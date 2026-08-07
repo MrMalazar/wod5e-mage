@@ -1,0 +1,70 @@
+<section class="tab {{tab.cssClass}} wod5e-mage-focus" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    <header class="wod5e-mage-section-title">
+        <span>{{localize "WOD5E_MAGE.Tabs.Focus"}}</span>
+    </header>
+
+    <div class="wod5e-mage-focus-layout">
+        <section class="wod5e-mage-focus-definition">
+            <div class="wod5e-mage-focus-short-field">
+                <div>
+                    <strong>{{localize "WOD5E_MAGE.Focus.Paradigm"}}</strong>
+                    <small>{{localize "WOD5E_MAGE.Focus.ParadigmHint"}}</small>
+                </div>
+                <input type="text" name="flags.wod5e-mage.focus.paradigm" value="{{focus.paradigm}}" aria-label="{{localize 'WOD5E_MAGE.Focus.ParadigmHint'}}" {{#if locked}}disabled{{/if}}>
+            </div>
+
+            <div class="wod5e-mage-focus-short-field">
+                <div>
+                    <strong>{{localize "WOD5E_MAGE.Focus.Practice"}}</strong>
+                    <small>{{localize "WOD5E_MAGE.Focus.PracticeHint"}}</small>
+                </div>
+                <input type="text" name="flags.wod5e-mage.focus.practice" value="{{focus.practice}}" aria-label="{{localize 'WOD5E_MAGE.Focus.PracticeHint'}}" {{#if locked}}disabled{{/if}}>
+            </div>
+
+            <section class="wod5e-mage-focus-instruments">
+                <header class="resource-header">
+                    <label class="header-label">{{localize "WOD5E_MAGE.Focus.Instruments"}}</label>
+                </header>
+
+                <div class="wod5e-mage-focus-instrument-list">
+                    {{#each focus.instruments as |instrument|}}
+                        <div class="wod5e-mage-focus-instrument">
+                            <span class="resource-value" data-value="{{#if instrument.selected}}1{{else}}0{{/if}}">
+                                <span class="resource-value-step" data-action="focusInstrumentToggle" data-slot="{{instrument.id}}" data-selected="{{instrument.selected}}" data-index="1" role="checkbox" aria-checked="{{instrument.selected}}" tabindex="0"></span>
+                            </span>
+                            <input type="text" name="flags.wod5e-mage.focus.instruments.{{instrument.id}}.name" value="{{instrument.name}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Instrument'}}" {{#if ../locked}}disabled{{/if}}>
+                        </div>
+                    {{/each}}
+                </div>
+
+                <footer>
+                    <span>{{localize "WOD5E_MAGE.Focus.SceneQuestion"}}</span>
+                    <span>{{localize "WOD5E_MAGE.Focus.InstrumentCount" count=focus.instrumentCount arete=focus.arete}}</span>
+                </footer>
+            </section>
+        </section>
+
+        <section class="wod5e-mage-focus-spheres">
+            <header class="resource-header">
+                <label class="header-label">{{localize "WOD5E_MAGE.Focus.Spheres"}}</label>
+            </header>
+
+            {{#each focus.spheres as |sphere|}}
+                <article class="wod5e-mage-focus-sphere">
+                    <h3>
+                        <span>{{localize "WOD5E_MAGE.Focus.WhatIs"}}</span>
+                        <strong>{{localize sphere.label}}</strong>
+                        {{#if sphere.levelLabel}}
+                            <span>(<em>{{localize sphere.levelLabel}}</em>)</span>
+                        {{/if}}
+                    </h3>
+                    <div class="resource">
+                        <prose-mirror name="flags.wod5e-mage.focus.sphereNotes.{{sphere.id}}" value="{{sphere.notes}}" toggled="true" compact="true">
+                            {{{sphere.enrichedNotes}}}
+                        </prose-mirror>
+                    </div>
+                </article>
+            {{/each}}
+        </section>
+    </div>
+</section>

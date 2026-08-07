@@ -6,20 +6,45 @@
   --mage-tab-nav-bg: color-mix(in srgb, var(--mortal-color-1) 94%, white);
 }
 
-.wod5e-mage.wod5e.actor.sheet .sheet-tabs > :is([data-tab="magick"], [data-tab="conceptChallenge"]) .navicon {
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > :is([data-tab="magick"], [data-tab="focus"], [data-tab="conceptChallenge"]) .navicon {
   background-color: var(--mage-tab-nav-bg);
   border: 0;
   color: #fff;
 }
 
-.wod5e-mage.wod5e.actor.sheet .sheet-tabs > :is([data-tab="magick"], [data-tab="conceptChallenge"]) .navicon i {
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > :is([data-tab="magick"], [data-tab="focus"], [data-tab="conceptChallenge"]) .navicon i {
   color: #fff;
 }
 
-.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-spheres, .wod5e-mage-concept-challenge) {
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-spheres, .wod5e-mage-focus, .wod5e-mage-concept-challenge) {
   --input-text-color: #111;
   background-color: #f0e6cf;
   color: #111;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-section-title {
+  align-items: center;
+  color: var(--mortal-color-1);
+  display: flex;
+  font-family: "Modesto Condensed", serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  gap: 1rem;
+  margin: 1rem 1.25rem 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-section-title::before,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-section-title::after {
+  border-top: 1px solid var(--mortal-color-2);
+  content: "";
+  flex: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-section-title > span {
+  color: var(--mortal-color-1);
+  white-space: nowrap;
 }
 
 /* 
@@ -573,6 +598,131 @@
   color: #fff;
 }
 
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-layout {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr);
+  padding: 1.25rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-definition {
+  border-right: 1px solid var(--mortal-color-2);
+  min-width: 0;
+  padding-right: 1.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-short-field {
+  margin-bottom: 1.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-short-field > div {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0.25rem 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-short-field > div small {
+  color: #111;
+  opacity: 0.75;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-short-field > input,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > input {
+  --input-text-color: #fff;
+  color: #fff;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instruments {
+  margin-top: 2rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instruments > .resource-header,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-spheres > .resource-header {
+  color: var(--mortal-color-1);
+  margin-bottom: 0.9rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instruments > .resource-header .header-label,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-spheres > .resource-header .header-label {
+  color: var(--mortal-color-1);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument {
+  align-items: center;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 18px minmax(0, 1fr);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument .resource-value {
+  align-self: center;
+  line-height: 1;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instruments > footer {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.72rem;
+  margin-top: 0.8rem;
+  text-align: right;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere {
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
+  margin-bottom: 1.15rem;
+  padding-bottom: 1.15rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere h3 {
+  align-items: baseline;
+  border: 0;
+  color: #111;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  gap: 0.35rem;
+  margin: 0 0 0.4rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere h3 strong,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere h3 em {
+  color: var(--mortal-color-2);
+  font-style: normal;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere > .resource {
+  min-height: 0;
+  padding: 0;
+  place-content: stretch;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror {
+  resize: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content {
+  box-sizing: border-box;
+  height: 5rem;
+  max-height: 5rem;
+  min-height: 5rem;
+  overflow-y: auto;
+  padding: 0.45rem 0.55rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content * {
+  color: #fff;
+}
+
 @media (width <= 900px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-layout {
     grid-template-columns: 1fr;
@@ -584,5 +734,16 @@
 
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-grid {
     grid-template-columns: 1fr;
+  }
+
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-definition {
+    border-bottom: 1px solid var(--mortal-color-2);
+    border-right: 0;
+    padding-bottom: 1.5rem;
+    padding-right: 0;
   }
 }

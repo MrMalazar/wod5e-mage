@@ -7,6 +7,7 @@
     "Tabs": {
       "Magick": "Magick",
       "Spheres": "Spheres",
+      "Focus": "Focus",
       "ConceptChallenge": "Concept Challenge"
     },
     "Dice": {
@@ -33,6 +34,18 @@
       "NoType": "No type selected",
       "NoPenaltyHint": "These options do not modify the dice pool yet.",
       "RollFlavor": "Pool: Arete {arete} + {attribute} {attributeValue} + {skill} {skillValue}. Type: {magickType}."
+    },
+    "Focus": {
+      "Paradigm": "Paradigm",
+      "ParadigmHint": "Your truth",
+      "Practice": "Practice",
+      "PracticeHint": "How you reach it",
+      "Instruments": "Instruments",
+      "Instrument": "Instrument",
+      "SceneQuestion": "What do you use in the scene to perform Magick?",
+      "InstrumentCount": "You have {count}: 2 + Arete {arete}",
+      "Spheres": "The Spheres of the Focus",
+      "WhatIs": "What is"
     },
     "ConceptChallenge": {
       "Label": "The Concept Challenge",
