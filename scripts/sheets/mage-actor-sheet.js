@@ -1,7 +1,14 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
+import { prepareConceptChallenge } from "../concept-challenge.js";
 import { onMagickBalanceChange, prepareMagickTrack } from "../magick-balance.js";
-import { prepareSpheres } from "../spheres.js";
+import {
+  onOngoingMagickAdd,
+  onOngoingMagickDelete,
+  prepareOngoingMagick
+} from "../ongoing-magick.js";
+import { onScopeChange, prepareScopes } from "../scopes.js";
+import { onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 
 const {
@@ -25,6 +32,10 @@ export class MageActorSheet extends MortalActorSheet {
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
       magickBalanceChange: onMagickBalanceChange,
+      ongoingMagickAdd: onOngoingMagickAdd,
+      ongoingMagickDelete: onOngoingMagickDelete,
+      scopeChange: onScopeChange,
+      sphereSelectionChange: onSphereSelectionChange,
       wisdomResourceChange: onWisdomResourceChange,
       wisdomRoll: onWisdomRoll
     }
@@ -46,6 +57,9 @@ export class MageActorSheet extends MortalActorSheet {
     magick: {
       template: "modules/wod5e-mage/templates/actor/parts/spheres.hbs"
     },
+    conceptChallenge: {
+      template: "modules/wod5e-mage/templates/actor/parts/concept-challenge.hbs"
+    },
     ...remainingParts
   };
 
@@ -61,6 +75,12 @@ export class MageActorSheet extends MortalActorSheet {
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Magick",
         icon: '<i class="fa-solid fa-circle-nodes"></i>'
+      },
+      conceptChallenge: {
+        id: "conceptChallenge",
+        group: "primary",
+        title: "WOD5E_MAGE.Tabs.ConceptChallenge",
+        icon: '<i class="fa-solid fa-pen-to-square"></i>'
       },
       ...remainingTabs
     };
@@ -86,7 +106,16 @@ export class MageActorSheet extends MortalActorSheet {
       context.tab = context.tabs.magick;
       context.arete = getArete(this.actor);
       context.magickTrack = prepareMagickTrack(this.actor);
-      context.spheres = prepareSpheres(this.actor);
+      context.scopes = prepareScopes(this.actor);
+      context.ongoingMagick = prepareOngoingMagick(this.actor);
+      const sphereData = prepareSpheres(this.actor);
+      context.sphereChoices = sphereData.all;
+      context.spheres = sphereData.selected;
+    }
+
+    if (partId === "conceptChallenge") {
+      context.tab = context.tabs.conceptChallenge;
+      context.conceptChallenge = await prepareConceptChallenge(this.actor);
     }
 
     return context;

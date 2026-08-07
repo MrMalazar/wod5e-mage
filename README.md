@@ -19,6 +19,10 @@ Place or link this directory at:
 Restart Foundry, enable the module in a world that uses `wod5e`, and reload the
 world. Run `npm run check` to validate the JavaScript and module manifest.
 
+PNG assets are organized under `assets/icons` by purpose: Mage sheet, general
+UI, chat dice, roll-dialog dice, and Dice So Nice textures. See the README in
+that directory for naming conventions and module-relative paths.
+
 ## Public API
 
 The API is available after Foundry's `init` hook:
@@ -50,6 +54,16 @@ selectors containing every available trait, including custom system definitions,
 and rolls the static Areté rating plus both selected traits. Coincidental,
 vulgar, and vulgar with witnesses are independent roll options and do not apply
 a dice penalty at this stage.
+The Sphere area uses the nine module-provided icons with WoD5e's native resource-dot
+selectors. Only selected Spheres are listed below; hiding a Sphere preserves its
+dot rating. Each listed Sphere displays its Influence description for ratings one
+through five. Six independent Scope toggles are displayed below Arete. The right
+column also provides a dynamic ongoing-Magick journal: it starts empty, lets the
+player add or remove rows, and stores its three descriptive text fields in module
+flags without affecting rolls.
+The separate Concept Challenge tab contains three groups of guided character
+questions. Its 21 compact three-line text areas save automatically to module
+flags and do not affect any roll.
 The Mage header groups Health, Willpower, and Wisdom on the left. Wisdom has an
 adjustable damage track and can be rolled using its undamaged boxes as the pool.
 The Magick tab also contains a shared nine-cell Magick track. Quintessence fills

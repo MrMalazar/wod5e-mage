@@ -6,7 +6,8 @@
     },
     "Tabs": {
       "Magick": "Magick",
-      "Spheres": "Spheres"
+      "Spheres": "Spheres",
+      "ConceptChallenge": "Concept Challenge"
     },
     "Dice": {
       "MageDice": "Mage Dice",
@@ -33,8 +34,133 @@
       "NoPenaltyHint": "These options do not modify the dice pool yet.",
       "RollFlavor": "Pool: Arete {arete} + {attribute} {attributeValue} + {skill} {skillValue}. Type: {magickType}."
     },
+    "ConceptChallenge": {
+      "Label": "The Concept Challenge",
+      "Hint": "Answer in writing: rough notes are enough. There is no right order, so begin with the group that inspires you most.",
+      "Groups": {
+        "portrait": "Group 1 — The Portrait",
+        "background": "Group 2 — The Background",
+        "bonds": "Group 3 — Bonds and Reflection"
+      },
+      "Fields": {
+        "description": {
+          "Label": "Description",
+          "Prompt": "What first impression do they make on a stranger, or on two people exchanging a few words?"
+        },
+        "mask": {
+          "Label": "The Mask",
+          "Prompt": "What do others believe about them at first glance, and what is only a façade?"
+        },
+        "routine": {
+          "Label": "The Routine",
+          "Prompt": "What is their typical day like? What ritual could they never give up, no matter how boring?"
+        },
+        "livelihood": {
+          "Label": "The Livelihood",
+          "Prompt": "What work have they done? Do they choose from passion, necessity, or jump from job to job?"
+        },
+        "spark": {
+          "Label": "Spark",
+          "Prompt": "Name three talents or virtues anyone would recognize in them."
+        },
+        "cracks": {
+          "Label": "Cracks",
+          "Prompt": "Name two flaws, quirks, or vices that complicate their life or relationships."
+        },
+        "outlet": {
+          "Label": "Release Valve",
+          "Prompt": "What makes them feel good right away: a beer, an engine, or an endless TV series?"
+        },
+        "roots": {
+          "Label": "Roots",
+          "Prompt": "What was their adolescence like? At the center of the group, on the margins, a rebel, or just passing through?"
+        },
+        "skeleton": {
+          "Label": "Skeleton in the Closet",
+          "Prompt": "An error, secret, or regret they pray will never resurface."
+        },
+        "monster": {
+          "Label": "The Monster under the Bed",
+          "Prompt": "Their most irrational fear: nothing supernatural, but spiders, heights, or going home alone."
+        },
+        "pressure": {
+          "Label": "Under Pressure",
+          "Prompt": "When everything slips from their grasp, do they explode, shut down, run, think, lie, or analyze coldly?"
+        },
+        "redLine": {
+          "Label": "The Red Line",
+          "Prompt": "The one thing they would refuse to do, no matter how high the stakes."
+        },
+        "refuge": {
+          "Label": "The Refuge",
+          "Prompt": "Where do they go, or what do they do, when they only want to disappear for a couple of hours?"
+        },
+        "superstition": {
+          "Label": "Profane Superstition",
+          "Prompt": "An ordinary fixation or superstition, such as a recurring routine or an object chosen blindly."
+        },
+        "beacon": {
+          "Label": "Beacon",
+          "Prompt": "The most important human person in their life today: a partner, parent, child, friend, or trusted doctor."
+        },
+        "thorn": {
+          "Label": "Thorn in the Side",
+          "Prompt": "Their everyday antagonist: an intrusive neighbor, an unfair boss, a resentful ex. Why?"
+        },
+        "securityBlanket": {
+          "Label": "The Security Blanket",
+          "Prompt": "A commonplace but irreplaceable object they always carry."
+        },
+        "lastSupper": {
+          "Label": "The Last Supper",
+          "Prompt": "If the world ended tomorrow, how and with whom would they spend their final evening as a mortal?"
+        },
+        "drive": {
+          "Label": "Drive",
+          "Prompt": "The dream that makes them human, the inspiration behind their Awakening."
+        },
+        "embodiment": {
+          "Label": "Embodiment",
+          "Prompt": "Up to three things they, the player, and the storyteller have in common: a hobby, fear, or ideal."
+        },
+        "distance": {
+          "Label": "Distance",
+          "Prompt": "At least three things in which you are profoundly different: the boundary between you and them."
+        }
+      }
+    },
+    "Scopes": {
+      "Label": "Scopes",
+      "potency": "Potency",
+      "duration": "Duration",
+      "targets": "Targets",
+      "area": "Area",
+      "conditions": "Conditions",
+      "range": "Range"
+    },
+    "OngoingMagick": {
+      "Label": "Ongoing Magick",
+      "Add": "Add ongoing Magick",
+      "Remove": "Remove ongoing Magick",
+      "Empty": "There is no ongoing Magick.",
+      "NameSpheres": "Name - Spheres",
+      "Status": "Status",
+      "TriggerEffect": "Trigger - Effect"
+    },
     "Spheres": {
-      "Hint": "Select a rating from zero to five for each Sphere.",
+      "Hint": "Select the Spheres to display and assign each a rating from zero to five.",
+      "Selector": "Sphere selection",
+      "List": "Sphere List",
+      "Empty": "Select at least one Sphere from the list above.",
+      "Influence": {
+        "Label": "Influence",
+        "None": "—",
+        "Perceive": "Perceive",
+        "Touch": "Touch",
+        "Control": "Control",
+        "Command": "Command",
+        "Revolutionize": "Revolutionize"
+      },
       "correspondence": "Correspondence",
       "entropy": "Entropy",
       "forces": "Forces",
