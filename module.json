@@ -2,7 +2,7 @@
   "id": "wod5e-mage",
   "title": "Mage for World of Darkness 5e",
   "description": "Adds Mage support to the World of Darkness 5e system.",
-  "version": "0.7.7",
+  "version": "0.8.0",
   "authors": [
     {
       "name": "wod5e-mage contributors"
@@ -46,10 +46,12 @@
       "extensions": [
         "css",
         "hbs",
-        "json"
+        "json",
+        "png"
       ],
       "paths": [
         "lang",
+        "assets",
         "styles",
         "templates"
       ]

@@ -120,6 +120,11 @@ export async function onAreteRoll(event) {
     window: {
       title: game.i18n.localize("WOD5E_MAGE.Arete.Roll")
     },
+    // DialogV2.input defaults to 400 px in Foundry 14. The three-part Areté
+    // pool needs 25% more horizontal room, so this dialog alone uses 500 px.
+    position: {
+      width: 500
+    },
     content,
     ok: {
       icon: "fas fa-dice",
