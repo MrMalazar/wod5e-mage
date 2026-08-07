@@ -1,0 +1,28 @@
+<section class="tab {{tab.cssClass}} wod5e-mage-concept-challenge" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    <div class="wod5e-mage-concept-content">
+        <header class="wod5e-mage-concept-heading">
+            <h2>{{localize "WOD5E_MAGE.ConceptChallenge.Label"}}</h2>
+            <p>{{localize "WOD5E_MAGE.ConceptChallenge.Hint"}}</p>
+        </header>
+
+        {{#each conceptChallenge as |group|}}
+            <section class="wod5e-mage-concept-group">
+                <header class="resource-header">
+                    <label class="header-label">{{localize group.label}}</label>
+                </header>
+
+                {{#each group.fields as |field|}}
+                    <div class="wod5e-mage-concept-field">
+                        <strong>{{localize field.label}}</strong>
+                        <small>{{localize field.prompt}}</small>
+                        <div class="resource">
+                            <prose-mirror name="flags.wod5e-mage.conceptChallenge.{{field.id}}" value="{{field.value}}" toggled="true" compact="true">
+                                {{{field.enrichedValue}}}
+                            </prose-mirror>
+                        </div>
+                    </div>
+                {{/each}}
+            </section>
+        {{/each}}
+    </div>
+</section>

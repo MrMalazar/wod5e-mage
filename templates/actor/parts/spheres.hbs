@@ -55,6 +55,32 @@
                 </div>
                 <p>{{localize "WOD5E_MAGE.Arete.RollHint"}}</p>
             </div>
+
+            <section class="wod5e-mage-scopes">
+                <header class="resource-header">
+                    <label class="header-label">{{localize "WOD5E_MAGE.Scopes.Label"}}</label>
+                </header>
+
+                <div class="wod5e-mage-scopes-wheel" role="group" aria-label="{{localize 'WOD5E_MAGE.Scopes.Label'}}">
+                    <svg viewBox="0 0 300 240" aria-hidden="true">
+                        <polygon points="150,30 245,80 245,160 150,210 55,160 55,80"></polygon>
+                        <line x1="150" y1="30" x2="150" y2="210"></line>
+                        <line x1="55" y1="80" x2="245" y2="160"></line>
+                        <line x1="245" y1="80" x2="55" y2="160"></line>
+                    </svg>
+
+                    <strong>{{localize "WOD5E_MAGE.Scopes.Label"}}</strong>
+
+                    {{#each scopes as |scope|}}
+                        <label class="wod5e-mage-scope-choice scope-{{scope.id}}" title="{{localize scope.label}}">
+                            <span>{{localize scope.label}}</span>
+                            <span class="resource-value" data-value="{{#if scope.selected}}1{{else}}0{{/if}}">
+                                <span class="resource-value-step" data-action="scopeChange" data-scope="{{scope.id}}" data-selected="{{scope.selected}}" data-index="1" role="checkbox" aria-checked="{{scope.selected}}" tabindex="0"></span>
+                            </span>
+                        </label>
+                    {{/each}}
+                </div>
+            </section>
         </div>
 
         <div class="wod5e-mage-magick-right">
@@ -64,7 +90,23 @@
 
             <p class="wod5e-mage-spheres-hint">{{localize "WOD5E_MAGE.Spheres.Hint"}}</p>
 
+            <div class="wod5e-mage-sphere-selector" role="group" aria-label="{{localize 'WOD5E_MAGE.Spheres.Selector'}}">
+                {{#each sphereChoices as |sphere|}}
+                    <label class="wod5e-mage-sphere-choice" title="{{localize sphere.label}}">
+                        <img src="{{sphere.icon}}" alt="{{localize sphere.label}}">
+                        <span class="resource-value wod5e-mage-sphere-toggle" data-value="{{#if sphere.selected}}1{{else}}0{{/if}}">
+                            <span class="resource-value-step" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="{{sphere.selected}}" data-index="1" role="checkbox" aria-checked="{{sphere.selected}}" tabindex="0"></span>
+                        </span>
+                    </label>
+                {{/each}}
+            </div>
+
             <div class="wod5e-mage-spheres-grid">
+                <div class="wod5e-mage-spheres-list-header">
+                    <span>{{localize "WOD5E_MAGE.Spheres.List"}}</span>
+                    <span>{{localize "WOD5E_MAGE.Spheres.Influence.Label"}}</span>
+                </div>
+
                 {{#each spheres as |sphere|}}
                     <div class="wod5e-mage-sphere">
                         <label class="resource-label">{{localize sphere.label}}</label>
@@ -74,9 +116,45 @@
                                 <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}" title="{{this}}"></span>
                             {{/numLoop}}
                         </div>
+                        <span class="wod5e-mage-sphere-influence">{{localize sphere.influenceLabel}}</span>
                     </div>
+                {{else}}
+                    <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.Spheres.Empty"}}</p>
                 {{/each}}
             </div>
+
+            <section class="wod5e-mage-ongoing-magick">
+                <header class="resource-header">
+                    <label class="header-label">{{localize "WOD5E_MAGE.OngoingMagick.Label"}}</label>
+                </header>
+
+                <div class="wod5e-mage-ongoing-magick-controls">
+                    <button type="button" data-action="ongoingMagickAdd" title="{{localize 'WOD5E_MAGE.OngoingMagick.Add'}}" {{#if locked}}disabled{{/if}}>
+                        <i class="fa-solid fa-plus"></i>
+                        {{localize "WOD5E_MAGE.OngoingMagick.Add"}}
+                    </button>
+                </div>
+
+                {{#if ongoingMagick.length}}
+                <div class="wod5e-mage-ongoing-magick-grid">
+                    <span>{{localize "WOD5E_MAGE.OngoingMagick.NameSpheres"}}</span>
+                    <span>{{localize "WOD5E_MAGE.OngoingMagick.Status"}}</span>
+                    <span>{{localize "WOD5E_MAGE.OngoingMagick.TriggerEffect"}}</span>
+                    <span aria-hidden="true"></span>
+
+                    {{#each ongoingMagick as |row|}}
+                        <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.nameSpheres" value="{{row.nameSpheres}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.NameSpheres'}}" {{#if ../locked}}disabled{{/if}}>
+                        <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.status" value="{{row.status}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Status'}}" {{#if ../locked}}disabled{{/if}}>
+                        <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.triggerEffect" value="{{row.triggerEffect}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.TriggerEffect'}}" {{#if ../locked}}disabled{{/if}}>
+                        <button type="button" data-action="ongoingMagickDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" {{#if ../locked}}disabled{{/if}}>
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    {{/each}}
+                </div>
+                {{else}}
+                    <p class="wod5e-mage-ongoing-magick-empty">{{localize "WOD5E_MAGE.OngoingMagick.Empty"}}</p>
+                {{/if}}
+            </section>
         </div>
     </div>
 </section>

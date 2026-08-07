@@ -1,15 +1,16 @@
 import { DiceRegistry } from "/systems/wod5e/system/api/def/dice.js";
 import {
-  hungerDiceFaces,
-  vampireDiceLocation
-} from "/systems/wod5e/system/dice/icons.js";
-import {
   MortalDie,
   WOD5eDie
 } from "/systems/wod5e/system/dice/splat-dice.js";
 import { getSituationalModifiers } from "/systems/wod5e/system/scripts/rolls/situational-modifiers.js";
 import { WOD5eRoll } from "/systems/wod5e/system/scripts/system-rolls.js";
 import { calculateAreteDicePool } from "./arete-dice-pool.js";
+import {
+  DICE_CHAT_ROOT,
+  getParadoxDieImage,
+  PARADOX_DICE_FACES
+} from "./dice-faces.js";
 
 const PARADOX_DENOMINATION = "p";
 
@@ -24,15 +25,7 @@ export class ParadoxDie extends WOD5eDie {
   static DENOMINATION = PARADOX_DENOMINATION;
 
   static getResultLabel(result) {
-    const face = result === 1
-      ? hungerDiceFaces.bestial
-      : result === 10
-        ? hungerDiceFaces.critical
-        : result > 5
-          ? hungerDiceFaces.success
-          : hungerDiceFaces.failure;
-
-    return `<img src="${vampireDiceLocation + face}" />`;
+    return `<img src="${getParadoxDieImage(result)}" />`;
   }
 }
 
@@ -43,7 +36,7 @@ function resultMap(result) {
   return "bestial";
 }
 
-/** Register the custom dP term and its purple chat rendering. */
+/** Register the custom dP term and its module-provided chat faces. */
 export function registerParadoxDice() {
   if (CONFIG.Dice.terms[PARADOX_DENOMINATION]
     && CONFIG.Dice.terms[PARADOX_DENOMINATION] !== ParadoxDie) {
@@ -55,11 +48,10 @@ export function registerParadoxDice() {
 
   CONFIG.Dice.terms[PARADOX_DENOMINATION] = ParadoxDie;
   DiceRegistry.registerAdvanced("mortal", {
-    imgRoot: vampireDiceLocation,
-    faces: hungerDiceFaces,
-    // Keep hunger-dice for compatibility with WoD5e advanced-die handling.
-    // paradox-dice is later in the class list and supplies the purple theme.
-    css: "hunger-dice paradox-dice",
+    imgRoot: DICE_CHAT_ROOT,
+    faces: PARADOX_DICE_FACES,
+    // Do not include hunger-dice: that native class adds the old red styling.
+    css: "paradox-dice",
     resultMap
   });
 

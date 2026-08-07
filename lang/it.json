@@ -6,7 +6,8 @@
     },
     "Tabs": {
       "Magick": "Magick",
-      "Spheres": "Sfere"
+      "Spheres": "Sfere",
+      "ConceptChallenge": "Sfida del concetto"
     },
     "Dice": {
       "MageDice": "Dadi Mage",
@@ -33,8 +34,133 @@
       "NoPenaltyHint": "Per ora queste opzioni non modificano la riserva di dadi.",
       "RollFlavor": "Riserva: Areté {arete} + {attribute} {attributeValue} + {skill} {skillValue}. Tipo: {magickType}."
     },
+    "ConceptChallenge": {
+      "Label": "La sfida del concetto",
+      "Hint": "Rispondi per iscritto: bastano appunti ben pensati. Non c'è un ordine giusto, quindi parti dal gruppo che ti chiama di più.",
+      "Groups": {
+        "portrait": "Gruppo 1 — Il ritratto",
+        "background": "Gruppo 2 — Il sottofondo",
+        "bonds": "Gruppo 3 — I legami e il riflesso"
+      },
+      "Fields": {
+        "description": {
+          "Label": "Descrizione",
+          "Prompt": "Che prima impressione dà a chi lo incrocia per strada o ci scambia due parole?"
+        },
+        "mask": {
+          "Label": "La Maschera",
+          "Prompt": "Cosa credono di lui a colpo d'occhio e che cosa è solo facciata?"
+        },
+        "routine": {
+          "Label": "Il Tran Tran",
+          "Prompt": "Com'è una sua giornata tipo? Quale rituale a cui non rinuncia mai, per quanto noioso?"
+        },
+        "livelihood": {
+          "Label": "La Pagnotta",
+          "Prompt": "Che lavori ha fatto? Sceglie per passione, per necessità, o salta di impiego in impiego?"
+        },
+        "spark": {
+          "Label": "Scintilla",
+          "Prompt": "Tre pregi o talenti che chiunque gli riconoscerebbe al volo."
+        },
+        "cracks": {
+          "Label": "Crepe",
+          "Prompt": "Due difetti, manie o vizi che gli complicano di continuo la vita o i rapporti."
+        },
+        "outlet": {
+          "Label": "Valvola di Sfogo",
+          "Prompt": "Cosa lo fa stare bene, subito? Una birra al pub, un motore, una serie fino a tardi?"
+        },
+        "roots": {
+          "Label": "Radici",
+          "Prompt": "Com'è stata la sua adolescenza? Al centro del gruppo, ai margini, ribelle, o di passaggio?"
+        },
+        "skeleton": {
+          "Label": "Scheletro nell'Armadio",
+          "Prompt": "Un errore, un segreto o un rimpianto che prega non torni mai a galla."
+        },
+        "monster": {
+          "Label": "Il Mostro sotto il Letto",
+          "Prompt": "La sua paura più irrazionale: niente di sovrannaturale, ma ragni, gli aghi, restare senza un soldo."
+        },
+        "pressure": {
+          "Label": "Sotto Pressione",
+          "Prompt": "Quando tutto gli sfugge di mano: esplode, si chiude a riccio, scappa, mente, analizza a freddo?"
+        },
+        "redLine": {
+          "Label": "La Linea Rossa",
+          "Prompt": "L'unica cosa che si rifiuterebbe di fare, non importa quanto alta sia la posta."
+        },
+        "refuge": {
+          "Label": "Il Rifugio",
+          "Prompt": "Dove va, o cosa fa, quando vuole solo sparire per un paio d'ore?"
+        },
+        "superstition": {
+          "Label": "Superstizione Profana",
+          "Prompt": "Una fissazione scaramantica, una routine illogica a cui obbedisce ciecamente."
+        },
+        "beacon": {
+          "Label": "Faro",
+          "Prompt": "La persona umana più importante della sua vita, oggi. Un partner, un genitore, un amico d'infanzia, un figlio."
+        },
+        "thorn": {
+          "Label": "Spina nel Fianco",
+          "Prompt": "Il suo antagonista quotidiano: il vicino impiccione, il capo tossico, l'ex rancoroso. E perché?"
+        },
+        "securityBlanket": {
+          "Label": "La Coperta di Linus",
+          "Prompt": "Un oggetto banale, di nessun valore, a cui è morbosamente attaccato."
+        },
+        "lastSupper": {
+          "Label": "L'Ultima Cena",
+          "Prompt": "Se domani finisse il mondo: come, dove e con chi passerebbe la sua ultima sera da mortale?"
+        },
+        "drive": {
+          "Label": "Motore",
+          "Prompt": "Il suo sogno nel cassetto da essere umano, l'aspirazione di prima del Risveglio."
+        },
+        "embodiment": {
+          "Label": "Impersonificazione",
+          "Prompt": "Fino a tre cose che tu, giocatore, e lui avete davvero in comune: un hobby, una paura, un ideale."
+        },
+        "distance": {
+          "Label": "Distanza",
+          "Prompt": "E almeno tre cose in cui siete profondamente diversi: il confine netto tra te e lui."
+        }
+      }
+    },
+    "Scopes": {
+      "Label": "Ambiti",
+      "potency": "Potenza",
+      "duration": "Durata",
+      "targets": "Bersagli",
+      "area": "Area",
+      "conditions": "Condizioni",
+      "range": "Portata"
+    },
+    "OngoingMagick": {
+      "Label": "Magick in atto",
+      "Add": "Aggiungi Magick in atto",
+      "Remove": "Rimuovi Magick in atto",
+      "Empty": "Non ci sono Magick in atto.",
+      "NameSpheres": "Nome - Sfere",
+      "Status": "Stato",
+      "TriggerEffect": "Interruttore - Effetto"
+    },
     "Spheres": {
-      "Hint": "Seleziona un valore da zero a cinque per ogni Sfera.",
+      "Hint": "Seleziona le Sfere da mostrare e assegna loro un valore da zero a cinque.",
+      "Selector": "Selezione Sfere",
+      "List": "Elenco Sfere",
+      "Empty": "Seleziona almeno una Sfera dall'elenco superiore.",
+      "Influence": {
+        "Label": "Influenza",
+        "None": "—",
+        "Perceive": "Percepire",
+        "Touch": "Ritoccare",
+        "Control": "Controllare",
+        "Command": "Comandare",
+        "Revolutionize": "Rivoluzionare"
+      },
       "correspondence": "Corrispondenza",
       "entropy": "Entropia",
       "forces": "Forze",
