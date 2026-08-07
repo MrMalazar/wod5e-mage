@@ -64,6 +64,10 @@ flags without affecting rolls.
 The separate Concept Challenge tab contains three groups of guided character
 questions. Its 21 compact three-line text areas save automatically to module
 flags and do not affect any roll.
+The Focus tab stores Paradigm, Practice, and a selectable list of Instruments;
+the number of visible Instrument slots is always two plus the current Arete
+rating. Its right column always shows all nine Spheres, reads their Influence
+levels directly from Magick, and provides a separate rich-text note for each.
 The Mage header groups Health, Willpower, and Wisdom on the left. Wisdom has an
 adjustable damage track and can be rolled using its undamaged boxes as the pool.
 The Magick tab also contains a shared nine-cell Magick track. Quintessence fills

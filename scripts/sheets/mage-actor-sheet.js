@@ -1,6 +1,7 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { prepareConceptChallenge } from "../concept-challenge.js";
+import { onFocusInstrumentToggle, prepareFocus } from "../focus.js";
 import { onMagickBalanceChange, prepareMagickTrack } from "../magick-balance.js";
 import {
   onOngoingMagickAdd,
@@ -31,6 +32,7 @@ export class MageActorSheet extends MortalActorSheet {
     actions: {
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
+      focusInstrumentToggle: onFocusInstrumentToggle,
       magickBalanceChange: onMagickBalanceChange,
       ongoingMagickAdd: onOngoingMagickAdd,
       ongoingMagickDelete: onOngoingMagickDelete,
@@ -57,6 +59,9 @@ export class MageActorSheet extends MortalActorSheet {
     magick: {
       template: "modules/wod5e-mage/templates/actor/parts/spheres.hbs"
     },
+    focus: {
+      template: "modules/wod5e-mage/templates/actor/parts/focus.hbs"
+    },
     conceptChallenge: {
       template: "modules/wod5e-mage/templates/actor/parts/concept-challenge.hbs"
     },
@@ -75,6 +80,12 @@ export class MageActorSheet extends MortalActorSheet {
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Magick",
         icon: '<i class="fa-solid fa-circle-nodes"></i>'
+      },
+      focus: {
+        id: "focus",
+        group: "primary",
+        title: "WOD5E_MAGE.Tabs.Focus",
+        icon: '<i class="fa-solid fa-bullseye"></i>'
       },
       conceptChallenge: {
         id: "conceptChallenge",
@@ -116,6 +127,11 @@ export class MageActorSheet extends MortalActorSheet {
     if (partId === "conceptChallenge") {
       context.tab = context.tabs.conceptChallenge;
       context.conceptChallenge = await prepareConceptChallenge(this.actor);
+    }
+
+    if (partId === "focus") {
+      context.tab = context.tabs.focus;
+      context.focus = await prepareFocus(this.actor);
     }
 
     return context;

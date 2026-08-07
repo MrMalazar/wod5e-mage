@@ -7,6 +7,7 @@
     "Tabs": {
       "Magick": "Magick",
       "Spheres": "Sfere",
+      "Focus": "Focus",
       "ConceptChallenge": "Sfida del concetto"
     },
     "Dice": {
@@ -33,6 +34,18 @@
       "NoType": "Nessun tipo selezionato",
       "NoPenaltyHint": "Per ora queste opzioni non modificano la riserva di dadi.",
       "RollFlavor": "Riserva: Areté {arete} + {attribute} {attributeValue} + {skill} {skillValue}. Tipo: {magickType}."
+    },
+    "Focus": {
+      "Paradigm": "Paradigma",
+      "ParadigmHint": "La tua verità",
+      "Practice": "Pratica",
+      "PracticeHint": "Come la raggiungi",
+      "Instruments": "Strumenti",
+      "Instrument": "Strumento",
+      "SceneQuestion": "Cosa usi nella scena per fare Magick?",
+      "InstrumentCount": "Ne possiedi {count}: 2 + Areté {arete}",
+      "Spheres": "Le Sfere del Focus",
+      "WhatIs": "Cos'è"
     },
     "ConceptChallenge": {
       "Label": "La sfida del concetto",
