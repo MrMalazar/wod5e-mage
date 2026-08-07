@@ -1,0 +1,9 @@
+{
+  "name": "wod5e-mage",
+  "version": "0.7.7",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check scripts/main.js && node --check scripts/constants.js && node --check scripts/actor-creation.js && node --check scripts/arete.js && node --check scripts/arete-dice-pool.js && node --check scripts/mage-dice.js && node --check scripts/magick-balance.js && node --check scripts/paradox-dice.js && node --check scripts/spheres.js && node --check scripts/wisdom.js && node --check scripts/sheets/mage-actor-sheet.js && node scripts/validate-manifest.js && node tests/magick-balance.test.js && node tests/arete.test.js && node tests/arete-dice-pool.test.js && node tests/mage-dice.test.js"
+  }
+}

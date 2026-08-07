@@ -1,0 +1,82 @@
+{
+  "WOD5E_MAGE": {
+    "Sheets": {
+      "Mage": "Mago",
+      "Awakened": "Awakened"
+    },
+    "Tabs": {
+      "Magick": "Magick",
+      "Spheres": "Sfere"
+    },
+    "Dice": {
+      "MageDice": "Dadi Mage",
+      "ParadoxDice": "Dadi Paradosso"
+    },
+    "Arete": {
+      "Label": "Areté",
+      "Roll": "Tira Areté",
+      "Rolling": "Areté + {attribute} + {skill}",
+      "RollHint": "Tira Areté insieme a un Attributo e un'Abilità",
+      "Trait": "Attributo o Abilità",
+      "TraitShort": "Abilità",
+      "SelectTrait": "Seleziona un tratto",
+      "SelectAttribute": "Seleziona un Attributo",
+      "SelectSkill": "Seleziona un'Abilità",
+      "SelectTraitWarning": "Seleziona sia un Attributo sia un'Abilità per il tiro di Areté.",
+      "MagickType": "Tipo di Magick",
+      "IsVulgar": "È volgare?",
+      "HasWitnesses": "Volgare con testimoni?",
+      "Coincidental": "Accidentale",
+      "Vulgar": "Volgare",
+      "VulgarWithWitnesses": "Volgare con testimoni",
+      "NoType": "Nessun tipo selezionato",
+      "NoPenaltyHint": "Per ora queste opzioni non modificano la riserva di dadi.",
+      "RollFlavor": "Riserva: Areté {arete} + {attribute} {attributeValue} + {skill} {skillValue}. Tipo: {magickType}."
+    },
+    "Spheres": {
+      "Hint": "Seleziona un valore da zero a cinque per ogni Sfera.",
+      "correspondence": "Corrispondenza",
+      "entropy": "Entropia",
+      "forces": "Forze",
+      "life": "Vita",
+      "matter": "Materia",
+      "mind": "Mente",
+      "prime": "Prime",
+      "spirit": "Spirito",
+      "time": "Tempo"
+    },
+    "Wisdom": {
+      "Label": "Saggezza",
+      "Roll": "Tira Saggezza",
+      "Rolling": "Tiro di Saggezza"
+    },
+    "MagickBalance": {
+      "Magick": "Magick",
+      "Wheel": "La Ruota",
+      "Quintessence": "Quintessenza",
+      "Paradox": "Paradosso",
+      "AddQuintessence": "Aggiungi Quintessenza",
+      "RemoveQuintessence": "Rimuovi Quintessenza",
+      "AddParadox": "Aggiungi Paradosso",
+      "RemoveParadox": "Rimuovi Paradosso",
+      "SideFull": "Questo lato della barra di Magick è già pieno."
+    },
+    "Creation": {
+      "SheetType": {
+        "Name": "Scheda",
+        "Hint": "Scegli quale scheda utilizzare per questo Actor mortale.",
+        "Mortal": "Mortale",
+        "Mage": "Mago"
+      }
+    },
+    "Settings": {
+      "DebugLogging": {
+        "Name": "Abilita i log di debug",
+        "Hint": "Scrive le informazioni diagnostiche di wod5e-mage nella console del browser."
+      }
+    },
+    "Errors": {
+      "UnsupportedSystem": "Mage for WoD5e richiede il sistema '{expected}'. Il sistema attivo è '{actual}'."
+    }
+  }
+}

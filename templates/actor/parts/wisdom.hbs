@@ -1,0 +1,23 @@
+<div class="flexcol field-section wod5e-mage-wisdom">
+    <div class="flexcol">
+        <label class="field-header flexrow resource-label">
+            <i class="fas fa-minus resource-control resource-minus" data-action="wisdomResourceChange" data-resource-action="minus"></i>
+            <label for="wisdom" class="system-rollable wisdom-roll" data-action="wisdomRoll" title="{{localize 'WOD5E_MAGE.Wisdom.Roll'}}">
+                {{localize "WOD5E_MAGE.Wisdom.Label"}}
+                <i class="fa-solid fa-dice-d10"></i>
+            </label>
+            <i class="fas fa-plus resource-control resource-plus" data-action="wisdomResourceChange" data-resource-action="plus"></i>
+        </label>
+    </div>
+    <div class="resource flex-group-center wisdom">
+        <div class="resource-content flexrow flex-center flex-between">
+            <div class="resource-counter editable" data-states="/:superficial,x:aggravated" data-max="{{wisdom.max}}"
+                data-superficial="{{wisdom.superficial}}" data-aggravated="{{wisdom.aggravated}}"
+                data-name="flags.wod5e-mage.wisdom">
+                {{#numLoop wisdom.max}}
+                    <span class="resource-counter-step" data-action="squareCounterChange" data-index="{{this}}" data-state=""></span>
+                {{/numLoop}}
+            </div>
+        </div>
+    </div>
+</div>

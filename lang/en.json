@@ -1,0 +1,82 @@
+{
+  "WOD5E_MAGE": {
+    "Sheets": {
+      "Mage": "Mage",
+      "Awakened": "Awakened"
+    },
+    "Tabs": {
+      "Magick": "Magick",
+      "Spheres": "Spheres"
+    },
+    "Dice": {
+      "MageDice": "Mage Dice",
+      "ParadoxDice": "Paradox Dice"
+    },
+    "Arete": {
+      "Label": "Arete",
+      "Roll": "Roll Arete",
+      "Rolling": "Arete + {attribute} + {skill}",
+      "RollHint": "Roll Arete together with an Attribute and a Skill",
+      "Trait": "Attribute or Skill",
+      "TraitShort": "Ability",
+      "SelectTrait": "Select a trait",
+      "SelectAttribute": "Select an Attribute",
+      "SelectSkill": "Select a Skill",
+      "SelectTraitWarning": "Select both an Attribute and a Skill for the Arete roll.",
+      "MagickType": "Magick type",
+      "IsVulgar": "Is it vulgar?",
+      "HasWitnesses": "Vulgar with witnesses?",
+      "Coincidental": "Coincidental",
+      "Vulgar": "Vulgar",
+      "VulgarWithWitnesses": "Vulgar with witnesses",
+      "NoType": "No type selected",
+      "NoPenaltyHint": "These options do not modify the dice pool yet.",
+      "RollFlavor": "Pool: Arete {arete} + {attribute} {attributeValue} + {skill} {skillValue}. Type: {magickType}."
+    },
+    "Spheres": {
+      "Hint": "Select a rating from zero to five for each Sphere.",
+      "correspondence": "Correspondence",
+      "entropy": "Entropy",
+      "forces": "Forces",
+      "life": "Life",
+      "matter": "Matter",
+      "mind": "Mind",
+      "prime": "Prime",
+      "spirit": "Spirit",
+      "time": "Time"
+    },
+    "Wisdom": {
+      "Label": "Wisdom",
+      "Roll": "Roll Wisdom",
+      "Rolling": "Rolling Wisdom"
+    },
+    "MagickBalance": {
+      "Magick": "Magick",
+      "Wheel": "Wheel",
+      "Quintessence": "Quintessence",
+      "Paradox": "Paradox",
+      "AddQuintessence": "Add Quintessence",
+      "RemoveQuintessence": "Remove Quintessence",
+      "AddParadox": "Add Paradox",
+      "RemoveParadox": "Remove Paradox",
+      "SideFull": "This side of the Magick track is already full."
+    },
+    "Creation": {
+      "SheetType": {
+        "Name": "Sheet",
+        "Hint": "Choose which sheet to use for this mortal Actor.",
+        "Mortal": "Mortal",
+        "Mage": "Mage"
+      }
+    },
+    "Settings": {
+      "DebugLogging": {
+        "Name": "Enable debug logging",
+        "Hint": "Writes wod5e-mage diagnostic information to the browser console."
+      }
+    },
+    "Errors": {
+      "UnsupportedSystem": "Mage for WoD5e requires the '{expected}' system. The active system is '{actual}'."
+    }
+  }
+}

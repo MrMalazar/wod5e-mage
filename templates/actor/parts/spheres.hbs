@@ -1,0 +1,82 @@
+<section class="tab {{tab.cssClass}} wod5e-mage-spheres" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    <div class="wod5e-mage-spheres-content wod5e-mage-magick-layout">
+        <div class="wod5e-mage-magick-left">
+            <div class="wod5e-mage-magick-balance">
+                <div class="wod5e-mage-magick-track" role="group" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Magick'}}">
+                    <svg class="wod5e-mage-magick-arc" viewBox="0 0 400 180" aria-hidden="true">
+                        <path d="M16 148 A184 133 0 0 1 384 148"></path>
+                    </svg>
+
+                    {{#each magickTrack.cells as |cell|}}
+                        <span class="wod5e-mage-magick-node {{cell.state}}" style="{{cell.position}}" title="{{cell.number}}"></span>
+                    {{/each}}
+
+                    <div class="wod5e-mage-magick-title">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</div>
+                </div>
+
+                <div class="wod5e-mage-magick-controls">
+                    <div class="wod5e-mage-magick-resource quintessence">
+                        <div class="wod5e-mage-magick-buttons">
+                            <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1" title="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <strong>{{magickTrack.quintessence}}</strong>
+                            <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="1" title="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <span>{{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</span>
+                    </div>
+
+                    <div class="wod5e-mage-magick-resource paradox">
+                        <div class="wod5e-mage-magick-buttons">
+                            <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1" title="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                            <strong>{{magickTrack.paradox}}</strong>
+                            <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="1" title="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <span>{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wod5e-mage-arete">
+                <button type="button" class="resource-label wod5e-mage-arete-roll" data-action="areteRoll" title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}">
+                    <i class="fa-solid fa-dice-d10"></i>
+                    {{localize "WOD5E_MAGE.Arete.Label"}}
+                </button>
+                <div class="wod5e-mage-arete-dots" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Label'}}">
+                    {{#each arete.steps as |step|}}
+                        <button type="button" class="wod5e-mage-arete-dot {{#if step.active}}active{{/if}}" data-action="areteChange" data-value="{{step.value}}" title="{{step.value}}" aria-label="{{step.value}}"></button>
+                    {{/each}}
+                </div>
+                <p>{{localize "WOD5E_MAGE.Arete.RollHint"}}</p>
+            </div>
+        </div>
+
+        <div class="wod5e-mage-magick-right">
+            <header class="resource-header">
+                <label class="header-label">{{localize "WOD5E_MAGE.Tabs.Spheres"}}</label>
+            </header>
+
+            <p class="wod5e-mage-spheres-hint">{{localize "WOD5E_MAGE.Spheres.Hint"}}</p>
+
+            <div class="wod5e-mage-spheres-grid">
+                {{#each spheres as |sphere|}}
+                    <div class="wod5e-mage-sphere">
+                        <label class="resource-label">{{localize sphere.label}}</label>
+                        <div class="resource-value" data-value="{{sphere.value}}" data-name="flags.wod5e-mage.spheres.{{sphere.id}}">
+                            <span class="resource-value-empty" data-action="dotCounterEmpty" title="0"></span>
+                            {{#numLoop 5}}
+                                <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}" title="{{this}}"></span>
+                            {{/numLoop}}
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</section>

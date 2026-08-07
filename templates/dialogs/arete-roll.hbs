@@ -1,0 +1,63 @@
+<form class="dialog-contents">
+    <div class="selectors-group">
+        <div class="primary-selector">
+            <div class="selector-title">
+                {{localize "WOD5E_MAGE.Arete.Label"}}
+            </div>
+            <div class="selector-content">
+                <select disabled aria-label="{{localize 'WOD5E_MAGE.Arete.Label'}}">
+                    <option>{{arete.value}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="middle">+</div>
+
+        <div class="primary-selector">
+            <div class="selector-title">
+                {{localize "WOD5E.AttributesList.Label"}}
+            </div>
+            <div class="selector-content">
+                <select id="wod5e-mage-arete-attribute" name="attribute" required>
+                    <option value="">{{localize "WOD5E_MAGE.Arete.SelectAttribute"}}</option>
+                    {{#each attributes as |trait|}}
+                        <option value="{{trait.id}}">{{trait.label}} ({{trait.value}})</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+
+        <div class="middle">+</div>
+
+        <div class="primary-selector">
+            <div class="selector-title">
+                {{localize "WOD5E.SkillsList.Label"}}
+            </div>
+            <div class="selector-content">
+                <select id="wod5e-mage-arete-skill" name="skill" required>
+                    <option value="">{{localize "WOD5E_MAGE.Arete.SelectSkill"}}</option>
+                    {{#each skills as |trait|}}
+                        <option value="{{trait.id}}">{{trait.label}} ({{trait.value}})</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div class="selector-title">{{localize "WOD5E_MAGE.Arete.MagickType"}}</div>
+    <div class="flexrow">
+        <div class="secondary-selector">
+            <div class="selector-title">{{localize "WOD5E_MAGE.Arete.Coincidental"}}</div>
+            <input type="checkbox" name="coincidental">
+        </div>
+        <div class="secondary-selector">
+            <div class="selector-title">{{localize "WOD5E_MAGE.Arete.Vulgar"}}</div>
+            <input type="checkbox" name="vulgar">
+        </div>
+        <div class="secondary-selector">
+            <div class="selector-title">{{localize "WOD5E_MAGE.Arete.VulgarWithWitnesses"}}</div>
+            <input type="checkbox" name="witnesses">
+        </div>
+    </div>
+</form>

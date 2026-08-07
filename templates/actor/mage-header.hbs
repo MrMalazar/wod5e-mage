@@ -1,0 +1,13 @@
+<header class="actor-header wod5e-mage-header" {{#if headerbg}}style="background: url({{headerbg}}) center;"{{/if}}>
+    <div class="header-fields">
+        <div class="header-fields-left wod5e-mage-header-resources">
+            {{> "systems/wod5e/display/shared/actors/parts/health.hbs"}}
+            {{> "systems/wod5e/display/shared/actors/parts/willpower.hbs"}}
+            {{> "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"}}
+        </div>
+    </div>
+
+    {{> "systems/wod5e/display/shared/actors/parts/header-profile.hbs"}}
+
+    <div class="header-fields wod5e-mage-header-spacer" aria-hidden="true"></div>
+</header>

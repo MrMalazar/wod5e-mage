@@ -1,0 +1,28 @@
+<div class="dice-group-header flex-group-center">
+    <label>{{localize "WOD5E_MAGE.Dice.MageDice"}}</label>
+    <label>{{localize "WOD5E_MAGE.Dice.ParadoxDice"}}</label>
+</div>
+
+<div class="base-dice-group flex-group-center">
+    <div class="basic-dice">
+        <div class="dice-input">
+            <img width="50" height="50" src="systems/wod5e/assets/icons/dialog/mortal-dice.png">
+            <div class="flexrow">
+                <i class="fas fa-minus dialog-control dialog-minus" data-action="minus" data-resource="inputBasicDice"></i>
+                <input type="number" min="0" id="inputBasicDice" value="{{basicDice}}">
+                <i class="fas fa-plus dialog-control dialog-plus" data-action="plus" data-resource="inputBasicDice"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="advanced-dice">
+        <div class="dice-input">
+            <img class="wod5e-mage-paradox-dialog-die" width="50" height="50" src="systems/wod5e/assets/icons/dialog/hunger-dice.png">
+            <div class="flexrow">
+                <input type="number" min="0" id="inputParadoxDice" value="{{paradoxDice}}" readonly>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{> "systems/wod5e/display/ui/parts/roll-dialog-base.hbs"}}
