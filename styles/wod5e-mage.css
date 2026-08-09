@@ -4,6 +4,18 @@
   --mortal-color-3: #f5e7b2;
   --mortal-color-4: #2c2413;
   --mage-tab-nav-bg: color-mix(in srgb, var(--mortal-color-1) 94%, white);
+  --mage-dot-color: #d9a827;
+  --mage-dot-border: #6b4f12;
+}
+
+/* Pallini pieni in oro acceso.
+   Il sistema disegna con la stessa regola i pallini di Attributi/Abilità e
+   quelli delle Sfere: qui la si sovrascrive una volta sola, per la sola
+   scheda del Mago. */
+.wod5e-mage.wod5e.actor.sheet .resource-value .resource-value-step.active,
+.wod5e-mage.wod5e.actor.sheet .resource-value-static .resource-value-static-step.active {
+  background-color: var(--mage-dot-color);
+  border-color: var(--mage-dot-border);
 }
 
 .wod5e-mage.wod5e.actor.sheet .sheet-tabs > :is([data-tab="magick"], [data-tab="focus"], [data-tab="conceptChallenge"]) .navicon {
