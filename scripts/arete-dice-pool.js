@@ -15,3 +15,23 @@ export function calculateAreteDicePool(totalDice, paradoxRating) {
     totalDice: total
   };
 }
+
+/**
+ * Trasferisce dadi tra la parte Mage e la parte Paradosso senza modificare
+ * il totale della pool. Il Paradosso non puo' superare i dadi disponibili.
+ */
+export function shiftParadoxDice(basicDice, paradoxDice, delta) {
+  const basic = Math.max(Math.trunc(Number(basicDice) || 0), 0);
+  const paradox = Math.max(Math.trunc(Number(paradoxDice) || 0), 0);
+  const total = basic + paradox;
+  const shiftedParadox = Math.min(
+    Math.max(paradox + Math.trunc(Number(delta) || 0), 0),
+    total
+  );
+
+  return {
+    basicDice: total - shiftedParadox,
+    paradoxDice: shiftedParadox,
+    totalDice: total
+  };
+}

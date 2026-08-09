@@ -1,7 +1,7 @@
 # Mage icon assets
 
 This directory contains only image assets owned or legally distributable by
-the module. Use lowercase, descriptive, hyphen-separated PNG filenames.
+the module. Use lowercase, descriptive, hyphen-separated filenames.
 
 ## Structure
 
@@ -15,13 +15,15 @@ the module. Use lowercase, descriptive, hyphen-separated PNG filenames.
 
 Current chat faces and result mappings:
 
-- `empty_mage.png`: Mage results 1–5.
-- `spark_mage.png`: Mage results 6–9.
-- `star_mage.png`: Mage result 10.
-- `eye_closed_paradox.png`: Paradox result 1.
-- `empty_paradox.png`: Paradox results 2–5.
-- `spark_paradox.png`: Paradox results 6–9.
-- `eye_open_paradox.png`: Paradox result 10.
+- `dado-vuoto.svg`: transparent base used for empty Mage and Paradox faces;
+  their color and border are rendered with CSS.
+- Mage results 1–5: empty CSS face using `dado-vuoto.svg`.
+- `magick-scintilla.svg`: Mage results 6–9.
+- `magick-stellina.svg`: Mage result 10.
+- `paradosso-occhio-vuoto.svg`: Paradox result 1.
+- Paradox results 2–5: empty CSS face using `dado-vuoto.svg`.
+- `paradosso-scintilla.svg`: Paradox results 6–9.
+- `paradosso-occhio-completo.svg`: Paradox result 10.
 
 Dialog previews:
 

@@ -6,7 +6,12 @@
 <div class="base-dice-group flex-group-center">
     <div class="basic-dice">
         <div class="dice-input">
-            <img width="50" height="50" src="modules/wod5e-mage/assets/icons/dice/chat/empty_mage.png">
+            <img
+                class="mage-dice-preview mage-dice"
+                src="modules/wod5e-mage/assets/icons/dice/chat/magick-scintilla.svg"
+                alt=""
+                aria-hidden="true"
+            >
             <div class="flexrow">
                 <i class="fas fa-minus dialog-control dialog-minus" data-action="minus" data-resource="inputBasicDice"></i>
                 <input type="number" min="0" id="inputBasicDice" value="{{basicDice}}">
@@ -17,9 +22,16 @@
 
     <div class="advanced-dice">
         <div class="dice-input">
-            <img width="50" height="50" src="modules/wod5e-mage/assets/icons/dice/chat/empty_paradox.png">
+            <img
+                class="mage-dice-preview paradox-dice"
+                src="modules/wod5e-mage/assets/icons/dice/chat/paradosso-scintilla.svg"
+                alt=""
+                aria-hidden="true"
+            >
             <div class="flexrow">
+                <i class="fas fa-minus dialog-control dialog-minus" data-action="paradoxMinus"></i>
                 <input type="number" min="0" id="inputParadoxDice" value="{{paradoxDice}}" readonly>
+                <i class="fas fa-plus dialog-control dialog-plus" data-action="paradoxPlus"></i>
             </div>
         </div>
     </div>

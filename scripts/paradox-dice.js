@@ -5,9 +5,11 @@ import {
 } from "/systems/wod5e/system/dice/splat-dice.js";
 import { getSituationalModifiers } from "/systems/wod5e/system/scripts/rolls/situational-modifiers.js";
 import { WOD5eRoll } from "/systems/wod5e/system/scripts/system-rolls.js";
-import { calculateAreteDicePool } from "./arete-dice-pool.js";
 import {
-  DICE_CHAT_ROOT,
+  calculateAreteDicePool,
+  shiftParadoxDice
+} from "./arete-dice-pool.js";
+import {
   getParadoxDieImage,
   PARADOX_DICE_FACES
 } from "./dice-faces.js";
@@ -25,7 +27,10 @@ export class ParadoxDie extends WOD5eDie {
   static DENOMINATION = PARADOX_DENOMINATION;
 
   static getResultLabel(result) {
-    return `<img src="${getParadoxDieImage(result)}" />`;
+    const image = getParadoxDieImage(result);
+    return image
+      ? `<img src="${image}" />`
+      : '<span class="paradox-dice paradox-dice-empty"></span>';
   }
 }
 
@@ -48,7 +53,8 @@ export function registerParadoxDice() {
 
   CONFIG.Dice.terms[PARADOX_DENOMINATION] = ParadoxDie;
   DiceRegistry.registerAdvanced("mortal", {
-    imgRoot: DICE_CHAT_ROOT,
+    // Le facce contengono percorsi completi; la stringa vuota e' il dado CSS.
+    imgRoot: "",
     faces: PARADOX_DICE_FACES,
     // Do not include hunger-dice: that native class adds the old red styling.
     css: "paradox-dice",
@@ -131,7 +137,22 @@ function getCustomModifierTotal(form) {
     .reduce((total, input) => total + (Number(input.value) || 0), 0);
 }
 
-function initializeModifierControls(dialog, paradoxRating) {
+function changeParadoxDice(ownerDocument, delta) {
+  const basicInput = ownerDocument.querySelector("#inputBasicDice");
+  const paradoxInput = ownerDocument.querySelector("#inputParadoxDice");
+  if (!basicInput || !paradoxInput) return;
+
+  // Ogni dado aggiunto al Paradosso viene sottratto ai dadi Mage e viceversa.
+  const pool = shiftParadoxDice(
+    basicInput.valueAsNumber,
+    paradoxInput.valueAsNumber,
+    delta
+  );
+  basicInput.value = pool.basicDice;
+  paradoxInput.value = pool.paradoxDice;
+}
+
+function initializeModifierControls(dialog) {
   const form = dialog.element;
   const basicInput = form.querySelector("#inputBasicDice");
   const paradoxInput = form.querySelector("#inputParadoxDice");
@@ -142,7 +163,12 @@ function initializeModifierControls(dialog, paradoxRating) {
       const value = Number(input.dataset.value) || 0;
       const delta = input.checked ? value : -value;
       const currentTotal = basicInput.valueAsNumber + paradoxInput.valueAsNumber;
-      const pool = calculateAreteDicePool(currentTotal + delta, paradoxRating);
+      // I modificatori cambiano il totale ma conservano, quando possibile, la
+      // quantita' di Paradosso scelta manualmente nel popup.
+      const pool = calculateAreteDicePool(
+        currentTotal + delta,
+        paradoxInput.valueAsNumber
+      );
       basicInput.value = pool.basicDice;
       paradoxInput.value = pool.paradoxDice;
     });
@@ -191,6 +217,12 @@ export async function rollAreteWithParadox({
         const input = target.ownerDocument.querySelector(`#${target.dataset.resource}`);
         if (input) input.valueAsNumber = Math.max(input.valueAsNumber - 1, 0);
       },
+      paradoxPlus: (_event, target) => {
+        changeParadoxDice(target.ownerDocument, 1);
+      },
+      paradoxMinus: (_event, target) => {
+        changeParadoxDice(target.ownerDocument, -1);
+      },
       addCustomMod: addCustomModifier,
       deleteCustomMod: (_event, target) => target.closest(".custom-modifier")?.remove()
     },
@@ -205,9 +237,11 @@ export async function rollAreteWithParadox({
           const visibleTotal =
             (form.querySelector("#inputBasicDice")?.valueAsNumber || 0)
             + (form.querySelector("#inputParadoxDice")?.valueAsNumber || 0);
+          const selectedParadox =
+            form.querySelector("#inputParadoxDice")?.valueAsNumber || 0;
           const finalPool = calculateAreteDicePool(
             visibleTotal + getCustomModifierTotal(form),
-            paradoxRating
+            selectedParadox
           );
           const difficulty = Number(form.querySelector("#inputDifficulty")?.value) || 0;
           const rollMode = form.querySelector('[name="rollMode"]')?.value
@@ -237,6 +271,6 @@ export async function rollAreteWithParadox({
       }
     ],
     classes: ["wod5e", "mortal", "roll-dialog", "mage-arete-roll-dialog"],
-    render: (_event, dialog) => initializeModifierControls(dialog, paradoxRating)
+    render: (_event, dialog) => initializeModifierControls(dialog)
   });
 }
