@@ -4,8 +4,13 @@
   --mortal-color-3: #f5e7b2;
   --mortal-color-4: #2c2413;
   --mage-tab-nav-bg: color-mix(in srgb, var(--mortal-color-1) 94%, white);
-  --mage-dot-color: #d9a827;
-  --mage-dot-border: #6b4f12;
+  /* Palette del Mago */
+  --mage-oro: #d9a827;        /* accento acceso: pallini e dettagli vivi */
+  --mage-oro-scuro: #98772b;  /* cornici e righelli */
+  --mage-oro-tenue: #6b4f12;  /* bordi discreti */
+  --mage-oro-chiaro: #f5e7b2; /* testo delle intestazioni sul fondo scuro */
+  --mage-dot-color: var(--mage-oro);
+  --mage-dot-border: var(--mage-oro-tenue);
 }
 
 /* Pallini pieni in oro acceso.
@@ -18,9 +23,56 @@
   border-color: var(--mage-dot-border);
 }
 
+/* ==========================================================================
+   Palette su tutta la scheda.
+   Il tema scuro del sistema borda ogni cosa di bianco: qui il bianco diventa
+   oro, su tutte le linguette, fondo scuro invariato.
+   ========================================================================== */
+
+.wod5e-mage.wod5e.actor.sheet .window-header {
+  background: var(--mortal-color-1);
+}
+
+.wod5e-mage.wod5e.actor.sheet .item-list .item,
+.wod5e-mage.wod5e.actor.sheet .item-list .category,
+.wod5e-mage.wod5e.actor.sheet .stats-container,
+.wod5e-mage.wod5e.actor.sheet .stats-container .stats-footer,
+.wod5e-mage.wod5e.actor.sheet .actor-header .resource,
+.wod5e-mage.wod5e.actor.sheet .actor-header input,
+.wod5e-mage.wod5e.actor.sheet .window-content .resource,
+.wod5e-mage.wod5e.actor.sheet .window-content prose-mirror .editor-content,
+.wod5e-mage.wod5e.actor.sheet .window-content input,
+.wod5e-mage.wod5e.actor.sheet .window-content select {
+  border-color: var(--mage-oro-scuro);
+}
+
+/* Caselle di Salute, Volontà e Saggezza */
+.wod5e-mage.wod5e.actor.sheet .resource-counter .resource-counter-step {
+  border-color: var(--mage-oro-scuro);
+}
+
+/* Intestazioni delle linguette che restano sul fondo scuro */
+.wod5e-mage.wod5e.actor.sheet .tab:not(.wod5e-mage-spheres, .wod5e-mage-focus, .wod5e-mage-concept-challenge) :is(.field-header, .resource-header, .header-label, .item-header) {
+  color: var(--mage-oro-chiaro);
+}
+
+/* Livrea unica per tutte le linguette della barra */
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab] .navicon,
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs .lock-btn {
+  border: 1px solid var(--mage-oro-scuro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].active .navicon {
+  background: var(--mage-tab-nav-bg);
+  border-color: var(--mage-oro);
+  color: #fff;
+}
+
+/* ========================================================================== */
+
 .wod5e-mage.wod5e.actor.sheet .sheet-tabs > :is([data-tab="magick"], [data-tab="focus"], [data-tab="conceptChallenge"]) .navicon {
   background-color: var(--mage-tab-nav-bg);
-  border: 0;
+  border: 1px solid var(--mage-oro-scuro);
   color: #fff;
 }
 
@@ -66,6 +118,19 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-resources .field-section {
   width: min(250px, 100%);
+}
+
+/* Salute, Volontà e Saggezza: intestazioni leggibili.
+   16pt è la stessa misura che il sistema chiama .big-header. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-resources .field-header {
+  font-size: 16pt;
+  gap: 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-resources .field-header .resource-control {
+  align-self: center;
+  font-size: 12pt;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-spacer {
@@ -592,17 +657,21 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror {
-  resize: none;
+  min-height: 10rem;
+  overflow: auto;
+  resize: vertical;
 }
 
+/* Nessun tetto: l'area cresce con quello che ci si scrive dentro,
+   e resta trascinabile in altezza. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror .editor-content {
   box-sizing: border-box;
-  height: 4.5rem;
-  line-height: 1.35;
-  max-height: 4.5rem;
-  min-height: 4.5rem;
-  overflow-y: auto;
-  padding: 0.45rem 0.55rem;
+  height: auto;
+  line-height: 1.45;
+  max-height: none;
+  min-height: 9.5rem;
+  overflow-y: visible;
+  padding: 0.5rem 0.6rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror .editor-content,
