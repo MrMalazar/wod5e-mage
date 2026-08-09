@@ -25,6 +25,18 @@ function clampSphereValue(value) {
   return Math.min(Math.max(Number(value) || 0, 0), 5);
 }
 
+export function sortSpheresAlphabetically(spheres, localize, locale) {
+  const getLabel = typeof localize === "function"
+    ? (sphere) => localize(sphere.label)
+    : (sphere) => sphere.id;
+
+  return [...spheres].sort((left, right) => getLabel(left).localeCompare(
+    getLabel(right),
+    locale,
+    { sensitivity: "base" }
+  ));
+}
+
 export function getSphereSelection(actor) {
   const storedSelection = actor.getFlag(MODULE_ID, "selectedSpheres");
   if (storedSelection && typeof storedSelection === "object") {
@@ -42,11 +54,11 @@ export function getSphereSelection(actor) {
   );
 }
 
-export function prepareSpheres(actor) {
+export function prepareSpheres(actor, options = {}) {
   const values = actor.getFlag(MODULE_ID, "spheres") ?? {};
   const selection = getSphereSelection(actor);
 
-  const all = SPHERES.map((id) => {
+  const unsorted = SPHERES.map((id) => {
     const value = clampSphereValue(values[id]);
     return {
       id,
@@ -57,6 +69,13 @@ export function prepareSpheres(actor) {
       influenceLabel: INFLUENCE_LABELS[value]
     };
   });
+
+  const i18n = globalThis.game?.i18n;
+  const all = sortSpheresAlphabetically(
+    unsorted,
+    options.localize ?? i18n?.localize?.bind(i18n),
+    options.locale ?? i18n?.lang
+  );
 
   return {
     all,

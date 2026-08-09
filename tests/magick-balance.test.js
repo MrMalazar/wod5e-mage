@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
   applyMagickBalanceDelta,
+  getPersistentMagickResources,
   prepareMagickTrack
 } from "../scripts/magick-balance.js";
 
@@ -46,5 +47,13 @@ assert.equal(track.paradox, 4);
 assert.equal(track.cells.filter((cell) => cell.state === "quintessence").length, 5);
 assert.equal(track.cells.filter((cell) => cell.state === "paradox").length, 4);
 assert.equal(track.cells.filter((cell) => cell.state === "empty").length, 0);
+
+const persistentResources = getPersistentMagickResources({
+  getFlag: () => ({ generatedQuintessence: "Nodo 3", permanentParadox: "2" })
+});
+assert.deepEqual(persistentResources, {
+  generatedQuintessence: "Nodo 3",
+  permanentParadox: 2
+});
 
 console.log("Magick balance behavior validated.");

@@ -14,6 +14,19 @@ const NODE_POSITIONS = Object.freeze([
   { x: 96, y: 78 }
 ]);
 
+/** Read the two persistent fields displayed below the Magick wheel. */
+export function getPersistentMagickResources(actor) {
+  const stored = actor.getFlag(MODULE_ID, "persistentMagickResources") ?? {};
+
+  return {
+    generatedQuintessence: String(stored.generatedQuintessence ?? ""),
+    permanentParadox: Math.max(
+      Math.trunc(Number(stored.permanentParadox) || 0),
+      0
+    )
+  };
+}
+
 export function getMagickBalance(actor) {
   const stored = actor.getFlag(MODULE_ID, "magickBalance") ?? {};
 

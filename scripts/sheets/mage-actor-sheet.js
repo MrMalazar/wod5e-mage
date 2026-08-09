@@ -2,7 +2,11 @@ import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { prepareConceptChallenge } from "../concept-challenge.js";
 import { onFocusInstrumentToggle, prepareFocus } from "../focus.js";
-import { onMagickBalanceChange, prepareMagickTrack } from "../magick-balance.js";
+import {
+  getPersistentMagickResources,
+  onMagickBalanceChange,
+  prepareMagickTrack
+} from "../magick-balance.js";
 import {
   onOngoingMagickAdd,
   onOngoingMagickDelete,
@@ -74,7 +78,6 @@ export class MageActorSheet extends MortalActorSheet {
     const { stats, experience, ...remainingTabs } = this.tabs;
     this.tabs = {
       stats,
-      experience,
       magick: {
         id: "magick",
         group: "primary",
@@ -93,6 +96,7 @@ export class MageActorSheet extends MortalActorSheet {
         title: "WOD5E_MAGE.Tabs.ConceptChallenge",
         icon: '<i class="fa-solid fa-pen-to-square"></i>'
       },
+      experience,
       ...remainingTabs
     };
   }
@@ -117,9 +121,15 @@ export class MageActorSheet extends MortalActorSheet {
       context.tab = context.tabs.magick;
       context.arete = getArete(this.actor);
       context.magickTrack = prepareMagickTrack(this.actor);
+      context.persistentMagickResources = getPersistentMagickResources(this.actor);
       context.scopes = prepareScopes(this.actor);
       context.ongoingMagick = prepareOngoingMagick(this.actor);
-      const sphereData = prepareSpheres(this.actor);
+      // Sort the upper icon selector by the labels the player actually sees.
+      // Passing i18n explicitly avoids relying on global fallback resolution.
+      const sphereData = prepareSpheres(this.actor, {
+        localize: game.i18n.localize.bind(game.i18n),
+        locale: game.i18n.lang
+      });
       context.sphereChoices = sphereData.all;
       context.spheres = sphereData.selected;
     }
