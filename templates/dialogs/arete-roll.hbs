@@ -5,9 +5,10 @@
                 {{localize "WOD5E_MAGE.Arete.Label"}}
             </div>
             <div class="selector-content">
-                <select disabled aria-label="{{localize 'WOD5E_MAGE.Arete.Label'}}">
-                    <option>{{arete.value}}</option>
-                </select>
+                <label class="wod5e-mage-arete-toggle" title="{{localize 'WOD5E_MAGE.Arete.IncludeHint'}}">
+                    <input type="checkbox" name="arete" aria-label="{{localize 'WOD5E_MAGE.Arete.Include'}}">
+                    <span class="wod5e-mage-arete-toggle-value">{{arete.value}}</span>
+                </label>
             </div>
         </div>
 
@@ -49,15 +50,17 @@
     <div class="flexrow">
         <div class="secondary-selector">
             <div class="selector-title">{{localize "WOD5E_MAGE.Arete.Coincidental"}}</div>
-            <input type="checkbox" name="coincidental">
+            <input type="checkbox" class="wod5e-mage-magick-type" name="coincidental">
         </div>
         <div class="secondary-selector">
             <div class="selector-title">{{localize "WOD5E_MAGE.Arete.Vulgar"}}</div>
-            <input type="checkbox" name="vulgar">
+            <input type="checkbox" class="wod5e-mage-magick-type" name="vulgar">
         </div>
         <div class="secondary-selector">
             <div class="selector-title">{{localize "WOD5E_MAGE.Arete.VulgarWithWitnesses"}}</div>
-            <input type="checkbox" name="witnesses">
+            <input type="checkbox" class="wod5e-mage-magick-type" name="witnesses">
         </div>
     </div>
+
+    <p class="wod5e-mage-magick-type-hint">{{localize "WOD5E_MAGE.Arete.ParadoxHint"}}</p>
 </form>

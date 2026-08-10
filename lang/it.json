@@ -17,7 +17,11 @@
     "Arete": {
       "Label": "Areté",
       "Roll": "Tira Areté",
+      "Include": "Aggiungi Areté alla riserva",
+      "IncludeHint": "Spunta per sommare il tuo Areté ad Attributo e Abilità. Di base non entra nel tiro.",
+      "ParadoxHint": "Volgare sposta la Ruota di 1 verso il Paradosso, con testimoni di 2. Il tipo è una scelta sola.",
       "Rolling": "Areté + {attribute} + {skill}",
+      "RollingNoArete": "{attribute} + {skill}",
       "RollHint": "Tira Areté insieme a un Attributo e un'Abilità",
       "Trait": "Attributo o Abilità",
       "TraitShort": "Abilità",
@@ -33,7 +37,8 @@
       "VulgarWithWitnesses": "Volgare con testimoni",
       "NoType": "Nessun tipo selezionato",
       "NoPenaltyHint": "Per ora queste opzioni non modificano la riserva di dadi.",
-      "RollFlavor": "Riserva: Areté {arete} + {attribute} {attributeValue} + {skill} {skillValue}. Tipo: {magickType}."
+      "RollFlavor": "Riserva: Areté {arete} + {attribute} {attributeValue} + {skill} {skillValue}. Tipo: {magickType}.",
+      "RollFlavorNoArete": "Riserva: {attribute} {attributeValue} + {skill} {skillValue}, senza Areté. Tipo: {magickType}."
     },
     "Focus": {
       "Paradigm": "Paradigma",
@@ -198,7 +203,9 @@
       "RemoveQuintessence": "Rimuovi Quintessenza",
       "AddParadox": "Aggiungi Paradosso",
       "RemoveParadox": "Rimuovi Paradosso",
-      "SideFull": "Questo lato della barra di Magick è già pieno."
+      "SideFull": "Questo lato della barra di Magick è già pieno.",
+      "ParadoxGained": "Magick volgare: la Ruota si sposta di {amount} verso il Paradosso.",
+      "ParadoxReverted": "Tiro annullato: la Ruota è tornata com'era."
     },
     "Creation": {
       "SheetType": {

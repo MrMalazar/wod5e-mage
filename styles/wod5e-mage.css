@@ -880,6 +880,51 @@
   width: 40px;
 }
 
+/* ==========================================================================
+   Finestra «Tira Areté».
+   La finestra non porta la classe del modulo, quindi questi selettori vivono
+   da soli: i nomi sono unici e non collidono con il sistema.
+   ========================================================================== */
+
+.wod5e-mage-arete-toggle {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.5rem;
+  justify-content: center;
+  width: 100%;
+}
+
+.wod5e-mage-arete-toggle input[type="checkbox"] {
+  cursor: pointer;
+  flex: none;
+  height: 18px;
+  margin: 0;
+  width: 18px;
+}
+
+.wod5e-mage-arete-toggle-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 1.2rem;
+  opacity: 0.5;
+  text-align: center;
+  transition: color 120ms ease, opacity 120ms ease;
+}
+
+.wod5e-mage-arete-toggle input[type="checkbox"]:checked + .wod5e-mage-arete-toggle-value {
+  color: #d9a827;
+  opacity: 1;
+}
+
+.wod5e-mage-magick-type-hint {
+  font-size: 0.75rem;
+  margin: 0.85rem 0 0;
+  opacity: 0.75;
+  text-align: center;
+}
+
 @media (width <= 900px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-layout {
     grid-template-columns: 1fr;
