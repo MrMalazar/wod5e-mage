@@ -9,6 +9,9 @@
   --mage-oro-scuro: #98772b;  /* cornici e righelli */
   --mage-oro-tenue: #6b4f12;  /* bordi discreti */
   --mage-oro-chiaro: #f5e7b2; /* testo delle intestazioni sul fondo scuro */
+  --mage-carta: #fbf8f0;      /* fondo di tutto ciò in cui si scrive */
+  --mage-inchiostro: #14110c; /* testo su carta */
+  --mage-inchiostro-tenue: #7a7264; /* segnaposto e suggerimenti */
   --mage-dot-color: var(--mage-oro);
   --mage-dot-border: var(--mage-oro-tenue);
 }
@@ -66,6 +69,32 @@
   background: var(--mage-tab-nav-bg);
   border-color: var(--mage-oro);
   color: #fff;
+}
+
+/* ==========================================================================
+   Aree di scrittura su carta.
+   Tutto ciò in cui si digita passa a fondo chiaro e inchiostro scuro: il
+   bianco su nero stanca la lettura. Le cornici restano oro.
+   ========================================================================== */
+
+.wod5e-mage.wod5e.actor.sheet :is(.window-content, .actor-header) :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]), textarea, select, prose-mirror .editor-content) {
+  --input-text-color: var(--mage-inchiostro);
+  background-color: var(--mage-carta);
+  border-color: var(--mage-oro-scuro);
+  color: var(--mage-inchiostro);
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.window-content, .actor-header) prose-mirror .editor-content :not(a) {
+  color: var(--mage-inchiostro);
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.window-content, .actor-header) ::placeholder {
+  color: var(--mage-inchiostro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content select option {
+  background-color: var(--mage-carta);
+  color: var(--mage-inchiostro);
 }
 
 /* ========================================================================== */
@@ -545,8 +574,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid > input {
-  --input-text-color: #fff;
-  color: #fff;
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
   min-width: 0;
   width: 100%;
 }
@@ -675,8 +704,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror .editor-content,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror .editor-content * {
-  color: #fff;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror .editor-content *:not(a) {
+  color: var(--mage-inchiostro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-layout {
@@ -710,8 +739,8 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-short-field > input,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > input {
-  --input-text-color: #fff;
-  color: #fff;
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
   width: 100%;
 }
 
@@ -800,8 +829,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content * {
-  color: #fff;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content *:not(a) {
+  color: var(--mage-inchiostro);
 }
 
 /* Le immagini SVG contengono soltanto il simbolo della faccia del dado. */
