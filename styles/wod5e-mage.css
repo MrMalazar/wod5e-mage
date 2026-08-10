@@ -6,11 +6,104 @@
   --mage-dot-active: #c99a2e;
   --mage-dot-border: #98772b;
   --mage-tab-nav-bg: color-mix(in srgb, var(--mortal-color-1) 94%, white);
+  /* Palette del Mago */
+  --mage-oro: #d9a827;        /* accento acceso: pallini e dettagli vivi */
+  --mage-oro-scuro: #98772b;  /* cornici e righelli */
+  --mage-oro-tenue: #6b4f12;  /* bordi discreti */
+  --mage-oro-chiaro: #f5e7b2; /* testo delle intestazioni sul fondo scuro */
+  --mage-carta: #fbf8f0;      /* fondo di tutto ciò in cui si scrive */
+  --mage-inchiostro: #14110c; /* testo su carta */
+  --mage-inchiostro-tenue: #7a7264; /* segnaposto e suggerimenti */
+  --mage-dot-color: var(--mage-oro);
+  --mage-dot-border: var(--mage-oro-tenue);
 }
+
+/* Pallini pieni in oro acceso.
+   Il sistema disegna con la stessa regola i pallini di Attributi/Abilità e
+   quelli delle Sfere: qui la si sovrascrive una volta sola, per la sola
+   scheda del Mago. */
+.wod5e-mage.wod5e.actor.sheet .resource-value .resource-value-step.active,
+.wod5e-mage.wod5e.actor.sheet .resource-value-static .resource-value-static-step.active {
+  background-color: var(--mage-dot-color);
+  border-color: var(--mage-dot-border);
+}
+
+/* ==========================================================================
+   Palette su tutta la scheda.
+   Il tema scuro del sistema borda ogni cosa di bianco: qui il bianco diventa
+   oro, su tutte le linguette, fondo scuro invariato.
+   ========================================================================== */
+
+.wod5e-mage.wod5e.actor.sheet .window-header {
+  background: var(--mortal-color-1);
+}
+
+.wod5e-mage.wod5e.actor.sheet .item-list .item,
+.wod5e-mage.wod5e.actor.sheet .item-list .category,
+.wod5e-mage.wod5e.actor.sheet .stats-container,
+.wod5e-mage.wod5e.actor.sheet .stats-container .stats-footer,
+.wod5e-mage.wod5e.actor.sheet .actor-header .resource,
+.wod5e-mage.wod5e.actor.sheet .actor-header input,
+.wod5e-mage.wod5e.actor.sheet .window-content .resource,
+.wod5e-mage.wod5e.actor.sheet .window-content prose-mirror .editor-content,
+.wod5e-mage.wod5e.actor.sheet .window-content input,
+.wod5e-mage.wod5e.actor.sheet .window-content select {
+  border-color: var(--mage-oro-scuro);
+}
+
+/* Caselle di Salute, Volontà e Saggezza */
+.wod5e-mage.wod5e.actor.sheet .resource-counter .resource-counter-step {
+  border-color: var(--mage-oro-scuro);
+}
+
+/* Intestazioni delle linguette che restano sul fondo scuro */
+.wod5e-mage.wod5e.actor.sheet .tab:not(.wod5e-mage-spheres, .wod5e-mage-focus, .wod5e-mage-concept-challenge) :is(.field-header, .resource-header, .header-label, .item-header) {
+  color: var(--mage-oro-chiaro);
+}
+
+/* Livrea unica per tutte le linguette della barra */
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab] .navicon,
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs .lock-btn {
+  border: 1px solid var(--mage-oro-scuro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].active .navicon {
+  background: var(--mage-tab-nav-bg);
+  border-color: var(--mage-oro);
+  color: #fff;
+}
+
+/* ==========================================================================
+   Aree di scrittura su carta.
+   Tutto ciò in cui si digita passa a fondo chiaro e inchiostro scuro: il
+   bianco su nero stanca la lettura. Le cornici restano oro.
+   ========================================================================== */
+
+.wod5e-mage.wod5e.actor.sheet :is(.window-content, .actor-header) :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]), textarea, select, prose-mirror .editor-content) {
+  --input-text-color: var(--mage-inchiostro);
+  background-color: var(--mage-carta);
+  border-color: var(--mage-oro-scuro);
+  color: var(--mage-inchiostro);
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.window-content, .actor-header) prose-mirror .editor-content :not(a) {
+  color: var(--mage-inchiostro);
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.window-content, .actor-header) ::placeholder {
+  color: var(--mage-inchiostro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content select option {
+  background-color: var(--mage-carta);
+  color: var(--mage-inchiostro);
+}
+
+/* ========================================================================== */
 
 .wod5e-mage.wod5e.actor.sheet .sheet-tabs > :is([data-tab="magick"], [data-tab="focus"], [data-tab="conceptChallenge"]) .navicon {
   background-color: var(--mage-tab-nav-bg);
-  border: 0;
+  border: 1px solid var(--mage-oro-scuro);
   color: #fff;
 }
 
@@ -56,6 +149,19 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-resources .field-section {
   width: min(250px, 100%);
+}
+
+/* Salute, Volontà e Saggezza: intestazioni leggibili.
+   16pt è la stessa misura che il sistema chiama .big-header. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-resources .field-header {
+  font-size: 16pt;
+  gap: 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-resources .field-header .resource-control {
+  align-self: center;
+  font-size: 12pt;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-spacer {
@@ -512,8 +618,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid > input {
-  --input-text-color: #fff;
-  color: #fff;
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
   min-width: 0;
   width: 100%;
 }
@@ -624,22 +730,26 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror {
-  resize: none;
+  min-height: 10rem;
+  overflow: auto;
+  resize: vertical;
 }
 
+/* Nessun tetto: l'area cresce con quello che ci si scrive dentro,
+   e resta trascinabile in altezza. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror .editor-content {
   box-sizing: border-box;
-  height: 4.5rem;
-  line-height: 1.35;
-  max-height: 4.5rem;
-  min-height: 4.5rem;
-  overflow-y: auto;
-  padding: 0.45rem 0.55rem;
+  height: auto;
+  line-height: 1.45;
+  max-height: none;
+  min-height: 9.5rem;
+  overflow-y: visible;
+  padding: 0.5rem 0.6rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror .editor-content,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror .editor-content * {
-  color: #fff;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror .editor-content *:not(a) {
+  color: var(--mage-inchiostro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-layout {
@@ -673,8 +783,8 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-short-field > input,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > input {
-  --input-text-color: #fff;
-  color: #fff;
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
   width: 100%;
 }
 
@@ -750,21 +860,24 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror {
-  resize: none;
+  min-height: 10rem;
+  overflow: auto;
+  resize: vertical;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content {
   box-sizing: border-box;
-  height: 5rem;
-  max-height: 5rem;
-  min-height: 5rem;
-  overflow-y: auto;
-  padding: 0.45rem 0.55rem;
+  height: auto;
+  line-height: 1.45;
+  max-height: none;
+  min-height: 9.5rem;
+  overflow-y: visible;
+  padding: 0.5rem 0.6rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content * {
-  color: #fff;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content *:not(a) {
+  color: var(--mage-inchiostro);
 }
 
 /* Sfere e Ambiti usano gli stessi pallini da 22px e la palette di Arete. */
@@ -837,6 +950,51 @@
   border-radius: 4px;
   height: 40px;
   width: 40px;
+}
+
+/* ==========================================================================
+   Finestra «Tira Areté».
+   La finestra non porta la classe del modulo, quindi questi selettori vivono
+   da soli: i nomi sono unici e non collidono con il sistema.
+   ========================================================================== */
+
+.wod5e-mage-arete-toggle {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.5rem;
+  justify-content: center;
+  width: 100%;
+}
+
+.wod5e-mage-arete-toggle input[type="checkbox"] {
+  cursor: pointer;
+  flex: none;
+  height: 18px;
+  margin: 0;
+  width: 18px;
+}
+
+.wod5e-mage-arete-toggle-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 1.2rem;
+  opacity: 0.5;
+  text-align: center;
+  transition: color 120ms ease, opacity 120ms ease;
+}
+
+.wod5e-mage-arete-toggle input[type="checkbox"]:checked + .wod5e-mage-arete-toggle-value {
+  color: #d9a827;
+  opacity: 1;
+}
+
+.wod5e-mage-magick-type-hint {
+  font-size: 0.75rem;
+  margin: 0.85rem 0 0;
+  opacity: 0.75;
+  text-align: center;
 }
 
 @media (width <= 900px) {

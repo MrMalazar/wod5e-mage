@@ -107,6 +107,36 @@ export function applyMagickBalanceDelta(balance, resource, delta) {
   return next;
 }
 
+/**
+ * Quanto Paradosso porta il tipo di Magick dichiarato nel tiro di Areté.
+ * Volgare vale 1, volgare con testimoni vale 2; i due non si sommano perché
+ * la finestra li tratta come una scelta sola.
+ */
+export function paradoxGainForMagickType({ vulgar = false, witnesses = false } = {}) {
+  if (witnesses) return 2;
+  if (vulgar) return 1;
+  return 0;
+}
+
+/**
+ * Aggiunge Paradosso passando dalla stessa logica del pulsante +, un passo
+ * alla volta: se la Ruota è piena il primo passo libera una cella dalla
+ * Quintessenza e il secondo la riempie di Paradosso.
+ */
+export function addParadoxToBalance(balance, amount) {
+  const steps = Math.max(Math.trunc(Number(amount)) || 0, 0);
+  let next = {
+    quintessence: balance.quintessence,
+    paradox: balance.paradox
+  };
+
+  for (let step = 0; step < steps; step += 1) {
+    next = applyMagickBalanceDelta(next, "paradox", 1);
+  }
+
+  return next;
+}
+
 export async function onMagickBalanceChange(event, target) {
   event.preventDefault();
 

@@ -21,19 +21,44 @@ assert.equal(getArete(actorWithFlag({ value: 0 })).value, 1);
 assert.equal(calculateAreteTraitPool(3, 4, 2), 9);
 assert.equal(calculateAreteTraitPool(1, 1, 0), 2);
 
+// Areté resta fuori dalla riserva finché la casella non viene spuntata.
+assert.deepEqual(normalizeMagickRollOptions(), {
+  useArete: false,
+  coincidental: false,
+  vulgar: false,
+  witnesses: false
+});
+assert.equal(normalizeMagickRollOptions({ arete: "on" }).useArete, true);
+assert.equal(normalizeMagickRollOptions({ arete: true }).useArete, true);
+assert.equal(normalizeMagickRollOptions({ arete: "false" }).useArete, false);
+
 assert.deepEqual(normalizeMagickRollOptions({ vulgar: false, witnesses: true }), {
+  useArete: false,
   coincidental: false,
   vulgar: false,
   witnesses: true
 });
+
+// Il tipo di Magick è una scelta sola: vince sempre la più grave.
 assert.deepEqual(normalizeMagickRollOptions({
   coincidental: true,
   vulgar: true,
   witnesses: false
 }), {
-  coincidental: true,
+  useArete: false,
+  coincidental: false,
   vulgar: true,
   witnesses: false
+});
+assert.deepEqual(normalizeMagickRollOptions({
+  coincidental: true,
+  vulgar: true,
+  witnesses: true
+}), {
+  useArete: false,
+  coincidental: false,
+  vulgar: false,
+  witnesses: true
 });
 
 const traits = prepareAreteTraits({
