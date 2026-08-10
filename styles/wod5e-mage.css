@@ -1021,3 +1021,192 @@
     padding-right: 0;
   }
 }
+
+/* ============================================================
+   BARRA DELLE LINGUETTE — 76px, icona sopra e parola sotto.
+   Il sistema riserva 45px con `margin-left` su .actor-header e .tab
+   (unica occorrenza in actor-sheets.less): qui si sposta il confine.
+   ============================================================ */
+.wod5e-mage.wod5e.actor.sheet .window-content .actor-header,
+.wod5e-mage.wod5e.actor.sheet .window-content .tab {
+  margin-left: 76px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tabs .sheet-tabs {
+  width: 76px;
+  padding: 6px 5px;
+  gap: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tabs .sheet-tabs > div,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tab-button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--mage-oro-chiaro);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 2px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tabs .navlabel {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tabs .sheet-tabs > div.active {
+  background: var(--mortal-color-1);
+  border-color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tabs-spacer {
+  flex: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tab-button {
+  background: #33290f;
+  border-color: var(--mage-oro-scuro);
+}
+
+/* Il canale della barra di scorrimento resta anche a pagina corta:
+   il sistema usa `scroll`, non `auto`. */
+.wod5e-mage.wod5e.actor.sheet .window-content section.tab {
+  overflow-y: auto;
+}
+
+/* Le pagine ricomposte */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-layout,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-layout,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-top,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-bottom {
+  gap: 10px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-bottom .note-container prose-mirror {
+  min-height: 16rem;
+}
+
+/* ============================================================
+   LA RUOTA IN TESTATA — l'arco resta, perché è la firma di M5.
+   Occupa lo slot destro, che il template teneva già libero.
+   ============================================================ */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-wheel {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-wheel-inner {
+  align-items: center;
+  background: linear-gradient(#2c2413, #211b0f);
+  border: 2px solid var(--mage-oro);
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 10px 8px;
+}
+
+/* Arco compatto: stessa geometria della linguetta Magick, metà scala. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-compact {
+  height: 74px;
+  margin: 0;
+  width: 196px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-compact .wod5e-mage-magick-node {
+  height: 13px;
+  width: 13px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-compact .wod5e-mage-magick-title {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-counters {
+  display: flex;
+  gap: 12px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-counter-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource.quintessence .wod5e-mage-counter-label,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource.quintessence strong {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource.paradox .wod5e-mage-counter-label,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource.paradox strong {
+  color: #b58ade;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource button {
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  height: 20px;
+  min-height: 20px;
+  padding: 0;
+  width: 20px;
+}
+
+/* La parola «Areté» compare una volta sola, qui. Il pulsante dice «Tira». */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-arete {
+  align-items: center;
+  border-top: 1px solid rgb(152 119 43 / 45%);
+  display: flex;
+  gap: 7px;
+  padding-top: 6px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-arete-label {
+  color: var(--mage-oro);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-arete-value {
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-roll {
+  align-items: center;
+  border: 1px solid var(--mage-oro);
+  border-radius: 5px;
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 600;
+  gap: 5px;
+  margin: 0 0 0 auto;
+  min-height: 24px;
+  padding: 0 10px;
+  width: auto;
+}
+
+/* La Saggezza scesa nel Focus */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-wisdom {
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
+  margin: 0 1.25rem;
+  padding-bottom: 0.75rem;
+}

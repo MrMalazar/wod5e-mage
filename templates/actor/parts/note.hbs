@@ -1,0 +1,34 @@
+{{!-- Note: biografia, aspetto, note pubbliche e private su una pagina sola. --}}
+<section class="tab {{tab.cssClass}} wod5e-mage-note" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    <div class="flexrow wod5e-mage-note-top">
+        <div class="note-container">
+            <div class="flex-center"><label class="resource-label field-header">{{localize "WOD5E.BiographyList.Biography"}}</label></div>
+            <div class="resource">
+                <prose-mirror name="system.biography" value="{{biography}}" toggled="true" compact="true">{{{enrichedBiography}}}</prose-mirror>
+            </div>
+        </div>
+        <div class="note-container">
+            <div class="flex-center"><label class="resource-label field-header">{{localize "WOD5E.BiographyList.Appearance"}}</label></div>
+            <div class="resource">
+                <prose-mirror name="system.appearance" value="{{appearance}}" toggled="true" compact="true">{{{enrichedAppearance}}}</prose-mirror>
+            </div>
+        </div>
+    </div>
+
+    <div class="flexrow wod5e-mage-note-bottom">
+        <div class="note-container public-notepad">
+            <div class="flex-center"><label class="resource-label field-header">{{localize "WOD5E.Tabs.PublicNotes"}}</label></div>
+            <div class="resource">
+                <prose-mirror name="system.notes" value="{{notes}}" toggled="true" compact="true">{{{enrichedNotes}}}</prose-mirror>
+            </div>
+        </div>
+        {{#if isOwner}}
+            <div class="note-container private-notepad">
+                <div class="flex-center"><label class="resource-label field-header">{{localize "WOD5E.Tabs.PrivateNotes"}}</label></div>
+                <div class="resource">
+                    <prose-mirror name="system.privatenotes" value="{{privatenotes}}" toggled="true" compact="true">{{{enrichedPrivateNotes}}}</prose-mirror>
+                </div>
+            </div>
+        {{/if}}
+    </div>
+</section>

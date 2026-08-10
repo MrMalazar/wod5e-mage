@@ -2,13 +2,17 @@
   "WOD5E_MAGE": {
     "Sheets": {
       "Mage": "Mago",
-      "Awakened": "Awakened"
+      "Awakened": "Risvegliato"
     },
     "Tabs": {
       "Magick": "Magick",
       "Spheres": "Sfere",
       "Focus": "Focus",
-      "ConceptChallenge": "Sfida del concetto"
+      "ConceptChallenge": "Sfida del concetto",
+      "Traits": "Tratti",
+      "Character": "Personaggio",
+      "Belongings": "Dotazione",
+      "Notes": "Note"
     },
     "Dice": {
       "MageDice": "Dadi Mage",
@@ -16,7 +20,7 @@
     },
     "Arete": {
       "Label": "Areté",
-      "Roll": "Tira Areté",
+      "Roll": "Tira",
       "Include": "Aggiungi Areté alla riserva",
       "IncludeHint": "Spunta per sommare il tuo Areté ad Attributo e Abilità. Di base non entra nel tiro.",
       "ParadoxHint": "Volgare sposta la Ruota di 1 verso il Paradosso, con testimoni di 2. Il tipo è una scelta sola.",
@@ -207,7 +211,9 @@
       "RemoveParadox": "Rimuovi Paradosso",
       "SideFull": "Questo lato della barra di Magick è già pieno.",
       "ParadoxGained": "Magick volgare: la Ruota si sposta di {amount} verso il Paradosso.",
-      "ParadoxReverted": "Tiro annullato: la Ruota è tornata com'era."
+      "ParadoxReverted": "Tiro annullato: la Ruota è tornata com'era.",
+      "QuintessenceShort": "Q",
+      "ParadoxShort": "P"
     },
     "Creation": {
       "SheetType": {

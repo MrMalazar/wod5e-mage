@@ -60,3 +60,21 @@ export async function prepareConceptChallenge(actor, enrichHTML) {
     }))
   })));
 }
+
+/** La Sfida esce dalle linguette: si apre a richiesta, dal pannello Personaggio. */
+export async function onConceptChallengeOpen(event) {
+  event?.preventDefault?.();
+
+  const actor = this.actor;
+  const content = await foundry.applications.handlebars.renderTemplate(
+    `modules/${MODULE_ID}/templates/actor/parts/concept-challenge.hbs`,
+    { conceptChallenge: await prepareConceptChallenge(actor), locked: actor.system.locked }
+  );
+
+  return foundry.applications.api.DialogV2.prompt({
+    window: { title: game.i18n.localize("WOD5E_MAGE.Tabs.ConceptChallenge") },
+    content,
+    classes: ["wod5e", "wod5e-mage", "mage"],
+    ok: { icon: "fas fa-check", label: game.i18n.localize("WOD5E.Close") }
+  });
+}

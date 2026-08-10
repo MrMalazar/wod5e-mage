@@ -1,13 +1,68 @@
+{{!-- Testata del Mago: riserve a sinistra, ritratto al centro,
+     e in alto a destra la Ruota con Areté — sempre visibile, su ogni pagina. --}}
 <header class="actor-header wod5e-mage-header" {{#if headerbg}}style="background: url({{headerbg}}) center;"{{/if}}>
     <div class="header-fields">
         <div class="header-fields-left wod5e-mage-header-resources">
             {{> "systems/wod5e/display/shared/actors/parts/health.hbs"}}
             {{> "systems/wod5e/display/shared/actors/parts/willpower.hbs"}}
-            {{> "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"}}
         </div>
     </div>
 
     {{> "systems/wod5e/display/shared/actors/parts/header-profile.hbs"}}
 
-    <div class="header-fields wod5e-mage-header-spacer" aria-hidden="true"></div>
+    <div class="header-fields wod5e-mage-header-wheel">
+        <div class="wod5e-mage-header-wheel-inner">
+
+            <div class="wod5e-mage-magick-track wod5e-mage-magick-track-compact" role="group"
+                 aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
+                <svg class="wod5e-mage-magick-arc" viewBox="0 0 400 180" aria-hidden="true">
+                    <path d="M16 148 A184 133 0 0 1 384 148"></path>
+                </svg>
+
+                {{#each magickTrack.cells as |cell|}}
+                    <span class="wod5e-mage-magick-node {{cell.state}}" style="{{cell.position}}" title="{{cell.number}}"></span>
+                {{/each}}
+
+                <div class="wod5e-mage-magick-title">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</div>
+            </div>
+
+            <div class="wod5e-mage-header-counters">
+                <div class="wod5e-mage-magick-resource quintessence">
+                    <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}"><i class="fa-solid fa-minus"></i></button>
+                    <span class="wod5e-mage-counter-label">{{localize "WOD5E_MAGE.MagickBalance.QuintessenceShort"}}</span>
+                    <strong>{{magickTrack.quintessence}}</strong>
+                    <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}"><i class="fa-solid fa-plus"></i></button>
+                </div>
+
+                <div class="wod5e-mage-magick-resource paradox">
+                    <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}"><i class="fa-solid fa-minus"></i></button>
+                    <span class="wod5e-mage-counter-label">{{localize "WOD5E_MAGE.MagickBalance.ParadoxShort"}}</span>
+                    <strong>{{magickTrack.paradox}}</strong>
+                    <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+
+            {{!-- «Areté» compare una volta sola: sull'indicatore.
+                 Il pulsante dice solo «Tira», e porta il nome esteso nell'aria-label. --}}
+            <div class="wod5e-mage-header-arete">
+                <span class="wod5e-mage-header-arete-label">{{localize "WOD5E_MAGE.Arete.Label"}}</span>
+                <div class="wod5e-mage-arete-dots" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Label'}}">
+                    {{#each arete.steps as |step|}}
+                        <button type="button" class="wod5e-mage-arete-dot {{#if step.active}}active{{/if}}"
+                                data-action="areteChange" data-value="{{step.value}}" aria-label="{{step.value}}"></button>
+                    {{/each}}
+                </div>
+                <strong class="wod5e-mage-header-arete-value">{{arete.value}}</strong>
+                <button type="button" class="wod5e-mage-header-roll" data-action="areteRoll"
+                        aria-label="{{localize 'WOD5E_MAGE.Arete.RollHint'}}" title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}">
+                    <i class="fa-solid fa-dice-d10"></i>{{localize "WOD5E_MAGE.Arete.Roll"}}
+                </button>
+            </div>
+
+        </div>
+    </div>
 </header>

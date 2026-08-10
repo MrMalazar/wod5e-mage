@@ -1,0 +1,28 @@
+{{!-- Dotazione: Background, Pregi e Difetti accanto all'inventario.
+     Unisce la colonna destra di features con la linguetta equipment. --}}
+<section class="tab {{tab.cssClass}} wod5e-mage-dotazione" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    <div class="flexrow wod5e-mage-dotazione-layout">
+        <div class="features-list item-list">
+            {{> "systems/wod5e/display/shared/actors/parts/core-features.hbs"}}
+        </div>
+
+        <div class="wod5e-mage-dotazione-right flexcol">
+            <div class="equipment-list item-list">
+                {{> "modules/wod5e-mage/templates/actor/parts/equipment-list.hbs"}}
+            </div>
+
+            <div class="equipment-notes flexcol">
+                <div class="description-field">
+                    <div class="flex-center">
+                        <label class="resource-label field-header">{{localize "WOD5E.EquipmentList.EquipmentNotes"}}</label>
+                    </div>
+                    <div class="description-content resource">
+                        <prose-mirror name="system.equipment" value="{{equipment}}" toggled="true" compact="true">
+                            {{{enrichedEquipment}}}
+                        </prose-mirror>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

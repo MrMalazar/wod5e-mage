@@ -8,7 +8,11 @@
       "Magick": "Magick",
       "Spheres": "Spheres",
       "Focus": "Focus",
-      "ConceptChallenge": "Concept Challenge"
+      "ConceptChallenge": "Concept Challenge",
+      "Traits": "Traits",
+      "Character": "Character",
+      "Belongings": "Belongings",
+      "Notes": "Notes"
     },
     "Dice": {
       "MageDice": "Mage Dice",
@@ -16,7 +20,7 @@
     },
     "Arete": {
       "Label": "Arete",
-      "Roll": "Roll Arete",
+      "Roll": "Roll",
       "Include": "Add Arete to the pool",
       "IncludeHint": "Tick to add your Arete on top of Attribute and Skill. It is left out by default.",
       "ParadoxHint": "Vulgar moves the Wheel 1 step toward Paradox, with witnesses 2. The type is a single choice.",
@@ -207,7 +211,9 @@
       "RemoveParadox": "Remove Paradox",
       "SideFull": "This side of the Magick track is already full.",
       "ParadoxGained": "Vulgar Magick: the Wheel moves {amount} step(s) toward Paradox.",
-      "ParadoxReverted": "Roll cancelled: the Wheel is back where it was."
+      "ParadoxReverted": "Roll cancelled: the Wheel is back where it was.",
+      "QuintessenceShort": "Q",
+      "ParadoxShort": "P"
     },
     "Creation": {
       "SheetType": {

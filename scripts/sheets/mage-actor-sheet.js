@@ -1,6 +1,7 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
-import { prepareConceptChallenge } from "../concept-challenge.js";
+import { onConceptChallengeOpen } from "../concept-challenge.js";
+import { onExperienceOpen } from "../experience-window.js";
 import { onFocusInstrumentToggle, prepareFocus } from "../focus.js";
 import {
   getPersistentMagickResources,
@@ -16,19 +17,28 @@ import { onScopeChange, prepareScopes } from "../scopes.js";
 import { onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 
+const MODULE = "modules/wod5e-mage/templates/actor";
+const SYSTEM = "systems/wod5e/display/shared/actors/parts";
+
+// Le PART che il Mago ricompone da sé: il loro contenuto finisce dentro
+// personaggio / dotazione / note, quindi non vanno più renderizzate a parte.
 const {
   header: _nativeHeader,
-  tabs,
+  tabs: _nativeTabs,
+  experience: _nativeExperience,
+  features: _nativeFeatures,
+  equipment: _nativeEquipment,
+  biography: _nativeBiography,
+  notepad: _nativeNotepad,
   stats,
-  experience,
   ...remainingParts
 } = MortalActorSheet.PARTS;
 
+const icon = (name) => `<i class="fa-solid fa-${name}"></i>`;
+
 /**
- * Mage sheet for mortal Actors.
- *
- * It intentionally inherits every part and action from MortalActorSheet. Mage
- * fields can be introduced incrementally without changing the native system.
+ * Scheda del Mago: sei pagine raggruppate per come si usano al tavolo.
+ * Vedi templates/actor/parts per i template ricomposti.
  */
 export class MageActorSheet extends MortalActorSheet {
   static DEFAULT_OPTIONS = {
@@ -40,6 +50,8 @@ export class MageActorSheet extends MortalActorSheet {
       magickBalanceChange: onMagickBalanceChange,
       ongoingMagickAdd: onOngoingMagickAdd,
       ongoingMagickDelete: onOngoingMagickDelete,
+      openConceptChallenge: onConceptChallengeOpen,
+      openExperience: onExperienceOpen,
       scopeChange: onScopeChange,
       sphereSelectionChange: onSphereSelectionChange,
       wisdomResourceChange: onWisdomResourceChange,
@@ -49,56 +61,95 @@ export class MageActorSheet extends MortalActorSheet {
 
   static PARTS = {
     header: {
-      template: "modules/wod5e-mage/templates/actor/mage-header.hbs",
+      template: `${MODULE}/mage-header.hbs`,
       templates: [
-        "systems/wod5e/display/shared/actors/parts/health.hbs",
-        "systems/wod5e/display/shared/actors/parts/willpower.hbs",
-        "systems/wod5e/display/shared/actors/parts/header-profile.hbs",
-        "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"
+        `${SYSTEM}/health.hbs`,
+        `${SYSTEM}/willpower.hbs`,
+        `${SYSTEM}/header-profile.hbs`
       ]
     },
-    tabs,
+    tabs: { template: `${MODULE}/parts/tab-navigation.hbs` },
     stats,
-    experience,
-    magick: {
-      template: "modules/wod5e-mage/templates/actor/parts/spheres.hbs"
-    },
+    magick: { template: `${MODULE}/parts/spheres.hbs` },
     focus: {
-      template: "modules/wod5e-mage/templates/actor/parts/focus.hbs"
+      template: `${MODULE}/parts/focus.hbs`,
+      templates: [`${MODULE}/parts/wisdom.hbs`]
     },
-    conceptChallenge: {
-      template: "modules/wod5e-mage/templates/actor/parts/concept-challenge.hbs"
+    personaggio: {
+      template: `${MODULE}/parts/personaggio.hbs`,
+      templates: [
+        `${SYSTEM}/core-details.hbs`,
+        `${SYSTEM}/chronicle-tenets.hbs`,
+        `${SYSTEM}/touchstones-convictions.hbs`
+      ]
     },
+    dotazione: {
+      template: `${MODULE}/parts/dotazione.hbs`,
+      templates: [
+        `${SYSTEM}/core-features.hbs`,
+        `${MODULE}/parts/equipment-list.hbs`
+      ]
+    },
+    note: { template: `${MODULE}/parts/note.hbs` },
     ...remainingParts
   };
 
   constructor(options = {}) {
     super(options);
 
-    const { stats, experience, ...remainingTabs } = this.tabs;
+    // Sei pagine, nell'ordine in cui si usano. La PART `stats` tiene il suo id
+    // perché tabGroups.primary punta lì: cambia solo l'etichetta.
     this.tabs = {
-      stats,
+      stats: {
+        id: "stats",
+        group: "primary",
+        title: "WOD5E_MAGE.Tabs.Traits",
+        icon: icon("table-cells-large")
+      },
       magick: {
         id: "magick",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Magick",
-        icon: '<i class="fa-solid fa-circle-nodes"></i>'
+        icon: icon("circle-nodes")
       },
       focus: {
         id: "focus",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Focus",
-        icon: '<i class="fa-solid fa-bullseye"></i>'
+        icon: icon("bullseye")
       },
-      conceptChallenge: {
-        id: "conceptChallenge",
+      dotazione: {
+        id: "dotazione",
         group: "primary",
-        title: "WOD5E_MAGE.Tabs.ConceptChallenge",
-        icon: '<i class="fa-solid fa-pen-to-square"></i>'
+        title: "WOD5E_MAGE.Tabs.Belongings",
+        icon: icon("toolbox")
       },
-      experience,
-      ...remainingTabs
+      personaggio: {
+        id: "personaggio",
+        group: "primary",
+        title: "WOD5E_MAGE.Tabs.Character",
+        icon: icon("gem")
+      },
+      note: {
+        id: "note",
+        group: "primary",
+        title: "WOD5E_MAGE.Tabs.Notes",
+        icon: icon("note-sticky")
+      }
     };
+  }
+
+  /** Le Impostazioni escono dalla barra e vanno nel menù della finestra. */
+  _getHeaderControls() {
+    const controls = super._getHeaderControls();
+
+    controls.push({
+      icon: "fa-solid fa-gears",
+      label: "WOD5E.Tabs.Settings",
+      action: "openSettings"
+    });
+
+    return controls;
   }
 
   get title() {
@@ -117,16 +168,22 @@ export class MageActorSheet extends MortalActorSheet {
   async _preparePartContext(partId, context, options) {
     context = { ...(await super._preparePartContext(partId, context, options)) };
 
+    const actor = this.actor;
+
+    // La testata porta la Ruota e Areté, quindi le serve il loro contesto.
+    if (partId === "header") {
+      context.arete = getArete(actor);
+      context.magickTrack = prepareMagickTrack(actor);
+    }
+
     if (partId === "magick") {
       context.tab = context.tabs.magick;
-      context.arete = getArete(this.actor);
-      context.magickTrack = prepareMagickTrack(this.actor);
-      context.persistentMagickResources = getPersistentMagickResources(this.actor);
-      context.scopes = prepareScopes(this.actor);
-      context.ongoingMagick = prepareOngoingMagick(this.actor);
-      // Sort the upper icon selector by the labels the player actually sees.
-      // Passing i18n explicitly avoids relying on global fallback resolution.
-      const sphereData = prepareSpheres(this.actor, {
+      context.arete = getArete(actor);
+      context.magickTrack = prepareMagickTrack(actor);
+      context.persistentMagickResources = getPersistentMagickResources(actor);
+      context.scopes = prepareScopes(actor);
+      context.ongoingMagick = prepareOngoingMagick(actor);
+      const sphereData = prepareSpheres(actor, {
         localize: game.i18n.localize.bind(game.i18n),
         locale: game.i18n.lang
       });
@@ -134,14 +191,29 @@ export class MageActorSheet extends MortalActorSheet {
       context.spheres = sphereData.selected;
     }
 
-    if (partId === "conceptChallenge") {
-      context.tab = context.tabs.conceptChallenge;
-      context.conceptChallenge = await prepareConceptChallenge(this.actor);
-    }
-
+    // La Saggezza scende qui dalla testata, con le Convinzioni accanto.
     if (partId === "focus") {
       context.tab = context.tabs.focus;
-      context.focus = await prepareFocus(this.actor);
+      context.focus = await prepareFocus(actor);
+    }
+
+    // Le pagine ricomposte non passano dallo switch del sistema: le loro
+    // preparazioni vanno chiamate a mano, una o due per pagina.
+    if (partId === "personaggio") {
+      context = await this.prepareFeaturesContext(context, actor);
+      context.tab = context.tabs.personaggio;
+    }
+
+    if (partId === "dotazione") {
+      context = await this.prepareFeaturesContext(context, actor);
+      context = await this.prepareEquipmentContext(context, actor);
+      context.tab = context.tabs.dotazione;
+    }
+
+    if (partId === "note") {
+      context = await this.prepareBiographyContext(context, actor);
+      context = await this.prepareNotepadContext(context, actor);
+      context.tab = context.tabs.note;
     }
 
     return context;
