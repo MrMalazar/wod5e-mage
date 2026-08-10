@@ -3,6 +3,8 @@
   --mortal-color-2: #98772b;
   --mortal-color-3: #f5e7b2;
   --mortal-color-4: #2c2413;
+  --mage-dot-active: #c99a2e;
+  --mage-dot-border: #98772b;
   --mage-tab-nav-bg: color-mix(in srgb, var(--mortal-color-1) 94%, white);
   /* Palette del Mago */
   --mage-oro: #d9a827;        /* accento acceso: pallini e dettagli vivi */
@@ -305,6 +307,47 @@
   text-align: center;
 }
 
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resources {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0 auto 1rem;
+  max-width: 400px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resource {
+  color: var(--mortal-color-1);
+  display: flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+  font-weight: 700;
+  gap: 0.3rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resource.permanent-paradox {
+  align-items: flex-end;
+  color: var(--paradox-color, #5a2b82);
+  text-align: right;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resource > input {
+  --input-text-color: #fff;
+  box-sizing: border-box;
+  color: #fff;
+  flex: 0 0 20px;
+  font-size: 0.72rem;
+  height: 20px !important;
+  inline-size: 68px;
+  max-width: 68px;
+  line-height: 16px;
+  min-height: 20px !important;
+  min-width: 68px;
+  padding: 0 0.3rem;
+  text-align: center;
+  width: 68px !important;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -401,7 +444,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete-dot {
   background: #f7f1dc;
-  border: 2px solid var(--mortal-color-1);
+  border: 2px solid var(--mage-dot-border);
   border-radius: 50%;
   box-shadow: 0 0 0 2px rgb(255 255 255 / 45%);
   height: 22px;
@@ -412,8 +455,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete-dot.active {
-  background: var(--mortal-color-2);
-  box-shadow: 0 0 6px var(--mortal-color-2);
+  background: var(--mage-dot-active);
+  box-shadow: 0 0 7px var(--mage-dot-active);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete p {
@@ -540,6 +583,7 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere .resource-value {
   display: flex;
   flex-wrap: nowrap;
+  gap: 0.35rem;
   white-space: nowrap;
 }
 
@@ -816,21 +860,49 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror {
-  resize: none;
+  min-height: 10rem;
+  overflow: auto;
+  resize: vertical;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content {
   box-sizing: border-box;
-  height: 5rem;
-  max-height: 5rem;
-  min-height: 5rem;
-  overflow-y: auto;
-  padding: 0.45rem 0.55rem;
+  height: auto;
+  line-height: 1.45;
+  max-height: none;
+  min-height: 9.5rem;
+  overflow-y: visible;
+  padding: 0.5rem 0.6rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere prose-mirror .editor-content *:not(a) {
   color: var(--mage-inchiostro);
+}
+
+/* Sfere e Ambiti usano gli stessi pallini da 22px e la palette di Arete. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres :is(
+  .wod5e-mage-sphere,
+  .wod5e-mage-sphere-choice,
+  .wod5e-mage-scope-choice
+) .resource-value .resource-value-step {
+  background: #f7f1dc;
+  border: 2px solid var(--mage-dot-border);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgb(255 255 255 / 45%);
+  box-sizing: border-box;
+  height: 22px;
+  min-height: 22px;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres :is(
+  .wod5e-mage-sphere,
+  .wod5e-mage-sphere-choice,
+  .wod5e-mage-scope-choice
+) .resource-value .resource-value-step.active {
+  background: var(--mage-dot-active);
+  box-shadow: 0 0 7px var(--mage-dot-active);
 }
 
 /* Le immagini SVG contengono soltanto il simbolo della faccia del dado. */

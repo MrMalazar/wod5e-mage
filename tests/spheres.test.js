@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
-import { prepareSpheres } from "../scripts/spheres.js";
+import {
+  prepareSpheres,
+  sortSpheresAlphabetically
+} from "../scripts/spheres.js";
 
 function sphereActor({ values = {}, selection } = {}) {
   return {
@@ -33,5 +36,49 @@ prepared = prepareSpheres(sphereActor({
 }));
 assert.deepEqual(prepared.selected.map((sphere) => sphere.id), ["entropy"]);
 assert.equal(prepared.selected[0].icon.endsWith("/entropy.png"), true);
+
+const italianLabels = {
+  correspondence: "Corrispondenza",
+  entropy: "Entropia",
+  forces: "Forze",
+  life: "Vita",
+  matter: "Materia",
+  mind: "Mente",
+  prime: "Prime",
+  spirit: "Spirito",
+  time: "Tempo"
+};
+const localizedOrder = sortSpheresAlphabetically(
+  prepared.all,
+  (key) => italianLabels[key.split(".").at(-1)],
+  "it"
+);
+assert.deepEqual(localizedOrder.map((sphere) => sphere.id), [
+  "correspondence",
+  "entropy",
+  "forces",
+  "matter",
+  "mind",
+  "prime",
+  "spirit",
+  "time",
+  "life"
+]);
+
+const localizedPrepared = prepareSpheres(sphereActor(), {
+  localize: (key) => italianLabels[key.split(".").at(-1)],
+  locale: "it"
+});
+assert.deepEqual(localizedPrepared.all.map((sphere) => sphere.id), [
+  "correspondence",
+  "entropy",
+  "forces",
+  "matter",
+  "mind",
+  "prime",
+  "spirit",
+  "time",
+  "life"
+]);
 
 console.log("Sphere selection and Influence tests passed.");

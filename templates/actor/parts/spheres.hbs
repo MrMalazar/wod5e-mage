@@ -47,6 +47,32 @@
                 </div>
             </div>
 
+            <div class="wod5e-mage-persistent-resources">
+                <label class="wod5e-mage-persistent-resource generated-quintessence">
+                    <span>{{localize "WOD5E_MAGE.MagickBalance.GeneratedQuintessence"}}</span>
+                    <input
+                        type="text"
+                        name="flags.wod5e-mage.persistentMagickResources.generatedQuintessence"
+                        value="{{persistentMagickResources.generatedQuintessence}}"
+                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.GeneratedQuintessence'}}"
+                        {{#if locked}}disabled{{/if}}
+                    >
+                </label>
+
+                <label class="wod5e-mage-persistent-resource permanent-paradox">
+                    <span>{{localize "WOD5E_MAGE.MagickBalance.PermanentParadox"}}</span>
+                    <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        name="flags.wod5e-mage.persistentMagickResources.permanentParadox"
+                        value="{{persistentMagickResources.permanentParadox}}"
+                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.PermanentParadox'}}"
+                        {{#if locked}}disabled{{/if}}
+                    >
+                </label>
+            </div>
+
             <div class="wod5e-mage-arete">
                 <button type="button" class="resource-label wod5e-mage-arete-roll" data-action="areteRoll" title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}">
                     <i class="fa-solid fa-dice-d10"></i>
@@ -115,7 +141,6 @@
                     <div class="wod5e-mage-sphere">
                         <label class="resource-label">{{localize sphere.label}}</label>
                         <div class="resource-value" data-value="{{sphere.value}}" data-name="flags.wod5e-mage.spheres.{{sphere.id}}">
-                            <span class="resource-value-empty" data-action="dotCounterEmpty" title="0"></span>
                             {{#numLoop 5}}
                                 <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}" title="{{this}}"></span>
                             {{/numLoop}}
