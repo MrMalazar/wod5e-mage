@@ -35,3 +35,22 @@ export function shiftParadoxDice(basicDice, paradoxDice, delta) {
     totalDice: total
   };
 }
+
+/**
+ * Conta i successi di un tiro di Arete senza creare coppie critiche con i
+ * dadi Paradosso. Ogni risultato 6-10 vale un successo; soltanto le coppie di
+ * 10 ottenute dai dadi Mage aggiungono due successi ulteriori.
+ */
+export function calculateAreteSuccesses(basicResults = [], paradoxResults = []) {
+  const isActive = (result) => result?.active !== false && !result?.discarded;
+  const activeBasic = basicResults.filter(isActive);
+  const activeParadox = paradoxResults.filter(isActive);
+  const baseSuccesses = [...activeBasic, ...activeParadox]
+    .filter((result) => Number(result.result) >= 6)
+    .length;
+  const basicTens = activeBasic
+    .filter((result) => Number(result.result) === 10)
+    .length;
+
+  return baseSuccesses + Math.floor(basicTens / 2) * 2;
+}

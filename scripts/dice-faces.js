@@ -8,8 +8,17 @@ export const PARADOX_DICE_FACES = Object.freeze({
   // Lo SVG e' trasparente: forma e colore della faccia vuota arrivano dal CSS.
   failure: EMPTY_DICE_FACE,
   success: `${DICE_CHAT_ROOT}paradosso-scintilla.svg`,
-  critical: `${DICE_CHAT_ROOT}paradosso-occhio-completo.svg`
+  // Il 10 conserva la sua icona ma non usa la categoria critica nativa.
+  paradoxTen: `${DICE_CHAT_ROOT}paradosso-occhio-completo.svg`
 });
+
+export function getParadoxDieResult(result) {
+  const value = Number(result);
+  if (value === 1) return "bestial";
+  if (value === 10) return "paradoxTen";
+  if (value >= 6) return "success";
+  return "failure";
+}
 
 export function getMageDieImage(result) {
   const value = Number(result);
@@ -20,9 +29,5 @@ export function getMageDieImage(result) {
 }
 
 export function getParadoxDieImage(result) {
-  const value = Number(result);
-  if (value === 1) return PARADOX_DICE_FACES.bestial;
-  if (value === 10) return PARADOX_DICE_FACES.critical;
-  if (value >= 6) return PARADOX_DICE_FACES.success;
-  return PARADOX_DICE_FACES.failure;
+  return PARADOX_DICE_FACES[getParadoxDieResult(result)];
 }
