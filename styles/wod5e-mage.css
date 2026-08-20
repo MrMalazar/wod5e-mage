@@ -1133,26 +1133,66 @@
 
 /* ============================================================
    THE WHEEL WIDGET — the arc stays, it is the M5 signature.
-   It lives on the Traits page, right column, and never shrinks:
-   when the window gets narrow, the page scrolls instead.
+   Traits page layout, two states driven by a container query:
+   wide   | attributes + skills | conditions/rolls |
+          | THE WHEEL (left)    |                  |
+   narrow | attributes + skills                    |
+          | THE WHEEL | conditions/rolls           |
+   The widget itself never shrinks either way.
    ============================================================ */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti {
+  container-type: inline-size;
+  display: block;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content {
+  align-items: start;
+  column-gap: 0.75rem;
+  display: grid;
+  grid-template-areas:
+    "main side"
+    "ruota side";
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  grid-template-rows: auto 1fr;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content > .skills-attributes {
+  grid-area: main;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content > .side-panel {
+  grid-area: side;
+  max-width: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-cell {
+  grid-area: ruota;
+  justify-self: start;
+  margin-top: 0.25rem;
+  min-width: max-content;
+}
+
+/* Narrow window: the side panel drops down NEXT TO the Wheel. */
+@container (max-width: 719px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content {
+    grid-template-areas:
+      "main main"
+      "ruota side";
+    grid-template-columns: max-content minmax(0, 1fr);
+    grid-template-rows: auto auto;
+  }
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota {
   display: flex;
   flex: 0 0 auto;
-  justify-content: center;
-  margin-top: 0.25rem;
 }
 
-/* The side panel keeps its width; the sheet has a hard floor below
-   which the layout has no honest answer. */
-.wod5e-mage.wod5e.actor.sheet .stats-content .side-panel {
-  flex: 0 0 auto;
-  min-width: 240px;
-}
-
+/* Hard floor: below this the window simply stops shrinking. */
 .wod5e-mage.wod5e.actor.sheet {
   min-height: 520px;
-  min-width: 720px;
+  min-width: 640px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-wheel-inner {

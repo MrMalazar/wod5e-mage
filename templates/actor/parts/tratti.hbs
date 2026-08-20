@@ -2,6 +2,10 @@
      the Wheel widget in the right column, below Conditions and Custom Rolls.
      Keep in sync with the system template, like equipment-list.hbs. --}}
 <section class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    {{!-- Measuring container for the two-state grid: as a block it takes its
+         width from the parent, so inline-size containment is safe here
+         (on the tab itself it collapsed the whole page to its padding). --}}
+    <div class="wod5e-mage-tratti">
     <div class="stats-content">
         <div class="skills-attributes">
             <div class="resource-header">
@@ -152,10 +156,12 @@
                     </div>
                 </div>
             </div>
-            <div class="stat-panel-section">
-                {{!-- The Wheel widget: below the skills, on the right. --}}
-                {{> "modules/wod5e-mage/templates/actor/parts/ruota.hbs"}}
-            </div>
         </div>
+        {{!-- The Wheel widget: below the skills, bottom-left. On narrow
+             windows Conditions and Custom Rolls drop down beside it. --}}
+        <div class="wod5e-mage-ruota-cell">
+            {{> "modules/wod5e-mage/templates/actor/parts/ruota.hbs"}}
+        </div>
+    </div>
     </div>
 </section>
