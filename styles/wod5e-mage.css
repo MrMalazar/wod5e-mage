@@ -3,8 +3,6 @@
   --mortal-color-2: #98772b;
   --mortal-color-3: #f5e7b2;
   --mortal-color-4: #2c2413;
-  --mage-dot-active: #c99a2e;
-  --mage-dot-border: #98772b;
   --mage-tab-nav-bg: color-mix(in srgb, var(--mortal-color-1) 94%, white);
   /* Palette del Mago */
   --mage-oro: #d9a827;        /* accento acceso: pallini e dettagli vivi */
@@ -13,9 +11,16 @@
   --mage-oro-chiaro: #f5e7b2; /* testo delle intestazioni sul fondo scuro */
   --mage-carta: #fbf8f0;      /* fondo di tutto ciò in cui si scrive */
   --mage-inchiostro: #14110c; /* testo su carta */
-  --mage-inchiostro-tenue: #7a7264; /* segnaposto e suggerimenti */
+  --mage-inchiostro-tenue: #746c5e; /* segnaposto e suggerimenti (4.9:1 su carta) */
+  --mage-testo: #e6dcc2;        /* corpo del testo sul fondo scuro */
+  --mage-tenue: #ab9f85;        /* didascalie e suggerimenti sul fondo scuro */
+  --mage-incavo: #15130f;       /* fondi incassati: pallini vuoti, nodi spenti */
+  --mage-velluto: #282723;      /* riquadri interni sul fondo scuro */
+  --mage-viola: #5a2b82;        /* SOLO il Paradosso */
+  --mage-viola-chiaro: #b58ade; /* testo e anelli del Paradosso */
   --mage-dot-color: var(--mage-oro);
   --mage-dot-border: var(--mage-oro-tenue);
+  --mage-dot-active: var(--mage-oro);
 }
 
 /* Pallini pieni in oro acceso.
@@ -26,6 +31,14 @@
 .wod5e-mage.wod5e.actor.sheet .resource-value-static .resource-value-static-step.active {
   background-color: var(--mage-dot-color);
   border-color: var(--mage-dot-border);
+}
+
+/* Pallini vuoti: incavo con anello d'oro scuro, non il grigio del tema
+   (che contro il pieno stava a 2.6:1: sotto la soglia dei componenti). */
+.wod5e-mage.wod5e.actor.sheet .resource-value .resource-value-step:not(.active),
+.wod5e-mage.wod5e.actor.sheet .resource-value-static .resource-value-static-step:not(.active) {
+  background-color: var(--mage-incavo);
+  border-color: var(--mage-oro-scuro);
 }
 
 /* ==========================================================================
@@ -56,8 +69,8 @@
   border-color: var(--mage-oro-scuro);
 }
 
-/* Intestazioni delle linguette che restano sul fondo scuro */
-.wod5e-mage.wod5e.actor.sheet .tab:not(.wod5e-mage-spheres, .wod5e-mage-focus, .wod5e-mage-concept-challenge) :is(.field-header, .resource-header, .header-label, .item-header) {
+/* Intestazioni: un tema solo, su tutte le linguette */
+.wod5e-mage.wod5e.actor.sheet .tab :is(.field-header, .resource-header, .header-label, .item-header) {
   color: var(--mage-oro-chiaro);
 }
 
@@ -111,15 +124,18 @@
   color: #fff;
 }
 
+/* Un tema solo (regola del 9/8, ora applicata davvero ovunque): anche le
+   linguette del Mago stanno sul fondo scuro; la carta resta ai soli campi
+   in cui si scrive. */
 .wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-spheres, .wod5e-mage-focus, .wod5e-mage-concept-challenge) {
-  --input-text-color: #111;
-  background-color: #f0e6cf;
-  color: #111;
+  --input-text-color: var(--mage-inchiostro);
+  background-color: transparent;
+  color: var(--mage-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-section-title {
   align-items: center;
-  color: var(--mortal-color-1);
+  color: var(--mage-oro);
   display: flex;
   font-family: "Modesto Condensed", serif;
   font-size: 1.7rem;
@@ -138,7 +154,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-section-title > span {
-  color: var(--mortal-color-1);
+  color: var(--mage-oro);
   white-space: nowrap;
 }
 
@@ -194,8 +210,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-balance {
-  --quintessence-color: #c99a2e;
-  --paradox-color: #5a2b82;
+  --quintessence-color: var(--mage-oro);
+  --paradox-color: var(--mage-viola);
   margin: 1rem auto 1.25rem;
   max-width: 400px;
   width: 100%;
@@ -219,15 +235,14 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-arc path {
   fill: none;
-  stroke: var(--mortal-color-1);
+  stroke: var(--mage-oro-scuro);
   stroke-width: 2;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-node {
-  background: #f7f1dc;
-  border: 2px solid var(--mortal-color-1);
+  background: var(--mage-incavo);
+  border: 2px solid var(--mage-oro-scuro);
   border-radius: 50%;
-  box-shadow: 0 0 0 2px rgb(255 255 255 / 60%);
   height: 20px;
   left: var(--track-x);
   position: absolute;
@@ -240,17 +255,17 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-node.quintessence {
   background: var(--quintessence-color);
-  box-shadow: 0 0 8px var(--quintessence-color);
+  border-color: var(--mage-oro-tenue);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-node.paradox {
   background: var(--paradox-color);
-  box-shadow: 0 0 8px var(--paradox-color);
+  border-color: var(--mage-viola-chiaro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-title {
   bottom: 12px;
-  color: var(--mortal-color-1);
+  color: var(--mage-oro);
   font-family: "Modesto Condensed", serif;
   font-size: 1.65rem;
   font-weight: 700;
@@ -278,11 +293,11 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource.quintessence {
-  color: #7a590d;
+  color: var(--mage-oro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource.paradox {
-  color: var(--paradox-color);
+  color: var(--mage-viola-chiaro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-buttons {
@@ -317,7 +332,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resource {
-  color: var(--mortal-color-1);
+  color: var(--mage-oro);
   display: flex;
   flex-direction: column;
   font-size: 0.78rem;
@@ -327,25 +342,25 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resource.permanent-paradox {
   align-items: flex-end;
-  color: var(--paradox-color, #5a2b82);
+  color: var(--mage-viola-chiaro);
   text-align: right;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resource > input {
-  --input-text-color: #fff;
+  --input-text-color: var(--mage-inchiostro);
   box-sizing: border-box;
-  color: #fff;
+  color: var(--mage-inchiostro);
   flex: 0 0 20px;
   font-size: 0.72rem;
-  height: 20px !important;
+  height: 20px;
   inline-size: 68px;
   max-width: 68px;
   line-height: 16px;
-  min-height: 20px !important;
+  min-height: 20px;
   min-width: 68px;
   padding: 0 0.3rem;
   text-align: center;
-  width: 68px !important;
+  width: 68px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-grid {
@@ -403,7 +418,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete {
   align-items: center;
-  background: rgb(0 0 0 / 8%);
+  background: var(--mage-velluto);
   border: 1px solid var(--mortal-color-2);
   border-radius: 4px;
   display: flex;
@@ -418,7 +433,7 @@
   align-items: center;
   background: none;
   border: 0;
-  color: var(--mortal-color-1);
+  color: var(--mage-oro);
   display: flex;
   font-family: inherit;
   font-size: 1.35rem;
@@ -432,8 +447,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete > .resource-label:hover {
-  color: var(--mortal-color-2);
-  text-shadow: 0 0 5px var(--mortal-color-3);
+  color: var(--mage-oro-chiaro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete-dots {
@@ -443,10 +457,9 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete-dot {
-  background: #f7f1dc;
-  border: 2px solid var(--mage-dot-border);
+  background: var(--mage-incavo);
+  border: 2px solid var(--mage-oro-scuro);
   border-radius: 50%;
-  box-shadow: 0 0 0 2px rgb(255 255 255 / 45%);
   height: 22px;
   margin: 0;
   min-height: 22px;
@@ -456,7 +469,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete-dot.active {
   background: var(--mage-dot-active);
-  box-shadow: 0 0 7px var(--mage-dot-active);
+  border-color: var(--mage-dot-border);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete p {
@@ -491,7 +504,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes-wheel > svg polygon {
   fill: none;
-  stroke: var(--mortal-color-1);
+  stroke: var(--mage-oro-scuro);
   stroke-width: 1.5;
 }
 
@@ -502,7 +515,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes-wheel > strong {
-  color: var(--mortal-color-1);
+  color: var(--mage-oro);
   font-family: "Modesto Condensed", serif;
   font-size: 1.5rem;
   left: 50%;
@@ -565,7 +578,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere {
   align-items: center;
-  background: rgb(0 0 0 / 8%);
+  background: var(--mage-velluto);
   border: 1px solid var(--mortal-color-2);
   border-radius: 4px;
   display: grid;
@@ -576,7 +589,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere .resource-label {
-  color: var(--mortal-color-1);
+  color: var(--mage-oro-chiaro);
   font-weight: 600;
 }
 
@@ -611,6 +624,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid > span {
+  color: var(--mage-oro);
   font-size: 0.7rem;
   font-weight: 700;
   text-align: center;
@@ -666,13 +680,13 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-heading {
-  color: var(--mortal-color-1);
+  color: var(--mage-oro);
   text-align: center;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-heading h2 {
   border: 0;
-  color: var(--mortal-color-1);
+  color: var(--mage-oro);
   font-family: "Modesto Condensed", serif;
   font-size: 1.7rem;
   margin: 0;
@@ -680,7 +694,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-heading p {
-  color: #111;
+  color: var(--mage-tenue);
   font-size: 0.8rem;
   margin: 0.35rem auto 1.5rem;
   max-width: 680px;
@@ -692,7 +706,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-group > .resource-header {
-  color: var(--mortal-color-2);
+  color: var(--mage-oro);
   font-size: 0.85rem;
   font-weight: 700;
   margin: 0 0 0.9rem;
@@ -702,7 +716,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-group > .resource-header .header-label {
-  color: var(--mortal-color-2);
+  color: var(--mage-oro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field {
@@ -712,12 +726,12 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > strong {
-  color: var(--mortal-color-1);
+  color: var(--mage-oro-chiaro);
   font-size: 0.95rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > small {
-  color: #111;
+  color: var(--mage-tenue);
   font-size: 0.72rem;
   margin: 0.1rem 0 0.3rem;
   opacity: 0.75;
@@ -777,8 +791,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-short-field > div small {
-  color: #111;
-  opacity: 0.75;
+  color: var(--mage-tenue);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-short-field > input,
@@ -794,13 +807,13 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instruments > .resource-header,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-spheres > .resource-header {
-  color: var(--mortal-color-1);
+  color: var(--mage-oro);
   margin-bottom: 0.9rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instruments > .resource-header .header-label,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-spheres > .resource-header .header-label {
-  color: var(--mortal-color-1);
+  color: var(--mage-oro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-list {
@@ -839,7 +852,7 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere h3 {
   align-items: baseline;
   border: 0;
-  color: #111;
+  color: var(--mage-testo);
   display: flex;
   flex-wrap: wrap;
   font-size: 1rem;
@@ -849,7 +862,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere h3 strong,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere h3 em {
-  color: var(--mortal-color-2);
+  color: var(--mage-oro);
   font-style: normal;
 }
 
@@ -886,10 +899,9 @@
   .wod5e-mage-sphere-choice,
   .wod5e-mage-scope-choice
 ) .resource-value .resource-value-step {
-  background: #f7f1dc;
-  border: 2px solid var(--mage-dot-border);
+  background: var(--mage-incavo);
+  border: 2px solid var(--mage-oro-scuro);
   border-radius: 50%;
-  box-shadow: 0 0 0 2px rgb(255 255 255 / 45%);
   box-sizing: border-box;
   height: 22px;
   min-height: 22px;
@@ -902,7 +914,7 @@
   .wod5e-mage-scope-choice
 ) .resource-value .resource-value-step.active {
   background: var(--mage-dot-active);
-  box-shadow: 0 0 7px var(--mage-dot-active);
+  border-color: var(--mage-dot-border);
 }
 
 /* Le immagini SVG contengono soltanto il simbolo della faccia del dado. */
