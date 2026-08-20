@@ -1101,6 +1101,10 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-wheel {
   flex: 0 0 auto;
   margin-left: auto;
+  /* Il div porta anche la classe .header-fields, che dal sistema eredita
+     width: 100%: con flex-shrink a 0 lo slot pretendeva TUTTA la larghezza
+     della testata e schiacciava Salute/Volontà a colonnina. Collaudato. */
+  width: auto;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-wheel-inner {
