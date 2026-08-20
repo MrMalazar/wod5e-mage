@@ -29,18 +29,38 @@
     <div class="header-fields wod5e-mage-header-wheel">
         <div class="wod5e-mage-header-wheel-inner">
 
-            <div class="wod5e-mage-magick-track wod5e-mage-magick-track-compact" role="group"
-                 aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
-                <svg class="wod5e-mage-magick-arc" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
-                    <path d="M16 148 A184 133 0 0 1 384 148"></path>
-                </svg>
+            {{!-- The Wheel dresses as an arc or as a compact bar of cells:
+                 each player picks their own view (client setting). --}}
+            <button type="button" class="wod5e-mage-wheel-mode" data-action="wheelModeToggle"
+                    aria-label="{{localize 'WOD5E_MAGE.MagickBalance.ToggleMode'}}"
+                    title="{{localize 'WOD5E_MAGE.MagickBalance.ToggleMode'}}">
+                <i class="fa-solid {{#if wheelAsBar}}fa-bezier-curve{{else}}fa-grip-lines{{/if}}"></i>
+            </button>
 
-                {{#each magickTrack.cells as |cell|}}
-                    <span class="wod5e-mage-magick-node {{cell.state}}" style="{{cell.position}}" title="{{cell.number}}"></span>
-                {{/each}}
+            {{#if wheelAsBar}}
+                <div class="wod5e-mage-magick-bar" role="group"
+                     aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
+                    <span class="wod5e-mage-magick-bar-label">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</span>
+                    <div class="wod5e-mage-magick-cells">
+                        {{#each magickTrack.cells as |cell|}}
+                            <span class="wod5e-mage-magick-cell {{cell.state}}" title="{{cell.number}}"></span>
+                        {{/each}}
+                    </div>
+                </div>
+            {{else}}
+                <div class="wod5e-mage-magick-track wod5e-mage-magick-track-compact" role="group"
+                     aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
+                    <svg class="wod5e-mage-magick-arc" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
+                        <path d="M16 148 A184 133 0 0 1 384 148"></path>
+                    </svg>
 
-                <div class="wod5e-mage-magick-title">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</div>
-            </div>
+                    {{#each magickTrack.cells as |cell|}}
+                        <span class="wod5e-mage-magick-node {{cell.state}}" style="{{cell.position}}" title="{{cell.number}}"></span>
+                    {{/each}}
+
+                    <div class="wod5e-mage-magick-title">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</div>
+                </div>
+            {{/if}}
 
             <div class="wod5e-mage-header-counters">
                 <div class="wod5e-mage-magick-resource quintessence">

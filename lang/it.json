@@ -249,7 +249,8 @@
       "ParadoxGained": "Magick volgare: la Ruota si sposta di {amount} verso il Paradosso.",
       "ParadoxReverted": "Tiro annullato: la Ruota è tornata com'era.",
       "QuintessenceShort": "Q",
-      "ParadoxShort": "P"
+      "ParadoxShort": "P",
+      "ToggleMode": "Ruota o barra"
     },
     "Creation": {
       "SheetType": {
@@ -263,6 +264,12 @@
       "DebugLogging": {
         "Name": "Abilita i log di debug",
         "Hint": "Scrive le informazioni diagnostiche di wod5e-mage nella console del browser."
+      },
+      "HeaderWheelMode": {
+        "Name": "La Ruota in testata",
+        "Hint": "Come vedi la Ruota sulla scheda del Mago: l'arco a nove nodi o la barra compatta a nove caselle.",
+        "Wheel": "Ruota ad arco",
+        "Bar": "Barra a caselle"
       }
     },
     "Errors": {

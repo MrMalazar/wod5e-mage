@@ -1146,6 +1146,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-wheel-inner {
   min-width: max-content;
+  position: relative;
   align-items: center;
   background: linear-gradient(#2c2413, #211b0f);
   border: 2px solid var(--mage-oro);
@@ -1406,4 +1407,75 @@
 .application.wod5e-mage .wod5e-mage-exp-n {
   text-align: right;
   white-space: nowrap;
+}
+
+/* ============================================================
+   THE WHEEL, ARC OR BAR — the player picks (client setting).
+   Bar mode lines up the nine cells to save vertical space:
+   Quintessence fills from the left, Paradox from the right.
+   ============================================================ */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wheel-mode {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--mage-oro-scuro);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.6rem;
+  height: 16px;
+  justify-content: center;
+  margin: 0;
+  min-height: 16px;
+  padding: 0;
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  width: 18px;
+  z-index: 2;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wheel-mode:hover {
+  border-color: var(--mage-oro-scuro);
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 2px 0 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar-label {
+  color: var(--mage-oro);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-cells {
+  display: flex;
+  gap: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-cell {
+  background: var(--mage-incavo);
+  border: 2px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  box-sizing: border-box;
+  height: 20px;
+  width: 14px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-cell.quintessence {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-cell.paradox {
+  background: var(--mage-nero-dado);
+  border-color: var(--mage-rosso-vivo);
 }

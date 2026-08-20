@@ -249,7 +249,8 @@
       "ParadoxGained": "Vulgar Magick: the Wheel moves {amount} step(s) toward Paradox.",
       "ParadoxReverted": "Roll cancelled: the Wheel is back where it was.",
       "QuintessenceShort": "Q",
-      "ParadoxShort": "P"
+      "ParadoxShort": "P",
+      "ToggleMode": "Wheel or bar"
     },
     "Creation": {
       "SheetType": {
@@ -263,6 +264,12 @@
       "DebugLogging": {
         "Name": "Enable debug logging",
         "Hint": "Writes wod5e-mage diagnostic information to the browser console."
+      },
+      "HeaderWheelMode": {
+        "Name": "Header Wheel",
+        "Hint": "How the Wheel looks on the Mage sheet: the nine-node arc or the compact nine-cell bar.",
+        "Wheel": "Arc wheel",
+        "Bar": "Cell bar"
       }
     },
     "Errors": {

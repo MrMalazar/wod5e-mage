@@ -1,5 +1,6 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
 import { prepareEssentialSkills } from "../abilita-essenziali.js";
+import { MODULE_ID } from "../constants.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { onConceptChallengeOpen } from "../concept-challenge.js";
 import { onExperienceOpen } from "../experience-window.js";
@@ -38,6 +39,14 @@ const {
 
 const icon = (name) => `<i class="fa-solid fa-${name}"></i>`;
 
+/** Flip the header Wheel between arc and bar mode, then repaint. */
+async function onWheelModeToggle(event) {
+  event?.preventDefault?.();
+  const current = game.settings.get(MODULE_ID, "headerWheelMode");
+  await game.settings.set(MODULE_ID, "headerWheelMode", current === "bar" ? "wheel" : "bar");
+  this.render();
+}
+
 /**
  * Scheda del Mago: sei pagine raggruppate per come si usano al tavolo.
  * Vedi templates/actor/parts per i template ricomposti.
@@ -56,6 +65,7 @@ export class MageActorSheet extends MortalActorSheet {
       openExperience: onExperienceOpen,
       scopeChange: onScopeChange,
       sphereSelectionChange: onSphereSelectionChange,
+      wheelModeToggle: onWheelModeToggle,
       wisdomResourceChange: onWisdomResourceChange,
       wisdomRoll: onWisdomRoll
     }
@@ -186,6 +196,7 @@ export class MageActorSheet extends MortalActorSheet {
       context.arete = getArete(actor);
       context.magickTrack = prepareMagickTrack(actor);
       context.lineage = getLineage(actor);
+      context.wheelAsBar = game.settings.get(MODULE_ID, "headerWheelMode") === "bar";
     }
 
     if (partId === "magick") {

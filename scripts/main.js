@@ -54,6 +54,20 @@ function debug(message, ...data) {
 Hooks.once("init", () => {
   console.info(`${MODULE_ID} | Initializing`);
 
+  // Each player picks how the header Wheel dresses: arc or compact bar.
+  game.settings.register(MODULE_ID, "headerWheelMode", {
+    name: "WOD5E_MAGE.Settings.HeaderWheelMode.Name",
+    hint: "WOD5E_MAGE.Settings.HeaderWheelMode.Hint",
+    scope: "client",
+    config: true,
+    type: String,
+    choices: {
+      wheel: "WOD5E_MAGE.Settings.HeaderWheelMode.Wheel",
+      bar: "WOD5E_MAGE.Settings.HeaderWheelMode.Bar"
+    },
+    default: "wheel"
+  });
+
   game.settings.register(MODULE_ID, "debugLogging", {
     name: "WOD5E_MAGE.Settings.DebugLogging.Name",
     hint: "WOD5E_MAGE.Settings.DebugLogging.Hint",
