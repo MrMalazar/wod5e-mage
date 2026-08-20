@@ -16,8 +16,13 @@
   --mage-tenue: #ab9f85;        /* didascalie e suggerimenti sul fondo scuro */
   --mage-incavo: #15130f;       /* fondi incassati: pallini vuoti, nodi spenti */
   --mage-velluto: #282723;      /* riquadri interni sul fondo scuro */
-  --mage-viola: #5a2b82;        /* SOLO il Paradosso */
-  --mage-viola-chiaro: #b58ade; /* testo e anelli del Paradosso */
+  --mage-viola: #5a2b82;        /* l'arcano: il dado dei successi (canone 20/8) */
+  --mage-viola-chiaro: #b58ade; /* cornici e segni del dado dei successi */
+  --mage-viola-dado: #2f2153;   /* corpo del dado dei successi */
+  --mage-rosso: #b5433c;        /* SOLO il Paradosso: bordi e nodi */
+  --mage-rosso-vivo: #d0524a;   /* il segno rosso sul dado nero */
+  --mage-rosso-chiaro: #e2a79e; /* testo del Paradosso sul fondo scuro */
+  --mage-nero-dado: #17120f;    /* corpo del dado di Paradosso */
   --mage-dot-color: var(--mage-oro);
   --mage-dot-border: var(--mage-oro-tenue);
   --mage-dot-active: var(--mage-oro);
@@ -211,7 +216,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-balance {
   --quintessence-color: var(--mage-oro);
-  --paradox-color: var(--mage-viola);
+  --paradox-color: var(--mage-rosso);
   margin: 1rem auto 1.25rem;
   max-width: 400px;
   width: 100%;
@@ -259,8 +264,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-node.paradox {
-  background: var(--paradox-color);
-  border-color: var(--mage-viola-chiaro);
+  background: var(--mage-nero-dado);
+  border-color: var(--mage-rosso-vivo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-title {
@@ -297,7 +302,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource.paradox {
-  color: var(--mage-viola-chiaro);
+  color: var(--mage-rosso-chiaro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-buttons {
@@ -342,7 +347,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resource.permanent-paradox {
   align-items: flex-end;
-  color: var(--mage-viola-chiaro);
+  color: var(--mage-rosso-chiaro);
   text-align: right;
 }
 
@@ -926,17 +931,19 @@
   width: 40px;
 }
 
+/* Dado dei successi: il viola dell'arcano, coi segni d'oro (canone 20/8). */
 .roll-img.mage-dice,
 .mage-dice-preview.mage-dice {
-  background: #4d390f;
-  border-color: #c99a2e;
+  background: #2f2153; /* --mage-viola-dado */
+  border-color: #b58ade; /* --mage-viola-chiaro */
 }
 
+/* Dado di Paradosso: corpo nero, segni e bordo rossi (canone 20/8). */
 .roll-img.paradox-dice,
 .mage-dice-preview.paradox-dice,
 .paradox-dice.paradox-dice-empty {
-  background: #542176;
-  border-color: #b78bd4;
+  background: #17120f; /* --mage-nero-dado */
+  border-color: #b5433c; /* --mage-rosso */
 }
 
 /* Le facce vuote non caricano asset: il quadrato viene disegnato dal CSS. */
@@ -958,7 +965,7 @@
 }
 
 .paradox-dice.paradox-dice-empty:not(.roll-img):not(.mage-dice-preview) {
-  border: 1px solid #b78bd4;
+  border: 1px solid #b5433c; /* --mage-rosso */
   border-radius: 4px;
   height: 40px;
   width: 40px;
@@ -1177,7 +1184,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource.paradox .wod5e-mage-counter-label,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource.paradox strong {
-  color: #b58ade;
+  color: var(--mage-rosso-chiaro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource button {

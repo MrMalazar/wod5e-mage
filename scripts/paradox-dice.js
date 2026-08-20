@@ -69,9 +69,9 @@ function registerDiceSoNicePreset(dice3d) {
     name: "mage-paradox",
     description: "Mage Paradox Dice",
     category: "World of Darkness 5e",
-    foreground: "#ffffff",
-    background: "#542176",
-    edge: "#b78bd4",
+    foreground: "#d0524a",
+    background: "#17120f",
+    edge: "#b5433c",
     texture: "none",
     material: "plastic",
     font: "Arial Black"
