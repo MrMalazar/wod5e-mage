@@ -33,7 +33,7 @@ const {
   equipment: _nativeEquipment,
   biography: _nativeBiography,
   notepad: _nativeNotepad,
-  stats,
+  stats: _nativeStats,
   ...remainingParts
 } = MortalActorSheet.PARTS;
 
@@ -81,7 +81,12 @@ export class MageActorSheet extends MortalActorSheet {
       ]
     },
     tabs: { template: `${MODULE}/parts/tab-navigation.hbs` },
-    stats,
+    // Forked from the system stats part to host the Wheel widget in the
+    // right column of the Traits page (see templates/actor/parts/tratti.hbs).
+    stats: {
+      template: `${MODULE}/parts/tratti.hbs`,
+      templates: [`${MODULE}/parts/ruota.hbs`]
+    },
     magick: { template: `${MODULE}/parts/spheres.hbs` },
     focus: {
       template: `${MODULE}/parts/focus.hbs`,
@@ -182,21 +187,22 @@ export class MageActorSheet extends MortalActorSheet {
 
     const actor = this.actor;
 
-    // Tratti: la lista di sistema lascia il posto alle diciotto Abilità
-    // Essenziali, in fila unica alfabetica su tre colonne.
+    // Traits: the system list gives way to the eighteen Essential Skills,
+    // one alphabetical file over three columns. The page also hosts the
+    // Wheel widget, so it needs that context too.
     if (partId === "stats") {
       context.sortedSkills = prepareEssentialSkills(context.sortedSkills, {
         localize: game.i18n.localize.bind(game.i18n),
         lang: game.i18n.lang
       });
-    }
-
-    // La testata porta la Ruota e Areté, quindi le serve il loro contesto.
-    if (partId === "header") {
       context.arete = getArete(actor);
       context.magickTrack = prepareMagickTrack(actor);
-      context.lineage = getLineage(actor);
       context.wheelAsBar = game.settings.get(MODULE_ID, "headerWheelMode") === "bar";
+    }
+
+    // The header only needs the allegiance line under the name.
+    if (partId === "header") {
+      context.lineage = getLineage(actor);
     }
 
     if (partId === "magick") {

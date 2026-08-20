@@ -1,0 +1,73 @@
+{{!-- The Wheel widget: arc or bar (client setting), the Q/P counters and
+     the Arete row. It lives on the Traits page, right column, and it is
+     never allowed to shrink when the window gets narrow. --}}
+<div class="wod5e-mage-ruota">
+    <div class="wod5e-mage-header-wheel-inner">
+        <button type="button" class="wod5e-mage-wheel-mode" data-action="wheelModeToggle"
+                aria-label="{{localize 'WOD5E_MAGE.MagickBalance.ToggleMode'}}"
+                title="{{localize 'WOD5E_MAGE.MagickBalance.ToggleMode'}}">
+            <i class="fa-solid {{#if wheelAsBar}}fa-bezier-curve{{else}}fa-grip-lines{{/if}}"></i>
+        </button>
+
+        {{#if wheelAsBar}}
+            <div class="wod5e-mage-magick-bar" role="group"
+                 aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
+                <span class="wod5e-mage-magick-bar-label">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</span>
+                <div class="wod5e-mage-magick-cells">
+                    {{#each magickTrack.cells as |cell|}}
+                        <span class="wod5e-mage-magick-cell {{cell.state}}" title="{{cell.number}}"></span>
+                    {{/each}}
+                </div>
+            </div>
+        {{else}}
+            <div class="wod5e-mage-magick-track wod5e-mage-magick-track-compact" role="group"
+                 aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
+                <svg class="wod5e-mage-magick-arc" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M16 148 A184 133 0 0 1 384 148"></path>
+                </svg>
+
+                {{#each magickTrack.cells as |cell|}}
+                    <span class="wod5e-mage-magick-node {{cell.state}}" style="{{cell.position}}" title="{{cell.number}}"></span>
+                {{/each}}
+
+                <div class="wod5e-mage-magick-title">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</div>
+            </div>
+        {{/if}}
+
+        <div class="wod5e-mage-header-counters">
+            <div class="wod5e-mage-magick-resource quintessence">
+                <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1"
+                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}"><i class="fa-solid fa-minus"></i></button>
+                <span class="wod5e-mage-counter-label">{{localize "WOD5E_MAGE.MagickBalance.QuintessenceShort"}}</span>
+                <strong>{{magickTrack.quintessence}}</strong>
+                <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="1"
+                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}"><i class="fa-solid fa-plus"></i></button>
+            </div>
+
+            <div class="wod5e-mage-magick-resource paradox">
+                <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1"
+                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}"><i class="fa-solid fa-minus"></i></button>
+                <span class="wod5e-mage-counter-label">{{localize "WOD5E_MAGE.MagickBalance.ParadoxShort"}}</span>
+                <strong>{{magickTrack.paradox}}</strong>
+                <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="1"
+                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+
+        {{!-- "Arete" is written once, on the indicator; the button just says Roll. --}}
+        <div class="wod5e-mage-header-arete">
+            <span class="wod5e-mage-header-arete-label">{{localize "WOD5E_MAGE.Arete.Label"}}</span>
+            <div class="wod5e-mage-arete-dots" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Label'}}">
+                {{#each arete.steps as |step|}}
+                    <button type="button" class="wod5e-mage-arete-dot {{#if step.active}}active{{/if}}"
+                            data-action="areteChange" data-value="{{step.value}}" aria-label="{{step.value}}"></button>
+                {{/each}}
+            </div>
+            <strong class="wod5e-mage-header-arete-value">{{arete.value}}</strong>
+            <button type="button" class="wod5e-mage-header-roll" data-action="areteRoll"
+                    aria-label="{{localize 'WOD5E_MAGE.Arete.RollHint'}}" title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}">
+                <i class="fa-solid fa-dice-d10"></i>{{localize "WOD5E_MAGE.Arete.Roll"}}
+            </button>
+        </div>
+    </div>
+</div>

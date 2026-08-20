@@ -1132,16 +1132,27 @@
 }
 
 /* ============================================================
-   LA RUOTA IN TESTATA — l'arco resta, perché è la firma di M5.
-   Occupa lo slot destro, che il template teneva già libero.
+   THE WHEEL WIDGET — the arc stays, it is the M5 signature.
+   It lives on the Traits page, right column, and never shrinks:
+   when the window gets narrow, the page scrolls instead.
    ============================================================ */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-wheel {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota {
+  display: flex;
   flex: 0 0 auto;
-  margin-left: auto;
-  /* Il div porta anche la classe .header-fields, che dal sistema eredita
-     width: 100%: con flex-shrink a 0 lo slot pretendeva TUTTA la larghezza
-     della testata e schiacciava Salute/Volontà a colonnina. Collaudato. */
-  width: auto;
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+/* The side panel keeps its width; the sheet has a hard floor below
+   which the layout has no honest answer. */
+.wod5e-mage.wod5e.actor.sheet .stats-content .side-panel {
+  flex: 0 0 auto;
+  min-width: 240px;
+}
+
+.wod5e-mage.wod5e.actor.sheet {
+  min-height: 520px;
+  min-width: 720px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-wheel-inner {
@@ -1159,6 +1170,7 @@
 
 /* Arco compatto: stessa geometria della linguetta Magick, metà scala. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-compact {
+  flex-shrink: 0;
   height: 74px;
   margin: 0;
   width: 196px;
