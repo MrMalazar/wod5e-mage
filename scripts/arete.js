@@ -4,6 +4,11 @@ import {
   getMagickBalance,
   paradoxGainForMagickType
 } from "./magick-balance.js";
+import {
+  findMageRollTrait,
+  prepareMageRollTraits,
+  selectorsForMageRollTrait
+} from "./mage-roll-selection.js";
 
 export const ARETE_MIN = 1;
 export const ARETE_MAX = 5;
@@ -31,31 +36,15 @@ export function getArete(actor) {
   };
 }
 
-function flattenTraitGroups(groups, type) {
-  return Object.values(groups ?? {})
-    .flatMap((group) => Array.isArray(group) ? group : [])
-    .filter((trait) => trait?.id && !trait.hidden)
-    .map((trait) => ({
-      key: `${type}:${trait.id}`,
-      id: trait.id,
-      type,
-      label: trait.displayName ?? trait.name ?? trait.id,
-      value: Math.max(Number(trait.value) || 0, 0)
-    }));
+export function prepareAreteTraits(actor, options) {
+  return prepareMageRollTraits(actor, options);
 }
 
-export function prepareAreteTraits(actor) {
-  return {
-    attributes: flattenTraitGroups(actor.system?.sortedAttributes, "attribute"),
-    skills: flattenTraitGroups(actor.system?.sortedSkills, "skill")
-  };
-}
-
-export function calculateAreteTraitPool(arete, attribute, skill) {
+export function calculateAreteTraitPool(arete, firstTrait, secondTrait) {
   return (
     Math.max(Number(arete) || 0, 0)
-    + Math.max(Number(attribute) || 0, 0)
-    + Math.max(Number(skill) || 0, 0)
+    + Math.max(Number(firstTrait) || 0, 0)
+    + Math.max(Number(secondTrait) || 0, 0)
   );
 }
 
@@ -70,7 +59,8 @@ export function normalizeMagickRollOptions({
   witnesses = false
 } = {}) {
   const options = {
-    // Areté non entra più di suo: lo aggiunge il giocatore spuntando la casella.
+    // Il valore resta fissato dai pallini della scheda, ma entra nella riserva
+    // soltanto quando il giocatore seleziona la casella del dialogo.
     useArete: isChecked(arete),
     coincidental: isChecked(coincidental),
     vulgar: isChecked(vulgar),
@@ -147,7 +137,10 @@ export async function onAreteRoll(event) {
 
   const actor = this.actor;
   const arete = getArete(actor);
-  const traits = prepareAreteTraits(actor);
+  const traits = prepareAreteTraits(actor, {
+    localize: game.i18n.localize.bind(game.i18n),
+    lang: game.i18n.lang
+  });
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
     { arete, ...traits }
@@ -157,10 +150,11 @@ export async function onAreteRoll(event) {
     window: {
       title: game.i18n.localize("WOD5E_MAGE.Arete.Roll")
     },
-    // DialogV2.input defaults to 400 px in Foundry 14. The three-part Areté
-    // pool needs 25% more horizontal room, so this dialog alone uses 500 px.
+    // La finestra segue la dimensione naturale dell'intero contenuto; il CSS
+    // mantiene form e controlli al 100% senza tagliare i tre selettori.
     position: {
-      width: 500
+      width: "auto",
+      height: "auto"
     },
     content,
     ok: {
@@ -174,34 +168,33 @@ export async function onAreteRoll(event) {
         label: game.i18n.localize("WOD5E.Cancel")
       }
     ],
-    classes: ["wod5e", actor.system.gamesystem],
+    classes: ["wod5e", actor.system.gamesystem, "wod5e-mage-roll-dialog"],
     render: (_event, dialog) => makeMagickTypeExclusive(dialog)
   });
 
   if (!result || result === "cancel") return;
 
-  const selectedAttribute = findTraitById(traits.attributes, result.attribute);
-  const selectedSkill = findTraitById(traits.skills, result.skill);
-  if (!selectedAttribute || !selectedSkill) {
+  const selectedSkill = findTraitById(traits.skills, result.primarySkill);
+  const selectedSecondTrait = findMageRollTrait(traits, result.secondaryTrait);
+  if (!selectedSkill || !selectedSecondTrait) {
     ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Arete.SelectTraitWarning"));
     return;
   }
 
   const options = normalizeMagickRollOptions(result);
-  // Areté non entra da solo nella riserva: di base vale zero ed è il giocatore
-  // a chiamarlo spuntando la casella. Il punteggio resta modificabile solo dai
-  // pallini sulla scheda. Attributo e Abilità si sommano sempre.
+  // Il valore di Areté non è modificabile nel dialogo: la casella decide solo
+  // se sommare o meno il valore impostato tramite i pallini della scheda.
   const areteValue = options.useArete ? arete.value : 0;
   const dicePool = calculateAreteTraitPool(
     areteValue,
-    selectedAttribute.value,
-    selectedSkill.value
+    selectedSkill.value,
+    selectedSecondTrait.value
   );
   const rollLabel = game.i18n.format(
     options.useArete ? "WOD5E_MAGE.Arete.Rolling" : "WOD5E_MAGE.Arete.RollingNoArete",
     {
-      attribute: selectedAttribute.label,
-      skill: selectedSkill.label
+      first: selectedSkill.label,
+      second: selectedSecondTrait.label
     }
   );
   const selectedTypes = [];
@@ -219,15 +212,16 @@ export async function onAreteRoll(event) {
     : game.i18n.localize("WOD5E_MAGE.Arete.NoType");
 
   const selectors = [
-    "attributes",
-    `attributes.${selectedAttribute.id}`,
     "skills",
-    `skills.${selectedSkill.id}`
+    `skills.${selectedSkill.id}`,
+    ...selectorsForMageRollTrait(selectedSecondTrait)
   ];
   if (options.useArete) selectors.unshift("arete");
   if (options.coincidental) selectors.push("magick.coincidental");
   if (options.vulgar) selectors.push("magick.vulgar");
   if (options.witnesses) selectors.push("magick.vulgar-with-witnesses");
+  // Rimuove i duplicati generati quando si selezionano due abilità.
+  const uniqueSelectors = [...new Set(selectors)];
 
   // La Magick volgare paga subito: la Ruota si sposta verso il Paradosso prima
   // del tiro, così i dadi Paradosso di questo tiro contano già il rincaro.
@@ -256,10 +250,10 @@ export async function onAreteRoll(event) {
       : "WOD5E_MAGE.Arete.RollFlavorNoArete",
     {
       arete: areteValue,
-      attribute: selectedAttribute.label,
-      attributeValue: selectedAttribute.value,
-      skill: selectedSkill.label,
-      skillValue: selectedSkill.value,
+      first: selectedSkill.label,
+      firstValue: selectedSkill.value,
+      second: selectedSecondTrait.label,
+      secondValue: selectedSecondTrait.value,
       magickType
     }
   );
@@ -276,7 +270,7 @@ export async function onAreteRoll(event) {
       paradoxRating,
       title: rollLabel,
       flavor,
-      selectors,
+      selectors: uniqueSelectors,
       actor,
       data: actor.system
     });

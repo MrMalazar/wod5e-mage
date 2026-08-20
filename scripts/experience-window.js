@@ -97,9 +97,13 @@ export async function onExperienceOpen(event) {
   );
 
   return foundry.applications.api.DialogV2.prompt({
-    window: { title: game.i18n.localize("WOD5E.Tabs.Experience") },
+    window: {
+      title: game.i18n.localize("WOD5E.Tabs.Experience"),
+      resizable: true
+    },
+    position: { width: "auto", height: "auto" },
     content,
-    classes: ["wod5e", "wod5e-mage", "mage"],
+    classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-experience-dialog"],
     ok: { icon: "fas fa-check", label: game.i18n.localize("WOD5E.Close") },
     render: (_event, dialog) => bindExperienceCalculator(dialog?.element ?? dialog)
   });

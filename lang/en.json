@@ -54,21 +54,30 @@
       "MageDice": "Mage Dice",
       "ParadoxDice": "Paradox Dice"
     },
+    "RollSelection": {
+      "Ability": "Ability",
+      "AbilityOrAttribute": "Ability or Attribute",
+      "Abilities": "Abilities",
+      "Attributes": "Attributes",
+      "SelectAbility": "Select an Ability",
+      "SelectTrait": "Select an Ability or Attribute",
+      "SelectBothWarning": "Select an Ability and a second trait to roll."
+    },
     "Arete": {
       "Label": "Arete",
       "Roll": "Roll",
       "Include": "Add Arete to the pool",
-      "IncludeHint": "Tick to add your Arete on top of Attribute and Skill. It is left out by default.",
+      "IncludeHint": "Tick to add the Arete value set on the sheet to the pool.",
       "ParadoxHint": "Vulgar moves the Wheel 1 step toward Paradox, with witnesses 2. The type is a single choice.",
-      "Rolling": "Arete + {attribute} + {skill}",
-      "RollingNoArete": "{attribute} + {skill}",
-      "RollHint": "Roll Arete together with an Attribute and a Skill",
+      "Rolling": "Arete + {first} + {second}",
+      "RollingNoArete": "{first} + {second}",
+      "RollHint": "Roll an Ability with another Ability or an Attribute; Arete is optional",
       "Trait": "Attribute or Skill",
       "TraitShort": "Ability",
       "SelectTrait": "Select a trait",
       "SelectAttribute": "Select an Attribute",
       "SelectSkill": "Select a Skill",
-      "SelectTraitWarning": "Select both an Attribute and a Skill for the Arete roll.",
+      "SelectTraitWarning": "Select an Ability and a second trait for the Arete roll.",
       "MagickType": "Magick type",
       "IsVulgar": "Is it vulgar?",
       "HasWitnesses": "Vulgar with witnesses?",
@@ -77,8 +86,8 @@
       "VulgarWithWitnesses": "Vulgar with witnesses",
       "NoType": "No type selected",
       "NoPenaltyHint": "These options do not modify the dice pool yet.",
-      "RollFlavor": "Pool: Arete {arete} + {attribute} {attributeValue} + {skill} {skillValue}. Type: {magickType}.",
-      "RollFlavorNoArete": "Pool: {attribute} {attributeValue} + {skill} {skillValue}, without Arete. Type: {magickType}."
+      "RollFlavor": "Pool: Arete {arete} + {first} {firstValue} + {second} {secondValue}. Type: {magickType}.",
+      "RollFlavorNoArete": "Pool: {first} {firstValue} + {second} {secondValue}. Type: {magickType}."
     },
     "Focus": {
       "Paradigm": "Paradigm",

@@ -980,6 +980,22 @@
    da soli: i nomi sono unici e non collidono con il sistema.
    ========================================================================== */
 
+.application.wod5e-mage-roll-dialog .window-content,
+.application.wod5e-mage-roll-dialog .dialog-content,
+.application.wod5e-mage-roll-dialog .dialog-contents,
+.application.wod5e-mage-experience-dialog .window-content,
+.application.wod5e-mage-experience-dialog .dialog-content,
+.application.wod5e-mage-experience-dialog .wod5e-mage-exp {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.application.wod5e-mage-roll-dialog,
+.application.wod5e-mage-experience-dialog {
+  max-height: calc(100vh - 2rem);
+  max-width: calc(100vw - 2rem);
+}
+
 .wod5e-mage-arete-toggle {
   align-items: center;
   cursor: pointer;

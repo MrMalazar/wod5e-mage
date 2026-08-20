@@ -21,7 +21,7 @@ assert.equal(getArete(actorWithFlag({ value: 0 })).value, 1);
 assert.equal(calculateAreteTraitPool(3, 4, 2), 9);
 assert.equal(calculateAreteTraitPool(1, 1, 0), 2);
 
-// Areté resta fuori dalla riserva finché la casella non viene spuntata.
+// Areté resta fuori dalla riserva finché la casella non viene selezionata.
 assert.deepEqual(normalizeMagickRollOptions(), {
   useArete: false,
   coincidental: false,
@@ -67,7 +67,10 @@ const traits = prepareAreteTraits({
       custom: [{ id: "focus", displayName: "Focus", value: 4 }]
     },
     sortedSkills: {
-      custom: [{ id: "ritual", displayName: "Ritual", value: 2 }]
+      custom: [
+        { id: "occult", displayName: "Ritual", value: 2 },
+        { id: "firearms", displayName: "Firearms", value: 5 }
+      ]
     }
   }
 });
@@ -76,15 +79,17 @@ assert.deepEqual(traits.attributes[0], {
   key: "attribute:focus",
   id: "focus",
   type: "attribute",
+  category: "custom",
   label: "Focus",
   value: 4
 });
 assert.deepEqual(traits.skills[0], {
-  key: "skill:ritual",
-  id: "ritual",
+  key: "skill:occult",
+  id: "occult",
   type: "skill",
   label: "Ritual",
   value: 2
 });
+assert.equal(traits.skills.some((trait) => trait.id === "firearms"), false);
 
 console.log("Areté tests passed.");

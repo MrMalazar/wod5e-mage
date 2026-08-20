@@ -270,7 +270,8 @@ export async function rollAreteWithParadox({
         label: game.i18n.localize("WOD5E.Cancel")
       }
     ],
-    classes: ["wod5e", "mortal", "roll-dialog", "mage-arete-roll-dialog"],
+    position: { width: "auto", height: "auto" },
+    classes: ["wod5e", "mortal", "roll-dialog", "mage-arete-roll-dialog", "wod5e-mage-roll-dialog"],
     render: (_event, dialog) => initializeModifierControls(dialog)
   });
 }

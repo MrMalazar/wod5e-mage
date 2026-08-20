@@ -1,0 +1,36 @@
+<form class="dialog-contents">
+    <div class="selectors-group">
+        <div class="primary-selector">
+            <div class="selector-title">{{localize "WOD5E_MAGE.RollSelection.Ability"}}</div>
+            <div class="selector-content">
+                <select name="primarySkill" required>
+                    <option value="">{{localize "WOD5E_MAGE.RollSelection.SelectAbility"}}</option>
+                    {{#each skills as |trait|}}
+                        <option value="{{trait.id}}" {{#if trait.selectedPrimary}}selected{{/if}}>{{trait.label}} ({{trait.value}})</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+
+        <div class="middle">+</div>
+
+        <div class="primary-selector">
+            <div class="selector-title">{{localize "WOD5E_MAGE.RollSelection.AbilityOrAttribute"}}</div>
+            <div class="selector-content">
+                <select name="secondaryTrait" required>
+                    <option value="">{{localize "WOD5E_MAGE.RollSelection.SelectTrait"}}</option>
+                    <optgroup label="{{localize 'WOD5E_MAGE.RollSelection.Abilities'}}">
+                        {{#each skills as |trait|}}
+                            <option value="{{trait.key}}" {{#if trait.selectedSecondary}}selected{{/if}}>{{trait.label}} ({{trait.value}})</option>
+                        {{/each}}
+                    </optgroup>
+                    <optgroup label="{{localize 'WOD5E_MAGE.RollSelection.Attributes'}}">
+                        {{#each attributes as |trait|}}
+                            <option value="{{trait.key}}" {{#if trait.selectedSecondary}}selected{{/if}}>{{trait.label}} ({{trait.value}})</option>
+                        {{/each}}
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>

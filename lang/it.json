@@ -54,21 +54,30 @@
       "MageDice": "Dadi Mage",
       "ParadoxDice": "Dadi Paradosso"
     },
+    "RollSelection": {
+      "Ability": "Abilità",
+      "AbilityOrAttribute": "Abilità o Attributo",
+      "Abilities": "Abilità",
+      "Attributes": "Attributi",
+      "SelectAbility": "Seleziona un'Abilità",
+      "SelectTrait": "Seleziona un'Abilità o un Attributo",
+      "SelectBothWarning": "Seleziona un'Abilità e un secondo tratto per effettuare il tiro."
+    },
     "Arete": {
       "Label": "Areté",
       "Roll": "Tira",
       "Include": "Aggiungi Areté alla riserva",
-      "IncludeHint": "Spunta per sommare il tuo Areté ad Attributo e Abilità. Di base non entra nel tiro.",
+      "IncludeHint": "Spunta per aggiungere alla riserva il valore di Areté impostato sulla scheda.",
       "ParadoxHint": "Volgare sposta la Ruota di 1 verso il Paradosso, con testimoni di 2. Il tipo è una scelta sola.",
-      "Rolling": "Areté + {attribute} + {skill}",
-      "RollingNoArete": "{attribute} + {skill}",
-      "RollHint": "Tira Areté insieme a un Attributo e un'Abilità",
+      "Rolling": "Areté + {first} + {second}",
+      "RollingNoArete": "{first} + {second}",
+      "RollHint": "Tira con un'Abilità e un'altra Abilità o un Attributo; Areté è opzionale",
       "Trait": "Attributo o Abilità",
       "TraitShort": "Abilità",
       "SelectTrait": "Seleziona un tratto",
       "SelectAttribute": "Seleziona un Attributo",
       "SelectSkill": "Seleziona un'Abilità",
-      "SelectTraitWarning": "Seleziona sia un Attributo sia un'Abilità per il tiro di Areté.",
+      "SelectTraitWarning": "Seleziona un'Abilità e un secondo tratto per il tiro di Areté.",
       "MagickType": "Tipo di Magick",
       "IsVulgar": "È volgare?",
       "HasWitnesses": "Volgare con testimoni?",
@@ -77,8 +86,8 @@
       "VulgarWithWitnesses": "Volgare con testimoni",
       "NoType": "Nessun tipo selezionato",
       "NoPenaltyHint": "Per ora queste opzioni non modificano la riserva di dadi.",
-      "RollFlavor": "Riserva: Areté {arete} + {attribute} {attributeValue} + {skill} {skillValue}. Tipo: {magickType}.",
-      "RollFlavorNoArete": "Riserva: {attribute} {attributeValue} + {skill} {skillValue}, senza Areté. Tipo: {magickType}."
+      "RollFlavor": "Riserva: Areté {arete} + {first} {firstValue} + {second} {secondValue}. Tipo: {magickType}.",
+      "RollFlavorNoArete": "Riserva: {first} {firstValue} + {second} {secondValue}. Tipo: {magickType}."
     },
     "Focus": {
       "Paradigm": "Paradigma",

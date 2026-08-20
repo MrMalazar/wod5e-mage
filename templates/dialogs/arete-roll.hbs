@@ -16,12 +16,12 @@
 
         <div class="primary-selector">
             <div class="selector-title">
-                {{localize "WOD5E.AttributesList.Label"}}
+                {{localize "WOD5E_MAGE.RollSelection.Ability"}}
             </div>
             <div class="selector-content">
-                <select id="wod5e-mage-arete-attribute" name="attribute" required>
-                    <option value="">{{localize "WOD5E_MAGE.Arete.SelectAttribute"}}</option>
-                    {{#each attributes as |trait|}}
+                <select id="wod5e-mage-arete-primary" name="primarySkill" required>
+                    <option value="">{{localize "WOD5E_MAGE.RollSelection.SelectAbility"}}</option>
+                    {{#each skills as |trait|}}
                         <option value="{{trait.id}}">{{trait.label}} ({{trait.value}})</option>
                     {{/each}}
                 </select>
@@ -32,14 +32,21 @@
 
         <div class="primary-selector">
             <div class="selector-title">
-                {{localize "WOD5E.SkillsList.Label"}}
+                {{localize "WOD5E_MAGE.RollSelection.AbilityOrAttribute"}}
             </div>
             <div class="selector-content">
-                <select id="wod5e-mage-arete-skill" name="skill" required>
-                    <option value="">{{localize "WOD5E_MAGE.Arete.SelectSkill"}}</option>
-                    {{#each skills as |trait|}}
-                        <option value="{{trait.id}}">{{trait.label}} ({{trait.value}})</option>
-                    {{/each}}
+                <select id="wod5e-mage-arete-secondary" name="secondaryTrait" required>
+                    <option value="">{{localize "WOD5E_MAGE.RollSelection.SelectTrait"}}</option>
+                    <optgroup label="{{localize 'WOD5E_MAGE.RollSelection.Abilities'}}">
+                        {{#each skills as |trait|}}
+                            <option value="{{trait.key}}">{{trait.label}} ({{trait.value}})</option>
+                        {{/each}}
+                    </optgroup>
+                    <optgroup label="{{localize 'WOD5E_MAGE.RollSelection.Attributes'}}">
+                        {{#each attributes as |trait|}}
+                            <option value="{{trait.key}}">{{trait.label}} ({{trait.value}})</option>
+                        {{/each}}
+                    </optgroup>
                 </select>
             </div>
         </div>

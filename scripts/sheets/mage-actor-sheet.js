@@ -6,6 +6,7 @@ import { onConceptChallengeOpen } from "../concept-challenge.js";
 import { onExperienceOpen } from "../experience-window.js";
 import { onFocusInstrumentToggle, prepareFocus } from "../focus.js";
 import { getLineage } from "../lineage.js";
+import { onMageRoll } from "../mage-roll-selection.js";
 import {
   getPersistentMagickResources,
   onMagickBalanceChange,
@@ -55,6 +56,7 @@ export class MageActorSheet extends MortalActorSheet {
   static DEFAULT_OPTIONS = {
     classes: ["wod5e-mage", "mage"],
     actions: {
+      roll: onMageRoll,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
       focusInstrumentToggle: onFocusInstrumentToggle,

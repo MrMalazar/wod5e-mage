@@ -62,18 +62,11 @@ export const RINOMINATE = Object.freeze({
 const VIVE = new Set(CHIAVI_VIVE);
 
 /**
- * Riscrive il `sortedSkills` del sistema nella fila unica alfabetica del
- * canone, distribuita in colonne per il template di sistema (che disegna
- * una colonna per ogni gruppo).
- *
- * @param {object} sortedSkills - i gruppi del sistema ({physical, social, mental}).
- * @param {object} [opzioni]
- * @param {(key: string) => string} [opzioni.localize] - il localize di i18n.
- * @param {string} [opzioni.lang] - la lingua per l'ordinamento alfabetico.
- * @param {number} [opzioni.colonne] - quante colonne disegna il template.
- * @returns {object} i nuovi gruppi, `colonna1..N`, in ordine alfabetico.
+ * Restituisce la fila alfabetica delle sole Abilità Essenziali.
+ * Questa è la fonte unica usata sia dalla scheda sia dalle finestre di tiro,
+ * così le vecchie abilità assorbite non possono ricomparire nei selettori.
  */
-export function prepareEssentialSkills(sortedSkills, { localize = (k) => k, lang = "it", colonne = 3 } = {}) {
+export function prepareEssentialSkillList(sortedSkills, { localize = (k) => k, lang = "it" } = {}) {
   const voci = Object.values(sortedSkills ?? {})
     .flat()
     .filter((skill) => skill && VIVE.has(skill.id))
@@ -86,6 +79,24 @@ export function prepareEssentialSkills(sortedSkills, { localize = (k) => k, lang
   voci.sort((a, b) =>
     String(a.displayName ?? a.id).localeCompare(String(b.displayName ?? b.id), lang)
   );
+
+  return voci;
+}
+
+/**
+ * Riscrive il `sortedSkills` del sistema nella fila unica alfabetica del
+ * canone, distribuita in colonne per il template di sistema (che disegna
+ * una colonna per ogni gruppo).
+ *
+ * @param {object} sortedSkills - i gruppi del sistema ({physical, social, mental}).
+ * @param {object} [opzioni]
+ * @param {(key: string) => string} [opzioni.localize] - il localize di i18n.
+ * @param {string} [opzioni.lang] - la lingua per l'ordinamento alfabetico.
+ * @param {number} [opzioni.colonne] - quante colonne disegna il template.
+ * @returns {object} i nuovi gruppi, `colonna1..N`, in ordine alfabetico.
+ */
+export function prepareEssentialSkills(sortedSkills, { localize = (k) => k, lang = "it", colonne = 3 } = {}) {
+  const voci = prepareEssentialSkillList(sortedSkills, { localize, lang });
 
   const perColonna = Math.max(1, Math.ceil(voci.length / colonne));
   const gruppi = {};
