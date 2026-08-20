@@ -1022,6 +1022,12 @@
   }
 }
 
+/* Le Abilità Essenziali sono una fila unica alfabetica: sotto le colonne
+   non ci sono più le famiglie Fisico/Sociale/Mentale. */
+.wod5e-mage.wod5e.actor.sheet .stats-container.skills .stats-footer {
+  display: none;
+}
+
 /* ============================================================
    BARRA DELLE LINGUETTE — 76px, icona sopra e parola sotto.
    Il sistema riserva 45px con `margin-left` su .actor-header e .tab

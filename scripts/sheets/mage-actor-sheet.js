@@ -1,4 +1,5 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
+import { prepareEssentialSkills } from "../abilita-essenziali.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { onConceptChallengeOpen } from "../concept-challenge.js";
 import { onExperienceOpen } from "../experience-window.js";
@@ -169,6 +170,15 @@ export class MageActorSheet extends MortalActorSheet {
     context = { ...(await super._preparePartContext(partId, context, options)) };
 
     const actor = this.actor;
+
+    // Tratti: la lista di sistema lascia il posto alle diciotto Abilità
+    // Essenziali, in fila unica alfabetica su tre colonne.
+    if (partId === "stats") {
+      context.sortedSkills = prepareEssentialSkills(context.sortedSkills, {
+        localize: game.i18n.localize.bind(game.i18n),
+        lang: game.i18n.lang
+      });
+    }
 
     // La testata porta la Ruota e Areté, quindi le serve il loro contesto.
     if (partId === "header") {
