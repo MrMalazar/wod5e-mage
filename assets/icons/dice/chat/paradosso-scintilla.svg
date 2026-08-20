@@ -1,1 +1,5 @@
-²ø1šYì
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <g transform="translate(128,128) scale(2) translate(-50,-50)">
+    <path d="M50 12 L58 42 L88 50 L58 58 L50 88 L42 58 L12 50 L42 42 Z" fill="none" stroke="#d0524a" stroke-width="6" stroke-linejoin="round"/>
+  </g>
+</svg>
