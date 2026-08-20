@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import {
+  calculateAreteSuccesses,
   calculateAreteDicePool,
   shiftParadoxDice
 } from "../scripts/arete-dice-pool.js";
@@ -49,5 +50,46 @@ assert.deepEqual(shiftParadoxDice(5, 3, -20), {
   paradoxDice: 0,
   totalDice: 8
 });
+
+// Only Mage tens form critical pairs: 2 -> 4, 3 -> 5, 4 -> 8 successes.
+assert.equal(calculateAreteSuccesses([
+  { result: 10 },
+  { result: 10 }
+]), 4);
+assert.equal(calculateAreteSuccesses([
+  { result: 10 },
+  { result: 10 },
+  { result: 10 }
+]), 5);
+assert.equal(calculateAreteSuccesses([
+  { result: 10 },
+  { result: 10 },
+  { result: 10 },
+  { result: 10 }
+]), 8);
+
+// Paradox tens are single successes and never pair with each other.
+assert.equal(calculateAreteSuccesses([], [
+  { result: 10 },
+  { result: 10 }
+]), 2);
+
+// A Mage ten and a Paradox ten do not form a mixed critical pair.
+assert.equal(calculateAreteSuccesses(
+  [{ result: 10 }],
+  [{ result: 10 }]
+), 2);
+
+// A basic critical pair keeps its bonus and adds ordinary Paradox successes.
+assert.equal(calculateAreteSuccesses(
+  [{ result: 10 }, { result: 10 }, { result: 7 }],
+  [{ result: 10 }, { result: 8 }, { result: 2 }]
+), 7);
+
+// Discarded and inactive dice never contribute to the total.
+assert.equal(calculateAreteSuccesses(
+  [{ result: 10 }, { result: 10, discarded: true }, { result: 8, active: false }],
+  [{ result: 9 }]
+), 2);
 
 console.log("Areté Paradox dice-pool tests passed.");

@@ -4,7 +4,10 @@ import {
   getMageDieImage,
   isMageActor
 } from "../scripts/mage-dice.js";
-import { getParadoxDieImage } from "../scripts/dice-faces.js";
+import {
+  getParadoxDieImage,
+  getParadoxDieResult
+} from "../scripts/dice-faces.js";
 
 function mageActor({ sheetClass = "", flag = false } = {}) {
   return {
@@ -60,6 +63,10 @@ assert.equal(getParadoxDieImage(5).endsWith("dado-vuoto.svg"), true);
 assert.equal(getParadoxDieImage(6).endsWith("paradosso-scintilla.svg"), true);
 assert.equal(getParadoxDieImage(9).endsWith("paradosso-scintilla.svg"), true);
 assert.equal(getParadoxDieImage(10).endsWith("paradosso-occhio-completo.svg"), true);
+assert.equal(getParadoxDieResult(1), "bestial");
+assert.equal(getParadoxDieResult(5), "failure");
+assert.equal(getParadoxDieResult(9), "success");
+assert.equal(getParadoxDieResult(10), "paradoxTen");
 
 const emptyMageClasses = new Set(["roll-img", "mortal-dice"]);
 let emptyMageSourceRemoved = false;

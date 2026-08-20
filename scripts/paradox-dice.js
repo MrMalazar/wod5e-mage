@@ -6,10 +6,12 @@ import {
 import { getSituationalModifiers } from "/systems/wod5e/system/scripts/rolls/situational-modifiers.js";
 import { WOD5eRoll } from "/systems/wod5e/system/scripts/system-rolls.js";
 import {
+  calculateAreteSuccesses,
   calculateAreteDicePool,
   shiftParadoxDice
 } from "./arete-dice-pool.js";
 import {
+  getParadoxDieResult,
   getParadoxDieImage,
   PARADOX_DICE_FACES
 } from "./dice-faces.js";
@@ -17,9 +19,9 @@ import {
 const PARADOX_DENOMINATION = "p";
 
 /**
- * Paradox uses the same result mapping as Hunger, but remains part of the
- * Mortal roll family. This lets WoD5e count successes and criticals normally
- * while keeping the advanced dice visually and mechanically separate.
+ * Paradox remains part of the Mortal roll family, but its 10 has a dedicated
+ * result category: it is a success and keeps its icon without forming critical
+ * pairs with any die.
  */
 export class ParadoxDie extends WOD5eDie {
   static GAME_SYSTEM = "mortal";
@@ -32,13 +34,6 @@ export class ParadoxDie extends WOD5eDie {
       ? `<img src="${image}" />`
       : '<span class="paradox-dice paradox-dice-empty"></span>';
   }
-}
-
-function resultMap(result) {
-  if (result === 10) return "critical";
-  if (result > 5) return "success";
-  if (result > 1) return "failure";
-  return "bestial";
 }
 
 /** Register the custom dP term and its module-provided chat faces. */
@@ -58,7 +53,7 @@ export function registerParadoxDice() {
     faces: PARADOX_DICE_FACES,
     // Do not include hunger-dice: that native class adds the old red styling.
     css: "paradox-dice",
-    resultMap
+    resultMap: getParadoxDieResult
   });
 
   Hooks.once("diceSoNiceReady", registerDiceSoNicePreset);
@@ -257,6 +252,13 @@ export async function rollAreteWithParadox({
             mageArete: true,
             paradoxRating
           }).roll();
+
+          // WoD5e normally forms critical pairs across basic and advanced
+          // dice. In an Arete roll only Mage tens may form those pairs.
+          roll._total = calculateAreteSuccesses(
+            roll.basicDice?.results ?? [],
+            roll.advancedDice?.results ?? []
+          );
 
           return roll.toMessage(
             { speaker: ChatMessage.getSpeaker({ actor }) },
