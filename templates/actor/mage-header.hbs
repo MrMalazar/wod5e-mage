@@ -8,14 +8,30 @@
         </div>
     </div>
 
-    {{> "systems/wod5e/display/shared/actors/parts/header-profile.hbs"}}
+    {{!-- Il profilo del sistema, disteso qui per aggiungere l'appartenenza
+         sotto il nome: Famiglia · Sottofamiglia, con la Fazione nel titolo. --}}
+    <div class="header-profile">
+        <div class="header-profile-img">
+            <img class="profile-img" data-action="editImage" src="{{img}}" data-edit="img" title="{{actor.name}}"/>
+        </div>
+        <div class="flexrow name-field{{#if locked}} clickthrough{{/if}}">
+            {{#if locked}}
+                <div class="charname">{{name}}</div>
+            {{else}}
+                <input class="charname" name="name" type="text" value="{{name}}" placeholder="{{localize 'WOD5E.Name'}}"/>
+            {{/if}}
+        </div>
+        {{#if lineage.riga}}
+            <div class="wod5e-mage-lineage" title="{{lineage.completa}}">{{lineage.riga}}</div>
+        {{/if}}
+    </div>
 
     <div class="header-fields wod5e-mage-header-wheel">
         <div class="wod5e-mage-header-wheel-inner">
 
             <div class="wod5e-mage-magick-track wod5e-mage-magick-track-compact" role="group"
                  aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
-                <svg class="wod5e-mage-magick-arc" viewBox="0 0 400 180" aria-hidden="true">
+                <svg class="wod5e-mage-magick-arc" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
                     <path d="M16 148 A184 133 0 0 1 384 148"></path>
                 </svg>
 

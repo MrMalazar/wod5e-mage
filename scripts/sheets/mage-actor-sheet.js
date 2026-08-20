@@ -4,6 +4,7 @@ import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { onConceptChallengeOpen } from "../concept-challenge.js";
 import { onExperienceOpen } from "../experience-window.js";
 import { onFocusInstrumentToggle, prepareFocus } from "../focus.js";
+import { getLineage } from "../lineage.js";
 import {
   getPersistentMagickResources,
   onMagickBalanceChange,
@@ -184,6 +185,7 @@ export class MageActorSheet extends MortalActorSheet {
     if (partId === "header") {
       context.arete = getArete(actor);
       context.magickTrack = prepareMagickTrack(actor);
+      context.lineage = getLineage(actor);
     }
 
     if (partId === "magick") {
@@ -211,6 +213,7 @@ export class MageActorSheet extends MortalActorSheet {
     // preparazioni vanno chiamate a mano, una o due per pagina.
     if (partId === "personaggio") {
       context = await this.prepareFeaturesContext(context, actor);
+      context.lineage = getLineage(actor);
       context.tab = context.tabs.personaggio;
     }
 

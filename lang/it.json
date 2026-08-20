@@ -19,6 +19,37 @@
       "Creatures": "Creature",
       "Art": "Arte"
     },
+    "Lineage": {
+      "Label": "Appartenenza",
+      "Faction": "Fazione",
+      "Family": "Famiglia",
+      "Subfamily": "Sottofamiglia",
+      "FactionHint": "Tradizioni, Tecnocrazia, Disparati…",
+      "FamilyHint": "Verbena, Ordine di Hermes…",
+      "SubfamilyHint": "La setta, con la sua Famiglia"
+    },
+    "Experience": {
+      "Remaining": "Rimanenti",
+      "Total": "Totale",
+      "Trait": "Tratto",
+      "From": "Da",
+      "To": "A",
+      "Points": "punti esperienza",
+      "Cost": "Costo",
+      "PerDot": "pallino d'arrivo",
+      "New": "nuova:",
+      "Kinds": {
+        "attribute": "Attributo",
+        "skill": "Abilità",
+        "affinitySphere": "Sfera d'Affinità",
+        "sphere": "Sfera",
+        "arete": "Areté",
+        "health": "Salute",
+        "willpower": "Volontà",
+        "merit": "Pregio",
+        "background": "Background"
+      }
+    },
     "Dice": {
       "MageDice": "Dadi Mage",
       "ParadoxDice": "Dadi Paradosso"

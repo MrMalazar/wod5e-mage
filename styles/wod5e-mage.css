@@ -1,4 +1,5 @@
-.wod5e-mage.wod5e.actor.sheet {
+.wod5e-mage.wod5e.actor.sheet,
+.application.wod5e-mage {
   --mortal-color-1: #59420e;
   --mortal-color-2: #98772b;
   --mortal-color-3: #f5e7b2;
@@ -394,6 +395,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-choice img {
+  /* I PNG sono glifi neri: sul fondo scuro si rivestono d'oro chiaro. */
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
   height: 34px;
   object-fit: contain;
   width: 34px;
@@ -507,7 +510,7 @@
   width: 275px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes-wheel > svg polygon {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes-wheel > svg :is(polygon, circle) {
   fill: none;
   stroke: var(--mage-oro-scuro);
   stroke-width: 1.5;
@@ -1047,6 +1050,15 @@
   display: none;
 }
 
+/* Aria fra le voci: ogni Abilità respira mezza riga. */
+.wod5e-mage.wod5e.actor.sheet .stats-container.skills .skill {
+  margin-bottom: 0.45rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .stats-container.skills .skill:last-child {
+  margin-bottom: 0;
+}
+
 /* ============================================================
    BARRA DELLE LINGUETTE — 76px, icona sopra e parola sotto.
    Il sistema riserva 45px con `margin-left` su .actor-header e .tab
@@ -1133,6 +1145,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-wheel-inner {
+  min-width: max-content;
   align-items: center;
   background: linear-gradient(#2c2413, #211b0f);
   border: 2px solid var(--mage-oro);
@@ -1156,6 +1169,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-compact .wod5e-mage-magick-title {
+  bottom: 0;
   font-size: 0.62rem;
   letter-spacing: 0.14em;
 }
@@ -1163,6 +1177,14 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-counters {
   display: flex;
   gap: 12px;
+}
+
+/* La regola della linguetta Magick impila i contatori in colonna:
+   in testata tornano in riga, piccoli — «− Q 3 +». */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-counters .wod5e-mage-magick-resource {
+  flex-direction: row;
+  font-size: 0.72rem;
+  gap: 4px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource {
@@ -1238,4 +1260,150 @@
   border-bottom: 1px solid rgb(152 119 43 / 45%);
   margin: 0 1.25rem;
   padding-bottom: 0.75rem;
+}
+
+/* ============================================================
+   L'APPARTENENZA — Fazione, Famiglia · Sottofamiglia.
+   Sotto il nome sta la coppia; la fazione completa vive nel
+   titolo al passaggio. I campi si scrivono in Personaggio.
+   ============================================================ */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage {
+  color: var(--mage-oro-chiaro);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+  max-width: 250px;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-fields > .resource-header {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 0.75rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-grid > label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-grid > label > span {
+  color: var(--mage-oro);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   LA FINESTRA DELL'ESPERIENZA — totali, calcolatore, listino.
+   Vive in un dialogo: i token arrivano da .application.wod5e-mage.
+   ============================================================ */
+.application.wod5e-mage .wod5e-mage-exp {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 460px;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-totali {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-k {
+  color: var(--mage-oro);
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-totali strong {
+  font-size: 1.6rem;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-mut {
+  opacity: 0.6;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-calc {
+  align-items: flex-end;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0.7rem;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-calc label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mage-oro);
+}
+
+.application.wod5e-mage .wod5e-mage-exp-calc input[type="number"] {
+  width: 58px;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-out {
+  margin-left: auto;
+  text-align: right;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-out strong {
+  display: block;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-out span {
+  font-size: 0.68rem;
+  opacity: 0.75;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-steps {
+  font-size: 0.78rem;
+  margin: 0;
+  min-height: 1em;
+  opacity: 0.85;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-listino {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-listino th {
+  color: var(--mage-oro);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-listino td {
+  border-top: 1px solid rgb(152 119 43 / 35%);
+  padding: 0.3rem 0.4rem;
+}
+
+.application.wod5e-mage .wod5e-mage-exp-n {
+  text-align: right;
+  white-space: nowrap;
 }

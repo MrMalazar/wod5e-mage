@@ -1,0 +1,56 @@
+{{!-- La finestra dell'Esperienza: i punti in cassa, il calcolatore da X a Y,
+     e il listino del manuale (05_10). Il calcolatore è cablato da
+     bindExperienceCalculator in experience-window.js. --}}
+<div class="wod5e-mage-exp">
+    <div class="wod5e-mage-exp-totali">
+        <div>
+            <span class="wod5e-mage-exp-k">{{localize "WOD5E_MAGE.Experience.Remaining"}}</span>
+            <strong>{{remaining}}</strong>
+        </div>
+        <div>
+            <span class="wod5e-mage-exp-k">{{localize "WOD5E_MAGE.Experience.Total"}}</span>
+            <strong class="wod5e-mage-exp-mut">{{total}}</strong>
+        </div>
+    </div>
+
+    <div class="wod5e-mage-exp-calc">
+        <label>
+            <span>{{localize "WOD5E_MAGE.Experience.Trait"}}</span>
+            <select name="kind">
+                {{#each rows as |row|}}
+                    <option value="{{row.kind}}">{{row.label}}</option>
+                {{/each}}
+            </select>
+        </label>
+        <label>
+            <span>{{localize "WOD5E_MAGE.Experience.From"}}</span>
+            <input type="number" name="from" value="0" min="0" max="9" step="1"/>
+        </label>
+        <label>
+            <span>{{localize "WOD5E_MAGE.Experience.To"}}</span>
+            <input type="number" name="to" value="1" min="1" max="10" step="1"/>
+        </label>
+        <div class="wod5e-mage-exp-out">
+            <strong data-role="total">0</strong>
+            <span>{{localize "WOD5E_MAGE.Experience.Points"}}</span>
+        </div>
+    </div>
+    <p class="wod5e-mage-exp-steps" data-role="steps"></p>
+
+    <table class="wod5e-mage-exp-listino">
+        <thead>
+            <tr>
+                <th>{{localize "WOD5E_MAGE.Experience.Trait"}}</th>
+                <th>{{localize "WOD5E_MAGE.Experience.Cost"}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each rows as |row|}}
+                <tr>
+                    <td>{{row.label}}</td>
+                    <td class="wod5e-mage-exp-n">{{row.formula}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

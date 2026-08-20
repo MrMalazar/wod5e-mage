@@ -19,6 +19,37 @@
       "Creatures": "Creatures",
       "Art": "Art"
     },
+    "Lineage": {
+      "Label": "Allegiance",
+      "Faction": "Faction",
+      "Family": "Family",
+      "Subfamily": "Subfamily",
+      "FactionHint": "Traditions, Technocracy, Disparates…",
+      "FamilyHint": "Verbena, Order of Hermes…",
+      "SubfamilyHint": "The sect, with its Family"
+    },
+    "Experience": {
+      "Remaining": "Remaining",
+      "Total": "Total",
+      "Trait": "Trait",
+      "From": "From",
+      "To": "To",
+      "Points": "experience points",
+      "Cost": "Cost",
+      "PerDot": "target dot",
+      "New": "new:",
+      "Kinds": {
+        "attribute": "Attribute",
+        "skill": "Skill",
+        "affinitySphere": "Affinity Sphere",
+        "sphere": "Sphere",
+        "arete": "Arete",
+        "health": "Health",
+        "willpower": "Willpower",
+        "merit": "Merit",
+        "background": "Background"
+      }
+    },
     "Dice": {
       "MageDice": "Mage Dice",
       "ParadoxDice": "Paradox Dice"
