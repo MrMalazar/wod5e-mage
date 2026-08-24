@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { getScopeSelection, prepareScopes } from "../scripts/scopes.js";
 import {
   onOngoingMagickAdd,
@@ -16,15 +17,37 @@ function mageActor(flags = {}) {
 
 let scopes = getScopeSelection(mageActor());
 assert.equal(Object.keys(scopes).length, 6);
-assert.equal(Object.values(scopes).every((selected) => !selected), true);
+assert.equal(Object.values(scopes).every((value) => value === 0), true);
 
 scopes = prepareScopes(mageActor({
-  scopes: { potency: true, area: true }
+  scopes: {
+    potency: true,
+    duration: "3",
+    targets: -2,
+    area: 4.8,
+    conditions: "invalid"
+  }
 }));
 assert.deepEqual(
-  scopes.filter((scope) => scope.selected).map((scope) => scope.id),
-  ["potency", "area"]
+  Object.fromEntries(scopes.map((scope) => [scope.id, scope.value])),
+  {
+    potency: 1,
+    duration: 3,
+    targets: 0,
+    area: 4,
+    conditions: 0,
+    range: 0
+  }
 );
+
+const scopesTemplate = readFileSync(
+  new URL("../templates/actor/parts/scopes.hbs", import.meta.url),
+  "utf8"
+);
+assert.match(scopesTemplate, /<polygon points="150,30 245,80 245,160 150,210 55,160 55,80"><\/polygon>/);
+assert.equal((scopesTemplate.match(/type="number"/g) ?? []).length, 1);
+assert.match(scopesTemplate, /name="flags\.wod5e-mage\.scopes\.\{\{scope\.id\}\}"/);
+assert.doesNotMatch(scopesTemplate, /role="checkbox"|resource-value-step/);
 
 let rows = prepareOngoingMagick(mageActor());
 assert.equal(rows.length, 0);

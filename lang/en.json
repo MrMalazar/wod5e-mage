@@ -238,6 +238,16 @@
       "spirit": "Spirit",
       "time": "Time"
     },
+    "AffinitySphere": {
+      "Label": "Affinity Sphere",
+      "Select": "Choose an Affinity Sphere",
+      "Change": "Change Affinity Sphere",
+      "Remove": "Remove Affinity Sphere",
+      "Search": "Search for a Sphere...",
+      "BrowserTitle": "Affinity Spheres",
+      "NoResults": "No Sphere found.",
+      "MissingPack": "The Sphere compendium is not available."
+    },
     "Wisdom": {
       "Label": "Wisdom",
       "Roll": "Roll Wisdom",

@@ -1,12 +1,10 @@
-{{!-- Barra delle linguette del Mago: icona sopra, parola sotto.
-     Copia della nav di sistema con l'etichetta visibile, il pulsante
-     dell'Esperienza e il lucchetto di sistema in fondo. --}}
+{{!-- Navigazione con la stessa geometria a sole icone del sistema.
+     Mantiene il pulsante Esperienza e il lucchetto nativo in fondo. --}}
 <div class="tabs-container wod5e-mage-tabs">
     <nav class="sheet-tabs tabs" data-group="primary">
         {{#each tabs as |tab|}}
             <div class="{{tab.cssClass}}" data-action="tab" data-group="{{tab.group}}" data-tab="{{tab.id}}" title="{{localize tab.title}}">
                 <div class="navicon">{{{tab.icon}}}</div>
-                <span class="navlabel">{{localize tab.title}}</span>
             </div>
         {{/each}}
 
@@ -14,7 +12,6 @@
 
         <button type="button" class="wod5e-mage-tab-button" data-action="openExperience" title="{{localize 'WOD5E.Tabs.Experience'}}">
             <div class="navicon"><i class="fa-solid fa-file-contract"></i></div>
-            <span class="navlabel">{{localize "WOD5E.Tabs.Experience"}}</span>
         </button>
 
         {{> "systems/wod5e/display/shared/actors/parts/lock-button.hbs"}}

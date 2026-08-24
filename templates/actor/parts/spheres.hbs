@@ -4,62 +4,33 @@
     </header>
 
     <div class="wod5e-mage-spheres-content wod5e-mage-magick-layout">
-        <div class="wod5e-mage-magick-left">
-            <div class="wod5e-mage-persistent-resources">
-                <label class="wod5e-mage-persistent-resource generated-quintessence">
-                    <span>{{localize "WOD5E_MAGE.MagickBalance.GeneratedQuintessence"}}</span>
-                    <input
-                        type="text"
-                        name="flags.wod5e-mage.persistentMagickResources.generatedQuintessence"
-                        value="{{persistentMagickResources.generatedQuintessence}}"
-                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.GeneratedQuintessence'}}"
-                        {{#if locked}}disabled{{/if}}
-                    >
-                </label>
+        <div class="wod5e-mage-persistent-resources">
+            <label class="wod5e-mage-persistent-resource generated-quintessence">
+                <span>{{localize "WOD5E_MAGE.MagickBalance.GeneratedQuintessence"}}</span>
+                <input
+                    type="text"
+                    name="flags.wod5e-mage.persistentMagickResources.generatedQuintessence"
+                    value="{{persistentMagickResources.generatedQuintessence}}"
+                    aria-label="{{localize 'WOD5E_MAGE.MagickBalance.GeneratedQuintessence'}}"
+                    {{#if locked}}disabled{{/if}}
+                >
+            </label>
 
-                <label class="wod5e-mage-persistent-resource permanent-paradox">
-                    <span>{{localize "WOD5E_MAGE.MagickBalance.PermanentParadox"}}</span>
-                    <input
-                        type="number"
-                        min="0"
-                        step="1"
-                        name="flags.wod5e-mage.persistentMagickResources.permanentParadox"
-                        value="{{persistentMagickResources.permanentParadox}}"
-                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.PermanentParadox'}}"
-                        {{#if locked}}disabled{{/if}}
-                    >
-                </label>
-            </div>
-
-            <section class="wod5e-mage-scopes">
-                <header class="resource-header">
-                    <label class="header-label">{{localize "WOD5E_MAGE.Scopes.Label"}}</label>
-                </header>
-
-                <div class="wod5e-mage-scopes-wheel" role="group" aria-label="{{localize 'WOD5E_MAGE.Scopes.Label'}}">
-                    {{!-- Una ruota, non un esagono: cerchio e sei raggi. --}}
-                    <svg viewBox="0 0 300 240" aria-hidden="true">
-                        <circle cx="150" cy="120" r="90"></circle>
-                        <line x1="150" y1="30" x2="150" y2="210"></line>
-                        <line x1="72" y1="75" x2="228" y2="165"></line>
-                        <line x1="228" y1="75" x2="72" y2="165"></line>
-                    </svg>
-
-                    <strong>{{localize "WOD5E_MAGE.Scopes.Label"}}</strong>
-
-                    {{#each scopes as |scope|}}
-                        <label class="wod5e-mage-scope-choice scope-{{scope.id}}" title="{{localize scope.label}}">
-                            <span>{{localize scope.label}}</span>
-                            <span class="resource-value" data-value="{{#if scope.selected}}1{{else}}0{{/if}}">
-                                <span class="resource-value-step" data-action="scopeChange" data-scope="{{scope.id}}" data-selected="{{scope.selected}}" data-index="1" role="checkbox" aria-checked="{{scope.selected}}" tabindex="0"></span>
-                            </span>
-                        </label>
-                    {{/each}}
-                </div>
-            </section>
+            <label class="wod5e-mage-persistent-resource permanent-paradox">
+                <span>{{localize "WOD5E_MAGE.MagickBalance.PermanentParadox"}}</span>
+                <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    name="flags.wod5e-mage.persistentMagickResources.permanentParadox"
+                    value="{{persistentMagickResources.permanentParadox}}"
+                    aria-label="{{localize 'WOD5E_MAGE.MagickBalance.PermanentParadox'}}"
+                    {{#if locked}}disabled{{/if}}
+                >
+            </label>
         </div>
 
-        <div class="wod5e-mage-magick-right">
+        <section class="wod5e-mage-spheres-panel">
             <header class="resource-header">
                 <label class="header-label">{{localize "WOD5E_MAGE.Tabs.Spheres"}}</label>
             </header>
@@ -97,39 +68,96 @@
                     <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.Spheres.Empty"}}</p>
                 {{/each}}
             </div>
+        </section>
 
-            <section class="wod5e-mage-ongoing-magick">
-                <header class="resource-header">
-                    <label class="header-label">{{localize "WOD5E_MAGE.OngoingMagick.Label"}}</label>
-                </header>
+        <section class="wod5e-mage-ongoing-magick">
+            <header class="resource-header">
+                <label class="header-label">{{localize "WOD5E_MAGE.OngoingMagick.Label"}}</label>
+            </header>
 
-                <div class="wod5e-mage-ongoing-magick-controls">
-                    <button type="button" data-action="ongoingMagickAdd" title="{{localize 'WOD5E_MAGE.OngoingMagick.Add'}}" {{#if locked}}disabled{{/if}}>
-                        <i class="fa-solid fa-plus"></i>
-                        {{localize "WOD5E_MAGE.OngoingMagick.Add"}}
+            <div class="wod5e-mage-ongoing-magick-controls">
+                <button type="button" data-action="ongoingMagickAdd" title="{{localize 'WOD5E_MAGE.OngoingMagick.Add'}}" {{#if locked}}disabled{{/if}}>
+                    <i class="fa-solid fa-plus"></i>
+                    {{localize "WOD5E_MAGE.OngoingMagick.Add"}}
+                </button>
+            </div>
+
+            {{#if ongoingMagick.length}}
+            <div class="wod5e-mage-ongoing-magick-grid">
+                <span>{{localize "WOD5E_MAGE.OngoingMagick.NameSpheres"}}</span>
+                <span>{{localize "WOD5E_MAGE.OngoingMagick.Status"}}</span>
+                <span>{{localize "WOD5E_MAGE.OngoingMagick.TriggerEffect"}}</span>
+                <span aria-hidden="true"></span>
+
+                {{#each ongoingMagick as |row|}}
+                    <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.nameSpheres" value="{{row.nameSpheres}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.NameSpheres'}}" {{#if ../locked}}disabled{{/if}}>
+                    <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.status" value="{{row.status}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Status'}}" {{#if ../locked}}disabled{{/if}}>
+                    <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.triggerEffect" value="{{row.triggerEffect}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.TriggerEffect'}}" {{#if ../locked}}disabled{{/if}}>
+                    <button type="button" data-action="ongoingMagickDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" {{#if ../locked}}disabled{{/if}}>
+                        <i class="fa-solid fa-trash"></i>
                     </button>
-                </div>
+                {{/each}}
+            </div>
+            {{else}}
+                <p class="wod5e-mage-ongoing-magick-empty">{{localize "WOD5E_MAGE.OngoingMagick.Empty"}}</p>
+            {{/if}}
+        </section>
 
-                {{#if ongoingMagick.length}}
-                <div class="wod5e-mage-ongoing-magick-grid">
-                    <span>{{localize "WOD5E_MAGE.OngoingMagick.NameSpheres"}}</span>
-                    <span>{{localize "WOD5E_MAGE.OngoingMagick.Status"}}</span>
-                    <span>{{localize "WOD5E_MAGE.OngoingMagick.TriggerEffect"}}</span>
-                    <span aria-hidden="true"></span>
+        <section class="wod5e-mage-affinity-sphere">
+            <header class="resource-header">
+                <label class="header-label">{{localize "WOD5E_MAGE.AffinitySphere.Label"}}</label>
+            </header>
 
-                    {{#each ongoingMagick as |row|}}
-                        <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.nameSpheres" value="{{row.nameSpheres}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.NameSpheres'}}" {{#if ../locked}}disabled{{/if}}>
-                        <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.status" value="{{row.status}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Status'}}" {{#if ../locked}}disabled{{/if}}>
-                        <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.triggerEffect" value="{{row.triggerEffect}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.TriggerEffect'}}" {{#if ../locked}}disabled{{/if}}>
-                        <button type="button" data-action="ongoingMagickDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" {{#if ../locked}}disabled{{/if}}>
+            <div class="resource resource-content wod5e-mage-affinity-selector">
+                {{#if affinitySphere}}
+                    <img src="{{affinitySphere.img}}" alt="">
+                    <strong>{{affinitySphere.name}}</strong>
+                    {{#unless locked}}
+                        <button
+                            type="button"
+                            data-action="affinitySphereOpen"
+                            title="{{localize 'WOD5E_MAGE.AffinitySphere.Change'}}"
+                            aria-label="{{localize 'WOD5E_MAGE.AffinitySphere.Change'}}"
+                        >
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        <button
+                            type="button"
+                            data-action="affinitySphereClear"
+                            title="{{localize 'WOD5E_MAGE.AffinitySphere.Remove'}}"
+                            aria-label="{{localize 'WOD5E_MAGE.AffinitySphere.Remove'}}"
+                        >
                             <i class="fa-solid fa-trash"></i>
                         </button>
+                    {{/unless}}
+                {{else}}
+                    {{#if locked}}
+                        <span class="wod5e-mage-affinity-empty">
+                            {{localize "WOD5E_MAGE.AffinitySphere.Select"}}
+                        </span>
+                    {{else}}
+                        <button type="button" class="wod5e-mage-affinity-empty" data-action="affinitySphereOpen">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span>{{localize "WOD5E_MAGE.AffinitySphere.Select"}}</span>
+                        </button>
+                    {{/if}}
+                {{/if}}
+            </div>
+
+            {{#if affinitySphere}}
+                <p class="wod5e-mage-affinity-intro">{{affinitySphere.intro}}</p>
+                <div class="wod5e-mage-affinity-abilities">
+                    {{#each affinitySphere.abilities as |ability|}}
+                        <article class="wod5e-mage-affinity-ability">
+                            <h3>
+                                {{ability.label}}
+                                {{#if ability.kind}}<small>{{ability.kind}}</small>{{/if}}
+                            </h3>
+                            <div>{{{ability.description}}}</div>
+                        </article>
                     {{/each}}
                 </div>
-                {{else}}
-                    <p class="wod5e-mage-ongoing-magick-empty">{{localize "WOD5E_MAGE.OngoingMagick.Empty"}}</p>
-                {{/if}}
-            </section>
-        </div>
+            {{/if}}
+        </section>
     </div>
 </section>

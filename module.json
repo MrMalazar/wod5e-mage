@@ -2,10 +2,10 @@
   "id": "wod5e-mage",
   "title": "Mage for World of Darkness 5e",
   "description": "Adds Mage support to the World of Darkness 5e system.",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "url": "https://github.com/Danilo-P-git/wod5e-mage",
   "manifest": "https://github.com/Danilo-P-git/wod5e-mage/releases/latest/download/module.json",
-  "download": "https://github.com/Danilo-P-git/wod5e-mage/releases/download/0.9.7/wod5e-mage.zip",
+  "download": "https://github.com/Danilo-P-git/wod5e-mage/releases/download/0.9.8/wod5e-mage.zip",
   "authors": [
     {
       "name": "wod5e-mage contributors"
@@ -31,6 +31,41 @@
       "lang": "it",
       "name": "Italiano",
       "path": "lang/it.json"
+    }
+  ],
+  "packs": [
+    {
+      "label": "Sfere d'Affinità (Italiano)",
+      "type": "Item",
+      "name": "mage-spheres",
+      "path": "packs/mage-spheres",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Affinity Spheres (English)",
+      "type": "Item",
+      "name": "mage-spheres-en",
+      "path": "packs/mage-spheres-en",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Mage",
+      "sorting": "m",
+      "packs": [
+        "mage-spheres",
+        "mage-spheres-en"
+      ],
+      "color": "#98772b"
     }
   ],
   "relationships": {

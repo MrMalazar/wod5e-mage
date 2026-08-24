@@ -238,6 +238,16 @@
       "spirit": "Spirito",
       "time": "Tempo"
     },
+    "AffinitySphere": {
+      "Label": "Sfera affine",
+      "Select": "Scegli una Sfera affine",
+      "Change": "Cambia Sfera affine",
+      "Remove": "Rimuovi Sfera affine",
+      "Search": "Cerca una Sfera...",
+      "BrowserTitle": "Sfere d'Affinità",
+      "NoResults": "Nessuna Sfera trovata.",
+      "MissingPack": "Il compendio delle Sfere non è disponibile."
+    },
     "Wisdom": {
       "Label": "Saggezza",
       "Roll": "Tira Saggezza",

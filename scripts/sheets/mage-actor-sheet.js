@@ -1,8 +1,10 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
 import { prepareEssentialSkills } from "../abilita-essenziali.js";
+import { prepareAffinitySphere } from "../affinity-sphere-data.js";
+import { onAffinitySphereClear, onAffinitySphereOpen } from "../affinity-sphere.js";
 import { MODULE_ID } from "../constants.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
-import { onConceptChallengeOpen } from "../concept-challenge.js";
+import { prepareConceptChallenge } from "../concept-challenge.js";
 import { onExperienceOpen } from "../experience-window.js";
 import { onFocusInstrumentToggle, prepareFocus } from "../focus.js";
 import { getLineage } from "../lineage.js";
@@ -17,7 +19,7 @@ import {
   onOngoingMagickDelete,
   prepareOngoingMagick
 } from "../ongoing-magick.js";
-import { onScopeChange, prepareScopes } from "../scopes.js";
+import { prepareScopes } from "../scopes.js";
 import { onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 
@@ -57,15 +59,15 @@ export class MageActorSheet extends MortalActorSheet {
     classes: ["wod5e-mage", "mage"],
     actions: {
       roll: onMageRoll,
+      affinitySphereClear: onAffinitySphereClear,
+      affinitySphereOpen: onAffinitySphereOpen,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
       focusInstrumentToggle: onFocusInstrumentToggle,
       magickBalanceChange: onMagickBalanceChange,
       ongoingMagickAdd: onOngoingMagickAdd,
       ongoingMagickDelete: onOngoingMagickDelete,
-      openConceptChallenge: onConceptChallengeOpen,
       openExperience: onExperienceOpen,
-      scopeChange: onScopeChange,
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
       wisdomResourceChange: onWisdomResourceChange,
@@ -83,17 +85,21 @@ export class MageActorSheet extends MortalActorSheet {
       ]
     },
     tabs: { template: `${MODULE}/parts/tab-navigation.hbs` },
-    // Forked from the system stats part to host the Wheel widget in the
-    // right column of the Traits page (see templates/actor/parts/tratti.hbs).
+    // Forked from the system stats part to host Wheel and Scopes beside the
+    // Conditions/Custom Rolls panel (see templates/actor/parts/tratti.hbs).
     stats: {
       template: `${MODULE}/parts/tratti.hbs`,
-      templates: [`${MODULE}/parts/ruota.hbs`]
+      templates: [
+        `${MODULE}/parts/ruota.hbs`,
+        `${MODULE}/parts/scopes.hbs`
+      ]
     },
     magick: { template: `${MODULE}/parts/spheres.hbs` },
     focus: {
       template: `${MODULE}/parts/focus.hbs`,
       templates: [`${MODULE}/parts/wisdom.hbs`]
     },
+    conceptChallenge: { template: `${MODULE}/parts/concept-challenge.hbs` },
     personaggio: {
       template: `${MODULE}/parts/personaggio.hbs`,
       templates: [
@@ -136,6 +142,12 @@ export class MageActorSheet extends MortalActorSheet {
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Focus",
         icon: icon("bullseye")
+      },
+      conceptChallenge: {
+        id: "conceptChallenge",
+        group: "primary",
+        title: "WOD5E_MAGE.Tabs.ConceptChallenge",
+        icon: icon("pen-to-square")
       },
       dotazione: {
         id: "dotazione",
@@ -199,6 +211,7 @@ export class MageActorSheet extends MortalActorSheet {
       });
       context.arete = getArete(actor);
       context.magickTrack = prepareMagickTrack(actor);
+      context.scopes = prepareScopes(actor);
       context.wheelAsBar = game.settings.get(MODULE_ID, "headerWheelMode") === "bar";
     }
 
@@ -209,10 +222,10 @@ export class MageActorSheet extends MortalActorSheet {
 
     if (partId === "magick") {
       context.tab = context.tabs.magick;
+      context.affinitySphere = await prepareAffinitySphere(actor);
       context.arete = getArete(actor);
       context.magickTrack = prepareMagickTrack(actor);
       context.persistentMagickResources = getPersistentMagickResources(actor);
-      context.scopes = prepareScopes(actor);
       context.ongoingMagick = prepareOngoingMagick(actor);
       const sphereData = prepareSpheres(actor, {
         localize: game.i18n.localize.bind(game.i18n),
@@ -226,6 +239,11 @@ export class MageActorSheet extends MortalActorSheet {
     if (partId === "focus") {
       context.tab = context.tabs.focus;
       context.focus = await prepareFocus(actor);
+    }
+
+    if (partId === "conceptChallenge") {
+      context.tab = context.tabs.conceptChallenge;
+      context.conceptChallenge = await prepareConceptChallenge(actor);
     }
 
     // Le pagine ricomposte non passano dallo switch del sistema: le loro

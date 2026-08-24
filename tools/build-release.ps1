@@ -37,6 +37,21 @@ foreach ($entry in $runtimeEntries) {
   Copy-Item -LiteralPath $sourcePath -Destination $stageDirectory -Recurse -Force
 }
 
+# Ship the portable source databases only. Foundry migrates these legacy .db
+# files to its local LevelDB directories on first load; runtime folders may
+# contain a live LOCK file and must never be bundled in a release.
+$packsSource = Join-Path $projectRoot "packs"
+$packsDestination = Join-Path $stageDirectory "packs"
+$packDatabases = @(Get-ChildItem -LiteralPath $packsSource -File -Filter "*.db")
+if ($packDatabases.Count -eq 0) {
+  throw "No compendium source databases were found in packs."
+}
+
+[IO.Directory]::CreateDirectory($packsDestination) | Out-Null
+foreach ($database in $packDatabases) {
+  Copy-Item -LiteralPath $database.FullName -Destination $packsDestination -Force
+}
+
 # Development-only files are useful in the repository but not at runtime.
 $validatorPath = Join-Path $stageDirectory "scripts\validate-manifest.js"
 if (Test-Path -LiteralPath $validatorPath) {
@@ -70,6 +85,12 @@ try {
 
   if ($archiveEntries | Where-Object { $_ -like "wod5e-mage/*" }) {
     throw "The generated archive contains an unwanted top-level module directory."
+  }
+
+  foreach ($packPath in @("packs/mage-spheres.db", "packs/mage-spheres-en.db")) {
+    if ($archiveEntries -notcontains $packPath) {
+      throw "The generated archive does not contain $packPath."
+    }
   }
 }
 finally {

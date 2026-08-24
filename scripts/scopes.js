@@ -13,7 +13,10 @@ export function getScopeSelection(actor) {
   const stored = actor.getFlag(MODULE_ID, "scopes");
 
   return Object.fromEntries(
-    SCOPES.map((id) => [id, Boolean(stored?.[id])])
+    SCOPES.map((id) => {
+      const value = Number(stored?.[id]);
+      return [id, Number.isFinite(value) ? Math.max(0, Math.trunc(value)) : 0];
+    })
   );
 }
 
@@ -23,38 +26,6 @@ export function prepareScopes(actor) {
   return SCOPES.map((id) => ({
     id,
     label: `WOD5E_MAGE.Scopes.${id}`,
-    selected: selection[id]
+    value: selection[id]
   }));
-}
-
-export async function onScopeChange(event, target) {
-  event.preventDefault();
-
-  const actor = this.actor;
-  if (!actor.isOwner) {
-    ui.notifications.warn(
-      game.i18n.format("WOD5E.Notifications.NoSufficientPermission", {
-        string: actor.name
-      })
-    );
-    return;
-  }
-
-  if (actor.system.locked) {
-    ui.notifications.warn(
-      game.i18n.format("WOD5E.Notifications.CannotModifyResourceString", {
-        string: actor.name
-      })
-    );
-    return;
-  }
-
-  const scopeId = target.dataset.scope;
-  if (!SCOPES.includes(scopeId)) return;
-
-  // Every Scope is an independent yes/no switch. Updating the complete flag
-  // keeps all six choices together without adding fields to the native system.
-  const selection = getScopeSelection(actor);
-  selection[scopeId] = target.dataset.selected !== "true";
-  await actor.setFlag(MODULE_ID, "scopes", selection);
 }
