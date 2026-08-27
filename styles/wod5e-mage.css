@@ -205,7 +205,8 @@
     grid-template-areas:
         "resources ."
         "spheres ongoing"
-        "affinity affinity";
+        "affinity affinity"
+        "table table";
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -323,14 +324,6 @@
   text-align: center;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-balance {
-  --quintessence-color: var(--mage-oro);
-  --paradox-color: var(--mage-rosso);
-  margin: 1rem auto 1.25rem;
-  max-width: 400px;
-  width: 100%;
-}
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track {
   height: 145px;
   margin: 0 auto;
@@ -367,8 +360,10 @@
   width: 20px;
 }
 
+/* Stesso oro della barra: la variabile --quintessence-color viveva in un
+   contenitore che la Ruota non ha, e il nodo pieno restava trasparente. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-node.quintessence {
-  background: var(--quintessence-color);
+  background: var(--mage-oro);
   border-color: var(--mage-oro-tenue);
 }
 
@@ -596,104 +591,111 @@
   text-align: center;
 }
 
+/* Ambiti: niente più esagono coi contatori. Un riquadro solo, che dice
+   dove il Dono della Sfera affine regala successi automatici. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes {
-  margin: 1.5rem auto 0;
-  max-width: 400px;
+  margin: 0;
   width: 100%;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes-wheel {
-  height: 260px;
-  margin: 0 auto;
-  max-width: 360px;
-  position: relative;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: 40px minmax(0, 1fr);
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.65rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes-wheel > svg {
-  height: 220px;
-  left: 50%;
-  overflow: visible;
-  position: absolute;
-  top: 20px;
-  transform: translateX(-50%);
-  width: 275px;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift > img {
+  border: 0;
+  height: 40px;
+  object-fit: contain;
+  width: 40px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes-wheel > svg :is(polygon, circle) {
-  fill: none;
-  stroke: var(--mage-oro-scuro);
-  stroke-width: 1.5;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  line-height: 1.25;
+  min-width: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes-wheel > svg line {
-  stroke: var(--mortal-color-2);
-  stroke-opacity: 0.22;
-  stroke-width: 1;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes-wheel > strong {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift-text > strong {
   color: var(--mage-oro);
   font-family: "Modesto Condensed", serif;
-  font-size: 1.5rem;
-  left: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  font-size: 1.15rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-choice {
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  font-weight: 600;
-  gap: 0.35rem;
-  position: absolute;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift-successes {
+  font-size: 0.9em;
+  opacity: 0.85;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift-empty {
+  margin: 0.5rem 0 0;
+  opacity: 0.8;
+}
+
+/* Il listino dei Successi Extra: una tavola larga, che scorre in orizzontale
+   se la pagina è stretta; la riga del Dono si accende in oro. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table {
+  grid-area: table;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table table {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 0;
+  min-width: 720px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table :is(th, td) {
+  border: 1px solid var(--mage-oro-scuro);
+  padding: 0.3rem 0.45rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table thead th {
+  background: var(--mage-incavo);
+  color: var(--mage-oro);
+  font-family: "Modesto Condensed", serif;
+  font-size: 1rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th {
+  background: var(--mage-incavo);
+  color: var(--mage-oro);
+  font-weight: 700;
+  text-align: left;
   white-space: nowrap;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-choice input[type="number"] {
-  flex: 0 0 48px;
-  height: 28px;
-  margin: 0;
-  padding: 0 4px;
-  text-align: center;
-  width: 48px;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th > i {
+  color: var(--mage-oro);
+  margin-left: 0.25rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-choice.scope-potency {
-  flex-direction: column;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-spheres {
+  font-style: italic;
+  opacity: 0.85;
+  text-align: left;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-choice.scope-duration {
-  flex-direction: row-reverse;
-  right: 0;
-  top: 25%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-choice.scope-targets {
-  flex-direction: row-reverse;
-  right: 0;
-  top: 62%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-choice.scope-area {
-  bottom: 0;
-  flex-direction: column-reverse;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-choice.scope-conditions {
-  left: 0;
-  top: 62%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-choice.scope-range {
-  left: 0;
-  top: 25%;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tr.gift :is(th, td) {
+  background: color-mix(in srgb, var(--mage-oro) 18%, transparent);
+  border-color: var(--mage-oro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere {
@@ -1252,7 +1254,8 @@
             "resources"
             "spheres"
             "ongoing"
-            "affinity";
+            "affinity"
+            "table";
     grid-template-columns: 1fr;
   }
 
@@ -1425,12 +1428,77 @@
   min-width: max-content;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-arcana-cell > .wod5e-mage-scopes {
-  flex: 0 0 340px;
+/* A destra della Ruota, in colonna: l'Ambito del Dono e i Bonus. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-arcana-cell > .wod5e-mage-arcana-side {
+  display: flex;
+  flex: 1 1 260px;
+  flex-direction: column;
+  gap: 0.75rem;
   margin: 0;
-  max-width: 340px;
-  width: 340px;
-  zoom: 0.75;
+  max-width: 380px;
+  min-width: 220px;
+}
+
+/* Bonus: la stessa griglia del diario delle magie in corso, a tre colonne. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses > .resource-header {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses-add {
+  align-items: center;
+  display: inline-flex;
+  height: 24px;
+  justify-content: center;
+  margin: 0;
+  min-height: 24px;
+  padding: 0;
+  width: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses-grid {
+  display: grid;
+  gap: 0.3rem 0.4rem;
+  grid-template-columns: 52px minmax(0, 0.8fr) minmax(0, 1.2fr) 26px;
+  margin-top: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses-grid > span {
+  color: var(--mage-oro);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses-grid > input {
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
+  min-width: 0;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses-grid > input[type="number"] {
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses-grid > button {
+  align-items: center;
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  margin: 0;
+  min-height: 26px;
+  padding: 0;
+  width: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses-empty {
+  font-size: 0.85em;
+  margin: 0.5rem 0 0;
+  opacity: 0.8;
 }
 
 @container (max-width: 900px) {
@@ -1457,12 +1525,25 @@
   }
 }
 
-/* Attributi e Abilità mantengono sempre le tre colonne del sistema. Se manca
-   spazio si ferma il resize della scheda: nessuna colonna può scendere sotto. */
+/* Attributi e Abilità partono dalle tre colonne del sistema. Il contenitore
+   misura la propria larghezza: quando le tre colonne non tengono più nome e
+   pallini leggibili, si scende a due (vedi la query più sotto). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .skills-attributes > .stats-container {
+  container-type: inline-size;
+  display: block;
+  width: 100%;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .skills-attributes > .stats-container > .stats-content {
   display: grid;
   gap: 0.35rem;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@container (max-width: 600px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .skills-attributes > .stats-container > .stats-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .skills-attributes > .stats-container > .stats-content > .stats-list {
@@ -1488,11 +1569,18 @@
   display: flex;
   flex: 0 0 auto;
   flex-wrap: nowrap;
-  gap: 2px;
+  gap: 5px;
   justify-self: end;
   margin-left: 0;
   margin-right: 0;
   white-space: nowrap;
+}
+
+/* I pallini non si comprimono mai: 14px ciascuno, con aria fra l'uno e
+   l'altro. Se manca spazio si accorcia il nome, mai il contatore. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list > :is(.attribute, .skill) > .resource-value > :is(.resource-value-step, .resource-value-empty) {
+  flex: 0 0 14px;
+  min-width: 14px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list > :is(.attribute, .skill) > .resource-label,

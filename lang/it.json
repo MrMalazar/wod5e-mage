@@ -97,7 +97,7 @@
       "Instruments": "Strumenti",
       "Instrument": "Strumento",
       "SceneQuestion": "Cosa usi nella scena per fare Magick?",
-      "InstrumentCount": "Ne possiedi {count}: 2 + Areté {arete}",
+      "InstrumentCount": "Sette slot, sempre: segna quelli che possiedi",
       "Spheres": "Le Sfere del Focus",
       "WhatIs": "Cos'è"
     },
@@ -203,7 +203,72 @@
       "targets": "Bersagli",
       "area": "Area",
       "conditions": "Condizioni",
-      "range": "Portata"
+      "range": "Portata",
+      "GiftScope": "Ambito del Dono",
+      "GiftTrack": "Dono sul tracciato",
+      "GiftSuccesses": "{count} successi automatici, pari ad Areté",
+      "NoAffinity": "Nessuna Sfera affine: scegline una nella pagina Magick per vedere il suo Ambito.",
+      "Free": "I successi extra si spendono dove vuoi: nessuna Sfera sblocca o vieta un Ambito.",
+      "TableTitle": "Il listino dei Successi Extra",
+      "TableHint": "Ogni colonna è indipendente: i successi si allocano Ambito per Ambito, e ogni Ambito parte dal suo valore base.",
+      "TableSuccesses": "Successi extra →",
+      "TableSpheres": "Le Sfere che lo prediligono",
+      "Table": {
+        "potency": {
+          "1": "+2 danni",
+          "2": "+4 danni",
+          "3": "+6 danni",
+          "4": "+8 danni",
+          "5": "+10 danni",
+          "6": "+12 danni",
+          "7": "+14 danni"
+        },
+        "duration": {
+          "1": "1 scena",
+          "2": "2 scene",
+          "3": "3 scene",
+          "4": "La sessione",
+          "5": "2 sessioni",
+          "6": "Un capitolo",
+          "7": "La cronaca"
+        },
+        "area": {
+          "1": "Stanza",
+          "2": "Edificio",
+          "3": "Quartiere",
+          "4": "Città",
+          "5": "Regione",
+          "6": "Continente",
+          "7": "Pianeta"
+        },
+        "targets": {
+          "1": "+1 bersaglio",
+          "2": "+2 bersagli",
+          "3": "+3 bersagli",
+          "4": "+4 bersagli",
+          "5": "+5 bersagli",
+          "6": "+6 bersagli",
+          "7": "+7 bersagli"
+        },
+        "conditions": {
+          "1": "1 condizione",
+          "2": "2 condizioni",
+          "3": "3 condizioni",
+          "4": "4 condizioni",
+          "5": "5 condizioni",
+          "6": "6 condizioni",
+          "7": "7 (un papiro)"
+        },
+        "range": {
+          "1": "Visiva (100 m)",
+          "2": "Dintorni (5 km)",
+          "3": "Orizzonte (50 km)",
+          "4": "Regione (500 km)",
+          "5": "Stesso continente",
+          "6": "Globale",
+          "7": "Ovunque sia"
+        }
+      }
     },
     "OngoingMagick": {
       "Label": "Magick in atto",
@@ -293,6 +358,17 @@
     },
     "Errors": {
       "UnsupportedSystem": "Mage for WoD5e richiede il sistema '{expected}'. Il sistema attivo è '{actual}'."
+    },
+    "Bonuses": {
+      "Label": "Bonus",
+      "Add": "Aggiungi un Bonus",
+      "Remove": "Togli il Bonus",
+      "Value": "N.",
+      "Kind": "Tipo",
+      "KindHint": "Ambito Forza",
+      "Description": "Descrizione",
+      "DescriptionHint": "quando vale",
+      "Empty": "Nessun Bonus segnato: il + ne aggiunge uno (es. +3 · Ambito Forza)."
     }
   }
 }

@@ -97,7 +97,7 @@
       "Instruments": "Instruments",
       "Instrument": "Instrument",
       "SceneQuestion": "What do you use in the scene to perform Magick?",
-      "InstrumentCount": "You have {count}: 2 + Arete {arete}",
+      "InstrumentCount": "Seven slots, always: mark the ones you own",
       "Spheres": "The Spheres of the Focus",
       "WhatIs": "What is"
     },
@@ -203,7 +203,72 @@
       "targets": "Targets",
       "area": "Area",
       "conditions": "Conditions",
-      "range": "Range"
+      "range": "Range",
+      "GiftScope": "Gift Scope",
+      "GiftTrack": "Gift on a track",
+      "GiftSuccesses": "{count} automatic successes, equal to Arete",
+      "NoAffinity": "No Affinity Sphere: pick one on the Magick page to see its Scope.",
+      "Free": "Extra successes go wherever you want: no Sphere unlocks or forbids a Scope.",
+      "TableTitle": "The Extra Successes price list",
+      "TableHint": "Every column is independent: successes are allocated Scope by Scope, and each Scope starts from its base value.",
+      "TableSuccesses": "Extra successes →",
+      "TableSpheres": "Spheres that favour it",
+      "Table": {
+        "potency": {
+          "1": "+2 damage",
+          "2": "+4 damage",
+          "3": "+6 damage",
+          "4": "+8 damage",
+          "5": "+10 damage",
+          "6": "+12 damage",
+          "7": "+14 damage"
+        },
+        "duration": {
+          "1": "1 scene",
+          "2": "2 scenes",
+          "3": "3 scenes",
+          "4": "The session",
+          "5": "2 sessions",
+          "6": "A chapter",
+          "7": "The chronicle"
+        },
+        "area": {
+          "1": "Room",
+          "2": "Building",
+          "3": "District",
+          "4": "City",
+          "5": "Region",
+          "6": "Continent",
+          "7": "Planet"
+        },
+        "targets": {
+          "1": "+1 target",
+          "2": "+2 targets",
+          "3": "+3 targets",
+          "4": "+4 targets",
+          "5": "+5 targets",
+          "6": "+6 targets",
+          "7": "+7 targets"
+        },
+        "conditions": {
+          "1": "1 condition",
+          "2": "2 conditions",
+          "3": "3 conditions",
+          "4": "4 conditions",
+          "5": "5 conditions",
+          "6": "6 conditions",
+          "7": "7 (a scroll)"
+        },
+        "range": {
+          "1": "Sight (100 m)",
+          "2": "Surroundings (5 km)",
+          "3": "Horizon (50 km)",
+          "4": "Region (500 km)",
+          "5": "Same continent",
+          "6": "Global",
+          "7": "Wherever it is"
+        }
+      }
     },
     "OngoingMagick": {
       "Label": "Ongoing Magick",
@@ -293,6 +358,17 @@
     },
     "Errors": {
       "UnsupportedSystem": "Mage for WoD5e requires the '{expected}' system. The active system is '{actual}'."
+    },
+    "Bonuses": {
+      "Label": "Bonuses",
+      "Add": "Add a Bonus",
+      "Remove": "Remove the Bonus",
+      "Value": "No.",
+      "Kind": "Type",
+      "KindHint": "Forces Scope",
+      "Description": "Description",
+      "DescriptionHint": "when it applies",
+      "Empty": "No Bonus noted: + adds one (e.g. +3 · Forces Scope)."
     }
   }
 }

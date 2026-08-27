@@ -58,6 +58,8 @@
                     <div class="wod5e-mage-sphere">
                         <label class="resource-label">{{localize sphere.label}}</label>
                         <div class="resource-value" data-value="{{sphere.value}}" data-name="flags.wod5e-mage.spheres.{{sphere.id}}">
+                            {{!-- Come le Abilità: il vuoto a sinistra riporta la Sfera a zero. --}}
+                            <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
                             {{#numLoop 5}}
                                 <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}" title="{{this}}"></span>
                             {{/numLoop}}
@@ -159,5 +161,7 @@
                 </div>
             {{/if}}
         </section>
+
+        {{> "modules/wod5e-mage/templates/actor/parts/scope-table.hbs"}}
     </div>
 </section>

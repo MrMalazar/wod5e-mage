@@ -1,0 +1,30 @@
+{{!-- I Bonus: una tabellina a tre colonne (numero, tipo, descrizione) che
+     il giocatore compila da sé, accanto ad Areté. Non tocca i tiri. --}}
+<section class="wod5e-mage-bonuses">
+    <header class="resource-header">
+        <label class="header-label">{{localize "WOD5E_MAGE.Bonuses.Label"}}</label>
+        <button type="button" class="wod5e-mage-bonuses-add" data-action="bonusAdd" title="{{localize 'WOD5E_MAGE.Bonuses.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Add'}}" {{#if locked}}disabled{{/if}}>
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </header>
+
+    {{#if bonuses.length}}
+    <div class="wod5e-mage-bonuses-grid">
+        <span>{{localize "WOD5E_MAGE.Bonuses.Value"}}</span>
+        <span>{{localize "WOD5E_MAGE.Bonuses.Kind"}}</span>
+        <span>{{localize "WOD5E_MAGE.Bonuses.Description"}}</span>
+        <span aria-hidden="true"></span>
+
+        {{#each bonuses as |row|}}
+            <input type="number" step="1" name="flags.wod5e-mage.bonuses.{{row.id}}.value" value="{{row.value}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Value'}}" {{#if ../locked}}disabled{{/if}}>
+            <input type="text" name="flags.wod5e-mage.bonuses.{{row.id}}.kind" value="{{row.kind}}" placeholder="{{localize 'WOD5E_MAGE.Bonuses.KindHint'}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Kind'}}" {{#if ../locked}}disabled{{/if}}>
+            <input type="text" name="flags.wod5e-mage.bonuses.{{row.id}}.description" value="{{row.description}}" placeholder="{{localize 'WOD5E_MAGE.Bonuses.DescriptionHint'}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Description'}}" {{#if ../locked}}disabled{{/if}}>
+            <button type="button" data-action="bonusDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Bonuses.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Remove'}}" {{#if ../locked}}disabled{{/if}}>
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        {{/each}}
+    </div>
+    {{else}}
+        <p class="wod5e-mage-bonuses-empty">{{localize "WOD5E_MAGE.Bonuses.Empty"}}</p>
+    {{/if}}
+</section>

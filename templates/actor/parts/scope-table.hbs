@@ -1,0 +1,37 @@
+{{!-- Il listino completo dei Successi Extra (5.8): sei Ambiti per sette
+     gradini. La riga del Dono della Sfera d'Affinità si accende. --}}
+<section class="wod5e-mage-scope-table">
+    <header class="resource-header">
+        <label class="header-label">{{localize "WOD5E_MAGE.Scopes.TableTitle"}}</label>
+    </header>
+
+    <p class="wod5e-mage-scopes-hint">{{localize "WOD5E_MAGE.Scopes.TableHint"}}</p>
+
+    <div class="wod5e-mage-scope-table-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">{{localize "WOD5E_MAGE.Scopes.TableSuccesses"}}</th>
+                    {{#each scopeTable.steps as |step|}}
+                        <th scope="col">{{step}}</th>
+                    {{/each}}
+                    <th scope="col">{{localize "WOD5E_MAGE.Scopes.TableSpheres"}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each scopeTable.rows as |row|}}
+                    <tr class="scope-{{row.id}}{{#if row.gift}} gift{{/if}}">
+                        <th scope="row">
+                            {{localize row.label}}
+                            {{#if row.gift}}<i class="fa-solid fa-star" title="{{localize 'WOD5E_MAGE.Scopes.GiftScope'}}"></i>{{/if}}
+                        </th>
+                        {{#each row.cells as |cell|}}
+                            <td>{{localize cell.label}}</td>
+                        {{/each}}
+                        <td class="wod5e-mage-scope-spheres">{{row.spheres}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>

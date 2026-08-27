@@ -158,12 +158,16 @@
             </div>
         </div>
         {{!-- Sul layout stretto questo blocco resta a sinistra del pannello
-             Condizioni/Tiri. Solo gli Ambiti usano la scala ridotta. --}}
+             Condizioni/Tiri. A destra della Ruota, in colonna: l'Ambito del
+             Dono e i Bonus che il giocatore compila. --}}
         <div class="wod5e-mage-arcana-cell">
             <div class="wod5e-mage-ruota-cell">
                 {{> "modules/wod5e-mage/templates/actor/parts/ruota.hbs"}}
             </div>
-            {{> "modules/wod5e-mage/templates/actor/parts/scopes.hbs"}}
+            <div class="wod5e-mage-arcana-side">
+                {{> "modules/wod5e-mage/templates/actor/parts/scopes.hbs"}}
+                {{> "modules/wod5e-mage/templates/actor/parts/bonuses.hbs"}}
+            </div>
         </div>
     </div>
     </div>

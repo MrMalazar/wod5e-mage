@@ -1,9 +1,9 @@
-import { getArete } from "./arete.js";
 import { MODULE_ID } from "./constants.js";
 import { prepareSpheres } from "./spheres.js";
 
-export const FOCUS_INSTRUMENT_BASE = 2;
-export const FOCUS_INSTRUMENT_MAX = 7;
+// Sette Strumenti per tutti, dal primo giorno: il vecchio conto «2 + Areté»
+// è canone superato, gli slot non crescono più con l'Areté.
+export const FOCUS_INSTRUMENT_COUNT = 7;
 
 function getTextEnricher(enrichHTML) {
   return enrichHTML
@@ -13,8 +13,7 @@ function getTextEnricher(enrichHTML) {
 
 export async function prepareFocus(actor, enrichHTML) {
   const stored = actor.getFlag(MODULE_ID, "focus") ?? {};
-  const arete = getArete(actor).value;
-  const instrumentCount = Math.min(FOCUS_INSTRUMENT_BASE + arete, FOCUS_INSTRUMENT_MAX);
+  const instrumentCount = FOCUS_INSTRUMENT_COUNT;
   const instruments = stored.instruments ?? {};
   const sphereNotes = stored.sphereNotes ?? {};
   const enrich = getTextEnricher(enrichHTML);
@@ -22,9 +21,11 @@ export async function prepareFocus(actor, enrichHTML) {
   const spheres = await Promise.all(
     prepareSpheres(actor).all.map(async (sphere) => {
       const notes = String(sphereNotes[sphere.id] ?? "");
+      // La parentesi col livello compare solo per le Sfere che il Mago ha
+      // davvero: nasconderne una conserva i pallini, ma non la fa parlare.
       return {
         ...sphere,
-        levelLabel: sphere.value > 0 ? sphere.influenceLabel : "",
+        levelLabel: sphere.selected && sphere.value > 0 ? sphere.influenceLabel : "",
         notes,
         enrichedNotes: await enrich(notes)
       };
@@ -32,7 +33,6 @@ export async function prepareFocus(actor, enrichHTML) {
   );
 
   return {
-    arete,
     instrumentCount,
     paradigm: String(stored.paradigm ?? ""),
     practice: String(stored.practice ?? ""),

@@ -4,6 +4,7 @@ import { prepareAffinitySphere } from "../affinity-sphere-data.js";
 import { onAffinitySphereClear, onAffinitySphereOpen } from "../affinity-sphere.js";
 import { MODULE_ID } from "../constants.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
+import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
 import { prepareConceptChallenge } from "../concept-challenge.js";
 import { onExperienceOpen } from "../experience-window.js";
 import { onFocusInstrumentToggle, prepareFocus } from "../focus.js";
@@ -19,7 +20,7 @@ import {
   onOngoingMagickDelete,
   prepareOngoingMagick
 } from "../ongoing-magick.js";
-import { prepareScopes } from "../scopes.js";
+import { prepareAffinityGift, prepareScopeTable } from "../scopes.js";
 import { onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 
@@ -63,6 +64,8 @@ export class MageActorSheet extends MortalActorSheet {
       affinitySphereOpen: onAffinitySphereOpen,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
+      bonusAdd: onBonusAdd,
+      bonusDelete: onBonusDelete,
       focusInstrumentToggle: onFocusInstrumentToggle,
       magickBalanceChange: onMagickBalanceChange,
       ongoingMagickAdd: onOngoingMagickAdd,
@@ -91,10 +94,14 @@ export class MageActorSheet extends MortalActorSheet {
       template: `${MODULE}/parts/tratti.hbs`,
       templates: [
         `${MODULE}/parts/ruota.hbs`,
-        `${MODULE}/parts/scopes.hbs`
+        `${MODULE}/parts/scopes.hbs`,
+        `${MODULE}/parts/bonuses.hbs`
       ]
     },
-    magick: { template: `${MODULE}/parts/spheres.hbs` },
+    magick: {
+      template: `${MODULE}/parts/spheres.hbs`,
+      templates: [`${MODULE}/parts/scope-table.hbs`]
+    },
     focus: {
       template: `${MODULE}/parts/focus.hbs`,
       templates: [`${MODULE}/parts/wisdom.hbs`]
@@ -211,7 +218,12 @@ export class MageActorSheet extends MortalActorSheet {
       });
       context.arete = getArete(actor);
       context.magickTrack = prepareMagickTrack(actor);
-      context.scopes = prepareScopes(actor);
+      // Gli Ambiti sono liberi: qui si mostra solo il Dono della Sfera affine.
+      context.affinityGift = prepareAffinityGift(
+        await prepareAffinitySphere(actor),
+        context.arete.value
+      );
+      context.bonuses = prepareBonuses(actor);
       context.wheelAsBar = game.settings.get(MODULE_ID, "headerWheelMode") === "bar";
     }
 
@@ -224,6 +236,10 @@ export class MageActorSheet extends MortalActorSheet {
       context.tab = context.tabs.magick;
       context.affinitySphere = await prepareAffinitySphere(actor);
       context.arete = getArete(actor);
+      context.scopeTable = prepareScopeTable({
+        gift: prepareAffinityGift(context.affinitySphere, context.arete.value),
+        localize: game.i18n.localize.bind(game.i18n)
+      });
       context.magickTrack = prepareMagickTrack(actor);
       context.persistentMagickResources = getPersistentMagickResources(actor);
       context.ongoingMagick = prepareOngoingMagick(actor);

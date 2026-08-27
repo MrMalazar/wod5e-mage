@@ -65,26 +65,34 @@ assert.match(
 );
 
 // Ruota e Ambiti condividono il blocco a sinistra del pannello laterale, ma
-// soltanto gli Ambiti vengono ridotti di circa il 25%.
+// il riquadro del Dono sta accanto senza scale ridotte: l'esagono non c'è più.
 assert.match(
   css,
   /\.wod5e-mage-arcana-cell\s*\{[^}]*display:\s*flex;[^}]*grid-area:\s*arcana;/s
 );
 assert.match(
   css,
-  /\.wod5e-mage-arcana-cell\s*>\s*\.wod5e-mage-scopes\s*\{[^}]*zoom:\s*0\.75;/s
+  /\.wod5e-mage-arcana-cell\s*>\s*\.wod5e-mage-arcana-side\s*\{[^}]*flex:\s*1 1 260px;[^}]*flex-direction:\s*column;/s
 );
+assert.doesNotMatch(css, /zoom:\s*0\.75|wod5e-mage-scopes-wheel|wod5e-mage-scope-choice/);
 assert.doesNotMatch(
   css,
   /\.wod5e-mage-ruota-cell[^,{]*\{[^}]*zoom:/s
 );
-assert.match(traitsTemplate, /parts\/ruota\.hbs[\s\S]*parts\/scopes\.hbs/);
-assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes/);
+assert.match(traitsTemplate, /parts\/ruota\.hbs[\s\S]*wod5e-mage-arcana-side[\s\S]*parts\/scopes\.hbs[\s\S]*parts\/bonuses\.hbs/);
+assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes\b/);
+// Il listino dei Successi Extra chiude la pagina Magick, a tutta larghezza.
+assert.match(magickTemplate, /wod5e-mage-affinity-sphere[\s\S]*parts\/scope-table\.hbs/);
+assert.match(
+  css,
+  /\.wod5e-mage-magick-layout\s*\{[^}]*"affinity affinity"\s*"table table";/s
+);
+assert.match(css, /\.wod5e-mage-scope-table\s*\{[^}]*grid-area:\s*table;/s);
 
 // The affinity section stays below Spheres and Ongoing Magick.
 assert.match(
   css,
-  /\.wod5e-mage-magick-layout\s*\{[^}]*"resources \."[^}]*"spheres ongoing"[^}]*"affinity affinity";/s
+  /\.wod5e-mage-magick-layout\s*\{[^}]*"resources \."[^}]*"spheres ongoing"[^}]*"affinity affinity"[^}]*"table table";/s
 );
 assert.match(
   css,
@@ -129,5 +137,36 @@ assert.match(
   mageHeader,
   /<div class="header-fields">[\s\S]*<div class="header-profile">[\s\S]*<div class="header-fields wod5e-mage-header-spacer" aria-hidden="true"><\/div>/
 );
+
+// Abilità e Attributi: pallini a misura fissa con aria fra loro, e due
+// colonne quando il contenitore non regge più le tre.
+assert.match(
+  css,
+  /\.stats-list\s*>\s*:is\(\.attribute,\s*\.skill\)\s*>\s*\.resource-value\s*\{[^}]*gap:\s*5px;/s
+);
+assert.match(
+  css,
+  /\.resource-value\s*>\s*:is\(\.resource-value-step,\s*\.resource-value-empty\)\s*\{[^}]*flex:\s*0 0 14px;[^}]*min-width:\s*14px;/s
+);
+assert.match(
+  css,
+  /\.skills-attributes\s*>\s*\.stats-container\s*\{[^}]*container-type:\s*inline-size;/s
+);
+assert.match(
+  css,
+  /@container\s*\(max-width:\s*600px\)\s*\{[^{]*\.skills-attributes\s*>\s*\.stats-container\s*>\s*\.stats-content\s*\{[^}]*repeat\(2,\s*minmax\(0,\s*1fr\)\);/s
+);
+
+// La Ruota ad arco accende i nodi con i token della palette, non con
+// variabili definite in un contenitore che non esiste più.
+assert.match(
+  css,
+  /\.wod5e-mage-magick-node\.quintessence\s*\{[^}]*background:\s*var\(--mage-oro\);/s
+);
+assert.match(
+  css,
+  /\.wod5e-mage-magick-node\.paradox\s*\{[^}]*background:\s*var\(--mage-nero-dado\);/s
+);
+assert.doesNotMatch(css, /var\(--quintessence-color\)|var\(--paradox-color\)/);
 
 console.log("Responsive Mage sheet layout tests passed.");
