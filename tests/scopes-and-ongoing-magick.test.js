@@ -27,7 +27,8 @@ assert.deepEqual([...SCOPES], ["potency", "duration", "area", "targets", "condit
 assert.equal(prepareAffinityGift(null, 3), null);
 assert.equal(prepareAffinityGift({ name: "Vuota", abilities: [] }, 3), null);
 
-// Corrispondenza: il Dono lavora sull'Ambito Portata, con successi pari ad Areté.
+// Corrispondenza: il Dono lavora sull'Ambito Portata, con successi
+// automatici pari ai pallini della Sfera affine (non all'Areté).
 const correspondence = {
   name: "Corrispondenza",
   img: "modules/wod5e-mage/assets/icons/sheet/correspondence.png",
@@ -68,8 +69,7 @@ assert.equal(gift.successes, 0);
 
 // Il listino: sei righe per sette gradini, con la riga del Dono accesa.
 const table = prepareScopeTable({
-  gift: prepareAffinityGift(correspondence, 2),
-  localize: (key) => key.replace("WOD5E_MAGE.Spheres.", "")
+  gift: prepareAffinityGift(correspondence, 2)
 });
 assert.equal(table.steps.length, SCOPE_TABLE_STEPS);
 assert.deepEqual(table.steps, [1, 2, 3, 4, 5, 6, 7]);
@@ -77,8 +77,16 @@ assert.equal(table.rows.length, 6);
 assert.deepEqual(table.rows.map((row) => row.gift), [false, false, false, false, false, true]);
 assert.equal(table.rows[0].cells[0].label, "WOD5E_MAGE.Scopes.Table.potency.1");
 assert.equal(table.rows[5].cells[6].label, "WOD5E_MAGE.Scopes.Table.range.7");
-assert.equal(table.rows[0].spheres, "forces, prime, spirit, life");
-assert.equal(table.rows[5].spheres, "correspondence, spirit");
+// Il Dono accende solo i gradini coperti dai pallini della Sfera affine.
+assert.deepEqual(table.rows[5].cells.map((cell) => cell.gift), [true, true, false, false, false, false, false]);
+assert.equal(table.rows[0].cells.every((cell) => !cell.gift), true);
+// La Durata porta il simbolo del tempo, gli altri Ambiti no.
+assert.match(table.rows[1].cells[0].icon, /tempo_scena\.svg$/);
+assert.match(table.rows[1].cells[3].icon, /tempo_sessione\.svg$/);
+assert.match(table.rows[1].cells[6].icon, /tempo_cronaca\.svg$/);
+assert.equal(table.rows[0].cells[0].icon, "");
+// La colonna delle Sfere non esiste più: solo Ambito e sette gradini.
+assert.equal(table.rows[0].spheres, undefined);
 assert.equal(prepareScopeTable().rows.every((row) => row.gift === false), true);
 
 // Le 42 celle del listino hanno una voce in tutte e due le lingue.
@@ -92,21 +100,14 @@ for (const lang of ["it", "en"]) {
   }
 }
 
-// Il template degli Ambiti non ha più l'esagono né i contatori.
-const scopesTemplate = readFileSync(
-  new URL("../templates/actor/parts/scopes.hbs", import.meta.url),
-  "utf8"
-);
-assert.doesNotMatch(scopesTemplate, /<polygon|type="number"|flags\.wod5e-mage\.scopes/);
-assert.match(scopesTemplate, /affinityGift\.isScope[\s\S]*WOD5E_MAGE\.Scopes\.GiftSuccesses/);
-assert.match(scopesTemplate, /WOD5E_MAGE\.Scopes\.NoAffinity/);
-
+// La tavola in scheda: niente colonna delle Sfere, riga del Dono marcata.
 const scopeTableTemplate = readFileSync(
   new URL("../templates/actor/parts/scope-table.hbs", import.meta.url),
   "utf8"
 );
-assert.match(scopeTableTemplate, /scopeTable\.steps[\s\S]*scopeTable\.rows[\s\S]*row\.cells[\s\S]*row\.spheres/);
-assert.match(scopeTableTemplate, /\{\{#if row\.gift\}\} gift\{\{\/if\}\}/);
+assert.match(scopeTableTemplate, /scopeTable\.steps[\s\S]*scopeTable\.rows[\s\S]*row\.cells/);
+assert.match(scopeTableTemplate, /\{\{#if cell\.gift\}\}gift\{\{\/if\}\}/);
+assert.doesNotMatch(scopeTableTemplate, /row\.spheres|TableSpheres/);
 
 let rows = prepareOngoingMagick(mageActor());
 assert.equal(rows.length, 0);

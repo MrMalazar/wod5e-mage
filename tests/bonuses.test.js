@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { onBonusAdd, onBonusDelete, prepareBonuses } from "../scripts/bonuses.js";
+import { BONUS_KINDS, onBonusAdd, onBonusDelete, prepareBonuses } from "../scripts/bonuses.js";
 
 globalThis.foundry = { utils: { randomID: () => "row1" } };
 globalThis.ui = { notifications: { warn() {} } };
-globalThis.game = { i18n: { format: (key) => key } };
+globalThis.game = { i18n: { format: (key) => key, localize: (key) => key } };
 
 function mageActor(flags = {}, { owner = true, locked = false } = {}) {
   return {
@@ -26,19 +26,23 @@ function mageActor(flags = {}, { owner = true, locked = false } = {}) {
 // Senza flag, nessuna riga.
 assert.deepEqual(prepareBonuses(mageActor()), []);
 
-// Le righe tornano con numero intero, tipo e descrizione come stringhe.
+// Le righe tornano con numero intero, il tipo in tendina e la descrizione.
 const rows = prepareBonuses(mageActor({
   bonuses: {
-    a: { value: "3", kind: "Ambito Forza", description: "col mio strumento" },
+    a: { value: "3", kind: "dice", description: "tiri di Forza" },
     b: { value: -1.7, kind: null },
     c: { value: "niente" }
   }
 }));
-assert.deepEqual(rows, [
-  { id: "a", value: 3, kind: "Ambito Forza", description: "col mio strumento" },
-  { id: "b", value: -1, kind: "", description: "" },
-  { id: "c", value: 0, kind: "", description: "" }
-]);
+assert.equal(rows.length, 3);
+assert.equal(rows[0].value, 3);
+assert.equal(rows[0].kind, "dice");
+assert.equal(rows[0].description, "tiri di Forza");
+assert.deepEqual(rows[0].kinds.map((kind) => kind.id), [...BONUS_KINDS]);
+assert.equal(rows[0].kinds.find((kind) => kind.id === "dice").selected, true);
+assert.equal(rows[1].value, -1);
+assert.equal(rows[1].kind, "");
+assert.equal(rows[2].value, 0);
 
 // Il + aggiunge una riga vuota a +1, con un id nuovo.
 let actor = mageActor({ bonuses: { a: { value: 2, kind: "", description: "" } } });
@@ -68,10 +72,10 @@ actor = mageActor({}, { owner: false });
 await onBonusAdd.call({ actor }, { preventDefault() {} });
 assert.equal(actor.lastFlag, undefined);
 
-// Il template: tre campi per riga, salvati nei flag del modulo.
+// Il template: numero, tipo in tendina, descrizione a mano.
 const template = readFileSync(new URL("../templates/actor/parts/bonuses.hbs", import.meta.url), "utf8");
 assert.match(template, /type="number"[^>]*name="flags\.wod5e-mage\.bonuses\.\{\{row\.id\}\}\.value"/);
-assert.match(template, /name="flags\.wod5e-mage\.bonuses\.\{\{row\.id\}\}\.kind"/);
+assert.match(template, /<select name="flags\.wod5e-mage\.bonuses\.\{\{row\.id\}\}\.kind"[\s\S]*row\.kinds/);
 assert.match(template, /name="flags\.wod5e-mage\.bonuses\.\{\{row\.id\}\}\.description"/);
 assert.match(template, /data-action="bonusAdd"[\s\S]*data-action="bonusDelete"/);
 

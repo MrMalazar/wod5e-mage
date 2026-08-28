@@ -2,6 +2,11 @@
      the Arete row. It lives on the Traits page, right column, and it is
      never allowed to shrink when the window gets narrow. --}}
 <div class="wod5e-mage-ruota">
+    {{!-- Il titolo della sezione: senza, il riquadro resta incollato alle Abilità. --}}
+    <header class="resource-header wod5e-mage-ruota-header">
+        <label class="header-label">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</label>
+    </header>
+
     <div class="wod5e-mage-header-wheel-inner">
         <button type="button" class="wod5e-mage-wheel-mode" data-action="wheelModeToggle"
                 aria-label="{{localize 'WOD5E_MAGE.MagickBalance.ToggleMode'}}"
@@ -9,54 +14,10 @@
             <i class="fa-solid {{#if wheelAsBar}}fa-bezier-curve{{else}}fa-grip-lines{{/if}}"></i>
         </button>
 
-        {{#if wheelAsBar}}
-            <div class="wod5e-mage-magick-bar" role="group"
-                 aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
-                <span class="wod5e-mage-magick-bar-label">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</span>
-                <div class="wod5e-mage-magick-cells">
-                    {{#each magickTrack.cells as |cell|}}
-                        <span class="wod5e-mage-magick-cell {{cell.state}}" title="{{cell.number}}"></span>
-                    {{/each}}
-                </div>
-            </div>
-        {{else}}
-            <div class="wod5e-mage-magick-track wod5e-mage-magick-track-compact" role="group"
-                 aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
-                <svg class="wod5e-mage-magick-arc" viewBox="0 0 400 180" preserveAspectRatio="none" aria-hidden="true">
-                    <path d="M16 148 A184 133 0 0 1 384 148"></path>
-                </svg>
-
-                {{#each magickTrack.cells as |cell|}}
-                    <span class="wod5e-mage-magick-node {{cell.state}}" style="{{cell.position}}" title="{{cell.number}}"></span>
-                {{/each}}
-
-                <div class="wod5e-mage-magick-title">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</div>
-            </div>
-        {{/if}}
-
-        <div class="wod5e-mage-header-counters">
-            <div class="wod5e-mage-magick-resource quintessence">
-                <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1"
-                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}"><i class="fa-solid fa-minus"></i></button>
-                <span class="wod5e-mage-counter-label">{{localize "WOD5E_MAGE.MagickBalance.QuintessenceShort"}}</span>
-                <strong>{{magickTrack.quintessence}}</strong>
-                <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="1"
-                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}"><i class="fa-solid fa-plus"></i></button>
-            </div>
-
-            <div class="wod5e-mage-magick-resource paradox">
-                <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1"
-                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}"><i class="fa-solid fa-minus"></i></button>
-                <span class="wod5e-mage-counter-label">{{localize "WOD5E_MAGE.MagickBalance.ParadoxShort"}}</span>
-                <strong>{{magickTrack.paradox}}</strong>
-                <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="1"
-                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}"><i class="fa-solid fa-plus"></i></button>
-            </div>
-        </div>
-
-        {{!-- "Arete" is written once, on the indicator; the button just says Roll. --}}
+        {{!-- La parola ARETÉ è il tiro: si clicca lei, niente bottone. --}}
         <div class="wod5e-mage-header-arete">
-            <span class="wod5e-mage-header-arete-label">{{localize "WOD5E_MAGE.Arete.Label"}}</span>
+            <button type="button" class="wod5e-mage-header-arete-label wod5e-mage-arete-roll" data-action="areteRoll"
+                    title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.RollHint'}}"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Arete.Label"}}</button>
             <div class="wod5e-mage-arete-dots" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Label'}}">
                 {{#each arete.steps as |step|}}
                     <button type="button" class="wod5e-mage-arete-dot {{#if step.active}}active{{/if}}"
@@ -64,10 +25,86 @@
                 {{/each}}
             </div>
             <strong class="wod5e-mage-header-arete-value">{{arete.value}}</strong>
-            <button type="button" class="wod5e-mage-header-roll" data-action="areteRoll"
-                    aria-label="{{localize 'WOD5E_MAGE.Arete.RollHint'}}" title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}">
-                <i class="fa-solid fa-dice-d10"></i>{{localize "WOD5E_MAGE.Arete.Roll"}}
-            </button>
+
+            {{!-- A destra di Areté: Quintessenza generata e Paradosso permanente. --}}
+            <div class="wod5e-mage-persistent-resources wod5e-mage-arete-extras">
+                <label class="wod5e-mage-persistent-resource generated-quintessence">
+                    <span>{{localize "WOD5E_MAGE.MagickBalance.GeneratedQuintessence"}}</span>
+                    <input
+                        type="text"
+                        name="flags.wod5e-mage.persistentMagickResources.generatedQuintessence"
+                        value="{{persistentMagickResources.generatedQuintessence}}"
+                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.GeneratedQuintessence'}}"
+                        {{#if locked}}disabled{{/if}}
+                    >
+                </label>
+                <label class="wod5e-mage-persistent-resource permanent-paradox">
+                    <span>{{localize "WOD5E_MAGE.MagickBalance.PermanentParadox"}}</span>
+                    <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        name="flags.wod5e-mage.persistentMagickResources.permanentParadox"
+                        value="{{persistentMagickResources.permanentParadox}}"
+                        aria-label="{{localize 'WOD5E_MAGE.MagickBalance.PermanentParadox'}}"
+                        {{#if locked}}disabled{{/if}}
+                    >
+                </label>
+            </div>
         </div>
+
+        {{#if wheelAsBar}}
+            <div class="wod5e-mage-magick-bar" role="group"
+                 aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
+                <span class="wod5e-mage-magick-end quintessence">
+                    <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}"><i class="fa-solid fa-minus"></i></button>
+                    <span>{{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</span>
+                    <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}"><i class="fa-solid fa-plus"></i></button>
+                </span>
+                <div class="wod5e-mage-magick-cells">
+                    {{#each magickTrack.cells as |cell|}}
+                        <span class="wod5e-mage-magick-cell {{cell.state}}" title="{{cell.number}}"></span>
+                    {{/each}}
+                </div>
+                <span class="wod5e-mage-magick-end paradox">
+                    <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}"><i class="fa-solid fa-minus"></i></button>
+                    <span>{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</span>
+                    <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}"><i class="fa-solid fa-plus"></i></button>
+                </span>
+            </div>
+        {{else}}
+            <div class="wod5e-mage-magick-track wod5e-mage-magick-track-compact" role="group"
+                 aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
+                {{!-- Un semicerchio vero: stesso raggio dei nodi, mai schiacciato. --}}
+                <svg class="wod5e-mage-magick-arc" viewBox="0 0 400 190" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                    <path d="M50 170 A150 150 0 0 1 350 170"></path>
+                </svg>
+
+                {{#each magickTrack.cells as |cell|}}
+                    <span class="wod5e-mage-magick-node {{cell.state}}" style="{{cell.position}}" title="{{cell.number}}"></span>
+                {{/each}}
+
+                {{!-- Agli estremi del semicerchio: − PAROLA valore + --}}
+                <span class="wod5e-mage-magick-end quintessence">
+                    <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}"><i class="fa-solid fa-minus"></i></button>
+                    <span>{{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</span>
+                    <button type="button" data-action="magickBalanceChange" data-resource="quintessence" data-delta="1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}"><i class="fa-solid fa-plus"></i></button>
+                </span>
+                <span class="wod5e-mage-magick-end paradox">
+                    <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}"><i class="fa-solid fa-minus"></i></button>
+                    <span>{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</span>
+                    <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="1"
+                            aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}"><i class="fa-solid fa-plus"></i></button>
+                </span>
+            </div>
+        {{/if}}
+
     </div>
 </div>

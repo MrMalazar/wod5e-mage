@@ -81,30 +81,101 @@ export function bindExperienceCalculator(root) {
   update();
 }
 
-/** Apre la finestra dell'Esperienza: totali, calcolatore e listino. */
-export async function onExperienceOpen(event) {
-  event?.preventDefault?.();
+function readMoneyRows(actor, flagKey, textField) {
+  const stored = actor.getFlag(MODULE_ID, flagKey) ?? {};
+
+  return Object.entries(stored).map(([id, row]) => {
+    const cost = Math.trunc(Number(row?.cost));
+    return {
+      id,
+      cost: Number.isFinite(cost) ? Math.max(cost, 0) : 0,
+      [textField]: String(row?.[textField] ?? "")
+    };
+  });
+}
+
+/**
+ * La pagina Esperienza: il Totale è la somma delle PRESE (una riga per
+ * sessione), la Spesa è la somma del registro degli acquisti, e i Rimanenti
+ * sono la differenza. Niente numeri a mano: si sommano da soli.
+ */
+export function prepareExperiencePage(actor) {
+  const gains = readMoneyRows(actor, "experienceGains", "when");
+  const log = readMoneyRows(actor, "experienceLog", "what");
+  const total = gains.reduce((sum, row) => sum + row.cost, 0);
+  const spent = log.reduce((sum, row) => sum + row.cost, 0);
+
+  return {
+    total,
+    spent,
+    remaining: total - spent,
+    gains,
+    log,
+    rows: experienceRows()
+  };
+}
+
+function canEditExperience(actor) {
+  if (!actor.isOwner) {
+    ui.notifications.warn(
+      game.i18n.format("WOD5E.Notifications.NoSufficientPermission", {
+        string: actor.name
+      })
+    );
+    return false;
+  }
+
+  if (actor.system.locked) {
+    ui.notifications.warn(
+      game.i18n.format("WOD5E.Notifications.CannotModifyResourceString", {
+        string: actor.name
+      })
+    );
+    return false;
+  }
+
+  return true;
+}
+
+const EXP_TABLES = Object.freeze({
+  experienceGains: { when: "" },
+  experienceLog: { what: "" }
+});
+
+function expTableFlag(target) {
+  const table = target.dataset.table;
+  return Object.hasOwn(EXP_TABLES, table) ? table : null;
+}
+
+export async function onExperienceLogAdd(event, target) {
+  event.preventDefault();
 
   const actor = this.actor;
-  const exp = actor.system.exp ?? {};
-  const content = await foundry.applications.handlebars.renderTemplate(
-    `modules/${MODULE_ID}/templates/dialogs/experience.hbs`,
-    {
-      remaining: Number(exp.value ?? 0),
-      total: Number(exp.max ?? 0),
-      rows: experienceRows()
-    }
-  );
+  const flagKey = expTableFlag(target);
+  if (!flagKey || !canEditExperience(actor)) return;
 
-  return foundry.applications.api.DialogV2.prompt({
-    window: {
-      title: game.i18n.localize("WOD5E.Tabs.Experience"),
-      resizable: true
-    },
-    position: { width: "auto", height: "auto" },
-    content,
-    classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-experience-dialog"],
-    ok: { icon: "fas fa-check", label: game.i18n.localize("WOD5E.Close") },
-    render: (_event, dialog) => bindExperienceCalculator(dialog?.element ?? dialog)
+  const rows = { ...(actor.getFlag(MODULE_ID, flagKey) ?? {}) };
+  let rowId = foundry.utils.randomID();
+  while (rows[rowId]) rowId = foundry.utils.randomID();
+
+  rows[rowId] = { cost: 0, ...EXP_TABLES[flagKey] };
+
+  await actor.setFlag(MODULE_ID, flagKey, rows);
+}
+
+export async function onExperienceLogDelete(event, target) {
+  event.preventDefault();
+
+  const actor = this.actor;
+  const flagKey = expTableFlag(target);
+  if (!flagKey || !canEditExperience(actor)) return;
+
+  const rowId = target.dataset.row;
+  const rows = { ...(actor.getFlag(MODULE_ID, flagKey) ?? {}) };
+  if (!Object.hasOwn(rows, rowId)) return;
+
+  // La sintassi -= di Foundry toglie la riga senza rifondere le altre.
+  await actor.update({
+    [`flags.${MODULE_ID}.${flagKey}.-=${rowId}`]: null
   });
 }

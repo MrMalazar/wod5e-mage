@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="38.9 38.9 122.1 122.1" width="200" height="200">
+<title>Sotterfugio</title>
+<g stroke="#d9a827" fill="none" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M50,58 L98,58 L98,92 C98,112 88,124 74,124 C60,124 50,112 50,92 Z"/>
+<path d="M64,82 L66,82"/>
+<path d="M82,82 L84,82"/>
+<path d="M64,100 C68,106 80,106 84,100"/>
+</g>
+<g stroke="#d9a827" fill="none" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+<path d="M102,76 L150,76 L150,110 C150,130 140,142 126,142 C112,142 102,130 102,110 Z"/>
+<path d="M116,98 L118,98"/>
+<path d="M134,98 L136,98"/>
+<path d="M118,124 C122,118 130,118 134,124"/>
+</g>
+</svg>

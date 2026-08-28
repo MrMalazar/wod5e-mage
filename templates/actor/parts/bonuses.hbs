@@ -17,7 +17,12 @@
 
         {{#each bonuses as |row|}}
             <input type="number" step="1" name="flags.wod5e-mage.bonuses.{{row.id}}.value" value="{{row.value}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Value'}}" {{#if ../locked}}disabled{{/if}}>
-            <input type="text" name="flags.wod5e-mage.bonuses.{{row.id}}.kind" value="{{row.kind}}" placeholder="{{localize 'WOD5E_MAGE.Bonuses.KindHint'}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Kind'}}" {{#if ../locked}}disabled{{/if}}>
+            <select name="flags.wod5e-mage.bonuses.{{row.id}}.kind" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Kind'}}" {{#if ../locked}}disabled{{/if}}>
+                <option value="">{{localize "WOD5E_MAGE.Bonuses.KindNone"}}</option>
+                {{#each row.kinds as |kind|}}
+                    <option value="{{kind.id}}" {{#if kind.selected}}selected{{/if}}>{{kind.label}}</option>
+                {{/each}}
+            </select>
             <input type="text" name="flags.wod5e-mage.bonuses.{{row.id}}.description" value="{{row.description}}" placeholder="{{localize 'WOD5E_MAGE.Bonuses.DescriptionHint'}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Description'}}" {{#if ../locked}}disabled{{/if}}>
             <button type="button" data-action="bonusDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Bonuses.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Remove'}}" {{#if ../locked}}disabled{{/if}}>
                 <i class="fa-solid fa-trash"></i>

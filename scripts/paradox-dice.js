@@ -180,6 +180,7 @@ export async function rollAreteWithParadox({
   data,
   dicePool,
   paradoxRating,
+  difficulty = 0,
   title,
   flavor,
   selectors = []
@@ -193,7 +194,7 @@ export async function rollAreteWithParadox({
     "modules/wod5e-mage/templates/dialogs/arete-roll-confirm.hbs",
     {
       ...initialPool,
-      difficulty: 0,
+      difficulty,
       rollMode: game.settings.get("core", "rollMode"),
       rollModes: CONFIG.Dice.rollModes,
       situationalModifiers
@@ -273,7 +274,7 @@ export async function rollAreteWithParadox({
       }
     ],
     position: { width: "auto", height: "auto" },
-    classes: ["wod5e", "mortal", "roll-dialog", "mage-arete-roll-dialog", "wod5e-mage-roll-dialog"],
+    classes: ["wod5e", "wod5e-mage", "mage", "mortal", "roll-dialog", "mage-arete-roll-dialog", "wod5e-mage-roll-dialog"],
     render: (_event, dialog) => initializeModifierControls(dialog)
   });
 }

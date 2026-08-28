@@ -1,5 +1,3 @@
-import { SPHERES } from "./spheres.js";
-
 /**
  * Gli Ambiti sono le sei colonne della Tabella dei Successi Extra (5.8).
  * Sono liberi per tutti: nessuna Sfera li sblocca o li vieta. La scheda non
@@ -21,21 +19,23 @@ export const GIFT_TRACKS = Object.freeze(["health", "willpower", "wisdom"]);
 /** Colonne del listino: sette gradini di successi extra. */
 export const SCOPE_TABLE_STEPS = 7;
 
-/** «Le Sfere che lo prediligono», come nel listino completo del 5.8. */
-export const SCOPE_FAVORED_SPHERES = Object.freeze({
-  potency: ["forces", "prime", "spirit", "life"],
-  duration: ["matter", "prime", "time"],
-  area: ["correspondence", "forces", "matter"],
-  targets: ["entropy", "mind", "life"],
-  conditions: ["entropy", "mind", "time"],
-  range: ["correspondence", "spirit"]
+/** La Durata si scrive col numero e il simbolo del tempo (dal manuale). */
+const DURATION_ICONS = Object.freeze({
+  1: "tempo_scena",
+  2: "tempo_scena",
+  3: "tempo_scena",
+  4: "tempo_sessione",
+  5: "tempo_sessione",
+  6: "tempo_storia",
+  7: "tempo_cronaca"
 });
 
 /**
  * Il Dono della Sfera d'Affinità: la quarta abilità del compendio parla o di
- * un Ambito (successi automatici pari ad Areté) o di un tracciato.
+ * un Ambito o di un tracciato. I successi automatici sono pari ai PALLINI
+ * della Sfera affine (canone di Blue del 28/8), non all'Areté.
  */
-export function prepareAffinityGift(affinitySphere, arete = 0) {
+export function prepareAffinityGift(affinitySphere, sphereRating = 0) {
   if (!affinitySphere) return null;
 
   const abilities = Array.isArray(affinitySphere.abilities) ? affinitySphere.abilities : [];
@@ -43,7 +43,7 @@ export function prepareAffinityGift(affinitySphere, arete = 0) {
     ?? abilities.find((ability) => GIFT_TRACKS.includes(ability.id));
   if (!gift) return null;
 
-  const successes = Math.max(Math.trunc(Number(arete)) || 0, 0);
+  const successes = Math.max(Math.trunc(Number(sphereRating)) || 0, 0);
 
   if (SCOPES.includes(gift.id)) {
     return {
@@ -72,23 +72,27 @@ export function prepareAffinityGift(affinitySphere, arete = 0) {
  * Il listino completo (5.8): sei righe per sette gradini, con le Sfere che
  * prediligono ogni Ambito. La riga del Dono viene segnata per accendersi.
  */
-export function prepareScopeTable({ gift = null, localize = (key) => key } = {}) {
+export function prepareScopeTable({ gift = null } = {}) {
   const steps = Array.from({ length: SCOPE_TABLE_STEPS }, (_, index) => index + 1);
 
   return {
     steps,
-    rows: SCOPES.map((id) => ({
-      id,
-      label: `WOD5E_MAGE.Scopes.${id}`,
-      gift: gift?.kind === "scope" && gift.id === id,
-      cells: steps.map((step) => ({
-        step,
-        label: `WOD5E_MAGE.Scopes.Table.${id}.${step}`
-      })),
-      spheres: SCOPE_FAVORED_SPHERES[id]
-        .filter((sphere) => SPHERES.includes(sphere))
-        .map((sphere) => localize(`WOD5E_MAGE.Spheres.${sphere}`))
-        .join(", ")
-    }))
+    rows: SCOPES.map((id) => {
+      const isGiftRow = gift?.kind === "scope" && gift.id === id;
+      return {
+        id,
+        label: `WOD5E_MAGE.Scopes.${id}`,
+        gift: isGiftRow,
+        cells: steps.map((step) => ({
+          step,
+          label: `WOD5E_MAGE.Scopes.Table.${id}.${step}`,
+          // Il Dono accende solo i gradini coperti dai pallini della Sfera.
+          gift: isGiftRow && step <= (gift?.successes ?? 0),
+          icon: id === "duration"
+            ? `modules/wod5e-mage/assets/icons/sheet/tempo/${DURATION_ICONS[step]}.svg`
+            : ""
+        }))
+      };
+    })
   };
 }

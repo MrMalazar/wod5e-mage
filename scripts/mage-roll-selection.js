@@ -1,4 +1,5 @@
 import { prepareEssentialSkillList } from "./abilita-essenziali.js";
+import { dressNextRollDialogAsMage, isMageActor } from "./mage-dice.js";
 
 function numericValue(value) {
   return Math.max(Number(value) || 0, 0);
@@ -99,6 +100,7 @@ export async function onMageRoll(event, target) {
   const actor = this.actor;
   const dataset = datasetFromTarget(target);
   if (!usesSelectionDialog(dataset.selectDialog)) {
+    if (isMageActor(actor)) dressNextRollDialogAsMage();
     return WOD5E.api.RollFromDataset({ dataset, actor });
   }
 
@@ -151,5 +153,6 @@ export async function onMageRoll(event, target) {
     return;
   }
 
+  if (isMageActor(actor)) dressNextRollDialogAsMage();
   return WOD5E.api.RollFromDataset({ dataset: modifiedDataset, actor });
 }

@@ -4,32 +4,6 @@
     </header>
 
     <div class="wod5e-mage-spheres-content wod5e-mage-magick-layout">
-        <div class="wod5e-mage-persistent-resources">
-            <label class="wod5e-mage-persistent-resource generated-quintessence">
-                <span>{{localize "WOD5E_MAGE.MagickBalance.GeneratedQuintessence"}}</span>
-                <input
-                    type="text"
-                    name="flags.wod5e-mage.persistentMagickResources.generatedQuintessence"
-                    value="{{persistentMagickResources.generatedQuintessence}}"
-                    aria-label="{{localize 'WOD5E_MAGE.MagickBalance.GeneratedQuintessence'}}"
-                    {{#if locked}}disabled{{/if}}
-                >
-            </label>
-
-            <label class="wod5e-mage-persistent-resource permanent-paradox">
-                <span>{{localize "WOD5E_MAGE.MagickBalance.PermanentParadox"}}</span>
-                <input
-                    type="number"
-                    min="0"
-                    step="1"
-                    name="flags.wod5e-mage.persistentMagickResources.permanentParadox"
-                    value="{{persistentMagickResources.permanentParadox}}"
-                    aria-label="{{localize 'WOD5E_MAGE.MagickBalance.PermanentParadox'}}"
-                    {{#if locked}}disabled{{/if}}
-                >
-            </label>
-        </div>
-
         <section class="wod5e-mage-spheres-panel">
             <header class="resource-header">
                 <label class="header-label">{{localize "WOD5E_MAGE.Tabs.Spheres"}}</label>

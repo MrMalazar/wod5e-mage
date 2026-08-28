@@ -1,23 +1,31 @@
 import { MODULE_ID } from "./constants.js";
 
 /**
- * I Bonus del Mago: righe libere accanto ad Areté, «+3 · Ambito Forza ·
- * quando lancio col mio strumento». Tre campi per riga, nessun effetto sui
- * tiri: sono un promemoria per il tavolo, salvato nei flag del modulo.
+ * I Bonus del Mago: righe libere sotto i Tiri personalizzati. Il tipo dice
+ * su cosa lavora il bonus (Dado, Successo o Difficoltà), la descrizione dice
+ * dove vale — a mano, come lo direbbe il giocatore. Nessun effetto sui tiri.
  */
-const FIELDS = Object.freeze(["kind", "description"]);
+export const BONUS_KINDS = Object.freeze(["dice", "success", "difficulty"]);
 
 export function prepareBonuses(actor) {
   const stored = actor.getFlag(MODULE_ID, "bonuses") ?? {};
 
+  const localize = globalThis.game?.i18n?.localize?.bind(globalThis.game.i18n)
+    ?? ((key) => key);
+
   return Object.entries(stored).map(([id, row]) => {
     const value = Math.trunc(Number(row?.value));
+    const kind = String(row?.kind ?? "");
     return {
       id,
       value: Number.isFinite(value) ? value : 0,
-      ...Object.fromEntries(
-        FIELDS.map((field) => [field, String(row?.[field] ?? "")])
-      )
+      kind,
+      description: String(row?.description ?? ""),
+      kinds: BONUS_KINDS.map((kindId) => ({
+        id: kindId,
+        label: localize(`WOD5E_MAGE.Bonuses.Kinds.${kindId}`),
+        selected: kindId === kind
+      }))
     };
   });
 }

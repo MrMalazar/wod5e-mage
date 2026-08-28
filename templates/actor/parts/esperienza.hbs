@@ -1,0 +1,120 @@
+{{!-- L'Esperienza vive in scheda: i totali, il registro delle spese,
+     il calcolatore da X a Y e il listino del manuale (05_10). --}}
+<section class="tab {{tab.cssClass}} wod5e-mage-esperienza" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    <div class="wod5e-mage-concept-content wod5e-mage-esperienza-content">
+        <div class="wod5e-mage-exp">
+            <div class="wod5e-mage-exp-totali">
+                <div>
+                    <span class="wod5e-mage-exp-k">{{localize "WOD5E_MAGE.Experience.Total"}}</span>
+                    <strong>{{experience.total}}</strong>
+                </div>
+                <div>
+                    <span class="wod5e-mage-exp-k">{{localize "WOD5E_MAGE.Experience.Spent"}}</span>
+                    <strong class="wod5e-mage-exp-mut">{{experience.spent}}</strong>
+                </div>
+                <div>
+                    <span class="wod5e-mage-exp-k">{{localize "WOD5E_MAGE.Experience.Remaining"}}</span>
+                    <strong>{{experience.remaining}}</strong>
+                </div>
+            </div>
+
+            {{!-- Le prese: quanta esperienza è arrivata, sessione per sessione.
+                 La somma fa il Totale. --}}
+            <section class="wod5e-mage-exp-log">
+                <header class="resource-header">
+                    <label class="header-label">{{localize "WOD5E_MAGE.Experience.GainsLabel"}}</label>
+                    <button type="button" class="wod5e-mage-row-add" data-action="experienceLogAdd" data-table="experienceGains" title="{{localize 'WOD5E_MAGE.Experience.GainsAdd'}}" aria-label="{{localize 'WOD5E_MAGE.Experience.GainsAdd'}}" {{#if locked}}disabled{{/if}}>
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </header>
+
+                {{#if experience.gains.length}}
+                <div class="wod5e-mage-exp-log-grid">
+                    <span>{{localize "WOD5E_MAGE.Experience.Points"}}</span>
+                    <span>{{localize "WOD5E_MAGE.Experience.GainsWhen"}}</span>
+                    <span aria-hidden="true"></span>
+
+                    {{#each experience.gains as |row|}}
+                        <input type="number" min="0" step="1" name="flags.wod5e-mage.experienceGains.{{row.id}}.cost" value="{{row.cost}}" aria-label="{{localize 'WOD5E_MAGE.Experience.Points'}}" {{#if ../locked}}disabled{{/if}}>
+                        <input type="text" name="flags.wod5e-mage.experienceGains.{{row.id}}.when" value="{{row.when}}" placeholder="{{localize 'WOD5E_MAGE.Experience.GainsWhenHint'}}" aria-label="{{localize 'WOD5E_MAGE.Experience.GainsWhen'}}" {{#if ../locked}}disabled{{/if}}>
+                        <button type="button" data-action="experienceLogDelete" data-table="experienceGains" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Experience.LogRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Experience.LogRemove'}}" {{#if ../locked}}disabled{{/if}}>
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    {{/each}}
+                </div>
+                {{else}}
+                    <p class="wod5e-mage-row-empty">{{localize "WOD5E_MAGE.Experience.GainsEmpty"}}</p>
+                {{/if}}
+            </section>
+
+            {{!-- Il registro: cosa hai comprato, e quanto è costato. --}}
+            <section class="wod5e-mage-exp-log">
+                <header class="resource-header">
+                    <label class="header-label">{{localize "WOD5E_MAGE.Experience.LogLabel"}}</label>
+                    <button type="button" class="wod5e-mage-row-add" data-action="experienceLogAdd" data-table="experienceLog" title="{{localize 'WOD5E_MAGE.Experience.LogAdd'}}" aria-label="{{localize 'WOD5E_MAGE.Experience.LogAdd'}}" {{#if locked}}disabled{{/if}}>
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </header>
+
+                {{#if experience.log.length}}
+                <div class="wod5e-mage-exp-log-grid">
+                    <span>{{localize "WOD5E_MAGE.Experience.Points"}}</span>
+                    <span>{{localize "WOD5E_MAGE.Experience.LogWhat"}}</span>
+                    <span aria-hidden="true"></span>
+
+                    {{#each experience.log as |row|}}
+                        <input type="number" min="0" step="1" name="flags.wod5e-mage.experienceLog.{{row.id}}.cost" value="{{row.cost}}" aria-label="{{localize 'WOD5E_MAGE.Experience.Points'}}" {{#if ../locked}}disabled{{/if}}>
+                        <input type="text" name="flags.wod5e-mage.experienceLog.{{row.id}}.what" value="{{row.what}}" placeholder="{{localize 'WOD5E_MAGE.Experience.LogWhatHint'}}" aria-label="{{localize 'WOD5E_MAGE.Experience.LogWhat'}}" {{#if ../locked}}disabled{{/if}}>
+                        <button type="button" data-action="experienceLogDelete" data-table="experienceLog" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Experience.LogRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Experience.LogRemove'}}" {{#if ../locked}}disabled{{/if}}>
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    {{/each}}
+                </div>
+                {{else}}
+                    <p class="wod5e-mage-row-empty">{{localize "WOD5E_MAGE.Experience.LogEmpty"}}</p>
+                {{/if}}
+            </section>
+
+            <div class="wod5e-mage-exp-calc">
+                <label>
+                    <span>{{localize "WOD5E_MAGE.Experience.Trait"}}</span>
+                    <select name="kind">
+                        {{#each experience.rows as |row|}}
+                            <option value="{{row.kind}}">{{row.label}}</option>
+                        {{/each}}
+                    </select>
+                </label>
+                <label>
+                    <span>{{localize "WOD5E_MAGE.Experience.From"}}</span>
+                    <input type="number" name="from" value="0" min="0" max="9" step="1"/>
+                </label>
+                <label>
+                    <span>{{localize "WOD5E_MAGE.Experience.To"}}</span>
+                    <input type="number" name="to" value="1" min="1" max="10" step="1"/>
+                </label>
+                <div class="wod5e-mage-exp-out">
+                    <strong data-role="total">0</strong>
+                    <span>{{localize "WOD5E_MAGE.Experience.Points"}}</span>
+                </div>
+            </div>
+            <p class="wod5e-mage-exp-steps" data-role="steps"></p>
+
+            <table class="wod5e-mage-exp-listino">
+                <thead>
+                    <tr>
+                        <th>{{localize "WOD5E_MAGE.Experience.Trait"}}</th>
+                        <th>{{localize "WOD5E_MAGE.Experience.Cost"}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each experience.rows as |row|}}
+                        <tr>
+                            <td>{{row.label}}</td>
+                            <td class="wod5e-mage-exp-n">{{row.formula}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

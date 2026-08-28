@@ -57,6 +57,31 @@ export function applyMageDiceClass(message, html) {
   return basicDice.length + paradoxDice.length;
 }
 
+/**
+ * La prossima finestra di tiro del sistema (quella coi contatori dei dadi)
+ * veste i dadi Mage: stella viola al posto dell'ankh mortale. Va chiamata
+ * subito prima di consegnare il tiro all'API WoD5e, per un attore Mago.
+ */
+export function dressNextRollDialogAsMage() {
+  Hooks.once("renderDialogV2", (_app, element) => {
+    const root = element ?? _app?.element;
+    if (!root?.querySelectorAll) return;
+
+    root.querySelectorAll("img.mortal-dice").forEach((die) => {
+      die.classList.remove("mortal-dice");
+      die.classList.add("mage-dice");
+      die.src = `modules/${MODULE_ID}/assets/icons/dice/chat/magick-stellina.svg`;
+    });
+
+    // L'intestazione «Dadi mortale» diventa «Dadi Mage».
+    root.querySelectorAll(".dice-group-header label").forEach((label) => {
+      if (/mortal/i.test(label.textContent)) {
+        label.textContent = game.i18n.localize("WOD5E_MAGE.Dice.MageDice");
+      }
+    });
+  });
+}
+
 export function registerMageDiceRendering() {
   Hooks.on("renderChatMessageHTML", applyMageDiceClass);
 }

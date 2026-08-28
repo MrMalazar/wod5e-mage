@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="39.8 34.5 120.5 120.5" width="200" height="200">
+<title>Atletica</title>
+<circle cx="100" cy="52" r="12" fill="#d9a827"/>
+<g stroke="#d9a827" fill="none" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
+<path d="M100,70 L100,102"/>
+<path d="M100,74 L74,56"/>
+<path d="M100,74 L126,56"/>
+<path d="M100,102 L76,116 L80,142"/>
+<path d="M100,102 L124,116 L120,142"/>
+</g>
+</svg>

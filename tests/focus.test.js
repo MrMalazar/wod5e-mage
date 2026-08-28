@@ -25,8 +25,18 @@ let focus = await prepareFocus(actor);
 assert.equal(focus.instrumentCount, 7);
 assert.equal(focus.instruments.length, 7);
 assert.equal(focus.arete, undefined);
-assert.equal(focus.spheres.length, 9);
-assert.equal(focus.spheres[0].levelLabel, "");
+// Senza Sfere sbloccate, la colonna delle Sfere del Focus è vuota.
+assert.equal(focus.spheres.length, 0);
+// Ogni slot porta la famiglia: vuota di default, sei scelte in ordine.
+assert.equal(focus.instruments[0].kind, "");
+assert.deepEqual(
+  focus.instruments[0].families.map((family) => family.id),
+  ["body", "machine", "object", "substance", "word", "world"]
+);
+assert.equal(focus.instruments[0].families.every((family) => !family.selected), true);
+// La Pratica si dichiara in due campi: la Forma (tre scelte) e il nome.
+assert.equal(focus.practiceForm, "");
+assert.deepEqual(focus.forms.map((form) => form.id), ["magick", "tecnomagick", "ibrida"]);
 
 actor = focusActor({
   arete: 5,
@@ -34,7 +44,8 @@ actor = focusActor({
   selectedSpheres: { forces: true, time: false },
   focus: {
     paradigm: "Everything is connected",
-    instruments: { slot1: { selected: true, name: "Old compass" } },
+    practiceForm: "tecnomagick",
+    instruments: { slot1: { selected: true, name: "Old compass", kind: "object" } },
     sphereNotes: { forces: "Fire reveals intent" }
   }
 });
@@ -42,10 +53,15 @@ focus = await prepareFocus(actor, async (value) => `<p>${value}</p>`);
 assert.equal(focus.instrumentCount, 7);
 assert.equal(focus.instruments[0].selected, true);
 assert.equal(focus.instruments[0].name, "Old compass");
-assert.equal(focus.spheres.find((sphere) => sphere.id === "forces").levelLabel, "WOD5E_MAGE.Spheres.Influence.Touch");
+assert.equal(focus.practiceForm, "tecnomagick");
+assert.equal(focus.forms.find((form) => form.id === "tecnomagick").selected, true);
+assert.equal(focus.instruments[0].kind, "object");
+assert.equal(focus.instruments[0].families.find((family) => family.id === "object").selected, true);
+// Solo le Sfere selezionate compaiono: Forza sì, Tempo (nascosta) no.
+assert.equal(focus.spheres.length, 1);
+assert.equal(focus.spheres.find((sphere) => sphere.id === "forces").levelLabel, undefined);
 assert.equal(focus.spheres.find((sphere) => sphere.id === "forces").enrichedNotes, "<p>Fire reveals intent</p>");
-// Tempo ha cinque pallini ma è nascosta: niente parentesi nel Focus.
-assert.equal(focus.spheres.find((sphere) => sphere.id === "time").levelLabel, "");
+assert.equal(focus.spheres.find((sphere) => sphere.id === "time"), undefined);
 
 await onFocusInstrumentToggle.call(
   { actor },

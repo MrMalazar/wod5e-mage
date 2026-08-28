@@ -53,7 +53,7 @@ assert.match(
 // voce. La finestra aperta si ferma prima di raggiungere quella soglia.
 assert.match(
   css,
-  /\.stats-list\s*>\s*:is\(\.attribute,\s*\.skill\)\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s+max-content;[^}]*white-space:\s*nowrap;/s
+  /\.stats-list\s*>\s*:is\(\.attribute,\s*\.skill\)\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*20px minmax\(0,\s*1fr\)\s+max-content;[^}]*white-space:\s*nowrap;/s
 );
 assert.match(
   css,
@@ -68,19 +68,49 @@ assert.match(
 // il riquadro del Dono sta accanto senza scale ridotte: l'esagono non c'è più.
 assert.match(
   css,
-  /\.wod5e-mage-arcana-cell\s*\{[^}]*display:\s*flex;[^}]*grid-area:\s*arcana;/s
+  /\.wod5e-mage-arcana-cell\s*\{[^}]*display:\s*flex;[^}]*grid-area:\s*arcana;[^}]*width:\s*100%;/s
+);
+// La Ruota prende tutta la colonna delle Abilità, coi nodi in grande.
+assert.match(
+  css,
+  /\.wod5e-mage-header-wheel-inner\s*\{[^}]*width:\s*100%;/s
 );
 assert.match(
   css,
-  /\.wod5e-mage-arcana-cell\s*>\s*\.wod5e-mage-arcana-side\s*\{[^}]*flex:\s*1 1 260px;[^}]*flex-direction:\s*column;/s
+  /\.wod5e-mage-magick-track-compact\s*\{[^}]*height:\s*176px;[^}]*width:\s*370px;/s
 );
-assert.doesNotMatch(css, /zoom:\s*0\.75|wod5e-mage-scopes-wheel|wod5e-mage-scope-choice/);
+assert.doesNotMatch(css, /zoom:\s*0\.75|wod5e-mage-scopes-wheel|wod5e-mage-scope-choice|wod5e-mage-scope-gift/);
+// Il sigillo apre ogni voce: colonna dedicata e aria uguale per tutti.
+assert.match(
+  css,
+  /\.stats-list\s*>\s*:is\(\.attribute,\s*\.skill\)\s*\{[^}]*grid-template-columns:\s*20px minmax\(0, 1fr\) max-content;/s
+);
+assert.match(
+  css,
+  /\.stats-container\.skills \.skill,\s*\n\.wod5e-mage\.wod5e\.actor\.sheet \.stats-container\.attributes \.attribute\s*\{[^}]*margin-bottom:\s*0\.45rem;/s
+);
+assert.match(traitsTemplate, /wod5e-mage-trait-icon[\s\S]*attribute\.icon[\s\S]*wod5e-mage-trait-icon[\s\S]*skill\.icon/);
 assert.doesNotMatch(
   css,
   /\.wod5e-mage-ruota-cell[^,{]*\{[^}]*zoom:/s
 );
-assert.match(traitsTemplate, /parts\/ruota\.hbs[\s\S]*wod5e-mage-arcana-side[\s\S]*parts\/scopes\.hbs[\s\S]*parts\/bonuses\.hbs/);
-assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes\b/);
+// I Bonus vivono nel pannello destro, sotto i Tiri personalizzati; la Ruota
+// tiene per sé Quintessenza generata e Paradosso permanente.
+assert.match(traitsTemplate, /CustomRolls[\s\S]*parts\/bonuses\.hbs/);
+assert.match(traitsTemplate, /parts\/ruota\.hbs/);
+assert.doesNotMatch(traitsTemplate, /parts\/scopes\.hbs|wod5e-mage-arcana-side/);
+assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes\b|wod5e-mage-persistent-resources/);
+const ruotaTemplate = readFileSync(
+  new URL("../templates/actor/parts/ruota.hbs", import.meta.url),
+  "utf8"
+);
+assert.match(ruotaTemplate, /wod5e-mage-persistent-resources[\s\S]*generatedQuintessence[\s\S]*permanentParadox/);
+// Il semicerchio è vero (raggio unico, mai schiacciato), con le due parole
+// agli estremi; la parola ARETÉ tira, e il vecchio bottone non esiste più.
+assert.match(ruotaTemplate, /A150 150 0 0 1[\s\S]*preserveAspectRatio="xMidYMid meet"|preserveAspectRatio="xMidYMid meet"[\s\S]*A150 150 0 0 1/);
+assert.match(ruotaTemplate, /wod5e-mage-magick-end quintessence[\s\S]*wod5e-mage-magick-end paradox/);
+assert.match(ruotaTemplate, /button[^>]*wod5e-mage-arete-roll[^>]*data-action="areteRoll"/);
+assert.doesNotMatch(ruotaTemplate, /wod5e-mage-header-roll|Arete\.Roll"/);
 // Il listino dei Successi Extra chiude la pagina Magick, a tutta larghezza.
 assert.match(magickTemplate, /wod5e-mage-affinity-sphere[\s\S]*parts\/scope-table\.hbs/);
 assert.match(
@@ -92,11 +122,7 @@ assert.match(css, /\.wod5e-mage-scope-table\s*\{[^}]*grid-area:\s*table;/s);
 // The affinity section stays below Spheres and Ongoing Magick.
 assert.match(
   css,
-  /\.wod5e-mage-magick-layout\s*\{[^}]*"resources \."[^}]*"spheres ongoing"[^}]*"affinity affinity"[^}]*"table table";/s
-);
-assert.match(
-  css,
-  /\.wod5e-mage-persistent-resources\s*\{[^}]*grid-area:\s*resources;/s
+  /\.wod5e-mage-magick-layout\s*\{[^}]*"spheres ongoing"[^}]*"affinity affinity"[^}]*"table table";/s
 );
 assert.match(
   css,
@@ -112,7 +138,7 @@ assert.match(
 );
 assert.match(
   magickTemplate,
-  /wod5e-mage-persistent-resources[\s\S]*wod5e-mage-spheres-panel[\s\S]*wod5e-mage-ongoing-magick[\s\S]*wod5e-mage-affinity-sphere/
+  /wod5e-mage-spheres-panel[\s\S]*wod5e-mage-ongoing-magick[\s\S]*wod5e-mage-affinity-sphere/
 );
 
 // La sidebar conserva le tab aggiuntive del Mago, ma usa la geometria nativa:
@@ -154,7 +180,7 @@ assert.match(
 );
 assert.match(
   css,
-  /@container\s*\(max-width:\s*600px\)\s*\{[^{]*\.skills-attributes\s*>\s*\.stats-container\s*>\s*\.stats-content\s*\{[^}]*repeat\(2,\s*minmax\(0,\s*1fr\)\);/s
+  /@container\s*\(max-width:\s*720px\)\s*\{[^{]*\.skills-attributes\s*>\s*\.stats-container\s*>\s*\.stats-content\s*\{[^}]*repeat\(2,\s*minmax\(0,\s*1fr\)\);/s
 );
 
 // La Ruota ad arco accende i nodi con i token della palette, non con
@@ -165,8 +191,38 @@ assert.match(
 );
 assert.match(
   css,
-  /\.wod5e-mage-magick-node\.paradox\s*\{[^}]*background:\s*var\(--mage-nero-dado\);/s
+  /\.wod5e-mage-magick-node\.paradox\s*\{[^}]*background:\s*var\(--mage-rosso\);/s
 );
 assert.doesNotMatch(css, /var\(--quintessence-color\)|var\(--paradox-color\)/);
+
+// I pallini di Arete respirano rispetto alla parola cliccabile.
+assert.match(
+  css,
+  /\.wod5e-mage-header-arete > \.wod5e-mage-arete-dots\s*\{[^}]*margin-left:/s
+);
+
+// Il dialogo del tiro di Arete segue il mockup: una riga per Sfera con
+// tendina Ambito e campo N.S., e la Tipologia con le spiegazioni in corsivo.
+const areteDialog = readFileSync(
+  new URL("../templates/dialogs/arete-roll.hbs", import.meta.url),
+  "utf8"
+);
+// Sfere Effetto e Ambiti sono due colonne distinte; il livello Sfera parla
+// a pallini e gli Ambiti hanno tendina + N.S. per riga.
+assert.match(areteDialog, /wod5e-mage-arete-columns[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dots[\s\S]*Scopes\.Label[\s\S]*data-role="scopeAdd"[\s\S]*Arete\.ScopeLevel[\s\S]*data-role="scopeRows"[\s\S]*template data-role="scopeRowTemplate"/);
+assert.match(areteDialog, /Arete\.SelectScope[\s\S]*Arete\.ScopeLevelHint/);
+assert.doesNotMatch(areteDialog, /<b>\{\{sphere\.value\}\}<\/b>|Arete\.ParadoxHint|name="scope-\{\{@index\}\}"|ScopeSuccesses/);
+// Due tratti liberi: entrambe le tendine sono Abilita' o Attributo.
+assert.match(areteDialog, /RollSelection\.AbilityOrAttribute[\s\S]*name="primaryTrait"[\s\S]*RollSelection\.AbilityOrAttribute[\s\S]*name="secondaryTrait"/);
+assert.doesNotMatch(areteDialog, /name="primarySkill"|RollSelection\.Ability"/);
+assert.match(css, /\.wod5e-mage-arete-row \+ \.wod5e-mage-arete-row\s*\{[^}]*margin-top:/s);
+assert.match(css, /\.wod5e-mage-arete-scope-head\s*\{[^}]*grid-template-columns:/s);
+// Le spiegazioni della Tipologia vivono in una colonna staccata a destra.
+assert.match(areteDialog, /wod5e-mage-arete-type-grid[\s\S]*Arete\.Coincidental\b[\s\S]*Arete\.CoincidentalHint[\s\S]*Arete\.VulgarHint[\s\S]*Arete\.WitnessesHint/);
+assert.doesNotMatch(areteDialog, /wod5e-mage-arete-sphere-list|wod5e-mage-arete-sphere-row\b/);
+assert.match(css, /\.wod5e-mage-arete-columns\s*\{[^}]*grid-template-columns:/s);
+assert.match(css, /\.wod5e-mage-arete-sphere-dot\.active\s*\{[^}]*var\(--mage-oro\)/s);
+assert.match(css, /\.wod5e-mage-arete-type-grid\s*\{[^}]*grid-template-columns:/s);
+assert.match(css, /\.wod5e-mage-arete-type-grid > em\s*\{[^}]*font-style: italic;/s);
 
 console.log("Responsive Mage sheet layout tests passed.");

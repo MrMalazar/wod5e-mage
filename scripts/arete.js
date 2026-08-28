@@ -9,6 +9,8 @@ import {
   prepareMageRollTraits,
   selectorsForMageRollTrait
 } from "./mage-roll-selection.js";
+import { prepareSpheres } from "./spheres.js";
+import { SCOPES } from "./scopes.js";
 
 export const ARETE_MIN = 1;
 export const ARETE_MAX = 5;
@@ -80,10 +82,6 @@ export function normalizeMagickRollOptions({
   return options;
 }
 
-function findTraitById(traits, id) {
-  return traits.find((trait) => trait.id === id);
-}
-
 function notifyLocked(actor) {
   ui.notifications.warn(
     game.i18n.format("WOD5E.Notifications.CannotModifyResourceString", {
@@ -132,6 +130,75 @@ function makeMagickTypeExclusive(dialog) {
   });
 }
 
+/** Gli Ambiti li aggiunge il giocatore: il + accoda una riga tendina+Lvl. */
+function wireScopeRows(dialog) {
+  const root = dialog?.element;
+  const list = root?.querySelector("[data-role=scopeRows]");
+  const addButton = root?.querySelector("[data-role=scopeAdd]");
+  const rowTemplate = root?.querySelector("template[data-role=scopeRowTemplate]");
+  if (!list || !addButton || !rowTemplate) return;
+
+  const addRow = () => {
+    const index = list.querySelectorAll(".wod5e-mage-arete-scope-row").length;
+    const fragment = rowTemplate.content.cloneNode(true);
+    const select = fragment.querySelector("select");
+    const level = fragment.querySelector("input");
+    if (select) select.name = `scope-${index}`;
+    if (level) level.name = `scope-lvl-${index}`;
+    list.appendChild(fragment);
+  };
+
+  addButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    addRow();
+  });
+
+  // Una riga pronta all'apertura: le altre le chiede il giocatore col +.
+  addRow();
+}
+
+/** Difficoltà totale: la Sfera spuntata più alta + i Lvl degli Ambiti. */
+function wireDifficulty(dialog) {
+  const root = dialog?.element;
+  const boxes = [...(root?.querySelectorAll(".wod5e-mage-arete-sphere-box") ?? [])];
+  const out = root?.querySelector("[data-role=baseDifficulty]");
+  if (!out) return;
+
+  const update = () => {
+    const levels = boxes
+      .filter((box) => box.checked)
+      .map((box) => Math.max(Math.trunc(Number(box.dataset.level) || 0), 0));
+    const sphereDifficulty = levels.length ? Math.max(...levels) : 0;
+    let scopeDifficulty = 0;
+    root.querySelectorAll(".wod5e-mage-arete-scope-row").forEach((row) => {
+      const select = row.querySelector("select");
+      if (!select?.value) return;
+      const level = row.querySelector("input");
+      scopeDifficulty += Math.max(Math.trunc(Number(level?.value) || 0), 0);
+    });
+    out.textContent = String(sphereDifficulty + scopeDifficulty);
+  };
+
+  boxes.forEach((box) => box.addEventListener("change", update));
+  // Le righe degli Ambiti sono dinamiche: si ascolta il contenitore.
+  const list = root?.querySelector("[data-role=scopeRows]");
+  list?.addEventListener("change", update);
+  list?.addEventListener("input", update);
+  update();
+}
+
+/** La casella «Effetto Mantenuto» mostra il campo del nome solo da spuntata. */
+function wireMaintainedEffect(dialog) {
+  const box = dialog?.element?.querySelector("#wod5e-mage-arete-maintained");
+  const name = dialog?.element?.querySelector("#wod5e-mage-arete-maintained-name");
+  if (!box || !name) return;
+
+  box.addEventListener("change", () => {
+    name.classList.toggle("hidden", !box.checked);
+    if (box.checked) name.focus();
+  });
+}
+
 export async function onAreteRoll(event) {
   event.preventDefault();
 
@@ -141,9 +208,19 @@ export async function onAreteRoll(event) {
     localize: game.i18n.localize.bind(game.i18n),
     lang: game.i18n.lang
   });
+  // Solo le Sfere sbloccate, con almeno un pallino: sono quelle combinabili.
+  // Il livello parla a pallini nel dialogo, come sulla scheda.
+  const rollSpheres = prepareSpheres(actor).selected
+    .filter((sphere) => sphere.value > 0)
+    .map((sphere) => ({
+      ...sphere,
+      steps: Array.from({ length: 5 }, (_, index) => ({ active: index < sphere.value }))
+    }));
+  // Le sei colonne della Tabella dei Successi Extra, per la tendina Ambito.
+  const scopeOptions = SCOPES.map((id) => ({ id, label: `WOD5E_MAGE.Scopes.${id}` }));
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
-    { arete, ...traits }
+    { arete, spheres: rollSpheres, scopes: scopeOptions, ...traits }
   );
 
   const result = await foundry.applications.api.DialogV2.input({
@@ -168,32 +245,42 @@ export async function onAreteRoll(event) {
         label: game.i18n.localize("WOD5E.Cancel")
       }
     ],
-    classes: ["wod5e", actor.system.gamesystem, "wod5e-mage-roll-dialog"],
-    render: (_event, dialog) => makeMagickTypeExclusive(dialog)
+    classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog"],
+    render: (_event, dialog) => {
+      makeMagickTypeExclusive(dialog);
+      wireScopeRows(dialog);
+      wireDifficulty(dialog);
+      wireMaintainedEffect(dialog);
+    }
   });
 
   if (!result || result === "cancel") return;
 
-  const selectedSkill = findTraitById(traits.skills, result.primarySkill);
+  const selectedFirstTrait = findMageRollTrait(traits, result.primaryTrait);
   const selectedSecondTrait = findMageRollTrait(traits, result.secondaryTrait);
-  if (!selectedSkill || !selectedSecondTrait) {
+  if (!selectedFirstTrait || !selectedSecondTrait) {
     ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Arete.SelectTraitWarning"));
     return;
   }
 
   const options = normalizeMagickRollOptions(result);
+  // La difficoltà base è il livello più alto fra le Sfere spuntate.
+  const chosenSphereLevels = rollSpheres
+    .filter((sphere) => isChecked(result[`sphere-${sphere.id}`]))
+    .map((sphere) => sphere.value);
+  const baseDifficulty = chosenSphereLevels.length ? Math.max(...chosenSphereLevels) : 0;
   // Il valore di Areté non è modificabile nel dialogo: la casella decide solo
   // se sommare o meno il valore impostato tramite i pallini della scheda.
   const areteValue = options.useArete ? arete.value : 0;
   const dicePool = calculateAreteTraitPool(
     areteValue,
-    selectedSkill.value,
+    selectedFirstTrait.value,
     selectedSecondTrait.value
   );
   const rollLabel = game.i18n.format(
     options.useArete ? "WOD5E_MAGE.Arete.Rolling" : "WOD5E_MAGE.Arete.RollingNoArete",
     {
-      first: selectedSkill.label,
+      first: selectedFirstTrait.label,
       second: selectedSecondTrait.label
     }
   );
@@ -212,8 +299,7 @@ export async function onAreteRoll(event) {
     : game.i18n.localize("WOD5E_MAGE.Arete.NoType");
 
   const selectors = [
-    "skills",
-    `skills.${selectedSkill.id}`,
+    ...selectorsForMageRollTrait(selectedFirstTrait),
     ...selectorsForMageRollTrait(selectedSecondTrait)
   ];
   if (options.useArete) selectors.unshift("arete");
@@ -244,19 +330,45 @@ export async function onAreteRoll(event) {
   }
 
   const paradoxRating = getMagickBalance(actor).paradox;
-  const flavor = game.i18n.format(
+  let flavor = game.i18n.format(
     options.useArete
       ? "WOD5E_MAGE.Arete.RollFlavor"
       : "WOD5E_MAGE.Arete.RollFlavorNoArete",
     {
       arete: areteValue,
-      first: selectedSkill.label,
-      firstValue: selectedSkill.value,
+      first: selectedFirstTrait.label,
+      firstValue: selectedFirstTrait.value,
       second: selectedSecondTrait.label,
       secondValue: selectedSecondTrait.value,
       magickType
     }
   );
+
+  // Gli Ambiti dichiarati (righe aggiunte dal giocatore col +): il Lvl si
+  // somma alla difficoltà, e il piano finisce nel testo del tiro in chat.
+  const scopeEntries = Object.entries(result)
+    .map(([key, value]) => {
+      const match = key.match(/^scope-(\d+)$/);
+      if (!match) return null;
+      const scopeId = String(value ?? "");
+      if (!SCOPES.includes(scopeId)) return null;
+      const level = Math.max(Math.trunc(Number(result[`scope-lvl-${match[1]}`]) || 0), 0);
+      return { scopeId, level };
+    })
+    .filter(Boolean);
+
+  // La difficoltà totale è la Sfera più alta + i livelli degli Ambiti.
+  const scopeDifficulty = scopeEntries.reduce((sum, entry) => sum + entry.level, 0);
+  const totalDifficulty = baseDifficulty + scopeDifficulty;
+
+  const scopePlans = scopeEntries.map((entry) => {
+    const scopeLabel = game.i18n.localize(`WOD5E_MAGE.Scopes.${entry.scopeId}`);
+    return entry.level > 0 ? `${scopeLabel} (${entry.level})` : scopeLabel;
+  });
+
+  if (scopePlans.length) {
+    flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.ScopePlan", { plans: scopePlans.join(", ") })}`;
+  }
 
   // Load the Foundry-specific dice implementation only when an Areté roll is
   // actually requested. Keeping it out of the data helpers also lets their
@@ -268,6 +380,7 @@ export async function onAreteRoll(event) {
     outcome = await rollAreteWithParadox({
       dicePool,
       paradoxRating,
+      difficulty: totalDifficulty,
       title: rollLabel,
       flavor,
       selectors: uniqueSelectors,
@@ -286,5 +399,25 @@ export async function onAreteRoll(event) {
   if (balanceMoved && !rolled) {
     await actor.setFlag(MODULE_ID, "magickBalance", balanceBefore);
     ui.notifications.info(game.i18n.localize("WOD5E_MAGE.MagickBalance.ParadoxReverted"));
+  }
+
+  // L'Effetto Mantenuto dichiarato nel dialogo, a tiro risolto, si scrive da
+  // solo fra le Magick in Atto della pagina Magick.
+  const maintainedName = String(result.maintainedName ?? "").trim();
+  if (rolled && isChecked(result.maintained) && maintainedName && actor.isOwner) {
+    const rows = { ...(actor.getFlag(MODULE_ID, "ongoingMagick") ?? {}) };
+    let rowId = foundry.utils.randomID();
+    while (rows[rowId]) rowId = foundry.utils.randomID();
+
+    rows[rowId] = {
+      nameSpheres: maintainedName,
+      status: game.i18n.localize("WOD5E_MAGE.OngoingMagick.MaintainedStatus"),
+      triggerEffect: ""
+    };
+
+    await actor.setFlag(MODULE_ID, "ongoingMagick", rows);
+    ui.notifications.info(
+      game.i18n.format("WOD5E_MAGE.OngoingMagick.MaintainedAdded", { name: maintainedName })
+    );
   }
 }

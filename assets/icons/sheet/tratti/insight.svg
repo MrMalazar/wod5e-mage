@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="35.6 35.6 128.7 128.7" width="200" height="200">
+<title>Intuito</title>
+<g stroke="#d9a827" fill="none" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="100" cy="100" r="52"/>
+</g>
+<path d="M100,64 L114,100 L100,136 L86,100 Z" fill="#d9a827" stroke="#d9a827" stroke-width="4" stroke-linejoin="round"/>
+<circle cx="100" cy="100" r="7" fill="#15130f"/>
+</svg>

@@ -1,28 +1,130 @@
-{{!-- Personaggio: chi è, i precetti, i punti di riferimento.
-     Solo la colonna sinistra della linguetta features di sistema. --}}
+{{!-- Personaggio, nella gabbia a tendine della Sfida: Appartenenza,
+     Concetto e Cronaca (con Ambizione e Desiderio descritti), poi le
+     Ancore e le Convinzioni a slot liberi — di norma tre e tre. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-personaggio" data-tab="{{tab.id}}" data-group="{{tab.group}}">
-    <div class="flexcol wod5e-mage-personaggio-layout">
-        <section class="wod5e-mage-lineage-fields">
-            <header class="resource-header">
-                <label class="header-label">{{localize "WOD5E_MAGE.Lineage.Label"}}</label>
-            </header>
-            <div class="wod5e-mage-lineage-grid">
-                <label>
-                    <span>{{localize "WOD5E_MAGE.Lineage.Faction"}}</span>
-                    <input type="text" name="flags.wod5e-mage.lineage.fazione" value="{{lineage.fazione}}" placeholder="{{localize 'WOD5E_MAGE.Lineage.FactionHint'}}"/>
-                </label>
-                <label>
-                    <span>{{localize "WOD5E_MAGE.Lineage.Family"}}</span>
-                    <input type="text" name="flags.wod5e-mage.lineage.famiglia" value="{{lineage.famiglia}}" placeholder="{{localize 'WOD5E_MAGE.Lineage.FamilyHint'}}"/>
-                </label>
-                <label>
-                    <span>{{localize "WOD5E_MAGE.Lineage.Subfamily"}}</span>
-                    <input type="text" name="flags.wod5e-mage.lineage.sottofamiglia" value="{{lineage.sottofamiglia}}" placeholder="{{localize 'WOD5E_MAGE.Lineage.SubfamilyHint'}}"/>
-                </label>
-            </div>
-        </section>
-        {{> "systems/wod5e/display/shared/actors/parts/core-details.hbs"}}
-        {{> "systems/wod5e/display/shared/actors/parts/chronicle-tenets.hbs"}}
-        {{> "systems/wod5e/display/shared/actors/parts/touchstones-convictions.hbs"}}
+    <div class="wod5e-mage-concept-content wod5e-mage-personaggio-content">
+            <details class="wod5e-mage-concept-group" open>
+                <summary>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    <span>{{localize "WOD5E_MAGE.Lineage.Label"}}</span>
+                </summary>
+
+                <div class="wod5e-mage-lineage-grid">
+                    <label>
+                        <span>{{localize "WOD5E_MAGE.Lineage.Faction"}}</span>
+                        <input type="text" name="flags.wod5e-mage.lineage.fazione" value="{{lineage.fazione}}" placeholder="{{localize 'WOD5E_MAGE.Lineage.FactionHint'}}"/>
+                    </label>
+                    <label>
+                        <span>{{localize "WOD5E_MAGE.Lineage.Family"}}</span>
+                        <input type="text" name="flags.wod5e-mage.lineage.famiglia" value="{{lineage.famiglia}}" placeholder="{{localize 'WOD5E_MAGE.Lineage.FamilyHint'}}"/>
+                    </label>
+                    <label>
+                        <span>{{localize "WOD5E_MAGE.Lineage.Subfamily"}}</span>
+                        <input type="text" name="flags.wod5e-mage.lineage.sottofamiglia" value="{{lineage.sottofamiglia}}" placeholder="{{localize 'WOD5E_MAGE.Lineage.SubfamilyHint'}}"/>
+                    </label>
+                </div>
+            </details>
+
+            <details class="wod5e-mage-concept-group" open>
+                <summary>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    <span>{{localize "WOD5E_MAGE.Personaggio.IdentityLabel"}}</span>
+                </summary>
+
+                <div class="wod5e-mage-identity-grid">
+                    <label class="wod5e-mage-identity-field">
+                        <span>{{localize "WOD5E.BiographyList.Concept"}}</span>
+                        <input type="text" name="system.headers.concept" value="{{concept}}" placeholder="{{localize 'WOD5E.BiographyList.Concept'}}"/>
+                    </label>
+                    <label class="wod5e-mage-identity-field">
+                        <span>{{localize "WOD5E.BiographyList.Chronicle"}}</span>
+                        <input type="text" name="system.headers.chronicle" value="{{chronicle}}" placeholder="{{localize 'WOD5E.BiographyList.Chronicle'}}"/>
+                    </label>
+                </div>
+
+                {{!-- Ambizione e Desiderio: il nome, e sotto quando si attiva.
+                     I cataloghi del manuale (08, blocco H) arriveranno qui. --}}
+                <div class="wod5e-mage-identity-grid">
+                    <div class="wod5e-mage-identity-field">
+                        <span>{{localize "WOD5E.BiographyList.Ambition"}}</span>
+                        <input type="text" name="system.headers.ambition" value="{{ambition}}" placeholder="{{localize 'WOD5E.BiographyList.Ambition'}}"/>
+                        <textarea name="flags.wod5e-mage.ambitionTrigger" rows="2" placeholder="{{localize 'WOD5E_MAGE.Personaggio.TriggerHint'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.TriggerHint'}}" {{#if locked}}disabled{{/if}}>{{ambitionTrigger}}</textarea>
+                    </div>
+                    <div class="wod5e-mage-identity-field">
+                        <span>{{localize "WOD5E.BiographyList.Desire"}}</span>
+                        <input type="text" name="system.headers.desire" value="{{desire}}" placeholder="{{localize 'WOD5E.BiographyList.Desire'}}"/>
+                        <textarea name="flags.wod5e-mage.desireTrigger" rows="2" placeholder="{{localize 'WOD5E_MAGE.Personaggio.TriggerHint'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.TriggerHint'}}" {{#if locked}}disabled{{/if}}>{{desireTrigger}}</textarea>
+                    </div>
+                </div>
+            </details>
+
+            <details class="wod5e-mage-concept-group" open>
+                <summary>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    <span>{{localize "WOD5E_MAGE.Personaggio.AnchorsLabel"}}</span>
+                </summary>
+
+                <div class="wod5e-mage-row-head">
+                    <p class="wod5e-mage-row-hint">{{localize "WOD5E_MAGE.Personaggio.AnchorsHint"}}</p>
+                    <button type="button" class="wod5e-mage-row-add" data-action="personaggioRowAdd" data-table="ancore" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorAdd'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorAdd'}}" {{#if locked}}disabled{{/if}}>
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                {{#if anchors.length}}
+                <div class="wod5e-mage-anchor-grid">
+                    <span>{{localize "WOD5E_MAGE.Personaggio.AnchorName"}}</span>
+                    <span>{{localize "WOD5E_MAGE.Personaggio.AnchorDescription"}}</span>
+                    <span aria-hidden="true"></span>
+
+                    {{#each anchors as |row|}}
+                        <textarea rows="2" class="wod5e-mage-mini-textarea" name="flags.wod5e-mage.ancore.{{row.id}}.name" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorName'}}" {{#if ../locked}}disabled{{/if}}>{{row.name}}</textarea>
+                        <textarea rows="2" class="wod5e-mage-mini-textarea" name="flags.wod5e-mage.ancore.{{row.id}}.description" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorDescription'}}" {{#if ../locked}}disabled{{/if}}>{{row.description}}</textarea>
+                        <button type="button" data-action="personaggioRowDelete" data-table="ancore" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorRemove'}}" {{#if ../locked}}disabled{{/if}}>
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    {{/each}}
+                </div>
+                {{else}}
+                    <p class="wod5e-mage-row-empty">{{localize "WOD5E_MAGE.Personaggio.AnchorsEmpty"}}</p>
+                {{/if}}
+            </details>
+
+            <details class="wod5e-mage-concept-group" open>
+                <summary>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionsLabel"}}</span>
+                </summary>
+
+                <div class="wod5e-mage-row-head">
+                    <p class="wod5e-mage-row-hint">{{localize "WOD5E_MAGE.Personaggio.ConvictionsHint"}}</p>
+                    <button type="button" class="wod5e-mage-row-add" data-action="personaggioRowAdd" data-table="convinzioni" title="{{localize 'WOD5E_MAGE.Personaggio.ConvictionAdd'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionAdd'}}" {{#if locked}}disabled{{/if}}>
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                {{#if convictions.length}}
+                <div class="wod5e-mage-conviction-grid">
+                    <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionGroup"}}</span>
+                    <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionText"}}</span>
+                    <span aria-hidden="true"></span>
+
+                    {{#each convictions as |row|}}
+                        <select name="flags.wod5e-mage.convinzioni.{{row.id}}.group" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroup'}}" {{#if ../locked}}disabled{{/if}}>
+                            <option value="">{{localize "WOD5E_MAGE.Personaggio.ConvictionGroupNone"}}</option>
+                            {{#each row.groups as |group|}}
+                                <option value="{{group.id}}" {{#if group.selected}}selected{{/if}}>{{group.label}}</option>
+                            {{/each}}
+                        </select>
+                        <input type="text" name="flags.wod5e-mage.convinzioni.{{row.id}}.text" value="{{row.text}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionText'}}" {{#if ../locked}}disabled{{/if}}>
+                        <button type="button" data-action="personaggioRowDelete" data-table="convinzioni" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.ConvictionRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionRemove'}}" {{#if ../locked}}disabled{{/if}}>
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    {{/each}}
+                </div>
+                {{else}}
+                    <p class="wod5e-mage-row-empty">{{localize "WOD5E_MAGE.Personaggio.ConvictionsEmpty"}}</p>
+                {{/if}}
+            </details>
     </div>
 </section>

@@ -2,16 +2,18 @@ import { MODULE_ID } from "./constants.js";
 
 export const MAGICK_TRACK_MAX = 9;
 
+// Nove nodi su un SEMICERCHIO VERO (raggio 150 su viewBox 400x190),
+// dal primo a sinistra (Quintessenza) all'ultimo a destra (Paradosso).
 const NODE_POSITIONS = Object.freeze([
-  { x: 4, y: 78 },
-  { x: 9, y: 51 },
-  { x: 20, y: 29 },
-  { x: 34, y: 14 },
-  { x: 50, y: 8 },
-  { x: 66, y: 14 },
-  { x: 80, y: 29 },
-  { x: 91, y: 51 },
-  { x: 96, y: 78 }
+  { x: 12.5, y: 89.5 },
+  { x: 15.4, y: 59.3 },
+  { x: 23.5, y: 33.6 },
+  { x: 35.6, y: 16.5 },
+  { x: 50, y: 10.5 },
+  { x: 64.4, y: 16.5 },
+  { x: 76.5, y: 33.6 },
+  { x: 84.6, y: 59.3 },
+  { x: 87.5, y: 89.5 }
 ]);
 
 /** Read the two persistent fields displayed below the Magick wheel. */

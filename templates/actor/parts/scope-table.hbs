@@ -15,20 +15,18 @@
                     {{#each scopeTable.steps as |step|}}
                         <th scope="col">{{step}}</th>
                     {{/each}}
-                    <th scope="col">{{localize "WOD5E_MAGE.Scopes.TableSpheres"}}</th>
                 </tr>
             </thead>
             <tbody>
                 {{#each scopeTable.rows as |row|}}
-                    <tr class="scope-{{row.id}}{{#if row.gift}} gift{{/if}}">
+                    <tr class="scope-{{row.id}}">
                         <th scope="row">
                             {{localize row.label}}
                             {{#if row.gift}}<i class="fa-solid fa-star" title="{{localize 'WOD5E_MAGE.Scopes.GiftScope'}}"></i>{{/if}}
                         </th>
                         {{#each row.cells as |cell|}}
-                            <td>{{localize cell.label}}</td>
+                            <td class="{{#if cell.gift}}gift{{/if}}">{{#if cell.icon}}<span class="wod5e-mage-tempo-cell"><img class="wod5e-mage-tempo-icon" src="{{cell.icon}}" alt="">{{localize cell.label}}</span>{{else}}{{localize cell.label}}{{/if}}</td>
                         {{/each}}
-                        <td class="wod5e-mage-scope-spheres">{{row.spheres}}</td>
                     </tr>
                 {{/each}}
             </tbody>

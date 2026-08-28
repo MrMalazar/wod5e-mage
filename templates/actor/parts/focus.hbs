@@ -3,13 +3,14 @@
         <span>{{localize "WOD5E_MAGE.Tabs.Focus"}}</span>
     </header>
 
-    {{!-- La Saggezza sta col Focus: quando casti, ti guarda. --}}
-    <div class="wod5e-mage-focus-wisdom">
-        {{> "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"}}
-    </div>
-
     <div class="wod5e-mage-focus-layout">
         <section class="wod5e-mage-focus-definition">
+            {{!-- La Saggezza sta col Focus: un riquadro in colonna, non una barra.
+                 Quando la fila è piena, accanto compare l'effetto (Segnato). --}}
+            <div class="wod5e-mage-focus-wisdom">
+                {{> "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"}}
+            </div>
+
             <div class="wod5e-mage-focus-short-field">
                 <div>
                     <strong>{{localize "WOD5E_MAGE.Focus.Paradigm"}}</strong>
@@ -23,7 +24,16 @@
                     <strong>{{localize "WOD5E_MAGE.Focus.Practice"}}</strong>
                     <small>{{localize "WOD5E_MAGE.Focus.PracticeHint"}}</small>
                 </div>
-                <input type="text" name="flags.wod5e-mage.focus.practice" value="{{focus.practice}}" aria-label="{{localize 'WOD5E_MAGE.Focus.PracticeHint'}}" {{#if locked}}disabled{{/if}}>
+                {{!-- La Forma (Magick, Tecnomagick, Magick Ibrida) e poi il nome. --}}
+                <div class="wod5e-mage-focus-practice-row">
+                    <select name="flags.wod5e-mage.focus.practiceForm" aria-label="{{localize 'WOD5E_MAGE.Focus.Form'}}" {{#if locked}}disabled{{/if}}>
+                        <option value="">{{localize "WOD5E_MAGE.Focus.FormNone"}}</option>
+                        {{#each focus.forms as |form|}}
+                            <option value="{{form.id}}" {{#if form.selected}}selected{{/if}}>{{form.label}}</option>
+                        {{/each}}
+                    </select>
+                    <input type="text" name="flags.wod5e-mage.focus.practice" value="{{focus.practice}}" aria-label="{{localize 'WOD5E_MAGE.Focus.PracticeHint'}}" {{#if locked}}disabled{{/if}}>
+                </div>
             </div>
 
             <section class="wod5e-mage-focus-instruments">
@@ -31,12 +41,20 @@
                     <label class="header-label">{{localize "WOD5E_MAGE.Focus.Instruments"}}</label>
                 </header>
 
+                {{!-- Ogni Strumento si scrive a due livelli (05_071): prima la
+                     famiglia, in tendina alfabetica, poi il tuo di preciso. --}}
                 <div class="wod5e-mage-focus-instrument-list">
                     {{#each focus.instruments as |instrument|}}
                         <div class="wod5e-mage-focus-instrument">
                             <span class="resource-value" data-value="{{#if instrument.selected}}1{{else}}0{{/if}}">
                                 <span class="resource-value-step" data-action="focusInstrumentToggle" data-slot="{{instrument.id}}" data-selected="{{instrument.selected}}" data-index="1" role="checkbox" aria-checked="{{instrument.selected}}" tabindex="0"></span>
                             </span>
+                            <select name="flags.wod5e-mage.focus.instruments.{{instrument.id}}.kind" aria-label="{{localize 'WOD5E_MAGE.Focus.Family'}}" {{#if ../locked}}disabled{{/if}}>
+                                <option value="">{{localize "WOD5E_MAGE.Focus.FamilyNone"}}</option>
+                                {{#each instrument.families as |family|}}
+                                    <option value="{{family.id}}" {{#if family.selected}}selected{{/if}}>{{family.label}}</option>
+                                {{/each}}
+                            </select>
                             <input type="text" name="flags.wod5e-mage.focus.instruments.{{instrument.id}}.name" value="{{instrument.name}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Instrument'}}" {{#if ../locked}}disabled{{/if}}>
                         </div>
                     {{/each}}
@@ -55,13 +73,10 @@
             </header>
 
             {{#each focus.spheres as |sphere|}}
-                <article class="wod5e-mage-focus-sphere">
+                <article class="wod5e-mage-focus-sphere">{{!-- solo le Sfere sbloccate --}}
                     <h3>
                         <span>{{localize "WOD5E_MAGE.Focus.WhatIs"}}</span>
                         <strong>{{localize sphere.label}}</strong>
-                        {{#if sphere.levelLabel}}
-                            <span>(<em>{{localize sphere.levelLabel}}</em>)</span>
-                        {{/if}}
                     </h3>
                     <div class="resource">
                         <prose-mirror name="flags.wod5e-mage.focus.sphereNotes.{{sphere.id}}" value="{{sphere.notes}}" toggled="true" compact="true">
@@ -69,6 +84,8 @@
                         </prose-mirror>
                     </div>
                 </article>
+            {{else}}
+                <p class="wod5e-mage-focus-spheres-empty">{{localize "WOD5E_MAGE.Focus.SpheresEmpty"}}</p>
             {{/each}}
         </section>
     </div>

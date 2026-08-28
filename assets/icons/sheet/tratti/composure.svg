@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="36.1 25.6 129.8 129.8" width="200" height="200">
+<title>Autocontrollo</title>
+<g stroke="#d9a827" fill="none" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+<path d="M49.3,97.5 A54,54 0 0 1 150.7,97.5"/>
+</g>
+<g stroke="#d9a827" fill="none" stroke-width="8" stroke-linecap="round">
+<path d="M60.5,101.6 L49.3,97.5"/>
+<path d="M75.9,81.6 L69.0,71.8"/>
+<path d="M100.0,74.0 L100.0,62.0"/>
+<path d="M124.1,81.6 L131.0,71.8"/>
+</g>
+<g stroke="#d9a827" fill="none" stroke-width="14" stroke-linecap="round">
+<path d="M135.7,103.0 L152.6,96.8"/>
+<path d="M100.0,116.0 L123.4,86.1"/>
+</g>
+<circle cx="100" cy="116" r="10" fill="#d9a827"/>
+</svg>

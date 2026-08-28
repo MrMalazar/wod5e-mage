@@ -5,24 +5,29 @@
             <p>{{localize "WOD5E_MAGE.ConceptChallenge.Hint"}}</p>
         </header>
 
+        {{!-- Ogni gruppo è una tendina richiudibile, e dentro le domande
+             corrono su due colonne: si comprime quello che non serve ora. --}}
         {{#each conceptChallenge as |group|}}
-            <section class="wod5e-mage-concept-group">
-                <header class="resource-header">
-                    <label class="header-label">{{localize group.label}}</label>
-                </header>
+            <details class="wod5e-mage-concept-group" open>
+                <summary>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    <span>{{localize group.label}}</span>
+                </summary>
 
-                {{#each group.fields as |field|}}
-                    <div class="wod5e-mage-concept-field">
-                        <strong>{{localize field.label}}</strong>
-                        <small>{{localize field.prompt}}</small>
-                        <div class="resource">
-                            <prose-mirror name="flags.wod5e-mage.conceptChallenge.{{field.id}}" value="{{field.value}}" toggled="true" compact="true">
-                                {{{field.enrichedValue}}}
-                            </prose-mirror>
+                <div class="wod5e-mage-concept-fields">
+                    {{#each group.fields as |field|}}
+                        <div class="wod5e-mage-concept-field">
+                            <strong>{{localize field.label}}</strong>
+                            <small>{{localize field.prompt}}</small>
+                            <div class="resource">
+                                <prose-mirror name="flags.wod5e-mage.conceptChallenge.{{field.id}}" value="{{field.value}}" toggled="true" compact="true">
+                                    {{{field.enrichedValue}}}
+                                </prose-mirror>
+                            </div>
                         </div>
-                    </div>
-                {{/each}}
-            </section>
+                    {{/each}}
+                </div>
+            </details>
         {{/each}}
     </div>
 </section>

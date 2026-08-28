@@ -6,9 +6,26 @@ import { MODULE_ID } from "../constants.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
 import { prepareConceptChallenge } from "../concept-challenge.js";
-import { onExperienceOpen } from "../experience-window.js";
+import {
+  BELONGING_TABLES,
+  onBelongingAdd,
+  onBelongingDelete,
+  prepareBelongings
+} from "../dotazione-extra.js";
+import {
+  bindExperienceCalculator,
+  onExperienceLogAdd,
+  onExperienceLogDelete,
+  prepareExperiencePage
+} from "../experience-window.js";
 import { onFocusInstrumentToggle, prepareFocus } from "../focus.js";
 import { getLineage } from "../lineage.js";
+import {
+  onPersonaggioRowAdd,
+  onPersonaggioRowDelete,
+  prepareAnchors,
+  prepareConvictions
+} from "../personaggio-extra.js";
 import { onMageRoll } from "../mage-roll-selection.js";
 import {
   getPersistentMagickResources,
@@ -22,6 +39,8 @@ import {
 } from "../ongoing-magick.js";
 import { prepareAffinityGift, prepareScopeTable } from "../scopes.js";
 import { onSphereSelectionChange, prepareSpheres } from "../spheres.js";
+import { prepareCreationSummary } from "../riepilogo.js";
+import { applyTraitIcons } from "../tratti-icone.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 
 const MODULE = "modules/wod5e-mage/templates/actor";
@@ -64,13 +83,18 @@ export class MageActorSheet extends MortalActorSheet {
       affinitySphereOpen: onAffinitySphereOpen,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
+      belongingAdd: onBelongingAdd,
+      belongingDelete: onBelongingDelete,
       bonusAdd: onBonusAdd,
       bonusDelete: onBonusDelete,
       focusInstrumentToggle: onFocusInstrumentToggle,
       magickBalanceChange: onMagickBalanceChange,
+      experienceLogAdd: onExperienceLogAdd,
+      experienceLogDelete: onExperienceLogDelete,
       ongoingMagickAdd: onOngoingMagickAdd,
       ongoingMagickDelete: onOngoingMagickDelete,
-      openExperience: onExperienceOpen,
+      personaggioRowAdd: onPersonaggioRowAdd,
+      personaggioRowDelete: onPersonaggioRowDelete,
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
       wisdomResourceChange: onWisdomResourceChange,
@@ -94,7 +118,6 @@ export class MageActorSheet extends MortalActorSheet {
       template: `${MODULE}/parts/tratti.hbs`,
       templates: [
         `${MODULE}/parts/ruota.hbs`,
-        `${MODULE}/parts/scopes.hbs`,
         `${MODULE}/parts/bonuses.hbs`
       ]
     },
@@ -107,14 +130,7 @@ export class MageActorSheet extends MortalActorSheet {
       templates: [`${MODULE}/parts/wisdom.hbs`]
     },
     conceptChallenge: { template: `${MODULE}/parts/concept-challenge.hbs` },
-    personaggio: {
-      template: `${MODULE}/parts/personaggio.hbs`,
-      templates: [
-        `${SYSTEM}/core-details.hbs`,
-        `${SYSTEM}/chronicle-tenets.hbs`,
-        `${SYSTEM}/touchstones-convictions.hbs`
-      ]
-    },
+    personaggio: { template: `${MODULE}/parts/personaggio.hbs` },
     dotazione: {
       template: `${MODULE}/parts/dotazione.hbs`,
       templates: [
@@ -123,6 +139,7 @@ export class MageActorSheet extends MortalActorSheet {
       ]
     },
     note: { template: `${MODULE}/parts/note.hbs` },
+    esperienza: { template: `${MODULE}/parts/esperienza.hbs` },
     ...remainingParts
   };
 
@@ -150,12 +167,6 @@ export class MageActorSheet extends MortalActorSheet {
         title: "WOD5E_MAGE.Tabs.Focus",
         icon: icon("bullseye")
       },
-      conceptChallenge: {
-        id: "conceptChallenge",
-        group: "primary",
-        title: "WOD5E_MAGE.Tabs.ConceptChallenge",
-        icon: icon("pen-to-square")
-      },
       dotazione: {
         id: "dotazione",
         group: "primary",
@@ -168,11 +179,24 @@ export class MageActorSheet extends MortalActorSheet {
         title: "WOD5E_MAGE.Tabs.Character",
         icon: icon("gem")
       },
+      // La Sfida del Concetto vive sotto il Personaggio.
+      conceptChallenge: {
+        id: "conceptChallenge",
+        group: "primary",
+        title: "WOD5E_MAGE.Tabs.ConceptChallenge",
+        icon: icon("pen-to-square")
+      },
       note: {
         id: "note",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Notes",
         icon: icon("note-sticky")
+      },
+      esperienza: {
+        id: "esperienza",
+        group: "primary",
+        title: "WOD5E.Tabs.Experience",
+        icon: icon("file-contract")
       }
     };
   }
@@ -188,6 +212,12 @@ export class MageActorSheet extends MortalActorSheet {
     });
 
     return controls;
+  }
+
+  /** Dopo ogni render la pagina Esperienza ricabla il suo calcolatore. */
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    bindExperienceCalculator(this.element);
   }
 
   get title() {
@@ -212,19 +242,20 @@ export class MageActorSheet extends MortalActorSheet {
     // one alphabetical file over three columns. The page also hosts the
     // Wheel widget, so it needs that context too.
     if (partId === "stats") {
-      context.sortedSkills = prepareEssentialSkills(context.sortedSkills, {
+      // Ogni voce porta il suo sigillo, a sinistra del nome.
+      context.sortedSkills = applyTraitIcons(prepareEssentialSkills(context.sortedSkills, {
         localize: game.i18n.localize.bind(game.i18n),
         lang: game.i18n.lang
-      });
+      }));
+      context.sortedAttributes = applyTraitIcons(context.sortedAttributes);
       context.arete = getArete(actor);
       context.magickTrack = prepareMagickTrack(actor);
-      // Gli Ambiti sono liberi: qui si mostra solo il Dono della Sfera affine.
-      context.affinityGift = prepareAffinityGift(
-        await prepareAffinitySphere(actor),
-        context.arete.value
-      );
+      // Quintessenza generata e Paradosso permanente vivono nella Ruota.
+      context.persistentMagickResources = getPersistentMagickResources(actor);
       context.bonuses = prepareBonuses(actor);
       context.wheelAsBar = game.settings.get(MODULE_ID, "headerWheelMode") === "bar";
+      // Il memo di creazione, in fondo alla pagina: conta e verifica.
+      context.creationSummary = prepareCreationSummary(actor);
     }
 
     // The header only needs the allegiance line under the name.
@@ -237,8 +268,10 @@ export class MageActorSheet extends MortalActorSheet {
       context.affinitySphere = await prepareAffinitySphere(actor);
       context.arete = getArete(actor);
       context.scopeTable = prepareScopeTable({
-        gift: prepareAffinityGift(context.affinitySphere, context.arete.value),
-        localize: game.i18n.localize.bind(game.i18n)
+        gift: prepareAffinityGift(
+          context.affinitySphere,
+          prepareSpheres(actor).all.find((sphere) => sphere.id === context.affinitySphere?.id)?.value
+        )
       });
       context.magickTrack = prepareMagickTrack(actor);
       context.persistentMagickResources = getPersistentMagickResources(actor);
@@ -267,12 +300,36 @@ export class MageActorSheet extends MortalActorSheet {
     if (partId === "personaggio") {
       context = await this.prepareFeaturesContext(context, actor);
       context.lineage = getLineage(actor);
+      // Ancore e Convinzioni a slot liberi, e il «quando si attiva» di
+      // Ambizione e Desiderio.
+      context.anchors = prepareAnchors(actor);
+      context.convictions = prepareConvictions(actor);
+      context.ambitionTrigger = String(actor.getFlag(MODULE_ID, "ambitionTrigger") ?? "");
+      context.desireTrigger = String(actor.getFlag(MODULE_ID, "desireTrigger") ?? "");
       context.tab = context.tabs.personaggio;
     }
 
     if (partId === "dotazione") {
       context = await this.prepareFeaturesContext(context, actor);
       context = await this.prepareEquipmentContext(context, actor);
+      // Le due tavole libere: in comune coi giocatori, e di storia.
+      const belongings = prepareBelongings(actor);
+      context.belongingTables = [
+        {
+          flag: BELONGING_TABLES.shared,
+          label: "WOD5E_MAGE.Belongings.SharedLabel",
+          hint: "WOD5E_MAGE.Belongings.SharedHint",
+          empty: "WOD5E_MAGE.Belongings.SharedEmpty",
+          rows: belongings.shared
+        },
+        {
+          flag: BELONGING_TABLES.story,
+          label: "WOD5E_MAGE.Belongings.StoryLabel",
+          hint: "WOD5E_MAGE.Belongings.StoryHint",
+          empty: "WOD5E_MAGE.Belongings.StoryEmpty",
+          rows: belongings.story
+        }
+      ];
       context.tab = context.tabs.dotazione;
     }
 
@@ -280,6 +337,12 @@ export class MageActorSheet extends MortalActorSheet {
       context = await this.prepareBiographyContext(context, actor);
       context = await this.prepareNotepadContext(context, actor);
       context.tab = context.tabs.note;
+    }
+
+    // L'Esperienza vive in scheda: totali, registro delle spese, calcolatore.
+    if (partId === "esperienza") {
+      context.experience = prepareExperiencePage(actor);
+      context.tab = context.tabs.esperienza;
     }
 
     return context;

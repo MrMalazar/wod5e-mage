@@ -203,7 +203,6 @@
   display: grid;
   gap: 1.5rem;
     grid-template-areas:
-        "resources ."
         "spheres ongoing"
         "affinity affinity"
         "table table";
@@ -368,19 +367,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-node.paradox {
-  background: var(--mage-nero-dado);
+  background: var(--mage-rosso);
   border-color: var(--mage-rosso-vivo);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-title {
-  bottom: 12px;
-  color: var(--mage-oro);
-  font-family: "Modesto Condensed", serif;
-  font-size: 1.65rem;
-  font-weight: 700;
-  left: 50%;
-  position: absolute;
-  transform: translateX(-50%);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-controls {
@@ -431,29 +419,29 @@
   text-align: center;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resources {
-  display: grid;
-  gap: 1rem;
-  grid-area: resources;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 0 auto;
-  max-width: 400px;
-  width: 100%;
+/* Quintessenza generata e Paradosso permanente: due righe a destra di
+   Areté, etichetta a sinistra e casella a destra. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete-extras {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-left: auto;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resource {
+  align-items: center;
   color: var(--mage-oro);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-size: 0.78rem;
   font-weight: 700;
-  gap: 0.3rem;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  text-align: right;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resource.permanent-paradox {
-  align-items: flex-end;
   color: var(--mage-rosso-chiaro);
-  text-align: right;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-persistent-resource > input {
@@ -591,54 +579,9 @@
   text-align: center;
 }
 
-/* Ambiti: niente più esagono coi contatori. Un riquadro solo, che dice
-   dove il Dono della Sfera affine regala successi automatici. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scopes {
-  margin: 0;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-header {
+  margin-bottom: 0.35rem;
   width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift {
-  align-items: center;
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 4px;
-  display: grid;
-  gap: 0.6rem;
-  grid-template-columns: 40px minmax(0, 1fr);
-  margin-top: 0.5rem;
-  padding: 0.5rem 0.65rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift > img {
-  border: 0;
-  height: 40px;
-  object-fit: contain;
-  width: 40px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  line-height: 1.25;
-  min-width: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift-text > strong {
-  color: var(--mage-oro);
-  font-family: "Modesto Condensed", serif;
-  font-size: 1.15rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift-successes {
-  font-size: 0.9em;
-  opacity: 0.85;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-gift-empty {
-  margin: 0.5rem 0 0;
-  opacity: 0.8;
 }
 
 /* Il listino dei Successi Extra: una tavola larga, che scorre in orizzontale
@@ -656,7 +599,7 @@
   border-collapse: collapse;
   font-size: 0.85rem;
   margin: 0;
-  min-width: 720px;
+  min-width: 620px;
   width: 100%;
 }
 
@@ -668,14 +611,14 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table thead th {
-  background: var(--mage-incavo);
+  background: transparent;
   color: var(--mage-oro);
   font-family: "Modesto Condensed", serif;
   font-size: 1rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th {
-  background: var(--mage-incavo);
+  background: transparent;
   color: var(--mage-oro);
   font-weight: 700;
   text-align: left;
@@ -687,15 +630,24 @@
   margin-left: 0.25rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-spheres {
-  font-style: italic;
-  opacity: 0.85;
-  text-align: left;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tr.gift :is(th, td) {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table td.gift {
   background: color-mix(in srgb, var(--mage-oro) 18%, transparent);
   border-color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tempo-cell {
+  align-items: center;
+  display: inline-flex;
+  gap: 4px;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tempo-icon {
+  border: 0;
+  display: block;
+  height: 15px;
+  width: 15px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere {
@@ -798,7 +750,7 @@
   border: 1px solid var(--mortal-color-2);
   border-radius: 12px;
   margin: 0 auto;
-  max-width: 850px;
+  max-width: 1050px;
   padding: 1.25rem;
 }
 
@@ -828,18 +780,46 @@
   margin-top: 1.5rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-group > .resource-header {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-group > summary {
+  align-items: center;
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
   color: var(--mage-oro);
+  cursor: pointer;
+  display: flex;
   font-size: 0.85rem;
   font-weight: 700;
+  gap: 0.5rem;
+  list-style: none;
   margin: 0 0 0.9rem;
-  text-align: left;
+  padding-bottom: 0.35rem;
   text-transform: uppercase;
-  width: 100%;
+  user-select: none;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-group > .resource-header .header-label {
-  color: var(--mage-oro);
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-group > summary > i {
+  font-size: 0.7rem;
+  transition: transform 0.15s ease;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-group:not([open]) > summary > i {
+  transform: rotate(-90deg);
+}
+
+/* Due colonne di domande; sotto la soglia stretta tornano in fila unica. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-fields {
+  column-gap: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (width <= 900px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field {
@@ -854,10 +834,10 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > small {
-  color: var(--mage-tenue);
-  font-size: 0.72rem;
-  margin: 0.1rem 0 0.3rem;
-  opacity: 0.75;
+  color: var(--mage-testo);
+  font-size: 0.8rem;
+  margin: 0.1rem 0 0.35rem;
+  opacity: 1;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > .resource {
@@ -867,7 +847,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror {
-  min-height: 10rem;
+  min-height: 7rem;
   overflow: auto;
   resize: vertical;
 }
@@ -949,7 +929,13 @@
   align-items: center;
   display: grid;
   gap: 0.5rem;
-  grid-template-columns: 18px minmax(0, 1fr);
+  grid-template-columns: 18px minmax(96px, 0.45fr) minmax(0, 1fr);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > select {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument .resource-value {
@@ -1209,12 +1195,275 @@
   max-width: calc(100vw - 2rem);
 }
 
+/* Le due finestre del tiro vestono i colori della scheda. */
+.application.wod5e-mage.wod5e-mage-roll-dialog .window-content {
+  background: #1d1c19;
+  color: var(--mage-testo);
+}
+
+.application.wod5e-mage.wod5e-mage-roll-dialog .window-header {
+  background: var(--mortal-color-1);
+}
+
+.application.wod5e-mage.wod5e-mage-roll-dialog hr {
+  border-color: var(--mage-oro-scuro);
+}
+
+.application.wod5e-mage.wod5e-mage-roll-dialog .wod5e-mage-arete-row-label,
+.application.wod5e-mage.wod5e-mage-roll-dialog .selector-title,
+.application.wod5e-mage.wod5e-mage-roll-dialog .dice-group-header label {
+  color: var(--mage-oro);
+}
+
+/* Le Sfere combinabili: casella, nome, livello; la più alta fa la difficoltà. */
+.wod5e-mage-arete-spheres {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* Sfere Effetto e Ambiti: due cose distinte, due colonne affiancate. */
+.wod5e-mage-arete-columns {
+  display: grid;
+  gap: 0.5rem 1.6rem;
+  grid-template-columns: minmax(150px, 1fr) minmax(0, 1fr);
+}
+
+.wod5e-mage-arete-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Il livello della Sfera parla a pallini, come sulla scheda. */
+.wod5e-mage-arete-sphere-dots {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.wod5e-mage-arete-sphere-dot {
+  background: transparent;
+  border: 1px solid var(--mage-oro);
+  border-radius: 50%;
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+}
+
+.wod5e-mage-arete-sphere-dot.active {
+  background: var(--mage-oro);
+}
+
+/* La testata degli Ambiti: il + aggiunge righe, Lvl intesta la colonnina. */
+.wod5e-mage-arete-scope-head {
+  align-items: center;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: minmax(0, 1fr) 54px;
+}
+
+.wod5e-mage-arete-scope-head .wod5e-mage-arete-row-label {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.45rem;
+}
+
+.wod5e-mage-arete-scope-add {
+  align-items: center;
+  background: none;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  font-size: 0.65rem;
+  height: 18px;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  width: 18px;
+}
+
+.wod5e-mage-arete-scope-add:hover {
+  border-color: var(--mage-oro);
+  box-shadow: 0 0 5px var(--mage-oro);
+}
+
+.wod5e-mage-arete-scope-lvl-label {
+  color: var(--mage-oro);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.wod5e-mage-arete-scope-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Una riga per Ambito: tendina + Lvl (si somma alla difficoltà). */
+.wod5e-mage-arete-scope-row {
+  align-items: center;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: minmax(0, 1fr) 54px;
+}
+
+.wod5e-mage-arete-scope-row > select {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.wod5e-mage-arete-scope-ns {
+  margin: 0;
+  min-width: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.wod5e-mage-arete-sphere {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 0.45rem;
+  min-height: 26px; /* le righe tengono il passo delle tendine accanto */
+}
+
+.wod5e-mage-arete-sphere input[type="checkbox"] {
+  cursor: pointer;
+  flex: none;
+  margin: 0;
+}
+
+.wod5e-mage-arete-sphere > span {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.wod5e-mage-arete-sphere > b {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage-arete-difficulty {
+  font-size: 0.8rem;
+  margin: 0.2rem 0 0;
+}
+
+.wod5e-mage-arete-difficulty > strong {
+  color: var(--mage-oro);
+  font-size: 1rem;
+}
+
+/* Il dialogo del tiro: una riga per voce, etichetta a sinistra. */
+.wod5e-mage-arete-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 380px;
+}
+
+.wod5e-mage-arete-form hr {
+  margin: 0.2rem 0;
+  opacity: 0.4;
+  width: 100%;
+}
+
+.wod5e-mage-arete-row {
+  align-items: center;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 170px minmax(0, 1fr);
+}
+
+/* Un po' d'aria fra Areté e i due tratti della riserva. */
+.wod5e-mage-arete-row + .wod5e-mage-arete-row {
+  margin-top: 0.35rem;
+}
+
+.wod5e-mage-arete-row > select {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.wod5e-mage-arete-row-label {
+  font-weight: 700;
+  text-align: left;
+}
+
+.wod5e-mage-arete-types {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+/* Caselle a sinistra, spiegazioni in corsivo in una colonna staccata a destra. */
+.wod5e-mage-arete-type-grid {
+  align-items: baseline;
+  display: grid;
+  gap: 0.45rem 2.2rem;
+  grid-template-columns: max-content minmax(0, 1fr);
+}
+
+.wod5e-mage-arete-type {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+.wod5e-mage-arete-type > span {
+  font-weight: 700;
+}
+
+.wod5e-mage-arete-type-grid > em {
+  color: rgb(216 208 192 / 70%);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.wod5e-mage-arete-types input[type="checkbox"] {
+  cursor: pointer;
+  margin: 0;
+}
+
+.wod5e-mage-arete-maintained {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.wod5e-mage-arete-maintained-toggle {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 700;
+  gap: 0.4rem;
+}
+
+.wod5e-mage-arete-maintained-toggle input[type="checkbox"] {
+  cursor: pointer;
+  margin: 0;
+}
+
+.wod5e-mage-arete-maintained > input.hidden {
+  display: none;
+}
+
 .wod5e-mage-arete-toggle {
   align-items: center;
   cursor: pointer;
   display: inline-flex;
   gap: 0.5rem;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
 }
 
@@ -1243,15 +1492,14 @@
 
 .wod5e-mage-magick-type-hint {
   font-size: 0.75rem;
-  margin: 0.85rem 0 0;
+  margin: 0;
   opacity: 0.75;
-  text-align: center;
+  text-align: left;
 }
 
 @media (width <= 900px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-layout {
         grid-template-areas:
-            "resources"
             "spheres"
             "ongoing"
             "affinity"
@@ -1289,12 +1537,14 @@
   display: none;
 }
 
-/* Aria fra le voci: ogni Abilità respira mezza riga. */
-.wod5e-mage.wod5e.actor.sheet .stats-container.skills .skill {
+/* Aria fra le voci: ogni Abilità e ogni Attributo respirano mezza riga. */
+.wod5e-mage.wod5e.actor.sheet .stats-container.skills .skill,
+.wod5e-mage.wod5e.actor.sheet .stats-container.attributes .attribute {
   margin-bottom: 0.45rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .stats-container.skills .skill:last-child {
+.wod5e-mage.wod5e.actor.sheet .stats-container.skills .skill:last-child,
+.wod5e-mage.wod5e.actor.sheet .stats-container.attributes .attribute:last-child {
   margin-bottom: 0;
 }
 
@@ -1369,10 +1619,427 @@
 
 /* Le pagine ricomposte */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-layout,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-layout,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-top,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-bottom {
   gap: 10px;
+  width: 100%;
+}
+
+/* Background, Vantaggi e Difetti: il nome a sinistra, i pallini sulla
+   stessa riga a destra, e un filo d'aria fra le voci. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .features-list .collapsible-container {
+  align-items: center;
+  column-gap: 0.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  margin-bottom: 0.35rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .features-list .collapsible-container > .item {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .features-list .collapsible-container > .flexrow:not(.item) {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .features-list .collapsible-container > .collapsible-content {
+  grid-column: 1 / -1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .features-list .item .item-name {
+  font-size: 0.95rem;
+}
+
+/* Il titolo della categoria respira: qualche pixel prima della prima voce. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .features-list .feature,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .equipment-list .equipment {
+  margin-bottom: 0.5rem;
+}
+
+/* Dotazione: due colonne (roba del personaggio | inventario), poi le tavole
+   dell'IN COMUNE e DI STORIA a tutta larghezza, e le note in fondo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-areas:
+    "features equipment"
+    "belongings belongings"
+    "notes notes";
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 0.75rem;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-layout > .features-list {
+  grid-area: features;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-layout > .equipment-list {
+  grid-area: equipment;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belongings {
+  border-top: 1px solid rgb(152 119 43 / 45%);
+  display: grid;
+  gap: 1.25rem;
+  grid-area: belongings;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-top: 0.9rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-notes {
+  grid-area: notes;
+}
+
+@media (width <= 900px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-layout,
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-belongings {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-layout {
+    grid-template-areas:
+      "features"
+      "equipment"
+      "belongings"
+      "notes";
+  }
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-table > .resource-header {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-table > .resource-header small {
+  color: var(--mage-tenue);
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 400;
+  text-transform: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-add {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 24px;
+  height: 24px;
+  justify-content: center;
+  margin: 0;
+  min-height: 24px;
+  padding: 0;
+  width: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-grid {
+  align-items: center;
+  display: grid;
+  gap: 0.3rem 0.4rem;
+  grid-template-columns: minmax(90px, 0.55fr) minmax(0, 1fr) max-content 26px;
+  margin-top: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-dots {
+  align-items: center;
+  align-self: center;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  margin: 0 0 0 16px;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-dots > :is(.resource-value-step, .resource-value-empty) {
+  flex: 0 0 14px;
+  min-width: 14px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-grid > span {
+  color: var(--mage-oro);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-grid > input {
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
+  min-width: 0;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-grid > select {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-grid > button {
+  align-items: center;
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  margin: 0;
+  min-height: 26px;
+  padding: 0;
+  width: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-empty {
+  font-size: 0.85em;
+  margin: 0.5rem 0 0;
+  opacity: 0.8;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-content {
+  margin: 0.75rem auto 0;
+  width: calc(100% - 1.5rem);
+}
+
+/* Personaggio nella gabbia a tendine: identità su due colonne, poi le
+   tavole di Ancore e Convinzioni con la riga del + accanto al suggerimento. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-grid {
+  display: grid;
+  gap: 0.75rem 1.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 0.9rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-field > span {
+  color: var(--mage-oro-chiaro);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-field > input,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-field > textarea,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-anchor-grid > input,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-grid > input {
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
+  min-width: 0;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-field > textarea {
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.4rem;
+  resize: vertical;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-row-head {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-row-hint {
+  color: var(--mage-tenue);
+  font-size: 0.75rem;
+  margin: 0;
+  opacity: 0.85;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-row-add {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 24px;
+  height: 24px;
+  justify-content: center;
+  margin: 0;
+  min-height: 24px;
+  padding: 0;
+  width: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-anchor-grid,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-grid {
+  align-items: start;
+  display: grid;
+  gap: 0.3rem 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-mini-textarea {
+  --input-text-color: var(--mage-inchiostro);
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-inchiostro);
+  font-size: 0.85rem;
+  min-width: 0;
+  padding: 0.3rem 0.4rem;
+  resize: vertical;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-anchor-grid {
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr) 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-grid {
+  grid-template-columns: minmax(110px, 0.4fr) minmax(0, 1.6fr) 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-anchor-grid, .wod5e-mage-conviction-grid) > span {
+  color: var(--mage-oro);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-grid > select {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-anchor-grid, .wod5e-mage-conviction-grid) > button {
+  align-items: center;
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  margin: 0;
+  min-height: 26px;
+  padding: 0;
+  width: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-row-empty {
+  font-size: 0.85em;
+  margin: 0.5rem 0 1rem;
+  opacity: 0.8;
+}
+
+/* Il memo di creazione: una barra richiudibile in fondo ai Tratti. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo {
+  border-top: 1px solid rgb(152 119 43 / 45%);
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo > summary {
+  align-items: center;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.8rem;
+  font-weight: 700;
+  gap: 0.5rem;
+  letter-spacing: 0.05em;
+  list-style: none;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo > summary > i {
+  font-size: 0.7rem;
+  transition: transform 0.15s ease;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo:not([open]) > summary > i {
+  transform: rotate(-90deg);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-grid {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  margin-top: 0.6rem;
+}
+
+@container (max-width: 720px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-chip {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.4rem 0.3rem;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-chip > strong {
+  color: var(--mage-oro);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-chip > span {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  margin-top: 0.6rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-check {
+  align-items: center;
+  color: var(--mage-rosso-chiaro);
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: 700;
+  gap: 0.35rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-check.ok {
+  color: var(--mage-oro);
+}
+
+/* La Pratica in due campi: la Forma in tendina, poi il nome. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-practice-row {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: minmax(110px, 0.45fr) minmax(0, 1fr);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-practice-row > select {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-practice-row > input {
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
+  min-width: 0;
   width: 100%;
 }
 
@@ -1413,30 +2080,19 @@
   max-width: none;
 }
 
+/* La Ruota occupa tutta la colonna delle Abilità: stessa larghezza. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arcana-cell {
-  align-items: flex-start;
   display: flex;
-  gap: 0.5rem;
   grid-area: arcana;
-  justify-self: start;
   margin-top: 0.25rem;
   min-width: 0;
+  width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arcana-cell > .wod5e-mage-ruota-cell {
-  flex: 0 0 auto;
-  min-width: max-content;
-}
-
-/* A destra della Ruota, in colonna: l'Ambito del Dono e i Bonus. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-arcana-cell > .wod5e-mage-arcana-side {
-  display: flex;
-  flex: 1 1 260px;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin: 0;
-  max-width: 380px;
-  min-width: 220px;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
 }
 
 /* Bonus: la stessa griglia del diario delle magie in corso, a tre colonne. */
@@ -1461,8 +2117,14 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses-grid {
   display: grid;
   gap: 0.3rem 0.4rem;
-  grid-template-columns: 52px minmax(0, 0.8fr) minmax(0, 1.2fr) 26px;
+  grid-template-columns: 46px minmax(90px, 0.55fr) minmax(0, 1.2fr) 26px;
   margin-top: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses-grid > select {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-bonuses-grid > span {
@@ -1540,7 +2202,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-@container (max-width: 600px) {
+@container (max-width: 720px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .skills-attributes > .stats-container > .stats-content {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1559,8 +2221,17 @@
   align-items: center;
   column-gap: 6px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) max-content;
+  grid-template-columns: 20px minmax(0, 1fr) max-content;
   white-space: nowrap;
+}
+
+/* Il sigillo di casa, in oro, a sinistra del nome. Ogni SVG ha la cornice
+   ritagliata sul suo disegno, così la stessa casella li rende leggibili. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-trait-icon {
+  border: 0;
+  height: 20px;
+  object-fit: contain;
+  width: 20px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list > :is(.attribute, .skill) > .resource-value {
@@ -1581,6 +2252,23 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list > :is(.attribute, .skill) > .resource-value > :is(.resource-value-step, .resource-value-empty) {
   flex: 0 0 14px;
   min-width: 14px;
+}
+
+/* La matita di modifica vive nel contatore, a sinistra della X. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list > .skill > .resource-value > .edit-skill {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  margin-right: 2px;
+  opacity: 0.75;
+}
+
+/* Lo zero sta nel suo posto, mai sopra il nome (il sistema lo tira a
+   sinistra di 16px: qui la riga è una griglia e si sovrapporrebbe). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list > :is(.attribute, .skill) > .resource-value > .resource-value-empty {
+  margin-left: 0;
+  margin-right: 2px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list > :is(.attribute, .skill) > .resource-label,
@@ -1604,7 +2292,9 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota {
   display: flex;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
 }
 
 /* Nessuna altezza minima: Foundry può richiudere la scheda col doppio clic.
@@ -1619,7 +2309,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-wheel-inner {
-  min-width: max-content;
+  box-sizing: border-box;
+  width: 100%;
   position: relative;
   align-items: center;
   background: linear-gradient(#2c2413, #211b0f);
@@ -1631,36 +2322,58 @@
   padding: 6px 10px 8px;
 }
 
-/* Arco compatto: stessa geometria della linguetta Magick, metà scala. */
+/* L'arco in grande: la Ruota ora ha tutta la colonna per respirare. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-compact {
   flex-shrink: 0;
-  height: 74px;
-  margin: 0;
-  width: 196px;
+  height: 176px;
+  margin: 0.25rem 0 30px;
+  width: 370px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-compact .wod5e-mage-magick-node {
-  height: 13px;
-  width: 13px;
+  height: 18px;
+  width: 18px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-compact .wod5e-mage-magick-title {
-  bottom: 0;
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-counters {
+/* Le due parole agli estremi: Quintessenza sotto il primo nodo a sinistra,
+   Paradosso sotto l'ultimo a destra. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-end {
+  align-items: center;
   display: flex;
-  gap: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  gap: 8px;
+  letter-spacing: 0.05em;
+  position: absolute;
+  text-transform: uppercase;
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
-/* La regola della linguetta Magick impila i contatori in colonna:
-   in testata tornano in riga, piccoli — «− Q 3 +». */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-counters .wod5e-mage-magick-resource {
-  flex-direction: row;
-  font-size: 0.72rem;
-  gap: 4px;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-end > button {
+  align-items: center;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  display: inline-flex;
+  flex: 0 0 18px;
+  font-size: 0.6rem;
+  height: 18px;
+  justify-content: center;
+  margin: 0;
+  min-height: 18px;
+  padding: 0;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-end.quintessence {
+  color: var(--mage-oro);
+  left: 12.5%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-end.paradox {
+  color: var(--mage-rosso-chiaro);
+  left: 87.5%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-resource {
@@ -1697,24 +2410,53 @@
 /* La parola «Areté» compare una volta sola, qui. Il pulsante dice «Tira». */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-arete {
   align-items: center;
-  border-top: 1px solid rgb(152 119 43 / 45%);
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
   display: flex;
   gap: 7px;
-  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-right: 26px; /* aria per il pulsante del modo, in alto a destra */
   width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-arete-label {
+  align-items: center;
   color: var(--mage-oro);
-  font-size: 0.62rem;
+  display: inline-flex;
+  font-family: "Modesto Condensed", serif;
+  font-size: 1.4rem;
   font-weight: 700;
-  letter-spacing: 0.13em;
+  gap: 0.4rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
   text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-arete-label > i {
+  font-size: 1.15rem;
+}
+
+/* I pallini respirano: un po' d'aria fra la parola ARETE' e la fila. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-arete > .wod5e-mage-arete-dots {
+  margin-left: 10px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-arete-value {
   color: #fff;
   font-size: 0.85rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-arete-roll {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-arete-roll:hover {
+  text-shadow: 0 0 6px var(--mage-oro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-roll {
@@ -1731,11 +2473,34 @@
   width: auto;
 }
 
-/* La Saggezza scesa nel Focus */
+/* La Saggezza scesa nel Focus: un riquadro in cima alla colonna sinistra,
+   non più una barra a tutta pagina. Se la fila è piena, sotto compare
+   l'avviso di Segnato coi suoi quattro effetti. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-wisdom {
-  border-bottom: 1px solid rgb(152 119 43 / 45%);
-  margin: 0 1.25rem;
-  padding-bottom: 0.75rem;
+  background: var(--mage-velluto);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  margin: 0 0 1.5rem;
+  padding: 0.6rem 0.75rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-wisdom .field-section {
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-segnato {
+  border-top: 1px solid rgb(152 119 43 / 45%);
+  color: var(--mage-rosso-chiaro);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  margin: 0.6rem 0 0;
+  padding-top: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-segnato > strong {
+  color: var(--mage-rosso-vivo);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 /* ============================================================
@@ -1811,6 +2576,67 @@
 
 .application.wod5e-mage .wod5e-mage-exp-mut {
   opacity: 0.6;
+}
+
+/* La pagina Esperienza in scheda: stessa gabbia delle altre pagine. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-esperienza-content {
+  margin: 0.75rem auto 0;
+  max-width: 760px;
+  width: calc(100% - 1.5rem);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-totali label input {
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
+  font-size: 1.1rem;
+  margin-top: 0.2rem;
+  text-align: center;
+  width: 80px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-log > .resource-header {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-log-grid {
+  align-items: center;
+  display: grid;
+  gap: 0.3rem 0.4rem;
+  grid-template-columns: 70px minmax(0, 1fr) 26px;
+  margin-top: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-log-grid > span {
+  color: var(--mage-oro);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-log-grid > input {
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
+  min-width: 0;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-log-grid > input[type="number"] {
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-log-grid > button {
+  align-items: center;
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  margin: 0;
+  min-height: 26px;
+  padding: 0;
+  width: 26px;
 }
 
 .application.wod5e-mage .wod5e-mage-exp-calc {
@@ -1892,21 +2718,20 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-wheel-mode {
   align-items: center;
   background: transparent;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  color: var(--mage-oro-scuro);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 5px;
+  color: var(--mage-oro);
   cursor: pointer;
   display: inline-flex;
-  font-size: 0.6rem;
-  height: 16px;
+  font-size: 0.85rem;
+  height: 26px;
   justify-content: center;
-  margin: 0;
-  min-height: 16px;
+  min-height: 26px;
   padding: 0;
   position: absolute;
-  right: 3px;
-  top: 3px;
-  width: 18px;
+  right: 6px;
+  top: 6px;
+  width: 26px;
   z-index: 2;
 }
 
@@ -1918,22 +2743,21 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar {
   align-items: center;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 2px 0 3px;
+  gap: 1rem;
+  justify-content: center;
+  padding: 8px 0;
+  width: 100%;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar-label {
-  color: var(--mage-oro);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+/* Nella barra i comandi non sono assoluti: stanno in fila con le celle. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar .wod5e-mage-magick-end {
+  position: static;
+  transform: none;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-cells {
   display: flex;
-  gap: 3px;
+  gap: 6px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-cell {
@@ -1941,8 +2765,8 @@
   border: 2px solid var(--mage-oro-scuro);
   border-radius: 3px;
   box-sizing: border-box;
-  height: 20px;
-  width: 14px;
+  height: 30px;
+  width: 22px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-cell.quintessence {

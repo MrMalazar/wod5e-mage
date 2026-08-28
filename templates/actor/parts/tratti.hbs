@@ -24,6 +24,7 @@
                         <div class="attributes stats-list">
                             {{#each type as |attribute key|}}
                                 <div class="attribute">
+                                    {{#if attribute.icon}}<img class="wod5e-mage-trait-icon" src="{{attribute.icon}}" alt="">{{/if}}
                                     <label for="actor.system.attributes.{{attribute.id}}.value" class="resource-label rollable" data-action="roll" data-value-paths="attributes.{{attribute.id}}.value" data-select-dialog="true"
                                         data-attribute="{{attribute.id}}">{{attribute.displayName}}</label>
                                     {{#if ../../settings.skillAttributeInputs}}
@@ -56,10 +57,8 @@
                         <div class="skills stats-list">
                             {{#each type as |skill key|}}
                                 <div class="skill">
+                                    {{#if skill.icon}}<img class="wod5e-mage-trait-icon" src="{{skill.icon}}" alt="">{{/if}}
                                     <div class="resource-label">
-                                        <a class="edit-skill" data-action="editSkill" title="Edit skill" data-skill="{{skill.id}}">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
                                         <label for="actor.system.skills.{{skill.id}}.value" class="rollable{{#if skill.bonuses}} specialty-available{{/if}}" data-action="roll" data-value-paths="skills.{{skill.id}}.value"
                                         data-skill="{{skill.id}}" data-select-dialog="true"
                                         data-use-flavor-path="true" data-flavor-path="skills.{{skill.id}}.description" data-macroid="{{skill.macroid}}">{{skill.displayName}}</label>
@@ -77,6 +76,10 @@
                                         {{/if}}
                                     {{else}}
                                         <div class="resource-value" data-value="{{skill.value}}" data-name="system.skills.{{skill.id}}.value">
+                                            {{!-- La matita sta qui, a sinistra della X che azzera. --}}
+                                            <a class="edit-skill" data-action="editSkill" title="Edit skill" data-skill="{{skill.id}}">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
                                             <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
                                             {{#numLoop 5}}
                                                 <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}"></span>
@@ -156,17 +159,43 @@
                     </div>
                 </div>
             </div>
+            {{!-- I Bonus del giocatore, sotto i Tiri personalizzati. --}}
+            <div class="stat-panel-section">
+                {{> "modules/wod5e-mage/templates/actor/parts/bonuses.hbs"}}
+            </div>
         </div>
-        {{!-- Sul layout stretto questo blocco resta a sinistra del pannello
-             Condizioni/Tiri. A destra della Ruota, in colonna: l'Ambito del
-             Dono e i Bonus che il giocatore compila. --}}
+        {{!-- La Ruota a tutta larghezza sotto le Abilità: dentro vivono anche
+             Quintessenza generata e Paradosso permanente. --}}
         <div class="wod5e-mage-arcana-cell">
             <div class="wod5e-mage-ruota-cell">
                 {{> "modules/wod5e-mage/templates/actor/parts/ruota.hbs"}}
-            </div>
-            <div class="wod5e-mage-arcana-side">
-                {{> "modules/wod5e-mage/templates/actor/parts/scopes.hbs"}}
-                {{> "modules/wod5e-mage/templates/actor/parts/bonuses.hbs"}}
+
+                {{!-- Il memo di creazione: conta i pallini e verifica i campi.
+                     Si richiude dal titolo. --}}
+                <details class="wod5e-mage-riepilogo">
+                    <summary>
+                        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                        <span>{{localize "WOD5E_MAGE.Riepilogo.Label"}}</span>
+                    </summary>
+
+                    <div class="wod5e-mage-riepilogo-grid">
+                        {{#each creationSummary.counts as |count|}}
+                            <div class="wod5e-mage-riepilogo-chip">
+                                <strong>{{count.value}}</strong>
+                                <span>{{localize count.label}}</span>
+                            </div>
+                        {{/each}}
+                    </div>
+
+                    <div class="wod5e-mage-riepilogo-checks">
+                        {{#each creationSummary.checks as |check|}}
+                            <span class="wod5e-mage-riepilogo-check {{#if check.ok}}ok{{/if}}">
+                                <i class="fa-solid {{#if check.ok}}fa-circle-check{{else}}fa-circle-xmark{{/if}}" aria-hidden="true"></i>
+                                {{localize check.label}}
+                            </span>
+                        {{/each}}
+                    </div>
+                </details>
             </div>
         </div>
     </div>

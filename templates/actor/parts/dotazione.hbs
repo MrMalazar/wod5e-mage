@@ -1,26 +1,74 @@
-{{!-- Dotazione: Background, Pregi e Difetti accanto all'inventario.
-     Unisce la colonna destra di features con la linguetta equipment. --}}
+{{!-- Dotazione, riorganizzata: in alto Background/Pregi/Difetti del
+     personaggio accanto all'inventario; sotto, a tutta larghezza, le voci
+     IN COMUNE con altri giocatori e quelle DI STORIA (anche temporanee);
+     in fondo le note. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-dotazione" data-tab="{{tab.id}}" data-group="{{tab.group}}">
-    <div class="flexrow wod5e-mage-dotazione-layout">
+    <div class="wod5e-mage-dotazione-layout">
         <div class="features-list item-list">
             {{> "systems/wod5e/display/shared/actors/parts/core-features.hbs"}}
         </div>
 
-        <div class="wod5e-mage-dotazione-right flexcol">
-            <div class="equipment-list item-list">
-                {{> "modules/wod5e-mage/templates/actor/parts/equipment-list.hbs"}}
-            </div>
+        <div class="equipment-list item-list">
+            {{> "modules/wod5e-mage/templates/actor/parts/equipment-list.hbs"}}
+        </div>
 
-            <div class="equipment-notes flexcol">
-                <div class="description-field">
-                    <div class="flex-center">
-                        <label class="resource-label field-header">{{localize "WOD5E.EquipmentList.EquipmentNotes"}}</label>
+        {{!-- Le due tavole libere: tipo, nome, note. --}}
+        <div class="wod5e-mage-belongings">
+            {{#each belongingTables as |table|}}
+                <section class="wod5e-mage-belonging-table">
+                    <header class="resource-header">
+                        <div>
+                            <label class="header-label">{{localize table.label}}</label>
+                            <small>{{localize table.hint}}</small>
+                        </div>
+                        <button type="button" class="wod5e-mage-belonging-add" data-action="belongingAdd" data-table="{{table.flag}}" title="{{localize 'WOD5E_MAGE.Belongings.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Belongings.Add'}}" {{#if ../locked}}disabled{{/if}}>
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </header>
+
+                    {{#if table.rows.length}}
+                    <div class="wod5e-mage-belonging-grid">
+                        <span>{{localize "WOD5E_MAGE.Belongings.Kind"}}</span>
+                        <span>{{localize "WOD5E_MAGE.Belongings.Name"}}</span>
+                        <span>{{localize "WOD5E_MAGE.Belongings.Level"}}</span>
+                        <span aria-hidden="true"></span>
+
+                        {{#each table.rows as |row|}}
+                            <select name="flags.wod5e-mage.{{table.flag}}.{{row.id}}.kind" aria-label="{{localize 'WOD5E_MAGE.Belongings.Kind'}}" {{#if ../../locked}}disabled{{/if}}>
+                                <option value="">{{localize "WOD5E_MAGE.Belongings.KindNone"}}</option>
+                                {{#each row.kinds as |kind|}}
+                                    <option value="{{kind.id}}" {{#if kind.selected}}selected{{/if}}>{{kind.label}}</option>
+                                {{/each}}
+                            </select>
+                            <input type="text" name="flags.wod5e-mage.{{table.flag}}.{{row.id}}.name" value="{{row.name}}" aria-label="{{localize 'WOD5E_MAGE.Belongings.Name'}}" {{#if ../../locked}}disabled{{/if}}>
+                            {{!-- Il livello a pallini, come ogni altro tratto della scheda. --}}
+                            <div class="resource-value wod5e-mage-belonging-dots" data-value="{{row.value}}" data-name="flags.wod5e-mage.{{table.flag}}.{{row.id}}.value">
+                                <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
+                                {{#numLoop 5}}
+                                    <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}"></span>
+                                {{/numLoop}}
+                            </div>
+                            <button type="button" data-action="belongingDelete" data-table="{{table.flag}}" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Belongings.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Belongings.Remove'}}" {{#if ../../locked}}disabled{{/if}}>
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        {{/each}}
                     </div>
-                    <div class="description-content resource">
-                        <prose-mirror name="system.equipment" value="{{equipment}}" toggled="true" compact="true">
-                            {{{enrichedEquipment}}}
-                        </prose-mirror>
-                    </div>
+                    {{else}}
+                        <p class="wod5e-mage-belonging-empty">{{localize table.empty}}</p>
+                    {{/if}}
+                </section>
+            {{/each}}
+        </div>
+
+        <div class="equipment-notes wod5e-mage-dotazione-notes">
+            <div class="description-field">
+                <div class="flex-center">
+                    <label class="resource-label field-header">{{localize "WOD5E.EquipmentList.EquipmentNotes"}}</label>
+                </div>
+                <div class="description-content resource">
+                    <prose-mirror name="system.equipment" value="{{equipment}}" toggled="true" compact="true">
+                        {{{enrichedEquipment}}}
+                    </prose-mirror>
                 </div>
             </div>
         </div>

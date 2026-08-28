@@ -48,7 +48,19 @@
         "willpower": "Willpower",
         "merit": "Merit",
         "background": "Background"
-      }
+      },
+      "Spent": "Spent",
+      "LogLabel": "Spending log",
+      "LogWhat": "What you bought",
+      "LogWhatHint": "e.g. Forces 2 → 3",
+      "LogAdd": "Log a purchase",
+      "LogRemove": "Remove the entry",
+      "LogEmpty": "Nothing logged: + adds an entry, and Spent adds itself up.",
+      "GainsLabel": "Gains",
+      "GainsWhen": "When",
+      "GainsWhenHint": "e.g. Aug 28 session",
+      "GainsAdd": "Log a gain",
+      "GainsEmpty": "No gain logged: + adds a session's experience, and the Total adds itself up."
     },
     "Dice": {
       "MageDice": "Mage Dice",
@@ -68,7 +80,6 @@
       "Roll": "Roll",
       "Include": "Add Arete to the pool",
       "IncludeHint": "Tick to add the Arete value set on the sheet to the pool.",
-      "ParadoxHint": "Vulgar moves the Wheel 1 step toward Paradox, with witnesses 2. The type is a single choice.",
       "Rolling": "Arete + {first} + {second}",
       "RollingNoArete": "{first} + {second}",
       "RollHint": "Roll an Ability with another Ability or an Attribute; Arete is optional",
@@ -77,8 +88,16 @@
       "SelectTrait": "Select a trait",
       "SelectAttribute": "Select an Attribute",
       "SelectSkill": "Select a Skill",
-      "SelectTraitWarning": "Select an Ability and a second trait for the Arete roll.",
-      "MagickType": "Magick type",
+      "SelectTraitWarning": "Select two traits (Abilities or Attributes) for the Arete roll.",
+      "MagickType": "Type",
+      "CoincidentalHint": "It goes unnoticed.",
+      "VulgarHint": "Reality takes notice, +1 Paradox.",
+      "WitnessesHint": "Someone saw you do it, +2 Paradox.",
+      "SelectScope": "Select Scope",
+      "AddScope": "Add a Scope",
+      "ScopeLevel": "Lvl",
+      "ScopeLevelHint": "Lvl: the Scope level, added to the difficulty.",
+      "ScopePlan": "Scopes: {plans}.",
       "IsVulgar": "Is it vulgar?",
       "HasWitnesses": "Vulgar with witnesses?",
       "Coincidental": "Coincidental",
@@ -87,7 +106,12 @@
       "NoType": "No type selected",
       "NoPenaltyHint": "These options do not modify the dice pool yet.",
       "RollFlavor": "Pool: Arete {arete} + {first} {firstValue} + {second} {secondValue}. Type: {magickType}.",
-      "RollFlavorNoArete": "Pool: {first} {firstValue} + {second} {secondValue}. Type: {magickType}."
+      "RollFlavorNoArete": "Pool: {first} {firstValue} + {second} {secondValue}. Type: {magickType}.",
+      "Maintained": "Maintained Effect",
+      "MaintainedName": "Effect name",
+      "Spheres": "Effect Spheres",
+      "BaseDifficulty": "Total difficulty (highest Sphere + Scopes)",
+      "NoSpheres": "No Sphere with dots: unlock Spheres in Magick to combine them here."
     },
     "Focus": {
       "Paradigm": "Paradigm",
@@ -99,7 +123,25 @@
       "SceneQuestion": "What do you use in the scene to perform Magick?",
       "InstrumentCount": "Seven slots, always: mark the ones you own",
       "Spheres": "The Spheres of the Focus",
-      "WhatIs": "What is"
+      "WhatIs": "What is",
+      "Family": "Family",
+      "FamilyNone": "Family…",
+      "Families": {
+        "body": "Body",
+        "machine": "Machine",
+        "object": "Object",
+        "substance": "Substance",
+        "word": "Word",
+        "world": "World"
+      },
+      "SpheresEmpty": "No Sphere unlocked: the ones you activate in Magick appear here, with their notes.",
+      "Form": "Form",
+      "FormNone": "Form…",
+      "Forms": {
+        "magick": "Magick",
+        "tecnomagick": "Technomagick",
+        "ibrida": "Hybrid Magick"
+      }
     },
     "ConceptChallenge": {
       "Label": "The Concept Challenge",
@@ -205,14 +247,9 @@
       "conditions": "Conditions",
       "range": "Range",
       "GiftScope": "Gift Scope",
-      "GiftTrack": "Gift on a track",
-      "GiftSuccesses": "{count} automatic successes, equal to Arete",
-      "NoAffinity": "No Affinity Sphere: pick one on the Magick page to see its Scope.",
-      "Free": "Extra successes go wherever you want: no Sphere unlocks or forbids a Scope.",
-      "TableTitle": "The Extra Successes price list",
+      "TableTitle": "Spending Extra Successes",
       "TableHint": "Every column is independent: successes are allocated Scope by Scope, and each Scope starts from its base value.",
       "TableSuccesses": "Extra successes →",
-      "TableSpheres": "Spheres that favour it",
       "Table": {
         "potency": {
           "1": "+2 damage",
@@ -224,13 +261,13 @@
           "7": "+14 damage"
         },
         "duration": {
-          "1": "1 scene",
-          "2": "2 scenes",
-          "3": "3 scenes",
-          "4": "The session",
-          "5": "2 sessions",
-          "6": "A chapter",
-          "7": "The chronicle"
+          "1": "1",
+          "2": "2",
+          "3": "3",
+          "4": "1",
+          "5": "2",
+          "6": "1",
+          "7": "1"
         },
         "area": {
           "1": "Room",
@@ -242,22 +279,22 @@
           "7": "Planet"
         },
         "targets": {
-          "1": "+1 target",
-          "2": "+2 targets",
-          "3": "+3 targets",
-          "4": "+4 targets",
-          "5": "+5 targets",
-          "6": "+6 targets",
-          "7": "+7 targets"
+          "1": "+1",
+          "2": "+2",
+          "3": "+3",
+          "4": "+4",
+          "5": "+5",
+          "6": "+6",
+          "7": "+7"
         },
         "conditions": {
-          "1": "1 condition",
-          "2": "2 conditions",
-          "3": "3 conditions",
-          "4": "4 conditions",
-          "5": "5 conditions",
-          "6": "6 conditions",
-          "7": "7 (a scroll)"
+          "1": "1",
+          "2": "2",
+          "3": "3",
+          "4": "4",
+          "5": "5",
+          "6": "6",
+          "7": "7"
         },
         "range": {
           "1": "Sight (100 m)",
@@ -277,7 +314,9 @@
       "Empty": "There is no ongoing Magick.",
       "NameSpheres": "Name - Spheres",
       "Status": "Status",
-      "TriggerEffect": "Trigger - Effect"
+      "TriggerEffect": "Trigger - Effect",
+      "MaintainedStatus": "Maintained",
+      "MaintainedAdded": "“{name}” is now among the Ongoing Magicks."
     },
     "Spheres": {
       "Hint": "Select the Spheres to display and assign each a rating from zero to five.",
@@ -316,7 +355,9 @@
     "Wisdom": {
       "Label": "Wisdom",
       "Roll": "Roll Wisdom",
-      "Rolling": "Rolling Wisdom"
+      "Rolling": "Rolling Wisdom",
+      "Segnato": "Marked",
+      "SegnatoEffects": "two fewer dice on mortal rolls, mundane scenes cost, no Consensus mending, your aura shows."
     },
     "MagickBalance": {
       "Magick": "Magick",
@@ -365,10 +406,74 @@
       "Remove": "Remove the Bonus",
       "Value": "No.",
       "Kind": "Type",
-      "KindHint": "Forces Scope",
       "Description": "Description",
-      "DescriptionHint": "when it applies",
-      "Empty": "No Bonus noted: + adds one (e.g. +3 · Forces Scope)."
+      "DescriptionHint": "attribute, roll, effect…",
+      "Empty": "No Bonus noted: + adds one (e.g. +3 · Die · Forces rolls).",
+      "Kinds": {
+        "dice": "Die",
+        "success": "Success",
+        "difficulty": "Difficulty"
+      },
+      "KindNone": "Type…"
+    },
+    "Belongings": {
+      "SharedLabel": "Shared Elements",
+      "SharedHint": "Backgrounds shared with other players",
+      "StoryLabel": "Story Elements",
+      "StoryHint": "Gained in play, possibly temporary",
+      "Kind": "Type",
+      "Kinds": {
+        "background": "Background",
+        "advantage": "Advantage",
+        "flaw": "Flaw"
+      },
+      "KindNone": "Type…",
+      "Name": "Name",
+      "Add": "Add an entry",
+      "Remove": "Remove the entry",
+      "SharedEmpty": "Nothing shared: + adds a shared Background, Advantage or Flaw with its dot rating.",
+      "StoryEmpty": "Nothing from the story: + adds what the chronicle gave (or took), with its dot rating.",
+      "Level": "Level"
+    },
+    "Personaggio": {
+      "IdentityLabel": "Concept and Chronicle",
+      "TriggerHint": "When it triggers",
+      "AnchorsLabel": "Anchors",
+      "AnchorsHint": "Usually three: the people keeping you tied to the world.",
+      "AnchorName": "Name",
+      "AnchorDescription": "Description",
+      "AnchorAdd": "Add an Anchor",
+      "AnchorRemove": "Remove the Anchor",
+      "AnchorsEmpty": "No Anchor noted: + adds one.",
+      "ConvictionsLabel": "Convictions",
+      "ConvictionsHint": "Usually three, each tied to a catalogue group.",
+      "ConvictionGroup": "Group",
+      "ConvictionGroupNone": "Group…",
+      "ConvictionGroups": {
+        "morte": "Death",
+        "verita": "Truth",
+        "lealta": "Loyalty",
+        "liberta": "Freedom",
+        "giustizia": "Justice",
+        "ordine": "Order",
+        "natura": "Nature"
+      },
+      "ConvictionText": "Conviction",
+      "ConvictionAdd": "Add a Conviction",
+      "ConvictionRemove": "Remove the Conviction",
+      "ConvictionsEmpty": "No Conviction noted: + adds one."
+    },
+    "Riepilogo": {
+      "Label": "Creation memo",
+      "Attributes": "Attribute dots",
+      "Skills": "Skill dots",
+      "Backgrounds": "Background dots",
+      "Merits": "Merit dots",
+      "Flaws": "Flaw dots",
+      "Spheres": "Sphere dots",
+      "Concept": "Concept filled",
+      "Anchors": "At least one Anchor",
+      "Convictions": "At least one Conviction"
     }
   }
 }

@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { dressNextRollDialogAsMage, isMageActor } from "./mage-dice.js";
 
 const DEFAULT_WISDOM = Object.freeze({
   max: 5,
@@ -18,7 +19,10 @@ export function getWisdom(actor) {
     Math.max(max - superficial, 0)
   );
 
-  return { max, superficial, aggravated };
+  // La fila piena ha un nome (04_95): da lì scattano i quattro effetti.
+  const segnato = max > 0 && superficial + aggravated >= max;
+
+  return { max, superficial, aggravated, segnato };
 }
 
 export async function onWisdomResourceChange(event, target) {
@@ -61,6 +65,8 @@ export async function onWisdomRoll(event) {
   const actor = this.actor;
   const wisdom = getWisdom(actor);
   const dicePool = Math.max(wisdom.max - wisdom.aggravated - wisdom.superficial, 1);
+
+  if (isMageActor(actor)) dressNextRollDialogAsMage();
 
   await WOD5E.api.Roll({
     basicDice: dicePool,

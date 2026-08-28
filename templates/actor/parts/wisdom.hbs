@@ -20,4 +20,12 @@
             </div>
         </div>
     </div>
+
+    {{#if wisdom.segnato}}
+        {{!-- La fila piena ha un nome (04_95), e i suoi quattro effetti. --}}
+        <p class="wod5e-mage-wisdom-segnato">
+            <strong>{{localize "WOD5E_MAGE.Wisdom.Segnato"}}</strong> ·
+            {{localize "WOD5E_MAGE.Wisdom.SegnatoEffects"}}
+        </p>
+    {{/if}}
 </div>

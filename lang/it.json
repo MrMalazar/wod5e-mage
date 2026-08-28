@@ -48,7 +48,19 @@
         "willpower": "Volontà",
         "merit": "Pregio",
         "background": "Background"
-      }
+      },
+      "Spent": "Spesa",
+      "LogLabel": "Registro delle spese",
+      "LogWhat": "Cosa hai comprato",
+      "LogWhatHint": "es. Forza 2 → 3",
+      "LogAdd": "Segna una spesa",
+      "LogRemove": "Togli la spesa",
+      "LogEmpty": "Nessuna spesa segnata: il + ne aggiunge una, e la Spesa si somma da sola.",
+      "GainsLabel": "Prese",
+      "GainsWhen": "Quando",
+      "GainsWhenHint": "es. sessione del 28/8",
+      "GainsAdd": "Segna una presa",
+      "GainsEmpty": "Nessuna presa segnata: il + aggiunge l'esperienza di una sessione, e il Totale si somma da solo."
     },
     "Dice": {
       "MageDice": "Dadi Mage",
@@ -68,7 +80,6 @@
       "Roll": "Tira",
       "Include": "Aggiungi Areté alla riserva",
       "IncludeHint": "Spunta per aggiungere alla riserva il valore di Areté impostato sulla scheda.",
-      "ParadoxHint": "Volgare sposta la Ruota di 1 verso il Paradosso, con testimoni di 2. Il tipo è una scelta sola.",
       "Rolling": "Areté + {first} + {second}",
       "RollingNoArete": "{first} + {second}",
       "RollHint": "Tira con un'Abilità e un'altra Abilità o un Attributo; Areté è opzionale",
@@ -77,8 +88,16 @@
       "SelectTrait": "Seleziona un tratto",
       "SelectAttribute": "Seleziona un Attributo",
       "SelectSkill": "Seleziona un'Abilità",
-      "SelectTraitWarning": "Seleziona un'Abilità e un secondo tratto per il tiro di Areté.",
-      "MagickType": "Tipo di Magick",
+      "SelectTraitWarning": "Seleziona due tratti (Abilità o Attributi) per il tiro di Areté.",
+      "MagickType": "Tipologia",
+      "CoincidentalHint": "Non si percepisce.",
+      "VulgarHint": "La realtà lo percepisce, +1 Paradosso.",
+      "WitnessesHint": "Qualcuno ti ha visto farlo, +2 Paradosso.",
+      "SelectScope": "Seleziona Ambito",
+      "AddScope": "Aggiungi un Ambito",
+      "ScopeLevel": "Lvl",
+      "ScopeLevelHint": "Lvl: il livello dell'Ambito, si somma alla difficoltà.",
+      "ScopePlan": "Ambiti: {plans}.",
       "IsVulgar": "È volgare?",
       "HasWitnesses": "Volgare con testimoni?",
       "Coincidental": "Accidentale",
@@ -87,7 +106,12 @@
       "NoType": "Nessun tipo selezionato",
       "NoPenaltyHint": "Per ora queste opzioni non modificano la riserva di dadi.",
       "RollFlavor": "Riserva: Areté {arete} + {first} {firstValue} + {second} {secondValue}. Tipo: {magickType}.",
-      "RollFlavorNoArete": "Riserva: {first} {firstValue} + {second} {secondValue}. Tipo: {magickType}."
+      "RollFlavorNoArete": "Riserva: {first} {firstValue} + {second} {secondValue}. Tipo: {magickType}.",
+      "Maintained": "Effetto Mantenuto",
+      "MaintainedName": "Nome dell'effetto",
+      "Spheres": "Sfere Effetto",
+      "BaseDifficulty": "Difficoltà totale (Sfera più alta + Ambiti)",
+      "NoSpheres": "Nessuna Sfera con pallini: sblocca le Sfere in Magick per combinarle qui."
     },
     "Focus": {
       "Paradigm": "Paradigma",
@@ -99,7 +123,25 @@
       "SceneQuestion": "Cosa usi nella scena per fare Magick?",
       "InstrumentCount": "Sette slot, sempre: segna quelli che possiedi",
       "Spheres": "Le Sfere del Focus",
-      "WhatIs": "Cos'è"
+      "WhatIs": "Cos'è",
+      "Family": "Famiglia",
+      "FamilyNone": "Famiglia…",
+      "Families": {
+        "body": "Corpo",
+        "machine": "Macchina",
+        "object": "Oggetto",
+        "substance": "Sostanza",
+        "word": "Parola",
+        "world": "Mondo"
+      },
+      "SpheresEmpty": "Nessuna Sfera sbloccata: quelle che attivi in Magick compaiono qui, con le loro note.",
+      "Form": "Forma",
+      "FormNone": "Forma…",
+      "Forms": {
+        "magick": "Magick",
+        "tecnomagick": "Tecnomagick",
+        "ibrida": "Magick Ibrida"
+      }
     },
     "ConceptChallenge": {
       "Label": "La sfida del concetto",
@@ -205,14 +247,9 @@
       "conditions": "Condizioni",
       "range": "Portata",
       "GiftScope": "Ambito del Dono",
-      "GiftTrack": "Dono sul tracciato",
-      "GiftSuccesses": "{count} successi automatici, pari ad Areté",
-      "NoAffinity": "Nessuna Sfera affine: scegline una nella pagina Magick per vedere il suo Ambito.",
-      "Free": "I successi extra si spendono dove vuoi: nessuna Sfera sblocca o vieta un Ambito.",
-      "TableTitle": "Il listino dei Successi Extra",
+      "TableTitle": "Spendere Successi Extra",
       "TableHint": "Ogni colonna è indipendente: i successi si allocano Ambito per Ambito, e ogni Ambito parte dal suo valore base.",
       "TableSuccesses": "Successi extra →",
-      "TableSpheres": "Le Sfere che lo prediligono",
       "Table": {
         "potency": {
           "1": "+2 danni",
@@ -224,13 +261,13 @@
           "7": "+14 danni"
         },
         "duration": {
-          "1": "1 scena",
-          "2": "2 scene",
-          "3": "3 scene",
-          "4": "La sessione",
-          "5": "2 sessioni",
-          "6": "Un capitolo",
-          "7": "La cronaca"
+          "1": "1",
+          "2": "2",
+          "3": "3",
+          "4": "1",
+          "5": "2",
+          "6": "1",
+          "7": "1"
         },
         "area": {
           "1": "Stanza",
@@ -242,22 +279,22 @@
           "7": "Pianeta"
         },
         "targets": {
-          "1": "+1 bersaglio",
-          "2": "+2 bersagli",
-          "3": "+3 bersagli",
-          "4": "+4 bersagli",
-          "5": "+5 bersagli",
-          "6": "+6 bersagli",
-          "7": "+7 bersagli"
+          "1": "+1",
+          "2": "+2",
+          "3": "+3",
+          "4": "+4",
+          "5": "+5",
+          "6": "+6",
+          "7": "+7"
         },
         "conditions": {
-          "1": "1 condizione",
-          "2": "2 condizioni",
-          "3": "3 condizioni",
-          "4": "4 condizioni",
-          "5": "5 condizioni",
-          "6": "6 condizioni",
-          "7": "7 (un papiro)"
+          "1": "1",
+          "2": "2",
+          "3": "3",
+          "4": "4",
+          "5": "5",
+          "6": "6",
+          "7": "7"
         },
         "range": {
           "1": "Visiva (100 m)",
@@ -277,7 +314,9 @@
       "Empty": "Non ci sono Magick in atto.",
       "NameSpheres": "Nome - Sfere",
       "Status": "Stato",
-      "TriggerEffect": "Interruttore - Effetto"
+      "TriggerEffect": "Interruttore - Effetto",
+      "MaintainedStatus": "Mantenuto",
+      "MaintainedAdded": "«{name}» è ora fra le Magick in Atto."
     },
     "Spheres": {
       "Hint": "Seleziona le Sfere da mostrare e assegna loro un valore da zero a cinque.",
@@ -316,7 +355,9 @@
     "Wisdom": {
       "Label": "Saggezza",
       "Roll": "Tira Saggezza",
-      "Rolling": "Tiro di Saggezza"
+      "Rolling": "Tiro di Saggezza",
+      "Segnato": "Segnato",
+      "SegnatoEffects": "due dadi in meno sui tiri mortali, la scena mondana costa, niente ricucitura del Consenso, l'aura si vede."
     },
     "MagickBalance": {
       "Magick": "Magick",
@@ -365,10 +406,74 @@
       "Remove": "Togli il Bonus",
       "Value": "N.",
       "Kind": "Tipo",
-      "KindHint": "Ambito Forza",
       "Description": "Descrizione",
-      "DescriptionHint": "quando vale",
-      "Empty": "Nessun Bonus segnato: il + ne aggiunge uno (es. +3 · Ambito Forza)."
+      "DescriptionHint": "attributo, tiro, effetto…",
+      "Empty": "Nessun Bonus segnato: il + ne aggiunge uno (es. +3 · Dado · tiri di Forza).",
+      "Kinds": {
+        "dice": "Dado",
+        "success": "Successo",
+        "difficulty": "Difficoltà"
+      },
+      "KindNone": "Tipo…"
+    },
+    "Belongings": {
+      "SharedLabel": "Elementi in comune",
+      "SharedHint": "Background condivisi con altri giocatori",
+      "StoryLabel": "Elementi di Storia",
+      "StoryHint": "Ottenuti in gioco, anche temporanei",
+      "Kind": "Tipo",
+      "Kinds": {
+        "background": "Background",
+        "advantage": "Vantaggio",
+        "flaw": "Difetto"
+      },
+      "KindNone": "Tipo…",
+      "Name": "Nome",
+      "Add": "Aggiungi una voce",
+      "Remove": "Togli la voce",
+      "SharedEmpty": "Niente in comune: il + aggiunge un Background, Vantaggio o Difetto condiviso, col suo livello a pallini.",
+      "StoryEmpty": "Niente di storia: il + aggiunge quello che la cronaca ti ha dato (o tolto), col suo livello a pallini.",
+      "Level": "Livello"
+    },
+    "Personaggio": {
+      "IdentityLabel": "Concetto e Cronaca",
+      "TriggerHint": "Quando si attiva",
+      "AnchorsLabel": "Ancore",
+      "AnchorsHint": "Di norma tre: le persone che ti tengono agganciato al mondo.",
+      "AnchorName": "Nome",
+      "AnchorDescription": "Descrizione",
+      "AnchorAdd": "Aggiungi un'Ancora",
+      "AnchorRemove": "Togli l'Ancora",
+      "AnchorsEmpty": "Nessuna Ancora segnata: il + ne aggiunge una.",
+      "ConvictionsLabel": "Convinzioni",
+      "ConvictionsHint": "Di norma tre, ognuna legata a un gruppo del catalogo.",
+      "ConvictionGroup": "Gruppo",
+      "ConvictionGroupNone": "Gruppo…",
+      "ConvictionGroups": {
+        "morte": "Morte",
+        "verita": "Verità",
+        "lealta": "Lealtà",
+        "liberta": "Libertà",
+        "giustizia": "Giustizia",
+        "ordine": "Ordine",
+        "natura": "Natura"
+      },
+      "ConvictionText": "Convinzione",
+      "ConvictionAdd": "Aggiungi una Convinzione",
+      "ConvictionRemove": "Togli la Convinzione",
+      "ConvictionsEmpty": "Nessuna Convinzione segnata: il + ne aggiunge una."
+    },
+    "Riepilogo": {
+      "Label": "Memo creazione",
+      "Attributes": "Pallini Attributi",
+      "Skills": "Pallini Abilità",
+      "Backgrounds": "Pallini Background",
+      "Merits": "Pallini Vantaggi",
+      "Flaws": "Pallini Difetti",
+      "Spheres": "Pallini Sfere",
+      "Concept": "Concetto compilato",
+      "Anchors": "Almeno un'Ancora",
+      "Convictions": "Almeno una Convinzione"
     }
   }
 }

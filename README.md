@@ -48,8 +48,10 @@ dialog displays an additional Sheet field:
 The Mage sheet currently inherits the complete mortal sheet without replacing
 any native system file. It adds a Magick tab with the nine Mage: The Ascension
 Spheres and ratings from zero to five. Sphere values are stored in module flags.
-The Magick tab places the shared resource wheel on the left, with an Areté rating
-from one to five below it. Clicking Areté opens separate Attribute and Skill
+The Traits page hosts the Wheel widget full-width under the Skills, with the
+two persistent fields (generated Quintessence, permanent Paradox) inside it
+and an Areté rating from one to five below. Every Attribute and Skill row
+opens with its M5 sigil, gold on the sheet's dark ground. Clicking Areté opens separate Attribute and Skill
 selectors containing every available trait, including custom system definitions,
 and rolls the static Areté rating plus both selected traits. Coincidental,
 vulgar, and vulgar with witnesses are independent roll options and do not apply
@@ -59,23 +61,27 @@ selectors. Only selected Spheres are listed below; hiding a Sphere preserves its
 dot rating. Each listed Sphere displays its Influence description for ratings one
 through five, and the leftmost empty marker returns a Sphere to zero. Scopes
 are free for everyone (no Sphere unlocks or forbids one): the Traits page shows
-only the Scope where the Affinity Sphere's Gift grants automatic successes
-equal to Arete, and the Magick tab ends with the full Extra Successes price
-list (six Scopes, seven steps, favoured Spheres) with the Gift row highlighted.
-Next to the Wheel, a small Bonuses table (number, type, description) lets the
-player note reminders such as "+3 · Forces Scope"; rows are stored in module
-flags and never touch the dice. The right
+no Scope counters at all — the Magick tab ends with the "Spending Extra
+Successes" table (six Scopes, seven steps) with the Affinity Gift row
+highlighted, and the Gift's automatic successes equal the Affinity Sphere's
+own rating. In the right side panel, under Custom Rolls, a small Bonuses
+table (number, type, description) lets the player note reminders such as
+"+3 · Forces Scope"; rows are stored in module flags and never touch the
+dice. The right
 column of the Magick tab also provides a dynamic ongoing-Magick journal: it starts empty, lets the
 player add or remove rows, and stores its three descriptive text fields in module
 flags without affecting rolls.
 The separate Concept Challenge tab contains three groups of guided character
 questions. Its 21 compact three-line text areas save automatically to module
 flags and do not affect any roll.
-The Focus tab stores Paradigm, Practice, and seven Instrument slots, always
-seven regardless of Arete. Its right column always shows all nine Spheres,
-shows the Influence level only for the Spheres currently selected in Magick,
-and provides a separate rich-text note for each.
-The Mage header groups Health, Willpower, and Wisdom on the left. Wisdom has an
+The Focus tab stores Paradigm, the Practice split into Form (Magick,
+Technomagick, Hybrid Magick) plus name, and seven Instrument slots, always
+seven regardless of Arete; each slot pairs a family drop-down (the six
+families of the M5 manual) with the free-text detail. Wisdom sits as a box at
+the top of the left column and, when its track is full, shows the Marked
+effects beside it. The right column lists only the Spheres currently selected
+in Magick, with a separate rich-text note for each.
+The Mage header groups Health and Willpower on the left. Wisdom has an
 adjustable damage track and can be rolled using its undamaged boxes as the pool.
 The Magick tab also contains a shared nine-cell Magick track. Quintessence fills
 it from the left and Paradox fills it from the right, with both values stored in
@@ -103,5 +109,15 @@ at render time, leaving the native WoD5e dice registry and Mortal rolls intact.
 3. Add reusable Item documents for magical traits and effects.
 4. Implement dice pools and chat cards through the `wod5e` roll API.
 5. Add compendiums only for content that can legally be distributed.
+
+The Belongings page pairs the character's Backgrounds, Merits and Flaws with
+the inventory, and adds two free tables — Shared Elements (with other
+players) and Story Elements (gained in play, possibly temporary) — each row
+a type, a name and a dot rating, stored in module flags. The Character page
+uses the same collapsible layout as the Concept Challenge: allegiance,
+Concept and Chronicle with described Ambition and Desire ("when it
+triggers"), then free-slot Anchors and Convictions (usually three each, plus
+and minus at will), every Conviction tied to one of the seven catalogue
+groups.
 
 This project does not include copyrighted game text or artwork.
