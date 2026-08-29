@@ -135,7 +135,8 @@ assert.ok(englishManifestPack);
 assert.equal(manifestPack.type, "Item");
 assert.equal(manifestPack.path, "packs/mage-spheres");
 assert.equal(englishManifestPack.path, "packs/mage-spheres-en");
-assert.equal(manifest.version, "0.9.8");
+// La versione non si fissa nel test: basta che sia un semver senza "v".
+assert.match(manifest.version, /^\d+\.\d+\.\d+$/);
 
 const buildScript = readFileSync(
   new URL("../tools/build-release.ps1", import.meta.url),
