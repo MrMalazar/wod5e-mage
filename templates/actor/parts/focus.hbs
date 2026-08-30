@@ -21,19 +21,16 @@
 
             <div class="wod5e-mage-focus-short-field">
                 <div>
-                    <strong>{{localize "WOD5E_MAGE.Focus.Practice"}}</strong>
-                    <small>{{localize "WOD5E_MAGE.Focus.PracticeHint"}}</small>
+                    <strong>{{localize "WOD5E_MAGE.Focus.Type"}}</strong>
+                    <small>{{localize "WOD5E_MAGE.Focus.TypeHint"}}</small>
                 </div>
-                {{!-- La Forma (Magick, Tecnomagick, Magick Ibrida) e poi il nome. --}}
-                <div class="wod5e-mage-focus-practice-row">
-                    <select name="flags.wod5e-mage.focus.practiceForm" aria-label="{{localize 'WOD5E_MAGE.Focus.Form'}}" {{#if locked}}disabled{{/if}}>
-                        <option value="">{{localize "WOD5E_MAGE.Focus.FormNone"}}</option>
-                        {{#each focus.forms as |form|}}
-                            <option value="{{form.id}}" {{#if form.selected}}selected{{/if}}>{{form.label}}</option>
-                        {{/each}}
-                    </select>
-                    <input type="text" name="flags.wod5e-mage.focus.practice" value="{{focus.practice}}" aria-label="{{localize 'WOD5E_MAGE.Focus.PracticeHint'}}" {{#if locked}}disabled{{/if}}>
-                </div>
+                {{!-- Magick, Tecnomagick, Magick Ibrida: le dodici Forme sono archiviate. --}}
+                <select name="flags.wod5e-mage.focus.practiceForm" aria-label="{{localize 'WOD5E_MAGE.Focus.TypeHint'}}" {{#if locked}}disabled{{/if}}>
+                    <option value="">{{localize "WOD5E_MAGE.Focus.FormNone"}}</option>
+                    {{#each focus.forms as |form|}}
+                        <option value="{{form.id}}" {{#if form.selected}}selected{{/if}}>{{form.label}}</option>
+                    {{/each}}
+                </select>
             </div>
 
             <section class="wod5e-mage-focus-instruments">

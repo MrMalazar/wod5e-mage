@@ -22,8 +22,8 @@ function focusActor({ arete = 1, spheres = {}, selectedSpheres, focus = {} } = {
 // Sette slot anche ad Areté 1: il conto «2 + Areté» non esiste più.
 let actor = focusActor();
 let focus = await prepareFocus(actor);
-assert.equal(focus.instrumentCount, 7);
-assert.equal(focus.instruments.length, 7);
+assert.equal(focus.instrumentCount, 6);
+assert.equal(focus.instruments.length, 6);
 assert.equal(focus.arete, undefined);
 // Senza Sfere sbloccate, la colonna delle Sfere del Focus è vuota.
 assert.equal(focus.spheres.length, 0);
@@ -50,7 +50,7 @@ actor = focusActor({
   }
 });
 focus = await prepareFocus(actor, async (value) => `<p>${value}</p>`);
-assert.equal(focus.instrumentCount, 7);
+assert.equal(focus.instrumentCount, 6);
 assert.equal(focus.instruments[0].selected, true);
 assert.equal(focus.instruments[0].name, "Old compass");
 assert.equal(focus.practiceForm, "tecnomagick");

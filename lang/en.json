@@ -116,12 +116,10 @@
     "Focus": {
       "Paradigm": "Paradigm",
       "ParadigmHint": "Your truth",
-      "Practice": "Practice",
-      "PracticeHint": "How you reach it",
       "Instruments": "Instruments",
       "Instrument": "Instrument",
       "SceneQuestion": "What do you use in the scene to perform Magick?",
-      "InstrumentCount": "Seven slots, always: mark the ones you own",
+      "InstrumentCount": "One per family, six in all: mark the ones you own",
       "Spheres": "The Spheres of the Focus",
       "WhatIs": "What is",
       "Family": "Family",
@@ -135,13 +133,14 @@
         "world": "World"
       },
       "SpheresEmpty": "No Sphere unlocked: the ones you activate in Magick appear here, with their notes.",
-      "Form": "Form",
-      "FormNone": "Form…",
+      "FormNone": "Type…",
       "Forms": {
         "magick": "Magick",
         "tecnomagick": "Technomagick",
         "ibrida": "Hybrid Magick"
-      }
+      },
+      "Type": "Type of Magick",
+      "TypeHint": "Which way the Will travels"
     },
     "ConceptChallenge": {
       "Label": "The Concept Challenge",

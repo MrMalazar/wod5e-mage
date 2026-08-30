@@ -116,12 +116,10 @@
     "Focus": {
       "Paradigm": "Paradigma",
       "ParadigmHint": "La tua verità",
-      "Practice": "Pratica",
-      "PracticeHint": "Come la raggiungi",
       "Instruments": "Strumenti",
       "Instrument": "Strumento",
       "SceneQuestion": "Cosa usi nella scena per fare Magick?",
-      "InstrumentCount": "Sette slot, sempre: segna quelli che possiedi",
+      "InstrumentCount": "Uno per famiglia, sei in tutto: segna quelli che possiedi",
       "Spheres": "Le Sfere del Focus",
       "WhatIs": "Cos'è",
       "Family": "Famiglia",
@@ -135,13 +133,14 @@
         "world": "Mondo"
       },
       "SpheresEmpty": "Nessuna Sfera sbloccata: quelle che attivi in Magick compaiono qui, con le loro note.",
-      "Form": "Forma",
-      "FormNone": "Forma…",
+      "FormNone": "Tipo…",
       "Forms": {
         "magick": "Magick",
         "tecnomagick": "Tecnomagick",
         "ibrida": "Magick Ibrida"
-      }
+      },
+      "Type": "Tipo di Magick",
+      "TypeHint": "Per quale via passa la Volontà"
     },
     "ConceptChallenge": {
       "Label": "La sfida del concetto",

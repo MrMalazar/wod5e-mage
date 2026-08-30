@@ -1,9 +1,8 @@
 import { MODULE_ID } from "./constants.js";
 import { prepareSpheres } from "./spheres.js";
 
-// Sette Strumenti per tutti, dal primo giorno: il vecchio conto «2 + Areté»
-// è canone superato, gli slot non crescono più con l'Areté.
-export const FOCUS_INSTRUMENT_COUNT = 7;
+// Uno Strumento per famiglia, sei in tutto (verdetto del 30/8/2026).
+export const FOCUS_INSTRUMENT_COUNT = 6;
 
 // Le sei famiglie del manuale (05_071): ogni Strumento si scrive a due
 // livelli, prima la famiglia e poi il tuo di preciso.
@@ -16,8 +15,8 @@ export const FOCUS_INSTRUMENT_FAMILIES = Object.freeze([
   "world"
 ]);
 
-// I tre modi di fare Magick (05_065): la Forma si dichiara accanto al nome
-// della Pratica.
+// I tre modi di fare Magick: il Tipo e' un campo del Focus a se'.
+// Conta nelle Armonie e nel genere di effetto lasciato nelle bolle di realta'.
 export const FOCUS_FORMS = Object.freeze(["magick", "tecnomagick", "ibrida"]);
 
 function getTextEnricher(enrichHTML) {
@@ -58,7 +57,6 @@ export async function prepareFocus(actor, enrichHTML) {
   return {
     instrumentCount,
     paradigm: String(stored.paradigm ?? ""),
-    practice: String(stored.practice ?? ""),
     practiceForm,
     forms: FOCUS_FORMS.map((id) => ({
       id,
@@ -106,7 +104,7 @@ export async function onFocusInstrumentToggle(event, target) {
   }
 
   const slotId = target.dataset.slot;
-  if (!/^slot[1-7]$/.test(slotId)) return;
+  if (!/^slot[1-6]$/.test(slotId)) return;
 
   await actor.update({
     [`flags.${MODULE_ID}.focus.instruments.${slotId}.selected`]:

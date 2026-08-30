@@ -75,7 +75,7 @@ The separate Concept Challenge tab contains three groups of guided character
 questions. Its 21 compact three-line text areas save automatically to module
 flags and do not affect any roll.
 The Focus tab stores Paradigm, the Practice split into Form (Magick,
-Technomagick, Hybrid Magick) plus name, and seven Instrument slots, always
+Technomagick, Hybrid Magick) plus name, and six Instrument slots, one per family
 seven regardless of Arete; each slot pairs a family drop-down (the six
 families of the M5 manual) with the free-text detail. Wisdom sits as a box at
 the top of the left column and, when its track is full, shows the Marked
