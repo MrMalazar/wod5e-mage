@@ -17,7 +17,7 @@
         {{!-- La parola ARETÉ è il tiro: si clicca lei, niente bottone. --}}
         <div class="wod5e-mage-header-arete">
             <button type="button" class="wod5e-mage-header-arete-label wod5e-mage-arete-roll" data-action="areteRoll"
-                    title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.RollHint'}}"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Arete.Label"}}</button>
+                    title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.RollHint'}}"><img class="wod5e-mage-arete-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt="" aria-hidden="true">{{localize "WOD5E_MAGE.Arete.Label"}}</button>
             <div class="wod5e-mage-arete-dots" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Label'}}">
                 {{#each arete.steps as |step|}}
                     <button type="button" class="wod5e-mage-arete-dot {{#if step.active}}active{{/if}}"

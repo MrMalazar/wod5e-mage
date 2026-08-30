@@ -2435,6 +2435,13 @@
   font-size: 1.15rem;
 }
 
+/* Il sigillo di Areté al posto del dado: stessa misura della parola. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-arete-label > .wod5e-mage-arete-sigillo {
+  height: 1.35rem;
+  width: 1.35rem;
+  flex: 0 0 auto;
+}
+
 /* I pallini respirano: un po' d'aria fra la parola ARETE' e la fila. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-arete > .wod5e-mage-arete-dots {
   margin-left: 10px;

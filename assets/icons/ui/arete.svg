@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+<title>Areté</title>
+<g stroke="#d9a827" fill="none" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="100" cy="112" r="58"/>
+<line x1="100" y1="54" x2="100" y2="16"/>
+<circle cx="100" cy="112" r="16"/>
+</g>
+</svg>
