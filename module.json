@@ -2,10 +2,10 @@
   "id": "wod5e-mage",
   "title": "Mage for World of Darkness 5e",
   "description": "Adds Mage support to the World of Darkness 5e system.",
-  "version": "0.38.0",
+  "version": "0.39.0",
   "url": "https://github.com/MrMalazar/wod5e-mage",
   "manifest": "https://github.com/MrMalazar/wod5e-mage/releases/latest/download/module.json",
-  "download": "https://github.com/MrMalazar/wod5e-mage/releases/download/0.38.0/wod5e-mage.zip",
+  "download": "https://github.com/MrMalazar/wod5e-mage/releases/download/0.39.0/wod5e-mage.zip",
   "authors": [
     {
       "name": "wod5e-mage contributors"
@@ -165,6 +165,17 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "label": "Macro del Master (M5)",
+      "type": "Macro",
+      "name": "mage-macros",
+      "path": "packs/mage-macros",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -183,7 +194,8 @@
         "mage-desideri",
         "mage-ancore",
         "mage-convinzioni",
-        "mage-condizioni"
+        "mage-condizioni",
+        "mage-macros"
       ],
       "color": "#98772b"
     }
