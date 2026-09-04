@@ -371,6 +371,15 @@
   border-color: var(--mage-rosso-vivo);
 }
 
+/* Il pavimento: le celle del Paradosso permanente, di un colore a parte,
+   che nessun meno scalza. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-node.permanent,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-cell.permanent {
+  background: var(--mage-rosso-vivo);
+  border-color: var(--mage-inchiostro, #1e1b2e);
+  box-shadow: inset 0 0 0 2px var(--mage-rosso);
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-controls {
   align-items: flex-start;
   display: flex;
@@ -904,6 +913,11 @@
   width: 100%;
 }
 
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-short-field > select {
+  margin: 0 0 0.35rem;
+  width: 100%;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instruments {
   margin-top: 2rem;
 }
@@ -919,38 +933,67 @@
   color: var(--mage-oro);
 }
 
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instruments-hint {
+  color: var(--mage-tenue);
+  font-size: 0.75rem;
+  margin: 0 0 0.8rem;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-list {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.6rem;
 }
 
+/* Una riga per Sfera: la Sfera a sinistra, a destra lo Strumento, il
+   mestiere quando serve e il tuo di preciso, uno sotto l'altro. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument {
   align-items: center;
+  border-bottom: 1px solid rgb(152 119 43 / 30%);
   display: grid;
-  gap: 0.5rem;
-  grid-template-columns: 18px minmax(96px, 0.45fr) minmax(0, 1fr);
+  gap: 0.35rem 0.5rem;
+  grid-template-columns: minmax(96px, 0.42fr) minmax(0, 1fr);
+  padding-bottom: 0.55rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > select {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-sphere {
+  align-items: center;
+  align-self: start;
+  color: var(--mage-oro);
+  display: flex;
+  font-weight: 600;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-sphere img {
+  border: 0;
+  height: 18px;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > select,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > input,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > small {
+  grid-column: 2;
   margin: 0;
   min-width: 0;
   width: 100%;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument .resource-value {
-  align-self: center;
-  line-height: 1;
-  margin: 0;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-note {
+  color: var(--mage-tenue);
+  font-size: 0.7rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instruments > footer {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.72rem;
-  margin-top: 0.8rem;
-  text-align: right;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument.shared > select {
+  border-color: var(--mage-oro);
 }
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument.outside > select {
+  border-color: #d0524a;
+}
+
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere {
   border-bottom: 1px solid rgb(152 119 43 / 45%);
@@ -1354,6 +1397,24 @@
 .wod5e-mage-arete-difficulty {
   font-size: 0.8rem;
   margin: 0.2rem 0 0;
+}
+
+.wod5e-mage-arete-hint {
+  color: var(--mage-tenue);
+  font-size: 0.72rem;
+  margin: 0.15rem 0 0.5rem;
+}
+
+.wod5e-mage-arete-auto {
+  color: var(--mage-oro);
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin: 0.25rem 0 0;
+}
+
+.wod5e-mage-arete-prize em {
+  color: var(--mage-tenue);
+  font-size: 0.75rem;
 }
 
 .wod5e-mage-arete-difficulty > strong {

@@ -10,6 +10,7 @@ import {
   calculateAreteDicePool,
   shiftParadoxDice
 } from "./arete-dice-pool.js";
+import { bonusDiceExcess, isOneStepShort } from "./arete.js";
 import {
   getParadoxDieResult,
   getParadoxDieImage,
@@ -132,6 +133,7 @@ function getCustomModifierTotal(form) {
     .reduce((total, input) => total + (Number(input.value) || 0), 0);
 }
 
+
 function changeParadoxDice(ownerDocument, delta) {
   const basicInput = ownerDocument.querySelector("#inputBasicDice");
   const paradoxInput = ownerDocument.querySelector("#inputParadoxDice");
@@ -179,17 +181,29 @@ export async function rollAreteWithParadox({
   actor,
   data,
   dicePool,
+  bonusDice = 0,
   paradoxRating,
+  onlyParadox = false,
   difficulty = 0,
+  arete = 0,
   title,
   flavor,
   selectors = []
 }) {
-  const situationalModifiers = await getSituationalModifiers({ actor, selectors });
-  const activeTotal = situationalModifiers
-    .filter((modifier) => modifier.isActive)
+  const situationalModifiers = onlyParadox
+    ? []
+    : await getSituationalModifiers({ actor, selectors });
+  const activeModifiersNow = situationalModifiers
+    .filter((modifier) => modifier.isActive);
+  const activeTotal = activeModifiersNow
     .reduce((total, modifier) => total + (Number(modifier.value) || 0), 0);
-  const initialPool = calculateAreteDicePool(dicePool + activeTotal, paradoxRating);
+  // La riserva mostrata: tratti, dadi in più e modificatori attivi, col
+  // tetto già applicato. Nella vittoria automatica volgare si tirano solo i
+  // rossi: la parte Mage parte da zero.
+  const startingExcess = bonusDiceExcess(bonusDice, activeModifiersNow);
+  const initialPool = onlyParadox
+    ? calculateAreteDicePool(paradoxRating, paradoxRating)
+    : calculateAreteDicePool(dicePool + bonusDice + activeTotal - startingExcess, paradoxRating);
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll-confirm.hbs",
     {
@@ -235,21 +249,32 @@ export async function rollAreteWithParadox({
             + (form.querySelector("#inputParadoxDice")?.valueAsNumber || 0);
           const selectedParadox =
             form.querySelector("#inputParadoxDice")?.valueAsNumber || 0;
+          const activeModifiers = collectActiveModifiers(form);
+          // Il tetto +3 si applica sul conto finale: premio, Armonia e
+          // modificatori positivi insieme. Lo scarto va in chat.
+          const excess = onlyParadox ? 0 : bonusDiceExcess(bonusDice, activeModifiers);
+          const alreadyRemoved = onlyParadox ? 0 : startingExcess;
           const finalPool = calculateAreteDicePool(
-            visibleTotal + getCustomModifierTotal(form),
+            visibleTotal + getCustomModifierTotal(form) - (excess - alreadyRemoved),
             selectedParadox
           );
           const difficulty = Number(form.querySelector("#inputDifficulty")?.value) || 0;
           const rollMode = form.querySelector('[name="rollMode"]')?.value
             || game.settings.get("core", "rollMode");
-          const formula = `${finalPool.basicDice}d${MortalDie.DENOMINATION}cs>5 + ${finalPool.paradoxDice}d${ParadoxDie.DENOMINATION}cs>5`;
+          const basicDice = onlyParadox ? 0 : finalPool.basicDice;
+          const paradoxDice = onlyParadox ? Math.max(finalPool.paradoxDice, 1) : finalPool.paradoxDice;
+          const formula = `${basicDice}d${MortalDie.DENOMINATION}cs>5 + ${paradoxDice}d${ParadoxDie.DENOMINATION}cs>5`;
+          let rollFlavor = flavor;
+          if (excess > 0) {
+            rollFlavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.BonusCap", { excess })}`;
+          }
           const roll = await new WOD5eRoll(formula, data, {
             system: "mortal",
             title,
-            flavor,
+            flavor: rollFlavor,
             difficulty,
             rollMode,
-            activeModifiers: collectActiveModifiers(form),
+            activeModifiers,
             mageArete: true,
             paradoxRating
           }).roll();
@@ -260,6 +285,15 @@ export async function rollAreteWithParadox({
             roll.basicDice?.results ?? [],
             roll.advancedDice?.results ?? []
           );
+
+          // A un passo (ramo A): sotto la soglia di al massimo Areté
+          // successi, la riuscita ha un prezzo. Il messaggio lo dice.
+          if (isOneStepShort(roll._total, difficulty, arete)) {
+            roll.options.flavor = `${rollFlavor} ${game.i18n.format("WOD5E_MAGE.Arete.OneStep", {
+              missing: difficulty - roll._total,
+              arete
+            })}`;
+          }
 
           return roll.toMessage(
             { speaker: ChatMessage.getSpeaker({ actor }) },

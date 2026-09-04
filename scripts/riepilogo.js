@@ -2,7 +2,8 @@ import { MODULE_ID } from "./constants.js";
 import { CHIAVI_VIVE } from "./abilita-essenziali.js";
 import { ATTRIBUTE_KEYS } from "./tratti-icone.js";
 import { PERSONAGGIO_TABLES } from "./personaggio-extra.js";
-import { SPHERES } from "./spheres.js";
+import { getSphereSelection, SPHERES } from "./spheres.js";
+import { FOCUS_TOOL_IDS } from "./focus.js";
 
 /**
  * Il memo di creazione in fondo ai Tratti: conta i pallini della scheda
@@ -27,6 +28,15 @@ function hasRow(stored, fields) {
   return Object.values(stored ?? {}).some((row) =>
     fields.some((field) => String(row?.[field] ?? "").trim() !== "")
   );
+}
+
+/** Ramo A: ogni Sfera sbloccata ha il suo Strumento fra i ventidue. */
+function everySphereHasInstrument(actor) {
+  const selection = getSphereSelection(actor);
+  const unlocked = SPHERES.filter((id) => selection[id]);
+  if (!unlocked.length) return false;
+  const rows = actor.getFlag(MODULE_ID, "focus")?.sphereInstruments ?? {};
+  return unlocked.every((id) => FOCUS_TOOL_IDS.includes(rows[id]?.tool));
 }
 
 export function prepareCreationSummary(actor) {
@@ -65,6 +75,11 @@ export function prepareCreationSummary(actor) {
       id: "convictions",
       label: "WOD5E_MAGE.Riepilogo.Convictions",
       ok: hasRow(actor.getFlag(MODULE_ID, PERSONAGGIO_TABLES.convictions), ["text"])
+    },
+    {
+      id: "instruments",
+      label: "WOD5E_MAGE.Riepilogo.Instruments",
+      ok: everySphereHasInstrument(actor)
     }
   ];
 

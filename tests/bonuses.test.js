@@ -80,3 +80,11 @@ assert.match(template, /name="flags\.wod5e-mage\.bonuses\.\{\{row\.id\}\}\.descr
 assert.match(template, /data-action="bonusAdd"[\s\S]*data-action="bonusDelete"/);
 
 console.log("Bonus tests passed.");
+
+// Il tetto +3: un Bonus scritto oltre il tre torna a tre.
+{
+  const { clampBonusValue } = await import("../scripts/bonuses.js");
+  assert.equal(clampBonusValue(5), 3);
+  assert.equal(clampBonusValue(-7), -3);
+  assert.equal(clampBonusValue("x"), 0);
+}

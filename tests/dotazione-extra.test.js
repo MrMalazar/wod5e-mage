@@ -152,6 +152,8 @@ const summaryActor = {
     if (key === "spheres") return { forces: 3, time: 1 };
     if (key === "ancore") return { a: { name: "", description: "" } };
     if (key === "convinzioni") return { c: { group: "lealta", text: "Mai vendere un amico" } };
+    // Forze e Tempo hanno pallini, ma solo Forze ha lo Strumento.
+    if (key === "focus") return { sphereInstruments: { forces: { tool: "weapons" } } };
     return undefined;
   }
 };
@@ -160,6 +162,11 @@ const byId = Object.fromEntries(summary.counts.map((count) => [count.id, count.v
 // melee è un'abilità assorbita: i suoi pallini non contano.
 assert.deepEqual(byId, { attributes: 5, skills: 5, backgrounds: 3, merits: 3, flaws: 1, spheres: 4 });
 const checkById = Object.fromEntries(summary.checks.map((check) => [check.id, check.ok]));
-assert.deepEqual(checkById, { concept: true, anchors: false, convictions: true });
+assert.deepEqual(checkById, { concept: true, anchors: false, convictions: true, instruments: false });
+// Con lo Strumento anche su Tempo, il controllo passa.
+summaryActor.getFlag = ((original) => (m, key) => key === "focus"
+  ? { sphereInstruments: { forces: { tool: "weapons" }, time: { tool: "trance" } } }
+  : original(m, key))(summaryActor.getFlag);
+assert.equal(prepareCreationSummary(summaryActor).checks.find((check) => check.id === "instruments").ok, true);
 
 console.log("Dotazione extra, Personaggio e sigilli dei tratti: test passati.");

@@ -16,7 +16,7 @@
         <span aria-hidden="true"></span>
 
         {{#each bonuses as |row|}}
-            <input type="number" step="1" name="flags.wod5e-mage.bonuses.{{row.id}}.value" value="{{row.value}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Value'}}" {{#if ../locked}}disabled{{/if}}>
+            <input type="number" step="1" min="-3" max="3" name="flags.wod5e-mage.bonuses.{{row.id}}.value" value="{{row.value}}" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Value'}}" {{#if ../locked}}disabled{{/if}}>
             <select name="flags.wod5e-mage.bonuses.{{row.id}}.kind" aria-label="{{localize 'WOD5E_MAGE.Bonuses.Kind'}}" {{#if ../locked}}disabled{{/if}}>
                 <option value="">{{localize "WOD5E_MAGE.Bonuses.KindNone"}}</option>
                 {{#each row.kinds as |kind|}}
@@ -29,6 +29,7 @@
             </button>
         {{/each}}
     </div>
+    <p class="wod5e-mage-bonuses-empty">{{localize "WOD5E_MAGE.Bonuses.Cap"}}</p>
     {{else}}
         <p class="wod5e-mage-bonuses-empty">{{localize "WOD5E_MAGE.Bonuses.Empty"}}</p>
     {{/if}}

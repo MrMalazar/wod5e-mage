@@ -29,24 +29,34 @@ export function getPersistentMagickResources(actor) {
   };
 }
 
+/**
+ * Il Paradosso permanente è il pavimento della Ruota (tronco del 3/9/2026):
+ * le celle di Paradosso non scendono mai sotto quel numero.
+ */
+export function getParadoxFloor(actor) {
+  return Math.min(getPersistentMagickResources(actor).permanentParadox, MAGICK_TRACK_MAX);
+}
+
 export function getMagickBalance(actor) {
   const stored = actor.getFlag(MODULE_ID, "magickBalance") ?? {};
+  const floor = getParadoxFloor(actor);
 
   // The two values share the same nine cells. Quintessence is clamped first,
   // then Paradox is limited to the cells that remain available on the right.
   // Old versions stored a transient `pending` value: it is intentionally
   // ignored because the current state is now completely described by the two
   // visible counters.
+  // Il pavimento vince sulla Quintessenza: le celle permanenti restano rosse.
   const quintessence = Math.min(
     Math.max(Number(stored.quintessence) || 0, 0),
-    MAGICK_TRACK_MAX
+    MAGICK_TRACK_MAX - floor
   );
   const paradox = Math.min(
-    Math.max(Number(stored.paradox) || 0, 0),
+    Math.max(Number(stored.paradox) || 0, floor),
     MAGICK_TRACK_MAX - quintessence
   );
 
-  return { quintessence, paradox };
+  return { quintessence, paradox, floor };
 }
 
 export function prepareMagickTrack(actor) {
@@ -54,8 +64,10 @@ export function prepareMagickTrack(actor) {
   const cells = NODE_POSITIONS.map((position, index) => {
     const hasQuintessence = index < balance.quintessence;
     const hasParadox = index >= MAGICK_TRACK_MAX - balance.paradox;
+    const isPermanent = index >= MAGICK_TRACK_MAX - balance.floor;
     let state = "empty";
     if (hasQuintessence) state = "quintessence";
+    else if (isPermanent) state = "paradox permanent";
     else if (hasParadox) state = "paradox";
 
     return {
@@ -69,7 +81,7 @@ export function prepareMagickTrack(actor) {
   return { ...balance, cells, max: MAGICK_TRACK_MAX };
 }
 
-export function applyMagickBalanceDelta(balance, resource, delta) {
+export function applyMagickBalanceDelta(balance, resource, delta, floor = 0) {
   if (!['quintessence', 'paradox'].includes(resource) || ![-1, 1].includes(delta)) {
     return {
       quintessence: balance.quintessence,
@@ -82,10 +94,13 @@ export function applyMagickBalanceDelta(balance, resource, delta) {
     quintessence: balance.quintessence,
     paradox: balance.paradox
   };
+  const paradoxFloor = Math.max(Math.trunc(Number(floor) || 0), 0);
 
   // Minus always removes one filled cell from the selected side immediately.
+  // Il Paradosso non scende sotto il pavimento del Permanente.
   if (delta < 0) {
-    next[resource] = Math.max(next[resource] - 1, 0);
+    const bottom = resource === "paradox" ? paradoxFloor : 0;
+    next[resource] = Math.max(next[resource] - 1, bottom);
     return next;
   }
 
@@ -102,7 +117,8 @@ export function applyMagickBalanceDelta(balance, resource, delta) {
   // If all nine cells are occupied, Plus first removes one cell from the
   // opposite side. A later Plus sees the empty cell and fills it normally.
   // Example: 5 / 4 -> 5 / 3 -> 6 / 3. No contested state is persisted.
-  if (next[opposingResource] > 0) {
+  const opposingBottom = opposingResource === "paradox" ? paradoxFloor : 0;
+  if (next[opposingResource] > opposingBottom) {
     next[opposingResource] -= 1;
   }
 
@@ -157,7 +173,7 @@ export async function onMagickBalanceChange(event, target) {
   if (!['quintessence', 'paradox'].includes(resource) || ![-1, 1].includes(delta)) return;
 
   const balance = getMagickBalance(actor);
-  const next = applyMagickBalanceDelta(balance, resource, delta);
+  const next = applyMagickBalanceDelta(balance, resource, delta, balance.floor);
 
   if (
     next.quintessence === balance.quintessence
@@ -165,6 +181,8 @@ export async function onMagickBalanceChange(event, target) {
   ) {
     if (delta > 0) {
       ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.MagickBalance.SideFull"));
+    } else if (resource === "paradox" && balance.floor > 0) {
+      ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.MagickBalance.FloorReached"));
     }
     return;
   }

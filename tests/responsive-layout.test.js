@@ -212,9 +212,13 @@ const areteDialog = readFileSync(
 assert.match(areteDialog, /wod5e-mage-arete-columns[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dots[\s\S]*Scopes\.Label[\s\S]*data-role="scopeAdd"[\s\S]*Arete\.ScopeLevel[\s\S]*data-role="scopeRows"[\s\S]*template data-role="scopeRowTemplate"/);
 assert.match(areteDialog, /Arete\.SelectScope[\s\S]*Arete\.ScopeLevelHint/);
 assert.doesNotMatch(areteDialog, /<b>\{\{sphere\.value\}\}<\/b>|Arete\.ParadoxHint|name="scope-\{\{@index\}\}"|ScopeSuccesses/);
-// Due tratti liberi: entrambe le tendine sono Abilita' o Attributo.
-assert.match(areteDialog, /RollSelection\.AbilityOrAttribute[\s\S]*name="primaryTrait"[\s\S]*RollSelection\.AbilityOrAttribute[\s\S]*name="secondaryTrait"/);
-assert.doesNotMatch(areteDialog, /name="primarySkill"|RollSelection\.Ability"/);
+// La riserva del ramo A: la prima tendina è un'Abilità, la seconda Abilità
+// o Attributo; l'Areté non tira, entra come premio (mai per l'Ibrida).
+assert.match(areteDialog, /RollSelection\.Ability"[\s\S]*name="primaryTrait"[\s\S]*RollSelection\.AbilityOrAttribute[\s\S]*name="secondaryTrait"/);
+assert.doesNotMatch(areteDialog, /name="primarySkill"|name="arete"|Arete\.Include/);
+assert.match(areteDialog, /Arete\.Prize"[\s\S]*name="prize"[\s\S]*Arete\.PrizeHybrid[\s\S]*name="harmony"[\s\S]*data-role="pool"[\s\S]*data-role="threshold"[\s\S]*data-role="autoVictory"/);
+// Gli Ambiti valgono da 1 a 7.
+assert.match(areteDialog, /wod5e-mage-arete-scope-ns"\s*min="1" max="7"/);
 assert.match(css, /\.wod5e-mage-arete-row \+ \.wod5e-mage-arete-row\s*\{[^}]*margin-top:/s);
 assert.match(css, /\.wod5e-mage-arete-scope-head\s*\{[^}]*grid-template-columns:/s);
 // Le spiegazioni della Tipologia vivono in una colonna staccata a destra.

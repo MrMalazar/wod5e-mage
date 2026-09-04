@@ -7,6 +7,15 @@ import { MODULE_ID } from "./constants.js";
  */
 export const BONUS_KINDS = Object.freeze(["dice", "success", "difficulty"]);
 
+/** I Bonus scritti non superano il +3 (tronco del 3/9/2026). */
+export const BONUS_MAX = 3;
+
+export function clampBonusValue(value) {
+  const number = Math.trunc(Number(value));
+  if (!Number.isFinite(number)) return 0;
+  return Math.min(Math.max(number, -BONUS_MAX), BONUS_MAX);
+}
+
 export function prepareBonuses(actor) {
   const stored = actor.getFlag(MODULE_ID, "bonuses") ?? {};
 
@@ -14,11 +23,10 @@ export function prepareBonuses(actor) {
     ?? ((key) => key);
 
   return Object.entries(stored).map(([id, row]) => {
-    const value = Math.trunc(Number(row?.value));
     const kind = String(row?.kind ?? "");
     return {
       id,
-      value: Number.isFinite(value) ? value : 0,
+      value: clampBonusValue(row?.value),
       kind,
       description: String(row?.description ?? ""),
       kinds: BONUS_KINDS.map((kindId) => ({

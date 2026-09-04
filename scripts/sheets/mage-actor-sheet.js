@@ -18,7 +18,7 @@ import {
   onExperienceLogDelete,
   prepareExperiencePage
 } from "../experience-window.js";
-import { onFocusInstrumentToggle, prepareFocus } from "../focus.js";
+import { prepareFocus } from "../focus.js";
 import { getLineage } from "../lineage.js";
 import {
   onPersonaggioRowAdd,
@@ -87,7 +87,6 @@ export class MageActorSheet extends MortalActorSheet {
       belongingDelete: onBelongingDelete,
       bonusAdd: onBonusAdd,
       bonusDelete: onBonusDelete,
-      focusInstrumentToggle: onFocusInstrumentToggle,
       magickBalanceChange: onMagickBalanceChange,
       experienceLogAdd: onExperienceLogAdd,
       experienceLogDelete: onExperienceLogDelete,
@@ -284,7 +283,7 @@ export class MageActorSheet extends MortalActorSheet {
       context.spheres = sphereData.selected;
     }
 
-    // La Saggezza scende qui dalla testata, con le Convinzioni accanto.
+    // La pagina del Credo: Saggezza, Credo, Tipo e Strumenti per Sfera.
     if (partId === "focus") {
       context.tab = context.tabs.focus;
       context.focus = await prepareFocus(actor);

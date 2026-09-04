@@ -11,6 +11,7 @@ import {
 } from "./mage-roll-selection.js";
 import { prepareSpheres } from "./spheres.js";
 import { SCOPES } from "./scopes.js";
+import { FOCUS_FORMS } from "./focus.js";
 
 export const ARETE_MIN = 1;
 export const ARETE_MAX = 5;
@@ -42,12 +43,85 @@ export function prepareAreteTraits(actor, options) {
   return prepareMageRollTraits(actor, options);
 }
 
-export function calculateAreteTraitPool(arete, firstTrait, secondTrait) {
+/** La riserva del ramo A: due tratti e basta, l'Areté non tira. */
+export function calculateAreteTraitPool(firstTrait, secondTrait) {
   return (
-    Math.max(Number(arete) || 0, 0)
-    + Math.max(Number(firstTrait) || 0, 0)
+    Math.max(Number(firstTrait) || 0, 0)
     + Math.max(Number(secondTrait) || 0, 0)
   );
+}
+
+/** Il tetto dei dadi in più: premio, Armonia e Bonus scritti insieme. */
+export const BONUS_DICE_CAP = 3;
+
+/** La soglia della Magick non supera il 7, Rituali compresi. */
+export const THRESHOLD_CAP = 7;
+
+/**
+ * Il premio dell'Areté: dadi in più pari all'Areté quando la descrizione lo
+ * merita (rispetta lo Strumento, o il Credo, o inventa un effetto fuori dalle
+ * tavole), dentro il tetto. La Magick Ibrida non lo prende mai.
+ */
+export function calculateAretePrize(arete, form = "") {
+  if (form === "ibrida") return 0;
+  return Math.min(Math.max(Math.trunc(Number(arete) || 0), 0), BONUS_DICE_CAP);
+}
+
+/** L'Armonia: un dado, o due, mai di più. */
+export function normalizeHarmony(value) {
+  return Math.min(Math.max(Math.trunc(Number(value) || 0), 0), 2);
+}
+
+/** Quanti dadi in più restano una volta applicato il tetto. */
+export function capBonusDice(bonusDice) {
+  return Math.min(Math.max(Math.trunc(Number(bonusDice) || 0), 0), BONUS_DICE_CAP);
+}
+
+/**
+ * Il tetto dei dadi in più (ramo A): premio dell'Areté, Armonia e ogni
+ * modificatore positivo stanno insieme dentro +3. Torna quanti dadi vanno
+ * tolti alla riserva perché il conto rientri.
+ */
+export function bonusDiceExcess(bonusDice, modifiers = []) {
+  const positives = modifiers
+    .map((modifier) => Number(modifier?.value) || 0)
+    .filter((value) => value > 0)
+    .reduce((total, value) => total + value, 0);
+  const declared = Math.max(Math.trunc(Number(bonusDice) || 0), 0) + positives;
+  return Math.max(declared - BONUS_DICE_CAP, 0);
+}
+
+/**
+ * La soglia del ramo A: il maggiore fra la Sfera più alta e l'Ambito più
+ * alto, +1 per ogni Ambito oltre il primo, +1 piatto con tre o più Sfere,
+ * tetto 7. Gli Ambiti valgono da 1 a 7.
+ */
+export function calculateMagickThreshold({ sphereLevels = [], scopeLevels = [] } = {}) {
+  const spheres = sphereLevels
+    .map((level) => Math.max(Math.trunc(Number(level) || 0), 0))
+    .filter((level) => level > 0);
+  const scopes = scopeLevels
+    .map((level) => Math.min(Math.max(Math.trunc(Number(level) || 0), 1), THRESHOLD_CAP));
+  if (!spheres.length && !scopes.length) return 0;
+
+  const highest = Math.max(0, ...spheres, ...scopes);
+  const extraScopes = Math.max(scopes.length - 1, 0);
+  const manySpheres = spheres.length >= 3 ? 1 : 0;
+  return Math.min(highest + extraScopes + manySpheres, THRESHOLD_CAP);
+}
+
+/** Vittoria automatica: riserva almeno doppia della soglia, non si tira. */
+export function isAutomaticVictory(pool, threshold) {
+  const goal = Math.max(Math.trunc(Number(threshold) || 0), 0);
+  return goal > 0 && Math.max(Math.trunc(Number(pool) || 0), 0) >= goal * 2;
+}
+
+/** A un passo: riuscita a un prezzo se mancano al massimo Areté successi. */
+export function isOneStepShort(successes, threshold, arete) {
+  const goal = Math.max(Math.trunc(Number(threshold) || 0), 0);
+  const got = Math.max(Math.trunc(Number(successes) || 0), 0);
+  if (goal === 0 || got >= goal) return false;
+  return goal - got <= Math.max(Math.trunc(Number(arete) || 0), 0);
 }
 
 function isChecked(value) {
@@ -55,15 +129,17 @@ function isChecked(value) {
 }
 
 export function normalizeMagickRollOptions({
-  arete = false,
+  prize = false,
+  harmony = 0,
   coincidental = false,
   vulgar = false,
   witnesses = false
 } = {}) {
   const options = {
-    // Il valore resta fissato dai pallini della scheda, ma entra nella riserva
-    // soltanto quando il giocatore seleziona la casella del dialogo.
-    useArete: isChecked(arete),
+    // Il premio lo decide la descrizione, e il giocatore lo spunta: i dadi
+    // sono pari all'Areté della scheda, dentro il tetto.
+    usePrize: isChecked(prize),
+    harmony: normalizeHarmony(harmony),
     coincidental: isChecked(coincidental),
     vulgar: isChecked(vulgar),
     witnesses: isChecked(witnesses)
@@ -157,29 +233,52 @@ function wireScopeRows(dialog) {
   addRow();
 }
 
-/** Difficoltà totale: la Sfera spuntata più alta + i Lvl degli Ambiti. */
+function optionValue(select) {
+  const option = select?.selectedOptions?.[0];
+  return Math.max(Math.trunc(Number(option?.dataset?.value) || 0), 0);
+}
+
+/** Il conto vivo: riserva (due tratti, premio, Armonia) contro soglia. */
 function wireDifficulty(dialog) {
   const root = dialog?.element;
   const boxes = [...(root?.querySelectorAll(".wod5e-mage-arete-sphere-box") ?? [])];
-  const out = root?.querySelector("[data-role=baseDifficulty]");
-  if (!out) return;
+  const thresholdOut = root?.querySelector("[data-role=threshold]");
+  const poolOut = root?.querySelector("[data-role=pool]");
+  const autoOut = root?.querySelector("[data-role=autoVictory]");
+  if (!thresholdOut || !poolOut) return;
+
+  const primary = root.querySelector("#wod5e-mage-arete-primary");
+  const secondary = root.querySelector("#wod5e-mage-arete-secondary");
+  const prizeBox = root.querySelector("input[name=prize]");
+  const harmony = root.querySelector("#wod5e-mage-arete-harmony");
 
   const update = () => {
-    const levels = boxes
+    const sphereLevels = boxes
       .filter((box) => box.checked)
       .map((box) => Math.max(Math.trunc(Number(box.dataset.level) || 0), 0));
-    const sphereDifficulty = levels.length ? Math.max(...levels) : 0;
-    let scopeDifficulty = 0;
+    const scopeLevels = [];
     root.querySelectorAll(".wod5e-mage-arete-scope-row").forEach((row) => {
       const select = row.querySelector("select");
       if (!select?.value) return;
-      const level = row.querySelector("input");
-      scopeDifficulty += Math.max(Math.trunc(Number(level?.value) || 0), 0);
+      scopeLevels.push(Number(row.querySelector("input")?.value) || 1);
     });
-    out.textContent = String(sphereDifficulty + scopeDifficulty);
+    const threshold = calculateMagickThreshold({ sphereLevels, scopeLevels });
+
+    const prizeDice = prizeBox?.checked
+      ? Math.max(Math.trunc(Number(prizeBox.dataset.value) || 0), 0)
+      : 0;
+    const bonus = capBonusDice(prizeDice + normalizeHarmony(harmony?.value));
+    const pool = calculateAreteTraitPool(optionValue(primary), optionValue(secondary)) + bonus;
+
+    thresholdOut.textContent = String(threshold);
+    poolOut.textContent = String(pool);
+    autoOut?.classList.toggle("hidden", !isAutomaticVictory(pool, threshold));
   };
 
   boxes.forEach((box) => box.addEventListener("change", update));
+  [primary, secondary, prizeBox, harmony].forEach((control) => {
+    control?.addEventListener("change", update);
+  });
   // Le righe degli Ambiti sono dinamiche: si ascolta il contenitore.
   const list = root?.querySelector("[data-role=scopeRows]");
   list?.addEventListener("change", update);
@@ -199,6 +298,15 @@ function wireMaintainedEffect(dialog) {
   });
 }
 
+/** Un messaggio in chat senza dadi: la vittoria automatica accidentale. */
+async function postAutomaticVictory(actor, title, flavor) {
+  return ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    flavor: title,
+    content: `<p>${flavor}</p>`
+  });
+}
+
 export async function onAreteRoll(event) {
   event.preventDefault();
 
@@ -208,6 +316,13 @@ export async function onAreteRoll(event) {
     localize: game.i18n.localize.bind(game.i18n),
     lang: game.i18n.lang
   });
+  // Il Tipo di Magick della pagina del Credo: l'Ibrida non prende il premio.
+  const storedForm = actor.getFlag(MODULE_ID, "focus")?.practiceForm;
+  const form = FOCUS_FORMS.includes(storedForm) ? storedForm : "";
+  const prize = {
+    dice: calculateAretePrize(arete.value, form),
+    allowed: form !== "ibrida"
+  };
   // Solo le Sfere sbloccate, con almeno un pallino: sono quelle combinabili.
   // Il livello parla a pallini nel dialogo, come sulla scheda.
   const rollSpheres = prepareSpheres(actor).selected
@@ -216,11 +331,11 @@ export async function onAreteRoll(event) {
       ...sphere,
       steps: Array.from({ length: 5 }, (_, index) => ({ active: index < sphere.value }))
     }));
-  // Le sei colonne della Tabella dei Successi Extra, per la tendina Ambito.
+  // I sei Ambiti, per la tendina.
   const scopeOptions = SCOPES.map((id) => ({ id, label: `WOD5E_MAGE.Scopes.${id}` }));
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
-    { arete, spheres: rollSpheres, scopes: scopeOptions, ...traits }
+    { arete, prize, spheres: rollSpheres, scopes: scopeOptions, ...traits }
   );
 
   const result = await foundry.applications.api.DialogV2.input({
@@ -258,32 +373,46 @@ export async function onAreteRoll(event) {
 
   const selectedFirstTrait = findMageRollTrait(traits, result.primaryTrait);
   const selectedSecondTrait = findMageRollTrait(traits, result.secondaryTrait);
-  if (!selectedFirstTrait || !selectedSecondTrait) {
+  // La riserva è un'Abilità più un'Abilità o un Attributo: mai due Attributi.
+  if (!selectedFirstTrait || !selectedSecondTrait || selectedFirstTrait.type !== "skill") {
     ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Arete.SelectTraitWarning"));
     return;
   }
 
   const options = normalizeMagickRollOptions(result);
-  // La difficoltà base è il livello più alto fra le Sfere spuntate.
-  const chosenSphereLevels = rollSpheres
+  const sphereLevels = rollSpheres
     .filter((sphere) => isChecked(result[`sphere-${sphere.id}`]))
     .map((sphere) => sphere.value);
-  const baseDifficulty = chosenSphereLevels.length ? Math.max(...chosenSphereLevels) : 0;
-  // Il valore di Areté non è modificabile nel dialogo: la casella decide solo
-  // se sommare o meno il valore impostato tramite i pallini della scheda.
-  const areteValue = options.useArete ? arete.value : 0;
-  const dicePool = calculateAreteTraitPool(
-    areteValue,
-    selectedFirstTrait.value,
-    selectedSecondTrait.value
-  );
-  const rollLabel = game.i18n.format(
-    options.useArete ? "WOD5E_MAGE.Arete.Rolling" : "WOD5E_MAGE.Arete.RollingNoArete",
-    {
-      first: selectedFirstTrait.label,
-      second: selectedSecondTrait.label
-    }
-  );
+
+  // Gli Ambiti dichiarati (righe aggiunte dal giocatore col +), col livello
+  // da 1 a 7: fanno soglia, e il piano finisce nel testo del tiro in chat.
+  const scopeEntries = Object.entries(result)
+    .map(([key, value]) => {
+      const match = key.match(/^scope-(\d+)$/);
+      if (!match) return null;
+      const scopeId = String(value ?? "");
+      if (!SCOPES.includes(scopeId)) return null;
+      const level = Math.min(
+        Math.max(Math.trunc(Number(result[`scope-lvl-${match[1]}`]) || 1), 1),
+        THRESHOLD_CAP
+      );
+      return { scopeId, level };
+    })
+    .filter(Boolean);
+
+  const threshold = calculateMagickThreshold({
+    sphereLevels,
+    scopeLevels: scopeEntries.map((entry) => entry.level)
+  });
+
+  const prizeDice = options.usePrize ? prize.dice : 0;
+  const bonusDice = prizeDice + options.harmony;
+  const basePool = calculateAreteTraitPool(selectedFirstTrait.value, selectedSecondTrait.value);
+  const dicePool = basePool + capBonusDice(bonusDice);
+  const rollLabel = game.i18n.format("WOD5E_MAGE.Arete.Rolling", {
+    first: selectedFirstTrait.label,
+    second: selectedSecondTrait.label
+  });
   const selectedTypes = [];
   if (options.coincidental) {
     selectedTypes.push(game.i18n.localize("WOD5E_MAGE.Arete.Coincidental"));
@@ -302,17 +431,52 @@ export async function onAreteRoll(event) {
     ...selectorsForMageRollTrait(selectedFirstTrait),
     ...selectorsForMageRollTrait(selectedSecondTrait)
   ];
-  if (options.useArete) selectors.unshift("arete");
   if (options.coincidental) selectors.push("magick.coincidental");
   if (options.vulgar) selectors.push("magick.vulgar");
   if (options.witnesses) selectors.push("magick.vulgar-with-witnesses");
   // Rimuove i duplicati generati quando si selezionano due abilità.
   const uniqueSelectors = [...new Set(selectors)];
 
+  const bonusParts = [];
+  if (prizeDice > 0) {
+    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.PrizeFlavor", { dice: prizeDice }));
+  }
+  if (options.harmony > 0) {
+    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.HarmonyFlavor", { dice: options.harmony }));
+  }
+  let flavor = game.i18n.format("WOD5E_MAGE.Arete.RollFlavor", {
+    first: selectedFirstTrait.label,
+    firstValue: selectedFirstTrait.value,
+    second: selectedSecondTrait.label,
+    secondValue: selectedSecondTrait.value,
+    bonus: bonusParts.length ? ` + ${bonusParts.join(" + ")}` : "",
+    threshold,
+    magickType
+  });
+
+  const scopePlans = scopeEntries.map((entry) => {
+    const scopeLabel = game.i18n.localize(`WOD5E_MAGE.Scopes.${entry.scopeId}`);
+    return `${scopeLabel} ${entry.level}`;
+  });
+  if (scopePlans.length) {
+    flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.ScopePlan", { plans: scopePlans.join(", ") })}`;
+  }
+
+  // La vittoria automatica: riserva almeno doppia della soglia, non si tira.
+  // Nel Volgare si tirano comunque i soli dadi rossi, per il Contraccolpo;
+  // se scatta, l'Ustione è pari alla soglia.
+  const automatic = isAutomaticVictory(dicePool, threshold);
+  const paradoxGain = paradoxGainForMagickType(options);
+  if (automatic && paradoxGain === 0) {
+    flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.AutoVictoryChat", { pool: dicePool, threshold })}`;
+    await postAutomaticVictory(actor, rollLabel, flavor);
+    await addMaintainedEffect(actor, result);
+    return;
+  }
+
   // La Magick volgare paga subito: la Ruota si sposta verso il Paradosso prima
   // del tiro, così i dadi Paradosso di questo tiro contano già il rincaro.
   const balanceBefore = getMagickBalance(actor);
-  const paradoxGain = paradoxGainForMagickType(options);
   let balanceMoved = false;
 
   if (paradoxGain > 0 && actor.isOwner) {
@@ -330,44 +494,15 @@ export async function onAreteRoll(event) {
   }
 
   const paradoxRating = getMagickBalance(actor).paradox;
-  let flavor = game.i18n.format(
-    options.useArete
-      ? "WOD5E_MAGE.Arete.RollFlavor"
-      : "WOD5E_MAGE.Arete.RollFlavorNoArete",
-    {
-      arete: areteValue,
-      first: selectedFirstTrait.label,
-      firstValue: selectedFirstTrait.value,
-      second: selectedSecondTrait.label,
-      secondValue: selectedSecondTrait.value,
-      magickType
+
+  if (automatic) {
+    flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.RedOnly", { pool: dicePool, threshold, burn: threshold })}`;
+    if (paradoxRating === 0) {
+      // Niente rossi da tirare: la vittoria resta automatica, e basta.
+      await postAutomaticVictory(actor, rollLabel, flavor);
+      await addMaintainedEffect(actor, result);
+      return;
     }
-  );
-
-  // Gli Ambiti dichiarati (righe aggiunte dal giocatore col +): il Lvl si
-  // somma alla difficoltà, e il piano finisce nel testo del tiro in chat.
-  const scopeEntries = Object.entries(result)
-    .map(([key, value]) => {
-      const match = key.match(/^scope-(\d+)$/);
-      if (!match) return null;
-      const scopeId = String(value ?? "");
-      if (!SCOPES.includes(scopeId)) return null;
-      const level = Math.max(Math.trunc(Number(result[`scope-lvl-${match[1]}`]) || 0), 0);
-      return { scopeId, level };
-    })
-    .filter(Boolean);
-
-  // La difficoltà totale è la Sfera più alta + i livelli degli Ambiti.
-  const scopeDifficulty = scopeEntries.reduce((sum, entry) => sum + entry.level, 0);
-  const totalDifficulty = baseDifficulty + scopeDifficulty;
-
-  const scopePlans = scopeEntries.map((entry) => {
-    const scopeLabel = game.i18n.localize(`WOD5E_MAGE.Scopes.${entry.scopeId}`);
-    return entry.level > 0 ? `${scopeLabel} (${entry.level})` : scopeLabel;
-  });
-
-  if (scopePlans.length) {
-    flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.ScopePlan", { plans: scopePlans.join(", ") })}`;
   }
 
   // Load the Foundry-specific dice implementation only when an Areté roll is
@@ -378,9 +513,12 @@ export async function onAreteRoll(event) {
   let outcome = null;
   try {
     outcome = await rollAreteWithParadox({
-      dicePool,
+      dicePool: automatic ? paradoxRating : basePool,
+      bonusDice: automatic ? 0 : bonusDice,
       paradoxRating,
-      difficulty: totalDifficulty,
+      onlyParadox: automatic,
+      difficulty: automatic ? 0 : threshold,
+      arete: arete.value,
       title: rollLabel,
       flavor,
       selectors: uniqueSelectors,
@@ -401,23 +539,29 @@ export async function onAreteRoll(event) {
     ui.notifications.info(game.i18n.localize("WOD5E_MAGE.MagickBalance.ParadoxReverted"));
   }
 
-  // L'Effetto Mantenuto dichiarato nel dialogo, a tiro risolto, si scrive da
-  // solo fra le Magick in Atto della pagina Magick.
+  if (rolled) await addMaintainedEffect(actor, result);
+}
+
+/**
+ * L'Effetto Mantenuto dichiarato nel dialogo, a tiro risolto, si scrive da
+ * solo fra le Magick in Atto della pagina Magick.
+ */
+async function addMaintainedEffect(actor, result) {
   const maintainedName = String(result.maintainedName ?? "").trim();
-  if (rolled && isChecked(result.maintained) && maintainedName && actor.isOwner) {
-    const rows = { ...(actor.getFlag(MODULE_ID, "ongoingMagick") ?? {}) };
-    let rowId = foundry.utils.randomID();
-    while (rows[rowId]) rowId = foundry.utils.randomID();
+  if (!isChecked(result.maintained) || !maintainedName || !actor.isOwner) return;
 
-    rows[rowId] = {
-      nameSpheres: maintainedName,
-      status: game.i18n.localize("WOD5E_MAGE.OngoingMagick.MaintainedStatus"),
-      triggerEffect: ""
-    };
+  const rows = { ...(actor.getFlag(MODULE_ID, "ongoingMagick") ?? {}) };
+  let rowId = foundry.utils.randomID();
+  while (rows[rowId]) rowId = foundry.utils.randomID();
 
-    await actor.setFlag(MODULE_ID, "ongoingMagick", rows);
-    ui.notifications.info(
-      game.i18n.format("WOD5E_MAGE.OngoingMagick.MaintainedAdded", { name: maintainedName })
-    );
-  }
+  rows[rowId] = {
+    nameSpheres: maintainedName,
+    status: game.i18n.localize("WOD5E_MAGE.OngoingMagick.MaintainedStatus"),
+    triggerEffect: ""
+  };
+
+  await actor.setFlag(MODULE_ID, "ongoingMagick", rows);
+  ui.notifications.info(
+    game.i18n.format("WOD5E_MAGE.OngoingMagick.MaintainedAdded", { name: maintainedName })
+  );
 }

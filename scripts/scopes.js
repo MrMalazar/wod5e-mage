@@ -1,8 +1,7 @@
 /**
- * Gli Ambiti sono le sei colonne della Tabella dei Successi Extra (5.8).
- * Sono liberi per tutti: nessuna Sfera li sblocca o li vieta. La scheda non
- * tiene più contatori per Ambito; mostra soltanto dove la Sfera d'Affinità
- * regala successi automatici, e il listino completo del manuale.
+ * I sei Ambiti della Magick. Nel ramo A si dichiarano a livelli da 1 a 7 e
+ * fanno soglia con la Sfera più alta; la scheda mostra la tavola dei livelli
+ * e la riga del Dono della Sfera d'Affinità (in attesa delle Specialità).
  */
 export const SCOPES = Object.freeze([
   "potency",
@@ -16,7 +15,7 @@ export const SCOPES = Object.freeze([
 /** I tracciati su cui il Dono lavora quando non lavora su un Ambito. */
 export const GIFT_TRACKS = Object.freeze(["health", "willpower", "wisdom"]);
 
-/** Colonne del listino: sette gradini di successi extra. */
+/** Colonne della tavola: i sette livelli di un Ambito. */
 export const SCOPE_TABLE_STEPS = 7;
 
 /** La Durata si scrive col numero e il simbolo del tempo (dal manuale). */
@@ -69,8 +68,8 @@ export function prepareAffinityGift(affinitySphere, sphereRating = 0) {
 }
 
 /**
- * Il listino completo (5.8): sei righe per sette gradini, con le Sfere che
- * prediligono ogni Ambito. La riga del Dono viene segnata per accendersi.
+ * La tavola degli Ambiti: sei righe per sette livelli (Potenza a danni per
+ * livello, dal 4/9/2026). La riga del Dono viene segnata per accendersi.
  */
 export function prepareScopeTable({ gift = null } = {}) {
   const steps = Array.from({ length: SCOPE_TABLE_STEPS }, (_, index) => index + 1);

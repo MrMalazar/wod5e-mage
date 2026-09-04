@@ -40,7 +40,7 @@ balance = applyMagickBalanceDelta(
 assert.deepEqual(balance, { quintessence: 4, paradox: 3 });
 
 const actor = {
-  getFlag: () => ({ quintessence: 5, paradox: 5 })
+  getFlag: (_m, key) => (key === "magickBalance" ? { quintessence: 5, paradox: 5 } : undefined)
 };
 const track = prepareMagickTrack(actor);
 assert.equal(track.cells.length, 9);
@@ -91,3 +91,24 @@ assert.deepEqual(
 );
 
 console.log("Magick balance behavior validated.");
+
+// Il Paradosso permanente è il pavimento: il meno si ferma lì, la
+// Quintessenza non lo scalza, e le celle permanenti si distinguono.
+balance = applyMagickBalanceDelta({ quintessence: 3, paradox: 2 }, "paradox", -1, 2);
+assert.deepEqual(balance, { quintessence: 3, paradox: 2 });
+balance = applyMagickBalanceDelta({ quintessence: 7, paradox: 2 }, "quintessence", 1, 2);
+assert.deepEqual(balance, { quintessence: 7, paradox: 2 });
+balance = applyMagickBalanceDelta({ quintessence: 6, paradox: 3 }, "quintessence", 1, 2);
+assert.deepEqual(balance, { quintessence: 6, paradox: 2 });
+{
+  const { getMagickBalance } = await import("../scripts/magick-balance.js");
+  const floored = {
+    getFlag: (_m, key) => key === "magickBalance"
+      ? { quintessence: 8, paradox: 0 }
+      : { permanentParadox: 3 }
+  };
+  assert.deepEqual(getMagickBalance(floored), { quintessence: 6, paradox: 3, floor: 3 });
+  const flooredTrack = prepareMagickTrack(floored);
+  assert.equal(flooredTrack.cells.filter((cell) => cell.state === "paradox permanent").length, 3);
+  assert.equal(flooredTrack.cells.filter((cell) => cell.state === "quintessence").length, 6);
+}

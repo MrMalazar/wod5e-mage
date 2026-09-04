@@ -51,20 +51,30 @@ Spheres and ratings from zero to five. Sphere values are stored in module flags.
 The Traits page hosts the Wheel widget full-width under the Skills, with the
 two persistent fields (generated Quintessence, permanent Paradox) inside it
 and an Areté rating from one to five below. Every Attribute and Skill row
-opens with its M5 sigil, gold on the sheet's dark ground. Clicking Areté opens separate Attribute and Skill
-selectors containing every available trait, including custom system definitions,
-and rolls the static Areté rating plus both selected traits. Coincidental,
-vulgar, and vulgar with witnesses are independent roll options and do not apply
-a dice penalty at this stage.
+opens with its M5 sigil, gold on the sheet's dark ground. Clicking Areté opens the Magick roll dialog
+(branch A of the September 2026 playtest): the pool is a Skill plus a Skill or
+an Attribute, and Areté never rolls. Areté enters as the prize of the
+description (a checkbox worth as many dice as Areté, never for Hybrid Magick),
+Harmony adds one or two dice, and prize, Harmony and every positive modifier
+share a +3 cap that the confirmation dialog enforces. The threshold is the
+higher of the highest Sphere and the highest Scope, +1 per Scope beyond the
+first, +1 with three or more Spheres, capped at 7; Scopes are declared with a
+level from 1 to 7. When the pool is at least twice the threshold the victory
+is automatic: coincidental Magick posts a chat card with no dice, vulgar
+Magick rolls only the Paradox dice and the card states the Burn (equal to the
+threshold). A roll short of the threshold by at most Areté successes is
+flagged "one step short". Coincidental, vulgar and vulgar with witnesses move
+the Wheel toward Paradox before the roll.
 The Sphere area uses the nine module-provided icons with WoD5e's native resource-dot
 selectors. Only selected Spheres are listed below; hiding a Sphere preserves its
 dot rating. Each listed Sphere displays its Influence description for ratings one
 through five, and the leftmost empty marker returns a Sphere to zero. Scopes
 are free for everyone (no Sphere unlocks or forbids one): the Traits page shows
-no Scope counters at all — the Magick tab ends with the "Spending Extra
-Successes" table (six Scopes, seven steps) with the Affinity Gift row
-highlighted, and the Gift's automatic successes equal the Affinity Sphere's
-own rating. In the right side panel, under Custom Rolls, a small Bonuses
+no Scope counters at all — the Magick tab ends with "The Scopes" table (six
+Scopes, seven levels; Potency reads as damage per level: 0, 2, 5, 7, 8, 10,
+13) with the Affinity Gift row highlighted, and the Gift's automatic successes
+equal the Affinity Sphere's own rating (the Sphere Specialities that replace
+the Gift wait for their lists). In the right side panel, under Custom Rolls, a small Bonuses
 table (number, type, description) lets the player note reminders such as
 "+3 · Forces Scope"; rows are stored in module flags and never touch the
 dice. The right
@@ -74,22 +84,30 @@ flags without affecting rolls.
 The separate Concept Challenge tab contains three groups of guided character
 questions. Its 21 compact three-line text areas save automatically to module
 flags and do not affect any roll.
-The Focus tab stores Paradigm, the Practice split into Form (Magick,
-Technomagick, Hybrid Magick) plus name, and six Instrument slots, one per family
-seven regardless of Arete; each slot pairs a family drop-down (the six
-families of the M5 manual) with the free-text detail. Wisdom sits as a box at
+The Creed tab (branch A of the September 2026 playtest) stores the Creed as a
+drop-down of the twelve manual Creeds plus a free-text line, the Type of Magick
+(Magick, Technomagick, Hybrid Magick) and the Instruments for Magick: one row
+per unlocked Sphere, each pairing one of the twenty-two Instruments (grouped by
+the five families: Object, Word, Machine, Substance, Body) with the player's
+own specific detail, and a trade field for the two "trade" Instruments. The
+Type disables the families it cannot use (Machine is Technomagick only, Word
+and Body are Magick only, Hybrid takes all); the same Instrument on two
+Spheres is allowed and flagged. The six family slots of older sheets are
+poured into the Sphere rows until the first save. Wisdom sits as a box at
 the top of the left column and, when its track is full, shows the Marked
 effects beside it. The right column lists only the Spheres currently selected
 in Magick, with a separate rich-text note for each.
 The Mage header groups Health and Willpower on the left. Wisdom has an
 adjustable damage track and can be rolled using its undamaged boxes as the pool.
-The Magick tab also contains a shared nine-cell Magick track. Quintessence fills
-it from the left and Paradox fills it from the right, with both values stored in
+The Traits tab contains the shared nine-cell Wheel. Quintessence fills it
+from the left and Paradox fills it from the right, with both values stored in
 module flags. Plus fills an available cell immediately. On a full track, Plus
 first removes one cell from the opposing side; the following Plus can then fill
 that empty cell from the selected side. No contested or pending state is stored,
-and Minus always removes one cell immediately. This play resource remains
-editable while the sheet is locked.
+and Minus always removes one cell immediately. Permanent Paradox is the floor
+of the Wheel: its cells are drawn apart, Minus never goes below them and
+Quintessence never takes them. This play resource remains editable while the
+sheet is locked.
 
 Only Areté rolls use Paradox dice. The current number of purple Paradox cells
 replaces the same number of normal dice in the Areté pool, capped by the pool

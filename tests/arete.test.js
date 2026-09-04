@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import {
+  bonusDiceExcess,
+  calculateAretePrize,
   calculateAreteTraitPool,
+  calculateMagickThreshold,
+  capBonusDice,
   getArete,
+  isAutomaticVictory,
+  isOneStepShort,
   normalizeMagickRollOptions,
   prepareAreteTraits
 } from "../scripts/arete.js";
@@ -18,22 +24,66 @@ assert.equal(getArete(actorWithFlag({ value: 3 })).value, 3);
 assert.equal(getArete(actorWithFlag({ value: 99 })).value, 5);
 assert.equal(getArete(actorWithFlag({ value: 0 })).value, 1);
 
-assert.equal(calculateAreteTraitPool(3, 4, 2), 9);
-assert.equal(calculateAreteTraitPool(1, 1, 0), 2);
+// La riserva del ramo A: due tratti, l'Areté non tira.
+assert.equal(calculateAreteTraitPool(4, 2), 6);
+assert.equal(calculateAreteTraitPool(1, 0), 1);
 
-// Areté resta fuori dalla riserva finché la casella non viene selezionata.
+// Il premio dell'Areté: pari all'Areté, tetto +3, mai all'Ibrida.
+assert.equal(calculateAretePrize(2, "magick"), 2);
+assert.equal(calculateAretePrize(5, "tecnomagick"), 3);
+assert.equal(calculateAretePrize(4, ""), 3);
+assert.equal(calculateAretePrize(5, "ibrida"), 0);
+assert.equal(capBonusDice(5), 3);
+assert.equal(capBonusDice(-1), 0);
+
+// Il tetto +3 conta premio, Armonia e modificatori positivi insieme;
+// i negativi non c'entrano.
+assert.equal(bonusDiceExcess(3, []), 0);
+assert.equal(bonusDiceExcess(2, [{ value: "+2" }, { value: "-1" }]), 1);
+assert.equal(bonusDiceExcess(0, [{ value: 1 }, { value: 1 }]), 0);
+assert.equal(bonusDiceExcess(3, [{ value: "+3" }]), 3);
+
+// La soglia: il maggiore fra Sfera e Ambito, +1 per ogni Ambito oltre il
+// primo, +1 con tre o più Sfere, tetto 7.
+assert.equal(calculateMagickThreshold(), 0);
+assert.equal(calculateMagickThreshold({ sphereLevels: [3] }), 3);
+assert.equal(calculateMagickThreshold({ sphereLevels: [3], scopeLevels: [4] }), 4);
+assert.equal(calculateMagickThreshold({ sphereLevels: [3], scopeLevels: [4, 2] }), 5);
+assert.equal(calculateMagickThreshold({ sphereLevels: [3, 2], scopeLevels: [1] }), 3);
+assert.equal(calculateMagickThreshold({ sphereLevels: [3, 2, 1], scopeLevels: [1] }), 4);
+assert.equal(calculateMagickThreshold({ sphereLevels: [5, 4, 4], scopeLevels: [7, 7, 7] }), 7);
+// Un livello di Ambito fuori scala si riporta fra 1 e 7.
+assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [0] }), 1);
+assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [9] }), 7);
+
+// Vittoria automatica: riserva almeno doppia della soglia.
+assert.equal(isAutomaticVictory(8, 4), true);
+assert.equal(isAutomaticVictory(7, 4), false);
+assert.equal(isAutomaticVictory(10, 0), false);
+
+// A un passo: sotto la soglia di al massimo Areté successi.
+assert.equal(isOneStepShort(2, 4, 2), true);
+assert.equal(isOneStepShort(1, 4, 2), false);
+assert.equal(isOneStepShort(4, 4, 2), false);
+assert.equal(isOneStepShort(0, 0, 5), false);
+
+// Il premio e l'Armonia entrano solo se il giocatore li dichiara.
 assert.deepEqual(normalizeMagickRollOptions(), {
-  useArete: false,
+  usePrize: false,
+  harmony: 0,
   coincidental: false,
   vulgar: false,
   witnesses: false
 });
-assert.equal(normalizeMagickRollOptions({ arete: "on" }).useArete, true);
-assert.equal(normalizeMagickRollOptions({ arete: true }).useArete, true);
-assert.equal(normalizeMagickRollOptions({ arete: "false" }).useArete, false);
+assert.equal(normalizeMagickRollOptions({ prize: "on" }).usePrize, true);
+assert.equal(normalizeMagickRollOptions({ prize: true }).usePrize, true);
+assert.equal(normalizeMagickRollOptions({ prize: "false" }).usePrize, false);
+assert.equal(normalizeMagickRollOptions({ harmony: "2" }).harmony, 2);
+assert.equal(normalizeMagickRollOptions({ harmony: 5 }).harmony, 2);
 
 assert.deepEqual(normalizeMagickRollOptions({ vulgar: false, witnesses: true }), {
-  useArete: false,
+  usePrize: false,
+  harmony: 0,
   coincidental: false,
   vulgar: false,
   witnesses: true
@@ -45,7 +95,8 @@ assert.deepEqual(normalizeMagickRollOptions({
   vulgar: true,
   witnesses: false
 }), {
-  useArete: false,
+  usePrize: false,
+  harmony: 0,
   coincidental: false,
   vulgar: true,
   witnesses: false
@@ -55,7 +106,8 @@ assert.deepEqual(normalizeMagickRollOptions({
   vulgar: true,
   witnesses: true
 }), {
-  useArete: false,
+  usePrize: false,
+  harmony: 0,
   coincidental: false,
   vulgar: false,
   witnesses: true

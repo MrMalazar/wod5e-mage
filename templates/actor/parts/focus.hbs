@@ -5,18 +5,25 @@
 
     <div class="wod5e-mage-focus-layout">
         <section class="wod5e-mage-focus-definition">
-            {{!-- La Saggezza sta col Focus: un riquadro in colonna, non una barra.
+            {{!-- La Saggezza sta col Credo: un riquadro in colonna, non una barra.
                  Quando la fila è piena, accanto compare l'effetto (Segnato). --}}
             <div class="wod5e-mage-focus-wisdom">
                 {{> "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"}}
             </div>
 
+            {{!-- Il Credo: uno dei dodici in tendina, e sotto le parole tue. --}}
             <div class="wod5e-mage-focus-short-field">
                 <div>
-                    <strong>{{localize "WOD5E_MAGE.Focus.Paradigm"}}</strong>
-                    <small>{{localize "WOD5E_MAGE.Focus.ParadigmHint"}}</small>
+                    <strong>{{localize "WOD5E_MAGE.Focus.Credo"}}</strong>
+                    <small>{{localize "WOD5E_MAGE.Focus.CredoHint"}}</small>
                 </div>
-                <input type="text" name="flags.wod5e-mage.focus.paradigm" value="{{focus.paradigm}}" aria-label="{{localize 'WOD5E_MAGE.Focus.ParadigmHint'}}" {{#if locked}}disabled{{/if}}>
+                <select name="flags.wod5e-mage.focus.credo" aria-label="{{localize 'WOD5E_MAGE.Focus.Credo'}}" {{#if locked}}disabled{{/if}}>
+                    <option value="">{{localize "WOD5E_MAGE.Focus.CredoNone"}}</option>
+                    {{#each focus.credos as |credo|}}
+                        <option value="{{credo.id}}" {{#if credo.selected}}selected{{/if}}>{{credo.label}}</option>
+                    {{/each}}
+                </select>
+                <input type="text" name="flags.wod5e-mage.focus.paradigm" value="{{focus.paradigm}}" placeholder="{{localize 'WOD5E_MAGE.Focus.ParadigmHint'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.ParadigmHint'}}" {{#if locked}}disabled{{/if}}>
             </div>
 
             <div class="wod5e-mage-focus-short-field">
@@ -24,7 +31,9 @@
                     <strong>{{localize "WOD5E_MAGE.Focus.Type"}}</strong>
                     <small>{{localize "WOD5E_MAGE.Focus.TypeHint"}}</small>
                 </div>
-                {{!-- Magick, Tecnomagick, Magick Ibrida: le dodici Forme sono archiviate. --}}
+                {{!-- Magick, Tecnomagick, Magick Ibrida: il Tipo decide le famiglie
+                     di Strumenti ammesse (Macchina solo Tecnomagick, Parola e
+                     Corpo solo Magick, l'Ibrida tutto). --}}
                 <select name="flags.wod5e-mage.focus.practiceForm" aria-label="{{localize 'WOD5E_MAGE.Focus.TypeHint'}}" {{#if locked}}disabled{{/if}}>
                     <option value="">{{localize "WOD5E_MAGE.Focus.FormNone"}}</option>
                     {{#each focus.forms as |form|}}
@@ -37,30 +46,43 @@
                 <header class="resource-header">
                     <label class="header-label">{{localize "WOD5E_MAGE.Focus.Instruments"}}</label>
                 </header>
+                <p class="wod5e-mage-focus-instruments-hint">{{localize "WOD5E_MAGE.Focus.InstrumentsHint"}}</p>
 
-                {{!-- Ogni Strumento si scrive a due livelli (05_071): prima la
-                     famiglia, in tendina alfabetica, poi il tuo di preciso. --}}
+                {{!-- Uno Strumento per Sfera (ramo A): la Sfera, lo Strumento fra i
+                     ventidue a gruppi di famiglia, il mestiere quando serve, e il
+                     tuo di preciso. --}}
                 <div class="wod5e-mage-focus-instrument-list">
-                    {{#each focus.instruments as |instrument|}}
-                        <div class="wod5e-mage-focus-instrument">
-                            <span class="resource-value" data-value="{{#if instrument.selected}}1{{else}}0{{/if}}">
-                                <span class="resource-value-step" data-action="focusInstrumentToggle" data-slot="{{instrument.id}}" data-selected="{{instrument.selected}}" data-index="1" role="checkbox" aria-checked="{{instrument.selected}}" tabindex="0"></span>
-                            </span>
-                            <select name="flags.wod5e-mage.focus.instruments.{{instrument.id}}.kind" aria-label="{{localize 'WOD5E_MAGE.Focus.Family'}}" {{#if ../locked}}disabled{{/if}}>
-                                <option value="">{{localize "WOD5E_MAGE.Focus.FamilyNone"}}</option>
-                                {{#each instrument.families as |family|}}
-                                    <option value="{{family.id}}" {{#if family.selected}}selected{{/if}}>{{family.label}}</option>
+                    {{#each focus.instruments as |row|}}
+                        <div class="wod5e-mage-focus-instrument{{#if row.sharedWith.length}} shared{{/if}}{{#if row.outsideForm}} outside{{/if}}">
+                            <label class="wod5e-mage-focus-instrument-sphere" title="{{localize row.label}}">
+                                <img src="{{row.icon}}" alt="">
+                                <span>{{localize row.label}}</span>
+                            </label>
+                            <select name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.tool" aria-label="{{localize 'WOD5E_MAGE.Focus.Tool'}}" {{#if ../locked}}disabled{{/if}}>
+                                <option value="">{{localize "WOD5E_MAGE.Focus.ToolNone"}}</option>
+                                {{#each row.families as |family|}}
+                                    <optgroup label="{{family.label}}" {{#unless family.allowed}}disabled{{/unless}}>
+                                        {{#each family.tools as |tool|}}
+                                            <option value="{{tool.id}}" {{#if tool.selected}}selected{{/if}}>{{tool.label}}</option>
+                                        {{/each}}
+                                    </optgroup>
                                 {{/each}}
                             </select>
-                            <input type="text" name="flags.wod5e-mage.focus.instruments.{{instrument.id}}.name" value="{{instrument.name}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Instrument'}}" {{#if ../locked}}disabled{{/if}}>
+                            {{#if row.needsProfession}}
+                                <input type="text" class="wod5e-mage-focus-instrument-profession" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.profession" value="{{row.profession}}" placeholder="{{localize 'WOD5E_MAGE.Focus.ProfessionHint'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Profession'}}" {{#if ../locked}}disabled{{/if}}>
+                            {{/if}}
+                            <input type="text" class="wod5e-mage-focus-instrument-name" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.name" value="{{row.name}}" placeholder="{{localize 'WOD5E_MAGE.Focus.Detail'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Detail'}}" {{#if ../locked}}disabled{{/if}}>
+                            {{#if row.sharedWith.length}}
+                                <small class="wod5e-mage-focus-instrument-note">{{localize "WOD5E_MAGE.Focus.SharedTool" others=row.sharedList}}</small>
+                            {{/if}}
+                            {{#if row.outsideForm}}
+                                <small class="wod5e-mage-focus-instrument-note">{{localize "WOD5E_MAGE.Focus.ToolOutsideType"}}</small>
+                            {{/if}}
                         </div>
+                    {{else}}
+                        <p class="wod5e-mage-focus-spheres-empty">{{localize "WOD5E_MAGE.Focus.NoSpheres"}}</p>
                     {{/each}}
                 </div>
-
-                <footer>
-                    <span>{{localize "WOD5E_MAGE.Focus.SceneQuestion"}}</span>
-                    <span>{{localize "WOD5E_MAGE.Focus.InstrumentCount" count=focus.instrumentCount}}</span>
-                </footer>
             </section>
         </section>
 
