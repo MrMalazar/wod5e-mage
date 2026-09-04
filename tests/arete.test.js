@@ -27,6 +27,10 @@ assert.equal(getArete(actorWithFlag({ value: 0 })).value, 1);
 // La riserva del ramo A: due tratti, l'Areté non tira.
 assert.equal(calculateAreteTraitPool(4, 2), 6);
 assert.equal(calculateAreteTraitPool(1, 0), 1);
+// Attributo, Abilità, Abilità: ne basta uno, gli altri si sommano.
+assert.equal(calculateAreteTraitPool(3, 2, 2), 7);
+assert.equal(calculateAreteTraitPool(3), 3);
+assert.equal(calculateAreteTraitPool(), 0);
 
 // Il premio dell'Areté: pari all'Areté, tetto +3, mai all'Ibrida.
 assert.equal(calculateAretePrize(2, "magick"), 2);

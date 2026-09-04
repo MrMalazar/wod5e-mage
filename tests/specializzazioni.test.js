@@ -43,9 +43,13 @@ assert.deepEqual(specialtyBonus("occult", "  Serrature "), {
   displayWhenInactive: true
 });
 
-// Il pannello sta nei Tratti, sotto i Bonus, e la finestra chiede Abilità e nome.
+// Il pannello sta nei Tratti sopra i Bonus (che così stanno accanto alla
+// Ruota), e la finestra chiede Abilità e nome.
 const tratti = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
-assert.match(tratti, /bonuses\.hbs[\s\S]*specializzazioni\.hbs/);
+assert.match(tratti, /specializzazioni\.hbs[\s\S]*bonuses\.hbs/);
+// Il + delle Abilità Specifiche sta nell'intestazione delle Abilità, e le
+// righe aggiunte stanno sotto il titolo loro.
+assert.match(tratti, /wod5e-mage-skills-header[\s\S]*data-action="customSkillAdd"[\s\S]*CustomSkills\.Label[\s\S]*data-custom-skill="\{\{skill\.id\}\}"[\s\S]*flags\.wod5e-mage\.customSkills\.\{\{skill\.id\}\}\.value[\s\S]*data-action="customSkillDelete"/);
 const panel = readFileSync(new URL("../templates/actor/parts/specializzazioni.hbs", import.meta.url), "utf8");
 assert.match(panel, /data-action="specialtyAdd"[\s\S]*data-action="editSkill"[\s\S]*data-action="specialtyDelete"/);
 const dialog = readFileSync(new URL("../templates/dialogs/specialty-add.hbs", import.meta.url), "utf8");

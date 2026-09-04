@@ -71,19 +71,20 @@
       "Attributes": "Attributi",
       "SelectAbility": "Seleziona un'Abilità",
       "SelectTrait": "Seleziona un'Abilità o un Attributo",
-      "SelectBothWarning": "Seleziona un'Abilità e un secondo tratto per effettuare il tiro."
+      "SelectBothWarning": "Seleziona un'Abilità e un secondo tratto per effettuare il tiro.",
+      "Attribute": "Attributo",
+      "None": "Nessuno"
     },
     "Arete": {
       "Label": "Areté",
       "Roll": "Tira",
-      "Rolling": "{first} + {second}",
-      "RollHint": "Tira con un'Abilità più un'Abilità o un Attributo; l'Areté è il premio della descrizione",
+      "RollHint": "Tira con Attributo, Abilità, Abilità (ne basta uno); l'Areté è il premio della descrizione",
       "Trait": "Attributo o Abilità",
       "TraitShort": "Abilità",
       "SelectTrait": "Seleziona un tratto",
       "SelectAttribute": "Seleziona un Attributo",
       "SelectSkill": "Seleziona un'Abilità",
-      "SelectTraitWarning": "Per il tiro serve un'Abilità, più un'Abilità o un Attributo.",
+      "SelectTraitWarning": "Scegli almeno un tratto: un Attributo o un'Abilità.",
       "MagickType": "Tipologia",
       "CoincidentalHint": "Non si percepisce.",
       "VulgarHint": "La realtà lo percepisce, +1 Paradosso.",
@@ -93,7 +94,7 @@
       "Vulgar": "Volgare",
       "VulgarWithWitnesses": "Volgare con testimoni",
       "NoType": "Nessun tipo selezionato",
-      "RollFlavor": "Riserva: {first} {firstValue} + {second} {secondValue}{bonus}. Soglia {threshold}. Tipo: {magickType}.",
+      "RollFlavor": "Riserva: {traits}{bonus}. Soglia {threshold}. Tipo: {magickType}.",
       "Maintained": "Effetto Mantenuto",
       "MaintainedName": "Nome dell'effetto",
       "Spheres": "Sfere Effetto",
@@ -114,7 +115,10 @@
       "OneStep": "A un passo: mancano {missing} successi, entro l'Areté ({arete}). Riuscita a un prezzo.",
       "BonusCap": "Tetto +3: {excess} dadi in meno.",
       "SpherePlan": "Sfere: {plans}.",
-      "SpecialtyHint": "Specialità: questo Ambito conta come il minore fra la Sfera e il suo livello, e non pesa come Ambito in più."
+      "SpecialtyHint": "Specialità: questo Ambito conta come il minore fra la Sfera e il suo livello, e non pesa come Ambito in più.",
+      "HarmonyShort": "dadi dagli altri Maghi",
+      "ThresholdShort": "Soglia: il maggiore fra Sfera e Ambito, +1 per ogni Ambito oltre il primo, +1 con tre Sfere, tetto 7.",
+      "ScopeTable": "La tavola degli Ambiti"
     },
     "Focus": {
       "Credo": "Credo",
@@ -564,10 +568,19 @@
     },
     "SphereSpecialties": {
       "Label": "Specialità delle Sfere",
-      "Hint": "Al terzo pallino di una Sfera scegli uno dei suoi poteri passivi. Non esiste più la Sfera affine.",
+      "Hint": "Al terzo pallino di una Sfera scegli uno dei suoi poteri passivi; il quarto e il quinto pallino ne danno un altro l'uno. Non esiste più la Sfera affine.",
       "None": "Specialità…",
       "Empty": "Nessuna Sfera al terzo pallino: la Specialità arriva col terzo.",
-      "MissingPack": "Il compendio delle Sfere non è disponibile."
+      "MissingPack": "Il compendio delle Sfere non è disponibile.",
+      "Slots": "{count} Specialità"
+    },
+    "CustomSkills": {
+      "Label": "Abilità Specifiche",
+      "Add": "Aggiungi un'Abilità Specifica",
+      "Remove": "Togli l'Abilità Specifica",
+      "Name": "Nome dell'Abilità",
+      "NameHint": "nome dell'Abilità",
+      "Roll": "Tira con questa Abilità"
     }
   }
 }

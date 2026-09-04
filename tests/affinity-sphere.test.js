@@ -10,7 +10,8 @@ import {
   loadSpherePowers,
   prepareSphereSpecialties,
   SPECIALTY_MIN_RATING,
-  specialtyScopes
+  specialtyScopes,
+  specialtySlots
 } from "../scripts/sphere-specialties.js";
 
 const packSource = readFileSync(
@@ -88,8 +89,11 @@ const powers = await loadSpherePowers({
 assert.equal(Object.keys(powers).length, 9);
 assert.equal(powers.correspondence.name, "Correspondence");
 
-// Le Specialità: solo le Sfere sbloccate dal terzo pallino, con la scelta.
+// Le Specialità: una al terzo pallino, poi una per pallino.
 assert.equal(SPECIALTY_MIN_RATING, 3);
+assert.deepEqual([0, 1, 2, 3, 4, 5].map(specialtySlots), [0, 0, 0, 1, 2, 3]);
+
+// Solo le Sfere sbloccate dal terzo pallino, con gli slot e le scelte.
 const itPowers = await loadSpherePowers({
   lang: "it",
   getPack: () => ({ getDocuments: async () => items })
@@ -97,22 +101,30 @@ const itPowers = await loadSpherePowers({
 const actor = {
   getFlag(_m, key) {
     if (key === "spheres") return { correspondence: 3, forces: 2, mind: 4, time: 5 };
-    if (key === "selectedSpheres") return { correspondence: true, forces: true, mind: true, time: false };
-    if (key === "sphereSpecialties") return { correspondence: "range", mind: "nonEsiste", forces: "potency" };
+    if (key === "selectedSpheres") return { correspondence: true, forces: true, mind: true, time: true };
+    // Corrispondenza con la forma vecchia (stringa), Mente a due slot, Tempo vuoto.
+    if (key === "sphereSpecialties") return { correspondence: "range", mind: { 1: "perception", 2: "nonEsiste" }, forces: "potency" };
     return undefined;
   }
 };
 const rows = prepareSphereSpecialties(actor, { powers: itPowers });
-assert.deepEqual(rows.map((row) => row.id), ["correspondence", "mind"]);
-assert.equal(rows[0].choice, "range");
-assert.equal(rows[0].chosen.label, "Portata");
-assert.equal(rows[0].options.length, 4);
-assert.equal(rows[0].options.find((option) => option.id === "range").selected, true);
-// Una scelta che il compendio non conosce vale come nessuna scelta.
-assert.equal(rows[1].choice, "");
-assert.equal(rows[1].chosen, null);
+assert.deepEqual(rows.map((row) => [row.id, row.slots.length]), [["correspondence", 1], ["mind", 2], ["time", 3]]);
+const corr = rows[0].slots[0];
+assert.equal(corr.choice, "range");
+assert.equal(corr.chosen.label, "Portata");
+assert.equal(corr.options.length, 4);
+assert.equal(corr.options.find((option) => option.id === "range").selected, true);
+// Mente: il primo slot ha Percezione, il secondo una scelta ignota (vuota);
+// nel secondo slot Percezione è presa e non si ripete.
+const mind = rows[1];
+assert.equal(mind.slots[0].choice, "perception");
+assert.equal(mind.slots[1].choice, "");
+assert.equal(mind.slots[1].chosen, null);
+assert.equal(mind.slots[1].options.find((option) => option.id === "perception").taken, true);
+assert.equal(mind.slots[0].options.find((option) => option.id === "perception").taken, false);
 
-// Per il tiro: Corrispondenza copre la Portata; Forze (due pallini) no.
+// Per il tiro: Corrispondenza copre la Portata; Forze (due pallini) no;
+// Mente non ha scelto l'Ambito.
 assert.deepEqual(specialtyScopes(actor, itPowers), { correspondence: "range" });
 
 console.log("Sphere specialities tests passed.");

@@ -91,47 +91,67 @@ function canEdit(actor) {
   return true;
 }
 
-const SALUTE_ICONS = Object.freeze({
-  ps: "fa-solid fa-slash",
-  pa: "fa-solid fa-xmark",
-  ms: "fa-regular fa-circle",
-  ma: "fa-regular fa-circle-dot"
-});
-
 /**
- * Il clic apre la scelta del segno: quattro danni più la casella vuota,
- * un colpo solo. Il clic destro svuota senza chiedere.
+ * Il clic apre un menù piccolo dove hai cliccato: i quattro segni e la
+ * casella vuota, solo simboli (la legenda sta sotto il tracciato). Si chiude
+ * scegliendo, o cliccando fuori, o con Esc. Il clic destro svuota subito.
  */
-async function askSaluteState(current) {
-  const localize = game.i18n.localize.bind(game.i18n);
-  const buttons = [
-    ...SALUTE_STATES.filter((state) => state).map((state) => ({
-      action: state,
-      label: localize(`WOD5E_MAGE.Salute.States.${state}`),
-      icon: SALUTE_ICONS[state],
-      default: state === (current || "ps")
-    })),
-    {
-      action: "",
-      label: localize("WOD5E_MAGE.Salute.States.empty"),
-      icon: "fa-regular fa-square"
-    }
-  ];
+function askSaluteState(event, current) {
+  return new Promise((resolve) => {
+    document.querySelectorAll(".wod5e-mage-salute-menu").forEach((old) => old.remove());
+    const localize = game.i18n.localize.bind(game.i18n);
+    const menu = document.createElement("div");
+    menu.className = "wod5e-mage-salute-menu";
+    menu.setAttribute("role", "menu");
 
-  try {
-    const choice = await foundry.applications.api.DialogV2.wait({
-      window: { title: localize("WOD5E_MAGE.Salute.Pick") },
-      content: `<p class="wod5e-mage-salute-pick-hint">${localize("WOD5E_MAGE.Salute.PickHint")}</p>`,
-      buttons,
-      classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-salute-pick"],
-      position: { width: "auto", height: "auto" },
-      rejectClose: true
-    });
-    return typeof choice === "string" ? choice : null;
-  } catch (_error) {
-    // Finestra chiusa con la X: nessun cambio.
-    return null;
-  }
+    const options = [...SALUTE_STATES.filter((state) => state), ""];
+    for (const state of options) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "wod5e-mage-salute-menu-item";
+      button.dataset.state = state;
+      button.title = localize(`WOD5E_MAGE.Salute.States.${state || "empty"}`);
+      button.setAttribute("aria-label", button.title);
+      if (state === current) button.classList.add("current");
+      const glyph = document.createElement("i");
+      glyph.className = "wod5e-mage-salute-glyph";
+      glyph.dataset.state = state;
+      button.appendChild(glyph);
+      button.addEventListener("click", (click) => {
+        click.preventDefault();
+        click.stopPropagation();
+        close(state);
+      });
+      menu.appendChild(button);
+    }
+
+    const close = (value) => {
+      menu.remove();
+      document.removeEventListener("pointerdown", onOutside, true);
+      document.removeEventListener("keydown", onKey, true);
+      resolve(value);
+    };
+    const onOutside = (pointer) => {
+      if (!menu.contains(pointer.target)) close(null);
+    };
+    const onKey = (key) => {
+      if (key.key === "Escape") close(null);
+    };
+
+    document.body.appendChild(menu);
+    // Dove hai cliccato, dentro lo schermo.
+    const width = menu.offsetWidth || 150;
+    const height = menu.offsetHeight || 32;
+    const x = Math.min(Math.max((event.clientX ?? 0) - width / 2, 4), window.innerWidth - width - 4);
+    const y = Math.min(Math.max((event.clientY ?? 0) - height - 8, 4), window.innerHeight - height - 4);
+    menu.style.left = `${x}px`;
+    menu.style.top = `${y}px`;
+
+    setTimeout(() => {
+      document.addEventListener("pointerdown", onOutside, true);
+      document.addEventListener("keydown", onKey, true);
+    }, 0);
+  });
 }
 
 export async function onSaluteCellChange(event, target) {
@@ -144,7 +164,7 @@ export async function onSaluteCellChange(event, target) {
   const cell = salute.cells[index];
   if (!cell) return;
 
-  const toState = event.button === 2 ? "" : await askSaluteState(cell.state);
+  const toState = event.button === 2 ? "" : await askSaluteState(event, cell.state);
   if (toState === null || toState === cell.state) return;
   const next = applySaluteStateChange(salute, salute.max, cell.state, toState);
   await actor.setFlag(MODULE_ID, "salute", { ...next, extra: salute.extra });

@@ -249,19 +249,27 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-legend {
+  align-items: center;
   color: var(--mage-oro-chiaro);
-  display: flex;
-  flex-direction: column;
-  font-size: 0.8rem;
-  gap: 0.15rem;
+  display: grid;
+  font-size: 0.78rem;
+  gap: 0.15rem 0.6rem;
+  grid-template-columns: max-content 1fr 1fr;
+  justify-items: center;
   line-height: 1.3;
-  margin: 0.4rem 0 0;
-  text-align: left;
+  margin: 0.4rem auto 0;
+  width: max-content;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-legend-head {
+  color: var(--mage-tenue);
+  font-size: 0.68rem;
+  text-transform: uppercase;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-legend strong {
   color: var(--mage-oro);
-  margin-right: 0.2rem;
+  justify-self: start;
 }
 
 /* I glifi della legenda: le stesse caselle, in piccolo, dentro il testo. */
@@ -317,11 +325,64 @@
   border-color: var(--mage-oro);
 }
 
-/* La scelta del segno: cinque bottoni in fila. */
-.wod5e-mage-salute-pick .wod5e-mage-salute-pick-hint {
-  color: var(--mage-tenue, #ab9f85);
-  font-size: 0.8rem;
-  margin: 0 0 0.4rem;
+/* La scelta del segno: un menù piccolo dove hai cliccato, solo simboli. */
+.wod5e-mage-salute-menu {
+  background: #17120f;
+  border: 1px solid var(--mage-oro, #d9a827);
+  border-radius: 4px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 60%);
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  position: fixed;
+  z-index: 10000;
+}
+
+.wod5e-mage-salute-menu-item {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  min-height: 26px;
+  padding: 0;
+  width: 26px;
+}
+
+.wod5e-mage-salute-menu-item:hover,
+.wod5e-mage-salute-menu-item.current {
+  border-color: var(--mage-oro, #d9a827);
+}
+
+.wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph {
+  --salute-segno: #f5e7b2;
+  border: 1px solid #98772b;
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+}
+
+.wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph[data-state="ps"] {
+  background: linear-gradient(135deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%);
+}
+
+.wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph[data-state="pa"] {
+  background:
+    linear-gradient(45deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%),
+    linear-gradient(135deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%);
+}
+
+.wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph[data-state="ms"] {
+  background: radial-gradient(circle, transparent 0%, transparent 32%, var(--salute-segno) 36%, var(--salute-segno) 48%, transparent 52%, transparent 100%);
+}
+
+.wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph[data-state="ma"] {
+  background: radial-gradient(circle, var(--salute-segno) 0%, var(--salute-segno) 18%, transparent 22%, transparent 34%, var(--salute-segno) 38%, var(--salute-segno) 50%, transparent 54%, transparent 100%);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-status {
@@ -413,7 +474,24 @@
   align-items: center;
   display: grid;
   gap: 0.5rem;
-  grid-template-columns: 28px minmax(80px, 0.5fr) minmax(0, 1fr);
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > small {
+  color: var(--mage-tenue);
+  font-size: 0.72rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-slot {
+  border-top: 1px solid rgb(152 119 43 / 30%);
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-slot > select {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > img {
@@ -503,9 +581,9 @@
    che nessun meno scalza. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-node.permanent,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-cell.permanent {
-  background: var(--mage-rosso-vivo);
-  border-color: var(--mage-inchiostro, #1e1b2e);
-  box-shadow: inset 0 0 0 2px var(--mage-rosso);
+  background: repeating-linear-gradient(135deg, var(--mage-rosso-vivo) 0 3px, var(--mage-nero-dado) 3px 6px);
+  border: 2px solid var(--mage-oro);
+  box-shadow: 0 0 6px var(--mage-rosso-vivo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-controls {
@@ -1347,7 +1425,7 @@
   align-items: center;
   display: flex;
   gap: 0.45rem;
-  min-height: 24px;
+  min-height: 20px;
 }
 
 .wod5e-mage-arete-dotrow > span:first-child {
@@ -1427,8 +1505,93 @@
 .wod5e-mage-arete-form {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  font-size: 0.85rem;
+  gap: 0.45rem;
   min-width: 380px;
+}
+
+/* La riserva: tre tendine in fila, etichetta sopra. */
+.wod5e-mage-arete-traits {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wod5e-mage-arete-trait {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.wod5e-mage-arete-trait > select {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+/* Premio e Armonia sulla stessa riga. */
+.wod5e-mage-arete-extras-row {
+  align-items: center;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wod5e-mage-arete-prize,
+.wod5e-mage-arete-harmony-row {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.wod5e-mage-arete-harmony-row > small {
+  color: var(--mage-tenue);
+  font-size: 0.7rem;
+}
+
+/* L'icona che apre la tavola degli Ambiti. */
+.wod5e-mage-arete-scope-table {
+  background: none;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  font-size: 0.7rem;
+  height: 20px;
+  line-height: 1;
+  margin: 0 0 0 0.35rem;
+  min-height: 20px;
+  padding: 0;
+  vertical-align: middle;
+  width: 22px;
+}
+
+.wod5e-mage-arete-scope-table:hover {
+  border-color: var(--mage-oro);
+  box-shadow: 0 0 5px var(--mage-oro);
+}
+
+.wod5e-mage-scope-table-dialog .wod5e-mage-scope-table > .resource-header {
+  display: none;
+}
+
+.wod5e-mage-scope-table-dialog table {
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.wod5e-mage-scope-table-dialog th,
+.wod5e-mage-scope-table-dialog td {
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  padding: 0.2rem 0.35rem;
+  text-align: center;
+}
+
+.wod5e-mage-scope-table-dialog th[scope="row"] {
+  color: var(--mage-oro, #d9a827);
+  text-align: left;
 }
 
 .wod5e-mage-arete-form hr {
@@ -1441,7 +1604,7 @@
   align-items: center;
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: 170px minmax(0, 1fr);
+  grid-template-columns: 130px minmax(0, 1fr);
 }
 
 /* Un po' d'aria fra Areté e i due tratti della riserva. */
@@ -1471,7 +1634,7 @@
 .wod5e-mage-arete-type-grid {
   align-items: baseline;
   display: grid;
-  gap: 0.45rem 2.2rem;
+  gap: 0.3rem 1.2rem;
   grid-template-columns: max-content minmax(0, 1fr);
 }
 
@@ -2217,6 +2380,70 @@
   min-height: 26px;
   padding: 0;
   width: 26px;
+}
+
+/* Il + nell'intestazione delle Abilità, e le Abilità Specifiche sotto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-skills-header {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skills {
+  border-top: 1px solid var(--mage-oro-scuro);
+  margin-top: 0.5rem;
+  padding-top: 0.4rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skills > .field-header {
+  margin-bottom: 0.3rem;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill-list {
+  display: grid;
+  gap: 0.3rem 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill {
+  align-items: center;
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: 18px minmax(0, 1fr) auto 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill-roll {
+  color: var(--mage-oro);
+  cursor: pointer;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill-name {
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
+  min-width: 0;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill-delete {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  display: inline-flex;
+  height: 22px;
+  justify-content: center;
+  margin: 0;
+  min-height: 22px;
+  padding: 0;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill-delete:hover {
+  color: var(--mage-rosso-chiaro);
 }
 
 /* Le Specializzazioni: Abilità, nome, matita, cestino. */

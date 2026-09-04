@@ -91,23 +91,27 @@
                 <div class="wod5e-mage-sphere-specialty-list">
                     {{#each sphereSpecialties as |row|}}
                         <article class="wod5e-mage-sphere-specialty">
-                            <label class="wod5e-mage-sphere-specialty-head">
+                            <div class="wod5e-mage-sphere-specialty-head">
                                 <img src="{{row.icon}}" alt="">
                                 <strong>{{localize row.label}}</strong>
-                                <select name="flags.wod5e-mage.sphereSpecialties.{{row.id}}" aria-label="{{localize 'WOD5E_MAGE.SphereSpecialties.Label'}}" {{#if ../locked}}disabled{{/if}}>
-                                    <option value="">{{localize "WOD5E_MAGE.SphereSpecialties.None"}}</option>
-                                    {{#each row.options as |option|}}
-                                        <option value="{{option.id}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>
-                                    {{/each}}
-                                </select>
-                            </label>
-                            {{#if row.chosen}}
-                                <div class="wod5e-mage-sphere-specialty-text">{{{row.chosen.description}}}</div>
-                            {{else}}
-                                {{#unless row.hasPowers}}
-                                    <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.SphereSpecialties.MissingPack"}}</p>
-                                {{/unless}}
-                            {{/if}}
+                                <small>{{localize "WOD5E_MAGE.SphereSpecialties.Slots" count=row.slots.length}}</small>
+                            </div>
+                            {{#unless row.hasPowers}}
+                                <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.SphereSpecialties.MissingPack"}}</p>
+                            {{/unless}}
+                            {{#each row.slots as |slot|}}
+                                <div class="wod5e-mage-sphere-specialty-slot">
+                                    <select name="flags.wod5e-mage.sphereSpecialties.{{row.id}}.{{slot.index}}" aria-label="{{localize 'WOD5E_MAGE.SphereSpecialties.Label'}}" {{#if ../../locked}}disabled{{/if}}>
+                                        <option value="">{{localize "WOD5E_MAGE.SphereSpecialties.None"}}</option>
+                                        {{#each slot.options as |option|}}
+                                            <option value="{{option.id}}" {{#if option.selected}}selected{{/if}} {{#if option.taken}}disabled{{/if}}>{{option.label}}</option>
+                                        {{/each}}
+                                    </select>
+                                    {{#if slot.chosen}}
+                                        <div class="wod5e-mage-sphere-specialty-text">{{{slot.chosen.description}}}</div>
+                                    {{/if}}
+                                </div>
+                            {{/each}}
                         </article>
                     {{/each}}
                 </div>

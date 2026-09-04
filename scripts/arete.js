@@ -10,7 +10,7 @@ import {
   selectorsForMageRollTrait
 } from "./mage-roll-selection.js";
 import { prepareSpheres } from "./spheres.js";
-import { SCOPES } from "./scopes.js";
+import { prepareScopeTable, SCOPES } from "./scopes.js";
 import { FOCUS_FORMS } from "./focus.js";
 import { loadSpherePowers, specialtyScopes } from "./sphere-specialties.js";
 
@@ -44,12 +44,12 @@ export function prepareAreteTraits(actor, options) {
   return prepareMageRollTraits(actor, options);
 }
 
-/** La riserva del ramo A: due tratti e basta, l'Areté non tira. */
-export function calculateAreteTraitPool(firstTrait, secondTrait) {
-  return (
-    Math.max(Number(firstTrait) || 0, 0)
-    + Math.max(Number(secondTrait) || 0, 0)
-  );
+/**
+ * La riserva del ramo A: Attributo, Abilità, Abilità. Ne basta uno; chi ne
+ * sceglie di più somma i dadi. L'Areté non tira.
+ */
+export function calculateAreteTraitPool(...traits) {
+  return traits.reduce((total, value) => total + Math.max(Number(value) || 0, 0), 0);
 }
 
 /** Il tetto dei dadi in più: premio, Armonia e Bonus scritti insieme. */
@@ -298,6 +298,7 @@ function wireDifficulty(dialog) {
   const autoOut = root?.querySelector("[data-role=autoVictory]");
   if (!thresholdOut || !poolOut) return;
 
+  const attribute = root.querySelector("#wod5e-mage-arete-attribute");
   const primary = root.querySelector("#wod5e-mage-arete-primary");
   const secondary = root.querySelector("#wod5e-mage-arete-secondary");
   const prizeBox = root.querySelector("input[name=prize]");
@@ -314,14 +315,14 @@ function wireDifficulty(dialog) {
       ? Math.max(Math.trunc(Number(prizeBox.dataset.value) || 0), 0)
       : 0;
     const bonus = capBonusDice(prizeDice + normalizeHarmony(harmony?.value));
-    const pool = calculateAreteTraitPool(optionValue(primary), optionValue(secondary)) + bonus;
+    const pool = calculateAreteTraitPool(optionValue(attribute), optionValue(primary), optionValue(secondary)) + bonus;
 
     thresholdOut.textContent = String(threshold);
     poolOut.textContent = String(pool);
     autoOut?.classList.toggle("hidden", !isAutomaticVictory(pool, threshold));
   };
 
-  [primary, secondary, prizeBox, harmony].forEach((control) => {
+  [attribute, primary, secondary, prizeBox, harmony].forEach((control) => {
     control?.addEventListener("change", update);
     control?.addEventListener("input", update);
   });
@@ -330,6 +331,26 @@ function wireDifficulty(dialog) {
     input.addEventListener("change", update);
   });
   update();
+}
+
+/** L'icona accanto ad Ambiti apre la tavola dei livelli, per consultarla. */
+function wireScopeTable(dialog) {
+  const button = dialog?.element?.querySelector("[data-role=scopeTableOpen]");
+  if (!button) return;
+  button.addEventListener("click", async (event) => {
+    event.preventDefault();
+    const content = await foundry.applications.handlebars.renderTemplate(
+      "modules/wod5e-mage/templates/actor/parts/scope-table.hbs",
+      { scopeTable: prepareScopeTable() }
+    );
+    await foundry.applications.api.DialogV2.wait({
+      window: { title: game.i18n.localize("WOD5E_MAGE.Scopes.TableTitle") },
+      content: `<div class="wod5e-mage-scope-table-dialog">${content}</div>`,
+      buttons: [{ action: "close", icon: "fas fa-times", label: game.i18n.localize("WOD5E.Close"), default: true }],
+      classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog"],
+      position: { width: 720, height: "auto" }
+    }).catch(() => null);
+  });
 }
 
 /** La casella «Effetto Mantenuto» mostra il campo del nome solo da spuntata. */
@@ -397,10 +418,9 @@ export async function onAreteRoll(event) {
     window: {
       title: game.i18n.localize("WOD5E_MAGE.Arete.Roll")
     },
-    // La finestra segue la dimensione naturale dell'intero contenuto; il CSS
-    // mantiene form e controlli al 100% senza tagliare i tre selettori.
+    // Una finestra compatta: due colonne, niente muri di testo.
     position: {
-      width: "auto",
+      width: 640,
       height: "auto"
     },
     content,
@@ -420,16 +440,20 @@ export async function onAreteRoll(event) {
       makeMagickTypeExclusive(dialog);
       wireDotRows(dialog);
       wireDifficulty(dialog);
+      wireScopeTable(dialog);
       wireMaintainedEffect(dialog);
     }
   });
 
   if (!result || result === "cancel") return;
 
-  const selectedFirstTrait = findMageRollTrait(traits, result.primaryTrait);
-  const selectedSecondTrait = findMageRollTrait(traits, result.secondaryTrait);
-  // La riserva è un'Abilità più un'Abilità o un Attributo: mai due Attributi.
-  if (!selectedFirstTrait || !selectedSecondTrait || selectedFirstTrait.type !== "skill") {
+  // Attributo, Abilità, Abilità: ne basta uno, gli altri si sommano.
+  const selectedTraits = [
+    findMageRollTrait(traits, result.attributeTrait),
+    findMageRollTrait(traits, result.primaryTrait),
+    findMageRollTrait(traits, result.secondaryTrait)
+  ].filter(Boolean);
+  if (!selectedTraits.length) {
     ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Arete.SelectTraitWarning"));
     return;
   }
@@ -459,12 +483,9 @@ export async function onAreteRoll(event) {
 
   const prizeDice = options.usePrize ? prize.dice : 0;
   const bonusDice = prizeDice + options.harmony;
-  const basePool = calculateAreteTraitPool(selectedFirstTrait.value, selectedSecondTrait.value);
+  const basePool = calculateAreteTraitPool(...selectedTraits.map((trait) => trait.value));
   const dicePool = basePool + capBonusDice(bonusDice);
-  const rollLabel = game.i18n.format("WOD5E_MAGE.Arete.Rolling", {
-    first: selectedFirstTrait.label,
-    second: selectedSecondTrait.label
-  });
+  const rollLabel = selectedTraits.map((trait) => trait.label).join(" + ");
   const selectedTypes = [];
   if (options.coincidental) {
     selectedTypes.push(game.i18n.localize("WOD5E_MAGE.Arete.Coincidental"));
@@ -479,10 +500,7 @@ export async function onAreteRoll(event) {
     ? selectedTypes.join(", ")
     : game.i18n.localize("WOD5E_MAGE.Arete.NoType");
 
-  const selectors = [
-    ...selectorsForMageRollTrait(selectedFirstTrait),
-    ...selectorsForMageRollTrait(selectedSecondTrait)
-  ];
+  const selectors = selectedTraits.flatMap((trait) => selectorsForMageRollTrait(trait));
   if (options.coincidental) selectors.push("magick.coincidental");
   if (options.vulgar) selectors.push("magick.vulgar");
   if (options.witnesses) selectors.push("magick.vulgar-with-witnesses");
@@ -497,10 +515,7 @@ export async function onAreteRoll(event) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.HarmonyFlavor", { dice: options.harmony }));
   }
   let flavor = game.i18n.format("WOD5E_MAGE.Arete.RollFlavor", {
-    first: selectedFirstTrait.label,
-    firstValue: selectedFirstTrait.value,
-    second: selectedSecondTrait.label,
-    secondValue: selectedSecondTrait.value,
+    traits: selectedTraits.map((trait) => `${trait.label} ${trait.value}`).join(" + "),
     bonus: bonusParts.length ? ` + ${bonusParts.join(" + ")}` : "",
     threshold,
     magickType

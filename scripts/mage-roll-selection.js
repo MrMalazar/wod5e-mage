@@ -1,4 +1,5 @@
 import { prepareEssentialSkillList } from "./abilita-essenziali.js";
+import { customSkillTraits } from "./abilita-specifiche.js";
 import { dressNextRollDialogAsMage, isMageActor } from "./mage-dice.js";
 
 function numericValue(value) {
@@ -31,8 +32,11 @@ export function prepareMageRollTraits(actor, { localize = (key) => key, lang = "
       value: numericValue(trait.value)
     }));
 
+  // Le Abilità Specifiche del giocatore si accodano alle essenziali.
+  const custom = typeof actor.getFlag === "function" ? customSkillTraits(actor) : [];
+
   return {
-    skills,
+    skills: [...skills, ...custom],
     attributes: flattenAttributes(actor.system?.sortedAttributes)
   };
 }
@@ -40,15 +44,16 @@ export function prepareMageRollTraits(actor, { localize = (key) => key, lang = "
 export function findMageRollTrait(traits, key) {
   const [type, id] = String(key ?? "").split(":", 2);
   if (!id) return null;
-  const collection = type === "skill"
+  const collection = type === "skill" || type === "custom"
     ? traits.skills
     : type === "attribute"
       ? traits.attributes
       : [];
-  return collection.find((trait) => trait.id === id) ?? null;
+  return collection.find((trait) => trait.id === id && trait.type === type) ?? null;
 }
 
 export function selectorsForMageRollTrait(trait) {
+  if (trait.type === "custom") return ["skills"];
   if (trait.type === "skill") return ["skills", `skills.${trait.id}`];
   return ["attributes", `attributes.${trait.id}`, trait.category].filter(Boolean);
 }
@@ -62,13 +67,20 @@ export function compileMageTraitRoll({ dataset = {}, traits, primarySkillId, sec
   const secondary = findMageRollTrait(traits, secondaryKey);
   if (!primary || !secondary) return null;
 
+  // Le Abilità di sistema passano per il percorso; le Abilità Specifiche
+  // (bandiere del modulo) entrano come dadi piatti.
+  const valuePaths = [];
+  let flatMod = numericValue(dataset.flatMod);
+  for (const trait of [primary, secondary]) {
+    if (trait.type === "custom") flatMod += trait.value;
+    else valuePaths.push(`${trait.type === "skill" ? "skills" : "attributes"}.${trait.id}.value`);
+  }
+
   const modified = {
     ...dataset,
     selectDialog: false,
-    valuePaths: [
-      `skills.${primary.id}.value`,
-      `${secondary.type === "skill" ? "skills" : "attributes"}.${secondary.id}.value`
-    ].join(" "),
+    valuePaths: valuePaths.join(" "),
+    flatMod,
     selectors: [...new Set([
       ...selectorsForMageRollTrait(primary),
       ...selectorsForMageRollTrait(secondary)
@@ -114,7 +126,9 @@ export async function onMageRoll(event, target) {
     {
       skills: traits.skills.map((trait) => ({
         ...trait,
-        selectedPrimary: trait.id === dataset.skill,
+        selectedPrimary: trait.type === "custom"
+          ? trait.id === dataset.customSkill
+          : trait.id === dataset.skill,
         selectedSecondary: trait.key === selectedSecondary
       })),
       attributes: traits.attributes.map((trait) => ({

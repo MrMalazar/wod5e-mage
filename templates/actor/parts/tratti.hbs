@@ -50,7 +50,13 @@
                 </div>
             </div>
 
-            <label class="resource-header">{{localize "WOD5E.SkillsList.Skills"}}</label>
+            <label class="resource-header wod5e-mage-skills-header">
+                {{localize "WOD5E.SkillsList.Skills"}}
+                {{!-- Il + aggiunge un'Abilità Specifica intera, sotto le essenziali. --}}
+                <button type="button" class="wod5e-mage-bonuses-add wod5e-mage-custom-skill-add" data-action="customSkillAdd" title="{{localize 'WOD5E_MAGE.CustomSkills.Add'}}" aria-label="{{localize 'WOD5E_MAGE.CustomSkills.Add'}}" {{#if locked}}disabled{{/if}}>
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </label>
             <div class="stats-container skills">
                 <div class="stats-content">
                     {{#each sortedSkills as |type key|}}
@@ -96,6 +102,30 @@
                     <div class="field-header">{{localize "WOD5E.SPC.Social"}}</div>
                     <div class="field-header">{{localize "WOD5E.SPC.Mental"}}</div>
                 </div>
+
+                {{#if customSkills.length}}
+                {{!-- Le Abilità Specifiche: nome, dadi, pallini, cestino. --}}
+                <div class="wod5e-mage-custom-skills">
+                    <div class="field-header">{{localize "WOD5E_MAGE.CustomSkills.Label"}}</div>
+                    <div class="wod5e-mage-custom-skill-list">
+                        {{#each customSkills as |skill|}}
+                            <div class="skill wod5e-mage-custom-skill">
+                                <a class="wod5e-mage-custom-skill-roll rollable" data-action="roll" data-select-dialog="true" data-custom-skill="{{skill.id}}" title="{{localize 'WOD5E_MAGE.CustomSkills.Roll'}}"><i class="fa-solid fa-dice-d10"></i></a>
+                                <input type="text" class="wod5e-mage-custom-skill-name" name="flags.wod5e-mage.customSkills.{{skill.id}}.name" value="{{skill.name}}" placeholder="{{localize 'WOD5E_MAGE.CustomSkills.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.CustomSkills.Name'}}" {{#if ../locked}}disabled{{/if}}>
+                                <div class="resource-value" data-value="{{skill.value}}" data-name="flags.wod5e-mage.customSkills.{{skill.id}}.value">
+                                    <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
+                                    {{#numLoop 5}}
+                                        <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}"></span>
+                                    {{/numLoop}}
+                                </div>
+                                <button type="button" class="wod5e-mage-custom-skill-delete" data-action="customSkillDelete" data-row="{{skill.id}}" title="{{localize 'WOD5E_MAGE.CustomSkills.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.CustomSkills.Remove'}}" {{#if ../locked}}disabled{{/if}}>
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+                {{/if}}
             </div>
         </div>
         <div class="side-panel">
@@ -159,13 +189,13 @@
                     </div>
                 </div>
             </div>
-            {{!-- I Bonus del giocatore, sotto i Tiri personalizzati. --}}
-            <div class="stat-panel-section">
-                {{> "modules/wod5e-mage/templates/actor/parts/bonuses.hbs"}}
-            </div>
-            {{!-- Le Specializzazioni delle Abilità, sotto i Bonus. --}}
+            {{!-- Le Specializzazioni delle Abilità, sotto i Tiri personalizzati. --}}
             <div class="stat-panel-section">
                 {{> "modules/wod5e-mage/templates/actor/parts/specializzazioni.hbs"}}
+            </div>
+            {{!-- I Bonus del giocatore, in fondo: accanto alla Ruota. --}}
+            <div class="stat-panel-section">
+                {{> "modules/wod5e-mage/templates/actor/parts/bonuses.hbs"}}
             </div>
         </div>
         {{!-- La Ruota a tutta larghezza sotto le Abilità: dentro vivono anche

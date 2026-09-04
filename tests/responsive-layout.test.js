@@ -214,12 +214,12 @@ assert.match(areteDialog, /data-specialty="\{\{sphere\.specialtyScope\}\}"/);
 assert.doesNotMatch(areteDialog, /scopeRowTemplate|data-role="scopeAdd"|wod5e-mage-arete-sphere-box|ScopeSuccesses/);
 // La riserva del ramo A: la prima tendina è un'Abilità, la seconda Abilità
 // o Attributo; l'Areté non tira, entra come premio (mai per l'Ibrida).
-assert.match(areteDialog, /RollSelection\.Ability"[\s\S]*name="primaryTrait"[\s\S]*RollSelection\.AbilityOrAttribute[\s\S]*name="secondaryTrait"/);
+assert.match(areteDialog, /RollSelection\.Attribute"[\s\S]*name="attributeTrait"[\s\S]*RollSelection\.Ability"[\s\S]*name="primaryTrait"[\s\S]*RollSelection\.Ability"[\s\S]*name="secondaryTrait"/);
+assert.match(areteDialog, /data-role="scopeTableOpen"/);
 assert.doesNotMatch(areteDialog, /name="primarySkill"|name="arete"|Arete\.Include/);
 assert.match(areteDialog, /Arete\.Prize"[\s\S]*name="prize"[\s\S]*Arete\.PrizeHybrid[\s\S]*name="harmony"[\s\S]*data-role="pool"[\s\S]*data-role="threshold"[\s\S]*data-role="autoVictory"/);
 // L'Armonia è un numero: i dadi degli altri Maghi, contati al tavolo.
 assert.match(areteDialog, /name="harmony"[^>]*type="number"|type="number"[^>]*name="harmony"/);
-assert.match(css, /\.wod5e-mage-arete-row \+ \.wod5e-mage-arete-row\s*\{[^}]*margin-top:/s);
 // Le spiegazioni della Tipologia vivono in una colonna staccata a destra.
 assert.match(areteDialog, /wod5e-mage-arete-type-grid[\s\S]*Arete\.Coincidental\b[\s\S]*Arete\.CoincidentalHint[\s\S]*Arete\.VulgarHint[\s\S]*Arete\.WitnessesHint/);
 assert.doesNotMatch(areteDialog, /wod5e-mage-arete-sphere-list|wod5e-mage-arete-sphere-row\b/);

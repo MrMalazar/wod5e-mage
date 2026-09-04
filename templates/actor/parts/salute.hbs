@@ -15,10 +15,17 @@
             {{/each}}
         </div>
     </div>
-    {{!-- La legenda, in due righe: i danni fisici e i danni mentali. --}}
-    <div class="wod5e-mage-salute-legend">
-        <span><strong>{{localize "WOD5E_MAGE.Salute.LegendPhysical"}}</strong> <i class="wod5e-mage-salute-glyph" data-state="ps"></i> {{localize "WOD5E_MAGE.Salute.Superficial"}} · <i class="wod5e-mage-salute-glyph" data-state="pa"></i> {{localize "WOD5E_MAGE.Salute.Aggravated"}}</span>
-        <span><strong>{{localize "WOD5E_MAGE.Salute.LegendMental"}}</strong> <i class="wod5e-mage-salute-glyph" data-state="ms"></i> {{localize "WOD5E_MAGE.Salute.Superficial"}} · <i class="wod5e-mage-salute-glyph" data-state="ma"></i> {{localize "WOD5E_MAGE.Salute.Aggravated"}}</span>
+    {{!-- La legenda, incolonnata: una riga per i danni fisici, una per i mentali. --}}
+    <div class="wod5e-mage-salute-legend" role="table">
+        <span class="wod5e-mage-salute-legend-head" aria-hidden="true"></span>
+        <span class="wod5e-mage-salute-legend-head">{{localize "WOD5E_MAGE.Salute.Superficial"}}</span>
+        <span class="wod5e-mage-salute-legend-head">{{localize "WOD5E_MAGE.Salute.Aggravated"}}</span>
+        <strong>{{localize "WOD5E_MAGE.Salute.LegendPhysical"}}</strong>
+        <span><i class="wod5e-mage-salute-glyph" data-state="ps"></i></span>
+        <span><i class="wod5e-mage-salute-glyph" data-state="pa"></i></span>
+        <strong>{{localize "WOD5E_MAGE.Salute.LegendMental"}}</strong>
+        <span><i class="wod5e-mage-salute-glyph" data-state="ms"></i></span>
+        <span><i class="wod5e-mage-salute-glyph" data-state="ma"></i></span>
     </div>
     {{#if salute.status}}
         <p class="wod5e-mage-salute-status">{{localize salute.status}}</p>

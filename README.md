@@ -52,14 +52,16 @@ The Traits page hosts the Wheel widget full-width under the Skills, with the
 two persistent fields (generated Quintessence, permanent Paradox) inside it
 and an Areté rating from one to five below. Every Attribute and Skill row
 opens with its M5 sigil, gold on the sheet's dark ground. Clicking Areté opens the Magick roll dialog
-(branch A of the September 2026 playtest): the pool is a Skill plus a Skill or
-an Attribute, and Areté never rolls. Areté enters as the prize of the
+(branch A of the September 2026 playtest): the pool is Attribute + Skill +
+Skill, any one of them is enough and the chosen ones add up; Areté never
+rolls. Areté enters as the prize of the
 description (a checkbox worth as many dice as Areté, never for Hybrid Magick),
 Harmony is a plain number of dice the other Mages grant (counted at the
 table), and prize, Harmony and every positive modifier share a +3 cap that
 the confirmation dialog enforces. Every unlocked Sphere shows its dots and
 the player clicks the level used; the six Scopes each show seven dots for
-their level. The threshold is the higher of the highest Sphere and the
+their level, and an icon beside the Scopes header opens the Scopes table for
+reference. The threshold is the higher of the highest Sphere and the
 highest Scope, +1 per Scope beyond the first, +1 with three or more Spheres,
 capped at 7; a Scope covered by a Sphere Speciality counts as the lower of
 the Sphere and the Scope and does not weigh as an extra Scope. When the pool
@@ -79,14 +81,19 @@ Scopes, seven levels; Potency reads as damage per level: 0, 2, 5, 7, 8, 10,
 13). There is no Affinity Sphere any more: at the third dot of a Sphere the
 player picks one Sphere Speciality among the four passive powers the Spheres
 compendium lists for it (Perception, Resistance, Innate Defence and the
-Sphere's own Scope or track); the choice lives in module flags and the
-chosen power's text is shown under the drop-down. In the right side panel, under Custom Rolls, a small Bonuses
+Sphere's own Scope or track), and the fourth and fifth dots each grant
+another slot; the choices live in module flags, a power taken in one slot is
+disabled in the others, and each chosen power's text is shown under its
+drop-down. In the right side panel, under Custom Rolls, a small Bonuses
 table (number, type, description) lets the player note reminders such as
 "+3 · Forces Scope"; rows are stored in module flags and never touch the
-dice, and each value is capped at ±3. Under the Bonuses, a Specialties panel
+dice, and each value is capped at ±3. Above the Bonuses, a Specialties panel
 lists every Skill specialty with a + to add one (Skill and name) and a bin to
 remove it; it writes the same `bonuses` entries the system's Skill editor
-writes, so the S marker and the roll modifiers keep working. The right
+writes, so the S marker and the roll modifiers keep working. The Skills
+header carries a + that adds a whole Specific Skill (name and dots, stored in
+module flags) under the "Specific Skills" title; these skills roll from the
+sheet and appear in every roll dialog, entering the pool as flat dice. The right
 column of the Magick tab also provides a dynamic ongoing-Magick journal: it starts empty, lets the
 player add or remove rows, and stores its three descriptive text fields in module
 flags without affecting rolls.
@@ -109,8 +116,8 @@ in Magick, with a separate rich-text note for each.
 The Mage header carries a single Health track (branch A): 1 + Stamina +
 Resolve boxes, adjustable with plus and minus, holding physical damage (/
 superficial, X aggravated) and mental damage (o superficial, ◎ aggravated).
-Left click opens a five-way choice (the four marks or empty), right click
-clears the box; the counts live in module flags and the system's Health and
+Left click opens a small five-glyph menu at the pointer (the four marks or
+empty), right click clears the box; the counts live in module flags and the system's Health and
 Willpower partials are no longer shown, since Willpower is gone from the
 rules (the Experience page no longer prices it). A two-line legend explains
 the physical and mental marks. "New session" heals every mental superficial

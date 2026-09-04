@@ -1,5 +1,6 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
 import { prepareEssentialSkills } from "../abilita-essenziali.js";
+import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../abilita-specifiche.js";
 import { MODULE_ID } from "../constants.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
@@ -95,6 +96,8 @@ export class MageActorSheet extends MortalActorSheet {
       bonusAdd: onBonusAdd,
       bonusDelete: onBonusDelete,
       contraccolpoNega: onContraccolpoNega,
+      customSkillAdd: onCustomSkillAdd,
+      customSkillDelete: onCustomSkillDelete,
       // Clic sinistro sceglie il segno, clic destro svuota la casella.
       saluteCellChange: { handler: onSaluteCellChange, buttons: [0, 2] },
       saluteExtraChange: onSaluteExtraChange,
@@ -262,6 +265,8 @@ export class MageActorSheet extends MortalActorSheet {
         lang: game.i18n.lang
       }));
       context.sortedAttributes = applyTraitIcons(context.sortedAttributes);
+      // Le Abilità Specifiche del giocatore, sotto le essenziali.
+      context.customSkills = prepareCustomSkills(actor);
       context.arete = getArete(actor);
       context.magickTrack = prepareMagickTrack(actor);
       // Quintessenza generata e Paradosso permanente vivono nella Ruota.

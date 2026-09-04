@@ -71,19 +71,20 @@
       "Attributes": "Attributes",
       "SelectAbility": "Select an Ability",
       "SelectTrait": "Select an Ability or Attribute",
-      "SelectBothWarning": "Select an Ability and a second trait to roll."
+      "SelectBothWarning": "Select an Ability and a second trait to roll.",
+      "Attribute": "Attribute",
+      "None": "None"
     },
     "Arete": {
       "Label": "Arete",
       "Roll": "Roll",
-      "Rolling": "{first} + {second}",
-      "RollHint": "Roll a Skill plus a Skill or an Attribute; Arete is the prize of the description",
+      "RollHint": "Roll Attribute, Skill, Skill (one is enough); Arete is the prize of the description",
       "Trait": "Attribute or Skill",
       "TraitShort": "Ability",
       "SelectTrait": "Select a trait",
       "SelectAttribute": "Select an Attribute",
       "SelectSkill": "Select a Skill",
-      "SelectTraitWarning": "The roll needs a Skill, plus a Skill or an Attribute.",
+      "SelectTraitWarning": "Pick at least one trait: an Attribute or a Skill.",
       "MagickType": "Type",
       "CoincidentalHint": "It goes unnoticed.",
       "VulgarHint": "Reality takes notice, +1 Paradox.",
@@ -93,7 +94,7 @@
       "Vulgar": "Vulgar",
       "VulgarWithWitnesses": "Vulgar with witnesses",
       "NoType": "No type selected",
-      "RollFlavor": "Pool: {first} {firstValue} + {second} {secondValue}{bonus}. Threshold {threshold}. Type: {magickType}.",
+      "RollFlavor": "Pool: {traits}{bonus}. Threshold {threshold}. Type: {magickType}.",
       "Maintained": "Maintained Effect",
       "MaintainedName": "Effect name",
       "Spheres": "Effect Spheres",
@@ -114,7 +115,10 @@
       "OneStep": "One step short: {missing} successes missing, within Arete ({arete}). Success at a price.",
       "BonusCap": "+3 cap: {excess} fewer dice.",
       "SpherePlan": "Spheres: {plans}.",
-      "SpecialtyHint": "Speciality: this Scope counts as the lower of the Sphere and its own level, and does not weigh as an extra Scope."
+      "SpecialtyHint": "Speciality: this Scope counts as the lower of the Sphere and its own level, and does not weigh as an extra Scope.",
+      "HarmonyShort": "dice from other Mages",
+      "ThresholdShort": "Threshold: the higher of Sphere and Scope, +1 per Scope beyond the first, +1 with three Spheres, capped at 7.",
+      "ScopeTable": "The Scopes table"
     },
     "Focus": {
       "Credo": "Creed",
@@ -564,10 +568,19 @@
     },
     "SphereSpecialties": {
       "Label": "Sphere Specialities",
-      "Hint": "At the third dot of a Sphere, pick one of its passive powers. There is no Affinity Sphere any more.",
+      "Hint": "At the third dot of a Sphere, pick one of its passive powers; the fourth and fifth dots each grant another. There is no Affinity Sphere any more.",
       "None": "Speciality…",
       "Empty": "No Sphere at its third dot: the Speciality comes with the third.",
-      "MissingPack": "The Spheres compendium is not available."
+      "MissingPack": "The Spheres compendium is not available.",
+      "Slots": "{count} Specialities"
+    },
+    "CustomSkills": {
+      "Label": "Specific Skills",
+      "Add": "Add a Specific Skill",
+      "Remove": "Remove the Specific Skill",
+      "Name": "Skill name",
+      "NameHint": "skill name",
+      "Roll": "Roll with this Skill"
     }
   }
 }
