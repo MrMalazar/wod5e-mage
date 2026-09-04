@@ -92,6 +92,14 @@ function registerDiceSoNicePreset(dice3d) {
   }, "d10");
 }
 
+/** Gli occhi sui dadi rossi: l'1 e il 10 chiamano il Contraccolpo. */
+export function countParadoxEyes(results = []) {
+  return results
+    .filter((result) => result?.active !== false && !result?.discarded)
+    .filter((result) => [1, 10].includes(Number(result.result)))
+    .length;
+}
+
 function addCustomModifier(_event, target) {
   const list = target.ownerDocument.querySelector("#custom-modifiers-list");
   const label = game.i18n.localize("WOD5E.RollList.CustomModifiers");
@@ -185,6 +193,7 @@ export async function rollAreteWithParadox({
   paradoxRating,
   onlyParadox = false,
   difficulty = 0,
+  burn = 0,
   arete = 0,
   title,
   flavor,
@@ -288,12 +297,22 @@ export async function rollAreteWithParadox({
 
           // A un passo (ramo A): sotto la soglia di al massimo Areté
           // successi, la riuscita ha un prezzo. Il messaggio lo dice.
+          let finalFlavor = rollFlavor;
           if (isOneStepShort(roll._total, difficulty, arete)) {
-            roll.options.flavor = `${rollFlavor} ${game.i18n.format("WOD5E_MAGE.Arete.OneStep", {
+            finalFlavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.OneStep", {
               missing: difficulty - roll._total,
               arete
             })}`;
           }
+
+          // Il Contraccolpo: ogni rosso che mostra l'occhio (1 o 10) chiama
+          // la realtà. Il messaggio lo dichiara e dice l'Ustione da segnare,
+          // pari alla soglia.
+          const eyes = countParadoxEyes(roll.advancedDice?.results ?? []);
+          if (eyes > 0) {
+            finalFlavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.Backlash", { eyes, burn })}`;
+          }
+          roll.options.flavor = finalFlavor;
 
           return roll.toMessage(
             { speaker: ChatMessage.getSpeaker({ actor }) },

@@ -119,7 +119,8 @@
       "SpecialtyHint": "Specialità: questo Ambito conta come il minore fra la Sfera e il suo livello, e non pesa come Ambito in più.",
       "HarmonyShort": "dadi dagli altri Maghi",
       "ThresholdShort": "Soglia: il maggiore fra Sfera e Ambito, +1 per ogni Ambito oltre il primo, +1 con tre Sfere, tetto 7.",
-      "ScopeTable": "La tavola degli Ambiti"
+      "ScopeTable": "La tavola degli Ambiti",
+      "Backlash": "CONTRACCOLPO: {eyes} occhi sui rossi. Ustione {burn}: segna {burn} danni sulla Salute."
     },
     "Focus": {
       "Credo": "Credo",
@@ -430,7 +431,7 @@
       "Quintessence": "Quintessenza",
       "Paradox": "Paradosso",
       "GeneratedQuintessence": "Quintessenza generata",
-      "PermanentParadox": "Paradosso permanente (pavimento)",
+      "PermanentParadox": "Paradosso permanente",
       "AddQuintessence": "Aggiungi Quintessenza",
       "RemoveQuintessence": "Rimuovi Quintessenza",
       "AddParadox": "Aggiungi Paradosso",
@@ -568,7 +569,11 @@
       "NewSessionHint": "Guariscono tutti i superficiali mentali, un superficiale fisico se ne va, il Contraccolpo si può negare di nuovo.",
       "NewSessionDone": "Nuova sessione: superficiali mentali guariti, un superficiale fisico in meno, Contraccolpo riarmato.",
       "Reset": "Reset",
-      "ResetHint": "Il tracciato torna vuoto."
+      "ResetHint": "Il tracciato torna vuoto.",
+      "SessionXp": "Esperienza della sessione",
+      "SessionXpHint": "I punti che il Narratore assegna: finiscono fra le Prese della pagina Esperienza. Zero se non ce ne sono.",
+      "SessionOf": "sessione del {date}",
+      "NewSessionDoneXp": "Nuova sessione: {points} punti esperienza segnati, superficiali mentali guariti, un superficiale fisico in meno, Contraccolpo riarmato."
     },
     "Contraccolpo": {
       "Label": "Negare il Contraccolpo",
@@ -606,6 +611,56 @@
       "Name": "Nome dell'Abilità",
       "NameHint": "nome dell'Abilità",
       "Roll": "Tira con questa Abilità"
+    },
+    "Items": {
+      "Name": "Nome",
+      "Description": "Descrizione",
+      "WeaponType": "Tipo d'arma",
+      "Damage": "Danno",
+      "DamageHint": "I dadi di danno dell'arma.",
+      "ArmorValue": "Armatura",
+      "ArmorHint": "I dadi d'armatura che assorbono.",
+      "Quantity": "Quantità",
+      "Points": "Pallini",
+      "PointsHint": "Il livello, da 1 a 5.",
+      "NameMissing": "Serve un nome.",
+      "WeaponTypes": {
+        "melee": "Mischia",
+        "ranged": "Distanza",
+        "supernatural": "Soprannaturale"
+      },
+      "Titles": {
+        "weapon": "Nuova arma",
+        "armor": "Nuova armatura",
+        "gear": "Nuovo oggetto",
+        "merit": "Nuovo Pregio",
+        "flaw": "Nuovo Difetto",
+        "background": "Nuovo Background"
+      },
+      "Hints": {
+        "weapon": "Che arma è, quanto fa male, come la porti.",
+        "armor": "Cosa indossi e quanto para.",
+        "gear": "Un oggetto che porti con te.",
+        "merit": "Un Pregio dal catalogo, col suo livello.",
+        "flaw": "Un Difetto dal catalogo, col suo livello.",
+        "background": "Un Background dal catalogo, col suo livello."
+      },
+      "NameHints": {
+        "weapon": "es. Coltello da cucina, Pistola",
+        "armor": "es. Giubbotto di pelle",
+        "gear": "es. Torcia, Kit medico",
+        "merit": "es. Contatti",
+        "flaw": "es. Nemico",
+        "background": "es. Risorse"
+      },
+      "DescriptionHints": {
+        "weapon": "com'è fatta, da dove viene",
+        "armor": "com'è fatta, quando la porti",
+        "gear": "a cosa serve",
+        "merit": "cosa fa in gioco",
+        "flaw": "cosa ti costa in gioco",
+        "background": "chi, cosa, quanto"
+      }
     }
   },
   "WOD5E": {

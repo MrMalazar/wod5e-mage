@@ -420,7 +420,7 @@ export async function onAreteRoll(event) {
     },
     // Una finestra compatta: due colonne, niente muri di testo.
     position: {
-      width: 640,
+      width: 700,
       height: "auto"
     },
     content,
@@ -593,6 +593,7 @@ export async function onAreteRoll(event) {
       paradoxRating,
       onlyParadox: automatic,
       difficulty: automatic ? 0 : threshold,
+      burn: threshold,
       arete: arete.value,
       title: rollLabel,
       flavor,

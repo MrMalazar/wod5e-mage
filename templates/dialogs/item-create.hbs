@@ -1,0 +1,46 @@
+<form class="dialog-contents wod5e-mage-item-form">
+    <p class="wod5e-mage-arete-hint">{{localize (concat "WOD5E_MAGE.Items.Hints." kindKey)}}</p>
+    <label class="wod5e-mage-item-field">
+        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Items.Name"}}</span>
+        <input type="text" name="name" required autofocus placeholder="{{localize (concat 'WOD5E_MAGE.Items.NameHints.' kindKey)}}">
+    </label>
+    {{#if isWeapon}}
+        <label class="wod5e-mage-item-field">
+            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Items.WeaponType"}}</span>
+            <select name="weaponType">
+                {{#each weaponTypes as |kind|}}<option value="{{kind.id}}" {{#if kind.selected}}selected{{/if}}>{{kind.label}}</option>{{/each}}
+            </select>
+        </label>
+        <label class="wod5e-mage-item-field">
+            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Items.Damage"}}</span>
+            <input type="number" name="value" min="0" max="20" step="1" value="1">
+            <small>{{localize "WOD5E_MAGE.Items.DamageHint"}}</small>
+        </label>
+    {{/if}}
+    {{#if isArmor}}
+        <label class="wod5e-mage-item-field">
+            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Items.ArmorValue"}}</span>
+            <input type="number" name="value" min="0" max="20" step="1" value="1">
+            <small>{{localize "WOD5E_MAGE.Items.ArmorHint"}}</small>
+        </label>
+    {{/if}}
+    {{#if isGear}}
+        <label class="wod5e-mage-item-field">
+            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Items.Quantity"}}</span>
+            <input type="number" name="quantity" min="1" max="999" step="1" value="1">
+        </label>
+    {{/if}}
+    {{#if isFeature}}
+        <label class="wod5e-mage-item-field">
+            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Items.Points"}}</span>
+            <select name="points">
+                {{#each points as |dot|}}<option value="{{dot}}" {{#if (eq dot 1)}}selected{{/if}}>{{dot}}</option>{{/each}}
+            </select>
+            <small>{{localize "WOD5E_MAGE.Items.PointsHint"}}</small>
+        </label>
+    {{/if}}
+    <label class="wod5e-mage-item-field">
+        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Items.Description"}}</span>
+        <textarea name="description" rows="3" placeholder="{{localize (concat 'WOD5E_MAGE.Items.DescriptionHints.' kindKey)}}"></textarea>
+    </label>
+</form>

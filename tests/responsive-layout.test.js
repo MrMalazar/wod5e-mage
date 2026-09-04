@@ -209,7 +209,9 @@ const areteDialog = readFileSync(
 );
 // Sfere e Ambiti: due colonne a pallini, un campo nascosto per riga, la
 // Specialità segnata sulla Sfera che ce l'ha.
-assert.match(areteDialog, /wod5e-mage-arete-columns[\s\S]*data-kind="sphere"[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dot[\s\S]*data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}"/);
+assert.match(areteDialog, /wod5e-mage-arete-layout[\s\S]*wod5e-mage-arete-side[\s\S]*name="attributeTrait"[\s\S]*name="harmony"[\s\S]*wod5e-mage-arete-types[\s\S]*name="maintained"[\s\S]*wod5e-mage-arete-dots-column[\s\S]*data-kind="sphere"[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dot[\s\S]*data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}"/);
+// Le file a pallini non portano più la classe della vecchia riga flex.
+assert.doesNotMatch(areteDialog, /wod5e-mage-arete-dotrow wod5e-mage-arete-sphere"/);
 assert.match(areteDialog, /data-specialty="\{\{sphere\.specialtyScope\}\}"/);
 assert.doesNotMatch(areteDialog, /scopeRowTemplate|data-role="scopeAdd"|wod5e-mage-arete-sphere-box|ScopeSuccesses/);
 // La riserva del ramo A: la prima tendina è un'Abilità, la seconda Abilità
@@ -223,7 +225,7 @@ assert.match(areteDialog, /name="harmony"[^>]*type="number"|type="number"[^>]*na
 // Le spiegazioni della Tipologia vivono in una colonna staccata a destra.
 assert.match(areteDialog, /wod5e-mage-arete-type-grid[\s\S]*Arete\.Coincidental\b[\s\S]*Arete\.CoincidentalHint[\s\S]*Arete\.VulgarHint[\s\S]*Arete\.WitnessesHint/);
 assert.doesNotMatch(areteDialog, /wod5e-mage-arete-sphere-list|wod5e-mage-arete-sphere-row\b/);
-assert.match(css, /\.wod5e-mage-arete-columns\s*\{[^}]*grid-template-columns:/s);
+assert.match(css, /\.wod5e-mage-arete-layout\s*\{[^}]*grid-template-columns:/s);
 assert.match(css, /\.wod5e-mage-arete-sphere-dot\.active\s*\{[^}]*var\(--mage-oro\)/s);
 assert.match(css, /\.wod5e-mage-arete-type-grid\s*\{[^}]*grid-template-columns:/s);
 assert.match(css, /\.wod5e-mage-arete-type-grid > em\s*\{[^}]*font-style: italic;/s);

@@ -129,7 +129,8 @@ Willpower partials are no longer shown, since Willpower is gone from the
 rules (the Experience page no longer prices it). A two-line legend explains
 the physical and mental marks. "New session" heals every mental superficial
 box, removes one physical superficial box and re-arms "Deny the Backlash";
-"Reset" empties the track. A full track reads "Impaired"; a track of
+"Reset" empties the track. "New session" first asks for the session's
+experience points, which land among the Gains of the Experience page. A full track reads "Impaired"; a track of
 aggravated boxes reads KO, death if physical damage prevails, coma or shock
 if mental does. Wisdom has an adjustable damage track and can be rolled
 using its undamaged boxes as the pool. Next to Areté, "Deny the Backlash"

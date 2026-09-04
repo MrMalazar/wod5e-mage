@@ -375,12 +375,36 @@
   text-align: center;
 }
 
-/* Negare il Contraccolpo: un bottone sotto i pallini di Areté. */
+/* Negare il Contraccolpo: in basso a destra della Ruota. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-contraccolpo {
   align-items: center;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.4rem;
+  width: 100%;
+}
+
+/* Le aree di testo usano il carattere della scheda, non il monospazio. */
+.wod5e-mage.wod5e.actor.sheet textarea,
+.wod5e-mage.wod5e.actor.sheet input {
+  font-family: inherit;
+}
+
+/* Le tendine a gruppi (le famiglie degli Strumenti): gruppi leggibili. */
+.wod5e-mage.wod5e.actor.sheet select optgroup,
+.wod5e-mage.wod5e.actor.sheet select option {
+  background: var(--mage-carta);
+  color: var(--mage-inchiostro);
+}
+
+.wod5e-mage.wod5e.actor.sheet select optgroup {
+  font-style: normal;
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet select optgroup[disabled] {
+  color: rgb(30 27 46 / 45%);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-contraccolpo-button {
@@ -1499,11 +1523,35 @@
   padding: 0.25rem 0.15rem;
 }
 
-/* La riserva: tre tendine in fila, etichetta sopra. */
-.wod5e-mage-arete-traits {
+/* Due colonne: a sinistra le scelte e le caselle, a destra i pallini. */
+.wod5e-mage-arete-layout {
   display: grid;
-  gap: 0.5rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem 1.75rem;
+  grid-template-columns: minmax(230px, 0.9fr) minmax(250px, 1.1fr);
+}
+
+.wod5e-mage-arete-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.wod5e-mage-arete-side > hr {
+  margin: 0.1rem 0;
+  opacity: 0.4;
+  width: 100%;
+}
+
+.wod5e-mage-arete-dots-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.wod5e-mage-arete-scopes-head {
+  margin-top: 0.75rem;
 }
 
 .wod5e-mage-arete-trait {
@@ -1517,14 +1565,6 @@
   margin: 0;
   min-width: 0;
   width: 100%;
-}
-
-/* Premio e Armonia sulla stessa riga. */
-.wod5e-mage-arete-extras-row {
-  align-items: center;
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .wod5e-mage-arete-prize,
@@ -1560,6 +1600,33 @@
 .wod5e-mage-arete-scope-table:hover {
   border-color: var(--mage-oro);
   box-shadow: 0 0 5px var(--mage-oro);
+}
+
+/* L'inserimento guidato degli oggetti: un campo per riga. */
+.wod5e-mage-item-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.25rem 0.15rem;
+}
+
+.wod5e-mage-item-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.wod5e-mage-item-field > input,
+.wod5e-mage-item-field > select,
+.wod5e-mage-item-field > textarea {
+  font-family: inherit;
+  margin: 0;
+  width: 100%;
+}
+
+.wod5e-mage-item-field > small {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 0.72rem;
 }
 
 .wod5e-mage-scope-table-dialog .wod5e-mage-scope-table > .resource-header {

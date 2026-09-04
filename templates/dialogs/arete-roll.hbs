@@ -1,134 +1,125 @@
 <form class="dialog-contents wod5e-mage-arete-form">
-    {{!-- La riserva (ramo A): Attributo, Abilità, Abilità. Ne basta uno; chi
-         ne sceglie di più somma i dadi. L'Areté non tira: è il premio. --}}
-    <div class="wod5e-mage-arete-traits">
-        <label class="wod5e-mage-arete-trait">
-            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.RollSelection.Attribute"}}</span>
-            <select id="wod5e-mage-arete-attribute" name="attributeTrait">
-                <option value="" data-value="0">{{localize "WOD5E_MAGE.RollSelection.None"}}</option>
-                {{#each attributes as |trait|}}
-                    <option value="{{trait.key}}" data-value="{{trait.value}}">{{trait.label}} ({{trait.value}})</option>
-                {{/each}}
-            </select>
-        </label>
-        <label class="wod5e-mage-arete-trait">
-            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.RollSelection.Ability"}}</span>
-            <select id="wod5e-mage-arete-primary" name="primaryTrait">
-                <option value="" data-value="0">{{localize "WOD5E_MAGE.RollSelection.None"}}</option>
-                {{#each skills as |trait|}}
-                    <option value="{{trait.key}}" data-value="{{trait.value}}">{{trait.label}} ({{trait.value}})</option>
-                {{/each}}
-            </select>
-        </label>
-        <label class="wod5e-mage-arete-trait">
-            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.RollSelection.Ability"}}</span>
-            <select id="wod5e-mage-arete-secondary" name="secondaryTrait">
-                <option value="" data-value="0">{{localize "WOD5E_MAGE.RollSelection.None"}}</option>
-                {{#each skills as |trait|}}
-                    <option value="{{trait.key}}" data-value="{{trait.value}}">{{trait.label}} ({{trait.value}})</option>
-                {{/each}}
-            </select>
-        </label>
-    </div>
-
-    {{!-- Premio dell'Areté e Armonia sulla stessa riga: i dadi in più, dentro
-         il tetto +3. L'Ibrida non prende il premio. --}}
-    <div class="wod5e-mage-arete-extras-row">
-        <div class="wod5e-mage-arete-prize" title="{{localize 'WOD5E_MAGE.Arete.PrizeHint' arete=arete.value}}">
-            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Prize"}}</span>
-            {{#if prize.allowed}}
-                <label class="wod5e-mage-arete-toggle">
-                    <input type="checkbox" name="prize" data-value="{{prize.dice}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Prize'}}">
-                    <span class="wod5e-mage-arete-toggle-value">+{{prize.dice}}</span>
-                </label>
-            {{else}}
-                <em>{{localize "WOD5E_MAGE.Arete.PrizeHybrid"}}</em>
-            {{/if}}
-        </div>
-        <div class="wod5e-mage-arete-harmony-row" title="{{localize 'WOD5E_MAGE.Arete.HarmonyHint'}}">
-            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Harmony"}}</span>
-            <input type="number" name="harmony" id="wod5e-mage-arete-harmony" class="wod5e-mage-arete-harmony" min="0" max="9" step="1" value="0" data-value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Harmony'}}">
-            <small>{{localize "WOD5E_MAGE.Arete.HarmonyShort"}}</small>
-        </div>
-    </div>
-
-    <hr>
-
-    {{!-- Sfere e Ambiti a pallini: per ogni Sfera scegli il livello che usi,
-         per ogni Ambito il livello da 1 a 7. La soglia è il maggiore fra la
-         Sfera più alta e l'Ambito più alto, +1 per ogni Ambito oltre il
-         primo, +1 con tre o più Sfere, tetto 7. --}}
-    <div class="wod5e-mage-arete-spheres" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Spheres'}}">
-        {{#if spheres.length}}
-            <div class="wod5e-mage-arete-columns">
-                <div class="wod5e-mage-arete-col">
-                    <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Spheres"}}</span>
-                    {{#each spheres as |sphere|}}
-                        <div class="wod5e-mage-arete-dotrow wod5e-mage-arete-sphere" data-role="dotRow" data-kind="sphere" data-id="{{sphere.id}}" data-specialty="{{sphere.specialtyScope}}">
-                            <span>{{localize sphere.label}}{{#if sphere.specialtyScope}} <small class="wod5e-mage-arete-specialty" title="{{localize 'WOD5E_MAGE.Arete.SpecialtyHint'}}">◆ {{localize sphere.specialtyLabel}}</small>{{/if}}</span>
-                            <input type="hidden" name="sphere-{{sphere.id}}" value="0">
-                            <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize sphere.label}}">
-                                {{#each sphere.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
-                            </span>
-                        </div>
+    <div class="wod5e-mage-arete-layout">
+        {{!-- Colonna sinistra: le scelte e le caselle. --}}
+        <div class="wod5e-mage-arete-side">
+            {{!-- La riserva (ramo A): Attributo, Abilità, Abilità. Ne basta uno; chi
+                 ne sceglie di più somma i dadi. L'Areté non tira: è il premio. --}}
+            <label class="wod5e-mage-arete-trait">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.RollSelection.Attribute"}}</span>
+                <select id="wod5e-mage-arete-attribute" name="attributeTrait">
+                    <option value="" data-value="0">{{localize "WOD5E_MAGE.RollSelection.None"}}</option>
+                    {{#each attributes as |trait|}}
+                        <option value="{{trait.key}}" data-value="{{trait.value}}">{{trait.label}} ({{trait.value}})</option>
                     {{/each}}
-                </div>
-                <div class="wod5e-mage-arete-col">
-                    <span class="wod5e-mage-arete-row-label">
-                        {{localize "WOD5E_MAGE.Scopes.Label"}}
-                        <button type="button" class="wod5e-mage-arete-scope-table" data-role="scopeTableOpen" title="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}"><i class="fa-solid fa-table-list"></i></button>
-                    </span>
-                    {{#each scopes as |scope|}}
-                        <div class="wod5e-mage-arete-dotrow wod5e-mage-arete-sphere" data-role="dotRow" data-kind="scope" data-id="{{scope.id}}">
-                            <span>{{localize scope.label}}</span>
-                            <input type="hidden" name="scope-{{scope.id}}" value="0">
-                            <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
-                                {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
-                            </span>
-                        </div>
+                </select>
+            </label>
+            <label class="wod5e-mage-arete-trait">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.RollSelection.Ability"}}</span>
+                <select id="wod5e-mage-arete-primary" name="primaryTrait">
+                    <option value="" data-value="0">{{localize "WOD5E_MAGE.RollSelection.None"}}</option>
+                    {{#each skills as |trait|}}
+                        <option value="{{trait.key}}" data-value="{{trait.value}}">{{trait.label}} ({{trait.value}})</option>
                     {{/each}}
+                </select>
+            </label>
+            <label class="wod5e-mage-arete-trait">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.RollSelection.Ability"}}</span>
+                <select id="wod5e-mage-arete-secondary" name="secondaryTrait">
+                    <option value="" data-value="0">{{localize "WOD5E_MAGE.RollSelection.None"}}</option>
+                    {{#each skills as |trait|}}
+                        <option value="{{trait.key}}" data-value="{{trait.value}}">{{trait.label}} ({{trait.value}})</option>
+                    {{/each}}
+                </select>
+            </label>
+
+            {{!-- Il premio dell'Areté: dadi in più pari all'Areté quando la descrizione
+                 lo merita, dentro il tetto +3 insieme ai Bonus. L'Ibrida non lo prende. --}}
+            <div class="wod5e-mage-arete-prize" title="{{localize 'WOD5E_MAGE.Arete.PrizeHint' arete=arete.value}}">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Prize"}}</span>
+                {{#if prize.allowed}}
+                    <label class="wod5e-mage-arete-toggle">
+                        <input type="checkbox" name="prize" data-value="{{prize.dice}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Prize'}}">
+                        <span class="wod5e-mage-arete-toggle-value">+{{prize.dice}}</span>
+                    </label>
+                {{else}}
+                    <em>{{localize "WOD5E_MAGE.Arete.PrizeHybrid"}}</em>
+                {{/if}}
+            </div>
+
+            {{!-- L'Armonia: i dadi che gli altri Maghi ti danno, contati al tavolo. --}}
+            <div class="wod5e-mage-arete-harmony-row" title="{{localize 'WOD5E_MAGE.Arete.HarmonyHint'}}">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Harmony"}}</span>
+                <input type="number" name="harmony" id="wod5e-mage-arete-harmony" class="wod5e-mage-arete-harmony" min="0" max="9" step="1" value="0" data-value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Harmony'}}">
+                <small>{{localize "WOD5E_MAGE.Arete.HarmonyShort"}}</small>
+            </div>
+
+            <hr>
+
+            {{!-- La Tipologia: una scelta sola. --}}
+            <div class="wod5e-mage-arete-types" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.MagickType'}}">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.MagickType"}}</span>
+                <div class="wod5e-mage-arete-type-grid">
+                    <label class="wod5e-mage-arete-type"><input type="checkbox" class="wod5e-mage-magick-type" name="coincidental"> <span>{{localize "WOD5E_MAGE.Arete.Coincidental"}}</span></label>
+                    <em>{{localize "WOD5E_MAGE.Arete.CoincidentalHint"}}</em>
+                    <label class="wod5e-mage-arete-type"><input type="checkbox" class="wod5e-mage-magick-type" name="vulgar"> <span>{{localize "WOD5E_MAGE.Arete.Vulgar"}}</span></label>
+                    <em>{{localize "WOD5E_MAGE.Arete.VulgarHint"}}</em>
+                    <label class="wod5e-mage-arete-type"><input type="checkbox" class="wod5e-mage-magick-type" name="witnesses"> <span>{{localize "WOD5E_MAGE.Arete.VulgarWithWitnesses"}}</span></label>
+                    <em>{{localize "WOD5E_MAGE.Arete.WitnessesHint"}}</em>
                 </div>
             </div>
-        {{else}}
-            <p class="wod5e-mage-magick-type-hint">{{localize "WOD5E_MAGE.Arete.NoSpheres"}}</p>
-        {{/if}}
 
-        {{!-- Il conto, aggiornato a ogni scelta: riserva contro soglia. --}}
-        <p class="wod5e-mage-arete-difficulty">
-            {{localize "WOD5E_MAGE.Arete.Pool"}}: <strong data-role="pool">0</strong>
-            · {{localize "WOD5E_MAGE.Arete.Threshold"}}: <strong data-role="threshold">0</strong>
-        </p>
-        <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Arete.ThresholdShort"}}</p>
-        <p class="wod5e-mage-arete-auto hidden" data-role="autoVictory">{{localize "WOD5E_MAGE.Arete.AutoVictory"}}</p>
-    </div>
+            <hr>
 
-    <hr>
-
-    {{!-- La Tipologia: una scelta sola. Le spiegazioni in corsivo stanno in
-         una colonna a sé, staccate a destra delle caselle. --}}
-    <div class="wod5e-mage-arete-types" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.MagickType'}}">
-        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.MagickType"}}</span>
-        <div class="wod5e-mage-arete-type-grid">
-            <label class="wod5e-mage-arete-type"><input type="checkbox" class="wod5e-mage-magick-type" name="coincidental"> <span>{{localize "WOD5E_MAGE.Arete.Coincidental"}}</span></label>
-            <em>{{localize "WOD5E_MAGE.Arete.CoincidentalHint"}}</em>
-            <label class="wod5e-mage-arete-type"><input type="checkbox" class="wod5e-mage-magick-type" name="vulgar"> <span>{{localize "WOD5E_MAGE.Arete.Vulgar"}}</span></label>
-            <em>{{localize "WOD5E_MAGE.Arete.VulgarHint"}}</em>
-            <label class="wod5e-mage-arete-type"><input type="checkbox" class="wod5e-mage-magick-type" name="witnesses"> <span>{{localize "WOD5E_MAGE.Arete.VulgarWithWitnesses"}}</span></label>
-            <em>{{localize "WOD5E_MAGE.Arete.WitnessesHint"}}</em>
+            {{!-- L'Effetto Mantenuto: se spuntato compare il nome, e a tiro risolto
+                 l'effetto finisce fra le Magick in Atto. --}}
+            <div class="wod5e-mage-arete-maintained">
+                <label class="wod5e-mage-arete-maintained-toggle">
+                    <input type="checkbox" name="maintained" id="wod5e-mage-arete-maintained">
+                    {{localize "WOD5E_MAGE.Arete.Maintained"}}
+                </label>
+                <input type="text" name="maintainedName" id="wod5e-mage-arete-maintained-name" class="hidden"
+                       placeholder="{{localize 'WOD5E_MAGE.Arete.MaintainedName'}}"
+                       aria-label="{{localize 'WOD5E_MAGE.Arete.MaintainedName'}}">
+            </div>
         </div>
-    </div>
 
-    <hr>
+        {{!-- Colonna destra: Sfere e Ambiti a pallini, uno sotto l'altro. Per ogni
+             Sfera scegli il livello che usi, per ogni Ambito il livello da 1 a 7. --}}
+        <div class="wod5e-mage-arete-dots-column" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Spheres'}}">
+            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Spheres"}}</span>
+            {{#each spheres as |sphere|}}
+                <div class="wod5e-mage-arete-dotrow" data-role="dotRow" data-kind="sphere" data-id="{{sphere.id}}" data-specialty="{{sphere.specialtyScope}}">
+                    <span>{{localize sphere.label}}{{#if sphere.specialtyScope}} <small class="wod5e-mage-arete-specialty" title="{{localize 'WOD5E_MAGE.Arete.SpecialtyHint'}}">◆ {{localize sphere.specialtyLabel}}</small>{{/if}}</span>
+                    <input type="hidden" name="sphere-{{sphere.id}}" value="0">
+                    <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize sphere.label}}">
+                        {{#each sphere.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
+                    </span>
+                </div>
+            {{else}}
+                <p class="wod5e-mage-magick-type-hint">{{localize "WOD5E_MAGE.Arete.NoSpheres"}}</p>
+            {{/each}}
 
-    {{!-- L'Effetto Mantenuto: se spuntato compare il nome, e a tiro risolto
-         l'effetto finisce fra le Magick in Atto. --}}
-    <div class="wod5e-mage-arete-maintained">
-        <label class="wod5e-mage-arete-maintained-toggle">
-            <input type="checkbox" name="maintained" id="wod5e-mage-arete-maintained">
-            {{localize "WOD5E_MAGE.Arete.Maintained"}}
-        </label>
-        <input type="text" name="maintainedName" id="wod5e-mage-arete-maintained-name" class="hidden"
-               placeholder="{{localize 'WOD5E_MAGE.Arete.MaintainedName'}}"
-               aria-label="{{localize 'WOD5E_MAGE.Arete.MaintainedName'}}">
+            <span class="wod5e-mage-arete-row-label wod5e-mage-arete-scopes-head">
+                {{localize "WOD5E_MAGE.Scopes.Label"}}
+                <button type="button" class="wod5e-mage-arete-scope-table" data-role="scopeTableOpen" title="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}"><i class="fa-solid fa-table-list"></i></button>
+            </span>
+            {{#each scopes as |scope|}}
+                <div class="wod5e-mage-arete-dotrow" data-role="dotRow" data-kind="scope" data-id="{{scope.id}}">
+                    <span>{{localize scope.label}}</span>
+                    <input type="hidden" name="scope-{{scope.id}}" value="0">
+                    <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
+                        {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
+                    </span>
+                </div>
+            {{/each}}
+
+            {{!-- Il conto, aggiornato a ogni scelta: riserva contro soglia. --}}
+            <p class="wod5e-mage-arete-difficulty">
+                {{localize "WOD5E_MAGE.Arete.Pool"}}: <strong data-role="pool">0</strong>
+                · {{localize "WOD5E_MAGE.Arete.Threshold"}}: <strong data-role="threshold">0</strong>
+            </p>
+            <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Arete.ThresholdShort"}}</p>
+            <p class="wod5e-mage-arete-auto hidden" data-role="autoVictory">{{localize "WOD5E_MAGE.Arete.AutoVictory"}}</p>
+        </div>
     </div>
 </form>

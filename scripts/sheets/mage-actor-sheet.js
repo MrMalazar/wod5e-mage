@@ -42,6 +42,7 @@ import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from ".
 import { prepareCreationSummary } from "../riepilogo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
 import { onSpecialtyAdd, onSpecialtyDelete, prepareSpecialties } from "../specializzazioni.js";
+import { onGuidedItemCreate } from "../oggetti-guidati.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 import {
   getContraccolpo,
@@ -89,6 +90,9 @@ export class MageActorSheet extends MortalActorSheet {
     classes: ["wod5e-mage", "mage"],
     actions: {
       roll: onMageRoll,
+      // Il + di armi, armature, oggetti, Pregi, Difetti e Background chiede
+      // i campi che servono; gli altri tipi restano al sistema.
+      createItem: onGuidedItemCreate,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
       belongingAdd: onBelongingAdd,

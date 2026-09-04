@@ -69,3 +69,12 @@ assert.match(ruota, /data-action="contraccolpoNega"/);
 assert.doesNotMatch(ruota, /contraccolpoReset/);
 
 console.log("Salute tests passed.");
+
+// Nuova sessione: i punti esperienza della sessione diventano una Presa.
+{
+  const { experienceGainRow } = await import("../scripts/salute.js");
+  assert.deepEqual(experienceGainRow("4", " sessione del 4/9 "), { cost: 4, when: "sessione del 4/9" });
+  assert.deepEqual(experienceGainRow("x", ""), { cost: 0, when: "" });
+  const dialog = readFileSync(new URL("../templates/dialogs/new-session.hbs", import.meta.url), "utf8");
+  assert.match(dialog, /name="experience"[\s\S]*name="when"/);
+}

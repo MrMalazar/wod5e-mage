@@ -183,17 +183,57 @@ export function saluteAfterSession(counts) {
   };
 }
 
+/** La riga delle Prese dell'Esperienza per i punti della sessione. */
+export function experienceGainRow(points, when) {
+  return { cost: Math.max(Math.trunc(Number(points) || 0), 0), when: String(when ?? "").trim() };
+}
+
 export async function onSaluteNewSession(event) {
   event.preventDefault();
   const actor = this.actor;
   if (!canEdit(actor)) return;
 
+  // Prima i punti esperienza della sessione: il Narratore li assegna alla
+  // fine (o all'inizio della prossima), e finiscono fra le Prese.
+  const localize = game.i18n.localize.bind(game.i18n);
+  const today = new Date().toLocaleDateString(game.i18n.lang);
+  const content = await foundry.applications.handlebars.renderTemplate(
+    "modules/wod5e-mage/templates/dialogs/new-session.hbs",
+    { when: localize("WOD5E_MAGE.Salute.SessionOf").replace("{date}", today) }
+  );
+  let result = null;
+  try {
+    result = await foundry.applications.api.DialogV2.input({
+      window: { title: localize("WOD5E_MAGE.Salute.NewSession") },
+      content,
+      ok: { icon: "fa-solid fa-sun", label: localize("WOD5E_MAGE.Salute.NewSession") },
+      buttons: [{ action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") }],
+      classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog"],
+      position: { width: 420, height: "auto" }
+    });
+  } catch (_error) {
+    return;
+  }
+  if (!result || result === "cancel") return;
+
   const salute = getSalute(actor);
-  await actor.update({
+  const update = {
     [`flags.${MODULE_ID}.salute`]: { ...saluteAfterSession(salute), extra: salute.extra },
     [`flags.${MODULE_ID}.contraccolpoNegato`]: false
-  });
-  ui.notifications.info(game.i18n.localize("WOD5E_MAGE.Salute.NewSessionDone"));
+  };
+
+  const gain = experienceGainRow(result.experience, result.when);
+  if (gain.cost > 0) {
+    const rows = { ...(actor.getFlag(MODULE_ID, "experienceGains") ?? {}) };
+    let rowId = foundry.utils.randomID();
+    while (rows[rowId]) rowId = foundry.utils.randomID();
+    update[`flags.${MODULE_ID}.experienceGains.${rowId}`] = gain;
+  }
+
+  await actor.update(update);
+  ui.notifications.info(gain.cost > 0
+    ? game.i18n.format("WOD5E_MAGE.Salute.NewSessionDoneXp", { points: gain.cost })
+    : localize("WOD5E_MAGE.Salute.NewSessionDone"));
 }
 
 /** Reset: il tracciato torna vuoto e pulito. */
