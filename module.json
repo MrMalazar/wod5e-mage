@@ -2,10 +2,10 @@
   "id": "wod5e-mage",
   "title": "Mage for World of Darkness 5e",
   "description": "Adds Mage support to the World of Darkness 5e system.",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "url": "https://github.com/MrMalazar/wod5e-mage",
   "manifest": "https://github.com/MrMalazar/wod5e-mage/releases/latest/download/module.json",
-  "download": "https://github.com/MrMalazar/wod5e-mage/releases/download/0.20.0/wod5e-mage.zip",
+  "download": "https://github.com/MrMalazar/wod5e-mage/releases/download/0.21.0/wod5e-mage.zip",
   "authors": [
     {
       "name": "wod5e-mage contributors"
@@ -55,6 +55,105 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    },
+    {
+      "label": "Pregi (M5)",
+      "type": "Item",
+      "name": "mage-pregi",
+      "path": "packs/mage-pregi",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Difetti (M5)",
+      "type": "Item",
+      "name": "mage-difetti",
+      "path": "packs/mage-difetti",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Background (M5)",
+      "type": "Item",
+      "name": "mage-background",
+      "path": "packs/mage-background",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Credi (M5)",
+      "type": "JournalEntry",
+      "name": "mage-credi",
+      "path": "packs/mage-credi",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Concetti (M5)",
+      "type": "JournalEntry",
+      "name": "mage-concetti",
+      "path": "packs/mage-concetti",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Ambizioni (M5)",
+      "type": "JournalEntry",
+      "name": "mage-ambizioni",
+      "path": "packs/mage-ambizioni",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Desideri (M5)",
+      "type": "JournalEntry",
+      "name": "mage-desideri",
+      "path": "packs/mage-desideri",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Ancore (M5)",
+      "type": "JournalEntry",
+      "name": "mage-ancore",
+      "path": "packs/mage-ancore",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "label": "Convinzioni (M5)",
+      "type": "JournalEntry",
+      "name": "mage-convinzioni",
+      "path": "packs/mage-convinzioni",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "packFolders": [
@@ -63,7 +162,16 @@
       "sorting": "m",
       "packs": [
         "mage-spheres",
-        "mage-spheres-en"
+        "mage-spheres-en",
+        "mage-pregi",
+        "mage-difetti",
+        "mage-background",
+        "mage-credi",
+        "mage-concetti",
+        "mage-ambizioni",
+        "mage-desideri",
+        "mage-ancore",
+        "mage-convinzioni"
       ],
       "color": "#98772b"
     }
