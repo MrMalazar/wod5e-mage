@@ -1,5 +1,4 @@
-{{!-- La tavola degli Ambiti: sei Ambiti per sette livelli, che fanno soglia.
-     La riga del Dono della Sfera d'Affinità si accende. --}}
+{{!-- La tavola degli Ambiti: sei Ambiti per sette livelli, che fanno soglia. --}}
 <section class="wod5e-mage-scope-table">
     <header class="resource-header">
         <label class="header-label">{{localize "WOD5E_MAGE.Scopes.TableTitle"}}</label>
@@ -20,12 +19,9 @@
             <tbody>
                 {{#each scopeTable.rows as |row|}}
                     <tr class="scope-{{row.id}}">
-                        <th scope="row">
-                            {{localize row.label}}
-                            {{#if row.gift}}<i class="fa-solid fa-star" title="{{localize 'WOD5E_MAGE.Scopes.GiftScope'}}"></i>{{/if}}
-                        </th>
+                        <th scope="row">{{localize row.label}}</th>
                         {{#each row.cells as |cell|}}
-                            <td class="{{#if cell.gift}}gift{{/if}}">{{#if cell.icon}}<span class="wod5e-mage-tempo-cell"><img class="wod5e-mage-tempo-icon" src="{{cell.icon}}" alt="">{{localize cell.label}}</span>{{else}}{{localize cell.label}}{{/if}}</td>
+                            <td>{{#if cell.icon}}<span class="wod5e-mage-tempo-cell"><img class="wod5e-mage-tempo-icon" src="{{cell.icon}}" alt="">{{localize cell.label}}</span>{{else}}{{localize cell.label}}{{/if}}</td>
                         {{/each}}
                     </tr>
                 {{/each}}

@@ -7,7 +7,6 @@ import { MODULE_ID } from "./constants.js";
 export const EXPERIENCE_COSTS = Object.freeze({
   attribute: { multiplier: 4 },
   skill: { multiplier: 2, firstDot: 3 },
-  affinitySphere: { multiplier: 5, firstDot: 8 },
   sphere: { multiplier: 7, firstDot: 8 },
   arete: { multiplier: 10 },
   // La Volontà è caduta: c'è un tracciato solo, la Salute.

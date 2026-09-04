@@ -8,7 +8,7 @@ import { addParadoxToBalance, getMagickBalance, MAGICK_TRACK_MAX } from "./magic
  * Volontà è caduta: ogni «spendi 1 Volontà» è una casella mentale segnata.
  */
 
-// I quattro segni, nell'ordine in cui il clic li fa girare.
+// I quattro segni, nell'ordine della scelta.
 export const SALUTE_STATES = Object.freeze(["", "ps", "pa", "ms", "ma"]);
 
 // L'ordine in cui il tracciato si dipinge da sinistra: prima gli aggravati.
@@ -73,12 +73,6 @@ export function getSalute(actor) {
   };
 }
 
-/** Il clic fa girare la casella: vuota, /, X, o, ◎, poi di nuovo vuota. */
-export function nextSaluteState(state) {
-  const index = SALUTE_STATES.indexOf(state);
-  return SALUTE_STATES[(index < 0 ? 0 : index + 1) % SALUTE_STATES.length];
-}
-
 /** Applica il cambio di una casella ai conti, senza uscire dal tracciato. */
 export function applySaluteStateChange(counts, max, fromState, toState) {
   const next = { pa: count(counts?.pa), ps: count(counts?.ps), ma: count(counts?.ma), ms: count(counts?.ms) };
@@ -97,7 +91,49 @@ function canEdit(actor) {
   return true;
 }
 
-/** Clic sinistro: la casella gira; clic destro: la casella si svuota. */
+const SALUTE_ICONS = Object.freeze({
+  ps: "fa-solid fa-slash",
+  pa: "fa-solid fa-xmark",
+  ms: "fa-regular fa-circle",
+  ma: "fa-regular fa-circle-dot"
+});
+
+/**
+ * Il clic apre la scelta del segno: quattro danni più la casella vuota,
+ * un colpo solo. Il clic destro svuota senza chiedere.
+ */
+async function askSaluteState(current) {
+  const localize = game.i18n.localize.bind(game.i18n);
+  const buttons = [
+    ...SALUTE_STATES.filter((state) => state).map((state) => ({
+      action: state,
+      label: localize(`WOD5E_MAGE.Salute.States.${state}`),
+      icon: SALUTE_ICONS[state],
+      default: state === (current || "ps")
+    })),
+    {
+      action: "",
+      label: localize("WOD5E_MAGE.Salute.States.empty"),
+      icon: "fa-regular fa-square"
+    }
+  ];
+
+  try {
+    const choice = await foundry.applications.api.DialogV2.wait({
+      window: { title: localize("WOD5E_MAGE.Salute.Pick") },
+      content: `<p class="wod5e-mage-salute-pick-hint">${localize("WOD5E_MAGE.Salute.PickHint")}</p>`,
+      buttons,
+      classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-salute-pick"],
+      position: { width: "auto", height: "auto" },
+      rejectClose: true
+    });
+    return typeof choice === "string" ? choice : null;
+  } catch (_error) {
+    // Finestra chiusa con la X: nessun cambio.
+    return null;
+  }
+}
+
 export async function onSaluteCellChange(event, target) {
   event.preventDefault();
   const actor = this.actor;
@@ -108,9 +144,46 @@ export async function onSaluteCellChange(event, target) {
   const cell = salute.cells[index];
   if (!cell) return;
 
-  const toState = event.button === 2 ? "" : nextSaluteState(cell.state);
+  const toState = event.button === 2 ? "" : await askSaluteState(cell.state);
+  if (toState === null || toState === cell.state) return;
   const next = applySaluteStateChange(salute, salute.max, cell.state, toState);
   await actor.setFlag(MODULE_ID, "salute", { ...next, extra: salute.extra });
+}
+
+/**
+ * Nuova sessione: i superficiali mentali guariscono tutti, un superficiale
+ * fisico se ne va, e il Contraccolpo si può negare di nuovo.
+ */
+export function saluteAfterSession(counts) {
+  return {
+    pa: count(counts?.pa),
+    ps: Math.max(count(counts?.ps) - 1, 0),
+    ma: count(counts?.ma),
+    ms: 0
+  };
+}
+
+export async function onSaluteNewSession(event) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEdit(actor)) return;
+
+  const salute = getSalute(actor);
+  await actor.update({
+    [`flags.${MODULE_ID}.salute`]: { ...saluteAfterSession(salute), extra: salute.extra },
+    [`flags.${MODULE_ID}.contraccolpoNegato`]: false
+  });
+  ui.notifications.info(game.i18n.localize("WOD5E_MAGE.Salute.NewSessionDone"));
+}
+
+/** Reset: il tracciato torna vuoto e pulito. */
+export async function onSaluteReset(event) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEdit(actor)) return;
+
+  const salute = getSalute(actor);
+  await actor.setFlag(MODULE_ID, "salute", { pa: 0, ps: 0, ma: 0, ms: 0, extra: salute.extra });
 }
 
 /** Il più e il meno accanto al nome: caselle in più oltre il conto. */
@@ -199,10 +272,3 @@ export async function onContraccolpoNega(event) {
   }
 }
 
-/** Nuova sessione: il Contraccolpo si può negare di nuovo. */
-export async function onContraccolpoReset(event) {
-  event.preventDefault();
-  const actor = this.actor;
-  if (!canEdit(actor)) return;
-  await actor.setFlag(MODULE_ID, "contraccolpoNegato", false);
-}

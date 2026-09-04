@@ -15,8 +15,22 @@
             {{/each}}
         </div>
     </div>
-    <p class="wod5e-mage-salute-legend">{{localize "WOD5E_MAGE.Salute.Legend"}}</p>
+    {{!-- La legenda, in due righe: i danni fisici e i danni mentali. --}}
+    <div class="wod5e-mage-salute-legend">
+        <span><strong>{{localize "WOD5E_MAGE.Salute.LegendPhysical"}}</strong> <i class="wod5e-mage-salute-glyph" data-state="ps"></i> {{localize "WOD5E_MAGE.Salute.Superficial"}} · <i class="wod5e-mage-salute-glyph" data-state="pa"></i> {{localize "WOD5E_MAGE.Salute.Aggravated"}}</span>
+        <span><strong>{{localize "WOD5E_MAGE.Salute.LegendMental"}}</strong> <i class="wod5e-mage-salute-glyph" data-state="ms"></i> {{localize "WOD5E_MAGE.Salute.Superficial"}} · <i class="wod5e-mage-salute-glyph" data-state="ma"></i> {{localize "WOD5E_MAGE.Salute.Aggravated"}}</span>
+    </div>
     {{#if salute.status}}
         <p class="wod5e-mage-salute-status">{{localize salute.status}}</p>
     {{/if}}
+    {{!-- Nuova sessione: guariscono i superficiali mentali, un superficiale
+         fisico se ne va, il Contraccolpo si riarma. Reset: tracciato vuoto. --}}
+    <div class="wod5e-mage-salute-buttons">
+        <button type="button" data-action="saluteNewSession" title="{{localize 'WOD5E_MAGE.Salute.NewSessionHint'}}">
+            <i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.NewSession"}}
+        </button>
+        <button type="button" data-action="saluteReset" title="{{localize 'WOD5E_MAGE.Salute.ResetHint'}}">
+            <i class="fa-solid fa-eraser" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.Reset"}}
+        </button>
+    </div>
 </div>

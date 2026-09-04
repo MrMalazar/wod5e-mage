@@ -79,60 +79,40 @@
             {{/if}}
         </section>
 
-        <section class="wod5e-mage-affinity-sphere">
+        {{!-- Le Specialità delle Sfere: al terzo pallino di una Sfera si sceglie
+             uno dei suoi poteri passivi. La Sfera affine non esiste più. --}}
+        <section class="wod5e-mage-sphere-specialties">
             <header class="resource-header">
-                <label class="header-label">{{localize "WOD5E_MAGE.AffinitySphere.Label"}}</label>
+                <label class="header-label">{{localize "WOD5E_MAGE.SphereSpecialties.Label"}}</label>
             </header>
+            <p class="wod5e-mage-spheres-hint">{{localize "WOD5E_MAGE.SphereSpecialties.Hint"}}</p>
 
-            <div class="resource resource-content wod5e-mage-affinity-selector">
-                {{#if affinitySphere}}
-                    <img src="{{affinitySphere.img}}" alt="">
-                    <strong>{{affinitySphere.name}}</strong>
-                    {{#unless locked}}
-                        <button
-                            type="button"
-                            data-action="affinitySphereOpen"
-                            title="{{localize 'WOD5E_MAGE.AffinitySphere.Change'}}"
-                            aria-label="{{localize 'WOD5E_MAGE.AffinitySphere.Change'}}"
-                        >
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                        <button
-                            type="button"
-                            data-action="affinitySphereClear"
-                            title="{{localize 'WOD5E_MAGE.AffinitySphere.Remove'}}"
-                            aria-label="{{localize 'WOD5E_MAGE.AffinitySphere.Remove'}}"
-                        >
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    {{/unless}}
-                {{else}}
-                    {{#if locked}}
-                        <span class="wod5e-mage-affinity-empty">
-                            {{localize "WOD5E_MAGE.AffinitySphere.Select"}}
-                        </span>
-                    {{else}}
-                        <button type="button" class="wod5e-mage-affinity-empty" data-action="affinitySphereOpen">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <span>{{localize "WOD5E_MAGE.AffinitySphere.Select"}}</span>
-                        </button>
-                    {{/if}}
-                {{/if}}
-            </div>
-
-            {{#if affinitySphere}}
-                <p class="wod5e-mage-affinity-intro">{{affinitySphere.intro}}</p>
-                <div class="wod5e-mage-affinity-abilities">
-                    {{#each affinitySphere.abilities as |ability|}}
-                        <article class="wod5e-mage-affinity-ability">
-                            <h3>
-                                {{ability.label}}
-                                {{#if ability.kind}}<small>{{ability.kind}}</small>{{/if}}
-                            </h3>
-                            <div>{{{ability.description}}}</div>
+            {{#if sphereSpecialties.length}}
+                <div class="wod5e-mage-sphere-specialty-list">
+                    {{#each sphereSpecialties as |row|}}
+                        <article class="wod5e-mage-sphere-specialty">
+                            <label class="wod5e-mage-sphere-specialty-head">
+                                <img src="{{row.icon}}" alt="">
+                                <strong>{{localize row.label}}</strong>
+                                <select name="flags.wod5e-mage.sphereSpecialties.{{row.id}}" aria-label="{{localize 'WOD5E_MAGE.SphereSpecialties.Label'}}" {{#if ../locked}}disabled{{/if}}>
+                                    <option value="">{{localize "WOD5E_MAGE.SphereSpecialties.None"}}</option>
+                                    {{#each row.options as |option|}}
+                                        <option value="{{option.id}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>
+                                    {{/each}}
+                                </select>
+                            </label>
+                            {{#if row.chosen}}
+                                <div class="wod5e-mage-sphere-specialty-text">{{{row.chosen.description}}}</div>
+                            {{else}}
+                                {{#unless row.hasPowers}}
+                                    <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.SphereSpecialties.MissingPack"}}</p>
+                                {{/unless}}
+                            {{/if}}
                         </article>
                     {{/each}}
                 </div>
+            {{else}}
+                <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.SphereSpecialties.Empty"}}</p>
             {{/if}}
         </section>
 

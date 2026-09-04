@@ -52,9 +52,27 @@ assert.equal(calculateMagickThreshold({ sphereLevels: [3], scopeLevels: [4, 2] }
 assert.equal(calculateMagickThreshold({ sphereLevels: [3, 2], scopeLevels: [1] }), 3);
 assert.equal(calculateMagickThreshold({ sphereLevels: [3, 2, 1], scopeLevels: [1] }), 4);
 assert.equal(calculateMagickThreshold({ sphereLevels: [5, 4, 4], scopeLevels: [7, 7, 7] }), 7);
-// Un livello di Ambito fuori scala si riporta fra 1 e 7.
+// Un livello di Ambito fuori scala si riporta fra 0 e 7: lo zero non conta.
 assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [0] }), 1);
 assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [9] }), 7);
+
+// Le Specialità: l'esempio di Blue (Mente 3 con Bersagli, Bersagli 4,
+// Portata 4): Bersagli conta come il minore (3) e non pesa come Ambito in
+// più, la soglia è 4. Senza Mente nel lancio la Specialità non parla.
+assert.equal(calculateMagickThreshold({
+  sphereLevels: [{ id: "mind", level: 3 }],
+  scopeLevels: [{ id: "targets", level: 4 }, { id: "range", level: 4 }],
+  specialties: { mind: "targets" }
+}), 4);
+assert.equal(calculateMagickThreshold({
+  sphereLevels: [{ id: "mind", level: 3 }],
+  scopeLevels: [{ id: "targets", level: 4 }, { id: "range", level: 4 }]
+}), 5);
+assert.equal(calculateMagickThreshold({
+  sphereLevels: [{ id: "forces", level: 2 }],
+  scopeLevels: [{ id: "targets", level: 4 }],
+  specialties: { mind: "targets" }
+}), 4);
 
 // Vittoria automatica: riserva almeno doppia della soglia.
 assert.equal(isAutomaticVictory(8, 4), true);
@@ -79,7 +97,9 @@ assert.equal(normalizeMagickRollOptions({ prize: "on" }).usePrize, true);
 assert.equal(normalizeMagickRollOptions({ prize: true }).usePrize, true);
 assert.equal(normalizeMagickRollOptions({ prize: "false" }).usePrize, false);
 assert.equal(normalizeMagickRollOptions({ harmony: "2" }).harmony, 2);
-assert.equal(normalizeMagickRollOptions({ harmony: 5 }).harmony, 2);
+assert.equal(normalizeMagickRollOptions({ harmony: 5 }).harmony, 5);
+assert.equal(normalizeMagickRollOptions({ harmony: 40 }).harmony, 9);
+assert.equal(normalizeMagickRollOptions({ harmony: -3 }).harmony, 0);
 
 assert.deepEqual(normalizeMagickRollOptions({ vulgar: false, witnesses: true }), {
   usePrize: false,

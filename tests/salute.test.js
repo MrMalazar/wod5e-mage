@@ -4,7 +4,7 @@ import {
   applySaluteStateChange,
   clampSalute,
   getSalute,
-  nextSaluteState,
+  saluteAfterSession,
   saluteMax,
   saluteStatus,
   saluteWithMentalAggravated
@@ -23,12 +23,9 @@ assert.equal(saluteMax(actor({ stamina: 0, resolve: 0 })), 1);
 assert.equal(saluteMax(actor(), 2), 8);
 assert.equal(saluteMax(actor(), -9), 1);
 
-// Il clic gira: vuota, /, X, o, ◎, poi di nuovo vuota.
-assert.equal(nextSaluteState(""), "ps");
-assert.equal(nextSaluteState("ps"), "pa");
-assert.equal(nextSaluteState("pa"), "ms");
-assert.equal(nextSaluteState("ms"), "ma");
-assert.equal(nextSaluteState("ma"), "");
+// Nuova sessione: i superficiali mentali guariscono, un fisico se ne va.
+assert.deepEqual(saluteAfterSession({ pa: 1, ps: 3, ma: 2, ms: 2 }), { pa: 1, ps: 2, ma: 2, ms: 0 });
+assert.deepEqual(saluteAfterSession({ pa: 0, ps: 0, ma: 0, ms: 4 }), { pa: 0, ps: 0, ma: 0, ms: 0 });
 
 // I conti stanno dentro il tracciato, aggravati per primi.
 assert.deepEqual(clampSalute({ pa: 2, ps: 3, ma: 2, ms: 1 }, 6), { pa: 2, ps: 3, ma: 1, ms: 0 });
@@ -66,7 +63,9 @@ assert.doesNotMatch(header, /health\.hbs|willpower\.hbs/);
 const track = readFileSync(new URL("../templates/actor/parts/salute.hbs", import.meta.url), "utf8");
 assert.match(track, /data-action="saluteCellChange"[\s\S]*data-index="\{\{cell\.index\}\}"/);
 assert.match(track, /data-action="saluteExtraChange"/);
+assert.match(track, /Salute\.LegendPhysical[\s\S]*Salute\.LegendMental[\s\S]*data-action="saluteNewSession"[\s\S]*data-action="saluteReset"/);
 const ruota = readFileSync(new URL("../templates/actor/parts/ruota.hbs", import.meta.url), "utf8");
-assert.match(ruota, /data-action="contraccolpoNega"[\s\S]*data-action="contraccolpoReset"/);
+assert.match(ruota, /data-action="contraccolpoNega"/);
+assert.doesNotMatch(ruota, /contraccolpoReset/);
 
 console.log("Salute tests passed.");

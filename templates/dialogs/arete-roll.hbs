@@ -45,64 +45,46 @@
         <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Arete.PrizeHint" arete=arete.value}}</p>
     {{/if}}
 
-    {{!-- L'Armonia: un dado se un altro Mago ha il tuo Credo o il tuo Tipo,
-         due se entrambi, sempre con una Sfera in comune. --}}
+    {{!-- L'Armonia: i dadi che gli altri Maghi ti danno (stesso Credo o
+         stesso Tipo, con una Sfera in comune). Si contano al tavolo. --}}
     <div class="wod5e-mage-arete-row">
         <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Harmony"}}</span>
-        <select name="harmony" id="wod5e-mage-arete-harmony" title="{{localize 'WOD5E_MAGE.Arete.HarmonyHint'}}">
-            <option value="0" data-value="0">{{localize "WOD5E_MAGE.Arete.HarmonyNone"}}</option>
-            <option value="1" data-value="1">{{localize "WOD5E_MAGE.Arete.HarmonyOne"}}</option>
-            <option value="2" data-value="2">{{localize "WOD5E_MAGE.Arete.HarmonyTwo"}}</option>
-        </select>
+        <input type="number" name="harmony" id="wod5e-mage-arete-harmony" class="wod5e-mage-arete-harmony" min="0" max="9" step="1" value="0" data-value="0" title="{{localize 'WOD5E_MAGE.Arete.HarmonyHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Harmony'}}">
     </div>
+    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Arete.HarmonyHint"}}</p>
 
     <hr>
 
-    {{!-- Sfere e Ambiti: la soglia è il maggiore fra la Sfera più alta e
-         l'Ambito più alto, +1 per ogni Ambito oltre il primo, +1 con tre o
-         più Sfere, tetto 7. --}}
+    {{!-- Sfere e Ambiti a pallini: per ogni Sfera scegli il livello che usi,
+         per ogni Ambito il livello da 1 a 7. La soglia è il maggiore fra la
+         Sfera più alta e l'Ambito più alto, +1 per ogni Ambito oltre il
+         primo, +1 con tre o più Sfere, tetto 7. --}}
     <div class="wod5e-mage-arete-spheres" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Spheres'}}">
         {{#if spheres.length}}
             <div class="wod5e-mage-arete-columns">
                 <div class="wod5e-mage-arete-col">
                     <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Spheres"}}</span>
                     {{#each spheres as |sphere|}}
-                        <label class="wod5e-mage-arete-sphere">
-                            <input type="checkbox" class="wod5e-mage-arete-sphere-box" name="sphere-{{sphere.id}}" data-level="{{sphere.value}}">
-                            <span>{{localize sphere.label}}</span>
-                            <span class="wod5e-mage-arete-sphere-dots" aria-label="{{sphere.value}}">
-                                {{#each sphere.steps as |step|}}<i class="wod5e-mage-arete-sphere-dot {{#if step.active}}active{{/if}}"></i>{{/each}}
+                        <div class="wod5e-mage-arete-dotrow wod5e-mage-arete-sphere" data-role="dotRow" data-kind="sphere" data-id="{{sphere.id}}" data-specialty="{{sphere.specialtyScope}}">
+                            <span>{{localize sphere.label}}{{#if sphere.specialtyScope}} <small class="wod5e-mage-arete-specialty" title="{{localize 'WOD5E_MAGE.Arete.SpecialtyHint'}}">◆ {{localize sphere.specialtyLabel}}</small>{{/if}}</span>
+                            <input type="hidden" name="sphere-{{sphere.id}}" value="0">
+                            <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize sphere.label}}">
+                                {{#each sphere.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
                             </span>
-                        </label>
+                        </div>
                     {{/each}}
                 </div>
                 <div class="wod5e-mage-arete-col">
-                    {{!-- Gli Ambiti li aggiunge il giocatore col +, ognuno col suo
-                         livello da 1 a 7. --}}
-                    <div class="wod5e-mage-arete-scope-head">
-                        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Scopes.Label"}}
-                            <button type="button" class="wod5e-mage-arete-scope-add" data-role="scopeAdd"
-                                    title="{{localize 'WOD5E_MAGE.Arete.AddScope'}}"
-                                    aria-label="{{localize 'WOD5E_MAGE.Arete.AddScope'}}"><i class="fa-solid fa-plus"></i></button>
-                        </span>
-                        <span class="wod5e-mage-arete-scope-lvl-label">{{localize "WOD5E_MAGE.Arete.ScopeLevel"}}</span>
-                    </div>
-                    <div class="wod5e-mage-arete-scope-rows" data-role="scopeRows"></div>
-                    <template data-role="scopeRowTemplate">
-                        <div class="wod5e-mage-arete-scope-row">
-                            <select class="wod5e-mage-arete-scope"
-                                    aria-label="{{localize 'WOD5E_MAGE.Arete.SelectScope'}}">
-                                <option value="">{{localize "WOD5E_MAGE.Arete.SelectScope"}}</option>
-                                {{#each scopes as |scope|}}
-                                    <option value="{{scope.id}}">{{localize scope.label}}</option>
-                                {{/each}}
-                            </select>
-                            <input type="number" class="wod5e-mage-arete-scope-ns"
-                                   min="1" max="7" step="1" value="1"
-                                   title="{{localize 'WOD5E_MAGE.Arete.ScopeLevelHint'}}"
-                                   aria-label="{{localize 'WOD5E_MAGE.Arete.ScopeLevelHint'}}">
+                    <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Scopes.Label"}}</span>
+                    {{#each scopes as |scope|}}
+                        <div class="wod5e-mage-arete-dotrow wod5e-mage-arete-sphere" data-role="dotRow" data-kind="scope" data-id="{{scope.id}}">
+                            <span>{{localize scope.label}}</span>
+                            <input type="hidden" name="scope-{{scope.id}}" value="0">
+                            <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
+                                {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
+                            </span>
                         </div>
-                    </template>
+                    {{/each}}
                 </div>
             </div>
         {{else}}

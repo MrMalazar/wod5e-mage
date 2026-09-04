@@ -41,7 +41,6 @@
       "Kinds": {
         "attribute": "Attributo",
         "skill": "Abilità",
-        "affinitySphere": "Sfera d'Affinità",
         "sphere": "Sfera",
         "arete": "Areté",
         "health": "Salute",
@@ -89,10 +88,6 @@
       "CoincidentalHint": "Non si percepisce.",
       "VulgarHint": "La realtà lo percepisce, +1 Paradosso.",
       "WitnessesHint": "Qualcuno ti ha visto farlo, +2 Paradosso.",
-      "SelectScope": "Seleziona Ambito",
-      "AddScope": "Aggiungi un Ambito",
-      "ScopeLevel": "Livello",
-      "ScopeLevelHint": "Il livello dell'Ambito, da 1 a 7: fa soglia.",
       "ScopePlan": "Ambiti: {plans}.",
       "Coincidental": "Accidentale",
       "Vulgar": "Volgare",
@@ -102,25 +97,24 @@
       "Maintained": "Effetto Mantenuto",
       "MaintainedName": "Nome dell'effetto",
       "Spheres": "Sfere Effetto",
-      "NoSpheres": "Nessuna Sfera con pallini: sblocca le Sfere in Magick per combinarle qui.",
+      "NoSpheres": "Nessuna Sfera con pallini: sblocca le Sfere in Magick per usarle qui.",
       "Prize": "Premio dell'Areté",
       "PrizeHint": "Se la descrizione rispetta lo Strumento, o il Credo, o inventa un effetto fuori dalle tavole: dadi in più pari all'Areté ({arete}), dentro il tetto +3 insieme ad Armonia e Bonus.",
       "PrizeHybrid": "La Magick Ibrida non prende il premio.",
       "PrizeFlavor": "premio {dice}",
       "Harmony": "Armonia",
-      "HarmonyNone": "Nessuna",
-      "HarmonyOne": "+1 · stesso Credo o stesso Tipo",
-      "HarmonyTwo": "+2 · stesso Credo e stesso Tipo",
-      "HarmonyHint": "Serve una Sfera in comune. Magick e Tecnomagick non fanno Armonia fra loro; l'Ibrida con entrambi.",
+      "HarmonyHint": "I dadi che gli altri Maghi ti danno: uno per chi ha il tuo Credo o il tuo Tipo, due per chi ha entrambi, sempre con una Sfera in comune. Li contate al tavolo. Magick e Tecnomagick non fanno Armonia fra loro; l'Ibrida con entrambi.",
       "HarmonyFlavor": "Armonia {dice}",
       "Pool": "Riserva",
       "Threshold": "Soglia",
-      "ThresholdHint": "La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto, +1 per ogni Ambito oltre il primo, +1 con tre o più Sfere, tetto 7.",
+      "ThresholdHint": "La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto, +1 per ogni Ambito oltre il primo, +1 con tre o più Sfere, tetto 7. Clicca i pallini: il livello della Sfera che usi, il livello di ogni Ambito.",
       "AutoVictory": "Vittoria automatica: la riserva è almeno il doppio della soglia, non si tira. Nel Volgare si tirano solo i rossi.",
       "AutoVictoryChat": "Vittoria automatica: riserva {pool} contro soglia {threshold}, non si tira.",
       "RedOnly": "Vittoria automatica (riserva {pool}, soglia {threshold}): si tirano solo i rossi. Se scatta il Contraccolpo, Ustione {burn}, pari alla soglia.",
       "OneStep": "A un passo: mancano {missing} successi, entro l'Areté ({arete}). Riuscita a un prezzo.",
-      "BonusCap": "Tetto +3: {excess} dadi in meno."
+      "BonusCap": "Tetto +3: {excess} dadi in meno.",
+      "SpherePlan": "Sfere: {plans}.",
+      "SpecialtyHint": "Specialità: questo Ambito conta come il minore fra la Sfera e il suo livello, e non pesa come Ambito in più."
     },
     "Focus": {
       "Credo": "Credo",
@@ -299,7 +293,6 @@
       "area": "Area",
       "conditions": "Condizioni",
       "range": "Portata",
-      "GiftScope": "Ambito del Dono",
       "TableTitle": "Gli Ambiti",
       "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto; ogni Ambito oltre il primo la alza di 1. Potenza: danni per livello.",
       "TableSuccesses": "Livello →",
@@ -394,16 +387,6 @@
       "prime": "Prime",
       "spirit": "Spirito",
       "time": "Tempo"
-    },
-    "AffinitySphere": {
-      "Label": "Sfera affine",
-      "Select": "Scegli una Sfera affine",
-      "Change": "Cambia Sfera affine",
-      "Remove": "Rimuovi Sfera affine",
-      "Search": "Cerca una Sfera...",
-      "BrowserTitle": "Sfere d'Affinità",
-      "NoResults": "Nessuna Sfera trovata.",
-      "MissingPack": "Il compendio delle Sfere non è disponibile."
     },
     "Wisdom": {
       "Label": "Saggezza",
@@ -535,8 +518,7 @@
       "Label": "Salute",
       "Hint": "1 + Costituzione + Fermezza",
       "Extra": "Caselle in più, oltre il conto",
-      "ClickHint": "Clic: la casella gira (/, X, o, ◎). Clic destro: si svuota.",
-      "Legend": "/ fisico · X fisico aggravato · o mentale · ◎ mentale aggravato",
+      "ClickHint": "Clic: scegli il segno. Clic destro: la casella si svuota.",
       "States": {
         "empty": "Vuota",
         "ps": "Danno fisico superficiale",
@@ -546,17 +528,46 @@
       },
       "Impaired": "Menomato: il tracciato è coperto.",
       "KoDeath": "KO: tutte le caselle sono aggravate e prevalgono i danni fisici. Morte.",
-      "KoShock": "KO: tutte le caselle sono aggravate e prevalgono i danni mentali. Coma o shock."
+      "KoShock": "KO: tutte le caselle sono aggravate e prevalgono i danni mentali. Coma o shock.",
+      "Pick": "Che danno segni?",
+      "PickHint": "Un segno per casella: fisico o mentale, superficiale o aggravato.",
+      "LegendPhysical": "Danni fisici:",
+      "LegendMental": "Danni mentali:",
+      "Superficial": "superficiale",
+      "Aggravated": "aggravato",
+      "NewSession": "Nuova sessione",
+      "NewSessionHint": "Guariscono tutti i superficiali mentali, un superficiale fisico se ne va, il Contraccolpo si può negare di nuovo.",
+      "NewSessionDone": "Nuova sessione: superficiali mentali guariti, un superficiale fisico in meno, Contraccolpo riarmato.",
+      "Reset": "Reset",
+      "ResetHint": "Il tracciato torna vuoto."
     },
     "Contraccolpo": {
       "Label": "Negare il Contraccolpo",
-      "Hint": "Una volta per sessione: segni un aggravato mentale, il Contraccolpo non scatta, la Ruota sale di 3. L'aggravato non guarisce finché quei punti non sono scaricati.",
+      "Hint": "Una volta per sessione: segni un aggravato mentale, il Contraccolpo non scatta, la Ruota sale di 3. L'aggravato non guarisce finché quei punti non sono scaricati. Si riarma con «Nuova sessione».",
       "Used": "negato in questa sessione",
-      "Reset": "Nuova sessione: si può negare di nuovo",
       "Done": "Contraccolpo negato: un aggravato mentale, la Ruota sale di {amount}.",
       "AlreadyUsed": "Il Contraccolpo è già stato negato in questa sessione.",
       "NoRoom": "Nessuna casella per l'aggravato mentale: il tracciato è tutto aggravato.",
       "WheelFull": "I tre punti portano la Ruota al massimo: Difetto paradossale oppure scoppio."
+    },
+    "Specialties": {
+      "Label": "Specializzazioni",
+      "Add": "Aggiungi una Specializzazione",
+      "Remove": "Togli la Specializzazione",
+      "Edit": "Apri l'editor dell'Abilità",
+      "Skill": "Abilità",
+      "Name": "Specializzazione",
+      "NameHint": "es. Serrature, Chirurgia, Pistole",
+      "Hint": "Vale un dado in più quando la specializzazione conta nel tiro.",
+      "Empty": "Nessuna Specializzazione: il + ne aggiunge una (Abilità e nome).",
+      "Incomplete": "Serve un'Abilità e il nome della Specializzazione."
+    },
+    "SphereSpecialties": {
+      "Label": "Specialità delle Sfere",
+      "Hint": "Al terzo pallino di una Sfera scegli uno dei suoi poteri passivi. Non esiste più la Sfera affine.",
+      "None": "Specialità…",
+      "Empty": "Nessuna Sfera al terzo pallino: la Specialità arriva col terzo.",
+      "MissingPack": "Il compendio delle Sfere non è disponibile."
     }
   }
 }

@@ -1,0 +1,16 @@
+<form class="dialog-contents wod5e-mage-specialty-form">
+    <div class="wod5e-mage-arete-row">
+        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Specialties.Skill"}}</span>
+        <select name="skill" required>
+            <option value="">{{localize "WOD5E_MAGE.RollSelection.SelectAbility"}}</option>
+            {{#each skills as |skill|}}
+                <option value="{{skill.id}}">{{skill.label}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <div class="wod5e-mage-arete-row">
+        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Specialties.Name"}}</span>
+        <input type="text" name="source" required placeholder="{{localize 'WOD5E_MAGE.Specialties.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Name'}}">
+    </div>
+    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Specialties.Hint"}}</p>
+</form>

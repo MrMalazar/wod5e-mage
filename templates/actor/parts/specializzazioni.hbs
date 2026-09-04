@@ -1,0 +1,30 @@
+{{!-- Le Specializzazioni delle Abilità: una riga l'una, il + ne aggiunge
+     una, la matita apre l'editor del sistema, il cestino la toglie. --}}
+<section class="wod5e-mage-bonuses wod5e-mage-specialties">
+    <header class="resource-header">
+        <label class="header-label">{{localize "WOD5E_MAGE.Specialties.Label"}}</label>
+        <button type="button" class="wod5e-mage-bonuses-add" data-action="specialtyAdd" title="{{localize 'WOD5E_MAGE.Specialties.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Add'}}" {{#if locked}}disabled{{/if}}>
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </header>
+
+    {{#if specialties.rows.length}}
+    <div class="wod5e-mage-specialties-grid">
+        <span>{{localize "WOD5E_MAGE.Specialties.Skill"}}</span>
+        <span>{{localize "WOD5E_MAGE.Specialties.Name"}}</span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+
+        {{#each specialties.rows as |row|}}
+            <strong>{{row.skillLabel}}</strong>
+            <em>{{row.source}} <small>+{{row.value}}</small></em>
+            <a class="wod5e-mage-specialty-edit" data-action="editSkill" data-skill="{{row.skill}}" title="{{localize 'WOD5E_MAGE.Specialties.Edit'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Edit'}}"><i class="fas fa-edit"></i></a>
+            <button type="button" data-action="specialtyDelete" data-skill="{{row.skill}}" data-index="{{row.index}}" title="{{localize 'WOD5E_MAGE.Specialties.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Remove'}}" {{#if ../locked}}disabled{{/if}}>
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        {{/each}}
+    </div>
+    {{else}}
+        <p class="wod5e-mage-bonuses-empty">{{localize "WOD5E_MAGE.Specialties.Empty"}}</p>
+    {{/if}}
+</section>

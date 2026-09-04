@@ -4,7 +4,6 @@ import { experienceCost, prepareExperiencePage } from "../scripts/experience-win
 // L'esempio scritto nel manuale: Attributo da 2 a 3 = 4 × 3 = 12.
 assert.equal(experienceCost("attribute", 2, 3).total, 12);
 // Sfera d'Affinità da 3 a 4 = 4 × 5.
-assert.equal(experienceCost("affinitySphere", 3, 4).total, 20);
 // Abilità da 2 a 3 = 3 × 2.
 assert.equal(experienceCost("skill", 2, 3).total, 6);
 // Abilità nuova fino a 3: 3 + 4 + 6.
@@ -35,7 +34,7 @@ assert.equal(page.gains.length, 2);
 assert.equal(page.spent, 17);
 assert.equal(page.remaining, 13);
 assert.equal(page.log.length, 2);
-// Otto tipi: la Volontà è caduta col tracciato unico della Salute.
-assert.equal(page.rows.length, 8);
+// Sette tipi: via la Volontà (tracciato unico) e la Sfera affine (Specialità).
+assert.equal(page.rows.length, 7);
 
 console.log("experience-window.test.js: pagina e 10 asserzioni superate");

@@ -1,7 +1,5 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
 import { prepareEssentialSkills } from "../abilita-essenziali.js";
-import { prepareAffinitySphere } from "../affinity-sphere-data.js";
-import { onAffinitySphereClear, onAffinitySphereOpen } from "../affinity-sphere.js";
 import { MODULE_ID } from "../constants.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
@@ -37,18 +35,21 @@ import {
   onOngoingMagickDelete,
   prepareOngoingMagick
 } from "../ongoing-magick.js";
-import { prepareAffinityGift, prepareScopeTable } from "../scopes.js";
+import { prepareScopeTable } from "../scopes.js";
+import { loadSpherePowers, prepareSphereSpecialties } from "../sphere-specialties.js";
 import { onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
+import { onSpecialtyAdd, onSpecialtyDelete, prepareSpecialties } from "../specializzazioni.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 import {
   getContraccolpo,
   getSalute,
   onContraccolpoNega,
-  onContraccolpoReset,
   onSaluteCellChange,
-  onSaluteExtraChange
+  onSaluteExtraChange,
+  onSaluteNewSession,
+  onSaluteReset
 } from "../salute.js";
 
 const MODULE = "modules/wod5e-mage/templates/actor";
@@ -87,8 +88,6 @@ export class MageActorSheet extends MortalActorSheet {
     classes: ["wod5e-mage", "mage"],
     actions: {
       roll: onMageRoll,
-      affinitySphereClear: onAffinitySphereClear,
-      affinitySphereOpen: onAffinitySphereOpen,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
       belongingAdd: onBelongingAdd,
@@ -96,10 +95,11 @@ export class MageActorSheet extends MortalActorSheet {
       bonusAdd: onBonusAdd,
       bonusDelete: onBonusDelete,
       contraccolpoNega: onContraccolpoNega,
-      contraccolpoReset: onContraccolpoReset,
-      // Clic sinistro gira la casella, clic destro la svuota.
+      // Clic sinistro sceglie il segno, clic destro svuota la casella.
       saluteCellChange: { handler: onSaluteCellChange, buttons: [0, 2] },
       saluteExtraChange: onSaluteExtraChange,
+      saluteNewSession: onSaluteNewSession,
+      saluteReset: onSaluteReset,
       magickBalanceChange: onMagickBalanceChange,
       experienceLogAdd: onExperienceLogAdd,
       experienceLogDelete: onExperienceLogDelete,
@@ -107,6 +107,8 @@ export class MageActorSheet extends MortalActorSheet {
       ongoingMagickDelete: onOngoingMagickDelete,
       personaggioRowAdd: onPersonaggioRowAdd,
       personaggioRowDelete: onPersonaggioRowDelete,
+      specialtyAdd: onSpecialtyAdd,
+      specialtyDelete: onSpecialtyDelete,
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
       wisdomResourceChange: onWisdomResourceChange,
@@ -129,7 +131,8 @@ export class MageActorSheet extends MortalActorSheet {
       template: `${MODULE}/parts/tratti.hbs`,
       templates: [
         `${MODULE}/parts/ruota.hbs`,
-        `${MODULE}/parts/bonuses.hbs`
+        `${MODULE}/parts/bonuses.hbs`,
+        `${MODULE}/parts/specializzazioni.hbs`
       ]
     },
     magick: {
@@ -264,6 +267,11 @@ export class MageActorSheet extends MortalActorSheet {
       // Quintessenza generata e Paradosso permanente vivono nella Ruota.
       context.persistentMagickResources = getPersistentMagickResources(actor);
       context.bonuses = prepareBonuses(actor);
+      // Le Specializzazioni delle Abilità, lette dai bonuses del sistema.
+      context.specialties = prepareSpecialties(actor, {
+        localize: game.i18n.localize.bind(game.i18n),
+        lang: game.i18n.lang
+      });
       context.wheelAsBar = game.settings.get(MODULE_ID, "headerWheelMode") === "bar";
       // Negare il Contraccolpo: una volta per sessione, dalla Ruota.
       context.contraccolpo = getContraccolpo(actor);
@@ -279,13 +287,13 @@ export class MageActorSheet extends MortalActorSheet {
 
     if (partId === "magick") {
       context.tab = context.tabs.magick;
-      context.affinitySphere = await prepareAffinitySphere(actor);
       context.arete = getArete(actor);
-      context.scopeTable = prepareScopeTable({
-        gift: prepareAffinityGift(
-          context.affinitySphere,
-          prepareSpheres(actor).all.find((sphere) => sphere.id === context.affinitySphere?.id)?.value
-        )
+      context.scopeTable = prepareScopeTable();
+      // Le Specialità delle Sfere, dal terzo pallino, coi poteri del compendio.
+      context.sphereSpecialties = prepareSphereSpecialties(actor, {
+        powers: await loadSpherePowers(),
+        localize: game.i18n.localize.bind(game.i18n),
+        locale: game.i18n.lang
       });
       context.magickTrack = prepareMagickTrack(actor);
       context.persistentMagickResources = getPersistentMagickResources(actor);

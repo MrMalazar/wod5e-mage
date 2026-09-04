@@ -112,17 +112,17 @@ assert.match(ruotaTemplate, /wod5e-mage-magick-end quintessence[\s\S]*wod5e-mage
 assert.match(ruotaTemplate, /button[^>]*wod5e-mage-arete-roll[^>]*data-action="areteRoll"/);
 assert.doesNotMatch(ruotaTemplate, /wod5e-mage-header-roll|Arete\.Roll"/);
 // Il listino dei Successi Extra chiude la pagina Magick, a tutta larghezza.
-assert.match(magickTemplate, /wod5e-mage-affinity-sphere[\s\S]*parts\/scope-table\.hbs/);
+assert.match(magickTemplate, /wod5e-mage-sphere-specialties[\s\S]*parts\/scope-table\.hbs/);
 assert.match(
   css,
-  /\.wod5e-mage-magick-layout\s*\{[^}]*"affinity affinity"\s*"table table";/s
+  /\.wod5e-mage-magick-layout\s*\{[^}]*"specialties specialties"\s*"table table";/s
 );
 assert.match(css, /\.wod5e-mage-scope-table\s*\{[^}]*grid-area:\s*table;/s);
 
-// The affinity section stays below Spheres and Ongoing Magick.
+// The Specialities section stays below Spheres and Ongoing Magick.
 assert.match(
   css,
-  /\.wod5e-mage-magick-layout\s*\{[^}]*"spheres ongoing"[^}]*"affinity affinity"[^}]*"table table";/s
+  /\.wod5e-mage-magick-layout\s*\{[^}]*"spheres ongoing"[^}]*"specialties specialties"[^}]*"table table";/s
 );
 assert.match(
   css,
@@ -130,7 +130,7 @@ assert.match(
 );
 assert.match(
   css,
-  /\.wod5e-mage-affinity-sphere\s*\{[^}]*grid-area:\s*affinity;/s
+  /\.wod5e-mage-sphere-specialties\s*\{[^}]*grid-area:\s*specialties;/s
 );
 assert.match(
   css,
@@ -138,7 +138,7 @@ assert.match(
 );
 assert.match(
   magickTemplate,
-  /wod5e-mage-spheres-panel[\s\S]*wod5e-mage-ongoing-magick[\s\S]*wod5e-mage-affinity-sphere/
+  /wod5e-mage-spheres-panel[\s\S]*wod5e-mage-ongoing-magick[\s\S]*wod5e-mage-sphere-specialties/
 );
 
 // La sidebar conserva le tab aggiuntive del Mago, ma usa la geometria nativa:
@@ -207,20 +207,19 @@ const areteDialog = readFileSync(
   new URL("../templates/dialogs/arete-roll.hbs", import.meta.url),
   "utf8"
 );
-// Sfere Effetto e Ambiti sono due colonne distinte; il livello Sfera parla
-// a pallini e gli Ambiti hanno tendina + N.S. per riga.
-assert.match(areteDialog, /wod5e-mage-arete-columns[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dots[\s\S]*Scopes\.Label[\s\S]*data-role="scopeAdd"[\s\S]*Arete\.ScopeLevel[\s\S]*data-role="scopeRows"[\s\S]*template data-role="scopeRowTemplate"/);
-assert.match(areteDialog, /Arete\.SelectScope[\s\S]*Arete\.ScopeLevelHint/);
-assert.doesNotMatch(areteDialog, /<b>\{\{sphere\.value\}\}<\/b>|Arete\.ParadoxHint|name="scope-\{\{@index\}\}"|ScopeSuccesses/);
+// Sfere e Ambiti: due colonne a pallini, un campo nascosto per riga, la
+// Specialità segnata sulla Sfera che ce l'ha.
+assert.match(areteDialog, /wod5e-mage-arete-columns[\s\S]*data-kind="sphere"[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dot[\s\S]*data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}"/);
+assert.match(areteDialog, /data-specialty="\{\{sphere\.specialtyScope\}\}"/);
+assert.doesNotMatch(areteDialog, /scopeRowTemplate|data-role="scopeAdd"|wod5e-mage-arete-sphere-box|ScopeSuccesses/);
 // La riserva del ramo A: la prima tendina è un'Abilità, la seconda Abilità
 // o Attributo; l'Areté non tira, entra come premio (mai per l'Ibrida).
 assert.match(areteDialog, /RollSelection\.Ability"[\s\S]*name="primaryTrait"[\s\S]*RollSelection\.AbilityOrAttribute[\s\S]*name="secondaryTrait"/);
 assert.doesNotMatch(areteDialog, /name="primarySkill"|name="arete"|Arete\.Include/);
 assert.match(areteDialog, /Arete\.Prize"[\s\S]*name="prize"[\s\S]*Arete\.PrizeHybrid[\s\S]*name="harmony"[\s\S]*data-role="pool"[\s\S]*data-role="threshold"[\s\S]*data-role="autoVictory"/);
-// Gli Ambiti valgono da 1 a 7.
-assert.match(areteDialog, /wod5e-mage-arete-scope-ns"\s*min="1" max="7"/);
+// L'Armonia è un numero: i dadi degli altri Maghi, contati al tavolo.
+assert.match(areteDialog, /name="harmony"[^>]*type="number"|type="number"[^>]*name="harmony"/);
 assert.match(css, /\.wod5e-mage-arete-row \+ \.wod5e-mage-arete-row\s*\{[^}]*margin-top:/s);
-assert.match(css, /\.wod5e-mage-arete-scope-head\s*\{[^}]*grid-template-columns:/s);
 // Le spiegazioni della Tipologia vivono in una colonna staccata a destra.
 assert.match(areteDialog, /wod5e-mage-arete-type-grid[\s\S]*Arete\.Coincidental\b[\s\S]*Arete\.CoincidentalHint[\s\S]*Arete\.VulgarHint[\s\S]*Arete\.WitnessesHint/);
 assert.doesNotMatch(areteDialog, /wod5e-mage-arete-sphere-list|wod5e-mage-arete-sphere-row\b/);

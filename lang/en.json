@@ -41,7 +41,6 @@
       "Kinds": {
         "attribute": "Attribute",
         "skill": "Skill",
-        "affinitySphere": "Affinity Sphere",
         "sphere": "Sphere",
         "arete": "Arete",
         "health": "Health",
@@ -89,10 +88,6 @@
       "CoincidentalHint": "It goes unnoticed.",
       "VulgarHint": "Reality takes notice, +1 Paradox.",
       "WitnessesHint": "Someone saw you do it, +2 Paradox.",
-      "SelectScope": "Select Scope",
-      "AddScope": "Add a Scope",
-      "ScopeLevel": "Level",
-      "ScopeLevelHint": "The Scope level, 1 to 7: it sets the threshold.",
       "ScopePlan": "Scopes: {plans}.",
       "Coincidental": "Coincidental",
       "Vulgar": "Vulgar",
@@ -102,25 +97,24 @@
       "Maintained": "Maintained Effect",
       "MaintainedName": "Effect name",
       "Spheres": "Effect Spheres",
-      "NoSpheres": "No Sphere with dots: unlock Spheres in Magick to combine them here.",
+      "NoSpheres": "No Sphere with dots: unlock Spheres in Magick to use them here.",
       "Prize": "Arete prize",
       "PrizeHint": "If the description honours the Instrument, or the Creed, or invents an effect beyond the tables: extra dice equal to Arete ({arete}), within the +3 cap together with Harmony and Bonuses.",
       "PrizeHybrid": "Hybrid Magick never takes the prize.",
       "PrizeFlavor": "prize {dice}",
       "Harmony": "Harmony",
-      "HarmonyNone": "None",
-      "HarmonyOne": "+1 · same Creed or same Type",
-      "HarmonyTwo": "+2 · same Creed and same Type",
-      "HarmonyHint": "Needs a shared Sphere. Magick and Technomagick do not harmonise with each other; Hybrid does with both.",
+      "HarmonyHint": "The dice other Mages give you: one from anyone sharing your Creed or your Type, two from anyone sharing both, always with a Sphere in common. Count them at the table. Magick and Technomagick do not harmonise with each other; Hybrid does with both.",
       "HarmonyFlavor": "Harmony {dice}",
       "Pool": "Pool",
       "Threshold": "Threshold",
-      "ThresholdHint": "The threshold is the higher of the highest Sphere and the highest Scope, +1 per Scope beyond the first, +1 with three or more Spheres, capped at 7.",
+      "ThresholdHint": "The threshold is the higher of the highest Sphere and the highest Scope, +1 per Scope beyond the first, +1 with three or more Spheres, capped at 7. Click the dots: the Sphere level you use, the level of each Scope.",
       "AutoVictory": "Automatic victory: the pool is at least twice the threshold, no roll. In Vulgar Magick only the red dice are rolled.",
       "AutoVictoryChat": "Automatic victory: pool {pool} against threshold {threshold}, no roll.",
       "RedOnly": "Automatic victory (pool {pool}, threshold {threshold}): only the red dice are rolled. If Backlash strikes, Burn {burn}, equal to the threshold.",
       "OneStep": "One step short: {missing} successes missing, within Arete ({arete}). Success at a price.",
-      "BonusCap": "+3 cap: {excess} fewer dice."
+      "BonusCap": "+3 cap: {excess} fewer dice.",
+      "SpherePlan": "Spheres: {plans}.",
+      "SpecialtyHint": "Speciality: this Scope counts as the lower of the Sphere and its own level, and does not weigh as an extra Scope."
     },
     "Focus": {
       "Credo": "Creed",
@@ -299,7 +293,6 @@
       "area": "Area",
       "conditions": "Conditions",
       "range": "Range",
-      "GiftScope": "Gift Scope",
       "TableTitle": "The Scopes",
       "TableHint": "Each Scope is declared with a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope; every Scope beyond the first raises it by 1. Potency: damage per level.",
       "TableSuccesses": "Level →",
@@ -394,16 +387,6 @@
       "prime": "Prime",
       "spirit": "Spirit",
       "time": "Time"
-    },
-    "AffinitySphere": {
-      "Label": "Affinity Sphere",
-      "Select": "Choose an Affinity Sphere",
-      "Change": "Change Affinity Sphere",
-      "Remove": "Remove Affinity Sphere",
-      "Search": "Search for a Sphere...",
-      "BrowserTitle": "Affinity Spheres",
-      "NoResults": "No Sphere found.",
-      "MissingPack": "The Sphere compendium is not available."
     },
     "Wisdom": {
       "Label": "Wisdom",
@@ -535,8 +518,7 @@
       "Label": "Health",
       "Hint": "1 + Stamina + Resolve",
       "Extra": "Extra boxes beyond the count",
-      "ClickHint": "Click: the box cycles (/, X, o, ◎). Right click: it clears.",
-      "Legend": "/ physical · X physical aggravated · o mental · ◎ mental aggravated",
+      "ClickHint": "Click: pick the mark. Right click: the box clears.",
       "States": {
         "empty": "Empty",
         "ps": "Physical superficial damage",
@@ -546,17 +528,46 @@
       },
       "Impaired": "Impaired: the track is full.",
       "KoDeath": "KO: every box is aggravated and physical damage prevails. Death.",
-      "KoShock": "KO: every box is aggravated and mental damage prevails. Coma or shock."
+      "KoShock": "KO: every box is aggravated and mental damage prevails. Coma or shock.",
+      "Pick": "Which damage?",
+      "PickHint": "One mark per box: physical or mental, superficial or aggravated.",
+      "LegendPhysical": "Physical damage:",
+      "LegendMental": "Mental damage:",
+      "Superficial": "superficial",
+      "Aggravated": "aggravated",
+      "NewSession": "New session",
+      "NewSessionHint": "Every mental superficial heals, one physical superficial goes away, the Backlash can be denied again.",
+      "NewSessionDone": "New session: mental superficial healed, one physical superficial removed, Backlash re-armed.",
+      "Reset": "Reset",
+      "ResetHint": "The track goes back to empty."
     },
     "Contraccolpo": {
       "Label": "Deny the Backlash",
-      "Hint": "Once per session: mark one mental aggravated, the Backlash does not strike, the Wheel rises by 3. That aggravated box does not heal until those points are discharged.",
+      "Hint": "Once per session: mark one mental aggravated, the Backlash does not strike, the Wheel rises by 3. That aggravated box does not heal until those points are discharged. \"New session\" re-arms it.",
       "Used": "denied this session",
-      "Reset": "New session: it can be denied again",
       "Done": "Backlash denied: one mental aggravated, the Wheel rises by {amount}.",
       "AlreadyUsed": "The Backlash has already been denied this session.",
       "NoRoom": "No box left for the mental aggravated: the whole track is aggravated.",
       "WheelFull": "The three points bring the Wheel to its maximum: paradox Flaw or default burst."
+    },
+    "Specialties": {
+      "Label": "Specialties",
+      "Add": "Add a Specialty",
+      "Remove": "Remove the Specialty",
+      "Edit": "Open the Skill editor",
+      "Skill": "Skill",
+      "Name": "Specialty",
+      "NameHint": "e.g. Locks, Surgery, Pistols",
+      "Hint": "Worth one extra die whenever the specialty applies to the roll.",
+      "Empty": "No Specialty: + adds one (Skill and name).",
+      "Incomplete": "A Skill and the Specialty name are both needed."
+    },
+    "SphereSpecialties": {
+      "Label": "Sphere Specialities",
+      "Hint": "At the third dot of a Sphere, pick one of its passive powers. There is no Affinity Sphere any more.",
+      "None": "Speciality…",
+      "Empty": "No Sphere at its third dot: the Speciality comes with the third.",
+      "MissingPack": "The Spheres compendium is not available."
     }
   }
 }

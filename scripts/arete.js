@@ -12,6 +12,7 @@ import {
 import { prepareSpheres } from "./spheres.js";
 import { SCOPES } from "./scopes.js";
 import { FOCUS_FORMS } from "./focus.js";
+import { loadSpherePowers, specialtyScopes } from "./sphere-specialties.js";
 
 export const ARETE_MIN = 1;
 export const ARETE_MAX = 5;
@@ -67,9 +68,11 @@ export function calculateAretePrize(arete, form = "") {
   return Math.min(Math.max(Math.trunc(Number(arete) || 0), 0), BONUS_DICE_CAP);
 }
 
-/** L'Armonia: un dado, o due, mai di più. */
+/** L'Armonia: i dadi che gli altri Maghi ti danno, contati al tavolo. */
+export const HARMONY_MAX = 9;
+
 export function normalizeHarmony(value) {
-  return Math.min(Math.max(Math.trunc(Number(value) || 0), 0), 2);
+  return Math.min(Math.max(Math.trunc(Number(value) || 0), 0), HARMONY_MAX);
 }
 
 /** Quanti dadi in più restano una volta applicato il tetto. */
@@ -91,21 +94,48 @@ export function bonusDiceExcess(bonusDice, modifiers = []) {
   return Math.max(declared - BONUS_DICE_CAP, 0);
 }
 
+function levelEntries(entries, max) {
+  return (entries ?? [])
+    .map((entry) => (typeof entry === "object" && entry !== null ? entry : { level: entry }))
+    .map((entry) => ({
+      id: String(entry.id ?? ""),
+      level: Math.min(Math.max(Math.trunc(Number(entry.level) || 0), 0), max)
+    }))
+    .filter((entry) => entry.level > 0);
+}
+
 /**
  * La soglia del ramo A: il maggiore fra la Sfera più alta e l'Ambito più
  * alto, +1 per ogni Ambito oltre il primo, +1 piatto con tre o più Sfere,
  * tetto 7. Gli Ambiti valgono da 1 a 7.
+ *
+ * Le Specialità delle Sfere (Sfera → Ambito): quando la Sfera è nel lancio,
+ * quell'Ambito conta come il minore fra il livello della Sfera e il suo, e
+ * non pesa come Ambito in più.
  */
-export function calculateMagickThreshold({ sphereLevels = [], scopeLevels = [] } = {}) {
-  const spheres = sphereLevels
-    .map((level) => Math.max(Math.trunc(Number(level) || 0), 0))
-    .filter((level) => level > 0);
-  const scopes = scopeLevels
-    .map((level) => Math.min(Math.max(Math.trunc(Number(level) || 0), 1), THRESHOLD_CAP));
+export function calculateMagickThreshold({ sphereLevels = [], scopeLevels = [], specialties = {} } = {}) {
+  const spheres = levelEntries(sphereLevels, 5);
+  const scopes = levelEntries(scopeLevels, THRESHOLD_CAP);
   if (!spheres.length && !scopes.length) return 0;
 
-  const highest = Math.max(0, ...spheres, ...scopes);
-  const extraScopes = Math.max(scopes.length - 1, 0);
+  // Gli Ambiti coperti da una Specialità di una Sfera in gioco.
+  const covered = new Map();
+  for (const [sphereId, scopeId] of Object.entries(specialties ?? {})) {
+    const sphere = spheres.find((entry) => entry.id === sphereId);
+    if (sphere && scopeId) covered.set(String(scopeId), sphere.level);
+  }
+
+  const effectiveScopes = scopes.map((scope) => (covered.has(scope.id)
+    ? { ...scope, level: Math.min(scope.level, covered.get(scope.id)), covered: true }
+    : { ...scope, covered: false }));
+
+  const highest = Math.max(
+    0,
+    ...spheres.map((entry) => entry.level),
+    ...effectiveScopes.map((entry) => entry.level)
+  );
+  const countedScopes = effectiveScopes.filter((entry) => !entry.covered).length;
+  const extraScopes = Math.max(countedScopes - 1, 0);
   const manySpheres = spheres.length >= 3 ? 1 : 0;
   return Math.min(highest + extraScopes + manySpheres, THRESHOLD_CAP);
 }
@@ -206,31 +236,53 @@ function makeMagickTypeExclusive(dialog) {
   });
 }
 
-/** Gli Ambiti li aggiunge il giocatore: il + accoda una riga tendina+Lvl. */
-function wireScopeRows(dialog) {
+/**
+ * Le file a pallini di Sfere e Ambiti: il clic su un pallino fissa il
+ * livello (di nuovo sullo stesso: zero) e lo scrive nel campo nascosto.
+ */
+function wireDotRows(dialog) {
   const root = dialog?.element;
-  const list = root?.querySelector("[data-role=scopeRows]");
-  const addButton = root?.querySelector("[data-role=scopeAdd]");
-  const rowTemplate = root?.querySelector("template[data-role=scopeRowTemplate]");
-  if (!list || !addButton || !rowTemplate) return;
+  root?.querySelectorAll("[data-role=dotRow]").forEach((row) => {
+    const input = row.querySelector("input[type=hidden]");
+    const dots = [...row.querySelectorAll(".wod5e-mage-arete-sphere-dot")];
+    if (!input) return;
 
-  const addRow = () => {
-    const index = list.querySelectorAll(".wod5e-mage-arete-scope-row").length;
-    const fragment = rowTemplate.content.cloneNode(true);
-    const select = fragment.querySelector("select");
-    const level = fragment.querySelector("input");
-    if (select) select.name = `scope-${index}`;
-    if (level) level.name = `scope-lvl-${index}`;
-    list.appendChild(fragment);
-  };
+    const paint = () => {
+      const level = Math.max(Math.trunc(Number(input.value) || 0), 0);
+      dots.forEach((dot) => {
+        dot.classList.toggle("active", Number(dot.dataset.level) <= level);
+      });
+      row.classList.toggle("chosen", level > 0);
+    };
 
-  addButton.addEventListener("click", (event) => {
-    event.preventDefault();
-    addRow();
+    dots.forEach((dot) => {
+      dot.addEventListener("click", (event) => {
+        event.preventDefault();
+        const level = Math.max(Math.trunc(Number(dot.dataset.level) || 0), 0);
+        input.value = String(Number(input.value) === level ? 0 : level);
+        paint();
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+    });
+    paint();
   });
+}
 
-  // Una riga pronta all'apertura: le altre le chiede il giocatore col +.
-  addRow();
+function readDotRows(root, kind) {
+  const entries = [];
+  root?.querySelectorAll(`[data-role=dotRow][data-kind=${kind}]`).forEach((row) => {
+    const level = Math.max(Math.trunc(Number(row.querySelector("input[type=hidden]")?.value) || 0), 0);
+    if (level > 0) entries.push({ id: row.dataset.id, level });
+  });
+  return entries;
+}
+
+function readSpecialties(root) {
+  const map = {};
+  root?.querySelectorAll("[data-role=dotRow][data-kind=sphere]").forEach((row) => {
+    if (row.dataset.specialty) map[row.dataset.id] = row.dataset.specialty;
+  });
+  return map;
 }
 
 function optionValue(select) {
@@ -241,7 +293,6 @@ function optionValue(select) {
 /** Il conto vivo: riserva (due tratti, premio, Armonia) contro soglia. */
 function wireDifficulty(dialog) {
   const root = dialog?.element;
-  const boxes = [...(root?.querySelectorAll(".wod5e-mage-arete-sphere-box") ?? [])];
   const thresholdOut = root?.querySelector("[data-role=threshold]");
   const poolOut = root?.querySelector("[data-role=pool]");
   const autoOut = root?.querySelector("[data-role=autoVictory]");
@@ -253,16 +304,11 @@ function wireDifficulty(dialog) {
   const harmony = root.querySelector("#wod5e-mage-arete-harmony");
 
   const update = () => {
-    const sphereLevels = boxes
-      .filter((box) => box.checked)
-      .map((box) => Math.max(Math.trunc(Number(box.dataset.level) || 0), 0));
-    const scopeLevels = [];
-    root.querySelectorAll(".wod5e-mage-arete-scope-row").forEach((row) => {
-      const select = row.querySelector("select");
-      if (!select?.value) return;
-      scopeLevels.push(Number(row.querySelector("input")?.value) || 1);
+    const threshold = calculateMagickThreshold({
+      sphereLevels: readDotRows(root, "sphere"),
+      scopeLevels: readDotRows(root, "scope"),
+      specialties: readSpecialties(root)
     });
-    const threshold = calculateMagickThreshold({ sphereLevels, scopeLevels });
 
     const prizeDice = prizeBox?.checked
       ? Math.max(Math.trunc(Number(prizeBox.dataset.value) || 0), 0)
@@ -275,14 +321,14 @@ function wireDifficulty(dialog) {
     autoOut?.classList.toggle("hidden", !isAutomaticVictory(pool, threshold));
   };
 
-  boxes.forEach((box) => box.addEventListener("change", update));
   [primary, secondary, prizeBox, harmony].forEach((control) => {
     control?.addEventListener("change", update);
+    control?.addEventListener("input", update);
   });
-  // Le righe degli Ambiti sono dinamiche: si ascolta il contenitore.
-  const list = root?.querySelector("[data-role=scopeRows]");
-  list?.addEventListener("change", update);
-  list?.addEventListener("input", update);
+  // I pallini scrivono nei campi nascosti e avvisano col change.
+  root.querySelectorAll("[data-role=dotRow] input[type=hidden]").forEach((input) => {
+    input.addEventListener("change", update);
+  });
   update();
 }
 
@@ -325,14 +371,23 @@ export async function onAreteRoll(event) {
   };
   // Solo le Sfere sbloccate, con almeno un pallino: sono quelle combinabili.
   // Il livello parla a pallini nel dialogo, come sulla scheda.
+  // Ogni Sfera porta i suoi pallini: il giocatore sceglie il livello che
+  // usa. Le Specialità dell'Ambito si leggono dal compendio.
+  const specialties = specialtyScopes(actor, await loadSpherePowers());
   const rollSpheres = prepareSpheres(actor).selected
     .filter((sphere) => sphere.value > 0)
     .map((sphere) => ({
       ...sphere,
-      steps: Array.from({ length: 5 }, (_, index) => ({ active: index < sphere.value }))
+      steps: Array.from({ length: sphere.value }, (_, index) => ({ value: index + 1 })),
+      specialtyScope: specialties[sphere.id] ?? "",
+      specialtyLabel: specialties[sphere.id] ? `WOD5E_MAGE.Scopes.${specialties[sphere.id]}` : ""
     }));
-  // I sei Ambiti, per la tendina.
-  const scopeOptions = SCOPES.map((id) => ({ id, label: `WOD5E_MAGE.Scopes.${id}` }));
+  // I sei Ambiti, a sette pallini l'uno.
+  const scopeOptions = SCOPES.map((id) => ({
+    id,
+    label: `WOD5E_MAGE.Scopes.${id}`,
+    steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 }))
+  }));
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
     { arete, prize, spheres: rollSpheres, scopes: scopeOptions, ...traits }
@@ -363,7 +418,7 @@ export async function onAreteRoll(event) {
     classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog"],
     render: (_event, dialog) => {
       makeMagickTypeExclusive(dialog);
-      wireScopeRows(dialog);
+      wireDotRows(dialog);
       wireDifficulty(dialog);
       wireMaintainedEffect(dialog);
     }
@@ -380,29 +435,26 @@ export async function onAreteRoll(event) {
   }
 
   const options = normalizeMagickRollOptions(result);
-  const sphereLevels = rollSpheres
-    .filter((sphere) => isChecked(result[`sphere-${sphere.id}`]))
-    .map((sphere) => sphere.value);
+  const sphereEntries = rollSpheres
+    .map((sphere) => ({
+      id: sphere.id,
+      level: Math.min(Math.max(Math.trunc(Number(result[`sphere-${sphere.id}`]) || 0), 0), sphere.value)
+    }))
+    .filter((entry) => entry.level > 0);
 
-  // Gli Ambiti dichiarati (righe aggiunte dal giocatore col +), col livello
-  // da 1 a 7: fanno soglia, e il piano finisce nel testo del tiro in chat.
-  const scopeEntries = Object.entries(result)
-    .map(([key, value]) => {
-      const match = key.match(/^scope-(\d+)$/);
-      if (!match) return null;
-      const scopeId = String(value ?? "");
-      if (!SCOPES.includes(scopeId)) return null;
-      const level = Math.min(
-        Math.max(Math.trunc(Number(result[`scope-lvl-${match[1]}`]) || 1), 1),
-        THRESHOLD_CAP
-      );
-      return { scopeId, level };
-    })
-    .filter(Boolean);
+  // Gli Ambiti dichiarati a pallini, col livello da 1 a 7: fanno soglia, e
+  // il piano finisce nel testo del tiro in chat.
+  const scopeEntries = SCOPES
+    .map((scopeId) => ({
+      scopeId,
+      level: Math.min(Math.max(Math.trunc(Number(result[`scope-${scopeId}`]) || 0), 0), THRESHOLD_CAP)
+    }))
+    .filter((entry) => entry.level > 0);
 
   const threshold = calculateMagickThreshold({
-    sphereLevels,
-    scopeLevels: scopeEntries.map((entry) => entry.level)
+    sphereLevels: sphereEntries,
+    scopeLevels: scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level })),
+    specialties
   });
 
   const prizeDice = options.usePrize ? prize.dice : 0;
@@ -454,6 +506,13 @@ export async function onAreteRoll(event) {
     magickType
   });
 
+  const spherePlans = sphereEntries.map((entry) => {
+    const sphereLabel = game.i18n.localize(`WOD5E_MAGE.Spheres.${entry.id}`);
+    return `${sphereLabel} ${entry.level}`;
+  });
+  if (spherePlans.length) {
+    flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.SpherePlan", { plans: spherePlans.join(", ") })}`;
+  }
   const scopePlans = scopeEntries.map((entry) => {
     const scopeLabel = game.i18n.localize(`WOD5E_MAGE.Scopes.${entry.scopeId}`);
     return `${scopeLabel} ${entry.level}`;

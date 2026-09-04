@@ -1,5 +1,9 @@
 import { MODULE_ID } from "./constants.js";
 
+// I due compendi delle Sfere (it, en) portano ancora la chiave storica
+// `affinitySphere`: oggi contengono i poteri passivi da cui si scelgono le
+// Specialità delle Sfere (vedi sphere-specialties.js).
+
 export const AFFINITY_SPHERE_FLAG = "affinitySphere";
 export const AFFINITY_SPHERE_PACK_ID = `${MODULE_ID}.mage-spheres`;
 export const AFFINITY_SPHERE_PACK_IDS = Object.freeze({
@@ -38,38 +42,4 @@ export function affinitySphereFromItem(item) {
       description: String(ability.description ?? "")
     }))
   };
-}
-
-export async function prepareAffinitySphere(
-  actor,
-  {
-    resolveUuid = globalThis.fromUuid,
-    getPack = (packId) => globalThis.game?.packs?.get?.(packId),
-    lang = globalThis.game?.i18n?.lang
-  } = {}
-) {
-  const stored = actor.getFlag(MODULE_ID, AFFINITY_SPHERE_FLAG);
-  const id = typeof stored === "string"
-    ? stored
-    : String(stored?.id ?? "");
-  const uuid = typeof stored === "string"
-    ? ""
-    : String(stored?.uuid ?? "");
-
-  // Resolve by logical ID from the pack for the active language. The UUID is
-  // retained only as a fallback for actors saved by earlier module versions.
-  if (id && typeof getPack === "function") {
-    const pack = getPack(getAffinitySpherePackId(lang));
-    const documents = await pack?.getDocuments?.();
-    const item = documents?.find(
-      (document) => readAffinityData(document)?.id === id
-    );
-    const sphere = affinitySphereFromItem(item);
-    if (sphere) return sphere;
-  }
-
-  if (!uuid || typeof resolveUuid !== "function") return null;
-
-  const item = await resolveUuid(uuid);
-  return affinitySphereFromItem(item);
 }
