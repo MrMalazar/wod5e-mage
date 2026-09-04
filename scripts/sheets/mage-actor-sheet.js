@@ -356,8 +356,6 @@ export class MageActorSheet extends MortalActorSheet {
 
     // La pagina del Credo: Saggezza, Credo, Tipo e Strumenti per Sfera.
     if (partId === "focus") {
-      // Le Convinzioni stanno col Credo.
-      context.convictions = prepareConvictions(actor);
       context.tab = context.tabs.focus;
       context.focus = await prepareFocus(actor);
     }

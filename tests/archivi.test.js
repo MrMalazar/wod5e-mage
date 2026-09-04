@@ -139,10 +139,9 @@ assert.deepEqual([...new Set(condizioni.map((doc) => doc.flags["wod5e-mage"].arc
 
 // La scheda: il libro accanto a ogni voce, distinto dal +.
 const personaggio = readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");
-for (const kind of ["concetto", "ambizione", "desiderio", "ancora"]) {
+for (const kind of ["concetto", "ambizione", "desiderio", "ancora", "convinzione"]) {
   assert.match(personaggio, new RegExp(`data-action="archivioOpen" data-kind="${kind}"`), kind);
 }
-assert.match(readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8"), /data-action="archivioOpen" data-kind="convinzione"/);
 // Il libro del Credo sta in testata, con la tendina (4/9 notte).
 const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza.hbs", import.meta.url), "utf8");
 assert.match(appartenenza, /data-action="archivioOpen" data-kind="credo"/);

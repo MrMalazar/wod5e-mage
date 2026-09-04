@@ -19,7 +19,6 @@
                     <header class="resource-header">
                         <div>
                             <label class="header-label">{{localize table.label}}</label>
-                            <small>{{localize table.hint}}</small>
                         </div>
                         <button type="button" class="wod5e-mage-belonging-add" data-action="belongingAdd" data-table="{{table.flag}}" title="{{localize 'WOD5E_MAGE.Belongings.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Belongings.Add'}}" {{#if ../locked}}disabled{{/if}}>
                             <i class="fa-solid fa-plus"></i>
@@ -62,9 +61,9 @@
 
         <div class="equipment-notes wod5e-mage-dotazione-notes">
             <div class="description-field">
-                <div class="flex-center">
-                    <label class="resource-label field-header">{{localize "WOD5E.EquipmentList.EquipmentNotes"}}</label>
-                </div>
+                <header class="resource-header">
+                    <label class="header-label">{{localize "WOD5E.EquipmentList.EquipmentNotes"}}</label>
+                </header>
                 <div class="description-content resource">
                     <prose-mirror name="system.equipment" value="{{equipment}}" toggled="true" compact="true">
                         {{{enrichedEquipment}}}

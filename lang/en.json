@@ -590,10 +590,10 @@
       "ClickHint": "Click: pick the mark. Right click: the box clears.",
       "States": {
         "empty": "Empty",
-        "ps": "Physical superficial damage",
-        "pa": "Physical aggravated damage",
-        "ms": "Mental superficial damage",
-        "ma": "Mental aggravated damage"
+        "ps": "Physical Superficial",
+        "pa": "Physical Aggravated",
+        "ms": "Mental Superficial",
+        "ma": "Mental Aggravated"
       },
       "Impaired": "Impaired: the track is full.",
       "KoDeath": "KO: every box is aggravated and physical damage prevails. Death.",

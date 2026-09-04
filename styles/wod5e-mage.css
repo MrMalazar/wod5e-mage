@@ -4187,11 +4187,53 @@
   border: 1px solid var(--mage-oro-scuro);
 }
 
-/* La Saggezza in cima al Personaggio, le Convinzioni col Credo. */
+/* La Saggezza in cima al Personaggio, con le Convinzioni subito sotto. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-content > .wod5e-mage-focus-wisdom {
   margin: 0.5rem auto 1rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-convinzioni {
-  margin-bottom: 1.5rem;
+/* Dotazione: le tavole libere e le note vestono come i riquadri dei
+   Background (bordo oro, titolo oro grande, sans), non come i titoli bianchi. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belongings {
+  border-top: none;
+  padding-top: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-table,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-notes > .description-field {
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  padding: 0.4rem 0.6rem 0.6rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-table > .resource-header,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-notes .resource-header {
+  align-items: center;
+  border: none;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin: 0 0 0.25rem;
+  padding: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-table > .resource-header .header-label,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-notes .resource-header .header-label {
+  color: var(--mage-oro);
+  font-family: inherit;
+  font-size: 16pt;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: left;
+  text-transform: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-empty {
+  color: var(--mage-tenue);
+  font-size: 0.78rem;
+  margin: 0.25rem 0 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-notes .description-content {
+  margin-top: 0.25rem;
 }

@@ -590,10 +590,10 @@
       "ClickHint": "Clic: scegli il segno. Clic destro: la casella si svuota.",
       "States": {
         "empty": "Vuota",
-        "ps": "Danno fisico superficiale",
-        "pa": "Danno fisico aggravato",
-        "ms": "Danno mentale superficiale",
-        "ma": "Danno mentale aggravato"
+        "ps": "Superficiale Fisico",
+        "pa": "Aggravato Fisico",
+        "ms": "Superficiale Mentale",
+        "ma": "Aggravato Mentale"
       },
       "Impaired": "Menomato: il tracciato è coperto.",
       "KoDeath": "KO: tutte le caselle sono aggravate e prevalgono i danni fisici. Morte.",
