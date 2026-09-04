@@ -113,6 +113,10 @@ assert.deepEqual(credi.map((doc) => doc.flags["wod5e-mage"].archivio.credo).sort
 // Le Convinzioni dei Credi hanno le due glosse.
 const convinzioni = readFileSync(new URL("../packs/mage-convinzioni.db", import.meta.url), "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
 assert.ok(convinzioni.some((doc) => doc.flags["wod5e-mage"].archivio.credo === "arte" && doc.flags["wod5e-mage"].archivio.cross));
+// Anche le cinquanta del catalogo portano i due momenti (4/9 notte).
+const catalogo = convinzioni.filter((doc) => !doc.flags["wod5e-mage"].archivio.credo);
+assert.equal(catalogo.length, 50);
+assert.ok(catalogo.every((doc) => doc.flags["wod5e-mage"].archivio.gloss && doc.flags["wod5e-mage"].archivio.cross));
 
 // La scheda: il libro accanto a ogni voce, distinto dal +.
 const personaggio = readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");

@@ -394,8 +394,14 @@ def build_convinzioni():
         for text, gloss, *rest in [r for r in rows if len(r) >= 2 and r[0]]:
             if text.lower() == "convinzione":
                 continue
-            content = f"<p><em>{html.escape(text, quote=False)}</em></p><p>{html.escape(gloss, quote=False)}</p>"
-            docs.append(journal(text, content, "convinzione", group, sort, {"text": text, "gloss": gloss}))
+            # Dal 4/9/2026 anche il catalogo è a due glosse: la servi, la attraversi.
+            cross = rest[0] if rest and rest[0] else ""
+            content = f"<p><em>{html.escape(text, quote=False)}</em></p>"
+            if cross:
+                content += f"<p><strong>La servi quando</strong> {html.escape(gloss, quote=False)}.</p><p><strong>La attraversi quando</strong> {html.escape(cross, quote=False)}.</p>"
+            else:
+                content += f"<p>{html.escape(gloss, quote=False)}</p>"
+            docs.append(journal(text, content, "convinzione", group, sort, {"text": text, "gloss": gloss, "cross": cross}))
             sort += 10
     for credo_id, credo_md in credo_files():
         block = section(credo_md, "Le Convinzioni")
