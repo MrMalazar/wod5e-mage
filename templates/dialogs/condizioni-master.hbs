@@ -1,0 +1,23 @@
+{{!-- La finestra del Master: i personaggi scelti in testa, poi le
+     Condizioni per gruppo. Un clic accende a tutti, un altro spegne. --}}
+<div class="wod5e-mage-master-condizioni">
+    <p class="wod5e-mage-master-targets">
+        <strong>{{localize "WOD5E_MAGE.Condizioni.MasterTargets"}}</strong>
+        <span data-role="targets">{{targets}}</span>
+    </p>
+    {{#each groups as |group|}}
+        <section class="wod5e-mage-master-group">
+            <h3>{{group.group}}</h3>
+            <div class="wod5e-mage-master-row">
+                {{#each group.entries as |entry|}}
+                    <button type="button" class="wod5e-mage-master-cond{{#if entry.all}} active{{/if}}{{#if entry.some}} partial{{/if}}" data-condizione="{{entry.id}}" title="{{entry.title}}">
+                        <img src="{{entry.icon}}" alt="">
+                        <span class="wod5e-mage-master-name">{{entry.name}}{{#if entry.dice}} <em>{{entry.dice}}</em>{{/if}}</span>
+                        <small>{{entry.what}}</small>
+                        <b data-role="count">{{entry.badge}}</b>
+                    </button>
+                {{/each}}
+            </div>
+        </section>
+    {{/each}}
+</div>

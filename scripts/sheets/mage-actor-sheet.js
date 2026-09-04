@@ -3,7 +3,7 @@ import { prepareEssentialSkills } from "../abilita-essenziali.js";
 import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../abilita-specifiche.js";
 import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
-import { prepareConditionRows } from "../condizioni.js";
+import { onCondizioneToggle, prepareCondizioni, prepareConditionRows } from "../condizioni.js";
 import { onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResets } from "../reset.js";
 import { onStrumentiSuggest } from "../strumenti.js";
@@ -136,6 +136,7 @@ export class MageActorSheet extends MortalActorSheet {
       familySphereToggle: onFamilySphereToggle,
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
+      condizioneToggle: onCondizioneToggle,
       wisdomResourceChange: onWisdomResourceChange,
       wisdomRoll: onWisdomRoll
     }
@@ -265,6 +266,22 @@ export class MageActorSheet extends MortalActorSheet {
       appartenenza.open = Boolean(this._appartenenzaOpen);
       appartenenza.addEventListener("toggle", () => { this._appartenenzaOpen = appartenenza.open; });
     }
+    // La tendina delle Condizioni resta com'era attraverso i render.
+    const drawer = this.element?.querySelector(".wod5e-mage-condizioni-drawer");
+    if (drawer) {
+      drawer.open = Boolean(this._condizioniOpen);
+      drawer.addEventListener("toggle", () => { this._condizioniOpen = drawer.open; });
+    }
+    // Le Specialità delle Sfere: il testo del potere si apre dal titolo.
+    this._specialtyOpen ??= {};
+    for (const article of this.element?.querySelectorAll(".wod5e-mage-sphere-specialty[data-slot]") ?? []) {
+      const key = article.dataset.slot;
+      article.classList.toggle("open", Boolean(this._specialtyOpen[key]));
+      article.querySelector(".wod5e-mage-sphere-specialty-head")?.addEventListener("click", () => {
+        this._specialtyOpen[key] = !this._specialtyOpen[key];
+        article.classList.toggle("open", this._specialtyOpen[key]);
+      });
+    }
     // Le domande della Sfida del concetto: ogni tendina ricorda com'era.
     this._conceptOpen ??= {};
     for (const field of this.element?.querySelectorAll(".wod5e-mage-concept-field[data-field]") ?? []) {
@@ -314,6 +331,7 @@ export class MageActorSheet extends MortalActorSheet {
       context.resets = prepareResets(game.i18n.localize.bind(game.i18n));
       // Le Condizioni addosso: righe con simbolo, nome, cos'è e dadi.
       context.condizioniRows = prepareConditionRows(actor.items);
+      context.condizioni = prepareCondizioni(actor.items);
       // Le Specializzazioni delle Abilità, lette dai bonuses del sistema.
       context.specialties = prepareSpecialties(actor, {
         localize: game.i18n.localize.bind(game.i18n),

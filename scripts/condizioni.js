@@ -2,13 +2,70 @@ import { CONDIZIONI } from "./data/condizioni.js";
 import { MODULE_ID } from "./constants.js";
 
 /**
- * Le Condizioni di M5 sulla scheda (verdetto di Blue, 4/9 notte): il + della
- * cella apre l'archivio, diviso per categoria; la scelta diventa un oggetto
+ * Le Condizioni di M5 sulla scheda (compromesso di Blue, 4/9 notte): sopra
+ * la striscia dei simboli accesi, sotto una tendina con tutte le venticinque
+ * divise per gruppo; un clic accende, un altro spegne, e il simbolo acceso
+ * resta sopra anche a tendina chiusa. Accesa, la Condizione è un oggetto
  * «condition» del sistema addosso al personaggio, così i dadi che toglie
  * entrano nel tiro da soli. Le Condizioni fuori lista arrivano dalla lente.
  */
 
 export const CONDIZIONE_FLAG = "condizione";
+
+/** L'ordine dei gruppi, com'è nella bozza. */
+export const CONDIZIONI_GROUPS = Object.freeze([...new Set(CONDIZIONI.map((entry) => entry.group))]);
+
+/** L'id della Condizione di lista che un oggetto porta, o "". */
+export function condizioneIdOf(item) {
+  const flags = item?.flags?.[MODULE_ID] ?? {};
+  return String(flags[CONDIZIONE_FLAG] ?? "");
+}
+
+/** Gli oggetti «condition» del personaggio che sono Condizioni di lista, per id. */
+export function activeCondizioni(items) {
+  const active = new Map();
+  for (const item of items ?? []) {
+    if (item?.type !== "condition") continue;
+    const id = condizioneIdOf(item);
+    if (id && !active.has(id)) active.set(id, item);
+  }
+  return active;
+}
+
+/** I dadi tolti da una Condizione di lista, in una parola: "-2", "-1 -1", "". */
+export function condizioneDice(entry) {
+  return (entry?.bonuses ?? [])
+    .map((bonus) => Number(bonus?.value) || 0)
+    .filter((value) => value !== 0)
+    .map((value) => (value > 0 ? `+${value}` : String(value)))
+    .join(" ");
+}
+
+/** Il titolo che compare al passaggio del mouse: nome, dadi, cos'è, effetto. */
+export function condizioneTitle(entry) {
+  const dice = condizioneDice(entry);
+  return `${entry.name}${dice ? ` (${dice})` : ""} · ${entry.what}. ${entry.effect}`;
+}
+
+/** La tendina: i gruppi coi simboli, accesi o spenti. */
+export function prepareCondizioni(items) {
+  const active = activeCondizioni(items);
+  return CONDIZIONI_GROUPS.map((group) => ({
+    group,
+    entries: CONDIZIONI.filter((entry) => entry.group === group).map((entry) => {
+      const item = active.get(entry.id);
+      return {
+        id: entry.id,
+        name: entry.name,
+        icon: entry.icon,
+        active: Boolean(item),
+        suppressed: Boolean(item?.system?.suppressed),
+        dice: condizioneDice(entry),
+        title: condizioneTitle(entry)
+      };
+    })
+  }));
+}
 
 export function findCondizione(id) {
   return CONDIZIONI.find((entry) => entry.id === id) ?? null;
@@ -57,21 +114,52 @@ export function prepareConditionRows(items) {
       .filter((value) => value !== 0)
       .map((value) => (value > 0 ? `+${value}` : String(value)))
       .join(" ");
+    const what = definition?.what ?? plainText(item.system?.description).slice(0, 90);
+    const effect = definition?.effect ?? "";
     rows.push({
       id: item.id ?? item._id,
       uuid: item.uuid ?? "",
       img: item.img,
       name: item.name,
-      what: definition?.what ?? plainText(item.system?.description).slice(0, 90),
-      effect: definition?.effect ?? "",
+      what,
+      effect,
       dice,
+      list: Boolean(definition),
+      condizione: definition?.id ?? "",
+      title: `${item.name}${dice ? ` (${dice})` : ""}${what ? ` · ${what}` : ""}${effect ? `. ${effect}` : ""}`,
       suppressed: Boolean(item.system?.suppressed)
     });
   }
   return rows;
 }
 
-function condizioneIdOf(item) {
-  const flags = item?.flags?.[MODULE_ID] ?? {};
-  return String(flags[CONDIZIONE_FLAG] ?? "");
+/** Accende o spegne una Condizione di lista su un personaggio; torna true se accesa. */
+export async function toggleCondizione(actor, entry) {
+  const current = activeCondizioni(actor.items).get(entry.id);
+  if (current) {
+    await actor.deleteEmbeddedDocuments("Item", [current.id]);
+    return false;
+  }
+  await actor.createEmbeddedDocuments("Item", [condizioneItemData(entry)]);
+  return true;
+}
+
+/**
+ * Il clic su un simbolo, nella tendina o nella striscia: accende o spegne la
+ * Condizione di lista; un oggetto fuori lista (dalla lente) si toglie e basta.
+ */
+export async function onCondizioneToggle(event, target) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!actor.isOwner) {
+    ui.notifications.warn(game.i18n.format("WOD5E.Notifications.NoSufficientPermission", { string: actor.name }));
+    return;
+  }
+  const entry = findCondizione(target.dataset.condizione);
+  if (entry) {
+    await toggleCondizione(actor, entry);
+    return;
+  }
+  const itemId = target.dataset.itemId;
+  if (itemId && actor.items.get(itemId)) await actor.deleteEmbeddedDocuments("Item", [itemId]);
 }

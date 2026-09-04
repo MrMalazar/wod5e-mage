@@ -648,6 +648,7 @@
       "Roll": "Tira con la Specializzazione: il dado in più è già dentro"
     },
     "SphereSpecialties": {
+      "ShowText": "Mostra o nascondi il testo",
       "Label": "Specialità delle Sfere",
       "Hint": "Al terzo pallino di una Sfera scegli uno dei suoi poteri passivi; il quarto e il quinto pallino ne danno un altro l'uno. Non esiste più la Sfera affine.",
       "None": "Specialità…",
@@ -763,6 +764,14 @@
       "Empty": "Niente ancora: il + aggiunge un riquadro con un titolo e un testo."
     },
     "Condizioni": {
+      "All": "Tutte le Condizioni",
+      "MasterTitle": "Condizioni (Master)",
+      "MasterTargets": "Personaggi scelti:",
+      "MasterNoTargets": "Seleziona i personaggi sulla scena, poi clicca una Condizione.",
+      "MasterOnly": "Solo il Master assegna le Condizioni.",
+      "MasterClose": "Chiudi",
+      "MasterOn": "{name} accesa a: {targets}",
+      "MasterOff": "{name} spenta a: {targets}",
       "Empty": "Nessuna Condizione addosso: il + apre l'archivio, per categoria."
     },
     "Header": {

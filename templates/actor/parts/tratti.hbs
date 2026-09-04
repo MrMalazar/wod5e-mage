@@ -57,38 +57,41 @@
             <div class="stat-panel-section">
                 <label class="resource-header">{{localize "WOD5E.ItemsList.Conditions"}}</label>
                 <div class="stats-container">
-                    {{!-- Le righe: simbolo, nome, il cos'è in piccolo e i dadi tolti.
-                         I comandi sono quelli del sistema: chat, modifica, sospendi, togli. --}}
-                    <div class="items-list flexcol wod5e-mage-condition-list">
+                    {{!-- Sopra: i simboli delle Condizioni accese (un clic spegne);
+                         la lente per quelle fuori lista. Sotto: la tendina con
+                         tutte le venticinque per gruppo, un clic accende. --}}
+                    <div class="wod5e-mage-condizioni-strip">
                         {{#each condizioniRows as |row|}}
-                            <div class="item wod5e-mage-condition-row{{#if row.suppressed}} suppressed{{/if}}" data-drag="true" data-item-id="{{row.id}}" data-document-uuid="{{row.uuid}}" data-type="Item">
-                                <div class="item-image clickable" data-action="itemChat" data-item-id="{{row.id}}">
-                                    <img src="{{row.img}}" title="{{row.name}}" width="28" height="28" alt="{{row.name}}" />
-                                </div>
-                                <div class="wod5e-mage-condition-text" title="{{row.effect}}">
-                                    <strong>{{row.name}}{{#if row.dice}} <em>{{row.dice}}</em>{{/if}}</strong>
-                                    {{#if row.what}}<small>{{row.what}}</small>{{/if}}
-                                </div>
-                                <div class="item-controls">
-                                    <a class="item-control item-edit" data-action="itemEdit" data-item-id="{{row.id}}" title="{{localize 'WOD5E.Edit'}}"><i class="fas fa-edit"></i></a>
-                                    <a class="item-control condition-suppression" data-action="toggleConditionSuppression" data-item-id="{{row.id}}" title="{{localize 'WOD5E.ItemsList.ToggleConditionSuppression'}}"><i class="fa-solid {{#if row.suppressed}}fa-toggle-off{{else}}fa-toggle-on{{/if}}"></i></a>
-                                    <a class="item-control condition-delete" data-action="itemDelete" data-item-id="{{row.id}}" title="{{localize 'WOD5E.Delete'}}"><i class="fas fa-trash"></i></a>
-                                </div>
-                            </div>
-                        {{else}}
-                            <p class="wod5e-mage-row-empty">{{localize "WOD5E_MAGE.Condizioni.Empty"}}</p>
+                            <button type="button" class="wod5e-mage-condizione-on{{#if row.suppressed}} suppressed{{/if}}" data-action="condizioneToggle" data-condizione="{{row.condizione}}" data-item-id="{{row.id}}" title="{{row.title}}" aria-label="{{row.name}}">
+                                <img src="{{row.img}}" alt="">
+                                {{#if row.dice}}<small>{{row.dice}}</small>{{/if}}
+                            </button>
                         {{/each}}
-                    </div>
-                    <div class="flex-group-center">
-                        <a class="item-control search-data-item flex-center" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="condition">
+                        <a class="item-control search-data-item wod5e-mage-condizioni-search" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="condition">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </a>
-                        {{!-- Il + apre l'archivio delle Condizioni di M5, per categoria;
-                             la lente resta per quelle fuori lista. --}}
-                        <a class="item-control item-create" data-action="archivioOpen" data-kind="condizione" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}">
-                            <i class="fas fa-plus"></i>
-                        </a>
                     </div>
+                    <details class="wod5e-mage-condizioni-drawer">
+                        <summary>
+                            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                            <span>{{localize "WOD5E_MAGE.Condizioni.All"}}</span>
+                        </summary>
+                        <div class="wod5e-mage-condizioni">
+                            {{#each condizioni as |group|}}
+                                <div class="wod5e-mage-condizioni-group">
+                                    <span class="wod5e-mage-condizioni-title">{{group.group}}</span>
+                                    <div class="wod5e-mage-condizioni-row">
+                                        {{#each group.entries as |entry|}}
+                                            <button type="button" class="wod5e-mage-condizione{{#if entry.active}} active{{/if}}{{#if entry.suppressed}} suppressed{{/if}}" data-action="condizioneToggle" data-condizione="{{entry.id}}" title="{{entry.title}}" aria-label="{{entry.name}}" aria-pressed="{{#if entry.active}}true{{else}}false{{/if}}">
+                                                <img src="{{entry.icon}}" alt="">
+                                                {{#if entry.dice}}<small>{{entry.dice}}</small>{{/if}}
+                                            </button>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>

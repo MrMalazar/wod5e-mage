@@ -4,6 +4,8 @@ import { isMageActor, registerMageDiceRendering } from "./mage-dice.js";
 import { registerParadoxDice } from "./paradox-dice.js";
 import { registerLineageSpheres } from "./famiglie.js";
 import { registerRollCardRendering } from "./roll-card.js";
+import { assignCondizione, listCondizioni, openCondizioniMaster, selectedActors } from "./condizioni-master.js";
+import { findCondizione } from "./condizioni.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 
 /**
@@ -44,7 +46,18 @@ function createApi() {
           };
 
       return actor.update(update);
-    }
+    },
+
+    /** Le Condizioni per il Master: la finestra, o l'assegnazione diretta. */
+    condizioni: Object.freeze({
+      assign: openCondizioniMaster,
+      list: listCondizioni,
+      async toggle(id, actors = selectedActors(canvas?.tokens?.controlled)) {
+        const entry = findCondizione(id);
+        if (!entry) throw new Error(`Condizione sconosciuta: ${id}`);
+        return assignCondizione(actors, entry);
+      }
+    })
   });
 }
 

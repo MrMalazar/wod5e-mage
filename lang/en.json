@@ -648,6 +648,7 @@
       "Roll": "Roll with the Specialty: the extra die is already in"
     },
     "SphereSpecialties": {
+      "ShowText": "Show or hide the text",
       "Label": "Sphere Specialities",
       "Hint": "At the third dot of a Sphere, pick one of its passive powers; the fourth and fifth dots each grant another. There is no Affinity Sphere any more.",
       "None": "Speciality…",
@@ -763,6 +764,14 @@
       "Empty": "Nothing yet: + adds a box with a title and a text."
     },
     "Condizioni": {
+      "All": "All Conditions",
+      "MasterTitle": "Conditions (Storyteller)",
+      "MasterTargets": "Selected characters:",
+      "MasterNoTargets": "Select the characters on the scene, then click a Condition.",
+      "MasterOnly": "Only the Storyteller assigns Conditions.",
+      "MasterClose": "Close",
+      "MasterOn": "{name} applied to: {targets}",
+      "MasterOff": "{name} removed from: {targets}",
       "Empty": "No Condition on you: + opens the archive, by category."
     },
     "Header": {

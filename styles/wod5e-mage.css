@@ -589,14 +589,16 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty {
+  align-items: center;
   background: var(--mage-velluto);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
+  column-gap: 0.6rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   min-width: 0;
-  padding: 0.6rem 0.75rem;
+  padding: 0.4rem 0.6rem;
+  row-gap: 0.3rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty.chosen {
@@ -607,7 +609,23 @@
   align-items: center;
   display: grid;
   gap: 0.5rem;
-  grid-template-columns: 26px minmax(0, 1fr) auto;
+  grid-template-columns: 26px auto auto minmax(0, 1fr);
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty.chosen .wod5e-mage-sphere-specialty-head {
+  cursor: pointer;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-chevron {
+  color: var(--mage-oro);
+  font-size: 0.7rem;
+  justify-self: end;
+  transition: transform 0.15s ease;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty:not(.open) .wod5e-mage-sphere-specialty-chevron {
+  transform: rotate(-90deg);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > img {
@@ -649,9 +667,17 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-text {
+  border-top: 1px solid rgb(152 119 43 / 35%);
   color: var(--mage-inchiostro-chiaro, inherit);
+  display: none;
   font-size: 0.85rem;
-  margin-top: 0.5rem;
+  grid-column: 1 / -1;
+  margin-top: 0.1rem;
+  padding-top: 0.35rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty.open > .wod5e-mage-sphere-specialty-text {
+  display: block;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-text p,
@@ -4162,7 +4188,18 @@
    fondo al ritratto, due caselle larghe uguali, una sotto l'altra. Il
    sistema mette il nome in assoluto: qui torna in flusso dentro la colonna. */
 .wod5e-mage.wod5e.actor.sheet .header-profile {
+  padding-bottom: 72px;
   position: relative;
+}
+
+/* Il ritratto un poco più basso, così le due caselle stanno sotto e non sopra. */
+.wod5e-mage.wod5e.actor.sheet .actor-header .header-profile-img {
+  height: 160px;
+  margin-bottom: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .actor-header .header-profile-img img {
+  max-height: 160px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .actor-header .header-profile .wod5e-mage-names {
@@ -4386,4 +4423,250 @@
   height: 30px;
   text-align: center;
   width: 100%;
+}
+
+/* Condizioni (compromesso di Blue): sopra la striscia dei simboli accesi,
+   sotto la tendina con tutte le venticinque per gruppo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-strip {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  min-height: 34px;
+  padding: 0.15rem 0 0.35rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-search {
+  color: var(--mage-oro);
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-drawer > summary {
+  align-items: center;
+  border-top: 1px solid rgb(152 119 43 / 45%);
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.72rem;
+  font-weight: 700;
+  gap: 0.4rem;
+  letter-spacing: 0.06em;
+  list-style: none;
+  padding: 0.35rem 0 0.25rem;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-drawer > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-drawer > summary > i {
+  font-size: 0.65rem;
+  transition: transform 0.15s ease;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-drawer:not([open]) > summary > i {
+  transform: rotate(-90deg);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.25rem 0 0.4rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-title {
+  color: var(--mage-oro);
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.15rem;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on {
+  align-items: center;
+  background: var(--mage-carta);
+  border: 1px solid rgb(152 119 43 / 45%);
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 30px;
+  height: 30px;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  opacity: 0.45;
+  padding: 0;
+  position: relative;
+  width: 30px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on:hover {
+  box-shadow: 0 0 4px var(--mage-oro);
+  opacity: 0.9;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione > img,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on > img {
+  border: none;
+  height: 22px;
+  object-fit: contain;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione > small,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on > small {
+  background: var(--mage-carta);
+  border-radius: 2px;
+  bottom: -1px;
+  color: var(--mage-inchiostro);
+  font-size: 0.55rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 1px;
+  position: absolute;
+  right: -1px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione.active,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on {
+  background: rgb(152 119 43 / 22%);
+  border-color: var(--mage-oro);
+  box-shadow: 0 0 0 1px var(--mage-oro), 0 0 6px rgb(152 119 43 / 60%);
+  opacity: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione.active.suppressed,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on.suppressed {
+  border-style: dashed;
+  opacity: 0.7;
+}
+
+/* La finestra del Master: le Condizioni per gruppo, col nome, i dadi e il
+   cos'è; accesa a tutti in oro pieno, a qualcuno in oro tratteggiato. */
+.application.wod5e-mage-condizioni-master .window-header {
+  background: #2b2418;
+  border-bottom: 1px solid var(--mage-oro-scuro, #98772b);
+  color: var(--mage-oro-chiaro, #e8cf8a);
+}
+
+.application.wod5e-mage-condizioni-master .window-content {
+  background: #17120f;
+  color: var(--mage-testo, #e6dcc8);
+}
+
+.wod5e-mage-master-condizioni {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.wod5e-mage-master-targets {
+  color: var(--mage-oro-chiaro, #e8cf8a);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.wod5e-mage-master-targets > strong {
+  color: var(--mage-oro, #c9a14a);
+  margin-right: 0.35rem;
+}
+
+.wod5e-mage-master-group > h3 {
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
+  color: var(--mage-oro, #c9a14a);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-master-row {
+  display: grid;
+  gap: 0.4rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.wod5e-mage-master-cond {
+  align-items: center;
+  background: rgb(255 250 240 / 6%);
+  border: 1px solid rgb(152 119 43 / 45%);
+  border-radius: 4px;
+  color: inherit;
+  column-gap: 0.5rem;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  line-height: 1.2;
+  margin: 0;
+  padding: 0.3rem 0.45rem;
+  position: relative;
+  text-align: left;
+}
+
+.wod5e-mage-master-cond:hover {
+  border-color: var(--mage-oro, #c9a14a);
+  box-shadow: 0 0 4px var(--mage-oro, #c9a14a);
+}
+
+.wod5e-mage-master-cond > img {
+  background: var(--mage-carta, #f3ead8);
+  border: none;
+  border-radius: 4px;
+  grid-row: 1 / 3;
+  height: 30px;
+  object-fit: contain;
+  padding: 3px;
+  width: 30px;
+}
+
+.wod5e-mage-master-cond > .wod5e-mage-master-name {
+  color: var(--mage-oro-chiaro, #e8cf8a);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.wod5e-mage-master-cond > .wod5e-mage-master-name > em {
+  color: var(--mage-oro, #c9a14a);
+  font-style: normal;
+  margin-left: 0.25rem;
+}
+
+.wod5e-mage-master-cond > small {
+  color: var(--mage-testo, #e6dcc8);
+  font-size: 0.72rem;
+  grid-column: 2 / 4;
+  opacity: 0.85;
+}
+
+.wod5e-mage-master-cond > b {
+  color: var(--mage-oro, #c9a14a);
+  font-size: 0.75rem;
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.wod5e-mage-master-cond.active {
+  background: rgb(152 119 43 / 25%);
+  border-color: var(--mage-oro, #c9a14a);
+  box-shadow: 0 0 0 1px var(--mage-oro, #c9a14a);
+}
+
+.wod5e-mage-master-cond.partial {
+  border-color: var(--mage-oro, #c9a14a);
+  border-style: dashed;
 }

@@ -95,11 +95,14 @@
                         {{!-- Un riquadro per ogni Specialità: la Sfera, il numero, la
                              tendina stretta, il testo del potere scelto. --}}
                         {{#each row.slots as |slot|}}
-                            <article class="wod5e-mage-sphere-specialty{{#if slot.chosen}} chosen{{/if}}">
-                                <div class="wod5e-mage-sphere-specialty-head">
+                            {{!-- Una riga per Specialità: simbolo, Sfera, numero e la tendina;
+                                 il testo del potere si apre cliccando sul titolo. --}}
+                            <article class="wod5e-mage-sphere-specialty{{#if slot.chosen}} chosen{{/if}}" data-slot="{{row.id}}-{{slot.key}}">
+                                <div class="wod5e-mage-sphere-specialty-head"{{#if slot.chosen}} title="{{localize 'WOD5E_MAGE.SphereSpecialties.ShowText'}}"{{/if}}>
                                     <img src="{{row.icon}}" alt="">
                                     <strong>{{localize row.label}}</strong>
                                     <small>{{localize "WOD5E_MAGE.SphereSpecialties.Slot" index=slot.index}}</small>
+                                    {{#if slot.chosen}}<i class="fa-solid fa-chevron-down wod5e-mage-sphere-specialty-chevron" aria-hidden="true"></i>{{/if}}
                                 </div>
                                 <select name="flags.wod5e-mage.sphereSpecialties.{{row.id}}.{{slot.key}}" aria-label="{{localize 'WOD5E_MAGE.SphereSpecialties.Label'}}" {{#if ../../locked}}disabled{{/if}}>
                                     <option value="">{{localize "WOD5E_MAGE.SphereSpecialties.None"}}</option>

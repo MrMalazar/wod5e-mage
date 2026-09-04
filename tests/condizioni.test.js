@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { CONDIZIONI } from "../scripts/data/condizioni.js";
-import { condizioneItemData, findCondizione, findCondizioneByName, prepareConditionRows } from "../scripts/condizioni.js";
+import { condizioneItemData, findCondizione, findCondizioneByName, prepareCondizioni, prepareConditionRows } from "../scripts/condizioni.js";
+import { assignCondizione, prepareMasterCondizioni, selectedActors } from "../scripts/condizioni-master.js";
 
 // Le venticinque della bozza, in sette gruppi, con simbolo e id unici.
 assert.equal(CONDIZIONI.length, 25);
@@ -31,11 +32,44 @@ assert.equal(rows.length, 2);
 assert.deepEqual([rows[0].name, rows[0].dice, rows[0].what, rows[0].suppressed], ["Offuscato", "-2", "Distingui solo le forme", false]);
 assert.deepEqual([rows[1].name, rows[1].dice, rows[1].what, rows[1].suppressed], ["Mia", "-1", "Una cosa mia", true]);
 
-// La scheda: il + della cella apre l'archivio (per categoria), la lente resta; niente quadratini.
+// La scheda (compromesso): sopra la striscia dei simboli accesi con la lente,
+// sotto la tendina con tutte le venticinque per gruppo; un clic accende o spegne.
 const tratti = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
-assert.match(tratti, /data-action="searchItem"[\s\S]*data-action="archivioOpen" data-kind="condizione"/);
-assert.doesNotMatch(tratti, /condizioneToggle|wod5e-mage-condizioni\b/);
-assert.match(tratti, /condizioniRows[\s\S]*wod5e-mage-condition-row[\s\S]*row\.what[\s\S]*toggleConditionSuppression/);
+assert.match(tratti, /wod5e-mage-condizioni-strip[\s\S]*condizioniRows[\s\S]*data-action="condizioneToggle" data-condizione="\{\{row\.condizione\}\}" data-item-id="\{\{row\.id\}\}"[\s\S]*data-action="searchItem"[\s\S]*<details class="wod5e-mage-condizioni-drawer">[\s\S]*Condizioni\.All[\s\S]*group\.group[\s\S]*data-action="condizioneToggle" data-condizione="\{\{entry\.id\}\}"/);
+assert.doesNotMatch(tratti, /data-kind="condizione"/);
+const groups = prepareCondizioni([{ id: "a", type: "condition", flags: { "wod5e-mage": { condizione: "offuscato" } }, system: { suppressed: true } }]);
+assert.equal(groups.length, 7);
+const offuscato = groups.flatMap((g) => g.entries).find((e) => e.id === "offuscato");
+assert.deepEqual([offuscato.active, offuscato.suppressed, offuscato.dice], [true, true, "-2"]);
+assert.match(offuscato.title, /^Offuscato \(-2\) · Distingui solo le forme\./);
+assert.equal(groups.flatMap((g) => g.entries).filter((e) => e.active).length, 1);
+assert.equal(rows[0].condizione, "offuscato");
+assert.equal(rows[1].condizione, "");
+
+// Il Master: coi personaggi scelti, un clic accende a tutti, se l'hanno tutti spegne.
+function fakeActor(name, ids) {
+  const actor = { name, items: ids.map((id, i) => ({ id: `${name}${i}`, type: "condition", flags: { "wod5e-mage": { condizione: id } }, system: {} })) };
+  actor.createEmbeddedDocuments = async (_t, docs) => { for (const d of docs) actor.items.push({ id: `${name}${actor.items.length}`, type: "condition", flags: d.flags, system: d.system }); };
+  actor.deleteEmbeddedDocuments = async (_t, ids) => { actor.items = actor.items.filter((i) => !ids.includes(i.id)); };
+  return actor;
+}
+const a = fakeActor("A", ["offuscato"]);
+const b = fakeActor("B", []);
+const master = prepareMasterCondizioni([a, b]).flatMap((g) => g.entries).find((e) => e.id === "offuscato");
+assert.deepEqual([master.count, master.all, master.some, master.badge], [1, false, true, "1"]);
+assert.equal(await assignCondizione([a, b], findCondizione("offuscato")), 2);
+assert.equal(prepareMasterCondizioni([a, b]).flatMap((g) => g.entries).find((e) => e.id === "offuscato").all, true);
+assert.equal(await assignCondizione([a, b], findCondizione("offuscato")), 0);
+assert.equal(a.items.length + b.items.length, 0);
+assert.equal(selectedActors([{ actor: a }, { actor: a }, { actor: b }, {}]).length, 2);
+const masterTemplate = readFileSync(new URL("../templates/dialogs/condizioni-master.hbs", import.meta.url), "utf8");
+assert.match(masterTemplate, /data-role="targets"[\s\S]*data-condizione="\{\{entry\.id\}\}"[\s\S]*entry\.what[\s\S]*data-role="count"/);
+const macros = readFileSync(new URL("../packs/mage-macros.db", import.meta.url), "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
+assert.equal(macros.length, 1);
+assert.match(macros[0].command, /api\.condizioni\.assign\(\)/);
+const manifest = JSON.parse(readFileSync(new URL("../module.json", import.meta.url), "utf8"));
+assert.equal(manifest.packs.find((p) => p.name === "mage-macros").type, "Macro");
+assert.match(readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"), /condizioni: Object\.freeze\(\{[\s\S]*assign: openCondizioniMaster/);
 const archivi = readFileSync(new URL("../scripts/archivi.js", import.meta.url), "utf8");
 assert.match(archivi, /kind === "condizione"[\s\S]*findCondizioneByName\(entry\.name\)[\s\S]*condizioneItemData/);
 
