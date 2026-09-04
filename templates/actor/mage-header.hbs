@@ -24,13 +24,11 @@
                 <input class="charname" name="name" type="text" value="{{name}}" placeholder="{{localize 'WOD5E.Name'}}"/>
             {{/if}}
         </div>
-        {{!-- Sotto il nome del personaggio, quello del giocatore. --}}
-        <div class="flexrow name-field wod5e-mage-player-field">
+        {{!-- Sotto il nome del personaggio, quello del giocatore. L'appartenenza
+             sta nel pannello a destra, non più sotto il nome. --}}
+        <div class="wod5e-mage-player-field">
             <input class="wod5e-mage-player" name="flags.wod5e-mage.player" type="text" value="{{playerName}}" placeholder="{{localize 'WOD5E_MAGE.Header.Player'}}" aria-label="{{localize 'WOD5E_MAGE.Header.Player'}}" {{#if locked}}disabled{{/if}}/>
         </div>
-        {{#if lineage.riga}}
-            <div class="wod5e-mage-lineage" title="{{lineage.completa}}">{{lineage.riga}}</div>
-        {{/if}}
     </div>
 
     {{!-- A destra, a bilanciare la Salute: l'Appartenenza a tendina. --}}

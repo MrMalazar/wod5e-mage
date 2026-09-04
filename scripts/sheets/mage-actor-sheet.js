@@ -165,12 +165,12 @@ export class MageActorSheet extends MortalActorSheet {
       template: `${MODULE}/parts/spheres.hbs`,
       templates: [`${MODULE}/parts/scope-table.hbs`]
     },
-    focus: {
-      template: `${MODULE}/parts/focus.hbs`,
+    focus: { template: `${MODULE}/parts/focus.hbs` },
+    conceptChallenge: { template: `${MODULE}/parts/concept-challenge.hbs` },
+    personaggio: {
+      template: `${MODULE}/parts/personaggio.hbs`,
       templates: [`${MODULE}/parts/wisdom.hbs`]
     },
-    conceptChallenge: { template: `${MODULE}/parts/concept-challenge.hbs` },
-    personaggio: { template: `${MODULE}/parts/personaggio.hbs` },
     dotazione: {
       template: `${MODULE}/parts/dotazione.hbs`,
       templates: [
@@ -356,6 +356,8 @@ export class MageActorSheet extends MortalActorSheet {
 
     // La pagina del Credo: Saggezza, Credo, Tipo e Strumenti per Sfera.
     if (partId === "focus") {
+      // Le Convinzioni stanno col Credo.
+      context.convictions = prepareConvictions(actor);
       context.tab = context.tabs.focus;
       context.focus = await prepareFocus(actor);
     }

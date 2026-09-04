@@ -71,6 +71,6 @@ assert.equal(compiled.label, "Accademiche + Intelligenza · Storia");
 // Niente pannello dei modificatori nei tiri del Mago.
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
 assert.match(css, /\.wod5e-mage-roll-dialog \.situational-modifiers \{\s*display: none;/);
-assert.match(readFileSync(new URL("../scripts/mage-dice.js", import.meta.url), "utf8"), /classList\?\.add\("wod5e-mage-roll-dialog"\)/);
+assert.match(readFileSync(new URL("../scripts/mage-dice.js", import.meta.url), "utf8"), /classList\?\.add\("wod5e-mage", "mage", "wod5e-mage-roll-dialog"\)/);
 
 console.log("Specializzazioni tests passed.");

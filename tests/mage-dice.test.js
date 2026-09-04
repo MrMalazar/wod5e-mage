@@ -30,8 +30,8 @@ const classes = new Set(["roll-img", "mortal-dice"]);
 const die = {
   src: "native-mortal.png",
   classList: {
-    add: (name) => classes.add(name),
-    remove: (name) => classes.delete(name)
+    add: (...names) => names.forEach((name) => classes.add(name)),
+    remove: (...names) => names.forEach((name) => classes.delete(name))
   }
 };
 const changed = applyMageDiceClass(
@@ -40,7 +40,8 @@ const changed = applyMageDiceClass(
     rolls: [{ basicDice: { results: [{ result: 10 }] } }]
   },
   {
-    querySelectorAll: (selector) => selector === ".roll-img.mortal-dice"
+    // I dadi di ogni splat del sistema (mortale, vampiro…) vestono la stella (4/9 notte).
+    querySelectorAll: (selector) => selector.startsWith(".roll-img.mortal-dice")
       ? [die]
       : []
   }
@@ -73,8 +74,8 @@ let emptyMageSourceRemoved = false;
 const emptyMageDie = {
   src: "native-mortal.png",
   classList: {
-    add: (name) => emptyMageClasses.add(name),
-    remove: (name) => emptyMageClasses.delete(name)
+    add: (...names) => names.forEach((name) => emptyMageClasses.add(name)),
+    remove: (...names) => names.forEach((name) => emptyMageClasses.delete(name))
   },
   removeAttribute(name) {
     if (name === "src") emptyMageSourceRemoved = true;
@@ -87,7 +88,7 @@ applyMageDiceClass(
     rolls: [{ basicDice: { results: [{ result: 4 }] } }]
   },
   {
-    querySelectorAll: (selector) => selector === ".roll-img.mortal-dice"
+    querySelectorAll: (selector) => selector.startsWith(".roll-img.mortal-dice")
       ? [emptyMageDie]
       : []
   }

@@ -118,7 +118,12 @@ const credoConviction = prepareConvictions(mageActor({
 }))[0];
 assert.equal(credoConviction.credos.find((group) => group.id === "arte").selected, true);
 assert.equal(credoConviction.serve, "lasci l'opera parlare");
-assert.match(personaggioSource(), /convinzioni\.\{\{row\.id\}\}\.serve[\s\S]*convinzioni\.\{\{row\.id\}\}\.cross/);
+// Le Convinzioni stanno col Credo (4/9 notte), la Saggezza in cima al Personaggio.
+const focusSource = readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8");
+assert.match(focusSource, /wod5e-mage-focus-convinzioni[\s\S]*convinzioni\.\{\{row\.id\}\}\.serve[\s\S]*convinzioni\.\{\{row\.id\}\}\.cross/);
+assert.doesNotMatch(focusSource, /wisdom\.hbs/);
+assert.match(personaggioSource(), /wod5e-mage-personaggio-content[\s\S]*wisdom\.hbs[\s\S]*IdentityLabel/);
+assert.doesNotMatch(personaggioSource(), /data-table="convinzioni"/);
 // L'Appartenenza sta in testata (4/9 notte), non più nel Personaggio.
 assert.doesNotMatch(personaggioSource(), /flags\.wod5e-mage\.lineage/);
 const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza.hbs", import.meta.url), "utf8");
@@ -153,7 +158,7 @@ assert.deepEqual(actor.lastUpdate, { "flags.wod5e-mage.convinzioni.-=c": null })
 const personaggio = readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");
 assert.match(personaggio, /wod5e-mage-concept-content[\s\S]*wod5e-mage-concept-group/);
 assert.match(personaggio, /flags\.wod5e-mage\.ambitionTrigger[\s\S]*flags\.wod5e-mage\.desireTrigger/);
-assert.match(personaggio, /data-table="ancore"[\s\S]*data-table="convinzioni"/);
+assert.match(personaggio, /data-table="ancore"/);
 assert.doesNotMatch(personaggio, /chronicle-tenets|touchstones-convictions/);
 
 // Il memo di creazione: conta i pallini e verifica i campi minimi.

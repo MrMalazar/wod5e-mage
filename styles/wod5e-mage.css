@@ -298,7 +298,7 @@
   font-size: 0.85rem;
   height: 26px;
   margin: 0;
-  width: auto;
+  width: 190px;
 }
 
 /* La Salute (ramo A): un tracciato solo, quattro segni. Le caselle sono
@@ -3454,7 +3454,7 @@
   height: 26px;
   margin: 0;
   min-width: 0;
-  width: auto;
+  width: 190px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-grid > label > span {
@@ -4142,12 +4142,13 @@
   position: relative;
 }
 
-.wod5e-mage.wod5e.actor.sheet .header-profile > .name-field:not(.wod5e-mage-player-field) {
-  bottom: 26px;
+.wod5e-mage.wod5e.actor.sheet .header-profile > .name-field:not(.clickthrough) {
+  bottom: 30px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-player-field {
-  bottom: 0;
+  bottom: 2px;
+  display: flex;
   justify-content: center;
   left: 0;
   position: absolute;
@@ -4172,4 +4173,25 @@
   border-color: var(--mage-oro);
   color: var(--mage-oro);
   flex-basis: 100%;
+}
+
+/* Le finestre del tiro: testata della scheda, non del sistema. */
+.application.wod5e-mage.wod5e-mage-roll-dialog .window-header {
+  background: #2b2418;
+  border-bottom: 1px solid var(--mage-oro-scuro);
+  color: var(--mage-oro-chiaro);
+}
+
+.application.wod5e-mage.wod5e-mage-roll-dialog .dice-group-header {
+  background: #2b2418;
+  border: 1px solid var(--mage-oro-scuro);
+}
+
+/* La Saggezza in cima al Personaggio, le Convinzioni col Credo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-content > .wod5e-mage-focus-wisdom {
+  margin: 0.5rem auto 1rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-convinzioni {
+  margin-bottom: 1.5rem;
 }
