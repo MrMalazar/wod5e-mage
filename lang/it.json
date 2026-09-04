@@ -559,7 +559,13 @@
       "ConvictionText": "Convinzione",
       "ConvictionAdd": "Aggiungi una Convinzione",
       "ConvictionRemove": "Togli la Convinzione",
-      "ConvictionsEmpty": "Nessuna Convinzione segnata: il + ne aggiunge una."
+      "ConvictionsEmpty": "Nessuna Convinzione segnata: il + ne aggiunge una.",
+      "ConvictionGroupsCatalog": "Dal catalogo",
+      "ConvictionGroupsCredi": "Dai Credi",
+      "ConvictionServe": "La servi quando",
+      "ConvictionServeHint": "L'atto entra nella parata delle Macchie",
+      "ConvictionCross": "La attraversi quando",
+      "ConvictionCrossHint": "Costa un Aggravato"
     },
     "Riepilogo": {
       "Label": "Memo creazione",

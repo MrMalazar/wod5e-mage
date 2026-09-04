@@ -111,6 +111,18 @@ const convictions = prepareConvictions(mageActor({
 }));
 assert.equal(convictions[0].groups.length, CONVICTION_GROUPS.length);
 assert.equal(convictions[0].groups.find((group) => group.id === "lealta").selected, true);
+// I due momenti e i Credi in tendina: una Convinzione di Tutto è Arte sta sotto il suo Credo.
+assert.deepEqual([convictions[0].serve, convictions[0].cross], ["", ""]);
+const credoConviction = prepareConvictions(mageActor({
+  [PERSONAGGIO_TABLES.convictions]: { c: { group: "arte", text: "Il bello non si spiega.", serve: "lasci l'opera parlare", cross: "spieghi l'opera a chi non l'ha chiesto" } }
+}))[0];
+assert.equal(credoConviction.credos.find((group) => group.id === "arte").selected, true);
+assert.equal(credoConviction.serve, "lasci l'opera parlare");
+assert.match(personaggioSource(), /convinzioni\.\{\{row\.id\}\}\.serve[\s\S]*convinzioni\.\{\{row\.id\}\}\.cross/);
+assert.match(personaggioSource(), /wod5e-mage-lineage-pick[\s\S]*lineageChoices\.familySphere\.icon[\s\S]*lineageChoices\.subSphere\.icon/);
+function personaggioSource() {
+  return readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");
+}
 const anchors = prepareAnchors(mageActor({
   [PERSONAGGIO_TABLES.anchors]: { a: { name: "Nonna Lucia", description: null } }
 }));
@@ -121,7 +133,7 @@ await onPersonaggioRowAdd.call({ actor }, { preventDefault() {} }, { dataset: { 
 assert.deepEqual(actor.lastFlag, { key: "ancore", value: { row1: { name: "", description: "" } } });
 actor = mageActor();
 await onPersonaggioRowAdd.call({ actor }, { preventDefault() {} }, { dataset: { table: PERSONAGGIO_TABLES.convictions } });
-assert.deepEqual(actor.lastFlag, { key: "convinzioni", value: { row1: { group: "", text: "" } } });
+assert.deepEqual(actor.lastFlag, { key: "convinzioni", value: { row1: { group: "", text: "", serve: "", cross: "" } } });
 actor = mageActor({ convinzioni: { c: { group: "", text: "" } } });
 await onPersonaggioRowDelete.call({ actor }, { preventDefault() {} }, { dataset: { table: "convinzioni", row: "c" } });
 assert.deepEqual(actor.lastUpdate, { "flags.wod5e-mage.convinzioni.-=c": null });

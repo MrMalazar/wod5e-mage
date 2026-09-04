@@ -45,9 +45,23 @@ export function rowFromEntry(kind, entry) {
     return { name: String(entry.text ?? entry.name ?? ""), description: String(entry.description ?? "") };
   }
   if (kind === "convinzione") {
-    return { group: String(entry.group ?? ""), text: String(entry.text ?? entry.name ?? "") };
+    return {
+      group: convictionGroupId(entry),
+      text: String(entry.text ?? entry.name ?? ""),
+      serve: String(entry.gloss ?? ""),
+      cross: String(entry.cross ?? "")
+    };
   }
   return null;
+}
+
+/** Il gruppo dell'archivio («Morte», «Tutto è Arte») nella chiave della tendina. */
+export function convictionGroupId(entry) {
+  if (entry.credo) return String(entry.credo);
+  const label = String(entry.group ?? "").trim().toLowerCase();
+  const plain = label.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const known = ["morte", "verita", "lealta", "liberta", "giustizia", "ordine", "natura"];
+  return known.includes(plain) ? plain : "";
 }
 
 /**

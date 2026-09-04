@@ -559,7 +559,13 @@
       "ConvictionText": "Conviction",
       "ConvictionAdd": "Add a Conviction",
       "ConvictionRemove": "Remove the Conviction",
-      "ConvictionsEmpty": "No Conviction noted: + adds one."
+      "ConvictionsEmpty": "No Conviction noted: + adds one.",
+      "ConvictionGroupsCatalog": "From the catalogue",
+      "ConvictionGroupsCredi": "From the Creeds",
+      "ConvictionServe": "You serve it when",
+      "ConvictionServeHint": "The act joins the Stains parade",
+      "ConvictionCross": "You cross it when",
+      "ConvictionCrossHint": "It costs an Aggravated"
     },
     "Riepilogo": {
       "Label": "Creation memo",

@@ -18,6 +18,8 @@
                          Sfere a 1 (il Credo, nella sua pagina, le sue di sola presenza). --}}
                     <label>
                         <span>{{localize "WOD5E_MAGE.Lineage.Family"}}</span>
+                        <div class="wod5e-mage-lineage-pick">
+                        {{#if lineageChoices.familySphere}}<img src="{{lineageChoices.familySphere.icon}}" alt="" title="{{lineageChoices.familySphere.label}}">{{else}}<span class="wod5e-mage-lineage-nosphere" aria-hidden="true"></span>{{/if}}
                         <select name="flags.wod5e-mage.lineage.famiglia" {{#if locked}}disabled{{/if}}>
                             <option value="">{{localize "WOD5E_MAGE.Lineage.FamilyNone"}}</option>
                             {{#each lineageChoices.groups as |group|}}
@@ -28,15 +30,19 @@
                                 </optgroup>
                             {{/each}}
                         </select>
+                        </div>
                     </label>
                     <label>
                         <span>{{localize "WOD5E_MAGE.Lineage.Subfamily"}}{{#if lineageChoices.subKind}} <small>({{lineageChoices.subKind}})</small>{{/if}}</span>
+                        <div class="wod5e-mage-lineage-pick">
+                        {{#if lineageChoices.subSphere}}<img src="{{lineageChoices.subSphere.icon}}" alt="" title="{{lineageChoices.subSphere.label}}">{{else}}<span class="wod5e-mage-lineage-nosphere" aria-hidden="true"></span>{{/if}}
                         <select name="flags.wod5e-mage.lineage.sottofamiglia" {{#unless lineageChoices.hasSubfamilies}}disabled{{/unless}} {{#if locked}}disabled{{/if}}>
                             <option value="">{{#if lineageChoices.hasSubfamilies}}{{localize "WOD5E_MAGE.Lineage.SubfamilyNone"}}{{else}}{{localize "WOD5E_MAGE.Lineage.SubfamilyEmpty"}}{{/if}}</option>
                             {{#each lineageChoices.sottofamiglie as |sub|}}
                                 <option value="{{sub.id}}" {{#if sub.selected}}selected{{/if}}>{{sub.label}}</option>
                             {{/each}}
                         </select>
+                        </div>
                     </label>
                 </div>
             </details>
@@ -122,22 +128,41 @@
                 </div>
 
                 {{#if convictions.length}}
-                <div class="wod5e-mage-conviction-grid">
-                    <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionGroup"}}</span>
-                    <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionText"}}</span>
-                    <span aria-hidden="true"></span>
-
+                <div class="wod5e-mage-conviction-list">
+                    {{!-- Ogni Convinzione: gruppo (o Credo) e testo, e sotto i due momenti,
+                         «La servi quando» e «La attraversi quando» (arrivano dall'archivio). --}}
                     {{#each convictions as |row|}}
-                        <select name="flags.wod5e-mage.convinzioni.{{row.id}}.group" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroup'}}" {{#if ../locked}}disabled{{/if}}>
-                            <option value="">{{localize "WOD5E_MAGE.Personaggio.ConvictionGroupNone"}}</option>
-                            {{#each row.groups as |group|}}
-                                <option value="{{group.id}}" {{#if group.selected}}selected{{/if}}>{{group.label}}</option>
-                            {{/each}}
-                        </select>
-                        <input type="text" name="flags.wod5e-mage.convinzioni.{{row.id}}.text" value="{{row.text}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionText'}}" {{#if ../locked}}disabled{{/if}}>
-                        <button type="button" data-action="personaggioRowDelete" data-table="convinzioni" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.ConvictionRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionRemove'}}" {{#if ../locked}}disabled{{/if}}>
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <div class="wod5e-mage-conviction">
+                            <div class="wod5e-mage-conviction-grid">
+                                <select name="flags.wod5e-mage.convinzioni.{{row.id}}.group" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroup'}}" {{#if ../locked}}disabled{{/if}}>
+                                    <option value="">{{localize "WOD5E_MAGE.Personaggio.ConvictionGroupNone"}}</option>
+                                    <optgroup label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroupsCatalog'}}">
+                                        {{#each row.groups as |group|}}
+                                            <option value="{{group.id}}" {{#if group.selected}}selected{{/if}}>{{group.label}}</option>
+                                        {{/each}}
+                                    </optgroup>
+                                    <optgroup label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroupsCredi'}}">
+                                        {{#each row.credos as |group|}}
+                                            <option value="{{group.id}}" {{#if group.selected}}selected{{/if}}>{{group.label}}</option>
+                                        {{/each}}
+                                    </optgroup>
+                                </select>
+                                <input type="text" name="flags.wod5e-mage.convinzioni.{{row.id}}.text" value="{{row.text}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.ConvictionText'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionText'}}" {{#if ../locked}}disabled{{/if}}>
+                                <button type="button" data-action="personaggioRowDelete" data-table="convinzioni" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.ConvictionRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionRemove'}}" {{#if ../locked}}disabled{{/if}}>
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="wod5e-mage-conviction-when">
+                                <label>
+                                    <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionServe"}}</span>
+                                    <textarea class="wod5e-mage-mini-textarea" name="flags.wod5e-mage.convinzioni.{{row.id}}.serve" rows="2" placeholder="{{localize 'WOD5E_MAGE.Personaggio.ConvictionServeHint'}}" {{#if ../locked}}disabled{{/if}}>{{row.serve}}</textarea>
+                                </label>
+                                <label>
+                                    <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionCross"}}</span>
+                                    <textarea class="wod5e-mage-mini-textarea" name="flags.wod5e-mage.convinzioni.{{row.id}}.cross" rows="2" placeholder="{{localize 'WOD5E_MAGE.Personaggio.ConvictionCrossHint'}}" {{#if ../locked}}disabled{{/if}}>{{row.cross}}</textarea>
+                                </label>
+                            </div>
+                        </div>
                     {{/each}}
                 </div>
                 {{else}}

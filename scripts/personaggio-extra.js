@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { FOCUS_CREDOS } from "./focus.js";
 
 /**
  * La pagina Personaggio oltre i campi del sistema: le ANCORE e le
@@ -42,10 +43,19 @@ export function prepareConvictions(actor) {
       id,
       group,
       text: String(row?.text ?? ""),
+      // I due momenti (verdetto di Blue, 4/9 notte): quando la servi, quando la attraversi.
+      serve: String(row?.serve ?? ""),
+      cross: String(row?.cross ?? ""),
       groups: CONVICTION_GROUPS.map((groupId) => ({
         id: groupId,
         label: localize(`WOD5E_MAGE.Personaggio.ConvictionGroups.${groupId}`),
         selected: groupId === group
+      })),
+      // Le Convinzioni di un Credo stanno sotto il Credo, non sotto un gruppo del catalogo.
+      credos: FOCUS_CREDOS.map((credoId) => ({
+        id: credoId,
+        label: localize(`WOD5E_MAGE.Focus.Credos.${credoId}`),
+        selected: credoId === group
       }))
     };
   });
@@ -91,7 +101,7 @@ export async function onPersonaggioRowAdd(event, target) {
 
   rows[rowId] = flagKey === PERSONAGGIO_TABLES.anchors
     ? { name: "", description: "" }
-    : { group: "", text: "" };
+    : { group: "", text: "", serve: "", cross: "" };
 
   await actor.setFlag(MODULE_ID, flagKey, rows);
 }

@@ -77,6 +77,12 @@ assert.equal(choices.sottofamiglie.length, 4);
 assert.equal(choices.sottofamiglie.find((sub) => sub.selected).id, "streghe");
 assert.equal(choices.subKind, "Circolo");
 assert.equal(prepareLineageChoices({ famiglia: "ngoma" }).hasSubfamilies, false);
+// Il simbolo della Sfera accanto alla tendina: Vita per Verbena, Spirito per le Streghe; niente per gli Hollow Ones.
+assert.equal(choices.familySphere.id, "life");
+assert.match(choices.familySphere.icon, /assets\/icons\/sheet\/life\.png$/);
+assert.equal(choices.subSphere.id, "spirit");
+assert.equal(prepareLineageChoices({ famiglia: "hollow" }).familySphere, null);
+assert.equal(prepareLineageChoices({ famiglia: "hermes" }).subSphere, null);
 
 // La pagina e l'avvio.
 const personaggio = readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");

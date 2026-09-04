@@ -208,7 +208,21 @@ export function prepareLineageChoices(lineage, localize = (key) => key) {
     label: sub.label,
     selected: sub.id === lineage.sottofamiglia
   }));
-  return { groups, sottofamiglie, subKind: family?.subKind ?? "", hasSubfamilies: sottofamiglie.length > 0 };
+  const sub = findSottofamiglia(lineage.famiglia, lineage.sottofamiglia);
+  return {
+    groups,
+    sottofamiglie,
+    subKind: family?.subKind ?? "",
+    hasSubfamilies: sottofamiglie.length > 0,
+    // Il simbolo della Sfera che la scelta porta, a sinistra della tendina.
+    familySphere: sphereBadge(family?.sphere, localize),
+    subSphere: sphereBadge(sub?.sphere, localize)
+  };
+}
+
+function sphereBadge(id, localize) {
+  if (!id || !SPHERES.includes(id)) return null;
+  return { id, label: localize(`WOD5E_MAGE.Spheres.${id}`), icon: `modules/${MODULE_ID}/assets/icons/sheet/${id}.png` };
 }
 
 /** L'attore com'è adesso, per lineageSphereChanges. */

@@ -2438,6 +2438,45 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-grid {
   grid-template-columns: minmax(110px, 0.4fr) minmax(0, 1.6fr) 26px;
+  margin-bottom: 0.3rem;
+}
+
+/* Ogni Convinzione: la riga e, sotto, i due momenti affiancati. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-list {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction {
+  border-bottom: 1px solid rgb(152 119 43 / 30%);
+  padding-bottom: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-when {
+  display: grid;
+  gap: 0.4rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-when > label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-when > label > span {
+  color: var(--mage-oro);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-when textarea {
+  resize: vertical;
+  width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-anchor-grid, .wod5e-mage-conviction-grid) > span {
@@ -3260,6 +3299,37 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+}
+
+/* La tendina con, a sinistra, il simbolo della Sfera che porta. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick {
+  align-items: center;
+  display: flex;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick > img,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-nosphere {
+  border: none;
+  flex: 0 0 22px;
+  height: 22px;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-nosphere {
+  border: 1px dashed rgb(152 119 43 / 45%);
+  border-radius: 50%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick > select,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-grid > label > input {
+  flex: 1 1 auto;
+  font-size: 0.85rem;
+  height: 26px;
+  margin: 0;
+  min-width: 0;
+  width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-grid > label > span {

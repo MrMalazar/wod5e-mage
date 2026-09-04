@@ -27,7 +27,11 @@ assert.equal(appendText("Vendicarmi.", ""), "Vendicarmi.");
 
 // Le righe di Ancore e Convinzioni.
 assert.deepEqual(rowFromEntry("ancora", { text: "Il partner", description: "La normalità." }), { name: "Il partner", description: "La normalità." });
-assert.deepEqual(rowFromEntry("convinzione", { group: "Morte", text: "Nessuno decide." }), { group: "Morte", text: "Nessuno decide." });
+// La Convinzione porta i due momenti; il gruppo dell'archivio diventa la chiave della tendina (o il Credo).
+assert.deepEqual(rowFromEntry("convinzione", { group: "Morte", text: "Nessuno decide.", gloss: "lasci andare" }), { group: "morte", text: "Nessuno decide.", serve: "lasci andare", cross: "" });
+assert.deepEqual(rowFromEntry("convinzione", { group: "Tutto è Arte", credo: "arte", text: "Il bello non si spiega.", gloss: "taci", cross: "spieghi" }), { group: "arte", text: "Il bello non si spiega.", serve: "taci", cross: "spieghi" });
+assert.equal(rowFromEntry("convinzione", { group: "Verità", text: "x" }).group, "verita");
+assert.equal(rowFromEntry("convinzione", { group: "Altro", text: "x" }).group, "");
 assert.equal(rowFromEntry("ambizione", {}), null);
 
 // Il Background sulla scheda: appunti veloci, chi e tipo, non il papiro.
