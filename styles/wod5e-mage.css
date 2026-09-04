@@ -170,7 +170,7 @@
 } */
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-resources .field-section {
-  width: min(250px, 100%);
+  width: min(300px, 100%);
 }
 
 /* Salute, Volontà e Saggezza: intestazioni leggibili.
@@ -202,9 +202,9 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-track {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px;
+  gap: 4px;
   justify-content: center;
-  margin-top: 5px;
+  margin-top: 6px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-cell {
@@ -214,12 +214,12 @@
   border-radius: 0;
   box-shadow: none;
   cursor: pointer;
-  height: 14px;
+  height: 22px;
   line-height: 1;
   margin: 0;
-  min-height: 14px;
+  min-height: 22px;
   padding: 0;
-  width: 14px;
+  width: 22px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-cell:hover {
@@ -332,6 +332,7 @@
   border-radius: 4px;
   box-shadow: 0 4px 14px rgb(0 0 0 / 60%);
   display: flex;
+  flex-direction: column;
   gap: 4px;
   padding: 5px;
   position: fixed;
@@ -345,13 +346,13 @@
   border-radius: 3px;
   cursor: pointer;
   display: inline-flex;
-  height: 26px;
+  height: 36px;
   justify-content: center;
   line-height: 1;
   margin: 0;
-  min-height: 26px;
+  min-height: 36px;
   padding: 0;
-  width: 26px;
+  width: 36px;
 }
 
 .wod5e-mage-salute-menu-item:hover,
@@ -363,8 +364,8 @@
   --salute-segno: #f5e7b2;
   border: 1px solid #98772b;
   display: inline-block;
-  height: 14px;
-  width: 14px;
+  height: 24px;
+  width: 24px;
 }
 
 .wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph[data-state="ps"] {
@@ -872,7 +873,7 @@
   border-radius: 4px;
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: minmax(110px, 1fr) max-content minmax(100px, 0.75fr);
+  grid-template-columns: max-content minmax(90px, 1fr) max-content minmax(100px, 0.75fr);
   min-height: 3rem;
   padding: 0.5rem 0.75rem;
 }
@@ -2283,32 +2284,55 @@
   width: 100%;
 }
 
+/* Sei celle: Attributi | Condizioni, Abilità | Specializzazioni, Ruota | Bonus. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content {
   align-items: start;
   column-gap: 0.75rem;
   display: grid;
   grid-template-areas:
-    "main side"
-    "arcana side";
+    "attributes conditions"
+    "skills specialties"
+    "ruota bonus";
   grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto auto;
+  row-gap: 0.25rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content > .skills-attributes {
-  grid-area: main;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content > .wod5e-mage-tratti-attributes {
+  grid-area: attributes;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content > .wod5e-mage-tratti-skills {
+  grid-area: skills;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content > .side-panel {
-  grid-area: side;
   margin-left: 0;
   margin-right: 0;
   max-width: none;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content > .wod5e-mage-tratti-conditions {
+  grid-area: conditions;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content > .wod5e-mage-tratti-specialties {
+  grid-area: specialties;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content > .wod5e-mage-tratti-bonus {
+  grid-area: bonus;
 }
 
 /* La Ruota occupa tutta la colonna delle Abilità: stessa larghezza. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arcana-cell {
   display: flex;
-  grid-area: arcana;
+  grid-area: ruota;
   margin-top: 0.25rem;
   min-width: 0;
   width: 100%;
@@ -2396,7 +2420,8 @@
   padding-top: 0.4rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skills > .field-header {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skills > .resource-header {
+  display: block;
   margin-bottom: 0.3rem;
   text-align: center;
 }
@@ -2411,7 +2436,7 @@
   align-items: center;
   display: grid;
   gap: 0.35rem;
-  grid-template-columns: 18px minmax(0, 1fr) auto 22px;
+  grid-template-columns: 18px minmax(80px, 150px) auto 22px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill-roll {
@@ -2423,7 +2448,11 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill-name {
   --input-text-color: var(--mage-inchiostro);
   color: var(--mage-inchiostro);
+  font-size: 0.8rem;
+  height: 22px;
+  min-height: 22px;
   min-width: 0;
+  padding: 0 0.3rem;
   width: 100%;
 }
 
@@ -2444,6 +2473,29 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill-delete:hover {
   color: var(--mage-rosso-chiaro);
+}
+
+/* La casetta della Sfera di famiglia, davanti al nome della Sfera. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-family {
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  flex: none;
+  font-size: 0.7rem;
+  height: 20px;
+  line-height: 1;
+  margin: 0 0.35rem 0 0;
+  min-height: 20px;
+  padding: 0;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere.family .wod5e-mage-sphere-family {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro);
+  color: var(--mage-inchiostro, #1e1b2e);
 }
 
 /* Le Specializzazioni: Abilità, nome, matita, cestino. */
@@ -2501,24 +2553,23 @@
 
 @container (max-width: 900px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content {
-    grid-template-areas:
-      "main main"
-      "arcana side";
     grid-template-columns: minmax(0, 1fr) 250px;
-    grid-template-rows: auto auto;
   }
 }
 
-/* Al limite minimo il pannello laterale non viene compresso contro gli
-   Ambiti: scende su una terza riga e torna a usare tutta la larghezza. */
+/* Al limite minimo i pannelli laterali scendono sotto il loro riquadro e
+   tornano a usare tutta la larghezza. */
 @container (max-width: 800px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content {
     grid-template-areas:
-      "main"
-      "arcana"
-      "side";
+      "attributes"
+      "conditions"
+      "skills"
+      "specialties"
+      "ruota"
+      "bonus";
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto;
     row-gap: 0.75rem;
   }
 }

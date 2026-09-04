@@ -1,13 +1,15 @@
-{{!-- Traits page. Forked from the system's stats.hbs (wod5e 5.3.19) to host
-     Wheel and Scopes beside Conditions and Custom Rolls.
-     Keep in sync with the system template, like equipment-list.hbs. --}}
+{{!-- Traits page. Forked from the system's stats.hbs (wod5e 5.3.19): six
+     cells, Attributes | Conditions, Skills | Specialties, Wheel | Bonuses.
+     Keep the trait blocks in sync with the system template. --}}
 <section class="tab {{tab.cssClass}}" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     {{!-- Measuring container for the two-state grid: as a block it takes its
          width from the parent, so inline-size containment is safe here
          (on the tab itself it collapsed the whole page to its padding). --}}
     <div class="wod5e-mage-tratti">
     <div class="stats-content">
-        <div class="skills-attributes">
+        {{!-- Sei celle: Attributi | Condizioni, Abilità | Specializzazioni,
+             Ruota | Bonus. --}}
+        <div class="skills-attributes wod5e-mage-tratti-attributes">
             <div class="resource-header">
                 <label class="header-label">
                     {{localize "WOD5E.AttributesList.Attributes"}}
@@ -49,7 +51,43 @@
                     {{/each}}
                 </div>
             </div>
+        </div>
 
+        <div class="side-panel wod5e-mage-tratti-conditions">
+            <div class="stat-panel-section">
+                <label class="resource-header">{{localize "WOD5E.ItemsList.Conditions"}}</label>
+                <div class="stats-container">
+                    <div class="items-list flexcol">
+                        {{#each conditions as |condition id|}}
+                            <div class="item flexrow{{#if condition.system.suppressed}} suppressed{{/if}}" data-drag="true" data-item-id="{{condition.id}}" data-document-uuid="{{condition.uuid}}" data-type="Item">
+                                <div class="item-image clickable" data-action="itemChat" data-item-id="{{condition._id}}">
+                                    <img src="{{condition.img}}" title="{{condition.name}}" width="24" height="24" alt="{{condition.name}}" />
+                                </div>
+                                <div class="item-name">{{condition.name}}</div>
+                                <div class="item-controls">
+                                    <a class="item-control item-edit" data-action="itemEdit" data-item-id="{{condition._id}}" title="{{localize 'WOD5E.Edit'}}"><i
+                                        class="fas fa-edit"></i></a>
+                                    <a class="item-control condition-suppression" data-action="toggleConditionSuppression" data-item-id="{{condition._id}}" title="{{localize 'WOD5E.ItemsList.ToggleConditionSuppression'}}"><i
+                                        class="fa-solid {{#if condition.system.suppressed}}fa-toggle-off{{else}}fa-toggle-on{{/if}}"></i></a>
+                                    <a class="item-control condition-delete" data-action="itemDelete" data-item-id="{{condition._id}}" title="{{localize 'WOD5E.Delete'}}"><i
+                                        class="fas fa-trash"></i></a>
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                    <div class="flex-group-center">
+                        <a class="item-control search-data-item flex-center" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="condition">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </a>
+                        <a class="item-control item-create" data-action="createItem" title="{{localize 'WOD5E.Add'}}" data-type="condition">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="skills-attributes wod5e-mage-tratti-skills">
             <label class="resource-header wod5e-mage-skills-header">
                 {{localize "WOD5E.SkillsList.Skills"}}
                 {{!-- Il + aggiunge un'Abilità Specifica intera, sotto le essenziali. --}}
@@ -106,7 +144,7 @@
                 {{#if customSkills.length}}
                 {{!-- Le Abilità Specifiche: nome, dadi, pallini, cestino. --}}
                 <div class="wod5e-mage-custom-skills">
-                    <div class="field-header">{{localize "WOD5E_MAGE.CustomSkills.Label"}}</div>
+                    <label class="resource-header">{{localize "WOD5E_MAGE.CustomSkills.Label"}}</label>
                     <div class="wod5e-mage-custom-skill-list">
                         {{#each customSkills as |skill|}}
                             <div class="skill wod5e-mage-custom-skill">
@@ -128,79 +166,15 @@
                 {{/if}}
             </div>
         </div>
-        <div class="side-panel">
-            <div class="stat-panel-section">
-                <label class="resource-header">{{localize "WOD5E.ItemsList.Conditions"}}</label>
-                <div class="stats-container">
-                    <div class="items-list flexcol">
-                        {{#each conditions as |condition id|}}
-                            <div class="item flexrow{{#if condition.system.suppressed}} suppressed{{/if}}" data-drag="true" data-item-id="{{condition.id}}" data-document-uuid="{{condition.uuid}}" data-type="Item">
-                                <div class="item-image clickable" data-action="itemChat" data-item-id="{{condition._id}}">
-                                    <img src="{{condition.img}}" title="{{condition.name}}" width="24" height="24" alt="{{condition.name}}" />
-                                </div>
-                                <div class="item-name">{{condition.name}}</div>
-                                <div class="item-controls">
-                                    <a class="item-control item-edit" data-action="itemEdit" data-item-id="{{condition._id}}" title="{{localize 'WOD5E.Edit'}}"><i
-                                        class="fas fa-edit"></i></a>
-                                    <a class="item-control condition-suppression" data-action="toggleConditionSuppression" data-item-id="{{condition._id}}" title="{{localize 'WOD5E.ItemsList.ToggleConditionSuppression'}}"><i
-                                        class="fa-solid {{#if condition.system.suppressed}}fa-toggle-off{{else}}fa-toggle-on{{/if}}"></i></a>
-                                    <a class="item-control condition-delete" data-action="itemDelete" data-item-id="{{condition._id}}" title="{{localize 'WOD5E.Delete'}}"><i
-                                        class="fas fa-trash"></i></a>
-                                </div>
-                            </div>
-                        {{/each}}
-                    </div>
-                    <div class="flex-group-center">
-                        <a class="item-control search-data-item flex-center" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="condition">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </a>
-                        <a class="item-control item-create" data-action="createItem" title="{{localize 'WOD5E.Add'}}" data-type="condition">
-                            <i class="fas fa-plus"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="stat-panel-section">
-                <label class="resource-header">{{localize "WOD5E.ItemsList.CustomRolls"}}</label>
-                <div class="stats-container">
-                    <div class="items-list flexcol">
-                        {{#each customRolls as |roll id|}}
-                            <div class="item flexrow" data-drag="true" data-item-id="{{roll.id}}" data-document-uuid="{{roll.uuid}}" data-type="Item">
-                                <div class="item-image rollable-item" data-action="rollItem" data-item-uuid="{{roll.uuid}}">
-                                    <img src="{{roll.img}}" title="{{roll.name}}" width="24" height="24" alt="{{roll.name}}" />
-                                </div>
-                                <div class="item-name">{{roll.name}}</div>
-                                <div class="item-controls">
-                                    <a class="item-control item-edit" data-action="itemEdit" data-item-id="{{roll._id}}" title="{{localize 'WOD5E.Edit'}}"><i
-                                        class="fas fa-edit"></i></a>
-                                    <a class="item-control item-delete" data-action="itemDelete" data-item-id="{{roll._id}}" title="{{localize 'WOD5E.Delete'}}"><i
-                                        class="fas fa-trash"></i></a>
-                                </div>
-                            </div>
-                        {{/each}}
-                    </div>
-                    <div class="flex-group-center">
-                        <a class="item-control search-data-item flex-center" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="customRoll">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </a>
-                        <a class="item-control item-create" data-action="createItem" title="{{localize 'WOD5E.Add'}}" data-type="customRoll">
-                            <i class="fas fa-plus"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {{!-- Le Specializzazioni delle Abilità, sotto i Tiri personalizzati. --}}
+        <div class="side-panel wod5e-mage-tratti-specialties">
             <div class="stat-panel-section">
                 {{> "modules/wod5e-mage/templates/actor/parts/specializzazioni.hbs"}}
             </div>
-            {{!-- I Bonus del giocatore, in fondo: accanto alla Ruota. --}}
-            <div class="stat-panel-section">
-                {{> "modules/wod5e-mage/templates/actor/parts/bonuses.hbs"}}
-            </div>
         </div>
-        {{!-- La Ruota a tutta larghezza sotto le Abilità: dentro vivono anche
+
+        {{!-- La Ruota sotto le Abilità, coi Bonus accanto: dentro vivono anche
              Quintessenza generata e Paradosso permanente. --}}
-        <div class="wod5e-mage-arcana-cell">
+        <div class="wod5e-mage-arcana-cell wod5e-mage-tratti-ruota">
             <div class="wod5e-mage-ruota-cell">
                 {{> "modules/wod5e-mage/templates/actor/parts/ruota.hbs"}}
 
@@ -230,6 +204,12 @@
                         {{/each}}
                     </div>
                 </details>
+            </div>
+        </div>
+
+        <div class="side-panel wod5e-mage-tratti-bonus">
+            <div class="stat-panel-section">
+                {{> "modules/wod5e-mage/templates/actor/parts/bonuses.hbs"}}
             </div>
         </div>
     </div>

@@ -41,7 +41,8 @@
       "Kinds": {
         "attribute": "Attribute",
         "skill": "Skill",
-        "sphere": "Sphere",
+        "sphereFamily": "Family Sphere",
+        "sphereOutside": "Outside Sphere",
         "arete": "Arete",
         "health": "Health",
         "merit": "Merit",
@@ -390,7 +391,10 @@
       "mind": "Mind",
       "prime": "Prime",
       "spirit": "Spirit",
-      "time": "Time"
+      "time": "Time",
+      "FamilyHint": "The house marks the family Spheres: the ones your Family, Subfamily and Creed open to you, which cost less than outside Spheres.",
+      "FamilyOn": "Family Sphere: costs less. Click to make it outside.",
+      "FamilyOff": "Outside Sphere. Click to make it a family one."
     },
     "Wisdom": {
       "Label": "Wisdom",

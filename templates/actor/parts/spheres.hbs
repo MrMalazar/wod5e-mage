@@ -9,7 +9,7 @@
                 <label class="header-label">{{localize "WOD5E_MAGE.Tabs.Spheres"}}</label>
             </header>
 
-            <p class="wod5e-mage-spheres-hint">{{localize "WOD5E_MAGE.Spheres.Hint"}}</p>
+            <p class="wod5e-mage-spheres-hint">{{localize "WOD5E_MAGE.Spheres.Hint"}} {{localize "WOD5E_MAGE.Spheres.FamilyHint"}}</p>
 
             <div class="wod5e-mage-sphere-selector" role="group" aria-label="{{localize 'WOD5E_MAGE.Spheres.Selector'}}">
                 {{#each sphereChoices as |sphere|}}
@@ -29,7 +29,9 @@
                 </div>
 
                 {{#each spheres as |sphere|}}
-                    <div class="wod5e-mage-sphere">
+                    <div class="wod5e-mage-sphere{{#if sphere.family}} family{{/if}}">
+                        {{!-- La casetta: Sfera di famiglia (costa meno) o esterna. --}}
+                        <button type="button" class="wod5e-mage-sphere-family" data-action="familySphereToggle" data-sphere="{{sphere.id}}" title="{{#if sphere.family}}{{localize 'WOD5E_MAGE.Spheres.FamilyOn'}}{{else}}{{localize 'WOD5E_MAGE.Spheres.FamilyOff'}}{{/if}}" aria-pressed="{{sphere.family}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-house"></i></button>
                         <label class="resource-label">{{localize sphere.label}}</label>
                         <div class="resource-value" data-value="{{sphere.value}}" data-name="flags.wod5e-mage.spheres.{{sphere.id}}">
                             {{!-- Come le Abilità: il vuoto a sinistra riporta la Sfera a zero. --}}

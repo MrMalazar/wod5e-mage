@@ -82,3 +82,17 @@ assert.deepEqual(localizedPrepared.all.map((sphere) => sphere.id), [
 ]);
 
 console.log("Sphere selection and Influence tests passed.");
+
+// Le Sfere di famiglia: segnate a mano, si leggono con le Sfere.
+{
+  const { getFamilySpheres } = await import("../scripts/spheres.js");
+  const actor = {
+    getFlag: (_m, key) => (key === "familySpheres" ? { forces: true, time: "x" } : key === "spheres" ? { forces: 2 } : undefined)
+  };
+  assert.equal(getFamilySpheres(actor).forces, true);
+  assert.equal(getFamilySpheres(actor).time, true);
+  assert.equal(getFamilySpheres(actor).mind, false);
+  const prepared = prepareSpheres(actor);
+  assert.equal(prepared.all.find((sphere) => sphere.id === "forces").family, true);
+  assert.equal(prepared.all.find((sphere) => sphere.id === "mind").family, false);
+}

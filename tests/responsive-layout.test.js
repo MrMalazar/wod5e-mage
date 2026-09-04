@@ -34,15 +34,15 @@ assert.doesNotMatch(
 // interno delle tabelle Attributi e Abilita.
 assert.match(
   css,
-  /\.wod5e-mage-tratti\s*>\s*\.stats-content\s*\{[^}]*display:\s*grid;[^}]*"main side"[^}]*"arcana side";/s
+  /\.wod5e-mage-tratti\s*>\s*\.stats-content\s*\{[^}]*display:\s*grid;[^}]*"attributes conditions"[^}]*"skills specialties"[^}]*"ruota bonus";/s
 );
 assert.match(
   css,
-  /@container\s*\(max-width:\s*900px\)[\s\S]*"main main"[\s\S]*"arcana side"/
+  /@container\s*\(max-width:\s*900px\)[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*250px/
 );
 assert.match(
   css,
-  /@container\s*\(max-width:\s*800px\)[\s\S]*"main"[\s\S]*"arcana"[\s\S]*"side"/
+  /@container\s*\(max-width:\s*800px\)[\s\S]*"attributes"[\s\S]*"conditions"[\s\S]*"skills"[\s\S]*"specialties"[\s\S]*"ruota"[\s\S]*"bonus"/
 );
 assert.match(
   css,
@@ -68,7 +68,7 @@ assert.match(
 // il riquadro del Dono sta accanto senza scale ridotte: l'esagono non c'è più.
 assert.match(
   css,
-  /\.wod5e-mage-arcana-cell\s*\{[^}]*display:\s*flex;[^}]*grid-area:\s*arcana;[^}]*width:\s*100%;/s
+  /\.wod5e-mage-arcana-cell\s*\{[^}]*display:\s*flex;[^}]*grid-area:\s*ruota;[^}]*width:\s*100%;/s
 );
 // La Ruota prende tutta la colonna delle Abilità, coi nodi in grande.
 assert.match(
@@ -96,7 +96,7 @@ assert.doesNotMatch(
 );
 // I Bonus vivono nel pannello destro, sotto i Tiri personalizzati; la Ruota
 // tiene per sé Quintessenza generata e Paradosso permanente.
-assert.match(traitsTemplate, /CustomRolls[\s\S]*parts\/bonuses\.hbs/);
+assert.match(traitsTemplate, /Conditions[\s\S]*parts\/bonuses\.hbs/);
 assert.match(traitsTemplate, /parts\/ruota\.hbs/);
 assert.doesNotMatch(traitsTemplate, /parts\/scopes\.hbs|wod5e-mage-arcana-side/);
 assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes\b|wod5e-mage-persistent-resources/);

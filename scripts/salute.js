@@ -142,8 +142,8 @@ function askSaluteState(event, current) {
     // Dove hai cliccato, dentro lo schermo.
     const width = menu.offsetWidth || 150;
     const height = menu.offsetHeight || 32;
-    const x = Math.min(Math.max((event.clientX ?? 0) - width / 2, 4), window.innerWidth - width - 4);
-    const y = Math.min(Math.max((event.clientY ?? 0) - height - 8, 4), window.innerHeight - height - 4);
+    const x = Math.min(Math.max((event.clientX ?? 0) + 10, 4), window.innerWidth - width - 4);
+    const y = Math.min(Math.max((event.clientY ?? 0) - height / 2, 4), window.innerHeight - height - 4);
     menu.style.left = `${x}px`;
     menu.style.top = `${y}px`;
 

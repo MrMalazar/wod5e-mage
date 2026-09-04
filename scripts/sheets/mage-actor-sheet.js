@@ -38,7 +38,7 @@ import {
 } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
 import { loadSpherePowers, prepareSphereSpecialties } from "../sphere-specialties.js";
-import { onSphereSelectionChange, prepareSpheres } from "../spheres.js";
+import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
 import { onSpecialtyAdd, onSpecialtyDelete, prepareSpecialties } from "../specializzazioni.js";
@@ -112,6 +112,7 @@ export class MageActorSheet extends MortalActorSheet {
       personaggioRowDelete: onPersonaggioRowDelete,
       specialtyAdd: onSpecialtyAdd,
       specialtyDelete: onSpecialtyDelete,
+      familySphereToggle: onFamilySphereToggle,
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
       wisdomResourceChange: onWisdomResourceChange,

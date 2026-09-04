@@ -7,7 +7,10 @@ import { MODULE_ID } from "./constants.js";
 export const EXPERIENCE_COSTS = Object.freeze({
   attribute: { multiplier: 4 },
   skill: { multiplier: 2, firstDot: 3 },
-  sphere: { multiplier: 7, firstDot: 8 },
+  // Le Sfere di famiglia (sbloccate da Famiglia, Sottofamiglia e Credo)
+  // costano meno delle esterne.
+  sphereFamily: { multiplier: 5, firstDot: 8 },
+  sphereOutside: { multiplier: 7, firstDot: 8 },
   arete: { multiplier: 10 },
   // La Volontà è caduta: c'è un tracciato solo, la Salute.
   health: { multiplier: 1 },

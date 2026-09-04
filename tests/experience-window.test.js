@@ -9,7 +9,9 @@ assert.equal(experienceCost("skill", 2, 3).total, 6);
 // Abilità nuova fino a 3: 3 + 4 + 6.
 assert.equal(experienceCost("skill", 0, 3).total, 13);
 // Sfera nuova fino a 2: 8 + 14.
-assert.equal(experienceCost("sphere", 0, 2).total, 22);
+// Le Sfere di famiglia costano meno delle esterne.
+assert.equal(experienceCost("sphereOutside", 0, 2).total, 22);
+assert.equal(experienceCost("sphereFamily", 0, 2).total, 18);
 // Areté da 2 a 3 = 3 × 10.
 assert.equal(experienceCost("arete", 2, 3).total, 30);
 // Nessun passo indietro, nessun costo.
@@ -34,7 +36,7 @@ assert.equal(page.gains.length, 2);
 assert.equal(page.spent, 17);
 assert.equal(page.remaining, 13);
 assert.equal(page.log.length, 2);
-// Sette tipi: via la Volontà (tracciato unico) e la Sfera affine (Specialità).
-assert.equal(page.rows.length, 7);
+// Otto tipi: via la Volontà e la Sfera affine, dentro le Sfere di famiglia ed esterne.
+assert.equal(page.rows.length, 8);
 
 console.log("experience-window.test.js: pagina e 10 asserzioni superate");

@@ -41,7 +41,8 @@
       "Kinds": {
         "attribute": "Attributo",
         "skill": "Abilità",
-        "sphere": "Sfera",
+        "sphereFamily": "Sfera di famiglia",
+        "sphereOutside": "Sfera esterna",
         "arete": "Areté",
         "health": "Salute",
         "merit": "Pregio",
@@ -390,7 +391,10 @@
       "mind": "Mente",
       "prime": "Prime",
       "spirit": "Spirito",
-      "time": "Tempo"
+      "time": "Tempo",
+      "FamilyHint": "La casetta segna le Sfere di famiglia: quelle che Famiglia, Sottofamiglia e Credo ti aprono, e che costano meno delle esterne.",
+      "FamilyOn": "Sfera di famiglia: costa meno. Clicca per farla esterna.",
+      "FamilyOff": "Sfera esterna. Clicca per farla di famiglia."
     },
     "Wisdom": {
       "Label": "Saggezza",
@@ -581,6 +585,12 @@
       "Name": "Nome dell'Abilità",
       "NameHint": "nome dell'Abilità",
       "Roll": "Tira con questa Abilità"
+    }
+  },
+  "WOD5E": {
+    "RollList": {
+      "SuccessBy": "Successo di {string}",
+      "FailureBy": "Fallimento di {string}"
     }
   }
 }

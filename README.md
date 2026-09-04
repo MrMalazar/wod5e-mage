@@ -48,9 +48,10 @@ dialog displays an additional Sheet field:
 The Mage sheet currently inherits the complete mortal sheet without replacing
 any native system file. It adds a Magick tab with the nine Mage: The Ascension
 Spheres and ratings from zero to five. Sphere values are stored in module flags.
-The Traits page hosts the Wheel widget full-width under the Skills, with the
-two persistent fields (generated Quintessence, permanent Paradox) inside it
-and an Areté rating from one to five below. Every Attribute and Skill row
+The Traits page is a six-cell grid: Attributes beside Conditions, Skills
+beside Specialties, the Wheel beside Bonuses (the system's Custom Rolls panel
+is gone). The Wheel carries the two persistent fields (generated
+Quintessence, permanent Paradox) and the Areté rating from one to five. Every Attribute and Skill row
 opens with its M5 sigil, gold on the sheet's dark ground. Clicking Areté opens the Magick roll dialog
 (branch A of the September 2026 playtest): the pool is Attribute + Skill +
 Skill, any one of them is enough and the chosen ones add up; Areté never
@@ -84,7 +85,11 @@ compendium lists for it (Perception, Resistance, Innate Defence and the
 Sphere's own Scope or track), and the fourth and fifth dots each grant
 another slot; the choices live in module flags, a power taken in one slot is
 disabled in the others, and each chosen power's text is shown under its
-drop-down. In the right side panel, under Custom Rolls, a small Bonuses
+drop-down. Each Sphere row also carries a house toggle marking it as a
+"family Sphere" (opened by Family, Subfamily and Creed): the Experience page
+prices family Spheres lower than outside Spheres. The module also patches
+the system's Italian "Successo di" / "Fallimento di" labels, which lacked the
+margin placeholder. In the right side panel, under Custom Rolls, a small Bonuses
 table (number, type, description) lets the player note reminders such as
 "+3 · Forces Scope"; rows are stored in module flags and never touch the
 dice, and each value is capped at ±3. Above the Bonuses, a Specialties panel
@@ -116,8 +121,8 @@ in Magick, with a separate rich-text note for each.
 The Mage header carries a single Health track (branch A): 1 + Stamina +
 Resolve boxes, adjustable with plus and minus, holding physical damage (/
 superficial, X aggravated) and mental damage (o superficial, ◎ aggravated).
-Left click opens a small five-glyph menu at the pointer (the four marks or
-empty), right click clears the box; the counts live in module flags and the system's Health and
+Left click opens a small vertical five-glyph menu at the pointer (the four
+marks or empty), right click clears the box; the counts live in module flags and the system's Health and
 Willpower partials are no longer shown, since Willpower is gone from the
 rules (the Experience page no longer prices it). A two-line legend explains
 the physical and mental marks. "New session" heals every mental superficial

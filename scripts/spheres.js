@@ -54,9 +54,20 @@ export function getSphereSelection(actor) {
   );
 }
 
+/**
+ * Le Sfere di famiglia (verdetto del 4/9/2026): Famiglia, Sottofamiglia e
+ * Credo sbloccano le Sfere «di famiglia», che costano meno delle esterne.
+ * Sulla scheda si segnano a mano, Sfera per Sfera.
+ */
+export function getFamilySpheres(actor) {
+  const stored = actor.getFlag(MODULE_ID, "familySpheres") ?? {};
+  return Object.fromEntries(SPHERES.map((id) => [id, Boolean(stored?.[id])]));
+}
+
 export function prepareSpheres(actor, options = {}) {
   const values = actor.getFlag(MODULE_ID, "spheres") ?? {};
   const selection = getSphereSelection(actor);
+  const family = getFamilySpheres(actor);
 
   const unsorted = SPHERES.map((id) => {
     const value = clampSphereValue(values[id]);
@@ -65,6 +76,7 @@ export function prepareSpheres(actor, options = {}) {
       label: `WOD5E_MAGE.Spheres.${id}`,
       icon: `modules/${MODULE_ID}/assets/icons/sheet/${id}.png`,
       selected: selection[id],
+      family: family[id],
       value,
       influenceLabel: INFLUENCE_LABELS[value]
     };
@@ -111,4 +123,35 @@ export async function onSphereSelectionChange(event, target) {
   const selection = getSphereSelection(actor);
   selection[sphereId] = target.dataset.selected !== "true";
   await actor.setFlag(MODULE_ID, "selectedSpheres", selection);
+}
+
+/** Il clic sulla casetta: la Sfera diventa di famiglia, o torna esterna. */
+export async function onFamilySphereToggle(event, target) {
+  event.preventDefault();
+
+  const actor = this.actor;
+  if (!actor.isOwner) {
+    ui.notifications.warn(
+      game.i18n.format("WOD5E.Notifications.NoSufficientPermission", {
+        string: actor.name
+      })
+    );
+    return;
+  }
+
+  if (actor.system.locked) {
+    ui.notifications.warn(
+      game.i18n.format("WOD5E.Notifications.CannotModifyResourceString", {
+        string: actor.name
+      })
+    );
+    return;
+  }
+
+  const sphereId = target.dataset.sphere;
+  if (!SPHERES.includes(sphereId)) return;
+
+  const family = getFamilySpheres(actor);
+  family[sphereId] = !family[sphereId];
+  await actor.setFlag(MODULE_ID, "familySpheres", family);
 }
