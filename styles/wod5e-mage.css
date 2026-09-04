@@ -3540,10 +3540,21 @@
   width: auto;
 }
 
-.wod5e-mage-archivio-dialog .window-content {
+/* La finestra scorre nella lista, non nella pagina: tutta la catena dei
+   contenitori del dialogo è flessibile fino alla lista. */
+.wod5e-mage-archivio-dialog .window-content,
+.wod5e-mage-archivio-dialog .window-content > form,
+.wod5e-mage-archivio-dialog .window-content > form > .dialog-content,
+.wod5e-mage-archivio-dialog .dialog-content {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   min-height: 0;
+  overflow: hidden;
+}
+
+.wod5e-mage-archivio-dialog .window-content > form > .form-footer {
+  flex: 0 0 auto;
 }
 
 .wod5e-mage-archivio {
@@ -3574,6 +3585,7 @@
 
 .wod5e-mage-archivio-list {
   flex: 1 1 auto;
+  max-height: calc(100vh - 220px);
   min-height: 0;
   overflow-y: auto;
   padding-right: 0.25rem;

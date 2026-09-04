@@ -1,0 +1,21 @@
+{{!-- Gli appunti del Background: chi hai scelto, e di che tipo. --}}
+<form class="dialog-contents wod5e-mage-item-form">
+    {{#if entry.lead}}<p class="wod5e-mage-archivio-hint">{{entry.lead}}</p>{{/if}}
+    <label class="wod5e-mage-item-field">
+        <span>{{localize "WOD5E_MAGE.Archivi.Who"}}</span>
+        <input type="text" name="who" placeholder="{{localize 'WOD5E_MAGE.Archivi.WhoHint'}}" autofocus>
+    </label>
+    {{#if types.length}}
+        <label class="wod5e-mage-item-field">
+            <span>{{localize "WOD5E_MAGE.Archivi.Type"}}</span>
+            <select name="typeChoice">
+                <option value="">{{localize "WOD5E_MAGE.Archivi.TypeNone"}}</option>
+                {{#each types as |type|}}<option value="{{type}}">{{type}}</option>{{/each}}
+            </select>
+        </label>
+    {{/if}}
+    <label class="wod5e-mage-item-field">
+        <span>{{localize "WOD5E_MAGE.Archivi.TypeFree"}}</span>
+        <input type="text" name="type" placeholder="{{localize 'WOD5E_MAGE.Archivi.TypeHint'}}">
+    </label>
+</form>

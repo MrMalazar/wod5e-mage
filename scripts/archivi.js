@@ -50,6 +50,30 @@ export function rowFromEntry(kind, entry) {
   return null;
 }
 
+/**
+ * Il Background sulla scheda: appunti veloci, non il papiro. Il nome porta
+ * chi hai scelto, la descrizione il cappello, chi e il tipo.
+ */
+export function backgroundItemData(entry, { who = "", type = "" } = {}) {
+  const base = String(entry.name ?? "").trim();
+  const chi = String(who ?? "").trim();
+  const tipo = String(type ?? "").trim();
+  const name = chi ? `${base}: ${chi}` : base;
+  const lines = [];
+  if (entry.lead) lines.push(`<p><em>${escapeHtml(entry.lead)}</em></p>`);
+  if (chi) lines.push(`<p><strong>Chi:</strong> ${escapeHtml(chi)}</p>`);
+  if (tipo) lines.push(`<p><strong>Tipo:</strong> ${escapeHtml(tipo)}</p>`);
+  return { name, description: lines.join("") };
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 /** Le voci raggruppate, nell'ordine dell'archivio. */
 export function groupEntries(entries) {
   const groups = [];
@@ -94,6 +118,8 @@ export function entryFromDocument(doc) {
     cost: flag.cost,
     points: flag.points,
     credo: flag.credo,
+    lead: flag.lead,
+    types: Array.isArray(flag.types) ? flag.types.map(String) : [],
     sort: Number(doc?.sort) || 0,
     content: String(content ?? "")
   };
@@ -127,6 +153,14 @@ export async function addFromArchivio(actor, kind, entry) {
     const data = doc.toObject();
     delete data._id;
     data.system.points = Math.max(Number(entry.points) || 1, 1);
+    if (kind === "background") {
+      // Chi e che tipo: sulla scheda restano gli appunti, il papiro sta in archivio.
+      const notes = await askBackgroundNotes(entry);
+      if (!notes) return false;
+      const short = backgroundItemData(entry, notes);
+      data.name = short.name;
+      data.system.description = short.description;
+    }
     await actor.createEmbeddedDocuments("Item", [data]);
     return true;
   }
@@ -149,6 +183,24 @@ export async function addFromArchivio(actor, kind, entry) {
     return true;
   }
   return false;
+}
+
+/** Per un Background: chi hai scelto e di che tipo, prima di metterlo sulla scheda. */
+async function askBackgroundNotes(entry) {
+  const content = await foundry.applications.handlebars.renderTemplate(
+    `modules/${MODULE_ID}/templates/dialogs/archivio-background.hbs`,
+    { entry, types: entry.types ?? [] }
+  );
+  const result = await foundry.applications.api.DialogV2.input({
+    window: { title: entry.name },
+    position: { width: 420, height: "auto" },
+    content,
+    ok: { icon: "fas fa-plus", label: game.i18n.localize("WOD5E_MAGE.Archivi.Add") },
+    classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-archivio-notes"]
+  });
+  if (!result || result === "cancel") return null;
+  const picked = String(result.typeChoice ?? "").trim();
+  return { who: result.who ?? "", type: picked || result.type || "" };
 }
 
 /** La finestra dell'archivio: cerca, apri la voce, «+» per metterla sulla scheda. */

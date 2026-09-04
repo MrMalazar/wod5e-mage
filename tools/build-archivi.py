@@ -162,6 +162,24 @@ def journal(name, content, kind, group, sort, extra=None):
     }
 
 
+# L'icona dei Pregi e dei Difetti dice il gruppo: fisici, mentali, sociali,
+# soprannaturali (Paradosso, Duali e Reinterpretabili stanno coi soprannaturali).
+GROUP_ICONS = {"Fisici": "fisici", "Mentali": "mentali", "Sociali": "sociali"}
+
+
+def slug(text):
+    t = text.lower()
+    for a, b in (("à", "a"), ("è", "e"), ("é", "e"), ("ì", "i"), ("ò", "o"), ("ù", "u")):
+        t = t.replace(a, b)
+    return re.sub(r"[^a-z0-9]+", "-", t).strip("-")
+
+
+def feature_icon(kind, group, name):
+    if kind == "background":
+        return f"modules/{MODULE}/assets/icons/archivi/bg-{slug(name)}.svg"
+    return f"modules/{MODULE}/assets/icons/archivi/{kind}-{GROUP_ICONS.get(group, 'soprannaturali')}.svg"
+
+
 def feature(name, content, featuretype, points, kind, group, sort, extra=None):
     flag = {"kind": kind, "group": group, "name": name, "points": points}
     if extra:
@@ -170,7 +188,7 @@ def feature(name, content, featuretype, points, kind, group, sort, extra=None):
         "_id": doc_id(kind, group, name),
         "name": name,
         "type": "feature",
-        "img": f"modules/{MODULE}/assets/icons/archivi/{kind}.svg",
+        "img": feature_icon(kind, group, name),
         "system": {
             "description": content,
             "bonuses": [],
@@ -264,7 +282,16 @@ def build_backgrounds():
         if cost:
             content += f"<p><strong>Costo:</strong> {html.escape(cost)}</p>"
         content += md_to_html(raw)
-        docs.append(feature(name, content, "background", 1, "background", "Background", i * 10, {"cost": cost}))
+        # Il cappello (una frase) e i tipi della prima tavola, se c'è: sulla
+        # scheda vanno gli appunti veloci, non il papiro.
+        clean = strip_comments(raw)
+        lead_m = re.search(r'<p class="lead">(.*?)</p>', clean, flags=re.S)
+        lead = plain(lead_m.group(1)).replace("\n", " ") if lead_m else ""
+        types = []
+        rows = table_rows(clean)
+        if rows and rows[0] and rows[0][0].lower() == "tipo":
+            types = [r[0] for r in rows[1:] if r and r[0]]
+        docs.append(feature(name, content, "background", 1, "background", "Background", i * 10, {"cost": cost, "lead": lead, "types": types}))
     write_pack("mage-background", docs)
 
 

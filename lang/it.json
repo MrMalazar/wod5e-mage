@@ -695,7 +695,13 @@
         "desiderio": "Desideri",
         "ancora": "Ancore",
         "convinzione": "Convinzioni"
-      }
+      },
+      "Who": "Chi o cosa",
+      "WhoHint": "Il nome: chi è, o che cos'è",
+      "Type": "Tipo",
+      "TypeNone": "Scegli il tipo…",
+      "TypeFree": "Tipo, in parole tue",
+      "TypeHint": "Se non è in tendina, scrivilo qui"
     }
   },
   "WOD5E": {

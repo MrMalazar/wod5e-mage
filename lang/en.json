@@ -695,7 +695,13 @@
         "desiderio": "Desires",
         "ancora": "Anchors",
         "convinzione": "Convictions"
-      }
+      },
+      "Who": "Who or what",
+      "WhoHint": "The name: who or what it is",
+      "Type": "Type",
+      "TypeNone": "Pick a type…",
+      "TypeFree": "Type, in your words",
+      "TypeHint": "If it is not in the list, write it here"
     }
   }
 }
