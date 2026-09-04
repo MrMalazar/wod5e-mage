@@ -3819,10 +3819,79 @@
   cursor: default;
 }
 
-/* Il libro delle Condizioni, accanto al titolo della cella. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conditions-header {
-  align-items: center;
-  display: flex;
+/* Le Condizioni come quadratini: per gruppo, accese in oro, spente sbiadite. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni {
+  display: grid;
   gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-title {
+  color: var(--mage-oro);
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.15rem;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione {
+  align-items: center;
+  background: var(--mage-carta);
+  border: 1px solid rgb(152 119 43 / 45%);
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 30px;
+  height: 30px;
   justify-content: center;
+  line-height: 1;
+  margin: 0;
+  opacity: 0.45;
+  padding: 0;
+  position: relative;
+  width: 30px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione:hover {
+  box-shadow: 0 0 4px var(--mage-oro);
+  opacity: 0.85;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione > img {
+  border: none;
+  height: 22px;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione > small {
+  background: var(--mage-carta);
+  border-radius: 2px;
+  bottom: -1px;
+  color: var(--mage-inchiostro);
+  font-size: 0.55rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 1px;
+  position: absolute;
+  right: -1px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione.active {
+  background: rgb(152 119 43 / 22%);
+  border-color: var(--mage-oro);
+  box-shadow: 0 0 0 1px var(--mage-oro), 0 0 6px rgb(152 119 43 / 60%);
+  opacity: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione.active.suppressed {
+  border-style: dashed;
+  opacity: 0.7;
 }

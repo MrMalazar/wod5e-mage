@@ -426,18 +426,21 @@ BOZZE = CASA / "04_BOZZE"
 
 # I dadi che una Condizione toglie, nei «modificatori» del sistema: «attributes»
 # vale su ogni tiro (ogni riserva parte da un Attributo), «physical» sulle fisiche.
+# I dadi che una Condizione toglie, nei «modificatori» del sistema: «all» vale
+# su ogni tiro, Areté compreso; «physical» sulle riserve fisiche.
 CONDITION_BONUSES = {
     "Atterrato": ("-2", ["physical"]),
-    "Abbagliato": ("-1", ["attributes"]), "Offuscato": ("-2", ["attributes"]),
-    "Ovattato": ("-1", ["attributes"]), "Assordato": ("-2", ["attributes"]),
-    "Scosso": ("-1", ["attributes"]), "Spaventato": ("-2", ["attributes"]),
+    "Abbagliato": ("-1", ["all"]), "Offuscato": ("-2", ["all"]),
+    "Ovattato": ("-1", ["all"]), "Assordato": ("-2", ["all"]),
+    "Scosso": ("-1", ["all"]), "Spaventato": ("-2", ["all"]),
 }
+DATA_OUT = Path(__file__).resolve().parent.parent / "scripts" / "data" / "condizioni.js"
 
 
 def build_condizioni():
     """Le Condizioni di M5 (bozza 04_BOZZE/condizioni_M5.md, verdetti del 4/9): Item «condition»."""
     raw = strip_comments(read(BOZZE / "condizioni_M5.md"))
-    docs, sort = [], 0
+    docs, sort, data = [], 0, []
     for m in re.finditer(r"^## (.+?)\n(.*?)(?=^## |\Z)", raw, flags=re.S | re.M):
         group, body = m.group(1).strip(), m.group(2)
         for row in table_rows(body):
@@ -450,11 +453,14 @@ def build_condizioni():
                 value, paths = CONDITION_BONUSES[name]
                 bonuses.append({"source": name, "value": value, "paths": paths, "displayWhenInactive": False,
                                 "activeWhen": {"check": "always", "path": "", "value": ""}})
+            icon = f"modules/{MODULE}/assets/icons/condizioni/cond_{slug(name).replace('-', '_')}.svg"
+            data.append({"id": slug(name), "name": name, "group": group, "what": what, "effect": effect, "icon": icon,
+                         "description": content, "bonuses": bonuses})
             docs.append({
                 "_id": doc_id("condizione", group, name),
                 "name": name,
                 "type": "condition",
-                "img": f"modules/{MODULE}/assets/icons/condizioni/cond_{slug(name).replace('-', '_')}.svg",
+                "img": icon,
                 "system": {"description": content, "bonuses": bonuses, "source": {"book": "M5 · Le Condizioni", "page": ""},
                            "effects": {}, "suppressed": False},
                 "effects": [], "folder": None, "sort": sort, "ownership": {"default": 0},
@@ -462,6 +468,13 @@ def build_condizioni():
             })
             sort += 10
     write_pack("mage-condizioni", docs)
+    # Le stesse venticinque come modulo dati: i quadratini della scheda non aspettano il compendio.
+    DATA_OUT.write_text(
+        "// Generato da tools/build-archivi.py dalla bozza 04_BOZZE/condizioni_M5.md: non toccare a mano.\n"
+        "// Le venticinque Condizioni di M5, nell'ordine della bozza, coi dadi tolti nei modificatori.\n\n"
+        f"export const CONDIZIONI = Object.freeze({json.dumps(data, ensure_ascii=False, indent=2)});\n",
+        encoding="utf-8", newline="\n")
+    print(f"condizioni.js: {len(data)} voci")
 
 
 def build_ancore():

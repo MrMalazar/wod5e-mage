@@ -130,13 +130,12 @@ assert.ok(catalogo.every((doc) => doc.flags["wod5e-mage"].archivio.gloss && doc.
 // Le Condizioni: Abbagliato toglie un dado a ogni tiro, Atterrato due alle fisiche, Cieco non tocca i dadi.
 const condizioni = readFileSync(new URL("../packs/mage-condizioni.db", import.meta.url), "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
 const byName = Object.fromEntries(condizioni.map((doc) => [doc.name, doc]));
-assert.deepEqual(byName.Abbagliato.system.bonuses.map((b) => [b.value, b.paths]), [["-1", ["attributes"]]]);
+assert.deepEqual(byName.Abbagliato.system.bonuses.map((b) => [b.value, b.paths]), [["-1", ["all"]]]);
 assert.deepEqual(byName.Atterrato.system.bonuses.map((b) => [b.value, b.paths]), [["-2", ["physical"]]]);
 assert.deepEqual(byName.Cieco.system.bonuses, []);
 assert.equal(byName["A secco"].flags["wod5e-mage"].archivio.group, "Strumenti tagliati");
 assert.deepEqual([...new Set(condizioni.map((doc) => doc.flags["wod5e-mage"].archivio.group))], ["Corpo", "Strumenti tagliati", "Vista", "Udito", "Testa", "Maledizione", "Ambiente"]);
-const tratti = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
-assert.match(tratti, /data-action="archivioOpen" data-kind="condizione"/);
+
 
 // La scheda: il libro accanto a ogni voce, distinto dal +.
 const personaggio = readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");

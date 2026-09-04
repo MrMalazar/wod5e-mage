@@ -3,6 +3,7 @@ import { prepareEssentialSkills } from "../abilita-essenziali.js";
 import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../abilita-specifiche.js";
 import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
+import { customConditions, onCondizioneToggle, prepareCondizioni } from "../condizioni.js";
 import { onStrumentiSuggest } from "../strumenti.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
@@ -98,6 +99,7 @@ export class MageActorSheet extends MortalActorSheet {
       createItem: onGuidedItemCreate,
       archivioOpen: onArchivioOpen,
       strumentiSuggest: onStrumentiSuggest,
+      condizioneToggle: onCondizioneToggle,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
       belongingAdd: onBelongingAdd,
@@ -282,6 +284,9 @@ export class MageActorSheet extends MortalActorSheet {
       // Quintessenza generata e Paradosso permanente vivono nella Ruota.
       context.persistentMagickResources = getPersistentMagickResources(actor);
       context.bonuses = prepareBonuses(actor);
+      // Le Condizioni di M5 come quadratini; nella lista restano solo quelle fuori lista.
+      context.condizioni = prepareCondizioni(actor.items);
+      if (Array.isArray(context.conditions)) context.conditions = customConditions(context.conditions);
       // Le Specializzazioni delle Abilità, lette dai bonuses del sistema.
       context.specialties = prepareSpecialties(actor, {
         localize: game.i18n.localize.bind(game.i18n),
