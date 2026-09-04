@@ -139,7 +139,8 @@
         "potere": "Tutto è Potere",
         "sacro": "Tutto è Sacro",
         "scienza": "Tutto è Scienza",
-        "suono": "Tutto è Suono"
+        "suono": "Tutto è Suono",
+        "vivo": "Tutto è Vivo"
       },
       "Paradigm": "Paradigma",
       "ParadigmHint": "In parole tue",
@@ -673,6 +674,27 @@
         "merit": "cosa fa in gioco",
         "flaw": "cosa ti costa in gioco",
         "background": "chi, cosa, quanto"
+      }
+    },
+    "Archivi": {
+      "Open": "Apri l'archivio dei Cataloghi",
+      "WindowTitle": "Archivio: {title}",
+      "Search": "Cerca…",
+      "Count": "{count} voci",
+      "Hint": "Clicca il nome per leggere la voce; il + la mette sulla scheda.",
+      "Add": "Metti sulla scheda",
+      "Added": "{name}: sulla scheda.",
+      "Empty": "L'archivio è vuoto.",
+      "Kinds": {
+        "pregio": "Pregi",
+        "difetto": "Difetti",
+        "background": "Background",
+        "credo": "Credi",
+        "concetto": "Concetti",
+        "ambizione": "Ambizioni",
+        "desiderio": "Desideri",
+        "ancora": "Ancore",
+        "convinzione": "Convinzioni"
       }
     }
   },

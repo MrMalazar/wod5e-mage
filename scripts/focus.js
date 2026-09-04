@@ -53,7 +53,8 @@ export const FOCUS_CREDOS = Object.freeze([
   "potere",
   "sacro",
   "scienza",
-  "suono"
+  "suono",
+  "vivo"
 ]);
 
 // I tre Tipi di Magick. Il Tipo decide le famiglie di Strumenti che il Mago

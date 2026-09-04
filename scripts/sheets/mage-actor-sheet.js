@@ -2,6 +2,7 @@ import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet
 import { prepareEssentialSkills } from "../abilita-essenziali.js";
 import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../abilita-specifiche.js";
 import { MODULE_ID } from "../constants.js";
+import { onArchivioOpen } from "../archivi.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
 import { prepareConceptChallenge } from "../concept-challenge.js";
@@ -93,6 +94,7 @@ export class MageActorSheet extends MortalActorSheet {
       // Il + di armi, armature, oggetti, Pregi, Difetti e Background chiede
       // i campi che servono; gli altri tipi restano al sistema.
       createItem: onGuidedItemCreate,
+      archivioOpen: onArchivioOpen,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
       belongingAdd: onBelongingAdd,
@@ -156,7 +158,7 @@ export class MageActorSheet extends MortalActorSheet {
     dotazione: {
       template: `${MODULE}/parts/dotazione.hbs`,
       templates: [
-        `${SYSTEM}/core-features.hbs`,
+        `${MODULE}/parts/core-features.hbs`,
         `${MODULE}/parts/equipment-list.hbs`
       ]
     },

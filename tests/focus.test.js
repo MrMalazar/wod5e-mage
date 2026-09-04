@@ -28,7 +28,7 @@ assert.deepEqual(
   ["object", "word", "machine", "substance", "body"]
 );
 assert.equal(FOCUS_TOOLS.filter((tool) => tool.profession).length, 2);
-assert.equal(FOCUS_CREDOS.length, 12);
+assert.equal(FOCUS_CREDOS.length, 13);
 
 // I Tipi: Oggetto e Sostanza per tutti, Parola e Corpo solo Magick,
 // Macchina solo Tecnomagick, l'Ibrida tutto.

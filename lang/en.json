@@ -139,7 +139,8 @@
         "potere": "Everything is Power",
         "sacro": "Everything is Sacred",
         "scienza": "Everything is Science",
-        "suono": "Everything is Sound"
+        "suono": "Everything is Sound",
+        "vivo": "Everything Is Alive"
       },
       "Paradigm": "Paradigm",
       "ParadigmHint": "In your own words",
@@ -673,6 +674,27 @@
         "merit": "what it does in play",
         "flaw": "what it costs you in play",
         "background": "who, what, how much"
+      }
+    },
+    "Archivi": {
+      "Open": "Open the Catalogue archive",
+      "WindowTitle": "Archive: {title}",
+      "Search": "Search…",
+      "Count": "{count} entries",
+      "Hint": "Click a name to read the entry; + puts it on the sheet.",
+      "Add": "Put on the sheet",
+      "Added": "{name}: on the sheet.",
+      "Empty": "The archive is empty.",
+      "Kinds": {
+        "pregio": "Merits",
+        "difetto": "Flaws",
+        "background": "Backgrounds",
+        "credo": "Creeds",
+        "concetto": "Concepts",
+        "ambizione": "Ambitions",
+        "desiderio": "Desires",
+        "ancora": "Anchors",
+        "convinzione": "Convictions"
       }
     }
   }

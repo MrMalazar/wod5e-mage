@@ -11,10 +11,10 @@
                 {{> "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"}}
             </div>
 
-            {{!-- Il Credo: uno dei dodici in tendina, e sotto le parole tue. --}}
+            {{!-- Il Credo: uno dei tredici in tendina (il libro apre l'archivio), e sotto le parole tue. --}}
             <div class="wod5e-mage-focus-short-field">
                 <div>
-                    <strong>{{localize "WOD5E_MAGE.Focus.Credo"}}</strong>
+                    <strong>{{localize "WOD5E_MAGE.Focus.Credo"}} <button type="button" class="wod5e-mage-archivio-open" data-action="archivioOpen" data-kind="credo" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button></strong>
                     <small>{{localize "WOD5E_MAGE.Focus.CredoHint"}}</small>
                 </div>
                 <select name="flags.wod5e-mage.focus.credo" aria-label="{{localize 'WOD5E_MAGE.Focus.Credo'}}" {{#if locked}}disabled{{/if}}>

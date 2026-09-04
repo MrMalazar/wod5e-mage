@@ -1,0 +1,32 @@
+{{!-- L'archivio: cerca, apri la voce col clic sul nome, «+» per metterla sulla scheda. --}}
+<div class="wod5e-mage-archivio" data-kind="{{kind}}">
+    <div class="wod5e-mage-archivio-head">
+        <input type="search" data-role="archivioSearch" placeholder="{{localize 'WOD5E_MAGE.Archivi.Search'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Search'}}">
+        <small>{{localize "WOD5E_MAGE.Archivi.Count" count=count}}</small>
+    </div>
+    <p class="wod5e-mage-archivio-hint">{{localize "WOD5E_MAGE.Archivi.Hint"}}</p>
+    <div class="wod5e-mage-archivio-list">
+        {{#each groups as |group|}}
+            <section class="wod5e-mage-archivio-group" data-role="archivioGroup">
+                {{#if group.name}}<h3>{{group.name}}</h3>{{/if}}
+                {{#each group.entries as |entry|}}
+                    <article class="wod5e-mage-archivio-entry" data-role="archivioEntry" data-uuid="{{entry.uuid}}">
+                        <div class="wod5e-mage-archivio-row">
+                            <button type="button" class="wod5e-mage-archivio-name" data-role="archivioToggle">
+                                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                                <span>{{entry.name}}</span>
+                                {{#if entry.cost}}<small>{{entry.cost}}</small>{{/if}}
+                            </button>
+                            {{#if ../../canAdd}}
+                                <button type="button" class="wod5e-mage-archivio-add" data-role="archivioAdd" title="{{localize 'WOD5E_MAGE.Archivi.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Add'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                            {{/if}}
+                        </div>
+                        <div class="wod5e-mage-archivio-content">{{{entry.content}}}</div>
+                    </article>
+                {{/each}}
+            </section>
+        {{else}}
+            <p class="wod5e-mage-archivio-hint">{{localize "WOD5E_MAGE.Archivi.Empty"}}</p>
+        {{/each}}
+    </div>
+</div>
