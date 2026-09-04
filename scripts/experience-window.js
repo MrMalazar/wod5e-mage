@@ -10,8 +10,8 @@ export const EXPERIENCE_COSTS = Object.freeze({
   affinitySphere: { multiplier: 5, firstDot: 8 },
   sphere: { multiplier: 7, firstDot: 8 },
   arete: { multiplier: 10 },
+  // La Volontà è caduta: c'è un tracciato solo, la Salute.
   health: { multiplier: 1 },
-  willpower: { multiplier: 1 },
   merit: { multiplier: 3 },
   background: { multiplier: 3 }
 });

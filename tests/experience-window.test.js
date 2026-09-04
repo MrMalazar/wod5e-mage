@@ -35,6 +35,7 @@ assert.equal(page.gains.length, 2);
 assert.equal(page.spent, 17);
 assert.equal(page.remaining, 13);
 assert.equal(page.log.length, 2);
-assert.equal(page.rows.length, 9);
+// Otto tipi: la Volontà è caduta col tracciato unico della Salute.
+assert.equal(page.rows.length, 8);
 
 console.log("experience-window.test.js: pagina e 10 asserzioni superate");

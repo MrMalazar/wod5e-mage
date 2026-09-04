@@ -1,10 +1,9 @@
-{{!-- Mage header: resource pools on the left, portrait and allegiance in
-     the middle. The Wheel widget lives on the Traits page (see ruota.hbs). --}}
+{{!-- Mage header: the single Health track on the left, portrait and
+     allegiance in the middle. The Wheel widget lives on the Traits page (see ruota.hbs). --}}
 <header class="actor-header wod5e-mage-header" {{#if headerbg}}style="background: url({{headerbg}}) center;"{{/if}}>
     <div class="header-fields">
         <div class="header-fields-left wod5e-mage-header-resources">
-            {{> "systems/wod5e/display/shared/actors/parts/health.hbs"}}
-            {{> "systems/wod5e/display/shared/actors/parts/willpower.hbs"}}
+            {{> "modules/wod5e-mage/templates/actor/parts/salute.hbs"}}
         </div>
     </div>
 

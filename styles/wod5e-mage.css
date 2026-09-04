@@ -190,6 +190,111 @@
   min-height: 1px;
 }
 
+/* La Salute (ramo A): un tracciato solo, quattro segni. Le caselle sono
+   bottoni veri: clic sinistro gira, clic destro svuota. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-max {
+  color: var(--mage-tenue);
+  font-size: 0.7em;
+  font-weight: 400;
+  margin-left: 0.35rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-cell {
+  --salute-segno: var(--mage-oro-chiaro, #e8c766);
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 0;
+  box-shadow: none;
+  cursor: pointer;
+  height: 14px;
+  line-height: 1;
+  margin: 0;
+  min-height: 14px;
+  padding: 0;
+  width: 14px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-cell:hover {
+  border-color: var(--mage-oro);
+}
+
+/* / fisico superficiale */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-cell[data-state="ps"] {
+  background: linear-gradient(135deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%);
+}
+
+/* X fisico aggravato */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-cell[data-state="pa"] {
+  background:
+    linear-gradient(45deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%),
+    linear-gradient(135deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%);
+}
+
+/* o mentale superficiale: un anello */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-cell[data-state="ms"] {
+  background: radial-gradient(circle, transparent 0%, transparent 32%, var(--salute-segno) 36%, var(--salute-segno) 48%, transparent 52%, transparent 100%);
+}
+
+/* ◎ mentale aggravato: due anelli */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-cell[data-state="ma"] {
+  background: radial-gradient(circle, var(--salute-segno) 0%, var(--salute-segno) 18%, transparent 22%, transparent 34%, var(--salute-segno) 38%, var(--salute-segno) 50%, transparent 54%, transparent 100%);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-legend {
+  color: var(--mage-tenue);
+  font-size: 0.66rem;
+  margin: 0.3rem 0 0;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-status {
+  color: var(--mage-rosso-chiaro);
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin: 0.2rem 0 0;
+  text-align: center;
+}
+
+/* Negare il Contraccolpo: un bottone sotto i pallini di Areté. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-contraccolpo {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-contraccolpo-button,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-contraccolpo-reset {
+  background: transparent;
+  border: 1px solid var(--mage-rosso);
+  border-radius: 3px;
+  color: var(--mage-rosso-chiaro);
+  cursor: pointer;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  min-height: 0;
+  padding: 0.15rem 0.45rem;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-contraccolpo-button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-contraccolpo-used {
+  color: var(--mage-tenue);
+  font-size: 0.68rem;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom .wisdom-roll {
   cursor: pointer;
 }

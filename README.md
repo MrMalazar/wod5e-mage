@@ -97,8 +97,18 @@ poured into the Sphere rows until the first save. Wisdom sits as a box at
 the top of the left column and, when its track is full, shows the Marked
 effects beside it. The right column lists only the Spheres currently selected
 in Magick, with a separate rich-text note for each.
-The Mage header groups Health and Willpower on the left. Wisdom has an
-adjustable damage track and can be rolled using its undamaged boxes as the pool.
+The Mage header carries a single Health track (branch A): 1 + Stamina +
+Resolve boxes, adjustable with plus and minus, holding physical damage (/
+superficial, X aggravated) and mental damage (o superficial, ◎ aggravated).
+Left click cycles a box through the four marks, right click clears it; the
+counts live in module flags and the system's Health and Willpower partials
+are no longer shown, since Willpower is gone from the rules (the Experience
+page no longer prices it). A full track reads "Impaired"; a track of
+aggravated boxes reads KO, death if physical damage prevails, coma or shock
+if mental does. Wisdom has an adjustable damage track and can be rolled
+using its undamaged boxes as the pool. Next to Areté, "Deny the Backlash"
+marks one mental aggravated box, raises the Wheel by three and locks itself
+until the Storyteller resets it for the new session.
 The Traits tab contains the shared nine-cell Wheel. Quintessence fills it
 from the left and Paradox fills it from the right, with both values stored in
 module flags. Plus fills an available cell immediately. On a full track, Plus

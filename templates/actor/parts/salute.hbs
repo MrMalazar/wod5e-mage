@@ -1,0 +1,22 @@
+{{!-- La Salute (ramo A): un tracciato solo, 1 + Costituzione + Fermezza,
+     coi danni fisici (/ e X) e mentali (o e ◎). La Volontà non c'è più. --}}
+<div class="flexcol field-section wod5e-mage-salute">
+    <div class="flexcol">
+        <label class="field-header flexrow resource-label">
+            <i class="fas fa-minus resource-control resource-minus" data-action="saluteExtraChange" data-delta="-1" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}"></i>
+            <span title="{{localize 'WOD5E_MAGE.Salute.Hint'}}">{{localize "WOD5E_MAGE.Salute.Label"}} <small class="wod5e-mage-salute-max">{{salute.max}}</small></span>
+            <i class="fas fa-plus resource-control resource-plus" data-action="saluteExtraChange" data-delta="1" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}"></i>
+        </label>
+    </div>
+    <div class="resource flex-group-center">
+        <div class="wod5e-mage-salute-track" role="group" aria-label="{{localize 'WOD5E_MAGE.Salute.Label'}}" title="{{localize 'WOD5E_MAGE.Salute.ClickHint'}}">
+            {{#each salute.cells as |cell|}}
+                <button type="button" class="wod5e-mage-salute-cell" data-state="{{cell.state}}" data-action="saluteCellChange" data-index="{{cell.index}}" aria-label="{{localize cell.label}}"></button>
+            {{/each}}
+        </div>
+    </div>
+    <p class="wod5e-mage-salute-legend">{{localize "WOD5E_MAGE.Salute.Legend"}}</p>
+    {{#if salute.status}}
+        <p class="wod5e-mage-salute-status">{{localize salute.status}}</p>
+    {{/if}}
+</div>

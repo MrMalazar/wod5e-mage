@@ -42,6 +42,14 @@ import { onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
+import {
+  getContraccolpo,
+  getSalute,
+  onContraccolpoNega,
+  onContraccolpoReset,
+  onSaluteCellChange,
+  onSaluteExtraChange
+} from "../salute.js";
 
 const MODULE = "modules/wod5e-mage/templates/actor";
 const SYSTEM = "systems/wod5e/display/shared/actors/parts";
@@ -87,6 +95,11 @@ export class MageActorSheet extends MortalActorSheet {
       belongingDelete: onBelongingDelete,
       bonusAdd: onBonusAdd,
       bonusDelete: onBonusDelete,
+      contraccolpoNega: onContraccolpoNega,
+      contraccolpoReset: onContraccolpoReset,
+      // Clic sinistro gira la casella, clic destro la svuota.
+      saluteCellChange: { handler: onSaluteCellChange, buttons: [0, 2] },
+      saluteExtraChange: onSaluteExtraChange,
       magickBalanceChange: onMagickBalanceChange,
       experienceLogAdd: onExperienceLogAdd,
       experienceLogDelete: onExperienceLogDelete,
@@ -105,8 +118,7 @@ export class MageActorSheet extends MortalActorSheet {
     header: {
       template: `${MODULE}/mage-header.hbs`,
       templates: [
-        `${SYSTEM}/health.hbs`,
-        `${SYSTEM}/willpower.hbs`,
+        `${MODULE}/parts/salute.hbs`,
         `${SYSTEM}/header-profile.hbs`
       ]
     },
@@ -253,13 +265,16 @@ export class MageActorSheet extends MortalActorSheet {
       context.persistentMagickResources = getPersistentMagickResources(actor);
       context.bonuses = prepareBonuses(actor);
       context.wheelAsBar = game.settings.get(MODULE_ID, "headerWheelMode") === "bar";
+      // Negare il Contraccolpo: una volta per sessione, dalla Ruota.
+      context.contraccolpo = getContraccolpo(actor);
       // Il memo di creazione, in fondo alla pagina: conta e verifica.
       context.creationSummary = prepareCreationSummary(actor);
     }
 
-    // The header only needs the allegiance line under the name.
+    // La testata: la riga dell'appartenenza sotto il nome, e la Salute.
     if (partId === "header") {
       context.lineage = getLineage(actor);
+      context.salute = getSalute(actor);
     }
 
     if (partId === "magick") {

@@ -26,6 +26,23 @@
             </div>
             <strong class="wod5e-mage-header-arete-value">{{arete.value}}</strong>
 
+            {{!-- Negare il Contraccolpo: una volta per sessione, un aggravato
+                 mentale e la Ruota sale di 3. Il Narratore azzera a nuova sessione. --}}
+            <div class="wod5e-mage-contraccolpo">
+                <button type="button" class="wod5e-mage-contraccolpo-button" data-action="contraccolpoNega"
+                        title="{{localize 'WOD5E_MAGE.Contraccolpo.Hint'}}" {{#if contraccolpo.used}}disabled{{/if}}>
+                    <i class="fa-solid fa-hand" aria-hidden="true"></i>
+                    {{localize "WOD5E_MAGE.Contraccolpo.Label"}}
+                </button>
+                {{#if contraccolpo.used}}
+                    <span class="wod5e-mage-contraccolpo-used">{{localize "WOD5E_MAGE.Contraccolpo.Used"}}</span>
+                    <button type="button" class="wod5e-mage-contraccolpo-reset" data-action="contraccolpoReset"
+                            title="{{localize 'WOD5E_MAGE.Contraccolpo.Reset'}}" aria-label="{{localize 'WOD5E_MAGE.Contraccolpo.Reset'}}">
+                        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                    </button>
+                {{/if}}
+            </div>
+
             {{!-- A destra di Areté: Quintessenza generata e Paradosso permanente. --}}
             <div class="wod5e-mage-persistent-resources wod5e-mage-arete-extras">
                 <label class="wod5e-mage-persistent-resource generated-quintessence">

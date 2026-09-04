@@ -45,7 +45,6 @@
         "sphere": "Sphere",
         "arete": "Arete",
         "health": "Health",
-        "willpower": "Willpower",
         "merit": "Merit",
         "background": "Background"
       },
@@ -531,6 +530,33 @@
       "Anchors": "At least one Anchor",
       "Convictions": "At least one Conviction",
       "Instruments": "One Instrument per Sphere"
+    },
+    "Salute": {
+      "Label": "Health",
+      "Hint": "1 + Stamina + Resolve",
+      "Extra": "Extra boxes beyond the count",
+      "ClickHint": "Click: the box cycles (/, X, o, ◎). Right click: it clears.",
+      "Legend": "/ physical · X physical aggravated · o mental · ◎ mental aggravated",
+      "States": {
+        "empty": "Empty",
+        "ps": "Physical superficial damage",
+        "pa": "Physical aggravated damage",
+        "ms": "Mental superficial damage",
+        "ma": "Mental aggravated damage"
+      },
+      "Impaired": "Impaired: the track is full.",
+      "KoDeath": "KO: every box is aggravated and physical damage prevails. Death.",
+      "KoShock": "KO: every box is aggravated and mental damage prevails. Coma or shock."
+    },
+    "Contraccolpo": {
+      "Label": "Deny the Backlash",
+      "Hint": "Once per session: mark one mental aggravated, the Backlash does not strike, the Wheel rises by 3. That aggravated box does not heal until those points are discharged.",
+      "Used": "denied this session",
+      "Reset": "New session: it can be denied again",
+      "Done": "Backlash denied: one mental aggravated, the Wheel rises by {amount}.",
+      "AlreadyUsed": "The Backlash has already been denied this session.",
+      "NoRoom": "No box left for the mental aggravated: the whole track is aggravated.",
+      "WheelFull": "The three points bring the Wheel to its maximum: paradox Flaw or default burst."
     }
   }
 }

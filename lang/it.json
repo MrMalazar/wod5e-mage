@@ -45,7 +45,6 @@
         "sphere": "Sfera",
         "arete": "Areté",
         "health": "Salute",
-        "willpower": "Volontà",
         "merit": "Pregio",
         "background": "Background"
       },
@@ -531,6 +530,33 @@
       "Anchors": "Almeno un'Ancora",
       "Convictions": "Almeno una Convinzione",
       "Instruments": "Uno Strumento per Sfera"
+    },
+    "Salute": {
+      "Label": "Salute",
+      "Hint": "1 + Costituzione + Fermezza",
+      "Extra": "Caselle in più, oltre il conto",
+      "ClickHint": "Clic: la casella gira (/, X, o, ◎). Clic destro: si svuota.",
+      "Legend": "/ fisico · X fisico aggravato · o mentale · ◎ mentale aggravato",
+      "States": {
+        "empty": "Vuota",
+        "ps": "Danno fisico superficiale",
+        "pa": "Danno fisico aggravato",
+        "ms": "Danno mentale superficiale",
+        "ma": "Danno mentale aggravato"
+      },
+      "Impaired": "Menomato: il tracciato è coperto.",
+      "KoDeath": "KO: tutte le caselle sono aggravate e prevalgono i danni fisici. Morte.",
+      "KoShock": "KO: tutte le caselle sono aggravate e prevalgono i danni mentali. Coma o shock."
+    },
+    "Contraccolpo": {
+      "Label": "Negare il Contraccolpo",
+      "Hint": "Una volta per sessione: segni un aggravato mentale, il Contraccolpo non scatta, la Ruota sale di 3. L'aggravato non guarisce finché quei punti non sono scaricati.",
+      "Used": "negato in questa sessione",
+      "Reset": "Nuova sessione: si può negare di nuovo",
+      "Done": "Contraccolpo negato: un aggravato mentale, la Ruota sale di {amount}.",
+      "AlreadyUsed": "Il Contraccolpo è già stato negato in questa sessione.",
+      "NoRoom": "Nessuna casella per l'aggravato mentale: il tracciato è tutto aggravato.",
+      "WheelFull": "I tre punti portano la Ruota al massimo: Difetto paradossale oppure scoppio."
     }
   }
 }
