@@ -4187,9 +4187,33 @@
   border: 1px solid var(--mage-oro-scuro);
 }
 
-/* La Saggezza in cima al Personaggio, con le Convinzioni subito sotto. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-content > .wod5e-mage-focus-wisdom {
+/* Personaggio su due colonne: a sinistra Concetto, Ambizione, Desiderio e
+   Ancore; a destra la Saggezza e le Convinzioni. Nella colonna stretta i
+   campi dell'identità stanno uno sotto l'altro. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-columns {
+  align-items: start;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-col {
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-col .wod5e-mage-identity-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-col > .wod5e-mage-focus-wisdom {
   margin: 0.5rem auto 1rem;
+  max-width: 100%;
+}
+
+@media (width <= 900px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* Dotazione: le tavole libere e le note vestono come i riquadri dei
