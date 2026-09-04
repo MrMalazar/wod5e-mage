@@ -19,7 +19,8 @@ export const ARCHIVI = Object.freeze({
   ambizione: { pack: "mage-ambizioni", type: "JournalEntry", add: "header", field: "ambition", label: "WOD5E_MAGE.Archivi.Kinds.ambizione" },
   desiderio: { pack: "mage-desideri", type: "JournalEntry", add: "header", field: "desire", label: "WOD5E_MAGE.Archivi.Kinds.desiderio" },
   ancora: { pack: "mage-ancore", type: "JournalEntry", add: "row", table: "ancore", label: "WOD5E_MAGE.Archivi.Kinds.ancora" },
-  convinzione: { pack: "mage-convinzioni", type: "JournalEntry", add: "row", table: "convinzioni", label: "WOD5E_MAGE.Archivi.Kinds.convinzione" }
+  convinzione: { pack: "mage-convinzioni", type: "JournalEntry", add: "row", table: "convinzioni", label: "WOD5E_MAGE.Archivi.Kinds.convinzione" },
+  condizione: { pack: "mage-condizioni", type: "Item", add: "item", label: "WOD5E_MAGE.Archivi.Kinds.condizione" }
 });
 
 /** Il «+» dei Pregi, Difetti e Background del sistema parla per sottotipo. */
@@ -166,7 +167,8 @@ export async function addFromArchivio(actor, kind, entry) {
     if (!doc) return false;
     const data = doc.toObject();
     delete data._id;
-    data.system.points = Math.max(Number(entry.points) || 1, 1);
+    // Le Condizioni non hanno punti: il livello è dei Pregi, dei Difetti e dei Background.
+    if (data.type === "feature") data.system.points = Math.max(Number(entry.points) || 1, 1);
     if (kind === "background") {
       // Chi e che tipo: sulla scheda restano gli appunti, il papiro sta in archivio.
       const notes = await askBackgroundNotes(entry);

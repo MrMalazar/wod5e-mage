@@ -13,7 +13,7 @@ import {
 } from "../scripts/archivi.js";
 
 // Nove archivi, e il sottotipo del sistema porta al suo.
-assert.deepEqual(Object.keys(ARCHIVI), ["pregio", "difetto", "background", "credo", "concetto", "ambizione", "desiderio", "ancora", "convinzione"]);
+assert.deepEqual(Object.keys(ARCHIVI), ["pregio", "difetto", "background", "credo", "concetto", "ambizione", "desiderio", "ancora", "convinzione", "condizione"]);
 assert.equal(archivioKind("ambizione"), "ambizione");
 assert.equal(archivioKind("altro"), null);
 assert.equal(FEATURE_KINDS.merit, "pregio");
@@ -69,7 +69,7 @@ assert.equal(entry.content, "<p>c</p>");
 
 // I nove compendi esistono, sono JSON riga per riga e portano la bandiera.
 const manifest = JSON.parse(readFileSync(new URL("../module.json", import.meta.url), "utf8"));
-const expected = { "mage-pregi": 90, "mage-difetti": 85, "mage-background": 18, "mage-credi": 13, "mage-concetti": 24, "mage-ambizioni": 120, "mage-desideri": 120, "mage-ancore": 12, "mage-convinzioni": 110 };
+const expected = { "mage-pregi": 90, "mage-difetti": 85, "mage-background": 18, "mage-credi": 13, "mage-concetti": 24, "mage-ambizioni": 120, "mage-desideri": 120, "mage-ancore": 12, "mage-convinzioni": 110, "mage-condizioni": 25 };
 for (const [name, minimum] of Object.entries(expected)) {
   const pack = manifest.packs.find((candidate) => candidate.name === name);
   assert.ok(pack, name);
@@ -86,6 +86,16 @@ for (const [name, minimum] of Object.entries(expected)) {
     assert.ok(!ids.has(doc._id), `${name} id doppio ${doc._id}`);
     ids.add(doc._id);
     assert.equal(typeof doc.flags["wod5e-mage"].archivio.kind, "string");
+    if (name === "mage-condizioni") {
+      // Le Condizioni: Item «condition» del sistema, col simbolo della bozza e i dadi tolti nei modificatori.
+      assert.equal(doc.type, "condition");
+      const icon = doc.img.replace("modules/wod5e-mage/", "");
+      assert.match(icon, /icons\/condizioni\/cond_[a-z_]+\.svg$/);
+      assert.ok(existsSync(new URL(`../${icon}`, import.meta.url)), icon);
+      assert.equal(doc.system.suppressed, false);
+      assert.ok(Array.isArray(doc.system.bonuses));
+      continue;
+    }
     if (pack.type === "Item") {
       assert.equal(doc.type, "feature");
       // Ogni oggetto ha la sua icona: per gruppo i Pregi e i Difetti, una a testa i Background.
@@ -117,6 +127,16 @@ assert.ok(convinzioni.some((doc) => doc.flags["wod5e-mage"].archivio.credo === "
 const catalogo = convinzioni.filter((doc) => !doc.flags["wod5e-mage"].archivio.credo);
 assert.equal(catalogo.length, 50);
 assert.ok(catalogo.every((doc) => doc.flags["wod5e-mage"].archivio.gloss && doc.flags["wod5e-mage"].archivio.cross));
+// Le Condizioni: Abbagliato toglie un dado a ogni tiro, Atterrato due alle fisiche, Cieco non tocca i dadi.
+const condizioni = readFileSync(new URL("../packs/mage-condizioni.db", import.meta.url), "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
+const byName = Object.fromEntries(condizioni.map((doc) => [doc.name, doc]));
+assert.deepEqual(byName.Abbagliato.system.bonuses.map((b) => [b.value, b.paths]), [["-1", ["attributes"]]]);
+assert.deepEqual(byName.Atterrato.system.bonuses.map((b) => [b.value, b.paths]), [["-2", ["physical"]]]);
+assert.deepEqual(byName.Cieco.system.bonuses, []);
+assert.equal(byName["A secco"].flags["wod5e-mage"].archivio.group, "Strumenti tagliati");
+assert.deepEqual([...new Set(condizioni.map((doc) => doc.flags["wod5e-mage"].archivio.group))], ["Corpo", "Strumenti tagliati", "Vista", "Udito", "Testa", "Maledizione", "Ambiente"]);
+const tratti = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
+assert.match(tratti, /data-action="archivioOpen" data-kind="condizione"/);
 
 // La scheda: il libro accanto a ogni voce, distinto dal +.
 const personaggio = readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");
@@ -138,7 +158,7 @@ const dialog = readFileSync(new URL("../templates/dialogs/archivio.hbs", import.
 assert.match(dialog, /data-role="archivioSearch"[\s\S]*data-role="archivioGroup"[\s\S]*data-role="archivioEntry"[\s\S]*data-role="archivioToggle"[\s\S]*data-role="archivioAdd"/);
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
-  assert.equal(Object.keys(strings.WOD5E_MAGE.Archivi.Kinds).length, 9, lang);
+  assert.equal(Object.keys(strings.WOD5E_MAGE.Archivi.Kinds).length, 10, lang);
   assert.equal(typeof strings.WOD5E_MAGE.Focus.Credos.vivo, "string", lang);
 }
 

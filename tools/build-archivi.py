@@ -422,6 +422,48 @@ def build_convinzioni():
     write_pack("mage-convinzioni", docs)
 
 
+BOZZE = CASA / "04_BOZZE"
+
+# I dadi che una Condizione toglie, nei «modificatori» del sistema: «attributes»
+# vale su ogni tiro (ogni riserva parte da un Attributo), «physical» sulle fisiche.
+CONDITION_BONUSES = {
+    "Atterrato": ("-2", ["physical"]),
+    "Abbagliato": ("-1", ["attributes"]), "Offuscato": ("-2", ["attributes"]),
+    "Ovattato": ("-1", ["attributes"]), "Assordato": ("-2", ["attributes"]),
+    "Scosso": ("-1", ["attributes"]), "Spaventato": ("-2", ["attributes"]),
+}
+
+
+def build_condizioni():
+    """Le Condizioni di M5 (bozza 04_BOZZE/condizioni_M5.md, verdetti del 4/9): Item «condition»."""
+    raw = strip_comments(read(BOZZE / "condizioni_M5.md"))
+    docs, sort = [], 0
+    for m in re.finditer(r"^## (.+?)\n(.*?)(?=^## |\Z)", raw, flags=re.S | re.M):
+        group, body = m.group(1).strip(), m.group(2)
+        for row in table_rows(body):
+            if len(row) < 3 or not row[0] or row[0].lower() == "nome":
+                continue
+            name, what, effect = row[0], row[1], row[2]
+            content = f"<p><em>{inline(what)}</em></p><p>{inline(effect)}</p>"
+            bonuses = []
+            if name in CONDITION_BONUSES:
+                value, paths = CONDITION_BONUSES[name]
+                bonuses.append({"source": name, "value": value, "paths": paths, "displayWhenInactive": False,
+                                "activeWhen": {"check": "always", "path": "", "value": ""}})
+            docs.append({
+                "_id": doc_id("condizione", group, name),
+                "name": name,
+                "type": "condition",
+                "img": f"modules/{MODULE}/assets/icons/condizioni/cond_{slug(name).replace('-', '_')}.svg",
+                "system": {"description": content, "bonuses": bonuses, "source": {"book": "M5 · Le Condizioni", "page": ""},
+                           "effects": {}, "suppressed": False},
+                "effects": [], "folder": None, "sort": sort, "ownership": {"default": 0},
+                "flags": {MODULE: {"archivio": {"kind": "condizione", "group": group, "name": name, "text": what, "description": effect}}}
+            })
+            sort += 10
+    write_pack("mage-condizioni", docs)
+
+
 def build_ancore():
     docs = []
     raw = strip_comments(read(next(CAT.glob("08_099_*.md"))))
@@ -447,3 +489,4 @@ if __name__ == "__main__":
     spunti("desiderio", "08_096_*.md", "Desideri", "desideri")
     build_convinzioni()
     build_ancore()
+    build_condizioni()

@@ -3818,3 +3818,11 @@
 .wod5e-mage-strumenti-consigli .wod5e-mage-archivio-name {
   cursor: default;
 }
+
+/* Il libro delle Condizioni, accanto al titolo della cella. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conditions-header {
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+}
