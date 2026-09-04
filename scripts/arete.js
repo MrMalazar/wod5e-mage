@@ -144,7 +144,9 @@ export function calculateMagickThreshold({ sphereLevels = [], scopeLevels = [], 
   const countedScopes = effectiveScopes.filter((entry) => !entry.covered).length;
   const extraScopes = Math.max(countedScopes - 1, 0);
   const manySpheres = spheres.length >= 3 ? 1 : 0;
-  return Math.min(highest + extraScopes + manySpheres, THRESHOLD_CAP);
+  // Il tetto 7 vale sul livello (e sulle tre Sfere); gli Ambiti oltre il
+  // primo lo superano (regola di Blue del 4/9 notte).
+  return Math.min(highest + manySpheres, THRESHOLD_CAP) + extraScopes;
 }
 
 /** Vittoria automatica: riserva almeno doppia della soglia, non si tira. */
@@ -355,7 +357,7 @@ function wireScopeTable(dialog) {
       content: `<div class="wod5e-mage-scope-table-dialog">${content}</div>`,
       buttons: [{ action: "close", icon: "fas fa-times", label: game.i18n.localize("WOD5E.Close"), default: true }],
       classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog"],
-      position: { width: 860, height: "auto" }
+      position: { width: 1000, height: "auto" }
     }).catch(() => null);
   });
 }

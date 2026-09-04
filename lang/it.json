@@ -109,7 +109,7 @@
       "HarmonyFlavor": "Armonia {dice}",
       "Pool": "Riserva",
       "Threshold": "Soglia",
-      "ThresholdHint": "La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto, +1 per ogni Ambito oltre il primo, +1 con tre o più Sfere, tetto 7. Clicca i pallini: il livello della Sfera che usi, il livello di ogni Ambito.",
+      "ThresholdHint": "La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto, +1 con tre o più Sfere, tetto 7; poi +1 per ogni Ambito oltre il primo, e questi superano il tetto. Clicca i pallini: il livello della Sfera che usi, il livello di ogni Ambito.",
       "AutoVictory": "Vittoria automatica: la riserva è almeno il doppio della soglia, non si tira. Nel Volgare si tirano solo i rossi.",
       "AutoVictoryChat": "Vittoria automatica: riserva {pool} contro soglia {threshold}, non si tira.",
       "AutoVictoryBanner": "Vittoria automatica",
@@ -119,7 +119,7 @@
       "SpherePlan": "Sfere: {plans}.",
       "SpecialtyHint": "Specialità: questo Ambito conta come il minore fra la Sfera e il suo livello, e non pesa come Ambito in più.",
       "HarmonyShort": "dadi dagli altri Maghi",
-      "ThresholdShort": "Soglia: il maggiore fra Sfera e Ambito, +1 per ogni Ambito oltre il primo, +1 con tre Sfere, tetto 7.",
+      "ThresholdShort": "Soglia: il maggiore fra Sfera e Ambito, +1 con tre Sfere, tetto 7. Gli Ambiti oltre il primo danno +1 l'uno e superano il tetto.",
       "ScopeTable": "La tavola degli Ambiti",
       "Backlash": "CONTRACCOLPO: {eyes} occhi sui rossi. Ustione {burn}: segna {burn} danni sulla Salute."
     },
@@ -301,10 +301,19 @@
       "conditions": "Condizioni",
       "range": "Portata",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto; ogni Ambito oltre il primo la alza di 1. Potenza: il danno è l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
+      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza (Effetto): quanto è grande l'impresa. Potenza (Danni): l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
       "TableSuccesses": "Livello →",
       "Table": {
         "potency": {
+          "1": "Una sedia",
+          "2": "Un'auto",
+          "3": "Un furgone",
+          "4": "Un tir",
+          "5": "Una casa",
+          "6": "Un palazzo",
+          "7": "Una montagna"
+        },
+        "potencyDamage": {
           "1": "+0",
           "2": "+1",
           "3": "+3",
@@ -379,7 +388,9 @@
       },
       "precision": "Precisione",
       "DurationPlay": "Durata (gioco)",
-      "DurationNarrative": "Durata (narrativa)"
+      "DurationNarrative": "Durata (narrativa)",
+      "PotencyEffect": "Potenza (Effetto)",
+      "PotencyDamage": "Potenza (Danni)"
     },
     "OngoingMagick": {
       "Label": "Magick in atto",

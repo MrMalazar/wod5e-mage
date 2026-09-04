@@ -36,7 +36,10 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
   // mostra il sigillo dell'Areté, il numero e la casella di Salute vuota.
   // Ogni riga dichiara le sue colonne invisibili (layout): simbolo, numero,
   // testo o casella. Dentro una colonna della tavola le celle si allineano.
-  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.potency", arete: true, glyph: "", layout: "symbol-number-glyph" },
+  // La Potenza in due righe: l'Effetto dice quanto è grande l'impresa, i
+  // Danni sono l'Areté più il numero (sigillo e numero, niente casella).
+  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyEffect", layout: "text" },
+  { id: "potencyDamage", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyDamage", arete: true, layout: "symbol-number" },
   { id: "duration", scope: "duration", label: "WOD5E_MAGE.Scopes.DurationPlay", icons: true, layout: "symbol-number" },
   {
     id: "durationNarrative",
@@ -53,7 +56,7 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
     layout: "symbol-text"
   },
   { id: "targets", scope: "targets", label: "WOD5E_MAGE.Scopes.targets", faIcon: "fa-solid fa-user", layout: "symbol-number" },
-  { id: "conditions", scope: "conditions", label: "WOD5E_MAGE.Scopes.conditions", layout: "number" },
+  { id: "conditions", scope: "conditions", label: "WOD5E_MAGE.Scopes.conditions", faIcon: "fa-solid fa-list-check", layout: "symbol-number" },
   { id: "range", scope: "range", label: "WOD5E_MAGE.Scopes.range", layout: "text" },
   // La Precisione parla per frasi: carattere piccolo, per non allargare le colonne.
   { id: "precision", scope: "precision", label: "WOD5E_MAGE.Scopes.precision", layout: "text", small: true }
@@ -101,7 +104,6 @@ export function prepareScopeTable() {
           arete: Boolean(row.arete),
           // Al primo livello la Potenza è l'Areté e basta: niente numero.
           hideLabel: Boolean(row.arete) && step === 1,
-          glyph: row.arete ? "" : (row.glyph ?? ""),
           faIcon: row.faIcons ? row.faIcons[step - 1] : (row.faIcon ?? ""),
           icon: row.icons
             ? `modules/wod5e-mage/assets/icons/sheet/tempo/${DURATION_ICONS[step]}.svg`

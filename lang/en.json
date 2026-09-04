@@ -109,7 +109,7 @@
       "HarmonyFlavor": "Harmony {dice}",
       "Pool": "Pool",
       "Threshold": "Threshold",
-      "ThresholdHint": "The threshold is the higher of the highest Sphere and the highest Scope, +1 per Scope beyond the first, +1 with three or more Spheres, capped at 7. Click the dots: the Sphere level you use, the level of each Scope.",
+      "ThresholdHint": "The threshold is the higher of the highest Sphere and the highest Scope, +1 with three or more Spheres, cap 7; then +1 for each Scope beyond the first, and those go past the cap. Click the dots: the Sphere level you use, the level of each Scope.",
       "AutoVictory": "Automatic victory: the pool is at least twice the threshold, no roll. In Vulgar Magick only the red dice are rolled.",
       "AutoVictoryChat": "Automatic victory: pool {pool} against threshold {threshold}, no roll.",
       "AutoVictoryBanner": "Automatic victory",
@@ -119,7 +119,7 @@
       "SpherePlan": "Spheres: {plans}.",
       "SpecialtyHint": "Speciality: this Scope counts as the lower of the Sphere and its own level, and does not weigh as an extra Scope.",
       "HarmonyShort": "dice from other Mages",
-      "ThresholdShort": "Threshold: the higher of Sphere and Scope, +1 per Scope beyond the first, +1 with three Spheres, capped at 7.",
+      "ThresholdShort": "Threshold: the higher of Sphere and Scope, +1 with three Spheres, cap 7. Scopes beyond the first add +1 each and go past the cap.",
       "ScopeTable": "The Scopes table",
       "Backlash": "BACKLASH: {eyes} eyes on the red dice. Burn {burn}: mark {burn} damage on Health."
     },
@@ -301,10 +301,19 @@
       "conditions": "Conditions",
       "range": "Range",
       "TableTitle": "The Scopes",
-      "TableHint": "Each Scope is declared with a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope; every Scope beyond the first raises it by 1. Potency: damage is Arete plus the number. Duration: when you cast, say whether it runs on play or on narrative time.",
+      "TableHint": "Each Scope is declared at a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope (cap 7); each Scope beyond the first raises it by 1, even past the cap. Potency (Effect): how big the feat is. Potency (Damage): Arete plus the number. Duration: when casting you declare whether it runs on play or on narrative time.",
       "TableSuccesses": "Level →",
       "Table": {
         "potency": {
+          "1": "A chair",
+          "2": "A car",
+          "3": "A van",
+          "4": "A truck",
+          "5": "A house",
+          "6": "A tower block",
+          "7": "A mountain"
+        },
+        "potencyDamage": {
           "1": "+0",
           "2": "+1",
           "3": "+3",
@@ -379,7 +388,9 @@
       },
       "precision": "Precision",
       "DurationPlay": "Duration (play)",
-      "DurationNarrative": "Duration (narrative)"
+      "DurationNarrative": "Duration (narrative)",
+      "PotencyEffect": "Potency (Effect)",
+      "PotencyDamage": "Potency (Damage)"
     },
     "OngoingMagick": {
       "Label": "Ongoing Magick",

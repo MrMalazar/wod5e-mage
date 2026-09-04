@@ -103,9 +103,10 @@
                 <p class="wod5e-mage-magick-type-hint">{{localize "WOD5E_MAGE.Arete.NoSpheres"}}</p>
             {{/each}}
 
+            {{!-- L'icona della tavola sta a sinistra della parola. --}}
             <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head wod5e-mage-arete-scopes-head">
-                {{localize "WOD5E_MAGE.Scopes.Label"}}
                 <button type="button" class="wod5e-mage-arete-scope-table" data-role="scopeTableOpen" title="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}"><i class="fa-solid fa-table-list"></i></button>
+                {{localize "WOD5E_MAGE.Scopes.Label"}}
             </span>
             {{#each scopes as |scope|}}
                 <div class="wod5e-mage-arete-dotrow" data-role="dotRow" data-kind="scope" data-id="{{scope.id}}">

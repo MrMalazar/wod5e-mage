@@ -98,9 +98,11 @@ export function renderRollCard({
     ...traits.map((trait) => `${escapeHtml(trait.label)} ${escapeHtml(trait.value)}`),
     ...bonusParts.map((part) => escapeHtml(part))
   ].join(" + ");
+  // Una voce per riga: nome, descrizione, a capo.
   const lines = [
     line("WOD5E_MAGE.Arete.Pool", pool),
-    `<p><b>${escapeHtml(localize("WOD5E_MAGE.Arete.Threshold"))}</b> ${escapeHtml(threshold)} · <b>${escapeHtml(localize("WOD5E_MAGE.Arete.MagickType"))}</b> ${escapeHtml(magickType)}</p>`
+    line("WOD5E_MAGE.Arete.Threshold", escapeHtml(threshold)),
+    line("WOD5E_MAGE.Arete.MagickType", escapeHtml(magickType))
   ];
   if (spheres.length) {
     lines.push(line(

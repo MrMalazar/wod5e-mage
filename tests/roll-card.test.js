@@ -56,7 +56,8 @@ assert.equal(
   card,
   '<div class="wod5e-mage-roll-card">'
   + "<p><b>Riserva</b> Forza 3 + Lancio &lt;coltelli&gt; 2 + premio 3</p>"
-  + "<p><b>Soglia</b> 4 · <b>Tipologia</b> Accidentale</p>"
+  + "<p><b>Soglia</b> 4</p>"
+  + "<p><b>Tipologia</b> Accidentale</p>"
   + "<p><b>Sfere Effetto</b> Forze 3</p>"
   + "<p><b>Ambiti</b> Potenza 2</p>"
   + "</div>"
