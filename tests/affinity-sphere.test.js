@@ -88,6 +88,12 @@ const powers = await loadSpherePowers({
 });
 assert.equal(Object.keys(powers).length, 9);
 assert.equal(powers.correspondence.name, "Correspondence");
+// Il compendio si legge una volta per lingua: la seconda chiamata non riapre il pack (4/9 notte).
+let reads = 0;
+await loadSpherePowers({ lang: "en", getPack: () => { reads += 1; return { getDocuments: async () => [] }; } });
+assert.equal(reads, 0);
+await loadSpherePowers({ lang: "en", cache: false, getPack: () => { reads += 1; return { getDocuments: async () => [] }; } });
+assert.equal(reads, 1);
 
 // Le Specialità: una al terzo pallino, poi una per pallino.
 assert.equal(SPECIALTY_MIN_RATING, 3);

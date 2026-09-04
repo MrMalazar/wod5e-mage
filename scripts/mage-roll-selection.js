@@ -88,6 +88,8 @@ export function compileMageTraitRoll({ dataset = {}, traits, primarySkillId, sec
   };
 
   if (!modified.label) modified.label = `${primary.label} + ${secondary.label}`;
+  // Il tiro dalla Specializzazione: il nome nel titolo, il dado in più è già nel flatMod.
+  if (dataset.specialty) modified.label += ` · ${dataset.specialty}`;
 
   if (dataset.useAbsoluteValue && dataset.absoluteValue) {
     modified.absoluteValue = numericValue(dataset.absoluteValue) + primary.value + secondary.value;
@@ -169,4 +171,17 @@ export async function onMageRoll(event, target) {
 
   if (isMageActor(actor)) dressNextRollDialogAsMage();
   return WOD5E.api.RollFromDataset({ dataset: modifiedDataset, actor });
+}
+
+/**
+ * Il clic sulla Specializzazione (verdetto di Blue, 4/9 notte): come il
+ * clic sull'Abilità, con l'Abilità già scelta e il dado in più applicato da
+ * solo. Niente pannello dei modificatori.
+ */
+export async function onSpecialtyRoll(event, target) {
+  const skill = String(target.dataset.skill ?? "");
+  const specialty = String(target.dataset.specialty ?? "");
+  if (!skill) return;
+  const proxy = { dataset: { selectDialog: "true", skill, flatMod: "1", specialty } };
+  return onMageRoll.call(this, event, proxy);
 }

@@ -66,6 +66,8 @@ export function dressNextRollDialogAsMage() {
   Hooks.once("renderDialogV2", (_app, element) => {
     const root = element ?? _app?.element;
     if (!root?.querySelectorAll) return;
+    // La classe del modulo: nasconde il pannello dei modificatori (4/9 notte).
+    root.classList?.add("wod5e-mage-roll-dialog");
 
     root.querySelectorAll("img.mortal-dice").forEach((die) => {
       die.classList.remove("mortal-dice");

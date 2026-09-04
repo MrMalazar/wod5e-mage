@@ -1,5 +1,6 @@
 {{!-- Le Specializzazioni delle Abilità: una riga l'una, il + ne aggiunge
-     una, la matita apre l'editor del sistema, il cestino la toglie. --}}
+     una, la matita apre l'editor del sistema, il cestino la toglie. Il clic
+     sulla riga tira l'Abilità col dado in più applicato da solo. --}}
 <section class="wod5e-mage-bonuses wod5e-mage-specialties">
     <header class="resource-header">
         <label class="header-label">{{localize "WOD5E_MAGE.Specialties.Label"}}</label>
@@ -16,8 +17,9 @@
         <span aria-hidden="true"></span>
 
         {{#each specialties.rows as |row|}}
-            <strong>{{row.skillLabel}}</strong>
-            <em>{{row.source}} <small>+{{row.value}}</small></em>
+            {{!-- Il clic tira l'Abilità col dado in più già dentro. --}}
+            <strong class="rollable wod5e-mage-specialty-roll" data-action="specialtyRoll" data-skill="{{row.skill}}" data-specialty="{{row.source}}" title="{{localize 'WOD5E_MAGE.Specialties.Roll'}}">{{row.skillLabel}}</strong>
+            <em class="rollable wod5e-mage-specialty-roll" data-action="specialtyRoll" data-skill="{{row.skill}}" data-specialty="{{row.source}}" title="{{localize 'WOD5E_MAGE.Specialties.Roll'}}">{{row.source}} <small>+{{row.value}}</small></em>
             <a class="wod5e-mage-specialty-edit" data-action="editSkill" data-skill="{{row.skill}}" title="{{localize 'WOD5E_MAGE.Specialties.Edit'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Edit'}}"><i class="fas fa-edit"></i></a>
             <button type="button" data-action="specialtyDelete" data-skill="{{row.skill}}" data-index="{{row.index}}" title="{{localize 'WOD5E_MAGE.Specialties.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Remove'}}" {{#if ../locked}}disabled{{/if}}>
                 <i class="fa-solid fa-trash"></i>

@@ -3,6 +3,7 @@ import { prepareEssentialSkills } from "../abilita-essenziali.js";
 import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../abilita-specifiche.js";
 import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
+import { onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResets } from "../reset.js";
 import { onStrumentiSuggest } from "../strumenti.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
@@ -22,6 +23,7 @@ import {
 } from "../experience-window.js";
 import { prepareFocus } from "../focus.js";
 import { prepareLineageChoices } from "../famiglie.js";
+import { FOCUS_CREDOS } from "../focus.js";
 import { getLineage } from "../lineage.js";
 import {
   onPersonaggioRowAdd,
@@ -29,7 +31,7 @@ import {
   prepareAnchors,
   prepareConvictions
 } from "../personaggio-extra.js";
-import { onMageRoll } from "../mage-roll-selection.js";
+import { onMageRoll, onSpecialtyRoll } from "../mage-roll-selection.js";
 import {
   getPersistentMagickResources,
   onMagickBalanceChange,
@@ -100,6 +102,8 @@ export class MageActorSheet extends MortalActorSheet {
       archivioOpen: onArchivioOpen,
       strumentiSuggest: onStrumentiSuggest,
       resetSection: onResetSection,
+      noteAdd: onNoteAdd,
+      noteDelete: onNoteDelete,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
       belongingAdd: onBelongingAdd,
@@ -122,6 +126,7 @@ export class MageActorSheet extends MortalActorSheet {
       personaggioRowAdd: onPersonaggioRowAdd,
       personaggioRowDelete: onPersonaggioRowDelete,
       specialtyAdd: onSpecialtyAdd,
+      specialtyRoll: onSpecialtyRoll,
       specialtyDelete: onSpecialtyDelete,
       familySphereToggle: onFamilySphereToggle,
       sphereSelectionChange: onSphereSelectionChange,
@@ -167,8 +172,8 @@ export class MageActorSheet extends MortalActorSheet {
         `${MODULE}/parts/equipment-list.hbs`
       ]
     },
-    note: { template: `${MODULE}/parts/note.hbs` },
     esperienza: { template: `${MODULE}/parts/esperienza.hbs` },
+    note: { template: `${MODULE}/parts/note.hbs` },
     ...remainingParts
   };
 
@@ -215,17 +220,18 @@ export class MageActorSheet extends MortalActorSheet {
         title: "WOD5E_MAGE.Tabs.ConceptChallenge",
         icon: icon("pen-to-square")
       },
-      note: {
-        id: "note",
-        group: "primary",
-        title: "WOD5E_MAGE.Tabs.Notes",
-        icon: icon("note-sticky")
-      },
       esperienza: {
         id: "esperienza",
         group: "primary",
         title: "WOD5E.Tabs.Experience",
         icon: icon("file-contract")
+      },
+      // Le Note in fondo, sotto l'Esperienza (4/9 notte).
+      note: {
+        id: "note",
+        group: "primary",
+        title: "WOD5E_MAGE.Tabs.Notes",
+        icon: icon("note-sticky")
       }
     };
   }
@@ -247,6 +253,12 @@ export class MageActorSheet extends MortalActorSheet {
   _onRender(context, options) {
     super._onRender?.(context, options);
     bindExperienceCalculator(this.element);
+    // L'Appartenenza in testata resta aperta o chiusa com'era, attraverso i render.
+    const appartenenza = this.element?.querySelector(".wod5e-mage-appartenenza");
+    if (appartenenza) {
+      appartenenza.open = Boolean(this._appartenenzaOpen);
+      appartenenza.addEventListener("toggle", () => { this._appartenenzaOpen = appartenenza.open; });
+    }
   }
 
   get title() {
@@ -302,6 +314,12 @@ export class MageActorSheet extends MortalActorSheet {
     if (partId === "header") {
       context.lineage = getLineage(actor);
       context.salute = getSalute(actor);
+      // L'Appartenenza a tendina, in alto a destra: tendine e Credo.
+      const localize = game.i18n.localize.bind(game.i18n);
+      context.lineageChoices = prepareLineageChoices(context.lineage, localize);
+      const credo = String(actor.getFlag(MODULE_ID, "focus")?.credo ?? "");
+      context.credos = FOCUS_CREDOS.map((id) => ({ id, label: localize(`WOD5E_MAGE.Focus.Credos.${id}`), selected: id === credo }));
+      context.credoLabel = FOCUS_CREDOS.includes(credo) ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "";
     }
 
     if (partId === "magick") {
@@ -341,7 +359,6 @@ export class MageActorSheet extends MortalActorSheet {
     if (partId === "personaggio") {
       context = await this.prepareFeaturesContext(context, actor);
       context.lineage = getLineage(actor);
-      context.lineageChoices = prepareLineageChoices(context.lineage, game.i18n.localize.bind(game.i18n));
       // Ancore e Convinzioni a slot liberi, e il «quando si attiva» di
       // Ambizione e Desiderio.
       context.anchors = prepareAnchors(actor);
@@ -375,9 +392,9 @@ export class MageActorSheet extends MortalActorSheet {
       context.tab = context.tabs.dotazione;
     }
 
+    // Le Note: riquadri liberi del giocatore, niente campi del sistema.
     if (partId === "note") {
-      context = await this.prepareBiographyContext(context, actor);
-      context = await this.prepareNotepadContext(context, actor);
+      context.note = prepareNote(actor);
       context.tab = context.tabs.note;
     }
 

@@ -1,52 +1,8 @@
-{{!-- Personaggio, nella gabbia a tendine della Sfida: Appartenenza,
-     Concetto e Cronaca (con Ambizione e Desiderio descritti), poi le
-     Ancore e le Convinzioni a slot liberi — di norma tre e tre. --}}
+{{!-- Personaggio, nella gabbia a tendine della Sfida: Concetto e Cronaca
+     (con Ambizione e Desiderio descritti), poi le Ancore e le Convinzioni a
+     slot liberi, di norma tre e tre. L'Appartenenza sta in testata. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-personaggio" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     <div class="wod5e-mage-concept-content wod5e-mage-personaggio-content">
-            <details class="wod5e-mage-concept-group" open>
-                <summary>
-                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                    <span>{{localize "WOD5E_MAGE.Lineage.Label"}}</span>
-                </summary>
-
-                <div class="wod5e-mage-lineage-grid">
-                    <label>
-                        <span>{{localize "WOD5E_MAGE.Lineage.Faction"}}</span>
-                        <input type="text" name="flags.wod5e-mage.lineage.fazione" value="{{lineage.fazione}}" placeholder="{{localize 'WOD5E_MAGE.Lineage.FactionHint'}}"/>
-                    </label>
-                    {{!-- Famiglia e Sottofamiglia in tendina: scegliere sblocca le loro
-                         Sfere a 1 (il Credo, nella sua pagina, le sue di sola presenza). --}}
-                    <label>
-                        <span>{{localize "WOD5E_MAGE.Lineage.Family"}}</span>
-                        <div class="wod5e-mage-lineage-pick">
-                        {{#if lineageChoices.familySphere}}<img src="{{lineageChoices.familySphere.icon}}" alt="" title="{{lineageChoices.familySphere.label}}">{{else}}<span class="wod5e-mage-lineage-nosphere" aria-hidden="true"></span>{{/if}}
-                        <select name="flags.wod5e-mage.lineage.famiglia" {{#if locked}}disabled{{/if}}>
-                            <option value="">{{localize "WOD5E_MAGE.Lineage.FamilyNone"}}</option>
-                            {{#each lineageChoices.groups as |group|}}
-                                <optgroup label="{{group.label}}">
-                                    {{#each group.famiglie as |famiglia|}}
-                                        <option value="{{famiglia.id}}" {{#if famiglia.selected}}selected{{/if}}>{{famiglia.label}}</option>
-                                    {{/each}}
-                                </optgroup>
-                            {{/each}}
-                        </select>
-                        </div>
-                    </label>
-                    <label>
-                        <span>{{localize "WOD5E_MAGE.Lineage.Subfamily"}}{{#if lineageChoices.subKind}} <small>({{lineageChoices.subKind}})</small>{{/if}}</span>
-                        <div class="wod5e-mage-lineage-pick">
-                        {{#if lineageChoices.subSphere}}<img src="{{lineageChoices.subSphere.icon}}" alt="" title="{{lineageChoices.subSphere.label}}">{{else}}<span class="wod5e-mage-lineage-nosphere" aria-hidden="true"></span>{{/if}}
-                        <select name="flags.wod5e-mage.lineage.sottofamiglia" {{#unless lineageChoices.hasSubfamilies}}disabled{{/unless}} {{#if locked}}disabled{{/if}}>
-                            <option value="">{{#if lineageChoices.hasSubfamilies}}{{localize "WOD5E_MAGE.Lineage.SubfamilyNone"}}{{else}}{{localize "WOD5E_MAGE.Lineage.SubfamilyEmpty"}}{{/if}}</option>
-                            {{#each lineageChoices.sottofamiglie as |sub|}}
-                                <option value="{{sub.id}}" {{#if sub.selected}}selected{{/if}}>{{sub.label}}</option>
-                            {{/each}}
-                        </select>
-                        </div>
-                    </label>
-                </div>
-            </details>
-
             <details class="wod5e-mage-concept-group" open>
                 <summary>
                     <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>

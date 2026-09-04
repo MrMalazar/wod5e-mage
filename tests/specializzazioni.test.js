@@ -56,4 +56,21 @@ assert.match(panel, /data-action="specialtyAdd"[\s\S]*data-action="editSkill"[\s
 const dialog = readFileSync(new URL("../templates/dialogs/specialty-add.hbs", import.meta.url), "utf8");
 assert.match(dialog, /name="skill"[\s\S]*name="source"/);
 
+// Il clic sulla Specializzazione tira l'Abilità col dado in più già dentro (4/9 notte).
+const specTemplate = readFileSync(new URL("../templates/actor/parts/specializzazioni.hbs", import.meta.url), "utf8");
+assert.match(specTemplate, /data-action="specialtyRoll" data-skill="\{\{row\.skill\}\}" data-specialty="\{\{row\.source\}\}"/);
+const { compileMageTraitRoll } = await import("../scripts/mage-roll-selection.js");
+const compiled = compileMageTraitRoll({
+  dataset: { selectDialog: "true", skill: "academics", flatMod: "1", specialty: "Storia" },
+  traits: { skills: [{ key: "skill:academics", id: "academics", type: "skill", label: "Accademiche", value: 3 }], attributes: [{ key: "attribute:intelligence", id: "intelligence", type: "attribute", category: "mental", label: "Intelligenza", value: 2 }] },
+  primarySkillId: "academics",
+  secondaryKey: "attribute:intelligence"
+});
+assert.equal(compiled.flatMod, 1);
+assert.equal(compiled.label, "Accademiche + Intelligenza · Storia");
+// Niente pannello dei modificatori nei tiri del Mago.
+const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+assert.match(css, /\.wod5e-mage-roll-dialog \.situational-modifiers \{\s*display: none;/);
+assert.match(readFileSync(new URL("../scripts/mage-dice.js", import.meta.url), "utf8"), /classList\?\.add\("wod5e-mage-roll-dialog"\)/);
+
 console.log("Specializzazioni tests passed.");

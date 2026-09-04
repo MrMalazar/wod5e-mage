@@ -25,7 +25,8 @@
         {{/if}}
     </div>
 
-    {{!-- Come nella 0.9.4: bilancia il blocco risorse a sinistra e mantiene
-         il ritratto al centro dopo lo spostamento della Ruota. --}}
-    <div class="header-fields wod5e-mage-header-spacer" aria-hidden="true"></div>
+    {{!-- A destra, a bilanciare la Salute: l'Appartenenza a tendina. --}}
+    <div class="header-fields wod5e-mage-header-spacer">
+        {{> "modules/wod5e-mage/templates/actor/parts/appartenenza.hbs"}}
+    </div>
 </header>

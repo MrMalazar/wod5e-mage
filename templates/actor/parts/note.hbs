@@ -1,34 +1,28 @@
-{{!-- Note: biografia, aspetto, note pubbliche e private su una pagina sola. --}}
+{{!-- Note: una pagina vuota, riquadri a piacere col + e il meno. Ogni
+     riquadro: un titolo corto e un testo lungo. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-note" data-tab="{{tab.id}}" data-group="{{tab.group}}">
-    <div class="flexrow wod5e-mage-note-top">
-        <div class="note-container">
-            <div class="flex-center"><label class="resource-label field-header">{{localize "WOD5E.BiographyList.Biography"}}</label></div>
-            <div class="resource">
-                <prose-mirror name="system.biography" value="{{biography}}" toggled="true" compact="true">{{{enrichedBiography}}}</prose-mirror>
-            </div>
-        </div>
-        <div class="note-container">
-            <div class="flex-center"><label class="resource-label field-header">{{localize "WOD5E.BiographyList.Appearance"}}</label></div>
-            <div class="resource">
-                <prose-mirror name="system.appearance" value="{{appearance}}" toggled="true" compact="true">{{{enrichedAppearance}}}</prose-mirror>
-            </div>
-        </div>
-    </div>
+    <header class="wod5e-mage-section-title wod5e-mage-note-head">
+        <span>{{localize "WOD5E_MAGE.Tabs.Notes"}}</span>
+        <button type="button" class="wod5e-mage-row-add" data-action="noteAdd" title="{{localize 'WOD5E_MAGE.Note.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Note.Add'}}" {{#if locked}}disabled{{/if}}>
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </header>
 
-    <div class="flexrow wod5e-mage-note-bottom">
-        <div class="note-container public-notepad">
-            <div class="flex-center"><label class="resource-label field-header">{{localize "WOD5E.Tabs.PublicNotes"}}</label></div>
-            <div class="resource">
-                <prose-mirror name="system.notes" value="{{notes}}" toggled="true" compact="true">{{{enrichedNotes}}}</prose-mirror>
-            </div>
-        </div>
-        {{#if isOwner}}
-            <div class="note-container private-notepad">
-                <div class="flex-center"><label class="resource-label field-header">{{localize "WOD5E.Tabs.PrivateNotes"}}</label></div>
-                <div class="resource">
-                    <prose-mirror name="system.privatenotes" value="{{privatenotes}}" toggled="true" compact="true">{{{enrichedPrivateNotes}}}</prose-mirror>
+    {{#if note.length}}
+        <div class="wod5e-mage-note-list">
+            {{#each note as |row|}}
+                <div class="wod5e-mage-note-block">
+                    <div class="wod5e-mage-note-block-head">
+                        <input type="text" name="flags.wod5e-mage.note.{{row.id}}.title" value="{{row.title}}" placeholder="{{localize 'WOD5E_MAGE.Note.TitleHint'}}" aria-label="{{localize 'WOD5E_MAGE.Note.Title'}}" {{#if ../locked}}disabled{{/if}}>
+                        <button type="button" data-action="noteDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Note.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Note.Remove'}}" {{#if ../locked}}disabled{{/if}}>
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
+                    </div>
+                    <textarea name="flags.wod5e-mage.note.{{row.id}}.text" rows="6" placeholder="{{localize 'WOD5E_MAGE.Note.TextHint'}}" aria-label="{{localize 'WOD5E_MAGE.Note.Text'}}" {{#if ../locked}}disabled{{/if}}>{{row.text}}</textarea>
                 </div>
-            </div>
-        {{/if}}
-    </div>
+            {{/each}}
+        </div>
+    {{else}}
+        <p class="wod5e-mage-row-empty">{{localize "WOD5E_MAGE.Note.Empty"}}</p>
+    {{/if}}
 </section>

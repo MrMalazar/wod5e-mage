@@ -114,45 +114,53 @@ function levelEntries(entries, max) {
 /**
  * La soglia del ramo A: il maggiore fra la Sfera più alta e l'Ambito più
  * alto, +1 per ogni Ambito oltre il primo, +1 piatto con tre o più Sfere,
- * tetto 7. Gli Ambiti valgono da 1 a 7.
- *
- * Le Specialità delle Sfere (Sfera → Ambito): quando la Sfera è nel lancio,
- * quell'Ambito conta come il minore fra il livello della Sfera e il suo, e
- * non pesa come Ambito in più.
+ * tetto 7. Gli Ambiti valgono da 1 a 7. Le Specialità delle Sfere non la
+ * toccano (verdetto di Blue, 4/9 notte): danno successi automatici.
  */
-export function calculateMagickThreshold({ sphereLevels = [], scopeLevels = [], specialties = {} } = {}) {
+export function calculateMagickThreshold({ sphereLevels = [], scopeLevels = [] } = {}) {
   const spheres = levelEntries(sphereLevels, 5);
   const scopes = levelEntries(scopeLevels, THRESHOLD_CAP);
   if (!spheres.length && !scopes.length) return 0;
 
-  // Gli Ambiti coperti da una Specialità di una Sfera in gioco.
-  const covered = new Map();
-  for (const [sphereId, scopeId] of Object.entries(specialties ?? {})) {
-    const sphere = spheres.find((entry) => entry.id === sphereId);
-    if (sphere && scopeId) covered.set(String(scopeId), sphere.level);
-  }
-
-  const effectiveScopes = scopes.map((scope) => (covered.has(scope.id)
-    ? { ...scope, level: Math.min(scope.level, covered.get(scope.id)), covered: true }
-    : { ...scope, covered: false }));
-
   const highest = Math.max(
     0,
     ...spheres.map((entry) => entry.level),
-    ...effectiveScopes.map((entry) => entry.level)
+    ...scopes.map((entry) => entry.level)
   );
-  const countedScopes = effectiveScopes.filter((entry) => !entry.covered).length;
-  const extraScopes = Math.max(countedScopes - 1, 0);
+  const extraScopes = Math.max(scopes.length - 1, 0);
   const manySpheres = spheres.length >= 3 ? 1 : 0;
   // Il tetto 7 vale sul livello (e sulle tre Sfere); gli Ambiti oltre il
   // primo lo superano (regola di Blue del 4/9 notte).
   return Math.min(highest + manySpheres, THRESHOLD_CAP) + extraScopes;
 }
 
+/**
+ * I successi automatici delle Specialità (verdetto di Blue, 4/9 notte):
+ * quando una Sfera nel lancio ha la Specialità su un Ambito dichiarato,
+ * il tiro parte con tanti successi quanto l'Areté. Una volta sola, anche
+ * con più Specialità in gioco. Torna il conto e le coppie che lo danno.
+ */
+export function calculateAutomaticSuccesses({ sphereLevels = [], scopeLevels = [], specialties = {}, arete = 0 } = {}) {
+  const spheres = levelEntries(sphereLevels, 5);
+  const scopes = levelEntries(scopeLevels, THRESHOLD_CAP);
+  const pairs = [];
+  for (const [sphereId, scopeId] of Object.entries(specialties ?? {})) {
+    if (!scopeId) continue;
+    const sphere = spheres.find((entry) => entry.id === sphereId);
+    const scope = scopes.find((entry) => entry.id === String(scopeId));
+    if (sphere && scope) pairs.push({ sphere: sphereId, scope: String(scopeId) });
+  }
+  const value = Math.max(Math.trunc(Number(arete) || 0), 0);
+  return { successes: pairs.length ? value : 0, pairs };
+}
+
 /** Vittoria automatica: riserva almeno doppia della soglia, non si tira. */
-export function isAutomaticVictory(pool, threshold) {
+export function isAutomaticVictory(pool, threshold, automaticSuccesses = 0) {
   const goal = Math.max(Math.trunc(Number(threshold) || 0), 0);
-  return goal > 0 && Math.max(Math.trunc(Number(pool) || 0), 0) >= goal * 2;
+  if (goal <= 0) return false;
+  // I successi automatici delle Specialità che coprono la soglia: non si tira.
+  if (Math.max(Math.trunc(Number(automaticSuccesses) || 0), 0) >= goal) return true;
+  return Math.max(Math.trunc(Number(pool) || 0), 0) >= goal * 2;
 }
 
 /** A un passo: riuscita a un prezzo se mancano al massimo Areté successi. */
@@ -313,12 +321,19 @@ function wireDifficulty(dialog) {
   const prizeBox = root.querySelector("input[name=prize]");
   const harmony = root.querySelector("#wod5e-mage-arete-harmony");
 
+  const autoSuccessOut = root.querySelector("[data-role=autoSuccesses]");
+  const areteValue = Math.max(Math.trunc(Number(root.querySelector(".wod5e-mage-arete-form")?.dataset.arete) || 0), 0);
+
   const update = () => {
-    const threshold = calculateMagickThreshold({
-      sphereLevels: readDotRows(root, "sphere"),
-      scopeLevels: readDotRows(root, "scope"),
-      specialties: readSpecialties(root)
-    });
+    const sphereLevels = readDotRows(root, "sphere");
+    const scopeLevels = readDotRows(root, "scope");
+    const threshold = calculateMagickThreshold({ sphereLevels, scopeLevels });
+    const automaticSuccesses = calculateAutomaticSuccesses({
+      sphereLevels,
+      scopeLevels,
+      specialties: readSpecialties(root),
+      arete: areteValue
+    }).successes;
 
     const prizeDice = prizeBox?.checked
       ? Math.max(Math.trunc(Number(prizeBox.dataset.value) || 0), 0)
@@ -328,7 +343,12 @@ function wireDifficulty(dialog) {
 
     thresholdOut.textContent = String(threshold);
     poolOut.textContent = String(pool);
-    autoOut?.classList.toggle("hidden", !isAutomaticVictory(pool, threshold));
+    if (autoSuccessOut) {
+      autoSuccessOut.textContent = automaticSuccesses > 0
+        ? game.i18n.format("WOD5E_MAGE.Arete.AutoSuccesses", { successes: automaticSuccesses })
+        : "";
+    }
+    autoOut?.classList.toggle("hidden", !isAutomaticVictory(pool, threshold, automaticSuccesses));
   };
 
   [attribute, primary, secondary, prizeBox, harmony].forEach((control) => {
@@ -495,9 +515,16 @@ export async function onAreteRoll(event) {
 
   const threshold = calculateMagickThreshold({
     sphereLevels: sphereEntries,
-    scopeLevels: scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level })),
-    specialties
+    scopeLevels: scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level }))
   });
+  // Le Specialità: successi automatici pari all'Areté, la soglia non si tocca.
+  const automatic_ = calculateAutomaticSuccesses({
+    sphereLevels: sphereEntries,
+    scopeLevels: scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level })),
+    specialties,
+    arete: arete.value
+  });
+  const autoSuccesses = automatic_.successes;
 
   const prizeDice = options.usePrize ? prize.dice : 0;
   const bonusDice = prizeDice + options.harmony;
@@ -532,6 +559,12 @@ export async function onAreteRoll(event) {
   if (options.harmony > 0) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.HarmonyFlavor", { dice: options.harmony }));
   }
+  if (autoSuccesses > 0) {
+    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.AutoSuccessesFlavor", {
+      successes: autoSuccesses,
+      pairs: automatic_.pairs.map((pair) => `${game.i18n.localize(`WOD5E_MAGE.Spheres.${pair.sphere}`)} ◆ ${game.i18n.localize(`WOD5E_MAGE.Scopes.${pair.scope}`)}`).join(", ")
+    }));
+  }
   // La carta del tiro: una riga per voce sotto i dadi, i simboli sopra.
   const localize = game.i18n.localize.bind(game.i18n);
   const scopeLevels = scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level }));
@@ -549,7 +582,7 @@ export async function onAreteRoll(event) {
   // La vittoria automatica: riserva almeno doppia della soglia, non si tira.
   // Nel Volgare si tirano comunque i soli dadi rossi, per il Contraccolpo;
   // se scatta, l'Ustione è pari alla soglia.
-  const automatic = isAutomaticVictory(dicePool, threshold);
+  const automatic = isAutomaticVictory(dicePool, threshold, autoSuccesses);
   const paradoxGain = paradoxGainForMagickType(options);
   if (automatic && paradoxGain === 0) {
     const notes = [renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.AutoVictoryChat", { pool: dicePool, threshold }))];
@@ -606,6 +639,7 @@ export async function onAreteRoll(event) {
       difficulty: automatic ? 0 : threshold,
       burn: threshold,
       arete: arete.value,
+      autoSuccesses: automatic ? 0 : autoSuccesses,
       title: rollLabel,
       flavor,
       // Sopra i dadi, in chat: i simboli e la vittoria automatica.

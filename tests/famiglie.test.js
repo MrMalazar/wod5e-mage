@@ -5,6 +5,7 @@ import {
   FAMIGLIE,
   findFamiglia,
   findSottofamiglia,
+  isBlankNote,
   lineageSphereChanges,
   lineageSpheres,
   prepareLineageChoices
@@ -59,12 +60,19 @@ assert.deepEqual(
   lineageSphereChanges({ ...empty, lineage: { famiglia: "hermes" } }, { flags: { "wod5e-mage": { lineage: { famiglia: "hermes", sottofamiglia: "quaesitor" } } } }),
   { selectedSpheres: { correspondence: true }, familySpheres: { correspondence: true }, spheres: { correspondence: 1 } }
 );
-// Il Credo sblocca le sue due Sfere senza il pallino; sciolto, niente.
-assert.deepEqual(
-  lineageSphereChanges(empty, { flags: { "wod5e-mage": { focus: { credo: "arte" } } } }),
-  { selectedSpheres: { matter: true, mind: true }, familySpheres: { matter: true, mind: true } }
-);
-assert.equal(lineageSphereChanges(empty, { flags: { "wod5e-mage": { focus: { credo: "potere" } } } }), null);
+// Il Credo sblocca le sue due Sfere senza il pallino, e scrive cos'è ogni
+// Sfera nella sua ottica nelle caselle vuote (le parole del giocatore restano).
+const arte = lineageSphereChanges({ ...empty, sphereNotes: { forces: "<p>la mia</p>", mind: "<p></p>" } }, { flags: { "wod5e-mage": { focus: { credo: "arte", sphereNotes: { time: "scritta ora" } } } } });
+assert.deepEqual(arte.selectedSpheres, { matter: true, mind: true });
+assert.deepEqual(arte.familySpheres, { matter: true, mind: true });
+assert.deepEqual(Object.keys(arte.focus.sphereNotes).sort(), ["correspondence", "entropy", "life", "matter", "mind", "prime", "spirit"]);
+assert.match(arte.focus.sphereNotes.correspondence, /^<p>Corrispondenza è la Tela\./);
+// Potere è sciolto sulle Sfere di famiglia, ma ha le sue nove righe.
+const potere = lineageSphereChanges(empty, { flags: { "wod5e-mage": { focus: { credo: "potere" } } } });
+assert.equal(potere.selectedSpheres, undefined);
+assert.equal(Object.keys(potere.focus.sphereNotes).length, 9);
+assert.equal(isBlankNote("<p>&nbsp;</p>"), true);
+assert.equal(isBlankNote("<p>x</p>"), false);
 // Niente cambia: niente da fondere.
 assert.equal(lineageSphereChanges({ ...empty, lineage: { famiglia: "hermes" }, credo: "arte" }, { flags: { "wod5e-mage": { lineage: { famiglia: "hermes" }, focus: { credo: "arte" } } } }), null);
 assert.equal(lineageSphereChanges(empty, { system: { headers: { concept: "x" } } }), null);
@@ -85,9 +93,10 @@ assert.equal(prepareLineageChoices({ famiglia: "hollow" }).familySphere, null);
 assert.equal(prepareLineageChoices({ famiglia: "hermes" }).subSphere, null);
 
 // La pagina e l'avvio.
-const personaggio = readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");
-assert.match(personaggio, /<select name="flags\.wod5e-mage\.lineage\.famiglia"[\s\S]*lineageChoices\.groups[\s\S]*<select name="flags\.wod5e-mage\.lineage\.sottofamiglia"/);
-assert.doesNotMatch(personaggio, /<input type="text" name="flags\.wod5e-mage\.lineage\.famiglia"/);
+// Le tendine stanno in testata (appartenenza.hbs), non più nel Personaggio.
+const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza.hbs", import.meta.url), "utf8");
+assert.match(appartenenza, /<select name="flags\.wod5e-mage\.lineage\.famiglia"[\s\S]*lineageChoices\.groups[\s\S]*<select name="flags\.wod5e-mage\.lineage\.sottofamiglia"/);
+assert.doesNotMatch(appartenenza, /<input type="text" name="flags\.wod5e-mage\.lineage\.famiglia"/);
 const main = readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8");
 assert.match(main, /registerLineageSpheres\(\)/);
 for (const lang of ["it", "en"]) {

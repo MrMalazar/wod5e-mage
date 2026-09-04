@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { CREDO_SFERE } from "./data/credo-sfere.js";
 import { getSphereSelection, SPHERES } from "./spheres.js";
 
 /**
@@ -184,11 +185,36 @@ export function lineageSphereChanges(before, changes) {
   if (subChanged) unlock(findSottofamiglia(famiglia, sottofamiglia)?.sphere, true);
   if (credoChanged) for (const id of CREDO_SPHERES[credo] ?? []) unlock(id, false);
 
+  // Il Credo scelto scrive cos'è ogni Sfera nella sua ottica (studi dei Credi),
+  // solo nelle caselle vuote: le parole del giocatore restano sue.
+  if (credoChanged && CREDO_SFERE[credo]) {
+    const notesNow = { ...(before.sphereNotes ?? {}), ...(flags.focus?.sphereNotes ?? {}) };
+    const sphereNotes = {};
+    for (const [id, text] of Object.entries(CREDO_SFERE[credo])) {
+      if (!SPHERES.includes(id) || !isBlankNote(notesNow[id])) continue;
+      sphereNotes[id] = `<p>${escapeHtml(text)}</p>`;
+    }
+    if (Object.keys(sphereNotes).length) out.focus = { sphereNotes };
+  }
+
   const result = {};
   for (const [key, value] of Object.entries(out)) {
     if (Object.keys(value).length) result[key] = value;
   }
   return Object.keys(result).length ? result : null;
+}
+
+/** Una nota vuota: niente, o solo un paragrafo senza parole. */
+export function isBlankNote(value) {
+  return !String(value ?? "").replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 /** Le tendine della pagina Personaggio. */
@@ -227,9 +253,11 @@ function sphereBadge(id, localize) {
 
 /** L'attore com'è adesso, per lineageSphereChanges. */
 export function lineageStateOf(actor) {
+  const focus = actor.getFlag(MODULE_ID, "focus") ?? {};
   return {
     lineage: actor.getFlag(MODULE_ID, "lineage") ?? {},
-    credo: actor.getFlag(MODULE_ID, "focus")?.credo ?? "",
+    credo: focus.credo ?? "",
+    sphereNotes: focus.sphereNotes ?? {},
     spheres: actor.getFlag(MODULE_ID, "spheres") ?? {}
   };
 }
@@ -245,10 +273,7 @@ export function registerLineageSpheres() {
     if (extra.selectedSpheres && !actor.getFlag(MODULE_ID, "selectedSpheres")) {
       extra.selectedSpheres = { ...getSphereSelection(actor), ...extra.selectedSpheres };
     }
-    for (const [key, value] of Object.entries(extra)) {
-      for (const [id, entry] of Object.entries(value)) {
-        foundry.utils.setProperty(changes, `flags.${MODULE_ID}.${key}.${id}`, entry);
-      }
-    }
+    // Fusione profonda: le note del Credo si aggiungono a quelle già nel diff.
+    foundry.utils.mergeObject(changes, foundry.utils.expandObject({ [`flags.${MODULE_ID}`]: extra }), { inplace: true });
   });
 }

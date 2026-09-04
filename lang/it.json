@@ -116,7 +116,7 @@
       "HarmonyFlavor": "Armonia {dice}",
       "Pool": "Riserva",
       "Threshold": "Soglia",
-      "ThresholdHint": "La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto, +1 con tre o più Sfere, tetto 7; poi +1 per ogni Ambito oltre il primo, e questi superano il tetto. Clicca i pallini: il livello della Sfera che usi, il livello di ogni Ambito.",
+      "ThresholdHint": "La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto, +1 con tre o più Sfere, tetto 7; poi +1 per ogni Ambito oltre il primo, e questi superano il tetto. Clicca i pallini: il livello della Sfera che usi, il livello di ogni Ambito. Una Specialità sull'Ambito dichiarato dà successi automatici pari all'Areté.",
       "AutoVictory": "Vittoria automatica: la riserva è almeno il doppio della soglia, non si tira. Nel Volgare si tirano solo i rossi.",
       "AutoVictoryChat": "Vittoria automatica: riserva {pool} contro soglia {threshold}, non si tira.",
       "AutoVictoryBanner": "Vittoria automatica",
@@ -124,11 +124,13 @@
       "OneStep": "A un passo: mancano {missing} successi, entro l'Areté ({arete}). Riuscita a un prezzo.",
       "BonusCap": "Tetto +3: {excess} dadi in meno.",
       "SpherePlan": "Sfere: {plans}.",
-      "SpecialtyHint": "Specialità: questo Ambito conta come il minore fra la Sfera e il suo livello, e non pesa come Ambito in più.",
+      "SpecialtyHint": "Specialità: se dichiari questo Ambito, il tiro parte con tanti successi quanto l'Areté. La soglia non cambia.",
       "HarmonyShort": "dadi dagli altri Maghi",
-      "ThresholdShort": "Soglia: il maggiore fra Sfera e Ambito, +1 con tre Sfere, tetto 7. Gli Ambiti oltre il primo danno +1 l'uno e superano il tetto.",
+      "ThresholdShort": "Soglia: il maggiore fra Sfera e Ambito, +1 con tre Sfere, tetto 7. Gli Ambiti oltre il primo danno +1 l'uno e superano il tetto. La Specialità sull'Ambito dà successi automatici pari all'Areté.",
       "ScopeTable": "La tavola degli Ambiti",
-      "Backlash": "CONTRACCOLPO: {eyes} occhi sui rossi. Ustione {burn}: segna {burn} danni sulla Salute."
+      "Backlash": "CONTRACCOLPO: {eyes} occhi sui rossi. Ustione {burn}: segna {burn} danni sulla Salute.",
+      "AutoSuccesses": "· Successi automatici: {successes}",
+      "AutoSuccessesFlavor": "{successes} successi automatici (Areté, Specialità: {pairs})"
     },
     "Focus": {
       "Credo": "Credo",
@@ -213,7 +215,8 @@
       "SuggestFromSubfamily": "Dalla Sottofamiglia",
       "SuggestNoneForType": "Per questa Sfera e questo Tipo il Credo non ha un esempio.",
       "SuggestApply": "Metti Strumento ed esempio nella riga",
-      "SuggestApplyName": "Metti il testo nella riga (lo Strumento lo scegli in tendina)"
+      "SuggestApplyName": "Metti il testo nella riga (lo Strumento lo scegli in tendina)",
+      "CredoHere": "Si sceglie in testata; qui in parole tue"
     },
     "ConceptChallenge": {
       "Label": "La sfida del concetto",
@@ -630,7 +633,8 @@
       "NameHint": "es. Serrature, Chirurgia, Pistole",
       "Hint": "Vale un dado in più quando la specializzazione conta nel tiro.",
       "Empty": "Nessuna Specializzazione: il + ne aggiunge una (Abilità e nome).",
-      "Incomplete": "Serve un'Abilità e il nome della Specializzazione."
+      "Incomplete": "Serve un'Abilità e il nome della Specializzazione.",
+      "Roll": "Tira con la Specializzazione: il dado in più è già dentro"
     },
     "SphereSpecialties": {
       "Label": "Specialità delle Sfere",
@@ -736,6 +740,15 @@
       "Lineage": "Reset Appartenenza",
       "Compass": "Reset Bussola",
       "Confirm": "{label}: azzera questa parte della scheda. Vuoi procedere?"
+    },
+    "Note": {
+      "Add": "Aggiungi un riquadro",
+      "Remove": "Togli il riquadro",
+      "Title": "Titolo",
+      "TitleHint": "Titolo del riquadro",
+      "Text": "Testo",
+      "TextHint": "Scrivi qui",
+      "Empty": "Niente ancora: il + aggiunge un riquadro con un titolo e un testo."
     }
   },
   "WOD5E": {

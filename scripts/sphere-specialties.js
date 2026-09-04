@@ -22,19 +22,37 @@ function readPowers(item) {
   return item?.flags?.[MODULE_ID]?.[AFFINITY_SPHERE_FLAG];
 }
 
+// I poteri letti una volta per lingua: il compendio non cambia in sessione,
+// e rileggerlo a ogni render della scheda la rallentava (4/9 notte).
+const powersCache = new Map();
+
+export function clearSpherePowersCache() {
+  powersCache.clear();
+}
+
 /** I poteri passivi di ogni Sfera, dal compendio nella lingua attiva. */
 export async function loadSpherePowers({
   getPack = (packId) => globalThis.game?.packs?.get?.(packId),
-  lang = globalThis.game?.i18n?.lang
+  lang = globalThis.game?.i18n?.lang,
+  cache = true
 } = {}) {
-  const pack = getPack?.(getAffinitySpherePackId(lang));
-  const documents = (await pack?.getDocuments?.()) ?? [];
-  const powers = {};
-  for (const item of documents) {
-    const sphere = affinitySphereFromItem(item);
-    if (sphere) powers[sphere.id] = sphere;
+  const packId = getAffinitySpherePackId(lang);
+  if (cache && powersCache.has(packId)) return powersCache.get(packId);
+  const load = (async () => {
+    const pack = getPack?.(packId);
+    const documents = (await pack?.getDocuments?.()) ?? [];
+    const powers = {};
+    for (const item of documents) {
+      const sphere = affinitySphereFromItem(item);
+      if (sphere) powers[sphere.id] = sphere;
+    }
+    return powers;
+  })();
+  if (cache) {
+    powersCache.set(packId, load);
+    load.catch(() => powersCache.delete(packId));
   }
-  return powers;
+  return load;
 }
 
 /** Quante Specialità dà una Sfera: una al terzo pallino, poi una per pallino. */

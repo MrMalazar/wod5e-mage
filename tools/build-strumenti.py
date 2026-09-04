@@ -153,7 +153,36 @@ def build_famiglie(ids):
     return famiglie, sottofamiglie
 
 
+SFERE_OUT = ROOT / "scripts/data/credo-sfere.js"
+
+
+def build_credo_sfere():
+    """«Le nove Sfere in questa ottica»: una riga per Sfera, per ogni Credo che le ha."""
+    out = {}
+    for path in sorted(STUDI.glob("credo_tutto_e_*.md")):
+        text = path.read_text(encoding="utf-8")
+        section = re.search(r"^## Le Sfere affini\n(.*?)(?=^## )", text, flags=re.S | re.M)
+        if not section:
+            continue
+        credo_id = path.stem.replace("credo_tutto_e_", "")
+        spheres = {}
+        for line in section.group(1).split("\n"):
+            m = re.match(r"^- (Corrispondenza|Entropia|Forza|Vita|Materia|Mente|Primordio|Spirito|Tempo)\b(.*)$", line.strip())
+            if not m:
+                continue
+            spheres[SPHERES[m.group(1)]] = (m.group(1) + m.group(2)).strip()
+        if spheres:
+            out[credo_id] = spheres
+    SFERE_OUT.write_text(
+        "// Generato da tools/build-strumenti.py dagli studi dei Credi: non toccare a mano.\n"
+        "// Cos'è ogni Sfera nell'ottica di un Credo («Le nove Sfere in questa ottica»).\n\n"
+        f"export const CREDO_SFERE = Object.freeze({json.dumps(out, ensure_ascii=False, indent=2)});\n",
+        encoding="utf-8", newline="\n")
+    print(f"Credi con le nove Sfere: {len(out)} → {SFERE_OUT.relative_to(ROOT)}")
+
+
 def main():
+    build_credo_sfere()
     ids = famiglie_ids()
     credi = build_credi()
     famiglie, sottofamiglie = build_famiglie(ids)

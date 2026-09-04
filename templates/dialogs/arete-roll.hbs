@@ -1,4 +1,4 @@
-<form class="dialog-contents wod5e-mage-arete-form">
+<form class="dialog-contents wod5e-mage-arete-form" data-arete="{{arete.value}}">
     <div class="wod5e-mage-arete-layout">
         {{!-- Colonna sinistra: le scelte e le caselle. --}}
         <div class="wod5e-mage-arete-side">
@@ -123,6 +123,7 @@
             <p class="wod5e-mage-arete-difficulty">
                 {{localize "WOD5E_MAGE.Arete.Pool"}}: <strong data-role="pool">0</strong>
                 · {{localize "WOD5E_MAGE.Arete.Threshold"}}: <strong data-role="threshold">0</strong>
+                <span class="wod5e-mage-arete-autosuccess" data-role="autoSuccesses"></span>
             </p>
             <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Arete.ThresholdShort"}}</p>
             <p class="wod5e-mage-arete-auto hidden" data-role="autoVictory">{{localize "WOD5E_MAGE.Arete.AutoVictory"}}</p>

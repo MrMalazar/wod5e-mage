@@ -199,7 +199,92 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-spacer {
+  align-items: flex-start;
+  display: flex;
+  justify-content: flex-end;
   min-height: 1px;
+}
+
+/* L'Appartenenza a tendina, in alto a destra della testata. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza {
+  background: rgb(20 16 10 / 72%);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  margin: 0.35rem 0.5rem 0 0;
+  max-width: 320px;
+  min-width: 0;
+  padding: 0.3rem 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza > summary {
+  align-items: center;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.72rem;
+  font-weight: 700;
+  gap: 0.4rem;
+  letter-spacing: 0.08em;
+  list-style: none;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza > summary > i {
+  font-size: 0.6rem;
+  transform: rotate(-90deg);
+  transition: transform 0.15s;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza[open] > summary > i {
+  transform: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza > summary > small {
+  color: var(--mage-oro-chiaro);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-left: auto;
+  text-transform: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-body {
+  display: grid;
+  gap: 0.4rem;
+  padding-top: 0.4rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-body .wod5e-mage-lineage-grid {
+  gap: 0.4rem;
+  grid-template-columns: minmax(0, 1fr);
+  margin-bottom: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-credo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-credo > span {
+  align-items: center;
+  color: var(--mage-oro);
+  display: flex;
+  font-size: 0.7rem;
+  font-weight: 700;
+  gap: 0.35rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-credo > select {
+  font-size: 0.85rem;
+  height: 26px;
+  margin: 0;
+  width: 100%;
 }
 
 /* La Salute (ramo A): un tracciato solo, quattro segni. Le caselle sono
@@ -3871,4 +3956,85 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-reset-row > button:hover {
   box-shadow: 0 0 4px var(--mage-oro);
+}
+
+/* Le Note: riquadri liberi, un titolo corto e un testo lungo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-head {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-list {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem 1rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-block {
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-block-head {
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-block-head > input {
+  --input-text-color: var(--mage-inchiostro);
+  color: var(--mage-inchiostro);
+  flex: 1 1 auto;
+  font-weight: 700;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-block-head > button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-oro-chiaro);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 26px;
+  height: 26px;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-block > textarea {
+  --input-text-color: var(--mage-inchiostro);
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-inchiostro);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  min-height: 120px;
+  padding: 0.4rem 0.5rem;
+  resize: vertical;
+  width: 100%;
+}
+
+/* Niente pannello dei modificatori nei tiri del Mago (4/9 notte): le
+   Condizioni restano attive sotto, la Specializzazione entra dal suo clic. */
+.wod5e-mage-roll-dialog .situational-modifiers {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-specialty-roll {
+  cursor: pointer;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-specialty-roll:hover {
+  color: var(--mage-oro);
+  text-shadow: 0 0 4px rgb(152 119 43 / 60%);
 }

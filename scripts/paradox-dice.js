@@ -197,6 +197,7 @@ export async function rollAreteWithParadox({
   difficulty = 0,
   burn = 0,
   arete = 0,
+  autoSuccesses = 0,
   title,
   flavor,
   card = null,
@@ -296,7 +297,7 @@ export async function rollAreteWithParadox({
           roll._total = calculateAreteSuccesses(
             roll.basicDice?.results ?? [],
             roll.advancedDice?.results ?? []
-          );
+          ) + Math.max(Math.trunc(Number(autoSuccesses) || 0), 0);
 
           // A un passo (ramo A): sotto la soglia di al massimo Areté
           // successi, la riuscita ha un prezzo. Il messaggio lo dice.

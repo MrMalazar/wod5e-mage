@@ -119,7 +119,12 @@ const credoConviction = prepareConvictions(mageActor({
 assert.equal(credoConviction.credos.find((group) => group.id === "arte").selected, true);
 assert.equal(credoConviction.serve, "lasci l'opera parlare");
 assert.match(personaggioSource(), /convinzioni\.\{\{row\.id\}\}\.serve[\s\S]*convinzioni\.\{\{row\.id\}\}\.cross/);
-assert.match(personaggioSource(), /wod5e-mage-lineage-pick[\s\S]*lineageChoices\.familySphere\.icon[\s\S]*lineageChoices\.subSphere\.icon/);
+// L'Appartenenza sta in testata (4/9 notte), non più nel Personaggio.
+assert.doesNotMatch(personaggioSource(), /flags\.wod5e-mage\.lineage/);
+const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza.hbs", import.meta.url), "utf8");
+assert.match(appartenenza, /<details class="wod5e-mage-appartenenza">[\s\S]*lineage\.fazione[\s\S]*wod5e-mage-lineage-pick[\s\S]*lineageChoices\.familySphere\.icon[\s\S]*lineageChoices\.subSphere\.icon[\s\S]*flags\.wod5e-mage\.focus\.credo/);
+assert.match(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /parts\/appartenenza\.hbs/);
+assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8"), /<select name="flags\.wod5e-mage\.focus\.credo"/);
 function personaggioSource() {
   return readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");
 }

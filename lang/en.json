@@ -124,11 +124,13 @@
       "OneStep": "One step short: {missing} successes missing, within Arete ({arete}). Success at a price.",
       "BonusCap": "+3 cap: {excess} fewer dice.",
       "SpherePlan": "Spheres: {plans}.",
-      "SpecialtyHint": "Speciality: this Scope counts as the lower of the Sphere and its own level, and does not weigh as an extra Scope.",
+      "SpecialtyHint": "Specialty: declare this Scope and the roll starts with as many successes as your Arete. The threshold does not change.",
       "HarmonyShort": "dice from other Mages",
       "ThresholdShort": "Threshold: the higher of Sphere and Scope, +1 with three Spheres, cap 7. Scopes beyond the first add +1 each and go past the cap.",
       "ScopeTable": "The Scopes table",
-      "Backlash": "BACKLASH: {eyes} eyes on the red dice. Burn {burn}: mark {burn} damage on Health."
+      "Backlash": "BACKLASH: {eyes} eyes on the red dice. Burn {burn}: mark {burn} damage on Health.",
+      "AutoSuccesses": "· Automatic successes: {successes}",
+      "AutoSuccessesFlavor": "{successes} automatic successes (Arete, Specialty: {pairs})"
     },
     "Focus": {
       "Credo": "Creed",
@@ -213,7 +215,8 @@
       "SuggestFromSubfamily": "From the Subfamily",
       "SuggestNoneForType": "For this Sphere and this Type the Creed has no example.",
       "SuggestApply": "Put the Instrument and example in the row",
-      "SuggestApplyName": "Put the text in the row (pick the Instrument from the list)"
+      "SuggestApplyName": "Put the text in the row (pick the Instrument from the list)",
+      "CredoHere": "Chosen in the header; here in your words"
     },
     "ConceptChallenge": {
       "Label": "The Concept Challenge",
@@ -630,7 +633,8 @@
       "NameHint": "e.g. Locks, Surgery, Pistols",
       "Hint": "Worth one extra die whenever the specialty applies to the roll.",
       "Empty": "No Specialty: + adds one (Skill and name).",
-      "Incomplete": "A Skill and the Specialty name are both needed."
+      "Incomplete": "A Skill and the Specialty name are both needed.",
+      "Roll": "Roll with the Specialty: the extra die is already in"
     },
     "SphereSpecialties": {
       "Label": "Sphere Specialities",
@@ -736,6 +740,15 @@
       "Lineage": "Reset Lineage",
       "Compass": "Reset Compass",
       "Confirm": "{label}: this clears that part of the sheet. Proceed?"
+    },
+    "Note": {
+      "Add": "Add a box",
+      "Remove": "Remove the box",
+      "Title": "Title",
+      "TitleHint": "Box title",
+      "Text": "Text",
+      "TextHint": "Write here",
+      "Empty": "Nothing yet: + adds a box with a title and a text."
     }
   }
 }

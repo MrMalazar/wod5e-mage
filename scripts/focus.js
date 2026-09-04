@@ -188,6 +188,7 @@ export async function prepareFocus(actor, enrichHTML) {
 
   return {
     credo,
+    credoLabel: FOCUS_CREDOS.includes(credo) ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "",
     credos: FOCUS_CREDOS.map((id) => ({
       id,
       label: localize(`WOD5E_MAGE.Focus.Credos.${id}`),

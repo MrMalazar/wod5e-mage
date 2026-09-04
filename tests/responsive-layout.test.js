@@ -161,7 +161,7 @@ assert.doesNotMatch(tabNavigation, /class="navlabel"/);
 // lo spacer destro impedisce al ritratto di slittare sul bordo.
 assert.match(
   mageHeader,
-  /<div class="header-fields">[\s\S]*<div class="header-profile">[\s\S]*<div class="header-fields wod5e-mage-header-spacer" aria-hidden="true"><\/div>/
+  /<div class="header-fields">[\s\S]*<div class="header-profile">[\s\S]*<div class="header-fields wod5e-mage-header-spacer">[\s\S]*appartenenza\.hbs/
 );
 
 // Abilità e Attributi: pallini a misura fissa con aria fra loro, e due

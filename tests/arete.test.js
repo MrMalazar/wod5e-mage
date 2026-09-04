@@ -3,6 +3,7 @@ import {
   bonusDiceExcess,
   calculateAretePrize,
   calculateAreteTraitPool,
+  calculateAutomaticSuccesses,
   calculateMagickThreshold,
   capBonusDice,
   getArete,
@@ -63,23 +64,33 @@ assert.equal(calculateMagickThreshold({ sphereLevels: [5], scopeLevels: [7, 1] }
 assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [0] }), 1);
 assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [9] }), 7);
 
-// Le Specialità: l'esempio di Blue (Mente 3 con Bersagli, Bersagli 4,
-// Portata 4): Bersagli conta come il minore (3) e non pesa come Ambito in
-// più, la soglia è 4. Senza Mente nel lancio la Specialità non parla.
+// Le Specialità non toccano più la soglia (verdetto di Blue, 4/9 notte):
+// Mente 3 con Bersagli 4 e Portata 4 fa 5, con o senza Specialità.
 assert.equal(calculateMagickThreshold({
   sphereLevels: [{ id: "mind", level: 3 }],
   scopeLevels: [{ id: "targets", level: 4 }, { id: "range", level: 4 }],
   specialties: { mind: "targets" }
-}), 4);
-assert.equal(calculateMagickThreshold({
-  sphereLevels: [{ id: "mind", level: 3 }],
-  scopeLevels: [{ id: "targets", level: 4 }, { id: "range", level: 4 }]
 }), 5);
-assert.equal(calculateMagickThreshold({
-  sphereLevels: [{ id: "forces", level: 2 }],
-  scopeLevels: [{ id: "targets", level: 4 }],
-  specialties: { mind: "targets" }
-}), 4);
+// Danno successi automatici pari all'Areté quando la Sfera è nel lancio e
+// l'Ambito è dichiarato; una volta sola; senza la coppia, niente.
+assert.deepEqual(calculateAutomaticSuccesses({
+  sphereLevels: [{ id: "forces", level: 3 }],
+  scopeLevels: [{ id: "power", level: 7 }],
+  specialties: { forces: "power" },
+  arete: 2
+}), { successes: 2, pairs: [{ sphere: "forces", scope: "power" }] });
+assert.deepEqual(calculateAutomaticSuccesses({
+  sphereLevels: [{ id: "forces", level: 3 }, { id: "mind", level: 2 }],
+  scopeLevels: [{ id: "power", level: 7 }, { id: "targets", level: 2 }],
+  specialties: { forces: "power", mind: "targets" },
+  arete: 3
+}).successes, 3);
+assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "forces", level: 3 }], scopeLevels: [{ id: "range", level: 2 }], specialties: { forces: "power" }, arete: 2 }).successes, 0);
+assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "mind", level: 3 }], scopeLevels: [{ id: "power", level: 2 }], specialties: { forces: "power" }, arete: 2 }).successes, 0);
+assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "forces", level: 3 }], scopeLevels: [{ id: "power", level: 2 }], specialties: { forces: "power" }, arete: 0 }).successes, 0);
+// Coprono la soglia: vittoria automatica senza tirare.
+assert.equal(isAutomaticVictory(3, 4, 4), true);
+assert.equal(isAutomaticVictory(3, 4, 3), false);
 
 // Vittoria automatica: riserva almeno doppia della soglia.
 assert.equal(isAutomaticVictory(8, 4), true);

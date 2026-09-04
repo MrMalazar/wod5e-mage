@@ -142,8 +142,9 @@ const personaggio = readFileSync(new URL("../templates/actor/parts/personaggio.h
 for (const kind of ["concetto", "ambizione", "desiderio", "ancora", "convinzione"]) {
   assert.match(personaggio, new RegExp(`data-action="archivioOpen" data-kind="${kind}"`), kind);
 }
-const focus = readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8");
-assert.match(focus, /data-action="archivioOpen" data-kind="credo"/);
+// Il libro del Credo sta in testata, con la tendina (4/9 notte).
+const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza.hbs", import.meta.url), "utf8");
+assert.match(appartenenza, /data-action="archivioOpen" data-kind="credo"/);
 const features = readFileSync(new URL("../templates/actor/parts/core-features.hbs", import.meta.url), "utf8");
 assert.match(features, /data-action="archivioOpen" data-subtype="\{\{key\}\}"[\s\S]*data-action="createItem"/);
 const dotazione = readFileSync(new URL("../templates/actor/parts/dotazione.hbs", import.meta.url), "utf8");
