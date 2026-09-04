@@ -4038,3 +4038,60 @@
   color: var(--mage-oro);
   text-shadow: 0 0 4px rgb(152 119 43 / 60%);
 }
+
+/* Le Condizioni addosso: righe con simbolo, nome, cos'è e dadi. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condition-row {
+  align-items: center;
+  border-bottom: 1px solid rgb(152 119 43 / 25%);
+  display: grid;
+  gap: 0.4rem;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  padding: 0.25rem 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condition-row.suppressed {
+  opacity: 0.5;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condition-row .item-image {
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  display: inline-flex;
+  padding: 1px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condition-row .item-image > img {
+  border: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condition-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condition-text > strong {
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condition-text > strong > em {
+  color: var(--mage-oro);
+  font-style: normal;
+  font-weight: 700;
+  margin-left: 0.25rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condition-text > small {
+  color: var(--mage-oro-chiaro);
+  font-size: 0.7rem;
+  line-height: 1.2;
+  opacity: 0.85;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condition-row .item-controls {
+  display: flex;
+  gap: 0.3rem;
+}

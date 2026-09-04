@@ -3,6 +3,7 @@ import { prepareEssentialSkills } from "../abilita-essenziali.js";
 import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../abilita-specifiche.js";
 import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
+import { prepareConditionRows } from "../condizioni.js";
 import { onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResets } from "../reset.js";
 import { onStrumentiSuggest } from "../strumenti.js";
@@ -141,6 +142,7 @@ export class MageActorSheet extends MortalActorSheet {
       template: `${MODULE}/mage-header.hbs`,
       templates: [
         `${MODULE}/parts/salute.hbs`,
+        `${MODULE}/parts/appartenenza.hbs`,
         `${SYSTEM}/header-profile.hbs`
       ]
     },
@@ -298,6 +300,8 @@ export class MageActorSheet extends MortalActorSheet {
       context.bonuses = prepareBonuses(actor);
       // I tasti di reset in fondo al memo.
       context.resets = prepareResets(game.i18n.localize.bind(game.i18n));
+      // Le Condizioni addosso: righe con simbolo, nome, cos'è e dadi.
+      context.condizioniRows = prepareConditionRows(actor.items);
       // Le Specializzazioni delle Abilità, lette dai bonuses del sistema.
       context.specialties = prepareSpecialties(actor, {
         localize: game.i18n.localize.bind(game.i18n),

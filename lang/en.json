@@ -749,6 +749,9 @@
       "Text": "Text",
       "TextHint": "Write here",
       "Empty": "Nothing yet: + adds a box with a title and a text."
+    },
+    "Condizioni": {
+      "Empty": "No Condition on you: + opens the archive, by category."
     }
   }
 }

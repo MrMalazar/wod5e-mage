@@ -749,6 +749,9 @@
       "Text": "Testo",
       "TextHint": "Scrivi qui",
       "Empty": "Niente ancora: il + aggiunge un riquadro con un titolo e un testo."
+    },
+    "Condizioni": {
+      "Empty": "Nessuna Condizione addosso: il + apre l'archivio, per categoria."
     }
   },
   "WOD5E": {

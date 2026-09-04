@@ -35,3 +35,43 @@ export function condizioneItemData(entry) {
     flags: { [MODULE_ID]: { [CONDIZIONE_FLAG]: entry.id } }
   };
 }
+
+/** Il testo di una descrizione, senza i tag, per una riga corta. */
+function plainText(html) {
+  return String(html ?? "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Le righe della cella Condizioni (verdetto di Blue, 4/9 notte, «strada 1»):
+ * simbolo, nome, il cos'è in piccolo e i dadi tolti. Le Condizioni di lista
+ * leggono dal modulo, le altre dal loro oggetto.
+ */
+export function prepareConditionRows(items) {
+  const rows = [];
+  for (const item of items ?? []) {
+    if (item?.type !== "condition") continue;
+    const definition = findCondizione(condizioneIdOf(item));
+    const bonuses = definition?.bonuses ?? item.system?.bonuses ?? [];
+    const dice = bonuses
+      .map((bonus) => Number(bonus?.value) || 0)
+      .filter((value) => value !== 0)
+      .map((value) => (value > 0 ? `+${value}` : String(value)))
+      .join(" ");
+    rows.push({
+      id: item.id ?? item._id,
+      uuid: item.uuid ?? "",
+      img: item.img,
+      name: item.name,
+      what: definition?.what ?? plainText(item.system?.description).slice(0, 90),
+      effect: definition?.effect ?? "",
+      dice,
+      suppressed: Boolean(item.system?.suppressed)
+    });
+  }
+  return rows;
+}
+
+function condizioneIdOf(item) {
+  const flags = item?.flags?.[MODULE_ID] ?? {};
+  return String(flags[CONDIZIONE_FLAG] ?? "");
+}
