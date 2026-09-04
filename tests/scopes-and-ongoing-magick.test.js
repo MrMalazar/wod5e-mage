@@ -30,10 +30,14 @@ assert.deepEqual(table.steps, [1, 2, 3, 4, 5, 6, 7]);
 assert.equal(table.rows.length, 8);
 assert.deepEqual(table.rows.map((row) => row.id), ["potency", "duration", "durationNarrative", "area", "targets", "conditions", "range", "precision"]);
 assert.equal(table.rows[2].scope, "duration");
-// La Potenza porta il segno del danno dal secondo livello; i Bersagli la persona.
-assert.equal(table.rows[0].cells[0].glyph, "");
-assert.equal(table.rows[0].cells[1].glyph, "ps");
+// La Potenza è l'Areté più il numero (al primo livello l'Areté e basta);
+// i Bersagli portano la persona, Durata narrativa e Area un simbolo per cella.
+assert.equal(table.rows[0].cells[0].arete, true);
+assert.equal(table.rows[0].cells[0].hideLabel, true);
+assert.equal(table.rows[0].cells[1].hideLabel, false);
 assert.equal(table.rows[4].cells[0].faIcon, "fa-solid fa-user");
+assert.equal(table.rows[2].cells[6].faIcon, "fa-solid fa-infinity");
+assert.equal(table.rows[3].cells[0].faIcon, "fa-solid fa-door-open");
 assert.equal(table.rows[0].cells[0].label, "WOD5E_MAGE.Scopes.Table.potency.1");
 assert.equal(table.rows[6].cells[6].label, "WOD5E_MAGE.Scopes.Table.range.7");
 // La Durata porta il simbolo del tempo, gli altri Ambiti no.

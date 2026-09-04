@@ -464,7 +464,7 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-list {
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 0.5rem;
 }
 
@@ -472,15 +472,34 @@
   background: var(--mage-velluto);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
   min-width: 0;
   padding: 0.6rem 0.75rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty.chosen {
+  border-color: var(--mage-oro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head {
   align-items: center;
   display: grid;
   gap: 0.5rem;
-  grid-template-columns: 28px minmax(0, 1fr) auto;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > img {
+  border: 0;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  height: 24px;
+  object-fit: contain;
+  width: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > strong {
+  color: var(--mage-oro-chiaro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > small {
@@ -488,34 +507,25 @@
   font-size: 0.72rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-slot {
-  border-top: 1px solid rgb(152 119 43 / 30%);
-  margin-top: 0.45rem;
-  padding-top: 0.45rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-slot > select {
-  margin: 0;
-  min-width: 0;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > img {
-  border: 0;
-  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
-  height: 26px;
-  object-fit: contain;
-  width: 26px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > strong {
+/* La tendina della Specialità: stretta quanto il testo, scura, senza il
+   bianco che stanca l'occhio. */
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-sphere-specialty > select {
+  --input-text-color: var(--mage-oro-chiaro);
+  align-self: start;
+  background-color: #17120f;
+  border: 1px solid var(--mage-oro-scuro);
   color: var(--mage-oro-chiaro);
+  font-size: 0.85rem;
+  margin: 0;
+  max-width: 100%;
+  min-width: 0;
+  width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > select {
-  margin: 0;
-  min-width: 0;
-  width: 100%;
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-sphere-specialty > select option,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-sphere-specialty > select optgroup {
+  background: #17120f;
+  color: var(--mage-oro-chiaro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-text {
@@ -1602,6 +1612,21 @@
   box-shadow: 0 0 5px var(--mage-oro);
 }
 
+/* La cella della Potenza: sigillo dell'Areté, numero, casella vuota. */
+.wod5e-mage-potency-cell {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+.wod5e-mage-arete-sigillo-small {
+  border: 0;
+  height: 14px;
+  vertical-align: middle;
+  width: 14px;
+}
+
 /* L'inserimento guidato degli oggetti: un campo per riga. */
 .wod5e-mage-item-form {
   display: flex;
@@ -1797,7 +1822,7 @@
   }
 
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-layout {

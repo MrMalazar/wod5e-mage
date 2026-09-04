@@ -18,10 +18,22 @@ export const SCOPES = Object.freeze([
  * lancio si dichiara su quale delle due corre.
  */
 export const SCOPE_TABLE_ROWS = Object.freeze([
-  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.potency", glyph: "ps" },
+  // La Potenza: il danno è l'Areté più il numero del livello, e la cella
+  // mostra il sigillo dell'Areté, il numero e la casella di Salute vuota.
+  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.potency", arete: true, glyph: "" },
   { id: "duration", scope: "duration", label: "WOD5E_MAGE.Scopes.DurationPlay", icons: true },
-  { id: "durationNarrative", scope: "duration", label: "WOD5E_MAGE.Scopes.DurationNarrative" },
-  { id: "area", scope: "area", label: "WOD5E_MAGE.Scopes.area" },
+  {
+    id: "durationNarrative",
+    scope: "duration",
+    label: "WOD5E_MAGE.Scopes.DurationNarrative",
+    faIcons: ["fa-solid fa-sun", "fa-solid fa-calendar-week", "fa-solid fa-calendar-days", "fa-solid fa-leaf", "fa-solid fa-calendar-check", "fa-solid fa-hourglass-half", "fa-solid fa-infinity"]
+  },
+  {
+    id: "area",
+    scope: "area",
+    label: "WOD5E_MAGE.Scopes.area",
+    faIcons: ["fa-solid fa-door-open", "fa-solid fa-building", "fa-solid fa-house-chimney", "fa-solid fa-city", "fa-solid fa-map", "fa-solid fa-earth-europe", "fa-solid fa-globe"]
+  },
   { id: "targets", scope: "targets", label: "WOD5E_MAGE.Scopes.targets", faIcon: "fa-solid fa-user" },
   { id: "conditions", scope: "conditions", label: "WOD5E_MAGE.Scopes.conditions" },
   { id: "range", scope: "range", label: "WOD5E_MAGE.Scopes.range" },
@@ -60,9 +72,12 @@ export function prepareScopeTable() {
         return {
           step,
           label,
-          // La Potenza porta il segno del danno accanto al numero (dal 2).
-          glyph: row.glyph && step > 1 ? row.glyph : "",
-          faIcon: row.faIcon ?? "",
+          // La Potenza: sigillo dell'Areté, numero, casella vuota.
+          arete: Boolean(row.arete),
+          // Al primo livello la Potenza è l'Areté e basta: niente numero.
+          hideLabel: Boolean(row.arete) && step === 1,
+          glyph: row.arete ? "" : (row.glyph ?? ""),
+          faIcon: row.faIcons ? row.faIcons[step - 1] : (row.faIcon ?? ""),
           icon: row.icons
             ? `modules/wod5e-mage/assets/icons/sheet/tempo/${DURATION_ICONS[step]}.svg`
             : ""

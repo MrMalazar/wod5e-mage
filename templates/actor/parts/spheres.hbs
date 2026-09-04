@@ -92,29 +92,29 @@
             {{#if sphereSpecialties.length}}
                 <div class="wod5e-mage-sphere-specialty-list">
                     {{#each sphereSpecialties as |row|}}
-                        <article class="wod5e-mage-sphere-specialty">
-                            <div class="wod5e-mage-sphere-specialty-head">
-                                <img src="{{row.icon}}" alt="">
-                                <strong>{{localize row.label}}</strong>
-                                <small>{{localize "WOD5E_MAGE.SphereSpecialties.Slots" count=row.slots.length}}</small>
-                            </div>
-                            {{#unless row.hasPowers}}
-                                <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.SphereSpecialties.MissingPack"}}</p>
-                            {{/unless}}
-                            {{#each row.slots as |slot|}}
-                                <div class="wod5e-mage-sphere-specialty-slot">
-                                    <select name="flags.wod5e-mage.sphereSpecialties.{{row.id}}.{{slot.key}}" aria-label="{{localize 'WOD5E_MAGE.SphereSpecialties.Label'}}" {{#if ../../locked}}disabled{{/if}}>
-                                        <option value="">{{localize "WOD5E_MAGE.SphereSpecialties.None"}}</option>
-                                        {{#each slot.options as |option|}}
-                                            <option value="{{option.id}}" {{#if option.selected}}selected{{/if}} {{#if option.taken}}disabled{{/if}}>{{option.label}}</option>
-                                        {{/each}}
-                                    </select>
-                                    {{#if slot.chosen}}
-                                        <div class="wod5e-mage-sphere-specialty-text">{{{slot.chosen.description}}}</div>
-                                    {{/if}}
+                        {{#unless row.hasPowers}}
+                            <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.SphereSpecialties.MissingPack"}}</p>
+                        {{/unless}}
+                        {{!-- Un riquadro per ogni Specialità: la Sfera, il numero, la
+                             tendina stretta, il testo del potere scelto. --}}
+                        {{#each row.slots as |slot|}}
+                            <article class="wod5e-mage-sphere-specialty{{#if slot.chosen}} chosen{{/if}}">
+                                <div class="wod5e-mage-sphere-specialty-head">
+                                    <img src="{{row.icon}}" alt="">
+                                    <strong>{{localize row.label}}</strong>
+                                    <small>{{localize "WOD5E_MAGE.SphereSpecialties.Slot" index=slot.index}}</small>
                                 </div>
-                            {{/each}}
-                        </article>
+                                <select name="flags.wod5e-mage.sphereSpecialties.{{row.id}}.{{slot.key}}" aria-label="{{localize 'WOD5E_MAGE.SphereSpecialties.Label'}}" {{#if ../../locked}}disabled{{/if}}>
+                                    <option value="">{{localize "WOD5E_MAGE.SphereSpecialties.None"}}</option>
+                                    {{#each slot.options as |option|}}
+                                        <option value="{{option.id}}" {{#if option.selected}}selected{{/if}} {{#if option.taken}}disabled{{/if}}>{{option.label}}</option>
+                                    {{/each}}
+                                </select>
+                                {{#if slot.chosen}}
+                                    <div class="wod5e-mage-sphere-specialty-text">{{{slot.chosen.description}}}</div>
+                                {{/if}}
+                            </article>
+                        {{/each}}
                     {{/each}}
                 </div>
             {{else}}

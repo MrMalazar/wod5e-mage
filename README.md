@@ -78,10 +78,13 @@ dot rating. Each listed Sphere displays its Influence description for ratings on
 through five, and the leftmost empty marker returns a Sphere to zero. Scopes
 are free for everyone (no Sphere unlocks or forbids one): the Traits page shows
 no Scope counters at all — the Magick tab ends with "The Scopes" table
-(seven Scopes, Precision included, over seven levels; Potency reads as damage
-per level with the damage mark: 0, 2, 5, 7, 8, 10, 13; Duration has two rows,
-play time and narrative time, and the caster says which one the effect runs
-on; Targets carry the person icon). There is no Affinity Sphere any more: at the third dot of a Sphere the
+(seven Scopes, Precision included, over seven levels; Potency reads as
+Areté plus a number per level, drawn as the Areté sigil, the number and an
+empty Health box; Duration has two rows, play time and narrative time with
+their symbols, and the caster says which one the effect runs on; Area rows
+carry a symbol per cell, Targets the person icon; Precision is described by
+example, from "that thing there" to "that atom, in that instant"). Every
+Sphere Speciality sits in its own box with a narrow dark drop-down. There is no Affinity Sphere any more: at the third dot of a Sphere the
 player picks one Sphere Speciality among the four passive powers the Spheres
 compendium lists for it (Perception, Resistance, Innate Defence and the
 Sphere's own Scope or track), and the fourth and fifth dots each grant

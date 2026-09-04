@@ -300,17 +300,17 @@
       "conditions": "Conditions",
       "range": "Range",
       "TableTitle": "The Scopes",
-      "TableHint": "Each Scope is declared with a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope; every Scope beyond the first raises it by 1. Potency: damage per level. Duration: when you cast, say whether it runs on play or on narrative time.",
+      "TableHint": "Each Scope is declared with a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope; every Scope beyond the first raises it by 1. Potency: damage is Arete plus the number. Duration: when you cast, say whether it runs on play or on narrative time.",
       "TableSuccesses": "Level →",
       "Table": {
         "potency": {
-          "1": "0",
-          "2": "2",
-          "3": "5",
-          "4": "7",
-          "5": "8",
-          "6": "10",
-          "7": "13"
+          "1": "+0",
+          "2": "+1",
+          "3": "+3",
+          "4": "+5",
+          "5": "+7",
+          "6": "+9",
+          "7": "+11"
         },
         "duration": {
           "1": "1",
@@ -358,13 +358,13 @@
           "7": "Wherever it is"
         },
         "precision": {
-          "1": "1",
-          "2": "2",
-          "3": "3",
-          "4": "4",
-          "5": "5",
-          "6": "6",
-          "7": "7"
+          "1": "That thing there",
+          "2": "The blue car",
+          "3": "The man with the raised eyebrow in the crowd",
+          "4": "The right key on the ring",
+          "5": "The needle in the haystack",
+          "6": "That hydrogen molecule",
+          "7": "That atom, in that instant"
         },
         "durationNarrative": {
           "1": "A day",
@@ -602,7 +602,8 @@
       "None": "Speciality…",
       "Empty": "No Sphere at its third dot: the Speciality comes with the third.",
       "MissingPack": "The Spheres compendium is not available.",
-      "Slots": "{count} Specialities"
+      "Slots": "{count} Specialities",
+      "Slot": "Speciality {index}"
     },
     "CustomSkills": {
       "Label": "Specific Skills",

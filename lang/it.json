@@ -300,17 +300,17 @@
       "conditions": "Condizioni",
       "range": "Portata",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto; ogni Ambito oltre il primo la alza di 1. Potenza: danni per livello. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
+      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto; ogni Ambito oltre il primo la alza di 1. Potenza: il danno è l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
       "TableSuccesses": "Livello →",
       "Table": {
         "potency": {
-          "1": "0",
-          "2": "2",
-          "3": "5",
-          "4": "7",
-          "5": "8",
-          "6": "10",
-          "7": "13"
+          "1": "+0",
+          "2": "+1",
+          "3": "+3",
+          "4": "+5",
+          "5": "+7",
+          "6": "+9",
+          "7": "+11"
         },
         "duration": {
           "1": "1",
@@ -358,13 +358,13 @@
           "7": "Ovunque sia"
         },
         "precision": {
-          "1": "1",
-          "2": "2",
-          "3": "3",
-          "4": "4",
-          "5": "5",
-          "6": "6",
-          "7": "7"
+          "1": "Quella cosa lì",
+          "2": "L'auto blu",
+          "3": "L'uomo col sopracciglio alzato nella folla",
+          "4": "La chiave giusta nel mazzo",
+          "5": "L'ago nel pagliaio",
+          "6": "Quella molecola d'idrogeno",
+          "7": "Quell'atomo, in quell'istante"
         },
         "durationNarrative": {
           "1": "Un giorno",
@@ -602,7 +602,8 @@
       "None": "Specialità…",
       "Empty": "Nessuna Sfera al terzo pallino: la Specialità arriva col terzo.",
       "MissingPack": "Il compendio delle Sfere non è disponibile.",
-      "Slots": "{count} Specialità"
+      "Slots": "{count} Specialità",
+      "Slot": "Specialità {index}"
     },
     "CustomSkills": {
       "Label": "Abilità Specifiche",
