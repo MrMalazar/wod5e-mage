@@ -69,6 +69,14 @@ const scopeTableTemplate = readFileSync(
 );
 assert.match(scopeTableTemplate, /scopeTable\.steps[\s\S]*scopeTable\.rows[\s\S]*row\.cells/);
 assert.doesNotMatch(scopeTableTemplate, /gift/);
+// Le colonne invisibili: ogni riga dice le sue, e la cella le rispetta.
+assert.deepEqual(table.rows.map((row) => row.layout), ["symbol-number-glyph", "symbol-number", "symbol-text", "symbol-text", "symbol-number", "number", "text", "text"]);
+assert.equal(table.rows[0].cells[0].number, false);
+assert.equal(table.rows[0].cells[1].number, true);
+assert.equal(table.rows[7].small, true);
+assert.equal(table.rows[7].cells[0].text, true);
+assert.match(scopeTableTemplate, /wod5e-mage-scope-cell" data-layout="\{\{cell\.layout\}\}"/);
+assert.match(scopeTableTemplate, /wod5e-mage-scope-row-small/);
 assert.doesNotMatch(scopeTableTemplate, /row\.spheres|TableSpheres/);
 
 let rows = prepareOngoingMagick(mageActor());

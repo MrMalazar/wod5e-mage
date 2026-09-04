@@ -172,7 +172,7 @@ assert.match(
 );
 assert.match(
   css,
-  /\.resource-value\s*>\s*:is\(\.resource-value-step,\s*\.resource-value-empty\)\s*\{[^}]*flex:\s*0 0 14px;[^}]*min-width:\s*14px;/s
+  /\.resource-value\s*>\s*:is\(\.resource-value-step,\s*\.resource-value-empty\)\s*\{[^}]*flex:\s*0 0 18px;[^}]*min-width:\s*18px;/s
 );
 assert.match(
   css,

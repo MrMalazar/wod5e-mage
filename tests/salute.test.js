@@ -63,7 +63,12 @@ assert.doesNotMatch(header, /health\.hbs|willpower\.hbs/);
 const track = readFileSync(new URL("../templates/actor/parts/salute.hbs", import.meta.url), "utf8");
 assert.match(track, /data-action="saluteCellChange"[\s\S]*data-index="\{\{cell\.index\}\}"/);
 assert.match(track, /data-action="saluteExtraChange"/);
-assert.match(track, /Salute\.LegendPhysical[\s\S]*Salute\.LegendMental[\s\S]*data-action="saluteNewSession"[\s\S]*data-action="saluteReset"/);
+// Niente legenda sotto il tracciato: il menù di ogni casella dice il nome
+// accanto al segno.
+assert.doesNotMatch(track, /Salute\.LegendPhysical|Salute\.LegendMental|wod5e-mage-salute-legend/);
+assert.match(track, /data-action="saluteNewSession"[\s\S]*data-action="saluteReset"/);
+const saluteScript = readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8");
+assert.match(saluteScript, /wod5e-mage-salute-menu-text/);
 const ruota = readFileSync(new URL("../templates/actor/parts/ruota.hbs", import.meta.url), "utf8");
 assert.match(ruota, /data-action="contraccolpoNega"/);
 assert.doesNotMatch(ruota, /contraccolpoReset/);

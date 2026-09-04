@@ -117,6 +117,11 @@ function askSaluteState(event, current) {
       glyph.className = "wod5e-mage-salute-glyph";
       glyph.dataset.state = state;
       button.appendChild(glyph);
+      // Il nome del segno, a destra del simbolo: fa da legenda.
+      const text = document.createElement("span");
+      text.className = "wod5e-mage-salute-menu-text";
+      text.textContent = button.title;
+      button.appendChild(text);
       button.addEventListener("click", (click) => {
         click.preventDefault();
         click.stopPropagation();

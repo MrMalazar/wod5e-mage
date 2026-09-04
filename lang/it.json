@@ -112,6 +112,7 @@
       "ThresholdHint": "La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto, +1 per ogni Ambito oltre il primo, +1 con tre o più Sfere, tetto 7. Clicca i pallini: il livello della Sfera che usi, il livello di ogni Ambito.",
       "AutoVictory": "Vittoria automatica: la riserva è almeno il doppio della soglia, non si tira. Nel Volgare si tirano solo i rossi.",
       "AutoVictoryChat": "Vittoria automatica: riserva {pool} contro soglia {threshold}, non si tira.",
+      "AutoVictoryBanner": "Vittoria automatica",
       "RedOnly": "Vittoria automatica (riserva {pool}, soglia {threshold}): si tirano solo i rossi. Se scatta il Contraccolpo, Ustione {burn}, pari alla soglia.",
       "OneStep": "A un passo: mancano {missing} successi, entro l'Areté ({arete}). Riuscita a un prezzo.",
       "BonusCap": "Tetto +3: {excess} dadi in meno.",

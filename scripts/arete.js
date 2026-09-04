@@ -10,7 +10,14 @@ import {
   selectorsForMageRollTrait
 } from "./mage-roll-selection.js";
 import { prepareSpheres } from "./spheres.js";
-import { prepareScopeTable, SCOPES } from "./scopes.js";
+import { prepareScopeTable, SCOPE_ICONS, SCOPES } from "./scopes.js";
+import {
+  ROLL_CARD_FLAG,
+  renderAutoVictoryContent,
+  renderRollCard,
+  renderRollNote,
+  rollSymbols
+} from "./roll-card.js";
 import { FOCUS_FORMS } from "./focus.js";
 import { loadSpherePowers, specialtyScopes } from "./sphere-specialties.js";
 
@@ -348,7 +355,7 @@ function wireScopeTable(dialog) {
       content: `<div class="wod5e-mage-scope-table-dialog">${content}</div>`,
       buttons: [{ action: "close", icon: "fas fa-times", label: game.i18n.localize("WOD5E.Close"), default: true }],
       classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog"],
-      position: { width: 720, height: "auto" }
+      position: { width: 860, height: "auto" }
     }).catch(() => null);
   });
 }
@@ -366,11 +373,19 @@ function wireMaintainedEffect(dialog) {
 }
 
 /** Un messaggio in chat senza dadi: la vittoria automatica accidentale. */
-async function postAutomaticVictory(actor, title, flavor) {
+/**
+ * La vittoria automatica senza dadi: scritta grande, simboli del tiro,
+ * conto e note, in un messaggio senza tiro.
+ */
+async function postAutomaticVictory(actor, title, { symbols, card, notes }) {
   return ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     flavor: title,
-    content: `<p>${flavor}</p>`
+    content: renderAutoVictoryContent(
+      { symbols, card, notes },
+      game.i18n.localize.bind(game.i18n)
+    ),
+    flags: { [MODULE_ID]: { [ROLL_CARD_FLAG]: { symbols, automatic: true } } }
   });
 }
 
@@ -407,6 +422,7 @@ export async function onAreteRoll(event) {
   const scopeOptions = SCOPES.map((id) => ({
     id,
     label: `WOD5E_MAGE.Scopes.${id}`,
+    faIcon: SCOPE_ICONS[id] ?? "",
     steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 }))
   }));
   const content = await foundry.applications.handlebars.renderTemplate(
@@ -514,27 +530,19 @@ export async function onAreteRoll(event) {
   if (options.harmony > 0) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.HarmonyFlavor", { dice: options.harmony }));
   }
-  let flavor = game.i18n.format("WOD5E_MAGE.Arete.RollFlavor", {
-    traits: selectedTraits.map((trait) => `${trait.label} ${trait.value}`).join(" + "),
-    bonus: bonusParts.length ? ` + ${bonusParts.join(" + ")}` : "",
+  // La carta del tiro: una riga per voce sotto i dadi, i simboli sopra.
+  const localize = game.i18n.localize.bind(game.i18n);
+  const scopeLevels = scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level }));
+  const card = renderRollCard({
+    traits: selectedTraits.map((trait) => ({ label: trait.label, value: trait.value })),
+    bonusParts,
     threshold,
-    magickType
-  });
-
-  const spherePlans = sphereEntries.map((entry) => {
-    const sphereLabel = game.i18n.localize(`WOD5E_MAGE.Spheres.${entry.id}`);
-    return `${sphereLabel} ${entry.level}`;
-  });
-  if (spherePlans.length) {
-    flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.SpherePlan", { plans: spherePlans.join(", ") })}`;
-  }
-  const scopePlans = scopeEntries.map((entry) => {
-    const scopeLabel = game.i18n.localize(`WOD5E_MAGE.Scopes.${entry.scopeId}`);
-    return `${scopeLabel} ${entry.level}`;
-  });
-  if (scopePlans.length) {
-    flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.ScopePlan", { plans: scopePlans.join(", ") })}`;
-  }
+    magickType,
+    spheres: sphereEntries.map((entry) => ({ label: `WOD5E_MAGE.Spheres.${entry.id}`, level: entry.level })),
+    scopes: scopeLevels.map((entry) => ({ label: `WOD5E_MAGE.Scopes.${entry.id}`, level: entry.level }))
+  }, localize);
+  const symbols = rollSymbols({ spheres: sphereEntries, scopes: scopeLevels, prize: prizeDice });
+  let flavor = card;
 
   // La vittoria automatica: riserva almeno doppia della soglia, non si tira.
   // Nel Volgare si tirano comunque i soli dadi rossi, per il Contraccolpo;
@@ -542,8 +550,8 @@ export async function onAreteRoll(event) {
   const automatic = isAutomaticVictory(dicePool, threshold);
   const paradoxGain = paradoxGainForMagickType(options);
   if (automatic && paradoxGain === 0) {
-    flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.AutoVictoryChat", { pool: dicePool, threshold })}`;
-    await postAutomaticVictory(actor, rollLabel, flavor);
+    const notes = [renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.AutoVictoryChat", { pool: dicePool, threshold }))];
+    await postAutomaticVictory(actor, rollLabel, { symbols, card, notes });
     await addMaintainedEffect(actor, result);
     return;
   }
@@ -571,10 +579,11 @@ export async function onAreteRoll(event) {
   const paradoxRating = options.coincidental ? 0 : getMagickBalance(actor).paradox;
 
   if (automatic) {
-    flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.RedOnly", { pool: dicePool, threshold, burn: threshold })}`;
+    const redOnly = renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.RedOnly", { pool: dicePool, threshold, burn: threshold }));
+    flavor += redOnly;
     if (paradoxRating === 0) {
       // Niente rossi da tirare: la vittoria resta automatica, e basta.
-      await postAutomaticVictory(actor, rollLabel, flavor);
+      await postAutomaticVictory(actor, rollLabel, { symbols, card, notes: [redOnly] });
       await addMaintainedEffect(actor, result);
       return;
     }
@@ -597,6 +606,8 @@ export async function onAreteRoll(event) {
       arete: arete.value,
       title: rollLabel,
       flavor,
+      // Sopra i dadi, in chat: i simboli e la vittoria automatica.
+      card: { symbols, automatic },
       selectors: uniqueSelectors,
       actor,
       data: actor.system

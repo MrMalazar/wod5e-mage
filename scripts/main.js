@@ -2,6 +2,7 @@ import { registerActorCreationChoice } from "./actor-creation.js";
 import { MAGE_SHEET_ID, MODULE_ID, SUPPORTED_SYSTEM_ID } from "./constants.js";
 import { isMageActor, registerMageDiceRendering } from "./mage-dice.js";
 import { registerParadoxDice } from "./paradox-dice.js";
+import { registerRollCardRendering } from "./roll-card.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 
 /**
@@ -92,6 +93,7 @@ Hooks.once("init", () => {
 
   registerActorCreationChoice();
   registerMageDiceRendering();
+  registerRollCardRendering();
   registerParadoxDice();
 
   const module = game.modules.get(MODULE_ID);

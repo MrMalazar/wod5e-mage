@@ -13,6 +13,20 @@ export const SCOPES = Object.freeze([
 ]);
 
 /**
+ * Il simbolo di ogni Ambito: sta a sinistra del nome nel dialogo del tiro e
+ * sopra i dadi in chat, col livello dichiarato.
+ */
+export const SCOPE_ICONS = Object.freeze({
+  potency: "fa-solid fa-burst",
+  duration: "fa-solid fa-hourglass-half",
+  area: "fa-solid fa-map",
+  targets: "fa-solid fa-user",
+  conditions: "fa-solid fa-list-check",
+  range: "fa-solid fa-location-crosshairs",
+  precision: "fa-solid fa-bullseye"
+});
+
+/**
  * Le righe della tavola: gli Ambiti, con la Durata sdoppiata in gioco
  * (scene, sessioni, storia, cronaca) e narrativa (sul calendario): al
  * lancio si dichiara su quale delle due corre.
@@ -20,24 +34,29 @@ export const SCOPES = Object.freeze([
 export const SCOPE_TABLE_ROWS = Object.freeze([
   // La Potenza: il danno è l'Areté più il numero del livello, e la cella
   // mostra il sigillo dell'Areté, il numero e la casella di Salute vuota.
-  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.potency", arete: true, glyph: "" },
-  { id: "duration", scope: "duration", label: "WOD5E_MAGE.Scopes.DurationPlay", icons: true },
+  // Ogni riga dichiara le sue colonne invisibili (layout): simbolo, numero,
+  // testo o casella. Dentro una colonna della tavola le celle si allineano.
+  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.potency", arete: true, glyph: "", layout: "symbol-number-glyph" },
+  { id: "duration", scope: "duration", label: "WOD5E_MAGE.Scopes.DurationPlay", icons: true, layout: "symbol-number" },
   {
     id: "durationNarrative",
     scope: "duration",
     label: "WOD5E_MAGE.Scopes.DurationNarrative",
-    faIcons: ["fa-solid fa-sun", "fa-solid fa-calendar-week", "fa-solid fa-calendar-days", "fa-solid fa-leaf", "fa-solid fa-calendar-check", "fa-solid fa-hourglass-half", "fa-solid fa-infinity"]
+    faIcons: ["fa-solid fa-sun", "fa-solid fa-calendar-week", "fa-solid fa-calendar-days", "fa-solid fa-leaf", "fa-solid fa-calendar-check", "fa-solid fa-hourglass-half", "fa-solid fa-infinity"],
+    layout: "symbol-text"
   },
   {
     id: "area",
     scope: "area",
     label: "WOD5E_MAGE.Scopes.area",
-    faIcons: ["fa-solid fa-door-open", "fa-solid fa-building", "fa-solid fa-house-chimney", "fa-solid fa-city", "fa-solid fa-map", "fa-solid fa-earth-europe", "fa-solid fa-globe"]
+    faIcons: ["fa-solid fa-door-open", "fa-solid fa-building", "fa-solid fa-house-chimney", "fa-solid fa-city", "fa-solid fa-map", "fa-solid fa-earth-europe", "fa-solid fa-globe"],
+    layout: "symbol-text"
   },
-  { id: "targets", scope: "targets", label: "WOD5E_MAGE.Scopes.targets", faIcon: "fa-solid fa-user" },
-  { id: "conditions", scope: "conditions", label: "WOD5E_MAGE.Scopes.conditions" },
-  { id: "range", scope: "range", label: "WOD5E_MAGE.Scopes.range" },
-  { id: "precision", scope: "precision", label: "WOD5E_MAGE.Scopes.precision" }
+  { id: "targets", scope: "targets", label: "WOD5E_MAGE.Scopes.targets", faIcon: "fa-solid fa-user", layout: "symbol-number" },
+  { id: "conditions", scope: "conditions", label: "WOD5E_MAGE.Scopes.conditions", layout: "number" },
+  { id: "range", scope: "range", label: "WOD5E_MAGE.Scopes.range", layout: "text" },
+  // La Precisione parla per frasi: carattere piccolo, per non allargare le colonne.
+  { id: "precision", scope: "precision", label: "WOD5E_MAGE.Scopes.precision", layout: "text", small: true }
 ]);
 
 /** Colonne della tavola: i sette livelli di un Ambito. */
@@ -67,11 +86,17 @@ export function prepareScopeTable() {
       id: row.id,
       scope: row.scope,
       label: row.label,
+      layout: row.layout,
+      small: Boolean(row.small),
       cells: steps.map((step) => {
         const label = `WOD5E_MAGE.Scopes.Table.${row.id}.${step}`;
         return {
           step,
           label,
+          layout: row.layout,
+          // Le colonne invisibili: dove va il testo della cella.
+          number: row.layout.includes("number") && !(Boolean(row.arete) && step === 1),
+          text: row.layout.includes("text"),
           // La Potenza: sigillo dell'Areté, numero, casella vuota.
           arete: Boolean(row.arete),
           // Al primo livello la Potenza è l'Areté e basta: niente numero.

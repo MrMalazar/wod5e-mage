@@ -73,6 +73,18 @@
 /* Caselle di Salute, Volontà e Saggezza */
 .wod5e-mage.wod5e.actor.sheet .resource-counter .resource-counter-step {
   border-color: var(--mage-oro-scuro);
+  height: 18px;
+  width: 18px;
+}
+
+/* Pallini a 18px su tutta la scheda: il sistema li fa da 14px, troppo
+   piccoli da leggere al tavolo. Le Sfere hanno i loro, da 22px. */
+.wod5e-mage.wod5e.actor.sheet .resource-value .resource-value-step,
+.wod5e-mage.wod5e.actor.sheet .resource-value .resource-value-empty,
+.wod5e-mage.wod5e.actor.sheet .resource-value-static .resource-value-static-step {
+  box-sizing: border-box;
+  height: 18px;
+  width: 18px;
 }
 
 /* Intestazioni: un tema solo, su tutte le linguette */
@@ -192,11 +204,12 @@
 
 /* La Salute (ramo A): un tracciato solo, quattro segni. Le caselle sono
    bottoni veri: clic sinistro gira, clic destro svuota. */
+/* Il numero delle caselle, accanto alla parola: grande quanto il nome. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-max {
-  color: var(--mage-tenue);
-  font-size: 0.7em;
-  font-weight: 400;
-  margin-left: 0.35rem;
+  color: var(--mage-oro);
+  font-size: 1em;
+  font-weight: 700;
+  margin-left: 0.4rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-track {
@@ -345,15 +358,23 @@
   background: transparent;
   border: 1px solid transparent;
   border-radius: 3px;
+  color: var(--mage-oro-chiaro, #e8c766);
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
+  gap: 0.6rem;
   height: 36px;
-  justify-content: center;
+  justify-content: flex-start;
   line-height: 1;
   margin: 0;
   min-height: 36px;
-  padding: 0;
-  width: 36px;
+  padding: 0 0.6rem 0 0.35rem;
+  width: 100%;
+}
+
+/* Il nome del segno accanto al simbolo: la legenda vive qui. */
+.wod5e-mage-salute-menu-text {
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 
 .wod5e-mage-salute-menu-item:hover,
@@ -1289,6 +1310,93 @@
   border-color: var(--mage-dot-border);
 }
 
+/* ==========================================================================
+   La carta del tiro in chat: sopra i dadi la vittoria automatica e i
+   simboli di quel che si tira (premio dell'Areté, Sfere, Ambiti, col
+   livello); sotto, il conto una riga per voce e le note.
+   ========================================================================== */
+.wod5e-mage-roll-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.35rem;
+}
+
+.wod5e-mage-roll-victory {
+  border: 1px solid #d9a827;
+  border-radius: 3px;
+  color: #d9a827;
+  font-family: "Modesto Condensed", serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  margin: 0 0 0.35rem;
+  padding: 0.2rem 0.4rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-roll-symbols {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  justify-content: center;
+  margin: 0 0 0.35rem;
+}
+
+.wod5e-mage-roll-symbol {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.25rem;
+  line-height: 1;
+}
+
+.wod5e-mage-roll-symbol > img {
+  border: 0;
+  height: 22px;
+  object-fit: contain;
+  width: 22px;
+}
+
+.wod5e-mage-roll-symbol > i {
+  color: #d9a827;
+  font-size: 1rem;
+  text-align: center;
+  width: 22px;
+}
+
+.wod5e-mage-roll-symbol > b {
+  color: #d9a827;
+  font-size: 1rem;
+}
+
+.wod5e-mage-roll-card > p,
+.wod5e-mage-roll-note {
+  line-height: 1.3;
+  margin: 0.15rem 0;
+  text-align: left;
+}
+
+.wod5e-mage-roll-card b {
+  color: #d9a827;
+}
+
+.wod5e-mage-roll-note {
+  font-style: italic;
+}
+
+.wod5e-mage-roll-note-backlash {
+  color: #e05a5a;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.wod5e-mage-roll-note-onestep {
+  color: #e8c766;
+}
+
 /* Le immagini SVG contengono soltanto il simbolo della faccia del dado. */
 .roll-img.mage-dice,
 .roll-img.paradox-dice {
@@ -1435,27 +1543,39 @@
   background: var(--mage-oro);
 }
 
-/* Le file a pallini: la Sfera o l'Ambito a sinistra, i pallini a destra.
+/* Le file a pallini: simbolo, nome, pallini. Le file sono trasparenti
+   (display: contents) dentro la griglia della colonna, così i pallini di
+   ogni riga partono dalla stessa verticale, subito dopo il nome più lungo.
    I pallini sono bottoni: il clic fissa il livello. */
 .wod5e-mage-arete-dotrow {
-  align-items: center;
-  display: grid;
-  gap: 0.6rem;
-  grid-template-columns: minmax(96px, 1fr) auto;
-  min-height: 24px;
+  display: contents;
 }
 
-.wod5e-mage-arete-dotrow > span:first-child {
+.wod5e-mage-arete-row-icon {
+  border: 0;
+  color: var(--mage-oro);
+  font-size: 0.85rem;
+  height: 18px;
+  justify-self: center;
+  object-fit: contain;
+  text-align: center;
+  width: 18px;
+}
+
+.wod5e-mage-arete-dot-label {
+  align-self: center;
   min-width: 0;
+  white-space: nowrap;
 }
 
 /* I pallini partono tutti dalla stessa colonna, a sinistra. */
 .wod5e-mage-arete-dotrow > .wod5e-mage-arete-sphere-dots {
+  align-self: center;
   justify-self: start;
   margin-left: 0;
 }
 
-.wod5e-mage-arete-dotrow.chosen > span:first-child {
+.wod5e-mage-arete-dotrow.chosen > .wod5e-mage-arete-dot-label {
   color: var(--mage-oro);
   font-weight: 700;
 }
@@ -1554,10 +1674,16 @@
 }
 
 .wod5e-mage-arete-dots-column {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  align-content: start;
+  display: grid;
+  gap: 0.35rem 0.5rem;
+  grid-template-columns: 18px max-content minmax(0, 1fr);
   min-width: 0;
+}
+
+/* Titoli e conto occupano la riga intera. */
+.wod5e-mage-arete-dots-column > :is(.wod5e-mage-arete-dots-head, p) {
+  grid-column: 1 / -1;
 }
 
 .wod5e-mage-arete-scopes-head {
@@ -1577,17 +1703,44 @@
   width: 100%;
 }
 
+/* Premio e Armonia: il nome per intero a sinistra, la casella a destra. */
 .wod5e-mage-arete-prize,
 .wod5e-mage-arete-harmony-row {
   align-items: center;
   display: flex;
   gap: 0.5rem;
+  justify-content: space-between;
   min-width: 0;
 }
 
-.wod5e-mage-arete-harmony-row > small {
+.wod5e-mage-arete-row-label-full {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.wod5e-mage-arete-row-label-full > small {
   color: var(--mage-tenue);
   font-size: 0.7rem;
+  font-weight: 400;
+}
+
+.wod5e-mage-arete-prize > .wod5e-mage-arete-toggle {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  gap: 0.35rem;
+  margin-left: auto;
+  width: auto;
+}
+
+.wod5e-mage-arete-prize > .wod5e-mage-arete-toggle > input {
+  margin: 0;
+}
+
+.wod5e-mage-arete-harmony-row > .wod5e-mage-arete-harmony {
+  flex: none;
+  margin-left: auto;
 }
 
 /* L'icona che apre la tavola degli Ambiti. */
@@ -1612,12 +1765,79 @@
   box-shadow: 0 0 5px var(--mage-oro);
 }
 
-/* La cella della Potenza: sigillo dell'Areté, numero, casella vuota. */
-.wod5e-mage-potency-cell {
+/* Le celle della tavola degli Ambiti: colonne invisibili, uguali per tutta
+   la riga (simbolo | numero | testo, o casella), così dentro una colonna
+   della tavola i simboli stanno sotto i simboli e i numeri sotto i numeri.
+   Regole globali: la tavola vive in scheda e nel dialogo del tiro. */
+.wod5e-mage-scope-cell {
   align-items: center;
-  display: inline-flex;
-  gap: 0.25rem;
-  justify-content: center;
+  column-gap: 4px;
+  display: inline-grid;
+  justify-items: center;
+  vertical-align: middle;
+}
+
+.wod5e-mage-scope-cell[data-layout="symbol-number-glyph"] {
+  grid-template-columns: 16px 26px 14px;
+}
+
+.wod5e-mage-scope-cell[data-layout="symbol-number"] {
+  grid-template-columns: 16px 22px;
+}
+
+.wod5e-mage-scope-cell[data-layout="symbol-text"] {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  justify-items: start;
+  text-align: left;
+  width: 100%;
+}
+
+.wod5e-mage-scope-cell[data-layout="number"] {
+  grid-template-columns: 22px;
+}
+
+.wod5e-mage-scope-cell[data-layout="text"] {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+.wod5e-mage-scope-cell-symbol {
+  color: var(--mage-oro, #d9a827);
+  font-size: 0.85rem;
+  justify-self: center;
+  text-align: center;
+}
+
+.wod5e-mage-scope-cell-number {
+  justify-self: center;
+  text-align: center;
+}
+
+.wod5e-mage-scope-cell-text {
+  min-width: 0;
+}
+
+.wod5e-mage-scope-cell-glyph {
+  margin: 0;
+}
+
+/* La Precisione parla per frasi: piccole, su più righe, senza allargare
+   le colonne. */
+.wod5e-mage-scope-row-small td {
+  font-size: 0.7rem;
+  line-height: 1.15;
+}
+
+/* Le celle a testo si spartiscono la larghezza in parti uguali. */
+.wod5e-mage-scope-table table {
+  table-layout: fixed;
+}
+
+.wod5e-mage-scope-table th[scope="row"],
+.wod5e-mage-scope-table thead th:first-child {
+  width: 118px;
 }
 
 .wod5e-mage-arete-sigillo-small {
@@ -1791,7 +2011,8 @@
   transition: color 120ms ease, opacity 120ms ease;
 }
 
-.wod5e-mage-arete-toggle input[type="checkbox"]:checked + .wod5e-mage-arete-toggle-value {
+.wod5e-mage-arete-toggle input[type="checkbox"]:checked + .wod5e-mage-arete-toggle-value,
+.wod5e-mage-arete-toggle:has(input[type="checkbox"]:checked) .wod5e-mage-arete-toggle-value {
   color: #d9a827;
   opacity: 1;
 }
@@ -2061,8 +2282,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-dots > :is(.resource-value-step, .resource-value-empty) {
-  flex: 0 0 14px;
-  min-width: 14px;
+  flex: 0 0 18px;
+  min-width: 18px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-grid > span {
@@ -2714,11 +2935,25 @@
   white-space: nowrap;
 }
 
-/* I pallini non si comprimono mai: 14px ciascuno, con aria fra l'uno e
+/* I pallini non si comprimono mai: 18px ciascuno, con aria fra l'uno e
    l'altro. Se manca spazio si accorcia il nome, mai il contatore. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list > :is(.attribute, .skill) > .resource-value > :is(.resource-value-step, .resource-value-empty) {
-  flex: 0 0 14px;
-  min-width: 14px;
+  box-sizing: border-box;
+  flex: 0 0 18px;
+  height: 18px;
+  min-width: 18px;
+  width: 18px;
+}
+
+/* Il nome accanto ai pallini, a misura: si legge da lontano. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list > :is(.attribute, .skill) {
+  font-size: 15px;
+  min-height: 26px;
+}
+
+/* Aria fra un'Abilità e l'altra. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list {
+  row-gap: 3px;
 }
 
 /* La matita di modifica vive nel contatore, a sinistra della X. */

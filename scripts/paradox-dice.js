@@ -11,6 +11,8 @@ import {
   shiftParadoxDice
 } from "./arete-dice-pool.js";
 import { bonusDiceExcess, isOneStepShort } from "./arete.js";
+import { MODULE_ID } from "./constants.js";
+import { renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
 import {
   getParadoxDieResult,
   getParadoxDieImage,
@@ -197,6 +199,7 @@ export async function rollAreteWithParadox({
   arete = 0,
   title,
   flavor,
+  card = null,
   selectors = []
 }) {
   const situationalModifiers = onlyParadox
@@ -275,7 +278,7 @@ export async function rollAreteWithParadox({
           const formula = `${basicDice}d${MortalDie.DENOMINATION}cs>5 + ${paradoxDice}d${ParadoxDie.DENOMINATION}cs>5`;
           let rollFlavor = flavor;
           if (excess > 0) {
-            rollFlavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.BonusCap", { excess })}`;
+            rollFlavor += renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.BonusCap", { excess }));
           }
           const roll = await new WOD5eRoll(formula, data, {
             system: "mortal",
@@ -299,10 +302,10 @@ export async function rollAreteWithParadox({
           // successi, la riuscita ha un prezzo. Il messaggio lo dice.
           let finalFlavor = rollFlavor;
           if (isOneStepShort(roll._total, difficulty, arete)) {
-            finalFlavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.OneStep", {
+            finalFlavor += renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.OneStep", {
               missing: difficulty - roll._total,
               arete
-            })}`;
+            }), "onestep");
           }
 
           // Il Contraccolpo: ogni rosso che mostra l'occhio (1 o 10) chiama
@@ -310,12 +313,14 @@ export async function rollAreteWithParadox({
           // pari alla soglia.
           const eyes = countParadoxEyes(roll.advancedDice?.results ?? []);
           if (eyes > 0) {
-            finalFlavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.Backlash", { eyes, burn })}`;
+            finalFlavor += renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.Backlash", { eyes, burn }), "backlash");
           }
           roll.options.flavor = finalFlavor;
 
+          // La bandiera dice al disegno della chat cosa mettere sopra i dadi.
+          const flags = card ? { [MODULE_ID]: { [ROLL_CARD_FLAG]: card } } : {};
           return roll.toMessage(
-            { speaker: ChatMessage.getSpeaker({ actor }) },
+            { speaker: ChatMessage.getSpeaker({ actor }), flags },
             { rollMode }
           );
         }

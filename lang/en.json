@@ -112,6 +112,7 @@
       "ThresholdHint": "The threshold is the higher of the highest Sphere and the highest Scope, +1 per Scope beyond the first, +1 with three or more Spheres, capped at 7. Click the dots: the Sphere level you use, the level of each Scope.",
       "AutoVictory": "Automatic victory: the pool is at least twice the threshold, no roll. In Vulgar Magick only the red dice are rolled.",
       "AutoVictoryChat": "Automatic victory: pool {pool} against threshold {threshold}, no roll.",
+      "AutoVictoryBanner": "Automatic victory",
       "RedOnly": "Automatic victory (pool {pool}, threshold {threshold}): only the red dice are rolled. If Backlash strikes, Burn {burn}, equal to the threshold.",
       "OneStep": "One step short: {missing} successes missing, within Arete ({arete}). Success at a price.",
       "BonusCap": "+3 cap: {excess} fewer dice.",
