@@ -726,6 +726,16 @@
       "TypeNone": "Scegli il tipo…",
       "TypeFree": "Tipo, in parole tue",
       "TypeHint": "Se non è in tendina, scrivilo qui"
+    },
+    "Reset": {
+      "Attributes": "Reset Attributi",
+      "Skills": "Reset Abilità",
+      "Advantages": "Reset Vantaggi",
+      "Spheres": "Reset Sfere",
+      "Credo": "Reset Credo",
+      "Lineage": "Reset Appartenenza",
+      "Compass": "Reset Bussola",
+      "Confirm": "{label}: azzera questa parte della scheda. Vuoi procedere?"
     }
   },
   "WOD5E": {

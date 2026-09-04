@@ -1,3 +1,4 @@
+import { condizioneItemData, findCondizioneByName } from "./condizioni.js";
 import { MODULE_ID } from "./constants.js";
 
 /**
@@ -162,6 +163,13 @@ export async function addFromArchivio(actor, kind, entry) {
   const config = ARCHIVI[archivioKind(kind)];
   if (!config || !canEdit(actor)) return false;
 
+  if (config.add === "item" && kind === "condizione") {
+    // La Condizione nasce dai dati del modulo, sempre aggiornati, non dal compendio.
+    const definition = findCondizioneByName(entry.name);
+    if (!definition) return false;
+    await actor.createEmbeddedDocuments("Item", [condizioneItemData(definition)]);
+    return true;
+  }
   if (config.add === "item") {
     const doc = await fromUuid(entry.uuid);
     if (!doc) return false;

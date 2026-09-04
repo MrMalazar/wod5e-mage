@@ -3819,65 +3819,56 @@
   cursor: default;
 }
 
-/* Le Condizioni come quadratini: per gruppo, accese in oro, spente sbiadite. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni {
+/* Nuova sessione, in alto a sinistra della prima pagina. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-head {
+  position: relative;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-new-session {
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-oro-chiaro);
+  cursor: pointer;
+  font-size: 0.72rem;
+  left: 0;
+  line-height: 1.2;
+  min-height: 0;
+  padding: 0.2rem 0.45rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-new-session:hover {
+  box-shadow: 0 0 4px var(--mage-oro);
+}
+
+/* I reset in fondo al memo: una parte per tasto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-reset-row {
+  border-top: 1px solid rgb(152 119 43 / 30%);
   display: flex;
   flex-wrap: wrap;
-  gap: 0.2rem;
+  gap: 0.3rem;
   justify-content: center;
-  margin-bottom: 0.4rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione {
-  align-items: center;
-  background: var(--mage-carta);
-  border: 1px solid rgb(152 119 43 / 45%);
-  border-radius: 4px;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-reset-row > button {
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-oro-chiaro);
   cursor: pointer;
-  display: inline-flex;
-  flex: 0 0 26px;
-  height: 26px;
-  justify-content: center;
-  line-height: 1;
-  margin: 0;
-  opacity: 0.45;
-  padding: 0;
-  position: relative;
-  width: 26px;
+  font-size: 0.68rem;
+  line-height: 1.2;
+  min-height: 0;
+  padding: 0.2rem 0.4rem;
+  width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione:hover {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-reset-row > button:hover {
   box-shadow: 0 0 4px var(--mage-oro);
-  opacity: 0.85;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione > img {
-  border: none;
-  height: 20px;
-  width: 20px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione > small {
-  background: var(--mage-carta);
-  border-radius: 2px;
-  bottom: -1px;
-  color: var(--mage-inchiostro);
-  font-size: 0.55rem;
-  font-weight: 700;
-  line-height: 1;
-  padding: 0 1px;
-  position: absolute;
-  right: -1px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione.active {
-  background: rgb(152 119 43 / 22%);
-  border-color: var(--mage-oro);
-  box-shadow: 0 0 0 1px var(--mage-oro), 0 0 6px rgb(152 119 43 / 60%);
-  opacity: 1;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione.active.suppressed {
-  border-style: dashed;
-  opacity: 0.7;
 }

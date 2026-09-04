@@ -19,12 +19,8 @@
     {{#if salute.status}}
         <p class="wod5e-mage-salute-status">{{localize salute.status}}</p>
     {{/if}}
-    {{!-- Nuova sessione: guariscono i superficiali mentali, un superficiale
-         fisico se ne va, il Contraccolpo si riarma. Reset: tracciato vuoto. --}}
+    {{!-- Reset: tracciato vuoto. Nuova sessione sta in alto a sinistra dei Tratti. --}}
     <div class="wod5e-mage-salute-buttons">
-        <button type="button" data-action="saluteNewSession" title="{{localize 'WOD5E_MAGE.Salute.NewSessionHint'}}">
-            <i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.NewSession"}}
-        </button>
         <button type="button" data-action="saluteReset" title="{{localize 'WOD5E_MAGE.Salute.ResetHint'}}">
             <i class="fa-solid fa-eraser" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.Reset"}}
         </button>

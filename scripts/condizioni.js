@@ -2,62 +2,24 @@ import { CONDIZIONI } from "./data/condizioni.js";
 import { MODULE_ID } from "./constants.js";
 
 /**
- * Le Condizioni come quadratini (verdetto di Blue, 4/9 notte): tutte e
- * venticinque nel pannello, si accendono e si spengono con un clic. Accesa,
- * la Condizione è un oggetto «condition» del sistema addosso al personaggio,
- * così i dadi che toglie entrano nel tiro da soli; spenta, l'oggetto se ne va.
- * Le Condizioni fuori lista restano oggetti normali, aggiunti dalla lente.
+ * Le Condizioni di M5 sulla scheda (verdetto di Blue, 4/9 notte): il + della
+ * cella apre l'archivio, diviso per categoria; la scelta diventa un oggetto
+ * «condition» del sistema addosso al personaggio, così i dadi che toglie
+ * entrano nel tiro da soli. Le Condizioni fuori lista arrivano dalla lente.
  */
 
 export const CONDIZIONE_FLAG = "condizione";
-
-/** L'ordine dei gruppi, com'è nella bozza. */
-export const CONDIZIONI_GROUPS = Object.freeze([...new Set(CONDIZIONI.map((entry) => entry.group))]);
 
 export function findCondizione(id) {
   return CONDIZIONI.find((entry) => entry.id === id) ?? null;
 }
 
-/** L'id della Condizione di lista che un oggetto porta, o "". */
-export function condizioneIdOf(item) {
-  const flags = item?.flags?.[MODULE_ID] ?? {};
-  return String(flags[CONDIZIONE_FLAG] ?? "");
+export function findCondizioneByName(name) {
+  const wanted = String(name ?? "").trim().toLowerCase();
+  return CONDIZIONI.find((entry) => entry.name.toLowerCase() === wanted) ?? null;
 }
 
-/** Gli oggetti «condition» del personaggio che sono Condizioni di lista, per id. */
-export function activeCondizioni(items) {
-  const active = new Map();
-  for (const item of items ?? []) {
-    if (item?.type !== "condition") continue;
-    const id = condizioneIdOf(item);
-    if (id && !active.has(id)) active.set(id, item);
-  }
-  return active;
-}
-
-/** I quadratini sciolti, nell'ordine della bozza: accesi, spenti, sospesi, coi dadi tolti. */
-export function prepareCondizioni(items) {
-  const active = activeCondizioni(items);
-  return CONDIZIONI.map((entry) => {
-    const item = active.get(entry.id);
-    return {
-      id: entry.id,
-      name: entry.name,
-      group: entry.group,
-      icon: entry.icon,
-      active: Boolean(item),
-      suppressed: Boolean(item?.system?.suppressed),
-      dice: entry.bonuses.map((bonus) => bonus.value).join(" ")
-    };
-  });
-}
-
-/** Le Condizioni fuori lista: gli oggetti che restano nella lista classica. */
-export function customConditions(conditions) {
-  return (conditions ?? []).filter((item) => !condizioneIdOf(item));
-}
-
-/** L'oggetto da creare quando un quadratino si accende. */
+/** L'oggetto che va addosso al personaggio, sempre dai dati del modulo. */
 export function condizioneItemData(entry) {
   return {
     name: entry.name,
@@ -72,22 +34,4 @@ export function condizioneItemData(entry) {
     },
     flags: { [MODULE_ID]: { [CONDIZIONE_FLAG]: entry.id } }
   };
-}
-
-/** Il clic sul quadratino: accende o spegne la Condizione. */
-export async function onCondizioneToggle(event, target) {
-  event.preventDefault();
-  const actor = this.actor;
-  if (!actor.isOwner) {
-    ui.notifications.warn(game.i18n.format("WOD5E.Notifications.NoSufficientPermission", { string: actor.name }));
-    return;
-  }
-  const entry = findCondizione(target.dataset.condizione);
-  if (!entry) return;
-  const current = activeCondizioni(actor.items).get(entry.id);
-  if (current) {
-    await actor.deleteEmbeddedDocuments("Item", [current.id]);
-  } else {
-    await actor.createEmbeddedDocuments("Item", [condizioneItemData(entry)]);
-  }
 }

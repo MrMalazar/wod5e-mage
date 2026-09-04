@@ -10,7 +10,13 @@
         {{!-- Sei celle: Attributi | Condizioni, Abilità | Specializzazioni,
              Ruota | Bonus. --}}
         <div class="skills-attributes wod5e-mage-tratti-attributes">
-            <div class="resource-header">
+            <div class="resource-header wod5e-mage-tratti-head">
+                {{!-- Nuova sessione in alto a sinistra della prima pagina: guariscono i
+                     superficiali mentali, un superficiale fisico se ne va, il Contraccolpo
+                     si riarma, e si segnano i punti esperienza. --}}
+                <button type="button" class="wod5e-mage-new-session" data-action="saluteNewSession" title="{{localize 'WOD5E_MAGE.Salute.NewSessionHint'}}">
+                    <i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.NewSession"}}
+                </button>
                 <label class="header-label">
                     {{localize "WOD5E.AttributesList.Attributes"}}
                 </label>
@@ -57,17 +63,6 @@
             <div class="stat-panel-section">
                 <label class="resource-header">{{localize "WOD5E.ItemsList.Conditions"}}</label>
                 <div class="stats-container">
-                    {{!-- Le venticinque Condizioni di M5 come quadratini sciolti, nell'ordine
-                         della bozza: un clic accende, un altro spegne; accesa, toglie i suoi
-                         dadi al tiro da sola. Sotto il mouse, solo il nome. --}}
-                    <div class="wod5e-mage-condizioni">
-                        {{#each condizioni as |entry|}}
-                            <button type="button" class="wod5e-mage-condizione{{#if entry.active}} active{{/if}}{{#if entry.suppressed}} suppressed{{/if}}" data-action="condizioneToggle" data-condizione="{{entry.id}}" title="{{entry.name}}" aria-label="{{entry.name}}" aria-pressed="{{#if entry.active}}true{{else}}false{{/if}}">
-                                <img src="{{entry.icon}}" alt="">
-                                {{#if entry.dice}}<small>{{entry.dice}}</small>{{/if}}
-                            </button>
-                        {{/each}}
-                    </div>
                     <div class="items-list flexcol">
                         {{#each conditions as |condition id|}}
                             <div class="item flexrow{{#if condition.system.suppressed}} suppressed{{/if}}" data-drag="true" data-item-id="{{condition.id}}" data-document-uuid="{{condition.uuid}}" data-type="Item">
@@ -90,7 +85,9 @@
                         <a class="item-control search-data-item flex-center" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="condition">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </a>
-                        <a class="item-control item-create" data-action="createItem" title="{{localize 'WOD5E.Add'}}" data-type="condition">
+                        {{!-- Il + apre l'archivio delle Condizioni di M5, per categoria;
+                             la lente resta per quelle fuori lista. --}}
+                        <a class="item-control item-create" data-action="archivioOpen" data-kind="condizione" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}">
                             <i class="fas fa-plus"></i>
                         </a>
                     </div>
@@ -212,6 +209,15 @@
                                 <i class="fa-solid {{#if check.ok}}fa-circle-check{{else}}fa-circle-xmark{{/if}}" aria-hidden="true"></i>
                                 {{localize check.label}}
                             </span>
+                        {{/each}}
+                    </div>
+
+                    {{!-- I reset, una parte per tasto, con conferma. --}}
+                    <div class="wod5e-mage-reset-row">
+                        {{#each resets as |reset|}}
+                            <button type="button" data-action="resetSection" data-reset="{{reset.id}}" title="{{reset.label}}" {{#if ../locked}}disabled{{/if}}>
+                                <i class="fa-solid {{reset.icon}}" aria-hidden="true"></i> {{reset.label}}
+                            </button>
                         {{/each}}
                     </div>
                 </details>

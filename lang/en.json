@@ -726,6 +726,16 @@
       "TypeNone": "Pick a type…",
       "TypeFree": "Type, in your words",
       "TypeHint": "If it is not in the list, write it here"
+    },
+    "Reset": {
+      "Attributes": "Reset Attributes",
+      "Skills": "Reset Skills",
+      "Advantages": "Reset Advantages",
+      "Spheres": "Reset Spheres",
+      "Credo": "Reset Creed",
+      "Lineage": "Reset Lineage",
+      "Compass": "Reset Compass",
+      "Confirm": "{label}: this clears that part of the sheet. Proceed?"
     }
   }
 }
