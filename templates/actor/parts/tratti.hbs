@@ -57,21 +57,15 @@
             <div class="stat-panel-section">
                 <label class="resource-header">{{localize "WOD5E.ItemsList.Conditions"}}</label>
                 <div class="stats-container">
-                    {{!-- Le venticinque Condizioni di M5 come quadratini: un clic accende,
-                         un altro spegne; accesa, toglie i suoi dadi al tiro da sola. --}}
+                    {{!-- Le venticinque Condizioni di M5 come quadratini sciolti, nell'ordine
+                         della bozza: un clic accende, un altro spegne; accesa, toglie i suoi
+                         dadi al tiro da sola. Sotto il mouse, solo il nome. --}}
                     <div class="wod5e-mage-condizioni">
-                        {{#each condizioni as |group|}}
-                            <div class="wod5e-mage-condizioni-group">
-                                <span class="wod5e-mage-condizioni-title">{{group.group}}</span>
-                                <div class="wod5e-mage-condizioni-row">
-                                    {{#each group.entries as |entry|}}
-                                        <button type="button" class="wod5e-mage-condizione{{#if entry.active}} active{{/if}}{{#if entry.suppressed}} suppressed{{/if}}" data-action="condizioneToggle" data-condizione="{{entry.id}}" title="{{entry.title}}" aria-label="{{entry.name}}" aria-pressed="{{#if entry.active}}true{{else}}false{{/if}}">
-                                            <img src="{{entry.icon}}" alt="">
-                                            {{#if entry.dice}}<small>{{entry.dice}}</small>{{/if}}
-                                        </button>
-                                    {{/each}}
-                                </div>
-                            </div>
+                        {{#each condizioni as |entry|}}
+                            <button type="button" class="wod5e-mage-condizione{{#if entry.active}} active{{/if}}{{#if entry.suppressed}} suppressed{{/if}}" data-action="condizioneToggle" data-condizione="{{entry.id}}" title="{{entry.name}}" aria-label="{{entry.name}}" aria-pressed="{{#if entry.active}}true{{else}}false{{/if}}">
+                                <img src="{{entry.icon}}" alt="">
+                                {{#if entry.dice}}<small>{{entry.dice}}</small>{{/if}}
+                            </button>
                         {{/each}}
                     </div>
                     <div class="items-list flexcol">

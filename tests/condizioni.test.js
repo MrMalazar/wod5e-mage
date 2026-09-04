@@ -25,18 +25,16 @@ const items = [flagged("cieco"), flagged("scosso", { system: { suppressed: true 
 assert.deepEqual([...activeCondizioni(items).keys()], ["cieco", "scosso"]);
 assert.deepEqual(customConditions(items.filter((item) => item.type === "condition")), [custom]);
 
-// I quadratini: accesi, sospesi, coi dadi tolti e la spiegazione nel titolo.
-const groups = prepareCondizioni(items);
-assert.equal(groups.length, 7);
-const vista = groups.find((group) => group.group === "Vista");
-const cieco = vista.entries.find((entry) => entry.id === "cieco");
-assert.equal(cieco.active, true);
-assert.equal(cieco.dice, "");
-assert.match(cieco.title, /^Cieco · Non vedi\. /);
-const scosso = groups.find((group) => group.group === "Testa").entries.find((entry) => entry.id === "scosso");
+// I quadratini sciolti: venticinque nell'ordine della bozza, accesi, sospesi, coi dadi tolti; niente spiegazione, solo il nome.
+const squares = prepareCondizioni(items);
+assert.equal(squares.length, 25);
+assert.deepEqual(squares.slice(0, 3).map((entry) => entry.id), ["bloccato", "atterrato", "rallentato"]);
+const cieco = squares.find((entry) => entry.id === "cieco");
+assert.deepEqual([cieco.active, cieco.suppressed, cieco.dice, cieco.group], [true, false, "", "Vista"]);
+const scosso = squares.find((entry) => entry.id === "scosso");
 assert.deepEqual([scosso.active, scosso.suppressed, scosso.dice], [true, true, "-1"]);
-assert.match(scosso.title, /^Scosso \(-1\) · /);
-assert.equal(vista.entries.find((entry) => entry.id === "abbagliato").active, false);
+assert.equal(squares.find((entry) => entry.id === "abbagliato").active, false);
+assert.ok(!("title" in cieco));
 
 // L'oggetto che nasce quando il quadratino si accende: «condition» del sistema con i modificatori.
 const data = condizioneItemData(findCondizione("offuscato"));
@@ -67,7 +65,8 @@ assert.equal(calls.length, 2);
 
 // La scheda: i quadratini nella cella, l'azione registrata.
 const tratti = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
-assert.match(tratti, /data-action="condizioneToggle" data-condizione="\{\{entry\.id\}\}"/);
+assert.match(tratti, /data-action="condizioneToggle" data-condizione="\{\{entry\.id\}\}" title="\{\{entry\.name\}\}"/);
+assert.doesNotMatch(tratti, /wod5e-mage-condizioni-title/);
 assert.doesNotMatch(tratti, /data-kind="condizione"/);
 const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
 assert.match(sheet, /condizioneToggle: onCondizioneToggle/);

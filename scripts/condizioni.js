@@ -35,25 +35,21 @@ export function activeCondizioni(items) {
   return active;
 }
 
-/** I gruppi coi quadratini: accesi, spenti, e la spiegazione nel titolo. */
+/** I quadratini sciolti, nell'ordine della bozza: accesi, spenti, sospesi, coi dadi tolti. */
 export function prepareCondizioni(items) {
   const active = activeCondizioni(items);
-  return CONDIZIONI_GROUPS.map((group) => ({
-    group,
-    entries: CONDIZIONI.filter((entry) => entry.group === group).map((entry) => {
-      const item = active.get(entry.id);
-      const dice = entry.bonuses.map((bonus) => bonus.value).join(" ");
-      return {
-        id: entry.id,
-        name: entry.name,
-        icon: entry.icon,
-        active: Boolean(item),
-        suppressed: Boolean(item?.system?.suppressed),
-        dice,
-        title: `${entry.name}${dice ? ` (${dice})` : ""} · ${entry.what}. ${entry.effect}`
-      };
-    })
-  }));
+  return CONDIZIONI.map((entry) => {
+    const item = active.get(entry.id);
+    return {
+      id: entry.id,
+      name: entry.name,
+      group: entry.group,
+      icon: entry.icon,
+      active: Boolean(item),
+      suppressed: Boolean(item?.system?.suppressed),
+      dice: entry.bonuses.map((bonus) => bonus.value).join(" ")
+    };
+  });
 }
 
 /** Le Condizioni fuori lista: gli oggetti che restano nella lista classica. */
