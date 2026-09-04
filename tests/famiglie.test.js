@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   CREDO_SPHERES,
+  credoSphereBadges,
   FAMIGLIE,
   findFamiglia,
   findSottofamiglia,
@@ -104,5 +105,10 @@ for (const lang of ["it", "en"]) {
   assert.equal(typeof strings.WOD5E_MAGE.Lineage.Factions.tradizioni, "string", lang);
   assert.equal(typeof strings.WOD5E_MAGE.Lineage.SubfamilyEmpty, "string", lang);
 }
+
+// I simboli delle due Sfere del Credo, per la testata; Potere è sciolto.
+assert.deepEqual(credoSphereBadges("arte").map((badge) => badge.id), ["matter", "mind"]);
+assert.deepEqual(credoSphereBadges("potere"), []);
+assert.deepEqual(credoSphereBadges(""), []);
 
 console.log("Famiglie tests passed.");

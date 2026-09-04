@@ -23,7 +23,7 @@ import {
   prepareExperiencePage
 } from "../experience-window.js";
 import { prepareFocus } from "../focus.js";
-import { prepareLineageChoices } from "../famiglie.js";
+import { credoSphereBadges, prepareLineageChoices } from "../famiglie.js";
 import { FOCUS_CREDOS } from "../focus.js";
 import { getLineage } from "../lineage.js";
 import {
@@ -324,6 +324,9 @@ export class MageActorSheet extends MortalActorSheet {
       const credo = String(actor.getFlag(MODULE_ID, "focus")?.credo ?? "");
       context.credos = FOCUS_CREDOS.map((id) => ({ id, label: localize(`WOD5E_MAGE.Focus.Credos.${id}`), selected: id === credo }));
       context.credoLabel = FOCUS_CREDOS.includes(credo) ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "";
+      context.credoSpheres = credoSphereBadges(credo, localize);
+      // Il nome del giocatore, sotto quello del personaggio.
+      context.playerName = String(actor.getFlag(MODULE_ID, "player") ?? "");
     }
 
     if (partId === "magick") {

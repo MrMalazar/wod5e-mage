@@ -211,9 +211,10 @@
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 4px;
   margin: 0.35rem 0.5rem 0 0;
-  max-width: 320px;
+  max-width: 340px;
   min-width: 0;
   padding: 0.3rem 0.5rem;
+  width: max-content;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza > summary {
@@ -263,6 +264,19 @@
   margin-bottom: 0;
 }
 
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-body .wod5e-mage-lineage-grid > label > span,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-credo > span {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick-double > img,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick-double > .wod5e-mage-lineage-nosphere {
+  flex: 0 0 20px;
+  height: 20px;
+  width: 20px;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-credo {
   display: flex;
   flex-direction: column;
@@ -280,11 +294,11 @@
   text-transform: uppercase;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-credo > select {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-credo select {
   font-size: 0.85rem;
   height: 26px;
   margin: 0;
-  width: 100%;
+  width: auto;
 }
 
 /* La Salute (ramo A): un tracciato solo, quattro segni. Le caselle sono
@@ -2956,11 +2970,11 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-specialties-grid > strong {
   color: var(--mage-oro-chiaro);
-  font-size: 0.8rem;
+  font-size: 0.95rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-specialties-grid > em {
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   font-style: normal;
 }
 
@@ -3328,12 +3342,30 @@
   background: var(--mage-velluto);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 4px;
-  margin: 0 0 1.5rem;
-  padding: 0.6rem 0.75rem;
+  margin: 0 auto 1.5rem;
+  padding: 0.5rem 0.9rem 0.6rem;
+  width: max-content;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-wisdom .field-section {
-  width: 100%;
+  width: auto;
+}
+
+/* Il nome centrato sopra la fila, grande come «Salute»; più e meno ai lati. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-head {
+  align-items: center;
+  font-size: 16pt;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-head .resource-control {
+  font-size: 12pt;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom .resource-counter .resource-counter-step {
+  height: 22px;
+  width: 22px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-segnato {
@@ -3402,6 +3434,14 @@
   width: 22px;
 }
 
+/* I PNG delle Sfere sono glifi neri: sul fondo scuro si rivestono d'oro
+   chiaro, come nelle Specialità (lo studio della 0.16). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick > img,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-sphere img {
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  object-fit: contain;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-nosphere {
   border: 1px dashed rgb(152 119 43 / 45%);
   border-radius: 50%;
@@ -3409,12 +3449,12 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick > select,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-grid > label > input {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   font-size: 0.85rem;
   height: 26px;
   margin: 0;
   min-width: 0;
-  width: 100%;
+  width: auto;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-grid > label > span {
@@ -3904,26 +3944,26 @@
   cursor: default;
 }
 
-/* Nuova sessione, in alto a sinistra della prima pagina. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-head {
+/* Nuova sessione, all'estremo in alto a sinistra della testata, su ogni pagina. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-header {
   position: relative;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-new-session {
-  background: transparent;
+  background: rgb(20 16 10 / 72%);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 3px;
   color: var(--mage-oro-chiaro);
   cursor: pointer;
   font-size: 0.72rem;
-  left: 0;
+  left: 0.5rem;
   line-height: 1.2;
   min-height: 0;
   padding: 0.2rem 0.45rem;
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0.35rem;
   width: auto;
+  z-index: 2;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-new-session:hover {
@@ -4094,4 +4134,23 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-condition-row .item-controls {
   display: flex;
   gap: 0.3rem;
+}
+
+/* Il nome del giocatore sotto quello del personaggio. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-player-field {
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-player {
+  --input-text-color: var(--mage-inchiostro);
+  background: rgb(255 250 240 / 88%);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-inchiostro);
+  font-size: 0.8rem;
+  height: 22px;
+  max-width: 200px;
+  text-align: center;
+  width: 60%;
 }

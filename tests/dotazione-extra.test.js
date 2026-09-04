@@ -122,7 +122,13 @@ assert.match(personaggioSource(), /convinzioni\.\{\{row\.id\}\}\.serve[\s\S]*con
 // L'Appartenenza sta in testata (4/9 notte), non più nel Personaggio.
 assert.doesNotMatch(personaggioSource(), /flags\.wod5e-mage\.lineage/);
 const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza.hbs", import.meta.url), "utf8");
-assert.match(appartenenza, /<details class="wod5e-mage-appartenenza">[\s\S]*lineage\.fazione[\s\S]*wod5e-mage-lineage-pick[\s\S]*lineageChoices\.familySphere\.icon[\s\S]*lineageChoices\.subSphere\.icon[\s\S]*flags\.wod5e-mage\.focus\.credo/);
+// Niente Fazione; il Credo ha due posti per i simboli delle sue Sfere (4/9 notte).
+assert.match(appartenenza, /<details class="wod5e-mage-appartenenza">[\s\S]*wod5e-mage-lineage-pick[\s\S]*lineageChoices\.familySphere\.icon[\s\S]*lineageChoices\.subSphere\.icon[\s\S]*wod5e-mage-lineage-pick-double[\s\S]*credoSpheres[\s\S]*flags\.wod5e-mage\.focus\.credo/);
+assert.doesNotMatch(appartenenza, /lineage\.fazione/);
+// Nuova sessione in testata, nome del giocatore sotto il nome.
+const header = readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8");
+assert.match(header, /<header[^>]*>\s*\{\{!--[^}]*--\}\}\s*<button type="button" class="wod5e-mage-new-session" data-action="saluteNewSession"/);
+assert.match(header, /flags\.wod5e-mage\.player/);
 assert.match(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /parts\/appartenenza\.hbs/);
 assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8"), /<select name="flags\.wod5e-mage\.focus\.credo"/);
 function personaggioSource() {

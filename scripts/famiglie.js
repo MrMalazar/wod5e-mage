@@ -246,7 +246,12 @@ export function prepareLineageChoices(lineage, localize = (key) => key) {
   };
 }
 
-function sphereBadge(id, localize) {
+/** I simboli delle due Sfere affini del Credo (Potere e Scienza: nessuno). */
+export function credoSphereBadges(credo, localize = (key) => key) {
+  return (CREDO_SPHERES[credo] ?? []).map((id) => sphereBadge(id, localize)).filter(Boolean);
+}
+
+export function sphereBadge(id, localize) {
   if (!id || !SPHERES.includes(id)) return null;
   return { id, label: localize(`WOD5E_MAGE.Spheres.${id}`), icon: `modules/${MODULE_ID}/assets/icons/sheet/${id}.png` };
 }

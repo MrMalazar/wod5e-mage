@@ -752,6 +752,9 @@
     },
     "Condizioni": {
       "Empty": "Nessuna Condizione addosso: il + apre l'archivio, per categoria."
+    },
+    "Header": {
+      "Player": "Giocatore"
     }
   },
   "WOD5E": {

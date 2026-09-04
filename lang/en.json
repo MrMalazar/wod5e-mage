@@ -752,6 +752,9 @@
     },
     "Condizioni": {
       "Empty": "No Condition on you: + opens the archive, by category."
+    },
+    "Header": {
+      "Player": "Player"
     }
   }
 }

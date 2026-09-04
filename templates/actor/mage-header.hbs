@@ -1,6 +1,10 @@
 {{!-- Mage header: the single Health track on the left, portrait and
      allegiance in the middle. The Wheel widget lives on the Traits page (see ruota.hbs). --}}
 <header class="actor-header wod5e-mage-header" {{#if headerbg}}style="background: url({{headerbg}}) center;"{{/if}}>
+    {{!-- Nuova sessione all'estremo in alto a sinistra, su ogni pagina (4/9 notte). --}}
+    <button type="button" class="wod5e-mage-new-session" data-action="saluteNewSession" title="{{localize 'WOD5E_MAGE.Salute.NewSessionHint'}}">
+        <i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.NewSession"}}
+    </button>
     <div class="header-fields">
         <div class="header-fields-left wod5e-mage-header-resources">
             {{> "modules/wod5e-mage/templates/actor/parts/salute.hbs"}}
@@ -19,6 +23,10 @@
             {{else}}
                 <input class="charname" name="name" type="text" value="{{name}}" placeholder="{{localize 'WOD5E.Name'}}"/>
             {{/if}}
+        </div>
+        {{!-- Sotto il nome del personaggio, quello del giocatore. --}}
+        <div class="flexrow name-field wod5e-mage-player-field">
+            <input class="wod5e-mage-player" name="flags.wod5e-mage.player" type="text" value="{{playerName}}" placeholder="{{localize 'WOD5E_MAGE.Header.Player'}}" aria-label="{{localize 'WOD5E_MAGE.Header.Player'}}" {{#if locked}}disabled{{/if}}/>
         </div>
         {{#if lineage.riga}}
             <div class="wod5e-mage-lineage" title="{{lineage.completa}}">{{lineage.riga}}</div>

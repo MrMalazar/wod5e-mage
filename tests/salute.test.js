@@ -69,7 +69,8 @@ assert.doesNotMatch(track, /Salute\.LegendPhysical|Salute\.LegendMental|wod5e-ma
 // Il Reset resta sotto la barra; Nuova sessione sta in alto a sinistra dei Tratti (4/9 notte).
 assert.match(track, /data-action="saluteReset"/);
 assert.doesNotMatch(track, /data-action="saluteNewSession"/);
-assert.match(readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8"), /wod5e-mage-tratti-head[\s\S]*data-action="saluteNewSession"[\s\S]*AttributesList\.Attributes/);
+assert.match(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /wod5e-mage-new-session" data-action="saluteNewSession"/);
+assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8"), /saluteNewSession/);
 const saluteScript = readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8");
 assert.match(saluteScript, /wod5e-mage-salute-menu-text/);
 const ruota = readFileSync(new URL("../templates/actor/parts/ruota.hbs", import.meta.url), "utf8");

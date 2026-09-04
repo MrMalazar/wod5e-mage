@@ -99,6 +99,8 @@ export function compileMageTraitRoll({ dataset = {}, traits, primarySkillId, sec
 }
 
 function datasetFromTarget(target) {
+  // Un bersaglio finto (il clic sulla Specializzazione) porta già il suo dataset.
+  if (!target?.nodeType) return { ...(target?.dataset ?? {}) };
   if (globalThis.$) return globalThis.$(target).data();
   return { ...target.dataset };
 }
