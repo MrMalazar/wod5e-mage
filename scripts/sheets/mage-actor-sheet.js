@@ -3,6 +3,7 @@ import { prepareEssentialSkills } from "../abilita-essenziali.js";
 import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../abilita-specifiche.js";
 import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
+import { onStrumentiSuggest } from "../strumenti.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
 import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
 import { prepareConceptChallenge } from "../concept-challenge.js";
@@ -96,6 +97,7 @@ export class MageActorSheet extends MortalActorSheet {
       // i campi che servono; gli altri tipi restano al sistema.
       createItem: onGuidedItemCreate,
       archivioOpen: onArchivioOpen,
+      strumentiSuggest: onStrumentiSuggest,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
       belongingAdd: onBelongingAdd,

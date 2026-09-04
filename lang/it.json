@@ -203,7 +203,17 @@
       },
       "Spheres": "Le Sfere",
       "WhatIs": "Cos'è",
-      "SpheresEmpty": "Nessuna Sfera sbloccata: quelle che attivi in Magick compaiono qui, con le loro note."
+      "SpheresEmpty": "Nessuna Sfera sbloccata: quelle che attivi in Magick compaiono qui, con le loro note.",
+      "Suggest": "Consigli: dal Credo, dalla Famiglia, dalla Sottofamiglia",
+      "SuggestTitle": "Strumenti per {sphere}",
+      "SuggestHint": "Sono consigli: il + li mette nella riga, e puoi scrivere quello che vuoi.",
+      "SuggestEmpty": "Scegli il Credo in tendina, la Famiglia e la Sottofamiglia nel Personaggio: i consigli arrivano da lì.",
+      "SuggestFromCredo": "Dal Credo",
+      "SuggestFromFamily": "Dalla Famiglia",
+      "SuggestFromSubfamily": "Dalla Sottofamiglia",
+      "SuggestNoneForType": "Per questa Sfera e questo Tipo il Credo non ha un esempio.",
+      "SuggestApply": "Metti Strumento ed esempio nella riga",
+      "SuggestApplyName": "Metti il testo nella riga (lo Strumento lo scegli in tendina)"
     },
     "ConceptChallenge": {
       "Label": "La sfida del concetto",

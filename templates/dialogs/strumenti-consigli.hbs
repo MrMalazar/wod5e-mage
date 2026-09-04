@@ -1,0 +1,71 @@
+{{!-- I consigli sugli Strumenti per una Sfera: dal Credo, dalla Famiglia, dalla Sottofamiglia. --}}
+<div class="dialog-content wod5e-mage-strumenti-consigli">
+    {{#if suggestions.empty}}
+        <p class="wod5e-mage-archivio-hint">{{localize "WOD5E_MAGE.Focus.SuggestEmpty"}}</p>
+    {{else}}
+        <p class="wod5e-mage-archivio-hint">{{localize "WOD5E_MAGE.Focus.SuggestHint"}}</p>
+    {{/if}}
+    <div class="wod5e-mage-archivio-list">
+        {{#if suggestions.credo}}
+            <section class="wod5e-mage-archivio-group">
+                <h3>{{localize "WOD5E_MAGE.Focus.SuggestFromCredo"}} · {{suggestions.credo.label}}</h3>
+                {{#each suggestions.credo.entries as |entry|}}
+                    <article class="wod5e-mage-archivio-entry open">
+                        <div class="wod5e-mage-archivio-row">
+                            <div class="wod5e-mage-archivio-name">
+                                <span>{{entry.toolLabel}}</span>
+                                <small>{{entry.keyLabel}}</small>
+                            </div>
+                            {{#if ../canEdit}}
+                                <button type="button" class="wod5e-mage-archivio-add" data-role="suggestApply" data-tool="{{entry.tool}}" data-profession="{{entry.profession}}" data-name="{{entry.name}}" title="{{localize 'WOD5E_MAGE.Focus.SuggestApply'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.SuggestApply'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                            {{/if}}
+                        </div>
+                        <div class="wod5e-mage-archivio-content"><p>{{entry.examples}}</p></div>
+                    </article>
+                {{else}}
+                    <p class="wod5e-mage-archivio-hint">{{localize "WOD5E_MAGE.Focus.SuggestNoneForType"}}</p>
+                {{/each}}
+            </section>
+        {{/if}}
+        {{#if suggestions.famiglia}}
+            <section class="wod5e-mage-archivio-group">
+                <h3>{{localize "WOD5E_MAGE.Focus.SuggestFromFamily"}} · {{suggestions.famiglia.label}}</h3>
+                {{#each suggestions.famiglia.list as |item|}}
+                    <article class="wod5e-mage-archivio-entry">
+                        <div class="wod5e-mage-archivio-row">
+                            <div class="wod5e-mage-archivio-name"><span>{{item}}</span></div>
+                            {{#if ../canEdit}}
+                                <button type="button" class="wod5e-mage-archivio-add" data-role="suggestApply" data-name="{{item}}" title="{{localize 'WOD5E_MAGE.Focus.SuggestApplyName'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.SuggestApplyName'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                            {{/if}}
+                        </div>
+                    </article>
+                {{/each}}
+                {{#each suggestions.famiglia.tools as |entry|}}
+                    <article class="wod5e-mage-archivio-entry">
+                        <div class="wod5e-mage-archivio-row">
+                            <div class="wod5e-mage-archivio-name"><span>{{entry.name}}</span><small>{{entry.familyLabel}}</small></div>
+                            {{#if ../canEdit}}
+                                <button type="button" class="wod5e-mage-archivio-add" data-role="suggestApply" data-name="{{entry.name}}" title="{{localize 'WOD5E_MAGE.Focus.SuggestApplyName'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.SuggestApplyName'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                            {{/if}}
+                        </div>
+                    </article>
+                {{/each}}
+            </section>
+        {{/if}}
+        {{#if suggestions.sottofamiglia}}
+            <section class="wod5e-mage-archivio-group">
+                <h3>{{localize "WOD5E_MAGE.Focus.SuggestFromSubfamily"}} · {{suggestions.sottofamiglia.label}}</h3>
+                {{#each suggestions.sottofamiglia.tools as |entry|}}
+                    <article class="wod5e-mage-archivio-entry">
+                        <div class="wod5e-mage-archivio-row">
+                            <div class="wod5e-mage-archivio-name"><span>{{entry.name}}</span><small>{{entry.familyLabel}}</small></div>
+                            {{#if ../canEdit}}
+                                <button type="button" class="wod5e-mage-archivio-add" data-role="suggestApply" data-name="{{entry.name}}" title="{{localize 'WOD5E_MAGE.Focus.SuggestApplyName'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.SuggestApplyName'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                            {{/if}}
+                        </div>
+                    </article>
+                {{/each}}
+            </section>
+        {{/if}}
+    </div>
+</div>

@@ -54,10 +54,14 @@
                 <div class="wod5e-mage-focus-instrument-list">
                     {{#each focus.instruments as |row|}}
                         <div class="wod5e-mage-focus-instrument{{#if row.sharedWith.length}} shared{{/if}}{{#if row.outsideForm}} outside{{/if}}">
-                            <label class="wod5e-mage-focus-instrument-sphere" title="{{localize row.label}}">
-                                <img src="{{row.icon}}" alt="">
-                                <span>{{localize row.label}}</span>
-                            </label>
+                            <div class="wod5e-mage-focus-instrument-head">
+                                <label class="wod5e-mage-focus-instrument-sphere" title="{{localize row.label}}">
+                                    <img src="{{row.icon}}" alt="">
+                                    <span>{{localize row.label}}</span>
+                                </label>
+                                {{!-- La lampadina: i consigli dal Credo, dalla Famiglia e dalla Sottofamiglia. --}}
+                                <button type="button" class="wod5e-mage-archivio-open wod5e-mage-focus-instrument-suggest" data-action="strumentiSuggest" data-sphere="{{row.id}}" title="{{localize 'WOD5E_MAGE.Focus.Suggest'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Suggest'}}"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i></button>
+                            </div>
                             <select name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.tool" aria-label="{{localize 'WOD5E_MAGE.Focus.Tool'}}" {{#if ../locked}}disabled{{/if}}>
                                 <option value="">{{localize "WOD5E_MAGE.Focus.ToolNone"}}</option>
                                 {{#each row.families as |family|}}

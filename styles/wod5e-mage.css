@@ -3722,3 +3722,29 @@
 .wod5e-mage-archivio-content .lead {
   color: var(--mage-oro-chiaro, #e8c766);
 }
+
+/* La lampadina dei consigli sugli Strumenti, accanto alla Sfera. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-head {
+  align-items: center;
+  display: flex;
+  gap: 0.35rem;
+  grid-column: 1;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-head .wod5e-mage-focus-instrument-sphere {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-suggest {
+  flex: 0 0 24px;
+}
+
+.wod5e-mage-strumenti-consigli .wod5e-mage-archivio-list {
+  max-height: 60vh;
+}
+
+.wod5e-mage-strumenti-consigli .wod5e-mage-archivio-name {
+  cursor: default;
+}

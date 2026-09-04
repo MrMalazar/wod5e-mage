@@ -203,7 +203,17 @@
       },
       "Spheres": "The Spheres",
       "WhatIs": "What is",
-      "SpheresEmpty": "No Sphere unlocked: the ones you activate in Magick appear here, with their notes."
+      "SpheresEmpty": "No Sphere unlocked: the ones you activate in Magick appear here, with their notes.",
+      "Suggest": "Suggestions: from the Creed, the Family, the Subfamily",
+      "SuggestTitle": "Instruments for {sphere}",
+      "SuggestHint": "Suggestions only: + puts one in the row, and you can write whatever you like.",
+      "SuggestEmpty": "Pick the Creed from the list, the Family and Subfamily in Character: suggestions come from there.",
+      "SuggestFromCredo": "From the Creed",
+      "SuggestFromFamily": "From the Family",
+      "SuggestFromSubfamily": "From the Subfamily",
+      "SuggestNoneForType": "For this Sphere and this Type the Creed has no example.",
+      "SuggestApply": "Put the Instrument and example in the row",
+      "SuggestApplyName": "Put the text in the row (pick the Instrument from the list)"
     },
     "ConceptChallenge": {
       "Label": "The Concept Challenge",
