@@ -19,6 +19,7 @@ import {
   prepareExperiencePage
 } from "../experience-window.js";
 import { prepareFocus } from "../focus.js";
+import { prepareLineageChoices } from "../famiglie.js";
 import { getLineage } from "../lineage.js";
 import {
   onPersonaggioRowAdd,
@@ -334,6 +335,7 @@ export class MageActorSheet extends MortalActorSheet {
     if (partId === "personaggio") {
       context = await this.prepareFeaturesContext(context, actor);
       context.lineage = getLineage(actor);
+      context.lineageChoices = prepareLineageChoices(context.lineage, game.i18n.localize.bind(game.i18n));
       // Ancore e Convinzioni a slot liberi, e il «quando si attiva» di
       // Ambizione e Desiderio.
       context.anchors = prepareAnchors(actor);

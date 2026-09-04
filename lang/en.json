@@ -26,7 +26,14 @@
       "Subfamily": "Subfamily",
       "FactionHint": "Traditions, Technocracy, Disparates…",
       "FamilyHint": "Verbena, Order of Hermes…",
-      "SubfamilyHint": "The sect, with its Family"
+      "SubfamilyHint": "The sect, with its Family",
+      "FamilyNone": "Choose the Family…",
+      "SubfamilyNone": "Choose the Subfamily…",
+      "SubfamilyEmpty": "None: a Craft is a single road",
+      "Factions": {
+        "tradizioni": "The nine Traditions",
+        "disparati": "The ten Crafts of the Disparate"
+      }
     },
     "Experience": {
       "Remaining": "Remaining",

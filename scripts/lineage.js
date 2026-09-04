@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { findFamiglia, findSottofamiglia } from "./famiglie.js";
 
 /**
  * L'appartenenza del Mago: Fazione, e la coppia Famiglia · Sottofamiglia
@@ -12,9 +13,14 @@ export function getLineage(actor) {
   const famiglia = String(stored.famiglia ?? "").trim();
   const sottofamiglia = String(stored.sottofamiglia ?? "").trim();
 
-  // Sotto il nome sta la coppia; la fazione completa vive nel titolo.
-  const riga = [famiglia, sottofamiglia].filter(Boolean).join(" · ");
-  const completa = [fazione, famiglia, sottofamiglia].filter(Boolean).join(" · ");
+  // Le tendine salvano gli id: il nome si legge dalla tavola delle Famiglie;
+  // un testo vecchio scritto a mano resta com'è.
+  const famigliaLabel = findFamiglia(famiglia)?.label ?? famiglia;
+  const sottofamigliaLabel = findSottofamiglia(famiglia, sottofamiglia)?.label ?? sottofamiglia;
 
-  return { fazione, famiglia, sottofamiglia, riga, completa };
+  // Sotto il nome sta la coppia; la fazione completa vive nel titolo.
+  const riga = [famigliaLabel, sottofamigliaLabel].filter(Boolean).join(" · ");
+  const completa = [fazione, famigliaLabel, sottofamigliaLabel].filter(Boolean).join(" · ");
+
+  return { fazione, famiglia, sottofamiglia, famigliaLabel, sottofamigliaLabel, riga, completa };
 }

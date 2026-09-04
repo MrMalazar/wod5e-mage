@@ -26,7 +26,14 @@
       "Subfamily": "Sottofamiglia",
       "FactionHint": "Tradizioni, Tecnocrazia, Disparati…",
       "FamilyHint": "Verbena, Ordine di Hermes…",
-      "SubfamilyHint": "La setta, con la sua Famiglia"
+      "SubfamilyHint": "La setta, con la sua Famiglia",
+      "FamilyNone": "Scegli la Famiglia…",
+      "SubfamilyNone": "Scegli la Sottofamiglia…",
+      "SubfamilyEmpty": "Nessuna: la Craft è una strada sola",
+      "Factions": {
+        "tradizioni": "Le nove Tradizioni",
+        "disparati": "Le dieci Craft dei Disparati"
+      }
     },
     "Experience": {
       "Remaining": "Rimanenti",

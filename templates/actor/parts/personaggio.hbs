@@ -14,13 +14,29 @@
                         <span>{{localize "WOD5E_MAGE.Lineage.Faction"}}</span>
                         <input type="text" name="flags.wod5e-mage.lineage.fazione" value="{{lineage.fazione}}" placeholder="{{localize 'WOD5E_MAGE.Lineage.FactionHint'}}"/>
                     </label>
+                    {{!-- Famiglia e Sottofamiglia in tendina: scegliere sblocca le loro
+                         Sfere a 1 (il Credo, nella sua pagina, le sue di sola presenza). --}}
                     <label>
                         <span>{{localize "WOD5E_MAGE.Lineage.Family"}}</span>
-                        <input type="text" name="flags.wod5e-mage.lineage.famiglia" value="{{lineage.famiglia}}" placeholder="{{localize 'WOD5E_MAGE.Lineage.FamilyHint'}}"/>
+                        <select name="flags.wod5e-mage.lineage.famiglia" {{#if locked}}disabled{{/if}}>
+                            <option value="">{{localize "WOD5E_MAGE.Lineage.FamilyNone"}}</option>
+                            {{#each lineageChoices.groups as |group|}}
+                                <optgroup label="{{group.label}}">
+                                    {{#each group.famiglie as |famiglia|}}
+                                        <option value="{{famiglia.id}}" {{#if famiglia.selected}}selected{{/if}}>{{famiglia.label}}</option>
+                                    {{/each}}
+                                </optgroup>
+                            {{/each}}
+                        </select>
                     </label>
                     <label>
-                        <span>{{localize "WOD5E_MAGE.Lineage.Subfamily"}}</span>
-                        <input type="text" name="flags.wod5e-mage.lineage.sottofamiglia" value="{{lineage.sottofamiglia}}" placeholder="{{localize 'WOD5E_MAGE.Lineage.SubfamilyHint'}}"/>
+                        <span>{{localize "WOD5E_MAGE.Lineage.Subfamily"}}{{#if lineageChoices.subKind}} <small>({{lineageChoices.subKind}})</small>{{/if}}</span>
+                        <select name="flags.wod5e-mage.lineage.sottofamiglia" {{#unless lineageChoices.hasSubfamilies}}disabled{{/unless}} {{#if locked}}disabled{{/if}}>
+                            <option value="">{{#if lineageChoices.hasSubfamilies}}{{localize "WOD5E_MAGE.Lineage.SubfamilyNone"}}{{else}}{{localize "WOD5E_MAGE.Lineage.SubfamilyEmpty"}}{{/if}}</option>
+                            {{#each lineageChoices.sottofamiglie as |sub|}}
+                                <option value="{{sub.id}}" {{#if sub.selected}}selected{{/if}}>{{sub.label}}</option>
+                            {{/each}}
+                        </select>
                     </label>
                 </div>
             </details>
