@@ -103,7 +103,7 @@
                             {{/unless}}
                             {{#each row.slots as |slot|}}
                                 <div class="wod5e-mage-sphere-specialty-slot">
-                                    <select name="flags.wod5e-mage.sphereSpecialties.{{row.id}}.{{slot.index}}" aria-label="{{localize 'WOD5E_MAGE.SphereSpecialties.Label'}}" {{#if ../../locked}}disabled{{/if}}>
+                                    <select name="flags.wod5e-mage.sphereSpecialties.{{row.id}}.{{slot.key}}" aria-label="{{localize 'WOD5E_MAGE.SphereSpecialties.Label'}}" {{#if ../../locked}}disabled{{/if}}>
                                         <option value="">{{localize "WOD5E_MAGE.SphereSpecialties.None"}}</option>
                                         {{#each slot.options as |option|}}
                                             <option value="{{option.id}}" {{#if option.selected}}selected{{/if}} {{#if option.taken}}disabled{{/if}}>{{option.label}}</option>

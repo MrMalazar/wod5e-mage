@@ -567,7 +567,8 @@ export async function onAreteRoll(event) {
     }
   }
 
-  const paradoxRating = getMagickBalance(actor).paradox;
+  // La Magick accidentale non tira i rossi: solo dadi normali.
+  const paradoxRating = options.coincidental ? 0 : getMagickBalance(actor).paradox;
 
   if (automatic) {
     flavor += ` ${game.i18n.format("WOD5E_MAGE.Arete.RedOnly", { pool: dicePool, threshold, burn: threshold })}`;

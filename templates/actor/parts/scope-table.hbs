@@ -21,7 +21,7 @@
                     <tr class="scope-{{row.id}}">
                         <th scope="row">{{localize row.label}}</th>
                         {{#each row.cells as |cell|}}
-                            <td>{{#if cell.icon}}<span class="wod5e-mage-tempo-cell"><img class="wod5e-mage-tempo-icon" src="{{cell.icon}}" alt="">{{localize cell.label}}</span>{{else}}{{localize cell.label}}{{/if}}</td>
+                            <td>{{#if cell.icon}}<span class="wod5e-mage-tempo-cell"><img class="wod5e-mage-tempo-icon" src="{{cell.icon}}" alt="">{{localize cell.label}}</span>{{else if cell.faIcon}}<span class="wod5e-mage-tempo-cell"><i class="{{cell.faIcon}}" aria-hidden="true"></i> {{localize cell.label}}</span>{{else if cell.glyph}}<span class="wod5e-mage-tempo-cell">{{localize cell.label}} <i class="wod5e-mage-salute-glyph" data-state="{{cell.glyph}}" aria-hidden="true"></i></span>{{else}}{{localize cell.label}}{{/if}}</td>
                         {{/each}}
                     </tr>
                 {{/each}}

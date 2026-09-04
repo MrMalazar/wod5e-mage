@@ -8,7 +8,24 @@ export const SCOPES = Object.freeze([
   "area",
   "targets",
   "conditions",
-  "range"
+  "range",
+  "precision"
+]);
+
+/**
+ * Le righe della tavola: gli Ambiti, con la Durata sdoppiata in gioco
+ * (scene, sessioni, storia, cronaca) e narrativa (sul calendario): al
+ * lancio si dichiara su quale delle due corre.
+ */
+export const SCOPE_TABLE_ROWS = Object.freeze([
+  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.potency", glyph: "ps" },
+  { id: "duration", scope: "duration", label: "WOD5E_MAGE.Scopes.DurationPlay", icons: true },
+  { id: "durationNarrative", scope: "duration", label: "WOD5E_MAGE.Scopes.DurationNarrative" },
+  { id: "area", scope: "area", label: "WOD5E_MAGE.Scopes.area" },
+  { id: "targets", scope: "targets", label: "WOD5E_MAGE.Scopes.targets", faIcon: "fa-solid fa-user" },
+  { id: "conditions", scope: "conditions", label: "WOD5E_MAGE.Scopes.conditions" },
+  { id: "range", scope: "range", label: "WOD5E_MAGE.Scopes.range" },
+  { id: "precision", scope: "precision", label: "WOD5E_MAGE.Scopes.precision" }
 ]);
 
 /** Colonne della tavola: i sette livelli di un Ambito. */
@@ -34,16 +51,23 @@ export function prepareScopeTable() {
 
   return {
     steps,
-    rows: SCOPES.map((id) => ({
-      id,
-      label: `WOD5E_MAGE.Scopes.${id}`,
-      cells: steps.map((step) => ({
-        step,
-        label: `WOD5E_MAGE.Scopes.Table.${id}.${step}`,
-        icon: id === "duration"
-          ? `modules/wod5e-mage/assets/icons/sheet/tempo/${DURATION_ICONS[step]}.svg`
-          : ""
-      }))
+    rows: SCOPE_TABLE_ROWS.map((row) => ({
+      id: row.id,
+      scope: row.scope,
+      label: row.label,
+      cells: steps.map((step) => {
+        const label = `WOD5E_MAGE.Scopes.Table.${row.id}.${step}`;
+        return {
+          step,
+          label,
+          // La Potenza porta il segno del danno accanto al numero (dal 2).
+          glyph: row.glyph && step > 1 ? row.glyph : "",
+          faIcon: row.faIcon ?? "",
+          icon: row.icons
+            ? `modules/wod5e-mage/assets/icons/sheet/tempo/${DURATION_ICONS[step]}.svg`
+            : ""
+        };
+      })
     }))
   };
 }

@@ -299,17 +299,17 @@
       "conditions": "Conditions",
       "range": "Range",
       "TableTitle": "The Scopes",
-      "TableHint": "Each Scope is declared with a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope; every Scope beyond the first raises it by 1. Potency: damage per level.",
+      "TableHint": "Each Scope is declared with a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope; every Scope beyond the first raises it by 1. Potency: damage per level. Duration: when you cast, say whether it runs on play or on narrative time.",
       "TableSuccesses": "Level →",
       "Table": {
         "potency": {
-          "1": "0 damage",
-          "2": "2 damage",
-          "3": "5 damage",
-          "4": "7 damage",
-          "5": "8 damage",
-          "6": "10 damage",
-          "7": "13 damage"
+          "1": "0",
+          "2": "2",
+          "3": "5",
+          "4": "7",
+          "5": "8",
+          "6": "10",
+          "7": "13"
         },
         "duration": {
           "1": "1",
@@ -353,10 +353,31 @@
           "3": "Horizon (50 km)",
           "4": "Region (500 km)",
           "5": "Same continent",
-          "6": "Global",
+          "6": "Same Dimension",
           "7": "Wherever it is"
+        },
+        "precision": {
+          "1": "1",
+          "2": "2",
+          "3": "3",
+          "4": "4",
+          "5": "5",
+          "6": "6",
+          "7": "7"
+        },
+        "durationNarrative": {
+          "1": "A day",
+          "2": "A week",
+          "3": "A month",
+          "4": "A season",
+          "5": "A year",
+          "6": "A decade",
+          "7": "Permanent"
         }
-      }
+      },
+      "precision": "Precision",
+      "DurationPlay": "Duration (play)",
+      "DurationNarrative": "Duration (narrative)"
     },
     "OngoingMagick": {
       "Label": "Ongoing Magick",

@@ -299,17 +299,17 @@
       "conditions": "Condizioni",
       "range": "Portata",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto; ogni Ambito oltre il primo la alza di 1. Potenza: danni per livello.",
+      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto; ogni Ambito oltre il primo la alza di 1. Potenza: danni per livello. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
       "TableSuccesses": "Livello →",
       "Table": {
         "potency": {
-          "1": "0 danni",
-          "2": "2 danni",
-          "3": "5 danni",
-          "4": "7 danni",
-          "5": "8 danni",
-          "6": "10 danni",
-          "7": "13 danni"
+          "1": "0",
+          "2": "2",
+          "3": "5",
+          "4": "7",
+          "5": "8",
+          "6": "10",
+          "7": "13"
         },
         "duration": {
           "1": "1",
@@ -353,10 +353,31 @@
           "3": "Orizzonte (50 km)",
           "4": "Regione (500 km)",
           "5": "Stesso continente",
-          "6": "Globale",
+          "6": "Stessa Dimensione",
           "7": "Ovunque sia"
+        },
+        "precision": {
+          "1": "1",
+          "2": "2",
+          "3": "3",
+          "4": "4",
+          "5": "5",
+          "6": "6",
+          "7": "7"
+        },
+        "durationNarrative": {
+          "1": "Un giorno",
+          "2": "Una settimana",
+          "3": "Un mese",
+          "4": "Una stagione",
+          "5": "Un anno",
+          "6": "Un decennio",
+          "7": "Permanente"
         }
-      }
+      },
+      "precision": "Precisione",
+      "DurationPlay": "Durata (gioco)",
+      "DurationNarrative": "Durata (narrativa)"
     },
     "OngoingMagick": {
       "Label": "Magick in atto",

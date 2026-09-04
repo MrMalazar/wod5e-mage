@@ -46,6 +46,15 @@ export function specialtySlots(rating) {
  * Le scelte salvate: Sfera → lista degli id dei poteri, uno per slot.
  * Le schede vecchie tenevano una stringa sola: vale come primo slot.
  */
+export function slotKey(index) {
+  return `slot${index}`;
+}
+
+function slotNumber(key) {
+  const match = String(key).match(/^(?:slot)?(\d+)$/);
+  return match ? Number(match[1]) : NaN;
+}
+
 export function getSphereSpecialtyChoices(actor) {
   const stored = actor.getFlag(MODULE_ID, SPHERE_SPECIALTIES_FLAG);
   if (!stored || typeof stored !== "object") return {};
@@ -53,10 +62,18 @@ export function getSphereSpecialtyChoices(actor) {
     Object.entries(stored).map(([sphereId, choice]) => {
       if (typeof choice === "string") return [sphereId, [choice]];
       if (!choice || typeof choice !== "object") return [sphereId, []];
-      const list = Object.keys(choice)
-        .sort((left, right) => Number(left) - Number(right))
-        .map((slot) => String(choice[slot] ?? ""));
-      return [sphereId, list];
+      // Le chiavi sono slot1, slot2, slot3 (le chiavi numeriche di prima
+      // diventavano un array e perdevano il primo slot); un array vecchio
+      // si legge posizione per posizione.
+      const entries = Array.isArray(choice)
+        ? choice.map((value, index) => [index + 1, value])
+        : Object.entries(choice).map(([key, value]) => [slotNumber(key), value]);
+      const list = [];
+      for (const [slot, value] of entries) {
+        if (!Number.isInteger(slot) || slot < 1) continue;
+        list[slot - 1] = String(value ?? "");
+      }
+      return [sphereId, Array.from(list, (value) => value ?? "")];
     })
   );
 }
@@ -82,6 +99,7 @@ export function prepareSphereSpecialties(actor, { powers = {}, localize = (key) 
         const chosen = abilities.find((ability) => ability.id === choice) ?? null;
         return {
           index: index + 1,
+          key: slotKey(index + 1),
           choice,
           options: abilities.map((ability) => ({
             id: ability.id,

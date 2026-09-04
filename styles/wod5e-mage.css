@@ -272,10 +272,11 @@
   justify-self: start;
 }
 
-/* I glifi della legenda: le stesse caselle, in piccolo, dentro il testo. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-glyph {
-  --salute-segno: var(--mage-oro-chiaro, #e8c766);
-  border: 1px solid var(--mage-oro-scuro);
+/* I glifi della Salute: le stesse caselle, in piccolo, dentro il testo.
+   Regole globali: servono nella legenda, nel menù e nella tavola degli Ambiti. */
+.wod5e-mage-salute-glyph {
+  --salute-segno: #f5e7b2;
+  border: 1px solid #98772b;
   display: inline-block;
   height: 12px;
   margin: 0 0.1rem;
@@ -283,21 +284,21 @@
   width: 12px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-glyph[data-state="ps"] {
+.wod5e-mage-salute-glyph[data-state="ps"] {
   background: linear-gradient(135deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-glyph[data-state="pa"] {
+.wod5e-mage-salute-glyph[data-state="pa"] {
   background:
     linear-gradient(45deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%),
     linear-gradient(135deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-glyph[data-state="ms"] {
+.wod5e-mage-salute-glyph[data-state="ms"] {
   background: radial-gradient(circle, transparent 0%, transparent 32%, var(--salute-segno) 36%, var(--salute-segno) 48%, transparent 52%, transparent 100%);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-glyph[data-state="ma"] {
+.wod5e-mage-salute-glyph[data-state="ma"] {
   background: radial-gradient(circle, var(--salute-segno) 0%, var(--salute-segno) 18%, transparent 22%, transparent 34%, var(--salute-segno) 38%, var(--salute-segno) 50%, transparent 54%, transparent 100%);
 }
 
@@ -361,29 +362,9 @@
 }
 
 .wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph {
-  --salute-segno: #f5e7b2;
-  border: 1px solid #98772b;
-  display: inline-block;
   height: 24px;
+  margin: 0;
   width: 24px;
-}
-
-.wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph[data-state="ps"] {
-  background: linear-gradient(135deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%);
-}
-
-.wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph[data-state="pa"] {
-  background:
-    linear-gradient(45deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%),
-    linear-gradient(135deg, transparent 0%, transparent 43%, var(--salute-segno) 45%, var(--salute-segno) 55%, transparent 57%, transparent 100%);
-}
-
-.wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph[data-state="ms"] {
-  background: radial-gradient(circle, transparent 0%, transparent 32%, var(--salute-segno) 36%, var(--salute-segno) 48%, transparent 52%, transparent 100%);
-}
-
-.wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph[data-state="ma"] {
-  background: radial-gradient(circle, var(--salute-segno) 0%, var(--salute-segno) 18%, transparent 22%, transparent 34%, var(--salute-segno) 38%, var(--salute-segno) 50%, transparent 54%, transparent 100%);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-status {
@@ -1378,14 +1359,14 @@
 /* Sfere Effetto e Ambiti: due cose distinte, due colonne affiancate. */
 .wod5e-mage-arete-columns {
   display: grid;
-  gap: 0.5rem 1.6rem;
-  grid-template-columns: minmax(150px, 1fr) minmax(0, 1fr);
+  gap: 0.6rem 2rem;
+  grid-template-columns: minmax(170px, 1fr) minmax(0, 1.2fr);
 }
 
 .wod5e-mage-arete-col {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.45rem;
 }
 
 /* Il livello della Sfera parla a pallini, come sulla scheda. */
@@ -1393,7 +1374,7 @@
   align-items: center;
   display: inline-flex;
   flex: none;
-  gap: 3px;
+  gap: 4px;
   margin-left: auto;
 }
 
@@ -1404,12 +1385,12 @@
   box-shadow: none;
   cursor: pointer;
   display: inline-block;
-  height: 11px;
+  height: 13px;
   line-height: 1;
   margin: 0;
-  min-height: 11px;
+  min-height: 13px;
   padding: 0;
-  width: 11px;
+  width: 13px;
 }
 
 .wod5e-mage-arete-sphere-dot:hover {
@@ -1424,14 +1405,20 @@
    I pallini sono bottoni: il clic fissa il livello. */
 .wod5e-mage-arete-dotrow {
   align-items: center;
-  display: flex;
-  gap: 0.45rem;
-  min-height: 20px;
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: minmax(96px, 1fr) auto;
+  min-height: 24px;
 }
 
 .wod5e-mage-arete-dotrow > span:first-child {
-  flex: 1 1 auto;
   min-width: 0;
+}
+
+/* I pallini partono tutti dalla stessa colonna, a sinistra. */
+.wod5e-mage-arete-dotrow > .wod5e-mage-arete-sphere-dots {
+  justify-self: start;
+  margin-left: 0;
 }
 
 .wod5e-mage-arete-dotrow.chosen > span:first-child {
@@ -1507,8 +1494,9 @@
   display: flex;
   flex-direction: column;
   font-size: 0.85rem;
-  gap: 0.45rem;
+  gap: 0.75rem;
   min-width: 380px;
+  padding: 0.25rem 0.15rem;
 }
 
 /* La riserva: tre tendine in fila, etichetta sopra. */

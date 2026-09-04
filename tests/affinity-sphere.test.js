@@ -103,12 +103,15 @@ const actor = {
     if (key === "spheres") return { correspondence: 3, forces: 2, mind: 4, time: 5 };
     if (key === "selectedSpheres") return { correspondence: true, forces: true, mind: true, time: true };
     // Corrispondenza con la forma vecchia (stringa), Mente a due slot, Tempo vuoto.
-    if (key === "sphereSpecialties") return { correspondence: "range", mind: { 1: "perception", 2: "nonEsiste" }, forces: "potency" };
+    if (key === "sphereSpecialties") return { correspondence: "range", mind: { slot1: "perception", slot2: "nonEsiste" }, forces: "potency", time: ["", "resistance"] };
     return undefined;
   }
 };
 const rows = prepareSphereSpecialties(actor, { powers: itPowers });
 assert.deepEqual(rows.map((row) => [row.id, row.slots.length]), [["correspondence", 1], ["mind", 2], ["time", 3]]);
+// Le chiavi degli slot sono slot1, slot2, slot3; un array vecchio si legge per posizione.
+assert.deepEqual(rows[0].slots.map((slot) => slot.key), ["slot1"]);
+assert.deepEqual(rows[2].slots.map((slot) => slot.choice), ["", "resistance", ""]);
 const corr = rows[0].slots[0];
 assert.equal(corr.choice, "range");
 assert.equal(corr.chosen.label, "Portata");
