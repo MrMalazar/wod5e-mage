@@ -84,17 +84,21 @@
             </header>
 
             {{#each focus.spheres as |sphere|}}
-                <article class="wod5e-mage-focus-sphere">{{!-- solo le Sfere sbloccate --}}
-                    <h3>
-                        <span>{{localize "WOD5E_MAGE.Focus.WhatIs"}}</span>
-                        <strong>{{localize sphere.label}}</strong>
-                    </h3>
+                {{!-- Solo le Sfere sbloccate; ognuna si apre e si chiude dal titolo. --}}
+                <details class="wod5e-mage-focus-sphere" data-sphere="{{sphere.id}}" open>
+                    <summary>
+                        <h3>
+                            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                            <span>{{localize "WOD5E_MAGE.Focus.WhatIs"}}</span>
+                            <strong>{{localize sphere.label}}</strong>
+                        </h3>
+                    </summary>
                     <div class="resource">
                         <prose-mirror name="flags.wod5e-mage.focus.sphereNotes.{{sphere.id}}" value="{{sphere.notes}}" toggled="true" compact="true">
                             {{{sphere.enrichedNotes}}}
                         </prose-mirror>
                     </div>
-                </article>
+                </details>
             {{else}}
                 <p class="wod5e-mage-focus-spheres-empty">{{localize "WOD5E_MAGE.Focus.SpheresEmpty"}}</p>
             {{/each}}

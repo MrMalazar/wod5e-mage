@@ -129,7 +129,7 @@ function refreshMaster(element, actors) {
     for (const entry of group.entries) {
       const button = element.querySelector(`[data-condizione="${entry.id}"]`);
       if (!button) continue;
-      button.classList.toggle("active", entry.all);
+      button.classList.toggle("lit", entry.all);
       button.classList.toggle("partial", entry.some);
       const badge = button.querySelector("[data-role=count]");
       if (badge) badge.textContent = entry.badge;

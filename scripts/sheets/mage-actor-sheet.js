@@ -282,6 +282,13 @@ export class MageActorSheet extends MortalActorSheet {
         article.classList.toggle("open", this._specialtyOpen[key]);
       });
     }
+    // Le Sfere del Credo: ogni tendina ricorda com'era.
+    this._focusSphereOpen ??= {};
+    for (const sphere of this.element?.querySelectorAll(".wod5e-mage-focus-sphere[data-sphere]") ?? []) {
+      const id = sphere.dataset.sphere;
+      if (id in this._focusSphereOpen) sphere.open = this._focusSphereOpen[id];
+      sphere.addEventListener("toggle", () => { this._focusSphereOpen[id] = sphere.open; });
+    }
     // Le domande della Sfida del concetto: ogni tendina ricorda com'era.
     this._conceptOpen ??= {};
     for (const field of this.element?.querySelectorAll(".wod5e-mage-concept-field[data-field]") ?? []) {

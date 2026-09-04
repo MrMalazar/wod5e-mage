@@ -101,7 +101,6 @@
                                 <div class="wod5e-mage-sphere-specialty-head"{{#if slot.chosen}} title="{{localize 'WOD5E_MAGE.SphereSpecialties.ShowText'}}"{{/if}}>
                                     <img src="{{row.icon}}" alt="">
                                     <strong>{{localize row.label}}</strong>
-                                    <small>{{localize "WOD5E_MAGE.SphereSpecialties.Slot" index=slot.index}}</small>
                                     {{#if slot.chosen}}<i class="fa-solid fa-chevron-down wod5e-mage-sphere-specialty-chevron" aria-hidden="true"></i>{{/if}}
                                 </div>
                                 <select name="flags.wod5e-mage.sphereSpecialties.{{row.id}}.{{slot.key}}" aria-label="{{localize 'WOD5E_MAGE.SphereSpecialties.Label'}}" {{#if ../../locked}}disabled{{/if}}>

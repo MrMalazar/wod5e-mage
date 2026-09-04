@@ -10,7 +10,7 @@
             <h3>{{group.group}}</h3>
             <div class="wod5e-mage-master-row">
                 {{#each group.entries as |entry|}}
-                    <button type="button" class="wod5e-mage-master-cond{{#if entry.all}} active{{/if}}{{#if entry.some}} partial{{/if}}" data-condizione="{{entry.id}}" title="{{entry.title}}">
+                    <button type="button" class="wod5e-mage-master-cond{{#if entry.all}} lit{{/if}}{{#if entry.some}} partial{{/if}}" data-condizione="{{entry.id}}" title="{{entry.title}}">
                         <img src="{{entry.icon}}" alt="">
                         <span class="wod5e-mage-master-name">{{entry.name}}{{#if entry.dice}} <em>{{entry.dice}}</em>{{/if}}</span>
                         <small>{{entry.what}}</small>

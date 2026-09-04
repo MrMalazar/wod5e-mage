@@ -82,7 +82,7 @@
                                     <span class="wod5e-mage-condizioni-title">{{group.group}}</span>
                                     <div class="wod5e-mage-condizioni-row">
                                         {{#each group.entries as |entry|}}
-                                            <button type="button" class="wod5e-mage-condizione{{#if entry.active}} active{{/if}}{{#if entry.suppressed}} suppressed{{/if}}" data-action="condizioneToggle" data-condizione="{{entry.id}}" title="{{entry.title}}" aria-label="{{entry.name}}" aria-pressed="{{#if entry.active}}true{{else}}false{{/if}}">
+                                            <button type="button" class="wod5e-mage-condizione{{#if entry.active}} lit{{/if}}{{#if entry.suppressed}} suppressed{{/if}}" data-action="condizioneToggle" data-condizione="{{entry.id}}" title="{{entry.title}}" aria-label="{{entry.name}}">
                                                 <img src="{{entry.icon}}" alt="">
                                                 {{#if entry.dice}}<small>{{entry.dice}}</small>{{/if}}
                                             </button>
