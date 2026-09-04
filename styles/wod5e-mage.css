@@ -4136,10 +4136,23 @@
   gap: 0.3rem;
 }
 
-/* Il nome del giocatore sotto quello del personaggio. */
+/* Il nome del giocatore sotto quello del personaggio: il nome del PG sale
+   di una riga, il giocatore prende il bordo basso del ritratto. */
+.wod5e-mage.wod5e.actor.sheet .header-profile {
+  position: relative;
+}
+
+.wod5e-mage.wod5e.actor.sheet .header-profile > .name-field:not(.wod5e-mage-player-field) {
+  bottom: 26px;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-player-field {
+  bottom: 0;
   justify-content: center;
-  margin-top: 2px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-player {
@@ -4153,4 +4166,10 @@
   max-width: 200px;
   text-align: center;
   width: 60%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-reset-row > .wod5e-mage-reset-all {
+  border-color: var(--mage-oro);
+  color: var(--mage-oro);
+  flex-basis: 100%;
 }

@@ -612,7 +612,14 @@
       "SessionXp": "Esperienza della sessione",
       "SessionXpHint": "I punti che il Narratore assegna: finiscono fra le Prese della pagina Esperienza. Zero se non ce ne sono.",
       "SessionOf": "sessione del {date}",
-      "NewSessionDoneXp": "Nuova sessione: {points} punti esperienza segnati, superficiali mentali guariti, un superficiale fisico in meno, Contraccolpo riarmato."
+      "NewSessionDoneXp": "Nuova sessione: {points} punti esperienza segnati, superficiali mentali guariti, un superficiale fisico in meno, Contraccolpo riarmato.",
+      "Riposo": "Riposo",
+      "RiposoHint": "Guariscono i superficiali mentali, e un superficiale fisico",
+      "RiposoDone": "Riposo: la mente è sgombra, un superficiale fisico se n'è andato.",
+      "Relax": "Relax",
+      "RelaxHint": "Fermezza + Autocontrollo: ogni successo cura un superficiale mentale, ogni due un aggravato; almeno una casella",
+      "RelaxRolling": "Relax: Fermezza + Autocontrollo",
+      "RelaxDone": "Relax: {successes} successi, curati {superficial} superficiali e {aggravated} aggravati mentali."
     },
     "Contraccolpo": {
       "Label": "Negare il Contraccolpo",
@@ -739,7 +746,8 @@
       "Credo": "Reset Credo",
       "Lineage": "Reset Appartenenza",
       "Compass": "Reset Bussola",
-      "Confirm": "{label}: azzera questa parte della scheda. Vuoi procedere?"
+      "Confirm": "{label}: azzera questa parte della scheda. Vuoi procedere?",
+      "All": "Reset scheda"
     },
     "Note": {
       "Add": "Aggiungi un riquadro",

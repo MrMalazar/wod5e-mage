@@ -81,14 +81,34 @@ export const RESETS = Object.freeze({
 
 export const RESET_IDS = Object.freeze(Object.keys(RESETS));
 
+/** Il reset della scheda intera: le sette parti, più Condizioni, Salute e Note. */
+export const RESET_ALL = Object.freeze({
+  label: "WOD5E_MAGE.Reset.All",
+  icon: "fa-rotate-left",
+  changes: () => ({
+    [`flags.${MODULE_ID}.salute`]: { pa: 0, ps: 0, ma: 0, ms: 0, extra: 0 },
+    [`flags.${MODULE_ID}.-=note`]: null,
+    [`flags.${MODULE_ID}.-=player`]: null
+  }),
+  items: (actor) => actor.items.filter((item) => item.type === "condition").map((item) => item.id)
+});
+
 /** I tasti, nell'ordine chiesto. */
 export function prepareResets(localize = (key) => key) {
-  return RESET_IDS.map((id) => ({ id, label: localize(RESETS[id].label), icon: RESETS[id].icon }));
+  return [
+    ...RESET_IDS.map((id) => ({ id, label: localize(RESETS[id].label), icon: RESETS[id].icon })),
+    { id: "all", label: localize(RESET_ALL.label), icon: RESET_ALL.icon, all: true }
+  ];
 }
 
 /** Applica un reset: l'update e, se serve, la cancellazione degli oggetti. */
 export async function applyReset(actor, id) {
-  const reset = RESETS[id];
+  if (id === "all") {
+    for (const each of RESET_IDS) await applyReset(actor, each);
+    await applyReset(actor, RESET_ALL);
+    return true;
+  }
+  const reset = typeof id === "object" ? id : RESETS[id];
   if (!reset) return false;
   if (reset.changes) {
     const update = reset.changes(actor);
@@ -106,12 +126,12 @@ export async function onResetSection(event, target) {
   event.preventDefault();
   const actor = this.actor;
   const id = target.dataset.reset;
-  if (!RESETS[id]) return;
+  if (!RESETS[id] && id !== "all") return;
   if (!actor.isOwner) {
     ui.notifications.warn(game.i18n.format("WOD5E.Notifications.NoSufficientPermission", { string: actor.name }));
     return;
   }
-  const label = game.i18n.localize(RESETS[id].label);
+  const label = game.i18n.localize(id === "all" ? RESET_ALL.label : RESETS[id].label);
   const confirmed = await foundry.applications.api.DialogV2.confirm({
     window: { title: label },
     content: `<p>${game.i18n.format("WOD5E_MAGE.Reset.Confirm", { label })}</p>`,

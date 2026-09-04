@@ -136,9 +136,38 @@ export function renderAutoVictoryContent({ symbols, card, notes = [] }, localize
  * In chat, sopra i dadi: i simboli del tiro e, se serve, la vittoria
  * automatica. Legge la bandiera del messaggio scritta dal tiro di Areté.
  */
+/**
+ * Il conto del Mago in chat (4/9 notte): il sistema somma i dadi a modo
+ * suo; il tiro di Areté conta le coppie di dieci solo fra i dadi Mage e
+ * aggiunge i successi automatici delle Specialità. La carta porta il totale
+ * vero e la soglia, e qui si riscrivono numero ed esito.
+ */
+export function rollOutcome(total, difficulty, format = (key, data) => `${key} ${data?.string ?? ""}`) {
+  const successes = Math.max(Math.trunc(Number(total) || 0), 0);
+  const goal = Math.max(Math.trunc(Number(difficulty) || 0), 0);
+  if (goal <= 0) return { total: successes, cssClass: "", text: "" };
+  return successes >= goal
+    ? { total: successes, cssClass: "success", text: format("WOD5E.RollList.SuccessBy", { string: successes - goal }) }
+    : { total: successes, cssClass: "failure", text: format("WOD5E.RollList.FailureBy", { string: goal - successes }) };
+}
+
+function applyMageTotal(html, data) {
+  if (!Number.isFinite(Number(data.total))) return;
+  const outcome = rollOutcome(data.total, data.difficulty, game.i18n.format.bind(game.i18n));
+  const totalOut = html.querySelector(".total-contents");
+  if (totalOut) totalOut.textContent = String(outcome.total);
+  const label = html.querySelector(".roll-result-label");
+  if (label && outcome.text) {
+    label.classList.remove("success", "failure");
+    label.classList.add(outcome.cssClass);
+    label.textContent = outcome.text;
+  }
+}
+
 export function decorateRollCard(message, html) {
   const data = message?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG);
   if (!data || !html?.querySelector) return false;
+  applyMageTotal(html, data);
   const icons = html.querySelector(".dice-result .dice-icons");
   if (!icons || icons.parentElement.querySelector(".wod5e-mage-roll-top")) return false;
 

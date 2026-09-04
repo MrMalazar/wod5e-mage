@@ -6,7 +6,8 @@ import {
   renderRollCard,
   renderRollNote,
   renderRollSymbols,
-  rollSymbols
+  rollSymbols,
+  rollOutcome
 } from "../scripts/roll-card.js";
 import { SCOPE_ICONS, SCOPES } from "../scripts/scopes.js";
 
@@ -100,3 +101,10 @@ assert.match(css, /\.wod5e-mage-arete-prize,\s*\.wod5e-mage-arete-harmony-row\s*
 assert.match(css, /\.wod5e-mage-roll-victory\s*\{[^}]*text-transform:\s*uppercase;/s);
 
 console.log("Roll card tests passed.");
+
+// Il conto del Mago in chat: totale vero (successi automatici compresi) contro la soglia.
+const fmt = (key, data) => `${key.split(".").pop()} ${data.string}`;
+assert.deepEqual(rollOutcome(5, 3, fmt), { total: 5, cssClass: "success", text: "SuccessBy 2" });
+assert.deepEqual(rollOutcome(2, 3, fmt), { total: 2, cssClass: "failure", text: "FailureBy 1" });
+assert.deepEqual(rollOutcome(4, 0, fmt), { total: 4, cssClass: "", text: "" });
+assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /total: roll\._total, difficulty, autoSuccesses/);

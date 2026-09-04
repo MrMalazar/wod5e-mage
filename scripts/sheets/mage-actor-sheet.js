@@ -58,7 +58,9 @@ import {
   onSaluteCellChange,
   onSaluteExtraChange,
   onSaluteNewSession,
-  onSaluteReset
+  onSaluteRelax,
+  onSaluteReset,
+  onSaluteRiposo
 } from "../salute.js";
 
 const MODULE = "modules/wod5e-mage/templates/actor";
@@ -119,6 +121,8 @@ export class MageActorSheet extends MortalActorSheet {
       saluteExtraChange: onSaluteExtraChange,
       saluteNewSession: onSaluteNewSession,
       saluteReset: onSaluteReset,
+      saluteRiposo: onSaluteRiposo,
+      saluteRelax: onSaluteRelax,
       magickBalanceChange: onMagickBalanceChange,
       experienceLogAdd: onExperienceLogAdd,
       experienceLogDelete: onExperienceLogDelete,

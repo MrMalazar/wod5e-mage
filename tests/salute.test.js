@@ -7,6 +7,7 @@ import {
   saluteAfterSession,
   saluteMax,
   saluteStatus,
+  saluteAfterRelax,
   saluteWithMentalAggravated
 } from "../scripts/salute.js";
 
@@ -87,3 +88,12 @@ console.log("Salute tests passed.");
   const dialog = readFileSync(new URL("../templates/dialogs/new-session.hbs", import.meta.url), "utf8");
   assert.match(dialog, /name="experience"[\s\S]*name="when"/);
 }
+
+// Relax (4/9 notte): un successo un superficiale mentale, due successi un aggravato; almeno una casella.
+assert.deepEqual(saluteAfterRelax({ pa: 1, ps: 2, ma: 2, ms: 3 }, 0), { pa: 1, ps: 2, ma: 2, ms: 2 });
+assert.deepEqual(saluteAfterRelax({ pa: 1, ps: 2, ma: 2, ms: 3 }, 2), { pa: 1, ps: 2, ma: 2, ms: 1 });
+assert.deepEqual(saluteAfterRelax({ pa: 1, ps: 2, ma: 2, ms: 3 }, 5), { pa: 1, ps: 2, ma: 1, ms: 0 });
+assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 0, ma: 2, ms: 0 }, 0), { pa: 0, ps: 0, ma: 1, ms: 0 });
+assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 0, ma: 2, ms: 0 }, 3), { pa: 0, ps: 0, ma: 1, ms: 0 });
+assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 1, ma: 0, ms: 0 }, 4), { pa: 0, ps: 1, ma: 0, ms: 0 });
+assert.match(track, /data-action="saluteRiposo"[\s\S]*data-action="saluteRelax"[\s\S]*data-action="saluteReset"/);

@@ -318,8 +318,11 @@ export async function rollAreteWithParadox({
           }
           roll.options.flavor = finalFlavor;
 
-          // La bandiera dice al disegno della chat cosa mettere sopra i dadi.
-          const flags = card ? { [MODULE_ID]: { [ROLL_CARD_FLAG]: card } } : {};
+          // La bandiera dice al disegno della chat cosa mettere sopra i dadi,
+          // e il totale vero del Mago (coppie solo fra i dadi Mage, più i
+          // successi automatici) con la soglia, per riscrivere numero ed esito.
+          const cardData = { ...(card ?? {}), total: roll._total, difficulty, autoSuccesses };
+          const flags = { [MODULE_ID]: { [ROLL_CARD_FLAG]: cardData } };
           return roll.toMessage(
             { speaker: ChatMessage.getSpeaker({ actor }), flags },
             { rollMode }

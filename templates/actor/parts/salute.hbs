@@ -19,8 +19,15 @@
     {{#if salute.status}}
         <p class="wod5e-mage-salute-status">{{localize salute.status}}</p>
     {{/if}}
-    {{!-- Reset: tracciato vuoto. Nuova sessione sta in alto a sinistra dei Tratti. --}}
+    {{!-- Riposo: via i superficiali mentali e un superficiale fisico. Relax:
+         Fermezza + Autocontrollo, i successi curano la mente. Reset: vuoto. --}}
     <div class="wod5e-mage-salute-buttons">
+        <button type="button" data-action="saluteRiposo" title="{{localize 'WOD5E_MAGE.Salute.RiposoHint'}}">
+            <i class="fa-solid fa-bed" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.Riposo"}}
+        </button>
+        <button type="button" data-action="saluteRelax" title="{{localize 'WOD5E_MAGE.Salute.RelaxHint'}}">
+            <i class="fa-solid fa-mug-hot" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.Relax"}}
+        </button>
         <button type="button" data-action="saluteReset" title="{{localize 'WOD5E_MAGE.Salute.ResetHint'}}">
             <i class="fa-solid fa-eraser" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.Reset"}}
         </button>

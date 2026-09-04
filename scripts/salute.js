@@ -241,6 +241,72 @@ export async function onSaluteNewSession(event) {
     : localize("WOD5E_MAGE.Salute.NewSessionDone"));
 }
 
+/** Riposo: i superficiali mentali guariscono tutti, un superficiale fisico se ne va. */
+export async function onSaluteRiposo(event) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEdit(actor)) return;
+  const salute = getSalute(actor);
+  await actor.setFlag(MODULE_ID, "salute", { ...saluteAfterSession(salute), extra: salute.extra });
+  ui.notifications.info(game.i18n.localize("WOD5E_MAGE.Salute.RiposoDone"));
+}
+
+/**
+ * Relax (verdetto di Blue, 4/9 notte): ogni successo cura un superficiale
+ * mentale, ogni due successi un aggravato mentale; almeno una casella.
+ * I superficiali prima, poi le coppie sugli aggravati.
+ */
+export function saluteAfterRelax(counts, successes) {
+  const out = { pa: count(counts?.pa), ps: count(counts?.ps), ma: count(counts?.ma), ms: count(counts?.ms) };
+  let left = Math.max(Math.trunc(Number(successes) || 0), 0);
+  const healedSuperficial = Math.min(out.ms, left);
+  out.ms -= healedSuperficial;
+  left -= healedSuperficial;
+  const healedAggravated = Math.min(out.ma, Math.floor(left / 2));
+  out.ma -= healedAggravated;
+  if (healedSuperficial + healedAggravated === 0) {
+    // Il minimo: una casella, un superficiale se c'è, altrimenti un aggravato.
+    if (out.ms > 0) out.ms -= 1;
+    else if (out.ma > 0) out.ma -= 1;
+  }
+  return out;
+}
+
+/** Relax: Fermezza + Autocontrollo, e i successi curano la mente. */
+export async function onSaluteRelax(event) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEdit(actor)) return;
+  const resolve = Math.max(Number(actor.system?.attributes?.resolve?.value) || 0, 0);
+  const composure = Math.max(Number(actor.system?.attributes?.composure?.value) || 0, 0);
+  const { dressNextRollDialogAsMage, isMageActor } = await import("./mage-dice.js");
+  if (isMageActor(actor)) dressNextRollDialogAsMage();
+  let roll = null;
+  try {
+    roll = await WOD5E.api.Roll({
+      basicDice: resolve + composure,
+      title: game.i18n.localize("WOD5E_MAGE.Salute.RelaxRolling"),
+      selectors: ["attributes", "attributes.resolve", "attributes.composure", "mental"],
+      actor,
+      data: actor.system,
+      quickRoll: false,
+      disableAdvancedDice: true
+    });
+  } catch (_error) {
+    return;
+  }
+  if (!roll || roll === "cancel") return;
+  const successes = Math.max(Math.trunc(Number(roll.total) || 0), 0);
+  const salute = getSalute(actor);
+  const after = saluteAfterRelax(salute, successes);
+  await actor.setFlag(MODULE_ID, "salute", { ...after, extra: salute.extra });
+  ui.notifications.info(game.i18n.format("WOD5E_MAGE.Salute.RelaxDone", {
+    successes,
+    superficial: salute.ms - after.ms,
+    aggravated: salute.ma - after.ma
+  }));
+}
+
 /** Reset: il tracciato torna vuoto e pulito. */
 export async function onSaluteReset(event) {
   event.preventDefault();

@@ -4,7 +4,7 @@ import { applyReset, onResetSection, prepareResets, RESET_IDS, RESETS } from "..
 
 // Sette tasti, nell'ordine chiesto.
 assert.deepEqual(RESET_IDS, ["attributes", "skills", "advantages", "spheres", "credo", "lineage", "compass"]);
-assert.deepEqual(prepareResets((key) => key.split(".").pop()).map((reset) => reset.label), ["Attributes", "Skills", "Advantages", "Spheres", "Credo", "Lineage", "Compass"]);
+assert.deepEqual(prepareResets((key) => key.split(".").pop()).map((reset) => reset.label), ["Attributes", "Skills", "Advantages", "Spheres", "Credo", "Lineage", "Compass", "All"]);
 
 function actorStub() {
   return {
@@ -50,6 +50,13 @@ actor = actorStub();
 await applyReset(actor, "compass");
 assert.deepEqual(Object.keys(actor.updates[0]).sort(), ["flags.wod5e-mage.-=ambitionTrigger", "flags.wod5e-mage.-=ancore", "flags.wod5e-mage.-=convinzioni", "flags.wod5e-mage.-=desireTrigger", "system.headers.ambition", "system.headers.desire"].sort());
 assert.equal(await applyReset(actor, "boh"), false);
+// Reset scheda: tutte le parti, poi Condizioni, Salute, Note e giocatore.
+actor = actorStub();
+await applyReset(actor, "all");
+assert.equal(actor.updates.length, 7);
+assert.deepEqual(actor.deleted, [["Item", ["f1", "f2"]], ["Item", ["c1"]]]);
+assert.deepEqual(actor.updates.at(-1)["flags.wod5e-mage.salute"], { pa: 0, ps: 0, ma: 0, ms: 0, extra: 0 });
+assert.equal(actor.updates.at(-1)["flags.wod5e-mage.-=note"], null);
 
 // Il clic: chiede conferma, e senza conferma non tocca niente.
 let asked = 0;

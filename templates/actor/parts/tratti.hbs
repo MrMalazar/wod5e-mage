@@ -213,7 +213,7 @@
                     {{!-- I reset, una parte per tasto, con conferma. --}}
                     <div class="wod5e-mage-reset-row">
                         {{#each resets as |reset|}}
-                            <button type="button" data-action="resetSection" data-reset="{{reset.id}}" title="{{reset.label}}" {{#if ../locked}}disabled{{/if}}>
+                            <button type="button" class="{{#if reset.all}}wod5e-mage-reset-all{{/if}}" data-action="resetSection" data-reset="{{reset.id}}" title="{{reset.label}}" {{#if ../locked}}disabled{{/if}}>
                                 <i class="fa-solid {{reset.icon}}" aria-hidden="true"></i> {{reset.label}}
                             </button>
                         {{/each}}

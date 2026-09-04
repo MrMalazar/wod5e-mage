@@ -9,8 +9,6 @@
                 <label class="header-label">{{localize "WOD5E_MAGE.Tabs.Spheres"}}</label>
             </header>
 
-            <p class="wod5e-mage-spheres-hint">{{localize "WOD5E_MAGE.Spheres.Hint"}} {{localize "WOD5E_MAGE.Spheres.FamilyHint"}}</p>
-
             <div class="wod5e-mage-sphere-selector" role="group" aria-label="{{localize 'WOD5E_MAGE.Spheres.Selector'}}">
                 {{#each sphereChoices as |sphere|}}
                     <label class="wod5e-mage-sphere-choice" title="{{localize sphere.label}}">
@@ -87,7 +85,6 @@
             <header class="resource-header">
                 <label class="header-label">{{localize "WOD5E_MAGE.SphereSpecialties.Label"}}</label>
             </header>
-            <p class="wod5e-mage-spheres-hint">{{localize "WOD5E_MAGE.SphereSpecialties.Hint"}}</p>
 
             {{#if sphereSpecialties.length}}
                 <div class="wod5e-mage-sphere-specialty-list">

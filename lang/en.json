@@ -612,7 +612,14 @@
       "SessionXp": "Session experience",
       "SessionXpHint": "The points the Storyteller awards: they go to the Gains on the Experience page. Zero if none.",
       "SessionOf": "session of {date}",
-      "NewSessionDoneXp": "New session: {points} experience points logged, mental superficial healed, one physical superficial removed, Backlash re-armed."
+      "NewSessionDoneXp": "New session: {points} experience points logged, mental superficial healed, one physical superficial removed, Backlash re-armed.",
+      "Riposo": "Rest",
+      "RiposoHint": "Mental superficial damage heals, and one physical superficial",
+      "RiposoDone": "Rest: the mind is clear, one physical superficial is gone.",
+      "Relax": "Relax",
+      "RelaxHint": "Resolve + Composure: each success heals a mental superficial, every two an aggravated; at least one box",
+      "RelaxRolling": "Relax: Resolve + Composure",
+      "RelaxDone": "Relax: {successes} successes, healed {superficial} superficial and {aggravated} aggravated mental."
     },
     "Contraccolpo": {
       "Label": "Deny the Backlash",
@@ -739,7 +746,8 @@
       "Credo": "Reset Creed",
       "Lineage": "Reset Lineage",
       "Compass": "Reset Compass",
-      "Confirm": "{label}: this clears that part of the sheet. Proceed?"
+      "Confirm": "{label}: this clears that part of the sheet. Proceed?",
+      "All": "Reset sheet"
     },
     "Note": {
       "Add": "Add a box",
