@@ -453,6 +453,7 @@
     },
     "Wisdom": {
       "Label": "Wisdom",
+      "Status": "Status",
       "Roll": "Roll Wisdom",
       "Rolling": "Rolling Wisdom",
       "Segnato": "Marked",
@@ -516,6 +517,9 @@
       },
       "KindNone": "Type…",
       "Cap": "+3 cap: written Bonuses, the Arete prize and Harmony share three dice at most."
+    },
+    "Dotazione": {
+      "Inventory": "Inventory"
     },
     "Belongings": {
       "SharedLabel": "Shared Elements",

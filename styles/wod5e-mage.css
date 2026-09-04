@@ -563,8 +563,8 @@
   display: grid;
   gap: 1.5rem;
     grid-template-areas:
-        "spheres ongoing"
-        "specialties specialties"
+        "spheres specialties"
+        "ongoing ongoing"
         "table table";
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -584,7 +584,7 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-list {
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   margin-top: 0.5rem;
 }
 
@@ -1179,12 +1179,34 @@
   margin-bottom: 1rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > strong {
+/* Il titolo della domanda apre e chiude la sua area di scrittura. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > summary {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > summary > strong {
   color: var(--mage-oro-chiaro);
   font-size: 0.95rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > small {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > summary > strong > i {
+  font-size: 0.65rem;
+  margin-right: 0.4rem;
+  transition: transform 0.15s ease;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field:not([open]) > summary > strong > i {
+  transform: rotate(-90deg);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field > summary > small {
   color: var(--mage-testo);
   font-size: 0.8rem;
   margin: 0.1rem 0 0.35rem;
@@ -2142,8 +2164,8 @@
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-layout {
         grid-template-areas:
             "spheres"
-            "ongoing"
             "specialties"
+            "ongoing"
             "table";
     grid-template-columns: 1fr;
   }
@@ -4136,23 +4158,46 @@
   gap: 0.3rem;
 }
 
-/* Il nome del giocatore sotto quello del personaggio: il nome del PG sale
-   di una riga, il giocatore prende il bordo basso del ritratto. */
+/* Il nome del personaggio e quello del giocatore: una colonna sola in
+   fondo al ritratto, due caselle larghe uguali, una sotto l'altra. Il
+   sistema mette il nome in assoluto: qui torna in flusso dentro la colonna. */
 .wod5e-mage.wod5e.actor.sheet .header-profile {
   position: relative;
 }
 
-.wod5e-mage.wod5e.actor.sheet .header-profile > .name-field:not(.clickthrough) {
-  bottom: 30px;
+.wod5e-mage.wod5e.actor.sheet .actor-header .header-profile .wod5e-mage-names {
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 250px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .actor-header .header-profile .wod5e-mage-names .name-field,
+.wod5e-mage.wod5e.actor.sheet .actor-header .header-profile .wod5e-mage-names .name-field:not(.clickthrough) {
+  bottom: auto;
+  height: auto;
+  position: static;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .actor-header .header-profile .wod5e-mage-names input.charname,
+.wod5e-mage.wod5e.actor.sheet .actor-header .header-profile .wod5e-mage-names .wod5e-mage-player {
+  box-sizing: border-box;
+  height: 32px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .actor-header .header-profile .wod5e-mage-names input.charname {
+  font-size: 24px;
+  line-height: 1;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-player-field {
-  bottom: 2px;
   display: flex;
-  justify-content: center;
-  left: 0;
-  position: absolute;
-  right: 0;
   width: 100%;
 }
 
@@ -4162,11 +4207,8 @@
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 3px;
   color: var(--mage-inchiostro);
-  font-size: 0.8rem;
-  height: 22px;
-  max-width: 200px;
+  font-size: 1rem;
   text-align: center;
-  width: 60%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-reset-row > .wod5e-mage-reset-all {
@@ -4260,4 +4302,88 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-notes .description-content {
   margin-top: 0.25rem;
+}
+
+/* Dotazione: l'inventario (Armatura, Arma, Equipaggiamento) in un riquadro
+   solo come i Background, con le tre voci una sotto l'altra. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-inventario {
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem 0.6rem 0.6rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-inventario > .resource-header {
+  border: none;
+  margin: 0 0 0.35rem;
+  padding: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-inventario > .resource-header .header-label {
+  color: var(--mage-oro);
+  font-family: inherit;
+  font-size: 16pt;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: left;
+  text-transform: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-inventario .category {
+  border: none;
+  border-top: 1px solid rgb(152 119 43 / 45%);
+  margin: 0;
+  max-width: none;
+  padding: 0.35rem 0 0.4rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-inventario .category .item-header .item-name {
+  color: var(--mage-oro-chiaro);
+  font-size: 1rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .wod5e-mage-inventario .equipment {
+  margin-bottom: 0.15rem;
+}
+
+/* La Saggezza e, a destra, lo stato del Risvegliato (una casella, per ora). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-row {
+  align-items: stretch;
+  display: flex;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-row > .wod5e-mage-focus-wisdom {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-status {
+  background: var(--mage-velluto);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.5rem 0.9rem 0.6rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-status > .wod5e-mage-wisdom-head {
+  color: var(--mage-oro-chiaro);
+  display: block;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-status > input {
+  --input-text-color: var(--mage-inchiostro);
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-scuro);
+  color: var(--mage-inchiostro);
+  height: 30px;
+  text-align: center;
+  width: 100%;
 }

@@ -88,7 +88,8 @@ export const RESET_ALL = Object.freeze({
   changes: () => ({
     [`flags.${MODULE_ID}.salute`]: { pa: 0, ps: 0, ma: 0, ms: 0, extra: 0 },
     [`flags.${MODULE_ID}.-=note`]: null,
-    [`flags.${MODULE_ID}.-=player`]: null
+    [`flags.${MODULE_ID}.-=player`]: null,
+    [`flags.${MODULE_ID}.-=wisdomStatus`]: null
   }),
   items: (actor) => actor.items.filter((item) => item.type === "condition").map((item) => item.id)
 });

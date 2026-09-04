@@ -453,6 +453,7 @@
     },
     "Wisdom": {
       "Label": "Saggezza",
+      "Status": "Stato",
       "Roll": "Tira Saggezza",
       "Rolling": "Tiro di Saggezza",
       "Segnato": "Segnato",
@@ -516,6 +517,9 @@
       },
       "KindNone": "Tipo…",
       "Cap": "Tetto +3: i Bonus scritti, il premio dell'Areté e l'Armonia stanno insieme dentro tre dadi."
+    },
+    "Dotazione": {
+      "Inventory": "Inventario"
     },
     "Belongings": {
       "SharedLabel": "Elementi in comune",

@@ -51,4 +51,9 @@ assert.match(
   /context\.conceptChallenge = await prepareConceptChallenge\(actor\)/
 );
 
+// Ogni domanda è una tendina: aperta se ha un testo, e la scheda ricorda com'era.
+const conceptTemplate = readFileSync(new URL("../templates/actor/parts/concept-challenge.hbs", import.meta.url), "utf8");
+assert.match(conceptTemplate, /<details class="wod5e-mage-concept-field" data-field="\{\{field\.id\}\}"\{\{#if field\.value\}\} open\{\{\/if\}\}>[\s\S]*<summary>[\s\S]*field\.label[\s\S]*field\.prompt[\s\S]*<\/summary>[\s\S]*<prose-mirror/);
+assert.match(sheetSource, /_conceptOpen/);
+
 console.log("Concept Challenge tests passed.");

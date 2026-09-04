@@ -115,14 +115,14 @@ assert.doesNotMatch(ruotaTemplate, /wod5e-mage-header-roll|Arete\.Roll"/);
 assert.match(magickTemplate, /wod5e-mage-sphere-specialties[\s\S]*parts\/scope-table\.hbs/);
 assert.match(
   css,
-  /\.wod5e-mage-magick-layout\s*\{[^}]*"specialties specialties"\s*"table table";/s
+  /\.wod5e-mage-magick-layout\s*\{[^}]*"ongoing ongoing"\s*"table table";/s
 );
 assert.match(css, /\.wod5e-mage-scope-table\s*\{[^}]*grid-area:\s*table;/s);
 
-// The Specialities section stays below Spheres and Ongoing Magick.
+// Le Specialità delle Sfere a destra delle Sfere; i Magick in atto sotto, a tutta larghezza.
 assert.match(
   css,
-  /\.wod5e-mage-magick-layout\s*\{[^}]*"spheres ongoing"[^}]*"specialties specialties"[^}]*"table table";/s
+  /\.wod5e-mage-magick-layout\s*\{[^}]*"spheres specialties"[^}]*"ongoing ongoing"[^}]*"table table";/s
 );
 assert.match(
   css,

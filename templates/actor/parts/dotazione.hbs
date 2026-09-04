@@ -8,7 +8,11 @@
             {{> "modules/wod5e-mage/templates/actor/parts/core-features.hbs"}}
         </div>
 
-        <div class="equipment-list item-list">
+        {{!-- L'inventario: Armatura, Arma ed Equipaggiamento in un riquadro solo. --}}
+        <div class="equipment-list item-list wod5e-mage-inventario">
+            <header class="resource-header">
+                <label class="header-label">{{localize "WOD5E_MAGE.Dotazione.Inventory"}}</label>
+            </header>
             {{> "modules/wod5e-mage/templates/actor/parts/equipment-list.hbs"}}
         </div>
 

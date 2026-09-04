@@ -15,15 +15,19 @@
 
                 <div class="wod5e-mage-concept-fields">
                     {{#each group.fields as |field|}}
-                        <div class="wod5e-mage-concept-field">
-                            <strong>{{localize field.label}}</strong>
-                            <small>{{localize field.prompt}}</small>
+                        {{!-- Ogni domanda si chiude a tendina dal suo titolo:
+                             aperta se ha già un testo, chiusa se è vuota. --}}
+                        <details class="wod5e-mage-concept-field" data-field="{{field.id}}"{{#if field.value}} open{{/if}}>
+                            <summary>
+                                <strong><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>{{localize field.label}}</strong>
+                                <small>{{localize field.prompt}}</small>
+                            </summary>
                             <div class="resource">
                                 <prose-mirror name="flags.wod5e-mage.conceptChallenge.{{field.id}}" value="{{field.value}}" toggled="true" compact="true">
                                     {{{field.enrichedValue}}}
                                 </prose-mirror>
                             </div>
-                        </div>
+                        </details>
                     {{/each}}
                 </div>
             </details>

@@ -265,6 +265,13 @@ export class MageActorSheet extends MortalActorSheet {
       appartenenza.open = Boolean(this._appartenenzaOpen);
       appartenenza.addEventListener("toggle", () => { this._appartenenzaOpen = appartenenza.open; });
     }
+    // Le domande della Sfida del concetto: ogni tendina ricorda com'era.
+    this._conceptOpen ??= {};
+    for (const field of this.element?.querySelectorAll(".wod5e-mage-concept-field[data-field]") ?? []) {
+      const id = field.dataset.field;
+      if (id in this._conceptOpen) field.open = this._conceptOpen[id];
+      field.addEventListener("toggle", () => { this._conceptOpen[id] = field.open; });
+    }
   }
 
   get title() {
@@ -277,6 +284,7 @@ export class MageActorSheet extends MortalActorSheet {
     const context = await super._prepareContext();
     context.currentTypeLabel = "WOD5E_MAGE.Sheets.Awakened";
     context.wisdom = getWisdom(this.actor);
+    context.wisdomStatus = String(this.actor.getFlag(MODULE_ID, "wisdomStatus") ?? "");
     return context;
   }
 

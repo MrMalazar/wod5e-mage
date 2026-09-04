@@ -195,4 +195,12 @@ summaryActor.getFlag = ((original) => (m, key) => key === "focus"
   : original(m, key))(summaryActor.getFlag);
 assert.equal(prepareCreationSummary(summaryActor).checks.find((check) => check.id === "instruments").ok, true);
 
+// L'inventario in un riquadro solo; lo stato della Saggezza accanto alla barra;
+// nome del PG e del giocatore in una colonna sola.
+const dotazioneTemplate = readFileSync(new URL("../templates/actor/parts/dotazione.hbs", import.meta.url), "utf8");
+assert.match(dotazioneTemplate, /wod5e-mage-inventario[\s\S]*Dotazione\.Inventory[\s\S]*equipment-list\.hbs/);
+assert.match(personaggioSource(), /wod5e-mage-wisdom-row[\s\S]*wisdom\.hbs[\s\S]*flags\.wod5e-mage\.wisdomStatus/);
+const headerTemplate = readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8");
+assert.match(headerTemplate, /wod5e-mage-names[\s\S]*name-field[\s\S]*wod5e-mage-player-field/);
+
 console.log("Dotazione extra, Personaggio e sigilli dei tratti: test passati.");

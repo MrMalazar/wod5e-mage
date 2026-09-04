@@ -17,6 +17,9 @@
         <div class="header-profile-img">
             <img class="profile-img" data-action="editImage" src="{{img}}" data-edit="img" title="{{actor.name}}"/>
         </div>
+        {{!-- Nome del personaggio e, sotto, quello del giocatore: una colonna
+             sola in fondo al ritratto, due caselle della stessa misura. --}}
+        <div class="wod5e-mage-names">
         <div class="flexrow name-field{{#if locked}} clickthrough{{/if}}">
             {{#if locked}}
                 <div class="charname">{{name}}</div>
@@ -28,6 +31,7 @@
              sta nel pannello a destra, non più sotto il nome. --}}
         <div class="wod5e-mage-player-field">
             <input class="wod5e-mage-player" name="flags.wod5e-mage.player" type="text" value="{{playerName}}" placeholder="{{localize 'WOD5E_MAGE.Header.Player'}}" aria-label="{{localize 'WOD5E_MAGE.Header.Player'}}" {{#if locked}}disabled{{/if}}/>
+        </div>
         </div>
     </div>
 
