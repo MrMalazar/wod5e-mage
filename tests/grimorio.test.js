@@ -68,7 +68,7 @@ console.log("Grimorio, Ustione e Salute: test passati.");
 // Il formato nuovo (6/9): Corrispondenza a blocchi, con le Sfere compagne e
 // gli Ambiti consigliati; «Mappare la zona» ha assorbito «Cercare nell'area».
 const corr = EFFETTI.filter((entry) => entry.sphere === "correspondence");
-assert.equal(corr.length, 21);
+assert.equal(corr.length, 22);
 const mappare = corr.find((entry) => entry.id === "correspondence-1-mappare-la-zona");
 assert.equal(mappare.pairings.length, 8);
 assert.equal(mappare.pairings[0].sphere, "entropy");
@@ -81,45 +81,45 @@ assert.equal(corr.some((entry) => entry.id === "correspondence-1-cercare-nell-ar
 const entro = EFFETTI.filter((entry) => entry.sphere === "entropy");
 assert.equal(entro.length, 24);
 assert.equal(entro.some((entry) => entry.id === "entropy-1-fiutare-il-pericolo"), false);
-assert.equal(entro.find((entry) => entry.id === "entropy-1-pesare-le-probabilita").pairings.length, 7);
+assert.equal(entro.find((entry) => entry.id === "entropy-1-pesare-le-probabilita").pairings.length, 6);
 assert.match(entro.find((entry) => entry.id === "entropy-5-sigillare-un-giuramento").scopes, /^Condizioni 1 per ogni clausola/);
 assert.equal(entro.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 // Forze nel formato nuovo (6/9): ventotto blocchi, tutti con compagne e Ambiti.
 const forze = EFFETTI.filter((entry) => entry.sphere === "forces");
-assert.equal(forze.length, 28);
+assert.equal(forze.length, 29);
 assert.equal(forze.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
-assert.equal(forze.find((entry) => entry.id === "forces-3-telecinesi").pairings.length, 6);
+assert.equal(forze.find((entry) => entry.id === "forces-3-telecinesi").pairings.length, 5);
 // Materia nel formato nuovo (6/9): ventiquattro blocchi; «(obbligata)» nel nome segna la compagna necessaria.
 const materia = EFFETTI.filter((entry) => entry.sphere === "matter");
-assert.equal(materia.length, 23);
+assert.equal(materia.length, 25);
 assert.equal(materia.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(materia.find((entry) => entry.id === "matter-4-innestare-la-macchina-nella-carne").extras.map((extra) => extra.sphere), ["life", "prime"]);
 assert.equal(materia.some((entry) => entry.id === "matter-2-invecchiare-un-oggetto"), false);
 assert.equal(materia.some((entry) => entry.id === "matter-3-rimodellare"), true);
 // Mente nel formato nuovo (6/9): venticinque blocchi.
 const mente = EFFETTI.filter((entry) => entry.sphere === "mind");
-assert.equal(mente.length, 28);
+assert.equal(mente.length, 29);
 assert.equal(mente.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(mente.find((entry) => entry.id === "mind-4-mostrarti-in-corpo-di-luce").extras.map((extra) => extra.sphere), ["spirit", "prime"]);
 // Primordio nel formato nuovo (6/9): ventisei blocchi.
 const primordio = EFFETTI.filter((entry) => entry.sphere === "prime");
-assert.equal(primordio.length, 23);
+assert.equal(primordio.length, 24);
 assert.equal(primordio.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.equal(primordio.some((entry) => entry.id === "prime-3-rianimare-un-morto-recente"), false);
 // Spirito nel formato nuovo (6/9): ventinove blocchi.
 const spirito = EFFETTI.filter((entry) => entry.sphere === "spirit");
-assert.equal(spirito.length, 28);
+assert.equal(spirito.length, 30);
 assert.equal(spirito.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(spirito.find((entry) => entry.id === "spirit-1-riconoscere-il-sovrannaturale").extras.map((extra) => extra.sphere), ["life"]);
 // Tempo nel formato nuovo (6/9): ventuno blocchi.
 const tempo = EFFETTI.filter((entry) => entry.sphere === "time");
-assert.equal(tempo.length, 20);
+assert.equal(tempo.length, 21);
 assert.equal(tempo.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(tempo.find((entry) => entry.id === "time-4-avvertire-il-te-di-ieri").extras.map((extra) => extra.sphere), ["mind"]);
 // Vita nel formato nuovo (6/9): ventiquattro blocchi. Tutte le nove Sfere sono a blocchi:
 // ogni effetto ha gli Ambiti consigliati, e solo due di Corrispondenza stanno senza compagne.
 const vita = EFFETTI.filter((entry) => entry.sphere === "life");
-assert.equal(vita.length, 21);
+assert.equal(vita.length, 22);
 assert.equal(vita.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(vita.find((entry) => entry.id === "life-3-animare-un-cadavere").extras.map((extra) => extra.sphere), ["prime"]);
 assert.equal(EFFETTI.every((entry) => entry.scopes), true);
@@ -136,6 +136,8 @@ assert.deepEqual(shown.pairings.map((pairing) => pairing.label), ["WOD5E_MAGE.Sp
 assert.match(shown.pairings[0].icon, /life\.png$/);
 assert.equal(Array.isArray(shown.scopes), true);
 assert.equal(shown.scopes.length, 3);
+// Le quattro compagne generali (Corrispondenza, Spirito, Tempo, Entropia) sono regole nel LIBRO: nelle tavole restano solo quando dicono di più.
+assert.equal(EFFETTI.filter((entry) => entry.pairings.some((pairing) => pairing.sphere === "correspondence" && /non vedi\.$/.test(pairing.text))).length, 0);
 assert.match(shown.scopes[0], /^Durata per quanto canta il marchio/);
 assert.deepEqual(splitScopes("Area per un campo, un giardino, un raccolto. Durata per quanto dura. Potenza (danni) se la malattia ferisce. Condizioni (malus 2, ostacolare) per quanto pesa."), ["Area per un campo, un giardino, un raccolto.", "Durata per quanto dura.", "Potenza (danni) se la malattia ferisce.", "Condizioni (malus 2, ostacolare) per quanto pesa."]);
 assert.deepEqual(prepareGrimorio({ correspondence: 2 }, (k) => k)[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio").pairings, []);
