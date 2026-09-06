@@ -918,7 +918,14 @@
       "Scopes": "Ambiti consigliati:",
       "Required": "diretta",
       "Without": "Senza",
-      "Sideways": "di lato, e Volgare."
+      "Sideways": "di lato, e Volgare.",
+      "BySphere": "Per Sfera",
+      "ByFormula": "Per Formula",
+      "Grade": "Grado",
+      "OpenRow": "aperto",
+      "ShortOne": "ti manca un pallino",
+      "ShortMany": "ti mancano {n} pallini",
+      "Absent": "Sfera che non hai"
     },
     "Incantesimi": {
       "DialogTitle": "Scrivi un incantesimo",

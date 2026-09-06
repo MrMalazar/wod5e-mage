@@ -918,7 +918,14 @@
       "Scopes": "Suggested Scopes:",
       "Required": "direct",
       "Without": "Without",
-      "Sideways": "sideways, and Vulgar."
+      "Sideways": "sideways, and Vulgar.",
+      "BySphere": "By Sphere",
+      "ByFormula": "By Formula",
+      "Grade": "Grade",
+      "OpenRow": "open",
+      "ShortOne": "one dot short",
+      "ShortMany": "{n} dots short",
+      "Absent": "Sphere you lack"
     },
     "Incantesimi": {
       "DialogTitle": "Write a spell",

@@ -52,6 +52,35 @@ def plain(text):
 SPHERE_NAMES = {**SPHERES, "Forze": "forces"}
 PAIRING = re.compile(r"^- \*\*\+ (" + "|".join(SPHERE_NAMES) + r")( \((?:obbligata|diretta)\))?:\*\*\s*(.*)$")
 SCOPES_LINE = re.compile(r"^\*Ambiti consigliati:\*\s*(.*)$")
+# La Formula (6/9, dal lavoro del ramo B): la parola universale che l'effetto
+# incarna nella sua Sfera. Una riga sotto il nome, anche più Formule a virgola.
+FORMULA_LINE = re.compile(r"^\*Formula:\*\s*(.*)$")
+FORMULE_DOC = CASA / "01_DECISIONI/studi/formule_sfere.md"
+FORMULA_HEAD = re.compile(r"^### (.+?) · (\d)\s*$")
+FORMULA_BREVE = re.compile(r"^\*\*In breve\.\*\*\s*(.*)$")
+
+
+def parse_formule(path):
+    """Le 53 Formule del ramo B: nome, grado, glossa, e il soggetto per Sfera."""
+    formule = []
+    current = None
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        head = FORMULA_HEAD.match(line)
+        if head:
+            current = {"id": slug(head.group(1)), "name": head.group(1), "grade": int(head.group(2)), "text": "", "subjects": {}}
+            formule.append(current)
+            continue
+        if current is None:
+            continue
+        breve = FORMULA_BREVE.match(line)
+        if breve:
+            current["text"] = plain(breve.group(1))
+            continue
+        cells = [cell.strip() for cell in line.strip("|").split("|")] if line.startswith("|") else []
+        if len(cells) == 2 and cells[0] in SPHERES:
+            current["subjects"][SPHERES[cells[0]]] = plain(cells[1])
+    return formule
 
 
 def parse(path, sphere):
@@ -99,12 +128,16 @@ def parse(path, sphere):
                 "text": [],
                 "pairings": [],
                 "scopes": "",
+                "formule": [],
             }
             continue
         if block is not None:
             pairing = PAIRING.match(line)
             scopes = SCOPES_LINE.match(line)
-            if pairing:
+            formula = FORMULA_LINE.match(line)
+            if formula:
+                block["formule"] = [slug(part) for part in formula.group(1).split(",") if part.strip()]
+            elif pairing:
                 text = plain(pairing.group(3))
                 extra_sphere = SPHERE_NAMES[pairing.group(1)]
                 # «(diretta)» (6/9): la compagna che fa il lavoro diretto. Senza,
@@ -146,6 +179,7 @@ def parse(path, sphere):
             "text": plain(how),
             "pairings": [],
             "scopes": "",
+            "formule": [],
         })
     close()
     return entries
@@ -162,13 +196,22 @@ def main():
     if len(ids) != len(set(ids)):
         dupes = sorted({i for i in ids if ids.count(i) > 1})
         raise SystemExit(f"Id doppi: {dupes}")
+    formule = parse_formule(FORMULE_DOC) if FORMULE_DOC.exists() else []
+    known = {f["id"] for f in formule}
+    unknown = sorted({f for entry in effetti for f in entry["formule"] if f not in known})
+    if unknown:
+        raise SystemExit(f"Formule sconosciute: {unknown}")
     body = json.dumps(effetti, ensure_ascii=False, indent=2)
+    body_formule = json.dumps(formule, ensure_ascii=False, indent=2)
     OUT.write_text(
         "// Generato da tools/build-effetti.py dalle nove tavole di Sfera del LIBRO (06_2_1 … 06_2_9): non toccare a mano.\n"
-        "// Il Grimorio: gli effetti del manuale, Sfera per Sfera e livello per livello, con le Sfere in più che il testo chiede.\n\n"
-        f"export const EFFETTI = Object.freeze({body});\n",
+        "// Il Grimorio: gli effetti del manuale, Sfera per Sfera e livello per livello, con le Sfere in più che il testo chiede.\n"
+        "// Le Formule (dal ramo B, 01_DECISIONI/studi/formule_sfere.md): le parole universali; ogni effetto ne porta una o più.\n\n"
+        f"export const EFFETTI = Object.freeze({body});\n\n"
+        f"export const FORMULE = Object.freeze({body_formule});\n",
         encoding="utf-8",
     )
+    print(f"Formule: {len(formule)}; effetti senza Formula: {sum(1 for e in effetti if not e['formule'])}")
     per_sphere = {}
     for entry in effetti:
         per_sphere[entry["sphere"]] = per_sphere.get(entry["sphere"], 0) + 1

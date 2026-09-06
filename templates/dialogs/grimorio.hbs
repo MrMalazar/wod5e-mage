@@ -1,7 +1,15 @@
 {{!-- Il Grimorio: gli effetti del manuale che le Sfere del personaggio aprono,
-     per Sfera e per livello. Un clic sceglie. --}}
+     per Sfera e per livello, o per Formula (i verbi universali del ramo B, 6/9).
+     Un clic sceglie. --}}
 <div class="wod5e-mage-grimorio-body">
-    <input type="search" class="wod5e-mage-grimorio-search" data-role="grimorioSearch" placeholder="{{localize 'WOD5E_MAGE.Grimorio.Search'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Search'}}">
+    <div class="wod5e-mage-grimorio-top">
+        <input type="search" class="wod5e-mage-grimorio-search" data-role="grimorioSearch" placeholder="{{localize 'WOD5E_MAGE.Grimorio.Search'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Search'}}">
+        <div class="wod5e-mage-grimorio-views" role="tablist">
+            <button type="button" data-role="grimorioView" data-view="sphere">{{localize "WOD5E_MAGE.Grimorio.BySphere"}}</button>
+            <button type="button" data-role="grimorioView" data-view="formula">{{localize "WOD5E_MAGE.Grimorio.ByFormula"}}</button>
+        </div>
+    </div>
+    <div data-view-panel="sphere" class="wod5e-mage-grimorio-panel">
     {{#each groups as |group|}}
         {{!-- Ogni Sfera è una tendina; ogni effetto una riga: il nome sceglie,
              la freccina apre il come. --}}
@@ -13,6 +21,7 @@
                     <details class="wod5e-mage-grimorio-row">
                         <summary>
                             <button type="button" class="wod5e-mage-grimorio-pick" data-effetto="{{entry.id}}">{{entry.name}}</button>
+                            {{#each entry.formule as |formula|}}<em class="wod5e-mage-grimorio-formula">{{formula}}</em>{{/each}}
                             {{#if entry.extras.length}}
                                 <span class="wod5e-mage-grimorio-extras">{{#each entry.extras as |extra|}}<em class="{{#if extra.required}}required{{/if}}">+ {{extra.label}} {{extra.dots}}</em>{{/each}}</span>
                             {{/if}}
@@ -42,4 +51,37 @@
     {{else}}
         <p class="wod5e-mage-grimorio-empty">{{localize "WOD5E_MAGE.Grimorio.Empty"}}</p>
     {{/each}}
+    </div>
+    {{!-- La vista per Formula: per grado, ogni Formula con la sua glossa e,
+         Sfera per Sfera, gli effetti che la portano: aperto, i pallini che
+         mancano, o la Sfera che non c'è. Solo le righe aperte scelgono. --}}
+    <div data-view-panel="formula" class="wod5e-mage-grimorio-panel" hidden>
+    {{#each grades as |grade|}}
+        <details class="wod5e-mage-grimorio-sphere" open>
+            <summary><h3><span class="wod5e-mage-grimorio-dots">{{grade.dots}}</span> {{grade.label}}</h3></summary>
+            {{#each grade.formule as |formula|}}
+                <details class="wod5e-mage-grimorio-row wod5e-mage-grimorio-formula-row{{#unless formula.open}} closed{{/unless}}">
+                    <summary>
+                        <span class="wod5e-mage-grimorio-formula-name">{{formula.title}}</span>
+                        <span class="wod5e-mage-grimorio-formula-brief">{{formula.text}}</span>
+                        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    </summary>
+                    <table class="wod5e-mage-grimorio-formula-table">
+                        <tbody>
+                        {{#each formula.rows as |row|}}
+                            <tr class="{{row.status}}">
+                                <td class="sphere"><img src="{{row.icon}}" alt="">{{row.label}} <span class="wod5e-mage-grimorio-dots">{{row.dots}}</span></td>
+                                <td class="effect">{{#if row.open}}<button type="button" class="wod5e-mage-grimorio-pick" data-effetto="{{row.id}}">{{row.name}}</button>{{else}}{{row.name}}{{/if}}{{#if row.subject}}<small>{{row.subject}}</small>{{/if}}</td>
+                                <td class="status">{{row.statusText}}</td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </details>
+            {{/each}}
+        </details>
+    {{else}}
+        <p class="wod5e-mage-grimorio-empty">{{localize "WOD5E_MAGE.Grimorio.Empty"}}</p>
+    {{/each}}
+    </div>
 </div>

@@ -5668,6 +5668,154 @@
 }
 
 
+/* Le due viste del Grimorio (6/9): per Sfera, per Formula. La cerca sopra,
+   i due tasti accanto. */
+.wod5e-mage-grimorio-top {
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.wod5e-mage-grimorio-top > .wod5e-mage-grimorio-search {
+  flex: 1 1 auto;
+  width: auto;
+}
+
+.wod5e-mage-grimorio-views {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.2rem;
+}
+
+.wod5e-mage-grimorio-views > button {
+  background: transparent;
+  border: 1px solid rgb(152 119 43 / 45%);
+  border-radius: 3px;
+  color: var(--mage-tenue, #b8ad93);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  margin: 0;
+  min-height: 0;
+  padding: 0.1rem 0.5rem;
+  text-transform: uppercase;
+  width: auto;
+}
+
+.wod5e-mage-grimorio-views > button.active,
+.wod5e-mage-grimorio-views > button:hover {
+  background: rgb(217 168 39 / 15%);
+  border-color: var(--mage-oro, #d9a827);
+  color: var(--mage-oro-chiaro, #f5e7b2);
+}
+
+.wod5e-mage-grimorio-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Il nome della Formula accanto all'effetto, nella vista per Sfera. */
+.wod5e-mage-grimorio-formula {
+  color: var(--mage-tenue, #b8ad93);
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* La vista per Formula: nome, glossa, e la tavola Sfera · effetto · stato. */
+.wod5e-mage-grimorio-formula-row > summary {
+  flex-wrap: wrap;
+}
+
+.wod5e-mage-grimorio-formula-name {
+  color: var(--mage-oro-chiaro, #f5e7b2);
+  flex: 0 0 auto;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.15rem 0.2rem;
+}
+
+.wod5e-mage-grimorio-formula-row.closed > summary > .wod5e-mage-grimorio-formula-name {
+  color: var(--mage-tenue, #b8ad93);
+}
+
+.wod5e-mage-grimorio-formula-brief {
+  color: var(--mage-tenue, #b8ad93);
+  flex: 1 1 12rem;
+  font-size: 0.75rem;
+  font-style: italic;
+  line-height: 1.3;
+  padding: 0.15rem 0.2rem;
+}
+
+.wod5e-mage-grimorio-formula-table {
+  background: transparent;
+  border: none;
+  font-size: 0.8rem;
+  margin: 0.2rem 0 0.4rem;
+  width: 100%;
+}
+
+.wod5e-mage-grimorio-formula-table td {
+  border: none;
+  border-top: 1px solid rgb(152 119 43 / 20%);
+  padding: 0.2rem 0.4rem;
+  vertical-align: top;
+}
+
+.wod5e-mage-grimorio-formula-table td.sphere {
+  color: var(--mage-oro-chiaro, #f5e7b2);
+  white-space: nowrap;
+  width: 1%;
+}
+
+.wod5e-mage-grimorio-formula-table td.sphere > img {
+  border: none;
+  height: 1rem;
+  margin-right: 0.25rem;
+  vertical-align: -0.2rem;
+  width: 1rem;
+}
+
+.wod5e-mage-grimorio-formula-table td.effect > small {
+  color: var(--mage-tenue, #b8ad93);
+  display: block;
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+
+.wod5e-mage-grimorio-formula-table td.effect > .wod5e-mage-grimorio-pick {
+  display: inline;
+  font-size: 0.8rem;
+  padding: 0;
+}
+
+.wod5e-mage-grimorio-formula-table td.status {
+  color: var(--mage-tenue, #b8ad93);
+  font-size: 0.72rem;
+  text-align: right;
+  white-space: nowrap;
+  width: 1%;
+}
+
+.wod5e-mage-grimorio-formula-table tr.open > td.status {
+  color: var(--mage-oro, #d9a827);
+}
+
+.wod5e-mage-grimorio-formula-table tr.absent > td {
+  color: var(--mage-tenue, #b8ad93);
+  opacity: 0.7;
+}
+
+.wod5e-mage-grimorio-formula-table tr.absent > td.sphere > img {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
 .wod5e-mage-grimorio-empty {
   color: var(--mage-tenue, #b8ad93);
   margin: 0.5rem 0;

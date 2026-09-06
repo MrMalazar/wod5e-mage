@@ -1,5 +1,5 @@
 import { MODULE_ID } from "./constants.js";
-import { EFFETTI } from "./data/effetti.js";
+import { EFFETTI, FORMULE } from "./data/effetti.js";
 import { SPHERES } from "./spheres.js";
 
 /**
@@ -69,6 +69,8 @@ export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
               id: entry.id,
               name: entry.name,
               text: entry.text,
+              // La Formula (o le Formule) del ramo B che l'effetto porta (6/9).
+              formule: formuleLabels(entry),
               // Nel formato nuovo (con le compagne) l'obbligo sta nell'elenco:
               // in testa non si ripete.
               extras: (entry.pairings?.length ? [] : (entry.extras ?? [])).map((extra) => ({
@@ -107,6 +109,77 @@ export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
     .filter((group) => group.levels.length);
 }
 
+/** I nomi delle Formule di un effetto, «Danneggiare · 3». */
+export function formuleLabels(entry) {
+  return (entry.formule ?? [])
+    .map((id) => FORMULE.find((formula) => formula.id === id))
+    .filter(Boolean)
+    .map((formula) => `${formula.name} · ${formula.grade}`);
+}
+
+const STATUS_ORDER = Object.freeze({ open: 0, short: 1, absent: 2 });
+
+/**
+ * La vista «per Formula» (le Formule del ramo B come verbi universali, 6/9):
+ * per grado, ogni Formula con la sua glossa e, Sfera per Sfera, gli effetti
+ * che la portano. Si mostra una Formula se almeno una Sfera del personaggio
+ * la tocca; le righe dicono se l'effetto è aperto, quanti pallini mancano,
+ * o che la Sfera non c'è.
+ */
+export function prepareGrimorioFormule(sphereLevels = {}, localize = (key) => key) {
+  const anySphere = SPHERES.some((sphere) => level(sphereLevels[sphere]) > 0);
+  if (!anySphere) return [];
+  return [1, 2, 3, 4, 5]
+    .map((grade) => ({
+      grade,
+      dots: "●".repeat(grade),
+      label: `${localize("WOD5E_MAGE.Grimorio.Grade")} ${grade}`,
+      formule: FORMULE
+        .filter((formula) => formula.grade === grade)
+        .map((formula) => {
+          const rows = SPHERES
+            .flatMap((sphere) => EFFETTI
+              .filter((entry) => entry.sphere === sphere && (entry.formule ?? []).includes(formula.id))
+              .map((entry) => {
+                const owned = level(sphereLevels[sphere]);
+                const status = owned <= 0 ? "absent" : owned >= entry.level ? "open" : "short";
+                const short = entry.level - owned;
+                return {
+                  id: entry.id,
+                  name: entry.name,
+                  level: entry.level,
+                  dots: "●".repeat(entry.level),
+                  sphere,
+                  label: localize(`WOD5E_MAGE.Spheres.${sphere}`),
+                  icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere}.png`,
+                  subject: formula.subjects?.[sphere] ?? "",
+                  status,
+                  open: status === "open",
+                  short: status === "short" ? short : 0,
+                  statusText: status === "open"
+                    ? localize("WOD5E_MAGE.Grimorio.OpenRow")
+                    : status === "short"
+                      ? localize(short === 1 ? "WOD5E_MAGE.Grimorio.ShortOne" : "WOD5E_MAGE.Grimorio.ShortMany").replace("{n}", String(short))
+                      : localize("WOD5E_MAGE.Grimorio.Absent")
+                };
+              }))
+            .sort((a, b) => (STATUS_ORDER[a.status] - STATUS_ORDER[b.status]) || (a.short - b.short) || (a.level - b.level) || a.label.localeCompare(b.label));
+          return {
+            id: formula.id,
+            name: formula.name,
+            grade: formula.grade,
+            title: `${formula.name} · ${formula.grade}`,
+            text: formula.text,
+            rows,
+            open: rows.some((row) => row.open),
+            touched: rows.some((row) => row.status !== "absent")
+          };
+        })
+        .filter((formula) => formula.touched)
+    }))
+    .filter((group) => group.formule.length);
+}
+
 export function findEffetto(id) {
   return EFFETTI.find((entry) => entry.id === id) ?? null;
 }
@@ -116,11 +189,13 @@ export function findEffetto(id) {
  * finestra resta aperta: ogni nome cliccato passa da `onPick` e si segna
  * come preso (per aggiungere liste di effetti alla scheda).
  */
+let lastView = "sphere";
+
 export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
   const content = await foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/dialogs/grimorio.hbs`,
-    { groups: prepareGrimorio(sphereLevels, localize) }
+    { groups: prepareGrimorio(sphereLevels, localize), grades: prepareGrimorioFormule(sphereLevels, localize), view: lastView }
   );
   let chosen = null;
   await foundry.applications.api.DialogV2.wait({
@@ -132,6 +207,16 @@ export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
     rejectClose: false,
     render: (_event, dialog) => {
       const root = dialog.element;
+      // L'interruttore fra le due viste: per Sfera, per Formula.
+      const showView = (view) => {
+        lastView = view;
+        root.querySelectorAll("[data-view-panel]").forEach((panel) => { panel.hidden = panel.dataset.viewPanel !== view; });
+        root.querySelectorAll("[data-role=grimorioView]").forEach((button) => button.classList.toggle("active", button.dataset.view === view));
+      };
+      root.querySelectorAll("[data-role=grimorioView]").forEach((button) => {
+        button.addEventListener("click", (event) => { event.preventDefault(); showView(button.dataset.view); });
+      });
+      showView(lastView);
       const search = root.querySelector("[data-role=grimorioSearch]");
       search?.addEventListener("input", () => {
         const wanted = search.value.trim().toLowerCase();
