@@ -38,6 +38,14 @@ export function effectSphereLevels(entry) {
   return levels;
 }
 
+/** Gli Ambiti consigliati, una frase per riga: si spezza dopo il punto, davanti a una maiuscola. */
+export function splitScopes(scopes) {
+  return String(scopes ?? "")
+    .split(/(?<=\.)\s+(?=[A-ZÀ-Ý])/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
 /** Il Grimorio del personaggio: per Sfera, per livello, solo quel che si apre. */
 export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
   return SPHERES
@@ -63,14 +71,18 @@ export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
                 required: extra.required
               })),
               // Il formato nuovo (6/9): le Sfere compagne con quel che aggiungono,
-              // e gli Ambiti consigliati.
-              pairings: (entry.pairings ?? []).map((pairing) => ({
-                label: localize(`WOD5E_MAGE.Spheres.${pairing.sphere}`),
-                icon: `modules/${MODULE_ID}/assets/icons/sheet/${pairing.sphere}.png`,
-                text: pairing.text,
-                required: Boolean(pairing.required)
-              })),
-              scopes: entry.scopes ?? ""
+              // SOLO quelle che il personaggio ha (verdetto di Blue: vede come
+              // l'effetto si espande con le sue Sfere), e gli Ambiti consigliati
+              // una riga per Ambito.
+              pairings: (entry.pairings ?? [])
+                .filter((pairing) => level(sphereLevels[pairing.sphere]) > 0)
+                .map((pairing) => ({
+                  label: localize(`WOD5E_MAGE.Spheres.${pairing.sphere}`),
+                  icon: `modules/${MODULE_ID}/assets/icons/sheet/${pairing.sphere}.png`,
+                  text: pairing.text,
+                  required: Boolean(pairing.required)
+                })),
+              scopes: splitScopes(entry.scopes ?? "")
             }))
         }))
         .filter((group) => group.entries.length);

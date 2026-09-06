@@ -5621,9 +5621,18 @@
 
 .wod5e-mage-grimorio-row > .wod5e-mage-grimorio-scopes {
   color: var(--mage-tenue, #ab9f85);
+  display: flex;
+  flex-direction: column;
   font-size: 0.78rem;
+  gap: 0.1rem;
   margin: 0.2rem 0 0.4rem;
   padding: 0 0.6rem;
+}
+
+/* Ogni Ambito consigliato sulla sua riga (verdetto di Blue, 6/9). */
+.wod5e-mage-grimorio-row > .wod5e-mage-grimorio-scopes > span {
+  line-height: 1.35;
+  padding-left: 0.6rem;
 }
 
 .wod5e-mage-grimorio-row > .wod5e-mage-grimorio-scopes > b {

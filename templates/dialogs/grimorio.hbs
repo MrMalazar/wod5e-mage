@@ -26,8 +26,11 @@
                                 {{/each}}
                             </ul>
                         {{/if}}
-                        {{#if entry.scopes}}
-                            <p class="wod5e-mage-grimorio-scopes"><b>{{localize "WOD5E_MAGE.Grimorio.Scopes"}}</b> {{entry.scopes}}</p>
+                        {{#if entry.scopes.length}}
+                            <div class="wod5e-mage-grimorio-scopes">
+                                <b>{{localize "WOD5E_MAGE.Grimorio.Scopes"}}</b>
+                                {{#each entry.scopes as |line|}}<span>{{line}}</span>{{/each}}
+                            </div>
                         {{/if}}
                     </details>
                 {{/each}}

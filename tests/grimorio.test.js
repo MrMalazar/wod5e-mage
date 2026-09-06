@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { EFFETTI } from "../scripts/data/effetti.js";
-import { effectAvailable, effectSphereLevels, findEffetto, prepareGrimorio } from "../scripts/grimorio.js";
+import { effectAvailable, effectSphereLevels, findEffetto, prepareGrimorio, splitScopes } from "../scripts/grimorio.js";
 import { ustioneSplit, normalizeEffectKind } from "../scripts/paradox-burst.js";
 import { paintSalute } from "../scripts/salute.js";
 import { renderRollCard } from "../scripts/roll-card.js";
@@ -121,8 +121,15 @@ assert.equal(vita.every((entry) => entry.pairings.length > 0 && entry.scopes), t
 assert.deepEqual(vita.find((entry) => entry.id === "life-3-animare-un-cadavere").extras.map((extra) => extra.sphere), ["prime"]);
 assert.equal(EFFETTI.every((entry) => entry.scopes), true);
 assert.equal(EFFETTI.filter((entry) => entry.pairings.length === 0).length, 2);
-const grimorioIt = prepareGrimorio({ correspondence: 2 }, (k) => k);
+// Il giocatore vede solo le compagne che ha (verdetto di Blue, 6/9), e gli
+// Ambiti consigliati una riga per Ambito.
+const grimorioIt = prepareGrimorio({ correspondence: 2, life: 1, matter: 1 }, (k) => k);
 const shown = grimorioIt[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio");
-assert.equal(shown.pairings.length, 5);
+assert.deepEqual(shown.pairings.map((pairing) => pairing.label), ["WOD5E_MAGE.Spheres.life", "WOD5E_MAGE.Spheres.matter"]);
 assert.match(shown.pairings[0].icon, /life\.png$/);
+assert.equal(Array.isArray(shown.scopes), true);
+assert.equal(shown.scopes.length, 3);
+assert.match(shown.scopes[0], /^Durata per quanto canta il marchio/);
+assert.deepEqual(splitScopes("Area per un campo, un giardino, un raccolto. Durata per quanto dura. Potenza (danni) se la malattia ferisce. Condizioni (malus 2, ostacolare) per quanto pesa."), ["Area per un campo, un giardino, un raccolto.", "Durata per quanto dura.", "Potenza (danni) se la malattia ferisce.", "Condizioni (malus 2, ostacolare) per quanto pesa."]);
+assert.deepEqual(prepareGrimorio({ correspondence: 2 }, (k) => k)[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio").pairings, []);
 assert.match(readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8"), /wod5e-mage-grimorio-pairings[\s\S]*pairing\.icon[\s\S]*wod5e-mage-grimorio-scopes[\s\S]*Grimorio\.Scopes/);
