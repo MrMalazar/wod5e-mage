@@ -982,8 +982,10 @@
   width: 100%;
 }
 
+/* Righe staccate (6/9): lo spazio fa da divisorio, niente cornici. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 6px;
   font-size: 0.85rem;
   margin: 0;
   min-width: 620px;
@@ -991,10 +993,28 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table :is(th, td) {
-  border: 1px solid var(--mage-oro-scuro);
-  padding: 0.3rem 0.45rem;
+  background: rgb(255 250 240 / 5%);
+  border: 0;
+  padding: 0.4rem 0.45rem;
   text-align: center;
   vertical-align: middle;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody tr > :first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody tr > :last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+/* La nota sotto il titolo, dettata da Blue (6/9). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table-note {
+  color: var(--mage-tenue);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  margin: 0 0 0.5rem;
+  text-align: center;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table thead th {
@@ -1016,7 +1036,6 @@
    le letture rientrate col solo loro nome (6/9). */
 .wod5e-mage-scope-table tbody tr.wod5e-mage-scope-group > th {
   background: rgb(152 119 43 / 22%);
-  border-bottom: 1px solid rgb(152 119 43 / 45%);
   color: var(--mage-oro, #d9a827);
   font-size: 0.9rem;
   font-weight: 700;
@@ -1040,24 +1059,20 @@
   text-transform: uppercase;
 }
 
-/* Leggibile (6/9): righe a zebra, un filo di aria, testo più grande. */
-.wod5e-mage-scope-table tbody tr:nth-child(even):not(.wod5e-mage-scope-group) > td {
-  background: rgb(255 250 240 / 4%);
-}
-
-.wod5e-mage-scope-table tbody td {
-  border-bottom: 1px solid rgb(152 119 43 / 18%);
-  padding: 0.3rem 0.35rem;
-}
-
+/* Leggibile (6/9): testo largo quanto la cella, a capo se serve. */
 .wod5e-mage-scope-table tbody th[scope="row"] {
-  border-bottom: 1px solid rgb(152 119 43 / 18%);
   font-size: 0.85rem;
 }
 
 .wod5e-mage-scope-table .wod5e-mage-scope-cell[data-layout="text"] {
-  font-size: 0.78rem;
-  line-height: 1.25;
+  font-size: 0.82rem;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-group > th {
+  background: rgb(152 119 43 / 22%);
+  border-radius: 4px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th > i {
@@ -2985,7 +3000,7 @@
    layout rigidi separati da un breakpoint: il wrapping è continuo.
    ============================================================ */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti {
-  container-type: inline-size;
+  container: tratti / inline-size;
   display: block;
   width: 100%;
 }
@@ -3257,7 +3272,7 @@
   opacity: 0.8;
 }
 
-@container (max-width: 900px) {
+@container tratti (max-width: 900px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content {
     grid-template-columns: minmax(0, 1fr) 250px;
   }
@@ -3265,7 +3280,7 @@
 
 /* Al limite minimo i pannelli laterali scendono sotto il loro riquadro e
    tornano a usare tutta la larghezza. */
-@container (max-width: 800px) {
+@container tratti (max-width: 800px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti > .stats-content {
     grid-template-areas:
       "attributes"
@@ -3284,7 +3299,7 @@
    misura la propria larghezza: quando le tre colonne non tengono più nome e
    pallini leggibili, si scende a due (vedi la query più sotto). */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .skills-attributes > .stats-container {
-  container-type: inline-size;
+  container: lista / inline-size;
   display: block;
   width: 100%;
 }
@@ -3295,7 +3310,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-@container (max-width: 720px) {
+@container lista (max-width: 720px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .skills-attributes > .stats-container > .stats-content {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -3371,19 +3386,42 @@
   row-gap: 0.75rem;
 }
 
-/* Il numero accanto ai pallini: nascosto, esce solo nel modo compatto. */
+/* Il numero accanto ai pallini: nascosto, esce solo a scheda stretta. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-trait-number {
   color: var(--mage-oro);
   display: none;
-  font-size: 15px;
+  font-size: 1.35rem;
+  font-weight: 700;
   justify-self: end;
-  min-width: 1.4em;
+  line-height: 1;
+  min-width: 1.2em;
   text-align: right;
 }
 
-/* Scheda stretta (6/9, proposta di Blue): niente pallini, solo simbolo,
-   nome e numero. Le tre colonne restano. */
-@container (max-width: 980px) {
+/* A colonne i pallini respirano con la lista (6/9): più larga la scheda,
+   più grandi; più stretta, più piccoli. La misura è relativa al contenitore
+   della lista (`lista`): gli Attributi hanno una colonna, le Abilità due. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-attributes .stats-list > .attribute > .resource-value {
+  --dot: clamp(11px, 5.2cqw, 24px);
+  gap: clamp(2px, 0.9cqw, 6px);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-skills .stats-list > .skill > .resource-value {
+  --dot: clamp(11px, 2.6cqw, 24px);
+  gap: clamp(2px, 0.45cqw, 6px);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .stats-list > :is(.attribute, .skill) > .resource-value > :is(.resource-value-step, .resource-value-empty) {
+  flex-basis: var(--dot, 18px);
+  height: var(--dot, 18px);
+  min-width: var(--dot, 18px);
+  width: var(--dot, 18px);
+}
+
+/* Scheda stretta (6/9, proposta di Blue): quando i pallini non ci stanno
+   più, spariscono e resta simbolo, nome e numero grande. Le tre colonne
+   restano. */
+@container tratti (max-width: 820px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .stats-list > :is(.attribute, .skill) > .resource-value {
     display: none !important;
   }
@@ -3397,7 +3435,7 @@
   }
 }
 
-@container (max-width: 700px) {
+@container tratti (max-width: 640px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns > .stats-content {
     grid-template-areas:
       "attributes skills"
@@ -3409,7 +3447,7 @@
   }
 }
 
-@container (max-width: 520px) {
+@container tratti (max-width: 480px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns > .stats-content {
     grid-template-areas:
       "attributes"
@@ -3439,7 +3477,7 @@
   row-gap: 0.45rem;
 }
 
-@container (max-width: 340px) {
+@container lista (max-width: 340px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-skills > .stats-container > .stats-content {
     grid-auto-flow: row;
     grid-template-columns: minmax(0, 1fr);

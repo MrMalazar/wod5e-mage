@@ -425,6 +425,15 @@
           "6": "Mettere KO",
           "7": "Non giochi"
         },
+        "conditionsComplexity": {
+          "1": "Assente",
+          "2": "Molto semplice",
+          "3": "Semplice",
+          "4": "Lunga",
+          "5": "Complessa",
+          "6": "Molto complessa",
+          "7": "Livello contratto"
+        },
         "range": {
           "1": "Lo vedi (entro 100 m)",
           "2": "Nei dintorni (entro 5 km)",
@@ -463,12 +472,15 @@
         "potency": "Peso",
         "potencyEpic": "Epicità",
         "potencyDamage": "Danni",
-        "duration": "Gioco",
-        "durationNarrative": "Narrativa",
-        "conditions": "Quante",
-        "conditionsDebuff": "Debuff"
+        "duration": "Narrativa",
+        "durationNarrative": "Fuori gioco",
+        "conditions": "Quantità",
+        "conditionsDebuff": "Malus",
+        "conditionsComplexity": "Complessità"
       },
-      "ConditionsDebuff": "Condizioni (Debuff)"
+      "ConditionsDebuff": "Condizioni (Debuff)",
+      "ConditionsComplexity": "Condizioni (Complessità)",
+      "TableNote": "Gli Ambiti servono a canalizzare la generalità e la variabilità degli effetti di Magick: è consigliato pensare un effetto nel minor numero di Ambiti possibile, ragionando per necessità e obiettivo."
     },
     "OngoingMagick": {
       "Label": "Magick in atto",

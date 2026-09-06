@@ -63,6 +63,8 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
   // che sale di potenza a ogni gradino.
   { id: "conditions", scope: "conditions", label: "WOD5E_MAGE.Scopes.conditions", sublabel: "WOD5E_MAGE.Scopes.Sub.conditions", faIcon: "fa-solid fa-list-check", layout: "symbol-number" },
   { id: "conditionsDebuff", scope: "conditions", label: "WOD5E_MAGE.Scopes.ConditionsDebuff", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsDebuff", layout: "text" },
+  // La Complessità (6/9): da «assente» a «livello contratto».
+  { id: "conditionsComplexity", scope: "conditions", label: "WOD5E_MAGE.Scopes.ConditionsComplexity", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsComplexity", layout: "text" },
   { id: "range", scope: "range", label: "WOD5E_MAGE.Scopes.range", layout: "text" },
   // La Precisione parla per frasi: carattere piccolo, per non allargare le colonne.
   { id: "precision", scope: "precision", label: "WOD5E_MAGE.Scopes.precision", layout: "text", small: true }

@@ -425,6 +425,15 @@
           "6": "Knock out",
           "7": "You are out"
         },
+        "conditionsComplexity": {
+          "1": "None",
+          "2": "Very simple",
+          "3": "Simple",
+          "4": "Long",
+          "5": "Complex",
+          "6": "Very complex",
+          "7": "Contract level"
+        },
         "range": {
           "1": "In sight (within 100 m)",
           "2": "Nearby (within 5 km)",
@@ -463,12 +472,15 @@
         "potency": "Weight",
         "potencyEpic": "Epicness",
         "potencyDamage": "Damage",
-        "duration": "Play",
-        "durationNarrative": "Narrative",
-        "conditions": "How many",
-        "conditionsDebuff": "Debuff"
+        "duration": "Narrative",
+        "durationNarrative": "Off game",
+        "conditions": "Quantity",
+        "conditionsDebuff": "Malus",
+        "conditionsComplexity": "Complexity"
       },
-      "ConditionsDebuff": "Conditions (Debuff)"
+      "ConditionsDebuff": "Conditions (Debuff)",
+      "ConditionsComplexity": "Conditions (Complexity)",
+      "TableNote": "Scopes channel how general and variable a Magick effect is: think of an effect in as few Scopes as possible, reasoning by need and goal."
     },
     "OngoingMagick": {
       "Label": "Ongoing Magick",

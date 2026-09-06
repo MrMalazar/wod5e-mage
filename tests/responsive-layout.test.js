@@ -38,11 +38,11 @@ assert.match(
 );
 assert.match(
   css,
-  /@container\s*\(max-width:\s*900px\)[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*250px/
+  /@container tratti\s*\(max-width:\s*900px\)[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*250px/
 );
 assert.match(
   css,
-  /@container\s*\(max-width:\s*800px\)[\s\S]*"attributes"[\s\S]*"conditions"[\s\S]*"skills"[\s\S]*"specialties"[\s\S]*"ruota"[\s\S]*"bonus"/
+  /@container tratti\s*\(max-width:\s*800px\)[\s\S]*"attributes"[\s\S]*"conditions"[\s\S]*"skills"[\s\S]*"specialties"[\s\S]*"ruota"[\s\S]*"bonus"/
 );
 assert.match(
   css,
@@ -172,6 +172,13 @@ assert.match(css, /\.sheet-tabs > \[data-tab\] \.navicon,\s*\.wod5e-mage\.wod5e\
 assert.match(css, /\.wod5e-mage-tratti-columns > \.stats-content \{[^}]*"attributes skills conditions"[^}]*"attributes skills specialties"[^}]*"ruota ruota bonus"/s);
 assert.match(css, /\.wod5e-mage-tratti-columns \.wod5e-mage-tratti-skills > \.stats-container > \.stats-content \{[^}]*grid-auto-flow: column;[^}]*grid-template-rows: repeat\(9, auto\);/s);
 assert.match(css, /\.wod5e-mage-tratti-columns \.stats-footer \{[^}]*display: none;/s);
+// I pallini a colonne respirano col contenitore (cqw) e sotto gli 820 px
+// dei Tratti lasciano il posto al numero grande; le query hanno il nome
+// del contenitore giusto (`tratti`, `lista`).
+assert.match(css, /\.wod5e-mage-tratti \{[^}]*container: tratti \/ inline-size;/s);
+assert.match(css, /--dot: clamp\(11px, 2\.6cqw, 24px\);/);
+assert.match(css, /@container tratti \(max-width: 820px\) \{\s*\.wod5e-mage\.wod5e\.actor\.sheet \.wod5e-mage-tratti-columns \.stats-list > :is\(\.attribute, \.skill\) > \.resource-value \{\s*display: none !important;/);
+assert.match(css, /\.wod5e-mage-trait-number \{[^}]*font-size: 1\.35rem;/s);
 const trattiTemplate = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
 assert.match(trattiTemplate, /wod5e-mage-tratti\{\{#if traitsColumns\}\} wod5e-mage-tratti-columns\{\{\/if\}\}[\s\S]*data-action="traitsLayoutToggle"/);
 assert.match(readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"), /register\(MODULE_ID, "traitsLayout"/);
@@ -205,11 +212,11 @@ assert.match(
 );
 assert.match(
   css,
-  /\.skills-attributes\s*>\s*\.stats-container\s*\{[^}]*container-type:\s*inline-size;/s
+  /\.skills-attributes\s*>\s*\.stats-container\s*\{[^}]*container: lista \/ inline-size;/s
 );
 assert.match(
   css,
-  /@container\s*\(max-width:\s*720px\)\s*\{[^{]*\.skills-attributes\s*>\s*\.stats-container\s*>\s*\.stats-content\s*\{[^}]*repeat\(2,\s*minmax\(0,\s*1fr\)\);/s
+  /@container lista\s*\(max-width:\s*720px\)\s*\{[^{]*\.skills-attributes\s*>\s*\.stats-container\s*>\s*\.stats-content\s*\{[^}]*repeat\(2,\s*minmax\(0,\s*1fr\)\);/s
 );
 
 // La Ruota ad arco accende i nodi con i token della palette, non con
