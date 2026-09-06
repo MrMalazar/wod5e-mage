@@ -240,7 +240,7 @@ const areteDialog = readFileSync(
 // Sfere e Ambiti (un campo nascosto per riga, la Specialità segnata sulla
 // Sfera che ce l'ha); a destra la riserva, la narrativa, il premio e la
 // Tipologia.
-assert.match(areteDialog, /wod5e-mage-arete-layout[\s\S]*wod5e-mage-arete-dots-column[\s\S]*name="spellName"[\s\S]*name="goal"[\s\S]*name="effectKind"[\s\S]*data-kind="sphere"[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dot[\s\S]*data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}"[\s\S]*wod5e-mage-arete-side[\s\S]*name="attributeTrait"[\s\S]*name="narrative"[\s\S]*name="harmony"[\s\S]*wod5e-mage-arete-types[\s\S]*name="maintained"/);
+assert.match(areteDialog, /wod5e-mage-arete-layout[\s\S]*wod5e-mage-arete-dots-column[\s\S]*name="spellName"[\s\S]*name="effectKind"[\s\S]*data-kind="sphere"[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dot[\s\S]*name="goal"[\s\S]*data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}"[\s\S]*wod5e-mage-arete-side[\s\S]*name="attributeTrait"[\s\S]*name="narrative"[\s\S]*name="harmony"[\s\S]*wod5e-mage-arete-types[\s\S]*name="maintained"/);
 assert.match(css, /\.wod5e-mage-arete-layout\s*\{[^}]*grid-template-columns: minmax\(250px, 1\.1fr\) minmax\(230px, 0\.9fr\);/s);
 // Nel Grimorio degli effetti la testata di ogni Sfera sta al centro:
 // simbolo sopra, nome sotto.

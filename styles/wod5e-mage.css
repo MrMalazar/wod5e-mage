@@ -1030,6 +1030,14 @@
   color: var(--mage-oro-chiaro, #f5e7b2);
   font-weight: 600;
   padding-left: 1.1rem;
+  text-transform: lowercase;
+}
+
+/* Gli Ambiti a lettura sola: il nome in MAIUSCOLO come le fasce (6/9). */
+.wod5e-mage-scope-table tbody tr:not(.wod5e-mage-scope-sub) > th[scope="row"] {
+  color: var(--mage-oro, #d9a827);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 /* Leggibile (6/9): righe a zebra, un filo di aria, testo più grande. */
@@ -2539,7 +2547,9 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-right > .wod5e-mage-inventario {
+  align-self: stretch;
   padding: 0.6rem 0.8rem 0.8rem;
+  width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-right .wod5e-mage-inventario .category {
@@ -3375,7 +3385,7 @@
    nome e numero. Le tre colonne restano. */
 @container (max-width: 980px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .stats-list > :is(.attribute, .skill) > .resource-value {
-    display: none;
+    display: none !important;
   }
 
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-trait-number {

@@ -59,7 +59,10 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
     layout: "symbol-text"
   },
   { id: "targets", scope: "targets", label: "WOD5E_MAGE.Scopes.targets", faIcon: "fa-solid fa-user", layout: "symbol-number" },
-  { id: "conditions", scope: "conditions", label: "WOD5E_MAGE.Scopes.conditions", faIcon: "fa-solid fa-list-check", layout: "symbol-number" },
+  // Le Condizioni in due letture (6/9): quante ne infliggi, e il Debuff,
+  // che sale di potenza a ogni gradino.
+  { id: "conditions", scope: "conditions", label: "WOD5E_MAGE.Scopes.conditions", sublabel: "WOD5E_MAGE.Scopes.Sub.conditions", faIcon: "fa-solid fa-list-check", layout: "symbol-number" },
+  { id: "conditionsDebuff", scope: "conditions", label: "WOD5E_MAGE.Scopes.ConditionsDebuff", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsDebuff", layout: "text" },
   { id: "range", scope: "range", label: "WOD5E_MAGE.Scopes.range", layout: "text" },
   // La Precisione parla per frasi: carattere piccolo, per non allargare le colonne.
   { id: "precision", scope: "precision", label: "WOD5E_MAGE.Scopes.precision", layout: "text", small: true }
@@ -133,7 +136,10 @@ export function prepareScopeTable(localize = (key) => key) {
         // Con una lettura sola la riga porta il nome dell'Ambito; con più
         // letture c'è la riga di titolo e sotto le letture col loro nome.
         header: many,
-        rows: scopeRows.map((row) => ({ ...row, title: many ? (row.sublabel || row.label) : label }))
+        rows: scopeRows
+          .map((row) => ({ ...row, title: many ? (row.sublabel || row.label) : label }))
+          // Le letture in ordine alfabetico della lingua (6/9).
+          .sort((a, b) => many ? String(localize(a.title)).localeCompare(String(localize(b.title))) : 0)
       };
     })
     .sort((a, b) => a.name.localeCompare(b.name));

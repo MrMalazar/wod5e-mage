@@ -350,7 +350,7 @@
       "conditions": "Condizioni",
       "range": "Portata",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza: Peso, quanto pesa ciò che muovi; Epicità, quanto pesa l'impresa nella storia; Danni, l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
+      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza: Peso, quanto pesa ciò che muovi; Epicità, quanto pesa l'impresa nella storia; Danni, l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa. Condizioni: Quante, il numero di Condizioni inflitte; Debuff, quanto pesa quella inflitta.",
       "TableSuccesses": "Livello →",
       "Table": {
         "potency": {
@@ -416,6 +416,15 @@
           "6": "6",
           "7": "7"
         },
+        "conditionsDebuff": {
+          "1": "Distrarre",
+          "2": "Ostacolare, disarmare",
+          "3": "Accecare, addormentare",
+          "4": "Stordire, inabilitare arti",
+          "5": "Negare i sensi",
+          "6": "Mettere KO",
+          "7": "Non giochi"
+        },
         "range": {
           "1": "Lo vedi (entro 100 m)",
           "2": "Nei dintorni (entro 5 km)",
@@ -455,8 +464,11 @@
         "potencyEpic": "Epicità",
         "potencyDamage": "Danni",
         "duration": "Gioco",
-        "durationNarrative": "Narrativa"
-      }
+        "durationNarrative": "Narrativa",
+        "conditions": "Quante",
+        "conditionsDebuff": "Debuff"
+      },
+      "ConditionsDebuff": "Condizioni (Debuff)"
     },
     "OngoingMagick": {
       "Label": "Magick in atto",

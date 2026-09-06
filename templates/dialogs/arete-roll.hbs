@@ -13,15 +13,6 @@
                     <input type="text" name="spellName" id="wod5e-mage-arete-spell-name" placeholder="{{localize 'WOD5E_MAGE.Incantesimi.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Name'}}">
                 </label>
             {{/if}}
-            {{!-- L'Obiettivo: cosa vuoi ottenere, scritto a mano o scelto dal
-                 Grimorio (il libro), che accende anche le Sfere coinvolte. --}}
-            {{!-- L'Obiettivo è un riquadro (6/9): c'è spazio per scrivere, e la
-                 colonna sinistra pareggia la destra. --}}
-            <div class="wod5e-mage-arete-goal wod5e-mage-arete-goal-box">
-                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Goal"}}</span>
-                <textarea name="goal" id="wod5e-mage-arete-goal" rows="4" placeholder="{{localize 'WOD5E_MAGE.Arete.GoalHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Goal'}}"></textarea>
-                <button type="button" class="wod5e-mage-archivio-open wod5e-mage-arete-grimorio" data-role="grimorioOpen" title="{{localize 'WOD5E_MAGE.Grimorio.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
-            </div>
             {{!-- L'Effetto: fisico, mentale o variabile. Dice dove va il Contraccolpo. --}}
             <div class="wod5e-mage-arete-goal wod5e-mage-arete-effect-kind">
                 <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.EffectKind"}}</span>
@@ -46,6 +37,15 @@
                 <p class="wod5e-mage-magick-type-hint">{{localize "WOD5E_MAGE.Arete.NoSpheres"}}</p>
             {{/each}}
 
+            {{!-- L'Obiettivo, sotto le Sfere (6/9): cosa vuoi ottenere, scritto a mano o scelto dal
+                 Grimorio (il libro), che accende anche le Sfere coinvolte. --}}
+            {{!-- L'Obiettivo è un riquadro (6/9): c'è spazio per scrivere, e la
+                 colonna sinistra pareggia la destra. --}}
+            <div class="wod5e-mage-arete-goal wod5e-mage-arete-goal-box">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Goal"}}</span>
+                <textarea name="goal" id="wod5e-mage-arete-goal" rows="4" placeholder="{{localize 'WOD5E_MAGE.Arete.GoalHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Goal'}}"></textarea>
+                <button type="button" class="wod5e-mage-archivio-open wod5e-mage-arete-grimorio" data-role="grimorioOpen" title="{{localize 'WOD5E_MAGE.Grimorio.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+            </div>
             {{!-- L'icona della tavola sta a sinistra della parola. --}}
             <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head wod5e-mage-arete-scopes-head">
                 <button type="button" class="wod5e-mage-arete-scope-table" data-role="scopeTableOpen" title="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}"><i class="fa-solid fa-table-list"></i></button>
