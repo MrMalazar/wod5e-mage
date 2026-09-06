@@ -15,14 +15,14 @@
       "Notes": "Note",
       "Grimorio": "Grimorio",
       "Short": {
-        "stats": "Tratti",
-        "dotazione": "Oggetti",
+        "stats": "Stat",
+        "dotazione": "Tratti",
         "magick": "Magick",
-        "grimorio": "Incanti",
+        "grimorio": "Formule",
         "focus": "Credo",
         "personaggio": "Bussola",
         "conceptChallenge": "Sfida",
-        "esperienza": "Ascesa",
+        "esperienza": "Exp",
         "note": "Note"
       }
     },
@@ -460,6 +460,15 @@
           "5": "Un anno",
           "6": "Un decennio",
           "7": "Permanente"
+        },
+        "precisionInfo": {
+          "1": "Irrilevante (una curiosità)",
+          "2": "Poco rilevante (un dettaglio)",
+          "3": "Rilevante (la scena)",
+          "4": "Molto rilevante (il capitolo)",
+          "5": "Decisiva (ribalta il capitolo)",
+          "6": "Cruciale (la storia)",
+          "7": "Fondante (l'ambientazione)"
         }
       },
       "precision": "Precisione",
@@ -476,11 +485,15 @@
         "durationNarrative": "Fuori gioco",
         "conditions": "Quantità",
         "conditionsDebuff": "Malus",
-        "conditionsComplexity": "Complessità"
+        "conditionsComplexity": "Complessità",
+        "precision": "Dettaglio",
+        "precisionInfo": "Informazione"
       },
       "ConditionsDebuff": "Condizioni (Debuff)",
       "ConditionsComplexity": "Condizioni (Complessità)",
-      "TableNote": "Gli Ambiti servono a canalizzare la generalità e la variabilità degli effetti di Magick: è consigliato pensare un effetto nel minor numero di Ambiti possibile, ragionando per necessità e obiettivo."
+      "TableNote": "Gli Ambiti servono a canalizzare la generalità e la variabilità degli effetti di Magick: è consigliato pensare un effetto nel minor numero di Ambiti possibile, ragionando per necessità e obiettivo.",
+      "PrecisionDetail": "Precisione (Dettaglio)",
+      "PrecisionInfo": "Precisione (Informazione)"
     },
     "OngoingMagick": {
       "Label": "Magick in atto",

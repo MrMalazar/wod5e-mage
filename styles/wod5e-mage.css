@@ -1045,16 +1045,20 @@
   text-transform: uppercase;
 }
 
+/* Le letture: la prima lettera maiuscola, come sono scritte (6/9). */
 .wod5e-mage-scope-table tbody tr.wod5e-mage-scope-sub > th {
   color: var(--mage-oro-chiaro, #f5e7b2);
   font-weight: 600;
   padding-left: 1.1rem;
-  text-transform: lowercase;
+  text-transform: none;
 }
 
-/* Gli Ambiti a lettura sola: il nome in MAIUSCOLO come le fasce (6/9). */
+/* Gli Ambiti a lettura sola: il nome in MAIUSCOLO e con gli stessi colori
+   delle fasce (6/9). */
 .wod5e-mage-scope-table tbody tr:not(.wod5e-mage-scope-sub) > th[scope="row"] {
+  background: rgb(152 119 43 / 22%);
   color: var(--mage-oro, #d9a827);
+  font-size: 0.9rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -6070,9 +6074,16 @@
   border-radius: 0 4px 4px 0;
 }
 
-.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-group > th {
+.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-group > th,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody tr:not(.wod5e-mage-scope-sub) > th[scope="row"],
+.wod5e-mage-scope-table tbody tr:not(.wod5e-mage-scope-sub) > th[scope="row"] {
   background: var(--tavola-fascia);
   color: var(--tavola-fascia-testo);
+}
+
+/* Le celle degli Ambiti a lettura sola: come quelle delle letture (6/9). */
+.wod5e-mage-scope-table tbody tr:not(.wod5e-mage-scope-sub) > td {
+  background: var(--tavola-cella-alt);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th[scope="row"],

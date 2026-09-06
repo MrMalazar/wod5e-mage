@@ -160,7 +160,7 @@ assert.equal((sheetTabs.match(/short: "WOD5E_MAGE\.Tabs\.Short\./g) ?? []).lengt
 const itShort = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE.Tabs.Short;
 // Le pagine a gruppi (6/9): chi sei | la Magick | la storia, con un
 // divisorio davanti a Magick e a Bussola; accesa SOLO la pagina in cui sei.
-assert.deepEqual(Object.values(itShort), ["Tratti", "Oggetti", "Magick", "Incanti", "Credo", "Bussola", "Sfida", "Ascesa", "Note"]);
+assert.deepEqual(Object.values(itShort), ["Stat", "Tratti", "Magick", "Formule", "Credo", "Bussola", "Sfida", "Exp", "Note"]);
 assert.match(sheetTabs, /stats: \{[\s\S]*?dotazione: \{[\s\S]*?magick: \{\s*id: "magick",\s*groupStart: true,[\s\S]*?grimorio: \{[\s\S]*?focus: \{[\s\S]*?personaggio: \{\s*id: "personaggio",\s*groupStart: true,[\s\S]*?conceptChallenge: \{[\s\S]*?esperienza: \{[\s\S]*?note: \{/);
 assert.match(tabNavigation, /\{\{#if tab\.groupStart\}\}<hr class="wod5e-mage-tabs-divider"/);
 assert.match(css, /\.wod5e-mage-tabs-divider \{[^}]*border-top: 1px solid var\(--mage-oro-scuro\);/s);

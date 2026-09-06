@@ -36,8 +36,8 @@ assert.deepEqual(table.steps, [1, 2, 3, 4, 5, 6, 7]);
 // Dodici righe: i sette Ambiti, con la Potenza in tre (Peso, Epicità, Danni),
 // la Durata in narrativa e fuori gioco, le Condizioni in quantità, malus e
 // complessità (6/9).
-assert.equal(table.rows.length, 12);
-assert.deepEqual(table.rows.map((row) => row.id), ["potency", "potencyEpic", "potencyDamage", "duration", "durationNarrative", "area", "targets", "conditions", "conditionsDebuff", "conditionsComplexity", "range", "precision"]);
+assert.equal(table.rows.length, 13);
+assert.deepEqual(table.rows.map((row) => row.id), ["potency", "potencyEpic", "potencyDamage", "duration", "durationNarrative", "area", "targets", "conditions", "conditionsDebuff", "conditionsComplexity", "range", "precision", "precisionInfo"]);
 assert.equal(table.rows[0].label, "WOD5E_MAGE.Scopes.PotencyWeight");
 // La tavola per gruppi (6/9): Ambiti in ordine alfabetico della lingua, chi
 // ha più letture porta la riga di titolo e le letture col solo loro nome.
@@ -46,13 +46,13 @@ const tableIt = prepareScopeTable((key) => key.startsWith("WOD5E_MAGE.Scopes.")
   ? (key.slice("WOD5E_MAGE.Scopes.".length).split(".").reduce((node, part) => node?.[part], itScopes) ?? key)
   : key);
 assert.deepEqual(tableIt.groups.map((group) => group.name), ["Area", "Bersagli", "Condizioni", "Durata", "Portata", "Potenza", "Precisione"]);
-assert.deepEqual(tableIt.groups.map((group) => group.header), [false, false, true, true, false, true, false]);
+assert.deepEqual(tableIt.groups.map((group) => group.header), [false, false, true, true, false, true, true]);
 // Le letture in ordine alfabetico: Danni, Epicità, Peso.
 assert.deepEqual(tableIt.groups.find((group) => group.scope === "potency").rows.map((row) => row.title), ["WOD5E_MAGE.Scopes.Sub.potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyEpic", "WOD5E_MAGE.Scopes.Sub.potency"]);
 assert.deepEqual(tableIt.groups.find((group) => group.scope === "conditions").rows.map((row) => row.id), ["conditionsComplexity", "conditionsDebuff", "conditions"]);
 assert.deepEqual(tableIt.groups.find((group) => group.scope === "duration").rows.map((row) => row.id), ["durationNarrative", "duration"]);
 assert.equal(tableIt.groups.find((group) => group.scope === "area").rows[0].title, "WOD5E_MAGE.Scopes.area");
-assert.deepEqual(Object.values(itScopes.Sub), ["Peso", "Epicità", "Danni", "Narrativa", "Fuori gioco", "Quantità", "Malus", "Complessità"]);
+assert.deepEqual(Object.values(itScopes.Sub), ["Peso", "Epicità", "Danni", "Narrativa", "Fuori gioco", "Quantità", "Malus", "Complessità", "Dettaglio", "Informazione"]);
 assert.equal(itScopes.Table.conditionsDebuff["7"], "Non giochi");
 assert.equal(itScopes.Table.conditionsComplexity["7"], "Livello contratto");
 assert.match(scopeTableTemplate, /wod5e-mage-scope-table-note[\s\S]*Scopes\.TableNote/);
@@ -118,7 +118,7 @@ for (const lang of ["it", "en"]) {
 assert.match(scopeTableTemplate, /scopeTable\.steps[\s\S]*scopeTable\.groups[\s\S]*row\.cells/);
 assert.doesNotMatch(scopeTableTemplate, /gift/);
 // Le colonne invisibili: ogni riga dice le sue, e la cella le rispetta.
-assert.deepEqual(table.rows.map((row) => row.layout), ["text", "text", "symbol-number", "symbol-number", "symbol-text", "symbol-text", "symbol-number", "symbol-number", "text", "text", "text", "text"]);
+assert.deepEqual(table.rows.map((row) => row.layout), ["text", "text", "symbol-number", "symbol-number", "symbol-text", "symbol-text", "symbol-number", "symbol-number", "text", "text", "text", "text", "text"]);
 assert.equal(table.rows[2].cells[0].number, false);
 assert.equal(table.rows[2].cells[1].number, true);
 assert.equal(table.rows[11].small, true);

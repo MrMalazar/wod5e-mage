@@ -66,8 +66,11 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
   // La Complessità (6/9): da «assente» a «livello contratto».
   { id: "conditionsComplexity", scope: "conditions", label: "WOD5E_MAGE.Scopes.ConditionsComplexity", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsComplexity", layout: "text" },
   { id: "range", scope: "range", label: "WOD5E_MAGE.Scopes.range", layout: "text" },
-  // La Precisione parla per frasi: carattere piccolo, per non allargare le colonne.
-  { id: "precision", scope: "precision", label: "WOD5E_MAGE.Scopes.precision", layout: "text", small: true }
+  // La Precisione in due letture (6/9): il Dettaglio (quanto è piccolo ciò
+  // che cerchi) e l'Informazione (quanto pesa saperla nella trama). Parla per
+  // frasi: carattere piccolo, per non allargare le colonne.
+  { id: "precision", scope: "precision", label: "WOD5E_MAGE.Scopes.PrecisionDetail", sublabel: "WOD5E_MAGE.Scopes.Sub.precision", layout: "text", small: true },
+  { id: "precisionInfo", scope: "precision", label: "WOD5E_MAGE.Scopes.PrecisionInfo", sublabel: "WOD5E_MAGE.Scopes.Sub.precisionInfo", layout: "text", small: true }
 ]);
 
 /** Colonne della tavola: i sette livelli di un Ambito. */

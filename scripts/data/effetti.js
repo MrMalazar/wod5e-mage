@@ -434,9 +434,34 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 1,
     "extras": [],
-    "text": "la crepa nel muro, nell'alibi, nel piano",
-    "pairings": [],
-    "scopes": ""
+    "text": "Guardi una cosa e vedi dove cederà: la crepa nel muro, il passaggio morto del piano, la frase dell'alibi che non regge. Non la rompi: sai dove spingere, e quanto poco basta.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "il punto esatto della struttura: la saldatura vecchia, il pilastro stanco, il bullone che gioca etc.."
+      },
+      {
+        "sphere": "life",
+        "text": "il punto debole di un corpo: il ginocchio operato, la spalla che esce, il fiato corto etc.."
+      },
+      {
+        "sphere": "mind",
+        "text": "il punto debole di una persona: la paura, l'orgoglio, il segreto che non deve uscire etc.."
+      },
+      {
+        "sphere": "forces",
+        "text": "dove cede un impianto: il fusibile, il cavo scoperto, la valvola sotto pressione etc.."
+      },
+      {
+        "sphere": "spirit",
+        "text": "dove cede uno spirito o una soglia: il patto non rispettato, il nome che non vuole sentire etc.."
+      },
+      {
+        "sphere": "time",
+        "text": "sai anche quando cederà, non solo dove."
+      }
+    ],
+    "scopes": "Precisione per un punto solo e non l'insieme (1 il muro, 3 il mattone). Bersagli per più cose alla volta. Durata 2 per tenere l'occhio acceso tutta la scena."
   },
   {
     "id": "entropy-1-fiutare-la-menzogna",
@@ -444,19 +469,22 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 1,
     "extras": [],
-    "text": "il racconto che stona; le menti si difendono con la Volontà",
-    "pairings": [],
-    "scopes": ""
-  },
-  {
-    "id": "entropy-1-fiutare-il-pericolo",
-    "name": "Fiutare il pericolo",
-    "sphere": "entropy",
-    "level": 1,
-    "extras": [],
-    "text": "sai quanto è pericolosa la stanza prima di entrarci",
-    "pairings": [],
-    "scopes": ""
+    "text": "Senti quando un racconto stona: la nota falsa, mai il testo. Sai che sta mentendo, non su cosa. Le menti si difendono con la Volontà.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "sai anche cosa nasconde, e perché."
+      },
+      {
+        "sphere": "matter",
+        "text": "senti quando a mentire è un oggetto: il documento falso, la moneta contraffatta, l'etichetta cambiata etc.."
+      },
+      {
+        "sphere": "spirit",
+        "text": "senti la bugia di uno spirito e il patto detto a metà."
+      }
+    ],
+    "scopes": "Bersagli per ascoltare più bocche insieme. Durata 2 per un interrogatorio intero. Precisione per la frase esatta che stona."
   },
   {
     "id": "entropy-1-pesare-le-probabilita",
@@ -464,9 +492,38 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 1,
     "extras": [],
-    "text": "quanto è probabile che il banco sballi, che piova, che sopravvivi",
-    "pairings": [],
-    "scopes": ""
+    "text": "Chiedi al mondo quanto è probabile una cosa e il mondo ti risponde con un numero: che piova, che il banco sballi, che tu esca vivo da quella stanza etc.. È anche il tuo fiuto per il pericolo: sai quanto è pericoloso un posto prima di entrarci.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "quanto è probabile che una persona faccia una cosa: che ceda, che tradisca, che spari etc.."
+      },
+      {
+        "sphere": "life",
+        "text": "quanto è probabile che un corpo regga: che sopravviva, che guarisca, che la ferita si infetti etc.."
+      },
+      {
+        "sphere": "matter",
+        "text": "quanto è probabile che una cosa regga: il ponte, la corda, il paracadute etc.."
+      },
+      {
+        "sphere": "forces",
+        "text": "quanto è probabile che un impianto regga: che scarichi, che prenda fuoco, che salti la luce etc.."
+      },
+      {
+        "sphere": "spirit",
+        "text": "quanto è probabile che lo spirito accetti, che la soglia si apra, che il rito riesca etc.."
+      },
+      {
+        "sphere": "time",
+        "text": "la probabilità di adesso e quella di fra un'ora: la sorte in movimento."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "pesi le probabilità di un luogo che non vedi."
+      }
+    ],
+    "scopes": "Precisione per una domanda sola e precisa invece del quadro. Area per pesare un luogo intero. Durata 2 per tenere il fiuto acceso tutta la scena."
   },
   {
     "id": "entropy-1-leggere-il-conto-alla-rovescia",
@@ -474,9 +531,38 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 1,
     "extras": [],
-    "text": "quanto resta a un oggetto, a una struttura, a un accordo prima che ceda",
-    "pairings": [],
-    "scopes": ""
+    "text": "Sai quanto manca: all'oggetto che si romperà, all'accordo che salterà, alla malattia che si dichiarerà. In giorni, mesi o anni, e più successi hai più la cifra è esatta.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "il conto di un oggetto o di una struttura: la lavatrice, il ponte, il tetto etc.."
+      },
+      {
+        "sphere": "life",
+        "text": "il conto di un corpo: quanto gli resta, quando cadrà malato, quando la ferita si chiuderà etc.."
+      },
+      {
+        "sphere": "mind",
+        "text": "il conto di un legame o di una decisione: quando lascerà, quando cederà, quando cambierà idea etc.."
+      },
+      {
+        "sphere": "forces",
+        "text": "il conto di un impianto: quando muore il generatore, quando si scarica la batteria etc.."
+      },
+      {
+        "sphere": "spirit",
+        "text": "il conto di un patto o di uno spirito: quando si scioglie, quando si disfa etc.."
+      },
+      {
+        "sphere": "prime",
+        "text": "il conto di un incantesimo: quanto regge la Magick di un altro."
+      },
+      {
+        "sphere": "time",
+        "text": "la cifra diventa una data, con ora e minuto."
+      }
+    ],
+    "scopes": "Precisione per la cifra esatta e non l'ordine di grandezza. Bersagli per più conti insieme. Durata 2 per leggere tutta la scena."
   },
   {
     "id": "entropy-2-far-durare",
@@ -484,25 +570,61 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 2,
     "extras": [],
-    "text": "l'Entropia al contrario: la corda regge, il motore parte, la cosa vecchia arriva a fine giornata",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'Entropia al contrario: la corda regge, il motore parte, la cosa vecchia arriva a fine giornata. Non ripari niente: fai in modo che non ceda proprio adesso.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "tieni in piedi anche ciò che è già rotto: il motore fuso fa un altro giro."
+      },
+      {
+        "sphere": "life",
+        "text": "il corpo regge: il ferito arriva all'ospedale, il malato arriva a domani etc.."
+      },
+      {
+        "sphere": "forces",
+        "text": "la batteria, la torcia, il generatore reggono oltre la carica etc.."
+      },
+      {
+        "sphere": "mind",
+        "text": "reggono la calma, la bugia, il coraggio fino a fine scena etc.."
+      },
+      {
+        "sphere": "spirit",
+        "text": "lo spirito evocato non si disfa, il patto regge un altro giorno etc.."
+      },
+      {
+        "sphere": "time",
+        "text": "fissi fino a quando: reggerà esattamente fino a mezzanotte."
+      }
+    ],
+    "scopes": "Durata per quanto deve reggere (1 la fuga, 2 la scena, 4 la sessione). Bersagli per più cose insieme. Potenza (peso) se è grosso: il ponte, non la corda."
   },
   {
     "id": "entropy-2-inclinare-una-scelta",
     "name": "Inclinare una scelta",
     "sphere": "entropy",
     "level": 2,
-    "extras": [
+    "extras": [],
+    "text": "Sposti le probabilità attorno a una decisione: quando sceglierà, l'opzione che vuoi tu è quella che gli capita davanti, quella comoda, quella che gli torna in mente per prima. Non decidi per lui: apparecchi il caso.",
+    "pairings": [
       {
         "sphere": "mind",
-        "level": 2,
-        "required": true
+        "text": "la Mente gli mette l'idea in testa, l'Entropia fa in modo che sia proprio quella a tornargli in mente al momento giusto: sceglie l'errore convinto di averlo scelto."
+      },
+      {
+        "sphere": "life",
+        "text": "il corpo gli dà ragione: la stanchezza, la fame, il sonno gli fanno preferire l'opzione facile etc.."
+      },
+      {
+        "sphere": "time",
+        "text": "scegli l'istante in cui la scelta gli si presenta."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "inclini la scelta di chi non vedi."
       }
     ],
-    "text": "+ Mente ●●: la Mente gli mette l'idea in testa, l'Entropia fa sì che sia proprio quella a tornargli in mente",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Condizioni 1 per legarla a un momento: quando glielo chiederanno. Bersagli per più teste. Potenza (epicità) per quanto pesa la scelta: 1 il tavolo al ristorante, 4 il voto in consiglio."
   },
   {
     "id": "entropy-2-passare-inosservato",
@@ -510,9 +632,26 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 2,
     "extras": [],
-    "text": "gli sguardi scivolano altrove: nessuno ricorda di averti visto",
-    "pairings": [],
-    "scopes": ""
+    "text": "Gli sguardi scivolano altrove: chi guarda verso di te trova sempre qualcosa di meglio da guardare, la telecamera gira nel momento sbagliato, la guardia starnutisce. Nessuno ricorda di averti visto. Non sei invisibile: sei improbabile.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "chi ti vede lo dimentica subito."
+      },
+      {
+        "sphere": "forces",
+        "text": "la telecamera, il sensore, il faro sbagliano insieme agli sguardi etc.."
+      },
+      {
+        "sphere": "life",
+        "text": "nemmeno il cane ti fiuta."
+      },
+      {
+        "sphere": "spirit",
+        "text": "passi inosservato anche agli spiriti e a chi guarda dall'Umbra."
+      }
+    ],
+    "scopes": "Durata 1 per attraversare la stanza, 2 per la scena. Bersagli per la Cabala intera. Area per un luogo dove nessuno nota niente."
   },
   {
     "id": "entropy-2-provocare-un-guasto",
@@ -520,9 +659,38 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 2,
     "extras": [],
-    "text": "la probabilità di rottura sale al cento per cento: l'auto tace",
-    "pairings": [],
-    "scopes": ""
+    "text": "Una cosa che poteva rompersi si rompe adesso: l'auto tace, la serratura si inceppa, il ponte radio cade. Serve una crepa vera da spingere: quello che è nuovo e sano non ne ha, e senza crepa il guasto non è tuo.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "guasti anche ciò che è sano: la Materia lo indebolisce, il caso sceglie l'istante."
+      },
+      {
+        "sphere": "forces",
+        "text": "guasti l'impianto: il quadro elettrico, il generatore, la rete etc.."
+      },
+      {
+        "sphere": "life",
+        "text": "il corpo sbaglia: la caviglia cede, arriva il crampo, manca il fiato etc.."
+      },
+      {
+        "sphere": "mind",
+        "text": "il guasto è in testa: la parola dimenticata, il numero sbagliato, il nome che non torna etc.."
+      },
+      {
+        "sphere": "spirit",
+        "text": "il rito degli altri si inceppa, lo spirito non risponde alla chiamata etc.."
+      },
+      {
+        "sphere": "time",
+        "text": "scegli l'istante esatto: si rompe quando lo tocca lui."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "guasti quello che non vedi."
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto è grosso quel che cede: 1 la serratura, 3 l'auto, 5 la casa. Condizioni 1 per farlo scattare al momento giusto: quando gira la chiave. Precisione per il pezzo giusto e non l'insieme. Bersagli per più cose."
   },
   {
     "id": "entropy-2-seminare-gli-inseguitori",
@@ -530,9 +698,26 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 2,
     "extras": [],
-    "text": "chi ti segue colleziona gomme a terra, buche e semafori rossi",
-    "pairings": [],
-    "scopes": ""
+    "text": "Chi ti segue colleziona sfortuna: gomme a terra, semafori rossi, il furgone che si mette di traverso. Tu non vai più veloce: sono loro che non arrivano.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "la loro auto si spegne, la radio gracchia, il navigatore sbaglia strada etc.."
+      },
+      {
+        "sphere": "matter",
+        "text": "la strada stessa gli va contro: la buca, il cancello chiuso, il tombino aperto etc.."
+      },
+      {
+        "sphere": "mind",
+        "text": "perdono la tua traccia e si convincono di un'altra strada."
+      },
+      {
+        "sphere": "life",
+        "text": "il cane perde l'odore, il segugio si stanca etc.."
+      }
+    ],
+    "scopes": "Bersagli per quanti ti seguono (zero se stanno tutti sulla stessa auto). Durata 1 per la fuga, 2 per tutta la scena. Area per un quartiere intero che gli va contro."
   },
   {
     "id": "entropy-2-truccare-la-fortuna",
@@ -540,9 +725,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 2,
     "extras": [],
-    "text": "il dado, la carta, l'ingranaggio che si inceppa al momento giusto",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il dado, la carta, la pallina della roulette, l'ingranaggio che si inceppa al momento giusto: le piccole probabilità di un istante cadono come dici tu. Un colpo alla volta: la serata intera è il terzo pallino.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "trucchi anche l'oggetto che non lascia niente al caso: il dado piombato, la slot programmata etc.."
+      },
+      {
+        "sphere": "forces",
+        "text": "trucchi la macchina: il generatore di numeri, la lotteria elettronica etc.."
+      },
+      {
+        "sphere": "mind",
+        "text": "l'altro giocatore sbaglia proprio la mossa giusta."
+      },
+      {
+        "sphere": "time",
+        "text": "scegli il momento in cui la fortuna gira."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "trucchi il tavolo che non vedi."
+      }
+    ],
+    "scopes": "Bersagli per più giocatori o più tavoli. Condizioni 1 per legarla a una mano precisa. Precisione per il risultato esatto e non «vinco»: il sette, il doppio sei."
   },
   {
     "id": "entropy-3-deviare-la-malasorte",
@@ -550,9 +756,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 3,
     "extras": [],
-    "text": "ogni colpo ti manca per un soffio, e sembra sempre fortuna",
-    "pairings": [],
-    "scopes": ""
+    "text": "Ogni colpo ti manca per un soffio, e sembra sempre fortuna: la pallottola sfiora, il tetto cede un passo dietro di te, il vetro cade dall'altra parte. Non sei più resistente: sei difficile da colpire.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "devii anche le disgrazie del corpo: il contagio, il veleno, l'infarto etc.."
+      },
+      {
+        "sphere": "forces",
+        "text": "devii le energie: il fulmine, la scarica, la fiammata etc.."
+      },
+      {
+        "sphere": "mind",
+        "text": "chi ti tende una trappola sbaglia sempre qualcosa."
+      },
+      {
+        "sphere": "spirit",
+        "text": "devii le maledizioni degli spiriti e i colpi dall'Umbra."
+      },
+      {
+        "sphere": "prime",
+        "text": "anche la Magick altrui sbaglia bersaglio."
+      }
+    ],
+    "scopes": "Durata 1 per lo scontro, 2 per la scena, 4 per la sessione. Bersagli per proteggere altri. Condizioni 1 se scatta da sola quando sparano, 2 se chi ti manca si inceppa pure."
   },
   {
     "id": "entropy-3-distribuire-fortuna-e-sfortuna",
@@ -560,51 +787,96 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 3,
     "extras": [],
-    "text": "pieghi una serata intera: la bisca ti ama, il rivale colleziona disastri",
-    "pairings": [],
-    "scopes": ""
+    "text": "Pieghi una serata intera: la bisca ti ama, il rivale colleziona disastri, i tuoi trovano parcheggio e i loro trovano la polizia. Quello che dai a uno lo togli a un altro: il conto resta in pari, e sei tu a decidere chi paga.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "la fortuna sceglie anche le teste: le tue idee arrivano, le loro no."
+      },
+      {
+        "sphere": "life",
+        "text": "la fortuna nei corpi: i tuoi non si ammalano, i loro sì."
+      },
+      {
+        "sphere": "forces",
+        "text": "la fortuna negli impianti: le vostre macchine partono, le loro no."
+      },
+      {
+        "sphere": "matter",
+        "text": "la fortuna nelle cose: quello che vi serve è nel cassetto, quello che gli serve è rotto."
+      },
+      {
+        "sphere": "spirit",
+        "text": "gli spiriti del luogo prendono la tua parte."
+      },
+      {
+        "sphere": "time",
+        "text": "scegli quando la marea gira."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "la serata che pieghi è dall'altra parte della città."
+      }
+    ],
+    "scopes": "Area per quanto è grande la serata (1 la bisca, 2 l'edificio, 3 il quartiere). Durata 1 la serata, 3 il mese. Bersagli per chi vince e chi perde. Condizioni 1 per una regola: solo i tuoi, solo al tavolo grande."
   },
   {
     "id": "entropy-3-ferire-uno-spirito",
     "name": "Ferire uno spirito",
     "sphere": "entropy",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Disfi un'effimera dall'interno: le probabilità che la tengono insieme cadono e lo spirito si sfalda. L'Entropia da sola non tocca l'Umbra: serve una Sfera che ti ci porti.",
+    "pairings": [
       {
         "sphere": "prime",
-        "level": 2,
-        "required": true
+        "text": "disfi la Quintessenza di cui è fatto: perde forma, poi sostanza."
       },
       {
         "sphere": "spirit",
-        "level": 3,
-        "required": true
+        "text": "la via diretta: lo colpisci nell'Umbra o attraverso la soglia."
+      },
+      {
+        "sphere": "matter",
+        "text": "lo spirito legato a un oggetto si disfa con l'oggetto: il feticcio, la statua, la reliquia etc.."
+      },
+      {
+        "sphere": "forces",
+        "text": "lo spirito legato a un'energia si disfa con lei: il fuoco, la corrente, la tempesta etc.."
       }
     ],
-    "text": "+ Primordio ●●: disfi l'effimera dall'interno; via diretta: + Spirito ●●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più spiriti. Precisione per colpire quello giusto in uno sciame."
   },
   {
     "id": "entropy-3-ridurre-in-polvere-un-oggetto",
     "name": "Ridurre in polvere un oggetto",
     "sphere": "entropy",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Anni di decadimento in un istante: la ruggine vince, il legno marcisce, la corda si sfilaccia, e resta la polvere. Da sola l'Entropia sceglie solo cosa cede per primo: per far correre gli anni serve una compagna.",
+    "pairings": [
       {
         "sphere": "time",
-        "level": 2,
-        "required": true
+        "text": "gli anni cadono tutti insieme: l'oggetto invecchia davanti a te."
       },
       {
         "sphere": "matter",
-        "level": 3,
-        "required": true
+        "text": "la via diretta: la materia si disfa per quello che è."
+      },
+      {
+        "sphere": "forces",
+        "text": "la polvere di un impianto: i circuiti si ossidano, i cavi si sbriciolano etc.."
+      },
+      {
+        "sphere": "life",
+        "text": "quello che era vivo marcisce: il legno, il cibo, il raccolto etc.."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "riduci in polvere quello che non vedi."
       }
     ],
-    "text": "+ Tempo ●●: anni di decadimento in un istante; via diretta: + Materia ●●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Potenza (peso) per quanto è grosso: 1 la chiave, 3 l'auto, 5 la casa. Precisione per la parte giusta e non l'insieme: la canna, non la pistola. Bersagli per più oggetti."
   },
   {
     "id": "entropy-3-rompere-la-catena",
@@ -612,25 +884,61 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 3,
     "extras": [],
-    "text": "isoli un guasto perché smetta di propagarsi: il disastro si ferma dov'è",
-    "pairings": [],
-    "scopes": ""
+    "text": "Isoli un guasto perché smetta di propagarsi: il disastro si ferma dov'è. Il cortocircuito non arriva al quadro, il pettegolezzo non arriva alla stampa, il contagio si ferma al primo malato.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "la catena è un impianto: il blackout resta nel palazzo."
+      },
+      {
+        "sphere": "life",
+        "text": "la catena è un contagio: l'epidemia si ferma alla prima stanza."
+      },
+      {
+        "sphere": "mind",
+        "text": "la catena è una voce: la notizia muore prima di uscire dalla stanza."
+      },
+      {
+        "sphere": "matter",
+        "text": "la catena è una struttura: il crollo si ferma al primo piano."
+      },
+      {
+        "sphere": "spirit",
+        "text": "la catena è una maledizione o un patto che passa di mano in mano."
+      },
+      {
+        "sphere": "prime",
+        "text": "la catena è un incantesimo che si propaga."
+      },
+      {
+        "sphere": "time",
+        "text": "fermi il primo anello prima che scatti."
+      }
+    ],
+    "scopes": "Area per quanto è ampio il perimetro in cui il guasto resta chiuso. Durata per quanto tieni chiusa la porta (2 la scena, 4 la sessione). Precisione per l'anello esatto da spezzare."
   },
   {
     "id": "entropy-3-scegliere-il-domani-piu-comodo",
     "name": "Scegliere il domani più comodo",
     "sphere": "entropy",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Tra i futuri possibili spingi il mondo verso quello che preferisci: non una probabilità alla volta, ma una direzione. Da sola l'Entropia piega solo l'adesso: il domani intero chiede il Tempo.",
+    "pairings": [
       {
         "sphere": "time",
-        "level": 2,
-        "required": true
+        "text": "la via obbligata: vedi i rami e scegli quello."
+      },
+      {
+        "sphere": "mind",
+        "text": "il domani più comodo per una persona: la strada che prenderà."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "il domani di un luogo lontano."
       }
     ],
-    "text": "+ Tempo ●●: tra i futuri possibili, spingi il mondo verso quello che preferisci",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Durata per quanto è lontano quel domani (fuori gioco: 1 il giorno, 3 il mese, 5 l'anno). Potenza (epicità) per quanto pesa il domani che scegli: 2 tocca la scena, 5 stravolge il capitolo. Precisione per un esito preciso e non «meglio»."
   },
   {
     "id": "entropy-3-spezzare-una-maledizione",
@@ -638,62 +946,115 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 3,
     "extras": [],
-    "text": "disfi il nodo di sfortuna stretto da altri; la Sfera d'origine aiuta",
-    "pairings": [],
-    "scopes": ""
+    "text": "Disfi il nodo di sfortuna stretto da altri: la malasorte cucita addosso a qualcuno si scioglie e la fortuna torna a cadere come cade a tutti. La Sfera con cui è stata stretta aiuta a trovare il nodo.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "riconosci la Magick con cui è stata stretta e la disfi alla radice."
+      },
+      {
+        "sphere": "spirit",
+        "text": "la maledizione viene da uno spirito o da un patto: sciogli il patto."
+      },
+      {
+        "sphere": "life",
+        "text": "la maledizione ha messo radici nel corpo: la togli anche da lì."
+      },
+      {
+        "sphere": "mind",
+        "text": "la maledizione vive nella convinzione di chi la porta: lo liberi anche da quella."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "sciogli il nodo di chi è lontano."
+      }
+    ],
+    "scopes": "Potenza (epicità) nel braccio di ferro: contro una maledizione più forte vince la Potenza più alta. Bersagli per più persone maledette. Precisione per il nodo giusto fra molti."
   },
   {
     "id": "entropy-4-benedire-o-maledire",
     "name": "Benedire o maledire",
     "sphere": "entropy",
     "level": 4,
-    "extras": [
+    "extras": [],
+    "text": "Riscrivi il destino di un vivente: la fortuna gli si cuce addosso, o la malasorte, e lo segue ovunque vada per tutto il tempo che decidi. Contro un Risvegliato o una creatura densa senza la sua Sfera di Modello l'effetto strappa: nasce Volgare.",
+    "pairings": [
       {
         "sphere": "life",
-        "level": 2,
-        "required": false
+        "text": "la sorte lo raggiunge per le vie del corpo: cede dove i corpi cedono, guarisce dove guariscono, e la scena resta pulita."
+      },
+      {
+        "sphere": "mind",
+        "text": "la sorte gli entra in testa: le decisioni gli riescono tutte, o gli falliscono tutte."
+      },
+      {
+        "sphere": "spirit",
+        "text": "benedici o maledici uno spirito, o passi dallo spirito che veglia su di lui."
+      },
+      {
+        "sphere": "time",
+        "text": "la benedizione ha una data: scatta al compleanno, finisce a mezzanotte etc.."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "riscrivi il destino di chi non vedi."
       }
     ],
-    "text": "riscrivi il destino di un vivente; potenziata: + Vita ●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Durata per quanto dura (fuori gioco: 3 il mese, 7 per sempre). Condizioni 1 per legarla: solo quando impugna un'arma, solo la sua famiglia etc.. Potenza (epicità) per il peso: 2 tocca la scena, 6 impatta sulla storia. Bersagli per una famiglia intera."
   },
   {
     "id": "entropy-4-creare-fortuna-dal-nulla",
     "name": "Creare fortuna dal nulla",
     "sphere": "entropy",
     "level": 4,
-    "extras": [
+    "extras": [],
+    "text": "Aggiungi al conto invece di spostarlo: la fortuna che dai non manca a nessuno, la sfortuna che cancelli non finisce da nessun'altra parte. Serve il Primordio: da sola l'Entropia sposta soltanto. Il mondo se ne accorge, e il resto lo reclamerà quando vuole lui.",
+    "pairings": [
       {
         "sphere": "prime",
-        "level": 3,
-        "required": true
+        "text": "la via obbligata: la fortuna nasce dalla Quintessenza, oppure la paghi."
+      },
+      {
+        "sphere": "life",
+        "text": "la fortuna nuova in un corpo: la guarigione che non era probabile."
+      },
+      {
+        "sphere": "mind",
+        "text": "la fortuna nuova in una testa: l'idea che nessuno avrebbe avuto."
+      },
+      {
+        "sphere": "matter",
+        "text": "la fortuna nuova nelle cose: il biglietto vincente, la vena d'oro, il pezzo di ricambio nel cassetto etc.."
       }
     ],
-    "text": "+ Primordio ●●●: aggiungi al conto invece di spostarlo. Il mondo se ne accorge, e il resto lo reclamerà",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Potenza (epicità) per quanta fortuna: 1 un dettaglio, 4 impatta sul capitolo. Durata per quanto dura. Bersagli per chi la riceve."
   },
   {
     "id": "entropy-4-far-marcire-un-corpo",
     "name": "Far marcire un corpo",
     "sphere": "entropy",
     "level": 4,
-    "extras": [
+    "extras": [],
+    "text": "La mortalità accelera nella carne: le ferite si infettano, gli organi cedono, la pelle si apre. Da sola l'Entropia tiene la rovina attorno al corpo, incidenti e contagi probabili; per entrare nella carne serve la Vita.",
+    "pairings": [
       {
         "sphere": "life",
-        "level": 2,
-        "required": false
+        "text": "la via obbligata: la carne marcisce dall'interno."
       },
       {
-        "sphere": "life",
-        "level": 4,
-        "required": false
+        "sphere": "time",
+        "text": "gli anni della carne cadono in un istante: invecchia davanti a te."
+      },
+      {
+        "sphere": "spirit",
+        "text": "marcisce anche l'effimera di uno spirito incarnato."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "marcisce chi non vedi."
       }
     ],
-    "text": "la mortalità accelera nella carne; anche ●●● + Vita ●●, oppure + Vita ●●●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Potenza (danni) per quanto ferisce. Durata per quanto continua a marcire. Condizioni 1 se scatta solo quando fa una cosa. Bersagli per più corpi."
   },
   {
     "id": "entropy-4-rendere-un-luogo-immune-al-caso",
@@ -701,9 +1062,34 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 4,
     "extras": [],
-    "text": "dentro quel perimetro gli incidenti smettono di capitare, e la fortuna pure",
-    "pairings": [],
-    "scopes": ""
+    "text": "Dentro quel perimetro gli incidenti smettono di capitare, e la fortuna pure: nessuna scala cede, nessun colpo sfiora, nessun dado cade bene o male. Il caso non entra, né il tuo né quello altrui.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "il perimetro respinge anche l'Entropia di un altro mago."
+      },
+      {
+        "sphere": "forces",
+        "text": "nemmeno le macchine sbagliano: niente guasti, niente scariche."
+      },
+      {
+        "sphere": "mind",
+        "text": "chi entra non si accorge che la fortuna ha smesso."
+      },
+      {
+        "sphere": "spirit",
+        "text": "vale anche nell'Umbra del luogo."
+      },
+      {
+        "sphere": "time",
+        "text": "il perimetro si accende a orari: solo di notte."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "il perimetro è lontano, o segue chi lo porta."
+      }
+    ],
+    "scopes": "Area per il perimetro (1 la stanza, 2 l'edificio, 3 il quartiere). Durata per quanto regge. Condizioni 1 per chi entra: i tuoi tengono la fortuna, gli altri no."
   },
   {
     "id": "entropy-5-intrecciare-destini",
@@ -711,25 +1097,57 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 5,
     "extras": [],
-    "text": "due vite legate per sempre, nel bene e nella rovina",
-    "pairings": [],
-    "scopes": ""
+    "text": "Leghi due vite: quello che capita a una capita all'altra, nel bene e nella rovina. La fortuna dell'uno è la fortuna dell'altro, e la malasorte pure, per sempre o per quanto decidi.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "il legame passa anche nel corpo: la ferita dell'uno sanguina nell'altro."
+      },
+      {
+        "sphere": "mind",
+        "text": "il legame passa nei pensieri: sanno l'uno dell'altro."
+      },
+      {
+        "sphere": "spirit",
+        "text": "il legame regge anche oltre la morte."
+      },
+      {
+        "sphere": "time",
+        "text": "il legame ha una scadenza, o si accende in un giorno preciso."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "i due sono lontani e non si sono mai visti."
+      }
+    ],
+    "scopes": "Durata (7 per sempre). Bersagli 2, o di più per una Cabala intera. Condizioni 1 per una regola: finché vivono nella stessa città, finché uno non tradisce etc.. Potenza (epicità) per quanto pesa il legame."
   },
   {
     "id": "entropy-5-riscrivere-un-destino-da-zero",
     "name": "Riscrivere un destino da zero",
     "sphere": "entropy",
     "level": 5,
-    "extras": [
+    "extras": [],
+    "text": "La vita che non era prevista: la carriera impossibile, la sopravvivenza che nessun conto ammetteva, il nome che nessuno avrebbe mai fatto. Non sposti fortuna: la inventi, e il conto si sbilancia. Il resto lo presenta lui, quando vuole. Serve il Primordio.",
+    "pairings": [
       {
         "sphere": "prime",
-        "level": 4,
-        "required": true
+        "text": "la via obbligata: il destino nuovo nasce dalla Quintessenza."
+      },
+      {
+        "sphere": "mind",
+        "text": "il destino nuovo passa dalle sue scelte: prenderà sempre la strada che porta lì."
+      },
+      {
+        "sphere": "life",
+        "text": "il destino nuovo passa dal corpo: vivrà quanto serve per arrivarci."
+      },
+      {
+        "sphere": "time",
+        "text": "fissi quando il destino si compie."
       }
     ],
-    "text": "+ Primordio ●●●●: la vita che non era prevista. Il conto si sbilancia, e presenta il resto quando vuole lui",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Potenza (epicità) per quanto è grande il destino: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione. Durata 7. Bersagli per una stirpe."
   },
   {
     "id": "entropy-5-sigillare-un-giuramento",
@@ -737,9 +1155,34 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 5,
     "extras": [],
-    "text": "il patto punisce da solo chi lo spezza",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il patto punisce da solo chi lo spezza: la sfortuna aspetta il primo passo fuori dalla parola data e poi cade, senza che tu muova un dito, anche se sei morto, anche se hai dimenticato.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "chi giura sa cosa lo aspetta, e lo sente ogni volta che pensa di tradire."
+      },
+      {
+        "sphere": "spirit",
+        "text": "il patto vale anche per spiriti e creature dell'Umbra, e loro lo riconoscono."
+      },
+      {
+        "sphere": "life",
+        "text": "la punizione passa dal corpo: si ammala, cade, non guarisce etc.."
+      },
+      {
+        "sphere": "prime",
+        "text": "il patto lega anche la Magick: chi tradisce non lancia più."
+      },
+      {
+        "sphere": "time",
+        "text": "il patto ha un termine, o si sveglia in una data."
+      },
+      {
+        "sphere": "correspondence",
+        "text": "il patto lo trova ovunque vada."
+      }
+    ],
+    "scopes": "Condizioni 1 per ogni clausola, e Complessità per quanto è lungo il contratto (7 livello contratto). Durata 7 per sempre. Bersagli per quanti giurano. Potenza (epicità) per quanto pesa la punizione."
   },
   {
     "id": "forces-1-allargare-lo-spettro",

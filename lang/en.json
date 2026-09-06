@@ -15,14 +15,14 @@
       "Notes": "Notes",
       "Grimorio": "Grimoire",
       "Short": {
-        "stats": "Traits",
-        "dotazione": "Gear",
+        "stats": "Stats",
+        "dotazione": "Traits",
         "magick": "Magick",
-        "grimorio": "Spells",
+        "grimorio": "Rotes",
         "focus": "Creed",
         "personaggio": "Compass",
         "conceptChallenge": "Trial",
-        "esperienza": "Ascent",
+        "esperienza": "XP",
         "note": "Notes"
       }
     },
@@ -460,6 +460,15 @@
           "5": "A year",
           "6": "A decade",
           "7": "Permanent"
+        },
+        "precisionInfo": {
+          "1": "Irrelevant (a curiosity)",
+          "2": "Minor (a detail)",
+          "3": "Relevant (the scene)",
+          "4": "Major (the chapter)",
+          "5": "Decisive (turns the chapter)",
+          "6": "Crucial (the story)",
+          "7": "Foundational (the setting)"
         }
       },
       "precision": "Precision",
@@ -476,11 +485,15 @@
         "durationNarrative": "Off game",
         "conditions": "Quantity",
         "conditionsDebuff": "Malus",
-        "conditionsComplexity": "Complexity"
+        "conditionsComplexity": "Complexity",
+        "precision": "Detail",
+        "precisionInfo": "Information"
       },
       "ConditionsDebuff": "Conditions (Debuff)",
       "ConditionsComplexity": "Conditions (Complexity)",
-      "TableNote": "Scopes channel how general and variable a Magick effect is: think of an effect in as few Scopes as possible, reasoning by need and goal."
+      "TableNote": "Scopes channel how general and variable a Magick effect is: think of an effect in as few Scopes as possible, reasoning by need and goal.",
+      "PrecisionDetail": "Precision (Detail)",
+      "PrecisionInfo": "Precision (Information)"
     },
     "OngoingMagick": {
       "Label": "Ongoing Magick",

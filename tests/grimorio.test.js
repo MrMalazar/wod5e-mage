@@ -73,6 +73,14 @@ assert.match(mappare.scopes, /^Area per le dimensioni/);
 assert.doesNotMatch(mappare.text, /Tutto questo, dal primo giorno/);
 assert.equal(corr.find((entry) => entry.id === "correspondence-1-sapere-dove-sei").pairings[0].sphere, "entropy");
 assert.equal(corr.some((entry) => entry.id === "correspondence-1-cercare-nell-area"), false);
+// Entropia nel formato nuovo (6/9): ventiquattro blocchi, Pesare le probabilità
+// assorbe Fiutare il pericolo, Sigillare un Giuramento chiude con gli Ambiti.
+const entro = EFFETTI.filter((entry) => entry.sphere === "entropy");
+assert.equal(entro.length, 24);
+assert.equal(entro.some((entry) => entry.id === "entropy-1-fiutare-il-pericolo"), false);
+assert.equal(entro.find((entry) => entry.id === "entropy-1-pesare-le-probabilita").pairings.length, 7);
+assert.match(entro.find((entry) => entry.id === "entropy-5-sigillare-un-giuramento").scopes, /^Condizioni 1 per ogni clausola/);
+assert.equal(entro.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 const grimorioIt = prepareGrimorio({ correspondence: 2 }, (k) => k);
 const shown = grimorioIt[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio");
 assert.equal(shown.pairings.length, 5);
