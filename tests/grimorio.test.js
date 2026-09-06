@@ -98,6 +98,11 @@ const mente = EFFETTI.filter((entry) => entry.sphere === "mind");
 assert.equal(mente.length, 25);
 assert.equal(mente.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(mente.find((entry) => entry.id === "mind-4-mostrarti-in-corpo-di-luce").extras.map((extra) => extra.sphere), ["spirit", "prime"]);
+// Primordio nel formato nuovo (6/9): ventisei blocchi.
+const primordio = EFFETTI.filter((entry) => entry.sphere === "prime");
+assert.equal(primordio.length, 26);
+assert.equal(primordio.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
+assert.deepEqual(primordio.find((entry) => entry.id === "prime-3-rianimare-un-morto-recente").extras.map((extra) => extra.sphere), ["life", "spirit"]);
 const grimorioIt = prepareGrimorio({ correspondence: 2 }, (k) => k);
 const shown = grimorioIt[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio");
 assert.equal(shown.pairings.length, 5);

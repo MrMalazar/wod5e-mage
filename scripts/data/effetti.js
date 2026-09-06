@@ -4352,9 +4352,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 1,
     "extras": [],
-    "text": "l'incantesimo ancora caldo, la firma di chi ha lanciato",
-    "pairings": [],
-    "scopes": ""
+    "text": "Senti la Magick attorno a te: l'incantesimo ancora caldo, la firma di chi ha lanciato, l'oggetto che porta un effetto addosso. Con più successi sai cosa fa e chi l'ha fatto.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Percepire la magia in un luogo che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Sapere quando è stata lanciata, e cosa c'era prima.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quando l'incantesimo cederà.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere cosa voleva chi ha lanciato.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Percepire la Magick che viene dall'Umbra.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per setacciare un luogo intero: 1 la stanza, 2 il palazzo. Precisione (dettaglio) per un incantesimo solo fra tanti. Precisione (informazione) per quanto pesa saperlo. Durata 2 per tenere i sensi accesi tutta la scena."
   },
   {
     "id": "prime-1-vedere-quanto-e-carico",
@@ -4362,9 +4388,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 1,
     "extras": [],
-    "text": "quanta Quintessenza resta a un Nodo, a una Meraviglia, a un mago",
-    "pairings": [],
-    "scopes": ""
+    "text": "Sai quanta Quintessenza resta a un Nodo, a una Meraviglia, a un mago: quanto brucia, non come sta.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Vedere la carica di chi è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quando finirà.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Sapere quanto ne aveva ieri, e quanto ne avrà domani.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Vedere la carica di uno spirito o di un luogo dell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Vedere la carica dentro un oggetto che non sembra una Meraviglia.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più Ruote insieme. Precisione (dettaglio) per la cifra esatta."
   },
   {
     "id": "prime-1-consacrare-un-oggetto",
@@ -4372,9 +4424,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 1,
     "extras": [],
-    "text": "legato a te, ti segue in ogni trasformazione",
-    "pairings": [],
-    "scopes": ""
+    "text": "Leghi un oggetto a te: ti segue in ogni trasformazione, non lo perdi quando cambi forma o luogo, e la tua Magick lo riconosce come parte di te.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Consacrare anche un oggetto grande: l'auto, l'armatura, la casa etc..",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Consacrare un vivente: il cane, il cavallo, il famiglio etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Far seguire l'oggetto anche quando ti sposti nello spazio.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far seguire l'oggetto anche nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far seguire l'oggetto anche nel tempo.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto resta consacrato (7 per sempre). Bersagli per più oggetti. Potenza (peso) se è grosso."
   },
   {
     "id": "prime-1-leggere-le-aure",
@@ -4388,9 +4466,35 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●: l'alone dei vivi si accende: più forte la vita, più brilla",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'alone dei vivi si accende ai tuoi occhi: più forte la vita, più brilla. Serve la Vita: da solo il Primordio vede la Quintessenza, non la salute.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Vedere l'alone dei vivi.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "Leggere nell'aura anche l'umore.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Leggere l'aura degli spiriti e dei morti.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Leggere le aure di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Vedere nell'aura quanto gli resta.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più persone. Area per una folla. Durata 2 per la scena."
   },
   {
     "id": "prime-1-vedere-l-avatar",
@@ -4400,13 +4504,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "spirit",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Spirito ●●: la scintilla che rende Risvegliato un Risvegliato: forma, colore, e quanto è sveglia",
-    "pairings": [],
-    "scopes": ""
+    "text": "Vedi la scintilla che rende Risvegliato un Risvegliato: forma, colore, e quanto è sveglia. Serve lo Spirito: da solo il Primordio vede la Ruota e la firma, non la scintilla.",
+    "pairings": [
+      {
+        "sphere": "spirit",
+        "text": "Vedere la scintilla oltre il Velo.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere cosa vuole l'Avatar da lui.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Vedere l'Avatar di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Vedere com'era l'Avatar prima del Risveglio, e dove sta andando.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quando l'Avatar si farà sentire.",
+        "required": false
+      }
+    ],
+    "scopes": "Precisione (dettaglio) per quanto a fondo: 1 la forma, 3 il colore e la natura, 5 cosa gli chiede. Bersagli per più Risvegliati."
   },
   {
     "id": "prime-2-bruciare-l-attrito-in-anticipo",
@@ -4414,9 +4544,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "spendi Quintessenza e togli Paradosso quando decidi tu (5.6)",
-    "pairings": [],
-    "scopes": ""
+    "text": "Spendi Quintessenza e togli Paradosso dalla Ruota quando decidi tu, prima che il conto arrivi.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Scegliere quale punto di Paradosso brucia per primo: quello che stava per scoppiare.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Bruciare l'attrito prima che il lancio lo generi.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Bruciare l'attrito sulla Ruota del compagno lontano.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Scaricare l'attrito nell'Umbra, dove nessuno lo raccoglie.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto Paradosso togli. Bersagli per più Ruote."
   },
   {
     "id": "prime-2-creare-dal-nulla",
@@ -4424,9 +4575,50 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "+ la Sfera del Modello, Regola del Nulla: tu porti la materia prima, l'altra Sfera la forma",
-    "pairings": [],
-    "scopes": ""
+    "text": "Porti la materia prima; la Sfera del Modello dà la forma, e quello che nasce è una cosa vera, che il mondo archivia. Senza una compagna nasce grezzo, e il grezzo ha sempre un testimone.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Creare un oggetto: il muro, il coltello, la chiave etc..",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Creare energia: il fuoco, il fulmine, la luce etc..",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Creare carne: il cibo, l'organo, l'animale etc..",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Creare un'idea, una facoltà, un ricordo etc..",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Creare un'effimera, uno spirito minore etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Creare spazio: la stanza che non c'era.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Creare tempo: l'ora in più.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Creare fortuna che non manca a nessuno.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso o epicità) per quanto crei: 1 lo zaino, 3 l'auto, 5 la casa. Durata per quanto resta al mondo (7 per sempre). Precisione (dettaglio) per quanto è fine."
   },
   {
     "id": "prime-2-creare-grezzo",
@@ -4434,9 +4626,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "energia grezza, che si spegne quando molli la presa. Volgare con Testimoni, sempre",
-    "pairings": [],
-    "scopes": ""
+    "text": "Energia grezza, senza forma: brilla, morde, e si spegne quando molli la presa. Non somiglia a niente che il mondo conosca: Volgare con Testimoni, sempre, +2 di Paradosso prima di tirare.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Dare al grezzo una direzione: il dardo, la lama, il muro di luce etc..",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Dare al grezzo un corpo che resta.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Far nascere il grezzo lontano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far colpire il grezzo dove fa più male.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto morde. Durata 1 per un turno, 2 per la scena, finché lo tieni. Area per quanto è largo."
   },
   {
     "id": "prime-2-destabilizzare-un-modello",
@@ -4444,9 +4657,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "scuoti la trama stessa del bersaglio: danno diretto al Modello delle cose",
-    "pairings": [],
-    "scopes": ""
+    "text": "Scuoti la trama stessa del bersaglio: danno diretto al Modello delle cose, che siano carne, pietra o spirito. Non passi per la Sfera del bersaglio: colpisci ciò che lo fa esistere.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far arrivare il danno per le vie del corpo, e restare spiegabile.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Destabilizzare un oggetto: si sfalda senza motivo apparente.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Destabilizzare uno spirito o una Meraviglia.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Destabilizzare una mente: la Volontà cede.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Destabilizzare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Colpire dove il Modello è già stanco.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più Modelli. Precisione (dettaglio) per il punto del Modello che colpisci."
   },
   {
     "id": "prime-2-forgiare-costrutti-di-pura-energia",
@@ -4454,9 +4698,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "dardi e lame di luce, finché la Quintessenza regge",
-    "pairings": [],
-    "scopes": ""
+    "text": "Dardi e lame di luce, scudi, corde: costrutti che reggono finché la Quintessenza regge. Quando la Ruota si svuota, buio.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Far durare i costrutti senza bere dalla Ruota: l'energia del mondo li alimenta.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Dare ai costrutti un corpo solido: la lama pesa e taglia come una lama.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far vedere i costrutti solo a chi decidi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far mordere i costrutti anche gli spiriti.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Forgiare il costrutto in mano al compagno lontano.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Durata 1 per lo scontro, 2 per la scena. Bersagli per armare la Cabala. Precisione (dettaglio) per la forma esatta."
   },
   {
     "id": "prime-2-incantare-un-arma",
@@ -4464,9 +4734,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "danni Aggravati nel filo della lama; morde anche gli spiriti",
-    "pairings": [],
-    "scopes": ""
+    "text": "Metti Quintessenza nel filo della lama o nella canna: danni Aggravati, e morde anche gli spiriti.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Far portare all'arma anche un'energia: brucia, folgora etc..",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Far restare l'incanto nell'arma anche senza di te.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far ferire l'arma nell'Umbra come nel mondo.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far trovare all'arma il punto debole.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Incantare l'arma del compagno lontano.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 1 per lo scontro, 2 per la scena, 7 per sempre. Bersagli per più armi. Potenza (danni) per quanto aggiunge."
   },
   {
     "id": "prime-2-mascherare-la-tua-aura",
@@ -4474,9 +4770,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "la tua firma si spegne o mente: per i sensi mistici sei un altro",
-    "pairings": [],
-    "scopes": ""
+    "text": "La tua firma si spegne o mente: per i sensi mistici sei un altro, o non sei nessuno. Vale contro chi percepisce la magia, legge le aure o cerca la tua Ruota.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Mascherare anche l'umore e i pensieri in superficie.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Mascherare l'aura anche agli spiriti.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Mascherare anche l'alone della vita: sembri malato, o morto.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Mascherare l'aura di chi è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far leggere a chi ci prova l'aura sbagliata.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per la scena, 4 per la sessione. Bersagli per la Cabala. Precisione (dettaglio) per un'aura precisa da imitare."
   },
   {
     "id": "prime-3-assorbire-e-incanalare",
@@ -4484,9 +4806,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 3,
     "extras": [],
-    "text": "da Nodi altrui alla tua Ruota, o dove serve",
-    "pairings": [],
-    "scopes": ""
+    "text": "Prendi Quintessenza da dove sta, Nodi, Meraviglie, incantesimi altrui, e la porti nella tua Ruota, o dove serve.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Assorbire da un Nodo lontano.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Assorbire dall'Umbra e dagli spiriti.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Assorbire da una Meraviglia e lasciarla intera.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Assorbire senza che il Nodo si accorga di essere stato bevuto.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Assorbire la Quintessenza che passava di lì ieri.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta ne prendi. Portata per la distanza. Durata 2 per tenere aperto il flusso."
   },
   {
     "id": "prime-3-innestare-la-macchina-nella-carne",
@@ -4496,18 +4844,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "matter",
-        "level": 4,
+        "level": 1,
         "required": true
       },
       {
         "sphere": "life",
-        "level": 4,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Materia ●●●● + Vita ●●●●: la tua energia salda l'acciaio al battito",
-    "pairings": [],
-    "scopes": ""
+    "text": "La tua energia salda l'acciaio al battito: il metallo entra nel corpo e il corpo lo accetta. Servono la Materia e la Vita: il Primordio fa vivere l'innesto.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Dare l'innesto.",
+        "required": true
+      },
+      {
+        "sphere": "life",
+        "text": "Far accettare l'innesto al corpo.",
+        "required": true
+      },
+      {
+        "sphere": "forces",
+        "text": "Far alimentare l'innesto dal corpo, e fargli portare corrente.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far rispondere l'innesto al pensiero.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 7: l'innesto resta. Potenza (epicità) per quanto pesa: 2 una placca, 5 un braccio nuovo. Precisione (dettaglio) per quanto è fine l'innesto."
   },
   {
     "id": "prime-3-rianimare-un-morto-recente",
@@ -4517,18 +4886,49 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "life",
-        "level": 4,
+        "level": 1,
         "required": true
       },
       {
         "sphere": "spirit",
-        "level": 4,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Vita ●●●● + Spirito ●●●●: la scintilla riaccesa nel Modello spento; Volgare, sempre",
-    "pairings": [],
-    "scopes": ""
+    "text": "Riaccendi la scintilla in un Modello spento: il morto recente torna. Servono la Vita, che rimette in piedi il corpo, e lo Spirito, che richiama chi è partito. Volgare, sempre.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Rimettere in piedi il corpo.",
+        "required": true
+      },
+      {
+        "sphere": "spirit",
+        "text": "Richiamare chi è partito.",
+        "required": true
+      },
+      {
+        "sphere": "time",
+        "text": "Rianimare chi è morto da più tempo.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far tornare il morto con la memoria intera.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Rianimare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far pagare il conto a qualcun altro.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (epicità) per quanto pesa il ritorno: 4 impatta sul capitolo, 6 impatta sulla storia. Durata 7. Condizioni 1 per ogni clausola del ritorno."
   },
   {
     "id": "prime-3-travasare-a-un-altro-mago",
@@ -4536,25 +4936,71 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 3,
     "extras": [],
-    "text": "la tua energia entra nella sua Ruota, se lì c'è posto",
-    "pairings": [],
-    "scopes": ""
+    "text": "La tua energia entra nella sua Ruota, se lì c'è posto: Quintessenza che passa da te a lui.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Travasare a chi è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Travasare a uno spirito, o riceverne.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Travasare anche la salute insieme alla Quintessenza.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Travasare anche la Volontà.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far arrivare la Quintessenza proprio quando gli serve.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta ne passa. Bersagli per più Ruote. Portata per la distanza."
   },
   {
     "id": "prime-4-creare-un-feticcio",
     "name": "Creare un Feticcio",
     "sphere": "prime",
     "level": 4,
-    "extras": [
+    "extras": [],
+    "text": "Leghi uno spirito consenziente a un oggetto: la tua energia gli fa da casa, e l'oggetto porta i suoi poteri. Senza il consenso serve lo Spirito, per forzarlo.",
+    "pairings": [
       {
         "sphere": "spirit",
-        "level": 4,
+        "text": "Legare lo spirito a forza.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Fare l'oggetto su misura per lo spirito.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far obbedire il Feticcio anche a chi non lo conosce.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Fare da Feticcio un vivente: l'animale, la pianta.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Legare lo spirito per un tempo preciso.",
         "required": false
       }
     ],
-    "text": "spirito consenziente: la tua energia gli fa da casa. A forza: + Spirito ●●●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Durata per quanto resta legato (7 per sempre). Potenza (epicità) per quanto è forte lo spirito. Condizioni 1 per ogni clausola del patto, e Complessità per quanto è lungo."
   },
   {
     "id": "prime-4-deviare-il-contraccolpo",
@@ -4562,9 +5008,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 4,
     "extras": [],
-    "text": "lo attutisci, lo assorbi in Quintessenza, o lo trasli su un altro (5.6)",
-    "pairings": [],
-    "scopes": ""
+    "text": "Quando il Paradosso arriva lo attutisci, lo assorbi in Quintessenza, o lo trasli su un altro.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Traslare il Contraccolpo su chi è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Scaricare il Contraccolpo nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far cadere il Contraccolpo su chi se lo meritava.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Rimandare il Contraccolpo a dopo.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Scaricare il Contraccolpo in un oggetto: si rompe lui.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto Contraccolpo devii. Bersagli per proteggere la Cabala. Condizioni 1 se scatta da solo: ogni volta che scoppia."
   },
   {
     "id": "prime-4-drenare-un-nodo",
@@ -4572,9 +5044,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 4,
     "extras": [],
-    "text": "strappi la sorgente, e il luogo appassisce",
-    "pairings": [],
-    "scopes": ""
+    "text": "Strappi la sorgente: la Quintessenza del Nodo passa a te, tutta, e il luogo appassisce.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Drenare il Nodo da lontano.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Drenare anche la parte del Nodo che sta nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Drenare il Nodo in una Meraviglia invece che nella Ruota.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far appassire il Nodo come un incidente.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Drenare il Nodo piano, in un mese, senza che nessuno se ne accorga.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta ne prendi. Portata per la distanza. Durata per quanto resta drenato (7 per sempre)."
   },
   {
     "id": "prime-4-drenare-una-creatura",
@@ -4582,9 +5080,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 4,
     "extras": [],
-    "text": "+ la Sfera del bersaglio: l'energia esce da ciò che la portava. Sui viventi lascia Macchie",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'energia esce da ciò che la portava: il vampiro, lo spirito, il lupo, il mago. Serve la Sfera del bersaglio, che dice da dove esce. Sui viventi lascia Macchie.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Drenare un vivente o un vampiro.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Drenare uno spirito o un fantasma.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Drenare la Volontà insieme.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Drenare una Meraviglia o un Feticcio.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Drenare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Drenare senza che se ne accorga finché non è tardi.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta ne prendi. Bersagli per più creature. Durata 2 per tenere aperto il drenaggio."
   },
   {
     "id": "prime-4-levare-un-campo-di-negazione",
@@ -4592,9 +5121,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 4,
     "extras": [],
-    "text": "nell'area la Magick altrui nasce già stanca: ogni effetto si smorza",
-    "pairings": [],
-    "scopes": ""
+    "text": "Nell'area la Magick altrui nasce già stanca: ogni effetto si smorza, ogni lancio perde successi.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Mettere il campo lontano, o farlo seguire chi lo porta.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far valere il campo anche nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Legare il campo a un oggetto: la stanza è protetta finché c'è la pietra.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far lavorare il campo solo contro chi vuoi tu.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Accendere il campo a orari.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per il perimetro: 1 la stanza, 2 l'edificio, 3 il quartiere. Durata per quanto regge. Condizioni 1 per chi è esente: i tuoi. Potenza (epicità) per quanto smorza."
   },
   {
     "id": "prime-4-spegnere-una-meraviglia",
@@ -4602,9 +5157,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 4,
     "extras": [],
-    "text": "le togli la carica: l'oggetto resta, e smette di essere speciale",
-    "pairings": [],
-    "scopes": ""
+    "text": "Le togli la carica: l'oggetto resta, e smette di essere speciale.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Spegnere la Meraviglia e lasciare l'oggetto intatto, o romperlo insieme.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Spegnere un Feticcio: lo spirito se ne va.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Spegnere la Meraviglia che non hai in mano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Farla spegnere nel momento peggiore per chi la usa.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Spegnerla per un tempo preciso, poi torna.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (epicità) nel braccio di ferro con chi l'ha tessuta. Bersagli per più Meraviglie. Durata per quanto resta spenta (7 per sempre)."
   },
   {
     "id": "prime-5-creare-un-nodo",
@@ -4612,9 +5193,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 5,
     "extras": [],
-    "text": "una sorgente nuova nel mondo, dove prima il mondo era ordinario",
-    "pairings": [],
-    "scopes": ""
+    "text": "Una sorgente nuova nel mondo, dove prima il mondo era ordinario: da lì in poi la Quintessenza sgorga.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Creare il Nodo lontano, o legarlo a un luogo che si sposta.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Aprire il Nodo anche nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Legare il Nodo a un oggetto: la pietra, la fontana, l'albero etc..",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Nascondere il Nodo alla sorte: nessuno lo trova per caso.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far sgorgare il Nodo a orari, o dargli una scadenza.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (epicità) per quanto è forte il Nodo: 4 impatta sul capitolo, 6 impatta sulla storia. Durata 7. Area per quanto è largo."
   },
   {
     "id": "prime-5-produrre-quintessenza",
@@ -4622,9 +5229,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 5,
     "extras": [],
-    "text": "la fai nascere dove non ce n'era: il gesto che nessuna spesa e nessun furto sostituiscono",
-    "pairings": [],
-    "scopes": ""
+    "text": "La fai nascere dove non ce n'era: il gesto che nessuna spesa e nessun furto sostituiscono.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Farla nascere nella Ruota di chi è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Farla nascere in un vivente.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Farla nascere dentro un oggetto: la Meraviglia si ricarica.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Farla nascere in uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Farla nascere a orari.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta ne produci. Bersagli per più Ruote. Durata per quanto continua a nascere."
   },
   {
     "id": "prime-5-radicare-un-incantesimo-per-sempre",
@@ -4632,9 +5265,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 5,
     "extras": [],
-    "text": "l'effetto entra nell'Arazzo e smette di dipendere da te",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'effetto entra nell'Arazzo e smette di dipendere da te: non decade, non si mantiene, non conta fra le tue Magick in atto.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "Far sì che l'effetto sia sempre stato lì.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Radicare l'effetto anche nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che nessuna sorte lo consumi.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Radicare l'effetto ovunque si sposti il bersaglio.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far sì che nessuno ricordi che una volta era diverso.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 7, e basta. Potenza (epicità) per quanto pesa l'effetto radicato."
   },
   {
     "id": "prime-5-rifiutare-il-contraccolpo",
@@ -4642,9 +5301,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 5,
     "extras": [],
-    "text": "sai con cosa hanno costruito il Paradosso, e puoi dirgli di no (5.6)",
-    "pairings": [],
-    "scopes": ""
+    "text": "Sai con cosa hanno costruito il Paradosso, e puoi dirgli di no: quando scoppia, non ti tocca.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Rifiutare il Contraccolpo per chi è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Rifiutare anche gli spiriti del Paradosso.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Rifiutare il Contraccolpo prima che scoppi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far cadere il Contraccolpo rifiutato su chi vuoi tu.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per la scena, 4 per la sessione. Bersagli per la Cabala. Condizioni 1 se vale solo per un tipo di Magick."
   },
   {
     "id": "spirit-1-vedere-oltre-il-velo",
