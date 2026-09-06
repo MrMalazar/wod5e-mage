@@ -141,21 +141,25 @@ assert.match(
   /wod5e-mage-spheres-panel[\s\S]*wod5e-mage-ongoing-magick[\s\S]*wod5e-mage-sphere-specialties/
 );
 
-// La sidebar conserva le tab aggiuntive del Mago, ma usa la geometria nativa:
-// 50px, icona centrata e nessun riquadro applicato all'intera voce.
+// La sidebar (6/9): 64px, icona centrata e sotto il nome corto della pagina;
+// le pagine si scostano di altrettanto.
 assert.match(
   css,
-  /\.wod5e-mage-tabs\s+\.sheet-tabs\s*\{[^}]*width:\s*50px;/s
+  /\.wod5e-mage-tabs\s+\.sheet-tabs\s*\{[^}]*width:\s*64px;/s
 );
 assert.match(
   css,
-  /\.sheet-tabs\s*>\s*\[data-tab\][^{]*\{[^}]*border:\s*0;[^}]*height:\s*50px;[^}]*width:\s*50px;/s
+  /\.sheet-tabs\s*>\s*\[data-tab\][^{]*\{[^}]*border:\s*0;[^}]*flex-direction:\s*column;[^}]*height:\s*54px;[^}]*width:\s*64px;/s
 );
-assert.match(
-  css,
-  /\.sheet-tabs\s*>\s*\[data-tab\]\s+\.navicon,[^{]*\{[^}]*height:\s*100%;[^}]*justify-content:\s*center;[^}]*width:\s*100%;/s
-);
+assert.match(css, /\.window-content \.tab \{\s*margin-left:\s*62px;/);
+assert.match(css, /\.wod5e-mage-tab-label \{[^}]*text-transform:\s*uppercase;/s);
+assert.match(tabNavigation, /<span class="wod5e-mage-tab-label">\{\{localize tab\.short\}\}<\/span>/);
 assert.doesNotMatch(tabNavigation, /class="navlabel"/);
+const sheetTabs = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+assert.equal((sheetTabs.match(/short: "WOD5E_MAGE\.Tabs\.Short\./g) ?? []).length, 9);
+const itShort = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE.Tabs.Short;
+assert.deepEqual(Object.values(itShort), ["Tratti", "Magick", "Grimorio", "Credo", "Dotazione", "Bussola", "Sfida", "Esperienza", "Note"]);
+assert.ok(Object.values(itShort).every((label) => label.length <= 10), "nomi corti entro dieci caratteri");
 
 // Come nella 0.9.4, il profilo rimane fra due colonne header-fields:
 // lo spacer destro impedisce al ritratto di slittare sul bordo.

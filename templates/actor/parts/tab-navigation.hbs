@@ -3,8 +3,10 @@
 <div class="tabs-container wod5e-mage-tabs">
     <nav class="sheet-tabs tabs" data-group="primary">
         {{#each tabs as |tab|}}
+            {{!-- Icona e, sotto, il nome corto della pagina (6/9). --}}
             <div class="{{tab.cssClass}}" data-action="tab" data-group="{{tab.group}}" data-tab="{{tab.id}}" title="{{localize tab.title}}">
                 <div class="navicon">{{{tab.icon}}}</div>
+                {{#if tab.short}}<span class="wod5e-mage-tab-label">{{localize tab.short}}</span>{{/if}}
             </div>
         {{/each}}
 

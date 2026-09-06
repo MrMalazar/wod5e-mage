@@ -13,7 +13,18 @@
       "Character": "Personaggio",
       "Belongings": "Dotazione",
       "Notes": "Note",
-      "Grimorio": "Grimorio"
+      "Grimorio": "Grimorio",
+      "Short": {
+        "stats": "Tratti",
+        "magick": "Magick",
+        "grimorio": "Grimorio",
+        "focus": "Credo",
+        "dotazione": "Dotazione",
+        "personaggio": "Bussola",
+        "conceptChallenge": "Sfida",
+        "esperienza": "Esperienza",
+        "note": "Note"
+      }
     },
     "Skills": {
       "Combat": "Combattimento",

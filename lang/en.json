@@ -13,7 +13,18 @@
       "Character": "Character",
       "Belongings": "Belongings",
       "Notes": "Notes",
-      "Grimorio": "Grimoire"
+      "Grimorio": "Grimoire",
+      "Short": {
+        "stats": "Traits",
+        "magick": "Magick",
+        "grimorio": "Grimoire",
+        "focus": "Creed",
+        "dotazione": "Gear",
+        "personaggio": "Compass",
+        "conceptChallenge": "Challenge",
+        "esperienza": "Experience",
+        "note": "Notes"
+      }
     },
     "Skills": {
       "Combat": "Combat",

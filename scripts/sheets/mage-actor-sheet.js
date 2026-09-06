@@ -210,12 +210,14 @@ export class MageActorSheet extends MortalActorSheet {
         id: "stats",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Traits",
+        short: "WOD5E_MAGE.Tabs.Short.stats",
         icon: icon("table-cells-large")
       },
       magick: {
         id: "magick",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Magick",
+        short: "WOD5E_MAGE.Tabs.Short.magick",
         icon: icon("circle-nodes")
       },
       // Il Grimorio del personaggio, subito dopo la Magick (6/9).
@@ -223,24 +225,28 @@ export class MageActorSheet extends MortalActorSheet {
         id: "grimorio",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Grimorio",
+        short: "WOD5E_MAGE.Tabs.Short.grimorio",
         icon: icon("scroll")
       },
       focus: {
         id: "focus",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Focus",
+        short: "WOD5E_MAGE.Tabs.Short.focus",
         icon: icon("bullseye")
       },
       dotazione: {
         id: "dotazione",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Belongings",
+        short: "WOD5E_MAGE.Tabs.Short.dotazione",
         icon: icon("toolbox")
       },
       personaggio: {
         id: "personaggio",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Character",
+        short: "WOD5E_MAGE.Tabs.Short.personaggio",
         icon: icon("gem")
       },
       // La Sfida del Concetto vive sotto il Personaggio.
@@ -248,12 +254,14 @@ export class MageActorSheet extends MortalActorSheet {
         id: "conceptChallenge",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.ConceptChallenge",
+        short: "WOD5E_MAGE.Tabs.Short.conceptChallenge",
         icon: icon("pen-to-square")
       },
       esperienza: {
         id: "esperienza",
         group: "primary",
         title: "WOD5E.Tabs.Experience",
+        short: "WOD5E_MAGE.Tabs.Short.esperienza",
         icon: icon("file-contract")
       },
       // Le Note in fondo, sotto l'Esperienza (4/9 notte).
@@ -261,6 +269,7 @@ export class MageActorSheet extends MortalActorSheet {
         id: "note",
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Notes",
+        short: "WOD5E_MAGE.Tabs.Short.note",
         icon: icon("note-sticky")
       }
     };
