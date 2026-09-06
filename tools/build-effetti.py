@@ -105,7 +105,14 @@ def parse(path, sphere):
             pairing = PAIRING.match(line)
             scopes = SCOPES_LINE.match(line)
             if pairing:
-                block["pairings"].append({"sphere": SPHERE_NAMES[pairing.group(1)], "text": plain(pairing.group(2))})
+                text = plain(pairing.group(2))
+                extra_sphere = SPHERE_NAMES[pairing.group(1)]
+                # «La via obbligata» (6/9): la compagna senza cui l'effetto non si
+                # lancia. Nei blocchi il livello non si scrive: basta averla.
+                required = text.lower().startswith("la via obbligata")
+                block["pairings"].append({"sphere": extra_sphere, "text": text, "required": required})
+                if required:
+                    block["extras"].append({"sphere": extra_sphere, "level": 1, "required": True})
             elif scopes:
                 # Gli Ambiti consigliati chiudono il blocco.
                 block["scopes"] = plain(scopes.group(1))

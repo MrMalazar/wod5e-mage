@@ -12,16 +12,18 @@ assert.equal(new Set(EFFETTI.map((e) => e.id)).size, EFFETTI.length);
 assert.deepEqual([...new Set(EFFETTI.map((e) => e.sphere))].sort(), ["correspondence", "entropy", "forces", "life", "matter", "mind", "prime", "spirit", "time"]);
 assert.ok(EFFETTI.every((e) => e.level >= 1 && e.level <= 5 && e.name && e.text));
 const proiettare = findEffetto("forces-2-proiettare-luce-e-suono");
-assert.deepEqual(proiettare.extras, [{ sphere: "prime", level: 2, required: true }]);
+// Nei blocchi (6/9) «la via obbligata» segna la compagna necessaria, senza livello.
+assert.deepEqual(proiettare.extras, [{ sphere: "prime", level: 1, required: true }]);
+assert.equal(proiettare.pairings.find((pairing) => pairing.sphere === "prime").required, true);
 const curvare = findEffetto("forces-2-curvare-la-luce-o-il-suono");
-assert.equal(curvare.extras[0].required, false);
+assert.equal(curvare.extras.length, 0);
 
 // Si apre solo con le Sfere giuste: la principale al livello, le obbligatorie al loro.
 assert.equal(effectAvailable(proiettare, { forces: 2 }), false);
-assert.equal(effectAvailable(proiettare, { forces: 2, prime: 2 }), true);
+assert.equal(effectAvailable(proiettare, { forces: 2, prime: 1 }), true);
 assert.equal(effectAvailable(curvare, { forces: 2 }), true);
 assert.equal(effectAvailable(curvare, { forces: 1 }), false);
-assert.deepEqual(effectSphereLevels(proiettare), { forces: 2, prime: 2 });
+assert.deepEqual(effectSphereLevels(proiettare), { forces: 2, prime: 1 });
 assert.deepEqual(effectSphereLevels(curvare), { forces: 2 });
 
 const grimorio = prepareGrimorio({ forces: 2, mind: 1 });
@@ -81,6 +83,11 @@ assert.equal(entro.some((entry) => entry.id === "entropy-1-fiutare-il-pericolo")
 assert.equal(entro.find((entry) => entry.id === "entropy-1-pesare-le-probabilita").pairings.length, 7);
 assert.match(entro.find((entry) => entry.id === "entropy-5-sigillare-un-giuramento").scopes, /^Condizioni 1 per ogni clausola/);
 assert.equal(entro.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
+// Forze nel formato nuovo (6/9): ventotto blocchi, tutti con compagne e Ambiti.
+const forze = EFFETTI.filter((entry) => entry.sphere === "forces");
+assert.equal(forze.length, 28);
+assert.equal(forze.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
+assert.equal(forze.find((entry) => entry.id === "forces-3-telecinesi").pairings.length, 6);
 const grimorioIt = prepareGrimorio({ correspondence: 2 }, (k) => k);
 const shown = grimorioIt[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio");
 assert.equal(shown.pairings.length, 5);

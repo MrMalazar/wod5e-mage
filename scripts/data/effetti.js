@@ -22,7 +22,8 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "entropy",
-        "text": "sai dov'è «meglio» che tu sia."
+        "text": "sai dov'è «meglio» che tu sia.",
+        "required": false
       }
     ],
     "scopes": "Durata 2 ti copre la scena."
@@ -37,35 +38,43 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "entropy",
-        "text": "nodi del fato, eventi della sorte, luoghi fortunati e sfortunati etc.."
+        "text": "nodi del fato, eventi della sorte, luoghi fortunati e sfortunati etc..",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "circuiti elettrici, fonti di calore, dove si muove l'energia etc.."
+        "text": "circuiti elettrici, fonti di calore, dove si muove l'energia etc..",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "oggetti, edifici, planimetrie, un oggetto specifico etc.."
+        "text": "oggetti, edifici, planimetrie, un oggetto specifico etc..",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "un sogno specifico, quanto è propagata un'idea etc.."
+        "text": "un sogno specifico, quanto è propagata un'idea etc..",
+        "required": false
       },
       {
         "sphere": "prime",
-        "text": "Magick nell'area, dove tocca, Quintessenza etc.."
+        "text": "Magick nell'area, dove tocca, Quintessenza etc..",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "anime, crepe nell'Umbra, creature spirituali etc.."
+        "text": "anime, crepe nell'Umbra, creature spirituali etc..",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "anomalie, alterazioni del flusso nell'ambiente etc.."
+        "text": "anomalie, alterazioni del flusso nell'ambiente etc..",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "insetti, piante, animali, persone etc.."
+        "text": "insetti, piante, animali, persone etc..",
+        "required": false
       }
     ],
     "scopes": "Area per le dimensioni dell'effetto. Precisione per sapere più informazioni. Durata per tenerlo nella scena."
@@ -90,35 +99,43 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "entropy",
-        "text": "far inceppare la pistola nella stanza accanto etc.."
+        "text": "far inceppare la pistola nella stanza accanto etc..",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "spegnere le luci del magazzino in fondo alla via etc.."
+        "text": "spegnere le luci del magazzino in fondo alla via etc..",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "aprire la cassaforte dall'altra parte della città etc.."
+        "text": "aprire la cassaforte dall'altra parte della città etc..",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "sussurrare un pensiero a chi dorme a chilometri da te etc.."
+        "text": "sussurrare un pensiero a chi dorme a chilometri da te etc..",
+        "required": false
       },
       {
         "sphere": "prime",
-        "text": "attingere Quintessenza da un Nodo lontano etc.."
+        "text": "attingere Quintessenza da un Nodo lontano etc..",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "parlare con lo spirito del fiume senza andarci etc.."
+        "text": "parlare con lo spirito del fiume senza andarci etc..",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "rallentare il corridoio dove passeranno i sicari etc.."
+        "text": "rallentare il corridoio dove passeranno i sicari etc..",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "chiudere la ferita del compagno rimasto indietro etc.."
+        "text": "chiudere la ferita del compagno rimasto indietro etc..",
+        "required": false
       }
     ],
     "scopes": "Portata per la distanza. Gli altri Ambiti li dichiara l'effetto dell'altra Sfera."
@@ -133,11 +150,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "mind",
-        "text": "più finestre insieme."
+        "text": "più finestre insieme.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "la finestra guarda com'era ieri."
+        "text": "la finestra guarda com'era ieri.",
+        "required": false
       }
     ],
     "scopes": "Portata per la distanza. Precisione per i dettagli. Durata 1 per lo scontro, 2 per la scena."
@@ -152,23 +171,28 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "life",
-        "text": "marchi il corpo: sai dov'è, e se è ferito, vivo o morto etc.."
+        "text": "marchi il corpo: sai dov'è, e se è ferito, vivo o morto etc..",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "marchi la mente: sai dov'è e come sta, paura, fretta, calma etc.."
+        "text": "marchi la mente: sai dov'è e come sta, paura, fretta, calma etc..",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "marchi l'anima: lo segui anche nell'Umbra, e oltre la morte."
+        "text": "marchi l'anima: lo segui anche nell'Umbra, e oltre la morte.",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "marchi l'energia che porta: il telefono acceso, l'auto in moto etc.."
+        "text": "marchi l'energia che porta: il telefono acceso, l'auto in moto etc..",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "marchi un oggetto addosso a lui: l'anello, la giacca, la pistola etc.. Se lo lascia, il filo resta sull'oggetto."
+        "text": "marchi un oggetto addosso a lui: l'anello, la giacca, la pistola etc.. Se lo lascia, il filo resta sull'oggetto.",
+        "required": false
       }
     ],
     "scopes": "Durata per quanto canta il marchio (7 per la cronaca). Bersagli per più marchi in un colpo. Portata per quanto lontano lo senti."
@@ -183,11 +207,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "prime",
-        "text": "lo schermo morde chi lo tocca."
+        "text": "lo schermo morde chi lo tocca.",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "chi guarda dentro vede quello che vuoi tu."
+        "text": "chi guarda dentro vede quello che vuoi tu.",
+        "required": false
       }
     ],
     "scopes": "Area 1 la stanza, 2 l'edificio. Durata per quanto regge. Condizioni se morde, o se lascia passare solo i tuoi."
@@ -202,11 +228,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "mind",
-        "text": "sai anche chi."
+        "text": "sai anche chi.",
+        "required": false
       },
       {
         "sphere": "prime",
-        "text": "sai con quale Magick."
+        "text": "sai con quale Magick.",
+        "required": false
       }
     ],
     "scopes": "Durata 2 per vegliare tutta la scena. Precisione per il punto esatto da cui parte il filo."
@@ -221,11 +249,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "life",
-        "text": "ci passa la tua mano, ed è una mano."
+        "text": "ci passa la tua mano, ed è una mano.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "ci passa un oggetto al posto della mano."
+        "text": "ci passa un oggetto al posto della mano.",
+        "required": false
       }
     ],
     "scopes": "Portata per la distanza. Durata 1 per il tempo di girare la maniglia."
@@ -240,11 +270,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "entropy",
-        "text": "il caso sceglie i nascondigli, e nessuno sa dove, nemmeno tu."
+        "text": "il caso sceglie i nascondigli, e nessuno sa dove, nemmeno tu.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "i nascondigli li scegli tu."
+        "text": "i nascondigli li scegli tu.",
+        "required": false
       }
     ],
     "scopes": "Bersagli per quante cose. Portata per quanto lontano finiscono. Potenza (peso) se sono pesanti."
@@ -259,11 +291,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "life",
-        "text": "sembra medicina."
+        "text": "sembra medicina.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "sembra fatto da un congegno."
+        "text": "sembra fatto da un congegno.",
+        "required": false
       }
     ],
     "scopes": "Precisione per la scheggia giusta e non il resto. Bersagli per più feriti."
@@ -278,11 +312,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "matter",
-        "text": "arriva pulita, per quello che è."
+        "text": "arriva pulita, per quello che è.",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "arriva un corpo vivo."
+        "text": "arriva un corpo vivo.",
+        "required": false
       }
     ],
     "scopes": "Portata per la distanza (6 dall'altra parte del mondo). Potenza (peso) per quanto pesa. Precisione se la cosa è una fra tante."
@@ -297,11 +333,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "matter",
-        "text": "due oggetti si scambiano per quello che sono."
+        "text": "due oggetti si scambiano per quello che sono.",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "due corpi."
+        "text": "due corpi.",
+        "required": false
       }
     ],
     "scopes": "Portata per la distanza fra i due. Potenza (peso). Bersagli 2 per due persone."
@@ -316,11 +354,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "life",
-        "text": "il corpo passa restando un corpo, e il gesto si spiega."
+        "text": "il corpo passa restando un corpo, e il gesto si spiega.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "passa anche il carico, intero."
+        "text": "passa anche il carico, intero.",
+        "required": false
       }
     ],
     "scopes": "Portata per la distanza. Bersagli per i compagni. Potenza (peso) per il carico."
@@ -335,15 +375,18 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "life",
-        "text": "ancori un corpo."
+        "text": "ancori un corpo.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "ancori un oggetto."
+        "text": "ancori un oggetto.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "ancori uno spirito fuori dall'Umbra."
+        "text": "ancori uno spirito fuori dall'Umbra.",
+        "required": false
       }
     ],
     "scopes": "Durata per quanto regge. Potenza (epicità) nel braccio di ferro. Bersagli per più persone."
@@ -358,11 +401,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "matter",
-        "text": "ci passa un tir intero."
+        "text": "ci passa un tir intero.",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "chi non sa che c'è non lo vede."
+        "text": "chi non sa che c'è non lo vede.",
+        "required": false
       }
     ],
     "scopes": "Portata per la distanza. Durata per quanto resta aperto (4 la sessione). Potenza (peso) per tenerlo largo. Condizioni 1 se si apre solo per i tuoi."
@@ -377,11 +422,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "mind",
-        "text": "non si accorge nemmeno del tempo perso."
+        "text": "non si accorge nemmeno del tempo perso.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "ci arriva quando dici tu."
+        "text": "ci arriva quando dici tu.",
+        "required": false
       }
     ],
     "scopes": "Area per il tratto di strada. Durata per quanto dura. Condizioni se vale solo per certi passi."
@@ -396,11 +443,13 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "time",
-        "text": "dentro il tempo corre diverso."
+        "text": "dentro il tempo corre diverso.",
+        "required": false
       },
       {
         "sphere": "prime",
-        "text": "dentro la Quintessenza non si disperde."
+        "text": "dentro la Quintessenza non si disperde.",
+        "required": false
       }
     ],
     "scopes": "Area per la grandezza. Durata per quanto resta chiusa. Condizioni 1 se si riapre all'alba."
@@ -415,15 +464,18 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "matter",
-        "text": "quel che sposti resta intero."
+        "text": "quel che sposti resta intero.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "il mondo ricorda che è sempre stato così."
+        "text": "il mondo ricorda che è sempre stato così.",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "chi ci vive ricorda che è sempre stato così."
+        "text": "chi ci vive ricorda che è sempre stato così.",
+        "required": false
       }
     ],
     "scopes": "Area, Potenza (peso ed epicità), Durata: tutti alti."
@@ -438,27 +490,33 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "matter",
-        "text": "il punto esatto della struttura: la saldatura vecchia, il pilastro stanco, il bullone che gioca etc.."
+        "text": "il punto esatto della struttura: la saldatura vecchia, il pilastro stanco, il bullone che gioca etc..",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "il punto debole di un corpo: il ginocchio operato, la spalla che esce, il fiato corto etc.."
+        "text": "il punto debole di un corpo: il ginocchio operato, la spalla che esce, il fiato corto etc..",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "il punto debole di una persona: la paura, l'orgoglio, il segreto che non deve uscire etc.."
+        "text": "il punto debole di una persona: la paura, l'orgoglio, il segreto che non deve uscire etc..",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "dove cede un impianto: il fusibile, il cavo scoperto, la valvola sotto pressione etc.."
+        "text": "dove cede un impianto: il fusibile, il cavo scoperto, la valvola sotto pressione etc..",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "dove cede uno spirito o una soglia: il patto non rispettato, il nome che non vuole sentire etc.."
+        "text": "dove cede uno spirito o una soglia: il patto non rispettato, il nome che non vuole sentire etc..",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "sai anche quando cederà, non solo dove."
+        "text": "sai anche quando cederà, non solo dove.",
+        "required": false
       }
     ],
     "scopes": "Precisione per un punto solo e non l'insieme (1 il muro, 3 il mattone). Bersagli per più cose alla volta. Durata 2 per tenere l'occhio acceso tutta la scena."
@@ -473,15 +531,18 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "mind",
-        "text": "sai anche cosa nasconde, e perché."
+        "text": "sai anche cosa nasconde, e perché.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "senti quando a mentire è un oggetto: il documento falso, la moneta contraffatta, l'etichetta cambiata etc.."
+        "text": "senti quando a mentire è un oggetto: il documento falso, la moneta contraffatta, l'etichetta cambiata etc..",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "senti la bugia di uno spirito e il patto detto a metà."
+        "text": "senti la bugia di uno spirito e il patto detto a metà.",
+        "required": false
       }
     ],
     "scopes": "Bersagli per ascoltare più bocche insieme. Durata 2 per un interrogatorio intero. Precisione per la frase esatta che stona."
@@ -496,31 +557,38 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "mind",
-        "text": "quanto è probabile che una persona faccia una cosa: che ceda, che tradisca, che spari etc.."
+        "text": "quanto è probabile che una persona faccia una cosa: che ceda, che tradisca, che spari etc..",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "quanto è probabile che un corpo regga: che sopravviva, che guarisca, che la ferita si infetti etc.."
+        "text": "quanto è probabile che un corpo regga: che sopravviva, che guarisca, che la ferita si infetti etc..",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "quanto è probabile che una cosa regga: il ponte, la corda, il paracadute etc.."
+        "text": "quanto è probabile che una cosa regga: il ponte, la corda, il paracadute etc..",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "quanto è probabile che un impianto regga: che scarichi, che prenda fuoco, che salti la luce etc.."
+        "text": "quanto è probabile che un impianto regga: che scarichi, che prenda fuoco, che salti la luce etc..",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "quanto è probabile che lo spirito accetti, che la soglia si apra, che il rito riesca etc.."
+        "text": "quanto è probabile che lo spirito accetti, che la soglia si apra, che il rito riesca etc..",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "la probabilità di adesso e quella di fra un'ora: la sorte in movimento."
+        "text": "la probabilità di adesso e quella di fra un'ora: la sorte in movimento.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "pesi le probabilità di un luogo che non vedi."
+        "text": "pesi le probabilità di un luogo che non vedi.",
+        "required": false
       }
     ],
     "scopes": "Precisione per una domanda sola e precisa invece del quadro. Area per pesare un luogo intero. Durata 2 per tenere il fiuto acceso tutta la scena."
@@ -535,31 +603,38 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "matter",
-        "text": "il conto di un oggetto o di una struttura: la lavatrice, il ponte, il tetto etc.."
+        "text": "il conto di un oggetto o di una struttura: la lavatrice, il ponte, il tetto etc..",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "il conto di un corpo: quanto gli resta, quando cadrà malato, quando la ferita si chiuderà etc.."
+        "text": "il conto di un corpo: quanto gli resta, quando cadrà malato, quando la ferita si chiuderà etc..",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "il conto di un legame o di una decisione: quando lascerà, quando cederà, quando cambierà idea etc.."
+        "text": "il conto di un legame o di una decisione: quando lascerà, quando cederà, quando cambierà idea etc..",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "il conto di un impianto: quando muore il generatore, quando si scarica la batteria etc.."
+        "text": "il conto di un impianto: quando muore il generatore, quando si scarica la batteria etc..",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "il conto di un patto o di uno spirito: quando si scioglie, quando si disfa etc.."
+        "text": "il conto di un patto o di uno spirito: quando si scioglie, quando si disfa etc..",
+        "required": false
       },
       {
         "sphere": "prime",
-        "text": "il conto di un incantesimo: quanto regge la Magick di un altro."
+        "text": "il conto di un incantesimo: quanto regge la Magick di un altro.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "la cifra diventa una data, con ora e minuto."
+        "text": "la cifra diventa una data, con ora e minuto.",
+        "required": false
       }
     ],
     "scopes": "Precisione per la cifra esatta e non l'ordine di grandezza. Bersagli per più conti insieme. Durata 2 per leggere tutta la scena."
@@ -574,27 +649,33 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "matter",
-        "text": "tieni in piedi anche ciò che è già rotto: il motore fuso fa un altro giro."
+        "text": "tieni in piedi anche ciò che è già rotto: il motore fuso fa un altro giro.",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "il corpo regge: il ferito arriva all'ospedale, il malato arriva a domani etc.."
+        "text": "il corpo regge: il ferito arriva all'ospedale, il malato arriva a domani etc..",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "la batteria, la torcia, il generatore reggono oltre la carica etc.."
+        "text": "la batteria, la torcia, il generatore reggono oltre la carica etc..",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "reggono la calma, la bugia, il coraggio fino a fine scena etc.."
+        "text": "reggono la calma, la bugia, il coraggio fino a fine scena etc..",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "lo spirito evocato non si disfa, il patto regge un altro giorno etc.."
+        "text": "lo spirito evocato non si disfa, il patto regge un altro giorno etc..",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "fissi fino a quando: reggerà esattamente fino a mezzanotte."
+        "text": "fissi fino a quando: reggerà esattamente fino a mezzanotte.",
+        "required": false
       }
     ],
     "scopes": "Durata per quanto deve reggere (1 la fuga, 2 la scena, 4 la sessione). Bersagli per più cose insieme. Potenza (peso) se è grosso: il ponte, non la corda."
@@ -609,19 +690,23 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "mind",
-        "text": "la Mente gli mette l'idea in testa, l'Entropia fa in modo che sia proprio quella a tornargli in mente al momento giusto: sceglie l'errore convinto di averlo scelto."
+        "text": "la Mente gli mette l'idea in testa, l'Entropia fa in modo che sia proprio quella a tornargli in mente al momento giusto: sceglie l'errore convinto di averlo scelto.",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "il corpo gli dà ragione: la stanchezza, la fame, il sonno gli fanno preferire l'opzione facile etc.."
+        "text": "il corpo gli dà ragione: la stanchezza, la fame, il sonno gli fanno preferire l'opzione facile etc..",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "scegli l'istante in cui la scelta gli si presenta."
+        "text": "scegli l'istante in cui la scelta gli si presenta.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "inclini la scelta di chi non vedi."
+        "text": "inclini la scelta di chi non vedi.",
+        "required": false
       }
     ],
     "scopes": "Condizioni 1 per legarla a un momento: quando glielo chiederanno. Bersagli per più teste. Potenza (epicità) per quanto pesa la scelta: 1 il tavolo al ristorante, 4 il voto in consiglio."
@@ -636,19 +721,23 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "mind",
-        "text": "chi ti vede lo dimentica subito."
+        "text": "chi ti vede lo dimentica subito.",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "la telecamera, il sensore, il faro sbagliano insieme agli sguardi etc.."
+        "text": "la telecamera, il sensore, il faro sbagliano insieme agli sguardi etc..",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "nemmeno il cane ti fiuta."
+        "text": "nemmeno il cane ti fiuta.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "passi inosservato anche agli spiriti e a chi guarda dall'Umbra."
+        "text": "passi inosservato anche agli spiriti e a chi guarda dall'Umbra.",
+        "required": false
       }
     ],
     "scopes": "Durata 1 per attraversare la stanza, 2 per la scena. Bersagli per la Cabala intera. Area per un luogo dove nessuno nota niente."
@@ -663,31 +752,38 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "matter",
-        "text": "guasti anche ciò che è sano: la Materia lo indebolisce, il caso sceglie l'istante."
+        "text": "guasti anche ciò che è sano: la Materia lo indebolisce, il caso sceglie l'istante.",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "guasti l'impianto: il quadro elettrico, il generatore, la rete etc.."
+        "text": "guasti l'impianto: il quadro elettrico, il generatore, la rete etc..",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "il corpo sbaglia: la caviglia cede, arriva il crampo, manca il fiato etc.."
+        "text": "il corpo sbaglia: la caviglia cede, arriva il crampo, manca il fiato etc..",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "il guasto è in testa: la parola dimenticata, il numero sbagliato, il nome che non torna etc.."
+        "text": "il guasto è in testa: la parola dimenticata, il numero sbagliato, il nome che non torna etc..",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "il rito degli altri si inceppa, lo spirito non risponde alla chiamata etc.."
+        "text": "il rito degli altri si inceppa, lo spirito non risponde alla chiamata etc..",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "scegli l'istante esatto: si rompe quando lo tocca lui."
+        "text": "scegli l'istante esatto: si rompe quando lo tocca lui.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "guasti quello che non vedi."
+        "text": "guasti quello che non vedi.",
+        "required": false
       }
     ],
     "scopes": "Potenza (peso) per quanto è grosso quel che cede: 1 la serratura, 3 l'auto, 5 la casa. Condizioni 1 per farlo scattare al momento giusto: quando gira la chiave. Precisione per il pezzo giusto e non l'insieme. Bersagli per più cose."
@@ -702,19 +798,23 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "forces",
-        "text": "la loro auto si spegne, la radio gracchia, il navigatore sbaglia strada etc.."
+        "text": "la loro auto si spegne, la radio gracchia, il navigatore sbaglia strada etc..",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "la strada stessa gli va contro: la buca, il cancello chiuso, il tombino aperto etc.."
+        "text": "la strada stessa gli va contro: la buca, il cancello chiuso, il tombino aperto etc..",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "perdono la tua traccia e si convincono di un'altra strada."
+        "text": "perdono la tua traccia e si convincono di un'altra strada.",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "il cane perde l'odore, il segugio si stanca etc.."
+        "text": "il cane perde l'odore, il segugio si stanca etc..",
+        "required": false
       }
     ],
     "scopes": "Bersagli per quanti ti seguono (zero se stanno tutti sulla stessa auto). Durata 1 per la fuga, 2 per tutta la scena. Area per un quartiere intero che gli va contro."
@@ -729,23 +829,28 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "matter",
-        "text": "trucchi anche l'oggetto che non lascia niente al caso: il dado piombato, la slot programmata etc.."
+        "text": "trucchi anche l'oggetto che non lascia niente al caso: il dado piombato, la slot programmata etc..",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "trucchi la macchina: il generatore di numeri, la lotteria elettronica etc.."
+        "text": "trucchi la macchina: il generatore di numeri, la lotteria elettronica etc..",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "l'altro giocatore sbaglia proprio la mossa giusta."
+        "text": "l'altro giocatore sbaglia proprio la mossa giusta.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "scegli il momento in cui la fortuna gira."
+        "text": "scegli il momento in cui la fortuna gira.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "trucchi il tavolo che non vedi."
+        "text": "trucchi il tavolo che non vedi.",
+        "required": false
       }
     ],
     "scopes": "Bersagli per più giocatori o più tavoli. Condizioni 1 per legarla a una mano precisa. Precisione per il risultato esatto e non «vinco»: il sette, il doppio sei."
@@ -760,23 +865,28 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "life",
-        "text": "devii anche le disgrazie del corpo: il contagio, il veleno, l'infarto etc.."
+        "text": "devii anche le disgrazie del corpo: il contagio, il veleno, l'infarto etc..",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "devii le energie: il fulmine, la scarica, la fiammata etc.."
+        "text": "devii le energie: il fulmine, la scarica, la fiammata etc..",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "chi ti tende una trappola sbaglia sempre qualcosa."
+        "text": "chi ti tende una trappola sbaglia sempre qualcosa.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "devii le maledizioni degli spiriti e i colpi dall'Umbra."
+        "text": "devii le maledizioni degli spiriti e i colpi dall'Umbra.",
+        "required": false
       },
       {
         "sphere": "prime",
-        "text": "anche la Magick altrui sbaglia bersaglio."
+        "text": "anche la Magick altrui sbaglia bersaglio.",
+        "required": false
       }
     ],
     "scopes": "Durata 1 per lo scontro, 2 per la scena, 4 per la sessione. Bersagli per proteggere altri. Condizioni 1 se scatta da sola quando sparano, 2 se chi ti manca si inceppa pure."
@@ -791,31 +901,38 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "mind",
-        "text": "la fortuna sceglie anche le teste: le tue idee arrivano, le loro no."
+        "text": "la fortuna sceglie anche le teste: le tue idee arrivano, le loro no.",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "la fortuna nei corpi: i tuoi non si ammalano, i loro sì."
+        "text": "la fortuna nei corpi: i tuoi non si ammalano, i loro sì.",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "la fortuna negli impianti: le vostre macchine partono, le loro no."
+        "text": "la fortuna negli impianti: le vostre macchine partono, le loro no.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "la fortuna nelle cose: quello che vi serve è nel cassetto, quello che gli serve è rotto."
+        "text": "la fortuna nelle cose: quello che vi serve è nel cassetto, quello che gli serve è rotto.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "gli spiriti del luogo prendono la tua parte."
+        "text": "gli spiriti del luogo prendono la tua parte.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "scegli quando la marea gira."
+        "text": "scegli quando la marea gira.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "la serata che pieghi è dall'altra parte della città."
+        "text": "la serata che pieghi è dall'altra parte della città.",
+        "required": false
       }
     ],
     "scopes": "Area per quanto è grande la serata (1 la bisca, 2 l'edificio, 3 il quartiere). Durata 1 la serata, 3 il mese. Bersagli per chi vince e chi perde. Condizioni 1 per una regola: solo i tuoi, solo al tavolo grande."
@@ -830,19 +947,23 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "prime",
-        "text": "disfi la Quintessenza di cui è fatto: perde forma, poi sostanza."
+        "text": "disfi la Quintessenza di cui è fatto: perde forma, poi sostanza.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "la via diretta: lo colpisci nell'Umbra o attraverso la soglia."
+        "text": "la via diretta: lo colpisci nell'Umbra o attraverso la soglia.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "lo spirito legato a un oggetto si disfa con l'oggetto: il feticcio, la statua, la reliquia etc.."
+        "text": "lo spirito legato a un oggetto si disfa con l'oggetto: il feticcio, la statua, la reliquia etc..",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "lo spirito legato a un'energia si disfa con lei: il fuoco, la corrente, la tempesta etc.."
+        "text": "lo spirito legato a un'energia si disfa con lei: il fuoco, la corrente, la tempesta etc..",
+        "required": false
       }
     ],
     "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più spiriti. Precisione per colpire quello giusto in uno sciame."
@@ -857,23 +978,28 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "time",
-        "text": "gli anni cadono tutti insieme: l'oggetto invecchia davanti a te."
+        "text": "gli anni cadono tutti insieme: l'oggetto invecchia davanti a te.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "la via diretta: la materia si disfa per quello che è."
+        "text": "la via diretta: la materia si disfa per quello che è.",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "la polvere di un impianto: i circuiti si ossidano, i cavi si sbriciolano etc.."
+        "text": "la polvere di un impianto: i circuiti si ossidano, i cavi si sbriciolano etc..",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "quello che era vivo marcisce: il legno, il cibo, il raccolto etc.."
+        "text": "quello che era vivo marcisce: il legno, il cibo, il raccolto etc..",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "riduci in polvere quello che non vedi."
+        "text": "riduci in polvere quello che non vedi.",
+        "required": false
       }
     ],
     "scopes": "Potenza (peso) per quanto è grosso: 1 la chiave, 3 l'auto, 5 la casa. Precisione per la parte giusta e non l'insieme: la canna, non la pistola. Bersagli per più oggetti."
@@ -888,31 +1014,38 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "forces",
-        "text": "la catena è un impianto: il blackout resta nel palazzo."
+        "text": "la catena è un impianto: il blackout resta nel palazzo.",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "la catena è un contagio: l'epidemia si ferma alla prima stanza."
+        "text": "la catena è un contagio: l'epidemia si ferma alla prima stanza.",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "la catena è una voce: la notizia muore prima di uscire dalla stanza."
+        "text": "la catena è una voce: la notizia muore prima di uscire dalla stanza.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "la catena è una struttura: il crollo si ferma al primo piano."
+        "text": "la catena è una struttura: il crollo si ferma al primo piano.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "la catena è una maledizione o un patto che passa di mano in mano."
+        "text": "la catena è una maledizione o un patto che passa di mano in mano.",
+        "required": false
       },
       {
         "sphere": "prime",
-        "text": "la catena è un incantesimo che si propaga."
+        "text": "la catena è un incantesimo che si propaga.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "fermi il primo anello prima che scatti."
+        "text": "fermi il primo anello prima che scatti.",
+        "required": false
       }
     ],
     "scopes": "Area per quanto è ampio il perimetro in cui il guasto resta chiuso. Durata per quanto tieni chiusa la porta (2 la scena, 4 la sessione). Precisione per l'anello esatto da spezzare."
@@ -922,20 +1055,29 @@ export const EFFETTI = Object.freeze([
     "name": "Scegliere il domani più comodo",
     "sphere": "entropy",
     "level": 3,
-    "extras": [],
+    "extras": [
+      {
+        "sphere": "time",
+        "level": 1,
+        "required": true
+      }
+    ],
     "text": "Tra i futuri possibili spingi il mondo verso quello che preferisci: non una probabilità alla volta, ma una direzione. Da sola l'Entropia piega solo l'adesso: il domani intero chiede il Tempo.",
     "pairings": [
       {
         "sphere": "time",
-        "text": "la via obbligata: vedi i rami e scegli quello."
+        "text": "la via obbligata: vedi i rami e scegli quello.",
+        "required": true
       },
       {
         "sphere": "mind",
-        "text": "il domani più comodo per una persona: la strada che prenderà."
+        "text": "il domani più comodo per una persona: la strada che prenderà.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "il domani di un luogo lontano."
+        "text": "il domani di un luogo lontano.",
+        "required": false
       }
     ],
     "scopes": "Durata per quanto è lontano quel domani (fuori gioco: 1 il giorno, 3 il mese, 5 l'anno). Potenza (epicità) per quanto pesa il domani che scegli: 2 tocca la scena, 5 stravolge il capitolo. Precisione per un esito preciso e non «meglio»."
@@ -950,23 +1092,28 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "prime",
-        "text": "riconosci la Magick con cui è stata stretta e la disfi alla radice."
+        "text": "riconosci la Magick con cui è stata stretta e la disfi alla radice.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "la maledizione viene da uno spirito o da un patto: sciogli il patto."
+        "text": "la maledizione viene da uno spirito o da un patto: sciogli il patto.",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "la maledizione ha messo radici nel corpo: la togli anche da lì."
+        "text": "la maledizione ha messo radici nel corpo: la togli anche da lì.",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "la maledizione vive nella convinzione di chi la porta: lo liberi anche da quella."
+        "text": "la maledizione vive nella convinzione di chi la porta: lo liberi anche da quella.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "sciogli il nodo di chi è lontano."
+        "text": "sciogli il nodo di chi è lontano.",
+        "required": false
       }
     ],
     "scopes": "Potenza (epicità) nel braccio di ferro: contro una maledizione più forte vince la Potenza più alta. Bersagli per più persone maledette. Precisione per il nodo giusto fra molti."
@@ -981,23 +1128,28 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "life",
-        "text": "la sorte lo raggiunge per le vie del corpo: cede dove i corpi cedono, guarisce dove guariscono, e la scena resta pulita."
+        "text": "la sorte lo raggiunge per le vie del corpo: cede dove i corpi cedono, guarisce dove guariscono, e la scena resta pulita.",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "la sorte gli entra in testa: le decisioni gli riescono tutte, o gli falliscono tutte."
+        "text": "la sorte gli entra in testa: le decisioni gli riescono tutte, o gli falliscono tutte.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "benedici o maledici uno spirito, o passi dallo spirito che veglia su di lui."
+        "text": "benedici o maledici uno spirito, o passi dallo spirito che veglia su di lui.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "la benedizione ha una data: scatta al compleanno, finisce a mezzanotte etc.."
+        "text": "la benedizione ha una data: scatta al compleanno, finisce a mezzanotte etc..",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "riscrivi il destino di chi non vedi."
+        "text": "riscrivi il destino di chi non vedi.",
+        "required": false
       }
     ],
     "scopes": "Durata per quanto dura (fuori gioco: 3 il mese, 7 per sempre). Condizioni 1 per legarla: solo quando impugna un'arma, solo la sua famiglia etc.. Potenza (epicità) per il peso: 2 tocca la scena, 6 impatta sulla storia. Bersagli per una famiglia intera."
@@ -1007,24 +1159,34 @@ export const EFFETTI = Object.freeze([
     "name": "Creare fortuna dal nulla",
     "sphere": "entropy",
     "level": 4,
-    "extras": [],
+    "extras": [
+      {
+        "sphere": "prime",
+        "level": 1,
+        "required": true
+      }
+    ],
     "text": "Aggiungi al conto invece di spostarlo: la fortuna che dai non manca a nessuno, la sfortuna che cancelli non finisce da nessun'altra parte. Serve il Primordio: da sola l'Entropia sposta soltanto. Il mondo se ne accorge, e il resto lo reclamerà quando vuole lui.",
     "pairings": [
       {
         "sphere": "prime",
-        "text": "la via obbligata: la fortuna nasce dalla Quintessenza, oppure la paghi."
+        "text": "la via obbligata: la fortuna nasce dalla Quintessenza, oppure la paghi.",
+        "required": true
       },
       {
         "sphere": "life",
-        "text": "la fortuna nuova in un corpo: la guarigione che non era probabile."
+        "text": "la fortuna nuova in un corpo: la guarigione che non era probabile.",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "la fortuna nuova in una testa: l'idea che nessuno avrebbe avuto."
+        "text": "la fortuna nuova in una testa: l'idea che nessuno avrebbe avuto.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "text": "la fortuna nuova nelle cose: il biglietto vincente, la vena d'oro, il pezzo di ricambio nel cassetto etc.."
+        "text": "la fortuna nuova nelle cose: il biglietto vincente, la vena d'oro, il pezzo di ricambio nel cassetto etc..",
+        "required": false
       }
     ],
     "scopes": "Potenza (epicità) per quanta fortuna: 1 un dettaglio, 4 impatta sul capitolo. Durata per quanto dura. Bersagli per chi la riceve."
@@ -1034,24 +1196,34 @@ export const EFFETTI = Object.freeze([
     "name": "Far marcire un corpo",
     "sphere": "entropy",
     "level": 4,
-    "extras": [],
+    "extras": [
+      {
+        "sphere": "life",
+        "level": 1,
+        "required": true
+      }
+    ],
     "text": "La mortalità accelera nella carne: le ferite si infettano, gli organi cedono, la pelle si apre. Da sola l'Entropia tiene la rovina attorno al corpo, incidenti e contagi probabili; per entrare nella carne serve la Vita.",
     "pairings": [
       {
         "sphere": "life",
-        "text": "la via obbligata: la carne marcisce dall'interno."
+        "text": "la via obbligata: la carne marcisce dall'interno.",
+        "required": true
       },
       {
         "sphere": "time",
-        "text": "gli anni della carne cadono in un istante: invecchia davanti a te."
+        "text": "gli anni della carne cadono in un istante: invecchia davanti a te.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "marcisce anche l'effimera di uno spirito incarnato."
+        "text": "marcisce anche l'effimera di uno spirito incarnato.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "marcisce chi non vedi."
+        "text": "marcisce chi non vedi.",
+        "required": false
       }
     ],
     "scopes": "Potenza (danni) per quanto ferisce. Durata per quanto continua a marcire. Condizioni 1 se scatta solo quando fa una cosa. Bersagli per più corpi."
@@ -1066,27 +1238,33 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "prime",
-        "text": "il perimetro respinge anche l'Entropia di un altro mago."
+        "text": "il perimetro respinge anche l'Entropia di un altro mago.",
+        "required": false
       },
       {
         "sphere": "forces",
-        "text": "nemmeno le macchine sbagliano: niente guasti, niente scariche."
+        "text": "nemmeno le macchine sbagliano: niente guasti, niente scariche.",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "chi entra non si accorge che la fortuna ha smesso."
+        "text": "chi entra non si accorge che la fortuna ha smesso.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "vale anche nell'Umbra del luogo."
+        "text": "vale anche nell'Umbra del luogo.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "il perimetro si accende a orari: solo di notte."
+        "text": "il perimetro si accende a orari: solo di notte.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "il perimetro è lontano, o segue chi lo porta."
+        "text": "il perimetro è lontano, o segue chi lo porta.",
+        "required": false
       }
     ],
     "scopes": "Area per il perimetro (1 la stanza, 2 l'edificio, 3 il quartiere). Durata per quanto regge. Condizioni 1 per chi entra: i tuoi tengono la fortuna, gli altri no."
@@ -1101,23 +1279,28 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "life",
-        "text": "il legame passa anche nel corpo: la ferita dell'uno sanguina nell'altro."
+        "text": "il legame passa anche nel corpo: la ferita dell'uno sanguina nell'altro.",
+        "required": false
       },
       {
         "sphere": "mind",
-        "text": "il legame passa nei pensieri: sanno l'uno dell'altro."
+        "text": "il legame passa nei pensieri: sanno l'uno dell'altro.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "il legame regge anche oltre la morte."
+        "text": "il legame regge anche oltre la morte.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "il legame ha una scadenza, o si accende in un giorno preciso."
+        "text": "il legame ha una scadenza, o si accende in un giorno preciso.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "i due sono lontani e non si sono mai visti."
+        "text": "i due sono lontani e non si sono mai visti.",
+        "required": false
       }
     ],
     "scopes": "Durata (7 per sempre). Bersagli 2, o di più per una Cabala intera. Condizioni 1 per una regola: finché vivono nella stessa città, finché uno non tradisce etc.. Potenza (epicità) per quanto pesa il legame."
@@ -1127,24 +1310,34 @@ export const EFFETTI = Object.freeze([
     "name": "Riscrivere un destino da zero",
     "sphere": "entropy",
     "level": 5,
-    "extras": [],
+    "extras": [
+      {
+        "sphere": "prime",
+        "level": 1,
+        "required": true
+      }
+    ],
     "text": "La vita che non era prevista: la carriera impossibile, la sopravvivenza che nessun conto ammetteva, il nome che nessuno avrebbe mai fatto. Non sposti fortuna: la inventi, e il conto si sbilancia. Il resto lo presenta lui, quando vuole. Serve il Primordio.",
     "pairings": [
       {
         "sphere": "prime",
-        "text": "la via obbligata: il destino nuovo nasce dalla Quintessenza."
+        "text": "la via obbligata: il destino nuovo nasce dalla Quintessenza.",
+        "required": true
       },
       {
         "sphere": "mind",
-        "text": "il destino nuovo passa dalle sue scelte: prenderà sempre la strada che porta lì."
+        "text": "il destino nuovo passa dalle sue scelte: prenderà sempre la strada che porta lì.",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "il destino nuovo passa dal corpo: vivrà quanto serve per arrivarci."
+        "text": "il destino nuovo passa dal corpo: vivrà quanto serve per arrivarci.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "fissi quando il destino si compie."
+        "text": "fissi quando il destino si compie.",
+        "required": false
       }
     ],
     "scopes": "Potenza (epicità) per quanto è grande il destino: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione. Durata 7. Bersagli per una stirpe."
@@ -1159,27 +1352,33 @@ export const EFFETTI = Object.freeze([
     "pairings": [
       {
         "sphere": "mind",
-        "text": "chi giura sa cosa lo aspetta, e lo sente ogni volta che pensa di tradire."
+        "text": "chi giura sa cosa lo aspetta, e lo sente ogni volta che pensa di tradire.",
+        "required": false
       },
       {
         "sphere": "spirit",
-        "text": "il patto vale anche per spiriti e creature dell'Umbra, e loro lo riconoscono."
+        "text": "il patto vale anche per spiriti e creature dell'Umbra, e loro lo riconoscono.",
+        "required": false
       },
       {
         "sphere": "life",
-        "text": "la punizione passa dal corpo: si ammala, cade, non guarisce etc.."
+        "text": "la punizione passa dal corpo: si ammala, cade, non guarisce etc..",
+        "required": false
       },
       {
         "sphere": "prime",
-        "text": "il patto lega anche la Magick: chi tradisce non lancia più."
+        "text": "il patto lega anche la Magick: chi tradisce non lancia più.",
+        "required": false
       },
       {
         "sphere": "time",
-        "text": "il patto ha un termine, o si sveglia in una data."
+        "text": "il patto ha un termine, o si sveglia in una data.",
+        "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "il patto lo trova ovunque vada."
+        "text": "il patto lo trova ovunque vada.",
+        "required": false
       }
     ],
     "scopes": "Condizioni 1 per ogni clausola, e Complessità per quanto è lungo il contratto (7 livello contratto). Durata 7 per sempre. Bersagli per quanti giurano. Potenza (epicità) per quanto pesa la punizione."
@@ -1190,9 +1389,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 1,
     "extras": [],
-    "text": "infrarossi, correnti, radiazioni: il buio ti si apre",
-    "pairings": [],
-    "scopes": ""
+    "text": "Vedi e senti quello che i sensi umani tagliano: infrarossi, ultravioletti, onde radio, correnti, radiazioni etc.. Il buio ti si apre, perché il buio è solo luce che l'occhio non prende.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "i tuoi occhi cambiano per davvero, e lo spettro resta aperto senza doverlo tenere su.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "leggi anche l'energia di un cervello: se dorme, se sogna, se è sveglio.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "capisci di cosa è fatto quello che l'energia attraversa.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "vedi anche la Quintessenza, l'energia dietro all'energia.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "vedi l'energia dell'Umbra dove sfiora il mondo.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per tutta la scena. Precisione (dettaglio) per la frequenza esatta e non la banda."
   },
   {
     "id": "forces-1-leggere-il-calore-rimasto",
@@ -1200,9 +1425,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 1,
     "extras": [],
-    "text": "chi era seduto lì, quale motore è ancora tiepido, quanto tempo fa",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il calore racconta: chi era seduto lì, quale motore è ancora tiepido, quale tazza è stata svuotata per ultima, e quanto tempo fa.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "la traccia ti dice l'ora esatta, e la segui indietro più a lungo.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "dal calore riconosci il corpo: alto o basso, sano o febbricitante, uomo o cane etc..",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "dal calore capisci cosa c'era appoggiato: una tazza, un'arma, un portatile etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "leggi il calore rimasto in una stanza che non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Precisione (dettaglio) per la traccia singola fra tante. Precisione (informazione) per quanto pesa nella trama quel che cerchi. Area per leggere un palazzo intero."
   },
   {
     "id": "forces-1-sentire-la-corrente",
@@ -1210,9 +1456,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 1,
     "extras": [],
-    "text": "la segui dentro i muri: dove passa, dove è staccata, chi la sta usando",
-    "pairings": [],
-    "scopes": ""
+    "text": "Segui la corrente dentro i muri: dove passa, dove è staccata, chi la sta usando e per cosa. Cavi, tubi del gas, fibre, antenne: ogni rete che porta energia o segnale ti si disegna davanti.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "senti anche cosa passa nel segnale: la telefonata, il file, il messaggio etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "segui la rete oltre il palazzo, fino alla centrale.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "senti il cavo per quello che è: rame, fibra, dove è consumato etc..",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "senti dove la rete sta per cedere.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "senti quando è passata l'ultima corrente, e quando tornerà.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per la rete intera (1 la stanza, 2 il palazzo, 3 il quartiere). Durata 2 per la scena. Precisione (dettaglio) per un filo solo."
   },
   {
     "id": "forces-1-vedere-attraverso-i-muri",
@@ -1220,9 +1492,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 1,
     "extras": [],
-    "text": "leggi le radiazioni oltre la parete: sagome nitide nella stanza accanto",
-    "pairings": [],
-    "scopes": ""
+    "text": "Leggi le radiazioni oltre la parete: sagome nitide nella stanza accanto, il metallo che portano addosso, la corrente nei muri. Non vedi i colori: vedi le energie.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "le sagome diventano corpi: quanti, quali, come stanno.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "vedi anche gli oggetti freddi: il mobile, la cassaforte, l'arma nel cassetto etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "guardi attraverso più muri, fino in fondo al palazzo.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "sai anche cosa stanno facendo: dormono, aspettano, ti aspettano etc..",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "vedi chi sta oltre il muro ma non nel mondo.",
+        "required": false
+      }
+    ],
+    "scopes": "Precisione (dettaglio) per i particolari: 1 le sagome, 3 l'arma in mano. Durata 1 per un'occhiata, 2 per la scena. Area per tutto il piano."
   },
   {
     "id": "forces-2-amplificare-o-spegnere-un-suono",
@@ -1230,25 +1528,66 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "il sussurro che attraversa la sala, o la porta che si chiude in silenzio",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il sussurro attraversa la sala, il grido resta in gola, la porta si chiude in silenzio: alzi o abbassi il volume di quello che c'è. Non crei suoni: pieghi quelli che esistono.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "il suono lo sente solo chi scegli tu.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "il suono arriva dove non arriverebbe: la tua voce nella stanza in fondo al corridoio.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "spegni o alzi la voce di qualcuno alla fonte, nella gola.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "il suono attraversa il muro, o il muro lo blocca del tutto.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "il suono nasce dal nulla: una voce, un motore, un colpo di pistola etc..",
+        "required": false
+      }
+    ],
+    "scopes": "Area per la stanza o la sala. Durata 1 per un attimo, 2 per la scena. Bersagli per zittire più bocche. Condizioni (malus 1) se il suono serve a distrarre."
   },
   {
     "id": "forces-2-curvare-la-luce-o-il-suono",
     "name": "Curvare la luce o il suono",
     "sphere": "forces",
     "level": 2,
-    "extras": [
+    "extras": [],
+    "text": "Pieghi la luce attorno a qualcosa e gli occhi la scavalcano, oppure pieghi il suono e nessuno la sente. Su qualcosa di fermo bastano le Forze; su un vivente che si muove serve la Vita, o la piega non gli sta dietro.",
+    "pairings": [
       {
         "sphere": "life",
-        "level": 2,
+        "text": "la piega segue il corpo in movimento: sparisci mentre corri.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "la piega si cuce a un oggetto: l'auto, la porta, la cassa etc..",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "chi guarda non si accorge nemmeno del vuoto che lasci.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "chi potrebbe vederti comunque guarda altrove.",
         "required": false
       }
     ],
-    "text": "scompari alla vista, o all'orecchio. Su un vivente in movimento: + Vita ●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Durata 1 per attraversare, 2 per la scena. Bersagli per la Cabala. Area per nascondere un luogo. Precisione (dettaglio) se pieghi solo un colore, solo una voce."
   },
   {
     "id": "forces-2-deviare-un-proiettile",
@@ -1256,9 +1595,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "acceleri o rallenti la massa in volo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Acceleri o rallenti la massa in volo: la pallottola perde il bersaglio, la freccia cade corta, il sasso torna indietro etc.. Serve vederlo partire, o sapere che parte.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "lo vedi partire in anticipo e la deviazione è pronta prima dello sparo.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "il colpo finisce da solo nel muro giusto.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "devii il colpo sparato a qualcuno lontano da te.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "la pallottola si deforma in volo, oltre a deviare.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 1 per lo scontro, 2 per la scena. Bersagli per coprire i compagni. Potenza (peso) per quello che devii: 1 la pallottola, 3 l'auto lanciata. Condizioni 1 per farlo scattare da solo: ogni colpo diretto a te."
   },
   {
     "id": "forces-2-dirigere-l-energia-in-scena",
@@ -1266,9 +1626,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "fuoco, vento, corrente: c'è già, e lo pieghi",
-    "pairings": [],
-    "scopes": ""
+    "text": "Fuoco, vento, corrente, acqua che scorre: c'è già, e lo pieghi. La fiamma si allunga verso di lui, il vento cambia lato, la scarica del quadro elettrico salta dove dici tu. Non crei energia: la guidi.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "l'energia che dirigi la evochi dal nulla.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "l'energia e la sua materia insieme: l'acqua, la sabbia, il fumo etc..",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "la corrente che guidi entra in un corpo e lo muove: i muscoli rispondono a te.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "dirigi l'energia in una stanza che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "l'energia trova da sola il punto debole: il cavo scoperto, la tenda, il serbatoio etc..",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "la fiamma rallenta o corre.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto brucia o scarica. Area per quanta energia governi (1 il camino, 2 l'incendio del piano). Durata 1 per lo scontro, 2 per la scena. Precisione (dettaglio) per guidarla in un punto solo."
   },
   {
     "id": "forces-2-governare-l-attrito",
@@ -1276,9 +1667,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "il pavimento diventa ghiaccio, o colla: chi corre se ne accorge",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il pavimento diventa ghiaccio, o colla: chi corre scivola, chi vuole fuggire resta incollato, la corda non scivola più dalle mani. Cambi quanto le cose si aggrappano l'una all'altra.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "l'attrito cambia insieme alla superficie: il pavimento è davvero ghiaccio, o davvero colla.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "la pelle di qualcuno non fa più presa: gli scivola tutto dalle mani, o gli resta attaccato.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "scivola solo chi deve scivolare.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "il corridoio che rendi ghiaccio è due piani sotto.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per la superficie (1 la stanza, 2 il palazzo). Durata 1 per un turno, 2 per la scena. Condizioni (malus 2, ostacolare) per chi ci cade. Bersagli per far scivolare solo loro."
   },
   {
     "id": "forces-2-proiettare-luce-e-suono",
@@ -1288,13 +1700,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "prime",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: un'immagine vera, visibile a chiunque, telecamere incluse",
-    "pairings": [],
-    "scopes": ""
+    "text": "Con il Primordio accanto fai nascere luce e suono dal nulla: un'immagine vera, visibile a chiunque, telecamere incluse; una voce vera, registrabile. Senza il Primordio puoi solo piegare luce e suono che ci sono già.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "la via obbligata: la luce e il suono nascono dal nulla.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "l'immagine vive solo negli occhi che scegli, e nessuno strumento la registra.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "l'immagine si appoggia a un oggetto vero: l'ologramma sul tavolo, la voce dalla radio etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "la proiezione appare in un luogo che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "la proiezione sei tu: la tua voce, la tua faccia, dove non sei.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per quanto è grande (1 la stanza). Durata 1 per un attimo, 2 per la scena. Precisione (dettaglio) per i particolari: 1 una sagoma, 3 un volto che si riconosce. Condizioni (malus 1, distrarre) se serve a ingannare."
   },
   {
     "id": "forces-2-rubare-il-calore",
@@ -1302,9 +1740,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "il gelo improvviso in una stanza; il calore tolto va comunque da qualche parte",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il gelo improvviso in una stanza, il caffè che ghiaccia in mano, il motore che si blocca dal freddo: prendi il calore che c'è. Va comunque da qualche parte: nella stanza accanto, addosso a te, nel muro. Dove, lo decidi tu.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "rubi il calore a un corpo: assideramento, dita blu, il cuore che rallenta etc..",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "il freddo entra nella materia: il metallo si spacca, l'acqua diventa ghiaccio solido.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "il calore che rubi sparisce davvero, senza andare da nessuna parte.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "rubi il calore a una stanza che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "il freddo colpisce la cosa più fragile: la tubatura, il serbatoio, il vetro etc..",
+        "required": false
+      }
+    ],
+    "scopes": "Area per la stanza o il palazzo. Potenza (danni) per quanto ferisce il gelo. Durata 2 per tenere il gelo tutta la scena. Bersagli per gelare solo loro."
   },
   {
     "id": "forces-2-spegnere-e-ravvivare",
@@ -1312,9 +1776,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "la fiamma divampa o muore, il motore riparte; dal nulla serve il Primordio",
-    "pairings": [],
-    "scopes": ""
+    "text": "La fiamma divampa o muore, il motore riparte, la torcia si spegne, il quadro torna in tensione: accendi e spegni quello che c'è. Dal nulla non parte niente: serve una scintilla, una brace, una batteria, oppure il Primordio.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "accendi dal nulla: la fiamma senza innesco, la scarica senza rete.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "ravvivi un motore rotto, o spegni un incendio togliendogli ciò che brucia.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "la fiamma si spegne o riparte proprio nel momento giusto per te.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "spegni le luci del piano di sotto.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per quante fiamme o luci (1 la stanza, 2 il palazzo). Potenza (danni) se la fiamma divampa addosso a qualcuno. Bersagli per più fuochi scelti. Condizioni 1 per farlo scattare dopo: quando entra."
   },
   {
     "id": "forces-2-vestire-uno-scudo-di-forza",
@@ -1322,9 +1807,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "un'armatura invisibile di energia smorza i colpi in arrivo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Un'armatura invisibile di energia smorza i colpi in arrivo: pugni, pallottole, cadute etc.. Sta addosso a te e a chi decidi.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "lo scudo entra nella carne e il corpo resiste per quello che è: la pelle non brucia, le ossa non si rompono.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "lo scudo veste un oggetto: l'auto, la porta, il muro etc..",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "lo scudo ferma anche la Magick.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "lo scudo ferma i colpi dall'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "chi colpisce lo scudo sbaglia anche il colpo dopo.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 1 per lo scontro, 2 per la scena, 4 per la sessione. Bersagli per la Cabala. Potenza (danni) per quanto toglie ai colpi."
   },
   {
     "id": "forces-3-camminare-dove-non-si-cammina",
@@ -1332,9 +1843,20 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "attrito e gravità insieme: la parete verticale, la superficie dell'acqua",
-    "pairings": [],
-    "scopes": ""
+    "text": "Attrito e gravità insieme: sali la parete verticale, cammini sul soffitto, attraversi il lago sulla superficie dell'acqua. I tuoi piedi trovano presa dove per gli altri non c'è.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "diventa del corpo: i piedi si aggrappano da soli, anche se corri o combatti.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "la superficie ti viene incontro: l'acqua si fa solida sotto il piede, il muro fa gradini.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 1 per la salita, 2 per la scena. Bersagli per chi viene con te. Potenza (peso) per quello che porti."
   },
   {
     "id": "forces-3-convertire-un-energia",
@@ -1342,9 +1864,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "luce in calore, suono in urto; la scarica drenata dall'ambiente",
-    "pairings": [],
-    "scopes": ""
+    "text": "Luce in calore, suono in urto, corrente in luce: l'energia che c'è cambia natura. La scarica che dreni dall'ambiente diventa il tuo fulmine; il rumore della sala diventa una spinta.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "converti la Quintessenza in energia, e viceversa.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "converti materia in energia ed energia in materia: il ghiaccio in vapore, il fumo in fiamma etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "la conversione avviene lontano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "la conversione finisce nel posto peggiore per loro.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per l'energia che ne esce. Area per quanta energia converti (1 la stanza). Durata 1 per il colpo, 2 per tenere aperta la conversione."
   },
   {
     "id": "forces-3-evocare-energia-dal-nulla",
@@ -1354,18 +1897,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "prime",
-        "level": 2,
-        "required": true
-      },
-      {
-        "sphere": "prime",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: fulmine senza rete, fiamma senza innesco. Terra e acqua: Materia ●●● + Primordio ●●",
-    "pairings": [],
-    "scopes": ""
+    "text": "Con il Primordio fai nascere il fulmine senza rete e la fiamma senza innesco: energia nuova, che non hai preso a nessuno. Terra e acqua sono materia, e chiedono la Materia oltre al Primordio.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "la via obbligata.",
+        "required": true
+      },
+      {
+        "sphere": "matter",
+        "text": "con Materia e Primordio evochi anche terra, acqua, aria, ghiaccio etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "l'energia nasce dove non sei.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "l'energia nasce dentro un corpo: la scarica nel cuore.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "nasce già puntata sul punto debole.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto colpisce. Area per quanta ne evochi (1 la stanza in fiamme). Durata 1 per una scarica, 2 per tenerla accesa. Precisione (dettaglio) per l'energia esatta: la frequenza, la temperatura."
   },
   {
     "id": "forces-3-fermare-cio-che-corre",
@@ -1373,9 +1937,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "l'auto in corsa, il treno, il corpo lanciato: la cinetica gli viene tolta",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'auto in corsa, il treno, il corpo lanciato, la valanga: la cinetica gli viene tolta e si fermano dove sono. L'energia che togli va da qualche parte: nel calore, nel rumore, nel muro.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "fermi senza strappi: l'auto si ferma intera, senza deformarsi.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "fermi un corpo senza fargli male: chi cade atterra piano.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "fermi ciò che corre lontano da te.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "fermi solo quello che deve fermarsi: l'auto sì, il bambino che attraversa no.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto fermi: 2 una persona, 3 l'auto, 4 il tir. Bersagli per più cose in corsa. Durata 1 per tenerlo fermo un turno, 2 per la scena."
   },
   {
     "id": "forces-3-levitare-e-volare",
@@ -1383,9 +1968,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "il peso ti obbedisce: sali dolcemente, o fendi il cielo di fretta",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il peso ti obbedisce: sali dolcemente, resti a mezz'aria, o fendi il cielo di fretta. Chi ti guarda vede un uomo in volo: Volgare, se non hai una spiegazione addosso.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "il corpo vola per quello che è: niente vertigini, niente freddo, il fiato regge in quota.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "voli con l'auto, con il carico, con la barca etc..",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "chi ti vede volare trova una spiegazione da solo.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "il vento gira sempre a tuo favore.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "voli anche nell'Umbra.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 1 per il salto, 2 per la scena, 4 per la traversata. Bersagli per chi vola con te. Potenza (peso) per il carico: 1 lo zaino, 3 l'auto."
   },
   {
     "id": "forces-3-onda-d-urto",
@@ -1393,9 +2004,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "il suono si fa pugno: tutto attorno al punto d'impatto vola",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il suono si fa pugno: tutto attorno al punto d'impatto vola, i vetri esplodono, la gente cade. Un colpo solo, largo.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "l'onda spacca anche il muro portante, non solo i vetri.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "l'onda colpisce i corpi e risparmia le cose, o l'inverso.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "l'onda parte da un punto lontano da te.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "l'onda sceglie: chi deve cadere cade, chi no resta in piedi.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "l'onda nasce dal nulla, senza un rumore da cui partire.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto colpisce. Area per il raggio (1 la stanza, 2 il palazzo). Bersagli per chi risparmiare. Condizioni (malus 4, stordire) per chi ci finisce dentro."
   },
   {
     "id": "forces-3-spegnere-l-elettronica",
@@ -1403,9 +2040,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "un impulso muto frigge ogni circuito nella stanza",
-    "pairings": [],
-    "scopes": ""
+    "text": "Un impulso muto frigge ogni circuito nella stanza: telefoni, telecamere, auto moderne, pacemaker etc.. Quello che era acceso è morto, e non torna.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "i circuiti fondono per davvero; oppure restano intatti, solo spenti, e si riaccendono.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "l'impulso parte in un luogo che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "friggi solo quello che deve friggere: i loro telefoni sì, il tuo no.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "risparmi quello che tiene in vita: il pacemaker, il respiratore.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "l'impulso scatta dopo, quando decidi.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per il raggio (1 la stanza, 2 il palazzo, 3 il quartiere). Bersagli per scegliere cosa risparmiare. Condizioni 1 per farlo scattare da solo: quando aprono la porta."
   },
   {
     "id": "forces-3-telecinesi",
@@ -1413,9 +2076,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "la cinetica obbedisce: sollevi, scagli, blocchi",
-    "pairings": [],
-    "scopes": ""
+    "text": "La cinetica obbedisce: sollevi, scagli, blocchi, spingi, senza toccare. Muovi la massa che c'è, non la forma.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "quello che sollevi lo plasmi anche: la sbarra si piega mentre vola.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "un corpo si muove come un corpo, non come un burattino rigido.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "muovi quello che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "quello che scagli colpisce sempre nel punto giusto.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "nessun gesto, e nessuno capisce da dove viene.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "la cosa si muove più lenta o più veloce di come dovrebbe.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto sollevi: 1 lo zaino, 2 una persona, 3 l'auto, 4 il tir. Potenza (danni) se scagli. Bersagli per più cose insieme. Durata 1 per un turno, 2 per la scena. Precisione (dettaglio) per un lavoro fine: la chiave nella toppa."
   },
   {
     "id": "forces-4-accendere-un-piccolo-sole",
@@ -1425,13 +2119,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "prime",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: una fonte stabile e autonoma, che nessuna rete alimenta",
-    "pairings": [],
-    "scopes": ""
+    "text": "Con il Primordio crei una fonte stabile e autonoma: luce, calore, corrente che nessuna rete alimenta e che non si spegne finché non lo decidi. Il santuario che non ha bisogno di nulla.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "la via obbligata.",
+        "required": true
+      },
+      {
+        "sphere": "matter",
+        "text": "la fonte ha un corpo: la lampada, la pietra, il cuore del reattore etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "la fonte alimenta anche chi è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "la fonte brilla anche nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "la fonte la vedono solo i tuoi.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto resta acceso (fuori gioco: 3 il mese, 7 per sempre). Area per quanto illumina e scalda (1 la stanza, 2 il palazzo)."
   },
   {
     "id": "forces-4-concentrare-ogni-energia",
@@ -1439,9 +2159,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 4,
     "extras": [],
-    "text": "tutta quella in scena, in un punto solo: quello che regge, dopo, è poco",
-    "pairings": [],
-    "scopes": ""
+    "text": "Tutta l'energia in scena, in un punto solo: la luce, il calore, la corrente, il moto di tutto quello che c'è convergono dove dici tu. Quello che regge, dopo, è poco.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "il punto è un oggetto e l'energia lo trasforma: la lama che fonde e si ricompone.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "il punto è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "resta in piedi esattamente quello che vuoi tu.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "concentri anche la Quintessenza del luogo.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "il punto è un corpo, e la carne prende l'energia come colpo o come nutrimento.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto colpisce. Area per quanta energia raccogli (2 il palazzo, 3 il quartiere). Precisione (dettaglio) per il punto esatto."
   },
   {
     "id": "forces-4-dominare-il-meteo",
@@ -1449,9 +2195,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 4,
     "extras": [],
-    "text": "pioggia, nebbia, gelo su un perimetro intero",
-    "pairings": [],
-    "scopes": ""
+    "text": "Pioggia, nebbia, gelo, vento, sole su un perimetro intero: il cielo fa quello che dici. Lavori con quello che il cielo ha, la nuvola che c'è, l'umidità che c'è; per la tempesta a ciel sereno serve il Primordio.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "il meteo nasce dal nulla: la tempesta a ciel sereno.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "governi anche l'acqua e la neve come materia: la grandine, il ghiaccio sulla strada.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "il meteo colpisce solo i loro campi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "cambia anche nell'Umbra, e gli spiriti del cielo obbediscono.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "il perimetro è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "il meteo arriva a orari: la nebbia ogni notte alle tre.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per il perimetro (3 il quartiere, 4 la città, 5 la regione). Durata (fuori gioco: 1 il giorno, 2 la settimana). Potenza (danni) se la tempesta ferisce. Condizioni 1 per legarlo a un evento."
   },
   {
     "id": "forces-4-proiettare-una-scena-intera",
@@ -1461,34 +2238,85 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "mind",
-        "level": 4,
+        "level": 1,
         "required": true
       },
       {
         "sphere": "prime",
-        "level": 4,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Mente ●●●● + Primordio ●●●●: la scena finta che tutti vedono e toccano",
-    "pairings": [],
-    "scopes": ""
+    "text": "Con Mente e Primordio costruisci una scena finta che tutti vedono, sentono e toccano: la stanza vuota sembra un ricevimento, il vicolo sembra un muro. Le Forze fanno la luce e il suono veri, la Mente convince, il Primordio dà la sostanza.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "la via obbligata per la convinzione.",
+        "required": true
+      },
+      {
+        "sphere": "prime",
+        "text": "la via obbligata per la sostanza.",
+        "required": true
+      },
+      {
+        "sphere": "matter",
+        "text": "la scena ha un tocco vero: il tavolo regge il bicchiere.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "la scena ha corpi caldi che respirano.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "la scena appare dove non sei.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "la scena mostra com'era ieri.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per quanto è grande (1 la stanza, 2 il palazzo). Durata 2 per la scena, 4 per la sessione. Precisione (dettaglio) per i particolari: 3 le facce, 5 il testo sui documenti. Bersagli per chi invece deve vedere la verità."
   },
   {
     "id": "forces-4-scatenare-la-tempesta",
     "name": "Scatenare la tempesta",
     "sphere": "forces",
     "level": 4,
-    "extras": [
+    "extras": [],
+    "text": "Scagli una tempesta: vento che spacca, fulmini, pioggia che acceca su un'area intera. Se c'è già un temporale lo governi e basta; a ciel sereno serve il Primordio. Tifone e tempesta di fuoco costano in Area e Potenza.",
+    "pairings": [
       {
         "sphere": "prime",
-        "level": 2,
-        "required": true
+        "text": "a ciel sereno.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "la tempesta porta grandine, sabbia, detriti etc..",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "i fulmini cadono dove servono a te.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "i tuoi non sentono la tempesta addosso.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "la tempesta cade lontano.",
+        "required": false
       }
     ],
-    "text": "+ Primordio ●● a ciel sereno; tifone e tempesta di fuoco si comprano in espansione",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Area per l'estensione (2 il palazzo, 3 il quartiere, 4 la città). Potenza (danni) per quanto colpisce. Durata 2 per la scena. Bersagli per chi risparmiare."
   },
   {
     "id": "forces-4-togliere-l-energia-a-un-area",
@@ -1496,9 +2324,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 4,
     "extras": [],
-    "text": "buio, silenzio, gelo e immobilità su un isolato: la Sfera al contrario",
-    "pairings": [],
-    "scopes": ""
+    "text": "Buio, silenzio, gelo e immobilità su un isolato: la Sfera al contrario. Niente brucia, niente scorre, niente si muove in fretta; le auto si fermano, le voci non arrivano. Dove va tutta quell'energia lo decidi tu.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "i corpi si raffreddano e rallentano.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "la materia si irrigidisce insieme: l'acqua è ghiaccio, il metallo è fragile.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "togli anche la Quintessenza: niente Magick nel perimetro.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "l'Umbra del luogo si spegne con lui.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "il perimetro è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "dentro resta acceso solo quello che vuoi tu.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per il perimetro (2 il palazzo, 3 il quartiere). Durata 2 per la scena, 4 per la sessione. Condizioni 1 per chi è esente: i tuoi. Potenza (danni) se il gelo e il buio feriscono."
   },
   {
     "id": "forces-5-inventare-un-energia-nuova",
@@ -1506,9 +2365,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 5,
     "extras": [],
-    "text": "inventi nuove regole su come funziona l'energia: il fuoco freddo, la luce che nutre, la gravità laterale",
-    "pairings": [],
-    "scopes": ""
+    "text": "Inventi nuove regole su come funziona l'energia: il fuoco freddo, la luce che nutre, la gravità laterale, il suono che si vede etc.. Non pieghi l'energia che c'è: ne scrivi una che il mondo non aveva, e il mondo la tiene finché la tieni tu.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "l'energia nuova nasce dal nulla e resta anche senza di te.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "l'energia nuova ha una materia che la porta: il cristallo che emette fuoco freddo.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "l'energia nuova vive in un corpo: il mago che brilla, il sangue che scalda le stanze.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "l'energia nuova risponde al pensiero.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "l'energia nuova vale anche nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "l'energia nuova ha un orologio suo.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (epicità) per quanto pesa l'invenzione: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione. Durata per quanto il mondo la tiene (7 per sempre). Area per dove vale."
   },
   {
     "id": "matter-1-analizzare-un-oggetto",

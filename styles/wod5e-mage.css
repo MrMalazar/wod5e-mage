@@ -5600,6 +5600,11 @@
   margin: 0 0 0.15rem;
 }
 
+/* «La via obbligata» (6/9): la compagna senza cui l'effetto non si lancia. */
+.wod5e-mage-grimorio-row > .wod5e-mage-grimorio-pairings > li.required > b {
+  color: var(--mage-oro, #d9a827);
+}
+
 .wod5e-mage-grimorio-row > .wod5e-mage-grimorio-pairings > li > img {
   align-self: center;
   border: 0;

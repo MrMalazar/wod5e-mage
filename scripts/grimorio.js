@@ -55,7 +55,9 @@ export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
               id: entry.id,
               name: entry.name,
               text: entry.text,
-              extras: (entry.extras ?? []).map((extra) => ({
+              // Nel formato nuovo (con le compagne) l'obbligo sta nell'elenco:
+              // in testa non si ripete.
+              extras: (entry.pairings?.length ? [] : (entry.extras ?? [])).map((extra) => ({
                 label: localize(`WOD5E_MAGE.Spheres.${extra.sphere}`),
                 dots: "●".repeat(extra.level),
                 required: extra.required
@@ -65,7 +67,8 @@ export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
               pairings: (entry.pairings ?? []).map((pairing) => ({
                 label: localize(`WOD5E_MAGE.Spheres.${pairing.sphere}`),
                 icon: `modules/${MODULE_ID}/assets/icons/sheet/${pairing.sphere}.png`,
-                text: pairing.text
+                text: pairing.text,
+                required: Boolean(pairing.required)
               })),
               scopes: entry.scopes ?? ""
             }))
