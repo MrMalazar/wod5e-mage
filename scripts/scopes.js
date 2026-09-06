@@ -67,7 +67,7 @@ export const SCOPE_TABLE_STEPS = 7;
 
 /** La Durata si scrive col numero e il simbolo del tempo (dal manuale). */
 const DURATION_ICONS = Object.freeze({
-  1: "tempo_scena",
+  1: "tempo_turno",
   2: "tempo_scena",
   3: "tempo_scena",
   4: "tempo_sessione",

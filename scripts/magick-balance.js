@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { lockedParadox } from "./ongoing-magick.js";
 
 export const MAGICK_TRACK_MAX = 9;
 
@@ -31,10 +32,12 @@ export function getPersistentMagickResources(actor) {
 
 /**
  * Il Paradosso permanente è il pavimento della Ruota (tronco del 3/9/2026):
- * le celle di Paradosso non scendono mai sotto quel numero.
+ * le celle di Paradosso non scendono mai sotto quel numero. Dal 6/9 il
+ * pavimento somma il permanente scritto a mano e i punti bloccati dalle
+ * Magick in atto volgari.
  */
 export function getParadoxFloor(actor) {
-  return Math.min(getPersistentMagickResources(actor).permanentParadox, MAGICK_TRACK_MAX);
+  return Math.min(getPersistentMagickResources(actor).permanentParadox + lockedParadox(actor), MAGICK_TRACK_MAX);
 }
 
 export function getMagickBalance(actor) {
@@ -78,7 +81,7 @@ export function prepareMagickTrack(actor) {
     };
   });
 
-  return { ...balance, cells, max: MAGICK_TRACK_MAX };
+  return { ...balance, cells, max: MAGICK_TRACK_MAX, locked: lockedParadox(actor) };
 }
 
 export function applyMagickBalanceDelta(balance, resource, delta, floor = 0) {

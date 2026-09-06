@@ -49,6 +49,10 @@
                         aria-label="{{localize 'WOD5E_MAGE.MagickBalance.PermanentParadox'}}"
                         {{#if locked}}disabled{{/if}}
                     >
+                    {{#if magickTrack.locked}}
+                        {{!-- I punti bloccati dalle Magick in atto volgari, sopra il permanente scritto. --}}
+                        <em class="wod5e-mage-paradox-locked" title="{{localize 'WOD5E_MAGE.MagickBalance.LockedHint'}}"><i class="fa-solid fa-lock" aria-hidden="true"></i>{{magickTrack.locked}}</em>
+                    {{/if}}
                 </label>
             </div>
         </div>
@@ -71,7 +75,9 @@
                 <span class="wod5e-mage-magick-end paradox">
                     <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1"
                             aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}"><i class="fa-solid fa-minus"></i></button>
-                    <span>{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</span>
+                    {{!-- La parola PARADOSSO è lo Scoppio: si tirano solo i rossi. --}}
+                    <button type="button" class="wod5e-mage-paradox-burst" data-action="paradoxBurst"
+                            title="{{localize 'WOD5E_MAGE.Burst.Hint'}}">{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</button>
                     <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="1"
                             aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}"><i class="fa-solid fa-plus"></i></button>
                 </span>
@@ -99,7 +105,9 @@
                 <span class="wod5e-mage-magick-end paradox">
                     <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1"
                             aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}"><i class="fa-solid fa-minus"></i></button>
-                    <span>{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</span>
+                    {{!-- La parola PARADOSSO è lo Scoppio: si tirano solo i rossi. --}}
+                    <button type="button" class="wod5e-mage-paradox-burst" data-action="paradoxBurst"
+                            title="{{localize 'WOD5E_MAGE.Burst.Hint'}}">{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</button>
                     <button type="button" data-action="magickBalanceChange" data-resource="paradox" data-delta="1"
                             aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}"><i class="fa-solid fa-plus"></i></button>
                 </span>

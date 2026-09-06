@@ -1,4 +1,4 @@
-// Generato da tools/build-strumenti.py dalle sorgenti del LIBRO M5: non toccare a mano.
+// Generato da tools/build-strumenti.py dalle sorgenti del LIBRO M6: non toccare a mano.
 // Gli Strumenti d'esempio dei tredici Credi (Sfera per Sfera, Magick e Tecnomagick),
 // gli Strumenti delle nove Tradizioni e delle dieci Craft, e quelli delle trentasei sette.
 

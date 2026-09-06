@@ -344,9 +344,9 @@
           "7": "+11"
         },
         "duration": {
-          "1": "1",
-          "2": "2",
-          "3": "3",
+          "1": "3",
+          "2": "1",
+          "3": "2",
           "4": "1",
           "5": "2",
           "6": "1",
@@ -422,6 +422,9 @@
       "Status": "Stato",
       "TriggerEffect": "Interruttore - Effetto",
       "MaintainedStatus": "Mantenuto",
+      "RunningStatus": "In corso",
+      "MaintainedLocked": "«{name}» è fra le Magick in atto: blocca 1 Paradosso permanente finché resta in piedi.",
+      "LockHint": "Volgare in piedi: 1 Paradosso permanente bloccato finché la riga non si cancella",
       "MaintainedAdded": "«{name}» è ora fra le Magick in Atto."
     },
     "Spheres": {
@@ -466,6 +469,7 @@
       "Paradox": "Paradosso",
       "GeneratedQuintessence": "Quintessenza generata",
       "PermanentParadox": "Paradosso permanente",
+      "LockedHint": "Punti bloccati dalle Magick in atto volgari, sopra il permanente scritto",
       "AddQuintessence": "Aggiungi Quintessenza",
       "RemoveQuintessence": "Rimuovi Quintessenza",
       "AddParadox": "Aggiungi Paradosso",
@@ -762,6 +766,27 @@
       "Text": "Testo",
       "TextHint": "Scrivi qui",
       "Empty": "Niente ancora: il + aggiunge un riquadro con un titolo e un testo."
+    },
+    "Burst": {
+      "Title": "Scoppio del Paradosso",
+      "Hint": "Scoppio: tira solo i rossi",
+      "Threshold": "Soglia dell'incantesimo",
+      "Dice": "Si tirano {dice} dadi Paradosso.",
+      "Roll": "Tira i rossi",
+      "NoParadox": "La Ruota non ha Paradosso: niente da tirare.",
+      "Flavor": "Scoppio: {dice} rossi, soglia {threshold}.",
+      "Result": "SCOPPIO: {eyes} occhi. Ustione {total} ({aggravated} aggravati) segnata sulla Salute; la Ruota scarica {discharged}."
+    },
+    "Volonta": {
+      "Label": "Volontà",
+      "Reroll": "Ritira",
+      "RerollHint": "Un superficiale mentale: ritira i dadi falliti più bassi",
+      "Aggravated": "Aggravato: +2",
+      "AggravatedHint": "Un aggravato mentale: due successi in più",
+      "UsedReroll": "Volontà: ritirati {dice} dadi (un superficiale mentale).",
+      "UsedAggravated": "Volontà: un aggravato mentale, +{bonus} successi.",
+      "RerollDone": "Ritirati {dice} dadi: un superficiale mentale segnato.",
+      "AggravatedDone": "Aggravato mentale segnato: +{bonus} successi, totale {total}."
     },
     "Condizioni": {
       "All": "Tutte le Condizioni",

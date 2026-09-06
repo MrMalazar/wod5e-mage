@@ -1,5 +1,5 @@
 {{!-- Copia del partial core-features.hbs del sistema (wod5e 5.3.x) con in più
-     il libro degli archivi M5 accanto al +. Da tenere allineata al sistema. --}}
+     il libro degli archivi M6 accanto al +. Da tenere allineata al sistema. --}}
 {{#each features as |feature key|}}
     <div class="category">
         <div class="feature">
@@ -9,7 +9,7 @@
                 </div>
                 <!-- Item controls for gift item sections -->
                 <div class="item-controls">
-                    {{!-- L'archivio dei Cataloghi M5 (Pregi, Difetti, Background): il libro, distinto dal + che crea da zero. --}}
+                    {{!-- L'archivio dei Cataloghi M6 (Pregi, Difetti, Background): il libro, distinto dal + che crea da zero. --}}
                     {{#unless (eq key "boon")}}
                     <a class="item-control wod5e-mage-archivio-open flex-center" data-action="archivioOpen" data-subtype="{{key}}" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}">
                         <i class="fa-solid fa-book-open"></i>

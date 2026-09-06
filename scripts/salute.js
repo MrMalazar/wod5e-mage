@@ -73,6 +73,21 @@ export function getSalute(actor) {
   };
 }
 
+/** Somma danni ai conti (pa, ps, ma, ms), senza uscire dal tracciato. */
+export function saluteWithDamage(counts, max, damage = {}) {
+  const next = { pa: count(counts?.pa), ps: count(counts?.ps), ma: count(counts?.ma), ms: count(counts?.ms) };
+  for (const state of SALUTE_ORDER) next[state] += count(damage[state]);
+  return clampSalute(next, max);
+}
+
+/** Segna danni sulla Salute del personaggio e torna i conti nuovi. */
+export async function addSaluteDamage(actor, damage = {}) {
+  const salute = getSalute(actor);
+  const next = saluteWithDamage(salute, salute.max, damage);
+  await actor.setFlag(MODULE_ID, "salute", { ...next, extra: salute.extra });
+  return next;
+}
+
 /** Applica il cambio di una casella ai conti, senza uscire dal tracciato. */
 export function applySaluteStateChange(counts, max, fromState, toState) {
   const next = { pa: count(counts?.pa), ps: count(counts?.ps), ma: count(counts?.ma), ms: count(counts?.ms) };

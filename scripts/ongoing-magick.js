@@ -6,6 +6,16 @@ const TEXT_FIELDS = Object.freeze([
   "triggerEffect"
 ]);
 
+function count(value) {
+  return Math.max(Math.trunc(Number(value) || 0), 0);
+}
+
+/**
+ * Le Magick in atto (verdetto di Blue, 6/9/2026): ogni effetto Volgare che
+ * resta in piedi, mantenuto o con una Durata dichiarata, tiene BLOCCATO un
+ * punto di Paradosso permanente sulla Ruota finché la riga non si cancella.
+ * La riga porta anche il tipo, la Durata e la soglia del lancio.
+ */
 export function prepareOngoingMagick(actor) {
   const stored = actor.getFlag(MODULE_ID, "ongoingMagick") ?? {};
 
@@ -13,8 +23,44 @@ export function prepareOngoingMagick(actor) {
     id,
     ...Object.fromEntries(
       TEXT_FIELDS.map((field) => [field, String(row?.[field] ?? "")])
-    )
+    ),
+    vulgar: Boolean(row?.vulgar),
+    duration: count(row?.duration),
+    threshold: count(row?.threshold),
+    lock: count(row?.lock)
   }));
+}
+
+/** I punti di Paradosso permanente bloccati dagli effetti in piedi. */
+export function lockedParadox(actor) {
+  const stored = actor?.getFlag?.(MODULE_ID, "ongoingMagick") ?? {};
+  return Object.values(stored).reduce((total, row) => total + count(row?.lock), 0);
+}
+
+/**
+ * La riga di un effetto appena lanciato: il nome, lo stato, il tipo, la
+ * Durata e la soglia; se è Volgare blocca un punto di Paradosso.
+ */
+export function maintainedEffectRow({ name, vulgar = false, duration = 0, threshold = 0, maintained = false, status = "" } = {}) {
+  return {
+    nameSpheres: String(name ?? "").trim(),
+    status,
+    triggerEffect: "",
+    vulgar: Boolean(vulgar),
+    duration: count(duration),
+    threshold: count(threshold),
+    maintained: Boolean(maintained),
+    lock: vulgar ? 1 : 0
+  };
+}
+
+/**
+ * Un lancio va segnato fra le Magick in atto se il giocatore lo mantiene
+ * (casella spuntata) oppure se ha dichiarato una Durata: anche senza
+ * mantenerlo ne risponde lui, e la scheda lo tiene in vista.
+ */
+export function shouldRecordEffect({ maintained = false, duration = 0 } = {}) {
+  return Boolean(maintained) || count(duration) > 0;
 }
 
 function canEditOngoingMagick(actor) {

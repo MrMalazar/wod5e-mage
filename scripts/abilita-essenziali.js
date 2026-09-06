@@ -1,5 +1,5 @@
 /**
- * Le Abilità Essenziali — canone M5 del 2026-08-19.
+ * Le Abilità Essenziali — canone M6 del 2026-08-19.
  *
  * La lista di sistema (27 voci, tradotte da Vampiri 5e) diventa la fila unica
  * alfabetica delle diciotto voci del manuale. Ogni voce vive su UNA chiave del

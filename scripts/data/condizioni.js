@@ -1,5 +1,5 @@
-// Generato da tools/build-archivi.py dalla bozza 04_BOZZE/condizioni_M5.md: non toccare a mano.
-// Le venticinque Condizioni di M5, nell'ordine della bozza, coi dadi tolti nei modificatori.
+// Generato da tools/build-archivi.py dalla bozza 04_BOZZE/condizioni_M6.md: non toccare a mano.
+// Le venticinque Condizioni di M6, nell'ordine della bozza, coi dadi tolti nei modificatori.
 
 export const CONDIZIONI = Object.freeze([
   {

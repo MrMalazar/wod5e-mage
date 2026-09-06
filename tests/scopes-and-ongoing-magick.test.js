@@ -6,9 +6,12 @@ import {
   prepareScopeTable
 } from "../scripts/scopes.js";
 import {
+  lockedParadox,
+  maintainedEffectRow,
   onOngoingMagickAdd,
   onOngoingMagickDelete,
-  prepareOngoingMagick
+  prepareOngoingMagick,
+  shouldRecordEffect
 } from "../scripts/ongoing-magick.js";
 
 function mageActor(flags = {}) {
@@ -48,7 +51,11 @@ assert.equal(table.rows[0].cells[0].label, "WOD5E_MAGE.Scopes.Table.potency.1");
 assert.equal(table.rows[1].cells[0].label, "WOD5E_MAGE.Scopes.Table.potencyDamage.1");
 assert.equal(table.rows[7].cells[6].label, "WOD5E_MAGE.Scopes.Table.range.7");
 // La Durata porta il simbolo del tempo, gli altri Ambiti no.
-assert.match(table.rows[2].cells[0].icon, /tempo_scena\.svg$/);
+// La Durata (6/9): 1 = entro 3 turni, 2 = una scena, 3 = due scene.
+assert.match(table.rows[2].cells[0].icon, /tempo_turno\.svg$/);
+assert.match(table.rows[2].cells[1].icon, /tempo_scena\.svg$/);
+const itLang = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8"));
+assert.deepEqual([1, 2, 3].map((n) => itLang.WOD5E_MAGE.Scopes.Table.duration[String(n)]), ["3", "1", "2"]);
 assert.match(table.rows[2].cells[3].icon, /tempo_sessione\.svg$/);
 assert.match(table.rows[2].cells[6].icon, /tempo_cronaca\.svg$/);
 assert.equal(table.rows[0].cells[0].icon, "");
@@ -102,6 +109,18 @@ rows = prepareOngoingMagick(mageActor({
 assert.equal(rows[0].nameSpheres, "Ward - Forces 2");
 assert.equal(rows[0].status, "Active");
 assert.equal(rows[0].triggerEffect, "At sunset");
+assert.deepEqual([rows[0].vulgar, rows[0].duration, rows[0].threshold, rows[0].lock], [false, 0, 0, 0]);
+
+// Le Magick in atto (6/9): il Volgare in piedi blocca 1 Paradosso permanente;
+// si segna quando è mantenuto o ha una Durata.
+const vulgarRow = maintainedEffectRow({ name: "Fiamma", vulgar: true, duration: 2, threshold: 4, maintained: true, status: "Mantenuto" });
+assert.deepEqual([vulgarRow.lock, vulgarRow.duration, vulgarRow.threshold, vulgarRow.vulgar, vulgarRow.nameSpheres], [1, 2, 4, true, "Fiamma"]);
+assert.equal(maintainedEffectRow({ name: "Sussurro", vulgar: false, duration: 1 }).lock, 0);
+assert.equal(shouldRecordEffect({ maintained: false, duration: 0 }), false);
+assert.equal(shouldRecordEffect({ maintained: true, duration: 0 }), true);
+assert.equal(shouldRecordEffect({ maintained: false, duration: 3 }), true);
+assert.equal(lockedParadox(mageActor({ ongoingMagick: { a: { lock: 1 }, b: { lock: 0 }, c: vulgarRow } })), 2);
+assert.equal(lockedParadox(mageActor()), 0);
 
 globalThis.foundry = {
   utils: {

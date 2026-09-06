@@ -19,6 +19,7 @@ import {
   rollSymbols
 } from "./roll-card.js";
 import { FOCUS_FORMS } from "./focus.js";
+import { maintainedEffectRow, shouldRecordEffect } from "./ongoing-magick.js";
 import { loadSpherePowers, specialtyScopes } from "./sphere-specialties.js";
 
 export const ARETE_MIN = 1;
@@ -577,6 +578,17 @@ export async function onAreteRoll(event) {
     scopes: scopeLevels.map((entry) => ({ label: `WOD5E_MAGE.Scopes.${entry.id}`, level: entry.level }))
   }, localize);
   const symbols = rollSymbols({ spheres: sphereEntries, scopes: scopeLevels, prize: prizeDice });
+  // Quel che resta del lancio dopo il tiro: nome, tipo, Durata e soglia.
+  const effect = {
+    vulgar: options.vulgar || options.witnesses,
+    duration: scopeEntries.find((entry) => entry.scopeId === "duration")?.level ?? 0,
+    threshold,
+    fallbackName: sphereEntries
+      .map((entry) => `${localize(`WOD5E_MAGE.Spheres.${entry.id}`)} ${entry.level}`)
+      .join(", ") || rollLabel
+  };
+  // L'ultima soglia lanciata: la usa lo Scoppio del Paradosso come proposta.
+  if (actor.isOwner) await actor.setFlag(MODULE_ID, "lastThreshold", threshold);
   let flavor = card;
 
   // La vittoria automatica: riserva almeno doppia della soglia, non si tira.
@@ -587,7 +599,7 @@ export async function onAreteRoll(event) {
   if (automatic && paradoxGain === 0) {
     const notes = [renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.AutoVictoryChat", { pool: dicePool, threshold }))];
     await postAutomaticVictory(actor, rollLabel, { symbols, card, notes });
-    await addMaintainedEffect(actor, result);
+    await recordEffect(actor, result, effect);
     return;
   }
 
@@ -619,7 +631,7 @@ export async function onAreteRoll(event) {
     if (paradoxRating === 0) {
       // Niente rossi da tirare: la vittoria resta automatica, e basta.
       await postAutomaticVictory(actor, rollLabel, { symbols, card, notes: [redOnly] });
-      await addMaintainedEffect(actor, result);
+      await recordEffect(actor, result, effect);
       return;
     }
   }
@@ -662,29 +674,38 @@ export async function onAreteRoll(event) {
     ui.notifications.info(game.i18n.localize("WOD5E_MAGE.MagickBalance.ParadoxReverted"));
   }
 
-  if (rolled) await addMaintainedEffect(actor, result);
+  if (rolled) await recordEffect(actor, result, effect);
 }
 
 /**
- * L'Effetto Mantenuto dichiarato nel dialogo, a tiro risolto, si scrive da
- * solo fra le Magick in Atto della pagina Magick.
+ * Il lancio, a tiro risolto, si scrive da solo fra le Magick in atto quando
+ * il giocatore lo mantiene (casella spuntata) oppure ha dichiarato una
+ * Durata (verdetto di Blue, 6/9/2026: ne risponde lui anche senza
+ * mantenerlo). Se è Volgare, la riga blocca un punto di Paradosso permanente
+ * finché resta in piedi. Torna la riga scritta, o null.
  */
-async function addMaintainedEffect(actor, result) {
-  const maintainedName = String(result.maintainedName ?? "").trim();
-  if (!isChecked(result.maintained) || !maintainedName || !actor.isOwner) return;
+export async function recordEffect(actor, result, effect = {}) {
+  const maintained = isChecked(result?.maintained);
+  if (!shouldRecordEffect({ maintained, duration: effect.duration }) || !actor.isOwner) return null;
+
+  const name = String(result?.maintainedName ?? "").trim() || String(effect.fallbackName ?? "").trim();
+  const row = maintainedEffectRow({
+    name,
+    vulgar: effect.vulgar,
+    duration: effect.duration,
+    threshold: effect.threshold,
+    maintained,
+    status: game.i18n.localize(maintained ? "WOD5E_MAGE.OngoingMagick.MaintainedStatus" : "WOD5E_MAGE.OngoingMagick.RunningStatus")
+  });
 
   const rows = { ...(actor.getFlag(MODULE_ID, "ongoingMagick") ?? {}) };
   let rowId = foundry.utils.randomID();
   while (rows[rowId]) rowId = foundry.utils.randomID();
-
-  rows[rowId] = {
-    nameSpheres: maintainedName,
-    status: game.i18n.localize("WOD5E_MAGE.OngoingMagick.MaintainedStatus"),
-    triggerEffect: ""
-  };
+  rows[rowId] = row;
 
   await actor.setFlag(MODULE_ID, "ongoingMagick", rows);
   ui.notifications.info(
-    game.i18n.format("WOD5E_MAGE.OngoingMagick.MaintainedAdded", { name: maintainedName })
+    game.i18n.format(row.lock ? "WOD5E_MAGE.OngoingMagick.MaintainedLocked" : "WOD5E_MAGE.OngoingMagick.MaintainedAdded", { name: row.nameSpheres })
   );
+  return row;
 }

@@ -2,7 +2,7 @@ import { CONDIZIONI } from "./data/condizioni.js";
 import { MODULE_ID } from "./constants.js";
 
 /**
- * Le Condizioni di M5 sulla scheda (compromesso di Blue, 4/9 notte): sopra
+ * Le Condizioni di M6 sulla scheda (compromesso di Blue, 4/9 notte): sopra
  * la striscia dei simboli accesi, sotto una tendina con tutte le venticinque
  * divise per gruppo; un clic accende, un altro spegne, e il simbolo acceso
  * resta sopra anche a tendina chiusa. Accesa, la Condizione è un oggetto
@@ -85,7 +85,7 @@ export function condizioneItemData(entry) {
     system: {
       description: entry.description,
       bonuses: entry.bonuses.map((bonus) => ({ ...bonus, paths: [...bonus.paths] })),
-      source: { book: "M5 · Le Condizioni", page: "" },
+      source: { book: "M6 · Le Condizioni", page: "" },
       effects: {},
       suppressed: false
     },

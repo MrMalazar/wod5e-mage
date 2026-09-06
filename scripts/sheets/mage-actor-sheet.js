@@ -4,6 +4,7 @@ import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../a
 import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
 import { onCondizioneToggle, prepareCondizioni, prepareConditionRows } from "../condizioni.js";
+import { onParadoxBurst } from "../paradox-burst.js";
 import { onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResets } from "../reset.js";
 import { onStrumentiSuggest } from "../strumenti.js";
@@ -114,6 +115,7 @@ export class MageActorSheet extends MortalActorSheet {
       bonusAdd: onBonusAdd,
       bonusDelete: onBonusDelete,
       contraccolpoNega: onContraccolpoNega,
+      paradoxBurst: onParadoxBurst,
       customSkillAdd: onCustomSkillAdd,
       customSkillDelete: onCustomSkillDelete,
       // Clic sinistro sceglie il segno, clic destro svuota la casella.

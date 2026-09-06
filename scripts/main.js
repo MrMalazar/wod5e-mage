@@ -6,6 +6,7 @@ import { registerLineageSpheres } from "./famiglie.js";
 import { registerRollCardRendering } from "./roll-card.js";
 import { assignCondizione, listCondizioni, openCondizioniMaster, selectedActors } from "./condizioni-master.js";
 import { findCondizione } from "./condizioni.js";
+import { registerVolonta } from "./volonta.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 
 /**
@@ -108,6 +109,7 @@ Hooks.once("init", () => {
   registerActorCreationChoice();
   registerMageDiceRendering();
   registerRollCardRendering();
+  registerVolonta();
   registerLineageSpheres();
   registerParadoxDice();
 

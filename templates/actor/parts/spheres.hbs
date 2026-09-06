@@ -60,12 +60,20 @@
 
             {{#if ongoingMagick.length}}
             <div class="wod5e-mage-ongoing-magick-grid">
+                <span aria-hidden="true"></span>
                 <span>{{localize "WOD5E_MAGE.OngoingMagick.NameSpheres"}}</span>
                 <span>{{localize "WOD5E_MAGE.OngoingMagick.Status"}}</span>
                 <span>{{localize "WOD5E_MAGE.OngoingMagick.TriggerEffect"}}</span>
                 <span aria-hidden="true"></span>
 
                 {{#each ongoingMagick as |row|}}
+                    {{!-- I segni: il lucchetto rosso del Paradosso bloccato (Volgare),
+                         la clessidra con la Durata, la soglia. --}}
+                    <span class="wod5e-mage-ongoing-marks">
+                        {{#if row.lock}}<i class="fa-solid fa-lock wod5e-mage-ongoing-lock" title="{{localize 'WOD5E_MAGE.OngoingMagick.LockHint'}}" aria-hidden="true"></i>{{/if}}
+                        {{#if row.duration}}<small title="{{localize 'WOD5E_MAGE.Scopes.duration'}}"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>{{row.duration}}</small>{{/if}}
+                        {{#if row.threshold}}<small title="{{localize 'WOD5E_MAGE.Arete.Threshold'}}"><i class="fa-solid fa-bullseye" aria-hidden="true"></i>{{row.threshold}}</small>{{/if}}
+                    </span>
                     <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.nameSpheres" value="{{row.nameSpheres}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.NameSpheres'}}" {{#if ../locked}}disabled{{/if}}>
                     <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.status" value="{{row.status}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Status'}}" {{#if ../locked}}disabled{{/if}}>
                     <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.triggerEffect" value="{{row.triggerEffect}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.TriggerEffect'}}" {{#if ../locked}}disabled{{/if}}>

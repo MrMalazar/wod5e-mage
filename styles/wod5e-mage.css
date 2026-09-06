@@ -1071,8 +1071,34 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid {
   display: grid;
   gap: 0.35rem 0.5rem;
-  grid-template-columns: minmax(0, 1fr) minmax(75px, 0.55fr) minmax(0, 1.5fr) 28px;
+  grid-template-columns: max-content minmax(0, 1fr) minmax(75px, 0.55fr) minmax(0, 1.5fr) 28px;
   margin-top: 0.75rem;
+}
+
+/* I segni della riga: il lucchetto rosso del Paradosso bloccato, la Durata,
+   la soglia. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-marks {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.35rem;
+  min-height: 26px;
+  min-width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-marks > small {
+  color: var(--mage-oro-chiaro);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-marks > small > i {
+  color: var(--mage-oro);
+  margin-right: 0.15rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-lock {
+  color: #e05a5a;
+  font-size: 0.85rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid > span {
@@ -4760,4 +4786,122 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-inventario .category .collapsible-content {
   font-size: 0.85rem;
   margin: 0.15rem 0 0.3rem 2rem;
+}
+
+/* La parola PARADOSSO sulla Ruota è un tasto: lo Scoppio, solo i rossi. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-end > .wod5e-mage-paradox-burst {
+  background: none;
+  border: none;
+  border-radius: 3px;
+  color: inherit;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font: inherit;
+  height: auto;
+  letter-spacing: inherit;
+  line-height: 1;
+  margin: 0;
+  min-height: 0;
+  padding: 0 2px;
+  text-transform: inherit;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-end > .wod5e-mage-paradox-burst:hover {
+  box-shadow: 0 0 4px #e05a5a;
+  text-shadow: 0 0 6px #e05a5a;
+}
+
+/* I punti bloccati dalle Magick in atto, accanto al Paradosso permanente. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-paradox-locked {
+  color: #e05a5a;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 700;
+  margin-left: 0.25rem;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-paradox-locked > i {
+  margin-right: 0.15rem;
+}
+
+/* La finestra dello Scoppio. */
+.wod5e-mage-burst-ask {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.wod5e-mage-burst-ask > label {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+  justify-content: space-between;
+}
+
+.wod5e-mage-burst-ask > label > input {
+  width: 70px;
+}
+
+.wod5e-mage-burst-dice {
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* La Volontà sotto il tiro in chat: i tasti del ritiro e dell'aggravato. */
+.wod5e-mage-volonta {
+  align-items: center;
+  border-top: 1px solid rgb(152 119 43 / 45%);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  padding-top: 0.35rem;
+}
+
+.wod5e-mage-volonta-label {
+  color: #d9a827;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-right: 0.2rem;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-volonta > button {
+  background: #2b2418;
+  border: 1px solid #98772b;
+  border-radius: 3px;
+  color: #f5e7b2;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  margin: 0;
+  min-height: 0;
+  padding: 0.2rem 0.45rem;
+  width: auto;
+}
+
+.wod5e-mage-volonta > button:hover:not(:disabled) {
+  border-color: #d9a827;
+  box-shadow: 0 0 4px #d9a827;
+}
+
+.wod5e-mage-volonta > button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.wod5e-mage-volonta > .wod5e-mage-volonta-aggravato {
+  border-color: #b5433c;
+  color: #f0b3ae;
+}
+
+.wod5e-mage-roll-note-volonta {
+  color: #d9a827;
+  font-style: normal;
+  font-weight: 700;
 }
