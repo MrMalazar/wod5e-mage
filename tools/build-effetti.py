@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Costruisce il Grimorio degli effetti dalle nove tavole di Sfera del LIBRO.
 
-Uso: python3 tools/build-effetti.py "<cartella della casa MAGHI M5>"
+Uso: python3 tools/build-effetti.py "<cartella della casa MAGHI M6>"
 
 Legge, in ogni 06_2_N (le nove Sfere), la tavola «Quanto vedi, quando
 guardi» (il primo pallino) e «Gli effetti, livello per livello» (dal
@@ -16,7 +16,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
-CASA = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("../MAGHI M5")
+CASA = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("../MAGHI M6")
 MAGICK = CASA / "02_LIBRO/sorgenti/06_la_magick"
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "scripts/data/effetti.js"

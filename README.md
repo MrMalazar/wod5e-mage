@@ -52,7 +52,7 @@ The Traits page is a six-cell grid: Attributes beside Conditions, Skills
 beside Specialties, the Wheel beside Bonuses (the system's Custom Rolls panel
 is gone). The Wheel carries the two persistent fields (generated
 Quintessence, permanent Paradox) and the Areté rating from one to five. Every Attribute and Skill row
-opens with its M5 sigil, gold on the sheet's dark ground. Clicking Areté opens the Magick roll dialog
+opens with its M6 sigil, gold on the sheet's dark ground. Clicking Areté opens the Magick roll dialog
 (branch A of the September 2026 playtest): the pool is Attribute + Skill +
 Skill, any one of them is enough and the chosen ones add up; Areté never
 rolls. Areté enters as the prize of the
