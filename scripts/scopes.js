@@ -36,9 +36,11 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
   // mostra il sigillo dell'Areté, il numero e la casella di Salute vuota.
   // Ogni riga dichiara le sue colonne invisibili (layout): simbolo, numero,
   // testo o casella. Dentro una colonna della tavola le celle si allineano.
-  // La Potenza in due righe: l'Effetto dice quanto è grande l'impresa, i
-  // Danni sono l'Areté più il numero (sigillo e numero, niente casella).
-  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyEffect", layout: "text" },
+  // La Potenza in tre righe (6/9): il Peso dice quanto pesa ciò che muovi,
+  // l'Epicità quanto è grande l'impresa (scala alternativa), i Danni sono
+  // l'Areté più il numero (sigillo e numero, niente casella).
+  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyWeight", layout: "text" },
+  { id: "potencyEpic", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyEpic", layout: "text" },
   { id: "potencyDamage", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyDamage", arete: true, layout: "symbol-number" },
   { id: "duration", scope: "duration", label: "WOD5E_MAGE.Scopes.DurationPlay", icons: true, layout: "symbol-number" },
   {
@@ -78,7 +80,7 @@ const DURATION_ICONS = Object.freeze({
 
 /**
  * La tavola degli Ambiti: sei righe per sette livelli (Potenza a danni per
- * livello, dal 4/9/2026).
+ * livello, dal 4/9/2026; Peso ed Epicità dal 6/9).
  */
 export function prepareScopeTable() {
   const steps = Array.from({ length: SCOPE_TABLE_STEPS }, (_, index) => index + 1);

@@ -1,14 +1,77 @@
 <form class="dialog-contents wod5e-mage-arete-form" data-arete="{{arete.value}}">
     <div class="wod5e-mage-arete-layout">
-        {{!-- Colonna sinistra: le scelte e le caselle. --}}
-        <div class="wod5e-mage-arete-side">
+        {{!-- Colonna sinistra: nome, Obiettivo, Effetto, Sfere e Ambiti a pallini. Per ogni
+             Sfera scegli il livello che usi, per ogni Ambito il livello da 1 a 7. --}}
+        {{!-- Una griglia sola: simbolo | nome | pallini. Le file sono trasparenti
+             (display: contents), così i pallini di tutte le righe partono dalla
+             stessa verticale, subito dopo il nome più lungo, a sinistra. --}}
+        <div class="wod5e-mage-arete-dots-column" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Spheres'}}">
             {{#if saveMode}}
-                {{!-- Il Grimorio del personaggio: il nome dell'incantesimo. --}}
-                <label class="wod5e-mage-arete-trait wod5e-mage-arete-spell">
+                {{!-- Il Grimorio del personaggio: il nome dell'incantesimo, in cima. --}}
+                <label class="wod5e-mage-arete-goal wod5e-mage-arete-spell">
                     <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Incantesimi.Name"}}</span>
                     <input type="text" name="spellName" id="wod5e-mage-arete-spell-name" placeholder="{{localize 'WOD5E_MAGE.Incantesimi.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Name'}}">
                 </label>
             {{/if}}
+            {{!-- L'Obiettivo: cosa vuoi ottenere, scritto a mano o scelto dal
+                 Grimorio (il libro), che accende anche le Sfere coinvolte. --}}
+            <div class="wod5e-mage-arete-goal">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Goal"}}</span>
+                <input type="text" name="goal" id="wod5e-mage-arete-goal" placeholder="{{localize 'WOD5E_MAGE.Arete.GoalHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Goal'}}">
+                <button type="button" class="wod5e-mage-archivio-open wod5e-mage-arete-grimorio" data-role="grimorioOpen" title="{{localize 'WOD5E_MAGE.Grimorio.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+            </div>
+            {{!-- L'Effetto: fisico, mentale o variabile. Dice dove va il Contraccolpo. --}}
+            <div class="wod5e-mage-arete-goal wod5e-mage-arete-effect-kind">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.EffectKind"}}</span>
+                <select name="effectKind" id="wod5e-mage-arete-effect-kind" aria-label="{{localize 'WOD5E_MAGE.Arete.EffectKind'}}">
+                    <option value="">{{localize "WOD5E_MAGE.Arete.EffectKinds.none"}}</option>
+                    <option value="physical">{{localize "WOD5E_MAGE.Arete.EffectKinds.physical"}}</option>
+                    <option value="mental">{{localize "WOD5E_MAGE.Arete.EffectKinds.mental"}}</option>
+                    <option value="variable">{{localize "WOD5E_MAGE.Arete.EffectKinds.variable"}}</option>
+                </select>
+            </div>
+            <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head">{{localize "WOD5E_MAGE.Arete.Spheres"}}</span>
+            {{#each spheres as |sphere|}}
+                <div class="wod5e-mage-arete-dotrow" data-role="dotRow" data-kind="sphere" data-id="{{sphere.id}}" data-specialty="{{sphere.specialtyScope}}">
+                    <img class="wod5e-mage-arete-row-icon" src="{{sphere.icon}}" alt="">
+                    <span class="wod5e-mage-arete-dot-label">{{localize sphere.label}}{{#if sphere.specialtyScope}} <small class="wod5e-mage-arete-specialty" title="{{localize 'WOD5E_MAGE.Arete.SpecialtyHint'}}">◆ {{localize sphere.specialtyLabel}}</small>{{/if}}</span>
+                    <input type="hidden" name="sphere-{{sphere.id}}" value="0">
+                    <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize sphere.label}}">
+                        {{#each sphere.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
+                    </span>
+                </div>
+            {{else}}
+                <p class="wod5e-mage-magick-type-hint">{{localize "WOD5E_MAGE.Arete.NoSpheres"}}</p>
+            {{/each}}
+
+            {{!-- L'icona della tavola sta a sinistra della parola. --}}
+            <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head wod5e-mage-arete-scopes-head">
+                <button type="button" class="wod5e-mage-arete-scope-table" data-role="scopeTableOpen" title="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}"><i class="fa-solid fa-table-list"></i></button>
+                {{localize "WOD5E_MAGE.Scopes.Label"}}
+            </span>
+            {{#each scopes as |scope|}}
+                <div class="wod5e-mage-arete-dotrow" data-role="dotRow" data-kind="scope" data-id="{{scope.id}}">
+                    <i class="wod5e-mage-arete-row-icon {{scope.faIcon}}" aria-hidden="true"></i>
+                    <span class="wod5e-mage-arete-dot-label">{{localize scope.label}}</span>
+                    <input type="hidden" name="scope-{{scope.id}}" value="0">
+                    <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
+                        {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
+                    </span>
+                </div>
+            {{/each}}
+
+            {{!-- Il conto, aggiornato a ogni scelta: riserva contro soglia. --}}
+            <p class="wod5e-mage-arete-difficulty">
+                {{localize "WOD5E_MAGE.Arete.Pool"}}: <strong data-role="pool">0</strong>
+                · {{localize "WOD5E_MAGE.Arete.Threshold"}}: <strong data-role="threshold">0</strong>
+                <span class="wod5e-mage-arete-autosuccess" data-role="autoSuccesses"></span>
+            </p>
+            <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Arete.ThresholdShort"}}</p>
+            <p class="wod5e-mage-arete-auto hidden" data-role="autoVictory">{{localize "WOD5E_MAGE.Arete.AutoVictory"}}</p>
+        </div>
+
+        {{!-- Colonna destra: la riserva, la narrativa, il premio, la Tipologia. --}}
+        <div class="wod5e-mage-arete-side">
             {{!-- La riserva (ramo A): Attributo, Abilità, Abilità. Ne basta uno; chi
                  ne sceglie di più somma i dadi. L'Areté non tira: è il premio. --}}
             <label class="wod5e-mage-arete-trait">
@@ -105,69 +168,6 @@
                        placeholder="{{localize 'WOD5E_MAGE.Arete.MaintainedName'}}"
                        aria-label="{{localize 'WOD5E_MAGE.Arete.MaintainedName'}}">
             </div>
-        </div>
-
-        {{!-- Colonna destra: Sfere e Ambiti a pallini, uno sotto l'altro. Per ogni
-             Sfera scegli il livello che usi, per ogni Ambito il livello da 1 a 7. --}}
-        {{!-- Una griglia sola: simbolo | nome | pallini. Le file sono trasparenti
-             (display: contents), così i pallini di tutte le righe partono dalla
-             stessa verticale, subito dopo il nome più lungo, a sinistra. --}}
-        <div class="wod5e-mage-arete-dots-column" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Spheres'}}">
-            {{!-- L'Obiettivo: cosa vuoi ottenere, scritto a mano o scelto dal
-                 Grimorio (il libro), che accende anche le Sfere coinvolte. --}}
-            <div class="wod5e-mage-arete-goal">
-                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Goal"}}</span>
-                <input type="text" name="goal" id="wod5e-mage-arete-goal" placeholder="{{localize 'WOD5E_MAGE.Arete.GoalHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Goal'}}">
-                <button type="button" class="wod5e-mage-archivio-open wod5e-mage-arete-grimorio" data-role="grimorioOpen" title="{{localize 'WOD5E_MAGE.Grimorio.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
-            </div>
-            {{!-- L'Effetto: fisico, mentale o variabile. Dice dove va il Contraccolpo. --}}
-            <div class="wod5e-mage-arete-goal wod5e-mage-arete-effect-kind">
-                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.EffectKind"}}</span>
-                <select name="effectKind" id="wod5e-mage-arete-effect-kind" aria-label="{{localize 'WOD5E_MAGE.Arete.EffectKind'}}">
-                    <option value="">{{localize "WOD5E_MAGE.Arete.EffectKinds.none"}}</option>
-                    <option value="physical">{{localize "WOD5E_MAGE.Arete.EffectKinds.physical"}}</option>
-                    <option value="mental">{{localize "WOD5E_MAGE.Arete.EffectKinds.mental"}}</option>
-                    <option value="variable">{{localize "WOD5E_MAGE.Arete.EffectKinds.variable"}}</option>
-                </select>
-            </div>
-            <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head">{{localize "WOD5E_MAGE.Arete.Spheres"}}</span>
-            {{#each spheres as |sphere|}}
-                <div class="wod5e-mage-arete-dotrow" data-role="dotRow" data-kind="sphere" data-id="{{sphere.id}}" data-specialty="{{sphere.specialtyScope}}">
-                    <img class="wod5e-mage-arete-row-icon" src="{{sphere.icon}}" alt="">
-                    <span class="wod5e-mage-arete-dot-label">{{localize sphere.label}}{{#if sphere.specialtyScope}} <small class="wod5e-mage-arete-specialty" title="{{localize 'WOD5E_MAGE.Arete.SpecialtyHint'}}">◆ {{localize sphere.specialtyLabel}}</small>{{/if}}</span>
-                    <input type="hidden" name="sphere-{{sphere.id}}" value="0">
-                    <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize sphere.label}}">
-                        {{#each sphere.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
-                    </span>
-                </div>
-            {{else}}
-                <p class="wod5e-mage-magick-type-hint">{{localize "WOD5E_MAGE.Arete.NoSpheres"}}</p>
-            {{/each}}
-
-            {{!-- L'icona della tavola sta a sinistra della parola. --}}
-            <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head wod5e-mage-arete-scopes-head">
-                <button type="button" class="wod5e-mage-arete-scope-table" data-role="scopeTableOpen" title="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}"><i class="fa-solid fa-table-list"></i></button>
-                {{localize "WOD5E_MAGE.Scopes.Label"}}
-            </span>
-            {{#each scopes as |scope|}}
-                <div class="wod5e-mage-arete-dotrow" data-role="dotRow" data-kind="scope" data-id="{{scope.id}}">
-                    <i class="wod5e-mage-arete-row-icon {{scope.faIcon}}" aria-hidden="true"></i>
-                    <span class="wod5e-mage-arete-dot-label">{{localize scope.label}}</span>
-                    <input type="hidden" name="scope-{{scope.id}}" value="0">
-                    <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
-                        {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
-                    </span>
-                </div>
-            {{/each}}
-
-            {{!-- Il conto, aggiornato a ogni scelta: riserva contro soglia. --}}
-            <p class="wod5e-mage-arete-difficulty">
-                {{localize "WOD5E_MAGE.Arete.Pool"}}: <strong data-role="pool">0</strong>
-                · {{localize "WOD5E_MAGE.Arete.Threshold"}}: <strong data-role="threshold">0</strong>
-                <span class="wod5e-mage-arete-autosuccess" data-role="autoSuccesses"></span>
-            </p>
-            <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Arete.ThresholdShort"}}</p>
-            <p class="wod5e-mage-arete-auto hidden" data-role="autoVictory">{{localize "WOD5E_MAGE.Arete.AutoVictory"}}</p>
         </div>
     </div>
 </form>

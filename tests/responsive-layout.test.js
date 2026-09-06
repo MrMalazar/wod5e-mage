@@ -211,9 +211,15 @@ const areteDialog = readFileSync(
   new URL("../templates/dialogs/arete-roll.hbs", import.meta.url),
   "utf8"
 );
-// Sfere e Ambiti: due colonne a pallini, un campo nascosto per riga, la
-// Specialità segnata sulla Sfera che ce l'ha.
-assert.match(areteDialog, /wod5e-mage-arete-layout[\s\S]*wod5e-mage-arete-side[\s\S]*name="attributeTrait"[\s\S]*name="harmony"[\s\S]*wod5e-mage-arete-types[\s\S]*name="maintained"[\s\S]*wod5e-mage-arete-dots-column[\s\S]*data-kind="sphere"[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dot[\s\S]*data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}"/);
+// Due colonne (6/9): a sinistra nome, Obiettivo, Effetto e i pallini di
+// Sfere e Ambiti (un campo nascosto per riga, la Specialità segnata sulla
+// Sfera che ce l'ha); a destra la riserva, la narrativa, il premio e la
+// Tipologia.
+assert.match(areteDialog, /wod5e-mage-arete-layout[\s\S]*wod5e-mage-arete-dots-column[\s\S]*name="spellName"[\s\S]*name="goal"[\s\S]*name="effectKind"[\s\S]*data-kind="sphere"[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dot[\s\S]*data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}"[\s\S]*wod5e-mage-arete-side[\s\S]*name="attributeTrait"[\s\S]*name="narrative"[\s\S]*name="harmony"[\s\S]*wod5e-mage-arete-types[\s\S]*name="maintained"/);
+assert.match(css, /\.wod5e-mage-arete-layout\s*\{[^}]*grid-template-columns: minmax\(250px, 1\.1fr\) minmax\(230px, 0\.9fr\);/s);
+// Nel Grimorio degli effetti la testata di ogni Sfera sta al centro:
+// simbolo sopra, nome sotto.
+assert.match(css, /\.wod5e-mage-grimorio-sphere > summary > h3\s*\{[^}]*flex-direction: column;[^}]*text-align: center;/s);
 // Le file a pallini non portano più la classe della vecchia riga flex.
 assert.doesNotMatch(areteDialog, /wod5e-mage-arete-dotrow wod5e-mage-arete-sphere"/);
 assert.match(areteDialog, /data-specialty="\{\{sphere\.specialtyScope\}\}"/);
@@ -223,7 +229,7 @@ assert.doesNotMatch(areteDialog, /scopeRowTemplate|data-role="scopeAdd"|wod5e-ma
 assert.match(areteDialog, /RollSelection\.Attribute"[\s\S]*name="attributeTrait"[\s\S]*RollSelection\.Ability"[\s\S]*name="primaryTrait"[\s\S]*RollSelection\.Ability"[\s\S]*name="secondaryTrait"/);
 assert.match(areteDialog, /data-role="scopeTableOpen"/);
 assert.doesNotMatch(areteDialog, /name="primarySkill"|name="arete"|Arete\.Include/);
-assert.match(areteDialog, /Arete\.Prize"[\s\S]*name="prize"[\s\S]*Arete\.PrizeHybrid[\s\S]*name="harmony"[\s\S]*data-role="pool"[\s\S]*data-role="threshold"[\s\S]*data-role="autoVictory"/);
+assert.match(areteDialog, /data-role="pool"[\s\S]*data-role="threshold"[\s\S]*data-role="autoVictory"[\s\S]*Arete\.Prize"[\s\S]*name="prize"[\s\S]*Arete\.PrizeHybrid[\s\S]*name="harmony"/);
 // L'Armonia è un numero: i dadi degli altri Maghi, contati al tavolo.
 assert.match(areteDialog, /name="harmony"[^>]*type="number"|type="number"[^>]*name="harmony"/);
 // Le spiegazioni della Tipologia vivono in una colonna staccata a destra.

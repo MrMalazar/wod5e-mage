@@ -46,7 +46,7 @@ assert.deepEqual(paintSalute({ pa: 0, ps: 3, ma: 0, ms: 3 }, 5), ["ps", "ps", "p
 const card = renderRollCard({ goal: "Invisibilità", effectKind: "WOD5E_MAGE.Arete.EffectKinds.physical", threshold: 2 }, (k) => k);
 assert.match(card, /WOD5E_MAGE\.Arete\.Goal<\/b> Invisibilità[\s\S]*WOD5E_MAGE\.Arete\.EffectKind<\/b> WOD5E_MAGE\.Arete\.EffectKinds\.physical/);
 const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
-assert.match(dialog, /name="harmony"[\s\S]*name="quintessence"[\s\S]*name="goal"[\s\S]*data-role="grimorioOpen"[\s\S]*name="effectKind"[\s\S]*Arete\.Spheres/);
+assert.match(dialog, /name="goal"[\s\S]*data-role="grimorioOpen"[\s\S]*name="effectKind"[\s\S]*Arete\.Spheres[\s\S]*name="harmony"[\s\S]*name="quintessence"/);
 const grimorioTemplate = readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8");
 assert.match(grimorioTemplate, /data-role="grimorioSearch"[\s\S]*data-effetto="\{\{entry\.id\}\}"/);
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");

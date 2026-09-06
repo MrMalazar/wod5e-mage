@@ -350,17 +350,26 @@
       "conditions": "Condizioni",
       "range": "Portata",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza (Effetto): quanto è grande l'impresa. Potenza (Danni): l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
+      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza (Peso): quanto pesa ciò che muovi. Potenza (Epicità): quanto è grande l'impresa, in alternativa al Peso. Potenza (Danni): l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
       "TableSuccesses": "Livello →",
       "Table": {
         "potency": {
-          "1": "Una sedia",
-          "2": "Un'auto",
-          "3": "Un furgone",
-          "4": "Un tir",
-          "5": "Una casa",
-          "6": "Un palazzo",
+          "1": "10 kg (una valigia)",
+          "2": "100 kg (una persona)",
+          "3": "2 t (un'auto)",
+          "4": "40 t (un tir)",
+          "5": "400 t (una casa)",
+          "6": "500.000 t (un grattacielo)",
           "7": "Una montagna"
+        },
+        "potencyEpic": {
+          "1": "Un trucco da salotto",
+          "2": "Un'impresa da atleta",
+          "3": "Un record del mondo",
+          "4": "Un miracolo",
+          "5": "Una leggenda",
+          "6": "Un mito",
+          "7": "Un atto divino"
         },
         "potencyDamage": {
           "1": "+0",
@@ -417,13 +426,13 @@
           "7": "Ovunque sia"
         },
         "precision": {
-          "1": "Quella cosa lì",
-          "2": "L'auto blu",
-          "3": "L'uomo col sopracciglio alzato nella folla",
-          "4": "La chiave giusta nel mazzo",
-          "5": "L'ago nel pagliaio",
-          "6": "Quella molecola d'idrogeno",
-          "7": "Quell'atomo, in quell'istante"
+          "1": "Una cosa a caso, lì intorno",
+          "2": "Un'auto qualunque",
+          "3": "Quell'auto",
+          "4": "Il motore di quell'auto",
+          "5": "Una vite del motore",
+          "6": "Un granello di ruggine sulla vite",
+          "7": "Un atomo di quel granello"
         },
         "durationNarrative": {
           "1": "Un giorno",
@@ -438,7 +447,8 @@
       "precision": "Precisione",
       "DurationPlay": "Durata (gioco)",
       "DurationNarrative": "Durata (narrativa)",
-      "PotencyEffect": "Potenza (Effetto)",
+      "PotencyWeight": "Potenza (Peso)",
+      "PotencyEpic": "Potenza (Epicità)",
       "PotencyDamage": "Potenza (Danni)"
     },
     "OngoingMagick": {
