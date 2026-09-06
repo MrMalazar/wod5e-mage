@@ -97,7 +97,7 @@ export async function openGrimorio(sphereLevels) {
       const search = root.querySelector("[data-role=grimorioSearch]");
       search?.addEventListener("input", () => {
         const wanted = search.value.trim().toLowerCase();
-        root.querySelectorAll("[data-effetto]").forEach((row) => {
+        root.querySelectorAll(".wod5e-mage-grimorio-row").forEach((row) => {
           row.hidden = Boolean(wanted) && !row.textContent.toLowerCase().includes(wanted);
         });
       });

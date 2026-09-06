@@ -34,7 +34,9 @@
       "Factions": {
         "tradizioni": "The nine Traditions",
         "disparati": "The ten Crafts of the Disparate"
-      }
+      },
+      "CredoSphere": "Family Sphere of the Creed",
+      "CredoSphereNone": "Sphere…"
     },
     "Experience": {
       "Remaining": "Remaining",
@@ -840,6 +842,18 @@
       "Saved": "“{name}” is in the Grimoire.",
       "Unnamed": "Unnamed",
       "Empty": "No spells: the + opens the roll window and saves instead of rolling."
+    },
+    "GrimorioComune": {
+      "Label": "Shared Grimoire (M6)",
+      "Open": "Open the shared Grimoire",
+      "Share": "Pour into the shared Grimoire",
+      "Copy": "Copy to your Grimoire",
+      "Search": "Search a spell…",
+      "Author": "Written by",
+      "NoCredo": "No Creed",
+      "Empty": "The shared Grimoire is empty: from your page, the up arrow pours a spell in.",
+      "Missing": "The shared Grimoire does not exist yet: the Storyteller creates it by entering the world.",
+      "Shared": "“{name}” is in the shared Grimoire."
     }
   }
 }

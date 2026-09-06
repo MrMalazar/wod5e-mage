@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { spellFromResult } from "../scripts/arete.js";
 import { prepareIncantesimo, prepareIncantesimi, INCANTESIMI_FLAG } from "../scripts/incantesimi.js";
+import { groupSharedSpells, sharedItemData, SHARED_PACK_NAME } from "../scripts/grimorio-comune.js";
 
 // Il Grimorio del personaggio (6/9): la finestra del tiro in modo «salva» torna l'incantesimo.
 const traits = {
@@ -61,5 +62,24 @@ const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf
 assert.match(arete, /export async function launchArete\(actor, \{ mode = "roll", preset = null \} = \{\}\)/);
 assert.match(arete, /if \(saveMode\) \{\s*return spellFromResult/);
 assert.match(arete, /applyAretePreset\(dialog, preset\)/);
+
+// Il Grimorio comune (6/9): la voce del compendio porta il testo leggibile e i dati per il tiro.
+const shared = sharedItemData(spell, { author: "Claudio", localize: (key) => key.split(".").pop() });
+assert.equal(shared.type, "feature");
+assert.equal(shared.name, "Riavvolgere Scena");
+assert.match(shared.img, /time\.png$/);
+assert.match(shared.system.description, /Author:<\/strong> Claudio[\s\S]*Credo:<\/strong> dati[\s\S]*Narrative:<\/strong> Su, su/);
+assert.equal(shared.flags["wod5e-mage"].incantesimo.author, "Claudio");
+assert.deepEqual(shared.flags["wod5e-mage"].incantesimo.spheres, { time: 3 });
+const groups = groupSharedSpells([{ credo: "Tutto è Dati", name: "A" }, { credo: "", name: "B" }, { credo: "Tutto è Dati", name: "C" }], (k) => "Senza");
+assert.deepEqual(groups.map((g) => [g.credo, g.spells.length]), [["Tutto è Dati", 2], ["Senza", 1]]);
+assert.equal(SHARED_PACK_NAME, "grimorio-comune");
+assert.match(page, /data-action="grimorioComuneOpen"[\s\S]*data-action="incantesimoShare"/);
+const comune = readFileSync(new URL("../templates/dialogs/grimorio-comune.hbs", import.meta.url), "utf8");
+assert.match(comune, /data-spell="\{\{spell\.id\}\}"[\s\S]*data-shared-action="roll"[\s\S]*data-shared-action="copy"/);
+assert.match(readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"), /registerGrimorioComune\(\)/);
+// Il Grimorio degli effetti: Sfere a tendina, ogni effetto una riga col come a richiesta.
+const effetti = readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8");
+assert.match(effetti, /<details class="wod5e-mage-grimorio-sphere" open>[\s\S]*<details class="wod5e-mage-grimorio-row">[\s\S]*class="wod5e-mage-grimorio-pick" data-effetto="\{\{entry\.id\}\}"[\s\S]*<p>\{\{entry\.text\}\}<\/p>/);
 
 console.log("Grimorio del personaggio: test passati.");

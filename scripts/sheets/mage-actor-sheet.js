@@ -6,6 +6,7 @@ import { onArchivioOpen } from "../archivi.js";
 import { onCondizioneToggle, prepareCondizioni, prepareConditionRows } from "../condizioni.js";
 import { onParadoxBurst } from "../paradox-burst.js";
 import { onIncantesimoAdd, onIncantesimoChat, onIncantesimoDelete, onIncantesimoEdit, onIncantesimoRoll, prepareIncantesimi } from "../incantesimi.js";
+import { onGrimorioComuneOpen, onIncantesimoShare } from "../grimorio-comune.js";
 import { onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResets } from "../reset.js";
 import { onStrumentiSuggest } from "../strumenti.js";
@@ -25,7 +26,7 @@ import {
   prepareExperiencePage
 } from "../experience-window.js";
 import { prepareFocus } from "../focus.js";
-import { credoSphereBadges, prepareLineageChoices } from "../famiglie.js";
+import { credoSphereBadges, isFreeCredo, prepareCredoSphereChoices, prepareLineageChoices } from "../famiglie.js";
 import { FOCUS_CREDOS } from "../focus.js";
 import { getLineage } from "../lineage.js";
 import {
@@ -112,6 +113,8 @@ export class MageActorSheet extends MortalActorSheet {
       incantesimoDelete: onIncantesimoDelete,
       incantesimoRoll: onIncantesimoRoll,
       incantesimoChat: onIncantesimoChat,
+      incantesimoShare: onIncantesimoShare,
+      grimorioComuneOpen: onGrimorioComuneOpen,
       noteAdd: onNoteAdd,
       noteDelete: onNoteDelete,
       areteChange: onAreteChange,
@@ -377,7 +380,11 @@ export class MageActorSheet extends MortalActorSheet {
       const credo = String(actor.getFlag(MODULE_ID, "focus")?.credo ?? "");
       context.credos = FOCUS_CREDOS.map((id) => ({ id, label: localize(`WOD5E_MAGE.Focus.Credos.${id}`), selected: id === credo }));
       context.credoLabel = FOCUS_CREDOS.includes(credo) ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "";
-      context.credoSpheres = credoSphereBadges(credo, localize);
+      const credoChoice = actor.getFlag(MODULE_ID, "focus")?.credoSpheres ?? {};
+      context.credoSpheres = credoSphereBadges(credo, localize, credoChoice);
+      // Potere e Scienza: le due Sfere di famiglia le sceglie il giocatore.
+      context.credoFree = isFreeCredo(credo);
+      context.credoSphereChoices = prepareCredoSphereChoices(credoChoice, localize);
       // Il nome del giocatore, sotto quello del personaggio.
       context.playerName = String(actor.getFlag(MODULE_ID, "player") ?? "");
     }

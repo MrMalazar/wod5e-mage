@@ -126,6 +126,23 @@ export const CREDO_SPHERES = Object.freeze({
   vivo: ["life", "forces"]
 });
 
+/** I Credi «sciolti»: Potere e Scienza non hanno Sfere fisse, le sceglie il giocatore. */
+export function isFreeCredo(credo) {
+  return Object.hasOwn(CREDO_SPHERES, credo) && CREDO_SPHERES[credo].length === 0;
+}
+
+/** Le due Sfere scelte per un Credo sciolto (flag focus.credoSpheres), pulite. */
+export function chosenCredoSpheres(choice) {
+  const picks = [choice?.first, choice?.second].map((id) => String(id ?? "")).filter((id) => SPHERES.includes(id));
+  return picks.filter((id, index) => picks.indexOf(id) === index);
+}
+
+/** Le Sfere di famiglia del Credo: le sue fisse, o le due scelte se è sciolto. */
+export function credoSpheresFor(credo, choice) {
+  if (isFreeCredo(credo)) return chosenCredoSpheres(choice);
+  return [...(CREDO_SPHERES[credo] ?? [])];
+}
+
 export function findFamiglia(id) {
   return FAMIGLIE.find((famiglia) => famiglia.id === id) ?? null;
 }
@@ -138,13 +155,13 @@ export function findSottofamiglia(famigliaId, id) {
  * Le Sfere che l'appartenenza porta: Famiglia e Sottofamiglia a 1,
  * il Credo di sola presenza.
  */
-export function lineageSpheres({ famiglia = "", sottofamiglia = "", credo = "" } = {}) {
+export function lineageSpheres({ famiglia = "", sottofamiglia = "", credo = "", credoSpheres = null } = {}) {
   const dotted = [];
   const family = findFamiglia(famiglia);
   if (family?.sphere) dotted.push(family.sphere);
   const sub = findSottofamiglia(famiglia, sottofamiglia);
   if (sub?.sphere && !dotted.includes(sub.sphere)) dotted.push(sub.sphere);
-  const present = (CREDO_SPHERES[credo] ?? []).filter((id) => !dotted.includes(id));
+  const present = credoSpheresFor(credo, credoSpheres).filter((id) => !dotted.includes(id));
   return { dotted, present };
 }
 
@@ -158,7 +175,9 @@ export function lineageSphereChanges(before, changes) {
   const flags = changes?.flags?.[MODULE_ID] ?? {};
   const lineageChange = flags.lineage ?? null;
   const credoChange = flags.focus && Object.hasOwn(flags.focus, "credo") ? String(flags.focus.credo ?? "") : null;
-  if (!lineageChange && credoChange === null) return null;
+  // Le due Sfere scelte per un Credo sciolto (Potere, Scienza).
+  const choiceChange = flags.focus && Object.hasOwn(flags.focus, "credoSpheres") ? flags.focus.credoSpheres : null;
+  if (!lineageChange && credoChange === null && choiceChange === null) return null;
 
   const current = before.lineage ?? {};
   const famiglia = lineageChange && Object.hasOwn(lineageChange, "famiglia") ? String(lineageChange.famiglia ?? "") : String(current.famiglia ?? "");
@@ -170,6 +189,8 @@ export function lineageSphereChanges(before, changes) {
   const subChanged = sottofamiglia !== String(current.sottofamiglia ?? "");
   const credo = credoChange ?? String(before.credo ?? "");
   const credoChanged = credoChange !== null && credo !== String(before.credo ?? "");
+  const choice = { ...(before.credoSpheres ?? {}), ...(choiceChange ?? {}) };
+  const choiceChanged = choiceChange !== null && chosenCredoSpheres(choice).join() !== chosenCredoSpheres(before.credoSpheres).join();
 
   const out = { lineage: {}, selectedSpheres: {}, familySpheres: {}, spheres: {} };
   if (sottofamiglia !== requestedSub) out.lineage.sottofamiglia = sottofamiglia;
@@ -183,7 +204,7 @@ export function lineageSphereChanges(before, changes) {
   };
   if (familyChanged) unlock(findFamiglia(famiglia)?.sphere, true);
   if (subChanged) unlock(findSottofamiglia(famiglia, sottofamiglia)?.sphere, true);
-  if (credoChanged) for (const id of CREDO_SPHERES[credo] ?? []) unlock(id, false);
+  if (credoChanged || (choiceChanged && isFreeCredo(credo))) for (const id of credoSpheresFor(credo, choice)) unlock(id, false);
 
   // Il Credo scelto scrive cos'è ogni Sfera nella sua ottica (studi dei Credi),
   // solo nelle caselle vuote: le parole del giocatore restano sue.
@@ -247,8 +268,17 @@ export function prepareLineageChoices(lineage, localize = (key) => key) {
 }
 
 /** I simboli delle due Sfere affini del Credo (Potere e Scienza: nessuno). */
-export function credoSphereBadges(credo, localize = (key) => key) {
-  return (CREDO_SPHERES[credo] ?? []).map((id) => sphereBadge(id, localize)).filter(Boolean);
+export function credoSphereBadges(credo, localize = (key) => key, choice = null) {
+  return credoSpheresFor(credo, choice).map((id) => sphereBadge(id, localize)).filter(Boolean);
+}
+
+/** Le tendine delle due Sfere per un Credo sciolto: tutte e nove, con la scelta segnata. */
+export function prepareCredoSphereChoices(choice, localize = (key) => key) {
+  const picks = { first: String(choice?.first ?? ""), second: String(choice?.second ?? "") };
+  return ["first", "second"].map((slot) => ({
+    slot,
+    options: SPHERES.map((id) => ({ id, label: localize(`WOD5E_MAGE.Spheres.${id}`), selected: picks[slot] === id }))
+  }));
 }
 
 export function sphereBadge(id, localize) {
@@ -262,6 +292,7 @@ export function lineageStateOf(actor) {
   return {
     lineage: actor.getFlag(MODULE_ID, "lineage") ?? {},
     credo: focus.credo ?? "",
+    credoSpheres: focus.credoSpheres ?? {},
     sphereNotes: focus.sphereNotes ?? {},
     spheres: actor.getFlag(MODULE_ID, "spheres") ?? {}
   };

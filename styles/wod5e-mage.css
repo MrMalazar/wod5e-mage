@@ -4997,30 +4997,84 @@
   letter-spacing: 0.1em;
 }
 
+/* Ogni effetto è una riga a tendina: il nome (un tasto) sceglie, la
+   freccina apre il come. */
 .wod5e-mage-grimorio-row {
   background: rgb(255 250 240 / 5%);
   border: 1px solid rgb(152 119 43 / 35%);
   border-radius: 4px;
-  color: inherit;
-  cursor: pointer;
-  display: grid;
-  gap: 0.15rem 0.5rem;
-  grid-template-columns: minmax(0, 1fr) auto;
-  line-height: 1.25;
   margin: 0 0 0.3rem;
-  padding: 0.3rem 0.5rem;
-  text-align: left;
-  width: 100%;
+  padding: 0.25rem 0.5rem;
 }
 
-.wod5e-mage-grimorio-row:hover {
-  border-color: var(--mage-oro, #d9a827);
-  box-shadow: 0 0 4px var(--mage-oro, #d9a827);
+.wod5e-mage-grimorio-row > summary {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
 }
 
-.wod5e-mage-grimorio-row > strong {
+.wod5e-mage-grimorio-row > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage-grimorio-row > summary > i {
+  color: var(--mage-oro, #d9a827);
+  flex: 0 0 auto;
+  font-size: 0.65rem;
+  transition: transform 0.15s ease;
+}
+
+.wod5e-mage-grimorio-row:not([open]) > summary > i {
+  transform: rotate(-90deg);
+}
+
+.wod5e-mage-grimorio-pick {
+  background: transparent;
+  border: none;
   color: var(--mage-oro-chiaro, #f5e7b2);
+  cursor: pointer;
+  flex: 1 1 auto;
   font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  min-height: 0;
+  min-width: 0;
+  padding: 0.15rem 0.2rem;
+  text-align: left;
+  width: auto;
+}
+
+.wod5e-mage-grimorio-pick:hover {
+  color: var(--mage-oro, #d9a827);
+  text-shadow: 0 0 6px rgb(217 168 39 / 60%);
+}
+
+.wod5e-mage-grimorio-row > p {
+  border-top: 1px solid rgb(152 119 43 / 30%);
+  color: var(--mage-testo, #e6dcc2);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  margin: 0.3rem 0 0.15rem;
+  padding-top: 0.3rem;
+}
+
+.wod5e-mage-grimorio-sphere > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.wod5e-mage-grimorio-sphere > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage-grimorio-sphere > summary > h3 > small {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 0.75rem;
+  font-weight: 400;
+  margin-left: auto;
 }
 
 .wod5e-mage-grimorio-extras {
@@ -5041,12 +5095,6 @@
   color: var(--mage-oro, #d9a827);
 }
 
-.wod5e-mage-grimorio-row > small {
-  color: var(--mage-testo, #e6dcc2);
-  font-size: 0.78rem;
-  grid-column: 1 / -1;
-  opacity: 0.9;
-}
 
 .wod5e-mage-grimorio-empty {
   color: var(--mage-tenue, #b8ad93);
@@ -5238,4 +5286,129 @@
   font-size: 1.05rem;
   font-weight: 700;
   margin: 0 0 0.25rem;
+}
+
+/* Il Grimorio comune: una scheda per incantesimo, con chi l'ha scritto. */
+.wod5e-mage-shared-spell {
+  background: rgb(255 250 240 / 5%);
+  border: 1px solid rgb(152 119 43 / 35%);
+  border-radius: 4px;
+  margin: 0 0 0.35rem;
+  padding: 0.3rem 0.55rem 0.4rem;
+}
+
+.wod5e-mage-shared-spell > header {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.wod5e-mage-shared-spell > header > strong {
+  color: var(--mage-oro-chiaro, #f5e7b2);
+  flex: 1 1 auto;
+  font-size: 0.95rem;
+  min-width: 0;
+}
+
+.wod5e-mage-shared-spell > header > em {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 0.75rem;
+  font-style: normal;
+  white-space: nowrap;
+}
+
+.wod5e-mage-shared-spell .wod5e-mage-incantesimo-sphere {
+  align-items: center;
+  color: var(--mage-oro, #d9a827);
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.wod5e-mage-shared-spell .wod5e-mage-incantesimo-sphere > img {
+  border: none;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  height: 18px;
+  width: 18px;
+}
+
+.wod5e-mage-shared-spell .wod5e-mage-incantesimo-type {
+  border: 1px solid rgb(152 119 43 / 45%);
+  border-radius: 3px;
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 0.65rem;
+  padding: 0.05rem 0.35rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage-shared-spell .wod5e-mage-incantesimo-type.vulgar,
+.wod5e-mage-shared-spell .wod5e-mage-incantesimo-type.witnesses {
+  border-color: #b5433c;
+  color: #f0b3ae;
+}
+
+.wod5e-mage-shared-spell .wod5e-mage-incantesimo-controls {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.wod5e-mage-shared-spell .wod5e-mage-incantesimo-controls > button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  border-radius: 3px;
+  color: var(--mage-oro, #d9a827);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 24px;
+  font-size: 0.75rem;
+  height: 24px;
+  justify-content: center;
+  margin: 0;
+  min-height: 0;
+  padding: 0;
+  width: 24px;
+}
+
+.wod5e-mage-shared-spell > small {
+  color: var(--mage-tenue, #ab9f85);
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.15rem;
+}
+
+.wod5e-mage-shared-spell > p {
+  color: var(--mage-testo, #e6dcc2);
+  font-size: 0.82rem;
+  margin: 0.25rem 0 0;
+}
+
+.wod5e-mage-shared-spell > details > summary {
+  color: var(--mage-oro, #d9a827);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-top: 0.2rem;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-shared-spell > details > p {
+  color: var(--mage-testo, #e6dcc2);
+  font-size: 0.82rem;
+  margin: 0.2rem 0 0;
+  white-space: pre-wrap;
+}
+
+/* Potere e Scienza: le due tendine delle Sfere di famiglia, sotto il Credo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-credo-spheres {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.3rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza-credo-spheres > select {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
 }

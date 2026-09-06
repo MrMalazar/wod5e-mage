@@ -34,7 +34,9 @@
       "Factions": {
         "tradizioni": "Le nove Tradizioni",
         "disparati": "Le dieci Craft dei Disparati"
-      }
+      },
+      "CredoSphere": "Sfera di famiglia del Credo",
+      "CredoSphereNone": "Sfera…"
     },
     "Experience": {
       "Remaining": "Rimanenti",
@@ -840,6 +842,18 @@
       "Saved": "«{name}» è nel Grimorio.",
       "Unnamed": "Senza nome",
       "Empty": "Nessun incantesimo: il + apre la finestra del tiro, e invece di tirare salva."
+    },
+    "GrimorioComune": {
+      "Label": "Grimorio comune (M6)",
+      "Open": "Apri il Grimorio comune",
+      "Share": "Versa nel Grimorio comune",
+      "Copy": "Copia nel tuo Grimorio",
+      "Search": "Cerca un incantesimo…",
+      "Author": "Scritto da",
+      "NoCredo": "Senza Credo",
+      "Empty": "Il Grimorio comune è vuoto: dalla tua pagina, la freccia in su versa un incantesimo.",
+      "Missing": "Il Grimorio comune non c'è ancora: lo crea il Narratore entrando nel mondo.",
+      "Shared": "«{name}» è nel Grimorio comune."
     }
   },
   "WOD5E": {

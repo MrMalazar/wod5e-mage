@@ -7,6 +7,7 @@ import { registerRollCardRendering } from "./roll-card.js";
 import { assignCondizione, listCondizioni, openCondizioniMaster, selectedActors } from "./condizioni-master.js";
 import { findCondizione } from "./condizioni.js";
 import { registerVolonta } from "./volonta.js";
+import { registerGrimorioComune } from "./grimorio-comune.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 
 /**
@@ -110,6 +111,7 @@ Hooks.once("init", () => {
   registerMageDiceRendering();
   registerRollCardRendering();
   registerVolonta();
+  registerGrimorioComune();
   registerLineageSpheres();
   registerParadoxDice();
 

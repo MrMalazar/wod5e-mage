@@ -1,0 +1,32 @@
+{{!-- Il Grimorio comune: gli incantesimi di tutto il tavolo, per Credo.
+     Copia nel tuo, oppure lancia subito. --}}
+<div class="wod5e-mage-grimorio-body">
+    <input type="search" class="wod5e-mage-grimorio-search" data-role="grimorioSearch" placeholder="{{localize 'WOD5E_MAGE.GrimorioComune.Search'}}" aria-label="{{localize 'WOD5E_MAGE.GrimorioComune.Search'}}">
+    {{#each groups as |group|}}
+        <details class="wod5e-mage-grimorio-sphere" open>
+            <summary><h3>{{group.credo}} <small>{{group.spells.length}}</small></h3></summary>
+            {{#each group.spells as |spell|}}
+                <article class="wod5e-mage-shared-spell" data-spell="{{spell.id}}">
+                    <header>
+                        <span class="wod5e-mage-incantesimo-spheres">{{#each spell.spheres as |s|}}<span class="wod5e-mage-incantesimo-sphere" title="{{s.label}} {{s.level}}"><img src="{{s.icon}}" alt="">{{s.level}}</span>{{/each}}</span>
+                        <strong>{{spell.name}}</strong>
+                        {{#if spell.author}}<em>{{spell.author}}</em>{{/if}}
+                        <span class="wod5e-mage-incantesimo-type {{spell.magickTypeId}}">{{spell.magickType}}</span>
+                        <span class="wod5e-mage-incantesimo-controls">
+                            <button type="button" data-shared-action="roll" title="{{localize 'WOD5E_MAGE.Incantesimi.Roll'}}"><i class="fa-solid fa-dice-d10"></i></button>
+                            <button type="button" data-shared-action="copy" title="{{localize 'WOD5E_MAGE.GrimorioComune.Copy'}}"><i class="fa-solid fa-download"></i></button>
+                        </span>
+                    </header>
+                    <small>
+                        {{#if spell.practiceForm}}{{spell.practiceForm}} · {{/if}}{{#if spell.instruments}}{{spell.instruments}} · {{/if}}{{#if spell.traits}}{{spell.traits}}{{/if}}
+                        {{#if spell.scopes.length}} · {{#each spell.scopes as |s|}}{{s.label}} {{s.level}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}
+                    </small>
+                    {{#if spell.goal}}<p>{{spell.goal}}</p>{{/if}}
+                    {{#if spell.narrative}}<details><summary>{{localize "WOD5E_MAGE.Incantesimi.Narrative"}}</summary><p>{{spell.narrative}}</p></details>{{/if}}
+                </article>
+            {{/each}}
+        </details>
+    {{else}}
+        <p class="wod5e-mage-grimorio-empty">{{localize "WOD5E_MAGE.GrimorioComune.Empty"}}</p>
+    {{/each}}
+</div>

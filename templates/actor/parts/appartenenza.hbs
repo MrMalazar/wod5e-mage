@@ -55,5 +55,18 @@
                 </select>
             </div>
         </label>
+        {{#if credoFree}}
+            {{!-- Potere e Scienza: le due Sfere di famiglia le sceglie il giocatore. --}}
+            <div class="wod5e-mage-appartenenza-credo-spheres">
+                {{#each credoSphereChoices as |pick|}}
+                    <select name="flags.wod5e-mage.focus.credoSpheres.{{pick.slot}}" aria-label="{{localize 'WOD5E_MAGE.Lineage.CredoSphere'}}" {{#if ../locked}}disabled{{/if}}>
+                        <option value="">{{localize "WOD5E_MAGE.Lineage.CredoSphereNone"}}</option>
+                        {{#each pick.options as |sphere|}}
+                            <option value="{{sphere.id}}" {{#if sphere.selected}}selected{{/if}}>{{sphere.label}}</option>
+                        {{/each}}
+                    </select>
+                {{/each}}
+            </div>
+        {{/if}}
     </div>
 </details>

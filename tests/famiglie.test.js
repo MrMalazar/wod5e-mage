@@ -3,6 +3,10 @@ import { readFileSync } from "node:fs";
 import {
   CREDO_SPHERES,
   credoSphereBadges,
+  chosenCredoSpheres,
+  credoSpheresFor,
+  isFreeCredo,
+  prepareCredoSphereChoices,
   FAMIGLIE,
   findFamiglia,
   findSottofamiglia,
@@ -72,6 +76,22 @@ assert.match(arte.focus.sphereNotes.correspondence, /^<p>Corrispondenza è la Te
 const potere = lineageSphereChanges(empty, { flags: { "wod5e-mage": { focus: { credo: "potere" } } } });
 assert.equal(potere.selectedSpheres, undefined);
 assert.equal(Object.keys(potere.focus.sphereNotes).length, 9);
+// Potere e Scienza: le due Sfere le sceglie il giocatore (6/9); scelte, si sbloccano di sola presenza.
+assert.equal(isFreeCredo("potere"), true);
+assert.equal(isFreeCredo("arte"), false);
+assert.deepEqual(chosenCredoSpheres({ first: "forces", second: "forces" }), ["forces"]);
+assert.deepEqual(credoSpheresFor("scienza", { first: "matter", second: "life" }), ["matter", "life"]);
+assert.deepEqual(credoSpheresFor("arte", { first: "matter" }), ["matter", "mind"]);
+const scelta = lineageSphereChanges({ ...empty, credo: "potere" }, { flags: { "wod5e-mage": { focus: { credoSpheres: { first: "forces", second: "time" } } } } });
+assert.deepEqual(scelta.selectedSpheres, { forces: true, time: true });
+assert.deepEqual(scelta.familySpheres, { forces: true, time: true });
+assert.equal(scelta.spheres, undefined);
+assert.equal(lineageSphereChanges({ ...empty, credo: "arte" }, { flags: { "wod5e-mage": { focus: { credoSpheres: { first: "forces" } } } } }), null);
+assert.deepEqual(credoSphereBadges("potere", (k) => k, { first: "forces", second: "" }).map((b) => b.id), ["forces"]);
+assert.deepEqual(lineageSpheres({ credo: "scienza", credoSpheres: { first: "spirit", second: "prime" } }), { dotted: [], present: ["spirit", "prime"] });
+assert.equal(prepareCredoSphereChoices({ first: "mind" })[0].options.find((o) => o.id === "mind").selected, true);
+const appartenenzaSource = readFileSync(new URL("../templates/actor/parts/appartenenza.hbs", import.meta.url), "utf8");
+assert.match(appartenenzaSource, /\{\{#if credoFree\}\}[\s\S]*focus\.credoSpheres\.\{\{pick\.slot\}\}/);
 assert.equal(isBlankNote("<p>&nbsp;</p>"), true);
 assert.equal(isBlankNote("<p>x</p>"), false);
 // Niente cambia: niente da fondere.
