@@ -7234,9 +7234,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 1,
     "extras": [],
-    "text": "età vera, emorragie interne, il farmaco che mente",
-    "pairings": [],
-    "scopes": ""
+    "text": "Guardi un corpo e sai come sta: l'età vera, l'emorragia interna, il veleno in circolo, il farmaco che mente, la gravidanza. Con più successi sai anche cosa lo guarirebbe.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Sapere anche come sta la testa: la paura, la stanchezza, il trauma.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quanto gli resta, e cosa cederà per primo.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Sapere come stava ieri, e come starà domani.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Leggere la salute di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Sapere cosa ha in corpo che non è suo: il proiettile, il chip, la protesi etc..",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Sapere se il corpo è abitato da qualcosa che non è lui.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per un pronto soccorso intero. Precisione (dettaglio) per andare a fondo: 1 è ferito, 3 dove, 5 il veleno esatto. Durata 2 per tenere l'occhio acceso tutta la scena."
   },
   {
     "id": "life-1-leggere-la-storia-di-un-corpo",
@@ -7244,9 +7275,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 1,
     "extras": [],
-    "text": "vecchie fratture, cicatrici che non si vedono, il mestiere che ha fatto",
-    "pairings": [],
-    "scopes": ""
+    "text": "Le vecchie fratture, le cicatrici che non si vedono, il mestiere che ha fatto, i figli che ha avuto: il corpo racconta la vita che ha vissuto.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "Avere le date, e vedere il momento in cui si è fatto quella ferita.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere cosa ricorda lui di ognuna.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Leggere anche la storia di quello che porta addosso: l'arma, la protesi.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Leggere la storia del corpo di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Leggere anche le Macchie che ogni ferita ha lasciato sull'anima.",
+        "required": false
+      }
+    ],
+    "scopes": "Precisione (informazione) per quanto pesa quel che cerchi. Precisione (dettaglio) per un segno solo fra tanti. Durata 2 per la scena."
   },
   {
     "id": "life-1-riconoscere-il-sovrannaturale",
@@ -7260,9 +7317,35 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Spirito ●: uno sguardo dice se quello davanti a te è umano",
-    "pairings": [],
-    "scopes": ""
+    "text": "Uno sguardo dice se quello davanti a te è umano, e quanto è lontano dal Modello umano. Serve lo Spirito per sapere cosa lo abita: la Vita legge il corpo e la specie.",
+    "pairings": [
+      {
+        "sphere": "spirit",
+        "text": "Sapere cosa lo abita, oltre che che corpo è.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere se lui sa cos'è.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Riconoscere anche un Risvegliato.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riconoscere il sovrannaturale in chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quanto è pericoloso, adesso.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per una stanza piena. Area per setacciare un luogo. Precisione (dettaglio) per la specie esatta: 1 non è umano, 3 cos'è, 5 quale clan, quale tribù."
   },
   {
     "id": "life-2-curare-o-causare-malattie",
@@ -7270,9 +7353,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "nella vita semplice e in te stesso; su un altro: ●●●",
-    "pairings": [],
-    "scopes": ""
+    "text": "Nella vita semplice, piante, insetti, muffe, e in te stesso: la malattia arriva o se ne va. Su un altro è il terzo pallino.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Far arrivare la malattia come una sfortuna, o far guarire come un colpo di fortuna.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far correre la malattia in un'ora, o farla durare un anno.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Curare o ammalare la vita semplice lontano da te.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Creare una malattia che non esisteva.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Far viaggiare la malattia in un oggetto: l'acqua, il cibo, la lettera.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per un campo, un giardino, un raccolto. Durata per quanto dura. Potenza (danni) se la malattia ferisce. Condizioni (malus 2, ostacolare) per quanto pesa."
   },
   {
     "id": "life-2-fingere-la-morte",
@@ -7280,9 +7389,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "battito e respiro scendono a zero apparente: i becchini ci cascano",
-    "pairings": [],
-    "scopes": ""
+    "text": "Battito e respiro scendono a zero apparente: i becchini ci cascano, i medici pure. Il corpo aspetta, e si risveglia quando decidi tu.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Far sembrare morto anche a chi legge le menti: nessun pensiero in superficie.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far sembrare morto anche a chi legge le anime.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Fissare l'ora del risveglio.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che nessuno controlli troppo bene.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Far fingere la morte a chi non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto resti morto: 2 la scena, 4 la sessione. Bersagli per far fingere anche i compagni. Condizioni 1 per cosa ti sveglia: la parola, il tocco."
   },
   {
     "id": "life-2-guarire-te-stesso",
@@ -7290,9 +7425,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "1 successo per livello; Aggravati: +1 Quintessenza ciascuno",
-    "pairings": [],
-    "scopes": ""
+    "text": "Le tue ferite si chiudono: un successo per livello di Salute; gli Aggravati chiedono anche una Quintessenza ciascuno.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Pagare gli Aggravati con la Quintessenza del luogo, non con la tua.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Guarire come se la ferita non fosse mai stata aperta: niente cicatrice.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Guarire insieme la Volontà.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che la ferita non si riapra lì.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Far uscire il proiettile mentre guarisci.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta Salute torna."
   },
   {
     "id": "life-2-immunizzarti",
@@ -7300,9 +7461,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "il tuo sangue impara il veleno prima che faccia danno",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il tuo sangue impara il veleno prima che faccia danno: tossine, malattie, droghe non ti toccano, per quello che hai deciso.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Immunizzarti anche da un veleno che non è organico: il gas, il metallo pesante.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Immunizzarti dal caldo, dal freddo, dalle radiazioni.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Immunizzarti dalla sfortuna del contagio: non prendi mai quello che gira.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Immunizzarti in anticipo da quello che arriverà.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Immunizzarti dai veleni fatti di Magick.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Precisione (dettaglio) per il veleno esatto o per tutti. Bersagli per immunizzare i compagni."
   },
   {
     "id": "life-2-ritoccarti-i-connotati",
@@ -7310,9 +7497,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "capelli, lineamenti, dettagli: il tuo Modello, di un soffio",
-    "pairings": [],
-    "scopes": ""
+    "text": "Capelli, lineamenti, colore degli occhi, dettagli: il tuo Modello, di un soffio. Resti tu, ma nessuno ti riconosce dalla foto.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Far sì che chi ti conosce non trovi strano il cambiamento.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Ritoccarti a come eri dieci anni fa, o come sarai.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Ritoccare anche i denti, le unghie, le protesi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Prendere per caso proprio i connotati che ti servono.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Ritoccare i connotati di chi non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Precisione (dettaglio) per quanto è fine il ritocco: 1 i capelli, 3 il volto, 5 le impronte."
   },
   {
     "id": "life-2-smettere-di-aver-bisogno",
@@ -7320,9 +7533,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "fame, sete, sonno e respiro si mettono in pausa finché reggi l'effetto",
-    "pairings": [],
-    "scopes": ""
+    "text": "Fame, sete, sonno e respiro si mettono in pausa finché reggi l'effetto: stai sott'acqua, attraversi il deserto, vegli tre notti.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Smettere di aver bisogno anche di aria: i polmoni non servono.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Smettere di sentire il caldo e il freddo.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Fissare per quanto reggi, e far tornare i bisogni tutti insieme, o piano.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Nutrirti di Quintessenza invece che di cibo.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Smettere di aver bisogno di dormire anche con la testa: niente allucinazioni.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 5 due sessioni. Bersagli per la Cabala."
   },
   {
     "id": "life-3-accelerare-una-guarigione-naturale",
@@ -7330,25 +7569,71 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 3,
     "extras": [],
-    "text": "il corpo fa in una notte il lavoro di due settimane, e chiede da mangiare",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il corpo fa in una notte il lavoro di due settimane: ossa, ferite, febbri guariscono da sole, in fretta, e il corpo chiede da mangiare.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "Far cadere la convalescenza di un mese in un pomeriggio.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Dare al corpo la Quintessenza per guarire senza consumarsi.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Accelerare la guarigione di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far guarire senza complicazioni.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far dormire il corpo mentre guarisce.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più feriti. Durata per quanto corre la guarigione: 2 la scena, 3 la notte. Potenza (danni) per quanto guarisce in più."
   },
   {
     "id": "life-3-addormentare",
     "name": "Addormentare",
     "sphere": "life",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Il corpo del bersaglio decide che è notte fonda: la notte chimica, che nessuna sveglia discute. Con la Mente si addormenta anche la testa.",
+    "pairings": [
       {
         "sphere": "mind",
-        "level": 3,
+        "text": "Addormentare anche la testa: niente sogni, niente risvegli.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Farlo addormentare nel momento giusto: al volante no, sul divano sì.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Addormentare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Farlo dormire fino a un'ora precisa.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Far viaggiare il sonno in un oggetto: il bicchiere, il cuscino.",
         "required": false
       }
     ],
-    "text": "il corpo del bersaglio decide che è notte fonda; anche + Mente ●●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Bersagli per più persone. Area per una sala intera. Durata 1 per un turno, 2 per la scena. Condizioni (malus 3, addormentare) per quanto è profondo il sonno."
   },
   {
     "id": "life-3-animare-un-cadavere",
@@ -7358,23 +7643,44 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "prime",
-        "level": 2,
+        "level": 1,
+        "required": true
+      }
+    ],
+    "text": "Il cadavere si muove senz'anima: cammina, esegue, non pensa. Serve il Primordio, che gli dà il moto; le ossa nude chiedono anche la Materia.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Dare al cadavere il moto che non ha più.",
         "required": true
       },
       {
         "sphere": "matter",
-        "level": 3,
-        "required": true
+        "text": "Animare anche le ossa nude, senza carne.",
+        "required": false
       },
       {
-        "sphere": "prime",
-        "level": 2,
-        "required": true
+        "sphere": "spirit",
+        "text": "Mettere dentro qualcosa che vuole: il cadavere ha opinioni.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far capire al cadavere ordini complessi.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Animare il cadavere nel cimitero in cui non sei.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Animare un cadavere vecchio di anni come fosse di ieri.",
+        "required": false
       }
     ],
-    "text": "+ Primordio ●●: si muove senz'anima; ossa nude: + Materia ●●● + Primordio ●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Bersagli per quanti cadaveri. Durata per quanto camminano: 2 la scena, 4 la sessione. Condizioni 1 per l'ordine che eseguono. Potenza (danni) se colpiscono."
   },
   {
     "id": "life-3-ferire-un-mutaforma",
@@ -7384,23 +7690,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "spirit",
-        "level": 2,
-        "required": true
-      },
-      {
-        "sphere": "spirit",
-        "level": 3,
-        "required": true
-      },
-      {
-        "sphere": "life",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Spirito ●●: il loro Modello è ibrido; a scelta: + Spirito ●●● + Vita ●●",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il loro Modello è ibrido, carne e spirito insieme: lo colpisci sulla carne, e lo spirito segue. Serve lo Spirito per la parte di là.",
+    "pairings": [
+      {
+        "sphere": "spirit",
+        "text": "Colpire anche la parte di spirito.",
+        "required": true
+      },
+      {
+        "sphere": "forces",
+        "text": "Colpire con un'energia: il fuoco, l'argento fuso.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Colpire dove il Modello ibrido è più stanco.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Ferire il mutaforma che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far mordere il colpo con la Quintessenza.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più mutaforma. Precisione (dettaglio) per il punto esatto."
   },
   {
     "id": "life-3-ferire-un-vampiro",
@@ -7408,9 +7730,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 3,
     "extras": [],
-    "text": "carne morta animata; via Materia: ●●",
-    "pairings": [],
-    "scopes": ""
+    "text": "Carne morta animata: la tratti da viva che non è, e funziona, ma paghi la finzione. Con la Materia lo ferisci per ciò che è, e resta spiegabile.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Ferire la carne morta per quello che è.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Far bruciare la ferita: il fuoco entra dove la carne si è aperta.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Colpire dove il corpo morto è più stanco.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Ferire anche quello che lo abita.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Ferire il vampiro che non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Precisione (dettaglio) per il punto esatto: il cuore. Bersagli per più vampiri."
   },
   {
     "id": "life-3-guarire-o-ferire-un-altro",
@@ -7418,9 +7766,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 3,
     "extras": [],
-    "text": "la Regola del Sé al lavoro: il Modello altrui chiede il terzo pallino",
-    "pairings": [],
-    "scopes": ""
+    "text": "Metti le mani sul corpo di un altro: le sue ferite si chiudono, o si aprono. Un successo per livello; gli Aggravati chiedono una Quintessenza ciascuno. Il Modello altrui chiede il terzo pallino.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Pagare gli Aggravati con la Quintessenza del luogo.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Guarire come se la ferita non fosse mai stata aperta, o riaprire quella di ieri.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Guarire o ferire chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che la ferita non si riapra, o che non si chiuda mai.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Guarire o ferire insieme la Volontà.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Far uscire il proiettile mentre guarisci.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta Salute va o viene. Bersagli per più corpi: il triage di un pronto soccorso in un gesto solo. Precisione (dettaglio) per una ferita sola fra tante."
   },
   {
     "id": "life-3-potenziare-il-fisico",
@@ -7428,9 +7807,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 3,
     "extras": [],
-    "text": "attributi accresciuti, artigli, branchie, corazza: il tuo corpo risponde",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il tuo corpo risponde: attributi accresciuti, artigli, branchie, corazza, occhi da gatto etc.. Resti umano, con qualcosa in più, finché paghi la Durata.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Farti crescere una corazza di osso o di chitina che regge le pallottole.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Farti reggere il fuoco, il freddo, la corrente.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Farti vedere e colpire anche di là.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far correre i riflessi: il corpo risponde prima.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Potenziare anche la testa: la memoria, la lucidità.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Potenziare il fisico di chi non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto regge: 1 lo scontro, 2 la scena, 4 la sessione. Potenza (epicità) per quanto pesa il potenziamento: 1 un dettaglio, 3 stravolge la scena. Bersagli per potenziare i compagni."
   },
   {
     "id": "life-4-diventare-interamente-altro",
@@ -7438,9 +7848,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 4,
     "extras": [],
-    "text": "il tuo Modello cambia da capo, e ci resti finché paghi la Durata",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il tuo Modello cambia da capo: un'altra faccia, un'altra taglia, un altro sesso, un'altra età, e ci resti finché paghi la Durata.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Far sì che chi ti conosceva ti riconosca lo stesso, o no.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Diventare chi eri, o chi sarai.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Portarti dietro gli abiti e gli oggetti nella misura nuova.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Cambiare anche il riflesso di là: nemmeno gli spiriti ti riconoscono.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far reggere la forma nuova senza mantenerla.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Precisione (dettaglio) per quanto è fine la copia: 3 un volto qualunque, 5 il volto di quell'uomo."
   },
   {
     "id": "life-4-guarire-l-inguaribile",
@@ -7448,9 +7884,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 4,
     "extras": [],
-    "text": "ciò che la medicina dichiara irreversibile torna indietro. Il corpo regge; il resto è affar suo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Ciò che la medicina dichiara irreversibile torna indietro: la paralisi, la cecità, l'organo perso, il male che non si cura. Il corpo regge; il resto è affar suo.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Ricreare quello che manca: l'organo, l'arto.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Riportare il corpo a prima del male.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Guarire insieme la mente che ha convissuto col male.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Guarire chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che il male non torni mai.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto guarisce. Bersagli per più corpi. Durata 7 perché resti."
   },
   {
     "id": "life-4-innestare-la-macchina-nella-carne",
@@ -7460,18 +7922,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "matter",
-        "level": 4,
+        "level": 1,
         "required": true
       },
       {
         "sphere": "prime",
-        "level": 3,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Materia ●●●● + Primordio ●●●: il metallo entra nel corpo, e il corpo lo accetta come suo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il metallo entra nel corpo e il corpo lo accetta come suo: la Vita fa accettare l'innesto; servono la Materia, che lo dà, e il Primordio, che lo fa vivere.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Dare l'innesto.",
+        "required": true
+      },
+      {
+        "sphere": "prime",
+        "text": "Far vivere l'innesto.",
+        "required": true
+      },
+      {
+        "sphere": "forces",
+        "text": "Far alimentare l'innesto dal corpo, e fargli portare corrente.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far rispondere l'innesto al pensiero.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 7: l'innesto resta. Potenza (epicità) per quanto pesa: 2 una placca, 5 un braccio nuovo. Precisione (dettaglio) per quanto è fine l'innesto."
   },
   {
     "id": "life-4-riscrivere-il-corpo-di-un-altro",
@@ -7479,9 +7962,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 4,
     "extras": [],
-    "text": "forma, proporzioni, funzioni: esce diverso da come è entrato",
-    "pairings": [],
-    "scopes": ""
+    "text": "Forma, proporzioni, funzioni: esce diverso da come è entrato. Più alto, più forte, con un'altra faccia, con branchie etc..",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Far sì che lui non trovi strano il corpo nuovo.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Riscriverlo a com'era, o a come sarà.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riscrivere il corpo di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Riscrivere anche quello che porta in corpo: le protesi, i denti.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Riscrivere anche il riflesso di là.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Aggiungere carne che non c'era.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Potenza (epicità) per quanto cambia: 1 un dettaglio, 4 impatta sul capitolo. Bersagli per più corpi."
   },
   {
     "id": "life-4-trasformare-in-animale",
@@ -7489,9 +8003,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 4,
     "extras": [],
-    "text": "il Modello passa a un'altra specie, con quello che comporta pensarci dentro",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il Modello passa a un'altra specie, con quello che comporta pensarci dentro: il lupo pensa da lupo, il corvo vola da corvo. Tu, o un altro.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Tenere la testa umana dentro l'animale, o toglierla del tutto.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Trasformare anche il riflesso di là: gli spiriti vedono un animale.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Portarti dietro gli oggetti nella forma nuova.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Fissare l'ora in cui torni umano.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Trasformare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Trasformare in un animale che non esiste.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Potenza (peso) per quanto cambia la taglia: 1 il gatto, 3 il cavallo. Bersagli per più persone."
   },
   {
     "id": "life-5-creare-un-organismo",
@@ -7501,13 +8046,44 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "prime",
-        "level": 3,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Primordio ●●●: vita nuova, con una forma che decidi tu e una fame che decide lei",
-    "pairings": [],
-    "scopes": ""
+    "text": "Vita nuova, con una forma che decidi tu e una fame che decide lei. Serve il Primordio, che dà la carne dove manca.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Dare la carne dove manca.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "Dare all'organismo una mente: pensa, ricorda, obbedisce.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Dare all'organismo un'anima.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Dare all'organismo parti che non sono carne: il guscio, gli artigli di metallo.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Farlo nascere già adulto, o farlo crescere in un'ora.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Farlo nascere lontano.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto è grande: 1 il topo, 2 l'uomo, 3 il cavallo. Potenza (epicità) per quanto pesa: 3 stravolge una scena, 6 impatta sulla storia. Durata per quanto vive (7 per sempre)."
   },
   {
     "id": "life-5-metamorfosi-senza-limiti",
@@ -7515,9 +8091,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 5,
     "extras": [],
-    "text": "massa, specie e scala smettono di essere un problema",
-    "pairings": [],
-    "scopes": ""
+    "text": "Massa, specie e scala smettono di essere un problema: diventi la balena, lo sciame, il bosco, e torni.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Diventare anche qualcosa che non è vivo, e restare vivo dentro.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Cambiare anche il riflesso di là, e passare il Velo nella forma nuova.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Tenere la testa tua in qualunque forma.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Diventare energia: il fuoco, il fulmine.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Essere lo sciame in due luoghi insieme.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far reggere la forma senza mantenerla.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto cambia la massa: 4 il tir, 6 il grattacielo. Durata per quanto regge: 2 la scena, 4 la sessione. Bersagli per trasformare anche altri."
   },
   {
     "id": "life-5-rendere-permanente-il-mutamento",
@@ -7525,8 +8132,34 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 5,
     "extras": [],
-    "text": "quello che hai riscritto smette di poter tornare indietro, e diventa il suo Modello vero",
-    "pairings": [],
-    "scopes": ""
+    "text": "Quello che hai riscritto smette di poter tornare indietro, e diventa il suo Modello vero: la forma nuova è lui, per sempre, per tutti.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Far entrare il mutamento nell'Arazzo: nemmeno il Paradosso lo disfa.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far sì che sia sempre stato così.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far sì che lui, e chi lo conosce, non ricordino l'altro corpo.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Rendere permanente anche il riflesso di là.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che nessuna sorte lo consumi.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 7, e basta. Potenza (epicità) per quanto pesa: 4 impatta sul capitolo, 6 impatta sulla storia. Bersagli per più corpi."
   }
 ]);

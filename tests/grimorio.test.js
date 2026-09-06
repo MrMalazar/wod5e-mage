@@ -113,6 +113,14 @@ const tempo = EFFETTI.filter((entry) => entry.sphere === "time");
 assert.equal(tempo.length, 21);
 assert.equal(tempo.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(tempo.find((entry) => entry.id === "time-4-avvertire-il-te-di-ieri").extras.map((extra) => extra.sphere), ["mind"]);
+// Vita nel formato nuovo (6/9): ventiquattro blocchi. Tutte le nove Sfere sono a blocchi:
+// ogni effetto ha gli Ambiti consigliati, e solo due di Corrispondenza stanno senza compagne.
+const vita = EFFETTI.filter((entry) => entry.sphere === "life");
+assert.equal(vita.length, 24);
+assert.equal(vita.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
+assert.deepEqual(vita.find((entry) => entry.id === "life-3-animare-un-cadavere").extras.map((extra) => extra.sphere), ["prime"]);
+assert.equal(EFFETTI.every((entry) => entry.scopes), true);
+assert.equal(EFFETTI.filter((entry) => entry.pairings.length === 0).length, 2);
 const grimorioIt = prepareGrimorio({ correspondence: 2 }, (k) => k);
 const shown = grimorioIt[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio");
 assert.equal(shown.pairings.length, 5);
