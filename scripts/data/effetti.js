@@ -2406,9 +2406,45 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 1,
     "extras": [],
-    "text": "composizione, doppi fondi, il punto dove cederà",
-    "pairings": [],
-    "scopes": ""
+    "text": "Guardi una cosa e la cosa ti dice cos'è: composizione, doppi fondi, saldature, il punto dove cederà. Sai se la parete è portante, se la cassaforte ha un secondo scomparto, se la lega è quella che dicono.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Sapere anche quando cederà, e quanto poco basta.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Sapere cosa ci passa dentro: corrente, calore, segnale etc..",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Fare la stessa lettura sulla carne morta, e sul confine col vivo: il proiettile nella gamba.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Sapere se l'oggetto porta Magick: la Meraviglia, il talismano, l'oggetto incantato etc..",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Sapere se dentro c'è qualcosa che vuole.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Sapere quanti anni ha davvero, e da quando è così.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Analizzare l'oggetto che non hai in mano.",
+        "required": false
+      }
+    ],
+    "scopes": "Precisione (dettaglio) per andare a fondo: 1 l'auto, 3 la vite, 5 la lega. Precisione (informazione) per quanto pesa saperlo. Bersagli per più oggetti in un colpo."
   },
   {
     "id": "matter-1-sapere-cosa-c-era-prima",
@@ -2416,25 +2452,71 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 1,
     "extras": [],
-    "text": "il residuo parla: cosa conteneva, chi l'ha usato, quanto tempo fa",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il residuo parla: cosa conteneva la bottiglia, chi ha impugnato la pistola, cosa è passato su quel tavolo, e quanto tempo fa.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "Avere una data al posto del «quanto tempo fa», e seguire la traccia più indietro.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Risalire dal residuo al corpo: il sangue di chi, il capello di chi etc..",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere in che stato era chi l'ha usata: fretta, rabbia, calma etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Sapere dal residuo dov'è finita la cosa che manca.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere cosa è andato storto, lì sopra.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Sapere cosa ci si è posato che non era di questo mondo.",
+        "required": false
+      }
+    ],
+    "scopes": "Precisione (informazione) per quanto pesa nella trama quel che cerchi. Precisione (dettaglio) per una traccia sola fra tante. Durata 2 per leggere tutta la scena."
   },
   {
     "id": "matter-1-riconoscere-il-commestibile",
     "name": "Riconoscere il commestibile",
     "sphere": "matter",
     "level": 1,
-    "extras": [
+    "extras": [],
+    "text": "Un'occhiata dice se il piatto nutre, marcisce o avvelena, se l'acqua è potabile, se la pillola è quella giusta. Da sola la Materia legge la sostanza; con la Vita sai cosa farà a un corpo.",
+    "pairings": [
       {
         "sphere": "life",
-        "level": 1,
-        "required": true
+        "text": "Sapere cosa farà a chi lo mangia: nutre, avvelena, cura, e a chi in particolare.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quanto manca perché vada a male.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Sapere da quanto è lì.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Sapere se è stato toccato dalla Magick.",
+        "required": false
       }
     ],
-    "text": "+ Vita ●: un'occhiata dice se il piatto nutre, marcisce o avvelena",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Bersagli per un banchetto intero. Precisione (dettaglio) per la sostanza esatta: 1 c'è veleno, 3 quale veleno, 5 quanto."
   },
   {
     "id": "matter-2-aprire-appigli-nella-parete",
@@ -2442,25 +2524,71 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "la facciata liscia germoglia maniglie su misura per le tue mani",
-    "pairings": [],
-    "scopes": ""
+    "text": "La facciata liscia germoglia maniglie su misura per le tue mani; il muro fa gradini, la lastra di vetro tiene.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Far tenere gli appigli anche sotto il peso che non dovrebbero: attrito e gravità dalla tua parte.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Cambiare anche le tue mani: si aggrappano da sole.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Far nascere gli appigli sulla parete che non vedi ancora.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Nascondere gli appigli a chi viene dopo di te.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far reggere gli appigli finché ti servono, e farli cedere sotto chi ti segue.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per quanta parete: 1 il muro, 2 la facciata. Durata 1 per la salita, 2 per la scena. Bersagli per chi sale con te."
   },
   {
     "id": "matter-2-ferire-un-vampiro",
     "name": "Ferire un vampiro",
     "sphere": "matter",
     "level": 2,
-    "extras": [
+    "extras": [],
+    "text": "La carne morta è materia: la tocchi come tocchi il legno, e la spacchi come spacchi il legno. Da sola la Materia lavora sul cadavere che cammina; con la Vita passi per le vie del corpo.",
+    "pairings": [
       {
         "sphere": "life",
-        "level": 3,
+        "text": "Aprire la ferita come a un vivo, per le vie del corpo.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Far bruciare la ferita: il fuoco entra dove la materia si è aperta.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Colpire dove il corpo morto è più stanco.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Ferire anche quello che lo abita.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Ferire il vampiro che non vedi.",
         "required": false
       }
     ],
-    "text": "carne morta: la tocchi come materia. Via Vita: + Vita ●●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Potenza (danni) per quanto ferisce. Precisione (dettaglio) per il punto esatto: il cuore. Bersagli per più cadaveri."
   },
   {
     "id": "matter-2-invecchiare-un-oggetto",
@@ -2470,13 +2598,34 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "time",
-        "level": 3,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Tempo ●●●: ruggine e polvere di decenni in un minuto",
-    "pairings": [],
-    "scopes": ""
+    "text": "Ruggine e polvere di decenni in un minuto: la serratura si blocca, il legno marcisce, la corda si sfilaccia. Serve il Tempo: da sola la Materia consuma la sostanza, ma gli anni non corrono.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "Far correre gli anni: l'oggetto invecchia davanti a te.",
+        "required": true
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far invecchiare per primo il pezzo che regge tutto.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Invecchiare anche quello che era vivo: il legno verde, il cuoio, il cibo etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Invecchiare quello che non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto è grosso: 1 la serratura, 3 l'auto, 5 la casa. Precisione (dettaglio) per il pezzo solo: la canna, non la pistola. Bersagli per più oggetti."
   },
   {
     "id": "matter-2-modellare-un-passe-partout",
@@ -2484,9 +2633,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "la chiave sbagliata cola e si riassesta nei denti giusti",
-    "pairings": [],
-    "scopes": ""
+    "text": "La chiave sbagliata cola e si riassesta nei denti giusti; la tessera prende il codice della porta, il chiavistello scorre. Serve una chiave da modellare, e una serratura da leggere.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Aprire anche le serrature elettroniche: il segnale giusto, la corrente giusta.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere che chiave serve senza averla mai vista.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Modellare la chiave per la porta che non hai davanti.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far girare la chiave al primo colpo, anche se la serratura è vecchia.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far tornare la chiave com'era dopo che sei passato.",
+        "required": false
+      }
+    ],
+    "scopes": "Precisione (dettaglio) per la serratura difficile: 1 la porta di casa, 3 la cassaforte. Bersagli per più porte con la stessa chiave. Durata per quanto resta chiave: 1 per passare, 7 per sempre."
   },
   {
     "id": "matter-2-riforgiare-le-munizioni",
@@ -2494,9 +2669,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "i proiettili in canna cambiano lega: argento, gomma, sale",
-    "pairings": [],
-    "scopes": ""
+    "text": "I proiettili in canna cambiano lega: argento, gomma, sale, legno etc.. Il caricatore resta pieno, e ogni colpo è quello che serve.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Caricare i proiettili di energia: bruciano, folgorano etc..",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Caricare i proiettili di Quintessenza: mordono la Magick.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far ferire i proiettili anche nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Caricare i proiettili di un veleno, un sedativo, un farmaco etc..",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che i proiettili non si inceppino mai.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riforgiare le munizioni nell'arma del compagno lontano.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più armi. Durata per quanto restano così (7 per sempre). Precisione (dettaglio) per la lega esatta."
   },
   {
     "id": "matter-2-rimettere-a-posto",
@@ -2504,9 +2710,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "la crepa si chiude, l'ingranaggio torna in tolleranza, lo strappo si richiude",
-    "pairings": [],
-    "scopes": ""
+    "text": "La crepa si chiude, l'ingranaggio torna in tolleranza, lo strappo si richiude, l'auto riparte: ripari senza attrezzi quello che è rotto. Serve la cosa intera, anche in pezzi: il pezzo che manca non lo inventi.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Riparare anche quello che manca: il pezzo nasce dal nulla.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Riportare la cosa a com'era ieri, prima del danno.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Riparare anche l'elettronica: i circuiti tornano a funzionare.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Riparare quel che sta nel corpo: la protesi, la placca, il pacemaker etc..",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far tenere la riparazione: non si rompe più lì.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riparare quello che non hai in mano.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto è grosso: 1 l'orologio, 3 l'auto, 5 la casa. Precisione (dettaglio) per il pezzo esatto. Bersagli per più cose."
   },
   {
     "id": "matter-2-trasformare-l-aria-in-sonnifero",
@@ -2514,9 +2751,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "l'aria della stanza si fa dolciastra, e la sala si addormenta",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'aria della stanza si fa dolciastra e la sala si addormenta: cambi la sostanza di quello che respirano. Da sola la Materia fa il gas; cosa fa esattamente a un corpo lo dice la Vita.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Decidere cosa fa il gas ai corpi: dormono, tossiscono, si calmano etc.., e risparmiare chi vuoi.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far dimenticare tutto a chi si sveglia.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Muovere il gas dove dici tu: verso la porta, lontano da te.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riempire di gas la stanza in cui non sei.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far agire il gas dopo: quando si siedono.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per la stanza o il palazzo. Bersagli per chi respira aria buona. Condizioni (malus 3, addormentare) per quanto pesa. Durata 1 per un attimo di gas, 2 per la scena."
   },
   {
     "id": "matter-2-trasmutare-una-sostanza",
@@ -2524,9 +2787,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "piombo in oro: forma, volume e stato intatti; i preziosi costano successi",
-    "pairings": [],
-    "scopes": ""
+    "text": "Piombo in oro, acqua in vino, cemento in sabbia: la sostanza cambia, forma, volume e stato restano. I preziosi costano di più.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Trasmutare in qualcosa che il mondo non aveva, o partire dal nulla.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Far passare la trasmutazione per il calore o la corrente: il mondo vede una fornace.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Trasmutare anche l'organico: il pane in carne, il legno in osso.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far reggere la trasmutazione, o farla disfare quando decidi tu.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far arrivare la trasmutazione col tempo: il muro che diventa sabbia in un mese.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Trasmutare quello che non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanta sostanza: 1 lo zaino, 3 l'auto, 5 la casa. Precisione (dettaglio) per la sostanza esatta: 1 un metallo, 3 oro, 5 oro a ventiquattro carati. Durata per quanto resta (7 per sempre)."
   },
   {
     "id": "matter-3-alzare-un-muro-dal-terreno",
@@ -2534,9 +2828,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 3,
     "extras": [],
-    "text": "l'asfalto si solleva e ti fa da barricata",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'asfalto si solleva e ti fa da barricata, il pavimento fa una parete, la roccia si alza dal fianco della collina. Materia che c'è, spostata in fretta. Quello che alzi resta finché qualcuno non lo disfa.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Alzare il muro in mezzo alla corsa e fargli reggere l'urto dell'auto.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Alzare il muro dove non c'era terreno.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Alzare il muro esattamente dove li ferma.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Alzare il muro nel corridoio in cui non sei.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Alzare un muro vivo: radici, rami, edera etc..",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto muro: 3 due tonnellate, 5 una casa. Area per quanto è lungo: 1 la stanza, 2 il palazzo."
   },
   {
     "id": "matter-3-animare-ossa-nude",
@@ -2546,23 +2866,44 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "prime",
-        "level": 2,
+        "level": 1,
+        "required": true
+      }
+    ],
+    "text": "Lo scheletro si alza e cammina: una struttura senz'anima che esegue e basta. Serve il Primordio; un cadavere intero chiede anche la Vita.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Dare alle ossa il moto che la materia non ha.",
         "required": true
       },
       {
         "sphere": "life",
-        "level": 3,
-        "required": true
+        "text": "Alzare il cadavere intero, carne compresa.",
+        "required": false
       },
       {
-        "sphere": "prime",
-        "level": 2,
-        "required": true
+        "sphere": "spirit",
+        "text": "Mettere dentro qualcosa che vuole: la struttura ha opinioni.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far capire al congegno d'ossa ordini complessi.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Far muovere le ossa in fretta e colpire forte.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Alzare le ossa nel cimitero in cui non sei.",
+        "required": false
       }
     ],
-    "text": "+ Primordio ●●: lo scheletro si alza, struttura senz'anima; cadavere intero: + Vita ●●● + Primordio ●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Bersagli per quanti scheletri. Durata per quanto camminano: 2 la scena, 4 la sessione. Condizioni 1 per l'ordine che eseguono: proteggi la porta. Potenza (danni) se colpiscono."
   },
   {
     "id": "matter-3-appesantire-o-alleggerire",
@@ -2570,9 +2911,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 3,
     "extras": [],
-    "text": "la refurtiva pesa piume, la porta del nemico pesa tonnellate",
-    "pairings": [],
-    "scopes": ""
+    "text": "La refurtiva pesa piume, la porta del nemico pesa tonnellate, la corda regge un'auto: cambi la densità di quello che tocchi, e la forma resta.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Far volare quello che pesa poco, far sfondare quello che pesa tanto.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Appesantire o alleggerire un corpo: chi ti insegue non alza più i piedi.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Alleggerire il carico che non è qui.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far pesare la cosa il giusto proprio nel momento in cui conta.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far tornare la cosa al suo peso quando dici tu.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto vale la cosa che cambi: 1 lo zaino, 3 l'auto, 5 la casa. Bersagli per più cose. Durata se vuoi che finisca da sola (2 la scena); altrimenti resta finché non la disfi."
   },
   {
     "id": "matter-3-evocare-un-oggetto-dal-nulla",
@@ -2582,13 +2949,44 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "prime",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: il coltello che prima non c'era; congegni complessi: ●●●●",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il coltello che prima non c'era, la corda, la chiave: tu dai la forma, il Primordio la sostanza. Cose semplici; i congegni complessi sono il quarto pallino.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Dare sostanza a quello che non c'era.",
+        "required": true
+      },
+      {
+        "sphere": "forces",
+        "text": "Far nascere l'oggetto già carico: la torcia accesa, la batteria piena.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far nascere qualcosa di organico: il pane, il siero, la benda già medicata etc..",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far nascere l'oggetto che chi guarda si aspetta di vedere.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Far nascere l'oggetto in mano al compagno lontano.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far nascere l'oggetto quando serve, non adesso.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto pesa: 1 lo zaino, 2 cento chili. Precisione (dettaglio) per quanto è fine: 1 un coltello, 3 una chiave precisa, 5 un meccanismo. Durata per quanto resta al mondo (7 per sempre)."
   },
   {
     "id": "matter-3-guastare-senza-rompere",
@@ -2596,30 +2994,76 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 3,
     "extras": [],
-    "text": "l'oggetto sembra intatto e smette di funzionare: nessuno capisce perché",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'oggetto sembra intatto e smette di funzionare: il motore non parte, la pistola non spara, la serratura non gira, e chi lo apre non trova niente.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Far arrivare il guasto nel momento giusto per te.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Guastare l'elettronica senza bruciarla: circuiti perfetti che non conducono.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far durare il guasto quanto decidi, poi tutto riparte.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Guastare la macchina che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far sì che chi lo ripara non capisca mai cosa cercare.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto è grosso: 1 la pistola, 3 l'auto, 5 la centrale. Condizioni 1 per farlo scattare da solo: quando la impugna lui. Bersagli per più cose. Precisione (dettaglio) per il pezzo solo."
   },
   {
     "id": "matter-3-rimodellare-o-disintegrare",
     "name": "Rimodellare o disintegrare",
     "sphere": "matter",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "La serranda cola, la sbarra si piega, il muro si apre in una porta: plasmi la forma, la densità e lo stato di quello che tocchi. Per disintegrare, ridurre una cosa a niente, servono l'Entropia e il Tempo insieme.",
+    "pairings": [
       {
         "sphere": "entropy",
-        "level": 3,
+        "text": "Disfare la cosa fino alla polvere, insieme al Tempo.",
         "required": false
       },
       {
         "sphere": "time",
-        "level": 2,
+        "text": "Disintegrare, insieme all'Entropia; da solo, far tornare la cosa com'era quando decidi.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Rimodellare col calore: il mondo vede una fucina.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Rimodellare anche la carne morta e l'osso.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Rimodellare quello che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Rimodellare aggiungendo materia che non c'era.",
         "required": false
       }
     ],
-    "text": "la serranda cola. Per disintegrare anche: + Entropia ●●● + Tempo ●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Potenza (peso) per quanto rimodelli: 1 la serratura, 3 l'auto, 5 la casa. Precisione (dettaglio) per un lavoro fine: 3 la vite, 5 il meccanismo. Area per una parete intera."
   },
   {
     "id": "matter-3-rinforzare-gli-abiti",
@@ -2627,9 +3071,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 3,
     "extras": [],
-    "text": "la giacca pesa uguale e ferma i coltelli come maglia d'acciaio",
-    "pairings": [],
-    "scopes": ""
+    "text": "La giacca pesa uguale e ferma i coltelli come maglia d'acciaio, la camicia regge la pallottola, gli stivali non temono il fuoco. Cambi la sostanza del tessuto senza cambiarne l'aspetto.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Far fermare agli abiti anche il fuoco e la corrente.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far fermare agli abiti la Magick.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far fermare agli abiti i colpi dall'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Rinforzare anche la pelle sotto: gli abiti e il corpo insieme.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Nascondere che l'abito è cambiato: sembra stoffa.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per la Cabala. Potenza (danni) per quanto tolgono ai colpi. Durata solo se vuoi che finisca; altrimenti restano così finché non li disfi."
   },
   {
     "id": "matter-4-costruire-macchinari-complessi",
@@ -2637,9 +3107,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 4,
     "extras": [],
-    "text": "dal rottame al motore funzionante, con la tua firma",
-    "pairings": [],
-    "scopes": ""
+    "text": "Dal rottame al motore funzionante, dalla lamiera al drone, dai pezzi sparsi alla radio: costruisci il complesso, e regge, con la tua firma dentro. Serve la materia da cui partire; dal nulla è il Primordio.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Far nascere la macchina dal nulla.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Far nascere la macchina già alimentata: funziona senza rete.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far pensare la macchina: esegue ordini, riconosce i tuoi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Mettere dentro la macchina qualcosa che vuole.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che la macchina non si guasti mai.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far fare alla macchina in un'ora quello che farebbe in un giorno.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto è grossa: 1 la radio, 3 l'auto, 4 il tir. Precisione (dettaglio) per quanto è fine: 3 un motore, 5 un microchip. Durata per quanto resta al mondo (7 per sempre)."
   },
   {
     "id": "matter-4-innestare-la-macchina-nella-carne",
@@ -2649,18 +3150,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "life",
-        "level": 4,
+        "level": 1,
         "required": true
       },
       {
         "sphere": "prime",
-        "level": 3,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Vita ●●●● + Primordio ●●●: il metallo entra nel corpo, e il corpo lo accetta come suo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il metallo entra nel corpo e il corpo lo accetta come suo: la lama nell'avambraccio, l'occhio di vetro che vede, la placca che non rigetta. La Materia dà l'innesto; servono la Vita e il Primordio.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far accettare l'innesto al corpo.",
+        "required": true
+      },
+      {
+        "sphere": "prime",
+        "text": "Far vivere l'innesto.",
+        "required": true
+      },
+      {
+        "sphere": "forces",
+        "text": "Far alimentare l'innesto dal corpo, e fargli portare corrente.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far rispondere l'innesto al pensiero.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 7: l'innesto resta. Potenza (epicità) per quanto pesa: 2 una placca, 5 un braccio nuovo. Precisione (dettaglio) per quanto è fine l'innesto."
   },
   {
     "id": "matter-4-rifare-un-edificio",
@@ -2668,9 +3190,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 4,
     "extras": [],
-    "text": "la struttura si riassesta: pareti spostate, piani aggiunti, la casa che cambia pianta",
-    "pairings": [],
-    "scopes": ""
+    "text": "La struttura si riassesta: pareti spostate, piani aggiunti, la casa che cambia pianta mentre ci sei dentro. La materia è la stessa; la disponi tu.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Spostare gli impianti con le pareti: luce, acqua, gas seguono.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Collegare le stanze dove non dovrebbero: la porta che dà tre piani più su.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far credere a chi ci abita che sia sempre stato così.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Aggiungere materia che non c'era: il piano in più non lo rubi a niente.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far reggere la casa nuova, o farla cedere quando dici tu.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Dare un'anima alla casa nuova, o tenerla fuori.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (peso) per quanto è grosso: 5 una casa, 6 un grattacielo. Area per quanto rifai: 1 la stanza, 2 l'edificio. Precisione (dettaglio) per i particolari: 1 le pareti, 3 gli infissi, 5 i fregi."
   },
   {
     "id": "matter-4-sigillare-per-sempre",
@@ -2678,9 +3231,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 4,
     "extras": [],
-    "text": "la porta smette di essere una porta: muro pieno, senza giunzione",
-    "pairings": [],
-    "scopes": ""
+    "text": "La porta smette di essere una porta: muro pieno, senza giunzione, senza cardini. La cassaforte diventa un blocco. Quello che chiudi non ha più un'apertura da forzare.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Sigillare anche lo spazio: nessun varco, nessun salto lo attraversa.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Sigillare anche nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Respingere la Magick di chi vuole riaprire.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far dimenticare a tutti che lì c'era una porta.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far trovare a chi forza sempre la parte più dura.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far aprire il sigillo da solo a una data.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 7. Potenza (epicità) nel braccio di ferro con chi vuole aprire. Area per quanto sigilli: 1 la stanza, 2 l'edificio. Condizioni 1 se si apre per qualcuno: solo per te."
   },
   {
     "id": "matter-5-creare-una-lega-impossibile",
@@ -2688,9 +3272,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 5,
     "extras": [],
-    "text": "leggera come stoffa e dura come nient'altro, e nessun laboratorio saprà dire cos'è",
-    "pairings": [],
-    "scopes": ""
+    "text": "Leggera come stoffa e dura come nient'altro, trasparente e opaca a comando, che non fonde e non arrugginisce: inventi un materiale che la chimica rifiuta.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Far nascere la lega dal nulla, e farla restare senza di te.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Far condurre, isolare, brillare la lega come decidi tu.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far vivere la lega: cresce, si ripara, si innesta.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far rispondere la lega al pensiero.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far esistere la lega anche nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Decidere se e come la lega invecchia.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (epicità) per quanto pesa l'invenzione: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione. Potenza (peso) per quanta ne fai. Durata per quanto resta al mondo (7 per sempre)."
   },
   {
     "id": "matter-5-rendere-permanente-il-mutamento",
@@ -2698,9 +3313,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 5,
     "extras": [],
-    "text": "quello che hai trasformato smette di poter tornare indietro",
-    "pairings": [],
-    "scopes": ""
+    "text": "Quello che hai trasformato smette di poter tornare indietro: nessuna Magick lo disfa, nessun tempo lo consuma. L'oro resta oro, il muro resta muro, il sigillo resta sigillo, per tutti.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Far entrare il mutamento nell'Arazzo: nemmeno il Paradosso lo disfa.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far valere il mutamento anche nel passato: è sempre stato così.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che il mutamento non decada mai.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far valere il mutamento anche nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Far valere il mutamento ovunque quella cosa vada.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 7, e basta. Potenza (epicità) per quanto pesa: 6 impatta sulla storia, 7 sull'intera ambientazione. Bersagli per più cose rese permanenti."
   },
   {
     "id": "mind-1-leggere-aure-ed-emozioni",

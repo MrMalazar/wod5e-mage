@@ -88,6 +88,11 @@ const forze = EFFETTI.filter((entry) => entry.sphere === "forces");
 assert.equal(forze.length, 28);
 assert.equal(forze.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.equal(forze.find((entry) => entry.id === "forces-3-telecinesi").pairings.length, 6);
+// Materia nel formato nuovo (6/9): ventiquattro blocchi; «(obbligata)» nel nome segna la compagna necessaria.
+const materia = EFFETTI.filter((entry) => entry.sphere === "matter");
+assert.equal(materia.length, 24);
+assert.equal(materia.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
+assert.deepEqual(materia.find((entry) => entry.id === "matter-4-innestare-la-macchina-nella-carne").extras.map((extra) => extra.sphere), ["life", "prime"]);
 const grimorioIt = prepareGrimorio({ correspondence: 2 }, (k) => k);
 const shown = grimorioIt[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio");
 assert.equal(shown.pairings.length, 5);
