@@ -101,6 +101,21 @@ Hooks.once("init", () => {
     default: "groups"
   });
 
+  // L'ordine dei Tratti a colonne (6/9): alfabetico, oppure per gruppo
+  // (Fisici, Sociali, Mentali).
+  game.settings.register(MODULE_ID, "traitsOrder", {
+    name: "WOD5E_MAGE.Settings.TraitsOrder.Name",
+    hint: "WOD5E_MAGE.Settings.TraitsOrder.Hint",
+    scope: "client",
+    config: true,
+    type: String,
+    choices: {
+      alpha: "WOD5E_MAGE.Settings.TraitsOrder.Alpha",
+      group: "WOD5E_MAGE.Settings.TraitsOrder.Group"
+    },
+    default: "alpha"
+  });
+
   game.settings.register(MODULE_ID, "debugLogging", {
     name: "WOD5E_MAGE.Settings.DebugLogging.Name",
     hint: "WOD5E_MAGE.Settings.DebugLogging.Hint",

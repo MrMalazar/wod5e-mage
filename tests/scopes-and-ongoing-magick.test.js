@@ -144,6 +144,14 @@ assert.equal(shouldRecordEffect({ maintained: false, duration: 0 }), false);
 assert.equal(shouldRecordEffect({ maintained: true, duration: 0 }), true);
 assert.equal(shouldRecordEffect({ maintained: false, duration: 3 }), true);
 assert.equal(lockedParadox(mageActor({ ongoingMagick: { a: { lock: 1 }, b: { lock: 0 }, c: vulgarRow } })), 2);
+// On/Off (6/9): la riga nasce accesa; spenta non blocca Paradosso, e porta l'Effetto (l'Obiettivo).
+assert.equal(vulgarRow.active, true);
+assert.equal(maintainedEffectRow({ name: "Velo", effect: "sparire alla vista" }).triggerEffect, "sparire alla vista");
+assert.equal(lockedParadox(mageActor({ ongoingMagick: { a: { lock: 1, active: false }, c: vulgarRow } })), 1);
+assert.equal(prepareOngoingMagick(mageActor({ ongoingMagick: { a: { lock: 1, active: false }, b: { lock: 1 } } })).map((row) => row.active).join(","), "false,true");
+const spheresOngoing = readFileSync(new URL("../templates/actor/parts/spheres.hbs", import.meta.url), "utf8");
+assert.match(spheresOngoing, /data-action="ongoingMagickToggle" data-row="\{\{row\.id\}\}"[\s\S]*OngoingMagick\.On[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.nameSpheres[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.triggerEffect/);
+assert.doesNotMatch(spheresOngoing, /ongoingMagick\.\{\{row\.id\}\}\.status/);
 assert.equal(lockedParadox(mageActor()), 0);
 
 globalThis.foundry = {
@@ -173,7 +181,8 @@ await onOngoingMagickAdd.call({ actor: editableActor }, event);
 assert.deepEqual(storedRows.newRow, {
   nameSpheres: "",
   status: "",
-  triggerEffect: ""
+  triggerEffect: "",
+  active: true
 });
 
 await onOngoingMagickDelete.call(

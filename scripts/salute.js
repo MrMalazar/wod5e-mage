@@ -1,5 +1,5 @@
 import { MODULE_ID } from "./constants.js";
-import { addParadoxToBalance, getMagickBalance, MAGICK_TRACK_MAX } from "./magick-balance.js";
+import { addParadoxToBalance, getMagickBalance, getPersistentMagickResources, MAGICK_TRACK_MAX } from "./magick-balance.js";
 
 /**
  * La Salute del ramo A (tronco del 3/9/2026): un tracciato solo, lungo
@@ -218,6 +218,12 @@ export function saluteAfterSession(counts) {
   };
 }
 
+/** Quanta Quintessenza torna a nuova sessione: la generata, almeno 1. */
+export function quintessenceGained(generated) {
+  const value = Math.trunc(Number(String(generated ?? "").trim()) || 0);
+  return Math.max(value, 1);
+}
+
 /** La riga delle Prese dell'Esperienza per i punti della sessione. */
 export function experienceGainRow(points, when) {
   return { cost: Math.max(Math.trunc(Number(points) || 0), 0), when: String(when ?? "").trim() };
@@ -255,6 +261,15 @@ export async function onSaluteNewSession(event) {
   const update = {
     [`flags.${MODULE_ID}.salute`]: { ...saluteAfterSession(salute), extra: salute.extra },
     [`flags.${MODULE_ID}.contraccolpoNegato`]: false
+  };
+
+  // La Ruota (6/9): a nuova sessione la Quintessenza sale della «Quintessenza
+  // generata» scritta sulla scheda, almeno di 1.
+  const balance = getMagickBalance(actor);
+  const gained = quintessenceGained(getPersistentMagickResources(actor).generatedQuintessence);
+  update[`flags.${MODULE_ID}.magickBalance`] = {
+    quintessence: Math.min(balance.quintessence + gained, MAGICK_TRACK_MAX - balance.floor),
+    paradox: balance.paradox
   };
 
   const gain = experienceGainRow(result.experience, result.when);

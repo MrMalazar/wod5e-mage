@@ -1095,10 +1095,36 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid {
+  align-items: center;
   display: grid;
   gap: 0.35rem 0.5rem;
-  grid-template-columns: max-content minmax(0, 1fr) minmax(75px, 0.55fr) minmax(0, 1.5fr) 28px;
+  grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1.6fr) max-content 28px;
   margin-top: 0.75rem;
+}
+
+/* On/Off (6/9): acceso in oro, spento sul fondo incassato. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-toggle {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 700;
+  height: 24px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin: 0;
+  min-height: 0;
+  padding: 0;
+  text-transform: uppercase;
+  width: 44px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-toggle.lit {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro);
+  color: #17120f;
 }
 
 /* I segni della riga: il lucchetto rosso del Paradosso bloccato, la Durata,
@@ -1157,7 +1183,7 @@
   width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid > button {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid > button:not(.wod5e-mage-ongoing-toggle) {
   align-items: center;
   display: inline-flex;
   height: 28px;
@@ -3240,6 +3266,29 @@
   right: 4px;
   top: 50%;
   transform: translateY(-50%);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-header > .wod5e-mage-traits-order {
+  position: absolute;
+  right: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Le Abilità Specifiche a colonne (6/9): una per riga, i pallini in fila. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-custom-skill-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-custom-skill {
+  grid-template-columns: 18px minmax(0, 1fr) max-content 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill > .resource-value {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 5px;
+  margin: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .stats-footer {
@@ -5437,13 +5486,44 @@
   padding: 0.45rem 0.7rem 0.55rem;
 }
 
+/* La testa è il summary della tendina (6/9): chiusa restano nome e dado. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-head {
   align-items: center;
-  border-bottom: 1px solid rgb(152 119 43 / 45%);
+  cursor: pointer;
   display: flex;
   gap: 0.6rem;
+  list-style: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-head::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-chevron {
+  color: var(--mage-oro);
+  font-size: 0.7rem;
+  transform: rotate(-90deg);
+  transition: transform 0.15s;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo[open] > .wod5e-mage-incantesimo-head {
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
   margin-bottom: 0.35rem;
   padding-bottom: 0.3rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo[open] > .wod5e-mage-incantesimo-head .wod5e-mage-incantesimo-chevron {
+  transform: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-body {
+  position: relative;
+}
+
+/* Gli altri comandi (versa, fumetto, matita, cestino) stanno dentro, in alto a destra. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-tools {
+  float: right;
+  margin: 0 0 0.25rem 0.5rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-spheres {

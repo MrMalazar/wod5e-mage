@@ -469,8 +469,12 @@
       "MaintainedStatus": "Mantenuto",
       "RunningStatus": "In corso",
       "MaintainedLocked": "«{name}» è fra le Magick in atto: blocca 1 Paradosso permanente finché resta in piedi.",
-      "LockHint": "Volgare in piedi: 1 Paradosso permanente bloccato finché la riga non si cancella",
-      "MaintainedAdded": "«{name}» è ora fra le Magick in Atto."
+      "LockHint": "Volgare in piedi: 1 Paradosso permanente bloccato finché resta acceso",
+      "MaintainedAdded": "«{name}» è ora fra le Magick in Atto.",
+      "Name": "Nome",
+      "Effect": "Effetto",
+      "On": "On",
+      "Off": "Off"
     },
     "Spheres": {
       "Hint": "Seleziona le Sfere da mostrare e assegna loro un valore da zero a cinque.",
@@ -552,6 +556,13 @@
         "Groups": "A gruppi",
         "Columns": "A colonne",
         "Toggle": "Cambia la struttura dei Tratti"
+      },
+      "TraitsOrder": {
+        "Name": "L'ordine dei Tratti a colonne",
+        "Hint": "Con i Tratti a colonne: Attributi e Abilità in ordine alfabetico, oppure per gruppo (Fisici, Sociali, Mentali).",
+        "Alpha": "Alfabetico",
+        "Group": "Per gruppo",
+        "Toggle": "Ordine: alfabetico o per gruppo"
       }
     },
     "Errors": {

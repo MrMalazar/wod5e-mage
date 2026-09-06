@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import {
   CHIAVI_ASSORBITE,
   CHIAVI_VIVE,
-  prepareEssentialSkills
+  prepareEssentialSkills,
+  prepareEssentialSkillsByGroup,
+  orderAttributes
 } from "../scripts/abilita-essenziali.js";
 
 // Le etichette italiane del sistema, come arrivano da initializeLabels.
@@ -77,3 +79,15 @@ assert.equal(sortedSkills.physical.length, 9);
 assert.equal(sortedSkills.social.find((s) => s.id === "performance").displayName, "Espressività");
 
 console.log("abilita-essenziali.test.js: tutte le asserzioni superate");
+
+// I Tratti a colonne (6/9): per gruppo (Fisici, Sociali, Mentali, ognuno
+// alfabetico) o una fila alfabetica sola.
+const perGruppo = prepareEssentialSkillsByGroup(sortedSkills, { localize: (k) => k, lang: "it" });
+assert.deepEqual(Object.keys(perGruppo), Object.keys(sortedSkills));
+for (const [gruppo, lista] of Object.entries(perGruppo)) {
+  const nomi = lista.map((s) => String(s.displayName ?? s.id));
+  assert.deepEqual(nomi, [...nomi].sort((a, b) => a.localeCompare(b, "it")), gruppo);
+}
+const attributi = { physical: [{ id: "strength", displayName: "Forza" }, { id: "dexterity", displayName: "Destrezza" }], social: [{ id: "charisma", displayName: "Carisma" }], mental: [{ id: "wits", displayName: "Prontezza" }] };
+assert.deepEqual(orderAttributes(attributi, { order: "alpha", lang: "it" }).tutti.map((a) => a.displayName), ["Carisma", "Destrezza", "Forza", "Prontezza"]);
+assert.deepEqual(Object.keys(orderAttributes(attributi, { order: "group" })), ["physical", "social", "mental"]);

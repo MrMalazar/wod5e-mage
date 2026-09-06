@@ -22,6 +22,14 @@
                         title="{{localize 'WOD5E_MAGE.Settings.TraitsLayout.Toggle'}}">
                     <i class="fa-solid {{#if traitsColumns}}fa-table-cells-large{{else}}fa-table-columns{{/if}}"></i>
                 </button>
+                {{!-- A colonne: l'ordine, alfabetico o per gruppo (Fisici, Sociali, Mentali). --}}
+                {{#if traitsColumns}}
+                <button type="button" class="wod5e-mage-wheel-mode wod5e-mage-traits-order" data-action="traitsOrderToggle"
+                        aria-label="{{localize 'WOD5E_MAGE.Settings.TraitsOrder.Toggle'}}"
+                        title="{{localize 'WOD5E_MAGE.Settings.TraitsOrder.Toggle'}}">
+                    <i class="fa-solid {{#if traitsOrderGroup}}fa-arrow-down-a-z{{else}}fa-layer-group{{/if}}"></i>
+                </button>
+                {{/if}}
             </div>
             <div class="stats-container attributes">
                 <div class="grid grid-3col stats-footer">

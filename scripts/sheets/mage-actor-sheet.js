@@ -1,5 +1,5 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
-import { prepareEssentialSkills } from "../abilita-essenziali.js";
+import { orderAttributes, prepareEssentialSkillList, prepareEssentialSkills, prepareEssentialSkillsByGroup } from "../abilita-essenziali.js";
 import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../abilita-specifiche.js";
 import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
@@ -41,11 +41,7 @@ import {
   onMagickBalanceChange,
   prepareMagickTrack
 } from "../magick-balance.js";
-import {
-  onOngoingMagickAdd,
-  onOngoingMagickDelete,
-  prepareOngoingMagick
-} from "../ongoing-magick.js";
+import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
 import { loadSpherePowers, prepareSphereSpecialties } from "../sphere-specialties.js";
 import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
@@ -90,6 +86,14 @@ async function onWheelModeToggle(event) {
   event?.preventDefault?.();
   const current = game.settings.get(MODULE_ID, "headerWheelMode");
   await game.settings.set(MODULE_ID, "headerWheelMode", current === "bar" ? "wheel" : "bar");
+  this.render();
+}
+
+/** Il secondo tasto sui Tratti a colonne: ordine alfabetico o per gruppo (6/9). */
+async function onTraitsOrderToggle(event) {
+  event?.preventDefault?.();
+  const current = game.settings.get(MODULE_ID, "traitsOrder");
+  await game.settings.set(MODULE_ID, "traitsOrder", current === "group" ? "alpha" : "group");
   this.render();
 }
 
@@ -148,6 +152,7 @@ export class MageActorSheet extends MortalActorSheet {
       experienceLogDelete: onExperienceLogDelete,
       ongoingMagickAdd: onOngoingMagickAdd,
       ongoingMagickDelete: onOngoingMagickDelete,
+      ongoingMagickToggle: onOngoingMagickToggle,
       personaggioRowAdd: onPersonaggioRowAdd,
       personaggioRowDelete: onPersonaggioRowDelete,
       specialtyAdd: onSpecialtyAdd,
@@ -157,6 +162,7 @@ export class MageActorSheet extends MortalActorSheet {
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
       traitsLayoutToggle: onTraitsLayoutToggle,
+      traitsOrderToggle: onTraitsOrderToggle,
       condizioneToggle: onCondizioneToggle,
       wisdomResourceChange: onWisdomResourceChange,
       wisdomRoll: onWisdomRoll
@@ -329,6 +335,17 @@ export class MageActorSheet extends MortalActorSheet {
         article.classList.toggle("open", this._specialtyOpen[key]);
       });
     }
+    // Il Grimorio (6/9): ogni incantesimo è una tendina che ricorda com'era;
+    // il dado nella testa non la apre né la chiude.
+    this._incantesimoOpen ??= {};
+    for (const card of this.element?.querySelectorAll(".wod5e-mage-incantesimo[data-row]") ?? []) {
+      const id = card.dataset.row;
+      if (id in this._incantesimoOpen) card.open = this._incantesimoOpen[id];
+      card.addEventListener("toggle", () => { this._incantesimoOpen[id] = card.open; });
+      for (const button of card.querySelectorAll(":scope > summary button")) {
+        button.addEventListener("click", (event) => event.preventDefault());
+      }
+    }
     // Le Sfere del Credo: ogni tendina ricorda com'era.
     this._focusSphereOpen ??= {};
     for (const sphere of this.element?.querySelectorAll(".wod5e-mage-focus-sphere[data-sphere]") ?? []) {
@@ -369,11 +386,21 @@ export class MageActorSheet extends MortalActorSheet {
     // Wheel widget, so it needs that context too.
     if (partId === "stats") {
       // Ogni voce porta il suo sigillo, a sinistra del nome.
-      context.sortedSkills = applyTraitIcons(prepareEssentialSkills(context.sortedSkills, {
-        localize: game.i18n.localize.bind(game.i18n),
-        lang: game.i18n.lang
-      }));
-      context.sortedAttributes = applyTraitIcons(context.sortedAttributes);
+      const traitsColumns = game.settings.get(MODULE_ID, "traitsLayout") === "columns";
+      const traitsOrder = game.settings.get(MODULE_ID, "traitsOrder") === "group" ? "group" : "alpha";
+      const i18n = { localize: game.i18n.localize.bind(game.i18n), lang: game.i18n.lang };
+      if (traitsColumns) {
+        // A colonne (6/9): una fila sola, alfabetica o per gruppo (Fisici,
+        // Sociali, Mentali); le liste diventano trasparenti nel CSS.
+        context.sortedSkills = applyTraitIcons(traitsOrder === "group"
+          ? prepareEssentialSkillsByGroup(context.sortedSkills, i18n)
+          : { tutti: prepareEssentialSkillList(context.sortedSkills, i18n) });
+        context.sortedAttributes = applyTraitIcons(orderAttributes(context.sortedAttributes, { order: traitsOrder, lang: i18n.lang }));
+      } else {
+        context.sortedSkills = applyTraitIcons(prepareEssentialSkills(context.sortedSkills, i18n));
+        context.sortedAttributes = applyTraitIcons(context.sortedAttributes);
+      }
+      context.traitsOrderGroup = traitsOrder === "group";
       // Le Abilità Specifiche del giocatore, sotto le essenziali.
       context.customSkills = prepareCustomSkills(actor);
       context.arete = getArete(actor);

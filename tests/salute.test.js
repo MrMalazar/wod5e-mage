@@ -5,6 +5,7 @@ import {
   clampSalute,
   getSalute,
   saluteAfterSession,
+  quintessenceGained,
   saluteMax,
   saluteStatus,
   saluteAfterRelax,
@@ -27,6 +28,12 @@ assert.equal(saluteMax(actor(), -9), 1);
 // Nuova sessione: i superficiali mentali guariscono, un fisico se ne va.
 assert.deepEqual(saluteAfterSession({ pa: 1, ps: 3, ma: 2, ms: 2 }), { pa: 1, ps: 2, ma: 2, ms: 0 });
 assert.deepEqual(saluteAfterSession({ pa: 0, ps: 0, ma: 0, ms: 4 }), { pa: 0, ps: 0, ma: 0, ms: 0 });
+// Nuova sessione (6/9): la Ruota sale della Quintessenza generata, almeno di 1.
+assert.equal(quintessenceGained(""), 1);
+assert.equal(quintessenceGained("0"), 1);
+assert.equal(quintessenceGained("3"), 3);
+assert.equal(quintessenceGained(" 2 "), 2);
+assert.match(readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8"), /magickBalance`\] = \{\s*quintessence: Math\.min\(balance\.quintessence \+ gained, MAGICK_TRACK_MAX - balance\.floor\)/);
 
 // I conti stanno dentro il tracciato, aggravati per primi.
 assert.deepEqual(clampSalute({ pa: 2, ps: 3, ma: 2, ms: 1 }, 6), { pa: 2, ps: 3, ma: 1, ms: 0 });

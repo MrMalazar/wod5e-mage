@@ -735,6 +735,7 @@ export async function launchArete(actor, { mode = "roll", preset = null } = {}) 
     vulgar: options.vulgar || options.witnesses,
     duration: scopeEntries.find((entry) => entry.scopeId === "duration")?.level ?? 0,
     threshold,
+    goal,
     fallbackName: goal || sphereEntries
       .map((entry) => `${localize(`WOD5E_MAGE.Spheres.${entry.id}`)} ${entry.level}`)
       .join(", ") || rollLabel
@@ -850,6 +851,7 @@ export async function recordEffect(actor, result, effect = {}) {
     duration: effect.duration,
     threshold: effect.threshold,
     maintained,
+    effect: effect.goal,
     status: game.i18n.localize(maintained ? "WOD5E_MAGE.OngoingMagick.MaintainedStatus" : "WOD5E_MAGE.OngoingMagick.RunningStatus")
   });
 

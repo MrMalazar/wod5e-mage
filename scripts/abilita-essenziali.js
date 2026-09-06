@@ -84,6 +84,30 @@ export function prepareEssentialSkillList(sortedSkills, { localize = (k) => k, l
 }
 
 /**
+ * Le Abilità Essenziali per gruppo del sistema (Fisiche, Sociali, Mentali),
+ * ognuno in ordine alfabetico: serve ai Tratti a colonne quando il giocatore
+ * vuole l'ordine per gruppo (6/9).
+ */
+export function prepareEssentialSkillsByGroup(sortedSkills, { localize = (k) => k, lang = "it" } = {}) {
+  const gruppi = {};
+  for (const [gruppo, lista] of Object.entries(sortedSkills ?? {})) {
+    gruppi[gruppo] = prepareEssentialSkillList({ [gruppo]: lista }, { localize, lang });
+  }
+  return gruppi;
+}
+
+/**
+ * Gli Attributi in un ordine solo (6/9): «alpha» una fila alfabetica,
+ * «group» i gruppi del sistema (Fisici, Sociali, Mentali) come sono.
+ */
+export function orderAttributes(sortedAttributes, { order = "alpha", lang = "it" } = {}) {
+  if (order !== "alpha") return sortedAttributes ?? {};
+  const tutti = Object.values(sortedAttributes ?? {}).flat().filter(Boolean);
+  tutti.sort((a, b) => String(a.displayName ?? a.id).localeCompare(String(b.displayName ?? b.id), lang));
+  return { tutti };
+}
+
+/**
  * Riscrive il `sortedSkills` del sistema nella fila unica alfabetica del
  * canone, distribuita in colonne per il template di sistema (che disegna
  * una colonna per ogni gruppo).

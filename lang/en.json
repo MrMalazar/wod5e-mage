@@ -469,8 +469,12 @@
       "MaintainedStatus": "Maintained",
       "RunningStatus": "Running",
       "MaintainedLocked": "“{name}” is among the ongoing Magick: it locks 1 permanent Paradox while it stands.",
-      "LockHint": "Vulgar effect standing: 1 permanent Paradox locked until the row is removed",
-      "MaintainedAdded": "“{name}” is now among the Ongoing Magicks."
+      "LockHint": "Standing Vulgar: 1 permanent Paradox locked while it stays on",
+      "MaintainedAdded": "“{name}” is now among the Ongoing Magicks.",
+      "Name": "Name",
+      "Effect": "Effect",
+      "On": "On",
+      "Off": "Off"
     },
     "Spheres": {
       "Hint": "Select the Spheres to display and assign each a rating from zero to five.",
@@ -552,6 +556,13 @@
         "Groups": "By group",
         "Columns": "In columns",
         "Toggle": "Switch the Traits layout"
+      },
+      "TraitsOrder": {
+        "Name": "Traits order in columns",
+        "Hint": "With Traits in columns: Attributes and Skills in alphabetical order, or by group (Physical, Social, Mental).",
+        "Alpha": "Alphabetical",
+        "Group": "By group",
+        "Toggle": "Order: alphabetical or by group"
       }
     },
     "Errors": {

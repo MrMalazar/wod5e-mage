@@ -27,30 +27,39 @@ export function prepareOngoingMagick(actor) {
     vulgar: Boolean(row?.vulgar),
     duration: count(row?.duration),
     threshold: count(row?.threshold),
-    lock: count(row?.lock)
+    lock: count(row?.lock),
+    // On/Off (6/9): un effetto spento resta scritto ma non è in piedi.
+    active: isActive(row)
   }));
 }
 
-/** I punti di Paradosso permanente bloccati dagli effetti in piedi. */
+/** Una riga è accesa finché nessuno la spegne. */
+export function isActive(row) {
+  return row?.active !== false;
+}
+
+/** I punti di Paradosso permanente bloccati dagli effetti in piedi (accesi). */
 export function lockedParadox(actor) {
   const stored = actor?.getFlag?.(MODULE_ID, "ongoingMagick") ?? {};
-  return Object.values(stored).reduce((total, row) => total + count(row?.lock), 0);
+  return Object.values(stored).reduce((total, row) => total + (isActive(row) ? count(row?.lock) : 0), 0);
 }
 
 /**
  * La riga di un effetto appena lanciato: il nome, lo stato, il tipo, la
  * Durata e la soglia; se è Volgare blocca un punto di Paradosso.
  */
-export function maintainedEffectRow({ name, vulgar = false, duration = 0, threshold = 0, maintained = false, status = "" } = {}) {
+export function maintainedEffectRow({ name, vulgar = false, duration = 0, threshold = 0, maintained = false, status = "", effect = "" } = {}) {
   return {
     nameSpheres: String(name ?? "").trim(),
     status,
-    triggerEffect: "",
+    // L'Effetto (6/9): l'Obiettivo del lancio, quel che l'incantesimo fa.
+    triggerEffect: String(effect ?? "").trim(),
     vulgar: Boolean(vulgar),
     duration: count(duration),
     threshold: count(threshold),
     maintained: Boolean(maintained),
-    lock: vulgar ? 1 : 0
+    lock: vulgar ? 1 : 0,
+    active: true
   };
 }
 
@@ -98,10 +107,27 @@ export async function onOngoingMagickAdd(event) {
   rows[rowId] = {
     nameSpheres: "",
     status: "",
-    triggerEffect: ""
+    triggerEffect: "",
+    active: true
   };
 
   await actor.setFlag(MODULE_ID, "ongoingMagick", rows);
+}
+
+/** On/Off (6/9): spento, l'effetto non è in piedi e non blocca Paradosso. */
+export async function onOngoingMagickToggle(event, target) {
+  event.preventDefault();
+
+  const actor = this.actor;
+  if (!canEditOngoingMagick(actor)) return;
+
+  const rowId = target.dataset.row;
+  const rows = actor.getFlag(MODULE_ID, "ongoingMagick") ?? {};
+  if (!Object.hasOwn(rows, rowId)) return;
+
+  await actor.update({
+    [`flags.${MODULE_ID}.ongoingMagick.${rowId}.active`]: !isActive(rows[rowId])
+  });
 }
 
 export async function onOngoingMagickDelete(event, target) {
