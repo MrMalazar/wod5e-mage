@@ -22,7 +22,7 @@
                         {{#if entry.pairings.length}}
                             <ul class="wod5e-mage-grimorio-pairings">
                                 {{#each entry.pairings as |pairing|}}
-                                    <li{{#if pairing.required}} class="required"{{/if}}><img src="{{pairing.icon}}" alt=""><b>+ {{pairing.label}}:</b> {{pairing.text}}</li>
+                                    <li{{#if pairing.required}} class="required"{{/if}}><img src="{{pairing.icon}}" alt=""><b>+ {{pairing.label}}{{#if pairing.required}} ({{localize "WOD5E_MAGE.Grimorio.Required"}}){{/if}}:</b> {{pairing.text}}</li>
                                 {{/each}}
                             </ul>
                         {{/if}}

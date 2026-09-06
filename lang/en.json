@@ -915,7 +915,8 @@
       "Open": "Open the Grimoire",
       "Search": "Search an effect…",
       "Empty": "No effects: you need Spheres with at least one dot.",
-      "Scopes": "Suggested Scopes:"
+      "Scopes": "Suggested Scopes:",
+      "Required": "required"
     },
     "Incantesimi": {
       "DialogTitle": "Write a spell",
