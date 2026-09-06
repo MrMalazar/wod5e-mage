@@ -130,7 +130,21 @@
       "ScopeTable": "The Scopes table",
       "Backlash": "BACKLASH: {eyes} eyes on the red dice. Burn {burn}: mark {burn} damage on Health.",
       "AutoSuccesses": "· Automatic successes: {successes}",
-      "AutoSuccessesFlavor": "{successes} automatic successes (Arete, Specialty: {pairs})"
+      "AutoSuccessesFlavor": "{successes} automatic successes (Arete, Specialty: {pairs})",
+      "Goal": "Goal",
+      "GoalHint": "What you want to achieve",
+      "EffectKind": "Effect",
+      "EffectKinds": {
+        "none": "—",
+        "physical": "Physical",
+        "mental": "Mental (abstract)",
+        "variable": "Variable"
+      },
+      "Quintessence": "Quintessence",
+      "QuintessenceShort": "automatic successes (you have {available})",
+      "QuintessenceHint": "Each point spent is an automatic success and leaves the Wheel. If the effect deals damage, it is aggravated.",
+      "QuintessenceFlavor": "Quintessence {points} (+{points} successes; damage is aggravated)",
+      "QuintessenceSpent": "Quintessence spent: {points}."
     },
     "Focus": {
       "Credo": "Creed",
@@ -775,7 +789,8 @@
       "Roll": "Roll the reds",
       "NoParadox": "The Wheel holds no Paradox: nothing to roll.",
       "Flavor": "Burst: {dice} reds, threshold {threshold}.",
-      "Result": "BURST: {eyes} eyes. Burn {total} ({aggravated} aggravated) marked on Health; the Wheel discharges {discharged}."
+      "Result": "BURST: {eyes} eyes. Burn {total} ({aggravated} aggravated) marked on Health; the Wheel discharges {discharged}.",
+      "Applied": "Burn marked: {total} damage ({physical} physical, {physicalAggravated} aggravated; {mental} mental, {mentalAggravated} aggravated). The Wheel discharges {discharged}."
     },
     "Volonta": {
       "Label": "Willpower",
@@ -801,6 +816,12 @@
     },
     "Header": {
       "Player": "Player"
+    },
+    "Grimorio": {
+      "Title": "Grimoire",
+      "Open": "Open the Grimoire",
+      "Search": "Search an effect…",
+      "Empty": "No effects: you need Spheres with at least one dot."
     }
   }
 }

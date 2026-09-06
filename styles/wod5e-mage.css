@@ -4905,3 +4905,150 @@
   font-style: normal;
   font-weight: 700;
 }
+
+/* L'Obiettivo e l'Effetto, in cima alla colonna delle Sfere del tiro:
+   una riga a tutta larghezza della griglia, nome | campo | libro. */
+.wod5e-mage-arete-goal {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.wod5e-mage-arete-goal > .wod5e-mage-arete-row-label {
+  flex: 0 0 auto;
+  min-width: 68px;
+}
+
+.wod5e-mage-arete-goal > input,
+.wod5e-mage-arete-goal > select {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.wod5e-mage-arete-goal > .wod5e-mage-arete-grimorio {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  border-radius: 3px;
+  color: var(--mage-oro, #d9a827);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 26px;
+  height: 26px;
+  justify-content: center;
+  margin: 0;
+  min-height: 0;
+  padding: 0;
+  width: 26px;
+}
+
+.wod5e-mage-arete-goal > .wod5e-mage-arete-grimorio:hover {
+  border-color: var(--mage-oro, #d9a827);
+  box-shadow: 0 0 4px var(--mage-oro, #d9a827);
+}
+
+.wod5e-mage-arete-effect-kind {
+  margin-bottom: 0.35rem;
+}
+
+/* Il Grimorio: le Sfere una sotto l'altra, i livelli a pallini, gli effetti
+   come righe da cliccare. */
+.wod5e-mage-grimorio-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.wod5e-mage-grimorio-search {
+  width: 100%;
+}
+
+.wod5e-mage-grimorio-sphere > h3 {
+  align-items: center;
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
+  color: var(--mage-oro, #d9a827);
+  display: flex;
+  font-size: 1rem;
+  gap: 0.4rem;
+  margin: 0.4rem 0 0.3rem;
+}
+
+.wod5e-mage-grimorio-sphere > h3 > img {
+  border: none;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  height: 20px;
+  width: 20px;
+}
+
+.wod5e-mage-grimorio-sphere > h4 {
+  border: none;
+  color: var(--mage-oro-chiaro, #f5e7b2);
+  font-size: 0.8rem;
+  margin: 0.4rem 0 0.2rem;
+}
+
+.wod5e-mage-grimorio-dots {
+  color: var(--mage-oro, #d9a827);
+  letter-spacing: 0.1em;
+}
+
+.wod5e-mage-grimorio-row {
+  background: rgb(255 250 240 / 5%);
+  border: 1px solid rgb(152 119 43 / 35%);
+  border-radius: 4px;
+  color: inherit;
+  cursor: pointer;
+  display: grid;
+  gap: 0.15rem 0.5rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  line-height: 1.25;
+  margin: 0 0 0.3rem;
+  padding: 0.3rem 0.5rem;
+  text-align: left;
+  width: 100%;
+}
+
+.wod5e-mage-grimorio-row:hover {
+  border-color: var(--mage-oro, #d9a827);
+  box-shadow: 0 0 4px var(--mage-oro, #d9a827);
+}
+
+.wod5e-mage-grimorio-row > strong {
+  color: var(--mage-oro-chiaro, #f5e7b2);
+  font-size: 0.9rem;
+}
+
+.wod5e-mage-grimorio-extras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+}
+
+.wod5e-mage-grimorio-extras > em {
+  color: var(--mage-tenue, #b8ad93);
+  font-size: 0.72rem;
+  font-style: normal;
+  white-space: nowrap;
+}
+
+.wod5e-mage-grimorio-extras > em.required {
+  color: var(--mage-oro, #d9a827);
+}
+
+.wod5e-mage-grimorio-row > small {
+  color: var(--mage-testo, #e6dcc2);
+  font-size: 0.78rem;
+  grid-column: 1 / -1;
+  opacity: 0.9;
+}
+
+.wod5e-mage-grimorio-empty {
+  color: var(--mage-tenue, #b8ad93);
+  margin: 0.5rem 0;
+}

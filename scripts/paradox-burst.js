@@ -1,6 +1,6 @@
 import { MODULE_ID } from "./constants.js";
 import { getMagickBalance, getParadoxFloor } from "./magick-balance.js";
-import { renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
+import { renderRollNote } from "./roll-card.js";
 import { addSaluteDamage } from "./salute.js";
 
 /**
@@ -21,18 +21,63 @@ export function burstDamage({ eyes = 0, tens = 0, threshold = 0 } = {}) {
   return { total, pa, ps: total - pa };
 }
 
+/** I tipi di effetto: dicono dove va il Contraccolpo (verdetto di Blue, 6/9). */
+export const EFFECT_KINDS = Object.freeze(["", "physical", "mental", "variable"]);
+
+export function normalizeEffectKind(value) {
+  const kind = String(value ?? "");
+  return EFFECT_KINDS.includes(kind) ? kind : "";
+}
+
+/**
+ * Dove va l'Ustione: fisico se l'effetto è fisico (o non dichiarato), mentale
+ * se è mentale, metà e metà arrotondando per difetto se è variabile. Le
+ * conversioni in aggravato (una ogni due 10) vanno prima sul fisico.
+ */
+export function ustioneSplit({ threshold = 0, tens = 0, kind = "" } = {}) {
+  const total = Math.max(Math.trunc(Number(threshold) || 0), 0);
+  let aggravated = Math.min(Math.floor(Math.max(Math.trunc(Number(tens) || 0), 0) / 2), total);
+  const effect = normalizeEffectKind(kind);
+  let physical = total;
+  let mental = 0;
+  if (effect === "mental") { physical = 0; mental = total; }
+  if (effect === "variable") { physical = Math.floor(total / 2); mental = Math.floor(total / 2); }
+  const pa = Math.min(aggravated, physical);
+  aggravated -= pa;
+  const ma = Math.min(aggravated, mental);
+  return { total, applied: physical + mental, pa, ps: physical - pa, ma, ms: mental - ma, kind: effect };
+}
+
+/** Segna l'Ustione sulla Salute e scarica la Ruota di un punto per danno. */
+export async function applyUstione(actor, { threshold = 0, tens = 0, kind = "" } = {}) {
+  const split = ustioneSplit({ threshold, tens, kind });
+  if (split.applied <= 0) return { ...split, discharged: 0 };
+  await addSaluteDamage(actor, { pa: split.pa, ps: split.ps, ma: split.ma, ms: split.ms });
+  const balance = getMagickBalance(actor);
+  const paradox = paradoxAfterBurst(balance.paradox, split.applied, getParadoxFloor(actor));
+  if (paradox !== balance.paradox) {
+    await actor.setFlag(MODULE_ID, "magickBalance", { quintessence: balance.quintessence, paradox });
+  }
+  return { ...split, discharged: balance.paradox - paradox };
+}
+
+/** La riga in chat: quanto è andato dove, e quanto ha scaricato la Ruota. */
+export function ustioneText(applied, format) {
+  return format("WOD5E_MAGE.Burst.Applied", {
+    total: applied.applied,
+    physical: applied.pa + applied.ps,
+    physicalAggravated: applied.pa,
+    mental: applied.ma + applied.ms,
+    mentalAggravated: applied.ma,
+    discharged: applied.discharged
+  });
+}
+
 /** La Ruota si scarica di un punto per danno, mai sotto il pavimento. */
 export function paradoxAfterBurst(paradox, damage, floor = 0) {
   const current = Math.max(Math.trunc(Number(paradox) || 0), 0);
   const bottom = Math.max(Math.trunc(Number(floor) || 0), 0);
   return Math.max(current - Math.max(Math.trunc(Number(damage) || 0), 0), bottom);
-}
-
-function paradoxResults(message) {
-  const roll = message?.rolls?.[0];
-  const term = roll?.terms?.find((candidate) => candidate?.denomination === "p" || candidate?.constructor?.DENOMINATION === "p");
-  const results = term?.results ?? roll?.advancedDice?.results ?? [];
-  return results.filter((result) => result?.active !== false && !result?.discarded).map((result) => Number(result.result));
 }
 
 export async function onParadoxBurst(event) {
@@ -56,6 +101,9 @@ export async function onParadoxBurst(event) {
       <label>${game.i18n.localize("WOD5E_MAGE.Burst.Threshold")}
         <input type="number" name="threshold" min="0" step="1" value="${suggested}" autofocus>
       </label>
+      <label>${game.i18n.localize("WOD5E_MAGE.Arete.EffectKind")}
+        <select name="effectKind">${EFFECT_KINDS.map((kind) => `<option value="${kind}">${game.i18n.localize(`WOD5E_MAGE.Arete.EffectKinds.${kind || "none"}`)}</option>`).join("")}</select>
+      </label>
       <p class="wod5e-mage-burst-dice">${game.i18n.format("WOD5E_MAGE.Burst.Dice", { dice: balance.paradox })}</p>
     </div>`,
     ok: { icon: "fas fa-dice", label: game.i18n.localize("WOD5E_MAGE.Burst.Roll") },
@@ -63,12 +111,13 @@ export async function onParadoxBurst(event) {
   }).catch(() => null);
   if (!answer || answer === "cancel") return;
   const threshold = Math.max(Math.trunc(Number(answer.threshold) || 0), 0);
+  const effectKind = normalizeEffectKind(answer.effectKind);
 
+  // Il tiro dei soli rossi: se scoppia, l'Ustione la segna il tiro stesso.
   const { rollAreteWithParadox } = await import("./paradox-dice.js");
   const title = game.i18n.localize("WOD5E_MAGE.Burst.Title");
-  let message = null;
   try {
-    message = await rollAreteWithParadox({
+    await rollAreteWithParadox({
       actor,
       data: actor.system,
       dicePool: balance.paradox,
@@ -76,6 +125,7 @@ export async function onParadoxBurst(event) {
       onlyParadox: true,
       difficulty: 0,
       burn: threshold,
+      effectKind,
       title,
       flavor: renderRollNote(game.i18n.format("WOD5E_MAGE.Burst.Flavor", { dice: balance.paradox, threshold })),
       card: { symbols: [], burst: true }
@@ -83,34 +133,4 @@ export async function onParadoxBurst(event) {
   } catch (error) {
     console.warn("wod5e-mage | Scoppio interrotto.", error);
   }
-  if (!message || message === "cancel" || !message.rolls) return;
-
-  const results = paradoxResults(message);
-  const eyes = results.filter((value) => value === 1 || value === 10).length;
-  const tens = results.filter((value) => value === 10).length;
-  if (eyes <= 0) return;
-
-  const damage = burstDamage({ eyes, tens, threshold });
-  const after = getMagickBalance(actor);
-  const paradox = paradoxAfterBurst(after.paradox, damage.total, getParadoxFloor(actor));
-  const updates = {};
-  if (damage.total > 0) await addSaluteDamage(actor, { ps: damage.ps, pa: damage.pa });
-  if (paradox !== after.paradox) {
-    updates[`flags.${MODULE_ID}.magickBalance`] = { quintessence: after.quintessence, paradox };
-  }
-  if (Object.keys(updates).length) await actor.update(updates);
-
-  const note = game.i18n.format("WOD5E_MAGE.Burst.Result", {
-    eyes,
-    total: damage.total,
-    aggravated: damage.pa,
-    discharged: after.paradox - paradox
-  });
-  ui.notifications.warn(note);
-  await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor }),
-    flavor: title,
-    content: renderRollNote(note, "backlash"),
-    flags: { [MODULE_ID]: { [ROLL_CARD_FLAG]: { symbols: [], burstResult: true } } }
-  });
 }

@@ -11,8 +11,23 @@ import { addParadoxToBalance, getMagickBalance, MAGICK_TRACK_MAX } from "./magic
 // I quattro segni, nell'ordine della scelta.
 export const SALUTE_STATES = Object.freeze(["", "ps", "pa", "ms", "ma"]);
 
-// L'ordine in cui il tracciato si dipinge da sinistra: prima gli aggravati.
+// L'ordine dei conti: prima gli aggravati.
 export const SALUTE_ORDER = Object.freeze(["pa", "ps", "ma", "ms"]);
+
+/**
+ * Come si dipinge il tracciato (verdetto di Blue, 6/9/2026): i danni fisici
+ * da sinistra a destra (aggravati, poi superficiali), quelli mentali da
+ * destra a sinistra (aggravati all'estremo, poi superficiali verso il
+ * centro). Torna gli stati delle caselle, da sinistra.
+ */
+export function paintSalute(counts, max) {
+  const cells = Array.from({ length: Math.max(max, 0) }, () => "");
+  const left = [...Array.from({ length: count(counts?.pa) }, () => "pa"), ...Array.from({ length: count(counts?.ps) }, () => "ps")];
+  const right = [...Array.from({ length: count(counts?.ma) }, () => "ma"), ...Array.from({ length: count(counts?.ms) }, () => "ms")];
+  left.slice(0, cells.length).forEach((state, index) => { cells[index] = state; });
+  right.slice(0, cells.length - Math.min(left.length, cells.length)).forEach((state, index) => { cells[cells.length - 1 - index] = state; });
+  return cells;
+}
 
 function count(value) {
   return Math.max(Math.trunc(Number(value) || 0), 0);
@@ -56,7 +71,7 @@ export function getSalute(actor) {
   const counts = clampSalute(stored, max);
   const total = counts.pa + counts.ps + counts.ma + counts.ms;
 
-  const painted = SALUTE_ORDER.flatMap((state) => Array.from({ length: counts[state] }, () => state));
+  const painted = paintSalute(counts, max);
   const cells = Array.from({ length: max }, (_, index) => ({
     index,
     state: painted[index] ?? "",

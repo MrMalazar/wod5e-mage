@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Costruisce i consigli degli Strumenti dalle sorgenti del LIBRO M5.
+"""Costruisce i consigli degli Strumenti dalle sorgenti del LIBRO M6.
 
-Uso: python3 tools/build-strumenti.py "<cartella della casa MAGHI M5>"
+Uso: python3 tools/build-strumenti.py "<cartella della casa MAGHI M6>"
 
 Legge la pagina «Gli Strumenti d'esempio» dei tredici studi dei Credi
 (tavola Sfera per Sfera, chiave Magick e Tecnomagick) e le righe ⚙ delle
@@ -14,7 +14,7 @@ import re
 import sys
 from pathlib import Path
 
-CASA = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("../MAGHI M5")
+CASA = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("../MAGHI M6")
 STUDI = CASA / "01_DECISIONI/studi"
 FAZIONI = CASA / "02_LIBRO/sorgenti/03_le_fazioni"
 ROOT = Path(__file__).resolve().parent.parent
@@ -192,7 +192,7 @@ def main():
         raise SystemExit(f"Sette lette: {len(sottofamiglie)}, attese 36")
     dump = lambda value: json.dumps(value, ensure_ascii=False, indent=2)
     OUT.write_text(
-        "// Generato da tools/build-strumenti.py dalle sorgenti del LIBRO M5: non toccare a mano.\n"
+        "// Generato da tools/build-strumenti.py dalle sorgenti del LIBRO M6: non toccare a mano.\n"
         "// Gli Strumenti d'esempio dei tredici Credi (Sfera per Sfera, Magick e Tecnomagick),\n"
         "// gli Strumenti delle nove Tradizioni e delle dieci Craft, e quelli delle trentasei sette.\n\n"
         f"export const CREDO_STRUMENTI = Object.freeze({dump(credi)});\n\n"

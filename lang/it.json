@@ -130,7 +130,21 @@
       "ScopeTable": "La tavola degli Ambiti",
       "Backlash": "CONTRACCOLPO: {eyes} occhi sui rossi. Ustione {burn}: segna {burn} danni sulla Salute.",
       "AutoSuccesses": "· Successi automatici: {successes}",
-      "AutoSuccessesFlavor": "{successes} successi automatici (Areté, Specialità: {pairs})"
+      "AutoSuccessesFlavor": "{successes} successi automatici (Areté, Specialità: {pairs})",
+      "Goal": "Obiettivo",
+      "GoalHint": "Cosa vuoi ottenere",
+      "EffectKind": "Effetto",
+      "EffectKinds": {
+        "none": "—",
+        "physical": "Fisico",
+        "mental": "Mentale (astratto)",
+        "variable": "Variabile"
+      },
+      "Quintessence": "Quintessenza",
+      "QuintessenceShort": "successi automatici (hai {available})",
+      "QuintessenceHint": "Ogni punto speso è un successo automatico e scende dalla Ruota. Se l'effetto fa danni, sono aggravati.",
+      "QuintessenceFlavor": "Quintessenza {points} (+{points} successi; i danni sono aggravati)",
+      "QuintessenceSpent": "Quintessenza spesa: {points}."
     },
     "Focus": {
       "Credo": "Credo",
@@ -775,7 +789,8 @@
       "Roll": "Tira i rossi",
       "NoParadox": "La Ruota non ha Paradosso: niente da tirare.",
       "Flavor": "Scoppio: {dice} rossi, soglia {threshold}.",
-      "Result": "SCOPPIO: {eyes} occhi. Ustione {total} ({aggravated} aggravati) segnata sulla Salute; la Ruota scarica {discharged}."
+      "Result": "SCOPPIO: {eyes} occhi. Ustione {total} ({aggravated} aggravati) segnata sulla Salute; la Ruota scarica {discharged}.",
+      "Applied": "Ustione segnata: {total} danni ({physical} fisici, {physicalAggravated} aggravati; {mental} mentali, {mentalAggravated} aggravati). La Ruota scarica {discharged}."
     },
     "Volonta": {
       "Label": "Volontà",
@@ -801,6 +816,12 @@
     },
     "Header": {
       "Player": "Giocatore"
+    },
+    "Grimorio": {
+      "Title": "Grimorio",
+      "Open": "Apri il Grimorio",
+      "Search": "Cerca un effetto…",
+      "Empty": "Nessun effetto: servono Sfere con almeno un pallino."
     }
   },
   "WOD5E": {

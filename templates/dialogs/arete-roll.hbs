@@ -53,6 +53,13 @@
                 <input type="number" name="harmony" id="wod5e-mage-arete-harmony" class="wod5e-mage-arete-harmony" min="0" max="9" step="1" value="0" data-value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Harmony'}}">
             </div>
 
+            {{!-- La Quintessenza: ogni punto speso è un successo automatico e scende
+                 dalla Ruota; se l'effetto fa danni, sono aggravati. --}}
+            <div class="wod5e-mage-arete-harmony-row wod5e-mage-arete-quintessence-row" title="{{localize 'WOD5E_MAGE.Arete.QuintessenceHint'}}">
+                <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Quintessence"}} <small>{{localize "WOD5E_MAGE.Arete.QuintessenceShort" available=quintessence}}</small></span>
+                <input type="number" name="quintessence" id="wod5e-mage-arete-quintessence" class="wod5e-mage-arete-harmony" min="0" max="{{quintessence}}" step="1" value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Quintessence'}}" {{#unless quintessence}}disabled{{/unless}}>
+            </div>
+
             <hr>
 
             {{!-- La Tipologia: una scelta sola. --}}
@@ -89,6 +96,23 @@
              (display: contents), così i pallini di tutte le righe partono dalla
              stessa verticale, subito dopo il nome più lungo, a sinistra. --}}
         <div class="wod5e-mage-arete-dots-column" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Spheres'}}">
+            {{!-- L'Obiettivo: cosa vuoi ottenere, scritto a mano o scelto dal
+                 Grimorio (il libro), che accende anche le Sfere coinvolte. --}}
+            <div class="wod5e-mage-arete-goal">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Goal"}}</span>
+                <input type="text" name="goal" id="wod5e-mage-arete-goal" placeholder="{{localize 'WOD5E_MAGE.Arete.GoalHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Goal'}}">
+                <button type="button" class="wod5e-mage-archivio-open wod5e-mage-arete-grimorio" data-role="grimorioOpen" title="{{localize 'WOD5E_MAGE.Grimorio.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+            </div>
+            {{!-- L'Effetto: fisico, mentale o variabile. Dice dove va il Contraccolpo. --}}
+            <div class="wod5e-mage-arete-goal wod5e-mage-arete-effect-kind">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.EffectKind"}}</span>
+                <select name="effectKind" id="wod5e-mage-arete-effect-kind" aria-label="{{localize 'WOD5E_MAGE.Arete.EffectKind'}}">
+                    <option value="">{{localize "WOD5E_MAGE.Arete.EffectKinds.none"}}</option>
+                    <option value="physical">{{localize "WOD5E_MAGE.Arete.EffectKinds.physical"}}</option>
+                    <option value="mental">{{localize "WOD5E_MAGE.Arete.EffectKinds.mental"}}</option>
+                    <option value="variable">{{localize "WOD5E_MAGE.Arete.EffectKinds.variable"}}</option>
+                </select>
+            </div>
             <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head">{{localize "WOD5E_MAGE.Arete.Spheres"}}</span>
             {{#each spheres as |sphere|}}
                 <div class="wod5e-mage-arete-dotrow" data-role="dotRow" data-kind="sphere" data-id="{{sphere.id}}" data-specialty="{{sphere.specialtyScope}}">

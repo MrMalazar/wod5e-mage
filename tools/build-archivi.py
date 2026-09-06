@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Costruisce i compendi degli archivi del Mago dalle sorgenti del LIBRO M5.
+"""Costruisce i compendi degli archivi del Mago dalle sorgenti del LIBRO M6.
 
-Uso: python3 tools/build-archivi.py "<cartella della casa MAGHI M5>"
+Uso: python3 tools/build-archivi.py "<cartella della casa MAGHI M6>"
 
 Legge i Cataloghi (capitolo 08), i Concetti (05_011) e gli studi dei Credi
 e scrive in packs/ un file .db (NeDB, una riga per documento) per archivio:
@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 MODULE = "wod5e-mage"
-CASA = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("../MAGHI M5")
+CASA = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("../MAGHI M6")
 CAT = CASA / "02_LIBRO/sorgenti/08_i_cataloghi"
 PERS = CASA / "02_LIBRO/sorgenti/05_il_personaggio"
 STUDI = CASA / "01_DECISIONI/studi"
@@ -192,7 +192,7 @@ def feature(name, content, featuretype, points, kind, group, sort, extra=None):
         "system": {
             "description": content,
             "bonuses": [],
-            "source": {"book": "M5 · I Cataloghi", "page": ""},
+            "source": {"book": "M6 · I Cataloghi", "page": ""},
             "points": points,
             "featuretype": featuretype
         },
@@ -438,8 +438,8 @@ DATA_OUT = Path(__file__).resolve().parent.parent / "scripts" / "data" / "condiz
 
 
 def build_condizioni():
-    """Le Condizioni di M5 (bozza 04_BOZZE/condizioni_M5.md, verdetti del 4/9): Item «condition»."""
-    raw = strip_comments(read(BOZZE / "condizioni_M5.md"))
+    """Le Condizioni di M6 (bozza 04_BOZZE/condizioni_M6.md, verdetti del 4/9): Item «condition»."""
+    raw = strip_comments(read(BOZZE / "condizioni_M6.md"))
     docs, sort, data = [], 0, []
     for m in re.finditer(r"^## (.+?)\n(.*?)(?=^## |\Z)", raw, flags=re.S | re.M):
         group, body = m.group(1).strip(), m.group(2)
@@ -461,7 +461,7 @@ def build_condizioni():
                 "name": name,
                 "type": "condition",
                 "img": icon,
-                "system": {"description": content, "bonuses": bonuses, "source": {"book": "M5 · Le Condizioni", "page": ""},
+                "system": {"description": content, "bonuses": bonuses, "source": {"book": "M6 · Le Condizioni", "page": ""},
                            "effects": {}, "suppressed": False},
                 "effects": [], "folder": None, "sort": sort, "ownership": {"default": 0},
                 "flags": {MODULE: {"archivio": {"kind": "condizione", "group": group, "name": name, "text": what, "description": effect}}}
@@ -470,8 +470,8 @@ def build_condizioni():
     write_pack("mage-condizioni", docs)
     # Le stesse venticinque come modulo dati: i quadratini della scheda non aspettano il compendio.
     DATA_OUT.write_text(
-        "// Generato da tools/build-archivi.py dalla bozza 04_BOZZE/condizioni_M5.md: non toccare a mano.\n"
-        "// Le venticinque Condizioni di M5, nell'ordine della bozza, coi dadi tolti nei modificatori.\n\n"
+        "// Generato da tools/build-archivi.py dalla bozza 04_BOZZE/condizioni_M6.md: non toccare a mano.\n"
+        "// Le venticinque Condizioni di M6, nell'ordine della bozza, coi dadi tolti nei modificatori.\n\n"
         f"export const CONDIZIONI = Object.freeze({json.dumps(data, ensure_ascii=False, indent=2)});\n",
         encoding="utf-8", newline="\n")
     print(f"condizioni.js: {len(data)} voci")

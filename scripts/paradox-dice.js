@@ -11,6 +11,7 @@ import {
   shiftParadoxDice
 } from "./arete-dice-pool.js";
 import { bonusDiceExcess, isOneStepShort } from "./arete.js";
+import { applyUstione, ustioneText } from "./paradox-burst.js";
 import { MODULE_ID } from "./constants.js";
 import { renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
 import {
@@ -196,6 +197,8 @@ export async function rollAreteWithParadox({
   onlyParadox = false,
   difficulty = 0,
   burn = 0,
+  effectKind = "",
+  applyBurn = true,
   arete = 0,
   autoSuccesses = 0,
   title,
@@ -312,9 +315,20 @@ export async function rollAreteWithParadox({
           // Il Contraccolpo: ogni rosso che mostra l'occhio (1 o 10) chiama
           // la realtà. Il messaggio lo dichiara e dice l'Ustione da segnare,
           // pari alla soglia.
-          const eyes = countParadoxEyes(roll.advancedDice?.results ?? []);
+          const redResults = roll.advancedDice?.results ?? [];
+          const eyes = countParadoxEyes(redResults);
           if (eyes > 0) {
             finalFlavor += renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.Backlash", { eyes, burn }), "backlash");
+            // L'Ustione si segna da sola (6/9): fisica, mentale o metà e metà
+            // secondo l'Effetto dichiarato; ogni due 10 un punto aggravato; la
+            // Ruota scarica un punto per danno.
+            if (applyBurn && actor?.isOwner && burn > 0) {
+              const tens = redResults
+                .filter((result) => result?.active !== false && !result?.discarded)
+                .filter((result) => Number(result.result) === 10).length;
+              const applied = await applyUstione(actor, { threshold: burn, tens, kind: effectKind });
+              finalFlavor += renderRollNote(ustioneText(applied, game.i18n.format.bind(game.i18n)), "backlash");
+            }
           }
           roll.options.flavor = finalFlavor;
 

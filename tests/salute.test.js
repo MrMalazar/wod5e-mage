@@ -35,7 +35,8 @@ assert.deepEqual(clampSalute({ pa: 9 }, 4), { pa: 4, ps: 0, ma: 0, ms: 0 });
 // Le caselle si dipingono da sinistra: X, /, ◎, o, vuote.
 let salute = getSalute(actor({ salute: { pa: 1, ps: 2, ma: 1, ms: 1 } }));
 assert.equal(salute.max, 6);
-assert.deepEqual(salute.cells.map((cell) => cell.state), ["pa", "ps", "ps", "ma", "ms", ""]);
+// I fisici da sinistra, i mentali da destra (6/9).
+assert.deepEqual(salute.cells.map((cell) => cell.state), ["pa", "ps", "ps", "", "ms", "ma"]);
 assert.equal(salute.total, 5);
 assert.equal(salute.status, "");
 

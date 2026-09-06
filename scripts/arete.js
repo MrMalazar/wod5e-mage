@@ -20,6 +20,8 @@ import {
 } from "./roll-card.js";
 import { FOCUS_FORMS } from "./focus.js";
 import { maintainedEffectRow, shouldRecordEffect } from "./ongoing-magick.js";
+import { effectSphereLevels, openGrimorio } from "./grimorio.js";
+import { normalizeEffectKind } from "./paradox-burst.js";
 import { loadSpherePowers, specialtyScopes } from "./sphere-specialties.js";
 
 export const ARETE_MIN = 1;
@@ -282,6 +284,8 @@ function wireDotRows(dialog) {
         input.dispatchEvent(new Event("change", { bubbles: true }));
       });
     });
+    // Il Grimorio ridipinge la fila da fuori.
+    row._paint = paint;
     paint();
   });
 }
@@ -321,6 +325,7 @@ function wireDifficulty(dialog) {
   const secondary = root.querySelector("#wod5e-mage-arete-secondary");
   const prizeBox = root.querySelector("input[name=prize]");
   const harmony = root.querySelector("#wod5e-mage-arete-harmony");
+  const quintessence = root.querySelector("#wod5e-mage-arete-quintessence");
 
   const autoSuccessOut = root.querySelector("[data-role=autoSuccesses]");
   const areteValue = Math.max(Math.trunc(Number(root.querySelector(".wod5e-mage-arete-form")?.dataset.arete) || 0), 0);
@@ -329,12 +334,14 @@ function wireDifficulty(dialog) {
     const sphereLevels = readDotRows(root, "sphere");
     const scopeLevels = readDotRows(root, "scope");
     const threshold = calculateMagickThreshold({ sphereLevels, scopeLevels });
+    const quintessenceMax = Math.max(Math.trunc(Number(quintessence?.max) || 0), 0);
+    const quintessenceSpent = Math.min(Math.max(Math.trunc(Number(quintessence?.value) || 0), 0), quintessenceMax);
     const automaticSuccesses = calculateAutomaticSuccesses({
       sphereLevels,
       scopeLevels,
       specialties: readSpecialties(root),
       arete: areteValue
-    }).successes;
+    }).successes + quintessenceSpent;
 
     const prizeDice = prizeBox?.checked
       ? Math.max(Math.trunc(Number(prizeBox.dataset.value) || 0), 0)
@@ -352,7 +359,7 @@ function wireDifficulty(dialog) {
     autoOut?.classList.toggle("hidden", !isAutomaticVictory(pool, threshold, automaticSuccesses));
   };
 
-  [attribute, primary, secondary, prizeBox, harmony].forEach((control) => {
+  [attribute, primary, secondary, prizeBox, harmony, quintessence].forEach((control) => {
     control?.addEventListener("change", update);
     control?.addEventListener("input", update);
   });
@@ -380,6 +387,31 @@ function wireScopeTable(dialog) {
       classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog"],
       position: { width: 1000, height: "auto" }
     }).catch(() => null);
+  });
+}
+
+/**
+ * Il libro accanto all'Obiettivo apre il Grimorio: la scelta scrive
+ * l'Obiettivo e accende i pallini delle Sfere che l'effetto chiede.
+ */
+function wireGrimorio(dialog, sphereLevels) {
+  const root = dialog?.element;
+  const button = root?.querySelector("[data-role=grimorioOpen]");
+  const goal = root?.querySelector("#wod5e-mage-arete-goal");
+  if (!button || !goal) return;
+  button.addEventListener("click", async (event) => {
+    event.preventDefault();
+    const entry = await openGrimorio(sphereLevels);
+    if (!entry) return;
+    goal.value = entry.name;
+    for (const [sphere, level] of Object.entries(effectSphereLevels(entry))) {
+      const row = root.querySelector(`[data-role=dotRow][data-kind=sphere][data-id="${sphere}"]`);
+      const input = row?.querySelector("input[type=hidden]");
+      if (!input) continue;
+      input.value = String(Math.min(level, Math.max(Math.trunc(Number(sphereLevels[sphere]) || 0), 0)));
+      row._paint?.();
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    }
   });
 }
 
@@ -448,9 +480,11 @@ export async function onAreteRoll(event) {
     faIcon: SCOPE_ICONS[id] ?? "",
     steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 }))
   }));
+  const quintessenceAvailable = getMagickBalance(actor).quintessence;
+  const sphereLevelsOwned = Object.fromEntries(rollSpheres.map((sphere) => [sphere.id, sphere.value]));
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
-    { arete, prize, spheres: rollSpheres, scopes: scopeOptions, ...traits }
+    { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, ...traits }
   );
 
   const result = await foundry.applications.api.DialogV2.input({
@@ -481,6 +515,7 @@ export async function onAreteRoll(event) {
       wireDifficulty(dialog);
       wireScopeTable(dialog);
       wireMaintainedEffect(dialog);
+      wireGrimorio(dialog, sphereLevelsOwned);
     }
   });
 
@@ -525,7 +560,12 @@ export async function onAreteRoll(event) {
     specialties,
     arete: arete.value
   });
-  const autoSuccesses = automatic_.successes;
+  // La Quintessenza spesa (6/9): un successo automatico per punto, scende
+  // dalla Ruota; se l'effetto fa danni, sono aggravati.
+  const quintessence = Math.min(Math.max(Math.trunc(Number(result.quintessence) || 0), 0), quintessenceAvailable);
+  const autoSuccesses = automatic_.successes + quintessence;
+  const goal = String(result.goal ?? "").trim();
+  const effectKind = normalizeEffectKind(result.effectKind);
 
   const prizeDice = options.usePrize ? prize.dice : 0;
   const bonusDice = prizeDice + options.harmony;
@@ -560,9 +600,12 @@ export async function onAreteRoll(event) {
   if (options.harmony > 0) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.HarmonyFlavor", { dice: options.harmony }));
   }
-  if (autoSuccesses > 0) {
+  if (quintessence > 0) {
+    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: quintessence }));
+  }
+  if (automatic_.successes > 0) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.AutoSuccessesFlavor", {
-      successes: autoSuccesses,
+      successes: automatic_.successes,
       pairs: automatic_.pairs.map((pair) => `${game.i18n.localize(`WOD5E_MAGE.Spheres.${pair.sphere}`)} ◆ ${game.i18n.localize(`WOD5E_MAGE.Scopes.${pair.scope}`)}`).join(", ")
     }));
   }
@@ -574,6 +617,8 @@ export async function onAreteRoll(event) {
     bonusParts,
     threshold,
     magickType,
+    goal,
+    effectKind: effectKind ? `WOD5E_MAGE.Arete.EffectKinds.${effectKind}` : "",
     spheres: sphereEntries.map((entry) => ({ label: `WOD5E_MAGE.Spheres.${entry.id}`, level: entry.level })),
     scopes: scopeLevels.map((entry) => ({ label: `WOD5E_MAGE.Scopes.${entry.id}`, level: entry.level }))
   }, localize);
@@ -583,7 +628,7 @@ export async function onAreteRoll(event) {
     vulgar: options.vulgar || options.witnesses,
     duration: scopeEntries.find((entry) => entry.scopeId === "duration")?.level ?? 0,
     threshold,
-    fallbackName: sphereEntries
+    fallbackName: goal || sphereEntries
       .map((entry) => `${localize(`WOD5E_MAGE.Spheres.${entry.id}`)} ${entry.level}`)
       .join(", ") || rollLabel
   };
@@ -596,30 +641,32 @@ export async function onAreteRoll(event) {
   // se scatta, l'Ustione è pari alla soglia.
   const automatic = isAutomaticVictory(dicePool, threshold, autoSuccesses);
   const paradoxGain = paradoxGainForMagickType(options);
+
+  // La Ruota paga subito: la Quintessenza spesa scende, la Magick volgare
+  // sale verso il Paradosso, così i rossi di questo tiro contano già il
+  // rincaro. Se il tiro non parte, la Ruota torna com'era.
+  const balanceBefore = getMagickBalance(actor);
+  let balanceMoved = false;
+  if ((quintessence > 0 || paradoxGain > 0) && actor.isOwner) {
+    const spent = { quintessence: Math.max(balanceBefore.quintessence - quintessence, 0), paradox: balanceBefore.paradox };
+    const balanceAfter = addParadoxToBalance(spent, paradoxGain);
+    if (balanceAfter.paradox !== balanceBefore.paradox || balanceAfter.quintessence !== balanceBefore.quintessence) {
+      await actor.setFlag(MODULE_ID, "magickBalance", balanceAfter);
+      balanceMoved = true;
+      if (quintessence > 0) {
+        ui.notifications.info(game.i18n.format("WOD5E_MAGE.Arete.QuintessenceSpent", { points: quintessence }));
+      }
+      if (paradoxGain > 0) {
+        ui.notifications.info(game.i18n.format("WOD5E_MAGE.MagickBalance.ParadoxGained", { amount: paradoxGain }));
+      }
+    }
+  }
+
   if (automatic && paradoxGain === 0) {
     const notes = [renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.AutoVictoryChat", { pool: dicePool, threshold }))];
     await postAutomaticVictory(actor, rollLabel, { symbols, card, notes });
     await recordEffect(actor, result, effect);
     return;
-  }
-
-  // La Magick volgare paga subito: la Ruota si sposta verso il Paradosso prima
-  // del tiro, così i dadi Paradosso di questo tiro contano già il rincaro.
-  const balanceBefore = getMagickBalance(actor);
-  let balanceMoved = false;
-
-  if (paradoxGain > 0 && actor.isOwner) {
-    const balanceAfter = addParadoxToBalance(balanceBefore, paradoxGain);
-    if (
-      balanceAfter.paradox !== balanceBefore.paradox
-      || balanceAfter.quintessence !== balanceBefore.quintessence
-    ) {
-      await actor.setFlag(MODULE_ID, "magickBalance", balanceAfter);
-      balanceMoved = true;
-      ui.notifications.info(
-        game.i18n.format("WOD5E_MAGE.MagickBalance.ParadoxGained", { amount: paradoxGain })
-      );
-    }
   }
 
   // La Magick accidentale non tira i rossi: solo dadi normali.
@@ -650,6 +697,7 @@ export async function onAreteRoll(event) {
       onlyParadox: automatic,
       difficulty: automatic ? 0 : threshold,
       burn: threshold,
+      effectKind,
       arete: arete.value,
       autoSuccesses: automatic ? 0 : autoSuccesses,
       title: rollLabel,

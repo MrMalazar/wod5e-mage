@@ -1,0 +1,24 @@
+{{!-- Il Grimorio: gli effetti del manuale che le Sfere del personaggio aprono,
+     per Sfera e per livello. Un clic sceglie. --}}
+<div class="wod5e-mage-grimorio-body">
+    <input type="search" class="wod5e-mage-grimorio-search" data-role="grimorioSearch" placeholder="{{localize 'WOD5E_MAGE.Grimorio.Search'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Search'}}">
+    {{#each groups as |group|}}
+        <section class="wod5e-mage-grimorio-sphere">
+            <h3><img src="{{group.icon}}" alt="">{{group.label}}</h3>
+            {{#each group.levels as |lvl|}}
+                <h4><span class="wod5e-mage-grimorio-dots">{{lvl.dots}}</span> {{lvl.label}}</h4>
+                {{#each lvl.entries as |entry|}}
+                    <button type="button" class="wod5e-mage-grimorio-row" data-effetto="{{entry.id}}">
+                        <strong>{{entry.name}}</strong>
+                        {{#if entry.extras.length}}
+                            <span class="wod5e-mage-grimorio-extras">{{#each entry.extras as |extra|}}<em class="{{#if extra.required}}required{{/if}}">+ {{extra.label}} {{extra.dots}}</em>{{/each}}</span>
+                        {{/if}}
+                        <small>{{entry.text}}</small>
+                    </button>
+                {{/each}}
+            {{/each}}
+        </section>
+    {{else}}
+        <p class="wod5e-mage-grimorio-empty">{{localize "WOD5E_MAGE.Grimorio.Empty"}}</p>
+    {{/each}}
+</div>

@@ -90,6 +90,8 @@ export function renderRollCard({
   bonusParts = [],
   threshold = 0,
   magickType = "",
+  goal = "",
+  effectKind = "",
   spheres = [],
   scopes = []
 } = {}, localize = (key) => key) {
@@ -99,11 +101,14 @@ export function renderRollCard({
     ...bonusParts.map((part) => escapeHtml(part))
   ].join(" + ");
   // Una voce per riga: nome, descrizione, a capo.
-  const lines = [
+  const lines = [];
+  if (goal) lines.push(line("WOD5E_MAGE.Arete.Goal", escapeHtml(goal)));
+  lines.push(
     line("WOD5E_MAGE.Arete.Pool", pool),
     line("WOD5E_MAGE.Arete.Threshold", escapeHtml(threshold)),
     line("WOD5E_MAGE.Arete.MagickType", escapeHtml(magickType))
-  ];
+  );
+  if (effectKind) lines.push(line("WOD5E_MAGE.Arete.EffectKind", escapeHtml(localize(effectKind))));
   if (spheres.length) {
     lines.push(line(
       "WOD5E_MAGE.Arete.Spheres",
