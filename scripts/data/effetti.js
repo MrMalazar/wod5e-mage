@@ -6443,9 +6443,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 1,
     "extras": [],
-    "text": "ora esatta, anomalie, la linea del luogo a ritroso; la profondità la comprano i successi",
-    "pairings": [],
-    "scopes": ""
+    "text": "Sai l'ora esatta senza orologio, senti le anomalie del tempo attorno a te, e leggi la linea del luogo all'indietro: cosa è successo qui, e quando. La profondità la comprano i successi.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Leggere il flusso di un luogo che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Leggere il flusso di là, nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Sapere se l'anomalia l'ha fatta una Magick, e di chi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quando il flusso si romperà.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Sentire cosa pensava chi era qui, nel momento che leggi.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto indietro arrivi (fuori gioco: 1 il giorno, 3 il mese, 5 l'anno). Area per un luogo intero. Precisione (dettaglio) per un momento solo."
   },
   {
     "id": "time-1-leggere-la-linea-di-una-persona",
@@ -6453,9 +6479,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 1,
     "extras": [],
-    "text": "il suo passato addosso a lei, e i rami che le partono da adesso",
-    "pairings": [],
-    "scopes": ""
+    "text": "Vedi il suo passato addosso a lei, e i rami che le partono da adesso: da dove viene, cosa ha fatto, e verso cosa sta andando.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Leggere anche cosa pensava lungo la linea.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Leggere la linea del corpo: le ferite, le malattie, quanto gli resta.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quale ramo peserà di più.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Leggere la linea di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Leggere la linea di uno spirito o di un morto.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto indietro o avanti (fuori gioco: 3 il mese, 5 l'anno, 6 il decennio). Precisione (informazione) per quanto pesa quel che cerchi. Bersagli per più linee."
   },
   {
     "id": "time-1-trovare-le-cuciture",
@@ -6463,9 +6515,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 1,
     "extras": [],
-    "text": "i punti in cui il tempo è stato rifatto da qualcuno prima di te",
-    "pairings": [],
-    "scopes": ""
+    "text": "Vedi i punti in cui il tempo è stato rifatto da qualcuno prima di te: la scena riavvolta, l'evento cancellato, l'anello chiuso.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Sapere chi ha cucito, e con quanta forza.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Ricordare la versione di prima della cucitura.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Trovare le cuciture in un luogo lontano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quale cucitura sta per cedere.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Trovare le cuciture anche di là.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per setacciare un luogo: 1 la stanza, 3 il quartiere. Durata per quanto indietro cerchi. Precisione (dettaglio) per una cucitura sola."
   },
   {
     "id": "time-2-il-vantaggio-del-primo-istante",
@@ -6473,25 +6551,66 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 2,
     "extras": [],
-    "text": "quando la violenza esplode, tu eri pronto da un attimo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Quando la violenza esplode, tu eri pronto da un attimo: agisci per primo, sempre. Su te stesso è la più Accidentale delle Arti.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Far arrivare l'attimo giusto anche quando non te lo aspettavi.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Dare il vantaggio anche ai compagni, avvertendoli in tempo.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far muovere il corpo prima che la testa decida.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Sapere per primo anche di quel che esplode lontano.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 1 per lo scontro, 2 per la scena. Bersagli per la Cabala."
   },
   {
     "id": "time-2-vedere-e-proiettare-passato-o-futuro",
     "name": "Vedere e proiettare passato o futuro",
     "sphere": "time",
     "level": 2,
-    "extras": [
+    "extras": [],
+    "text": "La scena rivive davanti a te, nitida e mostrabile: quello che è successo qui, o quello che succederà. La mostri anche agli altri. Lontano da qui serve la Corrispondenza.",
+    "pairings": [
       {
         "sphere": "correspondence",
-        "level": 2,
+        "text": "Vedere e proiettare la scena di un luogo lontano.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Proiettare la scena in luce e suono veri: anche le telecamere la riprendono.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Mostrare la scena solo nelle teste che scegli.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Vedere la scena com'era di là.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Vedere il futuro più probabile, fra i rami.",
         "required": false
       }
     ],
-    "text": "la scena rivive, nitida e mostrabile; lontano da qui: + Corrispondenza ●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Durata per quanto indietro o avanti (fuori gioco: 1 il giorno, 3 il mese, 5 l'anno). Precisione (dettaglio) per i particolari: 1 le sagome, 3 i volti, 5 le parole. Area per la scena intera."
   },
   {
     "id": "time-2-vegliare-sui-futuri-prossimi",
@@ -6501,13 +6620,34 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "entropy",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Entropia ●●: tieni d'occhio i prossimi istanti: niente ti coglie di sorpresa",
-    "pairings": [],
-    "scopes": ""
+    "text": "Tieni d'occhio i prossimi istanti: niente ti coglie di sorpresa, e sai un attimo prima cosa sta per succedere. Serve l'Entropia: senza, i rami li leggi solo quando guardi.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Tenere i rami sotto gli occhi anche fra uno sguardo e l'altro.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "Avvertire i compagni di quel che sta per succedere.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Vegliare sui futuri prossimi di un luogo lontano.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far reagire il corpo da solo a quel che vedi arrivare.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 1 per lo scontro, 2 per la scena. Bersagli per far vegliare anche i compagni. Precisione (dettaglio) per un pericolo solo: il colpo di pistola."
   },
   {
     "id": "time-3-accelerare-e-rallentare",
@@ -6515,9 +6655,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 3,
     "extras": [],
-    "text": "tu doppio, lui a metà; l'Ora Rubata vive qui (5.9): un'azione extra per turno, finché regge",
-    "pairings": [],
-    "scopes": ""
+    "text": "Tu doppio, lui a metà: cambi il ritmo con cui il tempo scorre per qualcuno. L'Ora Rubata vive qui: un'azione extra per turno, finché regge. Sugli altri è Volgare.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far reggere il corpo al ritmo doppio: niente strappi, niente fiato corto.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far pensare a ritmo doppio, senza muoversi.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Accelerare o rallentare un'energia: la fiamma, la scarica, il proiettile.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Accelerare o rallentare una macchina: l'auto, l'orologio.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Accelerare o rallentare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far cambiare il ritmo nel momento giusto.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 1 per lo scontro, 2 per la scena. Bersagli per più persone. Potenza (epicità) per quanto cambia il ritmo: 2 il doppio, 4 dieci volte."
   },
   {
     "id": "time-3-far-maturare-in-un-ora",
@@ -6527,34 +6698,75 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "life",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Vita ●●: la vigna fa in un pomeriggio la sua stagione intera",
-    "pairings": [],
-    "scopes": ""
+    "text": "La vigna fa in un pomeriggio la sua stagione intera: il vivente cresce, matura, guarisce col tempo che gli scarichi addosso. Serve la Vita.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far crescere il vivente per le vie del vivente.",
+        "required": true
+      },
+      {
+        "sphere": "matter",
+        "text": "Far maturare anche quello che non è vivo: il vino, il formaggio, il legno stagionato etc..",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far maturare senza marcire.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Far maturare la vigna che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Dare al vivente la Quintessenza per crescere senza consumarsi.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto tempo scarichi (fuori gioco: 2 la settimana, 4 la stagione, 5 l'anno). Area per un campo intero. Bersagli per più viventi."
   },
   {
     "id": "time-3-invecchiare-qualcuno",
     "name": "Invecchiare qualcuno",
     "sphere": "time",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Decenni scaricati nel corpo: la pelle si segna, i capelli sbiancano, le forze vanno. Con la Vita il corpo invecchia da dentro, per le vie del vivente; con la Materia invecchia un oggetto. Senza la Sfera del bersaglio pieghi il tempo attorno a lui, e il mondo vede un uomo che invecchia senza motivo: Volgare.",
+    "pairings": [
       {
         "sphere": "life",
-        "level": 2,
-        "required": true
+        "text": "Far invecchiare il corpo da dentro, e restare spiegabile.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "level": 2,
-        "required": true
+        "text": "Invecchiare un oggetto: la ruggine, la polvere, il legno secco.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far invecchiare anche la mente: la memoria che va.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far cedere per primo quello che regge tutto.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Invecchiare chi non vedi.",
+        "required": false
       }
     ],
-    "text": "+ Vita ●●: decenni scaricati nel corpo; un oggetto: + Materia ●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Durata per quanti anni scarichi (fuori gioco: 5 l'anno, 6 il decennio). Potenza (danni) se gli anni feriscono. Bersagli per più persone. Precisione (dettaglio) per una parte sola: le mani, la vista."
   },
   {
     "id": "time-3-riavvolgere-la-scena",
@@ -6562,9 +6774,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 3,
     "extras": [],
-    "text": "gli ultimi istanti tornano indietro; per ricordarlo: + Mente",
-    "pairings": [],
-    "scopes": ""
+    "text": "Gli ultimi istanti tornano indietro: quello che è appena successo non è successo, e si rifà. Senza la Mente i ricordi si riscrivono da soli, i tuoi per primi: rifarai le stesse scelte per le stesse ragioni.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Ricordare la versione cancellata, e rifare la scena sapendo com'era andata.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riavvolgere la scena di un luogo lontano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far cadere la scena rifatta dalla parte giusta.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Riavvolgere anche di là.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far tornare indietro anche la Quintessenza spesa.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto indietro: 1 tre turni, 2 la scena. Area per quanto riavvolgi: 1 la stanza, 2 il palazzo. Bersagli per chi ricorda insieme a te."
   },
   {
     "id": "time-3-riavvolgere-un-corpo",
@@ -6574,34 +6812,75 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "life",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Vita ●●: le ferite si richiudono a ritroso, come un nastro mandato indietro",
-    "pairings": [],
-    "scopes": ""
+    "text": "Le ferite si richiudono a ritroso, come un nastro mandato indietro: il corpo torna a com'era prima del colpo. Serve la Vita: senza, il flusso prende tutto insieme, la ferita e il resto.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Scegliere cosa torna indietro: la ferita e nient'altro.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "Fargli dimenticare il dolore insieme alla ferita.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riavvolgere il corpo di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che la ferita non si riapra.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Riavvolgere anche il proiettile: torna nella canna.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto guarisce. Durata per quanto indietro: 1 tre turni, 2 la scena, 3 il giorno. Bersagli per più feriti."
   },
   {
     "id": "time-3-ridurre-in-polvere-un-oggetto",
     "name": "Ridurre in polvere un oggetto",
     "sphere": "time",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Anni di decadimento in un istante: la ruggine vince, il legno marcisce, resta la polvere. Con l'Entropia scegli cosa cede per primo; con la Materia l'oggetto si disfa per quello che è. Senza, il flusso prende tutto insieme: il congegno, la vernice, i documenti nel cassetto.",
+    "pairings": [
       {
         "sphere": "entropy",
-        "level": 2,
-        "required": true
+        "text": "Scegliere cosa cede per primo: la ruggine sul meccanismo, mai sulla cassa.",
+        "required": false
       },
       {
         "sphere": "matter",
-        "level": 3,
-        "required": true
+        "text": "Disfare l'oggetto per quello che è, e restare spiegabile.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far marcire quello che era vivo: il legno, il cibo, il raccolto etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Ridurre in polvere quello che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Ridurre in polvere un impianto: i circuiti si ossidano.",
+        "required": false
       }
     ],
-    "text": "+ Entropia ●●: anni di decadimento in un istante; via diretta: + Materia ●●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Potenza (peso) per quanto è grosso: 1 la chiave, 3 l'auto, 5 la casa. Precisione (dettaglio) per la parte giusta e non l'insieme. Bersagli per più oggetti."
   },
   {
     "id": "time-3-saltare-l-attimo-del-colpo",
@@ -6609,9 +6888,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 3,
     "extras": [],
-    "text": "un passo nel futuro immediato: l'attacco attraversa il punto dove eri",
-    "pairings": [],
-    "scopes": ""
+    "text": "Un passo nel futuro immediato: l'attacco attraversa il punto dove eri, e tu sei un istante più avanti. Su te stesso è Accidentale.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Riapparire un passo più in là, oltre che un istante dopo.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far fare il salto al corpo senza contraccolpi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far saltare l'attimo giusto senza doverlo vedere arrivare.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far saltare l'attimo anche a un compagno, avvertendolo.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 1 per un colpo, 2 per la scena. Bersagli per chi salta con te. Condizioni 1 se scatta da solo: ogni colpo diretto a te."
   },
   {
     "id": "time-4-ancorare-il-presente",
@@ -6619,9 +6919,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 4,
     "extras": [],
-    "text": "fissi un punto fermo nel flusso: la base di viaggi e ritorni",
-    "pairings": [],
-    "scopes": ""
+    "text": "Fissi un punto fermo nel flusso: la base di viaggi e ritorni, il momento a cui tornare quando tutto va storto.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Ancorare anche il luogo insieme al momento.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Ancorare anche i ricordi: tornando, ricordi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Ancorare il presente anche di là.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far reggere l'ancora contro chi vuole spostarla.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Legare l'ancora a un oggetto: l'orologio, la pietra.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto resta l'ancora (7 per sempre). Area per quanto ancori: 1 la stanza, 2 il palazzo. Bersagli per chi può usarla."
   },
   {
     "id": "time-4-avvertire-il-te-di-ieri",
@@ -6631,13 +6957,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "mind",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Mente ●●: un ricordo torna indietro di minuti e cambia la scena",
-    "pairings": [],
-    "scopes": ""
+    "text": "Un ricordo torna indietro di minuti e cambia la scena: il te di prima sa quello che tu sai adesso. Serve la Mente, che porta il ricordo.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Far risalire il ricordo lungo la corrente.",
+        "required": true
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Avvertire chi era altrove.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far arrivare l'avvertimento nel momento giusto.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Avvertire uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far pesare l'avvertimento contro chi ha cucito la scena.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto indietro: 1 tre turni, 2 la scena, 3 il giorno. Bersagli per avvertire più persone. Precisione (dettaglio) per un ricordo solo e preciso."
   },
   {
     "id": "time-4-chiudere-un-area-in-un-anello",
@@ -6647,13 +6999,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "mind",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Mente ●●: gli stessi tre minuti, ancora e ancora, finché non decidi tu",
-    "pairings": [],
-    "scopes": ""
+    "text": "Gli stessi tre minuti, ancora e ancora, finché non decidi tu: chi è dentro li rivive senza uscirne. Serve la Mente, perché l'anello regga nelle teste.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Far reggere l'anello nelle teste di chi è dentro.",
+        "required": true
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Chiudere l'anello lontano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far cambiare qualcosa a ogni giro, o niente.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Chiudere l'anello anche di là.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far reggere i corpi ai giri: niente fame, niente sonno.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per l'anello: 1 la stanza, 2 il palazzo. Durata per quanto resta chiuso (2 la scena, 4 la sessione). Condizioni 1 per cosa lo apre: una parola, un gesto. Bersagli per chi resta fuori."
   },
   {
     "id": "time-4-fermare-il-tempo-in-un-area",
@@ -6661,9 +7039,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 4,
     "extras": [],
-    "text": "la stanza in stasi, con tutto ciò che contiene",
-    "pairings": [],
-    "scopes": ""
+    "text": "La stanza in stasi, con tutto ciò che contiene: niente si muove, niente invecchia, finché non riapri.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Fermare il tempo in un luogo lontano.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Fermare i corpi senza danno: si svegliano come se niente fosse.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far sì che chi era dentro non si accorga della pausa.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Fermare il tempo anche di là.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Legare la stasi a un oggetto: finché la teca è chiusa.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far reggere la stasi contro chi vuole romperla.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per quanto fermi: 1 la stanza, 2 il palazzo, 3 il quartiere. Durata per quanto resta fermo (fuori gioco: 3 il mese, 7 per sempre). Bersagli per chi ne resta fuori."
   },
   {
     "id": "time-4-sospendere-un-incantesimo",
@@ -6671,9 +7080,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 4,
     "extras": [],
-    "text": "l'effetto dorme fuori dal flusso e attende la condizione",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'effetto dorme fuori dal flusso e attende la condizione: quando scatta, parte come se lo lanciassi adesso.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Far scattare la condizione da sola, per caso.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Sospendere l'incantesimo in un luogo lontano.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far scattare l'incantesimo su un pensiero: quando pensa a te.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far scattare l'incantesimo quando passa uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far dormire l'incantesimo senza contare fra le tue Magick in atto.",
+        "required": false
+      }
+    ],
+    "scopes": "Condizioni 1 per la condizione che lo sveglia, e Complessità per quanto è lunga. Durata (fuori gioco) per quanto resta sospeso: 3 il mese, 5 l'anno. Gli altri Ambiti li dichiara l'incantesimo sospeso."
   },
   {
     "id": "time-5-rifare-un-evento",
@@ -6681,9 +7116,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 5,
     "extras": [],
-    "text": "non la scena di poco fa, ma il fatto: quello che è successo smette di essere successo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Non la scena di poco fa, ma il fatto: quello che è successo smette di essere successo, e al suo posto ce n'è un altro.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Far ricordare a chi vuoi tu la versione vecchia.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Rifare un evento accaduto lontano.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far tornare i conti al mondo: nessuna cucitura visibile.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Rifare l'evento anche di là.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far reggere l'evento nuovo contro chi vuole rifarlo ancora.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far tornare chi è morto in quell'evento.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto indietro (fuori gioco: 3 il mese, 5 l'anno, 6 il decennio). Potenza (epicità) per quanto pesa l'evento: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione."
   },
   {
     "id": "time-5-smettere-di-invecchiare",
@@ -6691,9 +7157,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 5,
     "extras": [],
-    "text": "gli anni ti scorrono accanto: resti quello che eri il giorno in cui hai imparato",
-    "pairings": [],
-    "scopes": ""
+    "text": "Gli anni ti scorrono accanto: resti quello che eri il giorno in cui hai imparato.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far reggere il corpo per quello che è: niente malattie dell'età.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Tenere la mente giovane insieme al corpo.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che nemmeno la sorte ti consumi.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far reggere l'effetto senza mantenerlo.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Far smettere di invecchiare chi non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 7. Bersagli per chi vuoi con te."
   },
   {
     "id": "time-5-viaggiare-nel-tempo",
@@ -6701,9 +7193,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 5,
     "extras": [],
-    "text": "vai e torni davvero, col corpo. Quello che trovi al ritorno è affar tuo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Vai e torni davvero, col corpo, in un altro quando. Quello che trovi al ritorno è affar tuo.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Viaggiare anche nello spazio: un altro quando, un altro dove.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far reggere il corpo al viaggio.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Ricordare tutto al ritorno, e non farti notare laggiù.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Portare con te il carico: l'auto, l'attrezzatura.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Viaggiare nel tempo di là.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Pagare il viaggio in Quintessenza invece che in Paradosso.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto lontano (fuori gioco: 5 l'anno, 6 il decennio, 7 oltre). Bersagli per chi viaggia con te. Potenza (peso) per il carico."
   },
   {
     "id": "life-1-percepire-salute-e-condizioni",

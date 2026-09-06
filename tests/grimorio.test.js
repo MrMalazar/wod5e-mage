@@ -108,6 +108,11 @@ const spirito = EFFETTI.filter((entry) => entry.sphere === "spirit");
 assert.equal(spirito.length, 29);
 assert.equal(spirito.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(spirito.find((entry) => entry.id === "spirit-1-riconoscere-il-sovrannaturale").extras.map((extra) => extra.sphere), ["life"]);
+// Tempo nel formato nuovo (6/9): ventuno blocchi.
+const tempo = EFFETTI.filter((entry) => entry.sphere === "time");
+assert.equal(tempo.length, 21);
+assert.equal(tempo.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
+assert.deepEqual(tempo.find((entry) => entry.id === "time-4-avvertire-il-te-di-ieri").extras.map((extra) => extra.sphere), ["mind"]);
 const grimorioIt = prepareGrimorio({ correspondence: 2 }, (k) => k);
 const shown = grimorioIt[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio");
 assert.equal(shown.pairings.length, 5);
