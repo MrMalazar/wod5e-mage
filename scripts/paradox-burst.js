@@ -34,14 +34,22 @@ export function normalizeEffectKind(value) {
  * se è mentale, metà e metà arrotondando per difetto se è variabile. Le
  * conversioni in aggravato (una ogni due 10) vanno prima sul fisico.
  */
-export function ustioneSplit({ threshold = 0, tens = 0, kind = "" } = {}) {
+export function ustioneSplit({ threshold = 0, tens = 0, kind = "", random = Math.random } = {}) {
   const total = Math.max(Math.trunc(Number(threshold) || 0), 0);
   let aggravated = Math.min(Math.floor(Math.max(Math.trunc(Number(tens) || 0), 0) / 2), total);
   const effect = normalizeEffectKind(kind);
   let physical = total;
   let mental = 0;
   if (effect === "mental") { physical = 0; mental = total; }
-  if (effect === "variable") { physical = Math.floor(total / 2); mental = Math.floor(total / 2); }
+  // Variabile: a metà; il punto che avanza cade a caso (verdetto di Blue, 6/9).
+  if (effect === "variable") {
+    physical = Math.floor(total / 2);
+    mental = Math.floor(total / 2);
+    if (total % 2 === 1) {
+      if (random() < 0.5) physical += 1;
+      else mental += 1;
+    }
+  }
   const pa = Math.min(aggravated, physical);
   aggravated -= pa;
   const ma = Math.min(aggravated, mental);
@@ -49,8 +57,8 @@ export function ustioneSplit({ threshold = 0, tens = 0, kind = "" } = {}) {
 }
 
 /** Segna l'Ustione sulla Salute e scarica la Ruota di un punto per danno. */
-export async function applyUstione(actor, { threshold = 0, tens = 0, kind = "" } = {}) {
-  const split = ustioneSplit({ threshold, tens, kind });
+export async function applyUstione(actor, { threshold = 0, tens = 0, kind = "", random } = {}) {
+  const split = ustioneSplit({ threshold, tens, kind, random });
   if (split.applied <= 0) return { ...split, discharged: 0 };
   await addSaluteDamage(actor, { pa: split.pa, ps: split.ps, ma: split.ma, ms: split.ms });
   const balance = getMagickBalance(actor);

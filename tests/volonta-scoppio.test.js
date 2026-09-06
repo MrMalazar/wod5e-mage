@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { burstDamage, paradoxAfterBurst } from "../scripts/paradox-burst.js";
-import { pickRerollDice, recountCard, systemTotal, volontaState, REROLL_MAX, AGGRAVATED_BONUS } from "../scripts/volonta.js";
+import { pickRerollDice, recountCard, rerollableDice, systemTotal, volontaState, REROLL_MAX, AGGRAVATED_BONUS } from "../scripts/volonta.js";
 import { saluteWithDamage } from "../scripts/salute.js";
 import { getMagickBalance, getParadoxFloor } from "../scripts/magick-balance.js";
 
@@ -32,6 +32,17 @@ assert.deepEqual(pickRerollDice(dice, 2), [1, 4]);
 assert.deepEqual(pickRerollDice(dice, 3), [1, 4, 5]);
 assert.deepEqual(pickRerollDice(dice, 9), [1, 4, 5]);
 assert.equal(REROLL_MAX, 3);
+// Il giocatore sceglie (6/9): i bianchi falliti e i rossi falliti, mai un
+// rosso che ha fatto 1 o 10.
+assert.deepEqual(rerollableDice(dice, [{ result: 1 }, { result: 10 }, { result: 3 }, { result: 8 }, { result: 4, discarded: true }]), [
+  { kind: "basic", index: 1 }, { kind: "basic", index: 2 }, { kind: "basic", index: 4 }, { kind: "basic", index: 5 },
+  { kind: "paradox", index: 2 }
+]);
+assert.equal(volontaState({ total: 2, difficulty: 4, failedCount: 5 }).max, 3);
+assert.equal(volontaState({ total: 2, difficulty: 4, failedCount: 1 }).max, 1);
+const volontaSource = readFileSync(new URL("../scripts/volonta.js", import.meta.url), "utf8");
+assert.match(volontaSource, /wod5e-mage-volonta-pick[\s\S]*picked\.length < state\.max[\s\S]*rerollDice\(message, actor, picked\.slice\(\)\)/);
+assert.match(volontaSource, /kind === "paradox" && \(result\.result === 1 \|\| result\.result === 10\)/);
 assert.equal(systemTotal([{ result: 10 }, { result: 6 }, { result: 2 }], [{ result: 10 }]), 5);
 assert.equal(recountCard({ autoSuccesses: 2, volontaBonus: 2 }, [{ result: 8 }], []), 5);
 assert.equal(AGGRAVATED_BONUS, 2);

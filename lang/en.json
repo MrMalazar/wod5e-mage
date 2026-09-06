@@ -363,12 +363,12 @@
           "7": "A mountain"
         },
         "potencyEpic": {
-          "1": "Changes a detail",
-          "2": "Changes a scene",
-          "3": "Changes a day",
-          "4": "Changes a life",
+          "1": "Changes an object",
+          "2": "Changes a person",
+          "3": "Changes a group",
+          "4": "Changes a district",
           "5": "Changes a city",
-          "6": "Changes history",
+          "6": "Changes a nation",
           "7": "Changes the world"
         },
         "potencyDamage": {
@@ -432,7 +432,7 @@
           "4": "The needle in the haystack",
           "5": "A speck of dust on the needle",
           "6": "A molecule of that speck",
-          "7": "An atom, in that instant"
+          "7": "An atom"
         },
         "durationNarrative": {
           "1": "A day",
@@ -538,6 +538,13 @@
         "Hint": "How the Wheel looks on the Mage sheet: the nine-node arc or the compact nine-cell bar.",
         "Wheel": "Arc wheel",
         "Bar": "Cell bar"
+      },
+      "TraitsLayout": {
+        "Name": "Traits layout",
+        "Hint": "How Attributes and Skills are laid out on the Mage sheet: by group (Physical, Social, Mental) or in columns (Attributes in one column of nine rows, Skills in two of nine).",
+        "Groups": "By group",
+        "Columns": "In columns",
+        "Toggle": "Switch the Traits layout"
       }
     },
     "Errors": {
@@ -821,13 +828,14 @@
     "Volonta": {
       "Label": "Willpower",
       "Reroll": "Reroll",
-      "RerollHint": "One superficial mental: reroll the lowest failed dice",
+      "RerollHint": "Pick up to three failed dice on the card (never a red 1 or 10), then reroll: one superficial mental",
       "Aggravated": "Aggravated: +2",
       "AggravatedHint": "One aggravated mental: two extra successes",
-      "UsedReroll": "Willpower: {dice} dice rerolled (one superficial mental).",
+      "UsedReroll": "Willpower: rerolled {dice} chosen dice (one superficial mental).",
       "UsedAggravated": "Willpower: one aggravated mental, +{bonus} successes.",
       "RerollDone": "{dice} dice rerolled: one superficial mental marked.",
-      "AggravatedDone": "Aggravated mental marked: +{bonus} successes, total {total}."
+      "AggravatedDone": "Aggravated mental marked: +{bonus} successes, total {total}.",
+      "RerollEyes": "{eyes} rerolled red dice showed 1 or 10: Paradox eye."
     },
     "Condizioni": {
       "All": "All Conditions",

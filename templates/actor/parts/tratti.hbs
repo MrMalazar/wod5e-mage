@@ -5,15 +5,23 @@
     {{!-- Measuring container for the two-state grid: as a block it takes its
          width from the parent, so inline-size containment is safe here
          (on the tab itself it collapsed the whole page to its padding). --}}
-    <div class="wod5e-mage-tratti">
+    {{!-- A colonne (6/9): gli Attributi in una colonna da nove righe, le
+         Abilità in due da nove, senza Fisici, Sociali, Mentali. --}}
+    <div class="wod5e-mage-tratti{{#if traitsColumns}} wod5e-mage-tratti-columns{{/if}}">
     <div class="stats-content">
         {{!-- Sei celle: Attributi | Condizioni, Abilità | Specializzazioni,
              Ruota | Bonus. --}}
         <div class="skills-attributes wod5e-mage-tratti-attributes">
-            <div class="resource-header">
+            <div class="resource-header wod5e-mage-tratti-header">
                 <label class="header-label">
                     {{localize "WOD5E.AttributesList.Attributes"}}
                 </label>
+                {{!-- Il tasto cambia la struttura dei Tratti: gruppi o colonne. --}}
+                <button type="button" class="wod5e-mage-wheel-mode wod5e-mage-traits-layout" data-action="traitsLayoutToggle"
+                        aria-label="{{localize 'WOD5E_MAGE.Settings.TraitsLayout.Toggle'}}"
+                        title="{{localize 'WOD5E_MAGE.Settings.TraitsLayout.Toggle'}}">
+                    <i class="fa-solid {{#if traitsColumns}}fa-table-cells-large{{else}}fa-table-columns{{/if}}"></i>
+                </button>
             </div>
             <div class="stats-container attributes">
                 <div class="grid grid-3col stats-footer">

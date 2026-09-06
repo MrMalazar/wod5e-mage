@@ -1371,25 +1371,25 @@
   gap: 0.6rem;
 }
 
-/* Una riga per Sfera: la Sfera a sinistra, a destra lo Strumento, il
-   mestiere quando serve e il tuo di preciso, uno sotto l'altro. */
+/* Una riga sola per Sfera (6/9): simbolo, nome, lampadina, la famiglia
+   dello Strumento (tendina), il mestiere quando serve, il tuo di preciso.
+   Le note, se ci sono, vanno sotto. Se manca spazio la riga va a capo. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument {
   align-items: center;
   border-bottom: 1px solid rgb(152 119 43 / 30%);
-  display: grid;
-  gap: 0.35rem 0.5rem;
-  grid-template-columns: minmax(96px, 0.42fr) minmax(0, 1fr);
-  padding-bottom: 0.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.5rem;
+  padding-bottom: 0.45rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-sphere {
   align-items: center;
-  align-self: start;
   color: var(--mage-oro);
   display: flex;
   font-weight: 600;
   gap: 0.35rem;
-  margin-top: 0.15rem;
+  white-space: nowrap;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-sphere img {
@@ -1399,12 +1399,16 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > select,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > input,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > small {
-  grid-column: 2;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > input {
+  flex: 1 1 110px;
   margin: 0;
   min-width: 0;
-  width: 100%;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > small {
+  flex: 1 1 100%;
+  margin: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-note {
@@ -3191,6 +3195,54 @@
   padding-right: 8px;
 }
 
+/* A colonne (6/9, esperimento di Blue): niente Fisici, Sociali, Mentali;
+   gli Attributi in UNA colonna da nove righe, le Abilità in DUE colonne da
+   nove (le tre liste del sistema diventano trasparenti e le voci scorrono
+   per colonna). Se la scheda si stringe, le colonne si stringono. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-header {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-header > .wod5e-mage-traits-layout {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .stats-footer {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .skills-attributes > .stats-container > .stats-content > .stats-list {
+  display: contents;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-attributes > .stats-container > .stats-content {
+  grid-auto-flow: row;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 0 8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-skills > .stats-container > .stats-content {
+  column-gap: 1rem;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(9, auto);
+  padding: 0 8px;
+}
+
+@container (max-width: 560px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-skills > .stats-container > .stats-content {
+    grid-auto-flow: row;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+}
+
 /* Ogni voce ha due colonne interne stabili: nome | pallini. In questo modo i
    contatori di una stessa colonna partono tutti dalla medesima verticale. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti .stats-list > :is(.attribute, .skill) {
@@ -4058,8 +4110,8 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-head {
   align-items: center;
   display: flex;
+  flex: 0 0 auto;
   gap: 0.35rem;
-  grid-column: 1;
   min-width: 0;
 }
 
@@ -4528,12 +4580,17 @@
   text-transform: none;
 }
 
+/* Ogni voce (Armatura, Arma, Equipaggiamento) è una riga del riquadro:
+   niente fondo suo, niente cornice sua (6/9: il fondo del sistema stava
+   sfasato e la prima lettera e il + sforavano), un filo d'aria ai lati. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-inventario .category {
+  background: transparent;
   border: none;
   border-top: 1px solid rgb(152 119 43 / 45%);
+  box-shadow: none;
   margin: 0;
   max-width: none;
-  padding: 0.35rem 0 0.4rem;
+  padding: 0.35rem 0.4rem 0.4rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-inventario .category .item-header .item-name {
@@ -5051,6 +5108,18 @@
 .wod5e-mage-volonta > button:disabled {
   cursor: default;
   opacity: 0.4;
+}
+
+/* I dadi che si possono ritirare: cliccabili; scelti, in oro. */
+.dice-icons img.die.wod5e-mage-volonta-pick {
+  cursor: pointer;
+  outline: 1px dashed rgb(217 168 39 / 55%);
+  outline-offset: 1px;
+}
+
+.dice-icons img.die.wod5e-mage-volonta-pick.picked {
+  box-shadow: 0 0 6px #d9a827;
+  outline: 2px solid #d9a827;
 }
 
 .wod5e-mage-volonta > .wod5e-mage-volonta-aggravato {

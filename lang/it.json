@@ -363,12 +363,12 @@
           "7": "Una montagna"
         },
         "potencyEpic": {
-          "1": "Cambia un dettaglio",
-          "2": "Cambia una scena",
-          "3": "Cambia una giornata",
-          "4": "Cambia una vita",
+          "1": "Cambia un oggetto",
+          "2": "Cambia una persona",
+          "3": "Cambia un gruppo",
+          "4": "Cambia un quartiere",
           "5": "Cambia una città",
-          "6": "Cambia la storia",
+          "6": "Cambia una nazione",
           "7": "Cambia il mondo"
         },
         "potencyDamage": {
@@ -432,7 +432,7 @@
           "4": "L'ago nel pagliaio",
           "5": "Un granello di polvere sull'ago",
           "6": "Una molecola di quel granello",
-          "7": "Un atomo, in quell'istante"
+          "7": "Un atomo"
         },
         "durationNarrative": {
           "1": "Un giorno",
@@ -538,6 +538,13 @@
         "Hint": "Come vedi la Ruota sulla scheda del Mago: l'arco a nove nodi o la barra compatta a nove caselle.",
         "Wheel": "Ruota ad arco",
         "Bar": "Barra a caselle"
+      },
+      "TraitsLayout": {
+        "Name": "La struttura dei Tratti",
+        "Hint": "Come vedi Attributi e Abilità sulla scheda del Mago: a gruppi (Fisici, Sociali, Mentali) o a colonne (gli Attributi in una da nove righe, le Abilità in due da nove).",
+        "Groups": "A gruppi",
+        "Columns": "A colonne",
+        "Toggle": "Cambia la struttura dei Tratti"
       }
     },
     "Errors": {
@@ -821,13 +828,14 @@
     "Volonta": {
       "Label": "Volontà",
       "Reroll": "Ritira",
-      "RerollHint": "Un superficiale mentale: ritira i dadi falliti più bassi",
+      "RerollHint": "Scegli sulla carta fino a tre dadi falliti (mai un rosso con 1 o 10), poi ritira: un superficiale mentale",
       "Aggravated": "Aggravato: +2",
       "AggravatedHint": "Un aggravato mentale: due successi in più",
-      "UsedReroll": "Volontà: ritirati {dice} dadi (un superficiale mentale).",
+      "UsedReroll": "Volontà: ritirati {dice} dadi scelti (un superficiale mentale).",
       "UsedAggravated": "Volontà: un aggravato mentale, +{bonus} successi.",
       "RerollDone": "Ritirati {dice} dadi: un superficiale mentale segnato.",
-      "AggravatedDone": "Aggravato mentale segnato: +{bonus} successi, totale {total}."
+      "AggravatedDone": "Aggravato mentale segnato: +{bonus} successi, totale {total}.",
+      "RerollEyes": "{eyes} rossi ritirati hanno mostrato 1 o 10: occhio del Paradosso."
     },
     "Condizioni": {
       "All": "Tutte le Condizioni",

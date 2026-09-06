@@ -93,6 +93,14 @@ async function onWheelModeToggle(event) {
   this.render();
 }
 
+/** Il tasto sui Tratti: gruppi o colonne (6/9). */
+async function onTraitsLayoutToggle(event) {
+  event?.preventDefault?.();
+  const current = game.settings.get(MODULE_ID, "traitsLayout");
+  await game.settings.set(MODULE_ID, "traitsLayout", current === "columns" ? "groups" : "columns");
+  this.render();
+}
+
 /**
  * Scheda del Mago: sei pagine raggruppate per come si usano al tavolo.
  * Vedi templates/actor/parts per i template ricomposti.
@@ -148,6 +156,7 @@ export class MageActorSheet extends MortalActorSheet {
       familySphereToggle: onFamilySphereToggle,
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
+      traitsLayoutToggle: onTraitsLayoutToggle,
       condizioneToggle: onCondizioneToggle,
       wisdomResourceChange: onWisdomResourceChange,
       wisdomRoll: onWisdomRoll
@@ -383,6 +392,7 @@ export class MageActorSheet extends MortalActorSheet {
         lang: game.i18n.lang
       });
       context.wheelAsBar = game.settings.get(MODULE_ID, "headerWheelMode") === "bar";
+      context.traitsColumns = game.settings.get(MODULE_ID, "traitsLayout") === "columns";
       // Negare il Contraccolpo: una volta per sessione, dalla Ruota.
       context.contraccolpo = getContraccolpo(actor);
       // Il memo di creazione, in fondo alla pagina: conta e verifica.

@@ -36,7 +36,10 @@ assert.equal(normalizeEffectKind("boh"), "");
 assert.deepEqual(ustioneSplit({ threshold: 5, tens: 2, kind: "physical" }), { total: 5, applied: 5, pa: 1, ps: 4, ma: 0, ms: 0, kind: "physical" });
 assert.deepEqual(ustioneSplit({ threshold: 5, tens: 0, kind: "" }), { total: 5, applied: 5, pa: 0, ps: 5, ma: 0, ms: 0, kind: "" });
 assert.deepEqual(ustioneSplit({ threshold: 4, tens: 3, kind: "mental" }), { total: 4, applied: 4, pa: 0, ps: 0, ma: 1, ms: 3, kind: "mental" });
-assert.deepEqual(ustioneSplit({ threshold: 5, tens: 4, kind: "variable" }), { total: 5, applied: 4, pa: 2, ps: 0, ma: 0, ms: 2, kind: "variable" });
+// Variabile (6/9): il punto dispari cade a caso, sul fisico o sul mentale.
+assert.deepEqual(ustioneSplit({ threshold: 5, tens: 4, kind: "variable", random: () => 0.1 }), { total: 5, applied: 5, pa: 2, ps: 1, ma: 0, ms: 2, kind: "variable" });
+assert.deepEqual(ustioneSplit({ threshold: 5, tens: 4, kind: "variable", random: () => 0.9 }), { total: 5, applied: 5, pa: 2, ps: 0, ma: 0, ms: 3, kind: "variable" });
+assert.deepEqual(ustioneSplit({ threshold: 4, tens: 0, kind: "variable", random: () => 0.9 }), { total: 4, applied: 4, pa: 0, ps: 2, ma: 0, ms: 2, kind: "variable" });
 
 // La Salute: fisici da sinistra, mentali da destra.
 assert.deepEqual(paintSalute({ pa: 1, ps: 1, ma: 1, ms: 2 }, 7), ["pa", "ps", "", "", "ms", "ms", "ma"]);
