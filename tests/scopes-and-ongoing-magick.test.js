@@ -25,6 +25,10 @@ function mageActor(flags = {}) {
 // Gli Ambiti sono le sei colonne del listino, nell'ordine del manuale.
 assert.deepEqual([...SCOPES], ["potency", "duration", "area", "targets", "conditions", "range", "precision"]);
 
+const scopeTableTemplate = readFileSync(
+  new URL("../templates/actor/parts/scope-table.hbs", import.meta.url),
+  "utf8"
+);
 // La tavola: sei righe per sette livelli, senza righe accese.
 const table = prepareScopeTable();
 assert.equal(table.steps.length, SCOPE_TABLE_STEPS);
@@ -34,6 +38,16 @@ assert.deepEqual(table.steps, [1, 2, 3, 4, 5, 6, 7]);
 assert.equal(table.rows.length, 10);
 assert.deepEqual(table.rows.map((row) => row.id), ["potency", "potencyEpic", "potencyDamage", "duration", "durationNarrative", "area", "targets", "conditions", "range", "precision"]);
 assert.equal(table.rows[0].label, "WOD5E_MAGE.Scopes.PotencyWeight");
+// La tavola per gruppi (6/9): Ambiti in ordine alfabetico della lingua, chi
+// ha più letture porta la riga di titolo e le letture col solo loro nome.
+const itScopes = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE.Scopes;
+const tableIt = prepareScopeTable((key) => key.startsWith("WOD5E_MAGE.Scopes.") ? itScopes[key.slice("WOD5E_MAGE.Scopes.".length)] ?? key : key);
+assert.deepEqual(tableIt.groups.map((group) => group.name), ["Area", "Bersagli", "Condizioni", "Durata", "Portata", "Potenza", "Precisione"]);
+assert.deepEqual(tableIt.groups.map((group) => group.header), [false, false, false, true, false, true, false]);
+assert.deepEqual(tableIt.groups.find((group) => group.scope === "potency").rows.map((row) => row.title), ["WOD5E_MAGE.Scopes.Sub.potency", "WOD5E_MAGE.Scopes.Sub.potencyEpic", "WOD5E_MAGE.Scopes.Sub.potencyDamage"]);
+assert.equal(tableIt.groups.find((group) => group.scope === "area").rows[0].title, "WOD5E_MAGE.Scopes.area");
+assert.deepEqual(Object.values(itScopes.Sub), ["Peso", "Epicità", "Danni", "Gioco", "Narrativa"]);
+assert.match(scopeTableTemplate, /scopeTable\.groups[\s\S]*group\.header[\s\S]*wod5e-mage-scope-group[\s\S]*group\.rows[\s\S]*row\.title/);
 assert.equal(table.rows[1].label, "WOD5E_MAGE.Scopes.PotencyEpic");
 assert.equal(table.rows[1].scope, "potency");
 assert.equal(table.rows[2].scope, "potency");
@@ -76,7 +90,9 @@ assert.equal(table.rows.every((row) => row.gift === undefined), true);
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
   const cells = strings.WOD5E_MAGE.Scopes.Table;
-  assert.equal(cells.range["6"], lang === "it" ? "Stessa Dimensione" : "Same Dimension");
+  // La Portata parla chiaro (6/9): «Lo vedi (entro 100 m)» … «Ovunque sia».
+  assert.equal(cells.range["6"], lang === "it" ? "In un altro continente" : "On another continent");
+  assert.match(cells.range["1"], /100 m/);
   assert.match(cells.potency["2"], /100 kg/);
   assert.match(cells.potency["6"], /500[.,]000 t/);
   assert.equal(typeof strings.WOD5E_MAGE.Scopes.PotencyWeight, "string");
@@ -90,11 +106,7 @@ for (const lang of ["it", "en"]) {
 }
 
 // La tavola in scheda: niente colonna delle Sfere, niente riga del Dono.
-const scopeTableTemplate = readFileSync(
-  new URL("../templates/actor/parts/scope-table.hbs", import.meta.url),
-  "utf8"
-);
-assert.match(scopeTableTemplate, /scopeTable\.steps[\s\S]*scopeTable\.rows[\s\S]*row\.cells/);
+assert.match(scopeTableTemplate, /scopeTable\.steps[\s\S]*scopeTable\.groups[\s\S]*row\.cells/);
 assert.doesNotMatch(scopeTableTemplate, /gift/);
 // Le colonne invisibili: ogni riga dice le sue, e la cella le rispetta.
 assert.deepEqual(table.rows.map((row) => row.layout), ["text", "text", "symbol-number", "symbol-number", "symbol-text", "symbol-text", "symbol-number", "symbol-number", "text", "text"]);

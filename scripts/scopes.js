@@ -39,14 +39,15 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
   // La Potenza in tre righe (6/9): il Peso dice quanto pesa ciò che muovi,
   // l'Epicità quanto è grande l'impresa (scala alternativa), i Danni sono
   // l'Areté più il numero (sigillo e numero, niente casella).
-  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyWeight", layout: "text" },
-  { id: "potencyEpic", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyEpic", layout: "text" },
-  { id: "potencyDamage", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyDamage", arete: true, layout: "symbol-number" },
-  { id: "duration", scope: "duration", label: "WOD5E_MAGE.Scopes.DurationPlay", icons: true, layout: "symbol-number" },
+  { id: "potency", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyWeight", sublabel: "WOD5E_MAGE.Scopes.Sub.potency", layout: "text" },
+  { id: "potencyEpic", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyEpic", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyEpic", layout: "text" },
+  { id: "potencyDamage", scope: "potency", label: "WOD5E_MAGE.Scopes.PotencyDamage", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyDamage", arete: true, layout: "symbol-number" },
+  { id: "duration", scope: "duration", label: "WOD5E_MAGE.Scopes.DurationPlay", sublabel: "WOD5E_MAGE.Scopes.Sub.duration", icons: true, layout: "symbol-number" },
   {
     id: "durationNarrative",
     scope: "duration",
     label: "WOD5E_MAGE.Scopes.DurationNarrative",
+    sublabel: "WOD5E_MAGE.Scopes.Sub.durationNarrative",
     faIcons: ["fa-solid fa-sun", "fa-solid fa-calendar-week", "fa-solid fa-calendar-days", "fa-solid fa-leaf", "fa-solid fa-calendar-check", "fa-solid fa-hourglass-half", "fa-solid fa-infinity"],
     layout: "symbol-text"
   },
@@ -79,39 +80,63 @@ const DURATION_ICONS = Object.freeze({
 });
 
 /**
- * La tavola degli Ambiti: sei righe per sette livelli (Potenza a danni per
- * livello, dal 4/9/2026; Peso ed Epicità dal 6/9).
+ * La tavola degli Ambiti (6/9): gli Ambiti in ordine alfabetico (nella
+ * lingua del giocatore: `localize`), e chi ha più letture (la Potenza tre,
+ * la Durata due) porta una riga di titolo e sotto le sue righe, col solo
+ * nome della lettura. `groups` è quel che il template stampa; `rows` resta
+ * la lista piatta delle righe coi loro gradini.
  */
-export function prepareScopeTable() {
+export function prepareScopeTable(localize = (key) => key) {
   const steps = Array.from({ length: SCOPE_TABLE_STEPS }, (_, index) => index + 1);
+  const rows = SCOPE_TABLE_ROWS.map((row) => ({
+    id: row.id,
+    scope: row.scope,
+    label: row.label,
+    sublabel: row.sublabel ?? "",
+    layout: row.layout,
+    small: Boolean(row.small),
+    cells: steps.map((step) => {
+      const label = `WOD5E_MAGE.Scopes.Table.${row.id}.${step}`;
+      return {
+        step,
+        label,
+        layout: row.layout,
+        // Le colonne invisibili: dove va il testo della cella.
+        number: row.layout.includes("number") && !(Boolean(row.arete) && step === 1),
+        text: row.layout.includes("text"),
+        // La Potenza: sigillo dell'Areté, numero, casella vuota.
+        arete: Boolean(row.arete),
+        // Al primo livello la Potenza è l'Areté e basta: niente numero.
+        hideLabel: Boolean(row.arete) && step === 1,
+        faIcon: row.faIcons ? row.faIcons[step - 1] : (row.faIcon ?? ""),
+        icon: row.icons
+          ? `modules/wod5e-mage/assets/icons/sheet/tempo/${DURATION_ICONS[step]}.svg`
+          : ""
+      };
+    })
+  }));
 
-  return {
-    steps,
-    rows: SCOPE_TABLE_ROWS.map((row) => ({
-      id: row.id,
-      scope: row.scope,
-      label: row.label,
-      layout: row.layout,
-      small: Boolean(row.small),
-      cells: steps.map((step) => {
-        const label = `WOD5E_MAGE.Scopes.Table.${row.id}.${step}`;
-        return {
-          step,
-          label,
-          layout: row.layout,
-          // Le colonne invisibili: dove va il testo della cella.
-          number: row.layout.includes("number") && !(Boolean(row.arete) && step === 1),
-          text: row.layout.includes("text"),
-          // La Potenza: sigillo dell'Areté, numero, casella vuota.
-          arete: Boolean(row.arete),
-          // Al primo livello la Potenza è l'Areté e basta: niente numero.
-          hideLabel: Boolean(row.arete) && step === 1,
-          faIcon: row.faIcons ? row.faIcons[step - 1] : (row.faIcon ?? ""),
-          icon: row.icons
-            ? `modules/wod5e-mage/assets/icons/sheet/tempo/${DURATION_ICONS[step]}.svg`
-            : ""
-        };
-      })
-    }))
-  };
+  // Per Ambito, in ordine alfabetico del nome tradotto.
+  const byScope = new Map();
+  for (const row of rows) {
+    if (!byScope.has(row.scope)) byScope.set(row.scope, []);
+    byScope.get(row.scope).push(row);
+  }
+  const groups = [...byScope.entries()]
+    .map(([scope, scopeRows]) => {
+      const label = `WOD5E_MAGE.Scopes.${scope}`;
+      const many = scopeRows.length > 1;
+      return {
+        scope,
+        label,
+        name: String(localize(label)),
+        // Con una lettura sola la riga porta il nome dell'Ambito; con più
+        // letture c'è la riga di titolo e sotto le letture col loro nome.
+        header: many,
+        rows: scopeRows.map((row) => ({ ...row, title: many ? (row.sublabel || row.label) : label }))
+      };
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  return { steps, rows, groups };
 }

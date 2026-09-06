@@ -421,7 +421,7 @@ export class MageActorSheet extends MortalActorSheet {
     if (partId === "magick") {
       context.tab = context.tabs.magick;
       context.arete = getArete(actor);
-      context.scopeTable = prepareScopeTable();
+      context.scopeTable = prepareScopeTable(game.i18n.localize.bind(game.i18n));
       // Le Specialità delle Sfere, dal terzo pallino, coi poteri del compendio.
       context.sphereSpecialties = prepareSphereSpecialties(actor, {
         powers: await loadSpherePowers(),

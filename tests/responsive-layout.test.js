@@ -166,6 +166,15 @@ assert.match(tabNavigation, /\{\{#if tab\.groupStart\}\}<hr class="wod5e-mage-ta
 assert.match(css, /\.wod5e-mage-tabs-divider \{[^}]*border-top: 1px solid var\(--mage-oro-scuro\);/s);
 assert.doesNotMatch(css, /:is\(\[data-tab="magick"\], \[data-tab="focus"\], \[data-tab="conceptChallenge"\]\) \.navicon \{/);
 assert.match(css, /\.sheet-tabs > \[data-tab\] \.navicon,\s*\.wod5e-mage\.wod5e\.actor\.sheet \.sheet-tabs \.lock-btn \{[^}]*background-color: var\(--mage-incavo\);/s);
+// I Tratti a colonne (6/9): tre colonne sulla stessa riga, Attributi |
+// Abilità (due colonne da nove) | il pannello di destra; il tasto sta nel
+// titolo degli Attributi e l'impostazione è del giocatore.
+assert.match(css, /\.wod5e-mage-tratti-columns > \.stats-content \{[^}]*"attributes skills conditions"[^}]*"attributes skills specialties"[^}]*"ruota ruota bonus"/s);
+assert.match(css, /\.wod5e-mage-tratti-columns \.wod5e-mage-tratti-skills > \.stats-container > \.stats-content \{[^}]*grid-auto-flow: column;[^}]*grid-template-rows: repeat\(9, auto\);/s);
+assert.match(css, /\.wod5e-mage-tratti-columns \.stats-footer \{[^}]*display: none;/s);
+const trattiTemplate = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
+assert.match(trattiTemplate, /wod5e-mage-tratti\{\{#if traitsColumns\}\} wod5e-mage-tratti-columns\{\{\/if\}\}[\s\S]*data-action="traitsLayoutToggle"/);
+assert.match(readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"), /register\(MODULE_ID, "traitsLayout"/);
 // Il sigillo dell'Areté in alto a destra della testata tira da ogni pagina;
 // il numero accanto ai pallini dell'Areté non c'è più; i nodi della Ruota
 // sono 26 px.

@@ -378,7 +378,7 @@ function wireScopeTable(dialog) {
     event.preventDefault();
     const content = await foundry.applications.handlebars.renderTemplate(
       "modules/wod5e-mage/templates/actor/parts/scope-table.hbs",
-      { scopeTable: prepareScopeTable() }
+      { scopeTable: prepareScopeTable(game.i18n.localize.bind(game.i18n)) }
     );
     await foundry.applications.api.DialogV2.wait({
       window: { title: game.i18n.localize("WOD5E_MAGE.Scopes.TableTitle") },

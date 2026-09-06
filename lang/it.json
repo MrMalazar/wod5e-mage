@@ -350,7 +350,7 @@
       "conditions": "Condizioni",
       "range": "Portata",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza (Peso): quanto pesa ciò che muovi. Potenza (Epicità): quanto cambia l'impresa, in alternativa al Peso. Potenza (Danni): l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
+      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza: Peso, quanto pesa ciò che muovi; Epicità, quanto pesa l'impresa nella storia; Danni, l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
       "TableSuccesses": "Livello →",
       "Table": {
         "potency": {
@@ -363,13 +363,13 @@
           "7": "Una montagna"
         },
         "potencyEpic": {
-          "1": "Cambia un oggetto",
-          "2": "Cambia una persona",
-          "3": "Cambia un gruppo",
-          "4": "Cambia un quartiere",
-          "5": "Cambia una città",
-          "6": "Cambia una nazione",
-          "7": "Cambia il mondo"
+          "1": "Cambia un dettaglio",
+          "2": "Tocca la scena",
+          "3": "Stravolge una scena",
+          "4": "Impatta sul capitolo",
+          "5": "Stravolge il capitolo",
+          "6": "Impatta sulla storia",
+          "7": "Impatta sull'intera ambientazione"
         },
         "potencyDamage": {
           "1": "+0",
@@ -417,12 +417,12 @@
           "7": "7"
         },
         "range": {
-          "1": "Visiva (100 m)",
-          "2": "Dintorni (5 km)",
-          "3": "Orizzonte (50 km)",
-          "4": "Regione (500 km)",
-          "5": "Stesso continente",
-          "6": "Stessa Dimensione",
+          "1": "Lo vedi (entro 100 m)",
+          "2": "Nei dintorni (entro 5 km)",
+          "3": "Lontano (entro 50 km)",
+          "4": "Molto lontano (entro 500 km)",
+          "5": "Nel continente",
+          "6": "In un altro continente",
           "7": "Ovunque sia"
         },
         "precision": {
@@ -449,7 +449,14 @@
       "DurationNarrative": "Durata (narrativa)",
       "PotencyWeight": "Potenza (Peso)",
       "PotencyEpic": "Potenza (Epicità)",
-      "PotencyDamage": "Potenza (Danni)"
+      "PotencyDamage": "Potenza (Danni)",
+      "Sub": {
+        "potency": "Peso",
+        "potencyEpic": "Epicità",
+        "potencyDamage": "Danni",
+        "duration": "Gioco",
+        "durationNarrative": "Narrativa"
+      }
     },
     "OngoingMagick": {
       "Label": "Magick in atto",

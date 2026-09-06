@@ -15,9 +15,17 @@
                 </tr>
             </thead>
             <tbody>
-                {{#each scopeTable.rows as |row|}}
-                    <tr class="scope-{{row.id}}{{#if row.small}} wod5e-mage-scope-row-small{{/if}}">
-                        <th scope="row">{{localize row.label}}</th>
+                {{!-- Gli Ambiti in ordine alfabetico (6/9); chi ha più letture
+                     porta una riga di titolo e sotto le letture. --}}
+                {{#each scopeTable.groups as |group|}}
+                    {{#if group.header}}
+                        <tr class="wod5e-mage-scope-group">
+                            <th scope="rowgroup" colspan="8">{{localize group.label}}</th>
+                        </tr>
+                    {{/if}}
+                    {{#each group.rows as |row|}}
+                    <tr class="scope-{{row.id}}{{#if row.small}} wod5e-mage-scope-row-small{{/if}}{{#if group.header}} wod5e-mage-scope-sub{{/if}}">
+                        <th scope="row">{{localize row.title}}</th>
                         {{!-- Ogni cella ha le stesse colonne invisibili della sua riga:
                              simbolo | numero | testo (o casella). Così, dentro una colonna
                              della tavola, simboli, numeri e testi stanno in fila. --}}
@@ -43,6 +51,7 @@
                             </td>
                         {{/each}}
                     </tr>
+                    {{/each}}
                 {{/each}}
             </tbody>
         </table>

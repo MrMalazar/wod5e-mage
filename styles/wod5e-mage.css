@@ -1012,6 +1012,22 @@
   white-space: nowrap;
 }
 
+/* La riga di titolo di un Ambito a più letture (Potenza, Durata) e, sotto,
+   le letture rientrate col solo loro nome (6/9). */
+.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-group > th {
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
+  color: var(--mage-oro, #d9a827);
+  font-weight: 700;
+  padding-top: 0.4rem;
+  text-align: left;
+}
+
+.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-sub > th {
+  color: var(--mage-oro-chiaro, #f5e7b2);
+  font-weight: 600;
+  padding-left: 1rem;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th > i {
   color: var(--mage-oro);
   margin-left: 0.25rem;
@@ -3221,6 +3237,42 @@
   display: contents;
 }
 
+/* Tre colonne sulla stessa riga (verdetto del 6/9): Attributi a sinistra,
+   poi le due colonne delle Abilità; Condizioni e Specializzazioni a destra,
+   la Ruota e i Bonus sotto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns > .stats-content {
+  grid-template-areas:
+    "attributes skills conditions"
+    "attributes skills specialties"
+    "ruota ruota bonus";
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 2fr) minmax(220px, 280px);
+  grid-template-rows: auto auto auto;
+}
+
+@container (max-width: 980px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns > .stats-content {
+    grid-template-areas:
+      "attributes skills"
+      "conditions specialties"
+      "ruota bonus";
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 2fr);
+  }
+}
+
+@container (max-width: 640px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns > .stats-content {
+    grid-template-areas:
+      "attributes"
+      "skills"
+      "conditions"
+      "specialties"
+      "ruota"
+      "bonus";
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto auto auto;
+  }
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-attributes > .stats-container > .stats-content {
   grid-auto-flow: row;
   grid-template-columns: minmax(0, 1fr);
@@ -3235,7 +3287,7 @@
   padding: 0 8px;
 }
 
-@container (max-width: 560px) {
+@container (max-width: 420px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-skills > .stats-container > .stats-content {
     grid-auto-flow: row;
     grid-template-columns: minmax(0, 1fr);

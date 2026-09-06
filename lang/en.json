@@ -350,7 +350,7 @@
       "conditions": "Conditions",
       "range": "Range",
       "TableTitle": "The Scopes",
-      "TableHint": "Each Scope is declared at a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope (cap 7); each Scope beyond the first raises it by 1, even past the cap. Potency (Weight): how heavy what you move is. Potency (Epicness): how much the feat changes, as an alternative to Weight. Potency (Damage): Arete plus the number. Duration: when casting you declare whether it runs on play or on narrative time.",
+      "TableHint": "Each Scope is declared at a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope (cap 7); each Scope beyond the first raises it by 1, even past the cap. Potency: Weight, how heavy what you move is; Epicness, how much the feat weighs in the story; Damage, Arete plus the number. Duration: when casting you declare whether it runs on play or on narrative time.",
       "TableSuccesses": "Level →",
       "Table": {
         "potency": {
@@ -363,13 +363,13 @@
           "7": "A mountain"
         },
         "potencyEpic": {
-          "1": "Changes an object",
-          "2": "Changes a person",
-          "3": "Changes a group",
-          "4": "Changes a district",
-          "5": "Changes a city",
-          "6": "Changes a nation",
-          "7": "Changes the world"
+          "1": "Changes a detail",
+          "2": "Touches the scene",
+          "3": "Upends a scene",
+          "4": "Impacts the chapter",
+          "5": "Upends the chapter",
+          "6": "Impacts the story",
+          "7": "Impacts the whole setting"
         },
         "potencyDamage": {
           "1": "+0",
@@ -417,12 +417,12 @@
           "7": "7"
         },
         "range": {
-          "1": "Sight (100 m)",
-          "2": "Surroundings (5 km)",
-          "3": "Horizon (50 km)",
-          "4": "Region (500 km)",
-          "5": "Same continent",
-          "6": "Same Dimension",
+          "1": "In sight (within 100 m)",
+          "2": "Nearby (within 5 km)",
+          "3": "Far (within 50 km)",
+          "4": "Very far (within 500 km)",
+          "5": "On the continent",
+          "6": "On another continent",
           "7": "Wherever it is"
         },
         "precision": {
@@ -449,7 +449,14 @@
       "DurationNarrative": "Duration (narrative)",
       "PotencyWeight": "Potency (Weight)",
       "PotencyEpic": "Potency (Epicness)",
-      "PotencyDamage": "Potency (Damage)"
+      "PotencyDamage": "Potency (Damage)",
+      "Sub": {
+        "potency": "Weight",
+        "potencyEpic": "Epicness",
+        "potencyDamage": "Damage",
+        "duration": "Play",
+        "durationNarrative": "Narrative"
+      }
     },
     "OngoingMagick": {
       "Label": "Ongoing Magick",
