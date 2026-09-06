@@ -2,10 +2,10 @@
   "id": "wod5e-mage",
   "title": "Mage for World of Darkness 5e",
   "description": "Adds Mage support to the World of Darkness 5e system.",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "url": "https://github.com/MrMalazar/wod5e-mage",
   "manifest": "https://github.com/MrMalazar/wod5e-mage/releases/latest/download/module.json",
-  "download": "https://github.com/MrMalazar/wod5e-mage/releases/download/0.40.0/wod5e-mage.zip",
+  "download": "https://github.com/MrMalazar/wod5e-mage/releases/download/0.41.0/wod5e-mage.zip",
   "authors": [
     {
       "name": "wod5e-mage contributors"
@@ -57,7 +57,7 @@
       }
     },
     {
-      "label": "Pregi (M5)",
+      "label": "Pregi (M6)",
       "type": "Item",
       "name": "mage-pregi",
       "path": "packs/mage-pregi",
@@ -68,7 +68,7 @@
       }
     },
     {
-      "label": "Difetti (M5)",
+      "label": "Difetti (M6)",
       "type": "Item",
       "name": "mage-difetti",
       "path": "packs/mage-difetti",
@@ -79,7 +79,7 @@
       }
     },
     {
-      "label": "Background (M5)",
+      "label": "Background (M6)",
       "type": "Item",
       "name": "mage-background",
       "path": "packs/mage-background",
@@ -90,7 +90,7 @@
       }
     },
     {
-      "label": "Credi (M5)",
+      "label": "Credi (M6)",
       "type": "JournalEntry",
       "name": "mage-credi",
       "path": "packs/mage-credi",
@@ -101,7 +101,7 @@
       }
     },
     {
-      "label": "Concetti (M5)",
+      "label": "Concetti (M6)",
       "type": "JournalEntry",
       "name": "mage-concetti",
       "path": "packs/mage-concetti",
@@ -112,7 +112,7 @@
       }
     },
     {
-      "label": "Ambizioni (M5)",
+      "label": "Ambizioni (M6)",
       "type": "JournalEntry",
       "name": "mage-ambizioni",
       "path": "packs/mage-ambizioni",
@@ -123,7 +123,7 @@
       }
     },
     {
-      "label": "Desideri (M5)",
+      "label": "Desideri (M6)",
       "type": "JournalEntry",
       "name": "mage-desideri",
       "path": "packs/mage-desideri",
@@ -134,7 +134,7 @@
       }
     },
     {
-      "label": "Ancore (M5)",
+      "label": "Ancore (M6)",
       "type": "JournalEntry",
       "name": "mage-ancore",
       "path": "packs/mage-ancore",
@@ -145,7 +145,7 @@
       }
     },
     {
-      "label": "Convinzioni (M5)",
+      "label": "Convinzioni (M6)",
       "type": "JournalEntry",
       "name": "mage-convinzioni",
       "path": "packs/mage-convinzioni",
@@ -156,7 +156,7 @@
       }
     },
     {
-      "label": "Condizioni (M5)",
+      "label": "Condizioni (M6)",
       "type": "Item",
       "name": "mage-condizioni",
       "path": "packs/mage-condizioni",
@@ -167,7 +167,7 @@
       }
     },
     {
-      "label": "Macro del Master (M5)",
+      "label": "Macro del Master (M6)",
       "type": "Macro",
       "name": "mage-macros",
       "path": "packs/mage-macros",
