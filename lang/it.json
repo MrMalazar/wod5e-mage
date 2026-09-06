@@ -916,7 +916,9 @@
       "Search": "Cerca un effetto…",
       "Empty": "Nessun effetto: servono Sfere con almeno un pallino.",
       "Scopes": "Ambiti consigliati:",
-      "Required": "obbligata"
+      "Required": "diretta",
+      "Without": "Senza",
+      "Sideways": "di lato, e Volgare."
     },
     "Incantesimi": {
       "DialogTitle": "Scrivi un incantesimo",

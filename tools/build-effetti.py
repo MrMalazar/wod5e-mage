@@ -50,7 +50,7 @@ def plain(text):
 
 
 SPHERE_NAMES = {**SPHERES, "Forze": "forces"}
-PAIRING = re.compile(r"^- \*\*\+ (" + "|".join(SPHERE_NAMES) + r")( \(obbligata\))?:\*\*\s*(.*)$")
+PAIRING = re.compile(r"^- \*\*\+ (" + "|".join(SPHERE_NAMES) + r")( \((?:obbligata|diretta)\))?:\*\*\s*(.*)$")
 SCOPES_LINE = re.compile(r"^\*Ambiti consigliati:\*\s*(.*)$")
 
 
@@ -107,8 +107,9 @@ def parse(path, sphere):
             if pairing:
                 text = plain(pairing.group(3))
                 extra_sphere = SPHERE_NAMES[pairing.group(1)]
-                # «(obbligata)» (6/9): la compagna senza cui l'effetto non si
-                # lancia. Nei blocchi il livello non si scrive: basta averla.
+                # «(diretta)» (6/9): la compagna che fa il lavoro diretto. Senza,
+                # l'effetto riesce di lato e sale di un grado (regola del ponte).
+                # Nei blocchi il livello non si scrive: basta averla.
                 required = bool(pairing.group(2))
                 block["pairings"].append({"sphere": extra_sphere, "text": text, "required": required})
                 if required:

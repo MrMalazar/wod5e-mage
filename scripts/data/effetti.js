@@ -77,7 +77,7 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "scopes": "Area per le dimensioni dell'effetto. Precisione per sapere più informazioni. Durata per tenerlo nella scena."
+    "scopes": "Area per le dimensioni dell'effetto. Precisione (dettaglio) per sapere più informazioni. Durata per tenerlo nella scena."
   },
   {
     "id": "correspondence-2-accorciare-la-strada",
@@ -159,7 +159,7 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "scopes": "Portata per la distanza. Precisione per i dettagli. Durata 1 per lo scontro, 2 per la scena."
+    "scopes": "Portata per la distanza. Precisione (dettaglio) per i particolari. Durata 1 per lo scontro, 2 per la scena."
   },
   {
     "id": "correspondence-2-marchiare-un-bersaglio",
@@ -237,7 +237,7 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "scopes": "Durata 2 per vegliare tutta la scena. Precisione per il punto esatto da cui parte il filo."
+    "scopes": "Durata 2 per vegliare tutta la scena. Precisione (dettaglio) per il punto esatto da cui parte il filo."
   },
   {
     "id": "correspondence-3-affacciarti-oltre-il-varco",
@@ -300,7 +300,7 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "scopes": "Precisione per la scheggia giusta e non il resto. Bersagli per più feriti."
+    "scopes": "Precisione (dettaglio) per la scheggia giusta e non il resto. Bersagli per più feriti."
   },
   {
     "id": "correspondence-3-richiamare-un-oggetto-distante",
@@ -321,7 +321,7 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "scopes": "Portata per la distanza (6 dall'altra parte del mondo). Potenza (peso) per quanto pesa. Precisione se la cosa è una fra tante."
+    "scopes": "Portata per la distanza (6 dall'altra parte del mondo). Potenza (peso) per quanto pesa. Precisione (dettaglio) se la cosa è una fra tante."
   },
   {
     "id": "correspondence-3-scambiare-due-cose-di-posto",
@@ -411,6 +411,37 @@ export const EFFETTI = Object.freeze([
       }
     ],
     "scopes": "Portata per la distanza. Durata per quanto resta aperto (4 la sessione). Potenza (peso) per tenerlo largo. Condizioni 1 se si apre solo per i tuoi."
+  },
+  {
+    "id": "correspondence-4-teletrasportare-un-gruppo",
+    "name": "Teletrasportare un gruppo",
+    "sphere": "correspondence",
+    "level": 4,
+    "extras": [],
+    "text": "Sparite insieme e riapparite là: la Cabala intera, l'auto con chi c'è dentro, il carico. Nessuno viaggia. Volgare se qualcuno guarda.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far passare i corpi restando corpi: il gesto si spiega.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Far passare anche il veicolo e il carico, interi.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far sì che chi resta non ricordi di avervi visto sparire.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Arrivare un attimo prima di partire.",
+        "required": false
+      }
+    ],
+    "scopes": "Portata per la distanza. Bersagli per quanti passano. Potenza (peso) per il veicolo e il carico."
   },
   {
     "id": "correspondence-4-piegare-una-strada",
@@ -935,7 +966,7 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "scopes": "Area per quanto è grande la serata: 1 la bisca, 2 l'edificio, 3 il quartiere. Durata 1 la serata, 3 il mese. Bersagli per chi vince e chi perde. Condizioni 1 per una regola: solo i tuoi, solo al tavolo grande."
+    "scopes": "Area per quanto è grande la serata: 1 la bisca, 2 l'edificio, 3 il quartiere. Durata 2 la serata, o fuori gioco 3 per un mese. Bersagli per chi vince e chi perde. Condizioni 1 per una regola: solo i tuoi, solo al tavolo grande."
   },
   {
     "id": "entropy-3-ferire-uno-spirito",
@@ -1116,7 +1147,7 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro: contro una maledizione più forte vince la Potenza più alta. Bersagli per più persone maledette. Precisione (dettaglio) per il nodo giusto fra molti."
+    "scopes": "Potenza (epicità) nel braccio di ferro: contro una maledizione più forte vince l'Epicità più alta. Bersagli per più persone maledette. Precisione (dettaglio) per il nodo giusto fra molti."
   },
   {
     "id": "entropy-4-benedire-o-maledire",
@@ -2591,43 +2622,6 @@ export const EFFETTI = Object.freeze([
     "scopes": "Potenza (danni) per quanto ferisce. Precisione (dettaglio) per il punto esatto: il cuore. Bersagli per più cadaveri."
   },
   {
-    "id": "matter-2-invecchiare-un-oggetto",
-    "name": "Invecchiare un oggetto",
-    "sphere": "matter",
-    "level": 2,
-    "extras": [
-      {
-        "sphere": "time",
-        "level": 1,
-        "required": true
-      }
-    ],
-    "text": "Ruggine e polvere di decenni in un minuto: la serratura si blocca, il legno marcisce, la corda si sfilaccia. Serve il Tempo: da sola la Materia consuma la sostanza, ma gli anni non corrono.",
-    "pairings": [
-      {
-        "sphere": "time",
-        "text": "Far correre gli anni: l'oggetto invecchia davanti a te.",
-        "required": true
-      },
-      {
-        "sphere": "entropy",
-        "text": "Far invecchiare per primo il pezzo che regge tutto.",
-        "required": false
-      },
-      {
-        "sphere": "life",
-        "text": "Invecchiare anche quello che era vivo: il legno verde, il cuoio, il cibo etc..",
-        "required": false
-      },
-      {
-        "sphere": "correspondence",
-        "text": "Invecchiare quello che non vedi.",
-        "required": false
-      }
-    ],
-    "scopes": "Potenza (peso) per quanto è grosso: 1 la serratura, 3 l'auto, 5 la casa. Precisione (dettaglio) per il pezzo solo: la canna, non la pistola. Bersagli per più oggetti."
-  },
-  {
     "id": "matter-2-modellare-un-passe-partout",
     "name": "Modellare un passe-partout",
     "sphere": "matter",
@@ -3025,23 +3019,13 @@ export const EFFETTI = Object.freeze([
     "scopes": "Potenza (peso) per quanto è grosso: 1 la pistola, 3 l'auto, 5 la centrale. Condizioni 1 per farlo scattare da solo: quando la impugna lui. Bersagli per più cose. Precisione (dettaglio) per il pezzo solo."
   },
   {
-    "id": "matter-3-rimodellare-o-disintegrare",
-    "name": "Rimodellare o disintegrare",
+    "id": "matter-3-rimodellare",
+    "name": "Rimodellare",
     "sphere": "matter",
     "level": 3,
     "extras": [],
-    "text": "La serranda cola, la sbarra si piega, il muro si apre in una porta: plasmi la forma, la densità e lo stato di quello che tocchi. Per disintegrare, ridurre una cosa a niente, servono l'Entropia e il Tempo insieme.",
+    "text": "La serranda cola, la sbarra si piega, il muro si apre in una porta: plasmi la forma, la densità e lo stato di quello che tocchi. Ridurre una cosa a niente è un altro lavoro, e sta nell'Entropia.",
     "pairings": [
-      {
-        "sphere": "entropy",
-        "text": "Disfare la cosa fino alla polvere, insieme al Tempo.",
-        "required": false
-      },
-      {
-        "sphere": "time",
-        "text": "Disintegrare, insieme all'Entropia; da solo, far tornare la cosa com'era quando decidi.",
-        "required": false
-      },
       {
         "sphere": "forces",
         "text": "Rimodellare col calore: il mondo vede una fucina.",
@@ -3060,6 +3044,16 @@ export const EFFETTI = Object.freeze([
       {
         "sphere": "prime",
         "text": "Rimodellare aggiungendo materia che non c'era.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far cedere da sola la parte che togli.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far tornare la cosa com'era quando decidi.",
         "required": false
       }
     ],
@@ -3462,6 +3456,42 @@ export const EFFETTI = Object.freeze([
     "scopes": "Area per quanto è grande la stanza: 1 la sala, 2 il palazzo, 3 il quartiere. Durata 2 per la scena. Precisione (dettaglio) per la testa da cui parte l'umore."
   },
   {
+    "id": "mind-1-riconoscere-il-sovrannaturale",
+    "name": "Riconoscere il sovrannaturale",
+    "sphere": "mind",
+    "level": 1,
+    "extras": [],
+    "text": "L'aura dice cosa hai davanti: vampiro, mutaforma, posseduto, peggio. La Mente legge la mente e l'aura; per sapere cosa lo abita serve lo Spirito, per che corpo è la Vita.",
+    "pairings": [
+      {
+        "sphere": "spirit",
+        "text": "Sapere cosa lo abita, oltre che cosa pensa.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Sapere che corpo è, e quanto è lontano dal Modello umano.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Riconoscere anche un Risvegliato.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riconoscere il sovrannaturale in chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quanto è pericoloso, adesso.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per una stanza piena. Area per setacciare un luogo. Precisione (dettaglio) per la specie esatta: 1 non è umano, 3 cos'è, 5 quale clan, quale tribù."
+  },
+  {
     "id": "mind-2-blindare-un-ricordo",
     "name": "Blindare un ricordo",
     "sphere": "mind",
@@ -3503,7 +3533,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 2,
     "extras": [],
-    "text": "Scrivi in una testa una cosa che non c'è: la vede, la sente, la tocca, solo lui. Nessuna telecamera la riprende. Se ferisce, è il terzo pallino, e per i danni Aggravati serve la Vita. Scriverla in venti teste nello stesso istante è uno strappo: Volgare, senza le Forze.",
+    "text": "Scrivi in una testa una cosa che non c'è: la vede, la sente, la tocca, solo lui. Nessuna telecamera la riprende. Se deve ferire, è il terzo pallino. Scriverla in venti teste nello stesso istante è uno strappo: Volgare, senza le Forze.",
     "pairings": [
       {
         "sphere": "forces",
@@ -3614,6 +3644,37 @@ export const EFFETTI = Object.freeze([
       }
     ],
     "scopes": "Bersagli per più persone. Area per una folla intera. Durata 1 per un attimo, 2 per la scena. Condizioni (malus 1, distrarre) se l'umore serve a distrarlo. Potenza (epicità) per quanto pesa: 1 un dettaglio, 3 stravolge la scena."
+  },
+  {
+    "id": "mind-2-risanare-la-tua-volonta",
+    "name": "Risanare la tua Volontà",
+    "sphere": "mind",
+    "level": 2,
+    "extras": [],
+    "text": "Ripari la tua mente lacerata: un successo per livello di Volontà; gli Aggravati chiedono anche una Quintessenza ciascuno. Su un altro è il terzo pallino.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Risanare insieme il corpo: la fatica, il tremore etc..",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Pagare gli Aggravati con la Quintessenza del luogo.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Tornare a com'eri prima del trauma.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che la crepa non si riapra lì.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta Volontà torna."
   },
   {
     "id": "mind-2-schermare-i-tuoi-pensieri",
@@ -3809,6 +3870,42 @@ export const EFFETTI = Object.freeze([
       }
     ],
     "scopes": "Bersagli per più dormienti insieme. Durata 2 per la notte. Precisione (dettaglio) per il sogno esatto. Condizioni 1 per legarlo: solo quando sogna lei."
+  },
+  {
+    "id": "mind-3-impiantare-un-illusione-che-ferisce",
+    "name": "Impiantare un'illusione che ferisce",
+    "sphere": "mind",
+    "level": 3,
+    "extras": [],
+    "text": "L'illusione scritta nella sua testa fa male davvero: il fuoco che non c'è brucia, la lama che non c'è taglia, e il corpo ci crede. Il danno è Superficiale; per gli Aggravati serve la Vita.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far ferire il corpo per davvero: danni Aggravati.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Fare l'illusione di luce e suono veri: la vedono tutti, e brucia lo stesso.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Ferire con l'illusione chi pensa senza cervello.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Impiantare l'illusione in chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far comparire l'illusione nel momento peggiore per lui.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più teste. Durata 1 per un colpo, 2 per la scena."
   },
   {
     "id": "mind-3-legare-le-menti-della-squadra",
@@ -4837,100 +4934,6 @@ export const EFFETTI = Object.freeze([
     "scopes": "Potenza (danni) per quanta ne prendi. Portata per la distanza. Durata 2 per tenere aperto il flusso."
   },
   {
-    "id": "prime-3-innestare-la-macchina-nella-carne",
-    "name": "Innestare la macchina nella carne",
-    "sphere": "prime",
-    "level": 3,
-    "extras": [
-      {
-        "sphere": "matter",
-        "level": 1,
-        "required": true
-      },
-      {
-        "sphere": "life",
-        "level": 1,
-        "required": true
-      }
-    ],
-    "text": "La tua energia salda l'acciaio al battito: il metallo entra nel corpo e il corpo lo accetta. Servono la Materia e la Vita: il Primordio fa vivere l'innesto.",
-    "pairings": [
-      {
-        "sphere": "matter",
-        "text": "Dare l'innesto.",
-        "required": true
-      },
-      {
-        "sphere": "life",
-        "text": "Far accettare l'innesto al corpo.",
-        "required": true
-      },
-      {
-        "sphere": "forces",
-        "text": "Far alimentare l'innesto dal corpo, e fargli portare corrente.",
-        "required": false
-      },
-      {
-        "sphere": "mind",
-        "text": "Far rispondere l'innesto al pensiero.",
-        "required": false
-      }
-    ],
-    "scopes": "Durata 7: l'innesto resta. Potenza (epicità) per quanto pesa: 2 una placca, 5 un braccio nuovo. Precisione (dettaglio) per quanto è fine l'innesto."
-  },
-  {
-    "id": "prime-3-rianimare-un-morto-recente",
-    "name": "Rianimare un morto recente",
-    "sphere": "prime",
-    "level": 3,
-    "extras": [
-      {
-        "sphere": "life",
-        "level": 1,
-        "required": true
-      },
-      {
-        "sphere": "spirit",
-        "level": 1,
-        "required": true
-      }
-    ],
-    "text": "Riaccendi la scintilla in un Modello spento: il morto recente torna. Servono la Vita, che rimette in piedi il corpo, e lo Spirito, che richiama chi è partito. Volgare, sempre.",
-    "pairings": [
-      {
-        "sphere": "life",
-        "text": "Rimettere in piedi il corpo.",
-        "required": true
-      },
-      {
-        "sphere": "spirit",
-        "text": "Richiamare chi è partito.",
-        "required": true
-      },
-      {
-        "sphere": "time",
-        "text": "Rianimare chi è morto da più tempo.",
-        "required": false
-      },
-      {
-        "sphere": "mind",
-        "text": "Far tornare il morto con la memoria intera.",
-        "required": false
-      },
-      {
-        "sphere": "correspondence",
-        "text": "Rianimare chi non vedi.",
-        "required": false
-      },
-      {
-        "sphere": "entropy",
-        "text": "Far pagare il conto a qualcun altro.",
-        "required": false
-      }
-    ],
-    "scopes": "Potenza (epicità) per quanto pesa il ritorno: 4 impatta sul capitolo, 6 impatta sulla storia. Durata 7. Condizioni 1 per ogni clausola del ritorno."
-  },
-  {
     "id": "prime-3-travasare-a-un-altro-mago",
     "name": "Travasare a un altro mago",
     "sphere": "prime",
@@ -4965,42 +4968,6 @@ export const EFFETTI = Object.freeze([
       }
     ],
     "scopes": "Potenza (danni) per quanta ne passa. Bersagli per più Ruote. Portata per la distanza."
-  },
-  {
-    "id": "prime-4-creare-un-feticcio",
-    "name": "Creare un Feticcio",
-    "sphere": "prime",
-    "level": 4,
-    "extras": [],
-    "text": "Leghi uno spirito consenziente a un oggetto: la tua energia gli fa da casa, e l'oggetto porta i suoi poteri. Senza il consenso serve lo Spirito, per forzarlo.",
-    "pairings": [
-      {
-        "sphere": "spirit",
-        "text": "Legare lo spirito a forza.",
-        "required": false
-      },
-      {
-        "sphere": "matter",
-        "text": "Fare l'oggetto su misura per lo spirito.",
-        "required": false
-      },
-      {
-        "sphere": "mind",
-        "text": "Far obbedire il Feticcio anche a chi non lo conosce.",
-        "required": false
-      },
-      {
-        "sphere": "life",
-        "text": "Fare da Feticcio un vivente: l'animale, la pianta.",
-        "required": false
-      },
-      {
-        "sphere": "time",
-        "text": "Legare lo spirito per un tempo preciso.",
-        "required": false
-      }
-    ],
-    "scopes": "Durata per quanto resta legato (7 per sempre). Potenza (epicità) per quanto è forte lo spirito. Condizioni 1 per ogni clausola del patto, e Complessità per quanto è lungo."
   },
   {
     "id": "prime-4-deviare-il-contraccolpo",
@@ -5527,7 +5494,7 @@ export const EFFETTI = Object.freeze([
       },
       {
         "sphere": "mind",
-        "text": "Sapere se lui sa cos'è.",
+        "text": "Leggere l'aura insieme al riflesso, e sapere se lui sa cos'è.",
         "required": false
       },
       {
@@ -5883,53 +5850,6 @@ export const EFFETTI = Object.freeze([
       }
     ],
     "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più mutaforma. Precisione (dettaglio) per il punto esatto."
-  },
-  {
-    "id": "spirit-3-mostrarti-in-corpo-di-luce",
-    "name": "Mostrarti in corpo di luce",
-    "sphere": "spirit",
-    "level": 3,
-    "extras": [
-      {
-        "sphere": "mind",
-        "level": 1,
-        "required": true
-      },
-      {
-        "sphere": "prime",
-        "level": 1,
-        "required": true
-      }
-    ],
-    "text": "La tua forma astrale si stacca dal corpo e si mostra ai presenti: la vedono, la sentono parlare. Servono la Mente, che la proietta, e il Primordio, che le dà sostanza.",
-    "pairings": [
-      {
-        "sphere": "mind",
-        "text": "Proiettare la forma nelle teste dei presenti.",
-        "required": true
-      },
-      {
-        "sphere": "prime",
-        "text": "Dare sostanza alla forma.",
-        "required": true
-      },
-      {
-        "sphere": "correspondence",
-        "text": "Mostrarti lontano da dove sei.",
-        "required": false
-      },
-      {
-        "sphere": "forces",
-        "text": "Farti vedere anche dalle telecamere: luce vera.",
-        "required": false
-      },
-      {
-        "sphere": "matter",
-        "text": "Far toccare la forma: apre porte, prende oggetti.",
-        "required": false
-      }
-    ],
-    "scopes": "Durata 2 per la scena. Portata per quanto lontano ti mostri. Precisione (dettaglio) per quanto sei nitido: 1 una luce, 3 la tua faccia."
   },
   {
     "id": "spirit-3-aprire-la-prova-dell-anima",
@@ -6844,43 +6764,7 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "scopes": "Potenza (danni) per quanto guarisce. Durata per quanto indietro: 1 tre turni, 2 la scena, 3 il giorno. Bersagli per più feriti."
-  },
-  {
-    "id": "time-3-ridurre-in-polvere-un-oggetto",
-    "name": "Ridurre in polvere un oggetto",
-    "sphere": "time",
-    "level": 3,
-    "extras": [],
-    "text": "Anni di decadimento in un istante: la ruggine vince, il legno marcisce, resta la polvere. Con l'Entropia scegli cosa cede per primo; con la Materia l'oggetto si disfa per quello che è. Senza, il flusso prende tutto insieme: il congegno, la vernice, i documenti nel cassetto.",
-    "pairings": [
-      {
-        "sphere": "entropy",
-        "text": "Scegliere cosa cede per primo: la ruggine sul meccanismo, mai sulla cassa.",
-        "required": false
-      },
-      {
-        "sphere": "matter",
-        "text": "Disfare l'oggetto per quello che è, e restare spiegabile.",
-        "required": false
-      },
-      {
-        "sphere": "life",
-        "text": "Far marcire quello che era vivo: il legno, il cibo, il raccolto etc..",
-        "required": false
-      },
-      {
-        "sphere": "correspondence",
-        "text": "Ridurre in polvere quello che non vedi.",
-        "required": false
-      },
-      {
-        "sphere": "forces",
-        "text": "Ridurre in polvere un impianto: i circuiti si ossidano.",
-        "required": false
-      }
-    ],
-    "scopes": "Potenza (peso) per quanto è grosso: 1 la chiave, 3 l'auto, 5 la casa. Precisione (dettaglio) per la parte giusta e non l'insieme. Bersagli per più oggetti."
+    "scopes": "Potenza (danni) per quanto guarisce. Durata per quanto indietro: 1 tre turni, 2 la scena, 3 due scene. Bersagli per più feriti."
   },
   {
     "id": "time-3-saltare-l-attimo-del-colpo",
@@ -6989,7 +6873,7 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "scopes": "Durata per quanto indietro: 1 tre turni, 2 la scena, 3 il giorno. Bersagli per avvertire più persone. Precisione (dettaglio) per un ricordo solo e preciso."
+    "scopes": "Durata per quanto indietro: 1 tre turni, 2 la scena, 3 due scene. Bersagli per avvertire più persone. Precisione (dettaglio) per un ricordo solo e preciso."
   },
   {
     "id": "time-4-chiudere-un-area-in-un-anello",
@@ -7306,48 +7190,6 @@ export const EFFETTI = Object.freeze([
     "scopes": "Precisione (informazione) per quanto pesa quel che cerchi. Precisione (dettaglio) per un segno solo fra tanti. Durata 2 per la scena."
   },
   {
-    "id": "life-1-riconoscere-il-sovrannaturale",
-    "name": "Riconoscere il sovrannaturale",
-    "sphere": "life",
-    "level": 1,
-    "extras": [
-      {
-        "sphere": "spirit",
-        "level": 1,
-        "required": true
-      }
-    ],
-    "text": "Uno sguardo dice se quello davanti a te è umano, e quanto è lontano dal Modello umano. Serve lo Spirito per sapere cosa lo abita: la Vita legge il corpo e la specie.",
-    "pairings": [
-      {
-        "sphere": "spirit",
-        "text": "Sapere cosa lo abita, oltre che che corpo è.",
-        "required": true
-      },
-      {
-        "sphere": "mind",
-        "text": "Sapere se lui sa cos'è.",
-        "required": false
-      },
-      {
-        "sphere": "prime",
-        "text": "Riconoscere anche un Risvegliato.",
-        "required": false
-      },
-      {
-        "sphere": "correspondence",
-        "text": "Riconoscere il sovrannaturale in chi non vedi.",
-        "required": false
-      },
-      {
-        "sphere": "entropy",
-        "text": "Sapere quanto è pericoloso, adesso.",
-        "required": false
-      }
-    ],
-    "scopes": "Bersagli per una stanza piena. Area per setacciare un luogo. Precisione (dettaglio) per la specie esatta: 1 non è umano, 3 cos'è, 5 quale clan, quale tribù."
-  },
-  {
     "id": "life-2-curare-o-causare-malattie",
     "name": "Curare o causare malattie",
     "sphere": "life",
@@ -7597,7 +7439,7 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "scopes": "Bersagli per più feriti. Durata per quanto corre la guarigione: 2 la scena, 3 la notte. Potenza (danni) per quanto guarisce in più."
+    "scopes": "Bersagli per più feriti. Durata per quanto corre la guarigione: 2 la scena, 4 la sessione. Potenza (danni) per quanto guarisce in più."
   },
   {
     "id": "life-3-addormentare",
@@ -7683,82 +7525,45 @@ export const EFFETTI = Object.freeze([
     "scopes": "Bersagli per quanti cadaveri. Durata per quanto camminano: 2 la scena, 4 la sessione. Condizioni 1 per l'ordine che eseguono. Potenza (danni) se colpiscono."
   },
   {
-    "id": "life-3-ferire-un-mutaforma",
-    "name": "Ferire un mutaforma",
+    "id": "life-3-curare-o-causare-malattie-a-un-altro",
+    "name": "Curare o causare malattie a un altro",
     "sphere": "life",
     "level": 3,
-    "extras": [
-      {
-        "sphere": "spirit",
-        "level": 1,
-        "required": true
-      }
-    ],
-    "text": "Il loro Modello è ibrido, carne e spirito insieme: lo colpisci sulla carne, e lo spirito segue. Serve lo Spirito per la parte di là.",
+    "extras": [],
+    "text": "Metti le mani su un altro corpo e la malattia arriva o se ne va: la febbre, l'infezione, il male lento. Il Modello altrui chiede il terzo pallino; nella vita semplice e su di te basta il secondo.",
     "pairings": [
       {
-        "sphere": "spirit",
-        "text": "Colpire anche la parte di spirito.",
-        "required": true
-      },
-      {
-        "sphere": "forces",
-        "text": "Colpire con un'energia: il fuoco, l'argento fuso.",
+        "sphere": "entropy",
+        "text": "Far arrivare la malattia come una sfortuna, o far guarire come un colpo di fortuna.",
         "required": false
       },
       {
-        "sphere": "entropy",
-        "text": "Colpire dove il Modello ibrido è più stanco.",
+        "sphere": "time",
+        "text": "Far correre la malattia in un'ora, o farla durare un anno.",
         "required": false
       },
       {
         "sphere": "correspondence",
-        "text": "Ferire il mutaforma che non vedi.",
+        "text": "Curare o ammalare chi non vedi.",
         "required": false
       },
       {
         "sphere": "prime",
-        "text": "Far mordere il colpo con la Quintessenza.",
+        "text": "Creare una malattia che non esisteva.",
         "required": false
-      }
-    ],
-    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più mutaforma. Precisione (dettaglio) per il punto esatto."
-  },
-  {
-    "id": "life-3-ferire-un-vampiro",
-    "name": "Ferire un vampiro",
-    "sphere": "life",
-    "level": 3,
-    "extras": [],
-    "text": "Carne morta animata: la tratti da viva che non è, e funziona, ma paghi la finzione. Con la Materia lo ferisci per ciò che è, e resta spiegabile.",
-    "pairings": [
+      },
       {
         "sphere": "matter",
-        "text": "Ferire la carne morta per quello che è.",
+        "text": "Far viaggiare la malattia in un oggetto: l'acqua, il cibo, la lettera.",
         "required": false
       },
       {
-        "sphere": "forces",
-        "text": "Far bruciare la ferita: il fuoco entra dove la carne si è aperta.",
-        "required": false
-      },
-      {
-        "sphere": "entropy",
-        "text": "Colpire dove il corpo morto è più stanco.",
-        "required": false
-      },
-      {
-        "sphere": "spirit",
-        "text": "Ferire anche quello che lo abita.",
-        "required": false
-      },
-      {
-        "sphere": "correspondence",
-        "text": "Ferire il vampiro che non vedi.",
+        "sphere": "mind",
+        "text": "Fargli credere di stare bene, o di stare male, oltre al corpo.",
         "required": false
       }
     ],
-    "scopes": "Potenza (danni) per quanto ferisce. Precisione (dettaglio) per il punto esatto: il cuore. Bersagli per più vampiri."
+    "scopes": "Bersagli per più persone. Durata per quanto dura. Potenza (danni) se la malattia ferisce. Condizioni (malus 2, ostacolare) per quanto pesa."
   },
   {
     "id": "life-3-guarire-o-ferire-un-altro",
@@ -7913,48 +7718,6 @@ export const EFFETTI = Object.freeze([
       }
     ],
     "scopes": "Potenza (danni) per quanto guarisce. Bersagli per più corpi. Durata 7 perché resti."
-  },
-  {
-    "id": "life-4-innestare-la-macchina-nella-carne",
-    "name": "Innestare la macchina nella carne",
-    "sphere": "life",
-    "level": 4,
-    "extras": [
-      {
-        "sphere": "matter",
-        "level": 1,
-        "required": true
-      },
-      {
-        "sphere": "prime",
-        "level": 1,
-        "required": true
-      }
-    ],
-    "text": "Il metallo entra nel corpo e il corpo lo accetta come suo: la Vita fa accettare l'innesto; servono la Materia, che lo dà, e il Primordio, che lo fa vivere.",
-    "pairings": [
-      {
-        "sphere": "matter",
-        "text": "Dare l'innesto.",
-        "required": true
-      },
-      {
-        "sphere": "prime",
-        "text": "Far vivere l'innesto.",
-        "required": true
-      },
-      {
-        "sphere": "forces",
-        "text": "Far alimentare l'innesto dal corpo, e fargli portare corrente.",
-        "required": false
-      },
-      {
-        "sphere": "mind",
-        "text": "Far rispondere l'innesto al pensiero.",
-        "required": false
-      }
-    ],
-    "scopes": "Durata 7: l'innesto resta. Potenza (epicità) per quanto pesa: 2 una placca, 5 un braccio nuovo. Precisione (dettaglio) per quanto è fine l'innesto."
   },
   {
     "id": "life-4-riscrivere-il-corpo-di-un-altro",

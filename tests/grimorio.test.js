@@ -12,14 +12,14 @@ assert.equal(new Set(EFFETTI.map((e) => e.id)).size, EFFETTI.length);
 assert.deepEqual([...new Set(EFFETTI.map((e) => e.sphere))].sort(), ["correspondence", "entropy", "forces", "life", "matter", "mind", "prime", "spirit", "time"]);
 assert.ok(EFFETTI.every((e) => e.level >= 1 && e.level <= 5 && e.name && e.text));
 const proiettare = findEffetto("forces-2-proiettare-luce-e-suono");
-// Nei blocchi (6/9) «la via obbligata» segna la compagna necessaria, senza livello.
+// Nei blocchi (6/9) «(diretta)» segna la compagna che fa il lavoro diretto, senza livello.
 assert.deepEqual(proiettare.extras, [{ sphere: "prime", level: 1, required: true }]);
 assert.equal(proiettare.pairings.find((pairing) => pairing.sphere === "prime").required, true);
 const curvare = findEffetto("forces-2-curvare-la-luce-o-il-suono");
 assert.equal(curvare.extras.length, 0);
 
-// Si apre solo con le Sfere giuste: la principale al livello, le obbligatorie al loro.
-assert.equal(effectAvailable(proiettare, { forces: 2 }), false);
+// Si apre con la Sfera che lo porta: la compagna diretta non chiude la porta (regola del ponte).
+assert.equal(effectAvailable(proiettare, { forces: 2 }), true);
 assert.equal(effectAvailable(proiettare, { forces: 2, prime: 1 }), true);
 assert.equal(effectAvailable(curvare, { forces: 2 }), true);
 assert.equal(effectAvailable(curvare, { forces: 1 }), false);
@@ -30,7 +30,8 @@ const grimorio = prepareGrimorio({ forces: 2, mind: 1 });
 assert.deepEqual(grimorio.map((g) => g.sphere), ["forces", "mind"]);
 assert.deepEqual(grimorio[0].levels.map((l) => l.level), [1, 2]);
 assert.ok(grimorio[0].levels[1].entries.some((e) => e.id === curvare.id));
-assert.ok(!grimorio[0].levels[1].entries.some((e) => e.id === proiettare.id));
+assert.ok(grimorio[0].levels[1].entries.some((e) => e.id === proiettare.id));
+assert.deepEqual(grimorio[0].levels[1].entries.find((e) => e.id === proiettare.id).missing, ["WOD5E_MAGE.Spheres.prime"]);
 assert.equal(prepareGrimorio({}).length, 0);
 
 // L'Ustione va dove dice l'Effetto: fisico, mentale, metà e metà per difetto.
@@ -67,7 +68,7 @@ console.log("Grimorio, Ustione e Salute: test passati.");
 // Il formato nuovo (6/9): Corrispondenza a blocchi, con le Sfere compagne e
 // gli Ambiti consigliati; «Mappare la zona» ha assorbito «Cercare nell'area».
 const corr = EFFETTI.filter((entry) => entry.sphere === "correspondence");
-assert.equal(corr.length, 20);
+assert.equal(corr.length, 21);
 const mappare = corr.find((entry) => entry.id === "correspondence-1-mappare-la-zona");
 assert.equal(mappare.pairings.length, 8);
 assert.equal(mappare.pairings[0].sphere, "entropy");
@@ -90,37 +91,43 @@ assert.equal(forze.every((entry) => entry.pairings.length > 0 && entry.scopes), 
 assert.equal(forze.find((entry) => entry.id === "forces-3-telecinesi").pairings.length, 6);
 // Materia nel formato nuovo (6/9): ventiquattro blocchi; «(obbligata)» nel nome segna la compagna necessaria.
 const materia = EFFETTI.filter((entry) => entry.sphere === "matter");
-assert.equal(materia.length, 24);
+assert.equal(materia.length, 23);
 assert.equal(materia.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(materia.find((entry) => entry.id === "matter-4-innestare-la-macchina-nella-carne").extras.map((extra) => extra.sphere), ["life", "prime"]);
+assert.equal(materia.some((entry) => entry.id === "matter-2-invecchiare-un-oggetto"), false);
+assert.equal(materia.some((entry) => entry.id === "matter-3-rimodellare"), true);
 // Mente nel formato nuovo (6/9): venticinque blocchi.
 const mente = EFFETTI.filter((entry) => entry.sphere === "mind");
-assert.equal(mente.length, 25);
+assert.equal(mente.length, 28);
 assert.equal(mente.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(mente.find((entry) => entry.id === "mind-4-mostrarti-in-corpo-di-luce").extras.map((extra) => extra.sphere), ["spirit", "prime"]);
 // Primordio nel formato nuovo (6/9): ventisei blocchi.
 const primordio = EFFETTI.filter((entry) => entry.sphere === "prime");
-assert.equal(primordio.length, 26);
+assert.equal(primordio.length, 23);
 assert.equal(primordio.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
-assert.deepEqual(primordio.find((entry) => entry.id === "prime-3-rianimare-un-morto-recente").extras.map((extra) => extra.sphere), ["life", "spirit"]);
+assert.equal(primordio.some((entry) => entry.id === "prime-3-rianimare-un-morto-recente"), false);
 // Spirito nel formato nuovo (6/9): ventinove blocchi.
 const spirito = EFFETTI.filter((entry) => entry.sphere === "spirit");
-assert.equal(spirito.length, 29);
+assert.equal(spirito.length, 28);
 assert.equal(spirito.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(spirito.find((entry) => entry.id === "spirit-1-riconoscere-il-sovrannaturale").extras.map((extra) => extra.sphere), ["life"]);
 // Tempo nel formato nuovo (6/9): ventuno blocchi.
 const tempo = EFFETTI.filter((entry) => entry.sphere === "time");
-assert.equal(tempo.length, 21);
+assert.equal(tempo.length, 20);
 assert.equal(tempo.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(tempo.find((entry) => entry.id === "time-4-avvertire-il-te-di-ieri").extras.map((extra) => extra.sphere), ["mind"]);
 // Vita nel formato nuovo (6/9): ventiquattro blocchi. Tutte le nove Sfere sono a blocchi:
 // ogni effetto ha gli Ambiti consigliati, e solo due di Corrispondenza stanno senza compagne.
 const vita = EFFETTI.filter((entry) => entry.sphere === "life");
-assert.equal(vita.length, 24);
+assert.equal(vita.length, 21);
 assert.equal(vita.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(vita.find((entry) => entry.id === "life-3-animare-un-cadavere").extras.map((extra) => extra.sphere), ["prime"]);
 assert.equal(EFFETTI.every((entry) => entry.scopes), true);
 assert.equal(EFFETTI.filter((entry) => entry.pairings.length === 0).length, 2);
+// Una copia sola per effetto (verdetto di Blue, 6/9), tranne le vie volute: Addormentare (Mente, Vita), Rendere permanente il mutamento (Materia, Vita), Riconoscere il sovrannaturale (Mente, Spirito).
+const perNome = new Map();
+for (const entry of EFFETTI) perNome.set(entry.name, (perNome.get(entry.name) ?? 0) + 1);
+assert.deepEqual([...perNome].filter(([, n]) => n > 1).map(([name]) => name).sort(), ["Addormentare", "Rendere permanente il mutamento", "Riconoscere il sovrannaturale"]);
 // Il giocatore vede solo le compagne che ha (verdetto di Blue, 6/9), e gli
 // Ambiti consigliati una riga per Ambito.
 const grimorioIt = prepareGrimorio({ correspondence: 2, life: 1, matter: 1 }, (k) => k);

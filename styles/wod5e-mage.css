@@ -5629,6 +5629,16 @@
   padding: 0 0.6rem;
 }
 
+/* La compagna diretta che manca (regola del ponte, 6/9): una riga in rosso. */
+.wod5e-mage-grimorio-row > .wod5e-mage-grimorio-missing {
+  color: var(--mage-rosso-chiaro, #e2a79e);
+  display: flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+  margin: 0.2rem 0 0.3rem;
+  padding: 0 0.6rem;
+}
+
 /* Ogni Ambito consigliato sulla sua riga (verdetto di Blue, 6/9). */
 .wod5e-mage-grimorio-row > .wod5e-mage-grimorio-scopes > span {
   line-height: 1.35;

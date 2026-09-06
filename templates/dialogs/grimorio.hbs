@@ -26,6 +26,9 @@
                                 {{/each}}
                             </ul>
                         {{/if}}
+                        {{#if entry.missing.length}}
+                            <p class="wod5e-mage-grimorio-missing">{{#each entry.missing as |name|}}<span>{{localize "WOD5E_MAGE.Grimorio.Without"}} {{name}}: {{localize "WOD5E_MAGE.Grimorio.Sideways"}}</span>{{/each}}</p>
+                        {{/if}}
                         {{#if entry.scopes.length}}
                             <div class="wod5e-mage-grimorio-scopes">
                                 <b>{{localize "WOD5E_MAGE.Grimorio.Scopes"}}</b>

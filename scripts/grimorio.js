@@ -23,9 +23,15 @@ function level(value) {
   return Math.max(Math.trunc(Number(value) || 0), 0);
 }
 
-/** Un effetto si apre se la Sfera basta e le Sfere in più obbligatorie ci sono. */
+/**
+ * Un effetto si apre se la Sfera che lo porta basta. Le compagne «dirette»
+ * (regola del ponte, 6/9) non chiudono la porta: senza, l'effetto riesce di
+ * lato e sale di un grado. Le tavole vecchie (senza compagne) tengono ancora
+ * l'obbligo delle Sfere in più.
+ */
 export function effectAvailable(entry, sphereLevels = {}) {
   if (level(sphereLevels[entry.sphere]) < entry.level) return false;
+  if (entry.pairings?.length) return true;
   return (entry.extras ?? []).every((extra) => !extra.required || level(sphereLevels[extra.sphere]) >= extra.level);
 }
 
@@ -82,6 +88,11 @@ export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
                   text: pairing.text,
                   required: Boolean(pairing.required)
                 })),
+              // Le compagne dirette che il personaggio non ha: una riga sola,
+              // «senza X: di lato, e Volgare».
+              missing: (entry.pairings ?? [])
+                .filter((pairing) => pairing.required && level(sphereLevels[pairing.sphere]) <= 0)
+                .map((pairing) => localize(`WOD5E_MAGE.Spheres.${pairing.sphere}`)),
               scopes: splitScopes(entry.scopes ?? "")
             }))
         }))

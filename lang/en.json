@@ -916,7 +916,9 @@
       "Search": "Search an effect…",
       "Empty": "No effects: you need Spheres with at least one dot.",
       "Scopes": "Suggested Scopes:",
-      "Required": "required"
+      "Required": "direct",
+      "Without": "Without",
+      "Sideways": "sideways, and Vulgar."
     },
     "Incantesimi": {
       "DialogTitle": "Write a spell",
