@@ -54,7 +54,10 @@ assert.match(grouped.colonna1[0].icon, /athletics\.svg$/);
 assert.equal(grouped.colonna1[1].icon, "");
 
 // Le due tavole della Dotazione: vuote senza flag, righe normalizzate.
-assert.deepEqual(prepareBelongings(mageActor()), { shared: [], story: [] });
+assert.deepEqual(prepareBelongings(mageActor()), { shared: [], story: [], items: [] });
+// Gli Altri oggetti (6/9): nome e nota, nella colonna dell'inventario.
+assert.equal(BELONGING_TABLES.items, "altriOggetti");
+assert.deepEqual(prepareBelongings(mageActor({ altriOggetti: { x: { name: "Torcia", note: "a pile" } } })).items, [{ id: "x", name: "Torcia", note: "a pile" }]);
 const belongings = prepareBelongings(mageActor({
   [BELONGING_TABLES.shared]: { a: { kind: "background", name: "Rifugio del Coro", value: "3" } },
   [BELONGING_TABLES.story]: { b: { kind: "flaw", name: "Debito", value: 9.7 } }
@@ -82,6 +85,9 @@ assert.deepEqual(actor.lastFlag, {
 actor = mageActor();
 await onBelongingAdd.call({ actor }, { preventDefault() {} }, { dataset: { table: "altrove" } });
 assert.equal(actor.lastFlag, undefined);
+actor = mageActor();
+await onBelongingAdd.call({ actor }, { preventDefault() {} }, { dataset: { table: BELONGING_TABLES.items } });
+assert.deepEqual(actor.lastFlag, { key: "altriOggetti", value: { row1: { name: "", note: "" } } });
 
 // Il cestino toglie solo la riga scelta, con la sintassi -= di Foundry.
 actor = mageActor({ [BELONGING_TABLES.shared]: { a: { kind: "", name: "", notes: "" } } });
@@ -98,6 +104,10 @@ const template = readFileSync(new URL("../templates/actor/parts/dotazione.hbs", 
 assert.match(template, /belongingTables[\s\S]*data-action="belongingAdd"[\s\S]*data-action="belongingDelete"/);
 assert.match(template, /flags\.wod5e-mage\.\{\{table\.flag\}\}\.\{\{row\.id\}\}\.kind/);
 assert.match(template, /flags\.wod5e-mage\.\{\{table\.flag\}\}\.\{\{row\.id\}\}\.name/);
+// Due colonne (6/9): sinistra Background e tavole libere, destra inventario e
+// Altri oggetti; le note dell'equipaggiamento non ci sono più.
+assert.match(template, /wod5e-mage-dotazione-left[\s\S]*core-features\.hbs[\s\S]*wod5e-mage-belongings[\s\S]*wod5e-mage-dotazione-right[\s\S]*wod5e-mage-inventario[\s\S]*wod5e-mage-altri-oggetti[\s\S]*flags\.wod5e-mage\.altriOggetti\.\{\{row\.id\}\}\.name[\s\S]*flags\.wod5e-mage\.altriOggetti\.\{\{row\.id\}\}\.note/);
+assert.doesNotMatch(template, /system\.equipment|EquipmentNotes|prose-mirror/);
 // Il livello è un contatore a pallini, con lo zero a sinistra.
 assert.match(template, /data-name="flags\.wod5e-mage\.\{\{table\.flag\}\}\.\{\{row\.id\}\}\.value"/);
 assert.match(template, /wod5e-mage-belonging-dots[\s\S]*dotCounterEmpty[\s\S]*dotCounterChange/);

@@ -594,7 +594,11 @@
       "Remove": "Remove the entry",
       "SharedEmpty": "Nothing shared: + adds a shared Background, Advantage or Flaw with its dot rating.",
       "StoryEmpty": "Nothing from the story: + adds what the chronicle gave (or took), with its dot rating.",
-      "Level": "Level"
+      "Level": "Level",
+      "ItemsLabel": "Other items",
+      "ItemsEmpty": "Nothing yet: the + adds an item.",
+      "ItemName": "Item",
+      "ItemNote": "Note"
     },
     "Personaggio": {
       "IdentityLabel": "Concept and Chronicle",

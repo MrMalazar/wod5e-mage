@@ -69,7 +69,7 @@ assert.equal(entry.content, "<p>c</p>");
 
 // I nove compendi esistono, sono JSON riga per riga e portano la bandiera.
 const manifest = JSON.parse(readFileSync(new URL("../module.json", import.meta.url), "utf8"));
-const expected = { "mage-pregi": 90, "mage-difetti": 85, "mage-background": 18, "mage-credi": 13, "mage-concetti": 24, "mage-ambizioni": 120, "mage-desideri": 120, "mage-ancore": 12, "mage-convinzioni": 110, "mage-condizioni": 25 };
+const expected = { "mage-pregi": 90, "mage-difetti": 85, "mage-background": 18, "mage-credi": 13, "mage-concetti": 24, "mage-ambizioni": 120, "mage-desideri": 120, "mage-ancore": 12, "mage-convinzioni": 110, "mage-condizioni": 25, "mage-strumenti": 22 };
 for (const [name, minimum] of Object.entries(expected)) {
   const pack = manifest.packs.find((candidate) => candidate.name === name);
   assert.ok(pack, name);
@@ -94,6 +94,14 @@ for (const [name, minimum] of Object.entries(expected)) {
       assert.ok(existsSync(new URL(`../${icon}`, import.meta.url)), icon);
       assert.equal(doc.system.suppressed, false);
       assert.ok(Array.isArray(doc.system.bonuses));
+      continue;
+    }
+    if (name === "mage-strumenti") {
+      // Gli Strumenti per la Magick (6/9): oggetti «gear» dell'Equipaggiamento, uno per ognuno dei ventidue.
+      assert.equal(doc.type, "gear");
+      assert.match(doc.flags["wod5e-mage"].strumento.id, /^[a-zA-Z]+$/);
+      assert.ok(["object", "word", "machine", "substance", "body"].includes(doc.flags["wod5e-mage"].strumento.family), doc.name);
+      assert.match(doc.system.description, /Per esempio/);
       continue;
     }
     if (pack.type === "Item") {

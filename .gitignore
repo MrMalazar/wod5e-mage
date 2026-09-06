@@ -3,3 +3,4 @@ dist/
 *.zip
 /packs/mage-spheres/
 /packs/mage-spheres-en/
+__pycache__/

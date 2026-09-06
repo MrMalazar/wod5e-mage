@@ -6,15 +6,7 @@
     <div class="wod5e-mage-focus-layout">
         <section class="wod5e-mage-focus-definition">
 
-            {{!-- Il Credo si sceglie in testata (Appartenenza); qui restano le parole tue. --}}
-            <div class="wod5e-mage-focus-short-field">
-                <div>
-                    <strong>{{localize "WOD5E_MAGE.Focus.Credo"}}{{#if focus.credoLabel}}: {{focus.credoLabel}}{{/if}}</strong>
-                    <small>{{localize "WOD5E_MAGE.Focus.CredoHere"}}</small>
-                </div>
-                <input type="text" name="flags.wod5e-mage.focus.paradigm" value="{{focus.paradigm}}" placeholder="{{localize 'WOD5E_MAGE.Focus.ParadigmHint'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.ParadigmHint'}}" {{#if locked}}disabled{{/if}}>
-            </div>
-
+            {{!-- Il Credo si sceglie in testata (Appartenenza): qui non si ripete (6/9). --}}
             <div class="wod5e-mage-focus-short-field">
                 <div>
                     <strong>{{localize "WOD5E_MAGE.Focus.Type"}}</strong>

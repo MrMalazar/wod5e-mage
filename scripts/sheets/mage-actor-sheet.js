@@ -469,6 +469,7 @@ export class MageActorSheet extends MortalActorSheet {
       context = await this.prepareEquipmentContext(context, actor);
       // Le due tavole libere: in comune coi giocatori, e di storia.
       const belongings = prepareBelongings(actor);
+      context.altriOggetti = belongings.items;
       context.belongingTables = [
         {
           flag: BELONGING_TABLES.shared,

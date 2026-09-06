@@ -6,7 +6,8 @@ Uso: python3 tools/build-archivi.py "<cartella della casa MAGHI M6>"
 Legge i Cataloghi (capitolo 08), i Concetti (05_011) e gli studi dei Credi
 e scrive in packs/ un file .db (NeDB, una riga per documento) per archivio:
 Pregi, Difetti, Background (Item feature), Credi, Concetti, Ambizioni,
-Desideri, Ancore, Convinzioni (JournalEntry). Solo italiano.
+Desideri, Ancore, Convinzioni (JournalEntry), Strumenti per la Magick
+(Item equipment, dalla tavola di ramo_a_regole.md). Solo italiano.
 """
 import hashlib
 import html
@@ -491,6 +492,69 @@ def build_ancore():
     write_pack("mage-ancore", docs)
 
 
+# ------------------------------------------------------- Strumenti (6/9)
+# I ventidue Strumenti per la Magick, dalla tavola di ramo_a_regole.md,
+# come oggetti «gear» (Equipaggiamento): la lente dell'Equipaggiamento li trova.
+TOOL_IDS = [
+    "weapons", "tradeTools", "symbols", "writings", "musicalInstruments",
+    "prayers", "commands", "formulas", "songs", "tales",
+    "devices", "tradeApparatus", "implants", "contraptions",
+    "herbs", "preparations", "fluids", "minerals",
+    "gestures", "movements", "breath", "trance",
+]
+TOOL_FAMILIES = {"Oggetto": "object", "Parola": "word", "Macchina": "machine", "Sostanza": "substance", "Corpo": "body"}
+
+
+def build_strumenti():
+    raw = strip_comments(read(STUDI / "ramo_a_regole.md"))
+    m = re.search(r"^\| Famiglia \| Strumento \|.*?$", raw, flags=re.M)
+    if not m:
+        sys.exit("Tavola degli Strumenti non trovata in ramo_a_regole.md")
+    block = raw[m.start():]
+    block = block[:re.search(r"\n\n", block).start()]
+    docs = []
+    family_label = ""
+    family_id = ""
+    index = 0
+    for row in table_rows(block):
+        if len(row) < 4 or row[1].lower() == "strumento":
+            continue
+        if row[0]:
+            family_label = row[0]
+            family_id = TOOL_FAMILIES.get(family_label.split(",")[0].strip(), "")
+        name, what, examples = row[1], row[2], row[3]
+        what = re.sub(r"\s*\(APERTO:.*?\)", "", what).strip()
+        tool_id = TOOL_IDS[index] if index < len(TOOL_IDS) else slug(name)
+        index += 1
+        content = (
+            f"<p><strong>{html.escape(family_label, quote=False)}.</strong></p>"
+            f"<p><em>Tutto quello che…</em> {html.escape(what, quote=False)}.</p>"
+            f"<p><strong>Per esempio:</strong> {html.escape(examples, quote=False)}.</p>"
+        )
+        docs.append({
+            "_id": doc_id("strumento", family_id, name),
+            "name": name,
+            "type": "gear",
+            "img": "icons/svg/item-bag.svg",
+            "system": {
+                "description": content,
+                "quantity": 1,
+                "source": {"book": "M6 · Strumenti per la Magick", "page": ""}
+            },
+            "effects": [],
+            "folder": None,
+            "sort": index * 10,
+            "ownership": {"default": 0},
+            "flags": {MODULE: {
+                "archivio": {"kind": "strumento", "group": family_id, "name": name, "points": ""},
+                "strumento": {"id": tool_id, "family": family_id, "familyLabel": family_label, "examples": examples}
+            }}
+        })
+    if len(docs) != 22:
+        sys.exit(f"Strumenti: attesi 22, trovati {len(docs)}")
+    write_pack("mage-strumenti", docs)
+
+
 if __name__ == "__main__":
     if not CAT.exists():
         sys.exit(f"Cartella dei Cataloghi non trovata: {CAT}")
@@ -503,3 +567,4 @@ if __name__ == "__main__":
     build_convinzioni()
     build_ancore()
     build_condizioni()
+    build_strumenti()

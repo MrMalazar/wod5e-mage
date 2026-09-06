@@ -8,7 +8,9 @@ import { MODULE_ID } from "./constants.js";
  */
 export const BELONGING_TABLES = Object.freeze({
   shared: "sharedBelongings",
-  story: "storyBelongings"
+  story: "storyBelongings",
+  // Gli Altri oggetti (6/9): righe libere nell'inventario, nome e nota.
+  items: "altriOggetti"
 });
 
 export const BELONGING_KINDS = Object.freeze(["background", "advantage", "flaw"]);
@@ -33,13 +35,24 @@ function readRows(actor, flagKey, localize) {
   });
 }
 
+/** Gli Altri oggetti: nome e nota, nell'ordine in cui sono stati aggiunti. */
+export function prepareAltriOggetti(actor) {
+  const stored = actor.getFlag(MODULE_ID, BELONGING_TABLES.items) ?? {};
+  return Object.entries(stored).map(([id, row]) => ({
+    id,
+    name: String(row?.name ?? ""),
+    note: String(row?.note ?? "")
+  }));
+}
+
 export function prepareBelongings(actor) {
   const localize = globalThis.game?.i18n?.localize?.bind(globalThis.game.i18n)
     ?? ((key) => key);
 
   return {
     shared: readRows(actor, BELONGING_TABLES.shared, localize),
-    story: readRows(actor, BELONGING_TABLES.story, localize)
+    story: readRows(actor, BELONGING_TABLES.story, localize),
+    items: prepareAltriOggetti(actor)
   };
 }
 
@@ -81,7 +94,7 @@ export async function onBelongingAdd(event, target) {
   let rowId = foundry.utils.randomID();
   while (rows[rowId]) rowId = foundry.utils.randomID();
 
-  rows[rowId] = { kind: "", name: "", value: 0 };
+  rows[rowId] = flagKey === BELONGING_TABLES.items ? { name: "", note: "" } : { kind: "", name: "", value: 0 };
 
   await actor.setFlag(MODULE_ID, flagKey, rows);
 }

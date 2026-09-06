@@ -594,7 +594,11 @@
       "Remove": "Togli la voce",
       "SharedEmpty": "Niente in comune: il + aggiunge un Background, Vantaggio o Difetto condiviso, col suo livello a pallini.",
       "StoryEmpty": "Niente di storia: il + aggiunge quello che la cronaca ti ha dato (o tolto), col suo livello a pallini.",
-      "Level": "Livello"
+      "Level": "Livello",
+      "ItemsLabel": "Altri oggetti",
+      "ItemsEmpty": "Niente ancora: il + aggiunge un oggetto.",
+      "ItemName": "Oggetto",
+      "ItemNote": "Nota"
     },
     "Personaggio": {
       "IdentityLabel": "Concetto e Cronaca",

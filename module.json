@@ -167,6 +167,17 @@
       }
     },
     {
+      "label": "Strumenti per la Magick (M6)",
+      "type": "Item",
+      "name": "mage-strumenti",
+      "path": "packs/mage-strumenti",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
       "label": "Macro del Master (M6)",
       "type": "Macro",
       "name": "mage-macros",
@@ -195,6 +206,7 @@
         "mage-ancore",
         "mage-convinzioni",
         "mage-condizioni",
+        "mage-strumenti",
         "mage-macros"
       ],
       "color": "#98772b"
