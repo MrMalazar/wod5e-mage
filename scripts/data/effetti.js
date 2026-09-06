@@ -5332,9 +5332,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 1,
     "extras": [],
-    "text": "la Penumbra, lo spessore della parete, le cariche mistiche negli oggetti",
-    "pairings": [],
-    "scopes": ""
+    "text": "Vedi la Penumbra, il riflesso di là di ciò che hai davanti: lo spessore della parete in quel punto, le cariche mistiche negli oggetti, chi sta dall'altra parte a guardare.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Vedere oltre il Velo in un luogo che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Vedere quanta Quintessenza corre di là.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere cosa vuole chi sta di là a guardare.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Vedere com'era la Penumbra ieri.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere dove il Velo sta per cedere.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per tenere la vista aperta tutta la scena. Area per un luogo intero. Precisione (dettaglio) per un punto solo della parete."
   },
   {
     "id": "spirit-1-sapere-cosa-e-morto-qui",
@@ -5342,9 +5368,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 1,
     "extras": [],
-    "text": "il luogo racconta chi se n'è andato, quando, e se è rimasto qualcosa",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il luogo racconta chi se n'è andato, quando, e se è rimasto qualcosa: la morte lascia un segno di là, e tu lo leggi.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "Avere la data, e vedere la scena della morte.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Sapere di cosa è morto.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere cosa pensava mentre moriva.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Leggere la morte in un luogo che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere se la morte era scritta o costruita.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per un luogo intero: 1 la stanza, 2 il palazzo, 3 il quartiere. Precisione (informazione) per quanto pesa saperlo. Precisione (dettaglio) per una morte sola fra tante."
   },
   {
     "id": "spirit-1-leggere-l-anima",
@@ -5352,9 +5404,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 1,
     "extras": [],
-    "text": "quanto è integra una persona, cosa si porta addosso e da quanto tempo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Sai quanto è integra una persona, cosa si porta addosso e da quanto tempo: le Macchie, i patti, i vincoli che le stanno cuciti sull'anima.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Leggere l'anima di un vivo attraverso il corpo che la ospita.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere cosa ne pensa lui, di quello che porta.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Vedere l'Avatar dietro l'anima.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Sapere quando ogni Macchia è arrivata.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Leggere l'anima di chi non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Precisione (dettaglio) per quanto a fondo: 1 se è integra, 3 cosa porta, 5 chi glielo ha messo. Bersagli per più anime. Durata 2 per la scena."
   },
   {
     "id": "spirit-1-leggere-la-geografia-di-la",
@@ -5362,9 +5440,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 1,
     "extras": [],
-    "text": "la mappa dell'altro lato in quel punto: dove si passa, dove porta, chi comanda",
-    "pairings": [],
-    "scopes": ""
+    "text": "Hai la mappa dell'altro lato in quel punto: dove si passa, dove porta, chi comanda, cosa ci vive.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Leggere la geografia di là di un luogo lontano.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere cosa vogliono quelli che comandano.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Sapere com'era la mappa un secolo fa, e come cambierà.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere dove è pericoloso passare.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Vedere dove corre la Quintessenza di là.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per quanto è larga la mappa: 1 la stanza, 3 il quartiere, 5 la regione. Precisione (dettaglio) per un varco solo. Durata 2 per tenere la mappa tutta la scena."
   },
   {
     "id": "spirit-1-guardare-lontano",
@@ -5372,9 +5476,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 1,
     "extras": [],
-    "text": "la vista si stacca dal luogo e va dove nessuno ha mappato. Chi guarda tanto, prima o poi, viene guardato",
-    "pairings": [],
-    "scopes": ""
+    "text": "La tua vista si stacca dal luogo e va dove nessuno ha mappato: i Regni profondi, gli Orizzonti, quello che ci vive. Chi guarda tanto, prima o poi, viene guardato.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Guardare lontano anche di qua, oltre che di là.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Non farti vedere da chi guarda indietro.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Guardare lontano nel passato dell'altro lato.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Trovare dove sta la Quintessenza, laggiù.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere cosa ti conviene non guardare.",
+        "required": false
+      }
+    ],
+    "scopes": "Portata per quanto lontano, in Veli e non in metri: 3 la Penumbra profonda, 5 i Regni, 7 gli Orizzonti. Durata 1 per un'occhiata, 2 per la scena. Precisione (dettaglio) per un luogo preciso."
   },
   {
     "id": "spirit-1-riconoscere-il-sovrannaturale",
@@ -5388,9 +5518,35 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●: uno sguardo dice cosa hai davanti: vampiro, mutaforma, morto, peggio",
-    "pairings": [],
-    "scopes": ""
+    "text": "Uno sguardo dice cosa hai davanti: vampiro, mutaforma, morto, posseduto, peggio. Serve la Vita: lo Spirito vede il riflesso, la Vita dice che corpo è.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Leggere il corpo insieme al riflesso.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "Sapere se lui sa cos'è.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Riconoscere anche un Risvegliato, e quanto è forte.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riconoscere il sovrannaturale in chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quanto è pericoloso, adesso.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per una stanza piena. Area per setacciare un luogo. Precisione (dettaglio) per la specie esatta: 1 non è umano, 3 cos'è, 5 quale clan, quale tribù."
   },
   {
     "id": "spirit-2-aprire-una-trattativa",
@@ -5398,9 +5554,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 2,
     "extras": [],
-    "text": "l'offerta formale: dichiari cosa porti e cosa chiedi, e da lì si contratta",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'offerta formale a un'entità: dichiari cosa porti e cosa chiedi, e da lì si contratta. Lo spirito ti ascolta, e risponde con le sue regole.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Sapere che prezzo ha in mente davvero l'altra parte.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Mettere sul tavolo Quintessenza, e farla pesare.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Trattare con chi è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Sapere cosa ha accettato in passato, e da chi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quando l'entità cederà.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per la trattativa intera. Condizioni 1 per ogni clausola dell'accordo, e Complessità per quanto è lungo. Bersagli per trattare con più entità."
   },
   {
     "id": "spirit-2-chiamare-il-tuo-alleato",
@@ -5408,9 +5590,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 2,
     "extras": [],
-    "text": "la voce del famiglio o del patrono ti risponde, ovunque sia",
-    "pairings": [],
-    "scopes": ""
+    "text": "La voce del famiglio o del patrono ti risponde, ovunque sia: gli parli, ti parla, e se può, arriva.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Farlo arrivare da lontano, attraverso lo spazio.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Parlargli mente a mente, senza voce.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Dargli Quintessenza per il viaggio.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Chiamarlo prima, così che sia già lì.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Farlo arrivare proprio al momento giusto.",
+        "required": false
+      }
+    ],
+    "scopes": "Portata per quanto lontano ti sente, in Veli. Durata 1 per una chiamata, 2 per la scena."
   },
   {
     "id": "spirit-2-ispessire-o-assottigliare-il-velo",
@@ -5418,9 +5626,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 2,
     "extras": [],
-    "text": "apri la strada ai tuoi, la sbarri agli altri",
-    "pairings": [],
-    "scopes": ""
+    "text": "Apri la strada ai tuoi, la sbarri agli altri: in quel punto passare diventa facile, o impossibile.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Lavorare sul Velo di un luogo lontano.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Legare lo spessore a un oggetto: la porta, la soglia, la pietra.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far mordere il Velo a chi lo forza.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far passare solo chi ha l'intenzione giusta.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Aprire o chiudere il Velo a orari: solo a mezzanotte.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per quanto Velo: 1 la stanza, 2 il palazzo, 3 il quartiere. Durata per quanto regge. Condizioni 1 per chi passa: solo i tuoi."
   },
   {
     "id": "spirit-2-parlare-con-chi-sta-di-la",
@@ -5428,9 +5662,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 2,
     "extras": [],
-    "text": "la tua voce attraversa la parete sottile",
-    "pairings": [],
-    "scopes": ""
+    "text": "La tua voce attraversa la parete sottile: parli con lo spirito, col morto, con la cosa che vive nel muro, e senti la risposta.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Capire quello che l'entità non dice.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Parlare con chi sta di là lontano da qui.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Far sentire la voce di là anche agli altri, e registrarla.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Parlare con chi stava di là ieri.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far sentire la voce di là a un corpo: lo tocca.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 1 per una frase, 2 per la scena. Bersagli per parlare con più entità. Portata per quanto lontano, in Veli."
   },
   {
     "id": "spirit-3-attraversare-il-velo",
@@ -5438,9 +5698,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 3,
     "extras": [],
-    "text": "in carne e ossa; occhio alla barriera locale",
-    "pairings": [],
-    "scopes": ""
+    "text": "Passi dall'altra parte in carne e ossa, esattamente dove sei: la Penumbra del punto in cui stavi. Occhio alla barriera locale: nei luoghi sterili costa di più.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Attraversare e arrivare altrove: il Velo di qua, i chilometri di là.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far reggere il corpo all'aria di là.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Portare con te anche il carico: l'auto, l'attrezzatura.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Non farti notare da chi vive di là.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Pagare l'attrito della barriera con la Quintessenza.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per chi passa con te. Durata 1 per un'andata, 2 per la scena. Potenza (peso) per il carico."
   },
   {
     "id": "spirit-3-chiudere-un-passaggio",
@@ -5448,9 +5734,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 3,
     "extras": [],
-    "text": "il varco che qualcuno usava smette di esistere, e chi lo stava usando resta dov'è",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il varco che qualcuno usava smette di esistere, e chi lo stava usando resta dov'è: di qua o di là.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Chiudere anche i varchi nello spazio.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Murare il varco con una cosa vera: la porta sparisce nel muro.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far mordere il varco chiuso a chi prova a riaprirlo.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Chiudere il varco per un tempo preciso.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far chiudere il varco proprio mentre lui ci passa.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto resta chiuso (7 per sempre). Potenza (epicità) nel braccio di ferro con chi vuole riaprirlo. Bersagli per più varchi."
   },
   {
     "id": "spirit-3-colpire-l-anima",
@@ -5460,34 +5772,75 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "life",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Vita ●● su un vivente: danno alla Saggezza, uno dei pochissimi modi che esistano",
-    "pairings": [],
-    "scopes": ""
+    "text": "Colpisci l'anima di un vivente: danno alla Saggezza, uno dei pochissimi modi che esistano. Serve la Vita: il colpo passa per il corpo che la ospita.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far passare il colpo per il corpo.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "Fargli capire cosa ha perso.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Colpire l'anima di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Colpire dove l'anima è già crepata.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Colpire anche l'Avatar dietro l'anima.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più anime. Precisione (dettaglio) per una parte sola dell'anima: una Convinzione."
   },
   {
     "id": "spirit-3-ferire-l-immateriale",
     "name": "Ferire l'immateriale",
     "sphere": "spirit",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Colpisci l'effimera come fosse carne: lo spirito, il fantasma, la cosa nel muro sanguinano. Oltre il Velo il danno è Aggravato e resta Accidentale: l'altro lato non ha Testimoni.",
+    "pairings": [
       {
         "sphere": "entropy",
-        "level": 3,
+        "text": "Disfare l'effimera dall'interno.",
         "required": false
       },
       {
         "sphere": "prime",
-        "level": 2,
+        "text": "Far mordere il colpo con la Quintessenza.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Colpire con un'energia: il fuoco, il fulmine.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Ferire l'immateriale lontano.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Ferire l'immateriale con un'arma vera.",
         "required": false
       }
     ],
-    "text": "colpisci l'effimera come fosse carne; anche + Entropia ●●● + Primordio ●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più spiriti. Precisione (dettaglio) per colpire quello giusto in uno sciame."
   },
   {
     "id": "spirit-3-ferire-un-mutaforma",
@@ -5497,23 +5850,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "life",
-        "level": 2,
-        "required": true
-      },
-      {
-        "sphere": "life",
-        "level": 3,
-        "required": true
-      },
-      {
-        "sphere": "spirit",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Vita ●●: il loro Modello è ibrido; a scelta: + Vita ●●● + Spirito ●●",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il loro Modello è ibrido, carne e spirito insieme: lo colpisci sulla parte spirituale, e la carne segue. Serve la Vita per la parte di carne.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Colpire anche la carne.",
+        "required": true
+      },
+      {
+        "sphere": "forces",
+        "text": "Colpire con un'energia: il fuoco, l'argento fuso.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Colpire dove il Modello ibrido è più stanco.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Ferire il mutaforma che non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far mordere il colpo con la Quintessenza.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più mutaforma. Precisione (dettaglio) per il punto esatto."
   },
   {
     "id": "spirit-3-mostrarti-in-corpo-di-luce",
@@ -5523,18 +5892,44 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "mind",
-        "level": 4,
+        "level": 1,
         "required": true
       },
       {
         "sphere": "prime",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Mente ●●●● + Primordio ●●: la tua forma astrale si mostra ai presenti",
-    "pairings": [],
-    "scopes": ""
+    "text": "La tua forma astrale si stacca dal corpo e si mostra ai presenti: la vedono, la sentono parlare. Servono la Mente, che la proietta, e il Primordio, che le dà sostanza.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Proiettare la forma nelle teste dei presenti.",
+        "required": true
+      },
+      {
+        "sphere": "prime",
+        "text": "Dare sostanza alla forma.",
+        "required": true
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Mostrarti lontano da dove sei.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Farti vedere anche dalle telecamere: luce vera.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Far toccare la forma: apre porte, prende oggetti.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per la scena. Portata per quanto lontano ti mostri. Precisione (dettaglio) per quanto sei nitido: 1 una luce, 3 la tua faccia."
   },
   {
     "id": "spirit-3-aprire-la-prova-dell-anima",
@@ -5544,13 +5939,39 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "life",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Vita ●●: non cancelli niente da solo, apri una porta. Lo aspetta una prova cucita sulle sue Convinzioni; se la supera, ogni Macchia se ne va. Una sola per cronaca, a testa",
-    "pairings": [],
-    "scopes": ""
+    "text": "Non cancelli niente da solo: apri una porta. Il soggetto si trova davanti a sé stesso e al proprio Avatar, in una prova cucita sulle sue Convinzioni; se la supera, ogni Macchia se ne va. Una sola per cronaca, a testa. Serve la Vita.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Aprire la porta attraverso il corpo che ospita l'anima.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "Costruire la prova con i suoi ricordi.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far parlare l'Avatar più chiaro.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Portarlo nella prova al momento della prima Macchia.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Aprire la prova a chi non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per la scena della prova. Potenza (epicità) per quanto pesa: 4 impatta sul capitolo, 6 impatta sulla storia."
   },
   {
     "id": "spirit-3-svegliare-cio-che-dorme-in-un-oggetto",
@@ -5558,25 +5979,71 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 3,
     "extras": [],
-    "text": "il vecchio fucile si ricorda di avere un'opinione, e ti è amico",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il vecchio fucile si ricorda di avere un'opinione, e ti è amico: lo spirito che dorme nell'oggetto si sveglia, e ti risponde.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Far parlare l'oggetto anche a chi non ha lo Spirito: si muove, suona, scrive.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Capire cosa vuole lo spirito dell'oggetto.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Dare allo spirito la Quintessenza per restare sveglio.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Svegliare lo spirito com'era quando l'oggetto era nuovo.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Svegliare l'oggetto che non hai in mano.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto resta sveglio: 2 la scena, 7 per sempre. Bersagli per più oggetti. Condizioni 1 se risponde solo a te."
   },
   {
     "id": "spirit-4-creare-un-feticcio",
     "name": "Creare un Feticcio",
     "sphere": "spirit",
     "level": 4,
-    "extras": [
+    "extras": [],
+    "text": "Leghi un'entità in un oggetto, che lo voglia o no: l'oggetto porta i suoi poteri. Con il Primordio il Feticcio nasce da un patto, e lo spirito consenziente abita la tua energia.",
+    "pairings": [
       {
         "sphere": "prime",
-        "level": 4,
+        "text": "Legare uno spirito consenziente: la tua energia gli fa da casa.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Fare l'oggetto su misura per lo spirito.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far obbedire lo spirito legato come lo intendevi, senza spiragli.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Fare da Feticcio un vivente: l'animale, la pianta.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Legare lo spirito per un tempo preciso.",
         "required": false
       }
     ],
-    "text": "l'entità legata nell'oggetto; consenziente: + Primordio ●●●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Durata per quanto resta legato (7 per sempre). Potenza (epicità) per quanto è forte lo spirito. Condizioni 1 per ogni clausola del vincolo, e Complessità per quanto è lungo."
   },
   {
     "id": "spirit-4-esiliare-oltre-il-velo",
@@ -5584,9 +6051,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 4,
     "extras": [],
-    "text": "il bersaglio precipita dall'altro lato, e il ritorno è affar suo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il bersaglio precipita dall'altro lato, e il ritorno è affar suo. Un vivente ci arriva in carne e ossa: serve la Vita perché la carne passi senza strappo.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far passare un vivente restando un corpo.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Esiliarlo lontano, oltre che di là.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Esiliare un oggetto, o un'auto con chi c'è dentro.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Esiliarlo per un tempo preciso, poi torna.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Fargli dimenticare la strada del ritorno.",
+        "required": false
+      }
+    ],
+    "scopes": "Portata per quanto in fondo lo mandi, in Veli. Bersagli per più esiliati. Potenza (epicità) nel braccio di ferro con chi resiste. Durata per quanto resta chiuso fuori."
   },
   {
     "id": "spirit-4-esorcizzare-un-posseduto",
@@ -5594,25 +6087,71 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 4,
     "extras": [],
-    "text": "il corpo torna libero, l'ospite torna di là",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il corpo torna libero, l'ospite torna di là: sciogli chi si è insediato dove non doveva.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Guarire il corpo dai segni della possessione.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Guarire la mente da quello che l'ospite ha lasciato.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far mordere l'esorcismo a un ospite più forte.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Esorcizzare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che l'ospite non trovi più la strada per tornare.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (epicità) nel braccio di ferro con l'ospite. Bersagli per più posseduti. Durata 2 per la scena, 7 perché non torni."
   },
   {
     "id": "spirit-4-evocare-e-vincolare",
     "name": "Evocare e vincolare",
     "sphere": "spirit",
     "level": 4,
-    "extras": [
+    "extras": [],
+    "text": "L'entità risponde all'appello e resta nel cerchio: vincolata, esegue alla lettera. Per comandarla come la intendi tu serve la Mente.",
+    "pairings": [
       {
         "sphere": "mind",
-        "level": 2,
+        "text": "Comandarla come la intendi tu, senza spiragli nella lettera.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Pagarla in Quintessenza, e vincolarla più a lungo.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Evocarla da lontano, o mandarla lontano.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Darle un corpo di qua: la statua, il manichino.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Evocarla a orari, o vincolarla fino a una data.",
         "required": false
       }
     ],
-    "text": "l'entità risponde all'appello; per comandarla: + Mente ●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Potenza (epicità) per quanto è forte l'entità. Durata per quanto resta vincolata: 2 la scena, 4 la sessione. Condizioni 1 per ogni clausola del vincolo, e Complessità per quanto è lungo."
   },
   {
     "id": "spirit-4-imprigionare-un-avatar",
@@ -5620,9 +6159,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 4,
     "extras": [],
-    "text": "la scintilla di un Risvegliato resta chiusa fuori dalla sua portata, finché reggi il vincolo",
-    "pairings": [],
-    "scopes": ""
+    "text": "La scintilla di un Risvegliato resta chiusa fuori dalla sua portata: finché reggi il vincolo, la sua Magick non risponde.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Far reggere il vincolo contro la Quintessenza che spende per liberarsi.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Non fargli capire cosa è successo.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Imprigionare l'Avatar di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Imprigionarlo fino a una data.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far scattare la prigione quando lancia.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto reggi: 2 la scena, 4 la sessione. Potenza (epicità) nel braccio di ferro con l'Avatar. Condizioni 1 se la prigione si apre a una condizione."
   },
   {
     "id": "spirit-4-intrappolare",
@@ -5630,9 +6195,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 4,
     "extras": [],
-    "text": "la trappola scatta: niente poteri, niente fuga, finché la mantieni",
-    "pairings": [],
-    "scopes": ""
+    "text": "La trappola scatta su un'entità: niente poteri, niente fuga, finché la mantieni.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Legare la trappola a un oggetto: la bottiglia, il cerchio di sale, la gabbia.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far reggere la trappola senza mantenerla.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far credere all'entità di essere libera.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Intrappolare l'entità lontana.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far aprire la trappola a una data.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto reggi: 2 la scena, 4 la sessione, 7 per sempre. Potenza (epicità) nel braccio di ferro con l'entità. Bersagli per più entità."
   },
   {
     "id": "spirit-4-rianimare-un-morto-recente",
@@ -5642,18 +6233,44 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "life",
-        "level": 4,
+        "level": 1,
         "required": true
       },
       {
         "sphere": "prime",
-        "level": 3,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Vita ●●●● + Primordio ●●●: richiami l'anima oltre il Velo; Volgare, sempre, ovunque",
-    "pairings": [],
-    "scopes": ""
+    "text": "Richiami l'anima oltre il Velo e la rimetti nel corpo: il morto recente torna. Servono la Vita, che rimette in piedi il corpo, e il Primordio, che riaccende la scintilla. Volgare, sempre, ovunque.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Rimettere in piedi il corpo.",
+        "required": true
+      },
+      {
+        "sphere": "prime",
+        "text": "Riaccendere la scintilla.",
+        "required": true
+      },
+      {
+        "sphere": "time",
+        "text": "Rianimare chi è morto da più tempo.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Far tornare il morto con la memoria intera.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Rianimare chi non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (epicità) per quanto pesa il ritorno: 4 impatta sul capitolo, 6 impatta sulla storia. Durata 7. Condizioni 1 per ogni clausola del ritorno."
   },
   {
     "id": "spirit-5-aprire-un-regno",
@@ -5661,9 +6278,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 5,
     "extras": [],
-    "text": "un luogo nuovo di là, con le sue leggi e i suoi confini, che resta quando te ne vai",
-    "pairings": [],
-    "scopes": ""
+    "text": "Un luogo nuovo di là, con le sue leggi e i suoi confini, che resta quando te ne vai.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Aprire il Regno con una porta di qua, dove decidi tu.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Dare al Regno una materia sua: le pietre, le case.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Popolare il Regno di viventi.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Dare al Regno una legge sui pensieri: chi entra dimentica, chi entra dice il vero.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Dare al Regno un tempo suo.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Dare al Regno una sorgente di Quintessenza.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per quanto è grande: 2 il palazzo, 4 la città, 6 il continente. Durata 7. Potenza (epicità) per quanto pesa: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione."
   },
   {
     "id": "spirit-5-dare-corpo-a-una-presenza",
@@ -5673,13 +6321,44 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "prime",
-        "level": 3,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Primordio ●●●: un'entità dove non ce n'era: nasce con una fame, e la fame la scegli tu",
-    "pairings": [],
-    "scopes": ""
+    "text": "Un'entità dove non ce n'era: nasce con una fame, e la fame la scegli tu. Serve il Primordio, che dà la materia prima.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Dare la materia prima all'entità.",
+        "required": true
+      },
+      {
+        "sphere": "mind",
+        "text": "Dare all'entità una mente sua: pensa, ricorda, decide.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Dare all'entità un corpo di carne.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Dare all'entità un corpo di pietra o di metallo.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Farla nascere lontano.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Farla nascere in una data, o darle una scadenza.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (epicità) per quanto è forte: 3 stravolge una scena, 6 impatta sulla storia. Durata per quanto vive (7 per sempre). Condizioni 1 per la fame che le dai."
   },
   {
     "id": "spirit-5-il-gilgul",
@@ -5687,9 +6366,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 5,
     "extras": [],
-    "text": "spezzi l'Avatar di un Risvegliato. Si fa una volta sola, e chi lo fa smette di essere quello di prima",
-    "pairings": [],
-    "scopes": ""
+    "text": "Spezzi l'Avatar di un Risvegliato: da quel momento non lancia più, e non lancerà mai più. Si fa una volta sola, e chi lo fa smette di essere quello di prima.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Disperdere la Quintessenza dell'Avatar spezzato.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Fargli restare la memoria di cos'era, o togliergliela.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Spezzare l'Avatar di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Fare in modo che non si sia mai Risvegliato.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far sopravvivere il corpo al colpo.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (epicità): 6 impatta sulla storia. Durata 7, e basta."
   },
   {
     "id": "spirit-5-provocare-un-risveglio",
@@ -5697,9 +6402,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 5,
     "extras": [],
-    "text": "apri gli occhi a un Dormiente. Non è un dono e non si chiede permesso: è una porta spalancata addosso a qualcuno che dormiva",
-    "pairings": [],
-    "scopes": ""
+    "text": "Apri gli occhi a un Dormiente. Non è un dono e non si chiede permesso: è una porta spalancata addosso a qualcuno che dormiva.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Dare al nuovo Risvegliato la prima Quintessenza.",
+        "required": false
+      },
+      {
+        "sphere": "mind",
+        "text": "Fargli reggere la mente al Risveglio.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Fargli reggere il corpo al Risveglio.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Scegliere il momento in cui si sveglia.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Scegliere chi, fra molti, si sveglia.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Svegliare chi non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (epicità): 5 stravolge il capitolo, 6 impatta sulla storia. Durata 7. Bersagli per più Dormienti."
   },
   {
     "id": "time-1-leggere-il-flusso",
