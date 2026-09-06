@@ -5412,3 +5412,48 @@
   min-width: 0;
   width: auto;
 }
+
+/* Il Grimorio per Sfere: il titolo della Sfera col simbolo, poi le schede. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimi-group {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimi-sphere {
+  align-items: center;
+  border: none;
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
+  color: var(--mage-oro);
+  display: flex;
+  font-size: 1.05rem;
+  gap: 0.4rem;
+  margin: 0.4rem 0 0;
+  padding-bottom: 0.2rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimi-sphere > img {
+  border: none;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  height: 22px;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimi-sphere > small {
+  color: var(--mage-tenue);
+  font-size: 0.75rem;
+  font-weight: 400;
+  margin-left: auto;
+}
+
+/* Nel Grimorio degli effetti, un effetto già preso resta segnato. */
+.wod5e-mage-grimorio-row.taken > summary > .wod5e-mage-grimorio-pick {
+  color: var(--mage-tenue, #ab9f85);
+  cursor: default;
+  text-decoration: line-through;
+}
+
+.wod5e-mage-grimorio-row.taken > summary > .wod5e-mage-grimorio-pick::after {
+  color: var(--mage-oro, #d9a827);
+  content: " ✓";
+  text-decoration: none;
+}

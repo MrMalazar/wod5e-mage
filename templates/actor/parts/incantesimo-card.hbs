@@ -1,0 +1,34 @@
+{{!-- La scheda di un incantesimo del Grimorio del personaggio. --}}
+<article class="wod5e-mage-incantesimo" data-row="{{spell.id}}">
+    <header class="wod5e-mage-incantesimo-head">
+        <span class="wod5e-mage-incantesimo-spheres">
+            {{#each spell.spheres as |s|}}<span class="wod5e-mage-incantesimo-sphere" title="{{s.label}} {{s.level}}"><img src="{{s.icon}}" alt="">{{s.level}}</span>{{/each}}
+        </span>
+        <strong class="wod5e-mage-incantesimo-name">{{spell.name}}</strong>
+        <span class="wod5e-mage-incantesimo-type {{spell.magickTypeId}}">{{spell.magickType}}</span>
+        <span class="wod5e-mage-incantesimo-controls">
+            <button type="button" data-action="incantesimoRoll" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.Roll'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Roll'}}"><i class="fa-solid fa-dice-d10"></i></button>
+            <button type="button" data-action="incantesimoShare" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.GrimorioComune.Share'}}" aria-label="{{localize 'WOD5E_MAGE.GrimorioComune.Share'}}" {{#if @root.locked}}disabled{{/if}}><i class="fa-solid fa-upload"></i></button>
+            <button type="button" data-action="incantesimoChat" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.Chat'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Chat'}}"><i class="fa-solid fa-comment"></i></button>
+            <button type="button" data-action="incantesimoEdit" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.Edit'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Edit'}}" {{#if @root.locked}}disabled{{/if}}><i class="fa-solid fa-pen"></i></button>
+            <button type="button" data-action="incantesimoDelete" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Remove'}}" {{#if @root.locked}}disabled{{/if}}><i class="fa-solid fa-trash"></i></button>
+        </span>
+    </header>
+    <div class="wod5e-mage-incantesimo-grid">
+        {{#if spell.credo}}<span><b>{{localize "WOD5E_MAGE.Focus.Credo"}}</b> {{spell.credo}}</span>{{/if}}
+        {{#if spell.practiceForm}}<span><b>{{localize "WOD5E_MAGE.Focus.Type"}}</b> {{spell.practiceForm}}</span>{{/if}}
+        {{#if spell.instruments}}<span><b>{{localize "WOD5E_MAGE.Incantesimi.Instrument"}}</b> {{spell.instruments}}</span>{{/if}}
+        {{#if spell.traits}}<span><b>{{localize "WOD5E_MAGE.Arete.Pool"}}</b> {{spell.traits}}{{#if spell.prize}} + {{localize "WOD5E_MAGE.Arete.Prize"}}{{/if}}</span>{{/if}}
+        {{#if spell.spheres.length}}<span><b>{{localize "WOD5E_MAGE.Arete.Spheres"}}</b> {{#each spell.spheres as |s|}}{{s.label}} {{s.level}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
+        {{#if spell.scopes.length}}<span><b>{{localize "WOD5E_MAGE.Scopes.Label"}}</b> {{#each spell.scopes as |s|}}<i class="{{s.faIcon}}" aria-hidden="true"></i> {{s.label}} {{s.level}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
+        {{#if spell.effectKind}}<span><b>{{localize "WOD5E_MAGE.Arete.EffectKind"}}</b> {{spell.effectKind}}</span>{{/if}}
+        {{#if spell.maintained}}<span><b>{{localize "WOD5E_MAGE.Arete.Maintained"}}</b></span>{{/if}}
+    </div>
+    {{#if spell.goal}}<p class="wod5e-mage-incantesimo-goal"><b>{{localize "WOD5E_MAGE.Arete.Goal"}}</b> {{spell.goal}}</p>{{/if}}
+    {{#if spell.narrative}}
+        <details class="wod5e-mage-incantesimo-narrative">
+            <summary><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Incantesimi.Narrative"}}</summary>
+            <p>{{spell.narrative}}</p>
+        </details>
+    {{/if}}
+</article>

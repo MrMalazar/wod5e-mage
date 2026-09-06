@@ -4,7 +4,9 @@
 <section class="tab {{tab.cssClass}} wod5e-mage-grimorio-page" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     <header class="wod5e-mage-section-title wod5e-mage-note-head">
         <span>{{localize "WOD5E_MAGE.Tabs.Grimorio"}}</span>
-        {{!-- Il libro apre il Grimorio comune del tavolo. --}}
+        {{!-- L'archivio degli effetti del manuale: liste da aggiungere alla scheda e ritoccare. --}}
+        <button type="button" class="wod5e-mage-archivio-open" data-action="incantesimoFromEffetti" title="{{localize 'WOD5E_MAGE.Incantesimi.FromEffetti'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.FromEffetti'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-book" aria-hidden="true"></i></button>
+        {{!-- Il libro aperto: il Grimorio comune del tavolo. --}}
         <button type="button" class="wod5e-mage-archivio-open wod5e-mage-grimorio-comune-open" data-action="grimorioComuneOpen" title="{{localize 'WOD5E_MAGE.GrimorioComune.Open'}}" aria-label="{{localize 'WOD5E_MAGE.GrimorioComune.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
         <button type="button" class="wod5e-mage-row-add" data-action="incantesimoAdd" title="{{localize 'WOD5E_MAGE.Incantesimi.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Add'}}" {{#if locked}}disabled{{/if}}>
             <i class="fa-solid fa-plus"></i>
@@ -12,44 +14,19 @@
     </header>
 
     {{#if incantesimi.length}}
+        {{!-- Per Sfere: ogni incantesimo sotto la Sfera più alta che usa; a pari
+             merito compare in tutte e due. --}}
         <div class="wod5e-mage-incantesimi">
-            {{#each incantesimi as |spell|}}
-                <article class="wod5e-mage-incantesimo" data-row="{{spell.id}}">
-                    <header class="wod5e-mage-incantesimo-head">
-                        <span class="wod5e-mage-incantesimo-spheres">
-                            {{#each spell.spheres as |s|}}<span class="wod5e-mage-incantesimo-sphere" title="{{s.label}} {{s.level}}"><img src="{{s.icon}}" alt="">{{s.level}}</span>{{/each}}
-                        </span>
-                        <strong class="wod5e-mage-incantesimo-name">{{spell.name}}</strong>
-                        <span class="wod5e-mage-incantesimo-type {{spell.magickTypeId}}">{{spell.magickType}}</span>
-                        <span class="wod5e-mage-incantesimo-controls">
-                            <button type="button" data-action="incantesimoRoll" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.Roll'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Roll'}}"><i class="fa-solid fa-dice-d10"></i></button>
-                            <button type="button" data-action="incantesimoShare" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.GrimorioComune.Share'}}" aria-label="{{localize 'WOD5E_MAGE.GrimorioComune.Share'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-upload"></i></button>
-                            <button type="button" data-action="incantesimoChat" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.Chat'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Chat'}}"><i class="fa-solid fa-comment"></i></button>
-                            <button type="button" data-action="incantesimoEdit" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.Edit'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Edit'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-pen"></i></button>
-                            <button type="button" data-action="incantesimoDelete" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Remove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash"></i></button>
-                        </span>
-                    </header>
-                    <div class="wod5e-mage-incantesimo-grid">
-                        {{#if spell.credo}}<span><b>{{localize "WOD5E_MAGE.Focus.Credo"}}</b> {{spell.credo}}</span>{{/if}}
-                        {{#if spell.practiceForm}}<span><b>{{localize "WOD5E_MAGE.Focus.Type"}}</b> {{spell.practiceForm}}</span>{{/if}}
-                        {{#if spell.instruments}}<span><b>{{localize "WOD5E_MAGE.Incantesimi.Instrument"}}</b> {{spell.instruments}}</span>{{/if}}
-                        {{#if spell.traits}}<span><b>{{localize "WOD5E_MAGE.Arete.Pool"}}</b> {{spell.traits}}{{#if spell.prize}} + {{localize "WOD5E_MAGE.Arete.Prize"}}{{/if}}</span>{{/if}}
-                        {{#if spell.spheres.length}}<span><b>{{localize "WOD5E_MAGE.Arete.Spheres"}}</b> {{#each spell.spheres as |s|}}{{s.label}} {{s.level}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
-                        {{#if spell.scopes.length}}<span><b>{{localize "WOD5E_MAGE.Scopes.Label"}}</b> {{#each spell.scopes as |s|}}<i class="{{s.faIcon}}" aria-hidden="true"></i> {{s.label}} {{s.level}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
-                        {{#if spell.effectKind}}<span><b>{{localize "WOD5E_MAGE.Arete.EffectKind"}}</b> {{spell.effectKind}}</span>{{/if}}
-                        {{#if spell.maintained}}<span><b>{{localize "WOD5E_MAGE.Arete.Maintained"}}</b></span>{{/if}}
-                    </div>
-                    {{#if spell.goal}}<p class="wod5e-mage-incantesimo-goal"><b>{{localize "WOD5E_MAGE.Arete.Goal"}}</b> {{spell.goal}}</p>{{/if}}
-                    {{#if spell.narrative}}
-                        <details class="wod5e-mage-incantesimo-narrative">
-                            <summary><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Incantesimi.Narrative"}}</summary>
-                            <p>{{spell.narrative}}</p>
-                        </details>
-                    {{/if}}
-                </article>
+            {{#each incantesimiGroups as |group|}}
+                <section class="wod5e-mage-incantesimi-group">
+                    <h3 class="wod5e-mage-incantesimi-sphere">{{#if group.icon}}<img src="{{group.icon}}" alt="">{{/if}}{{group.label}} <small>{{group.spells.length}}</small></h3>
+                    {{#each group.spells as |spell|}}
+                        {{> "modules/wod5e-mage/templates/actor/parts/incantesimo-card.hbs" spell=spell}}
+                    {{/each}}
+                </section>
             {{/each}}
         </div>
-    {{else}}
+    {{else}}    {{else}}
         <p class="wod5e-mage-row-empty">{{localize "WOD5E_MAGE.Incantesimi.Empty"}}</p>
     {{/if}}
 </section>

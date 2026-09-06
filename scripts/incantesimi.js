@@ -66,6 +66,63 @@ export function prepareIncantesimi(actor, localize = (key) => key) {
     .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name));
 }
 
+/**
+ * La pagina per Sfere (verdetto di Blue, 6/9): ogni incantesimo sta sotto la
+ * Sfera più alta che usa; se due Sfere sono pari e le più alte, compare in
+ * tutte e due. Chi non ha Sfere finisce in coda, «Senza Sfera».
+ */
+export function topSpheres(row) {
+  const spheres = row?.spheres ?? [];
+  const top = Math.max(0, ...spheres.map((sphere) => sphere.level));
+  return spheres.filter((sphere) => sphere.level === top && top > 0).map((sphere) => sphere.id);
+}
+
+export function groupIncantesimiBySphere(rows, localize = (key) => key) {
+  const groups = SPHERES.map((sphere) => ({
+    sphere,
+    label: localize(`WOD5E_MAGE.Spheres.${sphere}`),
+    icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere}.png`,
+    spells: rows.filter((row) => topSpheres(row).includes(sphere))
+  })).filter((group) => group.spells.length);
+  const loose = rows.filter((row) => topSpheres(row).length === 0);
+  if (loose.length) groups.push({ sphere: "", label: localize("WOD5E_MAGE.Incantesimi.NoSphere"), icon: "", spells: loose });
+  return groups;
+}
+
+/**
+ * Un effetto del manuale diventa un incantesimo della scheda: nome e Obiettivo
+ * dal Grimorio, le Sfere che chiede, Credo, Tipo e Strumenti dalla scheda;
+ * il resto lo scrive il giocatore, nell'ottica del suo Credo.
+ */
+export function spellFromEffetto(actor, entry, sphereLevels, localize = (key) => key) {
+  const focus = actor.getFlag(MODULE_ID, "focus") ?? {};
+  const instruments = Object.keys(sphereLevels)
+    .map((id) => {
+      const row = focus.sphereInstruments?.[id] ?? {};
+      const tool = row.tool ? localize(`WOD5E_MAGE.Focus.Tools.${row.tool}`) : "";
+      const name = String(row.name ?? "").trim();
+      if (tool && name) return `${tool} (${name})`;
+      return tool || name;
+    })
+    .filter((item, index, all) => item && all.indexOf(item) === index);
+  return {
+    name: entry.name,
+    goal: entry.text,
+    narrative: "",
+    effectKind: "",
+    magickType: "",
+    prize: false,
+    maintained: false,
+    traits: [],
+    spheres: { ...sphereLevels },
+    scopes: {},
+    credo: String(focus.credo ?? ""),
+    practiceForm: String(focus.practiceForm ?? ""),
+    instruments,
+    effetto: entry.id
+  };
+}
+
 function canEdit(actor) {
   if (!actor.isOwner) {
     ui.notifications.warn(game.i18n.format("WOD5E.Notifications.NoSufficientPermission", { string: actor.name }));
@@ -129,6 +186,27 @@ export async function onIncantesimoRoll(event, target) {
   if (!current) return;
   const { launchArete } = await import("./arete.js");
   return launchArete(actor, { mode: "roll", preset: current });
+}
+
+/** Il libro degli effetti: liste di effetti del manuale aggiunte alla scheda, da ritoccare poi. */
+export async function onIncantesimoFromEffetti(event) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEdit(actor)) return;
+  const { openGrimorio, effectSphereLevels } = await import("./grimorio.js");
+  const { prepareSpheres } = await import("./spheres.js");
+  const localize = game.i18n.localize.bind(game.i18n);
+  const owned = Object.fromEntries(prepareSpheres(actor).selected.filter((sphere) => sphere.value > 0).map((sphere) => [sphere.id, sphere.value]));
+  await openGrimorio(owned, {
+    onPick: async (entry) => {
+      const stored = actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {};
+      let id = foundry.utils.randomID();
+      while (stored[id]) id = foundry.utils.randomID();
+      const spell = spellFromEffetto(actor, entry, effectSphereLevels(entry), localize);
+      await saveSpell(actor, id, { ...spell, sort: Object.keys(stored).length });
+      ui.notifications.info(game.i18n.format("WOD5E_MAGE.Incantesimi.Saved", { name: spell.name }));
+    }
+  });
 }
 
 /** Il fumetto: l'incantesimo in chat, per il tavolo. */

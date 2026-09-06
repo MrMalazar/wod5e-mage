@@ -77,8 +77,12 @@ export function findEffetto(id) {
   return EFFETTI.find((entry) => entry.id === id) ?? null;
 }
 
-/** Apre il Grimorio e torna l'effetto scelto, o null. */
-export async function openGrimorio(sphereLevels) {
+/**
+ * Apre il Grimorio e torna l'effetto scelto, o null. Con `onPick` la
+ * finestra resta aperta: ogni nome cliccato passa da `onPick` e si segna
+ * come preso (per aggiungere liste di effetti alla scheda).
+ */
+export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
   const content = await foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/dialogs/grimorio.hbs`,
@@ -101,11 +105,19 @@ export async function openGrimorio(sphereLevels) {
           row.hidden = Boolean(wanted) && !row.textContent.toLowerCase().includes(wanted);
         });
       });
-      root.addEventListener("click", (event) => {
+      root.addEventListener("click", async (event) => {
         const row = event.target.closest?.("[data-effetto]");
         if (!row) return;
         event.preventDefault();
-        chosen = findEffetto(row.dataset.effetto);
+        const entry = findEffetto(row.dataset.effetto);
+        if (!entry) return;
+        if (onPick) {
+          if (row.classList.contains("taken")) return;
+          await onPick(entry);
+          row.classList.add("taken");
+          return;
+        }
+        chosen = entry;
         dialog.close();
       });
     }

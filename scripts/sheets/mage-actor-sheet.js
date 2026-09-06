@@ -5,7 +5,7 @@ import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
 import { onCondizioneToggle, prepareCondizioni, prepareConditionRows } from "../condizioni.js";
 import { onParadoxBurst } from "../paradox-burst.js";
-import { onIncantesimoAdd, onIncantesimoChat, onIncantesimoDelete, onIncantesimoEdit, onIncantesimoRoll, prepareIncantesimi } from "../incantesimi.js";
+import { groupIncantesimiBySphere, onIncantesimoAdd, onIncantesimoChat, onIncantesimoDelete, onIncantesimoEdit, onIncantesimoFromEffetti, onIncantesimoRoll, prepareIncantesimi } from "../incantesimi.js";
 import { onGrimorioComuneOpen, onIncantesimoShare } from "../grimorio-comune.js";
 import { onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResets } from "../reset.js";
@@ -114,6 +114,7 @@ export class MageActorSheet extends MortalActorSheet {
       incantesimoRoll: onIncantesimoRoll,
       incantesimoChat: onIncantesimoChat,
       incantesimoShare: onIncantesimoShare,
+      incantesimoFromEffetti: onIncantesimoFromEffetti,
       grimorioComuneOpen: onGrimorioComuneOpen,
       noteAdd: onNoteAdd,
       noteDelete: onNoteDelete,
@@ -177,7 +178,10 @@ export class MageActorSheet extends MortalActorSheet {
       template: `${MODULE}/parts/spheres.hbs`,
       templates: [`${MODULE}/parts/scope-table.hbs`]
     },
-    grimorio: { template: `${MODULE}/parts/grimorio.hbs` },
+    grimorio: {
+      template: `${MODULE}/parts/grimorio.hbs`,
+      templates: [`${MODULE}/parts/incantesimo-card.hbs`]
+    },
     focus: { template: `${MODULE}/parts/focus.hbs` },
     conceptChallenge: { template: `${MODULE}/parts/concept-challenge.hbs` },
     personaggio: {
@@ -462,7 +466,9 @@ export class MageActorSheet extends MortalActorSheet {
     // Le Note: riquadri liberi del giocatore, niente campi del sistema.
     if (partId === "grimorio") {
       context.tab = context.tabs.grimorio;
-      context.incantesimi = prepareIncantesimi(actor, game.i18n.localize.bind(game.i18n));
+      const localize = game.i18n.localize.bind(game.i18n);
+      context.incantesimi = prepareIncantesimi(actor, localize);
+      context.incantesimiGroups = groupIncantesimiBySphere(context.incantesimi, localize);
     }
 
     if (partId === "note") {

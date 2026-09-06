@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { spellFromResult } from "../scripts/arete.js";
-import { prepareIncantesimo, prepareIncantesimi, INCANTESIMI_FLAG } from "../scripts/incantesimi.js";
+import { groupIncantesimiBySphere, prepareIncantesimo, prepareIncantesimi, spellFromEffetto, topSpheres, INCANTESIMI_FLAG } from "../scripts/incantesimi.js";
 import { groupSharedSpells, sharedItemData, SHARED_PACK_NAME } from "../scripts/grimorio-comune.js";
 
 // Il Grimorio del personaggio (6/9): la finestra del tiro in modo «salva» torna l'incantesimo.
@@ -50,11 +50,13 @@ assert.equal(prepareIncantesimo("x", {}).name, "WOD5E_MAGE.Incantesimi.Unnamed")
 
 // La scheda: la pagina Grimorio dopo la Magick, i cinque comandi, il dialogo in modo «salva».
 const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
-assert.match(sheet, /grimorio: \{ template: `\$\{MODULE\}\/parts\/grimorio\.hbs` \}/);
+assert.match(sheet, /grimorio: \{\s*template: `\$\{MODULE\}\/parts\/grimorio\.hbs`,\s*templates: \[`\$\{MODULE\}\/parts\/incantesimo-card\.hbs`\]/);
 assert.match(sheet, /magick: \{[\s\S]*\},\s*\/\/ Il Grimorio del personaggio[\s\S]*grimorio: \{\s*id: "grimorio"[\s\S]*focus: \{/);
 const page = readFileSync(new URL("../templates/actor/parts/grimorio.hbs", import.meta.url), "utf8");
-for (const action of ["incantesimoAdd", "incantesimoRoll", "incantesimoChat", "incantesimoEdit", "incantesimoDelete"]) {
-  assert.match(page, new RegExp(`data-action="${action}"`), action);
+const card = readFileSync(new URL("../templates/actor/parts/incantesimo-card.hbs", import.meta.url), "utf8");
+assert.match(page, /data-action="incantesimoAdd"/);
+for (const action of ["incantesimoRoll", "incantesimoShare", "incantesimoChat", "incantesimoEdit", "incantesimoDelete"]) {
+  assert.match(card, new RegExp(`data-action="${action}"`), action);
 }
 const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
 assert.match(dialog, /\{\{#if saveMode\}\}[\s\S]*name="spellName"[\s\S]*name="narrative"[\s\S]*\{\{#unless saveMode\}\}[\s\S]*name="harmony"/);
@@ -74,12 +76,28 @@ assert.deepEqual(shared.flags["wod5e-mage"].incantesimo.spheres, { time: 3 });
 const groups = groupSharedSpells([{ credo: "Tutto è Dati", name: "A" }, { credo: "", name: "B" }, { credo: "Tutto è Dati", name: "C" }], (k) => "Senza");
 assert.deepEqual(groups.map((g) => [g.credo, g.spells.length]), [["Tutto è Dati", 2], ["Senza", 1]]);
 assert.equal(SHARED_PACK_NAME, "grimorio-comune");
-assert.match(page, /data-action="grimorioComuneOpen"[\s\S]*data-action="incantesimoShare"/);
+assert.match(page, /data-action="grimorioComuneOpen"/);
 const comune = readFileSync(new URL("../templates/dialogs/grimorio-comune.hbs", import.meta.url), "utf8");
 assert.match(comune, /data-spell="\{\{spell\.id\}\}"[\s\S]*data-shared-action="roll"[\s\S]*data-shared-action="copy"/);
 assert.match(readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"), /registerGrimorioComune\(\)/);
 // Il Grimorio degli effetti: Sfere a tendina, ogni effetto una riga col come a richiesta.
 const effetti = readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8");
 assert.match(effetti, /<details class="wod5e-mage-grimorio-sphere" open>[\s\S]*<details class="wod5e-mage-grimorio-row">[\s\S]*class="wod5e-mage-grimorio-pick" data-effetto="\{\{entry\.id\}\}"[\s\S]*<p>\{\{entry\.text\}\}<\/p>/);
+
+// Per Sfere (6/9): sotto la Sfera più alta; a pari merito in tutte e due; senza Sfere in coda.
+const rowsBySphere = [
+  prepareIncantesimo("a", { name: "Tempo3", spheres: { time: 3, forces: 1 } }, (k) => k.split(".").pop()),
+  prepareIncantesimo("b", { name: "Pari", spheres: { time: 2, forces: 2 } }, (k) => k.split(".").pop()),
+  prepareIncantesimo("c", { name: "Nudo", spheres: {} }, (k) => k.split(".").pop())
+];
+assert.deepEqual(topSpheres(rowsBySphere[0]), ["time"]);
+assert.deepEqual(topSpheres(rowsBySphere[1]), ["forces", "time"]);
+const bySphere = groupIncantesimiBySphere(rowsBySphere, (k) => k.split(".").pop());
+assert.deepEqual(bySphere.map((g) => [g.sphere, g.spells.map((s) => s.name)]), [["forces", ["Pari"]], ["time", ["Tempo3", "Pari"]], ["", ["Nudo"]]]);
+// Un effetto del manuale diventa un incantesimo da ritoccare.
+const fromEffetto = spellFromEffetto(actor, { id: "forces-2-x", name: "Curvare", text: "scompari", extras: [] }, { forces: 2 }, (key) => key.split(".").pop());
+assert.deepEqual([fromEffetto.name, fromEffetto.goal, fromEffetto.spheres, fromEffetto.credo, fromEffetto.instruments, fromEffetto.effetto], ["Curvare", "scompari", { forces: 2 }, "dati", ["devices"], "forces-2-x"]);
+assert.match(page, /data-action="incantesimoFromEffetti"[\s\S]*incantesimiGroups[\s\S]*incantesimo-card\.hbs" spell=spell/);
+assert.match(readFileSync(new URL("../scripts/grimorio.js", import.meta.url), "utf8"), /onPick = null/);
 
 console.log("Grimorio del personaggio: test passati.");

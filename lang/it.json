@@ -841,7 +841,9 @@
       "Chat": "Manda in chat",
       "Saved": "«{name}» è nel Grimorio.",
       "Unnamed": "Senza nome",
-      "Empty": "Nessun incantesimo: il + apre la finestra del tiro, e invece di tirare salva."
+      "Empty": "Nessun incantesimo: il + apre la finestra del tiro, e invece di tirare salva.",
+      "NoSphere": "Senza Sfera",
+      "FromEffetti": "Aggiungi effetti del manuale"
     },
     "GrimorioComune": {
       "Label": "Grimorio comune (M6)",

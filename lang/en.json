@@ -841,7 +841,9 @@
       "Chat": "Send to chat",
       "Saved": "“{name}” is in the Grimoire.",
       "Unnamed": "Unnamed",
-      "Empty": "No spells: the + opens the roll window and saves instead of rolling."
+      "Empty": "No spells: the + opens the roll window and saves instead of rolling.",
+      "NoSphere": "No Sphere",
+      "FromEffetti": "Add effects from the book"
     },
     "GrimorioComune": {
       "Label": "Shared Grimoire (M6)",
