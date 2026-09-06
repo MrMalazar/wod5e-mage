@@ -391,6 +391,99 @@ function wireScopeTable(dialog) {
 }
 
 /**
+ * L'incantesimo del Grimorio del personaggio (6/9): quel che il dialogo ha
+ * scelto, più il Credo, il Tipo di Magick e gli Strumenti delle Sfere usate,
+ * letti dalla scheda al momento del salvataggio.
+ */
+export function spellFromResult(actor, result, { traits, rollSpheres, localize = (key) => key } = {}) {
+  const options = normalizeMagickRollOptions(result);
+  const spheres = {};
+  for (const sphere of rollSpheres ?? []) {
+    const level = Math.min(Math.max(Math.trunc(Number(result[`sphere-${sphere.id}`]) || 0), 0), sphere.value);
+    if (level > 0) spheres[sphere.id] = level;
+  }
+  const scopes = {};
+  for (const scopeId of SCOPES) {
+    const level = Math.min(Math.max(Math.trunc(Number(result[`scope-${scopeId}`]) || 0), 0), THRESHOLD_CAP);
+    if (level > 0) scopes[scopeId] = level;
+  }
+  const chosen = ["attributeTrait", "primaryTrait", "secondaryTrait"]
+    .map((field) => {
+      const trait = findMageRollTrait(traits, result[field]);
+      return trait ? { field, key: String(result[field]), label: trait.label } : null;
+    })
+    .filter(Boolean);
+  const focus = actor.getFlag(MODULE_ID, "focus") ?? {};
+  const instruments = Object.keys(spheres)
+    .map((id) => {
+      const row = focus.sphereInstruments?.[id] ?? {};
+      const tool = row.tool ? localize(`WOD5E_MAGE.Focus.Tools.${row.tool}`) : "";
+      const name = String(row.name ?? "").trim();
+      if (tool && name) return `${tool} (${name})`;
+      return tool || name;
+    })
+    .filter((entry, index, all) => entry && all.indexOf(entry) === index);
+  return {
+    name: String(result.spellName ?? "").trim() || String(result.goal ?? "").trim(),
+    goal: String(result.goal ?? "").trim(),
+    narrative: String(result.narrative ?? "").trim(),
+    effectKind: normalizeEffectKind(result.effectKind),
+    magickType: options.witnesses ? "witnesses" : options.vulgar ? "vulgar" : options.coincidental ? "coincidental" : "",
+    prize: Boolean(options.usePrize),
+    maintained: isChecked(result.maintained),
+    traits: chosen,
+    spheres,
+    scopes,
+    credo: String(focus.credo ?? ""),
+    practiceForm: FOCUS_FORMS.includes(focus.practiceForm) ? focus.practiceForm : "",
+    instruments
+  };
+}
+
+/** Un incantesimo salvato riempie la finestra: tratti, tipo, pallini, Obiettivo. */
+function applyAretePreset(dialog, preset) {
+  const root = dialog?.element;
+  if (!root || !preset) return;
+  const setValue = (selector, value) => {
+    const field = root.querySelector(selector);
+    if (!field) return;
+    field.value = value ?? "";
+    field.dispatchEvent(new Event("change", { bubbles: true }));
+  };
+  const setChecked = (selector, checked) => {
+    const box = root.querySelector(selector);
+    if (!box) return;
+    box.checked = Boolean(checked);
+    box.dispatchEvent(new Event("change", { bubbles: true }));
+  };
+  for (const trait of preset.traits ?? []) {
+    const select = root.querySelector(`[name="${trait.field}"]`);
+    if (select && [...select.options].some((option) => option.value === trait.key)) setValue(`[name="${trait.field}"]`, trait.key);
+  }
+  setChecked('input[name="prize"]', preset.prize);
+  setChecked('input[name="coincidental"]', preset.magickType === "coincidental");
+  setChecked('input[name="vulgar"]', preset.magickType === "vulgar");
+  setChecked('input[name="witnesses"]', preset.magickType === "witnesses");
+  setChecked("#wod5e-mage-arete-maintained", preset.maintained);
+  setValue("#wod5e-mage-arete-maintained-name", preset.name);
+  setValue("#wod5e-mage-arete-goal", preset.goal);
+  setValue("#wod5e-mage-arete-effect-kind", preset.effectKind);
+  setValue("#wod5e-mage-arete-spell-name", preset.name);
+  setValue("#wod5e-mage-arete-narrative", preset.narrative);
+  for (const [kind, levels] of [["sphere", preset.spheres ?? {}], ["scope", preset.scopes ?? {}]]) {
+    for (const [id, level] of Object.entries(levels)) {
+      const row = root.querySelector(`[data-role=dotRow][data-kind=${kind}][data-id="${id}"]`);
+      const input = row?.querySelector("input[type=hidden]");
+      if (!input) continue;
+      const max = kind === "sphere" ? row.querySelectorAll(".wod5e-mage-arete-sphere-dot").length : THRESHOLD_CAP;
+      input.value = String(Math.min(Math.max(Math.trunc(Number(level) || 0), 0), max));
+      row._paint?.();
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  }
+}
+
+/**
  * Il libro accanto all'Obiettivo apre il Grimorio: la scelta scrive
  * l'Obiettivo e accende i pallini delle Sfere che l'effetto chiede.
  */
@@ -446,8 +539,16 @@ async function postAutomaticVictory(actor, title, { symbols, card, notes }) {
 
 export async function onAreteRoll(event) {
   event.preventDefault();
+  return launchArete(this.actor, { mode: "roll" });
+}
 
-  const actor = this.actor;
+/**
+ * La finestra del tiro di Areté, in due modi: «roll» tira; «save» (il
+ * Grimorio del personaggio, 6/9) non tira e torna l'incantesimo da salvare.
+ * Un `preset` (un incantesimo salvato) riempie la finestra prima di aprirla.
+ */
+export async function launchArete(actor, { mode = "roll", preset = null } = {}) {
+  const saveMode = mode === "save";
   const arete = getArete(actor);
   const traits = prepareAreteTraits(actor, {
     localize: game.i18n.localize.bind(game.i18n),
@@ -484,12 +585,12 @@ export async function onAreteRoll(event) {
   const sphereLevelsOwned = Object.fromEntries(rollSpheres.map((sphere) => [sphere.id, sphere.value]));
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
-    { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, ...traits }
+    { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, preset, ...traits }
   );
 
   const result = await foundry.applications.api.DialogV2.input({
     window: {
-      title: game.i18n.localize("WOD5E_MAGE.Arete.Roll")
+      title: game.i18n.localize(saveMode ? "WOD5E_MAGE.Incantesimi.DialogTitle" : "WOD5E_MAGE.Arete.Roll")
     },
     // Una finestra compatta: due colonne, niente muri di testo.
     position: {
@@ -498,8 +599,8 @@ export async function onAreteRoll(event) {
     },
     content,
     ok: {
-      icon: "fas fa-dice",
-      label: game.i18n.localize("WOD5E_MAGE.Arete.Roll")
+      icon: saveMode ? "fas fa-floppy-disk" : "fas fa-dice",
+      label: game.i18n.localize(saveMode ? "WOD5E_MAGE.Incantesimi.Save" : "WOD5E_MAGE.Arete.Roll")
     },
     buttons: [
       {
@@ -516,10 +617,16 @@ export async function onAreteRoll(event) {
       wireScopeTable(dialog);
       wireMaintainedEffect(dialog);
       wireGrimorio(dialog, sphereLevelsOwned);
+      applyAretePreset(dialog, preset);
     }
   });
 
-  if (!result || result === "cancel") return;
+  if (!result || result === "cancel") return null;
+
+  // Il Grimorio: niente tiro, torna quel che si è scelto, da salvare.
+  if (saveMode) {
+    return spellFromResult(actor, result, { traits, rollSpheres, localize: game.i18n.localize.bind(game.i18n) });
+  }
 
   // Attributo, Abilità, Abilità: ne basta uno, gli altri si sommano.
   const selectedTraits = [

@@ -5,6 +5,7 @@ import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
 import { onCondizioneToggle, prepareCondizioni, prepareConditionRows } from "../condizioni.js";
 import { onParadoxBurst } from "../paradox-burst.js";
+import { onIncantesimoAdd, onIncantesimoChat, onIncantesimoDelete, onIncantesimoEdit, onIncantesimoRoll, prepareIncantesimi } from "../incantesimi.js";
 import { onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResets } from "../reset.js";
 import { onStrumentiSuggest } from "../strumenti.js";
@@ -106,6 +107,11 @@ export class MageActorSheet extends MortalActorSheet {
       archivioOpen: onArchivioOpen,
       strumentiSuggest: onStrumentiSuggest,
       resetSection: onResetSection,
+      incantesimoAdd: onIncantesimoAdd,
+      incantesimoEdit: onIncantesimoEdit,
+      incantesimoDelete: onIncantesimoDelete,
+      incantesimoRoll: onIncantesimoRoll,
+      incantesimoChat: onIncantesimoChat,
       noteAdd: onNoteAdd,
       noteDelete: onNoteDelete,
       areteChange: onAreteChange,
@@ -168,6 +174,7 @@ export class MageActorSheet extends MortalActorSheet {
       template: `${MODULE}/parts/spheres.hbs`,
       templates: [`${MODULE}/parts/scope-table.hbs`]
     },
+    grimorio: { template: `${MODULE}/parts/grimorio.hbs` },
     focus: { template: `${MODULE}/parts/focus.hbs` },
     conceptChallenge: { template: `${MODULE}/parts/concept-challenge.hbs` },
     personaggio: {
@@ -203,6 +210,13 @@ export class MageActorSheet extends MortalActorSheet {
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Magick",
         icon: icon("circle-nodes")
+      },
+      // Il Grimorio del personaggio, subito dopo la Magick (6/9).
+      grimorio: {
+        id: "grimorio",
+        group: "primary",
+        title: "WOD5E_MAGE.Tabs.Grimorio",
+        icon: icon("scroll")
       },
       focus: {
         id: "focus",
@@ -439,6 +453,11 @@ export class MageActorSheet extends MortalActorSheet {
     }
 
     // Le Note: riquadri liberi del giocatore, niente campi del sistema.
+    if (partId === "grimorio") {
+      context.tab = context.tabs.grimorio;
+      context.incantesimi = prepareIncantesimi(actor, game.i18n.localize.bind(game.i18n));
+    }
+
     if (partId === "note") {
       context.note = prepareNote(actor);
       context.tab = context.tabs.note;

@@ -2,6 +2,13 @@
     <div class="wod5e-mage-arete-layout">
         {{!-- Colonna sinistra: le scelte e le caselle. --}}
         <div class="wod5e-mage-arete-side">
+            {{#if saveMode}}
+                {{!-- Il Grimorio del personaggio: il nome dell'incantesimo. --}}
+                <label class="wod5e-mage-arete-trait wod5e-mage-arete-spell">
+                    <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Incantesimi.Name"}}</span>
+                    <input type="text" name="spellName" id="wod5e-mage-arete-spell-name" placeholder="{{localize 'WOD5E_MAGE.Incantesimi.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Name'}}">
+                </label>
+            {{/if}}
             {{!-- La riserva (ramo A): Attributo, Abilità, Abilità. Ne basta uno; chi
                  ne sceglie di più somma i dadi. L'Areté non tira: è il premio. --}}
             <label class="wod5e-mage-arete-trait">
@@ -32,6 +39,14 @@
                 </select>
             </label>
 
+            {{#if saveMode}}
+                {{!-- La narrativa: come si lancia, sulla base delle Abilità scelte. --}}
+                <label class="wod5e-mage-arete-narrative">
+                    <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Incantesimi.Narrative"}}</span>
+                    <textarea name="narrative" id="wod5e-mage-arete-narrative" rows="5" placeholder="{{localize 'WOD5E_MAGE.Incantesimi.NarrativeHint'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Narrative'}}"></textarea>
+                </label>
+            {{/if}}
+
             {{!-- Il premio dell'Areté: dadi in più pari all'Areté quando la descrizione
                  lo merita, dentro il tetto +3 insieme ai Bonus. L'Ibrida non lo prende. --}}
             {{!-- Il nome per intero a sinistra, la casella (col suo +N) a destra. --}}
@@ -47,6 +62,7 @@
                 {{/if}}
             </div>
 
+            {{#unless saveMode}}
             {{!-- L'Armonia: i dadi che gli altri Maghi ti danno, contati al tavolo. --}}
             <div class="wod5e-mage-arete-harmony-row" title="{{localize 'WOD5E_MAGE.Arete.HarmonyHint'}}">
                 <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Harmony"}} <small>{{localize "WOD5E_MAGE.Arete.HarmonyShort"}}</small></span>
@@ -59,6 +75,7 @@
                 <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Quintessence"}} <small>{{localize "WOD5E_MAGE.Arete.QuintessenceShort" available=quintessence}}</small></span>
                 <input type="number" name="quintessence" id="wod5e-mage-arete-quintessence" class="wod5e-mage-arete-harmony" min="0" max="{{quintessence}}" step="1" value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Quintessence'}}" {{#unless quintessence}}disabled{{/unless}}>
             </div>
+            {{/unless}}
 
             <hr>
 

@@ -12,7 +12,8 @@
       "Traits": "Traits",
       "Character": "Character",
       "Belongings": "Belongings",
-      "Notes": "Notes"
+      "Notes": "Notes",
+      "Grimorio": "Grimoire"
     },
     "Skills": {
       "Combat": "Combat",
@@ -822,6 +823,23 @@
       "Open": "Open the Grimoire",
       "Search": "Search an effect…",
       "Empty": "No effects: you need Spheres with at least one dot."
+    },
+    "Incantesimi": {
+      "DialogTitle": "Write a spell",
+      "Save": "Save to the Grimoire",
+      "Name": "Name",
+      "NameHint": "The spell's name",
+      "Narrative": "Narrative",
+      "NarrativeHint": "How you cast it, with the Skills you chose",
+      "Instrument": "Instrument",
+      "Add": "Write a spell",
+      "Edit": "Edit",
+      "Remove": "Delete",
+      "Roll": "Cast",
+      "Chat": "Send to chat",
+      "Saved": "“{name}” is in the Grimoire.",
+      "Unnamed": "Unnamed",
+      "Empty": "No spells: the + opens the roll window and saves instead of rolling."
     }
   }
 }

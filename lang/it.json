@@ -12,7 +12,8 @@
       "Traits": "Tratti",
       "Character": "Personaggio",
       "Belongings": "Dotazione",
-      "Notes": "Note"
+      "Notes": "Note",
+      "Grimorio": "Grimorio"
     },
     "Skills": {
       "Combat": "Combattimento",
@@ -822,6 +823,23 @@
       "Open": "Apri il Grimorio",
       "Search": "Cerca un effetto…",
       "Empty": "Nessun effetto: servono Sfere con almeno un pallino."
+    },
+    "Incantesimi": {
+      "DialogTitle": "Scrivi un incantesimo",
+      "Save": "Salva nel Grimorio",
+      "Name": "Nome",
+      "NameHint": "Il nome dell'incantesimo",
+      "Narrative": "Narrativa",
+      "NarrativeHint": "Come lo lanci, con le Abilità che hai scelto",
+      "Instrument": "Strumento",
+      "Add": "Scrivi un incantesimo",
+      "Edit": "Modifica",
+      "Remove": "Cancella",
+      "Roll": "Lancia",
+      "Chat": "Manda in chat",
+      "Saved": "«{name}» è nel Grimorio.",
+      "Unnamed": "Senza nome",
+      "Empty": "Nessun incantesimo: il + apre la finestra del tiro, e invece di tirare salva."
     }
   },
   "WOD5E": {

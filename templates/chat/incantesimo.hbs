@@ -1,0 +1,13 @@
+<div class="wod5e-mage-roll-card wod5e-mage-incantesimo-chat">
+    <p class="wod5e-mage-incantesimo-chat-name">{{spell.name}}</p>
+    {{#if spell.credo}}<p><b>{{localize "WOD5E_MAGE.Focus.Credo"}}</b> {{spell.credo}}</p>{{/if}}
+    {{#if spell.practiceForm}}<p><b>{{localize "WOD5E_MAGE.Focus.Type"}}</b> {{spell.practiceForm}}</p>{{/if}}
+    {{#if spell.instruments}}<p><b>{{localize "WOD5E_MAGE.Incantesimi.Instrument"}}</b> {{spell.instruments}}</p>{{/if}}
+    {{#if spell.traits}}<p><b>{{localize "WOD5E_MAGE.Arete.Pool"}}</b> {{spell.traits}}</p>{{/if}}
+    {{#if spell.spheres.length}}<p><b>{{localize "WOD5E_MAGE.Arete.Spheres"}}</b> {{#each spell.spheres as |s|}}{{s.label}} {{s.level}}{{#unless @last}}, {{/unless}}{{/each}}</p>{{/if}}
+    {{#if spell.scopes.length}}<p><b>{{localize "WOD5E_MAGE.Scopes.Label"}}</b> {{#each spell.scopes as |s|}}{{s.label}} {{s.level}}{{#unless @last}}, {{/unless}}{{/each}}</p>{{/if}}
+    <p><b>{{localize "WOD5E_MAGE.Arete.MagickType"}}</b> {{spell.magickType}}</p>
+    {{#if spell.effectKind}}<p><b>{{localize "WOD5E_MAGE.Arete.EffectKind"}}</b> {{spell.effectKind}}</p>{{/if}}
+    {{#if spell.goal}}<p><b>{{localize "WOD5E_MAGE.Arete.Goal"}}</b> {{spell.goal}}</p>{{/if}}
+    {{#if spell.narrative}}<p><b>{{localize "WOD5E_MAGE.Incantesimi.Narrative"}}</b> {{spell.narrative}}</p>{{/if}}
+</div>
