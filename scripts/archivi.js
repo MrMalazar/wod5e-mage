@@ -136,6 +136,8 @@ export function entryFromDocument(doc) {
     credo: flag.credo,
     lead: flag.lead,
     types: Array.isArray(flag.types) ? flag.types.map(String) : [],
+    // Le domande della finestra «metti sulla scheda», scritte per ogni Background (6/9).
+    prompts: flag.prompts && typeof flag.prompts === "object" ? flag.prompts : {},
     sort: Number(doc?.sort) || 0,
     content: String(content ?? "")
   };
@@ -213,7 +215,7 @@ export async function addFromArchivio(actor, kind, entry) {
 async function askBackgroundNotes(entry) {
   const content = await foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/dialogs/archivio-background.hbs`,
-    { entry, types: entry.types ?? [] }
+    { entry, types: entry.types ?? [], prompts: entry.prompts ?? {} }
   );
   const result = await foundry.applications.api.DialogV2.input({
     window: { title: entry.name },

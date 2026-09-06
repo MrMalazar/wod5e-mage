@@ -1,21 +1,27 @@
-{{!-- Gli appunti del Background: chi hai scelto, e di che tipo. --}}
+{{!-- Gli appunti del Background: le due domande, scritte per ogni voce (6/9);
+     se una voce non le ha, restano quelle generiche. --}}
 <form class="dialog-contents wod5e-mage-item-form">
     {{#if entry.lead}}<p class="wod5e-mage-archivio-hint">{{entry.lead}}</p>{{/if}}
     <label class="wod5e-mage-item-field">
-        <span>{{localize "WOD5E_MAGE.Archivi.Who"}}</span>
-        <input type="text" name="who" placeholder="{{localize 'WOD5E_MAGE.Archivi.WhoHint'}}" autofocus>
+        <span>{{#if prompts.who}}{{prompts.who}}{{else}}{{localize "WOD5E_MAGE.Archivi.Who"}}{{/if}}</span>
+        <input type="text" name="who" placeholder="{{#if prompts.whoHint}}{{prompts.whoHint}}{{else}}{{localize 'WOD5E_MAGE.Archivi.WhoHint'}}{{/if}}" autofocus>
     </label>
     {{#if types.length}}
         <label class="wod5e-mage-item-field">
-            <span>{{localize "WOD5E_MAGE.Archivi.Type"}}</span>
+            <span>{{#if prompts.type}}{{prompts.type}}{{else}}{{localize "WOD5E_MAGE.Archivi.Type"}}{{/if}}</span>
             <select name="typeChoice">
                 <option value="">{{localize "WOD5E_MAGE.Archivi.TypeNone"}}</option>
                 {{#each types as |type|}}<option value="{{type}}">{{type}}</option>{{/each}}
             </select>
         </label>
+        <label class="wod5e-mage-item-field">
+            <span>{{localize "WOD5E_MAGE.Archivi.TypeFree"}}</span>
+            <input type="text" name="type" placeholder="{{localize 'WOD5E_MAGE.Archivi.TypeHint'}}">
+        </label>
+    {{else}}
+        <label class="wod5e-mage-item-field">
+            <span>{{#if prompts.type}}{{prompts.type}}{{else}}{{localize "WOD5E_MAGE.Archivi.TypeFree"}}{{/if}}</span>
+            <input type="text" name="type" placeholder="{{#if prompts.typeHint}}{{prompts.typeHint}}{{else}}{{localize 'WOD5E_MAGE.Archivi.TypeHint'}}{{/if}}">
+        </label>
     {{/if}}
-    <label class="wod5e-mage-item-field">
-        <span>{{localize "WOD5E_MAGE.Archivi.TypeFree"}}</span>
-        <input type="text" name="type" placeholder="{{localize 'WOD5E_MAGE.Archivi.TypeHint'}}">
-    </label>
 </form>

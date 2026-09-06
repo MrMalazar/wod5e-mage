@@ -269,6 +269,33 @@ def build_traits():
 
 
 # ------------------------------------------------------------ Background
+# Le due domande della finestra «metti sulla scheda», una per Background
+# (6/9, verdetto di Blue: «Chi o cosa» e «Tipo» non si capivano). Ogni voce:
+# (domanda 1, esempio 1, domanda 2, esempio 2). Dove la seconda ha una
+# tendina, i tipi arrivano dalla tavola della voce.
+BG_PROMPTS = {
+    "Alleati": ("Chi è", "Il nome della persona o del gruppo: Ludovica, il turno di notte al Niguarda", "Che tipo di alleato", "Se non è in tendina, scrivilo qui"),
+    "Fama": ("Per cosa sei famoso", "Il campo: musica, cronaca nera, chirurgia", "Dove ti conoscono", "Il quartiere, la città, il settore"),
+    "Influenza": ("L'ambito", "L'ufficio, l'istituzione o il settore: un commissariato, un assessorato, una multinazionale", "Come ci arrivi", "Il ruolo o la persona che ti dà peso lì"),
+    "Rifugio": ("Dov'è", "Il posto: il seminterrato in via Padova, la baita sopra il lago", "Cos'è", "Un appartamento, un'officina, una barca"),
+    "Risorse": ("Da dove vengono", "Lo stipendio, l'eredità, il giro d'affari", "Come si vedono", "La casa, l'auto, i vestiti"),
+    "Arcano": ("Come ti dimenticano", "Il volto che non resta, il nome che sbagliano, la foto che viene mossa", "Cosa resta di te", "Quel che, nonostante tutto, la gente ricorda"),
+    "Biblioteca": ("Cosa contiene", "Grimori, tesi non pubblicate, hard disk cifrati, registrazioni", "Dove sta", "La stanza, il server, la cassetta di sicurezza"),
+    "Congegni e Meraviglie": ("L'oggetto", "Cos'è e cosa fa", "Da dove viene", "Costruito da te, ereditato, rubato"),
+    "Culto": ("Chi ti venera", "Il gruppo: quanti sono e dove si riuniscono", "Cosa credono che tu sia", "Il santo, il profeta, l'alieno, il guaritore"),
+    "Destino": ("Cosa pende su di te", "La profezia, il ruolo, l'appuntamento, per quel che ne sai", "Chi te l'ha detto", "La voce nel sogno, la vecchia del mercato, il tuo Mentore"),
+    "Famiglio": ("La creatura", "Il nome e la forma", "Cosa sa fare", "Il suo talento: vede, porta, avverte"),
+    "Il Sogno": ("A cosa attingi", "L'archetipo o la vita che sogni: il chirurgo, il pilota, il ladro", "Come arriva", "Nel sonno, in trance, con un rito"),
+    "Maschera": ("Chi diventi", "Il nome dell'altra identità", "Cosa la regge", "I documenti, un lavoro, una casa"),
+    "Nodo": ("Dov'è il Nodo", "Il luogo: la sorgente, la cripta, il server", "Con chi lo dividi", "Solo tuo, con la Cabala, con la setta"),
+    "Palazzo della Memoria": ("Com'è fatto", "La casa, il teatro, la biblioteca che hai in testa", "Cosa ci tieni", "Ricordi, formule, volti"),
+    "Potenziamento": ("L'innesto", "Cos'è e dov'è nel corpo", "Chi te l'ha messo", "La clinica, la Convenzione, tu stesso"),
+    "Santuario": ("Dov'è", "Il luogo e i suoi confini", "La vocazione", "Magick oppure Tecnomagick"),
+    "Status": ("In quale società", "La Tradizione, la Convenzione, i Disparati della città", "Il titolo", "Come ti chiamano lì"),
+}
+BG_TYPES = {"Santuario": ["Magick", "Tecnomagick"]}
+
+
 def build_backgrounds():
     docs = []
     for i, p in enumerate(sorted(CAT.glob("08_0[789][0-9]_bg_*.md"))):
@@ -292,7 +319,11 @@ def build_backgrounds():
         rows = table_rows(clean)
         if rows and rows[0] and rows[0][0].lower() == "tipo":
             types = [r[0] for r in rows[1:] if r and r[0]]
-        docs.append(feature(name, content, "background", 1, "background", "Background", i * 10, {"cost": cost, "lead": lead, "types": types}))
+        if name in BG_TYPES and not types:
+            types = BG_TYPES[name]
+        who, who_hint, kind, kind_hint = BG_PROMPTS.get(name, ("", "", "", ""))
+        prompts = {"who": who, "whoHint": who_hint, "type": kind, "typeHint": kind_hint}
+        docs.append(feature(name, content, "background", 1, "background", "Background", i * 10, {"cost": cost, "lead": lead, "types": types, "prompts": prompts}))
     write_pack("mage-background", docs)
 
 

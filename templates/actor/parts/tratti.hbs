@@ -54,6 +54,7 @@
                                             <input class="resource-value skill-attribute-input" name="system.attributes.{{attribute.id}}.value" type="number" value="{{attribute.value}}"/>
                                         {{/if}}
                                     {{else}}
+                                        <b class="wod5e-mage-trait-number" aria-hidden="true">{{attribute.value}}</b>
                                         <div class="resource-value" data-value="{{attribute.value}}" data-name="system.attributes.{{attribute.id}}.value">
                                             <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
                                             {{#numLoop 5}}
@@ -151,6 +152,7 @@
                                             <input class="resource-value skill-attribute-input" name="system.skills.{{skill.id}}.value" type="number" value="{{skill.value}}"/>
                                         {{/if}}
                                     {{else}}
+                                        <b class="wod5e-mage-trait-number" aria-hidden="true">{{skill.value}}</b>
                                         <div class="resource-value" data-value="{{skill.value}}" data-name="system.skills.{{skill.id}}.value">
                                             {{!-- La matita sta qui, a sinistra della X che azzera. --}}
                                             <a class="edit-skill" data-action="editSkill" title="Edit skill" data-skill="{{skill.id}}">

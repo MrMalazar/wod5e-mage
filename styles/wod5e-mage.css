@@ -1015,17 +1015,41 @@
 /* La riga di titolo di un Ambito a più letture (Potenza, Durata) e, sotto,
    le letture rientrate col solo loro nome (6/9). */
 .wod5e-mage-scope-table tbody tr.wod5e-mage-scope-group > th {
+  background: rgb(152 119 43 / 22%);
   border-bottom: 1px solid rgb(152 119 43 / 45%);
   color: var(--mage-oro, #d9a827);
+  font-size: 0.9rem;
   font-weight: 700;
-  padding-top: 0.4rem;
+  letter-spacing: 0.04em;
+  padding: 0.45rem 0.5rem 0.3rem;
   text-align: left;
+  text-transform: uppercase;
 }
 
 .wod5e-mage-scope-table tbody tr.wod5e-mage-scope-sub > th {
   color: var(--mage-oro-chiaro, #f5e7b2);
   font-weight: 600;
-  padding-left: 1rem;
+  padding-left: 1.1rem;
+}
+
+/* Leggibile (6/9): righe a zebra, un filo di aria, testo più grande. */
+.wod5e-mage-scope-table tbody tr:nth-child(even):not(.wod5e-mage-scope-group) > td {
+  background: rgb(255 250 240 / 4%);
+}
+
+.wod5e-mage-scope-table tbody td {
+  border-bottom: 1px solid rgb(152 119 43 / 18%);
+  padding: 0.3rem 0.35rem;
+}
+
+.wod5e-mage-scope-table tbody th[scope="row"] {
+  border-bottom: 1px solid rgb(152 119 43 / 18%);
+  font-size: 0.85rem;
+}
+
+.wod5e-mage-scope-table .wod5e-mage-scope-cell[data-layout="text"] {
+  font-size: 0.78rem;
+  line-height: 1.25;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th > i {
@@ -2488,24 +2512,48 @@
    Altri oggetti. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-layout {
   display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  padding: 0.75rem;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  padding: 1rem 1rem 1.25rem;
   width: 100%;
+}
+
+/* I riquadri prendono tutta la colonna: il tetto di 425 px del sistema cade (6/9). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .features-list .category {
+  margin: 0 0 0.6rem;
+  max-width: none;
+  padding: 0.5rem 0.7rem 0.6rem;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .features-list .category .item-header .item-name {
+  font-size: 1.05rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-left,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-right {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
   min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-right > .wod5e-mage-inventario {
+  padding: 0.6rem 0.8rem 0.8rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione-right .wod5e-mage-inventario .category {
+  padding: 0.5rem 0.4rem 0.55rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-belongings {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
   grid-template-columns: minmax(0, 1fr);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-table {
+  padding: 0.6rem 0.8rem 0.8rem;
 }
 
 @media (width <= 900px) {
@@ -3301,27 +3349,57 @@
 
 /* Tre colonne sulla stessa riga (verdetto del 6/9): Attributi a sinistra,
    poi le due colonne delle Abilità; Condizioni e Specializzazioni a destra,
-   la Ruota e i Bonus sotto. */
+   la Ruota (larga due colonne) e i Bonus sotto. Aria fra le colonne. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns > .stats-content {
+  column-gap: 1.25rem;
   grid-template-areas:
     "attributes skills conditions"
     "attributes skills specialties"
     "ruota ruota bonus";
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 2fr) minmax(220px, 280px);
   grid-template-rows: auto auto auto;
+  row-gap: 0.75rem;
 }
 
+/* Il numero accanto ai pallini: nascosto, esce solo nel modo compatto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-trait-number {
+  color: var(--mage-oro);
+  display: none;
+  font-size: 15px;
+  justify-self: end;
+  min-width: 1.4em;
+  text-align: right;
+}
+
+/* Scheda stretta (6/9, proposta di Blue): niente pallini, solo simbolo,
+   nome e numero. Le tre colonne restano. */
 @container (max-width: 980px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .stats-list > :is(.attribute, .skill) > .resource-value {
+    display: none;
+  }
+
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-trait-number {
+    display: inline-block;
+  }
+
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns > .stats-content {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr) minmax(200px, 240px);
+  }
+}
+
+@container (max-width: 700px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns > .stats-content {
     grid-template-areas:
       "attributes skills"
       "conditions specialties"
-      "ruota bonus";
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 2fr);
+      "ruota ruota"
+      "bonus bonus";
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr);
+    grid-template-rows: auto auto auto auto;
   }
 }
 
-@container (max-width: 640px) {
+@container (max-width: 520px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns > .stats-content {
     grid-template-areas:
       "attributes"
@@ -3338,18 +3416,20 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-attributes > .stats-container > .stats-content {
   grid-auto-flow: row;
   grid-template-columns: minmax(0, 1fr);
-  padding: 0 8px;
+  padding: 0.35rem 12px;
+  row-gap: 0.45rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-skills > .stats-container > .stats-content {
-  column-gap: 1rem;
+  column-gap: 1.5rem;
   grid-auto-flow: column;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-rows: repeat(9, auto);
-  padding: 0 8px;
+  padding: 0.35rem 12px;
+  row-gap: 0.45rem;
 }
 
-@container (max-width: 420px) {
+@container (max-width: 340px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-columns .wod5e-mage-tratti-skills > .stats-container > .stats-content {
     grid-auto-flow: row;
     grid-template-columns: minmax(0, 1fr);
