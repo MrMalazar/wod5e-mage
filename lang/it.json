@@ -16,13 +16,13 @@
       "Grimorio": "Grimorio",
       "Short": {
         "stats": "Tratti",
-        "dotazione": "Dotazione",
+        "dotazione": "Oggetti",
         "magick": "Magick",
-        "grimorio": "Grimorio",
+        "grimorio": "Incanti",
         "focus": "Credo",
         "personaggio": "Bussola",
         "conceptChallenge": "Sfida",
-        "esperienza": "Esperienza",
+        "esperienza": "Ascesa",
         "note": "Note"
       }
     },

@@ -149,7 +149,7 @@ assert.match(
 );
 assert.match(
   css,
-  /\.sheet-tabs\s*>\s*\[data-tab\][^{]*\{[^}]*border:\s*0;[^}]*flex-direction:\s*column;[^}]*height:\s*54px;[^}]*width:\s*64px;/s
+  /\.sheet-tabs\s*>\s*\[data-tab\][^{]*\{[^}]*border:\s*0;[^}]*flex-direction:\s*column;[^}]*height:\s*58px;[^}]*width:\s*64px;/s
 );
 assert.match(css, /\.window-content \.tab \{\s*margin-left:\s*62px;/);
 assert.match(css, /\.wod5e-mage-tab-label \{[^}]*text-transform:\s*uppercase;/s);
@@ -160,7 +160,7 @@ assert.equal((sheetTabs.match(/short: "WOD5E_MAGE\.Tabs\.Short\./g) ?? []).lengt
 const itShort = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE.Tabs.Short;
 // Le pagine a gruppi (6/9): chi sei | la Magick | la storia, con un
 // divisorio davanti a Magick e a Bussola; accesa SOLO la pagina in cui sei.
-assert.deepEqual(Object.values(itShort), ["Tratti", "Dotazione", "Magick", "Grimorio", "Credo", "Bussola", "Sfida", "Esperienza", "Note"]);
+assert.deepEqual(Object.values(itShort), ["Tratti", "Oggetti", "Magick", "Incanti", "Credo", "Bussola", "Sfida", "Ascesa", "Note"]);
 assert.match(sheetTabs, /stats: \{[\s\S]*?dotazione: \{[\s\S]*?magick: \{\s*id: "magick",\s*groupStart: true,[\s\S]*?grimorio: \{[\s\S]*?focus: \{[\s\S]*?personaggio: \{\s*id: "personaggio",\s*groupStart: true,[\s\S]*?conceptChallenge: \{[\s\S]*?esperienza: \{[\s\S]*?note: \{/);
 assert.match(tabNavigation, /\{\{#if tab\.groupStart\}\}<hr class="wod5e-mage-tabs-divider"/);
 assert.match(css, /\.wod5e-mage-tabs-divider \{[^}]*border-top: 1px solid var\(--mage-oro-scuro\);/s);
@@ -191,7 +191,7 @@ const ruota = readFileSync(new URL("../templates/actor/parts/ruota.hbs", import.
 assert.doesNotMatch(ruota, /wod5e-mage-header-arete-value/);
 assert.match(css, /\.wod5e-mage-magick-node \{[^}]*height: 26px;[^}]*width: 26px;/s);
 assert.match(css, /\.wod5e-mage-magick-track-compact \.wod5e-mage-magick-node \{[^}]*height: 26px;[^}]*width: 26px;/s);
-assert.ok(Object.values(itShort).every((label) => label.length <= 10), "nomi corti entro dieci caratteri");
+assert.ok(Object.values(itShort).every((label) => label.length <= 7), "nomi corti entro sette lettere");
 
 // Come nella 0.9.4, il profilo rimane fra due colonne header-fields:
 // lo spacer destro impedisce al ritratto di slittare sul bordo.

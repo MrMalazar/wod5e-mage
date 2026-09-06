@@ -18,11 +18,11 @@
         "stats": "Traits",
         "dotazione": "Gear",
         "magick": "Magick",
-        "grimorio": "Grimoire",
+        "grimorio": "Spells",
         "focus": "Creed",
         "personaggio": "Compass",
-        "conceptChallenge": "Challenge",
-        "esperienza": "Experience",
+        "conceptChallenge": "Trial",
+        "esperienza": "Ascent",
         "note": "Notes"
       }
     },
