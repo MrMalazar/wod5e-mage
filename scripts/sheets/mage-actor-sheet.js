@@ -7,7 +7,7 @@ import { onCondizioneToggle, prepareCondizioni, prepareConditionRows } from "../
 import { onParadoxBurst } from "../paradox-burst.js";
 import { groupIncantesimiBySphere, onIncantesimoAdd, onIncantesimoChat, onIncantesimoDelete, onIncantesimoEdit, onIncantesimoFromEffetti, onIncantesimoRoll, prepareIncantesimi } from "../incantesimi.js";
 import { onGrimorioComuneOpen, onIncantesimoShare } from "../grimorio-comune.js";
-import { onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
+import { bindNoteBoard, noteBoardHeight, onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResets } from "../reset.js";
 import { onStrumentiSuggest } from "../strumenti.js";
 import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
@@ -203,8 +203,10 @@ export class MageActorSheet extends MortalActorSheet {
   constructor(options = {}) {
     super(options);
 
-    // Sei pagine, nell'ordine in cui si usano. La PART `stats` tiene il suo id
-    // perché tabGroups.primary punta lì: cambia solo l'etichetta.
+    // Le pagine, a gruppi (6/9): chi sei (Tratti, Dotazione), la Magick
+    // (Magick, Grimorio, Credo), la storia (Bussola, Sfida, Esperienza,
+    // Note). `groupStart` apre un gruppo: la barra ci mette un divisorio.
+    // La PART `stats` tiene il suo id perché tabGroups.primary punta lì.
     this.tabs = {
       stats: {
         id: "stats",
@@ -213,8 +215,16 @@ export class MageActorSheet extends MortalActorSheet {
         short: "WOD5E_MAGE.Tabs.Short.stats",
         icon: icon("table-cells-large")
       },
+      dotazione: {
+        id: "dotazione",
+        group: "primary",
+        title: "WOD5E_MAGE.Tabs.Belongings",
+        short: "WOD5E_MAGE.Tabs.Short.dotazione",
+        icon: icon("toolbox")
+      },
       magick: {
         id: "magick",
+        groupStart: true,
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Magick",
         short: "WOD5E_MAGE.Tabs.Short.magick",
@@ -235,15 +245,9 @@ export class MageActorSheet extends MortalActorSheet {
         short: "WOD5E_MAGE.Tabs.Short.focus",
         icon: icon("bullseye")
       },
-      dotazione: {
-        id: "dotazione",
-        group: "primary",
-        title: "WOD5E_MAGE.Tabs.Belongings",
-        short: "WOD5E_MAGE.Tabs.Short.dotazione",
-        icon: icon("toolbox")
-      },
       personaggio: {
         id: "personaggio",
+        groupStart: true,
         group: "primary",
         title: "WOD5E_MAGE.Tabs.Character",
         short: "WOD5E_MAGE.Tabs.Short.personaggio",
@@ -292,6 +296,8 @@ export class MageActorSheet extends MortalActorSheet {
   _onRender(context, options) {
     super._onRender?.(context, options);
     bindExperienceCalculator(this.element);
+    // La lavagna delle Note: presa e angolo (6/9).
+    bindNoteBoard(this);
     // L'Appartenenza in testata resta aperta o chiusa com'era, attraverso i render.
     const appartenenza = this.element?.querySelector(".wod5e-mage-appartenenza");
     if (appartenenza) {
@@ -482,6 +488,7 @@ export class MageActorSheet extends MortalActorSheet {
 
     if (partId === "note") {
       context.note = prepareNote(actor);
+      context.noteBoardHeight = noteBoardHeight(context.note);
       context.tab = context.tabs.note;
     }
 

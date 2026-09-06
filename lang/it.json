@@ -16,10 +16,10 @@
       "Grimorio": "Grimorio",
       "Short": {
         "stats": "Tratti",
+        "dotazione": "Dotazione",
         "magick": "Magick",
         "grimorio": "Grimorio",
         "focus": "Credo",
-        "dotazione": "Dotazione",
         "personaggio": "Bussola",
         "conceptChallenge": "Sfida",
         "esperienza": "Esperienza",
@@ -350,11 +350,11 @@
       "conditions": "Condizioni",
       "range": "Portata",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza (Peso): quanto pesa ciò che muovi. Potenza (Epicità): quanto è grande l'impresa, in alternativa al Peso. Potenza (Danni): l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
+      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza (Peso): quanto pesa ciò che muovi. Potenza (Epicità): quanto cambia l'impresa, in alternativa al Peso. Potenza (Danni): l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa.",
       "TableSuccesses": "Livello →",
       "Table": {
         "potency": {
-          "1": "10 kg (una valigia)",
+          "1": "10 kg (uno zaino pieno)",
           "2": "100 kg (una persona)",
           "3": "2 t (un'auto)",
           "4": "40 t (un tir)",
@@ -363,13 +363,13 @@
           "7": "Una montagna"
         },
         "potencyEpic": {
-          "1": "Un trucco da salotto",
-          "2": "Un'impresa da atleta",
-          "3": "Un record del mondo",
-          "4": "Un miracolo",
-          "5": "Una leggenda",
-          "6": "Un mito",
-          "7": "Un atto divino"
+          "1": "Cambia un dettaglio",
+          "2": "Cambia una scena",
+          "3": "Cambia una giornata",
+          "4": "Cambia una vita",
+          "5": "Cambia una città",
+          "6": "Cambia la storia",
+          "7": "Cambia il mondo"
         },
         "potencyDamage": {
           "1": "+0",
@@ -426,13 +426,13 @@
           "7": "Ovunque sia"
         },
         "precision": {
-          "1": "Una cosa a caso, lì intorno",
-          "2": "Un'auto qualunque",
-          "3": "Quell'auto",
-          "4": "Il motore di quell'auto",
-          "5": "Una vite del motore",
-          "6": "Un granello di ruggine sulla vite",
-          "7": "Un atomo di quel granello"
+          "1": "Quell'auto",
+          "2": "Il motore dell'auto",
+          "3": "La vite del motore dell'auto",
+          "4": "L'ago nel pagliaio",
+          "5": "Un granello di polvere sull'ago",
+          "6": "Una molecola di quel granello",
+          "7": "Un atomo, in quell'istante"
         },
         "durationNarrative": {
           "1": "Un giorno",
@@ -803,7 +803,9 @@
       "TitleHint": "Titolo del riquadro",
       "Text": "Testo",
       "TextHint": "Scrivi qui",
-      "Empty": "Niente ancora: il + aggiunge un riquadro con un titolo e un testo."
+      "Empty": "Niente ancora: il + aggiunge un riquadro con un titolo e un testo.",
+      "Move": "Sposta il riquadro",
+      "Resize": "Ridimensiona il riquadro"
     },
     "Burst": {
       "Title": "Scoppio del Paradosso",

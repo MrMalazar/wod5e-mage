@@ -3,6 +3,8 @@
 <div class="tabs-container wod5e-mage-tabs">
     <nav class="sheet-tabs tabs" data-group="primary">
         {{#each tabs as |tab|}}
+            {{!-- Un divisorio fra un gruppo di pagine e l'altro (6/9). --}}
+            {{#if tab.groupStart}}<hr class="wod5e-mage-tabs-divider" aria-hidden="true">{{/if}}
             {{!-- Icona e, sotto, il nome corto della pagina (6/9). --}}
             <div class="{{tab.cssClass}}" data-action="tab" data-group="{{tab.group}}" data-tab="{{tab.id}}" title="{{localize tab.title}}">
                 <div class="navicon">{{{tab.icon}}}</div>

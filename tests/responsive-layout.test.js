@@ -158,7 +158,23 @@ assert.doesNotMatch(tabNavigation, /class="navlabel"/);
 const sheetTabs = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
 assert.equal((sheetTabs.match(/short: "WOD5E_MAGE\.Tabs\.Short\./g) ?? []).length, 9);
 const itShort = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE.Tabs.Short;
-assert.deepEqual(Object.values(itShort), ["Tratti", "Magick", "Grimorio", "Credo", "Dotazione", "Bussola", "Sfida", "Esperienza", "Note"]);
+// Le pagine a gruppi (6/9): chi sei | la Magick | la storia, con un
+// divisorio davanti a Magick e a Bussola; accesa SOLO la pagina in cui sei.
+assert.deepEqual(Object.values(itShort), ["Tratti", "Dotazione", "Magick", "Grimorio", "Credo", "Bussola", "Sfida", "Esperienza", "Note"]);
+assert.match(sheetTabs, /stats: \{[\s\S]*?dotazione: \{[\s\S]*?magick: \{\s*id: "magick",\s*groupStart: true,[\s\S]*?grimorio: \{[\s\S]*?focus: \{[\s\S]*?personaggio: \{\s*id: "personaggio",\s*groupStart: true,[\s\S]*?conceptChallenge: \{[\s\S]*?esperienza: \{[\s\S]*?note: \{/);
+assert.match(tabNavigation, /\{\{#if tab\.groupStart\}\}<hr class="wod5e-mage-tabs-divider"/);
+assert.match(css, /\.wod5e-mage-tabs-divider \{[^}]*border-top: 1px solid var\(--mage-oro-scuro\);/s);
+assert.doesNotMatch(css, /:is\(\[data-tab="magick"\], \[data-tab="focus"\], \[data-tab="conceptChallenge"\]\) \.navicon \{/);
+assert.match(css, /\.sheet-tabs > \[data-tab\] \.navicon,\s*\.wod5e-mage\.wod5e\.actor\.sheet \.sheet-tabs \.lock-btn \{[^}]*background-color: var\(--mage-incavo\);/s);
+// Il sigillo dell'Areté in alto a destra della testata tira da ogni pagina;
+// il numero accanto ai pallini dell'Areté non c'è più; i nodi della Ruota
+// sono 26 px.
+assert.match(mageHeader, /<button type="button" class="wod5e-mage-header-arete-roll wod5e-mage-arete-roll" data-action="areteRoll"[\s\S]*arete\.svg[\s\S]*<div class="header-fields">/);
+assert.match(css, /button\.wod5e-mage-header-arete-roll \{[^}]*position: absolute;[^}]*right: 0\.5rem;/s);
+const ruota = readFileSync(new URL("../templates/actor/parts/ruota.hbs", import.meta.url), "utf8");
+assert.doesNotMatch(ruota, /wod5e-mage-header-arete-value/);
+assert.match(css, /\.wod5e-mage-magick-node \{[^}]*height: 26px;[^}]*width: 26px;/s);
+assert.match(css, /\.wod5e-mage-magick-track-compact \.wod5e-mage-magick-node \{[^}]*height: 26px;[^}]*width: 26px;/s);
 assert.ok(Object.values(itShort).every((label) => label.length <= 10), "nomi corti entro dieci caratteri");
 
 // Come nella 0.9.4, il profilo rimane fra due colonne header-fields:

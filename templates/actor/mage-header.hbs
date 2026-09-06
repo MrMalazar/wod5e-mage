@@ -5,6 +5,11 @@
     <button type="button" class="wod5e-mage-new-session" data-action="saluteNewSession" title="{{localize 'WOD5E_MAGE.Salute.NewSessionHint'}}">
         <i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.NewSession"}}
     </button>
+    {{!-- In alto a destra, speculare: il sigillo dell'Areté tira da ogni pagina (6/9). --}}
+    <button type="button" class="wod5e-mage-header-arete-roll wod5e-mage-arete-roll" data-action="areteRoll"
+            title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.RollHint'}}">
+        <img class="wod5e-mage-arete-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt="" aria-hidden="true">
+    </button>
     <div class="header-fields">
         <div class="header-fields-left wod5e-mage-header-resources">
             {{> "modules/wod5e-mage/templates/actor/parts/salute.hbs"}}

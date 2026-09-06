@@ -8,17 +8,21 @@
         </button>
     </header>
 
+    {{!-- La lavagna (6/9): ogni riquadro sta dove lo metti (la presa lo
+         trascina) ed è grande quanto lo fai (l'angolo lo ridimensiona). --}}
     {{#if note.length}}
-        <div class="wod5e-mage-note-list">
+        <div class="wod5e-mage-note-board" data-locked="{{#if locked}}true{{else}}false{{/if}}" style="min-height: {{noteBoardHeight}}px;">
             {{#each note as |row|}}
-                <div class="wod5e-mage-note-block">
+                <div class="wod5e-mage-note-block" data-row="{{row.id}}" style="left: {{row.x}}px; top: {{row.y}}px; width: {{row.w}}px; height: {{row.h}}px;">
                     <div class="wod5e-mage-note-block-head">
+                        <span class="wod5e-mage-note-grip" title="{{localize 'WOD5E_MAGE.Note.Move'}}" aria-hidden="true"><i class="fa-solid fa-grip-vertical"></i></span>
                         <input type="text" name="flags.wod5e-mage.note.{{row.id}}.title" value="{{row.title}}" placeholder="{{localize 'WOD5E_MAGE.Note.TitleHint'}}" aria-label="{{localize 'WOD5E_MAGE.Note.Title'}}" {{#if ../locked}}disabled{{/if}}>
                         <button type="button" data-action="noteDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Note.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Note.Remove'}}" {{#if ../locked}}disabled{{/if}}>
                             <i class="fa-solid fa-minus"></i>
                         </button>
                     </div>
-                    <textarea name="flags.wod5e-mage.note.{{row.id}}.text" rows="6" placeholder="{{localize 'WOD5E_MAGE.Note.TextHint'}}" aria-label="{{localize 'WOD5E_MAGE.Note.Text'}}" {{#if ../locked}}disabled{{/if}}>{{row.text}}</textarea>
+                    <textarea name="flags.wod5e-mage.note.{{row.id}}.text" placeholder="{{localize 'WOD5E_MAGE.Note.TextHint'}}" aria-label="{{localize 'WOD5E_MAGE.Note.Text'}}" {{#if ../locked}}disabled{{/if}}>{{row.text}}</textarea>
+                    <span class="wod5e-mage-note-resize" title="{{localize 'WOD5E_MAGE.Note.Resize'}}" aria-hidden="true"></span>
                 </div>
             {{/each}}
         </div>

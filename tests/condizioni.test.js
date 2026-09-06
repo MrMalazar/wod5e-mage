@@ -37,6 +37,13 @@ assert.deepEqual([rows[1].name, rows[1].dice, rows[1].what, rows[1].suppressed],
 const tratti = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
 assert.match(tratti, /wod5e-mage-condizioni-strip[\s\S]*condizioniRows[\s\S]*data-action="condizioneToggle" data-condizione="\{\{row\.condizione\}\}" data-item-id="\{\{row\.id\}\}"[\s\S]*data-action="searchItem"[\s\S]*<details class="wod5e-mage-condizioni-drawer">[\s\S]*Condizioni\.All[\s\S]*group\.group[\s\S]*data-action="condizioneToggle" data-condizione="\{\{entry\.id\}\}"/);
 assert.doesNotMatch(tratti, /data-kind="condizione"/);
+// Ogni Condizione porta il nome sotto il simbolo (6/9); nella striscia
+// le accese sono più grandi (74 px, simbolo 38 px, nome 0.62rem).
+assert.match(tratti, /wod5e-mage-condizione-on[\s\S]*<span class="wod5e-mage-condizione-glyph">[\s\S]*row\.img[\s\S]*<span class="wod5e-mage-condizione-name">\{\{row\.name\}\}<\/span>[\s\S]*wod5e-mage-condizione\{\{#if entry\.active\}\} lit[\s\S]*<span class="wod5e-mage-condizione-name">\{\{entry\.name\}\}<\/span>/);
+const condCss = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+assert.match(condCss, /\.wod5e-mage-condizione-on \{[^}]*flex: 0 0 74px;/s);
+assert.match(condCss, /\.wod5e-mage-condizione-on img \{[^}]*height: 38px;/s);
+assert.match(condCss, /\.wod5e-mage-condizione-on \.wod5e-mage-condizione-name \{[^}]*font-size: 0\.62rem;/s);
 const groups = prepareCondizioni([{ id: "a", type: "condition", flags: { "wod5e-mage": { condizione: "offuscato" } }, system: { suppressed: true } }]);
 assert.equal(groups.length, 7);
 const offuscato = groups.flatMap((g) => g.entries).find((e) => e.id === "offuscato");

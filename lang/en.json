@@ -16,10 +16,10 @@
       "Grimorio": "Grimoire",
       "Short": {
         "stats": "Traits",
+        "dotazione": "Gear",
         "magick": "Magick",
         "grimorio": "Grimoire",
         "focus": "Creed",
-        "dotazione": "Gear",
         "personaggio": "Compass",
         "conceptChallenge": "Challenge",
         "esperienza": "Experience",
@@ -350,11 +350,11 @@
       "conditions": "Conditions",
       "range": "Range",
       "TableTitle": "The Scopes",
-      "TableHint": "Each Scope is declared at a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope (cap 7); each Scope beyond the first raises it by 1, even past the cap. Potency (Weight): how heavy what you move is. Potency (Epicness): how big the feat is, as an alternative to Weight. Potency (Damage): Arete plus the number. Duration: when casting you declare whether it runs on play or on narrative time.",
+      "TableHint": "Each Scope is declared at a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope (cap 7); each Scope beyond the first raises it by 1, even past the cap. Potency (Weight): how heavy what you move is. Potency (Epicness): how much the feat changes, as an alternative to Weight. Potency (Damage): Arete plus the number. Duration: when casting you declare whether it runs on play or on narrative time.",
       "TableSuccesses": "Level →",
       "Table": {
         "potency": {
-          "1": "10 kg (a suitcase)",
+          "1": "10 kg (a full backpack)",
           "2": "100 kg (a person)",
           "3": "2 t (a car)",
           "4": "40 t (a truck)",
@@ -363,13 +363,13 @@
           "7": "A mountain"
         },
         "potencyEpic": {
-          "1": "A parlour trick",
-          "2": "An athlete's feat",
-          "3": "A world record",
-          "4": "A miracle",
-          "5": "A legend",
-          "6": "A myth",
-          "7": "A divine act"
+          "1": "Changes a detail",
+          "2": "Changes a scene",
+          "3": "Changes a day",
+          "4": "Changes a life",
+          "5": "Changes a city",
+          "6": "Changes history",
+          "7": "Changes the world"
         },
         "potencyDamage": {
           "1": "+0",
@@ -426,13 +426,13 @@
           "7": "Wherever it is"
         },
         "precision": {
-          "1": "Something random nearby",
-          "2": "Any car",
-          "3": "That car",
-          "4": "That car's engine",
-          "5": "One bolt of the engine",
-          "6": "A speck of rust on the bolt",
-          "7": "One atom of that speck"
+          "1": "That car",
+          "2": "The car's engine",
+          "3": "The bolt in the car's engine",
+          "4": "The needle in the haystack",
+          "5": "A speck of dust on the needle",
+          "6": "A molecule of that speck",
+          "7": "An atom, in that instant"
         },
         "durationNarrative": {
           "1": "A day",
@@ -803,7 +803,9 @@
       "TitleHint": "Box title",
       "Text": "Text",
       "TextHint": "Write here",
-      "Empty": "Nothing yet: + adds a box with a title and a text."
+      "Empty": "Nothing yet: + adds a box with a title and a text.",
+      "Move": "Move the box",
+      "Resize": "Resize the box"
     },
     "Burst": {
       "Title": "Paradox Burst",

@@ -92,16 +92,36 @@
   color: var(--mage-oro-chiaro);
 }
 
-/* Livrea unica per tutte le linguette della barra */
+/* Livrea unica per tutte le linguette della barra: spente sul fondo
+   incassato, accesa (in oro) SOLO la pagina in cui sei (6/9). */
 .wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab] .navicon,
 .wod5e-mage.wod5e.actor.sheet .sheet-tabs .lock-btn {
+  background-color: var(--mage-incavo);
   border: 1px solid var(--mage-oro-scuro);
+  color: var(--mage-oro-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab] .navicon :is(i, .wod5e-symbol) {
+  color: var(--mage-oro-chiaro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].active .navicon {
   background: var(--mage-tab-nav-bg);
   border-color: var(--mage-oro);
   color: #fff;
+}
+
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].active .navicon :is(i, .wod5e-symbol) {
+  color: #fff;
+}
+
+/* Il divisorio fra i gruppi di pagine. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tabs-divider {
+  border: 0;
+  border-top: 1px solid var(--mage-oro-scuro);
+  margin: 4px 10px;
+  opacity: 0.8;
+  width: 44px;
 }
 
 /* ==========================================================================
@@ -131,16 +151,6 @@
 }
 
 /* ========================================================================== */
-
-.wod5e-mage.wod5e.actor.sheet .sheet-tabs > :is([data-tab="magick"], [data-tab="focus"], [data-tab="conceptChallenge"]) .navicon {
-  background-color: var(--mage-tab-nav-bg);
-  border: 1px solid var(--mage-oro-scuro);
-  color: #fff;
-}
-
-.wod5e-mage.wod5e.actor.sheet .sheet-tabs > :is([data-tab="magick"], [data-tab="focus"], [data-tab="conceptChallenge"]) .navicon i {
-  color: #fff;
-}
 
 /* Un tema solo (regola del 9/8, ora applicata davvero ovunque): anche le
    linguette del Mago stanno sul fondo scuro; la carta resta ai soli campi
@@ -717,14 +727,14 @@
   background: var(--mage-incavo);
   border: 2px solid var(--mage-oro-scuro);
   border-radius: 50%;
-  height: 20px;
+  height: 26px;
   left: var(--track-x);
   position: absolute;
   pointer-events: none;
   top: var(--track-y);
   transform: translate(-50%, -50%);
   transition: background-color 150ms ease, box-shadow 150ms ease;
-  width: 20px;
+  width: 26px;
 }
 
 /* Stesso oro della barra: la variabile --quintessence-color viveva in un
@@ -3310,9 +3320,10 @@
   width: 370px;
 }
 
+/* I nodi più grandi (6/9): a 18 px si vedevano poco. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-compact .wod5e-mage-magick-node {
-  height: 18px;
-  width: 18px;
+  height: 26px;
+  width: 26px;
 }
 
 /* Le due parole agli estremi: Quintessenza sotto il primo nodo a sinistra,
@@ -4074,6 +4085,37 @@
   position: relative;
 }
 
+/* Il sigillo dell'Areté in alto a destra della testata: il tiro da ogni
+   pagina, speculare a Nuova sessione (6/9). */
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-header-arete-roll {
+  align-items: center;
+  background: rgb(20 16 10 / 72%);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  height: 30px;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
+  position: absolute;
+  right: 0.5rem;
+  top: 0.35rem;
+  width: 34px;
+  z-index: 2;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-header-arete-roll:hover {
+  border-color: var(--mage-oro);
+  box-shadow: 0 0 6px rgb(217 168 39 / 45%);
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-header-arete-roll > .wod5e-mage-arete-sigillo {
+  height: 22px;
+  margin: 0;
+  width: 22px;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-new-session {
   background: rgb(20 16 10 / 72%);
   border: 1px solid var(--mage-oro-scuro);
@@ -4131,24 +4173,52 @@
   justify-content: center;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-list {
-  display: grid;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem 1rem;
+/* La lavagna (6/9): i riquadri stanno dove il giocatore li mette. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-board {
+  margin: 0.5rem 0.75rem 1rem;
+  position: relative;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-block {
+  background: rgb(20 16 10 / 80%);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 4px;
-  display: grid;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   gap: 0.35rem;
   padding: 0.5rem;
+  position: absolute;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-block.dragging {
+  box-shadow: 0 0 8px var(--mage-oro);
+  user-select: none;
+  z-index: 3;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-block:focus-within {
+  z-index: 2;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-block-head {
   align-items: center;
   display: flex;
+  flex: 0 0 auto;
   gap: 0.4rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-grip {
+  color: var(--mage-oro);
+  cursor: grab;
+  flex: 0 0 auto;
+  padding: 0 0.15rem;
+  touch-action: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-board[data-locked="true"] .wod5e-mage-note-grip,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-board[data-locked="true"] .wod5e-mage-note-resize {
+  display: none;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-block-head > input {
@@ -4181,12 +4251,26 @@
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 3px;
   color: var(--mage-inchiostro);
+  flex: 1 1 auto;
   font-size: 0.9rem;
   line-height: 1.4;
-  min-height: 120px;
+  min-height: 0;
   padding: 0.4rem 0.5rem;
-  resize: vertical;
+  resize: none;
   width: 100%;
+}
+
+/* L'angolo in basso a destra ridimensiona. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-resize {
+  border-bottom: 2px solid var(--mage-oro);
+  border-right: 2px solid var(--mage-oro);
+  bottom: 3px;
+  cursor: nwse-resize;
+  height: 12px;
+  position: absolute;
+  right: 3px;
+  touch-action: none;
+  width: 12px;
 }
 
 /* Niente pannello dei modificatori nei tiri del Mago (4/9 notte): le
@@ -4508,8 +4592,8 @@
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3rem;
-  min-height: 34px;
+  gap: 0.35rem;
+  min-height: 40px;
   padding: 0.15rem 0 0.35rem;
 }
 
@@ -4568,6 +4652,9 @@
   gap: 0.25rem;
 }
 
+/* Ogni Condizione è una linguetta: il simbolo e, sotto, il nome (6/9).
+   Nella tendina sono piccole; nella striscia in alto, quelle accese
+   sono più grandi e col nome più leggibile. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on {
   align-items: center;
@@ -4576,14 +4663,22 @@
   border-radius: 4px;
   cursor: pointer;
   display: inline-flex;
-  flex: 0 0 34px;
-  height: 34px;
+  flex: 0 0 54px;
+  flex-direction: column;
+  gap: 2px;
+  height: 52px;
   justify-content: center;
   line-height: 1;
   margin: 0;
-  padding: 0;
+  padding: 3px 2px 2px;
   position: relative;
-  width: 34px;
+  width: 54px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on {
+  flex: 0 0 74px;
+  height: 66px;
+  width: 74px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione:hover,
@@ -4592,10 +4687,16 @@
   box-shadow: 0 0 4px var(--mage-oro);
 }
 
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-glyph {
+  display: inline-flex;
+  line-height: 0;
+  position: relative;
+}
+
 /* I glifi delle Condizioni sono tratti scuri: spenti diventano chiari,
    accesi diventano oro, così si leggono sul fondo scuro. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione > img,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on > img {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione img,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on img {
   border: none;
   filter: brightness(0) invert(78%);
   height: 28px;
@@ -4603,23 +4704,52 @@
   width: 28px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione.lit > img,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on > img {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on img {
+  height: 38px;
+  width: 38px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione.lit img,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on img {
   filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione > small,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on > small {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-name {
+  color: var(--mage-oro-chiaro);
+  display: block;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  max-width: 100%;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione.lit .wod5e-mage-condizione-name,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on .wod5e-mage-condizione-name {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on .wod5e-mage-condizione-name {
+  font-size: 0.62rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione small,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-on small {
   background: var(--mage-oro);
   border-radius: 2px;
-  bottom: -1px;
+  bottom: -2px;
   color: #17120f;
   font-size: 0.6rem;
   font-weight: 700;
   line-height: 1;
   padding: 0 1px;
   position: absolute;
-  right: -1px;
+  right: -4px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione.lit,
