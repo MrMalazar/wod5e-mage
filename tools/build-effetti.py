@@ -8,7 +8,9 @@ guardi» (il primo pallino) e «Gli effetti, livello per livello» (dal
 secondo al quinto), e scrive scripts/data/effetti.js: ogni effetto col nome,
 la Sfera, il livello, le Sfere in più chieste dal testo («+ Primordio ●●»,
 obbligatorie se aprono la riga, altrimenti a seconda del caso) e il come.
-Un modulo generato, da non toccare a mano.
+Dal 6/9 legge anche i blocchi nuovi (formato dettato da Blue): `#### Nome`,
+la descrizione, le Sfere compagne a elenco (`pairings`) e gli Ambiti
+consigliati (`scopes`). Un modulo generato, da non toccare a mano.
 """
 import json
 import re
@@ -47,13 +49,33 @@ def plain(text):
     return re.sub(r"\s+", " ", text).strip()
 
 
+SPHERE_NAMES = {**SPHERES, "Forze": "forces"}
+PAIRING = re.compile(r"^- \*\*\+ (" + "|".join(SPHERE_NAMES) + r"):\*\*\s*(.*)$")
+SCOPES_LINE = re.compile(r"^\*Ambiti consigliati:\*\s*(.*)$")
+
+
 def parse(path, sphere):
+    """Legge una tavola di Sfera in due formati: le tavole vecchie (una riga
+    per effetto, «Come funziona» in una cella) e i blocchi nuovi (6/9,
+    formato dettato da Blue: `#### Nome`, la descrizione, le Sfere compagne
+    a elenco `- **+ Sfera:** …`, e `*Ambiti consigliati:* …`)."""
     entries = []
     level = 0
     section = None
+    block = None
+
+    def close():
+        nonlocal block
+        if block is None:
+            return
+        block["text"] = " ".join(block["text"]).strip()
+        entries.append(block)
+        block = None
+
     for raw in path.read_text(encoding="utf-8").splitlines():
         line = raw.strip()
         if line.startswith("## "):
+            close()
             title = line[3:]
             section = "effects" if title.startswith("Quanto vedi") or title.startswith("Gli effetti") else None
             continue
@@ -61,8 +83,39 @@ def parse(path, sphere):
             continue
         head = LEVEL_HEAD.match(line)
         if head:
+            close()
             level = len(head.group(1))
             continue
+        # I blocchi nuovi.
+        if line.startswith("#### "):
+            close()
+            name = plain(line[5:])
+            block = {
+                "id": f"{sphere}-{level}-{slug(name)}",
+                "name": name,
+                "sphere": sphere,
+                "level": level,
+                "extras": [],
+                "text": [],
+                "pairings": [],
+                "scopes": "",
+            }
+            continue
+        if block is not None:
+            pairing = PAIRING.match(line)
+            scopes = SCOPES_LINE.match(line)
+            if pairing:
+                block["pairings"].append({"sphere": SPHERE_NAMES[pairing.group(1)], "text": plain(pairing.group(2))})
+            elif scopes:
+                # Gli Ambiti consigliati chiudono il blocco.
+                block["scopes"] = plain(scopes.group(1))
+                close()
+            elif line.startswith("|") or line.startswith("<!--"):
+                close()
+            elif line:
+                block["text"].append(plain(line))
+            continue
+        # Le tavole vecchie.
         if not line.startswith("|") or line.startswith("| Effetto") or line.startswith("| :--") or line.startswith("| Successi"):
             continue
         cells = [cell.strip() for cell in line.strip("|").split("|")]
@@ -83,7 +136,10 @@ def parse(path, sphere):
             "level": level,
             "extras": extras,
             "text": plain(how),
+            "pairings": [],
+            "scopes": "",
         })
+    close()
     return entries
 
 

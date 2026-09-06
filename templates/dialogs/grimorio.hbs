@@ -19,6 +19,16 @@
                             <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                         </summary>
                         <p>{{entry.text}}</p>
+                        {{#if entry.pairings.length}}
+                            <ul class="wod5e-mage-grimorio-pairings">
+                                {{#each entry.pairings as |pairing|}}
+                                    <li><img src="{{pairing.icon}}" alt=""><b>+ {{pairing.label}}:</b> {{pairing.text}}</li>
+                                {{/each}}
+                            </ul>
+                        {{/if}}
+                        {{#if entry.scopes}}
+                            <p class="wod5e-mage-grimorio-scopes"><b>{{localize "WOD5E_MAGE.Grimorio.Scopes"}}</b> {{entry.scopes}}</p>
+                        {{/if}}
                     </details>
                 {{/each}}
             {{/each}}

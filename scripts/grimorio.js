@@ -59,7 +59,15 @@ export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
                 label: localize(`WOD5E_MAGE.Spheres.${extra.sphere}`),
                 dots: "●".repeat(extra.level),
                 required: extra.required
-              }))
+              })),
+              // Il formato nuovo (6/9): le Sfere compagne con quel che aggiungono,
+              // e gli Ambiti consigliati.
+              pairings: (entry.pairings ?? []).map((pairing) => ({
+                label: localize(`WOD5E_MAGE.Spheres.${pairing.sphere}`),
+                icon: `modules/${MODULE_ID}/assets/icons/sheet/${pairing.sphere}.png`,
+                text: pairing.text
+              })),
+              scopes: entry.scopes ?? ""
             }))
         }))
         .filter((group) => group.entries.length);

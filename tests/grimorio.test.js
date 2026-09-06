@@ -61,3 +61,20 @@ const dice = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url)
 assert.match(dice, /applyUstione\(actor, \{ threshold: burn, tens, kind: effectKind \}\)/);
 
 console.log("Grimorio, Ustione e Salute: test passati.");
+
+// Il formato nuovo (6/9): Corrispondenza a blocchi, con le Sfere compagne e
+// gli Ambiti consigliati; «Mappare la zona» ha assorbito «Cercare nell'area».
+const corr = EFFETTI.filter((entry) => entry.sphere === "correspondence");
+assert.equal(corr.length, 20);
+const mappare = corr.find((entry) => entry.id === "correspondence-1-mappare-la-zona");
+assert.equal(mappare.pairings.length, 8);
+assert.equal(mappare.pairings[0].sphere, "entropy");
+assert.match(mappare.scopes, /^Area per le dimensioni/);
+assert.doesNotMatch(mappare.text, /Tutto questo, dal primo giorno/);
+assert.equal(corr.find((entry) => entry.id === "correspondence-1-sapere-dove-sei").pairings[0].sphere, "entropy");
+assert.equal(corr.some((entry) => entry.id === "correspondence-1-cercare-nell-area"), false);
+const grimorioIt = prepareGrimorio({ correspondence: 2 }, (k) => k);
+const shown = grimorioIt[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio");
+assert.equal(shown.pairings.length, 5);
+assert.match(shown.pairings[0].icon, /life\.png$/);
+assert.match(readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8"), /wod5e-mage-grimorio-pairings[\s\S]*pairing\.icon[\s\S]*wod5e-mage-grimorio-scopes[\s\S]*Grimorio\.Scopes/);

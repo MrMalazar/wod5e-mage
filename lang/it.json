@@ -901,7 +901,8 @@
       "Title": "Grimorio",
       "Open": "Apri il Grimorio",
       "Search": "Cerca un effetto…",
-      "Empty": "Nessun effetto: servono Sfere con almeno un pallino."
+      "Empty": "Nessun effetto: servono Sfere con almeno un pallino.",
+      "Scopes": "Ambiti consigliati:"
     },
     "Incantesimi": {
       "DialogTitle": "Scrivi un incantesimo",

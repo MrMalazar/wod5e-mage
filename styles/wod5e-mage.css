@@ -5575,6 +5575,49 @@
   margin-left: auto;
 }
 
+/* Il formato nuovo degli effetti (6/9): le Sfere compagne a elenco col
+   loro simbolo, e gli Ambiti consigliati in coda. */
+.wod5e-mage-grimorio-row > .wod5e-mage-grimorio-pairings {
+  list-style: none;
+  margin: 0.2rem 0 0.3rem;
+  padding: 0 0.6rem;
+}
+
+.wod5e-mage-grimorio-row > .wod5e-mage-grimorio-pairings > li {
+  align-items: baseline;
+  color: var(--mage-testo, #e6dcc2);
+  display: flex;
+  font-size: 0.8rem;
+  gap: 0.35rem;
+  line-height: 1.35;
+  margin: 0 0 0.15rem;
+}
+
+.wod5e-mage-grimorio-row > .wod5e-mage-grimorio-pairings > li > img {
+  align-self: center;
+  border: 0;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  flex: 0 0 14px;
+  height: 14px;
+  width: 14px;
+}
+
+.wod5e-mage-grimorio-row > .wod5e-mage-grimorio-pairings > li > b {
+  color: var(--mage-oro, #d9a827);
+  white-space: nowrap;
+}
+
+.wod5e-mage-grimorio-row > .wod5e-mage-grimorio-scopes {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 0.78rem;
+  margin: 0.2rem 0 0.4rem;
+  padding: 0 0.6rem;
+}
+
+.wod5e-mage-grimorio-row > .wod5e-mage-grimorio-scopes > b {
+  color: var(--mage-oro-chiaro, #f5e7b2);
+}
+
 .wod5e-mage-grimorio-extras {
   display: flex;
   flex-wrap: wrap;

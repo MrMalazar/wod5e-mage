@@ -8,7 +8,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 1,
     "extras": [],
-    "text": "sai ogni distanza al centimetro, e senti il vano che la parete nasconde"
+    "text": "La tua percezione spaziale ti consente di sentire e misurare ogni centimetro dello spazio intorno a te, rivelando nascondigli, intercapedini e via dicendo. All'opposto, sai quando ce n'è poco: se ce n'è poco, qualcosa o qualcuno lo occupa.",
+    "pairings": [],
+    "scopes": "Area per misurare un luogo."
   },
   {
     "id": "correspondence-1-sapere-dove-sei",
@@ -16,29 +18,57 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 1,
     "extras": [],
-    "text": "l'orientamento perfetto: la strada di casa esiste sempre, anche sottoterra e al buio"
+    "text": "Sai sempre dov'è casa, il nord, l'uscita: l'orientamento non ti lascia nemmeno sottoterra o al buio.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "sai dov'è «meglio» che tu sia."
+      }
+    ],
+    "scopes": "Durata 2 ti copre la scena."
   },
   {
     "id": "correspondence-1-mappare-la-zona",
     "name": "Mappare la zona",
     "sphere": "correspondence",
     "level": 1,
-    "extras": [
+    "extras": [],
+    "text": "Percepisci e mappi l'ambiente intorno a te. A seconda della Sfera collegata, sai anche cosa c'è di specifico.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "nodi del fato, eventi della sorte, luoghi fortunati e sfortunati etc.."
+      },
+      {
+        "sphere": "forces",
+        "text": "circuiti elettrici, fonti di calore, dove si muove l'energia etc.."
+      },
       {
         "sphere": "matter",
-        "level": 1,
-        "required": true
+        "text": "oggetti, edifici, planimetrie, un oggetto specifico etc.."
+      },
+      {
+        "sphere": "mind",
+        "text": "un sogno specifico, quanto è propagata un'idea etc.."
+      },
+      {
+        "sphere": "prime",
+        "text": "Magick nell'area, dove tocca, Quintessenza etc.."
+      },
+      {
+        "sphere": "spirit",
+        "text": "anime, crepe nell'Umbra, creature spirituali etc.."
+      },
+      {
+        "sphere": "time",
+        "text": "anomalie, alterazioni del flusso nell'ambiente etc.."
+      },
+      {
+        "sphere": "life",
+        "text": "insetti, piante, animali, persone etc.."
       }
     ],
-    "text": "+ Materia ●: la planimetria dei dintorni ti si disegna in testa, presenze comprese"
-  },
-  {
-    "id": "correspondence-1-cercare-nell-area",
-    "name": "Cercare nell'area",
-    "sphere": "correspondence",
-    "level": 1,
-    "extras": [],
-    "text": "+ la Sfera del filtro ●: scandagli l'isolato e trovi solo ciò che cerchi: armi, vivi, magia"
+    "scopes": "Area per le dimensioni dell'effetto. Precisione per sapere più informazioni. Durata per tenerlo nella scena."
   },
   {
     "id": "correspondence-2-accorciare-la-strada",
@@ -46,7 +76,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 2,
     "extras": [],
-    "text": "i tuoi passi valgono doppio: la scorciatoia che esiste solo per te"
+    "text": "Stringi lo spazio davanti a te: il corridoio, il vicolo, il tratto di strada che hai davanti si accorcia, e i tuoi passi valgono doppio. Non sparisci e non riappari: cammini, e arrivi prima di quanto chiunque si aspetti. Pieghi un tratto alla volta, non un quartiere.",
+    "pairings": [],
+    "scopes": "Area per quanto tratto stringi. Durata 1 per la fuga, 2 per la scena. Bersagli per chi cammina con te."
   },
   {
     "id": "correspondence-2-agire-su-cio-che-non-vedi",
@@ -54,21 +86,61 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 2,
     "extras": [],
-    "text": "+ la Sfera del bersaglio, Regola del Ponte: il ponte ti porta, l'altra Sfera lavora"
+    "text": "Getti un ponte fino a un luogo lontano, e l'altra Sfera lavora da là come se fossi sul posto. La Corrispondenza porta, l'altra Sfera fa.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "far inceppare la pistola nella stanza accanto etc.."
+      },
+      {
+        "sphere": "forces",
+        "text": "spegnere le luci del magazzino in fondo alla via etc.."
+      },
+      {
+        "sphere": "matter",
+        "text": "aprire la cassaforte dall'altra parte della città etc.."
+      },
+      {
+        "sphere": "mind",
+        "text": "sussurrare un pensiero a chi dorme a chilometri da te etc.."
+      },
+      {
+        "sphere": "prime",
+        "text": "attingere Quintessenza da un Nodo lontano etc.."
+      },
+      {
+        "sphere": "spirit",
+        "text": "parlare con lo spirito del fiume senza andarci etc.."
+      },
+      {
+        "sphere": "time",
+        "text": "rallentare il corridoio dove passeranno i sicari etc.."
+      },
+      {
+        "sphere": "life",
+        "text": "chiudere la ferita del compagno rimasto indietro etc.."
+      }
+    ],
+    "scopes": "Portata per la distanza. Gli altri Ambiti li dichiara l'effetto dell'altra Sfera."
   },
   {
     "id": "correspondence-2-chiaroveggenza",
     "name": "Chiaroveggenza",
     "sphere": "correspondence",
     "level": 2,
-    "extras": [
+    "extras": [],
+    "text": "Apri una finestra su un luogo lontano e lo guardi adesso: vedi e senti, non tocchi. La Precisione dice quanto a fondo: 1 la stanza, 3 il foglio sulla scrivania, 5 il numero di serie sulla pistola.",
+    "pairings": [
       {
         "sphere": "mind",
-        "level": 1,
-        "required": false
+        "text": "più finestre insieme."
+      },
+      {
+        "sphere": "time",
+        "text": "la finestra guarda com'era ieri."
       }
     ],
-    "text": "osservi un luogo remoto, in tempo reale. Più luoghi insieme: + Mente ●"
+    "scopes": "Portata per la distanza. Precisione per i dettagli. Durata 1 per lo scontro, 2 per la scena."
   },
   {
     "id": "correspondence-2-marchiare-un-bersaglio",
@@ -76,7 +148,30 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 2,
     "extras": [],
-    "text": "leghi un filo invisibile: ovunque vada, tu sai dov'è. E il filo corre in due sensi"
+    "text": "Leghi un filo invisibile a qualcuno o a qualcosa: ovunque vada, sai dov'è. Il filo corre in due sensi: chi sa cercarlo risale fino a te. La Sfera compagna dice cosa marchi, e cosa senti lungo il filo.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "marchi il corpo: sai dov'è, e se è ferito, vivo o morto etc.."
+      },
+      {
+        "sphere": "mind",
+        "text": "marchi la mente: sai dov'è e come sta, paura, fretta, calma etc.."
+      },
+      {
+        "sphere": "spirit",
+        "text": "marchi l'anima: lo segui anche nell'Umbra, e oltre la morte."
+      },
+      {
+        "sphere": "forces",
+        "text": "marchi l'energia che porta: il telefono acceso, l'auto in moto etc.."
+      },
+      {
+        "sphere": "matter",
+        "text": "marchi un oggetto addosso a lui: l'anello, la giacca, la pistola etc.. Se lo lascia, il filo resta sull'oggetto."
+      }
+    ],
+    "scopes": "Durata per quanto canta il marchio (7 per la cronaca). Bersagli per più marchi in un colpo. Portata per quanto lontano lo senti."
   },
   {
     "id": "correspondence-2-schermare-un-luogo",
@@ -84,7 +179,18 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 2,
     "extras": [],
-    "text": "ispessisci lo spazio: chi scruta o divina perde successi"
+    "text": "Ispessisci lo spazio attorno a un luogo: chi scruta o divina da fuori perde successi, chi vuole entrarci con un salto trova il muro più spesso.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "lo schermo morde chi lo tocca."
+      },
+      {
+        "sphere": "mind",
+        "text": "chi guarda dentro vede quello che vuoi tu."
+      }
+    ],
+    "scopes": "Area 1 la stanza, 2 l'edificio. Durata per quanto regge. Condizioni se morde, o se lascia passare solo i tuoi."
   },
   {
     "id": "correspondence-2-sentire-il-filo",
@@ -92,73 +198,94 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 2,
     "extras": [],
-    "text": "ti accorgi di essere marchiato, osservato o cercato, e sai da che distanza"
+    "text": "Ti accorgi di essere marchiato, osservato o cercato, e sai da che distanza arriva il filo.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "sai anche chi."
+      },
+      {
+        "sphere": "prime",
+        "text": "sai con quale Magick."
+      }
+    ],
+    "scopes": "Durata 2 per vegliare tutta la scena. Precisione per il punto esatto da cui parte il filo."
   },
   {
     "id": "correspondence-3-affacciarti-oltre-il-varco",
     "name": "Affacciarti oltre il varco",
     "sphere": "correspondence",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Apri un varco quanto un braccio e la tua mano lavora dall'altra parte: gira la maniglia, preme il tasto, afferra etc..",
+    "pairings": [
       {
         "sphere": "life",
-        "level": 2,
-        "required": true
+        "text": "ci passa la tua mano, ed è una mano."
+      },
+      {
+        "sphere": "matter",
+        "text": "ci passa un oggetto al posto della mano."
       }
     ],
-    "text": "+ Vita ●●: la tua mano attraversa lo spazio e apre la porta dall'altro lato"
+    "scopes": "Portata per la distanza. Durata 1 per il tempo di girare la maniglia."
   },
   {
     "id": "correspondence-3-disperdere-oggetti-lontano",
     "name": "Disperdere oggetti lontano",
     "sphere": "correspondence",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Quel che hai davanti si sparpaglia in nascondigli sparsi entro dieci chilometri.",
+    "pairings": [
       {
         "sphere": "entropy",
-        "level": 2,
-        "required": true
+        "text": "il caso sceglie i nascondigli, e nessuno sa dove, nemmeno tu."
+      },
+      {
+        "sphere": "matter",
+        "text": "i nascondigli li scegli tu."
       }
     ],
-    "text": "+ Entropia ●●: le prove si sparpagliano in dieci chilometri di nascondigli casuali"
+    "scopes": "Bersagli per quante cose. Portata per quanto lontano finiscono. Potenza (peso) se sono pesanti."
   },
   {
     "id": "correspondence-3-estrarre-senza-bisturi",
     "name": "Estrarre senza bisturi",
     "sphere": "correspondence",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Il proiettile, la scheggia, il chip lasciano il ferito da soli. Da solo è uno strappo, Volgare.",
+    "pairings": [
       {
         "sphere": "life",
-        "level": 2,
-        "required": false
+        "text": "sembra medicina."
       },
       {
         "sphere": "matter",
-        "level": 2,
-        "required": false
+        "text": "sembra fatto da un congegno."
       }
     ],
-    "text": "il proiettile lascia il ferito da solo; + Vita ●● perché sembri medicina, da un congegno + Materia ●●"
+    "scopes": "Precisione per la scheggia giusta e non il resto. Bersagli per più feriti."
   },
   {
     "id": "correspondence-3-richiamare-un-oggetto-distante",
     "name": "Richiamare un oggetto distante",
     "sphere": "correspondence",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Tiri il filo e la cosa arriva in mano tua, da dove sta. Da solo è uno strappo, Volgare.",
+    "pairings": [
       {
         "sphere": "matter",
-        "level": 2,
-        "required": false
+        "text": "arriva pulita, per quello che è."
       },
       {
         "sphere": "life",
-        "level": 2,
-        "required": false
+        "text": "arriva un corpo vivo."
       }
     ],
-    "text": "il filo si tira e la cosa arriva. Da solo è strappo, Volgare; pulito con + Materia ●●, vivo con + Vita ●●"
+    "scopes": "Portata per la distanza (6 dall'altra parte del mondo). Potenza (peso) per quanto pesa. Precisione se la cosa è una fra tante."
   },
   {
     "id": "correspondence-3-scambiare-due-cose-di-posto",
@@ -166,7 +293,18 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 3,
     "extras": [],
-    "text": "quello che era lì è qui, e viceversa: nessuno ha viaggiato. Senza Sfere compagne, due strappi"
+    "text": "Quello che era lì è qui, e viceversa: nessuno ha viaggiato. Senza Sfere compagne sono due strappi, Volgare.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "due oggetti si scambiano per quello che sono."
+      },
+      {
+        "sphere": "life",
+        "text": "due corpi."
+      }
+    ],
+    "scopes": "Portata per la distanza fra i due. Potenza (peso). Bersagli 2 per due persone."
   },
   {
     "id": "correspondence-3-teletrasportarti",
@@ -174,7 +312,18 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 3,
     "extras": [],
-    "text": "sparisci qui, riappari là, con piccoli carichi. Gruppi e veicoli: ●●●●"
+    "text": "Sparisci qui e riappari là, con quel che porti addosso. Volgare se qualcuno guarda. Gruppi e veicoli chiedono il quarto pallino.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "il corpo passa restando un corpo, e il gesto si spiega."
+      },
+      {
+        "sphere": "matter",
+        "text": "passa anche il carico, intero."
+      }
+    ],
+    "scopes": "Portata per la distanza. Bersagli per i compagni. Potenza (peso) per il carico."
   },
   {
     "id": "correspondence-4-ancorare-un-bersaglio",
@@ -182,7 +331,22 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 4,
     "extras": [],
-    "text": "lo spazio attorno a lui si rifiuta: nessun varco lo porta via"
+    "text": "Lo spazio attorno a lui si rifiuta di aprirsi: nessun varco, salto o richiamo lo porta via. Contro chi vuole strapparlo vince la Potenza più alta.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "ancori un corpo."
+      },
+      {
+        "sphere": "matter",
+        "text": "ancori un oggetto."
+      },
+      {
+        "sphere": "spirit",
+        "text": "ancori uno spirito fuori dall'Umbra."
+      }
+    ],
+    "scopes": "Durata per quanto regge. Potenza (epicità) nel braccio di ferro. Bersagli per più persone."
   },
   {
     "id": "correspondence-4-aprire-un-portale-stabile",
@@ -190,7 +354,18 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 4,
     "extras": [],
-    "text": "una soglia spalancata tra due punti, finché la mantieni"
+    "text": "Una soglia spalancata tra due punti: chi ci passa, passa, senza contare i Bersagli.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "ci passa un tir intero."
+      },
+      {
+        "sphere": "mind",
+        "text": "chi non sa che c'è non lo vede."
+      }
+    ],
+    "scopes": "Portata per la distanza. Durata per quanto resta aperto (4 la sessione). Potenza (peso) per tenerlo largo. Condizioni 1 se si apre solo per i tuoi."
   },
   {
     "id": "correspondence-4-piegare-una-strada",
@@ -198,7 +373,18 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 4,
     "extras": [],
-    "text": "chi la percorre arriva dove hai deciso tu, convinto di aver camminato dritto"
+    "text": "Chi la percorre arriva dove hai deciso tu, convinto di aver camminato dritto.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "non si accorge nemmeno del tempo perso."
+      },
+      {
+        "sphere": "time",
+        "text": "ci arriva quando dici tu."
+      }
+    ],
+    "scopes": "Area per il tratto di strada. Durata per quanto dura. Condizioni se vale solo per certi passi."
   },
   {
     "id": "correspondence-4-sigillare-una-tasca-spaziale",
@@ -206,7 +392,18 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 4,
     "extras": [],
-    "text": "chiudi una stanza fuori dalla geometria del mondo"
+    "text": "Chiudi una stanza fuori dalla geometria del mondo: da fuori non c'è, da dentro non si esce finché non riapri.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "dentro il tempo corre diverso."
+      },
+      {
+        "sphere": "prime",
+        "text": "dentro la Quintessenza non si disperde."
+      }
+    ],
+    "scopes": "Area per la grandezza. Durata per quanto resta chiusa. Condizioni 1 se si riapre all'alba."
   },
   {
     "id": "correspondence-5-riscrivere-la-geometria",
@@ -214,7 +411,22 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 5,
     "extras": [],
-    "text": "luoghi fusi, edifici spostati, continenti avvicinati"
+    "text": "Fondi due luoghi, sposti un edificio, avvicini due continenti etc..: la mappa cambia perché l'hai deciso tu. Volgare con testimoni per forza di cose.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "quel che sposti resta intero."
+      },
+      {
+        "sphere": "time",
+        "text": "il mondo ricorda che è sempre stato così."
+      },
+      {
+        "sphere": "mind",
+        "text": "chi ci vive ricorda che è sempre stato così."
+      }
+    ],
+    "scopes": "Area, Potenza (peso ed epicità), Durata: tutti alti."
   },
   {
     "id": "entropy-1-individuare-il-punto-debole",
@@ -222,7 +434,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 1,
     "extras": [],
-    "text": "la crepa nel muro, nell'alibi, nel piano"
+    "text": "la crepa nel muro, nell'alibi, nel piano",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-1-fiutare-la-menzogna",
@@ -230,7 +444,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 1,
     "extras": [],
-    "text": "il racconto che stona; le menti si difendono con la Volontà"
+    "text": "il racconto che stona; le menti si difendono con la Volontà",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-1-fiutare-il-pericolo",
@@ -238,7 +454,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 1,
     "extras": [],
-    "text": "sai quanto è pericolosa la stanza prima di entrarci"
+    "text": "sai quanto è pericolosa la stanza prima di entrarci",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-1-pesare-le-probabilita",
@@ -246,7 +464,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 1,
     "extras": [],
-    "text": "quanto è probabile che il banco sballi, che piova, che sopravvivi"
+    "text": "quanto è probabile che il banco sballi, che piova, che sopravvivi",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-1-leggere-il-conto-alla-rovescia",
@@ -254,7 +474,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 1,
     "extras": [],
-    "text": "quanto resta a un oggetto, a una struttura, a un accordo prima che ceda"
+    "text": "quanto resta a un oggetto, a una struttura, a un accordo prima che ceda",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-2-far-durare",
@@ -262,7 +484,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 2,
     "extras": [],
-    "text": "l'Entropia al contrario: la corda regge, il motore parte, la cosa vecchia arriva a fine giornata"
+    "text": "l'Entropia al contrario: la corda regge, il motore parte, la cosa vecchia arriva a fine giornata",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-2-inclinare-una-scelta",
@@ -276,7 +500,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Mente ●●: la Mente gli mette l'idea in testa, l'Entropia fa sì che sia proprio quella a tornargli in mente"
+    "text": "+ Mente ●●: la Mente gli mette l'idea in testa, l'Entropia fa sì che sia proprio quella a tornargli in mente",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-2-passare-inosservato",
@@ -284,7 +510,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 2,
     "extras": [],
-    "text": "gli sguardi scivolano altrove: nessuno ricorda di averti visto"
+    "text": "gli sguardi scivolano altrove: nessuno ricorda di averti visto",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-2-provocare-un-guasto",
@@ -292,7 +520,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 2,
     "extras": [],
-    "text": "la probabilità di rottura sale al cento per cento: l'auto tace"
+    "text": "la probabilità di rottura sale al cento per cento: l'auto tace",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-2-seminare-gli-inseguitori",
@@ -300,7 +530,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 2,
     "extras": [],
-    "text": "chi ti segue colleziona gomme a terra, buche e semafori rossi"
+    "text": "chi ti segue colleziona gomme a terra, buche e semafori rossi",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-2-truccare-la-fortuna",
@@ -308,7 +540,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 2,
     "extras": [],
-    "text": "il dado, la carta, l'ingranaggio che si inceppa al momento giusto"
+    "text": "il dado, la carta, l'ingranaggio che si inceppa al momento giusto",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-3-deviare-la-malasorte",
@@ -316,7 +550,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 3,
     "extras": [],
-    "text": "ogni colpo ti manca per un soffio, e sembra sempre fortuna"
+    "text": "ogni colpo ti manca per un soffio, e sembra sempre fortuna",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-3-distribuire-fortuna-e-sfortuna",
@@ -324,7 +560,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 3,
     "extras": [],
-    "text": "pieghi una serata intera: la bisca ti ama, il rivale colleziona disastri"
+    "text": "pieghi una serata intera: la bisca ti ama, il rivale colleziona disastri",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-3-ferire-uno-spirito",
@@ -343,7 +581,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: disfi l'effimera dall'interno; via diretta: + Spirito ●●●"
+    "text": "+ Primordio ●●: disfi l'effimera dall'interno; via diretta: + Spirito ●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-3-ridurre-in-polvere-un-oggetto",
@@ -362,7 +602,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Tempo ●●: anni di decadimento in un istante; via diretta: + Materia ●●●"
+    "text": "+ Tempo ●●: anni di decadimento in un istante; via diretta: + Materia ●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-3-rompere-la-catena",
@@ -370,7 +612,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 3,
     "extras": [],
-    "text": "isoli un guasto perché smetta di propagarsi: il disastro si ferma dov'è"
+    "text": "isoli un guasto perché smetta di propagarsi: il disastro si ferma dov'è",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-3-scegliere-il-domani-piu-comodo",
@@ -384,7 +628,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Tempo ●●: tra i futuri possibili, spingi il mondo verso quello che preferisci"
+    "text": "+ Tempo ●●: tra i futuri possibili, spingi il mondo verso quello che preferisci",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-3-spezzare-una-maledizione",
@@ -392,7 +638,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 3,
     "extras": [],
-    "text": "disfi il nodo di sfortuna stretto da altri; la Sfera d'origine aiuta"
+    "text": "disfi il nodo di sfortuna stretto da altri; la Sfera d'origine aiuta",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-4-benedire-o-maledire",
@@ -406,7 +654,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "riscrivi il destino di un vivente; potenziata: + Vita ●●"
+    "text": "riscrivi il destino di un vivente; potenziata: + Vita ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-4-creare-fortuna-dal-nulla",
@@ -420,7 +670,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●●: aggiungi al conto invece di spostarlo. Il mondo se ne accorge, e il resto lo reclamerà"
+    "text": "+ Primordio ●●●: aggiungi al conto invece di spostarlo. Il mondo se ne accorge, e il resto lo reclamerà",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-4-far-marcire-un-corpo",
@@ -439,7 +691,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "la mortalità accelera nella carne; anche ●●● + Vita ●●, oppure + Vita ●●●●"
+    "text": "la mortalità accelera nella carne; anche ●●● + Vita ●●, oppure + Vita ●●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-4-rendere-un-luogo-immune-al-caso",
@@ -447,7 +701,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 4,
     "extras": [],
-    "text": "dentro quel perimetro gli incidenti smettono di capitare, e la fortuna pure"
+    "text": "dentro quel perimetro gli incidenti smettono di capitare, e la fortuna pure",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-5-intrecciare-destini",
@@ -455,7 +711,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 5,
     "extras": [],
-    "text": "due vite legate per sempre, nel bene e nella rovina"
+    "text": "due vite legate per sempre, nel bene e nella rovina",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-5-riscrivere-un-destino-da-zero",
@@ -469,7 +727,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●●●: la vita che non era prevista. Il conto si sbilancia, e presenta il resto quando vuole lui"
+    "text": "+ Primordio ●●●●: la vita che non era prevista. Il conto si sbilancia, e presenta il resto quando vuole lui",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "entropy-5-sigillare-un-giuramento",
@@ -477,7 +737,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "entropy",
     "level": 5,
     "extras": [],
-    "text": "il patto punisce da solo chi lo spezza"
+    "text": "il patto punisce da solo chi lo spezza",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-1-allargare-lo-spettro",
@@ -485,7 +747,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 1,
     "extras": [],
-    "text": "infrarossi, correnti, radiazioni: il buio ti si apre"
+    "text": "infrarossi, correnti, radiazioni: il buio ti si apre",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-1-leggere-il-calore-rimasto",
@@ -493,7 +757,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 1,
     "extras": [],
-    "text": "chi era seduto lì, quale motore è ancora tiepido, quanto tempo fa"
+    "text": "chi era seduto lì, quale motore è ancora tiepido, quanto tempo fa",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-1-sentire-la-corrente",
@@ -501,7 +767,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 1,
     "extras": [],
-    "text": "la segui dentro i muri: dove passa, dove è staccata, chi la sta usando"
+    "text": "la segui dentro i muri: dove passa, dove è staccata, chi la sta usando",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-1-vedere-attraverso-i-muri",
@@ -509,7 +777,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 1,
     "extras": [],
-    "text": "leggi le radiazioni oltre la parete: sagome nitide nella stanza accanto"
+    "text": "leggi le radiazioni oltre la parete: sagome nitide nella stanza accanto",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-2-amplificare-o-spegnere-un-suono",
@@ -517,7 +787,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "il sussurro che attraversa la sala, o la porta che si chiude in silenzio"
+    "text": "il sussurro che attraversa la sala, o la porta che si chiude in silenzio",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-2-curvare-la-luce-o-il-suono",
@@ -531,7 +803,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "scompari alla vista, o all'orecchio. Su un vivente in movimento: + Vita ●●"
+    "text": "scompari alla vista, o all'orecchio. Su un vivente in movimento: + Vita ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-2-deviare-un-proiettile",
@@ -539,7 +813,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "acceleri o rallenti la massa in volo"
+    "text": "acceleri o rallenti la massa in volo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-2-dirigere-l-energia-in-scena",
@@ -547,7 +823,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "fuoco, vento, corrente: c'è già, e lo pieghi"
+    "text": "fuoco, vento, corrente: c'è già, e lo pieghi",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-2-governare-l-attrito",
@@ -555,7 +833,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "il pavimento diventa ghiaccio, o colla: chi corre se ne accorge"
+    "text": "il pavimento diventa ghiaccio, o colla: chi corre se ne accorge",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-2-proiettare-luce-e-suono",
@@ -569,7 +849,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: un'immagine vera, visibile a chiunque, telecamere incluse"
+    "text": "+ Primordio ●●: un'immagine vera, visibile a chiunque, telecamere incluse",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-2-rubare-il-calore",
@@ -577,7 +859,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "il gelo improvviso in una stanza; il calore tolto va comunque da qualche parte"
+    "text": "il gelo improvviso in una stanza; il calore tolto va comunque da qualche parte",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-2-spegnere-e-ravvivare",
@@ -585,7 +869,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "la fiamma divampa o muore, il motore riparte; dal nulla serve il Primordio"
+    "text": "la fiamma divampa o muore, il motore riparte; dal nulla serve il Primordio",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-2-vestire-uno-scudo-di-forza",
@@ -593,7 +879,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 2,
     "extras": [],
-    "text": "un'armatura invisibile di energia smorza i colpi in arrivo"
+    "text": "un'armatura invisibile di energia smorza i colpi in arrivo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-3-camminare-dove-non-si-cammina",
@@ -601,7 +889,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "attrito e gravità insieme: la parete verticale, la superficie dell'acqua"
+    "text": "attrito e gravità insieme: la parete verticale, la superficie dell'acqua",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-3-convertire-un-energia",
@@ -609,7 +899,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "luce in calore, suono in urto; la scarica drenata dall'ambiente"
+    "text": "luce in calore, suono in urto; la scarica drenata dall'ambiente",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-3-evocare-energia-dal-nulla",
@@ -628,7 +920,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: fulmine senza rete, fiamma senza innesco. Terra e acqua: Materia ●●● + Primordio ●●"
+    "text": "+ Primordio ●●: fulmine senza rete, fiamma senza innesco. Terra e acqua: Materia ●●● + Primordio ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-3-fermare-cio-che-corre",
@@ -636,7 +930,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "l'auto in corsa, il treno, il corpo lanciato: la cinetica gli viene tolta"
+    "text": "l'auto in corsa, il treno, il corpo lanciato: la cinetica gli viene tolta",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-3-levitare-e-volare",
@@ -644,7 +940,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "il peso ti obbedisce: sali dolcemente, o fendi il cielo di fretta"
+    "text": "il peso ti obbedisce: sali dolcemente, o fendi il cielo di fretta",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-3-onda-d-urto",
@@ -652,7 +950,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "il suono si fa pugno: tutto attorno al punto d'impatto vola"
+    "text": "il suono si fa pugno: tutto attorno al punto d'impatto vola",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-3-spegnere-l-elettronica",
@@ -660,7 +960,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "un impulso muto frigge ogni circuito nella stanza"
+    "text": "un impulso muto frigge ogni circuito nella stanza",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-3-telecinesi",
@@ -668,7 +970,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "la cinetica obbedisce: sollevi, scagli, blocchi"
+    "text": "la cinetica obbedisce: sollevi, scagli, blocchi",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-4-accendere-un-piccolo-sole",
@@ -682,7 +986,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: una fonte stabile e autonoma, che nessuna rete alimenta"
+    "text": "+ Primordio ●●: una fonte stabile e autonoma, che nessuna rete alimenta",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-4-concentrare-ogni-energia",
@@ -690,7 +996,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 4,
     "extras": [],
-    "text": "tutta quella in scena, in un punto solo: quello che regge, dopo, è poco"
+    "text": "tutta quella in scena, in un punto solo: quello che regge, dopo, è poco",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-4-dominare-il-meteo",
@@ -698,7 +1006,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 4,
     "extras": [],
-    "text": "pioggia, nebbia, gelo su un perimetro intero"
+    "text": "pioggia, nebbia, gelo su un perimetro intero",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-4-proiettare-una-scena-intera",
@@ -717,7 +1027,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Mente ●●●● + Primordio ●●●●: la scena finta che tutti vedono e toccano"
+    "text": "+ Mente ●●●● + Primordio ●●●●: la scena finta che tutti vedono e toccano",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-4-scatenare-la-tempesta",
@@ -731,7 +1043,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●● a ciel sereno; tifone e tempesta di fuoco si comprano in espansione"
+    "text": "+ Primordio ●● a ciel sereno; tifone e tempesta di fuoco si comprano in espansione",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-4-togliere-l-energia-a-un-area",
@@ -739,7 +1053,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 4,
     "extras": [],
-    "text": "buio, silenzio, gelo e immobilità su un isolato: la Sfera al contrario"
+    "text": "buio, silenzio, gelo e immobilità su un isolato: la Sfera al contrario",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "forces-5-inventare-un-energia-nuova",
@@ -747,7 +1063,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 5,
     "extras": [],
-    "text": "inventi nuove regole su come funziona l'energia: il fuoco freddo, la luce che nutre, la gravità laterale"
+    "text": "inventi nuove regole su come funziona l'energia: il fuoco freddo, la luce che nutre, la gravità laterale",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-1-analizzare-un-oggetto",
@@ -755,7 +1073,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 1,
     "extras": [],
-    "text": "composizione, doppi fondi, il punto dove cederà"
+    "text": "composizione, doppi fondi, il punto dove cederà",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-1-sapere-cosa-c-era-prima",
@@ -763,7 +1083,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 1,
     "extras": [],
-    "text": "il residuo parla: cosa conteneva, chi l'ha usato, quanto tempo fa"
+    "text": "il residuo parla: cosa conteneva, chi l'ha usato, quanto tempo fa",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-1-riconoscere-il-commestibile",
@@ -777,7 +1099,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●: un'occhiata dice se il piatto nutre, marcisce o avvelena"
+    "text": "+ Vita ●: un'occhiata dice se il piatto nutre, marcisce o avvelena",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-2-aprire-appigli-nella-parete",
@@ -785,7 +1109,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "la facciata liscia germoglia maniglie su misura per le tue mani"
+    "text": "la facciata liscia germoglia maniglie su misura per le tue mani",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-2-ferire-un-vampiro",
@@ -799,7 +1125,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "carne morta: la tocchi come materia. Via Vita: + Vita ●●●"
+    "text": "carne morta: la tocchi come materia. Via Vita: + Vita ●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-2-invecchiare-un-oggetto",
@@ -813,7 +1141,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Tempo ●●●: ruggine e polvere di decenni in un minuto"
+    "text": "+ Tempo ●●●: ruggine e polvere di decenni in un minuto",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-2-modellare-un-passe-partout",
@@ -821,7 +1151,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "la chiave sbagliata cola e si riassesta nei denti giusti"
+    "text": "la chiave sbagliata cola e si riassesta nei denti giusti",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-2-riforgiare-le-munizioni",
@@ -829,7 +1161,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "i proiettili in canna cambiano lega: argento, gomma, sale"
+    "text": "i proiettili in canna cambiano lega: argento, gomma, sale",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-2-rimettere-a-posto",
@@ -837,7 +1171,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "la crepa si chiude, l'ingranaggio torna in tolleranza, lo strappo si richiude"
+    "text": "la crepa si chiude, l'ingranaggio torna in tolleranza, lo strappo si richiude",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-2-trasformare-l-aria-in-sonnifero",
@@ -845,7 +1181,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "l'aria della stanza si fa dolciastra, e la sala si addormenta"
+    "text": "l'aria della stanza si fa dolciastra, e la sala si addormenta",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-2-trasmutare-una-sostanza",
@@ -853,7 +1191,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 2,
     "extras": [],
-    "text": "piombo in oro: forma, volume e stato intatti; i preziosi costano successi"
+    "text": "piombo in oro: forma, volume e stato intatti; i preziosi costano successi",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-3-alzare-un-muro-dal-terreno",
@@ -861,7 +1201,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 3,
     "extras": [],
-    "text": "l'asfalto si solleva e ti fa da barricata"
+    "text": "l'asfalto si solleva e ti fa da barricata",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-3-animare-ossa-nude",
@@ -885,7 +1227,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: lo scheletro si alza, struttura senz'anima; cadavere intero: + Vita ●●● + Primordio ●●"
+    "text": "+ Primordio ●●: lo scheletro si alza, struttura senz'anima; cadavere intero: + Vita ●●● + Primordio ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-3-appesantire-o-alleggerire",
@@ -893,7 +1237,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 3,
     "extras": [],
-    "text": "la refurtiva pesa piume, la porta del nemico pesa tonnellate"
+    "text": "la refurtiva pesa piume, la porta del nemico pesa tonnellate",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-3-evocare-un-oggetto-dal-nulla",
@@ -907,7 +1253,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: il coltello che prima non c'era; congegni complessi: ●●●●"
+    "text": "+ Primordio ●●: il coltello che prima non c'era; congegni complessi: ●●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-3-guastare-senza-rompere",
@@ -915,7 +1263,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 3,
     "extras": [],
-    "text": "l'oggetto sembra intatto e smette di funzionare: nessuno capisce perché"
+    "text": "l'oggetto sembra intatto e smette di funzionare: nessuno capisce perché",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-3-rimodellare-o-disintegrare",
@@ -934,7 +1284,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "la serranda cola. Per disintegrare anche: + Entropia ●●● + Tempo ●●"
+    "text": "la serranda cola. Per disintegrare anche: + Entropia ●●● + Tempo ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-3-rinforzare-gli-abiti",
@@ -942,7 +1294,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 3,
     "extras": [],
-    "text": "la giacca pesa uguale e ferma i coltelli come maglia d'acciaio"
+    "text": "la giacca pesa uguale e ferma i coltelli come maglia d'acciaio",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-4-costruire-macchinari-complessi",
@@ -950,7 +1304,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 4,
     "extras": [],
-    "text": "dal rottame al motore funzionante, con la tua firma"
+    "text": "dal rottame al motore funzionante, con la tua firma",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-4-innestare-la-macchina-nella-carne",
@@ -969,7 +1325,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●●●● + Primordio ●●●: il metallo entra nel corpo, e il corpo lo accetta come suo"
+    "text": "+ Vita ●●●● + Primordio ●●●: il metallo entra nel corpo, e il corpo lo accetta come suo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-4-rifare-un-edificio",
@@ -977,7 +1335,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 4,
     "extras": [],
-    "text": "la struttura si riassesta: pareti spostate, piani aggiunti, la casa che cambia pianta"
+    "text": "la struttura si riassesta: pareti spostate, piani aggiunti, la casa che cambia pianta",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-4-sigillare-per-sempre",
@@ -985,7 +1345,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 4,
     "extras": [],
-    "text": "la porta smette di essere una porta: muro pieno, senza giunzione"
+    "text": "la porta smette di essere una porta: muro pieno, senza giunzione",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-5-creare-una-lega-impossibile",
@@ -993,7 +1355,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 5,
     "extras": [],
-    "text": "leggera come stoffa e dura come nient'altro, e nessun laboratorio saprà dire cos'è"
+    "text": "leggera come stoffa e dura come nient'altro, e nessun laboratorio saprà dire cos'è",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "matter-5-rendere-permanente-il-mutamento",
@@ -1001,7 +1365,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 5,
     "extras": [],
-    "text": "quello che hai trasformato smette di poter tornare indietro"
+    "text": "quello che hai trasformato smette di poter tornare indietro",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-1-leggere-aure-ed-emozioni",
@@ -1009,7 +1375,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 1,
     "extras": [],
-    "text": "la paura sotto il sorriso; la profondità la comprano i successi"
+    "text": "la paura sotto il sorriso; la profondità la comprano i successi",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-1-leggere-pensieri-e-ricordi",
@@ -1017,7 +1385,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 1,
     "extras": [],
-    "text": "fino al sepolto, coi successi; le menti resistono con la Volontà"
+    "text": "fino al sepolto, coi successi; le menti resistono con la Volontà",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-1-sentire-la-stanza",
@@ -1025,7 +1395,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 1,
     "extras": [],
-    "text": "l'umore collettivo di una folla o di un luogo, e da dove sta arrivando"
+    "text": "l'umore collettivo di una folla o di un luogo, e da dove sta arrivando",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-2-blindare-un-ricordo",
@@ -1033,7 +1405,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 2,
     "extras": [],
-    "text": "quel ricordo diventa cassaforte: nessuna lettura, nessuna riscrittura"
+    "text": "quel ricordo diventa cassaforte: nessuna lettura, nessuna riscrittura",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-2-impiantare-un-illusione-mentale",
@@ -1047,7 +1421,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "la vedono solo i bersagli scelti; che ferisce: ●●● (+ Vita ●● per gli Aggravati)"
+    "text": "la vedono solo i bersagli scelti; che ferisce: ●●● (+ Vita ●● per gli Aggravati)",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-2-non-restare-in-memoria",
@@ -1055,7 +1431,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 2,
     "extras": [],
-    "text": "ti vedono, ti parlano, e mezz'ora dopo saprebbero descrivere soltanto un tipo qualunque"
+    "text": "ti vedono, ti parlano, e mezz'ora dopo saprebbero descrivere soltanto un tipo qualunque",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-2-pilotare-l-umore",
@@ -1063,7 +1441,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 2,
     "extras": [],
-    "text": "accendi o spegni un'emozione che c'è già"
+    "text": "accendi o spegni un'emozione che c'è già",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-2-schermare-i-tuoi-pensieri",
@@ -1071,7 +1451,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 2,
     "extras": [],
-    "text": "mura attorno alla tua psiche: chi legge perde successi"
+    "text": "mura attorno alla tua psiche: chi legge perde successi",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-2-seminare-un-idea",
@@ -1085,7 +1467,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "gliela metti in testa, e da lì in poi è una fra le tante. + Entropia ●● perché sia proprio quella a tornargli in mente"
+    "text": "gliela metti in testa, e da lì in poi è una fra le tante. + Entropia ●● perché sia proprio quella a tornargli in mente",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-3-addormentare",
@@ -1099,7 +1483,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "le palpebre del bersaglio si arrendono in tre respiri; anche + Vita ●●●"
+    "text": "le palpebre del bersaglio si arrendono in tre respiri; anche + Vita ●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-3-assalto-psichico",
@@ -1107,7 +1493,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "danno alla Volontà, mente contro mente"
+    "text": "danno alla Volontà, mente contro mente",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-3-entrare-e-dirigere-i-sogni",
@@ -1115,7 +1503,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "il sonno altrui diventa il tuo palcoscenico"
+    "text": "il sonno altrui diventa il tuo palcoscenico",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-3-legare-le-menti-della-squadra",
@@ -1123,7 +1513,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "la Cabala pensa in coro: ognuno sente ciò che serve agli altri"
+    "text": "la Cabala pensa in coro: ognuno sente ciò che serve agli altri",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-3-risanare-la-volonta",
@@ -1131,7 +1523,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "1 successo per livello; Aggravati: +1 Quintessenza; la tua: ●●"
+    "text": "1 successo per livello; Aggravati: +1 Quintessenza; la tua: ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-3-sciogliere-la-lingua",
@@ -1139,7 +1533,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "il bersaglio dice tutto ciò che pensa, e si stupisce di dirlo"
+    "text": "il bersaglio dice tutto ciò che pensa, e si stupisce di dirlo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-3-telepatia-piena",
@@ -1147,7 +1543,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "dialogo completo, mente a mente"
+    "text": "dialogo completo, mente a mente",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-3-tradurre-le-lingue",
@@ -1155,7 +1553,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "il significato ti arriva prima delle parole"
+    "text": "il significato ti arriva prima delle parole",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-4-comandare-una-mente",
@@ -1163,7 +1563,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 4,
     "extras": [],
-    "text": "ordini assoluti; ben eseguito, il bersaglio razionalizza"
+    "text": "ordini assoluti; ben eseguito, il bersaglio razionalizza",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-4-dare-una-facolta-che-non-aveva",
@@ -1177,7 +1579,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●●: creatività, orecchio, coraggio: materia nuova invece che materia piegata"
+    "text": "+ Primordio ●●●: creatività, orecchio, coraggio: materia nuova invece che materia piegata",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-4-inceppare-una-mente",
@@ -1185,7 +1589,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 4,
     "extras": [],
-    "text": "nella sua testa resta un solo compito assurdo: il mondo può attendere"
+    "text": "nella sua testa resta un solo compito assurdo: il mondo può attendere",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-4-mostrarti-in-corpo-di-luce",
@@ -1204,7 +1610,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Spirito ●●● + Primordio ●●: la tua forma astrale si stacca e si mostra ai presenti"
+    "text": "+ Spirito ●●● + Primordio ●●: la tua forma astrale si stacca e si mostra ai presenti",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-4-riscrivere-ricordi",
@@ -1212,7 +1620,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 4,
     "extras": [],
-    "text": "cancelli e cuci; la personalità intera: ●●●●●"
+    "text": "cancelli e cuci; la personalità intera: ●●●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-4-seminare-un-ordine-dormiente",
@@ -1220,7 +1630,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 4,
     "extras": [],
-    "text": "l'istruzione resta latente per mesi e si sveglia alla parola convenuta"
+    "text": "l'istruzione resta latente per mesi e si sveglia alla parola convenuta",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-5-accendere-un-intelletto",
@@ -1234,7 +1646,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●●: una coscienza dove non ce n'era: la macchina che pensa, il luogo che sa di esistere"
+    "text": "+ Primordio ●●●: una coscienza dove non ce n'era: la macchina che pensa, il luogo che sa di esistere",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "mind-5-riforgiare-una-personalita",
@@ -1242,7 +1656,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 5,
     "extras": [],
-    "text": "la persona che esce è coerente, funzionante e diversa, e non lo sospetta"
+    "text": "la persona che esce è coerente, funzionante e diversa, e non lo sospetta",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-1-percepire-la-magia",
@@ -1250,7 +1666,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 1,
     "extras": [],
-    "text": "l'incantesimo ancora caldo, la firma di chi ha lanciato"
+    "text": "l'incantesimo ancora caldo, la firma di chi ha lanciato",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-1-vedere-quanto-e-carico",
@@ -1258,7 +1676,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 1,
     "extras": [],
-    "text": "quanta Quintessenza resta a un Nodo, a una Meraviglia, a un mago"
+    "text": "quanta Quintessenza resta a un Nodo, a una Meraviglia, a un mago",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-1-consacrare-un-oggetto",
@@ -1266,7 +1686,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 1,
     "extras": [],
-    "text": "legato a te, ti segue in ogni trasformazione"
+    "text": "legato a te, ti segue in ogni trasformazione",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-1-leggere-le-aure",
@@ -1280,7 +1702,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●: l'alone dei vivi si accende: più forte la vita, più brilla"
+    "text": "+ Vita ●: l'alone dei vivi si accende: più forte la vita, più brilla",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-1-vedere-l-avatar",
@@ -1294,7 +1718,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Spirito ●●: la scintilla che rende Risvegliato un Risvegliato: forma, colore, e quanto è sveglia"
+    "text": "+ Spirito ●●: la scintilla che rende Risvegliato un Risvegliato: forma, colore, e quanto è sveglia",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-2-bruciare-l-attrito-in-anticipo",
@@ -1302,7 +1728,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "spendi Quintessenza e togli Paradosso quando decidi tu (5.6)"
+    "text": "spendi Quintessenza e togli Paradosso quando decidi tu (5.6)",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-2-creare-dal-nulla",
@@ -1310,7 +1738,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "+ la Sfera del Modello, Regola del Nulla: tu porti la materia prima, l'altra Sfera la forma"
+    "text": "+ la Sfera del Modello, Regola del Nulla: tu porti la materia prima, l'altra Sfera la forma",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-2-creare-grezzo",
@@ -1318,7 +1748,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "energia grezza, che si spegne quando molli la presa. Volgare con Testimoni, sempre"
+    "text": "energia grezza, che si spegne quando molli la presa. Volgare con Testimoni, sempre",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-2-destabilizzare-un-modello",
@@ -1326,7 +1758,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "scuoti la trama stessa del bersaglio: danno diretto al Modello delle cose"
+    "text": "scuoti la trama stessa del bersaglio: danno diretto al Modello delle cose",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-2-forgiare-costrutti-di-pura-energia",
@@ -1334,7 +1768,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "dardi e lame di luce, finché la Quintessenza regge"
+    "text": "dardi e lame di luce, finché la Quintessenza regge",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-2-incantare-un-arma",
@@ -1342,7 +1778,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "danni Aggravati nel filo della lama; morde anche gli spiriti"
+    "text": "danni Aggravati nel filo della lama; morde anche gli spiriti",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-2-mascherare-la-tua-aura",
@@ -1350,7 +1788,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 2,
     "extras": [],
-    "text": "la tua firma si spegne o mente: per i sensi mistici sei un altro"
+    "text": "la tua firma si spegne o mente: per i sensi mistici sei un altro",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-3-assorbire-e-incanalare",
@@ -1358,7 +1798,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 3,
     "extras": [],
-    "text": "da Nodi altrui alla tua Ruota, o dove serve"
+    "text": "da Nodi altrui alla tua Ruota, o dove serve",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-3-innestare-la-macchina-nella-carne",
@@ -1377,7 +1819,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Materia ●●●● + Vita ●●●●: la tua energia salda l'acciaio al battito"
+    "text": "+ Materia ●●●● + Vita ●●●●: la tua energia salda l'acciaio al battito",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-3-rianimare-un-morto-recente",
@@ -1396,7 +1840,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●●●● + Spirito ●●●●: la scintilla riaccesa nel Modello spento; Volgare, sempre"
+    "text": "+ Vita ●●●● + Spirito ●●●●: la scintilla riaccesa nel Modello spento; Volgare, sempre",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-3-travasare-a-un-altro-mago",
@@ -1404,7 +1850,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 3,
     "extras": [],
-    "text": "la tua energia entra nella sua Ruota, se lì c'è posto"
+    "text": "la tua energia entra nella sua Ruota, se lì c'è posto",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-4-creare-un-feticcio",
@@ -1418,7 +1866,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "spirito consenziente: la tua energia gli fa da casa. A forza: + Spirito ●●●●"
+    "text": "spirito consenziente: la tua energia gli fa da casa. A forza: + Spirito ●●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-4-deviare-il-contraccolpo",
@@ -1426,7 +1876,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 4,
     "extras": [],
-    "text": "lo attutisci, lo assorbi in Quintessenza, o lo trasli su un altro (5.6)"
+    "text": "lo attutisci, lo assorbi in Quintessenza, o lo trasli su un altro (5.6)",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-4-drenare-un-nodo",
@@ -1434,7 +1886,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 4,
     "extras": [],
-    "text": "strappi la sorgente, e il luogo appassisce"
+    "text": "strappi la sorgente, e il luogo appassisce",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-4-drenare-una-creatura",
@@ -1442,7 +1896,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 4,
     "extras": [],
-    "text": "+ la Sfera del bersaglio: l'energia esce da ciò che la portava. Sui viventi lascia Macchie"
+    "text": "+ la Sfera del bersaglio: l'energia esce da ciò che la portava. Sui viventi lascia Macchie",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-4-levare-un-campo-di-negazione",
@@ -1450,7 +1906,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 4,
     "extras": [],
-    "text": "nell'area la Magick altrui nasce già stanca: ogni effetto si smorza"
+    "text": "nell'area la Magick altrui nasce già stanca: ogni effetto si smorza",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-4-spegnere-una-meraviglia",
@@ -1458,7 +1916,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 4,
     "extras": [],
-    "text": "le togli la carica: l'oggetto resta, e smette di essere speciale"
+    "text": "le togli la carica: l'oggetto resta, e smette di essere speciale",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-5-creare-un-nodo",
@@ -1466,7 +1926,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 5,
     "extras": [],
-    "text": "una sorgente nuova nel mondo, dove prima il mondo era ordinario"
+    "text": "una sorgente nuova nel mondo, dove prima il mondo era ordinario",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-5-produrre-quintessenza",
@@ -1474,7 +1936,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 5,
     "extras": [],
-    "text": "la fai nascere dove non ce n'era: il gesto che nessuna spesa e nessun furto sostituiscono"
+    "text": "la fai nascere dove non ce n'era: il gesto che nessuna spesa e nessun furto sostituiscono",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-5-radicare-un-incantesimo-per-sempre",
@@ -1482,7 +1946,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 5,
     "extras": [],
-    "text": "l'effetto entra nell'Arazzo e smette di dipendere da te"
+    "text": "l'effetto entra nell'Arazzo e smette di dipendere da te",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "prime-5-rifiutare-il-contraccolpo",
@@ -1490,7 +1956,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "prime",
     "level": 5,
     "extras": [],
-    "text": "sai con cosa hanno costruito il Paradosso, e puoi dirgli di no (5.6)"
+    "text": "sai con cosa hanno costruito il Paradosso, e puoi dirgli di no (5.6)",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-1-vedere-oltre-il-velo",
@@ -1498,7 +1966,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 1,
     "extras": [],
-    "text": "la Penumbra, lo spessore della parete, le cariche mistiche negli oggetti"
+    "text": "la Penumbra, lo spessore della parete, le cariche mistiche negli oggetti",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-1-sapere-cosa-e-morto-qui",
@@ -1506,7 +1976,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 1,
     "extras": [],
-    "text": "il luogo racconta chi se n'è andato, quando, e se è rimasto qualcosa"
+    "text": "il luogo racconta chi se n'è andato, quando, e se è rimasto qualcosa",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-1-leggere-l-anima",
@@ -1514,7 +1986,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 1,
     "extras": [],
-    "text": "quanto è integra una persona, cosa si porta addosso e da quanto tempo"
+    "text": "quanto è integra una persona, cosa si porta addosso e da quanto tempo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-1-leggere-la-geografia-di-la",
@@ -1522,7 +1996,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 1,
     "extras": [],
-    "text": "la mappa dell'altro lato in quel punto: dove si passa, dove porta, chi comanda"
+    "text": "la mappa dell'altro lato in quel punto: dove si passa, dove porta, chi comanda",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-1-guardare-lontano",
@@ -1530,7 +2006,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 1,
     "extras": [],
-    "text": "la vista si stacca dal luogo e va dove nessuno ha mappato. Chi guarda tanto, prima o poi, viene guardato"
+    "text": "la vista si stacca dal luogo e va dove nessuno ha mappato. Chi guarda tanto, prima o poi, viene guardato",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-1-riconoscere-il-sovrannaturale",
@@ -1544,7 +2022,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●: uno sguardo dice cosa hai davanti: vampiro, mutaforma, morto, peggio"
+    "text": "+ Vita ●: uno sguardo dice cosa hai davanti: vampiro, mutaforma, morto, peggio",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-2-aprire-una-trattativa",
@@ -1552,7 +2032,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 2,
     "extras": [],
-    "text": "l'offerta formale: dichiari cosa porti e cosa chiedi, e da lì si contratta"
+    "text": "l'offerta formale: dichiari cosa porti e cosa chiedi, e da lì si contratta",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-2-chiamare-il-tuo-alleato",
@@ -1560,7 +2042,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 2,
     "extras": [],
-    "text": "la voce del famiglio o del patrono ti risponde, ovunque sia"
+    "text": "la voce del famiglio o del patrono ti risponde, ovunque sia",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-2-ispessire-o-assottigliare-il-velo",
@@ -1568,7 +2052,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 2,
     "extras": [],
-    "text": "apri la strada ai tuoi, la sbarri agli altri"
+    "text": "apri la strada ai tuoi, la sbarri agli altri",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-2-parlare-con-chi-sta-di-la",
@@ -1576,7 +2062,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 2,
     "extras": [],
-    "text": "la tua voce attraversa la parete sottile"
+    "text": "la tua voce attraversa la parete sottile",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-3-attraversare-il-velo",
@@ -1584,7 +2072,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 3,
     "extras": [],
-    "text": "in carne e ossa; occhio alla barriera locale"
+    "text": "in carne e ossa; occhio alla barriera locale",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-3-chiudere-un-passaggio",
@@ -1592,7 +2082,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 3,
     "extras": [],
-    "text": "il varco che qualcuno usava smette di esistere, e chi lo stava usando resta dov'è"
+    "text": "il varco che qualcuno usava smette di esistere, e chi lo stava usando resta dov'è",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-3-colpire-l-anima",
@@ -1606,7 +2098,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●● su un vivente: danno alla Saggezza, uno dei pochissimi modi che esistano"
+    "text": "+ Vita ●● su un vivente: danno alla Saggezza, uno dei pochissimi modi che esistano",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-3-ferire-l-immateriale",
@@ -1625,7 +2119,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "colpisci l'effimera come fosse carne; anche + Entropia ●●● + Primordio ●●"
+    "text": "colpisci l'effimera come fosse carne; anche + Entropia ●●● + Primordio ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-3-ferire-un-mutaforma",
@@ -1649,7 +2145,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●●: il loro Modello è ibrido; a scelta: + Vita ●●● + Spirito ●●"
+    "text": "+ Vita ●●: il loro Modello è ibrido; a scelta: + Vita ●●● + Spirito ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-3-mostrarti-in-corpo-di-luce",
@@ -1668,7 +2166,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Mente ●●●● + Primordio ●●: la tua forma astrale si mostra ai presenti"
+    "text": "+ Mente ●●●● + Primordio ●●: la tua forma astrale si mostra ai presenti",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-3-aprire-la-prova-dell-anima",
@@ -1682,7 +2182,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●●: non cancelli niente da solo, apri una porta. Lo aspetta una prova cucita sulle sue Convinzioni; se la supera, ogni Macchia se ne va. Una sola per cronaca, a testa"
+    "text": "+ Vita ●●: non cancelli niente da solo, apri una porta. Lo aspetta una prova cucita sulle sue Convinzioni; se la supera, ogni Macchia se ne va. Una sola per cronaca, a testa",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-3-svegliare-cio-che-dorme-in-un-oggetto",
@@ -1690,7 +2192,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 3,
     "extras": [],
-    "text": "il vecchio fucile si ricorda di avere un'opinione, e ti è amico"
+    "text": "il vecchio fucile si ricorda di avere un'opinione, e ti è amico",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-4-creare-un-feticcio",
@@ -1704,7 +2208,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "l'entità legata nell'oggetto; consenziente: + Primordio ●●●●"
+    "text": "l'entità legata nell'oggetto; consenziente: + Primordio ●●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-4-esiliare-oltre-il-velo",
@@ -1712,7 +2218,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 4,
     "extras": [],
-    "text": "il bersaglio precipita dall'altro lato, e il ritorno è affar suo"
+    "text": "il bersaglio precipita dall'altro lato, e il ritorno è affar suo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-4-esorcizzare-un-posseduto",
@@ -1720,7 +2228,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 4,
     "extras": [],
-    "text": "il corpo torna libero, l'ospite torna di là"
+    "text": "il corpo torna libero, l'ospite torna di là",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-4-evocare-e-vincolare",
@@ -1734,7 +2244,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "l'entità risponde all'appello; per comandarla: + Mente ●●"
+    "text": "l'entità risponde all'appello; per comandarla: + Mente ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-4-imprigionare-un-avatar",
@@ -1742,7 +2254,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 4,
     "extras": [],
-    "text": "la scintilla di un Risvegliato resta chiusa fuori dalla sua portata, finché reggi il vincolo"
+    "text": "la scintilla di un Risvegliato resta chiusa fuori dalla sua portata, finché reggi il vincolo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-4-intrappolare",
@@ -1750,7 +2264,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 4,
     "extras": [],
-    "text": "la trappola scatta: niente poteri, niente fuga, finché la mantieni"
+    "text": "la trappola scatta: niente poteri, niente fuga, finché la mantieni",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-4-rianimare-un-morto-recente",
@@ -1769,7 +2285,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●●●● + Primordio ●●●: richiami l'anima oltre il Velo; Volgare, sempre, ovunque"
+    "text": "+ Vita ●●●● + Primordio ●●●: richiami l'anima oltre il Velo; Volgare, sempre, ovunque",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-5-aprire-un-regno",
@@ -1777,7 +2295,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 5,
     "extras": [],
-    "text": "un luogo nuovo di là, con le sue leggi e i suoi confini, che resta quando te ne vai"
+    "text": "un luogo nuovo di là, con le sue leggi e i suoi confini, che resta quando te ne vai",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-5-dare-corpo-a-una-presenza",
@@ -1791,7 +2311,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●●: un'entità dove non ce n'era: nasce con una fame, e la fame la scegli tu"
+    "text": "+ Primordio ●●●: un'entità dove non ce n'era: nasce con una fame, e la fame la scegli tu",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-5-il-gilgul",
@@ -1799,7 +2321,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 5,
     "extras": [],
-    "text": "spezzi l'Avatar di un Risvegliato. Si fa una volta sola, e chi lo fa smette di essere quello di prima"
+    "text": "spezzi l'Avatar di un Risvegliato. Si fa una volta sola, e chi lo fa smette di essere quello di prima",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "spirit-5-provocare-un-risveglio",
@@ -1807,7 +2331,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 5,
     "extras": [],
-    "text": "apri gli occhi a un Dormiente. Non è un dono e non si chiede permesso: è una porta spalancata addosso a qualcuno che dormiva"
+    "text": "apri gli occhi a un Dormiente. Non è un dono e non si chiede permesso: è una porta spalancata addosso a qualcuno che dormiva",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-1-leggere-il-flusso",
@@ -1815,7 +2341,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 1,
     "extras": [],
-    "text": "ora esatta, anomalie, la linea del luogo a ritroso; la profondità la comprano i successi"
+    "text": "ora esatta, anomalie, la linea del luogo a ritroso; la profondità la comprano i successi",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-1-leggere-la-linea-di-una-persona",
@@ -1823,7 +2351,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 1,
     "extras": [],
-    "text": "il suo passato addosso a lei, e i rami che le partono da adesso"
+    "text": "il suo passato addosso a lei, e i rami che le partono da adesso",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-1-trovare-le-cuciture",
@@ -1831,7 +2361,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 1,
     "extras": [],
-    "text": "i punti in cui il tempo è stato rifatto da qualcuno prima di te"
+    "text": "i punti in cui il tempo è stato rifatto da qualcuno prima di te",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-2-il-vantaggio-del-primo-istante",
@@ -1839,7 +2371,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 2,
     "extras": [],
-    "text": "quando la violenza esplode, tu eri pronto da un attimo"
+    "text": "quando la violenza esplode, tu eri pronto da un attimo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-2-vedere-e-proiettare-passato-o-futuro",
@@ -1853,7 +2387,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "la scena rivive, nitida e mostrabile; lontano da qui: + Corrispondenza ●●"
+    "text": "la scena rivive, nitida e mostrabile; lontano da qui: + Corrispondenza ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-2-vegliare-sui-futuri-prossimi",
@@ -1867,7 +2403,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Entropia ●●: tieni d'occhio i prossimi istanti: niente ti coglie di sorpresa"
+    "text": "+ Entropia ●●: tieni d'occhio i prossimi istanti: niente ti coglie di sorpresa",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-3-accelerare-e-rallentare",
@@ -1875,7 +2413,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 3,
     "extras": [],
-    "text": "tu doppio, lui a metà; l'Ora Rubata vive qui (5.9): un'azione extra per turno, finché regge"
+    "text": "tu doppio, lui a metà; l'Ora Rubata vive qui (5.9): un'azione extra per turno, finché regge",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-3-far-maturare-in-un-ora",
@@ -1889,7 +2429,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●●: la vigna fa in un pomeriggio la sua stagione intera"
+    "text": "+ Vita ●●: la vigna fa in un pomeriggio la sua stagione intera",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-3-invecchiare-qualcuno",
@@ -1908,7 +2450,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●●: decenni scaricati nel corpo; un oggetto: + Materia ●●"
+    "text": "+ Vita ●●: decenni scaricati nel corpo; un oggetto: + Materia ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-3-riavvolgere-la-scena",
@@ -1916,7 +2460,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 3,
     "extras": [],
-    "text": "gli ultimi istanti tornano indietro; per ricordarlo: + Mente"
+    "text": "gli ultimi istanti tornano indietro; per ricordarlo: + Mente",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-3-riavvolgere-un-corpo",
@@ -1930,7 +2476,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Vita ●●: le ferite si richiudono a ritroso, come un nastro mandato indietro"
+    "text": "+ Vita ●●: le ferite si richiudono a ritroso, come un nastro mandato indietro",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-3-ridurre-in-polvere-un-oggetto",
@@ -1949,7 +2497,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Entropia ●●: anni di decadimento in un istante; via diretta: + Materia ●●●"
+    "text": "+ Entropia ●●: anni di decadimento in un istante; via diretta: + Materia ●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-3-saltare-l-attimo-del-colpo",
@@ -1957,7 +2507,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 3,
     "extras": [],
-    "text": "un passo nel futuro immediato: l'attacco attraversa il punto dove eri"
+    "text": "un passo nel futuro immediato: l'attacco attraversa il punto dove eri",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-4-ancorare-il-presente",
@@ -1965,7 +2517,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 4,
     "extras": [],
-    "text": "fissi un punto fermo nel flusso: la base di viaggi e ritorni"
+    "text": "fissi un punto fermo nel flusso: la base di viaggi e ritorni",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-4-avvertire-il-te-di-ieri",
@@ -1979,7 +2533,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Mente ●●: un ricordo torna indietro di minuti e cambia la scena"
+    "text": "+ Mente ●●: un ricordo torna indietro di minuti e cambia la scena",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-4-chiudere-un-area-in-un-anello",
@@ -1993,7 +2549,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Mente ●●: gli stessi tre minuti, ancora e ancora, finché non decidi tu"
+    "text": "+ Mente ●●: gli stessi tre minuti, ancora e ancora, finché non decidi tu",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-4-fermare-il-tempo-in-un-area",
@@ -2001,7 +2559,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 4,
     "extras": [],
-    "text": "la stanza in stasi, con tutto ciò che contiene"
+    "text": "la stanza in stasi, con tutto ciò che contiene",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-4-sospendere-un-incantesimo",
@@ -2009,7 +2569,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 4,
     "extras": [],
-    "text": "l'effetto dorme fuori dal flusso e attende la condizione"
+    "text": "l'effetto dorme fuori dal flusso e attende la condizione",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-5-rifare-un-evento",
@@ -2017,7 +2579,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 5,
     "extras": [],
-    "text": "non la scena di poco fa, ma il fatto: quello che è successo smette di essere successo"
+    "text": "non la scena di poco fa, ma il fatto: quello che è successo smette di essere successo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-5-smettere-di-invecchiare",
@@ -2025,7 +2589,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 5,
     "extras": [],
-    "text": "gli anni ti scorrono accanto: resti quello che eri il giorno in cui hai imparato"
+    "text": "gli anni ti scorrono accanto: resti quello che eri il giorno in cui hai imparato",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "time-5-viaggiare-nel-tempo",
@@ -2033,7 +2599,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "time",
     "level": 5,
     "extras": [],
-    "text": "vai e torni davvero, col corpo. Quello che trovi al ritorno è affar tuo"
+    "text": "vai e torni davvero, col corpo. Quello che trovi al ritorno è affar tuo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-1-percepire-salute-e-condizioni",
@@ -2041,7 +2609,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 1,
     "extras": [],
-    "text": "età vera, emorragie interne, il farmaco che mente"
+    "text": "età vera, emorragie interne, il farmaco che mente",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-1-leggere-la-storia-di-un-corpo",
@@ -2049,7 +2619,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 1,
     "extras": [],
-    "text": "vecchie fratture, cicatrici che non si vedono, il mestiere che ha fatto"
+    "text": "vecchie fratture, cicatrici che non si vedono, il mestiere che ha fatto",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-1-riconoscere-il-sovrannaturale",
@@ -2063,7 +2635,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Spirito ●: uno sguardo dice se quello davanti a te è umano"
+    "text": "+ Spirito ●: uno sguardo dice se quello davanti a te è umano",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-2-curare-o-causare-malattie",
@@ -2071,7 +2645,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "nella vita semplice e in te stesso; su un altro: ●●●"
+    "text": "nella vita semplice e in te stesso; su un altro: ●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-2-fingere-la-morte",
@@ -2079,7 +2655,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "battito e respiro scendono a zero apparente: i becchini ci cascano"
+    "text": "battito e respiro scendono a zero apparente: i becchini ci cascano",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-2-guarire-te-stesso",
@@ -2087,7 +2665,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "1 successo per livello; Aggravati: +1 Quintessenza ciascuno"
+    "text": "1 successo per livello; Aggravati: +1 Quintessenza ciascuno",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-2-immunizzarti",
@@ -2095,7 +2675,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "il tuo sangue impara il veleno prima che faccia danno"
+    "text": "il tuo sangue impara il veleno prima che faccia danno",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-2-ritoccarti-i-connotati",
@@ -2103,7 +2685,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "capelli, lineamenti, dettagli: il tuo Modello, di un soffio"
+    "text": "capelli, lineamenti, dettagli: il tuo Modello, di un soffio",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-2-smettere-di-aver-bisogno",
@@ -2111,7 +2695,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "fame, sete, sonno e respiro si mettono in pausa finché reggi l'effetto"
+    "text": "fame, sete, sonno e respiro si mettono in pausa finché reggi l'effetto",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-3-accelerare-una-guarigione-naturale",
@@ -2119,7 +2705,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 3,
     "extras": [],
-    "text": "il corpo fa in una notte il lavoro di due settimane, e chiede da mangiare"
+    "text": "il corpo fa in una notte il lavoro di due settimane, e chiede da mangiare",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-3-addormentare",
@@ -2133,7 +2721,9 @@ export const EFFETTI = Object.freeze([
         "required": false
       }
     ],
-    "text": "il corpo del bersaglio decide che è notte fonda; anche + Mente ●●●"
+    "text": "il corpo del bersaglio decide che è notte fonda; anche + Mente ●●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-3-animare-un-cadavere",
@@ -2157,7 +2747,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●: si muove senz'anima; ossa nude: + Materia ●●● + Primordio ●●"
+    "text": "+ Primordio ●●: si muove senz'anima; ossa nude: + Materia ●●● + Primordio ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-3-ferire-un-mutaforma",
@@ -2181,7 +2773,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Spirito ●●: il loro Modello è ibrido; a scelta: + Spirito ●●● + Vita ●●"
+    "text": "+ Spirito ●●: il loro Modello è ibrido; a scelta: + Spirito ●●● + Vita ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-3-ferire-un-vampiro",
@@ -2189,7 +2783,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 3,
     "extras": [],
-    "text": "carne morta animata; via Materia: ●●"
+    "text": "carne morta animata; via Materia: ●●",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-3-guarire-o-ferire-un-altro",
@@ -2197,7 +2793,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 3,
     "extras": [],
-    "text": "la Regola del Sé al lavoro: il Modello altrui chiede il terzo pallino"
+    "text": "la Regola del Sé al lavoro: il Modello altrui chiede il terzo pallino",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-3-potenziare-il-fisico",
@@ -2205,7 +2803,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 3,
     "extras": [],
-    "text": "attributi accresciuti, artigli, branchie, corazza: il tuo corpo risponde"
+    "text": "attributi accresciuti, artigli, branchie, corazza: il tuo corpo risponde",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-4-diventare-interamente-altro",
@@ -2213,7 +2813,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 4,
     "extras": [],
-    "text": "il tuo Modello cambia da capo, e ci resti finché paghi la Durata"
+    "text": "il tuo Modello cambia da capo, e ci resti finché paghi la Durata",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-4-guarire-l-inguaribile",
@@ -2221,7 +2823,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 4,
     "extras": [],
-    "text": "ciò che la medicina dichiara irreversibile torna indietro. Il corpo regge; il resto è affar suo"
+    "text": "ciò che la medicina dichiara irreversibile torna indietro. Il corpo regge; il resto è affar suo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-4-innestare-la-macchina-nella-carne",
@@ -2240,7 +2844,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Materia ●●●● + Primordio ●●●: il metallo entra nel corpo, e il corpo lo accetta come suo"
+    "text": "+ Materia ●●●● + Primordio ●●●: il metallo entra nel corpo, e il corpo lo accetta come suo",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-4-riscrivere-il-corpo-di-un-altro",
@@ -2248,7 +2854,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 4,
     "extras": [],
-    "text": "forma, proporzioni, funzioni: esce diverso da come è entrato"
+    "text": "forma, proporzioni, funzioni: esce diverso da come è entrato",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-4-trasformare-in-animale",
@@ -2256,7 +2864,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 4,
     "extras": [],
-    "text": "il Modello passa a un'altra specie, con quello che comporta pensarci dentro"
+    "text": "il Modello passa a un'altra specie, con quello che comporta pensarci dentro",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-5-creare-un-organismo",
@@ -2270,7 +2880,9 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "+ Primordio ●●●: vita nuova, con una forma che decidi tu e una fame che decide lei"
+    "text": "+ Primordio ●●●: vita nuova, con una forma che decidi tu e una fame che decide lei",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-5-metamorfosi-senza-limiti",
@@ -2278,7 +2890,9 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 5,
     "extras": [],
-    "text": "massa, specie e scala smettono di essere un problema"
+    "text": "massa, specie e scala smettono di essere un problema",
+    "pairings": [],
+    "scopes": ""
   },
   {
     "id": "life-5-rendere-permanente-il-mutamento",
@@ -2286,6 +2900,8 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 5,
     "extras": [],
-    "text": "quello che hai riscritto smette di poter tornare indietro, e diventa il suo Modello vero"
+    "text": "quello che hai riscritto smette di poter tornare indietro, e diventa il suo Modello vero",
+    "pairings": [],
+    "scopes": ""
   }
 ]);
