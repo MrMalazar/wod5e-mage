@@ -5986,3 +5986,75 @@
   content: " ✓";
   text-decoration: none;
 }
+
+/* ==========================================================================
+   La tavola degli Ambiti: la palette (6/9, verdetto di Blue). Quattro toni:
+   la riga dei livelli in oro pieno con testo scuro; le fasce degli Ambiti
+   in oro cupo; i nomi su velluto; le celle su un fondo quasi nero con le
+   parole in crema e i numeri in oro. Le lettere colorate restano poche.
+   ========================================================================== */
+.wod5e-mage-scope-table {
+  --tavola-livelli: #b8902a;
+  --tavola-livelli-testo: #17120f;
+  --tavola-fascia: #4a3610;
+  --tavola-fascia-testo: #f5e7b2;
+  --tavola-nome: #2d2618;
+  --tavola-nome-testo: #f5e7b2;
+  --tavola-lettura-testo: #c9bb96;
+  --tavola-cella: #1a1712;
+  --tavola-cella-alt: #201c15;
+  --tavola-testo: #e6dcc2;
+  --tavola-numero: #e2b53a;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table thead th,
+.wod5e-mage-scope-table thead th {
+  background: var(--tavola-livelli);
+  color: var(--tavola-livelli-testo);
+  font-family: "Modesto Condensed", serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+}
+
+.wod5e-mage-scope-table thead th:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.wod5e-mage-scope-table thead th:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-group > th {
+  background: var(--tavola-fascia);
+  color: var(--tavola-fascia-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th[scope="row"],
+.wod5e-mage-scope-table tbody th[scope="row"] {
+  background: var(--tavola-nome);
+  color: var(--tavola-nome-testo);
+}
+
+.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-sub > th[scope="row"] {
+  color: var(--tavola-lettura-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody td,
+.wod5e-mage-scope-table tbody td {
+  background: var(--tavola-cella);
+  color: var(--tavola-testo);
+}
+
+.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-sub > td {
+  background: var(--tavola-cella-alt);
+}
+
+.wod5e-mage-scope-table .wod5e-mage-scope-cell-text {
+  color: var(--tavola-testo);
+}
+
+.wod5e-mage-scope-table .wod5e-mage-scope-cell-number,
+.wod5e-mage-scope-table .wod5e-mage-scope-cell-symbol {
+  color: var(--tavola-numero);
+}
+
