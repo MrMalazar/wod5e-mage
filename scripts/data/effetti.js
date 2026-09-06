@@ -3349,9 +3349,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 1,
     "extras": [],
-    "text": "la paura sotto il sorriso; la profondità la comprano i successi",
-    "pairings": [],
-    "scopes": ""
+    "text": "Vedi cosa prova davvero chi hai davanti: la paura sotto il sorriso, la rabbia sotto la calma, la bugia sotto la sicurezza. La superficie subito; la profondità la danno i successi.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Leggere anche il corpo che va con l'emozione: il battito, il sudore, il tremore etc..",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Leggere le emozioni di chi pensa senza cervello: spiriti, fantasmi etc..",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quale emozione lo farà cedere.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Leggere le emozioni di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Leggere le emozioni che aveva ieri, in questa stanza.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Riconoscere le emozioni messe lì dalla Magick di un altro.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più persone insieme. Durata 2 per tenere la lettura tutta la scena. Precisione (dettaglio) per un'emozione sola e precisa: 1 ha paura, 3 di cosa."
   },
   {
     "id": "mind-1-leggere-pensieri-e-ricordi",
@@ -3359,9 +3390,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 1,
     "extras": [],
-    "text": "fino al sepolto, coi successi; le menti resistono con la Volontà",
-    "pairings": [],
-    "scopes": ""
+    "text": "Entri in una testa e leggi: quello che pensa adesso in superficie, e con più successi quello che ricorda, fino al sepolto. Le menti resistono con la Volontà.",
+    "pairings": [
+      {
+        "sphere": "spirit",
+        "text": "Leggere chi pensa senza cervello.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Leggere la mente di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Leggere il ricordo com'era quando è nato, prima che lo riscrivesse.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Trovare il ricordo che non torna, la bugia che si racconta.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Leggere il pensiero degli animali.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Riconoscere i ricordi piantati dalla Magick.",
+        "required": false
+      }
+    ],
+    "scopes": "Precisione (dettaglio) per il pensiero esatto e non il rumore: 1 a cosa pensa, 3 il numero, 5 il ricordo sepolto. Precisione (informazione) per quanto pesa quel che cerchi. Bersagli per più teste. Durata 2 per restare in ascolto tutta la scena."
   },
   {
     "id": "mind-1-sentire-la-stanza",
@@ -3369,9 +3431,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 1,
     "extras": [],
-    "text": "l'umore collettivo di una folla o di un luogo, e da dove sta arrivando",
-    "pairings": [],
-    "scopes": ""
+    "text": "Senti l'umore di una folla o di un luogo: la paura che sale nella sala, la rabbia che monta allo stadio, la tristezza che resta in una casa, e da dove sta arrivando.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Sentire la stanza in cui non sei.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Sentire anche gli umori dell'Umbra del luogo.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Sapere quando l'umore scoppia.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Sentire l'umore di ieri, di dieci anni fa.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Sentire se l'umore l'ha messo lì una Magick.",
+        "required": false
+      }
+    ],
+    "scopes": "Area per quanto è grande la stanza: 1 la sala, 2 il palazzo, 3 il quartiere. Durata 2 per la scena. Precisione (dettaglio) per la testa da cui parte l'umore."
   },
   {
     "id": "mind-2-blindare-un-ricordo",
@@ -3379,25 +3467,76 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 2,
     "extras": [],
-    "text": "quel ricordo diventa cassaforte: nessuna lettura, nessuna riscrittura",
-    "pairings": [],
-    "scopes": ""
+    "text": "Quel ricordo diventa una cassaforte: nessuna lettura lo apre, nessuna riscrittura lo tocca. Il tuo, o quello di un altro.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Far respingere alla cassaforte anche la Magick più alta.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Blindare il ricordo di uno spirito, o oltre la morte.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Blindare il ricordo com'era in una data: nemmeno il tempo lo consuma.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Blindare il ricordo di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Blindare anche il ricordo del corpo: il gesto imparato, il riflesso.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto resta blindato (7 per sempre). Bersagli per più ricordi o più teste. Condizioni 1 per la chiave che lo apre: solo tu, solo con quella parola."
   },
   {
     "id": "mind-2-impiantare-un-illusione-mentale",
     "name": "Impiantare un'illusione mentale",
     "sphere": "mind",
     "level": 2,
-    "extras": [
+    "extras": [],
+    "text": "Scrivi in una testa una cosa che non c'è: la vede, la sente, la tocca, solo lui. Nessuna telecamera la riprende. Se ferisce, è il terzo pallino, e per i danni Aggravati serve la Vita. Scriverla in venti teste nello stesso istante è uno strappo: Volgare, senza le Forze.",
+    "pairings": [
+      {
+        "sphere": "forces",
+        "text": "Fare l'illusione di luce e suono veri: la vedono tutti, telecamere comprese.",
+        "required": false
+      },
       {
         "sphere": "life",
-        "level": 2,
+        "text": "Far ferire l'illusione anche il corpo: danni Aggravati.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Impiantare l'illusione in chi pensa senza cervello.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Impiantare l'illusione in chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far comparire l'illusione nel momento peggiore per lui.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Impiantare l'illusione di un momento passato: lo rivive.",
         "required": false
       }
     ],
-    "text": "la vedono solo i bersagli scelti; che ferisce: ●●● (+ Vita ●● per gli Aggravati)",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Bersagli per più teste. Durata 1 per un attimo, 2 per la scena. Precisione (dettaglio) per i particolari: 1 una sagoma, 3 un volto, 5 un documento leggibile. Potenza (danni) se ferisce, dal terzo pallino."
   },
   {
     "id": "mind-2-non-restare-in-memoria",
@@ -3405,9 +3544,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 2,
     "extras": [],
-    "text": "ti vedono, ti parlano, e mezz'ora dopo saprebbero descrivere soltanto un tipo qualunque",
-    "pairings": [],
-    "scopes": ""
+    "text": "Ti vedono, ti parlano, e mezz'ora dopo saprebbero descrivere soltanto un tipo qualunque. Non sparisci: chi ti ha visto non riesce a trattenerti.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Far sì che nessuno ti guardi abbastanza da ricordarti.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Non restare nemmeno nelle registrazioni: la telecamera ti sfoca.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Farti dimenticare da chi ti ha visto da lontano.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Non restare in memoria nemmeno agli spiriti.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Farti dimenticare anche da chi ti ha visto ieri.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per la scena, 4 per la sessione. Bersagli per la Cabala. Area per un luogo intero: nessuno ricorda chi è passato."
   },
   {
     "id": "mind-2-pilotare-l-umore",
@@ -3415,9 +3580,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 2,
     "extras": [],
-    "text": "accendi o spegni un'emozione che c'è già",
-    "pairings": [],
-    "scopes": ""
+    "text": "Accendi o spegni un'emozione che c'è già: la paura sale fino al panico, la rabbia si spegne, la fiducia cresce. Non crei niente: giri la manopola.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Pilotare anche la chimica: il tremore, il battito, il sudore seguono l'umore.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far girare l'umore nel momento giusto.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Pilotare l'umore di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Pilotare l'umore di uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Accendere un'emozione che non aveva.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Riaccendere l'umore che aveva ieri.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più persone. Area per una folla intera. Durata 1 per un attimo, 2 per la scena. Condizioni (malus 1, distrarre) se l'umore serve a distrarlo. Potenza (epicità) per quanto pesa: 1 un dettaglio, 3 stravolge la scena."
   },
   {
     "id": "mind-2-schermare-i-tuoi-pensieri",
@@ -3425,41 +3621,112 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 2,
     "extras": [],
-    "text": "mura attorno alla tua psiche: chi legge perde successi",
-    "pairings": [],
-    "scopes": ""
+    "text": "Alzi mura attorno alla tua psiche: chi legge perde successi, chi vuole entrare trova la porta chiusa. Vale per te e per chi decidi.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Far respingere alle mura anche la Magick che vuole entrare.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Schermare anche dagli spiriti e da chi legge dall'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far leggere a chi ci prova la cosa sbagliata.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Schermare chi è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Schermare anche il corpo: niente sudore, niente battito che ti tradisce.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per la scena, 4 per la sessione, 7 per sempre. Bersagli per la Cabala. Potenza (epicità) nel braccio di ferro con chi legge."
   },
   {
     "id": "mind-2-seminare-un-idea",
     "name": "Seminare un'idea",
     "sphere": "mind",
     "level": 2,
-    "extras": [
+    "extras": [],
+    "text": "Gli metti un'idea in testa, e da lì in poi è una fra le tante: che affiori stanotte o mai lo decide la sua testa. Per farla affiorare al momento giusto serve l'Entropia.",
+    "pairings": [
       {
         "sphere": "entropy",
-        "level": 2,
+        "text": "Far tornare proprio quell'idea, al momento giusto: la segue convinto di averla scelta.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Seminare l'idea in chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Seminare l'idea in uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far germogliare l'idea in una data.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far arrivare l'idea come un bisogno del corpo: sete, fame, sonno.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Seminare un'idea che nessuna testa poteva avere.",
         "required": false
       }
     ],
-    "text": "gliela metti in testa, e da lì in poi è una fra le tante. + Entropia ●● perché sia proprio quella a tornargli in mente",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Bersagli per più teste. Durata per quanto resta (7 per sempre). Condizioni 1 per quando affiora: quando vede la moglie. Precisione (dettaglio) per un'idea esatta e non vaga."
   },
   {
     "id": "mind-3-addormentare",
     "name": "Addormentare",
     "sphere": "mind",
     "level": 3,
-    "extras": [
+    "extras": [],
+    "text": "Le palpebre del bersaglio si arrendono in tre respiri: dorme dove sta, e non si sveglia finché non decidi tu, o finché qualcuno non lo scuote. Da sola la Mente spegne la veglia; con la Vita spegni il corpo.",
+    "pairings": [
       {
         "sphere": "life",
-        "level": 3,
+        "text": "Addormentare il corpo, non solo la mente: nessuno lo sveglia a scossoni.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Farlo addormentare nel momento giusto: al volante no, sul divano sì.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Addormentare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Addormentare uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Farlo dormire fino a un'ora precisa.",
         "required": false
       }
     ],
-    "text": "le palpebre del bersaglio si arrendono in tre respiri; anche + Vita ●●●",
-    "pairings": [],
-    "scopes": ""
+    "scopes": "Bersagli per più persone. Area per una sala intera. Durata 1 per un turno, 2 per la scena. Condizioni (malus 3, addormentare) per quanto è profondo il sonno."
   },
   {
     "id": "mind-3-assalto-psichico",
@@ -3467,9 +3734,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "danno alla Volontà, mente contro mente",
-    "pairings": [],
-    "scopes": ""
+    "text": "Colpisci una mente con la tua: danno alla Volontà, mente contro mente. Chi crolla resta lucido ma vuoto; con la Vita il corpo paga insieme.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far pagare anche il corpo: danni Aggravati.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Assalire uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Assalire chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Colpire dove la mente è già crepata.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Far vedere l'assalto: la luce che acceca, il suono che stordisce.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far mordere l'assalto anche le difese magiche.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più menti. Condizioni (malus 4, stordire) per lasciarlo stordito."
   },
   {
     "id": "mind-3-entrare-e-dirigere-i-sogni",
@@ -3477,9 +3775,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "il sonno altrui diventa il tuo palcoscenico",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il sonno altrui diventa il tuo palcoscenico: entri nel sogno, lo guardi, lo cambi, ci parli dentro. Chi dorme ti sente come parte del sogno.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Entrare nel sogno di chi dorme lontano.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Entrare nel sogno come in un luogo: l'Umbra dei sogni.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Fargli rivivere una notte passata, o mostrargli quella che verrà.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far restare al risveglio quello che è successo nel sogno: la ferita, la stanchezza.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Fargli sognare quello che teme di più.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Lanciare Magick da dentro il sogno.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più dormienti insieme. Durata 2 per la notte. Precisione (dettaglio) per il sogno esatto. Condizioni 1 per legarlo: solo quando sogna lei."
   },
   {
     "id": "mind-3-legare-le-menti-della-squadra",
@@ -3487,9 +3816,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "la Cabala pensa in coro: ognuno sente ciò che serve agli altri",
-    "pairings": [],
-    "scopes": ""
+    "text": "La Cabala pensa in coro: ognuno sente ciò che serve agli altri, dove sono, cosa vedono, cosa stanno per fare. Niente parole.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Legare le menti a qualunque distanza.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Legare anche uno spirito o un fantasma alla squadra.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Condividere anche i sensi: vedere con gli occhi dell'altro.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far arrivare a ognuno esattamente il pensiero che gli serve.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Condividere anche i ricordi della giornata.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per quanti sono. Durata 2 per la scena, 4 per la sessione. Portata per quanto lontano regge il legame."
   },
   {
     "id": "mind-3-risanare-la-volonta",
@@ -3497,9 +3852,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "1 successo per livello; Aggravati: +1 Quintessenza; la tua: ●●",
-    "pairings": [],
-    "scopes": ""
+    "text": "Ripari una mente lacerata: un successo per livello di Volontà; gli Aggravati chiedono anche una Quintessenza ciascuno. La tua chiede solo il secondo pallino.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Risanare insieme il corpo: la fatica, il tremore etc..",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Risanare gli Aggravati con la Quintessenza del luogo.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Risanare la Volontà di uno spirito, o di un morto.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Risanare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Riportare la mente a com'era prima del trauma.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che la crepa non si riapra lì.",
+        "required": false
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta Volontà torna. Bersagli per più menti."
   },
   {
     "id": "mind-3-sciogliere-la-lingua",
@@ -3507,9 +3893,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "il bersaglio dice tutto ciò che pensa, e si stupisce di dirlo",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il bersaglio dice tutto ciò che pensa, e si stupisce di dirlo: la verità, il segreto, il nome che non doveva fare. Le menti resistono con la Volontà.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Fargli dire proprio la cosa che non voleva dire.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Fargli dire tutto senza che il corpo lo tradisca: voce calma, mani ferme.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Sciogliere la lingua di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Sciogliere la lingua di uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Fargli dire quello che sapeva ieri e ha già dimenticato.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Far sentire quello che dice solo a te.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più bocche. Durata 1 per una domanda, 2 per l'interrogatorio. Precisione (informazione) per quanto pesa quel che deve dire. Condizioni 1 se parla solo con te."
   },
   {
     "id": "mind-3-telepatia-piena",
@@ -3517,9 +3934,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "dialogo completo, mente a mente",
-    "pairings": [],
-    "scopes": ""
+    "text": "Dialogo completo, mente a mente: parole, immagini, sensazioni, senza aprire bocca. In due sensi, se vuoi.",
+    "pairings": [
+      {
+        "sphere": "correspondence",
+        "text": "Parlare mente a mente con chi è lontano.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Parlare con chi pensa senza cervello.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Parlare con gli animali.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Parlare con chi era qui ieri, o con chi ci sarà.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Far arrivare il dialogo anche a una macchina: la radio, il telefono.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più interlocutori. Durata 1 per una frase, 2 per la scena. Portata per la distanza. Condizioni 1 se parla solo lui a te."
   },
   {
     "id": "mind-3-tradurre-le-lingue",
@@ -3527,9 +3970,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "il significato ti arriva prima delle parole",
-    "pairings": [],
-    "scopes": ""
+    "text": "Il significato ti arriva prima delle parole: capisci qualunque lingua, parlata o scritta, e ti fai capire. Non impari: comprendi, finché dura.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Tradurre anche i versi degli animali.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Tradurre le lingue dell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Tradurre le lingue morte e quelle che non esistono ancora.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Tradurre anche i segni su un oggetto: il codice, l'incisione, il marchio etc..",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Tradurre un segnale: il codice radio, il flusso di dati etc..",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Tradurre a distanza.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per la scena, 4 per la sessione. Bersagli per far capire anche ai compagni. Precisione (dettaglio) per la sfumatura: 1 il senso, 3 le parole, 5 il tono e le allusioni."
   },
   {
     "id": "mind-4-comandare-una-mente",
@@ -3537,9 +4011,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 4,
     "extras": [],
-    "text": "ordini assoluti; ben eseguito, il bersaglio razionalizza",
-    "pairings": [],
-    "scopes": ""
+    "text": "Ordini assoluti: quello che dici lo fa. Ben eseguito, il bersaglio razionalizza e crede di averlo voluto; eseguito male, lascia le crepe che un altro esperto di Mente legge.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Comandare anche il corpo: fa quello che dici anche se non vuole.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Comandare uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Comandare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far arrivare l'ordine nel momento giusto.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far scattare l'ordine a un'ora precisa.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far valere l'ordine anche contro la Magick che lo protegge.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più persone. Durata 1 per un ordine, 2 per la scena, 4 per la sessione. Condizioni 1 per ogni clausola dell'ordine. Potenza (epicità) per quanto pesa l'ordine: 1 un dettaglio, 4 impatta sul capitolo."
   },
   {
     "id": "mind-4-dare-una-facolta-che-non-aveva",
@@ -3549,13 +4054,44 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "prime",
-        "level": 3,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Primordio ●●●: creatività, orecchio, coraggio: materia nuova invece che materia piegata",
-    "pairings": [],
-    "scopes": ""
+    "text": "Creatività, orecchio assoluto, coraggio, memoria fotografica: materia nuova invece che materia piegata. Serve il Primordio: da sola la Mente dirige quello che c'è.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Creare la facoltà dal nulla.",
+        "required": true
+      },
+      {
+        "sphere": "life",
+        "text": "Dare una facoltà del corpo: la vista del falco, l'orecchio del cane etc..",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Dare la facoltà a uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Dare la facoltà per un tempo preciso, o farla nascere in una data.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far arrivare la facoltà quando serve.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Dare la facoltà a chi non vedi.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto resta (7 per sempre). Bersagli per più persone. Potenza (epicità) per quanto pesa la facoltà: 2 un talento, 5 un genio."
   },
   {
     "id": "mind-4-inceppare-una-mente",
@@ -3563,9 +4099,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 4,
     "extras": [],
-    "text": "nella sua testa resta un solo compito assurdo: il mondo può attendere",
-    "pairings": [],
-    "scopes": ""
+    "text": "Nella sua testa resta un solo compito assurdo: contare le piastrelle, cercare la parola, finire il calcolo. Il mondo può attendere.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Inceppare anche il corpo: fermo, come la testa.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Inceppare uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Inceppare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Fargli trovare il compito da solo, e non finirlo mai.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Farlo restare inceppato fino a un'ora.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più persone. Durata 1 per un turno, 2 per la scena. Condizioni (malus 4, inabilitare) per quanto pesa: 4 non agisce, 7 non gioca."
   },
   {
     "id": "mind-4-mostrarti-in-corpo-di-luce",
@@ -3575,18 +4137,49 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "spirit",
-        "level": 3,
+        "level": 1,
         "required": true
       },
       {
         "sphere": "prime",
-        "level": 2,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Spirito ●●● + Primordio ●●: la tua forma astrale si stacca e si mostra ai presenti",
-    "pairings": [],
-    "scopes": ""
+    "text": "La tua forma astrale si stacca e si mostra ai presenti: la vedono, la sentono parlare. Servono lo Spirito e il Primordio.",
+    "pairings": [
+      {
+        "sphere": "spirit",
+        "text": "Staccare la forma astrale dal corpo.",
+        "required": true
+      },
+      {
+        "sphere": "prime",
+        "text": "Dare sostanza alla forma perché la vedano.",
+        "required": true
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Mostrarti lontano da dove sei.",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Farti vedere anche dalle telecamere: luce vera.",
+        "required": false
+      },
+      {
+        "sphere": "matter",
+        "text": "Far toccare la forma: apre porte, prende oggetti.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far sembrare la forma un corpo vivo.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 2 per la scena. Portata per quanto lontano ti mostri. Precisione (dettaglio) per quanto sei nitido: 1 una luce, 3 la tua faccia."
   },
   {
     "id": "mind-4-riscrivere-ricordi",
@@ -3594,9 +4187,35 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 4,
     "extras": [],
-    "text": "cancelli e cuci; la personalità intera: ●●●●●",
-    "pairings": [],
-    "scopes": ""
+    "text": "Cancelli e cuci: il ricordo di stasera non c'è più, al suo posto una cena tranquilla. La persona resta la stessa; cambia quello che sa di aver vissuto. La personalità intera è il quinto pallino.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "Riscrivere anche i ricordi vecchi di anni, coerenti con tutto il resto.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riscrivere i ricordi di chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Riscrivere i ricordi di uno spirito o di un morto.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far tornare i conti al ricordo nuovo: nessuna crepa, nessuna stonatura.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Riscrivere anche la memoria del corpo: la cicatrice non fa più male, il gesto si dimentica.",
+        "required": false
+      }
+    ],
+    "scopes": "Bersagli per più teste. Durata per quanto regge la riscrittura (7 per sempre). Precisione (dettaglio) per un ricordo solo e preciso: 1 la serata, 3 un volto, 5 una frase. Potenza (epicità) per quanto pesa: 2 una serata, 5 un anno di vita."
   },
   {
     "id": "mind-4-seminare-un-ordine-dormiente",
@@ -3604,9 +4223,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 4,
     "extras": [],
-    "text": "l'istruzione resta latente per mesi e si sveglia alla parola convenuta",
-    "pairings": [],
-    "scopes": ""
+    "text": "L'istruzione resta latente per mesi e si sveglia alla parola convenuta: allora esegue, e non sa perché.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Far arrivare la parola convenuta da sola, per caso.",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Far svegliare l'ordine a una data, senza parola.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Seminare l'ordine in chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Seminare l'ordine in uno spirito.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Far svegliare l'ordine anche nel corpo: il gesto parte da solo.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far scattare l'ordine anche contro la Magick che lo protegge.",
+        "required": false
+      }
+    ],
+    "scopes": "Condizioni 1 per la parola o l'evento che lo sveglia, e Complessità per quanto è lungo l'ordine. Durata (fuori gioco) per quanto resta dormiente: 3 il mese, 5 l'anno. Bersagli per più persone."
   },
   {
     "id": "mind-5-accendere-un-intelletto",
@@ -3616,13 +4266,44 @@ export const EFFETTI = Object.freeze([
     "extras": [
       {
         "sphere": "prime",
-        "level": 3,
+        "level": 1,
         "required": true
       }
     ],
-    "text": "+ Primordio ●●●: una coscienza dove non ce n'era: la macchina che pensa, il luogo che sa di esistere",
-    "pairings": [],
-    "scopes": ""
+    "text": "Una coscienza dove non ce n'era: la macchina che pensa, il luogo che sa di esistere, la statua che ricorda. Serve il Primordio.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Creare la coscienza dal nulla.",
+        "required": true
+      },
+      {
+        "sphere": "matter",
+        "text": "Accendere un oggetto: la macchina, la statua, la casa etc..",
+        "required": false
+      },
+      {
+        "sphere": "forces",
+        "text": "Accendere un'energia: la rete, la tempesta, il fuoco etc..",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Dare alla coscienza nuova un'anima, e un posto nell'Umbra.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Accendere un vivente senza cervello: la pianta, la muffa, lo sciame etc..",
+        "required": false
+      },
+      {
+        "sphere": "time",
+        "text": "Accendere la coscienza in una data, o darle una scadenza.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata per quanto resta sveglia (7 per sempre). Potenza (epicità) per quanto pesa: 4 impatta sul capitolo, 7 sull'intera ambientazione. Precisione (dettaglio) per quanto è fine l'intelletto: 1 un cane, 3 un bambino, 5 un genio."
   },
   {
     "id": "mind-5-riforgiare-una-personalita",
@@ -3630,9 +4311,40 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 5,
     "extras": [],
-    "text": "la persona che esce è coerente, funzionante e diversa, e non lo sospetta",
-    "pairings": [],
-    "scopes": ""
+    "text": "La persona che esce è coerente, funzionante e diversa, e non lo sospetta: i gusti, le paure, i legami, la storia che si racconta. Nessuna crepa.",
+    "pairings": [
+      {
+        "sphere": "time",
+        "text": "Riforgiare anche il passato che ricorda: coerente da sempre.",
+        "required": false
+      },
+      {
+        "sphere": "life",
+        "text": "Riforgiare anche il corpo che va con la persona nuova: la postura, la voce, i gesti.",
+        "required": false
+      },
+      {
+        "sphere": "spirit",
+        "text": "Riforgiare l'anima insieme: nemmeno un morto la riconoscerebbe.",
+        "required": false
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far tornare i conti a tutti: nessuno nota la differenza.",
+        "required": false
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Riforgiare chi non vedi.",
+        "required": false
+      },
+      {
+        "sphere": "prime",
+        "text": "Far reggere la personalità nuova contro qualunque Magick.",
+        "required": false
+      }
+    ],
+    "scopes": "Durata 7. Potenza (epicità) per quanto pesa: 5 stravolge il capitolo, 7 sull'intera ambientazione. Bersagli per più persone. Precisione (dettaglio) per un tratto solo o la persona intera."
   },
   {
     "id": "prime-1-percepire-la-magia",

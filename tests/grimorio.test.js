@@ -93,6 +93,11 @@ const materia = EFFETTI.filter((entry) => entry.sphere === "matter");
 assert.equal(materia.length, 24);
 assert.equal(materia.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(materia.find((entry) => entry.id === "matter-4-innestare-la-macchina-nella-carne").extras.map((extra) => extra.sphere), ["life", "prime"]);
+// Mente nel formato nuovo (6/9): venticinque blocchi.
+const mente = EFFETTI.filter((entry) => entry.sphere === "mind");
+assert.equal(mente.length, 25);
+assert.equal(mente.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
+assert.deepEqual(mente.find((entry) => entry.id === "mind-4-mostrarti-in-corpo-di-luce").extras.map((extra) => extra.sphere), ["spirit", "prime"]);
 const grimorioIt = prepareGrimorio({ correspondence: 2 }, (k) => k);
 const shown = grimorioIt[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio");
 assert.equal(shown.pairings.length, 5);
