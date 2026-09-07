@@ -93,8 +93,12 @@ export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
               // Le compagne dirette che il personaggio non ha: una riga sola,
               // «senza X: di lato, e Volgare».
               missing: (entry.pairings ?? [])
-                .filter((pairing) => pairing.required && level(sphereLevels[pairing.sphere]) <= 0)
-                .map((pairing) => localize(`WOD5E_MAGE.Spheres.${pairing.sphere}`)),
+                .filter((pairing) => pairing.required && pairing.sphere !== "prime" && level(sphereLevels[pairing.sphere]) < (pairing.level ?? 1))
+                .map((pairing) => `${localize(`WOD5E_MAGE.Spheres.${pairing.sphere}`)}${(pairing.level ?? 1) > 1 ? ` ${"●".repeat(pairing.level)}` : ""}`),
+              // Il Primordio senza Primordio (verdetto di Blue, 7/9): l'effetto
+              // si fa lo stesso, pagando in Quintessenza. Una riga sotto ogni
+              // effetto che chiede il Primordio come compagna.
+              missingPrime: (entry.pairings ?? []).some((pairing) => pairing.sphere === "prime") && level(sphereLevels.prime) <= 0,
               scopes: splitScopes(entry.scopes ?? "")
             }))
         }))

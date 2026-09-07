@@ -5639,6 +5639,11 @@
   padding: 0 0.6rem;
 }
 
+/* Il Primordio senza Primordio: si paga in Quintessenza (7/9), in oro. */
+.wod5e-mage-grimorio-row > .wod5e-mage-grimorio-missing.prime {
+  color: var(--mage-oro, #d9a827);
+}
+
 /* Ogni Ambito consigliato sulla sua riga (verdetto di Blue, 6/9). */
 .wod5e-mage-grimorio-row > .wod5e-mage-grimorio-scopes > span {
   line-height: 1.35;

@@ -925,7 +925,8 @@
       "OpenRow": "aperto",
       "ShortOne": "ti manca un pallino",
       "ShortMany": "ti mancano {n} pallini",
-      "Absent": "Sfera che non hai"
+      "Absent": "Sfera che non hai",
+      "WithoutPrime": "Senza Primordio: si paga in Quintessenza."
     },
     "Incantesimi": {
       "DialogTitle": "Scrivi un incantesimo",

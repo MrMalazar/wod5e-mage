@@ -925,7 +925,8 @@
       "OpenRow": "open",
       "ShortOne": "one dot short",
       "ShortMany": "{n} dots short",
-      "Absent": "Sphere you lack"
+      "Absent": "Sphere you lack",
+      "WithoutPrime": "Without Prime: you pay in Quintessence."
     },
     "Incantesimi": {
       "DialogTitle": "Write a spell",

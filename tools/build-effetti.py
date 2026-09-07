@@ -50,7 +50,7 @@ def plain(text):
 
 
 SPHERE_NAMES = {**SPHERES, "Forze": "forces"}
-PAIRING = re.compile(r"^- \*\*\+ (" + "|".join(SPHERE_NAMES) + r")( \((?:obbligata|diretta)\))?:\*\*\s*(.*)$")
+PAIRING = re.compile(r"^- \*\*\+ (" + "|".join(SPHERE_NAMES) + r")( ●+)?( \((?:obbligata|diretta)\))?:\*\*\s*(.*)$")
 SCOPES_LINE = re.compile(r"^\*Ambiti consigliati:\*\s*(.*)$")
 # La Formula (6/9, dal lavoro del ramo B): la parola universale che l'effetto
 # incarna nella sua Sfera. Una riga sotto il nome, anche più Formule a virgola.
@@ -138,15 +138,17 @@ def parse(path, sphere):
             if formula:
                 block["formule"] = [slug(part) for part in formula.group(1).split(",") if part.strip()]
             elif pairing:
-                text = plain(pairing.group(3))
+                text = plain(pairing.group(4))
                 extra_sphere = SPHERE_NAMES[pairing.group(1)]
                 # «(diretta)» (6/9): la compagna che fa il lavoro diretto. Senza,
                 # l'effetto riesce di lato e sale di un grado (regola del ponte).
-                # Nei blocchi il livello non si scrive: basta averla.
-                required = bool(pairing.group(2))
-                block["pairings"].append({"sphere": extra_sphere, "text": text, "required": required})
+                # Il livello di norma non si scrive (basta averla); «+ Vita ●●●
+                # (diretta)» (7/9, Innestare) lo fissa.
+                required = bool(pairing.group(3))
+                extra_level = len(pairing.group(2).strip()) if pairing.group(2) else 1
+                block["pairings"].append({"sphere": extra_sphere, "text": text, "required": required, "level": extra_level})
                 if required:
-                    block["extras"].append({"sphere": extra_sphere, "level": 1, "required": True})
+                    block["extras"].append({"sphere": extra_sphere, "level": extra_level, "required": True})
             elif scopes:
                 # Gli Ambiti consigliati chiudono il blocco.
                 block["scopes"] = plain(scopes.group(1))
