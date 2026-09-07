@@ -88,6 +88,8 @@ export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
                   label: localize(`WOD5E_MAGE.Spheres.${pairing.sphere}`),
                   icon: `modules/${MODULE_ID}/assets/icons/sheet/${pairing.sphere}.png`,
                   text: pairing.text,
+                  // Il livello della compagna, quando il blocco lo scrive («+ Vita ●●●», 7/9).
+                  dots: (pairing.level ?? 1) > 1 ? "●".repeat(pairing.level) : "",
                   required: Boolean(pairing.required)
                 })),
               // Le compagne dirette che il personaggio non ha: una riga sola,
