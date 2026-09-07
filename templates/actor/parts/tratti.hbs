@@ -220,10 +220,31 @@
                         <span>{{localize "WOD5E_MAGE.Riepilogo.Label"}}</span>
                     </summary>
 
+                    {{!-- Il grado del Risvegliato e il profilo delle Abilità (7/9):
+                         decidono i traguardi dei contatori. --}}
+                    <div class="wod5e-mage-riepilogo-scelte">
+                        <label>
+                            <span>{{localize "WOD5E_MAGE.Riepilogo.Grade"}}</span>
+                            <select name="flags.wod5e-mage.creazione.grado" {{#if locked}}disabled{{/if}}>
+                                {{#each creationSummary.grades as |grade|}}
+                                    <option value="{{grade.id}}" {{#if grade.selected}}selected{{/if}}>{{localize grade.label}}</option>
+                                {{/each}}
+                            </select>
+                        </label>
+                        <label>
+                            <span>{{localize "WOD5E_MAGE.Riepilogo.Profile"}}</span>
+                            <select name="flags.wod5e-mage.creazione.profilo" {{#if locked}}disabled{{/if}}>
+                                {{#each creationSummary.profiles as |profile|}}
+                                    <option value="{{profile.id}}" {{#if profile.selected}}selected{{/if}}>{{localize profile.label}} ({{profile.dots}})</option>
+                                {{/each}}
+                            </select>
+                        </label>
+                    </div>
+
                     <div class="wod5e-mage-riepilogo-grid">
                         {{#each creationSummary.counts as |count|}}
-                            <div class="wod5e-mage-riepilogo-chip">
-                                <strong>{{count.value}}</strong>
+                            <div class="wod5e-mage-riepilogo-chip {{count.state}}"{{#if count.hint}} title="{{localize count.hint}}"{{/if}}>
+                                <strong>{{count.value}}{{#if count.target}}<small>/{{count.target}}</small>{{/if}}</strong>
                                 <span>{{localize count.label}}</span>
                             </div>
                         {{/each}}
@@ -233,7 +254,7 @@
                         {{#each creationSummary.checks as |check|}}
                             <span class="wod5e-mage-riepilogo-check {{#if check.ok}}ok{{/if}}">
                                 <i class="fa-solid {{#if check.ok}}fa-circle-check{{else}}fa-circle-xmark{{/if}}" aria-hidden="true"></i>
-                                {{localize check.label}}
+                                {{localize check.label}}{{#if check.target}} {{check.target}}{{/if}}
                             </span>
                         {{/each}}
                     </div>

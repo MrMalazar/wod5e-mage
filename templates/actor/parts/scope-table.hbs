@@ -10,24 +10,24 @@
         <table>
             <thead>
                 <tr>
-                    <th scope="col">{{localize "WOD5E_MAGE.Scopes.TableSuccesses"}}</th>
+                    <th scope="col" class="wod5e-mage-scope-col-name">{{localize "WOD5E_MAGE.Scopes.TableSuccesses"}}</th>
+                    <th scope="col" class="wod5e-mage-scope-col-reading">{{localize "WOD5E_MAGE.Scopes.TableReading"}}</th>
                     {{#each scopeTable.steps as |step|}}
                         <th scope="col">{{step}}</th>
                     {{/each}}
                 </tr>
             </thead>
             <tbody>
-                {{!-- Gli Ambiti in ordine alfabetico (6/9); chi ha più letture
-                     porta una riga di titolo e sotto le letture. --}}
+                {{!-- Gli Ambiti in ordine alfabetico (6/9). Due colonne di testa
+                     (verdetto di Blue, 7/9): il nome dell'Ambito, che con più
+                     letture occupa tutte le sue righe, e la lettura. --}}
                 {{#each scopeTable.groups as |group|}}
-                    {{#if group.header}}
-                        <tr class="wod5e-mage-scope-group">
-                            <th scope="rowgroup" colspan="8">{{localize group.label}}</th>
-                        </tr>
-                    {{/if}}
                     {{#each group.rows as |row|}}
                     <tr class="scope-{{row.id}}{{#if row.small}} wod5e-mage-scope-row-small{{/if}}{{#if group.header}} wod5e-mage-scope-sub{{/if}}">
-                        <th scope="row">{{localize row.title}}</th>
+                        {{#if @first}}
+                            <th scope="rowgroup" class="wod5e-mage-scope-group" rowspan="{{group.span}}">{{localize group.label}}</th>
+                        {{/if}}
+                        <th scope="row" class="wod5e-mage-scope-reading">{{#if group.header}}{{localize row.title}}{{/if}}</th>
                         {{!-- Ogni cella ha le stesse colonne invisibili della sua riga:
                              simbolo | numero | testo (o casella). Così, dentro una colonna
                              della tavola, simboli, numeri e testi stanno in fila. --}}

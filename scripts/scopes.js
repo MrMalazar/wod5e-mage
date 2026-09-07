@@ -141,6 +141,8 @@ export function prepareScopeTable(localize = (key) => key) {
         // Con una lettura sola la riga porta il nome dell'Ambito; con più
         // letture c'è la riga di titolo e sotto le letture col loro nome.
         header: many,
+        // Quante righe occupa il nome dell'Ambito nella prima colonna (7/9).
+        span: scopeRows.length,
         rows: scopeRows
           .map((row) => ({ ...row, title: many ? (row.sublabel || row.label) : label }))
           // Le letture in ordine alfabetico della lingua (6/9).

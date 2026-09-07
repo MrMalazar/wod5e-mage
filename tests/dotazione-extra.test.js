@@ -195,8 +195,20 @@ const summaryActor = {
 };
 const summary = prepareCreationSummary(summaryActor);
 const byId = Object.fromEntries(summary.counts.map((count) => [count.id, count.value]));
-// melee è un'abilità assorbita: i suoi pallini non contano.
-assert.deepEqual(byId, { attributes: 5, skills: 5, backgrounds: 3, merits: 3, flaws: 1, spheres: 4 });
+// melee è un'abilità assorbita: i suoi pallini non contano. I Vantaggi contano Background e Pregi insieme (7/9).
+assert.deepEqual(byId, { attributes: 5, skills: 5, backgrounds: 3, merits: 6, flaws: 1, spheres: 4 });
+// I traguardi del Neofita col profilo Bilanciato: 22, 26, 7, 2, 6; rosso sotto, giallo sopra, verde pari (7/9).
+const byTarget = Object.fromEntries(summary.counts.map((count) => [count.id, [count.target, count.state]]));
+assert.deepEqual(byTarget, { attributes: [22, "under"], skills: [26, "under"], backgrounds: [null, ""], merits: [7, "under"], flaws: [2, "under"], spheres: [6, "under"] });
+assert.deepEqual(summary.grades.map((g) => g.id), ["neofita", "risvegliato", "discepolo", "anziano", "maestro"]);
+assert.equal(summary.grades[0].selected, true);
+const { creationTargets, compareCount } = await import("../scripts/riepilogo.js");
+assert.deepEqual(creationTargets("maestro", "specialista", 3), { grado: "maestro", profilo: "specialista", arete: 4, attributes: 24, skills: 29, merits: 16, flaws: 6, spheres: 11 });
+assert.deepEqual(creationTargets("risvegliato", "factotum", 2), { grado: "risvegliato", profilo: "factotum", arete: 2, attributes: 22, skills: 31, merits: 9, flaws: 3, spheres: 7 });
+assert.deepEqual([compareCount(22, 22), compareCount(20, 22), compareCount(25, 22)], ["exact", "under", "over"]);
+assert.equal(prepareCreationSummary(summaryActor, 1).checks.find((check) => check.id === "arete").ok, true);
+assert.equal(prepareCreationSummary(summaryActor, 2).checks.find((check) => check.id === "arete").ok, false);
+assert.match(readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8"), /flags\.wod5e-mage\.creazione\.grado[\s\S]*flags\.wod5e-mage\.creazione\.profilo[\s\S]*wod5e-mage-riepilogo-chip \{\{count\.state\}\}/);
 const checkById = Object.fromEntries(summary.checks.map((check) => [check.id, check.ok]));
 assert.deepEqual(checkById, { concept: true, anchors: false, convictions: true, instruments: false });
 // Con lo Strumento anche su Tempo, il controllo passa.

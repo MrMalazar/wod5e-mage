@@ -351,7 +351,8 @@
       "range": "Range",
       "TableTitle": "The Scopes",
       "TableHint": "Each Scope is declared at a level from 1 to 7. The threshold is the higher of the highest Sphere and the highest Scope (cap 7); each Scope beyond the first raises it by 1, even past the cap. Potency: Weight, how heavy what you move is; Epicness, how much the feat weighs in the story; Damage, Arete plus the number. Duration: when casting you declare whether it runs on play or on narrative time. Conditions: How many, the number of Conditions inflicted; Debuff, how heavy the one inflicted is.",
-      "TableSuccesses": "Level →",
+      "TableSuccesses": "Scope",
+      "TableReading": "Reading · level →",
       "Table": {
         "potency": {
           "1": "10 kg (a full backpack)",
@@ -693,7 +694,24 @@
       "Concept": "Concept filled",
       "Anchors": "At least one Anchor",
       "Convictions": "At least one Conviction",
-      "Instruments": "One Instrument per Sphere"
+      "Instruments": "One Instrument per Sphere",
+      "Grade": "Rank",
+      "Grades": {
+        "neofita": "Neophyte",
+        "risvegliato": "Awakened",
+        "discepolo": "Disciple",
+        "anziano": "Elder",
+        "maestro": "Master"
+      },
+      "Profile": "Skills profile",
+      "Profiles": {
+        "bilanciato": "Balanced",
+        "factotum": "Jack of all trades",
+        "specialista": "Specialist",
+        "libero": "Free"
+      },
+      "MeritsHint": "Backgrounds and Merits together: seven points, nine with two Challenge groups.",
+      "Arete": "Areté of the rank"
     },
     "Salute": {
       "Label": "Health",

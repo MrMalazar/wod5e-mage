@@ -351,7 +351,8 @@
       "range": "Portata",
       "TableTitle": "Gli Ambiti",
       "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza: Peso, quanto pesa ciò che muovi; Epicità, quanto pesa l'impresa nella storia; Danni, l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa. Condizioni: Quante, il numero di Condizioni inflitte; Debuff, quanto pesa quella inflitta.",
-      "TableSuccesses": "Livello →",
+      "TableSuccesses": "Ambito",
+      "TableReading": "Lettura · livello →",
       "Table": {
         "potency": {
           "1": "10 kg (uno zaino pieno)",
@@ -693,7 +694,24 @@
       "Concept": "Concetto compilato",
       "Anchors": "Almeno un'Ancora",
       "Convictions": "Almeno una Convinzione",
-      "Instruments": "Uno Strumento per Sfera"
+      "Instruments": "Uno Strumento per Sfera",
+      "Grade": "Grado",
+      "Grades": {
+        "neofita": "Neofita",
+        "risvegliato": "Risvegliato",
+        "discepolo": "Discepolo",
+        "anziano": "Anziano",
+        "maestro": "Maestro"
+      },
+      "Profile": "Profilo Abilità",
+      "Profiles": {
+        "bilanciato": "Bilanciato",
+        "factotum": "Factotum",
+        "specialista": "Specialista",
+        "libero": "Libero"
+      },
+      "MeritsHint": "Background e Pregi insieme: sette punti, nove con due gruppi della Sfida.",
+      "Arete": "Areté del grado"
     },
     "Salute": {
       "Label": "Salute",

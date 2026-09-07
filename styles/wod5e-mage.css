@@ -1032,35 +1032,29 @@
   white-space: nowrap;
 }
 
-/* La riga di titolo di un Ambito a più letture (Potenza, Durata) e, sotto,
-   le letture rientrate col solo loro nome (6/9). */
-.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-group > th {
-  background: rgb(152 119 43 / 22%);
-  color: var(--mage-oro, #d9a827);
+/* La prima colonna: il nome dell'Ambito in MAIUSCOLO, con i colori delle
+   fasce, che occupa tutte le righe delle sue letture (7/9). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th.wod5e-mage-scope-group,
+.wod5e-mage-scope-table tbody th.wod5e-mage-scope-group {
+  background: var(--tavola-fascia, rgb(152 119 43 / 22%));
+  color: var(--tavola-fascia-testo, #d9a827);
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  padding: 0.45rem 0.5rem 0.3rem;
+  padding: 0.45rem 0.5rem;
   text-align: left;
   text-transform: uppercase;
+  vertical-align: middle;
 }
 
-/* Le letture: la prima lettera maiuscola, come sono scritte (6/9). */
-.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-sub > th {
-  color: var(--mage-oro-chiaro, #f5e7b2);
+/* La seconda colonna: la lettura, con la prima lettera maiuscola (6/9);
+   vuota per gli Ambiti a lettura sola. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th.wod5e-mage-scope-reading,
+.wod5e-mage-scope-table tbody th.wod5e-mage-scope-reading {
+  background: var(--tavola-nome, transparent);
+  color: var(--tavola-lettura-testo, #f5e7b2);
   font-weight: 600;
-  padding-left: 1.1rem;
   text-transform: none;
-}
-
-/* Gli Ambiti a lettura sola: il nome in MAIUSCOLO e con gli stessi colori
-   delle fasce (6/9). */
-.wod5e-mage-scope-table tbody tr:not(.wod5e-mage-scope-sub) > th[scope="row"] {
-  background: rgb(152 119 43 / 22%);
-  color: var(--mage-oro, #d9a827);
-  font-size: 0.9rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 /* Leggibile (6/9): testo largo quanto la cella, a capo se serve. */
@@ -1072,11 +1066,6 @@
   font-size: 0.82rem;
   line-height: 1.3;
   white-space: normal;
-}
-
-.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-group > th {
-  background: rgb(152 119 43 / 22%);
-  border-radius: 4px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th > i {
@@ -2161,9 +2150,15 @@
   table-layout: fixed;
 }
 
-.wod5e-mage-scope-table th[scope="row"],
-.wod5e-mage-scope-table thead th:first-child {
-  width: 118px;
+/* Due colonne di testa (7/9): il nome dell'Ambito e la lettura. */
+.wod5e-mage-scope-table th.wod5e-mage-scope-group,
+.wod5e-mage-scope-table thead th.wod5e-mage-scope-col-name {
+  width: 104px;
+}
+
+.wod5e-mage-scope-table th.wod5e-mage-scope-reading,
+.wod5e-mage-scope-table thead th.wod5e-mage-scope-col-reading {
+  width: 96px;
 }
 
 .wod5e-mage-arete-sigillo-small {
@@ -2952,6 +2947,63 @@
   color: var(--mage-oro);
   font-size: 1.15rem;
   line-height: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-chip > strong > small {
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+/* Il confronto col traguardo (verdetto di Blue, 7/9): rosso sotto, giallo
+   sopra, verde pari. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-chip.under > strong {
+  color: #e2655a;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-chip.over > strong {
+  color: #e9c84a;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-chip.exact > strong {
+  color: #7fd18a;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-chip.under {
+  border-color: rgb(226 101 90 / 60%);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-chip.exact {
+  border-color: rgb(127 209 138 / 60%);
+}
+
+/* Il grado e il profilo, in cima al memo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-scelte {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-scelte > label {
+  align-items: center;
+  display: flex;
+  flex: 1 1 14rem;
+  gap: 0.4rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-scelte > label > span {
+  color: var(--mage-oro);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-scelte > label > select {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-chip > span {
@@ -6391,26 +6443,9 @@
   border-radius: 0 4px 4px 0;
 }
 
-.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-group > th,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody tr:not(.wod5e-mage-scope-sub) > th[scope="row"],
-.wod5e-mage-scope-table tbody tr:not(.wod5e-mage-scope-sub) > th[scope="row"] {
-  background: var(--tavola-fascia);
-  color: var(--tavola-fascia-testo);
-}
-
 /* Le celle degli Ambiti a lettura sola: come quelle delle letture (6/9). */
 .wod5e-mage-scope-table tbody tr:not(.wod5e-mage-scope-sub) > td {
   background: var(--tavola-cella-alt);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody th[scope="row"],
-.wod5e-mage-scope-table tbody th[scope="row"] {
-  background: var(--tavola-nome);
-  color: var(--tavola-nome-testo);
-}
-
-.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-sub > th[scope="row"] {
-  color: var(--tavola-lettura-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody td,

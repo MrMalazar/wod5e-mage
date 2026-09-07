@@ -56,7 +56,10 @@ assert.deepEqual(Object.values(itScopes.Sub), ["Peso", "Epicità", "Danni", "Nar
 assert.equal(itScopes.Table.conditionsDebuff["7"], "Non giochi");
 assert.equal(itScopes.Table.conditionsComplexity["7"], "Livello contratto");
 assert.match(scopeTableTemplate, /wod5e-mage-scope-table-note[\s\S]*Scopes\.TableNote/);
-assert.match(scopeTableTemplate, /scopeTable\.groups[\s\S]*group\.header[\s\S]*wod5e-mage-scope-group[\s\S]*group\.rows[\s\S]*row\.title/);
+// Due colonne di testa (7/9): il nome dell'Ambito su tutte le sue righe, poi la lettura.
+assert.match(scopeTableTemplate, /Scopes\.TableReading[\s\S]*scopeTable\.groups[\s\S]*group\.rows[\s\S]*@first[\s\S]*wod5e-mage-scope-group" rowspan="\{\{group\.span\}\}"[\s\S]*wod5e-mage-scope-reading[\s\S]*row\.title/);
+assert.equal(tableIt.groups.find((group) => group.scope === "potency").span, 3);
+assert.equal(tableIt.groups.find((group) => group.scope === "area").span, 1);
 assert.equal(table.rows[1].label, "WOD5E_MAGE.Scopes.PotencyEpic");
 assert.equal(table.rows[1].scope, "potency");
 assert.equal(table.rows[2].scope, "potency");

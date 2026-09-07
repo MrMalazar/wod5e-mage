@@ -423,7 +423,7 @@ export class MageActorSheet extends MortalActorSheet {
       // Negare il Contraccolpo: una volta per sessione, dalla Ruota.
       context.contraccolpo = getContraccolpo(actor);
       // Il memo di creazione, in fondo alla pagina: conta e verifica.
-      context.creationSummary = prepareCreationSummary(actor);
+      context.creationSummary = prepareCreationSummary(actor, getArete(actor).value);
     }
 
     // La testata: la riga dell'appartenenza sotto il nome, e la Salute.
