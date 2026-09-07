@@ -704,6 +704,44 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
+    "id": "correspondence-4-ubiquita",
+    "name": "Ubiquità",
+    "sphere": "correspondence",
+    "level": 4,
+    "extras": [],
+    "text": "Sei in più luoghi nello stesso istante: vedi, senti e agisci da ognuno come se fossi lì, e da ognuno lo spazio ti riporta agli altri. Da sola la Corrispondenza porta la tua presenza; per un corpo in ogni luogo serve la Vita.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Tenere insieme le presenze senza confonderti: una testa sola in più luoghi.",
+        "required": false,
+        "level": 2
+      },
+      {
+        "sphere": "life",
+        "text": "Avere un corpo in ogni luogo, e non solo una presenza.",
+        "required": false,
+        "level": 3
+      },
+      {
+        "sphere": "matter",
+        "text": "Portarti dietro gli oggetti in ogni luogo.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "time",
+        "text": "Essere in più luoghi in istanti diversi.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Bersagli per quanti luoghi: 1 due luoghi, 3 quattro. Portata per quanto sono lontani. Durata 2 per la scena. Precisione (dettaglio) per il punto esatto di ogni luogo.",
+    "formule": [
+      "spostare"
+    ]
+  },
+  {
     "id": "correspondence-5-riscrivere-la-geometria",
     "name": "Riscrivere la geometria",
     "sphere": "correspondence",
@@ -731,6 +769,44 @@ export const EFFETTI = Object.freeze([
       }
     ],
     "scopes": "Area, Potenza (peso ed epicità), Durata: tutti alti.",
+    "formule": [
+      "rivoluzionare"
+    ]
+  },
+  {
+    "id": "correspondence-5-cancellare-un-luogo",
+    "name": "Cancellare un luogo",
+    "sphere": "correspondence",
+    "level": 5,
+    "extras": [],
+    "text": "Un luogo smette di esistere nella geometria del mondo: chi ci arriva si trova dall'altra parte, le strade si saldano, le mappe non lo hanno mai avuto. Quello che c'era dentro non è da nessuna parte, finché non lo riapri. Volgare con Testimoni per forza di cose.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Far dimenticare a tutti che il luogo c'era.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "time",
+        "text": "Far sì che il luogo non ci sia mai stato.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "matter",
+        "text": "Cancellare anche la materia del luogo, non solo lo spazio.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "spirit",
+        "text": "Cancellare anche il riflesso di là.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Area per quanto cancelli: 2 l'edificio, 3 il quartiere. Durata per quanto resta cancellato (7 per sempre). Potenza (epicità) per quanto pesa nella storia.",
     "formule": [
       "rivoluzionare"
     ]
@@ -3274,7 +3350,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per il perimetro: 2 il palazzo, 3 il quartiere. Durata 2 per la scena, 4 per la sessione. Condizioni 1 per chi è esente: i tuoi. Potenza (danni) se il gelo e il buio feriscono.",
+    "scopes": "Area per il perimetro: 2 il palazzo, 3 il quartiere, 4 la città intera. Durata 2 per la scena, 4 per la sessione, o fuori gioco 1 per un giorno di buio. Condizioni 1 per chi è esente: i tuoi. Potenza (danni) se il gelo e il buio feriscono.",
     "formule": [
       "barriera"
     ]
@@ -4390,7 +4466,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "matter",
     "level": 4,
     "extras": [],
-    "text": "La struttura si riassesta: pareti spostate, piani aggiunti, la casa che cambia pianta mentre ci sei dentro. La materia è la stessa; la disponi tu.",
+    "text": "La struttura si riassesta: pareti spostate, piani aggiunti, la casa che cambia pianta mentre ci sei dentro. La materia è la stessa; la disponi tu. Con la Potenza (peso) lo trasmuti intero: il grattacielo diventa vetro, la prigione sabbia, il ponte oro, con chi c'è dentro.",
     "pairings": [
       {
         "sphere": "forces",
@@ -4429,7 +4505,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (peso) per quanto è grosso: 5 una casa, 6 un grattacielo. Area per quanto rifai: 1 la stanza, 2 l'edificio. Precisione (dettaglio) per i particolari: 1 le pareti, 3 gli infissi, 5 i fregi.",
+    "scopes": "Potenza (peso) per quanto è grosso, o quanto trasmuti: 5 una casa, 6 un grattacielo. Area per quanto rifai: 1 la stanza, 2 l'edificio. Precisione (dettaglio) per i particolari: 1 le pareti, 3 gli infissi, 5 i fregi.",
     "formule": [
       "trasformare"
     ]
@@ -9798,6 +9874,12 @@ export const EFFETTI = Object.freeze([
         "text": "Portarti dietro gli abiti e gli oggetti nella misura nuova.",
         "required": false,
         "level": 1
+      },
+      {
+        "sphere": "forces",
+        "text": "Diventare energia: luce, fulmine o fiamma; passi nei cavi, entri dalle finestre come luce, niente di fisico ti tocca, e torni carne.",
+        "required": false,
+        "level": 3
       },
       {
         "sphere": "spirit",

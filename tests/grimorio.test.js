@@ -71,7 +71,8 @@ console.log("Grimorio, Ustione e Salute: test passati.");
 // Il formato nuovo (6/9): Corrispondenza a blocchi, con le Sfere compagne e
 // gli Ambiti consigliati; «Mappare la zona» ha assorbito «Cercare nell'area».
 const corr = EFFETTI.filter((entry) => entry.sphere === "correspondence");
-assert.equal(corr.length, 24);
+assert.equal(corr.length, 26);
+assert.deepEqual(prepareGrimorio({ correspondence: 4, mind: 2, life: 1 }, (k) => k)[0].levels[3].entries.find((entry) => entry.id === "correspondence-4-ubiquita").pairings.map((pairing) => pairing.dots), ["●●", "●●●"]);
 const mappare = corr.find((entry) => entry.id === "correspondence-1-mappare-la-zona");
 assert.equal(mappare.pairings.length, 8);
 assert.equal(mappare.pairings[0].sphere, "entropy");
@@ -165,7 +166,7 @@ assert.match(readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.me
 // anche «per Formula»: per grado, Sfera per Sfera, aperto / pallini che
 // mancano / Sfera che non hai. Solo le righe aperte scelgono.
 assert.equal(FORMULE.length, 52);
-assert.equal(EFFETTI.length, 267);
+assert.equal(EFFETTI.length, 269);
 assert.equal(EFFETTI.every((entry) => entry.formule.length > 0 && entry.formule.every((id) => FORMULE.some((formula) => formula.id === id))), true);
 assert.deepEqual(FORMULE.find((formula) => formula.id === "danneggiare").grade, 3);
 assert.deepEqual(formuleLabels(findEffetto("forces-3-onda-d-urto")), ["Danneggiare · 3"]);
