@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { EFFETTI, FORMULE } from "../scripts/data/effetti.js";
-import { effectAvailable, effectSphereLevels, findEffetto, formuleLabels, prepareGrimorio, prepareGrimorioFormule, splitScopes } from "../scripts/grimorio.js";
+import { effectAvailable, effectSphereLevels, findEffetto, formuleLabels, prepareGrimorio, prepareGrimorioFormule, prepareGrimorioSpheres, splitScopes } from "../scripts/grimorio.js";
 import { ustioneSplit, normalizeEffectKind } from "../scripts/paradox-burst.js";
 import { paintSalute } from "../scripts/salute.js";
 import { renderRollCard } from "../scripts/roll-card.js";
@@ -190,3 +190,11 @@ assert.equal(prepareGrimorioFormule({}).length, 0);
 assert.deepEqual(prepareGrimorio({ forces: 3 }, (k) => k)[0].levels[2].entries.find((entry) => entry.id === "forces-3-onda-d-urto").formule, ["Danneggiare · 3"]);
 assert.match(grimorioTemplate, /data-view-panel="sphere"[\s\S]*wod5e-mage-grimorio-formula[\s\S]*data-view-panel="formula"[\s\S]*data-effetto="\{\{row\.id\}\}"/);
 console.log("Formule: test passati.");
+
+// I simboli delle Sfere in cima, le schede dei gradi, la riga aperta in evidenza (7/9).
+assert.deepEqual(prepareGrimorioSpheres({ forces: 3, life: 1 }, (k) => k, new Set(["life"])).map((s) => [s.sphere, s.lit, s.dots]), [["forces", true, "●●●"], ["life", false, "●"]]);
+assert.match(grimorioTemplate, /data-role="grimorioSphere" data-sphere="\{\{s\.sphere\}\}"[\s\S]*data-sphere-group="\{\{group\.sphere\}\}"[\s\S]*data-role="grimorioGrade" data-grade="\{\{grade\.grade\}\}"[\s\S]*data-grade-panel="\{\{grade\.grade\}\}"[\s\S]*data-sphere-row="\{\{row\.sphere\}\}"/);
+const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+assert.match(css, /\.wod5e-mage-grimorio-row\[open\] \{/);
+assert.match(css, /\.wod5e-mage-roll-symbol-sphere > img \{\n  filter: brightness\(0\)/);
+console.log("Grimorio, simboli e schede: test passati.");
