@@ -89,7 +89,7 @@ assert.match(entro.find((entry) => entry.id === "entropy-5-sigillare-un-giuramen
 assert.equal(entro.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 // Forze nel formato nuovo (6/9): ventotto blocchi, tutti con compagne e Ambiti.
 const forze = EFFETTI.filter((entry) => entry.sphere === "forces");
-assert.equal(forze.length, 34);
+assert.equal(forze.length, 35);
 assert.equal(forze.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.equal(forze.find((entry) => entry.id === "forces-3-telecinesi").pairings.length, 5);
 // Materia nel formato nuovo (6/9): ventiquattro blocchi; «(obbligata)» nel nome segna la compagna necessaria.
@@ -115,28 +115,36 @@ assert.equal(primordio.every((entry) => entry.pairings.length > 0 && entry.scope
 assert.equal(primordio.some((entry) => entry.id === "prime-3-rianimare-un-morto-recente"), false);
 // Spirito nel formato nuovo (6/9): ventinove blocchi.
 const spirito = EFFETTI.filter((entry) => entry.sphere === "spirit");
-assert.equal(spirito.length, 36);
+assert.equal(spirito.length, 33);
 assert.equal(spirito.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(spirito.find((entry) => entry.id === "spirit-1-riconoscere-il-sovrannaturale").extras.map((extra) => extra.sphere), ["life"]);
+assert.ok(spirito.some((entry) => entry.id === "spirit-4-abitare-un-corpo"));
+assert.equal(spirito.some((entry) => entry.name === "Creare un Feticcio"), false);
 // Tempo nel formato nuovo (6/9): ventuno blocchi.
 const tempo = EFFETTI.filter((entry) => entry.sphere === "time");
-assert.equal(tempo.length, 24);
+assert.equal(tempo.length, 22);
 assert.equal(tempo.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(tempo.find((entry) => entry.id === "time-4-avvertire-il-te-di-ieri").extras.map((extra) => extra.sphere), ["mind"]);
 // Vita nel formato nuovo (6/9): ventiquattro blocchi. Tutte le nove Sfere sono a blocchi:
 // ogni effetto ha gli Ambiti consigliati, e solo due di Corrispondenza stanno senza compagne.
 const vita = EFFETTI.filter((entry) => entry.sphere === "life");
-assert.equal(vita.length, 31);
+assert.equal(vita.length, 30);
 assert.equal(vita.every((entry) => entry.pairings.length > 0 && entry.scopes), true);
 assert.deepEqual(vita.find((entry) => entry.id === "life-3-animare-un-cadavere").extras.map((extra) => extra.sphere), ["prime"]);
+assert.ok(vita.some((entry) => entry.id === "life-3-pilotare-un-corpo"));
+assert.ok(vita.some((entry) => entry.id === "life-5-immunita-fisica"));
+assert.equal(vita.some((entry) => entry.name === "Rendere permanente il mutamento"), false);
 assert.equal(EFFETTI.every((entry) => entry.scopes), true);
 assert.equal(EFFETTI.filter((entry) => entry.pairings.length === 0).length, 2);
 // Una copia sola per effetto (verdetto di Blue, 6/9), tranne le vie volute: Addormentare (Mente, Vita), Rendere permanente il mutamento (Materia, Vita), Riconoscere il sovrannaturale (Mente, Spirito).
 const perNome = new Map();
 for (const entry of EFFETTI) perNome.set(entry.name, (perNome.get(entry.name) ?? 0) + 1);
 // Dal 7/9: Contrastare Magick porta lo stesso nome in tutte e nove le Sfere; Rendere permanente resta solo in Vita, Riconoscere il sovrannaturale solo in Spirito (in Mente sta dentro Lettura dell'aura).
-assert.deepEqual([...perNome].filter(([, n]) => n > 1).map(([name]) => name).sort(), ["Accelerare e rallentare", "Addormentare", "Contrastare Magick"]);
+// E Ferire creatura (7/9, verdetto di Blue: «una sola spell», colorata per Sfera) in otto Sfere: tutte tranne il Tempo.
+assert.deepEqual([...perNome].filter(([, n]) => n > 1).map(([name]) => name).sort(), ["Accelerare e rallentare", "Addormentare", "Contrastare Magick", "Ferire creatura"]);
 assert.equal(perNome.get("Contrastare Magick"), 9);
+assert.equal(perNome.get("Ferire creatura"), 8);
+assert.equal(EFFETTI.filter((entry) => entry.name === "Ferire creatura").every((entry) => entry.formule.includes("danneggiare")), true);
 // Il giocatore vede solo le compagne che ha (verdetto di Blue, 6/9), e gli
 // Ambiti consigliati una riga per Ambito.
 const grimorioIt = prepareGrimorio({ correspondence: 2, life: 1, matter: 1 }, (k) => k);
@@ -157,18 +165,19 @@ assert.match(readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.me
 // anche «per Formula»: per grado, Sfera per Sfera, aperto / pallini che
 // mancano / Sfera che non hai. Solo le righe aperte scelgono.
 assert.equal(FORMULE.length, 52);
-assert.equal(EFFETTI.length, 272);
+assert.equal(EFFETTI.length, 267);
 assert.equal(EFFETTI.every((entry) => entry.formule.length > 0 && entry.formule.every((id) => FORMULE.some((formula) => formula.id === id))), true);
 assert.deepEqual(FORMULE.find((formula) => formula.id === "danneggiare").grade, 3);
 assert.deepEqual(formuleLabels(findEffetto("forces-3-onda-d-urto")), ["Danneggiare · 3"]);
-assert.deepEqual(formuleLabels(findEffetto("life-3-guarire-o-ferire-un-altro")), ["Guarire · 3", "Danneggiare · 3"]);
+assert.deepEqual(formuleLabels(findEffetto("life-3-curare-malattie")), ["Guarire · 3", "Riparare · 2"]);
 assert.ok(EFFETTI.some((entry) => entry.sphere === "correspondence" && entry.formule.includes("danneggiare")));
 assert.ok(EFFETTI.filter((entry) => entry.formule.includes("contrastare")).length >= 9);
 const perFormula = prepareGrimorioFormule({ forces: 3, mind: 2, life: 1 }, (k) => k);
 assert.deepEqual(perFormula.map((group) => group.grade), [1, 2, 3, 4, 5]);
 const danneggiare = perFormula[2].formule.find((formula) => formula.id === "danneggiare");
 assert.equal(danneggiare.open, true);
-assert.deepEqual(danneggiare.rows.slice(0, 2).map((row) => [row.sphere, row.status]), [["forces", "open"], ["mind", "short"]]);
+assert.deepEqual(danneggiare.rows.filter((row) => row.status === "open").map((row) => row.sphere), ["forces", "forces"]);
+assert.equal(danneggiare.rows.find((row) => row.sphere === "mind").status, "short");
 assert.deepEqual(danneggiare.rows.map((row) => row.status), [...danneggiare.rows.map((row) => row.status)].sort((x, y) => ({ open: 0, short: 1, absent: 2 })[x] - ({ open: 0, short: 1, absent: 2 })[y]));
 assert.equal(danneggiare.rows.find((row) => row.sphere === "mind").statusText, "WOD5E_MAGE.Grimorio.ShortOne");
 assert.equal(danneggiare.rows.find((row) => row.sphere === "life").statusText, "WOD5E_MAGE.Grimorio.ShortMany".replace("{n}", "2"));

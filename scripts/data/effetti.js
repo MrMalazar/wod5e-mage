@@ -536,38 +536,6 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "correspondence-3-stropicciare-lo-spazio",
-    "name": "Stropicciare lo spazio",
-    "sphere": "correspondence",
-    "level": 3,
-    "extras": [],
-    "text": "Pieghi lo spazio addosso a qualcuno e lo rimetti a posto come un foglio di carta stropicciato: non torna com'era, perché l'hai compresso e mutato. Non è la forza a colpire: è la posizione che si scardina, e il corpo fa i conti con dove si trova adesso.",
-    "pairings": [
-      {
-        "sphere": "life",
-        "text": "Scardinare per le vie del corpo, e restare spiegabile: la caduta, lo strappo, la lussazione.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "matter",
-        "text": "Stropicciare un oggetto o un veicolo insieme a chi c'è dentro.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Far cedere per prima la piega che regge tutto.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più corpi. Precisione (dettaglio) per una parte sola: la mano, non l'uomo.",
-    "formule": [
-      "danneggiare"
-    ]
-  },
-  {
     "id": "correspondence-3-contrastare-magick",
     "name": "Contrastare Magick",
     "sphere": "correspondence",
@@ -597,6 +565,38 @@ export const EFFETTI = Object.freeze([
     "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
     "formule": [
       "contrastare"
+    ]
+  },
+  {
+    "id": "correspondence-3-ferire-creatura",
+    "name": "Ferire creatura",
+    "sphere": "correspondence",
+    "level": 3,
+    "extras": [],
+    "text": "Stropicci lo spazio: lo pieghi addosso a una creatura e lo rimetti a posto come un foglio di carta stropicciato: non torna com'era, perché l'hai compresso e mutato. Non è la forza a colpire: è la posizione che si scardina, e il corpo fa i conti con dove si trova adesso.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Scardinare per le vie del corpo, e restare spiegabile: la caduta, lo strappo, la lussazione.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "matter",
+        "text": "Stropicciare un oggetto o un veicolo insieme a chi c'è dentro.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far cedere per prima la piega che regge tutto.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più corpi. Precisione (dettaglio) per una parte sola: la mano, non l'uomo.",
+    "formule": [
+      "danneggiare"
     ]
   },
   {
@@ -1294,44 +1294,6 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "entropy-3-ferire-indirettamente",
-    "name": "Ferire indirettamente",
-    "sphere": "entropy",
-    "level": 3,
-    "extras": [],
-    "text": "Non lo tocchi: gli fai capitare l'incidente. La mensola gli cade in testa, il gradino cede, l'auto sbanda, la pistola gli esplode in mano. Il danno è vero, e sembra sfortuna: la strada più spiegabile che esista per fare male a qualcuno.",
-    "pairings": [
-      {
-        "sphere": "life",
-        "text": "Far cedere il corpo al momento giusto: il crampo, l'inciampo, il cuore.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "matter",
-        "text": "Scegliere cosa cede e cade: la trave, il vetro, il cavo.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "forces",
-        "text": "Far sbandare l'energia: la scintilla nel gas, la corrente nella mano.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "spirit",
-        "text": "Far capitare l'incidente a uno spirito: le probabilità che lo tengono insieme cadono.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più persone. Precisione (dettaglio) per l'incidente esatto: la mano, non l'uomo.",
-    "formule": [
-      "danneggiare"
-    ]
-  },
-  {
     "id": "entropy-3-ridurre-in-polvere-un-oggetto",
     "name": "Ridurre in polvere un oggetto",
     "sphere": "entropy",
@@ -1615,6 +1577,44 @@ export const EFFETTI = Object.freeze([
     "scopes": "Durata 2 per la scena, 4 per la sessione, 7 per sempre. Bersagli per proteggere altri.",
     "formule": [
       "resistere"
+    ]
+  },
+  {
+    "id": "entropy-3-ferire-creatura",
+    "name": "Ferire creatura",
+    "sphere": "entropy",
+    "level": 3,
+    "extras": [],
+    "text": "Non lo tocchi: gli fai capitare l'incidente. La mensola gli cade in testa, il gradino cede, l'auto sbanda, la pistola gli esplode in mano. Il danno è vero, e sembra sfortuna: la strada più spiegabile che esista per fare male a qualcuno.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far cedere il corpo al momento giusto: il crampo, l'inciampo, il cuore.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "matter",
+        "text": "Scegliere cosa cede e cade: la trave, il vetro, il cavo.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "forces",
+        "text": "Far sbandare l'energia: la scintilla nel gas, la corrente nella mano.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far capitare l'incidente a uno spirito: le probabilità che lo tengono insieme cadono.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più persone. Precisione (dettaglio) per l'incidente esatto: la mano, non l'uomo.",
+    "formule": [
+      "danneggiare"
     ]
   },
   {
@@ -2977,6 +2977,50 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
+    "id": "forces-3-ferire-creatura",
+    "name": "Ferire creatura",
+    "sphere": "forces",
+    "level": 3,
+    "extras": [],
+    "text": "Scagli energia addosso a una creatura: il fulmine, la fiamma, il colpo cinetico, il gelo. La Forza colpisce chiunque abbia un corpo su cui l'energia fa presa; il resto lo aprono le compagne.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far entrare l'energia per le vie del corpo: l'infarto, l'ustione interna, e restare spiegabile.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "spirit",
+        "text": "Colpire con l'energia anche l'effimera: lo spirito, il fantasma.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "matter",
+        "text": "Colpire il vampiro, il golem, il costrutto dove la materia cede all'energia.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "prime",
+        "text": "Scagliare energia nata dal nulla, senza una fonte in scena. Senza Primordio si paga in Quintessenza.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far arrivare l'energia dove la creatura è più fragile.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più creature. Precisione (dettaglio) per il punto esatto.",
+    "formule": [
+      "danneggiare"
+    ]
+  },
+  {
     "id": "forces-4-creare-un-nucleo-d-energia",
     "name": "Creare un nucleo d'energia",
     "sphere": "forces",
@@ -3577,50 +3621,6 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "matter-2-ferire-una-creatura",
-    "name": "Ferire una creatura",
-    "sphere": "matter",
-    "level": 2,
-    "extras": [],
-    "text": "Quello che non è carne viva lo tocchi come tocchi il legno, e lo spacchi come spacchi il legno: il vampiro, il golem, il costrutto, la statua che cammina. Da sola la Materia lavora su ciò che è materia; la Sfera compagna apre le altre creature.",
-    "pairings": [
-      {
-        "sphere": "life",
-        "text": "Ferire un vivente, o aprire la ferita al vampiro per le vie del corpo.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "spirit",
-        "text": "Ferire un mutaforma, uno spirito, un fantasma: la parte spirituale, e la carne segue.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "forces",
-        "text": "Far bruciare la ferita: il fuoco entra dove la materia si è aperta.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "prime",
-        "text": "Ferire qualunque cosa abbia un Modello: danno diretto alla trama. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Colpire dove la creatura è più stanca.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Potenza (danni) per quanto ferisce. Precisione (dettaglio) per il punto esatto: il cuore. Bersagli per più creature.",
-    "formule": [
-      "danneggiare"
-    ]
-  },
-  {
     "id": "matter-2-modellare-un-passe-partout",
     "name": "Modellare un passe-partout",
     "sphere": "matter",
@@ -3826,6 +3826,50 @@ export const EFFETTI = Object.freeze([
     "scopes": "Potenza (peso) per quanta sostanza: 1 lo zaino, 3 l'auto, 5 la casa. Precisione (dettaglio) per la sostanza esatta: 1 un metallo, 3 oro, 5 oro a ventiquattro carati. Durata per quanto resta (7 per sempre).",
     "formule": [
       "trasmutare"
+    ]
+  },
+  {
+    "id": "matter-2-ferire-creatura",
+    "name": "Ferire creatura",
+    "sphere": "matter",
+    "level": 2,
+    "extras": [],
+    "text": "Quello che non è carne viva lo tocchi come tocchi il legno, e lo spacchi come spacchi il legno: il vampiro, il golem, il costrutto, la statua che cammina. Da sola la Materia lavora su ciò che è materia; la Sfera compagna apre le altre creature.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Ferire un vivente, o aprire la ferita al vampiro per le vie del corpo.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "spirit",
+        "text": "Ferire un mutaforma, uno spirito, un fantasma: la parte spirituale, e la carne segue.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "forces",
+        "text": "Far bruciare la ferita: il fuoco entra dove la materia si è aperta.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "prime",
+        "text": "Ferire qualunque cosa abbia un Modello: danno diretto alla trama. Senza Primordio si paga in Quintessenza.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "entropy",
+        "text": "Colpire dove la creatura è più stanca.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Precisione (dettaglio) per il punto esatto: il cuore. Bersagli per più creature.",
+    "formule": [
+      "danneggiare"
     ]
   },
   {
@@ -5067,44 +5111,6 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "mind-3-assalto-psichico",
-    "name": "Assalto psichico",
-    "sphere": "mind",
-    "level": 3,
-    "extras": [],
-    "text": "Colpisci una mente con la tua: danno alla Volontà, mente contro mente. Chi crolla resta lucido ma vuoto; con la Vita il corpo paga insieme.",
-    "pairings": [
-      {
-        "sphere": "life",
-        "text": "Far pagare anche il corpo: danni Aggravati.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Colpire dove la mente è già crepata.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "forces",
-        "text": "Far vedere l'assalto: la luce che acceca, il suono che stordisce.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "prime",
-        "text": "Far mordere l'assalto anche le difese magiche. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più menti. Condizioni (malus 4, stordire) per lasciarlo stordito.",
-    "formule": [
-      "danneggiare"
-    ]
-  },
-  {
     "id": "mind-3-entrare-e-dirigere-i-sogni",
     "name": "Entrare e dirigere i sogni",
     "sphere": "mind",
@@ -5452,11 +5458,11 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "Cancelli e cuci: il ricordo di stasera non c'è più, al suo posto una cena tranquilla. La persona resta la stessa; cambia quello che sa di aver vissuto. Un ricordo, una serata, un volto: gli anni interi sono il quarto pallino, la personalità il quinto.",
+    "text": "I ricordi sono malleabili come la creta: cancelli e cuci, il ricordo di stasera non c'è più, al suo posto una cena tranquilla. La persona resta la stessa; cambia quello che sa di aver vissuto. Un ricordo, una serata, un volto: gli anni interi sono il quarto pallino, la personalità il quinto.",
     "pairings": [
       {
         "sphere": "time",
-        "text": "Riscrivere anche i ricordi vecchi di anni, coerenti con tutto il resto.",
+        "text": "Far coincidere il ricordo nuovo con l'ora e il giorno veri.",
         "required": false,
         "level": 1
       },
@@ -5508,6 +5514,44 @@ export const EFFETTI = Object.freeze([
     "scopes": "Bersagli per più persone. Durata 1 per un turno, 2 per la scena. Condizioni (malus 4, inabilitare) per quanto pesa: 4 non agisce, 7 non gioca.",
     "formule": [
       "bloccare"
+    ]
+  },
+  {
+    "id": "mind-3-ferire-creatura",
+    "name": "Ferire creatura",
+    "sphere": "mind",
+    "level": 3,
+    "extras": [],
+    "text": "Ferisci la mente: colpisci una mente con la tua, danno alla Volontà, mente contro mente. Chi crolla resta lucido ma vuoto; con la Vita il corpo paga insieme.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far pagare anche il corpo: danni Aggravati.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "entropy",
+        "text": "Colpire dove la mente è già crepata.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "forces",
+        "text": "Far vedere l'assalto: la luce che acceca, il suono che stordisce.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "prime",
+        "text": "Far mordere l'assalto anche le difese magiche. Senza Primordio si paga in Quintessenza.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più menti. Condizioni (malus 4, stordire) per lasciarlo stordito.",
+    "formule": [
+      "danneggiare"
     ]
   },
   {
@@ -5731,7 +5775,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 4,
     "extras": [],
-    "text": "Non un ricordo: anni. Cancelli e ricostruisci un'infanzia, un matrimonio, una guerra, e i ricordi nuovi tengono insieme come i veri, con i dettagli, le stagioni, i volti. La persona resta la stessa; sa di aver vissuto un'altra vita.",
+    "text": "Non pieghi i ricordi: li stravolgi. Non un ricordo: anni. Cancelli e ricostruisci un'infanzia, un matrimonio, una guerra, e i ricordi nuovi tengono insieme come i veri, con i dettagli, le stagioni, i volti. La persona resta la stessa; sa di aver vissuto un'altra vita.",
     "pairings": [
       {
         "sphere": "time",
@@ -6157,50 +6201,6 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "prime-2-destabilizzare-un-modello",
-    "name": "Destabilizzare un Modello",
-    "sphere": "prime",
-    "level": 2,
-    "extras": [],
-    "text": "Scuoti la trama stessa del bersaglio: danno diretto al Modello delle cose, che siano carne, pietra o spirito. Non passi per la Sfera del bersaglio: colpisci ciò che lo fa esistere.",
-    "pairings": [
-      {
-        "sphere": "life",
-        "text": "Far arrivare il danno per le vie del corpo, e restare spiegabile.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "matter",
-        "text": "Destabilizzare un oggetto: si sfalda senza motivo apparente.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "spirit",
-        "text": "Destabilizzare uno spirito o una Meraviglia.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "mind",
-        "text": "Destabilizzare una mente: la Volontà cede.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Colpire dove il Modello è già stanco.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più Modelli. Precisione (dettaglio) per il punto del Modello che colpisci.",
-    "formule": [
-      "danneggiare"
-    ]
-  },
-  {
     "id": "prime-2-forgiare-costrutti-di-pura-energia",
     "name": "Forgiare costrutti di pura energia",
     "sphere": "prime",
@@ -6306,6 +6306,50 @@ export const EFFETTI = Object.freeze([
     "scopes": "Durata 2 per la scena, 4 per la sessione. Bersagli per la Cabala. Precisione (dettaglio) per un'aura precisa da imitare.",
     "formule": [
       "celare"
+    ]
+  },
+  {
+    "id": "prime-2-ferire-creatura",
+    "name": "Ferire creatura",
+    "sphere": "prime",
+    "level": 2,
+    "extras": [],
+    "text": "Destabilizzi il Modello: scuoti la trama stessa del bersaglio: danno diretto al Modello delle cose, che siano carne, pietra o spirito. Non passi per la Sfera del bersaglio: colpisci ciò che lo fa esistere.",
+    "pairings": [
+      {
+        "sphere": "life",
+        "text": "Far arrivare il danno per le vie del corpo, e restare spiegabile.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "matter",
+        "text": "Destabilizzare un oggetto: si sfalda senza motivo apparente.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "spirit",
+        "text": "Destabilizzare uno spirito o una Meraviglia.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "mind",
+        "text": "Destabilizzare una mente: la Volontà cede.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "entropy",
+        "text": "Colpire dove il Modello è già stanco.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più Modelli. Precisione (dettaglio) per il punto del Modello che colpisci.",
+    "formule": [
+      "danneggiare"
     ]
   },
   {
@@ -7333,12 +7377,12 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "spirit-2-tenere-lontani-gli-spiriti",
-    "name": "Tenere lontani gli spiriti",
+    "id": "spirit-2-protezione-dagli-spiriti",
+    "name": "Protezione dagli spiriti",
     "sphere": "spirit",
     "level": 2,
     "extras": [],
-    "text": "Gli spiriti non ti toccano e non ti entrano dentro: la possessione non attecchisce, il colpo dall'Umbra non arriva.",
+    "text": "Gli spiriti non ti toccano e non ti entrano dentro: la possessione non attecchisce, il colpo dall'Umbra non arriva, l'attrito del Velo non fa presa. Passi e resti tuo.",
     "pairings": [
       {
         "sphere": "mind",
@@ -7348,7 +7392,7 @@ export const EFFETTI = Object.freeze([
       },
       {
         "sphere": "prime",
-        "text": "Far mordere chi prova a entrare. Senza Primordio si paga in Quintessenza.",
+        "text": "Far mordere chi prova a entrare, e respingere anche la Magick che viene di là. Senza Primordio si paga in Quintessenza.",
         "required": false,
         "level": 1
       },
@@ -7359,9 +7403,10 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 2 per la scena, 4 per la sessione. Bersagli per proteggere altri.",
+    "scopes": "Durata 2 per la scena, 4 per la sessione, 7 per sempre. Bersagli per proteggere altri.",
     "formule": [
-      "proteggere"
+      "proteggere",
+      "resistere"
     ]
   },
   {
@@ -7447,8 +7492,8 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "spirit-3-colpire-l-anima",
-    "name": "Colpire l'anima",
+    "id": "spirit-3-benedire-o-maledire-l-anima",
+    "name": "Benedire o maledire l'anima",
     "sphere": "spirit",
     "level": 3,
     "extras": [
@@ -7458,49 +7503,56 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "Colpisci l'anima di un vivente: danno alla Saggezza, uno dei pochissimi modi che esistano. Serve la Vita: il colpo passa per il corpo che la ospita.",
+    "text": "Metti le mani sull'anima di un vivente e la fai marcire o la fai migliorare: la Saggezza scende, o risale, uno dei pochissimi modi che esistano. Serve la Vita: il tocco passa per il corpo che la ospita.",
     "pairings": [
       {
         "sphere": "life",
-        "text": "Far passare il colpo per il corpo.",
+        "text": "Far passare il tocco per il corpo.",
         "required": true,
         "level": 1
       },
       {
         "sphere": "mind",
-        "text": "Fargli capire cosa ha perso.",
+        "text": "Fargli capire cosa ha perso, o cosa ha ritrovato.",
         "required": false,
         "level": 1
       },
       {
         "sphere": "entropy",
-        "text": "Colpire dove l'anima è già crepata.",
+        "text": "Toccare dove l'anima è già crepata, o dove sta per guarire da sola.",
         "required": false,
         "level": 1
       },
       {
         "sphere": "prime",
-        "text": "Colpire anche l'Avatar dietro l'anima. Senza Primordio si paga in Quintessenza.",
+        "text": "Toccare anche l'Avatar dietro l'anima. Senza Primordio si paga in Quintessenza.",
         "required": false,
         "level": 1
       }
     ],
-    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più anime. Precisione (dettaglio) per una parte sola dell'anima: una Convinzione.",
+    "scopes": "Potenza (danni) per quanta Saggezza va o viene. Bersagli per più anime. Precisione (dettaglio) per una parte sola dell'anima: una Convinzione.",
     "formule": [
-      "danneggiare"
+      "benedire",
+      "maledire"
     ]
   },
   {
-    "id": "spirit-3-ferire-l-immateriale",
-    "name": "Ferire l'immateriale",
+    "id": "spirit-3-ferire-creatura",
+    "name": "Ferire creatura",
     "sphere": "spirit",
     "level": 3,
     "extras": [],
-    "text": "Colpisci l'effimera come fosse carne: lo spirito, il fantasma, la cosa nel muro sanguinano. Oltre il Velo il danno è Aggravato e resta Accidentale: l'altro lato non ha Testimoni.",
+    "text": "Ferisci l'effimera come fosse carne: lo spirito, il fantasma, la cosa nel muro sanguinano. Il mutaforma, che è carne e spirito insieme, lo colpisci sulla parte spirituale, e la carne segue. Oltre il Velo il danno è Aggravato e resta Accidentale: l'altro lato non ha Testimoni.",
     "pairings": [
       {
+        "sphere": "life",
+        "text": "Colpire anche la carne del mutaforma, o di chi è posseduto.",
+        "required": false,
+        "level": 1
+      },
+      {
         "sphere": "entropy",
-        "text": "Disfare l'effimera dall'interno.",
+        "text": "Disfare l'effimera dall'interno, o colpire dove il Modello ibrido è più stanco.",
         "required": false,
         "level": 1
       },
@@ -7512,7 +7564,7 @@ export const EFFETTI = Object.freeze([
       },
       {
         "sphere": "forces",
-        "text": "Colpire con un'energia: il fuoco, il fulmine.",
+        "text": "Colpire con un'energia: il fuoco, il fulmine, l'argento fuso.",
         "required": false,
         "level": 1
       },
@@ -7523,7 +7575,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più spiriti. Precisione (dettaglio) per colpire quello giusto in uno sciame.",
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più spiriti. Precisione (dettaglio) per colpire quello giusto in uno sciame, o il punto esatto.",
     "formule": [
       "danneggiare"
     ]
@@ -7534,7 +7586,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 3,
     "extras": [],
-    "text": "Ricuci l'effimera come si ricuce la carne: lo spirito ferito torna intero, il fantasma sfilacciato riprende forma.",
+    "text": "Ricuci l'effimera come si ricuce la carne: lo spirito ferito torna intero, il fantasma sfilacciato riprende forma. Da solo lo Spirito non basta: serve il Primordio, che nutre, oppure la Vita, che ricuce.",
     "pairings": [
       {
         "sphere": "prime",
@@ -7544,7 +7596,7 @@ export const EFFETTI = Object.freeze([
       },
       {
         "sphere": "life",
-        "text": "Guarire uno spirito incarnato insieme al corpo che abita.",
+        "text": "Ricucire l'effimera come carne, e guarire uno spirito incarnato insieme al corpo che abita.",
         "required": false,
         "level": 1
       },
@@ -7564,50 +7616,6 @@ export const EFFETTI = Object.freeze([
     "scopes": "Potenza (danni) per quanto guarisce. Bersagli per più spiriti.",
     "formule": [
       "guarire"
-    ]
-  },
-  {
-    "id": "spirit-3-ferire-un-mutaforma",
-    "name": "Ferire un mutaforma",
-    "sphere": "spirit",
-    "level": 3,
-    "extras": [
-      {
-        "sphere": "life",
-        "level": 1,
-        "required": true
-      }
-    ],
-    "text": "Il loro Modello è ibrido, carne e spirito insieme: lo colpisci sulla parte spirituale, e la carne segue. Serve la Vita per la parte di carne.",
-    "pairings": [
-      {
-        "sphere": "life",
-        "text": "Colpire anche la carne.",
-        "required": true,
-        "level": 1
-      },
-      {
-        "sphere": "forces",
-        "text": "Colpire con un'energia: il fuoco, l'argento fuso.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Colpire dove il Modello ibrido è più stanco.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "prime",
-        "text": "Far mordere il colpo con la Quintessenza. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più mutaforma. Precisione (dettaglio) per il punto esatto.",
-    "formule": [
-      "danneggiare"
     ]
   },
   {
@@ -7722,76 +7730,6 @@ export const EFFETTI = Object.freeze([
     "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
     "formule": [
       "contrastare"
-    ]
-  },
-  {
-    "id": "spirit-3-non-far-presa-a-spiriti-e-possessione",
-    "name": "Non far presa a spiriti e possessione",
-    "sphere": "spirit",
-    "level": 3,
-    "extras": [],
-    "text": "Spiriti, possessione, l'attrito del Velo: quello che viene di là non fa presa su di te. Passi e resti tuo.",
-    "pairings": [
-      {
-        "sphere": "mind",
-        "text": "Non far presa nemmeno ai sussurri.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "prime",
-        "text": "Respingere anche la Magick che viene di là. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "life",
-        "text": "Far entrare la resistenza nella carne.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Durata 2 per la scena, 4 per la sessione, 7 per sempre. Bersagli per proteggere altri.",
-    "formule": [
-      "resistere"
-    ]
-  },
-  {
-    "id": "spirit-4-creare-un-feticcio",
-    "name": "Creare un Feticcio",
-    "sphere": "spirit",
-    "level": 4,
-    "extras": [],
-    "text": "Leghi un'entità in un oggetto, che lo voglia o no: l'oggetto porta i suoi poteri. Con il Primordio il Feticcio nasce da un patto, e lo spirito consenziente abita la tua energia.",
-    "pairings": [
-      {
-        "sphere": "prime",
-        "text": "Legare uno spirito consenziente: la tua energia gli fa da casa. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "matter",
-        "text": "Fare l'oggetto su misura per lo spirito.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "mind",
-        "text": "Far obbedire lo spirito legato come lo intendevi, senza spiragli.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "life",
-        "text": "Fare da Feticcio un vivente: l'animale, la pianta.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Durata per quanto resta legato (7 per sempre). Potenza (epicità) per quanto è forte lo spirito. Condizioni 1 per ogni clausola del vincolo, e Complessità per quanto è lungo.",
-    "formule": [
-      "vincolare"
     ]
   },
   {
@@ -8049,6 +7987,82 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
+    "id": "spirit-4-dare-corpo-a-una-presenza",
+    "name": "Dare corpo a una presenza",
+    "sphere": "spirit",
+    "level": 4,
+    "extras": [
+      {
+        "sphere": "prime",
+        "level": 1,
+        "required": true
+      }
+    ],
+    "text": "Un'entità dove non ce n'era: nasce con una fame, e la fame la scegli tu. Serve il Primordio, che dà la materia prima.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Dare la materia prima all'entità. Senza Primordio si paga in Quintessenza.",
+        "required": true,
+        "level": 1
+      },
+      {
+        "sphere": "mind",
+        "text": "Dare all'entità una mente sua: pensa, ricorda, decide.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "life",
+        "text": "Dare all'entità un corpo di carne.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "matter",
+        "text": "Dare all'entità un corpo di pietra o di metallo.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Potenza (epicità) per quanto è forte: 3 stravolge una scena, 6 impatta sulla storia. Durata per quanto vive (7 per sempre). Condizioni 1 per la fame che le dai.",
+    "formule": [
+      "inventare"
+    ]
+  },
+  {
+    "id": "spirit-4-abitare-un-corpo",
+    "name": "Abitare un corpo",
+    "sphere": "spirit",
+    "level": 4,
+    "extras": [],
+    "text": "Entri in un corpo che non è tuo e lo abiti: lo muovi, lo usi, parli con la sua bocca. Il tuo resta dov'è, e chi c'era dentro aspetta.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Assoggettare chi c'era dentro: non lotta, e hai anche i suoi ricordi mentre lo abiti.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "life",
+        "text": "Far reggere il corpo alla tua presenza senza consumarlo.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Abitare un corpo lontano.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Durata 2 per la scena, 4 per la sessione, 7 per sempre. Potenza (epicità) nel braccio di ferro con chi c'è dentro.",
+    "formule": [
+      "possedere"
+    ]
+  },
+  {
     "id": "spirit-5-aprire-un-regno",
     "name": "Aprire un Regno",
     "sphere": "spirit",
@@ -8097,50 +8111,6 @@ export const EFFETTI = Object.freeze([
     "formule": [
       "inventare",
       "rivoluzionare"
-    ]
-  },
-  {
-    "id": "spirit-5-dare-corpo-a-una-presenza",
-    "name": "Dare corpo a una presenza",
-    "sphere": "spirit",
-    "level": 5,
-    "extras": [
-      {
-        "sphere": "prime",
-        "level": 1,
-        "required": true
-      }
-    ],
-    "text": "Un'entità dove non ce n'era: nasce con una fame, e la fame la scegli tu. Serve il Primordio, che dà la materia prima.",
-    "pairings": [
-      {
-        "sphere": "prime",
-        "text": "Dare la materia prima all'entità. Senza Primordio si paga in Quintessenza.",
-        "required": true,
-        "level": 1
-      },
-      {
-        "sphere": "mind",
-        "text": "Dare all'entità una mente sua: pensa, ricorda, decide.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "life",
-        "text": "Dare all'entità un corpo di carne.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "matter",
-        "text": "Dare all'entità un corpo di pietra o di metallo.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Potenza (epicità) per quanto è forte: 3 stravolge una scena, 6 impatta sulla storia. Durata per quanto vive (7 per sempre). Condizioni 1 per la fame che le dai.",
-    "formule": [
-      "inventare"
     ]
   },
   {
@@ -8226,67 +8196,36 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "spirit-5-abitare-un-corpo",
-    "name": "Abitare un corpo",
-    "sphere": "spirit",
-    "level": 5,
-    "extras": [],
-    "text": "Entri in un corpo che non è tuo e lo abiti: lo muovi, lo usi, parli con la sua bocca. Il tuo resta dov'è, e chi c'era dentro aspetta.",
-    "pairings": [
-      {
-        "sphere": "mind",
-        "text": "Avere anche i suoi ricordi mentre lo abiti.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "life",
-        "text": "Far reggere il corpo alla tua presenza senza consumarlo.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "correspondence",
-        "text": "Abitare un corpo lontano.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Durata 2 per la scena, 4 per la sessione, 7 per sempre. Potenza (epicità) nel braccio di ferro con chi c'è dentro.",
-    "formule": [
-      "possedere"
-    ]
-  },
-  {
     "id": "time-1-leggere-il-flusso",
     "name": "Leggere il flusso",
     "sphere": "time",
     "level": 1,
     "extras": [],
-    "text": "Sai l'ora esatta senza orologio, senti le anomalie del tempo attorno a te, e leggi la linea del luogo all'indietro: cosa è successo qui, e quando. La profondità la comprano i successi.",
+    "text": "Sai l'ora esatta senza orologio, senti le anomalie del tempo attorno a te, e leggi la linea del luogo all'indietro: cosa è successo qui, e quando. Vedi anche le cuciture, i punti in cui il tempo è stato rifatto da qualcuno prima di te: la scena riavvolta, l'evento cancellato, l'anello chiuso. La profondità la comprano i successi.",
     "pairings": [
       {
         "sphere": "prime",
-        "text": "Sapere se l'anomalia l'ha fatta una Magick, e di chi. Senza Primordio si paga in Quintessenza.",
+        "text": "Sapere se l'anomalia o la cucitura l'ha fatta una Magick, di chi, e con quanta forza. Senza Primordio si paga in Quintessenza.",
         "required": false,
         "level": 1
       },
       {
         "sphere": "entropy",
-        "text": "Sapere quando il flusso si romperà.",
+        "text": "Sapere quando il flusso si romperà, o quale cucitura sta per cedere.",
         "required": false,
         "level": 1
       },
       {
         "sphere": "mind",
-        "text": "Sentire cosa pensava chi era qui, nel momento che leggi.",
+        "text": "Sentire cosa pensava chi era qui, nel momento che leggi; ricordare la versione di prima della cucitura.",
         "required": false,
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto indietro arrivi (fuori gioco: 1 il giorno, 3 il mese, 5 l'anno). Area per un luogo intero. Precisione (dettaglio) per un momento solo.",
+    "scopes": "Durata per quanto indietro arrivi (fuori gioco: 1 il giorno, 3 il mese, 5 l'anno). Area per un luogo intero. Precisione (dettaglio) per un momento solo, o una cucitura sola.",
     "formule": [
-      "percepire"
+      "percepire",
+      "trovare"
     ]
   },
   {
@@ -8325,38 +8264,6 @@ export const EFFETTI = Object.freeze([
     "scopes": "Durata per quanto indietro o avanti (fuori gioco: 3 il mese, 5 l'anno, 6 il decennio). Precisione (informazione) per quanto pesa quel che cerchi. Bersagli per più linee.",
     "formule": [
       "sapere"
-    ]
-  },
-  {
-    "id": "time-1-trovare-le-cuciture",
-    "name": "Trovare le cuciture",
-    "sphere": "time",
-    "level": 1,
-    "extras": [],
-    "text": "Vedi i punti in cui il tempo è stato rifatto da qualcuno prima di te: la scena riavvolta, l'evento cancellato, l'anello chiuso.",
-    "pairings": [
-      {
-        "sphere": "prime",
-        "text": "Sapere chi ha cucito, e con quanta forza. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "mind",
-        "text": "Ricordare la versione di prima della cucitura.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Sapere quale cucitura sta per cedere.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Area per setacciare un luogo: 1 la stanza, 3 il quartiere. Durata per quanto indietro cerchi. Precisione (dettaglio) per una cucitura sola.",
-    "formule": [
-      "trovare"
     ]
   },
   {
@@ -8615,7 +8522,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanti anni scarichi (fuori gioco: 5 l'anno, 6 il decennio). Potenza (danni) se gli anni feriscono. Bersagli per più persone. Precisione (dettaglio) per una parte sola: le mani, la vista.",
+    "scopes": "Durata per quanti anni scarichi (fuori gioco: 5 l'anno, 6 il decennio); Durata 7, con la Vita accanto, per smettere di invecchiare: gli anni ti scorrono accanto. Potenza (danni) se gli anni feriscono. Bersagli per più persone. Precisione (dettaglio) per una parte sola: le mani, la vista.",
     "formule": [
       "danneggiare",
       "risanare"
@@ -9023,44 +8930,6 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "time-5-smettere-di-invecchiare",
-    "name": "Smettere di invecchiare",
-    "sphere": "time",
-    "level": 5,
-    "extras": [],
-    "text": "Gli anni ti scorrono accanto: resti quello che eri il giorno in cui hai imparato.",
-    "pairings": [
-      {
-        "sphere": "life",
-        "text": "Far reggere il corpo per quello che è: niente malattie dell'età.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "mind",
-        "text": "Tenere la mente giovane insieme al corpo.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Far sì che nemmeno la sorte ti consumi.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "prime",
-        "text": "Far reggere l'effetto senza mantenerlo. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Durata 7. Bersagli per chi vuoi con te.",
-    "formule": [
-      "fissare"
-    ]
-  },
-  {
     "id": "time-5-viaggiare-nel-tempo",
     "name": "Viaggiare nel tempo",
     "sphere": "time",
@@ -9251,84 +9120,6 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "life-2-curare-o-causare-malattie",
-    "name": "Curare o causare malattie",
-    "sphere": "life",
-    "level": 2,
-    "extras": [],
-    "text": "Nella vita semplice, piante, insetti, muffe, e in te stesso: la malattia arriva o se ne va. Su un altro è il terzo pallino.",
-    "pairings": [
-      {
-        "sphere": "entropy",
-        "text": "Far arrivare la malattia come una sfortuna, o far guarire come un colpo di fortuna.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "time",
-        "text": "Far correre la malattia in un'ora, o farla durare un anno.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "prime",
-        "text": "Creare una malattia che non esisteva. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "matter",
-        "text": "Far viaggiare la malattia in un oggetto: l'acqua, il cibo, la lettera.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Area per un campo, un giardino, un raccolto. Durata per quanto dura. Potenza (danni) se la malattia ferisce. Condizioni (malus 2, ostacolare) per quanto pesa.",
-    "formule": [
-      "maledire",
-      "riparare"
-    ]
-  },
-  {
-    "id": "life-2-fingere-la-morte",
-    "name": "Fingere la morte",
-    "sphere": "life",
-    "level": 2,
-    "extras": [],
-    "text": "Battito e respiro scendono a zero apparente: i becchini ci cascano, i medici pure. Il corpo aspetta, e si risveglia quando decidi tu.",
-    "pairings": [
-      {
-        "sphere": "mind",
-        "text": "Far sembrare morto anche a chi legge le menti: nessun pensiero in superficie.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "spirit",
-        "text": "Far sembrare morto anche a chi legge le anime.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "time",
-        "text": "Fissare l'ora del risveglio.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Far sì che nessuno controlli troppo bene.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Durata per quanto resti morto: 2 la scena, 4 la sessione. Bersagli per far fingere anche i compagni. Condizioni 1 per cosa ti sveglia: la parola, il tocco.",
-    "formule": [
-      "celare",
-      "simulare"
-    ]
-  },
-  {
     "id": "life-2-guarire-te-stesso",
     "name": "Guarire te stesso",
     "sphere": "life",
@@ -9373,50 +9164,6 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "life-2-immunizzarti",
-    "name": "Immunizzarti",
-    "sphere": "life",
-    "level": 2,
-    "extras": [],
-    "text": "Il tuo sangue impara il veleno prima che faccia danno: tossine, malattie, droghe non ti toccano, per quello che hai deciso.",
-    "pairings": [
-      {
-        "sphere": "matter",
-        "text": "Immunizzarti anche da un veleno che non è organico: il gas, il metallo pesante.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "forces",
-        "text": "Immunizzarti dal caldo, dal freddo, dalle radiazioni.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Immunizzarti dalla sfortuna del contagio: non prendi mai quello che gira.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "time",
-        "text": "Immunizzarti in anticipo da quello che arriverà.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "prime",
-        "text": "Immunizzarti dai veleni fatti di Magick. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Precisione (dettaglio) per il veleno esatto o per tutti. Bersagli per immunizzare i compagni.",
-    "formule": [
-      "resistere"
-    ]
-  },
-  {
     "id": "life-2-ritoccarti-i-connotati",
     "name": "Ritoccarti i connotati",
     "sphere": "life",
@@ -9452,50 +9199,6 @@ export const EFFETTI = Object.freeze([
     "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Precisione (dettaglio) per quanto è fine il ritocco: 1 i capelli, 3 il volto, 5 le impronte.",
     "formule": [
       "mutare"
-    ]
-  },
-  {
-    "id": "life-2-smettere-di-aver-bisogno",
-    "name": "Smettere di aver bisogno",
-    "sphere": "life",
-    "level": 2,
-    "extras": [],
-    "text": "Fame, sete, sonno e respiro si mettono in pausa finché reggi l'effetto: stai sott'acqua, attraversi il deserto, vegli tre notti.",
-    "pairings": [
-      {
-        "sphere": "matter",
-        "text": "Smettere di aver bisogno anche di aria: i polmoni non servono.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "forces",
-        "text": "Smettere di sentire il caldo e il freddo.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "time",
-        "text": "Fissare per quanto reggi, e far tornare i bisogni tutti insieme, o piano.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "prime",
-        "text": "Nutrirti di Quintessenza invece che di cibo. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "mind",
-        "text": "Smettere di aver bisogno di dormire anche con la testa: niente allucinazioni.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 5 due sessioni. Bersagli per la Cabala.",
-    "formule": [
-      "potenziare"
     ]
   },
   {
@@ -9592,6 +9295,38 @@ export const EFFETTI = Object.freeze([
     "scopes": "Bersagli per più corpi. Durata 1 per un turno, 2 per la scena. Condizioni (malus 2, ostacolare) per quanto pesa.",
     "formule": [
       "rallentare"
+    ]
+  },
+  {
+    "id": "life-2-resistere-a-droghe-e-veleni",
+    "name": "Resistere a droghe e veleni",
+    "sphere": "life",
+    "level": 2,
+    "extras": [],
+    "text": "Il tuo sangue regge: la droga non ti stordisce, il veleno non ti piega, l'alcol non ti fa parlare. Uno alla volta, per quello che hai deciso; l'immunità intera è il quarto pallino.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Resistere anche a un veleno che non è organico: il gas, il metallo pesante.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che la dose ti arrivi sempre più leggera.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "time",
+        "text": "Resistere in anticipo a quello che berrai stasera.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione. Precisione (dettaglio) per la sostanza esatta. Bersagli per proteggere i compagni.",
+    "formule": [
+      "resistere"
     ]
   },
   {
@@ -9715,16 +9450,16 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "life-3-curare-o-causare-malattie-a-un-altro",
-    "name": "Curare o causare malattie a un altro",
+    "id": "life-3-infliggere-malattie",
+    "name": "Infliggere malattie",
     "sphere": "life",
     "level": 3,
     "extras": [],
-    "text": "Metti le mani su un altro corpo e la malattia arriva o se ne va: la febbre, l'infezione, il male lento. Il Modello altrui chiede il terzo pallino; nella vita semplice e su di te basta il secondo.",
+    "text": "Metti le mani su un corpo e la malattia arriva: la febbre, l'infezione, il male lento, in un uomo, in un animale, in un raccolto.",
     "pairings": [
       {
         "sphere": "entropy",
-        "text": "Far arrivare la malattia come una sfortuna, o far guarire come un colpo di fortuna.",
+        "text": "Far arrivare la malattia come una sfortuna.",
         "required": false,
         "level": 1
       },
@@ -9748,60 +9483,14 @@ export const EFFETTI = Object.freeze([
       },
       {
         "sphere": "mind",
-        "text": "Fargli credere di stare bene, o di stare male, oltre al corpo.",
+        "text": "Fargli credere di stare male, oltre al corpo.",
         "required": false,
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Durata per quanto dura. Potenza (danni) se la malattia ferisce. Condizioni (malus 2, ostacolare) per quanto pesa.",
+    "scopes": "Bersagli per più persone. Area per un campo, un giardino, un raccolto. Durata per quanto dura. Potenza (danni) se la malattia ferisce. Condizioni (malus 2, ostacolare) per quanto pesa.",
     "formule": [
-      "maledire",
-      "guarire"
-    ]
-  },
-  {
-    "id": "life-3-guarire-o-ferire-un-altro",
-    "name": "Guarire o ferire un altro",
-    "sphere": "life",
-    "level": 3,
-    "extras": [],
-    "text": "Metti le mani sul corpo di un altro: le sue ferite si chiudono, o si aprono, per l'Areté più il numero della Potenza (danni); gli Aggravati chiedono una Quintessenza ciascuno. Il Modello altrui chiede il terzo pallino.",
-    "pairings": [
-      {
-        "sphere": "prime",
-        "text": "Pagare gli Aggravati con la Quintessenza del luogo. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "time",
-        "text": "Guarire come se la ferita non fosse mai stata aperta, o riaprire quella di ieri.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Far sì che la ferita non si riapra, o che non si chiuda mai.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "mind",
-        "text": "Guarire o ferire insieme la Volontà.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "matter",
-        "text": "Far uscire il proiettile mentre guarisci.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Potenza (danni) per quanta Salute va o viene. Bersagli per più corpi: il triage di un pronto soccorso in un gesto solo. Precisione (dettaglio) per una ferita sola fra tante.",
-    "formule": [
-      "guarire",
-      "danneggiare"
+      "maledire"
     ]
   },
   {
@@ -9843,38 +9532,6 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "life-3-portare-un-volto-non-tuo",
-    "name": "Portare un volto non tuo",
-    "sphere": "life",
-    "level": 3,
-    "extras": [],
-    "text": "Un volto, una voce, una ferita che non c'è: il corpo mente a chi guarda, e regge al tocco. Non cambi il Modello: gli metti sopra una maschera di carne.",
-    "pairings": [
-      {
-        "sphere": "mind",
-        "text": "Far sì che chi ti conosce non trovi strano il volto.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "matter",
-        "text": "Far mentire anche le impronte e i documenti.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "time",
-        "text": "Portare il volto che avevi, o che avrai.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Durata 2 per la scena, 4 per la sessione. Precisione (dettaglio) per quanto è fine: 3 un volto qualunque, 5 il volto di quell'uomo.",
-    "formule": [
-      "ingannare"
-    ]
-  },
-  {
     "id": "life-3-contrastare-magick",
     "name": "Contrastare Magick",
     "sphere": "life",
@@ -9904,6 +9561,216 @@ export const EFFETTI = Object.freeze([
     "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena. Bersagli per proteggere più corpi.",
     "formule": [
       "contrastare"
+    ]
+  },
+  {
+    "id": "life-3-guarire",
+    "name": "Guarire",
+    "sphere": "life",
+    "level": 3,
+    "extras": [],
+    "text": "Metti le mani sul corpo di un altro e le sue ferite si chiudono: guarisci l'Areté più il numero della Potenza (danni); gli Aggravati chiedono una Quintessenza ciascuno. Il Modello altrui chiede il terzo pallino.",
+    "pairings": [
+      {
+        "sphere": "prime",
+        "text": "Pagare gli Aggravati con la Quintessenza del luogo. Senza Primordio si paga in Quintessenza.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "time",
+        "text": "Guarire come se la ferita non fosse mai stata aperta.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che la ferita non si riapra.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "mind",
+        "text": "Guarire insieme la Volontà.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "matter",
+        "text": "Far uscire il proiettile mentre guarisci.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta Salute torna. Bersagli per più corpi: il triage di un pronto soccorso in un gesto solo. Precisione (dettaglio) per una ferita sola fra tante.",
+    "formule": [
+      "guarire"
+    ]
+  },
+  {
+    "id": "life-3-ferire-creatura",
+    "name": "Ferire creatura",
+    "sphere": "life",
+    "level": 3,
+    "extras": [],
+    "text": "Metti le mani sul corpo di un vivente e le sue ferite si aprono: ferisci l'Areté più il numero della Potenza (danni); gli Aggravati chiedono una Quintessenza ciascuno. La Vita ferisce ciò che vive: il resto lo aprono le compagne.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Ferire il vampiro, il corpo morto che cammina.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "spirit",
+        "text": "Ferire il mutaforma nella carne e nello spirito insieme.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "time",
+        "text": "Riaprire la ferita di ieri.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che la ferita non si chiuda mai.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "mind",
+        "text": "Ferire insieme la Volontà.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "prime",
+        "text": "Pagare gli Aggravati con la Quintessenza del luogo. Senza Primordio si paga in Quintessenza.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Potenza (danni) per quanta Salute va via. Bersagli per più corpi. Precisione (dettaglio) per una ferita sola: la mano, non l'uomo.",
+    "formule": [
+      "danneggiare"
+    ]
+  },
+  {
+    "id": "life-3-curare-malattie",
+    "name": "Curare malattie",
+    "sphere": "life",
+    "level": 3,
+    "extras": [],
+    "text": "Metti le mani su un corpo e la malattia se ne va: la febbre, l'infezione, il male lento; in te, in un altro, nella vita semplice, piante, insetti, muffe.",
+    "pairings": [
+      {
+        "sphere": "entropy",
+        "text": "Far guarire come un colpo di fortuna.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "time",
+        "text": "Far guarire come se non si fosse mai ammalato.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "mind",
+        "text": "Fargli credere di stare bene, oltre al corpo.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Area per un campo, un giardino, un raccolto. Durata per quanto dura. Potenza (danni) per quanto guarisce. Bersagli per più persone.",
+    "formule": [
+      "guarire",
+      "riparare"
+    ]
+  },
+  {
+    "id": "life-3-fingere-la-morte",
+    "name": "Fingere la morte",
+    "sphere": "life",
+    "level": 3,
+    "extras": [],
+    "text": "Battito e respiro scendono a zero apparente: i becchini ci cascano, i medici pure. Il corpo aspetta, e si risveglia quando decidi tu. Con più successi il cadavere passa ogni controllo: il sangue, il DNA, le impronte, l'età dicono quello che vuoi tu, anche al medico legale.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Far sembrare morto anche a chi legge le menti: nessun pensiero in superficie.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "spirit",
+        "text": "Far sembrare morto anche a chi legge le anime.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "time",
+        "text": "Fissare l'ora del risveglio.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "entropy",
+        "text": "Far sì che nessuno controlli troppo bene.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "matter",
+        "text": "Far mentire anche gli oggetti addosso: i vestiti, il portafoglio.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Durata per quanto resti morto: 2 la scena, 4 la sessione. Bersagli per far fingere anche i compagni. Condizioni 1 per cosa ti sveglia: la parola, il tocco. Precisione (dettaglio) per quanto regge il cadavere ai controlli: 1 il becchino, 3 il medico, 5 il DNA.",
+    "formule": [
+      "celare",
+      "simulare"
+    ]
+  },
+  {
+    "id": "life-3-pilotare-un-corpo",
+    "name": "Pilotare un corpo",
+    "sphere": "life",
+    "level": 3,
+    "extras": [
+      {
+        "sphere": "mind",
+        "level": 1,
+        "required": true
+      }
+    ],
+    "text": "Il corpo di un altro risponde a te come il tuo: lo muovi da lontano, ci vedi, ci parli, mentre il tuo aspetta. Serve la Mente, che ti ci porta dentro.",
+    "pairings": [
+      {
+        "sphere": "mind",
+        "text": "Entrare nella sua testa e prendere i comandi.",
+        "required": true,
+        "level": 1
+      },
+      {
+        "sphere": "correspondence",
+        "text": "Usare un corpo lontano.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "spirit",
+        "text": "Usare il corpo mentre chi c'era dentro aspetta di là.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Durata 2 per la scena, 4 per la sessione. Potenza (epicità) nel braccio di ferro con chi c'è dentro.",
+    "formule": [
+      "possedere"
     ]
   },
   {
@@ -10109,35 +9976,91 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "life-4-un-cadavere-che-passa-i-controlli",
-    "name": "Un cadavere che passa i controlli",
+    "id": "life-4-immunizzarti",
+    "name": "Immunizzarti",
     "sphere": "life",
     "level": 4,
     "extras": [],
-    "text": "Un cadavere vero per il medico legale, un corpo che passa ogni controllo: il sangue, il DNA, le impronte, l'età dicono quello che vuoi tu.",
+    "text": "Il tuo sangue impara tutto prima che faccia danno: tossine, malattie, droghe, contagi non ti toccano, per quello che hai deciso. Al secondo pallino resisti a una droga o a un veleno alla volta; qui sei immune.",
     "pairings": [
       {
         "sphere": "matter",
-        "text": "Far mentire anche gli oggetti addosso: i vestiti, il portafoglio.",
+        "text": "Immunizzarti anche da un veleno che non è organico: il gas, il metallo pesante.",
         "required": false,
         "level": 1
       },
       {
-        "sphere": "mind",
-        "text": "Far ricordare a chi serve di aver conosciuto quel corpo.",
+        "sphere": "forces",
+        "text": "Immunizzarti dal caldo, dal freddo, dalle radiazioni.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "entropy",
+        "text": "Immunizzarti dalla sfortuna del contagio: non prendi mai quello che gira.",
         "required": false,
         "level": 1
       },
       {
         "sphere": "time",
-        "text": "Dare al corpo l'età e la storia giuste.",
+        "text": "Immunizzarti in anticipo da quello che arriverà.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "prime",
+        "text": "Immunizzarti dai veleni fatti di Magick. Senza Primordio si paga in Quintessenza.",
         "required": false,
         "level": 1
       }
     ],
-    "scopes": "Precisione (dettaglio) per quanto è fine: 3 il volto, 5 il DNA. Potenza (epicità) per quanto pesa nella storia. Durata 7.",
+    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Precisione (dettaglio) per il veleno esatto o per tutti. Bersagli per immunizzare i compagni.",
     "formule": [
-      "simulare"
+      "resistere"
+    ]
+  },
+  {
+    "id": "life-4-smettere-di-aver-bisogno",
+    "name": "Smettere di aver bisogno",
+    "sphere": "life",
+    "level": 4,
+    "extras": [],
+    "text": "Fame, sete, sonno e respiro si mettono in pausa finché reggi l'effetto: stai sott'acqua, attraversi il deserto, vegli tre notti.",
+    "pairings": [
+      {
+        "sphere": "matter",
+        "text": "Smettere di aver bisogno anche di aria: i polmoni non servono.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "forces",
+        "text": "Smettere di sentire il caldo e il freddo.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "time",
+        "text": "Fissare per quanto reggi, e far tornare i bisogni tutti insieme, o piano.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "prime",
+        "text": "Nutrirti di Quintessenza invece che di cibo. Senza Primordio si paga in Quintessenza.",
+        "required": false,
+        "level": 1
+      },
+      {
+        "sphere": "mind",
+        "text": "Smettere di aver bisogno di dormire anche con la testa: niente allucinazioni.",
+        "required": false,
+        "level": 1
+      }
+    ],
+    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 5 due sessioni. Bersagli per la Cabala.",
+    "formule": [
+      "potenziare"
     ]
   },
   {
@@ -10241,46 +10164,8 @@ export const EFFETTI = Object.freeze([
     ]
   },
   {
-    "id": "life-5-rendere-permanente-il-mutamento",
-    "name": "Rendere permanente il mutamento",
-    "sphere": "life",
-    "level": 5,
-    "extras": [],
-    "text": "Quello che hai riscritto smette di poter tornare indietro, e diventa il suo Modello vero: la forma nuova è lui, per sempre, per tutti.",
-    "pairings": [
-      {
-        "sphere": "prime",
-        "text": "Far entrare il mutamento nell'Arazzo: nemmeno il Paradosso lo disfa. Senza Primordio si paga in Quintessenza.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "time",
-        "text": "Far sì che sia sempre stato così.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "mind",
-        "text": "Far sì che lui, e chi lo conosce, non ricordino l'altro corpo.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "entropy",
-        "text": "Far sì che nessuna sorte lo consumi.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Durata 7, e basta. Potenza (epicità) per quanto pesa: 4 impatta sul capitolo, 6 impatta sulla storia. Bersagli per più corpi.",
-    "formule": [
-      "fissare"
-    ]
-  },
-  {
-    "id": "life-5-nessuna-ferita-ti-tocca",
-    "name": "Nessuna ferita ti tocca",
+    "id": "life-5-immunita-fisica",
+    "name": "Immunità fisica",
     "sphere": "life",
     "level": 5,
     "extras": [],
@@ -10308,44 +10193,6 @@ export const EFFETTI = Object.freeze([
     "scopes": "Durata 2 per la scena, 4 per la sessione. Bersagli per la Cabala.",
     "formule": [
       "invulnerabilita"
-    ]
-  },
-  {
-    "id": "life-5-usare-il-corpo-di-un-altro-come-il-tuo",
-    "name": "Usare il corpo di un altro come il tuo",
-    "sphere": "life",
-    "level": 5,
-    "extras": [
-      {
-        "sphere": "mind",
-        "level": 1,
-        "required": true
-      }
-    ],
-    "text": "Il corpo di un altro risponde a te come il tuo: lo muovi da lontano, ci vedi, ci parli, mentre il tuo aspetta. Serve la Mente, che ti ci porta dentro.",
-    "pairings": [
-      {
-        "sphere": "mind",
-        "text": "Entrare nella sua testa e prendere i comandi.",
-        "required": true,
-        "level": 1
-      },
-      {
-        "sphere": "correspondence",
-        "text": "Usare un corpo lontano.",
-        "required": false,
-        "level": 1
-      },
-      {
-        "sphere": "spirit",
-        "text": "Usare il corpo mentre chi c'era dentro aspetta di là.",
-        "required": false,
-        "level": 1
-      }
-    ],
-    "scopes": "Durata 2 per la scena, 4 per la sessione. Potenza (epicità) nel braccio di ferro con chi c'è dentro.",
-    "formule": [
-      "possedere"
     ]
   }
 ]);
