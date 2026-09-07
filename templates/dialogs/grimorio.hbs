@@ -9,11 +9,19 @@
             <button type="button" data-role="grimorioView" data-view="formula">{{localize "WOD5E_MAGE.Grimorio.ByFormula"}}</button>
         </div>
     </div>
+    {{!-- I simboli delle Sfere possedute (7/9): un clic accende o spegne la Sfera. --}}
+    {{#if spheres.length}}
+        <div class="wod5e-mage-grimorio-spheres" role="group">
+            {{#each spheres as |s|}}
+                <button type="button" data-role="grimorioSphere" data-sphere="{{s.sphere}}" class="{{#if s.lit}}lit{{/if}}" title="{{s.label}} {{s.dots}}"><img src="{{s.icon}}" alt=""><span>{{s.label}}</span></button>
+            {{/each}}
+        </div>
+    {{/if}}
     <div data-view-panel="sphere" class="wod5e-mage-grimorio-panel">
     {{#each groups as |group|}}
         {{!-- Ogni Sfera è una tendina; ogni effetto una riga: il nome sceglie,
              la freccina apre il come. --}}
-        <details class="wod5e-mage-grimorio-sphere" open>
+        <details class="wod5e-mage-grimorio-sphere" data-sphere-group="{{group.sphere}}" open>
             <summary><h3><img src="{{group.icon}}" alt="">{{group.label}}</h3></summary>
             {{#each group.levels as |lvl|}}
                 <h4><span class="wod5e-mage-grimorio-dots">{{lvl.dots}}</span> {{lvl.label}}</h4>
@@ -59,9 +67,16 @@
          Sfera per Sfera, gli effetti che la portano: aperto, i pallini che
          mancano, o la Sfera che non c'è. Solo le righe aperte scelgono. --}}
     <div data-view-panel="formula" class="wod5e-mage-grimorio-panel" hidden>
+    {{!-- Le schede dei gradi (7/9): una linguetta per grado, in alto. --}}
+    {{#if grades.length}}
+        <div class="wod5e-mage-grimorio-grades" role="tablist">
+            {{#each grades as |grade|}}
+                <button type="button" data-role="grimorioGrade" data-grade="{{grade.grade}}" class="{{#if grade.current}}active{{/if}}"><span class="wod5e-mage-grimorio-dots">{{grade.dots}}</span> {{grade.label}}</button>
+            {{/each}}
+        </div>
+    {{/if}}
     {{#each grades as |grade|}}
-        <details class="wod5e-mage-grimorio-sphere" open>
-            <summary><h3><span class="wod5e-mage-grimorio-dots">{{grade.dots}}</span> {{grade.label}}</h3></summary>
+        <div class="wod5e-mage-grimorio-grade" data-grade-panel="{{grade.grade}}"{{#unless grade.current}} hidden{{/unless}}>
             {{#each grade.formule as |formula|}}
                 <details class="wod5e-mage-grimorio-row wod5e-mage-grimorio-formula-row{{#unless formula.open}} closed{{/unless}}">
                     <summary>
@@ -72,7 +87,7 @@
                     <table class="wod5e-mage-grimorio-formula-table">
                         <tbody>
                         {{#each formula.rows as |row|}}
-                            <tr class="{{row.status}}">
+                            <tr class="{{row.status}}" data-sphere-row="{{row.sphere}}">
                                 <td class="sphere"><img src="{{row.icon}}" alt="">{{row.label}} <span class="wod5e-mage-grimorio-dots">{{row.dots}}</span></td>
                                 <td class="effect">{{#if row.open}}<button type="button" class="wod5e-mage-grimorio-pick" data-effetto="{{row.id}}">{{row.name}}</button>{{else}}{{row.name}}{{/if}}{{#if row.subject}}<small>{{row.subject}}</small>{{/if}}</td>
                                 <td class="status">{{row.statusText}}</td>
@@ -82,7 +97,7 @@
                     </table>
                 </details>
             {{/each}}
-        </details>
+        </div>
     {{else}}
         <p class="wod5e-mage-grimorio-empty">{{localize "WOD5E_MAGE.Grimorio.Empty"}}</p>
     {{/each}}

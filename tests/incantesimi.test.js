@@ -82,7 +82,7 @@ assert.match(comune, /data-spell="\{\{spell\.id\}\}"[\s\S]*data-shared-action="r
 assert.match(readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"), /registerGrimorioComune\(\)/);
 // Il Grimorio degli effetti: Sfere a tendina, ogni effetto una riga col come a richiesta.
 const effetti = readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8");
-assert.match(effetti, /<details class="wod5e-mage-grimorio-sphere" open>[\s\S]*<details class="wod5e-mage-grimorio-row">[\s\S]*class="wod5e-mage-grimorio-pick" data-effetto="\{\{entry\.id\}\}"[\s\S]*<p>\{\{entry\.text\}\}<\/p>/);
+assert.match(effetti, /<details class="wod5e-mage-grimorio-sphere" data-sphere-group="\{\{group\.sphere\}\}" open>[\s\S]*<details class="wod5e-mage-grimorio-row">[\s\S]*class="wod5e-mage-grimorio-pick" data-effetto="\{\{entry\.id\}\}"[\s\S]*<p>\{\{entry\.text\}\}<\/p>/);
 
 // Per Sfere (6/9): sotto la Sfera più alta; a pari merito in tutte e due; senza Sfere in coda.
 const rowsBySphere = [

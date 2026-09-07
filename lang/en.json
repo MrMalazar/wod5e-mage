@@ -945,7 +945,8 @@
       "Unnamed": "Unnamed",
       "Empty": "No spells: the + opens the roll window and saves instead of rolling.",
       "NoSphere": "No Sphere",
-      "FromEffetti": "Add effects from the book"
+      "FromEffetti": "Add effects from the book",
+      "NoType": "Type chosen when cast"
     },
     "GrimorioComune": {
       "Label": "Shared Grimoire (M6)",

@@ -1665,6 +1665,11 @@
   width: 22px;
 }
 
+/* I PNG delle Sfere sono neri: in chat vanno in oro (7/9). */
+.wod5e-mage-roll-symbol-sphere > img {
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+}
+
 .wod5e-mage-roll-symbol > i {
   color: #d9a827;
   font-size: 1rem;
@@ -5540,7 +5545,9 @@
   border: none;
   color: var(--mage-oro-chiaro, #f5e7b2);
   cursor: pointer;
+  display: block;
   flex: 1 1 auto;
+  justify-content: flex-start;
   font-size: 0.9rem;
   font-weight: 700;
   line-height: 1.3;
@@ -5819,6 +5826,113 @@
 .wod5e-mage-grimorio-formula-table tr.absent > td.sphere > img {
   filter: grayscale(1);
   opacity: 0.6;
+}
+
+/* I simboli delle Sfere possedute in cima (7/9): accesi in oro, spenti in grigio. */
+.wod5e-mage-grimorio-spheres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+.wod5e-mage-grimorio-spheres > button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgb(152 119 43 / 35%);
+  border-radius: 4px;
+  color: var(--mage-tenue, #b8ad93);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  line-height: 1;
+  margin: 0;
+  min-height: 0;
+  opacity: 0.55;
+  padding: 0.3rem 0.45rem;
+  width: auto;
+}
+
+.wod5e-mage-grimorio-spheres > button > img {
+  border: none;
+  filter: brightness(0) invert(78%);
+  height: 30px;
+  width: 30px;
+}
+
+.wod5e-mage-grimorio-spheres > button > span {
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-grimorio-spheres > button.lit {
+  border-color: var(--mage-oro, #d9a827);
+  color: var(--mage-oro-chiaro, #f5e7b2);
+  opacity: 1;
+}
+
+.wod5e-mage-grimorio-spheres > button.lit > img {
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+}
+
+/* Le schede dei gradi nella vista per Formula (7/9). */
+.wod5e-mage-grimorio-grades {
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
+  display: flex;
+  gap: 0.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.wod5e-mage-grimorio-grades > button {
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  color: var(--mage-tenue, #b8ad93);
+  cursor: pointer;
+  flex: 1 1 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.6;
+  margin: 0;
+  min-height: 0;
+  padding: 0.2rem 0.3rem;
+  width: auto;
+}
+
+.wod5e-mage-grimorio-grades > button > .wod5e-mage-grimorio-dots {
+  font-size: 0.6rem;
+}
+
+.wod5e-mage-grimorio-grades > button.active,
+.wod5e-mage-grimorio-grades > button:hover {
+  background: rgb(217 168 39 / 15%);
+  border-color: rgb(152 119 43 / 45%);
+  color: var(--mage-oro-chiaro, #f5e7b2);
+}
+
+.wod5e-mage-grimorio-grade {
+  display: flex;
+  flex-direction: column;
+}
+
+/* La riga aperta si vede (7/9): fondo più chiaro, bordo oro, nome in oro. */
+.wod5e-mage-grimorio-row[open] {
+  background: rgb(217 168 39 / 12%);
+  border-color: var(--mage-oro, #d9a827);
+  box-shadow: 0 0 8px rgb(217 168 39 / 25%);
+}
+
+.wod5e-mage-grimorio-row[open] > summary > .wod5e-mage-grimorio-pick,
+.wod5e-mage-grimorio-row[open] > summary > .wod5e-mage-grimorio-formula-name {
+  color: var(--mage-oro, #d9a827);
+  text-shadow: 0 0 6px rgb(217 168 39 / 50%);
+}
+
+.wod5e-mage-grimorio-row[open] > summary > i {
+  color: var(--mage-oro, #d9a827);
 }
 
 .wod5e-mage-grimorio-empty {

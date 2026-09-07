@@ -196,12 +196,35 @@ export function findEffetto(id) {
  * come preso (per aggiungere liste di effetti alla scheda).
  */
 let lastView = "sphere";
+let lastGrade = 1;
+// Le Sfere spente coi simboli in cima (7/9): si ricordano finché il mondo resta aperto.
+const dimmedSpheres = new Set();
+
+/** I simboli delle Sfere possedute, in cima al Grimorio: un clic accende o spegne. */
+export function prepareGrimorioSpheres(sphereLevels = {}, localize = (key) => key, dimmed = new Set()) {
+  return SPHERES
+    .filter((sphere) => level(sphereLevels[sphere]) > 0)
+    .map((sphere) => ({
+      sphere,
+      label: localize(`WOD5E_MAGE.Spheres.${sphere}`),
+      icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere}.png`,
+      dots: "●".repeat(level(sphereLevels[sphere])),
+      lit: !dimmed.has(sphere)
+    }));
+}
 
 export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
+  const grades = prepareGrimorioFormule(sphereLevels, localize);
+  if (!grades.some((group) => group.grade === lastGrade)) lastGrade = grades[0]?.grade ?? 1;
   const content = await foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/dialogs/grimorio.hbs`,
-    { groups: prepareGrimorio(sphereLevels, localize), grades: prepareGrimorioFormule(sphereLevels, localize), view: lastView }
+    {
+      groups: prepareGrimorio(sphereLevels, localize),
+      grades: grades.map((group) => ({ ...group, current: group.grade === lastGrade })),
+      spheres: prepareGrimorioSpheres(sphereLevels, localize, dimmedSpheres),
+      view: lastView
+    }
   );
   let chosen = null;
   await foundry.applications.api.DialogV2.wait({
@@ -224,11 +247,42 @@ export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
       });
       showView(lastView);
       const search = root.querySelector("[data-role=grimorioSearch]");
+      // Le schede dei gradi (7/9): una alla volta; con la cerca piena si
+      // vedono tutte, così si cerca in tutto il Grimorio.
+      const showGrade = () => {
+        const wanted = search?.value.trim() ?? "";
+        root.querySelectorAll("[data-grade-panel]").forEach((panel) => {
+          panel.hidden = !wanted && Number(panel.dataset.gradePanel) !== lastGrade;
+        });
+        root.querySelectorAll("[data-role=grimorioGrade]").forEach((button) => button.classList.toggle("active", Number(button.dataset.grade) === lastGrade));
+      };
+      root.querySelectorAll("[data-role=grimorioGrade]").forEach((button) => {
+        button.addEventListener("click", (event) => { event.preventDefault(); lastGrade = Number(button.dataset.grade); showGrade(); });
+      });
+      // I simboli delle Sfere (7/9): spenta una Sfera, sparisce dalla vista
+      // per Sfera e dalle righe della vista per Formula.
+      const applySpheres = () => {
+        root.querySelectorAll("[data-role=grimorioSphere]").forEach((button) => button.classList.toggle("lit", !dimmedSpheres.has(button.dataset.sphere)));
+        root.querySelectorAll("[data-sphere-group]").forEach((group) => { group.hidden = dimmedSpheres.has(group.dataset.sphereGroup); });
+        root.querySelectorAll("[data-sphere-row]").forEach((row) => { row.hidden = dimmedSpheres.has(row.dataset.sphereRow); });
+      };
+      root.querySelectorAll("[data-role=grimorioSphere]").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.preventDefault();
+          const sphere = button.dataset.sphere;
+          if (dimmedSpheres.has(sphere)) dimmedSpheres.delete(sphere);
+          else dimmedSpheres.add(sphere);
+          applySpheres();
+        });
+      });
+      applySpheres();
+      showGrade();
       search?.addEventListener("input", () => {
         const wanted = search.value.trim().toLowerCase();
         root.querySelectorAll(".wod5e-mage-grimorio-row").forEach((row) => {
           row.hidden = Boolean(wanted) && !row.textContent.toLowerCase().includes(wanted);
         });
+        showGrade();
       });
       root.addEventListener("click", async (event) => {
         const row = event.target.closest?.("[data-effetto]");

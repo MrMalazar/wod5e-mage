@@ -15,7 +15,7 @@ import { SPHERES } from "./spheres.js";
 export const INCANTESIMI_FLAG = "grimorio";
 
 const MAGICK_TYPE_LABELS = Object.freeze({
-  "": "WOD5E_MAGE.Arete.NoType",
+  "": "WOD5E_MAGE.Incantesimi.NoType",
   coincidental: "WOD5E_MAGE.Arete.Coincidental",
   vulgar: "WOD5E_MAGE.Arete.Vulgar",
   witnesses: "WOD5E_MAGE.Arete.VulgarWithWitnesses"
