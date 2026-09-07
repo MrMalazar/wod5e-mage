@@ -523,8 +523,8 @@
         "None": "—",
         "Perceive": "Perceive",
         "Touch": "Touch",
-        "Control": "Control",
-        "Command": "Command",
+        "Control": "Alter",
+        "Command": "Dominate",
         "Revolutionize": "Revolutionize"
       },
       "correspondence": "Correspondence",

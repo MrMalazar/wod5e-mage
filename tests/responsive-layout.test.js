@@ -249,9 +249,10 @@ const areteDialog = readFileSync(
 // Tipologia.
 assert.match(areteDialog, /wod5e-mage-arete-layout[\s\S]*wod5e-mage-arete-dots-column[\s\S]*name="spellName"[\s\S]*name="effectKind"[\s\S]*data-kind="sphere"[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dot[\s\S]*name="goal"[\s\S]*data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}"[\s\S]*wod5e-mage-arete-side[\s\S]*name="attributeTrait"[\s\S]*name="narrative"[\s\S]*name="harmony"[\s\S]*wod5e-mage-arete-types[\s\S]*name="maintained"/);
 assert.match(css, /\.wod5e-mage-arete-layout\s*\{[^}]*grid-template-columns: minmax\(250px, 1\.1fr\) minmax\(230px, 0\.9fr\);/s);
-// Nel Grimorio degli effetti la testata di ogni Sfera sta al centro:
-// simbolo sopra, nome sotto.
-assert.match(css, /\.wod5e-mage-grimorio-sphere > summary > h3\s*\{[^}]*flex-direction: column;[^}]*text-align: center;/s);
+// Nel Grimorio degli effetti la testata di ogni Sfera è il nome al centro,
+// senza simbolo: il simbolo sta nei tasti in cima (verdetto di Blue, 7/9).
+assert.match(css, /\.wod5e-mage-grimorio-sphere > summary > h3\s*\{[^}]*text-align: center;/s);
+assert.doesNotMatch(readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8"), /<h3><img src="\{\{group\.icon\}\}"/);
 // Le file a pallini non portano più la classe della vecchia riga flex.
 assert.doesNotMatch(areteDialog, /wod5e-mage-arete-dotrow wod5e-mage-arete-sphere"/);
 assert.match(areteDialog, /data-specialty="\{\{sphere\.specialtyScope\}\}"/);

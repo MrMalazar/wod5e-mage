@@ -240,6 +240,7 @@ export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
       const showView = (view) => {
         lastView = view;
         root.querySelectorAll("[data-view-panel]").forEach((panel) => { panel.hidden = panel.dataset.viewPanel !== view; });
+        root.querySelectorAll("[data-view-only]").forEach((part) => { part.hidden = part.dataset.viewOnly !== view; });
         root.querySelectorAll("[data-role=grimorioView]").forEach((button) => button.classList.toggle("active", button.dataset.view === view));
       };
       root.querySelectorAll("[data-role=grimorioView]").forEach((button) => {
@@ -264,7 +265,6 @@ export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
       const applySpheres = () => {
         root.querySelectorAll("[data-role=grimorioSphere]").forEach((button) => button.classList.toggle("lit", !dimmedSpheres.has(button.dataset.sphere)));
         root.querySelectorAll("[data-sphere-group]").forEach((group) => { group.hidden = dimmedSpheres.has(group.dataset.sphereGroup); });
-        root.querySelectorAll("[data-sphere-row]").forEach((row) => { row.hidden = dimmedSpheres.has(row.dataset.sphereRow); });
       };
       root.querySelectorAll("[data-role=grimorioSphere]").forEach((button) => {
         button.addEventListener("click", (event) => {
