@@ -116,6 +116,15 @@
       "Vulgar": "Volgare",
       "VulgarWithWitnesses": "Volgare con testimoni",
       "NoType": "Nessun tipo selezionato",
+      "Simple": "Areté semplificata",
+      "SimpleHint": "Areté semplificata: il tiro in tre passi, uno alla volta",
+      "Steps": {
+        "1": "Cosa vuoi",
+        "2": "Come lo fai",
+        "3": "Il conto"
+      },
+      "Back": "Indietro",
+      "Next": "Avanti",
       "RollFlavor": "Riserva: {traits}{bonus}. Soglia {threshold}. Tipo: {magickType}.",
       "Maintained": "Effetto Mantenuto",
       "MaintainedName": "Nome dell'effetto",

@@ -116,6 +116,15 @@
       "Vulgar": "Vulgar",
       "VulgarWithWitnesses": "Vulgar with witnesses",
       "NoType": "No type selected",
+      "Simple": "Simplified Areté",
+      "SimpleHint": "Simplified Areté: the roll in three steps, one at a time",
+      "Steps": {
+        "1": "What you want",
+        "2": "How you do it",
+        "3": "The count"
+      },
+      "Back": "Back",
+      "Next": "Next",
       "RollFlavor": "Pool: {traits}{bonus}. Threshold {threshold}. Type: {magickType}.",
       "Maintained": "Maintained Effect",
       "MaintainedName": "Effect name",

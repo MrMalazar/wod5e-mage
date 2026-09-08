@@ -4482,6 +4482,85 @@
   width: 22px;
 }
 
+/* L'Areté semplificata (7/9): il secondo sigillo, a sinistra del primo, con la S. */
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-header-arete-simple {
+  right: calc(0.5rem + 34px + 0.35rem);
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-header-arete-simple > small {
+  bottom: 1px;
+  color: var(--mage-oro);
+  font-family: "Modesto Condensed", serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  position: absolute;
+  right: 3px;
+}
+
+/* La finestra in tre passi: una colonna, la barra dei passi in cima, i
+   tasti Indietro e Avanti in fondo. */
+.wod5e-mage-arete-simple > .wod5e-mage-arete-layout {
+  grid-template-columns: 1fr;
+}
+
+/* Le file a pallini sono `display: contents`: `hidden` da solo non le spegne. */
+.wod5e-mage-arete-simple [hidden] {
+  display: none !important;
+}
+
+.wod5e-mage-arete-steps {
+  border-bottom: 1px solid rgb(152 119 43 / 45%);
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.wod5e-mage-arete-steps > button {
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  color: var(--mage-tenue, #b8ad93);
+  cursor: pointer;
+  flex: 1 1 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.6;
+  margin: 0;
+  min-height: 0;
+  padding: 0.25rem 0.3rem;
+  width: auto;
+}
+
+.wod5e-mage-arete-steps > button > b {
+  color: var(--mage-oro, #d9a827);
+  margin-right: 0.2rem;
+}
+
+.wod5e-mage-arete-steps > button.active,
+.wod5e-mage-arete-steps > button:hover {
+  background: rgb(217 168 39 / 15%);
+  border-color: rgb(152 119 43 / 45%);
+  color: var(--mage-oro-chiaro, #f5e7b2);
+}
+
+.wod5e-mage-arete-step-nav {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+}
+
+.wod5e-mage-arete-step-nav > button {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.wod5e-mage-arete-step-nav > button[data-role="areteNext"] {
+  margin-left: auto;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-new-session {
   background: rgb(20 16 10 / 72%);
   border: 1px solid var(--mage-oro-scuro);

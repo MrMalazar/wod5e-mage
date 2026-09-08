@@ -10,7 +10,7 @@ import { onGrimorioComuneOpen, onIncantesimoShare } from "../grimorio-comune.js"
 import { bindNoteBoard, noteBoardHeight, onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResets } from "../reset.js";
 import { onStrumentiSuggest } from "../strumenti.js";
-import { getArete, onAreteChange, onAreteRoll } from "../arete.js";
+import { getArete, onAreteChange, onAreteRoll, onAreteSimple } from "../arete.js";
 import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
 import { prepareConceptChallenge } from "../concept-challenge.js";
 import {
@@ -132,6 +132,7 @@ export class MageActorSheet extends MortalActorSheet {
       noteDelete: onNoteDelete,
       areteChange: onAreteChange,
       areteRoll: onAreteRoll,
+      areteSimple: onAreteSimple,
       belongingAdd: onBelongingAdd,
       belongingDelete: onBelongingDelete,
       bonusAdd: onBonusAdd,

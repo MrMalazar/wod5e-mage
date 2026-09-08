@@ -542,12 +542,54 @@ export async function onAreteRoll(event) {
   return launchArete(this.actor, { mode: "roll" });
 }
 
+/** L'Areté semplificata (7/9): lo stesso tiro, in tre passi, uno alla volta. */
+export async function onAreteSimple(event) {
+  event.preventDefault();
+  return launchArete(this.actor, { mode: "roll", simple: true });
+}
+
+/**
+ * I tre passi dell'Areté semplificata: 1 cosa vuoi (Obiettivo, Sfere, Ambiti),
+ * 2 come lo fai (Attributo e Abilità, Tipologia, Effetto), 3 il conto (premio,
+ * Armonia, Quintessenza, Mantenuto) e il tiro. Ogni pezzo della finestra porta
+ * `data-step`; si vede solo quel che appartiene al passo aperto, e il tasto
+ * «Tira» compare solo all'ultimo.
+ */
+export function wireSteps(dialog) {
+  const root = dialog.element;
+  const form = root.querySelector(".wod5e-mage-arete-simple");
+  if (!form) return;
+  // Al primo passo l'Obiettivo sta in cima: è la prima domanda.
+  const goalBox = form.querySelector("[data-role=goalBox]");
+  goalBox?.parentElement?.prepend(goalBox);
+  let step = 1;
+  const show = () => {
+    form.querySelectorAll("[data-step]").forEach((part) => {
+      const steps = String(part.dataset.step).split(/\s+/).map(Number);
+      part.hidden = !steps.includes(step);
+    });
+    form.querySelectorAll("[data-role=areteStep]").forEach((button) => button.classList.toggle("active", Number(button.dataset.step) === step));
+    const back = form.querySelector("[data-role=areteBack]");
+    const next = form.querySelector("[data-role=areteNext]");
+    if (back) back.hidden = step === 1;
+    if (next) next.hidden = step === 3;
+    const ok = root.querySelector("button[data-action=ok]");
+    if (ok) ok.hidden = step !== 3;
+  };
+  form.querySelectorAll("[data-role=areteStep]").forEach((button) => {
+    button.addEventListener("click", (event) => { event.preventDefault(); step = Number(button.dataset.step); show(); });
+  });
+  form.querySelector("[data-role=areteBack]")?.addEventListener("click", (event) => { event.preventDefault(); step = Math.max(1, step - 1); show(); });
+  form.querySelector("[data-role=areteNext]")?.addEventListener("click", (event) => { event.preventDefault(); step = Math.min(3, step + 1); show(); });
+  show();
+}
+
 /**
  * La finestra del tiro di Areté, in due modi: «roll» tira; «save» (il
  * Grimorio del personaggio, 6/9) non tira e torna l'incantesimo da salvare.
  * Un `preset` (un incantesimo salvato) riempie la finestra prima di aprirla.
  */
-export async function launchArete(actor, { mode = "roll", preset = null } = {}) {
+export async function launchArete(actor, { mode = "roll", preset = null, simple = false } = {}) {
   const saveMode = mode === "save";
   const arete = getArete(actor);
   const traits = prepareAreteTraits(actor, {
@@ -585,16 +627,16 @@ export async function launchArete(actor, { mode = "roll", preset = null } = {}) 
   const sphereLevelsOwned = Object.fromEntries(rollSpheres.map((sphere) => [sphere.id, sphere.value]));
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
-    { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, preset, ...traits }
+    { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, simple, preset, ...traits }
   );
 
   const result = await foundry.applications.api.DialogV2.input({
     window: {
-      title: game.i18n.localize(saveMode ? "WOD5E_MAGE.Incantesimi.DialogTitle" : "WOD5E_MAGE.Arete.Roll")
+      title: game.i18n.localize(saveMode ? "WOD5E_MAGE.Incantesimi.DialogTitle" : (simple ? "WOD5E_MAGE.Arete.Simple" : "WOD5E_MAGE.Arete.Roll"))
     },
-    // Una finestra compatta: due colonne, niente muri di testo.
+    // Una finestra compatta: due colonne, niente muri di testo. Semplificata: una colonna.
     position: {
-      width: 700,
+      width: simple ? 480 : 700,
       height: "auto"
     },
     content,
@@ -609,7 +651,7 @@ export async function launchArete(actor, { mode = "roll", preset = null } = {}) 
         label: game.i18n.localize("WOD5E.Cancel")
       }
     ],
-    classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog"],
+    classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog", ...(simple ? ["wod5e-mage-arete-simple-dialog"] : [])],
     render: (_event, dialog) => {
       makeMagickTypeExclusive(dialog);
       wireDotRows(dialog);
@@ -618,6 +660,7 @@ export async function launchArete(actor, { mode = "roll", preset = null } = {}) 
       wireMaintainedEffect(dialog);
       wireGrimorio(dialog, sphereLevelsOwned);
       applyAretePreset(dialog, preset);
+      if (simple) wireSteps(dialog);
     }
   });
 

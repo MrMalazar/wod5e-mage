@@ -10,6 +10,12 @@
             title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.RollHint'}}">
         <img class="wod5e-mage-arete-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt="" aria-hidden="true">
     </button>
+    {{!-- Accanto, l'Areté semplificata (7/9): il sigillo con una S piccola, il tiro in tre passi. --}}
+    <button type="button" class="wod5e-mage-header-arete-roll wod5e-mage-header-arete-simple wod5e-mage-arete-roll" data-action="areteSimple"
+            title="{{localize 'WOD5E_MAGE.Arete.SimpleHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.SimpleHint'}}">
+        <img class="wod5e-mage-arete-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt="" aria-hidden="true">
+        <small aria-hidden="true">S</small>
+    </button>
     <div class="header-fields">
         <div class="header-fields-left wod5e-mage-header-resources">
             {{> "modules/wod5e-mage/templates/actor/parts/salute.hbs"}}

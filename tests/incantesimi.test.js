@@ -61,7 +61,13 @@ for (const action of ["incantesimoRoll", "incantesimoShare", "incantesimoChat", 
 const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
 assert.match(dialog, /\{\{#if saveMode\}\}[\s\S]*name="spellName"[\s\S]*name="narrative"[\s\S]*\{\{#unless saveMode\}\}[\s\S]*name="harmony"/);
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-assert.match(arete, /export async function launchArete\(actor, \{ mode = "roll", preset = null \} = \{\}\)/);
+assert.match(arete, /export async function launchArete\(actor, \{ mode = "roll", preset = null, simple = false \} = \{\}\)/);
+// L'Areté semplificata (7/9): il secondo sigillo con la S, la finestra in tre passi.
+assert.match(arete, /export async function onAreteSimple[\s\S]*simple: true[\s\S]*export function wireSteps[\s\S]*if \(simple\) wireSteps\(dialog\);/);
+assert.match(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /data-action="areteSimple"[\s\S]*<small aria-hidden="true">S<\/small>/);
+const areteDialogSteps = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
+assert.match(areteDialogSteps, /data-role="areteStep" data-step="1"[\s\S]*data-role="goalBox"[\s\S]*data-step="1 2 3"[\s\S]*data-role="areteBack"[\s\S]*data-role="areteNext"/);
+assert.equal((areteDialogSteps.match(/<label class="wod5e-mage-arete-trait" data-step="2">/g) ?? []).length, 3);
 assert.match(arete, /if \(saveMode\) \{\s*return spellFromResult/);
 assert.match(arete, /applyAretePreset\(dialog, preset\)/);
 
