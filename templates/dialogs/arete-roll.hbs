@@ -7,7 +7,7 @@
             <button type="button" data-role="areteStep" data-step="3"><b>3</b> {{localize "WOD5E_MAGE.Arete.Steps.3"}}</button>
         </nav>
     {{/if}}
-    <div class="wod5e-mage-arete-layout">
+    <div class="wod5e-mage-arete-layout{{#if simple}} wod5e-mage-arete-simple{{/if}}" data-arete="{{arete.value}}">
         {{!-- Colonna sinistra: nome, Obiettivo, Effetto, Sfere e Ambiti a pallini. Per ogni
              Sfera scegli il livello che usi, per ogni Ambito il livello da 1 a 7. --}}
         {{!-- Una griglia sola: simbolo | nome | pallini. Le file sono trasparenti

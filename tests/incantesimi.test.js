@@ -64,6 +64,12 @@ const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf
 assert.match(arete, /export async function launchArete\(actor, \{ mode = "roll", preset = null, simple = false \} = \{\}\)/);
 // L'Areté semplificata (7/9): il secondo sigillo con la S, la finestra in tre passi.
 assert.match(arete, /export async function onAreteSimple[\s\S]*simple: true[\s\S]*export function wireSteps[\s\S]*if \(simple\) wireSteps\(dialog\);/);
+// Il <form> del template lo butta via il browser (form dentro form): il segno
+// della semplificata sta sul div del layout e tutto si cerca da `root` (0.79.0).
+assert.match(arete, /wod5e-mage-arete-layout\.wod5e-mage-arete-simple/);
+assert.doesNotMatch(arete, /root\.querySelector\("\.wod5e-mage-arete-simple"\)/);
+assert.match(arete, /root\.querySelector\("\[data-arete\]"\)\?\.dataset\.arete/);
+assert.match(readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8"), /<div class="wod5e-mage-arete-layout\{\{#if simple\}\} wod5e-mage-arete-simple\{\{\/if\}\}" data-arete="\{\{arete\.value\}\}">/);
 assert.match(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /data-action="areteSimple"[\s\S]*<small aria-hidden="true">S<\/small>/);
 const areteDialogSteps = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
 assert.match(areteDialogSteps, /data-role="areteStep" data-step="1"[\s\S]*data-role="goalBox"[\s\S]*data-step="1 2 3"[\s\S]*data-role="areteBack"[\s\S]*data-role="areteNext"/);

@@ -4500,12 +4500,15 @@
 
 /* La finestra in tre passi: una colonna, la barra dei passi in cima, i
    tasti Indietro e Avanti in fondo. */
-.wod5e-mage-arete-simple > .wod5e-mage-arete-layout {
+.wod5e-mage-arete-layout.wod5e-mage-arete-simple {
   grid-template-columns: 1fr;
 }
 
-/* Le file a pallini sono `display: contents`: `hidden` da solo non le spegne. */
-.wod5e-mage-arete-simple [hidden] {
+/* Le file a pallini sono `display: contents`: `hidden` da solo non le spegne.
+   La classe sta sulla finestra, perché i passi nascondono anche i tasti in
+   fondo e il «Tira» del dialogo (0.79.0). */
+.wod5e-mage-arete-simple-dialog [hidden],
+.wod5e-mage-arete-layout.wod5e-mage-arete-simple [hidden] {
   display: none !important;
 }
 

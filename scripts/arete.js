@@ -328,7 +328,7 @@ function wireDifficulty(dialog) {
   const quintessence = root.querySelector("#wod5e-mage-arete-quintessence");
 
   const autoSuccessOut = root.querySelector("[data-role=autoSuccesses]");
-  const areteValue = Math.max(Math.trunc(Number(root.querySelector(".wod5e-mage-arete-form")?.dataset.arete) || 0), 0);
+  const areteValue = Math.max(Math.trunc(Number(root.querySelector("[data-arete]")?.dataset.arete) || 0), 0);
 
   const update = () => {
     const sphereLevels = readDotRows(root, "sphere");
@@ -556,31 +556,37 @@ export async function onAreteSimple(event) {
  * «Tira» compare solo all'ultimo.
  */
 export function wireSteps(dialog) {
+  // Il <form> del template sparisce: DialogV2 mette già il contenuto dentro un
+  // form, e un form dentro un form il browser lo butta via (0.79.0). Quindi si
+  // cerca tutto da `root`, e il segno della semplificata sta sul div del layout.
   const root = dialog.element;
-  const form = root.querySelector(".wod5e-mage-arete-simple");
-  if (!form) return;
+  if (!root?.querySelector(".wod5e-mage-arete-layout.wod5e-mage-arete-simple")) return;
   // Al primo passo l'Obiettivo sta in cima: è la prima domanda.
-  const goalBox = form.querySelector("[data-role=goalBox]");
+  const goalBox = root.querySelector("[data-role=goalBox]");
   goalBox?.parentElement?.prepend(goalBox);
+  // Il tasto «Tira» del dialogo: si vede solo all'ultimo passo.
+  const ok = root.querySelector("[data-action=ok]") ?? root.querySelector("button[type=submit]");
   let step = 1;
   const show = () => {
-    form.querySelectorAll("[data-step]").forEach((part) => {
+    root.querySelectorAll("[data-step]").forEach((part) => {
       const steps = String(part.dataset.step).split(/\s+/).map(Number);
       part.hidden = !steps.includes(step);
     });
-    form.querySelectorAll("[data-role=areteStep]").forEach((button) => button.classList.toggle("active", Number(button.dataset.step) === step));
-    const back = form.querySelector("[data-role=areteBack]");
-    const next = form.querySelector("[data-role=areteNext]");
+    root.querySelectorAll("[data-role=areteStep]").forEach((button) => {
+      button.classList.toggle("active", Number(button.dataset.step) === step);
+      button.hidden = false;
+    });
+    const back = root.querySelector("[data-role=areteBack]");
+    const next = root.querySelector("[data-role=areteNext]");
     if (back) back.hidden = step === 1;
     if (next) next.hidden = step === 3;
-    const ok = root.querySelector("button[data-action=ok]");
     if (ok) ok.hidden = step !== 3;
   };
-  form.querySelectorAll("[data-role=areteStep]").forEach((button) => {
+  root.querySelectorAll("[data-role=areteStep]").forEach((button) => {
     button.addEventListener("click", (event) => { event.preventDefault(); step = Number(button.dataset.step); show(); });
   });
-  form.querySelector("[data-role=areteBack]")?.addEventListener("click", (event) => { event.preventDefault(); step = Math.max(1, step - 1); show(); });
-  form.querySelector("[data-role=areteNext]")?.addEventListener("click", (event) => { event.preventDefault(); step = Math.min(3, step + 1); show(); });
+  root.querySelector("[data-role=areteBack]")?.addEventListener("click", (event) => { event.preventDefault(); step = Math.max(1, step - 1); show(); });
+  root.querySelector("[data-role=areteNext]")?.addEventListener("click", (event) => { event.preventDefault(); step = Math.min(3, step + 1); show(); });
   show();
 }
 
