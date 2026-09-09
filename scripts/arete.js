@@ -308,7 +308,9 @@ function readSpecialties(root) {
 }
 
 function optionValue(select) {
-  const option = select?.selectedOptions?.[0];
+  // Una select legge l'opzione scelta; un campo nascosto (i tratti che
+  // viaggiano fra i passi dell'Areté semplificata) porta il valore da sé.
+  const option = select?.selectedOptions?.[0] ?? select;
   return Math.max(Math.trunc(Number(option?.dataset?.value) || 0), 0);
 }
 
@@ -542,52 +544,127 @@ export async function onAreteRoll(event) {
   return launchArete(this.actor, { mode: "roll" });
 }
 
-/** L'Areté semplificata (7/9): lo stesso tiro, in tre passi, uno alla volta. */
+/** L'Areté semplificata (8/9): lo stesso tiro, in tre finestre, una alla volta. */
 export async function onAreteSimple(event) {
   event.preventDefault();
   return launchArete(this.actor, { mode: "roll", simple: true });
 }
 
+const TRAIT_FIELDS = Object.freeze([
+  { field: "attributeTrait", id: "wod5e-mage-arete-attribute" },
+  { field: "primaryTrait", id: "wod5e-mage-arete-primary" },
+  { field: "secondaryTrait", id: "wod5e-mage-arete-secondary" }
+]);
+
+/** Quali campi appartengono a ogni passo dell'Areté semplificata. */
+const STEP_OWNS = Object.freeze({
+  1: (key) => key === "goal" || key.startsWith("sphere-") || key.startsWith("scope-"),
+  2: (key) => ["effectKind", "attributeTrait", "primaryTrait", "secondaryTrait", "coincidental", "vulgar", "witnesses"].includes(key),
+  3: (key) => ["prize", "harmony", "quintessence", "maintained", "maintainedName"].includes(key)
+});
+
+function clampLevel(value, max) {
+  return Math.min(Math.max(Math.trunc(Number(value) || 0), 0), max);
+}
+
 /**
- * I tre passi dell'Areté semplificata: 1 cosa vuoi (Obiettivo, Sfere, Ambiti),
- * 2 come lo fai (Attributo e Abilità, Tipologia, Effetto), 3 il conto (premio,
- * Armonia, Quintessenza, Mantenuto) e il tiro. Ogni pezzo della finestra porta
- * `data-step`; si vede solo quel che appartiene al passo aperto, e il tasto
- * «Tira» compare solo all'ultimo.
+ * Cosa mostra la finestra (8/9). Senza passo (`step` 0) mostra tutto, com'è
+ * il tiro pieno. Con un passo mostra solo la sua parte, e le risposte dei
+ * passi prima viaggiano come campi nascosti (`carry`): così il conto della
+ * riserva e della soglia, e il tiro alla fine, leggono tutto da una finestra.
  */
-export function wireSteps(dialog) {
-  // Il <form> del template sparisce: DialogV2 mette già il contenuto dentro un
-  // form, e un form dentro un form il browser lo butta via (0.79.0). Quindi si
-  // cerca tutto da `root`, e il segno della semplificata sta sul div del layout.
-  const root = dialog.element;
-  if (!root?.querySelector(".wod5e-mage-arete-layout.wod5e-mage-arete-simple")) return;
-  // Al primo passo l'Obiettivo sta in cima: è la prima domanda.
-  const goalBox = root.querySelector("[data-role=goalBox]");
-  goalBox?.parentElement?.prepend(goalBox);
-  // Il tasto «Tira» del dialogo: si vede solo all'ultimo passo.
-  const ok = root.querySelector("[data-action=ok]") ?? root.querySelector("button[type=submit]");
-  let step = 1;
-  const show = () => {
-    root.querySelectorAll("[data-step]").forEach((part) => {
-      const steps = String(part.dataset.step).split(/\s+/).map(Number);
-      part.hidden = !steps.includes(step);
-    });
-    root.querySelectorAll("[data-role=areteStep]").forEach((button) => {
-      button.classList.toggle("active", Number(button.dataset.step) === step);
-      button.hidden = false;
-    });
-    const back = root.querySelector("[data-role=areteBack]");
-    const next = root.querySelector("[data-role=areteNext]");
-    if (back) back.hidden = step === 1;
-    if (next) next.hidden = step === 3;
-    if (ok) ok.hidden = step !== 3;
+export function stepContext(step = 0, answers = {}, { traits = { attributes: [], skills: [] }, rollSpheres = [] } = {}) {
+  const all = !step;
+  const show = {
+    goal: all || step === 1,
+    spheres: all || step === 1,
+    scopes: all || step === 1,
+    effect: all || step === 2,
+    traits: all || step === 2,
+    types: all || step === 2,
+    conto: all || step === 3,
+    pool: all || step >= 2
   };
-  root.querySelectorAll("[data-role=areteStep]").forEach((button) => {
-    button.addEventListener("click", (event) => { event.preventDefault(); step = Number(button.dataset.step); show(); });
-  });
-  root.querySelector("[data-role=areteBack]")?.addEventListener("click", (event) => { event.preventDefault(); step = Math.max(1, step - 1); show(); });
-  root.querySelector("[data-role=areteNext]")?.addEventListener("click", (event) => { event.preventDefault(); step = Math.min(3, step + 1); show(); });
-  show();
+  show.side = show.traits || show.types || show.conto;
+  const carry = step > 1
+    ? {
+      goal: String(answers.goal ?? "").trim(),
+      spheres: rollSpheres.map((sphere) => ({
+        id: sphere.id,
+        level: clampLevel(answers[`sphere-${sphere.id}`], sphere.value),
+        specialty: sphere.specialtyScope ?? ""
+      })),
+      scopes: SCOPES.map((id) => ({ id, level: clampLevel(answers[`scope-${id}`], THRESHOLD_CAP) })),
+      effect: step === 3,
+      effectKind: normalizeEffectKind(answers.effectKind),
+      traits: TRAIT_FIELDS.map(({ field, id }) => {
+        const trait = findMageRollTrait(traits, answers[field]);
+        return { field, id, key: trait ? String(answers[field]) : "", value: trait?.value ?? 0, label: trait?.label ?? "" };
+      }),
+      coincidental: isChecked(answers.coincidental),
+      vulgar: isChecked(answers.vulgar),
+      witnesses: isChecked(answers.witnesses)
+    }
+    : null;
+  if (carry) carry.traitLabels = carry.traits.filter((trait) => trait.key).map((trait) => `${trait.label} (${trait.value})`).join(" + ");
+  return { step, simple: step > 0, show, carry };
+}
+
+/** Le risposte di un passo entrano nel mazzo: le sue vecchie escono prima. */
+export function mergeStepAnswers(answers = {}, step = 0, fresh = {}) {
+  const owns = STEP_OWNS[step] ?? (() => false);
+  const kept = Object.fromEntries(Object.entries(answers).filter(([key]) => !owns(key)));
+  return { ...kept, ...fresh };
+}
+
+/**
+ * Le tre finestre in fila (8/9): `ask(step, answers)` apre la finestra del
+ * passo e torna le sue risposte, oppure "back" o "cancel". Indietro riapre
+ * il passo prima con le risposte già date; Annulla chiude tutto.
+ */
+export async function collectSimpleAnswers(ask, steps = 3) {
+  let answers = {};
+  let step = 1;
+  while (step >= 1 && step <= steps) {
+    const fresh = await ask(step, answers);
+    if (!fresh || fresh === "cancel") return null;
+    if (fresh === "back") {
+      step -= 1;
+      continue;
+    }
+    answers = mergeStepAnswers(answers, step, fresh);
+    step += 1;
+  }
+  return step < 1 ? null : answers;
+}
+
+/**
+ * Le risposte già date riempiono la finestra: quando si torna indietro, il
+ * giocatore ritrova quel che aveva scelto. I campi nascosti portano già il
+ * loro valore dal template; qui si riempiono i comandi visibili.
+ */
+function applyAreteAnswers(dialog, answers) {
+  const root = dialog?.element;
+  if (!root || !answers) return;
+  for (const [name, value] of Object.entries(answers)) {
+    const field = root.querySelector(`[name="${name}"]`);
+    if (!field) continue;
+    if (field.type === "checkbox") {
+      field.checked = isChecked(value);
+    } else if (field.closest?.("[data-role=dotRow]")) {
+      const row = field.closest("[data-role=dotRow]");
+      const dots = row.querySelectorAll(".wod5e-mage-arete-sphere-dot").length;
+      // Una fila nascosta (un passo dopo il primo) ha già il valore dal template.
+      if (!dots) continue;
+      field.value = String(clampLevel(value, dots));
+      row._paint?.();
+    } else if (field.type === "hidden") {
+      continue;
+    } else {
+      field.value = value ?? "";
+    }
+    field.dispatchEvent(new Event("change", { bubbles: true }));
+  }
 }
 
 /**
@@ -631,50 +708,55 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   }));
   const quintessenceAvailable = getMagickBalance(actor).quintessence;
   const sphereLevelsOwned = Object.fromEntries(rollSpheres.map((sphere) => [sphere.id, sphere.value]));
-  const content = await foundry.applications.handlebars.renderTemplate(
-    "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
-    { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, simple, preset, ...traits }
-  );
+  const localize = game.i18n.localize.bind(game.i18n);
+  const base = { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, preset, ...traits };
 
-  const result = await foundry.applications.api.DialogV2.input({
-    window: {
-      title: game.i18n.localize(saveMode ? "WOD5E_MAGE.Incantesimi.DialogTitle" : (simple ? "WOD5E_MAGE.Arete.Simple" : "WOD5E_MAGE.Arete.Roll"))
-    },
-    // Una finestra compatta: due colonne, niente muri di testo. Semplificata: una colonna.
-    position: {
-      width: simple ? 480 : 700,
-      height: "auto"
-    },
-    content,
-    ok: {
-      icon: saveMode ? "fas fa-floppy-disk" : "fas fa-dice",
-      label: game.i18n.localize(saveMode ? "WOD5E_MAGE.Incantesimi.Save" : "WOD5E_MAGE.Arete.Roll")
-    },
-    buttons: [
-      {
-        action: "cancel",
-        icon: "fas fa-times",
-        label: game.i18n.localize("WOD5E.Cancel")
+  // Una finestra: tutta (step 0) o un passo dell'Areté semplificata (1, 2, 3).
+  const ask = async (step = 0, answers = {}) => {
+    const last = !step || step === 3;
+    const content = await foundry.applications.handlebars.renderTemplate(
+      "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
+      { ...base, ...stepContext(step, answers, { traits, rollSpheres }) }
+    );
+    const buttons = [];
+    if (step > 1) buttons.push({ action: "back", icon: "fas fa-chevron-left", label: localize("WOD5E_MAGE.Arete.Back") });
+    buttons.push({ action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") });
+    return foundry.applications.api.DialogV2.input({
+      window: {
+        title: localize(saveMode ? "WOD5E_MAGE.Incantesimi.DialogTitle" : (step ? "WOD5E_MAGE.Arete.Simple" : "WOD5E_MAGE.Arete.Roll"))
+      },
+      // Una finestra compatta: due colonne, niente muri di testo. Un passo: una colonna.
+      position: {
+        width: step ? 480 : 700,
+        height: "auto"
+      },
+      content,
+      ok: {
+        icon: saveMode ? "fas fa-floppy-disk" : (last ? "fas fa-dice" : "fas fa-chevron-right"),
+        label: localize(saveMode ? "WOD5E_MAGE.Incantesimi.Save" : (last ? "WOD5E_MAGE.Arete.Roll" : "WOD5E_MAGE.Arete.Next"))
+      },
+      buttons,
+      classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog", ...(step ? ["wod5e-mage-arete-simple-dialog"] : [])],
+      render: (_event, dialog) => {
+        makeMagickTypeExclusive(dialog);
+        wireDotRows(dialog);
+        wireDifficulty(dialog);
+        wireScopeTable(dialog);
+        wireMaintainedEffect(dialog);
+        wireGrimorio(dialog, sphereLevelsOwned);
+        applyAretePreset(dialog, preset);
+        applyAreteAnswers(dialog, answers);
       }
-    ],
-    classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog", ...(simple ? ["wod5e-mage-arete-simple-dialog"] : [])],
-    render: (_event, dialog) => {
-      makeMagickTypeExclusive(dialog);
-      wireDotRows(dialog);
-      wireDifficulty(dialog);
-      wireScopeTable(dialog);
-      wireMaintainedEffect(dialog);
-      wireGrimorio(dialog, sphereLevelsOwned);
-      applyAretePreset(dialog, preset);
-      if (simple) wireSteps(dialog);
-    }
-  });
+    });
+  };
+
+  const result = simple ? await collectSimpleAnswers(ask) : await ask(0, {});
 
   if (!result || result === "cancel") return null;
 
   // Il Grimorio: niente tiro, torna quel che si è scelto, da salvare.
   if (saveMode) {
-    return spellFromResult(actor, result, { traits, rollSpheres, localize: game.i18n.localize.bind(game.i18n) });
+    return spellFromResult(actor, result, { traits, rollSpheres, localize });
   }
 
   // Attributo, Abilità, Abilità: ne basta uno, gli altri si sommano.
@@ -766,7 +848,6 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     }));
   }
   // La carta del tiro: una riga per voce sotto i dadi, i simboli sopra.
-  const localize = game.i18n.localize.bind(game.i18n);
   const scopeLevels = scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level }));
   const card = renderRollCard({
     traits: selectedTraits.map((trait) => ({ label: trait.label, value: trait.value })),

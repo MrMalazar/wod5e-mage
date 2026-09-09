@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { spellFromResult } from "../scripts/arete.js";
+import { collectSimpleAnswers, mergeStepAnswers, spellFromResult, stepContext } from "../scripts/arete.js";
 import { groupIncantesimiBySphere, prepareIncantesimo, prepareIncantesimi, spellFromEffetto, topSpheres, INCANTESIMI_FLAG } from "../scripts/incantesimi.js";
 import { groupSharedSpells, sharedItemData, SHARED_PACK_NAME } from "../scripts/grimorio-comune.js";
 
@@ -62,18 +62,88 @@ const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", impor
 assert.match(dialog, /\{\{#if saveMode\}\}[\s\S]*name="spellName"[\s\S]*name="narrative"[\s\S]*\{\{#unless saveMode\}\}[\s\S]*name="harmony"/);
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
 assert.match(arete, /export async function launchArete\(actor, \{ mode = "roll", preset = null, simple = false \} = \{\}\)/);
-// L'Areté semplificata (7/9): il secondo sigillo con la S, la finestra in tre passi.
-assert.match(arete, /export async function onAreteSimple[\s\S]*simple: true[\s\S]*export function wireSteps[\s\S]*if \(simple\) wireSteps\(dialog\);/);
-// Il <form> del template lo butta via il browser (form dentro form): il segno
-// della semplificata sta sul div del layout e tutto si cerca da `root` (0.79.0).
-assert.match(arete, /wod5e-mage-arete-layout\.wod5e-mage-arete-simple/);
+// L'Areté semplificata (8/9): il secondo sigillo con la S; tre finestre in fila,
+// una alla volta, e la prossima si apre solo quando la precedente è chiusa.
+assert.match(arete, /export async function onAreteSimple[\s\S]*simple: true/);
+assert.match(arete, /const result = simple \? await collectSimpleAnswers\(ask\) : await ask\(0, \{\}\);/);
+assert.doesNotMatch(arete, /wireSteps/);
+// Il <form> del template lo butta via il browser (form dentro form, 0.79.0):
+// niente form nel template, e tutto si cerca da `root`.
+assert.doesNotMatch(dialog.replace(/\{\{!--[\s\S]*?--\}\}/g, ""), /<form/);
 assert.doesNotMatch(arete, /root\.querySelector\("\.wod5e-mage-arete-simple"\)/);
 assert.match(arete, /root\.querySelector\("\[data-arete\]"\)\?\.dataset\.arete/);
-assert.match(readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8"), /<div class="wod5e-mage-arete-layout\{\{#if simple\}\} wod5e-mage-arete-simple\{\{\/if\}\}" data-arete="\{\{arete\.value\}\}">/);
+assert.match(dialog, /<div class="wod5e-mage-arete-layout\{\{#if simple\}\} wod5e-mage-arete-simple\{\{\/if\}\}" data-arete="\{\{arete\.value\}\}">/);
 assert.match(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /data-action="areteSimple"[\s\S]*<small aria-hidden="true">S<\/small>/);
-const areteDialogSteps = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
-assert.match(areteDialogSteps, /data-role="areteStep" data-step="1"[\s\S]*data-role="goalBox"[\s\S]*data-step="1 2 3"[\s\S]*data-role="areteBack"[\s\S]*data-role="areteNext"/);
-assert.equal((areteDialogSteps.match(/<label class="wod5e-mage-arete-trait" data-step="2">/g) ?? []).length, 3);
+// Il template mostra un passo e porta gli altri come campi nascosti.
+assert.match(dialog, /\{\{#if show\.goal\}\}[\s\S]*name="goal"[\s\S]*\{\{else\}\}\s*<input type="hidden" name="goal" value="\{\{carry\.goal\}\}">/);
+assert.match(dialog, /\{\{#each carry\.spheres as \|row\|\}\}\s*<span data-role="dotRow" data-kind="sphere" data-id="\{\{row\.id\}\}" data-specialty="\{\{row\.specialty\}\}" hidden><input type="hidden" name="sphere-\{\{row\.id\}\}" value="\{\{row\.level\}\}">/);
+assert.match(dialog, /\{\{#each carry\.traits as \|trait\|\}\}\s*<input type="hidden" name="\{\{trait\.field\}\}" id="\{\{trait\.id\}\}" value="\{\{trait\.key\}\}" data-value="\{\{trait\.value\}\}">/);
+assert.equal((dialog.match(/<li class="\{\{#if show\.\w+\}\}active\{\{\/if\}\}"><b>\d<\/b>/g) ?? []).length, 3);
+const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+assert.match(css, /\.wod5e-mage-arete-layout\.wod5e-mage-arete-simple \[hidden\] \{\s*display: none !important;/);
+assert.match(css, /\.wod5e-mage-arete-simple \.wod5e-mage-arete-goal-box \{\s*order: -1;/);
+assert.doesNotMatch(css, /arete-step-nav|arete-steps > button/);
+
+// Cosa mostra ogni finestra, e cosa porta delle precedenti.
+const full = stepContext(0, {}, { traits, rollSpheres });
+assert.equal(full.simple, false);
+assert.ok(Object.values(full.show).every(Boolean));
+assert.equal(full.carry, null);
+const step1 = stepContext(1, {}, { traits, rollSpheres });
+assert.equal(step1.simple, true);
+assert.deepEqual(step1.show, { goal: true, spheres: true, scopes: true, effect: false, traits: false, types: false, conto: false, pool: false, side: false });
+assert.equal(step1.carry, null);
+const answers1 = { goal: " Riavvolgere il tempo ", "sphere-time": "5", "sphere-forces": "1", "scope-duration": "9" };
+const step2 = stepContext(2, answers1, { traits, rollSpheres });
+assert.deepEqual(step2.show, { goal: false, spheres: false, scopes: false, effect: true, traits: true, types: true, conto: false, pool: true, side: true });
+assert.equal(step2.carry.goal, "Riavvolgere il tempo");
+// I livelli portati stanno dentro i pallini posseduti e il tetto degli Ambiti.
+assert.deepEqual(step2.carry.spheres, [{ id: "time", level: 3, specialty: "" }, { id: "forces", level: 1, specialty: "" }]);
+assert.equal(step2.carry.scopes.find((scope) => scope.id === "duration").level, 7);
+assert.equal(step2.carry.scopes.find((scope) => scope.id === "area").level, 0);
+assert.equal(step2.carry.effect, false);
+const answers2 = { ...answers1, effectKind: "mental", attributeTrait: "attribute:dexterity", primaryTrait: "skill:technology", secondaryTrait: "", coincidental: false, vulgar: true, witnesses: false };
+const step3 = stepContext(3, answers2, { traits, rollSpheres });
+assert.deepEqual(step3.show, { goal: false, spheres: false, scopes: false, effect: false, traits: false, types: false, conto: true, pool: true, side: true });
+assert.equal(step3.carry.effect, true);
+assert.equal(step3.carry.effectKind, "mental");
+assert.deepEqual(step3.carry.traits.map((trait) => [trait.field, trait.id, trait.key, trait.value]), [
+  ["attributeTrait", "wod5e-mage-arete-attribute", "attribute:dexterity", 3],
+  ["primaryTrait", "wod5e-mage-arete-primary", "skill:technology", 2],
+  ["secondaryTrait", "wod5e-mage-arete-secondary", "", 0]
+]);
+assert.equal(step3.carry.traitLabels, "Destrezza (3) + Tecnologia (2)");
+assert.deepEqual([step3.carry.coincidental, step3.carry.vulgar, step3.carry.witnesses], [false, true, false]);
+assert.equal(stepContext(3, { ...answers2, attributeTrait: "attribute:nope" }, { traits, rollSpheres }).carry.traits[0].key, "");
+
+// Le risposte di un passo sostituiscono le sue vecchie, le altre restano.
+assert.deepEqual(mergeStepAnswers({ goal: "a", "sphere-time": "2", attributeTrait: "x" }, 1, { goal: "b" }), { attributeTrait: "x", goal: "b" });
+assert.deepEqual(mergeStepAnswers({ goal: "a", vulgar: true }, 2, { coincidental: true, goal: "a" }), { goal: "a", coincidental: true });
+
+// Tre finestre in fila: Avanti, Indietro (con le risposte già date), Annulla.
+{
+  const calls = [];
+  const script = [
+    { goal: "g", "sphere-time": "2" },
+    "back",
+    { goal: "g2", "sphere-time": "3" },
+    { attributeTrait: "attribute:dexterity", vulgar: true, goal: "g2", "sphere-time": "3" },
+    "back",
+    { attributeTrait: "attribute:dexterity", coincidental: true, goal: "g2", "sphere-time": "3" },
+    { prize: true, goal: "g2", "sphere-time": "3", coincidental: "on" }
+  ];
+  const answers = await collectSimpleAnswers(async (step, given) => {
+    calls.push([step, { ...given }]);
+    return script.shift();
+  });
+  assert.deepEqual(calls.map(([step]) => step), [1, 2, 1, 2, 3, 2, 3]);
+  assert.deepEqual(calls[2][1], { goal: "g", "sphere-time": "2" });
+  assert.equal(calls[5][1].vulgar, true);
+  assert.deepEqual(answers, { goal: "g2", "sphere-time": "3", attributeTrait: "attribute:dexterity", coincidental: "on", prize: true });
+  assert.equal(await collectSimpleAnswers(async () => "cancel"), null);
+  assert.equal(await collectSimpleAnswers(async () => null), null);
+  assert.equal(await collectSimpleAnswers(async (step) => (step === 1 ? "back" : {})), null);
+}
 assert.match(arete, /if \(saveMode\) \{\s*return spellFromResult/);
 assert.match(arete, /applyAretePreset\(dialog, preset\)/);
 
