@@ -9,7 +9,10 @@ import {
   saluteMax,
   saluteStatus,
   saluteAfterRelax,
-  saluteWithMentalAggravated
+  saluteDamageOutcome,
+  saluteWithDamage,
+  saluteWithMentalAggravated,
+  normalizeDamageChoice
 } from "../scripts/salute.js";
 
 function actor({ stamina = 2, resolve = 3, salute } = {}) {
@@ -86,7 +89,6 @@ const ruota = readFileSync(new URL("../templates/actor/parts/ruota.hbs", import.
 assert.match(ruota, /data-action="contraccolpoNega"/);
 assert.doesNotMatch(ruota, /contraccolpoReset/);
 
-console.log("Salute tests passed.");
 
 // Nuova sessione: i punti esperienza della sessione diventano una Presa.
 {
@@ -105,3 +107,29 @@ assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 0, ma: 2, ms: 0 }, 0), { pa: 0, p
 assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 0, ma: 2, ms: 0 }, 3), { pa: 0, ps: 0, ma: 1, ms: 0 });
 assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 1, ma: 0, ms: 0 }, 4), { pa: 0, ps: 1, ma: 0, ms: 0 });
 assert.match(track, /data-action="saluteRiposo"[\s\S]*data-action="saluteRelax"[\s\S]*data-action="saluteReset"/);
+
+// Danni subiti (9/9): il tasto a destra di Reset, la finestra coi quattro segni.
+assert.match(track, /data-action="saluteReset"[\s\S]*data-action="saluteDanni"/);
+{
+  const dialog = readFileSync(new URL("../templates/dialogs/salute-danni.hbs", import.meta.url), "utf8");
+  assert.doesNotMatch(dialog.replace(/\{\{!--[\s\S]*?--\}\}/g, ""), /<form/);
+  assert.match(dialog, /name="amount"[\s\S]*<input type="hidden" name="state" value="\{\{chosen\}\}">[\s\S]*data-role="danniSign" data-state="\{\{sign\.state\}\}"/);
+  const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+  assert.match(sheet, /saluteDanni: onSaluteDanni/);
+}
+assert.deepEqual(normalizeDamageChoice({ amount: "3", state: "ma" }), { state: "ma", amount: 3 });
+assert.deepEqual(normalizeDamageChoice({ amount: "-2", state: "boh" }), { state: "", amount: 0 });
+// Quel che entra riempie le caselle libere; gli aggravati per primi.
+assert.deepEqual(saluteDamageOutcome({ pa: 0, ps: 2, ma: 0, ms: 0 }, 6, { ps: 2 }), { counts: { pa: 0, ps: 4, ma: 0, ms: 0 }, converted: 0 });
+// La conversione (LIBRO, «La conversione»): tracciato pieno, ogni danno di
+// troppo trasforma un superficiale in aggravato, dalla prima casella.
+assert.deepEqual(saluteDamageOutcome({ pa: 0, ps: 6, ma: 0, ms: 0 }, 6, { ps: 3 }), { counts: { pa: 3, ps: 3, ma: 0, ms: 0 }, converted: 3 });
+// Due caselle libere e quattro danni: due entrano, due convertono.
+assert.deepEqual(saluteDamageOutcome({ pa: 0, ps: 2, ma: 0, ms: 2 }, 6, { ms: 4 }), { counts: { pa: 0, ps: 2, ma: 2, ms: 2 }, converted: 2 });
+// Prima dal lato del colpo, poi dall'altro; qualunque sia il tipo del colpo.
+assert.deepEqual(saluteDamageOutcome({ pa: 0, ps: 3, ma: 0, ms: 3 }, 6, { ms: 2 }), { counts: { pa: 0, ps: 3, ma: 2, ms: 1 }, converted: 2 });
+assert.deepEqual(saluteDamageOutcome({ pa: 0, ps: 1, ma: 0, ms: 5 }, 6, { pa: 2 }), { counts: { pa: 1, ps: 0, ma: 1, ms: 4 }, converted: 2 });
+// Tutto aggravato: non c'è più niente da convertire.
+assert.deepEqual(saluteDamageOutcome({ pa: 6, ps: 0, ma: 0, ms: 0 }, 6, { ps: 2 }), { counts: { pa: 6, ps: 0, ma: 0, ms: 0 }, converted: 0 });
+assert.deepEqual(saluteWithDamage({ pa: 0, ps: 6, ma: 0, ms: 0 }, 6, { ma: 1 }), { pa: 1, ps: 5, ma: 0, ms: 0 });
+console.log("Salute tests passed.");

@@ -12,7 +12,7 @@ export const SPHERES = Object.freeze([
   "time"
 ]);
 
-const INFLUENCE_LABELS = Object.freeze([
+export const INFLUENCE_LABELS = Object.freeze([
   "WOD5E_MAGE.Spheres.Influence.None",
   "WOD5E_MAGE.Spheres.Influence.Perceive",
   "WOD5E_MAGE.Spheres.Influence.Touch",

@@ -503,7 +503,16 @@
       "ConditionsComplexity": "Condizioni (Complessità)",
       "TableNote": "Gli Ambiti servono a canalizzare la generalità e la variabilità degli effetti di Magick: è consigliato pensare un effetto nel minor numero di Ambiti possibile, ragionando per necessità e obiettivo.",
       "PrecisionDetail": "Precisione (Dettaglio)",
-      "PrecisionInfo": "Precisione (Informazione)"
+      "PrecisionInfo": "Precisione (Informazione)",
+      "DurationUnits": {
+        "1": "turni",
+        "2": "scena",
+        "3": "scene",
+        "4": "sessione",
+        "5": "sessioni",
+        "6": "storia",
+        "7": "cronaca"
+      }
     },
     "OngoingMagick": {
       "Label": "Magick in atto",
@@ -758,7 +767,14 @@
       "Relax": "Relax",
       "RelaxHint": "Fermezza + Autocontrollo: ogni successo cura un superficiale mentale, ogni due un aggravato; almeno una casella",
       "RelaxRolling": "Relax: Fermezza + Autocontrollo",
-      "RelaxDone": "Relax: {successes} successi, curati {superficial} superficiali e {aggravated} aggravati mentali."
+      "RelaxDone": "Relax: {successes} successi, curati {superficial} superficiali e {aggravated} aggravati mentali.",
+      "Danni": "Danni subiti",
+      "DanniHint": "Quanti danni hai preso, e di che segno: superficiale o aggravato, fisico o mentale.",
+      "DanniAmount": "Quanti",
+      "DanniSign": "Che segno",
+      "DanniOk": "Segna",
+      "DanniDone": "Segnati {amount} danni: {sign}.",
+      "DanniConverted": "Il tracciato era pieno: {converted} superficiali sono diventati aggravati."
     },
     "Contraccolpo": {
       "Label": "Negare il Contraccolpo",

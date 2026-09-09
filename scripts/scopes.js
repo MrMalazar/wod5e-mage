@@ -153,3 +153,32 @@ export function prepareScopeTable(localize = (key) => key) {
 
   return { steps, rows, groups };
 }
+
+/**
+ * Le letture di ogni livello, per il dialogo del tiro (9/9): a destra dei
+ * pallini di un Ambito compare la voce della tavola del livello scelto
+ * («Città» al quarto pallino dell'Area). Chi ha più letture le porta tutte,
+ * nell'ordine della tavola, col nome della lettura davanti. La Durata in
+ * gioco parla in turni, scene, sessioni; i Danni sono l'Areté più il numero.
+ * Torna { [ambito]: sette liste di { sub, text } }.
+ */
+export function scopeReadings(localize = (key) => key) {
+  const { groups } = prepareScopeTable(localize);
+  const out = {};
+  for (const group of groups) {
+    out[group.scope] = Array.from({ length: SCOPE_TABLE_STEPS }, (_, index) => group.rows.map((row) => ({
+      sub: group.header ? String(localize(row.title)) : "",
+      text: scopeReadingText(row, index + 1, localize)
+    })));
+  }
+  return out;
+}
+
+function scopeReadingText(row, step, localize) {
+  const cell = row.cells[step - 1] ?? {};
+  const label = String(localize(cell.label ?? `WOD5E_MAGE.Scopes.Table.${row.id}.${step}`));
+  // I Danni: l'Areté più il numero. La Durata in gioco: numero e unità.
+  if (cell.arete) return `${localize("WOD5E_MAGE.Arete.Label")} ${label}`;
+  if (cell.icon) return `${label} ${localize(`WOD5E_MAGE.Scopes.DurationUnits.${step}`)}`;
+  return label;
+}

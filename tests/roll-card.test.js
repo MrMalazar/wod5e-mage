@@ -95,7 +95,7 @@ assert.match(dialog, /data-kind="sphere"[^>]*>\s*<img class="wod5e-mage-arete-ro
 assert.match(dialog, /data-kind="scope"[^>]*>\s*<i class="wod5e-mage-arete-row-icon \{\{scope\.faIcon\}\}"/);
 assert.match(dialog, /wod5e-mage-arete-row-label-full">\{\{localize "WOD5E_MAGE\.Arete\.Prize"\}\}/);
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
-assert.match(css, /\.wod5e-mage-arete-dots-column\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*18px max-content minmax\(0, 1fr\);/s);
+assert.match(css, /\.wod5e-mage-arete-dots-column\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*18px max-content max-content minmax\(0, 1fr\);/s);
 assert.match(css, /\.wod5e-mage-arete-dotrow\s*\{[^}]*display:\s*contents;/s);
 assert.match(css, /\.wod5e-mage-arete-prize,\s*\.wod5e-mage-arete-harmony-row\s*\{[^}]*justify-content:\s*space-between;/s);
 assert.match(css, /\.wod5e-mage-roll-victory\s*\{[^}]*text-transform:\s*uppercase;/s);

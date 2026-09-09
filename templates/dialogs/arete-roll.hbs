@@ -49,6 +49,8 @@
                     <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize sphere.label}}">
                         {{#each sphere.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
                     </span>
+                    {{!-- Il nome del livello scelto (Percepire … Rivoluzionare), a destra. --}}
+                    <span class="wod5e-mage-arete-dot-reading" data-role="dotReading" aria-live="polite"></span>
                 </div>
             {{else}}
                 <p class="wod5e-mage-magick-type-hint">{{localize "WOD5E_MAGE.Arete.NoSpheres"}}</p>
@@ -93,6 +95,8 @@
                     <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
                         {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
                     </span>
+                    {{!-- La voce della tavola per il livello scelto («Città»), a destra dei pallini (9/9). --}}
+                    <span class="wod5e-mage-arete-dot-reading" data-role="dotReading" aria-live="polite"></span>
                 </div>
             {{/each}}
             {{else}}

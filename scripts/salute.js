@@ -88,19 +88,124 @@ export function getSalute(actor) {
   };
 }
 
+// A tracciato pieno un superficiale diventa aggravato: prima dal lato del
+// colpo (fisico da sinistra, mentale da destra), poi dall'altro.
+const CONVERSION_SIDES = Object.freeze({ pa: ["ps", "ms"], ps: ["ps", "ms"], ma: ["ms", "ps"], ms: ["ms", "ps"] });
+const AGGRAVATED_OF = Object.freeze({ ps: "pa", ms: "ma" });
+
+/**
+ * Somma danni ai conti (pa, ps, ma, ms). Quel che entra riempie le caselle
+ * libere; a tracciato pieno vale la conversione (LIBRO, «La conversione»):
+ * ogni danno di troppo trasforma un superficiale in aggravato, qualunque
+ * sia il tipo del colpo, partendo dalla prima casella del suo lato (i
+ * fisici da sinistra, i mentali da destra) e poi dall'altro lato. Torna i
+ * conti nuovi e quanti superficiali sono diventati aggravati.
+ */
+export function saluteDamageOutcome(counts, max, damage = {}) {
+  const next = { pa: count(counts?.pa), ps: count(counts?.ps), ma: count(counts?.ma), ms: count(counts?.ms) };
+  let room = Math.max(count(max) - (next.pa + next.ps + next.ma + next.ms), 0);
+  const overflow = { pa: 0, ps: 0, ma: 0, ms: 0 };
+  for (const state of SALUTE_ORDER) {
+    const hit = count(damage[state]);
+    const taken = Math.min(hit, room);
+    next[state] += taken;
+    room -= taken;
+    overflow[state] = hit - taken;
+  }
+  let converted = 0;
+  for (const state of SALUTE_ORDER) {
+    while (overflow[state] > 0) {
+      const from = CONVERSION_SIDES[state].find((kind) => next[kind] > 0);
+      if (!from) break;
+      next[from] -= 1;
+      next[AGGRAVATED_OF[from]] += 1;
+      overflow[state] -= 1;
+      converted += 1;
+    }
+  }
+  return { counts: clampSalute(next, max), converted };
+}
+
 /** Somma danni ai conti (pa, ps, ma, ms), senza uscire dal tracciato. */
 export function saluteWithDamage(counts, max, damage = {}) {
-  const next = { pa: count(counts?.pa), ps: count(counts?.ps), ma: count(counts?.ma), ms: count(counts?.ms) };
-  for (const state of SALUTE_ORDER) next[state] += count(damage[state]);
-  return clampSalute(next, max);
+  return saluteDamageOutcome(counts, max, damage).counts;
 }
 
 /** Segna danni sulla Salute del personaggio e torna i conti nuovi. */
 export async function addSaluteDamage(actor, damage = {}) {
   const salute = getSalute(actor);
-  const next = saluteWithDamage(salute, salute.max, damage);
-  await actor.setFlag(MODULE_ID, "salute", { ...next, extra: salute.extra });
-  return next;
+  const { counts, converted } = saluteDamageOutcome(salute, salute.max, damage);
+  await actor.setFlag(MODULE_ID, "salute", { ...counts, extra: salute.extra });
+  return { ...counts, converted };
+}
+
+/** Il segno scelto nella finestra dei danni: uno dei quattro, o niente. */
+export function normalizeDamageChoice(result = {}) {
+  const state = SALUTE_STATES.includes(result.state) && result.state ? result.state : "";
+  const amount = Math.max(Math.trunc(Number(result.amount) || 0), 0);
+  return { state, amount };
+}
+
+/**
+ * Danni subiti (ordine di Blue, 9/9): il tasto accanto a Reset apre una
+ * finestra che chiede quanti danni e di che segno (superficiale o
+ * aggravato, fisico o mentale), e li segna sul tracciato. Se il tracciato
+ * era pieno, dice quanti superficiali sono diventati aggravati.
+ */
+export async function onSaluteDanni(event) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEdit(actor)) return;
+
+  const localize = game.i18n.localize.bind(game.i18n);
+  const signs = SALUTE_STATES.filter((state) => state).map((state) => ({ state, label: `WOD5E_MAGE.Salute.States.${state}` }));
+  const content = await foundry.applications.handlebars.renderTemplate(
+    "modules/wod5e-mage/templates/dialogs/salute-danni.hbs",
+    { signs, chosen: "ps" }
+  );
+  let result = null;
+  try {
+    result = await foundry.applications.api.DialogV2.input({
+      window: { title: localize("WOD5E_MAGE.Salute.Danni") },
+      content,
+      ok: { icon: "fa-solid fa-heart-crack", label: localize("WOD5E_MAGE.Salute.DanniOk") },
+      buttons: [{ action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") }],
+      classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog"],
+      position: { width: 380, height: "auto" },
+      render: (_event, dialog) => wireDamageSigns(dialog)
+    });
+  } catch (_error) {
+    return;
+  }
+  if (!result || result === "cancel") return;
+
+  const { state, amount } = normalizeDamageChoice(result);
+  if (!state || amount <= 0) return;
+  const next = await addSaluteDamage(actor, { [state]: amount });
+  const sign = localize(`WOD5E_MAGE.Salute.States.${state}`);
+  const parts = [game.i18n.format("WOD5E_MAGE.Salute.DanniDone", { amount, sign })];
+  if (next.converted > 0) parts.push(game.i18n.format("WOD5E_MAGE.Salute.DanniConverted", { converted: next.converted }));
+  const status = saluteStatus(next, getSalute(actor).max);
+  if (status) parts.push(localize(status));
+  ui.notifications.info(parts.join(" "));
+}
+
+/** I quattro segni nella finestra dei danni: un clic sceglie, il campo nascosto lo porta. */
+function wireDamageSigns(dialog) {
+  const root = dialog?.element;
+  const input = root?.querySelector("input[name=state]");
+  const buttons = [...(root?.querySelectorAll("[data-role=danniSign]") ?? [])];
+  if (!input || !buttons.length) return;
+  const paint = () => buttons.forEach((button) => button.classList.toggle("current", button.dataset.state === input.value));
+  buttons.forEach((button) => {
+    button.addEventListener("click", (click) => {
+      click.preventDefault();
+      input.value = button.dataset.state ?? "";
+      paint();
+    });
+  });
+  paint();
+  root.querySelector("input[name=amount]")?.focus();
 }
 
 /** Applica il cambio di una casella ai conti, senza uscire dal tracciato. */

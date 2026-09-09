@@ -9,8 +9,8 @@ import {
   prepareMageRollTraits,
   selectorsForMageRollTrait
 } from "./mage-roll-selection.js";
-import { prepareSpheres } from "./spheres.js";
-import { prepareScopeTable, SCOPE_ICONS, SCOPES } from "./scopes.js";
+import { INFLUENCE_LABELS, prepareSpheres } from "./spheres.js";
+import { prepareScopeTable, scopeReadings, SCOPE_ICONS, SCOPES } from "./scopes.js";
 import {
   ROLL_CARD_FLAG,
   renderAutoVictoryContent,
@@ -257,14 +257,59 @@ function makeMagickTypeExclusive(dialog) {
 }
 
 /**
- * Le file a pallini di Sfere e Ambiti: il clic su un pallino fissa il
- * livello (di nuovo sullo stesso: zero) e lo scrive nel campo nascosto.
+ * La voce del livello scelto, a destra dei pallini (9/9): «Città» al quarto
+ * pallino dell'Area, «Alterare» al terzo di una Sfera. Più letture stanno
+ * in fila, col nome della lettura davanti, separate da un punto.
  */
-function wireDotRows(dialog) {
+function paintReading(out, parts = []) {
+  const nodes = [];
+  parts.forEach((part, index) => {
+    if (index > 0) {
+      const sep = document.createElement("span");
+      sep.className = "wod5e-mage-arete-reading-sep";
+      sep.textContent = " · ";
+      nodes.push(sep);
+    }
+    const piece = document.createElement("span");
+    piece.className = "wod5e-mage-arete-reading-part";
+    if (part.sub) {
+      const sub = document.createElement("em");
+      sub.className = "wod5e-mage-arete-reading-sub";
+      sub.textContent = part.sub;
+      piece.append(sub, " ");
+    }
+    piece.append(part.text ?? "");
+    nodes.push(piece);
+  });
+  out.replaceChildren(...nodes);
+}
+
+/**
+ * Le letture per il dialogo: le Sfere dicono il nome del livello
+ * (Percepire, Ritoccare, Alterare, Dominare, Rivoluzionare), gli Ambiti la
+ * voce della tavola. Torna una funzione (kind, id, level) → parti.
+ */
+export function dotReadings(localize = (key) => key) {
+  const scopes = scopeReadings(localize);
+  const spheres = INFLUENCE_LABELS.slice(1).map((key) => String(localize(key)));
+  return (kind, id, level) => {
+    if (level <= 0) return [];
+    if (kind === "scope") return scopes[id]?.[level - 1] ?? [];
+    return spheres[level - 1] ? [{ sub: "", text: spheres[level - 1] }] : [];
+  };
+}
+
+/**
+ * Le file a pallini di Sfere e Ambiti: il clic su un pallino fissa il
+ * livello (di nuovo sullo stesso: zero), lo scrive nel campo nascosto e
+ * scrive la voce del livello a destra.
+ */
+function wireDotRows(dialog, readingFor = () => []) {
   const root = dialog?.element;
   root?.querySelectorAll("[data-role=dotRow]").forEach((row) => {
     const input = row.querySelector("input[type=hidden]");
     const dots = [...row.querySelectorAll(".wod5e-mage-arete-sphere-dot")];
+    const reading = row.querySelector("[data-role=dotReading]");
     if (!input) return;
 
     const paint = () => {
@@ -273,6 +318,7 @@ function wireDotRows(dialog) {
         dot.classList.toggle("active", Number(dot.dataset.level) <= level);
       });
       row.classList.toggle("chosen", level > 0);
+      if (reading) paintReading(reading, readingFor(row.dataset.kind, row.dataset.id, level));
     };
 
     dots.forEach((dot) => {
@@ -709,6 +755,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   const quintessenceAvailable = getMagickBalance(actor).quintessence;
   const sphereLevelsOwned = Object.fromEntries(rollSpheres.map((sphere) => [sphere.id, sphere.value]));
   const localize = game.i18n.localize.bind(game.i18n);
+  const readingFor = dotReadings(localize);
   const base = { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, preset, ...traits };
 
   // Una finestra: tutta (step 0) o un passo dell'Areté semplificata (1, 2, 3).
@@ -739,7 +786,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog", ...(step ? ["wod5e-mage-arete-simple-dialog"] : [])],
       render: (_event, dialog) => {
         makeMagickTypeExclusive(dialog);
-        wireDotRows(dialog);
+        wireDotRows(dialog, readingFor);
         wireDifficulty(dialog);
         wireScopeTable(dialog);
         wireMaintainedEffect(dialog);
