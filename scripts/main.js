@@ -8,6 +8,7 @@ import { assignCondizione, listCondizioni, openCondizioniMaster, selectedActors 
 import { findCondizione } from "./condizioni.js";
 import { registerVolonta } from "./volonta.js";
 import { registerSforzo } from "./sforzo.js";
+import { registerPrezzo } from "./prezzo.js";
 import { registerGrimorioComune } from "./grimorio-comune.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 
@@ -145,6 +146,7 @@ Hooks.once("init", () => {
   registerVolonta();
   // Sforzare la realtà (10/9 sera): il tasto sotto il tiro fallito, dopo la Volontà.
   registerSforzo();
+  registerPrezzo();
   registerGrimorioComune();
   registerLineageSpheres();
   registerParadoxDice();

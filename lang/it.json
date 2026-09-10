@@ -108,6 +108,8 @@
       "SelectSkill": "Seleziona un'Abilità",
       "SelectTraitWarning": "Scegli almeno un tratto: un Attributo o un'Abilità.",
       "MagickType": "Tipologia",
+      "MagickTypeHead": "Tipologia Effetto",
+      "Other": "Altro",
       "CoincidentalHint": "Non si percepisce.",
       "VulgarHint": "La realtà lo percepisce, +1 Paradosso.",
       "WitnessesHint": "Qualcuno ti ha visto farlo, +2 Paradosso.",
@@ -144,7 +146,6 @@
       "AutoVictoryChat": "Vittoria automatica: riserva {pool} contro soglia {threshold}, non si tira.",
       "AutoVictoryBanner": "Vittoria automatica",
       "RedOnly": "Vittoria automatica (riserva {pool}, soglia {threshold}): si tirano solo i rossi. Se scatta il Contraccolpo, Ustione {burn}, pari alla soglia.",
-      "OneStep": "A un passo: mancano {missing} successi, entro l'Areté ({arete}). Riuscita a un prezzo.",
       "BonusCap": "Tetto +3: {excess} dadi in meno.",
       "SpherePlan": "Sfere: {plans}.",
       "SpecialtyHint": "Specialità: se dichiari questo Ambito, il tiro parte con tanti successi quanto l'Areté. La soglia non cambia.",
@@ -529,7 +530,8 @@
         "5": "sessioni",
         "6": "storia",
         "7": "cronaca"
-      }
+      },
+      "DamageReading": "{n} danni"
     },
     "OngoingMagick": {
       "Label": "Magick in atto",
@@ -945,7 +947,7 @@
     "Sforzo": {
       "Label": "Sforzare la realtà",
       "Title": "Sforzare la realtà",
-      "Button": "Sforza la realtà",
+      "Button": "Sforzare la realtà",
       "Hint": "Successi mancanti: {missing}. L'incantesimo riesce, la Ruota sale di {missing} in Paradosso.",
       "HintAgain": "Successi mancanti: {missing}. L'incantesimo riesce, la Ruota sale di {missing} in Paradosso, e questa volta costa anche un aggravato {damage}.",
       "Ask": "Successi mancanti: {missing}. Sforzando la realtà l'incantesimo riesce, e la Ruota sale di {missing} in Paradosso, oltre a quello che il tiro ha già portato.",
@@ -959,16 +961,32 @@
       "DamagePhysical": "fisico",
       "DamageMental": "mentale"
     },
+    "Prezzo": {
+      "Label": "Vittoria a un prezzo",
+      "Title": "Vittoria a un prezzo",
+      "Button": "Vittoria a un prezzo",
+      "Hint": "Successi mancanti: {missing}, entro l'Areté ({arete}). L'incantesimo può riuscire lo stesso: il prezzo lo decide il Narratore.",
+      "HintFar": "Successi mancanti: {missing}, più dell'Areté ({arete}): troppo lontano per riuscire a un prezzo.",
+      "Ask": "Successi mancanti: {missing}, entro l'Areté ({arete}). L'incantesimo riesce, e il prezzo lo decide il Narratore.",
+      "AskNote": "Il Contraccolpo dei rossi, se è scattato, resta.",
+      "Yes": "Riesce a un prezzo",
+      "No": "Lascia stare",
+      "Done": "successi mancanti {missing} (Areté {arete}): il prezzo lo decide il Narratore."
+    },
     "RollCard": {
+      "Of": "Tiro di",
       "Successes": "Successi",
       "Threshold": "Soglia",
-      "CountOne": "1 successo",
-      "CountMany": "{n} successi",
-      "Won": "Riuscito: {count} su {goal}",
-      "WonMargin": "Riuscito: {count} su {goal}, {margin} in più",
-      "Lost": "Fallito: {count} su {goal}, ne mancano {missing}",
-      "LostOne": "Fallito: {count} su {goal}, ne manca uno",
-      "Forced": "Riuscito sforzando la realtà: {count} su {goal}"
+      "Goal": "Obiettivo",
+      "Spheres": "Sfere",
+      "Scopes": "Ambiti",
+      "Type": "Tipo",
+      "Effect": "Effetto",
+      "Pool": "Riserva",
+      "Success": "Successo",
+      "Failure": "Fallimento",
+      "Forced": "Successo sforzando la realtà",
+      "Priced": "Successo a un prezzo"
     },
     "Burst": {
       "Title": "Scoppio del Paradosso",
@@ -990,14 +1008,12 @@
     },
     "Volonta": {
       "Label": "Volontà",
-      "Reroll": "Ritira",
+      "Reroll": "Ritira con Volontà",
       "RerollHint": "Scegli sulla carta fino a tre dadi falliti (mai un rosso con 1 o 10), poi ritira: un superficiale mentale",
-      "Aggravated": "Aggravato: +2",
-      "AggravatedHint": "Un aggravato mentale: due successi in più",
+      "NoDice": "Nessun dado da ritirare: i dadi hanno fatto successo, o i rossi hanno mostrato 1 o 10",
+      "PickFirst": "Scegli prima sulla carta i dadi da ritirare: un clic su un dado fallito lo accende.",
       "UsedReroll": "Volontà: ritirati {dice} dadi scelti (un superficiale mentale).",
-      "UsedAggravated": "Volontà: un aggravato mentale, +{bonus} successi.",
       "RerollDone": "Ritirati {dice} dadi: un superficiale mentale segnato.",
-      "AggravatedDone": "Aggravato mentale segnato: +{bonus} successi, totale {total}.",
       "RerollEyes": "{eyes} rossi ritirati hanno mostrato 1 o 10: occhio del Paradosso."
     },
     "Condizioni": {

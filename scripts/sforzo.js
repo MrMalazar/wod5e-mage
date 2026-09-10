@@ -2,7 +2,7 @@ import { MODULE_ID } from "./constants.js";
 import { addParadoxToBalance, getMagickBalance, MAGICK_TRACK_MAX } from "./magick-balance.js";
 import { isMageActor } from "./mage-dice.js";
 import { normalizeEffectKind } from "./paradox-burst.js";
-import { ROLL_CARD_FLAG, rollOutcome } from "./roll-card.js";
+import { ROLL_CARD_FLAG, rollActionsBox, rollOutcome } from "./roll-card.js";
 import { addSaluteDamage } from "./salute.js";
 
 /**
@@ -13,7 +13,7 @@ import { addSaluteDamage } from "./salute.js";
  * Volgare, i rossi). È un azzardo: dalla seconda volta nella stessa
  * sessione costa anche un aggravato, fisico o mentale secondo l'Effetto
  * dichiarato (variabile: a caso; non dichiarato: fisico, come l'Ustione).
- * Il tasto sta sotto il tiro fallito, accanto alla Volontà.
+ * Il tasto sta nella fila dei tre sotto la fascia del tiro fallito.
  */
 
 export const SFORZO_FLAG = "sforzo";
@@ -27,10 +27,10 @@ export function missingSuccesses(total, difficulty) {
   return goal > 0 ? Math.max(goal - successes, 0) : 0;
 }
 
-/** Il tasto compare sotto un tiro fallito, non ancora sforzato, che non sia uno Scoppio né una vittoria automatica. */
-export function sforzoState({ total = 0, difficulty = 0, forced = false, burst = false, automatic = false } = {}) {
+/** Il tasto compare sotto un tiro fallito, non ancora sforzato né riuscito a un prezzo, che non sia uno Scoppio né una vittoria automatica. */
+export function sforzoState({ total = 0, difficulty = 0, forced = false, priced = false, burst = false, automatic = false } = {}) {
   const missing = missingSuccesses(total, difficulty);
-  if (forced || burst || automatic || missing <= 0) return { show: false, missing: 0 };
+  if (forced || priced || burst || automatic || missing <= 0) return { show: false, missing: 0 };
   return { show: true, missing };
 }
 
@@ -77,11 +77,12 @@ function damageLabel(damage, localize) {
   return "";
 }
 
-function renderButton(state, price, localize, format) {
+/** Il tasto nella fila dei tre: «Sforzare la realtà +N», col prezzo nel titolo. */
+export function renderSforzoButton(state, price, localize, format) {
   const hint = price.damage
     ? format("WOD5E_MAGE.Sforzo.HintAgain", { missing: state.missing, damage: damageLabel(price.damage, localize) })
     : format("WOD5E_MAGE.Sforzo.Hint", { missing: state.missing });
-  return `<div class="wod5e-mage-sforzo"><span class="wod5e-mage-sforzo-label">${localize("WOD5E_MAGE.Sforzo.Label")}</span><button type="button" class="wod5e-mage-sforzo-button" data-sforzo="go" title="${hint}">${localize("WOD5E_MAGE.Sforzo.Button")} <b>+${state.missing}</b></button></div>`;
+  return `<button type="button" class="wod5e-mage-roll-action wod5e-mage-sforzo-button" data-sforzo="go" title="${hint}">${localize("WOD5E_MAGE.Sforzo.Button")} <b>+${state.missing}</b></button>`;
 }
 
 /** La riga di quel che è stato fatto, al posto del tasto. */
@@ -97,7 +98,7 @@ export function decorateSforzo(message, html) {
   const roll = message?.rolls?.[0];
   if (!roll || !html?.querySelector) return false;
   const target = html.querySelector(".dice-result");
-  if (!target || target.querySelector(".wod5e-mage-sforzo, .wod5e-mage-roll-note-sforzo")) return false;
+  if (!target || target.querySelector(".wod5e-mage-sforzo-button, .wod5e-mage-roll-note-sforzo")) return false;
 
   const localize = game.i18n.localize.bind(game.i18n);
   const format = game.i18n.format.bind(game.i18n);
@@ -111,13 +112,14 @@ export function decorateSforzo(message, html) {
   if (!isMageActor(actor) || !actor.isOwner) return false;
   const card = message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG) ?? {};
   if (!Number.isFinite(Number(card.total))) return false;
-  const state = sforzoState({ total: card.total, difficulty: card.difficulty, forced: card.forced, burst: card.burst || card.burstResult, automatic: card.automatic });
+  const state = sforzoState({ total: card.total, difficulty: card.difficulty, forced: card.forced, priced: card.priced, burst: card.burst || card.burstResult, automatic: card.automatic });
   if (!state.show) return false;
 
   const usesSoFar = Math.max(Math.trunc(Number(actor.getFlag(MODULE_ID, SFORZO_SESSION_FLAG)) || 0), 0);
   const price = sforzoPrice({ missing: state.missing, usesSoFar, effectKind: card.effectKind });
-  target.insertAdjacentHTML("beforeend", renderButton(state, price, localize, format));
-  target.querySelector("[data-sforzo=\"go\"]")?.addEventListener("click", async (event) => {
+  const box = rollActionsBox(target);
+  box.insertAdjacentHTML("beforeend", renderSforzoButton(state, price, localize, format));
+  box.querySelector("[data-sforzo=\"go\"]")?.addEventListener("click", async (event) => {
     event.preventDefault();
     event.stopPropagation();
     await forceReality(message, actor);
@@ -144,7 +146,7 @@ async function confirmSforzo(state, price, localize, format) {
 export async function forceReality(message, actor) {
   if (message.getFlag(MODULE_ID, SFORZO_FLAG)) return null;
   const card = message.getFlag(MODULE_ID, ROLL_CARD_FLAG) ?? {};
-  const state = sforzoState({ total: card.total, difficulty: card.difficulty, forced: card.forced, burst: card.burst || card.burstResult, automatic: card.automatic });
+  const state = sforzoState({ total: card.total, difficulty: card.difficulty, forced: card.forced, priced: card.priced, burst: card.burst || card.burstResult, automatic: card.automatic });
   if (!state.show) return null;
   const localize = game.i18n.localize.bind(game.i18n);
   const format = game.i18n.format.bind(game.i18n);
@@ -166,7 +168,7 @@ export async function forceReality(message, actor) {
   // La carta dice riuscito; con la realtà sforzata la Volontà non ha più niente da fare.
   const flags = { [MODULE_ID]: { [SFORZO_FLAG]: used, [ROLL_CARD_FLAG]: { symbols: [], ...card, forced: true } } };
   await message.update({ flags });
-  const outcome = rollOutcome(card.total, card.difficulty, format, { forced: true });
+  const outcome = rollOutcome(card.total, card.difficulty, localize, { forced: true });
   ui.notifications.info(`${outcome.text}. ${format("WOD5E_MAGE.Sforzo.Done", { missing: state.missing, paradox: moved })}`);
   return used;
 }

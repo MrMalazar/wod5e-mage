@@ -1,11 +1,16 @@
 import { MODULE_ID } from "./constants.js";
 import { SCOPE_ICONS } from "./scopes.js";
+import { traitIcon } from "./tratti-icone.js";
 
 /**
- * La carta del tiro in chat: sopra i dadi i simboli di quel che si tira
- * (Sfere e Ambiti col livello, il premio dell'Areté), sotto le righe del
- * conto, una per voce. La vittoria automatica si dichiara a caratteri
- * grandi. Le funzioni di testo sono pure: si provano fuori da Foundry.
+ * La carta del tiro in chat, riletta con Blue (10/9 notte): in testa «Tiro
+ * di» e i sigilli dell'Attributo e delle Abilità; i dadi; sotto le righe
+ * del conto allineate, nome a sinistra e valore a destra (Obiettivo, Sfere
+ * col glifo e il livello, Ambiti col simbolo e il livello, Soglia, Tipo,
+ * Effetto, Riserva); la fascia dice Successo o Fallimento; sotto i tre
+ * tasti (Ritira con Volontà, Sforzare la realtà, Vittoria a un prezzo). La
+ * vittoria automatica si dichiara a caratteri grandi. Le funzioni di testo
+ * sono pure: si provano fuori da Foundry.
  */
 
 const ARETE_SIGIL = `modules/${MODULE_ID}/assets/icons/ui/arete.svg`;
@@ -23,7 +28,8 @@ function escapeHtml(value) {
 /**
  * I simboli del tiro: il premio dell'Areté, ogni Sfera col livello usato,
  * ogni Ambito col livello dichiarato. Le etichette sono chiavi di lingua,
- * tradotte al momento di disegnare.
+ * tradotte al momento di disegnare. Dalla 0.86.0 stanno nelle righe della
+ * carta; la fila sopra i dadi resta per i messaggi vecchi.
  */
 export function rollSymbols({ spheres = [], scopes = [], prize = 0 } = {}) {
   const symbols = [];
@@ -57,17 +63,37 @@ export function rollSymbols({ spheres = [], scopes = [], prize = 0 } = {}) {
   return symbols;
 }
 
-/** La fila dei simboli, da mettere sopra i dadi. Vuota se non c'è niente. */
+/** Un simbolo col suo numero: glifo (o icona) e livello, il nome al passaggio del mouse. */
+function renderSymbol(symbol, localize) {
+  const name = escapeHtml(localize(symbol.label));
+  const title = symbol.value ? `${name} ${escapeHtml(symbol.value)}` : name;
+  const picture = symbol.icon
+    ? `<img src="${escapeHtml(symbol.icon)}" alt="${name}">`
+    : `<i class="${escapeHtml(symbol.faIcon)}" aria-hidden="true"></i>`;
+  return `<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-${symbol.kind}" title="${title}">${picture}<b>${escapeHtml(symbol.value)}</b></span>`;
+}
+
+/** La fila dei simboli, da mettere sopra i dadi (messaggi vecchi). Vuota se non c'è niente. */
 export function renderRollSymbols(symbols, localize = (key) => key) {
   if (!symbols?.length) return "";
-  const items = symbols.map((symbol) => {
-    const title = escapeHtml(localize(symbol.label));
-    const picture = symbol.icon
-      ? `<img src="${escapeHtml(symbol.icon)}" alt="${title}">`
-      : `<i class="${escapeHtml(symbol.faIcon)}" aria-hidden="true"></i>`;
-    return `<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-${symbol.kind}" title="${title}">${picture}<b>${escapeHtml(symbol.value)}</b></span>`;
+  return `<div class="wod5e-mage-roll-symbols">${symbols.map((symbol) => renderSymbol(symbol, localize)).join("")}</div>`;
+}
+
+/**
+ * La testata della carta (10/9 notte): «Tiro di», a capo, il sigillo di
+ * ogni tratto della riserva col nome sotto, separati dal più.
+ */
+export function renderRollTitle(traits = [], localize = (key) => key) {
+  const parts = traits.map((trait) => {
+    const label = escapeHtml(trait.label);
+    const icon = trait.type === "attribute" || trait.type === "skill" ? traitIcon(trait.id) : "";
+    const picture = icon
+      ? `<img src="${escapeHtml(icon)}" alt="">`
+      : `<i class="fa-solid fa-circle-dot" aria-hidden="true"></i>`;
+    const title = Number.isFinite(Number(trait.value)) ? `${label} ${escapeHtml(trait.value)}` : label;
+    return `<span class="wod5e-mage-roll-trait" title="${title}">${picture}<small>${label}</small></span>`;
   });
-  return `<div class="wod5e-mage-roll-symbols">${items.join("")}</div>`;
+  return `<span class="wod5e-mage-roll-of">${escapeHtml(localize("WOD5E_MAGE.RollCard.Of"))}</span><span class="wod5e-mage-roll-traits">${parts.join('<span class="wod5e-mage-roll-plus">+</span>')}</span>`;
 }
 
 /** La scritta grande della vittoria automatica. */
@@ -75,7 +101,7 @@ export function renderAutoVictoryBanner(localize = (key) => key) {
   return `<p class="wod5e-mage-roll-victory">${escapeHtml(localize("WOD5E_MAGE.Arete.AutoVictoryBanner"))}</p>`;
 }
 
-/** Una nota sotto il conto: a un passo, tetto, Contraccolpo. */
+/** Una nota sotto il conto: tetto, vittoria automatica. */
 export function renderRollNote(text, kind = "") {
   const extra = kind ? ` wod5e-mage-roll-note-${kind}` : "";
   return `<p class="wod5e-mage-roll-note${extra}">${escapeHtml(text)}</p>`;
@@ -89,15 +115,15 @@ export function renderBacklashNote(label, text) {
   return `<p class="wod5e-mage-roll-note wod5e-mage-roll-note-backlash"><b class="wod5e-mage-roll-backlash-label">${escapeHtml(label)}</b> <span class="wod5e-mage-roll-backlash-text">${escapeHtml(text)}</span></p>`;
 }
 
-/** «1 successo», «3 successi». */
-export function successCount(count, format = (key, data) => `${data?.n ?? ""} ${key}`) {
-  const n = Math.max(Math.trunc(Number(count) || 0), 0);
-  return n === 1 ? format("WOD5E_MAGE.RollCard.CountOne", { n }) : format("WOD5E_MAGE.RollCard.CountMany", { n });
+/** Una riga della carta: nome a sinistra, valore a destra (già HTML). */
+function renderRow(key, label, body) {
+  return `<div class="wod5e-mage-roll-row wod5e-mage-roll-row-${key}"><b class="wod5e-mage-roll-key">${escapeHtml(label)}</b><span class="wod5e-mage-roll-value">${body}</span></div>`;
 }
 
 /**
- * Le righe del conto: riserva, soglia e tipo, Sfere, Ambiti. Ogni voce
- * sulla sua riga, il nome in oro.
+ * Le righe del conto, nell'ordine di Blue (10/9 notte): Obiettivo, Sfere
+ * (glifo e livello), Ambiti (simbolo e livello), Soglia, Tipo, Effetto,
+ * Riserva. Nome a sinistra e valore a destra, allineati.
  */
 export function renderRollCard({
   traits = [],
@@ -109,85 +135,62 @@ export function renderRollCard({
   spheres = [],
   scopes = []
 } = {}, localize = (key) => key) {
-  const line = (label, body) => `<p><b>${escapeHtml(localize(label))}</b> ${body}</p>`;
   const pool = [
     ...traits.map((trait) => `${escapeHtml(trait.label)} ${escapeHtml(trait.value)}`),
     ...bonusParts.map((part) => escapeHtml(part))
   ].join(" + ");
-  // Una voce per riga: nome, descrizione, a capo.
-  const lines = [];
-  if (goal) lines.push(line("WOD5E_MAGE.Arete.Goal", escapeHtml(goal)));
-  lines.push(
-    line("WOD5E_MAGE.Arete.Pool", pool),
-    line("WOD5E_MAGE.Arete.Threshold", escapeHtml(threshold)),
-    line("WOD5E_MAGE.Arete.MagickType", escapeHtml(magickType))
-  );
-  if (effectKind) lines.push(line("WOD5E_MAGE.Arete.EffectKind", escapeHtml(localize(effectKind))));
+  const rows = [];
+  if (goal) rows.push(renderRow("goal", localize("WOD5E_MAGE.RollCard.Goal"), escapeHtml(goal)));
   if (spheres.length) {
-    lines.push(line(
-      "WOD5E_MAGE.Arete.Spheres",
-      spheres.map((sphere) => `${escapeHtml(localize(sphere.label))} ${escapeHtml(sphere.level)}`).join(", ")
-    ));
+    const symbols = rollSymbols({ spheres: spheres.map((sphere) => ({ id: sphere.id, level: sphere.level })) });
+    rows.push(renderRow("spheres", localize("WOD5E_MAGE.RollCard.Spheres"), symbols.map((symbol) => renderSymbol(symbol, localize)).join("")));
   }
   if (scopes.length) {
-    lines.push(line(
-      "WOD5E_MAGE.Scopes.Label",
-      scopes.map((scope) => `${escapeHtml(localize(scope.label))} ${escapeHtml(scope.level)}`).join(", ")
-    ));
+    const symbols = rollSymbols({ scopes: scopes.map((scope) => ({ id: scope.id, level: scope.level })) });
+    rows.push(renderRow("scopes", localize("WOD5E_MAGE.RollCard.Scopes"), symbols.map((symbol) => renderSymbol(symbol, localize)).join("")));
   }
-  return `<div class="wod5e-mage-roll-card">${lines.join("")}</div>`;
+  rows.push(
+    renderRow("threshold", localize("WOD5E_MAGE.RollCard.Threshold"), escapeHtml(threshold)),
+    renderRow("type", localize("WOD5E_MAGE.RollCard.Type"), escapeHtml(magickType))
+  );
+  if (effectKind) rows.push(renderRow("effect", localize("WOD5E_MAGE.RollCard.Effect"), escapeHtml(localize(effectKind))));
+  rows.push(renderRow("pool", localize("WOD5E_MAGE.RollCard.Pool"), pool));
+  return `<div class="wod5e-mage-roll-card">${rows.join("")}</div>`;
 }
 
 /**
- * Il messaggio della vittoria automatica senza dadi: scritta grande,
- * simboli, conto.
+ * Il messaggio della vittoria automatica senza dadi: scritta grande, conto
+ * (coi glifi nelle righe), note.
  */
-export function renderAutoVictoryContent({ symbols, card, notes = [] }, localize = (key) => key) {
+export function renderAutoVictoryContent({ card, notes = [] }, localize = (key) => key) {
   return [
     renderAutoVictoryBanner(localize),
-    renderRollSymbols(symbols, localize),
     card,
     ...notes
   ].join("");
 }
 
 /**
- * In chat, sopra i dadi: i simboli del tiro e, se serve, la vittoria
- * automatica. Legge la bandiera del messaggio scritta dal tiro di Areté.
- */
-/**
  * Il conto del Mago in chat (4/9 notte): il sistema somma i dadi a modo
  * suo; il tiro di Areté conta le coppie di dieci solo fra i dadi Mage e
  * aggiunge i successi automatici delle Specialità. La carta porta il totale
- * vero e la soglia, e qui si riscrivono numero ed esito. L'esito parla
- * chiaro (10/9 sera): «Riuscito: 5 successi su 5», «Fallito: 3 successi su
- * 6, ne mancano 3»; con la realtà sforzata, riuscito lo stesso.
+ * vero e la soglia, e qui si riscrivono numero ed esito. La fascia dice una
+ * parola (10/9 notte): Successo o Fallimento; con la realtà sforzata o la
+ * vittoria a un prezzo, Successo con la sua ragione.
  */
-export function rollOutcome(total, difficulty, format = (key, data) => `${key} ${JSON.stringify(data ?? {})}`, { forced = false } = {}) {
+export function rollOutcome(total, difficulty, localize = (key) => key, { forced = false, priced = false } = {}) {
   const successes = Math.max(Math.trunc(Number(total) || 0), 0);
   const goal = Math.max(Math.trunc(Number(difficulty) || 0), 0);
-  if (goal <= 0) return { total: successes, cssClass: "", text: "" };
-  const count = successCount(successes, format);
-  if (forced) return { total: successes, cssClass: "success", text: format("WOD5E_MAGE.RollCard.Forced", { count, goal }) };
-  if (successes >= goal) {
-    const margin = successes - goal;
-    return {
-      total: successes,
-      cssClass: "success",
-      text: margin > 0 ? format("WOD5E_MAGE.RollCard.WonMargin", { count, goal, margin }) : format("WOD5E_MAGE.RollCard.Won", { count, goal })
-    };
-  }
-  const missing = goal - successes;
-  return {
-    total: successes,
-    cssClass: "failure",
-    text: missing === 1 ? format("WOD5E_MAGE.RollCard.LostOne", { count, goal }) : format("WOD5E_MAGE.RollCard.Lost", { count, goal, missing })
-  };
+  if (goal <= 0) return { total: successes, cssClass: "", text: "", missing: 0 };
+  if (forced) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Forced"), missing: 0 };
+  if (priced) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Priced"), missing: 0 };
+  if (successes >= goal) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Success"), missing: 0 };
+  return { total: successes, cssClass: "failure", text: localize("WOD5E_MAGE.RollCard.Failure"), missing: goal - successes };
 }
 
 function applyMageTotal(html, data) {
   if (!Number.isFinite(Number(data.total))) return;
-  const outcome = rollOutcome(data.total, data.difficulty, game.i18n.format.bind(game.i18n), { forced: Boolean(data.forced) });
+  const outcome = rollOutcome(data.total, data.difficulty, game.i18n.localize.bind(game.i18n), { forced: Boolean(data.forced), priced: Boolean(data.priced) });
   const totalOut = html.querySelector(".total-contents");
   if (totalOut) totalOut.textContent = String(outcome.total);
   // I titoli del conto in parole del Mago: Successi e Soglia, non Totale e Difficoltà.
@@ -198,15 +201,50 @@ function applyMageTotal(html, data) {
   const label = html.querySelector(".roll-result-label");
   if (label && outcome.text) {
     label.classList.remove("success", "failure");
-    label.classList.add(outcome.cssClass);
+    label.classList.add(outcome.cssClass, "wod5e-mage-roll-result");
     label.textContent = outcome.text;
   }
+}
+
+/** La testata: «Tiro di» e i sigilli dei tratti al posto del titolo del sistema. */
+function applyMageTitle(html, data) {
+  if (!data.traits?.length) return;
+  const title = html.querySelector(".roll-label");
+  if (!title || title.classList.contains("wod5e-mage-roll-title")) return;
+  title.classList.add("wod5e-mage-roll-title");
+  title.innerHTML = renderRollTitle(data.traits, game.i18n.localize.bind(game.i18n));
+}
+
+/**
+ * Il posto dei tasti sotto la fascia (10/9 notte): Ritira con Volontà,
+ * Sforzare la realtà, Vittoria a un prezzo, nell'ordine in cui i moduli si
+ * registrano. Lo crea il primo che ne ha bisogno.
+ */
+export function rollActionsBox(target) {
+  let box = target.querySelector(".wod5e-mage-roll-actions");
+  if (!box) {
+    box = target.ownerDocument.createElement("div");
+    box.className = "wod5e-mage-roll-actions";
+    target.append(box);
+  }
+  return box;
+}
+
+/**
+ * La fascia in giallo (10/9 notte): il tiro è fallito ma si può ancora
+ * ritirare con la Volontà o riuscire a un prezzo. La chiama chi mette il
+ * tasto acceso.
+ */
+export function markRollOpen(html) {
+  const label = html?.querySelector?.(".roll-result-label");
+  if (label?.classList.contains("failure")) label.classList.add("wod5e-mage-roll-open");
 }
 
 export function decorateRollCard(message, html) {
   const data = message?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG);
   if (!data || !html?.querySelector) return false;
   applyMageTotal(html, data);
+  applyMageTitle(html, data);
   const icons = html.querySelector(".dice-result .dice-icons");
   if (!icons || icons.parentElement.querySelector(".wod5e-mage-roll-top")) return false;
 
@@ -215,7 +253,8 @@ export function decorateRollCard(message, html) {
   top.className = "wod5e-mage-roll-top";
   top.innerHTML = [
     data.automatic ? renderAutoVictoryBanner(localize) : "",
-    renderRollSymbols(data.symbols ?? [], localize)
+    // I messaggi di prima della 0.86.0 non hanno i glifi nelle righe: la fila resta a loro.
+    data.traits ? "" : renderRollSymbols(data.symbols ?? [], localize)
   ].join("");
   if (!top.innerHTML) return false;
   icons.before(top);

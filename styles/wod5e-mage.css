@@ -742,7 +742,6 @@
   margin: 0.25rem 0;
 }
 
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-hint {
   margin: 0.75rem 0 1rem;
   text-align: center;
@@ -1567,7 +1566,6 @@
   border-color: #d0524a;
 }
 
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere {
   border-bottom: 1px solid rgb(152 119 43 / 45%);
   margin-bottom: 1.15rem;
@@ -1765,10 +1763,6 @@
 
 .wod5e-mage-roll-backlash-label::after {
   content: ":";
-}
-
-.wod5e-mage-roll-note-onestep {
-  color: #e8c766;
 }
 
 /* Le immagini SVG contengono soltanto il simbolo della faccia del dado. */
@@ -5750,28 +5744,7 @@
   opacity: 0.85;
 }
 
-/* La Volontà sotto il tiro in chat: i tasti del ritiro e dell'aggravato. */
-.wod5e-mage-volonta {
-  align-items: center;
-  border-top: 1px solid rgb(152 119 43 / 45%);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  margin-top: 0.4rem;
-  padding-top: 0.35rem;
-}
-
-/* Sforzare la realtà (10/9 sera): il tasto sotto il tiro fallito, dopo la Volontà. */
-.wod5e-mage-sforzo {
-  align-items: center;
-  border-top: 1px solid rgb(152 119 43 / 45%);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  margin-top: 0.4rem;
-  padding-top: 0.35rem;
-}
-
+/* Sforzare la realtà (10/9 sera): la riga di quel che si è fatto, e la finestra del prezzo. */
 .wod5e-mage-sforzo-label {
   color: #e05a5a;
   font-size: 0.72rem;
@@ -5781,26 +5754,6 @@
   text-transform: uppercase;
 }
 
-.wod5e-mage-sforzo > button {
-  background: rgb(224 90 90 / 12%);
-  border: 1px solid #b5433c;
-  border-radius: 3px;
-  color: #f1dcd8;
-  cursor: pointer;
-  flex: none;
-  font-size: 0.78rem;
-  line-height: 1.2;
-  margin: 0;
-  min-height: 0;
-  padding: 0.2rem 0.55rem;
-  width: auto;
-}
-
-.wod5e-mage-sforzo > button:hover {
-  border-color: #e05a5a;
-  box-shadow: 0 0 4px #e05a5a;
-}
-
 .wod5e-mage-roll-note-sforzo {
   color: #f1dcd8;
   font-style: normal;
@@ -5808,40 +5761,6 @@
 
 .wod5e-mage-sforzo-ask p {
   margin: 0 0 0.5rem;
-}
-
-.wod5e-mage-volonta-label {
-  color: #d9a827;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  margin-right: 0.2rem;
-  text-transform: uppercase;
-}
-
-.wod5e-mage-volonta > button {
-  background: #2b2418;
-  border: 1px solid #98772b;
-  border-radius: 3px;
-  color: #f5e7b2;
-  cursor: pointer;
-  flex: 0 0 auto;
-  font-size: 0.75rem;
-  line-height: 1.2;
-  margin: 0;
-  min-height: 0;
-  padding: 0.2rem 0.45rem;
-  width: auto;
-}
-
-.wod5e-mage-volonta > button:hover:not(:disabled) {
-  border-color: #d9a827;
-  box-shadow: 0 0 4px #d9a827;
-}
-
-.wod5e-mage-volonta > button:disabled {
-  cursor: default;
-  opacity: 0.4;
 }
 
 /* I dadi che si possono ritirare: cliccabili; scelti, in oro. */
@@ -5854,11 +5773,6 @@
 .dice-icons img.die.wod5e-mage-volonta-pick.picked {
   box-shadow: 0 0 6px #d9a827;
   outline: 2px solid #d9a827;
-}
-
-.wod5e-mage-volonta > .wod5e-mage-volonta-aggravato {
-  border-color: #b5433c;
-  color: #f0b3ae;
 }
 
 .wod5e-mage-roll-note-volonta {
@@ -6180,7 +6094,6 @@
 .wod5e-mage-grimorio-extras > em.required {
   color: var(--mage-oro, #d9a827);
 }
-
 
 /* Le due viste del Grimorio (6/9): per Sfera, per Formula. La cerca sopra,
    i due tasti accanto. */
@@ -6899,7 +6812,6 @@
   color: var(--tavola-numero);
 }
 
-
 /* ==========================================================================
    Il dialogo dell'Areté riletto con Blue (10/9): caratteri dal 14 in su,
    aria fra le righe, un colore solo per le voci (l'oro dei titoli, non
@@ -7365,4 +7277,245 @@
 
 .wod5e-mage-grimorio-body .wod5e-mage-grimorio-row > summary > i {
   font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   Il dialogo dell'Areté, quarto giro, e la carta del tiro riletta con Blue
+   (10/9 notte): le divisorie fra i gruppi (a sinistra Obiettivo ed Effetto |
+   Sfere | Ambiti; a destra i tratti | la Tipologia Effetto | Armonia e
+   Quintessenza | Altro), le voci in bianco sporco d'arancio, le letture degli
+   Ambiti senza il nome davanti. In chat: la testata «Tiro di» coi sigilli dei
+   tratti, le righe allineate (nome a sinistra, valore a destra, i glifi di
+   Sfere e Ambiti col livello), la fascia che dice Successo o Fallimento (in
+   giallo se il fallimento è ancora aperto) e sotto la fila dei tre tasti:
+   Ritira con Volontà, Sforzare la realtà, Vittoria a un prezzo.
+   ========================================================================== */
+.wod5e-mage-arete-body {
+  --mage-arete-voce: #f3e4c8;
+}
+
+/* Le divisorie fra i gruppi: nella griglia di sinistra occupano tutta la riga. */
+.wod5e-mage-arete-body hr.wod5e-mage-arete-rule {
+  border: 0;
+  border-top: 1px solid var(--mage-oro-scuro, #98772b);
+  grid-column: 1 / -1;
+  margin: 0.4rem 0 0.2rem;
+  opacity: 0.65;
+  width: 100%;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-side > hr.wod5e-mage-arete-rule {
+  margin: 0.25rem 0 0.1rem;
+}
+
+/* L'Effetto sotto l'Obiettivo: nome e tendina sulla stessa riga. */
+.wod5e-mage-arete-body .wod5e-mage-arete-effect-kind {
+  margin-bottom: 0;
+}
+
+/* Le Sfere vengono dopo una divisoria: il titolo non ha bisogno d'altra aria sopra. */
+.wod5e-mage-arete-body .wod5e-mage-arete-scopes-head {
+  margin-top: 0.2rem;
+}
+
+/* Quel che è nascosto resta nascosto, anche se la sua classe dice flex (la Convinzione già usata). */
+.wod5e-mage-arete-body [hidden]:not(.wod5e-mage-arete-reading-switch) {
+  display: none !important;
+}
+
+/* Altro: il titolo sopra, le sue voci sotto. */
+.wod5e-mage-arete-body .wod5e-mage-arete-altro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-altro-head {
+  padding-bottom: 0.1rem;
+}
+
+/* La testata della carta: «Tiro di» piccolo, sotto i sigilli dei tratti col nome. */
+.chat-message .roll-label.wod5e-mage-roll-title {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  line-height: 1.2;
+}
+
+.wod5e-mage-roll-of {
+  font-size: 0.7em;
+  letter-spacing: 0.14em;
+  opacity: 0.85;
+}
+
+.wod5e-mage-roll-traits {
+  align-items: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.55rem;
+  justify-content: center;
+}
+
+.wod5e-mage-roll-trait {
+  align-items: center;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.wod5e-mage-roll-trait > img {
+  border: 0;
+  height: 30px;
+  object-fit: contain;
+  width: 30px;
+}
+
+.wod5e-mage-roll-trait > i {
+  color: #d9a827;
+  font-size: 1.2rem;
+  height: 30px;
+  line-height: 30px;
+}
+
+.wod5e-mage-roll-trait > small {
+  font-size: 0.58em;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.wod5e-mage-roll-plus {
+  color: #d9a827;
+  font-size: 1em;
+}
+
+/* Le righe della carta: nome | valore, tutte allineate sulla stessa colonna. */
+.wod5e-mage-roll-card {
+  align-items: baseline;
+  display: grid;
+  gap: 0.3rem 0.65rem;
+  grid-template-columns: max-content minmax(0, 1fr);
+  margin: 0.15rem 0 0.45rem;
+}
+
+.wod5e-mage-roll-row {
+  display: contents;
+}
+
+.wod5e-mage-roll-key {
+  color: #d9a827;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-roll-value {
+  color: #ece3d0;
+  line-height: 1.3;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+.wod5e-mage-roll-row-spheres > .wod5e-mage-roll-value,
+.wod5e-mage-roll-row-scopes > .wod5e-mage-roll-value {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.75rem;
+}
+
+/* La fascia: una parola, Successo o Fallimento; gialla quando il fallimento è ancora aperto. */
+.chat-message .roll-result-label.wod5e-mage-roll-result {
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.chat-message .roll-result-label.failure.wod5e-mage-roll-open {
+  background-color: #c99a1e;
+  color: #1c1710;
+  text-shadow: none;
+}
+
+/* La fila dei tre tasti sotto la fascia. */
+.wod5e-mage-roll-actions {
+  border-top: 1px solid rgb(152 119 43 / 45%);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+  padding-top: 0.4rem;
+}
+
+.wod5e-mage-roll-actions > .wod5e-mage-roll-action {
+  background: #2b2418;
+  border: 1px solid #98772b;
+  border-radius: 3px;
+  color: #f5e7b2;
+  cursor: pointer;
+  flex: 1 1 30%;
+  font-size: 0.74rem;
+  line-height: 1.2;
+  margin: 0;
+  min-height: 0;
+  min-width: 0;
+  padding: 0.3rem 0.4rem;
+  text-align: center;
+  white-space: normal;
+  width: auto;
+}
+
+.wod5e-mage-roll-actions > .wod5e-mage-roll-action:hover:not(:disabled) {
+  border-color: #d9a827;
+  box-shadow: 0 0 4px #d9a827;
+}
+
+.wod5e-mage-roll-actions > .wod5e-mage-roll-action:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.wod5e-mage-volonta-reroll > small {
+  opacity: 0.8;
+}
+
+.wod5e-mage-roll-actions > .wod5e-mage-sforzo-button {
+  background: rgb(224 90 90 / 12%);
+  border-color: #b5433c;
+  color: #f1dcd8;
+}
+
+.wod5e-mage-roll-actions > .wod5e-mage-sforzo-button:hover:not(:disabled) {
+  border-color: #e05a5a;
+  box-shadow: 0 0 4px #e05a5a;
+}
+
+.wod5e-mage-roll-actions > .wod5e-mage-prezzo-button {
+  background: rgb(63 122 58 / 15%);
+  border-color: #3f7a3a;
+  color: #d9efd3;
+}
+
+.wod5e-mage-roll-actions > .wod5e-mage-prezzo-button:hover:not(:disabled) {
+  border-color: #6fbf66;
+  box-shadow: 0 0 4px #6fbf66;
+}
+
+/* La riga della vittoria a un prezzo, al posto del tasto. */
+.wod5e-mage-roll-note-prezzo {
+  color: #d9efd3;
+  font-style: normal;
+}
+
+.wod5e-mage-prezzo-label {
+  color: #6fbf66;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-prezzo-ask p {
+  margin: 0 0 0.5rem;
 }

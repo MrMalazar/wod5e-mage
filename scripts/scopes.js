@@ -160,7 +160,7 @@ export function prepareScopeTable(localize = (key) => key) {
  * («Città» al quarto pallino dell'Area). Chi ha più letture le porta tutte,
  * nell'ordine della tavola, col nome della lettura davanti. La Durata in
  * gioco parla in turni, scene, sessioni; i Danni sono l'Areté più il numero:
- * con l'Areté del personaggio (`arete`) il conto è già fatto («Danni 6» per
+ * con l'Areté del personaggio (`arete`) il conto è già fatto («6 danni» per
  * Areté 3 al terzo pallino), e la somma sta nella nota (`hint`).
  * Torna { [ambito]: sette liste di { sub, text, hint } }.
  */
@@ -190,7 +190,7 @@ function scopeReadingText(row, step, localize, arete = null) {
   if (cell.arete) {
     const bonus = damageBonus(label);
     const value = Number.isFinite(Number(arete)) && arete !== null && bonus !== null ? Math.max(Math.trunc(Number(arete)), 0) : null;
-    if (value !== null) return { text: String(value + bonus), hint: `${areteLabel} ${value} ${label}` };
+    if (value !== null) return { text: String(localize("WOD5E_MAGE.Scopes.DamageReading")).replace("{n}", String(value + bonus)), hint: `${areteLabel} ${value} ${label}` };
     return { text: `${areteLabel} ${label}`, hint: "" };
   }
   // La Durata in gioco: numero e unità.

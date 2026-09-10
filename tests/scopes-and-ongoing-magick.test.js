@@ -220,8 +220,8 @@ assert.deepEqual(editableActor.lastUpdate, {
   const plain = scopeReadings(localize);
   assert.deepEqual(plain.potency[2][0], { sub: "Danni", text: "Areté +3", hint: "" }, "senza Areté resta la formula");
   const mine = scopeReadings(localize, { arete: 3 });
-  assert.deepEqual(mine.potency[2][0], { sub: "Danni", text: "6", hint: "Areté 3 +3" }, "Areté 3 al terzo pallino: 6 danni");
-  assert.deepEqual(mine.potency[0][0], { sub: "Danni", text: "3", hint: "Areté 3 +0" });
+  assert.deepEqual(mine.potency[2][0], { sub: "Danni", text: "6 danni", hint: "Areté 3 +3" }, "Areté 3 al terzo pallino: 6 danni");
+  assert.deepEqual(mine.potency[0][0], { sub: "Danni", text: "3 danni", hint: "Areté 3 +0" });
   assert.equal(mine.potency[2][1].text, plain.potency[2][1].text, "le altre letture non cambiano");
   assert.deepEqual(mine.area[3], [{ sub: "", text: "Città", hint: "" }]);
   assert.equal(mine.duration[4][0].text, "Un anno");
@@ -229,7 +229,9 @@ assert.deepEqual(editableActor.lastUpdate, {
   assert.match(dialog, /data-role="dotReading"[^>]*><button type="button" class="wod5e-mage-arete-reading-switch" data-role="readingSwitch"[^>]*hidden>[\s\S]*?<\/button><span data-role="readingText"><\/span><\/span>/);
   const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
   assert.match(arete, /dotReadings\(localize, \{ arete: arete\.value \}\)/);
-  assert.match(arete, /piece\.title = part\.hint || \[part\.sub, part\.text\]\.filter\(Boolean\)\.join\(" "\);/);
+  // Il nome della lettura non si scrive più (10/9 notte): sta nella nota, col conto («Danni: Areté 3 +3»).
+  assert.match(arete, /piece\.title = part\.sub \? `\$\{part\.sub\}: \$\{detail\}` : detail;/);
+  assert.doesNotMatch(arete, /wod5e-mage-arete-reading-sub/);
 }
 
 console.log("Scopes and ongoing Magick tests passed.");

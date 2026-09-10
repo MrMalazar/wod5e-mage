@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import {
   missingSuccesses,
   renderForced,
+  renderSforzoButton,
   sforzoBalance,
   sforzoPrice,
   sforzoState,
@@ -42,7 +43,9 @@ assert.deepEqual(sforzoBalance({ quintessence: 5, paradox: 3 }, 3), { after: { q
 assert.deepEqual(sforzoBalance({ quintessence: 0, paradox: 8 }, 3), { after: { quintessence: 0, paradox: 9 }, entered: 1, cancelled: 0, moved: 1, wasted: 2 });
 
 // Con la realtà sforzata la Volontà non ha più tasti.
-assert.deepEqual(volontaState({ total: 3, difficulty: 6, failedCount: 2, forced: true }), { show: false, options: [] });
+assert.deepEqual(volontaState({ total: 3, difficulty: 6, failedCount: 2, forced: true }), { show: false, max: 0 });
+// E con la vittoria a un prezzo lo Sforzo tace.
+assert.deepEqual(sforzoState({ total: 3, difficulty: 6, priced: true }), { show: false, missing: 0 });
 
 // La riga in chat.
 const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8"));
@@ -58,13 +61,15 @@ assert.match(renderForced({ missing: 2, paradox: 1, wasted: 1, damage: "ma" }, f
 assert.match(readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"), /registerSforzo\(\)/);
 assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /effectKind: effectKind \?\? ""/);
 assert.match(readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8"), /-=sforziSessione/);
-assert.match(readFileSync(new URL("../scripts/volonta.js", import.meta.url), "utf8"), /card\.forced\) return false/);
+assert.match(readFileSync(new URL("../scripts/volonta.js", import.meta.url), "utf8"), /card\.forced \|\| card\.priced\) return false/);
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
   for (const key of ["Label", "Title", "Button", "Hint", "HintAgain", "Ask", "AskAgain", "AskNote", "Yes", "No", "Done", "DoneDamage", "DoneWasted", "DamagePhysical", "DamageMental"]) {
     assert.equal(typeof strings.WOD5E_MAGE.Sforzo[key], "string", `${lang} ${key}`);
   }
 }
-assert.match(readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8"), /\.wod5e-mage-sforzo > button\s*\{/);
+assert.match(readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8"), /\.wod5e-mage-roll-actions > \.wod5e-mage-sforzo-button\s*\{/);
+// Il tasto sta nella fila dei tre (10/9 notte), col nome all'infinito: «Sforzare la realtà +N».
+assert.equal(renderSforzoButton({ show: true, missing: 3 }, { paradox: 3, damage: null, uses: 0 }, localize, format), '<button type="button" class="wod5e-mage-roll-action wod5e-mage-sforzo-button" data-sforzo="go" title="Successi mancanti: 3. L\'incantesimo riesce, la Ruota sale di 3 in Paradosso.">Sforzare la realtà <b>+3</b></button>');
 
 console.log("Sforzare la realtà: test passati.");

@@ -53,10 +53,10 @@ assert.deepEqual(paintSalute({ pa: 0, ps: 3, ma: 0, ms: 3 }, 5), ["ps", "ps", "p
 
 // La carta porta Obiettivo ed Effetto; il dialogo li chiede sopra le Sfere, con la Quintessenza sotto l'Armonia.
 const card = renderRollCard({ goal: "Invisibilità", effectKind: "WOD5E_MAGE.Arete.EffectKinds.physical", threshold: 2 }, (k) => k);
-assert.match(card, /WOD5E_MAGE\.Arete\.Goal<\/b> Invisibilità[\s\S]*WOD5E_MAGE\.Arete\.EffectKind<\/b> WOD5E_MAGE\.Arete\.EffectKinds\.physical/);
+assert.match(card, /WOD5E_MAGE\.RollCard\.Goal<\/b><span class="wod5e-mage-roll-value">Invisibilità<\/span>[\s\S]*WOD5E_MAGE\.RollCard\.Effect<\/b><span class="wod5e-mage-roll-value">WOD5E_MAGE\.Arete\.EffectKinds\.physical<\/span>/);
 const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
-// L'Obiettivo sta sotto le Sfere Effetto e sopra gli Ambiti (6/9).
-assert.match(dialog, /name="effectKind"[\s\S]*Arete\.Spheres[\s\S]*name="goal"[\s\S]*data-role="grimorioOpen"[\s\S]*Scopes\.Label[\s\S]*name="harmony"[\s\S]*name="quintessence"/);
+// L'Obiettivo sta in cima, con l'Effetto sotto, poi Sfere Effetto e Ambiti (10/9 notte).
+assert.match(dialog, /name="goal"[\s\S]*data-role="grimorioOpen"[\s\S]*name="effectKind"[\s\S]*Arete\.Spheres[\s\S]*Scopes\.Label[\s\S]*name="harmony"[\s\S]*name="quintessence"/);
 const grimorioTemplate = readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8");
 assert.match(grimorioTemplate, /data-role="grimorioSearch"[\s\S]*data-effetto="\{\{entry\.id\}\}"/);
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");

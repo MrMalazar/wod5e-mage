@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { burstDamage, paradoxAfterBurst } from "../scripts/paradox-burst.js";
-import { pickRerollDice, recountCard, rerollableDice, systemTotal, volontaState, REROLL_MAX, AGGRAVATED_BONUS } from "../scripts/volonta.js";
+import { pickRerollDice, recountCard, rerollableDice, renderRerollButton, renderUsed, systemTotal, volontaState, REROLL_MAX } from "../scripts/volonta.js";
 import { saluteWithDamage } from "../scripts/salute.js";
 import { getMagickBalance, getParadoxFloor } from "../scripts/magick-balance.js";
 
@@ -44,12 +44,24 @@ const volontaSource = readFileSync(new URL("../scripts/volonta.js", import.meta.
 assert.match(volontaSource, /wod5e-mage-volonta-pick[\s\S]*picked\.length < state\.max[\s\S]*rerollDice\(message, actor, picked\.slice\(\)\)/);
 assert.match(volontaSource, /kind === "paradox" && \(result\.result === 1 \|\| result\.result === 10\)/);
 assert.equal(systemTotal([{ result: 10 }, { result: 6 }, { result: 2 }], [{ result: 10 }]), 5);
-assert.equal(recountCard({ autoSuccesses: 2, volontaBonus: 2 }, [{ result: 8 }], []), 5);
-assert.equal(AGGRAVATED_BONUS, 2);
+assert.equal(recountCard({ autoSuccesses: 2 }, [{ result: 8 }], []), 3);
+// L'aggravato che comprava due successi non esiste più (Blue, 10/9 notte): né nel codice né nelle lingue.
+assert.doesNotMatch(volontaSource, /AGGRAVATED_BONUS|spendAggravated|volontaBonus|data-volonta="aggravato"|Volonta\.Aggravated/);
+for (const lang of ["it", "en"]) {
+  const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
+  for (const key of ["Aggravated", "AggravatedHint", "UsedAggravated", "AggravatedDone"]) assert.equal(strings.WOD5E_MAGE.Volonta[key], undefined, `${lang} ${key} tolta`);
+  for (const key of ["Label", "Reroll", "RerollHint", "NoDice", "PickFirst", "UsedReroll", "RerollDone", "RerollEyes"]) assert.equal(typeof strings.WOD5E_MAGE.Volonta[key], "string", `${lang} ${key}`);
+}
+assert.equal(renderUsed({ kind: "aggravato", bonus: 2 }, (k) => k), "", "i messaggi vecchi con l'aggravato non scrivono più niente");
+assert.match(renderUsed({ kind: "reroll", dice: 2, eyes: 1 }, (k, d) => `${k}:${JSON.stringify(d)}`), /^<p class="wod5e-mage-roll-note wod5e-mage-roll-note-volonta">WOD5E_MAGE\.Volonta\.UsedReroll:\{"dice":2\} WOD5E_MAGE\.Volonta\.RerollEyes:\{"eyes":1\}<\/p>$/);
+// Il tasto nella fila dei tre: «Ritira con Volontà 0/3», spento finché non si sceglie un dado.
+assert.equal(renderRerollButton({ show: true, max: 3 }, (k) => k), '<button type="button" class="wod5e-mage-roll-action wod5e-mage-volonta-reroll" data-volonta="reroll" title="WOD5E_MAGE.Volonta.RerollHint">WOD5E_MAGE.Volonta.Reroll <small><b data-role="picked">0</b>/3</small></button>');
+assert.match(renderRerollButton({ show: true, max: 0 }, (k) => k), /data-volonta="reroll" disabled title="WOD5E_MAGE\.Volonta\.NoDice"/);
+assert.match(volontaSource, /if \(!picked\.length\) return ui\.notifications\.warn\(game\.i18n\.localize\("WOD5E_MAGE\.Volonta\.PickFirst"\)\);/);
 
 // I tasti compaiono a tiro fallito (o senza soglia), una volta sola, mai sullo Scoppio.
-assert.equal(volontaState({ total: 2, difficulty: 4, failedCount: 2 }).show, true);
-assert.deepEqual(volontaState({ total: 2, difficulty: 4, failedCount: 2 }).options.map((o) => o.enabled), [true, true, false]);
+assert.deepEqual(volontaState({ total: 2, difficulty: 4, failedCount: 2 }), { show: true, max: 2 });
+assert.deepEqual(volontaState({ total: 2, difficulty: 4, failedCount: 0 }), { show: true, max: 0 }, "senza dadi da ritirare il tasto c'è, spento");
 assert.equal(volontaState({ total: 4, difficulty: 4, failedCount: 2 }).show, false);
 assert.equal(volontaState({ total: 0, difficulty: 0, failedCount: 1 }).show, true);
 assert.equal(volontaState({ total: 0, difficulty: 3, failedCount: 1, used: { kind: "reroll" } }).show, false);

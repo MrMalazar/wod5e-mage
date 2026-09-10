@@ -108,6 +108,8 @@
       "SelectSkill": "Select a Skill",
       "SelectTraitWarning": "Pick at least one trait: an Attribute or a Skill.",
       "MagickType": "Type",
+      "MagickTypeHead": "Effect Type",
+      "Other": "Other",
       "CoincidentalHint": "It goes unnoticed.",
       "VulgarHint": "Reality takes notice, +1 Paradox.",
       "WitnessesHint": "Someone saw you do it, +2 Paradox.",
@@ -144,7 +146,6 @@
       "AutoVictoryChat": "Automatic victory: pool {pool} against threshold {threshold}, no roll.",
       "AutoVictoryBanner": "Automatic victory",
       "RedOnly": "Automatic victory (pool {pool}, threshold {threshold}): only the red dice are rolled. If Backlash strikes, Burn {burn}, equal to the threshold.",
-      "OneStep": "One step short: {missing} successes missing, within Arete ({arete}). Success at a price.",
       "BonusCap": "+3 cap: {excess} fewer dice.",
       "SpherePlan": "Spheres: {plans}.",
       "SpecialtyHint": "Specialty: declare this Scope and the roll starts with as many successes as your Arete. The threshold does not change.",
@@ -529,7 +530,8 @@
         "5": "sessions",
         "6": "story",
         "7": "chronicle"
-      }
+      },
+      "DamageReading": "{n} damage"
     },
     "OngoingMagick": {
       "Label": "Ongoing Magick",
@@ -959,16 +961,32 @@
       "DamagePhysical": "physical",
       "DamageMental": "mental"
     },
+    "Prezzo": {
+      "Label": "Victory at a price",
+      "Title": "Victory at a price",
+      "Button": "Victory at a price",
+      "Hint": "Successes missing: {missing}, within Arete ({arete}). The spell may still succeed: the Storyteller sets the price.",
+      "HintFar": "Successes missing: {missing}, more than Arete ({arete}): too far to succeed at a price.",
+      "Ask": "Successes missing: {missing}, within Arete ({arete}). The spell succeeds, and the Storyteller sets the price.",
+      "AskNote": "The Backlash of the red dice, if it struck, stays.",
+      "Yes": "Succeed at a price",
+      "No": "Let it be",
+      "Done": "successes missing {missing} (Arete {arete}): the Storyteller sets the price."
+    },
     "RollCard": {
+      "Of": "Roll of",
       "Successes": "Successes",
       "Threshold": "Threshold",
-      "CountOne": "1 success",
-      "CountMany": "{n} successes",
-      "Won": "Success: {count} against {goal}",
-      "WonMargin": "Success: {count} against {goal}, {margin} to spare",
-      "Lost": "Failure: {count} against {goal}, {missing} short",
-      "LostOne": "Failure: {count} against {goal}, one short",
-      "Forced": "Success by forcing reality: {count} against {goal}"
+      "Goal": "Goal",
+      "Spheres": "Spheres",
+      "Scopes": "Scopes",
+      "Type": "Type",
+      "Effect": "Effect",
+      "Pool": "Pool",
+      "Success": "Success",
+      "Failure": "Failure",
+      "Forced": "Success by forcing reality",
+      "Priced": "Success at a price"
     },
     "Burst": {
       "Title": "Paradox Burst",
@@ -990,14 +1008,12 @@
     },
     "Volonta": {
       "Label": "Willpower",
-      "Reroll": "Reroll",
+      "Reroll": "Reroll with Willpower",
       "RerollHint": "Pick up to three failed dice on the card (never a red 1 or 10), then reroll: one superficial mental",
-      "Aggravated": "Aggravated: +2",
-      "AggravatedHint": "One aggravated mental: two extra successes",
+      "NoDice": "No die to reroll: the dice succeeded, or the red ones showed 1 or 10",
+      "PickFirst": "First pick the dice to reroll on the card: one click on a failed die lights it up.",
       "UsedReroll": "Willpower: rerolled {dice} chosen dice (one superficial mental).",
-      "UsedAggravated": "Willpower: one aggravated mental, +{bonus} successes.",
       "RerollDone": "{dice} dice rerolled: one superficial mental marked.",
-      "AggravatedDone": "Aggravated mental marked: +{bonus} successes, total {total}.",
       "RerollEyes": "{eyes} rerolled red dice showed 1 or 10: Paradox eye."
     },
     "Condizioni": {

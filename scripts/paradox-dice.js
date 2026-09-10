@@ -10,7 +10,7 @@ import {
   calculateAreteDicePool,
   shiftParadoxDice
 } from "./arete-dice-pool.js";
-import { bonusDiceExcess, isOneStepShort } from "./arete.js";
+import { bonusDiceExcess } from "./arete.js";
 import { applyUstione, ustioneText } from "./paradox-burst.js";
 import { MODULE_ID } from "./constants.js";
 import { renderBacklashNote, renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
@@ -303,14 +303,9 @@ export async function rollAreteWithParadox({
           ) + Math.max(Math.trunc(Number(autoSuccesses) || 0), 0);
 
           // A un passo (ramo A): sotto la soglia di al massimo Areté
-          // successi, la riuscita ha un prezzo. Il messaggio lo dice.
+          // successi, la riuscita ha un prezzo. Dalla 0.86.0 lo dice il tasto
+          // «Vittoria a un prezzo» sotto la fascia, non una riga qui.
           let finalFlavor = rollFlavor;
-          if (isOneStepShort(roll._total, difficulty, arete)) {
-            finalFlavor += renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.OneStep", {
-              missing: difficulty - roll._total,
-              arete
-            }), "onestep");
-          }
 
           // Il Contraccolpo: ogni rosso che mostra l'occhio (1 o 10) chiama
           // la realtà. Il messaggio lo dichiara e dice l'Ustione da segnare,
@@ -342,7 +337,7 @@ export async function rollAreteWithParadox({
           // La bandiera dice al disegno della chat cosa mettere sopra i dadi,
           // e il totale vero del Mago (coppie solo fra i dadi Mage, più i
           // successi automatici) con la soglia, per riscrivere numero ed esito.
-          const cardData = { ...(card ?? {}), total: roll._total, difficulty, autoSuccesses, effectKind: effectKind ?? "" };
+          const cardData = { ...(card ?? {}), total: roll._total, difficulty, autoSuccesses, effectKind: effectKind ?? "", arete };
           const flags = { [MODULE_ID]: { [ROLL_CARD_FLAG]: cardData } };
           return roll.toMessage(
             { speaker: ChatMessage.getSpeaker({ actor }), flags },

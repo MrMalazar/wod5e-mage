@@ -261,8 +261,8 @@ function makeMagickTypeExclusive(dialog) {
 /**
  * La voce del livello scelto, a destra dei pallini (9/9): «Città» al quarto
  * pallino dell'Area, «Alterare» al terzo di una Sfera. Con più letture se ne
- * vede una sola (verdetto di Blue, 10/9), col nome della lettura davanti, e
- * il tasto accanto passa alla lettura dopo.
+ * vede una sola (verdetto di Blue, 10/9), senza il nome della lettura davanti
+ * (10/9 notte), e il tasto accanto passa alla lettura dopo.
  */
 function paintReading(out, parts = [], index = 0) {
   const text = out.querySelector("[data-role=readingText]") ?? out;
@@ -271,16 +271,12 @@ function paintReading(out, parts = [], index = 0) {
   if (part) {
     const piece = document.createElement("span");
     piece.className = "wod5e-mage-arete-reading-part";
-    if (part.sub) {
-      const sub = document.createElement("em");
-      sub.className = "wod5e-mage-arete-reading-sub";
-      sub.textContent = part.sub;
-      piece.append(sub, " ");
-    }
+    // Il nome della lettura (Dettaglio, Epicità…) non si scrive più (Blue,
+    // 10/9 notte: «da Dettaglio Un atomo a Un atomo»): sta nella nota al
+    // passaggio del mouse, col conto dei Danni («Danni: Areté 3 +3»).
     piece.append(part.text ?? "");
-    // La nota al passaggio del mouse: come esce il numero («Areté 3 +3»),
-    // oppure la voce per intero se la riga la taglia.
-    piece.title = part.hint || [part.sub, part.text].filter(Boolean).join(" ");
+    const detail = part.hint || part.text || "";
+    piece.title = part.sub ? `${part.sub}: ${detail}` : detail;
     nodes.push(piece);
   }
   text.replaceChildren(...nodes);
@@ -1010,8 +1006,8 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     magickType,
     goal,
     effectKind: effectKind ? `WOD5E_MAGE.Arete.EffectKinds.${effectKind}` : "",
-    spheres: sphereEntries.map((entry) => ({ label: `WOD5E_MAGE.Spheres.${entry.id}`, level: entry.level })),
-    scopes: scopeLevels.map((entry) => ({ label: `WOD5E_MAGE.Scopes.${entry.id}`, level: entry.level }))
+    spheres: sphereEntries.map((entry) => ({ id: entry.id, label: `WOD5E_MAGE.Spheres.${entry.id}`, level: entry.level })),
+    scopes: scopeLevels.map((entry) => ({ id: entry.id, label: `WOD5E_MAGE.Scopes.${entry.id}`, level: entry.level }))
   }, localize);
   const symbols = rollSymbols({ spheres: sphereEntries, scopes: scopeLevels, prize: prizeDice });
   // Quel che resta del lancio dopo il tiro: nome, tipo, Durata e soglia.
@@ -1097,7 +1093,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       title: rollLabel,
       flavor,
       // Sopra i dadi, in chat: i simboli e la vittoria automatica.
-      card: { symbols, automatic },
+      card: { symbols, automatic, traits: selectedTraits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value })) },
       selectors: uniqueSelectors,
       actor,
       data: actor.system

@@ -2,7 +2,10 @@
      un form dentro un form il browser lo butta via, quindi qui c'è un <div>.
      Con `step` (l'Areté semplificata, 8/9) la finestra mostra un passo solo:
      1 cosa vuoi, 2 come lo fai, 3 il conto; i passi già fatti viaggiano come
-     campi nascosti (`carry`), così il conto e il tiro leggono tutto. --}}
+     campi nascosti (`carry`), così il conto e il tiro leggono tutto.
+     L'ordine dei gruppi e le divisorie sono di Blue (10/9 notte): a sinistra
+     Obiettivo, Effetto | Sfere Effetto | Ambiti; a destra i tratti | la
+     Tipologia Effetto | Armonia e Quintessenza | Altro. --}}
 <div class="wod5e-mage-arete-body">
     {{#if simple}}
         <ol class="wod5e-mage-arete-steps" aria-label="{{localize 'WOD5E_MAGE.Arete.Simple'}}">
@@ -12,7 +15,7 @@
         </ol>
     {{/if}}
     <div class="wod5e-mage-arete-layout{{#if simple}} wod5e-mage-arete-simple{{/if}}" data-arete="{{arete.value}}">
-        {{!-- Colonna sinistra: nome, Obiettivo, Effetto, Sfere e Ambiti a pallini. Per ogni
+        {{!-- Colonna sinistra: nome, Obiettivo, Effetto, poi Sfere e Ambiti a pallini. Per ogni
              Sfera scegli il livello che usi, per ogni Ambito il livello da 1 a 7. --}}
         {{!-- Una griglia sola: simbolo | nome | pallini. Le file sono trasparenti
              (display: contents), così i pallini di tutte le righe partono dalla
@@ -25,7 +28,23 @@
                     <input type="text" name="spellName" id="wod5e-mage-arete-spell-name" placeholder="{{localize 'WOD5E_MAGE.Incantesimi.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Name'}}">
                 </label>
             {{/if}}
-            {{!-- L'Effetto: fisico, mentale o variabile. Dice dove va il Contraccolpo. --}}
+            {{!-- L'Obiettivo in cima (10/9 notte): cosa vuoi ottenere, scritto a mano o scelto dal
+                 Grimorio (il libro), che accende anche le Sfere coinvolte. È un riquadro (6/9):
+                 c'è spazio per scrivere, e la colonna sinistra pareggia la destra. --}}
+            {{#if show.goal}}
+            <div class="wod5e-mage-arete-goal wod5e-mage-arete-goal-box">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Goal"}}</span>
+                <textarea name="goal" id="wod5e-mage-arete-goal" rows="4" placeholder="{{localize 'WOD5E_MAGE.Arete.GoalHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Goal'}}"></textarea>
+                <button type="button" class="wod5e-mage-archivio-open wod5e-mage-arete-grimorio" data-role="grimorioOpen" title="{{localize 'WOD5E_MAGE.Grimorio.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+            </div>
+            {{else}}
+                <input type="hidden" name="goal" value="{{carry.goal}}">
+                {{#if carry.goal}}
+                    {{!-- L'Obiettivo scelto al primo passo, in lettura. --}}
+                    <p class="wod5e-mage-arete-carry-goal"><b>{{localize "WOD5E_MAGE.Arete.Goal"}}</b> {{carry.goal}}</p>
+                {{/if}}
+            {{/if}}
+            {{!-- L'Effetto, sotto l'Obiettivo: fisico, mentale o variabile. Dice dove va il Contraccolpo. --}}
             {{#if show.effect}}
             <div class="wod5e-mage-arete-goal wod5e-mage-arete-effect-kind">
                 <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.EffectKind"}}</span>
@@ -40,6 +59,8 @@
                 <input type="hidden" name="effectKind" id="wod5e-mage-arete-effect-kind" value="{{carry.effectKind}}">
             {{/if}}
             {{#if show.spheres}}
+            {{!-- La divisoria fra i gruppi (10/9 notte): la stessa riga della colonna destra. --}}
+            {{#if show.goal}}<hr class="wod5e-mage-arete-rule">{{/if}}
             <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head">{{localize "WOD5E_MAGE.Arete.Spheres"}}</span>
             {{#each spheres as |sphere|}}
                 <div class="wod5e-mage-arete-dotrow" data-role="dotRow" data-kind="sphere" data-id="{{sphere.id}}" data-specialty="{{sphere.specialtyScope}}">
@@ -63,25 +84,8 @@
                 {{/each}}
             {{/if}}
 
-            {{!-- L'Obiettivo, sotto le Sfere (6/9): cosa vuoi ottenere, scritto a mano o scelto dal
-                 Grimorio (il libro), che accende anche le Sfere coinvolte. --}}
-            {{!-- L'Obiettivo è un riquadro (6/9): c'è spazio per scrivere, e la
-                 colonna sinistra pareggia la destra. Nel primo passo della
-                 semplificata sta in cima (CSS: order). --}}
-            {{#if show.goal}}
-            <div class="wod5e-mage-arete-goal wod5e-mage-arete-goal-box">
-                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Goal"}}</span>
-                <textarea name="goal" id="wod5e-mage-arete-goal" rows="4" placeholder="{{localize 'WOD5E_MAGE.Arete.GoalHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Goal'}}"></textarea>
-                <button type="button" class="wod5e-mage-archivio-open wod5e-mage-arete-grimorio" data-role="grimorioOpen" title="{{localize 'WOD5E_MAGE.Grimorio.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
-            </div>
-            {{else}}
-                <input type="hidden" name="goal" value="{{carry.goal}}">
-                {{#if carry.goal}}
-                    {{!-- L'Obiettivo scelto al primo passo, in lettura. --}}
-                    <p class="wod5e-mage-arete-carry-goal"><b>{{localize "WOD5E_MAGE.Arete.Goal"}}</b> {{carry.goal}}</p>
-                {{/if}}
-            {{/if}}
             {{#if show.scopes}}
+            {{#if show.spheres}}<hr class="wod5e-mage-arete-rule">{{/if}}
             {{!-- L'icona della tavola sta a sinistra della parola. --}}
             <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head wod5e-mage-arete-scopes-head">
                 <button type="button" class="wod5e-mage-arete-scope-table" data-role="scopeTableOpen" title="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}"><i class="fa-solid fa-table-list"></i></button>
@@ -117,7 +121,7 @@
             {{/if}}
         </div>
 
-        {{!-- Colonna destra: la riserva, la narrativa, il premio, la Tipologia. --}}
+        {{!-- Colonna destra: la riserva, la narrativa, la Tipologia Effetto, i numeri del conto, Altro. --}}
         {{#if show.side}}
         <div class="wod5e-mage-arete-side">
             {{!-- La riserva (ramo A): Attributo, Abilità, Abilità. Ne basta uno; chi
@@ -167,9 +171,10 @@
             {{/if}}
 
             {{#if show.types}}
-            {{!-- La Tipologia: una scelta sola. Sta col «come lo fai», prima del conto. --}}
-            <div class="wod5e-mage-arete-types" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.MagickType'}}">
-                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.MagickType"}}</span>
+            {{#if show.traits}}<hr class="wod5e-mage-arete-rule">{{/if}}
+            {{!-- La Tipologia Effetto: una scelta sola. Sta col «come lo fai», prima del conto. --}}
+            <div class="wod5e-mage-arete-types" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.MagickTypeHead'}}">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.MagickTypeHead"}}</span>
                 {{!-- Le spiegazioni stanno nei titoli (10/9): niente testo a destra. --}}
                 <div class="wod5e-mage-arete-type-grid">
                     <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.CoincidentalHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="coincidental"> <span>{{localize "WOD5E_MAGE.Arete.Coincidental"}}</span></label>
@@ -177,7 +182,6 @@
                     <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.WitnessesHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="witnesses"> <span>{{localize "WOD5E_MAGE.Arete.VulgarWithWitnesses"}}</span></label>
                 </div>
             </div>
-            {{#if show.conto}}<hr>{{/if}}
             {{else}}
                 {{!-- La Tipologia scelta al secondo passo, nascosta: una casella spuntata vale «on». --}}
                 {{#if carry.coincidental}}<input type="hidden" name="coincidental" value="on">{{/if}}
@@ -186,16 +190,32 @@
             {{/if}}
 
             {{#if show.conto}}
-            {{!-- Il conto (10/9): campo o casella a sinistra, nome a destra, le voci in
-                 ordine alfabetico: Armonia, Convinzione, Effetto Mantenuto, Premio, Quintessenza. --}}
-            <div class="wod5e-mage-arete-conto" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Steps.3'}}">
             {{#unless saveMode}}
+            {{#if show.types}}<hr class="wod5e-mage-arete-rule">{{/if}}
+            {{!-- I numeri del conto (10/9 notte): campo a sinistra, nome a destra. --}}
+            <div class="wod5e-mage-arete-conto wod5e-mage-arete-conto-numbers" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Steps.3'}}">
             {{!-- L'Armonia: i dadi che gli altri Maghi ti danno, contati al tavolo. --}}
             <label class="wod5e-mage-arete-conto-row wod5e-mage-arete-harmony-row" title="{{localize 'WOD5E_MAGE.Arete.HarmonyHint'}}">
                 <input type="number" name="harmony" id="wod5e-mage-arete-harmony" class="wod5e-mage-arete-harmony" min="0" max="9" step="1" value="0" data-value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Harmony'}}">
                 <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Harmony"}}</span>
             </label>
+            {{!-- La Quintessenza: ogni punto speso è un successo automatico e scende
+                 dalla Ruota; se l'effetto fa danni, sono aggravati. --}}
+            <label class="wod5e-mage-arete-conto-row wod5e-mage-arete-harmony-row wod5e-mage-arete-quintessence-row" title="{{localize 'WOD5E_MAGE.Arete.QuintessenceHint'}}">
+                <input type="number" name="quintessence" id="wod5e-mage-arete-quintessence" class="wod5e-mage-arete-harmony" min="0" max="{{quintessence}}" step="1" value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Quintessence'}}" {{#unless quintessence}}disabled{{/unless}}>
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Quintessence"}}</span>
+            </label>
+            </div>
+            <hr class="wod5e-mage-arete-rule">
+            {{else}}
+            {{#if show.types}}<hr class="wod5e-mage-arete-rule">{{/if}}
+            {{/unless}}
 
+            {{!-- Altro (10/9 notte): la Convinzione, l'Effetto Mantenuto, il Premio, sotto il loro titolo. --}}
+            <div class="wod5e-mage-arete-altro" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Other'}}">
+            <span class="wod5e-mage-arete-row-label wod5e-mage-arete-altro-head">{{localize "WOD5E_MAGE.Arete.Other"}}</span>
+            <div class="wod5e-mage-arete-conto">
+            {{#unless saveMode}}
             {{!-- La Convinzione rispettata (9/9): spuntata e scelta fra quelle in scheda,
                  a tiro fatto un punto di Quintessenza risale sulla Ruota, una volta per scena. --}}
             <div class="wod5e-mage-arete-conviction" title="{{localize 'WOD5E_MAGE.Arete.ConvictionHint'}}">
@@ -252,15 +272,7 @@
                     <em>{{localize "WOD5E_MAGE.Arete.PrizeHybrid"}}</em>
                 {{/if}}
             </div>
-
-            {{#unless saveMode}}
-            {{!-- La Quintessenza: ogni punto speso è un successo automatico e scende
-                 dalla Ruota; se l'effetto fa danni, sono aggravati. --}}
-            <label class="wod5e-mage-arete-conto-row wod5e-mage-arete-harmony-row wod5e-mage-arete-quintessence-row" title="{{localize 'WOD5E_MAGE.Arete.QuintessenceHint'}}">
-                <input type="number" name="quintessence" id="wod5e-mage-arete-quintessence" class="wod5e-mage-arete-harmony" min="0" max="{{quintessence}}" step="1" value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Quintessence'}}" {{#unless quintessence}}disabled{{/unless}}>
-                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Quintessence"}}</span>
-            </label>
-            {{/unless}}
+            </div>
             </div>
             {{/if}}
         </div>
