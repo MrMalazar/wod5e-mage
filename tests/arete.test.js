@@ -182,4 +182,39 @@ assert.deepEqual(traits.skills[0], {
 });
 assert.equal(traits.skills.some((trait) => trait.id === "firearms"), false);
 
+
+// La Convinzione rispettata (9/9): le Convinzioni della scheda in tendina, la scelta, +1 Quintessenza una volta per scena.
+{
+  const { readFileSync } = await import("node:fs");
+  const { CONVICTION_SCENE_FLAG, convictionChoice, prepareConvictionChoice, quintessenceAfterConviction } = await import("../scripts/arete.js");
+  const flags = {
+    convinzioni: {
+      a1: { group: "verita", text: " Mai mentire a chi si fida di me. ", serve: "", cross: "" },
+      a2: { group: "illusione", text: "Da un sogno si esce.", serve: "", cross: "" },
+      a3: { group: "", text: "   ", serve: "", cross: "" }
+    }
+  };
+  const actor = { getFlag: (_m, key) => flags[key] };
+  const choice = prepareConvictionChoice(actor);
+  assert.deepEqual(choice.options.map((option) => [option.id, option.label]), [["a1", "WOD5E_MAGE.Personaggio.ConvictionGroups.verita: Mai mentire a chi si fida di me."], ["a2", "WOD5E_MAGE.Focus.Credos.illusione: Da un sogno si esce."]]);
+  assert.equal(choice.used, false);
+  assert.equal(CONVICTION_SCENE_FLAG, "convinzioneScena");
+  assert.deepEqual(convictionChoice({ conviction: true, convictionId: "a2" }, choice), { id: "a2", label: "WOD5E_MAGE.Focus.Credos.illusione: Da un sogno si esce." });
+  assert.equal(convictionChoice({ conviction: false, convictionId: "a2" }, choice), null);
+  assert.equal(convictionChoice({ conviction: "on", convictionId: "nope" }, choice), null);
+  flags.convinzioneScena = { used: true, label: "x" };
+  const used = prepareConvictionChoice(actor);
+  assert.equal(used.used, true);
+  assert.equal(convictionChoice({ conviction: true, convictionId: "a1" }, used), null, "una volta per scena");
+  assert.deepEqual(quintessenceAfterConviction({ quintessence: 3, paradox: 2, floor: 2 }), { quintessence: 4, gained: true });
+  assert.deepEqual(quintessenceAfterConviction({ quintessence: 7, paradox: 2, floor: 0 }), { quintessence: 7, gained: false }, "le celle sono in comune col Paradosso: la Ruota è piena");
+  assert.deepEqual(quintessenceAfterConviction({ quintessence: 8, paradox: 0, floor: 0 }), { quintessence: 9, gained: true });
+  assert.deepEqual(quintessenceAfterConviction({ quintessence: 9, paradox: 0, floor: 0 }), { quintessence: 9, gained: false });
+  const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
+  assert.match(dialog, /name="quintessence"[\s\S]*<input type="checkbox" name="conviction" id="wod5e-mage-arete-conviction">[\s\S]*<select name="convictionId" id="wod5e-mage-arete-conviction-id" class="hidden"[\s\S]*data-role="convictionReset"[\s\S]*\{\{\/unless\}\}/);
+  const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
+  assert.equal((arete.match(/await grantConvictionQuintessence\(actor, convictionKept\);/g) ?? []).length, 3, "a ogni uscita buona del tiro");
+  assert.match(readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8"), /-=convinzioneScena/);
+}
+
 console.log("Areté tests passed.");

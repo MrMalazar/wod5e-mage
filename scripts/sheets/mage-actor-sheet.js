@@ -26,7 +26,13 @@ import {
   prepareExperiencePage
 } from "../experience-window.js";
 import { prepareFocus } from "../focus.js";
-import { credoSphereBadges, isFreeCredo, prepareCredoSphereChoices, prepareLineageChoices } from "../famiglie.js";
+import {
+  alphabetical,
+  credoSphereBadges,
+  isFreeCredo,
+  prepareCredoSphereChoices,
+  prepareLineageChoices
+} from "../famiglie.js";
 import { FOCUS_CREDOS } from "../focus.js";
 import { getLineage } from "../lineage.js";
 import {
@@ -200,7 +206,10 @@ export class MageActorSheet extends MortalActorSheet {
       template: `${MODULE}/parts/grimorio.hbs`,
       templates: [`${MODULE}/parts/incantesimo-card.hbs`]
     },
-    focus: { template: `${MODULE}/parts/focus.hbs` },
+    focus: {
+      template: `${MODULE}/parts/focus.hbs`,
+      templates: [`${MODULE}/parts/strumento-riga.hbs`]
+    },
     conceptChallenge: { template: `${MODULE}/parts/concept-challenge.hbs` },
     personaggio: {
       template: `${MODULE}/parts/personaggio.hbs`,
@@ -435,9 +444,10 @@ export class MageActorSheet extends MortalActorSheet {
       context.salute = getSalute(actor);
       // L'Appartenenza a tendina, in alto a destra: tendine e Credo.
       const localize = game.i18n.localize.bind(game.i18n);
-      context.lineageChoices = prepareLineageChoices(context.lineage, localize);
+      context.lineageChoices = prepareLineageChoices(context.lineage, localize, game.i18n.lang);
       const credo = String(actor.getFlag(MODULE_ID, "focus")?.credo ?? "");
-      context.credos = FOCUS_CREDOS.map((id) => ({ id, label: localize(`WOD5E_MAGE.Focus.Credos.${id}`), selected: id === credo }));
+      // I Credi in ordine alfabetico della lingua (9/9).
+      context.credos = alphabetical(FOCUS_CREDOS.map((id) => ({ id, label: localize(`WOD5E_MAGE.Focus.Credos.${id}`), selected: id === credo })), game.i18n.lang);
       context.credoLabel = FOCUS_CREDOS.includes(credo) ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "";
       const credoChoice = actor.getFlag(MODULE_ID, "focus")?.credoSpheres ?? {};
       context.credoSpheres = credoSphereBadges(credo, localize, credoChoice);

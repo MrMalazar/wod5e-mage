@@ -3,11 +3,14 @@ import { readFileSync, existsSync } from "node:fs";
 import {
   appendText,
   ARCHIVI,
-  backgroundItemData,
   archivioKind,
+  backgroundItemData,
+  costLevels,
   entryFromDocument,
   FEATURE_KINDS,
   groupEntries,
+  hasLevels,
+  matchesLevel,
   matchesSearch,
   rowFromEntry
 } from "../scripts/archivi.js";
@@ -171,3 +174,29 @@ for (const lang of ["it", "en"]) {
 }
 
 console.log("Archivi tests passed.");
+
+// Il livello di un Pregio o Difetto dal costo a pallini (9/9): fisso, a forbice, a scelta.
+assert.deepEqual(costLevels("••"), [2]);
+assert.deepEqual(costLevels("•–•••"), [1, 2, 3]);
+assert.deepEqual(costLevels("•• / ••••"), [2, 4]);
+assert.deepEqual(costLevels("• / ••• / ••••"), [1, 3, 4]);
+assert.deepEqual(costLevels("••/••••"), [2, 4]);
+assert.deepEqual(costLevels("•••–•••••"), [3, 4, 5]);
+assert.deepEqual(costLevels("", 1), [1]);
+assert.deepEqual(costLevels(undefined, 3), [3]);
+// Il filtro «a 3»: chi vale 3, o chi ci arriva; 0 lascia passare tutti.
+assert.equal(matchesLevel({ cost: "•–•••" }, 3), true);
+assert.equal(matchesLevel({ cost: "•• / ••••" }, 3), false);
+assert.equal(matchesLevel({ cost: "••" }, 0), true);
+assert.equal(matchesLevel({ cost: "", points: 2 }, 2), true);
+assert.equal(hasLevels([{ cost: "" }, { cost: "••" }]), true);
+assert.equal(hasLevels([{ name: "a" }]), false);
+{
+  const dialog = readFileSync(new URL("../templates/dialogs/archivio.hbs", import.meta.url), "utf8");
+  assert.match(dialog, /data-role="archivioFold"/);
+  assert.match(dialog, /\{\{#if levels\.length\}\}[\s\S]*data-role="archivioLevel" data-level="0"[\s\S]*\{\{#each levels as \|level\|\}\}/);
+  assert.match(dialog, /<details class="wod5e-mage-archivio-group" data-role="archivioGroup" open>\s*<summary>/);
+  const archivi = readFileSync(new URL("../scripts/archivi.js", import.meta.url), "utf8");
+  assert.match(archivi, /levels: hasLevels\(entries\) \? \[1, 2, 3, 4, 5\] : \[\]/);
+  assert.match(archivi, /matchesSearch\(entry \?\? \{\}, query\) && matchesLevel\(entry \?\? \{\}, level\)/);
+}

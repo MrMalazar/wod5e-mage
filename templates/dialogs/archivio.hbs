@@ -1,14 +1,34 @@
-{{!-- L'archivio: cerca, apri la voce col clic sul nome, «+» per metterla sulla scheda. --}}
+{{!-- L'archivio: cerca, i gruppi a tendina (9/9), le linguette dei livelli
+     per Pregi e Difetti, apri la voce col clic sul nome, «+» per metterla sulla scheda. --}}
 <div class="wod5e-mage-archivio" data-kind="{{kind}}">
     <div class="wod5e-mage-archivio-head">
         <input type="search" data-role="archivioSearch" placeholder="{{localize 'WOD5E_MAGE.Archivi.Search'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Search'}}">
+        <button type="button" class="wod5e-mage-archivio-fold" data-role="archivioFold" title="{{localize 'WOD5E_MAGE.Archivi.FoldHint'}}"><i class="fa-solid fa-compress" aria-hidden="true"></i> <span>{{localize "WOD5E_MAGE.Archivi.FoldAll"}}</span></button>
         <small>{{localize "WOD5E_MAGE.Archivi.Count" count=count}}</small>
     </div>
+    {{#if levels.length}}
+        {{!-- Il livello (9/9): «a 3» mostra le voci che valgono 3, o che arrivano a 3. --}}
+        <div class="wod5e-mage-archivio-levels" role="group" aria-label="{{localize 'WOD5E_MAGE.Archivi.Level'}}">
+            <span>{{localize "WOD5E_MAGE.Archivi.Level"}}</span>
+            <button type="button" class="active" data-role="archivioLevel" data-level="0">{{localize "WOD5E_MAGE.Archivi.LevelAll"}}</button>
+            {{#each levels as |level|}}
+                <button type="button" data-role="archivioLevel" data-level="{{level}}">{{level}}</button>
+            {{/each}}
+        </div>
+    {{/if}}
     <p class="wod5e-mage-archivio-hint">{{localize "WOD5E_MAGE.Archivi.Hint"}}</p>
     <div class="wod5e-mage-archivio-list">
         {{#each groups as |group|}}
+            {{#if group.name}}
+            <details class="wod5e-mage-archivio-group" data-role="archivioGroup" open>
+                <summary>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    <h3>{{group.name}}</h3>
+                    <small>{{group.count}}</small>
+                </summary>
+            {{else}}
             <section class="wod5e-mage-archivio-group" data-role="archivioGroup">
-                {{#if group.name}}<h3>{{group.name}}</h3>{{/if}}
+            {{/if}}
                 {{#each group.entries as |entry|}}
                     <article class="wod5e-mage-archivio-entry" data-role="archivioEntry" data-uuid="{{entry.uuid}}">
                         <div class="wod5e-mage-archivio-row">
@@ -24,7 +44,11 @@
                         <div class="wod5e-mage-archivio-content">{{{entry.content}}}</div>
                     </article>
                 {{/each}}
+            {{#if group.name}}
+            </details>
+            {{else}}
             </section>
+            {{/if}}
         {{else}}
             <p class="wod5e-mage-archivio-hint">{{localize "WOD5E_MAGE.Archivi.Empty"}}</p>
         {{/each}}

@@ -2,6 +2,7 @@ import { MODULE_ID } from "./constants.js";
 import {
   addParadoxToBalance,
   getMagickBalance,
+  MAGICK_TRACK_MAX,
   paradoxGainForMagickType
 } from "./magick-balance.js";
 import {
@@ -18,11 +19,12 @@ import {
   renderRollNote,
   rollSymbols
 } from "./roll-card.js";
-import { FOCUS_FORMS } from "./focus.js";
+import { FOCUS_FORMS, PERCEIVE_TOOL_ID } from "./focus.js";
 import { maintainedEffectRow, shouldRecordEffect } from "./ongoing-magick.js";
 import { effectSphereLevels, openGrimorio } from "./grimorio.js";
 import { normalizeEffectKind } from "./paradox-burst.js";
 import { loadSpherePowers, specialtyScopes } from "./sphere-specialties.js";
+import { prepareConvictions } from "./personaggio-extra.js";
 
 export const ARETE_MIN = 1;
 export const ARETE_MAX = 5;
@@ -462,7 +464,14 @@ export function spellFromResult(actor, result, { traits, rollSpheres, localize =
     })
     .filter(Boolean);
   const focus = actor.getFlag(MODULE_ID, "focus") ?? {};
-  const instruments = Object.keys(spheres)
+  // Un effetto percettivo (tutte le Sfere al primo pallino) usa lo Strumento
+  // di Percepire (9/9), se c'è; altrimenti gli Strumenti delle Sfere usate.
+  const perceptive = Object.keys(spheres).length > 0 && Object.values(spheres).every((level) => level <= 1);
+  const perceiveRow = focus.sphereInstruments?.[PERCEIVE_TOOL_ID] ?? {};
+  const instrumentIds = perceptive && (perceiveRow.tool || String(perceiveRow.name ?? "").trim())
+    ? [PERCEIVE_TOOL_ID]
+    : Object.keys(spheres);
+  const instruments = instrumentIds
     .map((id) => {
       const row = focus.sphereInstruments?.[id] ?? {};
       const tool = row.tool ? localize(`WOD5E_MAGE.Focus.Tools.${row.tool}`) : "";
@@ -606,7 +615,7 @@ const TRAIT_FIELDS = Object.freeze([
 const STEP_OWNS = Object.freeze({
   1: (key) => key === "goal" || key.startsWith("sphere-") || key.startsWith("scope-"),
   2: (key) => ["effectKind", "attributeTrait", "primaryTrait", "secondaryTrait", "coincidental", "vulgar", "witnesses"].includes(key),
-  3: (key) => ["prize", "harmony", "quintessence", "maintained", "maintainedName"].includes(key)
+  3: (key) => ["prize", "harmony", "quintessence", "maintained", "maintainedName", "conviction", "convictionId"].includes(key)
 });
 
 function clampLevel(value, max) {
@@ -713,6 +722,87 @@ function applyAreteAnswers(dialog, answers) {
   }
 }
 
+/** Il flag «Convinzione già rigenerata in questa scena» (9/9). */
+export const CONVICTION_SCENE_FLAG = "convinzioneScena";
+
+/**
+ * Le Convinzioni della scheda per la finestra del tiro (9/9): gruppo (o
+ * Credo, tradotti dalla scheda) e testo, e se in questa scena la
+ * rigenerazione è già stata usata.
+ */
+export function prepareConvictionChoice(actor) {
+  const options = prepareConvictions(actor)
+    .filter((row) => String(row.text ?? "").trim())
+    .map((row) => {
+      const group = [...(row.groups ?? []), ...(row.credos ?? [])].find((entry) => entry.selected);
+      const label = group ? `${group.label}: ${row.text.trim()}` : row.text.trim();
+      return { id: row.id, label };
+    });
+  return {
+    options,
+    used: Boolean(actor.getFlag(MODULE_ID, CONVICTION_SCENE_FLAG)),
+    usedLabel: String(actor.getFlag(MODULE_ID, CONVICTION_SCENE_FLAG)?.label ?? "")
+  };
+}
+
+/** La Convinzione scelta nella finestra, se la casella è spuntata e non è già stata usata. */
+export function convictionChoice(result, conviction) {
+  if (!conviction || conviction.used || !isChecked(result?.conviction)) return null;
+  return conviction.options.find((option) => option.id === String(result?.convictionId ?? "")) ?? null;
+}
+
+/**
+ * La Quintessenza della Convinzione rispettata (ordine di Blue, 9/9): a
+ * tiro fatto, una volta per scena, un punto risale sulla Ruota. Se la Ruota
+ * è piena non c'è niente da rigenerare, e la volta resta buona.
+ */
+export function quintessenceAfterConviction(balance) {
+  // Le nove celle sono in comune col Paradosso (che non scende sotto il pavimento).
+  const taken = Math.max(Math.trunc(Number(balance?.paradox) || 0), Math.trunc(Number(balance?.floor) || 0), 0);
+  const room = MAGICK_TRACK_MAX - taken;
+  const current = Math.max(Math.trunc(Number(balance?.quintessence) || 0), 0);
+  const next = Math.min(current + 1, room);
+  return { quintessence: Math.max(next, Math.min(current, room)), gained: next > current };
+}
+
+async function grantConvictionQuintessence(actor, conviction) {
+  if (!conviction || !actor?.isOwner) return false;
+  if (actor.getFlag(MODULE_ID, CONVICTION_SCENE_FLAG)) return false;
+  const balance = getMagickBalance(actor);
+  const { quintessence, gained } = quintessenceAfterConviction(balance);
+  if (!gained) {
+    ui.notifications.info(game.i18n.localize("WOD5E_MAGE.Arete.ConvictionFull"));
+    return false;
+  }
+  await actor.setFlag(MODULE_ID, "magickBalance", { quintessence, paradox: balance.paradox });
+  await actor.setFlag(MODULE_ID, CONVICTION_SCENE_FLAG, { used: true, label: conviction.label });
+  ui.notifications.info(game.i18n.format("WOD5E_MAGE.Arete.ConvictionGained", { conviction: conviction.label }));
+  return true;
+}
+
+/**
+ * La casella della Convinzione: spuntata, mostra la tendina di quale; il
+ * tasto «Nuova scena» riarma la rigenerazione e riapre la casella.
+ */
+function wireConviction(dialog, actor) {
+  const root = dialog?.element;
+  const box = root?.querySelector("#wod5e-mage-arete-conviction");
+  const pick = root?.querySelector("#wod5e-mage-arete-conviction-id");
+  if (box && pick) {
+    box.addEventListener("change", () => {
+      pick.classList.toggle("hidden", !box.checked);
+    });
+  }
+  const reset = root?.querySelector("[data-role=convictionReset]");
+  reset?.addEventListener("click", async (event) => {
+    event.preventDefault();
+    if (!actor?.isOwner) return;
+    await actor.unsetFlag(MODULE_ID, CONVICTION_SCENE_FLAG);
+    root.querySelector("[data-role=convictionUsed]")?.setAttribute("hidden", "");
+    root.querySelector("[data-role=convictionFresh]")?.removeAttribute("hidden");
+  });
+}
+
 /**
  * La finestra del tiro di Areté, in due modi: «roll» tira; «save» (il
  * Grimorio del personaggio, 6/9) non tira e torna l'incantesimo da salvare.
@@ -756,7 +846,9 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   const sphereLevelsOwned = Object.fromEntries(rollSpheres.map((sphere) => [sphere.id, sphere.value]));
   const localize = game.i18n.localize.bind(game.i18n);
   const readingFor = dotReadings(localize);
-  const base = { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, preset, ...traits };
+  // La Convinzione rispettata (9/9): le Convinzioni della scheda, e se è già stata usata in scena.
+  const conviction = prepareConvictionChoice(actor);
+  const base = { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, preset, conviction, ...traits };
 
   // Una finestra: tutta (step 0) o un passo dell'Areté semplificata (1, 2, 3).
   const ask = async (step = 0, answers = {}) => {
@@ -790,6 +882,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
         wireDifficulty(dialog);
         wireScopeTable(dialog);
         wireMaintainedEffect(dialog);
+        wireConviction(dialog, actor);
         wireGrimorio(dialog, sphereLevelsOwned);
         applyAretePreset(dialog, preset);
         applyAreteAnswers(dialog, answers);
@@ -849,6 +942,8 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   // dalla Ruota; se l'effetto fa danni, sono aggravati.
   const quintessence = Math.min(Math.max(Math.trunc(Number(result.quintessence) || 0), 0), quintessenceAvailable);
   const autoSuccesses = automatic_.successes + quintessence;
+  // La Convinzione rispettata (9/9): a tiro fatto, +1 Quintessenza una volta per scena.
+  const convictionKept = convictionChoice(result, conviction);
   const goal = String(result.goal ?? "").trim();
   const effectKind = normalizeEffectKind(result.effectKind);
 
@@ -887,6 +982,9 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   }
   if (quintessence > 0) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: quintessence }));
+  }
+  if (convictionKept) {
+    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.ConvictionFlavor", { conviction: convictionKept.label }));
   }
   if (automatic_.successes > 0) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.AutoSuccessesFlavor", {
@@ -950,6 +1048,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   if (automatic && paradoxGain === 0) {
     const notes = [renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.AutoVictoryChat", { pool: dicePool, threshold }))];
     await postAutomaticVictory(actor, rollLabel, { symbols, card, notes });
+    await grantConvictionQuintessence(actor, convictionKept);
     await recordEffect(actor, result, effect);
     return;
   }
@@ -963,6 +1062,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     if (paradoxRating === 0) {
       // Niente rossi da tirare: la vittoria resta automatica, e basta.
       await postAutomaticVictory(actor, rollLabel, { symbols, card, notes: [redOnly] });
+      await grantConvictionQuintessence(actor, convictionKept);
       await recordEffect(actor, result, effect);
       return;
     }
@@ -1007,7 +1107,10 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     ui.notifications.info(game.i18n.localize("WOD5E_MAGE.MagickBalance.ParadoxReverted"));
   }
 
-  if (rolled) await recordEffect(actor, result, effect);
+  if (rolled) {
+    await grantConvictionQuintessence(actor, convictionKept);
+    await recordEffect(actor, result, effect);
+  }
 }
 
 /**

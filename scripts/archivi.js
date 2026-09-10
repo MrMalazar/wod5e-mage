@@ -105,6 +105,40 @@ export function groupEntries(entries) {
   return groups;
 }
 
+/**
+ * I livelli che un Pregio o Difetto può avere, dal suo costo a pallini (9/9):
+ * «••» vale 2; «•–•••» da 1 a 3; «•• / ••••» 2 oppure 4. Senza pallini vale
+ * il numero dei punti. Torna la lista dei livelli, in ordine.
+ */
+export function costLevels(cost, points = 1) {
+  const text = String(cost ?? "");
+  const levels = new Set();
+  for (const part of text.split("/")) {
+    const runs = part.split(/[–\-]/).map((run) => (run.match(/•/g) ?? []).length).filter((run) => run > 0);
+    if (!runs.length) continue;
+    if (runs.length >= 2) {
+      const [low, high] = [Math.min(runs[0], runs[1]), Math.max(runs[0], runs[1])];
+      for (let level = low; level <= high; level += 1) levels.add(level);
+    } else {
+      levels.add(runs[0]);
+    }
+  }
+  if (!levels.size) levels.add(Math.max(Math.trunc(Number(points) || 0), 1));
+  return [...levels].sort((left, right) => left - right);
+}
+
+/** Il filtro per livello (9/9): 0 vale tutti; altrimenti la voce deve poter valere quel livello. */
+export function matchesLevel(entry, level) {
+  const wanted = Math.max(Math.trunc(Number(level) || 0), 0);
+  if (!wanted) return true;
+  return costLevels(entry?.cost, entry?.points).includes(wanted);
+}
+
+/** L'archivio parla a livelli (Pregi, Difetti) se qualche voce ha il costo a pallini. */
+export function hasLevels(entries) {
+  return (entries ?? []).some((entry) => String(entry?.cost ?? "").includes("•"));
+}
+
 /** Il filtro della ricerca: nome, gruppo e testo, senza accenti e maiuscole. */
 export function matchesSearch(entry, query) {
   const needle = normalize(query);
@@ -238,7 +272,15 @@ export async function openArchivio(actor, kind) {
   const title = localize(config.label);
   const content = await foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/dialogs/archivio.hbs`,
-    { kind, title, groups: groupEntries(entries), count: entries.length, canAdd: canEdit(actor) }
+    {
+      kind,
+      title,
+      groups: groupEntries(entries).map((group) => ({ ...group, count: group.entries.length })),
+      count: entries.length,
+      canAdd: canEdit(actor),
+      // Le linguette dei livelli (9/9), solo dove il costo è a pallini.
+      levels: hasLevels(entries) ? [1, 2, 3, 4, 5] : []
+    }
   );
 
   return foundry.applications.api.DialogV2.wait({
@@ -257,17 +299,53 @@ function wireArchivio(dialog, actor, kind, entries) {
   const search = root.querySelector("[data-role=archivioSearch]");
   const rows = [...root.querySelectorAll("[data-role=archivioEntry]")];
   const groups = [...root.querySelectorAll("[data-role=archivioGroup]")];
+  const levelButtons = [...root.querySelectorAll("[data-role=archivioLevel]")];
+  const fold = root.querySelector("[data-role=archivioFold]");
+  let level = 0;
 
-  search?.addEventListener("input", () => {
-    const query = search.value;
+  // Cerca e livello insieme (9/9): con un filtro attivo i gruppi con voci si aprono.
+  const filter = () => {
+    const query = search?.value ?? "";
     for (const row of rows) {
       const entry = entries.find((candidate) => candidate.uuid === row.dataset.uuid);
-      row.hidden = !matchesSearch(entry ?? {}, query);
+      row.hidden = !(matchesSearch(entry ?? {}, query) && matchesLevel(entry ?? {}, level));
     }
+    const active = Boolean(query.trim()) || level > 0;
     for (const group of groups) {
-      group.hidden = ![...group.querySelectorAll("[data-role=archivioEntry]")].some((row) => !row.hidden);
+      const any = [...group.querySelectorAll("[data-role=archivioEntry]")].some((row) => !row.hidden);
+      group.hidden = !any;
+      if (active && any && "open" in group) group.open = true;
     }
+  };
+  search?.addEventListener("input", filter);
+
+  levelButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      level = Math.max(Math.trunc(Number(button.dataset.level) || 0), 0);
+      levelButtons.forEach((other) => other.classList.toggle("active", other === button));
+      filter();
+    });
   });
+
+  // Apri tutte / Chiudi tutte: i gruppi a tendina, a scelta di chi legge.
+  const paintFold = () => {
+    if (!fold) return;
+    const details = groups.filter((group) => "open" in group);
+    const allOpen = details.length > 0 && details.every((group) => group.open);
+    fold.dataset.state = allOpen ? "open" : "closed";
+    fold.querySelector("span").textContent = game.i18n.localize(allOpen ? "WOD5E_MAGE.Archivi.FoldAll" : "WOD5E_MAGE.Archivi.UnfoldAll");
+    fold.querySelector("i").className = allOpen ? "fa-solid fa-compress" : "fa-solid fa-expand";
+  };
+  fold?.addEventListener("click", (event) => {
+    event.preventDefault();
+    const details = groups.filter((group) => "open" in group);
+    const allOpen = details.length > 0 && details.every((group) => group.open);
+    details.forEach((group) => { group.open = !allOpen; });
+    paintFold();
+  });
+  groups.forEach((group) => group.addEventListener("toggle", paintFold));
+  paintFold();
 
   root.querySelectorAll("[data-role=archivioToggle]").forEach((toggle) => {
     toggle.addEventListener("click", (event) => {

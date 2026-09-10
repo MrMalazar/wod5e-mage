@@ -1,0 +1,38 @@
+{{!-- Una riga degli Strumenti per la Magick: la Sfera (o Percepire, 9/9), la
+     lampadina dei consigli (non per Percepire), la tendina dei ventidue, il
+     mestiere quando serve, il tuo di preciso, e le note. --}}
+<div class="wod5e-mage-focus-instrument{{#if row.sharedWith.length}} shared{{/if}}{{#if row.outsideForm}} outside{{/if}}{{#if row.perceive}} perceive{{/if}}">
+    <div class="wod5e-mage-focus-instrument-head">
+        <label class="wod5e-mage-focus-instrument-sphere" title="{{localize row.label}}">
+            {{#if row.faIcon}}<i class="{{row.faIcon}}" aria-hidden="true"></i>{{else}}<img src="{{row.icon}}" alt="">{{/if}}
+            <span>{{localize row.label}}</span>
+        </label>
+        {{#unless row.perceive}}
+        {{!-- La lampadina: i consigli dal Credo, dalla Famiglia e dalla Sottofamiglia. --}}
+        <button type="button" class="wod5e-mage-archivio-open wod5e-mage-focus-instrument-suggest" data-action="strumentiSuggest" data-sphere="{{row.id}}" title="{{localize 'WOD5E_MAGE.Focus.Suggest'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Suggest'}}"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i></button>
+        {{/unless}}
+    </div>
+    <select name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.tool" aria-label="{{localize 'WOD5E_MAGE.Focus.Tool'}}" {{#if locked}}disabled{{/if}}>
+        <option value="">{{localize "WOD5E_MAGE.Focus.ToolNone"}}</option>
+        {{#each row.families as |family|}}
+            <optgroup label="{{family.label}}" {{#unless family.allowed}}disabled{{/unless}}>
+                {{#each family.tools as |tool|}}
+                    <option value="{{tool.id}}" {{#if tool.selected}}selected{{/if}}>{{tool.label}}</option>
+                {{/each}}
+            </optgroup>
+        {{/each}}
+    </select>
+    {{#if row.needsProfession}}
+        <input type="text" class="wod5e-mage-focus-instrument-profession" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.profession" value="{{row.profession}}" placeholder="{{localize 'WOD5E_MAGE.Focus.ProfessionHint'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Profession'}}" {{#if locked}}disabled{{/if}}>
+    {{/if}}
+    <input type="text" class="wod5e-mage-focus-instrument-name" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.name" value="{{row.name}}" placeholder="{{localize 'WOD5E_MAGE.Focus.Detail'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Detail'}}" {{#if locked}}disabled{{/if}}>
+    {{#if row.perceive}}
+        <small class="wod5e-mage-focus-instrument-note">{{localize "WOD5E_MAGE.Focus.PerceiveToolHint"}}</small>
+    {{/if}}
+    {{#if row.sharedWith.length}}
+        <small class="wod5e-mage-focus-instrument-note">{{localize "WOD5E_MAGE.Focus.SharedTool" others=row.sharedList}}</small>
+    {{/if}}
+    {{#if row.outsideForm}}
+        <small class="wod5e-mage-focus-instrument-note">{{localize "WOD5E_MAGE.Focus.ToolOutsideType"}}</small>
+    {{/if}}
+</div>

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { prepareSpecialties, specialtyBonus } from "../scripts/specializzazioni.js";
+import { prepareSpecialties, specialtyBonus, specialtySkillChoices, SPECIALTY_MIN_SKILL } from "../scripts/specializzazioni.js";
 
 const actor = {
   system: {
@@ -74,3 +74,14 @@ assert.match(css, /\.wod5e-mage-roll-dialog \.situational-modifiers \{\s*display
 assert.match(readFileSync(new URL("../scripts/mage-dice.js", import.meta.url), "utf8"), /classList\?\.add\("wod5e-mage", "mage", "wod5e-mage-roll-dialog"\)/);
 
 console.log("Specializzazioni tests passed.");
+
+// Una Specializzazione si prende dal terzo pallino (9/9): la tendina mostra solo quelle Abilità.
+assert.equal(SPECIALTY_MIN_SKILL, 3);
+assert.deepEqual(specialtySkillChoices(prepareSpecialties(actor).skills).map((skill) => [skill.id, skill.value]), [["occult", 3]]);
+assert.deepEqual(specialtySkillChoices([]), []);
+{
+  const dialog = readFileSync(new URL("../templates/dialogs/specialty-add.hbs", import.meta.url), "utf8");
+  assert.doesNotMatch(dialog.replace(/\{\{!--[\s\S]*?--\}\}/g, ""), /<form/);
+  assert.match(dialog, /\{\{#unless skills\.length\}\}disabled\{\{\/unless\}\}/);
+  assert.match(readFileSync(new URL("../scripts/specializzazioni.js", import.meta.url), "utf8"), /specialtySkillChoices\(prepareSpecialties\(actor/);
+}

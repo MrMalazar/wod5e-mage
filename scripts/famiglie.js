@@ -238,23 +238,29 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;");
 }
 
-/** Le tendine della pagina Personaggio. */
-export function prepareLineageChoices(lineage, localize = (key) => key) {
+/** Una lista di scelte in ordine alfabetico della lingua (verdetto di Blue, 9/9). */
+export function alphabetical(list, lang = "it", key = "label") {
+  const collator = new Intl.Collator(lang || "it", { sensitivity: "base" });
+  return [...(list ?? [])].sort((left, right) => collator.compare(String(left?.[key] ?? ""), String(right?.[key] ?? "")));
+}
+
+/** Le tendine della pagina Personaggio: Famiglie e Sottofamiglie in ordine alfabetico. */
+export function prepareLineageChoices(lineage, localize = (key) => key, lang = "it") {
   const groups = Object.entries(FAZIONI).map(([fazione, label]) => ({
     id: fazione,
     label: localize(label),
-    famiglie: FAMIGLIE.filter((famiglia) => famiglia.fazione === fazione).map((famiglia) => ({
+    famiglie: alphabetical(FAMIGLIE.filter((famiglia) => famiglia.fazione === fazione).map((famiglia) => ({
       id: famiglia.id,
       label: famiglia.label,
       selected: famiglia.id === lineage.famiglia
-    }))
+    })), lang)
   }));
   const family = findFamiglia(lineage.famiglia);
-  const sottofamiglie = (family?.sottofamiglie ?? []).map((sub) => ({
+  const sottofamiglie = alphabetical((family?.sottofamiglie ?? []).map((sub) => ({
     id: sub.id,
     label: sub.label,
     selected: sub.id === lineage.sottofamiglia
-  }));
+  })), lang);
   const sub = findSottofamiglia(lineage.famiglia, lineage.sottofamiglia);
   return {
     groups,

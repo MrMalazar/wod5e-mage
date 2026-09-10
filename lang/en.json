@@ -167,7 +167,18 @@
       "QuintessenceShort": "automatic successes (you have {available})",
       "QuintessenceHint": "Each point spent is an automatic success and leaves the Wheel. If the effect deals damage, it is aggravated.",
       "QuintessenceFlavor": "Quintessence {points} (+{points} successes; damage is aggravated)",
-      "QuintessenceSpent": "Quintessence spent: {points}."
+      "QuintessenceSpent": "Quintessence spent: {points}.",
+      "Conviction": "Conviction upheld",
+      "ConvictionShort": "+1 Quintessence, once per scene",
+      "ConvictionHint": "If this casting upheld one of your sheet's Convictions, after the roll one point of Quintessence returns to the Wheel. Once per scene.",
+      "ConvictionPick": "Which Conviction",
+      "ConvictionUsed": "Already regained in this scene.",
+      "ConvictionNewScene": "New scene",
+      "ConvictionNewSceneHint": "The scene has changed: the Conviction can regenerate again.",
+      "ConvictionNone": "No Conviction on the sheet.",
+      "ConvictionGained": "Conviction upheld ({conviction}): +1 Quintessence.",
+      "ConvictionFull": "Conviction upheld, but the Wheel is full: nothing to regain.",
+      "ConvictionFlavor": "Conviction upheld: +1 Quintessence"
     },
     "Focus": {
       "Credo": "Creed",
@@ -253,7 +264,9 @@
       "SuggestNoneForType": "For this Sphere and this Type the Creed has no example.",
       "SuggestApply": "Put the Instrument and example in the row",
       "SuggestApplyName": "Put the text in the row (pick the Instrument from the list)",
-      "CredoHere": "Chosen in the header; here in your words"
+      "CredoHere": "Chosen in the header; here in your words",
+      "PerceiveTool": "Perceive",
+      "PerceiveToolHint": "The tool of perceptive effects: the Spheres at the first dot. It can be the same as a Sphere's, or another."
     },
     "ConceptChallenge": {
       "Label": "The Concept Challenge",
@@ -796,7 +809,9 @@
       "Hint": "Worth one extra die whenever the specialty applies to the roll.",
       "Empty": "No Specialty: + adds one (Skill and name).",
       "Incomplete": "A Skill and the Specialty name are both needed.",
-      "Roll": "Roll with the Specialty: the extra die is already in"
+      "Roll": "Roll with the Specialty: the extra die is already in",
+      "NoSkill": "No Skill at {min} or more",
+      "MinHint": "It takes a Skill at three dots or more."
     },
     "SphereSpecialties": {
       "ShowText": "Show or hide the text",
@@ -892,7 +907,12 @@
       "Type": "Type",
       "TypeNone": "Pick a type…",
       "TypeFree": "Type, in your words",
-      "TypeHint": "If it is not in the list, write it here"
+      "TypeHint": "If it is not in the list, write it here",
+      "FoldAll": "Close all",
+      "UnfoldAll": "Open all",
+      "FoldHint": "Closes or opens every group",
+      "Level": "Level",
+      "LevelAll": "All"
     },
     "Reset": {
       "Attributes": "Reset Attributes",

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   familiesForForm,
   FOCUS_CREDOS,
@@ -131,3 +132,28 @@ focus = await prepareFocus(actor);
 assert.equal(focus.instruments[0].name, "");
 
 console.log("Focus tests passed.");
+
+// Lo Strumento di Percepire (9/9): in coda alle Sfere, stessa tendina, e conta nel «regge anche».
+{
+  const { preparePerceiveInstrument, prepareSphereInstruments, PERCEIVE_TOOL_ID } = await import("../scripts/focus.js");
+  const localize = (key) => key;
+  const spheres = [{ id: "forces", label: "WOD5E_MAGE.Spheres.forces", icon: "f.png", value: 2 }];
+  const actorWith = (sphereInstruments) => ({ getFlag: (_m, key) => (key === "focus" ? { sphereInstruments } : undefined) });
+  assert.equal(PERCEIVE_TOOL_ID, "percepire");
+  const perceive = preparePerceiveInstrument(actorWith({ forces: { tool: "weapons" }, percepire: { tool: "weapons", name: "Lente" } }), { localize, spheres, form: "magick" });
+  assert.equal(perceive.perceive, true);
+  assert.equal(perceive.faIcon, "fa-solid fa-eye");
+  assert.equal(perceive.tool, "weapons");
+  assert.equal(perceive.name, "Lente");
+  assert.deepEqual(perceive.sharedWith, ["WOD5E_MAGE.Spheres.forces"]);
+  assert.ok(perceive.families.some((family) => family.tools.some((tool) => tool.selected)));
+  const rows = prepareSphereInstruments(actorWith({ forces: { tool: "weapons" }, percepire: { tool: "weapons" } }), { localize, spheres, form: "magick" });
+  assert.equal(rows.length, 1, "le righe delle Sfere restano quelle");
+  assert.deepEqual(rows[0].sharedWith, ["WOD5E_MAGE.Focus.PerceiveTool"]);
+  assert.equal(preparePerceiveInstrument(actorWith({}), { localize, spheres: [], form: "" }), null, "senza Sfere niente riga");
+  const template = readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8");
+  assert.match(template, /\{\{#if focus\.perceiveInstrument\}\}\s*\{\{> "modules\/wod5e-mage\/templates\/actor\/parts\/strumento-riga\.hbs" row=focus\.perceiveInstrument locked=locked\}\}/);
+  const riga = readFileSync(new URL("../templates/actor/parts/strumento-riga.hbs", import.meta.url), "utf8");
+  assert.match(riga, /\{\#unless row\.perceive\}\}[\s\S]*data-action="strumentiSuggest"/);
+  assert.match(riga, /name="flags\.wod5e-mage\.focus\.sphereInstruments\.\{\{row\.id\}\}\.tool"/);
+}

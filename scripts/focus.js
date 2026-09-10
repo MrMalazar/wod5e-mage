@@ -1,5 +1,6 @@
 import { MODULE_ID } from "./constants.js";
 import { prepareSpheres } from "./spheres.js";
+import { alphabetical } from "./famiglie.js";
 
 // Le cinque famiglie degli Strumenti (ramo A, 4/9/2026): il Mondo è cancellato.
 export const FOCUS_INSTRUMENT_FAMILIES = Object.freeze([
@@ -102,35 +103,54 @@ export function legacyInstrumentNames(legacyInstruments, localize) {
 }
 
 /**
- * Le righe degli Strumenti: una per Sfera sbloccata, con lo Strumento scelto
- * fra i ventidue, il mestiere quando serve e il tuo di preciso.
+ * Lo Strumento degli effetti percettivi (ordine di Blue, 9/9): per usare le
+ * Sfere al primo pallino c'è uno Strumento apposta, scelto come gli altri,
+ * uguale a quello di un'altra Sfera o diverso. Sta nel flag `focus.sphereInstruments`
+ * con questa chiave, accanto alle Sfere.
  */
-export function prepareSphereInstruments(actor, { localize, spheres, form } = {}) {
+export const PERCEIVE_TOOL_ID = "percepire";
+
+function instrumentRow({ id, label, icon = "", faIcon = "", value = 0, perceive = false }, { stored, hasRows, legacyName, allowedFamilies }) {
+  const row = hasRows ? (stored[id] ?? {}) : {};
+  const tool = FOCUS_TOOL_IDS.includes(row.tool) ? row.tool : "";
+  const definition = FOCUS_TOOLS.find((entry) => entry.id === tool);
+  return {
+    id,
+    label,
+    icon,
+    faIcon,
+    perceive,
+    value,
+    tool,
+    family: definition?.family ?? "",
+    needsProfession: Boolean(definition?.profession),
+    profession: String(row.profession ?? ""),
+    name: hasRows ? String(row.name ?? "") : String(legacyName ?? ""),
+    outsideForm: Boolean(definition) && !allowedFamilies.includes(definition.family),
+    sharedWith: [],
+    sharedList: ""
+  };
+}
+
+/** Tutte le righe insieme (le Sfere e Percepire): così il «regge anche» le vede tutte. */
+function allInstrumentRows(actor, { localize, spheres, form } = {}) {
   const stored = actor.getFlag(MODULE_ID, "focus") ?? {};
   const rowsStored = stored.sphereInstruments;
   const hasRows = rowsStored && typeof rowsStored === "object";
   const legacyNames = hasRows ? [] : legacyInstrumentNames(stored.instruments, localize);
   const allowedFamilies = familiesForForm(form);
+  const context = { stored: hasRows ? rowsStored : {}, hasRows, allowedFamilies };
 
-  const rows = spheres.map((sphere, index) => {
-    const row = hasRows ? (rowsStored[sphere.id] ?? {}) : {};
-    const tool = FOCUS_TOOL_IDS.includes(row.tool) ? row.tool : "";
-    const definition = FOCUS_TOOLS.find((entry) => entry.id === tool);
-    return {
-      id: sphere.id,
-      label: sphere.label,
-      icon: sphere.icon,
-      value: sphere.value,
-      tool,
-      family: definition?.family ?? "",
-      needsProfession: Boolean(definition?.profession),
-      profession: String(row.profession ?? ""),
-      name: hasRows ? String(row.name ?? "") : String(legacyNames[index] ?? ""),
-      outsideForm: Boolean(definition) && !allowedFamilies.includes(definition.family),
-      sharedWith: [],
-      sharedList: ""
-    };
-  });
+  const rows = spheres.map((sphere, index) => instrumentRow(
+    { id: sphere.id, label: sphere.label, icon: sphere.icon, value: sphere.value },
+    { ...context, legacyName: legacyNames[index] }
+  ));
+  if (spheres.length) {
+    rows.push(instrumentRow(
+      { id: PERCEIVE_TOOL_ID, label: "WOD5E_MAGE.Focus.PerceiveTool", faIcon: "fa-solid fa-eye", value: 1, perceive: true },
+      { ...context, legacyName: "" }
+    ));
+  }
 
   // Lo stesso Strumento su due Sfere è possibile e pericoloso: la riga lo dice.
   rows.forEach((row) => {
@@ -162,6 +182,19 @@ export function prepareSphereInstruments(actor, { localize, spheres, form } = {}
   }));
 }
 
+/**
+ * Le righe degli Strumenti: una per Sfera sbloccata, con lo Strumento scelto
+ * fra i ventidue, il mestiere quando serve e il tuo di preciso.
+ */
+export function prepareSphereInstruments(actor, options = {}) {
+  return allInstrumentRows(actor, options).filter((row) => !row.perceive);
+}
+
+/** La riga dello Strumento degli effetti percettivi, o null senza Sfere. */
+export function preparePerceiveInstrument(actor, options = {}) {
+  return allInstrumentRows(actor, options).find((row) => row.perceive) ?? null;
+}
+
 export async function prepareFocus(actor, enrichHTML) {
   const stored = actor.getFlag(MODULE_ID, "focus") ?? {};
   const sphereNotes = stored.sphereNotes ?? {};
@@ -189,11 +222,11 @@ export async function prepareFocus(actor, enrichHTML) {
   return {
     credo,
     credoLabel: FOCUS_CREDOS.includes(credo) ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "",
-    credos: FOCUS_CREDOS.map((id) => ({
+    credos: alphabetical(FOCUS_CREDOS.map((id) => ({
       id,
       label: localize(`WOD5E_MAGE.Focus.Credos.${id}`),
       selected: id === credo
-    })),
+    })), globalThis.game?.i18n?.lang),
     paradigm: String(stored.paradigm ?? ""),
     practiceForm,
     forms: FOCUS_FORMS.map((id) => ({
@@ -202,6 +235,11 @@ export async function prepareFocus(actor, enrichHTML) {
       selected: id === practiceForm
     })),
     instruments: prepareSphereInstruments(actor, {
+      localize,
+      spheres: selectedSpheres,
+      form: practiceForm
+    }),
+    perceiveInstrument: preparePerceiveInstrument(actor, {
       localize,
       spheres: selectedSpheres,
       form: practiceForm

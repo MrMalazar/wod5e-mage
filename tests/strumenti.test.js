@@ -64,8 +64,10 @@ assert.equal(craft.famiglia.tools.length, 5);
 assert.equal(craft.sottofamiglia, null);
 
 // La scheda e il dialogo.
-const focus = readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8");
+// La riga dello Strumento sta nel partial strumento-riga.hbs (9/9), che la pagina usa per le Sfere e per Percepire.
+const focus = readFileSync(new URL("../templates/actor/parts/strumento-riga.hbs", import.meta.url), "utf8");
 assert.match(focus, /data-action="strumentiSuggest" data-sphere="\{\{row\.id\}\}"/);
+assert.match(readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8"), /strumento-riga\.hbs" row=row locked=\.\.\/locked/);
 const dialog = readFileSync(new URL("../templates/dialogs/strumenti-consigli.hbs", import.meta.url), "utf8");
 assert.match(dialog, /data-role="suggestApply" data-tool="\{\{entry\.tool\}\}" data-profession="\{\{entry\.profession\}\}" data-name="\{\{entry\.name\}\}"/);
 const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");

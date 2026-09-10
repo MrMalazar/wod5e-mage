@@ -167,7 +167,18 @@
       "QuintessenceShort": "successi automatici (hai {available})",
       "QuintessenceHint": "Ogni punto speso è un successo automatico e scende dalla Ruota. Se l'effetto fa danni, sono aggravati.",
       "QuintessenceFlavor": "Quintessenza {points} (+{points} successi; i danni sono aggravati)",
-      "QuintessenceSpent": "Quintessenza spesa: {points}."
+      "QuintessenceSpent": "Quintessenza spesa: {points}.",
+      "Conviction": "Convinzione rispettata",
+      "ConvictionShort": "+1 Quintessenza, una volta per scena",
+      "ConvictionHint": "Se in questo lancio hai rispettato una Convinzione della scheda, a tiro fatto un punto di Quintessenza risale sulla Ruota. Una volta per scena.",
+      "ConvictionPick": "Quale Convinzione",
+      "ConvictionUsed": "Già rigenerata in questa scena.",
+      "ConvictionNewScene": "Nuova scena",
+      "ConvictionNewSceneHint": "La scena è cambiata: la Convinzione può rigenerare di nuovo.",
+      "ConvictionNone": "Nessuna Convinzione in scheda.",
+      "ConvictionGained": "Convinzione rispettata ({conviction}): +1 Quintessenza.",
+      "ConvictionFull": "Convinzione rispettata, ma la Ruota è piena: niente da rigenerare.",
+      "ConvictionFlavor": "Convinzione rispettata: +1 Quintessenza"
     },
     "Focus": {
       "Credo": "Credo",
@@ -253,7 +264,9 @@
       "SuggestNoneForType": "Per questa Sfera e questo Tipo il Credo non ha un esempio.",
       "SuggestApply": "Metti Strumento ed esempio nella riga",
       "SuggestApplyName": "Metti il testo nella riga (lo Strumento lo scegli in tendina)",
-      "CredoHere": "Si sceglie in testata; qui in parole tue"
+      "CredoHere": "Si sceglie in testata; qui in parole tue",
+      "PerceiveTool": "Percepire",
+      "PerceiveToolHint": "Lo Strumento degli effetti percettivi: le Sfere al primo pallino. Può essere lo stesso di una Sfera, o un altro."
     },
     "ConceptChallenge": {
       "Label": "La sfida del concetto",
@@ -796,7 +809,9 @@
       "Hint": "Vale un dado in più quando la specializzazione conta nel tiro.",
       "Empty": "Nessuna Specializzazione: il + ne aggiunge una (Abilità e nome).",
       "Incomplete": "Serve un'Abilità e il nome della Specializzazione.",
-      "Roll": "Tira con la Specializzazione: il dado in più è già dentro"
+      "Roll": "Tira con la Specializzazione: il dado in più è già dentro",
+      "NoSkill": "Nessuna Abilità a {min} o più",
+      "MinHint": "Si prende dal terzo pallino dell'Abilità."
     },
     "SphereSpecialties": {
       "ShowText": "Mostra o nascondi il testo",
@@ -892,7 +907,12 @@
       "Type": "Tipo",
       "TypeNone": "Scegli il tipo…",
       "TypeFree": "Tipo, in parole tue",
-      "TypeHint": "Se non è in tendina, scrivilo qui"
+      "TypeHint": "Se non è in tendina, scrivilo qui",
+      "FoldAll": "Chiudi tutte",
+      "UnfoldAll": "Apri tutte",
+      "FoldHint": "Chiude o apre tutte le tendine dei gruppi",
+      "Level": "Livello",
+      "LevelAll": "Tutti"
     },
     "Reset": {
       "Attributes": "Reset Attributi",

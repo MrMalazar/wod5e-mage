@@ -365,7 +365,9 @@ export async function onSaluteNewSession(event) {
   const salute = getSalute(actor);
   const update = {
     [`flags.${MODULE_ID}.salute`]: { ...saluteAfterSession(salute), extra: salute.extra },
-    [`flags.${MODULE_ID}.contraccolpoNegato`]: false
+    [`flags.${MODULE_ID}.contraccolpoNegato`]: false,
+    // Nuova sessione, nuova scena: la Convinzione può rigenerare di nuovo (9/9).
+    [`flags.${MODULE_ID}.-=convinzioneScena`]: null
   };
 
   // La Ruota (6/9): a nuova sessione la Quintessenza sale della «Quintessenza

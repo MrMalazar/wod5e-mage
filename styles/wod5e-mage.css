@@ -1529,6 +1529,18 @@
   width: 18px;
 }
 
+/* Percepire (9/9): l'occhio al posto del sigillo, e un po' d'aria sopra. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-sphere > i {
+  color: var(--mage-oro-chiaro);
+  font-size: 0.95rem;
+  text-align: center;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument.perceive {
+  margin-top: 0.35rem;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > select,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument > input {
   flex: 1 1 110px;
@@ -2556,6 +2568,14 @@
 
 /* Background, Vantaggi e Difetti: il nome a sinistra, i pallini sulla
    stessa riga a destra, e un filo d'aria fra le voci. */
+/* Le icone di Background, Pregi e Difetti (9/9): i glifi sono oro e rosso
+   su un disco d'oro scuro, e non si leggevano; il disco diventa scuro. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .features-list .item .item-image img {
+  background-color: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-scuro);
+  box-sizing: border-box;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-dotazione .features-list .collapsible-container {
   align-items: center;
   column-gap: 0.5rem;
@@ -2865,28 +2885,31 @@
   margin-bottom: 0.3rem;
 }
 
-/* Ogni Convinzione: la riga e, sotto, i due momenti affiancati. */
+/* Ogni Convinzione su tre righe (9/9): la riga del tipo e del testo, poi
+   «La servi quando» e «La attraversi quando», ognuna col nome a sinistra e
+   la descrizione a destra; fra una Convinzione e l'altra c'è aria. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-list {
   display: grid;
-  gap: 0.6rem;
+  gap: 1.1rem;
   margin-bottom: 1rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction {
   border-bottom: 1px solid rgb(152 119 43 / 30%);
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.9rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-when {
   display: grid;
-  gap: 0.4rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-when > label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+  align-items: start;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
   min-width: 0;
 }
 
@@ -2895,6 +2918,8 @@
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.08em;
+  line-height: 1.3;
+  padding-top: 0.35rem;
   text-transform: uppercase;
 }
 
@@ -4331,12 +4356,114 @@
   padding-right: 0.25rem;
 }
 
-.wod5e-mage-archivio-group > h3 {
+/* I gruppi a tendina (9/9): il titolo è il summary, con la freccia e il conto. */
+.wod5e-mage-archivio-group > summary {
+  align-items: baseline;
+  border-bottom: 1px solid var(--mage-oro-scuro, #98772b);
+  cursor: pointer;
+  display: flex;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0.6rem 0 0.25rem;
+}
+
+.wod5e-mage-archivio-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage-archivio-group > summary > i {
+  color: var(--mage-oro, #d9a827);
+  font-size: 0.7rem;
+  transition: transform 120ms ease;
+}
+
+.wod5e-mage-archivio-group:not([open]) > summary > i {
+  transform: rotate(-90deg);
+}
+
+.wod5e-mage-archivio-group > summary > small {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 0.72rem;
+  margin-left: auto;
+}
+
+.wod5e-mage-archivio-group > h3,
+.wod5e-mage-archivio-group > summary > h3 {
   border-bottom: 1px solid var(--mage-oro-scuro, #98772b);
   color: var(--mage-oro, #d9a827);
   font-family: "Modesto Condensed", serif;
   font-size: 1.05rem;
   margin: 0.6rem 0 0.25rem;
+}
+
+.wod5e-mage-archivio-group > summary > h3 {
+  border-bottom: 0;
+  margin: 0;
+}
+
+/* Apri tutte / Chiudi tutte, accanto alla cerca. */
+.wod5e-mage-archivio-fold {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  border-radius: 3px;
+  color: var(--mage-oro-chiaro, #f5e7b2);
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  font-size: 0.75rem;
+  gap: 0.3rem;
+  line-height: 1.2;
+  margin: 0;
+  min-height: 0;
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+  width: auto;
+}
+
+.wod5e-mage-archivio-fold:hover {
+  border-color: var(--mage-oro, #d9a827);
+}
+
+/* Le linguette dei livelli (9/9): Tutti, 1…5; quella scelta accesa. */
+.wod5e-mage-archivio-levels {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.wod5e-mage-archivio-levels > span {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-right: 0.2rem;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-archivio-levels > button {
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  border-radius: 3px;
+  color: var(--mage-tenue, #ab9f85);
+  cursor: pointer;
+  flex: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  min-height: 0;
+  min-width: 2rem;
+  padding: 0.2rem 0.5rem;
+  width: auto;
+}
+
+.wod5e-mage-archivio-levels > button:hover,
+.wod5e-mage-archivio-levels > button.active {
+  background: rgb(217 168 39 / 15%);
+  border-color: var(--mage-oro, #d9a827);
+  color: var(--mage-oro-chiaro, #f5e7b2);
 }
 
 .wod5e-mage-archivio-entry {
@@ -4575,6 +4702,59 @@
 .wod5e-mage-arete-simple-dialog [hidden],
 .wod5e-mage-arete-layout.wod5e-mage-arete-simple [hidden] {
   display: none !important;
+}
+
+/* La Convinzione rispettata (9/9): casella, tendina di quale, e la nota
+   «già rigenerata» col tasto Nuova scena. */
+.wod5e-mage-arete-conviction {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.wod5e-mage-arete-conviction-toggle {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.wod5e-mage-arete-conviction-toggle > input {
+  flex: none;
+  margin: 0;
+}
+
+.wod5e-mage-arete-conviction-toggle > span > small {
+  color: var(--mage-tenue, #b8ad93);
+  display: block;
+  font-size: 0.7rem;
+}
+
+.wod5e-mage-arete-conviction select {
+  margin-top: 0.3rem;
+  width: 100%;
+}
+
+.wod5e-mage-arete-conviction em {
+  color: var(--mage-tenue, #b8ad93);
+  font-size: 0.75rem;
+}
+
+.wod5e-mage-arete-conviction-used {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.5rem;
+}
+
+.wod5e-mage-arete-conviction-used > button {
+  flex: none;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  margin: 0;
+  min-height: 0;
+  padding: 0.15rem 0.5rem;
+  width: auto;
 }
 
 /* Quel che si è scelto nei passi prima, in lettura. */

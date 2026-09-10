@@ -1,10 +1,12 @@
-<form class="dialog-contents wod5e-mage-specialty-form">
+{{!-- Niente <form>: DialogV2 mette il contenuto nel suo, e un form dentro un form sparisce. --}}
+<div class="dialog-contents wod5e-mage-specialty-form">
     <div class="wod5e-mage-arete-row">
         <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Specialties.Skill"}}</span>
-        <select name="skill" required>
-            <option value="">{{localize "WOD5E_MAGE.RollSelection.SelectAbility"}}</option>
+        {{!-- Solo le Abilità a tre pallini o più (9/9). --}}
+        <select name="skill" required {{#unless skills.length}}disabled{{/unless}}>
+            <option value="">{{#if skills.length}}{{localize "WOD5E_MAGE.RollSelection.SelectAbility"}}{{else}}{{localize "WOD5E_MAGE.Specialties.NoSkill" min=minSkill}}{{/if}}</option>
             {{#each skills as |skill|}}
-                <option value="{{skill.id}}">{{skill.label}}</option>
+                <option value="{{skill.id}}">{{skill.label}} ({{skill.value}})</option>
             {{/each}}
         </select>
     </div>
@@ -12,5 +14,5 @@
         <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Specialties.Name"}}</span>
         <input type="text" name="source" required placeholder="{{localize 'WOD5E_MAGE.Specialties.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Name'}}">
     </div>
-    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Specialties.Hint"}}</p>
-</form>
+    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Specialties.Hint"}} {{localize "WOD5E_MAGE.Specialties.MinHint" min=minSkill}}</p>
+</div>

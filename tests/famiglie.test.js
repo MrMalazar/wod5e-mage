@@ -1,18 +1,19 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
+  alphabetical,
+  chosenCredoSpheres,
   CREDO_SPHERES,
   credoSphereBadges,
-  chosenCredoSpheres,
   credoSpheresFor,
-  isFreeCredo,
-  prepareCredoSphereChoices,
   FAMIGLIE,
   findFamiglia,
   findSottofamiglia,
   isBlankNote,
+  isFreeCredo,
   lineageSphereChanges,
   lineageSpheres,
+  prepareCredoSphereChoices,
   prepareLineageChoices
 } from "../scripts/famiglie.js";
 import { SPHERES } from "../scripts/spheres.js";
@@ -132,3 +133,17 @@ assert.deepEqual(credoSphereBadges("potere"), []);
 assert.deepEqual(credoSphereBadges(""), []);
 
 console.log("Famiglie tests passed.");
+
+// Le tendine dell'Appartenenza in ordine alfabetico (9/9): Famiglie dentro il loro gruppo, Sottofamiglie, e i Credi.
+{
+  const choices = prepareLineageChoices({ famiglia: "adepti", sottofamiglia: "" }, (key) => key, "it");
+  const labels = choices.groups.map((group) => group.famiglie.map((famiglia) => famiglia.label));
+  const collator = new Intl.Collator("it", { sensitivity: "base" });
+  for (const list of labels) assert.deepEqual(list, [...list].sort(collator.compare));
+  assert.equal(labels[0][0], "Adepti Virtuali");
+  assert.deepEqual(choices.sottofamiglie.map((sub) => sub.label), ["I Caotici", "I Naviganti", "L'Elite Mercuriale", "Le Sentinelle"]);
+  assert.deepEqual(alphabetical([{ label: "Età dell'Oro" }, { label: "Abbi Fede" }, { label: "Tutto è Dati" }], "it").map((row) => row.label), ["Abbi Fede", "Età dell'Oro", "Tutto è Dati"]);
+  const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+  assert.match(sheet, /context\.credos = alphabetical\(/);
+  assert.match(readFileSync(new URL("../scripts/focus.js", import.meta.url), "utf8"), /credos: alphabetical\(/);
+}

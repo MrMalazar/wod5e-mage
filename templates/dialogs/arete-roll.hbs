@@ -198,6 +198,32 @@
                 <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Quintessence"}} <small>{{localize "WOD5E_MAGE.Arete.QuintessenceShort" available=quintessence}}</small></span>
                 <input type="number" name="quintessence" id="wod5e-mage-arete-quintessence" class="wod5e-mage-arete-harmony" min="0" max="{{quintessence}}" step="1" value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Quintessence'}}" {{#unless quintessence}}disabled{{/unless}}>
             </div>
+
+            {{!-- La Convinzione rispettata (9/9): spuntata e scelta fra quelle in scheda,
+                 a tiro fatto un punto di Quintessenza risale sulla Ruota, una volta per scena. --}}
+            <div class="wod5e-mage-arete-conviction" title="{{localize 'WOD5E_MAGE.Arete.ConvictionHint'}}">
+                {{#if conviction.options.length}}
+                    <div data-role="convictionFresh" {{#if conviction.used}}hidden{{/if}}>
+                        <label class="wod5e-mage-arete-conviction-toggle">
+                            <input type="checkbox" name="conviction" id="wod5e-mage-arete-conviction">
+                            <span>{{localize "WOD5E_MAGE.Arete.Conviction"}} <small>{{localize "WOD5E_MAGE.Arete.ConvictionShort"}}</small></span>
+                        </label>
+                        <select name="convictionId" id="wod5e-mage-arete-conviction-id" class="hidden" aria-label="{{localize 'WOD5E_MAGE.Arete.ConvictionPick'}}">
+                            {{#each conviction.options as |option|}}
+                                <option value="{{option.id}}">{{option.label}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div data-role="convictionUsed" class="wod5e-mage-arete-conviction-used" {{#unless conviction.used}}hidden{{/unless}}>
+                        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Conviction"}}</span>
+                        <em>{{localize "WOD5E_MAGE.Arete.ConvictionUsed"}}</em>
+                        <button type="button" data-role="convictionReset" title="{{localize 'WOD5E_MAGE.Arete.ConvictionNewSceneHint'}}"><i class="fa-solid fa-clapperboard" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Arete.ConvictionNewScene"}}</button>
+                    </div>
+                {{else}}
+                    <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Conviction"}}</span>
+                    <em>{{localize "WOD5E_MAGE.Arete.ConvictionNone"}}</em>
+                {{/if}}
+            </div>
             {{/unless}}
             {{/if}}
 

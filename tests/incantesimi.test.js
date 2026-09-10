@@ -34,6 +34,18 @@ assert.equal(spell.effectKind, "variable");
 assert.equal(spell.prize, true);
 // Senza nome, il nome è l'Obiettivo.
 assert.equal(spellFromResult(actor, { ...result, spellName: "" }, { traits, rollSpheres }).name, "Riavvolgere il tempo nell'area");
+// Un effetto percettivo (tutte le Sfere al primo pallino) usa lo Strumento di Percepire (9/9), se c'è.
+{
+  const perceiver = {
+    getFlag: (_m, key) => key === "focus"
+      ? { credo: "dati", practiceForm: "", sphereInstruments: { time: { tool: "gestures", name: "Codici" }, percepire: { tool: "weapons", name: "Lente" } } }
+      : undefined
+  };
+  const perceptive = spellFromResult(perceiver, { ...result, "sphere-time": "1" }, { traits, rollSpheres, localize: (key) => key.split(".").pop() });
+  assert.deepEqual(perceptive.instruments, ["weapons (Lente)"]);
+  assert.deepEqual(spellFromResult(perceiver, result, { traits, rollSpheres, localize: (key) => key.split(".").pop() }).instruments, ["gestures (Codici)"]);
+  assert.deepEqual(spellFromResult(actor, { ...result, "sphere-time": "1" }, { traits, rollSpheres, localize: (key) => key.split(".").pop() }).instruments, ["gestures (Codici)"], "senza lo Strumento di Percepire restano quelli delle Sfere");
+}
 
 // La pagina: etichette pronte, ordine per sort e nome.
 const row = prepareIncantesimo("a", spell, (key) => key.split(".").pop());

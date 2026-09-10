@@ -9,9 +9,17 @@ import { prepareEssentialSkillList } from "./abilita-essenziali.js";
  */
 export const SPECIALTY_VALUE = 1;
 
+/** Una Specializzazione si prende dal terzo pallino dell'Abilità (verdetto di Blue, 9/9). */
+export const SPECIALTY_MIN_SKILL = 3;
+
 function skillList(actor, { localize, lang } = {}) {
   return prepareEssentialSkillList(actor.system?.sortedSkills, { localize, lang })
-    .map((skill) => ({ id: skill.id, label: String(skill.displayName ?? skill.id) }));
+    .map((skill) => ({ id: skill.id, label: String(skill.displayName ?? skill.id), value: Math.max(Math.trunc(Number(skill.value) || 0), 0) }));
+}
+
+/** Le Abilità che possono prendere una Specializzazione: quelle a tre pallini o più. */
+export function specialtySkillChoices(skills) {
+  return (skills ?? []).filter((skill) => (Number(skill.value) || 0) >= SPECIALTY_MIN_SKILL);
 }
 
 export function prepareSpecialties(actor, { localize = (key) => key, lang = "it" } = {}) {
@@ -65,10 +73,11 @@ export async function onSpecialtyAdd(event) {
   if (!canEditSpecialties(actor)) return;
 
   const localize = game.i18n.localize.bind(game.i18n);
-  const { skills } = prepareSpecialties(actor, { localize, lang: game.i18n.lang });
+  // Solo le Abilità dal terzo pallino in su (verdetto di Blue, 9/9).
+  const skills = specialtySkillChoices(prepareSpecialties(actor, { localize, lang: game.i18n.lang }).skills);
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/specialty-add.hbs",
-    { skills }
+    { skills, minSkill: SPECIALTY_MIN_SKILL }
   );
 
   const result = await foundry.applications.api.DialogV2.input({
