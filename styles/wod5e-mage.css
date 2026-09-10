@@ -7043,9 +7043,13 @@
   box-shadow: 0 0 4px var(--mage-oro, #d9a827);
 }
 
+/* Senza seconda lettura il tasto non si vede ma tiene il posto: le voci degli
+   Ambiti partono tutte dalla stessa verticale (10/9). */
 .wod5e-mage-arete-simple-dialog [hidden].wod5e-mage-arete-reading-switch,
 .wod5e-mage-arete-reading-switch[hidden] {
-  display: none !important;
+  display: inline-flex !important;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 /* Le Sfere in oro come gli Ambiti: i loro glifi sono neri (10/9). */
