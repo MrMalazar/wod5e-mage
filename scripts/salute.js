@@ -367,7 +367,9 @@ export async function onSaluteNewSession(event) {
     [`flags.${MODULE_ID}.salute`]: { ...saluteAfterSession(salute), extra: salute.extra },
     [`flags.${MODULE_ID}.contraccolpoNegato`]: false,
     // Nuova sessione, nuova scena: la Convinzione può rigenerare di nuovo (9/9).
-    [`flags.${MODULE_ID}.-=convinzioneScena`]: null
+    [`flags.${MODULE_ID}.-=convinzioneScena`]: null,
+    // Sforzare la realtà (10/9 sera): la prima volta della sessione torna gratis.
+    [`flags.${MODULE_ID}.-=sforziSessione`]: null
   };
 
   // La Ruota (6/9): a nuova sessione la Quintessenza sale della «Quintessenza

@@ -278,8 +278,9 @@ function paintReading(out, parts = [], index = 0) {
       piece.append(sub, " ");
     }
     piece.append(part.text ?? "");
-    // La nota: come esce il numero («Areté 3 +3»), al passaggio del mouse.
-    if (part.hint) piece.title = part.hint;
+    // La nota al passaggio del mouse: come esce il numero («Areté 3 +3»),
+    // oppure la voce per intero se la riga la taglia.
+    piece.title = part.hint || [part.sub, part.text].filter(Boolean).join(" ");
     nodes.push(piece);
   }
   text.replaceChildren(...nodes);
@@ -874,7 +875,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       },
       // Una finestra compatta: due colonne, niente muri di testo. Un passo: una colonna.
       position: {
-        width: step ? 540 : 800,
+        width: step ? 620 : 940,
         height: "auto"
       },
       content,

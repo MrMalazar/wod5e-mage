@@ -151,7 +151,10 @@
       "HarmonyShort": "dadi dagli altri Maghi",
       "ThresholdShort": "Soglia: il maggiore fra Sfera e Ambito, +1 con tre Sfere, tetto 7. Gli Ambiti oltre il primo danno +1 l'uno e superano il tetto. La Specialità sull'Ambito dà successi automatici pari all'Areté.",
       "ScopeTable": "La tavola degli Ambiti",
-      "Backlash": "CONTRACCOLPO: {eyes} occhi sui rossi. Ustione {burn}: segna {burn} danni sulla Salute.",
+      "BacklashLabel": "Contraccolpo",
+      "BacklashEyesOne": "un occhio sui rossi",
+      "BacklashEyes": "{eyes} occhi sui rossi",
+      "BacklashSign": "Ustione {burn}: segna {burn} danni sulla Salute.",
       "AutoSuccesses": "· Successi automatici: {successes}",
       "AutoSuccessesFlavor": "{successes} successi automatici (Areté, Specialità: {pairs})",
       "Goal": "Obiettivo",
@@ -939,6 +942,34 @@
       "Move": "Sposta il riquadro",
       "Resize": "Ridimensiona il riquadro"
     },
+    "Sforzo": {
+      "Label": "Sforzare la realtà",
+      "Title": "Sforzare la realtà",
+      "Button": "Sforza la realtà",
+      "Hint": "Successi mancanti: {missing}. L'incantesimo riesce, la Ruota sale di {missing} in Paradosso.",
+      "HintAgain": "Successi mancanti: {missing}. L'incantesimo riesce, la Ruota sale di {missing} in Paradosso, e questa volta costa anche un aggravato {damage}.",
+      "Ask": "Successi mancanti: {missing}. Sforzando la realtà l'incantesimo riesce, e la Ruota sale di {missing} in Paradosso, oltre a quello che il tiro ha già portato.",
+      "AskAgain": "È la volta numero {times} in questa sessione: costa anche un aggravato {damage}.",
+      "AskNote": "Il Contraccolpo dei rossi, se è scattato, resta.",
+      "Yes": "Sforza la realtà",
+      "No": "Lascia stare",
+      "Done": "successi mancanti {missing}, la Ruota sale di {paradox} in Paradosso.",
+      "DoneDamage": "Segnato un aggravato {damage}.",
+      "DoneWasted": "La Ruota era piena: {wasted} punti non sono entrati.",
+      "DamagePhysical": "fisico",
+      "DamageMental": "mentale"
+    },
+    "RollCard": {
+      "Successes": "Successi",
+      "Threshold": "Soglia",
+      "CountOne": "1 successo",
+      "CountMany": "{n} successi",
+      "Won": "Riuscito: {count} su {goal}",
+      "WonMargin": "Riuscito: {count} su {goal}, {margin} in più",
+      "Lost": "Fallito: {count} su {goal}, ne mancano {missing}",
+      "LostOne": "Fallito: {count} su {goal}, ne manca uno",
+      "Forced": "Riuscito sforzando la realtà: {count} su {goal}"
+    },
     "Burst": {
       "Title": "Scoppio del Paradosso",
       "Hint": "Scoppio: tira solo i rossi",
@@ -948,7 +979,14 @@
       "NoParadox": "La Ruota non ha Paradosso: niente da tirare.",
       "Flavor": "Scoppio: {dice} rossi, soglia {threshold}.",
       "Result": "SCOPPIO: {eyes} occhi. Ustione {total} ({aggravated} aggravati) segnata sulla Salute; la Ruota scarica {discharged}.",
-      "Applied": "Ustione segnata: {total} danni ({physical} fisici, {physicalAggravated} aggravati; {mental} mentali, {mentalAggravated} aggravati). La Ruota scarica {discharged}."
+      "Applied": "Ustione {total} segnata sulla Salute: {detail}. La Ruota scarica {discharged}.",
+      "Label": "Scoppio",
+      "Physical": "{n} fisici",
+      "PhysicalOne": "1 fisico",
+      "Mental": "{n} mentali",
+      "MentalOne": "1 mentale",
+      "Aggravated": "{n} aggravati",
+      "AggravatedOne": "1 aggravato"
     },
     "Volonta": {
       "Label": "Volontà",

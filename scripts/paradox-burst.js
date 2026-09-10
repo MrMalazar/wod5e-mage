@@ -71,12 +71,23 @@ export async function applyUstione(actor, { threshold = 0, tens = 0, kind = "", 
 
 /** La riga in chat: quanto è andato dove, e quanto ha scaricato la Ruota. */
 export function ustioneText(applied, format) {
+  // Solo le parti che ci sono: «3 fisici (1 aggravato), 2 mentali».
+  const parts = [];
+  const physical = applied.pa + applied.ps;
+  const mental = applied.ma + applied.ms;
+  if (physical > 0) {
+    let text = physical === 1 ? format("WOD5E_MAGE.Burst.PhysicalOne", { n: physical }) : format("WOD5E_MAGE.Burst.Physical", { n: physical });
+    if (applied.pa > 0) text += ` (${applied.pa === 1 ? format("WOD5E_MAGE.Burst.AggravatedOne", { n: applied.pa }) : format("WOD5E_MAGE.Burst.Aggravated", { n: applied.pa })})`;
+    parts.push(text);
+  }
+  if (mental > 0) {
+    let text = mental === 1 ? format("WOD5E_MAGE.Burst.MentalOne", { n: mental }) : format("WOD5E_MAGE.Burst.Mental", { n: mental });
+    if (applied.ma > 0) text += ` (${applied.ma === 1 ? format("WOD5E_MAGE.Burst.AggravatedOne", { n: applied.ma }) : format("WOD5E_MAGE.Burst.Aggravated", { n: applied.ma })})`;
+    parts.push(text);
+  }
   return format("WOD5E_MAGE.Burst.Applied", {
     total: applied.applied,
-    physical: applied.pa + applied.ps,
-    physicalAggravated: applied.pa,
-    mental: applied.ma + applied.ms,
-    mentalAggravated: applied.ma,
+    detail: parts.join(", "),
     discharged: applied.discharged
   });
 }

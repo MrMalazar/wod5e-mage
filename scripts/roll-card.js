@@ -82,6 +82,20 @@ export function renderRollNote(text, kind = "") {
 }
 
 /**
+ * La nota del Contraccolpo (o dello Scoppio), leggibile (10/9 sera): il nome
+ * in rosso, il testo in chiaro, una riga sola.
+ */
+export function renderBacklashNote(label, text) {
+  return `<p class="wod5e-mage-roll-note wod5e-mage-roll-note-backlash"><b class="wod5e-mage-roll-backlash-label">${escapeHtml(label)}</b> <span class="wod5e-mage-roll-backlash-text">${escapeHtml(text)}</span></p>`;
+}
+
+/** «1 successo», «3 successi». */
+export function successCount(count, format = (key, data) => `${data?.n ?? ""} ${key}`) {
+  const n = Math.max(Math.trunc(Number(count) || 0), 0);
+  return n === 1 ? format("WOD5E_MAGE.RollCard.CountOne", { n }) : format("WOD5E_MAGE.RollCard.CountMany", { n });
+}
+
+/**
  * Le righe del conto: riserva, soglia e tipo, Sfere, Ambiti. Ogni voce
  * sulla sua riga, il nome in oro.
  */
@@ -145,22 +159,42 @@ export function renderAutoVictoryContent({ symbols, card, notes = [] }, localize
  * Il conto del Mago in chat (4/9 notte): il sistema somma i dadi a modo
  * suo; il tiro di Areté conta le coppie di dieci solo fra i dadi Mage e
  * aggiunge i successi automatici delle Specialità. La carta porta il totale
- * vero e la soglia, e qui si riscrivono numero ed esito.
+ * vero e la soglia, e qui si riscrivono numero ed esito. L'esito parla
+ * chiaro (10/9 sera): «Riuscito: 5 successi su 5», «Fallito: 3 successi su
+ * 6, ne mancano 3»; con la realtà sforzata, riuscito lo stesso.
  */
-export function rollOutcome(total, difficulty, format = (key, data) => `${key} ${data?.string ?? ""}`) {
+export function rollOutcome(total, difficulty, format = (key, data) => `${key} ${JSON.stringify(data ?? {})}`, { forced = false } = {}) {
   const successes = Math.max(Math.trunc(Number(total) || 0), 0);
   const goal = Math.max(Math.trunc(Number(difficulty) || 0), 0);
   if (goal <= 0) return { total: successes, cssClass: "", text: "" };
-  return successes >= goal
-    ? { total: successes, cssClass: "success", text: format("WOD5E.RollList.SuccessBy", { string: successes - goal }) }
-    : { total: successes, cssClass: "failure", text: format("WOD5E.RollList.FailureBy", { string: goal - successes }) };
+  const count = successCount(successes, format);
+  if (forced) return { total: successes, cssClass: "success", text: format("WOD5E_MAGE.RollCard.Forced", { count, goal }) };
+  if (successes >= goal) {
+    const margin = successes - goal;
+    return {
+      total: successes,
+      cssClass: "success",
+      text: margin > 0 ? format("WOD5E_MAGE.RollCard.WonMargin", { count, goal, margin }) : format("WOD5E_MAGE.RollCard.Won", { count, goal })
+    };
+  }
+  const missing = goal - successes;
+  return {
+    total: successes,
+    cssClass: "failure",
+    text: missing === 1 ? format("WOD5E_MAGE.RollCard.LostOne", { count, goal }) : format("WOD5E_MAGE.RollCard.Lost", { count, goal, missing })
+  };
 }
 
 function applyMageTotal(html, data) {
   if (!Number.isFinite(Number(data.total))) return;
-  const outcome = rollOutcome(data.total, data.difficulty, game.i18n.format.bind(game.i18n));
+  const outcome = rollOutcome(data.total, data.difficulty, game.i18n.format.bind(game.i18n), { forced: Boolean(data.forced) });
   const totalOut = html.querySelector(".total-contents");
   if (totalOut) totalOut.textContent = String(outcome.total);
+  // I titoli del conto in parole del Mago: Successi e Soglia, non Totale e Difficoltà.
+  const totalTitle = html.querySelector(".total-title");
+  if (totalTitle) totalTitle.textContent = game.i18n.localize("WOD5E_MAGE.RollCard.Successes");
+  const difficultyTitle = html.querySelector(".difficulty-title");
+  if (difficultyTitle) difficultyTitle.textContent = game.i18n.localize("WOD5E_MAGE.RollCard.Threshold");
   const label = html.querySelector(".roll-result-label");
   if (label && outcome.text) {
     label.classList.remove("success", "failure");

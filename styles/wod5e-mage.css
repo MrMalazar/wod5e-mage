@@ -1749,10 +1749,22 @@
   font-style: italic;
 }
 
+/* Il Contraccolpo (10/9 sera): il nome in rosso, il testo in bianco sporco di rosso. */
 .wod5e-mage-roll-note-backlash {
-  color: #e05a5a;
+  color: #f1dcd8;
   font-style: normal;
+  font-weight: 400;
+}
+
+.wod5e-mage-roll-backlash-label {
+  color: #e05a5a;
   font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-roll-backlash-label::after {
+  content: ":";
 }
 
 .wod5e-mage-roll-note-onestep {
@@ -5749,6 +5761,55 @@
   padding-top: 0.35rem;
 }
 
+/* Sforzare la realtà (10/9 sera): il tasto sotto il tiro fallito, dopo la Volontà. */
+.wod5e-mage-sforzo {
+  align-items: center;
+  border-top: 1px solid rgb(152 119 43 / 45%);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  padding-top: 0.35rem;
+}
+
+.wod5e-mage-sforzo-label {
+  color: #e05a5a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-right: 0.2rem;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-sforzo > button {
+  background: rgb(224 90 90 / 12%);
+  border: 1px solid #b5433c;
+  border-radius: 3px;
+  color: #f1dcd8;
+  cursor: pointer;
+  flex: none;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  margin: 0;
+  min-height: 0;
+  padding: 0.2rem 0.55rem;
+  width: auto;
+}
+
+.wod5e-mage-sforzo > button:hover {
+  border-color: #e05a5a;
+  box-shadow: 0 0 4px #e05a5a;
+}
+
+.wod5e-mage-roll-note-sforzo {
+  color: #f1dcd8;
+  font-style: normal;
+}
+
+.wod5e-mage-sforzo-ask p {
+  margin: 0 0 0.5rem;
+}
+
 .wod5e-mage-volonta-label {
   color: #d9a827;
   font-size: 0.72rem;
@@ -7138,6 +7199,128 @@
 .wod5e-mage-arete-body .wod5e-mage-arete-maintained > input[type="text"]:not(.hidden) {
   margin-top: 0;
   width: 100%;
+}
+
+/* ==========================================================================
+   Il dialogo dell'Areté, terzo giro (10/9 sera): «un unico colore rende
+   tutto piatto». I titoli di sezione in MAIUSCOLO (stesso carattere, un po'
+   più piccolo, spaziato), le voci in un oro più chiaro, aria sotto i
+   titoli; tendine e numeri sul fondo scuro come l'Obiettivo; il dialogo
+   pieno più largo, così le voci degli Ambiti stanno su una riga.
+   ========================================================================== */
+.wod5e-mage-arete-body {
+  --mage-arete-titolo: var(--mage-oro, #d9a827);
+  --mage-arete-voce: #ecc763;
+}
+
+/* I titoli: Effetto, Obiettivo, Sfere Effetto, Ambiti, Attributo, Abilità, Tipologia, Narrativa. */
+.application.wod5e-mage.wod5e-mage-roll-dialog .wod5e-mage-arete-body .wod5e-mage-arete-row-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-row-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-dots-head,
+.wod5e-mage-arete-body .wod5e-mage-arete-carry-goal > b {
+  color: var(--mage-arete-titolo);
+  font-size: 0.86em;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* Le voci: le Sfere, gli Ambiti, le loro letture, le caselle della Tipologia e del conto. */
+.wod5e-mage-arete-body .wod5e-mage-arete-dot-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-dotrow.chosen > .wod5e-mage-arete-dot-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-dot-reading,
+.wod5e-mage-arete-body .wod5e-mage-arete-reading-sub,
+.wod5e-mage-arete-body .wod5e-mage-arete-specialty,
+.wod5e-mage-arete-body .wod5e-mage-arete-type > span,
+.wod5e-mage-arete-body .wod5e-mage-arete-maintained-toggle,
+.wod5e-mage-arete-body .wod5e-mage-arete-conviction-toggle,
+.wod5e-mage-arete-body .wod5e-mage-arete-conviction em,
+.wod5e-mage-arete-body .wod5e-mage-arete-toggle-value,
+.wod5e-mage-arete-body .wod5e-mage-arete-carry-goal,
+.wod5e-mage-arete-body .wod5e-mage-arete-conto-row > .wod5e-mage-arete-row-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-conviction-used > .wod5e-mage-arete-row-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-prize > .wod5e-mage-arete-row-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-reading-switch {
+  color: var(--mage-arete-voce);
+}
+
+.application.wod5e-mage.wod5e-mage-roll-dialog .wod5e-mage-arete-body .wod5e-mage-arete-conto-row > .wod5e-mage-arete-row-label,
+.application.wod5e-mage.wod5e-mage-roll-dialog .wod5e-mage-arete-body .wod5e-mage-arete-conviction-used > .wod5e-mage-arete-row-label,
+.application.wod5e-mage.wod5e-mage-roll-dialog .wod5e-mage-arete-body .wod5e-mage-arete-prize > .wod5e-mage-arete-row-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-conto-row > .wod5e-mage-arete-row-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-conviction-used > .wod5e-mage-arete-row-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-prize > .wod5e-mage-arete-row-label {
+  color: var(--mage-arete-voce);
+  font-size: 1em;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Il conto: riserva e soglia restano nell'oro dei titoli, i numeri più grandi. */
+.wod5e-mage-arete-body .wod5e-mage-arete-difficulty {
+  color: var(--mage-arete-titolo);
+}
+
+/* Aria fra il titolo e il contenuto. */
+.wod5e-mage-arete-body .wod5e-mage-arete-dots-head {
+  padding-bottom: 0.3rem;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-scopes-head {
+  margin-top: 1.1rem;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-goal-box > .wod5e-mage-arete-row-label,
+.wod5e-mage-arete-body .wod5e-mage-arete-narrative > .wod5e-mage-arete-row-label {
+  margin-bottom: 0.35rem;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-types {
+  gap: 0.8rem;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-side > hr {
+  margin: 0.4rem 0;
+}
+
+/* Tendine e numeri sul fondo scuro, come l'Obiettivo (verdetto di Blue, 10/9 sera). */
+.wod5e-mage-arete-body select,
+.wod5e-mage-arete-body input[type="number"] {
+  --input-text-color: var(--mage-arete-voce);
+  background: var(--mage-incavo, #15130f);
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  color: var(--mage-arete-voce);
+}
+
+.wod5e-mage-arete-body select option {
+  background: var(--mage-incavo, #15130f);
+  color: var(--mage-arete-voce);
+}
+
+.wod5e-mage-arete-body select:focus,
+.wod5e-mage-arete-body input[type="number"]:focus {
+  border-color: var(--mage-oro, #d9a827);
+  box-shadow: 0 0 4px var(--mage-oro, #d9a827);
+}
+
+.wod5e-mage-arete-body input[type="number"]:disabled {
+  opacity: 0.45;
+}
+
+/* Le voci degli Ambiti su una riga sola: la colonna sinistra del dialogo
+   pieno è più larga (la finestra è a 940), e la lettura non va a capo. */
+.wod5e-mage-arete-body .wod5e-mage-arete-layout:not(.wod5e-mage-arete-simple) {
+  grid-template-columns: minmax(540px, 1.5fr) minmax(270px, 0.8fr);
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-dot-reading > [data-role="readingText"] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-reading-part {
+  white-space: nowrap;
 }
 
 /* ==========================================================================

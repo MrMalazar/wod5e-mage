@@ -229,7 +229,7 @@ assert.deepEqual(editableActor.lastUpdate, {
   assert.match(dialog, /data-role="dotReading"[^>]*><button type="button" class="wod5e-mage-arete-reading-switch" data-role="readingSwitch"[^>]*hidden>[\s\S]*?<\/button><span data-role="readingText"><\/span><\/span>/);
   const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
   assert.match(arete, /dotReadings\(localize, \{ arete: arete\.value \}\)/);
-  assert.match(arete, /if \(part\.hint\) piece\.title = part\.hint;/);
+  assert.match(arete, /piece\.title = part\.hint || \[part\.sub, part\.text\]\.filter\(Boolean\)\.join\(" "\);/);
 }
 
 console.log("Scopes and ongoing Magick tests passed.");

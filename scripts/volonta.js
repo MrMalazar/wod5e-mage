@@ -58,8 +58,8 @@ export function systemTotal(basicResults = [], advancedResults = []) {
  * senza soglia, dove decide il giocatore), una volta sola; il ritiro vale
  * solo se c'è almeno un dado da ritirare.
  */
-export function volontaState({ total = 0, difficulty = 0, failedCount = 0, used = null, burst = false } = {}) {
-  if (used || burst) return { show: false, options: [] };
+export function volontaState({ total = 0, difficulty = 0, failedCount = 0, used = null, burst = false, forced = false } = {}) {
+  if (used || burst || forced) return { show: false, options: [] };
   const goal = Math.max(Math.trunc(Number(difficulty) || 0), 0);
   const failed = goal > 0 && Math.max(Math.trunc(Number(total) || 0), 0) < goal;
   if (goal > 0 && !failed) return { show: false, options: [] };
@@ -120,7 +120,8 @@ export function decorateVolonta(message, html) {
   const actor = speakerActor(message);
   if (!isMageActor(actor) || !actor.isOwner) return false;
   const card = message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG) ?? {};
-  if (card.automatic || card.burst || card.burstResult) return false;
+  // Vittoria automatica, Scoppio, o realtà già sforzata (10/9 sera): niente da ritirare.
+  if (card.automatic || card.burst || card.burstResult || card.forced) return false;
 
   const { basic, advanced } = diceTerms(roll);
   if (!basic) return false;

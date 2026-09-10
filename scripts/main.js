@@ -7,6 +7,7 @@ import { registerRollCardRendering } from "./roll-card.js";
 import { assignCondizione, listCondizioni, openCondizioniMaster, selectedActors } from "./condizioni-master.js";
 import { findCondizione } from "./condizioni.js";
 import { registerVolonta } from "./volonta.js";
+import { registerSforzo } from "./sforzo.js";
 import { registerGrimorioComune } from "./grimorio-comune.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 
@@ -142,6 +143,8 @@ Hooks.once("init", () => {
   registerMageDiceRendering();
   registerRollCardRendering();
   registerVolonta();
+  // Sforzare la realtà (10/9 sera): il tasto sotto il tiro fallito, dopo la Volontà.
+  registerSforzo();
   registerGrimorioComune();
   registerLineageSpheres();
   registerParadoxDice();

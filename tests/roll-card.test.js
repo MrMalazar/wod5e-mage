@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
+  renderBacklashNote,
+  successCount,
   renderAutoVictoryBanner,
   renderAutoVictoryContent,
   renderRollCard,
@@ -80,7 +82,11 @@ assert.match(arete, /renderAutoVictoryContent/);
 assert.doesNotMatch(arete, /Arete\.RollFlavor|Arete\.SpherePlan|Arete\.ScopePlan/);
 const paradox = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8");
 assert.match(paradox, /\[ROLL_CARD_FLAG\]: card/);
-assert.match(paradox, /renderRollNote\(game\.i18n\.format\("WOD5E_MAGE\.Arete\.Backlash"/);
+// Il Contraccolpo in una riga sola (10/9 sera): il nome in rosso, il testo in chiaro; l'Ustione scritta una volta.
+assert.match(paradox, /renderBacklashNote\(label, body\)/);
+assert.doesNotMatch(paradox, /Arete\.Backlash"/);
+assert.match(paradox, /effectKind: effectKind \?\? ""/);
+assert.match(renderBacklashNote("Contraccolpo", "un occhio sui rossi: Ustione 5"), /^<p class="wod5e-mage-roll-note wod5e-mage-roll-note-backlash"><b class="wod5e-mage-roll-backlash-label">Contraccolpo<\/b> <span class="wod5e-mage-roll-backlash-text">un occhio sui rossi: Ustione 5<\/span><\/p>$/);
 const main = readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8");
 assert.match(main, /registerRollCardRendering\(\)/);
 for (const lang of ["it", "en"]) {
@@ -109,9 +115,22 @@ assert.match(css, /\.wod5e-mage-roll-victory\s*\{[^}]*text-transform:\s*uppercas
 
 console.log("Roll card tests passed.");
 
-// Il conto del Mago in chat: totale vero (successi automatici compresi) contro la soglia.
-const fmt = (key, data) => `${key.split(".").pop()} ${data.string}`;
-assert.deepEqual(rollOutcome(5, 3, fmt), { total: 5, cssClass: "success", text: "SuccessBy 2" });
-assert.deepEqual(rollOutcome(2, 3, fmt), { total: 2, cssClass: "failure", text: "FailureBy 1" });
+// Il conto del Mago in chat: totale vero (successi automatici compresi) contro la soglia,
+// e l'esito in parole chiare (10/9 sera): riuscito o fallito, quanti su quanti, cosa manca.
+const fmt = (key, data = {}) => key.split(".").reduce((o, k) => (o && typeof o === "object" ? o[k] : undefined), it).replace(/\{(\w+)\}/g, (_, k) => String(data[k]));
+assert.equal(successCount(1, fmt), "1 successo");
+assert.equal(successCount(3, fmt), "3 successi");
+assert.deepEqual(rollOutcome(5, 3, fmt), { total: 5, cssClass: "success", text: "Riuscito: 5 successi su 3, 2 in più" });
+assert.deepEqual(rollOutcome(5, 5, fmt), { total: 5, cssClass: "success", text: "Riuscito: 5 successi su 5" });
+assert.deepEqual(rollOutcome(2, 3, fmt), { total: 2, cssClass: "failure", text: "Fallito: 2 successi su 3, ne manca uno" });
+assert.deepEqual(rollOutcome(3, 6, fmt), { total: 3, cssClass: "failure", text: "Fallito: 3 successi su 6, ne mancano 3" });
+assert.deepEqual(rollOutcome(3, 6, fmt, { forced: true }), { total: 3, cssClass: "success", text: "Riuscito sforzando la realtà: 3 successi su 6" });
 assert.deepEqual(rollOutcome(4, 0, fmt), { total: 4, cssClass: "", text: "" });
+for (const lang of ["it", "en"]) {
+  const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
+  for (const key of ["Successes", "Threshold", "CountOne", "CountMany", "Won", "WonMargin", "Lost", "LostOne", "Forced"]) assert.equal(typeof strings.WOD5E_MAGE.RollCard[key], "string", `${lang} ${key}`);
+  for (const key of ["BacklashLabel", "BacklashEyesOne", "BacklashEyes", "BacklashSign"]) assert.equal(typeof strings.WOD5E_MAGE.Arete[key], "string", `${lang} ${key}`);
+  for (const key of ["Label", "Physical", "PhysicalOne", "Mental", "MentalOne", "Aggravated", "AggravatedOne"]) assert.equal(typeof strings.WOD5E_MAGE.Burst[key], "string", `${lang} ${key}`);
+}
+assert.match(readFileSync(new URL("../scripts/roll-card.js", import.meta.url), "utf8"), /totalTitle\.textContent = game\.i18n\.localize\("WOD5E_MAGE\.RollCard\.Successes"\)/);
 assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /total: roll\._total, difficulty, autoSuccesses/);

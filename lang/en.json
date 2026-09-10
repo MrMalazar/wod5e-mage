@@ -151,7 +151,10 @@
       "HarmonyShort": "dice from other Mages",
       "ThresholdShort": "Threshold: the higher of Sphere and Scope, +1 with three Spheres, cap 7. Scopes beyond the first add +1 each and go past the cap.",
       "ScopeTable": "The Scopes table",
-      "Backlash": "BACKLASH: {eyes} eyes on the red dice. Burn {burn}: mark {burn} damage on Health.",
+      "BacklashLabel": "Backlash",
+      "BacklashEyesOne": "one eye on the red dice",
+      "BacklashEyes": "{eyes} eyes on the red dice",
+      "BacklashSign": "Burn {burn}: mark {burn} damage on Health.",
       "AutoSuccesses": "· Automatic successes: {successes}",
       "AutoSuccessesFlavor": "{successes} automatic successes (Arete, Specialty: {pairs})",
       "Goal": "Goal",
@@ -939,6 +942,34 @@
       "Move": "Move the box",
       "Resize": "Resize the box"
     },
+    "Sforzo": {
+      "Label": "Force reality",
+      "Title": "Force reality",
+      "Button": "Force reality",
+      "Hint": "Successes missing: {missing}. The spell succeeds, the Wheel gains {missing} Paradox.",
+      "HintAgain": "Successes missing: {missing}. The spell succeeds, the Wheel gains {missing} Paradox, and this time it also costs one {damage} aggravated.",
+      "Ask": "Successes missing: {missing}. Forcing reality the spell succeeds, and the Wheel gains {missing} Paradox on top of what the roll already brought.",
+      "AskAgain": "This is time number {times} this session: it also costs one {damage} aggravated.",
+      "AskNote": "The Backlash of the red dice, if it struck, stays.",
+      "Yes": "Force reality",
+      "No": "Let it be",
+      "Done": "successes missing {missing}, the Wheel gains {paradox} Paradox.",
+      "DoneDamage": "One {damage} aggravated marked.",
+      "DoneWasted": "The Wheel was full: {wasted} points did not enter.",
+      "DamagePhysical": "physical",
+      "DamageMental": "mental"
+    },
+    "RollCard": {
+      "Successes": "Successes",
+      "Threshold": "Threshold",
+      "CountOne": "1 success",
+      "CountMany": "{n} successes",
+      "Won": "Success: {count} against {goal}",
+      "WonMargin": "Success: {count} against {goal}, {margin} to spare",
+      "Lost": "Failure: {count} against {goal}, {missing} short",
+      "LostOne": "Failure: {count} against {goal}, one short",
+      "Forced": "Success by forcing reality: {count} against {goal}"
+    },
     "Burst": {
       "Title": "Paradox Burst",
       "Hint": "Burst: roll the red dice only",
@@ -948,7 +979,14 @@
       "NoParadox": "The Wheel holds no Paradox: nothing to roll.",
       "Flavor": "Burst: {dice} reds, threshold {threshold}.",
       "Result": "BURST: {eyes} eyes. Burn {total} ({aggravated} aggravated) marked on Health; the Wheel discharges {discharged}.",
-      "Applied": "Burn marked: {total} damage ({physical} physical, {physicalAggravated} aggravated; {mental} mental, {mentalAggravated} aggravated). The Wheel discharges {discharged}."
+      "Applied": "Burn {total} marked on Health: {detail}. The Wheel discharges {discharged}.",
+      "Label": "Burst",
+      "Physical": "{n} physical",
+      "PhysicalOne": "1 physical",
+      "Mental": "{n} mental",
+      "MentalOne": "1 mental",
+      "Aggravated": "{n} aggravated",
+      "AggravatedOne": "1 aggravated"
     },
     "Volonta": {
       "Label": "Willpower",

@@ -13,7 +13,7 @@ import {
 import { bonusDiceExcess, isOneStepShort } from "./arete.js";
 import { applyUstione, ustioneText } from "./paradox-burst.js";
 import { MODULE_ID } from "./constants.js";
-import { renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
+import { renderBacklashNote, renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
 import {
   getParadoxDieResult,
   getParadoxDieImage,
@@ -318,24 +318,31 @@ export async function rollAreteWithParadox({
           const redResults = roll.advancedDice?.results ?? [];
           const eyes = countParadoxEyes(redResults);
           if (eyes > 0) {
-            finalFlavor += renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.Backlash", { eyes, burn }), "backlash");
-            // L'Ustione si segna da sola (6/9): fisica, mentale o metà e metà
-            // secondo l'Effetto dichiarato; ogni due 10 un punto aggravato; la
-            // Ruota scarica un punto per danno.
+            // Una riga sola, leggibile (10/9 sera): il nome in rosso, poi gli
+            // occhi e l'Ustione. L'Ustione si segna da sola (6/9): fisica,
+            // mentale o metà e metà secondo l'Effetto dichiarato; ogni due 10
+            // un punto aggravato; la Ruota scarica un punto per danno.
+            const format = game.i18n.format.bind(game.i18n);
+            const eyesText = eyes === 1
+              ? game.i18n.localize("WOD5E_MAGE.Arete.BacklashEyesOne")
+              : format("WOD5E_MAGE.Arete.BacklashEyes", { eyes });
+            let body = `${eyesText}. ${format("WOD5E_MAGE.Arete.BacklashSign", { burn })}`;
             if (applyBurn && actor?.isOwner && burn > 0) {
               const tens = redResults
                 .filter((result) => result?.active !== false && !result?.discarded)
                 .filter((result) => Number(result.result) === 10).length;
               const applied = await applyUstione(actor, { threshold: burn, tens, kind: effectKind });
-              finalFlavor += renderRollNote(ustioneText(applied, game.i18n.format.bind(game.i18n)), "backlash");
+              body = `${eyesText}: ${ustioneText(applied, format)}`;
             }
+            const label = game.i18n.localize(onlyParadox ? "WOD5E_MAGE.Burst.Label" : "WOD5E_MAGE.Arete.BacklashLabel");
+            finalFlavor += renderBacklashNote(label, body);
           }
           roll.options.flavor = finalFlavor;
 
           // La bandiera dice al disegno della chat cosa mettere sopra i dadi,
           // e il totale vero del Mago (coppie solo fra i dadi Mage, più i
           // successi automatici) con la soglia, per riscrivere numero ed esito.
-          const cardData = { ...(card ?? {}), total: roll._total, difficulty, autoSuccesses };
+          const cardData = { ...(card ?? {}), total: roll._total, difficulty, autoSuccesses, effectKind: effectKind ?? "" };
           const flags = { [MODULE_ID]: { [ROLL_CARD_FLAG]: cardData } };
           return roll.toMessage(
             { speaker: ChatMessage.getSpeaker({ actor }), flags },
