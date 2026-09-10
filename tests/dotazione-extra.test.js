@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import {
   BELONGING_KINDS,
   BELONGING_TABLES,
+  belongingArchivioTable,
   onBelongingAdd,
   onBelongingDelete,
   prepareBelongings
@@ -226,3 +227,10 @@ const headerTemplate = readFileSync(new URL("../templates/actor/mage-header.hbs"
 assert.match(headerTemplate, /wod5e-mage-names[\s\S]*name-field[\s\S]*wod5e-mage-player-field/);
 
 console.log("Dotazione extra, Personaggio e sigilli dei tratti: test passati.");
+
+// Il libro degli Elementi (10/9) vale per le due tavole, non per gli Altri oggetti.
+assert.equal(belongingArchivioTable({ dataset: { table: "sharedBelongings" } }), "sharedBelongings");
+assert.equal(belongingArchivioTable({ dataset: { table: "storyBelongings" } }), "storyBelongings");
+assert.equal(belongingArchivioTable({ dataset: { table: "altriOggetti" } }), null);
+assert.equal(belongingArchivioTable({ dataset: { table: "altro" } }), null);
+console.log("Libro degli Elementi: test passati.");

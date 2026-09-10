@@ -93,11 +93,18 @@ for (const lang of ["it", "en"]) {
 const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
 assert.match(dialog, /data-kind="sphere"[^>]*>\s*<img class="wod5e-mage-arete-row-icon" src="\{\{sphere\.icon\}\}"/);
 assert.match(dialog, /data-kind="scope"[^>]*>\s*<i class="wod5e-mage-arete-row-icon \{\{scope\.faIcon\}\}"/);
-assert.match(dialog, /wod5e-mage-arete-row-label-full">\{\{localize "WOD5E_MAGE\.Arete\.Prize"\}\}/);
+// Il conto (10/9): la casella col suo +N a sinistra, il nome a destra.
+assert.match(dialog, /name="prize"[^>]*>\s*<span class="wod5e-mage-arete-toggle-value">\+\{\{prize\.dice\}\}<\/span>\s*<\/span>\s*<span class="wod5e-mage-arete-row-label">\{\{localize "WOD5E_MAGE\.Arete\.Prize"\}\}/);
+assert.doesNotMatch(dialog, /wod5e-mage-arete-row-label-full/);
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
 assert.match(css, /\.wod5e-mage-arete-dots-column\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*18px max-content max-content minmax\(0, 1fr\);/s);
 assert.match(css, /\.wod5e-mage-arete-dotrow\s*\{[^}]*display:\s*contents;/s);
-assert.match(css, /\.wod5e-mage-arete-prize,\s*\.wod5e-mage-arete-harmony-row\s*\{[^}]*justify-content:\s*space-between;/s);
+assert.match(css, /\.wod5e-mage-arete-body \.wod5e-mage-arete-conto-row\s*\{[^}]*grid-template-columns: 4rem minmax\(0, 1fr\);/s);
+// Le Sfere in oro come gli Ambiti; l'Obiettivo sul fondo scuro; tutto nell'oro dei titoli.
+assert.match(css, /\.wod5e-mage-arete-body img\.wod5e-mage-arete-row-icon\s*\{[^}]*filter: brightness\(0\) invert\(93%\)/s);
+assert.match(css, /\.wod5e-mage-arete-body \.wod5e-mage-arete-goal-box > textarea,[^{]*\{[^}]*background: var\(--mage-incavo, #15130f\);/s);
+assert.match(css, /\.wod5e-mage-arete-body\s*\{[^}]*color: var\(--mage-oro, #d9a827\);/s);
+assert.doesNotMatch(css.slice(css.indexOf("Il dialogo dell'Areté riletto con Blue")), /--mage-oro-chiaro/);
 assert.match(css, /\.wod5e-mage-roll-victory\s*\{[^}]*text-transform:\s*uppercase;/s);
 
 console.log("Roll card tests passed.");

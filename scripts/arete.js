@@ -278,6 +278,8 @@ function paintReading(out, parts = [], index = 0) {
       piece.append(sub, " ");
     }
     piece.append(part.text ?? "");
+    // La nota: come esce il numero («Areté 3 +3»), al passaggio del mouse.
+    if (part.hint) piece.title = part.hint;
     nodes.push(piece);
   }
   text.replaceChildren(...nodes);
@@ -288,10 +290,11 @@ function paintReading(out, parts = [], index = 0) {
 /**
  * Le letture per il dialogo: le Sfere dicono il nome del livello
  * (Percepire, Ritoccare, Alterare, Dominare, Rivoluzionare), gli Ambiti la
- * voce della tavola. Torna una funzione (kind, id, level) → parti.
+ * voce della tavola; con l'Areté del personaggio i Danni della Potenza sono
+ * già sommati (10/9). Torna una funzione (kind, id, level) → parti.
  */
-export function dotReadings(localize = (key) => key) {
-  const scopes = scopeReadings(localize);
+export function dotReadings(localize = (key) => key, { arete = null } = {}) {
+  const scopes = scopeReadings(localize, { arete });
   const spheres = INFLUENCE_LABELS.slice(1).map((key) => String(localize(key)));
   return (kind, id, level) => {
     if (level <= 0) return [];
@@ -850,7 +853,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   const quintessenceAvailable = getMagickBalance(actor).quintessence;
   const sphereLevelsOwned = Object.fromEntries(rollSpheres.map((sphere) => [sphere.id, sphere.value]));
   const localize = game.i18n.localize.bind(game.i18n);
-  const readingFor = dotReadings(localize);
+  const readingFor = dotReadings(localize, { arete: arete.value });
   // La Convinzione rispettata (9/9): le Convinzioni della scheda, e se è già stata usata in scena.
   const conviction = prepareConvictionChoice(actor);
   const base = { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, preset, conviction, ...traits };

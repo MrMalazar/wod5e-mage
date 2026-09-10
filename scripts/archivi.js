@@ -57,6 +57,26 @@ export function rowFromEntry(kind, entry) {
   return null;
 }
 
+/**
+ * Gli Elementi in comune e di Storia (10/9): dal libro accanto al + si sceglie
+ * dall'archivio dei Background, dei Pregi o dei Difetti, e la voce diventa una
+ * riga tipo · nome · livello, senza scriverla a mano. Il livello è quello del
+ * filtro se la voce lo ha, altrimenti il più basso del suo costo.
+ */
+export const BELONGING_ARCHIVI = Object.freeze(["background", "pregio", "difetto"]);
+export const BELONGING_KIND_BY_ARCHIVIO = Object.freeze({ background: "background", pregio: "advantage", difetto: "flaw" });
+
+export function belongingRowFromEntry(kind, entry, { name = "", level = 0 } = {}) {
+  const levels = costLevels(entry?.cost, entry?.points);
+  const wanted = Math.trunc(Number(level) || 0);
+  const value = wanted > 0 && levels.includes(wanted) ? wanted : (levels[0] ?? 1);
+  return {
+    kind: BELONGING_KIND_BY_ARCHIVIO[kind] ?? "",
+    name: String(name || entry?.name || ""),
+    value: Math.min(Math.max(Math.trunc(Number(value) || 0), 0), 5)
+  };
+}
+
 /** Il gruppo dell'archivio («Morte», «Tutto è Arte») nella chiave della tendina. */
 export function convictionGroupId(entry) {
   if (entry.credo) return String(entry.credo);
@@ -195,9 +215,26 @@ export async function loadArchivio(kind) {
 }
 
 /** Mette la voce sulla scheda: oggetto, Credo, testo accodato o riga nuova. */
-export async function addFromArchivio(actor, kind, entry) {
+export async function addFromArchivio(actor, kind, entry, { table = "", level = 0 } = {}) {
   const config = ARCHIVI[archivioKind(kind)];
   if (!config || !canEdit(actor)) return false;
+
+  if (table) {
+    // Gli Elementi in comune e di Storia (10/9): una riga tipo · nome · livello.
+    if (!BELONGING_ARCHIVI.includes(kind)) return false;
+    let name = entry.name;
+    if (kind === "background") {
+      const notes = await askBackgroundNotes(entry);
+      if (!notes) return false;
+      name = backgroundItemData(entry, notes).name;
+    }
+    const rows = { ...(actor.getFlag(MODULE_ID, table) ?? {}) };
+    let rowId = foundry.utils.randomID();
+    while (rows[rowId]) rowId = foundry.utils.randomID();
+    rows[rowId] = belongingRowFromEntry(kind, entry, { name, level });
+    await actor.setFlag(MODULE_ID, table, rows);
+    return true;
+  }
 
   if (config.add === "item" && kind === "condizione") {
     // La Condizione nasce dai dati del modulo, sempre aggiornati, non dal compendio.
@@ -264,7 +301,7 @@ async function askBackgroundNotes(entry) {
 }
 
 /** La finestra dell'archivio: cerca, apri la voce, «+» per metterla sulla scheda. */
-export async function openArchivio(actor, kind) {
+export async function openArchivio(actor, kind, { table = "", kinds = [] } = {}) {
   const config = ARCHIVI[archivioKind(kind)];
   if (!config) return;
   const entries = await loadArchivio(kind);
@@ -275,6 +312,8 @@ export async function openArchivio(actor, kind) {
     {
       kind,
       title,
+      // Le linguette degli archivi (10/9): per gli Elementi, Background, Pregi e Difetti in una finestra.
+      kinds: kinds.filter((id) => archivioKind(id)).map((id) => ({ id, label: localize(ARCHIVI[id].label), active: id === kind })),
       groups: groupEntries(entries).map((group) => ({ ...group, count: group.entries.length })),
       count: entries.length,
       canAdd: canEdit(actor),
@@ -289,13 +328,23 @@ export async function openArchivio(actor, kind) {
     content,
     classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-archivio-dialog"],
     buttons: [{ action: "close", icon: "fas fa-times", label: localize("WOD5E.Close"), default: true }],
-    render: (_event, dialog) => wireArchivio(dialog, actor, kind, entries)
+    render: (_event, dialog) => wireArchivio(dialog, actor, kind, entries, { table, kinds })
   });
 }
 
-function wireArchivio(dialog, actor, kind, entries) {
+function wireArchivio(dialog, actor, kind, entries, { table = "", kinds = [] } = {}) {
   const root = dialog?.element;
   if (!root) return;
+  // Le linguette degli archivi: un altro archivio nella stessa finestra (si riapre su quello).
+  root.querySelectorAll("[data-role=archivioKind]").forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const other = archivioKind(button.dataset.kind);
+      if (!other || other === kind) return;
+      await dialog.close();
+      await openArchivio(actor, other, { table, kinds });
+    });
+  });
   const search = root.querySelector("[data-role=archivioSearch]");
   const rows = [...root.querySelectorAll("[data-role=archivioEntry]")];
   const groups = [...root.querySelectorAll("[data-role=archivioGroup]")];
@@ -362,7 +411,7 @@ function wireArchivio(dialog, actor, kind, entries) {
       const entry = entries.find((candidate) => candidate.uuid === row?.dataset.uuid);
       if (!entry) return;
       button.disabled = true;
-      const done = await addFromArchivio(actor, kind, entry);
+      const done = await addFromArchivio(actor, kind, entry, { table, level });
       button.disabled = false;
       if (done) {
         row.classList.add("added");

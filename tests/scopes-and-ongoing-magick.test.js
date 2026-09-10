@@ -3,7 +3,9 @@ import { readFileSync } from "node:fs";
 import {
   SCOPES,
   SCOPE_TABLE_STEPS,
-  prepareScopeTable
+  damageBonus,
+  prepareScopeTable,
+  scopeReadings
 } from "../scripts/scopes.js";
 import {
   lockedParadox,
@@ -205,5 +207,29 @@ await onOngoingMagickDelete.call(
 assert.deepEqual(editableActor.lastUpdate, {
   "flags.wod5e-mage.ongoingMagick.-=newRow": null
 });
+
+// Le letture accanto ai pallini (9/9, 10/9): i Danni della Potenza sono l'Areté
+// più il numero; con l'Areté del personaggio il conto è già fatto, e la somma
+// sta nella nota. Il tasto che cambia lettura sta PRIMA della voce.
+{
+  const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8"));
+  const localize = (key) => key.split(".").reduce((o, k) => (o && typeof o === "object" ? o[k] : undefined), it) ?? key;
+  assert.equal(damageBonus("+3"), 3);
+  assert.equal(damageBonus("+0"), 0);
+  assert.equal(damageBonus("Città"), null);
+  const plain = scopeReadings(localize);
+  assert.deepEqual(plain.potency[2][0], { sub: "Danni", text: "Areté +3", hint: "" }, "senza Areté resta la formula");
+  const mine = scopeReadings(localize, { arete: 3 });
+  assert.deepEqual(mine.potency[2][0], { sub: "Danni", text: "6", hint: "Areté 3 +3" }, "Areté 3 al terzo pallino: 6 danni");
+  assert.deepEqual(mine.potency[0][0], { sub: "Danni", text: "3", hint: "Areté 3 +0" });
+  assert.equal(mine.potency[2][1].text, plain.potency[2][1].text, "le altre letture non cambiano");
+  assert.deepEqual(mine.area[3], [{ sub: "", text: "Città", hint: "" }]);
+  assert.equal(mine.duration[4][0].text, "Un anno");
+  const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
+  assert.match(dialog, /data-role="dotReading"[^>]*><button type="button" class="wod5e-mage-arete-reading-switch" data-role="readingSwitch"[^>]*hidden>[\s\S]*?<\/button><span data-role="readingText"><\/span><\/span>/);
+  const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
+  assert.match(arete, /dotReadings\(localize, \{ arete: arete\.value \}\)/);
+  assert.match(arete, /if \(part\.hint\) piece\.title = part\.hint;/);
+}
 
 console.log("Scopes and ongoing Magick tests passed.");

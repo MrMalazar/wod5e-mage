@@ -30,6 +30,24 @@ export function buildGuidedItemData(type, subtype, form = {}) {
   return data;
 }
 
+/**
+ * La matita di Background, Pregi, Difetti e Dotazione apre la scheda
+ * dell'oggetto. Il sistema wod5e la chiamava `itemEdit` fino alla 5.3.19 e
+ * `itemOpen` dalla 5.3.26 (il server di Sans, 10/9): il modulo si porta la
+ * sua, così la matita funziona con tutte e due.
+ */
+export function guidedItemId(target) {
+  const holder = target?.closest?.("[data-item-id]") ?? target;
+  return String(holder?.getAttribute?.("data-item-id") ?? holder?.dataset?.itemId ?? "");
+}
+
+export async function onGuidedItemEdit(event, target) {
+  event?.preventDefault?.();
+  const item = this.actor?.items?.get(guidedItemId(target));
+  if (!item) return;
+  await item.sheet?.render(true);
+}
+
 export async function onGuidedItemCreate(event, target) {
   const type = String(target.getAttribute("data-type") ?? "");
   const subtype = String(target.getAttribute("data-subtype") ?? "");

@@ -159,26 +159,41 @@ export function prepareScopeTable(localize = (key) => key) {
  * pallini di un Ambito compare la voce della tavola del livello scelto
  * («Città» al quarto pallino dell'Area). Chi ha più letture le porta tutte,
  * nell'ordine della tavola, col nome della lettura davanti. La Durata in
- * gioco parla in turni, scene, sessioni; i Danni sono l'Areté più il numero.
- * Torna { [ambito]: sette liste di { sub, text } }.
+ * gioco parla in turni, scene, sessioni; i Danni sono l'Areté più il numero:
+ * con l'Areté del personaggio (`arete`) il conto è già fatto («Danni 6» per
+ * Areté 3 al terzo pallino), e la somma sta nella nota (`hint`).
+ * Torna { [ambito]: sette liste di { sub, text, hint } }.
  */
-export function scopeReadings(localize = (key) => key) {
+export function scopeReadings(localize = (key) => key, { arete = null } = {}) {
   const { groups } = prepareScopeTable(localize);
   const out = {};
   for (const group of groups) {
     out[group.scope] = Array.from({ length: SCOPE_TABLE_STEPS }, (_, index) => group.rows.map((row) => ({
       sub: group.header ? String(localize(row.title)) : "",
-      text: scopeReadingText(row, index + 1, localize)
+      ...scopeReadingText(row, index + 1, localize, arete)
     })));
   }
   return out;
 }
 
-function scopeReadingText(row, step, localize) {
+/** «+3» → 3; «+0» → 0; un testo qualunque → null. */
+export function damageBonus(label) {
+  const match = /^\s*([+-]?\s*\d+)\s*$/.exec(String(label ?? ""));
+  return match ? Number(match[1].replace(/\s+/g, "")) : null;
+}
+
+function scopeReadingText(row, step, localize, arete = null) {
   const cell = row.cells[step - 1] ?? {};
   const label = String(localize(cell.label ?? `WOD5E_MAGE.Scopes.Table.${row.id}.${step}`));
-  // I Danni: l'Areté più il numero. La Durata in gioco: numero e unità.
-  if (cell.arete) return `${localize("WOD5E_MAGE.Arete.Label")} ${label}`;
-  if (cell.icon) return `${label} ${localize(`WOD5E_MAGE.Scopes.DurationUnits.${step}`)}`;
-  return label;
+  const areteLabel = String(localize("WOD5E_MAGE.Arete.Label"));
+  // I Danni: l'Areté più il numero. Con l'Areté del personaggio, il totale (10/9).
+  if (cell.arete) {
+    const bonus = damageBonus(label);
+    const value = Number.isFinite(Number(arete)) && arete !== null && bonus !== null ? Math.max(Math.trunc(Number(arete)), 0) : null;
+    if (value !== null) return { text: String(value + bonus), hint: `${areteLabel} ${value} ${label}` };
+    return { text: `${areteLabel} ${label}`, hint: "" };
+  }
+  // La Durata in gioco: numero e unità.
+  if (cell.icon) return { text: `${label} ${localize(`WOD5E_MAGE.Scopes.DurationUnits.${step}`)}`, hint: "" };
+  return { text: label, hint: "" };
 }

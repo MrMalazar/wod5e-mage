@@ -659,6 +659,7 @@
       "Inventory": "Inventario"
     },
     "Belongings": {
+      "Archivio": "Scegli dall'archivio dei Background, dei Pregi o dei Difetti",
       "SharedLabel": "Elementi in comune",
       "SharedHint": "Background condivisi con altri giocatori",
       "StoryLabel": "Elementi di Storia",
@@ -883,6 +884,7 @@
       }
     },
     "Archivi": {
+      "KindTabs": "Archivi",
       "Open": "Apri l'archivio dei Cataloghi",
       "WindowTitle": "Archivio: {title}",
       "Search": "Cerca…",

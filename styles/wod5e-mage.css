@@ -2717,6 +2717,13 @@
   text-transform: none;
 }
 
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-controls {
+  align-items: center;
+  display: inline-flex;
+  flex: none;
+  gap: 0.3rem;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-belonging-add {
   align-items: center;
   display: inline-flex;
@@ -4468,6 +4475,39 @@
 
 .wod5e-mage-archivio-levels > button:hover,
 .wod5e-mage-archivio-levels > button.active {
+  background: rgb(217 168 39 / 15%);
+  border-color: var(--mage-oro, #d9a827);
+  color: var(--mage-oro-chiaro, #f5e7b2);
+}
+
+/* Le linguette degli archivi (10/9): Background, Pregi, Difetti per gli Elementi. */
+.wod5e-mage-archivio-kinds {
+  border-bottom: 1px solid var(--mage-oro-scuro, #98772b);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+}
+
+.wod5e-mage-archivio-kinds > button {
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  border-radius: 3px;
+  color: var(--mage-tenue, #ab9f85);
+  cursor: pointer;
+  flex: 1 1 auto;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  min-height: 0;
+  padding: 0.35rem 0.6rem;
+  width: auto;
+}
+
+.wod5e-mage-archivio-kinds > button:hover,
+.wod5e-mage-archivio-kinds > button.active {
   background: rgb(217 168 39 / 15%);
   border-color: var(--mage-oro, #d9a827);
   color: var(--mage-oro-chiaro, #f5e7b2);
@@ -6801,12 +6841,15 @@
 
 /* ==========================================================================
    Il dialogo dell'Areté riletto con Blue (10/9): caratteri dal 14 in su,
-   aria fra le righe, un colore solo per le voci (niente titolo oro e testo
-   bianco), i tratti in riga «nome · tendina», una lettura alla volta.
+   aria fra le righe, un colore solo per le voci (l'oro dei titoli, non
+   l'oro chiaro: «quel giallo misto bianco mi dà fastidio»), i tratti in riga
+   «nome · tendina», una lettura alla volta col tasto prima della voce, il
+   conto con campo o casella a sinistra e nome a destra in ordine
+   alfabetico, le Sfere in oro come gli Ambiti, l'Obiettivo scuro.
    Queste regole vengono dopo le altre e le sovrascrivono.
    ========================================================================== */
 .wod5e-mage-arete-body {
-  color: var(--mage-oro-chiaro, #f5e7b2);
+  color: var(--mage-oro, #d9a827);
   font-size: 14px;
   line-height: 1.35;
 }
@@ -6830,7 +6873,7 @@
 .wod5e-mage-arete-body .wod5e-mage-arete-autosuccess,
 .wod5e-mage-arete-body .wod5e-mage-arete-toggle-value,
 .wod5e-mage-arete-body .wod5e-mage-arete-conviction em {
-  color: var(--mage-oro-chiaro, #f5e7b2);
+  color: var(--mage-oro, #d9a827);
 }
 
 .wod5e-mage-arete-body .wod5e-mage-arete-row-label,
@@ -6936,11 +6979,20 @@
 
 .wod5e-mage-arete-body .wod5e-mage-arete-harmony-row > .wod5e-mage-arete-harmony {
   height: 30px;
-  width: 4rem;
+  margin: 0;
+  max-width: none;
+  width: 100%;
 }
 
 .wod5e-mage-arete-body .wod5e-mage-arete-toggle-value {
-  font-size: 1.1em;
+  font-size: 1em;
+  font-weight: 700;
+  min-width: 0;
+  opacity: 0.7;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-toggle:has(input[type="checkbox"]:checked) .wod5e-mage-arete-toggle-value {
+  opacity: 1;
 }
 
 /* La fila dei passi della semplificata. */
@@ -6972,7 +7024,7 @@
   background: transparent;
   border: 1px solid var(--mage-oro-scuro, #98772b);
   border-radius: 3px;
-  color: var(--mage-oro-chiaro, #f5e7b2);
+  color: var(--mage-oro, #d9a827);
   cursor: pointer;
   display: inline-flex;
   flex: none;
@@ -6994,6 +7046,94 @@
 .wod5e-mage-arete-simple-dialog [hidden].wod5e-mage-arete-reading-switch,
 .wod5e-mage-arete-reading-switch[hidden] {
   display: none !important;
+}
+
+/* Le Sfere in oro come gli Ambiti: i loro glifi sono neri (10/9). */
+.wod5e-mage-arete-body img.wod5e-mage-arete-row-icon {
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+}
+
+/* L'Obiettivo (e le altre caselle di testo) sul fondo scuro, non su carta bianca (10/9). */
+.wod5e-mage-arete-body .wod5e-mage-arete-goal-box > textarea,
+.wod5e-mage-arete-body .wod5e-mage-arete-narrative > textarea,
+.wod5e-mage-arete-body .wod5e-mage-arete-spell > input[type="text"],
+.wod5e-mage-arete-body .wod5e-mage-arete-maintained > input[type="text"] {
+  --input-text-color: var(--mage-oro, #d9a827);
+  background: var(--mage-incavo, #15130f);
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  color: var(--mage-oro, #d9a827);
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-goal-box > textarea::placeholder,
+.wod5e-mage-arete-body .wod5e-mage-arete-narrative > textarea::placeholder,
+.wod5e-mage-arete-body .wod5e-mage-arete-spell > input[type="text"]::placeholder,
+.wod5e-mage-arete-body .wod5e-mage-arete-maintained > input[type="text"]::placeholder {
+  color: var(--mage-tenue, #ab9f85);
+  opacity: 1;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-goal-box > textarea:focus,
+.wod5e-mage-arete-body .wod5e-mage-arete-narrative > textarea:focus,
+.wod5e-mage-arete-body .wod5e-mage-arete-spell > input[type="text"]:focus,
+.wod5e-mage-arete-body .wod5e-mage-arete-maintained > input[type="text"]:focus {
+  border-color: var(--mage-oro, #d9a827);
+  box-shadow: 0 0 4px var(--mage-oro, #d9a827);
+}
+
+/* Il conto (10/9): una colonna di comandi a sinistra, i nomi a destra,
+   allineati; le voci in ordine alfabetico. */
+.wod5e-mage-arete-body .wod5e-mage-arete-conto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-conto-row {
+  align-items: center;
+  cursor: pointer;
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  justify-content: start;
+  margin: 0;
+  width: 100%;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-conto-row > .wod5e-mage-arete-row-label {
+  min-width: 0;
+  white-space: normal;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-conto-control {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.4rem;
+  justify-content: flex-start;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-conto-control > input[type="checkbox"] {
+  flex: none;
+  margin: 0;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-prize {
+  display: block;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-prize > em {
+  display: block;
+  margin-top: 0.2rem;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-conviction,
+.wod5e-mage-arete-body .wod5e-mage-arete-maintained {
+  gap: 0.4rem;
+}
+
+.wod5e-mage-arete-body .wod5e-mage-arete-conviction select,
+.wod5e-mage-arete-body .wod5e-mage-arete-maintained > input[type="text"]:not(.hidden) {
+  margin-top: 0;
+  width: 100%;
 }
 
 /* ==========================================================================

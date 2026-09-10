@@ -659,6 +659,7 @@
       "Inventory": "Inventory"
     },
     "Belongings": {
+      "Archivio": "Pick from the Backgrounds, Merits or Flaws archive",
       "SharedLabel": "Shared Elements",
       "SharedHint": "Backgrounds shared with other players",
       "StoryLabel": "Story Elements",
@@ -883,6 +884,7 @@
       }
     },
     "Archivi": {
+      "KindTabs": "Archives",
       "Open": "Open the Catalogue archive",
       "WindowTitle": "Archive: {title}",
       "Search": "Search…",

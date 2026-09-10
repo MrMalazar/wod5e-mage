@@ -96,8 +96,8 @@
                         {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
                     </span>
                     {{!-- La voce della tavola per il livello scelto («Città»), a destra dei pallini (9/9):
-                         una lettura alla volta, il tasto passa alla lettura dopo (10/9). --}}
-                    <span class="wod5e-mage-arete-dot-reading" data-role="dotReading" aria-live="polite"><span data-role="readingText"></span><button type="button" class="wod5e-mage-arete-reading-switch" data-role="readingSwitch" title="{{localize 'WOD5E_MAGE.Arete.ReadingSwitch'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ReadingSwitch'}}" hidden><i class="fa-solid fa-right-left" aria-hidden="true"></i></button></span>
+                         una lettura alla volta; il tasto, fra i pallini e la voce, passa alla lettura dopo (10/9). --}}
+                    <span class="wod5e-mage-arete-dot-reading" data-role="dotReading" aria-live="polite"><button type="button" class="wod5e-mage-arete-reading-switch" data-role="readingSwitch" title="{{localize 'WOD5E_MAGE.Arete.ReadingSwitch'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ReadingSwitch'}}" hidden><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><span data-role="readingText"></span></span>
                 </div>
             {{/each}}
             {{else}}
@@ -166,44 +166,44 @@
                 </label>
             {{/if}}
 
-            {{#if show.conto}}
-            {{!-- Il premio dell'Areté: dadi in più pari all'Areté quando la descrizione
-                 lo merita, dentro il tetto +3 insieme ai Bonus. L'Ibrida non lo prende. --}}
-            {{!-- Il nome per intero a sinistra, la casella (col suo +N) a destra. --}}
-            <div class="wod5e-mage-arete-prize" title="{{localize 'WOD5E_MAGE.Arete.PrizeHint' arete=arete.value}}">
-                <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Prize"}}</span>
-                {{#if prize.allowed}}
-                    <label class="wod5e-mage-arete-toggle">
-                        <span class="wod5e-mage-arete-toggle-value">+{{prize.dice}}</span>
-                        <input type="checkbox" name="prize" data-value="{{prize.dice}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Prize'}}">
-                    </label>
-                {{else}}
-                    <em>{{localize "WOD5E_MAGE.Arete.PrizeHybrid"}}</em>
-                {{/if}}
+            {{#if show.types}}
+            {{!-- La Tipologia: una scelta sola. Sta col «come lo fai», prima del conto. --}}
+            <div class="wod5e-mage-arete-types" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.MagickType'}}">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.MagickType"}}</span>
+                {{!-- Le spiegazioni stanno nei titoli (10/9): niente testo a destra. --}}
+                <div class="wod5e-mage-arete-type-grid">
+                    <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.CoincidentalHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="coincidental"> <span>{{localize "WOD5E_MAGE.Arete.Coincidental"}}</span></label>
+                    <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.VulgarHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="vulgar"> <span>{{localize "WOD5E_MAGE.Arete.Vulgar"}}</span></label>
+                    <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.WitnessesHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="witnesses"> <span>{{localize "WOD5E_MAGE.Arete.VulgarWithWitnesses"}}</span></label>
+                </div>
             </div>
+            {{#if show.conto}}<hr>{{/if}}
+            {{else}}
+                {{!-- La Tipologia scelta al secondo passo, nascosta: una casella spuntata vale «on». --}}
+                {{#if carry.coincidental}}<input type="hidden" name="coincidental" value="on">{{/if}}
+                {{#if carry.vulgar}}<input type="hidden" name="vulgar" value="on">{{/if}}
+                {{#if carry.witnesses}}<input type="hidden" name="witnesses" value="on">{{/if}}
+            {{/if}}
 
+            {{#if show.conto}}
+            {{!-- Il conto (10/9): campo o casella a sinistra, nome a destra, le voci in
+                 ordine alfabetico: Armonia, Convinzione, Effetto Mantenuto, Premio, Quintessenza. --}}
+            <div class="wod5e-mage-arete-conto" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.Steps.3'}}">
             {{#unless saveMode}}
             {{!-- L'Armonia: i dadi che gli altri Maghi ti danno, contati al tavolo. --}}
-            <div class="wod5e-mage-arete-harmony-row" title="{{localize 'WOD5E_MAGE.Arete.HarmonyHint'}}">
-                <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Harmony"}}</span>
+            <label class="wod5e-mage-arete-conto-row wod5e-mage-arete-harmony-row" title="{{localize 'WOD5E_MAGE.Arete.HarmonyHint'}}">
                 <input type="number" name="harmony" id="wod5e-mage-arete-harmony" class="wod5e-mage-arete-harmony" min="0" max="9" step="1" value="0" data-value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Harmony'}}">
-            </div>
-
-            {{!-- La Quintessenza: ogni punto speso è un successo automatico e scende
-                 dalla Ruota; se l'effetto fa danni, sono aggravati. --}}
-            <div class="wod5e-mage-arete-harmony-row wod5e-mage-arete-quintessence-row" title="{{localize 'WOD5E_MAGE.Arete.QuintessenceHint'}}">
-                <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Quintessence"}}</span>
-                <input type="number" name="quintessence" id="wod5e-mage-arete-quintessence" class="wod5e-mage-arete-harmony" min="0" max="{{quintessence}}" step="1" value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Quintessence'}}" {{#unless quintessence}}disabled{{/unless}}>
-            </div>
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Harmony"}}</span>
+            </label>
 
             {{!-- La Convinzione rispettata (9/9): spuntata e scelta fra quelle in scheda,
                  a tiro fatto un punto di Quintessenza risale sulla Ruota, una volta per scena. --}}
             <div class="wod5e-mage-arete-conviction" title="{{localize 'WOD5E_MAGE.Arete.ConvictionHint'}}">
                 {{#if conviction.options.length}}
                     <div data-role="convictionFresh" {{#if conviction.used}}hidden{{/if}}>
-                        <label class="wod5e-mage-arete-conviction-toggle">
-                            <input type="checkbox" name="conviction" id="wod5e-mage-arete-conviction">
-                            <span>{{localize "WOD5E_MAGE.Arete.Conviction"}}</span>
+                        <label class="wod5e-mage-arete-conviction-toggle wod5e-mage-arete-conto-row">
+                            <span class="wod5e-mage-arete-conto-control"><input type="checkbox" name="conviction" id="wod5e-mage-arete-conviction"></span>
+                            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Conviction"}}</span>
                         </label>
                         <select name="convictionId" id="wod5e-mage-arete-conviction-id" class="hidden" aria-label="{{localize 'WOD5E_MAGE.Arete.ConvictionPick'}}">
                             {{#each conviction.options as |option|}}
@@ -222,41 +222,45 @@
                 {{/if}}
             </div>
             {{/unless}}
-            {{/if}}
-
-            {{#if show.types}}
-            {{#if show.conto}}<hr>{{/if}}
-
-            {{!-- La Tipologia: una scelta sola. --}}
-            <div class="wod5e-mage-arete-types" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.MagickType'}}">
-                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.MagickType"}}</span>
-                {{!-- Le spiegazioni stanno nei titoli (10/9): niente testo a destra. --}}
-                <div class="wod5e-mage-arete-type-grid">
-                    <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.CoincidentalHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="coincidental"> <span>{{localize "WOD5E_MAGE.Arete.Coincidental"}}</span></label>
-                    <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.VulgarHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="vulgar"> <span>{{localize "WOD5E_MAGE.Arete.Vulgar"}}</span></label>
-                    <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.WitnessesHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="witnesses"> <span>{{localize "WOD5E_MAGE.Arete.VulgarWithWitnesses"}}</span></label>
-                </div>
-            </div>
-            {{else}}
-                {{!-- La Tipologia scelta al secondo passo, nascosta: una casella spuntata vale «on». --}}
-                {{#if carry.coincidental}}<input type="hidden" name="coincidental" value="on">{{/if}}
-                {{#if carry.vulgar}}<input type="hidden" name="vulgar" value="on">{{/if}}
-                {{#if carry.witnesses}}<input type="hidden" name="witnesses" value="on">{{/if}}
-            {{/if}}
-
-            {{#if show.conto}}
-            <hr>
 
             {{!-- L'Effetto Mantenuto: se spuntato compare il nome, e a tiro risolto
                  l'effetto finisce fra le Magick in Atto. --}}
             <div class="wod5e-mage-arete-maintained">
-                <label class="wod5e-mage-arete-maintained-toggle">
-                    <input type="checkbox" name="maintained" id="wod5e-mage-arete-maintained">
-                    {{localize "WOD5E_MAGE.Arete.Maintained"}}
+                <label class="wod5e-mage-arete-maintained-toggle wod5e-mage-arete-conto-row">
+                    <span class="wod5e-mage-arete-conto-control"><input type="checkbox" name="maintained" id="wod5e-mage-arete-maintained"></span>
+                    <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Maintained"}}</span>
                 </label>
                 <input type="text" name="maintainedName" id="wod5e-mage-arete-maintained-name" class="hidden"
                        placeholder="{{localize 'WOD5E_MAGE.Arete.MaintainedName'}}"
                        aria-label="{{localize 'WOD5E_MAGE.Arete.MaintainedName'}}">
+            </div>
+
+            {{!-- Il premio dell'Areté: dadi in più pari all'Areté quando la descrizione
+                 lo merita, dentro il tetto +3 insieme ai Bonus. L'Ibrida non lo prende.
+                 La casella col suo +N a sinistra, il nome a destra. --}}
+            <div class="wod5e-mage-arete-prize" title="{{localize 'WOD5E_MAGE.Arete.PrizeHint' arete=arete.value}}">
+                {{#if prize.allowed}}
+                    <label class="wod5e-mage-arete-toggle wod5e-mage-arete-conto-row">
+                        <span class="wod5e-mage-arete-conto-control">
+                            <input type="checkbox" name="prize" data-value="{{prize.dice}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Prize'}}">
+                            <span class="wod5e-mage-arete-toggle-value">+{{prize.dice}}</span>
+                        </span>
+                        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Prize"}}</span>
+                    </label>
+                {{else}}
+                    <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Prize"}}</span>
+                    <em>{{localize "WOD5E_MAGE.Arete.PrizeHybrid"}}</em>
+                {{/if}}
+            </div>
+
+            {{#unless saveMode}}
+            {{!-- La Quintessenza: ogni punto speso è un successo automatico e scende
+                 dalla Ruota; se l'effetto fa danni, sono aggravati. --}}
+            <label class="wod5e-mage-arete-conto-row wod5e-mage-arete-harmony-row wod5e-mage-arete-quintessence-row" title="{{localize 'WOD5E_MAGE.Arete.QuintessenceHint'}}">
+                <input type="number" name="quintessence" id="wod5e-mage-arete-quintessence" class="wod5e-mage-arete-harmony" min="0" max="{{quintessence}}" step="1" value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Quintessence'}}" {{#unless quintessence}}disabled{{/unless}}>
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Quintessence"}}</span>
+            </label>
+            {{/unless}}
             </div>
             {{/if}}
         </div>

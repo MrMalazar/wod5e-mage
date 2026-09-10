@@ -211,7 +211,7 @@ assert.equal(traits.skills.some((trait) => trait.id === "firearms"), false);
   assert.deepEqual(quintessenceAfterConviction({ quintessence: 8, paradox: 0, floor: 0 }), { quintessence: 9, gained: true });
   assert.deepEqual(quintessenceAfterConviction({ quintessence: 9, paradox: 0, floor: 0 }), { quintessence: 9, gained: false });
   const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
-  assert.match(dialog, /name="quintessence"[\s\S]*<input type="checkbox" name="conviction" id="wod5e-mage-arete-conviction">[\s\S]*<select name="convictionId" id="wod5e-mage-arete-conviction-id" class="hidden"[\s\S]*data-role="convictionReset"[\s\S]*\{\{\/unless\}\}/);
+  assert.match(dialog, /name="harmony"[\s\S]*<input type="checkbox" name="conviction" id="wod5e-mage-arete-conviction">[\s\S]*<select name="convictionId" id="wod5e-mage-arete-conviction-id" class="hidden"[\s\S]*data-role="convictionReset"[\s\S]*\{\{\/unless\}\}[\s\S]*name="quintessence"/);
   const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
   assert.equal((arete.match(/await grantConvictionQuintessence\(actor, convictionKept\);/g) ?? []).length, 3, "a ogni uscita buona del tiro");
   assert.match(readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8"), /-=convinzioneScena/);

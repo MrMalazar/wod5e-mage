@@ -19,9 +19,15 @@
                             <div>
                                 <label class="header-label">{{localize table.label}}</label>
                             </div>
-                            <button type="button" class="wod5e-mage-belonging-add" data-action="belongingAdd" data-table="{{table.flag}}" title="{{localize 'WOD5E_MAGE.Belongings.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Belongings.Add'}}" {{#if ../locked}}disabled{{/if}}>
-                                <i class="fa-solid fa-plus"></i>
-                            </button>
+                            <div class="wod5e-mage-belonging-controls">
+                                {{!-- Il libro (10/9): la voce dall'archivio dei Background, Pregi o Difetti, senza scriverla a mano. --}}
+                                <button type="button" class="wod5e-mage-belonging-add wod5e-mage-belonging-archivio" data-action="belongingArchivio" data-table="{{table.flag}}" title="{{localize 'WOD5E_MAGE.Belongings.Archivio'}}" aria-label="{{localize 'WOD5E_MAGE.Belongings.Archivio'}}" {{#if ../locked}}disabled{{/if}}>
+                                    <i class="fa-solid fa-book-open"></i>
+                                </button>
+                                <button type="button" class="wod5e-mage-belonging-add" data-action="belongingAdd" data-table="{{table.flag}}" title="{{localize 'WOD5E_MAGE.Belongings.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Belongings.Add'}}" {{#if ../locked}}disabled{{/if}}>
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
                         </header>
 
                         {{#if table.rows.length}}

@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { BELONGING_ARCHIVI, openArchivio } from "./archivi.js";
 
 /**
  * Gli Elementi oltre l'inventario: Background, Vantaggi e Difetti che non
@@ -97,6 +98,26 @@ export async function onBelongingAdd(event, target) {
   rows[rowId] = flagKey === BELONGING_TABLES.items ? { name: "", note: "" } : { kind: "", name: "", value: 0 };
 
   await actor.setFlag(MODULE_ID, flagKey, rows);
+}
+
+/**
+ * Il libro accanto al + (10/9): l'archivio dei Background, dei Pregi o dei
+ * Difetti, con le linguette per passare dall'uno all'altro; la voce scelta
+ * diventa una riga della tavola, tipo · nome · livello. Le tavole degli
+ * Elementi soltanto: gli Altri oggetti non hanno un archivio.
+ */
+export function belongingArchivioTable(target) {
+  const table = tableFlag(target);
+  return table && table !== BELONGING_TABLES.items ? table : null;
+}
+
+export async function onBelongingArchivio(event, target) {
+  event.preventDefault();
+  const actor = this.actor;
+  const table = belongingArchivioTable(target);
+  if (!table || !canEdit(actor)) return;
+  const kind = BELONGING_ARCHIVI.includes(target.dataset.kind) ? target.dataset.kind : BELONGING_ARCHIVI[0];
+  await openArchivio(actor, kind, { table, kinds: [...BELONGING_ARCHIVI] });
 }
 
 export async function onBelongingDelete(event, target) {

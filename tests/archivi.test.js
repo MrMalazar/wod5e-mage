@@ -5,6 +5,9 @@ import {
   ARCHIVI,
   archivioKind,
   backgroundItemData,
+  BELONGING_ARCHIVI,
+  BELONGING_KIND_BY_ARCHIVIO,
+  belongingRowFromEntry,
   costLevels,
   entryFromDocument,
   FEATURE_KINDS,
@@ -200,3 +203,44 @@ assert.equal(hasLevels([{ name: "a" }]), false);
   assert.match(archivi, /levels: hasLevels\(entries\) \? \[1, 2, 3, 4, 5\] : \[\]/);
   assert.match(archivi, /matchesSearch\(entry \?\? \{\}, query\) && matchesLevel\(entry \?\? \{\}, level\)/);
 }
+
+// Gli Elementi in comune e di Storia dall'archivio (10/9): la voce diventa una
+// riga tipo · nome · livello. Il livello: quello del filtro se la voce lo ha,
+// altrimenti il più basso del costo; il Background prende il nome breve.
+assert.deepEqual([...BELONGING_ARCHIVI], ["background", "pregio", "difetto"]);
+assert.deepEqual(BELONGING_KIND_BY_ARCHIVIO, { background: "background", pregio: "advantage", difetto: "flaw" });
+assert.deepEqual(belongingRowFromEntry("pregio", { name: "Concentrazione", cost: "•–•••" }), { kind: "advantage", name: "Concentrazione", value: 1 });
+assert.deepEqual(belongingRowFromEntry("pregio", { name: "Concentrazione", cost: "•–•••" }, { level: 3 }), { kind: "advantage", name: "Concentrazione", value: 3 }, "col filtro a 3");
+assert.deepEqual(belongingRowFromEntry("difetto", { name: "Zoppo", cost: "•• / ••••" }, { level: 3 }), { kind: "flaw", name: "Zoppo", value: 2 }, "il filtro non vale per la voce: il livello più basso");
+assert.deepEqual(belongingRowFromEntry("background", { name: "Maschera", points: 2 }, { name: "Maschera: Anna" }), { kind: "background", name: "Maschera: Anna", value: 2 });
+assert.deepEqual(belongingRowFromEntry("credo", { name: "x" }), { kind: "", name: "x", value: 1 });
+{
+  const dialog = readFileSync(new URL("../templates/dialogs/archivio.hbs", import.meta.url), "utf8");
+  assert.match(dialog, /\{\{#if kinds\.length\}\}[\s\S]*data-role="archivioKind" data-kind="\{\{tab\.id\}\}"[\s\S]*\{\{\/if\}\}\s*<div class="wod5e-mage-archivio-head">/);
+  const archivi = readFileSync(new URL("../scripts/archivi.js", import.meta.url), "utf8");
+  assert.match(archivi, /export async function openArchivio\(actor, kind, \{ table = "", kinds = \[\] \} = \{\}\)/);
+  assert.match(archivi, /addFromArchivio\(actor, kind, entry, \{ table, level \}\)/);
+  const dotazione = readFileSync(new URL("../templates/actor/parts/dotazione.hbs", import.meta.url), "utf8");
+  assert.match(dotazione, /data-action="belongingArchivio" data-table="\{\{table\.flag\}\}"[\s\S]*data-action="belongingAdd" data-table="\{\{table\.flag\}\}"/);
+  assert.match(readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8"), /belongingArchivio: onBelongingArchivio/);
+  for (const lang of ["it", "en"]) {
+    const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
+    assert.equal(typeof strings.WOD5E_MAGE.Belongings.Archivio, "string", lang);
+    assert.equal(typeof strings.WOD5E_MAGE.Archivi.KindTabs, "string", lang);
+  }
+}
+
+// La matita di Background, Pregi, Difetti e Dotazione (10/9): il sistema la chiama
+// itemEdit (5.3.19) o itemOpen (5.3.26, il server di Sans); il modulo si porta la sua.
+{
+  const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+  assert.match(sheet, /itemEdit: onGuidedItemEdit/);
+  const guided = readFileSync(new URL("../scripts/oggetti-guidati.js", import.meta.url), "utf8");
+  assert.match(guided, /export async function onGuidedItemEdit\(event, target\)[\s\S]*this\.actor\?\.items\?\.get\(guidedItemId\(target\)\)[\s\S]*item\.sheet\?\.render\(true\)/);
+  for (const part of ["core-features", "equipment-list"]) {
+    const template = readFileSync(new URL(`../templates/actor/parts/${part}.hbs`, import.meta.url), "utf8");
+    assert.match(template, /class="item-control item-edit" data-action="itemEdit" data-item-id="\{\{item\._id\}\}"/, part);
+  }
+}
+
+console.log("Archivi degli Elementi e matita: test passati.");

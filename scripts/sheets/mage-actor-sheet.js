@@ -16,6 +16,7 @@ import { prepareConceptChallenge } from "../concept-challenge.js";
 import {
   BELONGING_TABLES,
   onBelongingAdd,
+  onBelongingArchivio,
   onBelongingDelete,
   prepareBelongings
 } from "../dotazione-extra.js";
@@ -54,7 +55,7 @@ import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from ".
 import { prepareCreationSummary } from "../riepilogo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
 import { onSpecialtyAdd, onSpecialtyDelete, prepareSpecialties } from "../specializzazioni.js";
-import { onGuidedItemCreate } from "../oggetti-guidati.js";
+import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 import {
   getContraccolpo,
@@ -124,6 +125,9 @@ export class MageActorSheet extends MortalActorSheet {
       // Il + di armi, armature, oggetti, Pregi, Difetti e Background chiede
       // i campi che servono; gli altri tipi restano al sistema.
       createItem: onGuidedItemCreate,
+      // La matita: il sistema la chiama itemEdit (5.3.19) o itemOpen (5.3.26);
+      // il modulo si porta la sua (10/9).
+      itemEdit: onGuidedItemEdit,
       archivioOpen: onArchivioOpen,
       strumentiSuggest: onStrumentiSuggest,
       resetSection: onResetSection,
@@ -141,6 +145,7 @@ export class MageActorSheet extends MortalActorSheet {
       areteRoll: onAreteRoll,
       areteSimple: onAreteSimple,
       belongingAdd: onBelongingAdd,
+      belongingArchivio: onBelongingArchivio,
       belongingDelete: onBelongingDelete,
       bonusAdd: onBonusAdd,
       bonusDelete: onBonusDelete,
