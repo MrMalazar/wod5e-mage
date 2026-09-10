@@ -5,8 +5,9 @@
     <div class="wod5e-mage-grimorio-top">
         <input type="search" class="wod5e-mage-grimorio-search" data-role="grimorioSearch" placeholder="{{localize 'WOD5E_MAGE.Grimorio.Search'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Search'}}">
         <div class="wod5e-mage-grimorio-views" role="tablist">
-            <button type="button" data-role="grimorioView" data-view="sphere">{{localize "WOD5E_MAGE.Grimorio.BySphere"}}</button>
+            {{!-- Prima Per Formula, poi Per Sfera (verdetto di Blue, 10/9): si apre per Formula. --}}
             <button type="button" data-role="grimorioView" data-view="formula">{{localize "WOD5E_MAGE.Grimorio.ByFormula"}}</button>
+            <button type="button" data-role="grimorioView" data-view="sphere">{{localize "WOD5E_MAGE.Grimorio.BySphere"}}</button>
         </div>
     </div>
     {{!-- I simboli delle Sfere possedute (7/9): un clic accende o spegne la Sfera. --}}

@@ -56,10 +56,33 @@ assert.deepEqual(
   lineageSphereChanges({ ...empty, spheres: { forces: 3 } }, { flags: { "wod5e-mage": { lineage: { famiglia: "hermes" } } } }),
   { selectedSpheres: { forces: true }, familySpheres: { forces: true } }
 );
-// La Sottofamiglia di un'altra Famiglia si azzera quando cambia la Famiglia.
+// La Sottofamiglia di un'altra Famiglia si azzera quando cambia la Famiglia; le
+// Sfere di prima (Forze di Hermes, Mente di Verdicta) perdono il segno di famiglia
+// e, con solo il pallino regalato, si spengono e tornano bloccate (9/9).
 assert.deepEqual(
-  lineageSphereChanges({ ...empty, lineage: { famiglia: "hermes", sottofamiglia: "verdicta" } }, { flags: { "wod5e-mage": { lineage: { famiglia: "verbena" } } } }),
-  { lineage: { sottofamiglia: "" }, selectedSpheres: { life: true }, familySpheres: { life: true }, spheres: { life: 1 } }
+  lineageSphereChanges({ ...empty, lineage: { famiglia: "hermes", sottofamiglia: "verdicta" }, spheres: { forces: 1, mind: 1 } }, { flags: { "wod5e-mage": { lineage: { famiglia: "verbena" } } } }),
+  { lineage: { sottofamiglia: "" }, selectedSpheres: { forces: false, mind: false, life: true }, familySpheres: { forces: false, mind: false, life: true }, spheres: { forces: 0, mind: 0, life: 1 } }
+);
+// I pallini comprati restano: Forze a 3 resta accesa e sbloccata, perde solo il segno di famiglia.
+assert.deepEqual(
+  lineageSphereChanges({ ...empty, lineage: { famiglia: "hermes" }, spheres: { forces: 3 } }, { flags: { "wod5e-mage": { lineage: { famiglia: "verbena" } } } }),
+  { selectedSpheres: { life: true }, familySpheres: { forces: false, life: true }, spheres: { life: 1 } }
+);
+// Cambia solo la Sottofamiglia: via la Sfera della vecchia, dentro quella della nuova.
+assert.deepEqual(
+  lineageSphereChanges({ ...empty, lineage: { famiglia: "hermes", sottofamiglia: "verdicta" }, spheres: { forces: 1, mind: 1 } }, { flags: { "wod5e-mage": { lineage: { famiglia: "hermes", sottofamiglia: "quaesitor" } } } }),
+  { selectedSpheres: { mind: false, correspondence: true }, familySpheres: { mind: false, correspondence: true }, spheres: { mind: 0, correspondence: 1 } }
+);
+// Cambia il Credo: le due Sfere del vecchio Credo tornano bloccate se erano di sola presenza.
+{
+  const cambio = lineageSphereChanges({ ...empty, credo: "arte", spheres: {} }, { flags: { "wod5e-mage": { focus: { credo: "dati" } } } });
+  assert.deepEqual(cambio.familySpheres, { matter: false, mind: false, correspondence: true, prime: true });
+  assert.deepEqual(cambio.selectedSpheres, { matter: false, mind: false, correspondence: true, prime: true });
+}
+// La Sfera che resta di famiglia per un'altra via non si tocca: Verbena (Vita) → Sahajiya col Credo che porta la Vita.
+assert.deepEqual(
+  lineageSphereChanges({ ...empty, lineage: { famiglia: "verbena" }, credo: "vivo", spheres: { life: 1 } }, { flags: { "wod5e-mage": { lineage: { famiglia: "sahajiya" } } } }),
+  { selectedSpheres: { time: true }, familySpheres: { time: true }, spheres: { time: 1 } }
 );
 // La Sottofamiglia scelta porta la sua Sfera a 1.
 assert.deepEqual(

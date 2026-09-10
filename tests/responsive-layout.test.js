@@ -265,8 +265,11 @@ assert.doesNotMatch(areteDialog, /name="primarySkill"|name="arete"|Arete\.Includ
 assert.match(areteDialog, /data-role="pool"[\s\S]*data-role="threshold"[\s\S]*data-role="autoVictory"[\s\S]*Arete\.Prize"[\s\S]*name="prize"[\s\S]*Arete\.PrizeHybrid[\s\S]*name="harmony"/);
 // L'Armonia è un numero: i dadi degli altri Maghi, contati al tavolo.
 assert.match(areteDialog, /name="harmony"[^>]*type="number"|type="number"[^>]*name="harmony"/);
-// Le spiegazioni della Tipologia vivono in una colonna staccata a destra.
-assert.match(areteDialog, /wod5e-mage-arete-type-grid[\s\S]*Arete\.Coincidental\b[\s\S]*Arete\.CoincidentalHint[\s\S]*Arete\.VulgarHint[\s\S]*Arete\.WitnessesHint/);
+// Le spiegazioni della Tipologia stanno nei titoli delle caselle (10/9): niente testo a destra.
+assert.match(areteDialog, /wod5e-mage-arete-type-grid[\s\S]*title="\{\{localize 'WOD5E_MAGE\.Arete\.CoincidentalHint'\}\}"[\s\S]*Arete\.Coincidental"[\s\S]*title="\{\{localize 'WOD5E_MAGE\.Arete\.VulgarHint'\}\}"[\s\S]*title="\{\{localize 'WOD5E_MAGE\.Arete\.WitnessesHint'\}\}"/);
+assert.doesNotMatch(areteDialog, /<em>\{\{localize "WOD5E_MAGE\.Arete\.(Coincidental|Vulgar|Witnesses)Hint"\}\}<\/em>|Arete\.ThresholdShort|Arete\.HarmonyShort|Arete\.QuintessenceShort|carry\.traitLabels/);
+// Una lettura alla volta accanto ai pallini degli Ambiti, col tasto che cambia (10/9).
+assert.match(areteDialog, /data-role="dotReading"[^>]*><span data-role="readingText"><\/span><button type="button" class="wod5e-mage-arete-reading-switch" data-role="readingSwitch"/);
 assert.doesNotMatch(areteDialog, /wod5e-mage-arete-sphere-list|wod5e-mage-arete-sphere-row\b/);
 assert.match(css, /\.wod5e-mage-arete-layout\s*\{[^}]*grid-template-columns:/s);
 assert.match(css, /\.wod5e-mage-arete-sphere-dot\.active\s*\{[^}]*var\(--mage-oro\)/s);

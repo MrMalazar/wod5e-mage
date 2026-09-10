@@ -260,18 +260,15 @@ function makeMagickTypeExclusive(dialog) {
 
 /**
  * La voce del livello scelto, a destra dei pallini (9/9): «Città» al quarto
- * pallino dell'Area, «Alterare» al terzo di una Sfera. Più letture stanno
- * in fila, col nome della lettura davanti, separate da un punto.
+ * pallino dell'Area, «Alterare» al terzo di una Sfera. Con più letture se ne
+ * vede una sola (verdetto di Blue, 10/9), col nome della lettura davanti, e
+ * il tasto accanto passa alla lettura dopo.
  */
-function paintReading(out, parts = []) {
+function paintReading(out, parts = [], index = 0) {
+  const text = out.querySelector("[data-role=readingText]") ?? out;
+  const part = parts.length ? parts[((index % parts.length) + parts.length) % parts.length] : null;
   const nodes = [];
-  parts.forEach((part, index) => {
-    if (index > 0) {
-      const sep = document.createElement("span");
-      sep.className = "wod5e-mage-arete-reading-sep";
-      sep.textContent = " · ";
-      nodes.push(sep);
-    }
+  if (part) {
     const piece = document.createElement("span");
     piece.className = "wod5e-mage-arete-reading-part";
     if (part.sub) {
@@ -282,8 +279,10 @@ function paintReading(out, parts = []) {
     }
     piece.append(part.text ?? "");
     nodes.push(piece);
-  });
-  out.replaceChildren(...nodes);
+  }
+  text.replaceChildren(...nodes);
+  const button = out.querySelector("[data-role=readingSwitch]");
+  if (button) button.hidden = parts.length < 2;
 }
 
 /**
@@ -320,8 +319,14 @@ function wireDotRows(dialog, readingFor = () => []) {
         dot.classList.toggle("active", Number(dot.dataset.level) <= level);
       });
       row.classList.toggle("chosen", level > 0);
-      if (reading) paintReading(reading, readingFor(row.dataset.kind, row.dataset.id, level));
+      if (reading) paintReading(reading, readingFor(row.dataset.kind, row.dataset.id, level), Number(row.dataset.reading) || 0);
     };
+    // Il tasto accanto alla voce: la lettura dopo (Peso, Epicità, Danni…).
+    reading?.querySelector("[data-role=readingSwitch]")?.addEventListener("click", (event) => {
+      event.preventDefault();
+      row.dataset.reading = String((Number(row.dataset.reading) || 0) + 1);
+      paint();
+    });
 
     dots.forEach((dot) => {
       dot.addEventListener("click", (event) => {
@@ -866,7 +871,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       },
       // Una finestra compatta: due colonne, niente muri di testo. Un passo: una colonna.
       position: {
-        width: step ? 480 : 700,
+        width: step ? 540 : 800,
         height: "auto"
       },
       content,

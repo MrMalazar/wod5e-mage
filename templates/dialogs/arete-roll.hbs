@@ -50,7 +50,7 @@
                         {{#each sphere.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
                     </span>
                     {{!-- Il nome del livello scelto (Percepire … Rivoluzionare), a destra. --}}
-                    <span class="wod5e-mage-arete-dot-reading" data-role="dotReading" aria-live="polite"></span>
+                    <span class="wod5e-mage-arete-dot-reading" data-role="dotReading" aria-live="polite"><span data-role="readingText"></span></span>
                 </div>
             {{else}}
                 <p class="wod5e-mage-magick-type-hint">{{localize "WOD5E_MAGE.Arete.NoSpheres"}}</p>
@@ -95,8 +95,9 @@
                     <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
                         {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
                     </span>
-                    {{!-- La voce della tavola per il livello scelto («Città»), a destra dei pallini (9/9). --}}
-                    <span class="wod5e-mage-arete-dot-reading" data-role="dotReading" aria-live="polite"></span>
+                    {{!-- La voce della tavola per il livello scelto («Città»), a destra dei pallini (9/9):
+                         una lettura alla volta, il tasto passa alla lettura dopo (10/9). --}}
+                    <span class="wod5e-mage-arete-dot-reading" data-role="dotReading" aria-live="polite"><span data-role="readingText"></span><button type="button" class="wod5e-mage-arete-reading-switch" data-role="readingSwitch" title="{{localize 'WOD5E_MAGE.Arete.ReadingSwitch'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ReadingSwitch'}}" hidden><i class="fa-solid fa-right-left" aria-hidden="true"></i></button></span>
                 </div>
             {{/each}}
             {{else}}
@@ -112,7 +113,6 @@
                 <span class="wod5e-mage-arete-autosuccess" data-role="autoSuccesses"></span>
             </p>
             {{#if show.conto}}
-            <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Arete.ThresholdShort"}}</p>
             <p class="wod5e-mage-arete-auto hidden" data-role="autoVictory">{{localize "WOD5E_MAGE.Arete.AutoVictory"}}</p>
             {{/if}}
         </div>
@@ -156,9 +156,6 @@
                 {{#each carry.traits as |trait|}}
                     <input type="hidden" name="{{trait.field}}" id="{{trait.id}}" value="{{trait.key}}" data-value="{{trait.value}}">
                 {{/each}}
-                {{#if carry.traitLabels}}
-                    <p class="wod5e-mage-arete-carry-goal"><b>{{localize "WOD5E_MAGE.Arete.Pool"}}</b> {{carry.traitLabels}}</p>
-                {{/if}}
             {{/if}}
 
             {{#if saveMode}}
@@ -188,14 +185,14 @@
             {{#unless saveMode}}
             {{!-- L'Armonia: i dadi che gli altri Maghi ti danno, contati al tavolo. --}}
             <div class="wod5e-mage-arete-harmony-row" title="{{localize 'WOD5E_MAGE.Arete.HarmonyHint'}}">
-                <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Harmony"}} <small>{{localize "WOD5E_MAGE.Arete.HarmonyShort"}}</small></span>
+                <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Harmony"}}</span>
                 <input type="number" name="harmony" id="wod5e-mage-arete-harmony" class="wod5e-mage-arete-harmony" min="0" max="9" step="1" value="0" data-value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Harmony'}}">
             </div>
 
             {{!-- La Quintessenza: ogni punto speso è un successo automatico e scende
                  dalla Ruota; se l'effetto fa danni, sono aggravati. --}}
             <div class="wod5e-mage-arete-harmony-row wod5e-mage-arete-quintessence-row" title="{{localize 'WOD5E_MAGE.Arete.QuintessenceHint'}}">
-                <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Quintessence"}} <small>{{localize "WOD5E_MAGE.Arete.QuintessenceShort" available=quintessence}}</small></span>
+                <span class="wod5e-mage-arete-row-label wod5e-mage-arete-row-label-full">{{localize "WOD5E_MAGE.Arete.Quintessence"}}</span>
                 <input type="number" name="quintessence" id="wod5e-mage-arete-quintessence" class="wod5e-mage-arete-harmony" min="0" max="{{quintessence}}" step="1" value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Quintessence'}}" {{#unless quintessence}}disabled{{/unless}}>
             </div>
 
@@ -206,7 +203,7 @@
                     <div data-role="convictionFresh" {{#if conviction.used}}hidden{{/if}}>
                         <label class="wod5e-mage-arete-conviction-toggle">
                             <input type="checkbox" name="conviction" id="wod5e-mage-arete-conviction">
-                            <span>{{localize "WOD5E_MAGE.Arete.Conviction"}} <small>{{localize "WOD5E_MAGE.Arete.ConvictionShort"}}</small></span>
+                            <span>{{localize "WOD5E_MAGE.Arete.Conviction"}}</span>
                         </label>
                         <select name="convictionId" id="wod5e-mage-arete-conviction-id" class="hidden" aria-label="{{localize 'WOD5E_MAGE.Arete.ConvictionPick'}}">
                             {{#each conviction.options as |option|}}
@@ -233,13 +230,11 @@
             {{!-- La Tipologia: una scelta sola. --}}
             <div class="wod5e-mage-arete-types" role="group" aria-label="{{localize 'WOD5E_MAGE.Arete.MagickType'}}">
                 <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.MagickType"}}</span>
+                {{!-- Le spiegazioni stanno nei titoli (10/9): niente testo a destra. --}}
                 <div class="wod5e-mage-arete-type-grid">
-                    <label class="wod5e-mage-arete-type"><input type="checkbox" class="wod5e-mage-magick-type" name="coincidental"> <span>{{localize "WOD5E_MAGE.Arete.Coincidental"}}</span></label>
-                    <em>{{localize "WOD5E_MAGE.Arete.CoincidentalHint"}}</em>
-                    <label class="wod5e-mage-arete-type"><input type="checkbox" class="wod5e-mage-magick-type" name="vulgar"> <span>{{localize "WOD5E_MAGE.Arete.Vulgar"}}</span></label>
-                    <em>{{localize "WOD5E_MAGE.Arete.VulgarHint"}}</em>
-                    <label class="wod5e-mage-arete-type"><input type="checkbox" class="wod5e-mage-magick-type" name="witnesses"> <span>{{localize "WOD5E_MAGE.Arete.VulgarWithWitnesses"}}</span></label>
-                    <em>{{localize "WOD5E_MAGE.Arete.WitnessesHint"}}</em>
+                    <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.CoincidentalHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="coincidental"> <span>{{localize "WOD5E_MAGE.Arete.Coincidental"}}</span></label>
+                    <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.VulgarHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="vulgar"> <span>{{localize "WOD5E_MAGE.Arete.Vulgar"}}</span></label>
+                    <label class="wod5e-mage-arete-type" title="{{localize 'WOD5E_MAGE.Arete.WitnessesHint'}}"><input type="checkbox" class="wod5e-mage-magick-type" name="witnesses"> <span>{{localize "WOD5E_MAGE.Arete.VulgarWithWitnesses"}}</span></label>
                 </div>
             </div>
             {{else}}

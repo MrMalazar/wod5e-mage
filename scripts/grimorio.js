@@ -195,7 +195,8 @@ export function findEffetto(id) {
  * finestra resta aperta: ogni nome cliccato passa da `onPick` e si segna
  * come preso (per aggiungere liste di effetti alla scheda).
  */
-let lastView = "sphere";
+// Si apre per Formula (verdetto di Blue, 10/9); poi si ricorda l'ultima vista.
+let lastView = "formula";
 let lastGrade = 1;
 // Le Sfere spente coi simboli in cima (7/9): si ricordano finché il mondo resta aperto.
 const dimmedSpheres = new Set();
@@ -230,7 +231,7 @@ export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
   await foundry.applications.api.DialogV2.wait({
     window: { title: localize("WOD5E_MAGE.Grimorio.Title") },
     classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog", "wod5e-mage-grimorio"],
-    position: { width: 640 },
+    position: { width: 720 },
     content,
     buttons: [{ action: "close", icon: "fas fa-times", label: localize("WOD5E.Close"), default: true }],
     rejectClose: false,

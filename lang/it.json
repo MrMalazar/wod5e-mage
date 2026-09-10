@@ -178,7 +178,8 @@
       "ConvictionNone": "Nessuna Convinzione in scheda.",
       "ConvictionGained": "Convinzione rispettata ({conviction}): +1 Quintessenza.",
       "ConvictionFull": "Convinzione rispettata, ma la Ruota è piena: niente da rigenerare.",
-      "ConvictionFlavor": "Convinzione rispettata: +1 Quintessenza"
+      "ConvictionFlavor": "Convinzione rispettata: +1 Quintessenza",
+      "ReadingSwitch": "Un'altra lettura di questo Ambito"
     },
     "Focus": {
       "Credo": "Credo",

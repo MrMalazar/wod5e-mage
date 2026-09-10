@@ -168,8 +168,12 @@ export function lineageSpheres({ famiglia = "", sottofamiglia = "", credo = "", 
 /**
  * I cambi da fondere in un aggiornamento dell'attore quando cambia
  * l'appartenenza o il Credo: sblocca le Sfere (di famiglia) e, per Famiglia
- * e Sottofamiglia, segna il primo pallino se manca. Niente viene tolto.
- * `before` è lo stato dell'attore, `changes` il diff dell'update.
+ * e Sottofamiglia, segna il primo pallino se manca. Le Sfere che
+ * l'appartenenza di prima portava e quella nuova no perdono il segno di
+ * famiglia (verdetto di Blue, 9/9: «si accumula tutto e crea caos»); se
+ * avevano solo il pallino regalato, si spengono e tornano bloccate; i
+ * pallini comprati restano. `before` è lo stato dell'attore, `changes` il
+ * diff dell'update.
  */
 export function lineageSphereChanges(before, changes) {
   const flags = changes?.flags?.[MODULE_ID] ?? {};
@@ -196,6 +200,19 @@ export function lineageSphereChanges(before, changes) {
   if (sottofamiglia !== requestedSub) out.lineage.sottofamiglia = sottofamiglia;
 
   const values = before.spheres ?? {};
+  // Le Sfere dell'appartenenza di prima che quella nuova non porta più.
+  const wasLineage = lineageSpheres({ famiglia: current.famiglia, sottofamiglia: current.sottofamiglia, credo: before.credo, credoSpheres: before.credoSpheres });
+  const isLineage = lineageSpheres({ famiglia, sottofamiglia, credo, credoSpheres: choice });
+  const keeps = new Set([...isLineage.dotted, ...isLineage.present]);
+  for (const id of [...wasLineage.dotted, ...wasLineage.present]) {
+    if (keeps.has(id) || !SPHERES.includes(id)) continue;
+    out.familySpheres[id] = false;
+    const value = Math.max(Math.trunc(Number(values[id]) || 0), 0);
+    if (value <= 1) {
+      out.selectedSpheres[id] = false;
+      if (value > 0) out.spheres[id] = 0;
+    }
+  }
   const unlock = (id, withDot) => {
     if (!SPHERES.includes(id)) return;
     out.selectedSpheres[id] = true;

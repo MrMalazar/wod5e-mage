@@ -178,7 +178,8 @@
       "ConvictionNone": "No Conviction on the sheet.",
       "ConvictionGained": "Conviction upheld ({conviction}): +1 Quintessence.",
       "ConvictionFull": "Conviction upheld, but the Wheel is full: nothing to regain.",
-      "ConvictionFlavor": "Conviction upheld: +1 Quintessence"
+      "ConvictionFlavor": "Conviction upheld: +1 Quintessence",
+      "ReadingSwitch": "Another reading of this Scope"
     },
     "Focus": {
       "Credo": "Creed",
