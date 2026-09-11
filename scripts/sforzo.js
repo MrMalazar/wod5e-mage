@@ -2,18 +2,20 @@ import { MODULE_ID } from "./constants.js";
 import { addParadoxToBalance, getMagickBalance, MAGICK_TRACK_MAX } from "./magick-balance.js";
 import { isMageActor } from "./mage-dice.js";
 import { normalizeEffectKind } from "./paradox-burst.js";
+import { RAMO, sforzoCost } from "./ramo-c.js";
 import { ROLL_CARD_FLAG, rollActionsBox, rollOutcome } from "./roll-card.js";
 import { addSaluteDamage } from "./salute.js";
 
 /**
- * Sforzare la realtà (regola di Blue, 10/9/2026 sera): a tiro fallito il
- * giocatore può costringere la realtà a fare quello che vuole. L'incantesimo
- * riesce, e la Ruota sale di tanti punti di Paradosso quanti sono i successi
- * che mancano alla soglia (oltre a quelli che il tiro ha già portato, il
- * Volgare, i rossi). È un azzardo: dalla seconda volta nella stessa
- * sessione costa anche un aggravato, fisico o mentale secondo l'Effetto
- * dichiarato (variabile: a caso; non dichiarato: fisico, come l'Ustione).
- * Il tasto sta nella fila dei tre sotto la fascia del tiro fallito.
+ * Sforzare la realtà (regola di Blue, 10/9/2026 sera; ramo C dell'11/9):
+ * a tiro fallito il giocatore può costringere la realtà a fare quello che
+ * vuole. L'incantesimo riesce, e la Ruota sale di tanti punti di Paradosso
+ * quanti ne dice il prezzo: nel ramo C la SOGLIA dell'incantesimo (non ci
+ * sono successi mancanti; verdetto dell'11/9), oltre a quelli che il tiro
+ * ha già portato, il Volgare, i rossi. È un azzardo: dalla seconda volta
+ * nella stessa sessione costa anche un aggravato, fisico o mentale secondo
+ * l'Effetto dichiarato (variabile: a caso; non dichiarato: fisico, come
+ * l'Ustione). Il tasto sta nella fila sotto la fascia del tiro fallito.
  */
 
 export const SFORZO_FLAG = "sforzo";
@@ -27,10 +29,17 @@ export function missingSuccesses(total, difficulty) {
   return goal > 0 ? Math.max(goal - successes, 0) : 0;
 }
 
-/** Il tasto compare sotto un tiro fallito, non ancora sforzato né riuscito a un prezzo, che non sia uno Scoppio né una vittoria automatica. */
-export function sforzoState({ total = 0, difficulty = 0, forced = false, priced = false, burst = false, automatic = false } = {}) {
-  const missing = missingSuccesses(total, difficulty);
-  if (forced || priced || burst || automatic || missing <= 0) return { show: false, missing: 0 };
+/**
+ * Il tasto compare sotto un tiro fallito, non ancora sforzato né riuscito
+ * a un prezzo, che non sia uno Scoppio né una riuscita senza dadi. Il
+ * prezzo (`missing`, il nome resta): nel ramo C la soglia; nel ramo A i
+ * successi che mancano.
+ */
+export function sforzoState({ total = 0, difficulty = 0, threshold = 0, ramo = "", forced = false, priced = false, burst = false, automatic = false, skill = false } = {}) {
+  if (forced || priced || burst || automatic || skill) return { show: false, missing: 0 };
+  const failed = missingSuccesses(total, difficulty) > 0;
+  const missing = ramo === RAMO ? sforzoCost(threshold) : missingSuccesses(total, difficulty);
+  if (!failed || missing <= 0) return { show: false, missing: 0 };
   return { show: true, missing };
 }
 
@@ -66,6 +75,11 @@ export function sforzoBalance(balance, paradox) {
   return { after, entered, cancelled, moved, wasted: Math.max(paradox - moved, 0) };
 }
 
+/** I pezzi della carta che decidono il tasto. */
+function stateInput(card) {
+  return { total: card.total, difficulty: card.difficulty, threshold: card.threshold, ramo: card.ramo, forced: card.forced, priced: card.priced, burst: card.burst || card.burstResult, automatic: card.automatic, skill: card.skill };
+}
+
 function speakerActor(message) {
   const actor = ChatMessage.getSpeakerActor?.(message.speaker) ?? game.actors?.get(message.speaker?.actor);
   return actor ?? null;
@@ -95,9 +109,11 @@ export function renderForced(used, format, localize) {
 
 /** Sotto i dadi di un tiro fallito del Mago: il tasto, o la riga di quel che si è fatto. */
 export function decorateSforzo(message, html) {
-  const roll = message?.rolls?.[0];
-  if (!roll || !html?.querySelector) return false;
-  const target = html.querySelector(".dice-result");
+  if (!html?.querySelector) return false;
+  // Un tiro, oppure (ramo C) il lancio a zero dadi, senza tiro ma con la carta.
+  const card = message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG) ?? {};
+  if (!message?.rolls?.[0] && card.ramo !== RAMO) return false;
+  const target = html.querySelector(".dice-result") ?? html.querySelector(".message-content");
   if (!target || target.querySelector(".wod5e-mage-sforzo-button, .wod5e-mage-roll-note-sforzo")) return false;
 
   const localize = game.i18n.localize.bind(game.i18n);
@@ -110,9 +126,8 @@ export function decorateSforzo(message, html) {
 
   const actor = speakerActor(message);
   if (!isMageActor(actor) || !actor.isOwner) return false;
-  const card = message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG) ?? {};
   if (!Number.isFinite(Number(card.total))) return false;
-  const state = sforzoState({ total: card.total, difficulty: card.difficulty, forced: card.forced, priced: card.priced, burst: card.burst || card.burstResult, automatic: card.automatic });
+  const state = sforzoState(stateInput(card));
   if (!state.show) return false;
 
   const usesSoFar = Math.max(Math.trunc(Number(actor.getFlag(MODULE_ID, SFORZO_SESSION_FLAG)) || 0), 0);
@@ -146,7 +161,7 @@ async function confirmSforzo(state, price, localize, format) {
 export async function forceReality(message, actor) {
   if (message.getFlag(MODULE_ID, SFORZO_FLAG)) return null;
   const card = message.getFlag(MODULE_ID, ROLL_CARD_FLAG) ?? {};
-  const state = sforzoState({ total: card.total, difficulty: card.difficulty, forced: card.forced, priced: card.priced, burst: card.burst || card.burstResult, automatic: card.automatic });
+  const state = sforzoState(stateInput(card));
   if (!state.show) return null;
   const localize = game.i18n.localize.bind(game.i18n);
   const format = game.i18n.format.bind(game.i18n);

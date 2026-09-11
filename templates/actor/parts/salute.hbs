@@ -11,7 +11,7 @@
     <div class="resource flex-group-center">
         <div class="wod5e-mage-salute-track" role="group" aria-label="{{localize 'WOD5E_MAGE.Salute.Label'}}" title="{{localize 'WOD5E_MAGE.Salute.ClickHint'}}">
             {{#each salute.cells as |cell|}}
-                <button type="button" class="wod5e-mage-salute-cell" data-state="{{cell.state}}" data-action="saluteCellChange" data-index="{{cell.index}}" aria-label="{{localize cell.label}}"></button>
+                <button type="button" class="wod5e-mage-salute-cell{{#if cell.locked}} wod5e-mage-salute-locked{{/if}}" data-state="{{cell.state}}" {{#if cell.locked}}data-locked="true" title="{{localize 'WOD5E_MAGE.Salute.LockedHint'}}"{{/if}} data-action="saluteCellChange" data-index="{{cell.index}}" aria-label="{{localize cell.label}}"></button>
             {{/each}}
         </div>
     </div>

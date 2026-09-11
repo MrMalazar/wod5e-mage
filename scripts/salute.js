@@ -1,5 +1,6 @@
 import { MODULE_ID } from "./constants.js";
 import { addParadoxToBalance, getMagickBalance, getPersistentMagickResources, MAGICK_TRACK_MAX } from "./magick-balance.js";
+import { joinLobby } from "./paradosso-narratore.js";
 
 /**
  * La Salute del ramo A (tronco del 3/9/2026): un tracciato solo, lungo
@@ -64,23 +65,69 @@ export function saluteStatus(counts, max) {
   return "";
 }
 
+/**
+ * Le caselle bloccate dall'Ustione (ramo C, verdetto di Blue dell'11/9): i
+ * danni del Paradosso colorano la casella di rosso e la «bloccano», ma è
+ * solo un effetto visivo: il giocatore li può comunque togliere. Il conto
+ * non supera mai i danni segnati sul suo lato.
+ */
+export function normalizeParadoxLocks(stored, counts) {
+  return {
+    p: Math.min(count(stored?.p), count(counts?.pa) + count(counts?.ps)),
+    m: Math.min(count(stored?.m), count(counts?.ma) + count(counts?.ms))
+  };
+}
+
+/** Quali caselle sono bloccate: le prime fisiche da sinistra, le prime mentali da destra. */
+export function paintParadoxLocks(painted, locks) {
+  const cells = painted.map(() => false);
+  let physical = count(locks?.p);
+  for (let index = 0; index < cells.length && physical > 0; index += 1) {
+    if (painted[index] === "pa" || painted[index] === "ps") {
+      cells[index] = true;
+      physical -= 1;
+    }
+  }
+  let mental = count(locks?.m);
+  for (let index = cells.length - 1; index >= 0 && mental > 0; index -= 1) {
+    if (painted[index] === "ma" || painted[index] === "ms") {
+      cells[index] = true;
+      mental -= 1;
+    }
+  }
+  return cells;
+}
+
+/** Cambio Scena (11/9): una casella bloccata si sblocca, prima le fisiche. */
+export function locksAfterScene(locks) {
+  const next = { p: count(locks?.p), m: count(locks?.m) };
+  if (next.p > 0) next.p -= 1;
+  else if (next.m > 0) next.m -= 1;
+  return next;
+}
+
 export function getSalute(actor) {
   const stored = actor.getFlag(MODULE_ID, "salute") ?? {};
   const extra = Math.trunc(Number(stored.extra) || 0);
   const max = saluteMax(actor, extra);
   const counts = clampSalute(stored, max);
   const total = counts.pa + counts.ps + counts.ma + counts.ms;
+  const locks = normalizeParadoxLocks(stored.paradosso, counts);
 
   const painted = paintSalute(counts, max);
+  const lockedCells = paintParadoxLocks(painted, locks);
   const cells = Array.from({ length: max }, (_, index) => ({
     index,
     state: painted[index] ?? "",
+    locked: lockedCells[index],
     label: `WOD5E_MAGE.Salute.States.${painted[index] || "empty"}`
   }));
 
   return {
     ...counts,
     extra,
+    paradosso: locks,
+    locked: locks.p + locks.m,
     max,
     total,
     cells,
@@ -131,11 +178,21 @@ export function saluteWithDamage(counts, max, damage = {}) {
   return saluteDamageOutcome(counts, max, damage).counts;
 }
 
-/** Segna danni sulla Salute del personaggio e torna i conti nuovi. */
-export async function addSaluteDamage(actor, damage = {}) {
+/**
+ * Segna danni sulla Salute del personaggio e torna i conti nuovi. Con
+ * `lock` (l'Ustione del ramo C) le caselle segnate restano bloccate in
+ * rosso finché una scena non le sblocca.
+ */
+export async function addSaluteDamage(actor, damage = {}, { lock = false } = {}) {
   const salute = getSalute(actor);
   const { counts, converted } = saluteDamageOutcome(salute, salute.max, damage);
-  await actor.setFlag(MODULE_ID, "salute", { ...counts, extra: salute.extra });
+  const paradosso = lock
+    ? normalizeParadoxLocks({
+      p: salute.paradosso.p + count(damage.pa) + count(damage.ps),
+      m: salute.paradosso.m + count(damage.ma) + count(damage.ms)
+    }, counts)
+    : normalizeParadoxLocks(salute.paradosso, counts);
+  await actor.setFlag(MODULE_ID, "salute", { ...counts, extra: salute.extra, paradosso });
   return { ...counts, converted };
 }
 
@@ -307,7 +364,31 @@ export async function onSaluteCellChange(event, target) {
   const toState = event.button === 2 ? "" : await askSaluteState(event, cell.state);
   if (toState === null || toState === cell.state) return;
   const next = applySaluteStateChange(salute, salute.max, cell.state, toState);
-  await actor.setFlag(MODULE_ID, "salute", { ...next, extra: salute.extra });
+  // Una casella bloccata svuotata a mano: il blocco cade con lei (è solo visivo).
+  const paradosso = cell.locked && !toState
+    ? (cell.state === "pa" || cell.state === "ps" ? { ...salute.paradosso, p: salute.paradosso.p - 1 } : { ...salute.paradosso, m: salute.paradosso.m - 1 })
+    : salute.paradosso;
+  await actor.setFlag(MODULE_ID, "salute", { ...next, extra: salute.extra, paradosso: normalizeParadoxLocks(paradosso, next) });
+}
+
+/**
+ * Cambio Scena (verdetto di Blue, 11/9): sotto Nuova sessione, il tasto
+ * sblocca una casella bloccata dall'Ustione e riarma la Convinzione.
+ */
+export async function onSaluteCambioScena(event) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEdit(actor)) return;
+  const salute = getSalute(actor);
+  const paradosso = locksAfterScene(salute.paradosso);
+  await actor.update({
+    [`flags.${MODULE_ID}.salute.paradosso`]: paradosso,
+    [`flags.${MODULE_ID}.-=convinzioneScena`]: null
+  });
+  const unlocked = salute.locked - (paradosso.p + paradosso.m);
+  ui.notifications.info(unlocked > 0
+    ? game.i18n.localize("WOD5E_MAGE.Salute.CambioScenaDone")
+    : game.i18n.localize("WOD5E_MAGE.Salute.CambioScenaNone"));
 }
 
 /**
@@ -323,10 +404,23 @@ export function saluteAfterSession(counts) {
   };
 }
 
-/** Quanta Quintessenza torna a nuova sessione: la generata, almeno 1. */
+/**
+ * La Quintessenza a nuova sessione (ramo C, verdetto dell'11/9): la Ruota
+ * si azzera e riparte dalla «Quintessenza generata» dei Background; chi
+ * non ne ha riparte da zero. I tre punti della prima sessione si mettono
+ * a mano.
+ */
 export function quintessenceGained(generated) {
-  const value = Math.trunc(Number(String(generated ?? "").trim()) || 0);
-  return Math.max(value, 1);
+  return Math.max(Math.trunc(Number(String(generated ?? "").trim()) || 0), 0);
+}
+
+/** La Ruota a nuova sessione: la Quintessenza generata, dentro le celle libere. */
+export function balanceAfterSession(balance, generated) {
+  const gained = quintessenceGained(generated);
+  return {
+    quintessence: Math.min(gained, Math.max(MAGICK_TRACK_MAX - Math.max(count(balance?.paradox), count(balance?.floor)), 0)),
+    paradox: count(balance?.paradox)
+  };
 }
 
 /** La riga delle Prese dell'Esperienza per i punti della sessione. */
@@ -364,7 +458,8 @@ export async function onSaluteNewSession(event) {
 
   const salute = getSalute(actor);
   const update = {
-    [`flags.${MODULE_ID}.salute`]: { ...saluteAfterSession(salute), extra: salute.extra },
+    // La sessione nuova è anche una scena nuova: una casella bloccata si sblocca.
+    [`flags.${MODULE_ID}.salute`]: { ...saluteAfterSession(salute), extra: salute.extra, paradosso: locksAfterScene(salute.paradosso) },
     [`flags.${MODULE_ID}.contraccolpoNegato`]: false,
     // Nuova sessione, nuova scena: la Convinzione può rigenerare di nuovo (9/9).
     [`flags.${MODULE_ID}.-=convinzioneScena`]: null,
@@ -372,14 +467,10 @@ export async function onSaluteNewSession(event) {
     [`flags.${MODULE_ID}.-=sforziSessione`]: null
   };
 
-  // La Ruota (6/9): a nuova sessione la Quintessenza sale della «Quintessenza
-  // generata» scritta sulla scheda, almeno di 1.
+  // La Ruota (ramo C, 11/9): a nuova sessione la Quintessenza si azzera e
+  // riparte dalla «Quintessenza generata» scritta sulla scheda.
   const balance = getMagickBalance(actor);
-  const gained = quintessenceGained(getPersistentMagickResources(actor).generatedQuintessence);
-  update[`flags.${MODULE_ID}.magickBalance`] = {
-    quintessence: Math.min(balance.quintessence + gained, MAGICK_TRACK_MAX - balance.floor),
-    paradox: balance.paradox
-  };
+  update[`flags.${MODULE_ID}.magickBalance`] = balanceAfterSession(balance, getPersistentMagickResources(actor).generatedQuintessence);
 
   const gain = experienceGainRow(result.experience, result.when);
   if (gain.cost > 0) {
@@ -390,6 +481,8 @@ export async function onSaluteNewSession(event) {
   }
 
   await actor.update(update);
+  // Il personaggio entra in lobby: la Scheda del Paradosso del Narratore lo conta.
+  await joinLobby(actor);
   ui.notifications.info(gain.cost > 0
     ? game.i18n.format("WOD5E_MAGE.Salute.NewSessionDoneXp", { points: gain.cost })
     : localize("WOD5E_MAGE.Salute.NewSessionDone"));
@@ -433,24 +526,26 @@ export async function onSaluteRelax(event) {
   if (!canEdit(actor)) return;
   const resolve = Math.max(Number(actor.system?.attributes?.resolve?.value) || 0, 0);
   const composure = Math.max(Number(actor.system?.attributes?.composure?.value) || 0, 0);
-  const { dressNextRollDialogAsMage, isMageActor } = await import("./mage-dice.js");
-  if (isMageActor(actor)) dressNextRollDialogAsMage();
-  let roll = null;
+  // Il ramo C (11/9): anche il Relax passa dalla finestra del modulo, un 8 riesce.
+  const { rollAreteWithParadox } = await import("./paradox-dice.js");
+  const { ROLL_CARD_FLAG } = await import("./roll-card.js");
+  let message = null;
   try {
-    roll = await WOD5E.api.Roll({
-      basicDice: resolve + composure,
-      title: game.i18n.localize("WOD5E_MAGE.Salute.RelaxRolling"),
-      selectors: ["attributes", "attributes.resolve", "attributes.composure", "mental"],
+    message = await rollAreteWithParadox({
       actor,
       data: actor.system,
-      quickRoll: false,
-      disableAdvancedDice: true
+      pool: resolve + composure,
+      threshold: 0,
+      paradoxRating: 0,
+      skill: true,
+      title: game.i18n.localize("WOD5E_MAGE.Salute.RelaxRolling"),
+      selectors: ["attributes", "attributes.resolve", "attributes.composure", "mental"]
     });
   } catch (_error) {
     return;
   }
-  if (!roll || roll === "cancel") return;
-  const successes = Math.max(Math.trunc(Number(roll.total) || 0), 0);
+  if (!message || message === "cancel") return;
+  const successes = Math.max(Math.trunc(Number(message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG)?.total) || 0), 0);
   const salute = getSalute(actor);
   const after = saluteAfterRelax(salute, successes);
   await actor.setFlag(MODULE_ID, "salute", { ...after, extra: salute.extra });
@@ -468,7 +563,7 @@ export async function onSaluteReset(event) {
   if (!canEdit(actor)) return;
 
   const salute = getSalute(actor);
-  await actor.setFlag(MODULE_ID, "salute", { pa: 0, ps: 0, ma: 0, ms: 0, extra: salute.extra });
+  await actor.setFlag(MODULE_ID, "salute", { pa: 0, ps: 0, ma: 0, ms: 0, extra: salute.extra, paradosso: { p: 0, m: 0 } });
 }
 
 /** Il più e il meno accanto al nome: caselle in più oltre il conto. */

@@ -1,10 +1,12 @@
 import { MODULE_ID } from "./constants.js";
 import {
   addParadoxToBalance,
+  applyMagickBalanceDelta,
   getMagickBalance,
   MAGICK_TRACK_MAX,
   paradoxGainForMagickType
 } from "./magick-balance.js";
+import { quintessenceSpend, ramoCDice } from "./ramo-c.js";
 import {
   findMageRollTrait,
   prepareMageRollTraits,
@@ -14,9 +16,7 @@ import { INFLUENCE_LABELS, prepareSpheres } from "./spheres.js";
 import { prepareScopeTable, scopeReadings, SCOPE_ICONS, SCOPES } from "./scopes.js";
 import {
   ROLL_CARD_FLAG,
-  renderAutoVictoryContent,
   renderRollCard,
-  renderRollNote,
   rollSymbols
 } from "./roll-card.js";
 import { FOCUS_FORMS, PERCEIVE_TOOL_ID } from "./focus.js";
@@ -140,10 +140,12 @@ export function calculateMagickThreshold({ sphereLevels = [], scopeLevels = [] }
 }
 
 /**
- * I successi automatici delle Specialità (verdetto di Blue, 4/9 notte):
- * quando una Sfera nel lancio ha la Specialità su un Ambito dichiarato,
- * il tiro parte con tanti successi quanto l'Areté. Una volta sola, anche
- * con più Specialità in gioco. Torna il conto e le coppie che lo danno.
+ * Le Specialità delle Sfere (verdetto di Blue, 4/9 notte, ramo A): quando
+ * una Sfera nel lancio ha la Specialità su un Ambito dichiarato, il tiro
+ * partiva con tanti successi quanto l'Areté. Nel ramo C un successo è già
+ * la riuscita, quindi la stessa coppia dà tanti DADI quanto l'Areté
+ * (PROPOSTA del programma, 11/9: da confermare con Blue). Una volta sola,
+ * anche con più Specialità in gioco. Torna il conto e le coppie che lo danno.
  */
 export function calculateAutomaticSuccesses({ sphereLevels = [], scopeLevels = [], specialties = {}, arete = 0 } = {}) {
   const spheres = levelEntries(sphereLevels, 5);
@@ -159,21 +161,18 @@ export function calculateAutomaticSuccesses({ sphereLevels = [], scopeLevels = [
   return { successes: pairs.length ? value : 0, pairs };
 }
 
-/** Vittoria automatica: riserva almeno doppia della soglia, non si tira. */
-export function isAutomaticVictory(pool, threshold, automaticSuccesses = 0) {
-  const goal = Math.max(Math.trunc(Number(threshold) || 0), 0);
-  if (goal <= 0) return false;
-  // I successi automatici delle Specialità che coprono la soglia: non si tira.
-  if (Math.max(Math.trunc(Number(automaticSuccesses) || 0), 0) >= goal) return true;
-  return Math.max(Math.trunc(Number(pool) || 0), 0) >= goal * 2;
-}
-
-/** A un passo: riuscita a un prezzo se mancano al massimo Areté successi. */
-export function isOneStepShort(successes, threshold, arete) {
-  const goal = Math.max(Math.trunc(Number(threshold) || 0), 0);
-  const got = Math.max(Math.trunc(Number(successes) || 0), 0);
-  if (goal === 0 || got >= goal) return false;
-  return goal - got <= Math.max(Math.trunc(Number(arete) || 0), 0);
+/**
+ * La riserva del ramo C prima della soglia: tratti, dadi in più (premio e
+ * Armonia dentro il tetto), i dadi delle Specialità e la Quintessenza
+ * spesa sotto il prezzo della riuscita. Torna i pezzi e il conto dei dadi.
+ */
+export function ramoCPool({ traits = 0, bonus = 0, specialtyDice = 0, quintessence = 0, sphereMax = 0, threshold = 0 } = {}) {
+  const spend = quintessenceSpend(quintessence, sphereMax);
+  const pool = Math.max(Math.trunc(Number(traits) || 0), 0)
+    + capBonusDice(bonus)
+    + Math.max(Math.trunc(Number(specialtyDice) || 0), 0)
+    + spend.dice;
+  return { ...ramoCDice(pool, threshold), spend };
 }
 
 function isChecked(value) {
@@ -373,6 +372,7 @@ function wireDifficulty(dialog) {
   const thresholdOut = root?.querySelector("[data-role=threshold]");
   const poolOut = root?.querySelector("[data-role=pool]");
   const autoOut = root?.querySelector("[data-role=autoVictory]");
+  const diceOut = root?.querySelector("[data-role=dice]");
   if (!thresholdOut || !poolOut) return;
 
   const attribute = root.querySelector("#wod5e-mage-arete-attribute");
@@ -391,27 +391,38 @@ function wireDifficulty(dialog) {
     const threshold = calculateMagickThreshold({ sphereLevels, scopeLevels });
     const quintessenceMax = Math.max(Math.trunc(Number(quintessence?.max) || 0), 0);
     const quintessenceSpent = Math.min(Math.max(Math.trunc(Number(quintessence?.value) || 0), 0), quintessenceMax);
-    const automaticSuccesses = calculateAutomaticSuccesses({
+    const specialtyDice = calculateAutomaticSuccesses({
       sphereLevels,
       scopeLevels,
       specialties: readSpecialties(root),
       arete: areteValue
-    }).successes + quintessenceSpent;
+    }).successes;
 
     const prizeDice = prizeBox?.checked
       ? Math.max(Math.trunc(Number(prizeBox.dataset.value) || 0), 0)
       : 0;
-    const bonus = capBonusDice(prizeDice + normalizeHarmony(harmony?.value));
-    const pool = calculateAreteTraitPool(optionValue(attribute), optionValue(primary), optionValue(secondary)) + bonus;
+    const sphereMax = Math.max(0, ...sphereLevels.map((entry) => entry.level));
+    // Il ramo C: riserva meno soglia uguale dadi; la Quintessenza al prezzo
+    // della Sfera compra la riuscita, sotto il prezzo è un dado per punto.
+    const conto = ramoCPool({
+      traits: calculateAreteTraitPool(optionValue(attribute), optionValue(primary), optionValue(secondary)),
+      bonus: prizeDice + normalizeHarmony(harmony?.value),
+      specialtyDice,
+      quintessence: quintessenceSpent,
+      sphereMax,
+      threshold
+    });
 
-    thresholdOut.textContent = String(threshold);
-    poolOut.textContent = String(pool);
+    thresholdOut.textContent = String(conto.threshold);
+    poolOut.textContent = String(conto.pool);
+    if (diceOut) diceOut.textContent = String(conto.dice);
     if (autoSuccessOut) {
-      autoSuccessOut.textContent = automaticSuccesses > 0
-        ? game.i18n.format("WOD5E_MAGE.Arete.AutoSuccesses", { successes: automaticSuccesses })
-        : "";
+      const parts = [];
+      if (specialtyDice > 0) parts.push(game.i18n.format("WOD5E_MAGE.Arete.SpecialtyDice", { dice: specialtyDice }));
+      if (sphereMax > 0 && quintessenceMax > 0) parts.push(game.i18n.format("WOD5E_MAGE.RamoC.BuyPrice", { price: sphereMax }));
+      autoSuccessOut.textContent = parts.length ? `· ${parts.join(" · ")}` : "";
     }
-    autoOut?.classList.toggle("hidden", !isAutomaticVictory(pool, threshold, automaticSuccesses));
+    autoOut?.classList.toggle("hidden", !conto.spend.bought);
   };
 
   [attribute, primary, secondary, prizeBox, harmony, quintessence].forEach((control) => {
@@ -579,23 +590,6 @@ function wireMaintainedEffect(dialog) {
   box.addEventListener("change", () => {
     name.classList.toggle("hidden", !box.checked);
     if (box.checked) name.focus();
-  });
-}
-
-/** Un messaggio in chat senza dadi: la vittoria automatica accidentale. */
-/**
- * La vittoria automatica senza dadi: scritta grande, simboli del tiro,
- * conto e note, in un messaggio senza tiro.
- */
-async function postAutomaticVictory(actor, title, { symbols, card, notes }) {
-  return ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor }),
-    flavor: title,
-    content: renderAutoVictoryContent(
-      { symbols, card, notes },
-      game.i18n.localize.bind(game.i18n)
-    ),
-    flags: { [MODULE_ID]: { [ROLL_CARD_FLAG]: { symbols, automatic: true } } }
   });
 }
 
@@ -936,17 +930,19 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     sphereLevels: sphereEntries,
     scopeLevels: scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level }))
   });
-  // Le Specialità: successi automatici pari all'Areté, la soglia non si tocca.
-  const automatic_ = calculateAutomaticSuccesses({
+  // Le Specialità (ramo C): dadi pari all'Areté, la soglia non si tocca.
+  const specialty = calculateAutomaticSuccesses({
     sphereLevels: sphereEntries,
     scopeLevels: scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level })),
     specialties,
     arete: arete.value
   });
-  // La Quintessenza spesa (6/9): un successo automatico per punto, scende
-  // dalla Ruota; se l'effetto fa danni, sono aggravati.
+  // La Quintessenza spesa (ramo C, 11/9): un punto vale un dado; punti pari
+  // al livello della Sfera più alta comprano la riuscita senza tirare (i
+  // rossi si tirano comunque). Scende dalla Ruota; se l'effetto fa danni,
+  // sono aggravati.
   const quintessence = Math.min(Math.max(Math.trunc(Number(result.quintessence) || 0), 0), quintessenceAvailable);
-  const autoSuccesses = automatic_.successes + quintessence;
+  const sphereMax = Math.max(0, ...sphereEntries.map((entry) => entry.level));
   // La Convinzione rispettata (9/9): a tiro fatto, +1 Quintessenza una volta per scena.
   const convictionKept = convictionChoice(result, conviction);
   const goal = String(result.goal ?? "").trim();
@@ -955,7 +951,15 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   const prizeDice = options.usePrize ? prize.dice : 0;
   const bonusDice = prizeDice + options.harmony;
   const basePool = calculateAreteTraitPool(...selectedTraits.map((trait) => trait.value));
-  const dicePool = basePool + capBonusDice(bonusDice);
+  const conto = ramoCPool({
+    traits: basePool,
+    bonus: bonusDice,
+    specialtyDice: specialty.successes,
+    quintessence,
+    sphereMax,
+    threshold
+  });
+  const bought = conto.spend.bought;
   const rollLabel = selectedTraits.map((trait) => trait.label).join(" + ");
   const selectedTypes = [];
   if (options.coincidental) {
@@ -986,15 +990,17 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.HarmonyFlavor", { dice: options.harmony }));
   }
   if (quintessence > 0) {
-    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: quintessence }));
+    bonusParts.push(bought
+      ? game.i18n.format("WOD5E_MAGE.RamoC.BoughtFlavor", { points: quintessence, price: sphereMax })
+      : game.i18n.format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: quintessence }));
   }
   if (convictionKept) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.ConvictionFlavor", { conviction: convictionKept.label }));
   }
-  if (automatic_.successes > 0) {
-    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.AutoSuccessesFlavor", {
-      successes: automatic_.successes,
-      pairs: automatic_.pairs.map((pair) => `${game.i18n.localize(`WOD5E_MAGE.Spheres.${pair.sphere}`)} ◆ ${game.i18n.localize(`WOD5E_MAGE.Scopes.${pair.scope}`)}`).join(", ")
+  if (specialty.successes > 0) {
+    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.SpecialtyDiceFlavor", {
+      dice: specialty.successes,
+      pairs: specialty.pairs.map((pair) => `${game.i18n.localize(`WOD5E_MAGE.Spheres.${pair.sphere}`)} ◆ ${game.i18n.localize(`WOD5E_MAGE.Scopes.${pair.scope}`)}`).join(", ")
     }));
   }
   // La carta del tiro: una riga per voce sotto i dadi, i simboli sopra.
@@ -1022,12 +1028,8 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   };
   // L'ultima soglia lanciata: la usa lo Scoppio del Paradosso come proposta.
   if (actor.isOwner) await actor.setFlag(MODULE_ID, "lastThreshold", threshold);
-  let flavor = card;
+  const flavor = card;
 
-  // La vittoria automatica: riserva almeno doppia della soglia, non si tira.
-  // Nel Volgare si tirano comunque i soli dadi rossi, per il Contraccolpo;
-  // se scatta, l'Ustione è pari alla soglia.
-  const automatic = isAutomaticVictory(dicePool, threshold, autoSuccesses);
   const paradoxGain = paradoxGainForMagickType(options);
 
   // La Ruota paga subito: la Quintessenza spesa scende, la Magick volgare
@@ -1050,28 +1052,9 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     }
   }
 
-  if (automatic && paradoxGain === 0) {
-    const notes = [renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.AutoVictoryChat", { pool: dicePool, threshold }))];
-    await postAutomaticVictory(actor, rollLabel, { symbols, card, notes });
-    await grantConvictionQuintessence(actor, convictionKept);
-    await recordEffect(actor, result, effect);
-    return;
-  }
-
-  // La Magick accidentale non tira i rossi: solo dadi normali.
+  // L'Accidentale non tira i rossi: solo dadi normali. Il Volgare li tira
+  // sempre, anche con la riuscita comprata: decidono se scoppia.
   const paradoxRating = options.coincidental ? 0 : getMagickBalance(actor).paradox;
-
-  if (automatic) {
-    const redOnly = renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.RedOnly", { pool: dicePool, threshold, burn: threshold }));
-    flavor += redOnly;
-    if (paradoxRating === 0) {
-      // Niente rossi da tirare: la vittoria resta automatica, e basta.
-      await postAutomaticVictory(actor, rollLabel, { symbols, card, notes: [redOnly] });
-      await grantConvictionQuintessence(actor, convictionKept);
-      await recordEffect(actor, result, effect);
-      return;
-    }
-  }
 
   // Load the Foundry-specific dice implementation only when an Areté roll is
   // actually requested. Keeping it out of the data helpers also lets their
@@ -1081,19 +1064,17 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   let outcome = null;
   try {
     outcome = await rollAreteWithParadox({
-      dicePool: automatic ? paradoxRating : basePool,
-      bonusDice: automatic ? 0 : bonusDice,
+      pool: conto.pool,
+      threshold,
+      bonusDice,
       paradoxRating,
-      onlyParadox: automatic,
-      difficulty: automatic ? 0 : threshold,
+      bought,
       burn: threshold,
       effectKind,
       arete: arete.value,
-      autoSuccesses: automatic ? 0 : autoSuccesses,
       title: rollLabel,
       flavor,
-      // Sopra i dadi, in chat: i simboli e la vittoria automatica.
-      card: { symbols, automatic, traits: selectedTraits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value })) },
+      card: { symbols, traits: selectedTraits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value })), vulgar: effect.vulgar },
       selectors: uniqueSelectors,
       actor,
       data: actor.system
@@ -1113,9 +1094,34 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   }
 
   if (rolled) {
+    // Il Volgare fallito genera un punto di Quintessenza (verdetto dell'11/9):
+    // l'energia non spesa torna in casa.
+    const total = Number(outcome?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG)?.total);
+    if (effect.vulgar && Number.isFinite(total) && total < 1 && actor.isOwner) {
+      await grantFailedVulgarQuintessence(actor);
+    }
     await grantConvictionQuintessence(actor, convictionKept);
     await recordEffect(actor, result, effect);
   }
+}
+
+/**
+ * Il Volgare fallito (ramo C, verdetto dell'11/9): un punto di Quintessenza
+ * sale sulla Ruota, come col tasto +; se le nove celle sono piene, prima
+ * se ne libera una dal Paradosso (mai sotto il pavimento).
+ */
+export function quintessenceAfterFailedVulgar(balance) {
+  const next = applyMagickBalanceDelta(balance, "quintessence", 1, balance?.floor ?? 0);
+  return { ...next, gained: next.quintessence !== balance.quintessence || next.paradox !== balance.paradox };
+}
+
+async function grantFailedVulgarQuintessence(actor) {
+  const balance = getMagickBalance(actor);
+  const next = quintessenceAfterFailedVulgar(balance);
+  if (!next.gained) return false;
+  await actor.setFlag(MODULE_ID, "magickBalance", { quintessence: next.quintessence, paradox: next.paradox });
+  ui.notifications.info(game.i18n.localize("WOD5E_MAGE.RamoC.VulgarFailedQuintessence"));
+  return true;
 }
 
 /**

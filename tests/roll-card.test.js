@@ -95,13 +95,16 @@ assert.doesNotMatch(content, /wod5e-mage-roll-symbols/);
 
 // Il tiro scrive la bandiera (coi tratti per la testata e l'Areté per la vittoria a un prezzo) e la chat la legge.
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-assert.match(arete, /card: \{ symbols, automatic, traits: selectedTraits\.map\(\(trait\) => \(\{ id: trait\.id, type: trait\.type, label: trait\.label, value: trait\.value \}\)\) \}/);
+assert.match(arete, /card: \{ symbols, traits: selectedTraits\.map\(\(trait\) => \(\{ id: trait\.id, type: trait\.type, label: trait\.label, value: trait\.value \}\)\), vulgar: effect\.vulgar \}/);
 assert.match(arete, /spheres: sphereEntries\.map\(\(entry\) => \(\{ id: entry\.id, label:/);
-assert.match(arete, /renderAutoVictoryContent/);
+// Nel ramo C la riuscita senza dadi (comprata) la scrive paradox-dice.js con la stessa scritta grande.
+assert.doesNotMatch(arete, /renderAutoVictoryContent/);
+assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /renderAutoVictoryBanner\(localize, banner\)/);
+assert.equal(renderAutoVictoryBanner(localize, "Riuscita comprata"), '<p class="wod5e-mage-roll-victory">Riuscita comprata</p>');
 assert.doesNotMatch(arete, /Arete\.RollFlavor|Arete\.SpherePlan|Arete\.ScopePlan/);
 const paradox = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8");
 assert.match(paradox, /\[ROLL_CARD_FLAG\]: card/);
-assert.match(paradox, /effectKind: effectKind \?\? "", arete \}/);
+assert.match(paradox, /effectKind: effectKind \?\? "",\s*arete,/);
 assert.doesNotMatch(paradox, /isOneStepShort|Arete\.OneStep/);
 // Il Contraccolpo in una riga sola (10/9 sera): il nome in rosso, il testo in chiaro; l'Ustione scritta una volta.
 assert.match(paradox, /renderBacklashNote\(label, body\)/);
@@ -166,6 +169,6 @@ assert.match(rollCard, /title\.innerHTML = renderRollTitle\(data\.traits, game\.
 assert.match(rollCard, /data\.traits \? "" : renderRollSymbols\(data\.symbols \?\? \[\], localize\)/);
 assert.match(rollCard, /export function rollActionsBox\(target\)/);
 assert.match(rollCard, /export function markRollOpen\(html\)/);
-assert.match(paradox, /total: roll\._total, difficulty, autoSuccesses/);
+assert.match(paradox, /cardData\.total = roll\._total;/);
 
 console.log("Roll outcome tests passed.");

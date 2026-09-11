@@ -26,6 +26,7 @@ assert.equal(getParadoxFloor(actor), 2);
 assert.deepEqual(getMagickBalance(actor), { quintessence: 5, paradox: 2, floor: 2 });
 
 // La Volontà: si ritirano i falliti più bassi, mai i rossi, al massimo tre.
+// Nel ramo C (11/9) è fallito anche il 7.
 const dice = [{ result: 7 }, { result: 2 }, { result: 5 }, { result: 1, discarded: true }, { result: 3 }, { result: 4 }];
 assert.deepEqual(pickRerollDice(dice, 1), [1]);
 assert.deepEqual(pickRerollDice(dice, 2), [1, 4]);
@@ -35,7 +36,7 @@ assert.equal(REROLL_MAX, 3);
 // Il giocatore sceglie (6/9): i bianchi falliti e i rossi falliti, mai un
 // rosso che ha fatto 1 o 10.
 assert.deepEqual(rerollableDice(dice, [{ result: 1 }, { result: 10 }, { result: 3 }, { result: 8 }, { result: 4, discarded: true }]), [
-  { kind: "basic", index: 1 }, { kind: "basic", index: 2 }, { kind: "basic", index: 4 }, { kind: "basic", index: 5 },
+  { kind: "basic", index: 0 }, { kind: "basic", index: 1 }, { kind: "basic", index: 2 }, { kind: "basic", index: 4 }, { kind: "basic", index: 5 },
   { kind: "paradox", index: 2 }
 ]);
 assert.equal(volontaState({ total: 2, difficulty: 4, failedCount: 5 }).max, 3);

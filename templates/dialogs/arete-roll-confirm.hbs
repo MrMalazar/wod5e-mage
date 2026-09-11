@@ -1,9 +1,13 @@
-<div class="dice-group-header flex-group-center">
-    <label>{{localize "WOD5E_MAGE.Dice.MageDice"}}</label>
-    <label>{{localize "WOD5E_MAGE.Dice.ParadoxDice"}}</label>
+{{!-- La finestra di conferma del ramo C (11/9): la riserva, la soglia che
+     si toglie, la riga viva «6 − 3 = 3» e i rossi della Ruota, che non si
+     toccano. Nei tiri di Abilità i rossi non ci sono. --}}
+<div class="dice-group-header flex-group-center wod5e-mage-ramoc-head">
+    <label>{{#if onlyParadox}}{{localize "WOD5E_MAGE.Dice.ParadoxDice"}}{{else}}{{localize "WOD5E_MAGE.RamoC.Pool"}}{{/if}}</label>
+    {{#if showReds}}{{#unless onlyParadox}}<label>{{localize "WOD5E_MAGE.Dice.ParadoxDice"}}</label>{{/unless}}{{/if}}
 </div>
 
 <div class="base-dice-group flex-group-center">
+    {{#unless onlyParadox}}
     <div class="basic-dice">
         <div class="dice-input">
             <img
@@ -14,12 +18,14 @@
             >
             <div class="flexrow">
                 <i class="fas fa-minus dialog-control dialog-minus" data-action="minus" data-resource="inputBasicDice"></i>
-                <input type="number" min="0" id="inputBasicDice" value="{{basicDice}}">
+                <input type="number" min="0" id="inputBasicDice" value="{{basicDice}}" {{#if bought}}readonly{{/if}}>
                 <i class="fas fa-plus dialog-control dialog-plus" data-action="plus" data-resource="inputBasicDice"></i>
             </div>
         </div>
     </div>
+    {{/unless}}
 
+    {{#if showReds}}
     <div class="advanced-dice">
         <div class="dice-input">
             <img
@@ -29,12 +35,29 @@
                 aria-hidden="true"
             >
             <div class="flexrow">
-                <i class="fas fa-minus dialog-control dialog-minus" data-action="paradoxMinus"></i>
+                {{!-- I rossi sono quelli della Ruota: si leggono, non si scelgono. --}}
                 <input type="number" min="0" id="inputParadoxDice" value="{{paradoxDice}}" readonly>
-                <i class="fas fa-plus dialog-control dialog-plus" data-action="paradoxPlus"></i>
             </div>
         </div>
     </div>
+    {{/if}}
 </div>
 
-{{> "systems/wod5e/display/ui/parts/roll-dialog-base.hbs"}}
+{{!-- La riga viva: riserva meno soglia uguale dadi, e i rossi. --}}
+<p class="wod5e-mage-ramoc-dice" data-role="diceOut"></p>
+
+{{> "systems/wod5e/display/ui/parts/situational-modifiers.hbs"}}
+{{#unless onlyParadox}}
+<div class="form-group wod5e-mage-ramoc-threshold">
+    <label>{{localize "WOD5E_MAGE.RamoC.Threshold"}}</label>
+    <input type="number" min="0" id="inputDifficulty" value="{{difficulty}}" style="max-width: 100%; text-align: left;">
+</div>
+{{else}}
+<input type="hidden" id="inputDifficulty" value="0">
+{{/unless}}
+<div class="form-group">
+    <label>{{localize "WOD5E.RollList.RollMode"}}</label>
+    <select name="rollMode" data-type="String">
+        {{selectOptions rollModes selected=rollMode localize=true}}
+    </select>
+</div>

@@ -1,0 +1,54 @@
+{{!-- Il pannello dei punti Paradosso del Narratore (ramo C, 11/9): la presa
+     in alto per trascinarlo, il numero grande che sale a vista, i comandi
+     del Narratore, la lobby e la Scheda del Paradosso, il registro. I
+     giocatori, se il Narratore lo permette, vedono solo il numero. --}}
+<div class="wod5e-mage-paradosso-presa">
+    <i class="fa-solid fa-eye" aria-hidden="true"></i>
+    <span class="wod5e-mage-paradosso-titolo">{{localize "WOD5E_MAGE.Paradosso.Title"}}</span>
+    {{#if gm}}
+        <button type="button" data-azione="visibile" title="{{#if visible}}{{localize 'WOD5E_MAGE.Paradosso.HideHint'}}{{else}}{{localize 'WOD5E_MAGE.Paradosso.ShowHint'}}{{/if}}" aria-label="{{localize 'WOD5E_MAGE.Paradosso.Visible'}}">
+            <i class="fa-solid {{#if visible}}fa-eye{{else}}fa-eye-slash{{/if}}" aria-hidden="true"></i>
+        </button>
+    {{/if}}
+    <button type="button" data-azione="chiudi" title="{{localize 'WOD5E.Close'}}" aria-label="{{localize 'WOD5E.Close'}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+</div>
+<div class="wod5e-mage-paradosso-corpo">
+    <div class="wod5e-mage-paradosso-numero-riga">
+        {{#if gm}}<button type="button" data-azione="meno" title="{{localize 'WOD5E_MAGE.Paradosso.Minus'}}" aria-label="{{localize 'WOD5E_MAGE.Paradosso.Minus'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>{{/if}}
+        <span class="wod5e-mage-paradosso-numero" data-role="points">{{points}}</span>
+        {{#if gm}}<button type="button" data-azione="piu" title="{{localize 'WOD5E_MAGE.Paradosso.Plus'}}" aria-label="{{localize 'WOD5E_MAGE.Paradosso.Plus'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>{{/if}}
+    </div>
+    <p class="wod5e-mage-paradosso-sotto">{{localize "WOD5E_MAGE.Paradosso.Points"}}</p>
+    {{#if gm}}
+        <div class="wod5e-mage-paradosso-comandi">
+            <button type="button" data-azione="spendi" title="{{localize 'WOD5E_MAGE.Paradosso.SpendHint'}}"><i class="fa-solid fa-wand-sparkles" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Paradosso.Spend"}}</button>
+            <button type="button" data-azione="nuovaSessione" title="{{localize 'WOD5E_MAGE.Paradosso.NewSessionHint'}}"><i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Paradosso.NewSession"}}</button>
+            <button type="button" data-azione="azzera" title="{{localize 'WOD5E_MAGE.Paradosso.ResetHint'}}"><i class="fa-solid fa-eraser" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Paradosso.Reset"}}</button>
+            <button type="button" data-azione="scheda" title="{{localize 'WOD5E_MAGE.Paradosso.SchedaHint'}}"><i class="fa-solid {{#if showScheda}}fa-chevron-up{{else}}fa-chevron-down{{/if}}" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Paradosso.Scheda"}}</button>
+        </div>
+        {{#if showScheda}}
+        <div class="wod5e-mage-paradosso-scheda">
+            <p class="wod5e-mage-paradosso-lobby">
+                <b>{{localize "WOD5E_MAGE.Paradosso.Lobby"}}</b>
+                {{#if lobby.length}}{{#each lobby as |name|}}<span>{{name}}</span>{{/each}}{{else}}<em>{{localize "WOD5E_MAGE.Paradosso.LobbyEmpty"}}</em>{{/if}}
+            </p>
+            {{#if scheda.length}}
+            <div class="wod5e-mage-paradosso-sfere">
+                {{#each scheda as |row|}}
+                    <span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-sphere" title="{{row.label}} {{row.level}} ({{row.from}})"><img src="{{row.icon}}" alt="{{row.label}}"><b>{{row.level}}</b></span>
+                {{/each}}
+            </div>
+            {{else}}
+                <p class="wod5e-mage-paradosso-vuoto"><em>{{localize "WOD5E_MAGE.Paradosso.SchedaEmpty"}}</em></p>
+            {{/if}}
+        </div>
+        {{/if}}
+        {{#if log.length}}
+        <ul class="wod5e-mage-paradosso-registro">
+            {{#each log as |entry|}}
+                <li><b class="{{#if (gt entry.amount 0)}}su{{else}}giu{{/if}}">{{entry.sign}}</b> <span>{{entry.text}}</span></li>
+            {{/each}}
+        </ul>
+        {{/if}}
+    {{/if}}
+</div>

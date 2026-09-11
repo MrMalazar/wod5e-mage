@@ -1,6 +1,7 @@
 import { calculateAreteSuccesses } from "./arete-dice-pool.js";
 import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
+import { calculateRamoCSuccesses, RAMO, SUCCESS_FROM, SUCCESS_MODIFIER } from "./ramo-c.js";
 import { markRollOpen, ROLL_CARD_FLAG, rollActionsBox } from "./roll-card.js";
 import { addSaluteDamage } from "./salute.js";
 
@@ -20,26 +21,26 @@ export const REROLL_MAX = 3;
 const isActive = (result) => result?.active !== false && !result?.discarded;
 
 /**
- * I dadi che si possono ritirare: i falliti (1-5) fra i bianchi, i falliti
- * (2-5) fra i rossi: l'1 e il 10 del Paradosso restano dove sono. Torna
- * {kind, index} per ognuno.
+ * I dadi che si possono ritirare: i falliti fra i bianchi (sotto la
+ * riuscita: nel ramo C l'8, quindi 1-7), i falliti fra i rossi: l'1 e il
+ * 10 del Paradosso restano dove sono. Torna {kind, index} per ognuno.
  */
-export function rerollableDice(basicResults = [], paradoxResults = []) {
+export function rerollableDice(basicResults = [], paradoxResults = [], { successFrom = SUCCESS_FROM } = {}) {
   const basic = basicResults
     .map((result, index) => ({ kind: "basic", index, value: Number(result?.result) || 0, ok: isActive(result) }))
-    .filter((entry) => entry.ok && entry.value <= 5);
+    .filter((entry) => entry.ok && entry.value < successFrom);
   const paradox = paradoxResults
     .map((result, index) => ({ kind: "paradox", index, value: Number(result?.result) || 0, ok: isActive(result) }))
-    .filter((entry) => entry.ok && entry.value >= 2 && entry.value <= 5);
+    .filter((entry) => entry.ok && entry.value >= 2 && entry.value < successFrom);
   return [...basic, ...paradox].map(({ kind, index }) => ({ kind, index }));
 }
 
 /** I dadi falliti da ritirare quando nessuno sceglie: i bianchi più bassi, al massimo `count`. Torna gli indici. */
-export function pickRerollDice(results = [], count = 1) {
+export function pickRerollDice(results = [], count = 1, { successFrom = SUCCESS_FROM } = {}) {
   const wanted = Math.min(Math.max(Math.trunc(Number(count) || 0), 0), REROLL_MAX);
   return results
     .map((result, index) => ({ index, value: Number(result?.result) || 0, ok: isActive(result) }))
-    .filter((entry) => entry.ok && entry.value <= 5)
+    .filter((entry) => entry.ok && entry.value < successFrom)
     .sort((a, b) => a.value - b.value || a.index - b.index)
     .slice(0, wanted)
     .map((entry) => entry.index);
@@ -128,7 +129,7 @@ export function decorateVolonta(message, html) {
   if (!basic) return false;
   const total = Number.isFinite(Number(card.total)) ? Number(card.total) : systemTotal(basic.results, advanced?.results ?? []);
   const difficulty = Number.isFinite(Number(card.difficulty)) ? Number(card.difficulty) : Number(roll.options?.difficulty) || 0;
-  const candidates = rerollableDice(basic.results, advanced?.results ?? []);
+  const candidates = rerollableDice(basic.results, advanced?.results ?? [], { successFrom: card.ramo === RAMO ? SUCCESS_FROM : 6 });
   const state = volontaState({ total, difficulty, failedCount: candidates.length, used });
   if (!state.show) return false;
 
@@ -171,8 +172,11 @@ export function decorateVolonta(message, html) {
   return true;
 }
 
-/** Il totale nuovo della carta del Mago, dopo il ritiro. */
+/** Il totale nuovo della carta del Mago, dopo il ritiro: nel ramo C 8 o più, senza coppie. */
 export function recountCard(card, basicResults, advancedResults) {
+  if (card?.ramo === RAMO) {
+    return calculateRamoCSuccesses(basicResults, advancedResults, card.countedParadox ?? Infinity);
+  }
   return calculateAreteSuccesses(basicResults, advancedResults)
     + Math.max(Math.trunc(Number(card?.autoSuccesses) || 0), 0);
 }
@@ -184,13 +188,14 @@ async function rerollDice(message, actor, picks) {
   const { basic, advanced } = diceTerms(rolls[0]);
   const chosen = (Array.isArray(picks) ? picks : []).slice(0, REROLL_MAX);
   if (!chosen.length) return;
+  const card = message.getFlag(MODULE_ID, ROLL_CARD_FLAG);
 
   let eyes = 0;
   for (const kind of ["basic", "paradox"]) {
     const term = kind === "paradox" ? advanced : basic;
     const indices = chosen.filter((pick) => pick.kind === kind).map((pick) => pick.index);
     if (!term || !indices.length) continue;
-    const reroll = await new foundry.dice.Roll(`${indices.length}d10cs>5`).evaluate();
+    const reroll = await new foundry.dice.Roll(`${indices.length}d10${card?.ramo === RAMO ? SUCCESS_MODIFIER : "cs>5"}`).evaluate();
     if (game.dice3d) await game.dice3d.showForRoll(reroll, game.user, true);
     const fresh = reroll.terms[0]?.results ?? [];
     for (const index of indices) {
@@ -204,9 +209,16 @@ async function rerollDice(message, actor, picks) {
   }
 
   const flags = { [MODULE_ID]: { [VOLONTA_FLAG]: { kind: "reroll", dice: chosen.length, eyes } } };
-  const card = message.getFlag(MODULE_ID, ROLL_CARD_FLAG);
   if (card && Number.isFinite(Number(card.total))) {
-    flags[MODULE_ID][ROLL_CARD_FLAG] = { ...card, total: recountCard(card, basic.results, advanced?.results ?? []) };
+    const total = recountCard(card, basic.results, advanced?.results ?? []);
+    flags[MODULE_ID][ROLL_CARD_FLAG] = { ...card, total };
+    if (card.skill) flags[MODULE_ID][ROLL_CARD_FLAG].margin = Math.max(total - 1, 0);
+    // Un rosso ritirato che mostra l'occhio chiama il Contraccolpo (ramo C):
+    // l'Ustione, pari alla soglia, aspetta la scelta del giocatore sotto la carta.
+    if (eyes > 0 && card.ramo === RAMO && !card.ustione && Number(card.threshold) > 0 && !card.skill) {
+      const tens = (advanced?.results ?? []).filter(isActive).filter((result) => Number(result.result) === 10).length;
+      flags[MODULE_ID][ROLL_CARD_FLAG].ustione = { threshold: Number(card.threshold), tens, kind: card.effectKind ?? "", eyes, choice: "" };
+    }
   }
   await addSaluteDamage(actor, { ms: 1 });
   await message.update({ rolls, flags });

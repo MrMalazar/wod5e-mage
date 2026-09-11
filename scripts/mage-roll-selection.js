@@ -1,6 +1,7 @@
 import { prepareEssentialSkillList } from "./abilita-essenziali.js";
 import { customSkillTraits } from "./abilita-specifiche.js";
 import { dressNextRollDialogAsMage, isMageActor } from "./mage-dice.js";
+import { renderRollCard } from "./roll-card.js";
 
 function numericValue(value) {
   return Math.max(Number(value) || 0, 0);
@@ -98,6 +99,71 @@ export function compileMageTraitRoll({ dataset = {}, traits, primarySkillId, sec
   return modified;
 }
 
+/**
+ * La riserva di un tiro di Abilità dal dataset del sistema (ramo C, 11/9):
+ * i percorsi dei valori sommati, più i dadi piatti; un valore assoluto,
+ * se dichiarato, sostituisce il conto. Torna il conto e i pezzi.
+ */
+export function datasetPool(system = {}, dataset = {}) {
+  const paths = String(dataset.valuePaths ?? "").split(/\s+/).filter(Boolean);
+  const read = (path) => path.split(".").reduce((node, key) => (node && typeof node === "object" ? node[key] : undefined), system);
+  const parts = paths.map((path) => ({ path, value: numericValue(read(path)) }));
+  const flatMod = Math.trunc(Number(dataset.flatMod) || 0);
+  const useAbsolute = dataset.useAbsoluteValue === true || dataset.useAbsoluteValue === "true";
+  const absolute = useAbsolute && dataset.absoluteValue !== undefined ? numericValue(dataset.absoluteValue) : null;
+  const pool = absolute !== null ? absolute : Math.max(parts.reduce((total, part) => total + part.value, 0) + flatMod, 0);
+  return { pool, parts, flatMod, absolute };
+}
+
+/** La carta in chat di un tiro di Abilità: i tratti e la riserva, come nel tiro di Areté. */
+export function skillRollCard({ traits = [], flatMod = 0 } = {}, localize = (key) => key) {
+  const bonusParts = flatMod ? [`${flatMod > 0 ? "+" : ""}${flatMod}`] : [];
+  return renderRollCard({ traits, bonusParts, threshold: null, magickType: "" }, localize);
+}
+
+/**
+ * Il tiro di Abilità del ramo C (verdetto dell'11/9: «soglia sottratta
+ * anche ai dadi abilità»): passa dalla finestra del modulo, senza rossi
+ * né Quintessenza; la soglia la dice il Narratore e si scrive lì. Un 8
+ * riesce; i successi oltre il primo sono il margine (il danno).
+ */
+async function rollSkillRamoC(actor, dataset, { traits = [] } = {}) {
+  const conto = datasetPool(actor.system, dataset);
+  const label = String(dataset.label ?? "").trim();
+  const localize = game.i18n.localize.bind(game.i18n);
+  // I tratti sulla carta: quelli scelti nella finestra, oppure letti dai percorsi del dataset.
+  const known = traits.length ? null : prepareMageRollTraits(actor, { localize, lang: game.i18n.lang });
+  const rows = traits.length
+    ? traits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value }))
+    : conto.parts.map((part) => {
+      const [group, id] = part.path.split(".");
+      const type = group === "skills" ? "skill" : "attribute";
+      const found = (type === "skill" ? known.skills : known.attributes).find((trait) => trait.id === id);
+      return { id, type, label: found?.label ?? id, value: part.value };
+    });
+  // Le Abilità Specifiche viaggiano nei dadi piatti: sulla carta stanno già fra i tratti.
+  const shownFlat = conto.flatMod - traits.filter((trait) => trait.type === "custom").reduce((total, trait) => total + numericValue(trait.value), 0);
+  const selectors = String(dataset.selectors ?? "").split(/\s+/).filter(Boolean);
+  const { rollAreteWithParadox } = await import("./paradox-dice.js");
+  try {
+    return await rollAreteWithParadox({
+      actor,
+      data: actor.system,
+      pool: conto.pool,
+      threshold: 0,
+      paradoxRating: 0,
+      skill: true,
+      title: label || rows.map((row) => row.label).join(" + ") || localize("WOD5E.RollList.Label"),
+      flavor: skillRollCard({ traits: rows, flatMod: shownFlat }, localize),
+      card: { symbols: [], traits: rows },
+      selectors
+    });
+  } catch (error) {
+    console.warn("wod5e-mage | Tiro di Abilità interrotto.", error);
+    return null;
+  }
+}
+
 function datasetFromTarget(target) {
   // Un bersaglio finto (il clic sulla Specializzazione) porta già il suo dataset.
   if (!target?.nodeType) return { ...(target?.dataset ?? {}) };
@@ -116,8 +182,8 @@ export async function onMageRoll(event, target) {
   const actor = this.actor;
   const dataset = datasetFromTarget(target);
   if (!usesSelectionDialog(dataset.selectDialog)) {
-    if (isMageActor(actor)) dressNextRollDialogAsMage();
-    return WOD5E.api.RollFromDataset({ dataset, actor });
+    if (!isMageActor(actor)) return WOD5E.api.RollFromDataset({ dataset, actor });
+    return rollSkillRamoC(actor, dataset);
   }
 
   const traits = prepareMageRollTraits(actor, {
@@ -171,8 +237,15 @@ export async function onMageRoll(event, target) {
     return;
   }
 
-  if (isMageActor(actor)) dressNextRollDialogAsMage();
-  return WOD5E.api.RollFromDataset({ dataset: modifiedDataset, actor });
+  if (!isMageActor(actor)) {
+    dressNextRollDialogAsMage();
+    return WOD5E.api.RollFromDataset({ dataset: modifiedDataset, actor });
+  }
+  const chosen = [
+    traits.skills.find((trait) => trait.id === result.primarySkill),
+    findMageRollTrait(traits, result.secondaryTrait)
+  ].filter(Boolean);
+  return rollSkillRamoC(actor, modifiedDataset, { traits: chosen });
 }
 
 /**

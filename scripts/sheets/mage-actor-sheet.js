@@ -65,6 +65,7 @@ import {
   onSaluteDanni,
   onSaluteExtraChange,
   onSaluteNewSession,
+  onSaluteCambioScena,
   onSaluteRelax,
   onSaluteReset,
   onSaluteRiposo
@@ -157,6 +158,7 @@ export class MageActorSheet extends MortalActorSheet {
       saluteCellChange: { handler: onSaluteCellChange, buttons: [0, 2] },
       saluteExtraChange: onSaluteExtraChange,
       saluteNewSession: onSaluteNewSession,
+      saluteCambioScena: onSaluteCambioScena,
       saluteReset: onSaluteReset,
       saluteDanni: onSaluteDanni,
       saluteRiposo: onSaluteRiposo,

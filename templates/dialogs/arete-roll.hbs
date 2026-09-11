@@ -112,12 +112,13 @@
 
             {{!-- Il conto, aggiornato a ogni scelta: riserva contro soglia. Al primo
                  passo della semplificata la riserva non c'è ancora: solo la soglia. --}}
+            {{!-- Il conto del ramo C (11/9): riserva meno soglia uguale dadi. --}}
             <p class="wod5e-mage-arete-difficulty">
-                <span{{#unless show.pool}} hidden{{/unless}}>{{localize "WOD5E_MAGE.Arete.Pool"}}: <strong data-role="pool">0</strong> · </span>{{localize "WOD5E_MAGE.Arete.Threshold"}}: <strong data-role="threshold">0</strong>
+                <span{{#unless show.pool}} hidden{{/unless}}>{{localize "WOD5E_MAGE.Arete.Pool"}}: <strong data-role="pool">0</strong> − </span>{{localize "WOD5E_MAGE.Arete.Threshold"}}: <strong data-role="threshold">0</strong><span{{#unless show.pool}} hidden{{/unless}}> = {{localize "WOD5E_MAGE.RamoC.Dice"}}: <strong data-role="dice">0</strong></span>
                 <span class="wod5e-mage-arete-autosuccess" data-role="autoSuccesses"></span>
             </p>
             {{#if show.conto}}
-            <p class="wod5e-mage-arete-auto hidden" data-role="autoVictory">{{localize "WOD5E_MAGE.Arete.AutoVictory"}}</p>
+            <p class="wod5e-mage-arete-auto hidden" data-role="autoVictory">{{localize "WOD5E_MAGE.RamoC.Bought"}}</p>
             {{/if}}
         </div>
 

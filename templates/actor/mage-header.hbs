@@ -5,6 +5,10 @@
     <button type="button" class="wod5e-mage-new-session" data-action="saluteNewSession" title="{{localize 'WOD5E_MAGE.Salute.NewSessionHint'}}">
         <i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.NewSession"}}
     </button>
+    {{!-- Sotto, Cambio Scena (11/9): sblocca una casella bloccata dall'Ustione. --}}
+    <button type="button" class="wod5e-mage-new-session wod5e-mage-cambio-scena" data-action="saluteCambioScena" title="{{localize 'WOD5E_MAGE.Salute.CambioScenaHint'}}">
+        <i class="fa-solid fa-clapperboard" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.CambioScena"}}{{#if salute.locked}} <b class="wod5e-mage-cambio-scena-count">{{salute.locked}}</b>{{/if}}
+    </button>
     {{!-- In alto a destra, speculare: il sigillo dell'Areté tira da ogni pagina (6/9). --}}
     <button type="button" class="wod5e-mage-header-arete-roll wod5e-mage-arete-roll" data-action="areteRoll"
             title="{{localize 'WOD5E_MAGE.Arete.RollHint'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.RollHint'}}">

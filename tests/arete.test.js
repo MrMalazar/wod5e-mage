@@ -7,10 +7,10 @@ import {
   calculateMagickThreshold,
   capBonusDice,
   getArete,
-  isAutomaticVictory,
-  isOneStepShort,
   normalizeMagickRollOptions,
-  prepareAreteTraits
+  prepareAreteTraits,
+  quintessenceAfterFailedVulgar,
+  ramoCPool
 } from "../scripts/arete.js";
 
 function actorWithFlag(value) {
@@ -71,8 +71,9 @@ assert.equal(calculateMagickThreshold({
   scopeLevels: [{ id: "targets", level: 4 }, { id: "range", level: 4 }],
   specialties: { mind: "targets" }
 }), 5);
-// Danno successi automatici pari all'Areté quando la Sfera è nel lancio e
-// l'Ambito è dichiarato; una volta sola; senza la coppia, niente.
+// Nel ramo C danno DADI pari all'Areté (PROPOSTA dell'11/9) quando la
+// Sfera è nel lancio e l'Ambito è dichiarato; una volta sola; senza la
+// coppia, niente. Il conto torna col nome di prima.
 assert.deepEqual(calculateAutomaticSuccesses({
   sphereLevels: [{ id: "forces", level: 3 }],
   scopeLevels: [{ id: "power", level: 7 }],
@@ -88,20 +89,28 @@ assert.deepEqual(calculateAutomaticSuccesses({
 assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "forces", level: 3 }], scopeLevels: [{ id: "range", level: 2 }], specialties: { forces: "power" }, arete: 2 }).successes, 0);
 assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "mind", level: 3 }], scopeLevels: [{ id: "power", level: 2 }], specialties: { forces: "power" }, arete: 2 }).successes, 0);
 assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "forces", level: 3 }], scopeLevels: [{ id: "power", level: 2 }], specialties: { forces: "power" }, arete: 0 }).successes, 0);
-// Coprono la soglia: vittoria automatica senza tirare.
-assert.equal(isAutomaticVictory(3, 4, 4), true);
-assert.equal(isAutomaticVictory(3, 4, 3), false);
 
-// Vittoria automatica: riserva almeno doppia della soglia.
-assert.equal(isAutomaticVictory(8, 4), true);
-assert.equal(isAutomaticVictory(7, 4), false);
-assert.equal(isAutomaticVictory(10, 0), false);
+// La riserva del ramo C (11/9): tratti, dadi in più col tetto, dadi delle
+// Specialità, Quintessenza sotto il prezzo; meno la soglia, restano i dadi.
+// L'esempio dello studio: Intelligenza 3 e Occulto 3, Forze 3 con Potenza 3.
+assert.deepEqual(ramoCPool({ traits: 6, threshold: 3 }), { pool: 6, threshold: 3, dice: 3, spend: { spent: 0, price: 0, bought: false, dice: 0 } });
+// Soglia 5: un dado. Soglia 7: zero dadi, si lancia solo col premio.
+assert.equal(ramoCPool({ traits: 6, threshold: 5 }).dice, 1);
+assert.equal(ramoCPool({ traits: 6, threshold: 7 }).dice, 0);
+assert.equal(ramoCPool({ traits: 6, bonus: 2, threshold: 7 }).dice, 1, "il premio dell'Areté resta");
+assert.equal(ramoCPool({ traits: 6, bonus: 5, threshold: 0 }).pool, 9, "tetto +3 sui dadi in più");
+// La Quintessenza: un dado per punto sotto il prezzo; al prezzo della Sfera compra la riuscita.
+assert.deepEqual(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).spend, { spent: 2, price: 3, bought: false, dice: 2 });
+assert.equal(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).dice, 5);
+const bought = ramoCPool({ traits: 6, quintessence: 3, sphereMax: 3, threshold: 3 });
+assert.equal(bought.spend.bought, true);
+assert.equal(bought.dice, 3, "comprata: i punti non sono dadi");
+assert.equal(ramoCPool({ traits: 2, specialtyDice: 2, threshold: 3 }).dice, 1, "i dadi della Specialità");
 
-// A un passo: sotto la soglia di al massimo Areté successi.
-assert.equal(isOneStepShort(2, 4, 2), true);
-assert.equal(isOneStepShort(1, 4, 2), false);
-assert.equal(isOneStepShort(4, 4, 2), false);
-assert.equal(isOneStepShort(0, 0, 5), false);
+// Il Volgare fallito (11/9): un punto di Quintessenza sale sulla Ruota, come col +.
+assert.deepEqual(quintessenceAfterFailedVulgar({ quintessence: 2, paradox: 3, floor: 0 }), { quintessence: 3, paradox: 3, gained: true });
+assert.deepEqual(quintessenceAfterFailedVulgar({ quintessence: 4, paradox: 5, floor: 0 }), { quintessence: 4, paradox: 4, gained: true }, "Ruota piena: prima si libera una cella dal Paradosso");
+assert.deepEqual(quintessenceAfterFailedVulgar({ quintessence: 4, paradox: 5, floor: 5 }), { quintessence: 4, paradox: 5, gained: false }, "mai sotto il pavimento");
 
 // Il premio e l'Armonia entrano solo se il giocatore li dichiara.
 assert.deepEqual(normalizeMagickRollOptions(), {
@@ -214,7 +223,14 @@ assert.equal(traits.skills.some((trait) => trait.id === "firearms"), false);
     // Dal 10/9 notte: Armonia e Quintessenza coi numeri, poi Altro con la Convinzione.
   assert.match(dialog, /name="harmony"[\s\S]*name="quintessence"[\s\S]*Arete\.Other"[\s\S]*<input type="checkbox" name="conviction" id="wod5e-mage-arete-conviction">[\s\S]*<select name="convictionId" id="wod5e-mage-arete-conviction-id" class="hidden"[\s\S]*data-role="convictionReset"[\s\S]*\{\{\/unless\}\}/);
   const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-  assert.equal((arete.match(/await grantConvictionQuintessence\(actor, convictionKept\);/g) ?? []).length, 3, "a ogni uscita buona del tiro");
+  assert.equal((arete.match(/await grantConvictionQuintessence\(actor, convictionKept\);/g) ?? []).length, 1, "a tiro fatto (ramo C: un'uscita sola)");
+  // Il ramo C in arete.js: la riserva meno la soglia, la riuscita comprata, il Volgare fallito.
+  assert.match(arete, /rollAreteWithParadox\(\{\s*pool: conto\.pool,\s*threshold,/);
+  assert.match(arete, /effect\.vulgar && Number\.isFinite\(total\) && total < 1/);
+  assert.doesNotMatch(arete, /isAutomaticVictory|isOneStepShort|postAutomaticVictory/);
+  const dialog2 = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
+  assert.match(dialog2, /data-role="pool">0<\/strong> − <\/span>[\s\S]*data-role="threshold">0<\/strong>[\s\S]*data-role="dice">0<\/strong>/);
+  assert.match(dialog2, /data-role="autoVictory">\{\{localize "WOD5E_MAGE\.RamoC\.Bought"\}\}/);
   assert.match(readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8"), /-=convinzioneScena/);
 }
 

@@ -1,6 +1,7 @@
 import { MODULE_ID } from "./constants.js";
 import { SCOPE_ICONS } from "./scopes.js";
 import { traitIcon } from "./tratti-icone.js";
+import { RAMO, ramoCMargin } from "./ramo-c.js";
 
 /**
  * La carta del tiro in chat, riletta con Blue (10/9 notte): in testa «Tiro
@@ -96,9 +97,9 @@ export function renderRollTitle(traits = [], localize = (key) => key) {
   return `<span class="wod5e-mage-roll-of">${escapeHtml(localize("WOD5E_MAGE.RollCard.Of"))}</span><span class="wod5e-mage-roll-traits">${parts.join('<span class="wod5e-mage-roll-plus">+</span>')}</span>`;
 }
 
-/** La scritta grande della vittoria automatica. */
-export function renderAutoVictoryBanner(localize = (key) => key) {
-  return `<p class="wod5e-mage-roll-victory">${escapeHtml(localize("WOD5E_MAGE.Arete.AutoVictoryBanner"))}</p>`;
+/** La scritta grande: la vittoria automatica, o un'altra riuscita senza dadi (la riuscita comprata del ramo C). */
+export function renderAutoVictoryBanner(localize = (key) => key, text = "") {
+  return `<p class="wod5e-mage-roll-victory">${escapeHtml(text || localize("WOD5E_MAGE.Arete.AutoVictoryBanner"))}</p>`;
 }
 
 /** Una nota sotto il conto: tetto, vittoria automatica. */
@@ -149,10 +150,9 @@ export function renderRollCard({
     const symbols = rollSymbols({ scopes: scopes.map((scope) => ({ id: scope.id, level: scope.level })) });
     rows.push(renderRow("scopes", localize("WOD5E_MAGE.RollCard.Scopes"), symbols.map((symbol) => renderSymbol(symbol, localize)).join("")));
   }
-  rows.push(
-    renderRow("threshold", localize("WOD5E_MAGE.RollCard.Threshold"), escapeHtml(threshold)),
-    renderRow("type", localize("WOD5E_MAGE.RollCard.Type"), escapeHtml(magickType))
-  );
+  // Un tiro di Abilità (ramo C) non ha né soglia fissa né Tipo: le righe si saltano.
+  if (threshold !== null) rows.push(renderRow("threshold", localize("WOD5E_MAGE.RollCard.Threshold"), escapeHtml(threshold)));
+  if (magickType) rows.push(renderRow("type", localize("WOD5E_MAGE.RollCard.Type"), escapeHtml(magickType)));
   if (effectKind) rows.push(renderRow("effect", localize("WOD5E_MAGE.RollCard.Effect"), escapeHtml(localize(effectKind))));
   rows.push(renderRow("pool", localize("WOD5E_MAGE.RollCard.Pool"), pool));
   return `<div class="wod5e-mage-roll-card">${rows.join("")}</div>`;
@@ -178,10 +178,12 @@ export function renderAutoVictoryContent({ card, notes = [] }, localize = (key) 
  * parola (10/9 notte): Successo o Fallimento; con la realtà sforzata o la
  * vittoria a un prezzo, Successo con la sua ragione.
  */
-export function rollOutcome(total, difficulty, localize = (key) => key, { forced = false, priced = false } = {}) {
+export function rollOutcome(total, difficulty, localize = (key) => key, { forced = false, priced = false, bought = false } = {}) {
   const successes = Math.max(Math.trunc(Number(total) || 0), 0);
   const goal = Math.max(Math.trunc(Number(difficulty) || 0), 0);
   if (goal <= 0) return { total: successes, cssClass: "", text: "", missing: 0 };
+  // La riuscita comprata con la Quintessenza (ramo C): riuscito senza tirare.
+  if (bought) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Bought"), missing: 0 };
   if (forced) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Forced"), missing: 0 };
   if (priced) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Priced"), missing: 0 };
   if (successes >= goal) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Success"), missing: 0 };
@@ -190,9 +192,19 @@ export function rollOutcome(total, difficulty, localize = (key) => key, { forced
 
 function applyMageTotal(html, data) {
   if (!Number.isFinite(Number(data.total))) return;
-  const outcome = rollOutcome(data.total, data.difficulty, game.i18n.localize.bind(game.i18n), { forced: Boolean(data.forced), priced: Boolean(data.priced) });
+  const outcome = rollOutcome(data.total, data.difficulty, game.i18n.localize.bind(game.i18n), { forced: Boolean(data.forced), priced: Boolean(data.priced), bought: Boolean(data.bought) });
   const totalOut = html.querySelector(".total-contents");
-  if (totalOut) totalOut.textContent = String(outcome.total);
+  if (totalOut) {
+    totalOut.textContent = String(outcome.total);
+    // Il margine dei tiri di Abilità (ramo C): i successi oltre il primo, per il danno.
+    const margin = ramoCMargin(outcome.total);
+    if (data.ramo === RAMO && data.skill && margin > 0) {
+      totalOut.insertAdjacentHTML("beforeend", `<small class="wod5e-mage-roll-margin" title="${escapeHtml(game.i18n.localize("WOD5E_MAGE.RamoC.MarginHint"))}">+${margin}</small>`);
+    }
+  }
+  // Nel ramo C la fascia legge «un successo basta»; il numero sotto Soglia è la soglia vera.
+  const difficultyOut = html.querySelector(".difficulty-contents");
+  if (difficultyOut && data.ramo === RAMO && Number.isFinite(Number(data.threshold))) difficultyOut.textContent = String(data.threshold);
   // I titoli del conto in parole del Mago: Successi e Soglia, non Totale e Difficoltà.
   const totalTitle = html.querySelector(".total-title");
   if (totalTitle) totalTitle.textContent = game.i18n.localize("WOD5E_MAGE.RollCard.Successes");
@@ -252,7 +264,7 @@ export function decorateRollCard(message, html) {
   const top = document.createElement("div");
   top.className = "wod5e-mage-roll-top";
   top.innerHTML = [
-    data.automatic ? renderAutoVictoryBanner(localize) : "",
+    data.automatic ? renderAutoVictoryBanner(localize, data.bought ? localize("WOD5E_MAGE.RamoC.BoughtBanner") : "") : "",
     // I messaggi di prima della 0.86.0 non hanno i glifi nelle righe: la fila resta a loro.
     data.traits ? "" : renderRollSymbols(data.symbols ?? [], localize)
   ].join("");

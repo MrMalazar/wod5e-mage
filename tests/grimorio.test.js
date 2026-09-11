@@ -60,11 +60,13 @@ assert.match(dialog, /name="goal"[\s\S]*data-role="grimorioOpen"[\s\S]*name="eff
 const grimorioTemplate = readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8");
 assert.match(grimorioTemplate, /data-role="grimorioSearch"[\s\S]*data-effetto="\{\{entry\.id\}\}"/);
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-assert.match(arete, /const autoSuccesses = automatic_\.successes \+ quintessence;/);
+// Ramo C (11/9): la Quintessenza è dadi, o compra la riuscita; scende dalla Ruota al tiro.
+assert.match(arete, /const conto = ramoCPool\(\{\s*traits: basePool,\s*bonus: bonusDice,\s*specialtyDice: specialty\.successes,\s*quintessence,\s*sphereMax,\s*threshold\s*\}\);/);
 assert.match(arete, /quintessence: Math\.max\(balanceBefore\.quintessence - quintessence, 0\)/);
 assert.match(arete, /effectKind,\n\s+arete: arete\.value/);
-const dice = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8");
-assert.match(dice, /applyUstione\(actor, \{ threshold: burn, tens, kind: effectKind \}\)/);
+// L'Ustione non si segna più da sola: la scelta sta nei tasti sotto la carta (ustione.js).
+const ustione = readFileSync(new URL("../scripts/ustione.js", import.meta.url), "utf8");
+assert.match(ustione, /applyUstione\(actor, \{ threshold: state\.threshold, tens: card\.ustione\.tens, kind: card\.ustione\.kind, lock: true \}\)/);
 
 console.log("Grimorio, Ustione e Salute: test passati.");
 

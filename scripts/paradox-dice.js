@@ -5,15 +5,18 @@ import {
 } from "/systems/wod5e/system/dice/splat-dice.js";
 import { getSituationalModifiers } from "/systems/wod5e/system/scripts/rolls/situational-modifiers.js";
 import { WOD5eRoll } from "/systems/wod5e/system/scripts/system-rolls.js";
-import {
-  calculateAreteSuccesses,
-  calculateAreteDicePool,
-  shiftParadoxDice
-} from "./arete-dice-pool.js";
 import { bonusDiceExcess } from "./arete.js";
-import { applyUstione, ustioneText } from "./paradox-burst.js";
 import { MODULE_ID } from "./constants.js";
-import { renderBacklashNote, renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
+import {
+  calculateRamoCSuccesses,
+  diceNote,
+  RAMO,
+  ramoCDice,
+  ramoCMargin,
+  splitRamoCDice,
+  SUCCESS_MODIFIER
+} from "./ramo-c.js";
+import { renderAutoVictoryBanner, renderBacklashNote, renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
 import {
   getParadoxDieResult,
   getParadoxDieImage,
@@ -76,6 +79,7 @@ function registerDiceSoNicePreset(dice3d) {
     font: "Arial Black"
   }, "default");
 
+  // Nel ramo C la riuscita è l'8: le facce 6 e 7 sono fallimenti anche in 3D.
   dice3d.addDicePreset({
     type: "dp",
     labels: [
@@ -84,8 +88,8 @@ function registerDiceSoNicePreset(dice3d) {
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
-      "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
-      "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
+      "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
+      "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-crit-dsn.png"
@@ -100,6 +104,14 @@ export function countParadoxEyes(results = []) {
   return results
     .filter((result) => result?.active !== false && !result?.discarded)
     .filter((result) => [1, 10].includes(Number(result.result)))
+    .length;
+}
+
+/** I dieci sui rossi: ogni due, un punto dell'Ustione diventa aggravato. */
+export function countParadoxTens(results = []) {
+  return results
+    .filter((result) => result?.active !== false && !result?.discarded)
+    .filter((result) => Number(result.result) === 10)
     .length;
 }
 
@@ -144,65 +156,118 @@ function getCustomModifierTotal(form) {
     .reduce((total, input) => total + (Number(input.value) || 0), 0);
 }
 
-
-function changeParadoxDice(ownerDocument, delta) {
-  const basicInput = ownerDocument.querySelector("#inputBasicDice");
-  const paradoxInput = ownerDocument.querySelector("#inputParadoxDice");
-  if (!basicInput || !paradoxInput) return;
-
-  // Ogni dado aggiunto al Paradosso viene sottratto ai dadi Mage e viceversa.
-  const pool = shiftParadoxDice(
-    basicInput.valueAsNumber,
-    paradoxInput.valueAsNumber,
-    delta
-  );
-  basicInput.value = pool.basicDice;
-  paradoxInput.value = pool.paradoxDice;
+/**
+ * La riga viva della finestra (ramo C): riserva meno soglia uguale dadi,
+ * e quanti rossi. Si riscrive a ogni tocco di riserva, soglia e
+ * modificatori. Torna il conto, per chi lo chiama al tiro.
+ */
+export function readDialogDice(form, { paradoxRating = 0, bought = false, onlyParadox = false } = {}) {
+  const pool = Math.max((form.querySelector("#inputBasicDice")?.valueAsNumber || 0) + getCustomModifierTotal(form), 0);
+  const threshold = Math.max(Number(form.querySelector("#inputDifficulty")?.value) || 0, 0);
+  const conto = ramoCDice(pool, threshold);
+  const dice = bought || onlyParadox ? 0 : conto.dice;
+  const split = splitRamoCDice(dice, paradoxRating);
+  if (bought || onlyParadox) {
+    // La riuscita comprata (o lo Scoppio): i rossi si tirano solo per l'occhio.
+    split.basicDice = 0;
+    split.countedParadox = 0;
+    split.eyeOnly = split.paradoxDice;
+    split.totalDice = split.paradoxDice;
+  }
+  return { ...conto, dice, ...split };
 }
 
-function initializeModifierControls(dialog) {
-  const form = dialog.element;
-  const basicInput = form.querySelector("#inputBasicDice");
+function paintDialogDice(form, options) {
+  const out = form.querySelector("[data-role=diceOut]");
+  if (!out) return;
+  const conto = readDialogDice(form, options);
+  const format = game.i18n.format.bind(game.i18n);
+  const parts = [format("WOD5E_MAGE.RamoC.DiceLine", { pool: conto.pool, threshold: conto.threshold, dice: conto.dice })];
+  if (conto.paradoxDice > 0) {
+    parts.push(conto.eyeOnly > 0
+      ? format("WOD5E_MAGE.RamoC.RedsEyeOnly", { reds: conto.paradoxDice, eyeOnly: conto.eyeOnly })
+      : format("WOD5E_MAGE.RamoC.Reds", { reds: conto.paradoxDice }));
+  }
+  if (options.bought) parts.push(game.i18n.localize("WOD5E_MAGE.RamoC.BoughtLine"));
+  out.textContent = parts.join(" · ");
   const paradoxInput = form.querySelector("#inputParadoxDice");
-  if (!basicInput || !paradoxInput) return;
+  if (paradoxInput) paradoxInput.value = String(conto.paradoxDice);
+}
 
+function initializeDialog(dialog, options) {
+  const form = dialog.element;
+  const repaint = () => paintDialogDice(form, options);
+  form.querySelectorAll("#inputBasicDice, #inputDifficulty").forEach((input) => {
+    input.addEventListener("input", repaint);
+    input.addEventListener("change", repaint);
+  });
   form.querySelectorAll(".mod-checkbox").forEach((input) => {
     input.addEventListener("change", () => {
+      const basicInput = form.querySelector("#inputBasicDice");
       const value = Number(input.dataset.value) || 0;
-      const delta = input.checked ? value : -value;
-      const currentTotal = basicInput.valueAsNumber + paradoxInput.valueAsNumber;
-      // I modificatori cambiano il totale ma conservano, quando possibile, la
-      // quantita' di Paradosso scelta manualmente nel popup.
-      const pool = calculateAreteDicePool(
-        currentTotal + delta,
-        paradoxInput.valueAsNumber
-      );
-      basicInput.value = pool.basicDice;
-      paradoxInput.value = pool.paradoxDice;
+      if (basicInput) basicInput.value = String(Math.max((basicInput.valueAsNumber || 0) + (input.checked ? value : -value), 0));
+      repaint();
     });
   });
+  // I modificatori scritti a mano entrano nel conto a ogni tasto.
+  form.addEventListener("input", (event) => {
+    if (event.target?.classList?.contains("mod-value")) repaint();
+  });
+  form.addEventListener("click", (event) => {
+    if (event.target?.closest?.("[data-action]")) window.setTimeout(repaint, 0);
+  });
+  repaint();
 }
 
 /**
- * Open a native-looking WoD5e confirmation dialog and roll the custom formula.
- * This path is used only by Areté; every other Mage roll continues through the
- * untouched WoD5e API and therefore never receives Paradox dice.
+ * Un messaggio senza dadi: la riuscita comprata con la Quintessenza (niente
+ * rossi da tirare) oppure il lancio senza nessun dado (fallito). Porta la
+ * carta del Mago come un tiro, così i tasti sotto sanno cosa fare.
+ */
+async function postDicelessMessage(actor, title, { flavor, cardData, banner = "", rollMode }) {
+  const localize = game.i18n.localize.bind(game.i18n);
+  const content = [
+    banner ? renderAutoVictoryBanner(localize, banner) : "",
+    flavor
+  ].join("");
+  return ChatMessage.create(ChatMessage.applyRollMode({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    flavor: title,
+    content,
+    flags: { [MODULE_ID]: { [ROLL_CARD_FLAG]: cardData } }
+  }, rollMode));
+}
+
+/**
+ * La finestra di conferma e il tiro del ramo C. La usano il tiro di Areté,
+ * lo Scoppio e (dalla 0.87.0) i tiri di Abilità della scheda: la riserva
+ * meno la soglia dà i dadi, un 8 riesce, i rossi si tirano sempre. Torna il
+ * messaggio in chat, oppure null se la finestra è stata chiusa.
+ *
+ * @param pool          la riserva prima della soglia
+ * @param threshold     la soglia (modificabile nella finestra)
+ * @param bonusDice     i dadi in più (premio, Armonia) già dentro `pool`, per il tetto +3
+ * @param paradoxRating i rossi: il Paradosso sulla Ruota
+ * @param onlyParadox   lo Scoppio: solo rossi
+ * @param bought        la riuscita comprata con la Quintessenza: non si tira, salvo i rossi
+ * @param burn          l'Ustione se scatta il Contraccolpo: la soglia
+ * @param skill         un tiro di Abilità: niente rossi, e il margine oltre il primo successo
  */
 export async function rollAreteWithParadox({
   actor,
   data,
-  dicePool,
+  pool = 0,
+  threshold = 0,
   bonusDice = 0,
-  paradoxRating,
+  paradoxRating = 0,
   onlyParadox = false,
-  difficulty = 0,
+  bought = false,
   burn = 0,
   effectKind = "",
-  applyBurn = true,
   arete = 0,
-  autoSuccesses = 0,
+  skill = false,
   title,
-  flavor,
+  flavor = "",
   card = null,
   selectors = []
 }) {
@@ -214,17 +279,20 @@ export async function rollAreteWithParadox({
   const activeTotal = activeModifiersNow
     .reduce((total, modifier) => total + (Number(modifier.value) || 0), 0);
   // La riserva mostrata: tratti, dadi in più e modificatori attivi, col
-  // tetto già applicato. Nella vittoria automatica volgare si tirano solo i
-  // rossi: la parte Mage parte da zero.
-  const startingExcess = bonusDiceExcess(bonusDice, activeModifiersNow);
-  const initialPool = onlyParadox
-    ? calculateAreteDicePool(paradoxRating, paradoxRating)
-    : calculateAreteDicePool(dicePool + bonusDice + activeTotal - startingExcess, paradoxRating);
+  // tetto +3 già applicato (tronco). La soglia si toglie dopo, nella finestra.
+  const startingExcess = skill ? 0 : bonusDiceExcess(bonusDice, activeModifiersNow);
+  const reds = skill ? 0 : Math.max(Math.trunc(Number(paradoxRating) || 0), 0);
+  const options = { paradoxRating: reds, bought, onlyParadox };
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll-confirm.hbs",
     {
-      ...initialPool,
-      difficulty,
+      basicDice: onlyParadox ? 0 : Math.max(Math.trunc(Number(pool) || 0) + activeTotal - startingExcess, 0),
+      paradoxDice: reds,
+      difficulty: Math.max(Math.trunc(Number(threshold) || 0), 0),
+      skill,
+      onlyParadox,
+      bought,
+      showReds: !skill,
       rollMode: game.settings.get("core", "rollMode"),
       rollModes: CONFIG.Dice.rollModes,
       situationalModifiers
@@ -243,12 +311,6 @@ export async function rollAreteWithParadox({
         const input = target.ownerDocument.querySelector(`#${target.dataset.resource}`);
         if (input) input.valueAsNumber = Math.max(input.valueAsNumber - 1, 0);
       },
-      paradoxPlus: (_event, target) => {
-        changeParadoxDice(target.ownerDocument, 1);
-      },
-      paradoxMinus: (_event, target) => {
-        changeParadoxDice(target.ownerDocument, -1);
-      },
       addCustomMod: addCustomModifier,
       deleteCustomMod: (_event, target) => target.closest(".custom-modifier")?.remove()
     },
@@ -260,84 +322,111 @@ export async function rollAreteWithParadox({
         default: true,
         callback: async (_event, _button, dialog) => {
           const form = dialog.element;
-          const visibleTotal =
-            (form.querySelector("#inputBasicDice")?.valueAsNumber || 0)
-            + (form.querySelector("#inputParadoxDice")?.valueAsNumber || 0);
-          const selectedParadox =
-            form.querySelector("#inputParadoxDice")?.valueAsNumber || 0;
           const activeModifiers = collectActiveModifiers(form);
-          // Il tetto +3 si applica sul conto finale: premio, Armonia e
+          // Il tetto +3 (tronco) vale sul conto finale: premio, Armonia e
           // modificatori positivi insieme. Lo scarto va in chat.
-          const excess = onlyParadox ? 0 : bonusDiceExcess(bonusDice, activeModifiers);
-          const alreadyRemoved = onlyParadox ? 0 : startingExcess;
-          const finalPool = calculateAreteDicePool(
-            visibleTotal + getCustomModifierTotal(form) - (excess - alreadyRemoved),
-            selectedParadox
-          );
-          const difficulty = Number(form.querySelector("#inputDifficulty")?.value) || 0;
+          const excess = skill || onlyParadox ? 0 : bonusDiceExcess(bonusDice, activeModifiers);
+          const alreadyRemoved = skill || onlyParadox ? 0 : startingExcess;
+          const basicInput = form.querySelector("#inputBasicDice");
+          if (basicInput && excess - alreadyRemoved > 0) {
+            basicInput.value = String(Math.max((basicInput.valueAsNumber || 0) - (excess - alreadyRemoved), 0));
+          }
+          const conto = readDialogDice(form, options);
           const rollMode = form.querySelector('[name="rollMode"]')?.value
             || game.settings.get("core", "rollMode");
-          const basicDice = onlyParadox ? 0 : finalPool.basicDice;
-          const paradoxDice = onlyParadox ? Math.max(finalPool.paradoxDice, 1) : finalPool.paradoxDice;
-          const formula = `${basicDice}d${MortalDie.DENOMINATION}cs>5 + ${paradoxDice}d${ParadoxDie.DENOMINATION}cs>5`;
+          const format = game.i18n.format.bind(game.i18n);
+          const localize = game.i18n.localize.bind(game.i18n);
+
           let rollFlavor = flavor;
+          if (!onlyParadox) {
+            rollFlavor += renderRollNote(format("WOD5E_MAGE.RamoC.DiceNote", { note: diceNote(conto) }), "dice");
+          }
           if (excess > 0) {
             rollFlavor += renderRollNote(game.i18n.format("WOD5E_MAGE.Arete.BonusCap", { excess }));
           }
+          if (conto.eyeOnly > 0 && !bought && !onlyParadox) {
+            rollFlavor += renderRollNote(format("WOD5E_MAGE.RamoC.EyeOnlyNote", { eyeOnly: conto.eyeOnly }));
+          }
+
+          // La carta del Mago: il conto vero e la soglia, per i tasti sotto.
+          const cardData = {
+            ...(card ?? {}),
+            ramo: RAMO,
+            pool: conto.pool,
+            threshold: conto.threshold,
+            dice: conto.dice,
+            countedParadox: conto.countedParadox,
+            eyeOnly: conto.eyeOnly,
+            // Un successo basta: la fascia legge questo contro il totale.
+            difficulty: 1,
+            autoSuccesses: 0,
+            effectKind: effectKind ?? "",
+            arete,
+            skill,
+            bought,
+            automatic: bought
+          };
+
+          // Nessun dado da tirare: la riuscita comprata senza rossi, oppure
+          // il lancio a zero dadi, che fallisce senza tirare.
+          if (conto.basicDice + conto.paradoxDice === 0) {
+            cardData.total = bought ? 1 : 0;
+            const flavorOut = rollFlavor + (bought
+              ? ""
+              : renderRollNote(localize("WOD5E_MAGE.RamoC.NoDice"), "nodice"));
+            return postDicelessMessage(actor, title, {
+              flavor: flavorOut,
+              cardData,
+              banner: bought ? localize("WOD5E_MAGE.RamoC.BoughtBanner") : "",
+              rollMode
+            });
+          }
+
+          const formula = `${conto.basicDice}d${MortalDie.DENOMINATION}${SUCCESS_MODIFIER} + ${conto.paradoxDice}d${ParadoxDie.DENOMINATION}${SUCCESS_MODIFIER}`;
           const roll = await new WOD5eRoll(formula, data, {
             system: "mortal",
             title,
             flavor: rollFlavor,
-            difficulty,
+            difficulty: 1,
             rollMode,
             activeModifiers,
             mageArete: true,
-            paradoxRating
+            paradoxRating: reds
           }).roll();
 
-          // WoD5e normally forms critical pairs across basic and advanced
-          // dice. In an Arete roll only Mage tens may form those pairs.
-          roll._total = calculateAreteSuccesses(
-            roll.basicDice?.results ?? [],
-            roll.advancedDice?.results ?? []
-          ) + Math.max(Math.trunc(Number(autoSuccesses) || 0), 0);
+          // Il conto del ramo C: 8 o più, i rossi contano fino a quelli
+          // convertiti, niente coppie di dieci. La riuscita comprata è 1.
+          const basicResults = roll.basicDice?.results ?? [];
+          const redResults = roll.advancedDice?.results ?? [];
+          roll._total = bought
+            ? 1
+            : calculateRamoCSuccesses(basicResults, redResults, conto.countedParadox);
+          cardData.total = roll._total;
+          if (skill) cardData.margin = ramoCMargin(roll._total);
 
-          // A un passo (ramo A): sotto la soglia di al massimo Areté
-          // successi, la riuscita ha un prezzo. Dalla 0.86.0 lo dice il tasto
-          // «Vittoria a un prezzo» sotto la fascia, non una riga qui.
           let finalFlavor = rollFlavor;
 
           // Il Contraccolpo: ogni rosso che mostra l'occhio (1 o 10) chiama
-          // la realtà. Il messaggio lo dichiara e dice l'Ustione da segnare,
-          // pari alla soglia.
-          const redResults = roll.advancedDice?.results ?? [];
+          // la realtà. L'Ustione è pari alla soglia; dalla 0.87.0 non si
+          // segna da sola: la scelta (Brucia, o Dai al Narratore) sta nei
+          // tasti sotto la carta, e la fa il giocatore.
           const eyes = countParadoxEyes(redResults);
-          if (eyes > 0) {
-            // Una riga sola, leggibile (10/9 sera): il nome in rosso, poi gli
-            // occhi e l'Ustione. L'Ustione si segna da sola (6/9): fisica,
-            // mentale o metà e metà secondo l'Effetto dichiarato; ogni due 10
-            // un punto aggravato; la Ruota scarica un punto per danno.
-            const format = game.i18n.format.bind(game.i18n);
+          // L'Ustione è la soglia com'è nella finestra (si può ritoccare lì); lo Scoppio porta la sua.
+          const burnNow = onlyParadox ? burn : (burn > 0 ? conto.threshold : 0);
+          if (eyes > 0 && !skill) {
+            const tens = countParadoxTens(redResults);
             const eyesText = eyes === 1
-              ? game.i18n.localize("WOD5E_MAGE.Arete.BacklashEyesOne")
+              ? localize("WOD5E_MAGE.Arete.BacklashEyesOne")
               : format("WOD5E_MAGE.Arete.BacklashEyes", { eyes });
-            let body = `${eyesText}. ${format("WOD5E_MAGE.Arete.BacklashSign", { burn })}`;
-            if (applyBurn && actor?.isOwner && burn > 0) {
-              const tens = redResults
-                .filter((result) => result?.active !== false && !result?.discarded)
-                .filter((result) => Number(result.result) === 10).length;
-              const applied = await applyUstione(actor, { threshold: burn, tens, kind: effectKind });
-              body = `${eyesText}: ${ustioneText(applied, format)}`;
-            }
-            const label = game.i18n.localize(onlyParadox ? "WOD5E_MAGE.Burst.Label" : "WOD5E_MAGE.Arete.BacklashLabel");
+            const body = burnNow > 0
+              ? `${eyesText}. ${format("WOD5E_MAGE.Ustione.Pending", { burn: burnNow })}`
+              : `${eyesText}.`;
+            const label = localize(onlyParadox ? "WOD5E_MAGE.Burst.Label" : "WOD5E_MAGE.Arete.BacklashLabel");
             finalFlavor += renderBacklashNote(label, body);
+            if (burnNow > 0) cardData.ustione = { threshold: burnNow, tens, kind: effectKind ?? "", eyes, choice: "" };
           }
           roll.options.flavor = finalFlavor;
 
-          // La bandiera dice al disegno della chat cosa mettere sopra i dadi,
-          // e il totale vero del Mago (coppie solo fra i dadi Mage, più i
-          // successi automatici) con la soglia, per riscrivere numero ed esito.
-          const cardData = { ...(card ?? {}), total: roll._total, difficulty, autoSuccesses, effectKind: effectKind ?? "", arete };
           const flags = { [MODULE_ID]: { [ROLL_CARD_FLAG]: cardData } };
           return roll.toMessage(
             { speaker: ChatMessage.getSpeaker({ actor }), flags },
@@ -353,6 +442,6 @@ export async function rollAreteWithParadox({
     ],
     position: { width: "auto", height: "auto" },
     classes: ["wod5e", "wod5e-mage", "mage", "mortal", "roll-dialog", "mage-arete-roll-dialog", "wod5e-mage-roll-dialog"],
-    render: (_event, dialog) => initializeModifierControls(dialog)
+    render: (_event, dialog) => initializeDialog(dialog, options)
   });
 }

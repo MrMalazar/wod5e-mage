@@ -1,0 +1,55 @@
+{{!-- La spesa dei punti Paradosso (ramo C, 11/9): un effetto di Magick dalla
+     Scheda del Paradosso, al prezzo della soglia. Le Sfere hanno i pallini
+     che i giocatori hanno «regalato» alla realtà; gli Ambiti i sette della
+     tavola. Gli interventi di scena sono da fare. --}}
+<div class="wod5e-mage-arete-body wod5e-mage-paradosso-spesa">
+    <div class="wod5e-mage-arete-layout">
+        <div class="wod5e-mage-arete-dots-column" role="group" aria-label="{{localize 'WOD5E_MAGE.Paradosso.Scheda'}}">
+            <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head">{{localize "WOD5E_MAGE.Paradosso.Scheda"}}</span>
+            {{#each spheres as |sphere|}}
+                <div class="wod5e-mage-arete-dotrow" data-role="spendRow" data-kind="sphere" data-id="{{sphere.id}}">
+                    <img class="wod5e-mage-arete-row-icon" src="{{sphere.icon}}" alt="">
+                    <span class="wod5e-mage-arete-dot-label" title="{{sphere.from}}">{{localize sphere.label}}</span>
+                    <input type="hidden" name="sphere-{{sphere.id}}" value="0">
+                    <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize sphere.label}}">
+                        {{#each sphere.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
+                    </span>
+                    <span class="wod5e-mage-arete-dot-reading"><small>{{sphere.from}}</small></span>
+                </div>
+            {{else}}
+                <p class="wod5e-mage-magick-type-hint">{{localize "WOD5E_MAGE.Paradosso.SchedaEmpty"}}</p>
+            {{/each}}
+            <hr class="wod5e-mage-arete-rule">
+            <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head">{{localize "WOD5E_MAGE.Scopes.Label"}}</span>
+            {{#each scopes as |scope|}}
+                <div class="wod5e-mage-arete-dotrow" data-role="spendRow" data-kind="scope" data-id="{{scope.id}}">
+                    <i class="wod5e-mage-arete-row-icon {{scope.faIcon}}" aria-hidden="true"></i>
+                    <span class="wod5e-mage-arete-dot-label">{{localize scope.label}}</span>
+                    <input type="hidden" name="scope-{{scope.id}}" value="0">
+                    <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
+                        {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
+                    </span>
+                    <span class="wod5e-mage-arete-dot-reading"></span>
+                </div>
+            {{/each}}
+        </div>
+        <div class="wod5e-mage-arete-side">
+            <p class="wod5e-mage-arete-difficulty wod5e-mage-paradosso-prezzo" data-role="priceBox">
+                {{localize "WOD5E_MAGE.Paradosso.Price"}}: <strong data-role="price">0</strong> · {{localize "WOD5E_MAGE.Paradosso.Available"}}: <strong>{{points}}</strong>
+            </p>
+            <div class="wod5e-mage-arete-goal wod5e-mage-arete-goal-box">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Paradosso.What"}}</span>
+                <textarea name="text" rows="5" placeholder="{{localize 'WOD5E_MAGE.Paradosso.WhatHint'}}" aria-label="{{localize 'WOD5E_MAGE.Paradosso.What'}}"></textarea>
+            </div>
+            <label class="wod5e-mage-arete-conto-row wod5e-mage-paradosso-whisper">
+                <span class="wod5e-mage-arete-conto-control"><input type="checkbox" name="whisper"></span>
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Paradosso.Whisper"}}</span>
+            </label>
+            <hr class="wod5e-mage-arete-rule">
+            <div class="wod5e-mage-paradosso-interventi">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Paradosso.Interventions"}}</span>
+                <em>{{localize "WOD5E_MAGE.Paradosso.InterventionsTodo"}}</em>
+            </div>
+        </div>
+    </div>
+</div>

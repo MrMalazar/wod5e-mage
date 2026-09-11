@@ -54,18 +54,24 @@ assert.equal(die.src, "modules/wod5e-mage/assets/icons/dice/chat/magick-stellina
 
 assert.equal(getMageDieImage(1).endsWith("dado-vuoto.svg"), true);
 assert.equal(getMageDieImage(5).endsWith("dado-vuoto.svg"), true);
-assert.equal(getMageDieImage(6).endsWith("magick-scintilla.svg"), true);
+// Il ramo C (11/9): la riuscita è l'8; il 6 e il 7 sono facce vuote.
+assert.equal(getMageDieImage(6).endsWith("dado-vuoto.svg"), true);
+assert.equal(getMageDieImage(7).endsWith("dado-vuoto.svg"), true);
+assert.equal(getMageDieImage(8).endsWith("magick-scintilla.svg"), true);
 assert.equal(getMageDieImage(9).endsWith("magick-scintilla.svg"), true);
 assert.equal(getMageDieImage(10).endsWith("magick-stellina.svg"), true);
 
 assert.equal(getParadoxDieImage(1).endsWith("paradosso-occhio-vuoto.svg"), true);
 assert.equal(getParadoxDieImage(2).endsWith("dado-vuoto.svg"), true);
 assert.equal(getParadoxDieImage(5).endsWith("dado-vuoto.svg"), true);
-assert.equal(getParadoxDieImage(6).endsWith("paradosso-scintilla.svg"), true);
+assert.equal(getParadoxDieImage(6).endsWith("dado-vuoto.svg"), true);
+assert.equal(getParadoxDieImage(7).endsWith("dado-vuoto.svg"), true);
+assert.equal(getParadoxDieImage(8).endsWith("paradosso-scintilla.svg"), true);
 assert.equal(getParadoxDieImage(9).endsWith("paradosso-scintilla.svg"), true);
 assert.equal(getParadoxDieImage(10).endsWith("paradosso-occhio-completo.svg"), true);
 assert.equal(getParadoxDieResult(1), "bestial");
 assert.equal(getParadoxDieResult(5), "failure");
+assert.equal(getParadoxDieResult(7), "failure");
 assert.equal(getParadoxDieResult(9), "success");
 assert.equal(getParadoxDieResult(10), "paradoxTen");
 

@@ -56,11 +56,15 @@ export function ustioneSplit({ threshold = 0, tens = 0, kind = "", random = Math
   return { total, applied: physical + mental, pa, ps: physical - pa, ma, ms: mental - ma, kind: effect };
 }
 
-/** Segna l'Ustione sulla Salute e scarica la Ruota di un punto per danno. */
-export async function applyUstione(actor, { threshold = 0, tens = 0, kind = "", random } = {}) {
+/**
+ * Segna l'Ustione sulla Salute e scarica la Ruota di un punto per danno.
+ * Dal ramo C (11/9) le caselle dell'Ustione restano «bloccate» in rosso
+ * per la scena (un effetto visivo: Cambio Scena ne sblocca una).
+ */
+export async function applyUstione(actor, { threshold = 0, tens = 0, kind = "", random, lock = true } = {}) {
   const split = ustioneSplit({ threshold, tens, kind, random });
   if (split.applied <= 0) return { ...split, discharged: 0 };
-  await addSaluteDamage(actor, { pa: split.pa, ps: split.ps, ma: split.ma, ms: split.ms });
+  await addSaluteDamage(actor, { pa: split.pa, ps: split.ps, ma: split.ma, ms: split.ms }, { lock });
   const balance = getMagickBalance(actor);
   const paradox = paradoxAfterBurst(balance.paradox, split.applied, getParadoxFloor(actor));
   if (paradox !== balance.paradox) {
@@ -139,10 +143,10 @@ export async function onParadoxBurst(event) {
     await rollAreteWithParadox({
       actor,
       data: actor.system,
-      dicePool: balance.paradox,
+      pool: 0,
+      threshold: 0,
       paradoxRating: balance.paradox,
       onlyParadox: true,
-      difficulty: 0,
       burn: threshold,
       effectKind,
       title,
