@@ -63,7 +63,7 @@ const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf
 // Ramo C (11/9): la Quintessenza è dadi, o compra la riuscita; scende dalla Ruota al tiro.
 assert.match(arete, /const conto = ramoCPool\(\{\s*traits: basePool,\s*bonus: bonusDice \+ extraDice,\s*specialtyDice: specialty\.successes,\s*quintessence,\s*sphereMax,\s*threshold\s*\}\);/);
 assert.match(arete, /quintessence: Math\.max\(balanceBefore\.quintessence - quintessence, 0\)/);
-assert.match(arete, /effectKind,\n\s+arete: arete\.value/);
+assert.match(arete, /effectKind,\r?\n\s+arete: arete\.value/);
 // L'Ustione non si segna più da sola: la scelta sta nei tasti sotto la carta (ustione.js).
 const ustione = readFileSync(new URL("../scripts/ustione.js", import.meta.url), "utf8");
 assert.match(ustione, /applyUstione\(actor, \{ threshold: state\.threshold, tens: card\.ustione\.tens, kind: card\.ustione\.kind, lock: true \}\)/);
@@ -198,5 +198,5 @@ assert.deepEqual(prepareGrimorioSpheres({ forces: 3, life: 1 }, (k) => k, new Se
 assert.match(grimorioTemplate, /data-role="grimorioSphere" data-sphere="\{\{s\.sphere\}\}"[\s\S]*data-sphere-group="\{\{group\.sphere\}\}"[\s\S]*data-role="grimorioGrade" data-grade="\{\{grade\.grade\}\}"[\s\S]*data-grade-panel="\{\{grade\.grade\}\}"[\s\S]*data-sphere-row="\{\{row\.sphere\}\}"/);
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
 assert.match(css, /\.wod5e-mage-grimorio-row\[open\] \{/);
-assert.match(css, /\.wod5e-mage-roll-symbol-sphere > img \{\n  filter: brightness\(0\)/);
+assert.match(css, /\.wod5e-mage-roll-symbol-sphere > img \{\r?\n  filter: brightness\(0\)/);
 console.log("Grimorio, simboli e schede: test passati.");

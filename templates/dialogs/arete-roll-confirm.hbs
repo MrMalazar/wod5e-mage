@@ -55,6 +55,10 @@
 {{else}}
 <input type="hidden" id="inputDifficulty" value="0">
 {{/unless}}
+<div class="form-group wod5e-mage-advanced-difficulty">
+    <label for="inputAdvancedDifficulty">{{localize "WOD5E_MAGE.RamoC.AdvancedDifficulty"}}</label>
+    <input type="checkbox" id="inputAdvancedDifficulty" name="advancedDifficulty">
+</div>
 {{!-- Rispetta la Bussola? (11/9), solo nei tiri di Abilità: il blocco lo disegna bussola.js. --}}
 {{{bussolaHtml}}}
 <div class="form-group">

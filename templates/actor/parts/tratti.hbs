@@ -162,9 +162,9 @@
                                             <a class="edit-skill" data-action="editSkill" title="Edit skill" data-skill="{{skill.id}}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
+                                            <span class="resource-value-empty" data-action="essentialSkillClear"></span>
                                             {{#numLoop 5}}
-                                                <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}"></span>
+                                                <span class="resource-value-step" data-action="essentialSkillDotChange" data-index="{{this}}"></span>
                                             {{/numLoop}}
                                         </div>
                                     {{/if}}

@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   calculateRamoCSuccesses,
+  ADVANCED_SUCCESS_FROM,
   diceNote,
   isSuccess,
+  ORIGINAL_SUCCESS_FROM,
   prezzoAllowed,
   quintessenceSpend,
   RAMO,
@@ -11,6 +13,8 @@ import {
   ramoCMargin,
   sforzoCost,
   splitRamoCDice,
+  successModifier,
+  successThreshold,
   SUCCESS_FROM,
   SUCCESS_MODIFIER,
   ustioneAmount
@@ -26,6 +30,12 @@ import { datasetPool, skillRollCard } from "../scripts/mage-roll-selection.js";
 assert.equal(RAMO, "C");
 assert.equal(SUCCESS_FROM, 8);
 assert.equal(SUCCESS_MODIFIER, "cs>7");
+assert.equal(ORIGINAL_SUCCESS_FROM, 6);
+assert.equal(ADVANCED_SUCCESS_FROM, 8);
+assert.equal(successThreshold(false), 6);
+assert.equal(successThreshold(true), 8);
+assert.equal(successModifier(6), "cs>5");
+assert.equal(successModifier(8), "cs>7");
 assert.equal(isSuccess({ result: 8 }), true);
 assert.equal(isSuccess({ result: 7 }), false);
 assert.equal(isSuccess(10), true);
@@ -52,6 +62,8 @@ assert.equal(calculateRamoCSuccesses([{ result: 6 }], [{ result: 9 }, { result: 
 assert.equal(calculateRamoCSuccesses([], [{ result: 9 }, { result: 8 }], 0), 0, "rossi solo per l'occhio");
 assert.equal(calculateRamoCSuccesses([], [{ result: 9 }, { result: 8 }]), 2, "senza tetto contano tutti");
 assert.equal(calculateRamoCSuccesses([{ result: 9, discarded: true }, { result: 9, active: false }], []), 0);
+assert.equal(calculateRamoCSuccesses([{ result: 6 }, { result: 7 }], [], Infinity, { successFrom: 6 }), 2, "senza difficolta avanzata conta dal 6");
+assert.equal(calculateRamoCSuccesses([{ result: 6 }, { result: 7 }, { result: 8 }], [], Infinity, { successFrom: 8 }), 1, "con difficolta avanzata conta dall'8");
 
 // Il margine dei tiri di Abilità: i successi oltre il primo.
 assert.equal(ramoCMargin(0), 0);
@@ -80,6 +92,8 @@ assert.equal(getParadoxDieResult(7), "failure");
 assert.equal(getParadoxDieResult(8), "success");
 assert.equal(getParadoxDieResult(1), "bestial");
 assert.equal(getParadoxDieResult(10), "paradoxTen");
+assert.match(getMageDieImage(6, { successFrom: 6 }), /magick-scintilla\.svg$/);
+assert.equal(getParadoxDieResult(6, { successFrom: 6 }), "success");
 
 // La fascia: un successo basta; la riuscita comprata ha la sua parola.
 assert.equal(rollOutcome(1, 1, (k) => k).text, "WOD5E_MAGE.RollCard.Success");
@@ -101,6 +115,8 @@ assert.deepEqual(rerollableDice([{ result: 7 }, { result: 8 }, { result: 2 }], [
 ]);
 assert.deepEqual(rerollableDice([{ result: 7 }, { result: 5 }], [], { successFrom: 6 }), [{ kind: "basic", index: 1 }], "i messaggi del ramo A leggono il 6");
 assert.equal(recountCard({ ramo: "C", countedParadox: 1 }, [{ result: 8 }, { result: 7 }], [{ result: 9 }, { result: 8 }]), 2);
+assert.equal(recountCard({ ramo: "C", advancedDifficulty: false }, [{ result: 6 }], []), 1);
+assert.equal(recountCard({ ramo: "C", advancedDifficulty: true }, [{ result: 6 }], []), 0);
 assert.equal(recountCard({ autoSuccesses: 1 }, [{ result: 6 }], []), 2, "le carte del ramo A contano come prima");
 assert.equal(volontaState({ total: 0, difficulty: 1, failedCount: 2 }).show, true);
 
@@ -117,7 +133,8 @@ assert.doesNotMatch(skillCard, /RollCard\.Threshold|RollCard\.Type/, "senza sogl
 
 // La macchina: la formula cs>7, l'Ustione in attesa sulla carta, niente Ustione automatica.
 const dice = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8");
-assert.match(dice, /\$\{SUCCESS_MODIFIER\} \+ \$\{conto\.paradoxDice\}d\$\{ParadoxDie\.DENOMINATION\}\$\{SUCCESS_MODIFIER\}/);
+assert.match(dice, /const successFrom = successThreshold\(advancedDifficulty\)/);
+assert.match(dice, /\$\{modifier\} \+ \$\{conto\.paradoxDice\}d\$\{ParadoxDie\.DENOMINATION\}\$\{modifier\}/);
 assert.match(dice, /cardData\.ustione = \{ threshold: burnNow, sphere: Math\.max\(Math\.trunc\(Number\(sphereLevel\) \|\| 0\), 0\), tens, kind: effectKind \?\? "", eyes, choice: "" \}/);
 assert.doesNotMatch(dice, /applyUstione/);
 assert.match(dice, /difficulty: 1,/);
@@ -125,6 +142,7 @@ const confirm = readFileSync(new URL("../templates/dialogs/arete-roll-confirm.hb
 assert.match(confirm, /data-role="diceOut"/);
 assert.match(confirm, /id="inputParadoxDice" value="\{\{paradoxDice\}\}" readonly/);
 assert.doesNotMatch(confirm, /paradoxPlus|paradoxMinus/);
+assert.match(confirm, /id="inputAdvancedDifficulty"/);
 const selection = readFileSync(new URL("../scripts/mage-roll-selection.js", import.meta.url), "utf8");
 assert.match(selection, /skill: true,/);
 assert.match(selection, /if \(!isMageActor\(actor\)\) return WOD5E\.api\.RollFromDataset/);
@@ -132,7 +150,7 @@ const salute = readFileSync(new URL("../scripts/salute.js", import.meta.url), "u
 assert.match(salute, /pool: resolve \+ composure,[\s\S]*skill: true,/);
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
-  for (const key of ["Pool", "Threshold", "Dice", "DiceLine", "Reds", "RedsEyeOnly", "DiceNote", "EyeOnlyNote", "NoDice", "Bought", "BoughtLine", "BoughtBanner", "BoughtFlavor", "BuyPrice", "VulgarFailedQuintessence", "MarginHint", "SkillRoll"]) {
+  for (const key of ["Pool", "Threshold", "AdvancedDifficulty", "Dice", "DiceLine", "Reds", "RedsEyeOnly", "DiceNote", "EyeOnlyNote", "NoDice", "Bought", "BoughtLine", "BoughtBanner", "BoughtFlavor", "BuyPrice", "VulgarFailedQuintessence", "MarginHint", "SkillRoll"]) {
     assert.equal(typeof strings.WOD5E_MAGE.RamoC[key], "string", `${lang} RamoC.${key}`);
   }
   assert.equal(typeof strings.WOD5E_MAGE.RollCard.Bought, "string");

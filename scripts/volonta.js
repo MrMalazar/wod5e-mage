@@ -1,7 +1,7 @@
 import { calculateAreteSuccesses } from "./arete-dice-pool.js";
 import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
-import { calculateRamoCSuccesses, RAMO, SUCCESS_FROM, SUCCESS_MODIFIER } from "./ramo-c.js";
+import { calculateRamoCSuccesses, RAMO, resolveSuccessFrom, successModifier, SUCCESS_FROM } from "./ramo-c.js";
 import { markRollOpen, ROLL_CARD_FLAG, rollActionsBox } from "./roll-card.js";
 import { addSaluteDamage } from "./salute.js";
 
@@ -21,6 +21,11 @@ export const REROLL_MAX = 3;
 
 const isActive = (result) => result?.active !== false && !result?.discarded;
 const count = (value) => Math.max(Math.trunc(Number(value) || 0), 0);
+
+/** Le carte nuove salvano la scelta 6+/8+; quelle precedenti restano a 8+. */
+function cardSuccessFrom(card) {
+  return card?.ramo === RAMO ? resolveSuccessFrom(card, SUCCESS_FROM) : 6;
+}
 
 /**
  * I dadi che si possono ritirare: i falliti fra i bianchi (sotto la
@@ -132,7 +137,7 @@ export function decorateVolonta(message, html) {
   if (!basic) return false;
   const total = Number.isFinite(Number(card.total)) ? Number(card.total) : systemTotal(basic.results, advanced?.results ?? []);
   const difficulty = Number.isFinite(Number(card.difficulty)) ? Number(card.difficulty) : Number(roll.options?.difficulty) || 0;
-  const candidates = rerollableDice(basic.results, advanced?.results ?? [], { successFrom: card.ramo === RAMO ? SUCCESS_FROM : 6 });
+  const candidates = rerollableDice(basic.results, advanced?.results ?? [], { successFrom: cardSuccessFrom(card) });
   const state = volontaState({ total, difficulty, failedCount: candidates.length, used });
   if (!state.show) return false;
 
@@ -178,7 +183,9 @@ export function decorateVolonta(message, html) {
 /** Il totale nuovo della carta del Mago, dopo il ritiro: nel ramo C 8 o più, senza coppie. */
 export function recountCard(card, basicResults, advancedResults) {
   if (card?.ramo === RAMO) {
-    return calculateRamoCSuccesses(basicResults, advancedResults, card.countedParadox ?? Infinity);
+    return calculateRamoCSuccesses(basicResults, advancedResults, card.countedParadox ?? Infinity, {
+      successFrom: cardSuccessFrom(card)
+    });
   }
   return calculateAreteSuccesses(basicResults, advancedResults)
     + Math.max(Math.trunc(Number(card?.autoSuccesses) || 0), 0);
@@ -192,13 +199,14 @@ async function rerollDice(message, actor, picks) {
   const chosen = (Array.isArray(picks) ? picks : []).slice(0, REROLL_MAX);
   if (!chosen.length) return;
   const card = message.getFlag(MODULE_ID, ROLL_CARD_FLAG);
+  const modifier = successModifier(cardSuccessFrom(card));
 
   let eyes = 0;
   for (const kind of ["basic", "paradox"]) {
     const term = kind === "paradox" ? advanced : basic;
     const indices = chosen.filter((pick) => pick.kind === kind).map((pick) => pick.index);
     if (!term || !indices.length) continue;
-    const reroll = await new foundry.dice.Roll(`${indices.length}d10${card?.ramo === RAMO ? SUCCESS_MODIFIER : "cs>5"}`).evaluate();
+    const reroll = await new foundry.dice.Roll(`${indices.length}d10${modifier}`).evaluate();
     if (game.dice3d) await game.dice3d.showForRoll(reroll, game.user, true);
     const fresh = reroll.terms[0]?.results ?? [];
     for (const index of indices) {

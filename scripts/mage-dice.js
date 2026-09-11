@@ -4,6 +4,8 @@ import {
   getMageDieImage,
   getParadoxDieImage
 } from "./dice-faces.js";
+import { resolveSuccessFrom, SUCCESS_FROM } from "./ramo-c.js";
+import { ROLL_CARD_FLAG } from "./roll-card.js";
 
 export { getMageDieImage } from "./dice-faces.js";
 
@@ -31,7 +33,13 @@ export function applyMageDiceClass(message, html) {
   if (!isMageActor(actor) || !html?.querySelectorAll) return 0;
 
   const basicDice = html.querySelectorAll(".roll-img.mortal-dice, .roll-img.vampire-dice, .roll-img.hunter-dice, .roll-img.werewolf-dice");
-  const basicResults = message?.rolls?.[0]?.basicDice?.results ?? [];
+  const messageRoll = message?.rolls?.[0];
+  const basicResults = messageRoll?.basicDice?.results ?? [];
+  const card = message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG) ?? {};
+  const successFrom = resolveSuccessFrom({
+    successFrom: card.successFrom ?? messageRoll?.options?.mageSuccessFrom,
+    advancedDifficulty: card.advancedDifficulty
+  }, SUCCESS_FROM);
 
   basicDice.forEach((die, index) => {
     die.classList.remove("mortal-dice", "vampire-dice", "hunter-dice", "werewolf-dice");
@@ -40,7 +48,7 @@ export function applyMageDiceClass(message, html) {
     // WoD5e mantiene lo stesso ordine tra risultati e dadi mostrati in chat.
     const result = basicResults[index]?.result;
     if (result !== undefined) {
-      applyDieFace(die, getMageDieImage(result), "mage-dice-empty");
+      applyDieFace(die, getMageDieImage(result, { successFrom }), "mage-dice-empty");
     }
   });
 
@@ -50,7 +58,7 @@ export function applyMageDiceClass(message, html) {
   paradoxDice.forEach((die, index) => {
     const result = paradoxResults[index]?.result;
     if (result !== undefined) {
-      applyDieFace(die, getParadoxDieImage(result), "paradox-dice-empty");
+      applyDieFace(die, getParadoxDieImage(result, { successFrom }), "paradox-dice-empty");
     }
   });
 

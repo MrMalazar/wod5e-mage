@@ -75,6 +75,12 @@ assert.equal(getParadoxDieResult(7), "failure");
 assert.equal(getParadoxDieResult(9), "success");
 assert.equal(getParadoxDieResult(10), "paradoxTen");
 
+// La scelta nel dialog cambia sia il conteggio sia le facce mostrate in chat.
+assert.equal(getMageDieImage(6, { successFrom: 6 }).endsWith("magick-scintilla.svg"), true);
+assert.equal(getMageDieImage(7, { successFrom: 6 }).endsWith("magick-scintilla.svg"), true);
+assert.equal(getParadoxDieImage(6, { successFrom: 6 }).endsWith("paradosso-scintilla.svg"), true);
+assert.equal(getParadoxDieResult(6, { successFrom: 6 }), "success");
+
 const emptyMageClasses = new Set(["roll-img", "mortal-dice"]);
 let emptyMageSourceRemoved = false;
 const emptyMageDie = {
