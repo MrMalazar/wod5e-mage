@@ -1027,7 +1027,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       .join(", ") || rollLabel
   };
   // L'ultima soglia lanciata: la usa lo Scoppio del Paradosso come proposta.
-  if (actor.isOwner) await actor.setFlag(MODULE_ID, "lastThreshold", threshold);
+  if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: threshold, [`flags.${MODULE_ID}.lastSphereMax`]: sphereMax });
   const flavor = card;
 
   const paradoxGain = paradoxGainForMagickType(options);
@@ -1070,6 +1070,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       paradoxRating,
       bought,
       burn: threshold,
+      sphereLevel: sphereMax,
       effectKind,
       arete: arete.value,
       title: rollLabel,

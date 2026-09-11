@@ -107,7 +107,7 @@ assert.match(paradox, /\[ROLL_CARD_FLAG\]: card/);
 assert.match(paradox, /effectKind: effectKind \?\? "",\s*arete,/);
 assert.doesNotMatch(paradox, /isOneStepShort|Arete\.OneStep/);
 // Il Contraccolpo in una riga sola (10/9 sera): il nome in rosso, il testo in chiaro; l'Ustione scritta una volta.
-assert.match(paradox, /renderBacklashNote\(label, body\)/);
+assert.match(paradox, /renderBacklashNote\(localize\(onlyParadox \? "WOD5E_MAGE\.Burst\.Label" : "WOD5E_MAGE\.Arete\.BacklashLabel"\), `\$\{eyesText\}\.`\)/);
 assert.doesNotMatch(paradox, /Arete\.Backlash"/);
 assert.match(renderBacklashNote("Contraccolpo", "un occhio sui rossi: Ustione 5"), /^<p class="wod5e-mage-roll-note wod5e-mage-roll-note-backlash"><b class="wod5e-mage-roll-backlash-label">Contraccolpo<\/b> <span class="wod5e-mage-roll-backlash-text">un occhio sui rossi: Ustione 5<\/span><\/p>$/);
 const main = readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8");

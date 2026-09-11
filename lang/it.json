@@ -1007,7 +1007,8 @@
       "Mental": "{n} mentali",
       "MentalOne": "1 mentale",
       "Aggravated": "{n} aggravati",
-      "AggravatedOne": "1 aggravato"
+      "AggravatedOne": "1 aggravato",
+      "Sphere": "Sfera più alta usata (i punti al Narratore)"
     },
     "Volonta": {
       "Label": "Volontà",
@@ -1104,14 +1105,12 @@
     },
     "Ustione": {
       "Label": "Ustione",
-      "Pending": "Ustione {burn}, pari alla soglia: scegli sotto, Brucia oppure Dai al Narratore.",
       "Burn": "Brucia",
       "Give": "Dai al Narratore",
       "BurnHint": "Brucia: {burn} danni su di te, segnati sulla Salute e bloccati per la scena. La Ruota si scarica di {burn}.",
-      "GiveHint": "Dai al Narratore: {burn} punti Paradosso alla riserva del Narratore, e la realtà colpirà dove vuole lei. La Ruota si scarica di {burn}.",
+      "GiveHint": "Dai al Narratore: {points} punti Paradosso (pari alla Sfera usata) alla riserva del Narratore, e la realtà colpirà dove vuole lei. La Ruota si scarica di {points}.",
       "BurnedShort": "{burn} danni segnati sulla Salute.",
-      "Given": "{points} punti Paradosso al Narratore. La Ruota scarica {discharged}.",
-      "Waiting": "Ustione {burn}: il giocatore sceglie, Brucia o Dai al Narratore.",
+      "Given": "{points} punti Paradosso al Narratore (pari alla Sfera usata). La Ruota scarica {discharged}.",
       "BurnDone": "Brucia: Ustione {burn} segnata sulla Salute, bloccata per la scena.",
       "GiveDone": "Dai al Narratore: {points} punti Paradosso consegnati."
     },

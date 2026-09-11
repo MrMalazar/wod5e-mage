@@ -14,6 +14,10 @@ import { ROLL_CARD_FLAG, rollActionsBox } from "./roll-card.js";
  * tutti e due i casi la Ruota si scarica di altrettanto (PROPOSTA dello
  * studio). I due tasti stanno sotto la carta del tiro; premuto uno,
  * l'altro sparisce. Non è una trattativa: la scelta è del giocatore.
+ * I punti dati al Narratore sono pari al livello della Sfera usata, non
+ * alla soglia (Blue, 11/9 sera: «va ridotto al pari del livello sfera»);
+ * i danni restano pari alla soglia. Coi tasti non c'è testo: «vede solo i
+ * bottoni e tanto basta».
  */
 
 export const USTIONE_CHOICES = Object.freeze(["brucia", "narratore"]);
@@ -21,18 +25,24 @@ export const USTIONE_CHOICES = Object.freeze(["brucia", "narratore"]);
 /** Cosa mostrare: i tasti finché il giocatore non ha scelto, poi la riga. */
 export function ustioneState(ustione) {
   const threshold = Math.max(Math.trunc(Number(ustione?.threshold) || 0), 0);
-  if (!ustione || threshold <= 0) return { show: false, chosen: "", threshold: 0 };
+  if (!ustione || threshold <= 0) return { show: false, chosen: "", threshold: 0, points: 0 };
   const chosen = USTIONE_CHOICES.includes(ustione.choice) ? ustione.choice : "";
-  return { show: !chosen, chosen, threshold };
+  return { show: !chosen, chosen, threshold, points: givenPoints(ustione) };
+}
+
+/** I punti Paradosso al Narratore: il livello della Sfera usata; senza Sfera (i messaggi vecchi), la soglia. */
+export function givenPoints(ustione) {
+  const sphere = Math.max(Math.trunc(Number(ustione?.sphere) || 0), 0);
+  return sphere > 0 ? sphere : Math.max(Math.trunc(Number(ustione?.threshold) || 0), 0);
 }
 
 /** I due tasti: Brucia (rosso) e Dai al Narratore (viola), con l'Ustione nel numero. */
 export function renderUstioneButtons(state, localize, format) {
   const burn = format("WOD5E_MAGE.Ustione.BurnHint", { burn: state.threshold });
-  const give = format("WOD5E_MAGE.Ustione.GiveHint", { burn: state.threshold });
+  const give = format("WOD5E_MAGE.Ustione.GiveHint", { points: state.points });
   return [
     `<button type="button" class="wod5e-mage-roll-action wod5e-mage-ustione-button wod5e-mage-ustione-brucia" data-ustione="brucia" title="${burn}">${localize("WOD5E_MAGE.Ustione.Burn")} <b>${state.threshold}</b></button>`,
-    `<button type="button" class="wod5e-mage-roll-action wod5e-mage-ustione-button wod5e-mage-ustione-narratore" data-ustione="narratore" title="${give}">${localize("WOD5E_MAGE.Ustione.Give")} <b>${state.threshold}</b></button>`
+    `<button type="button" class="wod5e-mage-roll-action wod5e-mage-ustione-button wod5e-mage-ustione-narratore" data-ustione="narratore" title="${give}">${localize("WOD5E_MAGE.Ustione.Give")} <b>${state.points}</b></button>`
   ].join("");
 }
 
@@ -49,11 +59,6 @@ export function renderUstioneDone(ustione, format, localize) {
   }
   if (!text) return "";
   return `<p class="wod5e-mage-roll-note wod5e-mage-roll-note-ustione wod5e-mage-roll-note-ustione-${ustione.choice}"><b class="wod5e-mage-ustione-label">${label}</b> <span>${text}</span></p>`;
-}
-
-/** La riga per chi guarda: l'Ustione aspetta la scelta del giocatore. */
-export function renderUstioneWaiting(state, format) {
-  return `<p class="wod5e-mage-roll-note wod5e-mage-roll-note-ustione"><span>${format("WOD5E_MAGE.Ustione.Waiting", { burn: state.threshold })}</span></p>`;
 }
 
 function speakerActor(message) {
@@ -78,11 +83,9 @@ export function decorateUstione(message, html) {
     return Boolean(note);
   }
 
+  // Chi guarda non vede niente finché il giocatore non sceglie (Blue: «vede solo i bottoni»).
   const actor = speakerActor(message);
-  if (!isMageActor(actor) || !actor.isOwner) {
-    target.insertAdjacentHTML("beforeend", renderUstioneWaiting(state, format));
-    return true;
-  }
+  if (!isMageActor(actor) || !actor.isOwner) return false;
 
   const box = rollActionsBox(target);
   box.insertAdjacentHTML("beforeend", renderUstioneButtons(state, localize, format));
@@ -121,27 +124,25 @@ export async function chooseBurn(message, actor) {
   return ustione;
 }
 
-/** Dai al Narratore: altrettanti punti Paradosso alla riserva del Narratore; la Ruota si scarica. */
+/** Dai al Narratore: punti Paradosso pari alla Sfera usata alla riserva del Narratore; la Ruota si scarica di altrettanto. */
 export async function chooseGive(message, actor) {
   const card = message.getFlag(MODULE_ID, ROLL_CARD_FLAG) ?? {};
   const state = ustioneState(card.ustione);
   if (!state.show) return null;
-  const discharged = await dischargeWheel(actor, state.threshold);
+  const discharged = await dischargeWheel(actor, state.points);
   const ustione = {
     ...card.ustione,
     choice: "narratore",
-    given: state.threshold,
+    given: state.points,
     discharged,
     collected: false,
     actorId: actor.id,
     actorName: actor.name
   };
   await message.update({ flags: { [MODULE_ID]: { [ROLL_CARD_FLAG]: { symbols: [], ...card, ustione } } } });
-  ui.notifications.info(game.i18n.format("WOD5E_MAGE.Ustione.GiveDone", { points: state.threshold }));
-  // Se il Narratore è questo client, i punti entrano subito; altrimenti li
-  // raccoglie il suo client quando vede il messaggio.
-  const { collectGivenParadox } = await import("./paradosso-narratore.js");
-  await collectGivenParadox(message);
+  ui.notifications.info(game.i18n.format("WOD5E_MAGE.Ustione.GiveDone", { points: state.points }));
+  // I punti li raccoglie il client del Narratore attivo dal gancio
+  // updateChatMessage (che scatta anche qui, se il Narratore è questo client).
   return ustione;
 }
 

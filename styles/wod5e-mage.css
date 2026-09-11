@@ -7402,6 +7402,11 @@
   display: contents;
 }
 
+/* Le carte di prima della 0.86.0 sono paragrafi: nella griglia prendono la riga intera (11/9 sera, Blue: «schiacciate a destra»). */
+.wod5e-mage-roll-card > p {
+  grid-column: 1 / -1;
+}
+
 .wod5e-mage-roll-key {
   color: #d9a827;
   font-size: 0.72rem;

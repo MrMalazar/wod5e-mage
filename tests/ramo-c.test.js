@@ -116,7 +116,7 @@ assert.doesNotMatch(skillCard, /RollCard\.Threshold|RollCard\.Type/, "senza sogl
 // La macchina: la formula cs>7, l'Ustione in attesa sulla carta, niente Ustione automatica.
 const dice = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8");
 assert.match(dice, /\$\{SUCCESS_MODIFIER\} \+ \$\{conto\.paradoxDice\}d\$\{ParadoxDie\.DENOMINATION\}\$\{SUCCESS_MODIFIER\}/);
-assert.match(dice, /cardData\.ustione = \{ threshold: burnNow, tens, kind: effectKind \?\? "", eyes, choice: "" \}/);
+assert.match(dice, /cardData\.ustione = \{ threshold: burnNow, sphere: Math\.max\(Math\.trunc\(Number\(sphereLevel\) \|\| 0\), 0\), tens, kind: effectKind \?\? "", eyes, choice: "" \}/);
 assert.doesNotMatch(dice, /applyUstione/);
 assert.match(dice, /difficulty: 1,/);
 const confirm = readFileSync(new URL("../templates/dialogs/arete-roll-confirm.hbs", import.meta.url), "utf8");

@@ -250,7 +250,8 @@ async function postDicelessMessage(actor, title, { flavor, cardData, banner = ""
  * @param paradoxRating i rossi: il Paradosso sulla Ruota
  * @param onlyParadox   lo Scoppio: solo rossi
  * @param bought        la riuscita comprata con la Quintessenza: non si tira, salvo i rossi
- * @param burn          l'Ustione se scatta il Contraccolpo: la soglia
+ * @param burn          l'Ustione se scatta il Contraccolpo: la soglia (i danni)
+ * @param sphereLevel   il livello della Sfera usata (la più alta): i punti Paradosso al Narratore
  * @param skill         un tiro di Abilità: niente rossi, e il margine oltre il primo successo
  */
 export async function rollAreteWithParadox({
@@ -263,6 +264,7 @@ export async function rollAreteWithParadox({
   onlyParadox = false,
   bought = false,
   burn = 0,
+  sphereLevel = 0,
   effectKind = "",
   arete = 0,
   skill = false,
@@ -357,6 +359,7 @@ export async function rollAreteWithParadox({
             dice: conto.dice,
             countedParadox: conto.countedParadox,
             eyeOnly: conto.eyeOnly,
+            sphereMax: Math.max(Math.trunc(Number(sphereLevel) || 0), 0),
             // Un successo basta: la fascia legge questo contro il totale.
             difficulty: 1,
             autoSuccesses: 0,
@@ -407,23 +410,24 @@ export async function rollAreteWithParadox({
           let finalFlavor = rollFlavor;
 
           // Il Contraccolpo: ogni rosso che mostra l'occhio (1 o 10) chiama
-          // la realtà. L'Ustione è pari alla soglia; dalla 0.87.0 non si
-          // segna da sola: la scelta (Brucia, o Dai al Narratore) sta nei
-          // tasti sotto la carta, e la fa il giocatore.
+          // la realtà. L'Ustione è pari alla soglia (i danni) e la Sfera usata
+          // dice i punti Paradosso al Narratore (Blue, 11/9 sera); dalla
+          // 0.87.0 non si segna da sola: la scelta (Brucia, o Dai al
+          // Narratore) sta nei tasti sotto la carta, e la fa il giocatore.
+          // Coi tasti non serve una riga di testo: «vede solo i bottoni».
           const eyes = countParadoxEyes(redResults);
           // L'Ustione è la soglia com'è nella finestra (si può ritoccare lì); lo Scoppio porta la sua.
           const burnNow = onlyParadox ? burn : (burn > 0 ? conto.threshold : 0);
           if (eyes > 0 && !skill) {
             const tens = countParadoxTens(redResults);
-            const eyesText = eyes === 1
-              ? localize("WOD5E_MAGE.Arete.BacklashEyesOne")
-              : format("WOD5E_MAGE.Arete.BacklashEyes", { eyes });
-            const body = burnNow > 0
-              ? `${eyesText}. ${format("WOD5E_MAGE.Ustione.Pending", { burn: burnNow })}`
-              : `${eyesText}.`;
-            const label = localize(onlyParadox ? "WOD5E_MAGE.Burst.Label" : "WOD5E_MAGE.Arete.BacklashLabel");
-            finalFlavor += renderBacklashNote(label, body);
-            if (burnNow > 0) cardData.ustione = { threshold: burnNow, tens, kind: effectKind ?? "", eyes, choice: "" };
+            if (burnNow > 0) {
+              cardData.ustione = { threshold: burnNow, sphere: Math.max(Math.trunc(Number(sphereLevel) || 0), 0), tens, kind: effectKind ?? "", eyes, choice: "" };
+            } else {
+              const eyesText = eyes === 1
+                ? localize("WOD5E_MAGE.Arete.BacklashEyesOne")
+                : format("WOD5E_MAGE.Arete.BacklashEyes", { eyes });
+              finalFlavor += renderBacklashNote(localize(onlyParadox ? "WOD5E_MAGE.Burst.Label" : "WOD5E_MAGE.Arete.BacklashLabel"), `${eyesText}.`);
+            }
           }
           roll.options.flavor = finalFlavor;
 

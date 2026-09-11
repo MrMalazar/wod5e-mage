@@ -182,16 +182,26 @@ function isActiveGM() {
  * i suoi punti nella riserva. Lo fa il client del Narratore attivo, quando
  * il messaggio nasce, cambia, o al suo arrivo al tavolo.
  */
+const collecting = new Set();
+
 export async function collectGivenParadox(message) {
   if (!isActiveGM()) return false;
   const card = message?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG);
   const ustione = card?.ustione;
   if (!ustione || ustione.choice !== "narratore" || ustione.collected || count(ustione.given) <= 0) return false;
-  const next = addPoints(getPool(), ustione.given, { kind: "given", from: ustione.actorName ?? "", messageId: message.id });
-  await setPool(next);
-  await message.update({ flags: { [MODULE_ID]: { [ROLL_CARD_FLAG]: { symbols: [], ...card, ustione: { ...ustione, collected: true } } } } });
-  ui.notifications.info(game.i18n.format("WOD5E_MAGE.Paradosso.Collected", { points: ustione.given, name: ustione.actorName ?? "" }));
-  return true;
+  // Due ganci sullo stesso messaggio (create e update, o l'update del
+  // giocatore e quello del Narratore) non devono contare due volte (11/9 sera: +6 due volte).
+  if (collecting.has(message.id)) return false;
+  collecting.add(message.id);
+  try {
+    const next = addPoints(getPool(), ustione.given, { kind: "given", from: ustione.actorName ?? "", messageId: message.id });
+    await setPool(next);
+    await message.update({ flags: { [MODULE_ID]: { [ROLL_CARD_FLAG]: { symbols: [], ...card, ustione: { ...ustione, collected: true } } } } });
+    ui.notifications.info(game.i18n.format("WOD5E_MAGE.Paradosso.Collected", { points: ustione.given, name: ustione.actorName ?? "" }));
+    return true;
+  } finally {
+    collecting.delete(message.id);
+  }
 }
 
 async function collectAll() {

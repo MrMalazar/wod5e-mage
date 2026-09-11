@@ -117,12 +117,16 @@ export async function onParadoxBurst(event) {
   }
 
   const suggested = Math.max(Math.trunc(Number(actor.getFlag(MODULE_ID, "lastThreshold")) || 0), 0);
+  const suggestedSphere = Math.min(Math.max(Math.trunc(Number(actor.getFlag(MODULE_ID, "lastSphereMax")) || 0), 0), 5);
   const answer = await foundry.applications.api.DialogV2.input({
     window: { title: game.i18n.localize("WOD5E_MAGE.Burst.Title") },
     classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog"],
     content: `<div class="wod5e-mage-burst-ask">
       <label>${game.i18n.localize("WOD5E_MAGE.Burst.Threshold")}
         <input type="number" name="threshold" min="0" step="1" value="${suggested}" autofocus>
+      </label>
+      <label>${game.i18n.localize("WOD5E_MAGE.Burst.Sphere")}
+        <input type="number" name="sphere" min="0" max="5" step="1" value="${suggestedSphere}">
       </label>
       <label>${game.i18n.localize("WOD5E_MAGE.Arete.EffectKind")}
         <select name="effectKind">${EFFECT_KINDS.map((kind) => `<option value="${kind}">${game.i18n.localize(`WOD5E_MAGE.Arete.EffectKinds.${kind || "none"}`)}</option>`).join("")}</select>
@@ -134,6 +138,7 @@ export async function onParadoxBurst(event) {
   }).catch(() => null);
   if (!answer || answer === "cancel") return;
   const threshold = Math.max(Math.trunc(Number(answer.threshold) || 0), 0);
+  const sphereLevel = Math.min(Math.max(Math.trunc(Number(answer.sphere) || 0), 0), 5);
   const effectKind = normalizeEffectKind(answer.effectKind);
 
   // Il tiro dei soli rossi: se scoppia, l'Ustione la segna il tiro stesso.
@@ -148,6 +153,7 @@ export async function onParadoxBurst(event) {
       paradoxRating: balance.paradox,
       onlyParadox: true,
       burn: threshold,
+      sphereLevel,
       effectKind,
       title,
       flavor: renderRollNote(game.i18n.format("WOD5E_MAGE.Burst.Flavor", { dice: balance.paradox, threshold })),

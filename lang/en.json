@@ -1007,7 +1007,8 @@
       "Mental": "{n} mental",
       "MentalOne": "1 mental",
       "Aggravated": "{n} aggravated",
-      "AggravatedOne": "1 aggravated"
+      "AggravatedOne": "1 aggravated",
+      "Sphere": "Highest Sphere used (points to the Storyteller)"
     },
     "Volonta": {
       "Label": "Willpower",
@@ -1104,14 +1105,12 @@
     },
     "Ustione": {
       "Label": "Burn",
-      "Pending": "Burn {burn}, equal to the threshold: choose below, Burn or Give to the Storyteller.",
       "Burn": "Burn",
       "Give": "Give to the Storyteller",
       "BurnHint": "Burn: {burn} damage on you, marked on Health and locked for the scene. The Wheel discharges {burn}.",
-      "GiveHint": "Give to the Storyteller: {burn} Paradox points into the Storyteller's pool, and reality strikes where it wants. The Wheel discharges {burn}.",
+      "GiveHint": "Give to the Storyteller: {points} Paradox points (equal to the Sphere used) into the Storyteller's pool, and reality strikes where it wants. The Wheel discharges {points}.",
       "BurnedShort": "{burn} damage marked on Health.",
-      "Given": "{points} Paradox points to the Storyteller. The Wheel discharges {discharged}.",
-      "Waiting": "Burn {burn}: the player chooses, Burn or Give to the Storyteller.",
+      "Given": "{points} Paradox points to the Storyteller (equal to the Sphere used). The Wheel discharges {discharged}.",
       "BurnDone": "Burn: {burn} marked on Health, locked for the scene.",
       "GiveDone": "Give to the Storyteller: {points} Paradox points handed over."
     },

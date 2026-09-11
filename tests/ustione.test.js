@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
+  givenPoints,
   renderUstioneButtons,
   renderUstioneDone,
-  renderUstioneWaiting,
   USTIONE_CHOICES,
   ustioneState
 } from "../scripts/ustione.js";
@@ -11,24 +11,36 @@ import { getSalute, locksAfterScene, normalizeParadoxLocks, paintParadoxLocks, b
 
 // L'Ustione a scelta (Blue, 11/9): i due tasti finché il giocatore non sceglie, poi la riga.
 assert.deepEqual(USTIONE_CHOICES, ["brucia", "narratore"]);
-assert.deepEqual(ustioneState({ threshold: 3, choice: "" }), { show: true, chosen: "", threshold: 3 });
-assert.deepEqual(ustioneState({ threshold: 3, choice: "brucia" }), { show: false, chosen: "brucia", threshold: 3 });
-assert.deepEqual(ustioneState({ threshold: 0 }), { show: false, chosen: "", threshold: 0 });
-assert.deepEqual(ustioneState(undefined), { show: false, chosen: "", threshold: 0 });
-assert.deepEqual(ustioneState({ threshold: 2, choice: "boh" }), { show: true, chosen: "", threshold: 2 });
+// I danni sono la soglia; i punti al Narratore la Sfera usata (Blue, 11/9 sera); senza Sfera, la soglia.
+assert.deepEqual(ustioneState({ threshold: 5, sphere: 3, choice: "" }), { show: true, chosen: "", threshold: 5, points: 3 });
+assert.deepEqual(ustioneState({ threshold: 3, choice: "brucia" }), { show: false, chosen: "brucia", threshold: 3, points: 3 });
+assert.deepEqual(ustioneState({ threshold: 0 }), { show: false, chosen: "", threshold: 0, points: 0 });
+assert.deepEqual(ustioneState(undefined), { show: false, chosen: "", threshold: 0, points: 0 });
+assert.deepEqual(ustioneState({ threshold: 2, choice: "boh" }), { show: true, chosen: "", threshold: 2, points: 2 });
+assert.equal(givenPoints({ threshold: 6, sphere: 3 }), 3);
+assert.equal(givenPoints({ threshold: 6 }), 6);
 
 const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8"));
 const localize = (key) => key.split(".").reduce((o, k) => (o && typeof o === "object" ? o[k] : undefined), it) ?? key;
 const format = (key, data = {}) => String(localize(key)).replace(/\{(\w+)\}/g, (_, k) => String(data[k]));
-const buttons = renderUstioneButtons({ show: true, threshold: 3 }, localize, format);
-assert.match(buttons, /data-ustione="brucia"[^>]*>Brucia <b>3<\/b><\/button>/);
+const buttons = renderUstioneButtons({ show: true, threshold: 6, points: 3 }, localize, format);
+assert.match(buttons, /data-ustione="brucia"[^>]*>Brucia <b>6<\/b><\/button>/);
 assert.match(buttons, /data-ustione="narratore"[^>]*>Dai al Narratore <b>3<\/b><\/button>/);
 assert.doesNotMatch(buttons, /Cedi|gettone|token/i);
-assert.match(renderUstioneDone({ choice: "narratore", threshold: 3, given: 3, discharged: 2 }, format, localize), /3 punti Paradosso al Narratore\. La Ruota scarica 2\./);
+assert.match(renderUstioneDone({ choice: "narratore", threshold: 6, sphere: 3, given: 3, discharged: 2 }, format, localize), /3 punti Paradosso al Narratore \(pari alla Sfera usata\)\. La Ruota scarica 2\./);
 assert.match(renderUstioneDone({ choice: "brucia", threshold: 3 }, format, localize), /3 danni segnati sulla Salute\./);
 assert.match(renderUstioneDone({ choice: "brucia", threshold: 3, applied: { applied: 3, pa: 1, ps: 2, ma: 0, ms: 0, discharged: 3 } }, format, localize), /Ustione 3 segnata sulla Salute: 3 fisici \(1 aggravato\)\. La Ruota scarica 3\./);
 assert.equal(renderUstioneDone({ choice: "" }, format, localize), "");
-assert.match(renderUstioneWaiting({ threshold: 4 }, format), /Ustione 4: il giocatore sceglie/);
+// Coi tasti non c'è testo, né per chi tira né per chi guarda (Blue: «vede solo i bottoni»).
+const ustioneSource = readFileSync(new URL("../scripts/ustione.js", import.meta.url), "utf8");
+assert.doesNotMatch(ustioneSource, /renderUstioneWaiting|Ustione\.Pending|Ustione\.Waiting/);
+assert.match(ustioneSource, /if \(!isMageActor\(actor\) \|\| !actor\.isOwner\) return false;/);
+const diceSource = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8");
+assert.doesNotMatch(diceSource, /Ustione\.Pending/);
+assert.match(diceSource, /cardData\.ustione = \{ threshold: burnNow, sphere: /);
+// La raccolta non conta due volte lo stesso messaggio.
+assert.match(readFileSync(new URL("../scripts/paradosso-narratore.js", import.meta.url), "utf8"), /if \(collecting\.has\(message\.id\)\) return false;/);
+assert.doesNotMatch(ustioneSource, /collectGivenParadox/);
 
 // Le caselle bloccate dall'Ustione (11/9): rosse per la scena, mai più dei danni del loro lato.
 assert.deepEqual(normalizeParadoxLocks({ p: 3, m: 2 }, { pa: 1, ps: 1, ma: 0, ms: 1 }), { p: 2, m: 1 });
@@ -66,10 +78,9 @@ const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", impo
 assert.match(sheet, /saluteCambioScena: onSaluteCambioScena/);
 const source = readFileSync(new URL("../scripts/ustione.js", import.meta.url), "utf8");
 assert.match(source, /applyUstione\(actor, \{ threshold: state\.threshold, tens: card\.ustione\.tens, kind: card\.ustione\.kind, lock: true \}\)/);
-assert.match(source, /collectGivenParadox\(message\)/);
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
-  for (const key of ["Label", "Pending", "Burn", "Give", "BurnHint", "GiveHint", "BurnedShort", "Given", "Waiting", "BurnDone", "GiveDone"]) {
+  for (const key of ["Label", "Burn", "Give", "BurnHint", "GiveHint", "BurnedShort", "Given", "BurnDone", "GiveDone"]) {
     assert.equal(typeof strings.WOD5E_MAGE.Ustione[key], "string", `${lang} Ustione.${key}`);
   }
   for (const key of ["CambioScena", "CambioScenaHint", "CambioScenaDone", "CambioScenaNone", "LockedHint"]) {

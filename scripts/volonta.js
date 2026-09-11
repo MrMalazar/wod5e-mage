@@ -217,7 +217,7 @@ async function rerollDice(message, actor, picks) {
     // l'Ustione, pari alla soglia, aspetta la scelta del giocatore sotto la carta.
     if (eyes > 0 && card.ramo === RAMO && !card.ustione && Number(card.threshold) > 0 && !card.skill) {
       const tens = (advanced?.results ?? []).filter(isActive).filter((result) => Number(result.result) === 10).length;
-      flags[MODULE_ID][ROLL_CARD_FLAG].ustione = { threshold: Number(card.threshold), tens, kind: card.effectKind ?? "", eyes, choice: "" };
+      flags[MODULE_ID][ROLL_CARD_FLAG].ustione = { threshold: Number(card.threshold), sphere: Math.max(Math.trunc(Number(card.sphereMax) || 0), 0), tens, kind: card.effectKind ?? "", eyes, choice: "" };
     }
   }
   await addSaluteDamage(actor, { ms: 1 });
