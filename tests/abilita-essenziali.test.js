@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   CHIAVI_ASSORBITE,
   CHIAVI_VIVE,
+  nextEssentialSkillValue,
   prepareEssentialSkills,
   prepareEssentialSkillsByGroup,
   orderAttributes,
@@ -86,6 +87,14 @@ assert.equal(CHIAVI_VIVE.length + CHIAVI_ASSORBITE.length, 27);
 // Il tetto della creazione: tre pallini (V6).
 assert.equal(TETTO_CREAZIONE, 3);
 assert.deepEqual(skillsOverCap({ brawl: { value: 4 }, occult: { value: 3 }, melee: { value: 5 } }), ["brawl"]);
+
+// Il primo pallino può essere spento tornando a zero; gli altri continuano
+// a impostare normalmente il valore scelto.
+assert.equal(nextEssentialSkillValue(0, 0), 1);
+assert.equal(nextEssentialSkillValue(1, 0), 0);
+assert.equal(nextEssentialSkillValue(1, 1), 2);
+assert.equal(nextEssentialSkillValue(3, 0), 1);
+assert.equal(nextEssentialSkillValue(3, 4), 5);
 
 // I valori dell'attore passano intatti sulle voci vive.
 assert.equal(voci.find((v) => v.id === "larceny").value, 4);

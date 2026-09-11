@@ -145,7 +145,7 @@
       "HarmonyFlavor": "Harmony {dice}",
       "Pool": "Pool",
       "Threshold": "Threshold",
-      "ThresholdHint": "The threshold is the highest between the highest Sphere and the highest Scope, +1 with three or more Spheres, cap 7; then +1 for every Scope past the first. The threshold is subtracted from the pool: what is left is what you roll, and one die showing 8 or more is enough.",
+      "ThresholdHint": "The threshold is the highest between the highest Sphere and the highest Scope, +1 with three or more Spheres, cap 7; then +1 for every Scope past the first. The threshold is subtracted from the pool: what is left is what you roll. Success starts at 6, or at 8 when Advanced difficulty is selected.",
       "AutoVictoryBanner": "Automatic victory",
       "BonusCap": "+3 cap: {excess} fewer dice.",
       "SpherePlan": "Spheres: {plans}.",
@@ -1126,6 +1126,7 @@
     "RamoC": {
       "Pool": "Pool",
       "Threshold": "Threshold",
+      "AdvancedDifficulty": "Advanced difficulty",
       "Dice": "Dice",
       "DiceLine": "Pool {pool} − threshold {threshold} = {dice} dice",
       "Reds": "{reds} red dice",

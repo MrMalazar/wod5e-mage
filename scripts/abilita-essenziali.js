@@ -73,6 +73,19 @@ export const TETTO_CREAZIONE = 3;
 const VIVE = new Set(CHIAVI_VIVE);
 
 /**
+ * Calcola il valore richiesto dal clic su un pallino di un'Abilità Essenziale.
+ * Il primo pallino funziona anche da toggle: quando è l'unico acceso, un altro
+ * clic lo spegne e permette di correggere il valore riportandolo a zero.
+ */
+export function nextEssentialSkillValue(currentValue, clickedIndex) {
+  const current = Math.max(0, Math.trunc(Number(currentValue) || 0));
+  const index = Math.max(0, Math.trunc(Number(clickedIndex) || 0));
+
+  if (current === 1 && index === 0) return 0;
+  return Math.min(index + 1, 5);
+}
+
+/**
  * Restituisce la fila alfabetica delle sole Abilità Essenziali.
  * Questa è la fonte unica usata sia dalla scheda sia dalle finestre di tiro,
  * così le vecchie abilità assorbite non possono ricomparire nei selettori.

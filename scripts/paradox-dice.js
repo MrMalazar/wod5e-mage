@@ -14,8 +14,9 @@ import {
   RAMO,
   ramoCDice,
   ramoCMargin,
+  successModifier,
+  successThreshold,
   splitRamoCDice,
-  SUCCESS_MODIFIER
 } from "./ramo-c.js";
 import { renderAutoVictoryBanner, renderBacklashNote, renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
 import {
@@ -345,6 +346,11 @@ export async function rollAreteWithParadox({
             || game.settings.get("core", "rollMode");
           const format = game.i18n.format.bind(game.i18n);
           const localize = game.i18n.localize.bind(game.i18n);
+          // Senza spunta si usa il calcolo originale (6+); con la difficolta
+          // avanzata la riuscita parte da 8.
+          const advancedDifficulty = Boolean(form.querySelector("#inputAdvancedDifficulty")?.checked);
+          const successFrom = successThreshold(advancedDifficulty);
+          const modifier = successModifier(successFrom);
           // La Bussola rispettata nel tiro di Abilità: un dado ora (già nel conto), +1 Quintessenza a tiro fatto.
           const bussolaKept = skill && bussola ? readBussola(form, bussola) : null;
 
@@ -366,6 +372,8 @@ export async function rollAreteWithParadox({
           const cardData = {
             ...(card ?? {}),
             ramo: RAMO,
+            advancedDifficulty,
+            successFrom,
             pool: conto.pool,
             threshold: conto.threshold,
             dice: conto.dice,
@@ -397,7 +405,7 @@ export async function rollAreteWithParadox({
             });
           }
 
-          const formula = `${conto.basicDice}d${MortalDie.DENOMINATION}${SUCCESS_MODIFIER} + ${conto.paradoxDice}d${ParadoxDie.DENOMINATION}${SUCCESS_MODIFIER}`;
+          const formula = `${conto.basicDice}d${MortalDie.DENOMINATION}${modifier} + ${conto.paradoxDice}d${ParadoxDie.DENOMINATION}${modifier}`;
           const roll = await new WOD5eRoll(formula, data, {
             system: "mortal",
             title,
@@ -406,6 +414,7 @@ export async function rollAreteWithParadox({
             rollMode,
             activeModifiers,
             mageArete: true,
+            mageSuccessFrom: successFrom,
             paradoxRating: reds
           }).roll();
 
@@ -415,7 +424,7 @@ export async function rollAreteWithParadox({
           const redResults = roll.advancedDice?.results ?? [];
           roll._total = bought
             ? 1
-            : calculateRamoCSuccesses(basicResults, redResults, conto.countedParadox);
+            : calculateRamoCSuccesses(basicResults, redResults, conto.countedParadox, { successFrom });
           cardData.total = roll._total;
           if (skill) cardData.margin = ramoCMargin(roll._total);
 

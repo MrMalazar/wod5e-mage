@@ -16,10 +16,37 @@
 export const RAMO = "C";
 
 /** La riuscita: 8 o più (verdetto: «lo mettiamo anche noi a difficoltà 8»). */
-export const SUCCESS_FROM = 8;
+export const ORIGINAL_SUCCESS_FROM = 6;
+export const ADVANCED_SUCCESS_FROM = 8;
+
+// Rimane esportata per compatibilita con le carte create prima della scelta.
+export const SUCCESS_FROM = ADVANCED_SUCCESS_FROM;
 
 /** Il modificatore di Foundry per contare i successi: `cs>7`. */
 export const SUCCESS_MODIFIER = `cs>${SUCCESS_FROM - 1}`;
+
+/** Spunta disattivata: 6+. Spunta attivata: 8+. */
+export function successThreshold(advancedDifficulty = false) {
+  return advancedDifficulty ? ADVANCED_SUCCESS_FROM : ORIGINAL_SUCCESS_FROM;
+}
+
+/** Il modificatore Foundry corrispondente alla soglia scelta. */
+export function successModifier(successFrom = SUCCESS_FROM) {
+  const threshold = Math.max(Math.trunc(Number(successFrom) || ORIGINAL_SUCCESS_FROM), 1);
+  return `cs>${threshold - 1}`;
+}
+
+/**
+ * Le vecchie carte non hanno la scelta salvata e mantengono la loro soglia 8.
+ */
+export function resolveSuccessFrom(options = {}, fallback = SUCCESS_FROM) {
+  const explicit = Math.trunc(Number(options?.successFrom));
+  if (Number.isFinite(explicit) && explicit > 0) return explicit;
+  if (typeof options?.advancedDifficulty === "boolean") {
+    return successThreshold(options.advancedDifficulty);
+  }
+  return Math.max(Math.trunc(Number(fallback) || SUCCESS_FROM), 1);
+}
 
 function count(value) {
   return Math.max(Math.trunc(Number(value) || 0), 0);
@@ -27,8 +54,8 @@ function count(value) {
 
 const isActive = (result) => result?.active !== false && !result?.discarded;
 
-export function isSuccess(result) {
-  return Number(result?.result ?? result) >= SUCCESS_FROM;
+export function isSuccess(result, { successFrom = SUCCESS_FROM } = {}) {
+  return Number(result?.result ?? result) >= successFrom;
 }
 
 /** I dadi che tiri: la riserva meno la soglia, mai sotto zero. */
@@ -63,9 +90,10 @@ export function splitRamoCDice(dice, paradox) {
  * fino ai rossi che contano (gli altri sono per l'occhio). Niente coppie
  * di dieci: nel ramo C i critici non esistono.
  */
-export function calculateRamoCSuccesses(basicResults = [], paradoxResults = [], countedParadox = Infinity) {
-  const basic = basicResults.filter(isActive).filter(isSuccess).length;
-  const paradox = paradoxResults.filter(isActive).filter(isSuccess).length;
+export function calculateRamoCSuccesses(basicResults = [], paradoxResults = [], countedParadox = Infinity, { successFrom = SUCCESS_FROM } = {}) {
+  const succeeds = (result) => isSuccess(result, { successFrom });
+  const basic = basicResults.filter(isActive).filter(succeeds).length;
+  const paradox = paradoxResults.filter(isActive).filter(succeeds).length;
   const cap = countedParadox === Infinity ? paradox : count(countedParadox);
   return basic + Math.min(paradox, cap);
 }

@@ -1,5 +1,6 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
-import { orderAttributes, prepareEssentialSkillList, prepareEssentialSkills, prepareEssentialSkillsByGroup } from "../abilita-essenziali.js";
+import { _onDotCounterChange, _onDotCounterEmpty } from "/systems/wod5e/system/actor/scripts/counters.js";
+import { nextEssentialSkillValue, orderAttributes, prepareEssentialSkillList, prepareEssentialSkills, prepareEssentialSkillsByGroup } from "../abilita-essenziali.js";
 import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../abilita-specifiche.js";
 import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
@@ -116,6 +117,23 @@ async function onTraitsLayoutToggle(event) {
 }
 
 /**
+ * I contatori nativi impostano sempre il primo pallino a 1. Sulle Abilità
+ * Essenziali, invece, un secondo clic sul primo pallino riporta il valore a 0.
+ * L'aggiornamento resta affidato agli handler nativi, inclusi blocco scheda e
+ * messaggi di avviso del sistema.
+ */
+async function onEssentialSkillDotChange(event, target) {
+  const counter = target?.closest?.(".resource-value");
+  const nextValue = nextEssentialSkillValue(counter?.dataset?.value, target?.dataset?.index);
+
+  if (nextValue === 0) {
+    return _onDotCounterEmpty.call(this, event, target);
+  }
+
+  return _onDotCounterChange.call(this, event, target);
+}
+
+/**
  * Scheda del Mago: sei pagine raggruppate per come si usano al tavolo.
  * Vedi templates/actor/parts per i template ricomposti.
  */
@@ -155,6 +173,8 @@ export class MageActorSheet extends MortalActorSheet {
       paradoxBurst: onParadoxBurst,
       customSkillAdd: onCustomSkillAdd,
       customSkillDelete: onCustomSkillDelete,
+      essentialSkillClear: _onDotCounterEmpty,
+      essentialSkillDotChange: onEssentialSkillDotChange,
       // Clic sinistro sceglie il segno, clic destro svuota la casella.
       saluteCellChange: { handler: onSaluteCellChange, buttons: [0, 2] },
       saluteExtraChange: onSaluteExtraChange,

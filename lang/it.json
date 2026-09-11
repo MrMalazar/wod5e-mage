@@ -145,7 +145,7 @@
       "HarmonyFlavor": "Armonia {dice}",
       "Pool": "Riserva",
       "Threshold": "Soglia",
-      "ThresholdHint": "La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto, +1 con tre o più Sfere, tetto 7; poi +1 per ogni Ambito oltre il primo. La soglia si toglie dalla riserva: restano i dadi che tiri, e ne basta uno con 8 o più.",
+      "ThresholdHint": "La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto, +1 con tre o più Sfere, tetto 7; poi +1 per ogni Ambito oltre il primo. La soglia si toglie dalla riserva: restano i dadi che tiri. Il successo parte dal 6, oppure dall'8 selezionando Difficoltà avanzata.",
       "AutoVictoryBanner": "Vittoria automatica",
       "BonusCap": "Tetto +3: {excess} dadi in meno.",
       "SpherePlan": "Sfere: {plans}.",
@@ -1126,6 +1126,7 @@
     "RamoC": {
       "Pool": "Riserva",
       "Threshold": "Soglia",
+      "AdvancedDifficulty": "Difficoltà avanzata",
       "Dice": "Dadi",
       "DiceLine": "Riserva {pool} − soglia {threshold} = {dice} dadi",
       "Reds": "{reds} rossi",

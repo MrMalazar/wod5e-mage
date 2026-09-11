@@ -37,7 +37,7 @@ assert.equal(
 
 // Il resto della macchina: registrata in main dopo la Volontà e lo Sforzo (l'ordine dei tasti), la carta porta i dadi tirati.
 const main = readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8");
-assert.match(main, /registerVolonta\(\);[\s\S]*registerSforzo\(\);\n\s*registerPrezzo\(\);/);
+assert.match(main, /registerVolonta\(\);[\s\S]*registerSforzo\(\);\r?\n\s*registerPrezzo\(\);/);
 assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /dice: conto\.dice,/);
 const source = readFileSync(new URL("../scripts/prezzo.js", import.meta.url), "utf8");
 assert.match(source, /if \(state\.enabled\) \{\s*markRollOpen\(html\);/);
