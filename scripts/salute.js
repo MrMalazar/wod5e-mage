@@ -4,7 +4,7 @@ import { joinLobby } from "./paradosso-narratore.js";
 
 /**
  * La Salute del ramo A (tronco del 3/9/2026): un tracciato solo, lungo
- * 1 + Costituzione + Fermezza, che porta i danni fisici (/ superficiale,
+ * 2 + Costituzione + Fermezza (dall'11/9; era 1), che porta i danni fisici (/ superficiale,
  * X aggravato) e quelli mentali (o superficiale, ◎ aggravato). La parola
  * Volontà è caduta: ogni «spendi 1 Volontà» è una casella mentale segnata.
  */
@@ -38,9 +38,10 @@ function attributeValue(actor, id) {
   return count(actor.system?.attributes?.[id]?.value);
 }
 
-/** Le caselle: 1 + Costituzione + Fermezza, più le caselle in più segnate a mano. */
+/** Le caselle: 2 + Costituzione + Fermezza (Blue, 11/9), più le caselle in più segnate a mano. */
+export const SALUTE_BASE = 2;
 export function saluteMax(actor, extra = 0) {
-  return Math.max(1 + attributeValue(actor, "stamina") + attributeValue(actor, "resolve") + Math.trunc(Number(extra) || 0), 1);
+  return Math.max(SALUTE_BASE + attributeValue(actor, "stamina") + attributeValue(actor, "resolve") + Math.trunc(Number(extra) || 0), 1);
 }
 
 /** Riporta i conti dentro il tracciato: gli aggravati hanno la precedenza. */
@@ -587,7 +588,8 @@ export async function onSaluteExtraChange(event, target) {
 
 /**
  * Negare il Contraccolpo (ramo A): una volta per sessione segni un aggravato
- * mentale, il Contraccolpo non scatta e la Ruota sale di 3. Se i tre punti
+ * mentale (paradossale, bloccato in rosso: Blue, 11/9), il Contraccolpo non
+ * scatta e la Ruota sale di 3. Se i tre punti
  * portano la Ruota al massimo, Difetto paradossale oppure scoppio: lo dice
  * l'avviso, la scelta è del tavolo.
  */
@@ -638,8 +640,11 @@ export async function onContraccolpoNega(event) {
   const balance = getMagickBalance(actor);
   const next = addParadoxToBalance(balance, CONTRACCOLPO_COST);
 
+  // L'aggravato mentale è paradossale (Blue, 11/9): la casella resta
+  // bloccata in rosso finché non passa la scena, come l'Ustione bruciata.
+  const paradosso = normalizeParadoxLocks({ p: salute.paradosso.p, m: salute.paradosso.m + 1 }, wounded);
   await actor.update({
-    [`flags.${MODULE_ID}.salute`]: { ...wounded, extra: salute.extra },
+    [`flags.${MODULE_ID}.salute`]: { ...wounded, extra: salute.extra, paradosso },
     [`flags.${MODULE_ID}.magickBalance`]: { quintessence: next.quintessence, paradox: next.paradox },
     [`flags.${MODULE_ID}.contraccolpoNegato`]: true
   });

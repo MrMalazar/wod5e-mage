@@ -22,10 +22,10 @@ function actor({ stamina = 2, resolve = 3, salute } = {}) {
   };
 }
 
-// Un tracciato solo: 1 + Costituzione + Fermezza, più le caselle in più.
-assert.equal(saluteMax(actor()), 6);
-assert.equal(saluteMax(actor({ stamina: 0, resolve: 0 })), 1);
-assert.equal(saluteMax(actor(), 2), 8);
+// Un tracciato solo: 2 + Costituzione + Fermezza (11/9; era 1), più le caselle in più.
+assert.equal(saluteMax(actor()), 7);
+assert.equal(saluteMax(actor({ stamina: 0, resolve: 0 })), 2);
+assert.equal(saluteMax(actor(), 2), 9);
 assert.equal(saluteMax(actor(), -9), 1);
 
 // Nuova sessione: i superficiali mentali guariscono, un fisico se ne va.
@@ -44,9 +44,9 @@ assert.deepEqual(clampSalute({ pa: 9 }, 4), { pa: 4, ps: 0, ma: 0, ms: 0 });
 
 // Le caselle si dipingono da sinistra: X, /, ◎, o, vuote.
 let salute = getSalute(actor({ salute: { pa: 1, ps: 2, ma: 1, ms: 1 } }));
-assert.equal(salute.max, 6);
+assert.equal(salute.max, 7);
 // I fisici da sinistra, i mentali da destra (6/9).
-assert.deepEqual(salute.cells.map((cell) => cell.state), ["pa", "ps", "ps", "", "ms", "ma"]);
+assert.deepEqual(salute.cells.map((cell) => cell.state), ["pa", "ps", "ps", "", "", "ms", "ma"]);
 assert.equal(salute.total, 5);
 assert.equal(salute.status, "");
 

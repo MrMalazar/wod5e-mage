@@ -8,6 +8,8 @@
                 <details class="wod5e-mage-concept-group" open>
                     <summary>
                         <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                        {{!-- Il reset della Bussola (Ambizione, Desiderio, Convinzioni, Ancore), 11/9. --}}
+                        {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.compass}}{{/if}}
                         <span>{{localize "WOD5E_MAGE.Personaggio.IdentityLabel"}}</span>
                     </summary>
 

@@ -12,9 +12,12 @@
     </div>
     <div class="wod5e-mage-arete-row">
         <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Specialties.Name"}}</span>
-        {{!-- La tendina dei suggerimenti si riempie dal catalogo dell'Abilità scelta. --}}
-        <input type="text" name="source" required list="wod5e-mage-specialty-suggestions" placeholder="{{localize 'WOD5E_MAGE.Specialties.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Name'}}">
-        <datalist id="wod5e-mage-specialty-suggestions"></datalist>
+        {{!-- La tendina di casa (11/9): i suggerimenti del catalogo dell'Abilità
+             scelta, in ordine alfabetico, filtrati mentre si scrive. --}}
+        <span class="wod5e-mage-suggest-wrap">
+            <input type="text" name="source" required autocomplete="off" placeholder="{{localize 'WOD5E_MAGE.Specialties.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Name'}}">
+            <ul class="wod5e-mage-suggest" data-role="suggest" hidden></ul>
+        </span>
     </div>
     <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Specialties.Hint"}} {{localize "WOD5E_MAGE.Specialties.MinHint" steps=steps}}</p>
 </div>

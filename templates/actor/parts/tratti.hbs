@@ -13,6 +13,8 @@
              Ruota | Bonus. --}}
         <div class="skills-attributes wod5e-mage-tratti-attributes">
             <div class="resource-header wod5e-mage-tratti-header">
+                {{!-- Il reset degli Attributi, a sinistra del titolo (11/9). --}}
+                {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.attributes}}{{/if}}
                 <label class="header-label">
                     {{localize "WOD5E.AttributesList.Attributes"}}
                 </label>
@@ -122,6 +124,8 @@
 
         <div class="skills-attributes wod5e-mage-tratti-skills">
             <label class="resource-header wod5e-mage-skills-header">
+                {{!-- Il reset delle Abilità, a sinistra del titolo (11/9). --}}
+                {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.skills}}{{/if}}
                 {{localize "WOD5E.SkillsList.Skills"}}
                 {{!-- Il + aggiunge un'Abilità Specifica intera, sotto le essenziali. --}}
                 <button type="button" class="wod5e-mage-bonuses-add wod5e-mage-custom-skill-add" data-action="customSkillAdd" title="{{localize 'WOD5E_MAGE.CustomSkills.Add'}}" aria-label="{{localize 'WOD5E_MAGE.CustomSkills.Add'}}" {{#if locked}}disabled{{/if}}>
@@ -251,13 +255,19 @@
                         {{/each}}
                     </div>
 
-                    {{!-- I reset, una parte per tasto, con conferma. --}}
+                    {{!-- I tasti di reset stanno ognuno nella sua sezione (11/9): qui la
+                         spunta che li mostra, e con lei la X che azzera un tratto solo;
+                         resta qui solo il reset della scheda intera. --}}
                     <div class="wod5e-mage-reset-row">
-                        {{#each resets as |reset|}}
-                            <button type="button" class="{{#if reset.all}}wod5e-mage-reset-all{{/if}}" data-action="resetSection" data-reset="{{reset.id}}" title="{{reset.label}}" {{#if ../locked}}disabled{{/if}}>
-                                <i class="fa-solid {{reset.icon}}" aria-hidden="true"></i> {{reset.label}}
+                        <label class="wod5e-mage-reset-toggle" title="{{localize 'WOD5E_MAGE.Reset.ShowHint'}}">
+                            <input type="checkbox" name="flags.wod5e-mage.creazione.reset" {{#if creazioneReset}}checked{{/if}} {{#if locked}}disabled{{/if}}>
+                            <span>{{localize "WOD5E_MAGE.Reset.Show"}}</span>
+                        </label>
+                        {{#if creazioneReset}}
+                            <button type="button" class="wod5e-mage-reset-all" data-action="resetSection" data-reset="all" title="{{resetsById.all.label}}" {{#if locked}}disabled{{/if}}>
+                                <i class="fa-solid {{resetsById.all.icon}}" aria-hidden="true"></i> {{resetsById.all.label}}
                             </button>
-                        {{/each}}
+                        {{/if}}
                     </div>
                 </details>
             </div>

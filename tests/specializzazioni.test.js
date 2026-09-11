@@ -97,12 +97,14 @@ assert.deepEqual(Object.keys(SPECIALIZZAZIONI).sort(), [...CHIAVI_VIVE].sort());
 for (const [key, names] of Object.entries(SPECIALIZZAZIONI)) {
   for (const name of names) assert.doesNotMatch(name, /\s/, `${key}: ${name}`);
 }
-assert.match(suggestionOptions("brawl"), /<option value="Pugilato"><\/option>/);
+// In ordine alfabetico, filtrati da quel che si scrive (11/9: la tendina nativa era storta).
+assert.equal(suggestionOptions("brawl"), '<li data-value="Disarmo">Disarmo</li><li data-value="Improvvisate">Improvvisate</li><li data-value="Lame">Lame</li><li data-value="Lotta">Lotta</li><li data-value="Mazze">Mazze</li><li data-value="Pugilato">Pugilato</li>');
+assert.equal(suggestionOptions("brawl", "la"), '<li data-value="Lame">Lame</li>');
 assert.equal(suggestionOptions("streetwise"), "");
 {
   const dialog = readFileSync(new URL("../templates/dialogs/specialty-add.hbs", import.meta.url), "utf8");
   assert.doesNotMatch(dialog.replace(/\{\{!--[\s\S]*?--\}\}/g, ""), /<form/);
   assert.match(dialog, /\{\{#unless skills\.length\}\}disabled\{\{\/unless\}\}/);
-  assert.match(dialog, /list="wod5e-mage-specialty-suggestions"[\s\S]*<datalist id="wod5e-mage-specialty-suggestions">/);
+  assert.match(dialog, /name="source"[^>]*autocomplete="off"[\s\S]*<ul class="wod5e-mage-suggest" data-role="suggest" hidden>/);
   assert.match(readFileSync(new URL("../scripts/specializzazioni.js", import.meta.url), "utf8"), /specialtySkillChoices\(prepared\.skills, specialtyCounts\(prepared\.rows\)\)/);
 }

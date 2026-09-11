@@ -7817,3 +7817,117 @@
   color: #a98be0;
   text-shadow: 0 0 8px rgb(126 87 194 / 70%);
 }
+
+/* La tendina «Dettagli» della carta del tiro (11/9): le righe del conto
+   chiuse di default, un clic le apre. */
+.wod5e-mage-roll-card-details {
+  margin: 0.15em 0 0.25em;
+}
+.wod5e-mage-roll-card-details > summary {
+  cursor: pointer;
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wod5e-mage-gold, #d9a827);
+  opacity: 0.85;
+  list-style: none;
+  padding: 0.1em 0;
+}
+.wod5e-mage-roll-card-details > summary::-webkit-details-marker { display: none; }
+.wod5e-mage-roll-card-details > summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 0.35em;
+  transition: transform 0.15s;
+}
+.wod5e-mage-roll-card-details[open] > summary::before { transform: rotate(90deg); }
+
+/* Il tasto «Compra la riuscita» nella finestra dell'Areté (11/9). */
+.wod5e-mage-arete-compra-row { margin: 0.2em 0 0; }
+.wod5e-mage-arete-compra {
+  width: auto;
+  padding: 0.15em 0.7em;
+  border: 1px solid var(--wod5e-mage-gold, #d9a827);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--wod5e-mage-gold, #d9a827);
+  font-size: 0.85em;
+  cursor: pointer;
+}
+.wod5e-mage-arete-compra[disabled] { opacity: 0.45; cursor: not-allowed; }
+.wod5e-mage-arete-compra b { margin-left: 0.25em; }
+.wod5e-mage-roll-actions > .wod5e-mage-compra-button {
+  background: rgb(120 100 200 / 15%);
+  border-color: #6f63b8;
+  color: #e4e0f5;
+}
+.wod5e-mage-roll-actions > .wod5e-mage-compra-button:hover:not(:disabled) {
+  border-color: #9c8fe0;
+  box-shadow: 0 0 4px #9c8fe0;
+}
+.wod5e-mage-roll-note-compra .wod5e-mage-compra-label { color: #9c8fe0; }
+
+/* La modalità creazione (11/9): la X che azzera un tratto si vede solo con
+   la spunta accesa nel memo; i tasti di reset stanno a sinistra dei titoli. */
+.wod5e-mage.wod5e.actor.sheet:not(.wod5e-mage-creazione) .wod5e-mage-tratti .stats-list > :is(.attribute, .skill) > .resource-value > .resource-value-empty {
+  display: none;
+}
+.wod5e-mage-reset-tasto {
+  width: 1.6em;
+  height: 1.6em;
+  padding: 0;
+  margin-right: 0.35em;
+  border: 1px solid rgb(217 168 39 / 55%);
+  border-radius: 3px;
+  background: rgb(217 168 39 / 10%);
+  color: var(--wod5e-mage-gold, #d9a827);
+  font-size: 0.8em;
+  line-height: 1;
+  cursor: pointer;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+.wod5e-mage-reset-tasto:hover:not(:disabled) { border-color: #e05a5a; color: #e05a5a; }
+.wod5e-mage-reset-tasto:disabled { opacity: 0.4; cursor: not-allowed; }
+.wod5e-mage-reset-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  font-size: 0.85em;
+  margin-right: 0.6em;
+  cursor: pointer;
+}
+.wod5e-mage-reset-toggle input { margin: 0; }
+.wod5e-mage-reset-inline {
+  display: flex;
+  align-items: center;
+  font-size: 0.85em;
+  margin: 0 0 0.25em;
+  opacity: 0.85;
+}
+
+/* La tendina di casa dei suggerimenti delle Specializzazioni (11/9). */
+.wod5e-mage-suggest-wrap { position: relative; display: block; flex: 1; }
+.wod5e-mage-suggest-wrap > input { width: 100%; }
+.wod5e-mage-suggest {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 5;
+  margin: 2px 0 0;
+  padding: 0.2em 0;
+  list-style: none;
+  max-height: 11em;
+  overflow-y: auto;
+  background: #1a1726;
+  border: 1px solid var(--wod5e-mage-gold, #d9a827);
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 50%);
+}
+.wod5e-mage-suggest > li {
+  padding: 0.2em 0.6em;
+  cursor: pointer;
+  color: #e9e4d6;
+}
+.wod5e-mage-suggest > li:hover { background: rgb(217 168 39 / 20%); color: var(--wod5e-mage-gold, #d9a827); }

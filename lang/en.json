@@ -746,7 +746,7 @@
     },
     "Salute": {
       "Label": "Health",
-      "Hint": "1 + Stamina + Resolve",
+      "Hint": "2 + Stamina + Resolve",
       "Extra": "Extra boxes beyond the count",
       "ClickHint": "Click: pick the mark. Right click: the box clears.",
       "States": {
@@ -798,7 +798,7 @@
       "Label": "Deny the Backlash",
       "Hint": "Once per session: mark one mental aggravated, the Backlash does not strike, the Wheel rises by 3. That aggravated box does not heal until those points are discharged. \"New session\" re-arms it.",
       "Used": "denied this session",
-      "Done": "Backlash denied: one mental aggravated, the Wheel rises by {amount}.",
+      "Done": "Backlash denied: one paradoxical mental aggravated (locked), the Wheel rises by {amount}.",
       "AlreadyUsed": "The Backlash has already been denied this session.",
       "NoRoom": "No box left for the mental aggravated: the whole track is aggravated.",
       "WheelFull": "The three points bring the Wheel to its maximum: paradox Flaw or default burst."
@@ -930,6 +930,8 @@
       "Credo": "Reset Creed",
       "Lineage": "Reset Lineage",
       "Compass": "Reset Compass",
+      "Show": "Show the reset buttons",
+      "ShowHint": "Creation mode: the reset buttons appear in their sections and the X clears a single trait.",
       "Confirm": "{label}: this clears that part of the sheet. Proceed?",
       "All": "Reset sheet"
     },
@@ -958,8 +960,24 @@
       "Done": "threshold {missing}, the Wheel gains {paradox} Paradox.",
       "DoneDamage": "One {damage} aggravated marked.",
       "DoneWasted": "The Wheel was full: {wasted} points did not enter.",
+      "DoneGiven": "The Storyteller gets {points} Paradox points.",
       "DamagePhysical": "physical",
       "DamageMental": "mental"
+    },
+    "Compra": {
+      "Label": "Bought success",
+      "Title": "Buy the success",
+      "Button": "Buy the success",
+      "Hint": "Quintessence {quintessence}: {price} points (the highest Sphere) buy the success. The Burn of the reds, if it triggered, stays.",
+      "HintPoor": "It takes {price} Quintessence points (the highest Sphere), you have {quintessence}.",
+      "Ask": "Spend {price} Quintessence points out of {quintessence} and the spell succeeds.",
+      "AskNote": "The damage of a bought effect is aggravated. The Burn of the reds, if it triggered, stays.",
+      "Yes": "Buy",
+      "No": "Leave it",
+      "Done": "success bought with {price} Quintessence: damage is aggravated.",
+      "DialogButton": "Buy the success",
+      "DialogHint": "{price} Quintessence points (the highest Sphere) buy the success: no roll, the reds still roll.",
+      "DialogPoor": "It takes {price} Quintessence points, you have {quintessence}."
     },
     "Prezzo": {
       "Label": "Victory at a price",
@@ -974,6 +992,7 @@
       "Done": "dice rolled {dice}: the Storyteller sets the price."
     },
     "RollCard": {
+      "Details": "Details",
       "Of": "Roll of",
       "Successes": "Successes",
       "Threshold": "Threshold",
@@ -1011,12 +1030,12 @@
     "Volonta": {
       "Label": "Willpower",
       "Reroll": "Reroll with Willpower",
-      "RerollHint": "Pick up to three failed dice on the card (never a red 1 or 10), then reroll: one superficial mental",
-      "NoDice": "No die to reroll: the dice succeeded, or the red ones showed 1 or 10",
+      "RerollHint": "Pick up to three failed dice on the card (a red showing 1 too: the eye stays), then reroll: one superficial mental",
+      "NoDice": "No die to reroll: the dice succeeded",
       "PickFirst": "First pick the dice to reroll on the card: one click on a failed die lights it up.",
       "UsedReroll": "Willpower: rerolled {dice} chosen dice (one superficial mental).",
       "RerollDone": "{dice} dice rerolled: one superficial mental marked.",
-      "RerollEyes": "{eyes} rerolled red dice showed 1 or 10: Paradox eye."
+      "RerollEyes": "{eyes} rerolled reds showed 1 or 10: eye of Paradox. An eye already out stays."
     },
     "Condizioni": {
       "All": "All Conditions",
@@ -1152,6 +1171,7 @@
       "LobbyEmpty": "nobody",
       "Collected": "{points} Paradox points from {name}.",
       "LogGiven": "Burn given by {name}",
+      "LogSforzo": "Reality forced by {name}",
       "LogSpend": "Effect from the Sheet",
       "LogManual": "By hand",
       "LogReset": "Reset",

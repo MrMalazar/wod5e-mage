@@ -33,12 +33,14 @@ assert.deepEqual(pickRerollDice(dice, 2), [1, 4]);
 assert.deepEqual(pickRerollDice(dice, 3), [1, 4, 5]);
 assert.deepEqual(pickRerollDice(dice, 9), [1, 4, 5]);
 assert.equal(REROLL_MAX, 3);
-// Il giocatore sceglie (6/9): i bianchi falliti e i rossi falliti, mai un
-// rosso che ha fatto 1 o 10.
+// Il giocatore sceglie (6/9): i bianchi falliti e i rossi falliti; dall'11/9
+// anche il rosso che ha fatto 1 (l'occhio resta), mai il 10 (è un successo).
 assert.deepEqual(rerollableDice(dice, [{ result: 1 }, { result: 10 }, { result: 3 }, { result: 8 }, { result: 4, discarded: true }]), [
   { kind: "basic", index: 0 }, { kind: "basic", index: 1 }, { kind: "basic", index: 2 }, { kind: "basic", index: 4 }, { kind: "basic", index: 5 },
-  { kind: "paradox", index: 2 }
+  { kind: "paradox", index: 0 }, { kind: "paradox", index: 2 }
 ]);
+// L'occhio già uscito resta anche dopo il ritiro: il codice non tocca un'ustione esistente, la aggiorna solo nei conti.
+assert.match(readFileSync(new URL("../scripts/volonta.js", import.meta.url), "utf8"), /if \(!card\.ustione\) \{[\s\S]*\} else if \(!card\.ustione\.choice\) \{/);
 assert.equal(volontaState({ total: 2, difficulty: 4, failedCount: 5 }).max, 3);
 assert.equal(volontaState({ total: 2, difficulty: 4, failedCount: 1 }).max, 1);
 const volontaSource = readFileSync(new URL("../scripts/volonta.js", import.meta.url), "utf8");

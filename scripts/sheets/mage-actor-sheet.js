@@ -8,7 +8,7 @@ import { onParadoxBurst } from "../paradox-burst.js";
 import { groupIncantesimiBySphere, onIncantesimoAdd, onIncantesimoChat, onIncantesimoDelete, onIncantesimoEdit, onIncantesimoFromEffetti, onIncantesimoRoll, prepareIncantesimi } from "../incantesimi.js";
 import { onGrimorioComuneOpen, onIncantesimoShare } from "../grimorio-comune.js";
 import { bindNoteBoard, noteBoardHeight, onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
-import { onResetSection, prepareResets } from "../reset.js";
+import { onResetSection, prepareResetsById } from "../reset.js";
 import { onStrumentiSuggest } from "../strumenti.js";
 import { getArete, onAreteChange, onAreteRoll, onAreteSimple } from "../arete.js";
 import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
@@ -191,6 +191,7 @@ export class MageActorSheet extends MortalActorSheet {
       templates: [
         `${MODULE}/parts/salute.hbs`,
         `${MODULE}/parts/appartenenza.hbs`,
+        `${MODULE}/parts/reset-tasto.hbs`,
         `${SYSTEM}/header-profile.hbs`
       ]
     },
@@ -329,6 +330,9 @@ export class MageActorSheet extends MortalActorSheet {
   /** Dopo ogni render la pagina Esperienza ricabla il suo calcolatore. */
   _onRender(context, options) {
     super._onRender?.(context, options);
+    // La modalità creazione (11/9): con la spunta accesa si vedono i tasti di
+    // reset e la X che azzera un tratto; spenta, la X sparisce.
+    this.element?.classList.toggle("wod5e-mage-creazione", Boolean(context.creazioneReset));
     bindExperienceCalculator(this.element);
     // La lavagna delle Note: presa e angolo (6/9).
     bindNoteBoard(this);
@@ -392,6 +396,11 @@ export class MageActorSheet extends MortalActorSheet {
     context.currentTypeLabel = "WOD5E_MAGE.Sheets.Awakened";
     context.wisdom = getWisdom(this.actor);
     context.wisdomStatus = String(this.actor.getFlag(MODULE_ID, "wisdomStatus") ?? "");
+    // I tasti di reset (11/9): ognuno nella sua sezione, visibili solo con la
+    // spunta «Mostra i tasti di reset» del memo di creazione; con loro la X
+    // che azzera un tratto solo.
+    context.creazioneReset = Boolean(this.actor.getFlag(MODULE_ID, "creazione")?.reset);
+    context.resetsById = prepareResetsById(game.i18n.localize.bind(game.i18n));
     return context;
   }
 
@@ -427,8 +436,6 @@ export class MageActorSheet extends MortalActorSheet {
       // Quintessenza generata e Paradosso permanente vivono nella Ruota.
       context.persistentMagickResources = getPersistentMagickResources(actor);
       context.bonuses = prepareBonuses(actor);
-      // I tasti di reset in fondo al memo.
-      context.resets = prepareResets(game.i18n.localize.bind(game.i18n));
       // Le Condizioni addosso: righe con simbolo, nome, cos'è e dadi.
       context.condizioniRows = prepareConditionRows(actor.items);
       context.condizioni = prepareCondizioni(actor.items);

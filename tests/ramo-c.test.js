@@ -94,8 +94,9 @@ assert.deepEqual(sforzoState({ total: 0, difficulty: 1, threshold: 0, ramo: "C" 
 assert.deepEqual(prezzoState({ total: 0, difficulty: 1, dice: 2 }), { show: true, enabled: true, missing: 1, dice: 2 });
 assert.deepEqual(prezzoState({ total: 0, difficulty: 1, dice: 0 }), { show: true, enabled: false, missing: 1, dice: 0 }, "a zero dadi il tasto c'è ma è spento");
 assert.deepEqual(prezzoState({ total: 0, difficulty: 1, dice: 2, skill: true }), { show: false, enabled: false, missing: 0 });
+// Dall'11/9 anche il rosso con l'1 si ritira (l'occhio resta); il 10 è un successo e no.
 assert.deepEqual(rerollableDice([{ result: 7 }, { result: 8 }, { result: 2 }], [{ result: 1 }, { result: 6 }, { result: 10 }]), [
-  { kind: "basic", index: 0 }, { kind: "basic", index: 2 }, { kind: "paradox", index: 1 }
+  { kind: "basic", index: 0 }, { kind: "basic", index: 2 }, { kind: "paradox", index: 0 }, { kind: "paradox", index: 1 }
 ]);
 assert.deepEqual(rerollableDice([{ result: 7 }, { result: 5 }], [], { successFrom: 6 }), [{ kind: "basic", index: 1 }], "i messaggi del ramo A leggono il 6");
 assert.equal(recountCard({ ramo: "C", countedParadox: 1 }, [{ result: 8 }, { result: 7 }], [{ result: 9 }, { result: 8 }]), 2);

@@ -8,7 +8,8 @@ import { RAMO, ramoCMargin } from "./ramo-c.js";
  * di» e i sigilli dell'Attributo e delle Abilità; i dadi; sotto le righe
  * del conto allineate, nome a sinistra e valore a destra (Obiettivo, Sfere
  * col glifo e il livello, Ambiti col simbolo e il livello, Soglia, Tipo,
- * Effetto, Riserva); la fascia dice Successo o Fallimento; sotto i tre
+ * Effetto, Riserva), dall'11/9 dentro una tendina chiusa «Dettagli»; la
+ * fascia dice Successo o Fallimento; sotto i tre
  * tasti (Ritira con Volontà, Sforzare la realtà, Vittoria a un prezzo). La
  * vittoria automatica si dichiara a caratteri grandi. Le funzioni di testo
  * sono pure: si provano fuori da Foundry.
@@ -155,7 +156,9 @@ export function renderRollCard({
   if (magickType) rows.push(renderRow("type", localize("WOD5E_MAGE.RollCard.Type"), escapeHtml(magickType)));
   if (effectKind) rows.push(renderRow("effect", localize("WOD5E_MAGE.RollCard.Effect"), escapeHtml(localize(effectKind))));
   rows.push(renderRow("pool", localize("WOD5E_MAGE.RollCard.Pool"), pool));
-  return `<div class="wod5e-mage-roll-card">${rows.join("")}</div>`;
+  // Le righe stanno in una tendina chiusa (Blue, 11/9): «sono dati che non
+  // servono a primo impatto». Un clic su «Dettagli» le apre.
+  return `<details class="wod5e-mage-roll-card-details"><summary>${escapeHtml(localize("WOD5E_MAGE.RollCard.Details"))}</summary><div class="wod5e-mage-roll-card">${rows.join("")}</div></details>`;
 }
 
 /**

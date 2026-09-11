@@ -5,9 +5,10 @@ import { SPHERE_SPECIALTIES_FLAG } from "./sphere-specialties.js";
 import { SPHERES } from "./spheres.js";
 
 /**
- * I tasti di reset in fondo al memo di creazione (verdetto di Blue, 4/9
- * notte): ognuno azzera una parte sola della scheda, dopo una conferma.
- * La Salute ha il suo sotto la barra.
+ * I tasti di reset (verdetto di Blue, 4/9 notte; dall'11/9 ognuno sta
+ * nella sua sezione, a sinistra del titolo, e si vede solo con la spunta
+ * «Mostra i tasti di reset» del memo di creazione): ognuno azzera una parte
+ * sola della scheda, dopo una conferma. La Salute ha il suo sotto la barra.
  */
 export const RESETS = Object.freeze({
   attributes: {
@@ -100,6 +101,11 @@ export function prepareResets(localize = (key) => key) {
     ...RESET_IDS.map((id) => ({ id, label: localize(RESETS[id].label), icon: RESETS[id].icon })),
     { id: "all", label: localize(RESET_ALL.label), icon: RESET_ALL.icon, all: true }
   ];
+}
+
+/** Gli stessi tasti per id (11/9): ogni sezione pesca il suo. */
+export function prepareResetsById(localize = (key) => key) {
+  return Object.fromEntries(prepareResets(localize).map((reset) => [reset.id, reset]));
 }
 
 /** Applica un reset: l'update e, se serve, la cancellazione degli oggetti. */

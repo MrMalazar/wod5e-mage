@@ -206,6 +206,13 @@
                 <input type="number" name="quintessence" id="wod5e-mage-arete-quintessence" class="wod5e-mage-arete-harmony" min="0" max="{{quintessence}}" step="1" value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Quintessence'}}" {{#unless quintessence}}disabled{{/unless}}>
                 <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Quintessence"}}</span>
             </label>
+            {{!-- La richiesta esplicita (Blue, 11/9): un tasto che mette nella casella
+                 il prezzo della Sfera più alta e compra la riuscita. Vivo col conto. --}}
+            <p class="wod5e-mage-arete-conto-row wod5e-mage-arete-compra-row">
+                <button type="button" class="wod5e-mage-arete-compra" data-role="buySuccess" hidden>
+                    <i class="fa-solid fa-gem" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Compra.DialogButton"}} <b data-role="buyPrice">0</b>
+                </button>
+            </p>
             </div>
             <hr class="wod5e-mage-arete-rule">
             {{else}}

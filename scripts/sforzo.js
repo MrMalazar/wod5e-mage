@@ -16,6 +16,8 @@ import { addSaluteDamage } from "./salute.js";
  * nella stessa sessione costa anche un aggravato, fisico o mentale secondo
  * l'Effetto dichiarato (variabile: a caso; non dichiarato: fisico, come
  * l'Ustione). Il tasto sta nella fila sotto la fascia del tiro fallito.
+ * Dall'11/9 il Narratore riceve tanti punti Paradosso quanti ne paga il
+ * giocatore (la soglia).
  */
 
 export const SFORZO_FLAG = "sforzo";
@@ -104,6 +106,7 @@ export function renderForced(used, format, localize) {
   const parts = [format("WOD5E_MAGE.Sforzo.Done", { missing: used.missing, paradox: used.paradox })];
   if (used.damage) parts.push(format("WOD5E_MAGE.Sforzo.DoneDamage", { damage: damageLabel(used.damage, localize) }));
   if (Number(used.wasted) > 0) parts.push(format("WOD5E_MAGE.Sforzo.DoneWasted", { wasted: used.wasted }));
+  if (Number(used.given) > 0) parts.push(format("WOD5E_MAGE.Sforzo.DoneGiven", { points: used.given }));
   return `<p class="wod5e-mage-roll-note wod5e-mage-roll-note-sforzo"><b class="wod5e-mage-sforzo-label">${localize("WOD5E_MAGE.Sforzo.Label")}</b> <span>${parts.join(" ")}</span></p>`;
 }
 
@@ -179,7 +182,9 @@ export async function forceReality(message, actor) {
   if (price.damage) await addSaluteDamage(actor, { [price.damage]: 1 });
   await actor.setFlag(MODULE_ID, SFORZO_SESSION_FLAG, usesSoFar + 1);
 
-  const used = { missing: state.missing, paradox: moved, wasted, damage: price.damage, uses: usesSoFar + 1, max: MAGICK_TRACK_MAX };
+  // Il Narratore riceve altrettanti punti Paradosso (Blue, 11/9): li
+  // raccoglie il suo client dal gancio updateChatMessage, come per l'Ustione.
+  const used = { missing: state.missing, paradox: moved, wasted, damage: price.damage, uses: usesSoFar + 1, max: MAGICK_TRACK_MAX, given: price.paradox, collected: false, actorId: actor.id, actorName: actor.name };
   // La carta dice riuscito; con la realtà sforzata la Volontà non ha più niente da fare.
   const flags = { [MODULE_ID]: { [SFORZO_FLAG]: used, [ROLL_CARD_FLAG]: { symbols: [], ...card, forced: true } } };
   await message.update({ flags });

@@ -59,7 +59,12 @@ assert.equal(calculateMagickThreshold({ sphereLevels: [3, 2, 1], scopeLevels: [1
 // Il tetto 7 vale sul livello e sulle tre Sfere; gli Ambiti oltre il primo lo superano.
 assert.equal(calculateMagickThreshold({ sphereLevels: [5, 4, 4], scopeLevels: [7, 7, 7] }), 9);
 assert.equal(calculateMagickThreshold({ sphereLevels: [5, 4, 4], scopeLevels: [7] }), 7);
-assert.equal(calculateMagickThreshold({ sphereLevels: [5], scopeLevels: [7, 1] }), 8);
+// Un Ambito a 1 non pesa (11/9): né come maggiore né come Ambito in più.
+assert.equal(calculateMagickThreshold({ sphereLevels: [5], scopeLevels: [7, 1] }), 7);
+assert.equal(calculateMagickThreshold({ sphereLevels: [2], scopeLevels: [1, 1] }), 2);
+assert.equal(calculateMagickThreshold({ sphereLevels: [2], scopeLevels: [2, 1] }), 2);
+assert.equal(calculateMagickThreshold({ sphereLevels: [2], scopeLevels: [2, 2] }), 3);
+assert.equal(calculateMagickThreshold({ sphereLevels: [], scopeLevels: [1] }), 0);
 // Un livello di Ambito fuori scala si riporta fra 0 e 7: lo zero non conta.
 assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [0] }), 1);
 assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [9] }), 7);

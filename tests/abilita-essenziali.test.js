@@ -31,7 +31,7 @@ const TIPI = {
 // Le cinque voci rinominate, tradotte come dal lang italiano del modulo.
 const TRADUZIONI = {
   "WOD5E_MAGE.Skills.Melee": "Mischia",
-  "WOD5E_MAGE.Skills.Ranged": "Armi a Distanza",
+  "WOD5E_MAGE.Skills.Ranged": "Mira",
   "WOD5E_MAGE.Skills.Knowledge": "Conoscenze",
   "WOD5E_MAGE.Skills.Veil": "Velo",
   "WOD5E_MAGE.Skills.Art": "Arte"
@@ -65,14 +65,14 @@ for (const morta of CHIAVI_ASSORBITE) {
 
 // La fila unica alfabetica del canone, colonna per colonna.
 assert.deepEqual(voci.map((v) => v.displayName), [
-  "Allerta", "Armi a Distanza", "Arte", "Atletica", "Conoscenze",
-  "Convincere", "Criminalità", "Investigare", "Manualità", "Medicina",
+  "Allerta", "Arte", "Atletica", "Conoscenze", "Convincere",
+  "Criminalità", "Investigare", "Manualità", "Medicina", "Mira",
   "Mischia", "Sopravvivenza", "Sotterfugio", "Velo"
 ]);
 
 // Le rinominate restano sulle loro chiavi di sistema.
 assert.equal(voci.find((v) => v.displayName === "Mischia").id, "brawl");
-assert.equal(voci.find((v) => v.displayName === "Armi a Distanza").id, "firearms");
+assert.equal(voci.find((v) => v.displayName === "Mira").id, "firearms");
 assert.equal(voci.find((v) => v.displayName === "Conoscenze").id, "academics");
 assert.equal(voci.find((v) => v.displayName === "Velo").id, "occult");
 assert.equal(voci.find((v) => v.displayName === "Arte").id, "performance");

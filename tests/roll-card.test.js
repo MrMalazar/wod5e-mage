@@ -70,9 +70,10 @@ const card = renderRollCard({
   scopes: [{ id: "potency", label: "WOD5E_MAGE.Scopes.potency", level: 2 }]
 }, localize);
 const row = (key, label, body) => `<div class="wod5e-mage-roll-row wod5e-mage-roll-row-${key}"><b class="wod5e-mage-roll-key">${label}</b><span class="wod5e-mage-roll-value">${body}</span></div>`;
+// Dall'11/9 le righe stanno in una tendina chiusa: «Dettagli».
 assert.equal(
   card,
-  '<div class="wod5e-mage-roll-card">'
+  '<details class="wod5e-mage-roll-card-details"><summary>Dettagli</summary><div class="wod5e-mage-roll-card">'
   + row("goal", "Obiettivo", "Ferire con un'onda &lt;d'urto&gt;")
   + row("spheres", "Sfere", '<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-sphere" title="Forze 3"><img src="modules/wod5e-mage/assets/icons/sheet/forces.png" alt="Forze"><b>3</b></span>')
   + row("scopes", "Ambiti", '<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-scope" title="Potenza 2"><i class="fa-solid fa-burst" aria-hidden="true"></i><b>2</b></span>')
@@ -80,7 +81,7 @@ assert.equal(
   + row("type", "Tipo", "Accidentale")
   + row("effect", "Effetto", "Fisico")
   + row("pool", "Riserva", "Forza 3 + Lancio &lt;coltelli&gt; 2 + premio 3")
-  + "</div>"
+  + "</div></details>"
 );
 assert.doesNotMatch(renderRollCard({ traits: [{ label: "Forza", value: 3 }], threshold: 1, magickType: "x" }), /Sfere|Ambiti|Obiettivo|Effetto/);
 
@@ -90,7 +91,7 @@ assert.match(renderRollNote("CONTRACCOLPO", "backlash"), /wod5e-mage-roll-note w
 
 // La vittoria senza dadi: scritta, conto (coi glifi nelle righe), note; niente fila di simboli in più.
 const content = renderAutoVictoryContent({ symbols, card, notes: [renderRollNote("nota")] }, localize);
-assert.match(content, /^<p class="wod5e-mage-roll-victory">Vittoria automatica<\/p><div class="wod5e-mage-roll-card">[\s\S]*<p class="wod5e-mage-roll-note">nota<\/p>$/);
+assert.match(content, /^<p class="wod5e-mage-roll-victory">Vittoria automatica<\/p><details class="wod5e-mage-roll-card-details">[\s\S]*<p class="wod5e-mage-roll-note">nota<\/p>$/);
 assert.doesNotMatch(content, /wod5e-mage-roll-symbols/);
 
 // Il tiro scrive la bandiera (coi tratti per la testata e l'Areté per la vittoria a un prezzo) e la chat la legge.

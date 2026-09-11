@@ -119,12 +119,15 @@ function levelEntries(entries, max) {
 /**
  * La soglia del ramo A: il maggiore fra la Sfera più alta e l'Ambito più
  * alto, +1 per ogni Ambito oltre il primo, +1 piatto con tre o più Sfere,
- * tetto 7. Gli Ambiti valgono da 1 a 7. Le Specialità delle Sfere non la
+ * tetto 7. Gli Ambiti valgono da 1 a 7, ma a 1 non contano (11/9). Le Specialità delle Sfere non la
  * toccano (verdetto di Blue, 4/9 notte): danno successi automatici.
  */
+export const SCOPE_COUNTS_FROM = 2;
+
 export function calculateMagickThreshold({ sphereLevels = [], scopeLevels = [] } = {}) {
   const spheres = levelEntries(sphereLevels, 5);
-  const scopes = levelEntries(scopeLevels, THRESHOLD_CAP);
+  // Un Ambito a 1 non pesa sulla soglia (Blue, 11/9): conta dal 2 in su.
+  const scopes = levelEntries(scopeLevels, THRESHOLD_CAP).filter((entry) => entry.level >= SCOPE_COUNTS_FROM);
   if (!spheres.length && !scopes.length) return 0;
 
   const highest = Math.max(
@@ -381,6 +384,8 @@ function wireDifficulty(dialog) {
   const prizeBox = root.querySelector("input[name=prize]");
   const harmony = root.querySelector("#wod5e-mage-arete-harmony");
   const quintessence = root.querySelector("#wod5e-mage-arete-quintessence");
+  const buyButton = root.querySelector("[data-role=buySuccess]");
+  const buyPriceOut = root.querySelector("[data-role=buyPrice]");
 
   const autoSuccessOut = root.querySelector("[data-role=autoSuccesses]");
   const areteValue = Math.max(Math.trunc(Number(root.querySelector("[data-arete]")?.dataset.arete) || 0), 0);
@@ -423,7 +428,25 @@ function wireDifficulty(dialog) {
       autoSuccessOut.textContent = parts.length ? `· ${parts.join(" · ")}` : "";
     }
     autoOut?.classList.toggle("hidden", !conto.spend.bought);
+    // Il tasto «Compra la riuscita» (11/9): c'è quando c'è una Sfera e una
+    // Ruota con Quintessenza; acceso se i punti bastano, spento col perché.
+    if (buyButton) {
+      const show = sphereMax > 0 && quintessenceMax > 0 && !conto.spend.bought;
+      buyButton.hidden = !show;
+      buyButton.disabled = quintessenceMax < sphereMax;
+      buyButton.title = quintessenceMax >= sphereMax
+        ? game.i18n.format("WOD5E_MAGE.Compra.DialogHint", { price: sphereMax })
+        : game.i18n.format("WOD5E_MAGE.Compra.DialogPoor", { price: sphereMax, quintessence: quintessenceMax });
+      if (buyPriceOut) buyPriceOut.textContent = String(sphereMax);
+    }
   };
+  buyButton?.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (!quintessence || buyButton.disabled) return;
+    const sphereMax = Math.max(0, ...readDotRows(root, "sphere").map((entry) => entry.level));
+    quintessence.value = String(sphereMax);
+    update();
+  });
 
   [attribute, primary, secondary, prizeBox, harmony, quintessence].forEach((control) => {
     control?.addEventListener("change", update);

@@ -73,18 +73,43 @@ export function specialtyBonus(skillId, source) {
   };
 }
 
-/** La tendina dei suggerimenti segue l'Abilità scelta (datalist del catalogo). */
-export function suggestionOptions(skillId) {
-  return specialtySuggestions(skillId).map((name) => `<option value="${name}"></option>`).join("");
+/**
+ * I suggerimenti del catalogo, in ordine alfabetico (Blue, 11/9: la tendina
+ * nativa era storta e non ordinata). `filter` tiene solo quelli che cominciano
+ * con quel che si sta scrivendo. Torna le voci `<li>`.
+ */
+export function suggestionOptions(skillId, filter = "", lang = "it") {
+  const needle = String(filter ?? "").trim().toLocaleLowerCase(lang);
+  return [...specialtySuggestions(skillId)]
+    .sort((a, b) => a.localeCompare(b, lang))
+    .filter((name) => !needle || name.toLocaleLowerCase(lang).startsWith(needle))
+    .map((name) => `<li data-value="${name}">${name}</li>`)
+    .join("");
 }
 
+/** La tendina di casa sotto il campo: si riempie dall'Abilità scelta, si filtra scrivendo, un clic sceglie. */
 function wireSuggestions(root) {
   const select = root?.querySelector?.("select[name=\"skill\"]");
-  const list = root?.querySelector?.("datalist");
-  if (!select || !list) return;
-  const refresh = () => { list.innerHTML = suggestionOptions(select.value); };
+  const input = root?.querySelector?.("input[name=\"source\"]");
+  const list = root?.querySelector?.("[data-role=\"suggest\"]");
+  if (!select || !input || !list) return;
+  const lang = game.i18n?.lang ?? "it";
+  const refresh = () => {
+    list.innerHTML = suggestionOptions(select.value, input.value, lang);
+    list.hidden = !list.children.length;
+  };
   select.addEventListener("change", refresh);
-  refresh();
+  input.addEventListener("input", refresh);
+  input.addEventListener("focus", refresh);
+  input.addEventListener("blur", () => setTimeout(() => { list.hidden = true; }, 150));
+  list.addEventListener("mousedown", (event) => {
+    const item = event.target.closest("li[data-value]");
+    if (!item) return;
+    event.preventDefault();
+    input.value = item.dataset.value;
+    list.hidden = true;
+  });
+  list.hidden = true;
 }
 
 function canEditSpecialties(actor) {

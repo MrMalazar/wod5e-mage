@@ -56,7 +56,7 @@ const actor = {
 const salute = getSalute(actor);
 assert.deepEqual(salute.paradosso, { p: 1, m: 1 });
 assert.equal(salute.locked, 2);
-assert.deepEqual(salute.cells.map((cell) => cell.locked), [true, false, false, false, true]);
+assert.deepEqual(salute.cells.map((cell) => cell.locked), [true, false, false, false, false, true]);
 
 // Nuova sessione (11/9): la Quintessenza si azzera e riparte dalla generata.
 assert.equal(quintessenceGained(""), 0);

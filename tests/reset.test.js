@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { applyReset, onResetSection, prepareResets, RESET_IDS, RESETS } from "../scripts/reset.js";
+import { applyReset, onResetSection, prepareResets, prepareResetsById, RESET_IDS, RESETS } from "../scripts/reset.js";
 
 // Sette tasti, nell'ordine chiesto.
 assert.deepEqual(RESET_IDS, ["attributes", "skills", "advantages", "spheres", "credo", "lineage", "compass"]);
@@ -74,12 +74,30 @@ assert.equal(actor.updates.length, 1);
 await onResetSection.call({ actor }, { preventDefault() {} }, { dataset: { reset: "boh" } });
 assert.equal(asked, 2);
 
-// La scheda: i tasti in fondo al memo, l'azione registrata, la lingua.
-const tratti = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
-assert.match(tratti, /wod5e-mage-riepilogo-checks[\s\S]*wod5e-mage-reset-row[\s\S]*data-action="resetSection" data-reset="\{\{reset\.id\}\}"/);
+// La scheda (11/9): la spunta «Mostra i tasti di reset» e il reset della
+// scheda intera nel memo; ogni altro tasto nella sua sezione, a sinistra del
+// titolo, dentro {{#if creazioneReset}}; l'azione registrata; la lingua.
+assert.deepEqual(Object.keys(prepareResetsById()), [...RESET_IDS, "all"]);
+const read = (file) => readFileSync(new URL(`../templates/actor/parts/${file}`, import.meta.url), "utf8");
+const tratti = read("tratti.hbs");
+assert.match(tratti, /wod5e-mage-riepilogo-checks[\s\S]*wod5e-mage-reset-row[\s\S]*name="flags\.wod5e-mage\.creazione\.reset"[\s\S]*data-reset="all"/);
+assert.doesNotMatch(tratti, /data-reset="\{\{reset\.id\}\}"/);
+const tasto = (id) => new RegExp(`\\{\\{#if creazioneReset\\}\\}\\{\\{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById\\.${id}\\}\\}`);
+assert.match(tratti, new RegExp(`wod5e-mage-tratti-header[\\s\\S]*${tasto("attributes").source}[\\s\\S]*AttributesList\\.Attributes`));
+assert.match(tratti, new RegExp(`wod5e-mage-skills-header[\\s\\S]*${tasto("skills").source}[\\s\\S]*SkillsList\\.Skills`));
+assert.match(read("spheres.hbs"), new RegExp(`wod5e-mage-section-title[\\s\\S]*${tasto("spheres").source}[\\s\\S]*Tabs\\.Magick`));
+assert.match(read("focus.hbs"), new RegExp(`wod5e-mage-section-title[\\s\\S]*${tasto("credo").source}[\\s\\S]*Tabs\\.Focus`));
+assert.match(read("appartenenza.hbs"), new RegExp(`<summary[\\s\\S]*${tasto("lineage").source}[\\s\\S]*Lineage\\.Label`));
+assert.match(read("personaggio.hbs"), new RegExp(`${tasto("compass").source}[\\s\\S]*Personaggio\\.IdentityLabel`));
+assert.match(read("dotazione.hbs"), /\{\{#if creazioneReset\}\}[\s\S]*resetsById\.advantages[\s\S]*core-features\.hbs/);
+assert.match(read("reset-tasto.hbs"), /data-action="resetSection" data-reset="\{\{id\}\}"[\s\S]*@root\.locked/);
 const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
 assert.match(sheet, /resetSection: onResetSection/);
-assert.match(sheet, /context\.resets = prepareResets/);
+assert.match(sheet, /context\.creazioneReset = Boolean\(this\.actor\.getFlag\(MODULE_ID, "creazione"\)\?\.reset\)/);
+assert.match(sheet, /context\.resetsById = prepareResetsById/);
+assert.match(sheet, /classList\.toggle\("wod5e-mage-creazione", Boolean\(context\.creazioneReset\)\)/);
+// Senza la spunta la X che azzera un tratto sparisce.
+assert.match(readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8"), /sheet:not\(\.wod5e-mage-creazione\)[^{]*\.resource-value-empty \{\s*display: none;/);
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
   for (const id of RESET_IDS) assert.equal(typeof strings.WOD5E_MAGE.Reset[RESETS[id].label.split(".").pop()], "string", `${lang} ${id}`);

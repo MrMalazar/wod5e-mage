@@ -7,6 +7,10 @@
          Armatura, Arma, Equipaggiamento e gli Altri oggetti. --}}
     <div class="wod5e-mage-dotazione-layout">
         <div class="wod5e-mage-dotazione-left">
+            {{#if creazioneReset}}
+            {{!-- Il reset dei Vantaggi (Background, Pregi, Difetti), 11/9. --}}
+            <div class="wod5e-mage-reset-inline">{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.advantages}} <span>{{resetsById.advantages.label}}</span></div>
+            {{/if}}
             <div class="features-list item-list">
                 {{> "modules/wod5e-mage/templates/actor/parts/core-features.hbs"}}
             </div>

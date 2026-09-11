@@ -28,7 +28,7 @@
     },
     "Skills": {
       "Melee": "Mischia",
-      "Ranged": "Armi a Distanza",
+      "Ranged": "Mira",
       "Knowledge": "Conoscenze",
       "Veil": "Velo",
       "Art": "Arte"
@@ -746,7 +746,7 @@
     },
     "Salute": {
       "Label": "Salute",
-      "Hint": "1 + Costituzione + Fermezza",
+      "Hint": "2 + Costituzione + Fermezza",
       "Extra": "Caselle in più, oltre il conto",
       "ClickHint": "Clic: scegli il segno. Clic destro: la casella si svuota.",
       "States": {
@@ -798,7 +798,7 @@
       "Label": "Negare il Contraccolpo",
       "Hint": "Una volta per sessione: segni un aggravato mentale, il Contraccolpo non scatta, la Ruota sale di 3. L'aggravato non guarisce finché quei punti non sono scaricati. Si riarma con «Nuova sessione».",
       "Used": "negato in questa sessione",
-      "Done": "Contraccolpo negato: un aggravato mentale, la Ruota sale di {amount}.",
+      "Done": "Contraccolpo negato: un aggravato mentale paradossale (bloccato), la Ruota sale di {amount}.",
       "AlreadyUsed": "Il Contraccolpo è già stato negato in questa sessione.",
       "NoRoom": "Nessuna casella per l'aggravato mentale: il tracciato è tutto aggravato.",
       "WheelFull": "I tre punti portano la Ruota al massimo: Difetto paradossale oppure scoppio."
@@ -930,6 +930,8 @@
       "Credo": "Reset Credo",
       "Lineage": "Reset Appartenenza",
       "Compass": "Reset Bussola",
+      "Show": "Mostra i tasti di reset",
+      "ShowHint": "Modalità creazione: i tasti di reset compaiono nelle loro sezioni e la X azzera un tratto solo.",
       "Confirm": "{label}: azzera questa parte della scheda. Vuoi procedere?",
       "All": "Reset scheda"
     },
@@ -958,8 +960,24 @@
       "Done": "soglia {missing}, la Ruota sale di {paradox} in Paradosso.",
       "DoneDamage": "Segnato un aggravato {damage}.",
       "DoneWasted": "La Ruota era piena: {wasted} punti non sono entrati.",
+      "DoneGiven": "Il Narratore riceve {points} punti Paradosso.",
       "DamagePhysical": "fisico",
       "DamageMental": "mentale"
+    },
+    "Compra": {
+      "Label": "Riuscita comprata",
+      "Title": "Compra la riuscita",
+      "Button": "Compra la riuscita",
+      "Hint": "Quintessenza {quintessence}: {price} punti (la Sfera più alta) comprano la riuscita. L'Ustione dei rossi, se è scattata, resta.",
+      "HintPoor": "Servono {price} punti di Quintessenza (la Sfera più alta), ne hai {quintessence}.",
+      "Ask": "Spendi {price} punti di Quintessenza su {quintessence} e l'incantesimo riesce.",
+      "AskNote": "I danni dell'effetto comprato sono aggravati. L'Ustione dei rossi, se è scattata, resta.",
+      "Yes": "Compra",
+      "No": "Lascia stare",
+      "Done": "riuscita comprata con {price} Quintessenza: i danni sono aggravati.",
+      "DialogButton": "Compra la riuscita",
+      "DialogHint": "{price} punti di Quintessenza (la Sfera più alta) comprano la riuscita: non si tira, i rossi sì.",
+      "DialogPoor": "Servono {price} punti di Quintessenza, ne hai {quintessence}."
     },
     "Prezzo": {
       "Label": "Vittoria a un prezzo",
@@ -974,6 +992,7 @@
       "Done": "dadi tirati {dice}: il prezzo lo decide il Narratore."
     },
     "RollCard": {
+      "Details": "Dettagli",
       "Of": "Tiro di",
       "Successes": "Successi",
       "Threshold": "Soglia",
@@ -1011,12 +1030,12 @@
     "Volonta": {
       "Label": "Volontà",
       "Reroll": "Ritira con Volontà",
-      "RerollHint": "Scegli sulla carta fino a tre dadi falliti (mai un rosso con 1 o 10), poi ritira: un superficiale mentale",
-      "NoDice": "Nessun dado da ritirare: i dadi hanno fatto successo, o i rossi hanno mostrato 1 o 10",
+      "RerollHint": "Scegli sulla carta fino a tre dadi falliti (anche un rosso con l'1: l'occhio resta), poi ritira: un superficiale mentale",
+      "NoDice": "Nessun dado da ritirare: i dadi hanno fatto successo",
       "PickFirst": "Scegli prima sulla carta i dadi da ritirare: un clic su un dado fallito lo accende.",
       "UsedReroll": "Volontà: ritirati {dice} dadi scelti (un superficiale mentale).",
       "RerollDone": "Ritirati {dice} dadi: un superficiale mentale segnato.",
-      "RerollEyes": "{eyes} rossi ritirati hanno mostrato 1 o 10: occhio del Paradosso."
+      "RerollEyes": "{eyes} rossi ritirati hanno mostrato 1 o 10: occhio del Paradosso. Un occhio già uscito resta."
     },
     "Condizioni": {
       "All": "Tutte le Condizioni",
@@ -1152,6 +1171,7 @@
       "LobbyEmpty": "nessuno",
       "Collected": "{points} punti Paradosso da {name}.",
       "LogGiven": "Ustione data da {name}",
+      "LogSforzo": "Realtà sforzata da {name}",
       "LogSpend": "Effetto dalla Scheda",
       "LogManual": "A mano",
       "LogReset": "Azzerata",

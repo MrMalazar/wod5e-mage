@@ -183,21 +183,47 @@ function isActiveGM() {
  * il messaggio nasce, cambia, o al suo arrivo al tavolo.
  */
 const collecting = new Set();
+/** Il nome del flag di Sforzare la realtà (lo stesso di sforzo.js, ripetuto per non importare il modulo). */
+const SFORZO_FLAG = "sforzo";
+
+/**
+ * Cosa c'è da raccogliere su un messaggio: l'Ustione data al Narratore
+ * (`rollCard.ustione`) e, dall'11/9, la realtà sforzata (`sforzo.given`:
+ * il Narratore riceve quanto ha pagato il giocatore). Puro.
+ */
+export function pendingGifts(flags = {}) {
+  const gifts = [];
+  const ustione = flags?.[ROLL_CARD_FLAG]?.ustione;
+  if (ustione && ustione.choice === "narratore" && !ustione.collected && count(ustione.given) > 0) {
+    gifts.push({ kind: "given", points: count(ustione.given), from: ustione.actorName ?? "" });
+  }
+  const sforzo = flags?.[SFORZO_FLAG];
+  if (sforzo && !sforzo.collected && count(sforzo.given) > 0) {
+    gifts.push({ kind: "sforzo", points: count(sforzo.given), from: sforzo.actorName ?? "" });
+  }
+  return gifts;
+}
 
 export async function collectGivenParadox(message) {
   if (!isActiveGM()) return false;
-  const card = message?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG);
-  const ustione = card?.ustione;
-  if (!ustione || ustione.choice !== "narratore" || ustione.collected || count(ustione.given) <= 0) return false;
+  const flags = message?.flags?.[MODULE_ID] ?? {};
+  const gifts = pendingGifts(flags);
+  if (!gifts.length) return false;
   // Due ganci sullo stesso messaggio (create e update, o l'update del
   // giocatore e quello del Narratore) non devono contare due volte (11/9 sera: +6 due volte).
   if (collecting.has(message.id)) return false;
   collecting.add(message.id);
   try {
-    const next = addPoints(getPool(), ustione.given, { kind: "given", from: ustione.actorName ?? "", messageId: message.id });
-    await setPool(next);
-    await message.update({ flags: { [MODULE_ID]: { [ROLL_CARD_FLAG]: { symbols: [], ...card, ustione: { ...ustione, collected: true } } } } });
-    ui.notifications.info(game.i18n.format("WOD5E_MAGE.Paradosso.Collected", { points: ustione.given, name: ustione.actorName ?? "" }));
+    let pool = getPool();
+    const update = {};
+    for (const gift of gifts) {
+      pool = addPoints(pool, gift.points, { kind: gift.kind, from: gift.from, messageId: message.id });
+      if (gift.kind === "given") update[ROLL_CARD_FLAG] = { symbols: [], ...flags[ROLL_CARD_FLAG], ustione: { ...flags[ROLL_CARD_FLAG].ustione, collected: true } };
+      if (gift.kind === "sforzo") update[SFORZO_FLAG] = { ...flags[SFORZO_FLAG], collected: true };
+      ui.notifications.info(game.i18n.format("WOD5E_MAGE.Paradosso.Collected", { points: gift.points, name: gift.from }));
+    }
+    await setPool(pool);
+    await message.update({ flags: { [MODULE_ID]: update } });
     return true;
   } finally {
     collecting.delete(message.id);
@@ -364,6 +390,7 @@ function logText(entry, localize) {
   const format = game.i18n.format.bind(game.i18n);
   switch (entry.kind) {
     case "given": return format("WOD5E_MAGE.Paradosso.LogGiven", { name: entry.from ?? "" });
+    case "sforzo": return format("WOD5E_MAGE.Paradosso.LogSforzo", { name: entry.from ?? "" });
     case "spend": return entry.text ? entry.text : localize("WOD5E_MAGE.Paradosso.LogSpend");
     case "manual": return localize("WOD5E_MAGE.Paradosso.LogManual");
     case "reset": return localize("WOD5E_MAGE.Paradosso.LogReset");

@@ -8,9 +8,10 @@ import { addSaluteDamage } from "./salute.js";
 /**
  * Il ritiro di Volontà sotto il tiro (verdetti di Blue, 6/9/2026): quando
  * un tiro fallisce, il giocatore SCEGLIE sulla carta i dadi da ritirare
- * (fino a tre, fra i falliti: anche i rossi, MAI un rosso che ha fatto 1 o
- * 10: «una volta che è scoppiato, è scoppiato»), poi «Ritira con Volontà»
- * costa un superficiale mentale. L'aggravato che comprava due successi è
+ * (fino a tre, fra i falliti: anche i rossi, e dall'11/9 anche il rosso che
+ * ha fatto 1: si ritira per cercare il successo, ma l'occhio resta e lo
+ * Scoppio con lui, «se un dado lo fa uscire si attiva»), poi «Ritira con
+ * Volontà» costa un superficiale mentale. L'aggravato che comprava due successi è
  * cancellato (Blue, 10/9 notte). Il tasto sta nella fila dei tre sotto la
  * fascia, con Sforzare la realtà e Vittoria a un prezzo.
  */
@@ -19,11 +20,13 @@ export const VOLONTA_FLAG = "volonta";
 export const REROLL_MAX = 3;
 
 const isActive = (result) => result?.active !== false && !result?.discarded;
+const count = (value) => Math.max(Math.trunc(Number(value) || 0), 0);
 
 /**
  * I dadi che si possono ritirare: i falliti fra i bianchi (sotto la
- * riuscita: nel ramo C l'8, quindi 1-7), i falliti fra i rossi: l'1 e il
- * 10 del Paradosso restano dove sono. Torna {kind, index} per ognuno.
+ * riuscita: nel ramo C l'8, quindi 1-7) e i falliti fra i rossi, compreso
+ * l'1 dell'occhio (11/9: si ritira per il successo, lo Scoppio resta; il 10
+ * è già un successo e non si ritira). Torna {kind, index} per ognuno.
  */
 export function rerollableDice(basicResults = [], paradoxResults = [], { successFrom = SUCCESS_FROM } = {}) {
   const basic = basicResults
@@ -31,7 +34,7 @@ export function rerollableDice(basicResults = [], paradoxResults = [], { success
     .filter((entry) => entry.ok && entry.value < successFrom);
   const paradox = paradoxResults
     .map((result, index) => ({ kind: "paradox", index, value: Number(result?.result) || 0, ok: isActive(result) }))
-    .filter((entry) => entry.ok && entry.value >= 2 && entry.value < successFrom);
+    .filter((entry) => entry.ok && entry.value < successFrom);
   return [...basic, ...paradox].map(({ kind, index }) => ({ kind, index }));
 }
 
@@ -215,9 +218,17 @@ async function rerollDice(message, actor, picks) {
     if (card.skill) flags[MODULE_ID][ROLL_CARD_FLAG].margin = Math.max(total - 1, 0);
     // Un rosso ritirato che mostra l'occhio chiama il Contraccolpo (ramo C):
     // l'Ustione, pari alla soglia, aspetta la scelta del giocatore sotto la carta.
-    if (eyes > 0 && card.ramo === RAMO && !card.ustione && Number(card.threshold) > 0 && !card.skill) {
-      const tens = (advanced?.results ?? []).filter(isActive).filter((result) => Number(result.result) === 10).length;
-      flags[MODULE_ID][ROLL_CARD_FLAG].ustione = { threshold: Number(card.threshold), sphere: Math.max(Math.trunc(Number(card.sphereMax) || 0), 0), tens, kind: card.effectKind ?? "", eyes, choice: "" };
+    // Un occhio già uscito resta (11/9: «lo scoppio rimane»): i 10 e gli
+    // occhi si contano su tutti i rossi, anche quelli ritirati.
+    if (eyes > 0 && card.ramo === RAMO && Number(card.threshold) > 0 && !card.skill) {
+      const reds = advanced?.results ?? [];
+      const tens = reds.filter((result) => Number(result.result) === 10).length;
+      const allEyes = reds.filter((result) => Number(result.result) === 1 || Number(result.result) === 10).length;
+      if (!card.ustione) {
+        flags[MODULE_ID][ROLL_CARD_FLAG].ustione = { threshold: Number(card.threshold), sphere: Math.max(Math.trunc(Number(card.sphereMax) || 0), 0), tens, kind: card.effectKind ?? "", eyes: allEyes, choice: "" };
+      } else if (!card.ustione.choice) {
+        flags[MODULE_ID][ROLL_CARD_FLAG].ustione = { ...card.ustione, tens: Math.max(tens, count(card.ustione.tens)), eyes: Math.max(allEyes, count(card.ustione.eyes)) };
+      }
     }
   }
   await addSaluteDamage(actor, { ms: 1 });

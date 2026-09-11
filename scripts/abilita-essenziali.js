@@ -10,7 +10,7 @@
  *
  * La corrispondenza (tavola «Dove va quello che muore» del canone):
  *   Rissa, Mischia                 → Mischia           (chiave: brawl)
- *   Armi da Fuoco                  → Armi a Distanza   (chiave: firearms)
+ *   Armi da Fuoco                  → Mira   (chiave: firearms)
  *   Accademiche, Scienze, Finanza, Politica → Conoscenze (chiave: academics)
  *   Occulto, Creature (senza corpo) → Velo             (chiave: occult)
  *   Affinità Animale, Creature (con corpo) → Sopravvivenza (survival)
@@ -26,7 +26,6 @@
 /** Le quattordici chiavi di sistema su cui vivono le voci del canone. */
 export const CHIAVI_VIVE = Object.freeze([
   "awareness", // Allerta
-  "firearms", // Armi a Distanza
   "performance", // Arte
   "athletics", // Atletica
   "academics", // Conoscenze
@@ -35,6 +34,7 @@ export const CHIAVI_VIVE = Object.freeze([
   "investigation", // Investigare
   "craft", // Manualità
   "medicine", // Medicina
+  "firearms", // Mira (era «Armi a Distanza» per qualche ora dell'11/9: Blue ha scelto Mira)
   "brawl", // Mischia
   "survival", // Sopravvivenza
   "subterfuge", // Sotterfugio

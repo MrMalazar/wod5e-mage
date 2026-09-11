@@ -1,5 +1,6 @@
 <section class="tab {{tab.cssClass}} wod5e-mage-spheres" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     <header class="wod5e-mage-section-title">
+        {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.spheres}}{{/if}}
         <span>{{localize "WOD5E_MAGE.Tabs.Magick"}}</span>
     </header>
 
