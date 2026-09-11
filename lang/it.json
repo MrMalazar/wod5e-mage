@@ -48,6 +48,8 @@
         "tradizioni": "Le nove Tradizioni",
         "disparati": "Le dieci Craft dei Disparati"
       },
+      "CredoFamilyOn": "Sfera di famiglia",
+      "CredoFamilyPick": "clicca per farla di famiglia",
       "CredoSphere": "Sfera di famiglia del Credo",
       "CredoSphereNone": "Sfera…"
     },
@@ -169,6 +171,9 @@
       "QuintessenceHint": "Ogni punto speso è un dado in più e scende dalla Ruota. Punti pari al livello della Sfera più alta comprano la riuscita senza tirare (i rossi si tirano comunque). Se l'effetto fa danni, sono aggravati.",
       "QuintessenceFlavor": "Quintessenza {points} (+{points} dadi; i danni sono aggravati)",
       "QuintessenceSpent": "Quintessenza spesa: {points}.",
+      "SkillSpecialty": "Specializzazione",
+      "SkillSpecialtyHint": "L'Abilità ha una Specializzazione che c'entra col gesto: un dado in più (11/9), fuori dal tetto.",
+      "SkillSpecialtyFlavor": "Specializzazione +{dice}",
       "Conviction": "Convinzione rispettata",
       "ConvictionShort": "+1 Quintessenza, una volta per scena",
       "ConvictionHint": "Se in questo lancio hai rispettato una Convinzione della scheda, a tiro fatto un punto di Quintessenza risale sulla Ruota. Una volta per scena.",
@@ -930,6 +935,7 @@
       "Credo": "Reset Credo",
       "Lineage": "Reset Appartenenza",
       "Compass": "Reset Bussola",
+      "Word": "Reset",
       "Show": "Mostra i tasti di reset",
       "ShowHint": "Modalità creazione: i tasti di reset compaiono nelle loro sezioni e la X azzera un tratto solo.",
       "Confirm": "{label}: azzera questa parte della scheda. Vuoi procedere?",
@@ -963,6 +969,22 @@
       "DoneGiven": "Il Narratore riceve {points} punti Paradosso.",
       "DamagePhysical": "fisico",
       "DamageMental": "mentale"
+    },
+    "Bussola": {
+      "Ask": "Rispetta la Bussola?",
+      "Short": "+1 dado, +1 Quintessenza a tiro fatto",
+      "Hint": "Se con questo gesto servi la tua Bussola (l'Ambizione, il Desiderio o una Convinzione), prendi un dado in più e, a tiro fatto, un punto di Quintessenza risale sulla Ruota. Una volta per scena.",
+      "Pick": "Quale voce della Bussola",
+      "Ambition": "Ambizione",
+      "Desire": "Desiderio",
+      "Conviction": "Convinzione",
+      "None": "Nessuna voce della Bussola in scheda.",
+      "Used": "Già rispettata in questa scena.",
+      "NewScene": "Nuova scena",
+      "NewSceneHint": "La scena è cambiata: la Bussola può dare di nuovo.",
+      "Gained": "Bussola rispettata ({label}): +1 Quintessenza.",
+      "Full": "Bussola rispettata, ma la Ruota è piena: niente da rigenerare.",
+      "Flavor": "Bussola rispettata (+1 dado): {label}"
     },
     "Compra": {
       "Label": "Riuscita comprata",

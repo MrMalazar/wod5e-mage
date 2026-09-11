@@ -37,11 +37,12 @@ assert.deepEqual(ramoCDice(6, 7), { pool: 6, threshold: 7, dice: 0 });
 assert.deepEqual(ramoCDice("x", -2), { pool: 0, threshold: 0, dice: 0 });
 assert.equal(diceNote({ pool: 6, threshold: 3, dice: 3 }), "6 − 3 = 3");
 
-// I rossi si tirano sempre e si convertono dai dadi rimasti; quelli in più
-// contano solo per l'occhio (PROPOSTA dello studio).
+// I rossi si tirano sempre e si convertono dai dadi rimasti; quelli in più si
+// aggiungono e contano anche loro (verdetto di Blue dell'11/9 pomeriggio: «3 10 10 8,
+// su 4 dadi dovrebbe essere 3 successi»; la PROPOSTA «solo per l'occhio» è caduta).
 assert.deepEqual(splitRamoCDice(3, 2), { basicDice: 1, paradoxDice: 2, countedParadox: 2, eyeOnly: 0, totalDice: 3 });
-assert.deepEqual(splitRamoCDice(1, 3), { basicDice: 0, paradoxDice: 3, countedParadox: 1, eyeOnly: 2, totalDice: 3 });
-assert.deepEqual(splitRamoCDice(0, 4), { basicDice: 0, paradoxDice: 4, countedParadox: 0, eyeOnly: 4, totalDice: 4 });
+assert.deepEqual(splitRamoCDice(1, 3), { basicDice: 0, paradoxDice: 3, countedParadox: 3, eyeOnly: 0, totalDice: 3 });
+assert.deepEqual(splitRamoCDice(0, 4), { basicDice: 0, paradoxDice: 4, countedParadox: 4, eyeOnly: 0, totalDice: 4 });
 assert.deepEqual(splitRamoCDice(5, 0), { basicDice: 5, paradoxDice: 0, countedParadox: 0, eyeOnly: 0, totalDice: 5 });
 
 // I successi: 8 o più, i rossi fino a quelli che contano, niente coppie di dieci.

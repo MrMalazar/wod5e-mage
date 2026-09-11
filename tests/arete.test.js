@@ -199,10 +199,12 @@ assert.deepEqual(traits.skills[0], {
 assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
 
 
-// La Convinzione rispettata (9/9): le Convinzioni della scheda in tendina, la scelta, +1 Quintessenza una volta per scena.
+// Rispetta la Bussola? (11/9, al posto della Convinzione del 9/9): Ambizione, Desiderio e
+// Convinzioni in tendina, la scelta, +1 dado e +1 Quintessenza una volta per scena.
 {
   const { readFileSync } = await import("node:fs");
-  const { CONVICTION_SCENE_FLAG, convictionChoice, prepareConvictionChoice, quintessenceAfterConviction } = await import("../scripts/arete.js");
+  const { CONVICTION_SCENE_FLAG, SKILL_SPECIALTY_DICE, skillSpecialtyNames } = await import("../scripts/arete.js");
+  const { BUSSOLA_DICE, BUSSOLA_SCENE_FLAG, bussolaChoice, prepareBussolaChoice, quintessenceAfterBussola, renderBussolaBlock, readBussola, bussolaDice } = await import("../scripts/bussola.js");
   const flags = {
     convinzioni: {
       a1: { group: "verita", text: " Mai mentire a chi si fida di me. ", serve: "", cross: "" },
@@ -210,27 +212,50 @@ assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
       a3: { group: "", text: "   ", serve: "", cross: "" }
     }
   };
-  const actor = { getFlag: (_m, key) => flags[key] };
-  const choice = prepareConvictionChoice(actor);
-  assert.deepEqual(choice.options.map((option) => [option.id, option.label]), [["a1", "WOD5E_MAGE.Personaggio.ConvictionGroups.verita: Mai mentire a chi si fida di me."], ["a2", "WOD5E_MAGE.Focus.Credos.illusione: Da un sogno si esce."]]);
+  const actor = { getFlag: (_m, key) => flags[key], system: { headers: { ambition: " Salvare il faro ", desire: "" } } };
+  const choice = prepareBussolaChoice(actor);
+  assert.deepEqual(choice.options.map((option) => [option.id, option.kind, option.label]), [
+    ["ambizione", "ambizione", "WOD5E_MAGE.Bussola.Ambition: Salvare il faro"],
+    ["convinzione:a1", "convinzione", "WOD5E_MAGE.Bussola.Conviction (WOD5E_MAGE.Personaggio.ConvictionGroups.verita): Mai mentire a chi si fida di me."],
+    ["convinzione:a2", "convinzione", "WOD5E_MAGE.Bussola.Conviction (WOD5E_MAGE.Focus.Credos.illusione): Da un sogno si esce."]
+  ]);
   assert.equal(choice.used, false);
-  assert.equal(CONVICTION_SCENE_FLAG, "convinzioneScena");
-  assert.deepEqual(convictionChoice({ conviction: true, convictionId: "a2" }, choice), { id: "a2", label: "WOD5E_MAGE.Focus.Credos.illusione: Da un sogno si esce." });
-  assert.equal(convictionChoice({ conviction: false, convictionId: "a2" }, choice), null);
-  assert.equal(convictionChoice({ conviction: "on", convictionId: "nope" }, choice), null);
+  assert.equal(BUSSOLA_SCENE_FLAG, "convinzioneScena");
+  assert.equal(CONVICTION_SCENE_FLAG, BUSSOLA_SCENE_FLAG, "il Cambio Scena riarma lo stesso flag");
+  assert.equal(BUSSOLA_DICE, 1);
+  assert.equal(SKILL_SPECIALTY_DICE, 1);
+  assert.deepEqual(bussolaChoice({ bussola: true, bussolaId: "convinzione:a2" }, choice).id, "convinzione:a2");
+  assert.equal(bussolaChoice({ bussola: false, bussolaId: "ambizione" }, choice), null);
+  assert.equal(bussolaChoice({ bussola: "on", bussolaId: "nope" }, choice), null);
   flags.convinzioneScena = { used: true, label: "x" };
-  const used = prepareConvictionChoice(actor);
+  const used = prepareBussolaChoice(actor);
   assert.equal(used.used, true);
-  assert.equal(convictionChoice({ conviction: true, convictionId: "a1" }, used), null, "una volta per scena");
-  assert.deepEqual(quintessenceAfterConviction({ quintessence: 3, paradox: 2, floor: 2 }), { quintessence: 4, gained: true });
-  assert.deepEqual(quintessenceAfterConviction({ quintessence: 7, paradox: 2, floor: 0 }), { quintessence: 7, gained: false }, "le celle sono in comune col Paradosso: la Ruota è piena");
-  assert.deepEqual(quintessenceAfterConviction({ quintessence: 8, paradox: 0, floor: 0 }), { quintessence: 9, gained: true });
-  assert.deepEqual(quintessenceAfterConviction({ quintessence: 9, paradox: 0, floor: 0 }), { quintessence: 9, gained: false });
+  assert.equal(bussolaChoice({ bussola: true, bussolaId: "ambizione" }, used), null, "una volta per scena");
+  assert.deepEqual(quintessenceAfterBussola({ quintessence: 3, paradox: 2, floor: 2 }), { quintessence: 4, gained: true });
+  assert.deepEqual(quintessenceAfterBussola({ quintessence: 7, paradox: 2, floor: 0 }), { quintessence: 7, gained: false }, "le celle sono in comune col Paradosso: la Ruota è piena");
+  assert.deepEqual(quintessenceAfterBussola({ quintessence: 9, paradox: 0, floor: 0 }), { quintessence: 9, gained: false });
+  // Il blocco della finestra: casella, tendina nascosta, riga «già usata» col tasto.
+  const block = renderBussolaBlock(choice, (k) => k);
+  assert.match(block, /<input type="checkbox" name="bussola" id="wod5e-mage-bussola">[\s\S]*<select name="bussolaId" id="wod5e-mage-bussola-id" class="hidden"[\s\S]*<option value="convinzione:a1">[\s\S]*data-role="bussolaReset"/);
+  assert.match(renderBussolaBlock({ options: [], used: false }, (k) => k), /WOD5E_MAGE\.Bussola\.None/);
+  assert.equal(bussolaDice({ querySelector: () => ({ checked: true }) }), 1);
+  assert.equal(bussolaDice({ querySelector: () => ({ checked: false }) }), 0);
+  assert.equal(readBussola({ querySelector: (sel) => sel.includes("bussolaId") ? { value: "ambizione" } : { checked: true } }, choice).id, "ambizione");
+  // Le Specializzazioni sulle opzioni della tendina dell'Abilità.
+  assert.deepEqual(skillSpecialtyNames({ system: { skills: { brawl: { bonuses: [{ source: "Lame" }, { source: " Lotta " }] }, occult: { bonuses: [] } } } }), { brawl: ["Lame", "Lotta"] });
   const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
     // Dal 10/9 notte: Armonia e Quintessenza coi numeri, poi Altro con la Convinzione.
-  assert.match(dialog, /name="harmony"[\s\S]*name="quintessence"[\s\S]*Arete\.Other"[\s\S]*<input type="checkbox" name="conviction" id="wod5e-mage-arete-conviction">[\s\S]*<select name="convictionId" id="wod5e-mage-arete-conviction-id" class="hidden"[\s\S]*data-role="convictionReset"[\s\S]*\{\{\/unless\}\}/);
+  assert.match(dialog, /name="harmony"[\s\S]*name="quintessence"[\s\S]*Arete\.Other"[\s\S]*\{\{\{bussolaHtml\}\}\}[\s\S]*\{\{\/unless\}\}/);
+  // La seconda Abilità non c'è più: al suo posto la Specializzazione come casella (+1).
+  assert.match(dialog, /name="primaryTrait"[\s\S]*data-specialties="\{\{trait\.specialties\}\}"[\s\S]*<input type="checkbox" name="skillSpecialty">[\s\S]*data-role="specialtyNames"/);
+  assert.doesNotMatch(dialog, /<select id="wod5e-mage-arete-secondary"/);
   const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-  assert.equal((arete.match(/await grantConvictionQuintessence\(actor, convictionKept\);/g) ?? []).length, 1, "a tiro fatto (ramo C: un'uscita sola)");
+  assert.equal((arete.match(/await grantBussolaQuintessence\(actor, bussolaKept\);/g) ?? []).length, 1, "a tiro fatto (ramo C: un'uscita sola)");
+  assert.match(arete, /const extraDice = specialtyDie \+ \(bussolaKept \? BUSSOLA_DICE : 0\);/);
+  // La conferma dei tiri di Abilità porta lo stesso blocco.
+  const confirm = readFileSync(new URL("../templates/dialogs/arete-roll-confirm.hbs", import.meta.url), "utf8");
+  assert.match(confirm, /\{\{\{bussolaHtml\}\}\}/);
+  assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /getCustomModifierTotal\(form\) \+ bussolaDice\(form\)/);
   // Il ramo C in arete.js: la riserva meno la soglia, la riuscita comprata, il Volgare fallito.
   assert.match(arete, /rollAreteWithParadox\(\{\s*pool: conto\.pool,\s*threshold,/);
   assert.match(arete, /effect\.vulgar && Number\.isFinite\(total\) && total < 1/);

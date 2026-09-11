@@ -125,8 +125,8 @@
         {{!-- Colonna destra: la riserva, la narrativa, la Tipologia Effetto, i numeri del conto, Altro. --}}
         {{#if show.side}}
         <div class="wod5e-mage-arete-side">
-            {{!-- La riserva (ramo A): Attributo, Abilità, Abilità. Ne basta uno; chi
-                 ne sceglie di più somma i dadi. L'Areté non tira: è il premio. --}}
+            {{!-- La riserva: Attributo e Abilità, più la Specializzazione (11/9: al
+                 posto della seconda Abilità, un dado in più). L'Areté non tira: è il premio. --}}
             {{#if show.traits}}
             <label class="wod5e-mage-arete-trait">
                 <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.RollSelection.Attribute"}}</span>
@@ -142,19 +142,16 @@
                 <select id="wod5e-mage-arete-primary" name="primaryTrait">
                     <option value="" data-value="0">{{localize "WOD5E_MAGE.RollSelection.None"}}</option>
                     {{#each skills as |trait|}}
-                        <option value="{{trait.key}}" data-value="{{trait.value}}">{{trait.label}} ({{trait.value}})</option>
+                        <option value="{{trait.key}}" data-value="{{trait.value}}" data-specialties="{{trait.specialties}}">{{trait.label}} ({{trait.value}})</option>
                     {{/each}}
                 </select>
             </label>
-            <label class="wod5e-mage-arete-trait">
-                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.RollSelection.Ability"}}</span>
-                <select id="wod5e-mage-arete-secondary" name="secondaryTrait">
-                    <option value="" data-value="0">{{localize "WOD5E_MAGE.RollSelection.None"}}</option>
-                    {{#each skills as |trait|}}
-                        <option value="{{trait.key}}" data-value="{{trait.value}}">{{trait.label}} ({{trait.value}})</option>
-                    {{/each}}
-                </select>
+            <label class="wod5e-mage-arete-trait wod5e-mage-arete-specialty" title="{{localize 'WOD5E_MAGE.Arete.SkillSpecialtyHint'}}">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.SkillSpecialty"}}</span>
+                <span class="wod5e-mage-arete-specialty-box"><input type="checkbox" name="skillSpecialty"> <small>+1</small> <small data-role="specialtyNames"></small></span>
             </label>
+            {{!-- La seconda Abilità non c'è più (11/9): il campo resta vuoto per i preset vecchi. --}}
+            <input type="hidden" id="wod5e-mage-arete-secondary" name="secondaryTrait" value="" data-value="0">
             {{else}}
                 {{!-- Al terzo passo la riserva è già scelta: i tratti viaggiano nascosti,
                      col loro valore, e il conto li legge da lì. --}}
@@ -224,31 +221,9 @@
             <span class="wod5e-mage-arete-row-label wod5e-mage-arete-altro-head">{{localize "WOD5E_MAGE.Arete.Other"}}</span>
             <div class="wod5e-mage-arete-conto">
             {{#unless saveMode}}
-            {{!-- La Convinzione rispettata (9/9): spuntata e scelta fra quelle in scheda,
-                 a tiro fatto un punto di Quintessenza risale sulla Ruota, una volta per scena. --}}
-            <div class="wod5e-mage-arete-conviction" title="{{localize 'WOD5E_MAGE.Arete.ConvictionHint'}}">
-                {{#if conviction.options.length}}
-                    <div data-role="convictionFresh" {{#if conviction.used}}hidden{{/if}}>
-                        <label class="wod5e-mage-arete-conviction-toggle wod5e-mage-arete-conto-row">
-                            <span class="wod5e-mage-arete-conto-control"><input type="checkbox" name="conviction" id="wod5e-mage-arete-conviction"></span>
-                            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Conviction"}}</span>
-                        </label>
-                        <select name="convictionId" id="wod5e-mage-arete-conviction-id" class="hidden" aria-label="{{localize 'WOD5E_MAGE.Arete.ConvictionPick'}}">
-                            {{#each conviction.options as |option|}}
-                                <option value="{{option.id}}">{{option.label}}</option>
-                            {{/each}}
-                        </select>
-                    </div>
-                    <div data-role="convictionUsed" class="wod5e-mage-arete-conviction-used" {{#unless conviction.used}}hidden{{/unless}}>
-                        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Conviction"}}</span>
-                        <em>{{localize "WOD5E_MAGE.Arete.ConvictionUsed"}}</em>
-                        <button type="button" data-role="convictionReset" title="{{localize 'WOD5E_MAGE.Arete.ConvictionNewSceneHint'}}"><i class="fa-solid fa-clapperboard" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Arete.ConvictionNewScene"}}</button>
-                    </div>
-                {{else}}
-                    <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Conviction"}}</span>
-                    <em>{{localize "WOD5E_MAGE.Arete.ConvictionNone"}}</em>
-                {{/if}}
-            </div>
+            {{!-- Rispetta la Bussola? (11/9): Ambizione, Desiderio o una Convinzione; un dado in più,
+                 +1 Quintessenza a tiro fatto, una volta per scena. Il blocco lo disegna bussola.js. --}}
+            {{{bussolaHtml}}}
             {{/unless}}
 
             {{!-- L'Effetto Mantenuto: se spuntato compare il nome, e a tiro risolto

@@ -48,6 +48,8 @@
         "tradizioni": "The nine Traditions",
         "disparati": "The ten Crafts of the Disparate"
       },
+      "CredoFamilyOn": "Family Sphere",
+      "CredoFamilyPick": "click to make it the family one",
       "CredoSphere": "Family Sphere of the Creed",
       "CredoSphereNone": "Sphere…"
     },
@@ -169,6 +171,9 @@
       "QuintessenceHint": "Every point spent is an extra die and leaves the Wheel. Points equal to the highest Sphere level buy the success without rolling (the red dice are rolled anyway). If the effect deals damage, it is aggravated.",
       "QuintessenceFlavor": "Quintessence {points} (+{points} dice; damage is aggravated)",
       "QuintessenceSpent": "Quintessence spent: {points}.",
+      "SkillSpecialty": "Specialty",
+      "SkillSpecialtyHint": "The Skill has a Specialty that fits the act: one extra die (11/9), outside the cap.",
+      "SkillSpecialtyFlavor": "Specialty +{dice}",
       "Conviction": "Conviction upheld",
       "ConvictionShort": "+1 Quintessence, once per scene",
       "ConvictionHint": "If this casting upheld one of your sheet's Convictions, after the roll one point of Quintessence returns to the Wheel. Once per scene.",
@@ -930,6 +935,7 @@
       "Credo": "Reset Creed",
       "Lineage": "Reset Lineage",
       "Compass": "Reset Compass",
+      "Word": "Reset",
       "Show": "Show the reset buttons",
       "ShowHint": "Creation mode: the reset buttons appear in their sections and the X clears a single trait.",
       "Confirm": "{label}: this clears that part of the sheet. Proceed?",
@@ -963,6 +969,22 @@
       "DoneGiven": "The Storyteller gets {points} Paradox points.",
       "DamagePhysical": "physical",
       "DamageMental": "mental"
+    },
+    "Bussola": {
+      "Ask": "Follows the Compass?",
+      "Short": "+1 die, +1 Quintessence after the roll",
+      "Hint": "If this act serves your Compass (Ambition, Desire or a Conviction), take one extra die and, after the roll, one Quintessence point rises on the Wheel. Once per scene.",
+      "Pick": "Which Compass entry",
+      "Ambition": "Ambition",
+      "Desire": "Desire",
+      "Conviction": "Conviction",
+      "None": "No Compass entry on the sheet.",
+      "Used": "Already followed in this scene.",
+      "NewScene": "New scene",
+      "NewSceneHint": "The scene changed: the Compass can give again.",
+      "Gained": "Compass followed ({label}): +1 Quintessence.",
+      "Full": "Compass followed, but the Wheel is full: nothing to regain.",
+      "Flavor": "Compass followed (+1 die): {label}"
     },
     "Compra": {
       "Label": "Bought success",

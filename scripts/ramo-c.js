@@ -6,8 +6,9 @@
  * il margine dei tiri di Abilità (il danno: arma più successi oltre il
  * primo) e i confronti. I rossi sono pari al Paradosso sulla Ruota e si
  * tirano sempre, anche a riserva azzerata: si convertono dai dadi rimasti
- * e, se sono di più, quelli in più contano solo per l'occhio (PROPOSTA
- * dello studio). Dalla 0.87.0 il modulo è in ramo C di default, senza
+ * e, se sono di più, quelli in più si aggiungono e contano anche loro
+ * (verdetto di Blue dell'11/9 pomeriggio: la PROPOSTA «solo per l'occhio»
+ * è caduta). Dalla 0.87.0 il modulo è in ramo C di default, senza
  * interruttore (ordine di Blue: «vorrei ora andassimo in Default C»).
  * Tutto qui è puro: si prova fuori da Foundry.
  */
@@ -39,19 +40,21 @@ export function ramoCDice(pool, threshold) {
 
 /**
  * Come si dividono i dadi: i rossi sono tanti quanto il Paradosso e si
- * tirano sempre; si convertono dai dadi rimasti dopo la soglia. Quelli
- * oltre i dadi rimasti si tirano lo stesso ma contano solo per l'occhio.
+ * tirano sempre; si convertono dai dadi rimasti dopo la soglia, e quelli
+ * oltre i dadi rimasti si aggiungono. Contano tutti (11/9 pomeriggio).
  */
 export function splitRamoCDice(dice, paradox) {
   const rolled = count(dice);
   const reds = count(paradox);
-  const countedParadox = Math.min(reds, rolled);
+  const converted = Math.min(reds, rolled);
+  // Tutti i rossi contano (Blue, 11/9 pomeriggio: «3 10 10 8, su 4 dadi
+  // dovrebbe essere 3 successi»): la PROPOSTA «solo per l'occhio» è caduta.
   return {
-    basicDice: rolled - countedParadox,
+    basicDice: rolled - converted,
     paradoxDice: reds,
-    countedParadox,
-    eyeOnly: reds - countedParadox,
-    totalDice: rolled - countedParadox + reds
+    countedParadox: reds,
+    eyeOnly: 0,
+    totalDice: rolled - converted + reds
   };
 }
 

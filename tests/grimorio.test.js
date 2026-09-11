@@ -61,7 +61,7 @@ const grimorioTemplate = readFileSync(new URL("../templates/dialogs/grimorio.hbs
 assert.match(grimorioTemplate, /data-role="grimorioSearch"[\s\S]*data-effetto="\{\{entry\.id\}\}"/);
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
 // Ramo C (11/9): la Quintessenza è dadi, o compra la riuscita; scende dalla Ruota al tiro.
-assert.match(arete, /const conto = ramoCPool\(\{\s*traits: basePool,\s*bonus: bonusDice,\s*specialtyDice: specialty\.successes,\s*quintessence,\s*sphereMax,\s*threshold\s*\}\);/);
+assert.match(arete, /const conto = ramoCPool\(\{\s*traits: basePool,\s*bonus: bonusDice \+ extraDice,\s*specialtyDice: specialty\.successes,\s*quintessence,\s*sphereMax,\s*threshold\s*\}\);/);
 assert.match(arete, /quintessence: Math\.max\(balanceBefore\.quintessence - quintessence, 0\)/);
 assert.match(arete, /effectKind,\n\s+arete: arete\.value/);
 // L'Ustione non si segna più da sola: la scelta sta nei tasti sotto la carta (ustione.js).

@@ -6,6 +6,7 @@ import {
 import { getSituationalModifiers } from "/systems/wod5e/system/scripts/rolls/situational-modifiers.js";
 import { WOD5eRoll } from "/systems/wod5e/system/scripts/system-rolls.js";
 import { bonusDiceExcess } from "./arete.js";
+import { bussolaDice, grantBussolaQuintessence, readBussola, renderBussolaBlock, wireBussola } from "./bussola.js";
 import { MODULE_ID } from "./constants.js";
 import {
   calculateRamoCSuccesses,
@@ -162,7 +163,8 @@ function getCustomModifierTotal(form) {
  * modificatori. Torna il conto, per chi lo chiama al tiro.
  */
 export function readDialogDice(form, { paradoxRating = 0, bought = false, onlyParadox = false } = {}) {
-  const pool = Math.max((form.querySelector("#inputBasicDice")?.valueAsNumber || 0) + getCustomModifierTotal(form), 0);
+  // La Bussola rispettata (11/9) vale un dado, fuori dal tetto.
+  const pool = Math.max((form.querySelector("#inputBasicDice")?.valueAsNumber || 0) + getCustomModifierTotal(form) + bussolaDice(form), 0);
   const threshold = Math.max(Number(form.querySelector("#inputDifficulty")?.value) || 0, 0);
   const conto = ramoCDice(pool, threshold);
   const dice = bought || onlyParadox ? 0 : conto.dice;
@@ -197,6 +199,7 @@ function paintDialogDice(form, options) {
 function initializeDialog(dialog, options) {
   const form = dialog.element;
   const repaint = () => paintDialogDice(form, options);
+  wireBussola(form, options.actor, repaint);
   form.querySelectorAll("#inputBasicDice, #inputDifficulty").forEach((input) => {
     input.addEventListener("input", repaint);
     input.addEventListener("change", repaint);
@@ -253,6 +256,7 @@ async function postDicelessMessage(actor, title, { flavor, cardData, banner = ""
  * @param burn          l'Ustione se scatta il Contraccolpo: la soglia (i danni)
  * @param sphereLevel   il livello della Sfera usata (la più alta): i punti Paradosso al Narratore
  * @param skill         un tiro di Abilità: niente rossi, e il margine oltre il primo successo
+ * @param bussola       (tiri di Abilità) le voci della Bussola: la finestra chiede «Rispetta la Bussola?»
  */
 export async function rollAreteWithParadox({
   actor,
@@ -268,6 +272,7 @@ export async function rollAreteWithParadox({
   effectKind = "",
   arete = 0,
   skill = false,
+  bussola = null,
   title,
   flavor = "",
   card = null,
@@ -284,7 +289,8 @@ export async function rollAreteWithParadox({
   // tetto +3 già applicato (tronco). La soglia si toglie dopo, nella finestra.
   const startingExcess = skill ? 0 : bonusDiceExcess(bonusDice, activeModifiersNow);
   const reds = skill ? 0 : Math.max(Math.trunc(Number(paradoxRating) || 0), 0);
-  const options = { paradoxRating: reds, bought, onlyParadox };
+  const options = { paradoxRating: reds, bought, onlyParadox, actor };
+  const bussolaHtml = skill && bussola ? renderBussolaBlock(bussola, game.i18n.localize.bind(game.i18n)) : "";
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll-confirm.hbs",
     {
@@ -295,6 +301,7 @@ export async function rollAreteWithParadox({
       onlyParadox,
       bought,
       showReds: !skill,
+      bussolaHtml,
       rollMode: game.settings.get("core", "rollMode"),
       rollModes: CONFIG.Dice.rollModes,
       situationalModifiers
@@ -338,8 +345,13 @@ export async function rollAreteWithParadox({
             || game.settings.get("core", "rollMode");
           const format = game.i18n.format.bind(game.i18n);
           const localize = game.i18n.localize.bind(game.i18n);
+          // La Bussola rispettata nel tiro di Abilità: un dado ora (già nel conto), +1 Quintessenza a tiro fatto.
+          const bussolaKept = skill && bussola ? readBussola(form, bussola) : null;
 
           let rollFlavor = flavor;
+          if (bussolaKept) {
+            rollFlavor += renderRollNote(format("WOD5E_MAGE.Bussola.Flavor", { label: bussolaKept.label }), "bussola");
+          }
           if (!onlyParadox) {
             rollFlavor += renderRollNote(format("WOD5E_MAGE.RamoC.DiceNote", { note: diceNote(conto) }), "dice");
           }
@@ -432,10 +444,12 @@ export async function rollAreteWithParadox({
           roll.options.flavor = finalFlavor;
 
           const flags = { [MODULE_ID]: { [ROLL_CARD_FLAG]: cardData } };
-          return roll.toMessage(
+          const message = await roll.toMessage(
             { speaker: ChatMessage.getSpeaker({ actor }), flags },
             { rollMode }
           );
+          if (bussolaKept) await grantBussolaQuintessence(actor, bussolaKept);
+          return message;
         }
       },
       {

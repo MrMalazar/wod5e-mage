@@ -55,6 +55,8 @@
 {{else}}
 <input type="hidden" id="inputDifficulty" value="0">
 {{/unless}}
+{{!-- Rispetta la Bussola? (11/9), solo nei tiri di Abilità: il blocco lo disegna bussola.js. --}}
+{{{bussolaHtml}}}
 <div class="form-group">
     <label>{{localize "WOD5E.RollList.RollMode"}}</label>
     <select name="rollMode" data-type="String">

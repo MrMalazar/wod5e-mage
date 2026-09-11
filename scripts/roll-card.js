@@ -255,11 +255,35 @@ export function markRollOpen(html) {
   if (label?.classList.contains("failure")) label.classList.add("wod5e-mage-roll-open");
 }
 
+/** Le tendine «Dettagli» aperte, per messaggio: sopravvivono ai render della chat. */
+const openDetails = new Set();
+
+/**
+ * La tendina «Dettagli» si apre a mano (Blue, 11/9: «se clicco su dettagli
+ * non si apre nulla»): il clic sul riassunto lo gestiamo noi, perché la chat
+ * di Foundry lo intercetta e il <details> non cambia stato da solo.
+ */
+export function wireRollDetails(html, messageId) {
+  const details = html?.querySelector?.("details.wod5e-mage-roll-card-details");
+  const summary = details?.querySelector("summary");
+  if (!details || !summary || summary.dataset.wired) return false;
+  summary.dataset.wired = "1";
+  details.open = openDetails.has(messageId);
+  summary.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    details.open = !details.open;
+    if (details.open) openDetails.add(messageId); else openDetails.delete(messageId);
+  });
+  return true;
+}
+
 export function decorateRollCard(message, html) {
   const data = message?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG);
   if (!data || !html?.querySelector) return false;
   applyMageTotal(html, data);
   applyMageTitle(html, data);
+  wireRollDetails(html, message.id);
   const icons = html.querySelector(".dice-result .dice-icons");
   if (!icons || icons.parentElement.querySelector(".wod5e-mage-roll-top")) return false;
 

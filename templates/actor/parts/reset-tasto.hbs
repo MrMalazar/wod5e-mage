@@ -1,6 +1,8 @@
 {{!-- Il tasto di reset di una parte della scheda (Blue, 11/9): sta a sinistra
-     del titolo della sua sezione, e si vede solo con «Mostra i tasti di reset»
-     acceso nel memo di creazione. Contesto: {id, label, icon}; locked da @root. --}}
+     del titolo della sua sezione, nero e rosso, con «Reset» sotto l'icona, e
+     si vede solo con «Mostra i tasti di reset» acceso nel memo di creazione.
+     Contesto: {id, label, icon}; locked da @root. --}}
 <button type="button" class="wod5e-mage-reset-tasto" data-action="resetSection" data-reset="{{id}}" title="{{label}}" aria-label="{{label}}" {{#if @root.locked}}disabled{{/if}}>
     <i class="fa-solid {{icon}}" aria-hidden="true"></i>
+    <span>{{localize "WOD5E_MAGE.Reset.Word"}}</span>
 </button>

@@ -9,6 +9,7 @@ import { groupIncantesimiBySphere, onIncantesimoAdd, onIncantesimoChat, onIncant
 import { onGrimorioComuneOpen, onIncantesimoShare } from "../grimorio-comune.js";
 import { bindNoteBoard, noteBoardHeight, onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResetsById } from "../reset.js";
+import { onCredoFamilyPick } from "../famiglie.js";
 import { onStrumentiSuggest } from "../strumenti.js";
 import { getArete, onAreteChange, onAreteRoll, onAreteSimple } from "../arete.js";
 import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
@@ -175,6 +176,7 @@ export class MageActorSheet extends MortalActorSheet {
       specialtyRoll: onSpecialtyRoll,
       specialtyDelete: onSpecialtyDelete,
       familySphereToggle: onFamilySphereToggle,
+      credoFamilyPick: onCredoFamilyPick,
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
       traitsLayoutToggle: onTraitsLayoutToggle,
@@ -464,7 +466,8 @@ export class MageActorSheet extends MortalActorSheet {
       context.credos = alphabetical(FOCUS_CREDOS.map((id) => ({ id, label: localize(`WOD5E_MAGE.Focus.Credos.${id}`), selected: id === credo })), game.i18n.lang);
       context.credoLabel = FOCUS_CREDOS.includes(credo) ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "";
       const credoChoice = actor.getFlag(MODULE_ID, "focus")?.credoSpheres ?? {};
-      context.credoSpheres = credoSphereBadges(credo, localize, credoChoice);
+      // Delle due Sfere del Credo una sola è di famiglia (11/9): si sceglie cliccando il simbolo.
+      context.credoSpheres = credoSphereBadges(credo, localize, credoChoice, actor.getFlag(MODULE_ID, "focus")?.credoFamily);
       // Potere e Scienza: le due Sfere di famiglia le sceglie il giocatore.
       context.credoFree = isFreeCredo(credo);
       context.credoSphereChoices = prepareCredoSphereChoices(credoChoice, localize);

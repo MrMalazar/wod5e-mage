@@ -7873,22 +7873,36 @@
   display: none;
 }
 .wod5e-mage-reset-tasto {
-  width: 1.6em;
-  height: 1.6em;
-  padding: 0;
-  margin-right: 0.35em;
-  border: 1px solid rgb(217 168 39 / 55%);
-  border-radius: 3px;
-  background: rgb(217 168 39 / 10%);
-  color: var(--wod5e-mage-gold, #d9a827);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  width: 3.2em;
+  min-height: 3.2em;
+  padding: 0.25em 0.2em;
+  margin-right: 0.5em;
+  border: 1px solid #b5433c;
+  border-radius: 4px;
+  background: #0d0b12;
+  color: #e05a5a;
   font-size: 0.8em;
   line-height: 1;
   cursor: pointer;
   flex: 0 0 auto;
   vertical-align: middle;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 60%);
 }
-.wod5e-mage-reset-tasto:hover:not(:disabled) { border-color: #e05a5a; color: #e05a5a; }
+.wod5e-mage-reset-tasto > i { font-size: 1.35em; }
+.wod5e-mage-reset-tasto > span {
+  font-size: 0.7em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.wod5e-mage-reset-tasto:hover:not(:disabled) { background: #b5433c; color: #0d0b12; border-color: #e05a5a; box-shadow: 0 0 6px #e05a5a; }
 .wod5e-mage-reset-tasto:disabled { opacity: 0.4; cursor: not-allowed; }
+.wod5e-mage-reset-all { border-color: #b5433c !important; background: #0d0b12 !important; color: #e05a5a !important; }
 .wod5e-mage-reset-toggle {
   display: inline-flex;
   align-items: center;
@@ -7931,3 +7945,32 @@
   color: #e9e4d6;
 }
 .wod5e-mage-suggest > li:hover { background: rgb(217 168 39 / 20%); color: var(--wod5e-mage-gold, #d9a827); }
+
+/* I numeri delle colonne della tavola degli Ambiti (Blue, 11/9: «troppo
+   troppo piccoli»): grandi e pesanti, sul fondo giallo della prima riga. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table thead th:not(.wod5e-mage-scope-col-name):not(.wod5e-mage-scope-col-reading),
+.wod5e-mage-scope-table thead th:not(.wod5e-mage-scope-col-name):not(.wod5e-mage-scope-col-reading) {
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.35rem 0.4rem;
+  min-width: 2.2rem;
+}
+
+/* Il blocco «Rispetta la Bussola?» nelle finestre del tiro (11/9). */
+.wod5e-mage-bussola { margin: 0.35em 0; }
+.wod5e-mage-bussola .wod5e-mage-bussola-toggle { display: flex; align-items: center; gap: 0.4em; }
+.wod5e-mage-bussola .wod5e-mage-bussola-toggle small { opacity: 0.75; font-weight: 400; margin-left: 0.3em; }
+.wod5e-mage-bussola select { width: 100%; margin-top: 0.25em; }
+.wod5e-mage-bussola .hidden { display: none; }
+.wod5e-mage-bussola-used { display: flex; align-items: center; gap: 0.5em; flex-wrap: wrap; }
+.wod5e-mage-bussola-used button { width: auto; padding: 0.1em 0.5em; font-size: 0.85em; }
+.wod5e-mage-arete-specialty-box { display: inline-flex; align-items: center; gap: 0.35em; }
+.wod5e-mage-arete-specialty-box small { opacity: 0.8; }
+
+/* Le due Sfere del Credo nell'Appartenenza (11/9): una di famiglia, accesa;
+   l'altra sbiadita. Un clic sceglie. */
+.wod5e-mage-credo-sphere { cursor: pointer; transition: filter 0.15s, opacity 0.15s; }
+.wod5e-mage-credo-sphere-family { filter: drop-shadow(0 0 4px var(--wod5e-mage-gold, #d9a827)); opacity: 1; }
+.wod5e-mage-credo-sphere-dim { opacity: 0.35; filter: grayscale(1); }
+.wod5e-mage-credo-sphere-dim:hover { opacity: 0.7; }

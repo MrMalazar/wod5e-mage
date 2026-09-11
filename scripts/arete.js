@@ -7,6 +7,7 @@ import {
   paradoxGainForMagickType
 } from "./magick-balance.js";
 import { quintessenceSpend, ramoCDice } from "./ramo-c.js";
+import { BUSSOLA_DICE, BUSSOLA_SCENE_FLAG, bussolaChoice, grantBussolaQuintessence, prepareBussolaChoice, renderBussolaBlock, wireBussola } from "./bussola.js";
 import {
   findMageRollTrait,
   prepareMageRollTraits,
@@ -24,7 +25,6 @@ import { maintainedEffectRow, shouldRecordEffect } from "./ongoing-magick.js";
 import { effectSphereLevels, openGrimorio } from "./grimorio.js";
 import { normalizeEffectKind } from "./paradox-burst.js";
 import { loadSpherePowers, specialtyScopes } from "./sphere-specialties.js";
-import { prepareConvictions } from "./personaggio-extra.js";
 
 export const ARETE_MIN = 1;
 export const ARETE_MAX = 5;
@@ -66,6 +66,19 @@ export function calculateAreteTraitPool(...traits) {
 
 /** Il tetto dei dadi in più: premio, Armonia e Bonus scritti insieme. */
 export const BONUS_DICE_CAP = 3;
+
+/** La Specializzazione dell'Abilità nel tiro di Areté (11/9): un dado, fuori dal tetto. */
+export const SKILL_SPECIALTY_DICE = 1;
+
+/** Le Specializzazioni di ogni Abilità (i bonuses del sistema), per le tendine. */
+export function skillSpecialtyNames(actor) {
+  const out = {};
+  for (const [id, skill] of Object.entries(actor?.system?.skills ?? {})) {
+    const names = (skill?.bonuses ?? []).map((bonus) => String(bonus?.source ?? "").trim()).filter(Boolean);
+    if (names.length) out[id] = names;
+  }
+  return out;
+}
 
 /** La soglia della Magick non supera il 7, Rituali compresi. */
 export const THRESHOLD_CAP = 7;
@@ -386,6 +399,11 @@ function wireDifficulty(dialog) {
   const quintessence = root.querySelector("#wod5e-mage-arete-quintessence");
   const buyButton = root.querySelector("[data-role=buySuccess]");
   const buyPriceOut = root.querySelector("[data-role=buyPrice]");
+  // La Specializzazione dell'Abilità (11/9: al posto della seconda Abilità)
+  // e la Bussola rispettata: un dado l'una, fuori dal tetto +3.
+  const specialtyBox = root.querySelector("input[name=skillSpecialty]");
+  const specialtyNames = root.querySelector("[data-role=specialtyNames]");
+  const bussolaBox = root.querySelector("input[name=bussola]");
 
   const autoSuccessOut = root.querySelector("[data-role=autoSuccesses]");
   const areteValue = Math.max(Math.trunc(Number(root.querySelector("[data-arete]")?.dataset.arete) || 0), 0);
@@ -409,9 +427,14 @@ function wireDifficulty(dialog) {
     const sphereMax = Math.max(0, ...sphereLevels.map((entry) => entry.level));
     // Il ramo C: riserva meno soglia uguale dadi; la Quintessenza al prezzo
     // della Sfera compra la riuscita, sotto il prezzo è un dado per punto.
+    if (specialtyNames) {
+      const names = primary?.selectedOptions?.[0]?.dataset?.specialties ?? "";
+      specialtyNames.textContent = names ? `(${names})` : "";
+    }
+    const extraDice = (specialtyBox?.checked ? SKILL_SPECIALTY_DICE : 0) + (bussolaBox?.checked ? BUSSOLA_DICE : 0);
     const conto = ramoCPool({
       traits: calculateAreteTraitPool(optionValue(attribute), optionValue(primary), optionValue(secondary)),
-      bonus: prizeDice + normalizeHarmony(harmony?.value),
+      bonus: prizeDice + normalizeHarmony(harmony?.value) + extraDice,
       specialtyDice,
       quintessence: quintessenceSpent,
       sphereMax,
@@ -448,7 +471,7 @@ function wireDifficulty(dialog) {
     update();
   });
 
-  [attribute, primary, secondary, prizeBox, harmony, quintessence].forEach((control) => {
+  [attribute, primary, secondary, prizeBox, harmony, quintessence, specialtyBox, bussolaBox].forEach((control) => {
     control?.addEventListener("change", update);
     control?.addEventListener("input", update);
   });
@@ -636,8 +659,8 @@ const TRAIT_FIELDS = Object.freeze([
 /** Quali campi appartengono a ogni passo dell'Areté semplificata. */
 const STEP_OWNS = Object.freeze({
   1: (key) => key === "goal" || key.startsWith("sphere-") || key.startsWith("scope-"),
-  2: (key) => ["effectKind", "attributeTrait", "primaryTrait", "secondaryTrait", "coincidental", "vulgar", "witnesses"].includes(key),
-  3: (key) => ["prize", "harmony", "quintessence", "maintained", "maintainedName", "conviction", "convictionId"].includes(key)
+  2: (key) => ["effectKind", "attributeTrait", "primaryTrait", "secondaryTrait", "skillSpecialty", "coincidental", "vulgar", "witnesses"].includes(key),
+  3: (key) => ["prize", "harmony", "quintessence", "maintained", "maintainedName", "bussola", "bussolaId"].includes(key)
 });
 
 function clampLevel(value, max) {
@@ -745,85 +768,7 @@ function applyAreteAnswers(dialog, answers) {
 }
 
 /** Il flag «Convinzione già rigenerata in questa scena» (9/9). */
-export const CONVICTION_SCENE_FLAG = "convinzioneScena";
-
-/**
- * Le Convinzioni della scheda per la finestra del tiro (9/9): gruppo (o
- * Credo, tradotti dalla scheda) e testo, e se in questa scena la
- * rigenerazione è già stata usata.
- */
-export function prepareConvictionChoice(actor) {
-  const options = prepareConvictions(actor)
-    .filter((row) => String(row.text ?? "").trim())
-    .map((row) => {
-      const group = [...(row.groups ?? []), ...(row.credos ?? [])].find((entry) => entry.selected);
-      const label = group ? `${group.label}: ${row.text.trim()}` : row.text.trim();
-      return { id: row.id, label };
-    });
-  return {
-    options,
-    used: Boolean(actor.getFlag(MODULE_ID, CONVICTION_SCENE_FLAG)),
-    usedLabel: String(actor.getFlag(MODULE_ID, CONVICTION_SCENE_FLAG)?.label ?? "")
-  };
-}
-
-/** La Convinzione scelta nella finestra, se la casella è spuntata e non è già stata usata. */
-export function convictionChoice(result, conviction) {
-  if (!conviction || conviction.used || !isChecked(result?.conviction)) return null;
-  return conviction.options.find((option) => option.id === String(result?.convictionId ?? "")) ?? null;
-}
-
-/**
- * La Quintessenza della Convinzione rispettata (ordine di Blue, 9/9): a
- * tiro fatto, una volta per scena, un punto risale sulla Ruota. Se la Ruota
- * è piena non c'è niente da rigenerare, e la volta resta buona.
- */
-export function quintessenceAfterConviction(balance) {
-  // Le nove celle sono in comune col Paradosso (che non scende sotto il pavimento).
-  const taken = Math.max(Math.trunc(Number(balance?.paradox) || 0), Math.trunc(Number(balance?.floor) || 0), 0);
-  const room = MAGICK_TRACK_MAX - taken;
-  const current = Math.max(Math.trunc(Number(balance?.quintessence) || 0), 0);
-  const next = Math.min(current + 1, room);
-  return { quintessence: Math.max(next, Math.min(current, room)), gained: next > current };
-}
-
-async function grantConvictionQuintessence(actor, conviction) {
-  if (!conviction || !actor?.isOwner) return false;
-  if (actor.getFlag(MODULE_ID, CONVICTION_SCENE_FLAG)) return false;
-  const balance = getMagickBalance(actor);
-  const { quintessence, gained } = quintessenceAfterConviction(balance);
-  if (!gained) {
-    ui.notifications.info(game.i18n.localize("WOD5E_MAGE.Arete.ConvictionFull"));
-    return false;
-  }
-  await actor.setFlag(MODULE_ID, "magickBalance", { quintessence, paradox: balance.paradox });
-  await actor.setFlag(MODULE_ID, CONVICTION_SCENE_FLAG, { used: true, label: conviction.label });
-  ui.notifications.info(game.i18n.format("WOD5E_MAGE.Arete.ConvictionGained", { conviction: conviction.label }));
-  return true;
-}
-
-/**
- * La casella della Convinzione: spuntata, mostra la tendina di quale; il
- * tasto «Nuova scena» riarma la rigenerazione e riapre la casella.
- */
-function wireConviction(dialog, actor) {
-  const root = dialog?.element;
-  const box = root?.querySelector("#wod5e-mage-arete-conviction");
-  const pick = root?.querySelector("#wod5e-mage-arete-conviction-id");
-  if (box && pick) {
-    box.addEventListener("change", () => {
-      pick.classList.toggle("hidden", !box.checked);
-    });
-  }
-  const reset = root?.querySelector("[data-role=convictionReset]");
-  reset?.addEventListener("click", async (event) => {
-    event.preventDefault();
-    if (!actor?.isOwner) return;
-    await actor.unsetFlag(MODULE_ID, CONVICTION_SCENE_FLAG);
-    root.querySelector("[data-role=convictionUsed]")?.setAttribute("hidden", "");
-    root.querySelector("[data-role=convictionFresh]")?.removeAttribute("hidden");
-  });
-}
+export const CONVICTION_SCENE_FLAG = BUSSOLA_SCENE_FLAG;
 
 /**
  * La finestra del tiro di Areté, in due modi: «roll» tira; «save» (il
@@ -868,9 +813,14 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   const sphereLevelsOwned = Object.fromEntries(rollSpheres.map((sphere) => [sphere.id, sphere.value]));
   const localize = game.i18n.localize.bind(game.i18n);
   const readingFor = dotReadings(localize, { arete: arete.value });
-  // La Convinzione rispettata (9/9): le Convinzioni della scheda, e se è già stata usata in scena.
-  const conviction = prepareConvictionChoice(actor);
-  const base = { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, preset, conviction, ...traits };
+  // La Bussola rispettata (11/9, al posto della Convinzione del 9/9): Ambizione,
+  // Desiderio e Convinzioni in tendina, un dado in più e +1 Quintessenza a tiro fatto.
+  const bussola = prepareBussolaChoice(actor);
+  const bussolaHtml = saveMode ? "" : renderBussolaBlock(bussola, localize);
+  // Le Specializzazioni di ogni Abilità, sulle opzioni della tendina.
+  const specialtyNames = skillSpecialtyNames(actor);
+  const skillsWithSpecialties = traits.skills.map((trait) => ({ ...trait, specialties: (specialtyNames[trait.id] ?? []).join(", ") }));
+  const base = { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, preset, bussolaHtml, ...traits, skills: skillsWithSpecialties };
 
   // Una finestra: tutta (step 0) o un passo dell'Areté semplificata (1, 2, 3).
   const ask = async (step = 0, answers = {}) => {
@@ -904,7 +854,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
         wireDifficulty(dialog);
         wireScopeTable(dialog);
         wireMaintainedEffect(dialog);
-        wireConviction(dialog, actor);
+        wireBussola(dialog.element, actor);
         wireGrimorio(dialog, sphereLevelsOwned);
         applyAretePreset(dialog, preset);
         applyAreteAnswers(dialog, answers);
@@ -966,17 +916,20 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   // sono aggravati.
   const quintessence = Math.min(Math.max(Math.trunc(Number(result.quintessence) || 0), 0), quintessenceAvailable);
   const sphereMax = Math.max(0, ...sphereEntries.map((entry) => entry.level));
-  // La Convinzione rispettata (9/9): a tiro fatto, +1 Quintessenza una volta per scena.
-  const convictionKept = convictionChoice(result, conviction);
+  // La Bussola rispettata (11/9): un dado in più ora, +1 Quintessenza a tiro fatto, una volta per scena.
+  const bussolaKept = bussolaChoice(result, bussola);
+  // La Specializzazione dell'Abilità (11/9): un dado in più, fuori dal tetto.
+  const specialtyDie = isChecked(result.skillSpecialty) ? SKILL_SPECIALTY_DICE : 0;
   const goal = String(result.goal ?? "").trim();
   const effectKind = normalizeEffectKind(result.effectKind);
 
   const prizeDice = options.usePrize ? prize.dice : 0;
   const bonusDice = prizeDice + options.harmony;
+  const extraDice = specialtyDie + (bussolaKept ? BUSSOLA_DICE : 0);
   const basePool = calculateAreteTraitPool(...selectedTraits.map((trait) => trait.value));
   const conto = ramoCPool({
     traits: basePool,
-    bonus: bonusDice,
+    bonus: bonusDice + extraDice,
     specialtyDice: specialty.successes,
     quintessence,
     sphereMax,
@@ -1017,8 +970,11 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       ? game.i18n.format("WOD5E_MAGE.RamoC.BoughtFlavor", { points: quintessence, price: sphereMax })
       : game.i18n.format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: quintessence }));
   }
-  if (convictionKept) {
-    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.ConvictionFlavor", { conviction: convictionKept.label }));
+  if (specialtyDie > 0) {
+    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.SkillSpecialtyFlavor", { dice: specialtyDie }));
+  }
+  if (bussolaKept) {
+    bonusParts.push(game.i18n.format("WOD5E_MAGE.Bussola.Flavor", { label: bussolaKept.label }));
   }
   if (specialty.successes > 0) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.SpecialtyDiceFlavor", {
@@ -1124,7 +1080,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     if (effect.vulgar && Number.isFinite(total) && total < 1 && actor.isOwner) {
       await grantFailedVulgarQuintessence(actor);
     }
-    await grantConvictionQuintessence(actor, convictionKept);
+    await grantBussolaQuintessence(actor, bussolaKept);
     await recordEffect(actor, result, effect);
   }
 }
