@@ -9,7 +9,7 @@ const actor = {
     sortedSkills: {
       physical: [
         { id: "brawl", displayName: "Rissa", value: 3 },
-        { id: "firearms", displayName: "Armi da fuoco", value: 5 }
+        { id: "melee", displayName: "Mischia di sistema", value: 5 }
       ],
       mental: [{ id: "occult", displayName: "Occulto", value: 4 }],
       social: [{ id: "persuasion", displayName: "Convincere", value: 2 }]
@@ -21,14 +21,16 @@ const actor = {
   }
 };
 
+const NOMI = { "WOD5E_MAGE.Skills.Melee": "Mischia", "WOD5E_MAGE.Skills.Veil": "Velo" };
 const traits = prepareMageRollTraits(actor, {
-  localize: (key) => key === "WOD5E_MAGE.Skills.Combat" ? "Combattimento" : key,
+  localize: (key) => NOMI[key] ?? key,
   lang: "it"
 });
 
-assert.deepEqual(traits.skills.map((trait) => trait.id), ["brawl", "persuasion", "occult"]);
-assert.equal(traits.skills.find((trait) => trait.id === "brawl").label, "Combattimento");
-assert.equal(traits.skills.some((trait) => trait.id === "firearms"), false);
+// In fila alfabetica coi nomi di casa: Convincere, Mischia, Velo; la chiave assorbita (melee) sparisce.
+assert.deepEqual(traits.skills.map((trait) => trait.id), ["persuasion", "brawl", "occult"]);
+assert.equal(traits.skills.find((trait) => trait.id === "brawl").label, "Mischia");
+assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
 
 const twoAbilities = compileMageTraitRoll({
   dataset: {},
@@ -36,7 +38,7 @@ const twoAbilities = compileMageTraitRoll({
   primarySkillId: "brawl",
   secondaryKey: "skill:occult"
 });
-assert.equal(twoAbilities.label, "Combattimento + Occulto");
+assert.equal(twoAbilities.label, "Mischia + Velo");
 assert.equal(twoAbilities.valuePaths, "skills.brawl.value skills.occult.value");
 assert.equal(twoAbilities.selectors, "skills skills.brawl skills.occult");
 assert.equal(twoAbilities.selectDialog, false);
@@ -47,7 +49,7 @@ const abilityAndAttribute = compileMageTraitRoll({
   primarySkillId: "occult",
   secondaryKey: "attribute:intelligence"
 });
-assert.equal(abilityAndAttribute.label, "Occulto + Intelligenza");
+assert.equal(abilityAndAttribute.label, "Velo + Intelligenza");
 assert.equal(
   abilityAndAttribute.valuePaths,
   "skills.occult.value attributes.intelligence.value"

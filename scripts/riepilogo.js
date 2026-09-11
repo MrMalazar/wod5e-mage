@@ -1,5 +1,5 @@
 import { MODULE_ID } from "./constants.js";
-import { CHIAVI_VIVE } from "./abilita-essenziali.js";
+import { CHIAVI_VIVE, TETTO_CREAZIONE, skillsOverCap } from "./abilita-essenziali.js";
 import { ATTRIBUTE_KEYS } from "./tratti-icone.js";
 import { PERSONAGGIO_TABLES } from "./personaggio-extra.js";
 import { getSphereSelection, SPHERES } from "./spheres.js";
@@ -18,27 +18,23 @@ export const GRADI = Object.freeze([
   Object.freeze({ id: "maestro", arete: 4, spheres: 4, attributes: 2, skills: 7, merits: 7, flaws: 4 })
 ]);
 
-/** I profili delle Abilità (LIBRO, «Le Abilità»): quanti pallini danno. */
-export const PROFILI_ABILITA = Object.freeze([
-  Object.freeze({ id: "bilanciato", dots: 26 }),
-  Object.freeze({ id: "factotum", dots: 29 }),
-  Object.freeze({ id: "specialista", dots: 22 }),
-  Object.freeze({ id: "libero", dots: 25 })
-]);
+/**
+ * La creazione base: 22 Attributi, 19 pallini di Abilità liberi col tetto a 3
+ * (V6: 18 su tredici voci; qui una voce in più vale un pallino in più, verdetto
+ * di Blue dell'11/9; le tre ripartizioni del 18/8 non esistono più), 7 fra Background
+ * e Pregi (9 con due gruppi della Sfida), 2 Difetti, 6 Sfere (7 con la Sfida completa).
+ */
+export const BASE_CREAZIONE = Object.freeze({ attributes: 22, skills: 19, skillCap: TETTO_CREAZIONE, merits: 7, flaws: 2, spheres: 6 });
 
-/** La creazione base: 22 Attributi, 7 fra Background e Pregi (9 con due gruppi della Sfida), 2 Difetti, 6 Sfere (7 con la Sfida completa). */
-export const BASE_CREAZIONE = Object.freeze({ attributes: 22, merits: 7, flaws: 2, spheres: 6 });
-
-/** I traguardi della creazione per grado, profilo e gruppi della Sfida completati. */
-export function creationTargets(gradoId = "neofita", profiloId = "bilanciato", groupsDone = 0) {
+/** I traguardi della creazione per grado e gruppi della Sfida completati. */
+export function creationTargets(gradoId = "neofita", groupsDone = 0) {
   const grado = GRADI.find((g) => g.id === gradoId) ?? GRADI[0];
-  const profilo = PROFILI_ABILITA.find((p) => p.id === profiloId) ?? PROFILI_ABILITA[0];
   return {
     grado: grado.id,
-    profilo: profilo.id,
     arete: grado.arete,
     attributes: BASE_CREAZIONE.attributes + grado.attributes,
-    skills: profilo.dots + grado.skills,
+    skills: BASE_CREAZIONE.skills + grado.skills,
+    skillCap: BASE_CREAZIONE.skillCap,
     merits: BASE_CREAZIONE.merits + (groupsDone >= 2 ? 2 : 0) + grado.merits,
     flaws: BASE_CREAZIONE.flaws + grado.flaws,
     spheres: BASE_CREAZIONE.spheres + (groupsDone >= 3 ? 1 : 0) + grado.spheres
@@ -99,7 +95,7 @@ export function prepareCreationSummary(actor, areteValue = null) {
   const sphereValues = actor.getFlag(MODULE_ID, "spheres") ?? {};
   const creazione = actor.getFlag(MODULE_ID, "creazione") ?? {};
   const groupsDone = conceptGroupsDone(actor);
-  const targets = creationTargets(creazione.grado, creazione.profilo, groupsDone);
+  const targets = creationTargets(creazione.grado, groupsDone);
 
   const backgrounds = featureDots(items, "background");
   const merits = featureDots(items, "merit");
@@ -122,9 +118,11 @@ export function prepareCreationSummary(actor, areteValue = null) {
   ];
   const counts = raw.map((count) => ({ ...count, state: count.target === null ? "" : compareCount(count.value, count.target) }));
   const grades = GRADI.map((g) => ({ id: g.id, label: `WOD5E_MAGE.Riepilogo.Grades.${g.id}`, selected: g.id === targets.grado }));
-  const profiles = PROFILI_ABILITA.map((p) => ({ id: p.id, label: `WOD5E_MAGE.Riepilogo.Profiles.${p.id}`, dots: p.dots, selected: p.id === targets.profilo }));
 
+  const overCap = skillsOverCap(system.skills, targets.skillCap);
   const checks = [
+    // Nessuna Abilità oltre il tetto della creazione (V6: tre pallini).
+    { id: "skillCap", label: "WOD5E_MAGE.Riepilogo.SkillCap", ok: overCap.length === 0, target: targets.skillCap },
     {
       id: "concept",
       label: "WOD5E_MAGE.Riepilogo.Concept",
@@ -151,5 +149,5 @@ export function prepareCreationSummary(actor, areteValue = null) {
     checks.push({ id: "arete", label: "WOD5E_MAGE.Riepilogo.Arete", ok: Number(areteValue) === targets.arete, target: targets.arete });
   }
 
-  return { counts, checks, targets, grades, profiles, groupsDone };
+  return { counts, checks, targets, grades, groupsDone };
 }

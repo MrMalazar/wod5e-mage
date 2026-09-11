@@ -4,7 +4,9 @@ import {
   CHIAVI_VIVE,
   prepareEssentialSkills,
   prepareEssentialSkillsByGroup,
-  orderAttributes
+  orderAttributes,
+  skillsOverCap,
+  TETTO_CREAZIONE
 } from "../scripts/abilita-essenziali.js";
 
 // Le etichette italiane del sistema, come arrivano da initializeLabels.
@@ -26,10 +28,12 @@ const TIPI = {
   mental: ["academics", "awareness", "finance", "investigation", "medicine", "occult", "politics", "science", "technology"]
 };
 
-// Le tre voci rinominate, tradotte come dal lang italiano del modulo.
+// Le cinque voci rinominate, tradotte come dal lang italiano del modulo.
 const TRADUZIONI = {
-  "WOD5E_MAGE.Skills.Combat": "Combattimento",
-  "WOD5E_MAGE.Skills.Creatures": "Creature",
+  "WOD5E_MAGE.Skills.Melee": "Mischia",
+  "WOD5E_MAGE.Skills.Ranged": "Armi a Distanza",
+  "WOD5E_MAGE.Skills.Knowledge": "Conoscenze",
+  "WOD5E_MAGE.Skills.Veil": "Velo",
   "WOD5E_MAGE.Skills.Art": "Arte"
 };
 
@@ -37,8 +41,8 @@ const sortedSkills = {};
 for (const [tipo, ids] of Object.entries(TIPI)) {
   sortedSkills[tipo] = ids.map((id) => ({ id, displayName: ETICHETTE[id], value: 0 }));
 }
-// WIZ ha Armi da fuoco 3 e Criminalità 4: la voce morta sparisce, la viva resta.
-sortedSkills.physical.find((s) => s.id === "firearms").value = 3;
+// WIZ ha Furtività 3 e Criminalità 4: la voce morta sparisce, la viva resta.
+sortedSkills.physical.find((s) => s.id === "stealth").value = 3;
 sortedSkills.physical.find((s) => s.id === "larceny").value = 4;
 
 const gruppi = prepareEssentialSkills(sortedSkills, {
@@ -48,10 +52,10 @@ const gruppi = prepareEssentialSkills(sortedSkills, {
 
 const voci = Object.values(gruppi).flat();
 
-// Diciotto voci, sei per colonna, tre colonne.
-assert.equal(voci.length, 18);
+// Quattordici voci (11/9: le tredici di V6 più il Velo), tre colonne da cinque, cinque e quattro.
+assert.equal(voci.length, 14);
 assert.deepEqual(Object.keys(gruppi), ["colonna1", "colonna2", "colonna3"]);
-assert.deepEqual(Object.values(gruppi).map((c) => c.length), [6, 6, 6]);
+assert.deepEqual(Object.values(gruppi).map((c) => c.length), [5, 5, 4]);
 
 // Tutte e sole le chiavi vive; nessuna assorbita.
 assert.deepEqual(new Set(voci.map((v) => v.id)), new Set(CHIAVI_VIVE));
@@ -61,15 +65,27 @@ for (const morta of CHIAVI_ASSORBITE) {
 
 // La fila unica alfabetica del canone, colonna per colonna.
 assert.deepEqual(voci.map((v) => v.displayName), [
-  "Accademiche", "Allerta", "Arte", "Atletica", "Combattimento", "Convincere",
-  "Creature", "Criminalità", "Guidare", "Intuito", "Investigare", "Manualità",
-  "Medicina", "Occulto", "Scienze", "Sopravvivenza", "Sotterfugio", "Tecnologia"
+  "Allerta", "Armi a Distanza", "Arte", "Atletica", "Conoscenze",
+  "Convincere", "Criminalità", "Investigare", "Manualità", "Medicina",
+  "Mischia", "Sopravvivenza", "Sotterfugio", "Velo"
 ]);
 
 // Le rinominate restano sulle loro chiavi di sistema.
-assert.equal(voci.find((v) => v.displayName === "Combattimento").id, "brawl");
-assert.equal(voci.find((v) => v.displayName === "Creature").id, "animalken");
+assert.equal(voci.find((v) => v.displayName === "Mischia").id, "brawl");
+assert.equal(voci.find((v) => v.displayName === "Armi a Distanza").id, "firearms");
+assert.equal(voci.find((v) => v.displayName === "Conoscenze").id, "academics");
+assert.equal(voci.find((v) => v.displayName === "Velo").id, "occult");
 assert.equal(voci.find((v) => v.displayName === "Arte").id, "performance");
+
+// Le voci morte dell'11/9 non ci sono più: Guidare, Intuito, Creature, Scienze, Tecnologia.
+for (const morta of ["drive", "insight", "animalken", "science", "technology"]) {
+  assert.ok(CHIAVI_ASSORBITE.includes(morta), `${morta} dev'essere assorbita`);
+}
+assert.equal(CHIAVI_VIVE.length + CHIAVI_ASSORBITE.length, 27);
+
+// Il tetto della creazione: tre pallini (V6).
+assert.equal(TETTO_CREAZIONE, 3);
+assert.deepEqual(skillsOverCap({ brawl: { value: 4 }, occult: { value: 3 }, melee: { value: 5 } }), ["brawl"]);
 
 // I valori dell'attore passano intatti sulle voci vive.
 assert.equal(voci.find((v) => v.id === "larceny").value, 4);

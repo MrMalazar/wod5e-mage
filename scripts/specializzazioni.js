@@ -1,4 +1,5 @@
 import { prepareEssentialSkillList } from "./abilita-essenziali.js";
+import { SPECIALIZZAZIONI, specialtySuggestions } from "./data/specializzazioni.js";
 
 /**
  * Le Specializzazioni delle Abilità, in un pannello dei Tratti: una riga
@@ -9,17 +10,38 @@ import { prepareEssentialSkillList } from "./abilita-essenziali.js";
  */
 export const SPECIALTY_VALUE = 1;
 
-/** Una Specializzazione si prende dal terzo pallino dell'Abilità (verdetto di Blue, 9/9). */
-export const SPECIALTY_MIN_SKILL = 3;
+/**
+ * Le Specializzazioni si prendono a 1, 3 e 5 pallini dell'Abilità, come i
+ * focus di V6 (verdetto di Blue, 11/9; prima, dal 9/9, dal terzo pallino).
+ */
+export const SPECIALTY_STEPS = Object.freeze([1, 3, 5]);
+
+/** Quante Specializzazioni tiene un'Abilità a quel valore: una a 1, due a 3, tre a 5. */
+export function specialtySlots(value) {
+  const dots = Math.max(Math.trunc(Number(value) || 0), 0);
+  return SPECIALTY_STEPS.filter((step) => dots >= step).length;
+}
 
 function skillList(actor, { localize, lang } = {}) {
   return prepareEssentialSkillList(actor.system?.sortedSkills, { localize, lang })
     .map((skill) => ({ id: skill.id, label: String(skill.displayName ?? skill.id), value: Math.max(Math.trunc(Number(skill.value) || 0), 0) }));
 }
 
-/** Le Abilità che possono prendere una Specializzazione: quelle a tre pallini o più. */
-export function specialtySkillChoices(skills) {
-  return (skills ?? []).filter((skill) => (Number(skill.value) || 0) >= SPECIALTY_MIN_SKILL);
+/**
+ * Le Abilità che possono prendere un'altra Specializzazione: quelle con un
+ * posto libero (`used` è quante ne hanno già). Ogni voce porta `slots` e `used`.
+ */
+export function specialtySkillChoices(skills, used = {}) {
+  return (skills ?? [])
+    .map((skill) => ({ ...skill, slots: specialtySlots(skill.value), used: Math.max(Math.trunc(Number(used[skill.id]) || 0), 0) }))
+    .filter((skill) => skill.used < skill.slots);
+}
+
+/** Quante Specializzazioni ha già ogni Abilità (i bonuses del sistema). */
+export function specialtyCounts(rows) {
+  const counts = {};
+  for (const row of rows ?? []) counts[row.skill] = (counts[row.skill] ?? 0) + 1;
+  return counts;
 }
 
 export function prepareSpecialties(actor, { localize = (key) => key, lang = "it" } = {}) {
@@ -51,6 +73,20 @@ export function specialtyBonus(skillId, source) {
   };
 }
 
+/** La tendina dei suggerimenti segue l'Abilità scelta (datalist del catalogo). */
+export function suggestionOptions(skillId) {
+  return specialtySuggestions(skillId).map((name) => `<option value="${name}"></option>`).join("");
+}
+
+function wireSuggestions(root) {
+  const select = root?.querySelector?.("select[name=\"skill\"]");
+  const list = root?.querySelector?.("datalist");
+  if (!select || !list) return;
+  const refresh = () => { list.innerHTML = suggestionOptions(select.value); };
+  select.addEventListener("change", refresh);
+  refresh();
+}
+
 function canEditSpecialties(actor) {
   if (!actor.isOwner) {
     ui.notifications.warn(
@@ -73,11 +109,12 @@ export async function onSpecialtyAdd(event) {
   if (!canEditSpecialties(actor)) return;
 
   const localize = game.i18n.localize.bind(game.i18n);
-  // Solo le Abilità dal terzo pallino in su (verdetto di Blue, 9/9).
-  const skills = specialtySkillChoices(prepareSpecialties(actor, { localize, lang: game.i18n.lang }).skills);
+  // Solo le Abilità con un posto libero: una a 1, due a 3, tre a 5 (verdetto di Blue, 11/9).
+  const prepared = prepareSpecialties(actor, { localize, lang: game.i18n.lang });
+  const skills = specialtySkillChoices(prepared.skills, specialtyCounts(prepared.rows));
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/specialty-add.hbs",
-    { skills, minSkill: SPECIALTY_MIN_SKILL }
+    { skills, steps: SPECIALTY_STEPS.join(", ") }
   );
 
   const result = await foundry.applications.api.DialogV2.input({
@@ -86,7 +123,8 @@ export async function onSpecialtyAdd(event) {
     ok: { icon: "fas fa-check", label: localize("WOD5E.Add") },
     buttons: [{ action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") }],
     classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem],
-    position: { width: "auto", height: "auto" }
+    position: { width: "auto", height: "auto" },
+    render: (event, dialog) => wireSuggestions(dialog.element)
   });
   if (!result || result === "cancel") return;
 
@@ -98,6 +136,11 @@ export async function onSpecialtyAdd(event) {
   }
 
   const bonuses = [...(actor.system.skills?.[skillId]?.bonuses ?? [])];
+  const chosen = skills.find((skill) => skill.id === skillId);
+  if (bonuses.length >= chosen.slots) {
+    ui.notifications.warn(game.i18n.format("WOD5E_MAGE.Specialties.Full", { skill: chosen.label, slots: chosen.slots }));
+    return;
+  }
   bonuses.push(specialtyBonus(skillId, source));
   await actor.update({ [`system.skills.${skillId}.bonuses`]: bonuses });
 }
@@ -115,3 +158,5 @@ export async function onSpecialtyDelete(event, target) {
   bonuses.splice(index, 1);
   await actor.update({ [`system.skills.${skillId}.bonuses`]: bonuses });
 }
+
+export { SPECIALIZZAZIONI };

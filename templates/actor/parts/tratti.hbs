@@ -220,22 +220,14 @@
                         <span>{{localize "WOD5E_MAGE.Riepilogo.Label"}}</span>
                     </summary>
 
-                    {{!-- Il grado del Risvegliato e il profilo delle Abilità (7/9):
-                         decidono i traguardi dei contatori. --}}
+                    {{!-- Il grado del Risvegliato (7/9) decide i traguardi dei contatori.
+                         Le Abilità sono diciannove pallini liberi col tetto a 3 (11/9): la ripartizione non si sceglie più. --}}
                     <div class="wod5e-mage-riepilogo-scelte">
                         <label>
                             <span>{{localize "WOD5E_MAGE.Riepilogo.Grade"}}</span>
                             <select name="flags.wod5e-mage.creazione.grado" {{#if locked}}disabled{{/if}}>
                                 {{#each creationSummary.grades as |grade|}}
                                     <option value="{{grade.id}}" {{#if grade.selected}}selected{{/if}}>{{localize grade.label}}</option>
-                                {{/each}}
-                            </select>
-                        </label>
-                        <label>
-                            <span>{{localize "WOD5E_MAGE.Riepilogo.Profile"}}</span>
-                            <select name="flags.wod5e-mage.creazione.profilo" {{#if locked}}disabled{{/if}}>
-                                {{#each creationSummary.profiles as |profile|}}
-                                    <option value="{{profile.id}}" {{#if profile.selected}}selected{{/if}}>{{localize profile.label}} ({{profile.dots}})</option>
                                 {{/each}}
                             </select>
                         </label>

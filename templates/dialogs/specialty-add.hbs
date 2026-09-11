@@ -2,17 +2,19 @@
 <div class="dialog-contents wod5e-mage-specialty-form">
     <div class="wod5e-mage-arete-row">
         <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Specialties.Skill"}}</span>
-        {{!-- Solo le Abilità a tre pallini o più (9/9). --}}
+        {{!-- Solo le Abilità con un posto libero: una a 1, due a 3, tre a 5 (11/9). --}}
         <select name="skill" required {{#unless skills.length}}disabled{{/unless}}>
-            <option value="">{{#if skills.length}}{{localize "WOD5E_MAGE.RollSelection.SelectAbility"}}{{else}}{{localize "WOD5E_MAGE.Specialties.NoSkill" min=minSkill}}{{/if}}</option>
+            <option value="">{{#if skills.length}}{{localize "WOD5E_MAGE.RollSelection.SelectAbility"}}{{else}}{{localize "WOD5E_MAGE.Specialties.NoSkill"}}{{/if}}</option>
             {{#each skills as |skill|}}
-                <option value="{{skill.id}}">{{skill.label}} ({{skill.value}})</option>
+                <option value="{{skill.id}}">{{skill.label}} ({{skill.value}}) · {{localize "WOD5E_MAGE.Specialties.Slots" used=skill.used slots=skill.slots}}</option>
             {{/each}}
         </select>
     </div>
     <div class="wod5e-mage-arete-row">
         <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Specialties.Name"}}</span>
-        <input type="text" name="source" required placeholder="{{localize 'WOD5E_MAGE.Specialties.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Name'}}">
+        {{!-- La tendina dei suggerimenti si riempie dal catalogo dell'Abilità scelta. --}}
+        <input type="text" name="source" required list="wod5e-mage-specialty-suggestions" placeholder="{{localize 'WOD5E_MAGE.Specialties.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Name'}}">
+        <datalist id="wod5e-mage-specialty-suggestions"></datalist>
     </div>
-    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Specialties.Hint"}} {{localize "WOD5E_MAGE.Specialties.MinHint" min=minSkill}}</p>
+    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Specialties.Hint"}} {{localize "WOD5E_MAGE.Specialties.MinHint" steps=steps}}</p>
 </div>

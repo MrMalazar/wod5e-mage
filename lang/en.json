@@ -27,9 +27,11 @@
       }
     },
     "Skills": {
-      "Combat": "Combat",
-      "Creatures": "Creatures",
-      "Art": "Art"
+      "Melee": "Fighting",
+      "Ranged": "Shooting",
+      "Knowledge": "Knowledge",
+      "Veil": "Veil",
+      "Art": "Expression"
     },
     "Lineage": {
       "Label": "Allegiance",
@@ -738,14 +740,8 @@
         "anziano": "Elder",
         "maestro": "Master"
       },
-      "Profile": "Skills profile",
-      "Profiles": {
-        "bilanciato": "Balanced",
-        "factotum": "Jack of all trades",
-        "specialista": "Specialist",
-        "libero": "Free"
-      },
       "MeritsHint": "Backgrounds and Merits together: seven points, nine with two Challenge groups.",
+      "SkillCap": "No Skill above the cap",
       "Arete": "Areté of the rank"
     },
     "Salute": {
@@ -814,13 +810,15 @@
       "Edit": "Open the Skill editor",
       "Skill": "Skill",
       "Name": "Specialty",
-      "NameHint": "e.g. Locks, Surgery, Pistols",
+      "NameHint": "e.g. Blades, Surgery, Pistols: pick from the list or write your own",
       "Hint": "Worth one extra die whenever the specialty applies to the roll.",
       "Empty": "No Specialty: + adds one (Skill and name).",
       "Incomplete": "A Skill and the Specialty name are both needed.",
       "Roll": "Roll with the Specialty: the extra die is already in",
-      "NoSkill": "No Skill at {min} or more",
-      "MinHint": "It takes a Skill at three dots or more."
+      "NoSkill": "No Skill with a free slot",
+      "MinHint": "One at the first dot, one at the third, one at the fifth ({steps}).",
+      "Slots": "{used} of {slots}",
+      "Full": "{skill} already has its {slots} Specialties."
     },
     "SphereSpecialties": {
       "ShowText": "Show or hide the text",

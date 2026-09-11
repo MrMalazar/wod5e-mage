@@ -1,47 +1,48 @@
 /**
- * Le Abilità Essenziali — canone M6 del 2026-08-19.
+ * Le Abilità Essenziali — canone M6 del 2026-08-19, riformato l'11/9/2026.
  *
  * La lista di sistema (27 voci, tradotte da Vampiri 5e) diventa la fila unica
- * alfabetica delle diciotto voci del manuale. Ogni voce vive su UNA chiave del
- * sistema, così tiri, specialità e macro continuano a funzionare; le nove
+ * alfabetica delle quattordici voci del manuale: le tredici di Vampiri 6e più
+ * il Velo (l'Occulto col nome di casa). Ogni voce vive su UNA chiave del
+ * sistema, così tiri, specialità e macro continuano a funzionare; le tredici
  * chiavi assorbite spariscono dalla scheda ma restano nei dati dell'attore,
  * finché la conversione dei personaggi vivi non le travasa a mano.
  *
  * La corrispondenza (tavola «Dove va quello che muore» del canone):
- *   Armi da Fuoco, Mischia, Rissa  → Combattimento (chiave: brawl)
- *   Affinità Animale               → Creature      (chiave: animalken)
- *   Espressività                   → Arte          (chiave: performance)
- *   Furtività                      → Criminalità   (larceny, già viva)
- *   Autorità, Galateo, Intimidire  → Convincere    (persuasion, già viva)
- *   Bassifondi                     → Sopravvivenza (survival, già viva)
- *   Finanza, Politica              → Accademiche   (academics, già viva)
+ *   Rissa, Mischia                 → Mischia           (chiave: brawl)
+ *   Armi da Fuoco                  → Armi a Distanza   (chiave: firearms)
+ *   Accademiche, Scienze, Finanza, Politica → Conoscenze (chiave: academics)
+ *   Occulto, Creature (senza corpo) → Velo             (chiave: occult)
+ *   Affinità Animale, Creature (con corpo) → Sopravvivenza (survival)
+ *   Guidare                        → Atletica          (athletics)
+ *   Intuito                        → Allerta           (awareness)
+ *   Tecnologia                     → Manualità, Criminalità, Investigare, Conoscenze
+ *   Espressività                   → Arte              (chiave: performance)
+ *   Furtività                      → Sotterfugio       (subterfuge)
+ *   Autorità, Galateo, Intimidire  → Convincere        (persuasion)
+ *   Bassifondi                     → Investigare       (investigation)
  */
 
-/** Le diciotto chiavi di sistema su cui vivono le voci del canone. */
+/** Le quattordici chiavi di sistema su cui vivono le voci del canone. */
 export const CHIAVI_VIVE = Object.freeze([
-  "academics", // Accademiche
   "awareness", // Allerta
+  "firearms", // Armi a Distanza
   "performance", // Arte
   "athletics", // Atletica
-  "brawl", // Combattimento
+  "academics", // Conoscenze
   "persuasion", // Convincere
-  "animalken", // Creature
   "larceny", // Criminalità
-  "drive", // Guidare
-  "insight", // Intuito
   "investigation", // Investigare
   "craft", // Manualità
   "medicine", // Medicina
-  "occult", // Occulto
-  "science", // Scienze
+  "brawl", // Mischia
   "survival", // Sopravvivenza
   "subterfuge", // Sotterfugio
-  "technology" // Tecnologia
+  "occult" // Velo
 ]);
 
-/** Le nove chiavi assorbite: mai mostrate sulla scheda del Mago. */
+/** Le tredici chiavi assorbite: mai mostrate sulla scheda del Mago. */
 export const CHIAVI_ASSORBITE = Object.freeze([
-  "firearms",
   "melee",
   "stealth",
   "etiquette",
@@ -49,15 +50,25 @@ export const CHIAVI_ASSORBITE = Object.freeze([
   "leadership",
   "streetwise",
   "finance",
-  "politics"
+  "politics",
+  "animalken",
+  "drive",
+  "insight",
+  "science",
+  "technology"
 ]);
 
-/** Le tre voci che cambiano nome rispetto all'etichetta di sistema. */
+/** Le cinque voci che cambiano nome rispetto all'etichetta di sistema. */
 export const RINOMINATE = Object.freeze({
-  brawl: "WOD5E_MAGE.Skills.Combat",
-  animalken: "WOD5E_MAGE.Skills.Creatures",
+  brawl: "WOD5E_MAGE.Skills.Melee",
+  firearms: "WOD5E_MAGE.Skills.Ranged",
+  academics: "WOD5E_MAGE.Skills.Knowledge",
+  occult: "WOD5E_MAGE.Skills.Veil",
   performance: "WOD5E_MAGE.Skills.Art"
 });
+
+/** Il tetto di ogni Abilità alla creazione (V6: nessuna voce oltre il terzo). */
+export const TETTO_CREAZIONE = 3;
 
 const VIVE = new Set(CHIAVI_VIVE);
 
@@ -129,4 +140,9 @@ export function prepareEssentialSkills(sortedSkills, { localize = (k) => k, lang
   }
 
   return gruppi;
+}
+
+/** Le Abilità sopra il tetto della creazione, per il memo. */
+export function skillsOverCap(skills, cap = TETTO_CREAZIONE) {
+  return CHIAVI_VIVE.filter((key) => Math.trunc(Number(skills?.[key]?.value) || 0) > cap);
 }

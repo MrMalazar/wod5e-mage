@@ -168,7 +168,7 @@ const traits = prepareAreteTraits({
     sortedSkills: {
       custom: [
         { id: "occult", displayName: "Ritual", value: 2 },
-        { id: "firearms", displayName: "Firearms", value: 5 }
+        { id: "melee", displayName: "Melee", value: 5 }
       ]
     }
   }
@@ -182,14 +182,16 @@ assert.deepEqual(traits.attributes[0], {
   label: "Focus",
   value: 4
 });
+// Il Velo prende il nome dal lang (11/9): senza i18n resta la chiave.
 assert.deepEqual(traits.skills[0], {
   key: "skill:occult",
   id: "occult",
   type: "skill",
-  label: "Ritual",
+  label: "WOD5E_MAGE.Skills.Veil",
   value: 2
 });
-assert.equal(traits.skills.some((trait) => trait.id === "firearms"), false);
+// Mischia (melee) è una chiave assorbita dall'11/9: non entra nel tiro.
+assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
 
 
 // La Convinzione rispettata (9/9): le Convinzioni della scheda in tendina, la scelta, +1 Quintessenza una volta per scena.

@@ -3,9 +3,9 @@ import { CHIAVI_VIVE } from "./abilita-essenziali.js";
 
 /**
  * I sigilli di casa per Attributi e Abilità: gli stessi simboli della scheda
- * cartacea, ricolorati in oro, uno per chiave di sistema. Arte, Combattimento
- * e Creature usano i sigilli dei nomi vecchi (Espressività, Mischia,
- * Affinità Animale) finché non ne esistono di propri.
+ * cartacea, ricolorati in oro, uno per chiave di sistema. Arte, Conoscenze,
+ * Mischia e Velo usano i sigilli dei nomi vecchi (Espressività, Accademiche,
+ * Mischia, Occulto); Armi a Distanza ha il mirino disegnato l'11/9.
  */
 const ROOT = `modules/${MODULE_ID}/assets/icons/sheet/tratti/`;
 

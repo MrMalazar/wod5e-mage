@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { prepareSpecialties, specialtyBonus, specialtySkillChoices, SPECIALTY_MIN_SKILL } from "../scripts/specializzazioni.js";
+import { prepareSpecialties, specialtyBonus, specialtySkillChoices, specialtyCounts, specialtySlots, suggestionOptions, SPECIALTY_STEPS, SPECIALIZZAZIONI } from "../scripts/specializzazioni.js";
+import { CHIAVI_VIVE } from "../scripts/abilita-essenziali.js";
 
 const actor = {
   system: {
@@ -75,13 +76,33 @@ assert.match(readFileSync(new URL("../scripts/mage-dice.js", import.meta.url), "
 
 console.log("Specializzazioni tests passed.");
 
-// Una Specializzazione si prende dal terzo pallino (9/9): la tendina mostra solo quelle Abilità.
-assert.equal(SPECIALTY_MIN_SKILL, 3);
-assert.deepEqual(specialtySkillChoices(prepareSpecialties(actor).skills).map((skill) => [skill.id, skill.value]), [["occult", 3]]);
-assert.deepEqual(specialtySkillChoices([]), []);
+// Le Specializzazioni si prendono a 1, 3 e 5 pallini (11/9, i focus di V6):
+// una a 1, due a 3, tre a 5; la tendina mostra solo le Abilità con un posto libero.
+assert.deepEqual([...SPECIALTY_STEPS], [1, 3, 5]);
+assert.deepEqual([0, 1, 2, 3, 4, 5, 9].map(specialtySlots), [0, 1, 1, 2, 2, 3, 3]);
+{
+  const prepared = prepareSpecialties(actor);
+  const used = specialtyCounts(prepared.rows);
+  assert.deepEqual(used, { athletics: 1, occult: 2 });
+  // Atletica 2 ha un posto e lo usa già; Occulto 3 ha due posti e li usa: nessuna scelta.
+  assert.deepEqual(specialtySkillChoices(prepared.skills, used), []);
+  // Senza Specializzazioni, tutte e due sono in tendina, con i posti.
+  assert.deepEqual(specialtySkillChoices(prepared.skills).map((skill) => [skill.id, skill.used, skill.slots]), [["athletics", 0, 1], ["occult", 0, 2]]);
+  // A zero pallini niente posto.
+  assert.deepEqual(specialtySkillChoices([{ id: "brawl", label: "Mischia", value: 0 }]), []);
+  assert.deepEqual(specialtySkillChoices([]), []);
+}
+// Il catalogo dei suggerimenti copre tutte le chiavi vive, una parola l'una.
+assert.deepEqual(Object.keys(SPECIALIZZAZIONI).sort(), [...CHIAVI_VIVE].sort());
+for (const [key, names] of Object.entries(SPECIALIZZAZIONI)) {
+  for (const name of names) assert.doesNotMatch(name, /\s/, `${key}: ${name}`);
+}
+assert.match(suggestionOptions("brawl"), /<option value="Pugilato"><\/option>/);
+assert.equal(suggestionOptions("streetwise"), "");
 {
   const dialog = readFileSync(new URL("../templates/dialogs/specialty-add.hbs", import.meta.url), "utf8");
   assert.doesNotMatch(dialog.replace(/\{\{!--[\s\S]*?--\}\}/g, ""), /<form/);
   assert.match(dialog, /\{\{#unless skills\.length\}\}disabled\{\{\/unless\}\}/);
-  assert.match(readFileSync(new URL("../scripts/specializzazioni.js", import.meta.url), "utf8"), /specialtySkillChoices\(prepareSpecialties\(actor/);
+  assert.match(dialog, /list="wod5e-mage-specialty-suggestions"[\s\S]*<datalist id="wod5e-mage-specialty-suggestions">/);
+  assert.match(readFileSync(new URL("../scripts/specializzazioni.js", import.meta.url), "utf8"), /specialtySkillChoices\(prepared\.skills, specialtyCounts\(prepared\.rows\)\)/);
 }
