@@ -33,49 +33,56 @@ assert.equal(calculateAreteTraitPool(3, 2, 2), 7);
 assert.equal(calculateAreteTraitPool(3), 3);
 assert.equal(calculateAreteTraitPool(), 0);
 
-// Il premio dell'Areté: pari all'Areté, tetto +3, mai all'Ibrida.
+// Il premio riduce la soglia dell'Areté intera, anche oltre 3; mai all'Ibrida.
 assert.equal(calculateAretePrize(2, "magick"), 2);
-assert.equal(calculateAretePrize(5, "tecnomagick"), 3);
-assert.equal(calculateAretePrize(4, ""), 3);
+assert.equal(calculateAretePrize(5, "tecnomagick"), 5);
+assert.equal(calculateAretePrize(4, ""), 4);
 assert.equal(calculateAretePrize(5, "ibrida"), 0);
 assert.equal(capBonusDice(5), 3);
 assert.equal(capBonusDice(-1), 0);
 
-// Il tetto +3 conta premio, Armonia e modificatori positivi insieme;
+// Il tetto +3 conta Armonia e modificatori positivi insieme;
 // i negativi non c'entrano.
 assert.equal(bonusDiceExcess(3, []), 0);
 assert.equal(bonusDiceExcess(2, [{ value: "+2" }, { value: "-1" }]), 1);
 assert.equal(bonusDiceExcess(0, [{ value: 1 }, { value: 1 }]), 0);
 assert.equal(bonusDiceExcess(3, [{ value: "+3" }]), 3);
 
-// La soglia: il maggiore fra Sfera e Ambito, +1 per ogni Ambito oltre il
-// primo, +1 con tre o più Sfere, tetto 7.
+// La soglia somma gli Ambiti sopra 1, senza contributo delle Sfere.
 assert.equal(calculateMagickThreshold(), 0);
-assert.equal(calculateMagickThreshold({ sphereLevels: [3] }), 3);
+assert.equal(calculateMagickThreshold({ sphereLevels: [3] }), 0);
 assert.equal(calculateMagickThreshold({ sphereLevels: [3], scopeLevels: [4] }), 4);
-assert.equal(calculateMagickThreshold({ sphereLevels: [3], scopeLevels: [4, 2] }), 5);
-assert.equal(calculateMagickThreshold({ sphereLevels: [3, 2], scopeLevels: [1] }), 3);
-assert.equal(calculateMagickThreshold({ sphereLevels: [3, 2, 1], scopeLevels: [1] }), 4);
-// Il tetto 7 vale sul livello e sulle tre Sfere; gli Ambiti oltre il primo lo superano.
-assert.equal(calculateMagickThreshold({ sphereLevels: [5, 4, 4], scopeLevels: [7, 7, 7] }), 9);
+assert.equal(calculateMagickThreshold({ sphereLevels: [3], scopeLevels: [4, 2] }), 6);
+assert.equal(calculateMagickThreshold({ sphereLevels: [3, 2], scopeLevels: [1] }), 0);
+assert.equal(calculateMagickThreshold({ sphereLevels: [3, 2, 1], scopeLevels: [1] }), 0);
+// Il livello del singolo Ambito arriva a 7, ma la somma non ha tetto.
+assert.equal(calculateMagickThreshold({ sphereLevels: [5, 4, 4], scopeLevels: [7, 7, 7] }), 21);
 assert.equal(calculateMagickThreshold({ sphereLevels: [5, 4, 4], scopeLevels: [7] }), 7);
-// Un Ambito a 1 non pesa (11/9): né come maggiore né come Ambito in più.
+// Un Ambito a 1 non contribuisce alla somma.
 assert.equal(calculateMagickThreshold({ sphereLevels: [5], scopeLevels: [7, 1] }), 7);
-assert.equal(calculateMagickThreshold({ sphereLevels: [2], scopeLevels: [1, 1] }), 2);
+assert.equal(calculateMagickThreshold({ sphereLevels: [2], scopeLevels: [1, 1] }), 0);
 assert.equal(calculateMagickThreshold({ sphereLevels: [2], scopeLevels: [2, 1] }), 2);
-assert.equal(calculateMagickThreshold({ sphereLevels: [2], scopeLevels: [2, 2] }), 3);
+assert.equal(calculateMagickThreshold({ sphereLevels: [2], scopeLevels: [2, 2] }), 4);
 assert.equal(calculateMagickThreshold({ sphereLevels: [], scopeLevels: [1] }), 0);
 // Un livello di Ambito fuori scala si riporta fra 0 e 7: lo zero non conta.
-assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [0] }), 1);
+assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [0] }), 0);
 assert.equal(calculateMagickThreshold({ sphereLevels: [1], scopeLevels: [9] }), 7);
 
 // Le Specialità non toccano più la soglia (verdetto di Blue, 4/9 notte):
-// Mente 3 con Bersagli 4 e Portata 4 fa 5, con o senza Specialità.
+// Mente 3 con Bersagli 4 e Portata 4 fa 8, con o senza Specialità.
 assert.equal(calculateMagickThreshold({
   sphereLevels: [{ id: "mind", level: 3 }],
   scopeLevels: [{ id: "targets", level: 4 }, { id: "range", level: 4 }],
   specialties: { mind: "targets" }
-}), 5);
+}), 8);
+// Il premio si sottrae una volta sola, senza far diventare negativa la soglia.
+assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2, 4], prize: 3 }), 3);
+assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2, 4], prize: 0 }), 6);
+assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2, 4], prize: 5 }), 1);
+assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2], prize: 5 }), 0);
+assert.equal(calculateMagickThreshold({ scopeLevels: [1, 1], prize: 3 }), 0);
+assert.equal(calculateMagickThreshold({ scopeLevels: ["1", "2", "4"], prize: "3" }), 3);
+assert.equal(calculateMagickThreshold({ scopeLevels: [2, 4], prize: calculateAretePrize(5, "ibrida") }), 6);
 // Nel ramo C danno DADI pari all'Areté (PROPOSTA dell'11/9) quando la
 // Sfera è nel lancio e l'Ambito è dichiarato; una volta sola; senza la
 // coppia, niente. Il conto torna col nome di prima.
@@ -102,7 +109,19 @@ assert.deepEqual(ramoCPool({ traits: 6, threshold: 3 }), { pool: 6, threshold: 3
 // Soglia 5: un dado. Soglia 7: zero dadi, si lancia solo col premio.
 assert.equal(ramoCPool({ traits: 6, threshold: 5 }).dice, 1);
 assert.equal(ramoCPool({ traits: 6, threshold: 7 }).dice, 0);
-assert.equal(ramoCPool({ traits: 6, bonus: 2, threshold: 7 }).dice, 1, "il premio dell'Areté resta");
+assert.equal(ramoCPool({ traits: 6, bonus: 2, threshold: 7 }).dice, 1, "l'Armonia aggiunge dadi");
+// Il premio cambia la soglia, non la riserva; non consuma il tetto dei bonus
+// e non crea dadi aggiuntivi quando la soglia è già zero.
+const rewarded = ramoCPool({
+  traits: 6, bonus: 3,
+  threshold: calculateMagickThreshold({ scopeLevels: [1, 2, 4], prize: 3 })
+});
+assert.deepEqual([rewarded.pool, rewarded.threshold, rewarded.dice], [9, 3, 6]);
+const zeroThreshold = ramoCPool({
+  traits: 6,
+  threshold: calculateMagickThreshold({ scopeLevels: [1], prize: 5 })
+});
+assert.deepEqual([zeroThreshold.pool, zeroThreshold.threshold, zeroThreshold.dice], [6, 0, 6]);
 assert.equal(ramoCPool({ traits: 6, bonus: 5, threshold: 0 }).pool, 9, "tetto +3 sui dadi in più");
 // La Quintessenza: un dado per punto sotto il prezzo; al prezzo della Sfera compra la riuscita.
 assert.deepEqual(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).spend, { spent: 2, price: 3, bought: false, dice: 2 });

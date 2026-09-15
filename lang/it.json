@@ -104,7 +104,7 @@
     "Arete": {
       "Label": "Areté",
       "Roll": "Tira",
-      "RollHint": "Tira con Attributo, Abilità, Abilità (ne basta uno); la soglia toglie dadi, un 8 riesce; l'Areté è il premio della descrizione",
+      "RollHint": "Tira con i tratti scelti; la soglia somma gli Ambiti sopra 1 e toglie dadi. Il premio dell'Areté riduce la soglia. Successi dal 6; Volgare con testimoni attiva automaticamente la difficoltà avanzata, con successi dall'8.",
       "Trait": "Attributo o Abilità",
       "TraitShort": "Abilità",
       "SelectTrait": "Seleziona un tratto",
@@ -116,7 +116,7 @@
       "Other": "Altro",
       "CoincidentalHint": "Non si percepisce.",
       "VulgarHint": "La realtà lo percepisce, +1 Paradosso.",
-      "WitnessesHint": "Qualcuno ti ha visto farlo, +2 Paradosso.",
+      "WitnessesHint": "Qualcuno ti ha visto farlo: +2 Paradosso e difficoltà avanzata automatica, con successi dall'8.",
       "ScopePlan": "Ambiti: {plans}.",
       "Coincidental": "Accidentale",
       "Vulgar": "Volgare",
@@ -137,21 +137,21 @@
       "Spheres": "Sfere Effetto",
       "NoSpheres": "Nessuna Sfera con pallini: sblocca le Sfere in Magick per usarle qui.",
       "Prize": "Premio dell'Areté",
-      "PrizeHint": "Se la descrizione rispetta lo Strumento, o il Credo, o inventa un effetto fuori dalle tavole: dadi in più pari all'Areté ({arete}), dentro il tetto +3 insieme ad Armonia e Bonus.",
+      "PrizeHint": "Se la descrizione rispetta lo Strumento, o il Credo, o inventa un effetto fuori dalle tavole: riduci la soglia di un valore pari all'Areté ({arete}), fino a un minimo di 0. Il premio non aggiunge dadi e non rientra nel tetto +3.",
       "PrizeHybrid": "La Magick Ibrida non prende il premio.",
-      "PrizeFlavor": "premio {dice}",
+      "PrizeFlavor": "premio: soglia −{reduction}",
       "Harmony": "Armonia",
       "HarmonyHint": "I dadi che gli altri Maghi ti danno: uno per chi ha il tuo Credo o il tuo Tipo, due per chi ha entrambi, sempre con una Sfera in comune. Li contate al tavolo. Magick e Tecnomagick non fanno Armonia fra loro; l'Ibrida con entrambi.",
       "HarmonyFlavor": "Armonia {dice}",
       "Pool": "Riserva",
       "Threshold": "Soglia",
-      "ThresholdHint": "La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto, +1 con tre o più Sfere, tetto 7; poi +1 per ogni Ambito oltre il primo. La soglia si toglie dalla riserva: restano i dadi che tiri. Il successo parte dal 6, oppure dall'8 selezionando Difficoltà avanzata.",
+      "ThresholdHint": "La soglia è la somma dei livelli degli Ambiti: quelli a 1 valgono 0, quelli sopra 1 valgono il loro livello. Le Sfere non contribuiscono e la somma non ha tetto. Il premio selezionato sottrae l'Areté, fino a un minimo di 0. La soglia si toglie dalla riserva: restano i dadi che tiri. Il successo parte dal 6; con Volgare con testimoni parte automaticamente dall'8.",
       "AutoVictoryBanner": "Vittoria automatica",
       "BonusCap": "Tetto +3: {excess} dadi in meno.",
       "SpherePlan": "Sfere: {plans}.",
       "SpecialtyHint": "Specialità: se dichiari questo Ambito, tanti dadi in più quanto l'Areté. La soglia non cambia.",
       "HarmonyShort": "dadi dagli altri Maghi",
-      "ThresholdShort": "Soglia: il maggiore fra Sfera e Ambito, +1 con tre Sfere, tetto 7; gli Ambiti oltre il primo danno +1. Si toglie dalla riserva: restano i dadi che tiri.",
+      "ThresholdShort": "Soglia: somma degli Ambiti sopra 1, meno il premio dell'Areté se selezionato; minimo 0. Gli Ambiti a 1 valgono 0. Si toglie dalla riserva: restano i dadi che tiri.",
       "ScopeTable": "La tavola degli Ambiti",
       "BacklashLabel": "Contraccolpo",
       "BacklashEyesOne": "un occhio sui rossi",
@@ -381,7 +381,7 @@
       "conditions": "Condizioni",
       "range": "Portata",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia è il maggiore fra la Sfera più alta e l'Ambito più alto (tetto 7); ogni Ambito oltre il primo la alza di 1, anche oltre il tetto. Potenza: Peso, quanto pesa ciò che muovi; Epicità, quanto pesa l'impresa nella storia; Danni, l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa. Condizioni: Quante, il numero di Condizioni inflitte; Debuff, quanto pesa quella inflitta.",
+      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia somma i livelli degli Ambiti sopra 1; quelli a 1 valgono 0. La somma non ha tetto e le Sfere non contribuiscono. Nel tiro di Areté il premio selezionato riduce la soglia fino a un minimo di 0. Potenza: Peso, quanto pesa ciò che muovi; Epicità, quanto pesa l'impresa nella storia; Danni, l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa. Condizioni: Quante, il numero di Condizioni inflitte; Debuff, quanto pesa quella inflitta.",
       "TableSuccesses": "Ambito",
       "TableReading": "Lettura · livello →",
       "Table": {
@@ -662,7 +662,7 @@
         "difficulty": "Difficoltà"
       },
       "KindNone": "Tipo…",
-      "Cap": "Tetto +3: i Bonus scritti, il premio dell'Areté e l'Armonia stanno insieme dentro tre dadi."
+      "Cap": "Tetto +3: i Bonus scritti e l'Armonia stanno insieme dentro tre dadi. Il premio dell'Areté riduce la soglia ed è escluso da questo tetto."
     },
     "Dotazione": {
       "Inventory": "Inventario"

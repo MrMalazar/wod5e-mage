@@ -67,18 +67,18 @@ assert.equal(scheda[0].label, "WOD5E_MAGE.Spheres.forces");
 assert.deepEqual(schedaParadosso([]), []);
 
 // Il prezzo: la soglia dalla stessa tavola dei giocatori.
-assert.equal(spendPrice({ sphereLevels: [{ id: "forces", level: 3 }], scopeLevels: [{ id: "potency", level: 3 }, { id: "duration", level: 4 }] }), 5);
+assert.equal(spendPrice({ sphereLevels: [{ id: "forces", level: 3 }], scopeLevels: [{ id: "potency", level: 3 }, { id: "duration", level: 4 }] }), 7);
 const choice = readSpendChoice({ "sphere-forces": "9", "sphere-life": "2", "scope-potency": "3", text: " Il lampione esplode ", whisper: "on" }, scheda);
 assert.deepEqual(choice.spheres, [{ id: "forces", level: 5 }, { id: "life", level: 2 }], "dentro il tetto della Scheda");
 assert.deepEqual(choice.scopes, [{ id: "potency", level: 3 }]);
-assert.equal(choice.price, 5);
+assert.equal(choice.price, 3);
 assert.equal(choice.text, "Il lampione esplode");
 assert.equal(choice.whisper, true);
 assert.equal(readSpendChoice({ "sphere-time": "3" }, scheda).spheres.length, 0, "una Sfera fuori dalla Scheda non entra");
 const card = renderSpendCard(choice, (key) => key);
 assert.match(card, /wod5e-mage-paradosso-banner">WOD5E_MAGE\.Paradosso\.CardTitle</);
 assert.match(card, /forces\.png" alt=""><b>5<\/b>/);
-assert.match(card, /WOD5E_MAGE\.Paradosso\.Price<\/b><span class="wod5e-mage-roll-value">5</);
+assert.match(card, /WOD5E_MAGE\.Paradosso\.Price<\/b><span class="wod5e-mage-roll-value">3</);
 assert.match(card, /Il lampione esplode/);
 
 // La macchina: impostazione di mondo, icona nella barra, raccolta dal messaggio, pannello, lingue, CSS.

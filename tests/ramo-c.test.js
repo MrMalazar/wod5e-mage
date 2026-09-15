@@ -15,6 +15,7 @@ import {
   splitRamoCDice,
   successModifier,
   successThreshold,
+  usesAdvancedDifficulty,
   SUCCESS_FROM,
   SUCCESS_MODIFIER,
   ustioneAmount
@@ -25,6 +26,7 @@ import { sforzoState } from "../scripts/sforzo.js";
 import { prezzoState } from "../scripts/prezzo.js";
 import { recountCard, rerollableDice, volontaState } from "../scripts/volonta.js";
 import { datasetPool, skillRollCard } from "../scripts/mage-roll-selection.js";
+import { normalizeMagickRollOptions } from "../scripts/arete.js";
 
 // Il ramo C (verdetti di Blue, 11/9): la soglia toglie dadi, un 8 riesce.
 assert.equal(RAMO, "C");
@@ -34,6 +36,31 @@ assert.equal(ORIGINAL_SUCCESS_FROM, 6);
 assert.equal(ADVANCED_SUCCESS_FROM, 8);
 assert.equal(successThreshold(false), 6);
 assert.equal(successThreshold(true), 8);
+// La difficoltà dipende solo da Volgare con testimoni, anche nelle risposte
+// "on" dei passi della modale semplificata e degli incantesimi salvati.
+for (const [answers, expected] of [
+  [{}, 6],
+  [{ coincidental: true }, 6],
+  [{ vulgar: true }, 6],
+  [{ witnesses: true }, 8],
+  [{ witnesses: "on" }, 8],
+  [{ vulgar: true, witnesses: true }, 8],
+  [{ witnesses: false }, 6],
+  [{ witnesses: "false" }, 6]
+]) {
+  const options = normalizeMagickRollOptions(answers);
+  const advancedDifficulty = usesAdvancedDifficulty(options);
+  const successFrom = successThreshold(advancedDifficulty);
+  assert.equal(successFrom, expected, JSON.stringify(answers));
+  // Stesso esito per dadi normali, dadi Paradosso e ricalcolo della carta.
+  const results = [{ result: 6 }, { result: 7 }, { result: 8 }];
+  assert.equal(calculateRamoCSuccesses(results, results, Infinity, { successFrom }), expected === 6 ? 6 : 2);
+  assert.equal(recountCard({ ramo: "C", advancedDifficulty, successFrom }, results, results), expected === 6 ? 6 : 2);
+  assert.equal(rerollableDice(results, [], { successFrom }).length, expected === 6 ? 0 : 2);
+}
+assert.equal(usesAdvancedDifficulty(), false);
+assert.equal(usesAdvancedDifficulty({ witnesses: true, skill: true }), false);
+assert.equal(usesAdvancedDifficulty({ witnesses: true, onlyParadox: true }), false);
 assert.equal(successModifier(6), "cs>5");
 assert.equal(successModifier(8), "cs>7");
 assert.equal(isSuccess({ result: 8 }), true);
@@ -133,7 +160,11 @@ assert.doesNotMatch(skillCard, /RollCard\.Threshold|RollCard\.Type/, "senza sogl
 
 // La macchina: la formula cs>7, l'Ustione in attesa sulla carta, niente Ustione automatica.
 const dice = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8");
+assert.match(dice, /const advancedDifficulty = usesAdvancedDifficulty\(\{ witnesses, skill, onlyParadox \}\)/);
 assert.match(dice, /const successFrom = successThreshold\(advancedDifficulty\)/);
+assert.doesNotMatch(dice, /#inputAdvancedDifficulty/);
+const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
+assert.match(arete, /rollAreteWithParadox\(\{\s*pool: conto\.pool,\s*threshold,\s*witnesses: options\.witnesses,/);
 assert.match(dice, /\$\{modifier\} \+ \$\{conto\.paradoxDice\}d\$\{ParadoxDie\.DENOMINATION\}\$\{modifier\}/);
 assert.match(dice, /cardData\.ustione = \{ threshold: burnNow, sphere: Math\.max\(Math\.trunc\(Number\(sphereLevel\) \|\| 0\), 0\), tens, kind: effectKind \?\? "", eyes, choice: "" \}/);
 assert.doesNotMatch(dice, /applyUstione/);
@@ -142,7 +173,7 @@ const confirm = readFileSync(new URL("../templates/dialogs/arete-roll-confirm.hb
 assert.match(confirm, /data-role="diceOut"/);
 assert.match(confirm, /id="inputParadoxDice" value="\{\{paradoxDice\}\}" readonly/);
 assert.doesNotMatch(confirm, /paradoxPlus|paradoxMinus/);
-assert.match(confirm, /id="inputAdvancedDifficulty"/);
+assert.doesNotMatch(confirm, /inputAdvancedDifficulty|name="advancedDifficulty"/);
 const selection = readFileSync(new URL("../scripts/mage-roll-selection.js", import.meta.url), "utf8");
 assert.match(selection, /skill: true,/);
 assert.match(selection, /if \(!isMageActor\(actor\)\) return WOD5E\.api\.RollFromDataset/);

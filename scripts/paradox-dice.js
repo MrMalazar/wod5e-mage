@@ -16,6 +16,7 @@ import {
   ramoCMargin,
   successModifier,
   successThreshold,
+  usesAdvancedDifficulty,
   splitRamoCDice,
 } from "./ramo-c.js";
 import { renderAutoVictoryBanner, renderBacklashNote, renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
@@ -250,7 +251,8 @@ async function postDicelessMessage(actor, title, { flavor, cardData, banner = ""
  *
  * @param pool          la riserva prima della soglia
  * @param threshold     la soglia (modificabile nella finestra)
- * @param bonusDice     i dadi in più (premio, Armonia) già dentro `pool`, per il tetto +3
+ * @param witnesses     Volgare con testimoni: successi dall'8 invece che dal 6
+ * @param bonusDice     i dadi in più (Armonia) già dentro `pool`, per il tetto +3
  * @param paradoxRating i rossi: il Paradosso sulla Ruota
  * @param onlyParadox   lo Scoppio: solo rossi
  * @param bought        la riuscita comprata con la Quintessenza: non si tira, salvo i rossi
@@ -273,12 +275,16 @@ export async function rollAreteWithParadox({
   effectKind = "",
   arete = 0,
   skill = false,
+  witnesses = false,
   bussola = null,
   title,
   flavor = "",
   card = null,
   selectors = []
 }) {
+  // La difficoltà avanzata dipende dal tipo di Magick scelto prima della
+  // conferma. Tiri di abilità e scoppi mantengono la difficoltà originale.
+  const advancedDifficulty = usesAdvancedDifficulty({ witnesses, skill, onlyParadox });
   const situationalModifiers = onlyParadox
     ? []
     : await getSituationalModifiers({ actor, selectors });
@@ -333,7 +339,7 @@ export async function rollAreteWithParadox({
         callback: async (_event, _button, dialog) => {
           const form = dialog.element;
           const activeModifiers = collectActiveModifiers(form);
-          // Il tetto +3 (tronco) vale sul conto finale: premio, Armonia e
+          // Il tetto +3 (tronco) vale sul conto finale: Armonia e
           // modificatori positivi insieme. Lo scarto va in chat.
           const excess = skill || onlyParadox ? 0 : bonusDiceExcess(bonusDice, activeModifiers);
           const alreadyRemoved = skill || onlyParadox ? 0 : startingExcess;
@@ -346,9 +352,8 @@ export async function rollAreteWithParadox({
             || game.settings.get("core", "rollMode");
           const format = game.i18n.format.bind(game.i18n);
           const localize = game.i18n.localize.bind(game.i18n);
-          // Senza spunta si usa il calcolo originale (6+); con la difficolta
-          // avanzata la riuscita parte da 8.
-          const advancedDifficulty = Boolean(form.querySelector("#inputAdvancedDifficulty")?.checked);
+          // Solo Volgare con testimoni usa 8+; il valore viene salvato sulla
+          // carta anche per le immagini dei dadi e i ritiri di Volontà.
           const successFrom = successThreshold(advancedDifficulty);
           const modifier = successModifier(successFrom);
           // La Bussola rispettata nel tiro di Abilità: un dado ora (già nel conto), +1 Quintessenza a tiro fatto.

@@ -25,9 +25,14 @@ export const SUCCESS_FROM = ADVANCED_SUCCESS_FROM;
 /** Il modificatore di Foundry per contare i successi: `cs>7`. */
 export const SUCCESS_MODIFIER = `cs>${SUCCESS_FROM - 1}`;
 
-/** Spunta disattivata: 6+. Spunta attivata: 8+. */
+/** Difficoltà originale: 6+. Volgare con testimoni: difficoltà avanzata, 8+. */
 export function successThreshold(advancedDifficulty = false) {
   return advancedDifficulty ? ADVANCED_SUCCESS_FROM : ORIGINAL_SUCCESS_FROM;
+}
+
+/** Solo la Magick volgare con testimoni attiva automaticamente la difficoltà avanzata. */
+export function usesAdvancedDifficulty({ witnesses = false, skill = false, onlyParadox = false } = {}) {
+  return witnesses === true && !skill && !onlyParadox;
 }
 
 /** Il modificatore Foundry corrispondente alla soglia scelta. */

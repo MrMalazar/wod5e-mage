@@ -40,7 +40,7 @@ export function rollSymbols({ spheres = [], scopes = [], prize = 0 } = {}) {
       kind: "arete",
       id: "arete",
       label: "WOD5E_MAGE.Arete.Prize",
-      value: `+${prize}`,
+      value: `−${prize}`,
       icon: ARETE_SIGIL
     });
   }
@@ -131,6 +131,7 @@ export function renderRollCard({
   traits = [],
   bonusParts = [],
   threshold = 0,
+  prize = 0,
   magickType = "",
   goal = "",
   effectKind = "",
@@ -153,6 +154,7 @@ export function renderRollCard({
   }
   // Un tiro di Abilità (ramo C) non ha né soglia fissa né Tipo: le righe si saltano.
   if (threshold !== null) rows.push(renderRow("threshold", localize("WOD5E_MAGE.RollCard.Threshold"), escapeHtml(threshold)));
+  if (prize > 0) rows.push(renderRow("prize", localize("WOD5E_MAGE.Arete.Prize"), `−${escapeHtml(prize)}`));
   if (magickType) rows.push(renderRow("type", localize("WOD5E_MAGE.RollCard.Type"), escapeHtml(magickType)));
   if (effectKind) rows.push(renderRow("effect", localize("WOD5E_MAGE.RollCard.Effect"), escapeHtml(localize(effectKind))));
   rows.push(renderRow("pool", localize("WOD5E_MAGE.RollCard.Pool"), pool));
