@@ -38,16 +38,17 @@ const context = {
   customSkills: [{ id: "k1", name: "Cucina", value: 2, chosen: false }],
   traitRows: [{ id: "i1", name: "Occhio di lince", img: "m.png", kind: "merit", kindLabel: "Pregi", dice: "+1", chosen: true, hint: "h" }],
   traitKinds: [{ id: "merit", label: "Pregi" }],
-  tiro: { magick: true, size: 6, empty: false, kindLabel: "Tiro di Magick", pills: [{ kind: "arete", id: "arete", text: "Areté 3" }, { kind: "specialty", id: "rituali", skill: "skill:occult", text: "rituali 1" }], pool: 10, computed: 1, difficulty: 1, manual: false, dice: 9, impossible: false, successFrom: 6, prize: { on: true, value: 3, arete: 3 }, quintessence: { value: 0, dice: 0, available: 4 }, sforza: false, kinds: [{ kind: "accidentale", label: "Accidentale", hint: "h" }, { kind: "volgare", label: "Volgare", hint: "h" }, { kind: "testimoni", label: "Volgare con testimoni", hint: "h" }], ready: true },
+  wisdom: { max: 10, superficial: 0, aggravated: 0, segnato: false },
+  tiro: { magick: true, size: 6, empty: false, kindLabel: "Tiro di Magick", extra: { value: 1, dice: 1, cap: 3 }, pool: 10, computed: 1, difficulty: 1, manual: false, dice: 9, impossible: false, successFrom: 6, prize: { on: true, value: 3, arete: 3 }, quintessence: { value: 0, dice: 0, available: 4 }, sforza: false, kinds: [{ kind: "accidentale", label: "Accidentale", hint: "h" }, { kind: "volgare", label: "Volgare", hint: "h" }, { kind: "testimoni", label: "Volgare con testimoni", hint: "h" }], ready: true },
   creationSummary: { grades: [{ id: "a", label: "x", selected: true }], counts: [{ state: "ok", value: 1, target: 2, label: "l", hint: "" }], checks: [{ ok: true, label: "l", target: "" }] },
   bonuses: []
 };
 const html = stat(context);
-for (const marker of ["wod5e-mage-riq-identita", "wod5e-mage-riq-salute", "wod5e-mage-riq-risorse", "wod5e-mage-riq-magick", "wod5e-mage-riq-poteri", "wod5e-mage-riq-attributi", "wod5e-mage-riq-tratti", "wod5e-mage-riq-abilita", "wod5e-mage-riq-tiro", 'data-action="tiroArete"', 'data-action="tiroScope" data-scope="potency" data-level="4"', 'class="wod5e-mage-ambito-livello active lit"', 'data-action="tiroRoll" data-kind="testimoni"', "wod5e-mage-pillola-specialty", 'data-action="ritrattoNext"', "1/2", 'data-action="specialtyDelete" data-skill="occult" data-index="0"', 'data-action="specialtyAdd" data-skill="occult"', "wod5e-mage-riga wod5e-mage-riga-tratto scelta", "WOD5E_MAGE.Tiro.Difficulty", "wod5e-mage-stat-creazione"]) {
+for (const marker of ["wod5e-mage-riq-identita", "wod5e-mage-riq-salute", "wod5e-mage-riq-risorse", "wod5e-mage-riq-magick", "wod5e-mage-riq-poteri", "wod5e-mage-riq-attributi", "wod5e-mage-riq-tratti", "wod5e-mage-riq-abilita", "wod5e-mage-riq-tiro", 'data-action="tiroArete"', 'data-action="tiroScope" data-scope="potency" data-level="4"', 'class="wod5e-mage-ambito-livello active lit"', 'data-action="tiroRoll" data-kind="testimoni"', "data-action=\"tiroExtra\"", "wod5e-mage-saggezza-tendina", 'data-action="ritrattoNext"', "1/2", 'data-action="specialtyDelete" data-skill="occult" data-index="0"', 'data-action="specialtyAdd" data-skill="occult"', "wod5e-mage-riga wod5e-mage-riga-tratto scelta", "WOD5E_MAGE.Tiro.Difficulty", "wod5e-mage-stat-creazione"]) {
   assert.ok(html.includes(marker), `manca ${marker}`);
 }
 assert.ok(!html.includes("wod5e-mage-tiro-tira"), "con l'Areté acceso il tasto TIRA non c'è: ci sono i tre tasti");
-const skillRoll = stat({ ...context, tiro: { ...context.tiro, magick: false, kindLabel: "Tiro di Abilità", pills: [], empty: true, size: 0, ready: false } });
+const skillRoll = stat({ ...context, tiro: { ...context.tiro, magick: false, kindLabel: "Tiro di Abilità", empty: true, size: 0, ready: false } });
 assert.ok(skillRoll.includes("wod5e-mage-tiro-tira") && skillRoll.includes("disabled"), "senza tratti TIRA c'è ed è spento");
 assert.ok(!skillRoll.includes('data-kind="testimoni"'));
 assert.ok(header({}).includes("wod5e-mage-header-vuota"));

@@ -24,14 +24,15 @@ import {
   clearTiro,
   contoTiro,
   emptyTiro,
+  EXTRA_DICE_CAP,
   isMagick,
   pickAttribute,
   pickPower,
   pickSkill,
   pickSpecialty,
-  pillsOf,
   removePill,
   setDifficulty,
+  setExtra,
   setKind,
   setQuintessence,
   setScope,
@@ -110,30 +111,14 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   const { known, attribute, skill, inputs } = contoInputs(actor, tiro, { traits });
   const conto = contoTiro(tiro, inputs);
   const arete = getArete(actor);
-  const names = {
-    arete: { label: localize("WOD5E_MAGE.Arete.Label"), value: arete.value },
-    spheres: Object.fromEntries(prepareSpheres(actor).all.map((sphere) => [sphere.id, localize(sphere.label)])),
-    scopes: Object.fromEntries(SCOPES.map((id) => [id, localize(`WOD5E_MAGE.Scopes.${id}`)])),
-    attributes: Object.fromEntries(known.attributes.map((trait) => [trait.id, { label: trait.label, value: trait.value }])),
-    skills: Object.fromEntries(known.skills.map((trait) => [trait.key, { label: trait.label, value: trait.value }])),
-    power: tiro.power ? { [tiro.power]: potereLabel(inputs.power, localize) } : {},
-    traits: Object.fromEntries((tiro.traits ?? []).map((id) => {
-      const item = actor.items?.get?.(id);
-      const dice = traitDiceOf(actor, [id]);
-      return [id, { label: item?.name ?? id, value: dice || null }];
-    }))
-  };
-  const pills = pillsOf(tiro, names).map((pill) => ({
-    ...pill,
-    text: pill.kind === "scope" ? `${pill.label} ${pill.level}` : (pill.value !== null && pill.value !== undefined ? `${pill.label} ${pill.value}` : pill.label)
-  }));
+  // La catena non si stampa più (Blue, 16/9): quel che è scelto si vede
+  // acceso nei riquadri, e in carta a tiro fatto.
   const magick = isMagick(tiro);
   return {
     magick,
     size: tiroSize(tiro),
     empty: tiroSize(tiro) === 0,
     kindLabel: localize(magick ? "WOD5E_MAGE.Tiro.KindMagick" : (tiro.attribute || tiro.skill ? "WOD5E_MAGE.Tiro.KindSkill" : "WOD5E_MAGE.Tiro.KindNone")),
-    pills,
     pool: conto.pool,
     computed: conto.computed,
     difficulty: conto.difficulty,
@@ -143,6 +128,7 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     successFrom: conto.successFrom,
     prize: { on: Boolean(tiro.prize) && magick, value: conto.prize, arete: arete.value },
     quintessence: { value: tiro.quintessence, dice: conto.quintessence, available: inputs.quintessenceAvailable },
+    extra: { value: tiro.extra, dice: conto.extra, cap: EXTRA_DICE_CAP },
     sforza: Boolean(tiro.sforza),
     kinds: TIRO_KINDS.map((kind) => ({ kind, label: localize(`WOD5E_MAGE.Tiro.Kinds.${kind}`), hint: localize(`WOD5E_MAGE.Tiro.KindHints.${kind}`) })),
     // Il tiro parte con almeno un tratto (Attributo o Abilità).
@@ -271,6 +257,13 @@ export async function onTiroQuintessence(event, target) {
   return repaint(this, setQuintessence(tiro, next));
 }
 
+/** I dadi extra: l'Armonia e i dadi dati al tavolo, col più e il meno, fino a tre. */
+export async function onTiroExtra(event, target) {
+  event.preventDefault();
+  const tiro = tiroOf(this);
+  return repaint(this, setExtra(tiro, tiro.extra + (Number(target.dataset.delta) || 0)));
+}
+
 export async function onTiroSforza(event) {
   event.preventDefault();
   return repaint(this, toggleSforza(tiroOf(this)));
@@ -280,6 +273,12 @@ export async function onTiroSforza(event) {
 export async function onTiroGrimorio(event) {
   event.preventDefault();
   this.changeTab("grimorio", "primary");
+}
+
+/** La × del Grimorio: si torna alla prima pagina. */
+export async function onGrimorioClose(event) {
+  event.preventDefault();
+  this.changeTab("stats", "primary");
 }
 
 /**
@@ -327,6 +326,8 @@ export async function launchTiro(actor, tiro) {
   }
   const notes = [];
   if (tiro.sforza) notes.push(localize("WOD5E_MAGE.Tiro.SforzaNote"));
+
+  if (conto.extra > 0) bonusParts.push(format("WOD5E_MAGE.Tiro.ExtraFlavor", { dice: conto.extra }));
 
   // Il tiro di Abilità: niente rossi, riuscita dal 6, la Difficoltà solo a mano.
   if (!magick) {

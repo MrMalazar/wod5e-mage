@@ -168,7 +168,7 @@
       },
       "Quintessence": "Quintessenza",
       "QuintessenceShort": "un dado per punto (hai {available})",
-      "QuintessenceHint": "Ogni punto speso è un dado in più e scende dalla Ruota. Punti pari al livello della Sfera più alta comprano la riuscita senza tirare (i rossi si tirano comunque). Se l'effetto fa danni, sono aggravati.",
+      "QuintessenceHint": "Ogni punto speso è un dado in più e scende dalla Ruota. Se l'effetto fa danni, sono aggravati.",
       "QuintessenceFlavor": "Quintessenza {points} (+{points} dadi; i danni sono aggravati)",
       "QuintessenceSpent": "Quintessenza spesa: {points}.",
       "SkillSpecialty": "Specializzazione",
@@ -972,21 +972,6 @@
       "Full": "Bussola rispettata, ma la Ruota è piena: niente da rigenerare.",
       "Flavor": "Bussola rispettata (+1 dado): {label}"
     },
-    "Compra": {
-      "Label": "Riuscita comprata",
-      "Title": "Compra la riuscita",
-      "Button": "Compra la riuscita",
-      "Hint": "Quintessenza {quintessence}: {price} punti (la Sfera più alta) comprano la riuscita. L'Ustione dei rossi, se è scattata, resta.",
-      "HintPoor": "Servono {price} punti di Quintessenza (la Sfera più alta), ne hai {quintessence}.",
-      "Ask": "Spendi {price} punti di Quintessenza su {quintessence} e l'incantesimo riesce.",
-      "AskNote": "I danni dell'effetto comprato sono aggravati. L'Ustione dei rossi, se è scattata, resta.",
-      "Yes": "Compra",
-      "No": "Lascia stare",
-      "Done": "riuscita comprata con {price} Quintessenza: i danni sono aggravati.",
-      "DialogButton": "Compra la riuscita",
-      "DialogHint": "{price} punti di Quintessenza (la Sfera più alta) comprano la riuscita: non si tira, i rossi sì.",
-      "DialogPoor": "Servono {price} punti di Quintessenza, ne hai {quintessence}."
-    },
     "Prezzo": {
       "Label": "Vittoria a un prezzo",
       "Title": "Vittoria a un prezzo",
@@ -1075,7 +1060,8 @@
       "ShortOne": "ti manca un pallino",
       "ShortMany": "ti mancano {n} pallini",
       "Absent": "Sfera che non hai",
-      "WithoutPrime": "Senza Primordio: si paga in Quintessenza."
+      "WithoutPrime": "Senza Primordio: si paga in Quintessenza.",
+      "Close": "Chiudi il Grimorio e torna alla scheda"
     },
     "Incantesimi": {
       "DialogTitle": "Scrivi un incantesimo",
@@ -1119,11 +1105,7 @@
       "DiceNote": "Dadi: {note}",
       "EyeOnlyNote": "{eyeOnly} rossi oltre i dadi rimasti: contano solo per l'occhio.",
       "NoDice": "Nessun dado da tirare: l'incantesimo fallisce.",
-      "Bought": "Riuscita comprata con la Quintessenza: non si tira (i rossi sì).",
-      "BoughtLine": "riuscita comprata",
       "BoughtBanner": "Riuscita comprata",
-      "BoughtFlavor": "Quintessenza {points} (riuscita comprata al prezzo della Sfera {price}; i danni sono aggravati)",
-      "BuyPrice": "riuscita a {price} Quintessenza",
       "VulgarFailedQuintessence": "Volgare fallito: un punto di Quintessenza torna sulla Ruota.",
       "MarginHint": "Margine: i successi oltre il primo (il danno: arma più margine).",
       "SkillRoll": "Tiro di Abilità"
@@ -1187,7 +1169,6 @@
     },
     "Stat": {
       "Identita": "Identità",
-      "SaluteCondizioni": "Salute e Condizioni",
       "Risorse": "Risorse",
       "DettagliRuota": "Dettagli della Ruota",
       "Poteri": "Poteri",
@@ -1244,7 +1225,10 @@
       "SforzaHint": "Dichiari che, se fallisce, vuoi ribaltarlo pagando un prezzo: lo tratti col Narratore a tiro fatto.",
       "HowLabel": "Come la fai",
       "Roll": "Tira",
-      "RollHint": "Tira l'Attributo e l'Abilità scelti, meno la Difficoltà; riesce dal 6."
+      "RollHint": "Tira l'Attributo e l'Abilità scelti, meno la Difficoltà; riesce dal 6.",
+      "Extra": "Dadi extra",
+      "ExtraHint": "L'Armonia e i dadi che il tavolo ti dà: fino a tre, entrano nella riserva.",
+      "ExtraFlavor": "dadi extra +{dice}"
     },
     "Ritratti": {
       "NextHint": "Gira i ritratti: quello che vedi è anche l'immagine sulla mappa e in chat",

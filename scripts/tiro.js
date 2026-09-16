@@ -15,7 +15,8 @@
  * - la difficoltà la fa il tipo di tiro: Accidentale e Volgare riescono
  *   col 6, Volgare con testimoni con l'8; i tiri di Abilità col 6;
  * - la Quintessenza dà dadi e basta, col tetto 2 + Areté per lancio;
- * - il tetto +3 vale sull'Armonia; i Tratti scelti entrano per intero;
+ * - i dadi extra (l'Armonia, i dadi dati al tavolo) entrano fino a +3;
+ *   i Tratti scelti entrano per intero;
  * - un potere solo per lancio: i suoi effetti li applica poteri.js;
  * - la Difficoltà scritta a mano sovrascrive quella calcolata.
  */
@@ -29,6 +30,9 @@ export const TIRO_KINDS = Object.freeze(["accidentale", "volgare", "testimoni"])
 
 /** La Quintessenza per lancio: fino a 2 + Areté (raccolta del 14/9). */
 export const QUINTESSENCE_BASE_CAP = 2;
+
+/** I dadi extra per lancio: l'Armonia e i dadi dati al tavolo, fino a +3 (il tetto del tronco). */
+export const EXTRA_DICE_CAP = 3;
 
 /** Lo stato vuoto: niente cliccato, niente scritto a mano. */
 export function emptyTiro() {
@@ -44,6 +48,7 @@ export function emptyTiro() {
     power: null,
     difficulty: null,
     quintessence: 0,
+    extra: 0,
     sforza: false,
     kind: null
   };
@@ -214,6 +219,13 @@ export function setQuintessence(tiro, value) {
   return next;
 }
 
+/** I dadi extra: da zero a EXTRA_DICE_CAP. */
+export function setExtra(tiro, value) {
+  const next = clone(tiro);
+  next.extra = Math.min(count(value), EXTRA_DICE_CAP);
+  return next;
+}
+
 export function toggleSforza(tiro) {
   const next = clone(tiro);
   next.sforza = !next.sforza;
@@ -335,8 +347,9 @@ export function contoTiro(tiro, {
   const specialtyDice = tiro?.skill && tiro?.specialty ? SKILL_SPECIALTY_DICE : 0;
   const bussolaDice = count(bussola) > 0 ? BUSSOLA_DICE : 0;
   const quintessence = magick ? quintessenceDice(tiro?.quintessence, { available: quintessenceAvailable, arete: areteValue }) : 0;
+  const extra = capBonusDice(count(harmony) + count(tiro?.extra));
   const traits = count(attributeValue) + count(skillValue);
-  const bonus = capBonusDice(harmony) + Math.trunc(Number(traitDice) || 0) + specialtyDice + bussolaDice + quintessence;
+  const bonus = extra + Math.trunc(Number(traitDice) || 0) + specialtyDice + bussolaDice + quintessence;
   const pool = Math.max(traits + bonus, 0);
 
   const scopeLevels = Object.entries(tiro?.scopes ?? {}).map(([id, level]) => ({ id, level: count(level) }));
@@ -357,6 +370,7 @@ export function contoTiro(tiro, {
     specialtyDice,
     bussolaDice,
     quintessence,
+    extra,
     pool: conto.pool,
     scopeThreshold,
     prize,

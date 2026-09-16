@@ -168,7 +168,7 @@
       },
       "Quintessence": "Quintessence",
       "QuintessenceShort": "one die per point (you have {available})",
-      "QuintessenceHint": "Every point spent is an extra die and leaves the Wheel. Points equal to the highest Sphere level buy the success without rolling (the red dice are rolled anyway). If the effect deals damage, it is aggravated.",
+      "QuintessenceHint": "Every point spent is one more die and leaves the Wheel. If the effect deals damage, it is aggravated.",
       "QuintessenceFlavor": "Quintessence {points} (+{points} dice; damage is aggravated)",
       "QuintessenceSpent": "Quintessence spent: {points}.",
       "SkillSpecialty": "Specialty",
@@ -972,21 +972,6 @@
       "Full": "Compass followed, but the Wheel is full: nothing to regain.",
       "Flavor": "Compass followed (+1 die): {label}"
     },
-    "Compra": {
-      "Label": "Bought success",
-      "Title": "Buy the success",
-      "Button": "Buy the success",
-      "Hint": "Quintessence {quintessence}: {price} points (the highest Sphere) buy the success. The Burn of the reds, if it triggered, stays.",
-      "HintPoor": "It takes {price} Quintessence points (the highest Sphere), you have {quintessence}.",
-      "Ask": "Spend {price} Quintessence points out of {quintessence} and the spell succeeds.",
-      "AskNote": "The damage of a bought effect is aggravated. The Burn of the reds, if it triggered, stays.",
-      "Yes": "Buy",
-      "No": "Leave it",
-      "Done": "success bought with {price} Quintessence: damage is aggravated.",
-      "DialogButton": "Buy the success",
-      "DialogHint": "{price} Quintessence points (the highest Sphere) buy the success: no roll, the reds still roll.",
-      "DialogPoor": "It takes {price} Quintessence points, you have {quintessence}."
-    },
     "Prezzo": {
       "Label": "Victory at a price",
       "Title": "Victory at a price",
@@ -1075,7 +1060,8 @@
       "ShortOne": "one dot short",
       "ShortMany": "{n} dots short",
       "Absent": "Sphere you lack",
-      "WithoutPrime": "Without Prime: you pay in Quintessence."
+      "WithoutPrime": "Without Prime: you pay in Quintessence.",
+      "Close": "Close the Grimoire and go back to the sheet"
     },
     "Incantesimi": {
       "DialogTitle": "Write a spell",
@@ -1119,11 +1105,7 @@
       "DiceNote": "Dice: {note}",
       "EyeOnlyNote": "{eyeOnly} red dice beyond the remaining dice: they count for the eye only.",
       "NoDice": "No dice to roll: the spell fails.",
-      "Bought": "Success bought with Quintessence: no roll (red dice still roll).",
-      "BoughtLine": "success bought",
       "BoughtBanner": "Success bought",
-      "BoughtFlavor": "Quintessence {points} (success bought at the Sphere price {price}; damage is aggravated)",
-      "BuyPrice": "success at {price} Quintessence",
       "VulgarFailedQuintessence": "Vulgar failed: one point of Quintessence returns to the Wheel.",
       "MarginHint": "Margin: successes beyond the first (damage: weapon plus margin).",
       "SkillRoll": "Skill roll"
@@ -1187,7 +1169,6 @@
     },
     "Stat": {
       "Identita": "Identity",
-      "SaluteCondizioni": "Health and Conditions",
       "Risorse": "Resources",
       "DettagliRuota": "Wheel details",
       "Poteri": "Powers",
@@ -1244,7 +1225,10 @@
       "SforzaHint": "You declare that, on a failure, you want to flip it by paying a price: settle it with the Storyteller after the roll.",
       "HowLabel": "How you do it",
       "Roll": "Roll",
-      "RollHint": "Rolls the chosen Attribute and Skill, minus the Difficulty; success from 6."
+      "RollHint": "Rolls the chosen Attribute and Skill, minus the Difficulty; success from 6.",
+      "Extra": "Extra dice",
+      "ExtraHint": "Harmony and the dice the table gives you: up to three, they enter the pool.",
+      "ExtraFlavor": "extra dice +{dice}"
     },
     "Ritratti": {
       "NextHint": "Cycle the portraits: the one you see is also the image on the map and in chat",

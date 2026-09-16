@@ -203,7 +203,6 @@ function paintDialogDice(form, options) {
       ? format("WOD5E_MAGE.RamoC.RedsEyeOnly", { reds: conto.paradoxDice, eyeOnly: conto.eyeOnly })
       : format("WOD5E_MAGE.RamoC.Reds", { reds: conto.paradoxDice }));
   }
-  if (options.bought) parts.push(game.i18n.localize("WOD5E_MAGE.RamoC.BoughtLine"));
   out.textContent = parts.join(" · ");
   const paradoxInput = form.querySelector("#inputParadoxDice");
   if (paradoxInput) paradoxInput.value = String(conto.paradoxDice);

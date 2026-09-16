@@ -11,6 +11,8 @@
         <button type="button" class="wod5e-mage-row-add" data-action="incantesimoAdd" title="{{localize 'WOD5E_MAGE.Incantesimi.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Add'}}" {{#if locked}}disabled{{/if}}>
             <i class="fa-solid fa-plus"></i>
         </button>
+        {{!-- La × in alto a destra (Blue, 16/9): chi apre il Grimorio dalla prima pagina deve poterlo chiudere. --}}
+        <button type="button" class="wod5e-mage-grimorio-chiudi" data-action="grimorioClose" title="{{localize 'WOD5E_MAGE.Grimorio.Close'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Close'}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
     </header>
 
     {{#if incantesimi.length}}

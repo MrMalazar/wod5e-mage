@@ -9,7 +9,6 @@ import { findCondizione } from "./condizioni.js";
 import { registerVolonta } from "./volonta.js";
 import { registerSforzo } from "./sforzo.js";
 import { registerPrezzo } from "./prezzo.js";
-import { registerCompra } from "./compra.js";
 import { registerUstione } from "./ustione.js";
 import { registerParadossoNarratore } from "./paradosso-narratore.js";
 import { registerGrimorioComune } from "./grimorio-comune.js";
@@ -119,7 +118,6 @@ Hooks.once("init", () => {
   // Sforzare la realtà (10/9 sera): il tasto sotto il tiro fallito, dopo la Volontà.
   registerSforzo();
   registerPrezzo();
-  registerCompra();
   // Il ramo C (11/9): la scelta dell'Ustione sotto la carta, e i punti
   // Paradosso del Narratore col pannello e la lobby.
   registerUstione();

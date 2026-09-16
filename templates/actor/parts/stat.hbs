@@ -6,11 +6,18 @@
     <div class="wod5e-mage-stat-grid">
         <div class="wod5e-mage-stat-col wod5e-mage-stat-col-1">
             {{> "modules/wod5e-mage/templates/actor/parts/stat-identita.hbs"}}
+            {{!-- Risorse (Blue, 16/9): la Salute, le Condizioni e la Saggezza a tendina. --}}
             <section class="wod5e-mage-riq wod5e-mage-riq-salute">
-                <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.SaluteCondizioni"}}</span></header>
+                <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.Risorse"}}</span></header>
                 <div class="wod5e-mage-riq-body">
                     {{> "modules/wod5e-mage/templates/actor/parts/salute.hbs"}}
                     {{> "modules/wod5e-mage/templates/actor/parts/stat-condizioni.hbs"}}
+                    <details class="wod5e-mage-saggezza-tendina">
+                        <summary><i class="fa-solid fa-chevron-right" aria-hidden="true"></i> <span>{{localize "WOD5E_MAGE.Wisdom.Label"}}</span></summary>
+                        <div class="wod5e-mage-saggezza-tendina-body">
+                            {{> "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"}}
+                        </div>
+                    </details>
                 </div>
             </section>
             {{> "modules/wod5e-mage/templates/actor/parts/stat-risorse.hbs"}}

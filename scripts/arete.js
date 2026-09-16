@@ -390,8 +390,6 @@ function wireDifficulty(dialog) {
   const prizeBox = root.querySelector("input[name=prize]");
   const harmony = root.querySelector("#wod5e-mage-arete-harmony");
   const quintessence = root.querySelector("#wod5e-mage-arete-quintessence");
-  const buyButton = root.querySelector("[data-role=buySuccess]");
-  const buyPriceOut = root.querySelector("[data-role=buyPrice]");
   // La Specializzazione dell'Abilità (11/9: al posto della seconda Abilità)
   // e la Bussola rispettata: un dado l'una, fuori dal tetto +3.
   const specialtyBox = root.querySelector("input[name=skillSpecialty]");
@@ -418,8 +416,7 @@ function wireDifficulty(dialog) {
     }).successes;
 
     const sphereMax = Math.max(0, ...sphereLevels.map((entry) => entry.level));
-    // Il ramo C: riserva meno soglia uguale dadi; la Quintessenza al prezzo
-    // della Sfera compra la riuscita, sotto il prezzo è un dado per punto.
+    // Il ramo C: riserva meno soglia uguale dadi; la Quintessenza è un dado per punto.
     if (specialtyNames) {
       const names = primary?.selectedOptions?.[0]?.dataset?.specialties ?? "";
       specialtyNames.textContent = names ? `(${names})` : "";
@@ -440,29 +437,10 @@ function wireDifficulty(dialog) {
     if (autoSuccessOut) {
       const parts = [];
       if (specialtyDice > 0) parts.push(game.i18n.format("WOD5E_MAGE.Arete.SpecialtyDice", { dice: specialtyDice }));
-      if (sphereMax > 0 && quintessenceMax > 0) parts.push(game.i18n.format("WOD5E_MAGE.RamoC.BuyPrice", { price: sphereMax }));
       autoSuccessOut.textContent = parts.length ? `· ${parts.join(" · ")}` : "";
     }
-    autoOut?.classList.toggle("hidden", !conto.spend.bought);
-    // Il tasto «Compra la riuscita» (11/9): c'è quando c'è una Sfera e una
-    // Ruota con Quintessenza; acceso se i punti bastano, spento col perché.
-    if (buyButton) {
-      const show = sphereMax > 0 && quintessenceMax > 0 && !conto.spend.bought;
-      buyButton.hidden = !show;
-      buyButton.disabled = quintessenceMax < sphereMax;
-      buyButton.title = quintessenceMax >= sphereMax
-        ? game.i18n.format("WOD5E_MAGE.Compra.DialogHint", { price: sphereMax })
-        : game.i18n.format("WOD5E_MAGE.Compra.DialogPoor", { price: sphereMax, quintessence: quintessenceMax });
-      if (buyPriceOut) buyPriceOut.textContent = String(sphereMax);
-    }
+    autoOut?.classList.add("hidden");
   };
-  buyButton?.addEventListener("click", (event) => {
-    event.preventDefault();
-    if (!quintessence || buyButton.disabled) return;
-    const sphereMax = Math.max(0, ...readDotRows(root, "sphere").map((entry) => entry.level));
-    quintessence.value = String(sphereMax);
-    update();
-  });
 
   [attribute, primary, secondary, prizeBox, harmony, quintessence, specialtyBox, bussolaBox].forEach((control) => {
     control?.addEventListener("change", update);
@@ -904,10 +882,8 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     specialties,
     arete: arete.value
   });
-  // La Quintessenza spesa (ramo C, 11/9): un punto vale un dado; punti pari
-  // al livello della Sfera più alta comprano la riuscita senza tirare (i
-  // rossi si tirano comunque). Scende dalla Ruota; se l'effetto fa danni,
-  // sono aggravati.
+  // La Quintessenza spesa (16/9): un punto vale un dado, e basta. Scende
+  // dalla Ruota; se l'effetto fa danni, sono aggravati.
   const quintessence = Math.min(Math.max(Math.trunc(Number(result.quintessence) || 0), 0), quintessenceAvailable);
   const sphereMax = Math.max(0, ...sphereEntries.map((entry) => entry.level));
   // La Bussola rispettata (11/9): un dado in più ora, +1 Quintessenza a tiro fatto, una volta per scena.
@@ -928,7 +904,6 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     sphereMax,
     threshold
   });
-  const bought = conto.spend.bought;
   const rollLabel = selectedTraits.map((trait) => trait.label).join(" + ");
   const selectedTypes = [];
   if (options.coincidental) {
@@ -956,9 +931,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.HarmonyFlavor", { dice: options.harmony }));
   }
   if (quintessence > 0) {
-    bonusParts.push(bought
-      ? game.i18n.format("WOD5E_MAGE.RamoC.BoughtFlavor", { points: quintessence, price: sphereMax })
-      : game.i18n.format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: quintessence }));
+    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: quintessence }));
   }
   if (specialtyDie > 0) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.SkillSpecialtyFlavor", { dice: specialtyDie }));
@@ -1023,7 +996,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   }
 
   // L'Accidentale non tira i rossi: solo dadi normali. Il Volgare li tira
-  // sempre, anche con la riuscita comprata: decidono se scoppia.
+  // sempre: decidono se scoppia.
   const paradoxRating = options.coincidental ? 0 : getMagickBalance(actor).paradox;
 
   // Load the Foundry-specific dice implementation only when an Areté roll is
@@ -1039,7 +1012,6 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       witnesses: options.witnesses,
       bonusDice,
       paradoxRating,
-      bought,
       burn: threshold,
       sphereLevel: sphereMax,
       effectKind,

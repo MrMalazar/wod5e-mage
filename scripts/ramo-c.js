@@ -113,15 +113,14 @@ export function ramoCMargin(total) {
 }
 
 /**
- * La Quintessenza nel lancio (verdetti dell'11/9): un punto vale un dado;
- * punti pari al livello della Sfera usata (la più alta, PROPOSTA) comprano
- * la riuscita senza tirare. Sotto quel prezzo ogni punto è un dado.
+ * La Quintessenza nel lancio (Blue, 16/9): un punto vale un dado, e basta.
+ * La riuscita comprata coi punti pari alla Sfera (11/9) è caduta con la
+ * rifondazione: niente successi automatici. `price` e `bought` restano a
+ * zero e falso per chi legge ancora il conto vecchio.
  */
-export function quintessenceSpend(points, sphereMax) {
+export function quintessenceSpend(points) {
   const spent = count(points);
-  const price = count(sphereMax);
-  const bought = price > 0 && spent >= price;
-  return { spent, price, bought, dice: bought ? 0 : spent };
+  return { spent, price: 0, bought: false, dice: spent };
 }
 
 /** L'Ustione del ramo C: pari alla soglia, senza tetto (il tetto Areté più tre è cancellato). */

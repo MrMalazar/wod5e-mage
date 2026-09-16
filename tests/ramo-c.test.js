@@ -97,11 +97,11 @@ assert.equal(ramoCMargin(0), 0);
 assert.equal(ramoCMargin(1), 0);
 assert.equal(ramoCMargin(3), 2);
 
-// La Quintessenza: un dado per punto; al livello della Sfera compra la riuscita.
-assert.deepEqual(quintessenceSpend(2, 3), { spent: 2, price: 3, bought: false, dice: 2 });
-assert.deepEqual(quintessenceSpend(3, 3), { spent: 3, price: 3, bought: true, dice: 0 });
-assert.deepEqual(quintessenceSpend(4, 3), { spent: 4, price: 3, bought: true, dice: 0 });
-assert.deepEqual(quintessenceSpend(2, 0), { spent: 2, price: 0, bought: false, dice: 2 }, "senza Sfera non c'è prezzo");
+// La Quintessenza (Blue, 16/9): un dado per punto, e basta. La riuscita comprata è caduta.
+assert.deepEqual(quintessenceSpend(2, 3), { spent: 2, price: 0, bought: false, dice: 2 });
+assert.deepEqual(quintessenceSpend(3, 3), { spent: 3, price: 0, bought: false, dice: 3 }, "al livello della Sfera non si compra più niente");
+assert.deepEqual(quintessenceSpend(4), { spent: 4, price: 0, bought: false, dice: 4 });
+assert.deepEqual(quintessenceSpend(-1), { spent: 0, price: 0, bought: false, dice: 0 });
 
 // L'Ustione pari alla soglia senza tetto; Sforzare costa la soglia; Vittoria a un prezzo con almeno un dado.
 assert.equal(ustioneAmount(9), 9);
@@ -122,7 +122,7 @@ assert.equal(getParadoxDieResult(10), "paradoxTen");
 assert.match(getMageDieImage(6, { successFrom: 6 }), /magick-scintilla\.svg$/);
 assert.equal(getParadoxDieResult(6, { successFrom: 6 }), "success");
 
-// La fascia: un successo basta; la riuscita comprata ha la sua parola.
+// La fascia: un successo basta; le carte vecchie con la riuscita comprata tengono la loro parola.
 assert.equal(rollOutcome(1, 1, (k) => k).text, "WOD5E_MAGE.RollCard.Success");
 assert.equal(rollOutcome(0, 1, (k) => k).text, "WOD5E_MAGE.RollCard.Failure");
 assert.equal(rollOutcome(1, 1, (k) => k, { bought: true }).text, "WOD5E_MAGE.RollCard.Bought");
@@ -185,11 +185,14 @@ const salute = readFileSync(new URL("../scripts/salute.js", import.meta.url), "u
 assert.match(salute, /pool: resolve \+ composure,[\s\S]*skill: true,/);
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
-  for (const key of ["Pool", "Threshold", "Dice", "DiceLine", "Reds", "RedsEyeOnly", "DiceNote", "EyeOnlyNote", "NoDice", "Bought", "BoughtLine", "BoughtBanner", "BoughtFlavor", "BuyPrice", "VulgarFailedQuintessence", "MarginHint", "SkillRoll"]) {
+  for (const key of ["Pool", "Threshold", "Dice", "DiceLine", "Reds", "RedsEyeOnly", "DiceNote", "EyeOnlyNote", "NoDice", "BoughtBanner", "VulgarFailedQuintessence", "MarginHint", "SkillRoll"]) {
     assert.equal(typeof strings.WOD5E_MAGE.RamoC[key], "string", `${lang} RamoC.${key}`);
   }
   assert.equal(strings.WOD5E_MAGE.RamoC.AdvancedDifficulty, undefined, `${lang}: la casella della difficoltà avanzata è caduta (16/9)`);
-  assert.equal(typeof strings.WOD5E_MAGE.RollCard.Bought, "string");
+  assert.equal(typeof strings.WOD5E_MAGE.RollCard.Bought, "string", "le carte vecchie leggono ancora la parola");
+  // La riuscita comprata è caduta (16/9): niente tasto in chat, niente nel dialogo.
+  assert.equal(strings.WOD5E_MAGE.Compra, undefined, `${lang}: Compra`);
+  assert.equal(strings.WOD5E_MAGE.RamoC.BuyPrice, undefined, `${lang}: BuyPrice`);
   assert.equal(typeof strings.WOD5E_MAGE.Arete.SpecialtyDice, "string");
   assert.equal(strings.WOD5E_MAGE.Arete.AutoVictory, undefined, `${lang}: la vittoria automatica del ramo A è caduta`);
   // La parola «gettone» non entra (verdetto di Blue).

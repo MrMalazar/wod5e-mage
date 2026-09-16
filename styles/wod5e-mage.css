@@ -3742,9 +3742,10 @@
 }
 
 /* Nessuna altezza minima: Foundry può richiudere la scheda col doppio clic.
-   La larghezza minima impedisce invece che nomi e pallini vengano spezzati. */
+   La larghezza minima tiene in piedi le quattro colonne di riquadri della
+   prima pagina (16/9): sotto, nomi, pallini e tasti si accavallavano. */
 .wod5e-mage.wod5e.actor.sheet:not(.minimized) {
-  min-width: 820px;
+  min-width: 1280px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.minimized {
@@ -7977,32 +7978,41 @@
 
 /* ==========================================================================
    LA PRIMA PAGINA A NOVE RIQUADRI (16/9): il selettore del tiro composto.
-   Quattro colonne; la prima da tre riquadri (Identità, Salute, Risorse), le
-   altre da due (Magick e Poteri; Attributi e Tratti; Abilità e Il Tiro). La
-   testata è vuota. Ogni riquadro ha il titolo maiuscolo spaziato e il corpo;
-   le righe si cliccano e si accendono in viola quando entrano nel tiro.
+   Quattro colonne; la prima da tre riquadri (Identità, Risorse, La Ruota),
+   le altre da due (Magick e Poteri; Attributi e Tratti; Abilità e Il Tiro).
+   La testata è vuota. Ogni riquadro ha il titolo maiuscolo spaziato e il
+   corpo; le righe si cliccano e si accendono in viola quando entrano nel
+   tiro. Misure strette (seconda passata, coi primi screenshot di Blue):
+   righe da 26, nomi a 1rem, la fascia alta più bassa per dare aria a
+   Poteri, Tratti e Il Tiro.
    ========================================================================== */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-header-vuota {
   display: none;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat {
+/* La pagina si vede solo quando è la linguetta accesa: il display della
+   griglia non deve scavalcare il nascondino delle altre pagine. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat:not(.active) {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat.active {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 8px 10px 10px 0;
+  gap: 8px;
+  padding: 6px 8px 8px 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-grid {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: auto auto auto;
 }
 
 /* Le colonne sono trasparenti alla griglia: i riquadri si posizionano da soli,
-   così la fascia bassa (Risorse, Poteri, Tratti, Il Tiro) sta su una riga sola. */
+   così la fascia bassa (La Ruota, Poteri, Tratti, Il Tiro) sta su una riga sola. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-col {
   display: contents;
 }
@@ -8027,7 +8037,8 @@
   flex-direction: column;
   min-height: 0;
   min-width: 0;
-  padding: 8px 10px 10px;
+  overflow: hidden;
+  padding: 6px 8px 8px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title {
@@ -8035,12 +8046,13 @@
   border-bottom: 1px solid rgb(152 119 43 / 45%);
   color: var(--mage-oro);
   display: flex;
+  flex: 0 0 auto;
   font-size: 0.72rem;
   font-weight: 700;
   gap: 6px;
   letter-spacing: 0.16em;
-  margin: 0 0 6px;
-  padding: 0 0 5px;
+  margin: 0 0 4px;
+  padding: 0 0 4px;
   text-transform: uppercase;
 }
 
@@ -8071,7 +8083,7 @@
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   min-height: 0;
 }
 
@@ -8084,7 +8096,7 @@
   font-weight: 700;
   gap: 8px;
   letter-spacing: 0.14em;
-  margin: 6px 0 2px;
+  margin: 3px 0 1px;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -8109,7 +8121,7 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambiti-lista {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga {
@@ -8120,7 +8132,7 @@
   box-sizing: border-box;
   display: flex;
   gap: 6px;
-  min-height: 30px;
+  min-height: 26px;
   padding: 0 6px 0 4px;
   position: relative;
 }
@@ -8134,6 +8146,7 @@
   border-color: var(--mage-viola-chiaro);
 }
 
+/* I nomi a 1rem (Blue, 16/9: «son difficili da leggere»). */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome {
   align-items: center;
   background: transparent;
@@ -8142,7 +8155,7 @@
   cursor: pointer;
   display: flex;
   flex: 1 1 auto;
-  font-size: 0.88rem;
+  font-size: 1rem;
   font-weight: 600;
   gap: 7px;
   justify-content: flex-start;
@@ -8150,7 +8163,7 @@
   min-height: 0;
   min-width: 0;
   overflow: hidden;
-  padding: 4px 2px;
+  padding: 2px 2px;
   text-align: left;
   white-space: nowrap;
 }
@@ -8162,7 +8175,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome:hover {
   box-shadow: none;
-  color: var(--mage-testo);
+  color: var(--mage-oro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.scelta .wod5e-mage-riga-nome {
@@ -8182,26 +8195,38 @@
 
 .wod5e-mage.wod5e.actor.sheet i.wod5e-mage-riga-icona {
   color: var(--mage-oro);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   text-align: center;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga > .resource-value {
+  align-items: center;
+  display: flex;
   flex: 0 0 auto;
+  gap: 5px;
   margin: 0;
+  white-space: nowrap;
 }
 
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga > .resource-value > :is(.resource-value-step, .resource-value-empty) {
+  flex: 0 0 18px;
+  height: 18px;
+  min-width: 18px;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga > .resource-value > .edit-skill,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga .wod5e-mage-trait-number {
   display: none;
 }
 
 /* L'Areté: il sigillo e il nome, i cinque pallini a destra. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-arete {
-  min-height: 36px;
+  min-height: 32px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-arete .wod5e-mage-riga-nome {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.02em;
 }
@@ -8222,10 +8247,10 @@
   padding: 2px;
 }
 
-/* Gli Ambiti: sette numeri in cerchio, cliccabili; fino al livello scelto si
-   accendono, il livello scelto è viola. */
+/* Gli Ambiti: sette numeri in cerchio, grandi da leggersi (Blue, 16/9),
+   cliccabili; fino al livello scelto si accendono, il livello scelto è viola. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito {
-  min-height: 32px;
+  min-height: 30px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito.scelta {
@@ -8243,28 +8268,28 @@
   background: var(--mage-incavo);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 50%;
-  color: var(--mage-tenue);
+  color: var(--mage-testo);
   cursor: pointer;
   display: inline-flex;
-  font-size: 0.66rem;
+  font-size: 0.86rem;
   font-weight: 700;
-  height: 20px;
+  height: 24px;
   justify-content: center;
   line-height: 1;
   min-height: 0;
   padding: 0;
-  width: 20px;
+  width: 24px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-livello:hover {
   border-color: var(--mage-oro);
   box-shadow: none;
-  color: var(--mage-testo);
+  color: var(--mage-oro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-livello.lit {
   background: var(--mage-oro-tenue);
-  color: var(--mage-testo);
+  color: #fff;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-livello.active {
@@ -8325,7 +8350,7 @@
   color: var(--mage-testo);
   cursor: pointer;
   flex: 1 1 auto;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   line-height: 1;
   min-height: 0;
   min-width: 0;
@@ -8371,8 +8396,8 @@
 /* L'Abilità Specifica: la spunta a sinistra, il nome si scrive. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-specifica .wod5e-mage-custom-skill-name {
   flex: 1 1 auto;
-  font-size: 0.85rem;
-  height: 24px;
+  font-size: 0.9rem;
+  height: 22px;
   min-width: 0;
 }
 
@@ -8406,8 +8431,9 @@
   border-radius: 6px;
   color: var(--mage-tenue);
   display: flex;
+  flex: 0 0 auto;
   gap: 6px;
-  padding: 2px 8px;
+  padding: 1px 8px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-cerca > input {
@@ -8416,16 +8442,18 @@
   box-shadow: none;
   color: var(--mage-testo);
   flex: 1 1 auto;
-  font-size: 0.82rem;
-  height: 24px;
+  font-size: 0.85rem;
+  height: 22px;
   min-width: 0;
 }
 
+/* Gli elenchi scorrono dentro il riquadro: la fascia bassa non cresce a dismisura. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-scroll {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
-  gap: 2px;
-  max-height: 290px;
+  gap: 1px;
+  max-height: 224px;
   min-height: 0;
   overflow: auto;
   padding-right: 2px;
@@ -8434,9 +8462,9 @@
 .wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga {
   color: var(--mage-testo);
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   justify-content: flex-start;
-  min-height: 28px;
+  min-height: 26px;
   text-align: left;
   width: 100%;
 }
@@ -8461,7 +8489,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.scelta .wod5e-mage-riga-spunta {
   background: var(--mage-oro);
-  border-color: var(--mage-testo);
+  border-color: #fff;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome-testo {
@@ -8499,17 +8527,19 @@
   border-radius: 6px;
   color: #1a140a;
   cursor: pointer;
+  flex: 0 0 auto;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   margin-top: auto;
-  min-height: 30px;
+  min-height: 28px;
   text-transform: uppercase;
   width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-filtri {
   display: flex;
+  flex: 0 0 auto;
   flex-wrap: wrap;
   gap: 4px;
 }
@@ -8535,7 +8565,8 @@
   color: #1a140a;
 }
 
-/* Identità: i due tasti sopra, il ritratto grande coi tasti nello slot, i nomi, l'Appartenenza. */
+/* Identità: i due tasti sopra, il ritratto a misura fissa (non segue la
+   colonna: Blue, 16/9) coi tasti nello slot, i nomi, l'Appartenenza. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-identita-tasti {
   display: grid;
   gap: 6px;
@@ -8547,6 +8578,7 @@
   position: static;
   text-align: center;
   top: auto;
+  white-space: nowrap;
   width: 100%;
 }
 
@@ -8554,9 +8586,12 @@
   background: var(--mage-incavo);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 6px;
-  height: 230px;
+  flex: 0 0 auto;
+  height: 170px;
+  margin: 2px auto 0;
   overflow: hidden;
   position: relative;
+  width: 220px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ritratto-img {
@@ -8600,8 +8635,8 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-names {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-top: 4px;
+  gap: 3px;
+  margin-top: 3px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .name-field {
@@ -8610,37 +8645,53 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .charname {
   box-sizing: border-box;
-  font-size: 22px;
-  height: 34px;
+  font-size: 20px;
+  height: 30px;
   text-align: center;
   width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-player {
-  height: 26px;
+  height: 24px;
   text-align: center;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-appartenenza {
-  margin-top: 4px;
+  margin-top: 3px;
   width: 100%;
 }
 
-/* Salute: il tracciato a tutta larghezza, i quattro tasti su una fila, le Condizioni sotto. */
+/* Risorse: il tracciato a tutta larghezza, i quattro tasti su una fila, le
+   Condizioni e la Saggezza a tendina. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-salute .wod5e-mage-salute {
   padding: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-salute .wod5e-mage-salute-track {
+  flex-wrap: nowrap;
+  gap: 3px;
+  justify-content: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-salute .wod5e-mage-salute-cell {
+  flex: 0 0 22px;
+  height: 22px;
+  width: 22px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-salute .wod5e-mage-salute-buttons {
   display: grid;
   gap: 4px;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-salute .wod5e-mage-salute-buttons > button {
   font-size: 0.66rem;
-  min-height: 26px;
-  padding: 2px 4px;
+  min-height: 24px;
+  overflow: hidden;
+  padding: 2px 3px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-box {
@@ -8649,35 +8700,72 @@
   gap: 2px;
 }
 
-/* Risorse: il mezzo cerchio nella colonna, i conti in cifra, i Dettagli chiusi. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-salute .wod5e-mage-condizioni-strip {
+  min-height: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-tendina > summary,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli > summary,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione > summary {
+  color: var(--mage-testo);
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  list-style: none;
+  padding: 3px 2px;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-tendina > summary::-webkit-details-marker,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli > summary::-webkit-details-marker,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-tendina[open] > summary > i,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli[open] > summary > i {
+  transform: rotate(90deg);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-tendina-body .wod5e-mage-wisdom {
+  padding: 0 0 4px;
+}
+
+/* La Ruota: il mezzo cerchio nella colonna, i due conti col meno e il più
+   sotto (niente parole appese ai lati dell'arco: uscivano dal riquadro), i
+   Dettagli chiusi con le due righe allineate e i due tasti. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-stat {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-stat .wod5e-mage-magick-track-compact {
-  height: 150px;
-  margin: 4px auto 34px;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-stat {
+  height: 128px;
+  margin: 2px auto 0;
   max-width: 100%;
-  width: 300px;
+  width: 270px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-nome {
-  color: var(--mage-tenue);
-  font-size: 0.62rem;
-  left: 50%;
-  letter-spacing: 0.16em;
-  position: absolute;
-  text-transform: uppercase;
-  top: 62%;
-  transform: translateX(-50%);
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-stat .wod5e-mage-magick-node {
+  height: 24px;
+  width: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar-stat {
+  display: block;
+  margin: 8px 0 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar-stat .wod5e-mage-magick-cells {
+  justify-content: center;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conti {
   display: grid;
   gap: 6px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto {
@@ -8685,51 +8773,100 @@
   background: var(--mage-incavo);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 6px;
+  box-sizing: border-box;
   display: flex;
-  font-size: 0.62rem;
-  justify-content: space-between;
-  letter-spacing: 0.12em;
-  padding: 4px 8px;
+  gap: 4px;
+  min-width: 0;
+  padding: 3px 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto-nome {
+  color: var(--mage-testo);
+  flex: 1 1 auto;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-ruota-conto-nome {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  line-height: 1;
+  min-height: 0;
+  padding: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-ruota-conto-nome:hover {
+  box-shadow: none;
+  text-shadow: 0 0 6px var(--mage-rosso-vivo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto > b {
-  font-size: 1.1rem;
+  flex: 0 0 auto;
+  font-size: 1.05rem;
+  min-width: 16px;
+  text-align: center;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto.quintessence > b {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto.quintessence > b,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto.quintessence .wod5e-mage-ruota-conto-nome {
   color: var(--mage-oro);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto.paradox > b {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto.paradox > b,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto.paradox .wod5e-mage-ruota-conto-nome {
   color: var(--mage-rosso-vivo);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli > summary,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione > summary {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto > button:not(.wod5e-mage-ruota-conto-nome) {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
   color: var(--mage-testo);
   cursor: pointer;
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  list-style: none;
-  padding: 4px 2px;
-  text-transform: uppercase;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli > summary::-webkit-details-marker,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione > summary::-webkit-details-marker {
-  display: none;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli[open] > summary > i {
-  transform: rotate(90deg);
+  display: inline-flex;
+  flex: 0 0 18px;
+  font-size: 0.6rem;
+  height: 18px;
+  justify-content: center;
+  line-height: 1;
+  min-height: 0;
+  padding: 0;
+  width: 18px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli-body {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 4px 0;
+  gap: 4px;
+  padding: 2px 0 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettaglio {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) 64px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettaglio > span {
+  color: var(--mage-testo);
+  font-size: 0.78rem;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettaglio > input {
+  height: 24px;
+  text-align: center;
+  width: 64px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli-tasti {
@@ -8740,9 +8877,11 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli-tasti .wod5e-mage-contraccolpo-button {
   flex: 1 1 auto;
+  margin: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli-tasti .wod5e-mage-wheel-mode {
+  flex: 0 0 auto;
   position: static;
 }
 
@@ -8757,7 +8896,12 @@
   font-size: 0.88rem;
   font-weight: 700;
   gap: 8px;
-  padding: 5px 10px;
+  min-height: 28px;
+  padding: 2px 8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tipo > span {
+  flex: 1 1 auto;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tiro:not(.magick) .wod5e-mage-tiro-tipo {
@@ -8766,61 +8910,17 @@
   color: var(--mage-testo);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-catena {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  min-height: 28px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola {
-  align-items: center;
-  background: #2f2a1f;
-  border: 1px solid var(--mage-viola-chiaro);
-  border-radius: 12px;
-  color: var(--mage-testo);
-  display: inline-flex;
-  font-size: 0.74rem;
-  font-weight: 600;
-  gap: 4px;
-  line-height: 1;
-  padding: 3px 4px 3px 9px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola > button {
-  background: transparent;
-  border: 0;
-  color: var(--mage-tenue);
-  cursor: pointer;
-  font-size: 0.8rem;
-  line-height: 1;
-  min-height: 0;
-  padding: 0 3px;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola > button:hover {
-  box-shadow: none;
-  color: var(--mage-rosso-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-arete { border-color: var(--mage-oro); }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-scope { border-color: var(--mage-oro-scuro); }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-trait,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-power { border-color: var(--mage-oro-tenue); color: var(--mage-testo); }
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-azzera {
-  background: transparent;
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 12px;
-  color: var(--mage-tenue);
+  background: rgb(20 16 10 / 45%);
+  border: 1px solid rgb(255 255 255 / 35%);
+  border-radius: 10px;
+  color: inherit;
   cursor: pointer;
-  font-size: 0.68rem;
+  flex: 0 0 auto;
+  font-size: 0.66rem;
   line-height: 1;
-  margin-left: auto;
   min-height: 0;
-  padding: 4px 8px;
+  padding: 3px 7px;
   width: auto;
 }
 
@@ -8839,7 +8939,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 4px 6px 6px;
+  padding: 3px 6px 4px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-riserva .wod5e-mage-riq-occhiello,
@@ -8854,9 +8954,9 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-riserva > b,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-dadi > b {
-  color: var(--mage-testo);
+  color: var(--mage-oro);
   font-family: "Modesto Condensed", serif;
-  font-size: 1.9rem;
+  font-size: 1.7rem;
   line-height: 1;
 }
 
@@ -8870,7 +8970,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-dadi > small {
   color: var(--mage-tenue);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-riga {
@@ -8881,8 +8981,8 @@
   display: flex;
   gap: 6px;
   justify-content: space-between;
-  min-height: 30px;
-  padding: 2px 6px;
+  min-height: 26px;
+  padding: 1px 6px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-difficolta.a-mano {
@@ -8898,7 +8998,7 @@
   align-items: center;
   color: var(--mage-testo);
   display: flex;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   gap: 6px;
   letter-spacing: 0.08em;
@@ -8917,7 +9017,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-comandi > b {
-  color: var(--mage-testo);
+  color: var(--mage-oro);
   font-size: 1rem;
   min-width: 22px;
   text-align: center;
@@ -8925,7 +9025,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-comandi > small {
   color: var(--mage-tenue);
-  font-size: 0.68rem;
+  font-size: 0.66rem;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-comandi > button {
@@ -8938,7 +9038,7 @@
   display: inline-flex;
   font-size: 0.7rem;
   gap: 4px;
-  height: 22px;
+  height: 20px;
   justify-content: center;
   line-height: 1;
   min-height: 0;
@@ -8954,22 +9054,16 @@
   margin: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-opzioni {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza {
   background: #2f2a1f;
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 6px;
   color: var(--mage-testo);
   cursor: pointer;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  min-height: 30px;
+  min-height: 26px;
   text-transform: uppercase;
   width: 100%;
 }
@@ -8984,6 +9078,7 @@
   display: grid;
   gap: 5px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: auto;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasto,
@@ -8996,7 +9091,7 @@
   font-size: 0.76rem;
   font-weight: 700;
   line-height: 1.15;
-  min-height: 40px;
+  min-height: 38px;
   padding: 4px 6px;
   width: 100%;
 }
@@ -9006,7 +9101,7 @@
   font-size: 1.5rem;
   letter-spacing: 0.14em;
   margin-top: auto;
-  min-height: 46px;
+  min-height: 40px;
   text-transform: uppercase;
 }
 
@@ -9021,8 +9116,26 @@
   opacity: 0.45;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tiro .wod5e-mage-riq-occhiello {
-  margin-top: auto;
+/* Il Grimorio aperto dalla prima pagina: la × in alto a destra lo chiude. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-grimorio-chiudi {
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  color: var(--mage-testo);
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: 1rem;
+  height: 26px;
+  line-height: 1;
+  margin-left: auto;
+  min-height: 0;
+  padding: 0;
+  width: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-grimorio-chiudi:hover {
+  box-shadow: none;
+  color: var(--mage-rosso-chiaro);
 }
 
 /* Il memo di creazione e i Bonus, sotto i riquadri, chiusi. */
@@ -9030,7 +9143,8 @@
   background: linear-gradient(#2a2314, #1f1a10);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 8px;
-  padding: 2px 10px;
+  flex: 0 0 auto;
+  padding: 1px 10px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione[open] > summary > i {
@@ -9042,23 +9156,4 @@
   gap: 12px;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   padding: 4px 0 8px;
-}
-
-/* I pallini dentro le righe della prima pagina: in fila, 18 px, aria fra loro. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga > .resource-value {
-  align-items: center;
-  display: flex;
-  gap: 5px;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga > .resource-value > :is(.resource-value-step, .resource-value-empty) {
-  flex: 0 0 18px;
-  height: 18px;
-  min-width: 18px;
-  width: 18px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga > .resource-value > .edit-skill {
-  display: none;
 }

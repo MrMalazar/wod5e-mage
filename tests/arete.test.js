@@ -123,12 +123,12 @@ const zeroThreshold = ramoCPool({
 });
 assert.deepEqual([zeroThreshold.pool, zeroThreshold.threshold, zeroThreshold.dice], [6, 0, 6]);
 assert.equal(ramoCPool({ traits: 6, bonus: 5, threshold: 0 }).pool, 9, "tetto +3 sui dadi in più");
-// La Quintessenza: un dado per punto sotto il prezzo; al prezzo della Sfera compra la riuscita.
-assert.deepEqual(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).spend, { spent: 2, price: 3, bought: false, dice: 2 });
+// La Quintessenza (16/9): un dado per punto, e basta; il livello della Sfera non compra più niente.
+assert.deepEqual(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).spend, { spent: 2, price: 0, bought: false, dice: 2 });
 assert.equal(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).dice, 5);
-const bought = ramoCPool({ traits: 6, quintessence: 3, sphereMax: 3, threshold: 3 });
-assert.equal(bought.spend.bought, true);
-assert.equal(bought.dice, 3, "comprata: i punti non sono dadi");
+const paid = ramoCPool({ traits: 6, quintessence: 3, sphereMax: 3, threshold: 3 });
+assert.equal(paid.spend.bought, false);
+assert.equal(paid.dice, 6, "tre punti, tre dadi in più");
 assert.equal(ramoCPool({ traits: 2, specialtyDice: 2, threshold: 3 }).dice, 1, "i dadi della Specialità");
 
 // Il Volgare fallito (11/9): un punto di Quintessenza sale sulla Ruota, come col +.
@@ -275,13 +275,14 @@ assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
   const confirm = readFileSync(new URL("../templates/dialogs/arete-roll-confirm.hbs", import.meta.url), "utf8");
   assert.match(confirm, /\{\{\{bussolaHtml\}\}\}/);
   assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /getCustomModifierTotal\(form\) \+ bussolaDice\(form\)/);
-  // Il ramo C in arete.js: la riserva meno la soglia, la riuscita comprata, il Volgare fallito.
+  // Il ramo C in arete.js: la riserva meno la soglia, il Volgare fallito; niente riuscita comprata (16/9).
   assert.match(arete, /rollAreteWithParadox\(\{\s*pool: conto\.pool,\s*threshold,/);
   assert.match(arete, /effect\.vulgar && Number\.isFinite\(total\) && total < 1/);
   assert.doesNotMatch(arete, /isAutomaticVictory|isOneStepShort|postAutomaticVictory/);
   const dialog2 = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
   assert.match(dialog2, /data-role="pool">0<\/strong> − <\/span>[\s\S]*data-role="threshold">0<\/strong>[\s\S]*data-role="dice">0<\/strong>/);
-  assert.match(dialog2, /data-role="autoVictory">\{\{localize "WOD5E_MAGE\.RamoC\.Bought"\}\}/);
+  assert.doesNotMatch(dialog2, /autoVictory|buySuccess|Compra\./);
+  assert.doesNotMatch(arete, /buySuccess|spend\.bought|Compra\./);
   assert.match(readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8"), /-=convinzioneScena/);
 }
 

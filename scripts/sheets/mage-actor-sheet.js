@@ -63,7 +63,9 @@ import {
   onTiroAttribute,
   onTiroClear,
   onTiroDifficulty,
+  onTiroExtra,
   onTiroGrimorio,
+  onGrimorioClose,
   onTiroPill,
   onTiroPower,
   onTiroPrize,
@@ -272,8 +274,10 @@ export class MageActorSheet extends MortalActorSheet {
       tiroClear: onTiroClear,
       tiroDifficulty: onTiroDifficulty,
       tiroQuintessence: onTiroQuintessence,
+      tiroExtra: onTiroExtra,
       tiroSforza: onTiroSforza,
       tiroGrimorio: onTiroGrimorio,
+      grimorioClose: onGrimorioClose,
       tiroRoll: onTiroRoll,
       // I ritratti (16/9): girano, se ne aggiunge uno, si toglie quello che si vede.
       ritrattoNext: onRitrattoNext,
@@ -310,6 +314,7 @@ export class MageActorSheet extends MortalActorSheet {
         `${MODULE}/parts/stat-tratti.hbs`,
         `${MODULE}/parts/stat-abilita.hbs`,
         `${MODULE}/parts/stat-tiro.hbs`,
+        `${MODULE}/parts/wisdom.hbs`,
         `${MODULE}/parts/bonuses.hbs`
       ],
       scrollable: [".wod5e-mage-riq-scroll", ".wod5e-mage-riq-body"]
@@ -453,7 +458,7 @@ export class MageActorSheet extends MortalActorSheet {
     // Le tendine della prima pagina restano com'erano attraverso i render:
     // Condizioni, Dettagli della Ruota, il memo di creazione.
     this._drawersOpen ??= {};
-    for (const [key, selector] of [["condizioni", ".wod5e-mage-condizioni-drawer"], ["ruota", ".wod5e-mage-ruota-dettagli"], ["creazione", ".wod5e-mage-stat-creazione"]]) {
+    for (const [key, selector] of [["condizioni", ".wod5e-mage-condizioni-drawer"], ["ruota", ".wod5e-mage-ruota-dettagli"], ["saggezza", ".wod5e-mage-saggezza-tendina"], ["creazione", ".wod5e-mage-stat-creazione"]]) {
       const drawer = this.element?.querySelector(selector);
       if (!drawer) continue;
       drawer.open = Boolean(this._drawersOpen[key]);

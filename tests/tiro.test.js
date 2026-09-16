@@ -4,6 +4,7 @@ import {
   clearTiro,
   contoTiro,
   emptyTiro,
+  EXTRA_DICE_CAP,
   isMagick,
   pickAttribute,
   pickPower,
@@ -14,6 +15,7 @@ import {
   quintessenceDice,
   removePill,
   setDifficulty,
+  setExtra,
   setKind,
   setQuintessence,
   setScope,
@@ -89,6 +91,10 @@ assert.equal(bumpDifficulty(vuoto, 1, 5).difficulty, 6, "senza numero scritto si
 assert.equal(bumpDifficulty(setDifficulty(vuoto, 2), -1).difficulty, 1);
 assert.equal(bumpDifficulty(setDifficulty(vuoto, 0), -1).difficulty, 0, "mai sotto zero");
 assert.equal(setQuintessence(vuoto, 3).quintessence, 3);
+assert.equal(EXTRA_DICE_CAP, 3);
+assert.equal(setExtra(vuoto, 2).extra, 2);
+assert.equal(setExtra(vuoto, 9).extra, 3, "i dadi extra si fermano a tre");
+assert.equal(setExtra(vuoto, -1).extra, 0);
 assert.equal(toggleSforza(vuoto).sforza, true);
 assert.equal(setKind(vuoto, "testimoni").kind, "testimoni");
 assert.equal(setKind(vuoto, "altro").kind, null);
@@ -173,11 +179,16 @@ assert.deepEqual([conto.manual, conto.difficulty, conto.dice], [true, 4, 2]);
 conto = contoTiro(setDifficulty(magick, 9), { arete: 2, attributeValue: 4, skillValue: 5 });
 assert.deepEqual([conto.computed, conto.difficulty, conto.dice, conto.impossible], [5, 9, 0, true]);
 
-// La Quintessenza, la Bussola, l'Armonia col tetto +3 e i Tratti per intero entrano nella riserva.
+// La Quintessenza, la Bussola, i dadi extra col tetto +3 e i Tratti per intero entrano nella riserva.
 conto = contoTiro(setQuintessence(magick, 9), { arete: 2, attributeValue: 4, skillValue: 5, quintessenceAvailable: 9, bussola: 1, harmony: 5, traitDice: 4 });
 assert.equal(conto.quintessence, 4, "tetto 2 + Areté");
 assert.equal(conto.bussolaDice, 1);
+assert.equal(conto.extra, 3, "l'Armonia data dal programma si ferma a tre");
 assert.equal(conto.pool, 9 + 4 + 1 + 3 + 4);
+conto = contoTiro(setExtra(magick, 2), { arete: 2, attributeValue: 4, skillValue: 5 });
+assert.deepEqual([conto.extra, conto.pool], [2, 11], "i dadi extra della scheda entrano nella riserva");
+conto = contoTiro(setExtra(magick, 3), { arete: 2, attributeValue: 4, skillValue: 5, harmony: 2 });
+assert.equal(conto.extra, 3, "scheda e Armonia insieme non passano il tetto");
 
 // Un potere con effetti tocca il conto; un segnaposto non fa niente.
 const sconto = { id: "forces-2-1", sphere: "forces", dot: 2, slot: 1, name: "Dono della forza", text: "", effects: [{ on: "threshold", value: -1 }] };

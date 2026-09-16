@@ -47,16 +47,26 @@ assert.match(sheetSource, /position: \{\s*width: 1340,\s*height: 1080\s*\}/);
 assert.match(css, /\.wod5e-mage-riga\.scelta\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
 assert.match(css, /\.wod5e-mage-ambito-livello\.active\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
 assert.match(css, /\.wod5e-mage-riga-abilita\.con-cassetto:hover \.wod5e-mage-cassetto[^{]*\{\s*display: flex;/);
-// La scheda minimizzata resta richiudibile; la larghezza minima resta.
+// La scheda minimizzata resta richiudibile; sotto i 1280 le quattro colonne si accavallavano (16/9).
 assert.match(
   css,
-  /\.sheet:not\(\.minimized\)\s*\{[^}]*min-width:\s*820px;/s
+  /\.sheet:not\(\.minimized\)\s*\{[^}]*min-width:\s*1280px;/s
 );
+// La pagina si vede solo quando è la linguetta accesa; senza Areté niente
+// tre tasti; la catena non si stampa più; i dadi extra hanno la loro riga.
+assert.match(css, /\.wod5e-mage-stat:not\(\.active\)\s*\{\s*display: none;/);
+assert.match(css, /\.wod5e-mage-stat\.active\s*\{[^}]*display: flex;/s);
+const tiroTemplate = stat("stat-tiro.hbs");
+assert.doesNotMatch(tiroTemplate, /tiro\.pills|wod5e-mage-pillola/);
+assert.match(tiroTemplate, /data-action="tiroExtra" data-delta="-1"[\s\S]*data-action="tiroExtra" data-delta="1"/);
+assert.match(stat("grimorio.hbs"), /data-action="grimorioClose"/);
+assert.match(statTemplate, /wod5e-mage-saggezza-tendina[\s\S]*parts\/wisdom\.hbs/);
+assert.doesNotMatch(stat("stat-risorse.hbs"), /wod5e-mage-magick-end/);
 // La Ruota nel riquadro delle Risorse: il mezzo cerchio vero, le due parole
 // agli estremi, il modo a barra, i Dettagli della Ruota chiusi.
 const risorse = stat("stat-risorse.hbs");
 assert.match(risorse, /A150 150 0 0 1[\s\S]*preserveAspectRatio="xMidYMid meet"|preserveAspectRatio="xMidYMid meet"[\s\S]*A150 150 0 0 1/);
-assert.match(risorse, /wod5e-mage-magick-end quintessence[\s\S]*wod5e-mage-magick-end paradox/);
+assert.match(risorse, /wod5e-mage-ruota-conto quintessence[\s\S]*data-resource="quintessence" data-delta="-1"[\s\S]*wod5e-mage-ruota-conto paradox[\s\S]*data-action="paradoxBurst"[\s\S]*data-resource="paradox" data-delta="1"/);
 assert.match(risorse, /<details class="wod5e-mage-ruota-dettagli">[\s\S]*generatedQuintessence[\s\S]*permanentParadox[\s\S]*data-action="contraccolpoNega"[\s\S]*data-action="wheelModeToggle"/);
 assert.doesNotMatch(risorse, /data-action="areteRoll"|wod5e-mage-header-arete/);
 assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes\b|wod5e-mage-persistent-resources/);
@@ -174,7 +184,7 @@ assert.match(areteDialog, /RollSelection\.Attribute"[\s\S]*name="attributeTrait"
 assert.match(areteDialog, /data-role="scopeTableOpen"/);
 assert.doesNotMatch(areteDialog, /name="primarySkill"|name="arete"|Arete\.Include/);
 // Il conto (10/9 notte): i numeri (Armonia, Quintessenza), poi Altro (Bussola, Effetto Mantenuto, Premio).
-assert.match(areteDialog, /data-role="pool"[\s\S]*data-role="threshold"[\s\S]*data-role="autoVictory"[\s\S]*wod5e-mage-arete-conto wod5e-mage-arete-conto-numbers"[\s\S]*name="harmony"[\s\S]*name="quintessence"[\s\S]*wod5e-mage-arete-altro"[\s\S]*\{\{\{bussolaHtml\}\}\}[\s\S]*name="maintained"[\s\S]*name="prize"[\s\S]*Arete\.Prize"[\s\S]*Arete\.PrizeHybrid/);
+assert.match(areteDialog, /data-role="pool"[\s\S]*data-role="threshold"[\s\S]*wod5e-mage-arete-conto wod5e-mage-arete-conto-numbers"[\s\S]*name="harmony"[\s\S]*name="quintessence"[\s\S]*wod5e-mage-arete-altro"[\s\S]*\{\{\{bussolaHtml\}\}\}[\s\S]*name="maintained"[\s\S]*name="prize"[\s\S]*Arete\.Prize"[\s\S]*Arete\.PrizeHybrid/);
 // L'Armonia è un numero: i dadi degli altri Maghi, contati al tavolo.
 assert.match(areteDialog, /name="harmony"[^>]*type="number"|type="number"[^>]*name="harmony"/);
 // Le spiegazioni della Tipologia stanno nei titoli delle caselle (10/9): niente testo a destra.
