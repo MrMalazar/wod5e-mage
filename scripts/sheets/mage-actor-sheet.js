@@ -65,6 +65,7 @@ import {
   onTiroDifficulty,
   onTiroExtra,
   onTiroGrimorio,
+  onTiroIncantesimo,
   onGrimorioClose,
   onTiroPill,
   onTiroPower,
@@ -77,6 +78,8 @@ import {
   onTiroSpecialty,
   onTiroSphere,
   onTiroTrait,
+  poteriOfSphere,
+  prepareIncantesimiRows,
   preparePoteriRows,
   prepareScopeRows,
   prepareTiroContext,
@@ -84,7 +87,7 @@ import {
   traitDiceOf
 } from "../tiro-scheda.js";
 import { onRitrattoAdd, onRitrattoNext, onRitrattoRemove, prepareRitratti, RITRATTI_FLAG } from "../ritratti.js";
-import { altroTema, applicaTema, TEMA_AZIONE, TEMA_SETTING, TEMA_TASTO_CLASSE } from "../tema.js";
+import { altraScala, altroTema, applicaScala, applicaTema, normalizeScala, SCALA_AZIONE, SCALA_SETTING, SCALA_TASTO_CLASSE, scalaFattore, TEMA_AZIONE, TEMA_SETTING, TEMA_TASTO_CLASSE } from "../tema.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 import {
@@ -139,6 +142,54 @@ async function onTemaToggle(event) {
   await game.settings.set(MODULE_ID, TEMA_SETTING, next);
   // L'impostazione lo fa già cambiando; rifarlo non costa (è solo una classe).
   MageActorSheet.applicaTemaOvunque(next);
+}
+
+/**
+ * Il tasto della misura del testo (16/9 sera), a sinistra di quello del
+ * tema: piccolo, medio, grande, e da capo. L'impostazione riveste le schede
+ * aperte; la finestra cresce o cala in proporzione, entro lo schermo.
+ */
+async function onScalaToggle(event) {
+  event?.preventDefault?.();
+  const current = normalizeScala(game.settings.get(MODULE_ID, SCALA_SETTING));
+  const next = altraScala(current);
+  await game.settings.set(MODULE_ID, SCALA_SETTING, next);
+  MageActorSheet.applicaScalaOvunque(next);
+  const ratio = scalaFattore(next) / scalaFattore(current);
+  const { width, height } = this.position ?? {};
+  if (Number.isFinite(width) && Number.isFinite(height)) {
+    this.setPosition({
+      width: Math.min(Math.round(width * ratio), Math.max(window.innerWidth - 40, 600)),
+      height: Math.min(Math.round(height * ratio), Math.max(window.innerHeight - 40, 400))
+    });
+  }
+}
+
+/** Il tasto accanto al + delle Abilità (16/9 sera): per famiglia o tutte in fila, in ordine alfabetico. */
+async function onSkillsFlatToggle(event) {
+  event?.preventDefault?.();
+  await game.settings.set(MODULE_ID, "skillsFlat", !game.settings.get(MODULE_ID, "skillsFlat"));
+  this.render({ parts: ["stats"] });
+}
+
+/**
+ * I cassetti al sorvolo (Specializzazioni, poteri delle Sfere, livelli
+ * degli Ambiti) si aprono sotto la riga; se sotto non c'è posto nel
+ * riquadro, si aprono sopra (Blue, 16/9 sera: quello di Velo era tagliato).
+ */
+function wireCassetti(sheet) {
+  for (const row of sheet.element?.querySelectorAll(".wod5e-mage-riga.con-cassetto") ?? []) {
+    row.addEventListener("mouseenter", () => {
+      const drawer = row.querySelector(":scope > .wod5e-mage-cassetto");
+      const body = row.closest(".wod5e-mage-riq-body");
+      if (!drawer || !body) return;
+      row.classList.remove("cassetto-su");
+      const limit = body.getBoundingClientRect();
+      const rect = row.getBoundingClientRect();
+      const height = drawer.offsetHeight || 36;
+      if (rect.bottom + height > limit.bottom && rect.top - height >= limit.top) row.classList.add("cassetto-su");
+    });
+  }
 }
 
 /**
@@ -271,8 +322,11 @@ export class MageActorSheet extends MortalActorSheet {
       credoFamilyPick: onCredoFamilyPick,
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
-      // La modalità chiara (16/9): il tasto accanto ai tre pallini della finestra.
+      // La modalità chiara (16/9) e la misura del testo (16/9 sera): i tasti accanto ai tre pallini della finestra.
       [TEMA_AZIONE]: onTemaToggle,
+      [SCALA_AZIONE]: onScalaToggle,
+      // Le Abilità per famiglia o tutte in fila.
+      skillsFlatToggle: onSkillsFlatToggle,
       condizioneToggle: onCondizioneToggle,
       wisdomResourceChange: onWisdomResourceChange,
       wisdomRoll: onWisdomRoll,
@@ -293,6 +347,7 @@ export class MageActorSheet extends MortalActorSheet {
       tiroExtra: onTiroExtra,
       tiroSforza: onTiroSforza,
       tiroGrimorio: onTiroGrimorio,
+      tiroIncantesimo: onTiroIncantesimo,
       grimorioClose: onGrimorioClose,
       tiroRoll: onTiroRoll,
       // I ritratti (16/9): girano, se ne aggiunge uno, si toglie quello che si vede.
@@ -313,7 +368,7 @@ export class MageActorSheet extends MortalActorSheet {
       template: `${MODULE}/mage-header.hbs`
     },
     tabs: { template: `${MODULE}/parts/tab-navigation.hbs` },
-    // La prima pagina (16/9): nove riquadri in quattro colonne, il selettore
+    // La prima pagina (16/9): otto riquadri in quattro colonne, il selettore
     // del tiro composto (templates/actor/parts/stat.hbs e stat-*.hbs).
     stats: {
       template: `${MODULE}/parts/stat.hbs`,
@@ -324,8 +379,9 @@ export class MageActorSheet extends MortalActorSheet {
         `${MODULE}/parts/reset-tasto.hbs`,
         `${MODULE}/parts/stat-condizioni.hbs`,
         `${MODULE}/parts/stat-risorse.hbs`,
+        `${MODULE}/parts/stat-ruota.hbs`,
         `${MODULE}/parts/stat-magick.hbs`,
-        `${MODULE}/parts/stat-poteri.hbs`,
+        `${MODULE}/parts/stat-grimorio.hbs`,
         `${MODULE}/parts/stat-attributi.hbs`,
         `${MODULE}/parts/stat-tratti.hbs`,
         `${MODULE}/parts/stat-abilita.hbs`,
@@ -466,11 +522,16 @@ export class MageActorSheet extends MortalActorSheet {
     const anchor = this.window?.controls ?? this.window?.close
       ?? frame.querySelector("button[data-action=toggleControls]") ?? frame.querySelector("button[data-action=close]");
     if (anchor && !frame.querySelector(`.${TEMA_TASTO_CLASSE}`)) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.classList.add("header-control", "icon", "fa-solid", TEMA_TASTO_CLASSE);
-      button.dataset.action = TEMA_AZIONE;
-      anchor.before(button);
+      // Da sinistra: la misura del testo, poi il tema, poi i tre pallini.
+      const scala = document.createElement("button");
+      scala.type = "button";
+      scala.classList.add("header-control", "icon", "fa-solid", "fa-text-height", SCALA_TASTO_CLASSE);
+      scala.dataset.action = SCALA_AZIONE;
+      const tema = document.createElement("button");
+      tema.type = "button";
+      tema.classList.add("header-control", "icon", "fa-solid", TEMA_TASTO_CLASSE);
+      tema.dataset.action = TEMA_AZIONE;
+      anchor.before(scala, tema);
     }
     return frame;
   }
@@ -483,11 +544,21 @@ export class MageActorSheet extends MortalActorSheet {
     }
   }
 
+  /** La misura del testo (16/9 sera) su tutte le schede del Mago aperte, senza render. */
+  static applicaScalaOvunque(scala = game.settings.get(MODULE_ID, SCALA_SETTING)) {
+    const i18n = { localize: (key) => game.i18n.localize(key), format: (key, data) => game.i18n.format(key, data) };
+    for (const app of foundry.applications?.instances?.values?.() ?? []) {
+      if (app instanceof MageActorSheet) applicaScala(app.element, scala, i18n);
+    }
+  }
+
   /** Dopo ogni render la pagina Esperienza ricabla il suo calcolatore. */
   _onRender(context, options) {
     super._onRender?.(context, options);
-    // La modalità chiara (16/9): la classe sulla finestra e il tasto in testata.
+    // La modalità chiara (16/9) e la misura del testo (16/9 sera): la classe
+    // e la scala sulla finestra, i due tasti in testata.
     applicaTema(this.element, game.settings.get(MODULE_ID, TEMA_SETTING), { localize: (key) => game.i18n.localize(key) });
+    applicaScala(this.element, game.settings.get(MODULE_ID, SCALA_SETTING), { localize: (key) => game.i18n.localize(key), format: (key, data) => game.i18n.format(key, data) });
     // La modalità creazione (11/9): con la spunta accesa si vedono i tasti di
     // reset e la X che azzera un tratto; spenta, la X sparisce.
     this.element?.classList.toggle("wod5e-mage-creazione", Boolean(context.creazioneReset));
@@ -513,6 +584,8 @@ export class MageActorSheet extends MortalActorSheet {
     // senza render; il testo scritto sopravvive ai render.
     this._filters ??= {};
     wireStatFilters(this);
+    // I cassetti al sorvolo si aprono sopra quando sotto non c'è posto.
+    wireCassetti(this);
     // Le Specialità delle Sfere: il testo del potere si apre dal titolo.
     this._specialtyOpen ??= {};
     for (const article of this.element?.querySelectorAll(".wod5e-mage-sphere-specialty[data-slot]") ?? []) {
@@ -607,12 +680,14 @@ export class MageActorSheet extends MortalActorSheet {
 
     // Magick: l'Areté, le Sfere possedute (scelte se in catena), gli Ambiti a sette livelli.
     context.arete = getArete(actor);
+    // Ogni Sfera porta nel suo cassetto i suoi poteri (segnaposto finché non sono scritti).
+    context.poteri = preparePoteriRows(actor, tiro, localize);
     context.spheres = prepareSpheres(actor, { localize, locale: lang }).selected
-      .map((sphere) => ({ ...sphere, chosen: tiro.spheres.includes(sphere.id) }));
+      .map((sphere) => ({ ...sphere, chosen: tiro.spheres.includes(sphere.id), poteri: poteriOfSphere(context.poteri, sphere.id) }));
     context.scopeRows = prepareScopeRows(tiro, localize, { arete: context.arete.value });
 
-    // Poteri: quelli delle Sfere che ha, segnaposto finché non sono scritti.
-    context.poteri = preparePoteriRows(actor, tiro, localize);
+    // Il Grimorio (16/9 sera): gli incantesimi scritti, cliccabili per il lancio.
+    context.incantesimi = prepareIncantesimiRows(actor, tiro, localize);
 
     // Attributi e Abilità per famiglia, coi sigilli e lo stato «scelto».
     const groupLabels = { physical: "WOD5E.SPC.Physical", social: "WOD5E.SPC.Social", mental: "WOD5E.SPC.Mental" };
@@ -638,7 +713,16 @@ export class MageActorSheet extends MortalActorSheet {
         return { ...skill, key, chosen: tiro.skill === key, hasSpecialties: slots.length > 0, slots };
       })
     }));
-    context.customSkills = prepareCustomSkills(actor).map((skill) => ({ ...skill, chosen: tiro.skill === `custom:${skill.id}` }));
+    context.customSkills = prepareCustomSkills(actor).map((skill) => ({ ...skill, chosen: tiro.skill === `custom:${skill.id}`, custom: true }));
+    // Tutte in fila (16/9 sera): il tasto accanto al + scioglie le famiglie e
+    // mette ogni Abilità, Specifiche comprese, in ordine alfabetico.
+    context.skillsFlat = Boolean(game.settings.get(MODULE_ID, "skillsFlat"));
+    if (context.skillsFlat) {
+      const rows = [...context.skillGroups.flatMap((group) => group.rows), ...context.customSkills.map((skill) => ({ ...skill, displayName: skill.name }))];
+      rows.sort((a, b) => String(a.displayName ?? "").localeCompare(String(b.displayName ?? ""), lang));
+      context.skillGroups = [{ id: "tutte", label: "", rows }];
+      context.customSkills = [];
+    }
     context.specialties = prepareSpecialties(actor, i18n);
 
     // Tratti: gli oggetti del personaggio in un elenco piatto, con la specie

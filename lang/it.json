@@ -634,6 +634,10 @@
         "Hint": "I colori della scheda del Mago: scuro (oro sul fondo scuro) o chiaro, coi colori del manuale. Si gira anche dal tasto col sole, o la luna, accanto ai tre pallini della finestra.",
         "Scuro": "Scuro",
         "Chiaro": "Chiaro (i colori del manuale)"
+      },
+      "SheetScale": {
+        "Name": "La misura del testo della scheda",
+        "Hint": "Piccolo, medio o grande: tutta la scheda del Mago cresce o cala in proporzione, ogni cosa con la sua misura. Si gira anche dal tasto a sinistra di quello del tema."
       }
     },
     "Errors": {
@@ -1178,10 +1182,12 @@
       "Risorse": "Risorse",
       "DettagliRuota": "Dettagli della Ruota",
       "Poteri": "Poteri",
-      "CercaPotere": "Cerca un potere…",
       "PotereSegnaposto": "Segnaposto: il potere non è ancora scritto. Si sceglie, va in carta, non cambia il conto.",
-      "PoteriVuoti": "Nessuna Sfera con pallini: i poteri arrivano con le Sfere.",
+      "CercaIncantesimo": "Cerca un incantesimo…",
+      "IncantesimiVuoti": "Nessun incantesimo scritto: si scrivono nella pagina del Grimorio (il libro qui sopra).",
       "ApriGrimorio": "Apri il Grimorio",
+      "AbilitaInFila": "Tutte in fila, in ordine alfabetico",
+      "AbilitaFamiglie": "Per famiglia: Fisico, Sociale, Mentale",
       "Tratti": "Tratti",
       "CercaTratto": "Cerca fra i tratti…",
       "Tutti": "Tutti",
@@ -1213,6 +1219,9 @@
       "ManualDifficultyNote": "Difficoltà scritta a mano: {difficulty} (il conto diceva {computed}).",
       "AreteHint": "L'Areté fa il tiro di Magick: compaiono i tre tasti del tipo e il premio.",
       "SphereHint": "Mette la Sfera nel lancio. Le Sfere non pesano sulla soglia.",
+      "ScopeHint": "Al sorvolo i sette livelli: il numero dichiara l'Ambito, lo stesso numero lo toglie. A destra, la lettura del livello scelto.",
+      "PoteriHint": "Al sorvolo i poteri della Sfera: uno solo per lancio, e porta con sé la Sfera.",
+      "IncantesimoHint": "Un clic lo carica nel tiro com'è scritto (Areté, Sfere, Ambiti, Attributo, Abilità); i tre tasti tirano. Un altro clic lo toglie.",
       "AttributeHint": "Mette l'Attributo nella riserva: uno solo.",
       "SkillHint": "Mette l'Abilità nella riserva: una sola.",
       "SpecialtyHint": "La Specializzazione: un dado in più, e devi dimostrare come.",
@@ -1244,6 +1253,12 @@
     "Tema": {
       "Chiaro": "Modalità chiara",
       "Scuro": "Modalità scura"
+    },
+    "Scala": {
+      "Piccolo": "piccolo",
+      "Medio": "medio",
+      "Grande": "grande",
+      "Tasto": "Misura del testo: {current}. Clic: {next}"
     }
   },
   "WOD5E": {

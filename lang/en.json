@@ -634,6 +634,10 @@
         "Hint": "The colours of the Mage sheet: dark (gold on a dark ground) or light, in the colours of the rulebook. The sun, or moon, button next to the three dots of the window flips it too.",
         "Scuro": "Dark",
         "Chiaro": "Light (rulebook colours)"
+      },
+      "SheetScale": {
+        "Name": "Sheet text size",
+        "Hint": "Small, medium or large: the whole Mage sheet grows or shrinks in proportion, everything at its own size. The button left of the theme button flips it too."
       }
     },
     "Errors": {
@@ -1178,10 +1182,12 @@
       "Risorse": "Resources",
       "DettagliRuota": "Wheel details",
       "Poteri": "Powers",
-      "CercaPotere": "Search a power…",
       "PotereSegnaposto": "Placeholder: this power is not written yet. It can be picked and goes on the card, it does not change the count.",
-      "PoteriVuoti": "No Sphere with dots: powers come with the Spheres.",
+      "CercaIncantesimo": "Search a spell…",
+      "IncantesimiVuoti": "No spell written yet: spells are written on the Grimorio page (the book above).",
       "ApriGrimorio": "Open the Grimoire",
+      "AbilitaInFila": "All in one list, alphabetical",
+      "AbilitaFamiglie": "By family: Physical, Social, Mental",
       "Tratti": "Traits",
       "CercaTratto": "Search the traits…",
       "Tutti": "All",
@@ -1213,6 +1219,9 @@
       "ManualDifficultyNote": "Difficulty set by hand: {difficulty} (the count said {computed}).",
       "AreteHint": "Arete makes it a Magick roll: the three type buttons and the prize appear.",
       "SphereHint": "Puts the Sphere in the casting. Spheres do not weigh on the threshold.",
+      "ScopeHint": "Hover for the seven levels: the number declares the Scope, the same number removes it. On the right, the reading of the chosen level.",
+      "PoteriHint": "Hover for the Sphere's powers: one per cast, and it brings its Sphere along.",
+      "IncantesimoHint": "One click loads it into the roll as written (Areté, Spheres, Scopes, Attribute, Skill); the three buttons roll. Another click removes it.",
       "AttributeHint": "Puts the Attribute in the pool: one only.",
       "SkillHint": "Puts the Skill in the pool: one only.",
       "SpecialtyHint": "The Specialty: one extra die, and you must show how.",
@@ -1244,6 +1253,12 @@
     "Tema": {
       "Chiaro": "Light mode",
       "Scuro": "Dark mode"
+    },
+    "Scala": {
+      "Piccolo": "small",
+      "Medio": "medium",
+      "Grande": "large",
+      "Tasto": "Text size: {current}. Click: {next}"
     }
   }
 }

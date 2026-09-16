@@ -6,11 +6,13 @@ import {
   emptyTiro,
   EXTRA_DICE_CAP,
   isMagick,
+  loadSpell,
   pickAttribute,
   pickPower,
   pickSkill,
   pickSpecialty,
   pillsOf,
+  powerSphere,
   QUINTESSENCE_BASE_CAP,
   quintessenceDice,
   removePill,
@@ -83,6 +85,27 @@ assert.deepEqual(toggleTrait(tiro, "pregio-1").traits, ["background-2"]);
 tiro = pickPower(vuoto, "forces-1-1");
 assert.equal(pickPower(tiro, "forces-2-1").power, "forces-2-1", "un altro potere sostituisce il primo");
 assert.equal(pickPower(tiro, "forces-1-1").power, null);
+// Il potere porta con sé la sua Sfera (16/9 sera); togliere il potere non la toglie.
+assert.deepEqual([powerSphere("forces-2-1"), powerSphere("mind-1-2"), powerSphere("boh"), powerSphere("")], ["forces", "mind", "", ""]);
+assert.deepEqual(tiro.spheres, ["forces"]);
+assert.deepEqual(pickPower(toggleSphere(vuoto, "forces"), "forces-1-1").spheres, ["forces"], "la Sfera già in catena non si raddoppia");
+assert.deepEqual(pickPower(tiro, "forces-1-1").spheres, ["forces"]);
+assert.deepEqual(pickPower(toggleSphere(vuoto, "mind"), "forces-3-2").spheres, ["mind", "forces"]);
+
+// Un incantesimo del Grimorio entra tutto insieme (16/9 sera): Areté, le sue
+// Sfere (solo quelle possedute), gli Ambiti, Attributo e Abilità, premio e tipo.
+const incantesimo = { name: "Lama", prize: true, magickType: "vulgar", spheres: { forces: 3, prime: 2, spirit: 0 }, scopes: { potency: 4, range: 2, duration: 0 }, traits: [{ field: "attributeTrait", key: "attribute:dexterity", label: "Destrezza" }, { field: "primaryTrait", key: "skill:occult", label: "Velo" }] };
+tiro = loadSpell(toggleTrait(vuoto, "pregio-1"), "s1", incantesimo, { owned: ["forces", "mind"] });
+assert.deepEqual([tiro.arete, tiro.prize, tiro.spheres, tiro.scopes, tiro.attribute, tiro.skill, tiro.kind, tiro.spell, tiro.traits], [true, true, ["forces"], { potency: 4, range: 2 }, "dexterity", "skill:occult", "volgare", "s1", []]);
+assert.equal(isMagick(tiro), true);
+assert.deepEqual(loadSpell(vuoto, "s2", { ...incantesimo, prize: false, magickType: "", traits: [{ key: "custom:k1", label: "Cucina" }] }).skill, "custom:k1");
+assert.deepEqual(loadSpell(vuoto, "s2", { ...incantesimo, magickType: "witnesses" }).kind, "testimoni");
+assert.deepEqual(loadSpell(vuoto, "s2", incantesimo).spheres, ["forces", "prime"], "senza l'elenco delle possedute entrano tutte quelle con livello");
+// Lo stesso incantesimo cliccato di nuovo si toglie: tutto vuoto.
+assert.deepEqual(loadSpell(tiro, "s1", incantesimo), emptyTiro());
+// Un pezzo cambiato a mano tiene l'incantesimo caricato; Azzera lo toglie.
+assert.equal(toggleSphere(tiro, "mind").spell, "s1");
+assert.equal(clearTiro().spell, null);
 
 // La Difficoltà a mano: un numero la fissa, il più e il meno partono dal conto.
 assert.equal(setDifficulty(vuoto, 4).difficulty, 4);

@@ -1,0 +1,31 @@
+{{!-- Il Grimorio (Blue, 16/9 sera): al posto dei Poteri, gli incantesimi
+     scritti dal personaggio, cliccabili per il lancio. Un clic carica
+     l'incantesimo nel compositore (Areté, Sfere, Ambiti, Attributo,
+     Abilità, premio e tipo com'erano scritti) e i tre tasti del Tiro
+     tirano; lo stesso incantesimo cliccato di nuovo si toglie. La cerca
+     filtra la lista sul posto; il libro in testa apre la pagina del
+     Grimorio, dove gli incantesimi si scrivono. --}}
+<section class="wod5e-mage-riq wod5e-mage-riq-grimorio">
+    <header class="wod5e-mage-riq-title">
+        <span>{{localize "WOD5E_MAGE.Tabs.Grimorio"}}</span>
+        <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="tiroGrimorio" title="{{localize 'WOD5E_MAGE.Stat.ApriGrimorio'}}" aria-label="{{localize 'WOD5E_MAGE.Stat.ApriGrimorio'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+    </header>
+    <div class="wod5e-mage-riq-body">
+        <label class="wod5e-mage-riq-cerca">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="search" class="wod5e-mage-cerca-incantesimi" placeholder="{{localize 'WOD5E_MAGE.Stat.CercaIncantesimo'}}" aria-label="{{localize 'WOD5E_MAGE.Stat.CercaIncantesimo'}}" data-filter="incantesimi">
+        </label>
+        <div class="wod5e-mage-riq-scroll wod5e-mage-incantesimi-lista" data-list="incantesimi">
+            {{#each incantesimi as |spell|}}
+                <button type="button" class="wod5e-mage-riga wod5e-mage-riga-incantesimo{{#if spell.chosen}} scelta{{/if}}" data-action="tiroIncantesimo" data-row="{{spell.id}}" data-search="{{spell.name}} {{spell.coda}}" aria-pressed="{{spell.chosen}}" title="{{spell.hint}}">
+                    <span class="wod5e-mage-riga-spunta" aria-hidden="true"></span>
+                    {{#if spell.icon}}<img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{spell.icon}}" alt="">{{/if}}
+                    <span class="wod5e-mage-riga-nome-testo">{{spell.name}}</span>
+                    <small class="wod5e-mage-riga-coda">{{spell.coda}}</small>
+                </button>
+            {{else}}
+                <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Stat.IncantesimiVuoti"}}</p>
+            {{/each}}
+        </div>
+    </div>
+</section>

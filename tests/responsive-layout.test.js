@@ -28,25 +28,37 @@ assert.doesNotMatch(
   /\.wod5e-mage\.wod5e\.actor\.sheet\s*\{[^}]*min-height:/s
 );
 
-// La prima pagina a nove riquadri (16/9): quattro colonne, la prima da tre;
-// le colonne sono trasparenti alla griglia e ogni riquadro ha la sua area,
-// così la fascia bassa (Risorse, Poteri, Tratti, Il Tiro) sta su una riga sola.
-assert.match(css, /\.wod5e-mage-stat-grid\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\);[^}]*grid-template-rows:\s*auto auto auto;/s);
+// La prima pagina a otto riquadri (16/9 sera): quattro colonne, due riquadri
+// ciascuna; le colonne sono trasparenti alla griglia e ogni riquadro ha la
+// sua area, così la fascia bassa (Grimorio, Tratti, Il Tiro) sta su una riga
+// sola e le Risorse prendono le due righe sotto l'Identità.
+assert.match(css, /\.wod5e-mage-stat-grid\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\);[^}]*grid-template-rows:\s*auto minmax\(0, 1fr\) minmax\(0, 1\.45fr\);[^}]*min-height:\s*0;/s);
+assert.match(css, /\.wod5e-mage-stat\.active\s*\{[^}]*flex:\s*1 1 auto;[^}]*min-height:\s*0;/s);
+assert.match(css, /\.wod5e-mage-riq-body\s*\{[^}]*overflow-y:\s*auto;/s);
 assert.match(css, /\.wod5e-mage-stat-col\s*\{[^}]*display:\s*contents;/s);
-for (const [riq, area] of [["identita", "1 / 1 / 2 / 2"], ["salute", "2 / 1 / 3 / 2"], ["risorse", "3 / 1 / 4 / 2"], ["magick", "1 / 2 / 3 / 3"], ["poteri", "3 / 2 / 4 / 3"], ["attributi", "1 / 3 / 3 / 4"], ["tratti", "3 / 3 / 4 / 4"], ["abilita", "1 / 4 / 3 / 5"], ["tiro", "3 / 4 / 4 / 5"]]) {
+for (const [riq, area] of [["identita", "1 / 1 / 2 / 2"], ["risorse", "2 / 1 / 4 / 2"], ["magick", "1 / 2 / 3 / 3"], ["grimorio", "3 / 2 / 4 / 3"], ["attributi", "1 / 3 / 3 / 4"], ["tratti", "3 / 3 / 4 / 4"], ["abilita", "1 / 4 / 3 / 5"], ["tiro", "3 / 4 / 4 / 5"]]) {
   assert.match(css, new RegExp(`\\.wod5e-mage-riq-${riq} \\{ grid-area: ${area.replace(/\//g, "\\/")}; \\}`), `area di ${riq}`);
 }
-// I nove riquadri stanno in stat.hbs nell'ordine delle colonne; la testata è vuota e nascosta.
-assert.match(statTemplate, /stat-identita\.hbs[\s\S]*wod5e-mage-riq-salute[\s\S]*stat-risorse\.hbs[\s\S]*stat-magick\.hbs[\s\S]*stat-poteri\.hbs[\s\S]*stat-attributi\.hbs[\s\S]*stat-tratti\.hbs[\s\S]*stat-abilita\.hbs[\s\S]*stat-tiro\.hbs/);
+assert.doesNotMatch(css, /wod5e-mage-riq-salute|wod5e-mage-riq-poteri|wod5e-mage-ambito-livell/);
+// Gli otto riquadri stanno in stat.hbs nell'ordine delle colonne; la testata è vuota e nascosta.
+assert.match(statTemplate, /stat-identita\.hbs[\s\S]*stat-risorse\.hbs[\s\S]*stat-magick\.hbs[\s\S]*stat-grimorio\.hbs[\s\S]*stat-attributi\.hbs[\s\S]*stat-tratti\.hbs[\s\S]*stat-abilita\.hbs[\s\S]*stat-tiro\.hbs/);
+assert.doesNotMatch(statTemplate, /stat-poteri\.hbs|riq-salute/);
 assert.match(mageHeader, /<header class="actor-header wod5e-mage-header wod5e-mage-header-vuota" aria-hidden="true"><\/header>/);
 assert.match(css, /\.wod5e-mage-header-vuota\s*\{\s*display: none;/);
 // La finestra parte larga per le quattro colonne.
 const sheetSource = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
 assert.match(sheetSource, /position: \{\s*width: 1340,\s*height: 1080\s*\}/);
-// Le righe scelte sono viola; il livello dell'Ambito scelto è viola; il cassetto si apre al sorvolo.
+// Le righe scelte sono viola; il livello dell'Ambito scelto è viola nel
+// cassetto e nel cerchio sulla riga; il cassetto si apre al sorvolo su ogni
+// riga che ce l'ha (Abilità, Sfere, Ambiti) e sopra quando sotto non c'è posto.
 assert.match(css, /\.wod5e-mage-riga\.scelta\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
-assert.match(css, /\.wod5e-mage-ambito-livello\.active\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
-assert.match(css, /\.wod5e-mage-riga-abilita\.con-cassetto:hover \.wod5e-mage-cassetto[^{]*\{\s*display: flex;/);
+assert.match(css, /\.wod5e-mage-pastiglia-livello\.scelta\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
+assert.match(css, /\.wod5e-mage-ambito-lettura > b\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
+assert.match(css, /\.wod5e-mage-riga\.con-cassetto:hover > \.wod5e-mage-cassetto[^{]*\{\s*display: flex;/);
+assert.match(css, /\.wod5e-mage-riga\.con-cassetto\.cassetto-su > \.wod5e-mage-cassetto\s*\{[^}]*bottom: calc\(100% - 2px\);[^}]*top: auto;/s);
+assert.match(css, /\.wod5e-mage-riga\.con-cassetto:hover > \.wod5e-mage-cassetto-poteri[^{]*\{\s*display: grid;/);
+// La misura del testo: una scala sul contenuto della finestra.
+assert.match(css, /\.window-content\s*\{\s*zoom: var\(--mage-scala, 1\);/);
 // La scheda minimizzata resta richiudibile; sotto i 1280 le quattro colonne si accavallavano (16/9).
 assert.match(
   css,
@@ -60,15 +72,33 @@ const tiroTemplate = stat("stat-tiro.hbs");
 assert.doesNotMatch(tiroTemplate, /tiro\.pills|wod5e-mage-pillola/);
 assert.match(tiroTemplate, /data-action="tiroExtra" data-delta="-1"[\s\S]*data-action="tiroExtra" data-delta="1"/);
 assert.match(stat("grimorio.hbs"), /data-action="grimorioClose"/);
-assert.match(statTemplate, /wod5e-mage-saggezza-tendina[\s\S]*parts\/wisdom\.hbs/);
-assert.doesNotMatch(stat("stat-risorse.hbs"), /wod5e-mage-magick-end/);
-// La Ruota nel riquadro delle Risorse: il mezzo cerchio vero, le due parole
-// agli estremi, il modo a barra, i Dettagli della Ruota chiusi.
-const risorse = stat("stat-risorse.hbs");
+assert.match(stat("stat-risorse.hbs"), /wod5e-mage-saggezza-tendina[\s\S]*parts\/wisdom\.hbs/);
+assert.doesNotMatch(stat("stat-ruota.hbs"), /wod5e-mage-magick-end/);
+// La Ruota dentro le Risorse: il mezzo cerchio vero, il meno e il più ai
+// lati del primo nodo di ciascuno (sull'arco e sulla barra), i due conti
+// senza tasti, i Dettagli della Ruota chiusi.
+const risorse = stat("stat-ruota.hbs");
 assert.match(risorse, /A150 150 0 0 1[\s\S]*preserveAspectRatio="xMidYMid meet"|preserveAspectRatio="xMidYMid meet"[\s\S]*A150 150 0 0 1/);
-assert.match(risorse, /wod5e-mage-ruota-conto quintessence[\s\S]*data-resource="quintessence" data-delta="-1"[\s\S]*wod5e-mage-ruota-conto paradox[\s\S]*data-action="paradoxBurst"[\s\S]*data-resource="paradox" data-delta="1"/);
+assert.match(risorse, /wod5e-mage-magick-track-stat[\s\S]*wod5e-mage-magick-node[\s\S]*wod5e-mage-ruota-tasto quintessence meno" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1"[\s\S]*wod5e-mage-ruota-tasto quintessence piu"[\s\S]*wod5e-mage-ruota-tasto paradox meno"[\s\S]*wod5e-mage-ruota-tasto paradox piu" data-action="magickBalanceChange" data-resource="paradox" data-delta="1"/);
+assert.match(risorse, /wod5e-mage-magick-bar-stat[\s\S]*ruota-tasto quintessence meno[\s\S]*ruota-tasto quintessence piu[\s\S]*wod5e-mage-magick-cell [\s\S]*ruota-tasto paradox meno[\s\S]*ruota-tasto paradox piu/);
+assert.match(risorse, /wod5e-mage-ruota-conto quintessence">\s*<span class="wod5e-mage-ruota-conto-nome">[\s\S]*wod5e-mage-ruota-conto paradox">\s*<button[^>]*data-action="paradoxBurst"/);
+assert.doesNotMatch(risorse, /wod5e-mage-ruota-conto[^>]*>\s*<button type="button" data-action="magickBalanceChange"/);
+assert.match(css, /\.wod5e-mage-magick-track-stat \.wod5e-mage-ruota-tasto\.quintessence\.meno \{ left: calc\(12\.5% - 25px\); \}/);
+assert.match(css, /\.wod5e-mage-magick-track-stat \.wod5e-mage-ruota-tasto\.paradox\.piu \{ left: calc\(87\.5% \+ 25px\); \}/);
 assert.match(risorse, /<details class="wod5e-mage-ruota-dettagli">[\s\S]*generatedQuintessence[\s\S]*permanentParadox[\s\S]*data-action="contraccolpoNega"[\s\S]*data-action="wheelModeToggle"/);
 assert.doesNotMatch(risorse, /data-action="areteRoll"|wod5e-mage-header-arete/);
+// Magick: le Sfere col cassetto dei poteri, gli Ambiti con la lettura e il cassetto dei livelli.
+const magickRiq = stat("stat-magick.hbs");
+assert.match(magickRiq, /wod5e-mage-riga-sfera[^"]*\{\{#if sphere\.poteri\.length\}\} con-cassetto[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-poteri[\s\S]*data-action="tiroPower" data-power="\{\{power\.id\}\}"[^>]*>\{\{power\.short\}\}/);
+assert.match(magickRiq, /wod5e-mage-riga-ambito con-cassetto[\s\S]*wod5e-mage-ambito-lettura[\s\S]*<b>\{\{scope\.level\}\}<\/b>[\s\S]*\{\{scope\.reading\}\}[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-ambito[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-livello[^>]*data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}"[^>]*title="\{\{step\.reading\}\}"/);
+assert.doesNotMatch(magickRiq, /wod5e-mage-ambito-livello/);
+// Il Grimorio al posto dei Poteri: gli incantesimi cliccabili per il lancio, il libro apre la pagina.
+const grimorioRiq = stat("stat-grimorio.hbs");
+assert.match(grimorioRiq, /wod5e-mage-riq-grimorio[\s\S]*data-action="tiroGrimorio"[\s\S]*data-filter="incantesimi"[\s\S]*data-list="incantesimi"[\s\S]*data-action="tiroIncantesimo" data-row="\{\{spell\.id\}\}"/);
+// Le Abilità: il tasto accanto al + le mette tutte in fila.
+const abilitaTemplate = stat("stat-abilita.hbs");
+assert.match(abilitaTemplate, /data-action="skillsFlatToggle"[\s\S]*data-action="customSkillAdd"/);
+assert.match(abilitaTemplate, /\{\{#if group\.label\}\}<span class="wod5e-mage-riq-occhiello">/);
 assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes\b|wod5e-mage-persistent-resources/);
 // Il listino dei Successi Extra chiude la pagina Magick, a tutta larghezza.
 assert.match(magickTemplate, /wod5e-mage-sphere-specialties[\s\S]*parts\/scope-table\.hbs/);

@@ -17,7 +17,11 @@
  * - la Quintessenza dà dadi e basta, col tetto 2 + Areté per lancio;
  * - i dadi extra (l'Armonia, i dadi dati al tavolo) entrano fino a +3;
  *   i Tratti scelti entrano per intero;
- * - un potere solo per lancio: i suoi effetti li applica poteri.js;
+ * - un potere solo per lancio: i suoi effetti li applica poteri.js, e il
+ *   potere porta con sé la sua Sfera;
+ * - un incantesimo del Grimorio entra tutto insieme (Blue, 16/9 sera):
+ *   Areté, Sfere, Ambiti, Attributo, Abilità, premio e tipo com'erano
+ *   scritti; poi si tira coi tre tasti;
  * - la Difficoltà scritta a mano sovrascrive quella calcolata.
  */
 import { calculateAretePrize, calculateMagickThreshold, capBonusDice, SKILL_SPECIALTY_DICE, THRESHOLD_CAP } from "./arete.js";
@@ -50,7 +54,8 @@ export function emptyTiro() {
     quintessence: 0,
     extra: 0,
     sforza: false,
-    kind: null
+    kind: null,
+    spell: null
   };
 }
 
@@ -188,7 +193,17 @@ export function toggleTrait(tiro, id) {
   return next;
 }
 
-/** Il potere è uno solo per lancio: un altro lo sostituisce, lo stesso lo toglie. */
+/** La Sfera di un potere, dal suo id («forces-2-1» → «forces»). */
+export function powerSphere(id) {
+  const match = /^([a-z]+)-\d+-\d+$/.exec(String(id ?? ""));
+  return match ? match[1] : "";
+}
+
+/**
+ * Il potere è uno solo per lancio: un altro lo sostituisce, lo stesso lo
+ * toglie. Il potere porta con sé la sua Sfera (dal cassetto della Sfera,
+ * 16/9 sera): se non è in catena, entra.
+ */
 export function pickPower(tiro, id) {
   const next = clone(tiro);
   const key = String(id ?? "");
@@ -197,7 +212,42 @@ export function pickPower(tiro, id) {
     return next;
   }
   next.power = key;
+  const sphere = powerSphere(key);
+  if (sphere && !next.spheres.includes(sphere)) next.spheres = [...next.spheres, sphere];
   return withMagick(next);
+}
+
+/** Il tipo di tiro con cui un incantesimo è stato scritto, nei nomi dei tre tasti. */
+const KIND_OF_MAGICK_TYPE = Object.freeze({ coincidental: "accidentale", vulgar: "volgare", witnesses: "testimoni" });
+
+/**
+ * Un incantesimo del Grimorio entra nel compositore tutto insieme: Areté
+ * acceso, le sue Sfere (solo quelle che il personaggio ha, se `owned` le
+ * elenca), i suoi Ambiti, l'Attributo e l'Abilità com'erano scritti, il
+ * premio e il tipo (i tre tasti restano da premere). Lo stesso incantesimo
+ * cliccato di nuovo si toglie: torna tutto vuoto.
+ */
+export function loadSpell(tiro, id, spell, { owned = null } = {}) {
+  const key = String(id ?? "");
+  if (!key || tiro?.spell === key) return clearTiro();
+  const next = clearTiro();
+  next.arete = true;
+  next.prize = Boolean(spell?.prize);
+  next.spheres = Object.entries(spell?.spheres ?? {})
+    .filter(([sphere, level]) => count(level) > 0 && (!Array.isArray(owned) || owned.includes(sphere)))
+    .map(([sphere]) => sphere);
+  for (const [scope, level] of Object.entries(spell?.scopes ?? {})) {
+    const value = Math.min(count(level), THRESHOLD_CAP);
+    if (value > 0) next.scopes[scope] = value;
+  }
+  for (const trait of spell?.traits ?? []) {
+    const traitKey = String(trait?.key ?? "");
+    if (traitKey.startsWith("attribute:")) next.attribute ??= traitKey.slice("attribute:".length) || null;
+    else if (traitKey.startsWith("skill:") || traitKey.startsWith("custom:")) next.skill ??= traitKey;
+  }
+  next.kind = KIND_OF_MAGICK_TYPE[String(spell?.magickType ?? "")] ?? null;
+  next.spell = key;
+  return next;
 }
 
 /** La Difficoltà a mano: un numero la fissa, null torna al conto. */

@@ -68,11 +68,14 @@ assert.deepEqual(saluteWithMentalAggravated({ pa: 1, ps: 2, ma: 0, ms: 3 }, 6), 
 assert.deepEqual(saluteWithMentalAggravated({ pa: 1, ps: 5, ma: 0, ms: 0 }, 6), { pa: 1, ps: 4, ma: 1, ms: 0 });
 assert.equal(saluteWithMentalAggravated({ pa: 3, ps: 0, ma: 3, ms: 0 }, 6), null);
 
-// La Salute nostra sta nel riquadro Salute e Condizioni della prima pagina
-// (16/9), non nei partial di Salute e Volontà del sistema; la testata è vuota.
+// La Salute nostra sta nel riquadro Risorse della prima pagina (16/9 sera:
+// Condizioni, Salute, Saggezza, Ruota), non nei partial di Salute e Volontà
+// del sistema; la testata è vuota.
 const statPage = readFileSync(new URL("../templates/actor/parts/stat.hbs", import.meta.url), "utf8");
-assert.match(statPage, /wod5e-mage-riq-salute[\s\S]*parts\/salute\.hbs[\s\S]*parts\/stat-condizioni\.hbs/);
-assert.doesNotMatch(statPage, /health\.hbs|willpower\.hbs/);
+assert.match(statPage, /stat-identita\.hbs[\s\S]*parts\/stat-risorse\.hbs/);
+assert.doesNotMatch(statPage, /health\.hbs|willpower\.hbs|riq-salute/);
+const risorsePage = readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8");
+assert.match(risorsePage, /wod5e-mage-riq-risorse[\s\S]*parts\/stat-condizioni\.hbs[\s\S]*parts\/salute\.hbs[\s\S]*wod5e-mage-saggezza-tendina[\s\S]*parts\/wisdom\.hbs[\s\S]*parts\/stat-ruota\.hbs/);
 const header = readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8");
 assert.doesNotMatch(header, /health\.hbs|willpower\.hbs|salute\.hbs/);
 const track = readFileSync(new URL("../templates/actor/parts/salute.hbs", import.meta.url), "utf8");
@@ -87,7 +90,7 @@ assert.doesNotMatch(track, /data-action="saluteNewSession"/);
 assert.match(readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8"), /wod5e-mage-new-session" data-action="saluteNewSession"[\s\S]*data-action="saluteCambioScena"/);
 const saluteScript = readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8");
 assert.match(saluteScript, /wod5e-mage-salute-menu-text/);
-const risorse = readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8");
+const risorse = readFileSync(new URL("../templates/actor/parts/stat-ruota.hbs", import.meta.url), "utf8");
 assert.match(risorse, /data-action="contraccolpoNega"/);
 assert.doesNotMatch(risorse, /contraccolpoReset/);
 

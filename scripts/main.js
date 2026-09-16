@@ -12,7 +12,7 @@ import { registerPrezzo } from "./prezzo.js";
 import { registerUstione } from "./ustione.js";
 import { registerParadossoNarratore } from "./paradosso-narratore.js";
 import { registerGrimorioComune } from "./grimorio-comune.js";
-import { TEMA_CHIARO, TEMA_SCURO, TEMA_SETTING } from "./tema.js";
+import { SCALA_PREDEFINITA, SCALA_SETTING, TEMA_CHIARO, TEMA_SCURO, TEMA_SETTING } from "./tema.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 
 /**
@@ -105,6 +105,32 @@ Hooks.once("init", () => {
     },
     default: TEMA_SCURO,
     onChange: (value) => MageActorSheet.applicaTemaOvunque(value)
+  });
+
+  // La misura del testo (16/9 sera): piccolo, medio, grande; una scala sul
+  // contenuto della finestra, ogni cosa tiene la sua proporzione. Si gira
+  // anche dal tasto a sinistra di quello del tema.
+  game.settings.register(MODULE_ID, SCALA_SETTING, {
+    name: "WOD5E_MAGE.Settings.SheetScale.Name",
+    hint: "WOD5E_MAGE.Settings.SheetScale.Hint",
+    scope: "client",
+    config: true,
+    type: String,
+    choices: {
+      piccolo: "WOD5E_MAGE.Scala.Piccolo",
+      medio: "WOD5E_MAGE.Scala.Medio",
+      grande: "WOD5E_MAGE.Scala.Grande"
+    },
+    default: SCALA_PREDEFINITA,
+    onChange: (value) => MageActorSheet.applicaScalaOvunque(value)
+  });
+
+  // Le Abilità tutte in fila (16/9 sera): il tasto accanto al + della prima pagina.
+  game.settings.register(MODULE_ID, "skillsFlat", {
+    scope: "client",
+    config: false,
+    type: Boolean,
+    default: false
   });
 
   game.settings.register(MODULE_ID, "debugLogging", {

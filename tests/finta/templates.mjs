@@ -30,9 +30,11 @@ const context = {
   credos: [{ id: "arte", label: "Tutto è Arte", selected: true }], credoLabel: "Tutto è Arte", credoSpheres: [{ id: "forces", icon: "s.png", label: "Forze", family: true }], credoFree: false, credoSphereChoices: [],
   ritratti: { list: ["a.png", "b.png"], index: 0, count: 2, position: 1, many: true },
   arete: { value: 3, steps: [{ value: 1, active: true }, { value: 2, active: true }, { value: 3, active: true }, { value: 4, active: false }, { value: 5, active: false }] },
-  spheres: [{ id: "forces", label: "WOD5E_MAGE.Spheres.forces", icon: "s.png", value: 3, family: true, chosen: true }],
-  scopeRows: [{ id: "potency", label: "Potenza", faIcon: "fa-solid fa-burst", level: 4, reading: "Peso: un'auto", steps: [1, 2, 3, 4, 5, 6, 7].map((v) => ({ value: v, active: v === 4, lit: v <= 4 })) }],
-  poteri: [{ id: "forces-1-1", sphere: "forces", sphereLabel: "Forze", dot: 1, label: "Forze 1 · 1", placeholder: true, text: "", selected: false }],
+  spheres: [{ id: "forces", label: "WOD5E_MAGE.Spheres.forces", icon: "s.png", value: 3, family: true, chosen: true, poteri: [{ id: "forces-1-1", sphere: "forces", sphereLabel: "Forze", dot: 1, label: "Forze 1 · 1", short: "1 · 1", placeholder: true, text: "", selected: false }, { id: "forces-1-2", sphere: "forces", sphereLabel: "Forze", dot: 1, label: "Forze 1 · 2", short: "1 · 2", placeholder: true, text: "", selected: true }] }],
+  scopeRows: [{ id: "potency", label: "Potenza", faIcon: "fa-solid fa-burst", level: 4, reading: "Peso: un'auto", steps: [1, 2, 3, 4, 5, 6, 7].map((v) => ({ value: v, active: v === 4, lit: v <= 4, reading: `lettura ${v}` })) }],
+  poteri: [{ id: "forces-1-1", sphere: "forces", sphereLabel: "Forze", dot: 1, label: "Forze 1 · 1", short: "1 · 1", placeholder: true, text: "", selected: false }],
+  incantesimi: [{ id: "s1", name: "Lama di fuoco", icon: "s.png", coda: "Forze 3", hint: "Obiettivo", chosen: true }],
+  skillsFlat: false,
   attributeGroups: [{ id: "physical", label: "Fisico", rows: [{ id: "strength", displayName: "Forza", value: 3, icon: "i.png", chosen: false }, { id: "dexterity", displayName: "Destrezza", value: 4, icon: "i.png", chosen: true }] }],
   skillGroups: [{ id: "mental", label: "Mentale", rows: [{ id: "occult", key: "skill:occult", displayName: "Velo", value: 5, icon: "i.png", chosen: true, hasSpecialties: true, slots: [{ index: 0, name: "rituali", chosen: true }, { index: 1, name: "", chosen: false }, { index: 2, name: "", chosen: false }] }] }],
   customSkills: [{ id: "k1", name: "Cucina", value: 2, chosen: false }],
@@ -44,10 +46,23 @@ const context = {
   bonuses: []
 };
 const html = stat(context);
-for (const marker of ["wod5e-mage-riq-identita", "wod5e-mage-riq-salute", "wod5e-mage-riq-risorse", "wod5e-mage-riq-magick", "wod5e-mage-riq-poteri", "wod5e-mage-riq-attributi", "wod5e-mage-riq-tratti", "wod5e-mage-riq-abilita", "wod5e-mage-riq-tiro", 'data-action="tiroArete"', 'data-action="tiroScope" data-scope="potency" data-level="4"', 'class="wod5e-mage-ambito-livello active lit"', 'data-action="tiroRoll" data-kind="testimoni"', "data-action=\"tiroExtra\"", "wod5e-mage-saggezza-tendina", 'data-action="ritrattoNext"', "1/2", 'data-action="specialtyDelete" data-skill="occult" data-index="0"', 'data-action="specialtyAdd" data-skill="occult"', "wod5e-mage-riga wod5e-mage-riga-tratto scelta", "WOD5E_MAGE.Tiro.Difficulty", "wod5e-mage-stat-creazione"]) {
+for (const marker of ["wod5e-mage-riq-identita", "wod5e-mage-riq-risorse", "wod5e-mage-riq-magick", "wod5e-mage-riq-grimorio", "wod5e-mage-riq-attributi", "wod5e-mage-riq-tratti", "wod5e-mage-riq-abilita", "wod5e-mage-riq-tiro", 'data-action="tiroArete"', 'data-action="tiroScope" data-scope="potency" data-level="4"', 'class="wod5e-mage-pastiglia wod5e-mage-pastiglia-livello scelta lit"', 'title="lettura 7"', '<b>4</b>', "Peso: un&#x27;auto", 'wod5e-mage-pastiglia wod5e-mage-pastiglia-potere scelta segnaposto" data-action="tiroPower" data-power="forces-1-2"', 'data-action="tiroIncantesimo" data-row="s1"', "wod5e-mage-riga wod5e-mage-riga-incantesimo scelta", 'data-action="skillsFlatToggle"', 'data-action="tiroRoll" data-kind="testimoni"', "data-action=\"tiroExtra\"", "wod5e-mage-saggezza-tendina", 'wod5e-mage-ruota-tasto quintessence meno', 'wod5e-mage-ruota-tasto paradox piu', 'data-action="ritrattoNext"', "1/2", 'data-action="specialtyDelete" data-skill="occult" data-index="0"', 'data-action="specialtyAdd" data-skill="occult"', "wod5e-mage-riga wod5e-mage-riga-tratto scelta", "WOD5E_MAGE.Tiro.Difficulty", "wod5e-mage-stat-creazione"]) {
   assert.ok(html.includes(marker), `manca ${marker}`);
 }
 assert.ok(!html.includes("wod5e-mage-tiro-tira"), "con l'Areté acceso il tasto TIRA non c'è: ci sono i tre tasti");
+assert.ok(!html.includes("wod5e-mage-riq-salute") && !html.includes("wod5e-mage-riq-poteri") && !html.includes("wod5e-mage-ambito-livello"), "niente riquadri vecchi");
+// Le Risorse nell'ordine di Blue: Condizioni, Salute, Saggezza, Ruota.
+const risorseHtml = html.slice(html.indexOf("wod5e-mage-riq-risorse"), html.indexOf("wod5e-mage-riq-magick"));
+const posti = ["wod5e-mage-condizioni-box", "wod5e-mage-salute-track", "wod5e-mage-saggezza-tendina", "wod5e-mage-magick-track-stat"].map((m) => risorseHtml.indexOf(m));
+assert.ok(posti.every((p, i) => p >= 0 && (i === 0 || p > posti[i - 1])), `ordine delle Risorse: ${posti.join(", ")}`);
+// Il meno e il più accanto ai nodi, non nei conti.
+assert.ok(!/wod5e-mage-ruota-conto[^>]*>\s*<button type="button" data-action="magickBalanceChange"/.test(risorseHtml));
+// Le Abilità in fila: niente occhielli delle famiglie, le Specifiche in mezzo alle altre.
+const flat = stat({ ...context, skillsFlat: true, skillGroups: [{ id: "tutte", label: "", rows: [{ id: "athletics", key: "skill:athletics", displayName: "Atletica", value: 2, icon: "i.png", chosen: false, hasSpecialties: false, slots: [] }, { id: "k1", name: "Cucina", displayName: "Cucina", value: 2, chosen: false, custom: true }, { id: "occult", key: "skill:occult", displayName: "Velo", value: 5, icon: "i.png", chosen: false, hasSpecialties: false, slots: [] }] }], customSkills: [] });
+const abilitaFlat = flat.slice(flat.indexOf("wod5e-mage-riq-abilita"), flat.indexOf("wod5e-mage-riq-tiro"));
+assert.ok(!abilitaFlat.includes("wod5e-mage-riq-occhiello"), "in fila niente occhielli");
+assert.ok(abilitaFlat.indexOf("Atletica") < abilitaFlat.indexOf('customSkills.k1.name') && abilitaFlat.indexOf('customSkills.k1.name') < abilitaFlat.indexOf("Velo"), "la Specifica sta in mezzo, in ordine alfabetico");
+assert.ok(abilitaFlat.includes("fa-layer-group"), "il tasto acceso riporta alle famiglie");
 const skillRoll = stat({ ...context, tiro: { ...context.tiro, magick: false, kindLabel: "Tiro di Abilità", empty: true, size: 0, ready: false } });
 assert.ok(skillRoll.includes("wod5e-mage-tiro-tira") && skillRoll.includes("disabled"), "senza tratti TIRA c'è ed è spento");
 assert.ok(!skillRoll.includes('data-kind="testimoni"'));

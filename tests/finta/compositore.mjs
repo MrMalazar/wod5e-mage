@@ -54,6 +54,9 @@ assert.equal(rows.find((r) => r.id === "potency").steps[3].active, true);
 const poteri = S.preparePoteriRows(actor, tiro, (k) => strings[k] ?? k);
 assert.equal(poteri.length, 6 + 2, "Forze 3 e Mente 1: otto poteri");
 assert.equal(poteri[0].label, "Forze 1 · 1");
+assert.equal(poteri[0].short, "1 · 1");
+assert.deepEqual(S.poteriOfSphere(poteri, "mind").map((p) => p.id), ["mind-1-1", "mind-1-2"], "il cassetto di Mente ha i suoi due");
+assert.equal(rows.find((r) => r.id === "potency").steps[3].reading, rows.find((r) => r.id === "potency").reading, "la lettura sul numero è quella della riga");
 
 // Il lancio: Volgare con testimoni, riuscita dall'8, la Ruota sale di 2, la Quintessenza chiesta scende.
 tiro = T.setQuintessence(tiro, 2);
@@ -87,4 +90,26 @@ assert.deepEqual([m2.getFlag("wod5e-mage", ROLL_CARD_FLAG).total, m2.getFlag("wo
 assert.equal(await S.launchTiro(actor, T.toggleArete(T.emptyTiro())), null);
 assert.equal(await S.launchTiro(actor, T.toggleArete(T.pickAttribute(T.emptyTiro(), "dexterity"))), null);
 assert.ok(infos.some((m) => m.startsWith("WARN")));
+// Il Grimorio nel riquadro (16/9 sera): l'incantesimo scritto entra nel compositore com'è.
+flags["wod5e-mage"].grimorio = { s1: { name: "Lama di fuoco", goal: "Una lama", prize: false, magickType: "vulgar", spheres: { forces: 3, prime: 1 }, scopes: { potency: 3 }, traits: [{ field: "attributeTrait", key: "attribute:wits", label: "Prontezza" }, { field: "primaryTrait", key: "skill:athletics", label: "Atletica" }], sort: 0 } };
+const spellRows = S.prepareIncantesimiRows(actor, T.emptyTiro(), (k) => strings[k] ?? k);
+assert.equal(spellRows.length, 1);
+assert.deepEqual([spellRows[0].name, spellRows[0].coda, spellRows[0].chosen], ["Lama di fuoco", "Forze 3, WOD5E_MAGE.Spheres.prime 1", false]);
+const sheetFinta = { actor, _tiro: T.emptyTiro(), render: async () => {} };
+await S.onTiroIncantesimo.call(sheetFinta, { preventDefault() {} }, { dataset: { row: "s1" } });
+const caricato = sheetFinta._tiro;
+assert.deepEqual([caricato.arete, caricato.prize, caricato.spheres, caricato.scopes, caricato.attribute, caricato.skill, caricato.kind, caricato.spell], [true, false, ["forces"], { potency: 3 }, "wits", "skill:athletics", "volgare", "s1"], "Primordio non c'è sulla scheda: resta fuori");
+assert.equal(S.prepareIncantesimiRows(actor, caricato, (k) => strings[k] ?? k)[0].chosen, true);
+const ctxSpell = S.prepareTiroContext(actor, caricato);
+assert.deepEqual([ctxSpell.magick, ctxSpell.pool, ctxSpell.computed, ctxSpell.ready], [true, 2 + 2, 3, true], "Prontezza 2 + Atletica 2; soglia 3 senza premio");
+globalThis.__sim.faces = [9, 2, 4];
+const m3 = await S.launchTiro(actor, caricato);
+assert.ok(m3, "l'incantesimo caricato tira coi tre tasti (Volgare com'era scritto)");
+assert.match(String(globalThis.__sim.rolls.at(-1).options.title), /^Lama di fuoco · Prontezza \+ Atletica$/, "il nome dell'incantesimo dà il titolo al tiro");
+assert.match(m3.flavor, /Una lama/, "e l'Obiettivo va in carta");
+await S.onTiroIncantesimo.call(sheetFinta, { preventDefault() {} }, { dataset: { row: "s1" } });
+assert.equal(sheetFinta._tiro.spell, null, "lo stesso incantesimo cliccato di nuovo si toglie");
+await S.onTiroIncantesimo.call(sheetFinta, { preventDefault() {} }, { dataset: { row: "nessuno" } });
+assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
+
 console.log("compositore: ok,", globalThis.__sim.messages.length, "messaggi");

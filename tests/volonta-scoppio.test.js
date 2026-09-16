@@ -75,7 +75,7 @@ assert.deepEqual(saluteWithDamage({ pa: 0, ps: 1, ma: 0, ms: 0 }, 6, { ps: 3, pa
 assert.deepEqual(saluteWithDamage({ pa: 0, ps: 0, ma: 0, ms: 0 }, 3, { ms: 1, ma: 1 }), { pa: 0, ps: 0, ma: 1, ms: 1 });
 
 // La scheda: la parola PARADOSSO sulla Ruota è lo Scoppio; le righe delle Magick in atto portano i segni.
-const ruota = readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8");
+const ruota = readFileSync(new URL("../templates/actor/parts/stat-ruota.hbs", import.meta.url), "utf8");
 assert.equal((ruota.match(/data-action="paradoxBurst"/g) ?? []).length, 1, "la parola PARADOSSO nel conto sotto la Ruota (16/9)");
 assert.match(ruota, /magickTrack\.locked/);
 const spheres = readFileSync(new URL("../templates/actor/parts/spheres.hbs", import.meta.url), "utf8");

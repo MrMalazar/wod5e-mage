@@ -14,6 +14,7 @@ import {
 } from "./arete.js";
 import { FOCUS_FORMS } from "./focus.js";
 import { addParadoxToBalance, getMagickBalance, paradoxGainForMagickType } from "./magick-balance.js";
+import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
 import { findMageRollTrait, selectorsForMageRollTrait, skillRollCard } from "./mage-roll-selection.js";
 import { findPotere, potereLabel, poteriOf } from "./poteri.js";
 import { renderRollCard, ROLL_CARD_FLAG, rollSymbols } from "./roll-card.js";
@@ -26,6 +27,7 @@ import {
   emptyTiro,
   EXTRA_DICE_CAP,
   isMagick,
+  loadSpell,
   pickAttribute,
   pickPower,
   pickSkill,
@@ -141,6 +143,7 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
 /** Le righe degli Ambiti per il riquadro della Magick: sette livelli, quello dichiarato acceso. */
 export function prepareScopeRows(tiro, localize = (key) => key, { arete = null } = {}) {
   const readings = scopeReadings(localize, { arete });
+  const readingOf = (id, level) => (readings[id]?.[level - 1] ?? []).map((entry) => (entry.sub ? `${entry.sub}: ${entry.text}` : entry.text)).join(" · ");
   return SCOPES.map((id) => {
     const level = count(tiro?.scopes?.[id]);
     return {
@@ -148,11 +151,14 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null }
       label: localize(`WOD5E_MAGE.Scopes.${id}`),
       faIcon: SCOPE_ICONS[id] ?? "",
       level,
-      reading: level ? (readings[id]?.[level - 1] ?? []).map((entry) => (entry.sub ? `${entry.sub}: ${entry.text}` : entry.text)).join(" · ") : "",
+      // La lettura del livello scelto sta sulla riga; quella di ogni
+      // livello sul suo numero nel cassetto (Blue, 16/9 sera).
+      reading: level ? readingOf(id, level) : "",
       steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({
         value: index + 1,
         active: index + 1 === level,
-        lit: index + 1 <= level
+        lit: index + 1 <= level,
+        reading: readingOf(id, index + 1)
       }))
     };
   }).sort((a, b) => a.label.localeCompare(b.label, game.i18n?.lang ?? "it"));
@@ -169,10 +175,38 @@ export function preparePoteriRows(actor, tiro, localize = (key) => key) {
     sphereLabel: localize(`WOD5E_MAGE.Spheres.${power.sphere}`),
     dot: power.dot,
     label: potereLabel(power, localize),
+    // Nel cassetto della Sfera il nome della Sfera è già sulla riga: resta «3 · 1», o il nome del potere quando c'è.
+    short: String(power.name ?? "").trim() || `${power.dot} · ${power.slot}`,
     placeholder: !String(power.name ?? "").trim(),
     text: power.text ?? "",
     selected: tiro?.power === power.id
   }));
+}
+
+/** I poteri di una Sfera sola, per il suo cassetto. */
+export function poteriOfSphere(rows, sphere) {
+  return (rows ?? []).filter((power) => power.sphere === sphere);
+}
+
+/**
+ * Gli incantesimi del Grimorio per il riquadro (Blue, 16/9 sera): nome,
+ * sigillo della Sfera più alta, la coda con le Sfere e i livelli, la nota
+ * con l'Obiettivo e gli Ambiti, e lo stato «scelto» (caricato nel tiro).
+ */
+export function prepareIncantesimiRows(actor, tiro, localize = (key) => key) {
+  return prepareIncantesimi(actor, localize).map((row) => {
+    const top = [...row.spheres].sort((a, b) => b.level - a.level)[0];
+    const spheresText = row.spheres.map((sphere) => `${sphere.label} ${sphere.level}`).join(", ");
+    const scopesText = row.scopes.map((scope) => `${scope.label} ${scope.level}`).join(", ");
+    return {
+      id: row.id,
+      name: row.name,
+      icon: top?.icon ?? "",
+      coda: spheresText,
+      hint: [row.goal, scopesText, localize("WOD5E_MAGE.Tiro.IncantesimoHint")].filter(Boolean).join("\n"),
+      chosen: tiro?.spell === row.id
+    };
+  });
 }
 
 /* ---------------------------------------------------------------- */
@@ -227,6 +261,21 @@ export async function onTiroTrait(event, target) {
 export async function onTiroPower(event, target) {
   event.preventDefault();
   return repaint(this, pickPower(tiroOf(this), target.dataset.power));
+}
+
+/**
+ * Un incantesimo del Grimorio cliccato entra nel compositore com'era
+ * scritto (Sfere solo fra quelle che il personaggio ha); lo stesso
+ * incantesimo cliccato di nuovo si toglie.
+ */
+export async function onTiroIncantesimo(event, target) {
+  event.preventDefault();
+  const id = String(target.dataset.row ?? "");
+  const stored = this.actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {};
+  const spell = Object.hasOwn(stored, id) ? stored[id] : null;
+  if (!spell) return repaint(this, clearTiro());
+  const owned = prepareSpheres(this.actor).selected.map((sphere) => sphere.id);
+  return repaint(this, loadSpell(tiroOf(this), id, spell, { owned }));
 }
 
 export async function onTiroPill(event, target) {
@@ -312,7 +361,11 @@ export async function launchTiro(actor, tiro) {
   }
   const conto = contoTiro(tiro, inputs);
   const arete = getArete(actor);
-  const rollLabel = selectedTraits.map((trait) => trait.label).join(" + ") + (tiro.specialty ? ` · ${tiro.specialty}` : "");
+  // L'incantesimo caricato dal Grimorio dà il nome e l'Obiettivo al lancio.
+  const spell = tiro.spell ? ((actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {})[tiro.spell] ?? null) : null;
+  const spellName = String(spell?.name ?? "").trim();
+  const traitLabel = selectedTraits.map((trait) => trait.label).join(" + ") + (tiro.specialty ? ` · ${tiro.specialty}` : "");
+  const rollLabel = spellName ? `${spellName} · ${traitLabel}` : traitLabel;
   const selectors = [...new Set(selectedTraits.flatMap((trait) => selectorsForMageRollTrait(trait)))];
   const traitRows = selectedTraits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value }));
   const chosenTraits = (tiro.traits ?? []).map((id) => actor.items?.get?.(id)).filter(Boolean);
@@ -376,8 +429,8 @@ export async function launchTiro(actor, tiro) {
     threshold: conto.difficulty,
     prize: conto.prize,
     magickType,
-    goal: "",
-    effectKind: "",
+    goal: String(spell?.goal ?? ""),
+    effectKind: spell?.effectKind ? `WOD5E_MAGE.Arete.EffectKinds.${spell.effectKind}` : "",
     spheres: sphereEntries.map((entry) => ({ id: entry.id, label: `WOD5E_MAGE.Spheres.${entry.id}`, level: entry.level })),
     scopes: scopeLevels.map((entry) => ({ id: entry.id, label: `WOD5E_MAGE.Scopes.${entry.id}`, level: entry.level }))
   }, localize);
@@ -386,8 +439,8 @@ export async function launchTiro(actor, tiro) {
     vulgar: options.vulgar || options.witnesses,
     duration: count(tiro.scopes?.duration),
     threshold: conto.difficulty,
-    goal: "",
-    fallbackName: sphereEntries.map((entry) => localize(`WOD5E_MAGE.Spheres.${entry.id}`)).join(", ") || rollLabel
+    goal: String(spell?.goal ?? ""),
+    fallbackName: spellName || sphereEntries.map((entry) => localize(`WOD5E_MAGE.Spheres.${entry.id}`)).join(", ") || rollLabel
   };
   const sphereMax = Math.max(0, ...sphereEntries.map((entry) => entry.level));
   if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: conto.difficulty, [`flags.${MODULE_ID}.lastSphereMax`]: sphereMax });

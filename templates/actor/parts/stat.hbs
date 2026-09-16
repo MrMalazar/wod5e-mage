@@ -1,30 +1,18 @@
-{{!-- La prima pagina (16/9): nove riquadri in quattro colonne, la prima da
-     tre. Non è un modulo da compilare, è un selettore: il giocatore clicca
-     l'Areté, le Sfere, i livelli degli Ambiti, un Attributo, un'Abilità, i
-     Tratti e un potere, e il riquadro del Tiro compone e tira. --}}
+{{!-- La prima pagina (16/9): otto riquadri in quattro colonne, due per
+     colonna (Identità e Risorse; Magick e Grimorio; Attributi e Tratti;
+     Abilità e Il Tiro). Non è un modulo da compilare, è un selettore: il
+     giocatore clicca l'Areté, le Sfere coi loro poteri, i livelli degli
+     Ambiti, un Attributo, un'Abilità, i Tratti, oppure un incantesimo del
+     Grimorio, e il riquadro del Tiro compone e tira. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-stat" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     <div class="wod5e-mage-stat-grid">
         <div class="wod5e-mage-stat-col wod5e-mage-stat-col-1">
             {{> "modules/wod5e-mage/templates/actor/parts/stat-identita.hbs"}}
-            {{!-- Risorse (Blue, 16/9): la Salute, le Condizioni e la Saggezza a tendina. --}}
-            <section class="wod5e-mage-riq wod5e-mage-riq-salute">
-                <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.Risorse"}}</span></header>
-                <div class="wod5e-mage-riq-body">
-                    {{> "modules/wod5e-mage/templates/actor/parts/salute.hbs"}}
-                    {{> "modules/wod5e-mage/templates/actor/parts/stat-condizioni.hbs"}}
-                    <details class="wod5e-mage-saggezza-tendina">
-                        <summary><i class="fa-solid fa-chevron-right" aria-hidden="true"></i> <span>{{localize "WOD5E_MAGE.Wisdom.Label"}}</span></summary>
-                        <div class="wod5e-mage-saggezza-tendina-body">
-                            {{> "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"}}
-                        </div>
-                    </details>
-                </div>
-            </section>
             {{> "modules/wod5e-mage/templates/actor/parts/stat-risorse.hbs"}}
         </div>
         <div class="wod5e-mage-stat-col wod5e-mage-stat-col-2">
             {{> "modules/wod5e-mage/templates/actor/parts/stat-magick.hbs"}}
-            {{> "modules/wod5e-mage/templates/actor/parts/stat-poteri.hbs"}}
+            {{> "modules/wod5e-mage/templates/actor/parts/stat-grimorio.hbs"}}
         </div>
         <div class="wod5e-mage-stat-col wod5e-mage-stat-col-3">
             {{> "modules/wod5e-mage/templates/actor/parts/stat-attributi.hbs"}}
@@ -36,7 +24,7 @@
         </div>
     </div>
 
-    {{!-- Sotto i nove riquadri, chiuso: il memo della creazione coi tasti di
+    {{!-- Sotto gli otto riquadri, chiuso: il memo della creazione coi tasti di
          reset e i Bonus scritti, che stavano sulla pagina vecchia. --}}
     <details class="wod5e-mage-stat-creazione wod5e-mage-riepilogo">
         <summary>

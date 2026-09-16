@@ -8,6 +8,12 @@
  * il blocco chiaro del foglio di stile, senza render. Qui la parte senza
  * Foundry: i due temi, il giro, il tasto; la finestra la veste
  * `applicaTema`, che tocca solo classi e attributi.
+ *
+ * Accanto, a sinistra, la misura del testo (Blue, 16/9 sera): piccolo,
+ * medio, grande. Non è un corpo unico per tutto: è una scala (`zoom` sul
+ * contenuto della finestra), così ogni cosa (il nome, l'Areté, un
+ * titoletto come Appartenenza) tiene la sua misura e cresce o cala in
+ * proporzione. Anche questa è un'impostazione del giocatore (`sheetScale`).
  */
 export const TEMA_SETTING = "sheetTheme";
 export const TEMA_SCURO = "scuro";
@@ -67,4 +73,56 @@ export function applicaTema(element, tema, { localize = (key) => key } = {}) {
   button.setAttribute("aria-label", text);
   button.setAttribute("data-tooltip", text);
   button.setAttribute("aria-pressed", String(chiaro));
+}
+
+/* ------------------------------------------------------------------ */
+/* La misura del testo.                                                */
+/* ------------------------------------------------------------------ */
+export const SCALA_SETTING = "sheetScale";
+export const SCALE = Object.freeze(["piccolo", "medio", "grande"]);
+export const SCALA_PREDEFINITA = "medio";
+/** Il fattore di ogni misura: lo zoom sul contenuto della finestra. */
+export const SCALA_FATTORI = Object.freeze({ piccolo: 0.88, medio: 1, grande: 1.12 });
+/** La classe del tasto nella barra del titolo. */
+export const SCALA_TASTO_CLASSE = "wod5e-mage-scala";
+/** L'azione del tasto (data-action). */
+export const SCALA_AZIONE = "scalaToggle";
+const SCALA_ETICHETTE = Object.freeze({ piccolo: "WOD5E_MAGE.Scala.Piccolo", medio: "WOD5E_MAGE.Scala.Medio", grande: "WOD5E_MAGE.Scala.Grande" });
+
+export function normalizeScala(value) {
+  return SCALE.includes(value) ? value : SCALA_PREDEFINITA;
+}
+
+/** Il fattore della misura (1 per il medio). */
+export function scalaFattore(scala) {
+  return SCALA_FATTORI[normalizeScala(scala)];
+}
+
+/** Il giro del tasto: piccolo, medio, grande, e da capo. */
+export function altraScala(scala) {
+  const index = SCALE.indexOf(normalizeScala(scala));
+  return SCALE[(index + 1) % SCALE.length];
+}
+
+/** Com'è il tasto: dice la misura di adesso e dove porta il clic. */
+export function scalaTasto(scala) {
+  const current = normalizeScala(scala);
+  return { current, next: altraScala(current), label: SCALA_ETICHETTE[current], nextLabel: SCALA_ETICHETTE[altraScala(current)] };
+}
+
+/**
+ * Veste la finestra con la misura: la variabile `--mage-scala` sul frame
+ * (il CSS la usa come zoom del contenuto) e, se c'è, il tasto in testata.
+ */
+export function applicaScala(element, scala, { localize = (key) => key, format = (key, data) => `${key} ${JSON.stringify(data)}` } = {}) {
+  if (!element) return;
+  const current = normalizeScala(scala);
+  element.style?.setProperty?.("--mage-scala", String(scalaFattore(current)));
+  element.dataset && (element.dataset.scala = current);
+  const button = element.querySelector?.(`.${SCALA_TASTO_CLASSE}`);
+  if (!button) return;
+  const { label, nextLabel } = scalaTasto(current);
+  const text = format("WOD5E_MAGE.Scala.Tasto", { current: localize(label), next: localize(nextLabel) });
+  button.setAttribute("aria-label", text);
+  button.setAttribute("data-tooltip", text);
 }

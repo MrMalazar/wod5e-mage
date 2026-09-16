@@ -1,8 +1,11 @@
 {{!-- Magick (16/9): l'Areté, le Sfere possedute e gli Ambiti, tutti
      cliccabili. L'Areté cliccato fa il tiro di Magick; la Sfera entra in
-     catena; l'Ambito si dichiara cliccando il numero del livello (lo stesso
-     numero lo toglie). I pallini dell'Areté e delle Sfere restano quelli
-     della scheda: cambiano il valore, non la catena. --}}
+     catena e al sorvolo apre il cassetto dei suoi poteri (uno solo per
+     lancio, porta con sé la Sfera); l'Ambito mostra a destra il livello
+     scelto con la sua lettura dalla tavola e al sorvolo apre il cassetto
+     dei sette livelli (lo stesso numero lo toglie). I pallini dell'Areté e
+     delle Sfere restano quelli della scheda: cambiano il valore, non la
+     catena. (Blue, 16/9 sera: come le Abilità.) --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-magick">
     <header class="wod5e-mage-riq-title">
         {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.spheres}}{{/if}}
@@ -25,7 +28,7 @@
         <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E_MAGE.Tabs.Spheres"}}</span>
         <div class="wod5e-mage-sfere-lista">
             {{#each spheres as |sphere|}}
-                <div class="wod5e-mage-riga wod5e-mage-riga-sfera{{#if sphere.chosen}} scelta{{/if}}{{#if sphere.family}} family{{/if}}">
+                <div class="wod5e-mage-riga wod5e-mage-riga-sfera{{#if sphere.chosen}} scelta{{/if}}{{#if sphere.family}} family{{/if}}{{#if sphere.poteri.length}} con-cassetto{{/if}}">
                     <button type="button" class="wod5e-mage-riga-nome" data-action="tiroSphere" data-sphere="{{sphere.id}}" aria-pressed="{{sphere.chosen}}" title="{{localize 'WOD5E_MAGE.Tiro.SphereHint'}}">
                         <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt="">
                         <span>{{localize sphere.label}}</span>
@@ -36,6 +39,14 @@
                             <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}" title="{{this}}"></span>
                         {{/numLoop}}
                     </div>
+                    {{#if sphere.poteri.length}}
+                        {{!-- Il cassetto dei poteri della Sfera: due per pallino, fino ai pallini che ha. --}}
+                        <div class="wod5e-mage-cassetto wod5e-mage-cassetto-poteri" role="group" aria-label="{{localize 'WOD5E_MAGE.Stat.Poteri'}}" title="{{localize 'WOD5E_MAGE.Tiro.PoteriHint'}}">
+                            {{#each sphere.poteri as |power|}}
+                                <button type="button" class="wod5e-mage-pastiglia wod5e-mage-pastiglia-potere{{#if power.selected}} scelta{{/if}}{{#if power.placeholder}} segnaposto{{/if}}" data-action="tiroPower" data-power="{{power.id}}" aria-pressed="{{power.selected}}" title="{{#if power.text}}{{power.text}}{{else}}{{localize 'WOD5E_MAGE.Stat.PotereSegnaposto'}}{{/if}}">{{power.short}}</button>
+                            {{/each}}
+                        </div>
+                    {{/if}}
                 </div>
             {{else}}
                 <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Spheres.Empty"}}</p>
@@ -45,14 +56,21 @@
         <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E_MAGE.Scopes.TableTitle"}}</span>
         <div class="wod5e-mage-ambiti-lista">
             {{#each scopeRows as |scope|}}
-                <div class="wod5e-mage-riga wod5e-mage-riga-ambito{{#if scope.level}} scelta{{/if}}" title="{{#if scope.reading}}{{scope.reading}}{{/if}}">
+                <div class="wod5e-mage-riga wod5e-mage-riga-ambito con-cassetto{{#if scope.level}} scelta{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.ScopeHint'}}">
                     <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo">
                         <i class="{{scope.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>
                         <span>{{scope.label}}</span>
                     </span>
-                    <div class="wod5e-mage-ambito-livelli" role="group" aria-label="{{scope.label}}">
+                    {{!-- Al posto dei numeri: il livello scelto e la sua lettura dalla tavola. --}}
+                    {{#if scope.level}}
+                        <span class="wod5e-mage-ambito-lettura" title="{{scope.reading}}">
+                            <b>{{scope.level}}</b>
+                            <span>{{scope.reading}}</span>
+                        </span>
+                    {{/if}}
+                    <div class="wod5e-mage-cassetto wod5e-mage-cassetto-ambito" role="group" aria-label="{{scope.label}}">
                         {{#each scope.steps as |step|}}
-                            <button type="button" class="wod5e-mage-ambito-livello{{#if step.active}} active{{/if}}{{#if step.lit}} lit{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.value}}">{{step.value}}</button>
+                            <button type="button" class="wod5e-mage-pastiglia wod5e-mage-pastiglia-livello{{#if step.active}} scelta{{/if}}{{#if step.lit}} lit{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.value}}" title="{{step.reading}}">{{step.value}}</button>
                         {{/each}}
                     </div>
                 </div>
