@@ -1,5 +1,5 @@
 import { prepareEssentialSkillList } from "./abilita-essenziali.js";
-import { SPECIALIZZAZIONI, specialtySuggestions } from "./data/specializzazioni.js";
+import { SPECIALIZZAZIONI, SPECIALIZZAZIONI_PER_VOCE, specialtySuggestions } from "./data/specializzazioni.js";
 
 /**
  * Le Specializzazioni delle Abilità, in un pannello dei Tratti: una riga
@@ -187,4 +187,4 @@ export async function onSpecialtyDelete(event, target) {
   await actor.update({ [`system.skills.${skillId}.bonuses`]: bonuses });
 }
 
-export { SPECIALIZZAZIONI };
+export { SPECIALIZZAZIONI, SPECIALIZZAZIONI_PER_VOCE };

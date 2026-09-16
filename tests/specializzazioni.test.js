@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { prepareSpecialties, specialtyBonus, specialtySkillChoices, specialtyCounts, specialtySlots, suggestionOptions, SPECIALTY_STEPS, SPECIALIZZAZIONI } from "../scripts/specializzazioni.js";
+import { prepareSpecialties, specialtyBonus, specialtySkillChoices, specialtyCounts, specialtySlots, suggestionOptions, SPECIALTY_STEPS, SPECIALIZZAZIONI, SPECIALIZZAZIONI_PER_VOCE } from "../scripts/specializzazioni.js";
 import { CHIAVI_VIVE } from "../scripts/abilita-essenziali.js";
 
 const actor = {
@@ -90,13 +90,20 @@ assert.deepEqual([0, 1, 2, 3, 4, 5, 9].map(specialtySlots), [0, 1, 1, 2, 2, 3, 3
   assert.deepEqual(specialtySkillChoices([{ id: "brawl", label: "Mischia", value: 0 }]), []);
   assert.deepEqual(specialtySkillChoices([]), []);
 }
-// Il catalogo dei suggerimenti copre tutte le chiavi vive, una parola l'una.
+// Il catalogo dei suggerimenti copre tutte le chiavi vive, sei per voce (16/9), una parola l'una, senza doppioni.
 assert.deepEqual(Object.keys(SPECIALIZZAZIONI).sort(), [...CHIAVI_VIVE].sort());
+assert.equal(SPECIALIZZAZIONI_PER_VOCE, 6);
 for (const [key, names] of Object.entries(SPECIALIZZAZIONI)) {
+  assert.equal(names.length, SPECIALIZZAZIONI_PER_VOCE, `${key}: ${names.length}`);
+  assert.equal(new Set(names).size, names.length, `${key}: doppioni`);
   for (const name of names) assert.doesNotMatch(name, /\s/, `${key}: ${name}`);
 }
+// Le fette uscite il 16/9 non tornano dalla finestra.
+for (const morta of ["Deduzione", "Selva", "Fondo", "Lancio", "Aure", "Disarmo", "Veleni", "Raffica"]) {
+  assert.ok(!Object.values(SPECIALIZZAZIONI).some((names) => names.includes(morta)), morta);
+}
 // In ordine alfabetico, filtrati da quel che si scrive (11/9: la tendina nativa era storta).
-assert.equal(suggestionOptions("brawl"), '<li data-value="Disarmo">Disarmo</li><li data-value="Improvvisate">Improvvisate</li><li data-value="Lame">Lame</li><li data-value="Lotta">Lotta</li><li data-value="Mazze">Mazze</li><li data-value="Pugilato">Pugilato</li>');
+assert.equal(suggestionOptions("brawl"), '<li data-value="Difesa">Difesa</li><li data-value="Improvvisate">Improvvisate</li><li data-value="Lame">Lame</li><li data-value="Lotta">Lotta</li><li data-value="Mazze">Mazze</li><li data-value="Pugilato">Pugilato</li>');
 assert.equal(suggestionOptions("brawl", "la"), '<li data-value="Lame">Lame</li>');
 assert.equal(suggestionOptions("streetwise"), "");
 {

@@ -1,25 +1,30 @@
 /**
- * Le Specializzazioni di catalogo (canone «Le Abilità Essenziali», 11/9/2026):
- * per ogni chiave viva, i nomi proposti dal LIBRO. Sono suggerimenti per la
- * finestra «Aggiungi una Specializzazione», non un recinto: il giocatore può
- * scriverne una sua. Una parola l'una, come vuole il canone.
+ * Le Specializzazioni di catalogo (canone «Le Abilità Essenziali», 11/9/2026,
+ * le sei fisse del 16/9/2026): per ogni chiave viva, le sei proposte dal LIBRO,
+ * tutte della stessa specie (rami di un mestiere, classi d'arma, leve). Sono
+ * suggerimenti per la finestra «Aggiungi una Specializzazione», non un recinto:
+ * il giocatore può scriverne una sua. Una parola l'una, come vuole il canone.
+ * Difesa porta l'asterisco di Blue: le dinamiche del combattimento sono da rivalutare.
  */
 export const SPECIALIZZAZIONI = Object.freeze({
-  awareness: Object.freeze(["Imboscate", "Vista", "Udito", "Fiuto", "Pedinamenti", "Veglia", "Menzogne", "Desideri", "Folle", "Ostilità", "Aure"]),
-  firearms: Object.freeze(["Pistole", "Fucili", "Cecchino", "Raffica", "Archi", "Pesanti"]),
-  performance: Object.freeze(["Musica", "Scrittura", "Pittura", "Fotografia", "Danza", "Palcoscenico", "Oratoria"]),
-  athletics: Object.freeze(["Inseguimenti", "Parkour", "Nuoto", "Scalata", "Lancio", "Fondo", "Guida", "Moto", "Barche", "Velivoli", "Cavalcature"]),
-  academics: Object.freeze(["Storia", "Legge", "Finanza", "Matematica", "Psicologia", "Politica", "Lingue", "Chimica", "Fisica", "Biologia", "Ingegneria", "Informatica"]),
-  persuasion: Object.freeze(["Trattativa", "Comando", "Minaccia", "Galateo", "Parlantina", "Seduzione", "Conforto"]),
-  larceny: Object.freeze(["Scasso", "Borseggio", "Falsificazione", "Ricettazione", "Rapina", "Demolizioni", "Intrusione", "Cifratura"]),
-  investigation: Object.freeze(["Sopralluoghi", "Archivi", "Interrogatori", "Appostamenti", "Deduzione", "Scomparsi", "Strada", "Forense", "Dati"]),
-  craft: Object.freeze(["Officina", "Impianti", "Carpenteria", "Cucina", "Agricoltura", "Sartoria", "Elettronica", "Droni", "Reti"]),
-  medicine: Object.freeze(["Soccorso", "Chirurgia", "Veleni", "Farmaci", "Diagnosi", "Autopsie", "Veterinaria"]),
-  brawl: Object.freeze(["Pugilato", "Lotta", "Lame", "Mazze", "Improvvisate", "Disarmo"]),
-  survival: Object.freeze(["Selva", "Tracce", "Rovine", "Caccia", "Orientamento", "Rifugi", "Animali", "Belve"]),
-  subterfuge: Object.freeze(["Truffa", "Travestimenti", "Infiltrazione", "Bluff", "Depistaggi", "Innocenza", "Furtività"]),
-  occult: Object.freeze(["Tradizioni", "Rituali", "Cosmologia", "Enigmi", "Esoterica", "Folklore", "Spiriti", "Famigli", "Mostri", "Entità"])
+  awareness: Object.freeze(["Agguati", "Pedinamenti", "Dettagli", "Ascolto", "Menzogne", "Intenzioni"]),
+  firearms: Object.freeze(["Pistole", "Fucili", "Cecchino", "Automatiche", "Archi", "Pesanti"]),
+  performance: Object.freeze(["Musica", "Scrittura", "Pittura", "Fotografia", "Scena", "Oratoria"]),
+  athletics: Object.freeze(["Corsa", "Acrobazia", "Nuoto", "Scalata", "Resistenza", "Guida"]),
+  academics: Object.freeze(["Storia", "Legge", "Finanza", "Politica", "Scienze", "Lingue"]),
+  persuasion: Object.freeze(["Trattativa", "Comando", "Minaccia", "Galateo", "Parlantina", "Seduzione"]),
+  larceny: Object.freeze(["Scasso", "Borseggio", "Falsificazione", "Rapina", "Demolizioni", "Intrusione"]),
+  investigation: Object.freeze(["Forense", "Archivi", "Interrogatori", "Appostamenti", "Strada", "Dati"]),
+  craft: Object.freeze(["Officina", "Impianti", "Carpenteria", "Elettronica", "Cucina", "Agricoltura"]),
+  medicine: Object.freeze(["Soccorso", "Chirurgia", "Diagnosi", "Farmaci", "Autopsie", "Psicologia"]),
+  brawl: Object.freeze(["Pugilato", "Lotta", "Lame", "Mazze", "Improvvisate", "Difesa"]),
+  survival: Object.freeze(["Tracce", "Caccia", "Orientamento", "Rifugi", "Animali", "Rovine"]),
+  subterfuge: Object.freeze(["Truffa", "Travestimenti", "Infiltrazione", "Bluff", "Depistaggi", "Furtività"]),
+  occult: Object.freeze(["Cosmologia", "Vampiri", "Licantropi", "Risvegliati", "Fatati", "Esterni"])
 });
+
+/** Sei per voce, come vuole il canone del 16/9. */
+export const SPECIALIZZAZIONI_PER_VOCE = 6;
 
 /** I suggerimenti per una chiave, o niente. */
 export function specialtySuggestions(skillId) {
