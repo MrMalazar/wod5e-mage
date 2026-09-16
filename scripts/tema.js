@@ -93,6 +93,55 @@ export function normalizeScala(value) {
   return SCALE.includes(value) ? value : SCALA_PREDEFINITA;
 }
 
+/* ------------------------------------------------------------------ */
+/* La scheda sullo schermo (Blue, 16/9 sera: «ha problemi di dimensioni
+   a causa di schermi differenti dei giocatori»). La scheda è disegnata
+   per 1340×1080 a scala 1; su uno schermo più piccolo si rimpicciolisce
+   da sola, in proporzione, fino a starci: la misura scelta dal giocatore
+   (piccolo, medio, grande) si moltiplica per questo fattore. */
+/* ------------------------------------------------------------------ */
+/** La misura naturale della scheda a scala 1: le quattro colonne di riquadri. */
+export const MISURA_NATURALE = Object.freeze({ width: 1340, height: 1080 });
+/** Quanto resta libero attorno alla finestra, in tutto, per lato. */
+export const MARGINE_SCHERMO = 40;
+/** Sotto questa scala non si legge: da lì in giù si accetta lo scorrimento. */
+export const SCALA_MINIMA_SCHERMO = 0.5;
+
+/** Il fattore che fa stare la scheda nello schermo: 1 se ci sta già. */
+export function fattoreSchermo(viewport = {}) {
+  const width = Number(viewport?.innerWidth);
+  const height = Number(viewport?.innerHeight);
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return 1;
+  const fit = Math.min(1, (width - MARGINE_SCHERMO) / MISURA_NATURALE.width, (height - MARGINE_SCHERMO) / MISURA_NATURALE.height);
+  return Math.max(Math.round(fit * 100) / 100, SCALA_MINIMA_SCHERMO);
+}
+
+/** La scala vera sul contenuto: la misura del giocatore per il fattore dello schermo. */
+export function scalaTotale(scala, viewport) {
+  return Math.round(scalaFattore(scala) * fattoreSchermo(viewport) * 1000) / 1000;
+}
+
+/** La finestra che serve a questa scala, dentro lo schermo. */
+export function misuraFinestra(scala, viewport) {
+  const totale = scalaTotale(scala, viewport);
+  const width = Number(viewport?.innerWidth);
+  const height = Number(viewport?.innerHeight);
+  const maxWidth = Number.isFinite(width) && width > 0 ? Math.max(width - MARGINE_SCHERMO, 600) : Infinity;
+  const maxHeight = Number.isFinite(height) && height > 0 ? Math.max(height - MARGINE_SCHERMO, 400) : Infinity;
+  return {
+    width: Math.min(Math.round(MISURA_NATURALE.width * totale), maxWidth),
+    height: Math.min(Math.round(MISURA_NATURALE.height * totale), maxHeight)
+  };
+}
+
+/** La finestra sporge dallo schermo? */
+export function sporgeDalloSchermo(position = {}, viewport = {}) {
+  const width = Number(viewport?.innerWidth);
+  const height = Number(viewport?.innerHeight);
+  if (!Number.isFinite(width) || !Number.isFinite(height)) return false;
+  return Number(position?.width) > width - MARGINE_SCHERMO || Number(position?.height) > height - MARGINE_SCHERMO;
+}
+
 /** Il fattore della misura (1 per il medio). */
 export function scalaFattore(scala) {
   return SCALA_FATTORI[normalizeScala(scala)];
@@ -113,12 +162,15 @@ export function scalaTasto(scala) {
 /**
  * Veste la finestra con la misura: la variabile `--mage-scala` sul frame
  * (il CSS la usa come zoom del contenuto) e, se c'è, il tasto in testata.
+ * Col `viewport` (la window) la scala tiene conto dello schermo.
  */
-export function applicaScala(element, scala, { localize = (key) => key, format = (key, data) => `${key} ${JSON.stringify(data)}` } = {}) {
+export function applicaScala(element, scala, { localize = (key) => key, format = (key, data) => `${key} ${JSON.stringify(data)}`, viewport = null } = {}) {
   if (!element) return;
   const current = normalizeScala(scala);
-  element.style?.setProperty?.("--mage-scala", String(scalaFattore(current)));
+  // Con lo schermo in mano la scala è quella totale (misura per fattore dello schermo).
+  element.style?.setProperty?.("--mage-scala", String(viewport ? scalaTotale(current, viewport) : scalaFattore(current)));
   element.dataset && (element.dataset.scala = current);
+  if (element.dataset && viewport) element.dataset.scalaSchermo = String(fattoreSchermo(viewport));
   const button = element.querySelector?.(`.${SCALA_TASTO_CLASSE}`);
   if (!button) return;
   const { label, nextLabel } = scalaTasto(current);

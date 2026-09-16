@@ -1,0 +1,44 @@
+{{!-- Il verdetto del Narratore (Blue, 16/9 sera): il tiro del giocatore
+     com'è, la Difficoltà e i dadi da ritoccare col meno e il più, i dadi
+     che si tirano, e il conto alla rovescia: allo scadere il tiro parte
+     com'è, OK lo fa partire subito. --}}
+<div class="wod5e-mage-verdetto">
+    <p class="wod5e-mage-verdetto-chi">
+        <b>{{actorName}}</b>
+        <span class="wod5e-mage-verdetto-tipo">{{kindLabel}}</span>
+    </p>
+    {{#if title}}<p class="wod5e-mage-verdetto-titolo">{{title}}</p>{{/if}}
+
+    <div class="wod5e-mage-verdetto-conto">
+        <div class="wod5e-mage-verdetto-riga">
+            <span class="wod5e-mage-verdetto-etichetta">{{localize "WOD5E_MAGE.Arete.Pool"}}</span>
+            <b data-role="pool">{{pool}}</b>
+        </div>
+        <div class="wod5e-mage-verdetto-riga">
+            <span class="wod5e-mage-verdetto-etichetta">{{localize "WOD5E_MAGE.Tiro.Difficulty"}}</span>
+            <span class="wod5e-mage-verdetto-comandi">
+                <button type="button" data-campo="difficulty" data-delta="-1" aria-label="−1"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                <input type="number" name="difficulty" value="{{difficulty}}" min="0" step="1">
+                <button type="button" data-campo="difficulty" data-delta="1" aria-label="+1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+            </span>
+        </div>
+        <div class="wod5e-mage-verdetto-riga">
+            <span class="wod5e-mage-verdetto-etichetta">{{localize "WOD5E_MAGE.Verdetto.Dice"}}</span>
+            <span class="wod5e-mage-verdetto-comandi">
+                <button type="button" data-campo="dice" data-delta="-1" aria-label="−1"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                <input type="number" name="dice" value="0" step="1">
+                <button type="button" data-campo="dice" data-delta="1" aria-label="+1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+            </span>
+        </div>
+        <div class="wod5e-mage-verdetto-riga wod5e-mage-verdetto-uscita">
+            <span class="wod5e-mage-verdetto-etichetta">{{localize "WOD5E_MAGE.Tiro.Dice"}}</span>
+            <b data-role="dadi">{{dice}}</b>
+            <small>{{localize "WOD5E_MAGE.Tiro.SuccessFrom"}} {{successFrom}}+</small>
+        </div>
+    </div>
+
+    <p class="wod5e-mage-verdetto-timer">
+        <i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>
+        {{localize "WOD5E_MAGE.Verdetto.Countdown"}} <b data-role="secondi">{{seconds}}</b> s
+    </p>
+</div>

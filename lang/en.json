@@ -1236,6 +1236,8 @@
       "SuccessFrom": "success from",
       "Difficulty": "Difficulty",
       "DifficultyHint": "The threshold: the sum of Scopes above 1, minus Arete with the prize. Minus and plus adjust it by hand.",
+      "DifficultyWarning": "Set the Difficulty before rolling.",
+      "DifficultyMissing": "Set the Difficulty: without it the roll does not start.",
       "DifficultyReset": "Back to the count",
       "QuintessenceHint": "One die per point, up to 2 + Arete per casting. It leaves the Wheel once rolled.",
       "Sforza": "Force reality",
@@ -1251,6 +1253,17 @@
       "NextHint": "Cycle the portraits: the one you see is also the image on the map and in chat",
       "AddHint": "Add a portrait",
       "RemoveHint": "Remove this portrait"
+    },
+    "Verdetto": {
+      "Title": "The player's roll",
+      "Ok": "OK, roll",
+      "Dice": "Dice added or removed",
+      "Countdown": "The roll starts in",
+      "Sent": "Roll sent to the Storyteller: it starts in {seconds} seconds unless adjusted.",
+      "Note": "Storyteller: {changes}.",
+      "NoteDifficulty": "Difficulty {before} → {after}",
+      "NoteDice": "dice {dice}",
+      "Pending": "This roll is already with the Storyteller: wait for the verdict."
     },
     "Tema": {
       "Chiaro": "Light mode",

@@ -3,7 +3,9 @@
      più), il premio dell'Areté, la Quintessenza, i dadi extra, Sforza la
      realtà. La catena di quel che si è cliccato non si stampa (Blue, 16/9):
      si vede acceso nei riquadri. Senza Areté c'è TIRA; con l'Areté i tre
-     tasti del tipo, e ognuno tira. Niente finestra di conferma. --}}
+     tasti del tipo, e ognuno tira. Niente finestra di conferma. Senza la
+     Difficoltà inserita (a mano, o dagli Ambiti) i tasti restano spenti
+     (Blue, 16/9 sera). --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-tiro{{#if tiro.magick}} magick{{/if}}">
     <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.IlTiro"}}</span></header>
     <div class="wod5e-mage-riq-body">
@@ -27,17 +29,20 @@
             </div>
         </div>
 
-        <div class="wod5e-mage-tiro-riga wod5e-mage-tiro-difficolta{{#if tiro.manual}} a-mano{{/if}}">
+        <div class="wod5e-mage-tiro-riga wod5e-mage-tiro-difficolta{{#if tiro.manual}} a-mano{{/if}}{{#if tiro.needsDifficulty}} manca{{/if}}">
             <span class="wod5e-mage-tiro-etichetta" title="{{localize 'WOD5E_MAGE.Tiro.DifficultyHint'}}"><i class="fa-solid fa-signal" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.Difficulty"}}</span>
             <span class="wod5e-mage-tiro-comandi">
                 {{#if tiro.manual}}
                     <button type="button" class="wod5e-mage-tiro-ricalcola" data-action="tiroDifficulty" data-reset title="{{localize 'WOD5E_MAGE.Tiro.DifficultyReset'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.DifficultyReset'}}"><i class="fa-solid fa-calculator" aria-hidden="true"></i> {{tiro.computed}}</button>
                 {{/if}}
                 <button type="button" data-action="tiroDifficulty" data-delta="-1" aria-label="−1"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-                <b>{{tiro.difficulty}}</b>
+                <b>{{#if tiro.needsDifficulty}}?{{else}}{{tiro.difficulty}}{{/if}}</b>
                 <button type="button" data-action="tiroDifficulty" data-delta="1" aria-label="+1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
             </span>
         </div>
+        {{#if tiro.needsDifficulty}}
+            <p class="wod5e-mage-tiro-manca"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.DifficultyMissing"}}</p>
+        {{/if}}
 
         {{#if tiro.magick}}
             <label class="wod5e-mage-tiro-riga wod5e-mage-tiro-premio{{#if tiro.prize.on}} acceso{{/if}}" title="{{localize 'WOD5E_MAGE.Arete.PrizeHint' arete=tiro.prize.arete}}">

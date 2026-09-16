@@ -22,7 +22,9 @@
  * - un incantesimo del Grimorio entra tutto insieme (Blue, 16/9 sera):
  *   Areté, Sfere, Ambiti, Attributo, Abilità, premio e tipo com'erano
  *   scritti; poi si tira coi tre tasti;
- * - la Difficoltà scritta a mano sovrascrive quella calcolata.
+ * - la Difficoltà scritta a mano sovrascrive quella calcolata;
+ * - senza Difficoltà (a mano, o dagli Ambiti nella Magick) il tiro non
+ *   parte (Blue, 16/9 sera).
  */
 import { calculateAretePrize, calculateMagickThreshold, capBonusDice, SKILL_SPECIALTY_DICE, THRESHOLD_CAP } from "./arete.js";
 import { BUSSOLA_DICE } from "./bussola.js";
@@ -250,6 +252,19 @@ export function loadSpell(tiro, id, spell, { owned = null } = {}) {
   return next;
 }
 
+/**
+ * La Difficoltà c'è (Blue, 16/9 sera: senza, il tiro non parte): un numero
+ * scritto a mano col meno e il più, oppure, nella Magick, almeno un Ambito
+ * dichiarato (la soglia la fanno gli Ambiti). Un tiro di Abilità la vuole
+ * sempre a mano.
+ */
+export function hasDifficulty(tiro) {
+  const manual = tiro?.difficulty !== null && tiro?.difficulty !== undefined;
+  if (manual) return true;
+  if (!isMagick(tiro)) return false;
+  return Object.values(tiro?.scopes ?? {}).some((level) => count(level) >= 1);
+}
+
 /** La Difficoltà a mano: un numero la fissa, null torna al conto. */
 export function setDifficulty(tiro, value) {
   const next = clone(tiro);
@@ -426,6 +441,7 @@ export function contoTiro(tiro, {
     prize,
     computed,
     manual,
+    difficultySet: hasDifficulty(tiro),
     difficulty,
     dice: conto.dice,
     impossible: conto.dice === 0,

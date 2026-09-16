@@ -104,6 +104,14 @@ const roll2 = globalThis.__sim.rolls.at(-1);
 assert.equal(roll2.formula, "4dmcs>5 + 0dpcs>5");
 assert.deepEqual([m2.getFlag("wod5e-mage", ROLL_CARD_FLAG).total, m2.getFlag("wod5e-mage", ROLL_CARD_FLAG).skill], [2, true]);
 
+// Senza Difficoltà non si tira (16/9 sera): il riquadro spegne il tasto e lo dice.
+const senza = T.pickSkill(T.pickAttribute(T.emptyTiro(), "dexterity"), "skill:athletics");
+const ctxSenza = S.prepareTiroContext(actor, senza);
+assert.deepEqual([ctxSenza.ready, ctxSenza.needsDifficulty], [false, true]);
+assert.deepEqual([ctx2.needsDifficulty, ctx.needsDifficulty], [false, false]);
+const primaDelSenza = globalThis.__sim.rolls.length;
+assert.equal(await S.launchTiro(actor, senza), null);
+assert.equal(globalThis.__sim.rolls.length, primaDelSenza);
 // Senza tratti non si tira; con la Magick senza tipo nemmeno.
 assert.equal(await S.launchTiro(actor, T.toggleArete(T.emptyTiro())), null);
 assert.equal(await S.launchTiro(actor, T.toggleArete(T.pickAttribute(T.emptyTiro(), "dexterity"))), null);
@@ -118,6 +126,32 @@ await S.onTiroIncantesimo.call(sheetFinta, { preventDefault() {} }, { dataset: {
 const caricato = sheetFinta._tiro;
 assert.deepEqual([caricato.arete, caricato.prize, caricato.spheres, caricato.scopes, caricato.attribute, caricato.skill, caricato.kind, caricato.spell], [true, false, ["forces"], { potency: 3 }, "wits", "skill:athletics", "volgare", "s1"], "Primordio non c'è sulla scheda: resta fuori");
 assert.equal(S.prepareIncantesimiRows(actor, caricato, (k) => strings[k] ?? k)[0].chosen, true);
+// Il verdetto del Narratore (16/9 sera): col Narratore collegato il tiro gli
+// arriva sul socket; qui risponde subito alzando la Difficoltà di uno e dando
+// un dado: si tira coi suoi numeri e la carta lo dice.
+{
+  const V = await import(new URL("../../scripts/verdetto-narratore.js", import.meta.url).href);
+  const mandati = [];
+  strings["WOD5E_MAGE.Verdetto.Note"] = "Narratore: {changes}.";
+  strings["WOD5E_MAGE.Verdetto.NoteDifficulty"] = "Difficoltà {before} → {after}";
+  strings["WOD5E_MAGE.Verdetto.NoteDice"] = "dadi {dice}";
+  globalThis.game.user = { id: "p1" };
+  globalThis.game.users = { activeGM: { id: "gm" } };
+  globalThis.game.socket = {
+    emit: (name, payload) => {
+      mandati.push(payload);
+      if (payload.type === V.TIPO_RICHIESTA) queueMicrotask(() => V.onSocketVerdetto(V.verdettoTiro(payload, { difficulty: payload.difficulty + 1, dice: 1 })));
+    }
+  };
+  globalThis.__sim.faces = [7, 7, 7, 1];
+  const conVerdetto = await S.launchTiro(actor, abilita);
+  assert.equal(mandati[0].type, V.TIPO_RICHIESTA);
+  assert.deepEqual([mandati[0].pool, mandati[0].difficulty, mandati[0].actorName], [6, 2, "Ianira"]);
+  assert.equal(globalThis.__sim.rolls.at(-1).formula, "4dmcs>5 + 0dpcs>5", "riserva 7 meno Difficoltà 3: quattro dadi");
+  assert.match(conVerdetto.flavor, /Narratore: Difficoltà 2 → 3 · dadi \+1\./, "la carta dice cosa ha toccato il Narratore");
+  assert.equal(conVerdetto.getFlag("wod5e-mage", ROLL_CARD_FLAG).threshold, 3);
+  delete globalThis.game.user; delete globalThis.game.users; delete globalThis.game.socket;
+}
 const ctxSpell = S.prepareTiroContext(actor, caricato);
 assert.deepEqual([ctxSpell.magick, ctxSpell.pool, ctxSpell.computed, ctxSpell.ready], [true, 2 + 2, 3, true], "Prontezza 2 + Atletica 2; soglia 3 senza premio");
 globalThis.__sim.faces = [9, 2, 4];

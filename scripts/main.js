@@ -12,6 +12,7 @@ import { registerPrezzo } from "./prezzo.js";
 import { registerUstione } from "./ustione.js";
 import { registerParadossoNarratore } from "./paradosso-narratore.js";
 import { registerGrimorioComune } from "./grimorio-comune.js";
+import { registraSocketVerdetto } from "./verdetto-narratore.js";
 import { SCALA_PREDEFINITA, SCALA_SETTING, TEMA_CHIARO, TEMA_SCURO, TEMA_SETTING } from "./tema.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 
@@ -187,6 +188,9 @@ Hooks.once("ready", () => {
     );
     return;
   }
+
+  // Il verdetto del Narratore sui tiri dei giocatori (16/9 sera): il canale del modulo.
+  registraSocketVerdetto();
 
   debug("Ready", {
     foundryVersion: game.version,

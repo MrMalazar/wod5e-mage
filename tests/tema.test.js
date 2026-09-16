@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { altraScala, altroTema, applicaScala, applicaTema, isChiaro, normalizeScala, normalizeTema, SCALA_AZIONE, SCALA_FATTORI, SCALA_SETTING, SCALA_TASTO_CLASSE, scalaFattore, scalaTasto, SCALE, TEMA_AZIONE, TEMA_CLASSE, TEMA_SETTING, TEMA_TASTO_CLASSE, temaTasto, TEMI } from "../scripts/tema.js";
+import { altraScala, altroTema, applicaScala, applicaTema, fattoreSchermo, isChiaro, MARGINE_SCHERMO, MISURA_NATURALE, misuraFinestra, normalizeScala, normalizeTema, SCALA_AZIONE, SCALA_FATTORI, SCALA_MINIMA_SCHERMO, SCALA_SETTING, SCALA_TASTO_CLASSE, scalaFattore, scalaTasto, scalaTotale, SCALE, sporgeDalloSchermo, TEMA_AZIONE, TEMA_CLASSE, TEMA_SETTING, TEMA_TASTO_CLASSE, temaTasto, TEMI } from "../scripts/tema.js";
 
 // I due temi; un valore vecchio o vuoto torna allo scuro.
 assert.deepEqual(TEMI, ["scuro", "chiaro"]);
@@ -148,5 +148,38 @@ assert.match(chiara, /--mage-carta: #FBF8F0;/);
 assert.match(chiara, /\.wod5e-mage-chiara \.sheet-banner \{/);
 assert.doesNotMatch(chiara, /type-banner/);
 assert.match(chiara, /\.wod5e-mage-chiara \.window-content \.resource \{\n\s+background-color: #F6F2E6;/);
+
+
+// La scheda sullo schermo (16/9 sera): 1340×1080 a scala 1; su uno schermo
+// più piccolo si riduce in proporzione fino a starci, mai sotto 0.5.
+assert.deepEqual(MISURA_NATURALE, { width: 1340, height: 1080 });
+assert.equal(MARGINE_SCHERMO, 40);
+assert.equal(SCALA_MINIMA_SCHERMO, 0.5);
+assert.equal(fattoreSchermo({ innerWidth: 2560, innerHeight: 1440 }), 1, "lo schermo grande non ingrandisce");
+assert.equal(fattoreSchermo({ innerWidth: 1920, innerHeight: 1080 }), 0.96, "il full HD è stretto in altezza: 1040 su 1080");
+assert.equal(fattoreSchermo({ innerWidth: 1366, innerHeight: 768 }), 0.67, "il portatile: 728 su 1080");
+assert.equal(fattoreSchermo({ innerWidth: 1280, innerHeight: 720 }), 0.63);
+assert.equal(fattoreSchermo({ innerWidth: 500, innerHeight: 400 }), 0.5, "non sotto la metà");
+assert.equal(fattoreSchermo({}), 1);
+assert.equal(fattoreSchermo(null), 1);
+assert.equal(scalaTotale("medio", { innerWidth: 1366, innerHeight: 768 }), 0.67);
+assert.equal(scalaTotale("grande", { innerWidth: 1366, innerHeight: 768 }), 0.75);
+assert.equal(scalaTotale("piccolo", { innerWidth: 2560, innerHeight: 1440 }), 0.88);
+assert.deepEqual(misuraFinestra("medio", { innerWidth: 2560, innerHeight: 1440 }), { width: 1340, height: 1080 });
+assert.deepEqual(misuraFinestra("medio", { innerWidth: 1366, innerHeight: 768 }), { width: 898, height: 724 });
+assert.deepEqual(misuraFinestra("grande", { innerWidth: 1366, innerHeight: 768 }), { width: 1005, height: 728 }, "il grande sul portatile: la larghezza cresce, l'altezza si ferma allo schermo");
+assert.deepEqual(misuraFinestra("medio", null), { width: 1340, height: 1080 });
+assert.equal(sporgeDalloSchermo({ width: 1340, height: 1080 }, { innerWidth: 1366, innerHeight: 768 }), true);
+assert.equal(sporgeDalloSchermo({ width: 898, height: 724 }, { innerWidth: 1366, innerHeight: 768 }), false);
+assert.equal(sporgeDalloSchermo({ width: 1340, height: 1080 }, {}), false);
+// applicaScala col viewport scrive la scala totale e il fattore dello schermo.
+{
+  const vars = {}; const dataset = {};
+  const frame = { style: { setProperty: (k, v) => { vars[k] = v; } }, dataset, querySelector: () => null };
+  applicaScala(frame, "medio", { viewport: { innerWidth: 1366, innerHeight: 768 } });
+  assert.deepEqual([vars["--mage-scala"], dataset.scala, dataset.scalaSchermo], ["0.67", "medio", "0.67"]);
+  applicaScala(frame, "grande");
+  assert.equal(vars["--mage-scala"], "1.12", "senza viewport la scala è quella della misura e basta");
+}
 
 console.log("tema: ok");

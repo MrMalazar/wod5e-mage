@@ -5,6 +5,7 @@
  * lancio, che passa dal motore del ramo C senza finestra di conferma.
  */
 import { MODULE_ID } from "./constants.js";
+import { applicaVerdetto, chiediVerdetto, notaVerdetto, tiroInAttesa } from "./verdetto-narratore.js";
 import {
   getArete,
   normalizeMagickRollOptions,
@@ -136,8 +137,10 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     extra: { value: tiro.extra, dice: conto.extra, cap: EXTRA_DICE_CAP },
     sforza: Boolean(tiro.sforza),
     kinds: TIRO_KINDS.map((kind) => ({ kind, label: localize(`WOD5E_MAGE.Tiro.Kinds.${kind}`), hint: localize(`WOD5E_MAGE.Tiro.KindHints.${kind}`) })),
-    // Il tiro parte con almeno un tratto (Attributo o Abilità).
-    ready: Boolean(attribute || skill),
+    // Il tiro parte con almeno un tratto (Attributo o Abilità) e con la
+    // Difficoltà inserita (Blue, 16/9 sera).
+    ready: Boolean(attribute || skill) && conto.difficultySet,
+    needsDifficulty: Boolean(attribute || skill) && !conto.difficultySet,
     attributeLabel: attribute?.label ?? "",
     skillLabel: skill?.label ?? ""
   };
@@ -395,13 +398,27 @@ export async function launchTiro(actor, tiro) {
     ui.notifications.warn(localize("WOD5E_MAGE.Tiro.KindWarning"));
     return null;
   }
-  const conto = contoTiro(tiro, inputs);
+  let conto = contoTiro(tiro, inputs);
+  if (!conto.difficultySet) {
+    ui.notifications.warn(localize("WOD5E_MAGE.Tiro.DifficultyWarning"));
+    return null;
+  }
   const arete = getArete(actor);
   // L'incantesimo caricato dal Grimorio dà il nome e l'Obiettivo al lancio.
   const spell = tiro.spell ? ((actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {})[tiro.spell] ?? null) : null;
   const spellName = String(spell?.name ?? "").trim();
   const traitLabel = selectedTraits.map((trait) => trait.label).join(" + ") + (tiro.specialty ? ` · ${tiro.specialty}` : "");
   const rollLabel = spellName ? `${spellName} · ${traitLabel}` : traitLabel;
+
+  // Il verdetto del Narratore (Blue, 16/9 sera): il tiro gli compare com'è,
+  // ha dieci secondi per ritoccare Difficoltà e dadi o dire OK; poi si tira
+  // coi suoi numeri. Un tiro già mandato non si rimanda.
+  if (tiroInAttesa(actor.id)) {
+    ui.notifications.warn(localize("WOD5E_MAGE.Verdetto.Pending"));
+    return null;
+  }
+  const verdetto = await chiediVerdetto({ actor, title: rollLabel, magick, kind: tiro.kind ?? "", conto });
+  conto = applicaVerdetto(conto, verdetto);
   const selectors = [...new Set(selectedTraits.flatMap((trait) => selectorsForMageRollTrait(trait)))];
   const traitRows = selectedTraits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value }));
   const chosenTraits = (tiro.traits ?? []).map((id) => actor.items?.get?.(id)).filter(Boolean);
@@ -415,6 +432,8 @@ export async function launchTiro(actor, tiro) {
   }
   const notes = [];
   if (tiro.sforza) notes.push(localize("WOD5E_MAGE.Tiro.SforzaNote"));
+  const notaNarratore = notaVerdetto(conto, format);
+  if (notaNarratore) notes.push(notaNarratore);
 
   if (conto.extra > 0) bonusParts.push(format("WOD5E_MAGE.Tiro.ExtraFlavor", { dice: conto.extra }));
 

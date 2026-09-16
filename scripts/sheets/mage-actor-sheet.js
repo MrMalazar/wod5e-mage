@@ -89,7 +89,7 @@ import {
   traitDiceOf
 } from "../tiro-scheda.js";
 import { onRitrattoAdd, onRitrattoNext, onRitrattoRemove, prepareRitratti, RITRATTI_FLAG } from "../ritratti.js";
-import { altraScala, altroTema, applicaScala, applicaTema, normalizeScala, SCALA_AZIONE, SCALA_SETTING, SCALA_TASTO_CLASSE, scalaFattore, TEMA_AZIONE, TEMA_SETTING, TEMA_TASTO_CLASSE } from "../tema.js";
+import { altraScala, altroTema, applicaScala, applicaTema, misuraFinestra, normalizeScala, SCALA_AZIONE, SCALA_SETTING, SCALA_TASTO_CLASSE, scalaFattore, sporgeDalloSchermo, TEMA_AZIONE, TEMA_SETTING, TEMA_TASTO_CLASSE } from "../tema.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 import {
@@ -580,10 +580,51 @@ export class MageActorSheet extends MortalActorSheet {
 
   /** La misura del testo (16/9 sera) su tutte le schede del Mago aperte, senza render. */
   static applicaScalaOvunque(scala = game.settings.get(MODULE_ID, SCALA_SETTING)) {
-    const i18n = { localize: (key) => game.i18n.localize(key), format: (key, data) => game.i18n.format(key, data) };
+    const i18n = { localize: (key) => game.i18n.localize(key), format: (key, data) => game.i18n.format(key, data), viewport: window };
     for (const app of foundry.applications?.instances?.values?.() ?? []) {
       if (app instanceof MageActorSheet) applicaScala(app.element, scala, i18n);
     }
+  }
+
+  /**
+   * La scheda sullo schermo (16/9 sera): la finestra parte della misura
+   * che ci sta, e la scala del contenuto segue. Se la finestra del browser
+   * cambia, le schede aperte si riadattano; quelle che sporgono si
+   * restringono.
+   */
+  static adattaAlloSchermo() {
+    const scala = game.settings.get(MODULE_ID, SCALA_SETTING);
+    MageActorSheet.applicaScalaOvunque(scala);
+    for (const app of foundry.applications?.instances?.values?.() ?? []) {
+      if (!(app instanceof MageActorSheet) || app.minimized) continue;
+      if (sporgeDalloSchermo(app.position, window)) app.setPosition(misuraFinestra(scala, window));
+    }
+  }
+
+  static #adattaTimer = null;
+
+  /** Il gancio sul ridimensionamento della finestra del browser, una volta sola. */
+  static agganciaSchermo() {
+    if (MageActorSheet.#schermoAgganciato) return;
+    MageActorSheet.#schermoAgganciato = true;
+    window.addEventListener("resize", () => {
+      clearTimeout(MageActorSheet.#adattaTimer);
+      MageActorSheet.#adattaTimer = setTimeout(() => MageActorSheet.adattaAlloSchermo(), 150);
+    });
+  }
+
+  static #schermoAgganciato = false;
+
+  /** La finestra parte della misura che sta nello schermo del giocatore. */
+  _initializeApplicationOptions(options) {
+    const applicationOptions = super._initializeApplicationOptions(options);
+    try {
+      const misura = misuraFinestra(game.settings.get(MODULE_ID, SCALA_SETTING), window);
+      applicationOptions.position = { ...(applicationOptions.position ?? {}), ...misura };
+    } catch (error) {
+      console.warn("wod5e-mage | Misura della finestra non calcolata: resta quella di default.", error);
+    }
+    return applicationOptions;
   }
 
   /** Dopo ogni render la pagina Esperienza ricabla il suo calcolatore. */
@@ -592,7 +633,8 @@ export class MageActorSheet extends MortalActorSheet {
     // La modalità chiara (16/9) e la misura del testo (16/9 sera): la classe
     // e la scala sulla finestra, i due tasti in testata.
     applicaTema(this.element, game.settings.get(MODULE_ID, TEMA_SETTING), { localize: (key) => game.i18n.localize(key) });
-    applicaScala(this.element, game.settings.get(MODULE_ID, SCALA_SETTING), { localize: (key) => game.i18n.localize(key), format: (key, data) => game.i18n.format(key, data) });
+    applicaScala(this.element, game.settings.get(MODULE_ID, SCALA_SETTING), { localize: (key) => game.i18n.localize(key), format: (key, data) => game.i18n.format(key, data), viewport: window });
+    MageActorSheet.agganciaSchermo();
     // La modalità creazione (11/9): con la spunta accesa si vedono i tasti di
     // reset e la X che azzera un tratto; spenta, la X sparisce.
     this.element?.classList.toggle("wod5e-mage-creazione", Boolean(context.creazioneReset));

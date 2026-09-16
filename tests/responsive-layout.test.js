@@ -66,11 +66,17 @@ assert.match(css, /\.wod5e-mage-riga\.cassetto-su > \.wod5e-mage-cassetto\s*\{[^
 assert.match(css, /\.wod5e-mage-riga\.con-cassetto:hover > \.wod5e-mage-cassetto-poteri[^{]*\{\s*display: grid;/);
 // La misura del testo: una scala sul contenuto della finestra.
 assert.match(css, /\.window-content\s*\{\s*zoom: var\(--mage-scala, 1\);/);
-// La scheda minimizzata resta richiudibile; sotto i 1280 le quattro colonne si accavallavano (16/9).
+// La scheda minimizzata resta richiudibile; sotto i 1280 le quattro colonne si
+// accavallavano (16/9), e la minima segue la scala dello schermo (16/9 sera).
 assert.match(
   css,
-  /\.sheet:not\(\.minimized\)\s*\{[^}]*min-width:\s*1280px;/s
+  /\.sheet:not\(\.minimized\)\s*\{[^}]*min-width:\s*calc\(1280px \* var\(--mage-scala, 1\)\);/s
 );
+// La finestra parte della misura che sta nello schermo e si riadatta al ridimensionamento.
+assert.match(sheetSource, /_initializeApplicationOptions\(options\) \{[\s\S]*misuraFinestra\(game\.settings\.get\(MODULE_ID, SCALA_SETTING\), window\)/);
+assert.match(sheetSource, /static adattaAlloSchermo\(\)[\s\S]*sporgeDalloSchermo\(app\.position, window\)[\s\S]*app\.setPosition\(misuraFinestra\(scala, window\)\)/);
+assert.match(sheetSource, /window\.addEventListener\("resize"/);
+assert.match(sheetSource, /viewport: window \}\);\n\s+MageActorSheet\.agganciaSchermo\(\);/);
 // La pagina si vede solo quando è la linguetta accesa; senza Areté niente
 // tre tasti; la catena non si stampa più; i dadi extra hanno la loro riga.
 assert.match(css, /\.wod5e-mage-stat:not\(\.active\)\s*\{\s*display: none;/);

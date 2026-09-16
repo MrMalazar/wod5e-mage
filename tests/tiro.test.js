@@ -5,6 +5,7 @@ import {
   contoTiro,
   emptyTiro,
   EXTRA_DICE_CAP,
+  hasDifficulty,
   isMagick,
   loadSpell,
   pickAttribute,
@@ -197,6 +198,18 @@ conto = contoTiro(abilita, { attributeValue: 3, skillValue: 2, arete: 4, quintes
 assert.deepEqual([conto.magick, conto.pool, conto.difficulty, conto.dice, conto.specialtyDice, conto.quintessence], [false, 6, 0, 6, 1, 0]);
 conto = contoTiro(setDifficulty(abilita, 4), { attributeValue: 3, skillValue: 2 });
 assert.deepEqual([conto.manual, conto.difficulty, conto.dice], [true, 4, 2]);
+
+// Senza Difficoltà il tiro non parte (16/9 sera): l'Abilità la vuole a mano,
+// la Magick la prende dagli Ambiti dichiarati (anche a 1) o a mano.
+assert.equal(hasDifficulty(abilita), false);
+assert.equal(contoTiro(abilita, { attributeValue: 3, skillValue: 2 }).difficultySet, false);
+assert.equal(hasDifficulty(setDifficulty(abilita, 0)), true, "uno zero scritto a mano è una Difficoltà");
+assert.equal(hasDifficulty(setDifficulty(abilita, null)), false);
+assert.equal(hasDifficulty(toggleArete(vuoto)), false);
+assert.equal(hasDifficulty(setScope(toggleArete(vuoto), "area", 1)), true);
+assert.equal(hasDifficulty(magick), true);
+assert.equal(contoTiro(magick, { arete: 2 }).difficultySet, true);
+assert.equal(hasDifficulty(setScope(setScope(setScope(magick, "potency", 0), "range", 0), "area", 0)), false);
 
 // La Difficoltà scritta a mano sovrascrive il conto, anche nella Magick.
 conto = contoTiro(setDifficulty(magick, 9), { arete: 2, attributeValue: 4, skillValue: 5 });

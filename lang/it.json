@@ -1236,6 +1236,8 @@
       "SuccessFrom": "riesce dal",
       "Difficulty": "Difficoltà",
       "DifficultyHint": "La soglia: la somma degli Ambiti sopra 1, meno l'Areté col premio. Il meno e il più la ritoccano a mano.",
+      "DifficultyWarning": "Inserisci la Difficoltà prima di tirare.",
+      "DifficultyMissing": "Inserisci la Difficoltà: senza, il tiro non parte.",
       "DifficultyReset": "Torna al conto",
       "QuintessenceHint": "Un dado per punto, fino a 2 + Areté per lancio. Scende dalla Ruota a tiro fatto.",
       "Sforza": "Sforza la realtà",
@@ -1251,6 +1253,17 @@
       "NextHint": "Gira i ritratti: quello che vedi è anche l'immagine sulla mappa e in chat",
       "AddHint": "Aggiungi un ritratto",
       "RemoveHint": "Togli questo ritratto"
+    },
+    "Verdetto": {
+      "Title": "Il tiro del giocatore",
+      "Ok": "OK, tira",
+      "Dice": "Dadi in più o in meno",
+      "Countdown": "Il tiro parte fra",
+      "Sent": "Tiro mandato al Narratore: parte fra {seconds} secondi se non lo ritocca.",
+      "Note": "Narratore: {changes}.",
+      "NoteDifficulty": "Difficoltà {before} → {after}",
+      "NoteDice": "dadi {dice}",
+      "Pending": "Questo tiro è già dal Narratore: aspetta il verdetto."
     },
     "Tema": {
       "Chiaro": "Modalità chiara",
