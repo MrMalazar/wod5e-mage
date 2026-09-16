@@ -66,6 +66,8 @@ import {
   onTiroExtra,
   onTiroGrimorio,
   onTiroIncantesimo,
+  onScopeMode,
+  scopeModesOf,
   onGrimorioClose,
   onTiroPill,
   onTiroPower,
@@ -193,16 +195,27 @@ function wireCassetti(sheet) {
   for (const row of sheet.element?.querySelectorAll(".wod5e-mage-riga.con-cassetto") ?? []) {
     row.addEventListener("mouseenter", () => flipCassetto(row));
   }
+  // Le tendine (gli Ambiti) si aprono solo col tastino: un clic altrove
+  // sulla scheda le chiude. Il gancio sta sulla cornice, che resta.
+  if (sheet.element && !sheet._tendineWired) {
+    sheet._tendineWired = true;
+    sheet.element.addEventListener("pointerdown", (event) => {
+      for (const row of sheet.element.querySelectorAll(".wod5e-mage-riga.aperto")) {
+        if (!row.contains(event.target)) row.classList.remove("aperto");
+      }
+    });
+  }
 }
 
 /**
  * Il tastino in fondo alla riga dell'Ambito (16/9 sera): apre la tendina e
- * la tiene aperta finché non lo si preme di nuovo; una tendina aperta alla
- * volta per riquadro. Solo classi: niente render.
+ * la tiene aperta finché non lo si preme di nuovo o non si clicca altrove;
+ * una tendina aperta alla volta per riquadro. Niente sorvolo (Blue: «voglio
+ * solo che quando clicca mi mostra le scelte»). Solo classi: niente render.
  */
 function onCassettoToggle(event, target) {
   event?.preventDefault?.();
-  const row = target?.closest?.(".wod5e-mage-riga.con-cassetto");
+  const row = target?.closest?.(".wod5e-mage-riga.con-tendina, .wod5e-mage-riga.con-cassetto");
   if (!row) return;
   const open = !row.classList.contains("aperto");
   for (const other of row.closest(".wod5e-mage-riq-body")?.querySelectorAll(".wod5e-mage-riga.aperto") ?? []) other.classList.remove("aperto");
@@ -345,7 +358,8 @@ export class MageActorSheet extends MortalActorSheet {
       [SCALA_AZIONE]: onScalaToggle,
       // Le Abilità per famiglia o tutte in fila.
       skillsFlatToggle: onSkillsFlatToggle,
-      // Il tastino in fondo alla riga dell'Ambito: la tendina dei livelli.
+      // I tastini in fondo alla riga dell'Ambito: la lettura e la tendina dei livelli.
+      scopeMode: onScopeMode,
       cassettoToggle: onCassettoToggle,
       condizioneToggle: onCondizioneToggle,
       wisdomResourceChange: onWisdomResourceChange,
@@ -704,7 +718,7 @@ export class MageActorSheet extends MortalActorSheet {
     context.poteri = preparePoteriRows(actor, tiro, localize);
     context.spheres = prepareSpheres(actor, { localize, locale: lang }).selected
       .map((sphere) => ({ ...sphere, chosen: tiro.spheres.includes(sphere.id), poteri: poteriOfSphere(context.poteri, sphere.id) }));
-    context.scopeRows = prepareScopeRows(tiro, localize, { arete: context.arete.value });
+    context.scopeRows = prepareScopeRows(tiro, localize, { arete: context.arete.value, modes: scopeModesOf(this) });
 
     // Il Grimorio (16/9 sera): gli incantesimi scritti, cliccabili per il lancio.
     context.incantesimi = prepareIncantesimiRows(actor, tiro, localize);

@@ -57,6 +57,24 @@ assert.equal(poteri[0].label, "Forze 1 · 1");
 assert.equal(poteri[0].short, "1 · 1");
 assert.deepEqual(S.poteriOfSphere(poteri, "mind").map((p) => p.id), ["mind-1-1", "mind-1-2"], "il cassetto di Mente ha i suoi due");
 assert.equal(rows.find((r) => r.id === "potency").steps[3].reading, rows.find((r) => r.id === "potency").reading, "la lettura sul numero è quella della riga");
+// La lettura («modalità») dell'Ambito (16/9 sera): la prima della tavola, o quella scelta col tastino.
+const potenza = rows.find((r) => r.id === "potency");
+assert.deepEqual([potenza.mode, potenza.modeCount, potenza.modeLabel, potenza.nextModeLabel], ["potency", 3, "WOD5E_MAGE.Scopes.Sub.potency", "WOD5E_MAGE.Scopes.Sub.potencyEpic"]);
+assert.match(potenza.reading, /Table\.potency\.4/);
+const area = rows.find((r) => r.id === "area");
+assert.deepEqual([area.modeCount, area.modeLabel, area.nextModeLabel], [1, "", ""], "l'Area ha una lettura sola: niente tastino");
+const conDanni = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyDamage", area: "boh" } }).find((r) => r.id === "potency");
+assert.deepEqual([conDanni.mode, conDanni.nextModeLabel], ["potencyDamage", "WOD5E_MAGE.Scopes.Sub.potency"], "dai Danni si torna al Peso");
+assert.equal(conDanni.reading, "Areté WOD5E_MAGE.Scopes.Table.potencyDamage.4", "i Danni: l'Areté più il numero del quarto pallino (la finta traduce solo Areté)");
+// Il tastino: chi possiede scrive la bandiera; la scheda rilegge la bandiera.
+const sheetModi = { actor, _tiro: T.emptyTiro(), render: async () => {} };
+await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "potency" } });
+assert.equal(flags["wod5e-mage"].scopeModes.potency, "potencyEpic");
+await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "potency" } });
+assert.equal(flags["wod5e-mage"].scopeModes.potency, "potencyDamage");
+assert.deepEqual(S.scopeModesOf(sheetModi), { potency: "potencyDamage" });
+await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "area" } });
+assert.equal(flags["wod5e-mage"].scopeModes.area, "area", "con una lettura sola il giro resta lì");
 
 // Il lancio: Volgare con testimoni, riuscita dall'8, la Ruota sale di 2, la Quintessenza chiesta scende.
 tiro = T.setQuintessence(tiro, 2);

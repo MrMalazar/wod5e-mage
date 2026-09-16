@@ -176,6 +176,43 @@ export function scopeReadings(localize = (key) => key, { arete = null } = {}) {
   return out;
 }
 
+/**
+ * Le letture di ogni Ambito una per una (la «modalità» dell'Ambito, Blue
+ * 16/9 sera): per ogni Ambito le sue righe della tavola nell'ordine in cui
+ * sono scritte (la Potenza: Peso, Epicità, Danni; la Durata: in gioco,
+ * narrativa; le Condizioni: quante, Debuff, Complessità; la Precisione:
+ * Dettaglio, Informazione), ognuna col suo nome e le sette letture. La
+ * prima è quella che la scheda mostra finché il giocatore non gira il
+ * tastino; chi ha una lettura sola non ha nome né tastino.
+ * Torna { [ambito]: [{ id, label, readings: [sette testi] }] }.
+ */
+export function scopeModes(localize = (key) => key, { arete = null } = {}) {
+  const { rows } = prepareScopeTable(localize);
+  const out = {};
+  for (const row of rows) {
+    (out[row.scope] ??= []).push({
+      id: row.id,
+      label: row.sublabel ? String(localize(row.sublabel)) : "",
+      readings: Array.from({ length: SCOPE_TABLE_STEPS }, (_, index) => scopeReadingText(row, index + 1, localize, arete).text)
+    });
+  }
+  return out;
+}
+
+/** La lettura scelta di un Ambito: quella chiesta se c'è, altrimenti la prima. */
+export function scopeModeOf(modes, scope, chosen) {
+  const options = modes?.[scope] ?? [];
+  return options.find((option) => option.id === chosen) ?? options[0] ?? null;
+}
+
+/** La lettura dopo quella scelta, in giro: il tastino gira così. */
+export function nextScopeMode(modes, scope, chosen) {
+  const options = modes?.[scope] ?? [];
+  if (!options.length) return null;
+  const index = Math.max(options.findIndex((option) => option.id === chosen), 0);
+  return options[(index + 1) % options.length];
+}
+
 /** «+3» → 3; «+0» → 0; un testo qualunque → null. */
 export function damageBonus(label) {
   const match = /^\s*([+-]?\s*\d+)\s*$/.exec(String(label ?? ""));

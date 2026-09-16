@@ -18,7 +18,7 @@ import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
 import { findMageRollTrait, selectorsForMageRollTrait, skillRollCard } from "./mage-roll-selection.js";
 import { findPotere, potereLabel, poteriOf } from "./poteri.js";
 import { renderRollCard, ROLL_CARD_FLAG, rollSymbols } from "./roll-card.js";
-import { SCOPE_ICONS, SCOPES, scopeReadings } from "./scopes.js";
+import { nextScopeMode, SCOPE_ICONS, SCOPES, scopeModeOf, scopeModes } from "./scopes.js";
 import { prepareSpheres } from "./spheres.js";
 import {
   bumpDifficulty,
@@ -46,6 +46,9 @@ import {
   toggleSphere,
   toggleTrait
 } from "./tiro.js";
+
+/** La bandiera con la lettura scelta di ogni Ambito (16/9 sera). */
+export const SCOPE_MODES_FLAG = "scopeModes";
 
 /** Il tipo di tiro per i tre tasti: la casella del vecchio dialogo che accende. */
 const KIND_OPTIONS = Object.freeze({
@@ -141,27 +144,60 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
 }
 
 /** Le righe degli Ambiti per il riquadro della Magick: sette livelli, quello dichiarato acceso. */
-export function prepareScopeRows(tiro, localize = (key) => key, { arete = null } = {}) {
-  const readings = scopeReadings(localize, { arete });
-  const readingOf = (id, level) => (readings[id]?.[level - 1] ?? []).map((entry) => (entry.sub ? `${entry.sub}: ${entry.text}` : entry.text)).join(" · ");
+export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, modes = {} } = {}) {
+  const table = scopeModes(localize, { arete });
   return SCOPES.map((id) => {
     const level = count(tiro?.scopes?.[id]);
+    // La lettura («modalità») dell'Ambito (16/9 sera): quella scelta col
+    // tastino, o la prima; la riga e la tendina parlano solo con lei.
+    const options = table[id] ?? [];
+    const mode = scopeModeOf(table, id, modes?.[id]);
+    const next = nextScopeMode(table, id, mode?.id);
+    const readingOf = (step) => mode?.readings?.[step - 1] ?? "";
     return {
       id,
       label: localize(`WOD5E_MAGE.Scopes.${id}`),
       faIcon: SCOPE_ICONS[id] ?? "",
       level,
-      // La lettura del livello scelto sta sulla riga; quella di ogni
-      // livello sul suo numero nel cassetto (Blue, 16/9 sera).
-      reading: level ? readingOf(id, level) : "",
+      reading: level ? readingOf(level) : "",
+      mode: mode?.id ?? "",
+      modeLabel: mode?.label ?? "",
+      modeCount: options.length,
+      nextModeLabel: next?.label ?? "",
       steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({
         value: index + 1,
         active: index + 1 === level,
         lit: index + 1 <= level,
-        reading: readingOf(id, index + 1)
+        reading: readingOf(index + 1)
       }))
     };
   }).sort((a, b) => a.label.localeCompare(b.label, game.i18n?.lang ?? "it"));
+}
+
+/** Le letture scelte per Ambito: la bandiera del personaggio, e sopra quel che la scheda ricorda se non può scrivere. */
+export function scopeModesOf(sheet) {
+  return { ...(sheet.actor?.getFlag?.(MODULE_ID, SCOPE_MODES_FLAG) ?? {}), ...(sheet._scopeModes ?? {}) };
+}
+
+/**
+ * Il tastino a sinistra della freccia (16/9 sera): gira la lettura
+ * dell'Ambito (Peso, Epicità, Danni…). Si scrive sul personaggio, così
+ * resta; chi non può scriverlo la tiene nella scheda finché è aperta.
+ */
+export async function onScopeMode(event, target) {
+  event.preventDefault();
+  const scope = String(target.dataset.scope ?? "");
+  const localize = game.i18n.localize.bind(game.i18n);
+  const table = scopeModes(localize);
+  const current = scopeModesOf(this)[scope];
+  const next = nextScopeMode(table, scope, current);
+  if (!scope || !next) return;
+  if (this.actor.isOwner) {
+    await this.actor.setFlag(MODULE_ID, SCOPE_MODES_FLAG, { ...(this.actor.getFlag(MODULE_ID, SCOPE_MODES_FLAG) ?? {}), [scope]: next.id });
+    return;
+  }
+  this._scopeModes = { ...(this._scopeModes ?? {}), [scope]: next.id };
+  await this.render({ parts: ["stats"] });
 }
 
 /** I poteri del personaggio per il riquadro: quelli delle Sfere che ha, col nome e lo stato «scelto». */

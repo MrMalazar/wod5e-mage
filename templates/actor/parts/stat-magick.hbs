@@ -2,11 +2,12 @@
      cliccabili. L'Areté cliccato fa il tiro di Magick; la Sfera entra in
      catena e al sorvolo apre il cassetto dei suoi poteri (uno solo per
      lancio, porta con sé la Sfera); l'Ambito mostra dopo il nome il
-     pallino del livello scelto con la sua lettura dalla tavola, e col
-     sorvolo o il tastino in fondo alla riga apre la tendina dei sette
-     livelli, ognuno col suo pallino e la lettura (lo stesso numero lo
-     toglie). I pallini dell'Areté e delle Sfere restano quelli della
-     scheda: cambiano il valore, non la catena. (Blue, 16/9 sera.) --}}
+     pallino del livello scelto con la sua lettura dalla tavola; in fondo
+     alla riga il tastino della lettura (la «modalità»: Peso, Epicità,
+     Danni…) e la freccia, che apre la tendina dei sette livelli, ognuno col
+     suo pallino e la lettura (lo stesso numero lo toglie). La tendina si
+     apre solo col clic. I pallini dell'Areté e delle Sfere restano quelli
+     della scheda: cambiano il valore, non la catena. (Blue, 16/9 sera.) --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-magick">
     <header class="wod5e-mage-riq-title">
         {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.spheres}}{{/if}}
@@ -59,8 +60,10 @@
             {{#each scopeRows as |scope|}}
                 {{!-- La riga: il nome intero, poi (se dichiarato) il pallino col
                      livello e la sua lettura subito dopo, non in fondo; in fondo
-                     il tastino che apre la tendina (Blue, 16/9 sera). --}}
-                <div class="wod5e-mage-riga wod5e-mage-riga-ambito con-cassetto{{#if scope.level}} scelta{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.ScopeHint'}}">
+                     il tastino della lettura (Peso, Epicità, Danni…: solo chi ne
+                     ha più d'una) e la freccia che apre la tendina. Niente
+                     sorvolo: si apre solo col clic (Blue, 16/9 sera). --}}
+                <div class="wod5e-mage-riga wod5e-mage-riga-ambito con-tendina{{#if scope.level}} scelta{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.ScopeHint'}}">
                     <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo">
                         <i class="{{scope.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>
                         <span>{{scope.label}}</span>
@@ -71,7 +74,12 @@
                             <span>{{scope.reading}}</span>
                         </span>
                     {{/if}}
-                    <button type="button" class="wod5e-mage-riga-tastino" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.ScopeOpen'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.ScopeOpen'}}"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+                    <span class="wod5e-mage-riga-tastini">
+                        {{#if scope.nextModeLabel}}
+                            <button type="button" class="wod5e-mage-riga-modo" data-action="scopeMode" data-scope="{{scope.id}}" title="{{localize 'WOD5E_MAGE.Tiro.ScopeModeHint' mode=scope.modeLabel next=scope.nextModeLabel}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.ScopeModeHint' mode=scope.modeLabel next=scope.nextModeLabel}}">{{scope.modeLabel}}</button>
+                        {{/if}}
+                        <button type="button" class="wod5e-mage-riga-tastino" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.ScopeOpen'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.ScopeOpen'}}"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+                    </span>
                     {{!-- La tendina: i sette pallini, ognuno con la sua lettura dopo il numero. --}}
                     <div class="wod5e-mage-cassetto wod5e-mage-cassetto-ambito" role="group" aria-label="{{scope.label}}">
                         {{#each scope.steps as |step|}}

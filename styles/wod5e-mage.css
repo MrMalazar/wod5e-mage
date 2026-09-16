@@ -256,7 +256,9 @@
   color: #F6F2E6;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga-tastino {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga-tastino,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga-modo {
+  background: #FBF8F0;
   border-color: #B3924A;
   color: #282051;
 }
@@ -8665,8 +8667,45 @@
   opacity: 1;
 }
 
-/* Il tastino in fondo alla riga (lo stesso del modo della Ruota): apre e
-   chiude la tendina, la freccia gira quando è aperta. */
+/* I tastini in fondo alla riga: a sinistra la lettura dell'Ambito (Peso,
+   Epicità, Danni…), che gira a ogni clic; a destra la freccia (lo stesso
+   tastino del modo della Ruota) che apre e chiude la tendina, e gira quando
+   è aperta. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-tastini {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-modo {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 5px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: 0.58rem;
+  font-weight: 700;
+  height: 20px;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  max-width: 78px;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 5px;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-modo:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-tastino {
   align-items: center;
   background: transparent;
@@ -8680,7 +8719,6 @@
   height: 20px;
   justify-content: center;
   line-height: 1;
-  margin-left: auto;
   min-height: 0;
   padding: 0;
   width: 20px;
@@ -8761,18 +8799,22 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:hover > .wod5e-mage-cassetto,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:focus-within > .wod5e-mage-cassetto,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto.aperto > .wod5e-mage-cassetto {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.aperto > .wod5e-mage-cassetto {
   display: flex;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:hover,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto.aperto {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.aperto {
   z-index: 7;
 }
 
+/* Le tendine (gli Ambiti, `con-tendina`) non si aprono al sorvolo: solo col
+   tastino, che mette la classe `aperto` (Blue, 16/9 sera: «voglio solo che
+   quando clicca mi mostra le scelte»). */
+
 /* Sotto non c'è posto nel riquadro (l'ultima Abilità, l'ultimo Ambito): il
    cassetto si apre sopra la riga (Blue, 16/9 sera: quello di Velo era tagliato). */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto.cassetto-su > .wod5e-mage-cassetto {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.cassetto-su > .wod5e-mage-cassetto {
   bottom: calc(100% - 2px);
   box-shadow: 0 -6px 14px rgb(0 0 0 / 55%);
   top: auto;
