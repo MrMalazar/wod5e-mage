@@ -80,14 +80,15 @@ export function skillSpecialtyNames(actor) {
   return out;
 }
 
-/** Livello massimo del singolo Ambito; la somma degli Ambiti non ha tetto. */
+/** Il livello massimo di un Ambito; la somma degli Ambiti non ha tetto. */
 export const THRESHOLD_CAP = 7;
 
 /**
- * Il premio dell'Areté: riduzione della soglia pari all'Areté quando la descrizione lo
- * merita (rispetta lo Strumento, o il Credo, o inventa un effetto fuori dalle
- * tavole). Non è un bonus ai dadi: il tetto +3 non si applica.
- * La Magick Ibrida non lo prende mai.
+ * Il premio dell'Areté (Blue, 16/9): l'Areté si sottrae alla soglia, per
+ * intero, fino a zero, quando la narrazione lo merita (rispetta lo
+ * Strumento, o il Credo, o inventa un effetto fuori dalle tavole) e il
+ * Narratore dà l'ok: la casella resta per questo. Non è un dado in più: il
+ * tetto +3 non lo riguarda. La Magick Ibrida non lo prende mai.
  */
 export function calculateAretePrize(arete, form = "") {
   if (form === "ibrida") return 0;
@@ -131,16 +132,21 @@ function levelEntries(entries, max) {
 }
 
 /**
- * La soglia somma i livelli degli Ambiti dichiarati: a 1 valgono zero,
- * dal 2 in su valgono il proprio livello. Le Sfere non contribuiscono.
- * Il premio selezionato si sottrae una sola volta, fino al minimo di zero.
+ * La soglia (Blue, 16/9): la SOMMA dei livelli degli Ambiti dichiarati,
+ * Potenza 4 e Portata 3 fanno 7. Un Ambito a 1 vale zero (11/9), dal 2 in
+ * su vale il suo livello. Le Sfere non contano più. Niente tetto sulla
+ * somma. Il premio dell'Areté si sottrae una volta sola, fino a zero.
  */
 export const SCOPE_COUNTS_FROM = 2;
 
+export function scopeThreshold(scopeLevels = []) {
+  return levelEntries(scopeLevels, THRESHOLD_CAP)
+    .filter((entry) => entry.level >= SCOPE_COUNTS_FROM)
+    .reduce((sum, entry) => sum + entry.level, 0);
+}
+
 export function calculateMagickThreshold({ scopeLevels = [], prize = 0 } = {}) {
-  const scopes = levelEntries(scopeLevels, THRESHOLD_CAP).filter((entry) => entry.level >= SCOPE_COUNTS_FROM);
-  const total = scopes.reduce((sum, entry) => sum + entry.level, 0);
-  return Math.max(total - calculateAretePrize(prize), 0);
+  return Math.max(scopeThreshold(scopeLevels) - calculateAretePrize(prize), 0);
 }
 
 /**

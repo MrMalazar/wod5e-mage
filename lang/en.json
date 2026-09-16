@@ -1126,7 +1126,6 @@
     "RamoC": {
       "Pool": "Pool",
       "Threshold": "Threshold",
-      "AdvancedDifficulty": "Advanced difficulty",
       "Dice": "Dice",
       "DiceLine": "Pool {pool} − threshold {threshold} = {dice} dice",
       "Reds": "{reds} red dice",

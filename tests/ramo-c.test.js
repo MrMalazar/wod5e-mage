@@ -17,7 +17,6 @@ import {
   successThreshold,
   usesAdvancedDifficulty,
   SUCCESS_FROM,
-  SUCCESS_MODIFIER,
   ustioneAmount
 } from "../scripts/ramo-c.js";
 import { getMageDieImage, getParadoxDieResult } from "../scripts/dice-faces.js";
@@ -30,8 +29,9 @@ import { normalizeMagickRollOptions } from "../scripts/arete.js";
 
 // Il ramo C (verdetti di Blue, 11/9): la soglia toglie dadi, un 8 riesce.
 assert.equal(RAMO, "C");
-assert.equal(SUCCESS_FROM, 8);
-assert.equal(SUCCESS_MODIFIER, "cs>7");
+assert.equal(SUCCESS_FROM, 8, "il ripiego delle carte vecchie");
+assert.equal(successModifier(), "cs>5");
+assert.equal(successModifier(8), "cs>7");
 assert.equal(ORIGINAL_SUCCESS_FROM, 6);
 assert.equal(ADVANCED_SUCCESS_FROM, 8);
 assert.equal(successThreshold(false), 6);
@@ -163,6 +163,10 @@ const dice = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url)
 assert.match(dice, /const advancedDifficulty = usesAdvancedDifficulty\(\{ witnesses, skill, onlyParadox \}\)/);
 assert.match(dice, /const successFrom = successThreshold\(advancedDifficulty\)/);
 assert.doesNotMatch(dice, /#inputAdvancedDifficulty/);
+// Il tiro diretto dalla scheda (16/9) passa dallo stesso esecutore della finestra.
+assert.match(dice, /export async function executeRamoCRoll\(/);
+assert.match(dice, /export async function rollRamoCDirect\(/);
+assert.match(dice, /export function contoDice\(/);
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
 assert.match(arete, /rollAreteWithParadox\(\{\s*pool: conto\.pool,\s*threshold,\s*witnesses: options\.witnesses,/);
 assert.match(dice, /\$\{modifier\} \+ \$\{conto\.paradoxDice\}d\$\{ParadoxDie\.DENOMINATION\}\$\{modifier\}/);
@@ -181,9 +185,10 @@ const salute = readFileSync(new URL("../scripts/salute.js", import.meta.url), "u
 assert.match(salute, /pool: resolve \+ composure,[\s\S]*skill: true,/);
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
-  for (const key of ["Pool", "Threshold", "AdvancedDifficulty", "Dice", "DiceLine", "Reds", "RedsEyeOnly", "DiceNote", "EyeOnlyNote", "NoDice", "Bought", "BoughtLine", "BoughtBanner", "BoughtFlavor", "BuyPrice", "VulgarFailedQuintessence", "MarginHint", "SkillRoll"]) {
+  for (const key of ["Pool", "Threshold", "Dice", "DiceLine", "Reds", "RedsEyeOnly", "DiceNote", "EyeOnlyNote", "NoDice", "Bought", "BoughtLine", "BoughtBanner", "BoughtFlavor", "BuyPrice", "VulgarFailedQuintessence", "MarginHint", "SkillRoll"]) {
     assert.equal(typeof strings.WOD5E_MAGE.RamoC[key], "string", `${lang} RamoC.${key}`);
   }
+  assert.equal(strings.WOD5E_MAGE.RamoC.AdvancedDifficulty, undefined, `${lang}: la casella della difficoltà avanzata è caduta (16/9)`);
   assert.equal(typeof strings.WOD5E_MAGE.RollCard.Bought, "string");
   assert.equal(typeof strings.WOD5E_MAGE.Arete.SpecialtyDice, "string");
   assert.equal(strings.WOD5E_MAGE.Arete.AutoVictory, undefined, `${lang}: la vittoria automatica del ramo A è caduta`);

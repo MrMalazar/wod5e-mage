@@ -1126,7 +1126,6 @@
     "RamoC": {
       "Pool": "Riserva",
       "Threshold": "Soglia",
-      "AdvancedDifficulty": "Difficoltà avanzata",
       "Dice": "Dadi",
       "DiceLine": "Riserva {pool} − soglia {threshold} = {dice} dadi",
       "Reds": "{reds} rossi",

@@ -1,48 +1,52 @@
 /**
- * Il ramo C (verdetti di Blue, 11/9/2026, dallo studio ramo-c-regole): il
- * tiro dell'alpha di Vampiri portato sulla Magick e sulle Abilità. La
- * soglia si toglie dalla riserva e restano i dadi che tiri; un dado con 8
- * o più è la riuscita, ne basta uno; i successi in più non esistono, salvo
- * il margine dei tiri di Abilità (il danno: arma più successi oltre il
- * primo) e i confronti. I rossi sono pari al Paradosso sulla Ruota e si
- * tirano sempre, anche a riserva azzerata: si convertono dai dadi rimasti
- * e, se sono di più, quelli in più si aggiungono e contano anche loro
- * (verdetto di Blue dell'11/9 pomeriggio: la PROPOSTA «solo per l'occhio»
- * è caduta). Dalla 0.87.0 il modulo è in ramo C di default, senza
- * interruttore (ordine di Blue: «vorrei ora andassimo in Default C»).
- * Tutto qui è puro: si prova fuori da Foundry.
+ * Il ramo C (verdetti di Blue, 11/9/2026, dallo studio ramo-c-regole; la
+ * rifondazione del 14/9 e i verdetti del 16/9): il tiro dell'alpha di
+ * Vampiri portato sulla Magick e sulle Abilità. La soglia si toglie dalla
+ * riserva e restano i dadi che tiri; un dado sopra la difficoltà è la
+ * riuscita, ne basta uno; la difficoltà la fa il tipo di tiro (Accidentale
+ * e Volgare 6, Volgare con testimoni 8, tiri di Abilità 6). I rossi sono
+ * pari al Paradosso sulla Ruota e si tirano sempre, anche a riserva
+ * azzerata: si convertono dai dadi rimasti e, se sono di più, quelli in
+ * più si aggiungono e contano anche loro. Dalla 0.87.0 il modulo è in ramo
+ * C di default, senza interruttore. Tutto qui è puro: si prova fuori da
+ * Foundry.
  */
 
 export const RAMO = "C";
 
-/** La riuscita: 8 o più (verdetto: «lo mettiamo anche noi a difficoltà 8»). */
+/** La riuscita: dal 6 (Accidentale, Volgare, Abilità) o dall'8 (Volgare con testimoni). */
 export const ORIGINAL_SUCCESS_FROM = 6;
 export const ADVANCED_SUCCESS_FROM = 8;
 
-// Rimane esportata per compatibilita con le carte create prima della scelta.
+/**
+ * Le carte di prima della 0.91.0 non portano scritta la riuscita: erano
+ * tutte all'8, e all'8 restano. Serve solo come ripiego.
+ */
 export const SUCCESS_FROM = ADVANCED_SUCCESS_FROM;
 
-/** Il modificatore di Foundry per contare i successi: `cs>7`. */
-export const SUCCESS_MODIFIER = `cs>${SUCCESS_FROM - 1}`;
-
-/** Difficoltà originale: 6+. Volgare con testimoni: difficoltà avanzata, 8+. */
+/** Da che numero si riesce: 6, oppure 8 con la difficoltà avanzata. */
 export function successThreshold(advancedDifficulty = false) {
   return advancedDifficulty ? ADVANCED_SUCCESS_FROM : ORIGINAL_SUCCESS_FROM;
 }
 
-/** Solo la Magick volgare con testimoni attiva automaticamente la difficoltà avanzata. */
+/**
+ * La difficoltà avanzata (l'8) scatta da sola e solo col Volgare con
+ * testimoni (Blue, 14/9 e 16/9): «un messaggio al giocatore: non farlo
+ * così». I tiri di Abilità e lo Scoppio restano al 6.
+ */
 export function usesAdvancedDifficulty({ witnesses = false, skill = false, onlyParadox = false } = {}) {
   return witnesses === true && !skill && !onlyParadox;
 }
 
-/** Il modificatore Foundry corrispondente alla soglia scelta. */
-export function successModifier(successFrom = SUCCESS_FROM) {
+/** Il modificatore di Foundry che conta i successi da quel numero in su: `cs>5` per il 6, `cs>7` per l'8. */
+export function successModifier(successFrom = ORIGINAL_SUCCESS_FROM) {
   const threshold = Math.max(Math.trunc(Number(successFrom) || ORIGINAL_SUCCESS_FROM), 1);
   return `cs>${threshold - 1}`;
 }
 
 /**
- * Le vecchie carte non hanno la scelta salvata e mantengono la loro soglia 8.
+ * La riuscita scritta sulla carta, se c'è; altrimenti dalla difficoltà
+ * avanzata segnata; altrimenti il ripiego (le carte vecchie: 8).
  */
 export function resolveSuccessFrom(options = {}, fallback = SUCCESS_FROM) {
   const explicit = Math.trunc(Number(options?.successFrom));
@@ -91,9 +95,9 @@ export function splitRamoCDice(dice, paradox) {
 }
 
 /**
- * I successi del ramo C: 8 o più sui bianchi, 8 o più sui rossi ma solo
- * fino ai rossi che contano (gli altri sono per l'occhio). Niente coppie
- * di dieci: nel ramo C i critici non esistono.
+ * I successi del ramo C: dalla riuscita in su sui bianchi, lo stesso sui
+ * rossi ma solo fino ai rossi che contano (gli altri sono per l'occhio).
+ * Niente coppie di dieci: nel ramo C i critici non esistono.
  */
 export function calculateRamoCSuccesses(basicResults = [], paradoxResults = [], countedParadox = Infinity, { successFrom = SUCCESS_FROM } = {}) {
   const succeeds = (result) => isSuccess(result, { successFrom });
