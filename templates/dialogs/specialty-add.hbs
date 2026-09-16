@@ -6,7 +6,7 @@
         <select name="skill" required {{#unless skills.length}}disabled{{/unless}}>
             <option value="">{{#if skills.length}}{{localize "WOD5E_MAGE.RollSelection.SelectAbility"}}{{else}}{{localize "WOD5E_MAGE.Specialties.NoSkill"}}{{/if}}</option>
             {{#each skills as |skill|}}
-                <option value="{{skill.id}}">{{skill.label}} ({{skill.value}}) · {{localize "WOD5E_MAGE.Specialties.Slots" used=skill.used slots=skill.slots}}</option>
+                <option value="{{skill.id}}" {{#if skill.selected}}selected{{/if}}>{{skill.label}} ({{skill.value}}) · {{localize "WOD5E_MAGE.Specialties.Slots" used=skill.used slots=skill.slots}}</option>
             {{/each}}
         </select>
     </div>

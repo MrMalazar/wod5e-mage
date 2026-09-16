@@ -139,11 +139,10 @@ const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza
 // Niente Fazione; il Credo ha due posti per i simboli delle sue Sfere (4/9 notte).
 assert.match(appartenenza, /<details class="wod5e-mage-appartenenza">[\s\S]*wod5e-mage-lineage-pick[\s\S]*lineageChoices\.familySphere\.icon[\s\S]*lineageChoices\.subSphere\.icon[\s\S]*wod5e-mage-lineage-pick-double[\s\S]*credoSpheres[\s\S]*flags\.wod5e-mage\.focus\.credo/);
 assert.doesNotMatch(appartenenza, /lineage\.fazione/);
-// Nuova sessione in testata, nome del giocatore sotto il nome.
-const header = readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8");
-assert.match(header, /<header[^>]*>\s*\{\{!--[^}]*--\}\}\s*<button type="button" class="wod5e-mage-new-session" data-action="saluteNewSession"/);
-assert.match(header, /flags\.wod5e-mage\.player/);
-assert.match(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /parts\/appartenenza\.hbs/);
+// Nell'Identità (16/9): Nuova sessione e Cambio Scena sopra il ritratto, il nome
+// del giocatore sotto il nome, l'Appartenenza a tendina in fondo.
+const identita = readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8");
+assert.match(identita, /wod5e-mage-identita-tasti[\s\S]*data-action="saluteNewSession"[\s\S]*data-action="saluteCambioScena"[\s\S]*wod5e-mage-ritratto[\s\S]*data-action="ritrattoNext"[\s\S]*wod5e-mage-names[\s\S]*flags\.wod5e-mage\.player[\s\S]*parts\/appartenenza\.hbs/);
 assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8"), /<select name="flags\.wod5e-mage\.focus\.credo"/);
 function personaggioSource() {
   return readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");
@@ -215,8 +214,8 @@ assert.equal(summary.checks.find((check) => check.id === "skillCap").ok, true);
 summaryActor.system.skills.brawl.value = 4;
 assert.equal(prepareCreationSummary(summaryActor, 1).checks.find((check) => check.id === "skillCap").ok, false);
 summaryActor.system.skills.brawl.value = 3;
-assert.match(readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8"), /flags\.wod5e-mage\.creazione\.grado[\s\S]*wod5e-mage-riepilogo-chip \{\{count\.state\}\}/);
-assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8"), /creazione\.profilo/);
+assert.match(readFileSync(new URL("../templates/actor/parts/stat.hbs", import.meta.url), "utf8"), /flags\.wod5e-mage\.creazione\.grado[\s\S]*wod5e-mage-riepilogo-chip \{\{count\.state\}\}/);
+assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/stat.hbs", import.meta.url), "utf8"), /creazione\.profilo/);
 const checkById = Object.fromEntries(summary.checks.map((check) => [check.id, check.ok]));
 assert.deepEqual(checkById, { skillCap: true, concept: true, anchors: false, convictions: true, instruments: false });
 // Con lo Strumento anche su Tempo, il controllo passa.
@@ -230,8 +229,8 @@ assert.equal(prepareCreationSummary(summaryActor).checks.find((check) => check.i
 const dotazioneTemplate = readFileSync(new URL("../templates/actor/parts/dotazione.hbs", import.meta.url), "utf8");
 assert.match(dotazioneTemplate, /wod5e-mage-inventario[\s\S]*Dotazione\.Inventory[\s\S]*equipment-list\.hbs/);
 assert.match(personaggioSource(), /wod5e-mage-wisdom-row[\s\S]*wisdom\.hbs[\s\S]*flags\.wod5e-mage\.wisdomStatus/);
-const headerTemplate = readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8");
-assert.match(headerTemplate, /wod5e-mage-names[\s\S]*name-field[\s\S]*wod5e-mage-player-field/);
+const identitaTemplate = readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8");
+assert.match(identitaTemplate, /wod5e-mage-names[\s\S]*name-field[\s\S]*wod5e-mage-player-field/);
 
 console.log("Dotazione extra, Personaggio e sigilli dei tratti: test passati.");
 

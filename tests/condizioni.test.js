@@ -34,7 +34,7 @@ assert.deepEqual([rows[1].name, rows[1].dice, rows[1].what, rows[1].suppressed],
 
 // La scheda (compromesso): sopra la striscia dei simboli accesi con la lente,
 // sotto la tendina con tutte le venticinque per gruppo; un clic accende o spegne.
-const tratti = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
+const tratti = readFileSync(new URL("../templates/actor/parts/stat-condizioni.hbs", import.meta.url), "utf8");
 assert.match(tratti, /wod5e-mage-condizioni-strip[\s\S]*condizioniRows[\s\S]*data-action="condizioneToggle" data-condizione="\{\{row\.condizione\}\}" data-item-id="\{\{row\.id\}\}"[\s\S]*data-action="searchItem"[\s\S]*<details class="wod5e-mage-condizioni-drawer">[\s\S]*Condizioni\.All[\s\S]*group\.group[\s\S]*data-action="condizioneToggle" data-condizione="\{\{entry\.id\}\}"/);
 assert.doesNotMatch(tratti, /data-kind="condizione"/);
 // Ogni Condizione porta il nome sotto il simbolo (6/9); nella striscia

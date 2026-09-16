@@ -1,0 +1,44 @@
+{{!-- Le Condizioni addosso, a icone (i simboli veri sono ancora allo studio:
+     qui stanno le immagini degli oggetti, segnaposto). Un clic spegne; la
+     lente cerca fuori lista; la tendina mostra le venticinque per gruppo. --}}
+<div class="wod5e-mage-condizioni-box">
+    <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E.ItemsList.Conditions"}}</span>
+    <div class="wod5e-mage-condizioni-strip">
+        {{#each condizioniRows as |row|}}
+            <button type="button" class="wod5e-mage-condizione-on{{#if row.suppressed}} suppressed{{/if}}" data-action="condizioneToggle" data-condizione="{{row.condizione}}" data-item-id="{{row.id}}" title="{{row.title}}" aria-label="{{row.name}}">
+                <span class="wod5e-mage-condizione-glyph">
+                    <img src="{{row.img}}" alt="">
+                    {{#if row.dice}}<small>{{row.dice}}</small>{{/if}}
+                </span>
+                <span class="wod5e-mage-condizione-name">{{row.name}}</span>
+            </button>
+        {{/each}}
+        <a class="item-control search-data-item wod5e-mage-condizioni-search" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="condition">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+    </div>
+    <details class="wod5e-mage-condizioni-drawer">
+        <summary>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            <span>{{localize "WOD5E_MAGE.Condizioni.All"}}</span>
+        </summary>
+        <div class="wod5e-mage-condizioni">
+            {{#each condizioni as |group|}}
+                <div class="wod5e-mage-condizioni-group">
+                    <span class="wod5e-mage-condizioni-title">{{group.group}}</span>
+                    <div class="wod5e-mage-condizioni-row">
+                        {{#each group.entries as |entry|}}
+                            <button type="button" class="wod5e-mage-condizione{{#if entry.active}} lit{{/if}}{{#if entry.suppressed}} suppressed{{/if}}" data-action="condizioneToggle" data-condizione="{{entry.id}}" title="{{entry.title}}" aria-label="{{entry.name}}">
+                                <span class="wod5e-mage-condizione-glyph">
+                                    <img src="{{entry.icon}}" alt="">
+                                    {{#if entry.dice}}<small>{{entry.dice}}</small>{{/if}}
+                                </span>
+                                <span class="wod5e-mage-condizione-name">{{entry.name}}</span>
+                            </button>
+                        {{/each}}
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </details>
+</div>

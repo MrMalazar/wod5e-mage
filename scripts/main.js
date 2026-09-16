@@ -90,37 +90,6 @@ Hooks.once("init", () => {
     default: "wheel"
   });
 
-  // I Tratti (6/9, esperimento di Blue): tre colonne per gruppo (Fisici,
-  // Sociali, Mentali) oppure a colonne: gli Attributi in una da nove righe,
-  // le Abilità in due da nove.
-  game.settings.register(MODULE_ID, "traitsLayout", {
-    name: "WOD5E_MAGE.Settings.TraitsLayout.Name",
-    hint: "WOD5E_MAGE.Settings.TraitsLayout.Hint",
-    scope: "client",
-    config: true,
-    type: String,
-    choices: {
-      groups: "WOD5E_MAGE.Settings.TraitsLayout.Groups",
-      columns: "WOD5E_MAGE.Settings.TraitsLayout.Columns"
-    },
-    default: "groups"
-  });
-
-  // L'ordine dei Tratti a colonne (6/9): alfabetico, oppure per gruppo
-  // (Fisici, Sociali, Mentali).
-  game.settings.register(MODULE_ID, "traitsOrder", {
-    name: "WOD5E_MAGE.Settings.TraitsOrder.Name",
-    hint: "WOD5E_MAGE.Settings.TraitsOrder.Hint",
-    scope: "client",
-    config: true,
-    type: String,
-    choices: {
-      alpha: "WOD5E_MAGE.Settings.TraitsOrder.Alpha",
-      group: "WOD5E_MAGE.Settings.TraitsOrder.Group"
-    },
-    default: "alpha"
-  });
-
   game.settings.register(MODULE_ID, "debugLogging", {
     name: "WOD5E_MAGE.Settings.DebugLogging.Name",
     hint: "WOD5E_MAGE.Settings.DebugLogging.Hint",

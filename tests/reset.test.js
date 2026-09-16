@@ -79,12 +79,14 @@ assert.equal(asked, 2);
 // titolo, dentro {{#if creazioneReset}}; l'azione registrata; la lingua.
 assert.deepEqual(Object.keys(prepareResetsById()), [...RESET_IDS, "all"]);
 const read = (file) => readFileSync(new URL(`../templates/actor/parts/${file}`, import.meta.url), "utf8");
-const tratti = read("tratti.hbs");
+const tratti = read("stat.hbs");
 assert.match(tratti, /wod5e-mage-riepilogo-checks[\s\S]*wod5e-mage-reset-row[\s\S]*name="flags\.wod5e-mage\.creazione\.reset"[\s\S]*data-reset="all"/);
 assert.doesNotMatch(tratti, /data-reset="\{\{reset\.id\}\}"/);
 const tasto = (id) => new RegExp(`\\{\\{#if creazioneReset\\}\\}\\{\\{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById\\.${id}\\}\\}`);
-assert.match(tratti, new RegExp(`wod5e-mage-tratti-header[\\s\\S]*${tasto("attributes").source}[\\s\\S]*AttributesList\\.Attributes`));
-assert.match(tratti, new RegExp(`wod5e-mage-skills-header[\\s\\S]*${tasto("skills").source}[\\s\\S]*SkillsList\\.Skills`));
+// Nella prima pagina (16/9) i tasti di reset stanno nel titolo del riquadro: Attributi, Abilità, Magick.
+assert.match(read("stat-attributi.hbs"), new RegExp(`wod5e-mage-riq-title[\\s\\S]*${tasto("attributes").source}[\\s\\S]*AttributesList\\.Attributes`));
+assert.match(read("stat-abilita.hbs"), new RegExp(`wod5e-mage-riq-title[\\s\\S]*${tasto("skills").source}[\\s\\S]*SkillsList\\.Skills`));
+assert.match(read("stat-magick.hbs"), new RegExp(`wod5e-mage-riq-title[\\s\\S]*${tasto("spheres").source}[\\s\\S]*Tabs\\.Magick`));
 assert.match(read("spheres.hbs"), new RegExp(`wod5e-mage-section-title[\\s\\S]*${tasto("spheres").source}[\\s\\S]*Tabs\\.Magick`));
 assert.match(read("focus.hbs"), new RegExp(`wod5e-mage-section-title[\\s\\S]*${tasto("credo").source}[\\s\\S]*Tabs\\.Focus`));
 assert.match(read("appartenenza.hbs"), new RegExp(`<summary[\\s\\S]*${tasto("lineage").source}[\\s\\S]*Lineage\\.Label`));

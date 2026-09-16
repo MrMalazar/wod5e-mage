@@ -1,0 +1,25 @@
+{{!-- Poteri (16/9): i poteri delle Sfere che il personaggio ha, dieci per
+     Sfera, due per pallino. Uno solo entra nel lancio. Finché Blue non li
+     scrive sono segnaposto: si vedono e si scelgono, non fanno niente. La
+     cerca filtra la lista sul posto; «Apri il Grimorio» va alla sua pagina. --}}
+<section class="wod5e-mage-riq wod5e-mage-riq-poteri">
+    <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.Poteri"}}</span></header>
+    <div class="wod5e-mage-riq-body">
+        <label class="wod5e-mage-riq-cerca">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="search" class="wod5e-mage-cerca-poteri" placeholder="{{localize 'WOD5E_MAGE.Stat.CercaPotere'}}" aria-label="{{localize 'WOD5E_MAGE.Stat.CercaPotere'}}" data-filter="poteri">
+        </label>
+        <div class="wod5e-mage-riq-scroll wod5e-mage-poteri-lista" data-list="poteri">
+            {{#each poteri as |power|}}
+                <button type="button" class="wod5e-mage-riga wod5e-mage-riga-potere{{#if power.selected}} scelta{{/if}}{{#if power.placeholder}} segnaposto{{/if}}" data-action="tiroPower" data-power="{{power.id}}" data-search="{{power.label}} {{power.sphereLabel}}" aria-pressed="{{power.selected}}" title="{{#if power.text}}{{power.text}}{{else}}{{localize 'WOD5E_MAGE.Stat.PotereSegnaposto'}}{{/if}}">
+                    <span class="wod5e-mage-riga-spunta" aria-hidden="true"></span>
+                    <span class="wod5e-mage-riga-nome-testo">{{power.label}}</span>
+                    <small class="wod5e-mage-riga-coda">{{power.sphereLabel}} {{power.dot}}</small>
+                </button>
+            {{else}}
+                <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Stat.PoteriVuoti"}}</p>
+            {{/each}}
+        </div>
+        <button type="button" class="wod5e-mage-riq-tasto-largo" data-action="tiroGrimorio">{{localize "WOD5E_MAGE.Stat.ApriGrimorio"}}</button>
+    </div>
+</section>

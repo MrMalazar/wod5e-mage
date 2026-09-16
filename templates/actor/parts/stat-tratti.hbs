@@ -1,0 +1,31 @@
+{{!-- Tratti (16/9): Pregi, Difetti, Background, Equipaggiamento, Cabala,
+     Rifugio, Famiglio, in un elenco piatto con cerca e filtri. Ognuno si
+     mette nel tiro con un clic, anche più d'uno; a destra il bonus scritto
+     sull'oggetto, se ce l'ha. --}}
+<section class="wod5e-mage-riq wod5e-mage-riq-tratti">
+    <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.Tratti"}}</span></header>
+    <div class="wod5e-mage-riq-body">
+        <label class="wod5e-mage-riq-cerca">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="search" class="wod5e-mage-cerca-tratti" placeholder="{{localize 'WOD5E_MAGE.Stat.CercaTratto'}}" aria-label="{{localize 'WOD5E_MAGE.Stat.CercaTratto'}}" data-filter="tratti">
+        </label>
+        <div class="wod5e-mage-filtri" role="group" data-filters="tratti">
+            <button type="button" class="wod5e-mage-filtro active" data-kind="">{{localize "WOD5E_MAGE.Stat.Tutti"}}</button>
+            {{#each traitKinds as |kind|}}
+                <button type="button" class="wod5e-mage-filtro" data-kind="{{kind.id}}">{{kind.label}}</button>
+            {{/each}}
+        </div>
+        <div class="wod5e-mage-riq-scroll wod5e-mage-tratti-oggetti" data-list="tratti">
+            {{#each traitRows as |row|}}
+                <button type="button" class="wod5e-mage-riga wod5e-mage-riga-oggetto{{#if row.chosen}} scelta{{/if}}" data-action="tiroTrait" data-item-id="{{row.id}}" data-kind="{{row.kind}}" data-search="{{row.name}} {{row.kindLabel}}" aria-pressed="{{row.chosen}}" title="{{row.hint}}">
+                    <span class="wod5e-mage-riga-spunta" aria-hidden="true"></span>
+                    {{#if row.img}}<img class="wod5e-mage-riga-icona" src="{{row.img}}" alt="">{{/if}}
+                    <span class="wod5e-mage-riga-nome-testo">{{row.name}}</span>
+                    <small class="wod5e-mage-riga-coda">{{#if row.dice}}<b>{{row.dice}}</b> · {{/if}}{{row.kindLabel}}</small>
+                </button>
+            {{else}}
+                <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Stat.TrattiVuoti"}}</p>
+            {{/each}}
+        </div>
+    </div>
+</section>

@@ -68,26 +68,28 @@ assert.deepEqual(saluteWithMentalAggravated({ pa: 1, ps: 2, ma: 0, ms: 3 }, 6), 
 assert.deepEqual(saluteWithMentalAggravated({ pa: 1, ps: 5, ma: 0, ms: 0 }, 6), { pa: 1, ps: 4, ma: 1, ms: 0 });
 assert.equal(saluteWithMentalAggravated({ pa: 3, ps: 0, ma: 3, ms: 0 }, 6), null);
 
-// La testata usa la Salute nostra, non i partial di Salute e Volontà del sistema.
+// La Salute nostra sta nel riquadro Salute e Condizioni della prima pagina
+// (16/9), non nei partial di Salute e Volontà del sistema; la testata è vuota.
+const statPage = readFileSync(new URL("../templates/actor/parts/stat.hbs", import.meta.url), "utf8");
+assert.match(statPage, /wod5e-mage-riq-salute[\s\S]*parts\/salute\.hbs[\s\S]*parts\/stat-condizioni\.hbs/);
+assert.doesNotMatch(statPage, /health\.hbs|willpower\.hbs/);
 const header = readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8");
-assert.match(header, /parts\/salute\.hbs/);
-assert.doesNotMatch(header, /health\.hbs|willpower\.hbs/);
+assert.doesNotMatch(header, /health\.hbs|willpower\.hbs|salute\.hbs/);
 const track = readFileSync(new URL("../templates/actor/parts/salute.hbs", import.meta.url), "utf8");
 assert.match(track, /data-action="saluteCellChange"[\s\S]*data-index="\{\{cell\.index\}\}"/);
 assert.match(track, /data-action="saluteExtraChange"/);
 // Niente legenda sotto il tracciato: il menù di ogni casella dice il nome
 // accanto al segno.
 assert.doesNotMatch(track, /Salute\.LegendPhysical|Salute\.LegendMental|wod5e-mage-salute-legend/);
-// Il Reset resta sotto la barra; Nuova sessione sta in alto a sinistra dei Tratti (4/9 notte).
+// Il Reset resta sotto la barra; Nuova sessione e Cambio Scena stanno nell'Identità (16/9).
 assert.match(track, /data-action="saluteReset"/);
 assert.doesNotMatch(track, /data-action="saluteNewSession"/);
-assert.match(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /wod5e-mage-new-session" data-action="saluteNewSession"/);
-assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8"), /saluteNewSession/);
+assert.match(readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8"), /wod5e-mage-new-session" data-action="saluteNewSession"[\s\S]*data-action="saluteCambioScena"/);
 const saluteScript = readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8");
 assert.match(saluteScript, /wod5e-mage-salute-menu-text/);
-const ruota = readFileSync(new URL("../templates/actor/parts/ruota.hbs", import.meta.url), "utf8");
-assert.match(ruota, /data-action="contraccolpoNega"/);
-assert.doesNotMatch(ruota, /contraccolpoReset/);
+const risorse = readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8");
+assert.match(risorse, /data-action="contraccolpoNega"/);
+assert.doesNotMatch(risorse, /contraccolpoReset/);
 
 
 // Nuova sessione: i punti esperienza della sessione diventano una Presa.

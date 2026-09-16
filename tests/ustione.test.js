@@ -67,8 +67,8 @@ assert.deepEqual(balanceAfterSession({ quintessence: 5, paradox: 0, floor: 0 }, 
 
 // La macchina: i tasti registrati, il Cambio Scena in testata, le caselle bloccate nel template e nel CSS.
 assert.match(readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"), /registerUstione\(\);\s*registerParadossoNarratore\(\);/);
-const header = readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8");
-assert.match(header, /data-action="saluteNewSession"[\s\S]*data-action="saluteCambioScena"/);
+const identita = readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8");
+assert.match(identita, /data-action="saluteNewSession"[\s\S]*data-action="saluteCambioScena"/);
 assert.match(readFileSync(new URL("../templates/actor/parts/salute.hbs", import.meta.url), "utf8"), /wod5e-mage-salute-locked/);
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
 assert.match(css, /\.wod5e-mage-salute-cell\.wod5e-mage-salute-locked\s*\{/);

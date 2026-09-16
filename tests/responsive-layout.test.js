@@ -10,10 +10,8 @@ const mageHeader = readFileSync(
   new URL("../templates/actor/mage-header.hbs", import.meta.url),
   "utf8"
 );
-const traitsTemplate = readFileSync(
-  new URL("../templates/actor/parts/tratti.hbs", import.meta.url),
-  "utf8"
-);
+const stat = (file) => readFileSync(new URL(`../templates/actor/parts/${file}`, import.meta.url), "utf8");
+const statTemplate = stat("stat.hbs");
 const magickTemplate = readFileSync(
   new URL("../templates/actor/parts/spheres.hbs", import.meta.url),
   "utf8"
@@ -30,87 +28,38 @@ assert.doesNotMatch(
   /\.wod5e-mage\.wod5e\.actor\.sheet\s*\{[^}]*min-height:/s
 );
 
-// La griglia esterna cambia disposizione senza alterare il responsive
-// interno delle tabelle Attributi e Abilita.
-assert.match(
-  css,
-  /\.wod5e-mage-tratti\s*>\s*\.stats-content\s*\{[^}]*display:\s*grid;[^}]*"attributes conditions"[^}]*"skills specialties"[^}]*"ruota bonus";/s
-);
-assert.match(
-  css,
-  /@container tratti\s*\(max-width:\s*900px\)[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*250px/
-);
-assert.match(
-  css,
-  /@container tratti\s*\(max-width:\s*800px\)[\s\S]*"attributes"[\s\S]*"conditions"[\s\S]*"skills"[\s\S]*"specialties"[\s\S]*"ruota"[\s\S]*"bonus"/
-);
-assert.match(
-  css,
-  /\.skills-attributes\s*>\s*\.stats-container\s*>\s*\.stats-content\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\);/s
-);
-
-// Il wrapping è ammesso fra i riquadri, mai fra nome e pallini della stessa
-// voce. La finestra aperta si ferma prima di raggiungere quella soglia.
-assert.match(
-  css,
-  /\.stats-list\s*>\s*:is\(\.attribute,\s*\.skill\)\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*20px minmax\(0,\s*1fr\)\s+max-content;[^}]*white-space:\s*nowrap;/s
-);
+// La prima pagina a nove riquadri (16/9): quattro colonne, la prima da tre;
+// le colonne sono trasparenti alla griglia e ogni riquadro ha la sua area,
+// così la fascia bassa (Risorse, Poteri, Tratti, Il Tiro) sta su una riga sola.
+assert.match(css, /\.wod5e-mage-stat-grid\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\);[^}]*grid-template-rows:\s*auto auto auto;/s);
+assert.match(css, /\.wod5e-mage-stat-col\s*\{[^}]*display:\s*contents;/s);
+for (const [riq, area] of [["identita", "1 / 1 / 2 / 2"], ["salute", "2 / 1 / 3 / 2"], ["risorse", "3 / 1 / 4 / 2"], ["magick", "1 / 2 / 3 / 3"], ["poteri", "3 / 2 / 4 / 3"], ["attributi", "1 / 3 / 3 / 4"], ["tratti", "3 / 3 / 4 / 4"], ["abilita", "1 / 4 / 3 / 5"], ["tiro", "3 / 4 / 4 / 5"]]) {
+  assert.match(css, new RegExp(`\\.wod5e-mage-riq-${riq} \\{ grid-area: ${area.replace(/\//g, "\\/")}; \\}`), `area di ${riq}`);
+}
+// I nove riquadri stanno in stat.hbs nell'ordine delle colonne; la testata è vuota e nascosta.
+assert.match(statTemplate, /stat-identita\.hbs[\s\S]*wod5e-mage-riq-salute[\s\S]*stat-risorse\.hbs[\s\S]*stat-magick\.hbs[\s\S]*stat-poteri\.hbs[\s\S]*stat-attributi\.hbs[\s\S]*stat-tratti\.hbs[\s\S]*stat-abilita\.hbs[\s\S]*stat-tiro\.hbs/);
+assert.match(mageHeader, /<header class="actor-header wod5e-mage-header wod5e-mage-header-vuota" aria-hidden="true"><\/header>/);
+assert.match(css, /\.wod5e-mage-header-vuota\s*\{\s*display: none;/);
+// La finestra parte larga per le quattro colonne.
+const sheetSource = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+assert.match(sheetSource, /position: \{\s*width: 1340,\s*height: 1080\s*\}/);
+// Le righe scelte sono viola; il livello dell'Ambito scelto è viola; il cassetto si apre al sorvolo.
+assert.match(css, /\.wod5e-mage-riga\.scelta\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
+assert.match(css, /\.wod5e-mage-ambito-livello\.active\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
+assert.match(css, /\.wod5e-mage-riga-abilita\.con-cassetto:hover \.wod5e-mage-cassetto[^{]*\{\s*display: flex;/);
+// La scheda minimizzata resta richiudibile; la larghezza minima resta.
 assert.match(
   css,
   /\.sheet:not\(\.minimized\)\s*\{[^}]*min-width:\s*820px;/s
 );
-assert.match(
-  css,
-  /\.stats-list\s*>\s*:is\(\.attribute,\s*\.skill\)\s*>\s*\.resource-value\s*\{[^}]*display:\s*flex;[^}]*justify-self:\s*end;[^}]*white-space:\s*nowrap;/s
-);
-
-// Ruota e Ambiti condividono il blocco a sinistra del pannello laterale, ma
-// il riquadro del Dono sta accanto senza scale ridotte: l'esagono non c'è più.
-assert.match(
-  css,
-  /\.wod5e-mage-arcana-cell\s*\{[^}]*display:\s*flex;[^}]*grid-area:\s*ruota;[^}]*width:\s*100%;/s
-);
-// La Ruota prende tutta la colonna delle Abilità, coi nodi in grande.
-assert.match(
-  css,
-  /\.wod5e-mage-header-wheel-inner\s*\{[^}]*width:\s*100%;/s
-);
-assert.match(
-  css,
-  /\.wod5e-mage-magick-track-compact\s*\{[^}]*height:\s*176px;[^}]*width:\s*370px;/s
-);
-assert.doesNotMatch(css, /zoom:\s*0\.75|wod5e-mage-scopes-wheel|wod5e-mage-scope-choice|wod5e-mage-scope-gift/);
-// Il sigillo apre ogni voce: colonna dedicata e aria uguale per tutti.
-assert.match(
-  css,
-  /\.stats-list\s*>\s*:is\(\.attribute,\s*\.skill\)\s*\{[^}]*grid-template-columns:\s*20px minmax\(0, 1fr\) max-content;/s
-);
-assert.match(
-  css,
-  /\.stats-container\.skills \.skill,\s*\n\.wod5e-mage\.wod5e\.actor\.sheet \.stats-container\.attributes \.attribute\s*\{[^}]*margin-bottom:\s*0\.45rem;/s
-);
-assert.match(traitsTemplate, /wod5e-mage-trait-icon[\s\S]*attribute\.icon[\s\S]*wod5e-mage-trait-icon[\s\S]*skill\.icon/);
-assert.doesNotMatch(
-  css,
-  /\.wod5e-mage-ruota-cell[^,{]*\{[^}]*zoom:/s
-);
-// I Bonus vivono nel pannello destro, sotto i Tiri personalizzati; la Ruota
-// tiene per sé Quintessenza generata e Paradosso permanente.
-assert.match(traitsTemplate, /Conditions[\s\S]*parts\/bonuses\.hbs/);
-assert.match(traitsTemplate, /parts\/ruota\.hbs/);
-assert.doesNotMatch(traitsTemplate, /parts\/scopes\.hbs|wod5e-mage-arcana-side/);
+// La Ruota nel riquadro delle Risorse: il mezzo cerchio vero, le due parole
+// agli estremi, il modo a barra, i Dettagli della Ruota chiusi.
+const risorse = stat("stat-risorse.hbs");
+assert.match(risorse, /A150 150 0 0 1[\s\S]*preserveAspectRatio="xMidYMid meet"|preserveAspectRatio="xMidYMid meet"[\s\S]*A150 150 0 0 1/);
+assert.match(risorse, /wod5e-mage-magick-end quintessence[\s\S]*wod5e-mage-magick-end paradox/);
+assert.match(risorse, /<details class="wod5e-mage-ruota-dettagli">[\s\S]*generatedQuintessence[\s\S]*permanentParadox[\s\S]*data-action="contraccolpoNega"[\s\S]*data-action="wheelModeToggle"/);
+assert.doesNotMatch(risorse, /data-action="areteRoll"|wod5e-mage-header-arete/);
 assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes\b|wod5e-mage-persistent-resources/);
-const ruotaTemplate = readFileSync(
-  new URL("../templates/actor/parts/ruota.hbs", import.meta.url),
-  "utf8"
-);
-assert.match(ruotaTemplate, /wod5e-mage-persistent-resources[\s\S]*generatedQuintessence[\s\S]*permanentParadox/);
-// Il semicerchio è vero (raggio unico, mai schiacciato), con le due parole
-// agli estremi; la parola ARETÉ tira, e il vecchio bottone non esiste più.
-assert.match(ruotaTemplate, /A150 150 0 0 1[\s\S]*preserveAspectRatio="xMidYMid meet"|preserveAspectRatio="xMidYMid meet"[\s\S]*A150 150 0 0 1/);
-assert.match(ruotaTemplate, /wod5e-mage-magick-end quintessence[\s\S]*wod5e-mage-magick-end paradox/);
-assert.match(ruotaTemplate, /button[^>]*wod5e-mage-arete-roll[^>]*data-action="areteRoll"/);
-assert.doesNotMatch(ruotaTemplate, /wod5e-mage-header-roll|Arete\.Roll"/);
 // Il listino dei Successi Extra chiude la pagina Magick, a tutta larghezza.
 assert.match(magickTemplate, /wod5e-mage-sphere-specialties[\s\S]*parts\/scope-table\.hbs/);
 assert.match(
@@ -166,58 +115,19 @@ assert.match(tabNavigation, /\{\{#if tab\.groupStart\}\}<hr class="wod5e-mage-ta
 assert.match(css, /\.wod5e-mage-tabs-divider \{[^}]*border-top: 1px solid var\(--mage-oro-scuro\);/s);
 assert.doesNotMatch(css, /:is\(\[data-tab="magick"\], \[data-tab="focus"\], \[data-tab="conceptChallenge"\]\) \.navicon \{/);
 assert.match(css, /\.sheet-tabs > \[data-tab\] \.navicon,\s*\.wod5e-mage\.wod5e\.actor\.sheet \.sheet-tabs \.lock-btn \{[^}]*background-color: var\(--mage-incavo\);/s);
-// I Tratti a colonne (6/9): tre colonne sulla stessa riga, Attributi |
-// Abilità (due colonne da nove) | il pannello di destra; il tasto sta nel
-// titolo degli Attributi e l'impostazione è del giocatore.
-assert.match(css, /\.wod5e-mage-tratti-columns > \.stats-content \{[^}]*"attributes skills conditions"[^}]*"attributes skills specialties"[^}]*"ruota ruota bonus"/s);
-assert.match(css, /\.wod5e-mage-tratti-columns \.wod5e-mage-tratti-skills > \.stats-container > \.stats-content \{[^}]*grid-auto-flow: column;[^}]*grid-template-rows: repeat\(9, auto\);/s);
-assert.match(css, /\.wod5e-mage-tratti-columns \.stats-footer \{[^}]*display: none;/s);
-// I pallini a colonne respirano col contenitore (cqw) e sotto gli 820 px
-// dei Tratti lasciano il posto al numero grande; le query hanno il nome
-// del contenitore giusto (`tratti`, `lista`).
-assert.match(css, /\.wod5e-mage-tratti \{[^}]*container: tratti \/ inline-size;/s);
-assert.match(css, /--dot: clamp\(11px, 2\.6cqw, 24px\);/);
-assert.match(css, /@container tratti \(max-width: 820px\) \{\s*\.wod5e-mage\.wod5e\.actor\.sheet \.wod5e-mage-tratti-columns \.stats-list > :is\(\.attribute, \.skill\) > \.resource-value \{\s*display: none !important;/);
-assert.match(css, /\.wod5e-mage-trait-number \{[^}]*font-size: 1\.35rem;/s);
-const trattiTemplate = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
-assert.match(trattiTemplate, /wod5e-mage-tratti\{\{#if traitsColumns\}\} wod5e-mage-tratti-columns\{\{\/if\}\}[\s\S]*data-action="traitsLayoutToggle"/);
-assert.match(readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"), /register\(MODULE_ID, "traitsLayout"/);
-// Il sigillo dell'Areté in alto a destra della testata tira da ogni pagina;
-// il numero accanto ai pallini dell'Areté non c'è più; i nodi della Ruota
-// sono 26 px.
-assert.match(mageHeader, /<button type="button" class="wod5e-mage-header-arete-roll wod5e-mage-arete-roll" data-action="areteRoll"[\s\S]*arete\.svg[\s\S]*<div class="header-fields">/);
-assert.match(css, /button\.wod5e-mage-header-arete-roll \{[^}]*position: absolute;[^}]*right: 0\.5rem;/s);
-const ruota = readFileSync(new URL("../templates/actor/parts/ruota.hbs", import.meta.url), "utf8");
-assert.doesNotMatch(ruota, /wod5e-mage-header-arete-value/);
+// Gli Attributi e le Abilità nei loro riquadri (16/9): per famiglia, il nome
+// è il tasto che li mette nel tiro, i pallini restano quelli della scheda.
+const attributi = stat("stat-attributi.hbs");
+const abilita = stat("stat-abilita.hbs");
+assert.match(attributi, /attributeGroups[\s\S]*data-action="tiroAttribute" data-attribute="\{\{attribute\.id\}\}"[\s\S]*data-action="dotCounterChange"/);
+assert.match(abilita, /skillGroups[\s\S]*data-action="tiroSkill" data-key="\{\{skill\.key\}\}"[\s\S]*data-action="essentialSkillDotChange"[\s\S]*wod5e-mage-cassetto[\s\S]*data-action="tiroSpecialty"[\s\S]*data-action="specialtyAdd" data-skill="\{\{skill\.id\}\}"/);
+assert.match(attributi, /wod5e-mage-riga-icona[\s\S]*attribute\.icon/);
+assert.match(abilita, /wod5e-mage-riga-icona[\s\S]*skill\.icon/);
+assert.doesNotMatch(readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8"), /traitsLayoutToggle|traitsOrderToggle|parts\/tratti\.hbs|parts\/ruota\.hbs/);
+// I nodi della Ruota sono 26 px.
 assert.match(css, /\.wod5e-mage-magick-node \{[^}]*height: 26px;[^}]*width: 26px;/s);
 assert.match(css, /\.wod5e-mage-magick-track-compact \.wod5e-mage-magick-node \{[^}]*height: 26px;[^}]*width: 26px;/s);
 assert.ok(Object.values(itShort).every((label) => label.length <= 7), "nomi corti entro sette lettere");
-
-// Come nella 0.9.4, il profilo rimane fra due colonne header-fields:
-// lo spacer destro impedisce al ritratto di slittare sul bordo.
-assert.match(
-  mageHeader,
-  /<div class="header-fields">[\s\S]*<div class="header-profile">[\s\S]*<div class="header-fields wod5e-mage-header-spacer">[\s\S]*appartenenza\.hbs/
-);
-
-// Abilità e Attributi: pallini a misura fissa con aria fra loro, e due
-// colonne quando il contenitore non regge più le tre.
-assert.match(
-  css,
-  /\.stats-list\s*>\s*:is\(\.attribute,\s*\.skill\)\s*>\s*\.resource-value\s*\{[^}]*gap:\s*5px;/s
-);
-assert.match(
-  css,
-  /\.resource-value\s*>\s*:is\(\.resource-value-step,\s*\.resource-value-empty\)\s*\{[^}]*flex:\s*0 0 18px;[^}]*min-width:\s*18px;/s
-);
-assert.match(
-  css,
-  /\.skills-attributes\s*>\s*\.stats-container\s*\{[^}]*container: lista \/ inline-size;/s
-);
-assert.match(
-  css,
-  /@container lista\s*\(max-width:\s*720px\)\s*\{[^{]*\.skills-attributes\s*>\s*\.stats-container\s*>\s*\.stats-content\s*\{[^}]*repeat\(2,\s*minmax\(0,\s*1fr\)\);/s
-);
 
 // La Ruota ad arco accende i nodi con i token della palette, non con
 // variabili definite in un contenitore che non esiste più.

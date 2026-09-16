@@ -44,22 +44,20 @@ assert.deepEqual(specialtyBonus("occult", "  Serrature "), {
   displayWhenInactive: true
 });
 
-// Nei Tratti: Condizioni accanto agli Attributi, Specializzazioni accanto
-// alle Abilità, Bonus accanto alla Ruota; niente Tiri personalizzati.
-const tratti = readFileSync(new URL("../templates/actor/parts/tratti.hbs", import.meta.url), "utf8");
-assert.match(tratti, /wod5e-mage-tratti-attributes[\s\S]*wod5e-mage-tratti-conditions[\s\S]*wod5e-mage-tratti-skills[\s\S]*wod5e-mage-tratti-specialties[\s\S]*specializzazioni\.hbs[\s\S]*wod5e-mage-tratti-ruota[\s\S]*wod5e-mage-tratti-bonus[\s\S]*bonuses\.hbs/);
-assert.doesNotMatch(tratti, /CustomRolls|customRolls/);
-// Il + delle Abilità Specifiche sta nell'intestazione delle Abilità, e le
-// righe aggiunte stanno sotto il titolo loro.
-assert.match(tratti, /wod5e-mage-skills-header[\s\S]*data-action="customSkillAdd"[\s\S]*CustomSkills\.Label[\s\S]*data-custom-skill="\{\{skill\.id\}\}"[\s\S]*flags\.wod5e-mage\.customSkills\.\{\{skill\.id\}\}\.value[\s\S]*data-action="customSkillDelete"/);
-const panel = readFileSync(new URL("../templates/actor/parts/specializzazioni.hbs", import.meta.url), "utf8");
-assert.match(panel, /data-action="specialtyAdd"[\s\S]*data-action="editSkill"[\s\S]*data-action="specialtyDelete"/);
+// Nel riquadro delle Abilità (16/9): il + delle Abilità Specifiche nel
+// titolo, le righe aggiunte sotto il titolo loro col nome che si scrive; le
+// Specializzazioni nel cassetto al sorvolo, un posto vuoto le aggiunge con
+// l'Abilità già scelta, la × le toglie; niente Tiri personalizzati.
+const abilita = readFileSync(new URL("../templates/actor/parts/stat-abilita.hbs", import.meta.url), "utf8");
+assert.doesNotMatch(abilita, /CustomRolls|customRolls/);
+assert.match(abilita, /wod5e-mage-riq-title[\s\S]*data-action="customSkillAdd"[\s\S]*CustomSkills\.Label[\s\S]*data-key="custom:\{\{skill\.id\}\}"[\s\S]*flags\.wod5e-mage\.customSkills\.\{\{skill\.id\}\}\.name[\s\S]*flags\.wod5e-mage\.customSkills\.\{\{skill\.id\}\}\.value[\s\S]*data-action="customSkillDelete"/);
+assert.match(abilita, /wod5e-mage-cassetto[\s\S]*data-action="tiroSpecialty" data-key="\{\{skill\.key\}\}" data-specialty="\{\{slot\.name\}\}"[\s\S]*data-action="specialtyDelete" data-skill="\{\{skill\.id\}\}" data-index="\{\{slot\.index\}\}"[\s\S]*data-action="specialtyAdd" data-skill="\{\{skill\.id\}\}"/);
 const dialog = readFileSync(new URL("../templates/dialogs/specialty-add.hbs", import.meta.url), "utf8");
-assert.match(dialog, /name="skill"[\s\S]*name="source"/);
+assert.match(dialog, /name="skill"[\s\S]*\{\{#if skill\.selected\}\}selected\{\{\/if\}\}[\s\S]*name="source"/);
+const specScript = readFileSync(new URL("../scripts/specializzazioni.js", import.meta.url), "utf8");
+assert.match(specScript, /const preset = String\(target\?\.dataset\?\.skill \?\? ""\)/);
 
-// Il clic sulla Specializzazione tira l'Abilità col dado in più già dentro (4/9 notte).
-const specTemplate = readFileSync(new URL("../templates/actor/parts/specializzazioni.hbs", import.meta.url), "utf8");
-assert.match(specTemplate, /data-action="specialtyRoll" data-skill="\{\{row\.skill\}\}" data-specialty="\{\{row\.source\}\}"/);
+// Il clic sulla Specializzazione tira l'Abilità col dado in più già dentro (4/9 notte): la via vecchia resta per chi la chiama.
 const { compileMageTraitRoll } = await import("../scripts/mage-roll-selection.js");
 const compiled = compileMageTraitRoll({
   dataset: { selectDialog: "true", skill: "academics", flatMod: "1", specialty: "Storia" },

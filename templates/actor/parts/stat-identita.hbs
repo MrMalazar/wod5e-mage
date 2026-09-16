@@ -1,0 +1,47 @@
+{{!-- Identità (16/9): Nuova sessione e Cambio Scena sopra, il ritratto grande
+     con l'icona in alto a destra che fa girare i ritratti, il nome del
+     personaggio e del giocatore, e sotto l'Appartenenza a tendina. --}}
+<section class="wod5e-mage-riq wod5e-mage-riq-identita">
+    <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.Identita"}}</span></header>
+    <div class="wod5e-mage-riq-body">
+        <div class="wod5e-mage-identita-tasti">
+            <button type="button" class="wod5e-mage-new-session" data-action="saluteNewSession" title="{{localize 'WOD5E_MAGE.Salute.NewSessionHint'}}">
+                <i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.NewSession"}}
+            </button>
+            <button type="button" class="wod5e-mage-new-session wod5e-mage-cambio-scena" data-action="saluteCambioScena" title="{{localize 'WOD5E_MAGE.Salute.CambioScenaHint'}}">
+                <i class="fa-solid fa-clapperboard" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.CambioScena"}}{{#if salute.locked}} <b class="wod5e-mage-cambio-scena-count">{{salute.locked}}</b>{{/if}}
+            </button>
+        </div>
+
+        <div class="wod5e-mage-ritratto">
+            <img class="profile-img wod5e-mage-ritratto-img" data-action="editImage" src="{{img}}" data-edit="img" title="{{actor.name}}"/>
+            {{!-- In alto a destra, dentro lo slot: gira i ritratti; il più ne aggiunge uno, il meno toglie quello che si vede. --}}
+            <div class="wod5e-mage-ritratto-tasti">
+                {{#if ritratti.many}}
+                    <button type="button" data-action="ritrattoNext" title="{{localize 'WOD5E_MAGE.Ritratti.NextHint'}}" aria-label="{{localize 'WOD5E_MAGE.Ritratti.NextHint'}}"><i class="fa-solid fa-rotate" aria-hidden="true"></i><small>{{ritratti.position}}/{{ritratti.count}}</small></button>
+                {{/if}}
+                {{#unless locked}}
+                    <button type="button" data-action="ritrattoAdd" title="{{localize 'WOD5E_MAGE.Ritratti.AddHint'}}" aria-label="{{localize 'WOD5E_MAGE.Ritratti.AddHint'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                    {{#if ritratti.many}}
+                        <button type="button" data-action="ritrattoRemove" title="{{localize 'WOD5E_MAGE.Ritratti.RemoveHint'}}" aria-label="{{localize 'WOD5E_MAGE.Ritratti.RemoveHint'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                    {{/if}}
+                {{/unless}}
+            </div>
+        </div>
+
+        <div class="wod5e-mage-names">
+            <div class="flexrow name-field{{#if locked}} clickthrough{{/if}}">
+                {{#if locked}}
+                    <div class="charname">{{name}}</div>
+                {{else}}
+                    <input class="charname" name="name" type="text" value="{{name}}" placeholder="{{localize 'WOD5E.Name'}}"/>
+                {{/if}}
+            </div>
+            <div class="wod5e-mage-player-field">
+                <input class="wod5e-mage-player" name="flags.wod5e-mage.player" type="text" value="{{playerName}}" placeholder="{{localize 'WOD5E_MAGE.Header.Player'}}" aria-label="{{localize 'WOD5E_MAGE.Header.Player'}}" {{#if locked}}disabled{{/if}}/>
+            </div>
+        </div>
+
+        {{> "modules/wod5e-mage/templates/actor/parts/appartenenza.hbs"}}
+    </div>
+</section>

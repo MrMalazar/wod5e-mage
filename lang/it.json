@@ -628,20 +628,6 @@
         "Hint": "Come vedi la Ruota sulla scheda del Mago: l'arco a nove nodi o la barra compatta a nove caselle.",
         "Wheel": "Ruota ad arco",
         "Bar": "Barra a caselle"
-      },
-      "TraitsLayout": {
-        "Name": "La struttura dei Tratti",
-        "Hint": "Come vedi Attributi e Abilità sulla scheda del Mago: a gruppi (Fisici, Sociali, Mentali) o a colonne (gli Attributi in una da nove righe, le Abilità in due da nove).",
-        "Groups": "A gruppi",
-        "Columns": "A colonne",
-        "Toggle": "Cambia la struttura dei Tratti"
-      },
-      "TraitsOrder": {
-        "Name": "L'ordine dei Tratti a colonne",
-        "Hint": "Con i Tratti a colonne: Attributi e Abilità in ordine alfabetico, oppure per gruppo (Fisici, Sociali, Mentali).",
-        "Alpha": "Alfabetico",
-        "Group": "Per gruppo",
-        "Toggle": "Ordine: alfabetico o per gruppo"
       }
     },
     "Errors": {
@@ -1198,6 +1184,72 @@
       "LogManual": "A mano",
       "LogReset": "Azzerata",
       "LogSession": "Nuova sessione"
+    },
+    "Stat": {
+      "Identita": "Identità",
+      "SaluteCondizioni": "Salute e Condizioni",
+      "Risorse": "Risorse",
+      "DettagliRuota": "Dettagli della Ruota",
+      "Poteri": "Poteri",
+      "CercaPotere": "Cerca un potere…",
+      "PotereSegnaposto": "Segnaposto: il potere non è ancora scritto. Si sceglie, va in carta, non cambia il conto.",
+      "PoteriVuoti": "Nessuna Sfera con pallini: i poteri arrivano con le Sfere.",
+      "ApriGrimorio": "Apri il Grimorio",
+      "Tratti": "Tratti",
+      "CercaTratto": "Cerca fra i tratti…",
+      "Tutti": "Tutti",
+      "TrattiVuoti": "Nessun tratto sulla scheda: Pregi, Difetti, Background ed Equipaggiamento stanno nella pagina Tratti.",
+      "TrattiPregi": "Pregi",
+      "TrattiDifetti": "Difetti",
+      "TrattiBackground": "Background",
+      "TrattiEquipaggiamento": "Equipaggiamento",
+      "TrattiAltri": "Altri",
+      "IlTiro": "Il Tiro"
+    },
+    "Tiro": {
+      "KindMagick": "Tiro di Magick",
+      "KindSkill": "Tiro di Abilità",
+      "KindNone": "Componi il tiro",
+      "Kinds": {
+        "accidentale": "Accidentale",
+        "volgare": "Volgare",
+        "testimoni": "Volgare con testimoni"
+      },
+      "KindHints": {
+        "accidentale": "Non si percepisce: niente rossi, si riesce col 6.",
+        "volgare": "La realtà lo percepisce: +1 Paradosso, i rossi si tirano, si riesce col 6.",
+        "testimoni": "Qualcuno ti ha visto farlo: +2 Paradosso, i rossi si tirano, si riesce con l'8."
+      },
+      "KindWarning": "Scegli come la fai: Accidentale, Volgare o Volgare con testimoni.",
+      "SforzaNote": "Sforza la realtà: dichiarato prima del tiro.",
+      "PowerNote": "Potere: {name}.",
+      "ManualDifficultyNote": "Difficoltà scritta a mano: {difficulty} (il conto diceva {computed}).",
+      "AreteHint": "L'Areté fa il tiro di Magick: compaiono i tre tasti del tipo e il premio.",
+      "SphereHint": "Mette la Sfera nel lancio. Le Sfere non pesano sulla soglia.",
+      "AttributeHint": "Mette l'Attributo nella riserva: uno solo.",
+      "SkillHint": "Mette l'Abilità nella riserva: una sola.",
+      "SpecialtyHint": "La Specializzazione: un dado in più, e devi dimostrare come.",
+      "TraitHint": "Mette il tratto nel tiro: va in carta.",
+      "TraitHintDice": "Mette il tratto nel tiro: {dice} dadi.",
+      "Remove": "Togli dal tiro",
+      "Empty": "Clicca l'Areté, le Sfere, gli Ambiti, un Attributo, un'Abilità, i Tratti: qui si compone il tiro.",
+      "Clear": "Azzera",
+      "Dice": "Dadi",
+      "SuccessFrom": "riesce dal",
+      "Difficulty": "Difficoltà",
+      "DifficultyHint": "La soglia: la somma degli Ambiti sopra 1, meno l'Areté col premio. Il meno e il più la ritoccano a mano.",
+      "DifficultyReset": "Torna al conto",
+      "QuintessenceHint": "Un dado per punto, fino a 2 + Areté per lancio. Scende dalla Ruota a tiro fatto.",
+      "Sforza": "Sforza la realtà",
+      "SforzaHint": "Dichiari che, se fallisce, vuoi ribaltarlo pagando un prezzo: lo tratti col Narratore a tiro fatto.",
+      "HowLabel": "Come la fai",
+      "Roll": "Tira",
+      "RollHint": "Tira l'Attributo e l'Abilità scelti, meno la Difficoltà; riesce dal 6."
+    },
+    "Ritratti": {
+      "NextHint": "Gira i ritratti: quello che vedi è anche l'immagine sulla mappa e in chat",
+      "AddHint": "Aggiungi un ritratto",
+      "RemoveHint": "Togli questo ritratto"
     }
   },
   "WOD5E": {

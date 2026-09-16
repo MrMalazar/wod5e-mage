@@ -628,20 +628,6 @@
         "Hint": "How the Wheel looks on the Mage sheet: the nine-node arc or the compact nine-cell bar.",
         "Wheel": "Arc wheel",
         "Bar": "Cell bar"
-      },
-      "TraitsLayout": {
-        "Name": "Traits layout",
-        "Hint": "How Attributes and Skills are laid out on the Mage sheet: by group (Physical, Social, Mental) or in columns (Attributes in one column of nine rows, Skills in two of nine).",
-        "Groups": "By group",
-        "Columns": "In columns",
-        "Toggle": "Switch the Traits layout"
-      },
-      "TraitsOrder": {
-        "Name": "Traits order in columns",
-        "Hint": "With Traits in columns: Attributes and Skills in alphabetical order, or by group (Physical, Social, Mental).",
-        "Alpha": "Alphabetical",
-        "Group": "By group",
-        "Toggle": "Order: alphabetical or by group"
       }
     },
     "Errors": {
@@ -1198,6 +1184,72 @@
       "LogManual": "By hand",
       "LogReset": "Reset",
       "LogSession": "New session"
+    },
+    "Stat": {
+      "Identita": "Identity",
+      "SaluteCondizioni": "Health and Conditions",
+      "Risorse": "Resources",
+      "DettagliRuota": "Wheel details",
+      "Poteri": "Powers",
+      "CercaPotere": "Search a power…",
+      "PotereSegnaposto": "Placeholder: this power is not written yet. It can be picked and goes on the card, it does not change the count.",
+      "PoteriVuoti": "No Sphere with dots: powers come with the Spheres.",
+      "ApriGrimorio": "Open the Grimoire",
+      "Tratti": "Traits",
+      "CercaTratto": "Search the traits…",
+      "Tutti": "All",
+      "TrattiVuoti": "No traits on the sheet: Merits, Flaws, Backgrounds and Equipment live on the Traits page.",
+      "TrattiPregi": "Merits",
+      "TrattiDifetti": "Flaws",
+      "TrattiBackground": "Backgrounds",
+      "TrattiEquipaggiamento": "Equipment",
+      "TrattiAltri": "Other",
+      "IlTiro": "The Roll"
+    },
+    "Tiro": {
+      "KindMagick": "Magick roll",
+      "KindSkill": "Skill roll",
+      "KindNone": "Compose the roll",
+      "Kinds": {
+        "accidentale": "Coincidental",
+        "volgare": "Vulgar",
+        "testimoni": "Vulgar with witnesses"
+      },
+      "KindHints": {
+        "accidentale": "Nobody notices: no red dice, success from 6.",
+        "volgare": "Reality notices: +1 Paradox, red dice are rolled, success from 6.",
+        "testimoni": "Someone saw you: +2 Paradox, red dice are rolled, success from 8."
+      },
+      "KindWarning": "Choose how you do it: Coincidental, Vulgar or Vulgar with witnesses.",
+      "SforzaNote": "Force reality: declared before the roll.",
+      "PowerNote": "Power: {name}.",
+      "ManualDifficultyNote": "Difficulty set by hand: {difficulty} (the count said {computed}).",
+      "AreteHint": "Arete makes it a Magick roll: the three type buttons and the prize appear.",
+      "SphereHint": "Puts the Sphere in the casting. Spheres do not weigh on the threshold.",
+      "AttributeHint": "Puts the Attribute in the pool: one only.",
+      "SkillHint": "Puts the Skill in the pool: one only.",
+      "SpecialtyHint": "The Specialty: one extra die, and you must show how.",
+      "TraitHint": "Puts the trait in the roll: it goes on the card.",
+      "TraitHintDice": "Puts the trait in the roll: {dice} dice.",
+      "Remove": "Remove from the roll",
+      "Empty": "Click Arete, Spheres, Scopes, an Attribute, a Skill, Traits: the roll is composed here.",
+      "Clear": "Clear",
+      "Dice": "Dice",
+      "SuccessFrom": "success from",
+      "Difficulty": "Difficulty",
+      "DifficultyHint": "The threshold: the sum of Scopes above 1, minus Arete with the prize. Minus and plus adjust it by hand.",
+      "DifficultyReset": "Back to the count",
+      "QuintessenceHint": "One die per point, up to 2 + Arete per casting. It leaves the Wheel once rolled.",
+      "Sforza": "Force reality",
+      "SforzaHint": "You declare that, on a failure, you want to flip it by paying a price: settle it with the Storyteller after the roll.",
+      "HowLabel": "How you do it",
+      "Roll": "Roll",
+      "RollHint": "Rolls the chosen Attribute and Skill, minus the Difficulty; success from 6."
+    },
+    "Ritratti": {
+      "NextHint": "Cycle the portraits: the one you see is also the image on the map and in chat",
+      "AddHint": "Add a portrait",
+      "RemoveHint": "Remove this portrait"
     }
   }
 }

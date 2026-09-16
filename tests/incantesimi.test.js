@@ -85,7 +85,8 @@ assert.doesNotMatch(dialog.replace(/\{\{!--[\s\S]*?--\}\}/g, ""), /<form/);
 assert.doesNotMatch(arete, /root\.querySelector\("\.wod5e-mage-arete-simple"\)/);
 assert.match(arete, /root\.querySelector\("\[data-arete\]"\)\?\.dataset\.arete/);
 assert.match(dialog, /<div class="wod5e-mage-arete-layout\{\{#if simple\}\} wod5e-mage-arete-simple\{\{\/if\}\}" data-arete="\{\{arete\.value\}\}">/);
-assert.match(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /data-action="areteSimple"[\s\S]*<small aria-hidden="true">S<\/small>/);
+// La testata è vuota (16/9): i tasti del tiro non ci sono più, la scheda compone.
+assert.doesNotMatch(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /data-action="areteSimple"|data-action="areteRoll"/);
 // Il template mostra un passo e porta gli altri come campi nascosti.
 assert.match(dialog, /\{\{#if show\.goal\}\}[\s\S]*name="goal"[\s\S]*\{\{else\}\}\s*<input type="hidden" name="goal" value="\{\{carry\.goal\}\}">/);
 assert.match(dialog, /\{\{#each carry\.spheres as \|row\|\}\}\s*<span data-role="dotRow" data-kind="sphere" data-id="\{\{row\.id\}\}" data-specialty="\{\{row\.specialty\}\}" hidden><input type="hidden" name="sphere-\{\{row\.id\}\}" value="\{\{row\.level\}\}">/);

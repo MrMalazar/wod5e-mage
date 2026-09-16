@@ -128,7 +128,7 @@ function canEditSpecialties(actor) {
   return true;
 }
 
-export async function onSpecialtyAdd(event) {
+export async function onSpecialtyAdd(event, target = null) {
   event.preventDefault();
   const actor = this.actor;
   if (!canEditSpecialties(actor)) return;
@@ -136,7 +136,10 @@ export async function onSpecialtyAdd(event) {
   const localize = game.i18n.localize.bind(game.i18n);
   // Solo le Abilità con un posto libero: una a 1, due a 3, tre a 5 (verdetto di Blue, 11/9).
   const prepared = prepareSpecialties(actor, { localize, lang: game.i18n.lang });
-  const skills = specialtySkillChoices(prepared.skills, specialtyCounts(prepared.rows));
+  // Dal posto vuoto del cassetto (16/9) l'Abilità arriva già scelta.
+  const preset = String(target?.dataset?.skill ?? "");
+  const skills = specialtySkillChoices(prepared.skills, specialtyCounts(prepared.rows))
+    .map((skill) => ({ ...skill, selected: skill.id === preset }));
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/specialty-add.hbs",
     { skills, steps: SPECIALTY_STEPS.join(", ") }

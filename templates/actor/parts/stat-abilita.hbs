@@ -1,0 +1,75 @@
+{{!-- Abilità (16/9): per famiglia, il nome è il tasto che la mette nel tiro
+     (una sola); al sorvolo si apre il cassetto delle Specializzazioni, tre
+     posti (uno a 1 pallino, due a 3, tre a 5): un nome la sceglie insieme
+     all'Abilità, un posto vuoto ne aggiunge una. I pallini restano quelli
+     della scheda. Le Abilità Specifiche del giocatore chiudono la lista. --}}
+<section class="wod5e-mage-riq wod5e-mage-riq-abilita">
+    <header class="wod5e-mage-riq-title">
+        {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.skills}}{{/if}}
+        <span>{{localize "WOD5E.SkillsList.Skills"}}</span>
+        <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="customSkillAdd" title="{{localize 'WOD5E_MAGE.CustomSkills.Add'}}" aria-label="{{localize 'WOD5E_MAGE.CustomSkills.Add'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+    </header>
+    <div class="wod5e-mage-riq-body">
+        {{#each skillGroups as |group|}}
+            <span class="wod5e-mage-riq-occhiello">{{group.label}}</span>
+            <div class="wod5e-mage-tratti-lista">
+                {{#each group.rows as |skill|}}
+                    <div class="wod5e-mage-riga wod5e-mage-riga-tratto wod5e-mage-riga-abilita{{#if skill.chosen}} scelta{{/if}}{{#if skill.hasSpecialties}} con-cassetto{{/if}}">
+                        <button type="button" class="wod5e-mage-riga-nome" data-action="tiroSkill" data-key="{{skill.key}}" aria-pressed="{{skill.chosen}}" title="{{localize 'WOD5E_MAGE.Tiro.SkillHint'}}">
+                            {{#if skill.icon}}<img class="wod5e-mage-riga-icona" src="{{skill.icon}}" alt="">{{/if}}
+                            <span>{{skill.displayName}}</span>
+                        </button>
+                        {{#if ../../settings.skillAttributeInputs}}
+                            {{#if ../../locked}}
+                                <b>{{skill.value}}</b>
+                            {{else}}
+                                <input class="resource-value skill-attribute-input" name="system.skills.{{skill.id}}.value" type="number" value="{{skill.value}}"/>
+                            {{/if}}
+                        {{else}}
+                            <div class="resource-value" data-value="{{skill.value}}" data-name="system.skills.{{skill.id}}.value">
+                                <span class="resource-value-empty" data-action="essentialSkillClear"></span>
+                                {{#numLoop 5}}
+                                    <span class="resource-value-step" data-action="essentialSkillDotChange" data-index="{{this}}"></span>
+                                {{/numLoop}}
+                            </div>
+                        {{/if}}
+                        {{#if skill.slots.length}}
+                            <div class="wod5e-mage-cassetto" role="group" aria-label="{{localize 'WOD5E.SkillsList.Specialties'}}">
+                                {{#each skill.slots as |slot|}}
+                                    {{#if slot.name}}
+                                        <span class="wod5e-mage-pastiglia{{#if slot.chosen}} scelta{{/if}}">
+                                            <button type="button" class="wod5e-mage-pastiglia-nome" data-action="tiroSpecialty" data-key="{{skill.key}}" data-specialty="{{slot.name}}" aria-pressed="{{slot.chosen}}" title="{{localize 'WOD5E_MAGE.Tiro.SpecialtyHint'}}">{{slot.name}}</button>
+                                            {{#unless ../../../locked}}<button type="button" class="wod5e-mage-pastiglia-via" data-action="specialtyDelete" data-skill="{{skill.id}}" data-index="{{slot.index}}" title="{{localize 'WOD5E_MAGE.Specialties.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Remove'}}">×</button>{{/unless}}
+                                        </span>
+                                    {{else}}
+                                        <button type="button" class="wod5e-mage-pastiglia vuota" data-action="specialtyAdd" data-skill="{{skill.id}}" title="{{localize 'WOD5E_MAGE.Specialties.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Add'}}" {{#if ../../../locked}}disabled{{/if}}></button>
+                                    {{/if}}
+                                {{/each}}
+                            </div>
+                        {{/if}}
+                    </div>
+                {{/each}}
+            </div>
+        {{/each}}
+
+        {{#if customSkills.length}}
+            <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E_MAGE.CustomSkills.Label"}}</span>
+            <div class="wod5e-mage-tratti-lista">
+                {{#each customSkills as |skill|}}
+                    <div class="wod5e-mage-riga wod5e-mage-riga-tratto wod5e-mage-riga-specifica{{#if skill.chosen}} scelta{{/if}}">
+                        {{!-- Il nome si scrive; la spunta a sinistra la mette nel tiro. --}}
+                        <button type="button" class="wod5e-mage-riga-spunta-tasto" data-action="tiroSkill" data-key="custom:{{skill.id}}" aria-pressed="{{skill.chosen}}" title="{{localize 'WOD5E_MAGE.Tiro.SkillHint'}}"><span class="wod5e-mage-riga-spunta" aria-hidden="true"></span></button>
+                        <input type="text" class="wod5e-mage-custom-skill-name" name="flags.wod5e-mage.customSkills.{{skill.id}}.name" value="{{skill.name}}" placeholder="{{localize 'WOD5E_MAGE.CustomSkills.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.CustomSkills.Name'}}" {{#if ../locked}}disabled{{/if}}>
+                        <div class="resource-value" data-value="{{skill.value}}" data-name="flags.wod5e-mage.customSkills.{{skill.id}}.value">
+                            <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
+                            {{#numLoop 5}}
+                                <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}"></span>
+                            {{/numLoop}}
+                        </div>
+                        <button type="button" class="wod5e-mage-custom-skill-delete" data-action="customSkillDelete" data-row="{{skill.id}}" title="{{localize 'WOD5E_MAGE.CustomSkills.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.CustomSkills.Remove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                    </div>
+                {{/each}}
+            </div>
+        {{/if}}
+    </div>
+</section>

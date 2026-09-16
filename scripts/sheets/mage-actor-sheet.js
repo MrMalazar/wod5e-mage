@@ -1,6 +1,6 @@
 import { MortalActorSheet } from "/systems/wod5e/system/actor/mortal-actor-sheet.js";
 import { _onDotCounterChange, _onDotCounterEmpty } from "/systems/wod5e/system/actor/scripts/counters.js";
-import { nextEssentialSkillValue, orderAttributes, prepareEssentialSkillList, prepareEssentialSkills, prepareEssentialSkillsByGroup } from "../abilita-essenziali.js";
+import { nextEssentialSkillValue, orderAttributes, prepareEssentialSkillsByGroup } from "../abilita-essenziali.js";
 import { onCustomSkillAdd, onCustomSkillDelete, prepareCustomSkills } from "../abilita-specifiche.js";
 import { MODULE_ID } from "../constants.js";
 import { onArchivioOpen } from "../archivi.js";
@@ -56,7 +56,32 @@ import { loadSpherePowers, prepareSphereSpecialties } from "../sphere-specialtie
 import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
-import { onSpecialtyAdd, onSpecialtyDelete, prepareSpecialties } from "../specializzazioni.js";
+import { onSpecialtyAdd, onSpecialtyDelete, prepareSpecialties, specialtySlots } from "../specializzazioni.js";
+import { skillSpecialtyNames } from "../arete.js";
+import {
+  onTiroArete,
+  onTiroAttribute,
+  onTiroClear,
+  onTiroDifficulty,
+  onTiroGrimorio,
+  onTiroPill,
+  onTiroPower,
+  onTiroPrize,
+  onTiroQuintessence,
+  onTiroRoll,
+  onTiroScope,
+  onTiroSforza,
+  onTiroSkill,
+  onTiroSpecialty,
+  onTiroSphere,
+  onTiroTrait,
+  preparePoteriRows,
+  prepareScopeRows,
+  prepareTiroContext,
+  tiroOf,
+  traitDiceOf
+} from "../tiro-scheda.js";
+import { onRitrattoAdd, onRitrattoNext, onRitrattoRemove, prepareRitratti, RITRATTI_FLAG } from "../ritratti.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 import {
@@ -100,22 +125,6 @@ async function onWheelModeToggle(event) {
   this.render();
 }
 
-/** Il secondo tasto sui Tratti a colonne: ordine alfabetico o per gruppo (6/9). */
-async function onTraitsOrderToggle(event) {
-  event?.preventDefault?.();
-  const current = game.settings.get(MODULE_ID, "traitsOrder");
-  await game.settings.set(MODULE_ID, "traitsOrder", current === "group" ? "alpha" : "group");
-  this.render();
-}
-
-/** Il tasto sui Tratti: gruppi o colonne (6/9). */
-async function onTraitsLayoutToggle(event) {
-  event?.preventDefault?.();
-  const current = game.settings.get(MODULE_ID, "traitsLayout");
-  await game.settings.set(MODULE_ID, "traitsLayout", current === "columns" ? "groups" : "columns");
-  this.render();
-}
-
 /**
  * I contatori nativi impostano sempre il primo pallino a 1. Sulle Abilità
  * Essenziali, invece, un secondo clic sul primo pallino riporta il valore a 0.
@@ -131,6 +140,53 @@ async function onEssentialSkillDotChange(event, target) {
   }
 
   return _onDotCounterChange.call(this, event, target);
+}
+
+/**
+ * Le cerche e i filtri della prima pagina (16/9): ogni elenco (`data-list`)
+ * ha la sua casella (`data-filter`) e, i Tratti, i tasti di specie
+ * (`data-filters`). Nascondono le righe che non combaciano; il testo e la
+ * specie scelti restano nella scheda attraverso i render.
+ */
+function wireStatFilters(sheet) {
+  const root = sheet.element;
+  if (!root) return;
+  const apply = (name) => {
+    const list = root.querySelector(`[data-list="${name}"]`);
+    if (!list) return;
+    const state = sheet._filters[name] ?? {};
+    const needle = String(state.text ?? "").trim().toLocaleLowerCase(game.i18n.lang);
+    const kind = String(state.kind ?? "");
+    for (const row of list.querySelectorAll("[data-search]")) {
+      const text = String(row.dataset.search ?? "").toLocaleLowerCase(game.i18n.lang);
+      const okText = !needle || text.includes(needle);
+      const okKind = !kind || row.dataset.kind === kind;
+      row.hidden = !(okText && okKind);
+    }
+    for (const button of root.querySelectorAll(`[data-filters="${name}"] .wod5e-mage-filtro`)) {
+      button.classList.toggle("active", String(button.dataset.kind ?? "") === kind);
+    }
+  };
+  for (const input of root.querySelectorAll("input[data-filter]")) {
+    const name = input.dataset.filter;
+    input.value = String(sheet._filters[name]?.text ?? "");
+    input.addEventListener("input", () => {
+      sheet._filters[name] = { ...(sheet._filters[name] ?? {}), text: input.value };
+      apply(name);
+    });
+    apply(name);
+  }
+  for (const group of root.querySelectorAll("[data-filters]")) {
+    const name = group.dataset.filters;
+    for (const button of group.querySelectorAll(".wod5e-mage-filtro")) {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        sheet._filters[name] = { ...(sheet._filters[name] ?? {}), kind: button.dataset.kind ?? "" };
+        apply(name);
+      });
+    }
+    apply(name);
+  }
 }
 
 /**
@@ -199,34 +255,64 @@ export class MageActorSheet extends MortalActorSheet {
       credoFamilyPick: onCredoFamilyPick,
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
-      traitsLayoutToggle: onTraitsLayoutToggle,
-      traitsOrderToggle: onTraitsOrderToggle,
       condizioneToggle: onCondizioneToggle,
       wisdomResourceChange: onWisdomResourceChange,
-      wisdomRoll: onWisdomRoll
+      wisdomRoll: onWisdomRoll,
+      // Il tiro composto (16/9): i clic dei nove riquadri della prima pagina.
+      tiroArete: onTiroArete,
+      tiroPrize: onTiroPrize,
+      tiroSphere: onTiroSphere,
+      tiroScope: onTiroScope,
+      tiroAttribute: onTiroAttribute,
+      tiroSkill: onTiroSkill,
+      tiroSpecialty: onTiroSpecialty,
+      tiroTrait: onTiroTrait,
+      tiroPower: onTiroPower,
+      tiroPill: onTiroPill,
+      tiroClear: onTiroClear,
+      tiroDifficulty: onTiroDifficulty,
+      tiroQuintessence: onTiroQuintessence,
+      tiroSforza: onTiroSforza,
+      tiroGrimorio: onTiroGrimorio,
+      tiroRoll: onTiroRoll,
+      // I ritratti (16/9): girano, se ne aggiunge uno, si toglie quello che si vede.
+      ritrattoNext: onRitrattoNext,
+      ritrattoAdd: onRitrattoAdd,
+      ritrattoRemove: onRitrattoRemove
+    },
+    // La finestra: quattro colonne di riquadri vogliono spazio (16/9).
+    position: {
+      width: 1340,
+      height: 1080
     }
   };
 
   static PARTS = {
+    // La testata è vuota (16/9): l'identità sta nel primo riquadro della prima pagina.
     header: {
-      template: `${MODULE}/mage-header.hbs`,
+      template: `${MODULE}/mage-header.hbs`
+    },
+    tabs: { template: `${MODULE}/parts/tab-navigation.hbs` },
+    // La prima pagina (16/9): nove riquadri in quattro colonne, il selettore
+    // del tiro composto (templates/actor/parts/stat.hbs e stat-*.hbs).
+    stats: {
+      template: `${MODULE}/parts/stat.hbs`,
       templates: [
+        `${MODULE}/parts/stat-identita.hbs`,
         `${MODULE}/parts/salute.hbs`,
         `${MODULE}/parts/appartenenza.hbs`,
         `${MODULE}/parts/reset-tasto.hbs`,
-        `${SYSTEM}/header-profile.hbs`
-      ]
-    },
-    tabs: { template: `${MODULE}/parts/tab-navigation.hbs` },
-    // Forked from the system stats part to host Wheel and Scopes beside the
-    // Conditions/Custom Rolls panel (see templates/actor/parts/tratti.hbs).
-    stats: {
-      template: `${MODULE}/parts/tratti.hbs`,
-      templates: [
-        `${MODULE}/parts/ruota.hbs`,
-        `${MODULE}/parts/bonuses.hbs`,
-        `${MODULE}/parts/specializzazioni.hbs`
-      ]
+        `${MODULE}/parts/stat-condizioni.hbs`,
+        `${MODULE}/parts/stat-risorse.hbs`,
+        `${MODULE}/parts/stat-magick.hbs`,
+        `${MODULE}/parts/stat-poteri.hbs`,
+        `${MODULE}/parts/stat-attributi.hbs`,
+        `${MODULE}/parts/stat-tratti.hbs`,
+        `${MODULE}/parts/stat-abilita.hbs`,
+        `${MODULE}/parts/stat-tiro.hbs`,
+        `${MODULE}/parts/bonuses.hbs`
+      ],
+      scrollable: [".wod5e-mage-riq-scroll", ".wod5e-mage-riq-body"]
     },
     magick: {
       template: `${MODULE}/parts/spheres.hbs`,
@@ -364,12 +450,19 @@ export class MageActorSheet extends MortalActorSheet {
       appartenenza.open = Boolean(this._appartenenzaOpen);
       appartenenza.addEventListener("toggle", () => { this._appartenenzaOpen = appartenenza.open; });
     }
-    // La tendina delle Condizioni resta com'era attraverso i render.
-    const drawer = this.element?.querySelector(".wod5e-mage-condizioni-drawer");
-    if (drawer) {
-      drawer.open = Boolean(this._condizioniOpen);
-      drawer.addEventListener("toggle", () => { this._condizioniOpen = drawer.open; });
+    // Le tendine della prima pagina restano com'erano attraverso i render:
+    // Condizioni, Dettagli della Ruota, il memo di creazione.
+    this._drawersOpen ??= {};
+    for (const [key, selector] of [["condizioni", ".wod5e-mage-condizioni-drawer"], ["ruota", ".wod5e-mage-ruota-dettagli"], ["creazione", ".wod5e-mage-stat-creazione"]]) {
+      const drawer = this.element?.querySelector(selector);
+      if (!drawer) continue;
+      drawer.open = Boolean(this._drawersOpen[key]);
+      drawer.addEventListener("toggle", () => { this._drawersOpen[key] = drawer.open; });
     }
+    // Le cerche e i filtri di Poteri e Tratti (16/9): filtrano sul posto,
+    // senza render; il testo scritto sopravvive ai render.
+    this._filters ??= {};
+    wireStatFilters(this);
     // Le Specialità delle Sfere: il testo del potere si apre dal titolo.
     this._specialtyOpen ??= {};
     for (const article of this.element?.querySelectorAll(".wod5e-mage-sphere-specialty[data-slot]") ?? []) {
@@ -426,73 +519,136 @@ export class MageActorSheet extends MortalActorSheet {
     return context;
   }
 
+  /**
+   * Il contesto dei nove riquadri (16/9): Identità (ritratti, nomi,
+   * Appartenenza), Salute e Condizioni, Risorse (la Ruota), Magick (Areté,
+   * Sfere, Ambiti a livelli), Poteri, Attributi e Abilità per famiglia col
+   * cassetto delle Specializzazioni, Tratti (gli oggetti), e Il Tiro.
+   */
+  prepareStatContext(context, actor) {
+    const localize = game.i18n.localize.bind(game.i18n);
+    const lang = game.i18n.lang;
+    const i18n = { localize, lang };
+    const tiro = tiroOf(this);
+
+    // Identità.
+    context.lineage = getLineage(actor);
+    context.lineageChoices = prepareLineageChoices(context.lineage, localize, lang);
+    const credo = String(actor.getFlag(MODULE_ID, "focus")?.credo ?? "");
+    context.credos = alphabetical(FOCUS_CREDOS.map((id) => ({ id, label: localize(`WOD5E_MAGE.Focus.Credos.${id}`), selected: id === credo })), lang);
+    context.credoLabel = FOCUS_CREDOS.includes(credo) ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "";
+    const credoChoice = actor.getFlag(MODULE_ID, "focus")?.credoSpheres ?? {};
+    context.credoSpheres = credoSphereBadges(credo, localize, credoChoice, actor.getFlag(MODULE_ID, "focus")?.credoFamily);
+    context.credoFree = isFreeCredo(credo);
+    context.credoSphereChoices = prepareCredoSphereChoices(credoChoice, localize);
+    context.playerName = String(actor.getFlag(MODULE_ID, "player") ?? "");
+    context.ritratti = prepareRitratti(actor.getFlag(MODULE_ID, RITRATTI_FLAG), actor.img);
+
+    // Salute e Condizioni.
+    context.salute = getSalute(actor);
+    context.condizioniRows = prepareConditionRows(actor.items);
+    context.condizioni = prepareCondizioni(actor.items);
+
+    // Risorse.
+    context.magickTrack = prepareMagickTrack(actor);
+    context.persistentMagickResources = getPersistentMagickResources(actor);
+    context.wheelAsBar = game.settings.get(MODULE_ID, "headerWheelMode") === "bar";
+    context.contraccolpo = getContraccolpo(actor);
+
+    // Magick: l'Areté, le Sfere possedute (scelte se in catena), gli Ambiti a sette livelli.
+    context.arete = getArete(actor);
+    context.spheres = prepareSpheres(actor, { localize, locale: lang }).selected
+      .map((sphere) => ({ ...sphere, chosen: tiro.spheres.includes(sphere.id) }));
+    context.scopeRows = prepareScopeRows(tiro, localize, { arete: context.arete.value });
+
+    // Poteri: quelli delle Sfere che ha, segnaposto finché non sono scritti.
+    context.poteri = preparePoteriRows(actor, tiro, localize);
+
+    // Attributi e Abilità per famiglia, coi sigilli e lo stato «scelto».
+    const groupLabels = { physical: "WOD5E.SPC.Physical", social: "WOD5E.SPC.Social", mental: "WOD5E.SPC.Mental" };
+    const attributes = applyTraitIcons(orderAttributes(context.sortedAttributes, { order: "group", lang }));
+    context.attributeGroups = Object.entries(attributes).map(([group, rows]) => ({
+      id: group,
+      label: localize(groupLabels[group] ?? group),
+      rows: (rows ?? []).map((attribute) => ({ ...attribute, chosen: tiro.attribute === attribute.id }))
+    }));
+    const specialtyNames = skillSpecialtyNames(actor);
+    const skills = applyTraitIcons(prepareEssentialSkillsByGroup(context.sortedSkills, i18n));
+    context.skillGroups = Object.entries(skills).map(([group, rows]) => ({
+      id: group,
+      label: localize(groupLabels[group] ?? group),
+      rows: (rows ?? []).map((skill) => {
+        const key = `skill:${skill.id}`;
+        const names = specialtyNames[skill.id] ?? [];
+        const slots = Array.from({ length: specialtySlots(skill.value) }, (_, index) => ({
+          index,
+          name: names[index] ?? "",
+          chosen: tiro.skill === key && tiro.specialty === names[index]
+        }));
+        return { ...skill, key, chosen: tiro.skill === key, hasSpecialties: slots.length > 0, slots };
+      })
+    }));
+    context.customSkills = prepareCustomSkills(actor).map((skill) => ({ ...skill, chosen: tiro.skill === `custom:${skill.id}` }));
+    context.specialties = prepareSpecialties(actor, i18n);
+
+    // Tratti: gli oggetti del personaggio in un elenco piatto, con la specie
+    // (Pregi, Difetti, Background, Equipaggiamento, altro) per i filtri.
+    const kinds = [
+      { id: "merit", label: localize("WOD5E_MAGE.Stat.TrattiPregi") },
+      { id: "flaw", label: localize("WOD5E_MAGE.Stat.TrattiDifetti") },
+      { id: "background", label: localize("WOD5E_MAGE.Stat.TrattiBackground") },
+      { id: "equipment", label: localize("WOD5E_MAGE.Stat.TrattiEquipaggiamento") },
+      { id: "other", label: localize("WOD5E_MAGE.Stat.TrattiAltri") }
+    ];
+    const kindOf = (item) => {
+      if (item.type === "feature") return ["merit", "flaw", "background"].includes(item.system?.featuretype) ? item.system.featuretype : "background";
+      if (["weapon", "armor", "gear"].includes(item.type)) return "equipment";
+      if (["boon", "trait", "customRoll"].includes(item.type)) return "other";
+      return null;
+    };
+    const rows = [];
+    for (const item of actor.items ?? []) {
+      const kindId = kindOf(item);
+      if (!kindId) continue;
+      const kind = kinds.find((entry) => entry.id === kindId);
+      const dice = traitDiceOf(actor, [item.id]);
+      rows.push({
+        id: item.id,
+        name: item.name,
+        img: item.img,
+        kind: kind.id,
+        kindLabel: kind.label,
+        dice: dice ? `${dice > 0 ? "+" : ""}${dice}` : "",
+        chosen: tiro.traits.includes(item.id),
+        hint: dice ? localize("WOD5E_MAGE.Tiro.TraitHintDice").replace("{dice}", String(dice)) : localize("WOD5E_MAGE.Tiro.TraitHint")
+      });
+    }
+    const kindRank = new Map(kinds.map((kind, index) => [kind.id, index]));
+    context.traitRows = rows.sort((a, b) => kindRank.get(a.kind) - kindRank.get(b.kind) || a.name.localeCompare(b.name, lang));
+    context.traitKinds = kinds.filter((kind) => rows.some((row) => row.kind === kind.id));
+
+    // Il Tiro.
+    context.tiro = prepareTiroContext(actor, tiro);
+
+    // Il memo di creazione e i Bonus scritti, sotto i riquadri.
+    context.bonuses = prepareBonuses(actor);
+    context.creationSummary = prepareCreationSummary(actor, context.arete.value);
+    return context;
+  }
+
   async _preparePartContext(partId, context, options) {
     context = { ...(await super._preparePartContext(partId, context, options)) };
 
     const actor = this.actor;
 
-    // Traits: the system list gives way to the eighteen Essential Skills,
-    // one alphabetical file over three columns. The page also hosts the
-    // Wheel widget, so it needs that context too.
+    // La prima pagina (16/9): nove riquadri, il selettore del tiro composto.
     if (partId === "stats") {
-      // Ogni voce porta il suo sigillo, a sinistra del nome.
-      const traitsColumns = game.settings.get(MODULE_ID, "traitsLayout") === "columns";
-      const traitsOrder = game.settings.get(MODULE_ID, "traitsOrder") === "group" ? "group" : "alpha";
-      const i18n = { localize: game.i18n.localize.bind(game.i18n), lang: game.i18n.lang };
-      if (traitsColumns) {
-        // A colonne (6/9): una fila sola, alfabetica o per gruppo (Fisici,
-        // Sociali, Mentali); le liste diventano trasparenti nel CSS.
-        context.sortedSkills = applyTraitIcons(traitsOrder === "group"
-          ? prepareEssentialSkillsByGroup(context.sortedSkills, i18n)
-          : { tutti: prepareEssentialSkillList(context.sortedSkills, i18n) });
-        context.sortedAttributes = applyTraitIcons(orderAttributes(context.sortedAttributes, { order: traitsOrder, lang: i18n.lang }));
-      } else {
-        context.sortedSkills = applyTraitIcons(prepareEssentialSkills(context.sortedSkills, i18n));
-        context.sortedAttributes = applyTraitIcons(context.sortedAttributes);
-      }
-      context.traitsOrderGroup = traitsOrder === "group";
-      // Le Abilità Specifiche del giocatore, sotto le essenziali.
-      context.customSkills = prepareCustomSkills(actor);
-      context.arete = getArete(actor);
-      context.magickTrack = prepareMagickTrack(actor);
-      // Quintessenza generata e Paradosso permanente vivono nella Ruota.
-      context.persistentMagickResources = getPersistentMagickResources(actor);
-      context.bonuses = prepareBonuses(actor);
-      // Le Condizioni addosso: righe con simbolo, nome, cos'è e dadi.
-      context.condizioniRows = prepareConditionRows(actor.items);
-      context.condizioni = prepareCondizioni(actor.items);
-      // Le Specializzazioni delle Abilità, lette dai bonuses del sistema.
-      context.specialties = prepareSpecialties(actor, {
-        localize: game.i18n.localize.bind(game.i18n),
-        lang: game.i18n.lang
-      });
-      context.wheelAsBar = game.settings.get(MODULE_ID, "headerWheelMode") === "bar";
-      context.traitsColumns = game.settings.get(MODULE_ID, "traitsLayout") === "columns";
-      // Negare il Contraccolpo: una volta per sessione, dalla Ruota.
-      context.contraccolpo = getContraccolpo(actor);
-      // Il memo di creazione, in fondo alla pagina: conta e verifica.
-      context.creationSummary = prepareCreationSummary(actor, getArete(actor).value);
+      context = this.prepareStatContext(context, actor);
     }
 
-    // La testata: la riga dell'appartenenza sotto il nome, e la Salute.
+    // La testata è vuota: resta solo il gancio del sistema.
     if (partId === "header") {
-      context.lineage = getLineage(actor);
       context.salute = getSalute(actor);
-      // L'Appartenenza a tendina, in alto a destra: tendine e Credo.
-      const localize = game.i18n.localize.bind(game.i18n);
-      context.lineageChoices = prepareLineageChoices(context.lineage, localize, game.i18n.lang);
-      const credo = String(actor.getFlag(MODULE_ID, "focus")?.credo ?? "");
-      // I Credi in ordine alfabetico della lingua (9/9).
-      context.credos = alphabetical(FOCUS_CREDOS.map((id) => ({ id, label: localize(`WOD5E_MAGE.Focus.Credos.${id}`), selected: id === credo })), game.i18n.lang);
-      context.credoLabel = FOCUS_CREDOS.includes(credo) ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "";
-      const credoChoice = actor.getFlag(MODULE_ID, "focus")?.credoSpheres ?? {};
-      // Delle due Sfere del Credo una sola è di famiglia (11/9): si sceglie cliccando il simbolo.
-      context.credoSpheres = credoSphereBadges(credo, localize, credoChoice, actor.getFlag(MODULE_ID, "focus")?.credoFamily);
-      // Potere e Scienza: le due Sfere di famiglia le sceglie il giocatore.
-      context.credoFree = isFreeCredo(credo);
-      context.credoSphereChoices = prepareCredoSphereChoices(credoChoice, localize);
-      // Il nome del giocatore, sotto quello del personaggio.
-      context.playerName = String(actor.getFlag(MODULE_ID, "player") ?? "");
     }
 
     if (partId === "magick") {
