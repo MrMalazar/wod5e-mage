@@ -27,6 +27,294 @@
   --mage-dot-color: var(--mage-oro);
   --mage-dot-border: var(--mage-oro-tenue);
   --mage-dot-active: var(--mage-oro);
+  /* La prima pagina (16/9): i fondi dei riquadri e delle righe, la scelta in viola. */
+  --mage-riq-fondo: linear-gradient(#2a2314, #1f1a10);
+  --mage-riga-fondo: #2f2a1f;
+  --mage-riga-sorvolo: #3a352c;
+  --mage-scelta-tenue: #3b2a55;   /* la riga dell'Ambito scelto, il premio acceso */
+  --mage-scelta-testo: #fff;      /* il testo sulla scelta viola */
+  --mage-scelta-tenue-testo: #fff; /* il testo sulla scelta tenue */
+  --mage-cassetto-fondo: #1a160f;
+  --mage-velo: rgb(20 16 10 / 78%); /* i tasti posati sul ritratto */
+  --mage-su-oro: #1a140a;         /* il testo sui tasti pieni d'oro */
+}
+
+/* ==========================================================================
+   LA MODALITÀ CHIARA (Blue, 16/9): la scheda coi colori del manuale
+   (01_DECISIONI/stile/Palette_M6.html). Viola per la gerarchia e i simboli,
+   oro solo come linea, crema per le superfici, grigio per il commento; il
+   rosso mattone solo per il Paradosso. Si accende dal tasto accanto ai tre
+   pallini della finestra (impostazione del giocatore, sheetTheme).
+   ========================================================================== */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara {
+  --mortal-color-1: #282051;      /* viola profondo: barra del titolo e livrea */
+  --mortal-color-2: #3B336B;      /* viola medio */
+  --mortal-color-3: #F6F2E6;
+  --mortal-color-4: #FBF8F0;
+  --mage-tab-nav-bg: #A98B4F;     /* oro testatina: la linguetta accesa */
+  --mage-oro: #B3924A;            /* l'oro del manuale: linea, mai campitura */
+  --mage-oro-scuro: #B3924A;
+  --mage-oro-tenue: #D9C28A;      /* l'oro chiaro dei filetti */
+  --mage-oro-chiaro: #3B336B;     /* dove il tema scuro scriveva in oro chiaro, qui parla il viola medio */
+  --mage-carta: #FFFFFF;
+  --mage-inchiostro: #1E1B2E;
+  --mage-inchiostro-tenue: #6E6E7A;
+  --mage-testo: #1E1B2E;
+  --mage-tenue: #6E6E7A;          /* grigio ardesia: il commento a margine */
+  --mage-incavo: #F6F2E6;         /* crema riquadri: i fondi incassati */
+  --mage-velluto: #ECE7F4;        /* lilla chiarissimo: l'unica campitura viola */
+  --mage-viola: #282051;
+  --mage-viola-chiaro: #7A6FA0;
+  --mage-viola-dado: #3B336B;
+  --mage-rosso: #A4444A;          /* rosso mattone: solo il Paradosso */
+  --mage-rosso-vivo: #A4444A;
+  --mage-rosso-chiaro: #7A3540;
+  --mage-nero-dado: #FAF0F0;
+  --mage-dot-color: #282051;      /* i pallini pieni: viola, come i sigilli */
+  --mage-dot-border: #282051;
+  --mage-dot-active: #282051;
+  --mage-riq-fondo: #F6F2E6;
+  --mage-riga-fondo: #FBF8F0;
+  --mage-riga-sorvolo: #ECE7F4;
+  --mage-scelta-tenue: #DCD6EC;
+  --mage-scelta-testo: #F6F2E6;   /* «testo sulla pillola attiva» */
+  --mage-scelta-tenue-testo: #282051; /* sul lilla della scelta tenue parla il viola */
+  --mage-cassetto-fondo: #FBF8F0;
+  --mage-velo: rgb(251 248 240 / 85%);
+  --mage-su-oro: #1E1B2E;
+  background: #FBF8F0;
+  color: var(--mage-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .window-content {
+  background: #FBF8F0;
+  color: var(--mage-testo);
+}
+
+/* La barra del titolo e la barra delle linguette in viola profondo, le
+   linguette spente in crema col simbolo viola, accesa in oro testatina. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .window-header {
+  background: #282051;
+  color: #F6F2E6;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tabs .sheet-tabs {
+  background: #282051;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .sheet-tabs > [data-tab] .navicon,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .sheet-tabs .lock-btn {
+  background-color: #F6F2E6;
+  border-color: #D9C28A;
+  color: #282051;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .sheet-tabs > [data-tab] .navicon :is(i, .wod5e-symbol) {
+  color: #282051;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .sheet-tabs > [data-tab].active .navicon {
+  background: #A98B4F;
+  border-color: #B3924A;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .sheet-tabs > [data-tab].active .navicon :is(i, .wod5e-symbol) {
+  color: #1E1B2E;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tab-label,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .sheet-tabs > [data-tab].active .wod5e-mage-tab-label {
+  color: #F6F2E6;
+  text-shadow: none;
+}
+
+/* I riquadri: crema con la cornice oro; i titoli in viola profondo con la
+   riga sotto; gli occhielli nell'oro scuro delle microetichette. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riq {
+  box-shadow: 0 1px 0 #E0D5B8;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riq-title {
+  border-bottom-color: #B3924A;
+  color: #282051;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riq-occhiello {
+  color: #8A6D2F;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riq-occhiello::after {
+  border-top-color: #E0D5B8;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga {
+  border-color: #E0D5B8;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga.scelta,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pastiglia.scelta {
+  border-color: #282051;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga-nome:hover {
+  color: #8A6D2F;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara i.wod5e-mage-riga-icona,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga-arete .wod5e-mage-riga-nome {
+  color: #282051;
+}
+
+/* L'Appartenenza sotto i nomi: la tendina in viola sulla crema velata. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-appartenenza > summary {
+  color: #282051;
+}
+
+/* I sigilli neri dei tratti e delle Sfere stanno bene sulla crema: niente disco d'oro dietro. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-sfera-sigillo {
+  background: transparent;
+  padding: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ambito-livello {
+  background: #FBF8F0;
+  border-color: #C7C7D6;
+  color: #1E1B2E;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ambito-livello.lit {
+  background: #D9C28A;
+  border-color: #B3924A;
+  color: #1E1B2E;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ambito-livello.active {
+  background: #282051;
+  border-color: #282051;
+  box-shadow: none;
+  color: #F6F2E6;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-cassetto {
+  border-color: #B3924A;
+  box-shadow: 0 6px 14px rgb(40 32 81 / 22%);
+}
+
+/* La Ruota: i nodi vuoti in crema col bordo grigio-lilla, l'oro pieno per
+   la Quintessenza, il rosso mattone per il Paradosso. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-magick-node,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-magick-cell {
+  background: #FBF8F0;
+  border-color: #C7C7D6;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-magick-node.quintessence,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-magick-cell.quintessence {
+  background: #B3924A;
+  border-color: #8A6D2F;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-magick-node.paradox,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-magick-cell.paradox {
+  background: #A4444A;
+  border-color: #7A3540;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-magick-arc path {
+  stroke: #B3924A;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ruota-conto.quintessence > b,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ruota-conto.quintessence .wod5e-mage-ruota-conto-nome {
+  color: #8A6D2F;
+}
+
+/* La Salute: le caselle su carta, i segni in inchiostro. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-salute-cell {
+  background: #FFFFFF;
+  border-color: #B3924A;
+  color: #1E1B2E;
+}
+
+/* Il Tiro: i numeri grandi in viola, i dadi in viola medio, l'impossibile in rosso mattone. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-riserva > b {
+  color: #282051;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-dadi > b {
+  color: #3B336B;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-comandi > b {
+  color: #282051;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-etichetta {
+  color: #3B336B;
+}
+
+/* Azzera, posato sulla fascia viola del tipo: la crema velata vuole il viola sopra. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-azzera {
+  color: #282051;
+}
+
+/* I tasti di casa (Nuova sessione, Cambio Scena, i quattro della Salute, i
+   Dettagli): crema col bordo oro, testo inchiostro. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-new-session,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-salute-buttons > button,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-contraccolpo-button,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-wheel-mode,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riq-tasto-piccolo,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-grimorio-chiudi {
+  background: #FFFFFF;
+  border-color: #B3924A;
+  color: #1E1B2E;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riq-cerca {
+  background: #FFFFFF;
+  border-color: #E0D5B8;
+}
+
+/* I titoli delle altre pagine (Modesto in oro sul fondo scuro) passano al viola. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-section-title,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-section-title > span,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .tab :is(.field-header, .resource-header, .header-label, .item-header) {
+  color: #282051;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-section-title::before,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-section-title::after {
+  border-top-color: #B3924A;
+}
+
+/* La tavola degli Ambiti (pagina Magick): la riga dei livelli in oro
+   testatina con testo inchiostro, le fasce in viola medio, i nomi sul lilla,
+   le celle bianche e crema alternate, i numeri nell'oro scuro. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-scope-table {
+  --tavola-livelli: #A98B4F;
+  --tavola-livelli-testo: #1E1B2E;
+  --tavola-fascia: #3B336B;
+  --tavola-fascia-testo: #F6F2E6;
+  --tavola-nome: #ECE7F4;
+  --tavola-nome-testo: #282051;
+  --tavola-lettura-testo: #6E6E7A;
+  --tavola-cella: #FFFFFF;
+  --tavola-cella-alt: #FBF8F0;
+  --tavola-testo: #1E1B2E;
+  --tavola-numero: #8A6D2F;
+}
+
+/* Il piede col tipo (Risvegliato) in viola. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .type-banner,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .actor-type-banner {
+  background: #282051;
+  color: #F6F2E6;
+}
+
+/* Il tasto del tema accanto ai tre pallini della finestra. */
+.wod5e-mage.wod5e.actor.sheet .window-header .wod5e-mage-tema {
+  cursor: pointer;
 }
 
 /* Pallini pieni in oro acceso.
@@ -217,7 +505,7 @@
 
 /* L'Appartenenza a tendina, in alto a destra della testata. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-appartenenza {
-  background: rgb(20 16 10 / 72%);
+  background: var(--mage-velo);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 4px;
   margin: 0.35rem 0.5rem 0 0;
@@ -397,8 +685,8 @@
 /* I glifi della Salute: le stesse caselle, in piccolo, dentro il testo.
    Regole globali: servono nella legenda, nel menù e nella tavola degli Ambiti. */
 .wod5e-mage-salute-glyph {
-  --salute-segno: #f5e7b2;
-  border: 1px solid #98772b;
+  --salute-segno: var(--mage-oro-chiaro);
+  border: 1px solid var(--mage-oro-scuro);
   display: inline-block;
   height: 12px;
   margin: 0 0.1rem;
@@ -497,7 +785,7 @@
 
 /* La scelta del segno: un menù piccolo dove hai cliccato, solo simboli. */
 .wod5e-mage-salute-menu {
-  background: #17120f;
+  background: var(--mage-nero-dado);
   border: 1px solid var(--mage-oro, #d9a827);
   border-radius: 4px;
   box-shadow: 0 4px 14px rgb(0 0 0 / 60%);
@@ -707,7 +995,7 @@
 .wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-sphere-specialty > select {
   --input-text-color: var(--mage-oro-chiaro);
   align-self: start;
-  background-color: #17120f;
+  background-color: var(--mage-nero-dado);
   border: 1px solid var(--mage-oro-scuro);
   color: var(--mage-oro-chiaro);
   font-size: 0.85rem;
@@ -719,7 +1007,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-sphere-specialty > select option,
 .wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-sphere-specialty > select optgroup {
-  background: #17120f;
+  background: var(--mage-nero-dado);
   color: var(--mage-oro-chiaro);
 }
 
@@ -1210,7 +1498,7 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-toggle.lit {
   background: var(--mage-oro);
   border-color: var(--mage-oro);
-  color: #17120f;
+  color: var(--mage-nero-dado);
 }
 
 /* I segni della riga: il lucchetto rosso del Paradosso bloccato, la Durata,
@@ -1563,7 +1851,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument.outside > select {
-  border-color: #d0524a;
+  border-color: var(--mage-rosso-vivo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-sphere {
@@ -1674,9 +1962,9 @@
 }
 
 .wod5e-mage-roll-victory {
-  border: 1px solid #d9a827;
+  border: 1px solid var(--mage-oro);
   border-radius: 3px;
-  color: #d9a827;
+  color: var(--mage-oro);
   font-family: "Modesto Condensed", serif;
   font-size: 1.35rem;
   font-weight: 700;
@@ -1717,14 +2005,14 @@
 }
 
 .wod5e-mage-roll-symbol > i {
-  color: #d9a827;
+  color: var(--mage-oro);
   font-size: 1rem;
   text-align: center;
   width: 22px;
 }
 
 .wod5e-mage-roll-symbol > b {
-  color: #d9a827;
+  color: var(--mage-oro);
   font-size: 1rem;
 }
 
@@ -1740,7 +2028,7 @@
 }
 
 .wod5e-mage-roll-card b {
-  color: #d9a827;
+  color: var(--mage-oro);
 }
 
 .wod5e-mage-roll-note {
@@ -1777,16 +2065,16 @@
 /* Dado dei successi: il viola dell'arcano, coi segni d'oro (canone 20/8). */
 .roll-img.mage-dice,
 .mage-dice-preview.mage-dice {
-  background: #2f2153; /* --mage-viola-dado */
-  border-color: #b58ade; /* --mage-viola-chiaro */
+  background: var(--mage-viola-dado); /* --mage-viola-dado */
+  border-color: var(--mage-viola-chiaro); /* --mage-viola-chiaro */
 }
 
 /* Dado di Paradosso: corpo nero, segni e bordo rossi (canone 20/8). */
 .roll-img.paradox-dice,
 .mage-dice-preview.paradox-dice,
 .paradox-dice.paradox-dice-empty {
-  background: #17120f; /* --mage-nero-dado */
-  border-color: #b5433c; /* --mage-rosso */
+  background: var(--mage-nero-dado); /* --mage-nero-dado */
+  border-color: var(--mage-rosso); /* --mage-rosso */
 }
 
 /* Le facce vuote non caricano asset: il quadrato viene disegnato dal CSS. */
@@ -1808,7 +2096,7 @@
 }
 
 .paradox-dice.paradox-dice-empty:not(.roll-img):not(.mage-dice-preview) {
-  border: 1px solid #b5433c; /* --mage-rosso */
+  border: 1px solid var(--mage-rosso); /* --mage-rosso */
   border-radius: 4px;
   height: 40px;
   width: 40px;
@@ -2403,7 +2691,7 @@
 
 .wod5e-mage-arete-toggle input[type="checkbox"]:checked + .wod5e-mage-arete-toggle-value,
 .wod5e-mage-arete-toggle:has(input[type="checkbox"]:checked) .wod5e-mage-arete-toggle-value {
-  color: #d9a827;
+  color: var(--mage-oro);
   opacity: 1;
 }
 
@@ -4687,7 +4975,7 @@
    pagina, speculare a Nuova sessione (6/9). */
 .wod5e-mage.wod5e.actor.sheet button.wod5e-mage-header-arete-roll {
   align-items: center;
-  background: rgb(20 16 10 / 72%);
+  background: var(--mage-velo);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 3px;
   cursor: pointer;
@@ -4861,7 +5149,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-new-session {
-  background: rgb(20 16 10 / 72%);
+  background: var(--mage-velo);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 3px;
   color: var(--mage-oro-chiaro);
@@ -5480,7 +5768,7 @@
   background: var(--mage-oro);
   border-radius: 2px;
   bottom: -2px;
-  color: #17120f;
+  color: var(--mage-nero-dado);
   font-size: 0.6rem;
   font-weight: 700;
   line-height: 1;
@@ -5511,7 +5799,7 @@
 }
 
 .application.wod5e-mage-condizioni-master .window-content {
-  background: #17120f;
+  background: var(--mage-nero-dado);
   color: var(--mage-testo, #e6dcc8);
 }
 
@@ -5772,12 +6060,12 @@
 }
 
 .dice-icons img.die.wod5e-mage-volonta-pick.picked {
-  box-shadow: 0 0 6px #d9a827;
-  outline: 2px solid #d9a827;
+  box-shadow: 0 0 6px var(--mage-oro);
+  outline: 2px solid var(--mage-oro);
 }
 
 .wod5e-mage-roll-note-volonta {
-  color: #d9a827;
+  color: var(--mage-oro);
   font-style: normal;
   font-weight: 700;
 }
@@ -6460,7 +6748,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-type.vulgar,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-type.witnesses {
-  border-color: #b5433c;
+  border-color: var(--mage-rosso);
   color: #f0b3ae;
 }
 
@@ -6576,7 +6864,7 @@
 
 /* L'incantesimo in chat: il nome grande, poi le righe. */
 .wod5e-mage-incantesimo-chat-name {
-  color: #f5e7b2;
+  color: var(--mage-oro-chiaro);
   font-size: 1.05rem;
   font-weight: 700;
   margin: 0 0 0.25rem;
@@ -6638,7 +6926,7 @@
 
 .wod5e-mage-shared-spell .wod5e-mage-incantesimo-type.vulgar,
 .wod5e-mage-shared-spell .wod5e-mage-incantesimo-type.witnesses {
-  border-color: #b5433c;
+  border-color: var(--mage-rosso);
   color: #f0b3ae;
 }
 
@@ -6760,15 +7048,15 @@
    ========================================================================== */
 .wod5e-mage-scope-table {
   --tavola-livelli: #b8902a;
-  --tavola-livelli-testo: #17120f;
+  --tavola-livelli-testo: var(--mage-nero-dado);
   --tavola-fascia: #4a3610;
-  --tavola-fascia-testo: #f5e7b2;
+  --tavola-fascia-testo: var(--mage-oro-chiaro);
   --tavola-nome: #2d2618;
-  --tavola-nome-testo: #f5e7b2;
+  --tavola-nome-testo: var(--mage-oro-chiaro);
   --tavola-lettura-testo: #c9bb96;
   --tavola-cella: #1a1712;
   --tavola-cella-alt: #201c15;
-  --tavola-testo: #e6dcc2;
+  --tavola-testo: var(--mage-testo);
   --tavola-numero: #e2b53a;
 }
 
@@ -7373,7 +7661,7 @@
 }
 
 .wod5e-mage-roll-trait > i {
-  color: #d9a827;
+  color: var(--mage-oro);
   font-size: 1.2rem;
   height: 30px;
   line-height: 30px;
@@ -7386,7 +7674,7 @@
 }
 
 .wod5e-mage-roll-plus {
-  color: #d9a827;
+  color: var(--mage-oro);
   font-size: 1em;
 }
 
@@ -7409,7 +7697,7 @@
 }
 
 .wod5e-mage-roll-key {
-  color: #d9a827;
+  color: var(--mage-oro);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.07em;
@@ -7457,7 +7745,7 @@
 
 .wod5e-mage-roll-actions > .wod5e-mage-roll-action {
   background: #2b2418;
-  border: 1px solid #98772b;
+  border: 1px solid var(--mage-oro-scuro);
   border-radius: 3px;
   color: #f5e7b2;
   cursor: pointer;
@@ -7474,8 +7762,8 @@
 }
 
 .wod5e-mage-roll-actions > .wod5e-mage-roll-action:hover:not(:disabled) {
-  border-color: #d9a827;
-  box-shadow: 0 0 4px #d9a827;
+  border-color: var(--mage-oro);
+  box-shadow: 0 0 4px var(--mage-oro);
 }
 
 .wod5e-mage-roll-actions > .wod5e-mage-roll-action:disabled {
@@ -7489,7 +7777,7 @@
 
 .wod5e-mage-roll-actions > .wod5e-mage-sforzo-button {
   background: rgb(224 90 90 / 12%);
-  border-color: #b5433c;
+  border-color: var(--mage-rosso);
   color: #f1dcd8;
 }
 
@@ -7537,7 +7825,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-cambio-scena-count {
-  background: #b5433c;
+  background: var(--mage-rosso);
   border-radius: 999px;
   color: #fff;
   display: inline-block;
@@ -7883,7 +8171,7 @@
   min-height: 3.2em;
   padding: 0.25em 0.2em;
   margin-right: 0.5em;
-  border: 1px solid #b5433c;
+  border: 1px solid var(--mage-rosso);
   border-radius: 4px;
   background: #0d0b12;
   color: #e05a5a;
@@ -7901,9 +8189,9 @@
   text-transform: uppercase;
   font-weight: 700;
 }
-.wod5e-mage-reset-tasto:hover:not(:disabled) { background: #b5433c; color: #0d0b12; border-color: #e05a5a; box-shadow: 0 0 6px #e05a5a; }
+.wod5e-mage-reset-tasto:hover:not(:disabled) { background: var(--mage-rosso); color: #0d0b12; border-color: #e05a5a; box-shadow: 0 0 6px #e05a5a; }
 .wod5e-mage-reset-tasto:disabled { opacity: 0.4; cursor: not-allowed; }
-.wod5e-mage-reset-all { border-color: #b5433c !important; background: #0d0b12 !important; color: #e05a5a !important; }
+.wod5e-mage-reset-all { border-color: var(--mage-rosso) !important; background: #0d0b12 !important; color: #e05a5a !important; }
 .wod5e-mage-reset-toggle {
   display: inline-flex;
   align-items: center;
@@ -8029,7 +8317,7 @@
 
 /* Il riquadro. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq {
-  background: linear-gradient(#2a2314, #1f1a10);
+  background: var(--mage-riq-fondo);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 8px;
   box-sizing: border-box;
@@ -8126,7 +8414,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga {
   align-items: center;
-  background: #2f2a1f;
+  background: var(--mage-riga-fondo);
   border: 1px solid transparent;
   border-radius: 6px;
   box-sizing: border-box;
@@ -8138,7 +8426,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga:hover {
-  background: #3a352c;
+  background: var(--mage-riga-sorvolo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.scelta {
@@ -8179,7 +8467,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.scelta .wod5e-mage-riga-nome {
-  color: #fff;
+  color: var(--mage-scelta-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome-fermo {
@@ -8254,7 +8542,11 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito.scelta {
-  background: #3b2a55;
+  background: var(--mage-scelta-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito.scelta .wod5e-mage-riga-nome {
+  color: var(--mage-scelta-tenue-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-livelli {
@@ -8289,20 +8581,20 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-livello.lit {
   background: var(--mage-oro-tenue);
-  color: #fff;
+  color: var(--mage-scelta-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-livello.active {
   background: var(--mage-viola);
   border-color: var(--mage-viola-chiaro);
   box-shadow: 0 0 5px var(--mage-viola-chiaro);
-  color: #fff;
+  color: var(--mage-scelta-testo);
 }
 
 /* Il cassetto delle Specializzazioni: al sorvolo dell'Abilità, sopra la riga
    sotto, tre pastiglie; un posto vuoto è tratteggiato e aggiunge. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-cassetto {
-  background: #1a160f;
+  background: var(--mage-cassetto-fondo);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 6px;
   box-shadow: 0 6px 14px rgb(0 0 0 / 55%);
@@ -8327,7 +8619,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia {
   align-items: stretch;
-  background: #2f2a1f;
+  background: var(--mage-riga-fondo);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 12px;
   box-sizing: border-box;
@@ -8361,7 +8653,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia.scelta .wod5e-mage-pastiglia-nome {
-  color: #fff;
+  color: var(--mage-scelta-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia.vuota {
@@ -8473,6 +8765,10 @@
   box-shadow: none;
 }
 
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga.scelta {
+  color: var(--mage-scelta-testo);
+}
+
 .wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga[hidden] {
   display: none;
 }
@@ -8489,7 +8785,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.scelta .wod5e-mage-riga-spunta {
   background: var(--mage-oro);
-  border-color: #fff;
+  border-color: var(--mage-scelta-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome-testo {
@@ -8509,7 +8805,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.scelta .wod5e-mage-riga-coda {
-  color: #e8dcf5;
+  color: var(--mage-scelta-testo);
+  opacity: 0.85;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-potere.segnaposto .wod5e-mage-riga-nome-testo {
@@ -8518,14 +8815,14 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.scelta.segnaposto .wod5e-mage-riga-nome-testo {
-  color: #fff;
+  color: var(--mage-scelta-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tasto-largo {
   background: var(--mage-oro-scuro);
   border: 1px solid var(--mage-oro);
   border-radius: 6px;
-  color: #1a140a;
+  color: var(--mage-su-oro);
   cursor: pointer;
   flex: 0 0 auto;
   font-size: 0.8rem;
@@ -8562,7 +8859,7 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-filtro.active {
   background: var(--mage-oro-scuro);
   border-color: var(--mage-oro);
-  color: #1a140a;
+  color: var(--mage-su-oro);
 }
 
 /* Identità: i due tasti sopra, il ritratto a misura fissa (non segue la
@@ -8613,7 +8910,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ritratto-tasti > button {
   align-items: center;
-  background: rgb(20 16 10 / 78%);
+  background: var(--mage-velo);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 4px;
   color: var(--mage-testo);
@@ -8891,7 +9188,7 @@
   background: var(--mage-viola);
   border: 1px solid var(--mage-viola-chiaro);
   border-radius: 6px;
-  color: #fff;
+  color: var(--mage-scelta-testo);
   display: flex;
   font-size: 0.88rem;
   font-weight: 700;
@@ -8905,14 +9202,14 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tiro:not(.magick) .wod5e-mage-tiro-tipo {
-  background: #2f2a1f;
+  background: var(--mage-riga-fondo);
   border-color: var(--mage-oro-tenue);
   color: var(--mage-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-azzera {
-  background: rgb(20 16 10 / 45%);
-  border: 1px solid rgb(255 255 255 / 35%);
+  background: var(--mage-velo);
+  border: 1px solid rgb(128 128 128 / 45%);
   border-radius: 10px;
   color: inherit;
   cursor: pointer;
@@ -8975,7 +9272,7 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-riga {
   align-items: center;
-  background: #2f2a1f;
+  background: var(--mage-riga-fondo);
   border: 1px solid transparent;
   border-radius: 6px;
   display: flex;
@@ -8990,7 +9287,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-premio.acceso {
-  background: #3b2a55;
+  background: var(--mage-scelta-tenue);
   border-color: var(--mage-viola-chiaro);
 }
 
@@ -9055,7 +9352,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza {
-  background: #2f2a1f;
+  background: var(--mage-riga-fondo);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 6px;
   color: var(--mage-testo);
@@ -9069,9 +9366,9 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza.acceso {
-  background: #3b2a55;
+  background: var(--mage-scelta-tenue);
   border-color: var(--mage-viola-chiaro);
-  color: #fff;
+  color: var(--mage-scelta-tenue-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasti {
@@ -9086,7 +9383,7 @@
   background: var(--mage-viola);
   border: 1px solid var(--mage-viola-chiaro);
   border-radius: 6px;
-  color: #fff;
+  color: var(--mage-scelta-testo);
   cursor: pointer;
   font-size: 0.76rem;
   font-weight: 700;
@@ -9140,7 +9437,7 @@
 
 /* Il memo di creazione e i Bonus, sotto i riquadri, chiusi. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione {
-  background: linear-gradient(#2a2314, #1f1a10);
+  background: var(--mage-riq-fondo);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 8px;
   flex: 0 0 auto;

@@ -84,6 +84,7 @@ import {
   traitDiceOf
 } from "../tiro-scheda.js";
 import { onRitrattoAdd, onRitrattoNext, onRitrattoRemove, prepareRitratti, RITRATTI_FLAG } from "../ritratti.js";
+import { altroTema, applicaTema, TEMA_AZIONE, TEMA_SETTING, TEMA_TASTO_CLASSE } from "../tema.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
 import {
@@ -125,6 +126,19 @@ async function onWheelModeToggle(event) {
   const current = game.settings.get(MODULE_ID, "headerWheelMode");
   await game.settings.set(MODULE_ID, "headerWheelMode", current === "bar" ? "wheel" : "bar");
   this.render();
+}
+
+/**
+ * Il tasto del tema accanto ai tre pallini (16/9): gira l'impostazione del
+ * giocatore; è l'impostazione, cambiando, a rivestire tutte le schede del
+ * Mago aperte (MageActorSheet.applicaTemaOvunque), senza render.
+ */
+async function onTemaToggle(event) {
+  event?.preventDefault?.();
+  const next = altroTema(game.settings.get(MODULE_ID, TEMA_SETTING));
+  await game.settings.set(MODULE_ID, TEMA_SETTING, next);
+  // L'impostazione lo fa già cambiando; rifarlo non costa (è solo una classe).
+  MageActorSheet.applicaTemaOvunque(next);
 }
 
 /**
@@ -257,6 +271,8 @@ export class MageActorSheet extends MortalActorSheet {
       credoFamilyPick: onCredoFamilyPick,
       sphereSelectionChange: onSphereSelectionChange,
       wheelModeToggle: onWheelModeToggle,
+      // La modalità chiara (16/9): il tasto accanto ai tre pallini della finestra.
+      [TEMA_AZIONE]: onTemaToggle,
       condizioneToggle: onCondizioneToggle,
       wisdomResourceChange: onWisdomResourceChange,
       wisdomRoll: onWisdomRoll,
@@ -440,9 +456,38 @@ export class MageActorSheet extends MortalActorSheet {
     return controls;
   }
 
+  /**
+   * La cornice della finestra si disegna una volta sola: qui entra il tasto
+   * del tema (16/9), a sinistra dei tre pallini (o della X, se i pallini
+   * mancano). Icona ed etichetta gliele mette applicaTema a ogni render.
+   */
+  async _renderFrame(options) {
+    const frame = await super._renderFrame(options);
+    const anchor = this.window?.controls ?? this.window?.close
+      ?? frame.querySelector("button[data-action=toggleControls]") ?? frame.querySelector("button[data-action=close]");
+    if (anchor && !frame.querySelector(`.${TEMA_TASTO_CLASSE}`)) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.classList.add("header-control", "icon", "fa-solid", TEMA_TASTO_CLASSE);
+      button.dataset.action = TEMA_AZIONE;
+      anchor.before(button);
+    }
+    return frame;
+  }
+
+  /** Il tema del giocatore (16/9) su tutte le schede del Mago aperte, senza render. */
+  static applicaTemaOvunque(tema = game.settings.get(MODULE_ID, TEMA_SETTING)) {
+    const localize = (key) => game.i18n.localize(key);
+    for (const app of foundry.applications?.instances?.values?.() ?? []) {
+      if (app instanceof MageActorSheet) applicaTema(app.element, tema, { localize });
+    }
+  }
+
   /** Dopo ogni render la pagina Esperienza ricabla il suo calcolatore. */
   _onRender(context, options) {
     super._onRender?.(context, options);
+    // La modalità chiara (16/9): la classe sulla finestra e il tasto in testata.
+    applicaTema(this.element, game.settings.get(MODULE_ID, TEMA_SETTING), { localize: (key) => game.i18n.localize(key) });
     // La modalità creazione (11/9): con la spunta accesa si vedono i tasti di
     // reset e la X che azzera un tratto; spenta, la X sparisce.
     this.element?.classList.toggle("wod5e-mage-creazione", Boolean(context.creazioneReset));

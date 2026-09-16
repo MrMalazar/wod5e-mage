@@ -1,0 +1,94 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { altroTema, applicaTema, isChiaro, normalizeTema, TEMA_AZIONE, TEMA_CLASSE, TEMA_SETTING, TEMA_TASTO_CLASSE, temaTasto, TEMI } from "../scripts/tema.js";
+
+// I due temi; un valore vecchio o vuoto torna allo scuro.
+assert.deepEqual(TEMI, ["scuro", "chiaro"]);
+assert.equal(normalizeTema("chiaro"), "chiaro");
+assert.equal(normalizeTema(undefined), "scuro");
+assert.equal(normalizeTema("dark"), "scuro");
+assert.equal(isChiaro("chiaro"), true);
+assert.equal(isChiaro(""), false);
+assert.equal(altroTema("scuro"), "chiaro");
+assert.equal(altroTema("chiaro"), "scuro");
+assert.equal(altroTema(null), "chiaro");
+
+// Il tasto mostra dove porta: il sole sullo scuro, la luna sul chiaro.
+assert.deepEqual(temaTasto("scuro"), { next: "chiaro", icon: "fa-sun", label: "WOD5E_MAGE.Tema.Chiaro" });
+assert.deepEqual(temaTasto("chiaro"), { next: "scuro", icon: "fa-moon", label: "WOD5E_MAGE.Tema.Scuro" });
+
+// Un finto frame: la classe sulla finestra, icona e attributi sul tasto.
+function fakeElement(withButton = true) {
+  const classes = new Set();
+  const attrs = {};
+  const button = {
+    classList: { add: (...c) => c.forEach((x) => classes.add(x)), remove: (...c) => c.forEach((x) => classes.delete(x)), has: (c) => classes.has(c) },
+    setAttribute: (k, v) => { attrs[k] = v; },
+    attrs,
+    classes
+  };
+  const frame = new Set();
+  return {
+    classList: { toggle: (c, on) => { on ? frame.add(c) : frame.delete(c); return on; }, has: (c) => frame.has(c) },
+    querySelector: (selector) => (withButton && selector === `.${TEMA_TASTO_CLASSE}` ? button : null),
+    button,
+    frame
+  };
+}
+const localize = (key) => ({ "WOD5E_MAGE.Tema.Chiaro": "Modalità chiara", "WOD5E_MAGE.Tema.Scuro": "Modalità scura" })[key] ?? key;
+
+let el = fakeElement();
+applicaTema(el, "chiaro", { localize });
+assert.ok(el.frame.has(TEMA_CLASSE));
+assert.ok(el.button.classes.has("fa-moon") && !el.button.classes.has("fa-sun"));
+assert.equal(el.button.attrs["aria-label"], "Modalità scura");
+assert.equal(el.button.attrs["data-tooltip"], "Modalità scura");
+assert.equal(el.button.attrs["aria-pressed"], "true");
+
+// Tornando allo scuro la classe sparisce e il tasto torna al sole.
+applicaTema(el, "scuro", { localize });
+assert.ok(!el.frame.has(TEMA_CLASSE));
+assert.ok(el.button.classes.has("fa-sun") && !el.button.classes.has("fa-moon"));
+assert.equal(el.button.attrs["aria-label"], "Modalità chiara");
+assert.equal(el.button.attrs["aria-pressed"], "false");
+
+// Senza tasto (o senza finestra) non si rompe niente.
+el = fakeElement(false);
+applicaTema(el, "chiaro");
+assert.ok(el.frame.has(TEMA_CLASSE));
+applicaTema(null, "chiaro");
+
+// La scheda: il tasto entra nella cornice a sinistra dei tre pallini, l'azione
+// è registrata, il tema si applica a ogni render; main.js registra
+// l'impostazione col cambio che riveste le schede aperte.
+const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+assert.match(sheet, /async _renderFrame\(options\)/);
+assert.match(sheet, /this\.window\?\.controls \?\? this\.window\?\.close/);
+assert.match(sheet, /anchor\.before\(button\)/);
+assert.match(sheet, /\[TEMA_AZIONE\]: onTemaToggle/);
+assert.match(sheet, /static applicaTemaOvunque\(/);
+assert.match(sheet, /applicaTema\(this\.element, game\.settings\.get\(MODULE_ID, TEMA_SETTING\)/);
+const main = readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8");
+assert.match(main, /game\.settings\.register\(MODULE_ID, TEMA_SETTING, \{/);
+assert.match(main, /scope: "client",\n\s+config: true,\n\s+type: String,\n\s+choices: \{\n\s+\[TEMA_SCURO\]/);
+assert.match(main, /onChange: \(value\) => MageActorSheet\.applicaTemaOvunque\(value\)/);
+assert.equal(TEMA_SETTING, "sheetTheme");
+assert.equal(TEMA_AZIONE, "temaToggle");
+
+// Le parole, in tutte e due le lingue.
+for (const lang of ["it", "en"]) {
+  const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8")).WOD5E_MAGE;
+  assert.deepEqual(Object.keys(strings.Settings.SheetTheme), ["Name", "Hint", "Scuro", "Chiaro"], lang);
+  assert.deepEqual(Object.keys(strings.Tema), ["Chiaro", "Scuro"], lang);
+}
+
+// Il CSS: il blocco chiaro coi colori del manuale, agganciato alla classe.
+const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+assert.match(css, /\.wod5e-mage\.wod5e\.actor\.sheet\.wod5e-mage-chiara \{\n\s+--mortal-color-1: #282051;/);
+assert.match(css, /\.wod5e-mage-chiara \{[^}]*--mage-oro: #B3924A;/);
+assert.match(css, /\.wod5e-mage-chiara \{[^}]*--mage-rosso: #A4444A;/);
+assert.match(css, /\.wod5e-mage-chiara \{[^}]*--mage-riq-fondo: #F6F2E6;/);
+assert.match(css, /\.wod5e-mage-chiara \.window-header \{\n\s+background: #282051;/);
+assert.match(css, /\.window-header \.wod5e-mage-tema \{/);
+
+console.log("tema: ok");

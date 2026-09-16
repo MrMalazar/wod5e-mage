@@ -628,6 +628,12 @@
         "Hint": "How the Wheel looks on the Mage sheet: the nine-node arc or the compact nine-cell bar.",
         "Wheel": "Arc wheel",
         "Bar": "Cell bar"
+      },
+      "SheetTheme": {
+        "Name": "Sheet theme",
+        "Hint": "The colours of the Mage sheet: dark (gold on a dark ground) or light, in the colours of the rulebook. The sun, or moon, button next to the three dots of the window flips it too.",
+        "Scuro": "Dark",
+        "Chiaro": "Light (rulebook colours)"
       }
     },
     "Errors": {
@@ -1234,6 +1240,10 @@
       "NextHint": "Cycle the portraits: the one you see is also the image on the map and in chat",
       "AddHint": "Add a portrait",
       "RemoveHint": "Remove this portrait"
+    },
+    "Tema": {
+      "Chiaro": "Light mode",
+      "Scuro": "Dark mode"
     }
   }
 }

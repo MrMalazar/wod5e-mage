@@ -628,6 +628,12 @@
         "Hint": "Come vedi la Ruota sulla scheda del Mago: l'arco a nove nodi o la barra compatta a nove caselle.",
         "Wheel": "Ruota ad arco",
         "Bar": "Barra a caselle"
+      },
+      "SheetTheme": {
+        "Name": "Il tema della scheda",
+        "Hint": "I colori della scheda del Mago: scuro (oro sul fondo scuro) o chiaro, coi colori del manuale. Si gira anche dal tasto col sole, o la luna, accanto ai tre pallini della finestra.",
+        "Scuro": "Scuro",
+        "Chiaro": "Chiaro (i colori del manuale)"
       }
     },
     "Errors": {
@@ -1234,6 +1240,10 @@
       "NextHint": "Gira i ritratti: quello che vedi è anche l'immagine sulla mappa e in chat",
       "AddHint": "Aggiungi un ritratto",
       "RemoveHint": "Togli questo ritratto"
+    },
+    "Tema": {
+      "Chiaro": "Modalità chiara",
+      "Scuro": "Modalità scura"
     }
   },
   "WOD5E": {

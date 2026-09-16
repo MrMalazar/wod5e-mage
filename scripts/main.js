@@ -12,6 +12,7 @@ import { registerPrezzo } from "./prezzo.js";
 import { registerUstione } from "./ustione.js";
 import { registerParadossoNarratore } from "./paradosso-narratore.js";
 import { registerGrimorioComune } from "./grimorio-comune.js";
+import { TEMA_CHIARO, TEMA_SCURO, TEMA_SETTING } from "./tema.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 
 /**
@@ -87,6 +88,23 @@ Hooks.once("init", () => {
       bar: "WOD5E_MAGE.Settings.HeaderWheelMode.Bar"
     },
     default: "wheel"
+  });
+
+  // La modalità chiara (16/9): il tema della scheda del Mago, per giocatore.
+  // Si gira anche dal tasto accanto ai tre pallini della finestra; cambiando,
+  // riveste le schede aperte senza render.
+  game.settings.register(MODULE_ID, TEMA_SETTING, {
+    name: "WOD5E_MAGE.Settings.SheetTheme.Name",
+    hint: "WOD5E_MAGE.Settings.SheetTheme.Hint",
+    scope: "client",
+    config: true,
+    type: String,
+    choices: {
+      [TEMA_SCURO]: "WOD5E_MAGE.Settings.SheetTheme.Scuro",
+      [TEMA_CHIARO]: "WOD5E_MAGE.Settings.SheetTheme.Chiaro"
+    },
+    default: TEMA_SCURO,
+    onChange: (value) => MageActorSheet.applicaTemaOvunque(value)
   });
 
   game.settings.register(MODULE_ID, "debugLogging", {
