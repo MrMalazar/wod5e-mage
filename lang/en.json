@@ -1220,6 +1220,7 @@
       "AreteHint": "Arete makes it a Magick roll: the three type buttons and the prize appear.",
       "SphereHint": "Puts the Sphere in the casting. Spheres do not weigh on the threshold.",
       "ScopeHint": "Hover for the seven levels: the number declares the Scope, the same number removes it. On the right, the reading of the chosen level.",
+      "ScopeOpen": "Open the levels list",
       "PoteriHint": "Hover for the Sphere's powers: one per cast, and it brings its Sphere along.",
       "IncantesimoHint": "One click loads it into the roll as written (Areté, Spheres, Scopes, Attribute, Skill); the three buttons roll. Another click removes it.",
       "AttributeHint": "Puts the Attribute in the pool: one only.",

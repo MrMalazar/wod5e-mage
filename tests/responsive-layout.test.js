@@ -52,8 +52,12 @@ assert.match(sheetSource, /position: \{\s*width: 1340,\s*height: 1080\s*\}/);
 // cassetto e nel cerchio sulla riga; il cassetto si apre al sorvolo su ogni
 // riga che ce l'ha (Abilità, Sfere, Ambiti) e sopra quando sotto non c'è posto.
 assert.match(css, /\.wod5e-mage-riga\.scelta\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
-assert.match(css, /\.wod5e-mage-pastiglia-livello\.scelta\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
-assert.match(css, /\.wod5e-mage-ambito-lettura > b\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
+assert.match(css, /\.wod5e-mage-pallino-ambito\.scelta,\n[^{]*\.scelta > \.wod5e-mage-pallino-ambito\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
+assert.match(css, /\.wod5e-mage-ambito-lettura\s*\{[^}]*justify-content:\s*flex-start;/s);
+assert.match(css, /\.wod5e-mage-riga-tastino\s*\{[^}]*margin-left:\s*auto;/s);
+assert.match(css, /\.wod5e-mage-cassetto-ambito\s*\{[^}]*flex-direction:\s*column;/s);
+assert.match(css, /\.wod5e-mage-riga\.con-cassetto\.aperto > \.wod5e-mage-cassetto\s*\{\s*display: flex;/);
+assert.doesNotMatch(css, /pastiglia-livello/);
 assert.match(css, /\.wod5e-mage-riga\.con-cassetto:hover > \.wod5e-mage-cassetto[^{]*\{\s*display: flex;/);
 assert.match(css, /\.wod5e-mage-riga\.con-cassetto\.cassetto-su > \.wod5e-mage-cassetto\s*\{[^}]*bottom: calc\(100% - 2px\);[^}]*top: auto;/s);
 assert.match(css, /\.wod5e-mage-riga\.con-cassetto:hover > \.wod5e-mage-cassetto-poteri[^{]*\{\s*display: grid;/);
@@ -90,7 +94,10 @@ assert.doesNotMatch(risorse, /data-action="areteRoll"|wod5e-mage-header-arete/);
 // Magick: le Sfere col cassetto dei poteri, gli Ambiti con la lettura e il cassetto dei livelli.
 const magickRiq = stat("stat-magick.hbs");
 assert.match(magickRiq, /wod5e-mage-riga-sfera[^"]*\{\{#if sphere\.poteri\.length\}\} con-cassetto[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-poteri[\s\S]*data-action="tiroPower" data-power="\{\{power\.id\}\}"[^>]*>\{\{power\.short\}\}/);
-assert.match(magickRiq, /wod5e-mage-riga-ambito con-cassetto[\s\S]*wod5e-mage-ambito-lettura[\s\S]*<b>\{\{scope\.level\}\}<\/b>[\s\S]*\{\{scope\.reading\}\}[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-ambito[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-livello[^>]*data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}"[^>]*title="\{\{step\.reading\}\}"/);
+// L'Ambito: nome intero, poi il pallino col livello e la lettura (non in
+// fondo), il tastino in fondo, la tendina coi sette pallini e la lettura dopo il numero.
+assert.match(magickRiq, /wod5e-mage-riga-ambito con-cassetto[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*wod5e-mage-ambito-lettura[\s\S]*wod5e-mage-pallino-ambito scelta">\{\{scope\.level\}\}<\/span>[\s\S]*\{\{scope\.reading\}\}[\s\S]*wod5e-mage-riga-tastino" data-action="cassettoToggle"[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-ambito[\s\S]*wod5e-mage-livello[^>]*data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}"[^>]*title="\{\{step\.reading\}\}"[\s\S]*wod5e-mage-pallino-ambito">\{\{step\.value\}\}<\/span>[\s\S]*wod5e-mage-livello-lettura">\{\{step\.reading\}\}/);
+assert.match(readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8"), /cassettoToggle: onCassettoToggle/);
 assert.doesNotMatch(magickRiq, /wod5e-mage-ambito-livello/);
 // Il Grimorio al posto dei Poteri: gli incantesimi cliccabili per il lancio, il libro apre la pagina.
 const grimorioRiq = stat("stat-grimorio.hbs");

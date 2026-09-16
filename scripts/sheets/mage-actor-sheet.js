@@ -173,23 +173,41 @@ async function onSkillsFlatToggle(event) {
 }
 
 /**
- * I cassetti al sorvolo (Specializzazioni, poteri delle Sfere, livelli
- * degli Ambiti) si aprono sotto la riga; se sotto non c'è posto nel
- * riquadro, si aprono sopra (Blue, 16/9 sera: quello di Velo era tagliato).
+ * I cassetti (Specializzazioni, poteri delle Sfere, livelli degli Ambiti)
+ * si aprono sotto la riga; se sotto non c'è posto nel riquadro, si aprono
+ * sopra (Blue, 16/9 sera: quello di Velo era tagliato). Si misura a
+ * cassetto mostrato: al sorvolo, o col tastino.
  */
+function flipCassetto(row) {
+  const drawer = row.querySelector(":scope > .wod5e-mage-cassetto");
+  const body = row.closest(".wod5e-mage-riq-body");
+  if (!drawer || !body) return;
+  row.classList.remove("cassetto-su");
+  const limit = body.getBoundingClientRect();
+  const rect = row.getBoundingClientRect();
+  const height = drawer.offsetHeight || 36;
+  if (rect.bottom + height > limit.bottom && rect.top - height >= limit.top) row.classList.add("cassetto-su");
+}
+
 function wireCassetti(sheet) {
   for (const row of sheet.element?.querySelectorAll(".wod5e-mage-riga.con-cassetto") ?? []) {
-    row.addEventListener("mouseenter", () => {
-      const drawer = row.querySelector(":scope > .wod5e-mage-cassetto");
-      const body = row.closest(".wod5e-mage-riq-body");
-      if (!drawer || !body) return;
-      row.classList.remove("cassetto-su");
-      const limit = body.getBoundingClientRect();
-      const rect = row.getBoundingClientRect();
-      const height = drawer.offsetHeight || 36;
-      if (rect.bottom + height > limit.bottom && rect.top - height >= limit.top) row.classList.add("cassetto-su");
-    });
+    row.addEventListener("mouseenter", () => flipCassetto(row));
   }
+}
+
+/**
+ * Il tastino in fondo alla riga dell'Ambito (16/9 sera): apre la tendina e
+ * la tiene aperta finché non lo si preme di nuovo; una tendina aperta alla
+ * volta per riquadro. Solo classi: niente render.
+ */
+function onCassettoToggle(event, target) {
+  event?.preventDefault?.();
+  const row = target?.closest?.(".wod5e-mage-riga.con-cassetto");
+  if (!row) return;
+  const open = !row.classList.contains("aperto");
+  for (const other of row.closest(".wod5e-mage-riq-body")?.querySelectorAll(".wod5e-mage-riga.aperto") ?? []) other.classList.remove("aperto");
+  row.classList.toggle("aperto", open);
+  if (open) flipCassetto(row);
 }
 
 /**
@@ -327,6 +345,8 @@ export class MageActorSheet extends MortalActorSheet {
       [SCALA_AZIONE]: onScalaToggle,
       // Le Abilità per famiglia o tutte in fila.
       skillsFlatToggle: onSkillsFlatToggle,
+      // Il tastino in fondo alla riga dell'Ambito: la tendina dei livelli.
+      cassettoToggle: onCassettoToggle,
       condizioneToggle: onCondizioneToggle,
       wisdomResourceChange: onWisdomResourceChange,
       wisdomRoll: onWisdomRoll,

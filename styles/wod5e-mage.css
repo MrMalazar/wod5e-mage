@@ -237,14 +237,32 @@
 /* I cassetti: i livelli accesi in oro chiaro con testo inchiostro, il
    livello scelto in viola; i tasti della Ruota in crema con l'oro (e il
    rosso mattone per il Paradosso). */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pastiglia-livello.lit {
-  background: #D9C28A;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pallino-ambito {
+  background: #FBF8F0;
+  border-color: #C7C7D6;
   color: #1E1B2E;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pastiglia-livello.scelta {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .lit > .wod5e-mage-pallino-ambito {
+  background: #D9C28A;
+  border-color: #B3924A;
+  color: #1E1B2E;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pallino-ambito.scelta,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .scelta > .wod5e-mage-pallino-ambito {
   background: #282051;
+  border-color: #282051;
   color: #F6F2E6;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga-tastino {
+  border-color: #B3924A;
+  color: #282051;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-livello {
+  color: #1E1B2E;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ruota-tasto {
@@ -256,12 +274,6 @@
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ruota-tasto.paradox {
   border-color: #A4444A;
   color: #A4444A;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ambito-lettura > b {
-  background: #282051;
-  border-color: #282051;
-  color: #F6F2E6;
 }
 
 /* Azzera, posato sulla fascia viola del tipo: la crema velata vuole il viola sopra. */
@@ -8592,11 +8604,12 @@
   color: var(--mage-scelta-tenue-testo);
 }
 
-/* Al posto dei sette numeri (che mangiavano il nome, Blue 16/9 sera): il
-   livello scelto in un cerchio viola e la sua lettura dalla tavola, in
-   piccolo, tagliata coi puntini se non ci sta; il nome resta per intero. */
+/* Al posto dei sette numeri (che mangiavano il nome, Blue 16/9 sera): dopo
+   il nome, non in fondo, il pallino del livello scelto e la sua lettura
+   dalla tavola, in piccolo, tagliata coi puntini se non ci sta; il nome
+   resta per intero. In fondo alla riga il tastino che apre la tendina. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito .wod5e-mage-riga-nome-fermo {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-lettura {
@@ -8606,25 +8619,123 @@
   flex: 1 1 auto;
   font-size: 0.72rem;
   gap: 5px;
-  justify-content: flex-end;
+  justify-content: flex-start;
   min-width: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-lettura > b {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-lettura > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Il pallino dell'Ambito (il «Pallino Ambito» del Figma): un cerchio col
+   numero, sbiadito da spento, oro tenue fino al livello scelto, viola sul
+   livello scelto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito {
   align-items: center;
-  background: var(--mage-viola);
-  border: 1px solid var(--mage-viola-chiaro);
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
   border-radius: 50%;
+  box-sizing: border-box;
+  color: var(--mage-testo);
+  display: inline-flex;
+  flex: 0 0 18px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  height: 18px;
+  justify-content: center;
+  line-height: 1;
+  opacity: 0.55;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .lit > .wod5e-mage-pallino-ambito {
+  background: var(--mage-oro-tenue);
   color: var(--mage-scelta-testo);
+  opacity: 0.85;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito.scelta,
+.wod5e-mage.wod5e.actor.sheet .scelta > .wod5e-mage-pallino-ambito {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
+  opacity: 1;
+}
+
+/* Il tastino in fondo alla riga (lo stesso del modo della Ruota): apre e
+   chiude la tendina, la freccia gira quando è aperta. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-tastino {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 5px;
+  color: var(--mage-oro);
+  cursor: pointer;
   display: inline-flex;
   flex: 0 0 20px;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   height: 20px;
   justify-content: center;
+  line-height: 1;
+  margin-left: auto;
+  min-height: 0;
+  padding: 0;
   width: 20px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-lettura > span {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-tastino:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-tastino > i {
+  transition: transform 0.15s;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.aperto .wod5e-mage-riga-tastino > i {
+  transform: rotate(180deg);
+}
+
+/* La tendina dei livelli: sette righe, ognuna col pallino e la lettura
+   dopo il numero; la riga scelta sul lilla. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-cassetto-ambito {
+  flex-direction: column;
+  gap: 1px;
+  padding: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-livello {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.78rem;
+  gap: 7px;
+  line-height: 1.1;
+  min-height: 22px;
+  padding: 1px 5px;
+  text-align: left;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-livello:hover {
+  background: var(--mage-riga-sorvolo);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-livello.scelta {
+  background: var(--mage-scelta-tenue);
+  color: var(--mage-scelta-tenue-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-livello-lettura {
+  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -8649,11 +8760,13 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:hover > .wod5e-mage-cassetto,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:focus-within > .wod5e-mage-cassetto {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:focus-within > .wod5e-mage-cassetto,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto.aperto > .wod5e-mage-cassetto {
   display: flex;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:hover {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto.aperto {
   z-index: 7;
 }
 
@@ -8672,7 +8785,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:hover > .wod5e-mage-cassetto-poteri,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:focus-within > .wod5e-mage-cassetto-poteri {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:focus-within > .wod5e-mage-cassetto-poteri,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto.aperto > .wod5e-mage-cassetto-poteri {
   display: grid;
 }
 
@@ -8686,25 +8800,6 @@
   font-style: normal;
 }
 
-/* Il cassetto dei livelli dell'Ambito: sette numeri; quelli fino al livello
-   scelto sono accesi in oro tenue, il livello scelto in viola. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia-livello {
-  font-weight: 700;
-  justify-content: center;
-  padding: 0;
-  text-align: center;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia-livello.lit {
-  background: var(--mage-oro-tenue);
-  color: var(--mage-scelta-testo);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia-livello.scelta {
-  background: var(--mage-viola);
-  border-color: var(--mage-viola-chiaro);
-  color: var(--mage-scelta-testo);
-}
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia {
   align-items: stretch;
@@ -8726,7 +8821,6 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia-nome,
 .wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia.vuota,
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia-livello,
 .wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia-potere {
   background: transparent;
   border: 0;
