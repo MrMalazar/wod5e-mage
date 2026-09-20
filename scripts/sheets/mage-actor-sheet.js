@@ -92,6 +92,7 @@ import { onRitrattoAdd, onRitrattoNext, onRitrattoRemove, prepareRitratti, RITRA
 import { altraScala, altroTema, applicaScala, applicaTema, misuraFinestra, normalizeScala, SCALA_AZIONE, SCALA_SETTING, SCALA_TASTO_CLASSE, scalaFattore, sporgeDalloSchermo, TEMA_AZIONE, TEMA_SETTING, TEMA_TASTO_CLASSE } from "../tema.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
 import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
+import { classeRuota, posizioneRuota } from "../ventaglio.js";
 import {
   getContraccolpo,
   getSalute,
@@ -196,15 +197,85 @@ function wireCassetti(sheet) {
     row.addEventListener("mouseenter", () => flipCassetto(row));
   }
   // Le tendine (gli Ambiti) si aprono solo col tastino: un clic altrove
-  // sulla scheda le chiude. Il gancio sta sulla cornice, che resta.
+  // sulla scheda le chiude, e chiude anche la ruota dei comandi (che sta
+  // fuori dalla riga: un clic dentro la ruota non la chiude). Il gancio sta
+  // sulla cornice, che resta. Esc e lo scorrimento di un riquadro chiudono
+  // la ruota, che altrimenti resterebbe ferma sopra righe che si muovono.
   if (sheet.element && !sheet._tendineWired) {
     sheet._tendineWired = true;
     sheet.element.addEventListener("pointerdown", (event) => {
+      if (event.target?.closest?.(".wod5e-mage-ruota-comandi")) return;
+      for (const ruota of sheet.element.querySelectorAll(".wod5e-mage-ruota-comandi")) {
+        if (!ruota._riga?.contains(event.target)) {
+          ruota._riga?.classList.remove("aperto");
+          ruota.remove();
+        }
+      }
       for (const row of sheet.element.querySelectorAll(".wod5e-mage-riga.aperto")) {
         if (!row.contains(event.target)) row.classList.remove("aperto");
       }
     });
+    sheet.element.addEventListener("keydown", (event) => { if (event.key === "Escape") chiudiRuote(sheet); });
+    sheet.element.addEventListener("scroll", () => chiudiRuote(sheet), true);
   }
+}
+
+/** Le ruote dei comandi aperte: via, e le loro righe si chiudono. */
+function chiudiRuote(sheet) {
+  for (const ruota of sheet.element?.querySelectorAll(".wod5e-mage-ruota-comandi") ?? []) {
+    ruota._riga?.classList.remove("aperto");
+    ruota.remove();
+  }
+  for (const row of sheet.element?.querySelectorAll(".wod5e-mage-riga.con-ventaglio.aperto") ?? []) row.classList.remove("aperto");
+}
+
+/**
+ * Il tastino della Salute e della Saggezza (20/9, seconda passata): apre la
+ * ruota dei comandi intorno al tastino. La ruota non sta nella riga (il
+ * corpo del riquadro taglia quel che esce): si appende al contenuto della
+ * finestra, col centro sul tastino, un disco col fondo suo, i comandi in
+ * cerchio (copiati dalla sorgente nascosta nella riga, così le azioni sono
+ * le stesse) e il tasto al centro per chiudere. Si chiude anche con un
+ * comando, con un clic altrove, con Esc e a ogni render.
+ */
+function onVentaglioToggle(event, target) {
+  event?.preventDefault?.();
+  const row = target?.closest?.(".wod5e-mage-riga.con-ventaglio");
+  const source = row?.querySelector(":scope > .wod5e-mage-ventaglio");
+  const content = this.element?.querySelector(".window-content");
+  if (!row || !source || !content) return;
+  const wasOpen = row.classList.contains("aperto");
+  chiudiRuote(this);
+  if (wasOpen) return;
+  const voci = source.querySelectorAll(".wod5e-mage-ventaglio-voce").length;
+  const ruota = document.createElement("div");
+  ruota.className = `wod5e-mage-ruota-comandi ${classeRuota(voci)}`;
+  ruota.setAttribute("role", "group");
+  ruota.setAttribute("aria-label", source.getAttribute("aria-label") ?? "");
+  ruota.innerHTML = source.innerHTML;
+  const chiudi = document.createElement("button");
+  chiudi.type = "button";
+  chiudi.className = "wod5e-mage-ruota-chiudi";
+  chiudi.dataset.action = "ventaglioChiudi";
+  chiudi.title = game.i18n.localize("WOD5E_MAGE.Ventaglio.Chiudi");
+  chiudi.setAttribute("aria-label", chiudi.title);
+  chiudi.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+  ruota.appendChild(chiudi);
+  ruota._riga = row;
+  const centro = posizioneRuota(target.getBoundingClientRect(), content.getBoundingClientRect(), content.offsetWidth);
+  ruota.style.left = `${centro.x}px`;
+  ruota.style.top = `${centro.y}px`;
+  content.appendChild(ruota);
+  row.classList.add("aperto");
+  // Un comando scelto chiude la ruota, dopo che l'azione è partita.
+  ruota.addEventListener("click", (ev) => {
+    if (ev.target?.closest?.(".wod5e-mage-ventaglio-voce")) setTimeout(() => chiudiRuote(this), 0);
+  });
+}
+
+function onVentaglioChiudi(event) {
+  event?.preventDefault?.();
+  chiudiRuote(this);
 }
 
 /**
@@ -212,12 +283,13 @@ function wireCassetti(sheet) {
  * la tiene aperta finché non lo si preme di nuovo o non si clicca altrove;
  * una tendina aperta alla volta per riquadro. Niente sorvolo (Blue: «voglio
  * solo che quando clicca mi mostra le scelte»). Solo classi: niente render.
- * Lo stesso tastino, sulla Salute e sulla Saggezza (20/9), apre il
- * ventaglio dei comandi: stesso meccanismo, due clic e niente overlay.
+ * Sugli Ambiti (20/9, seconda passata) è il clic sul nome: apre la tendina
+ * delle letture (Peso, Epicità, Danni…). La Salute e la Saggezza hanno la
+ * ruota dei comandi, con la sua azione.
  */
 function onCassettoToggle(event, target) {
   event?.preventDefault?.();
-  const row = target?.closest?.(".wod5e-mage-riga.con-tendina, .wod5e-mage-riga.con-cassetto, .wod5e-mage-riga.con-ventaglio");
+  const row = target?.closest?.(".wod5e-mage-riga.con-tendina, .wod5e-mage-riga.con-cassetto");
   if (!row) return;
   const open = !row.classList.contains("aperto");
   for (const other of row.closest(".wod5e-mage-riq-body")?.querySelectorAll(".wod5e-mage-riga.aperto") ?? []) other.classList.remove("aperto");
@@ -377,6 +449,8 @@ export class MageActorSheet extends MortalActorSheet {
       // I tastini in fondo alla riga dell'Ambito: la lettura e la tendina dei livelli.
       scopeMode: onScopeMode,
       cassettoToggle: onCassettoToggle,
+      ventaglioToggle: onVentaglioToggle,
+      ventaglioChiudi: onVentaglioChiudi,
       condizioneToggle: onCondizioneToggle,
       condizioneApri: onCondizioneApri,
       wisdomResourceChange: onWisdomResourceChange,
@@ -647,6 +721,7 @@ export class MageActorSheet extends MortalActorSheet {
   /** Dopo ogni render la pagina Esperienza ricabla il suo calcolatore. */
   _onRender(context, options) {
     super._onRender?.(context, options);
+    chiudiRuote(this);
     // La modalità chiara (16/9) e la misura del testo (16/9 sera): la classe
     // e la scala sulla finestra, i due tasti in testata.
     applicaTema(this.element, game.settings.get(MODULE_ID, TEMA_SETTING), { localize: (key) => game.i18n.localize(key) });

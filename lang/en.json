@@ -590,6 +590,8 @@
       "Tira": "Roll",
       "MaxMeno": "One box less",
       "MaxPiu": "One box more",
+      "MaxMenoBreve": "box",
+      "MaxPiuBreve": "box",
       "Rolling": "Rolling Wisdom",
       "Segnato": "Marked",
       "SegnatoEffects": "two fewer dice on mortal rolls, mundane scenes cost, no Consensus mending, your aura shows."
@@ -756,6 +758,9 @@
       "VentaglioHint": "Health commands: Rest, Relax, Reset, Damage taken, extra boxes",
       "ExtraMeno": "One box less",
       "ExtraPiu": "One box more",
+      "DanniBreve": "Damage",
+      "ExtraMenoBreve": "box",
+      "ExtraPiuBreve": "box",
       "ClickHint": "Click: pick the mark. Right click: the box clears.",
       "States": {
         "empty": "Empty",
@@ -1047,6 +1052,9 @@
       "RerollDone": "{dice} dice rerolled: one superficial mental marked.",
       "RerollEyes": "{eyes} rerolled reds showed 1 or 10: eye of Paradox. An eye already out stays."
     },
+    "Ventaglio": {
+      "Chiudi": "Close the command wheel"
+    },
     "Condizioni": {
       "All": "All Conditions",
       "AddHint": "Add a Condition",
@@ -1232,6 +1240,7 @@
       "SphereHint": "Puts the Sphere in the casting. Spheres do not weigh on the threshold.",
       "ScopeHint": "Hover for the seven levels: the number declares the Scope, the same number removes it. On the right, the reading of the chosen level.",
       "ScopeOpen": "Open the levels list",
+      "ScopeModePick": "Click: pick the Scope reading",
       "ScopeModeHint": "Scope reading: {mode}. Click: {next}",
       "PoteriHint": "Hover for the Sphere's powers: one per cast, and it brings its Sphere along.",
       "IncantesimoHint": "One click loads it into the roll as written (Areté, Spheres, Scopes, Attribute, Skill); the three buttons roll. Another click removes it.",

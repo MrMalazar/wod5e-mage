@@ -58,37 +58,44 @@
         <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E_MAGE.Scopes.TableTitle"}}</span>
         <div class="wod5e-mage-ambiti-lista">
             {{#each scopeRows as |scope|}}
-                {{!-- La riga: il nome intero, poi (se dichiarato) il pallino col
-                     livello e la sua lettura subito dopo, non in fondo; in fondo
-                     il tastino della lettura (Peso, Epicità, Danni…: solo chi ne
-                     ha più d'una) e la freccia che apre la tendina. Niente
-                     sorvolo: si apre solo col clic (Blue, 16/9 sera). --}}
-                <div class="wod5e-mage-riga wod5e-mage-riga-ambito con-tendina{{#if scope.level}} scelta{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.ScopeHint'}}">
-                    <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo">
+                {{!-- La riga (20/9, seconda passata) su due linee. Sopra: il nome,
+                     col chevron se l'Ambito ha più letture (il clic apre la
+                     tendina delle letture, una scelta a più voci come il
+                     cassetto delle Sfere), e in fondo i sette pallini, che
+                     compaiono quando la lettura è scelta (chi ne ha una sola
+                     li ha sempre); sul pallino il sorvolo dice il livello e la
+                     sua lettura, il clic lo dichiara. Sotto, centrata e grande,
+                     la lettura del livello scelto, con la lettura dell'Ambito
+                     in piccolo davanti. --}}
+                <div class="wod5e-mage-riga wod5e-mage-riga-ambito{{#if scope.multi}} con-tendina{{/if}}{{#if scope.level}} scelta{{/if}}">
+                    <div class="wod5e-mage-riga-testa">
                         <i class="{{scope.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>
-                        <span>{{scope.label}}</span>
-                    </span>
-                    {{#if scope.level}}
-                        <span class="wod5e-mage-ambito-lettura" title="{{scope.reading}}">
-                            <span class="wod5e-mage-pallino-ambito scelta">{{scope.level}}</span>
-                            <span>{{scope.reading}}</span>
-                        </span>
-                    {{/if}}
-                    <span class="wod5e-mage-riga-tastini">
-                        {{#if scope.nextModeLabel}}
-                            <button type="button" class="wod5e-mage-riga-modo" data-action="scopeMode" data-scope="{{scope.id}}" title="{{localize 'WOD5E_MAGE.Tiro.ScopeModeHint' mode=scope.modeLabel next=scope.nextModeLabel}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.ScopeModeHint' mode=scope.modeLabel next=scope.nextModeLabel}}">{{scope.modeLabel}}</button>
+                        {{#if scope.multi}}
+                            <button type="button" class="wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}" aria-label="{{scope.label}}: {{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}"><span>{{scope.label}}</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+                        {{else}}
+                            <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{scope.label}}</span></span>
                         {{/if}}
-                        <button type="button" class="wod5e-mage-riga-tastino" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.ScopeOpen'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.ScopeOpen'}}"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
-                    </span>
-                    {{!-- La tendina: i sette pallini, ognuno con la sua lettura dopo il numero. --}}
-                    <div class="wod5e-mage-cassetto wod5e-mage-cassetto-ambito" role="group" aria-label="{{scope.label}}">
-                        {{#each scope.steps as |step|}}
-                            <button type="button" class="wod5e-mage-livello{{#if step.active}} scelta{{/if}}{{#if step.lit}} lit{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.value}}" title="{{step.reading}}">
-                                <span class="wod5e-mage-pallino-ambito">{{step.value}}</span>
-                                <span class="wod5e-mage-livello-lettura">{{step.reading}}</span>
-                            </button>
-                        {{/each}}
+                        {{#if scope.modeChosen}}
+                            <span class="wod5e-mage-ambito-pallini" role="group" aria-label="{{scope.label}}">
+                                {{#each scope.steps as |step|}}
+                                    <button type="button" class="wod5e-mage-pallino-ambito{{#if step.lit}} lit{{/if}}{{#if step.active}} scelta{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" data-tooltip="{{step.value}} · {{step.reading}}" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.value}}: {{step.reading}}"></button>
+                                {{/each}}
+                            </span>
+                        {{/if}}
                     </div>
+                    {{#if scope.level}}
+                        <div class="wod5e-mage-ambito-lettura" title="{{scope.reading}}">{{#if scope.multi}}<small>{{scope.modeLabel}}</small>{{/if}}<span>{{scope.reading}}</span></div>
+                    {{else if scope.modeShown}}
+                        <div class="wod5e-mage-ambito-lettura solo-modo"><small>{{scope.modeLabel}}</small></div>
+                    {{/if}}
+                    {{#if scope.multi}}
+                        {{!-- La tendina delle letture: una pastiglia per lettura, quella in uso accesa. --}}
+                        <div class="wod5e-mage-cassetto wod5e-mage-cassetto-modi" role="group" aria-label="{{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}">
+                            {{#each scope.modes as |mode|}}
+                                <button type="button" class="wod5e-mage-pastiglia wod5e-mage-pastiglia-modo{{#if mode.selected}} scelta{{/if}}" data-action="scopeMode" data-scope="{{scope.id}}" data-mode="{{mode.id}}" aria-pressed="{{mode.selected}}">{{mode.label}}</button>
+                            {{/each}}
+                        </div>
+                    {{/if}}
                 </div>
             {{/each}}
         </div>

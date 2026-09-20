@@ -590,6 +590,8 @@
       "Tira": "Tira",
       "MaxMeno": "Una casella in meno",
       "MaxPiu": "Una casella in più",
+      "MaxMenoBreve": "casella",
+      "MaxPiuBreve": "casella",
       "Rolling": "Tiro di Saggezza",
       "Segnato": "Segnato",
       "SegnatoEffects": "due dadi in meno sui tiri mortali, la scena mondana costa, niente ricucitura del Consenso, l'aura si vede."
@@ -756,6 +758,9 @@
       "VentaglioHint": "I comandi della Salute: Riposo, Relax, Reset, Danni subiti, caselle in più",
       "ExtraMeno": "Una casella in meno",
       "ExtraPiu": "Una casella in più",
+      "DanniBreve": "Danni",
+      "ExtraMenoBreve": "casella",
+      "ExtraPiuBreve": "casella",
       "ClickHint": "Clic: scegli il segno. Clic destro: la casella si svuota.",
       "States": {
         "empty": "Vuota",
@@ -1047,6 +1052,9 @@
       "RerollDone": "Ritirati {dice} dadi: un superficiale mentale segnato.",
       "RerollEyes": "{eyes} rossi ritirati hanno mostrato 1 o 10: occhio del Paradosso. Un occhio già uscito resta."
     },
+    "Ventaglio": {
+      "Chiudi": "Chiudi la ruota dei comandi"
+    },
     "Condizioni": {
       "All": "Tutte le Condizioni",
       "AddHint": "Aggiungi una Condizione",
@@ -1232,6 +1240,7 @@
       "SphereHint": "Mette la Sfera nel lancio. Le Sfere non pesano sulla soglia.",
       "ScopeHint": "Al sorvolo i sette livelli: il numero dichiara l'Ambito, lo stesso numero lo toglie. A destra, la lettura del livello scelto.",
       "ScopeOpen": "Apri la tendina dei livelli",
+      "ScopeModePick": "Clic: scegli la lettura dell'Ambito",
       "ScopeModeHint": "Lettura dell'Ambito: {mode}. Clic: {next}",
       "PoteriHint": "Al sorvolo i poteri della Sfera: uno solo per lancio, e porta con sé la Sfera.",
       "IncantesimoHint": "Un clic lo carica nel tiro com'è scritto (Areté, Sfere, Ambiti, Attributo, Abilità); i tre tasti tirano. Un altro clic lo toglie.",

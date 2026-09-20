@@ -54,20 +54,23 @@ assert.match(sheetSource, /position: \{\s*width: 1340,\s*height: 1080\s*\}/);
 // cassetto e nel cerchio sulla riga; il cassetto si apre al sorvolo su ogni
 // riga che ce l'ha (Abilità, Sfere, Ambiti) e sopra quando sotto non c'è posto.
 assert.match(css, /\.wod5e-mage-riga\.scelta\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
-assert.match(css, /\.wod5e-mage-pallino-ambito\.scelta,\n[^{]*\.scelta > \.wod5e-mage-pallino-ambito\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
-assert.match(css, /\.wod5e-mage-ambito-lettura\s*\{[^}]*justify-content:\s*flex-start;/s);
+assert.match(css, /\.wod5e-mage-pallino-ambito\.scelta\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
+// La lettura scelta (20/9 sera): sotto la testa della riga, centrata e grande.
+assert.match(css, /\.wod5e-mage-ambito-lettura\s*\{[^}]*justify-content:\s*center;/s);
+assert.match(css, /\.wod5e-mage-ambito-lettura > span\s*\{[^}]*font-size:\s*0\.95rem;[^}]*font-weight:\s*700;/s);
 assert.match(css, /\.wod5e-mage-riga-tastini\s*\{[^}]*margin-left:\s*auto;/s);
-assert.match(css, /\.wod5e-mage-cassetto-ambito\s*\{[^}]*flex-direction:\s*column;/s);
+assert.match(css, /\.wod5e-mage-cassetto-modi\s*\{[^}]*flex-wrap:\s*wrap;/s);
+assert.doesNotMatch(css, /wod5e-mage-cassetto-ambito|wod5e-mage-livello-lettura/);
 assert.match(css, /\.wod5e-mage-riga\.aperto > \.wod5e-mage-cassetto\s*\{\s*display: flex;/);
 // Le tendine degli Ambiti non si aprono al sorvolo: nessuna regola :hover su con-tendina.
 assert.doesNotMatch(css, /con-tendina[^{]*:hover[^{]*\.wod5e-mage-cassetto/);
-assert.match(css, /\.wod5e-mage-riga-modo\s*\{[^}]*text-transform:\s*uppercase;/s);
+assert.doesNotMatch(css, /wod5e-mage-riga-modo/);
 assert.doesNotMatch(css, /pastiglia-livello/);
 assert.match(css, /\.wod5e-mage-riga\.con-cassetto:hover > \.wod5e-mage-cassetto[^{]*\{\s*display: flex;/);
 assert.match(css, /\.wod5e-mage-riga\.cassetto-su > \.wod5e-mage-cassetto\s*\{[^}]*bottom: calc\(100% - 2px\);[^}]*top: auto;/s);
 assert.match(css, /\.wod5e-mage-riga\.con-cassetto:hover > \.wod5e-mage-cassetto-poteri[^{]*\{\s*display: grid;/);
 // La misura del testo: una scala sul contenuto della finestra.
-assert.match(css, /\.window-content\s*\{\s*zoom: var\(--mage-scala, 1\);/);
+assert.match(css, /\.window-content\s*\{\s*position: relative;\s*zoom: var\(--mage-scala, 1\);/);
 // La scheda minimizzata resta richiudibile; sotto i 1280 le quattro colonne si
 // accavallavano (16/9), e la minima segue la scala dello schermo (16/9 sera).
 assert.match(
@@ -92,7 +95,7 @@ assert.match(stat("grimorio.hbs"), /data-action="grimorioClose"/);
 // Quintessenza e Paradosso col meno e il più ai lati del numero, la Ruota
 // nuda, le Condizioni in fondo.
 const risorseRiq = stat("stat-risorse.hbs");
-assert.match(risorseRiq, /wod5e-mage-risorse-righe[\s\S]*parts\/salute\.hbs[\s\S]*wod5e-mage-riga-saggezza con-ventaglio[\s\S]*wod5e-mage-ventaglio-tasto" data-action="cassettoToggle"[\s\S]*wod5e-mage-saggezza-track[\s\S]*data-action="squareCounterChange"[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-tre[\s\S]*data-action="wisdomRoll"[\s\S]*data-action="wisdomResourceChange" data-resource-action="minus"[\s\S]*data-resource-action="plus"[\s\S]*wod5e-mage-riga-conto quintessence[\s\S]*data-resource="quintessence" data-delta="-1"[\s\S]*magickTrack\.quintessence[\s\S]*data-resource="quintessence" data-delta="1"[\s\S]*wod5e-mage-riga-conto paradox[\s\S]*data-action="paradoxBurst"[\s\S]*data-resource="paradox" data-delta="-1"[\s\S]*magickTrack\.paradox[\s\S]*data-resource="paradox" data-delta="1"[\s\S]*parts\/stat-ruota\.hbs[\s\S]*parts\/stat-condizioni\.hbs/);
+assert.match(risorseRiq, /wod5e-mage-risorse-righe[\s\S]*parts\/salute\.hbs[\s\S]*wod5e-mage-riga-saggezza con-ventaglio[\s\S]*wod5e-mage-ventaglio-tasto" data-action="ventaglioToggle"[\s\S]*wod5e-mage-saggezza-track[\s\S]*data-action="squareCounterChange"[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-tre[\s\S]*data-action="wisdomRoll"[\s\S]*data-action="wisdomResourceChange" data-resource-action="minus"[\s\S]*data-resource-action="plus"[\s\S]*wod5e-mage-riga-conto quintessence[\s\S]*data-resource="quintessence" data-delta="-1"[\s\S]*magickTrack\.quintessence[\s\S]*data-resource="quintessence" data-delta="1"[\s\S]*wod5e-mage-riga-conto paradox[\s\S]*data-action="paradoxBurst"[\s\S]*data-resource="paradox" data-delta="-1"[\s\S]*magickTrack\.paradox[\s\S]*data-resource="paradox" data-delta="1"[\s\S]*parts\/stat-ruota\.hbs[\s\S]*parts\/stat-condizioni\.hbs/);
 assert.doesNotMatch(risorseRiq, /wod5e-mage-saggezza-tendina|parts\/wisdom\.hbs/);
 assert.doesNotMatch(stat("stat-ruota.hbs"), /wod5e-mage-magick-end/);
 // La Ruota dentro le Risorse: il mezzo cerchio vero senza tasti né conti né
@@ -104,20 +107,22 @@ assert.doesNotMatch(risorse, /wod5e-mage-ruota-tasto|wod5e-mage-ruota-conti|wod5
 assert.doesNotMatch(css, /\.wod5e-mage-magick-track-stat \.wod5e-mage-ruota-tasto/);
 assert.match(css, /\.wod5e-mage-ruota-dettagli > summary \{\s*text-align: center;/);
 assert.match(risorse, /<details class="wod5e-mage-ruota-dettagli">[\s\S]*generatedQuintessence[\s\S]*permanentParadox[\s\S]*data-action="contraccolpoNega"[\s\S]*data-action="wheelModeToggle"/);
-// Il ventaglio: si apre solo con la classe aperto (niente :hover), le voci a
-// raggio dal tastino, il nome a sinistra del simbolo al sorvolo.
-assert.match(css, /\.wod5e-mage-riga\.aperto > \.wod5e-mage-ventaglio \{\s*display: block;/);
+// La ruota dei comandi (20/9 sera): la sorgente nella riga non si vede mai,
+// niente :hover; il resto sta in tests/ventaglio.test.js.
+assert.match(css, /\.wod5e-mage-ventaglio \{\s*display: none;/);
 assert.doesNotMatch(css, /con-ventaglio[^{]*:hover[^{]*\.wod5e-mage-ventaglio/);
-assert.match(css, /\.wod5e-mage-ventaglio-voce \{[^}]*transform: rotate\(var\(--angolo\)\) translate\(var\(--raggio\)\) rotate\(calc\(-1 \* var\(--angolo\)\)\);/s);
-assert.match(css, /\.wod5e-mage-ventaglio-voce:hover > span,\n[^{]*:focus-visible > span \{\s*display: block;/);
-assert.match(sheetSource, /onCassettoToggle[\s\S]*\.wod5e-mage-riga\.con-ventaglio/);
+assert.match(sheetSource, /ventaglioToggle: onVentaglioToggle/);
+assert.match(sheetSource, /function onCassettoToggle\(event, target\) \{[\s\S]*?closest\?\.\("\.wod5e-mage-riga\.con-tendina, \.wod5e-mage-riga\.con-cassetto"\)/);
 assert.doesNotMatch(risorse, /data-action="areteRoll"|wod5e-mage-header-arete/);
 // Magick: le Sfere col cassetto dei poteri, gli Ambiti con la lettura e il cassetto dei livelli.
 const magickRiq = stat("stat-magick.hbs");
 assert.match(magickRiq, /wod5e-mage-riga-sfera[^"]*\{\{#if sphere\.poteri\.length\}\} con-cassetto[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-poteri[\s\S]*data-action="tiroPower" data-power="\{\{power\.id\}\}"[^>]*>\{\{power\.short\}\}/);
-// L'Ambito: nome intero, poi il pallino col livello e la lettura (non in
-// fondo), il tastino in fondo, la tendina coi sette pallini e la lettura dopo il numero.
-assert.match(magickRiq, /wod5e-mage-riga-ambito con-tendina[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*wod5e-mage-ambito-lettura[\s\S]*wod5e-mage-pallino-ambito scelta">\{\{scope\.level\}\}<\/span>[\s\S]*\{\{scope\.reading\}\}[\s\S]*wod5e-mage-riga-tastini[\s\S]*\{\{#if scope\.nextModeLabel\}\}[\s\S]*wod5e-mage-riga-modo" data-action="scopeMode" data-scope="\{\{scope\.id\}\}"[^>]*>\{\{scope\.modeLabel\}\}<\/button>[\s\S]*wod5e-mage-riga-tastino" data-action="cassettoToggle"[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-ambito[\s\S]*wod5e-mage-livello[^>]*data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}"[^>]*title="\{\{step\.reading\}\}"[\s\S]*wod5e-mage-pallino-ambito">\{\{step\.value\}\}<\/span>[\s\S]*wod5e-mage-livello-lettura">\{\{step\.reading\}\}/);
+// L'Ambito (20/9 sera): il nome col chevron se ha più letture (il clic apre la
+// tendina delle letture, una pastiglia per lettura), i sette pallini in fondo
+// alla testa quando la lettura è scelta (il sorvolo dice livello e lettura),
+// sotto la lettura del livello scelto, centrata, con la lettura dell'Ambito in piccolo.
+assert.match(magickRiq, /wod5e-mage-riga-ambito\{\{#if scope\.multi\}\} con-tendina\{\{\/if\}\}\{\{#if scope\.level\}\} scelta[\s\S]*wod5e-mage-riga-testa[\s\S]*\{\{#if scope\.multi\}\}[\s\S]*wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*\{\{#if scope\.modeChosen\}\}[\s\S]*wod5e-mage-ambito-pallini[\s\S]*wod5e-mage-pallino-ambito\{\{#if step\.lit\}\} lit\{\{\/if\}\}\{\{#if step\.active\}\} scelta\{\{\/if\}\}" data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}" data-tooltip="\{\{step\.value\}\} · \{\{step\.reading\}\}"[\s\S]*\{\{#if scope\.level\}\}[\s\S]*wod5e-mage-ambito-lettura"[^>]*>\{\{#if scope\.multi\}\}<small>\{\{scope\.modeLabel\}\}<\/small>\{\{\/if\}\}<span>\{\{scope\.reading\}\}<\/span>[\s\S]*\{\{else if scope\.modeShown\}\}[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-modi[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-modo\{\{#if mode\.selected\}\} scelta\{\{\/if\}\}" data-action="scopeMode" data-scope="\{\{scope\.id\}\}" data-mode="\{\{mode\.id\}\}"/);
+assert.doesNotMatch(magickRiq, /wod5e-mage-riga-modo|wod5e-mage-cassetto-ambito|wod5e-mage-livello|title="\{\{step\.reading\}\}"/);
 assert.doesNotMatch(magickRiq, /riga-ambito con-cassetto/);
 const sheetJs = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
 assert.match(sheetJs, /scopeMode: onScopeMode,\n\s+cassettoToggle: onCassettoToggle/);

@@ -83,7 +83,7 @@ const track = readFileSync(new URL("../templates/actor/parts/salute.hbs", import
 assert.match(track, /data-action="saluteCellChange"[\s\S]*data-index="\{\{cell\.index\}\}"/);
 // La riga (20/9): la testa col cuore, il nome, il conto e il tastino che apre
 // il ventaglio; nel ventaglio i sei comandi, meno e più delle caselle compresi.
-assert.match(track, /wod5e-mage-riga-salute con-ventaglio[\s\S]*wod5e-mage-riga-testa[\s\S]*salute\.max[\s\S]*wod5e-mage-ventaglio-tasto" data-action="cassettoToggle"[\s\S]*wod5e-mage-salute-track[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-sei[\s\S]*data-action="saluteRiposo"[\s\S]*data-action="saluteRelax"[\s\S]*data-action="saluteReset"[\s\S]*data-action="saluteDanni"[\s\S]*data-action="saluteExtraChange" data-delta="-1"[\s\S]*data-action="saluteExtraChange" data-delta="1"/);
+assert.match(track, /wod5e-mage-riga-salute con-ventaglio[\s\S]*wod5e-mage-riga-testa[\s\S]*salute\.max[\s\S]*wod5e-mage-ventaglio-tasto" data-action="ventaglioToggle"[\s\S]*wod5e-mage-salute-track[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-sei[\s\S]*data-action="saluteRiposo"[\s\S]*data-action="saluteRelax"[\s\S]*data-action="saluteReset"[\s\S]*data-action="saluteDanni"[\s\S]*data-action="saluteExtraChange" data-delta="-1"[\s\S]*data-action="saluteExtraChange" data-delta="1"/);
 assert.doesNotMatch(track, /wod5e-mage-salute-buttons|resource-control/);
 // Niente legenda sotto il tracciato: il menù di ogni casella dice il nome
 // accanto al segno.

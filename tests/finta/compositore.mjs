@@ -75,6 +75,20 @@ assert.equal(flags["wod5e-mage"].scopeModes.potency, "potencyDamage");
 assert.deepEqual(S.scopeModesOf(sheetModi), { potency: "potencyDamage" });
 await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "area" } });
 assert.equal(flags["wod5e-mage"].scopeModes.area, "area", "con una lettura sola il giro resta lì");
+// La tendina delle letture (20/9 sera): la lettura chiesta per nome, e la riga sa se è scelta.
+await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "potency", mode: "potencyEpic" } });
+assert.equal(flags["wod5e-mage"].scopeModes.potency, "potencyEpic", "dalla tendina arriva la lettura chiesta");
+await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "potency", mode: "boh" } });
+assert.equal(flags["wod5e-mage"].scopeModes.potency, "potencyEpic", "una lettura che non esiste non cambia niente");
+const righeTendina = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyEpic" } });
+const potenzaTendina = righeTendina.find((r) => r.id === "potency");
+assert.deepEqual([potenzaTendina.multi, potenzaTendina.modeChosen, potenzaTendina.modes.map((m) => m.id), potenzaTendina.modes.find((m) => m.selected).id], [true, true, ["potency", "potencyEpic", "potencyDamage"], "potencyEpic"]);
+const areaTendina = righeTendina.find((r) => r.id === "area");
+assert.deepEqual([areaTendina.multi, areaTendina.modeChosen, areaTendina.modeShown], [false, true, false], "una lettura sola: i pallini ci sono sempre, niente tendina");
+const durataTendina = righeTendina.find((r) => r.id === "duration");
+assert.deepEqual([durataTendina.multi, durataTendina.modeChosen, durataTendina.modeShown], [true, false, false], "più letture, nessuna scelta: niente pallini finché non si sceglie");
+const durataScelta = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { duration: "duration" } }).find((r) => r.id === "duration");
+assert.deepEqual([durataScelta.modeChosen, durataScelta.modeShown], [true, durataScelta.level === 0], "scelta la lettura: i pallini, e la lettura in piccolo finché non c'è il livello");
 
 // Il lancio: Volgare con testimoni, riuscita dall'8, la Ruota sale di 2, la Quintessenza chiesta scende.
 tiro = T.setQuintessence(tiro, 2);

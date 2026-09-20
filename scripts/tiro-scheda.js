@@ -157,6 +157,11 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
     const mode = scopeModeOf(table, id, modes?.[id]);
     const next = nextScopeMode(table, id, mode?.id);
     const readingOf = (step) => mode?.readings?.[step - 1] ?? "";
+    // La riga (20/9, seconda passata): chi ha più letture le sceglie dalla
+    // tendina (il clic sul nome); i sette pallini compaiono quando la lettura
+    // è scelta, e chi ne ha una sola li ha sempre.
+    const multi = options.length > 1;
+    const modeChosen = !multi || options.some((option) => option.id === modes?.[id]);
     return {
       id,
       label: localize(`WOD5E_MAGE.Scopes.${id}`),
@@ -167,6 +172,10 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
       modeLabel: mode?.label ?? "",
       modeCount: options.length,
       nextModeLabel: next?.label ?? "",
+      multi,
+      modeChosen,
+      modeShown: multi && modeChosen && !level,
+      modes: options.map((option) => ({ id: option.id, label: option.label, selected: option.id === mode?.id })),
       steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({
         value: index + 1,
         active: index + 1 === level,
@@ -183,9 +192,11 @@ export function scopeModesOf(sheet) {
 }
 
 /**
- * Il tastino a sinistra della freccia (16/9 sera): gira la lettura
- * dell'Ambito (Peso, Epicità, Danni…). Si scrive sul personaggio, così
- * resta; chi non può scriverlo la tiene nella scheda finché è aperta.
+ * La lettura dell'Ambito (Peso, Epicità, Danni…). Dalla tendina delle
+ * letture (20/9, seconda passata) arriva quella scelta, `data-mode`; senza,
+ * gira alla successiva (il tastino del 16/9 sera). Si scrive sul
+ * personaggio, così resta; chi non può scriverlo la tiene nella scheda
+ * finché è aperta.
  */
 export async function onScopeMode(event, target) {
   event.preventDefault();
@@ -193,7 +204,8 @@ export async function onScopeMode(event, target) {
   const localize = game.i18n.localize.bind(game.i18n);
   const table = scopeModes(localize);
   const current = scopeModesOf(this)[scope];
-  const next = nextScopeMode(table, scope, current);
+  const wanted = String(target.dataset.mode ?? "");
+  const next = wanted ? (table[scope] ?? []).find((option) => option.id === wanted) : nextScopeMode(table, scope, current);
   if (!scope || !next) return;
   if (this.actor.isOwner) {
     await this.actor.setFlag(MODULE_ID, SCOPE_MODES_FLAG, { ...(this.actor.getFlag(MODULE_ID, SCOPE_MODES_FLAG) ?? {}), [scope]: next.id });

@@ -38,6 +38,8 @@
                 <button type="button" data-action="tiroDifficulty" data-delta="-1" aria-label="−1"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
                 <b>{{#if tiro.needsDifficulty}}?{{else}}{{tiro.difficulty}}{{/if}}</b>
                 <button type="button" data-action="tiroDifficulty" data-delta="1" aria-label="+1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                {{!-- Lo slot vuoto: il meno, il numero e il più stanno in colonna con Quintessenza e Dadi extra (Blue, 20/9 sera). --}}
+                <small class="wod5e-mage-tiro-slot" aria-hidden="true"></small>
             </span>
         </div>
         {{#if tiro.needsDifficulty}}
