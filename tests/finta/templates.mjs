@@ -46,22 +46,25 @@ const context = {
   bonuses: []
 };
 const html = stat(context);
-for (const marker of ["wod5e-mage-riq-identita", "wod5e-mage-riq-risorse", "wod5e-mage-riq-magick", "wod5e-mage-riq-grimorio", "wod5e-mage-riq-attributi", "wod5e-mage-riq-tratti", "wod5e-mage-riq-abilita", "wod5e-mage-riq-tiro", 'data-action="tiroArete"', 'data-action="tiroScope" data-scope="potency" data-level="4"', 'class="wod5e-mage-livello scelta lit"', 'title="lettura 7"', '<span class="wod5e-mage-pallino-ambito scelta">4</span>', "Peso: un&#x27;auto", 'data-action="cassettoToggle"', 'wod5e-mage-livello-lettura">lettura 2<', 'data-action="scopeMode" data-scope="potency"', 'next&#x3D;Epicità,mode&#x3D;Peso', 'wod5e-mage-pastiglia wod5e-mage-pastiglia-potere scelta segnaposto" data-action="tiroPower" data-power="forces-1-2"', 'data-action="tiroIncantesimo" data-row="s1"', "wod5e-mage-riga wod5e-mage-riga-incantesimo scelta", 'data-action="skillsFlatToggle"', 'data-action="tiroRoll" data-kind="testimoni"', "data-action=\"tiroExtra\"", "wod5e-mage-saggezza-tendina", 'wod5e-mage-ruota-tasto quintessence meno', 'wod5e-mage-ruota-tasto paradox piu', 'data-action="ritrattoNext"', "1/2", 'data-action="specialtyDelete" data-skill="occult" data-index="0"', 'data-action="specialtyAdd" data-skill="occult"', "wod5e-mage-riga wod5e-mage-riga-tratto scelta", "WOD5E_MAGE.Tiro.Difficulty", "wod5e-mage-stat-creazione"]) {
+for (const marker of ["wod5e-mage-riq-identita", "wod5e-mage-riq-risorse", "wod5e-mage-riq-magick", "wod5e-mage-riq-grimorio", "wod5e-mage-riq-attributi", "wod5e-mage-riq-tratti", "wod5e-mage-riq-abilita", "wod5e-mage-riq-tiro", 'data-action="tiroArete"', 'data-action="tiroScope" data-scope="potency" data-level="4"', 'class="wod5e-mage-livello scelta lit"', 'title="lettura 7"', '<span class="wod5e-mage-pallino-ambito scelta">4</span>', "Peso: un&#x27;auto", 'data-action="cassettoToggle"', 'wod5e-mage-livello-lettura">lettura 2<', 'data-action="scopeMode" data-scope="potency"', 'next&#x3D;Epicità,mode&#x3D;Peso', 'wod5e-mage-pastiglia wod5e-mage-pastiglia-potere scelta segnaposto" data-action="tiroPower" data-power="forces-1-2"', 'data-action="tiroIncantesimo" data-row="s1"', "wod5e-mage-riga wod5e-mage-riga-incantesimo scelta", 'data-action="skillsFlatToggle"', 'data-action="tiroRoll" data-kind="testimoni"', "data-action=\"tiroExtra\"", "wod5e-mage-riga-saggezza con-ventaglio", 'wod5e-mage-ruota-tasto quintessence meno', 'wod5e-mage-ruota-tasto paradox piu', 'wod5e-mage-ventaglio wod5e-mage-ventaglio-sei', 'data-action="saluteExtraChange" data-delta="1"', 'data-action="wisdomResourceChange" data-resource-action="plus"', "wod5e-mage-condizioni-occhiello", 'data-action="ritrattoNext"', "1/2", 'data-action="specialtyDelete" data-skill="occult" data-index="0"', 'data-action="specialtyAdd" data-skill="occult"', "wod5e-mage-riga wod5e-mage-riga-tratto scelta", "WOD5E_MAGE.Tiro.Difficulty", "wod5e-mage-stat-creazione"]) {
   assert.ok(html.includes(marker), `manca ${marker}`);
 }
 assert.ok(!html.includes("wod5e-mage-tiro-tira"), "con l'Areté acceso il tasto TIRA non c'è: ci sono i tre tasti");
 assert.ok(!html.includes("wod5e-mage-riq-salute") && !html.includes("wod5e-mage-riq-poteri") && !html.includes("wod5e-mage-ambito-livello"), "niente riquadri vecchi");
 assert.equal((html.match(/data-action="scopeMode"/g) ?? []).length, 1, "il tastino della lettura solo su chi ha più letture (Potenza sì, Area no)");
-assert.equal((html.match(/data-action="cassettoToggle"/g) ?? []).length, 2, "la freccia su ogni Ambito");
-// Le Risorse nell'ordine di Blue: Condizioni, Salute, Saggezza, Ruota.
-const risorseHtml = html.slice(html.indexOf("wod5e-mage-riq-risorse"), html.indexOf("wod5e-mage-riq-magick"));
-const posti = ["wod5e-mage-condizioni-box", "wod5e-mage-salute-track", "wod5e-mage-saggezza-tendina", "wod5e-mage-magick-track-stat"].map((m) => risorseHtml.indexOf(m));
+assert.equal((html.match(/data-action="cassettoToggle"/g) ?? []).length, 4, "la freccia su ogni Ambito, il tastino su Salute e Saggezza");
+// Le Risorse nell'ordine di Blue (20/9): Salute, Saggezza, Quintessenza,
+// Paradosso, Ruota, Condizioni; le colonne: Identità, Attributi, Abilità, Magick.
+assert.ok(html.indexOf("wod5e-mage-riq-attributi") < html.indexOf("wod5e-mage-riq-abilita") && html.indexOf("wod5e-mage-riq-abilita") < html.indexOf("wod5e-mage-riq-magick"), "ordine delle colonne");
+const risorseHtml = html.slice(html.indexOf("wod5e-mage-riq-risorse"), html.indexOf("wod5e-mage-riq-attributi"));
+const posti = ["wod5e-mage-salute-track", "wod5e-mage-saggezza-track", "wod5e-mage-riga-conto quintessence", "wod5e-mage-riga-conto paradox", "wod5e-mage-magick-track-stat", "wod5e-mage-condizioni-box"].map((m) => risorseHtml.indexOf(m));
 assert.ok(posti.every((p, i) => p >= 0 && (i === 0 || p > posti[i - 1])), `ordine delle Risorse: ${posti.join(", ")}`);
-// Il meno e il più accanto ai nodi, non nei conti.
-assert.ok(!/wod5e-mage-ruota-conto[^>]*>\s*<button type="button" data-action="magickBalanceChange"/.test(risorseHtml));
+// Il meno e il più sulle righe dei conti, non sull'arco; niente ventaglio al sorvolo (solo la classe aperto).
+assert.ok(!/wod5e-mage-magick-track-stat[\s\S]*?wod5e-mage-ruota-tasto[\s\S]*?wod5e-mage-ruota-dettagli/.test(risorseHtml), "l'arco non porta tasti");
+assert.equal((risorseHtml.match(/data-action="cassettoToggle"/g) ?? []).length, 2, "un tastino del ventaglio per Salute e Saggezza");
 // Le Abilità in fila: niente occhielli delle famiglie, le Specifiche in mezzo alle altre.
 const flat = stat({ ...context, skillsFlat: true, skillGroups: [{ id: "tutte", label: "", rows: [{ id: "athletics", key: "skill:athletics", displayName: "Atletica", value: 2, icon: "i.png", chosen: false, hasSpecialties: false, slots: [] }, { id: "k1", name: "Cucina", displayName: "Cucina", value: 2, chosen: false, custom: true }, { id: "occult", key: "skill:occult", displayName: "Velo", value: 5, icon: "i.png", chosen: false, hasSpecialties: false, slots: [] }] }], customSkills: [] });
-const abilitaFlat = flat.slice(flat.indexOf("wod5e-mage-riq-abilita"), flat.indexOf("wod5e-mage-riq-tiro"));
+const abilitaFlat = flat.slice(flat.indexOf("wod5e-mage-riq-abilita"), flat.indexOf("wod5e-mage-riq-grimorio"));
 assert.ok(!abilitaFlat.includes("wod5e-mage-riq-occhiello"), "in fila niente occhielli");
 assert.ok(abilitaFlat.indexOf("Atletica") < abilitaFlat.indexOf('customSkills.k1.name') && abilitaFlat.indexOf('customSkills.k1.name') < abilitaFlat.indexOf("Velo"), "la Specifica sta in mezzo, in ordine alfabetico");
 assert.ok(abilitaFlat.includes("fa-layer-group"), "il tasto acceso riporta alle famiglie");

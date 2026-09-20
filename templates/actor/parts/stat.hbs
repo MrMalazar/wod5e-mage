@@ -1,6 +1,7 @@
-{{!-- La prima pagina (16/9): otto riquadri in quattro colonne, due per
-     colonna (Identità e Risorse; Magick e Grimorio; Attributi e Tratti;
-     Abilità e Il Tiro). Non è un modulo da compilare, è un selettore: il
+{{!-- La prima pagina (16/9, ordine delle colonne del 20/9): otto riquadri
+     in quattro colonne, due per colonna (Identità e Risorse; Attributi e
+     Tratti; Abilità e Grimorio; Magick e Il Tiro). Non è un modulo da
+     compilare, è un selettore: il
      giocatore clicca l'Areté, le Sfere coi loro poteri, i livelli degli
      Ambiti, un Attributo, un'Abilità, i Tratti, oppure un incantesimo del
      Grimorio, e il riquadro del Tiro compone e tira. --}}
@@ -11,15 +12,15 @@
             {{> "modules/wod5e-mage/templates/actor/parts/stat-risorse.hbs"}}
         </div>
         <div class="wod5e-mage-stat-col wod5e-mage-stat-col-2">
-            {{> "modules/wod5e-mage/templates/actor/parts/stat-magick.hbs"}}
-            {{> "modules/wod5e-mage/templates/actor/parts/stat-grimorio.hbs"}}
-        </div>
-        <div class="wod5e-mage-stat-col wod5e-mage-stat-col-3">
             {{> "modules/wod5e-mage/templates/actor/parts/stat-attributi.hbs"}}
             {{> "modules/wod5e-mage/templates/actor/parts/stat-tratti.hbs"}}
         </div>
-        <div class="wod5e-mage-stat-col wod5e-mage-stat-col-4">
+        <div class="wod5e-mage-stat-col wod5e-mage-stat-col-3">
             {{> "modules/wod5e-mage/templates/actor/parts/stat-abilita.hbs"}}
+            {{> "modules/wod5e-mage/templates/actor/parts/stat-grimorio.hbs"}}
+        </div>
+        <div class="wod5e-mage-stat-col wod5e-mage-stat-col-4">
+            {{> "modules/wod5e-mage/templates/actor/parts/stat-magick.hbs"}}
             {{> "modules/wod5e-mage/templates/actor/parts/stat-tiro.hbs"}}
         </div>
     </div>

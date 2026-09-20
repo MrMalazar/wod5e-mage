@@ -1,39 +1,53 @@
-{{!-- La Salute (ramo A): un tracciato solo, 1 + Costituzione + Fermezza,
-     coi danni fisici (/ e X) e mentali (o e ◎). La Volontà non c'è più. --}}
-<div class="flexcol field-section wod5e-mage-salute">
-    <div class="flexcol">
-        <label class="field-header flexrow resource-label">
-            <i class="fas fa-minus resource-control resource-minus" data-action="saluteExtraChange" data-delta="-1" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}"></i>
-            <span title="{{localize 'WOD5E_MAGE.Salute.Hint'}}">{{localize "WOD5E_MAGE.Salute.Label"}} <small class="wod5e-mage-salute-max">{{salute.max}}</small></span>
-            <i class="fas fa-plus resource-control resource-plus" data-action="saluteExtraChange" data-delta="1" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}"></i>
-        </label>
-    </div>
-    <div class="resource flex-group-center">
-        <div class="wod5e-mage-salute-track" role="group" aria-label="{{localize 'WOD5E_MAGE.Salute.Label'}}" title="{{localize 'WOD5E_MAGE.Salute.ClickHint'}}">
-            {{#each salute.cells as |cell|}}
-                <button type="button" class="wod5e-mage-salute-cell{{#if cell.locked}} wod5e-mage-salute-locked{{/if}}" data-state="{{cell.state}}" {{#if cell.locked}}data-locked="true" title="{{localize 'WOD5E_MAGE.Salute.LockedHint'}}"{{/if}} data-action="saluteCellChange" data-index="{{cell.index}}" aria-label="{{localize cell.label}}"></button>
-            {{/each}}
+{{!-- La Salute (20/9): una riga come le altre della colonna. In testa il
+     cuore, il nome, lo stato se c'è, il conto delle caselle e il tastino col
+     cuore e la croce; sotto, il tracciato (1 + Costituzione + Fermezza, coi
+     danni fisici / e X e mentali o e ◎; la Volontà non c'è più). Il tastino
+     apre col clic il ventaglio dei sei comandi: Riposo, Relax, Reset, Danni
+     subiti, e il meno e il più delle caselle in più (Blue, 20/9: «metti
+     anche quelli nel ventaglio»). Il nome del comando compare al sorvolo
+     del simbolo; un secondo clic, sul simbolo, fa la cosa. Niente apertura
+     al sorvolo: due clic, non l'overlay. --}}
+<div class="wod5e-mage-riga wod5e-mage-riga-risorsa wod5e-mage-riga-salute con-ventaglio">
+    <div class="wod5e-mage-riga-testa">
+        <i class="fa-solid fa-heart wod5e-mage-riga-icona" aria-hidden="true"></i>
+        <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo" title="{{localize 'WOD5E_MAGE.Salute.Hint'}}"><span>{{localize "WOD5E_MAGE.Salute.Label"}}</span></span>
+        {{#if salute.status}}
+            <em class="wod5e-mage-riga-stato">{{localize salute.status}}</em>
+        {{/if}}
+        <b class="wod5e-mage-riga-valore" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}">{{salute.max}}</b>
+        <div class="wod5e-mage-riga-tastini">
+            <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-ventaglio-tasto" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Salute.VentaglioHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.VentaglioHint'}}"><i class="fa-solid fa-heart-circle-plus" aria-hidden="true"></i></button>
         </div>
     </div>
+    <div class="wod5e-mage-salute-track" role="group" aria-label="{{localize 'WOD5E_MAGE.Salute.Label'}}" title="{{localize 'WOD5E_MAGE.Salute.ClickHint'}}">
+        {{#each salute.cells as |cell|}}
+            <button type="button" class="wod5e-mage-salute-cell{{#if cell.locked}} wod5e-mage-salute-locked{{/if}}" data-state="{{cell.state}}" {{#if cell.locked}}data-locked="true" title="{{localize 'WOD5E_MAGE.Salute.LockedHint'}}"{{/if}} data-action="saluteCellChange" data-index="{{cell.index}}" aria-label="{{localize cell.label}}"></button>
+        {{/each}}
+    </div>
     {{!-- Niente legenda: il menù di ogni casella dice il nome accanto al segno. --}}
-    {{#if salute.status}}
-        <p class="wod5e-mage-salute-status">{{localize salute.status}}</p>
-    {{/if}}
-    {{!-- Riposo: via i superficiali mentali e un superficiale fisico. Relax:
-         Fermezza + Autocontrollo, i successi curano la mente. Reset: vuoto. --}}
-    <div class="wod5e-mage-salute-buttons">
-        <button type="button" data-action="saluteRiposo" title="{{localize 'WOD5E_MAGE.Salute.RiposoHint'}}">
-            <i class="fa-solid fa-bed" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.Riposo"}}
+    {{!-- Il ventaglio: sei simboli a raggio dal tastino, verso il basso e
+         verso sinistra, dentro il riquadro. Riposo: via i superficiali
+         mentali e un superficiale fisico. Relax: Fermezza + Autocontrollo, i
+         successi curano la mente. Reset: vuoto. Danni subiti (9/9): quanti e
+         di che segno, in una finestra. Meno e più: le caselle in più. --}}
+    <div class="wod5e-mage-ventaglio wod5e-mage-ventaglio-sei" role="group" aria-label="{{localize 'WOD5E_MAGE.Salute.VentaglioHint'}}">
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 0" data-action="saluteRiposo" title="{{localize 'WOD5E_MAGE.Salute.RiposoHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Riposo'}}">
+            <i class="fa-solid fa-bed" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.Riposo"}}</span>
         </button>
-        <button type="button" data-action="saluteRelax" title="{{localize 'WOD5E_MAGE.Salute.RelaxHint'}}">
-            <i class="fa-solid fa-mug-hot" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.Relax"}}
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 1" data-action="saluteRelax" title="{{localize 'WOD5E_MAGE.Salute.RelaxHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Relax'}}">
+            <i class="fa-solid fa-mug-hot" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.Relax"}}</span>
         </button>
-        <button type="button" data-action="saluteReset" title="{{localize 'WOD5E_MAGE.Salute.ResetHint'}}">
-            <i class="fa-solid fa-eraser" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.Reset"}}
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 2" data-action="saluteReset" title="{{localize 'WOD5E_MAGE.Salute.ResetHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Reset'}}">
+            <i class="fa-solid fa-eraser" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.Reset"}}</span>
         </button>
-        {{!-- Danni subiti (9/9): quanti e di che segno, in una finestra. --}}
-        <button type="button" data-action="saluteDanni" title="{{localize 'WOD5E_MAGE.Salute.DanniHint'}}">
-            <i class="fa-solid fa-heart-crack" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.Danni"}}
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 3" data-action="saluteDanni" title="{{localize 'WOD5E_MAGE.Salute.DanniHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Danni'}}">
+            <i class="fa-solid fa-heart-crack" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.Danni"}}</span>
+        </button>
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 4" data-action="saluteExtraChange" data-delta="-1" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.ExtraMeno'}}">
+            <i class="fa-solid fa-minus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.ExtraMeno"}}</span>
+        </button>
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 5" data-action="saluteExtraChange" data-delta="1" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.ExtraPiu'}}">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.ExtraPiu"}}</span>
         </button>
     </div>
 </div>

@@ -205,8 +205,9 @@
   stroke: #B3924A;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ruota-conto.quintessence > b,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ruota-conto.quintessence .wod5e-mage-ruota-conto-nome {
+/* Il conto della Quintessenza sulla sua riga: oro scuro sul crema. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga-conto.quintessence .wod5e-mage-riga-valore,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga-valore {
   color: #8A6D2F;
 }
 
@@ -286,7 +287,6 @@
 /* I tasti di casa (Nuova sessione, Cambio Scena, i quattro della Salute, i
    Dettagli): crema col bordo oro, testo inchiostro. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-new-session,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-salute-buttons > button,
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-contraccolpo-button,
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-wheel-mode,
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riq-tasto-piccolo,
@@ -750,30 +750,6 @@
 
 .wod5e-mage-salute-glyph[data-state="ma"] {
   background: radial-gradient(circle, var(--salute-segno) 0%, var(--salute-segno) 18%, transparent 22%, transparent 34%, var(--salute-segno) 38%, var(--salute-segno) 50%, transparent 54%, transparent 100%);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-buttons {
-  display: flex;
-  gap: 0.35rem;
-  justify-content: center;
-  margin-top: 0.45rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-buttons > button {
-  background: transparent;
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 3px;
-  color: var(--mage-oro-chiaro);
-  cursor: pointer;
-  font-size: 0.72rem;
-  line-height: 1.2;
-  min-height: 0;
-  padding: 0.15rem 0.5rem;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-buttons > button:hover {
-  border-color: var(--mage-oro);
 }
 
 /* Danni subiti (9/9): la finestra chiede quanti e di che segno; i quattro
@@ -8454,20 +8430,21 @@
 }
 
 /* Le colonne sono trasparenti alla griglia: i riquadri si posizionano da soli,
-   così la fascia bassa (Grimorio, Tratti, Il Tiro) sta su una riga sola e le
-   Risorse (Condizioni, Salute, Saggezza, Ruota: otto riquadri, Blue 16/9
-   sera) prendono le due righe sotto l'Identità. */
+   così la fascia bassa (Tratti, Grimorio, Il Tiro) sta su una riga sola e le
+   Risorse prendono le due righe sotto l'Identità. L'ordine delle colonne è
+   quello di Blue del 20/9: Identità, Attributi, Abilità, Magick; sotto,
+   Risorse, Tratti, Grimorio, Il Tiro. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-col {
   display: contents;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita { grid-area: 1 / 1 / 2 / 2; }
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse { grid-area: 2 / 1 / 4 / 2; }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-magick { grid-area: 1 / 2 / 3 / 3; }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-grimorio { grid-area: 3 / 2 / 4 / 3; }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-attributi { grid-area: 1 / 3 / 3 / 4; }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tratti { grid-area: 3 / 3 / 4 / 4; }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-abilita { grid-area: 1 / 4 / 3 / 5; }
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-attributi { grid-area: 1 / 2 / 3 / 3; }
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tratti { grid-area: 3 / 2 / 4 / 3; }
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-abilita { grid-area: 1 / 3 / 3 / 4; }
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-grimorio { grid-area: 3 / 3 / 4 / 4; }
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-magick { grid-area: 1 / 4 / 3 / 5; }
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tiro { grid-area: 3 / 4 / 4 / 5; }
 
 /* Il riquadro. */
@@ -9195,33 +9172,19 @@
   color: var(--mage-su-oro);
 }
 
-/* Identità: i due tasti sopra, il ritratto a misura fissa (non segue la
-   colonna: Blue, 16/9) coi tasti nello slot, i nomi, l'Appartenenza. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identita-tasti {
-  display: grid;
-  gap: 6px;
-  grid-template-columns: 1fr 1fr;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identita-tasti .wod5e-mage-new-session {
-  left: auto;
-  position: static;
-  text-align: center;
-  top: auto;
-  white-space: nowrap;
-  width: 100%;
-}
-
+/* Identità (20/9): il ritratto a tutta colonna, coi tasti dei ritratti nello
+   slot in alto a destra e i due tasti di sessione posati sul bordo basso in
+   velatura; sotto, il nome come titolo e Giocatore · Appartenenza. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ritratto {
   background: var(--mage-incavo);
   border: 1px solid var(--mage-oro-scuro);
   border-radius: 6px;
   flex: 0 0 auto;
-  height: 170px;
-  margin: 2px auto 0;
+  height: 176px;
+  margin: 2px 0 0;
   overflow: hidden;
   position: relative;
-  width: 220px;
+  width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ritratto-img {
@@ -9262,79 +9225,398 @@
   font-size: 0.6rem;
 }
 
+/* La fascia bassa del ritratto: Nuova sessione e Cambio Scena affiancati,
+   senza cornice, sulla velatura. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identita-tasti {
+  background: var(--mage-velo);
+  border-top: 1px solid var(--mage-oro-tenue);
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  left: 0;
+  position: absolute;
+  right: 0;
+  z-index: 2;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identita-tasti .wod5e-mage-new-session {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  color: var(--mage-testo);
+  font-size: 0.7rem;
+  height: 24px;
+  left: auto;
+  line-height: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 4px;
+  position: static;
+  text-align: center;
+  text-overflow: ellipsis;
+  top: auto;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identita-tasti .wod5e-mage-cambio-scena {
+  border-left: 1px solid var(--mage-oro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identita-tasti .wod5e-mage-new-session:hover {
+  box-shadow: none;
+  color: var(--mage-oro);
+  text-shadow: 0 0 6px var(--mage-oro);
+}
+
+/* Il nome è un titolo (Modesto in oro chiaro), non un campo su carta: il
+   campo resta, trasparente, e si vede che si scrive solo al sorvolo. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-names {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  margin-top: 3px;
+  gap: 0;
+  margin-top: 6px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .name-field {
   position: static;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .charname {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .charname,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .name-field input.charname {
+  --input-text-color: var(--mage-testo);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
   box-sizing: border-box;
-  font-size: 20px;
-  height: 30px;
-  text-align: center;
+  color: var(--mage-testo);
+  font-family: "Modesto Condensed", serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  height: 32px;
+  line-height: 32px;
+  overflow: hidden;
+  padding: 0 2px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   width: 100%;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-player {
-  height: 24px;
-  text-align: center;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .name-field input.charname:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .name-field input.charname:focus {
+  border-bottom-color: var(--mage-oro-scuro);
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .name-field input.charname::placeholder {
+  color: var(--mage-tenue);
+}
+
+/* Giocatore · Appartenenza: il campo del giocatore in flusso, la linguetta
+   dell'Appartenenza posata a destra della stessa riga; la tendina, aperta,
+   scende sotto a tutta larghezza (il riquadro cresce, come prima). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identita-sotto {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identita-sotto .wod5e-mage-player-field {
+  padding-right: 128px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-player,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-player-field input.wod5e-mage-player {
+  --input-text-color: var(--mage-tenue);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--mage-tenue);
+  font-size: 0.82rem;
+  height: 22px;
+  line-height: 22px;
+  padding: 0 2px;
+  text-align: left;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-player-field input.wod5e-mage-player:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-player-field input.wod5e-mage-player:focus {
+  border-bottom-color: var(--mage-oro-scuro);
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-player-field input.wod5e-mage-player::placeholder {
+  color: var(--mage-tenue);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-appartenenza {
-  margin-top: 3px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  max-width: none;
+  padding: 0;
+  position: static;
   width: 100%;
 }
 
-/* Risorse: il tracciato a tutta larghezza, i quattro tasti su una fila, le
-   Condizioni e la Saggezza a tendina. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-salute {
-  padding: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-salute-track {
-  flex-wrap: nowrap;
-  gap: 3px;
-  justify-content: center;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-salute-cell {
-  flex: 0 0 22px;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-appartenenza > summary {
+  color: var(--mage-tenue);
+  font-size: 0.72rem;
+  gap: 0.3rem;
   height: 22px;
-  width: 22px;
+  justify-content: flex-end;
+  letter-spacing: 0.06em;
+  max-width: 124px;
+  position: absolute;
+  right: 0;
+  text-transform: none;
+  top: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-salute-buttons {
-  display: grid;
-  gap: 4px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-appartenenza > summary:hover {
+  color: var(--mage-oro);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-salute-buttons > button {
-  font-size: 0.66rem;
-  min-height: 24px;
-  overflow: hidden;
-  padding: 2px 3px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-appartenenza > summary::before {
+  content: "·";
+  margin-right: 0.2rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-box {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-appartenenza > summary > i {
+  order: 2;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-identita .wod5e-mage-appartenenza-body {
+  background: var(--mage-velluto);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 4px;
+  margin-top: 4px;
+  padding: 0.3rem 0.5rem 0.5rem;
+}
+
+/* Risorse (20/9): righe come le altre colonne. Salute e Saggezza su due
+   righe (la testa: simbolo, nome, stato, conto, tastino; sotto il
+   tracciato), Quintessenza e Paradosso su una col meno e il più ai lati del
+   numero, la Ruota nuda, le Condizioni in fondo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-risorse-righe {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-condizioni-strip {
-  min-height: 0;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-risorsa {
+  align-items: stretch;
+  flex-direction: column;
+  gap: 0;
+  padding: 0 6px 4px 4px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-tendina > summary,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-conto {
+  padding-bottom: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-testa {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  min-height: 28px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-risorsa .wod5e-mage-riga-nome {
+  flex: 0 1 auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-stato {
+  color: var(--mage-rosso-chiaro);
+  font-size: 0.62rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-valore {
+  color: var(--mage-oro);
+  flex: 0 0 auto;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-left: auto;
+  min-width: 16px;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-risorsa .wod5e-mage-riga-tastini {
+  margin-left: 0;
+}
+
+/* Il tracciato della Salute sotto la testa, rientrato sotto il nome; le
+   caselle della Saggezza uguali (il contatore del sistema, / e X). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-salute-track {
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: flex-start;
+  margin: 0 0 0 24px;
+  padding: 0 0 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-salute-cell {
+  flex: 0 0 20px;
+  height: 20px;
+  min-height: 20px;
+  width: 20px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin: 0 0 0 24px;
+  padding: 0 0 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-track .resource-counter-step {
+  border: 1px solid var(--mage-oro-scuro);
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  margin: 0;
+  width: 20px;
+}
+
+/* I conti: il meno e il più ai lati del numero, in fondo alla riga. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-conto-tasti {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-conto-tasti .wod5e-mage-riga-valore {
+  margin-left: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-conto.paradox i.wod5e-mage-riga-icona,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-conto.paradox .wod5e-mage-riga-nome {
+  color: var(--mage-rosso-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-conto.paradox .wod5e-mage-riga-valore {
+  color: var(--mage-rosso-vivo);
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga-nome.wod5e-mage-paradox-burst:hover {
+  color: var(--mage-rosso-chiaro);
+  text-shadow: 0 0 6px var(--mage-rosso-vivo);
+}
+
+/* Il ventaglio (20/9): i comandi a raggio dal tastino, verso il basso e
+   verso sinistra, dentro il riquadro. Si apre col clic (la classe aperto
+   sulla riga, come le tendine degli Ambiti) e si chiude col tastino o con
+   un clic altrove; niente sorvolo. Il nome del comando compare al sorvolo
+   del simbolo, alla sua sinistra. Le voci vanno da sinistra (180°) verso
+   il basso (90°, in CSS gli angoli girano in senso orario): sei a 18° su
+   96 px per la Salute, tre a 45° su 64 px per la Saggezza. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ventaglio {
+  --raggio: 96px;
+  --passo: 18deg;
+  display: none;
+  height: 0;
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  width: 0;
+  z-index: 8;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ventaglio-tre {
+  --raggio: 64px;
+  --passo: 45deg;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.aperto > .wod5e-mage-ventaglio {
+  display: block;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ventaglio-voce {
+  --angolo: calc(180deg - var(--voce, 0) * var(--passo));
+  align-items: center;
+  background: var(--mage-cassetto-fondo);
+  border: 1px solid var(--mage-oro);
+  border-radius: 50%;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 55%);
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.72rem;
+  height: 26px;
+  justify-content: center;
+  left: 0;
+  line-height: 1;
+  margin: -13px 0 0 -13px;
+  min-height: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  transform: rotate(var(--angolo)) translate(var(--raggio)) rotate(calc(-1 * var(--angolo)));
+  width: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ventaglio-voce:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ventaglio-voce:focus-visible {
+  background: var(--mage-oro);
+  box-shadow: 0 3px 8px rgb(0 0 0 / 55%);
+  color: var(--mage-su-oro);
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ventaglio-voce > span {
+  background: var(--mage-oro);
+  border-radius: 3px;
+  color: var(--mage-su-oro);
+  display: none;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 6px;
+  position: absolute;
+  right: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ventaglio-voce:hover > span,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ventaglio-voce:focus-visible > span {
+  display: block;
+}
+
+/* Il tastino acceso quando il ventaglio è aperto; il suo simbolo non gira. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.aperto .wod5e-mage-ventaglio-tasto {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro);
+  color: var(--mage-su-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.aperto .wod5e-mage-ventaglio-tasto > i {
+  transform: none;
+}
+
+/* Le tendine vecchie del riquadro (Saggezza, Dettagli, memo): il summary. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli > summary,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione > summary {
   color: var(--mage-testo);
@@ -9347,39 +9629,30 @@
   text-transform: uppercase;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-tendina > summary::-webkit-details-marker,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli > summary::-webkit-details-marker,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione > summary::-webkit-details-marker {
   display: none;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-tendina[open] > summary > i,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli[open] > summary > i {
   transform: rotate(90deg);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-tendina-body .wod5e-mage-wisdom {
-  padding: 0 0 4px;
-}
-
-/* La Ruota: il mezzo cerchio nella colonna, i due conti col meno e il più
-   sotto (niente parole appese ai lati dell'arco: uscivano dal riquadro), i
-   Dettagli chiusi con le due righe allineate e i due tasti. */
+/* La Ruota (20/9): da sola, senza etichetta né cornice, l'arco più largo;
+   i Dettagli centrati sotto. Il meno e il più stanno sulle righe dei conti. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-stat {
   display: flex;
+  flex: 0 0 auto;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
+  margin-top: 6px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-stat {
-  height: 128px;
-  margin: 2px auto 0;
+  height: 138px;
+  margin: 0 auto;
   max-width: 100%;
-  width: 270px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-stat {
-  margin-top: 2px;
+  width: 290px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-stat .wod5e-mage-magick-node {
@@ -9392,9 +9665,11 @@
   margin: 8px 0 4px;
 }
 
-/* Il meno e il più accanto al primo nodo di ciascuno (Blue, 16/9 sera):
-   sull'arco ai lati del nodo in basso a sinistra (Quintessenza) e di quello
-   in basso a destra (Paradosso); sulla barra ai due capi della fila. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar-stat .wod5e-mage-magick-cells {
+  align-items: center;
+  justify-content: center;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-tasto {
   align-items: center;
   background: var(--mage-incavo);
@@ -9423,115 +9698,194 @@
   color: var(--mage-rosso-chiaro);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-stat .wod5e-mage-ruota-tasto {
-  position: absolute;
-  top: 89.5%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-stat .wod5e-mage-ruota-tasto.quintessence.meno { left: calc(12.5% - 25px); }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-stat .wod5e-mage-ruota-tasto.quintessence.piu { left: calc(12.5% + 25px); }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-stat .wod5e-mage-ruota-tasto.paradox.meno { left: calc(87.5% - 25px); }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-track-stat .wod5e-mage-ruota-tasto.paradox.piu { left: calc(87.5% + 25px); }
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar-stat .wod5e-mage-magick-cells {
-  align-items: center;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar-stat .wod5e-mage-ruota-tasto.quintessence.piu,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar-stat .wod5e-mage-ruota-tasto.paradox.meno {
-  margin-right: 4px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar-stat .wod5e-mage-ruota-tasto.paradox.meno {
-  margin-left: 4px;
-  margin-right: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-bar-stat .wod5e-mage-magick-cells {
-  justify-content: center;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conti {
-  display: grid;
-  gap: 6px;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto {
-  align-items: center;
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 6px;
-  box-sizing: border-box;
-  display: flex;
-  gap: 4px;
-  min-width: 0;
-  padding: 3px 4px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto-nome {
-  color: var(--mage-testo);
-  flex: 1 1 auto;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  min-width: 0;
-  overflow: hidden;
-  text-align: left;
-  text-overflow: ellipsis;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-ruota-conto-nome {
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  line-height: 1;
-  min-height: 0;
-  padding: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-ruota-conto-nome:hover {
-  box-shadow: none;
-  text-shadow: 0 0 6px var(--mage-rosso-vivo);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto > b {
-  flex: 0 0 auto;
-  font-size: 1.05rem;
-  min-width: 16px;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli > summary {
   text-align: center;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto.quintessence > b,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto.quintessence .wod5e-mage-ruota-conto-nome {
-  color: var(--mage-oro);
+/* Le Condizioni (20/9), in fondo: l'occhiello col più che apre la scelta
+   (la tendina delle venticinque per gruppo e la lente), poi una riga per
+   Condizione accesa: simbolo che spegne, nome che apre e chiude la
+   spiegazione, dadi. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 6px;
+  position: relative;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto.paradox > b,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto.paradox .wod5e-mage-ruota-conto-nome {
-  color: var(--mage-rosso-vivo);
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizioni-occhiello {
+  padding-right: 26px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-conto > button:not(.wod5e-mage-ruota-conto-nome) {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-condizioni-drawer {
+  position: static;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-condizioni-drawer > summary {
   align-items: center;
   background: transparent;
   border: 1px solid var(--mage-oro-scuro);
-  border-radius: 4px;
-  color: var(--mage-testo);
+  border-radius: 5px;
+  border-top: 1px solid var(--mage-oro-scuro);
+  color: var(--mage-oro);
   cursor: pointer;
   display: inline-flex;
-  flex: 0 0 18px;
   font-size: 0.6rem;
-  height: 18px;
+  gap: 0;
+  height: 20px;
   justify-content: center;
-  line-height: 1;
-  min-height: 0;
+  letter-spacing: 0;
+  list-style: none;
   padding: 0;
-  width: 18px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-condizioni-drawer > summary:hover {
+  border-color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-condizioni-drawer > summary > i,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-condizioni-drawer:not([open]) > summary > i {
+  font-size: 0.6rem;
+  transform: none;
+  transition: transform 0.15s;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-condizioni-drawer[open] > summary {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro);
+  color: var(--mage-su-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-condizioni-drawer[open] > summary > i {
+  transform: rotate(45deg);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-condizioni {
+  margin: 2px 0 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-risorse .wod5e-mage-condizioni-search {
+  align-items: center;
+  display: flex;
+  font-size: 0.7rem;
+  gap: 5px;
+  margin: 2px 0 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-riga {
+  background: var(--mage-riga-fondo);
+  border-left: 2px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 2px 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-riga.suppressed {
+  border-left-color: var(--mage-oro-tenue);
+  opacity: 0.6;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-testa {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  min-height: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-spegni {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 50%;
+  cursor: pointer;
+  flex: 0 0 22px;
+  height: 22px;
+  line-height: 0;
+  min-height: 0;
+  padding: 2px;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-spegni:hover {
+  border-color: var(--mage-rosso);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-spegni > img {
+  border: 0;
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-nome {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: flex;
+  flex: 1 1 auto;
+  font-size: 0.92rem;
+  font-weight: 600;
+  gap: 6px;
+  justify-content: flex-start;
+  line-height: 1.1;
+  min-height: 0;
+  min-width: 0;
+  padding: 2px;
+  text-align: left;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-nome > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-nome > i {
+  color: var(--mage-tenue);
+  font-size: 0.6rem;
+  transition: transform 0.15s;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-nome:hover {
+  box-shadow: none;
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-riga.aperta .wod5e-mage-condizione-nome > i {
+  transform: rotate(180deg);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-dadi {
+  color: var(--mage-rosso-chiaro);
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-spiega {
+  color: var(--mage-testo);
+  display: none;
+  font-size: 0.76rem;
+  line-height: 1.3;
+  padding: 0 2px 4px 28px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-riga.aperta .wod5e-mage-condizione-spiega {
+  display: block;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-spiega > em {
+  color: var(--mage-testo);
+  display: block;
+  font-style: italic;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli-body {

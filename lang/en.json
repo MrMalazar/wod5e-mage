@@ -586,6 +586,10 @@
       "Label": "Wisdom",
       "Status": "Status",
       "Roll": "Roll Wisdom",
+      "VentaglioHint": "Wisdom commands: roll, one box less, one more",
+      "Tira": "Roll",
+      "MaxMeno": "One box less",
+      "MaxPiu": "One box more",
       "Rolling": "Rolling Wisdom",
       "Segnato": "Marked",
       "SegnatoEffects": "two fewer dice on mortal rolls, mundane scenes cost, no Consensus mending, your aura shows."
@@ -749,6 +753,9 @@
       "Label": "Health",
       "Hint": "2 + Stamina + Resolve",
       "Extra": "Extra boxes beyond the count",
+      "VentaglioHint": "Health commands: Rest, Relax, Reset, Damage taken, extra boxes",
+      "ExtraMeno": "One box less",
+      "ExtraPiu": "One box more",
       "ClickHint": "Click: pick the mark. Right click: the box clears.",
       "States": {
         "empty": "Empty",
@@ -1042,6 +1049,10 @@
     },
     "Condizioni": {
       "All": "All Conditions",
+      "AddHint": "Add a Condition",
+      "SearchHint": "Search outside the list",
+      "OffHint": "Click: the Condition goes off",
+      "OpenHint": "Click: show or hide what it is and what it does",
       "MasterTitle": "Conditions (Storyteller)",
       "MasterTargets": "Selected characters:",
       "MasterNoTargets": "Select the characters on the scene, then click a Condition.",

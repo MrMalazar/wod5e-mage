@@ -1,18 +1,11 @@
-{{!-- Identità (16/9): Nuova sessione e Cambio Scena sopra, il ritratto grande
-     con l'icona in alto a destra che fa girare i ritratti, il nome del
-     personaggio e del giocatore, e sotto l'Appartenenza a tendina. --}}
+{{!-- Identità (20/9): il ritratto grande, coi tasti dei ritratti in alto a
+     destra e, posati sul bordo basso in velatura, Nuova sessione e Cambio
+     Scena (restano sopra l'immagine, ma non si prendono una riga). Sotto,
+     il nome come titolo (è ancora un campo: la scheda sbloccata lo scrive),
+     poi sulla stessa riga il giocatore e l'Appartenenza a tendina. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-identita">
     <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.Identita"}}</span></header>
     <div class="wod5e-mage-riq-body">
-        <div class="wod5e-mage-identita-tasti">
-            <button type="button" class="wod5e-mage-new-session" data-action="saluteNewSession" title="{{localize 'WOD5E_MAGE.Salute.NewSessionHint'}}">
-                <i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.NewSession"}}
-            </button>
-            <button type="button" class="wod5e-mage-new-session wod5e-mage-cambio-scena" data-action="saluteCambioScena" title="{{localize 'WOD5E_MAGE.Salute.CambioScenaHint'}}">
-                <i class="fa-solid fa-clapperboard" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.CambioScena"}}{{#if salute.locked}} <b class="wod5e-mage-cambio-scena-count">{{salute.locked}}</b>{{/if}}
-            </button>
-        </div>
-
         <div class="wod5e-mage-ritratto">
             <img class="profile-img wod5e-mage-ritratto-img" data-action="editImage" src="{{img}}" data-edit="img" title="{{actor.name}}"/>
             {{!-- In alto a destra, dentro lo slot: gira i ritratti; il più ne aggiunge uno, il meno toglie quello che si vede. --}}
@@ -27,6 +20,15 @@
                     {{/if}}
                 {{/unless}}
             </div>
+            {{!-- La fascia bassa: i due tasti di sessione, in velatura sul ritratto. --}}
+            <div class="wod5e-mage-identita-tasti">
+                <button type="button" class="wod5e-mage-new-session" data-action="saluteNewSession" title="{{localize 'WOD5E_MAGE.Salute.NewSessionHint'}}">
+                    <i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.NewSession"}}
+                </button>
+                <button type="button" class="wod5e-mage-new-session wod5e-mage-cambio-scena" data-action="saluteCambioScena" title="{{localize 'WOD5E_MAGE.Salute.CambioScenaHint'}}">
+                    <i class="fa-solid fa-clapperboard" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Salute.CambioScena"}}{{#if salute.locked}} <b class="wod5e-mage-cambio-scena-count">{{salute.locked}}</b>{{/if}}
+                </button>
+            </div>
         </div>
 
         <div class="wod5e-mage-names">
@@ -37,11 +39,15 @@
                     <input class="charname" name="name" type="text" value="{{name}}" placeholder="{{localize 'WOD5E.Name'}}"/>
                 {{/if}}
             </div>
-            <div class="wod5e-mage-player-field">
-                <input class="wod5e-mage-player" name="flags.wod5e-mage.player" type="text" value="{{playerName}}" placeholder="{{localize 'WOD5E_MAGE.Header.Player'}}" aria-label="{{localize 'WOD5E_MAGE.Header.Player'}}" {{#if locked}}disabled{{/if}}/>
+            {{!-- Giocatore · Appartenenza: il campo del giocatore a sinistra, la
+                 linguetta dell'Appartenenza a destra sulla stessa riga; la
+                 tendina si apre sotto, a tutta larghezza. --}}
+            <div class="wod5e-mage-identita-sotto">
+                <div class="wod5e-mage-player-field">
+                    <input class="wod5e-mage-player" name="flags.wod5e-mage.player" type="text" value="{{playerName}}" placeholder="{{localize 'WOD5E_MAGE.Header.Player'}}" aria-label="{{localize 'WOD5E_MAGE.Header.Player'}}" {{#if locked}}disabled{{/if}}/>
+                </div>
+                {{> "modules/wod5e-mage/templates/actor/parts/appartenenza.hbs"}}
             </div>
         </div>
-
-        {{> "modules/wod5e-mage/templates/actor/parts/appartenenza.hbs"}}
     </div>
 </section>

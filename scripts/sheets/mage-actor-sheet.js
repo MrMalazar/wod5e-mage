@@ -212,15 +212,31 @@ function wireCassetti(sheet) {
  * la tiene aperta finché non lo si preme di nuovo o non si clicca altrove;
  * una tendina aperta alla volta per riquadro. Niente sorvolo (Blue: «voglio
  * solo che quando clicca mi mostra le scelte»). Solo classi: niente render.
+ * Lo stesso tastino, sulla Salute e sulla Saggezza (20/9), apre il
+ * ventaglio dei comandi: stesso meccanismo, due clic e niente overlay.
  */
 function onCassettoToggle(event, target) {
   event?.preventDefault?.();
-  const row = target?.closest?.(".wod5e-mage-riga.con-tendina, .wod5e-mage-riga.con-cassetto");
+  const row = target?.closest?.(".wod5e-mage-riga.con-tendina, .wod5e-mage-riga.con-cassetto, .wod5e-mage-riga.con-ventaglio");
   if (!row) return;
   const open = !row.classList.contains("aperto");
   for (const other of row.closest(".wod5e-mage-riq-body")?.querySelectorAll(".wod5e-mage-riga.aperto") ?? []) other.classList.remove("aperto");
   row.classList.toggle("aperto", open);
   if (open) flipCassetto(row);
+}
+
+/**
+ * Il nome di una Condizione accesa (20/9): un clic apre la spiegazione
+ * (cos'è e cosa fa, dalla voce), un altro la richiude. Solo una classe
+ * sulla riga: niente render, niente spazio quando è chiusa.
+ */
+function onCondizioneApri(event, target) {
+  event?.preventDefault?.();
+  const row = target?.closest?.(".wod5e-mage-condizione-riga");
+  if (!row) return;
+  const open = !row.classList.contains("aperta");
+  row.classList.toggle("aperta", open);
+  target.setAttribute("aria-expanded", open ? "true" : "false");
 }
 
 /**
@@ -362,6 +378,7 @@ export class MageActorSheet extends MortalActorSheet {
       scopeMode: onScopeMode,
       cassettoToggle: onCassettoToggle,
       condizioneToggle: onCondizioneToggle,
+      condizioneApri: onCondizioneApri,
       wisdomResourceChange: onWisdomResourceChange,
       wisdomRoll: onWisdomRoll,
       // Il tiro composto (16/9): i clic dei nove riquadri della prima pagina.

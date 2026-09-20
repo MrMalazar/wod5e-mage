@@ -1,26 +1,16 @@
-{{!-- Le Condizioni addosso, a icone (i simboli veri sono ancora allo studio:
-     qui stanno le immagini degli oggetti, segnaposto). Un clic spegne; la
-     lente cerca fuori lista; la tendina mostra le venticinque per gruppo. --}}
+{{!-- Le Condizioni addosso (20/9), in fondo alle Risorse sotto la Ruota.
+     In testa l'occhiello col più, che apre la scelta: la tendina con tutte
+     le venticinque per gruppo (i simboli veri sono ancora allo studio: qui
+     stanno le immagini degli oggetti, segnaposto) e la lente per quelle
+     fuori lista. Sotto, una riga per Condizione accesa: il simbolo (un clic
+     spegne), il nome (un clic apre e chiude la spiegazione: cos'è e cosa
+     fa, dalla voce), i dadi che toglie. Da vuota la sezione è la sola riga
+     del titolo. --}}
 <div class="wod5e-mage-condizioni-box">
-    <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E.ItemsList.Conditions"}}</span>
-    <div class="wod5e-mage-condizioni-strip">
-        {{#each condizioniRows as |row|}}
-            <button type="button" class="wod5e-mage-condizione-on{{#if row.suppressed}} suppressed{{/if}}" data-action="condizioneToggle" data-condizione="{{row.condizione}}" data-item-id="{{row.id}}" title="{{row.title}}" aria-label="{{row.name}}">
-                <span class="wod5e-mage-condizione-glyph">
-                    <img src="{{row.img}}" alt="">
-                    {{#if row.dice}}<small>{{row.dice}}</small>{{/if}}
-                </span>
-                <span class="wod5e-mage-condizione-name">{{row.name}}</span>
-            </button>
-        {{/each}}
-        <a class="item-control search-data-item wod5e-mage-condizioni-search" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="condition">
-            <i class="fa-solid fa-magnifying-glass"></i>
-        </a>
-    </div>
+    <span class="wod5e-mage-riq-occhiello wod5e-mage-condizioni-occhiello">{{localize "WOD5E.ItemsList.Conditions"}}</span>
     <details class="wod5e-mage-condizioni-drawer">
-        <summary>
-            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-            <span>{{localize "WOD5E_MAGE.Condizioni.All"}}</span>
+        <summary title="{{localize 'WOD5E_MAGE.Condizioni.AddHint'}}" aria-label="{{localize 'WOD5E_MAGE.Condizioni.AddHint'}}">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i>
         </summary>
         <div class="wod5e-mage-condizioni">
             {{#each condizioni as |group|}}
@@ -39,6 +29,30 @@
                     </div>
                 </div>
             {{/each}}
+            <a class="item-control search-data-item wod5e-mage-condizioni-search" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="condition">
+                <i class="fa-solid fa-magnifying-glass"></i> <span>{{localize "WOD5E_MAGE.Condizioni.SearchHint"}}</span>
+            </a>
         </div>
     </details>
+    {{#each condizioniRows as |row|}}
+        <div class="wod5e-mage-condizione-riga{{#if row.suppressed}} suppressed{{/if}}">
+            <div class="wod5e-mage-condizione-testa">
+                <button type="button" class="wod5e-mage-condizione-spegni" data-action="condizioneToggle" data-condizione="{{row.condizione}}" data-item-id="{{row.id}}" title="{{localize 'WOD5E_MAGE.Condizioni.OffHint'}}" aria-label="{{localize 'WOD5E_MAGE.Condizioni.OffHint'}}">
+                    <img src="{{row.img}}" alt="">
+                </button>
+                <button type="button" class="wod5e-mage-condizione-nome" data-action="condizioneApri" title="{{localize 'WOD5E_MAGE.Condizioni.OpenHint'}}" aria-expanded="false">
+                    <span>{{row.name}}</span>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                </button>
+                {{#if row.dice}}<b class="wod5e-mage-condizione-dadi">{{row.dice}}</b>{{/if}}
+            </div>
+            {{#if row.what}}
+                <div class="wod5e-mage-condizione-spiega">
+                    <em>{{row.what}}</em>{{#if row.effect}}<span>{{row.effect}}</span>{{/if}}
+                </div>
+            {{else if row.effect}}
+                <div class="wod5e-mage-condizione-spiega"><span>{{row.effect}}</span></div>
+            {{/if}}
+        </div>
+    {{/each}}
 </div>

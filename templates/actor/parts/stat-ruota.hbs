@@ -1,22 +1,16 @@
-{{!-- La Ruota (16/9), dentro le Risorse: il mezzo cerchio coi nove nodi (o
-     la barra, a scelta del giocatore). Il meno e il più stanno accanto al
-     primo nodo di ciascuno (Blue, 16/9 sera): a sinistra il primo della
-     Quintessenza, a destra il primo del Paradosso; sotto, i due conti (la
-     parola PARADOSSO è lo Scoppio) e «Dettagli della Ruota» chiuso:
-     Quintessenza generata, Paradosso permanente, Negare il Contraccolpo,
-     il modo. --}}
+{{!-- La Ruota (20/9), dentro le Risorse: da sola, senza etichetta né
+     cornice, il mezzo cerchio coi nove nodi (o la barra, a scelta del
+     giocatore). Il meno e il più non stanno più sull'arco: sono sulle righe
+     di Quintessenza e Paradosso, sopra. Sotto l'arco, centrati, i «Dettagli
+     della Ruota» chiusi: Quintessenza generata, Paradosso permanente, Negare
+     il Contraccolpo, il modo. --}}
 <div class="wod5e-mage-ruota wod5e-mage-ruota-stat">
-    <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E_MAGE.MagickBalance.Wheel"}}</span>
     {{#if wheelAsBar}}
         <div class="wod5e-mage-magick-bar wod5e-mage-magick-bar-stat" role="group" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.Wheel'}}">
             <div class="wod5e-mage-magick-cells">
-                <button type="button" class="wod5e-mage-ruota-tasto quintessence meno" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-                <button type="button" class="wod5e-mage-ruota-tasto quintessence piu" data-action="magickBalanceChange" data-resource="quintessence" data-delta="1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
                 {{#each magickTrack.cells as |cell|}}
                     <span class="wod5e-mage-magick-cell {{cell.state}}" title="{{cell.number}}"></span>
                 {{/each}}
-                <button type="button" class="wod5e-mage-ruota-tasto paradox meno" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-                <button type="button" class="wod5e-mage-ruota-tasto paradox piu" data-action="magickBalanceChange" data-resource="paradox" data-delta="1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
             </div>
         </div>
     {{else}}
@@ -27,25 +21,8 @@
             {{#each magickTrack.cells as |cell|}}
                 <span class="wod5e-mage-magick-node {{cell.state}}" style="{{cell.position}}" title="{{cell.number}}"></span>
             {{/each}}
-            {{!-- Il meno e il più ai lati del primo nodo di ciascuno. --}}
-            <button type="button" class="wod5e-mage-ruota-tasto quintessence meno" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-            <button type="button" class="wod5e-mage-ruota-tasto quintessence piu" data-action="magickBalanceChange" data-resource="quintessence" data-delta="1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
-            <button type="button" class="wod5e-mage-ruota-tasto paradox meno" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-            <button type="button" class="wod5e-mage-ruota-tasto paradox piu" data-action="magickBalanceChange" data-resource="paradox" data-delta="1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
         </div>
     {{/if}}
-
-    {{!-- I due conti; PARADOSSO è il tasto dello Scoppio. --}}
-    <div class="wod5e-mage-ruota-conti">
-        <div class="wod5e-mage-ruota-conto quintessence">
-            <span class="wod5e-mage-ruota-conto-nome">{{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</span>
-            <b>{{magickTrack.quintessence}}</b>
-        </div>
-        <div class="wod5e-mage-ruota-conto paradox">
-            <button type="button" class="wod5e-mage-paradox-burst wod5e-mage-ruota-conto-nome" data-action="paradoxBurst" title="{{localize 'WOD5E_MAGE.Burst.Hint'}}">{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</button>
-            <b>{{magickTrack.paradox}}</b>
-        </div>
-    </div>
 
     <details class="wod5e-mage-ruota-dettagli">
         <summary><i class="fa-solid fa-chevron-right" aria-hidden="true"></i> <span>{{localize "WOD5E_MAGE.Stat.DettagliRuota"}}</span></summary>

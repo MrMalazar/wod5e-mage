@@ -36,12 +36,14 @@ assert.match(css, /\.wod5e-mage-stat-grid\s*\{[^}]*display:\s*grid;[^}]*grid-tem
 assert.match(css, /\.wod5e-mage-stat\.active\s*\{[^}]*flex:\s*1 1 auto;[^}]*min-height:\s*0;/s);
 assert.match(css, /\.wod5e-mage-riq-body\s*\{[^}]*overflow-y:\s*auto;/s);
 assert.match(css, /\.wod5e-mage-stat-col\s*\{[^}]*display:\s*contents;/s);
-for (const [riq, area] of [["identita", "1 / 1 / 2 / 2"], ["risorse", "2 / 1 / 4 / 2"], ["magick", "1 / 2 / 3 / 3"], ["grimorio", "3 / 2 / 4 / 3"], ["attributi", "1 / 3 / 3 / 4"], ["tratti", "3 / 3 / 4 / 4"], ["abilita", "1 / 4 / 3 / 5"], ["tiro", "3 / 4 / 4 / 5"]]) {
+// L'ordine delle colonne (Blue, 20/9): Identità, Attributi, Abilità, Magick;
+// sotto, Risorse, Tratti, Grimorio, Il Tiro.
+for (const [riq, area] of [["identita", "1 / 1 / 2 / 2"], ["risorse", "2 / 1 / 4 / 2"], ["attributi", "1 / 2 / 3 / 3"], ["tratti", "3 / 2 / 4 / 3"], ["abilita", "1 / 3 / 3 / 4"], ["grimorio", "3 / 3 / 4 / 4"], ["magick", "1 / 4 / 3 / 5"], ["tiro", "3 / 4 / 4 / 5"]]) {
   assert.match(css, new RegExp(`\\.wod5e-mage-riq-${riq} \\{ grid-area: ${area.replace(/\//g, "\\/")}; \\}`), `area di ${riq}`);
 }
 assert.doesNotMatch(css, /wod5e-mage-riq-salute|wod5e-mage-riq-poteri|wod5e-mage-ambito-livell/);
 // Gli otto riquadri stanno in stat.hbs nell'ordine delle colonne; la testata è vuota e nascosta.
-assert.match(statTemplate, /stat-identita\.hbs[\s\S]*stat-risorse\.hbs[\s\S]*stat-magick\.hbs[\s\S]*stat-grimorio\.hbs[\s\S]*stat-attributi\.hbs[\s\S]*stat-tratti\.hbs[\s\S]*stat-abilita\.hbs[\s\S]*stat-tiro\.hbs/);
+assert.match(statTemplate, /stat-identita\.hbs[\s\S]*stat-risorse\.hbs[\s\S]*stat-attributi\.hbs[\s\S]*stat-tratti\.hbs[\s\S]*stat-abilita\.hbs[\s\S]*stat-grimorio\.hbs[\s\S]*stat-magick\.hbs[\s\S]*stat-tiro\.hbs/);
 assert.doesNotMatch(statTemplate, /stat-poteri\.hbs|riq-salute/);
 assert.match(mageHeader, /<header class="actor-header wod5e-mage-header wod5e-mage-header-vuota" aria-hidden="true"><\/header>/);
 assert.match(css, /\.wod5e-mage-header-vuota\s*\{\s*display: none;/);
@@ -85,20 +87,30 @@ const tiroTemplate = stat("stat-tiro.hbs");
 assert.doesNotMatch(tiroTemplate, /tiro\.pills|wod5e-mage-pillola/);
 assert.match(tiroTemplate, /data-action="tiroExtra" data-delta="-1"[\s\S]*data-action="tiroExtra" data-delta="1"/);
 assert.match(stat("grimorio.hbs"), /data-action="grimorioClose"/);
-assert.match(stat("stat-risorse.hbs"), /wod5e-mage-saggezza-tendina[\s\S]*parts\/wisdom\.hbs/);
+// Le Risorse a righe (Blue, 20/9): Salute e Saggezza col tastino che apre il
+// ventaglio (lo stesso cassettoToggle degli Ambiti, solo col clic), poi
+// Quintessenza e Paradosso col meno e il più ai lati del numero, la Ruota
+// nuda, le Condizioni in fondo.
+const risorseRiq = stat("stat-risorse.hbs");
+assert.match(risorseRiq, /wod5e-mage-risorse-righe[\s\S]*parts\/salute\.hbs[\s\S]*wod5e-mage-riga-saggezza con-ventaglio[\s\S]*wod5e-mage-ventaglio-tasto" data-action="cassettoToggle"[\s\S]*wod5e-mage-saggezza-track[\s\S]*data-action="squareCounterChange"[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-tre[\s\S]*data-action="wisdomRoll"[\s\S]*data-action="wisdomResourceChange" data-resource-action="minus"[\s\S]*data-resource-action="plus"[\s\S]*wod5e-mage-riga-conto quintessence[\s\S]*data-resource="quintessence" data-delta="-1"[\s\S]*magickTrack\.quintessence[\s\S]*data-resource="quintessence" data-delta="1"[\s\S]*wod5e-mage-riga-conto paradox[\s\S]*data-action="paradoxBurst"[\s\S]*data-resource="paradox" data-delta="-1"[\s\S]*magickTrack\.paradox[\s\S]*data-resource="paradox" data-delta="1"[\s\S]*parts\/stat-ruota\.hbs[\s\S]*parts\/stat-condizioni\.hbs/);
+assert.doesNotMatch(risorseRiq, /wod5e-mage-saggezza-tendina|parts\/wisdom\.hbs/);
 assert.doesNotMatch(stat("stat-ruota.hbs"), /wod5e-mage-magick-end/);
-// La Ruota dentro le Risorse: il mezzo cerchio vero, il meno e il più ai
-// lati del primo nodo di ciascuno (sull'arco e sulla barra), i due conti
-// senza tasti, i Dettagli della Ruota chiusi.
+// La Ruota dentro le Risorse: il mezzo cerchio vero senza tasti né conti né
+// etichetta, i Dettagli della Ruota chiusi e centrati.
 const risorse = stat("stat-ruota.hbs");
 assert.match(risorse, /A150 150 0 0 1[\s\S]*preserveAspectRatio="xMidYMid meet"|preserveAspectRatio="xMidYMid meet"[\s\S]*A150 150 0 0 1/);
-assert.match(risorse, /wod5e-mage-magick-track-stat[\s\S]*wod5e-mage-magick-node[\s\S]*wod5e-mage-ruota-tasto quintessence meno" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1"[\s\S]*wod5e-mage-ruota-tasto quintessence piu"[\s\S]*wod5e-mage-ruota-tasto paradox meno"[\s\S]*wod5e-mage-ruota-tasto paradox piu" data-action="magickBalanceChange" data-resource="paradox" data-delta="1"/);
-assert.match(risorse, /wod5e-mage-magick-bar-stat[\s\S]*ruota-tasto quintessence meno[\s\S]*ruota-tasto quintessence piu[\s\S]*wod5e-mage-magick-cell [\s\S]*ruota-tasto paradox meno[\s\S]*ruota-tasto paradox piu/);
-assert.match(risorse, /wod5e-mage-ruota-conto quintessence">\s*<span class="wod5e-mage-ruota-conto-nome">[\s\S]*wod5e-mage-ruota-conto paradox">\s*<button[^>]*data-action="paradoxBurst"/);
-assert.doesNotMatch(risorse, /wod5e-mage-ruota-conto[^>]*>\s*<button type="button" data-action="magickBalanceChange"/);
-assert.match(css, /\.wod5e-mage-magick-track-stat \.wod5e-mage-ruota-tasto\.quintessence\.meno \{ left: calc\(12\.5% - 25px\); \}/);
-assert.match(css, /\.wod5e-mage-magick-track-stat \.wod5e-mage-ruota-tasto\.paradox\.piu \{ left: calc\(87\.5% \+ 25px\); \}/);
+assert.match(risorse, /wod5e-mage-magick-track-stat[\s\S]*wod5e-mage-magick-node/);
+assert.doesNotMatch(risorse, /wod5e-mage-ruota-tasto|wod5e-mage-ruota-conti|wod5e-mage-ruota-conto|wod5e-mage-riq-occhiello|magickBalanceChange/);
+assert.doesNotMatch(css, /\.wod5e-mage-magick-track-stat \.wod5e-mage-ruota-tasto/);
+assert.match(css, /\.wod5e-mage-ruota-dettagli > summary \{\s*text-align: center;/);
 assert.match(risorse, /<details class="wod5e-mage-ruota-dettagli">[\s\S]*generatedQuintessence[\s\S]*permanentParadox[\s\S]*data-action="contraccolpoNega"[\s\S]*data-action="wheelModeToggle"/);
+// Il ventaglio: si apre solo con la classe aperto (niente :hover), le voci a
+// raggio dal tastino, il nome a sinistra del simbolo al sorvolo.
+assert.match(css, /\.wod5e-mage-riga\.aperto > \.wod5e-mage-ventaglio \{\s*display: block;/);
+assert.doesNotMatch(css, /con-ventaglio[^{]*:hover[^{]*\.wod5e-mage-ventaglio/);
+assert.match(css, /\.wod5e-mage-ventaglio-voce \{[^}]*transform: rotate\(var\(--angolo\)\) translate\(var\(--raggio\)\) rotate\(calc\(-1 \* var\(--angolo\)\)\);/s);
+assert.match(css, /\.wod5e-mage-ventaglio-voce:hover > span,\n[^{]*:focus-visible > span \{\s*display: block;/);
+assert.match(sheetSource, /onCassettoToggle[\s\S]*\.wod5e-mage-riga\.con-ventaglio/);
 assert.doesNotMatch(risorse, /data-action="areteRoll"|wod5e-mage-header-arete/);
 // Magick: le Sfere col cassetto dei poteri, gli Ambiti con la lettura e il cassetto dei livelli.
 const magickRiq = stat("stat-magick.hbs");

@@ -74,9 +74,12 @@ assert.equal(volontaState({ total: 0, difficulty: 3, failedCount: 1, burst: true
 assert.deepEqual(saluteWithDamage({ pa: 0, ps: 1, ma: 0, ms: 0 }, 6, { ps: 3, pa: 1 }), { pa: 1, ps: 4, ma: 0, ms: 0 });
 assert.deepEqual(saluteWithDamage({ pa: 0, ps: 0, ma: 0, ms: 0 }, 3, { ms: 1, ma: 1 }), { pa: 0, ps: 0, ma: 1, ms: 1 });
 
-// La scheda: la parola PARADOSSO sulla Ruota è lo Scoppio; le righe delle Magick in atto portano i segni.
+// La scheda: la parola PARADOSSO, sulla sua riga nelle Risorse (20/9), è lo
+// Scoppio; la Ruota non porta tasti; le righe delle Magick in atto portano i segni.
+const risorse = readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8");
+assert.equal((risorse.match(/data-action="paradoxBurst"/g) ?? []).length, 1, "la parola PARADOSSO sulla riga del conto (20/9)");
 const ruota = readFileSync(new URL("../templates/actor/parts/stat-ruota.hbs", import.meta.url), "utf8");
-assert.equal((ruota.match(/data-action="paradoxBurst"/g) ?? []).length, 1, "la parola PARADOSSO nel conto sotto la Ruota (16/9)");
+assert.doesNotMatch(ruota, /data-action="paradoxBurst"/);
 assert.match(ruota, /magickTrack\.locked/);
 const spheres = readFileSync(new URL("../templates/actor/parts/spheres.hbs", import.meta.url), "utf8");
 assert.match(spheres, /wod5e-mage-ongoing-marks[\s\S]*row\.lock[\s\S]*row\.duration[\s\S]*row\.threshold/);

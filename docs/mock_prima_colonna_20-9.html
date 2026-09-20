@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Prima colonna · adesso e proposta</title>
+<style>
+  :root{
+    --oro:#d9a827; --oro-scuro:#98772b; --oro-tenue:#6b4f12; --oro-chiaro:#f5e7b2;
+    --carta:#fbf8f0; --inchiostro:#14110c; --testo:#e6dcc2; --tenue:#ab9f85;
+    --incavo:#15130f; --velluto:#282723; --viola:#5a2b82; --viola-chiaro:#b58ade;
+    --rosso:#b5433c; --rosso-chiaro:#e2a79e; --riq:linear-gradient(#2a2314,#1f1a10);
+    --riga:#2f2a1f; --velo:rgb(20 16 10 / 78%); --su-oro:#1a140a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#121009;color:var(--testo);font:13px/1.35 "Signika","Segoe UI",system-ui,sans-serif;padding:28px 32px 48px}
+  h1{font:600 20px "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro);margin:0 0 4px;letter-spacing:.02em}
+  .sub{color:var(--tenue);margin:0 0 40px;font-size:13px}
+  .stage{display:grid;grid-template-columns:284px 284px 1fr;gap:36px;align-items:start}
+  .col{width:284px;height:800px;background:var(--riq);border:1px solid var(--oro-tenue);border-radius:6px;padding:10px 10px 8px;position:relative;display:flex;flex-direction:column}
+  .lbl{position:absolute;top:-24px;left:0;font:600 11px/1 sans-serif;letter-spacing:.14em;color:var(--tenue);text-transform:uppercase}
+  .tit{font:700 10px/1 sans-serif;letter-spacing:.16em;color:var(--oro-chiaro);text-transform:uppercase;padding:2px 0 8px;border-bottom:1px solid var(--oro-tenue);margin-bottom:8px}
+  .micro{font:700 8.5px/1 sans-serif;letter-spacing:.14em;color:var(--tenue);text-transform:uppercase;margin:8px 0 4px}
+  .btn{background:var(--velluto);border:1px solid var(--oro-scuro);color:var(--oro-chiaro);border-radius:4px;font-size:10.5px;padding:4px 6px;text-align:center;white-space:nowrap}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .field{background:var(--carta);color:var(--inchiostro);border-radius:3px;padding:5px 8px;text-align:center;font-size:13px}
+  .field.tenue{color:#746c5e;font-size:12px;padding:3px 8px}
+  .coll{background:var(--riga);border:1px solid var(--oro-tenue);border-radius:4px;padding:4px 8px;font:700 9.5px/1.4 sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--oro-chiaro);display:flex;justify-content:space-between}
+  .frame{background:var(--incavo);border:1px solid var(--oro-tenue);border-radius:4px;padding:6px 8px;display:flex;gap:4px;justify-content:center}
+  .box{width:16px;height:16px;border:1px solid var(--tenue);background:#221d15;border-radius:2px}
+  .portrait{background:var(--carta);border-radius:6px;position:relative;display:flex;align-items:center;justify-content:center}
+  .portrait .hood{width:56%;aspect-ratio:1/1.05;background:#000;border-radius:50% 50% 12% 12%/60% 60% 8% 8%}
+  .plus{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:4px;background:var(--velo);border:1px solid var(--oro-scuro);color:var(--oro-chiaro);font-size:14px;line-height:18px;text-align:center}
+  .pill{background:var(--riga);border:1px solid var(--oro-scuro);border-radius:4px;padding:4px 8px;font:700 8.5px/1 sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--oro-chiaro);display:flex;justify-content:space-between;align-items:center}
+  .pill b{font-size:12px;color:var(--oro)}
+  .pill.rosso{border-color:var(--rosso);color:var(--rosso-chiaro)}.pill.rosso b{color:#d0524a}
+  svg{display:block}
+  /* — la grammatica di riga della proposta — */
+  .r{display:flex;align-items:center;gap:8px;height:30px;padding:0 6px;border-radius:4px}
+  .r:nth-child(even){background:rgb(255 255 255 / 2.5%)}
+  .r .ic{width:14px;height:14px;border-radius:3px;background:var(--oro);opacity:.85;flex:none}
+  .r .nm{font-size:13.5px;color:var(--testo);flex:1;white-space:nowrap}
+  .r .val{font:600 15px "Modesto Condensed",Georgia,serif;color:var(--oro);min-width:18px;text-align:right}
+  .r .track{display:flex;gap:3px}
+  .r .track i{display:block;width:12px;height:12px;border:1px solid var(--oro-tenue);background:var(--incavo);border-radius:2px}
+  .r .dots{display:flex;gap:3px}.r .dots i{display:block;width:11px;height:11px;border-radius:50%;border:1px solid var(--oro-tenue);background:var(--incavo)}.r .dots i.on{background:var(--oro);border-color:var(--oro)}
+  .r .tastino{width:18px;height:18px;border-radius:3px;border:1px solid var(--oro-tenue);color:var(--tenue);font-size:11px;line-height:16px;text-align:center;flex:none}
+  .r .ctr{display:flex;align-items:center;gap:4px}
+  .r .ctr span{width:16px;height:16px;border-radius:50%;border:1px solid var(--oro-scuro);color:var(--oro-chiaro);font-size:12px;line-height:14px;text-align:center}
+  .r.rosso .ic{background:var(--rosso)}.r.rosso .val{color:#d0524a}.r.rosso .ctr span{border-color:var(--rosso)}
+  .r .cnt{font:700 9px/1 sans-serif;letter-spacing:.1em;color:var(--tenue);border:1px solid var(--oro-tenue);border-radius:3px;padding:3px 5px}
+  .velo{position:absolute;left:0;right:0;bottom:0;background:var(--velo);border-radius:0 0 6px 6px;display:flex;font-size:10.5px;color:var(--oro-chiaro)}
+  .velo span{flex:1;text-align:center;padding:5px 0}.velo span+span{border-left:1px solid var(--oro-tenue)}
+  .nome{font:600 23px/1.1 "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro);margin:8px 0 1px}
+  .sotto{color:var(--tenue);font-size:12px;display:flex;gap:6px;align-items:center}
+  .sotto b{color:var(--testo);font-weight:500}
+  .link{color:var(--tenue);font-size:10.5px;text-align:right;letter-spacing:.06em}
+  .badge{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--viola-chiaro);color:#1a0f2a;font:700 11px/18px sans-serif;text-align:center;box-shadow:0 0 0 2px #121009;z-index:2}
+  .cond{display:grid;grid-template-columns:26px 1fr;gap:8px;align-items:start;padding:6px 6px;border-radius:4px;background:rgb(255 255 255 / 2.5%);margin-bottom:4px;border-left:2px solid var(--oro-scuro)}
+  .cond-ic{width:26px;height:26px;border-radius:50%;border:1px dashed var(--oro-tenue);background:var(--incavo)}
+  .cond-tx{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center}
+  .cond-tx b{font-size:13.5px;color:var(--oro-chiaro);font-weight:600}
+  .cond-tx small{grid-column:1/-1;font-size:11px;line-height:1.3;color:var(--testo)}
+  .grado{display:flex;gap:2px}.grado i{display:block;width:7px;height:7px;border-radius:50%;border:1px solid var(--oro-tenue);background:var(--incavo)}.grado i.on{background:var(--oro);border-color:var(--oro)}
+  .tastino.cuore{color:var(--oro);border-color:var(--oro-scuro);display:flex;align-items:center;justify-content:center}
+  .r.sorvolo{background:var(--riga-sorvolo,#3a352c)}
+  .raggio{position:absolute;right:15px;top:15px;width:0;height:0;z-index:3}
+  .rg{position:absolute;left:0;top:0;transform:rotate(var(--a)) translate(50px) rotate(calc(-1 * var(--a)));display:flex;flex-direction:column;align-items:center;gap:2px;margin:-13px 0 0 -13px}
+  .rg i{width:26px;height:26px;border-radius:50%;background:var(--velluto);border:1px solid var(--oro);color:var(--oro-chiaro);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgb(0 0 0 / 55%)}
+  .rg i svg{width:14px;height:14px}
+  .rg .tip{position:absolute;top:-16px;font-size:9px;letter-spacing:.08em;color:var(--su-oro);background:var(--oro);border-radius:3px;padding:2px 5px;white-space:nowrap}
+  .rg:has(.tip) i{background:var(--oro);color:var(--su-oro)}
+  .cond .chev{font-size:10px;color:var(--tenue);margin-left:2px}
+  .cond:not(.aperta){padding:4px 6px;align-items:center}
+  .cond:not(.aperta) .cond-ic{width:20px;height:20px;margin-left:3px}
+  /* — legenda — */
+  .legend{max-width:520px;padding-top:2px}
+  .legend h2{font:600 12px/1 sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--oro-chiaro);margin:0 0 12px}
+  .legend ol{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+  .legend li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start}
+  .legend li i{width:18px;height:18px;border-radius:50%;background:var(--viola-chiaro);color:#1a0f2a;font:700 11px/18px sans-serif;text-align:center;font-style:normal}
+  .legend li b{color:var(--oro-chiaro);font-weight:600}
+  .legend p{margin:0;color:var(--testo)}
+  .count{margin-top:22px;border-top:1px solid var(--oro-tenue);padding-top:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .count div{background:var(--velluto);border-radius:5px;padding:8px 10px}
+  .count small{display:block;color:var(--tenue);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+  .count strong{font:600 20px "Modesto Condensed",Georgia,serif;color:var(--oro)}
+  .count em{display:block;margin-top:2px;color:var(--tenue);font-style:normal;font-size:12px}
+</style>
+</head>
+<body>
+<h1>Prima colonna della scheda · adesso e proposta</h1>
+<p class="sub">Stessa larghezza (284 px), stessa altezza (800 px), stessi gettoni di colore del modulo. A sinistra la colonna com'è nella 0.96, a destra la colonna rifatta con la grammatica di riga delle altre tre.</p>
+
+<div class="stage">
+
+  <!-- ADESSO -->
+  <div class="col">
+    <span class="lbl">Adesso</span>
+    <div class="tit">Identità</div>
+    <div class="row2"><div class="btn">⚙ Nuova sessione</div><div class="btn">🎬 Cambio Scena</div></div>
+    <div class="portrait" style="height:150px;margin:8px 0"><div class="hood"></div><div class="plus">+</div></div>
+    <div class="field">Guendalina</div>
+    <div class="field tenue" style="margin-top:5px">Giocatore</div>
+    <div class="coll" style="margin-top:6px"><span>› Appartenenza</span></div>
+
+    <div class="tit" style="margin-top:14px">Risorse</div>
+    <div class="micro" style="display:flex;justify-content:space-between">Condizioni <span>🔍</span></div>
+    <div class="coll"><span>› Tutte le condizioni</span></div>
+    <div class="coll" style="margin-top:5px;background:transparent;border-color:transparent;padding-left:2px"><span>– Salute &nbsp;<b style="color:var(--oro)">8</b></span><span style="color:var(--oro)">+</span></div>
+    <div class="frame"><i class="box"></i><i class="box"></i><i class="box"></i><i class="box"></i><i class="box"></i><i class="box"></i><i class="box"></i><i class="box"></i></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:5px"><div class="btn" style="font-size:9.5px;padding:3px 2px">Riposo</div><div class="btn" style="font-size:9.5px;padding:3px 2px">Relax</div><div class="btn" style="font-size:9.5px;padding:3px 2px">Reset</div><div class="btn" style="font-size:9.5px;padding:3px 2px">Danni subiti</div></div>
+    <div class="micro" style="margin-top:10px">Saggezza</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;font:600 17px/1 sans-serif;color:var(--oro-chiaro)"><span>– Saggezza <span style="color:var(--oro)">◈</span></span><span style="color:var(--oro)">+</span></div>
+    <div class="frame" style="margin-top:6px"><i class="box"></i><i class="box"></i><i class="box"></i><i class="box"></i><i class="box"></i></div>
+    <div class="micro" style="margin-top:10px">La Ruota</div>
+    <svg width="264" height="118" viewBox="0 0 264 118">
+      <path d="M40 100 A92 92 0 0 1 224 100" fill="none" stroke="#4a3f2a" stroke-width="2"/>
+      <g fill="var(--oro)"><circle cx="40" cy="100" r="9"/><circle cx="52" cy="66" r="9"/><circle cx="76" cy="38" r="9"/><circle cx="108" cy="20" r="9"/></g>
+      <g fill="var(--incavo)" stroke="#4a3f2a"><circle cx="146" cy="16" r="9"/><circle cx="182" cy="30" r="9"/><circle cx="208" cy="60" r="9"/></g>
+      <circle cx="224" cy="100" r="9" fill="var(--rosso)" stroke="#e0806f"/>
+      <g fill="var(--velluto)" stroke="var(--oro-scuro)"><circle cx="16" cy="100" r="8"/><circle cx="64" cy="100" r="8"/></g>
+      <g fill="var(--velluto)" stroke="var(--rosso)"><circle cx="200" cy="100" r="8"/><circle cx="248" cy="100" r="8"/></g>
+      <g font-size="11" fill="var(--oro-chiaro)" text-anchor="middle"><text x="16" y="104">–</text><text x="64" y="104">+</text></g>
+      <g font-size="11" fill="var(--rosso-chiaro)" text-anchor="middle"><text x="200" y="104">–</text><text x="248" y="104">+</text></g>
+    </svg>
+    <div class="row2" style="margin-top:4px"><div class="pill">Quintessenza <b>4</b></div><div class="pill rosso">Paradosso <b>1</b></div></div>
+    <div class="coll" style="margin-top:6px;background:transparent;border-color:transparent;padding-left:2px"><span>› Dettagli della ruota</span></div>
+  </div>
+
+  <!-- PROPOSTA -->
+  <div class="col">
+    <span class="lbl">Proposta</span>
+    <div class="tit">Identità</div>
+    <div class="portrait" style="height:158px"><div class="hood"></div><div class="plus">+</div>
+      <div class="velo"><span>⚙ Nuova sessione</span><span>🎬 Cambio scena</span></div>
+      <span class="badge" style="left:-9px;bottom:-4px">1</span>
+    </div>
+    <div class="nome">Guendalina</div>
+    <div class="sotto"><b>Giocatore</b> · Appartenenza <span style="color:var(--oro)">▾</span><span class="badge" style="position:static;margin-left:auto">2</span></div>
+
+    <div class="tit" style="margin-top:16px">Risorse</div>
+    <div style="position:relative">
+      <span class="badge" style="left:-19px;top:6px">3</span>
+      <div class="r sorvolo" style="position:relative"><i class="ic"></i><span class="nm">Salute</span><span class="track"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="val">8</span><span class="tastino cuore"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.3-9A5.2 5.2 0 0 1 12 6.4 5.2 5.2 0 0 1 21.3 12C19 16.4 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 9v6M9 12h6" stroke="currentColor" stroke-width="2.2"/></svg></span>
+        <div class="raggio">
+          <div class="rg" style="--a:188deg"><i><svg viewBox="0 0 24 24"><path d="M3 18V8h3v6h15v4M6 14a2 2 0 1 1 4 0" fill="none" stroke="currentColor" stroke-width="2"/></svg></i></div>
+          <div class="rg" style="--a:216deg"><i><svg viewBox="0 0 24 24"><path d="M12 21c-5-3-8-7-8-11a8 8 0 0 1 16 0c0 4-3 8-8 11zm0-15v6" fill="none" stroke="currentColor" stroke-width="2"/></svg></i></div>
+          <div class="rg" style="--a:244deg"><i><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2"/></svg></i><small class="tip">Reset</small></div>
+          <div class="rg" style="--a:272deg"><i><svg viewBox="0 0 24 24"><path d="M12 3l2 5 5-2-2 5 5 2-5 2 2 5-5-2-2 5-2-5-5 2 2-5-5-2 5-2-2-5 5 2z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></i></div>
+        </div>
+      </div>
+      <div class="r"><i class="ic"></i><span class="nm">Saggezza</span><span class="track"><i></i><i></i><i></i><i></i><i></i></span><span class="val">0</span><span class="tastino">+</span></div>
+      <div class="r"><i class="ic"></i><span class="nm">Quintessenza</span><span class="ctr"><span>–</span><span class="val" style="width:auto;min-width:16px;height:auto;border:0;font-size:15px;line-height:1;color:var(--oro)">4</span><span>+</span></span></div>
+      <div class="r rosso"><i class="ic"></i><span class="nm">Paradosso</span><span class="ctr"><span>–</span><span class="val" style="width:auto;min-width:16px;height:auto;border:0;font-size:15px;line-height:1">1</span><span>+</span></span></div>
+      <span class="badge" style="right:-9px;top:20px">4</span>
+      <span class="badge" style="right:-9px;top:69px">5</span>
+    </div>
+
+    <div style="position:relative;margin-top:14px">
+      <span class="badge" style="left:-9px;top:8px">6</span>
+      <svg width="264" height="150" viewBox="0 0 264 150">
+        <path d="M28 130 A104 104 0 0 1 236 130" fill="none" stroke="#4a3f2a" stroke-width="2"/>
+        <g fill="var(--oro)"><circle cx="28" cy="130" r="10"/><circle cx="40" cy="88" r="10"/><circle cx="66" cy="54" r="10"/><circle cx="102" cy="32" r="10"/></g>
+        <g fill="var(--incavo)" stroke="#4a3f2a"><circle cx="146" cy="26" r="10"/><circle cx="188" cy="42" r="10"/><circle cx="220" cy="80" r="10"/></g>
+        <circle cx="236" cy="130" r="10" fill="var(--rosso)" stroke="#e0806f"/>
+        <text x="28" y="149" font-size="9" fill="var(--tenue)" text-anchor="middle" letter-spacing="1">QUINT.</text>
+        <text x="236" y="149" font-size="9" fill="var(--rosso-chiaro)" text-anchor="middle" letter-spacing="1">PARAD.</text>
+      </svg>
+      <div class="link" style="text-align:center;margin-top:4px">Dettagli della Ruota ›</div>
+    </div>
+
+    <div class="tit" style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;position:relative">Condizioni <span class="tastino" style="width:18px;height:18px;border-radius:3px;border:1px solid var(--oro-tenue);color:var(--tenue);font-size:11px;line-height:16px;text-align:center;letter-spacing:0">+</span><span class="badge" style="left:-19px;top:-2px">7</span></div>
+    <div class="cond aperta">
+      <div class="cond-ic"></div>
+      <div class="cond-tx"><b>Atterrato <span class="chev">▾</span></b><span class="grado"><i class="on"></i><i class="on"></i><i></i></span><small>−2 dadi ai tiri fisici · fino a fine scena</small></div>
+    </div>
+    <div class="cond">
+      <div class="cond-ic"></div>
+      <div class="cond-tx"><b>Muto <span class="chev">▸</span></b><span class="grado"><i class="on"></i><i></i><i></i></span></div>
+    </div>
+    <div class="cond">
+      <div class="cond-ic"></div>
+      <div class="cond-tx"><b>Abbagliato <span class="chev">▸</span></b><span class="grado"><i class="on"></i><i></i><i></i></span></div>
+    </div>
+  </div>
+
+  <!-- LEGENDA -->
+  <div class="legend">
+    <h2>Cosa cambia</h2>
+    <ol>
+      <li><i>1</i><p><b>I due tasti di sessione posati sul ritratto.</b> Restano sopra l'immagine come chiesto, ma non occupano una riga: stanno in una fascia in velatura sul bordo basso, la stessa che oggi ospita il +. Una riga in meno, due cornici in meno.</p></li>
+      <li><i>2</i><p><b>Nome, giocatore e appartenenza in due righe di testo.</b> Il nome è un titolo, non un campo su carta: la colonna smette di avere tre rettangoli chiari uno sull'altro. Giocatore e Appartenenza stanno sulla stessa riga, l'appartenenza si apre col clic sulla freccia.</p></li>
+      <li><i>3</i><p><b>Le risorse diventano righe.</b> Salute, Saggezza, Quintessenza e Paradosso usano la grammatica delle altre colonne: icona, nome, tracciato, valore. Altezza fissa 30 px, nessuna cornice, nessuna etichetta in maiuscoletto sopra ogni voce.</p></li>
+      <li><i>4</i><p><b>I quattro comandi della Salute in un ventaglio.</b> In fondo alla riga un tastino col cuore e la croce, che dice «qui si tocca la Salute». Al clic si apre a raggio verso l'alto con i quattro simboli (Riposo, Relax, Reset, Danni), il nome compare sul simbolo che sorvoli; un secondo clic, sul simbolo, fa l'azione. Niente apertura al sorvolo (Blue, 20/9). Nel mock la riga è disegnata col ventaglio aperto verso l'alto; nel modulo (0.97.0) scende verso il basso, perché il riquadro taglia quello che esce sopra la prima riga. Anche il meno e il più delle caselle in più stanno nel ventaglio, sesta e quinta voce.</p></li>
+      <li><i>5</i><p><b>I conti della Ruota risalgono nelle righe.</b> Il più e il meno di Quintessenza e Paradosso stanno sulla loro riga, col numero in mezzo. La Ruota non deve più portare né pillole né tasti.</p></li>
+      <li><i>6</i><p><b>La Ruota da sola, con aria.</b> Unico elemento grafico della colonna, più grande (raggio 104 contro 92), senza cornice e senza etichetta sopra; i Dettagli centrati sotto l'arco. È il pezzo che distingue la scheda: gli si lascia lo spazio che oggi si prendono i tasti.</p></li>
+      <li><i>7</i><p><b>Le Condizioni in fondo, sotto la Ruota, e ognuna dice cosa fa.</b> Il + apre la scelta. Ogni condizione presa è una riga: simbolo (segnaposto, i simboli sono da rifare), nome, i tre gradini accesi fin dove arriva. Il clic sul nome la apre e mostra l'effetto e la durata presi dalla voce del manuale; un altro clic la richiude. Nel mock Atterrato è aperta, Muto e Abbagliato chiuse. Da vuota la sezione è la sola riga del titolo.</p></li>
+    </ol>
+    <div class="count">
+      <div><small>Tipi di componente</small><strong>10 → 5</strong><em>ritratto, riga, ruota, carta di condizione, tastino</em></div>
+      <div><small>Tasti in vista</small><strong>13 → 3</strong><em>+ ritratto, tastino Salute, + Condizioni</em></div>
+      <div><small>Voci tipografiche</small><strong>7 → 3</strong><em>titolo riquadro, nome di riga, numero</em></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -139,10 +139,11 @@ const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza
 // Niente Fazione; il Credo ha due posti per i simboli delle sue Sfere (4/9 notte).
 assert.match(appartenenza, /<details class="wod5e-mage-appartenenza">[\s\S]*wod5e-mage-lineage-pick[\s\S]*lineageChoices\.familySphere\.icon[\s\S]*lineageChoices\.subSphere\.icon[\s\S]*wod5e-mage-lineage-pick-double[\s\S]*credoSpheres[\s\S]*flags\.wod5e-mage\.focus\.credo/);
 assert.doesNotMatch(appartenenza, /lineage\.fazione/);
-// Nell'Identità (16/9): Nuova sessione e Cambio Scena sopra il ritratto, il nome
-// del giocatore sotto il nome, l'Appartenenza a tendina in fondo.
+// Nell'Identità (20/9): il ritratto coi tasti dei ritratti e, posati sul bordo
+// basso, Nuova sessione e Cambio Scena; sotto il nome come titolo, poi il
+// giocatore e l'Appartenenza a tendina sulla stessa riga.
 const identita = readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8");
-assert.match(identita, /wod5e-mage-identita-tasti[\s\S]*data-action="saluteNewSession"[\s\S]*data-action="saluteCambioScena"[\s\S]*wod5e-mage-ritratto[\s\S]*data-action="ritrattoNext"[\s\S]*wod5e-mage-names[\s\S]*flags\.wod5e-mage\.player[\s\S]*parts\/appartenenza\.hbs/);
+assert.match(identita, /wod5e-mage-ritratto[\s\S]*data-action="ritrattoNext"[\s\S]*wod5e-mage-identita-tasti[\s\S]*data-action="saluteNewSession"[\s\S]*data-action="saluteCambioScena"[\s\S]*wod5e-mage-names[\s\S]*wod5e-mage-identita-sotto[\s\S]*flags\.wod5e-mage\.player[\s\S]*parts\/appartenenza\.hbs/);
 assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8"), /<select name="flags\.wod5e-mage\.focus\.credo"/);
 function personaggioSource() {
   return readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");

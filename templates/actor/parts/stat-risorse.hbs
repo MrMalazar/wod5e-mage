@@ -1,16 +1,81 @@
-{{!-- Risorse (Blue, 16/9 sera): un riquadro solo, in quest'ordine, le
-     Condizioni addosso, la Salute, la Saggezza a tendina e la Ruota. --}}
+{{!-- Risorse (Blue, 20/9): un riquadro solo, a righe come le altre colonne.
+     In quest'ordine: la Salute e la Saggezza (ognuna col suo tastino che
+     apre il ventaglio dei comandi), la Quintessenza e il Paradosso col meno
+     e il più ai lati del numero, la Ruota da sola, e in fondo le Condizioni,
+     ognuna apribile col clic sul nome. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-risorse">
     <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.Risorse"}}</span></header>
     <div class="wod5e-mage-riq-body">
-        {{> "modules/wod5e-mage/templates/actor/parts/stat-condizioni.hbs"}}
-        {{> "modules/wod5e-mage/templates/actor/parts/salute.hbs"}}
-        <details class="wod5e-mage-saggezza-tendina">
-            <summary><i class="fa-solid fa-chevron-right" aria-hidden="true"></i> <span>{{localize "WOD5E_MAGE.Wisdom.Label"}}</span></summary>
-            <div class="wod5e-mage-saggezza-tendina-body">
-                {{> "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"}}
+        <div class="wod5e-mage-risorse-righe">
+            {{> "modules/wod5e-mage/templates/actor/parts/salute.hbs"}}
+
+            {{!-- La Saggezza: stesso meccanismo della Salute (Blue, 20/9: «così
+                 ripetiamo e insegniamo all'utente»): il d10 in fondo alla riga
+                 apre il ventaglio con il tiro, il meno e il più della fila. Le
+                 caselle sono il contatore del sistema (/ e X), come nella
+                 pagina del Personaggio. --}}
+            <div class="wod5e-mage-riga wod5e-mage-riga-risorsa wod5e-mage-riga-saggezza con-ventaglio">
+                <div class="wod5e-mage-riga-testa">
+                    <i class="fa-solid fa-scale-balanced wod5e-mage-riga-icona" aria-hidden="true"></i>
+                    <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize "WOD5E_MAGE.Wisdom.Label"}}</span></span>
+                    {{#if wisdom.segnato}}
+                        {{!-- La fila piena ha un nome (04_95), e i suoi quattro effetti nel titolo. --}}
+                        <em class="wod5e-mage-riga-stato" title="{{localize 'WOD5E_MAGE.Wisdom.SegnatoEffects'}}">{{localize "WOD5E_MAGE.Wisdom.Segnato"}}</em>
+                    {{/if}}
+                    <b class="wod5e-mage-riga-valore">{{wisdom.max}}</b>
+                    <div class="wod5e-mage-riga-tastini">
+                        <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-ventaglio-tasto" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Wisdom.VentaglioHint'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.VentaglioHint'}}"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+                <div class="resource-counter editable wod5e-mage-saggezza-track" data-states="/:superficial,x:aggravated" data-max="{{wisdom.max}}"
+                    data-superficial="{{wisdom.superficial}}" data-aggravated="{{wisdom.aggravated}}"
+                    data-name="flags.wod5e-mage.wisdom" role="group" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Label'}}">
+                    {{#numLoop wisdom.max}}
+                        <span class="resource-counter-step" data-action="squareCounterChange" data-index="{{this}}" data-state=""></span>
+                    {{/numLoop}}
+                </div>
+                <div class="wod5e-mage-ventaglio wod5e-mage-ventaglio-tre" role="group" aria-label="{{localize 'WOD5E_MAGE.Wisdom.VentaglioHint'}}">
+                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 0" data-action="wisdomRoll" title="{{localize 'WOD5E_MAGE.Wisdom.Roll'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Roll'}}">
+                        <i class="fa-solid fa-dice-d10" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.Tira"}}</span>
+                    </button>
+                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 1" data-action="wisdomResourceChange" data-resource-action="minus" title="{{localize 'WOD5E_MAGE.Wisdom.MaxMeno'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.MaxMeno'}}">
+                        <i class="fa-solid fa-minus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.MaxMeno"}}</span>
+                    </button>
+                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 2" data-action="wisdomResourceChange" data-resource-action="plus" title="{{localize 'WOD5E_MAGE.Wisdom.MaxPiu'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.MaxPiu'}}">
+                        <i class="fa-solid fa-plus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.MaxPiu"}}</span>
+                    </button>
+                </div>
             </div>
-        </details>
+
+            {{!-- I due conti della Ruota, ognuno sulla sua riga col meno e il più
+                 ai lati del numero (Blue, 20/9); la Ruota sotto non porta più
+                 tasti. Il nome PARADOSSO resta il tasto dello Scoppio. --}}
+            <div class="wod5e-mage-riga wod5e-mage-riga-risorsa wod5e-mage-riga-conto quintessence">
+                <div class="wod5e-mage-riga-testa">
+                    <i class="fa-solid fa-circle-dot wod5e-mage-riga-icona" aria-hidden="true"></i>
+                    <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</span></span>
+                    <div class="wod5e-mage-riga-conto-tasti">
+                        <button type="button" class="wod5e-mage-ruota-tasto quintessence meno" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                        <b class="wod5e-mage-riga-valore">{{magickTrack.quintessence}}</b>
+                        <button type="button" class="wod5e-mage-ruota-tasto quintessence piu" data-action="magickBalanceChange" data-resource="quintessence" data-delta="1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.AddQuintessence'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="wod5e-mage-riga wod5e-mage-riga-risorsa wod5e-mage-riga-conto paradox">
+                <div class="wod5e-mage-riga-testa">
+                    <i class="fa-solid fa-eye wod5e-mage-riga-icona" aria-hidden="true"></i>
+                    <button type="button" class="wod5e-mage-riga-nome wod5e-mage-paradox-burst" data-action="paradoxBurst" title="{{localize 'WOD5E_MAGE.Burst.Hint'}}"><span>{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</span></button>
+                    <div class="wod5e-mage-riga-conto-tasti">
+                        <button type="button" class="wod5e-mage-ruota-tasto paradox meno" data-action="magickBalanceChange" data-resource="paradox" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.RemoveParadox'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                        <b class="wod5e-mage-riga-valore">{{magickTrack.paradox}}</b>
+                        <button type="button" class="wod5e-mage-ruota-tasto paradox piu" data-action="magickBalanceChange" data-resource="paradox" data-delta="1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.AddParadox'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{> "modules/wod5e-mage/templates/actor/parts/stat-ruota.hbs"}}
+
+        {{> "modules/wod5e-mage/templates/actor/parts/stat-condizioni.hbs"}}
     </div>
 </section>

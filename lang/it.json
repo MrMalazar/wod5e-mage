@@ -586,6 +586,10 @@
       "Label": "Saggezza",
       "Status": "Stato",
       "Roll": "Tira Saggezza",
+      "VentaglioHint": "I comandi della Saggezza: tira, una casella in meno, una in più",
+      "Tira": "Tira",
+      "MaxMeno": "Una casella in meno",
+      "MaxPiu": "Una casella in più",
       "Rolling": "Tiro di Saggezza",
       "Segnato": "Segnato",
       "SegnatoEffects": "due dadi in meno sui tiri mortali, la scena mondana costa, niente ricucitura del Consenso, l'aura si vede."
@@ -749,6 +753,9 @@
       "Label": "Salute",
       "Hint": "2 + Costituzione + Fermezza",
       "Extra": "Caselle in più, oltre il conto",
+      "VentaglioHint": "I comandi della Salute: Riposo, Relax, Reset, Danni subiti, caselle in più",
+      "ExtraMeno": "Una casella in meno",
+      "ExtraPiu": "Una casella in più",
       "ClickHint": "Clic: scegli il segno. Clic destro: la casella si svuota.",
       "States": {
         "empty": "Vuota",
@@ -1042,6 +1049,10 @@
     },
     "Condizioni": {
       "All": "Tutte le Condizioni",
+      "AddHint": "Aggiungi una Condizione",
+      "SearchHint": "Cerca fuori lista",
+      "OffHint": "Clic: la Condizione si spegne",
+      "OpenHint": "Clic: mostra o nasconde cos'è e cosa fa",
       "MasterTitle": "Condizioni (Master)",
       "MasterTargets": "Personaggi scelti:",
       "MasterNoTargets": "Seleziona i personaggi sulla scena, poi clicca una Condizione.",

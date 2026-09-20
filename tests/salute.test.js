@@ -75,19 +75,23 @@ const statPage = readFileSync(new URL("../templates/actor/parts/stat.hbs", impor
 assert.match(statPage, /stat-identita\.hbs[\s\S]*parts\/stat-risorse\.hbs/);
 assert.doesNotMatch(statPage, /health\.hbs|willpower\.hbs|riq-salute/);
 const risorsePage = readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8");
-assert.match(risorsePage, /wod5e-mage-riq-risorse[\s\S]*parts\/stat-condizioni\.hbs[\s\S]*parts\/salute\.hbs[\s\S]*wod5e-mage-saggezza-tendina[\s\S]*parts\/wisdom\.hbs[\s\S]*parts\/stat-ruota\.hbs/);
+// L'ordine del 20/9: Salute, Saggezza, Quintessenza, Paradosso, Ruota, Condizioni.
+assert.match(risorsePage, /wod5e-mage-riq-risorse[\s\S]*parts\/salute\.hbs[\s\S]*wod5e-mage-riga-saggezza[\s\S]*wod5e-mage-riga-conto quintessence[\s\S]*wod5e-mage-riga-conto paradox[\s\S]*parts\/stat-ruota\.hbs[\s\S]*parts\/stat-condizioni\.hbs/);
 const header = readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8");
 assert.doesNotMatch(header, /health\.hbs|willpower\.hbs|salute\.hbs/);
 const track = readFileSync(new URL("../templates/actor/parts/salute.hbs", import.meta.url), "utf8");
 assert.match(track, /data-action="saluteCellChange"[\s\S]*data-index="\{\{cell\.index\}\}"/);
-assert.match(track, /data-action="saluteExtraChange"/);
+// La riga (20/9): la testa col cuore, il nome, il conto e il tastino che apre
+// il ventaglio; nel ventaglio i sei comandi, meno e più delle caselle compresi.
+assert.match(track, /wod5e-mage-riga-salute con-ventaglio[\s\S]*wod5e-mage-riga-testa[\s\S]*salute\.max[\s\S]*wod5e-mage-ventaglio-tasto" data-action="cassettoToggle"[\s\S]*wod5e-mage-salute-track[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-sei[\s\S]*data-action="saluteRiposo"[\s\S]*data-action="saluteRelax"[\s\S]*data-action="saluteReset"[\s\S]*data-action="saluteDanni"[\s\S]*data-action="saluteExtraChange" data-delta="-1"[\s\S]*data-action="saluteExtraChange" data-delta="1"/);
+assert.doesNotMatch(track, /wod5e-mage-salute-buttons|resource-control/);
 // Niente legenda sotto il tracciato: il menù di ogni casella dice il nome
 // accanto al segno.
 assert.doesNotMatch(track, /Salute\.LegendPhysical|Salute\.LegendMental|wod5e-mage-salute-legend/);
-// Il Reset resta sotto la barra; Nuova sessione e Cambio Scena stanno nell'Identità (16/9).
+// Il Reset sta nel ventaglio; Nuova sessione e Cambio Scena stanno nell'Identità (16/9), sul ritratto (20/9).
 assert.match(track, /data-action="saluteReset"/);
 assert.doesNotMatch(track, /data-action="saluteNewSession"/);
-assert.match(readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8"), /wod5e-mage-new-session" data-action="saluteNewSession"[\s\S]*data-action="saluteCambioScena"/);
+assert.match(readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8"), /wod5e-mage-ritratto">[\s\S]*wod5e-mage-identita-tasti[\s\S]*wod5e-mage-new-session" data-action="saluteNewSession"[\s\S]*data-action="saluteCambioScena"[\s\S]*<\/div>\s*<\/div>\s*<div class="wod5e-mage-names">/);
 const saluteScript = readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8");
 assert.match(saluteScript, /wod5e-mage-salute-menu-text/);
 const risorse = readFileSync(new URL("../templates/actor/parts/stat-ruota.hbs", import.meta.url), "utf8");
