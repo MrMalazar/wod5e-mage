@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Colonna Magick · adesso e proposta</title>
+<style>
+  :root{
+    --oro:#d9a827; --oro-scuro:#98772b; --oro-tenue:#6b4f12; --oro-chiaro:#f5e7b2;
+    --carta:#fbf8f0; --inchiostro:#14110c; --testo:#e6dcc2; --tenue:#ab9f85;
+    --incavo:#15130f; --velluto:#282723; --viola:#5a2b82; --viola-chiaro:#b58ade; --lilla:#3b2a55;
+    --rosso:#b5433c; --riq:linear-gradient(#2a2314,#1f1a10); --riga:#2f2a1f; --cassetto:#1a160f; --su-oro:#1a140a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#121009;color:var(--testo);font:13px/1.35 "Signika","Segoe UI",system-ui,sans-serif;padding:28px 32px 48px}
+  h1{font:600 20px "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro);margin:0 0 4px;letter-spacing:.02em}
+  .sub{color:var(--tenue);margin:0 0 40px;font-size:13px;max-width:900px}
+  .stage{display:grid;grid-template-columns:300px 300px 1fr;gap:36px;align-items:start}
+  .col{width:300px;min-height:620px;background:var(--riq);border:1px solid var(--oro-scuro);border-radius:8px;padding:8px 8px 10px;position:relative;display:flex;flex-direction:column;gap:2px}
+  .lbl{position:absolute;top:-24px;left:0;font:600 11px/1 sans-serif;letter-spacing:.14em;color:var(--tenue);text-transform:uppercase}
+  .tit{font:700 10.5px/1 sans-serif;letter-spacing:.16em;color:var(--oro);text-transform:uppercase;padding:2px 0 6px;border-bottom:1px solid rgb(152 119 43 / 45%);margin-bottom:4px}
+  .occ{display:flex;align-items:center;gap:8px;font:700 9px/1 sans-serif;letter-spacing:.14em;color:var(--tenue);text-transform:uppercase;margin:6px 0 2px;white-space:nowrap}
+  .occ::after{content:"";flex:1;border-top:1px solid rgb(152 119 43 / 40%)}
+  /* — la riga — */
+  .r{display:flex;flex-direction:column;background:var(--riga);border-radius:6px;padding:0 6px 0 4px;min-height:28px;position:relative}
+  .r.scelta{background:var(--lilla)}
+  .r.scelta .nm,.r.scelta .chev{color:#fff}
+  .testa{display:flex;align-items:center;gap:6px;min-height:28px}
+  .ic{width:18px;height:18px;border-radius:50%;background:var(--oro);flex:none;display:flex;align-items:center;justify-content:center;color:var(--su-oro);font-size:10px;font-weight:700}
+  .ic.fa{background:transparent;color:var(--oro);font-size:13px}
+  .nm{font-size:14px;font-weight:600;color:var(--testo);white-space:nowrap;display:flex;align-items:center;gap:5px}
+  .chev{font-size:9px;color:var(--tenue)}
+  .chev.oro{color:var(--oro);font-size:10px}
+  .dots{margin-left:auto;display:flex;gap:3px;align-items:center}
+  .d{width:16px;height:16px;border-radius:50%;border:1px solid var(--oro-tenue);background:var(--incavo)}
+  .d.on{background:var(--oro);border-color:var(--oro)}
+  .d.x{border-color:var(--oro-tenue);background:transparent;position:relative}
+  .d.x::before,.d.x::after{content:"";position:absolute;left:3px;right:3px;top:50%;height:1px;background:var(--oro-scuro);transform:rotate(45deg)}
+  .d.x::after{transform:rotate(-45deg)}
+  .d.big{width:20px;height:20px}
+  .d.mini{width:10px;height:10px}
+  .d.vio{background:var(--viola);border-color:var(--viola-chiaro)}
+  .d.lit{background:var(--oro-tenue);border-color:var(--oro-scuro)}
+  .dots.riposo .d{opacity:.4}
+  /* la seconda linea */
+  .sotto{display:flex;align-items:center;gap:8px;min-height:18px;padding:0 2px 4px 24px}
+  .tag{font:700 8.5px/1 sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--tenue);border:1px solid var(--oro-tenue);border-radius:9px;padding:3px 6px;white-space:nowrap}
+  .r.scelta .tag{color:#e9defa;border-color:var(--viola-chiaro)}
+  .lettura{flex:1;text-align:center;font-size:14px;font-weight:700;color:var(--testo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .r.scelta .lettura{color:#fff}
+  .orfana{text-align:center;font:700 8.5px/1 sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);padding:0 0 5px}
+  .scegli{margin-left:auto;font:700 9px/1 sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--oro);border:1px dashed var(--oro-scuro);border-radius:10px;padding:4px 8px;white-space:nowrap}
+  /* la tendina delle letture */
+  .cass{position:absolute;left:4px;right:4px;top:calc(100% - 2px);background:var(--cassetto);border:1px solid var(--oro-scuro);border-radius:6px;box-shadow:0 6px 14px rgb(0 0 0 / 55%);padding:5px;display:flex;gap:4px;flex-wrap:wrap;z-index:5}
+  .past{font-size:11px;color:var(--testo);background:var(--riga);border:1px solid var(--oro-tenue);border-radius:12px;padding:4px 9px;white-space:nowrap}
+  .past.sc{background:var(--viola);border-color:var(--viola-chiaro);color:#fff}
+  .badge{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--viola-chiaro);color:#1a0f2a;font:700 11px/18px sans-serif;text-align:center;box-shadow:0 0 0 2px #121009;z-index:6}
+  /* — legenda — */
+  .legend{max-width:560px;padding-top:2px}
+  .legend h2{font:600 12px/1 sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--oro-chiaro);margin:0 0 12px}
+  .legend ol{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+  .legend li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start}
+  .legend li i{width:18px;height:18px;border-radius:50%;background:var(--viola-chiaro);color:#1a0f2a;font:700 11px/18px sans-serif;text-align:center;font-style:normal}
+  .legend li b{color:var(--oro-chiaro);font-weight:600}
+  .legend p{margin:0;color:var(--testo)}
+  .stati{margin-top:18px;border-top:1px solid var(--oro-tenue);padding-top:12px}
+  .stati h3{font:600 10.5px/1 sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);margin:0 0 8px}
+  .stati table{border-collapse:collapse;width:100%;font-size:12px}
+  .stati td{padding:4px 6px;border-bottom:1px solid rgb(152 119 43 / 25%);vertical-align:top}
+  .stati td:first-child{color:var(--oro-chiaro);white-space:nowrap}
+  .count{margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .count div{background:var(--velluto);border-radius:5px;padding:8px 10px}
+  .count small{display:block;color:var(--tenue);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+  .count strong{font:600 20px "Modesto Condensed",Georgia,serif;color:var(--oro)}
+  .count em{display:block;margin-top:2px;color:var(--tenue);font-style:normal;font-size:12px}
+</style>
+</head>
+<body>
+<h1>Colonna Magick · adesso e proposta</h1>
+<p class="sub">Stessa larghezza (300 px), stessi gettoni. A sinistra la colonna com'è nella 0.98.0 (dallo screenshot), a destra la proposta: una grammatica sola per Sfere e Ambiti, la lettura che non galleggia più, la riga che dice cosa le manca.</p>
+
+<div class="stage">
+
+  <!-- ADESSO -->
+  <div class="col">
+    <span class="lbl">Adesso (0.98.0)</span>
+    <div class="tit">Magick</div>
+    <div class="r"><div class="testa"><span class="ic fa">◎</span><span class="nm">Areté</span><span class="dots"><i class="d big on"></i><i class="d big on"></i><i class="d big"></i><i class="d big"></i><i class="d big"></i></span></div></div>
+    <div class="occ">Sfere</div>
+    <div class="r"><div class="testa"><span class="ic">F</span><span class="nm">Forze</span><span class="dots"><i class="d x"></i><i class="d on"></i><i class="d on"></i><i class="d on"></i><i class="d"></i><i class="d"></i></span></div></div>
+    <div class="r"><div class="testa"><span class="ic">M</span><span class="nm">Materia</span><span class="dots"><i class="d x"></i><i class="d on"></i><i class="d on"></i><i class="d on"></i><i class="d"></i><i class="d"></i></span></div></div>
+    <div class="r"><div class="testa"><span class="ic">T</span><span class="nm">Tempo</span><span class="dots"><i class="d x"></i><i class="d on"></i><i class="d on"></i><i class="d on"></i><i class="d on"></i><i class="d on"></i></span></div></div>
+    <div class="r"><div class="testa"><span class="ic">V</span><span class="nm">Vita</span><span class="dots"><i class="d x"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span></div></div>
+    <div class="occ">Gli Ambiti</div>
+    <div class="r"><div class="testa"><span class="ic fa">▣</span><span class="nm">Area</span><span class="dots"><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i></span></div></div>
+    <div class="r"><div class="testa"><span class="ic fa">▣</span><span class="nm">Bersagli</span><span class="dots"><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i></span></div></div>
+    <div class="r"><div class="testa"><span class="ic fa">▣</span><span class="nm">Condizioni <span class="chev">▾</span></span><span class="dots"><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i></span></div><div class="orfana">Malus</div></div>
+    <div class="r"><div class="testa"><span class="ic fa">▣</span><span class="nm">Durata <span class="chev">▾</span></span><span class="dots"><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i></span></div><div class="orfana">Narrativa</div></div>
+    <div class="r"><div class="testa"><span class="ic fa">◎</span><span class="nm">Portata</span><span class="dots"><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i></span></div></div>
+    <div class="r"><div class="testa"><span class="ic fa">✱</span><span class="nm">Potenza <span class="chev">▾</span></span><span class="dots"><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i><i class="d mini"></i></span></div><div class="orfana">Epicità</div></div>
+    <div class="r"><div class="testa"><span class="ic fa">◎</span><span class="nm">Precisione <span class="chev">▾</span></span></div></div>
+  </div>
+
+  <!-- PROPOSTA -->
+  <div class="col">
+    <span class="lbl">Proposta</span>
+    <div class="tit">Magick</div>
+    <div class="r"><div class="testa"><span class="ic fa">◎</span><span class="nm">Areté</span><span class="dots"><i class="d big on"></i><i class="d big on"></i><i class="d big"></i><i class="d big"></i><i class="d big"></i></span></div></div>
+    <div class="occ">Sfere</div>
+    <div class="r"><div class="testa"><span class="ic">F</span><span class="nm">Forze</span><span class="dots"><i class="d x"></i><i class="d on"></i><i class="d on"></i><i class="d on"></i><i class="d"></i><i class="d"></i></span></div></div>
+    <div class="r"><div class="testa"><span class="ic">M</span><span class="nm">Materia</span><span class="dots"><i class="d x"></i><i class="d on"></i><i class="d on"></i><i class="d on"></i><i class="d"></i><i class="d"></i></span></div></div>
+    <div class="r"><div class="testa"><span class="ic">T</span><span class="nm">Tempo</span><span class="dots"><i class="d x"></i><i class="d on"></i><i class="d on"></i><i class="d on"></i><i class="d on"></i><i class="d on"></i></span></div></div>
+    <div class="r"><div class="testa"><span class="ic">V</span><span class="nm">Vita</span><span class="dots"><i class="d x"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span></div></div>
+    <div class="occ">Gli Ambiti</div>
+
+    <!-- 1: una lettura sola, livello scelto -->
+    <div class="r scelta"><span class="badge" style="left:-9px;top:5px">1</span>
+      <div class="testa"><span class="ic fa">▣</span><span class="nm">Area</span><span class="dots"><i class="d lit"></i><i class="d lit"></i><i class="d vio"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span></div>
+      <div class="sotto"><span class="lettura">Quartiere</span></div>
+    </div>
+    <!-- una lettura sola, a riposo -->
+    <div class="r"><span class="badge" style="right:-9px;top:5px">2</span>
+      <div class="testa"><span class="ic fa">▣</span><span class="nm">Bersagli</span><span class="dots riposo"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span></div>
+    </div>
+    <!-- più letture, lettura scelta, niente livello -->
+    <div class="r"><span class="badge" style="left:-9px;top:30px">3</span>
+      <div class="testa"><span class="ic fa">▣</span><span class="nm">Condizioni <span class="chev oro">▾</span></span><span class="dots riposo"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span></div>
+      <div class="sotto"><span class="tag">Malus</span></div>
+    </div>
+    <!-- più letture, nessuna scelta -->
+    <div class="r"><span class="badge" style="right:-9px;top:5px">4</span>
+      <div class="testa"><span class="ic fa">▣</span><span class="nm">Durata <span class="chev oro">▾</span></span><span class="scegli">Scegli la lettura</span></div>
+    </div>
+    <div class="r">
+      <div class="testa"><span class="ic fa">◎</span><span class="nm">Portata</span><span class="dots riposo"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span></div>
+    </div>
+    <!-- più letture, lettura e livello -->
+    <div class="r scelta"><span class="badge" style="left:-9px;top:30px">5</span>
+      <div class="testa"><span class="ic fa">✱</span><span class="nm">Potenza <span class="chev oro">▾</span></span><span class="dots"><i class="d lit"></i><i class="d lit"></i><i class="d lit"></i><i class="d vio"></i><i class="d"></i><i class="d"></i><i class="d"></i></span></div>
+      <div class="sotto"><span class="tag">Epicità</span><span class="lettura">Impatta sul capitolo</span></div>
+    </div>
+    <!-- la tendina aperta -->
+    <div class="r"><span class="badge" style="right:-9px;top:34px">6</span>
+      <div class="testa"><span class="ic fa">◎</span><span class="nm">Precisione <span class="chev oro">▴</span></span><span class="scegli">Scegli la lettura</span></div>
+      <div class="cass"><span class="past">Dettaglio</span><span class="past">Informazione</span></div>
+    </div>
+  </div>
+
+  <!-- LEGENDA -->
+  <div class="legend">
+    <h2>Cosa non va adesso</h2>
+    <ol>
+      <li><i>·</i><p><b>Tre misure di pallini nello stesso riquadro.</b> Areté 20 px, Sfere 16 px, Ambiti 10 px: i sette pallini degli Ambiti sembrano una linea punteggiata, non dei comandi, e non stanno sulla colonna dei pallini delle Sfere.</p></li>
+      <li><i>·</i><p><b>La lettura scelta galleggia.</b> «MALUS», «NARRATIVA», «EPICITÀ» centrate sotto la riga hanno lo stesso vestito degli occhielli SFERE e GLI AMBITI: si leggono come titoli di sezione della riga dopo, non come un valore di Condizioni, Durata, Potenza.</p></li>
+      <li><i>·</i><p><b>Righe di altezza diversa senza un motivo leggibile.</b> Tre righe alte, tre basse, una (Precisione) vuota a destra: la scala rotta si vede prima del contenuto.</p></li>
+      <li><i>·</i><p><b>Quarantanove cerchi vuoti a riposo.</b> Gli Ambiti sono comandi del tiro, non dati del personaggio: da fermi fanno rumore quanto le Sfere che invece portano un valore.</p></li>
+    </ol>
+    <h2 style="margin-top:18px">Cosa cambia</h2>
+    <ol>
+      <li><i>1</i><p><b>Livello scelto.</b> La riga sul lilla, i pallini accesi fino al livello e quello scelto viola; sotto, la lettura del livello centrata e in grassetto («Quartiere»).</p></li>
+      <li><i>2</i><p><b>Pallini della misura delle Sfere</b> (16 px), allineati a destra sulla stessa colonna. A riposo al 40%: al sorvolo e con un valore tornano pieni. Nel modulo (0.99.0) il colore è quello delle Sfere: oro pieno fino al livello, niente viola sul livello scelto (Blue, 20/9 sera: «più in linea con gli altri colori»); il livello è il conto dei pallini accesi.</p></li>
+      <li><i>3</i><p><b>La lettura scelta è una pastiglia sotto il nome</b>, a sinistra, rientrata sotto la parola: si legge come «Condizioni, letta come Malus», non come un titolo. Da sola finché non c'è il livello.</p></li>
+      <li><i>4</i><p><b>Chi ha più letture e non ne ha ancora scelta una</b> mostra al posto dei pallini il tasto «Scegli la lettura»: la riga dice cosa le manca, invece di restare vuota (Precisione oggi).</p></li>
+      <li><i>5</i><p><b>Lettura e livello insieme.</b> La pastiglia a sinistra, la lettura del livello centrata nello spazio che resta: «EPICITÀ · Impatta sul capitolo».</p></li>
+      <li><i>6</i><p><b>La tendina delle letture</b> resta com'è, sotto la riga, pastiglie in fila; il chevron accanto al nome passa in oro e gira quando è aperta. Il nome resta il tasto.</p></li>
+    </ol>
+    <div class="stati">
+      <h3>I sei stati della riga di un Ambito</h3>
+      <table>
+        <tr><td>Una lettura, a riposo</td><td>nome, sette pallini al 40%</td></tr>
+        <tr><td>Una lettura, livello</td><td>lilla, pallini accesi, la lettura del livello sotto</td></tr>
+        <tr><td>Più letture, nessuna scelta</td><td>nome col chevron, «Scegli la lettura»</td></tr>
+        <tr><td>Più letture, lettura scelta</td><td>pallini al 40%, la pastiglia della lettura sotto il nome</td></tr>
+        <tr><td>Più letture, lettura e livello</td><td>lilla, pallini accesi, pastiglia più lettura del livello</td></tr>
+        <tr><td>Tendina aperta</td><td>chevron girato, le pastiglie delle letture sotto la riga</td></tr>
+      </table>
+    </div>
+    <div class="count">
+      <div><small>Misure di pallini</small><strong>3 → 2</strong><em>Areté 20, Sfere e Ambiti 16</em></div>
+      <div><small>Etichette orfane</small><strong>3 → 0</strong><em>la lettura sta sotto il nome</em></div>
+      <div><small>Righe vuote a destra</small><strong>1 → 0</strong><em>«Scegli la lettura»</em></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

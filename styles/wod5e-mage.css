@@ -238,24 +238,6 @@
 /* I cassetti: i livelli accesi in oro chiaro con testo inchiostro, il
    livello scelto in viola; i tasti della Ruota in crema con l'oro (e il
    rosso mattone per il Paradosso). */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pallino-ambito {
-  background: #FBF8F0;
-  border-color: #C7C7D6;
-  color: #1E1B2E;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pallino-ambito.lit {
-  background: #D9C28A;
-  border-color: #B3924A;
-  color: #1E1B2E;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pallino-ambito.scelta {
-  background: #282051;
-  border-color: #282051;
-  color: #F6F2E6;
-}
-
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-riga-tastino {
   background: #FBF8F0;
   border-color: #B3924A;
@@ -8670,12 +8652,14 @@
   padding: 2px;
 }
 
-/* Gli Ambiti (20/9, seconda passata): la riga su due linee. Sopra il nome
-   (col chevron se ha più letture: il clic apre la tendina delle letture) e
-   in fondo i sette pallini, che compaiono quando la lettura è scelta; sul
-   pallino il sorvolo dice il livello e la lettura. Sotto, centrata e
-   grande, la lettura del livello scelto, con la lettura dell'Ambito in
-   piccolo davanti. La riga scelta sul lilla. */
+/* Gli Ambiti (20/9, sera): la riga su due linee. Sopra il nome (col chevron
+   in oro se ha più letture: il clic apre la tendina delle letture) e in
+   fondo i sette pallini, della misura e del colore di quelli delle Sfere
+   (16 px a passo 3,5: la stessa larghezza del blocco ⊗ più cinque da 18),
+   a riposo al 40%, pieni al sorvolo e con un valore; chi ha più letture e
+   non ne ha scelta una mostra al loro posto «Scegli la lettura». Sotto, la
+   pastiglia della lettura a sinistra sotto il nome e, col livello, la sua
+   lettura centrata e in grassetto. La riga col livello sul lilla. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito {
   align-items: stretch;
   flex-direction: column;
@@ -8702,8 +8686,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome-ambito > i {
-  color: var(--mage-tenue);
-  font-size: 0.6rem;
+  color: var(--mage-oro);
+  font-size: 0.62rem;
   transition: transform 0.15s;
 }
 
@@ -8714,57 +8698,97 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-pallini {
   display: inline-flex;
   flex: 0 0 auto;
-  gap: 3px;
+  gap: 3.5px;
   margin-left: auto;
+  transition: opacity 0.15s;
 }
 
-/* Il pallino dell'Ambito: un cerchio, sbiadito da spento, oro tenue fino al
-   livello scelto, viola sul livello scelto; il sorvolo dice il livello. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito:not(.scelta):not(:hover) .wod5e-mage-ambito-pallini {
+  opacity: 0.4;
+}
+
+/* Il pallino dell'Ambito: come quello delle Sfere, incavo con l'anello
+   d'oro scuro da spento, oro pieno fino al livello scelto. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito {
   background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
+  border: 1px solid var(--mage-oro-scuro);
   border-radius: 50%;
   box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
-  flex: 0 0 14px;
-  height: 14px;
+  flex: 0 0 16px;
+  height: 16px;
   line-height: 1;
   min-height: 0;
-  opacity: 0.7;
   padding: 0;
-  width: 14px;
+  width: 16px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito:hover {
   border-color: var(--mage-oro);
   box-shadow: none;
-  opacity: 1;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito.lit {
-  background: var(--mage-oro-tenue);
-  border-color: var(--mage-oro-scuro);
-  opacity: 0.9;
+  background: var(--mage-dot-color);
+  border-color: var(--mage-dot-border);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito.scelta {
-  background: var(--mage-viola);
-  border-color: var(--mage-viola-chiaro);
-  opacity: 1;
+/* «Scegli la lettura»: al posto dei pallini, finché una lettura non c'è. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-scegli {
+  background: transparent;
+  border: 1px dashed var(--mage-oro-scuro);
+  border-radius: 10px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: 0.58rem;
+  font-weight: 700;
+  height: 20px;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin-left: auto;
+  min-height: 0;
+  padding: 0 8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  width: auto;
 }
 
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-scegli:hover {
+  border-color: var(--mage-oro);
+  border-style: solid;
+  box-shadow: none;
+}
+
+/* La seconda linea: la pastiglia della lettura a sinistra, rientrata sotto
+   il nome; la lettura del livello centrata nello spazio che resta. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-lettura {
-  align-items: baseline;
+  align-items: center;
   color: var(--mage-testo);
   display: flex;
-  gap: 6px;
-  justify-content: center;
+  gap: 8px;
+  min-height: 18px;
   min-width: 0;
-  padding: 0 2px 4px;
+  padding: 0 2px 4px 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-tag {
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 9px;
+  color: var(--mage-tenue);
+  flex: 0 0 auto;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  padding: 3px 6px;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-lettura > span {
+  flex: 1 1 auto;
   font-size: 0.95rem;
   font-weight: 700;
   min-width: 0;
@@ -8774,21 +8798,12 @@
   white-space: nowrap;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-lettura > small {
-  color: var(--mage-tenue);
-  flex: 0 0 auto;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito.scelta .wod5e-mage-ambito-lettura {
+  color: var(--mage-scelta-tenue-testo);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-lettura.solo-modo {
-  padding-bottom: 3px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito.scelta .wod5e-mage-ambito-lettura,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito.scelta .wod5e-mage-ambito-lettura > small {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito.scelta .wod5e-mage-ambito-tag {
+  border-color: var(--mage-viola-chiaro);
   color: var(--mage-scelta-tenue-testo);
 }
 

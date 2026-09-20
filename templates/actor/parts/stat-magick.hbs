@@ -58,15 +58,16 @@
         <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E_MAGE.Scopes.TableTitle"}}</span>
         <div class="wod5e-mage-ambiti-lista">
             {{#each scopeRows as |scope|}}
-                {{!-- La riga (20/9, seconda passata) su due linee. Sopra: il nome,
-                     col chevron se l'Ambito ha più letture (il clic apre la
-                     tendina delle letture, una scelta a più voci come il
-                     cassetto delle Sfere), e in fondo i sette pallini, che
-                     compaiono quando la lettura è scelta (chi ne ha una sola
-                     li ha sempre); sul pallino il sorvolo dice il livello e la
-                     sua lettura, il clic lo dichiara. Sotto, centrata e grande,
-                     la lettura del livello scelto, con la lettura dell'Ambito
-                     in piccolo davanti. --}}
+                {{!-- La riga (20/9, sera): la testa col nome (il chevron in oro se
+                     l'Ambito ha più letture: il clic apre la tendina delle letture,
+                     una pastiglia per lettura) e in fondo i sette pallini, della
+                     misura e del colore di quelli delle Sfere (Blue: «in linea con
+                     gli altri colori»), a riposo al 40%; chi ha più letture e non
+                     ne ha ancora scelta una mostra al loro posto «Scegli la
+                     lettura». Sul pallino il sorvolo dice il livello e la lettura,
+                     il clic lo dichiara. Sotto, la pastiglia della lettura a
+                     sinistra sotto il nome e, col livello, la sua lettura centrata
+                     e in grassetto. --}}
                 <div class="wod5e-mage-riga wod5e-mage-riga-ambito{{#if scope.multi}} con-tendina{{/if}}{{#if scope.level}} scelta{{/if}}">
                     <div class="wod5e-mage-riga-testa">
                         <i class="{{scope.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>
@@ -78,15 +79,17 @@
                         {{#if scope.modeChosen}}
                             <span class="wod5e-mage-ambito-pallini" role="group" aria-label="{{scope.label}}">
                                 {{#each scope.steps as |step|}}
-                                    <button type="button" class="wod5e-mage-pallino-ambito{{#if step.lit}} lit{{/if}}{{#if step.active}} scelta{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" data-tooltip="{{step.value}} · {{step.reading}}" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.value}}: {{step.reading}}"></button>
+                                    <button type="button" class="wod5e-mage-pallino-ambito{{#if step.lit}} lit{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" data-tooltip="{{step.value}} · {{step.reading}}" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.value}}: {{step.reading}}"></button>
                                 {{/each}}
                             </span>
+                        {{else}}
+                            <button type="button" class="wod5e-mage-ambito-scegli" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}">{{localize "WOD5E_MAGE.Tiro.ScopeModeChoose"}}</button>
                         {{/if}}
                     </div>
                     {{#if scope.level}}
-                        <div class="wod5e-mage-ambito-lettura" title="{{scope.reading}}">{{#if scope.multi}}<small>{{scope.modeLabel}}</small>{{/if}}<span>{{scope.reading}}</span></div>
+                        <div class="wod5e-mage-ambito-lettura" title="{{scope.reading}}">{{#if scope.multi}}<small class="wod5e-mage-ambito-tag">{{scope.modeLabel}}</small>{{/if}}<span>{{scope.reading}}</span></div>
                     {{else if scope.modeShown}}
-                        <div class="wod5e-mage-ambito-lettura solo-modo"><small>{{scope.modeLabel}}</small></div>
+                        <div class="wod5e-mage-ambito-lettura"><small class="wod5e-mage-ambito-tag">{{scope.modeLabel}}</small></div>
                     {{/if}}
                     {{#if scope.multi}}
                         {{!-- La tendina delle letture: una pastiglia per lettura, quella in uso accesa. --}}

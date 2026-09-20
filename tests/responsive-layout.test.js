@@ -54,10 +54,17 @@ assert.match(sheetSource, /position: \{\s*width: 1340,\s*height: 1080\s*\}/);
 // cassetto e nel cerchio sulla riga; il cassetto si apre al sorvolo su ogni
 // riga che ce l'ha (Abilità, Sfere, Ambiti) e sopra quando sotto non c'è posto.
 assert.match(css, /\.wod5e-mage-riga\.scelta\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
-assert.match(css, /\.wod5e-mage-pallino-ambito\.scelta\s*\{[^}]*background:\s*var\(--mage-viola\);/s);
-// La lettura scelta (20/9 sera): sotto la testa della riga, centrata e grande.
-assert.match(css, /\.wod5e-mage-ambito-lettura\s*\{[^}]*justify-content:\s*center;/s);
-assert.match(css, /\.wod5e-mage-ambito-lettura > span\s*\{[^}]*font-size:\s*0\.95rem;[^}]*font-weight:\s*700;/s);
+// I pallini degli Ambiti (20/9 sera): come quelli delle Sfere, oro pieno fino al
+// livello, niente viola; a riposo al 40%; «Scegli la lettura» al loro posto
+// finché una lettura non c'è; la pastiglia della lettura sotto il nome, la
+// lettura del livello centrata e in grassetto.
+assert.match(css, /\.wod5e-mage-pallino-ambito\.lit\s*\{[^}]*background:\s*var\(--mage-dot-color\);/s);
+assert.doesNotMatch(css, /\.wod5e-mage-pallino-ambito\.scelta/);
+assert.match(css, /\.wod5e-mage-riga-ambito:not\(\.scelta\):not\(:hover\) \.wod5e-mage-ambito-pallini\s*\{\s*opacity: 0\.4;/);
+assert.match(css, /\.wod5e-mage-ambito-scegli\s*\{[^}]*border: 1px dashed var\(--mage-oro-scuro\);/s);
+assert.match(css, /\.wod5e-mage-ambito-lettura\s*\{[^}]*padding: 0 2px 4px 24px;/s);
+assert.match(css, /\.wod5e-mage-ambito-tag\s*\{[^}]*text-transform: uppercase;/s);
+assert.match(css, /\.wod5e-mage-ambito-lettura > span\s*\{[^}]*font-size:\s*0\.95rem;[^}]*font-weight:\s*700;[^}]*text-align: center;/s);
 assert.match(css, /\.wod5e-mage-riga-tastini\s*\{[^}]*margin-left:\s*auto;/s);
 assert.match(css, /\.wod5e-mage-cassetto-modi\s*\{[^}]*flex-wrap:\s*wrap;/s);
 assert.doesNotMatch(css, /wod5e-mage-cassetto-ambito|wod5e-mage-livello-lettura/);
@@ -121,7 +128,7 @@ assert.match(magickRiq, /wod5e-mage-riga-sfera[^"]*\{\{#if sphere\.poteri\.lengt
 // tendina delle letture, una pastiglia per lettura), i sette pallini in fondo
 // alla testa quando la lettura è scelta (il sorvolo dice livello e lettura),
 // sotto la lettura del livello scelto, centrata, con la lettura dell'Ambito in piccolo.
-assert.match(magickRiq, /wod5e-mage-riga-ambito\{\{#if scope\.multi\}\} con-tendina\{\{\/if\}\}\{\{#if scope\.level\}\} scelta[\s\S]*wod5e-mage-riga-testa[\s\S]*\{\{#if scope\.multi\}\}[\s\S]*wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*\{\{#if scope\.modeChosen\}\}[\s\S]*wod5e-mage-ambito-pallini[\s\S]*wod5e-mage-pallino-ambito\{\{#if step\.lit\}\} lit\{\{\/if\}\}\{\{#if step\.active\}\} scelta\{\{\/if\}\}" data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}" data-tooltip="\{\{step\.value\}\} · \{\{step\.reading\}\}"[\s\S]*\{\{#if scope\.level\}\}[\s\S]*wod5e-mage-ambito-lettura"[^>]*>\{\{#if scope\.multi\}\}<small>\{\{scope\.modeLabel\}\}<\/small>\{\{\/if\}\}<span>\{\{scope\.reading\}\}<\/span>[\s\S]*\{\{else if scope\.modeShown\}\}[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-modi[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-modo\{\{#if mode\.selected\}\} scelta\{\{\/if\}\}" data-action="scopeMode" data-scope="\{\{scope\.id\}\}" data-mode="\{\{mode\.id\}\}"/);
+assert.match(magickRiq, /wod5e-mage-riga-ambito\{\{#if scope\.multi\}\} con-tendina\{\{\/if\}\}\{\{#if scope\.level\}\} scelta[\s\S]*wod5e-mage-riga-testa[\s\S]*\{\{#if scope\.multi\}\}[\s\S]*wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*\{\{#if scope\.modeChosen\}\}[\s\S]*wod5e-mage-ambito-pallini[\s\S]*wod5e-mage-pallino-ambito\{\{#if step\.lit\}\} lit\{\{\/if\}\}" data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}" data-tooltip="\{\{step\.value\}\} · \{\{step\.reading\}\}"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-ambito-scegli" data-action="cassettoToggle"[\s\S]*Tiro\.ScopeModeChoose[\s\S]*\{\{#if scope\.level\}\}[\s\S]*wod5e-mage-ambito-lettura"[^>]*>\{\{#if scope\.multi\}\}<small class="wod5e-mage-ambito-tag">\{\{scope\.modeLabel\}\}<\/small>\{\{\/if\}\}<span>\{\{scope\.reading\}\}<\/span>[\s\S]*\{\{else if scope\.modeShown\}\}[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-modi[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-modo\{\{#if mode\.selected\}\} scelta\{\{\/if\}\}" data-action="scopeMode" data-scope="\{\{scope\.id\}\}" data-mode="\{\{mode\.id\}\}"/);
 assert.doesNotMatch(magickRiq, /wod5e-mage-riga-modo|wod5e-mage-cassetto-ambito|wod5e-mage-livello|title="\{\{step\.reading\}\}"/);
 assert.doesNotMatch(magickRiq, /riga-ambito con-cassetto/);
 const sheetJs = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");

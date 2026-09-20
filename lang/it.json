@@ -1241,6 +1241,7 @@
       "ScopeHint": "Al sorvolo i sette livelli: il numero dichiara l'Ambito, lo stesso numero lo toglie. A destra, la lettura del livello scelto.",
       "ScopeOpen": "Apri la tendina dei livelli",
       "ScopeModePick": "Clic: scegli la lettura dell'Ambito",
+      "ScopeModeChoose": "Scegli la lettura",
       "ScopeModeHint": "Lettura dell'Ambito: {mode}. Clic: {next}",
       "PoteriHint": "Al sorvolo i poteri della Sfera: uno solo per lancio, e porta con sé la Sfera.",
       "IncantesimoHint": "Un clic lo carica nel tiro com'è scritto (Areté, Sfere, Ambiti, Attributo, Abilità); i tre tasti tirano. Un altro clic lo toglie.",
