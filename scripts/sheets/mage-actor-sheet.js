@@ -850,8 +850,13 @@ export class MageActorSheet extends MortalActorSheet {
     context.arete = getArete(actor);
     // Ogni Sfera porta nel suo cassetto i suoi poteri (segnaposto finché non sono scritti).
     context.poteri = preparePoteriRows(actor, tiro, localize);
+    // La riga della Sfera (20/9 sera): niente pallini, il conto dei poteri
+    // conosciuti e la tendina a caselle col potere scelto per il lancio.
     context.spheres = prepareSpheres(actor, { localize, locale: lang }).selected
-      .map((sphere) => ({ ...sphere, chosen: tiro.spheres.includes(sphere.id), poteri: poteriOfSphere(context.poteri, sphere.id) }));
+      .map((sphere) => {
+        const poteri = poteriOfSphere(context.poteri, sphere.id);
+        return { ...sphere, chosen: tiro.spheres.includes(sphere.id), poteri, potere: poteri.find((power) => power.selected) ?? null };
+      });
     context.scopeRows = prepareScopeRows(tiro, localize, { arete: context.arete.value, modes: scopeModesOf(this) });
 
     // Il Grimorio (16/9 sera): gli incantesimi scritti, cliccabili per il lancio.

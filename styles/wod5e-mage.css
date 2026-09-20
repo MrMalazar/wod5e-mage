@@ -8583,6 +8583,11 @@
   color: var(--mage-oro);
 }
 
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome:focus {
+  box-shadow: none;
+  outline: none;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.scelta .wod5e-mage-riga-nome {
   color: var(--mage-scelta-testo);
 }
@@ -8807,15 +8812,49 @@
   color: var(--mage-scelta-tenue-testo);
 }
 
-/* La tendina delle letture: le pastiglie in fila, quella in uso viola. */
+/* La tendina delle letture (20/9 sera: «troppo piccolo, non centrato nei
+   colori e nelle forme»): le pastiglie in fila e centrate, tutte della
+   stessa forma, con la cornice d'oro; quella in uso viola. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-cassetto-modi {
   flex-wrap: wrap;
-  gap: 4px;
-  padding: 5px;
+  gap: 6px;
+  justify-content: center;
+  padding: 7px 6px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-cassetto-modi > .wod5e-mage-pastiglia-modo {
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia-modo {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 14px;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: inline-flex;
   flex: 0 1 auto;
+  font-size: 0.9rem;
+  font-weight: 600;
+  height: 28px;
+  justify-content: center;
+  line-height: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0 14px;
+  white-space: nowrap;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia-modo:hover,
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia-modo:focus {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia-modo.scelta {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
 }
 
 /* I tastini in fondo alla riga (la Salute e la Saggezza: il tastino della
@@ -8897,26 +8936,162 @@
   top: auto;
 }
 
-/* Il cassetto dei poteri della Sfera: due per pallino, una riga per pallino. */
+/* La riga della Sfera (Blue, 20/9 sera): niente pallini. Il sigillo, il
+   conto dei poteri conosciuti, il nome, e in fondo il tasto della scelta
+   del potere, che apre la tendina a caselle: un potere per riga, la
+   casella spuntata su quello scelto (uno solo per lancio). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-conto {
+  color: var(--mage-oro);
+  flex: 0 0 auto;
+  font-size: 1rem;
+  font-weight: 700;
+  min-width: 16px;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-conto.vuoto {
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera.scelta .wod5e-mage-sfera-conto {
+  color: var(--mage-scelta-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-potere {
+  align-items: center;
+  background: transparent;
+  border: 1px dashed var(--mage-oro-scuro);
+  border-radius: 10px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 1 auto;
+  font-size: 0.58rem;
+  font-weight: 700;
+  gap: 6px;
+  height: 20px;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin-left: auto;
+  max-width: 150px;
+  min-height: 0;
+  min-width: 0;
+  padding: 0 8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-potere > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-potere > i {
+  font-size: 0.55rem;
+  transition: transform 0.15s;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.aperto > .wod5e-mage-sfera-potere > i {
+  transform: rotate(180deg);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-potere:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-potere:focus {
+  border-color: var(--mage-oro);
+  border-style: solid;
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-potere.pieno {
+  background: var(--mage-viola);
+  border: 1px solid var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-cassetto-poteri {
-  display: none;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  flex-direction: column;
+  gap: 1px;
+  padding: 4px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:hover > .wod5e-mage-cassetto-poteri,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto:focus-within > .wod5e-mage-cassetto-poteri,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga.con-cassetto.aperto > .wod5e-mage-cassetto-poteri {
-  display: grid;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.85rem;
+  gap: 8px;
+  line-height: 1.1;
+  min-height: 26px;
+  padding: 2px 6px;
+  text-align: left;
+  width: 100%;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia-potere.segnaposto {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce:focus {
+  background: var(--mage-riga-sorvolo);
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce.segnaposto > span {
   color: var(--mage-tenue);
   font-style: italic;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia-potere.scelta {
-  color: var(--mage-scelta-testo);
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce.scelta {
+  background: var(--mage-scelta-tenue);
+  color: var(--mage-scelta-tenue-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce.scelta > span {
+  color: var(--mage-scelta-tenue-testo);
   font-style: normal;
+}
+
+/* La casella: un quadrato con l'anello d'oro scuro, viola con la spunta. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-casella {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: 0 0 15px;
+  font-size: 0.6rem;
+  height: 15px;
+  justify-content: center;
+  width: 15px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-casella.spuntata {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-casella.spuntata::before {
+  content: "\2713";
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
 }
 
 
@@ -8939,9 +9114,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia-nome,
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia.vuota,
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia-potere,
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia-modo {
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia.vuota {
   background: transparent;
   border: 0;
   color: var(--mage-testo);
@@ -8957,8 +9130,7 @@
   white-space: nowrap;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia.scelta .wod5e-mage-pastiglia-nome,
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-pastiglia-modo.scelta {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia.scelta .wod5e-mage-pastiglia-nome {
   color: var(--mage-scelta-testo);
 }
 

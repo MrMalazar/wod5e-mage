@@ -30,22 +30,29 @@
         <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E_MAGE.Tabs.Spheres"}}</span>
         <div class="wod5e-mage-sfere-lista">
             {{#each spheres as |sphere|}}
-                <div class="wod5e-mage-riga wod5e-mage-riga-sfera{{#if sphere.chosen}} scelta{{/if}}{{#if sphere.family}} family{{/if}}{{#if sphere.poteri.length}} con-cassetto{{/if}}">
+                {{!-- La riga della Sfera (Blue, 20/9 sera: cambio di direttiva): niente
+                     pallini, «non servono più». Il sigillo, il conto dei poteri
+                     conosciuti, il nome (il clic mette la Sfera nel lancio), e in
+                     fondo la scelta del potere: una tendina a caselle, come un
+                     menù, un potere solo per lancio (la casella scelta si spegne
+                     con un altro clic; scegliere un potere porta con sé la Sfera). --}}
+                <div class="wod5e-mage-riga wod5e-mage-riga-sfera{{#if sphere.chosen}} scelta{{/if}}{{#if sphere.family}} family{{/if}}{{#if sphere.poteri.length}} con-tendina{{/if}}">
+                    <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt="">
+                    <b class="wod5e-mage-sfera-conto{{#unless sphere.poteri.length}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Stat.PoteriConosciuti'}}" data-tooltip="{{localize 'WOD5E_MAGE.Stat.PoteriConosciuti'}}">{{sphere.poteri.length}}</b>
                     <button type="button" class="wod5e-mage-riga-nome" data-action="tiroSphere" data-sphere="{{sphere.id}}" aria-pressed="{{sphere.chosen}}" title="{{localize 'WOD5E_MAGE.Tiro.SphereHint'}}">
-                        <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt="">
                         <span>{{localize sphere.label}}</span>
                     </button>
-                    <div class="resource-value" data-value="{{sphere.value}}" data-name="flags.wod5e-mage.spheres.{{sphere.id}}">
-                        <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
-                        {{#numLoop 5}}
-                            <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}" title="{{this}}"></span>
-                        {{/numLoop}}
-                    </div>
                     {{#if sphere.poteri.length}}
-                        {{!-- Il cassetto dei poteri della Sfera: due per pallino, fino ai pallini che ha. --}}
-                        <div class="wod5e-mage-cassetto wod5e-mage-cassetto-poteri" role="group" aria-label="{{localize 'WOD5E_MAGE.Stat.Poteri'}}" title="{{localize 'WOD5E_MAGE.Tiro.PoteriHint'}}">
+                        <button type="button" class="wod5e-mage-sfera-potere{{#if sphere.potere}} pieno{{/if}}" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.PoteriHint'}}" aria-label="{{localize 'WOD5E_MAGE.Stat.PotereScegli'}}">
+                            <span>{{#if sphere.potere}}{{sphere.potere.short}}{{else}}{{localize "WOD5E_MAGE.Stat.PotereScegli"}}{{/if}}</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                        {{!-- La tendina a caselle: un potere per riga, la casella spuntata su quello scelto. --}}
+                        <div class="wod5e-mage-cassetto wod5e-mage-cassetto-poteri" role="group" aria-label="{{localize 'WOD5E_MAGE.Stat.Poteri'}}">
                             {{#each sphere.poteri as |power|}}
-                                <button type="button" class="wod5e-mage-pastiglia wod5e-mage-pastiglia-potere{{#if power.selected}} scelta{{/if}}{{#if power.placeholder}} segnaposto{{/if}}" data-action="tiroPower" data-power="{{power.id}}" aria-pressed="{{power.selected}}" title="{{#if power.text}}{{power.text}}{{else}}{{localize 'WOD5E_MAGE.Stat.PotereSegnaposto'}}{{/if}}">{{power.short}}</button>
+                                <button type="button" class="wod5e-mage-potere-voce{{#if power.selected}} scelta{{/if}}{{#if power.placeholder}} segnaposto{{/if}}" role="checkbox" aria-checked="{{power.selected}}" data-action="tiroPower" data-power="{{power.id}}" title="{{#if power.text}}{{power.text}}{{else}}{{localize 'WOD5E_MAGE.Stat.PotereSegnaposto'}}{{/if}}">
+                                    <i class="wod5e-mage-casella{{#if power.selected}} spuntata{{/if}}" aria-hidden="true"></i>
+                                    <span>{{power.label}}</span>
+                                </button>
                             {{/each}}
                         </div>
                     {{/if}}

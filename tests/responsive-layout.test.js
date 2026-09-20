@@ -75,7 +75,10 @@ assert.doesNotMatch(css, /wod5e-mage-riga-modo/);
 assert.doesNotMatch(css, /pastiglia-livello/);
 assert.match(css, /\.wod5e-mage-riga\.con-cassetto:hover > \.wod5e-mage-cassetto[^{]*\{\s*display: flex;/);
 assert.match(css, /\.wod5e-mage-riga\.cassetto-su > \.wod5e-mage-cassetto\s*\{[^}]*bottom: calc\(100% - 2px\);[^}]*top: auto;/s);
-assert.match(css, /\.wod5e-mage-riga\.con-cassetto:hover > \.wod5e-mage-cassetto-poteri[^{]*\{\s*display: grid;/);
+// La tendina dei poteri (20/9 sera) si apre col clic, non al sorvolo: una colonna di caselle.
+assert.doesNotMatch(css, /con-cassetto:hover > \.wod5e-mage-cassetto-poteri/);
+assert.match(css, /\.wod5e-mage-cassetto-poteri\s*\{[^}]*flex-direction: column;/s);
+assert.match(css, /\.wod5e-mage-casella\.spuntata::before \{\s*content: "\\2713";/);
 // La misura del testo: una scala sul contenuto della finestra.
 assert.match(css, /\.window-content\s*\{\s*position: relative;\s*zoom: var\(--mage-scala, 1\);/);
 // La scheda minimizzata resta richiudibile; sotto i 1280 le quattro colonne si
@@ -123,7 +126,11 @@ assert.match(sheetSource, /function onCassettoToggle\(event, target\) \{[\s\S]*?
 assert.doesNotMatch(risorse, /data-action="areteRoll"|wod5e-mage-header-arete/);
 // Magick: le Sfere col cassetto dei poteri, gli Ambiti con la lettura e il cassetto dei livelli.
 const magickRiq = stat("stat-magick.hbs");
-assert.match(magickRiq, /wod5e-mage-riga-sfera[^"]*\{\{#if sphere\.poteri\.length\}\} con-cassetto[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-poteri[\s\S]*data-action="tiroPower" data-power="\{\{power\.id\}\}"[^>]*>\{\{power\.short\}\}/);
+// La Sfera (20/9 sera, cambio di direttiva): niente pallini; il sigillo, il conto
+// dei poteri conosciuti, il nome, il tasto del potere che apre la tendina a
+// caselle (un potere per riga, la casella spuntata su quello scelto).
+assert.match(magickRiq, /wod5e-mage-riga-sfera[^"]*\{\{#if sphere\.poteri\.length\}\} con-tendina[\s\S]*wod5e-mage-sfera-sigillo[\s\S]*wod5e-mage-sfera-conto[^>]*>\{\{sphere\.poteri\.length\}\}<\/b>[\s\S]*wod5e-mage-riga-nome" data-action="tiroSphere"[\s\S]*wod5e-mage-sfera-potere\{\{#if sphere\.potere\}\} pieno\{\{\/if\}\}" data-action="cassettoToggle"[\s\S]*\{\{sphere\.potere\.short\}\}[\s\S]*Stat\.PotereScegli[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-poteri[\s\S]*wod5e-mage-potere-voce\{\{#if power\.selected\}\} scelta[\s\S]*role="checkbox" aria-checked="\{\{power\.selected\}\}" data-action="tiroPower" data-power="\{\{power\.id\}\}"[\s\S]*wod5e-mage-casella\{\{#if power\.selected\}\} spuntata[\s\S]*\{\{power\.label\}\}/);
+assert.doesNotMatch(magickRiq, /resource-value-step|dotCounterChange|wod5e-mage-pastiglia-potere/);
 // L'Ambito (20/9 sera): il nome col chevron se ha più letture (il clic apre la
 // tendina delle letture, una pastiglia per lettura), i sette pallini in fondo
 // alla testa quando la lettura è scelta (il sorvolo dice livello e lettura),
