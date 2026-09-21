@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Tratti, Credo, Esperienza · proposta</title>
+<style>
+  :root{
+    --oro:#d9a827; --oro-scuro:#98772b; --oro-tenue:#6b4f12; --oro-chiaro:#f5e7b2;
+    --carta:#fbf8f0; --inchiostro:#14110c; --testo:#e6dcc2; --tenue:#ab9f85;
+    --incavo:#15130f; --velluto:#282723; --viola:#5a2b82; --viola-chiaro:#b58ade; --lilla:#3b2a55;
+    --rosso:#b5433c; --riq:linear-gradient(#2a2314,#1f1a10); --riga:#2f2a1f; --cassetto:#1a160f; --su-oro:#1a140a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#121009;color:var(--testo);font:13px/1.35 "Signika","Segoe UI",system-ui,sans-serif;padding:28px 32px 48px}
+  h1{font:600 20px "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro);margin:0 0 4px;letter-spacing:.02em}
+  .sub{color:var(--tenue);margin:0 0 30px;font-size:13px;max-width:980px}
+  .blocco{display:grid;grid-template-columns:1240px 1fr;gap:34px;align-items:start;margin-bottom:56px}
+
+  /* — la pagina — */
+  .pagina{width:1240px;background:#1b160f;border:1px solid var(--oro-tenue);border-radius:10px;padding:14px 16px 18px;position:relative}
+  .pagina > h2{display:flex;align-items:center;gap:14px;margin:0 0 14px;font:600 22px "Modesto Condensed",Georgia,serif;color:var(--oro);letter-spacing:.06em;text-transform:uppercase}
+  .pagina > h2::before,.pagina > h2::after{content:"";flex:1;border-top:1px solid var(--oro-tenue)}
+  .griglia{display:grid;gap:14px;align-items:start}
+  .g-tratti{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:"vantaggi inventario" "elementi oggetti"}
+  .g-credo{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-areas:"tipo sfere" "strumenti sfere"}
+  .g-exp{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"conto conto" "prese spese" "listino listino"}
+  .riq{background:var(--riq);border:1px solid var(--oro-scuro);border-radius:8px;padding:8px 8px 10px;position:relative;display:flex;flex-direction:column;gap:2px;min-width:0}
+  .tit{display:flex;align-items:center;gap:8px;font:700 10.5px/1 sans-serif;letter-spacing:.16em;color:var(--oro);text-transform:uppercase;padding:2px 0 6px;border-bottom:1px solid rgb(152 119 43 / 45%);margin-bottom:4px}
+  .tit .conto{margin-left:auto;font:600 12px "Signika",sans-serif;letter-spacing:.04em;color:var(--testo);text-transform:none}
+  .tit .tasti{margin-left:auto;display:flex;gap:3px}
+  .tit .conto + .tasti{margin-left:8px}
+  .tastino{width:20px;height:20px;border-radius:5px;border:1px solid var(--oro-scuro);color:var(--oro);font-size:11px;line-height:18px;text-align:center;flex:none;background:transparent}
+  .tastino.pieno{background:var(--oro);color:var(--su-oro);border-color:var(--oro)}
+  .occ{display:flex;align-items:center;gap:8px;font:700 9px/1 sans-serif;letter-spacing:.14em;color:var(--tenue);text-transform:uppercase;margin:8px 0 2px;white-space:nowrap}
+  .occ::after{content:"";flex:1;border-top:1px solid rgb(152 119 43 / 40%)}
+  .occ .tasti{display:flex;gap:3px}
+  .occ .tasti .tastino{width:18px;height:18px;line-height:16px;font-size:10px}
+
+  /* — la riga — */
+  .r{display:flex;flex-direction:column;background:var(--riga);border-radius:6px;padding:0 6px 0 4px;min-height:28px;position:relative}
+  .r.scelta{background:var(--lilla)}
+  .testa{display:flex;align-items:center;gap:7px;min-height:28px}
+  .sig{width:20px;height:20px;flex:none;object-fit:contain}
+  .ic{width:20px;height:20px;border-radius:50%;background:var(--oro);flex:none;display:flex;align-items:center;justify-content:center;color:var(--su-oro);font-size:10px;font-weight:700}
+  .ic.fa{background:transparent;color:var(--oro);font-size:13px}
+  .nm{font-size:14px;font-weight:600;color:var(--testo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto}
+  .nm .chev{font-size:9px;color:var(--oro);margin-left:5px}
+  .dots{display:flex;gap:3px;align-items:center;flex:none}
+  .d{width:16px;height:16px;border-radius:50%;border:1px solid var(--oro-tenue);background:var(--incavo)}
+  .d.on{background:var(--oro);border-color:var(--oro)}
+  .tasti{display:flex;gap:3px;flex:none}
+  .n{min-width:22px;text-align:right;font:700 15px/1 "Signika",sans-serif;color:var(--oro);flex:none}
+  .n.tenue{color:var(--tenue);font-weight:400}
+  .tag{font:700 8.5px/1 sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--tenue);border:1px solid var(--oro-tenue);border-radius:9px;padding:3px 6px;white-space:nowrap;flex:none}
+  .tag.att{color:var(--oro-chiaro);border-color:var(--oro-scuro)}
+  .pill{font:700 9px/1 sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--oro);border:1px dashed var(--oro-scuro);border-radius:10px;padding:4px 8px;white-space:nowrap;flex:none}
+  .pill.pieno{background:var(--viola);border:1px solid var(--viola-chiaro);color:#fff;text-transform:none;letter-spacing:.02em;font-size:11px;font-weight:600}
+  .past{font-size:11px;color:var(--testo);background:var(--riga);border:1px solid var(--oro-tenue);border-radius:12px;padding:4px 9px;white-space:nowrap}
+  .past.sc{background:var(--viola);border-color:var(--viola-chiaro);color:#fff}
+  .pastiglie{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;padding:6px 4px}
+  .sotto{display:flex;align-items:center;gap:8px;min-height:20px;padding:0 2px 5px 27px}
+  .sotto .campo{flex:1;background:var(--carta);color:var(--inchiostro);border-radius:4px;padding:3px 7px;font-size:12px;min-height:22px}
+  .sotto .campo.vuoto{color:#8a8071;font-style:italic}
+  .sotto .campo.corto{flex:0 0 150px}
+  .spiega{padding:2px 6px 8px 27px;display:flex;flex-direction:column;gap:5px;font-size:12.5px;line-height:1.4}
+  .spiega p{margin:0}
+  .spiega .k{font:700 8.5px/1 sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--tenue);display:inline-block;margin-right:6px}
+  .spiega .fondo{display:flex;justify-content:flex-end;gap:12px;font:700 8.5px/1 sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--tenue);padding-top:2px}
+  .vuota{color:var(--tenue);font-size:12px;padding:4px 6px 6px;font-style:italic}
+  .campo{background:var(--carta);color:var(--inchiostro);border-radius:4px;padding:3px 7px;font-size:12.5px;min-height:22px}
+  .campo.vuoto{color:#8a8071;font-style:italic}
+  .testa .campo{flex:1;min-width:0}
+  .testa .campo.corto{flex:0 0 64px;text-align:center}
+  .cass{background:var(--cassetto);border:1px solid var(--oro-scuro);border-radius:6px;box-shadow:0 6px 14px rgb(0 0 0 / 55%);padding:6px;margin:0 4px 6px;display:flex;flex-direction:column;gap:4px}
+  .cass .occ{margin:2px 0 0}
+
+  /* — esperienza — */
+  .conti{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:4px 2px 2px}
+  .conti > div{background:var(--riga);border-radius:6px;padding:8px 10px;text-align:center}
+  .conti small{display:block;font:700 8.5px/1 sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);margin-bottom:4px}
+  .conti strong{font:600 28px/1 "Modesto Condensed",Georgia,serif;color:var(--oro)}
+  .conti .spesa strong{color:var(--viola-chiaro)}
+  .calc{display:flex;align-items:center;gap:8px;min-height:30px}
+  .calc .campo{min-height:24px}
+  .calc .uguale{font:600 18px "Modesto Condensed",Georgia,serif;color:var(--oro);margin-left:auto}
+  .passi{color:var(--tenue);font-size:11.5px;padding:0 4px 6px 27px}
+  .listino{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px}
+  .listino .r .testa{min-height:26px}
+  .formula{color:var(--tenue);font-size:12px;white-space:nowrap;flex:none}
+  .formula b{color:var(--oro)}
+
+  /* — i numeri della legenda — */
+  .badge{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--viola-chiaro);color:#1a0f2a;font:700 11px/18px sans-serif;text-align:center;box-shadow:0 0 0 2px #121009;z-index:6}
+  .legend h2{font:600 12px/1 sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--oro-chiaro);margin:0 0 12px}
+  .legend ol{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+  .legend li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start}
+  .legend li i{width:18px;height:18px;border-radius:50%;background:var(--viola-chiaro);color:#1a0f2a;font:700 11px/18px sans-serif;text-align:center;font-style:normal}
+  .legend li b{color:var(--oro-chiaro);font-weight:600}
+  .legend p{margin:0;color:var(--testo)}
+  .legend .cade{margin-top:14px;border-top:1px solid var(--oro-tenue);padding-top:10px;color:var(--tenue);font-size:12px}
+  .legend .cade b{color:var(--oro-chiaro);font-weight:600}
+</style>
+</head>
+<body>
+<h1>Tratti, Credo, Esperienza · proposta</h1>
+<p class="sub">Le tre pagine nello stile della prima pagina e della Magick: riquadri con l'occhiello, righe (icona, nome, pallini o valore, tastini), il testo che si apre col clic sul nome, le pastiglie per scegliere. Niente più tavole a colonne e tendine del sistema. I contenuti sono quelli che le pagine hanno oggi; i nomi degli oggetti sono d'esempio.</p>
+
+<!-- ============================ TRATTI ============================ -->
+<div class="blocco">
+<div class="pagina">
+  <h2>Tratti</h2>
+  <div class="griglia g-tratti">
+
+    <div class="riq" style="grid-area:vantaggi">
+      <span class="badge" style="left:-9px;top:-9px">1</span>
+      <div class="tit">Vantaggi <span class="conto">2 Background · 2 Pregi · 1 Difetto</span></div>
+      <div class="occ">Background <span class="tasti"><span class="tastino">📖</span><span class="tastino">⌕</span><span class="tastino">+</span></span></div>
+      <div class="r"><div class="testa"><span class="ic">B</span><span class="nm">Contatti <span class="chev">▾</span></span><span class="dots"><i class="d on"></i><i class="d on"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="tasti"><span class="tastino">✎</span><span class="tastino">🗑</span></span></div></div>
+      <div class="r"><span class="badge" style="right:-13px;top:5px">2</span>
+        <div class="testa"><span class="ic">B</span><span class="nm">Risorse <span class="chev">▴</span></span><span class="dots"><i class="d on"></i><i class="d on"></i><i class="d on"></i><i class="d"></i><i class="d"></i></span><span class="tasti"><span class="tastino">✎</span><span class="tastino">🗑</span></span></div>
+        <div class="spiega"><p>Un tenore di vita agiato: una casa, un'auto, i soldi per le spese di un mese senza pensarci. Al terzo pallino ti puoi permettere un capriccio a sessione.</p></div>
+      </div>
+      <div class="occ">Pregi <span class="tasti"><span class="tastino">📖</span><span class="tastino">⌕</span><span class="tastino">+</span></span></div>
+      <div class="r"><div class="testa"><span class="ic">P</span><span class="nm">Occhio di lince <span class="chev">▾</span></span><span class="dots"><i class="d on"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="tasti"><span class="tastino">✎</span><span class="tastino">🗑</span></span></div></div>
+      <div class="r"><div class="testa"><span class="ic">P</span><span class="nm">Sangue freddo <span class="chev">▾</span></span><span class="dots"><i class="d on"></i><i class="d on"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="tasti"><span class="tastino">✎</span><span class="tastino">🗑</span></span></div></div>
+      <div class="occ">Difetti <span class="tasti"><span class="tastino">📖</span><span class="tastino">⌕</span><span class="tastino">+</span></span></div>
+      <div class="r"><div class="testa"><span class="ic" style="background:var(--rosso);color:#fff">D</span><span class="nm">Nemico <span class="chev">▾</span></span><span class="dots"><i class="d on"></i><i class="d on"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="tasti"><span class="tastino">✎</span><span class="tastino">🗑</span></span></div></div>
+    </div>
+
+    <div class="riq" style="grid-area:inventario">
+      <span class="badge" style="left:-9px;top:-9px">3</span>
+      <div class="tit">Inventario</div>
+      <div class="occ">Armatura <span class="tasti"><span class="tastino">⌕</span><span class="tastino">+</span></span></div>
+      <div class="vuota">Niente armatura.</div>
+      <div class="occ">Armi <span class="tasti"><span class="tastino">⌕</span><span class="tastino">+</span></span></div>
+      <div class="r"><div class="testa"><span class="ic fa">⚔</span><span class="nm">Coltello <span class="chev">▾</span></span><span class="tag att">danno 2</span><span class="tasti"><span class="tastino pieno">⚅</span><span class="tastino">✎</span><span class="tastino">🗑</span></span></div></div>
+      <div class="occ">Equipaggiamento <span class="tasti"><span class="tastino">⌕</span><span class="tastino">+</span></span></div>
+      <div class="r"><div class="testa"><span class="ic fa">▣</span><span class="nm">Torcia <span class="chev">▾</span></span><span class="tasti"><span class="tastino">✎</span><span class="tastino">🗑</span></span></div></div>
+      <div class="r"><div class="testa"><span class="ic fa">▣</span><span class="nm">Kit del pronto soccorso <span class="chev">▾</span></span><span class="tag">2 / 3 usi</span><span class="tasti"><span class="tastino">▾</span><span class="tastino">↺</span><span class="tastino">✎</span><span class="tastino">🗑</span></span></div></div>
+    </div>
+
+    <div class="riq" style="grid-area:elementi">
+      <span class="badge" style="left:-9px;top:-9px">4</span>
+      <div class="tit">Elementi <span class="conto">in comune coi giocatori · di storia</span></div>
+      <div class="occ">In comune <span class="tasti"><span class="tastino">📖</span><span class="tastino">+</span></span></div>
+      <div class="r"><div class="testa"><span class="tag">Background</span><span class="nm">Il Nodo di via Padova</span><span class="dots"><i class="d on"></i><i class="d on"></i><i class="d on"></i><i class="d"></i><i class="d"></i></span><span class="tasti"><span class="tastino">🗑</span></span></div></div>
+      <div class="r"><div class="testa"><span class="tag">Pregio</span><span class="nm">Rifugio della cabala</span><span class="dots"><i class="d on"></i><i class="d on"></i><i class="d"></i><i class="d"></i><i class="d"></i></span><span class="tasti"><span class="tastino">🗑</span></span></div></div>
+      <div class="occ">Di storia <span class="tasti"><span class="tastino">📖</span><span class="tastino">+</span></span></div>
+      <div class="vuota">Quello che la cronaca ti ha dato o tolto, col suo livello a pallini.</div>
+    </div>
+
+    <div class="riq" style="grid-area:oggetti">
+      <span class="badge" style="left:-9px;top:-9px">5</span>
+      <div class="tit">Altri oggetti <span class="tasti"><span class="tastino">+</span></span></div>
+      <div class="r"><div class="testa"><span class="ic fa">•</span><span class="campo" style="flex:0 0 42%">Chiavi del Nodo</span><span class="campo">Tre copie, una a Regina</span><span class="tasti"><span class="tastino">🗑</span></span></div></div>
+      <div class="r"><div class="testa"><span class="ic fa">•</span><span class="campo" style="flex:0 0 42%">Taccuino di Olivio</span><span class="campo vuoto">nota</span><span class="tasti"><span class="tastino">🗑</span></span></div></div>
+    </div>
+
+  </div>
+</div>
+<div class="legend">
+  <h2>Tratti</h2>
+  <ol>
+    <li><i>1</i><p><b>Vantaggi in un riquadro solo</b>, con tre occhielli: Background, Pregi, Difetti. Ogni occhiello porta i suoi tre tastini a destra: il libro dell'archivio M6, la lente del compendio, il + che crea da zero. Il conto in testa dice quanti sono.</p></li>
+    <li><i>2</i><p><b>La riga del tratto</b>: il sigillo (B, P, D: la lettera nel disco d'oro, il Difetto in rosso), il nome, i cinque pallini, la matita e il cestino. Il clic sul nome apre la descrizione, come le Condizioni e i poteri: si consulta al tavolo senza aprire l'oggetto.</p></li>
+    <li><i>3</i><p><b>Inventario</b> con gli stessi occhielli (Armatura, Armi, Equipaggiamento) e la stessa riga: il d10 pieno sulle armi che tirano, il danno in pastiglia, gli usi con le due frecce quando ce li hanno. Via le etichette del sistema (TYPES.Item.armor…).</p></li>
+    <li><i>4</i><p><b>Elementi</b> in comune e di storia: la pastiglia del tipo al posto della tendina, il nome, i pallini, il cestino. Un riquadro solo, due occhielli.</p></li>
+    <li><i>5</i><p><b>Altri oggetti</b>: nome e nota su carta, sulla stessa riga.</p></li>
+  </ol>
+  <p class="cade"><b>Cade</b>: le tavole a colonne con le intestazioni in maiuscoletto, le tendine del sistema, il tasto del reset in linea (torna nel titolo del riquadro come sulla prima pagina). <b>Non cambia</b>: i Vantaggi restano oggetti del sistema (si aprono con la matita), quindi la revisione di Pregi, Difetti e Background è un lavoro a parte, sui compendi.</p>
+</div>
+</div>
+
+<!-- ============================ CREDO ============================ -->
+<div class="blocco">
+<div class="pagina">
+  <h2>Credo</h2>
+  <div class="griglia g-credo">
+
+    <div class="riq" style="grid-area:tipo">
+      <span class="badge" style="left:-9px;top:-9px">1</span>
+      <div class="tit">Tipo di Magick <span class="conto">decide le famiglie di Strumenti</span></div>
+      <div class="pastiglie"><span class="past sc">Magick</span><span class="past">Tecnomagick</span><span class="past">Magick Ibrida</span></div>
+      <div class="vuota">Il Credo si sceglie in prima pagina, sotto il nome (Appartenenza).</div>
+    </div>
+
+    <div class="riq" style="grid-area:strumenti">
+      <span class="badge" style="left:-9px;top:-9px">2</span>
+      <div class="tit">Strumenti per la Magick <span class="conto">uno per Sfera</span></div>
+      <div class="r"><div class="testa"><img class="sig" src="data:image/png;base64,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" alt=""><span class="nm">Forze</span><span class="pill pieno">Danza ▾</span><span class="tasti"><span class="tastino">💡</span></span></div><div class="sotto"><span class="campo">Il tamburo di pelle</span></div></div>
+      <div class="r"><span class="badge" style="right:-13px;top:5px">3</span>
+        <div class="testa"><img class="sig" src="data:image/png;base64,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" alt=""><span class="nm">Materia</span><span class="pill">Scegli lo Strumento ▾</span><span class="tasti"><span class="tastino">💡</span></span></div>
+        <div class="cass">
+          <div class="occ">Gesto</div><div class="pastiglie" style="justify-content:flex-start;padding:2px 0"><span class="past">Danza</span><span class="past">Canto</span><span class="past">Mudra</span></div>
+          <div class="occ">Oggetto</div><div class="pastiglie" style="justify-content:flex-start;padding:2px 0"><span class="past">Talismano</span><span class="past">Arma</span><span class="past">Mestiere…</span></div>
+          <div class="occ" style="opacity:.45">Macchina · solo Tecnomagick</div><div class="pastiglie" style="justify-content:flex-start;padding:2px 0;opacity:.45"><span class="past">App</span><span class="past">Congegno</span></div>
+        </div>
+      </div>
+      <div class="r"><div class="testa"><img class="sig" src="data:image/png;base64,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" alt=""><span class="nm">Tempo</span><span class="pill pieno">Mestiere · Orologiaio ▾</span><span class="tasti"><span class="tastino">💡</span></span></div><div class="sotto"><span class="campo vuoto">il tuo di preciso</span></div></div>
+      <div class="r"><span class="badge" style="right:-13px;top:5px">4</span>
+        <div class="testa"><span class="ic fa">◉</span><span class="nm">Percepire</span><span class="pill">Scegli lo Strumento ▾</span></div>
+        <div class="sotto"><span class="campo vuoto">il tuo di preciso</span></div>
+        <div class="vuota" style="padding-left:27px">Lo Strumento degli effetti percettivi, le Sfere al primo pallino. Può essere lo stesso di una Sfera, o un altro.</div>
+      </div>
+    </div>
+
+    <div class="riq" style="grid-area:sfere">
+      <span class="badge" style="left:-9px;top:-9px">5</span>
+      <div class="tit">Le Sfere per te <span class="conto">cos'è ognuna, con le tue parole</span></div>
+      <div class="r"><div class="testa"><img class="sig" src="data:image/png;base64,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" alt=""><span class="nm">Cos'è Forze <span class="chev">▴</span></span><span class="tasti"><span class="tastino">✎</span></span></div>
+        <div class="spiega"><p>Per me le Forze sono il ritmo: tutto vibra, e chi sente il battito lo può spostare. Il tamburo non è un simbolo, è la mano sul cuore del mondo.</p></div>
+      </div>
+      <div class="r"><div class="testa"><img class="sig" src="data:image/png;base64,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" alt=""><span class="nm">Cos'è Materia <span class="chev">▾</span></span><span class="tasti"><span class="tastino">✎</span></span></div></div>
+      <div class="r"><div class="testa"><img class="sig" src="data:image/png;base64,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" alt=""><span class="nm">Cos'è Tempo <span class="chev">▾</span></span><span class="tasti"><span class="tastino">✎</span></span></div>
+        <div class="vuota" style="padding-left:27px">Non l'hai ancora scritto: la matita apre il testo.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="legend">
+  <h2>Credo</h2>
+  <ol>
+    <li><i>1</i><p><b>Tipo di Magick a pastiglie</b> (Magick, Tecnomagick, Ibrida), quella in uso viola: la stessa forma delle letture degli Ambiti. Sotto, in una riga, dove si sceglie il Credo.</p></li>
+    <li><i>2</i><p><b>Uno Strumento per Sfera, una riga per Sfera</b>: il sigillo, la Sfera, la pastiglia dello Strumento (tratteggiata finché non c'è, viola col nome quando c'è), la lampadina dei consigli. Sulla seconda linea «il tuo di preciso», su carta.</p></li>
+    <li><i>3</i><p><b>La tendina degli Strumenti</b>: i ventidue per famiglia, con l'occhiello della famiglia; le famiglie che il Tipo non ammette restano in vista ma spente. Mestiere apre il campo del mestiere sulla seconda linea.</p></li>
+    <li><i>4</i><p><b>Percepire</b> in coda, stessa riga, con la nota sotto.</p></li>
+    <li><i>5</i><p><b>Le Sfere per te</b>: una riga per Sfera sbloccata, il testo si apre col clic sul nome e si scrive con la matita (l'editor di Foundry, come oggi).</p></li>
+  </ol>
+  <p class="cade"><b>Cade</b>: la tendina del Tipo, la tendina a gruppi degli Strumenti, i blocchi apri-e-chiudi delle Sfere con l'editor sempre in vista. <b>Aperto</b>: se nel ramo C lo Strumento resta uno per Sfera o cambia (la lista dei ventidue e le famiglie sono quelle del 3/9).</p>
+</div>
+</div>
+
+<!-- ============================ ESPERIENZA ============================ -->
+<div class="blocco">
+<div class="pagina">
+  <h2>Esperienza</h2>
+  <div class="griglia g-exp">
+
+    <div class="riq" style="grid-area:conto">
+      <span class="badge" style="left:-9px;top:-9px">1</span>
+      <div class="tit">Il conto</div>
+      <div class="conti"><div><small>Presa</small><strong>27</strong></div><div class="spesa"><small>Spesa</small><strong>15</strong></div><div><small>Rimane</small><strong>12</strong></div></div>
+    </div>
+
+    <div class="riq" style="grid-area:prese">
+      <span class="badge" style="left:-9px;top:-9px">2</span>
+      <div class="tit">Prese <span class="conto">27 in tutto</span><span class="tasti"><span class="tastino">+</span></span></div>
+      <div class="r"><div class="testa"><span class="n">12</span><span class="campo">Sessione 1 · l'arrivo a Milano</span><span class="tasti"><span class="tastino">🗑</span></span></div></div>
+      <div class="r"><div class="testa"><span class="n">15</span><span class="campo">Sessione 2</span><span class="tasti"><span class="tastino">🗑</span></span></div></div>
+    </div>
+
+    <div class="riq" style="grid-area:spese">
+      <span class="badge" style="left:-9px;top:-9px">3</span>
+      <div class="tit">Spese <span class="conto">15 in tutto</span><span class="tasti"><span class="tastino">+</span></span></div>
+      <div class="r"><div class="testa"><span class="n">8</span><span class="campo">Forze al terzo pallino</span><span class="tasti"><span class="tastino">🗑</span></span></div></div>
+      <div class="r"><div class="testa"><span class="n">7</span><span class="campo">Mischia 2</span><span class="tasti"><span class="tastino">🗑</span></span></div></div>
+      <div class="r" style="background:transparent;border:1px dashed var(--oro-tenue)"><span class="badge" style="right:-13px;top:5px">4</span><div class="testa"><span class="n tenue">6</span><span class="nm" style="color:var(--tenue);font-weight:500">Conduttore (potere di Forze) · proposto dalla pagina Magick</span><span class="pill">Segna</span></div></div>
+    </div>
+
+    <div class="riq" style="grid-area:listino">
+      <span class="badge" style="left:-9px;top:-9px">5</span>
+      <div class="tit">Il listino <span class="conto">quanto costa salire</span></div>
+      <div class="r" style="margin-bottom:6px"><div class="calc"><span class="ic fa">⚖</span><span class="pill pieno">Abilità ▾</span><span class="nm" style="flex:0 0 auto">da</span><span class="campo corto">1</span><span class="nm" style="flex:0 0 auto">a</span><span class="campo corto">3</span><span class="uguale">10 punti</span></div><div class="passi">1 → 2 costa 4 · 2 → 3 costa 6</div></div>
+      <div class="listino">
+        <div class="r"><div class="testa"><span class="ic fa">◈</span><span class="nm">Attributo</span><span class="formula">per pallino <b>× 4</b></span></div></div>
+        <div class="r"><div class="testa"><span class="ic fa">◈</span><span class="nm">Abilità</span><span class="formula">nuova <b>3</b> · per pallino <b>× 2</b></span></div></div>
+        <div class="r"><div class="testa"><span class="ic fa">◈</span><span class="nm">Sfera di famiglia</span><span class="formula">nuova <b>8</b> · per pallino <b>× 5</b></span></div></div>
+        <div class="r"><div class="testa"><span class="ic fa">◈</span><span class="nm">Sfera esterna</span><span class="formula">nuova <b>8</b> · per pallino <b>× 7</b></span></div></div>
+        <div class="r"><div class="testa"><span class="ic fa">◈</span><span class="nm">Areté</span><span class="formula">per pallino <b>× 10</b></span></div></div>
+        <div class="r"><div class="testa"><span class="ic fa">◈</span><span class="nm">Salute</span><span class="formula">per casella <b>× 1</b></span></div></div>
+        <div class="r"><div class="testa"><span class="ic fa">◈</span><span class="nm">Pregio</span><span class="formula">per pallino <b>× 3</b></span></div></div>
+        <div class="r"><div class="testa"><span class="ic fa">◈</span><span class="nm">Background</span><span class="formula">per pallino <b>× 3</b></span></div></div>
+        <div class="r" style="background:transparent;border:1px dashed var(--oro-tenue)"><span class="badge" style="right:-13px;top:5px">6</span><div class="testa"><span class="ic fa">◈</span><span class="nm">Potere di Sfera</span><span class="formula"><b>?</b> da decidere</span></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="legend">
+  <h2>Esperienza</h2>
+  <ol>
+    <li><i>1</i><p><b>Il conto</b> in tre numeri grandi (Presa, Spesa, Rimane), come Riserva e Dadi nel Tiro.</p></li>
+    <li><i>2</i><p><b>Prese</b> e <i>3</i> <b>Spese</b> affiancate, righe uguali: i punti in oro, il testo su carta, il cestino; il + nel titolo. Il totale di ognuna nel titolo.</p></li>
+    <li><i>4</i><p><b>La spesa proposta</b>: quando dalla pagina Magick inserisci un potere (o alzi un pallino di Sfera, un Attributo, un'Abilità), qui compare la riga tratteggiata col prezzo del listino; «Segna» la scrive fra le spese, altrimenti resta un promemoria. Niente si scala da solo.</p></li>
+    <li><i>5</i><p><b>Il listino</b> come righe, il calcolatore in testa (tratto a pastiglia, da, a, il totale) coi passi sotto.</p></li>
+    <li><i>6</i><p><b>Potere di Sfera</b>: la voce nel listino manca. Da decidere il prezzo.</p></li>
+  </ol>
+  <p class="cade"><b>Cade</b>: la tavola del listino, le tre righe di totali in piccolo, i campi numerici del sistema.</p>
+</div>
+</div>
+</body>
+</html>
