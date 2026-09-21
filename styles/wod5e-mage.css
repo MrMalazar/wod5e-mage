@@ -1029,7 +1029,14 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-testa > .wod5e-mage-ongoing-marks {
+  flex: 0 0 auto;
   margin-left: auto;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-testa > .wod5e-mage-ongoing-toggle,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-testa > .wod5e-mage-atto-cestino {
+  flex: 0 0 auto;
 }
 
 .wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-nome,
@@ -1040,11 +1047,12 @@
   border-radius: 0;
   box-shadow: none;
   color: var(--mage-testo);
-  flex: 1 1 auto;
+  flex: 1 1 0;
   font-size: 0.88rem;
   height: 22px;
   min-width: 0;
   padding: 0 2px;
+  width: auto;
 }
 
 .wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-nome {
@@ -1139,16 +1147,19 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-conto {
   align-items: baseline;
   display: inline-flex;
-  flex: 0 0 auto;
+  flex: 0 0 84px;
   gap: 5px;
   margin: 0 4px;
+  width: 84px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-conto > b {
   color: var(--mage-oro);
+  flex: 0 0 18px;
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1;
+  text-align: right;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-conto > b.vuoto {
@@ -1163,7 +1174,8 @@
   text-transform: uppercase;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-aggiungi {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-testa > .wod5e-mage-poteri-aggiungi {
+  flex: 0 0 auto;
   margin-left: 0;
 }
 
