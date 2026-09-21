@@ -1,70 +1,47 @@
-{{!-- Lista dell'equipaggiamento, estratta da equipment.hbs del sistema (5.3.19).
-     Da risincronizzare quando il sistema cambia questo blocco. --}}
+{{!-- L'inventario (21/9, dal mock docs/mock_tre_pagine_21-9.html): un occhiello
+     per tipo (Armatura, Armi, Equipaggiamento, coi nomi del sistema) con la
+     lente e il +; la riga dell'oggetto col simbolo che lo manda in chat, il
+     nome che apre la descrizione, gli usi, il d10 pieno se tira, le frecce
+     degli usi, la matita e il cestino. Le azioni sono quelle del sistema wod5e
+     (5.3.x): da risincronizzare quando il sistema cambia questo blocco. --}}
 {{#each equipmentItems as |equipment key|}}
-                <div class="category">
-                    <div class="equipment">
-                        <div class="flexrow item-header">
-                            <div class="item-name">
-                                {{localize (concat 'TYPES.Item.' key)}}
-                            </div>
-                            <!-- Item controls for gift item sections -->
-                            <div class="item-controls">
-                                <a class="item-control search-data-item flex-center" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="{{key}}">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </a>
-                                <a class="item-control item-create" data-action="createItem" title="{{localize 'WOD5E.Add'}}" data-type="{{key}}">
-                                    <i class="fas fa-plus"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    {{#each equipment as |item key|}}
-                        <div class="collapsible-container">
-                            <div class="flexrow item" data-drag="true" data-item-id="{{item.id}}" data-document-uuid="{{item.uuid}}" data-type="Item">
-                                <div class="item-image">
-                                    <img src="{{item.img}}" class="clickable" data-action="itemChat" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ShowToChat'}}">
-                                </div>
-                                <div class="item-name{{#if item.system.enrichedDescription}} collapsible{{/if}}" {{#if item.system.enrichedDescription}}data-action="toggleCollapse"{{/if}}>
-                                    {{item.name}}
-                                    {{#if item.system.uses.enabled}}
-                                        ({{item.system.uses.current}}/{{item.system.uses.max}})
-                                    {{/if}}
-                                </div>
-                                <div class="item-controls">
-                                    <!-- Icon to roll the item if a dicepool is available and the actor is not a group sheet -->
-                                    {{#ifnoteq ../../baseActorType 'group'}}
-                                        {{#if item.system.dicepool}}
-                                            {{#if (isNotEmpty item.system.dicepool)}}
-                                                <a class="item-image rollable-item" data-action="rollItem" data-item-uuid="{{item.uuid}}">
-                                                    <i class="fa-solid fa-dice-d10"></i>
-                                                </a>
-                                            {{/if}}
-                                        {{/if}}
-                                    {{/ifnoteq}}
-                                    {{#if item.system.uses.enabled}}
-                                        <!-- Icon to consume a use of the feature -->
-                                        <a class="item-control item-use" data-action="expendItemUse" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ExpendUse'}}">
-                                            <i class="fa-solid fa-angle-down"></i>
-                                        </a>
-                                        <!-- Icon to restore the uses of the feature back to max -->
-                                        <a class="item-control item-restore" data-action="restoreItemUses" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ResetUses'}}">
-                                            <i class="fa-solid fa-rotate-left"></i>
-                                        </a>
-                                    {{/if}}
-                                    <!-- Icon to edit the item -->
-                                    <a class="item-control item-edit" data-action="itemEdit" data-item-id="{{item._id}}" title="{{localize 'WOD5E.Edit'}}">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <!-- Icon to delete the item -->
-                                    <a class="item-control item-delete" data-action="itemDelete" data-item-id="{{item._id}}" title="{{localize 'WOD5E.Delete'}}">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="collapsible-content item-description">
-                                {{{item.system.enrichedDescription}}}
-                            </div>
-                        </div>
-                    {{/each}}
+    <span class="wod5e-mage-riq-occhiello wod5e-mage-occhiello-tasti">
+        <span>{{localize (concat 'TYPES.Item.' key)}}</span>
+        <span class="wod5e-mage-occhiello-tastini">
+            <a class="item-control wod5e-mage-riga-tastino search-data-item" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="{{key}}"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></a>
+            <a class="item-control wod5e-mage-riga-tastino item-create" data-action="createItem" title="{{localize 'WOD5E.Add'}}" data-type="{{key}}"><i class="fas fa-plus" aria-hidden="true"></i></a>
+        </span>
+    </span>
+    {{#each equipment as |item|}}
+        <div class="wod5e-mage-riga wod5e-mage-riga-apribile wod5e-mage-riga-oggetto wod5e-mage-riga-inventario tipo-{{key}}" data-drag="true" data-item-id="{{item.id}}" data-document-uuid="{{item.uuid}}" data-type="Item">
+            <div class="wod5e-mage-riga-testa">
+                <a class="wod5e-mage-lettera wod5e-mage-lettera-oggetto clickable" data-action="itemChat" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ShowToChat'}}"><i class="fa-solid {{#if (eq key "weapon")}}fa-khanda{{else if (eq key "armor")}}fa-shield-halved{{else}}fa-box-open{{/if}}" aria-hidden="true"></i></a>
+                <button type="button" class="wod5e-mage-riga-nome wod5e-mage-riga-nome-apri" data-action="rigaApri" title="{{localize 'WOD5E_MAGE.Tratti.Apri'}}" aria-expanded="false"><span>{{item.name}}</span>{{#if item.system.enrichedDescription}}<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>{{/if}}</button>
+                {{#if item.system.uses.enabled}}
+                    <small class="wod5e-mage-oggetto-tag">{{item.system.uses.current}} / {{item.system.uses.max}}</small>
+                {{/if}}
+                <div class="wod5e-mage-riga-tastini">
+                    {{!-- Il d10 pieno: l'oggetto ha una riserva e si tira (non dalla scheda di gruppo). --}}
+                    {{#ifnoteq ../../baseActorType 'group'}}
+                        {{#if item.system.dicepool}}
+                            {{#if (isNotEmpty item.system.dicepool)}}
+                                <a class="item-image rollable-item wod5e-mage-riga-tastino wod5e-mage-tastino-pieno" data-action="rollItem" data-item-uuid="{{item.uuid}}" title="{{localize 'WOD5E_MAGE.Tratti.Tira'}}"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i></a>
+                            {{/if}}
+                        {{/if}}
+                    {{/ifnoteq}}
+                    {{#if item.system.uses.enabled}}
+                        <a class="item-control wod5e-mage-riga-tastino item-use" data-action="expendItemUse" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ExpendUse'}}"><i class="fa-solid fa-angle-down" aria-hidden="true"></i></a>
+                        <a class="item-control wod5e-mage-riga-tastino item-restore" data-action="restoreItemUses" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ResetUses'}}"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></a>
+                    {{/if}}
+                    <a class="item-control item-edit wod5e-mage-riga-tastino" data-action="itemEdit" data-item-id="{{item._id}}" title="{{localize 'WOD5E.Edit'}}"><i class="fas fa-edit" aria-hidden="true"></i></a>
+                    <a class="item-control item-delete wod5e-mage-riga-tastino" data-action="itemDelete" data-item-id="{{item._id}}" title="{{localize 'WOD5E.Delete'}}"><i class="fas fa-trash" aria-hidden="true"></i></a>
                 </div>
-            {{/each}}
+            </div>
+            <div class="wod5e-mage-riga-spiega wod5e-mage-oggetto-spiega">
+                {{#if item.system.enrichedDescription}}{{{item.system.enrichedDescription}}}{{else}}<p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Tratti.SenzaTesto"}}</p>{{/if}}
+            </div>
+        </div>
+    {{else}}
+        <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Tratti.InventarioVuoto"}}</p>
+    {{/each}}
+{{/each}}

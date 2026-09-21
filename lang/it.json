@@ -14,6 +14,7 @@
       "Belongings": "Dotazione",
       "Notes": "Note",
       "Grimorio": "Grimorio",
+      "Esperienza": "Esperienza",
       "Short": {
         "stats": "Stat",
         "dotazione": "Tratti",
@@ -63,20 +64,25 @@
       "Cost": "Costo",
       "PerDot": "pallino d'arrivo",
       "New": "nuova:",
+      "Once": "una volta:",
+      "PerBox": "la casella nuova costa quante ne hai già",
       "Kinds": {
         "attribute": "Attributo",
         "skill": "Abilità",
-        "sphereFamily": "Sfera di famiglia",
-        "sphereOutside": "Sfera esterna",
         "arete": "Areté",
-        "health": "Salute",
-        "merit": "Pregio",
-        "background": "Background"
+        "dominio": "Dominio (l'accesso a una Sfera)",
+        "potereFamiglia": "Potere di un Dominio di famiglia",
+        "potereEsterno": "Potere di un Dominio esterno",
+        "health": "Casella di Salute",
+        "trait": "Tratto (Pregio o Background)"
       },
       "Spent": "Spesa",
-      "LogLabel": "Registro delle spese",
+      "Taken": "Presa",
+      "Remains": "Rimane",
+      "Conto": "Il conto",
+      "LogLabel": "Spese",
       "LogWhat": "Cosa hai comprato",
-      "LogWhatHint": "es. Forza 2 → 3",
+      "LogWhatHint": "es. Forze al terzo pallino",
       "LogAdd": "Segna una spesa",
       "LogRemove": "Togli la spesa",
       "LogEmpty": "Nessuna spesa segnata: il + ne aggiunge una, e la Spesa si somma da sola.",
@@ -84,7 +90,21 @@
       "GainsWhen": "Quando",
       "GainsWhenHint": "es. sessione del 28/8",
       "GainsAdd": "Segna una presa",
-      "GainsEmpty": "Nessuna presa segnata: il + aggiunge l'esperienza di una sessione, e il Totale si somma da solo."
+      "GainsEmpty": "Nessuna presa segnata: il + aggiunge l'esperienza di una sessione, e il Totale si somma da solo.",
+      "InTutto": "{count} in tutto",
+      "Proposte": "Spese proposte",
+      "ProposteHint": "Dalle altre pagine: i Domini presi e i poteri inseriti che non sono ancora fra le spese. Segna scrive la riga col prezzo del listino; Ignora la mette da parte (quello che viene dalla creazione non si paga).",
+      "DominioDi": "Dominio di {sphere}",
+      "PotereDi": "{power} (potere di {sphere})",
+      "SenzaPallino": "dai il pallino al potere, nella pagina Magick, per sapere il prezzo",
+      "Mark": "Segna",
+      "MarkHint": "Scrivi questa spesa nel registro",
+      "Ignore": "Ignora",
+      "IgnoreHint": "Metti da parte: non è una spesa",
+      "Listino": "Il listino",
+      "ListinoHint": "quanto costa salire",
+      "CalcHint": "Il calcolatore: il tratto, da dove parti, dove arrivi",
+      "Step": "{from} → {to} costa {cost}"
     },
     "Dice": {
       "MageDice": "Dadi Mage",
@@ -275,7 +295,19 @@
       "SuggestApplyName": "Metti il testo nella riga (lo Strumento lo scegli in tendina)",
       "CredoHere": "Si sceglie in testata; qui in parole tue",
       "PerceiveTool": "Percepire",
-      "PerceiveToolHint": "Lo Strumento degli effetti percettivi: le Sfere al primo pallino. Può essere lo stesso di una Sfera, o un altro."
+      "PerceiveToolHint": "Lo Strumento degli effetti percettivi: le Sfere al primo pallino. Può essere lo stesso di una Sfera, o un altro.",
+      "CredoInTestata": "Il Credo si sceglie in prima pagina, sotto il nome (Appartenenza).",
+      "TypePick": "Clic: il Tipo; lo stesso cliccato di nuovo lo toglie",
+      "UnoPerSfera": "uno per Sfera, più Percepire",
+      "ToolScegli": "Scegli lo Strumento",
+      "ToolPick": "Clic: gli Strumenti per famiglia; lo stesso cliccato di nuovo lo toglie",
+      "FamigliaFuori": "fuori dal tuo Tipo",
+      "SferePerTe": "Le Sfere per te",
+      "SferePerTeHint": "cos'è ognuna, con le tue parole",
+      "NoteVuote": "Non l'hai ancora scritto: la matita apre il testo.",
+      "Modifica": "Scrivi o correggi il testo",
+      "Fatto": "Chiudi l'editor",
+      "Apri": "Clic: apre e chiude il testo"
     },
     "ConceptChallenge": {
       "Label": "La sfida del concetto",
@@ -597,6 +629,28 @@
       "Fatto": "Fatto",
       "Togli": "Togli",
       "Tavola": "La tavola dei sette livelli"
+    },
+    "Tratti": {
+      "Vantaggi": "Vantaggi",
+      "VantaggiHint": "Background, Pregi, Difetti",
+      "Elementi": "Elementi",
+      "ElementiHint": "in comune coi giocatori · di storia",
+      "Apri": "Clic: apre e chiude la descrizione",
+      "SenzaTesto": "Nessuna descrizione: la matita apre l'oggetto.",
+      "InventarioVuoto": "Niente, per ora.",
+      "Tira": "Tira con questo oggetto",
+      "Lettera": {
+        "background": "B",
+        "merit": "P",
+        "flaw": "D",
+        "boon": "F"
+      },
+      "Vuoto": {
+        "background": "Nessun Background: il libro pesca dall'archivio, il + ne crea uno.",
+        "merit": "Nessun Pregio: il libro pesca dall'archivio, il + ne crea uno.",
+        "flaw": "Nessun Difetto: il libro pesca dall'archivio, il + ne crea uno.",
+        "boon": "Nessun Favore."
+      }
     },
     "Spheres": {
       "Hint": "Seleziona le Sfere da mostrare e assegna loro un valore da zero a cinque.",

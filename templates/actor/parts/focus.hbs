@@ -1,3 +1,9 @@
+{{!-- La pagina del Credo (21/9, dal mock docs/mock_tre_pagine_21-9.html): il
+     Tipo di Magick a pastiglie, gli Strumenti per la Magick una riga per Sfera
+     (più Percepire) con la pastiglia dello Strumento che apre la tendina dei
+     ventidue per famiglia, e a destra «Le Sfere per te», una riga per Sfera
+     sbloccata col testo che si apre col clic e si scrive con la matita. Il
+     Credo si sceglie in prima pagina, sotto il nome (Appartenenza, 6/9). --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-focus" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     <header class="wod5e-mage-section-title">
         {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.credo}}{{/if}}
@@ -5,72 +11,78 @@
     </header>
 
     <div class="wod5e-mage-focus-layout">
-        <section class="wod5e-mage-focus-definition">
-
-            {{!-- Il Credo si sceglie in testata (Appartenenza): qui non si ripete (6/9). --}}
-            <div class="wod5e-mage-focus-short-field">
-                <div>
-                    <strong>{{localize "WOD5E_MAGE.Focus.Type"}}</strong>
-                    <small>{{localize "WOD5E_MAGE.Focus.TypeHint"}}</small>
-                </div>
-                {{!-- Magick, Tecnomagick, Magick Ibrida: il Tipo decide le famiglie
-                     di Strumenti ammesse (Macchina solo Tecnomagick, Parola e
-                     Corpo solo Magick, l'Ibrida tutto). --}}
-                <select name="flags.wod5e-mage.focus.practiceForm" aria-label="{{localize 'WOD5E_MAGE.Focus.TypeHint'}}" {{#if locked}}disabled{{/if}}>
-                    <option value="">{{localize "WOD5E_MAGE.Focus.FormNone"}}</option>
-                    {{#each focus.forms as |form|}}
-                        <option value="{{form.id}}" {{#if form.selected}}selected{{/if}}>{{form.label}}</option>
-                    {{/each}}
-                </select>
-            </div>
-
-            <section class="wod5e-mage-focus-instruments">
-                <header class="resource-header">
-                    <label class="header-label">{{localize "WOD5E_MAGE.Focus.Instruments"}}</label>
+        <div class="wod5e-mage-focus-sinistra">
+            {{!-- Magick, Tecnomagick, Magick Ibrida: il Tipo decide le famiglie di
+                 Strumenti ammesse (Macchina solo Tecnomagick, Parola e Corpo solo
+                 Magick, l'Ibrida tutto). La stessa pastiglia cliccata di nuovo lo toglie. --}}
+            <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-focus-definition">
+                <header class="wod5e-mage-riq-title">
+                    <span>{{localize "WOD5E_MAGE.Focus.Type"}}</span>
+                    <small class="wod5e-mage-riq-conto">{{localize "WOD5E_MAGE.Focus.TypeHint"}}</small>
                 </header>
+                <div class="wod5e-mage-riq-body">
+                    <div class="wod5e-mage-pastiglie-fila" role="group" aria-label="{{localize 'WOD5E_MAGE.Focus.Type'}}" title="{{localize 'WOD5E_MAGE.Focus.TypePick'}}">
+                        {{#each focus.forms as |form|}}
+                            <button type="button" class="wod5e-mage-pastiglia wod5e-mage-pastiglia-modo{{#if form.selected}} scelta{{/if}}" data-action="focusForm" data-form="{{form.id}}" aria-pressed="{{form.selected}}" {{#if ../locked}}disabled{{/if}}>{{form.label}}</button>
+                        {{/each}}
+                    </div>
+                    <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Focus.CredoInTestata"}}</p>
+                </div>
+            </section>
 
-                {{!-- Uno Strumento per Sfera (ramo A): la Sfera, lo Strumento fra i
-                     ventidue a gruppi di famiglia, il mestiere quando serve, e il
-                     tuo di preciso. --}}
-                <div class="wod5e-mage-focus-instrument-list">
-                    {{!-- Le Sfere, e in coda Percepire (9/9): lo Strumento degli effetti
-                         percettivi, le Sfere al primo pallino. Stessa riga, stessa tendina. --}}
+            {{!-- Uno Strumento per Sfera (più Percepire, 9/9): la Sfera, la pastiglia
+                 dello Strumento fra i ventidue a famiglie, il mestiere quando serve,
+                 il tuo di preciso. --}}
+            <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-focus-instruments">
+                <header class="wod5e-mage-riq-title">
+                    <span>{{localize "WOD5E_MAGE.Focus.Instruments"}}</span>
+                    <small class="wod5e-mage-riq-conto">{{localize "WOD5E_MAGE.Focus.UnoPerSfera"}}</small>
+                </header>
+                <div class="wod5e-mage-riq-body wod5e-mage-focus-instrument-list">
                     {{#each focus.instruments as |row|}}
                         {{> "modules/wod5e-mage/templates/actor/parts/strumento-riga.hbs" row=row locked=../locked}}
                     {{else}}
-                        <p class="wod5e-mage-focus-spheres-empty">{{localize "WOD5E_MAGE.Focus.NoSpheres"}}</p>
+                        <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Focus.NoSpheres"}}</p>
                     {{/each}}
                     {{#if focus.perceiveInstrument}}
                         {{> "modules/wod5e-mage/templates/actor/parts/strumento-riga.hbs" row=focus.perceiveInstrument locked=locked}}
                     {{/if}}
                 </div>
             </section>
-        </section>
+        </div>
 
-        <section class="wod5e-mage-focus-spheres">
-            <header class="resource-header">
-                <label class="header-label">{{localize "WOD5E_MAGE.Focus.Spheres"}}</label>
+        {{!-- Le Sfere per te: solo le Sfere sbloccate; il testo si apre col clic sul nome, la matita apre l'editor. --}}
+        <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-focus-spheres">
+            <header class="wod5e-mage-riq-title">
+                <span>{{localize "WOD5E_MAGE.Focus.SferePerTe"}}</span>
+                <small class="wod5e-mage-riq-conto">{{localize "WOD5E_MAGE.Focus.SferePerTeHint"}}</small>
             </header>
-
-            {{#each focus.spheres as |sphere|}}
-                {{!-- Solo le Sfere sbloccate; ognuna si apre e si chiude dal titolo. --}}
-                <details class="wod5e-mage-focus-sphere" data-sphere="{{sphere.id}}" open>
-                    <summary>
-                        <h3>
-                            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                            <span>{{localize "WOD5E_MAGE.Focus.WhatIs"}}</span>
-                            <strong>{{localize sphere.label}}</strong>
-                        </h3>
-                    </summary>
-                    <div class="resource">
-                        <prose-mirror name="flags.wod5e-mage.focus.sphereNotes.{{sphere.id}}" value="{{sphere.notes}}" toggled="true" compact="true">
-                            {{{sphere.enrichedNotes}}}
-                        </prose-mirror>
+            <div class="wod5e-mage-riq-body">
+                {{#each focus.spheres as |sphere|}}
+                    <div class="wod5e-mage-riga wod5e-mage-riga-apribile wod5e-mage-riga-credo-sfera{{#if sphere.editing}} aperta modifica{{/if}}" data-sphere="{{sphere.id}}">
+                        <div class="wod5e-mage-riga-testa">
+                            <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt="">
+                            <button type="button" class="wod5e-mage-riga-nome wod5e-mage-riga-nome-apri" data-action="rigaApri" title="{{localize 'WOD5E_MAGE.Focus.Apri'}}" aria-expanded="{{sphere.editing}}"><span>{{localize "WOD5E_MAGE.Focus.WhatIs"}} {{localize sphere.label}}</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+                            <div class="wod5e-mage-riga-tastini">
+                                <button type="button" class="wod5e-mage-riga-tastino" data-action="credoModifica" data-sphere="{{sphere.id}}" title="{{#if sphere.editing}}{{localize 'WOD5E_MAGE.Focus.Fatto'}}{{else}}{{localize 'WOD5E_MAGE.Focus.Modifica'}}{{/if}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Modifica'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid {{#if sphere.editing}}fa-check{{else}}fa-pen{{/if}}" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="wod5e-mage-riga-spiega">
+                            {{#if sphere.editing}}
+                                <prose-mirror name="flags.wod5e-mage.focus.sphereNotes.{{sphere.id}}" value="{{sphere.notes}}" toggled="true" compact="true">
+                                    {{{sphere.enrichedNotes}}}
+                                </prose-mirror>
+                            {{else if sphere.notes}}
+                                <div class="wod5e-mage-credo-testo">{{{sphere.enrichedNotes}}}</div>
+                            {{else}}
+                                <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Focus.NoteVuote"}}</p>
+                            {{/if}}
+                        </div>
                     </div>
-                </details>
-            {{else}}
-                <p class="wod5e-mage-focus-spheres-empty">{{localize "WOD5E_MAGE.Focus.SpheresEmpty"}}</p>
-            {{/each}}
+                {{else}}
+                    <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Focus.SpheresEmpty"}}</p>
+                {{/each}}
+            </div>
         </section>
     </div>
 </section>

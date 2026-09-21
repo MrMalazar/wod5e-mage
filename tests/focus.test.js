@@ -155,5 +155,13 @@ console.log("Focus tests passed.");
   assert.match(template, /\{\{#if focus\.perceiveInstrument\}\}\s*\{\{> "modules\/wod5e-mage\/templates\/actor\/parts\/strumento-riga\.hbs" row=focus\.perceiveInstrument locked=locked\}\}/);
   const riga = readFileSync(new URL("../templates/actor/parts/strumento-riga.hbs", import.meta.url), "utf8");
   assert.match(riga, /\{\#unless row\.perceive\}\}[\s\S]*data-action="strumentiSuggest"/);
-  assert.match(riga, /name="flags\.wod5e-mage\.focus\.sphereInstruments\.\{\{row\.id\}\}\.tool"/);
+  // Lo Strumento (21/9): la pastiglia apre la tendina, le pastiglie scrivono la bandiera (strumentoPick); via la select.
+  assert.match(riga, /wod5e-mage-strumento-pastiglia\{\{#if row\.tool\}\} pieno\{\{\/if\}\}" data-action="cassettoToggle"[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-strumenti[\s\S]*data-action="strumentoPick" data-sphere="\{\{\.\.\/\.\.\/row\.id\}\}" data-tool="\{\{tool\.id\}\}"[\s\S]*name="flags\.wod5e-mage\.focus\.sphereInstruments\.\{\{row\.id\}\}\.name"/);
+  assert.doesNotMatch(riga, /<select/);
+  const focusJs = readFileSync(new URL("../scripts/focus.js", import.meta.url), "utf8");
+  assert.match(focusJs, /export async function onStrumentoPick[\s\S]*focus\.sphereInstruments\.\$\{sphere\}\.tool`\]: current === tool \? "" : tool/);
+  assert.match(focusJs, /export async function onFocusForm[\s\S]*focus\.practiceForm`\]: current === form \? "" : form/);
+  assert.match(focusJs, /export async function onCredoModifica[\s\S]*_credoInModifica/);
+  assert.match(template, /data-action="focusForm" data-form="\{\{form\.id\}\}"[\s\S]*Focus\.CredoInTestata[\s\S]*wod5e-mage-focus-spheres[\s\S]*wod5e-mage-riga-credo-sfera\{\{#if sphere\.editing\}\} aperta modifica\{\{\/if\}\}"[\s\S]*data-action="rigaApri"[\s\S]*data-action="credoModifica" data-sphere="\{\{sphere\.id\}\}"[\s\S]*<prose-mirror name="flags\.wod5e-mage\.focus\.sphereNotes\.\{\{sphere\.id\}\}"/);
+  assert.doesNotMatch(template, /<select name="flags\.wod5e-mage\.focus\.practiceForm"/);
 }

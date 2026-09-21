@@ -175,6 +175,9 @@ function allInstrumentRows(actor, { localize, spheres, form } = {}) {
 
   return rows.map((row) => ({
     ...row,
+    // La pastiglia della riga (21/9): il nome dello Strumento scelto, con la famiglia.
+    toolLabel: row.tool ? localize(`WOD5E_MAGE.Focus.Tools.${row.tool}`) : "",
+    familyLabel: row.family ? localize(`WOD5E_MAGE.Focus.Families.${row.family}`) : "",
     families: families.map((family) => ({
       ...family,
       tools: family.tools.map((entry) => ({ ...entry, selected: entry.id === row.tool }))
@@ -195,7 +198,7 @@ export function preparePerceiveInstrument(actor, options = {}) {
   return allInstrumentRows(actor, options).find((row) => row.perceive) ?? null;
 }
 
-export async function prepareFocus(actor, enrichHTML) {
+export async function prepareFocus(actor, enrichHTML, { editing = null } = {}) {
   const stored = actor.getFlag(MODULE_ID, "focus") ?? {};
   const sphereNotes = stored.sphereNotes ?? {};
   const enrich = getTextEnricher(enrichHTML);
@@ -203,7 +206,9 @@ export async function prepareFocus(actor, enrichHTML) {
     ?? ((key) => key);
 
   // Nel Credo parlano solo le Sfere che il Mago ha sbloccato in Magick:
-  // di quelle che non ha, non c'è niente da scrivere.
+  // di quelle che non ha, non c'è niente da scrivere. La riga si apre col
+  // clic sul nome e si scrive con la matita (21/9): `editing` dice quali
+  // Sfere hanno l'editor aperto.
   const selectedSpheres = prepareSpheres(actor).selected;
   const spheres = await Promise.all(
     selectedSpheres.map(async (sphere) => {
@@ -211,7 +216,8 @@ export async function prepareFocus(actor, enrichHTML) {
       return {
         ...sphere,
         notes,
-        enrichedNotes: await enrich(notes)
+        enrichedNotes: await enrich(notes),
+        editing: Boolean(editing?.has?.(sphere.id))
       };
     })
   );
@@ -246,4 +252,55 @@ export async function prepareFocus(actor, enrichHTML) {
     }),
     spheres
   };
+}
+
+/* ---------------------------------------------------------------- */
+/* I clic della pagina del Credo (21/9): le pastiglie del Tipo e degli   */
+/* Strumenti, la matita delle Sfere.                                    */
+/* ---------------------------------------------------------------- */
+
+function canEditFocus(actor) {
+  if (!actor.isOwner) {
+    ui.notifications.warn(game.i18n.format("WOD5E.Notifications.NoSufficientPermission", { string: actor.name }));
+    return false;
+  }
+  if (actor.system.locked) {
+    ui.notifications.warn(game.i18n.format("WOD5E.Notifications.CannotModifyResourceString", { string: actor.name }));
+    return false;
+  }
+  return true;
+}
+
+/** Il Tipo di Magick a pastiglie: la stessa pastiglia cliccata di nuovo lo toglie. */
+export async function onFocusForm(event, target) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEditFocus(actor)) return;
+  const form = String(target.dataset.form ?? "");
+  if (!FOCUS_FORMS.includes(form)) return;
+  const current = String(actor.getFlag(MODULE_ID, "focus")?.practiceForm ?? "");
+  await actor.update({ [`flags.${MODULE_ID}.focus.practiceForm`]: current === form ? "" : form });
+}
+
+/** Lo Strumento di una Sfera (o di Percepire) dalla tendina: lo stesso cliccato di nuovo lo toglie. */
+export async function onStrumentoPick(event, target) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEditFocus(actor)) return;
+  const sphere = String(target.dataset.sphere ?? "");
+  const tool = String(target.dataset.tool ?? "");
+  if (!sphere || !FOCUS_TOOL_IDS.includes(tool)) return;
+  const current = String(actor.getFlag(MODULE_ID, "focus")?.sphereInstruments?.[sphere]?.tool ?? "");
+  await actor.update({ [`flags.${MODULE_ID}.focus.sphereInstruments.${sphere}.tool`]: current === tool ? "" : tool });
+}
+
+/** La matita di «Cos'è la Sfera»: apre e chiude l'editor della riga. */
+export async function onCredoModifica(event, target) {
+  event.preventDefault();
+  if (!this.actor.isOwner) return;
+  const sphere = String(target.dataset.sphere ?? "");
+  if (!(this._credoInModifica instanceof Set)) this._credoInModifica = new Set();
+  if (this._credoInModifica.has(sphere)) this._credoInModifica.delete(sphere);
+  else this._credoInModifica.add(sphere);
+  await this.render({ parts: ["focus"] });
 }

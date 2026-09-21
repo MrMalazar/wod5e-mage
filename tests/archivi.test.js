@@ -239,7 +239,7 @@ assert.deepEqual(belongingRowFromEntry("credo", { name: "x" }), { kind: "", name
   assert.match(guided, /export async function onGuidedItemEdit\(event, target\)[\s\S]*this\.actor\?\.items\?\.get\(guidedItemId\(target\)\)[\s\S]*item\.sheet\?\.render\(true\)/);
   for (const part of ["core-features", "equipment-list"]) {
     const template = readFileSync(new URL(`../templates/actor/parts/${part}.hbs`, import.meta.url), "utf8");
-    assert.match(template, /class="item-control item-edit" data-action="itemEdit" data-item-id="\{\{item\._id\}\}"/, part);
+    assert.match(template, /class="item-control item-edit[^"]*" data-action="itemEdit" data-item-id="\{\{item\._id\}\}"/, part);
   }
 }
 

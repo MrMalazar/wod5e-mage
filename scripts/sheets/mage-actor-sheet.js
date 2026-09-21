@@ -26,9 +26,11 @@ import {
   bindExperienceCalculator,
   onExperienceLogAdd,
   onExperienceLogDelete,
+  onExperienceProposalIgnore,
+  onExperienceProposalMark,
   prepareExperiencePage
 } from "../experience-window.js";
-import { prepareFocus } from "../focus.js";
+import { onCredoModifica, onFocusForm, onStrumentoPick, prepareFocus } from "../focus.js";
 import {
   alphabetical,
   credoSphereBadges,
@@ -407,6 +409,10 @@ export class MageActorSheet extends MortalActorSheet {
       areteRoll: onAreteRoll,
       areteSimple: onAreteSimple,
       belongingAdd: onBelongingAdd,
+      // La pagina del Credo (21/9): il Tipo e gli Strumenti a pastiglie, la matita delle Sfere.
+      focusForm: onFocusForm,
+      strumentoPick: onStrumentoPick,
+      credoModifica: onCredoModifica,
       belongingArchivio: onBelongingArchivio,
       belongingDelete: onBelongingDelete,
       bonusAdd: onBonusAdd,
@@ -429,6 +435,9 @@ export class MageActorSheet extends MortalActorSheet {
       magickBalanceChange: onMagickBalanceChange,
       experienceLogAdd: onExperienceLogAdd,
       experienceLogDelete: onExperienceLogDelete,
+      // Le spese proposte dalle altre pagine (21/9): Segna e Ignora.
+      experienceProposalMark: onExperienceProposalMark,
+      experienceProposalIgnore: onExperienceProposalIgnore,
       ongoingMagickAdd: onOngoingMagickAdd,
       ongoingMagickDelete: onOngoingMagickDelete,
       ongoingMagickToggle: onOngoingMagickToggle,
@@ -438,6 +447,8 @@ export class MageActorSheet extends MortalActorSheet {
       potereModifica: onPotereModifica,
       potereTogli: onPotereTogli,
       potereApri: onPotereApri,
+      // Ogni riga apribile (21/9): il clic sul nome apre e chiude il testo.
+      rigaApri: onPotereApri,
       personaggioRowAdd: onPersonaggioRowAdd,
       personaggioRowDelete: onPersonaggioRowDelete,
       specialtyAdd: onSpecialtyAdd,
@@ -981,7 +992,7 @@ export class MageActorSheet extends MortalActorSheet {
     // La pagina del Credo: Saggezza, Credo, Tipo e Strumenti per Sfera.
     if (partId === "focus") {
       context.tab = context.tabs.focus;
-      context.focus = await prepareFocus(actor);
+      context.focus = await prepareFocus(actor, undefined, { editing: this._credoInModifica });
     }
 
     if (partId === "conceptChallenge") {
@@ -1044,7 +1055,7 @@ export class MageActorSheet extends MortalActorSheet {
 
     // L'Esperienza vive in scheda: totali, registro delle spese, calcolatore.
     if (partId === "esperienza") {
-      context.experience = prepareExperiencePage(actor);
+      context.experience = prepareExperiencePage(actor, { localize: game.i18n.localize.bind(game.i18n), format: game.i18n.format.bind(game.i18n) });
       context.tab = context.tabs.esperienza;
     }
 

@@ -1,94 +1,53 @@
-{{!-- Copia del partial core-features.hbs del sistema (wod5e 5.3.x) con in più
-     il libro degli archivi M6 accanto al +. Da tenere allineata al sistema. --}}
+{{!-- I Vantaggi (21/9, dal mock docs/mock_tre_pagine_21-9.html): un occhiello
+     per Background, Pregi e Difetti coi tre tastini (il libro dell'archivio
+     M6, la lente del compendio, il + che crea da zero); la riga del tratto con
+     la lettera nel disco (il clic la manda in chat), il nome che apre la
+     descrizione, i cinque pallini, la matita e il cestino. Le azioni sono
+     quelle del sistema wod5e (5.3.x): itemChat, createItem, searchItem,
+     itemEdit (la matita del modulo), itemDelete, dotCounterChange sugli
+     oggetti, expendItemUse e restoreItemUses. --}}
 {{#each features as |feature key|}}
-    <div class="category">
-        <div class="feature">
-            <div class="flexrow item-header">
-                <div class="item-name">
-                    {{localize (generateLocalizedLabel key 'features')}}
+    <span class="wod5e-mage-riq-occhiello wod5e-mage-occhiello-tasti">
+        <span>{{localize (generateLocalizedLabel key 'features')}}</span>
+        <span class="wod5e-mage-occhiello-tastini">
+            {{!-- L'archivio dei Cataloghi M6 (Pregi, Difetti, Background): il libro, distinto dal + che crea da zero. --}}
+            {{#unless (eq key "boon")}}
+            <a class="item-control wod5e-mage-riga-tastino wod5e-mage-archivio-open" data-action="archivioOpen" data-subtype="{{key}}" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></a>
+            {{/unless}}
+            <a class="item-control wod5e-mage-riga-tastino search-data-item" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="feature" data-subtype="{{key}}"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></a>
+            <a class="item-control wod5e-mage-riga-tastino item-create" data-action="createItem" title="{{localize 'WOD5E.Add'}}" data-type="feature" data-subtype="{{key}}"><i class="fas fa-plus" aria-hidden="true"></i></a>
+        </span>
+    </span>
+    {{#each feature as |item|}}
+        <div class="wod5e-mage-riga wod5e-mage-riga-apribile wod5e-mage-riga-oggetto wod5e-mage-riga-vantaggio tipo-{{key}}" data-drag="true" data-item-id="{{item.id}}" data-document-uuid="{{item.uuid}}" data-type="Item">
+            <div class="wod5e-mage-riga-testa">
+                <a class="wod5e-mage-lettera clickable" data-action="itemChat" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ShowToChat'}}">{{localize (concat 'WOD5E_MAGE.Tratti.Lettera.' key)}}</a>
+                <button type="button" class="wod5e-mage-riga-nome wod5e-mage-riga-nome-apri" data-action="rigaApri" title="{{localize 'WOD5E_MAGE.Tratti.Apri'}}" aria-expanded="false"><span>{{item.name}}</span>{{#if item.system.enrichedDescription}}<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>{{/if}}</button>
+                {{#if item.system.uses.enabled}}
+                    <small class="wod5e-mage-oggetto-tag">{{item.system.uses.current}} / {{item.system.uses.max}}</small>
+                {{/if}}
+                {{#ifnoteq item.system.featuretype 'boon'}}
+                    <div class="resource-value wod5e-mage-oggetto-pallini" data-value="{{item.system.points}}" data-name="items.{{item._id}}">
+                        <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
+                        {{#numLoop 5}}
+                            <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}"></span>
+                        {{/numLoop}}
+                    </div>
+                {{/ifnoteq}}
+                <div class="wod5e-mage-riga-tastini">
+                    {{#if item.system.uses.enabled}}
+                        <a class="item-control wod5e-mage-riga-tastino item-use" data-action="expendItemUse" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ExpendUse'}}"><i class="fa-solid fa-angle-down" aria-hidden="true"></i></a>
+                        <a class="item-control wod5e-mage-riga-tastino item-restore" data-action="restoreItemUses" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ResetUses'}}"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></a>
+                    {{/if}}
+                    <a class="item-control item-edit wod5e-mage-riga-tastino" data-action="itemEdit" data-item-id="{{item._id}}" title="{{localize 'WOD5E.Edit'}}"><i class="fas fa-edit" aria-hidden="true"></i></a>
+                    <a class="item-control item-delete wod5e-mage-riga-tastino" data-action="itemDelete" data-item-id="{{item._id}}" title="{{localize 'WOD5E.Delete'}}"><i class="fas fa-trash" aria-hidden="true"></i></a>
                 </div>
-                <!-- Item controls for gift item sections -->
-                <div class="item-controls">
-                    {{!-- L'archivio dei Cataloghi M6 (Pregi, Difetti, Background): il libro, distinto dal + che crea da zero. --}}
-                    {{#unless (eq key "boon")}}
-                    <a class="item-control wod5e-mage-archivio-open flex-center" data-action="archivioOpen" data-subtype="{{key}}" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}">
-                        <i class="fa-solid fa-book-open"></i>
-                    </a>
-                    {{/unless}}
-                    <a class="item-control search-data-item flex-center" data-action="searchItem" title="{{localize 'WOD5E.Search'}}" data-type="feature" data-subtype="{{key}}">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </a>
-                    <a class="item-control item-create" data-action="createItem" title="{{localize 'WOD5E.Add'}}" data-type="feature" data-subtype="{{key}}">
-                        <i class="fas fa-plus"></i>
-                    </a>
-                </div>
+            </div>
+            <div class="wod5e-mage-riga-spiega wod5e-mage-oggetto-spiega">
+                {{#if item.system.enrichedDescription}}{{{item.system.enrichedDescription}}}{{else}}<p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Tratti.SenzaTesto"}}</p>{{/if}}
             </div>
         </div>
-        {{#each feature as |item key|}}
-            <div class="collapsible-container">
-                <div class="flexrow item" data-drag="true" data-item-id="{{item.id}}" data-document-uuid="{{item.uuid}}" data-type="Item">
-                    <div class="item-image">
-                        <img src="{{item.img}}" class="clickable" data-action="itemChat" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ShowToChat'}}">
-                    </div>
-                    <div class="item-name{{#if item.system.enrichedDescription}} collapsible{{/if}}" {{#if item.system.enrichedDescription}}data-action="toggleCollapse"{{/if}}>
-                        {{item.name}}
-                    </div>
-                    {{#if ../../locked}}
-                        {{#ifnoteq item.system.featuretype 'boon'}}
-                            <div class="dot-tracker">
-                                <div class="resource-value" data-value="{{item.system.points}}" data-name="items.{{item._id}}">
-                                    <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
-                                    {{#numLoop 5}}
-                                        <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}"></span>
-                                    {{/numLoop}}
-                                </div>
-                            </div>
-                        {{/ifnoteq}}
-                    {{/if}}
-                    <div class="item-controls">
-                        <!-- Icon to edit the item -->
-                        <a class="item-control item-edit" data-action="itemEdit" data-item-id="{{item._id}}" title="{{localize 'WOD5E.Edit'}}">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <!-- Icon to delete the item -->
-                        <a class="item-control item-delete" data-action="itemDelete" data-item-id="{{item._id}}" title="{{localize 'WOD5E.Delete'}}">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="flexrow">
-                    {{#if item.system.uses.enabled}}
-                        <div>
-                            <span>
-                                {{localize "WOD5E.ItemsList.UsesRemaining"}}: {{item.system.uses.current}}/{{item.system.uses.max}}
-                            </span>
-                            <!-- Icon to consume a use of the feature -->
-                            <a class="item-control item-use" data-action="expendItemUse" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ExpendUse'}}">
-                                <i class="fa-solid fa-angle-down"></i>
-                            </a>
-                            <!-- Icon to restore the uses of the feature back to max -->
-                            <a class="item-control item-restore" data-action="restoreItemUses" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ResetUses'}}">
-                                <i class="fa-solid fa-rotate-left"></i>
-                            </a>
-                        </div>
-                    {{/if}}
-                    {{#unless ../../locked}}
-                        {{#ifnoteq item.system.featuretype 'boon'}}
-                            <div class="dot-tracker">
-                                <div class="resource-value" data-value="{{item.system.points}}" data-name="items.{{item._id}}">
-                                    <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
-                                    {{#numLoop 5}}
-                                        <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}"></span>
-                                    {{/numLoop}}
-                                </div>
-                            </div>
-                        {{/ifnoteq}}
-                    {{/unless}}
-                </div>
-                <div class="collapsible-content item-description">
-                    {{{item.system.enrichedDescription}}}
-                </div>
-            </div>
-        {{/each}}
-    </div>
+    {{else}}
+        <p class="wod5e-mage-riq-vuoto">{{localize (concat 'WOD5E_MAGE.Tratti.Vuoto.' key)}}</p>
+    {{/each}}
 {{/each}}

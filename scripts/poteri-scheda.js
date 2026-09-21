@@ -149,10 +149,14 @@ export async function onPotereTogli(event, target) {
   await actor.update({ [`flags.${MODULE_ID}.${POTERI_FLAG}.-=${id}`]: null });
 }
 
-/** Il clic sul nome: il testo del potere si apre e si chiude, senza ridisegnare. */
+/**
+ * Il clic sul nome: il testo del potere (o di qualunque riga apribile: le
+ * Sfere del Credo, i Vantaggi e l'inventario dei Tratti) si apre e si
+ * chiude, senza ridisegnare. Nella scheda è anche `rigaApri`.
+ */
 export function onPotereApri(event, target) {
   event.preventDefault();
-  const riga = target.closest(".wod5e-mage-potere-riga");
+  const riga = target.closest(".wod5e-mage-potere-riga, .wod5e-mage-riga-apribile");
   if (!riga) return;
   const aperta = riga.classList.toggle("aperta");
   target.setAttribute("aria-expanded", String(aperta));
