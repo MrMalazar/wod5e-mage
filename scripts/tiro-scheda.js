@@ -17,7 +17,9 @@ import { FOCUS_FORMS } from "./focus.js";
 import { addParadoxToBalance, getMagickBalance, paradoxGainForMagickType } from "./magick-balance.js";
 import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
 import { findMageRollTrait, selectorsForMageRollTrait, skillRollCard } from "./mage-roll-selection.js";
-import { findPotere, potereLabel, poteriOf } from "./poteri.js";
+import { findPotere, potereLabel, poteriDelPersonaggio, poteriOfSphere } from "./poteri.js";
+
+export { poteriOfSphere };
 import { renderRollCard, ROLL_CARD_FLAG, rollSymbols } from "./roll-card.js";
 import { nextScopeMode, SCOPE_ICONS, SCOPES, scopeModeOf, scopeModes } from "./scopes.js";
 import { prepareSpheres } from "./spheres.js";
@@ -103,7 +105,8 @@ export function contoInputs(actor, tiro, { traits = null } = {}) {
       traitDice: traitDiceOf(actor, tiro.traits),
       quintessenceAvailable: getMagickBalance(actor).quintessence,
       form: practiceForm(actor),
-      power: tiro.power ? findPotere(tiro.power) : null
+      // Il potere scelto, fra quelli che il personaggio ha inserito (21/9).
+      power: tiro.power ? findPotere(tiro.power, poteriDelPersonaggio(actor)) : null
     }
   };
 }
@@ -156,12 +159,16 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
     const options = table[id] ?? [];
     const mode = scopeModeOf(table, id, modes?.[id]);
     const next = nextScopeMode(table, id, mode?.id);
-    const readingOf = (step) => mode?.readings?.[step - 1] ?? "";
-    // La riga (20/9, seconda passata): chi ha più letture le sceglie dalla
-    // tendina (il clic sul nome); i sette pallini compaiono quando la lettura
-    // è scelta, e chi ne ha una sola li ha sempre.
+    // La riga (20/9, seconda passata; 21/9): chi ha più letture le sceglie
+    // dalla tendina (il clic sul nome), ma i sette pallini ci sono sempre
+    // (Blue, 21/9: «lasciamo solo i pallini: se vuole l'utente può
+    // specificare il sottotipo, ma può anche solo cliccare i pallini
+    // necessari e via»). La lettura si stampa solo se è scelta: chi ne ha
+    // una sola ce l'ha sempre.
     const multi = options.length > 1;
     const modeChosen = !multi || options.some((option) => option.id === modes?.[id]);
+    const readingOf = (step) => (modeChosen ? mode?.readings?.[step - 1] ?? "" : "");
+    const tipOf = (step) => (readingOf(step) ? `${step} · ${readingOf(step)}` : String(step));
     return {
       id,
       label: localize(`WOD5E_MAGE.Scopes.${id}`),
@@ -175,12 +182,13 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
       multi,
       modeChosen,
       modeShown: multi && modeChosen && !level,
-      modes: options.map((option) => ({ id: option.id, label: option.label, selected: option.id === mode?.id })),
+      modes: options.map((option) => ({ id: option.id, label: option.label, selected: modeChosen && option.id === mode?.id })),
       steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({
         value: index + 1,
         active: index + 1 === level,
         lit: index + 1 <= level,
-        reading: readingOf(index + 1)
+        reading: readingOf(index + 1),
+        tip: tipOf(index + 1)
       }))
     };
   }).sort((a, b) => a.label.localeCompare(b.label, game.i18n?.lang ?? "it"));
@@ -215,28 +223,25 @@ export async function onScopeMode(event, target) {
   await this.render({ parts: ["stats"] });
 }
 
-/** I poteri del personaggio per il riquadro: quelli delle Sfere che ha, col nome e lo stato «scelto». */
+/**
+ * I poteri del personaggio per il riquadro: quelli che ha inserito nella
+ * pagina Magick (Blue, 21/9: il conto è dei poteri inseriti, non degli
+ * slot), nell'ordine delle Sfere della scheda, col nome e lo stato «scelto».
+ */
 export function preparePoteriRows(actor, tiro, localize = (key) => key) {
-  const spheres = prepareSpheres(actor).selected;
-  const ratings = Object.fromEntries(spheres.map((sphere) => [sphere.id, sphere.value]));
-  const order = spheres.map((sphere) => sphere.id);
-  return poteriOf(ratings, { order }).map((power) => ({
+  const order = prepareSpheres(actor).selected.map((sphere) => sphere.id);
+  return poteriDelPersonaggio(actor, { order }).map((power) => ({
     id: power.id,
     sphere: power.sphere,
     sphereLabel: localize(`WOD5E_MAGE.Spheres.${power.sphere}`),
     dot: power.dot,
+    type: power.type,
     label: potereLabel(power, localize),
-    // Nel cassetto della Sfera il nome della Sfera è già sulla riga: resta «3 · 1», o il nome del potere quando c'è.
-    short: String(power.name ?? "").trim() || `${power.dot} · ${power.slot}`,
-    placeholder: !String(power.name ?? "").trim(),
-    text: power.text ?? "",
+    // Nella pastiglia della Sfera il nome della Sfera è già sulla riga: resta il nome del potere.
+    short: potereLabel(power, localize),
+    text: power.text,
     selected: tiro?.power === power.id
   }));
-}
-
-/** I poteri di una Sfera sola, per il suo cassetto. */
-export function poteriOfSphere(rows, sphere) {
-  return (rows ?? []).filter((power) => power.sphere === sphere);
 }
 
 /**
@@ -311,7 +316,8 @@ export async function onTiroTrait(event, target) {
 
 export async function onTiroPower(event, target) {
   event.preventDefault();
-  return repaint(this, pickPower(tiroOf(this), target.dataset.power));
+  // La casella porta la sua Sfera (21/9: gli id dei poteri non la dicono più).
+  return repaint(this, pickPower(tiroOf(this), target.dataset.power, target.dataset.sphere));
 }
 
 /**

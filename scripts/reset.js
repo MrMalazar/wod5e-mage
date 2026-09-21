@@ -1,6 +1,7 @@
 import { MODULE_ID } from "./constants.js";
 import { CUSTOM_SKILLS_FLAG } from "./abilita-specifiche.js";
 import { PERSONAGGIO_TABLES } from "./personaggio-extra.js";
+import { POTERI_FLAG } from "./poteri.js";
 import { SPHERE_SPECIALTIES_FLAG } from "./sphere-specialties.js";
 import { SPHERES } from "./spheres.js";
 
@@ -48,7 +49,9 @@ export const RESETS = Object.freeze({
       const update = {
         [`flags.${MODULE_ID}.-=selectedSpheres`]: null,
         [`flags.${MODULE_ID}.-=familySpheres`]: null,
-        [`flags.${MODULE_ID}.-=${SPHERE_SPECIALTIES_FLAG}`]: null
+        [`flags.${MODULE_ID}.-=${SPHERE_SPECIALTIES_FLAG}`]: null,
+        // I poteri inseriti (21/9) vanno via con le Sfere.
+        [`flags.${MODULE_ID}.-=${POTERI_FLAG}`]: null
       };
       for (const id of SPHERES) update[`flags.${MODULE_ID}.spheres.${id}`] = 0;
       return update;

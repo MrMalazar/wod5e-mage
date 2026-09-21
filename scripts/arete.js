@@ -24,7 +24,6 @@ import { FOCUS_FORMS, PERCEIVE_TOOL_ID } from "./focus.js";
 import { maintainedEffectRow, shouldRecordEffect } from "./ongoing-magick.js";
 import { effectSphereLevels, openGrimorio } from "./grimorio.js";
 import { normalizeEffectKind } from "./paradox-burst.js";
-import { loadSpherePowers, specialtyScopes } from "./sphere-specialties.js";
 
 export const ARETE_MIN = 1;
 export const ARETE_MAX = 5;
@@ -763,8 +762,9 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   // Solo le Sfere sbloccate, con almeno un pallino: sono quelle combinabili.
   // Il livello parla a pallini nel dialogo, come sulla scheda.
   // Ogni Sfera porta i suoi pallini: il giocatore sceglie il livello che
-  // usa. Le Specialità dell'Ambito si leggono dal compendio.
-  const specialties = specialtyScopes(actor, await loadSpherePowers());
+  // usa. Le Specialità delle Sfere non esistono più (Blue, 21/9): nessuna
+  // Sfera porta un Ambito di Specialità.
+  const specialties = {};
   const rollSpheres = prepareSpheres(actor).selected
     .filter((sphere) => sphere.value > 0)
     .map((sphere) => ({

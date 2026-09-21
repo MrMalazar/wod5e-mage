@@ -1,3 +1,12 @@
+{{!-- La pagina Magick (Blue, 21/9/2026, dal mock docs/mock_pagina_magick_21-9.html):
+     a sinistra le nove Sfere in una lista sola (il clic sul sigillo prende o
+     lascia la Sfera; i pallini; la casetta di famiglia; a destra il conto dei
+     poteri conosciuti, lo stesso numero della prima pagina) e sotto le Magick
+     in atto; a destra i poteri che il giocatore ha inserito, Sfera per Sfera,
+     in righe a colonne allineate (pallino, nome, tipo, Amalgama, costo), col
+     testo che si apre al clic sul nome e la tendina Aggiungi (dal catalogo,
+     o scritto a mano); in fondo, in una tendina, la tavola degli Ambiti. Le
+     Specialità delle Sfere e la colonna Influenza non esistono più. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-spheres" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     <header class="wod5e-mage-section-title">
         {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.spheres}}{{/if}}
@@ -5,135 +14,162 @@
     </header>
 
     <div class="wod5e-mage-spheres-content wod5e-mage-magick-layout">
-        <section class="wod5e-mage-spheres-panel">
-            <header class="resource-header">
-                <label class="header-label">{{localize "WOD5E_MAGE.Tabs.Spheres"}}</label>
-            </header>
-
-            <div class="wod5e-mage-sphere-selector" role="group" aria-label="{{localize 'WOD5E_MAGE.Spheres.Selector'}}">
-                {{#each sphereChoices as |sphere|}}
-                    <label class="wod5e-mage-sphere-choice" title="{{localize sphere.label}}">
-                        <img src="{{sphere.icon}}" alt="{{localize sphere.label}}">
-                        <span class="resource-value wod5e-mage-sphere-toggle" data-value="{{#if sphere.selected}}1{{else}}0{{/if}}">
-                            <span class="resource-value-step" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="{{sphere.selected}}" data-index="1" role="checkbox" aria-checked="{{sphere.selected}}" tabindex="0"></span>
-                        </span>
-                    </label>
-                {{/each}}
-            </div>
-
-            <div class="wod5e-mage-spheres-grid">
-                <div class="wod5e-mage-spheres-list-header">
-                    <span>{{localize "WOD5E_MAGE.Spheres.List"}}</span>
-                    <span>{{localize "WOD5E_MAGE.Spheres.Influence.Label"}}</span>
-                </div>
-
-                {{#each spheres as |sphere|}}
-                    <div class="wod5e-mage-sphere{{#if sphere.family}} family{{/if}}">
-                        {{!-- La casetta: Sfera di famiglia (costa meno) o esterna. --}}
-                        <button type="button" class="wod5e-mage-sphere-family" data-action="familySphereToggle" data-sphere="{{sphere.id}}" title="{{#if sphere.family}}{{localize 'WOD5E_MAGE.Spheres.FamilyOn'}}{{else}}{{localize 'WOD5E_MAGE.Spheres.FamilyOff'}}{{/if}}" aria-pressed="{{sphere.family}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-house"></i></button>
-                        <label class="resource-label">{{localize sphere.label}}</label>
-                        <div class="resource-value" data-value="{{sphere.value}}" data-name="flags.wod5e-mage.spheres.{{sphere.id}}">
-                            {{!-- Come le Abilità: il vuoto a sinistra riporta la Sfera a zero. --}}
-                            <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
-                            {{#numLoop 5}}
-                                <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}" title="{{this}}"></span>
-                            {{/numLoop}}
-                        </div>
-                        <span class="wod5e-mage-sphere-influence">{{localize sphere.influenceLabel}}</span>
-                    </div>
-                {{else}}
-                    <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.Spheres.Empty"}}</p>
-                {{/each}}
-            </div>
-        </section>
-
-        <section class="wod5e-mage-ongoing-magick">
-            <header class="resource-header">
-                <label class="header-label">{{localize "WOD5E_MAGE.OngoingMagick.Label"}}</label>
-            </header>
-
-            <div class="wod5e-mage-ongoing-magick-controls">
-                <button type="button" data-action="ongoingMagickAdd" title="{{localize 'WOD5E_MAGE.OngoingMagick.Add'}}" {{#if locked}}disabled{{/if}}>
-                    <i class="fa-solid fa-plus"></i>
-                    {{localize "WOD5E_MAGE.OngoingMagick.Add"}}
-                </button>
-            </div>
-
-            {{#if ongoingMagick.length}}
-            {{!-- Ogni effetto (6/9): On/Off, il nome, l'Effetto (l'Obiettivo del
-                 lancio), i segni, il cestino. --}}
-            <div class="wod5e-mage-ongoing-magick-grid">
-                <span>{{localize "WOD5E_MAGE.OngoingMagick.Status"}}</span>
-                <span>{{localize "WOD5E_MAGE.OngoingMagick.Name"}}</span>
-                <span>{{localize "WOD5E_MAGE.OngoingMagick.Effect"}}</span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-
-                {{#each ongoingMagick as |row|}}
-                    <button type="button" class="wod5e-mage-ongoing-toggle{{#if row.active}} lit{{/if}}" data-action="ongoingMagickToggle" data-row="{{row.id}}" title="{{#if row.active}}{{localize 'WOD5E_MAGE.OngoingMagick.On'}}{{else}}{{localize 'WOD5E_MAGE.OngoingMagick.Off'}}{{/if}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Status'}}" {{#if ../locked}}disabled{{/if}}>
-                        {{#if row.active}}{{localize "WOD5E_MAGE.OngoingMagick.On"}}{{else}}{{localize "WOD5E_MAGE.OngoingMagick.Off"}}{{/if}}
-                    </button>
-                    <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.nameSpheres" value="{{row.nameSpheres}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Name'}}" {{#if ../locked}}disabled{{/if}}>
-                    <input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.triggerEffect" value="{{row.triggerEffect}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" {{#if ../locked}}disabled{{/if}}>
-                    {{!-- I segni: il lucchetto rosso del Paradosso bloccato (Volgare
-                         acceso), la clessidra con la Durata, la soglia. --}}
-                    <span class="wod5e-mage-ongoing-marks">
-                        {{#if row.lock}}{{#if row.active}}<i class="fa-solid fa-lock wod5e-mage-ongoing-lock" title="{{localize 'WOD5E_MAGE.OngoingMagick.LockHint'}}" aria-hidden="true"></i>{{/if}}{{/if}}
-                        {{#if row.duration}}<small title="{{localize 'WOD5E_MAGE.Scopes.duration'}}"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>{{row.duration}}</small>{{/if}}
-                        {{#if row.threshold}}<small title="{{localize 'WOD5E_MAGE.Arete.Threshold'}}"><i class="fa-solid fa-bullseye" aria-hidden="true"></i>{{row.threshold}}</small>{{/if}}
-                    </span>
-                    <button type="button" data-action="ongoingMagickDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" {{#if ../locked}}disabled{{/if}}>
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                {{/each}}
-            </div>
-            {{else}}
-                <p class="wod5e-mage-ongoing-magick-empty">{{localize "WOD5E_MAGE.OngoingMagick.Empty"}}</p>
-            {{/if}}
-        </section>
-
-        {{!-- Le Specialità delle Sfere: al terzo pallino di una Sfera si sceglie
-             uno dei suoi poteri passivi. La Sfera affine non esiste più. --}}
-        <section class="wod5e-mage-sphere-specialties">
-            <header class="resource-header">
-                <label class="header-label">{{localize "WOD5E_MAGE.SphereSpecialties.Label"}}</label>
-            </header>
-
-            {{#if sphereSpecialties.length}}
-                <div class="wod5e-mage-sphere-specialty-list">
-                    {{#each sphereSpecialties as |row|}}
-                        {{#unless row.hasPowers}}
-                            <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.SphereSpecialties.MissingPack"}}</p>
-                        {{/unless}}
-                        {{!-- Un riquadro per ogni Specialità: la Sfera, il numero, la
-                             tendina stretta, il testo del potere scelto. --}}
-                        {{#each row.slots as |slot|}}
-                            {{!-- Una riga per Specialità: simbolo, Sfera, numero e la tendina;
-                                 il testo del potere si apre cliccando sul titolo. --}}
-                            <article class="wod5e-mage-sphere-specialty{{#if slot.chosen}} chosen{{/if}}" data-slot="{{row.id}}-{{slot.key}}">
-                                <div class="wod5e-mage-sphere-specialty-head"{{#if slot.chosen}} title="{{localize 'WOD5E_MAGE.SphereSpecialties.ShowText'}}"{{/if}}>
-                                    <img src="{{row.icon}}" alt="">
-                                    <strong>{{localize row.label}}</strong>
-                                    {{#if slot.chosen}}<i class="fa-solid fa-chevron-down wod5e-mage-sphere-specialty-chevron" aria-hidden="true"></i>{{/if}}
+        <div class="wod5e-mage-magick-sinistra">
+            {{!-- Le Sfere: quelle conosciute in testa, con pallini, casetta e conto; le altre sotto, spente. --}}
+            <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-sfere">
+                <header class="wod5e-mage-riq-title">
+                    <span>{{localize "WOD5E_MAGE.Tabs.Spheres"}}</span>
+                    <small class="wod5e-mage-riq-conto">{{localize "WOD5E_MAGE.Poteri.SfereConosciute" count=sfereConosciute.length}} · {{localize "WOD5E_MAGE.Poteri.InTutto" count=poteriTotale}}</small>
+                </header>
+                <div class="wod5e-mage-riq-body">
+                    <div class="wod5e-mage-sfere-lista">
+                        {{#each sfereConosciute as |sphere|}}
+                            <div class="wod5e-mage-riga wod5e-mage-riga-sfera-pagina{{#if sphere.family}} family{{/if}}">
+                                <button type="button" class="wod5e-mage-sfera-prendi" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="true" title="{{localize 'WOD5E_MAGE.Poteri.Lascia'}}" aria-pressed="true" {{#if ../locked}}disabled{{/if}}><img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt=""></button>
+                                <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize sphere.label}}</span></span>
+                                <div class="resource-value" data-value="{{sphere.value}}" data-name="flags.wod5e-mage.spheres.{{sphere.id}}">
+                                    {{!-- Come le Abilità: il vuoto a sinistra riporta la Sfera a zero. --}}
+                                    <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
+                                    {{#numLoop 5}}
+                                        <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}" title="{{this}}"></span>
+                                    {{/numLoop}}
                                 </div>
-                                <select name="flags.wod5e-mage.sphereSpecialties.{{row.id}}.{{slot.key}}" aria-label="{{localize 'WOD5E_MAGE.SphereSpecialties.Label'}}" {{#if ../../locked}}disabled{{/if}}>
-                                    <option value="">{{localize "WOD5E_MAGE.SphereSpecialties.None"}}</option>
-                                    {{#each slot.options as |option|}}
-                                        <option value="{{option.id}}" {{#if option.selected}}selected{{/if}} {{#if option.taken}}disabled{{/if}}>{{option.label}}</option>
-                                    {{/each}}
-                                </select>
-                                {{#if slot.chosen}}
-                                    <div class="wod5e-mage-sphere-specialty-text">{{{slot.chosen.description}}}</div>
-                                {{/if}}
-                            </article>
+                                <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-sfera-casa{{#if sphere.family}} on{{/if}}" data-action="familySphereToggle" data-sphere="{{sphere.id}}" title="{{#if sphere.family}}{{localize 'WOD5E_MAGE.Poteri.Casa'}}{{else}}{{localize 'WOD5E_MAGE.Poteri.CasaOff'}}{{/if}}" aria-pressed="{{sphere.family}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-house" aria-hidden="true"></i></button>
+                                <b class="wod5e-mage-sfera-conto{{#unless sphere.conto}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Stat.PoteriConosciuti'}}">{{sphere.conto}}</b>
+                            </div>
+                        {{else}}
+                            <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Spheres.Empty"}}</p>
                         {{/each}}
+                    </div>
+                    {{#if sfereAltre.length}}
+                        <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E_MAGE.Poteri.AltreSfere"}}</span>
+                        <div class="wod5e-mage-sfere-lista">
+                            {{#each sfereAltre as |sphere|}}
+                                <div class="wod5e-mage-riga wod5e-mage-riga-sfera-pagina spenta">
+                                    <button type="button" class="wod5e-mage-sfera-prendi" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="false" title="{{localize 'WOD5E_MAGE.Poteri.Prendi'}}" aria-pressed="false" {{#if ../locked}}disabled{{/if}}><img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt=""></button>
+                                    <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize sphere.label}}</span></span>
+                                </div>
+                            {{/each}}
+                        </div>
+                    {{/if}}
+                </div>
+            </section>
+
+            {{!-- Le Magick in atto (6/9): On/Off, il nome, i segni, il cestino; l'effetto sulla seconda linea. --}}
+            <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-ongoing-magick">
+                <header class="wod5e-mage-riq-title">
+                    <span>{{localize "WOD5E_MAGE.OngoingMagick.Label"}}</span>
+                    <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="ongoingMagickAdd" title="{{localize 'WOD5E_MAGE.OngoingMagick.Add'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Add'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                </header>
+                <div class="wod5e-mage-riq-body">
+                    {{#each ongoingMagick as |row|}}
+                        <div class="wod5e-mage-atto-riga{{#if row.active}} accesa{{/if}}">
+                            <div class="wod5e-mage-atto-testa">
+                                <button type="button" class="wod5e-mage-ongoing-toggle{{#if row.active}} lit{{/if}}" data-action="ongoingMagickToggle" data-row="{{row.id}}" title="{{#if row.active}}{{localize 'WOD5E_MAGE.OngoingMagick.On'}}{{else}}{{localize 'WOD5E_MAGE.OngoingMagick.Off'}}{{/if}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Status'}}" {{#if ../locked}}disabled{{/if}}>
+                                    {{#if row.active}}{{localize "WOD5E_MAGE.OngoingMagick.On"}}{{else}}{{localize "WOD5E_MAGE.OngoingMagick.Off"}}{{/if}}
+                                </button>
+                                <input type="text" class="wod5e-mage-atto-nome" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.nameSpheres" value="{{row.nameSpheres}}" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.Name'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Name'}}" {{#if ../locked}}disabled{{/if}}>
+                                {{!-- I segni: il lucchetto rosso del Paradosso bloccato (Volgare acceso), la clessidra con la Durata, la soglia. --}}
+                                <span class="wod5e-mage-ongoing-marks">
+                                    {{#if row.lock}}{{#if row.active}}<i class="fa-solid fa-lock wod5e-mage-ongoing-lock" title="{{localize 'WOD5E_MAGE.OngoingMagick.LockHint'}}" aria-hidden="true"></i>{{/if}}{{/if}}
+                                    {{#if row.duration}}<small title="{{localize 'WOD5E_MAGE.Scopes.duration'}}"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>{{row.duration}}</small>{{/if}}
+                                    {{#if row.threshold}}<small title="{{localize 'WOD5E_MAGE.Arete.Threshold'}}"><i class="fa-solid fa-bullseye" aria-hidden="true"></i>{{row.threshold}}</small>{{/if}}
+                                </span>
+                                <button type="button" class="wod5e-mage-riq-tasto-piccolo wod5e-mage-atto-cestino" data-action="ongoingMagickDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                            </div>
+                            <input type="text" class="wod5e-mage-atto-effetto" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.triggerEffect" value="{{row.triggerEffect}}" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" {{#if ../locked}}disabled{{/if}}>
+                        </div>
+                    {{else}}
+                        <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.OngoingMagick.Empty"}}</p>
                     {{/each}}
                 </div>
-            {{else}}
-                <p class="wod5e-mage-spheres-empty">{{localize "WOD5E_MAGE.SphereSpecialties.Empty"}}</p>
-            {{/if}}
+            </section>
+        </div>
+
+        {{!-- I poteri conosciuti, Sfera per Sfera. --}}
+        <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-conosciuti">
+            <header class="wod5e-mage-riq-title">
+                <span>{{localize "WOD5E_MAGE.Stat.PoteriConosciuti"}}</span>
+                <small class="wod5e-mage-riq-conto">{{localize "WOD5E_MAGE.Poteri.InTutto" count=poteriTotale}}</small>
+            </header>
+            <div class="wod5e-mage-riq-body">
+                {{#each poteriSezioni as |sez|}}
+                    <div class="wod5e-mage-poteri-sezione">
+                        {{!-- La testa della Sfera: sigillo, nome, i pallini in eco, il conto, Aggiungi (la tendina si apre col clic). --}}
+                        <div class="wod5e-mage-riga wod5e-mage-poteri-testa con-tendina">
+                            <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sez.icon}}" alt="">
+                            <span class="wod5e-mage-poteri-sfera">{{localize sez.label}}</span>
+                            <span class="wod5e-mage-poteri-eco" aria-hidden="true">{{#each sez.steps as |step|}}<i class="wod5e-mage-eco-pallino{{#if step.lit}} lit{{/if}}"></i>{{/each}}</span>
+                            <span class="wod5e-mage-poteri-conto" title="{{localize 'WOD5E_MAGE.Stat.PoteriConosciuti'}}"><b{{#unless sez.conto}} class="vuoto"{{/unless}}>{{sez.conto}}</b><small>{{#if (eq sez.conto 1)}}{{localize "WOD5E_MAGE.Poteri.Uno"}}{{else}}{{localize "WOD5E_MAGE.Poteri.Tanti"}}{{/if}}</small></span>
+                            <button type="button" class="wod5e-mage-sfera-potere wod5e-mage-poteri-aggiungi" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Poteri.AggiungiHint'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Poteri.Aggiungi"}}</span></button>
+                            {{!-- La tendina: le voci del catalogo (spuntate se già conosciute, col lucchetto sopra i pallini della Sfera), e in fondo la scrittura a mano. --}}
+                            <div class="wod5e-mage-cassetto wod5e-mage-cassetto-poteri wod5e-mage-cassetto-catalogo" role="group" aria-label="{{localize 'WOD5E_MAGE.Poteri.AggiungiHint'}}">
+                                {{#each sez.catalogo as |voce|}}
+                                    <button type="button" class="wod5e-mage-potere-voce{{#if voce.known}} scelta{{/if}}{{#if voce.locked}} chiusa{{/if}}" data-action="potereDaCatalogo" data-sphere="{{sez.id}}" data-catalogo="{{voce.id}}" title="{{#if voce.known}}{{localize 'WOD5E_MAGE.Poteri.Conosciuto'}}{{else}}{{voce.lockedHint}}{{/if}}" {{#if voce.known}}disabled{{else if voce.locked}}disabled{{/if}}>
+                                        <i class="wod5e-mage-casella{{#if voce.known}} spuntata{{/if}}" aria-hidden="true"></i>
+                                        <b class="wod5e-mage-potere-pallino">{{voce.dot}}</b>
+                                        <span>{{voce.name}}</span>
+                                        {{#if voce.locked}}<small class="wod5e-mage-potere-lucchetto"><i class="fa-solid fa-lock" aria-hidden="true"></i> {{voce.lockedHint}}</small>{{/if}}
+                                    </button>
+                                {{else}}
+                                    <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Poteri.CatalogoVuoto"}}</p>
+                                {{/each}}
+                                <button type="button" class="wod5e-mage-potere-voce wod5e-mage-potere-mano" data-action="potereNuovo" data-sphere="{{sez.id}}"><i class="fa-solid fa-pen" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Poteri.ScriviMano"}}</span></button>
+                            </div>
+                        </div>
+
+                        {{#each sez.poteri as |p|}}
+                            {{!-- La riga del potere: colonne allineate (Blue, 21/9: il tipo «non attaccato al nome»). --}}
+                            <div class="wod5e-mage-potere-riga{{#if p.editing}} aperta modifica{{/if}}" data-row="{{p.id}}">
+                                <div class="wod5e-mage-potere-testa">
+                                    <b class="wod5e-mage-potere-pallino{{#unless p.dot}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Poteri.Pallino'}}">{{#if p.dot}}{{p.dot}}{{else}}·{{/if}}</b>
+                                    <button type="button" class="wod5e-mage-potere-nome" data-action="potereApri" title="{{localize 'WOD5E_MAGE.Poteri.Apri'}}" aria-expanded="{{p.editing}}"><span>{{p.label}}</span></button>
+                                    <small class="wod5e-mage-potere-tipo{{#if p.type}} {{p.type}}{{/if}}">{{p.typeLabel}}</small>
+                                    <span class="wod5e-mage-potere-amalgama{{#if p.amalgam}}{{#unless p.amalgamOwned}} manca{{/unless}}{{else}} niente{{/if}}" title="{{#if p.amalgam}}{{localize 'WOD5E_MAGE.Poteri.Con' sphere=p.amalgamLabel}}{{/if}}">{{#if p.amalgam}}<img src="{{p.amalgamIcon}}" alt="{{p.amalgamLabel}}">{{/if}}</span>
+                                    <small class="wod5e-mage-potere-costo">{{p.cost}}</small>
+                                    <i class="fa-solid fa-chevron-down wod5e-mage-potere-chevron" aria-hidden="true"></i>
+                                </div>
+                                <div class="wod5e-mage-potere-spiega">
+                                    {{#if p.editing}}
+                                        {{!-- In modifica: i campi della bandiera, salvati dal foglio come le Magick in atto. --}}
+                                        <div class="wod5e-mage-potere-campi">
+                                            <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.Nome"}}</span><input type="text" name="flags.wod5e-mage.poteri.{{p.id}}.name" value="{{p.name}}"></label>
+                                            <label><span>{{localize "WOD5E_MAGE.Poteri.Pallino"}}</span><select name="flags.wod5e-mage.poteri.{{p.id}}.dot" data-dtype="Number"><option value="0"{{#unless p.dot}} selected{{/unless}}>{{localize "WOD5E_MAGE.Poteri.PallinoNessuno"}}</option>{{#each p.options.pallini as |o|}}<option value="{{o.value}}"{{#if (eq o.value p.dot)}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+                                            <label><span>{{localize "WOD5E_MAGE.Poteri.Tipo.Label"}}</span><select name="flags.wod5e-mage.poteri.{{p.id}}.type"><option value=""{{#unless p.type}} selected{{/unless}}>{{localize "WOD5E_MAGE.Poteri.Tipo.Nessuno"}}</option>{{#each p.options.tipi as |o|}}<option value="{{o.value}}"{{#if (eq o.value p.type)}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+                                            <label><span>{{localize "WOD5E_MAGE.Poteri.Costo"}}</span><input type="text" name="flags.wod5e-mage.poteri.{{p.id}}.cost" value="{{p.cost}}"></label>
+                                            <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.CosaFa"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.text" rows="3">{{p.text}}</textarea></label>
+                                            <label><span>{{localize "WOD5E_MAGE.Poteri.Amalgama"}}</span><select name="flags.wod5e-mage.poteri.{{p.id}}.amalgam"><option value=""{{#unless p.amalgam}} selected{{/unless}}>{{localize "WOD5E_MAGE.Poteri.AmalgamaNessuna"}}</option>{{#each p.options.sfere as |o|}}<option value="{{o.value}}"{{#if (eq o.value p.amalgam)}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+                                            <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.ConAmalgama"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.amalgamText" rows="2">{{p.amalgamText}}</textarea></label>
+                                            <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.Flavor"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.flavor" rows="2">{{p.flavor}}</textarea></label>
+                                        </div>
+                                    {{else}}
+                                        <p class="wod5e-mage-potere-testo"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.CosaFa"}}</span>{{#if p.text}}{{p.text}}{{else}}<em>{{localize "WOD5E_MAGE.Poteri.CosaFaVuoto"}}</em>{{/if}}</p>
+                                        {{#if p.amalgam}}
+                                            {{!-- L'Amalgama si legge: piena se la Sfera ce l'hai, tratteggiata se no. --}}
+                                            <div class="wod5e-mage-potere-con{{#unless p.amalgamOwned}} manca{{/unless}}"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.Con" sphere=p.amalgamLabel}}</span>{{p.amalgamText}}{{#unless p.amalgamOwned}} <em>{{localize "WOD5E_MAGE.Poteri.NonHai" sphere=p.amalgamLabel}}</em>{{/unless}}</div>
+                                        {{/if}}
+                                        {{#if p.flavor}}<p class="wod5e-mage-potere-flavor"><em>{{p.flavor}}</em></p>{{/if}}
+                                    {{/if}}
+                                    <div class="wod5e-mage-potere-fondo">
+                                        <button type="button" data-action="potereModifica" data-row="{{p.id}}" {{#if ../../locked}}disabled{{/if}}><i class="fa-solid {{#if p.editing}}fa-check{{else}}fa-pen{{/if}}" aria-hidden="true"></i> {{#if p.editing}}{{localize "WOD5E_MAGE.Poteri.Fatto"}}{{else}}{{localize "WOD5E_MAGE.Poteri.Modifica"}}{{/if}}</button>
+                                        <button type="button" data-action="potereTogli" data-row="{{p.id}}" {{#if ../../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Togli"}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {{else}}
+                            <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Poteri.Vuoto"}}</p>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Spheres.Empty"}}</p>
+                {{/each}}
+            </div>
         </section>
 
-        {{> "modules/wod5e-mage/templates/actor/parts/scope-table.hbs"}}
+        {{!-- Gli Ambiti: la tavola dei sette livelli, in una tendina a tutta larghezza. --}}
+        <details class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-ambiti-tavola">
+            <summary class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Scopes.TableTitle"}}</span><small class="wod5e-mage-riq-conto">{{localize "WOD5E_MAGE.Poteri.Tavola"}}</small><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+            {{> "modules/wod5e-mage/templates/actor/parts/scope-table.hbs"}}
+        </details>
     </div>
 </section>

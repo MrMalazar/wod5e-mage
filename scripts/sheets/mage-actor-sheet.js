@@ -52,7 +52,7 @@ import {
 } from "../magick-balance.js";
 import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
-import { loadSpherePowers, prepareSphereSpecialties } from "../sphere-specialties.js";
+import { onPotereApri, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, preparePoteriPagina } from "../poteri-scheda.js";
 import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
@@ -432,6 +432,12 @@ export class MageActorSheet extends MortalActorSheet {
       ongoingMagickAdd: onOngoingMagickAdd,
       ongoingMagickDelete: onOngoingMagickDelete,
       ongoingMagickToggle: onOngoingMagickToggle,
+      // I poteri inseriti dal giocatore (21/9): la pagina Magick.
+      potereNuovo: onPotereNuovo,
+      potereDaCatalogo: onPotereDaCatalogo,
+      potereModifica: onPotereModifica,
+      potereTogli: onPotereTogli,
+      potereApri: onPotereApri,
       personaggioRowAdd: onPersonaggioRowAdd,
       personaggioRowDelete: onPersonaggioRowDelete,
       specialtyAdd: onSpecialtyAdd,
@@ -962,21 +968,14 @@ export class MageActorSheet extends MortalActorSheet {
       context.tab = context.tabs.magick;
       context.arete = getArete(actor);
       context.scopeTable = prepareScopeTable(game.i18n.localize.bind(game.i18n));
-      // Le Specialità delle Sfere, dal terzo pallino, coi poteri del compendio.
-      context.sphereSpecialties = prepareSphereSpecialties(actor, {
-        powers: await loadSpherePowers(),
-        localize: game.i18n.localize.bind(game.i18n),
-        locale: game.i18n.lang
-      });
       context.magickTrack = prepareMagickTrack(actor);
       context.persistentMagickResources = getPersistentMagickResources(actor);
       context.ongoingMagick = prepareOngoingMagick(actor);
-      const sphereData = prepareSpheres(actor, {
+      // La pagina rifatta (21/9): le nove Sfere in lista, i poteri inseriti Sfera per Sfera.
+      Object.assign(context, preparePoteriPagina(actor, this, {
         localize: game.i18n.localize.bind(game.i18n),
         locale: game.i18n.lang
-      });
-      context.sphereChoices = sphereData.all;
-      context.spheres = sphereData.selected;
+      }));
     }
 
     // La pagina del Credo: Saggezza, Credo, Tipo e Strumenti per Sfera.

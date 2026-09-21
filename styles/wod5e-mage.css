@@ -896,132 +896,652 @@
   padding: 1rem;
 }
 
+/* La pagina Magick (Blue, 21/9, dal mock docs/mock_pagina_magick_21-9.html):
+   a sinistra le Sfere e sotto le Magick in atto (350 px), a destra i poteri
+   conosciuti, in fondo a tutta larghezza la tendina della tavola degli
+   Ambiti. I riquadri sono quelli della prima pagina, ma qui crescono col
+   contenuto: la pagina scorre, i riquadri no. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-layout {
   align-items: start;
   display: grid;
-  gap: 1.5rem;
-    grid-template-areas:
-        "spheres specialties"
-        "ongoing ongoing"
-        "table table";
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  grid-template-areas:
+    "sinistra poteri"
+    "ambiti ambiti";
+  grid-template-columns: 350px minmax(0, 1fr);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-layout > * {
   min-width: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-panel {
-  grid-area: spheres;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialties {
-  grid-area: specialties;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-list {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: minmax(0, 1fr);
-  margin-top: 0.5rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty {
-  align-items: center;
-  background: var(--mage-velluto);
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 4px;
-  column-gap: 0.6rem;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  min-width: 0;
-  padding: 0.4rem 0.6rem;
-  row-gap: 0.3rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty.chosen {
-  border-color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head {
-  align-items: center;
-  display: grid;
-  gap: 0.5rem;
-  grid-template-columns: 26px auto minmax(0, 1fr);
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-sinistra {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  grid-area: sinistra;
   min-width: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty.chosen .wod5e-mage-sphere-specialty-head {
-  cursor: pointer;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-conosciuti {
+  grid-area: poteri;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-chevron {
-  color: var(--mage-oro);
-  font-size: 0.7rem;
-  justify-self: end;
-  transition: transform 0.15s ease;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-ambiti-tavola {
+  grid-area: ambiti;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty:not(.open) .wod5e-mage-sphere-specialty-chevron {
-  transform: rotate(-90deg);
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq.wod5e-mage-riq-pagina {
+  flex: 0 0 auto;
+  min-height: 0;
+  overflow: visible;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > img {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-pagina > .wod5e-mage-riq-body {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+/* Il conto in testa al riquadro, a destra del titolo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-conto {
+  color: var(--mage-testo);
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+/* La riga della Sfera nella lista: il sigillo è il tasto che prende o
+   lascia la Sfera, poi il nome, i cinque pallini, la casetta, il conto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-prendi {
+  align-items: center;
+  background: transparent;
   border: 0;
-  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 22px;
+  height: 22px;
+  justify-content: center;
+  line-height: 1;
+  min-height: 0;
+  padding: 0;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-prendi:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-prendi:focus {
+  box-shadow: 0 0 0 1px var(--mage-oro);
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina.spenta {
+  opacity: 0.45;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina.spenta:hover {
+  opacity: 0.8;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina .wod5e-mage-riga-nome {
+  font-size: 0.95rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina > .resource-value {
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina > .resource-value > :is(.resource-value-step, .resource-value-empty) {
+  flex: 0 0 16px;
+  height: 16px;
+  min-width: 16px;
+  width: 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-casa.on {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro);
+  color: var(--mage-su-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina .wod5e-mage-sfera-conto {
+  min-width: 22px;
+  text-align: right;
+}
+
+/* Le Magick in atto: due linee per riga, On/Off, nome, segni, cestino; sotto l'effetto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-riga {
+  background: var(--mage-riga-fondo);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 3px 6px 5px 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-testa {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  min-height: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-testa > .wod5e-mage-ongoing-marks {
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-nome,
+.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-effetto {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--mage-testo);
+  flex: 1 1 auto;
+  font-size: 0.88rem;
+  height: 22px;
+  min-width: 0;
+  padding: 0 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-nome {
+  font-weight: 600;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-effetto {
+  color: var(--mage-tenue);
+  font-size: 0.8rem;
+  margin-left: 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-nome:focus,
+.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-effetto:focus {
+  border-bottom-color: var(--mage-oro);
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-riga:not(.accesa) .wod5e-mage-atto-nome {
+  opacity: 0.6;
+}
+
+/* I poteri conosciuti: una sezione per Sfera. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-sezione {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-sezione:first-child {
+  margin-top: 0;
+}
+
+/* La testa della Sfera: sigillo grande, nome in Modesto, pallini in eco, conto, Aggiungi. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-testa {
+  background: transparent;
+  border-bottom: 1px solid rgb(152 119 43 / 35%);
+  border-radius: 0;
+  gap: 8px;
+  margin-bottom: 2px;
+  min-height: 32px;
+  padding: 0 4px 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-testa:hover {
+  background: transparent;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-testa > .wod5e-mage-riga-icona {
+  flex: 0 0 24px;
   height: 24px;
-  object-fit: contain;
   width: 24px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > strong {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-sfera {
   color: var(--mage-oro-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-head > small {
-  color: var(--mage-tenue);
-  font-size: 0.72rem;
-}
-
-/* La tendina della Specialità: stretta quanto il testo, scura, senza il
-   bianco che stanca l'occhio. */
-.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-sphere-specialty > select {
-  --input-text-color: var(--mage-oro-chiaro);
-  align-self: start;
-  background-color: var(--mage-nero-dado);
-  border: 1px solid var(--mage-oro-scuro);
-  color: var(--mage-oro-chiaro);
-  font-size: 0.85rem;
-  margin: 0;
-  max-width: 100%;
+  flex: 0 1 auto;
+  font-family: var(--font-modesto, "Modesto Condensed", Georgia, serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-eco {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-eco-pallino {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 9px;
+  width: 9px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-eco-pallino.lit {
+  background: var(--mage-dot-color);
+  border-color: var(--mage-dot-border);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-conto {
+  align-items: baseline;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 5px;
+  margin: 0 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-conto > b {
+  color: var(--mage-oro);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-conto > b.vuoto {
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-conto > small {
+  color: var(--mage-tenue);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-aggiungi {
+  margin-left: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-poteri-aggiungi > i {
+  font-size: 0.6rem;
+}
+
+/* La tendina Aggiungi: le voci del catalogo, poi la scrittura a mano. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-cassetto-catalogo {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-cassetto-catalogo > .wod5e-mage-riq-vuoto {
+  margin: 4px 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce.chiusa {
+  opacity: 0.55;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce:disabled {
+  cursor: default;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce > .wod5e-mage-potere-lucchetto {
+  color: var(--mage-tenue);
+  flex: 0 0 auto;
+  font-size: 0.65rem;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-mano {
+  border-top: 1px solid rgb(152 119 43 / 35%);
+  border-radius: 0;
+  color: var(--mage-oro);
+  font-weight: 600;
+  margin-top: 3px;
+  padding-top: 5px;
+}
+
+/* La riga del potere: colonne allineate (Blue, 21/9: il tipo «non attaccato
+   al nome»): pallino, nome, tipo, Amalgama, costo, freccia. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-riga {
+  background: var(--mage-riga-fondo);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 6px 0 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-riga:hover {
+  background: var(--mage-riga-sorvolo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-testa {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 20px minmax(0, 1fr) 62px 24px minmax(0, 120px) 14px;
+  min-height: 28px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-pallino {
+  align-items: center;
+  border: 1px solid var(--mage-oro);
+  border-radius: 50%;
+  box-sizing: border-box;
+  color: var(--mage-oro);
+  display: inline-flex;
+  flex: 0 0 18px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  height: 18px;
+  justify-content: center;
+  line-height: 1;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-pallino.vuoto {
+  border-color: var(--mage-oro-tenue);
+  border-style: dashed;
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-nome {
+  background: transparent;
+  border: 0;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.95rem;
+  font-weight: 600;
+  justify-content: flex-start;
+  line-height: 1.1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 2px 0;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-nome > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-nome:hover {
+  box-shadow: none;
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-nome:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-tipo {
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: var(--mage-tenue);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  padding: 3px 0;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-tipo.passivo {
+  border-color: var(--mage-oro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-tipo.attivo {
+  border-color: var(--mage-oro-scuro);
+  color: var(--mage-testo);
+}
+
+/* Il sigillo dell'Amalgama: il disco d'oro come gli altri sigilli; se la
+   Sfera manca, il disco sbiadito con l'anello tratteggiato. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-amalgama {
+  align-items: center;
+  background: var(--mage-oro);
+  border: 1px solid var(--mage-oro);
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: inline-flex;
+  height: 24px;
+  justify-content: center;
+  width: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-amalgama.manca {
+  border-color: var(--mage-oro-scuro);
+  border-style: dashed;
+  opacity: 0.5;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-amalgama.niente {
+  background: transparent;
+  border-color: transparent;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-amalgama > img {
+  border: 0;
+  height: 18px;
+  object-fit: contain;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-potere-amalgama {
+  background: transparent;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-costo {
+  color: var(--mage-tenue);
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-chevron {
+  color: var(--mage-oro);
+  font-size: 0.6rem;
+  text-align: center;
+  transition: transform 0.15s;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-riga.aperta .wod5e-mage-potere-chevron {
+  transform: rotate(180deg);
+}
+
+/* Il testo del potere: chiuso non occupa spazio; aperto, Cosa fa, l'Amalgama, il Flavor, i due tasti. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-spiega {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 2px 4px 8px 28px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-riga.aperta > .wod5e-mage-potere-spiega {
+  display: flex;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-spiega p {
+  color: var(--mage-testo);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-spiega em {
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-k {
+  color: var(--mage-tenue);
+  display: inline-block;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-right: 6px;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-con {
+  background: var(--mage-scelta-tenue);
+  border-radius: 5px;
+  color: var(--mage-scelta-tenue-testo);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  padding: 5px 7px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-con > .wod5e-mage-potere-k {
+  color: var(--mage-scelta-tenue-testo);
+  opacity: 0.8;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-con.manca {
+  background: transparent;
+  border: 1px dashed var(--mage-oro-tenue);
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-con.manca > .wod5e-mage-potere-k {
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+  padding-top: 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo > button {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  font-size: 0.6rem;
+  font-weight: 700;
+  height: 20px;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  min-height: 0;
+  padding: 0 8px;
+  text-transform: uppercase;
   width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-sphere-specialty > select option,
-.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-sphere-specialty > select optgroup {
-  background: var(--mage-nero-dado);
-  color: var(--mage-oro-chiaro);
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo > button:hover {
+  border-color: var(--mage-oro-scuro);
+  box-shadow: none;
+  color: var(--mage-oro);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-text {
-  border-top: 1px solid rgb(152 119 43 / 35%);
-  color: var(--mage-inchiostro-chiaro, inherit);
-  display: none;
-  font-size: 0.85rem;
+/* In modifica: i campi in due colonne, i testi a tutta larghezza. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-campi {
+  display: grid;
+  gap: 5px 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-campi > label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-campo-largo {
   grid-column: 1 / -1;
-  margin-top: 0.1rem;
-  padding-top: 0.35rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty.open > .wod5e-mage-sphere-specialty-text {
-  display: block;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-campi > label > span {
+  color: var(--mage-tenue);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-text p,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-text ul {
-  margin: 0.25rem 0;
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-potere-campi :is(input, select, textarea) {
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 4px;
+  box-shadow: none;
+  color: var(--mage-inchiostro);
+  font-size: 0.85rem;
+  min-height: 24px;
+  padding: 2px 6px;
+  width: 100%;
 }
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-potere-campi textarea {
+  font-family: inherit;
+  line-height: 1.35;
+  min-height: 0;
+  resize: vertical;
+}
+
+/* La tendina della tavola degli Ambiti in fondo: il titolo è il riassunto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-ambiti-tavola > summary {
+  cursor: pointer;
+  list-style: none;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-ambiti-tavola > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-ambiti-tavola > summary > i {
+  color: var(--mage-oro);
+  font-size: 0.6rem;
+  margin-left: 8px;
+  transition: transform 0.15s;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-ambiti-tavola[open] > summary > i {
+  transform: rotate(180deg);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-ambiti-tavola:not([open]) > summary {
+  border-bottom: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-ambiti-tavola .wod5e-mage-scope-table {
+  margin-top: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-hint {
   margin: 0.75rem 0 1rem;
@@ -1175,60 +1695,13 @@
   width: 68px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-selector {
-  align-items: end;
-  display: grid;
-  gap: 0.35rem;
-  grid-template-columns: repeat(9, minmax(0, 1fr));
-  margin: 0 auto 1.25rem;
-  width: 100%;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-choice {
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  justify-content: flex-end;
-  min-width: 0;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-choice img {
-  /* I PNG sono glifi neri: sul fondo scuro si rivestono d'oro chiaro. */
-  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
-  height: 34px;
-  object-fit: contain;
-  width: 34px;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-choice .wod5e-mage-sphere-toggle {
-  align-self: auto;
-  line-height: 1;
-  margin: 0;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-list-header {
-  display: grid;
-  font-weight: 700;
-  gap: 0.75rem;
-  grid-template-columns: minmax(110px, 1fr) max-content minmax(100px, 0.75fr);
-  text-align: center;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-list-header span:first-child {
-  grid-column: 1 / 3;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-list-header span:last-child {
-  grid-column: 3;
-}
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete {
   align-items: center;
@@ -1298,10 +1771,10 @@
   width: 100%;
 }
 
-/* Il listino dei Successi Extra: una tavola larga, che scorre in orizzontale
-   se la pagina è stretta; la riga del Dono si accende in oro. */
+/* La tavola degli Ambiti: una tavola larga, che scorre in orizzontale se la
+   pagina è stretta; dal 21/9 sta nella tendina in fondo alla pagina Magick. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table {
-  grid-area: table;
+  min-width: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table-scroll {
@@ -1420,54 +1893,7 @@
   width: 15px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere {
-  align-items: center;
-  background: var(--mage-velluto);
-  border: 1px solid var(--mortal-color-2);
-  border-radius: 4px;
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: max-content minmax(90px, 1fr) max-content minmax(100px, 0.75fr);
-  min-height: 3rem;
-  padding: 0.5rem 0.75rem;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere .resource-label {
-  color: var(--mage-oro-chiaro);
-  font-weight: 600;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere .resource-value {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 0.35rem;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-influence {
-  text-align: center;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-empty {
-  font-style: italic;
-  margin: 0.5rem 0;
-  opacity: 0.75;
-  text-align: center;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick {
-  grid-area: ongoing;
-  margin-top: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid {
-  align-items: center;
-  display: grid;
-  gap: 0.35rem 0.5rem;
-  grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1.6fr) max-content 28px;
-  margin-top: 0.75rem;
-}
 
 /* On/Off (6/9): acceso in oro, spento sul fondo incassato. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-toggle {
@@ -1520,53 +1946,11 @@
   font-size: 0.85rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid > span {
-  color: var(--mage-oro);
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-align: center;
-  text-transform: uppercase;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid > input {
-  --input-text-color: var(--mage-inchiostro);
-  color: var(--mage-inchiostro);
-  min-width: 0;
-  width: 100%;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 0.75rem;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-controls button {
-  align-items: center;
-  display: inline-flex;
-  gap: 0.4rem;
-  margin: 0;
-  min-height: 28px;
-  width: auto;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-grid > button:not(.wod5e-mage-ongoing-toggle) {
-  align-items: center;
-  display: inline-flex;
-  height: 28px;
-  justify-content: center;
-  margin: 0;
-  min-height: 28px;
-  padding: 0;
-  width: 28px;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-magick-empty {
-  font-style: italic;
-  margin: 0.75rem 0 0;
-  opacity: 0.75;
-  text-align: center;
-}
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-content {
   border: 1px solid var(--mortal-color-2);
@@ -1920,27 +2304,7 @@
   color: var(--mage-inchiostro);
 }
 
-/* Sfere e Ambiti usano gli stessi pallini da 22px e la palette di Arete. */
-.wod5e-mage.wod5e.actor.sheet :is(
-  .wod5e-mage-sphere,
-  .wod5e-mage-sphere-choice
-) .resource-value .resource-value-step {
-  background: var(--mage-incavo);
-  border: 2px solid var(--mage-oro-scuro);
-  border-radius: 50%;
-  box-sizing: border-box;
-  height: 22px;
-  min-height: 22px;
-  width: 22px;
-}
 
-.wod5e-mage.wod5e.actor.sheet :is(
-  .wod5e-mage-sphere,
-  .wod5e-mage-sphere-choice
-) .resource-value .resource-value-step.active {
-  background: var(--mage-dot-active);
-  border-color: var(--mage-dot-border);
-}
 
 /* ==========================================================================
    La carta del tiro in chat: sopra i dadi la vittoria automatica e i
@@ -2697,11 +3061,10 @@
 
 @media (width <= 900px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-layout {
-        grid-template-areas:
-            "spheres"
-            "specialties"
-            "ongoing"
-            "table";
+    grid-template-areas:
+      "sinistra"
+      "poteri"
+      "ambiti";
     grid-template-columns: 1fr;
   }
 
@@ -2709,13 +3072,7 @@
     height: 125px;
   }
 
-  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-grid {
-    grid-template-columns: 1fr;
-  }
 
-  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-specialty-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-layout {
     grid-template-columns: 1fr;
@@ -3637,28 +3994,7 @@
   color: var(--mage-rosso-chiaro);
 }
 
-/* La casetta della Sfera di famiglia, davanti al nome della Sfera. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere-family {
-  background: transparent;
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 3px;
-  color: var(--mage-tenue);
-  cursor: pointer;
-  flex: none;
-  font-size: 0.7rem;
-  height: 20px;
-  line-height: 1;
-  margin: 0 0.35rem 0 0;
-  min-height: 20px;
-  padding: 0;
-  width: 22px;
-}
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sphere.family .wod5e-mage-sphere-family {
-  background: var(--mage-oro);
-  border-color: var(--mage-oro);
-  color: var(--mage-inchiostro, #1e1b2e);
-}
 
 /* Le Specializzazioni: Abilità, nome, matita, cestino. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-specialties-grid {
@@ -8661,8 +8997,8 @@
    in oro se ha più letture: il clic apre la tendina delle letture) e in
    fondo i sette pallini, della misura e del colore di quelli delle Sfere
    (16 px a passo 3,5: la stessa larghezza del blocco ⊗ più cinque da 18),
-   a riposo al 40%, pieni al sorvolo e con un valore; chi ha più letture e
-   non ne ha scelta una mostra al loro posto «Scegli la lettura». Sotto, la
+   a riposo al 40%, pieni al sorvolo e con un valore; ci sono sempre (Blue,
+   21/9: la lettura è facoltativa). Sotto, con una lettura scelta, la
    pastiglia della lettura a sinistra sotto il nome e, col livello, la sua
    lettura centrata e in grassetto. La riga col livello sul lilla. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito {
@@ -8737,33 +9073,6 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito.lit {
   background: var(--mage-dot-color);
   border-color: var(--mage-dot-border);
-}
-
-/* «Scegli la lettura»: al posto dei pallini, finché una lettura non c'è. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-scegli {
-  background: transparent;
-  border: 1px dashed var(--mage-oro-scuro);
-  border-radius: 10px;
-  color: var(--mage-oro);
-  cursor: pointer;
-  flex: 0 0 auto;
-  font-size: 0.58rem;
-  font-weight: 700;
-  height: 20px;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  margin-left: auto;
-  min-height: 0;
-  padding: 0 8px;
-  text-transform: uppercase;
-  white-space: nowrap;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-scegli:hover {
-  border-color: var(--mage-oro);
-  border-style: solid;
-  box-shadow: none;
 }
 
 /* La seconda linea: la pastiglia della lettura a sinistra, rientrata sotto

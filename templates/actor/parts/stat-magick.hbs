@@ -49,7 +49,7 @@
                         {{!-- La tendina a caselle: un potere per riga, la casella spuntata su quello scelto. --}}
                         <div class="wod5e-mage-cassetto wod5e-mage-cassetto-poteri" role="group" aria-label="{{localize 'WOD5E_MAGE.Stat.Poteri'}}">
                             {{#each sphere.poteri as |power|}}
-                                <button type="button" class="wod5e-mage-potere-voce{{#if power.selected}} scelta{{/if}}{{#if power.placeholder}} segnaposto{{/if}}" role="checkbox" aria-checked="{{power.selected}}" data-action="tiroPower" data-power="{{power.id}}" title="{{#if power.text}}{{power.text}}{{else}}{{localize 'WOD5E_MAGE.Stat.PotereSegnaposto'}}{{/if}}">
+                                <button type="button" class="wod5e-mage-potere-voce{{#if power.selected}} scelta{{/if}}" role="checkbox" aria-checked="{{power.selected}}" data-action="tiroPower" data-power="{{power.id}}" data-sphere="{{power.sphere}}" title="{{power.text}}">
                                     <i class="wod5e-mage-casella{{#if power.selected}} spuntata{{/if}}" aria-hidden="true"></i>
                                     <span>{{power.label}}</span>
                                 </button>
@@ -65,16 +65,17 @@
         <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E_MAGE.Scopes.TableTitle"}}</span>
         <div class="wod5e-mage-ambiti-lista">
             {{#each scopeRows as |scope|}}
-                {{!-- La riga (20/9, sera): la testa col nome (il chevron in oro se
-                     l'Ambito ha più letture: il clic apre la tendina delle letture,
-                     una pastiglia per lettura) e in fondo i sette pallini, della
-                     misura e del colore di quelli delle Sfere (Blue: «in linea con
-                     gli altri colori»), a riposo al 40%; chi ha più letture e non
-                     ne ha ancora scelta una mostra al loro posto «Scegli la
-                     lettura». Sul pallino il sorvolo dice il livello e la lettura,
-                     il clic lo dichiara. Sotto, la pastiglia della lettura a
-                     sinistra sotto il nome e, col livello, la sua lettura centrata
-                     e in grassetto. --}}
+                {{!-- La riga (20/9, sera; 21/9): la testa col nome (il chevron in
+                     oro se l'Ambito ha più letture: il clic apre la tendina delle
+                     letture, una pastiglia per lettura) e in fondo i sette pallini,
+                     sempre (Blue, 21/9: «lasciamo solo i pallini: se vuole l'utente
+                     può specificare il sottotipo, ma può anche solo cliccare i
+                     pallini necessari e via»), della misura e del colore di quelli
+                     delle Sfere, a riposo al 40%. Sul pallino il sorvolo dice il
+                     livello e, se la lettura è scelta, la sua lettura; il clic lo
+                     dichiara. Sotto, solo con una lettura scelta, la pastiglia
+                     della lettura a sinistra e, col livello, la sua lettura
+                     centrata e in grassetto. --}}
                 <div class="wod5e-mage-riga wod5e-mage-riga-ambito{{#if scope.multi}} con-tendina{{/if}}{{#if scope.level}} scelta{{/if}}">
                     <div class="wod5e-mage-riga-testa">
                         <i class="{{scope.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>
@@ -83,17 +84,13 @@
                         {{else}}
                             <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{scope.label}}</span></span>
                         {{/if}}
-                        {{#if scope.modeChosen}}
-                            <span class="wod5e-mage-ambito-pallini" role="group" aria-label="{{scope.label}}">
-                                {{#each scope.steps as |step|}}
-                                    <button type="button" class="wod5e-mage-pallino-ambito{{#if step.lit}} lit{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" data-tooltip="{{step.value}} · {{step.reading}}" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.value}}: {{step.reading}}"></button>
-                                {{/each}}
-                            </span>
-                        {{else}}
-                            <button type="button" class="wod5e-mage-ambito-scegli" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}">{{localize "WOD5E_MAGE.Tiro.ScopeModeChoose"}}</button>
-                        {{/if}}
+                        <span class="wod5e-mage-ambito-pallini" role="group" aria-label="{{scope.label}}">
+                            {{#each scope.steps as |step|}}
+                                <button type="button" class="wod5e-mage-pallino-ambito{{#if step.lit}} lit{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" data-tooltip="{{step.tip}}" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.tip}}"></button>
+                            {{/each}}
+                        </span>
                     </div>
-                    {{#if scope.level}}
+                    {{#if scope.reading}}
                         <div class="wod5e-mage-ambito-lettura" title="{{scope.reading}}">{{#if scope.multi}}<small class="wod5e-mage-ambito-tag">{{scope.modeLabel}}</small>{{/if}}<span>{{scope.reading}}</span></div>
                     {{else if scope.modeShown}}
                         <div class="wod5e-mage-ambito-lettura"><small class="wod5e-mage-ambito-tag">{{scope.modeLabel}}</small></div>

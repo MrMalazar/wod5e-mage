@@ -9,7 +9,8 @@ globalThis.ChatMessage = { getSpeaker: ({ actor }) => ({ alias: actor.name }), a
 globalThis.foundry = { applications: { api: { DialogV2: {} }, handlebars: {} }, utils: { randomID: () => "id" + Math.random().toString(36).slice(2, 8) } };
 const infos = []; globalThis.ui = { notifications: { info: (m) => infos.push(m), warn: (m) => infos.push("WARN " + m) } };
 
-const flags = { "wod5e-mage": { arete: { value: 3 }, spheres: { forces: 3, mind: 1 }, sphereSelection: { forces: true, mind: true }, magickBalance: { quintessence: 4, paradox: 1 }, focus: { practiceForm: "magick" } } };
+// I poteri inseriti dal giocatore (21/9): tre su Forze, uno su Mente, nessun segnaposto.
+const flags = { "wod5e-mage": { arete: { value: 3 }, spheres: { forces: 3, mind: 1 }, sphereSelection: { forces: true, mind: true }, magickBalance: { quintessence: 4, paradox: 1 }, focus: { practiceForm: "magick" }, poteri: { pf1: { sphere: "forces", name: "Conduttore", dot: 2, type: "passivo" }, pf2: { sphere: "forces", name: "Vestire lo scudo", dot: 3, type: "passivo" }, pf3: { sphere: "forces", name: "Buco nero", dot: 5, type: "attivo", effects: [{ on: "threshold", value: -2 }] }, pm1: { sphere: "mind", name: "Testa dura", dot: 1, type: "passivo" } } } };
 const items = new Map([["i1", { id: "i1", name: "Occhio di lince", type: "feature", img: "", system: { featuretype: "merit", bonuses: [{ value: 1 }] } }]]);
 const actor = {
   name: "Ianira", isOwner: true, items,
@@ -52,15 +53,25 @@ const rows = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3 });
 assert.equal(rows.length, 7);
 assert.equal(rows.find((r) => r.id === "potency").steps[3].active, true);
 const poteri = S.preparePoteriRows(actor, tiro, (k) => strings[k] ?? k);
-assert.equal(poteri.length, 6 + 2, "Forze 3 e Mente 1: otto poteri");
-assert.equal(poteri[0].label, "Forze 1 · 1");
-assert.equal(poteri[0].short, "1 · 1");
-assert.deepEqual(S.poteriOfSphere(poteri, "mind").map((p) => p.id), ["mind-1-1", "mind-1-2"], "il cassetto di Mente ha i suoi due");
+assert.equal(poteri.length, 3 + 1, "i poteri inseriti: tre su Forze e uno su Mente (21/9: non gli slot)");
+assert.deepEqual(poteri.map((p) => p.label), ["Conduttore", "Vestire lo scudo", "Buco nero", "Testa dura"], "in ordine di Sfera e di pallino, col nome vero");
+assert.equal(poteri[0].short, "Conduttore");
+assert.deepEqual(S.poteriOfSphere(poteri, "mind").map((p) => p.id), ["pm1"], "la tendina di Mente ha il suo");
+// Il potere scelto porta la sua Sfera (la casella la passa) e i suoi effetti entrano nel conto.
+const conPotere = S.prepareTiroContext(actor, T.pickPower(T.toggleArete(T.emptyTiro()), "pf3", "forces"));
+assert.deepEqual([conPotere.magick, conPotere.size], [true, 3], "Areté, Forze e il potere");
+assert.equal(S.contoInputs(actor, T.pickPower(T.emptyTiro(), "pf3", "forces")).inputs.power.name, "Buco nero", "il potere si legge fra quelli del personaggio");
+assert.equal(S.contoInputs(actor, T.pickPower(T.emptyTiro(), "zzz", "forces")).inputs.power, null);
 assert.equal(rows.find((r) => r.id === "potency").steps[3].reading, rows.find((r) => r.id === "potency").reading, "la lettura sul numero è quella della riga");
+// Senza una lettura scelta (21/9) la Potenza, che ne ha tre, non stampa nessuna lettura: solo il numero.
+assert.deepEqual([rows.find((r) => r.id === "potency").reading, rows.find((r) => r.id === "potency").steps[3].tip], ["", "4"]);
 // La lettura («modalità») dell'Ambito (16/9 sera): la prima della tavola, o quella scelta col tastino.
 const potenza = rows.find((r) => r.id === "potency");
 assert.deepEqual([potenza.mode, potenza.modeCount, potenza.modeLabel, potenza.nextModeLabel], ["potency", 3, "WOD5E_MAGE.Scopes.Sub.potency", "WOD5E_MAGE.Scopes.Sub.potencyEpic"]);
-assert.match(potenza.reading, /Table\.potency\.4/);
+assert.equal(potenza.reading, "", "nessuna lettura scelta: niente testo");
+const potenzaPeso = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potency" } }).find((r) => r.id === "potency");
+assert.match(potenzaPeso.reading, /Table\.potency\.4/);
+assert.match(potenzaPeso.steps[3].tip, /^4 · .*Table\.potency\.4/);
 const area = rows.find((r) => r.id === "area");
 assert.deepEqual([area.modeCount, area.modeLabel, area.nextModeLabel], [1, "", ""], "l'Area ha una lettura sola: niente tastino");
 const conDanni = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyDamage", area: "boh" } }).find((r) => r.id === "potency");
@@ -86,7 +97,8 @@ assert.deepEqual([potenzaTendina.multi, potenzaTendina.modeChosen, potenzaTendin
 const areaTendina = righeTendina.find((r) => r.id === "area");
 assert.deepEqual([areaTendina.multi, areaTendina.modeChosen, areaTendina.modeShown], [false, true, false], "una lettura sola: i pallini ci sono sempre, niente tendina");
 const durataTendina = righeTendina.find((r) => r.id === "duration");
-assert.deepEqual([durataTendina.multi, durataTendina.modeChosen, durataTendina.modeShown], [true, false, false], "più letture, nessuna scelta: niente pallini finché non si sceglie");
+assert.deepEqual([durataTendina.multi, durataTendina.modeChosen, durataTendina.modeShown, durataTendina.steps.length, durataTendina.steps[2].tip, durataTendina.steps[2].reading, durataTendina.modes.some((m) => m.selected)], [true, false, false, 7, "3", "", false], "più letture, nessuna scelta (21/9): i pallini ci sono lo stesso, col solo numero, e nessuna pastiglia accesa");
+assert.deepEqual([potenzaTendina.steps[3].tip.startsWith("4 · "), areaTendina.steps[0].tip.startsWith("1 · ")], [true, true], "con la lettura il tooltip dice livello e lettura");
 const durataScelta = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { duration: "duration" } }).find((r) => r.id === "duration");
 assert.deepEqual([durataScelta.modeChosen, durataScelta.modeShown], [true, durataScelta.level === 0], "scelta la lettura: i pallini, e la lettura in piccolo finché non c'è il livello");
 

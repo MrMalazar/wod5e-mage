@@ -44,7 +44,7 @@ const italianLabels = {
   life: "Vita",
   matter: "Materia",
   mind: "Mente",
-  prime: "Prime",
+  prime: "Primordio",
   spirit: "Spirito",
   time: "Tempo"
 };

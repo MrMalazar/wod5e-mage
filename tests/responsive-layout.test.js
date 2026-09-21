@@ -61,7 +61,8 @@ assert.match(css, /\.wod5e-mage-riga\.scelta\s*\{[^}]*background:\s*var\(--mage-
 assert.match(css, /\.wod5e-mage-pallino-ambito\.lit\s*\{[^}]*background:\s*var\(--mage-dot-color\);/s);
 assert.doesNotMatch(css, /\.wod5e-mage-pallino-ambito\.scelta/);
 assert.match(css, /\.wod5e-mage-riga-ambito:not\(\.scelta\):not\(:hover\) \.wod5e-mage-ambito-pallini\s*\{\s*opacity: 0\.4;/);
-assert.match(css, /\.wod5e-mage-ambito-scegli\s*\{[^}]*border: 1px dashed var\(--mage-oro-scuro\);/s);
+// «Scegli la lettura» non c'è più (21/9): i pallini ci sono sempre, la lettura è facoltativa.
+assert.doesNotMatch(css, /\.wod5e-mage-ambito-scegli/);
 assert.match(css, /\.wod5e-mage-ambito-lettura\s*\{[^}]*padding: 0 2px 4px 24px;/s);
 assert.match(css, /\.wod5e-mage-ambito-tag\s*\{[^}]*text-transform: uppercase;/s);
 assert.match(css, /\.wod5e-mage-ambito-lettura > span\s*\{[^}]*font-size:\s*0\.95rem;[^}]*font-weight:\s*700;[^}]*text-align: center;/s);
@@ -135,7 +136,10 @@ assert.doesNotMatch(magickRiq, /resource-value-step|dotCounterChange|wod5e-mage-
 // tendina delle letture, una pastiglia per lettura), i sette pallini in fondo
 // alla testa quando la lettura è scelta (il sorvolo dice livello e lettura),
 // sotto la lettura del livello scelto, centrata, con la lettura dell'Ambito in piccolo.
-assert.match(magickRiq, /wod5e-mage-riga-ambito\{\{#if scope\.multi\}\} con-tendina\{\{\/if\}\}\{\{#if scope\.level\}\} scelta[\s\S]*wod5e-mage-riga-testa[\s\S]*\{\{#if scope\.multi\}\}[\s\S]*wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*\{\{#if scope\.modeChosen\}\}[\s\S]*wod5e-mage-ambito-pallini[\s\S]*wod5e-mage-pallino-ambito\{\{#if step\.lit\}\} lit\{\{\/if\}\}" data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}" data-tooltip="\{\{step\.value\}\} · \{\{step\.reading\}\}"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-ambito-scegli" data-action="cassettoToggle"[\s\S]*Tiro\.ScopeModeChoose[\s\S]*\{\{#if scope\.level\}\}[\s\S]*wod5e-mage-ambito-lettura"[^>]*>\{\{#if scope\.multi\}\}<small class="wod5e-mage-ambito-tag">\{\{scope\.modeLabel\}\}<\/small>\{\{\/if\}\}<span>\{\{scope\.reading\}\}<\/span>[\s\S]*\{\{else if scope\.modeShown\}\}[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-modi[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-modo\{\{#if mode\.selected\}\} scelta\{\{\/if\}\}" data-action="scopeMode" data-scope="\{\{scope\.id\}\}" data-mode="\{\{mode\.id\}\}"/);
+// La riga dell'Ambito (21/9): il nome (tendina delle letture se ne ha più d'una), i sette pallini SEMPRE
+// (col tooltip del livello e, se la lettura è scelta, della lettura), la lettura sotto solo se c'è.
+assert.match(magickRiq, /wod5e-mage-riga-ambito\{\{#if scope\.multi\}\} con-tendina\{\{\/if\}\}\{\{#if scope\.level\}\} scelta[\s\S]*wod5e-mage-riga-testa[\s\S]*\{\{#if scope\.multi\}\}[\s\S]*wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*\{\{\/if\}\}\s*<span class="wod5e-mage-ambito-pallini"[\s\S]*wod5e-mage-pallino-ambito\{\{#if step\.lit\}\} lit\{\{\/if\}\}" data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}" data-tooltip="\{\{step\.tip\}\}"[\s\S]*\{\{#if scope\.reading\}\}[\s\S]*wod5e-mage-ambito-lettura"[^>]*>\{\{#if scope\.multi\}\}<small class="wod5e-mage-ambito-tag">\{\{scope\.modeLabel\}\}<\/small>\{\{\/if\}\}<span>\{\{scope\.reading\}\}<\/span>[\s\S]*\{\{else if scope\.modeShown\}\}[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-modi[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-modo\{\{#if mode\.selected\}\} scelta\{\{\/if\}\}" data-action="scopeMode" data-scope="\{\{scope\.id\}\}" data-mode="\{\{mode\.id\}\}"/);
+assert.doesNotMatch(magickRiq, /wod5e-mage-ambito-scegli|ScopeModeChoose|\{\{#if scope\.modeChosen\}\}/);
 assert.doesNotMatch(magickRiq, /wod5e-mage-riga-modo|wod5e-mage-cassetto-ambito|wod5e-mage-livello|title="\{\{step\.reading\}\}"/);
 assert.doesNotMatch(magickRiq, /riga-ambito con-cassetto/);
 const sheetJs = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
@@ -151,35 +155,29 @@ const abilitaTemplate = stat("stat-abilita.hbs");
 assert.match(abilitaTemplate, /data-action="skillsFlatToggle"[\s\S]*data-action="customSkillAdd"/);
 assert.match(abilitaTemplate, /\{\{#if group\.label\}\}<span class="wod5e-mage-riq-occhiello">/);
 assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes\b|wod5e-mage-persistent-resources/);
-// Il listino dei Successi Extra chiude la pagina Magick, a tutta larghezza.
-assert.match(magickTemplate, /wod5e-mage-sphere-specialties[\s\S]*parts\/scope-table\.hbs/);
-assert.match(
-  css,
-  /\.wod5e-mage-magick-layout\s*\{[^}]*"ongoing ongoing"\s*"table table";/s
-);
-assert.match(css, /\.wod5e-mage-scope-table\s*\{[^}]*grid-area:\s*table;/s);
-
-// Le Specialità delle Sfere a destra delle Sfere; i Magick in atto sotto, a tutta larghezza.
-assert.match(
-  css,
-  /\.wod5e-mage-magick-layout\s*\{[^}]*"spheres specialties"[^}]*"ongoing ongoing"[^}]*"table table";/s
-);
-assert.match(
-  css,
-  /\.wod5e-mage-spheres-panel\s*\{[^}]*grid-area:\s*spheres;/s
-);
-assert.match(
-  css,
-  /\.wod5e-mage-sphere-specialties\s*\{[^}]*grid-area:\s*specialties;/s
-);
-assert.match(
-  css,
-  /\.wod5e-mage-ongoing-magick\s*\{[^}]*grid-area:\s*ongoing;/s
-);
-assert.match(
-  magickTemplate,
-  /wod5e-mage-spheres-panel[\s\S]*wod5e-mage-ongoing-magick[\s\S]*wod5e-mage-sphere-specialties/
-);
+// La pagina Magick (21/9, dal mock): a sinistra le Sfere e le Magick in atto,
+// a destra i poteri conosciuti, in fondo la tendina della tavola degli Ambiti.
+// Le Specialità delle Sfere, il selettore a cerchietti e la colonna Influenza non ci sono più.
+assert.match(css, /\.wod5e-mage-magick-layout\s*\{[^}]*"sinistra poteri"\s*"ambiti ambiti";[^}]*grid-template-columns: 350px minmax\(0, 1fr\);/s);
+assert.match(css, /\.wod5e-mage-magick-sinistra\s*\{[^}]*grid-area: sinistra;/s);
+assert.match(css, /\.wod5e-mage-riq-conosciuti\s*\{\s*grid-area: poteri;/);
+assert.match(css, /\.wod5e-mage-riq-ambiti-tavola\s*\{\s*grid-area: ambiti;/);
+assert.match(css, /\.wod5e-mage-riq\.wod5e-mage-riq-pagina\s*\{[^}]*overflow: visible;/s);
+assert.doesNotMatch(css, /wod5e-mage-sphere-specialt|wod5e-mage-sphere-selector|wod5e-mage-sphere-choice|wod5e-mage-sphere-influence|wod5e-mage-spheres-panel|wod5e-mage-ongoing-magick-grid|grid-area:\s*table;/);
+assert.match(magickTemplate, /wod5e-mage-magick-sinistra[\s\S]*wod5e-mage-riq-sfere[\s\S]*wod5e-mage-ongoing-magick[\s\S]*wod5e-mage-riq-conosciuti[\s\S]*<details class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-ambiti-tavola">[\s\S]*parts\/scope-table\.hbs/);
+assert.doesNotMatch(magickTemplate, /SphereSpecialties|Spheres\.Influence|Spheres\.Selector|wod5e-mage-sphere-choice/);
+// La lista delle Sfere: il sigillo prende la Sfera, i pallini, la casetta, il conto; le altre spente.
+assert.match(magickTemplate, /wod5e-mage-riga wod5e-mage-riga-sfera-pagina\{\{#if sphere\.family\}\} family\{\{\/if\}\}"[\s\S]*wod5e-mage-sfera-prendi" data-action="sphereSelectionChange" data-sphere="\{\{sphere\.id\}\}" data-selected="true"[\s\S]*data-name="flags\.wod5e-mage\.spheres\.\{\{sphere\.id\}\}"[\s\S]*data-action="dotCounterChange"[\s\S]*wod5e-mage-sfera-casa\{\{#if sphere\.family\}\} on\{\{\/if\}\}" data-action="familySphereToggle"[\s\S]*wod5e-mage-sfera-conto\{\{#unless sphere\.conto\}\} vuoto\{\{\/unless\}\}"[\s\S]*Poteri\.AltreSfere[\s\S]*wod5e-mage-riga-sfera-pagina spenta"[\s\S]*data-selected="false"/);
+// I poteri conosciuti: la testa della Sfera con Aggiungi (tendina col catalogo e la scrittura a mano),
+// la riga del potere a colonne (pallino, nome, tipo, Amalgama, costo, freccia), il testo che si apre, Modifica e Togli.
+assert.match(magickTemplate, /wod5e-mage-riga wod5e-mage-poteri-testa con-tendina"[\s\S]*wod5e-mage-poteri-eco[\s\S]*wod5e-mage-poteri-conto[\s\S]*wod5e-mage-poteri-aggiungi" data-action="cassettoToggle"[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-poteri wod5e-mage-cassetto-catalogo"[\s\S]*data-action="potereDaCatalogo" data-sphere="\{\{sez\.id\}\}" data-catalogo="\{\{voce\.id\}\}"[\s\S]*Poteri\.CatalogoVuoto[\s\S]*wod5e-mage-potere-mano" data-action="potereNuovo" data-sphere="\{\{sez\.id\}\}"/);
+assert.match(magickTemplate, /wod5e-mage-potere-riga\{\{#if p\.editing\}\} aperta modifica\{\{\/if\}\}" data-row="\{\{p\.id\}\}"[\s\S]*wod5e-mage-potere-testa[\s\S]*wod5e-mage-potere-pallino[\s\S]*wod5e-mage-potere-nome" data-action="potereApri"[\s\S]*wod5e-mage-potere-tipo[\s\S]*wod5e-mage-potere-amalgama[\s\S]*wod5e-mage-potere-costo[\s\S]*wod5e-mage-potere-chevron[\s\S]*wod5e-mage-potere-spiega[\s\S]*name="flags\.wod5e-mage\.poteri\.\{\{p\.id\}\}\.name"[\s\S]*name="flags\.wod5e-mage\.poteri\.\{\{p\.id\}\}\.dot" data-dtype="Number"[\s\S]*\.type"[\s\S]*\.cost"[\s\S]*\.text"[\s\S]*\.amalgam"[\s\S]*\.amalgamText"[\s\S]*\.flavor"[\s\S]*wod5e-mage-potere-con\{\{#unless p\.amalgamOwned\}\} manca\{\{\/unless\}\}"[\s\S]*data-action="potereModifica" data-row="\{\{p\.id\}\}"[\s\S]*data-action="potereTogli" data-row="\{\{p\.id\}\}"/);
+assert.match(css, /\.wod5e-mage-potere-testa\s*\{[^}]*display: grid;[^}]*grid-template-columns: 20px minmax\(0, 1fr\) 62px 24px minmax\(0, 120px\) 14px;/s);
+assert.match(css, /\.wod5e-mage-potere-riga\.aperta > \.wod5e-mage-potere-spiega\s*\{\s*display: flex;/);
+const sheetPoteri = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+assert.match(sheetPoteri, /potereNuovo: onPotereNuovo,\n\s+potereDaCatalogo: onPotereDaCatalogo,\n\s+potereModifica: onPotereModifica,\n\s+potereTogli: onPotereTogli,\n\s+potereApri: onPotereApri,/);
+assert.match(sheetPoteri, /Object\.assign\(context, preparePoteriPagina\(actor, this, \{/);
+assert.doesNotMatch(sheetPoteri, /prepareSphereSpecialties|loadSpherePowers/);
 
 // La sidebar (6/9): 64px, icona centrata e sotto il nome corto della pagina;
 // le pagine si scostano di altrettanto.

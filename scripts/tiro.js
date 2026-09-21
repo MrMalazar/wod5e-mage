@@ -195,7 +195,7 @@ export function toggleTrait(tiro, id) {
   return next;
 }
 
-/** La Sfera di un potere, dal suo id («forces-2-1» → «forces»). */
+/** La Sfera di un potere dal suo id, quando l'id la dice («forces-2-1» → «forces»; gli id dei poteri inseriti dal 21/9 non la dicono: arriva a parte). */
 export function powerSphere(id) {
   const match = /^([a-z]+)-\d+-\d+$/.exec(String(id ?? ""));
   return match ? match[1] : "";
@@ -204,9 +204,10 @@ export function powerSphere(id) {
 /**
  * Il potere è uno solo per lancio: un altro lo sostituisce, lo stesso lo
  * toglie. Il potere porta con sé la sua Sfera (dal cassetto della Sfera,
- * 16/9 sera): se non è in catena, entra.
+ * 16/9 sera): se non è in catena, entra. La Sfera arriva con `sphere`
+ * (la casella la porta); senza, si legge dall'id se è di quella forma.
  */
-export function pickPower(tiro, id) {
+export function pickPower(tiro, id, sphere = "") {
   const next = clone(tiro);
   const key = String(id ?? "");
   if (!key || next.power === key) {
@@ -214,8 +215,8 @@ export function pickPower(tiro, id) {
     return next;
   }
   next.power = key;
-  const sphere = powerSphere(key);
-  if (sphere && !next.spheres.includes(sphere)) next.spheres = [...next.spheres, sphere];
+  const owner = String(sphere ?? "") || powerSphere(key);
+  if (owner && !next.spheres.includes(owner)) next.spheres = [...next.spheres, owner];
   return withMagick(next);
 }
 
