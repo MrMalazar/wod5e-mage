@@ -1,3 +1,4 @@
+import { SCOPE_ALIASES } from "./scopes.js";
 import { MODULE_ID } from "./constants.js";
 import {
   AFFINITY_SPHERE_FLAG,
@@ -155,7 +156,9 @@ export function specialtyScopes(actor, powers = {}) {
     const picked = (choices[sphere.id] ?? []).slice(0, specialtySlots(sphere.value));
     const ability = (powers[sphere.id]?.abilities ?? [])
       .find((entry) => picked.includes(entry.id) && ["ambito", "scope"].includes(entry.kind));
-    if (ability) map[sphere.id] = ability.id;
+    // L'Area di ieri è una lente dei Bersagli (23/9): la Specialità di
+    // Materia sull'Area vale sui Bersagli, finché Blue non la riassegna.
+    if (ability) map[sphere.id] = SCOPE_ALIASES[ability.id] ?? ability.id;
   }
   return map;
 }

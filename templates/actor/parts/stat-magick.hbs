@@ -83,13 +83,13 @@
                     <div class="wod5e-mage-riga-testa">
                         <i class="{{scope.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>
                         {{#if scope.multi}}
-                            <button type="button" class="wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}" aria-label="{{scope.label}}: {{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}"><span>{{scope.label}}</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>{{#if scope.modeShown}}<small class="wod5e-mage-ambito-tag">{{scope.modeLabel}}</small>{{else if scope.reading}}<small class="wod5e-mage-ambito-tag">{{scope.modeLabel}}</small>{{/if}}</button>
+                            <button type="button" class="wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito{{#if scope.modeChosen}} con-lente{{/if}}" data-action="cassettoToggle" title="{{#if scope.modeChosen}}{{scope.modeLabel}} · {{/if}}{{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}" aria-label="{{scope.label}}: {{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}"><span>{{scope.label}}</span>{{#if scope.modeChosen}}<small class="wod5e-mage-ambito-tag" title="{{scope.modeLabel}}">{{scope.modeShort}}</small>{{else}}<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>{{/if}}</button>
                         {{else}}
                             <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{scope.label}}</span></span>
                         {{/if}}
                         <span class="wod5e-mage-ambito-pallini" role="group" aria-label="{{scope.label}}">
                             {{#each scope.steps as |step|}}
-                                <button type="button" class="wod5e-mage-pallino-ambito{{#if step.lit}} lit{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" data-tooltip="{{step.tip}}" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.tip}}"></button>
+                                <button type="button" class="wod5e-mage-pallino-ambito{{#if step.lit}} lit{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" data-tooltip="{{step.tip}}" data-tooltip-class="wod5e-mage-tooltip-righe" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.tip}}"></button>
                             {{/each}}
                         </span>
                     </div>

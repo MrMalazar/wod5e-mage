@@ -1,5 +1,5 @@
 import { MODULE_ID } from "./constants.js";
-import { SCOPES, SCOPE_ICONS } from "./scopes.js";
+import { normalizeScopeLevels, SCOPES, SCOPE_ICONS } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
 
 /**
@@ -35,9 +35,11 @@ export function prepareIncantesimo(id, spell, localize = (key) => key) {
       level: level(spell.spheres[sphere]),
       icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere}.png`
     }));
+  // Gli Ambiti coi nomi di oggi: l'Area di un incantesimo di ieri si legge nei Bersagli (23/9).
+  const scopeLevels = normalizeScopeLevels(spell?.scopes ?? {});
   const scopes = SCOPES
-    .filter((scope) => level(spell?.scopes?.[scope]) > 0)
-    .map((scope) => ({ id: scope, label: localize(`WOD5E_MAGE.Scopes.${scope}`), level: level(spell.scopes[scope]), faIcon: SCOPE_ICONS[scope] ?? "" }));
+    .filter((scope) => level(scopeLevels[scope]) > 0)
+    .map((scope) => ({ id: scope, label: localize(`WOD5E_MAGE.Scopes.${scope}`), level: level(scopeLevels[scope]), faIcon: SCOPE_ICONS[scope] ?? "" }));
   const magickType = String(spell?.magickType ?? "");
   return {
     id,

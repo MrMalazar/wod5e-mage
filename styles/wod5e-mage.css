@@ -320,6 +320,12 @@
   --tavola-numero: #8A6D2F;
 }
 
+/* Nel tema chiaro la colonna dello 0 è crema più scuro, non nera. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-scope-table :is(th, td).wod5e-mage-scope-zero {
+  background: #EDE6D6;
+  color: #6E6E7A;
+}
+
 /* Il piede col tipo (Risvegliato) in viola (il sistema lo chiama sheet-banner). */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .sheet-banner {
   background-color: #282051;
@@ -2082,6 +2088,43 @@
 /* Le celle a testo si spartiscono la larghezza in parti uguali. */
 .wod5e-mage-scope-table table {
   table-layout: fixed;
+}
+
+/* La colonna dello 0 (23/9): la base, che non si dichiara e non costa. In
+   ombra, col testo più tenue, e una riga d'oro a staccarla dai livelli. */
+.wod5e-mage-scope-table :is(th, td).wod5e-mage-scope-zero,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table :is(th, td).wod5e-mage-scope-zero {
+  background: rgb(0 0 0 / 22%);
+  border-right: 1px solid color-mix(in srgb, var(--mage-oro, #d9a827) 45%, transparent);
+  color: var(--mage-tenue, #ab9f85);
+}
+
+.wod5e-mage-scope-table thead th.wod5e-mage-scope-zero,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table thead th.wod5e-mage-scope-zero {
+  background: transparent;
+  color: var(--mage-tenue, #ab9f85);
+}
+
+.wod5e-mage-scope-table td.wod5e-mage-scope-zero .wod5e-mage-scope-cell-symbol {
+  color: var(--mage-tenue, #ab9f85);
+}
+
+/* Il sorvolo dei pallini degli Ambiti (23/9): la lettura sulla prima riga,
+   la spiegazione della tavola sotto, a capo. */
+#tooltip.wod5e-mage-tooltip-righe {
+  max-width: 320px;
+  text-align: left;
+  white-space: pre-line;
+}
+
+/* Le note della tavola (23/9): la lettura sopra, le lenti in corsivo, la
+   raccomandazione di Blue in coda. */
+.wod5e-mage-scope-table-modi {
+  font-style: italic;
+}
+
+.wod5e-mage-scope-table-coda {
+  margin-top: 0.6rem;
 }
 
 /* Due colonne di testa (7/9): il nome dell'Ambito e la lettura. */
@@ -7706,6 +7749,20 @@
   font-size: 0.92rem;
 }
 
+/* Il nome dell'Ambito non si accorcia (23/9: «P» per Portata con la lente
+   Combattimento accanto): se manca spazio è la pastiglia della lente a
+   stringersi, coi puntini. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome-ambito > span:first-child {
+  flex: 0 0 auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome-ambito > .wod5e-mage-ambito-tag {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome-ambito > i {
   color: var(--mage-oro);
   font-size: 0.62rem;
@@ -7762,16 +7819,18 @@
   margin-left: 2px;
 }
 
+/* La pastiglia della lente (23/9: col nome corto, al posto del chevron
+   quando la lente è scelta: la pastiglia stessa dice che c'è una tendina). */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-tag {
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 9px;
   color: var(--mage-tenue);
   flex: 0 0 auto;
-  font-size: 0.55rem;
+  font-size: 0.52rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   line-height: 1;
-  padding: 3px 6px;
+  padding: 3px 5px;
   text-transform: uppercase;
   white-space: nowrap;
 }

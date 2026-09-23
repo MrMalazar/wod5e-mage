@@ -18,13 +18,13 @@ const actor = {
 const result = {
   spellName: "Riavvolgere Scena", goal: "Riavvolgere il tempo nell'area", narrative: "Su, su, destra, invio.",
   attributeTrait: "attribute:dexterity", primaryTrait: "skill:technology", secondaryTrait: "",
-  "sphere-time": "3", "sphere-forces": "0", "scope-duration": "2", "scope-area": "3",
+  "sphere-time": "3", "sphere-forces": "0", "scope-duration": "2", "scope-targets": "3",
   witnesses: true, prize: true, maintained: false, effectKind: "variable"
 };
 const spell = spellFromResult(actor, result, { traits, rollSpheres, localize: (key) => key.split(".").pop() });
 assert.equal(spell.name, "Riavvolgere Scena");
 assert.deepEqual(spell.spheres, { time: 3 });
-assert.deepEqual(spell.scopes, { duration: 2, area: 3 });
+assert.deepEqual(spell.scopes, { duration: 2, targets: 3 });
 assert.equal(spell.magickType, "witnesses");
 assert.equal(spell.credo, "dati");
 assert.equal(spell.practiceForm, "ibrida");
@@ -54,7 +54,9 @@ assert.equal(row.practiceForm, "ibrida");
 assert.equal(row.magickType, "VulgarWithWitnesses");
 assert.equal(row.magickTypeId, "witnesses");
 assert.deepEqual(row.spheres.map((s) => [s.id, s.level]), [["time", 3]]);
-assert.deepEqual(row.scopes.map((s) => [s.id, s.level]), [["duration", 2], ["area", 3]]);
+assert.deepEqual(row.scopes.map((s) => [s.id, s.level]), [["targets", 3], ["duration", 2]]);
+// Un incantesimo di ieri con l'Area si legge nei Bersagli (23/9).
+assert.deepEqual(prepareIncantesimo("v", { name: "Vecchio", scopes: { area: 4, range: 2 } }, (key) => key.split(".").pop()).scopes.map((s) => [s.id, s.level]), [["targets", 4], ["range", 2]]);
 assert.equal(row.traits, "Destrezza + Tecnologia");
 const pageActor = { getFlag: (_m, key) => key === INCANTESIMI_FLAG ? { b: { name: "Zeta", sort: 1 }, a: { name: "Alfa", sort: 0 } } : undefined };
 assert.deepEqual(prepareIncantesimi(pageActor).map((r) => r.name), ["Alfa", "Zeta"]);
@@ -113,7 +115,7 @@ assert.equal(step2.carry.goal, "Riavvolgere il tempo");
 // I livelli portati stanno dentro i pallini posseduti e il tetto degli Ambiti.
 assert.deepEqual(step2.carry.spheres, [{ id: "time", level: 3, specialty: "" }, { id: "forces", level: 1, specialty: "" }]);
 assert.equal(step2.carry.scopes.find((scope) => scope.id === "duration").level, 7);
-assert.equal(step2.carry.scopes.find((scope) => scope.id === "area").level, 0);
+assert.equal(step2.carry.scopes.find((scope) => scope.id === "targets").level, 0);
 assert.equal(step2.carry.effect, false);
 const answers2 = { ...answers1, effectKind: "mental", attributeTrait: "attribute:dexterity", primaryTrait: "skill:technology", secondaryTrait: "", coincidental: false, vulgar: true, witnesses: false };
 const step3 = stepContext(3, answers2, { traits, rollSpheres });

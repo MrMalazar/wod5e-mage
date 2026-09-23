@@ -21,7 +21,7 @@ import { findPotere, potereLabel, poteriDelPersonaggio, poteriOfSphere } from ".
 
 export { poteriOfSphere };
 import { renderRollCard, ROLL_CARD_FLAG, rollSymbols } from "./roll-card.js";
-import { nextScopeMode, SCOPE_ICONS, SCOPES, scopeModeOf, scopeModes } from "./scopes.js";
+import { canRaiseScope, nextScopeMode, SCOPE_ICONS, SCOPES, scopeModeOf, scopeModes, SCOPES_PER_CAST } from "./scopes.js";
 import { prepareSpheres } from "./spheres.js";
 import {
   bumpDifficulty,
@@ -187,12 +187,17 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   };
 }
 
-/** Le righe degli Ambiti per il riquadro della Magick: sette livelli, quello dichiarato acceso. */
+/**
+ * Le righe degli Ambiti per il riquadro della Magick: sette pallini, dal
+ * livello 1 al 7 (nessun pallino è lo 0, la base che non costa), quello
+ * dichiarato acceso. Ogni Ambito ha due lenti (la tavola del 23/9): la
+ * riga legge con quella scelta dalla tendina, o con la prima.
+ */
 export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, modes = {} } = {}) {
   const table = scopeModes(localize, { arete });
   return SCOPES.map((id) => {
     const level = count(tiro?.scopes?.[id]);
-    // La lettura («modalità») dell'Ambito (16/9 sera): quella scelta col
+    // La lettura («lente») dell'Ambito (16/9 sera): quella scelta col
     // tastino, o la prima; la riga e la tendina parlano solo con lei.
     const options = table[id] ?? [];
     const mode = scopeModeOf(table, id, modes?.[id]);
@@ -205,16 +210,21 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
     // una sola ce l'ha sempre.
     const multi = options.length > 1;
     const modeChosen = !multi || options.some((option) => option.id === modes?.[id]);
-    const readingOf = (step) => (modeChosen ? mode?.readings?.[step - 1] ?? "" : "");
-    const tipOf = (step) => (readingOf(step) ? `${step} · ${readingOf(step)}` : String(step));
+    const readingOf = (step) => (modeChosen ? mode?.readings?.[step] ?? "" : "");
+    const hintOf = (step) => (modeChosen ? mode?.hints?.[step] ?? "" : "");
+    // Sul pallino: il livello e la lettura, e a capo la spiegazione della tavola.
+    const tipOf = (step) => [readingOf(step) ? `${step} · ${readingOf(step)}` : String(step), hintOf(step)].filter(Boolean).join("\n");
     return {
       id,
       label: localize(`WOD5E_MAGE.Scopes.${id}`),
       faIcon: SCOPE_ICONS[id] ?? "",
       level,
-      reading: level ? readingOf(level) : "",
+      // La lettura del livello dichiarato; a riposo quella dello 0, la base.
+      reading: readingOf(level),
+      hint: hintOf(level),
       mode: mode?.id ?? "",
       modeLabel: mode?.label ?? "",
+      modeShort: mode?.short || mode?.label || "",
       modeCount: options.length,
       nextModeLabel: next?.label ?? "",
       multi,
@@ -226,6 +236,7 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
         active: index + 1 === level,
         lit: index + 1 <= level,
         reading: readingOf(index + 1),
+        hint: hintOf(index + 1),
         tip: tipOf(index + 1)
       }))
     };
@@ -327,9 +338,21 @@ export async function onTiroSphere(event, target) {
   return repaint(this, toggleSphere(tiroOf(this), target.dataset.sphere));
 }
 
+/**
+ * Il clic su un pallino dichiara il livello dell'Ambito. In un lancio si
+ * alzano sopra lo 0 al massimo tre Ambiti (la tavola del 23/9): il quarto
+ * non si accende, e la scheda lo dice.
+ */
 export async function onTiroScope(event, target) {
   event.preventDefault();
-  return repaint(this, setScope(tiroOf(this), target.dataset.scope, target.dataset.level));
+  const tiro = tiroOf(this);
+  const scope = String(target.dataset.scope ?? "");
+  const level = count(target.dataset.level);
+  if (level > 0 && !canRaiseScope(tiro.scopes, scope, SCOPES_PER_CAST)) {
+    ui.notifications?.warn?.(game.i18n.format("WOD5E_MAGE.Tiro.ScopeCapWarning", { n: SCOPES_PER_CAST }));
+    return;
+  }
+  return repaint(this, setScope(tiro, scope, level));
 }
 
 export async function onTiroAttribute(event, target) {

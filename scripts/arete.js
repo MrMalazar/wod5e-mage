@@ -132,11 +132,12 @@ function levelEntries(entries, max) {
 
 /**
  * La soglia (Blue, 16/9): la SOMMA dei livelli degli Ambiti dichiarati,
- * Potenza 4 e Portata 3 fanno 7. Un Ambito a 1 vale zero (11/9), dal 2 in
- * su vale il suo livello. Le Sfere non contano più. Niente tetto sulla
- * somma. Il premio dell'Areté si sottrae una volta sola, fino a zero.
+ * Potenza 4 e Portata 3 fanno 7. Con la tavola del 23/9 lo 0 è la base e
+ * non costa niente, e ogni livello dal primo in su vale il suo numero (il
+ * primo pallino non è più gratis). Le Sfere non contano più. Niente tetto
+ * sulla somma. Il premio dell'Areté si sottrae una volta sola, fino a zero.
  */
-export const SCOPE_COUNTS_FROM = 2;
+export const SCOPE_COUNTS_FROM = 1;
 
 export function scopeThreshold(scopeLevels = []) {
   return levelEntries(scopeLevels, THRESHOLD_CAP)
@@ -301,8 +302,10 @@ export function dotReadings(localize = (key) => key, { arete = null } = {}) {
   const scopes = scopeReadings(localize, { arete });
   const spheres = INFLUENCE_LABELS.slice(1).map((key) => String(localize(key)));
   return (kind, id, level) => {
+    // Gli Ambiti hanno una lettura anche allo 0 (la base: «A contatto», «Un
+    // bersaglio»); le Sfere no.
+    if (kind === "scope") return scopes[id]?.[Math.max(level, 0)] ?? [];
     if (level <= 0) return [];
-    if (kind === "scope") return scopes[id]?.[level - 1] ?? [];
     return spheres[level - 1] ? [{ sub: "", text: spheres[level - 1] }] : [];
   };
 }
@@ -773,7 +776,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       specialtyScope: specialties[sphere.id] ?? "",
       specialtyLabel: specialties[sphere.id] ? `WOD5E_MAGE.Scopes.${specialties[sphere.id]}` : ""
     }));
-  // I sei Ambiti, a sette pallini l'uno.
+  // I sette Ambiti, a sette pallini l'uno (lo 0 è nessun pallino).
   const scopeOptions = SCOPES.map((id) => ({
     id,
     label: `WOD5E_MAGE.Scopes.${id}`,

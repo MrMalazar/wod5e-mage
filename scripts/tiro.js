@@ -8,7 +8,8 @@
  *
  * Le regole del conto:
  * - la soglia è la SOMMA dei livelli degli Ambiti dichiarati (Potenza 4 e
- *   Portata 3 fanno 7); un Ambito a 1 vale zero; le Sfere non contano;
+ *   Portata 3 fanno 7); ogni livello vale il suo numero, lo 0 è gratis
+ *   (la tavola del 23/9); le Sfere non contano;
  * - l'Areté si sottrae alla soglia, fino a zero, quando la narrazione lo
  *   merita e il Narratore dà l'ok: la casella del premio resta, accesa
  *   quando si clicca l'Areté, e si spegne se il Narratore dice di no;
@@ -30,6 +31,7 @@ import { calculateAretePrize, calculateMagickThreshold, capBonusDice, SKILL_SPEC
 import { BUSSOLA_DICE } from "./bussola.js";
 import { applyPotere } from "./poteri.js";
 import { ramoCDice, successThreshold, usesAdvancedDifficulty } from "./ramo-c.js";
+import { normalizeScopeLevels, SCOPE_ALIASES } from "./scopes.js";
 
 /** I tre tasti del tiro di Magick, nell'ordine della scheda. */
 export const TIRO_KINDS = Object.freeze(["accidentale", "volgare", "testimoni"]);
@@ -70,7 +72,8 @@ function clone(tiro) {
     ...emptyTiro(),
     ...(tiro ?? {}),
     spheres: [...(tiro?.spheres ?? [])],
-    scopes: { ...(tiro?.scopes ?? {}) },
+    // Gli Ambiti coi nomi di oggi: l'Area di ieri è il livello dei Bersagli (23/9).
+    scopes: normalizeScopeLevels(tiro?.scopes ?? {}),
     traits: [...(tiro?.traits ?? [])]
   };
 }
@@ -140,7 +143,7 @@ export function toggleSphere(tiro, id) {
  */
 export function setScope(tiro, id, level) {
   const next = clone(tiro);
-  const key = String(id ?? "");
+  const key = SCOPE_ALIASES[String(id ?? "")] ?? String(id ?? "");
   const value = Math.min(count(level), THRESHOLD_CAP);
   if (!key) return next;
   if (!value || next.scopes[key] === value) {
@@ -243,7 +246,8 @@ export function loadSpell(tiro, id, spell, { owned = null } = {}) {
   next.spheres = Object.entries(spell?.spheres ?? {})
     .filter(([sphere, level]) => count(level) > 0 && (!Array.isArray(owned) || owned.includes(sphere)))
     .map(([sphere]) => sphere);
-  for (const [scope, level] of Object.entries(spell?.scopes ?? {})) {
+  // Gli Ambiti dell'incantesimo coi nomi di oggi (l'Area di ieri sta nei Bersagli).
+  for (const [scope, level] of Object.entries(normalizeScopeLevels(spell?.scopes ?? {}))) {
     const value = Math.min(count(level), THRESHOLD_CAP);
     if (value > 0) next.scopes[scope] = value;
   }

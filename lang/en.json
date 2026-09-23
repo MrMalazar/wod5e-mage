@@ -406,63 +406,48 @@
     },
     "Scopes": {
       "Label": "Scopes",
-      "potency": "Potency",
-      "duration": "Duration",
       "targets": "Targets",
-      "area": "Area",
       "conditions": "Conditions",
+      "duration": "Duration",
+      "impact": "Impact",
       "range": "Range",
+      "potency": "Potency",
+      "precision": "Precision",
+      "area": "Area",
       "TableTitle": "The Scopes",
-      "TableHint": "Each Scope is declared at a level from 1 to 7. The threshold sums Scope levels above 1; Scopes at 1 count as 0. The sum has no cap and Spheres do not contribute. On an Arete roll the selected prize reduces the threshold to a minimum of 0. Potency: Weight, how heavy what you move is; Epicness, how much the feat weighs in the story; Damage, Arete plus the number. Duration: when casting you declare whether it runs on play or on narrative time. Conditions: How many, the number of Conditions inflicted; Debuff, how heavy the one inflicted is.",
+      "TableHint": "Scopes give a Magick effect its measure, each on a scale from 0 to 7. First decide what the effect must do, then look for the Scopes needed to say it: those the effect does not touch stay at 0. Each Scope is read through two sub-scopes, alternative measures of the same thing. 0 is the base and costs nothing; each level is worth its number. The threshold is the sum of the levels of the Scopes used, and each point of threshold takes one die from the pool. An effect touching both Potency and Impact pays both. In one casting at most three Scopes rise above 0; an impossible feat takes +5 after the count.",
+      "TableModes": "In Range and Precision the Fight lens applies in combat and Narrative outside it; in Potency, Damage is for the fight and Weight for both: the Storyteller declares when a combat reading applies. In Duration the first row counts game time, the second world time. Targets, Conditions and Impact have two free lenses, good in any scene.",
       "TableSuccesses": "Scope",
-      "TableReading": "Reading · level →",
+      "TableReading": "Lens",
+      "TableNote": "Scopes channel the generality and variability of Magick effects: think an effect in as few Scopes as possible, by need and goal.",
+      "Desc": {
+        "targets": "Who or what takes the effect. Effect counts targets one by one, Area takes everything inside a space.",
+        "conditions": "What the effect leaves on someone and under which terms it works. The Malus is the Condition the effect puts on a target, the Complexity is the clauses that rule it.",
+        "duration": "How long the effect stands. The first row counts game time, the second world time.",
+        "impact": "How much the effect weighs on the story: what it changes or what it reveals. It stands apart from Potency, because an effect can be weak and weigh a lot, or strong and change nothing.",
+        "range": "How far the effect reaches from the caster. To act on what you cannot see you need Correspondence, or a bond with the target (the Bridge Rule).",
+        "potency": "How strong the effect is: Damage in a fight, Weight in both. How much it weighs on the story is measured by Impact.",
+        "precision": "How fine the effect's choice is: in a fight the spot to hit, outside the detail to find or touch. How much what you find matters is told by Information."
+      },
+      "Sub": {
+        "targets": "Effect",
+        "targetsArea": "Area",
+        "conditionsMalus": "Malus",
+        "conditionsComplexity": "Complexity",
+        "duration": "Game",
+        "durationWorld": "World",
+        "impactEpic": "Epicness",
+        "impactInfo": "Information",
+        "range": "Fight",
+        "rangeNarrative": "Narrative",
+        "potencyDamage": "Damage",
+        "potencyWeight": "Weight",
+        "precision": "Fight",
+        "precisionNarrative": "Narrative"
+      },
       "Table": {
-        "potency": {
-          "1": "10 kg (a full backpack)",
-          "2": "100 kg (a person)",
-          "3": "2 t (a car)",
-          "4": "40 t (a truck)",
-          "5": "400 t (a house)",
-          "6": "500,000 t (a skyscraper)",
-          "7": "A mountain"
-        },
-        "potencyEpic": {
-          "1": "Changes a detail",
-          "2": "Touches the scene",
-          "3": "Upends a scene",
-          "4": "Impacts the chapter",
-          "5": "Upends the chapter",
-          "6": "Impacts the story",
-          "7": "Impacts the whole setting"
-        },
-        "potencyDamage": {
-          "1": "+0",
-          "2": "+1",
-          "3": "+3",
-          "4": "+5",
-          "5": "+7",
-          "6": "+9",
-          "7": "+11"
-        },
-        "duration": {
-          "1": "3",
-          "2": "1",
-          "3": "2",
-          "4": "1",
-          "5": "2",
-          "6": "1",
-          "7": "1"
-        },
-        "area": {
-          "1": "Room",
-          "2": "Building",
-          "3": "District",
-          "4": "City",
-          "5": "Region",
-          "6": "Continent",
-          "7": "Planet"
-        },
         "targets": {
+          "0": "One target",
           "1": "+1",
           "2": "+2",
           "3": "+3",
@@ -471,52 +456,48 @@
           "6": "+6",
           "7": "+7"
         },
-        "conditions": {
-          "1": "1",
-          "2": "2",
-          "3": "3",
-          "4": "4",
-          "5": "5",
-          "6": "6",
-          "7": "7"
+        "targetsArea": {
+          "0": "A point",
+          "1": "Room",
+          "2": "Building",
+          "3": "Block",
+          "4": "City",
+          "5": "Region",
+          "6": "Continent",
+          "7": "Planet"
         },
-        "conditionsDebuff": {
-          "1": "Distract",
-          "2": "Hinder, disarm",
-          "3": "Blind, put to sleep",
-          "4": "Stun, disable limbs",
-          "5": "Deny the senses",
-          "6": "Knock out",
-          "7": "You are out"
+        "conditionsMalus": {
+          "0": "No impairment",
+          "1": "Disturbs: −1 dice",
+          "2": "Removes a means",
+          "3": "Blocks an action",
+          "4": "Hinders: −2 dice",
+          "5": "Shuts a sense",
+          "6": "Alters every roll",
+          "7": "Upends the character"
         },
         "conditionsComplexity": {
-          "1": "None",
-          "2": "Very simple",
-          "3": "Simple",
+          "0": "None",
+          "1": "Very simple",
+          "2": "Simple",
+          "3": "Articulated",
           "4": "Long",
           "5": "Complex",
           "6": "Very complex",
           "7": "Contract level"
         },
-        "range": {
-          "1": "In sight (within 100 m)",
-          "2": "Nearby (within 5 km)",
-          "3": "Far (within 50 km)",
-          "4": "Very far (within 500 km)",
-          "5": "On the continent",
-          "6": "On another continent",
-          "7": "Wherever it is"
+        "duration": {
+          "0": "1",
+          "1": "3",
+          "2": "1",
+          "3": "2",
+          "4": "1",
+          "5": "2",
+          "6": "1",
+          "7": "1"
         },
-        "precision": {
-          "1": "That car",
-          "2": "The car's engine",
-          "3": "The bolt in the car's engine",
-          "4": "The needle in the haystack",
-          "5": "A speck of dust on the needle",
-          "6": "A molecule of that speck",
-          "7": "An atom"
-        },
-        "durationNarrative": {
+        "durationWorld": {
+          "0": "An hour",
           "1": "A day",
           "2": "A week",
           "3": "A month",
@@ -525,40 +506,224 @@
           "6": "A decade",
           "7": "Permanent"
         },
-        "precisionInfo": {
-          "1": "Irrelevant (a curiosity)",
-          "2": "Minor (a detail)",
-          "3": "Relevant (the scene)",
-          "4": "Major (the chapter)",
-          "5": "Decisive (turns the chapter)",
-          "6": "Crucial (the story)",
-          "7": "Foundational (the setting)"
+        "impactEpic": {
+          "0": "No weight on the story",
+          "1": "Changes a detail of the scene",
+          "2": "Shifts a moment of the scene",
+          "3": "Decides the outcome of the scene",
+          "4": "Has consequences in later scenes",
+          "5": "Changes the direction of the chapter",
+          "6": "Bends the course of the story",
+          "7": "Changes the world for everyone"
+        },
+        "impactInfo": {
+          "0": "Nothing you did not know",
+          "1": "A curiosity of the scene",
+          "2": "An edge in the scene",
+          "3": "What decides the scene",
+          "4": "A lead for later scenes",
+          "5": "What changes the chapter",
+          "6": "A secret of the story",
+          "7": "A secret of the world"
+        },
+        "range": {
+          "0": "Touch",
+          "1": "Two steps",
+          "2": "The room",
+          "3": "A pistol shot",
+          "4": "The street",
+          "5": "A rifle shot",
+          "6": "A long shot",
+          "7": "A sniper"
+        },
+        "rangeNarrative": {
+          "0": "You touch it",
+          "1": "You see it",
+          "2": "Nearby",
+          "3": "Far",
+          "4": "Very far",
+          "5": "On the continent",
+          "6": "On another continent",
+          "7": "Wherever it is"
+        },
+        "potencyDamage": {
+          "0": "",
+          "1": "+1",
+          "2": "+2",
+          "3": "+3",
+          "4": "+4",
+          "5": "+5",
+          "6": "+6",
+          "7": "+7"
+        },
+        "potencyWeight": {
+          "0": "1 kg",
+          "1": "10 kg",
+          "2": "100 kg",
+          "3": "2 t",
+          "4": "40 t",
+          "5": "400 t",
+          "6": "500,000 t",
+          "7": "A mountain"
+        },
+        "precision": {
+          "0": "Wherever it lands",
+          "1": "The body",
+          "2": "A limb",
+          "3": "The object in use",
+          "4": "The weak spot",
+          "5": "A tiny spot",
+          "6": "The inner part",
+          "7": "A point of the Pattern"
+        },
+        "precisionNarrative": {
+          "0": "Broadly",
+          "1": "That object",
+          "2": "A part",
+          "3": "A detail",
+          "4": "The needle in the haystack",
+          "5": "A grain",
+          "6": "A molecule",
+          "7": "An atom"
         }
       },
-      "precision": "Precision",
-      "DurationPlay": "Duration (play)",
-      "DurationNarrative": "Duration (narrative)",
-      "PotencyWeight": "Potency (Weight)",
-      "PotencyEpic": "Potency (Epicness)",
-      "PotencyDamage": "Potency (Damage)",
-      "Sub": {
-        "potency": "Weight",
-        "potencyEpic": "Epicness",
-        "potencyDamage": "Damage",
-        "duration": "Narrative",
-        "durationNarrative": "Off game",
-        "conditions": "Quantity",
-        "conditionsDebuff": "Malus",
-        "conditionsComplexity": "Complexity",
-        "precision": "Detail",
-        "precisionInfo": "Information"
+      "Hint": {
+        "targets": {
+          "0": "A single target.",
+          "1": "One more target, picked one by one: friends and foes sort themselves out.",
+          "2": "Two more targets, picked one by one.",
+          "3": "Three more targets, picked one by one.",
+          "4": "Four more targets, picked one by one.",
+          "5": "Five more targets, picked one by one.",
+          "6": "Six more targets, picked one by one.",
+          "7": "Seven more targets, picked one by one."
+        },
+        "targetsArea": {
+          "0": "Only the point touched, no space around it.",
+          "1": "A closed space: a room, a carriage, a lift.",
+          "2": "A whole house or building, floors and cellars included.",
+          "3": "Several blocks, streets in between.",
+          "4": "The whole city, suburbs included.",
+          "5": "A region with all its cities.",
+          "6": "A continent.",
+          "7": "The world. Area takes everything inside, friends included: to leave them out you need a Complexity clause."
+        },
+        "conditionsMalus": {
+          "0": "No Condition: the effect leaves nothing on the target.",
+          "1": "Dazzled, Muffled, Shaken, Unlucky: −1 dice, or the critical that does not trigger.",
+          "2": "Slowed, Disarmed, Broken, Dry. The Slowed acts last and does one thing; the others lose a family of Instruments, and the Disarmed also the equipment dice.",
+          "3": "Mute, Immobilised, Stuck, Stunned: no voice, no movement, no defence or no action. Mute and Immobilised also lose Word and Body; the Stunned may mark 1 mental Health instead of losing the action.",
+          "4": "Blurred, Deafened, Frightened, Knocked down: −2 dice. Knocked down applies to physical pools only, and getting up costs half a guard.",
+          "5": "Blind, Deaf, Terrified: rolls based on sight or hearing are not rolled, and the Terrified does not approach the source.",
+          "6": "Sick, Unfit: the Sick never exceeds 6 dice, the Unfit halves every pool.",
+          "7": "Charmed, Cursed: the Charmed does not decide, the Cursed does not heal while the cause remains."
+        },
+        "conditionsComplexity": {
+          "0": "The effect fires at once and applies to everything it touches. No clause.",
+          "1": "A single clause, about whom, when or where. Only for your own.",
+          "2": "Two clauses that do not touch each other. Only for your own, only at night.",
+          "3": "The effect waits for a fact to fire, or has an exception, and the Storyteller must follow the scene to know when. When the key turns; everyone but the boss.",
+          "4": "Three or four clauses together: write it down, because at the table a piece gets lost. Only for your own, only at night, while the door stays shut.",
+          "5": "Clauses that depend on one another, and one changes the meaning of another. If a stranger enters the alarm fires, but only if the door was shut.",
+          "6": "A rulebook: different cases with different answers. A friend passes, a foe stays out, a Sleeper gets lost in the corridor.",
+          "7": "A pact among several parties, with duties, exceptions and penalties for who breaks it. Who betrays the pact stays Mute until they make amends."
+        },
+        "duration": {
+          "0": "The effect happens and ends within the casting turn.",
+          "1": "Covers an exchange of blows or a short flight.",
+          "2": "Holds until the scene ends.",
+          "3": "Carries into the next scene.",
+          "4": "Stays until the end of the evening.",
+          "5": "Reaches the next session.",
+          "6": "Accompanies the whole arc.",
+          "7": "Lasts as long as the chronicle."
+        },
+        "durationWorld": {
+          "7": "The effect stays until someone breaks it."
+        },
+        "impactEpic": {
+          "0": "Lighting a candle, spinning a coin, scenting a room.",
+          "1": "Opening a lock, draining a phone, breaking a glass.",
+          "2": "Distracting a guard, tripping a pursuer, cutting the power.",
+          "3": "Bringing down a bridge, turning the crowd, blocking the exit with fire.",
+          "4": "Making the news, emptying a building, alerting the police.",
+          "5": "Taking a boss's lair away, breaking an alliance, closing a district.",
+          "6": "Toppling a faction, extinguishing a Node, starting a war between Traditions.",
+          "7": "Cracking the Veil, wiping a city off the maps, shifting the Consensus."
+        },
+        "impactInfo": {
+          "0": "The time, the weather, who is in the room.",
+          "1": "Who slept in this bed, whose pen this is, what the dog ate.",
+          "2": "Where the guard is, which door is open, who lies at the table.",
+          "3": "Who the traitor is, where the weapon is hidden, the password.",
+          "4": "Where the van goes, who paid the hitman, which journalist knows too much.",
+          "5": "Where the boss sleeps, who funds the faction, the Technocrat's real name.",
+          "6": "Who betrayed the Tradition, why the Node went out, what a faction hides.",
+          "7": "How the Veil was born, what came before the Consensus, where an Archmage sleeps."
+        },
+        "range": {
+          "0": "You must touch the target: a hand on the shoulder, a punch.",
+          "1": "Whoever stands next to you, without moving.",
+          "2": "Everything in the same room.",
+          "3": "Across a courtyard or a car park.",
+          "4": "To the end of the street.",
+          "5": "Past the crossroads, roof to roof.",
+          "6": "Beyond the block, where a rifle barely reaches.",
+          "7": "As far as a marksman reaches."
+        },
+        "rangeNarrative": {
+          "0": "Hands on the target.",
+          "1": "What is before your eyes, in the scene.",
+          "2": "Out of sight, in the same area: the next building, the district.",
+          "3": "In a nearby city.",
+          "4": "In another region.",
+          "5": "Anywhere on the same continent.",
+          "6": "On the other side of the world.",
+          "7": "Even without knowing where it is."
+        },
+        "potencyDamage": {
+          "0": "As much damage as your Arete, on the target's Health.",
+          "1": "Arete plus one, on the target's Health.",
+          "2": "Arete plus two, on the target's Health.",
+          "3": "Arete plus three, on the target's Health.",
+          "4": "Arete plus four, on the target's Health.",
+          "5": "Arete plus five, on the target's Health.",
+          "6": "Arete plus six, on the target's Health.",
+          "7": "Arete plus seven, on the target's Health."
+        },
+        "potencyWeight": {
+          "0": "A book.",
+          "1": "A full backpack.",
+          "2": "A person.",
+          "3": "A car.",
+          "4": "A truck.",
+          "5": "A house.",
+          "6": "A skyscraper.",
+          "7": "A mountain."
+        },
+        "precision": {
+          "0": "You hit the target, but you do not choose where.",
+          "1": "A large, easy part: the torso, the bonnet.",
+          "2": "A large part: an arm, a leg, a car wheel.",
+          "3": "A small part that serves the action: the gripping hand, the steering wheel.",
+          "4": "An object held in hand, or a gap in the protection: the weapon, an armour joint.",
+          "5": "A tiny spot, often moving: an eye, the trigger.",
+          "6": "Something inside, unseen: an organ, the running engine.",
+          "7": "The point of the Pattern that makes that thing what it is."
+        },
+        "precisionNarrative": {
+          "0": "The thing in general: any car, a building, a crowd.",
+          "1": "One precise thing among many: that car, that person, that door.",
+          "2": "A part of that thing: the engine, the pocket, the lock.",
+          "3": "A small detail: the key in the lock, a screw, a button.",
+          "4": "A tiny thing hidden among many: a hair on the carpet, a coin in the sand, a page in a library.",
+          "5": "Something you can barely see: a speck of dust, a drop of blood, a thread.",
+          "6": "What the eye cannot see: the poison in the glass, a chemical trace, a virus.",
+          "7": "The smallest part of a thing: an atom, a single cell."
+        }
       },
-      "ConditionsDebuff": "Conditions (Debuff)",
-      "ConditionsComplexity": "Conditions (Complexity)",
-      "TableNote": "Scopes channel how general and variable a Magick effect is: think of an effect in as few Scopes as possible, reasoning by need and goal.",
-      "PrecisionDetail": "Precision (Detail)",
-      "PrecisionInfo": "Precision (Information)",
       "DurationUnits": {
+        "0": "turn",
         "1": "turns",
         "2": "scene",
         "3": "scenes",
@@ -567,7 +732,24 @@
         "6": "story",
         "7": "chronicle"
       },
-      "DamageReading": "{n} damage"
+      "DamageReading": "{n} damage",
+      "PerCastCap": "In one casting at most three Scopes rise above 0: lower one before raising another.",
+      "SubShort": {
+        "targets": "Effect",
+        "targetsArea": "Area",
+        "conditionsMalus": "Malus",
+        "conditionsComplexity": "Compl.",
+        "duration": "Game",
+        "durationWorld": "World",
+        "impactEpic": "Epic",
+        "impactInfo": "Info",
+        "range": "Fight",
+        "rangeNarrative": "Narr.",
+        "potencyDamage": "Damage",
+        "potencyWeight": "Weight",
+        "precision": "Fight",
+        "precisionNarrative": "Narr."
+      }
     },
     "OngoingMagick": {
       "Label": "Ongoing Magick",
@@ -1377,7 +1559,7 @@
       "SphereHint": "Puts the Sphere in the casting. Spheres do not weigh on the threshold.",
       "ScopeHint": "Hover for the seven levels: the number declares the Scope, the same number removes it. On the right, the reading of the chosen level.",
       "ScopeOpen": "Open the levels list",
-      "ScopeModePick": "Click: pick the Scope reading",
+      "ScopeModePick": "Click: pick the Scope's lens",
       "ScopeModeHint": "Scope reading: {mode}. Click: {next}",
       "PoteriHint": "Click: the Sphere powers, one per cast; the chosen power brings the Sphere along.",
       "IncantesimoHint": "One click loads it into the roll as written (Areté, Spheres, Scopes, Attribute, Skill); the three buttons roll. Another click removes it.",
@@ -1414,7 +1596,8 @@
       "DadiNote": "Dice adjusted by hand: {dice}.",
       "Catena": "In the roll",
       "CatenaHint": "What you clicked: the × removes the piece.",
-      "PillolaVia": "Remove from the roll"
+      "PillolaVia": "Remove from the roll",
+      "ScopeCapWarning": "In one casting at most {n} Scopes rise above 0: lower one before raising another."
     },
     "Ritratti": {
       "NextHint": "Cycle the portraits: the one you see is also the image on the map and in chat",

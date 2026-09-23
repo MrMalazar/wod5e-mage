@@ -60,12 +60,16 @@ description (a checkbox worth as many dice as Areté, never for Hybrid Magick),
 Harmony is a plain number of dice the other Mages grant (counted at the
 table), and prize, Harmony and every positive modifier share a +3 cap that
 the confirmation dialog enforces. Every unlocked Sphere shows its dots and
-the player clicks the level used; the six Scopes each show seven dots for
-their level, and an icon beside the Scopes header opens the Scopes table for
-reference. The threshold is the higher of the highest Sphere and the
-highest Scope, +1 per Scope beyond the first, +1 with three or more Spheres,
-capped at 7; a Scope covered by a Sphere Speciality counts as the lower of
-the Sphere and the Scope and does not weigh as an extra Scope. When the pool
+the player clicks the level used; the seven Scopes (Targets, Conditions,
+Duration, Impact, Range, Potency, Precision) each show seven dots for their
+level, and an icon beside the Scopes header opens the Scopes table for
+reference. Since the table of 23 September 2026 every Scope reads through
+two lenses (Effect or Area, Malus or Complexity, game or world time, Epicness
+or Information, fight or narrative, Damage or Weight) on a scale from 0 to
+7: 0 is the free base, each level is worth its number, the threshold is the
+sum of the levels used, at most three Scopes rise above 0 in one casting,
+and an impossible feat takes +5 after the count. A Scope covered by a Sphere
+Speciality counts as the lower of the Sphere and the Scope. When the pool
 is at least twice the threshold the victory is automatic: coincidental
 Magick posts a chat card with no dice, vulgar Magick rolls only the Paradox
 dice and the card states the Burn (equal to the threshold). A roll short of
@@ -78,12 +82,11 @@ dot rating. Each listed Sphere displays its Influence description for ratings on
 through five, and the leftmost empty marker returns a Sphere to zero. Scopes
 are free for everyone (no Sphere unlocks or forbids one): the Traits page shows
 no Scope counters at all — the Magick tab ends with "The Scopes" table
-(seven Scopes, Precision included, over seven levels; Potency reads as
-Areté plus a number per level, drawn as the Areté sigil, the number and an
-empty Health box; Duration has two rows, play time and narrative time with
-their symbols, and the caster says which one the effect runs on; Area rows
-carry a symbol per cell, Targets the person icon; Precision is described by
-example, from "that thing there" to "that atom, in that instant"). Every
+(seven Scopes, two lenses each, over the levels 0 to 7 with the 0 column
+shaded; Damage reads as Areté plus a number per level, drawn as the Areté
+sigil and the number; game Duration carries the time symbols, world Duration
+and Area a symbol per cell, Targets the person icon; every cell explains
+itself on hover with the guide's "what it means" and examples). Every
 Sphere Speciality sits in its own box with a narrow dark drop-down. There is no Affinity Sphere any more: at the third dot of a Sphere the
 player picks one Sphere Speciality among the four passive powers the Spheres
 compendium lists for it (Perception, Resistance, Innate Defence and the

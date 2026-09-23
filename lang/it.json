@@ -406,63 +406,48 @@
     },
     "Scopes": {
       "Label": "Ambiti",
-      "potency": "Potenza",
-      "duration": "Durata",
       "targets": "Bersagli",
-      "area": "Area",
       "conditions": "Condizioni",
+      "duration": "Durata",
+      "impact": "Impatto",
       "range": "Portata",
+      "potency": "Potenza",
+      "precision": "Precisione",
+      "area": "Area",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Ogni Ambito si dichiara con un livello da 1 a 7. La soglia somma i livelli degli Ambiti sopra 1; quelli a 1 valgono 0. La somma non ha tetto e le Sfere non contribuiscono. Nel tiro di Areté il premio selezionato riduce la soglia fino a un minimo di 0. Potenza: Peso, quanto pesa ciò che muovi; Epicità, quanto pesa l'impresa nella storia; Danni, l'Areté più il numero. Durata: al lancio dichiari se corre sul gioco o sulla narrativa. Condizioni: Quante, il numero di Condizioni inflitte; Debuff, quanto pesa quella inflitta.",
+      "TableHint": "Gli Ambiti danno la misura a un effetto di Magick, ognuno con una scala da 0 a 7. Prima si decide cosa deve fare l'effetto, poi si cercano gli Ambiti che servono a dirlo: quelli che l'effetto non tocca restano a 0. Ogni Ambito si legge con due sottoambiti, misure alternative della stessa cosa. Lo 0 è la base e non costa niente; ogni livello vale il suo numero. La soglia è la somma dei livelli degli Ambiti usati, e ogni punto di soglia toglie un dado alla riserva. Un effetto che tocca sia la Potenza sia l'Impatto li paga tutti e due. In un lancio si alzano sopra lo 0 al massimo tre Ambiti; un'impresa impossibile prende +5 dopo il conto.",
+      "TableModes": "In Portata e Precisione la lente Scontro vale nel combattimento e la Narrativa fuori; nella Potenza i Danni servono nello scontro, il Peso in tutti e due: è il Narratore a dichiarare quando si legge in combattimento. Nella Durata la prima riga conta il tempo di gioco, la seconda quello del mondo. Bersagli, Condizioni e Impatto hanno due lenti libere, buone in ogni scena.",
       "TableSuccesses": "Ambito",
-      "TableReading": "Lettura · livello →",
+      "TableReading": "Lente",
+      "TableNote": "Gli Ambiti servono a canalizzare la generalità e la variabilità degli effetti di Magick: è consigliato pensare un effetto nel minor numero di Ambiti possibile, ragionando per necessità e obiettivo.",
+      "Desc": {
+        "targets": "Chi o cosa prende l'effetto. L'Effetto conta i bersagli uno per uno, l'Area prende tutto quello che sta dentro uno spazio.",
+        "conditions": "Cosa l'effetto lascia addosso e a quali patti funziona. Il Malus è la Condizione che l'effetto mette su un bersaglio, la Complessità sono le clausole che lo regolano.",
+        "duration": "Quanto resta in piedi l'effetto. La prima riga conta in tempo di gioco, la seconda in tempo del mondo.",
+        "impact": "Quanto pesa l'effetto sulla storia: quello che cambia o quello che fa sapere. Sta fuori dalla Potenza, perché un effetto può essere debole e pesare molto, o forte e non cambiare niente.",
+        "range": "Fin dove arriva l'effetto da chi lo lancia. Per agire su quello che non vedi serve la Corrispondenza, oppure un legame col bersaglio (la Regola del Ponte).",
+        "potency": "Quanto è forte l'effetto: i Danni nello scontro, il Peso in tutti e due. Quanto pesa nella storia lo misura l'Impatto.",
+        "precision": "Quanto è fine quello che l'effetto sceglie: nello scontro il punto da colpire, fuori il particolare da trovare o da toccare. Quanto conta quello che trovi lo dice l'Informazione."
+      },
+      "Sub": {
+        "targets": "Effetto",
+        "targetsArea": "Area",
+        "conditionsMalus": "Malus",
+        "conditionsComplexity": "Complessità",
+        "duration": "Gioco",
+        "durationWorld": "Mondo",
+        "impactEpic": "Epicità",
+        "impactInfo": "Informazione",
+        "range": "Scontro",
+        "rangeNarrative": "Narrativa",
+        "potencyDamage": "Danni",
+        "potencyWeight": "Peso",
+        "precision": "Scontro",
+        "precisionNarrative": "Narrativa"
+      },
       "Table": {
-        "potency": {
-          "1": "10 kg (uno zaino pieno)",
-          "2": "100 kg (una persona)",
-          "3": "2 t (un'auto)",
-          "4": "40 t (un tir)",
-          "5": "400 t (una casa)",
-          "6": "500.000 t (un grattacielo)",
-          "7": "Una montagna"
-        },
-        "potencyEpic": {
-          "1": "Cambia un dettaglio",
-          "2": "Tocca la scena",
-          "3": "Stravolge una scena",
-          "4": "Impatta sul capitolo",
-          "5": "Stravolge il capitolo",
-          "6": "Impatta sulla storia",
-          "7": "Impatta sull'intera ambientazione"
-        },
-        "potencyDamage": {
-          "1": "+0",
-          "2": "+1",
-          "3": "+3",
-          "4": "+5",
-          "5": "+7",
-          "6": "+9",
-          "7": "+11"
-        },
-        "duration": {
-          "1": "3",
-          "2": "1",
-          "3": "2",
-          "4": "1",
-          "5": "2",
-          "6": "1",
-          "7": "1"
-        },
-        "area": {
-          "1": "Stanza",
-          "2": "Edificio",
-          "3": "Quartiere",
-          "4": "Città",
-          "5": "Regione",
-          "6": "Continente",
-          "7": "Pianeta"
-        },
         "targets": {
+          "0": "Un bersaglio",
           "1": "+1",
           "2": "+2",
           "3": "+3",
@@ -471,52 +456,48 @@
           "6": "+6",
           "7": "+7"
         },
-        "conditions": {
-          "1": "1",
-          "2": "2",
-          "3": "3",
-          "4": "4",
-          "5": "5",
-          "6": "6",
-          "7": "7"
+        "targetsArea": {
+          "0": "Un punto",
+          "1": "Stanza",
+          "2": "Edificio",
+          "3": "Quartiere",
+          "4": "Città",
+          "5": "Regione",
+          "6": "Continente",
+          "7": "Pianeta"
         },
-        "conditionsDebuff": {
-          "1": "Distrarre",
-          "2": "Ostacolare, disarmare",
-          "3": "Accecare, addormentare",
-          "4": "Stordire, inabilitare arti",
-          "5": "Negare i sensi",
-          "6": "Mettere KO",
-          "7": "Non giochi"
+        "conditionsMalus": {
+          "0": "Non inabilita",
+          "1": "Disturba: −1 ai dadi",
+          "2": "Toglie un mezzo",
+          "3": "Blocca un'azione",
+          "4": "Ostacola: −2 ai dadi",
+          "5": "Spegne un senso",
+          "6": "Altera ogni tiro",
+          "7": "Stravolge il personaggio"
         },
         "conditionsComplexity": {
-          "1": "Assente",
-          "2": "Molto semplice",
-          "3": "Semplice",
+          "0": "Assente",
+          "1": "Molto semplice",
+          "2": "Semplice",
+          "3": "Articolata",
           "4": "Lunga",
           "5": "Complessa",
           "6": "Molto complessa",
           "7": "Livello contratto"
         },
-        "range": {
-          "1": "Lo vedi (entro 100 m)",
-          "2": "Nei dintorni (entro 5 km)",
-          "3": "Lontano (entro 50 km)",
-          "4": "Molto lontano (entro 500 km)",
-          "5": "Nel continente",
-          "6": "In un altro continente",
-          "7": "Ovunque sia"
+        "duration": {
+          "0": "1",
+          "1": "3",
+          "2": "1",
+          "3": "2",
+          "4": "1",
+          "5": "2",
+          "6": "1",
+          "7": "1"
         },
-        "precision": {
-          "1": "Quell'auto",
-          "2": "Il motore dell'auto",
-          "3": "La vite del motore dell'auto",
-          "4": "L'ago nel pagliaio",
-          "5": "Un granello di polvere sull'ago",
-          "6": "Una molecola di quel granello",
-          "7": "Un atomo"
-        },
-        "durationNarrative": {
+        "durationWorld": {
+          "0": "Un'ora",
           "1": "Un giorno",
           "2": "Una settimana",
           "3": "Un mese",
@@ -525,40 +506,224 @@
           "6": "Un decennio",
           "7": "Permanente"
         },
-        "precisionInfo": {
-          "1": "Irrilevante (una curiosità)",
-          "2": "Poco rilevante (un dettaglio)",
-          "3": "Rilevante (la scena)",
-          "4": "Molto rilevante (il capitolo)",
-          "5": "Decisiva (ribalta il capitolo)",
-          "6": "Cruciale (la storia)",
-          "7": "Fondante (l'ambientazione)"
+        "impactEpic": {
+          "0": "Nessun peso sulla storia",
+          "1": "Cambia un dettaglio della scena",
+          "2": "Sposta un momento della scena",
+          "3": "Decide l'esito della scena",
+          "4": "Ha conseguenze nelle scene dopo",
+          "5": "Cambia la direzione del capitolo",
+          "6": "Piega il corso della storia",
+          "7": "Cambia il mondo per tutti"
+        },
+        "impactInfo": {
+          "0": "Niente che non sapessi già",
+          "1": "Una curiosità della scena",
+          "2": "Un vantaggio nella scena",
+          "3": "Ciò che decide la scena",
+          "4": "Una pista per le scene dopo",
+          "5": "Ciò che cambia il capitolo",
+          "6": "Un segreto della storia",
+          "7": "Un segreto del mondo"
+        },
+        "range": {
+          "0": "A contatto",
+          "1": "Due passi",
+          "2": "La stanza",
+          "3": "Un tiro di pistola",
+          "4": "La strada",
+          "5": "Un tiro di fucile",
+          "6": "Un tiro lungo",
+          "7": "Un cecchino"
+        },
+        "rangeNarrative": {
+          "0": "Lo tocchi",
+          "1": "Lo vedi",
+          "2": "Nei dintorni",
+          "3": "Lontano",
+          "4": "Molto lontano",
+          "5": "Nel continente",
+          "6": "In un altro continente",
+          "7": "Ovunque sia"
+        },
+        "potencyDamage": {
+          "0": "",
+          "1": "+1",
+          "2": "+2",
+          "3": "+3",
+          "4": "+4",
+          "5": "+5",
+          "6": "+6",
+          "7": "+7"
+        },
+        "potencyWeight": {
+          "0": "1 kg",
+          "1": "10 kg",
+          "2": "100 kg",
+          "3": "2 t",
+          "4": "40 t",
+          "5": "400 t",
+          "6": "500.000 t",
+          "7": "Una montagna"
+        },
+        "precision": {
+          "0": "Dove capita",
+          "1": "Il corpo",
+          "2": "Un arto",
+          "3": "L'oggetto impegnato",
+          "4": "Il punto debole",
+          "5": "Un punto minuscolo",
+          "6": "La parte interna",
+          "7": "Un punto del Modello"
+        },
+        "precisionNarrative": {
+          "0": "A grandi linee",
+          "1": "Quell'oggetto",
+          "2": "Una parte",
+          "3": "Un particolare",
+          "4": "L'ago nel pagliaio",
+          "5": "Un granello",
+          "6": "Una molecola",
+          "7": "Un atomo"
         }
       },
-      "precision": "Precisione",
-      "DurationPlay": "Durata (gioco)",
-      "DurationNarrative": "Durata (narrativa)",
-      "PotencyWeight": "Potenza (Peso)",
-      "PotencyEpic": "Potenza (Epicità)",
-      "PotencyDamage": "Potenza (Danni)",
-      "Sub": {
-        "potency": "Peso",
-        "potencyEpic": "Epicità",
-        "potencyDamage": "Danni",
-        "duration": "Narrativa",
-        "durationNarrative": "Fuori gioco",
-        "conditions": "Quantità",
-        "conditionsDebuff": "Malus",
-        "conditionsComplexity": "Complessità",
-        "precision": "Dettaglio",
-        "precisionInfo": "Informazione"
+      "Hint": {
+        "targets": {
+          "0": "Un bersaglio solo.",
+          "1": "Un bersaglio in più, scelto uno per uno: amici e nemici si separano da soli.",
+          "2": "Due bersagli in più, scelti uno per uno.",
+          "3": "Tre bersagli in più, scelti uno per uno.",
+          "4": "Quattro bersagli in più, scelti uno per uno.",
+          "5": "Cinque bersagli in più, scelti uno per uno.",
+          "6": "Sei bersagli in più, scelti uno per uno.",
+          "7": "Sette bersagli in più, scelti uno per uno."
+        },
+        "targetsArea": {
+          "0": "Il solo punto toccato, senza spazio intorno.",
+          "1": "Un ambiente chiuso: una stanza, un vagone, un ascensore.",
+          "2": "Una casa o un palazzo intero, piani e cantine compresi.",
+          "3": "Più isolati, con le strade in mezzo.",
+          "4": "La città intera, periferia compresa.",
+          "5": "Una regione con tutte le sue città.",
+          "6": "Un continente.",
+          "7": "Il mondo. L'Area prende tutto quello che sta dentro, amici compresi: per lasciarli fuori serve una clausola di Complessità."
+        },
+        "conditionsMalus": {
+          "0": "Nessuna Condizione: l'effetto non lascia niente addosso.",
+          "1": "Abbagliato, Ovattato, Scosso, Sfortunato: −1 ai dadi, oppure il critico che non scatta.",
+          "2": "Rallentato, Disarmato, Guasto, A secco. Il Rallentato agisce per ultimo e fa una cosa sola; gli altri perdono una famiglia di Strumenti, e il Disarmato anche i dadi dell'equipaggiamento.",
+          "3": "Muto, Immobilizzato, Bloccato, Stordito: niente voce, niente movimento, niente difesa o niente azione. Muto e Immobilizzato perdono anche Parola e Corpo; lo Stordito può segnare 1 Salute mentale invece di perdere l'azione.",
+          "4": "Offuscato, Assordato, Spaventato, Atterrato: −2 ai dadi. Atterrato vale solo per le riserve fisiche, e rialzarsi costa la mezza guardia.",
+          "5": "Cieco, Sordo, Terrorizzato: i tiri che si basano sulla vista o sull'udito non si tirano, e il Terrorizzato non si avvicina alla fonte.",
+          "6": "Malato, Inabile: il Malato non supera 6 dadi, l'Inabile dimezza tutte le riserve.",
+          "7": "Ammaliato, Maledetto: l'Ammaliato non decide lui, il Maledetto non guarisce finché la causa resta."
+        },
+        "conditionsComplexity": {
+          "0": "L'effetto scatta subito e vale per tutto quello che tocca. Nessuna clausola.",
+          "1": "Una clausola sola, su chi riguarda, quando scatta o dove vale. Solo per i tuoi.",
+          "2": "Due clausole che non si toccano fra loro. Solo per i tuoi, solo di notte.",
+          "3": "L'effetto aspetta un fatto per scattare, oppure ha un'eccezione, e il Narratore deve seguire la scena per sapere quando. Quando gira la chiave; tutti tranne il capo.",
+          "4": "Tre o quattro clausole insieme: va scritta, perché al tavolo se ne perde un pezzo. Solo per i tuoi, solo di notte, finché la porta resta chiusa.",
+          "5": "Clausole che dipendono l'una dall'altra, e una cambia il senso dell'altra. Se entra un estraneo scatta l'allarme, ma solo se la porta era chiusa.",
+          "6": "Un regolamento: casi diversi con risposte diverse. Un amico passa, un nemico resta fuori, un Dormiente si perde nel corridoio.",
+          "7": "Un patto fra più parti, con obblighi, eccezioni e penali per chi lo rompe. Chi tradisce il patto resta Muto finché non ripara."
+        },
+        "duration": {
+          "0": "L'effetto accade e si chiude nel turno del lancio.",
+          "1": "Copre uno scambio di colpi o una fuga breve.",
+          "2": "Regge finché la scena si chiude.",
+          "3": "Passa anche nella scena seguente.",
+          "4": "Resta fino alla fine della serata.",
+          "5": "Arriva alla sessione dopo.",
+          "6": "Accompagna l'arco intero.",
+          "7": "Dura quanto la campagna."
+        },
+        "durationWorld": {
+          "7": "L'effetto resta finché qualcuno non lo spezza."
+        },
+        "impactEpic": {
+          "0": "Accendere una candela, far girare una moneta, profumare una stanza.",
+          "1": "Aprire una serratura, scaricare un cellulare, rompere un bicchiere.",
+          "2": "Distrarre una guardia, sgambettare un inseguitore, far saltare la corrente.",
+          "3": "Abbattere un ponte, girare la folla contro, bloccare l'uscita col fuoco.",
+          "4": "Finire al telegiornale, svuotare un palazzo, mettere in allarme la polizia.",
+          "5": "Togliere il covo a un capo, rompere un'alleanza, chiudere un quartiere.",
+          "6": "Rovesciare una fazione, spegnere un Nodo, aprire una guerra fra Tradizioni.",
+          "7": "Incrinare il Velo, cancellare una città dalle mappe, spostare il Consenso."
+        },
+        "impactInfo": {
+          "0": "L'ora, il tempo che fa, chi c'è nella stanza.",
+          "1": "Chi ha dormito in questo letto, di chi è la penna, cosa ha mangiato il cane.",
+          "2": "Dove sta la guardia, quale porta è aperta, chi mente al tavolo.",
+          "3": "Chi è il traditore, dov'è nascosta l'arma, la parola d'ordine.",
+          "4": "Dove va il furgone, chi ha pagato il sicario, quale giornalista sa troppo.",
+          "5": "Dove dorme il capo, chi finanzia la fazione, il vero nome del Tecnocrate.",
+          "6": "Chi ha tradito la Tradizione, perché si è spento il Nodo, cosa nasconde una fazione.",
+          "7": "Come è nato il Velo, cosa c'era prima del Consenso, dove dorme un Arcimago."
+        },
+        "range": {
+          "0": "Devi toccare il bersaglio: una mano sulla spalla, un pugno.",
+          "1": "Chi ti sta accanto, senza muoverti.",
+          "2": "Tutto quello che sta nello stesso ambiente.",
+          "3": "Dall'altra parte di un cortile o di un parcheggio.",
+          "4": "Fino in fondo alla via.",
+          "5": "Oltre l'incrocio, da un tetto all'altro.",
+          "6": "Più in là dell'isolato, dove un fucile arriva a stento.",
+          "7": "Fin dove arriva un tiratore scelto."
+        },
+        "rangeNarrative": {
+          "0": "Le mani sul bersaglio.",
+          "1": "Quello che hai sotto gli occhi, nella scena.",
+          "2": "Fuori vista, nella stessa zona: il palazzo accanto, il quartiere.",
+          "3": "In una città vicina.",
+          "4": "In un'altra regione.",
+          "5": "Ovunque nello stesso continente.",
+          "6": "Dall'altra parte del mondo.",
+          "7": "Anche senza sapere dove si trova."
+        },
+        "potencyDamage": {
+          "0": "Tanti danni quanta la tua Areté, sulla Salute del bersaglio.",
+          "1": "L'Areté più uno, sulla Salute del bersaglio.",
+          "2": "L'Areté più due, sulla Salute del bersaglio.",
+          "3": "L'Areté più tre, sulla Salute del bersaglio.",
+          "4": "L'Areté più quattro, sulla Salute del bersaglio.",
+          "5": "L'Areté più cinque, sulla Salute del bersaglio.",
+          "6": "L'Areté più sei, sulla Salute del bersaglio.",
+          "7": "L'Areté più sette, sulla Salute del bersaglio."
+        },
+        "potencyWeight": {
+          "0": "Un libro.",
+          "1": "Uno zaino pieno.",
+          "2": "Una persona.",
+          "3": "Un'auto.",
+          "4": "Un tir.",
+          "5": "Una casa.",
+          "6": "Un grattacielo.",
+          "7": "Una montagna."
+        },
+        "precision": {
+          "0": "Colpisci il bersaglio, ma non scegli dove.",
+          "1": "Una parte grande e facile da prendere: il busto, il cofano.",
+          "2": "Una parte grande: un braccio, una gamba, la ruota di un'auto.",
+          "3": "Una parte piccola che serve all'azione: la mano che impugna, il volante.",
+          "4": "Un oggetto tenuto in mano, o una fessura nella protezione: l'arma, una giuntura dell'armatura.",
+          "5": "Un punto minuscolo, spesso in movimento: un occhio, il grilletto.",
+          "6": "Qualcosa che sta dentro e non si vede: un organo, il motore acceso.",
+          "7": "Il punto della trama che fa di quella cosa quello che è."
+        },
+        "precisionNarrative": {
+          "0": "La cosa in generale: un'auto qualunque, un palazzo, una folla.",
+          "1": "Una cosa precisa fra tante: quell'auto, quella persona, quella porta.",
+          "2": "Una parte di quella cosa: il motore, la tasca, la serratura.",
+          "3": "Un dettaglio piccolo: la chiave nella toppa, una vite, un bottone.",
+          "4": "Una cosa minuscola nascosta fra molte: un capello sul tappeto, una moneta nella sabbia, una pagina in una biblioteca.",
+          "5": "Qualcosa che quasi non si vede: un granello di polvere, una goccia di sangue, un filo.",
+          "6": "Quello che l'occhio non vede: il veleno nel bicchiere, una traccia chimica, un virus.",
+          "7": "La parte più piccola di una cosa: un atomo, una sola cellula."
+        }
       },
-      "ConditionsDebuff": "Condizioni (Debuff)",
-      "ConditionsComplexity": "Condizioni (Complessità)",
-      "TableNote": "Gli Ambiti servono a canalizzare la generalità e la variabilità degli effetti di Magick: è consigliato pensare un effetto nel minor numero di Ambiti possibile, ragionando per necessità e obiettivo.",
-      "PrecisionDetail": "Precisione (Dettaglio)",
-      "PrecisionInfo": "Precisione (Informazione)",
       "DurationUnits": {
+        "0": "turno",
         "1": "turni",
         "2": "scena",
         "3": "scene",
@@ -567,7 +732,24 @@
         "6": "storia",
         "7": "cronaca"
       },
-      "DamageReading": "{n} danni"
+      "DamageReading": "{n} danni",
+      "PerCastCap": "In un lancio si alzano sopra lo 0 al massimo tre Ambiti: togline uno prima di alzarne un altro.",
+      "SubShort": {
+        "targets": "Effetto",
+        "targetsArea": "Area",
+        "conditionsMalus": "Malus",
+        "conditionsComplexity": "Compl.",
+        "duration": "Gioco",
+        "durationWorld": "Mondo",
+        "impactEpic": "Epica",
+        "impactInfo": "Info",
+        "range": "Scontro",
+        "rangeNarrative": "Narr.",
+        "potencyDamage": "Danni",
+        "potencyWeight": "Peso",
+        "precision": "Scontro",
+        "precisionNarrative": "Narr."
+      }
     },
     "OngoingMagick": {
       "Label": "Magick in atto",
@@ -1377,7 +1559,7 @@
       "SphereHint": "Mette la Sfera nel lancio. Le Sfere non pesano sulla soglia.",
       "ScopeHint": "Al sorvolo i sette livelli: il numero dichiara l'Ambito, lo stesso numero lo toglie. A destra, la lettura del livello scelto.",
       "ScopeOpen": "Apri la tendina dei livelli",
-      "ScopeModePick": "Clic: scegli la lettura dell'Ambito",
+      "ScopeModePick": "Clic: scegli la lente dell'Ambito",
       "ScopeModeHint": "Lettura dell'Ambito: {mode}. Clic: {next}",
       "PoteriHint": "Clic: i poteri della Sfera, uno solo per lancio; il potere scelto porta con sé la Sfera.",
       "IncantesimoHint": "Un clic lo carica nel tiro com'è scritto (Areté, Sfere, Ambiti, Attributo, Abilità); i tre tasti tirano. Un altro clic lo toglie.",
@@ -1414,7 +1596,8 @@
       "DadiNote": "Dadi ritoccati a mano: {dice}.",
       "Catena": "Nel tiro",
       "CatenaHint": "Quello che hai cliccato: la × toglie il pezzo.",
-      "PillolaVia": "Togli dal tiro"
+      "PillolaVia": "Togli dal tiro",
+      "ScopeCapWarning": "In un lancio si alzano sopra lo 0 al massimo {n} Ambiti: abbassane uno prima di alzarne un altro."
     },
     "Ritratti": {
       "NextHint": "Gira i ritratti: quello che vedi è anche l'immagine sulla mappa e in chat",
