@@ -11899,8 +11899,11 @@
 }
 
 /* Il prose-mirror del Narratore: cresce col testo, niente scorrimento
-   dentro la scatola (Foundry gli dà un'altezza fissa). */
+   dentro la scatola. Foundry (v14) lo fa alto --min-height (150px) con il
+   contenuto in posizione assoluta dentro il contenitore: qui il contenuto
+   torna nel flusso e la scatola prende l'altezza del testo. */
 .application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror {
+  --min-height: 0;
   background: transparent;
   border: 0;
   display: block;
@@ -11910,13 +11913,32 @@
   resize: none;
 }
 
+.application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror.inactive {
+  overflow: visible;
+  /* La matita di Foundry sta in alto a destra: il testo non ci passa sotto. */
+  padding-right: 30px;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror .editor-container {
+  display: block;
+  overflow: visible;
+  position: static;
+}
+
 .application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror .editor-content,
 .application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror .editor {
   height: auto;
+  inset: auto;
   max-height: none;
   min-height: 0;
   overflow: visible;
   padding: 0;
+  position: static;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror .menu-container {
+  margin-bottom: 6px;
+  position: relative;
 }
 
 .application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror .editor-content *:not(a) {
