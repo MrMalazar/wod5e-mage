@@ -6,9 +6,10 @@
      Il tasto accanto al + (16/9 sera) scioglie le famiglie: tutte in fila,
      Specifiche comprese, in ordine alfabetico, senza divisorie. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-abilita">
-    <header class="wod5e-mage-riq-title">
+    {{!-- Col memo di creazione acceso (23/9): il conto a destra del titolo (col premio della Sfida se c'è), il tetto se sforato. --}}
+    <header class="wod5e-mage-riq-title{{#if memo.on}} memo-{{memo.boxes.abilita.state}}{{/if}}">
         {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.skills}}{{/if}}
-        <span>{{localize "WOD5E.SkillsList.Skills"}}</span>
+        <span>{{localize "WOD5E.SkillsList.Skills"}}{{#if memo.on}} <b class="wod5e-mage-memo-conto" title="{{localize 'WOD5E_MAGE.Riepilogo.Skills'}}">{{memo.boxes.abilita.text}}{{#if memo.boxes.abilita.sfida}} <small class="wod5e-mage-memo-premio preso" title="{{localize 'WOD5E_MAGE.Riepilogo.SfidaPremi.skills'}}">+{{memo.boxes.abilita.sfida}} {{localize "WOD5E_MAGE.Tabs.Short.conceptChallenge"}}</small>{{/if}}{{#unless memo.boxes.abilita.tetto.ok}} <small class="wod5e-mage-memo-avviso" title="{{localize 'WOD5E_MAGE.Riepilogo.SkillCap'}}"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Riepilogo.SkillCapBreve"}} {{memo.boxes.abilita.tetto.target}}</small>{{/unless}}</b>{{/if}}</span>
         <button type="button" class="wod5e-mage-riq-tasto-piccolo{{#if skillsFlat}} active{{/if}}" data-action="skillsFlatToggle" title="{{#if skillsFlat}}{{localize 'WOD5E_MAGE.Stat.AbilitaFamiglie'}}{{else}}{{localize 'WOD5E_MAGE.Stat.AbilitaInFila'}}{{/if}}" aria-label="{{#if skillsFlat}}{{localize 'WOD5E_MAGE.Stat.AbilitaFamiglie'}}{{else}}{{localize 'WOD5E_MAGE.Stat.AbilitaInFila'}}{{/if}}" aria-pressed="{{skillsFlat}}"><i class="fa-solid {{#if skillsFlat}}fa-layer-group{{else}}fa-arrow-down-a-z{{/if}}" aria-hidden="true"></i></button>
         <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="customSkillAdd" title="{{localize 'WOD5E_MAGE.CustomSkills.Add'}}" aria-label="{{localize 'WOD5E_MAGE.CustomSkills.Add'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
     </header>

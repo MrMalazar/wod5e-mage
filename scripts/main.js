@@ -15,6 +15,7 @@ import { registerGrimorioComune } from "./grimorio-comune.js";
 import { registraSocketVerdetto } from "./verdetto-narratore.js";
 import { SCALA_PREDEFINITA, SCALA_SETTING, TEMA_CHIARO, TEMA_SCURO, TEMA_SETTING } from "./tema.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
+import { registraHelperIcone } from "./icone-oggetti.js";
 
 /**
  * Return the public API exposed by this module.
@@ -76,6 +77,10 @@ function debug(message, ...data) {
 
 Hooks.once("init", () => {
   console.info(`${MODULE_ID} | Initializing`);
+
+  // L'icona propria di un oggetto nella pagina Tratti (23/9): l'immagine del
+  // Rifugio, la lettera solo per chi ha il segnaposto.
+  registraHelperIcone(globalThis.Handlebars);
 
   // Each player picks how the header Wheel dresses: arc or compact bar.
   game.settings.register(MODULE_ID, "headerWheelMode", {

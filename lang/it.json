@@ -683,7 +683,7 @@
       "Label": "Saggezza",
       "Status": "Stato",
       "Roll": "Tira Saggezza",
-      "VentaglioHint": "I comandi della Saggezza: tira, una casella in meno, una in più",
+      "VentaglioHint": "I comandi della Saggezza: Tira, Segna, Cura, Reset, caselle in più",
       "Tira": "Tira",
       "MaxMeno": "Una casella in meno",
       "MaxPiu": "Una casella in più",
@@ -691,7 +691,31 @@
       "MaxPiuBreve": "casella",
       "Rolling": "Tiro di Saggezza",
       "Segnato": "Segnato",
-      "SegnatoEffects": "due dadi in meno sui tiri mortali, la scena mondana costa, niente ricucitura del Consenso, l'aura si vede."
+      "SegnatoEffects": "due dadi in meno sui tiri mortali, la scena mondana costa, niente ricucitura del Consenso, l'aura si vede.",
+      "Hint": "3 + il più alto fra Carisma e Fermezza",
+      "Extra": "Caselle in più, oltre il conto",
+      "ClickHint": "Clic: scegli il segno. Clic destro: la casella si svuota.",
+      "States": {
+        "empty": "Vuota",
+        "s": "Sbarra",
+        "a": "Croce"
+      },
+      "Segna": "Segna le macchie",
+      "SegnaBreve": "Segna",
+      "SegnaHint": "Quante macchie hai preso, e di che segno: la sbarra, o la croce che resta finché lo Spirito non la toglie.",
+      "SegnaAmount": "Quante",
+      "SegnaSign": "Che segno",
+      "SegnaOk": "Segna",
+      "SegnaDone": "Segnate {amount} macchie: {sign}.",
+      "SegnaConverted": "La fila era piena: {converted} sbarre sono diventate croci.",
+      "Cura": "Cura",
+      "CuraHint": "Una sbarra se ne va: hai rispettato una Convinzione quando costava. Le croci le toglie solo lo Spirito.",
+      "CuraDone": "Cura: una sbarra se n'è andata.",
+      "CuraNiente": "Nessuna sbarra da togliere: le croci le toglie lo Spirito.",
+      "Reset": "Reset",
+      "ResetHint": "La fila torna pulita.",
+      "AttributeHint": "3 + {attribute} {value}, caselle in più {extra}. Clic: scegli fra Carisma e Fermezza.",
+      "AttributePick": "Scegli l'Attributo della Saggezza: Carisma o Fermezza"
     },
     "MagickBalance": {
       "Magick": "Magick",
@@ -846,7 +870,16 @@
       },
       "MeritsHint": "Background e Pregi insieme: sette punti, nove con due gruppi della Sfida.",
       "SkillCap": "Nessuna Abilità oltre il tetto",
-      "Arete": "Areté del grado"
+      "Arete": "Areté del grado",
+      "MemoHint": "Memo creazione: da spuntata, ogni riquadro porta il suo conto accanto al titolo (rosso sotto il traguardo, verde pari, giallo sopra), le pagine da completare colorano la linguetta e compaiono i tasti di reset.",
+      "SfidaHint": "La Sfida del Concetto: un gruppo completo dà +1 punto Abilità, due gruppi +2 punti Vantaggio, tutti e tre +1 potere. I premi si sommano.",
+      "SfidaPremi": {
+        "skills": "Abilità",
+        "merits": "Vantaggi",
+        "poteri": "potere"
+      },
+      "ConceptBreve": "Concetto",
+      "SkillCapBreve": "oltre il tetto"
     },
     "Salute": {
       "Label": "Salute",
@@ -1304,7 +1337,23 @@
       "TrattiBackground": "Background",
       "TrattiEquipaggiamento": "Equipaggiamento",
       "TrattiAltri": "Altri",
-      "IlTiro": "Il Tiro"
+      "IlTiro": "Il Tiro",
+      "Schede": {
+        "background": "Background",
+        "merit": "Pregi",
+        "flaw": "Difetti",
+        "equipment": "Equip.",
+        "other": "Altri",
+        "grimorio": "Grimorio"
+      },
+      "Vuoti": {
+        "background": "Nessun Background sulla scheda: si aggiunge nella pagina Tratti.",
+        "merit": "Nessun Pregio sulla scheda: si aggiunge nella pagina Tratti.",
+        "flaw": "Nessun Difetto sulla scheda: si aggiunge nella pagina Tratti.",
+        "equipment": "Niente equipaggiamento: si aggiunge nella pagina Tratti.",
+        "other": "Nessun altro tratto sulla scheda.",
+        "grimorio": "Nessun incantesimo scritto: si scrivono nella pagina del Grimorio (il libro qui sopra)."
+      }
     },
     "Tiro": {
       "KindMagick": "Tiro di Magick",
@@ -1355,7 +1404,17 @@
       "RollHint": "Tira l'Attributo e l'Abilità scelti, meno la Difficoltà; riesce dal 6.",
       "Extra": "Dadi extra",
       "ExtraHint": "L'Armonia e i dadi che il tavolo ti dà: fino a tre, entrano nella riserva.",
-      "ExtraFlavor": "dadi extra +{dice}"
+      "ExtraFlavor": "dadi extra +{dice}",
+      "Riserva": "Riserva",
+      "RiservaHint": "Attributo + Abilità e i bonus. Il meno e il più sono i dadi extra che entrano nella riserva: l'Armonia e i dadi che il tavolo ti dà, fino a tre.",
+      "Soglia": "Soglia",
+      "SogliaHint": "La Difficoltà: la somma degli Ambiti sopra 1, meno l'Areté col premio; il meno e il più la ritoccano a mano.",
+      "DadiHint": "I dadi che tiri: la riserva meno la soglia. Il meno e il più li ritoccano sul totale, fuori dal tetto (il ritocco del Narratore).",
+      "DadiReset": "Torna al conto",
+      "DadiNote": "Dadi ritoccati a mano: {dice}.",
+      "Catena": "Nel tiro",
+      "CatenaHint": "Quello che hai cliccato: la × toglie il pezzo.",
+      "PillolaVia": "Togli dal tiro"
     },
     "Ritratti": {
       "NextHint": "Gira i ritratti: quello che vedi è anche l'immagine sulla mappa e in chat",

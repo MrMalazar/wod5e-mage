@@ -285,11 +285,33 @@ function canEdit(actor) {
 }
 
 /**
- * Il clic apre un menù piccolo dove hai cliccato: i quattro segni e la
- * casella vuota, solo simboli (la legenda sta sotto il tracciato). Si chiude
- * scegliendo, o cliccando fuori, o con Esc. Il clic destro svuota subito.
+ * Il menù dei segni sta DENTRO la finestra della scheda (23/9): appeso al
+ * corpo della pagina non vedeva i gettoni dei colori, che vivono sulla
+ * scheda, e usciva senza fondo e senza simboli («opacità insufficiente», «è
+ * scomparso il simbolo di selezione»). Dentro la scheda ha i colori del tema
+ * in uso, chiaro compreso. Conti puri, senza DOM: la posizione del menù
+ * rispetto all'angolo della finestra, dentro i suoi bordi.
  */
-function askSaluteState(event, current) {
+export function posizioneMenuSalute(click, finestra, menu) {
+  const width = Math.max(Number(menu?.width) || 0, 1);
+  const height = Math.max(Number(menu?.height) || 0, 1);
+  const x = (Number(click?.x) || 0) - (Number(finestra?.left) || 0) + 10;
+  const y = (Number(click?.y) || 0) - (Number(finestra?.top) || 0) - height / 2;
+  const maxX = Math.max((Number(finestra?.width) || 0) - width - 4, 4);
+  const maxY = Math.max((Number(finestra?.height) || 0) - height - 4, 4);
+  return { x: Math.min(Math.max(x, 4), maxX), y: Math.min(Math.max(y, 4), maxY) };
+}
+
+/**
+ * Il clic apre un menù piccolo dove hai cliccato: i segni e la casella
+ * vuota, col nome accanto al simbolo e la spunta sul segno in uso. Si
+ * chiude scegliendo, o cliccando fuori, o con Esc. Il clic destro svuota
+ * subito. Il menù si appende alla finestra della scheda (vedi
+ * posizioneMenuSalute), non al corpo della pagina. Lo usa anche la
+ * Saggezza (23/9) coi suoi segni d'inchiostro: `options` è la lista
+ * `{state, label, glyph}` dei segni, la casella vuota compresa.
+ */
+export function askSegno(event, current, options) {
   return new Promise((resolve) => {
     document.querySelectorAll(".wod5e-mage-salute-menu").forEach((old) => old.remove());
     const localize = game.i18n.localize.bind(game.i18n);
@@ -297,24 +319,36 @@ function askSaluteState(event, current) {
     menu.className = "wod5e-mage-salute-menu";
     menu.setAttribute("role", "menu");
 
-    const options = [...SALUTE_STATES.filter((state) => state), ""];
-    for (const state of options) {
+    for (const option of options) {
+      const state = option.state ?? "";
       const button = document.createElement("button");
       button.type = "button";
       button.className = "wod5e-mage-salute-menu-item";
       button.dataset.state = state;
-      button.title = localize(`WOD5E_MAGE.Salute.States.${state || "empty"}`);
+      // `text` è già scritto (per esempio «Carisma 3»); `label` è una chiave di lingua.
+      button.title = option.text ?? localize(option.label);
       button.setAttribute("aria-label", button.title);
-      if (state === current) button.classList.add("current");
-      const glyph = document.createElement("i");
-      glyph.className = "wod5e-mage-salute-glyph";
-      glyph.dataset.state = state;
-      button.appendChild(glyph);
+      if (state === current) {
+        button.classList.add("current");
+        button.setAttribute("aria-checked", "true");
+      }
+      // Il simbolo del segno; con `glyph: null` la voce è solo testo.
+      if (option.glyph !== null) {
+        const glyph = document.createElement("i");
+        glyph.className = option.glyph ?? "wod5e-mage-salute-glyph";
+        glyph.dataset.state = state;
+        button.appendChild(glyph);
+      }
       // Il nome del segno, a destra del simbolo: fa da legenda.
       const text = document.createElement("span");
       text.className = "wod5e-mage-salute-menu-text";
       text.textContent = button.title;
       button.appendChild(text);
+      // La spunta sul segno in uso.
+      const spunta = document.createElement("i");
+      spunta.className = "fa-solid fa-check wod5e-mage-salute-menu-spunta";
+      spunta.setAttribute("aria-hidden", "true");
+      button.appendChild(spunta);
       button.addEventListener("click", (click) => {
         click.preventDefault();
         click.stopPropagation();
@@ -336,20 +370,35 @@ function askSaluteState(event, current) {
       if (key.key === "Escape") close(null);
     };
 
-    document.body.appendChild(menu);
-    // Dove hai cliccato, dentro lo schermo.
-    const width = menu.offsetWidth || 150;
-    const height = menu.offsetHeight || 32;
-    const x = Math.min(Math.max((event.clientX ?? 0) + 10, 4), window.innerWidth - width - 4);
-    const y = Math.min(Math.max((event.clientY ?? 0) - height / 2, 4), window.innerHeight - height - 4);
-    menu.style.left = `${x}px`;
-    menu.style.top = `${y}px`;
+    // Dentro la finestra della scheda (che è posizionata: il menù sta in
+    // assoluto rispetto al suo angolo); il corpo della pagina solo come ripiego.
+    const host = event.target?.closest?.(".application") ?? document.body;
+    host.appendChild(menu);
+    const finestra = host === document.body
+      ? { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight }
+      : host.getBoundingClientRect();
+    const posizione = posizioneMenuSalute(
+      { x: event.clientX ?? 0, y: event.clientY ?? 0 },
+      finestra,
+      { width: menu.offsetWidth || 150, height: menu.offsetHeight || 32 }
+    );
+    menu.style.left = `${posizione.x}px`;
+    menu.style.top = `${posizione.y}px`;
 
     setTimeout(() => {
       document.addEventListener("pointerdown", onOutside, true);
       document.addEventListener("keydown", onKey, true);
     }, 0);
   });
+}
+
+/** I quattro segni della Salute e la casella vuota, per il menù. */
+function saluteMenuOptions() {
+  return [...SALUTE_STATES.filter((state) => state), ""].map((state) => ({
+    state,
+    label: `WOD5E_MAGE.Salute.States.${state || "empty"}`,
+    glyph: "wod5e-mage-salute-glyph"
+  }));
 }
 
 export async function onSaluteCellChange(event, target) {
@@ -362,7 +411,7 @@ export async function onSaluteCellChange(event, target) {
   const cell = salute.cells[index];
   if (!cell) return;
 
-  const toState = event.button === 2 ? "" : await askSaluteState(event, cell.state);
+  const toState = event.button === 2 ? "" : await askSegno(event, cell.state, saluteMenuOptions());
   if (toState === null || toState === cell.state) return;
   const next = applySaluteStateChange(salute, salute.max, cell.state, toState);
   // Una casella bloccata svuotata a mano: il blocco cade con lei (è solo visivo).

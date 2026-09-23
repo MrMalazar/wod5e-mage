@@ -35,7 +35,9 @@ import {
   pickPower,
   pickSkill,
   pickSpecialty,
+  pillsOf,
   removePill,
+  setDadi,
   setDifficulty,
   setExtra,
   setKind,
@@ -112,27 +114,63 @@ export function contoInputs(actor, tiro, { traits = null } = {}) {
 }
 
 /**
- * Il contesto del riquadro del Tiro: la catena a pillole coi nomi veri,
- * il conto, la Difficoltà (calcolata o a mano), la Quintessenza, i tasti.
+ * I nomi dei pezzi in catena, per le pillole: Areté col valore, Sfere,
+ * Ambiti, Attributi e Abilità col valore, il potere, i Tratti coi dadi,
+ * l'incantesimo col nome.
+ */
+function pillNames(actor, tiro, { known, inputs }) {
+  const localize = game.i18n.localize.bind(game.i18n);
+  const arete = getArete(actor);
+  const spell = tiro.spell ? ((actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {})[tiro.spell] ?? null) : null;
+  return {
+    arete: { label: localize("WOD5E_MAGE.Arete.Label"), value: arete.value },
+    spheres: Object.fromEntries(prepareSpheres(actor).all.map((sphere) => [sphere.id, localize(sphere.label)])),
+    scopes: Object.fromEntries(SCOPES.map((id) => [id, localize(`WOD5E_MAGE.Scopes.${id}`)])),
+    attributes: Object.fromEntries((known?.attributes ?? []).map((trait) => [trait.id, { label: trait.label, value: trait.value }])),
+    skills: Object.fromEntries((known?.skills ?? []).map((trait) => [trait.key, { label: trait.label, value: trait.value }])),
+    power: tiro.power && inputs?.power ? { [tiro.power]: potereLabel(inputs.power, localize) } : {},
+    traits: Object.fromEntries((tiro.traits ?? []).map((id) => {
+      const item = actor.items?.get?.(id);
+      const dice = traitDiceOf(actor, [id]);
+      return [id, { label: item?.name ?? id, value: dice || null }];
+    })),
+    spells: tiro.spell ? { [tiro.spell]: String(spell?.name ?? "").trim() || localize("WOD5E_MAGE.Tabs.Grimorio") } : {}
+  };
+}
+
+/**
+ * Il contesto del riquadro del Tiro (23/9, largo due colonne): a sinistra
+ * la catena a pillole coi nomi veri (torna, con la × per togliere ogni
+ * pezzo), a destra i tre numeri col meno e il più: Riserva (i dadi extra
+ * dentro la riserva, tetto 3), Soglia (la Difficoltà, calcolata o a mano) e
+ * Dadi (il ritocco sul totale, fuori dal tetto); sotto il premio, la
+ * Quintessenza, Sforza la realtà e i tasti.
  */
 export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
   const { known, attribute, skill, inputs } = contoInputs(actor, tiro, { traits });
   const conto = contoTiro(tiro, inputs);
   const arete = getArete(actor);
-  // La catena non si stampa più (Blue, 16/9): quel che è scelto si vede
-  // acceso nei riquadri, e in carta a tiro fatto.
   const magick = isMagick(tiro);
+  const pills = pillsOf(tiro, pillNames(actor, tiro, { known, inputs })).map((pill) => ({
+    ...pill,
+    text: pill.kind === "scope"
+      ? `${pill.label} ${pill.level}`
+      : (pill.value !== null && pill.value !== undefined ? `${pill.label} ${pill.kind === "trait" && pill.value > 0 ? "+" : ""}${pill.value}` : pill.label)
+  }));
   return {
     magick,
     size: tiroSize(tiro),
     empty: tiroSize(tiro) === 0,
     kindLabel: localize(magick ? "WOD5E_MAGE.Tiro.KindMagick" : (tiro.attribute || tiro.skill ? "WOD5E_MAGE.Tiro.KindSkill" : "WOD5E_MAGE.Tiro.KindNone")),
+    pills,
+    riserva: conto.riserva,
     pool: conto.pool,
     computed: conto.computed,
     difficulty: conto.difficulty,
     manual: conto.manual,
     dice: conto.dice,
+    dadi: { value: conto.adjust, label: `${conto.adjust > 0 ? "+" : ""}${conto.adjust}` },
     impossible: conto.impossible && tiroSize(tiro) > 0,
     successFrom: conto.successFrom,
     prize: { on: Boolean(tiro.prize) && magick, value: conto.prize, arete: arete.value },
@@ -370,6 +408,14 @@ export async function onTiroExtra(event, target) {
   return repaint(this, setExtra(tiro, tiro.extra + (Number(target.dataset.delta) || 0)));
 }
 
+/** Il ritocco dei Dadi (23/9): più o meno sul totale, fuori dal tetto. */
+export async function onTiroDadi(event, target) {
+  event.preventDefault();
+  const tiro = tiroOf(this);
+  if (target.dataset.reset !== undefined) return repaint(this, setDadi(tiro, 0));
+  return repaint(this, setDadi(tiro, (Number(tiro.dadi) || 0) + (Number(target.dataset.delta) || 0)));
+}
+
 export async function onTiroSforza(event) {
   event.preventDefault();
   return repaint(this, toggleSforza(tiroOf(this)));
@@ -454,6 +500,8 @@ export async function launchTiro(actor, tiro) {
   if (notaNarratore) notes.push(notaNarratore);
 
   if (conto.extra > 0) bonusParts.push(format("WOD5E_MAGE.Tiro.ExtraFlavor", { dice: conto.extra }));
+  // Il ritocco dei Dadi (23/9): in carta, perché si sappia.
+  if (conto.adjust) notes.push(format("WOD5E_MAGE.Tiro.DadiNote", { dice: `${conto.adjust > 0 ? "+" : ""}${conto.adjust}` }));
 
   // Il tiro di Abilità: niente rossi, riuscita dal 6, la Difficoltà solo a mano.
   if (!magick) {

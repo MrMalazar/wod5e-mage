@@ -1,7 +1,7 @@
 {{!-- I Vantaggi (21/9, dal mock docs/mock_tre_pagine_21-9.html): un occhiello
      per Background, Pregi e Difetti coi tre tastini (il libro dell'archivio
      M6, la lente del compendio, il + che crea da zero); la riga del tratto con
-     la lettera nel disco (il clic la manda in chat), il nome che apre la
+     l'immagine dell'oggetto o la lettera nel disco (il clic manda in chat), il nome che apre la
      descrizione, i cinque pallini, la matita e il cestino. Le azioni sono
      quelle del sistema wod5e (5.3.x): itemChat, createItem, searchItem,
      itemEdit (la matita del modulo), itemDelete, dotCounterChange sugli
@@ -21,7 +21,12 @@
     {{#each feature as |item|}}
         <div class="wod5e-mage-riga wod5e-mage-riga-apribile wod5e-mage-riga-oggetto wod5e-mage-riga-vantaggio tipo-{{key}}" data-drag="true" data-item-id="{{item.id}}" data-document-uuid="{{item.uuid}}" data-type="Item">
             <div class="wod5e-mage-riga-testa">
-                <a class="wod5e-mage-lettera clickable" data-action="itemChat" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ShowToChat'}}">{{localize (concat 'WOD5E_MAGE.Tratti.Lettera.' key)}}</a>
+                {{!-- L'immagine dell'oggetto (il Rifugio ha la sua, 23/9); la lettera nel disco solo col segnaposto. Il clic manda in chat. --}}
+                {{#if (mageIconaPropria item.img)}}
+                    <a class="wod5e-mage-oggetto-icona clickable" data-action="itemChat" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ShowToChat'}}"><img src="{{item.img}}" alt=""></a>
+                {{else}}
+                    <a class="wod5e-mage-lettera clickable" data-action="itemChat" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ShowToChat'}}">{{localize (concat 'WOD5E_MAGE.Tratti.Lettera.' key)}}</a>
+                {{/if}}
                 <button type="button" class="wod5e-mage-riga-nome wod5e-mage-riga-nome-apri" data-action="rigaApri" title="{{localize 'WOD5E_MAGE.Tratti.Apri'}}" aria-expanded="false"><span>{{item.name}}</span>{{#if item.system.enrichedDescription}}<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>{{/if}}</button>
                 {{#if item.system.uses.enabled}}
                     <small class="wod5e-mage-oggetto-tag">{{item.system.uses.current}} / {{item.system.uses.max}}</small>

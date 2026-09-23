@@ -38,12 +38,14 @@ assert.match(css, /\.wod5e-mage-riq-body\s*\{[^}]*overflow-y:\s*auto;/s);
 assert.match(css, /\.wod5e-mage-stat-col\s*\{[^}]*display:\s*contents;/s);
 // L'ordine delle colonne (Blue, 20/9): Identità, Attributi, Abilità, Magick;
 // sotto, Risorse, Tratti, Grimorio, Il Tiro.
-for (const [riq, area] of [["identita", "1 / 1 / 2 / 2"], ["risorse", "2 / 1 / 4 / 2"], ["attributi", "1 / 2 / 3 / 3"], ["tratti", "3 / 2 / 4 / 3"], ["abilita", "1 / 3 / 3 / 4"], ["grimorio", "3 / 3 / 4 / 4"], ["magick", "1 / 4 / 3 / 5"], ["tiro", "3 / 4 / 4 / 5"]]) {
+// Dal 23/9 il Grimorio sta dentro i Tratti e Il Tiro prende due colonne.
+for (const [riq, area] of [["identita", "1 / 1 / 2 / 2"], ["risorse", "2 / 1 / 4 / 2"], ["attributi", "1 / 2 / 3 / 3"], ["tratti", "3 / 2 / 4 / 3"], ["abilita", "1 / 3 / 3 / 4"], ["magick", "1 / 4 / 3 / 5"], ["tiro", "3 / 3 / 4 / 5"]]) {
   assert.match(css, new RegExp(`\\.wod5e-mage-riq-${riq} \\{ grid-area: ${area.replace(/\//g, "\\/")}; \\}`), `area di ${riq}`);
 }
-assert.doesNotMatch(css, /wod5e-mage-riq-salute|wod5e-mage-riq-poteri|wod5e-mage-ambito-livell/);
+assert.doesNotMatch(css, /wod5e-mage-riq-salute|wod5e-mage-riq-poteri|wod5e-mage-ambito-livell|wod5e-mage-riq-grimorio/);
 // Gli otto riquadri stanno in stat.hbs nell'ordine delle colonne; la testata è vuota e nascosta.
-assert.match(statTemplate, /stat-identita\.hbs[\s\S]*stat-risorse\.hbs[\s\S]*stat-attributi\.hbs[\s\S]*stat-tratti\.hbs[\s\S]*stat-abilita\.hbs[\s\S]*stat-grimorio\.hbs[\s\S]*stat-magick\.hbs[\s\S]*stat-tiro\.hbs/);
+assert.match(statTemplate, /stat-identita\.hbs[\s\S]*stat-risorse\.hbs[\s\S]*stat-attributi\.hbs[\s\S]*stat-tratti\.hbs[\s\S]*stat-abilita\.hbs[\s\S]*stat-magick\.hbs[\s\S]*stat-tiro\.hbs/);
+assert.doesNotMatch(statTemplate, /stat-grimorio\.hbs/);
 assert.doesNotMatch(statTemplate, /stat-poteri\.hbs|riq-salute/);
 assert.match(mageHeader, /<header class="actor-header wod5e-mage-header wod5e-mage-header-vuota" aria-hidden="true"><\/header>/);
 assert.match(css, /\.wod5e-mage-header-vuota\s*\{\s*display: none;/);
@@ -63,9 +65,10 @@ assert.doesNotMatch(css, /\.wod5e-mage-pallino-ambito\.scelta/);
 assert.match(css, /\.wod5e-mage-riga-ambito:not\(\.scelta\):not\(:hover\) \.wod5e-mage-ambito-pallini\s*\{\s*opacity: 0\.4;/);
 // «Scegli la lettura» non c'è più (21/9): i pallini ci sono sempre, la lettura è facoltativa.
 assert.doesNotMatch(css, /\.wod5e-mage-ambito-scegli/);
-assert.match(css, /\.wod5e-mage-ambito-lettura\s*\{[^}]*padding: 0 2px 4px 24px;/s);
+// La seconda linea con la lettura non c'è più (23/9): la pastiglia sta dopo il nome, sulla stessa linea.
+assert.doesNotMatch(css, /\.wod5e-mage-ambito-lettura/);
+assert.match(css, /\.wod5e-mage-riga-nome-ambito > \.wod5e-mage-ambito-tag\s*\{\s*margin-left: 2px;/);
 assert.match(css, /\.wod5e-mage-ambito-tag\s*\{[^}]*text-transform: uppercase;/s);
-assert.match(css, /\.wod5e-mage-ambito-lettura > span\s*\{[^}]*font-size:\s*0\.95rem;[^}]*font-weight:\s*700;[^}]*text-align: center;/s);
 assert.match(css, /\.wod5e-mage-riga-tastini\s*\{[^}]*margin-left:\s*auto;/s);
 assert.match(css, /\.wod5e-mage-cassetto-modi\s*\{[^}]*flex-wrap:\s*wrap;/s);
 assert.doesNotMatch(css, /wod5e-mage-cassetto-ambito|wod5e-mage-livello-lettura/);
@@ -94,20 +97,28 @@ assert.match(sheetSource, /static adattaAlloSchermo\(\)[\s\S]*sporgeDalloSchermo
 assert.match(sheetSource, /window\.addEventListener\("resize"/);
 assert.match(sheetSource, /viewport: window \}\);\n\s+MageActorSheet\.agganciaSchermo\(\);/);
 // La pagina si vede solo quando è la linguetta accesa; senza Areté niente
-// tre tasti; la catena non si stampa più; i dadi extra hanno la loro riga.
+// tre tasti. Il Tiro largo due colonne (23/9): a sinistra la catena a
+// pillole con la × (torna), a destra Riserva, Soglia e Dadi col meno e il più.
 assert.match(css, /\.wod5e-mage-stat:not\(\.active\)\s*\{\s*display: none;/);
 assert.match(css, /\.wod5e-mage-stat\.active\s*\{[^}]*display: flex;/s);
 const tiroTemplate = stat("stat-tiro.hbs");
-assert.doesNotMatch(tiroTemplate, /tiro\.pills|wod5e-mage-pillola/);
-assert.match(tiroTemplate, /data-action="tiroExtra" data-delta="-1"[\s\S]*data-action="tiroExtra" data-delta="1"/);
+assert.match(tiroTemplate, /wod5e-mage-tiro-corpo[\s\S]*wod5e-mage-tiro-sinistra[\s\S]*wod5e-mage-tiro-catena[\s\S]*\{\{#each tiro\.pills as \|pill\|\}\}[\s\S]*wod5e-mage-pillola tipo-\{\{pill\.kind\}\}[\s\S]*data-action="tiroPill" data-kind="\{\{pill\.kind\}\}" data-id="\{\{pill\.id\}\}"[\s\S]*wod5e-mage-tiro-opzioni[\s\S]*data-action="tiroPrize"[\s\S]*data-action="tiroQuintessence"[\s\S]*data-action="tiroSforza"[\s\S]*wod5e-mage-tiro-destra[\s\S]*wod5e-mage-tiro-numero riserva[\s\S]*data-action="tiroExtra" data-delta="-1"[\s\S]*\{\{tiro\.riserva\}\}[\s\S]*data-action="tiroExtra" data-delta="1"[\s\S]*wod5e-mage-tiro-numero soglia[\s\S]*data-action="tiroDifficulty" data-delta="-1"[\s\S]*data-action="tiroDifficulty" data-delta="1"[\s\S]*wod5e-mage-tiro-numero dadi[\s\S]*data-action="tiroDadi" data-delta="-1"[\s\S]*\{\{tiro\.dice\}\}[\s\S]*data-action="tiroDadi" data-delta="1"[\s\S]*data-action="tiroRoll" data-kind="\{\{kind\.kind\}\}"/);
+assert.doesNotMatch(tiroTemplate, /wod5e-mage-tiro-conto|wod5e-mage-tiro-slot|wod5e-mage-tiro-extra"/);
+assert.match(css, /\.wod5e-mage-tiro-corpo\s*\{[^}]*grid-template-columns: minmax\(0, 1fr\) minmax\(0, 1fr\);/s);
+assert.match(sheetSource, /tiroDadi: onTiroDadi/);
 assert.match(stat("grimorio.hbs"), /data-action="grimorioClose"/);
 // Le Risorse a righe (Blue, 20/9): Salute e Saggezza col tastino che apre il
 // ventaglio (lo stesso cassettoToggle degli Ambiti, solo col clic), poi
 // Quintessenza e Paradosso col meno e il più ai lati del numero, la Ruota
 // nuda, le Condizioni in fondo.
 const risorseRiq = stat("stat-risorse.hbs");
-assert.match(risorseRiq, /wod5e-mage-risorse-righe[\s\S]*parts\/salute\.hbs[\s\S]*wod5e-mage-riga-saggezza con-ventaglio[\s\S]*wod5e-mage-ventaglio-tasto" data-action="ventaglioToggle"[\s\S]*wod5e-mage-saggezza-track[\s\S]*data-action="squareCounterChange"[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-tre[\s\S]*data-action="wisdomRoll"[\s\S]*data-action="wisdomResourceChange" data-resource-action="minus"[\s\S]*data-resource-action="plus"[\s\S]*wod5e-mage-riga-conto quintessence[\s\S]*data-resource="quintessence" data-delta="-1"[\s\S]*magickTrack\.quintessence[\s\S]*data-resource="quintessence" data-delta="1"[\s\S]*wod5e-mage-riga-conto paradox[\s\S]*data-action="paradoxBurst"[\s\S]*data-resource="paradox" data-delta="-1"[\s\S]*magickTrack\.paradox[\s\S]*data-resource="paradox" data-delta="1"[\s\S]*parts\/stat-ruota\.hbs[\s\S]*parts\/stat-condizioni\.hbs/);
-assert.doesNotMatch(risorseRiq, /wod5e-mage-saggezza-tendina|parts\/wisdom\.hbs/);
+assert.match(risorseRiq, /wod5e-mage-risorse-righe[\s\S]*parts\/salute\.hbs[\s\S]*wod5e-mage-riga-saggezza con-ventaglio[\s\S]*wod5e-mage-ventaglio-tasto" data-action="ventaglioToggle"[\s\S]*wod5e-mage-saggezza-track wod5e-mage-inchiostro-fila[\s\S]*wod5e-mage-inchiostro-cella" data-state="\{\{cell\.state\}\}" data-action="wisdomCellChange" data-index="\{\{cell\.index\}\}"[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-sei[\s\S]*style="--voce: 5" data-action="wisdomRoll"[\s\S]*style="--voce: 4" data-action="wisdomSegna"[\s\S]*style="--voce: 1" data-action="wisdomCura"[\s\S]*style="--voce: 2" data-action="wisdomReset"[\s\S]*style="--voce: 0" data-action="wisdomResourceChange" data-resource-action="minus"[\s\S]*style="--voce: 3" data-action="wisdomResourceChange" data-resource-action="plus"[\s\S]*wod5e-mage-riga-conto quintessence[\s\S]*data-resource="quintessence" data-delta="-1"[\s\S]*magickTrack\.quintessence[\s\S]*data-resource="quintessence" data-delta="1"[\s\S]*wod5e-mage-riga-conto paradox[\s\S]*data-action="paradoxBurst"[\s\S]*data-resource="paradox" data-delta="-1"[\s\S]*magickTrack\.paradox[\s\S]*data-resource="paradox" data-delta="1"[\s\S]*parts\/stat-ruota\.hbs[\s\S]*parts\/stat-condizioni\.hbs/);
+assert.doesNotMatch(risorseRiq, /wod5e-mage-saggezza-tendina|parts\/wisdom\.hbs|squareCounterChange|resource-counter-step/);
+// La ruota della Salute (23/9): il meno a sinistra (0), il più a destra (3), Riposo e Relax sopra (5, 4), Danni e Reset sotto (1, 2).
+const saluteRiga = stat("salute.hbs");
+for (const [voce, action] of [["5", 'data-action="saluteRiposo"'], ["4", 'data-action="saluteRelax"'], ["2", 'data-action="saluteReset"'], ["1", 'data-action="saluteDanni"'], ["0", 'data-action="saluteExtraChange" data-delta="-1"'], ["3", 'data-action="saluteExtraChange" data-delta="1"']]) {
+  assert.ok(saluteRiga.includes(`style="--voce: ${voce}" ${action}`), `ruota della Salute: ${action} al posto ${voce}`);
+}
 assert.doesNotMatch(stat("stat-ruota.hbs"), /wod5e-mage-magick-end/);
 // La Ruota dentro le Risorse: il mezzo cerchio vero senza tasti né conti né
 // etichetta, i Dettagli della Ruota chiusi e centrati.
@@ -138,8 +149,11 @@ assert.doesNotMatch(magickRiq, /resource-value-step|dotCounterChange|wod5e-mage-
 // sotto la lettura del livello scelto, centrata, con la lettura dell'Ambito in piccolo.
 // La riga dell'Ambito (21/9): il nome (tendina delle letture se ne ha più d'una), i sette pallini SEMPRE
 // (col tooltip del livello e, se la lettura è scelta, della lettura), la lettura sotto solo se c'è.
-assert.match(magickRiq, /wod5e-mage-riga-ambito\{\{#if scope\.multi\}\} con-tendina\{\{\/if\}\}\{\{#if scope\.level\}\} scelta[\s\S]*wod5e-mage-riga-testa[\s\S]*\{\{#if scope\.multi\}\}[\s\S]*wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*\{\{\/if\}\}\s*<span class="wod5e-mage-ambito-pallini"[\s\S]*wod5e-mage-pallino-ambito\{\{#if step\.lit\}\} lit\{\{\/if\}\}" data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}" data-tooltip="\{\{step\.tip\}\}"[\s\S]*\{\{#if scope\.reading\}\}[\s\S]*wod5e-mage-ambito-lettura"[^>]*>\{\{#if scope\.multi\}\}<small class="wod5e-mage-ambito-tag">\{\{scope\.modeLabel\}\}<\/small>\{\{\/if\}\}<span>\{\{scope\.reading\}\}<\/span>[\s\S]*\{\{else if scope\.modeShown\}\}[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-modi[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-modo\{\{#if mode\.selected\}\} scelta\{\{\/if\}\}" data-action="scopeMode" data-scope="\{\{scope\.id\}\}" data-mode="\{\{mode\.id\}\}"/);
+assert.match(magickRiq, /wod5e-mage-riga-ambito\{\{#if scope\.multi\}\} con-tendina\{\{\/if\}\}\{\{#if scope\.level\}\} scelta[\s\S]*wod5e-mage-riga-testa[\s\S]*\{\{#if scope\.multi\}\}[\s\S]*wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*\{\{\/if\}\}\s*<span class="wod5e-mage-ambito-pallini"[\s\S]*wod5e-mage-pallino-ambito\{\{#if step\.lit\}\} lit\{\{\/if\}\}" data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}" data-tooltip="\{\{step\.tip\}\}"[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-modi[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-modo\{\{#if mode\.selected\}\} scelta\{\{\/if\}\}" data-action="scopeMode" data-scope="\{\{scope\.id\}\}" data-mode="\{\{mode\.id\}\}"/);
 assert.doesNotMatch(magickRiq, /wod5e-mage-ambito-scegli|ScopeModeChoose|\{\{#if scope\.modeChosen\}\}/);
+// La pastiglia della lettura dentro il nome (23/9), niente seconda linea.
+assert.match(magickRiq, /wod5e-mage-riga-nome-ambito" data-action="cassettoToggle"[^>]*><span>\{\{scope\.label\}\}<\/span><i class="fa-solid fa-chevron-down" aria-hidden="true"><\/i>\{\{#if scope\.modeShown\}\}<small class="wod5e-mage-ambito-tag">\{\{scope\.modeLabel\}\}<\/small>\{\{else if scope\.reading\}\}<small class="wod5e-mage-ambito-tag">/);
+assert.doesNotMatch(magickRiq, /wod5e-mage-ambito-lettura/);
 assert.doesNotMatch(magickRiq, /wod5e-mage-riga-modo|wod5e-mage-cassetto-ambito|wod5e-mage-livello|title="\{\{step\.reading\}\}"/);
 assert.doesNotMatch(magickRiq, /riga-ambito con-cassetto/);
 const sheetJs = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
@@ -147,9 +161,14 @@ assert.match(sheetJs, /scopeMode: onScopeMode,\n\s+cassettoToggle: onCassettoTog
 assert.match(sheetJs, /addEventListener\("pointerdown"[\s\S]*classList\.remove\("aperto"\)/);
 assert.match(sheetJs, /modes: scopeModesOf\(this\)/);
 assert.doesNotMatch(magickRiq, /wod5e-mage-ambito-livello/);
-// Il Grimorio al posto dei Poteri: gli incantesimi cliccabili per il lancio, il libro apre la pagina.
-const grimorioRiq = stat("stat-grimorio.hbs");
-assert.match(grimorioRiq, /wod5e-mage-riq-grimorio[\s\S]*data-action="tiroGrimorio"[\s\S]*data-filter="incantesimi"[\s\S]*data-list="incantesimi"[\s\S]*data-action="tiroIncantesimo" data-row="\{\{spell\.id\}\}"/);
+// Il Grimorio dentro i Tratti a schede (23/9): le schede sono i filtri di specie in testa,
+// gli incantesimi sono righe della stessa lista con data-kind="grimorio", il libro apre la pagina.
+const trattiRiq = stat("stat-tratti.hbs");
+assert.match(trattiRiq, /wod5e-mage-riq-tratti" data-scheda="\{\{trattiScheda\}\}"[\s\S]*wod5e-mage-riq-title wod5e-mage-riq-schede[\s\S]*data-filters="tratti"[\s\S]*wod5e-mage-filtro wod5e-mage-scheda\{\{#if kind\.active\}\} active\{\{\/if\}\}" role="tab" data-kind="\{\{kind\.id\}\}"[\s\S]*data-filter="tratti"[\s\S]*data-action="tiroGrimorio"[\s\S]*data-list="tratti"[\s\S]*data-action="tiroTrait"[\s\S]*data-action="tiroIncantesimo" data-row="\{\{spell\.id\}\}" data-kind="grimorio"[\s\S]*wod5e-mage-tratti-vuoto" data-kind="\{\{kind\.id\}\}"/);
+assert.doesNotMatch(trattiRiq, /data-kind=""|Stat\.Tutti|data-list="incantesimi"/);
+assert.match(sheetJs, /SCHEDE_TRATTI = Object\.freeze\(\["background", "merit", "flaw", "equipment", "other", "grimorio"\]\)/);
+assert.match(sheetJs, /context\.trattiScheda = schedaTratti\(this\._filters\?\.tratti\)/);
+assert.match(sheetJs, /box\.dataset\.scheda = kind/);
 // Le Abilità: il tasto accanto al + le mette tutte in fila.
 const abilitaTemplate = stat("stat-abilita.hbs");
 assert.match(abilitaTemplate, /data-action="skillsFlatToggle"[\s\S]*data-action="customSkillAdd"/);

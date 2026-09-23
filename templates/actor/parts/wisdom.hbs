@@ -1,24 +1,25 @@
-{{!-- La Saggezza: il nome centrato sopra la fila, le caselle grandi come
-     la Salute, il riquadro largo quanto le caselle (4/9 notte). --}}
+{{!-- La Saggezza nella pagina del Personaggio: il nome centrato sopra la
+     fila, le caselle d'inchiostro come nella prima pagina (23/9), il meno e
+     il più delle caselle in più ai lati, il d10 tira. --}}
 <div class="flexcol field-section wod5e-mage-wisdom">
     <div class="flexcol">
         <label class="field-header flexrow resource-label wod5e-mage-wisdom-head">
-            <i class="fas fa-minus resource-control resource-minus" data-action="wisdomResourceChange" data-resource-action="minus"></i>
+            <i class="fas fa-minus resource-control resource-minus" data-action="wisdomResourceChange" data-resource-action="minus" title="{{localize 'WOD5E_MAGE.Wisdom.MaxMeno'}}"></i>
             <label for="wisdom" class="system-rollable wisdom-roll" data-action="wisdomRoll" title="{{localize 'WOD5E_MAGE.Wisdom.Roll'}}">
                 {{localize "WOD5E_MAGE.Wisdom.Label"}}
                 <i class="fa-solid fa-dice-d10"></i>
             </label>
-            <i class="fas fa-plus resource-control resource-plus" data-action="wisdomResourceChange" data-resource-action="plus"></i>
+            {{!-- Il numero delle caselle: il clic sceglie fra Carisma e Fermezza (23/9). --}}
+            <button type="button" class="wod5e-mage-valore-tasto wod5e-mage-wisdom-max" data-action="wisdomAttributePick" title="{{localize 'WOD5E_MAGE.Wisdom.AttributeHint' attribute=(localize (concat 'WOD5E.AttributesList.' wisdom.attributeLabel)) value=wisdom.attributeValue extra=wisdom.extra}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.AttributePick'}}">{{wisdom.max}}</button>
+            <i class="fas fa-plus resource-control resource-plus" data-action="wisdomResourceChange" data-resource-action="plus" title="{{localize 'WOD5E_MAGE.Wisdom.MaxPiu'}}"></i>
         </label>
     </div>
     <div class="resource flex-group-center wisdom">
         <div class="resource-content flexrow flex-center flex-between">
-            <div class="resource-counter editable" data-states="/:superficial,x:aggravated" data-max="{{wisdom.max}}"
-                data-superficial="{{wisdom.superficial}}" data-aggravated="{{wisdom.aggravated}}"
-                data-name="flags.wod5e-mage.wisdom">
-                {{#numLoop wisdom.max}}
-                    <span class="resource-counter-step" data-action="squareCounterChange" data-index="{{this}}" data-state=""></span>
-                {{/numLoop}}
+            <div class="wod5e-mage-inchiostro-fila" role="group" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Label'}}" title="{{localize 'WOD5E_MAGE.Wisdom.ClickHint'}}">
+                {{#each wisdom.cells as |cell|}}
+                    <button type="button" class="wod5e-mage-inchiostro-cella" data-state="{{cell.state}}" data-action="wisdomCellChange" data-index="{{cell.index}}" aria-label="{{localize cell.label}}"></button>
+                {{/each}}
             </div>
         </div>
     </div>

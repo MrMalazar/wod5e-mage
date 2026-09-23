@@ -219,16 +219,30 @@
 }
 
 /* Il Tiro: i numeri grandi in viola, i dadi in viola medio, l'impossibile in rosso mattone. */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-riserva > b {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-comandi > b {
   color: #282051;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-dadi > b {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-numero.dadi > .wod5e-mage-tiro-comandi > b {
   color: #3B336B;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-comandi > b {
-  color: #282051;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-numero.dadi.impossibile > .wod5e-mage-tiro-comandi > b {
+  color: #A4444A;
+}
+
+/* Le pillole della catena: crema con la cornice d'oro, Areté e incantesimo in viola. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pillola {
+  background: #FBF8F0;
+  border-color: #B3924A;
+  color: #1E1B2E;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pillola.tipo-arete,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pillola.tipo-spell {
+  background: #282051;
+  border-color: #7A6FA0;
+  color: #F6F2E6;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-etichetta {
@@ -692,8 +706,8 @@
 /* I glifi della Salute: le stesse caselle, in piccolo, dentro il testo.
    Regole globali: servono nella legenda, nel menù e nella tavola degli Ambiti. */
 .wod5e-mage-salute-glyph {
-  --salute-segno: var(--mage-oro-chiaro);
-  border: 1px solid var(--mage-oro-scuro);
+  --salute-segno: var(--mage-oro-chiaro, #f5e7b2);
+  border: 1px solid var(--mage-oro-scuro, #98772b);
   display: inline-block;
   height: 12px;
   margin: 0 0.1rem;
@@ -766,17 +780,21 @@
   width: 16px;
 }
 
-/* La scelta del segno: un menù piccolo dove hai cliccato, solo simboli. */
+/* La scelta del segno: un menù piccolo dove hai cliccato, col nome accanto al
+   simbolo e la spunta sul segno in uso. Sta dentro la finestra della scheda
+   (23/9): appeso al corpo della pagina non vedeva i gettoni dei colori e
+   usciva trasparente e senza simboli. In assoluto rispetto alla finestra;
+   i ripieghi nei colori servono solo se finisce fuori dalla scheda. */
 .wod5e-mage-salute-menu {
-  background: var(--mage-nero-dado);
+  background: var(--mage-cassetto-fondo, #1a160f);
   border: 1px solid var(--mage-oro, #d9a827);
-  border-radius: 4px;
-  box-shadow: 0 4px 14px rgb(0 0 0 / 60%);
+  border-radius: 6px;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 60%);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   padding: 5px;
-  position: fixed;
+  position: absolute;
   z-index: 10000;
 }
 
@@ -784,35 +802,66 @@
   align-items: center;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 3px;
-  color: var(--mage-oro-chiaro, #e8c766);
+  border-radius: 4px;
+  color: var(--mage-testo, #e6dcc2);
   cursor: pointer;
   display: flex;
   gap: 0.6rem;
-  height: 36px;
+  height: 34px;
   justify-content: flex-start;
   line-height: 1;
   margin: 0;
-  min-height: 36px;
-  padding: 0 0.6rem 0 0.35rem;
+  min-height: 34px;
+  padding: 0 0.5rem 0 0.4rem;
   width: 100%;
 }
 
 /* Il nome del segno accanto al simbolo: la legenda vive qui. */
 .wod5e-mage-salute-menu-text {
+  flex: 1 1 auto;
   font-size: 0.85rem;
+  font-weight: 600;
+  text-align: left;
   white-space: nowrap;
 }
 
 .wod5e-mage-salute-menu-item:hover,
-.wod5e-mage-salute-menu-item.current {
+.wod5e-mage-salute-menu-item:focus-visible {
+  background: var(--mage-riga-sorvolo, #3a352c);
   border-color: var(--mage-oro, #d9a827);
+  box-shadow: none;
+  outline: none;
+}
+
+/* Il segno in uso: viola come ogni scelta della scheda, con la spunta. */
+.wod5e-mage-salute-menu-item.current {
+  background: var(--mage-viola, #5a2b82);
+  border-color: var(--mage-viola-chiaro, #b58ade);
+  color: var(--mage-scelta-testo, #fff);
+}
+
+.wod5e-mage-salute-menu-spunta {
+  color: var(--mage-oro, #d9a827);
+  font-size: 0.75rem;
+  visibility: hidden;
+}
+
+.wod5e-mage-salute-menu-item.current .wod5e-mage-salute-menu-spunta {
+  visibility: visible;
 }
 
 .wod5e-mage-salute-menu-item .wod5e-mage-salute-glyph {
-  height: 24px;
+  --salute-segno: var(--mage-oro-chiaro, #f5e7b2);
+  border-color: var(--mage-oro-scuro, #98772b);
+  flex: 0 0 auto;
+  height: 22px;
   margin: 0;
-  width: 24px;
+  width: 22px;
+}
+
+.wod5e-mage-salute-menu-item.current .wod5e-mage-salute-glyph {
+  --salute-segno: #fff;
+  border-color: var(--mage-viola-chiaro, #b58ade);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-salute-status {
@@ -7365,10 +7414,10 @@
 }
 
 /* Le colonne sono trasparenti alla griglia: i riquadri si posizionano da soli,
-   così la fascia bassa (Tratti, Grimorio, Il Tiro) sta su una riga sola e le
-   Risorse prendono le due righe sotto l'Identità. L'ordine delle colonne è
-   quello di Blue del 20/9: Identità, Attributi, Abilità, Magick; sotto,
-   Risorse, Tratti, Grimorio, Il Tiro. */
+   così la fascia bassa (Tratti, Il Tiro) sta su una riga sola e le Risorse
+   prendono le due righe sotto l'Identità. L'ordine delle colonne è quello
+   di Blue del 20/9: Identità, Attributi, Abilità, Magick; sotto, Risorse,
+   Tratti (col Grimorio dentro, 23/9) e Il Tiro largo due colonne. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-col {
   display: contents;
 }
@@ -7378,9 +7427,8 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-attributi { grid-area: 1 / 2 / 3 / 3; }
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tratti { grid-area: 3 / 2 / 4 / 3; }
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-abilita { grid-area: 1 / 3 / 3 / 4; }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-grimorio { grid-area: 3 / 3 / 4 / 4; }
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-magick { grid-area: 1 / 4 / 3 / 5; }
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tiro { grid-area: 3 / 4 / 4 / 5; }
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tiro { grid-area: 3 / 3 / 4 / 5; }
 
 /* Il riquadro. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq {
@@ -7576,6 +7624,16 @@
   white-space: nowrap;
 }
 
+/* I pallini centrati in altezza (Blue, 23/9: «sono schiacciati in basso a
+   toccare la linea sotto del box»): il sistema wod5e li spinge in fondo alla
+   riga con `align-self: flex-end` su ogni `.resource-value`, e le righe
+   della scheda non lo annullavano. Vale per ogni riga delle pagine rifatte,
+   a una linea o a due, e per i pallini degli oggetti. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga .resource-value,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-oggetto-pallini {
+  align-self: center;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga > .resource-value > :is(.resource-value-step, .resource-value-empty) {
   flex: 0 0 18px;
   height: 18px;
@@ -7697,16 +7755,11 @@
   border-color: var(--mage-dot-border);
 }
 
-/* La seconda linea: la pastiglia della lettura a sinistra, rientrata sotto
-   il nome; la lettura del livello centrata nello spazio che resta. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-lettura {
-  align-items: center;
-  color: var(--mage-testo);
-  display: flex;
-  gap: 8px;
-  min-height: 18px;
-  min-width: 0;
-  padding: 0 2px 4px 24px;
+/* La pastiglia della lettura scelta (Peso, Epicità…) sta sulla stessa linea,
+   subito dopo il nome (Blue, 23/9: via la seconda linea, «crea spazio tra i
+   pallini»); il testo del livello sta nel tooltip del pallino. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome-ambito > .wod5e-mage-ambito-tag {
+  margin-left: 2px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-tag {
@@ -7721,21 +7774,6 @@
   padding: 3px 6px;
   text-transform: uppercase;
   white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ambito-lettura > span {
-  flex: 1 1 auto;
-  font-size: 0.95rem;
-  font-weight: 700;
-  min-width: 0;
-  overflow: hidden;
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito.scelta .wod5e-mage-ambito-lettura {
-  color: var(--mage-scelta-tenue-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito.scelta .wod5e-mage-ambito-tag {
@@ -8146,6 +8184,80 @@
   font-size: 0.85rem;
   height: 22px;
   min-width: 0;
+}
+
+/* La riga della cerca coi tastini a destra (23/9): il libro del Grimorio si
+   vede solo sulla scheda del Grimorio. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-cerca-riga {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-cerca-riga > .wod5e-mage-riq-cerca {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tratti-libro {
+  display: none;
+  height: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tratti[data-scheda="grimorio"] .wod5e-mage-tratti-libro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Le schede in testa ai Tratti (Blue, 23/9: «al posto della parola Tratti un
+   menù a schedine»): i filtri di specie vestiti da linguette, quella scelta
+   piena; il conto del memo, se c'è, in coda. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-schede {
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  padding-bottom: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-schede {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 3px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scheda {
+  border-radius: 6px 6px 0 0;
+  border-bottom-color: transparent;
+  color: var(--mage-tenue);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 7px 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scheda:hover {
+  border-color: var(--mage-oro-scuro);
+  border-bottom-color: transparent;
+  box-shadow: none;
+  color: var(--mage-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scheda.active {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-schede > .wod5e-mage-memo-conto {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-oggetto.wod5e-mage-riga-incantesimo .wod5e-mage-riga-coda {
+  color: var(--mage-oro);
 }
 
 /* Gli elenchi scorrono dentro il riquadro: la fascia bassa non cresce a dismisura. */
@@ -8590,14 +8702,184 @@
   padding: 0 0 2px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-track .resource-counter-step {
-  border: 1px solid var(--mage-oro-scuro);
+/* ==========================================================================
+   LA FILA D'INCHIOSTRO DELLA SAGGEZZA (Blue, 23/9): «delle macchie, degli
+   effetti gocce di inchiostro che ci cadono dentro a colorare la casella
+   fino a riempirla, in modo da far capire che è una cosa differente». La
+   sbarra è una goccia che macchia mezza casella, la croce la casella tutta
+   d'inchiostro. L'inchiostro è viola: lavanda sul fondo scuro, viola
+   profondo sulla carta. Quando una casella si segna, la goccia cade
+   dall'alto (classe `cade`, messa dal render) e la macchia si allarga.
+   Le regole valgono anche fuori dalla scheda (il menù dei segni, la
+   finestra delle macchie): per questo hanno i ripieghi nei colori.
+   ========================================================================== */
+.wod5e-mage-inchiostro-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.wod5e-mage-inchiostro-cella,
+.wod5e-mage-inchiostro-glyph {
+  --inchiostro: var(--mage-viola-chiaro, #b58ade);
+  --inchiostro-ombra: rgb(0 0 0 / 30%);
+  background: var(--mage-incavo, #15130f);
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  border-radius: 2px;
   box-sizing: border-box;
-  cursor: pointer;
   display: inline-block;
+  position: relative;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-inchiostro-cella,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-inchiostro-glyph {
+  --inchiostro: var(--mage-viola, #282051);
+  --inchiostro-ombra: rgb(40 32 81 / 25%);
+  background: #FBF8F0;
+  border-color: #B3924A;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-inchiostro-cella {
+  box-shadow: none;
+  cursor: pointer;
+  flex: 0 0 20px;
   height: 20px;
+  line-height: 1;
   margin: 0;
+  min-height: 20px;
+  padding: 0;
   width: 20px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-inchiostro-cella:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+}
+
+.wod5e-mage-inchiostro-glyph {
+  height: 22px;
+  margin: 0;
+  vertical-align: -3px;
+  width: 22px;
+}
+
+.wod5e-mage-inchiostro-cella::after,
+.wod5e-mage-inchiostro-glyph::after {
+  background-repeat: no-repeat;
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: 45% 50%;
+}
+
+/* La sbarra: una goccia caduta, mezza casella, coi suoi schizzi. */
+.wod5e-mage-inchiostro-cella[data-state="s"]::after,
+.wod5e-mage-inchiostro-glyph[data-state="s"]::after {
+  background:
+    radial-gradient(ellipse 36% 32% at 42% 50%, var(--inchiostro) 96%, transparent 100%),
+    radial-gradient(ellipse 13% 13% at 70% 66%, var(--inchiostro) 96%, transparent 100%),
+    radial-gradient(ellipse 9% 9% at 28% 80%, var(--inchiostro) 96%, transparent 100%),
+    radial-gradient(ellipse 7% 7% at 64% 26%, var(--inchiostro) 96%, transparent 100%),
+    radial-gradient(ellipse 5% 5% at 82% 40%, var(--inchiostro) 96%, transparent 100%);
+}
+
+/* La croce: la casella tutta d'inchiostro, col riflesso bagnato. */
+.wod5e-mage-inchiostro-cella[data-state="a"]::after,
+.wod5e-mage-inchiostro-glyph[data-state="a"]::after {
+  background:
+    radial-gradient(circle at 32% 28%, rgb(255 255 255 / 22%), transparent 42%),
+    var(--inchiostro);
+  box-shadow: inset 0 0 0 1px var(--inchiostro-ombra);
+}
+
+/* La goccia che cade (dal render, classe `cade`): parte sopra la casella,
+   scende dentro, e la macchia si allarga da zero. */
+.wod5e-mage-inchiostro-cella.cade::before {
+  animation: wod5e-mage-goccia-cade 0.38s ease-in forwards;
+  background: var(--inchiostro);
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  content: "";
+  height: 10px;
+  left: 50%;
+  margin-left: -3px;
+  pointer-events: none;
+  position: absolute;
+  top: -16px;
+  width: 6px;
+  z-index: 2;
+}
+
+.wod5e-mage-inchiostro-cella.cade::after {
+  animation: wod5e-mage-macchia-allarga 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) 0.3s backwards;
+}
+
+@keyframes wod5e-mage-goccia-cade {
+  0% { opacity: 1; transform: translateY(0) scaleY(1); }
+  85% { opacity: 1; transform: translateY(20px) scaleY(1.2); }
+  100% { opacity: 0; transform: translateY(24px) scaleY(0.4); }
+}
+
+@keyframes wod5e-mage-macchia-allarga {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wod5e-mage-inchiostro-cella.cade::before,
+  .wod5e-mage-inchiostro-cella.cade::after {
+    animation: none;
+  }
+}
+
+/* Il menù dei segni della Saggezza: i glifi d'inchiostro al posto di quelli della Salute. */
+.wod5e-mage-salute-menu-item .wod5e-mage-inchiostro-glyph {
+  flex: 0 0 auto;
+  height: 22px;
+  width: 22px;
+}
+
+.wod5e-mage-salute-menu-item.current .wod5e-mage-inchiostro-glyph {
+  border-color: var(--mage-viola-chiaro, #b58ade);
+}
+
+.wod5e-mage-danni-sign > .wod5e-mage-inchiostro-glyph {
+  flex: none;
+  height: 18px;
+  width: 18px;
+}
+
+/* Il numero delle caselle come tasto (23/9): sceglie fra Carisma e Fermezza. */
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-valore-tasto {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  line-height: 1;
+  min-height: 0;
+  padding: 1px 4px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-valore-tasto:hover,
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-valore-tasto:focus-visible {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-max {
+  color: var(--mage-oro);
+  font-size: 1em;
+  font-weight: 700;
+  margin-left: 0.4rem;
+}
+
+/* La pagina del Personaggio: la fila centrata, come stava. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom .wod5e-mage-inchiostro-fila {
+  justify-content: center;
+  padding: 4px 0;
 }
 
 /* I conti: il meno e il più ai lati del numero, in fondo alla riga. */
@@ -8750,9 +9032,9 @@
   transform: none;
 }
 
-/* Le tendine vecchie del riquadro (Saggezza, Dettagli, memo): il summary. */
+/* Le tendine vecchie del riquadro (Saggezza, Dettagli, i Bonus scritti): il summary. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli > summary,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione > summary {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-bonus > summary {
   color: var(--mage-testo);
   cursor: pointer;
   font-size: 0.68rem;
@@ -8764,7 +9046,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-dettagli > summary::-webkit-details-marker,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione > summary::-webkit-details-marker {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-bonus > summary::-webkit-details-marker {
   display: none;
 }
 
@@ -9103,53 +9385,181 @@
   width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto {
+/* Il Tiro largo due colonne (Blue, 23/9): a sinistra il tipo, la catena e
+   le opzioni; a destra i tre numeri col meno e il più, e i tasti. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-corpo {
   display: grid;
-  gap: 6px;
-  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-riserva,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-dadi {
-  align-items: center;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sinistra,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-destra {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* La catena: le pillole di quello che è in tiro, la × toglie il pezzo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-catena {
+  align-content: flex-start;
   background: var(--mage-incavo);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 6px;
   display: flex;
-  flex-direction: column;
-  gap: 0;
-  padding: 3px 6px 4px;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 56px;
+  overflow-y: auto;
+  padding: 5px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-riserva .wod5e-mage-riq-occhiello,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-dadi .wod5e-mage-riq-occhiello {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-vuoto {
   margin: 0;
+  padding: 4px 2px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-riserva .wod5e-mage-riq-occhiello::after,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-dadi .wod5e-mage-riq-occhiello::after {
-  display: none;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-riserva > b,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-dadi > b {
-  color: var(--mage-oro);
-  font-family: "Modesto Condensed", serif;
-  font-size: 1.7rem;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 12px;
+  color: var(--mage-testo);
+  display: inline-flex;
+  font-size: 0.74rem;
+  font-weight: 600;
+  gap: 4px;
+  height: 22px;
   line-height: 1;
+  max-width: 100%;
+  padding: 0 3px 0 8px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-dadi > b {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-testo {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-arete,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-spell {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-sphere,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-power,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-scope {
+  border-color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-via {
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  font-size: 0.85rem;
+  height: 16px;
+  line-height: 1;
+  min-height: 0;
+  padding: 0;
+  width: 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-via:hover {
+  box-shadow: none;
+  color: var(--mage-rosso-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-arete .wod5e-mage-pillola-via,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-spell .wod5e-mage-pillola-via {
+  color: var(--mage-scelta-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-opzioni {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* I tre numeri: etichetta, meno, numero grande, più, e la nota a destra. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numeri {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  display: grid;
+  gap: 6px;
+  grid-template-columns: 74px auto minmax(0, 1fr);
+  min-height: 34px;
+  padding: 2px 8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero > .wod5e-mage-tiro-comandi > b {
+  font-family: "Modesto Condensed", serif;
+  font-size: 1.6rem;
+  line-height: 1;
+  min-width: 34px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero.dadi > .wod5e-mage-tiro-comandi > b {
   color: var(--mage-viola-chiaro);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-dadi.impossibile > b {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero.dadi.impossibile > .wod5e-mage-tiro-comandi > b {
   color: var(--mage-rosso-vivo);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-dadi > small {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero.soglia.a-mano,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero.dadi.ritoccati {
+  border-color: var(--mage-oro-scuro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-nota {
   color: var(--mage-tenue);
-  font-size: 0.6rem;
+  font-size: 0.64rem;
+  justify-self: end;
+  line-height: 1.15;
+  text-align: right;
+}
+
+/* Torna al conto (la calcolatrice): sulla Soglia scritta a mano e sui Dadi ritoccati. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero > .wod5e-mage-tiro-ricalcola {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 10px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.66rem;
+  font-weight: 700;
+  gap: 4px;
+  height: 20px;
+  justify-self: end;
+  line-height: 1;
+  min-height: 0;
+  padding: 0 8px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero > .wod5e-mage-tiro-ricalcola:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-riga {
@@ -9340,24 +9750,234 @@
   color: var(--mage-rosso-chiaro);
 }
 
-/* Il memo di creazione e i Bonus, sotto i riquadri, chiusi. */
+/* La barra sotto i riquadri (Blue, 23/9): la spunta del memo di creazione,
+   e da accesa il grado, la Sfida coi premi, la spunta dei tasti di reset e
+   il reset della scheda; a destra la tendina dei Bonus scritti. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione {
+  align-items: center;
   background: var(--mage-riq-fondo);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 8px;
+  display: flex;
   flex: 0 0 auto;
-  padding: 1px 10px;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  min-height: 34px;
+  padding: 3px 10px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione[open] > summary > i {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-spunta,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione .wod5e-mage-reset-toggle {
+  align-items: center;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 700;
+  gap: 6px;
+  letter-spacing: 0.08em;
+  margin: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-spunta > input,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione .wod5e-mage-reset-toggle > input {
+  height: 15px;
+  margin: 0;
+  width: 15px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-creazione-barra.acceso .wod5e-mage-memo-spunta {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-grado {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-grado > span {
+  color: var(--mage-oro);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-memo-grado > select {
+  font-size: 0.8rem;
+  height: 24px;
+  margin: 0;
+  width: 130px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-sfida {
+  align-items: center;
+  color: var(--mage-testo);
+  display: inline-flex;
+  flex-wrap: wrap;
+  font-size: 0.72rem;
+  gap: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-sfida > i {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-sfida > b {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-sfida.exact > b {
+  color: #7fd18a;
+}
+
+/* Un premio della Sfida: spento finché non è preso, acceso in oro da preso. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-premio {
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 9px;
+  color: var(--mage-tenue);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  padding: 3px 6px;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-premio.preso {
+  border-color: var(--mage-oro);
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione .wod5e-mage-reset-all {
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-bonus {
+  flex: 1 1 100%;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-creazione-barra .wod5e-mage-stat-bonus {
+  flex: 0 1 auto;
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-creazione-barra .wod5e-mage-stat-bonus[open] {
+  flex: 1 1 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-bonus[open] > summary > i {
   transform: rotate(180deg);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-creazione-body {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-stat-bonus-body {
   padding: 4px 0 8px;
+}
+
+/* Il conto accanto al titolo del riquadro (23/9): in minuscolo, col colore
+   dello stato; il titolo intero si colora: rosso sotto il traguardo, verde
+   pari, giallo sopra (i tre stati del 7/9). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-conto {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-left: 6px;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-conto > i {
+  font-size: 0.7rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-voce.under,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title.memo-under,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title.memo-under .wod5e-mage-memo-conto {
+  color: #e2655a;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-voce.over,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title.memo-over,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title.memo-over .wod5e-mage-memo-conto {
+  color: #e9c84a;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-voce.exact,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title.memo-exact,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title.memo-exact .wod5e-mage-memo-conto {
+  color: #7fd18a;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title.memo-under {
+  background: linear-gradient(rgb(226 101 90 / 16%), rgb(226 101 90 / 4%));
+  border-bottom-color: rgb(226 101 90 / 70%);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title.memo-over {
+  background: linear-gradient(rgb(233 200 74 / 14%), rgb(233 200 74 / 3%));
+  border-bottom-color: rgb(233 200 74 / 65%);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title.memo-exact {
+  background: linear-gradient(rgb(127 209 138 / 14%), rgb(127 209 138 / 3%));
+  border-bottom-color: rgb(127 209 138 / 65%);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-memo-avviso {
+  color: #e2655a;
+  font-size: 0.62rem;
+  font-weight: 700;
+  margin-left: 4px;
+  text-transform: none;
+}
+
+/* La linguetta della pagina si colora (23/9): un punto rosso o verde sopra
+   l'icona, e l'icona del suo colore. */
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].wod5e-mage-tab-memo {
+  position: relative;
+}
+
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].wod5e-mage-tab-memo::after {
+  border-radius: 50%;
+  content: "";
+  height: 7px;
+  position: absolute;
+  right: 5px;
+  top: 4px;
+  width: 7px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].wod5e-mage-tab-memo.memo-under::after {
+  background: #e2655a;
+  box-shadow: 0 0 5px rgb(226 101 90 / 80%);
+}
+
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].wod5e-mage-tab-memo.memo-exact::after {
+  background: #7fd18a;
+  box-shadow: 0 0 5px rgb(127 209 138 / 80%);
+}
+
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].wod5e-mage-tab-memo.memo-over::after {
+  background: #e9c84a;
+}
+
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].wod5e-mage-tab-memo.memo-under .navicon,
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].wod5e-mage-tab-memo.memo-under .wod5e-mage-tab-label {
+  color: #e2655a;
+}
+
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].wod5e-mage-tab-memo.memo-exact .navicon,
+.wod5e-mage.wod5e.actor.sheet .sheet-tabs > [data-tab].wod5e-mage-tab-memo.memo-exact .wod5e-mage-tab-label {
+  color: #7fd18a;
 }
 
 /* ==========================================================================
@@ -10195,6 +10815,29 @@
   font-size: 0.85rem;
 }
 
+/* L'immagine dell'oggetto al posto della lettera (23/9: il Rifugio ha la
+   sua icona): stessa misura del disco, il clic manda in chat. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-oggetto-icona {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 22px;
+  height: 22px;
+  justify-content: center;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-oggetto-icona > img {
+  border: 0;
+  height: 22px;
+  object-fit: contain;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-oggetto-icona:hover > img {
+  filter: drop-shadow(0 0 3px var(--mage-oro));
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-oggetto .wod5e-mage-riga-nome {
   font-size: 0.95rem;
 }
@@ -10324,9 +10967,17 @@
   gap: 3px;
 }
 
+/* La pastiglia dello Strumento sta sulla seconda linea, a sinistra sotto il
+   nome della Sfera (Blue, 23/9); il tuo di preciso a destra fino in fondo. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-strumento-pastiglia {
-  margin-left: auto;
-  max-width: 200px;
+  flex: 0 1 auto;
+  margin-left: 0;
+  max-width: 180px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-strumento-sotto > input.wod5e-mage-focus-instrument-name {
+  flex: 1 1 60px;
+  min-width: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument .wod5e-mage-riga-nome {
@@ -10595,10 +11246,12 @@
   padding: 0 4px 0 30px;
 }
 
+/* Il listino in una colonna sola (Blue, 23/9: «mi sa di disordine dividere
+   le cose così, è difficile anche da leggere»). */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-listino {
-  display: grid;
-  gap: 2px 12px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-listino {

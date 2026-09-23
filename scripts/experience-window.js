@@ -57,7 +57,19 @@ export function potereCost(power, family) {
   return dot * EXPERIENCE_COSTS[family ? "potereFamiglia" : "potereEsterno"].multiplier;
 }
 
-/** Le righe del listino, con etichetta e formula già localizzate. */
+/** Il simbolo di ogni voce del listino (23/9: «mancano i simboli delle cose correlate»). */
+export const EXPERIENCE_ICONS = Object.freeze({
+  attribute: "fa-solid fa-person",
+  skill: "fa-solid fa-graduation-cap",
+  arete: "fa-solid fa-sun",
+  dominio: "fa-solid fa-circle-nodes",
+  potereFamiglia: "fa-solid fa-house",
+  potereEsterno: "fa-solid fa-wand-sparkles",
+  health: "fa-solid fa-heart",
+  trait: "fa-solid fa-star"
+});
+
+/** Le righe del listino, con etichetta, simbolo e formula già localizzate. */
 function experienceRows() {
   const localize = game.i18n.localize.bind(game.i18n);
   const perDot = localize("WOD5E_MAGE.Experience.PerDot");
@@ -69,7 +81,7 @@ function experienceRows() {
     else if (rule.current) formula = localize("WOD5E_MAGE.Experience.PerBox");
     else if (rule.firstDot !== undefined) formula = `${firstDot} ${rule.firstDot} · ${perDot} × ${rule.multiplier}`;
     else formula = `${perDot} × ${rule.multiplier}`;
-    return { kind, label: localize(`WOD5E_MAGE.Experience.Kinds.${kind}`), formula };
+    return { kind, label: localize(`WOD5E_MAGE.Experience.Kinds.${kind}`), formula, icon: EXPERIENCE_ICONS[kind] ?? "fa-solid fa-diamond" };
   });
 }
 

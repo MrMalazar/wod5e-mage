@@ -6,10 +6,19 @@
             {{!-- Un divisorio fra un gruppo di pagine e l'altro (6/9). --}}
             {{#if tab.groupStart}}<hr class="wod5e-mage-tabs-divider" aria-hidden="true">{{/if}}
             {{!-- Icona e, sotto, il nome corto della pagina (6/9). --}}
+            {{!-- Col memo di creazione acceso (23/9) la linguetta si colora: rossa se
+                 manca qualcosa in quella pagina, verde se è a posto. --}}
+            {{#with (lookup @root.memo.tabs tab.id) as |stato|}}
+            <div class="{{tab.cssClass}}{{#if @root.memo.on}}{{#if stato.state}} wod5e-mage-tab-memo memo-{{stato.state}}{{/if}}{{/if}}" data-action="tab" data-group="{{tab.group}}" data-tab="{{tab.id}}" title="{{localize tab.title}}">
+                <div class="navicon">{{{tab.icon}}}</div>
+                {{#if tab.short}}<span class="wod5e-mage-tab-label">{{localize tab.short}}</span>{{/if}}
+            </div>
+            {{else}}
             <div class="{{tab.cssClass}}" data-action="tab" data-group="{{tab.group}}" data-tab="{{tab.id}}" title="{{localize tab.title}}">
                 <div class="navicon">{{{tab.icon}}}</div>
                 {{#if tab.short}}<span class="wod5e-mage-tab-label">{{localize tab.short}}</span>{{/if}}
             </div>
+            {{/with}}
         {{/each}}
 
         <div class="wod5e-mage-tabs-spacer" aria-hidden="true"></div>

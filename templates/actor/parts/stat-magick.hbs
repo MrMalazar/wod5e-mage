@@ -9,9 +9,10 @@
      apre solo col clic. I pallini dell'Areté e delle Sfere restano quelli
      della scheda: cambiano il valore, non la catena. (Blue, 16/9 sera.) --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-magick">
-    <header class="wod5e-mage-riq-title">
+    {{!-- Col memo di creazione acceso (23/9): l'Areté del grado e i pallini delle Sfere (col premio della Sfida se c'è). --}}
+    <header class="wod5e-mage-riq-title{{#if memo.on}} memo-{{memo.boxes.magick.state}}{{/if}}">
         {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.spheres}}{{/if}}
-        <span>{{localize "WOD5E_MAGE.Tabs.Magick"}}</span>
+        <span>{{localize "WOD5E_MAGE.Tabs.Magick"}}{{#if memo.on}} <b class="wod5e-mage-memo-conto">{{#if memo.boxes.magick.arete}}<span class="wod5e-mage-memo-voce {{#if memo.boxes.magick.arete.ok}}exact{{else}}under{{/if}}" title="{{localize 'WOD5E_MAGE.Riepilogo.Arete'}}">{{localize "WOD5E_MAGE.Arete.Label"}} {{memo.boxes.magick.arete.target}}</span> · {{/if}}<span class="wod5e-mage-memo-voce {{memo.boxes.magick.sfere.state}}" title="{{localize 'WOD5E_MAGE.Riepilogo.Spheres'}}">{{localize "WOD5E_MAGE.Tabs.Spheres"}} {{memo.boxes.magick.sfere.text}}</span>{{#if memo.boxes.magick.sfere.sfida}} <small class="wod5e-mage-memo-premio preso" title="{{localize 'WOD5E_MAGE.Riepilogo.SfidaPremi.spheres'}}">+{{memo.boxes.magick.sfere.sfida}} {{localize "WOD5E_MAGE.Tabs.Short.conceptChallenge"}}</small>{{/if}}</b>{{/if}}</span>
     </header>
     <div class="wod5e-mage-riq-body">
         {{!-- La riga dell'Areté: il nome è il tasto, i pallini il valore. --}}
@@ -65,22 +66,24 @@
         <span class="wod5e-mage-riq-occhiello">{{localize "WOD5E_MAGE.Scopes.TableTitle"}}</span>
         <div class="wod5e-mage-ambiti-lista">
             {{#each scopeRows as |scope|}}
-                {{!-- La riga (20/9, sera; 21/9): la testa col nome (il chevron in
-                     oro se l'Ambito ha più letture: il clic apre la tendina delle
-                     letture, una pastiglia per lettura) e in fondo i sette pallini,
-                     sempre (Blue, 21/9: «lasciamo solo i pallini: se vuole l'utente
-                     può specificare il sottotipo, ma può anche solo cliccare i
-                     pallini necessari e via»), della misura e del colore di quelli
-                     delle Sfere, a riposo al 40%. Sul pallino il sorvolo dice il
-                     livello e, se la lettura è scelta, la sua lettura; il clic lo
-                     dichiara. Sotto, solo con una lettura scelta, la pastiglia
-                     della lettura a sinistra e, col livello, la sua lettura
-                     centrata e in grassetto. --}}
-                <div class="wod5e-mage-riga wod5e-mage-riga-ambito{{#if scope.multi}} con-tendina{{/if}}{{#if scope.level}} scelta{{/if}}">
+                {{!-- La riga (20/9, sera; 21/9; 23/9): una linea sola. La testa col
+                     nome (il chevron in oro se l'Ambito ha più letture: il clic
+                     apre la tendina delle letture, una pastiglia per lettura), la
+                     pastiglia della lettura scelta subito dopo il nome, e in fondo
+                     i sette pallini, sempre (Blue, 21/9: «lasciamo solo i pallini:
+                     se vuole l'utente può specificare il sottotipo, ma può anche
+                     solo cliccare i pallini necessari e via»), della misura e del
+                     colore di quelli delle Sfere, a riposo al 40%. Sul pallino il
+                     sorvolo dice il livello e, se la lettura è scelta, la sua
+                     lettura; il clic lo dichiara. La seconda linea con la lettura
+                     non c'è più (Blue, 23/9: «il sottoambito dà fastidio, crea
+                     spazio tra i pallini»); il testo del livello scelto sta nel
+                     tooltip del pallino e nel Tiro. --}}
+                <div class="wod5e-mage-riga wod5e-mage-riga-ambito{{#if scope.multi}} con-tendina{{/if}}{{#if scope.level}} scelta{{/if}}" {{#if scope.reading}}title="{{scope.reading}}"{{/if}}>
                     <div class="wod5e-mage-riga-testa">
                         <i class="{{scope.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>
                         {{#if scope.multi}}
-                            <button type="button" class="wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}" aria-label="{{scope.label}}: {{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}"><span>{{scope.label}}</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+                            <button type="button" class="wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}" aria-label="{{scope.label}}: {{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}"><span>{{scope.label}}</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>{{#if scope.modeShown}}<small class="wod5e-mage-ambito-tag">{{scope.modeLabel}}</small>{{else if scope.reading}}<small class="wod5e-mage-ambito-tag">{{scope.modeLabel}}</small>{{/if}}</button>
                         {{else}}
                             <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{scope.label}}</span></span>
                         {{/if}}
@@ -90,11 +93,6 @@
                             {{/each}}
                         </span>
                     </div>
-                    {{#if scope.reading}}
-                        <div class="wod5e-mage-ambito-lettura" title="{{scope.reading}}">{{#if scope.multi}}<small class="wod5e-mage-ambito-tag">{{scope.modeLabel}}</small>{{/if}}<span>{{scope.reading}}</span></div>
-                    {{else if scope.modeShown}}
-                        <div class="wod5e-mage-ambito-lettura"><small class="wod5e-mage-ambito-tag">{{scope.modeLabel}}</small></div>
-                    {{/if}}
                     {{#if scope.multi}}
                         {{!-- La tendina delle letture: una pastiglia per lettura, quella in uso accesa. --}}
                         <div class="wod5e-mage-cassetto wod5e-mage-cassetto-modi" role="group" aria-label="{{localize 'WOD5E_MAGE.Tiro.ScopeModePick'}}">

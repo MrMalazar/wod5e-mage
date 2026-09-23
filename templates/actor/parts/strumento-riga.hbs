@@ -1,16 +1,13 @@
-{{!-- Una riga degli Strumenti per la Magick (21/9): la Sfera (o Percepire,
-     9/9), la pastiglia dello Strumento (tratteggiata finché non c'è, viola col
-     nome quando c'è) che apre col clic la tendina dei ventidue per famiglia
-     (le famiglie fuori dal Tipo restano in vista ma spente), la lampadina dei
-     consigli (non per Percepire); sotto, il mestiere quando serve e il tuo di
-     preciso, su carta; poi le note. --}}
+{{!-- Una riga degli Strumenti per la Magick (21/9, 23/9): in testa la Sfera
+     (o Percepire, 9/9) e la lampadina dei consigli (non per Percepire); sotto,
+     a sinistra la pastiglia dello Strumento (tratteggiata finché non c'è,
+     viola col nome quando c'è) che apre col clic la tendina dei ventidue per
+     famiglia (le famiglie fuori dal Tipo restano in vista ma spente), a destra
+     il mestiere quando serve e il tuo di preciso, su carta; poi le note. --}}
 <div class="wod5e-mage-riga wod5e-mage-riga-apribile wod5e-mage-focus-instrument con-tendina{{#if row.sharedWith.length}} shared{{/if}}{{#if row.outsideForm}} outside{{/if}}{{#if row.perceive}} perceive{{/if}}">
     <div class="wod5e-mage-riga-testa">
         {{#if row.faIcon}}<i class="{{row.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>{{else}}<img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{row.icon}}" alt="">{{/if}}
         <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo" title="{{localize row.label}}"><span>{{localize row.label}}</span></span>
-        <button type="button" class="wod5e-mage-sfera-potere wod5e-mage-strumento-pastiglia{{#if row.tool}} pieno{{/if}}" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Focus.ToolPick'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Tool'}}" {{#if locked}}disabled{{/if}}>
-            <span>{{#if row.tool}}{{row.toolLabel}}{{else}}{{localize "WOD5E_MAGE.Focus.ToolScegli"}}{{/if}}</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-        </button>
         {{#unless row.perceive}}
         {{!-- La lampadina: i consigli dal Credo, dalla Famiglia e dalla Sottofamiglia. --}}
         <div class="wod5e-mage-riga-tastini">
@@ -18,7 +15,20 @@
         </div>
         {{/unless}}
     </div>
-    {{!-- La tendina degli Strumenti: un occhiello per famiglia, le pastiglie; lo stesso cliccato di nuovo si toglie. --}}
+    {{!-- La seconda linea (Blue, 23/9): la pastiglia dello Strumento a sinistra,
+         sotto il nome della Sfera, e a destra il mestiere se serve e il tuo di
+         preciso fino in fondo. Prima la casella del testo prendeva tutta la
+         larghezza della colonna. --}}
+    <div class="wod5e-mage-riga-sotto wod5e-mage-strumento-sotto">
+        <button type="button" class="wod5e-mage-sfera-potere wod5e-mage-strumento-pastiglia{{#if row.tool}} pieno{{/if}}" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Focus.ToolPick'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Tool'}}" {{#if locked}}disabled{{/if}}>
+            <span>{{#if row.tool}}{{row.toolLabel}}{{else}}{{localize "WOD5E_MAGE.Focus.ToolScegli"}}{{/if}}</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+        </button>
+        {{#if row.needsProfession}}
+            <input type="text" class="wod5e-mage-focus-instrument-profession" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.profession" value="{{row.profession}}" placeholder="{{localize 'WOD5E_MAGE.Focus.ProfessionHint'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Profession'}}" {{#if locked}}disabled{{/if}}>
+        {{/if}}
+        <input type="text" class="wod5e-mage-focus-instrument-name" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.name" value="{{row.name}}" placeholder="{{localize 'WOD5E_MAGE.Focus.Detail'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Detail'}}" {{#if locked}}disabled{{/if}}>
+    </div>
+    {{!-- La tendina degli Strumenti (si apre sotto tutta la riga): un occhiello per famiglia, le pastiglie; lo stesso cliccato di nuovo si toglie. --}}
     <div class="wod5e-mage-cassetto wod5e-mage-cassetto-strumenti" role="group" aria-label="{{localize 'WOD5E_MAGE.Focus.Tool'}}">
         {{#each row.families as |family|}}
             <span class="wod5e-mage-riq-occhiello{{#unless family.allowed}} spenta{{/unless}}">{{family.label}}{{#unless family.allowed}} · {{localize "WOD5E_MAGE.Focus.FamigliaFuori"}}{{/unless}}</span>
@@ -28,12 +38,6 @@
                 {{/each}}
             </div>
         {{/each}}
-    </div>
-    <div class="wod5e-mage-riga-sotto wod5e-mage-strumento-sotto">
-        {{#if row.needsProfession}}
-            <input type="text" class="wod5e-mage-focus-instrument-profession" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.profession" value="{{row.profession}}" placeholder="{{localize 'WOD5E_MAGE.Focus.ProfessionHint'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Profession'}}" {{#if locked}}disabled{{/if}}>
-        {{/if}}
-        <input type="text" class="wod5e-mage-focus-instrument-name" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.name" value="{{row.name}}" placeholder="{{localize 'WOD5E_MAGE.Focus.Detail'}}" aria-label="{{localize 'WOD5E_MAGE.Focus.Detail'}}" {{#if locked}}disabled{{/if}}>
     </div>
     {{#if row.perceive}}
         <small class="wod5e-mage-focus-instrument-note">{{localize "WOD5E_MAGE.Focus.PerceiveToolHint"}}</small>

@@ -71,7 +71,7 @@
             </div>
         </section>
 
-        {{!-- Il listino (Blue, 21/9): il calcolatore in testa, poi le voci a righe. --}}
+        {{!-- Il listino (Blue, 21/9; 23/9): il calcolatore in testa, poi le voci a righe, in una colonna sola, ognuna col suo simbolo. --}}
         <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-exp-listino">
             <header class="wod5e-mage-riq-title">
                 <span>{{localize "WOD5E_MAGE.Experience.Listino"}}</span>
@@ -93,7 +93,7 @@
                 <div class="wod5e-mage-exp-listino">
                     {{#each experience.rows as |row|}}
                         <div class="wod5e-mage-riga wod5e-mage-riga-listino">
-                            <i class="fa-solid fa-diamond wod5e-mage-riga-icona" aria-hidden="true"></i>
+                            <i class="{{row.icon}} wod5e-mage-riga-icona" aria-hidden="true"></i>
                             <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{row.label}}</span></span>
                             <small class="wod5e-mage-exp-formula">{{row.formula}}</small>
                         </div>

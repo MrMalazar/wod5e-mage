@@ -683,7 +683,7 @@
       "Label": "Wisdom",
       "Status": "Status",
       "Roll": "Roll Wisdom",
-      "VentaglioHint": "Wisdom commands: roll, one box less, one more",
+      "VentaglioHint": "Wisdom commands: Roll, Mark, Heal, Reset, extra boxes",
       "Tira": "Roll",
       "MaxMeno": "One box less",
       "MaxPiu": "One box more",
@@ -691,7 +691,31 @@
       "MaxPiuBreve": "box",
       "Rolling": "Rolling Wisdom",
       "Segnato": "Marked",
-      "SegnatoEffects": "two fewer dice on mortal rolls, mundane scenes cost, no Consensus mending, your aura shows."
+      "SegnatoEffects": "two fewer dice on mortal rolls, mundane scenes cost, no Consensus mending, your aura shows.",
+      "Hint": "3 + the higher of Charisma and Resolve",
+      "Extra": "Extra boxes, beyond the formula",
+      "ClickHint": "Click: pick the mark. Right click: the box clears.",
+      "States": {
+        "empty": "Empty",
+        "s": "Bar",
+        "a": "Cross"
+      },
+      "Segna": "Mark stains",
+      "SegnaBreve": "Mark",
+      "SegnaHint": "How many stains you took, and which mark: the bar, or the cross that stays until Spirit removes it.",
+      "SegnaAmount": "How many",
+      "SegnaSign": "Which mark",
+      "SegnaOk": "Mark",
+      "SegnaDone": "Marked {amount} stains: {sign}.",
+      "SegnaConverted": "The track was full: {converted} bars became crosses.",
+      "Cura": "Heal",
+      "CuraHint": "One bar goes away: you honoured a Conviction when it cost. Crosses are removed by Spirit only.",
+      "CuraDone": "Heal: one bar is gone.",
+      "CuraNiente": "No bar to remove: crosses are removed by Spirit.",
+      "Reset": "Reset",
+      "ResetHint": "The track goes clean.",
+      "AttributeHint": "3 + {attribute} {value}, extra boxes {extra}. Click: choose between Charisma and Resolve.",
+      "AttributePick": "Choose the Wisdom attribute: Charisma or Resolve"
     },
     "MagickBalance": {
       "Magick": "Magick",
@@ -846,7 +870,16 @@
       },
       "MeritsHint": "Backgrounds and Merits together: seven points, nine with two Challenge groups.",
       "SkillCap": "No Skill above the cap",
-      "Arete": "Areté of the rank"
+      "Arete": "Areté of the rank",
+      "MemoHint": "Creation memo: when checked, every box shows its count next to the title (red below the target, green on target, yellow above), the pages still to fill colour their tab and the reset buttons appear.",
+      "SfidaHint": "The Concept Challenge: one complete group gives +1 Skill point, two groups +2 Advantage points, all three +1 power. The prizes add up.",
+      "SfidaPremi": {
+        "skills": "Skills",
+        "merits": "Advantages",
+        "poteri": "power"
+      },
+      "ConceptBreve": "Concept",
+      "SkillCapBreve": "over the cap"
     },
     "Salute": {
       "Label": "Health",
@@ -1304,7 +1337,23 @@
       "TrattiBackground": "Backgrounds",
       "TrattiEquipaggiamento": "Equipment",
       "TrattiAltri": "Other",
-      "IlTiro": "The Roll"
+      "IlTiro": "The Roll",
+      "Schede": {
+        "background": "Backgrounds",
+        "merit": "Merits",
+        "flaw": "Flaws",
+        "equipment": "Gear",
+        "other": "Other",
+        "grimorio": "Grimoire"
+      },
+      "Vuoti": {
+        "background": "No Background on the sheet: add one on the Traits page.",
+        "merit": "No Merit on the sheet: add one on the Traits page.",
+        "flaw": "No Flaw on the sheet: add one on the Traits page.",
+        "equipment": "No equipment: add some on the Traits page.",
+        "other": "No other trait on the sheet.",
+        "grimorio": "No spell written yet: write them on the Grimoire page (the book above)."
+      }
     },
     "Tiro": {
       "KindMagick": "Magick roll",
@@ -1355,7 +1404,17 @@
       "RollHint": "Rolls the chosen Attribute and Skill, minus the Difficulty; success from 6.",
       "Extra": "Extra dice",
       "ExtraHint": "Harmony and the dice the table gives you: up to three, they enter the pool.",
-      "ExtraFlavor": "extra dice +{dice}"
+      "ExtraFlavor": "extra dice +{dice}",
+      "Riserva": "Pool",
+      "RiservaHint": "Attribute + Skill and bonuses. Minus and plus are the extra dice that join the pool: Harmony and the dice the table gives you, up to three.",
+      "Soglia": "Threshold",
+      "SogliaHint": "The Difficulty: the sum of Scopes above 1, minus Arete with the prize; minus and plus adjust it by hand.",
+      "DadiHint": "The dice you roll: the pool minus the threshold. Minus and plus adjust the total, beyond the cap (the Storyteller's touch).",
+      "DadiReset": "Back to the count",
+      "DadiNote": "Dice adjusted by hand: {dice}.",
+      "Catena": "In the roll",
+      "CatenaHint": "What you clicked: the × removes the piece.",
+      "PillolaVia": "Remove from the roll"
     },
     "Ritratti": {
       "NextHint": "Cycle the portraits: the one you see is also the image on the map and in chat",

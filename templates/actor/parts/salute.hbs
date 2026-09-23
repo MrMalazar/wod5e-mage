@@ -30,24 +30,28 @@
          via i superficiali mentali e un superficiale fisico. Relax: Fermezza
          + Autocontrollo, i successi curano la mente. Reset: vuoto. Danni
          subiti (9/9): quanti e di che segno, in una finestra. Meno e più: le
-         caselle in più. --}}
+         caselle in più. I posti sulla ruota (Blue, 23/9): il meno a sinistra
+         e il più a destra, sopra Riposo e Relax, sotto Danni e Reset. Il
+         posto è --voce: 0 sinistra, poi in senso orario dal basso (1 in basso
+         a sinistra, 2 in basso a destra, 3 destra, 4 in alto a destra, 5 in
+         alto a sinistra). --}}
     <div class="wod5e-mage-ventaglio wod5e-mage-ventaglio-sei" role="group" aria-label="{{localize 'WOD5E_MAGE.Salute.VentaglioHint'}}">
-        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 0" data-action="saluteRiposo" title="{{localize 'WOD5E_MAGE.Salute.RiposoHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Riposo'}}">
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 5" data-action="saluteRiposo" title="{{localize 'WOD5E_MAGE.Salute.RiposoHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Riposo'}}">
             <i class="fa-solid fa-bed" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.Riposo"}}</span>
         </button>
-        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 1" data-action="saluteRelax" title="{{localize 'WOD5E_MAGE.Salute.RelaxHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Relax'}}">
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 4" data-action="saluteRelax" title="{{localize 'WOD5E_MAGE.Salute.RelaxHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Relax'}}">
             <i class="fa-solid fa-mug-hot" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.Relax"}}</span>
         </button>
         <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 2" data-action="saluteReset" title="{{localize 'WOD5E_MAGE.Salute.ResetHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Reset'}}">
             <i class="fa-solid fa-eraser" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.Reset"}}</span>
         </button>
-        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 3" data-action="saluteDanni" title="{{localize 'WOD5E_MAGE.Salute.DanniHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Danni'}}">
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 1" data-action="saluteDanni" title="{{localize 'WOD5E_MAGE.Salute.DanniHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Danni'}}">
             <i class="fa-solid fa-heart-crack" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.DanniBreve"}}</span>
         </button>
-        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 4" data-action="saluteExtraChange" data-delta="-1" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.ExtraMeno'}}">
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 0" data-action="saluteExtraChange" data-delta="-1" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.ExtraMeno'}}">
             <i class="fa-solid fa-minus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.ExtraMenoBreve"}}</span>
         </button>
-        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 5" data-action="saluteExtraChange" data-delta="1" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.ExtraPiu'}}">
+        <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 3" data-action="saluteExtraChange" data-delta="1" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.ExtraPiu'}}">
             <i class="fa-solid fa-plus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.ExtraPiuBreve"}}</span>
         </button>
     </div>

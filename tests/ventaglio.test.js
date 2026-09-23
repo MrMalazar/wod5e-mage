@@ -30,7 +30,9 @@ const salute = readFileSync(new URL("../templates/actor/parts/salute.hbs", impor
 assert.match(salute, /wod5e-mage-ventaglio-tasto" data-action="ventaglioToggle"/);
 assert.match(salute, /wod5e-mage-ventaglio wod5e-mage-ventaglio-sei[\s\S]*Salute\.DanniBreve[\s\S]*Salute\.ExtraMenoBreve[\s\S]*Salute\.ExtraPiuBreve/);
 const risorse = readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8");
-assert.match(risorse, /wod5e-mage-riga-saggezza con-ventaglio[\s\S]*data-action="ventaglioToggle"[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-tre/);
+// Dal 23/9 anche la Saggezza ha la ruota a sei (Tira, Segna, Cura, Reset, meno, più).
+assert.match(risorse, /wod5e-mage-riga-saggezza con-ventaglio[\s\S]*data-action="ventaglioToggle"[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-sei[\s\S]*Wisdom\.SegnaBreve[\s\S]*Wisdom\.Cura[\s\S]*Wisdom\.Reset[\s\S]*Wisdom\.MaxMenoBreve[\s\S]*Wisdom\.MaxPiuBreve/);
+assert.doesNotMatch(risorse, /wod5e-mage-ventaglio-tre/);
 // Il CSS: la sorgente nella riga non si vede mai; la ruota ha il disco di
 // fondo, i comandi da 48 px in cerchio, il tasto al centro.
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");

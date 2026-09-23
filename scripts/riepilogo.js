@@ -22,22 +22,62 @@ export const GRADI = Object.freeze([
  * La creazione base: 22 Attributi, 19 pallini di Abilità liberi col tetto a 3
  * (V6: 18 su tredici voci; qui una voce in più vale un pallino in più, verdetto
  * di Blue dell'11/9; le tre ripartizioni del 18/8 non esistono più), 7 fra Background
- * e Pregi (9 con due gruppi della Sfida), 2 Difetti, 6 Sfere (7 con la Sfida completa).
+ * e Pregi, 2 Difetti, 6 Sfere. Sopra la base i premi della Sfida (PREMI_SFIDA)
+ * e i pallini del grado.
  */
 export const BASE_CREAZIONE = Object.freeze({ attributes: 22, skills: 19, skillCap: TETTO_CREAZIONE, merits: 7, flaws: 2, spheres: 6 });
+
+/**
+ * I premi della Sfida del Concetto (LIBRO 05_015, «i premi si sommano»): un
+ * gruppo completo dà +1 punto Abilità, due gruppi +2 punti Vantaggio, tutti e
+ * tre un potere in più (il LIBRO diceva «+1 punto Sfera»; Blue, 23/9: «è più
+ * un potere», perché col listino del 21/9 le Sfere non si comprano più a
+ * pallini). Nel memo si deve vedere l'aumento che viene dalla Sfida (il
+ * modulo dava solo gli ultimi due). Il potere in più non alza nessun conto:
+ * i poteri li inserisce il giocatore.
+ */
+export const PREMI_SFIDA = Object.freeze([
+  Object.freeze({ groups: 1, count: "skills", bonus: 1, label: "WOD5E_MAGE.Riepilogo.SfidaPremi.skills" }),
+  Object.freeze({ groups: 2, count: "merits", bonus: 2, label: "WOD5E_MAGE.Riepilogo.SfidaPremi.merits" }),
+  Object.freeze({ groups: 3, count: "poteri", bonus: 1, label: "WOD5E_MAGE.Riepilogo.SfidaPremi.poteri" })
+]);
+
+/** Quanto la Sfida aggiunge a ogni conto coi gruppi completati. */
+export function sfidaBonuses(groupsDone = 0) {
+  const done = Math.max(Math.trunc(Number(groupsDone) || 0), 0);
+  const bonuses = { skills: 0, merits: 0, spheres: 0, poteri: 0 };
+  for (const premio of PREMI_SFIDA) if (done >= premio.groups) bonuses[premio.count] += premio.bonus;
+  return bonuses;
+}
 
 /** I traguardi della creazione per grado e gruppi della Sfida completati. */
 export function creationTargets(gradoId = "neofita", groupsDone = 0) {
   const grado = GRADI.find((g) => g.id === gradoId) ?? GRADI[0];
+  const sfida = sfidaBonuses(groupsDone);
   return {
     grado: grado.id,
     arete: grado.arete,
     attributes: BASE_CREAZIONE.attributes + grado.attributes,
-    skills: BASE_CREAZIONE.skills + grado.skills,
+    skills: BASE_CREAZIONE.skills + sfida.skills + grado.skills,
     skillCap: BASE_CREAZIONE.skillCap,
-    merits: BASE_CREAZIONE.merits + (groupsDone >= 2 ? 2 : 0) + grado.merits,
+    merits: BASE_CREAZIONE.merits + sfida.merits + grado.merits,
     flaws: BASE_CREAZIONE.flaws + grado.flaws,
-    spheres: BASE_CREAZIONE.spheres + (groupsDone >= 3 ? 1 : 0) + grado.spheres
+    spheres: BASE_CREAZIONE.spheres + grado.spheres,
+    poteri: sfida.poteri
+  };
+}
+
+/**
+ * La riga della Sfida per il memo: quanti gruppi sono completi e i tre premi,
+ * ognuno con `earned` (già preso) e il conto che alza.
+ */
+export function sfidaSummary(groupsDone = 0) {
+  const done = Math.max(Math.trunc(Number(groupsDone) || 0), 0);
+  return {
+    done,
+    total: CONCEPT_CHALLENGE_GROUPS.length,
+    complete: done >= CONCEPT_CHALLENGE_GROUPS.length,
+    prizes: PREMI_SFIDA.map((premio) => ({ ...premio, earned: done >= premio.groups }))
   };
 }
 
@@ -116,7 +156,13 @@ export function prepareCreationSummary(actor, areteValue = null) {
       target: targets.spheres
     }
   ];
-  const counts = raw.map((count) => ({ ...count, state: count.target === null ? "" : compareCount(count.value, count.target) }));
+  const sfidaBonus = sfidaBonuses(groupsDone);
+  const counts = raw.map((count) => ({
+    ...count,
+    state: count.target === null ? "" : compareCount(count.value, count.target),
+    // Quanto del traguardo viene dalla Sfida (23/9): si scrive accanto al conto.
+    sfida: sfidaBonus[count.id] ?? 0
+  }));
   const grades = GRADI.map((g) => ({ id: g.id, label: `WOD5E_MAGE.Riepilogo.Grades.${g.id}`, selected: g.id === targets.grado }));
 
   const overCap = skillsOverCap(system.skills, targets.skillCap);
@@ -149,5 +195,5 @@ export function prepareCreationSummary(actor, areteValue = null) {
     checks.push({ id: "arete", label: "WOD5E_MAGE.Riepilogo.Arete", ok: Number(areteValue) === targets.arete, target: targets.arete });
   }
 
-  return { counts, checks, targets, grades, groupsDone };
+  return { counts, checks, targets, grades, groupsDone, sfida: sfidaSummary(groupsDone) };
 }

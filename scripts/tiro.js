@@ -40,6 +40,9 @@ export const QUINTESSENCE_BASE_CAP = 2;
 /** I dadi extra per lancio: l'Armonia e i dadi dati al tavolo, fino a +3 (il tetto del tronco). */
 export const EXTRA_DICE_CAP = 3;
 
+/** Il ritocco dei Dadi (23/9): dadi in più o in meno sul totale, fuori dalla riserva e dal tetto, entro ±10. */
+export const DADI_ADJUST_CAP = 10;
+
 /** Lo stato vuoto: niente cliccato, niente scritto a mano. */
 export function emptyTiro() {
   return {
@@ -55,6 +58,7 @@ export function emptyTiro() {
     difficulty: null,
     quintessence: 0,
     extra: 0,
+    dadi: 0,
     sforza: false,
     kind: null,
     spell: null
@@ -298,6 +302,18 @@ export function toggleSforza(tiro) {
   return next;
 }
 
+/**
+ * Il ritocco dei Dadi (Blue, 23/9: «più e meno modificabili manualmente a
+ * ognuno degli elementi»): dadi in più o in meno sul totale, fuori dalla
+ * riserva e dal tetto +3, come i dadi che il Narratore dà col verdetto.
+ */
+export function setDadi(tiro, value) {
+  const next = clone(tiro);
+  const wanted = Math.trunc(Number(value) || 0);
+  next.dadi = Math.max(Math.min(wanted, DADI_ADJUST_CAP), -DADI_ADJUST_CAP);
+  return next;
+}
+
 /** Il tipo di tiro di Magick, dai tre tasti. */
 export function setKind(tiro, kind) {
   const next = clone(tiro);
@@ -316,6 +332,8 @@ export function removePill(tiro, pill) {
     case "specialty": return pickSpecialty(tiro, pill.skill, pill.id);
     case "trait": return toggleTrait(tiro, pill.id);
     case "power": return pickPower(tiro, pill.id);
+    // L'incantesimo ha caricato tutto: la sua × svuota il compositore.
+    case "spell": return clearTiro();
     default: return clone(tiro);
   }
 }
@@ -378,6 +396,10 @@ export function pillsOf(tiro, names = {}) {
   for (const id of tiro?.traits ?? []) {
     pills.push({ kind: "trait", id, ...name(names.traits, id) });
   }
+  // L'incantesimo del Grimorio, in testa: la sua × svuota tutto.
+  if (tiro?.spell) {
+    pills.unshift({ kind: "spell", id: tiro.spell, ...name(names.spells, tiro.spell) });
+  }
   return pills;
 }
 
@@ -426,7 +448,9 @@ export function contoTiro(tiro, {
   const computed = count(powered.threshold);
   const manual = tiro?.difficulty !== null && tiro?.difficulty !== undefined;
   const difficulty = manual ? count(tiro.difficulty) : computed;
-  const conto = ramoCDice(pool + count(powered.dice), difficulty);
+  // Il ritocco dei Dadi (23/9): sul totale, fuori dal tetto, anche in meno.
+  const adjust = Math.max(Math.min(Math.trunc(Number(tiro?.dadi) || 0), DADI_ADJUST_CAP), -DADI_ADJUST_CAP);
+  const conto = ramoCDice(Math.max(pool + count(powered.dice) + adjust, 0), difficulty);
   const successFrom = powered.difficulty ?? successThreshold(magick && usesAdvancedDifficulty({ witnesses: tiro?.kind === "testimoni" }));
 
   return {
@@ -437,6 +461,8 @@ export function contoTiro(tiro, {
     bussolaDice,
     quintessence,
     extra,
+    // La riserva com'è (Attributo + Abilità + bonus), prima del ritocco dei Dadi.
+    riserva: pool,
     pool: conto.pool,
     scopeThreshold,
     prize,
@@ -445,6 +471,7 @@ export function contoTiro(tiro, {
     difficultySet: hasDifficulty(tiro),
     difficulty,
     dice: conto.dice,
+    adjust,
     impossible: conto.dice === 0,
     successFrom,
     powerNotes: powered.notes ?? []

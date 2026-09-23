@@ -1,10 +1,12 @@
-{{!-- La prima pagina (16/9, ordine delle colonne del 20/9): otto riquadri
-     in quattro colonne, due per colonna (Identità e Risorse; Attributi e
-     Tratti; Abilità e Grimorio; Magick e Il Tiro). Non è un modulo da
-     compilare, è un selettore: il
-     giocatore clicca l'Areté, le Sfere coi loro poteri, i livelli degli
-     Ambiti, un Attributo, un'Abilità, i Tratti, oppure un incantesimo del
-     Grimorio, e il riquadro del Tiro compone e tira. --}}
+{{!-- La prima pagina (16/9, ordine delle colonne del 20/9, sette riquadri
+     dal 23/9): quattro colonne, sopra Identità, Attributi, Abilità e Magick;
+     sotto le Risorse, i Tratti (a schede, col Grimorio dentro) e Il Tiro,
+     che prende due colonne (Blue, 23/9: «dove c'era il riquadro del
+     Grimorio dobbiamo espandere il riquadro del tiro»). Non è un modulo da
+     compilare, è un selettore: il giocatore clicca l'Areté, le Sfere coi
+     loro poteri, i livelli degli Ambiti, un Attributo, un'Abilità, i
+     Tratti, oppure un incantesimo del Grimorio, e il riquadro del Tiro
+     compone e tira. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-stat" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     <div class="wod5e-mage-stat-grid">
         <div class="wod5e-mage-stat-col wod5e-mage-stat-col-1">
@@ -17,7 +19,6 @@
         </div>
         <div class="wod5e-mage-stat-col wod5e-mage-stat-col-3">
             {{> "modules/wod5e-mage/templates/actor/parts/stat-abilita.hbs"}}
-            {{> "modules/wod5e-mage/templates/actor/parts/stat-grimorio.hbs"}}
         </div>
         <div class="wod5e-mage-stat-col wod5e-mage-stat-col-4">
             {{> "modules/wod5e-mage/templates/actor/parts/stat-magick.hbs"}}
@@ -25,64 +26,52 @@
         </div>
     </div>
 
-    {{!-- Sotto gli otto riquadri, chiuso: il memo della creazione coi tasti di
-         reset e i Bonus scritti, che stavano sulla pagina vecchia. --}}
-    <details class="wod5e-mage-stat-creazione wod5e-mage-riepilogo">
-        <summary>
-            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+    {{!-- Sotto gli otto riquadri (Blue, 23/9): il memo di creazione è una
+         spunta. Da spuntata, ogni riquadro porta il suo conto a destra del
+         titolo e si colora (rosso sotto, verde pari, giallo sopra), le
+         pagine fuori dalla prima colorano la linguetta, e i tasti di reset
+         si accendono (la stessa spunta, Blue 23/9); qui restano il grado del
+         Risvegliato (decide i traguardi), la Sfida coi suoi premi e il reset
+         della scheda intera. I Bonus scritti stanno nella loro tendina, a
+         destra. --}}
+    <div class="wod5e-mage-stat-creazione wod5e-mage-creazione-barra{{#if memo.on}} acceso{{/if}}">
+        <label class="wod5e-mage-memo-spunta" title="{{localize 'WOD5E_MAGE.Riepilogo.MemoHint'}}">
+            <input type="checkbox" name="flags.wod5e-mage.creazione.memo" {{#if memo.on}}checked{{/if}} {{#if locked}}disabled{{/if}}>
             <span>{{localize "WOD5E_MAGE.Riepilogo.Label"}}</span>
-        </summary>
-        <div class="wod5e-mage-stat-creazione-body">
-            <div class="wod5e-mage-stat-creazione-memo">
-                {{!-- Il grado del Risvegliato (7/9) decide i traguardi dei contatori.
-                     Le Abilità sono diciannove pallini liberi col tetto a 3 (11/9). --}}
-                <div class="wod5e-mage-riepilogo-scelte">
-                    <label>
-                        <span>{{localize "WOD5E_MAGE.Riepilogo.Grade"}}</span>
-                        <select name="flags.wod5e-mage.creazione.grado" {{#if locked}}disabled{{/if}}>
-                            {{#each creationSummary.grades as |grade|}}
-                                <option value="{{grade.id}}" {{#if grade.selected}}selected{{/if}}>{{localize grade.label}}</option>
-                            {{/each}}
-                        </select>
-                    </label>
-                </div>
-
-                <div class="wod5e-mage-riepilogo-grid">
-                    {{#each creationSummary.counts as |count|}}
-                        <div class="wod5e-mage-riepilogo-chip {{count.state}}"{{#if count.hint}} title="{{localize count.hint}}"{{/if}}>
-                            <strong>{{count.value}}{{#if count.target}}<small>/{{count.target}}</small>{{/if}}</strong>
-                            <span>{{localize count.label}}</span>
-                        </div>
+        </label>
+        {{#if memo.on}}
+            {{!-- Il grado del Risvegliato (7/9) decide i traguardi dei contatori. --}}
+            <label class="wod5e-mage-memo-grado">
+                <span>{{localize "WOD5E_MAGE.Riepilogo.Grade"}}</span>
+                <select name="flags.wod5e-mage.creazione.grado" {{#if locked}}disabled{{/if}}>
+                    {{#each creationSummary.grades as |grade|}}
+                        <option value="{{grade.id}}" {{#if grade.selected}}selected{{/if}}>{{localize grade.label}}</option>
                     {{/each}}
-                </div>
-
-                <div class="wod5e-mage-riepilogo-checks">
-                    {{#each creationSummary.checks as |check|}}
-                        <span class="wod5e-mage-riepilogo-check {{#if check.ok}}ok{{/if}}">
-                            <i class="fa-solid {{#if check.ok}}fa-circle-check{{else}}fa-circle-xmark{{/if}}" aria-hidden="true"></i>
-                            {{localize check.label}}{{#if check.target}} {{check.target}}{{/if}}
-                        </span>
-                    {{/each}}
-                </div>
-
-                {{!-- I tasti di reset stanno ognuno nella sua sezione (11/9): qui la
-                     spunta che li mostra, e con lei la X che azzera un tratto solo;
-                     resta qui solo il reset della scheda intera. --}}
-                <div class="wod5e-mage-reset-row">
-                    <label class="wod5e-mage-reset-toggle" title="{{localize 'WOD5E_MAGE.Reset.ShowHint'}}">
-                        <input type="checkbox" name="flags.wod5e-mage.creazione.reset" {{#if creazioneReset}}checked{{/if}} {{#if locked}}disabled{{/if}}>
-                        <span>{{localize "WOD5E_MAGE.Reset.Show"}}</span>
-                    </label>
-                    {{#if creazioneReset}}
-                        <button type="button" class="wod5e-mage-reset-all" data-action="resetSection" data-reset="all" title="{{resetsById.all.label}}" {{#if locked}}disabled{{/if}}>
-                            <i class="fa-solid {{resetsById.all.icon}}" aria-hidden="true"></i> {{resetsById.all.label}}
-                        </button>
-                    {{/if}}
-                </div>
-            </div>
-            <div class="wod5e-mage-stat-creazione-bonus">
+                </select>
+            </label>
+            {{!-- La Sfida del Concetto e i suoi premi (LIBRO 05_015): quelli presi accesi. --}}
+            <span class="wod5e-mage-memo-sfida {{memo.tabs.conceptChallenge.state}}" title="{{localize 'WOD5E_MAGE.Riepilogo.SfidaHint'}}">
+                <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                <b>{{localize "WOD5E_MAGE.Tabs.Short.conceptChallenge"}} {{memo.sfida.done}}/{{memo.sfida.total}}</b>
+                {{#each memo.sfida.prizes as |premio|}}
+                    <small class="wod5e-mage-memo-premio{{#if premio.earned}} preso{{/if}}">+{{premio.bonus}} {{localize premio.label}}</small>
+                {{/each}}
+            </span>
+            {{!-- I tasti di reset stanno ognuno nella sua sezione (11/9) e si
+                 accendono con la stessa spunta del memo (23/9), con la X che
+                 azzera un tratto solo; qui resta il reset della scheda intera. --}}
+            <button type="button" class="wod5e-mage-reset-all" data-action="resetSection" data-reset="all" title="{{resetsById.all.label}}" {{#if locked}}disabled{{/if}}>
+                <i class="fa-solid {{resetsById.all.icon}}" aria-hidden="true"></i> {{resetsById.all.label}}
+            </button>
+        {{/if}}
+        <details class="wod5e-mage-stat-bonus">
+            <summary>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                <span>{{localize "WOD5E_MAGE.Bonuses.Label"}}</span>
+            </summary>
+            <div class="wod5e-mage-stat-bonus-body">
                 {{> "modules/wod5e-mage/templates/actor/parts/bonuses.hbs"}}
             </div>
-        </div>
-    </details>
+        </details>
+    </div>
 </section>

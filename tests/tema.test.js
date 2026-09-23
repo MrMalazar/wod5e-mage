@@ -128,7 +128,10 @@ for (const lang of ["it", "en"]) {
   assert.deepEqual(Object.keys(strings.Tema), ["Chiaro", "Scuro"], lang);
   assert.deepEqual(Object.keys(strings.Scala), ["Piccolo", "Medio", "Grande", "Tasto"], lang);
   assert.match(strings.Scala.Tasto, /\{current\}[\s\S]*\{next\}/, lang);
-  for (const key of ["CercaIncantesimo", "IncantesimiVuoti", "AbilitaInFila", "AbilitaFamiglie"]) assert.ok(strings.Stat[key], `${lang} Stat.${key}`);
+  for (const key of ["AbilitaInFila", "AbilitaFamiglie"]) assert.ok(strings.Stat[key], `${lang} Stat.${key}`);
+  // Il Grimorio dentro i Tratti a schede (23/9): le sei schede e le sei righe di vuoto.
+  assert.deepEqual(Object.keys(strings.Stat.Schede), ["background", "merit", "flaw", "equipment", "other", "grimorio"], lang);
+  assert.deepEqual(Object.keys(strings.Stat.Vuoti), ["background", "merit", "flaw", "equipment", "other", "grimorio"], lang);
   for (const key of ["ScopeHint", "PoteriHint", "IncantesimoHint"]) assert.ok(strings.Tiro[key], `${lang} Tiro.${key}`);
   assert.ok(!strings.Stat.CercaPotere && !strings.Stat.PoteriVuoti, `${lang}: le chiavi del riquadro Poteri sono sparite`);
 }

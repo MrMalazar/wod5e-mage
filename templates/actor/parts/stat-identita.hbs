@@ -4,7 +4,10 @@
      il nome come titolo (è ancora un campo: la scheda sbloccata lo scrive),
      poi sulla stessa riga il giocatore e l'Appartenenza a tendina. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-identita">
-    <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.Identita"}}</span></header>
+    {{!-- Col memo di creazione acceso (23/9): il titolo si colora e dice se il Concetto è scritto. --}}
+    <header class="wod5e-mage-riq-title{{#if memo.on}} memo-{{memo.boxes.identita.state}}{{/if}}">
+        <span>{{localize "WOD5E_MAGE.Stat.Identita"}}{{#if memo.on}} <b class="wod5e-mage-memo-conto" title="{{localize 'WOD5E_MAGE.Riepilogo.Concept'}}"><i class="fa-solid {{#if memo.boxes.identita.concetto}}fa-circle-check{{else}}fa-circle-xmark{{/if}}" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Riepilogo.ConceptBreve"}}</b>{{/if}}</span>
+    </header>
     <div class="wod5e-mage-riq-body">
         <div class="wod5e-mage-ritratto">
             <img class="profile-img wod5e-mage-ritratto-img" data-action="editImage" src="{{img}}" data-edit="img" title="{{actor.name}}"/>

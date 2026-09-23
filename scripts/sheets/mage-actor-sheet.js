@@ -57,6 +57,7 @@ import { prepareScopeTable } from "../scopes.js";
 import { onPotereApri, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, preparePoteriPagina } from "../poteri-scheda.js";
 import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
+import { prepareMemo } from "../memo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
 import { onSpecialtyAdd, onSpecialtyDelete, prepareSpecialties, specialtySlots } from "../specializzazioni.js";
 import { skillSpecialtyNames } from "../arete.js";
@@ -66,6 +67,7 @@ import {
   onTiroClear,
   onTiroDifficulty,
   onTiroExtra,
+  onTiroDadi,
   onTiroGrimorio,
   onTiroIncantesimo,
   onScopeMode,
@@ -93,7 +95,7 @@ import {
 import { onRitrattoAdd, onRitrattoNext, onRitrattoRemove, prepareRitratti, RITRATTI_FLAG } from "../ritratti.js";
 import { altraScala, altroTema, applicaScala, applicaTema, misuraFinestra, normalizeScala, SCALA_AZIONE, SCALA_SETTING, SCALA_TASTO_CLASSE, scalaFattore, sporgeDalloSchermo, TEMA_AZIONE, TEMA_SETTING, TEMA_TASTO_CLASSE } from "../tema.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
-import { getWisdom, onWisdomResourceChange, onWisdomRoll } from "../wisdom.js";
+import { faiCadereInchiostro, getWisdom, onWisdomAttributePick, onWisdomCellChange, onWisdomCura, onWisdomReset, onWisdomResourceChange, onWisdomRoll, onWisdomSegna } from "../wisdom.js";
 import { classeRuota, posizioneRuota } from "../ventaglio.js";
 import {
   getContraccolpo,
@@ -336,6 +338,13 @@ async function onEssentialSkillDotChange(event, target) {
  * (`data-filters`). Nascondono le righe che non combaciano; il testo e la
  * specie scelti restano nella scheda attraverso i render.
  */
+/** La scheda dei Tratti in uso (23/9): quella scelta, o il Background. */
+export const SCHEDE_TRATTI = Object.freeze(["background", "merit", "flaw", "equipment", "other", "grimorio"]);
+export function schedaTratti(state) {
+  const kind = String(state?.kind ?? "");
+  return SCHEDE_TRATTI.includes(kind) ? kind : SCHEDE_TRATTI[0];
+}
+
 function wireStatFilters(sheet) {
   const root = sheet.element;
   if (!root) return;
@@ -345,15 +354,26 @@ function wireStatFilters(sheet) {
     const state = sheet._filters[name] ?? {};
     const needle = String(state.text ?? "").trim().toLocaleLowerCase(game.i18n.lang);
     const kind = String(state.kind ?? "");
-    for (const row of list.querySelectorAll("[data-search]")) {
+    const visible = {};
+    for (const row of list.querySelectorAll("[data-search]:not(.wod5e-mage-tratti-vuoto)")) {
       const text = String(row.dataset.search ?? "").toLocaleLowerCase(game.i18n.lang);
       const okText = !needle || text.includes(needle);
       const okKind = !kind || row.dataset.kind === kind;
       row.hidden = !(okText && okKind);
+      if (!row.hidden) visible[row.dataset.kind] = true;
+    }
+    // La riga di vuoto della scheda scelta, solo se non c'è niente da vedere (23/9).
+    for (const empty of list.querySelectorAll(".wod5e-mage-tratti-vuoto")) {
+      empty.hidden = Boolean(needle) || empty.dataset.kind !== kind || Boolean(visible[kind]);
     }
     for (const button of root.querySelectorAll(`[data-filters="${name}"] .wod5e-mage-filtro`)) {
-      button.classList.toggle("active", String(button.dataset.kind ?? "") === kind);
+      const active = String(button.dataset.kind ?? "") === kind;
+      button.classList.toggle("active", active);
+      if (button.getAttribute("role") === "tab") button.setAttribute("aria-selected", String(active));
     }
+    // La scheda scelta sul riquadro: il libro del Grimorio si vede solo lì.
+    const box = list.closest(".wod5e-mage-riq");
+    if (box) box.dataset.scheda = kind;
   };
   for (const input of root.querySelectorAll("input[data-filter]")) {
     const name = input.dataset.filter;
@@ -366,6 +386,8 @@ function wireStatFilters(sheet) {
   }
   for (const group of root.querySelectorAll("[data-filters]")) {
     const name = group.dataset.filters;
+    // Le schede dei Tratti partono dal Background (23/9): mai «tutte insieme».
+    if (name === "tratti") sheet._filters[name] = { ...(sheet._filters[name] ?? {}), kind: schedaTratti(sheet._filters[name]) };
     for (const button of group.querySelectorAll(".wod5e-mage-filtro")) {
       button.addEventListener("click", (event) => {
         event.preventDefault();
@@ -472,6 +494,13 @@ export class MageActorSheet extends MortalActorSheet {
       condizioneApri: onCondizioneApri,
       wisdomResourceChange: onWisdomResourceChange,
       wisdomRoll: onWisdomRoll,
+      // La Saggezza come la Salute (23/9): il menù dei segni sulla casella,
+      // Segna, Cura e Reset nella ruota.
+      wisdomCellChange: { handler: onWisdomCellChange, buttons: [0, 2] },
+      wisdomSegna: onWisdomSegna,
+      wisdomCura: onWisdomCura,
+      wisdomReset: onWisdomReset,
+      wisdomAttributePick: onWisdomAttributePick,
       // Il tiro composto (16/9): i clic dei nove riquadri della prima pagina.
       tiroArete: onTiroArete,
       tiroPrize: onTiroPrize,
@@ -487,6 +516,7 @@ export class MageActorSheet extends MortalActorSheet {
       tiroDifficulty: onTiroDifficulty,
       tiroQuintessence: onTiroQuintessence,
       tiroExtra: onTiroExtra,
+      tiroDadi: onTiroDadi,
       tiroSforza: onTiroSforza,
       tiroGrimorio: onTiroGrimorio,
       tiroIncantesimo: onTiroIncantesimo,
@@ -523,7 +553,6 @@ export class MageActorSheet extends MortalActorSheet {
         `${MODULE}/parts/stat-risorse.hbs`,
         `${MODULE}/parts/stat-ruota.hbs`,
         `${MODULE}/parts/stat-magick.hbs`,
-        `${MODULE}/parts/stat-grimorio.hbs`,
         `${MODULE}/parts/stat-attributi.hbs`,
         `${MODULE}/parts/stat-tratti.hbs`,
         `${MODULE}/parts/stat-abilita.hbs`,
@@ -739,6 +768,8 @@ export class MageActorSheet extends MortalActorSheet {
   _onRender(context, options) {
     super._onRender?.(context, options);
     chiudiRuote(this);
+    // La goccia d'inchiostro sulla casella della Saggezza appena segnata (23/9).
+    faiCadereInchiostro(this);
     // La modalità chiara (16/9) e la misura del testo (16/9 sera): la classe
     // e la scala sulla finestra, i due tasti in testata.
     applicaTema(this.element, game.settings.get(MODULE_ID, TEMA_SETTING), { localize: (key) => game.i18n.localize(key) });
@@ -759,7 +790,7 @@ export class MageActorSheet extends MortalActorSheet {
     // Le tendine della prima pagina restano com'erano attraverso i render:
     // Condizioni, Dettagli della Ruota, il memo di creazione.
     this._drawersOpen ??= {};
-    for (const [key, selector] of [["condizioni", ".wod5e-mage-condizioni-drawer"], ["ruota", ".wod5e-mage-ruota-dettagli"], ["saggezza", ".wod5e-mage-saggezza-tendina"], ["creazione", ".wod5e-mage-stat-creazione"]]) {
+    for (const [key, selector] of [["condizioni", ".wod5e-mage-condizioni-drawer"], ["ruota", ".wod5e-mage-ruota-dettagli"], ["saggezza", ".wod5e-mage-saggezza-tendina"], ["bonus", ".wod5e-mage-stat-bonus"]]) {
       const drawer = this.element?.querySelector(selector);
       if (!drawer) continue;
       drawer.open = Boolean(this._drawersOpen[key]);
@@ -822,7 +853,16 @@ export class MageActorSheet extends MortalActorSheet {
     // I tasti di reset (11/9): ognuno nella sua sezione, visibili solo con la
     // spunta «Mostra i tasti di reset» del memo di creazione; con loro la X
     // che azzera un tratto solo.
-    context.creazioneReset = Boolean(this.actor.getFlag(MODULE_ID, "creazione")?.reset);
+    // Il memo di creazione come spunta (23/9): i conti sui titoli dei
+    // riquadri e il colore delle linguette; serve a ogni PART, la barra
+    // delle pagine compresa. La stessa spunta accende i tasti di reset
+    // (Blue, 23/9: «sì, che può tornare utile nella fase di creazione»): la
+    // vecchia spunta «Mostra i tasti di reset» (creazione.reset) vale ancora
+    // per chi l'aveva accesa.
+    const creazione = this.actor.getFlag(MODULE_ID, "creazione") ?? {};
+    context.creationSummary = prepareCreationSummary(this.actor, getArete(this.actor).value);
+    context.memo = prepareMemo(context.creationSummary, { on: Boolean(creazione.memo) });
+    context.creazioneReset = context.memo.on || Boolean(creazione.reset);
     context.resetsById = prepareResetsById(game.i18n.localize.bind(game.i18n));
     return context;
   }
@@ -916,13 +956,16 @@ export class MageActorSheet extends MortalActorSheet {
     context.specialties = prepareSpecialties(actor, i18n);
 
     // Tratti: gli oggetti del personaggio in un elenco piatto, con la specie
-    // (Pregi, Difetti, Background, Equipaggiamento, altro) per i filtri.
+    // (Background, Pregi, Difetti, Equipaggiamento, altro) per le schede in
+    // testa al riquadro (23/9), più il Grimorio: sempre tutte e sei, nell'ordine
+    // di Blue; la scheda scelta resta nella scheda attraverso i render.
     const kinds = [
+      { id: "background", label: localize("WOD5E_MAGE.Stat.TrattiBackground") },
       { id: "merit", label: localize("WOD5E_MAGE.Stat.TrattiPregi") },
       { id: "flaw", label: localize("WOD5E_MAGE.Stat.TrattiDifetti") },
-      { id: "background", label: localize("WOD5E_MAGE.Stat.TrattiBackground") },
       { id: "equipment", label: localize("WOD5E_MAGE.Stat.TrattiEquipaggiamento") },
-      { id: "other", label: localize("WOD5E_MAGE.Stat.TrattiAltri") }
+      { id: "other", label: localize("WOD5E_MAGE.Stat.TrattiAltri") },
+      { id: "grimorio", label: localize("WOD5E_MAGE.Tabs.Grimorio") }
     ];
     const kindOf = (item) => {
       if (item.type === "feature") return ["merit", "flaw", "background"].includes(item.system?.featuretype) ? item.system.featuretype : "background";
@@ -949,14 +992,19 @@ export class MageActorSheet extends MortalActorSheet {
     }
     const kindRank = new Map(kinds.map((kind, index) => [kind.id, index]));
     context.traitRows = rows.sort((a, b) => kindRank.get(a.kind) - kindRank.get(b.kind) || a.name.localeCompare(b.name, lang));
-    context.traitKinds = kinds.filter((kind) => rows.some((row) => row.kind === kind.id));
+    context.trattiScheda = schedaTratti(this._filters?.tratti);
+    context.traitKinds = kinds.map((kind) => ({
+      ...kind,
+      short: localize(`WOD5E_MAGE.Stat.Schede.${kind.id}`),
+      empty: localize(`WOD5E_MAGE.Stat.Vuoti.${kind.id}`),
+      active: kind.id === context.trattiScheda
+    }));
 
     // Il Tiro.
     context.tiro = prepareTiroContext(actor, tiro);
 
-    // Il memo di creazione e i Bonus scritti, sotto i riquadri.
+    // I Bonus scritti, sotto i riquadri (il memo sta nel contesto di base).
     context.bonuses = prepareBonuses(actor);
-    context.creationSummary = prepareCreationSummary(actor, context.arete.value);
     return context;
   }
 

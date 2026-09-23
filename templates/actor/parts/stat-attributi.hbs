@@ -2,9 +2,10 @@
      tasto che lo mette nel tiro (uno solo), i pallini restano quelli della
      scheda e cambiano il valore. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-attributi">
-    <header class="wod5e-mage-riq-title">
+    {{!-- Col memo di creazione acceso (23/9): il conto a destra del titolo, il titolo rosso sotto il traguardo e verde pari. --}}
+    <header class="wod5e-mage-riq-title{{#if memo.on}} memo-{{memo.boxes.attributi.state}}{{/if}}">
         {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.attributes}}{{/if}}
-        <span>{{localize "WOD5E.AttributesList.Attributes"}}</span>
+        <span>{{localize "WOD5E.AttributesList.Attributes"}}{{#if memo.on}} <b class="wod5e-mage-memo-conto" title="{{localize 'WOD5E_MAGE.Riepilogo.Attributes'}}">{{memo.boxes.attributi.text}}</b>{{/if}}</span>
     </header>
     <div class="wod5e-mage-riq-body">
         {{#each attributeGroups as |group|}}

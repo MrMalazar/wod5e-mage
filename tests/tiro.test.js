@@ -3,6 +3,7 @@ import {
   bumpDifficulty,
   clearTiro,
   contoTiro,
+  DADI_ADJUST_CAP,
   emptyTiro,
   EXTRA_DICE_CAP,
   hasDifficulty,
@@ -17,6 +18,7 @@ import {
   QUINTESSENCE_BASE_CAP,
   quintessenceDice,
   removePill,
+  setDadi,
   setDifficulty,
   setExtra,
   setKind,
@@ -234,5 +236,27 @@ assert.deepEqual(conto.powerNotes, [{ on: "threshold", value: -1 }]);
 const segnaposto = { id: "forces-1-1", sphere: "forces", dot: 1, slot: 1, name: "", text: "", effects: [] };
 conto = contoTiro(pickPower(magick, "forces-1-1"), { arete: 2, attributeValue: 4, skillValue: 5, power: segnaposto });
 assert.deepEqual([conto.computed, conto.dice, conto.powerNotes], [5, 4, []]);
+
+// Il ritocco dei Dadi (23/9): sul totale, fuori dal tetto, anche in meno, entro ±10; azzerato da Azzera.
+assert.equal(emptyTiro().dadi, 0);
+assert.deepEqual([setDadi(magick, 2).dadi, setDadi(magick, -3).dadi, setDadi(magick, 40).dadi, setDadi(magick, -40).dadi], [2, -3, DADI_ADJUST_CAP, -DADI_ADJUST_CAP]);
+{
+  const base = contoTiro(magick, { arete: 2, attributeValue: 4, skillValue: 5 });
+  const piu = contoTiro(setDadi(magick, 2), { arete: 2, attributeValue: 4, skillValue: 5 });
+  const meno = contoTiro(setDadi(magick, -2), { arete: 2, attributeValue: 4, skillValue: 5 });
+  assert.deepEqual([piu.riserva, piu.pool, piu.dice, piu.adjust], [base.riserva, base.pool + 2, base.dice + 2, 2]);
+  assert.deepEqual([meno.riserva, meno.pool, meno.dice, meno.adjust], [base.riserva, base.pool - 2, base.dice - 2, -2]);
+  // La riserva mostrata non cambia col ritocco: è Attributo + Abilità + bonus.
+  assert.equal(base.riserva, base.pool);
+  // Il ritocco non porta la riserva sotto zero.
+  assert.equal(contoTiro(setDadi(emptyTiro(), -5), { attributeValue: 1, skillValue: 1 }).pool, 0);
+}
+// L'incantesimo sta in testa alla catena, e la sua × svuota tutto.
+{
+  const conSpell = loadSpell(magick, "s1", { name: "Lama di fuoco", spheres: ["forces"], scopes: { potency: 3 } }, { owned: ["forces"] });
+  const pills = pillsOf(conSpell, { ...names, spells: { s1: "Lama di fuoco" } });
+  assert.deepEqual([pills[0].kind, pills[0].label], ["spell", "Lama di fuoco"]);
+  assert.equal(tiroSize(removePill(conSpell, { kind: "spell", id: "s1" })), 0);
+}
 
 console.log("tiro: ok");

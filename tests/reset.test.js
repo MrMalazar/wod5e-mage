@@ -80,7 +80,9 @@ assert.equal(asked, 2);
 assert.deepEqual(Object.keys(prepareResetsById()), [...RESET_IDS, "all"]);
 const read = (file) => readFileSync(new URL(`../templates/actor/parts/${file}`, import.meta.url), "utf8");
 const tratti = read("stat.hbs");
-assert.match(tratti, /wod5e-mage-riepilogo-checks[\s\S]*wod5e-mage-reset-row[\s\S]*name="flags\.wod5e-mage\.creazione\.reset"[\s\S]*data-reset="all"/);
+// Dal 23/9 i tasti di reset si accendono con la spunta del memo (creazioneReset = memo.on): niente più spunta a parte.
+assert.match(tratti, /name="flags\.wod5e-mage\.creazione\.memo"[\s\S]*\{\{#if memo\.on\}\}[\s\S]*data-reset="all"/);
+assert.doesNotMatch(tratti, /name="flags\.wod5e-mage\.creazione\.reset"/);
 assert.doesNotMatch(tratti, /data-reset="\{\{reset\.id\}\}"/);
 const tasto = (id) => new RegExp(`\\{\\{#if creazioneReset\\}\\}\\{\\{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById\\.${id}\\}\\}`);
 // Nella prima pagina (16/9) i tasti di reset stanno nel titolo del riquadro: Attributi, Abilità, Magick.
@@ -95,7 +97,8 @@ assert.match(read("dotazione.hbs"), /\{\{#if creazioneReset\}\}[\s\S]*resetsById
 assert.match(read("reset-tasto.hbs"), /data-action="resetSection" data-reset="\{\{id\}\}"[\s\S]*@root\.locked/);
 const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
 assert.match(sheet, /resetSection: onResetSection/);
-assert.match(sheet, /context\.creazioneReset = Boolean\(this\.actor\.getFlag\(MODULE_ID, "creazione"\)\?\.reset\)/);
+assert.match(sheet, /const creazione = this\.actor\.getFlag\(MODULE_ID, "creazione"\) \?\? \{\};/);
+assert.match(sheet, /context\.creazioneReset = context\.memo\.on \|\| Boolean\(creazione\.reset\)/);
 assert.match(sheet, /context\.resetsById = prepareResetsById/);
 assert.match(sheet, /classList\.toggle\("wod5e-mage-creazione", Boolean\(context\.creazioneReset\)\)/);
 // Senza la spunta la X che azzera un tratto sparisce.

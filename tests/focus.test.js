@@ -156,7 +156,9 @@ console.log("Focus tests passed.");
   const riga = readFileSync(new URL("../templates/actor/parts/strumento-riga.hbs", import.meta.url), "utf8");
   assert.match(riga, /\{\#unless row\.perceive\}\}[\s\S]*data-action="strumentiSuggest"/);
   // Lo Strumento (21/9): la pastiglia apre la tendina, le pastiglie scrivono la bandiera (strumentoPick); via la select.
-  assert.match(riga, /wod5e-mage-strumento-pastiglia\{\{#if row\.tool\}\} pieno\{\{\/if\}\}" data-action="cassettoToggle"[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-strumenti[\s\S]*data-action="strumentoPick" data-sphere="\{\{\.\.\/\.\.\/row\.id\}\}" data-tool="\{\{tool\.id\}\}"[\s\S]*name="flags\.wod5e-mage\.focus\.sphereInstruments\.\{\{row\.id\}\}\.name"/);
+    // La pastiglia sta sulla seconda linea, a sinistra del tuo di preciso (23/9); la tendina si apre sotto tutta la riga.
+  assert.match(riga, /wod5e-mage-strumento-sotto">\s*<button type="button" class="wod5e-mage-sfera-potere wod5e-mage-strumento-pastiglia\{\{#if row\.tool\}\} pieno\{\{\/if\}\}" data-action="cassettoToggle"[\s\S]*name="flags\.wod5e-mage\.focus\.sphereInstruments\.\{\{row\.id\}\}\.name"[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-strumenti[\s\S]*data-action="strumentoPick" data-sphere="\{\{\.\.\/\.\.\/row\.id\}\}" data-tool="\{\{tool\.id\}\}"/);
+  assert.doesNotMatch(riga, /wod5e-mage-riga-testa">[\s\S]*wod5e-mage-strumento-pastiglia[\s\S]*<\/div>\s*\{\{!-- La seconda linea/);
   assert.doesNotMatch(riga, /<select/);
   const focusJs = readFileSync(new URL("../scripts/focus.js", import.meta.url), "utf8");
   assert.match(focusJs, /export async function onStrumentoPick[\s\S]*focus\.sphereInstruments\.\$\{sphere\}\.tool`\]: current === tool \? "" : tool/);
