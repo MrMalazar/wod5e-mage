@@ -11388,6 +11388,83 @@
   padding: 0;
 }
 
+/* Foundry dà a ogni bottone un'altezza fissa (var(--input-height)) e una
+   riga sola: le carte, i passi della barra e le righe del controllo sono
+   bottoni a più righe, e riprendono l'altezza dal contenuto (il collaudo di
+   Blue del 23/9 sera: le carte schiacciate una sull'altra). */
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-carta,
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-passo,
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-riga-lista,
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-chip {
+  box-shadow: none;
+  height: auto;
+  line-height: 1.25;
+  min-height: 0;
+  overflow: visible;
+  text-shadow: none;
+  width: auto;
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-carta {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  font-family: "Signika", sans-serif;
+  gap: 6px;
+  justify-content: flex-start;
+  padding: 8px;
+  text-align: left;
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-passo {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: flex-start;
+  padding: 6px 4px 8px;
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-riga-lista {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-chip {
+  display: inline-flex;
+  padding: 5px 10px;
+}
+
+.application.wod5e-mage-guidata button,
+.application.wod5e-mage-guidata button:hover,
+.application.wod5e-mage-guidata button:focus {
+  box-shadow: none;
+  outline: none;
+  text-shadow: none;
+}
+
+/* I titoli: niente righelli né margini di Foundry e del sistema sotto h2, h3 e h4. */
+.application.wod5e-mage-guidata .wod5e-mage-guidata-domanda,
+.application.wod5e-mage-guidata .wod5e-mage-guidata-occhiello,
+.application.wod5e-mage-guidata .wod5e-mage-guidata-carta > h4 {
+  border: 0;
+  padding: 0;
+  text-shadow: none;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-carta > h4 {
+  line-height: 1.15;
+  margin: 0;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-domanda {
+  margin: 0 0 12px;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-occhiello {
+  margin: 10px 0 6px;
+}
+
 /* La barra dei passi: quello in corso in viola, i fatti in oro, i passati in tenue. */
 .wod5e-mage-guidata-testa {
   align-items: flex-end;
@@ -11821,14 +11898,43 @@
   margin-left: 0;
 }
 
-.wod5e-mage-guidata-editor {
+/* Il prose-mirror del Narratore: cresce col testo, niente scorrimento
+   dentro la scatola (Foundry gli dà un'altezza fissa). */
+.application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror {
+  background: transparent;
+  border: 0;
   display: block;
-  min-height: 60px;
+  height: auto;
+  min-height: 40px;
+  overflow: visible;
+  resize: none;
 }
 
-.wod5e-mage-guidata-tastino.fermo {
-  cursor: default;
-  opacity: 0.7;
+.application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror .editor-content,
+.application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror .editor {
+  height: auto;
+  max-height: none;
+  min-height: 0;
+  overflow: visible;
+  padding: 0;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror .editor-content *:not(a) {
+  color: inherit;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror.active .editor-content,
+.application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror .editor-content[contenteditable="true"] {
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  color: var(--mage-inchiostro);
+  min-height: 140px;
+  padding: 8px 10px;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-perche prose-mirror .editor-content[contenteditable="true"] *:not(a) {
+  color: var(--mage-inchiostro);
 }
 
 /* Cosa ci guadagni: una voce per riga, il numero a destra in oro. */
@@ -11865,9 +11971,10 @@
 
 .wod5e-mage-guidata-voce > b {
   color: var(--mage-oro);
+  flex: 0 0 auto;
   margin-left: auto;
+  max-width: 60%;
   text-align: right;
-  white-space: nowrap;
 }
 
 .wod5e-mage-guidata-voce.no {
@@ -12020,6 +12127,12 @@
 
 .wod5e-mage-guidata-chip > b {
   color: var(--mage-oro);
+  margin-right: 4px;
+}
+
+.wod5e-mage-guidata-vuoto {
+  color: var(--mage-tenue);
+  font-weight: 400;
 }
 
 .wod5e-mage-guidata-chip.fermo {

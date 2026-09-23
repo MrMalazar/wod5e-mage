@@ -1809,7 +1809,8 @@
         "GuadagniAmbizione": "L'Ambizione dà forma alla cronaca",
         "GuadagniDesiderio": "Il Desiderio, raggiunto, frutta Esperienza",
         "GuadagniConvinzioni": "Le Convinzioni reggono le Macchie",
-        "GuadagniAncore": "Le Ancore, chi ti tiene umano"
+        "GuadagniAncore": "Le Ancore, chi ti tiene umano",
+        "ConvinzioneSenzaTesto": "riga senza testo: scrivila nella pagina Personaggio, o toglila"
       },
       "Tipo": {
         "Famiglie": "Strumenti che apre",

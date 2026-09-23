@@ -10,7 +10,7 @@
         </div>
         {{#if corpo.proposte.ambizione.length}}
             <div class="wod5e-mage-guidata-proposte"><small>{{#if corpo.credo}}{{localize "WOD5E_MAGE.Guidata.Proposte"}}{{else}}{{localize "WOD5E_MAGE.Guidata.ProposteComuni"}}{{/if}}</small>
-                {{#each corpo.proposte.ambizione as |p|}}<button type="button" class="wod5e-mage-guidata-chip" data-action="propostaMetti" data-kind="ambizione" data-uuid="{{p.uuid}}" title="{{p.text}}" {{#unless @root.canEdit}}disabled{{/unless}}>{{p.name}}</button>{{/each}}
+                {{#each corpo.proposte.ambizione as |p|}}<button type="button" class="wod5e-mage-guidata-chip" data-action="propostaMetti" data-kind="ambizione" data-uuid="{{p.uuid}}" title="{{localize 'WOD5E_MAGE.Guidata.Aggiungi'}}" {{#unless @root.canEdit}}disabled{{/unless}}><b>{{p.name}}</b> {{p.text}}</button>{{/each}}
             </div>
         {{/if}}
     </div>
@@ -22,7 +22,7 @@
         </div>
         {{#if corpo.proposte.desiderio.length}}
             <div class="wod5e-mage-guidata-proposte"><small>{{#if corpo.credo}}{{localize "WOD5E_MAGE.Guidata.Proposte"}}{{else}}{{localize "WOD5E_MAGE.Guidata.ProposteComuni"}}{{/if}}</small>
-                {{#each corpo.proposte.desiderio as |p|}}<button type="button" class="wod5e-mage-guidata-chip" data-action="propostaMetti" data-kind="desiderio" data-uuid="{{p.uuid}}" title="{{p.text}}" {{#unless @root.canEdit}}disabled{{/unless}}>{{p.name}}</button>{{/each}}
+                {{#each corpo.proposte.desiderio as |p|}}<button type="button" class="wod5e-mage-guidata-chip" data-action="propostaMetti" data-kind="desiderio" data-uuid="{{p.uuid}}" title="{{localize 'WOD5E_MAGE.Guidata.Aggiungi'}}" {{#unless @root.canEdit}}disabled{{/unless}}><b>{{p.name}}</b> {{p.text}}</button>{{/each}}
             </div>
         {{/if}}
     </div>
@@ -32,7 +32,7 @@
         </div>
         {{#each corpo.convinzioni as |row|}}
             <div class="wod5e-mage-guidata-riga-lista">
-                <div class="wod5e-mage-guidata-riga-testo"><b>{{row.text}}</b>{{#if row.groupLabel}} <small class="wod5e-mage-guidata-tag">{{row.groupLabel}}</small>{{/if}}
+                <div class="wod5e-mage-guidata-riga-testo"><b>{{#if row.text}}{{row.text}}{{else}}<em class="wod5e-mage-guidata-vuoto">{{localize "WOD5E_MAGE.Guidata.Bussola.ConvinzioneSenzaTesto"}}</em>{{/if}}</b>{{#if row.groupLabel}} <small class="wod5e-mage-guidata-tag">{{row.groupLabel}}</small>{{/if}}
                     {{#if row.serve}}<small class="wod5e-mage-guidata-sotto"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{row.serve}}</small>{{/if}}
                     {{#if row.cross}}<small class="wod5e-mage-guidata-sotto"><i class="fa-solid fa-minus" aria-hidden="true"></i> {{row.cross}}</small>{{/if}}
                 </div>

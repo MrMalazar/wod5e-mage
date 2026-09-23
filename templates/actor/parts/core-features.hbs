@@ -8,7 +8,8 @@
      oggetti, expendItemUse e restoreItemUses. --}}
 {{#each features as |feature key|}}
     <span class="wod5e-mage-riq-occhiello wod5e-mage-occhiello-tasti">
-        <span>{{localize (generateLocalizedLabel key 'features')}}</span>
+        {{!-- I nomi di casa (23/9 sera): il sistema traduce «merit» con Vantaggi, qui sono Pregi. --}}
+        <span>{{localize (concat "WOD5E_MAGE.Stat.Schede." key)}}</span>
         <span class="wod5e-mage-occhiello-tastini">
             {{!-- L'archivio dei Cataloghi M6 (Pregi, Difetti, Background): il libro, distinto dal + che crea da zero. --}}
             {{#unless (eq key "boon")}}

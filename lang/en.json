@@ -1809,7 +1809,8 @@
         "GuadagniAmbizione": "The Ambition shapes the chronicle",
         "GuadagniDesiderio": "The Desire, once reached, earns Experience",
         "GuadagniConvinzioni": "Convictions hold the Stains",
-        "GuadagniAncore": "Touchstones, who keeps you human"
+        "GuadagniAncore": "Touchstones, who keeps you human",
+        "ConvinzioneSenzaTesto": "empty row: write it on the Character page, or remove it"
       },
       "Tipo": {
         "Famiglie": "Instruments it opens",
