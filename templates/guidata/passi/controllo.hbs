@@ -1,0 +1,30 @@
+{{!-- Passo 13 · il controllo finale: i passi e i conti, tutto verde quando la scheda è pronta. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    <p class="wod5e-mage-guidata-nota-passo {{#if corpo.pronto}}exact{{else}}under{{/if}}">{{#if corpo.pronto}}{{localize "WOD5E_MAGE.Guidata.Controllo.Pronto"}}{{else}}{{localize "WOD5E_MAGE.Guidata.Controllo.Mancano" n=corpo.mancano}}{{/if}}</p>
+    <div class="wod5e-mage-guidata-due-colonne">
+        <div>
+            <div class="wod5e-mage-guidata-etichetta">{{localize "WOD5E_MAGE.Guidata.Controllo.Passi"}}</div>
+            {{#each corpo.voci as |voce|}}
+                <button type="button" class="wod5e-mage-guidata-riga-lista controllo {{#if voce.ok}}exact{{else}}under{{/if}}" data-action="passoVai" data-passo="{{voce.n}}"><i class="fa-solid {{#if voce.ok}}fa-circle-check{{else}}fa-circle-xmark{{/if}}" aria-hidden="true"></i> <span>{{voce.n}} · {{voce.label}}</span></button>
+            {{/each}}
+        </div>
+        <div>
+            <div class="wod5e-mage-guidata-etichetta">{{localize "WOD5E_MAGE.Guidata.Controllo.Conti"}}</div>
+            {{#each corpo.conti as |conto|}}
+                <div class="wod5e-mage-guidata-riga-lista controllo {{conto.state}}"><i class="fa-solid {{#if (eq conto.state "exact")}}fa-circle-check{{else}}fa-circle-xmark{{/if}}" aria-hidden="true"></i> <span>{{conto.label}}</span> <b>{{conto.text}}</b></div>
+            {{/each}}
+        </div>
+    </div>
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            <div class="wod5e-mage-guidata-voce {{#if corpo.pronto}}exact{{else}}under{{/if}}"><i class="fa-solid fa-wand-sparkles" aria-hidden="true"></i> {{#if corpo.pronto}}{{localize "WOD5E_MAGE.Guidata.Pronto"}}{{else}}{{localize "WOD5E_MAGE.Guidata.Controllo.Mancano" n=corpo.mancano}}{{/if}}</div>
+            <button type="button" class="wod5e-mage-guidata-tasto" data-action="schedaApri"><i class="fa-solid fa-address-card" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.ApriScheda"}}</button>
+        </div>
+    </section>
+</aside>

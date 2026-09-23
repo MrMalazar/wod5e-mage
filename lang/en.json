@@ -1624,6 +1624,295 @@
       "Medio": "medium",
       "Grande": "large",
       "Tasto": "Text size: {current}. Click: {next}"
+    },
+    "Guidata": {
+      "Title": "Guided creation",
+      "WindowTitle": "Guided creation · {name}",
+      "Apri": "Guided creation: the sheet step by step",
+      "PassoDi": "Step {n} of {totale}",
+      "Cosa": "What",
+      "Perche": "Why",
+      "Guadagni": "What you get",
+      "Memo": "The memo",
+      "Indietro": "Back",
+      "Avanti": "Next: {passo}",
+      "Chiudi": "Close the guide",
+      "Pronto": "The sheet is ready",
+      "Grado": "Grade",
+      "GradoHint": "The start: Neophyte is the base creation, the other grades start higher (the targets change).",
+      "Riscrivi": "Rewrite the why (Storyteller)",
+      "RiscriviHint": "The book text can be rewritten with the editor: it applies to every character in the world.",
+      "RiscriviChiudi": "Close the editor",
+      "Ripristina": "Back to the book text",
+      "Proprio": "Storyteller's text",
+      "Catalogo": "Open the catalogue",
+      "Proposte": "Proposed by your Creed",
+      "ProposteComuni": "From the catalogue",
+      "Aggiungi": "Put on the sheet",
+      "Togli": "Remove",
+      "SullaScheda": "On the sheet",
+      "ApriScheda": "Open the sheet",
+      "SoloLettura": "You cannot write on this character: the guide is read-only.",
+      "Bloccato": "The sheet is locked (the padlock): unlock it to write.",
+      "ImmagineDaFare": "image to do",
+      "ImmagineHint": "Family images go in assets/immagini/famiglie (see the LEGGIMI).",
+      "Note": {
+        "vuoto": "On the sheet: nothing yet",
+        "credo": "On the sheet: {credo}, written in the Creed",
+        "famiglia": "On the sheet: Lineage {riga}, with its Spheres at 1",
+        "bussola": "On the sheet: the Compass, on the Character page",
+        "tipo": "On the sheet: Magick Type {tipo}",
+        "concetto": "On the sheet: the Concept, in Identity",
+        "sfere": "On the sheet: the Sphere dots, live",
+        "strumenti": "On the sheet: the Instruments, on the Creed page",
+        "arete": "On the sheet: Arete {arete}",
+        "attributi": "On the sheet: the Attribute dots, live",
+        "abilita": "On the sheet: the Skill dots, live",
+        "vantaggi": "On the sheet: Backgrounds, Merits and Flaws, in Traits",
+        "ancore": "On the sheet: the Touchstones, on the Character page",
+        "controllo": "On the sheet: the creation memo stays on the titles"
+      },
+      "Passi": {
+        "credo": {
+          "Label": "Creed",
+          "Domanda": "What do you believe reality is?",
+          "Sotto": "thirteen Creeds · one only",
+          "Perche": "What you believe reality is, and everything else follows: the Truth you devoted yourself to, and the voice you defend it with at the table.",
+          "PercheDue": "Every sect breathes its own Creeds, usually two or three: that shortlist is the beaten path to yours, not a border. The Creed assigns no points and forbids nothing: the two Spheres it suggests open up, and the Instruments it proposes come at step 7."
+        },
+        "famiglia": {
+          "Label": "Family",
+          "Domanda": "The day you end up in trouble, which door will you knock on?",
+          "Sotto": "nine Traditions and ten Crafts · then the path",
+          "Perche": "But you do have a Tradition. Because it taught you to do what you know how to do, and because when you end up in trouble it is the only people who might come.",
+          "PercheDue": "Traditions survive in cabals, the group of mages you live, work and watch your back with. Do not look for the best one, because it does not exist. A Craft is a narrow road: a single Sphere and no path, and nobody will ever ask you to give up who you are to sit at the table."
+        },
+        "bussola": {
+          "Label": "Compass",
+          "Domanda": "Where do you want to get, what drives you now, what do you never betray?",
+          "Sotto": "Ambition · Desire · one to three Convictions",
+          "Perche": "Four traits written in a few lines, worth more than any score: the first two say where the character is going, the other two what keeps them human on the way.",
+          "PercheDue": "The Ambition says where you want to get, and you will not get there tonight: the best ones are purely mortal. The Desire is what drives you now, and it changes as soon as you get it. The Convictions, one to three, are your moral law: absolute in form, costly in practice, double-edged. Touchstones come at step 12."
+        },
+        "tipo": {
+          "Label": "Type",
+          "Domanda": "Which way does your Will pass through?",
+          "Sotto": "three Magick Types · one only",
+          "Perche": "With Magick the Will passes through things humans have used since they exist: the body and the voice, the object in hand, what gets consumed. With Technomagick it passes through an apparatus, and the apparatus is the point. In Hybrid the apparatus is there and does not command.",
+          "PercheDue": "The Type decides the Instrument families you can use, and counts in the Arete prize: Hybrid never gets it. Machine practices (Cybernetics, Reality Hacking, Weird Science) go through Technomagick; for the others the choice is yours."
+        },
+        "concetto": {
+          "Label": "Concept",
+          "Domanda": "Who were you before the Awakening, in a single line?",
+          "Sotto": "the Concept · the Challenge, optional, with three prizes",
+          "Perche": "Who you were before the Awakening, and what you became after, in a single line. It is the filter for everything else: every dot you mark later must match this sentence.",
+          "PercheDue": "It takes a real person, with an anonymous job and a tension inside, not an archetype. The Concept Challenge is twenty-one questions in three groups of seven: optional, and the game pays you back in proportion to how deep you go."
+        },
+        "sfere": {
+          "Label": "Spheres",
+          "Domanda": "How far do you reach, in each of the nine domains?",
+          "Sotto": "six dots · cap Arete + 2",
+          "Perche": "The nine domains of Magick, and the rating says how far you reach in each. They are the only thing on the sheet that says what your mage can really do.",
+          "PercheDue": "You have six dots, to spend in one of two shapes: 3-2-1 (one that leads, one that supports, one that sprouts) or 3-3 (two roads beaten deep). The family and path Spheres already have their first dot. Each Sphere's cap at creation is Arete + 2: read the two or three you care about in the Magick chapter before marking."
+        },
+        "strumenti": {
+          "Label": "Instruments",
+          "Domanda": "What do you cast with?",
+          "Sotto": "one Instrument per Sphere · and the Perceive one",
+          "Perche": "The things without which you do not cast. An object, a gesture, a word, a substance: something that channels your conviction. To cast you must use at least one, and it is the key in the lock.",
+          "PercheDue": "They give no dice. On the sheet they are written on two levels, the family and then your exact one: never \"a knife\", but my father's knife, which cuts nothing any more. The Creed and the Family propose some, and almost never the same things."
+        },
+        "arete": {
+          "Label": "Arete",
+          "Domanda": "How much do you understand of what you do?",
+          "Sotto": "Arete · Quintessence · Paradox",
+          "Perche": "How much your mage understands of what they are doing. At creation it is 1 for everyone, and it is the number everything else depends on: how many Spheres you can push, how high you reach.",
+          "PercheDue": "Now you choose nothing: mark 1, and with it Quintessence 3 and Paradox 0. Each Sphere's cap is Arete + 2. It only rises by playing, and it is the most expensive thing in the game. Advanced starts (the grade, above) start higher."
+        },
+        "attributi": {
+          "Label": "Attributes",
+          "Domanda": "What are you, before any training?",
+          "Sotto": "twenty-two dots · a fixed shape",
+          "Perche": "Nine entries in three families: what the character is before any training. The Attribute enters every roll of the game, and three of them give the base statistics.",
+          "PercheDue": "Distribute a fixed shape of twenty-two dots and decide which entry gets which value. Start from the 4, which says who the character is, and finish with the 1, which is the promise of trouble: the Storyteller will use it."
+        },
+        "abilita": {
+          "Label": "Skills",
+          "Domanda": "What have you learned?",
+          "Sotto": "nineteen dots · none above the third",
+          "Perche": "Fourteen entries, a single row: what the character has learned. It adds to the Attribute to make the dice pool, and opens a Specialty at the first dot, the third and the fifth.",
+          "PercheDue": "Nineteen free dots, and no entry above the third. A 3 is a trade, a 1 a smattering, a zero means you roll the Attribute alone. The fourth and fifth dot only come in play, with Experience."
+        },
+        "vantaggi": {
+          "Label": "Advantages",
+          "Domanda": "What do you have around you, what do you carry, and which troubles?",
+          "Sotto": "seven points across Backgrounds and Merits · up to two Flaws",
+          "Perche": "Seven points to spend in two directions: what you have outside yourself (Backgrounds) and what is yours (Merits). Three small, well-chosen traits tell more than two big ones.",
+          "PercheDue": "Flaws are up to two points of trouble, which give back as many points to spend elsewhere: they are the only trait on the sheet that gives the Storyteller explicit permission to come after you. Take one because you want that story at the table."
+        },
+        "ancore": {
+          "Label": "Touchstones",
+          "Domanda": "Who keeps you human?",
+          "Sotto": "one to three ordinary people",
+          "Perche": "One to three ordinary people, almost always unaware Sleepers, who keep the character hooked to the world before. They give you Willpower back, and they are where they will come to get you.",
+          "PercheDue": "One alone makes a tight, fierce chronicle, three make more oxygen and three times the blackmail. Choose people your mage still sees, not remembers. For each write who they are, why they matter and what they do not know: the third is where every scene comes from."
+        },
+        "controllo": {
+          "Label": "Check",
+          "Domanda": "Is everything in place?",
+          "Sotto": "the whole memo, all green",
+          "Perche": "The whole memo: every count on the sheet against its target. When it is all green, you have a finished mage.",
+          "PercheDue": "What is missing can be fixed from the sheet too: the counts on the box titles stay on with the memo, and this window reopens from the header button, at the step it was on."
+        }
+      },
+      "Credo": {
+        "Sfere": "Two affine Spheres open up",
+        "SfereScelte": "You pick the two Spheres",
+        "SfereLibere": "Spheres of your choice",
+        "Prima": "The first",
+        "Seconda": "The second",
+        "Mestiere": "The trade it suggests",
+        "Strumenti": "The suggested Instruments",
+        "Famiglie": "The Families that suggest it",
+        "Nessuna": "none, for now",
+        "Pallini": "Dots",
+        "Nessuno": "none",
+        "NelPasso": "at step {n}"
+      },
+      "Famiglia": {
+        "Via": "The path",
+        "ViaSotto": "{famiglia} · {kind}",
+        "DelCredo": "with your Creed",
+        "Craft": "Craft",
+        "CraftSotto": "one Sphere, no path",
+        "SferaFamiglia": "The family Sphere at 1",
+        "SferaVia": "The path Sphere at 1",
+        "CredoVia": "The Creed the path suggests",
+        "Pratica": "The path's practice",
+        "Strumenti": "The Family's Instruments",
+        "Bussola": "Convictions, Ambition and Desire proposed",
+        "Tipo": "The suggested Magick Type",
+        "ScegliPrima": "Choose the Family first: the path appears below.",
+        "Tradizioni": "The Traditions",
+        "Disparati": "The Disparate Crafts"
+      },
+      "Bussola": {
+        "Ambizione": "Ambition",
+        "AmbizioneHint": "Where you want to get, and not tonight.",
+        "Desiderio": "Desire",
+        "DesiderioHint": "What drives you now, and changes as soon as you get it.",
+        "Convinzioni": "Convictions",
+        "ConvinzioniHint": "One to three: what you never betray.",
+        "ConvinzioneVuota": "No Conviction yet: take one from the catalogue, or from the proposals.",
+        "Serve": "when you serve it",
+        "Cross": "when you cross it",
+        "GuadagniAmbizione": "The Ambition shapes the chronicle",
+        "GuadagniDesiderio": "The Desire, once reached, earns Experience",
+        "GuadagniConvinzioni": "Convictions hold the Stains",
+        "GuadagniAncore": "Touchstones, who keeps you human"
+      },
+      "Tipo": {
+        "Famiglie": "Instruments it opens",
+        "Premio": "The Arete prize",
+        "PremioSi": "yes",
+        "PremioNo": "no, never",
+        "Consigliato": "suggested by the path",
+        "Pratica": "Your path's practice",
+        "Nessuna": "the path names no Type: your choice"
+      },
+      "Concetto": {
+        "Concetto": "The Concept",
+        "Hint": "One line: who you were before the Awakening, and what you became after.",
+        "Sfida": "The Concept Challenge",
+        "SfidaHint": "Three groups of seven questions, on the sheet (the Challenge page). Optional: prizes add up.",
+        "ApriSfida": "Open the Challenge on the sheet",
+        "Gruppo": "{done}/{total} written",
+        "Premio": "{label}",
+        "Preso": "taken",
+        "DaPrendere": "with {n}"
+      },
+      "Sfere": {
+        "Pallini": "Sphere dots",
+        "Tetto": "Cap per Sphere at creation",
+        "TettoHint": "Arete + 2: no Sphere passes {cap}",
+        "Famiglia": "Family Sphere",
+        "FamigliaHint": "Family Spheres (Family, path, Creed) cost less with Experience.",
+        "TettoAvviso": "At creation a Sphere does not pass Arete + 2 ({cap}).",
+        "Sfida": "from the Challenge",
+        "Chiusa": "closed: it opens with the first dot"
+      },
+      "Strumenti": {
+        "Scelti": "Instruments chosen",
+        "SenzaNonLanci": "Without an Instrument you do not cast",
+        "Consiglio": "The Creed proposes",
+        "Usa": "Use this",
+        "Percepire": "The Perceive Instrument",
+        "PercepireHint": "For perceptive effects, at the first dot of every Sphere: a dedicated Instrument, same as another or different.",
+        "Famiglia": "The Family proposes",
+        "Via": "The path proposes",
+        "Nessuna": "No Sphere open: go back to step 6.",
+        "Tuo": "your exact one",
+        "Mestiere": "the trade",
+        "Scegli": "Choose the Instrument",
+        "FuoriTipo": "outside your Magick Type"
+      },
+      "Arete": {
+        "Grado": "The grade's Arete",
+        "Quintessenza": "Quintessence",
+        "Paradosso": "Paradox",
+        "Partenza": "At the start: Quintessence {q}, Paradox 0",
+        "Tetto": "The Sphere cap",
+        "Fuori": "With grade {grado} Arete is {target}: here it is {arete}.",
+        "Ok": "The grade's Arete is marked.",
+        "Metti": "Mark the starting Arete and Quintessence"
+      },
+      "Attributi": {
+        "Forma": "The fixed shape",
+        "FormaVoce": "{count} at {value}",
+        "NeHai": "you have {have}",
+        "Segnati": "marked",
+        "Salute": "Health = Stamina + 3",
+        "Volonta": "Willpower = Composure + Resolve",
+        "Saggezza": "Wisdom = 3 + the higher of Charisma and Resolve",
+        "Caselle": "{n} boxes",
+        "Tiro": "Every roll starts from an Attribute",
+        "TiroPiu": "+ Skill"
+      },
+      "Abilita": {
+        "Pallini": "Skill dots",
+        "Tetto": "The creation cap",
+        "TettoHint": "no entry above {cap}",
+        "TettoAvviso": "At creation no Skill passes {cap}.",
+        "Specializzazioni": "Specialties",
+        "SpecializzazioniHint": "one at the first dot, the third and the fifth, from the sheet",
+        "Sfida": "from the Challenge",
+        "Oltre": "above the cap: {list}"
+      },
+      "Vantaggi": {
+        "Background": "Backgrounds",
+        "Pregi": "Merits",
+        "Difetti": "Flaws",
+        "Vuoto": "none yet",
+        "Vantaggi": "Backgrounds and Merits together",
+        "DifettiConto": "Flaws",
+        "Restituiscono": "Flaws give back the points they cost",
+        "Punti": "points"
+      },
+      "Ancore": {
+        "Scritte": "Touchstones written",
+        "Volonta": "They give you Willpower back",
+        "Nome": "who they are",
+        "Descrizione": "why they matter, and what they do not know",
+        "Vuota": "No Touchstone yet: take one from the catalogue, or from the proposals.",
+        "Nuova": "A new Touchstone"
+      },
+      "Controllo": {
+        "Passi": "The steps",
+        "Conti": "The counts",
+        "Pronto": "All in place: the sheet is ready.",
+        "Mancano": "{n} steps missing: click them in the bar above.",
+        "Chiudi": "Close the guide and go to the sheet"
+      }
     }
   }
 }

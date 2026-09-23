@@ -1,0 +1,19 @@
+{{!-- La creazione guidata (23/9): la barra dei tredici passi dell'ordine
+     del 5/9. Quello in corso in viola, i fatti in oro; il clic porta al
+     passo. A destra il grado della partenza, che cambia i traguardi. --}}
+<header class="wod5e-mage-guidata-testa">
+    <nav class="wod5e-mage-guidata-passi" aria-label="{{localize 'WOD5E_MAGE.Guidata.Title'}}">
+        {{#each passi as |p|}}
+            <button type="button" class="wod5e-mage-guidata-passo{{#if p.qui}} qui{{/if}}{{#if p.fatto}} fatto{{/if}}{{#if p.prima}} prima{{/if}}" data-action="passoVai" data-passo="{{p.n}}" aria-current="{{#if p.qui}}step{{else}}false{{/if}}" title="{{localize 'WOD5E_MAGE.Guidata.PassoDi' n=p.n totale=@root.totale}}: {{p.label}}">
+                <i class="wod5e-mage-guidata-passo-numero">{{#if p.fatto}}<span class="fa-solid fa-check" aria-hidden="true"></span>{{else}}{{p.n}}{{/if}}</i>
+                <span class="wod5e-mage-guidata-passo-nome">{{p.label}}</span>
+            </button>
+        {{/each}}
+    </nav>
+    <label class="wod5e-mage-guidata-grado" title="{{localize 'WOD5E_MAGE.Guidata.GradoHint'}}">
+        <span>{{localize "WOD5E_MAGE.Guidata.Grado"}}</span>
+        <select name="flags.wod5e-mage.creazione.grado" {{#unless canEdit}}disabled{{/unless}}>
+            {{#each gradi as |g|}}<option value="{{g.id}}" {{#if g.selected}}selected{{/if}}>{{g.label}}</option>{{/each}}
+        </select>
+    </label>
+</header>

@@ -1,0 +1,35 @@
+{{!-- Passo 12 · le Ancore, da una a tre persone. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    <div class="wod5e-mage-guidata-etichetta"><i class="fa-solid fa-anchor" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Passi.ancore.Label"}}
+        <button type="button" class="wod5e-mage-guidata-tastino" data-action="catalogoApri" data-kind="ancora" title="{{localize 'WOD5E_MAGE.Guidata.Catalogo'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+        <button type="button" class="wod5e-mage-guidata-tastino" data-action="rigaNuova" data-table="ancore" title="{{localize 'WOD5E_MAGE.Guidata.Ancore.Nuova'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+    </div>
+    {{#each corpo.ancore as |row|}}
+        <div class="wod5e-mage-guidata-riga-lista ancora">
+            <div class="wod5e-mage-guidata-riga-testo">
+                <input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.name" value="{{row.name}}" placeholder="{{localize 'WOD5E_MAGE.Guidata.Ancore.Nome'}}" {{#unless @root.canEdit}}disabled{{/unless}}>
+                <input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.description" value="{{row.description}}" placeholder="{{localize 'WOD5E_MAGE.Guidata.Ancore.Descrizione'}}" {{#unless @root.canEdit}}disabled{{/unless}}>
+            </div>
+            <button type="button" class="wod5e-mage-guidata-tastino" data-action="rigaTogli" data-table="ancore" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Guidata.Togli'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+    {{else}}
+        <p class="wod5e-mage-guidata-nota-passo">{{localize "WOD5E_MAGE.Guidata.Ancore.Vuota"}}</p>
+    {{/each}}
+    {{#if corpo.proposte.length}}
+        <div class="wod5e-mage-guidata-proposte"><small>{{localize "WOD5E_MAGE.Guidata.ProposteComuni"}}</small>
+            {{#each corpo.proposte as |p|}}<button type="button" class="wod5e-mage-guidata-chip" data-action="propostaMetti" data-kind="ancora" data-uuid="{{p.uuid}}" title="{{p.text}}" {{#unless @root.canEdit}}disabled{{/unless}}>{{p.name}}</button>{{/each}}
+        </div>
+    {{/if}}
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            <div class="wod5e-mage-guidata-voce {{#if corpo.fatte}}exact{{else}}under{{/if}}"><i class="fa-solid fa-anchor" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Ancore.Scritte"}} <b>{{corpo.fatte}}/3</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-hand-fist" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Ancore.Volonta"}}</div>
+        </div>
+    </section>
+</aside>

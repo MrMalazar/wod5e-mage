@@ -46,7 +46,9 @@
    rosso mattone solo per il Paradosso. Si accende dal tasto accanto ai tre
    pallini della finestra (impostazione del giocatore, sheetTheme).
    ========================================================================== */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara {
+/* Anche la creazione guidata (23/9) veste il tema chiaro con questi colori. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara,
+.application.wod5e-mage-guidata.wod5e-mage-chiara {
   --mortal-color-1: #282051;      /* viola profondo: barra del titolo e livrea */
   --mortal-color-2: #3B336B;      /* viola medio */
   --mortal-color-3: #F6F2E6;
@@ -86,14 +88,16 @@
   color: var(--mage-testo);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .window-content {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .window-content,
+.application.wod5e-mage-guidata.wod5e-mage-chiara .window-content {
   background: #FBF8F0;
   color: var(--mage-testo);
 }
 
 /* La barra del titolo e la barra delle linguette in viola profondo, le
    linguette spente in crema col simbolo viola, accesa in oro testatina. */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .window-header {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .window-header,
+.application.wod5e-mage-guidata.wod5e-mage-chiara .window-header {
   background: #282051;
   color: #F6F2E6;
 }
@@ -11341,5 +11345,1217 @@
       "spese"
       "listino";
     grid-template-columns: 1fr;
+  }
+}
+
+
+/* ------------------------------------------------------------------ */
+/* La creazione guidata (Blue, 21/9 e 23/9): la finestra a passi, come  */
+/* il charactermancer di Roll20. Il mock del 23/9, col testo più grande  */
+/* (Blue: «vorrei il testo fosse più grande»). I colori sono i gettoni   */
+/* della scheda: la finestra ha le stesse classi (wod5e-mage) e il tema. */
+/* ------------------------------------------------------------------ */
+.application.wod5e-mage-guidata {
+  --guidata-fondo: #1b160f;
+  --guidata-riga: 1px solid rgb(152 119 43 / 45%);
+  --guidata-testo: 15px;
+  /* I titoli e le domande: il colore delle intestazioni della finestra (il mock del 23/9). */
+  --guidata-titolo: var(--mortal-color-3);
+}
+
+.application.wod5e-mage-guidata.wod5e-mage-chiara {
+  --guidata-fondo: #FBF8F0;
+  --guidata-riga: 1px solid #D9C28A;
+  --guidata-titolo: #3B336B;
+}
+
+.application.wod5e-mage-guidata .window-header {
+  background: var(--mortal-color-1);
+  color: #fff;
+}
+
+.application.wod5e-mage-guidata .window-content {
+  background: var(--guidata-fondo);
+  color: var(--mage-testo);
+  display: flex;
+  flex-direction: column;
+  font-family: "Signika", sans-serif;
+  font-size: var(--guidata-testo);
+  gap: 0;
+  line-height: 1.4;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* La barra dei passi: quello in corso in viola, i fatti in oro, i passati in tenue. */
+.wod5e-mage-guidata-testa {
+  align-items: flex-end;
+  background: var(--mage-cassetto-fondo);
+  border-bottom: var(--guidata-riga);
+  display: flex;
+  flex: 0 0 auto;
+  gap: 10px;
+  padding: 10px 12px 0;
+}
+
+.wod5e-mage-guidata-passi {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.wod5e-mage-guidata-passo {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 6px 6px 0 0;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  font-size: 0.68rem;
+  font-weight: 700;
+  gap: 5px;
+  letter-spacing: 0.06em;
+  min-width: 62px;
+  padding: 6px 4px 8px;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-guidata-passo:hover {
+  background: var(--mage-riga-sorvolo);
+  color: var(--mage-testo);
+}
+
+.wod5e-mage-guidata-passo-numero {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 50%;
+  color: var(--mage-tenue);
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-style: normal;
+  height: 26px;
+  justify-content: center;
+  width: 26px;
+}
+
+.wod5e-mage-guidata-passo.fatto .wod5e-mage-guidata-passo-numero {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro);
+  color: var(--mage-su-oro);
+}
+
+.wod5e-mage-guidata-passo.fatto {
+  color: var(--guidata-titolo);
+}
+
+.wod5e-mage-guidata-passo.qui {
+  border-bottom-color: var(--mage-viola-chiaro);
+  color: var(--guidata-titolo);
+}
+
+.wod5e-mage-guidata-passo.qui .wod5e-mage-guidata-passo-numero {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: #fff;
+}
+
+.wod5e-mage-guidata-passo-nome {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage-guidata-grado {
+  align-items: center;
+  color: var(--mage-tenue);
+  display: flex;
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  gap: 6px;
+  padding-bottom: 10px;
+}
+
+.wod5e-mage-guidata-grado select {
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  color: var(--mage-inchiostro);
+  font-family: inherit;
+  font-size: 0.85rem;
+  height: 28px;
+  padding: 0 6px;
+}
+
+/* Il corpo: due colonne, COSA a sinistra, PERCHÉ e COSA CI GUADAGNI a destra. */
+.wod5e-mage-guidata-corpo {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 14px 10px;
+}
+
+.wod5e-mage-guidata-colonne {
+  align-items: start;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr);
+}
+
+.wod5e-mage-guidata-spiega {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  position: sticky;
+  top: 0;
+}
+
+.wod5e-mage-guidata-riq {
+  background: var(--mage-riq-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 6px;
+  min-width: 0;
+  padding: 10px 12px 12px;
+}
+
+.wod5e-mage-guidata-riq-titolo {
+  align-items: center;
+  border-bottom: 1px solid var(--mage-oro-tenue);
+  color: var(--mage-oro);
+  display: flex;
+  font-size: 0.72rem;
+  font-weight: 700;
+  gap: 8px;
+  letter-spacing: 0.14em;
+  margin: 0 0 10px;
+  padding: 0 0 6px;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-guidata-riq-titolo > small {
+  color: var(--mage-tenue);
+  font-weight: 400;
+  letter-spacing: 0;
+  margin-left: auto;
+  text-transform: none;
+}
+
+.wod5e-mage-guidata-riq-titolo.via {
+  margin-top: 16px;
+}
+
+.wod5e-mage-guidata-riq-tasti {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.wod5e-mage-guidata-domanda {
+  border: 0;
+  color: var(--guidata-titolo);
+  font-family: "Modesto Condensed", Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+
+.wod5e-mage-guidata-occhiello {
+  border: 0;
+  color: var(--mage-tenue);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  margin: 10px 0 6px;
+  text-transform: uppercase;
+}
+
+/* Le carte: una per scelta, l'immagine sopra, il nome, le Sfere sotto. */
+.wod5e-mage-guidata-carte {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+}
+
+.wod5e-mage-guidata-carte.carte-famiglie {
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+}
+
+.wod5e-mage-guidata-carte.carte-tipi {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wod5e-mage-guidata-carta {
+  align-items: stretch;
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 8px;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  gap: 6px;
+  line-height: 1.25;
+  min-height: 0;
+  padding: 8px;
+  text-align: left;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.wod5e-mage-guidata-carta:hover {
+  background: var(--mage-riga-sorvolo);
+  border-color: var(--mage-oro);
+}
+
+.wod5e-mage-guidata-carta:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.wod5e-mage-guidata-carta.scelta {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  box-shadow: 0 0 0 1px var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
+}
+
+.wod5e-mage-guidata-carta.del-credo:not(.scelta) {
+  border-color: var(--mage-oro);
+}
+
+.wod5e-mage-guidata-carta > h4 {
+  border: 0;
+  font-family: "Modesto Condensed", Georgia, serif;
+  font-size: 1.12rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.wod5e-mage-guidata-arte {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  color: var(--mage-oro);
+  display: flex;
+  font-size: 2rem;
+  height: 74px;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.wod5e-mage-guidata-carta.grande .wod5e-mage-guidata-arte {
+  height: 112px;
+}
+
+.wod5e-mage-guidata-carta.scelta .wod5e-mage-guidata-arte {
+  background: var(--mage-viola-dado);
+  border-color: var(--mage-viola-chiaro);
+  color: #fff;
+}
+
+.wod5e-mage-guidata-arte > img {
+  border: 0;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* Senza l'immagine (da fare): le righe in diagonale, l'iniziale e la scritta. */
+.wod5e-mage-guidata-arte-manca {
+  display: none;
+}
+
+.wod5e-mage-guidata-arte.manca {
+  background: repeating-linear-gradient(135deg, var(--mage-incavo) 0 10px, var(--mage-riga-fondo) 10px 20px);
+}
+
+.wod5e-mage-guidata-arte.manca > img {
+  display: none;
+}
+
+.wod5e-mage-guidata-arte.manca::before {
+  color: var(--mage-oro);
+  content: attr(data-iniziale);
+  font-family: "Modesto Condensed", Georgia, serif;
+  font-size: 2.6rem;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.wod5e-mage-guidata-arte.manca > .wod5e-mage-guidata-arte-manca {
+  bottom: 4px;
+  color: var(--mage-tenue);
+  display: block;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  position: absolute;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-guidata-sfere {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.wod5e-mage-guidata-sfere > em {
+  color: var(--mage-tenue);
+  font-size: 0.78rem;
+}
+
+.wod5e-mage-guidata-sfere > small:not(.wod5e-mage-guidata-tag) {
+  color: var(--mage-tenue);
+  font-size: 0.74rem;
+  width: 100%;
+}
+
+.wod5e-mage-guidata-carta.scelta .wod5e-mage-guidata-sfere > small,
+.wod5e-mage-guidata-carta.scelta .wod5e-mage-guidata-sfere > em {
+  color: rgb(255 255 255 / 80%);
+}
+
+.wod5e-mage-guidata-sfera {
+  align-items: center;
+  background: var(--mage-cassetto-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 10px;
+  color: var(--mage-testo);
+  display: inline-flex;
+  font-size: 0.74rem;
+  gap: 4px;
+  padding: 2px 8px 2px 4px;
+}
+
+.wod5e-mage-guidata-sfera > img {
+  border: 0;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  height: 16px;
+  width: 16px;
+}
+
+.wod5e-mage-guidata-sfera > b {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage-guidata-carta.scelta .wod5e-mage-guidata-sfera {
+  background: var(--mage-viola-dado);
+  border-color: var(--mage-viola-chiaro);
+  color: #fff;
+}
+
+.wod5e-mage-guidata-tag {
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 9px;
+  color: var(--mage-tenue);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 3px 7px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage-guidata-tag.oro {
+  border-color: var(--mage-oro);
+  color: var(--mage-oro);
+}
+
+.wod5e-mage-guidata-carta.scelta .wod5e-mage-guidata-tag {
+  border-color: rgb(255 255 255 / 55%);
+  color: #fff;
+}
+
+.wod5e-mage-guidata-scelta-sfere {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.wod5e-mage-guidata-scelta-sfere > p {
+  margin: 0;
+}
+
+.wod5e-mage-guidata-scelta-sfere label {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+}
+
+/* Il perché: il testo del LIBRO, la prima riga in corsivo più grande. */
+.wod5e-mage-guidata-testo {
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.wod5e-mage-guidata-testo p {
+  margin: 0 0 8px;
+}
+
+.wod5e-mage-guidata-testo .wod5e-mage-guidata-lead,
+.wod5e-mage-guidata-testo p:first-child {
+  color: var(--guidata-titolo);
+  font-size: 1.04rem;
+  font-style: italic;
+}
+
+.wod5e-mage-guidata-perche.proprio .wod5e-mage-guidata-riq-titolo .wod5e-mage-guidata-tag {
+  margin-left: 0;
+}
+
+.wod5e-mage-guidata-editor {
+  display: block;
+  min-height: 60px;
+}
+
+.wod5e-mage-guidata-tastino.fermo {
+  cursor: default;
+  opacity: 0.7;
+}
+
+/* Cosa ci guadagni: una voce per riga, il numero a destra in oro. */
+.wod5e-mage-guidata-voci {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wod5e-mage-guidata-voce {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  display: flex;
+  font-size: 0.92rem;
+  gap: 8px;
+  line-height: 1.3;
+  padding: 7px 10px;
+}
+
+.wod5e-mage-guidata-voce > i,
+.wod5e-mage-guidata-voce > .wod5e-mage-guidata-sigillo {
+  color: var(--mage-oro);
+  flex: 0 0 18px;
+  text-align: center;
+}
+
+.wod5e-mage-guidata-sigillo {
+  border: 0;
+  height: 16px;
+  width: 16px;
+}
+
+.wod5e-mage-guidata-voce > b {
+  color: var(--mage-oro);
+  margin-left: auto;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.wod5e-mage-guidata-voce.no {
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage-guidata-voce.no > b,
+.wod5e-mage-guidata-voce.no > i {
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage-guidata-voce.under > b {
+  color: #e2655a;
+}
+
+.wod5e-mage-guidata-voce.exact > b {
+  color: #7fd18a;
+}
+
+.wod5e-mage-guidata-voce.over > b {
+  color: #e9c84a;
+}
+
+.wod5e-mage-guidata-voci > .wod5e-mage-guidata-tasto {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+/* I campi (la Bussola, il Concetto, le Ancore). */
+.wod5e-mage-guidata-campo {
+  margin-bottom: 14px;
+}
+
+.wod5e-mage-guidata-etichetta {
+  align-items: baseline;
+  color: var(--guidata-titolo);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  font-weight: 700;
+  gap: 8px;
+  margin: 0 0 6px;
+}
+
+.wod5e-mage-guidata-etichetta > i {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage-guidata-etichetta > small {
+  color: var(--mage-tenue);
+  font-size: 0.82rem;
+  font-weight: 400;
+}
+
+.wod5e-mage-guidata-riga-campo {
+  display: flex;
+  gap: 6px;
+}
+
+.application.wod5e-mage-guidata input[type="text"],
+.application.wod5e-mage-guidata select,
+.application.wod5e-mage-guidata .wod5e-mage-guidata-riga-testo input[type="text"] {
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  color: var(--mage-inchiostro);
+  flex: 1 1 auto;
+  font-family: inherit;
+  font-size: 0.95rem;
+  height: 32px;
+  min-width: 0;
+  padding: 0 8px;
+}
+
+.application.wod5e-mage-guidata input[type="text"]::placeholder {
+  color: var(--mage-inchiostro-tenue);
+}
+
+.wod5e-mage-guidata-tastino {
+  align-items: center;
+  background: var(--mage-cassetto-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.85rem;
+  height: 32px;
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+}
+
+.wod5e-mage-guidata-etichetta > .wod5e-mage-guidata-tastino,
+.wod5e-mage-guidata-riq-titolo .wod5e-mage-guidata-tastino {
+  height: 24px;
+  width: 24px;
+}
+
+.wod5e-mage-guidata-tastino:hover {
+  background: var(--mage-riga-sorvolo);
+}
+
+.wod5e-mage-guidata-tastino.acceso {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: #fff;
+}
+
+.wod5e-mage-guidata-tastino:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* Le proposte: pastiglie da cliccare, dal Credo o dal catalogo. */
+.wod5e-mage-guidata-proposte {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.wod5e-mage-guidata-proposte > small {
+  color: var(--mage-tenue);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.wod5e-mage-guidata-chip {
+  background: var(--mage-cassetto-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 12px;
+  color: var(--mage-testo);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.82rem;
+  line-height: 1.2;
+  padding: 4px 10px;
+  text-align: left;
+}
+
+.wod5e-mage-guidata-chip:hover {
+  background: var(--mage-riga-sorvolo);
+  border-color: var(--mage-oro);
+}
+
+.wod5e-mage-guidata-chip > b {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage-guidata-chip.fermo {
+  cursor: default;
+}
+
+.wod5e-mage-guidata-chip.exact {
+  border-color: #7fd18a;
+  color: #7fd18a;
+}
+
+.wod5e-mage-guidata-chip.under {
+  border-color: #e2655a;
+  color: #e2655a;
+}
+
+.wod5e-mage-guidata-chip.over {
+  border-color: #e9c84a;
+  color: #e9c84a;
+}
+
+/* Le righe a lista: le Convinzioni, le Ancore, gli oggetti dei Tratti. */
+.wod5e-mage-guidata-riga-lista {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+  padding: 6px 8px;
+}
+
+.wod5e-mage-guidata-riga-testo {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.wod5e-mage-guidata-riga-testo > b {
+  font-size: 0.95rem;
+}
+
+.wod5e-mage-guidata-riga-testo > .wod5e-mage-guidata-tag {
+  align-self: flex-start;
+}
+
+.wod5e-mage-guidata-sotto {
+  color: var(--mage-tenue);
+  font-size: 0.8rem;
+}
+
+.wod5e-mage-guidata-sotto > i {
+  color: var(--mage-oro);
+  width: 12px;
+}
+
+.wod5e-mage-guidata-riga-lista.controllo {
+  background: transparent;
+  border: 0;
+  color: var(--mage-testo);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 4px 6px;
+  text-align: left;
+  width: 100%;
+}
+
+.wod5e-mage-guidata-riga-lista.controllo > b {
+  margin-left: auto;
+}
+
+.wod5e-mage-guidata-riga-lista.controllo.exact > i,
+.wod5e-mage-guidata-riga-lista.controllo.exact > b {
+  color: #7fd18a;
+}
+
+.wod5e-mage-guidata-riga-lista.controllo.under > i,
+.wod5e-mage-guidata-riga-lista.controllo.under > b {
+  color: #e2655a;
+}
+
+.wod5e-mage-guidata-riga-lista.controllo.over > i,
+.wod5e-mage-guidata-riga-lista.controllo.over > b {
+  color: #e9c84a;
+}
+
+.wod5e-mage-guidata-nota-passo {
+  color: var(--mage-tenue);
+  font-size: 0.9rem;
+  margin: 8px 0;
+}
+
+.wod5e-mage-guidata-nota-passo.exact {
+  color: #7fd18a;
+}
+
+.wod5e-mage-guidata-nota-passo.under {
+  color: #e2655a;
+}
+
+.wod5e-mage-guidata-avviso {
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 6px;
+  color: var(--guidata-titolo);
+  margin: 0 0 12px;
+  padding: 8px 12px;
+}
+
+/* I pallini: come quelli della scheda, un po' più grandi (il testo è più grande). */
+.wod5e-mage-guidata-righe {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wod5e-mage-guidata-righe.due-colonne {
+  display: grid;
+  gap: 4px 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wod5e-mage-guidata-righe.due-colonne > .wod5e-mage-guidata-occhiello {
+  grid-column: 1 / -1;
+}
+
+.wod5e-mage-guidata-riga {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border-radius: 6px;
+  display: flex;
+  gap: 8px;
+  min-height: 32px;
+  padding: 3px 8px;
+}
+
+.wod5e-mage-guidata-riga.scelta {
+  background: var(--mage-scelta-tenue);
+}
+
+.wod5e-mage-guidata-riga.oltre .wod5e-mage-guidata-riga-nome {
+  color: #e2655a;
+}
+
+.wod5e-mage-guidata-riga-icona {
+  border: 0;
+  color: var(--mage-oro);
+  flex: 0 0 20px;
+  height: 20px;
+  object-fit: contain;
+  text-align: center;
+  width: 20px;
+}
+
+.wod5e-mage-guidata-riga-icona.sigillo {
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+}
+
+.wod5e-mage-guidata-riga-nome {
+  align-items: center;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-size: 0.98rem;
+  font-weight: 600;
+  gap: 6px;
+  min-width: 0;
+}
+
+.wod5e-mage-guidata-pallini {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.wod5e-mage-guidata-pallino {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-dot-border);
+  border-radius: 50%;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  flex: 0 0 18px;
+  height: 18px;
+  line-height: 1;
+  min-height: 0;
+  padding: 0;
+  width: 18px;
+}
+
+.wod5e-mage-guidata-pallino.lit {
+  background: var(--mage-dot-color);
+  border-color: var(--mage-dot-border);
+}
+
+.wod5e-mage-guidata-pallino.oltre {
+  border-style: dashed;
+  opacity: 0.45;
+}
+
+.wod5e-mage-guidata-pallino.zero {
+  border-radius: 3px;
+  flex-basis: 10px;
+  height: 10px;
+  margin-right: 4px;
+  opacity: 0.6;
+  width: 10px;
+}
+
+.wod5e-mage-guidata-pallino.traguardo:not(.lit) {
+  border-color: var(--mage-oro);
+  box-shadow: 0 0 0 2px rgb(217 168 39 / 35%);
+}
+
+.wod5e-mage-guidata-pallino:disabled {
+  cursor: default;
+}
+
+.wod5e-mage-guidata-pallini.grandi .wod5e-mage-guidata-pallino {
+  flex-basis: 26px;
+  height: 26px;
+  width: 26px;
+}
+
+.wod5e-mage-guidata-pallini.piccoli .wod5e-mage-guidata-pallino {
+  flex-basis: 14px;
+  height: 14px;
+  width: 14px;
+}
+
+.wod5e-mage-guidata-conto-riga {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 0 0 10px;
+}
+
+.wod5e-mage-guidata-conto {
+  color: var(--mage-tenue);
+  font-size: 0.9rem;
+}
+
+.wod5e-mage-guidata-conto > b {
+  color: var(--mage-oro);
+  font-size: 1rem;
+}
+
+.wod5e-mage-guidata-conto.under > b {
+  color: #e2655a;
+}
+
+.wod5e-mage-guidata-conto.exact > b {
+  color: #7fd18a;
+}
+
+.wod5e-mage-guidata-conto.over > b {
+  color: #e9c84a;
+}
+
+.wod5e-mage-guidata-conto > small {
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage-guidata-forma {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* Gli Strumenti: una scheda per Sfera, la tendina, il mestiere e il tuo di preciso. */
+.wod5e-mage-guidata-strumento {
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+}
+
+.wod5e-mage-guidata-strumento.scelto {
+  border-color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage-guidata-strumento-testa {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.wod5e-mage-guidata-strumento-tendina {
+  flex: 0 1 46%;
+  margin-left: auto;
+}
+
+.wod5e-mage-guidata-strumento-corpo {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+/* L'Areté: il sigillo, cinque pallini grandi, il numero; sotto la Ruota in due righe. */
+.wod5e-mage-guidata-arete {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  margin: 6px 0 10px;
+}
+
+.wod5e-mage-guidata-arete-sigillo {
+  border: 0;
+  height: 44px;
+  width: 44px;
+}
+
+.wod5e-mage-guidata-arete-numero {
+  color: var(--mage-oro);
+  font-family: "Modesto Condensed", Georgia, serif;
+  font-size: 2rem;
+}
+
+.wod5e-mage-guidata-ruota {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 10px 0;
+}
+
+.wod5e-mage-guidata-risorsa {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+}
+
+.wod5e-mage-guidata-risorsa.paradosso {
+  border-color: var(--mage-rosso);
+}
+
+.wod5e-mage-guidata-risorsa .wod5e-mage-guidata-etichetta {
+  margin: 0;
+}
+
+.wod5e-mage-guidata-comandi {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.wod5e-mage-guidata-comandi > button {
+  align-items: center;
+  background: var(--mage-cassetto-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.75rem;
+  height: 26px;
+  justify-content: center;
+  padding: 0;
+  width: 26px;
+}
+
+.wod5e-mage-guidata-comandi > b {
+  color: var(--mage-oro);
+  font-size: 1.2rem;
+  min-width: 22px;
+  text-align: center;
+}
+
+/* La Sfida: i tre gruppi con quante voci sono scritte. */
+.wod5e-mage-guidata-gruppi-sfida {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 8px;
+}
+
+.wod5e-mage-guidata-gruppo-sfida {
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  gap: 3px;
+  padding: 8px 10px;
+}
+
+.wod5e-mage-guidata-gruppo-sfida.completo {
+  border-color: #7fd18a;
+}
+
+.wod5e-mage-guidata-gruppo-sfida > span {
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage-guidata-gruppo-sfida.completo > span {
+  color: #7fd18a;
+}
+
+/* I Tratti in tre colonne, il controllo in due. */
+.wod5e-mage-guidata-tre-colonne {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wod5e-mage-guidata-due-colonne {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wod5e-mage-guidata-colonna-oggetti {
+  min-width: 0;
+}
+
+.wod5e-mage-guidata-riga-lista.oggetto .wod5e-mage-guidata-riga-nome {
+  font-size: 0.88rem;
+}
+
+.wod5e-mage-guidata-riga-lista.oggetto .wod5e-mage-guidata-riga-icona {
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+}
+
+.wod5e-mage-guidata-riga-lista.ancora .wod5e-mage-guidata-riga-testo {
+  flex-direction: row;
+}
+
+/* I tasti: Avanti pieno di viola, Indietro fantasma. */
+.wod5e-mage-guidata-tasto {
+  align-items: center;
+  background: var(--mage-cassetto-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 5px;
+  color: var(--guidata-titolo);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  width: auto;
+}
+
+.wod5e-mage-guidata-tasto:hover {
+  background: var(--mage-riga-sorvolo);
+}
+
+.wod5e-mage-guidata-tasto.avanti {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: #fff;
+}
+
+.wod5e-mage-guidata-tasto.avanti:hover {
+  background: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage-guidata-tasto.avanti.pronto {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro);
+  color: var(--mage-su-oro);
+}
+
+.wod5e-mage-guidata-tasto.fantasma {
+  background: transparent;
+  border-color: transparent;
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage-guidata-tasto.fantasma:hover {
+  color: var(--mage-testo);
+}
+
+.wod5e-mage-guidata-tasto:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.wod5e-mage-guidata-piede {
+  align-items: center;
+  background: var(--mage-cassetto-fondo);
+  border-top: var(--guidata-riga);
+  display: flex;
+  flex: 0 0 auto;
+  gap: 12px;
+  padding: 10px 14px;
+}
+
+.wod5e-mage-guidata-nota {
+  color: var(--mage-tenue);
+  flex: 1 1 auto;
+  font-size: 0.88rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage-guidata-nota > i {
+  color: #7fd18a;
+  margin-right: 4px;
+}
+
+/* Il tasto della bacchetta in testata della scheda. */
+.wod5e-mage.wod5e.actor.sheet .window-header .wod5e-mage-guidata-testata {
+  cursor: pointer;
+}
+
+/* Nel tema chiaro i sigilli neri stanno bene sulla crema: niente filtro. */
+.application.wod5e-mage-guidata.wod5e-mage-chiara .wod5e-mage-guidata-riga-icona.sigillo,
+.application.wod5e-mage-guidata.wod5e-mage-chiara .wod5e-mage-guidata-sfera > img,
+.application.wod5e-mage-guidata.wod5e-mage-chiara .wod5e-mage-guidata-riga-lista.oggetto .wod5e-mage-guidata-riga-icona {
+  filter: none;
+}
+
+/* Sotto i 900 pixel le due colonne diventano una. */
+@media (max-width: 900px) {
+  .wod5e-mage-guidata-colonne {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wod5e-mage-guidata-spiega {
+    position: static;
   }
 }

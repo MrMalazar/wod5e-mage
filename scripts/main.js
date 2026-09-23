@@ -14,6 +14,7 @@ import { registerParadossoNarratore } from "./paradosso-narratore.js";
 import { registerGrimorioComune } from "./grimorio-comune.js";
 import { registraSocketVerdetto } from "./verdetto-narratore.js";
 import { SCALA_PREDEFINITA, SCALA_SETTING, TEMA_CHIARO, TEMA_SCURO, TEMA_SETTING } from "./tema.js";
+import { registraCreazioneGuidata } from "./creazione-guidata-finestra.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 import { registraHelperIcone } from "./icone-oggetti.js";
 
@@ -175,6 +176,8 @@ Hooks.once("init", () => {
   registerGrimorioComune();
   registerLineageSpheres();
   registerParadoxDice();
+  // La creazione guidata (23/9): i testi del Narratore e l'apertura sul Mago nuovo.
+  registraCreazioneGuidata();
 
   const module = game.modules.get(MODULE_ID);
   if (module) module.api = createApi();

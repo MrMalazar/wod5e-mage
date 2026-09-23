@@ -1,0 +1,34 @@
+{{!-- Passo 6 · le nove Sfere coi pallini; il tetto Areté + 2; il conto del memo. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    <div class="wod5e-mage-guidata-conto-riga">
+        <span class="wod5e-mage-guidata-conto {{corpo.conto.state}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Pallini"}} <b>{{corpo.conto.text}}</b></span>
+        <span class="wod5e-mage-guidata-conto" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.TettoHint' cap=corpo.cap}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Tetto"}} <b>{{corpo.cap}}</b></span>
+    </div>
+    <div class="wod5e-mage-guidata-righe">
+        {{#each corpo.spheres as |sphere|}}
+            <div class="wod5e-mage-guidata-riga{{#if sphere.value}} scelta{{/if}}{{#if sphere.family}} famiglia{{/if}}">
+                <img class="wod5e-mage-guidata-riga-icona sigillo" src="{{sphere.icon}}" alt="">
+                <span class="wod5e-mage-guidata-riga-nome">{{sphere.label}}{{#if sphere.family}} <small class="wod5e-mage-guidata-tag oro" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.FamigliaHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Famiglia"}}</small>{{/if}}</span>
+                <span class="wod5e-mage-guidata-pallini" role="group" aria-label="{{sphere.label}}">
+                    <button type="button" class="wod5e-mage-guidata-pallino zero" data-action="sferaPallino" data-sphere="{{sphere.id}}" data-value="0" title="0" {{#unless @root.canEdit}}disabled{{/unless}}></button>
+                    {{#each sphere.steps as |step|}}
+                        <button type="button" class="wod5e-mage-guidata-pallino{{#if step.lit}} lit{{/if}}{{#if step.oltre}} oltre{{/if}}" data-action="sferaPallino" data-sphere="{{sphere.id}}" data-value="{{step.value}}" title="{{step.value}}{{#if step.oltre}} · {{localize 'WOD5E_MAGE.Guidata.Sfere.TettoHint' cap=../../corpo.cap}}{{/if}}" {{#unless @root.canEdit}}disabled{{/unless}}></button>
+                    {{/each}}
+                </span>
+            </div>
+        {{/each}}
+    </div>
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            <div class="wod5e-mage-guidata-voce {{corpo.conto.state}}"><i class="fa-solid fa-circle-nodes" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.Pallini"}} <b>{{corpo.conto.text}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><img class="wod5e-mage-guidata-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt=""> {{localize "WOD5E_MAGE.Guidata.Sfere.Tetto"}} <b>{{corpo.cap}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-house-chimney" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.FamigliaHint"}}</div>
+        </div>
+    </section>
+</aside>

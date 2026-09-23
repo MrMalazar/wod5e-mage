@@ -1,0 +1,43 @@
+{{!-- Passo 9 · i nove Attributi a pallini, la forma fissa e le statistiche di base. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    <div class="wod5e-mage-guidata-conto-riga">
+        <span class="wod5e-mage-guidata-forma">
+            {{#each corpo.forma.rows as |row|}}<span class="wod5e-mage-guidata-chip fermo {{row.state}}" title="{{localize 'WOD5E_MAGE.Guidata.Attributi.NeHai' have=row.have}}">{{localize "WOD5E_MAGE.Guidata.Attributi.FormaVoce" count=row.count value=row.value}}{{#unless (eq row.state "exact")}} · {{localize "WOD5E_MAGE.Guidata.Attributi.NeHai" have=row.have}}{{/unless}}</span>{{/each}}
+        </span>
+        <span class="wod5e-mage-guidata-conto {{corpo.conto.state}}">{{localize "WOD5E_MAGE.Guidata.Attributi.Segnati"}} <b>{{corpo.conto.text}}</b></span>
+    </div>
+    <div class="wod5e-mage-guidata-righe">
+        {{#each corpo.gruppi as |gruppo|}}
+            <h3 class="wod5e-mage-guidata-occhiello">{{gruppo.label}}</h3>
+            {{#each gruppo.attributi as |attr|}}
+                <div class="wod5e-mage-guidata-riga">
+                    {{#if attr.icon}}<img class="wod5e-mage-guidata-riga-icona" src="{{attr.icon}}" alt="">{{/if}}
+                    <span class="wod5e-mage-guidata-riga-nome">{{attr.label}}</span>
+                    <span class="wod5e-mage-guidata-pallini" role="group" aria-label="{{attr.label}}">
+                        {{#each attr.steps as |step|}}
+                            <button type="button" class="wod5e-mage-guidata-pallino{{#if step.lit}} lit{{/if}}" data-action="attributoPallino" data-attribute="{{attr.id}}" data-value="{{step.value}}" title="{{step.value}}" {{#unless @root.canEdit}}disabled{{/unless}}></button>
+                        {{/each}}
+                    </span>
+                </div>
+            {{/each}}
+        {{/each}}
+    </div>
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-heart" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Attributi.Salute"}} <b>{{localize "WOD5E_MAGE.Guidata.Attributi.Caselle" n=corpo.statistiche.salute}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-hand-fist" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Attributi.Volonta"}} <b>{{localize "WOD5E_MAGE.Guidata.Attributi.Caselle" n=corpo.statistiche.volonta}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Attributi.Saggezza"}} <b>{{localize "WOD5E_MAGE.Guidata.Attributi.Caselle" n=corpo.statistiche.saggezza}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Attributi.Tiro"}} <b>{{localize "WOD5E_MAGE.Guidata.Attributi.TiroPiu"}}</b></div>
+        </div>
+    </section>
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-memo">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Memo"}}</span></header>
+        <div class="wod5e-mage-guidata-voce {{corpo.conto.state}}"><i class="fa-solid fa-square-check" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Riepilogo.Attributes"}} <b>{{corpo.conto.text}}</b></div>
+    </section>
+</aside>

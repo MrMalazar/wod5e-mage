@@ -1,0 +1,38 @@
+{{!-- Passo 10 · le quattordici Abilità a pallini, col tetto della creazione. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    <div class="wod5e-mage-guidata-conto-riga">
+        <span class="wod5e-mage-guidata-conto {{corpo.conto.state}}">{{localize "WOD5E_MAGE.Guidata.Abilita.Pallini"}} <b>{{corpo.conto.text}}</b>{{#if corpo.conto.sfida}} <small>+{{corpo.conto.sfida}} {{localize "WOD5E_MAGE.Guidata.Abilita.Sfida"}}</small>{{/if}}</span>
+        <span class="wod5e-mage-guidata-conto {{#if corpo.tettoOk}}exact{{else}}under{{/if}}" title="{{localize 'WOD5E_MAGE.Guidata.Abilita.TettoHint' cap=corpo.cap}}">{{localize "WOD5E_MAGE.Guidata.Abilita.Tetto"}} <b>{{corpo.cap}}</b></span>
+    </div>
+    <div class="wod5e-mage-guidata-righe due-colonne">
+        {{#each corpo.gruppi as |gruppo|}}
+            <h3 class="wod5e-mage-guidata-occhiello">{{gruppo.label}}</h3>
+            {{#each gruppo.abilita as |skill|}}
+                <div class="wod5e-mage-guidata-riga{{#if skill.oltre}} oltre{{/if}}">
+                    {{#if skill.icon}}<img class="wod5e-mage-guidata-riga-icona" src="{{skill.icon}}" alt="">{{/if}}
+                    <span class="wod5e-mage-guidata-riga-nome">{{skill.label}}</span>
+                    <span class="wod5e-mage-guidata-pallini" role="group" aria-label="{{skill.label}}">
+                        <button type="button" class="wod5e-mage-guidata-pallino zero" data-action="abilitaPallino" data-skill="{{skill.id}}" data-value="0" title="0" {{#unless @root.canEdit}}disabled{{/unless}}></button>
+                        {{#each skill.steps as |step|}}
+                            <button type="button" class="wod5e-mage-guidata-pallino{{#if step.lit}} lit{{/if}}{{#if step.oltre}} oltre{{/if}}" data-action="abilitaPallino" data-skill="{{skill.id}}" data-value="{{step.value}}" title="{{step.value}}{{#if step.oltre}} · {{localize 'WOD5E_MAGE.Guidata.Abilita.TettoHint' cap=../../corpo.cap}}{{/if}}" {{#unless @root.canEdit}}disabled{{/unless}}></button>
+                        {{/each}}
+                    </span>
+                </div>
+            {{/each}}
+        {{/each}}
+    </div>
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            <div class="wod5e-mage-guidata-voce {{corpo.conto.state}}"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Abilita.Pallini"}} <b>{{corpo.conto.text}}</b></div>
+            <div class="wod5e-mage-guidata-voce {{#if corpo.tettoOk}}exact{{else}}under{{/if}}"><i class="fa-solid fa-arrow-up-short-wide" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Abilita.Tetto"}} <b>{{corpo.cap}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-star" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Abilita.Specializzazioni"}} <b>{{localize "WOD5E_MAGE.Guidata.Abilita.SpecializzazioniHint"}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Attributi.Tiro"}} <b>{{localize "WOD5E_MAGE.Guidata.Attributi.TiroPiu"}}</b></div>
+        </div>
+    </section>
+</aside>

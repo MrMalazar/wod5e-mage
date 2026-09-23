@@ -1,0 +1,62 @@
+{{!-- Passo 3 · la Bussola: Ambizione, Desiderio, Convinzioni, con le proposte del Credo e i cataloghi. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    <div class="wod5e-mage-guidata-campo">
+        <label class="wod5e-mage-guidata-etichetta" for="wod5e-mage-guidata-ambition"><i class="fa-solid fa-mountain-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Bussola.Ambizione"}} <small>{{localize "WOD5E_MAGE.Guidata.Bussola.AmbizioneHint"}}</small></label>
+        <div class="wod5e-mage-guidata-riga-campo">
+            <input type="text" id="wod5e-mage-guidata-ambition" name="system.headers.ambition" value="{{corpo.ambition}}" {{#unless @root.canEdit}}disabled{{/unless}}>
+            <button type="button" class="wod5e-mage-guidata-tastino" data-action="catalogoApri" data-kind="ambizione" title="{{localize 'WOD5E_MAGE.Guidata.Catalogo'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+        </div>
+        {{#if corpo.proposte.ambizione.length}}
+            <div class="wod5e-mage-guidata-proposte"><small>{{#if corpo.credo}}{{localize "WOD5E_MAGE.Guidata.Proposte"}}{{else}}{{localize "WOD5E_MAGE.Guidata.ProposteComuni"}}{{/if}}</small>
+                {{#each corpo.proposte.ambizione as |p|}}<button type="button" class="wod5e-mage-guidata-chip" data-action="propostaMetti" data-kind="ambizione" data-uuid="{{p.uuid}}" title="{{p.text}}" {{#unless @root.canEdit}}disabled{{/unless}}>{{p.name}}</button>{{/each}}
+            </div>
+        {{/if}}
+    </div>
+    <div class="wod5e-mage-guidata-campo">
+        <label class="wod5e-mage-guidata-etichetta" for="wod5e-mage-guidata-desire"><i class="fa-solid fa-fire" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Bussola.Desiderio"}} <small>{{localize "WOD5E_MAGE.Guidata.Bussola.DesiderioHint"}}</small></label>
+        <div class="wod5e-mage-guidata-riga-campo">
+            <input type="text" id="wod5e-mage-guidata-desire" name="system.headers.desire" value="{{corpo.desire}}" {{#unless @root.canEdit}}disabled{{/unless}}>
+            <button type="button" class="wod5e-mage-guidata-tastino" data-action="catalogoApri" data-kind="desiderio" title="{{localize 'WOD5E_MAGE.Guidata.Catalogo'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+        </div>
+        {{#if corpo.proposte.desiderio.length}}
+            <div class="wod5e-mage-guidata-proposte"><small>{{#if corpo.credo}}{{localize "WOD5E_MAGE.Guidata.Proposte"}}{{else}}{{localize "WOD5E_MAGE.Guidata.ProposteComuni"}}{{/if}}</small>
+                {{#each corpo.proposte.desiderio as |p|}}<button type="button" class="wod5e-mage-guidata-chip" data-action="propostaMetti" data-kind="desiderio" data-uuid="{{p.uuid}}" title="{{p.text}}" {{#unless @root.canEdit}}disabled{{/unless}}>{{p.name}}</button>{{/each}}
+            </div>
+        {{/if}}
+    </div>
+    <div class="wod5e-mage-guidata-campo">
+        <div class="wod5e-mage-guidata-etichetta"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Bussola.Convinzioni"}} <small>{{localize "WOD5E_MAGE.Guidata.Bussola.ConvinzioniHint"}}</small>
+            <button type="button" class="wod5e-mage-guidata-tastino" data-action="catalogoApri" data-kind="convinzione" title="{{localize 'WOD5E_MAGE.Guidata.Catalogo'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+        </div>
+        {{#each corpo.convinzioni as |row|}}
+            <div class="wod5e-mage-guidata-riga-lista">
+                <div class="wod5e-mage-guidata-riga-testo"><b>{{row.text}}</b>{{#if row.groupLabel}} <small class="wod5e-mage-guidata-tag">{{row.groupLabel}}</small>{{/if}}
+                    {{#if row.serve}}<small class="wod5e-mage-guidata-sotto"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{row.serve}}</small>{{/if}}
+                    {{#if row.cross}}<small class="wod5e-mage-guidata-sotto"><i class="fa-solid fa-minus" aria-hidden="true"></i> {{row.cross}}</small>{{/if}}
+                </div>
+                <button type="button" class="wod5e-mage-guidata-tastino" data-action="rigaTogli" data-table="convinzioni" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Guidata.Togli'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </div>
+        {{else}}
+            <p class="wod5e-mage-guidata-nota-passo">{{localize "WOD5E_MAGE.Guidata.Bussola.ConvinzioneVuota"}}</p>
+        {{/each}}
+        {{#if corpo.proposte.convinzione.length}}
+            <div class="wod5e-mage-guidata-proposte"><small>{{#if corpo.credo}}{{localize "WOD5E_MAGE.Guidata.Proposte"}}{{else}}{{localize "WOD5E_MAGE.Guidata.ProposteComuni"}}{{/if}}</small>
+                {{#each corpo.proposte.convinzione as |p|}}<button type="button" class="wod5e-mage-guidata-chip" data-action="propostaMetti" data-kind="convinzione" data-uuid="{{p.uuid}}" title="{{#if p.gloss}}+ {{p.gloss}}{{/if}}{{#if p.cross}} · − {{p.cross}}{{/if}}" {{#unless @root.canEdit}}disabled{{/unless}}>{{p.text}}</button>{{/each}}
+            </div>
+        {{/if}}
+    </div>
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-mountain-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Bussola.GuadagniAmbizione"}}</div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-fire" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Bussola.GuadagniDesiderio"}}</div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Bussola.GuadagniConvinzioni"}} <b>{{corpo.convinzioni.length}}/3</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-anchor" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Bussola.GuadagniAncore"}} <b>{{localize "WOD5E_MAGE.Guidata.Credo.NelPasso" n=12}}</b></div>
+        </div>
+    </section>
+</aside>

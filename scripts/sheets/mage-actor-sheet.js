@@ -94,6 +94,7 @@ import {
 } from "../tiro-scheda.js";
 import { onRitrattoAdd, onRitrattoNext, onRitrattoRemove, prepareRitratti, RITRATTI_FLAG } from "../ritratti.js";
 import { altraScala, altroTema, applicaScala, applicaTema, misuraFinestra, normalizeScala, SCALA_AZIONE, SCALA_SETTING, SCALA_TASTO_CLASSE, scalaFattore, sporgeDalloSchermo, TEMA_AZIONE, TEMA_SETTING, TEMA_TASTO_CLASSE } from "../tema.js";
+import { CreazioneGuidata, onGuidataApri } from "../creazione-guidata-finestra.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
 import { faiCadereInchiostro, getWisdom, onWisdomAttributePick, onWisdomCellChange, onWisdomCura, onWisdomReset, onWisdomResourceChange, onWisdomRoll, onWisdomSegna } from "../wisdom.js";
 import { classeRuota, posizioneRuota } from "../ventaglio.js";
@@ -483,6 +484,8 @@ export class MageActorSheet extends MortalActorSheet {
       // La modalità chiara (16/9) e la misura del testo (16/9 sera): i tasti accanto ai tre pallini della finestra.
       [TEMA_AZIONE]: onTemaToggle,
       [SCALA_AZIONE]: onScalaToggle,
+      // La creazione guidata (23/9): la bacchetta accanto ai tre pallini.
+      guidataApri: onGuidataApri,
       // Le Abilità per famiglia o tutte in fila.
       skillsFlatToggle: onSkillsFlatToggle,
       // I tastini in fondo alla riga dell'Ambito: la lettura e la tendina dei livelli.
@@ -693,7 +696,13 @@ export class MageActorSheet extends MortalActorSheet {
     const anchor = this.window?.controls ?? this.window?.close
       ?? frame.querySelector("button[data-action=toggleControls]") ?? frame.querySelector("button[data-action=close]");
     if (anchor && !frame.querySelector(`.${TEMA_TASTO_CLASSE}`)) {
-      // Da sinistra: la misura del testo, poi il tema, poi i tre pallini.
+      // Da sinistra: la creazione guidata (23/9), la misura del testo, poi il tema, poi i tre pallini.
+      const guidata = document.createElement("button");
+      guidata.type = "button";
+      guidata.classList.add("header-control", "icon", "fa-solid", "fa-wand-sparkles", "wod5e-mage-guidata-testata");
+      guidata.dataset.action = "guidataApri";
+      guidata.dataset.tooltip = game.i18n.localize("WOD5E_MAGE.Guidata.Apri");
+      guidata.setAttribute("aria-label", game.i18n.localize("WOD5E_MAGE.Guidata.Apri"));
       const scala = document.createElement("button");
       scala.type = "button";
       scala.classList.add("header-control", "icon", "fa-solid", "fa-text-height", SCALA_TASTO_CLASSE);
@@ -702,7 +711,7 @@ export class MageActorSheet extends MortalActorSheet {
       tema.type = "button";
       tema.classList.add("header-control", "icon", "fa-solid", TEMA_TASTO_CLASSE);
       tema.dataset.action = TEMA_AZIONE;
-      anchor.before(scala, tema);
+      anchor.before(guidata, scala, tema);
     }
     return frame;
   }
@@ -713,6 +722,8 @@ export class MageActorSheet extends MortalActorSheet {
     for (const app of foundry.applications?.instances?.values?.() ?? []) {
       if (app instanceof MageActorSheet) applicaTema(app.element, tema, { localize });
     }
+    // Anche le creazioni guidate aperte (23/9) cambiano vestito.
+    for (const app of CreazioneGuidata.aperte.values()) applicaTema(app.element, tema, { localize });
   }
 
   /** La misura del testo (16/9 sera) su tutte le schede del Mago aperte, senza render. */

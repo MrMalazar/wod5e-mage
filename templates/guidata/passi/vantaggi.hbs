@@ -1,0 +1,55 @@
+{{!-- Passo 11 · Background, Pregi e Difetti del personaggio, dai cataloghi. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    <div class="wod5e-mage-guidata-conto-riga">
+        <span class="wod5e-mage-guidata-conto {{corpo.conto.vantaggi.state}}">{{localize "WOD5E_MAGE.Guidata.Vantaggi.Vantaggi"}} <b>{{corpo.conto.vantaggi.text}}</b>{{#if corpo.conto.vantaggi.sfida}} <small>+{{corpo.conto.vantaggi.sfida}} {{localize "WOD5E_MAGE.Guidata.Abilita.Sfida"}}</small>{{/if}}</span>
+        <span class="wod5e-mage-guidata-conto {{corpo.conto.difetti.state}}">{{localize "WOD5E_MAGE.Guidata.Vantaggi.DifettiConto"}} <b>{{corpo.conto.difetti.text}}</b></span>
+    </div>
+    <div class="wod5e-mage-guidata-tre-colonne">
+        <div class="wod5e-mage-guidata-colonna-oggetti">
+            <div class="wod5e-mage-guidata-etichetta"><i class="fa-solid fa-globe" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Vantaggi.Background"}} <button type="button" class="wod5e-mage-guidata-tastino" data-action="catalogoApri" data-kind="background" title="{{localize 'WOD5E_MAGE.Guidata.Catalogo'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-book-open" aria-hidden="true"></i></button></div>
+            {{#each corpo.background as |item|}}
+                <div class="wod5e-mage-guidata-riga-lista oggetto">
+                    {{#if item.img}}<img class="wod5e-mage-guidata-riga-icona" src="{{item.img}}" alt="">{{/if}}
+                    <span class="wod5e-mage-guidata-riga-nome">{{item.name}}</span>
+                    <span class="wod5e-mage-guidata-pallini piccoli" role="group" aria-label="{{item.name}}">{{#each item.steps as |step|}}<button type="button" class="wod5e-mage-guidata-pallino{{#if step.lit}} lit{{/if}}" data-action="oggettoPunti" data-item="{{item.id}}" data-value="{{step.value}}" title="{{step.value}}" {{#unless @root.canEdit}}disabled{{/unless}}></button>{{/each}}</span>
+                    <button type="button" class="wod5e-mage-guidata-tastino" data-action="oggettoTogli" data-item="{{item.id}}" title="{{localize 'WOD5E_MAGE.Guidata.Togli'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                </div>
+            {{else}}<p class="wod5e-mage-guidata-nota-passo">{{localize "WOD5E_MAGE.Guidata.Vantaggi.Vuoto"}}</p>{{/each}}
+        </div>
+        <div class="wod5e-mage-guidata-colonna-oggetti">
+            <div class="wod5e-mage-guidata-etichetta"><i class="fa-solid fa-star" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Vantaggi.Pregi"}} <button type="button" class="wod5e-mage-guidata-tastino" data-action="catalogoApri" data-kind="pregio" title="{{localize 'WOD5E_MAGE.Guidata.Catalogo'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-book-open" aria-hidden="true"></i></button></div>
+            {{#each corpo.pregi as |item|}}
+                <div class="wod5e-mage-guidata-riga-lista oggetto">
+                    {{#if item.img}}<img class="wod5e-mage-guidata-riga-icona" src="{{item.img}}" alt="">{{/if}}
+                    <span class="wod5e-mage-guidata-riga-nome">{{item.name}}</span>
+                    <span class="wod5e-mage-guidata-pallini piccoli" role="group" aria-label="{{item.name}}">{{#each item.steps as |step|}}<button type="button" class="wod5e-mage-guidata-pallino{{#if step.lit}} lit{{/if}}" data-action="oggettoPunti" data-item="{{item.id}}" data-value="{{step.value}}" title="{{step.value}}" {{#unless @root.canEdit}}disabled{{/unless}}></button>{{/each}}</span>
+                    <button type="button" class="wod5e-mage-guidata-tastino" data-action="oggettoTogli" data-item="{{item.id}}" title="{{localize 'WOD5E_MAGE.Guidata.Togli'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                </div>
+            {{else}}<p class="wod5e-mage-guidata-nota-passo">{{localize "WOD5E_MAGE.Guidata.Vantaggi.Vuoto"}}</p>{{/each}}
+        </div>
+        <div class="wod5e-mage-guidata-colonna-oggetti">
+            <div class="wod5e-mage-guidata-etichetta"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Vantaggi.Difetti"}} <button type="button" class="wod5e-mage-guidata-tastino" data-action="catalogoApri" data-kind="difetto" title="{{localize 'WOD5E_MAGE.Guidata.Catalogo'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-book-open" aria-hidden="true"></i></button></div>
+            {{#each corpo.difetti as |item|}}
+                <div class="wod5e-mage-guidata-riga-lista oggetto">
+                    {{#if item.img}}<img class="wod5e-mage-guidata-riga-icona" src="{{item.img}}" alt="">{{/if}}
+                    <span class="wod5e-mage-guidata-riga-nome">{{item.name}}</span>
+                    <span class="wod5e-mage-guidata-pallini piccoli" role="group" aria-label="{{item.name}}">{{#each item.steps as |step|}}<button type="button" class="wod5e-mage-guidata-pallino{{#if step.lit}} lit{{/if}}" data-action="oggettoPunti" data-item="{{item.id}}" data-value="{{step.value}}" title="{{step.value}}" {{#unless @root.canEdit}}disabled{{/unless}}></button>{{/each}}</span>
+                    <button type="button" class="wod5e-mage-guidata-tastino" data-action="oggettoTogli" data-item="{{item.id}}" title="{{localize 'WOD5E_MAGE.Guidata.Togli'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                </div>
+            {{else}}<p class="wod5e-mage-guidata-nota-passo">{{localize "WOD5E_MAGE.Guidata.Vantaggi.Vuoto"}}</p>{{/each}}
+        </div>
+    </div>
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            <div class="wod5e-mage-guidata-voce {{corpo.conto.vantaggi.state}}"><i class="fa-solid fa-star" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Vantaggi.Vantaggi"}} <b>{{corpo.conto.vantaggi.text}}</b></div>
+            <div class="wod5e-mage-guidata-voce {{corpo.conto.difetti.state}}"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Vantaggi.DifettiConto"}} <b>{{corpo.conto.difetti.text}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-rotate" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Vantaggi.Restituiscono"}}</div>
+        </div>
+    </section>
+</aside>

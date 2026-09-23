@@ -1,0 +1,53 @@
+{{!-- Passo 7 · uno Strumento per ogni Sfera aperta, e quello di Percepire; il Credo e la Famiglia propongono. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    {{#each corpo.strumenti as |row|}}
+        <div class="wod5e-mage-guidata-strumento{{#if row.tool}} scelto{{/if}}{{#if row.perceive}} percepire{{/if}}">
+            <div class="wod5e-mage-guidata-strumento-testa">
+                {{#if row.icon}}<img class="wod5e-mage-guidata-riga-icona sigillo" src="{{row.icon}}" alt="">{{else}}<i class="{{row.faIcon}} wod5e-mage-guidata-riga-icona" aria-hidden="true"></i>{{/if}}
+                <span class="wod5e-mage-guidata-riga-nome">{{row.label}}{{#if row.perceive}} <small class="wod5e-mage-guidata-tag" title="{{localize 'WOD5E_MAGE.Guidata.Strumenti.PercepireHint'}}">{{localize "WOD5E_MAGE.Guidata.Strumenti.Percepire"}}</small>{{/if}}</span>
+                <select class="wod5e-mage-guidata-strumento-tendina" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.tool" aria-label="{{localize 'WOD5E_MAGE.Guidata.Strumenti.Scegli'}}" {{#unless @root.canEdit}}disabled{{/unless}}>
+                    <option value="">{{localize "WOD5E_MAGE.Guidata.Strumenti.Scegli"}}</option>
+                    {{#each row.families as |family|}}
+                        <optgroup label="{{family.label}}{{#unless family.allowed}} · {{localize 'WOD5E_MAGE.Guidata.Strumenti.FuoriTipo'}}{{/unless}}">
+                            {{#each family.tools as |tool|}}<option value="{{tool.id}}" {{#if tool.selected}}selected{{/if}} {{#unless family.allowed}}disabled{{/unless}}>{{tool.label}}</option>{{/each}}
+                        </optgroup>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="wod5e-mage-guidata-strumento-corpo">
+                {{#if row.needsProfession}}
+                    <input type="text" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.profession" value="{{row.profession}}" placeholder="{{localize 'WOD5E_MAGE.Guidata.Strumenti.Mestiere'}}" {{#unless @root.canEdit}}disabled{{/unless}}>
+                {{/if}}
+                <input type="text" name="flags.wod5e-mage.focus.sphereInstruments.{{row.id}}.name" value="{{row.name}}" placeholder="{{localize 'WOD5E_MAGE.Guidata.Strumenti.Tuo'}}" {{#unless @root.canEdit}}disabled{{/unless}}>
+            </div>
+            {{#if row.consigli.length}}
+                <div class="wod5e-mage-guidata-proposte"><small>{{localize "WOD5E_MAGE.Guidata.Strumenti.Consiglio"}} ({{../corpo.credoLabel}})</small>
+                    {{#each row.consigli as |c|}}
+                        <button type="button" class="wod5e-mage-guidata-chip" data-action="strumentoUsa" data-sphere="{{row.id}}" data-tool="{{c.tool}}" data-name="{{c.name}}" data-profession="{{c.profession}}" title="{{c.familyLabel}} · {{c.examples}}" {{#unless @root.canEdit}}disabled{{/unless}}><b>{{c.toolLabel}}</b>: {{c.examples}}</button>
+                    {{/each}}
+                </div>
+            {{/if}}
+        </div>
+    {{else}}
+        <p class="wod5e-mage-guidata-nota-passo">{{localize "WOD5E_MAGE.Guidata.Strumenti.Nessuna"}}</p>
+    {{/each}}
+    {{#if corpo.famiglia}}
+        <p class="wod5e-mage-guidata-nota-passo"><b>{{localize "WOD5E_MAGE.Guidata.Strumenti.Famiglia"}}</b> ({{corpo.famiglia.label}}): {{#each corpo.famiglia.list as |t|}}{{#if @index}}, {{/if}}{{t}}{{/each}}{{#each corpo.famiglia.tools as |t|}}{{#if @index}}, {{/if}}{{t.familyLabel}}: {{t.text}}{{/each}}</p>
+    {{/if}}
+    {{#if corpo.sottofamiglia}}
+        <p class="wod5e-mage-guidata-nota-passo"><b>{{localize "WOD5E_MAGE.Guidata.Strumenti.Via"}}</b> ({{corpo.sottofamiglia.label}}): {{#each corpo.sottofamiglia.tools as |t|}}{{#if @index}}, {{/if}}{{t.familyLabel}}: {{t.text}}{{/each}}</p>
+    {{/if}}
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            <div class="wod5e-mage-guidata-voce {{#if (eq corpo.fatti corpo.totale)}}exact{{else}}under{{/if}}"><i class="fa-solid fa-toolbox" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Strumenti.Scelti"}} <b>{{corpo.fatti}}/{{corpo.totale}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-key" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Strumenti.SenzaNonLanci"}}</div>
+            {{#if corpo.formLabel}}<div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-microchip" aria-hidden="true"></i> {{corpo.formLabel}}</div>{{/if}}
+        </div>
+    </section>
+</aside>

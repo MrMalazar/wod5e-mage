@@ -182,3 +182,20 @@ and minus at will), every Conviction tied to one of the seven catalogue
 groups.
 
 This project does not include copyrighted game text or artwork.
+
+## Guided creation
+
+Since 1.4.0 the sheet has a wand button in its title bar (and a new Mage opens it
+by itself): the guided creation, a separate window in the spirit of the Roll20
+D&D 5e charactermancer. Thirteen steps in the order of 5 September 2026 (Creed,
+Family and path, Compass, Magick Type, Concept and Challenge, Spheres,
+Instruments, Arete, Attributes, Skills, Advantages, Touchstones, final check),
+each with the same three blocks: what you choose (cards with the image), why
+(a few lines from the book, which the Storyteller can rewrite with the text
+editor for the whole world, `guidaTesti` setting) and what you get (the
+numbers that change on the sheet). Every click writes on the actor at once, the
+sheet behind stays live, and the window reopens at the step it was on
+(`flags.wod5e-mage.creazione.guidata.passo`). Family images are read from
+`assets/immagini/famiglie/` when present (see the LEGGIMI there); until then the
+cards show a placeholder.
+

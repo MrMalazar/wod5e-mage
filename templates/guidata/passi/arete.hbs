@@ -1,0 +1,45 @@
+{{!-- Passo 8 · l'Areté del grado, la Quintessenza e il Paradosso di partenza. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    <div class="wod5e-mage-guidata-arete">
+        <img class="wod5e-mage-guidata-arete-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt="">
+        <span class="wod5e-mage-guidata-pallini grandi" role="group" aria-label="Areté">
+            {{#each corpo.steps as |step|}}
+                <button type="button" class="wod5e-mage-guidata-pallino{{#if step.active}} lit{{/if}}{{#if step.target}} traguardo{{/if}}" data-action="areteScegli" data-value="{{step.value}}" title="{{step.value}}" {{#unless @root.canEdit}}disabled{{/unless}}></button>
+            {{/each}}
+        </span>
+        <b class="wod5e-mage-guidata-arete-numero">{{corpo.arete}}</b>
+    </div>
+    <p class="wod5e-mage-guidata-nota-passo {{#if corpo.ok}}exact{{else}}under{{/if}}">{{#if corpo.ok}}{{localize "WOD5E_MAGE.Guidata.Arete.Ok"}}{{else}}{{localize "WOD5E_MAGE.Guidata.Arete.Fuori" grado=corpo.gradoLabel target=corpo.target arete=corpo.arete}}{{/if}}</p>
+    <div class="wod5e-mage-guidata-ruota">
+        <div class="wod5e-mage-guidata-risorsa quintessenza">
+            <span class="wod5e-mage-guidata-etichetta"><i class="fa-solid fa-droplet" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Arete.Quintessenza"}}</span>
+            <span class="wod5e-mage-guidata-comandi">
+                <button type="button" data-action="risorsa" data-resource="quintessence" data-delta="-1" aria-label="−1" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                <b>{{corpo.quintessence}}</b>
+                <button type="button" data-action="risorsa" data-resource="quintessence" data-delta="1" aria-label="+1" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+            </span>
+        </div>
+        <div class="wod5e-mage-guidata-risorsa paradosso">
+            <span class="wod5e-mage-guidata-etichetta"><i class="fa-solid fa-bolt" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Arete.Paradosso"}}</span>
+            <span class="wod5e-mage-guidata-comandi">
+                <button type="button" data-action="risorsa" data-resource="paradox" data-delta="-1" aria-label="−1" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                <b>{{corpo.paradox}}</b>
+                <button type="button" data-action="risorsa" data-resource="paradox" data-delta="1" aria-label="+1" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+            </span>
+        </div>
+    </div>
+    <button type="button" class="wod5e-mage-guidata-tasto" data-action="aretePartenza" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Arete.Metti"}}</button>
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            <div class="wod5e-mage-guidata-voce {{#if corpo.ok}}exact{{else}}under{{/if}}"><img class="wod5e-mage-guidata-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt=""> {{localize "WOD5E_MAGE.Guidata.Arete.Grado"}} ({{corpo.gradoLabel}}) <b>{{corpo.target}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-droplet" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Arete.Partenza" q=corpo.quintessenzaIniziale}}</div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-circle-nodes" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Arete.Tetto"}} <b>{{corpo.cap}}</b></div>
+        </div>
+    </section>
+</aside>

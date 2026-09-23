@@ -1624,6 +1624,295 @@
       "Medio": "medio",
       "Grande": "grande",
       "Tasto": "Misura del testo: {current}. Clic: {next}"
+    },
+    "Guidata": {
+      "Title": "Creazione guidata",
+      "WindowTitle": "Creazione guidata · {name}",
+      "Apri": "Creazione guidata: la scheda passo passo",
+      "PassoDi": "Passo {n} di {totale}",
+      "Cosa": "Cosa",
+      "Perche": "Perché",
+      "Guadagni": "Cosa ci guadagni",
+      "Memo": "Il memo",
+      "Indietro": "Indietro",
+      "Avanti": "Avanti: {passo}",
+      "Chiudi": "Chiudi la guida",
+      "Pronto": "La scheda è pronta",
+      "Grado": "Grado",
+      "GradoHint": "La partenza: il Neofita è la creazione base, gli altri gradi partono più in alto (i traguardi cambiano).",
+      "Riscrivi": "Riscrivi il perché (Narratore)",
+      "RiscriviHint": "Il testo del LIBRO si può riscrivere con l'editor: vale per tutti i personaggi del mondo.",
+      "RiscriviChiudi": "Chiudi l'editor",
+      "Ripristina": "Torna al testo del LIBRO",
+      "Proprio": "testo del Narratore",
+      "Catalogo": "Apri il catalogo",
+      "Proposte": "Proposte dal tuo Credo",
+      "ProposteComuni": "Dal catalogo",
+      "Aggiungi": "Metti sulla scheda",
+      "Togli": "Togli",
+      "SullaScheda": "Sulla scheda",
+      "ApriScheda": "Apri la scheda",
+      "SoloLettura": "Non puoi scrivere su questo personaggio: la guida si legge e basta.",
+      "Bloccato": "La scheda è bloccata (il lucchetto): sbloccala per scrivere.",
+      "ImmagineDaFare": "immagine da fare",
+      "ImmagineHint": "Le immagini delle Famiglie si mettono in assets/immagini/famiglie (vedi il LEGGIMI).",
+      "Note": {
+        "vuoto": "Sulla scheda: niente ancora",
+        "credo": "Sulla scheda: {credo}, scritto nel Credo",
+        "famiglia": "Sulla scheda: Appartenenza {riga}, con le sue Sfere a 1",
+        "bussola": "Sulla scheda: la Bussola, nella pagina Personaggio",
+        "tipo": "Sulla scheda: Tipo di Magick {tipo}",
+        "concetto": "Sulla scheda: il Concetto, in Identità",
+        "sfere": "Sulla scheda: i pallini delle Sfere, in tempo reale",
+        "strumenti": "Sulla scheda: gli Strumenti, nella pagina Credo",
+        "arete": "Sulla scheda: Areté {arete}",
+        "attributi": "Sulla scheda: i pallini degli Attributi, in tempo reale",
+        "abilita": "Sulla scheda: i pallini delle Abilità, in tempo reale",
+        "vantaggi": "Sulla scheda: Background, Pregi e Difetti, nei Tratti",
+        "ancore": "Sulla scheda: le Ancore, nella pagina Personaggio",
+        "controllo": "Sulla scheda: il memo di creazione resta acceso sui titoli"
+      },
+      "Passi": {
+        "credo": {
+          "Label": "Credo",
+          "Domanda": "Cosa credi che la realtà sia?",
+          "Sotto": "tredici Credi · uno solo",
+          "Perche": "Cosa credi che la realtà sia, e da quello discende tutto il resto: la Verità a cui ti sei votato, e la voce con cui la difendi al tavolo.",
+          "PercheDue": "Ogni setta respira i suoi Credi, di solito due o tre: quella rosa è la strada battuta verso il tuo, non un confine. Il Credo non assegna punti e non vieta niente: le due Sfere che consiglia si aprono, e gli Strumenti che propone arrivano al passo 7."
+        },
+        "famiglia": {
+          "Label": "Famiglia",
+          "Domanda": "Il giorno in cui finirai nei guai, a quale porta andrai a bussare?",
+          "Sotto": "nove Tradizioni e dieci Craft · poi la via",
+          "Perche": "Ma tu una Tradizione ce l'hai lo stesso. Perché ti ha insegnato a fare quello che sai fare, e perché quando finisci nei guai è l'unica gente che potrebbe venire.",
+          "PercheDue": "Le Tradizioni sopravvivono nelle cabale, il gruppo di maghi con cui vivi, lavori e ti guardi le spalle. Non cercare la migliore, perché non esiste. Una Craft è una strada stretta: una Sfera sola e nessuna via, e nessuno ti chiederà mai di rinunciare a chi sei per stare al tavolo."
+        },
+        "bussola": {
+          "Label": "Bussola",
+          "Domanda": "Dove vuoi arrivare, cosa ti urge adesso, cosa non tradisci mai?",
+          "Sotto": "Ambizione · Desiderio · da una a tre Convinzioni",
+          "Perche": "Quattro tratti scritti in poche righe, che valgono più di qualsiasi punteggio: i primi due dicono dove sta andando il personaggio, gli altri due cosa lo tiene umano mentre ci va.",
+          "PercheDue": "L'Ambizione dice dove vuoi arrivare, e non ci arrivi stasera: le migliori sono puramente mortali. Il Desiderio è cosa ti urge adesso, e cambia appena l'ottieni. Le Convinzioni, da una a tre, sono la tua legge morale: assolute nella forma, costose nella pratica, a doppio taglio. Le Ancore arrivano al passo 12."
+        },
+        "tipo": {
+          "Label": "Tipo",
+          "Domanda": "Per quale via passa la tua Volontà?",
+          "Sotto": "tre Tipi di Magick · uno solo",
+          "Perche": "Con la Magick la Volontà passa attraverso cose che l'uomo usa da quando esiste: il corpo e la voce, l'oggetto impugnato, quello che si consuma. Con la Tecnomagick passa attraverso un apparato, e l'apparato è il punto. Nell'Ibrida l'apparato c'è e non comanda.",
+          "PercheDue": "Il Tipo decide le famiglie di Strumenti che puoi usare, e conta nel premio dell'Areté: l'Ibrida non lo prende. Le pratiche di macchina (Cibernetica, Hacking della Realtà, Scienza Bizzarra) passano per la Tecnomagick; per le altre la scelta è tua."
+        },
+        "concetto": {
+          "Label": "Concetto",
+          "Domanda": "Chi eri prima del Risveglio, in una riga sola?",
+          "Sotto": "il Concetto · la Sfida, facoltativa, con tre premi",
+          "Perche": "Chi eri prima del Risveglio, e cosa sei diventato dopo, in una riga sola. È il filtro di tutto il resto: ogni pallino che segni dopo deve tornare con questa frase.",
+          "PercheDue": "Serve una persona vera, con un mestiere anonimo e una tensione dentro, non un archetipo. La Sfida del Concetto sono ventuno domande in tre gruppi da sette: è facoltativa, e il gioco te la paga in proporzione a quanto scendi."
+        },
+        "sfere": {
+          "Label": "Sfere",
+          "Domanda": "Fin dove arrivi, in ciascuno dei nove domini?",
+          "Sotto": "sei pallini · tetto Areté + 2",
+          "Perche": "I nove domini della Magick, e il punteggio dice fin dove arrivi in ciascuno. Sono l'unica cosa sulla scheda che dice cosa il tuo mago sa fare davvero.",
+          "PercheDue": "Hai sei pallini, da spendere in una di due forme: 3-2-1 (una guida, una che sostiene, una che germoglia) o 3-3 (due strade battute a fondo). Le Sfere di famiglia e della via hanno già il primo pallino. Il tetto di ogni Sfera alla creazione è Areté + 2: leggi le due o tre che ti interessano nel capitolo della Magick prima di segnare."
+        },
+        "strumenti": {
+          "Label": "Strumenti",
+          "Domanda": "Con cosa lanci?",
+          "Sotto": "uno Strumento per ogni Sfera · e quello di Percepire",
+          "Perche": "Le cose senza cui non lanci. Un oggetto, un gesto, una parola, una sostanza: qualcosa che incanali la tua convinzione. Per lanciare devi impiegarne almeno uno, ed è la chiave nella serratura.",
+          "PercheDue": "Non danno dadi. In scheda si scrivono a due livelli, la famiglia e poi il tuo di preciso: mai «un coltello», ma il coltello di mio padre, che non taglia più niente. Il Credo e la Famiglia te ne propongono, e quasi mai le stesse cose."
+        },
+        "arete": {
+          "Label": "Areté",
+          "Domanda": "Quanto capisci di quello che fai?",
+          "Sotto": "Areté · Quintessenza · Paradosso",
+          "Perche": "Quanto il tuo mago capisce di quello che sta facendo. Alla creazione è 1 per tutti, ed è il numero da cui dipende tutto il resto: quante Sfere puoi spingere, quanto in alto arrivi.",
+          "PercheDue": "Adesso non scegli niente: segni 1, e con lui Quintessenza 3 e Paradosso 0. Il tetto di ogni Sfera è Areté + 2. Sale soltanto giocando, ed è la cosa più cara del gioco. Le partenze avanzate (il grado, in alto) partono più in alto."
+        },
+        "attributi": {
+          "Label": "Attributi",
+          "Domanda": "Che cosa sei, prima di ogni addestramento?",
+          "Sotto": "ventidue pallini · una forma fissa",
+          "Perche": "Nove voci in tre famiglie: quello che il personaggio è prima di ogni addestramento. L'Attributo entra in ogni tiro del gioco, e da tre di loro discendono le statistiche di base.",
+          "PercheDue": "Distribuisci una forma fissa di ventidue pallini e decidi tu quale voce prende quale valore. Comincia dal 4, che dice chi è il personaggio, e finisci dall'1, che è la promessa di un guaio: il Narratore lo userà."
+        },
+        "abilita": {
+          "Label": "Abilità",
+          "Domanda": "Che cosa hai imparato?",
+          "Sotto": "diciannove pallini · nessuna oltre il terzo",
+          "Perche": "Quattordici voci, una fila sola: quello che il personaggio ha imparato. Si somma all'Attributo per fare la riserva di dadi, e apre una Specializzazione al primo pallino, al terzo e al quinto.",
+          "PercheDue": "Diciannove pallini liberi, e nessuna voce oltre il terzo. Un 3 vale un mestiere, un 1 un'infarinatura, uno zero vuol dire che tiri il solo Attributo. Il quarto e il quinto pallino arrivano solo in gioco, con l'Esperienza."
+        },
+        "vantaggi": {
+          "Label": "Vantaggi",
+          "Domanda": "Cosa hai intorno, cosa hai addosso, e quali guai?",
+          "Sotto": "sette punti fra Background e Pregi · fino a due Difetti",
+          "Perche": "Sette punti da spendere in due direzioni: quello che hai fuori di te (i Background) e quello che hai di tuo (i Pregi). Tre tratti piccoli e ben scelti raccontano più di due grossi.",
+          "PercheDue": "I Difetti sono fino a due punti di problemi, che restituiscono altrettanti punti da spendere altrove: sono il solo tratto della scheda che dà al Narratore il permesso esplicito di venirti a cercare. Prendine uno perché vuoi quella storia al tavolo."
+        },
+        "ancore": {
+          "Label": "Ancore",
+          "Domanda": "Chi ti tiene umano?",
+          "Sotto": "da una a tre persone comuni",
+          "Perche": "Da una a tre persone comuni, quasi sempre Dormienti ignari, che tengono il personaggio agganciato al mondo di prima. Ti restituiscono Volontà, e sono il punto da cui verranno a prenderti.",
+          "PercheDue": "Una sola fa una cronaca stretta e feroce, tre fanno più ossigeno e tre volte più ricatti. Scegli persone che il tuo mago vede ancora, non che ricorda. Per ognuna scrivi chi è, perché conta e cosa non sa: la terza è quella da cui nascono tutte le scene."
+        },
+        "controllo": {
+          "Label": "Controllo",
+          "Domanda": "È tutto a posto?",
+          "Sotto": "il memo intero, tutto verde",
+          "Perche": "Il memo intero: ogni conto della scheda contro il suo traguardo. Quando è tutto verde, hai un mago finito.",
+          "PercheDue": "Quel che manca si sistema anche dalla scheda: i conti sui titoli dei riquadri restano accesi col memo, e questa finestra si riapre dal tasto in testata, al passo dov'era."
+        }
+      },
+      "Credo": {
+        "Sfere": "Due Sfere affini si aprono",
+        "SfereScelte": "Le due Sfere le scegli tu",
+        "SfereLibere": "Sfere a tua scelta",
+        "Prima": "La prima",
+        "Seconda": "La seconda",
+        "Mestiere": "Il mestiere che consiglia",
+        "Strumenti": "Gli Strumenti consigliati",
+        "Famiglie": "Le Famiglie che lo consigliano",
+        "Nessuna": "nessuna, per ora",
+        "Pallini": "Pallini",
+        "Nessuno": "nessuno",
+        "NelPasso": "nel passo {n}"
+      },
+      "Famiglia": {
+        "Via": "La via",
+        "ViaSotto": "{famiglia} · {kind}",
+        "DelCredo": "col tuo Credo",
+        "Craft": "Craft",
+        "CraftSotto": "una Sfera, nessuna via",
+        "SferaFamiglia": "La Sfera di famiglia a 1",
+        "SferaVia": "La Sfera della via a 1",
+        "CredoVia": "Il Credo che la via consiglia",
+        "Pratica": "La pratica della via",
+        "Strumenti": "Gli Strumenti della Famiglia",
+        "Bussola": "Convinzioni, Ambizione e Desiderio proposti",
+        "Tipo": "Il Tipo di Magick consigliato",
+        "ScegliPrima": "Scegli prima la Famiglia: la via compare qui sotto.",
+        "Tradizioni": "Le Tradizioni",
+        "Disparati": "Le Craft dei Disparati"
+      },
+      "Bussola": {
+        "Ambizione": "Ambizione",
+        "AmbizioneHint": "Dove vuoi arrivare, e non ci arrivi stasera.",
+        "Desiderio": "Desiderio",
+        "DesiderioHint": "Cosa ti urge adesso, e cambia appena l'ottieni.",
+        "Convinzioni": "Convinzioni",
+        "ConvinzioniHint": "Da una a tre: cosa non tradisci mai.",
+        "ConvinzioneVuota": "Nessuna Convinzione ancora: prendine una dal catalogo, o dalle proposte.",
+        "Serve": "quando la servi",
+        "Cross": "quando la attraversi",
+        "GuadagniAmbizione": "L'Ambizione dà forma alla cronaca",
+        "GuadagniDesiderio": "Il Desiderio, raggiunto, frutta Esperienza",
+        "GuadagniConvinzioni": "Le Convinzioni reggono le Macchie",
+        "GuadagniAncore": "Le Ancore, chi ti tiene umano"
+      },
+      "Tipo": {
+        "Famiglie": "Strumenti che apre",
+        "Premio": "Il premio dell'Areté",
+        "PremioSi": "sì",
+        "PremioNo": "no, mai",
+        "Consigliato": "consigliato dalla via",
+        "Pratica": "La pratica della tua via",
+        "Nessuna": "la via non dice un Tipo: scegli tu"
+      },
+      "Concetto": {
+        "Concetto": "Il Concetto",
+        "Hint": "Una riga: chi eri prima del Risveglio, e cosa sei diventato dopo.",
+        "Sfida": "La Sfida del Concetto",
+        "SfidaHint": "Tre gruppi da sette domande, sulla scheda (la pagina Sfida). Facoltativa: i premi si sommano.",
+        "ApriSfida": "Apri la Sfida sulla scheda",
+        "Gruppo": "{done}/{total} scritte",
+        "Premio": "{label}",
+        "Preso": "preso",
+        "DaPrendere": "con {n}"
+      },
+      "Sfere": {
+        "Pallini": "Pallini delle Sfere",
+        "Tetto": "Tetto per Sfera alla creazione",
+        "TettoHint": "Areté + 2: nessuna Sfera passa il {cap}",
+        "Famiglia": "Sfera di famiglia",
+        "FamigliaHint": "Le Sfere di famiglia (Famiglia, via, Credo) costano meno con l'Esperienza.",
+        "TettoAvviso": "Alla creazione una Sfera non passa Areté + 2 ({cap}).",
+        "Sfida": "dalla Sfida",
+        "Chiusa": "chiusa: si apre col primo pallino"
+      },
+      "Strumenti": {
+        "Scelti": "Strumenti scelti",
+        "SenzaNonLanci": "Senza Strumento non lanci",
+        "Consiglio": "Il Credo propone",
+        "Usa": "Usa questo",
+        "Percepire": "Lo Strumento di Percepire",
+        "PercepireHint": "Per gli effetti percettivi, al primo pallino di ogni Sfera: uno Strumento apposta, uguale a un altro o diverso.",
+        "Famiglia": "La Famiglia propone",
+        "Via": "La via propone",
+        "Nessuna": "Nessuna Sfera aperta: torna al passo 6.",
+        "Tuo": "il tuo di preciso",
+        "Mestiere": "il mestiere",
+        "Scegli": "Scegli lo Strumento",
+        "FuoriTipo": "fuori dal tuo Tipo di Magick"
+      },
+      "Arete": {
+        "Grado": "L'Areté del grado",
+        "Quintessenza": "Quintessenza",
+        "Paradosso": "Paradosso",
+        "Partenza": "Alla partenza: Quintessenza {q}, Paradosso 0",
+        "Tetto": "Il tetto delle Sfere",
+        "Fuori": "Con il grado {grado} l'Areté è {target}: qui ce n'è {arete}.",
+        "Ok": "L'Areté del grado è segnato.",
+        "Metti": "Segna l'Areté e la Quintessenza di partenza"
+      },
+      "Attributi": {
+        "Forma": "La forma fissa",
+        "FormaVoce": "{count} a {value}",
+        "NeHai": "ne hai {have}",
+        "Segnati": "segnati",
+        "Salute": "Salute = Costituzione + 3",
+        "Volonta": "Volontà = Autocontrollo + Fermezza",
+        "Saggezza": "Saggezza = 3 + il più alto fra Carisma e Fermezza",
+        "Caselle": "{n} caselle",
+        "Tiro": "Ogni tiro parte da un Attributo",
+        "TiroPiu": "+ Abilità"
+      },
+      "Abilita": {
+        "Pallini": "Pallini delle Abilità",
+        "Tetto": "Il tetto alla creazione",
+        "TettoHint": "nessuna voce oltre il {cap}",
+        "TettoAvviso": "Alla creazione nessuna Abilità passa il {cap}.",
+        "Specializzazioni": "Le Specializzazioni",
+        "SpecializzazioniHint": "una al primo pallino, al terzo e al quinto, dalla scheda",
+        "Sfida": "dalla Sfida",
+        "Oltre": "oltre il tetto: {list}"
+      },
+      "Vantaggi": {
+        "Background": "Background",
+        "Pregi": "Pregi",
+        "Difetti": "Difetti",
+        "Vuoto": "nessuno ancora",
+        "Vantaggi": "Background e Pregi insieme",
+        "DifettiConto": "Difetti",
+        "Restituiscono": "I Difetti restituiscono i punti che costano",
+        "Punti": "punti"
+      },
+      "Ancore": {
+        "Scritte": "Ancore scritte",
+        "Volonta": "Ti restituiscono Volontà",
+        "Nome": "chi è",
+        "Descrizione": "perché conta, e cosa non sa",
+        "Vuota": "Nessuna Ancora ancora: prendine una dal catalogo, o dalle proposte.",
+        "Nuova": "Un'Ancora nuova"
+      },
+      "Controllo": {
+        "Passi": "I passi",
+        "Conti": "I conti",
+        "Pronto": "Tutto a posto: la scheda è pronta.",
+        "Mancano": "Mancano {n} passi: cliccali nella barra in alto.",
+        "Chiudi": "Chiudi la guida e vai alla scheda"
+      }
     }
   },
   "WOD5E": {

@@ -1,0 +1,46 @@
+{{!-- Passo 1 · il Credo: tredici carte, una sola; Potere e Scienza chiedono le due Sfere. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    <div class="wod5e-mage-guidata-carte carte-credi">
+        {{#each corpo.credi as |credo|}}
+            <button type="button" class="wod5e-mage-guidata-carta{{#if credo.selected}} scelta{{/if}}" data-action="credoScegli" data-credo="{{credo.id}}" aria-pressed="{{credo.selected}}" {{#unless @root.canEdit}}disabled{{/unless}}>
+                <span class="wod5e-mage-guidata-arte simbolo"><i class="{{credo.icon}}" aria-hidden="true"></i></span>
+                <h4>{{credo.label}}</h4>
+                <span class="wod5e-mage-guidata-sfere">
+                    {{#if credo.free}}
+                        <em>{{localize "WOD5E_MAGE.Guidata.Credo.SfereLibere"}}</em>
+                    {{else}}
+                        {{#each credo.spheres as |sphere|}}<span class="wod5e-mage-guidata-sfera"><img src="{{sphere.icon}}" alt=""> {{sphere.label}}</span>{{/each}}
+                    {{/if}}
+                </span>
+            </button>
+        {{/each}}
+    </div>
+    {{#if corpo.chosen.free}}
+        <div class="wod5e-mage-guidata-scelta-sfere">
+            <p>{{localize "WOD5E_MAGE.Guidata.Credo.SfereScelte"}}:</p>
+            {{#each corpo.chosen.choices as |choice|}}
+                <label><span>{{#if (eq choice.slot "first")}}{{localize "WOD5E_MAGE.Guidata.Credo.Prima"}}{{else}}{{localize "WOD5E_MAGE.Guidata.Credo.Seconda"}}{{/if}}</span>
+                    <select name="flags.wod5e-mage.focus.credoSpheres.{{choice.slot}}" {{#unless @root.canEdit}}disabled{{/unless}}>
+                        <option value=""></option>
+                        {{#each choice.options as |option|}}<option value="{{option.id}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
+                    </select>
+                </label>
+            {{/each}}
+        </div>
+    {{/if}}
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-circle-nodes" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Sfere"}} <b>{{#if corpo.spheres.length}}{{#each corpo.spheres as |s|}}{{#if @index}} · {{/if}}{{s.label}}{{/each}}{{else if corpo.chosen.free}}{{localize "WOD5E_MAGE.Guidata.Credo.SfereLibere"}}{{else}}…{{/if}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Mestiere"}} <b>{{#if corpo.chosen.profession}}{{corpo.chosen.profession}}{{else}}…{{/if}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Strumenti"}} <b>{{localize "WOD5E_MAGE.Guidata.Credo.NelPasso" n=7}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-people-group" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Famiglie"}} <b>{{#if corpo.famiglie.length}}{{#each corpo.famiglie as |f|}}{{#if @index}}, {{/if}}{{f}}{{/each}}{{else if corpo.chosen}}{{localize "WOD5E_MAGE.Guidata.Credo.Nessuna"}}{{else}}{{localize "WOD5E_MAGE.Guidata.Credo.NelPasso" n=2}}{{/if}}</b></div>
+            <div class="wod5e-mage-guidata-voce no"><i class="fa-solid fa-coins" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Pallini"}} <b>{{localize "WOD5E_MAGE.Guidata.Credo.Nessuno"}}</b></div>
+        </div>
+    </section>
+</aside>

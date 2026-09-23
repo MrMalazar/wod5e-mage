@@ -1,0 +1,10 @@
+{{!-- Il corpo del passo: a sinistra COSA scegli, a destra PERCHÉ e COSA CI
+     GUADAGNI. Ogni passo ha il suo partial (templates/guidata/passi). --}}
+<div class="wod5e-mage-guidata-corpo passo-{{passo.id}}">
+    {{#unless canEdit}}
+        <p class="wod5e-mage-guidata-avviso"><i class="fa-solid fa-lock" aria-hidden="true"></i> {{#if bloccato}}{{localize "WOD5E_MAGE.Guidata.Bloccato"}}{{else}}{{localize "WOD5E_MAGE.Guidata.SoloLettura"}}{{/if}}</p>
+    {{/unless}}
+    <div class="wod5e-mage-guidata-colonne">
+        {{> (lookup passo "partial")}}
+    </div>
+</div>

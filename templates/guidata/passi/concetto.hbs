@@ -1,0 +1,37 @@
+{{!-- Passo 5 · il Concetto in una riga, e la Sfida a tre gruppi coi premi. --}}
+<section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
+    <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
+    <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
+    <div class="wod5e-mage-guidata-campo">
+        <label class="wod5e-mage-guidata-etichetta" for="wod5e-mage-guidata-concept"><i class="fa-solid fa-user-pen" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Concetto.Concetto"}} <small>{{localize "WOD5E_MAGE.Guidata.Concetto.Hint"}}</small></label>
+        <div class="wod5e-mage-guidata-riga-campo">
+            <input type="text" id="wod5e-mage-guidata-concept" name="system.headers.concept" value="{{corpo.concept}}" {{#unless @root.canEdit}}disabled{{/unless}}>
+            <button type="button" class="wod5e-mage-guidata-tastino" data-action="catalogoApri" data-kind="concetto" title="{{localize 'WOD5E_MAGE.Guidata.Catalogo'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+        </div>
+        {{#if corpo.proposte.length}}
+            <div class="wod5e-mage-guidata-proposte"><small>{{localize "WOD5E_MAGE.Guidata.ProposteComuni"}}</small>
+                {{#each corpo.proposte as |p|}}<button type="button" class="wod5e-mage-guidata-chip" data-action="propostaMetti" data-kind="concetto" data-uuid="{{p.uuid}}" {{#unless @root.canEdit}}disabled{{/unless}}>{{p.name}}</button>{{/each}}
+            </div>
+        {{/if}}
+    </div>
+    <div class="wod5e-mage-guidata-campo">
+        <div class="wod5e-mage-guidata-etichetta"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Concetto.Sfida"}} <small>{{localize "WOD5E_MAGE.Guidata.Concetto.SfidaHint"}}</small></div>
+        <div class="wod5e-mage-guidata-gruppi-sfida">
+            {{#each corpo.gruppi as |g|}}
+                <div class="wod5e-mage-guidata-gruppo-sfida{{#if g.complete}} completo{{/if}}"><b>{{g.label}}</b><span>{{localize "WOD5E_MAGE.Guidata.Concetto.Gruppo" done=g.done total=g.total}}</span></div>
+            {{/each}}
+        </div>
+        <button type="button" class="wod5e-mage-guidata-tasto" data-action="sfidaApri"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Concetto.ApriSfida"}}</button>
+    </div>
+</section>
+<aside class="wod5e-mage-guidata-spiega">
+    {{> "modules/wod5e-mage/templates/guidata/perche.hbs"}}
+    <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
+        <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
+        <div class="wod5e-mage-guidata-voci">
+            {{#each corpo.premi as |premio|}}
+                <div class="wod5e-mage-guidata-voce{{#unless premio.earned}} no{{/unless}}"><i class="fa-solid {{#if premio.earned}}fa-circle-check{{else}}fa-circle{{/if}}" aria-hidden="true"></i> {{premio.text}} <b>{{#if premio.earned}}{{localize "WOD5E_MAGE.Guidata.Concetto.Preso"}}{{else}}{{localize "WOD5E_MAGE.Guidata.Concetto.DaPrendere" n=premio.groups}}{{/if}}</b></div>
+            {{/each}}
+        </div>
+    </section>
+</aside>

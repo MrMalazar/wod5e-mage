@@ -1,0 +1,14 @@
+{{!-- Il piede: Indietro, la nota di quel che è già scritto sulla scheda, Avanti col nome del passo dopo. --}}
+<footer class="wod5e-mage-guidata-piede">
+    {{#if indietro}}
+        <button type="button" class="wod5e-mage-guidata-tasto fantasma" data-action="passoVai" data-passo="{{indietro.n}}"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Indietro"}}</button>
+    {{else}}
+        <span></span>
+    {{/if}}
+    <span class="wod5e-mage-guidata-nota"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> {{nota}}</span>
+    {{#if avanti}}
+        <button type="button" class="wod5e-mage-guidata-tasto avanti" data-action="passoVai" data-passo="{{avanti.n}}">{{localize "WOD5E_MAGE.Guidata.Avanti" passo=avanti.label}} <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+    {{else}}
+        <button type="button" class="wod5e-mage-guidata-tasto avanti{{#if done.controllo}} pronto{{/if}}" data-action="chiudi">{{#if done.controllo}}{{localize "WOD5E_MAGE.Guidata.Pronto"}}{{else}}{{localize "WOD5E_MAGE.Guidata.Chiudi"}}{{/if}} <i class="fa-solid fa-wand-sparkles" aria-hidden="true"></i></button>
+    {{/if}}
+</footer>
