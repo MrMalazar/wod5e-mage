@@ -281,4 +281,25 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   assert.equal(flags["wod5e-mage"].poteriUsi.pcasa, undefined);
 }
 
+// La pagina Magick (poteri-scheda.js) con le righe che chiedono una scelta: la
+// tendina dell'Ambito, delle Abilità e degli incantesimi. (Nella 1.7.0 e 1.7.1
+// una variabile con lo stesso nome di `scelte` rompeva la pagina: la scheda
+// non si apriva più. Blue, 24/9 sera.)
+{
+  const P = await import(new URL("../../scripts/poteri-scheda.js", import.meta.url).href);
+  flags["wod5e-mage"].poteri.ppratica = { sphere: "mind", name: "La Pratica rende Perfetti", dot: 0, type: "attivo", source: "catalogo", catalogId: "la-pratica-rende-perfetti", scelta: "s1" };
+  const pagina = P.preparePoteriPagina(actor, { _poteriInModifica: new Set() }, { localize: (k) => strings[k] ?? k, locale: "it" });
+  const forze = pagina.poteriSezioni.find((s) => s.id === "forces");
+  const casaRiga = forze.poteri.find((p) => p.catalogId === "ambito-di-casa");
+  assert.deepEqual([casaRiga.sceltaCampo.kind, casaRiga.sceltaCampo.options.map((o) => o.value), casaRiga.sceltaCampo.options.find((o) => o.selected)?.value], ["ambito", ["potency", "range"], "potency"]);
+  assert.equal(forze.poteri.find((p) => p.catalogId === "appoggio").sceltaCampo, null, "Appoggio non chiede niente");
+  const mente = pagina.poteriSezioni.find((s) => s.id === "mind");
+  const mestiereRiga = mente.poteri.find((p) => p.catalogId === "mestiere");
+  assert.deepEqual([mestiereRiga.sceltaCampo.kind, mestiereRiga.sceltaCampo.options.map((o) => o.value), mestiereRiga.sceltaCampo.options.find((o) => o.selected)?.value], ["abilita", ["skill:athletics", "skill:occult"], "skill:athletics"]);
+  const praticaRiga = mente.poteri.find((p) => p.catalogId === "la-pratica-rende-perfetti");
+  assert.deepEqual([praticaRiga.sceltaCampo.kind, praticaRiga.sceltaCampo.options.map((o) => [o.value, o.label, o.selected])], ["incantesimo", [["s1", "Lama di fuoco", true]]]);
+  assert.ok(forze.poteri.every((p) => p.options?.pallini?.length === 5), "le tendine dei pallini restano");
+  delete flags["wod5e-mage"].poteri.ppratica;
+}
+
 console.log("compositore: ok,", globalThis.__sim.messages.length, "messaggi");
