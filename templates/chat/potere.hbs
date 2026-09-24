@@ -1,0 +1,16 @@
+{{!-- La carta di un potere usato (24/9): nome, Sfera e matrice, il costo pagato,
+     gli usi che restano, il testo a blocchi. Quello che dice lo applica il Narratore. --}}
+<div class="wod5e-mage-roll-card wod5e-mage-potere-chat">
+    <p class="wod5e-mage-incantesimo-chat-name">{{carta.name}}</p>
+    <p class="wod5e-mage-potere-chat-riga">{{#if carta.sphere}}<b>{{carta.sphere}}</b>{{/if}}{{#if carta.formula}} · {{carta.formula}}{{/if}}{{#if carta.kind}} · {{carta.kind}}{{/if}}</p>
+    {{#if carta.spent}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Pagato"}}</b> {{carta.spent}} {{localize "WOD5E_MAGE.Poteri.QuintessenzaBreve"}}</p>{{/if}}
+    {{#if carta.usi}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Usi"}}</b> {{carta.usi.restanti}}/{{carta.usi.max}} ({{carta.usi.label}})</p>{{/if}}
+    {{#each carta.blocchi as |blocco|}}
+        <div class="wod5e-mage-potere-chat-blocco">
+            {{#if blocco.titolo}}<b>{{blocco.titolo}}</b>{{/if}}
+            {{#each blocco.righe as |riga|}}<p>{{riga}}</p>{{/each}}
+        </div>
+    {{/each}}
+    {{#if carta.paradox}}<p class="wod5e-mage-potere-chat-riga wod5e-mage-potere-chat-paradosso"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Paradosso"}}</b> {{carta.paradox}}</p>{{/if}}
+    {{#if carta.flavor}}<p class="wod5e-mage-potere-chat-flavor"><em>{{carta.flavor}}</em></p>{{/if}}
+</div>

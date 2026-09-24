@@ -12891,3 +12891,60 @@
   font-size: 0.7rem;
   font-style: italic;
 }
+
+/* Il tasto «Usa» sulla riga del potere (24/9): in oro, spento quando gli usi
+   sono finiti o manca la Quintessenza; sotto, gli usi che restano e il costo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo > button.wod5e-mage-potere-usa {
+  border-color: var(--mage-oro-scuro);
+  color: var(--mage-oro);
+  margin-right: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo > button.wod5e-mage-potere-usa > small {
+  color: var(--mage-tenue);
+  font-size: 0.55rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  margin-left: 6px;
+  text-transform: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo > button.wod5e-mage-potere-usa.spento {
+  border-color: transparent;
+  color: var(--mage-tenue);
+  opacity: 0.55;
+}
+
+/* La carta del potere in chat: come quella dell'incantesimo, coi blocchi del testo. */
+.wod5e-mage-potere-chat-riga {
+  margin: 0 0 0.2rem;
+}
+
+.wod5e-mage-potere-chat-blocco {
+  border-top: 1px solid rgb(152 119 43 / 30%);
+  margin: 0.3rem 0 0;
+  padding-top: 0.3rem;
+}
+
+.wod5e-mage-potere-chat-blocco > b {
+  color: var(--mage-oro, #d9a827);
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-potere-chat-blocco > p {
+  margin: 0.1rem 0;
+}
+
+.wod5e-mage-potere-chat-paradosso {
+  border-top: 1px solid rgb(152 119 43 / 30%);
+  margin-top: 0.3rem;
+  padding-top: 0.3rem;
+}
+
+.wod5e-mage-potere-chat-flavor {
+  color: var(--mage-tenue, #ab9f85);
+  margin: 0.2rem 0 0;
+}

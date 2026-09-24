@@ -5648,7 +5648,7 @@ export const POTERI = Object.freeze([
     "cost": "2 Quintessenza",
     "costValue": 2,
     "uses": {
-      "per": "scena",
+      "per": "bersaglio",
       "n": 1
     },
     "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",

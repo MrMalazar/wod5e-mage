@@ -71,6 +71,7 @@ export function normalizzaPotere(id, row = {}) {
     link: testo(row?.link),
     costValue: count(row?.costValue),
     uses: row?.uses && typeof row.uses === "object" ? { per: testo(row.uses.per), n: Math.max(count(row.uses.n), 1) } : null,
+    paradox: testo(row?.paradox),
     effects: Array.isArray(row?.effects) ? row.effects : []
   };
 }
@@ -160,6 +161,7 @@ export function nuovoPotere(sphere, entry = null) {
     link: testo(entry.link),
     costValue: count(entry.costValue),
     uses: entry.uses && typeof entry.uses === "object" ? { per: testo(entry.uses.per), n: Math.max(count(entry.uses.n), 1) } : null,
+    paradox: testo(entry.paradox),
     effects: Array.isArray(entry.effects) ? entry.effects : []
   };
 }
@@ -227,4 +229,107 @@ export function applyPotere(conto, power) {
     }
   }
   return next;
+}
+
+/* ------------------------------------------------------------------ */
+/* Il tasto «Usa» (tappa 2, 24/9): il potere si usa senza tirare. Il    */
+/* modulo conta gli usi («una volta per scena», «per sessione», «per    */
+/* campagna»), scala il costo in Quintessenza e manda la carta in chat; */
+/* quello che la carta dice lo applica il Narratore. Tutto qui è puro.  */
+/* ------------------------------------------------------------------ */
+
+/** La bandiera degli usi: { [id della riga]: { scena: n, sessione: n, campagna: n } }. */
+export const POTERI_USI_FLAG = "poteriUsi";
+
+/** I periodi che il modulo riarma da solo: la scena (Cambio Scena) e la sessione (Nuova sessione). */
+export const USI_RIARMATI = Object.freeze(["scena", "sessione", "campagna"]);
+
+/**
+ * Gli usi di un potere nel periodo corrente: null se il potere non ha un
+ * limite che il modulo conta («una volta per turno» o «per bersaglio» si
+ * contano al tavolo). Altrimenti quanti ne restano.
+ */
+export function usiDelPotere(power, usi = {}) {
+  const per = testo(power?.uses?.per);
+  if (!USI_RIARMATI.includes(per)) return null;
+  const max = Math.max(count(power.uses?.n), 1);
+  const usati = count(usi?.[power.id]?.[per]);
+  return { per, max, usati, restanti: Math.max(max - usati, 0) };
+}
+
+/**
+ * Si può usare adesso? Serve un uso nel periodo, e la Quintessenza che il
+ * potere costa. Torna il motivo del no: «usi» o «quintessenza».
+ */
+export function puoUsare(power, { usi = {}, quintessence = 0 } = {}) {
+  const conto = usiDelPotere(power, usi);
+  if (conto && conto.restanti <= 0) return { ok: false, motivo: "usi", usi: conto };
+  if (count(power?.costValue) > count(quintessence)) return { ok: false, motivo: "quintessenza", usi: conto };
+  return { ok: true, motivo: "", usi: conto };
+}
+
+/** Un uso in più del potere nel suo periodo; senza periodo contato la bandiera non cambia. */
+export function registraUso(usi, power) {
+  const per = testo(power?.uses?.per);
+  if (!USI_RIARMATI.includes(per)) return { ...(usi ?? {}) };
+  const riga = { ...(usi?.[power.id] ?? {}) };
+  riga[per] = count(riga[per]) + 1;
+  return { ...(usi ?? {}), [power.id]: riga };
+}
+
+/**
+ * Il riarmo: Cambio Scena azzera gli usi per scena; Nuova sessione anche
+ * quelli per sessione; «campagna» solo a mano. Torna la bandiera nuova.
+ */
+export function riarmaUsi(usi, per) {
+  const azzera = per === "sessione" ? ["scena", "sessione"] : per === "campagna" ? [...USI_RIARMATI] : ["scena"];
+  const next = {};
+  for (const [id, riga] of Object.entries(usi ?? {})) {
+    const pulita = Object.fromEntries(Object.entries(riga ?? {}).filter(([chiave, valore]) => !azzera.includes(chiave) && count(valore) > 0));
+    if (Object.keys(pulita).length) next[id] = pulita;
+  }
+  return next;
+}
+
+/** La Ruota dopo l'uso: la Quintessenza scende del costo, mai sotto zero. */
+export function ruotaDopoUso(balance, power) {
+  return {
+    quintessence: Math.max(count(balance?.quintessence) - count(power?.costValue), 0),
+    paradox: count(balance?.paradox)
+  };
+}
+
+/**
+ * I blocchi del testo di un potere per la carta: «Effetto attivo: …»,
+ * «Effetto passivo: …», «Effetto Amalgama: …», ognuno col titolo e le righe.
+ */
+export function blocchiDelTesto(text) {
+  return String(text ?? "")
+    .split(/\n\s*\n/)
+    .map((blocco) => blocco.trim())
+    .filter(Boolean)
+    .map((blocco) => {
+      const m = blocco.match(/^(Effetto (?:attivo|passivo|Amalgama)):\s*([\s\S]*)$/i);
+      const corpo = m ? m[2] : blocco;
+      return { titolo: m ? m[1] : "", righe: corpo.split("\n").map((riga) => riga.trim()).filter(Boolean) };
+    });
+}
+
+/**
+ * La carta in chat: nome, Sfera, matrice, tipo, il costo pagato, gli usi
+ * che restano, i blocchi del testo, Paradosso e Flavor.
+ */
+export function cartaPotere(power, { sphereLabel = "", usi = null, spent = 0, localize = (key) => key } = {}) {
+  return {
+    name: potereLabel(power, localize),
+    sphere: sphereLabel,
+    formula: testo(power?.formulaName),
+    kind: power?.type ? localize(`WOD5E_MAGE.Poteri.Tipo.${power.type}`) : "",
+    spent: count(spent),
+    usi: usi ? { ...usi, label: localize(`WOD5E_MAGE.Poteri.Usi.${usi.per}`) } : null,
+    blocchi: blocchiDelTesto(power?.text),
+    amalgamText: testo(power?.amalgamText),
+    paradox: testo(power?.paradox),
+    flavor: testo(power?.flavor)
+  };
 }

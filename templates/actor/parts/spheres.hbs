@@ -152,6 +152,8 @@
                                         {{#if p.flavor}}<p class="wod5e-mage-potere-flavor"><em>{{p.flavor}}</em></p>{{/if}}
                                     {{/if}}
                                     <div class="wod5e-mage-potere-fondo">
+                                        {{!-- «Usa» (24/9): senza tirare; conta gli usi, scala la Quintessenza, manda la carta in chat. --}}
+                                        <button type="button" class="wod5e-mage-potere-usa{{#unless p.usa.ok}} spento{{/unless}}" data-action="potereUsa" data-row="{{p.id}}" title="{{p.usa.hint}}"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Usa"}}{{#if p.usa.label}}<small>{{p.usa.label}}</small>{{/if}}</button>
                                         <button type="button" data-action="potereModifica" data-row="{{p.id}}" {{#if ../../locked}}disabled{{/if}}><i class="fa-solid {{#if p.editing}}fa-check{{else}}fa-pen{{/if}}" aria-hidden="true"></i> {{#if p.editing}}{{localize "WOD5E_MAGE.Poteri.Fatto"}}{{else}}{{localize "WOD5E_MAGE.Poteri.Modifica"}}{{/if}}</button>
                                         <button type="button" data-action="potereTogli" data-row="{{p.id}}" {{#if ../../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Togli"}}</button>
                                     </div>

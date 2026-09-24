@@ -818,6 +818,16 @@
         "campagna": "una volta per campagna",
         "turno": "una volta per turno",
         "bersaglio": "una volta per bersaglio"
+      },
+      "Usa": "Usa",
+      "UsaHint": "Usa il potere senza tirare: conta l'uso, paga la Quintessenza, manda la carta in chat",
+      "UsiFiniti": "Usi finiti per questo periodo: si riarma al Cambio Scena o a Nuova sessione.",
+      "QuintessenzaManca": "Non hai abbastanza Quintessenza sulla Ruota.",
+      "QuintessenzaBreve": "Quint.",
+      "Carta": {
+        "Pagato": "Pagato",
+        "Usi": "Usi rimasti",
+        "Paradosso": "Paradosso"
       }
     },
     "Tratti": {

@@ -54,7 +54,7 @@ import {
 } from "../magick-balance.js";
 import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
-import { onPotereApri, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, preparePoteriPagina } from "../poteri-scheda.js";
+import { onPotereApri, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriPagina } from "../poteri-scheda.js";
 import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { prepareMemo } from "../memo.js";
@@ -470,6 +470,8 @@ export class MageActorSheet extends MortalActorSheet {
       potereModifica: onPotereModifica,
       potereTogli: onPotereTogli,
       potereApri: onPotereApri,
+      // «Usa» (24/9): il potere senza tirare, con usi contati, costo e carta.
+      potereUsa: onPotereUsa,
       // Ogni riga apribile (21/9): il clic sul nome apre e chiude il testo.
       rigaApri: onPotereApri,
       personaggioRowAdd: onPersonaggioRowAdd,

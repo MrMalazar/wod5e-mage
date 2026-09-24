@@ -42,9 +42,9 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [],
-   "uses": null
+   "effects": []
   },
   {
    "id": "tasca-di-mary",
@@ -120,17 +120,17 @@
    "paradox": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "quintessenza",
     "combattimento"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "torna-sempre",
@@ -173,12 +173,12 @@
    "paradox": "Nessuno effetto attivo, basso rischio effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "narratore",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "armonia-a-distanza",
@@ -229,12 +229,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "conosco-un-posto",
@@ -285,15 +285,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "planimetria",
@@ -335,16 +335,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "altri",
     "narratore"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "rifornimento",
@@ -387,15 +387,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "scena"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "schieramento",
@@ -437,12 +437,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "pedina",
@@ -484,12 +484,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "strada-facendo",
@@ -532,12 +532,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "narratore",
     "orologi"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "giochiamo-in-casa",
@@ -588,14 +588,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
-   "hooks": [
-    "uso"
-   ],
    "uses": {
     "per": "sessione",
     "n": 1
-   }
+   },
+   "hooks": [
+    "uso"
+   ],
+   "effects": []
   },
   {
    "id": "uscita-d-emergenza",
@@ -637,16 +637,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "altri",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "colpo-di-fortuna",
@@ -688,7 +688,7 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "salute",
@@ -697,7 +697,7 @@
     "altri",
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "il-dado-e-tratto",
@@ -748,17 +748,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "altri",
     "scena"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "inseparabili",
@@ -800,13 +800,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "altri",
     "narratore",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "non-tutto-il-male",
@@ -848,12 +848,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "combattimento",
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "testa-o-croce",
@@ -909,16 +909,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "combattimento"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "angolo-morto",
@@ -960,15 +960,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "combattimento"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "chi-la-fa-l-aspetti",
@@ -1010,12 +1010,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "altri",
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "fortuna-del-principiante",
@@ -1057,15 +1057,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "il-banco-vince",
@@ -1111,14 +1111,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
     "paradosso",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "legge-di-murphy",
@@ -1160,16 +1160,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "altri",
     "narratore"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "niente-al-caso",
@@ -1220,15 +1220,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "si-trova-tutto",
@@ -1270,12 +1270,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "narratore",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "tiri-gemelli",
@@ -1326,16 +1326,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "combattimento",
     "altri"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "contagio",
@@ -1400,12 +1400,12 @@
    "paradox": "Nessuno effetto attivo; il passivo segue il lancio che ha dato la Condizione.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "condizione",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "fuori-dai-piedi",
@@ -1447,16 +1447,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "altri",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "il-fucile-di-echov",
@@ -1499,15 +1499,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "ladro-di-fortuna",
@@ -1558,15 +1558,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "lascia-o-raddoppia",
@@ -1617,17 +1617,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "salute",
     "narratore"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "porto-sfortuna-io",
@@ -1678,17 +1678,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "altri",
     "narratore"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "roulette",
@@ -1734,13 +1734,13 @@
    "paradox": "Lavora sul Paradosso, non ne fa di suo.",
    "cost": 0,
    "kind": "",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "paradosso",
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "scommessa",
@@ -1799,17 +1799,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "quintessenza",
     "paradosso",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "il-pezzo-mancante",
@@ -1853,15 +1853,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "nerf",
@@ -1903,16 +1903,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "combattimento",
     "altri"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "tarocchi",
@@ -1954,16 +1954,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "narratore",
     "scena"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "il-narratore-ti-ascolta",
@@ -2054,7 +2054,10 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "quintessenza",
@@ -2062,10 +2065,7 @@
     "combattimento",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "scambio-di-sorte",
@@ -2116,15 +2116,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "altri"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "a-stordire",
@@ -2166,14 +2166,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "condizione",
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "mi-metto-in-mezzo",
@@ -2215,12 +2215,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "brucia-ancora",
@@ -2262,13 +2262,13 @@
    "paradox": "Nessuno effetto attivo; il passivo segue il lancio che ha fatto il danno.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "bruciature",
@@ -2326,13 +2326,13 @@
    "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "combattimento",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "nessuno-scappa",
@@ -2387,13 +2387,13 @@
    "paradox": "Nessuno effetto attivo; con Corrispondenza basso rischio effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "onda-d-urto",
@@ -2435,13 +2435,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "perforante",
@@ -2484,11 +2484,11 @@
    "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "semplice-violenza",
@@ -2530,12 +2530,12 @@
    "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "ambiti",
     "salute"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "colpo-decisivo",
@@ -2577,16 +2577,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "combattimento",
     "altri"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "baratto",
@@ -2628,12 +2628,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "bottino",
@@ -2675,12 +2675,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "altri",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "ce-l-ho",
@@ -2722,14 +2722,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
-   "hooks": [
-    "uso"
-   ],
    "uses": {
     "per": "scena",
     "n": 1
-   }
+   },
+   "hooks": [
+    "uso"
+   ],
+   "effects": []
   },
   {
    "id": "fai-da-te",
@@ -2771,16 +2771,16 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 1,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "quintessenza"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "il-giusto-attrezzo",
@@ -2822,15 +2822,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "tutto-e-un-arma",
@@ -2872,11 +2872,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "fatto-da-me",
@@ -2919,11 +2919,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "opera",
@@ -2965,11 +2965,11 @@
    "paradox": "Nessuno effetto attivo, basso rischio per l'oggetto che non si rompe.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "oggetto-sacrificale",
@@ -3015,16 +3015,16 @@
    "paradox": "Lavora sul Contraccolpo, non ne fa di suo.",
    "cost": 0,
    "kind": "",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "paradosso",
     "combattimento"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "ho-letto-qualcosa",
@@ -3066,15 +3066,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "il-mondo-e-piccolo",
@@ -3116,16 +3116,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "altri",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "l-ho-sentito-dire",
@@ -3167,14 +3167,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
-   "hooks": [
-    "uso"
-   ],
    "uses": {
     "per": "sessione",
     "n": 1
-   }
+   },
+   "hooks": [
+    "uso"
+   ],
+   "effects": []
   },
   {
    "id": "mai-colto-di-sorpresa",
@@ -3216,11 +3216,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "combattimento"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "al-posto-tuo",
@@ -3287,12 +3287,12 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "condizione",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "conto-degli-indizi",
@@ -3334,12 +3334,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "narratore",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "morale",
@@ -3381,13 +3381,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "altri",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "pace",
@@ -3442,12 +3442,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "pane-e-sale",
@@ -3489,11 +3489,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "combattimento"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "pensiero-laterale",
@@ -3535,14 +3535,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
-   "hooks": [
-    "uso"
-   ],
    "uses": {
     "per": "scena",
     "n": 1
-   }
+   },
+   "hooks": [
+    "uso"
+   ],
+   "effects": []
   },
   {
    "id": "valvola-di-sfogo",
@@ -3584,12 +3584,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "condizione"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "volonta-prestata",
@@ -3631,13 +3631,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "salute",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "chiodo-fisso",
@@ -3679,12 +3679,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "come-da-piano",
@@ -3726,11 +3726,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "due-mosse-avanti",
@@ -3772,15 +3772,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "narratore"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "tre-ipotesi",
@@ -3822,15 +3822,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "vedo-il-bluff",
@@ -3872,11 +3872,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "alle-strette",
@@ -3918,15 +3918,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "altri"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "distrazione",
@@ -3968,15 +3968,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "parole-che-pesano",
@@ -4018,12 +4018,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "condizione"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "goccia-a-goccia",
@@ -4065,12 +4065,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "il-mio-disastro",
@@ -4112,16 +4112,16 @@
    "paradox": "Lavora sul Contraccolpo, non ne fa di suo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "paradosso"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "niente-di-perso",
@@ -4163,12 +4163,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "pulito",
@@ -4210,13 +4210,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "paradosso",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "risarcimento",
@@ -4258,13 +4258,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "paradosso",
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "strumento-di-fortuna",
@@ -4306,13 +4306,13 @@
    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
    "cost": 1,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "travaso",
@@ -4359,14 +4359,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "anche-a-mani-nude",
@@ -4408,12 +4408,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "bussola-comune",
@@ -4455,12 +4455,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "cambiavalute",
@@ -4513,17 +4513,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "quintessenza",
     "paradosso",
     "salute"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "casa-dolce-casa",
@@ -4585,13 +4585,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "salute",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "coro",
@@ -4633,11 +4633,11 @@
    "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "pila",
@@ -4679,11 +4679,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "prendo-io",
@@ -4725,13 +4725,13 @@
    "paradox": "Lavora sul Contraccolpo, non ne fa di suo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "paradosso",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "tabu",
@@ -4789,14 +4789,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
     "salute",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "tenuta",
@@ -4847,11 +4847,11 @@
    "paradox": "Nessuno effetto attivo; il passivo segue l'effetto mantenuto.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "a-credito",
@@ -4893,17 +4893,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "quintessenza",
     "salute",
     "scena"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "recupero",
@@ -5003,7 +5003,10 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
@@ -5012,10 +5015,7 @@
     "salute",
     "altri"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "scuola",
@@ -5057,13 +5057,13 @@
    "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "sifone",
@@ -5105,13 +5105,13 @@
    "paradox": "Nessuno effetto attivo; nel passivo il Paradosso è già il prezzo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "paradosso",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "terra-sacra",
@@ -5162,14 +5162,14 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 1,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "uso",
     "tiro",
     "quintessenza",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "pagare-in-paradosso",
@@ -5211,12 +5211,12 @@
    "paradox": "Il Paradosso è il prezzo, non ne fa altro di suo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "paradosso"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "parafulmine",
@@ -5265,13 +5265,13 @@
    "paradox": "Lavora sul Contraccolpo, non ne fa di suo, in tutte e due le forme.",
    "cost": 0,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "paradosso",
     "combattimento"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "doppia-modifica",
@@ -5313,14 +5313,14 @@
    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
-   "hooks": [
-    "uso"
-   ],
    "uses": {
     "per": "sessione",
     "n": 1
-   }
+   },
+   "hooks": [
+    "uso"
+   ],
+   "effects": []
   },
   {
    "id": "di-la-non-contano",
@@ -5362,14 +5362,14 @@
    "paradox": "Segue il lancio effetto attivo, che conta come Accidentale; nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
-   "hooks": [
-    "uso"
-   ],
    "uses": {
     "per": "scena",
     "n": 1
-   }
+   },
+   "hooks": [
+    "uso"
+   ],
+   "effects": []
   },
   {
    "id": "interprete",
@@ -5411,11 +5411,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "pellegrino",
@@ -5461,11 +5461,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "reliquia",
@@ -5507,12 +5507,12 @@
    "paradox": "Nessuno effetto attivo, basso rischio effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "condizione"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "segni",
@@ -5567,13 +5567,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "narratore",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "favori",
@@ -5615,12 +5615,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "altri",
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "lascio-fare-a-lui",
@@ -5662,17 +5662,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; se l'azione è un lancio, segue il lancio.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "combattimento",
     "narratore"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "l-avatar-reagisce",
@@ -5714,15 +5714,15 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "combattimento"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "angelo-custode",
@@ -5764,15 +5764,15 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "voce-dell-avatar",
@@ -5814,16 +5814,16 @@
    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "il-ritorno",
@@ -5865,16 +5865,16 @@
    "paradox": "Nessuno effetto attivo, basso rischio effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": {
+    "per": "campagna",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "narratore",
     "scena"
    ],
-   "uses": {
-    "per": "campagna",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "patto-col-diavolo",
@@ -5916,15 +5916,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo: il prezzo è il debito.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "campagna",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "narratore"
    ],
-   "uses": {
-    "per": "campagna",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "il-prezzo-prima",
@@ -5966,15 +5966,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "narratore"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "prestito-dal-futuro",
@@ -6028,15 +6028,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "pronto-all-uso",
@@ -6087,11 +6087,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "combattimento"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "puntuale",
@@ -6133,9 +6133,9 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [],
-   "uses": null
+   "effects": []
   },
   {
    "id": "quadrante",
@@ -6177,12 +6177,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "narratore",
     "orologi"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "sotto-tiro",
@@ -6224,9 +6224,9 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [],
-   "uses": null
+   "effects": []
   },
   {
    "id": "straordinari",
@@ -6273,11 +6273,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "adesso-e-non-dopo",
@@ -6319,15 +6319,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "combattimento"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "allo-scadere",
@@ -6369,13 +6369,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "combattimento",
     "narratore",
     "orologi"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "ci-penso-domani",
@@ -6417,15 +6417,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "scena"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "colpo-in-canna",
@@ -6472,12 +6472,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "contrattempo",
@@ -6519,14 +6519,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
-   "hooks": [
-    "uso"
-   ],
    "uses": {
     "per": "scena",
     "n": 1
-   }
+   },
+   "hooks": [
+    "uso"
+   ],
+   "effects": []
   },
   {
    "id": "l-avevo-preparata",
@@ -6589,14 +6589,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
-   "hooks": [
-    "uso"
-   ],
    "uses": {
     "per": "sessione",
     "n": 1
-   }
+   },
+   "hooks": [
+    "uso"
+   ],
+   "effects": []
   },
   {
    "id": "montaggio-alternato",
@@ -6647,11 +6647,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "primo-istante",
@@ -6700,13 +6700,13 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
     "combattimento"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "ciak-si-gira",
@@ -6748,14 +6748,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 3,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "salute",
     "combattimento",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "l-avevo-previsto",
@@ -6797,15 +6797,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "preparato-a-casa",
@@ -6848,11 +6848,11 @@
    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "salto",
@@ -6894,15 +6894,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "slancio",
@@ -6944,16 +6944,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": {
+    "per": "turno",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "combattimento",
     "altri"
    ],
-   "uses": {
-    "per": "turno",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "ero-gia-li",
@@ -6995,15 +6995,15 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 1,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "quintessenza"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "flash-forward",
@@ -7045,14 +7045,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
-   "hooks": [
-    "uso"
-   ],
    "uses": {
     "per": "sessione",
     "n": 1
-   }
+   },
+   "hooks": [
+    "uso"
+   ],
+   "effects": []
   },
   {
    "id": "flashback",
@@ -7094,16 +7094,16 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "quintessenza",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "minute-man",
@@ -7145,17 +7145,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "quintessenza",
     "narratore",
     "orologi"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "c-ho-ripensato",
@@ -7197,12 +7197,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "combattimento",
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "pisolino",
@@ -7244,9 +7244,9 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [],
-   "uses": null
+   "effects": []
   },
   {
    "id": "piu-forte-di-prima",
@@ -7288,12 +7288,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "tempra",
@@ -7335,12 +7335,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "allenamento",
@@ -7391,12 +7391,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "uso",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "buona-forchetta",
@@ -7438,13 +7438,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "combattimento",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "il-dolore-sveglia",
@@ -7490,11 +7490,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "infermeria",
@@ -7536,17 +7536,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "salute",
     "altri",
     "scena"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "sangue-per-sangue",
@@ -7588,12 +7588,12 @@
    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "stesso-sangue",
@@ -7635,12 +7635,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "vaccino",
@@ -7682,12 +7682,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "condizione",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "bisturi",
@@ -7729,11 +7729,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "canto-del-cigno",
@@ -7788,12 +7788,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "combattimento"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "ferro-nel-sangue",
@@ -7835,13 +7835,13 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 1,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "salute",
     "combattimento"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "in-piedi",
@@ -7883,17 +7883,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "salute",
     "combattimento",
     "altri"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "memoria-muscolare",
@@ -7935,11 +7935,11 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "parassita",
@@ -7981,11 +7981,11 @@
    "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "doppio-cuore",
@@ -8027,15 +8027,15 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "scena"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "duro-a-morire",
@@ -8077,16 +8077,16 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 3,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "quintessenza",
     "salute"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "non-sotto-il-mio-turno",
@@ -8128,12 +8128,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "salute",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "appoggio",
@@ -8234,13 +8234,13 @@
    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "ambiti",
     "quintessenza",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "coperto",
@@ -8341,14 +8341,14 @@
    "paradox": "Accidentale effetto attivo, Accidentale se il Narratore lo concede effetto passivo.",
    "cost": 4,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "salute",
     "combattimento",
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "difendersi-dalla-sfera",
@@ -8406,13 +8406,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 1,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
     "salute"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "fatto-per-durare",
@@ -8513,7 +8513,7 @@
    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "ambiti",
     "quintessenza",
@@ -8521,7 +8521,7 @@
     "narratore",
     "orologi"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "folla",
@@ -8622,14 +8622,14 @@
    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "ambiti",
     "quintessenza",
     "salute"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "impresa-impossibile",
@@ -8725,17 +8725,17 @@
    "paradox": "Volgare effetto attivo (il lancio è l'impresa), nessuno effetto passivo.",
    "cost": 0,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "paradosso",
     "altri",
     "narratore"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "la-pratica-rende-perfetti",
@@ -8782,16 +8782,16 @@
    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "quintessenza"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "legame",
@@ -8892,7 +8892,10 @@
    "paradox": "Basso rischio effetto attivo, segue il lancio effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "ambiti",
@@ -8900,10 +8903,7 @@
     "salute",
     "altri"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "mestiere",
@@ -8950,12 +8950,12 @@
    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo: sono tiri di Abilità.",
    "cost": 1,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "modello",
@@ -9002,12 +9002,12 @@
    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "segnale",
@@ -9108,7 +9108,7 @@
    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "ambiti",
     "quintessenza",
@@ -9116,7 +9116,7 @@
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "sentinella",
@@ -9170,14 +9170,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 1,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "sesto-senso",
@@ -9285,14 +9285,14 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
     "combattimento",
     "narratore"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "adrenalina",
@@ -9366,13 +9366,13 @@
    "paradox": "Nessuno effetto attivo, segue il lancio effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "salute",
     "condizione"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "ambito-di-casa",
@@ -9467,14 +9467,14 @@
    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
    "cost": 4,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "ambiti",
     "quintessenza",
     "condizione"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "bussola-doppia",
@@ -9531,12 +9531,12 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 1,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "incassare",
@@ -9630,7 +9630,7 @@
    "paradox": "Basso rischio effetto attivo, basso rischio effetto passivo se non osservato.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
@@ -9638,7 +9638,7 @@
     "combattimento",
     "scena"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "rigenerazione",
@@ -9737,7 +9737,10 @@
    "paradox": "Volgare effetto attivo, basso rischio effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "quintessenza",
@@ -9745,10 +9748,7 @@
     "salute",
     "scena"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "seconda-possibilita",
@@ -9834,7 +9834,10 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
@@ -9843,10 +9846,7 @@
     "salute",
     "altri"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "senza-residuo",
@@ -9910,12 +9910,12 @@
    "paradox": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
    "cost": 3,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "guasto",
@@ -9986,13 +9986,13 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 1,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
     "combattimento"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "miraggio",
@@ -10063,12 +10063,12 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 2,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "dettaglio",
@@ -10139,17 +10139,17 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 0,
    "kind": "passivo",
-   "effects": [],
+   "uses": {
+    "per": "scena",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "altri",
     "scena"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "convalescenza",
@@ -10227,7 +10227,10 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 3,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "bersaglio",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
@@ -10237,10 +10240,7 @@
     "condizione",
     "altri"
    ],
-   "uses": {
-    "per": "bersaglio",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "copertura",
@@ -10318,17 +10318,17 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 2,
    "kind": "attivo",
-   "effects": [],
+   "uses": {
+    "per": "sessione",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
     "quintessenza",
     "scena"
    ],
-   "uses": {
-    "per": "sessione",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "interruttore",
@@ -10399,12 +10399,12 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 1,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "velocista",
@@ -10464,12 +10464,12 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "quintessenza",
     "combattimento"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "rallentare",
@@ -10524,14 +10524,14 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 2,
    "kind": "attivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "tiro",
     "quintessenza",
     "combattimento",
     "altri"
    ],
-   "uses": null
+   "effects": []
   },
   {
    "id": "pronto-soccorso",
@@ -10600,7 +10600,10 @@
    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": {
+    "per": "bersaglio",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
@@ -10609,10 +10612,7 @@
     "condizione",
     "altri"
    ],
-   "uses": {
-    "per": "scena",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "sferzata",
@@ -10688,7 +10688,10 @@
    "paradox": "Basso rischio effetto attivo (Volgare con Forza se qualcuno guarda), nessuno effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": {
+    "per": "turno",
+    "n": 1
+   },
    "hooks": [
     "uso",
     "tiro",
@@ -10697,10 +10700,7 @@
     "combattimento",
     "altri"
    ],
-   "uses": {
-    "per": "turno",
-    "n": 1
-   }
+   "effects": []
   },
   {
    "id": "bussola",
@@ -10783,13 +10783,13 @@
    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
-   "effects": [],
+   "uses": null,
    "hooks": [
     "uso",
     "tiro",
     "quintessenza"
    ],
-   "uses": null
+   "effects": []
   }
  ]
 }

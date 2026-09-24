@@ -818,6 +818,16 @@
         "campagna": "once per chronicle",
         "turno": "once per turn",
         "bersaglio": "once per target"
+      },
+      "Usa": "Use",
+      "UsaHint": "Use the power without rolling: counts the use, pays the Quintessence, sends the card to chat",
+      "UsiFiniti": "No uses left for this period: it rearms at Scene Change or New Session.",
+      "QuintessenzaManca": "Not enough Quintessence on the Wheel.",
+      "QuintessenzaBreve": "Quint.",
+      "Carta": {
+        "Pagato": "Paid",
+        "Usi": "Uses left",
+        "Paradosso": "Paradox"
       }
     },
     "Tratti": {

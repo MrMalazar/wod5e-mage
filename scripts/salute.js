@@ -1,6 +1,7 @@
 import { MODULE_ID } from "./constants.js";
 import { addParadoxToBalance, getMagickBalance, getPersistentMagickResources, MAGICK_TRACK_MAX } from "./magick-balance.js";
 import { joinLobby } from "./paradosso-narratore.js";
+import { POTERI_USI_FLAG, riarmaUsi } from "./poteri.js";
 
 /**
  * La Salute del ramo A (tronco del 3/9/2026): un tracciato solo, lungo
@@ -433,7 +434,9 @@ export async function onSaluteCambioScena(event) {
   const paradosso = locksAfterScene(salute.paradosso);
   await actor.update({
     [`flags.${MODULE_ID}.salute.paradosso`]: paradosso,
-    [`flags.${MODULE_ID}.-=convinzioneScena`]: null
+    [`flags.${MODULE_ID}.-=convinzioneScena`]: null,
+    // I poteri «una volta per scena» tornano disponibili (24/9).
+    [`flags.${MODULE_ID}.${POTERI_USI_FLAG}`]: riarmaUsi(actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {}, "scena")
   });
   const unlocked = salute.locked - (paradosso.p + paradosso.m);
   ui.notifications.info(unlocked > 0
@@ -514,7 +517,9 @@ export async function onSaluteNewSession(event) {
     // Nuova sessione, nuova scena: la Convinzione può rigenerare di nuovo (9/9).
     [`flags.${MODULE_ID}.-=convinzioneScena`]: null,
     // Sforzare la realtà (10/9 sera): la prima volta della sessione torna gratis.
-    [`flags.${MODULE_ID}.-=sforziSessione`]: null
+    [`flags.${MODULE_ID}.-=sforziSessione`]: null,
+    // I poteri «una volta per scena» e «per sessione» tornano disponibili (24/9).
+    [`flags.${MODULE_ID}.${POTERI_USI_FLAG}`]: riarmaUsi(actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {}, "sessione")
   };
 
   // La Ruota (ramo C, 11/9): a nuova sessione la Quintessenza si azzera e

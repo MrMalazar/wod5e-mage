@@ -12,17 +12,25 @@
  */
 import { MODULE_ID } from "./constants.js";
 import {
+  cartaPotere,
   catalogoDellaSfera,
   contoPoteri,
+  findPotere,
   nuovoPotere,
   POTERE_DOTS,
   POTERE_TIPI,
   POTERI,
   POTERI_FLAG,
+  POTERI_USI_FLAG,
   poteriDelPersonaggio,
   poteriOfSphere,
-  potereLabel
+  potereLabel,
+  puoUsare,
+  registraUso,
+  ruotaDopoUso,
+  usiDelPotere
 } from "./poteri.js";
+import { getMagickBalance } from "./magick-balance.js";
 import { prepareSpheres, SPHERES } from "./spheres.js";
 
 const SPHERE_ICON = (sphere) => `modules/${MODULE_ID}/assets/icons/sheet/${sphere}.png`;
@@ -54,6 +62,9 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
   const selezione = Object.fromEntries(sphereData.all.map((sphere) => [sphere.id, sphere.selected]));
   const editing = inModifica(sheet);
   const options = scelte(localize);
+  // Il tasto «Usa» (24/9): gli usi del periodo e la Quintessenza sulla Ruota.
+  const usi = actor.getFlag?.(MODULE_ID, POTERI_USI_FLAG) ?? {};
+  const quintessence = getMagickBalance(actor).quintessence;
 
   const righe = sphereData.all.map((sphere) => ({ ...sphere, conto: conti[sphere.id] ?? 0 }));
   const sezioni = sphereData.selected.map((sphere) => ({
@@ -71,6 +82,7 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
       amalgamLabel: power.amalgam ? localize(`WOD5E_MAGE.Spheres.${power.amalgam}`) : "",
       amalgamOwned: power.amalgam ? Boolean(selezione[power.amalgam]) : false,
       usesLabel: power.uses?.per ? localize(`WOD5E_MAGE.Poteri.Usi.${power.uses.per}`) : "",
+      usa: usaContesto(power, usi, quintessence, localize),
       editing: editing.has(power.id),
       options
     }))
@@ -81,6 +93,26 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
     sfereAltre: righe.filter((sphere) => !sphere.selected),
     poteriSezioni: sezioni,
     poteriTotale: poteri.length
+  };
+}
+
+/** Il tasto «Usa» della riga: se si può, quanti usi restano, cosa costa, perché no. */
+export function usaContesto(power, usi = {}, quintessence = 0, localize = (key) => key) {
+  const verdetto = puoUsare(power, { usi, quintessence });
+  const conto = verdetto.usi;
+  const costo = Math.max(Math.trunc(Number(power?.costValue) || 0), 0);
+  const parti = [];
+  if (conto) parti.push(`${conto.restanti}/${conto.max} ${localize(`WOD5E_MAGE.Poteri.Usi.${conto.per}`)}`);
+  if (costo) parti.push(`${costo} ${localize("WOD5E_MAGE.Poteri.QuintessenzaBreve")}`);
+  return {
+    ok: verdetto.ok,
+    motivo: verdetto.motivo,
+    conto,
+    costo,
+    label: parti.join(" · "),
+    hint: verdetto.ok
+      ? localize("WOD5E_MAGE.Poteri.UsaHint")
+      : localize(verdetto.motivo === "usi" ? "WOD5E_MAGE.Poteri.UsiFiniti" : "WOD5E_MAGE.Poteri.QuintessenzaManca")
   };
 }
 
@@ -163,4 +195,40 @@ export function onPotereApri(event, target) {
   if (!riga) return;
   const aperta = riga.classList.toggle("aperta");
   target.setAttribute("aria-expanded", String(aperta));
+}
+
+/**
+ * «Usa» (tappa 2, 24/9): il potere si usa senza tirare. Si controlla il
+ * limite d'uso e la Quintessenza, si scala il costo dalla Ruota, si conta
+ * l'uso e la carta va in chat; quello che dice lo applica il Narratore.
+ */
+export async function onPotereUsa(event, target) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!actor.isOwner) {
+    ui.notifications.warn(game.i18n.format("WOD5E.Notifications.NoSufficientPermission", { string: actor.name }));
+    return;
+  }
+  const localize = game.i18n.localize.bind(game.i18n);
+  const power = findPotere(String(target.dataset.row ?? ""), poteriDelPersonaggio(actor));
+  if (!power) return;
+  const usi = actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {};
+  const balance = getMagickBalance(actor);
+  const verdetto = puoUsare(power, { usi, quintessence: balance.quintessence });
+  if (!verdetto.ok) {
+    ui.notifications.warn(localize(verdetto.motivo === "usi" ? "WOD5E_MAGE.Poteri.UsiFiniti" : "WOD5E_MAGE.Poteri.QuintessenzaManca"));
+    return;
+  }
+  const dopo = registraUso(usi, power);
+  const update = { [`flags.${MODULE_ID}.${POTERI_USI_FLAG}`]: dopo };
+  if (power.costValue > 0) update[`flags.${MODULE_ID}.magickBalance`] = ruotaDopoUso(balance, power);
+  await actor.update(update);
+  const carta = cartaPotere(power, {
+    sphereLabel: power.sphere ? localize(`WOD5E_MAGE.Spheres.${power.sphere}`) : "",
+    usi: usiDelPotere(power, dopo),
+    spent: power.costValue,
+    localize
+  });
+  const content = await foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/chat/potere.hbs`, { carta });
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content });
 }

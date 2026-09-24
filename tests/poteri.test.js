@@ -2,8 +2,16 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   applyPotere,
+  blocchiDelTesto,
+  cartaPotere,
   catalogoDellaSfera,
+  POTERI_USI_FLAG,
+  puoUsare,
+  registraUso,
+  riarmaUsi,
+  ruotaDopoUso,
   sfereDellaVoce,
+  usiDelPotere,
   contoPoteri,
   findPotere,
   normalizzaPotere,
@@ -35,8 +43,8 @@ assert.equal(POTERI_FLAG, "poteri");
 
 // Una riga della bandiera letta pulita: i campi al loro posto, il resto scartato.
 const riga = normalizzaPotere("abc", { sphere: "forces", name: " Conduttore ", dot: "7", type: "passivo", text: "Un dado in più.", amalgam: "mind", amalgamText: "Anche la mente", cost: "1 Quintessenza", source: "catalogo", catalogId: "P001-Fo" });
-assert.deepEqual(riga, { id: "abc", sphere: "forces", name: "Conduttore", dot: 5, type: "passivo", text: "Un dado in più.", amalgam: "mind", amalgamText: "Anche la mente", flavor: "", cost: "1 Quintessenza", source: "catalogo", catalogId: "P001-Fo", formula: "", formulaName: "", link: "", costValue: 0, uses: null, effects: [] });
-assert.deepEqual(normalizzaPotere("x", { sphere: "boh", type: "strano", dot: -2, amalgam: "nessuna" }), { id: "x", sphere: "", name: "", dot: 0, type: "", text: "", amalgam: "", amalgamText: "", flavor: "", cost: "", source: "mano", catalogId: "", formula: "", formulaName: "", link: "", costValue: 0, uses: null, effects: [] });
+assert.deepEqual(riga, { id: "abc", sphere: "forces", name: "Conduttore", dot: 5, type: "passivo", text: "Un dado in più.", amalgam: "mind", amalgamText: "Anche la mente", flavor: "", cost: "1 Quintessenza", source: "catalogo", catalogId: "P001-Fo", formula: "", formulaName: "", link: "", costValue: 0, uses: null, paradox: "", effects: [] });
+assert.deepEqual(normalizzaPotere("x", { sphere: "boh", type: "strano", dot: -2, amalgam: "nessuna" }), { id: "x", sphere: "", name: "", dot: 0, type: "", text: "", amalgam: "", amalgamText: "", flavor: "", cost: "", source: "mano", catalogId: "", formula: "", formulaName: "", link: "", costValue: 0, uses: null, paradox: "", effects: [] });
 // Dal catalogo del 24/9 restano la matrice, il legame, il costo e il limite d'uso.
 assert.deepEqual(normalizzaPotere("y", { sphere: "life", name: "Pronto soccorso", formula: "guarire", formulaName: "Guarire", link: "proposta", costValue: "2", uses: { per: "scena", n: 0 } }).uses, { per: "scena", n: 1 });
 
@@ -118,3 +126,42 @@ const reset = readFileSync(new URL("../scripts/reset.js", import.meta.url), "utf
 assert.match(reset, /POTERI_FLAG\}`\]: null/);
 
 console.log("poteri: ok");
+
+// Il tasto «Usa» (tappa 2, 24/9): gli usi per scena e per sessione si
+// contano e si riarmano da soli, il costo scende dalla Ruota, la carta porta
+// i blocchi del testo.
+const conosco = POTERI.find((power) => power.id === "conosco-un-posto");
+const pronto = { ...normalizzaPotere("r1", nuovoPotere("life", POTERI.find((power) => power.id === "pronto-soccorso"))), id: "r1" };
+const conoscoRiga = { ...normalizzaPotere("r2", nuovoPotere("mind", conosco)), id: "r2" };
+assert.deepEqual(usiDelPotere(conoscoRiga, {}), { per: "sessione", max: 1, usati: 0, restanti: 1 });
+assert.equal(usiDelPotere(pronto, {}), null);
+assert.equal(usiDelPotere({ id: "x", uses: { per: "turno", n: 1 } }, {}), null);
+assert.deepEqual(puoUsare(conoscoRiga, { usi: {}, quintessence: 0 }), { ok: true, motivo: "", usi: { per: "sessione", max: 1, usati: 0, restanti: 1 } });
+const dopo = registraUso({}, conoscoRiga);
+assert.deepEqual(dopo, { r2: { sessione: 1 } });
+assert.deepEqual(puoUsare(conoscoRiga, { usi: dopo, quintessence: 5 }).motivo, "usi");
+assert.deepEqual(puoUsare(pronto, { usi: {}, quintessence: 1 }).motivo, "quintessenza");
+assert.equal(puoUsare(pronto, { usi: {}, quintessence: 2 }).ok, true);
+// Senza periodo contato la bandiera non cambia.
+assert.deepEqual(registraUso(dopo, pronto), dopo);
+// Cambio Scena riarma la scena, Nuova sessione anche la sessione; «campagna» resta.
+const usi = { a: { scena: 1, sessione: 2, campagna: 1 }, b: { scena: 1 } };
+assert.deepEqual(riarmaUsi(usi, "scena"), { a: { sessione: 2, campagna: 1 } });
+assert.deepEqual(riarmaUsi(usi, "sessione"), { a: { campagna: 1 } });
+assert.deepEqual(riarmaUsi(usi, "campagna"), {});
+assert.deepEqual(riarmaUsi({}, "scena"), {});
+assert.deepEqual(ruotaDopoUso({ quintessence: 3, paradox: 2 }, pronto), { quintessence: 1, paradox: 2 });
+assert.deepEqual(ruotaDopoUso({ quintessence: 1, paradox: 2 }, pronto), { quintessence: 0, paradox: 2 });
+const blocchi = blocchiDelTesto("Effetto attivo: Paga 2 Quintessenza: cura.\nAccesso con Vita: ferite.\n\nEffetto passivo: In una scena di cure, un danno in più.");
+assert.deepEqual(blocchi, [{ titolo: "Effetto attivo", righe: ["Paga 2 Quintessenza: cura.", "Accesso con Vita: ferite."] }, { titolo: "Effetto passivo", righe: ["In una scena di cure, un danno in più."] }]);
+const carta = cartaPotere(pronto, { sphereLabel: "Vita", usi: null, spent: 2, localize: (key) => key });
+assert.deepEqual([carta.name, carta.sphere, carta.formula, carta.kind, carta.spent, carta.usi, carta.blocchi.length > 1, Boolean(carta.paradox)], ["Pronto soccorso", "Vita", "Guarire", "WOD5E_MAGE.Poteri.Tipo.attivo", 2, null, true, true]);
+assert.equal(cartaPotere(conoscoRiga, { usi: usiDelPotere(conoscoRiga, dopo), localize: (key) => key }).usi.label, "WOD5E_MAGE.Poteri.Usi.sessione");
+assert.equal(POTERI_USI_FLAG, "poteriUsi");
+const spheresPage = readFileSync(new URL("../templates/actor/parts/spheres.hbs", import.meta.url), "utf8");
+assert.match(spheresPage, /data-action="potereUsa" data-row="\{\{p\.id\}\}"/);
+assert.match(readFileSync(new URL("../templates/chat/potere.hbs", import.meta.url), "utf8"), /carta\.blocchi/);
+const salute = readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8");
+assert.match(salute, /riarmaUsi\(actor\.getFlag\(MODULE_ID, POTERI_USI_FLAG\) \?\? \{\}, "scena"\)/);
+assert.match(salute, /riarmaUsi\(actor\.getFlag\(MODULE_ID, POTERI_USI_FLAG\) \?\? \{\}, "sessione"\)/);
+console.log("poteri, tasto Usa: ok");
