@@ -16,6 +16,8 @@ import {
 import { FOCUS_FORMS } from "./focus.js";
 import { addParadoxToBalance, getMagickBalance, paradoxGainForMagickType } from "./magick-balance.js";
 import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
+import { FORMULE_M6 } from "./data/formule.js";
+import { scopesInParole } from "./ongoing-magick.js";
 import { findMageRollTrait, selectorsForMageRollTrait, skillRollCard } from "./mage-roll-selection.js";
 import {
   attivaEffetti,
@@ -409,7 +411,8 @@ export function preparePoteriRows(actor, tiro, localize = (key) => key) {
 export function prepareIncantesimiRows(actor, tiro, localize = (key) => key) {
   return prepareIncantesimi(actor, localize).map((row) => {
     const top = [...row.spheres].sort((a, b) => b.level - a.level)[0];
-    const spheresText = row.spheres.map((sphere) => `${sphere.label} ${sphere.level}`).join(", ");
+    // Le Sfere senza numero (25/9 sera: niente livelli).
+    const spheresText = row.spheres.map((sphere) => sphere.label).join(", ");
     const scopesText = row.scopes.map((scope) => `${scope.label} ${scope.level}`).join(", ");
     return {
       id: row.id,
@@ -736,15 +739,31 @@ export async function launchTiro(actor, tiro) {
     scopes: scopeLevels.map((entry) => ({ id: entry.id, label: `WOD5E_MAGE.Scopes.${entry.id}`, level: entry.level }))
   }, localize);
   const symbols = rollSymbols({ spheres: sphereEntries, scopes: scopeLevels, prize: conto.prize });
+  // La riga fra le Magick in atto (25/9 sera): chi lancia, com'è composta (le Sfere, la matrice,
+  // il potere), gli Ambiti della soglia in parole con la lettura scelta, i bonus e i malus.
+  const modiAmbiti = actor.getFlag(MODULE_ID, SCOPE_MODES_FLAG) ?? {};
+  const tavolaAmbiti = scopeModes(localize, { arete: arete.value });
+  const letture = Object.fromEntries(scopeLevels.map((entry) => [entry.id, scopeModeOf(tavolaAmbiti, entry.id, modiAmbiti[entry.id])?.readings?.[entry.level] ?? ""]).filter(([, reading]) => reading));
+  const composizione = [
+    sphereEntries.map((entry) => localize(`WOD5E_MAGE.Spheres.${entry.id}`)).join(" + "),
+    spell?.formula ? `${localize("WOD5E_MAGE.Incantesimi.Formula")}: ${FORMULE_M6.find((formula) => formula.id === spell.formula)?.name ?? spell.formula}` : "",
+    power ? `${localize("WOD5E_MAGE.Poteri.Uno")}: ${potereLabel(power, localize)}${conto.powerActive ? ` (${localize("WOD5E_MAGE.Poteri.Tipo.attivo")})` : ""}` : ""
+  ].filter(Boolean).join(" · ");
   const effect = {
     vulgar: options.vulgar || options.witnesses,
     duration: count(tiro.scopes?.duration),
     threshold: conto.difficulty,
     goal: String(spell?.goal ?? ""),
-    fallbackName: spellName || sphereEntries.map((entry) => localize(`WOD5E_MAGE.Spheres.${entry.id}`)).join(", ") || rollLabel
+    fallbackName: spellName || sphereEntries.map((entry) => localize(`WOD5E_MAGE.Spheres.${entry.id}`)).join(", ") || rollLabel,
+    caster: String(actor.name ?? ""),
+    spheres: sphereEntries.map((entry) => entry.id),
+    scopes: Object.fromEntries(scopeLevels.map((entry) => [entry.id, entry.level])),
+    composition: composizione,
+    scopesText: scopesInParole(Object.fromEntries(scopeLevels.map((entry) => [entry.id, entry.level])), localize, letture),
+    modifiers: [...bonusParts, ...notes].join(" · ")
   };
   const sphereMax = Math.max(0, ...sphereEntries.map((entry) => entry.level));
-  if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: conto.difficulty, [`flags.${MODULE_ID}.lastSphereMax`]: sphereMax });
+  if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: conto.difficulty });
 
   // La Ruota paga subito: la Quintessenza spesa (in dadi, e il costo del
   // potere attivo) scende, il Volgare sale verso il Paradosso.

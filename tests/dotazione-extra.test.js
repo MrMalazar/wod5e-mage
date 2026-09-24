@@ -203,10 +203,11 @@ const summary = prepareCreationSummary(summaryActor);
 const byId = Object.fromEntries(summary.counts.map((count) => [count.id, count.value]));
 // melee è un'abilità assorbita: i suoi pallini non contano. I Vantaggi contano Background e Pregi insieme (7/9).
 assert.deepEqual(byId, { attributes: 5, skills: 5, backgrounds: 3, merits: 6, flaws: 1, domini: 2, poteri: 1 });
-// I traguardi del Neofita: 22, 19 (V6 più uno, tetto 3), 7, 2; i Domini senza traguardo (25/9) e i poteri
+// I traguardi del Neofita: 22, 19 (V6 più uno, tetto 3), 7, 2; tre Domini (25/9 sera) e i poteri
 // uno per Dominio aperto; rosso sotto, giallo sopra, verde pari (7/9, 11/9).
 const byTarget = Object.fromEntries(summary.counts.map((count) => [count.id, [count.target, count.state]]));
-assert.deepEqual(byTarget, { attributes: [22, "under"], skills: [19, "under"], backgrounds: [null, ""], merits: [7, "under"], flaws: [2, "under"], domini: [null, ""], poteri: [2, "under"] });
+// I Domini: tre alla creazione (25/9 sera), due aperti qui.
+assert.deepEqual(byTarget, { attributes: [22, "under"], skills: [19, "under"], backgrounds: [null, ""], merits: [7, "under"], flaws: [2, "under"], domini: [3, "under"], poteri: [2, "under"] });
 assert.deepEqual(summary.grades.map((g) => g.id), ["neofita", "risvegliato", "discepolo", "anziano", "maestro"]);
 assert.equal(summary.grades[0].selected, true);
 assert.equal(summary.profiles, undefined);

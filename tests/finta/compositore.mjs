@@ -160,7 +160,7 @@ assert.ok(infos.some((m) => m.startsWith("WARN")));
 flags["wod5e-mage"].grimorio = { s1: { name: "Lama di fuoco", goal: "Una lama", prize: false, magickType: "vulgar", spheres: { forces: 3, prime: 1 }, scopes: { potency: 3 }, traits: [{ field: "attributeTrait", key: "attribute:wits", label: "Prontezza" }, { field: "primaryTrait", key: "skill:athletics", label: "Atletica" }], sort: 0 } };
 const spellRows = S.prepareIncantesimiRows(actor, T.emptyTiro(), (k) => strings[k] ?? k);
 assert.equal(spellRows.length, 1);
-assert.deepEqual([spellRows[0].name, spellRows[0].coda, spellRows[0].chosen], ["Lama di fuoco", "Forze 3, WOD5E_MAGE.Spheres.prime 1", false]);
+assert.deepEqual([spellRows[0].name, spellRows[0].coda, spellRows[0].chosen], ["Lama di fuoco", "Forze, WOD5E_MAGE.Spheres.prime", false]);
 const sheetFinta = { actor, _tiro: T.emptyTiro(), render: async () => {} };
 await S.onTiroIncantesimo.call(sheetFinta, { preventDefault() {} }, { dataset: { row: "s1" } });
 const caricato = sheetFinta._tiro;

@@ -10209,35 +10209,49 @@
   white-space: nowrap;
 }
 
-/* La riga della Sfera nella lista (Blue, 25/9 sera: niente livelli): il segno
-   dell'accesso apre o chiude il Dominio, poi il sigillo, il conto dei poteri
-   conosciuti, il nome, la casetta. */
+/* La riga della Sfera nella lista (Blue, 25/9 sera: niente livelli): il
+   sigillo è il tasto che apre o chiude il Dominio (acceso in oro con l'anello,
+   spento grigio), poi il conto dei poteri conosciuti, il nome, la casetta. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso {
   align-items: center;
   background: transparent;
-  border: 0;
+  border: 1px solid transparent;
   border-radius: 50%;
-  color: var(--mage-tenue);
   cursor: pointer;
   display: inline-flex;
-  flex: 0 0 20px;
-  font-size: 1rem;
-  height: 20px;
+  flex: 0 0 26px;
+  height: 26px;
   justify-content: center;
   line-height: 1;
   min-height: 0;
   padding: 0;
-  width: 20px;
+  width: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso > .wod5e-mage-sfera-sigillo {
+  filter: grayscale(1) brightness(0.7);
+  opacity: 0.6;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso.acceso {
-  color: #7fd18a;
+  border-color: var(--mage-oro);
+  box-shadow: 0 0 0 1px rgb(217 168 39 / 35%);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso.acceso > .wod5e-mage-sfera-sigillo {
+  filter: none;
+  opacity: 1;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso:hover,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso:focus {
-  box-shadow: 0 0 0 1px var(--mage-oro);
+  border-color: var(--mage-oro);
   outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso:hover > .wod5e-mage-sfera-sigillo {
+  filter: none;
+  opacity: 1;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina.spenta {
@@ -10338,6 +10352,117 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-riga:not(.accesa) .wod5e-mage-atto-nome {
   opacity: 0.6;
+}
+
+/* La carta della Magick in atto (25/9 sera): le pastiglie in testa, i campi a coppie sotto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-testa > .wod5e-mage-ongoing-marks {
+  align-items: center;
+  display: inline-flex;
+  gap: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-pastiglia {
+  align-items: center;
+  background: var(--mage-cassetto-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 8px;
+  color: var(--mage-tenue);
+  display: inline-flex;
+  font-size: 0.68rem;
+  gap: 4px;
+  height: 20px;
+  line-height: 1;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-pastiglia.volgare {
+  border-color: var(--mage-rosso);
+  color: var(--mage-rosso-chiaro, #e2a79e);
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content button.wod5e-mage-atto-lucchetto {
+  cursor: pointer;
+  font-family: inherit;
+  min-height: 0;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content button.wod5e-mage-atto-lucchetto.on {
+  background: var(--mage-rosso);
+  border-color: var(--mage-rosso);
+  color: #fff;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-campi {
+  display: grid;
+  gap: 2px 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 2px 0 2px 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-campo {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-campo.largo {
+  grid-column: 1 / -1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-campo > span {
+  color: var(--mage-oro);
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-atto-campo > input[type="text"],
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-atto-campo > input[type="number"] {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--mage-oro-tenue);
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--mage-testo);
+  flex: 1 1 0;
+  font-size: 0.8rem;
+  height: 20px;
+  min-width: 0;
+  padding: 0 2px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-atto-campo > input.wod5e-mage-atto-numero {
+  flex: 0 0 44px;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-atto-campo > input:focus {
+  border-bottom-color: var(--mage-oro);
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-sigilli {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-sigilli > img {
+  border: 0;
+  height: 18px;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-riga:not(.accesa) .wod5e-mage-atto-campi {
+  opacity: 0.7;
 }
 
 /* I poteri conosciuti: una sezione per Sfera. */
@@ -12674,6 +12799,19 @@
   border-color: #e2655a;
 }
 
+/* Le Sfere fuori dalla creazione (né Famiglia, né via, né Credo): spente. */
+.wod5e-mage-guidata-dominio.fuori {
+  opacity: 0.45;
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-accesso.scelta:not(.acceso) {
+  color: var(--mage-oro);
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-accesso:disabled {
+  cursor: default;
+}
+
 .wod5e-mage-guidata-dominio-testa {
   align-items: center;
   display: flex;
@@ -13793,9 +13931,39 @@
   color: var(--mage-rosso-chiaro, #e2a79e);
 }
 
-.wod5e-mage-catalogo-serve.ok > b,
-.wod5e-mage-catalogo-serve.ok > span > i {
+.wod5e-mage-catalogo-serve.ok > b {
   color: #7fd18a;
+}
+
+/* Le condizioni, una per riga (25/9 sera): la spunta verde, il lucchetto rosso, il punto del tavolo in oro. */
+.wod5e-mage-catalogo-condizioni {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+}
+
+.wod5e-mage-catalogo-condizioni > li {
+  align-items: baseline;
+  display: flex;
+  gap: 6px;
+  padding: 1px 0;
+}
+
+.wod5e-mage-catalogo-condizioni > li > i {
+  flex: 0 0 14px;
+  text-align: center;
+}
+
+.wod5e-mage-catalogo-condizioni > li.ok > i {
+  color: #7fd18a;
+}
+
+.wod5e-mage-catalogo-condizioni > li.manca > i {
+  color: var(--mage-rosso-chiaro, #e2a79e);
+}
+
+.wod5e-mage-catalogo-condizioni > li.tavolo > i {
+  color: var(--mage-oro, #d9a827);
 }
 
 /* Il grado col prezzo, e i prerequisiti, scritti per esteso nella testa della riga (25/9 sera). */

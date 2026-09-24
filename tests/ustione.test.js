@@ -12,12 +12,13 @@ import { getSalute, locksAfterScene, normalizeParadoxLocks, paintParadoxLocks, b
 // L'Ustione a scelta (Blue, 11/9): i due tasti finché il giocatore non sceglie, poi la riga.
 assert.deepEqual(USTIONE_CHOICES, ["brucia", "narratore"]);
 // I danni sono la soglia; i punti al Narratore la Sfera usata (Blue, 11/9 sera); senza Sfera, la soglia.
-assert.deepEqual(ustioneState({ threshold: 5, sphere: 3, choice: "" }), { show: true, chosen: "", threshold: 5, points: 3 });
+assert.deepEqual(ustioneState({ threshold: 5, sphere: 3, choice: "" }), { show: true, chosen: "", threshold: 5, points: 5 });
 assert.deepEqual(ustioneState({ threshold: 3, choice: "brucia" }), { show: false, chosen: "brucia", threshold: 3, points: 3 });
 assert.deepEqual(ustioneState({ threshold: 0 }), { show: false, chosen: "", threshold: 0, points: 0 });
 assert.deepEqual(ustioneState(undefined), { show: false, chosen: "", threshold: 0, points: 0 });
 assert.deepEqual(ustioneState({ threshold: 2, choice: "boh" }), { show: true, chosen: "", threshold: 2, points: 2 });
-assert.equal(givenPoints({ threshold: 6, sphere: 3 }), 3);
+// I punti al Narratore sono la soglia del lancio (Blue, 25/9 sera): il livello della Sfera non conta più.
+assert.equal(givenPoints({ threshold: 6, sphere: 3 }), 6);
 assert.equal(givenPoints({ threshold: 6 }), 6);
 
 const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8"));
@@ -27,7 +28,7 @@ const buttons = renderUstioneButtons({ show: true, threshold: 6, points: 3 }, lo
 assert.match(buttons, /data-ustione="brucia"[^>]*>Brucia <b>6<\/b><\/button>/);
 assert.match(buttons, /data-ustione="narratore"[^>]*>Dai al Narratore <b>3<\/b><\/button>/);
 assert.doesNotMatch(buttons, /Cedi|gettone|token/i);
-assert.match(renderUstioneDone({ choice: "narratore", threshold: 6, sphere: 3, given: 3, discharged: 2 }, format, localize), /3 punti Paradosso al Narratore \(pari alla Sfera usata\)\. La Ruota scarica 2\./);
+assert.match(renderUstioneDone({ choice: "narratore", threshold: 6, sphere: 3, given: 3, discharged: 2 }, format, localize), /3 punti Paradosso al Narratore \(pari alla soglia del lancio\)\. La Ruota scarica 2\./);
 assert.match(renderUstioneDone({ choice: "brucia", threshold: 3 }, format, localize), /3 danni segnati sulla Salute\./);
 assert.match(renderUstioneDone({ choice: "brucia", threshold: 3, applied: { applied: 3, pa: 1, ps: 2, ma: 0, ms: 0, discharged: 3 } }, format, localize), /Ustione 3 segnata sulla Salute: 3 fisici \(1 aggravato\)\. La Ruota scarica 3\./);
 assert.equal(renderUstioneDone({ choice: "" }, format, localize), "");

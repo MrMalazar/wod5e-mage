@@ -27,8 +27,8 @@ const symbols = rollSymbols({
 });
 assert.deepEqual(symbols.map((symbol) => [symbol.kind, symbol.id, symbol.value]), [
   ["arete", "arete", "−3"],
-  ["sphere", "forces", "3"],
-  ["sphere", "life", "2"],
+  ["sphere", "forces", ""],
+  ["sphere", "life", ""],
   ["scope", "potency", "2"],
   ["scope", "precision", "1"]
 ]);
@@ -37,10 +37,10 @@ assert.equal(symbols[3].faIcon, SCOPE_ICONS.potency);
 assert.deepEqual(rollSymbols({}), []);
 assert.equal(renderRollSymbols([]), "");
 
-// La fila dei simboli (per i messaggi di prima della 0.86.0): nome e livello nel titolo.
+// La fila dei simboli (per i messaggi di prima della 0.86.0): nome e livello nel titolo; le Sfere senza numero (25/9 sera).
 const symbolsHtml = renderRollSymbols(symbols, localize);
 assert.match(symbolsHtml, /^<div class="wod5e-mage-roll-symbols">/);
-assert.match(symbolsHtml, /wod5e-mage-roll-symbol-sphere" title="Forze 3"><img src="[^"]*forces\.png" alt="Forze"><b>3<\/b>/);
+assert.match(symbolsHtml, /wod5e-mage-roll-symbol-sphere" title="Forze"><img src="[^"]*forces\.png" alt="Forze"><\/span>/);
 assert.match(symbolsHtml, /wod5e-mage-roll-symbol-scope" title="Potenza 2"><i class="fa-solid fa-burst" aria-hidden="true"><\/i><b>2<\/b>/);
 assert.match(symbolsHtml, /wod5e-mage-roll-symbol-arete"[^>]*><img [^>]*arete\.svg[^>]*><b>−3<\/b>/);
 
@@ -76,7 +76,7 @@ assert.equal(
   card,
   '<details class="wod5e-mage-roll-card-details"><summary>Dettagli</summary><div class="wod5e-mage-roll-card">'
   + row("goal", "Obiettivo", "Ferire con un'onda &lt;d'urto&gt;")
-  + row("spheres", "Sfere", '<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-sphere" title="Forze 3"><img src="modules/wod5e-mage/assets/icons/sheet/forces.png" alt="Forze"><b>3</b></span>')
+  + row("spheres", "Sfere", '<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-sphere" title="Forze"><img src="modules/wod5e-mage/assets/icons/sheet/forces.png" alt="Forze"></span>')
   + row("scopes", "Ambiti", '<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-scope" title="Potenza 2"><i class="fa-solid fa-burst" aria-hidden="true"></i><b>2</b></span>')
   + row("threshold", "Soglia", "4")
   + row("prize", "Premio dell'Areté", "−3")

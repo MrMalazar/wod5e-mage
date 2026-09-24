@@ -4,7 +4,7 @@
     <summary class="wod5e-mage-incantesimo-head">
         <i class="fa-solid fa-chevron-down wod5e-mage-incantesimo-chevron" aria-hidden="true"></i>
         <span class="wod5e-mage-incantesimo-spheres">
-            {{#each spell.spheres as |s|}}<span class="wod5e-mage-incantesimo-sphere" title="{{s.label}} {{s.level}}"><img src="{{s.icon}}" alt="">{{s.level}}</span>{{/each}}
+            {{#each spell.spheres as |s|}}<span class="wod5e-mage-incantesimo-sphere" title="{{s.label}}"><img src="{{s.icon}}" alt=""></span>{{/each}}
         </span>
         <strong class="wod5e-mage-incantesimo-name">{{spell.name}}</strong>
         <span class="wod5e-mage-incantesimo-type {{spell.magickTypeId}}">{{spell.magickType}}</span>
@@ -25,7 +25,7 @@
         {{#if spell.practiceForm}}<span><b>{{localize "WOD5E_MAGE.Focus.Type"}}</b> {{spell.practiceForm}}</span>{{/if}}
         {{#if spell.instruments}}<span><b>{{localize "WOD5E_MAGE.Incantesimi.Instrument"}}</b> {{spell.instruments}}</span>{{/if}}
         {{#if spell.traits}}<span><b>{{localize "WOD5E_MAGE.Arete.Pool"}}</b> {{spell.traits}}{{#if spell.prize}} + {{localize "WOD5E_MAGE.Arete.Prize"}}{{/if}}</span>{{/if}}
-        {{#if spell.spheres.length}}<span><b>{{localize "WOD5E_MAGE.Arete.Spheres"}}</b> {{#each spell.spheres as |s|}}{{s.label}} {{s.level}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
+        {{#if spell.spheres.length}}<span><b>{{localize "WOD5E_MAGE.Arete.Spheres"}}</b> {{#each spell.spheres as |s|}}{{s.label}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
         {{#if spell.scopes.length}}<span><b>{{localize "WOD5E_MAGE.Scopes.Label"}}</b> {{#each spell.scopes as |s|}}<i class="{{s.faIcon}}" aria-hidden="true"></i> {{s.label}} {{s.level}}{{#unless @last}}, {{/unless}}{{/each}}</span>{{/if}}
         {{#if spell.effectKind}}<span><b>{{localize "WOD5E_MAGE.Arete.EffectKind"}}</b> {{spell.effectKind}}</span>{{/if}}
         {{#if spell.maintained}}<span><b>{{localize "WOD5E_MAGE.Arete.Maintained"}}</b></span>{{/if}}

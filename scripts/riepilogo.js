@@ -4,6 +4,8 @@ import { ATTRIBUTE_KEYS } from "./tratti-icone.js";
 import { PERSONAGGIO_TABLES } from "./personaggio-extra.js";
 import { getSphereSelection, SPHERES } from "./spheres.js";
 import { poteriDelPersonaggio } from "./poteri.js";
+import { credoFamilySphere, credoSpheresFor, findFamiglia, findSottofamiglia } from "./famiglie.js";
+import { getLineage } from "./lineage.js";
 import { FOCUS_TOOL_IDS } from "./focus.js";
 import { CONCEPT_CHALLENGE_GROUPS } from "./concept-challenge.js";
 
@@ -26,9 +28,10 @@ export const GRADI = Object.freeze([
  * (V6: 18 su tredici voci; qui una voce in più vale un pallino in più, verdetto
  * di Blue dell'11/9; le tre ripartizioni del 18/8 non esistono più), 7 fra Background
  * e Pregi, 2 Difetti. Niente pallini di Sfera (Blue, 25/9): si ha accesso a
- * dei Domini (le Sfere conosciute) e in ciascuno si prende un potere; quanti
- * Domini si aprano alla creazione non è ancora scritto, il conto è libero.
- * Sopra la base i premi della Sfida (PREMI_SFIDA) e i poteri in più del grado.
+ * tre Domini (25/9 sera: quello della Famiglia, quello della via e uno a
+ * scelta fra i due del Credo; una Craft senza vie ne ha due) e in ciascuno
+ * si prende un potere. Sopra la base il potere della Sfida completa
+ * (PREMI_SFIDA) e i poteri in più del grado.
  */
 export const BASE_CREAZIONE = Object.freeze({ attributes: 22, skills: 19, skillCap: TETTO_CREAZIONE, merits: 7, flaws: 2 });
 
@@ -134,11 +137,36 @@ function everySphereHasInstrument(actor) {
   return unlocked.every((id) => FOCUS_TOOL_IDS.includes(rows[id]?.tool));
 }
 
+/**
+ * I Domini della creazione (Blue, 25/9 sera): la Sfera della Famiglia, quella
+ * della via e una a scelta fra le due del Credo. Torna le tre caselle (vuote
+ * finché l'appartenenza non c'è), la scelta del Credo e il traguardo: tre, o
+ * due per una Famiglia senza vie (le Craft).
+ */
+export function dominiDellaCreazione(actor) {
+  const lineage = getLineage(actor);
+  const focus = actor?.getFlag?.(MODULE_ID, "focus") ?? {};
+  const family = findFamiglia(lineage.famiglia);
+  const sub = findSottofamiglia(lineage.famiglia, lineage.sottofamiglia);
+  const credo = String(focus.credo ?? "");
+  const candidate = credoSpheresFor(credo, focus.credoSpheres);
+  const scelta = credoFamilySphere(credo, focus.credoSpheres, focus.credoFamily);
+  const conVia = !family || family.sottofamiglie.length > 0;
+  return {
+    famiglia: family?.sphere ?? "",
+    via: sub?.sphere ?? "",
+    credo: candidate,
+    scelta,
+    target: conVia ? 3 : 2
+  };
+}
+
 export function prepareCreationSummary(actor, areteValue = null) {
   const system = actor.system ?? {};
   const items = actor.items ? Array.from(actor.items) : [];
   const selection = getSphereSelection(actor);
   const domini = SPHERES.filter((id) => selection[id]).length;
+  const dominiCreazione = dominiDellaCreazione(actor);
   const poteriConosciuti = poteriDelPersonaggio(actor).length;
   const creazione = actor.getFlag(MODULE_ID, "creazione") ?? {};
   const groupsDone = conceptGroupsDone(actor);
@@ -153,9 +181,9 @@ export function prepareCreationSummary(actor, areteValue = null) {
     // Background e Pregi si contano insieme: sette punti (LIBRO, «I Vantaggi»).
     { id: "merits", label: "WOD5E_MAGE.Riepilogo.Merits", hint: "WOD5E_MAGE.Riepilogo.MeritsHint", value: backgrounds + merits, target: targets.merits },
     { id: "flaws", label: "WOD5E_MAGE.Riepilogo.Flaws", value: featureDots(items, "flaw"), target: targets.flaws },
-    // I Domini a cui si ha accesso (le Sfere conosciute; il numero è libero) e i
+    // I Domini a cui si ha accesso (le Sfere conosciute): tre alla creazione (25/9 sera), e i
     // poteri: uno per Dominio, più quelli del grado e della Sfida (25/9).
-    { id: "domini", label: "WOD5E_MAGE.Riepilogo.Domini", value: domini, target: null },
+    { id: "domini", label: "WOD5E_MAGE.Riepilogo.Domini", hint: "WOD5E_MAGE.Riepilogo.DominiHint", value: domini, target: dominiCreazione.target },
     { id: "poteri", label: "WOD5E_MAGE.Riepilogo.Poteri", hint: "WOD5E_MAGE.Riepilogo.PoteriHint", value: poteriConosciuti, target: domini + targets.poteri }
   ];
   const sfidaBonus = sfidaBonuses(groupsDone);

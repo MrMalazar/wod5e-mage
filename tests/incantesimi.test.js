@@ -25,7 +25,8 @@ const result = {
 };
 const spell = spellFromResult(actor, result, { traits, rollSpheres, localize: (key) => key.split(".").pop() });
 assert.equal(spell.name, "Riavvolgere Scena");
-assert.deepEqual(spell.spheres, { time: 3 });
+// Le Sfere senza livelli (25/9 sera): la Sfera scelta vale 1, il numero dice solo che c'è.
+assert.deepEqual(spell.spheres, { time: 1 });
 assert.deepEqual(spell.scopes, { duration: 2, targets: 3 });
 assert.equal(spell.magickType, "witnesses");
 assert.equal(spell.credo, "dati");
@@ -36,17 +37,18 @@ assert.equal(spell.effectKind, "variable");
 assert.equal(spell.prize, true);
 // Senza nome, il nome è l'Obiettivo.
 assert.equal(spellFromResult(actor, { ...result, spellName: "" }, { traits, rollSpheres }).name, "Riavvolgere il tempo nell'area");
-// Un effetto percettivo (tutte le Sfere al primo pallino) usa lo Strumento di Percepire (9/9), se c'è.
+// Un effetto percettivo (dalla matrice Percepire; 25/9 sera: senza livelli di Sfera) usa lo Strumento di Percepire (9/9), se c'è.
 {
   const perceiver = {
     getFlag: (_m, key) => key === "focus"
       ? { credo: "dati", practiceForm: "", sphereInstruments: { time: { tool: "gestures", name: "Codici" }, percepire: { tool: "weapons", name: "Lente" } } }
       : undefined
   };
-  const perceptive = spellFromResult(perceiver, { ...result, "sphere-time": "1" }, { traits, rollSpheres, localize: (key) => key.split(".").pop() });
-  assert.deepEqual(perceptive.instruments, ["weapons (Lente)"]);
+  const perceptive = spellFromResult(perceiver, { ...result, formula: "percepire" }, { traits, rollSpheres, localize: (key) => key.split(".").pop() });
+  assert.deepEqual([perceptive.instruments, perceptive.formula], [["weapons (Lente)"], "percepire"]);
   assert.deepEqual(spellFromResult(perceiver, result, { traits, rollSpheres, localize: (key) => key.split(".").pop() }).instruments, ["gestures (Codici)"]);
-  assert.deepEqual(spellFromResult(actor, { ...result, "sphere-time": "1" }, { traits, rollSpheres, localize: (key) => key.split(".").pop() }).instruments, ["gestures (Codici)"], "senza lo Strumento di Percepire restano quelli delle Sfere");
+  assert.deepEqual(spellFromResult(actor, { ...result, formula: "percepire" }, { traits, rollSpheres, localize: (key) => key.split(".").pop() }).instruments, ["gestures (Codici)"], "senza lo Strumento di Percepire restano quelli delle Sfere");
+  assert.equal("formula" in spellFromResult(actor, result, { traits, rollSpheres }), false, "senza matrice niente campo");
 }
 
 // La pagina: etichette pronte, ordine per sort e nome.
@@ -55,7 +57,7 @@ assert.equal(row.credo, "dati");
 assert.equal(row.practiceForm, "ibrida");
 assert.equal(row.magickType, "VulgarWithWitnesses");
 assert.equal(row.magickTypeId, "witnesses");
-assert.deepEqual(row.spheres.map((s) => [s.id, s.level]), [["time", 3]]);
+assert.deepEqual(row.spheres.map((s) => [s.id, s.level]), [["time", 1]]);
 assert.deepEqual(row.scopes.map((s) => [s.id, s.level]), [["targets", 3], ["duration", 2]]);
 // Un incantesimo di ieri con l'Area si legge nei Bersagli (23/9).
 assert.deepEqual(prepareIncantesimo("v", { name: "Vecchio", scopes: { area: 4, range: 2 } }, (key) => key.split(".").pop()).scopes.map((s) => [s.id, s.level]), [["targets", 4], ["range", 2]]);
@@ -171,7 +173,7 @@ assert.equal(shared.name, "Riavvolgere Scena");
 assert.match(shared.img, /time\.png$/);
 assert.match(shared.system.description, /Author:<\/strong> Claudio[\s\S]*Credo:<\/strong> dati[\s\S]*Narrative:<\/strong> Su, su/);
 assert.equal(shared.flags["wod5e-mage"].incantesimo.author, "Claudio");
-assert.deepEqual(shared.flags["wod5e-mage"].incantesimo.spheres, { time: 3 });
+assert.deepEqual(shared.flags["wod5e-mage"].incantesimo.spheres, { time: 1 });
 const groups = groupSharedSpells([{ credo: "Tutto è Dati", name: "A" }, { credo: "", name: "B" }, { credo: "Tutto è Dati", name: "C" }], (k) => "Senza");
 assert.deepEqual(groups.map((g) => [g.credo, g.spells.length]), [["Tutto è Dati", 2], ["Senza", 1]]);
 assert.equal(SHARED_PACK_NAME, "grimorio-comune");

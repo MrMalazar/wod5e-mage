@@ -23,13 +23,13 @@
                 </header>
                 <div class="wod5e-mage-riq-body">
                     {{!-- Le Sfere come nella prima pagina (Blue, 25/9 sera): niente livelli da 1 a 5,
-                         «creano solo confusione». Il segno dell'accesso apre e chiude il Dominio, poi il
-                         sigillo, il conto dei poteri conosciuti, il nome, la casetta (di famiglia o esterna). --}}
+                         «creano solo confusione». Il sigillo è il tasto che apre e chiude il Dominio (Blue:
+                         «bastasse sul simbolo sfera»), poi il conto dei poteri conosciuti, il nome, la casetta
+                         (di famiglia o esterna). --}}
                     <div class="wod5e-mage-sfere-lista">
                         {{#each sfereConosciute as |sphere|}}
                             <div class="wod5e-mage-riga wod5e-mage-riga-sfera-pagina{{#if sphere.family}} family{{/if}}">
-                                <button type="button" class="wod5e-mage-sfera-accesso acceso" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="true" title="{{localize 'WOD5E_MAGE.Poteri.DominioChiudi'}}" aria-pressed="true" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-circle-check" aria-hidden="true"></i></button>
-                                <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt="">
+                                <button type="button" class="wod5e-mage-sfera-accesso acceso" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="true" title="{{localize 'WOD5E_MAGE.Poteri.DominioChiudi'}}" aria-pressed="true" {{#if ../locked}}disabled{{/if}}><img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt=""></button>
                                 <b class="wod5e-mage-sfera-conto{{#unless sphere.conto}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Stat.PoteriConosciuti'}}">{{sphere.conto}}</b>
                                 <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize sphere.label}}</span></span>
                                 <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-sfera-casa{{#if sphere.family}} on{{/if}}" data-action="familySphereToggle" data-sphere="{{sphere.id}}" title="{{#if sphere.family}}{{localize 'WOD5E_MAGE.Poteri.Casa'}}{{else}}{{localize 'WOD5E_MAGE.Poteri.CasaOff'}}{{/if}}" aria-pressed="{{sphere.family}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-house" aria-hidden="true"></i></button>
@@ -41,8 +41,7 @@
                         <div class="wod5e-mage-sfere-lista">
                             {{#each sfereAltre as |sphere|}}
                                 <div class="wod5e-mage-riga wod5e-mage-riga-sfera-pagina spenta">
-                                    <button type="button" class="wod5e-mage-sfera-accesso" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="false" title="{{localize 'WOD5E_MAGE.Poteri.DominioApri'}}" aria-pressed="false" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-circle" aria-hidden="true"></i></button>
-                                    <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt="">
+                                    <button type="button" class="wod5e-mage-sfera-accesso" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="false" title="{{localize 'WOD5E_MAGE.Poteri.DominioApri'}}" aria-pressed="false" {{#if ../locked}}disabled{{/if}}><img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt=""></button>
                                     <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize sphere.label}}</span></span>
                                 </div>
                             {{/each}}
@@ -51,7 +50,12 @@
                 </div>
             </section>
 
-            {{!-- Le Magick in atto (6/9): On/Off, il nome, i segni, il cestino; l'effetto sulla seconda linea. --}}
+            {{!-- Le Magick in atto (6/9; rifatte il 25/9 sera, Blue: «deve segnare diversi elementi»):
+                 ogni riga è una carta. In testa On/Off, il nome, le pastiglie (Volgare, il lucchetto del
+                 Paradosso permanente che si accende e spegne, «dal tiro», la Durata), il cestino; poi chi
+                 l'ha lanciata e chi la mantiene; com'è composta (i sigilli delle Sfere e il testo); la
+                 soglia con gli Ambiti in parole; i bonus e i malus; l'effetto su più righe. Il lancio con
+                 una Durata scrive tutto da sé; a mano si compila quel che serve. --}}
             <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-ongoing-magick">
                 <header class="wod5e-mage-riq-title">
                     <span>{{localize "WOD5E_MAGE.OngoingMagick.Label"}}</span>
@@ -65,13 +69,20 @@
                                     {{#if row.active}}{{localize "WOD5E_MAGE.OngoingMagick.On"}}{{else}}{{localize "WOD5E_MAGE.OngoingMagick.Off"}}{{/if}}
                                 </button>
                                 <input type="text" class="wod5e-mage-atto-nome" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.nameSpheres" value="{{row.nameSpheres}}" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.Name'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Name'}}" {{#if ../locked}}disabled{{/if}}>
-                                {{!-- I segni: il lucchetto rosso del Paradosso bloccato (Volgare acceso), la clessidra con la Durata, la soglia. --}}
                                 <span class="wod5e-mage-ongoing-marks">
-                                    {{#if row.lock}}{{#if row.active}}<i class="fa-solid fa-lock wod5e-mage-ongoing-lock" title="{{localize 'WOD5E_MAGE.OngoingMagick.LockHint'}}" aria-hidden="true"></i>{{/if}}{{/if}}
-                                    {{#if row.duration}}<small title="{{localize 'WOD5E_MAGE.Scopes.duration'}}"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>{{row.duration}}</small>{{/if}}
-                                    {{#if row.threshold}}<small title="{{localize 'WOD5E_MAGE.Arete.Threshold'}}"><i class="fa-solid fa-bullseye" aria-hidden="true"></i>{{row.threshold}}</small>{{/if}}
+                                    {{#if row.vulgar}}<small class="wod5e-mage-atto-pastiglia volgare" title="{{localize 'WOD5E_MAGE.OngoingMagick.VolgareHint'}}">{{localize "WOD5E_MAGE.OngoingMagick.Volgare"}}</small>{{/if}}
+                                    <button type="button" class="wod5e-mage-atto-pastiglia wod5e-mage-atto-lucchetto{{#if row.lock}} on{{/if}}" data-action="ongoingMagickLock" data-row="{{row.id}}" title="{{#if row.lock}}{{localize 'WOD5E_MAGE.OngoingMagick.LockHint'}}{{else}}{{localize 'WOD5E_MAGE.OngoingMagick.LockOffHint'}}{{/if}}" aria-pressed="{{#if row.lock}}true{{else}}false{{/if}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid {{#if row.lock}}fa-lock{{else}}fa-lock-open{{/if}}" aria-hidden="true"></i> {{localize "WOD5E_MAGE.OngoingMagick.Permanente"}}</button>
+                                    {{#if row.fromRoll}}<small class="wod5e-mage-atto-pastiglia" title="{{localize 'WOD5E_MAGE.OngoingMagick.DalTiroHint'}}"><i class="fa-solid fa-dice" aria-hidden="true"></i> {{localize "WOD5E_MAGE.OngoingMagick.DalTiro"}}</small>{{/if}}
+                                    {{#if row.duration}}<small class="wod5e-mage-atto-pastiglia" title="{{localize 'WOD5E_MAGE.Scopes.duration'}}"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i> {{row.duration}}</small>{{/if}}
                                 </span>
                                 <button type="button" class="wod5e-mage-riq-tasto-piccolo wod5e-mage-atto-cestino" data-action="ongoingMagickDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                            </div>
+                            <div class="wod5e-mage-atto-campi">
+                                <label class="wod5e-mage-atto-campo"><span>{{localize "WOD5E_MAGE.OngoingMagick.Lanciata"}}</span><input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.caster" value="{{row.caster}}" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.Chi'}}" {{#if ../locked}}disabled{{/if}}></label>
+                                <label class="wod5e-mage-atto-campo"><span>{{localize "WOD5E_MAGE.OngoingMagick.Mantenuta"}}</span><input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.maintainer" value="{{row.maintainer}}" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.Nessuno'}}" {{#if ../locked}}disabled{{/if}}></label>
+                                <label class="wod5e-mage-atto-campo largo"><span>{{localize "WOD5E_MAGE.OngoingMagick.Composizione"}}</span>{{#if row.spheres.length}}<span class="wod5e-mage-atto-sigilli">{{#each row.spheres as |s|}}<img src="{{s.icon}}" alt="{{s.label}}" title="{{s.label}}">{{/each}}</span>{{/if}}<input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.composition" value="{{row.composition}}" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.ComposizioneHint'}}" {{#if ../locked}}disabled{{/if}}></label>
+                                <label class="wod5e-mage-atto-campo largo"><span>{{localize "WOD5E_MAGE.OngoingMagick.Soglia"}}</span><input type="number" class="wod5e-mage-atto-numero" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.threshold" value="{{row.threshold}}" min="0" step="1" data-dtype="Number" {{#if ../locked}}disabled{{/if}}><input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.scopesText" value="{{row.scopesText}}" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.AmbitiHint'}}" {{#if ../locked}}disabled{{/if}}></label>
+                                <label class="wod5e-mage-atto-campo largo"><span>{{localize "WOD5E_MAGE.OngoingMagick.BonusMalus"}}</span><input type="text" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.modifiers" value="{{row.modifiers}}" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.BonusMalusHint'}}" {{#if ../locked}}disabled{{/if}}></label>
                             </div>
                             {{!-- L'effetto su più righe (Blue, 25/9: il riquadro era troppo piccolo). --}}
                             <textarea class="wod5e-mage-atto-effetto" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.triggerEffect" rows="2" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" {{#if ../locked}}disabled{{/if}}>{{row.triggerEffect}}</textarea>

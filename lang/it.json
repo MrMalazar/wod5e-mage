@@ -49,9 +49,9 @@
         "tradizioni": "Le nove Tradizioni",
         "disparati": "Le dieci Craft dei Disparati"
       },
-      "CredoFamilyOn": "Sfera di famiglia",
-      "CredoFamilyPick": "clicca per farla di famiglia",
-      "CredoSphere": "Sfera di famiglia del Credo",
+      "CredoFamilyOn": "Dominio del Credo: aperto e di famiglia",
+      "CredoFamilyPick": "clicca per aprire questo Dominio del Credo (uno dei due)",
+      "CredoSphere": "Il Dominio del Credo: una delle sue due Sfere, a scelta",
       "CredoSphereNone": "Sfera…"
     },
     "Experience": {
@@ -762,12 +762,28 @@
       "MaintainedStatus": "Mantenuto",
       "RunningStatus": "In corso",
       "MaintainedLocked": "«{name}» è fra le Magick in atto: blocca 1 Paradosso permanente finché resta in piedi.",
-      "LockHint": "Volgare in piedi: 1 Paradosso permanente bloccato finché resta acceso",
+      "LockHint": "Blocca 1 Paradosso permanente finché resta accesa: un clic lo sblocca",
       "MaintainedAdded": "«{name}» è ora fra le Magick in Atto.",
       "Name": "Nome",
       "Effect": "Effetto",
       "On": "On",
-      "Off": "Off"
+      "Off": "Off",
+      "Volgare": "Volgare",
+      "VolgareHint": "Lancio Volgare: la realtà lo ha visto",
+      "Permanente": "Paradosso permanente",
+      "LockOffHint": "Non blocca Paradosso: un clic blocca 1 Paradosso permanente",
+      "DalTiro": "dal tiro",
+      "DalTiroHint": "Scritta dal modulo a lancio fatto",
+      "Lanciata": "Lanciata da",
+      "Mantenuta": "Mantenuta da",
+      "Chi": "chi l'ha lanciata",
+      "Nessuno": "nessuno",
+      "Composizione": "Composizione",
+      "ComposizioneHint": "le Sfere, la matrice, il potere",
+      "Soglia": "Soglia",
+      "AmbitiHint": "gli Ambiti e i loro livelli",
+      "BonusMalus": "Bonus e malus",
+      "BonusMalusHint": "dadi in più o in meno, Quintessenza spesa, Armonia"
     },
     "Poteri": {
       "SfereConosciute": "{count} conosciute",
@@ -861,7 +877,10 @@
         "numero": "{n} poteri di {sphere}",
         "poteri": "richiede {names}"
       },
-      "PrerequisitiMancano": "Mancano i prerequisiti di questo potere: guarda la riga nella finestra Aggiungi."
+      "PrerequisitiMancano": "Mancano i prerequisiti di questo potere: guarda la riga nella finestra Aggiungi.",
+      "CreazioneRegola": "Alla creazione: un potere di base (grado 1) della Sfera, oppure uno di qualsiasi Sfera; niente prerequisiti.",
+      "CreazioneGrado": "Alla creazione si prende un potere di base (grado 1) della Sfera, o uno di qualsiasi Sfera.",
+      "CreazionePrerequisiti": "Alla creazione i poteri con prerequisiti non si prendono."
     },
     "Tratti": {
       "Vantaggi": "Vantaggi",
@@ -1125,7 +1144,8 @@
         "poteri": "potere"
       },
       "ConceptBreve": "Concetto",
-      "SkillCapBreve": "oltre il tetto"
+      "SkillCapBreve": "oltre il tetto",
+      "DominiHint": "Tre alla creazione: la Sfera della Famiglia, quella della via, una a scelta fra le due del Credo."
     },
     "Salute": {
       "Label": "Salute",
@@ -1313,7 +1333,9 @@
       "Show": "Mostra i tasti di reset",
       "ShowHint": "Modalità creazione: i tasti di reset compaiono nelle loro sezioni e la X azzera un tratto solo.",
       "Confirm": "{label}: azzera questa parte della scheda. Vuoi procedere?",
-      "All": "Reset scheda"
+      "All": "Reset scheda",
+      "ConfermaNome": "{label}: azzera tutta la scheda, Attributi, Abilità, Vantaggi, Sfere, Credo, Appartenenza e Bussola. Per procedere scrivi il nome del personaggio ({name}).",
+      "ConfermaNomeCampo": "Il nome del personaggio"
     },
     "Note": {
       "Add": "Aggiungi un riquadro",
@@ -1405,8 +1427,7 @@
       "Mental": "{n} mentali",
       "MentalOne": "1 mentale",
       "Aggravated": "{n} aggravati",
-      "AggravatedOne": "1 aggravato",
-      "Sphere": "Sfera più alta usata (i punti al Narratore)"
+      "AggravatedOne": "1 aggravato"
     },
     "Volonta": {
       "Label": "Volontà",
@@ -1525,9 +1546,9 @@
       "Burn": "Brucia",
       "Give": "Dai al Narratore",
       "BurnHint": "Brucia: {burn} danni su di te, segnati sulla Salute e bloccati per la scena. La Ruota si scarica di {burn}.",
-      "GiveHint": "Dai al Narratore: {points} punti Paradosso (pari alla Sfera usata) alla riserva del Narratore, e la realtà colpirà dove vuole lei. La Ruota si scarica di {points}.",
+      "GiveHint": "Dai al Narratore: {points} punti Paradosso (pari alla soglia del lancio) alla riserva del Narratore, e la realtà colpirà dove vuole lei. La Ruota si scarica di {points}.",
       "BurnedShort": "{burn} danni segnati sulla Salute.",
-      "Given": "{points} punti Paradosso al Narratore (pari alla Sfera usata). La Ruota scarica {discharged}.",
+      "Given": "{points} punti Paradosso al Narratore (pari alla soglia del lancio). La Ruota scarica {discharged}.",
       "BurnDone": "Brucia: Ustione {burn} segnata sulla Salute, bloccata per la scena.",
       "GiveDone": "Dai al Narratore: {points} punti Paradosso consegnati."
     },
@@ -1815,10 +1836,10 @@
         },
         "sfere": {
           "Label": "Domini",
-          "Domanda": "A quali Domini hai accesso, e quale potere prendi in ciascuno?",
-          "Sotto": "un potere per Dominio",
+          "Domanda": "Quale Sfera del Credo apri, e quale potere prendi in ogni Dominio?",
+          "Sotto": "tre Domini · un potere per Dominio",
           "Perche": "Le nove Sfere sono i Domini della Magick. Avere accesso a un Dominio vuol dire poter fare Magick su quello: non ci sono livelli di Sfera, conta quali Domini hai e quali poteri conosci.",
-          "PercheDue": "Alla creazione si apre l'accesso ai Domini del personaggio (la Sfera di famiglia e quella della via sono già aperte) e in ciascuno si prende un potere. I poteri si comprano seguendo la gerarchia: ogni potere ha un grado, che dice quanto pesa, ma quello che lo apre sono i prerequisiti, tanti poteri conosciuti o poteri precisi. Il grado del personaggio e la Sfida danno poteri in più."
+          "PercheDue": "Alla creazione i Domini sono tre: quello della Famiglia, quello della via e uno a scelta fra i due del Credo. In ogni Dominio prendi un potere di base, o uno di qualsiasi Sfera se quelli di base non ti piacciono. Se hai completato tutta la Sfida del Concetto prendi un potere in più, senza prerequisiti. Il resto si compra con l'Esperienza, seguendo la gerarchia dei prerequisiti."
         },
         "strumenti": {
           "Label": "Strumenti",
@@ -1947,7 +1968,17 @@
         "Scegli": "Scegli il potere",
         "Famiglia": "Sfera di famiglia",
         "FamigliaHint": "Le Sfere di famiglia (Famiglia, via, Credo) costano meno con l'Esperienza.",
-        "Sfida": "dalla Sfida"
+        "Sfida": "dalla Sfida",
+        "Ruoli": {
+          "famiglia": "Famiglia",
+          "via": "Via",
+          "credo": "Credo"
+        },
+        "Fissa": "Il Dominio dell'appartenenza è fisso: viene dalla Famiglia o dalla via.",
+        "FuoriCreazione": "Alla creazione i Domini sono tre: quello della Famiglia, quello della via e uno a scelta fra i due del Credo.",
+        "CredoScegli": "Scegli questa fra le due Sfere del Credo",
+        "CredoTogli": "Togli la scelta: la Sfera del Credo torna fuori",
+        "SenzaAppartenenza": "Scegli prima il Credo e la Famiglia: i Domini vengono da lì."
       },
       "Strumenti": {
         "Scelti": "Strumenti scelti",

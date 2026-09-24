@@ -18,6 +18,7 @@ import {
   POTERE_EFFECTS,
   POTERE_TIPI,
   potereLabel,
+  condizioniDelPotere,
   prerequisitiMancanti,
   POTERI,
   POTERI_FLAG,
@@ -105,19 +106,23 @@ const tendina = catalogoDellaSfera("matter", { catalog, owned });
 assert.deepEqual(tendina.map((entry) => [entry.id, entry.known, entry.locked]), [["M1", true, false], ["M3", false, false], ["M5", false, false]]);
 assert.deepEqual(catalogoDellaSfera("matter", { catalog: [] }), []);
 assert.deepEqual(catalogoDellaSfera("spirit", { catalog }), []);
-// I prerequisiti (25/9): tanti poteri della Sfera, o poteri specifici; mancano finché non ci sono.
+// I prerequisiti (25/9; 25/9 sera: una condizione per riga): tanti poteri della Sfera, poteri precisi, o una
+// condizione che giudica il tavolo; ogni riga ha il suo stato, e il potere è chiuso se una riga manca.
 const conPrerequisiti = [
   ...catalog,
-  { id: "M2", sphere: "matter", name: "Fusione", dot: 2, prerequisiti: { numero: 2 } },
-  { id: "M4", sphere: "matter", name: "Trasmutare", dot: 4, prerequisiti: { poteri: ["M3", "F1"] } }
+  { id: "M2", sphere: "matter", name: "Fusione", dot: 2, prerequisiti: [{ numero: 2 }] },
+  { id: "M4", sphere: "matter", name: "Trasmutare", dot: 4, prerequisiti: [{ potere: "M3" }, { potere: "F1" }, { testo: "Aver toccato l'oro" }] }
 ];
-assert.deepEqual(prerequisitiMancanti(conPrerequisiti[4], { owned }), { numero: 2 }, "un potere conosciuto, ne servono due");
+assert.deepEqual(condizioniDelPotere(conPrerequisiti[4], { owned }), [{ kind: "numero", n: 2, id: "", testo: "", ok: false }], "un potere conosciuto, ne servono due");
+assert.deepEqual(prerequisitiMancanti(conPrerequisiti[4], { owned }), [{ kind: "numero", n: 2, id: "", testo: "", ok: false }]);
 assert.equal(prerequisitiMancanti(conPrerequisiti[4], { owned: [...owned, normalizzaPotere("k2", { sphere: "matter", name: "Artigiano", source: "catalogo", catalogId: "M3" })] }), null, "con due poteri si prende");
-assert.deepEqual(prerequisitiMancanti(conPrerequisiti[5], { owned, tutti: owned }), { poteri: ["M3", "F1"] }, "mancano tutti e due i poteri richiesti");
-assert.deepEqual(prerequisitiMancanti(conPrerequisiti[5], { owned, tutti: [...owned, normalizzaPotere("f", { sphere: "forces", name: "Conduttore", source: "catalogo", catalogId: "F1" })] }), { poteri: ["M3"] }, "Conduttore sta su Forze e conta lo stesso");
+assert.deepEqual(condizioniDelPotere(conPrerequisiti[5], { owned, tutti: owned }).map((riga) => [riga.kind, riga.id || riga.testo, riga.ok]), [["potere", "M3", false], ["potere", "F1", false], ["testo", "Aver toccato l'oro", null]], "una riga per condizione; quella del tavolo non si giudica");
+assert.deepEqual(prerequisitiMancanti(conPrerequisiti[5], { owned, tutti: [...owned, normalizzaPotere("f", { sphere: "forces", name: "Conduttore", source: "catalogo", catalogId: "F1" })] }).map((riga) => riga.id), ["M3"], "Conduttore sta su Forze e conta lo stesso");
 assert.equal(prerequisitiMancanti(conPrerequisiti[0], { owned }), null, "senza prerequisiti si prende");
+// Il formato vecchio { numero, poteri } si legge ancora.
+assert.deepEqual(condizioniDelPotere({ id: "X", prerequisiti: { numero: 1, poteri: ["M1"] } }, { owned }).map((riga) => [riga.kind, riga.ok]), [["numero", true], ["potere", true]]);
 const conChiusi = catalogoDellaSfera("matter", { catalog: conPrerequisiti, owned, tutti: owned });
-assert.deepEqual(conChiusi.map((entry) => [entry.id, entry.locked, entry.chiuso]), [["M1", false, null], ["M2", true, { numero: 2 }], ["M3", false, null], ["M4", true, { poteri: ["M3", "F1"] }], ["M5", false, null]]);
+assert.deepEqual(conChiusi.map((entry) => [entry.id, entry.locked, entry.condizioni.length, entry.chiuso?.length ?? null]), [["M1", false, 0, null], ["M2", true, 1, 1], ["M3", false, 0, null], ["M4", true, 3, 2], ["M5", false, 0, null]]);
 // Il catalogo vero: un potere con più Sfere d'Accesso sta in ogni tendina, «Qualsiasi» in tutte; la Sfera scelta è quella della tendina.
 assert.ok(catalogoDellaSfera("forces", { catalog: POTERI }).some((entry) => entry.id === "velocista"));
 assert.ok(catalogoDellaSfera("time", { catalog: POTERI }).some((entry) => entry.id === "velocista"));

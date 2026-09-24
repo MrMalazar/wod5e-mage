@@ -74,18 +74,25 @@ assert.deepEqual(
   lineageSphereChanges({ ...empty, lineage: { famiglia: "hermes", sottofamiglia: "verdicta" }, spheres: { forces: 1, mind: 1 } }, { flags: { "wod5e-mage": { lineage: { famiglia: "hermes", sottofamiglia: "quaesitor" } } } }),
   { selectedSpheres: { mind: false, correspondence: true }, familySpheres: { mind: false, correspondence: true }, spheres: { mind: 0, correspondence: 1 } }
 );
-// Cambia il Credo: le due Sfere del vecchio Credo tornano bloccate se erano di sola presenza;
-// le due nuove si sbloccano, e di famiglia è solo quella scelta (11/9: nessuna, finché non si clicca).
+// Cambia il Credo: le Sfere del vecchio Credo tornano bloccate se avevano al più il segno;
+// del nuovo Credo entra fra i Domini solo la Sfera scelta (25/9 sera: nessuna, finché non si clicca).
 {
   const cambio = lineageSphereChanges({ ...empty, credo: "arte", spheres: {} }, { flags: { "wod5e-mage": { focus: { credo: "dati" } } } });
   assert.deepEqual(cambio.familySpheres, { matter: false, mind: false, correspondence: false, prime: false });
-  assert.deepEqual(cambio.selectedSpheres, { matter: false, mind: false, correspondence: true, prime: true });
-  // Il clic sul simbolo: Corrispondenza di famiglia, Primordio no; un altro clic la spegne.
+  assert.deepEqual(cambio.selectedSpheres, { matter: false, mind: false, correspondence: false, prime: false });
+  // Il clic sul simbolo: Corrispondenza entra fra i Domini, di famiglia e col segno; Primordio resta fuori.
   const pick = lineageSphereChanges({ ...empty, credo: "dati" }, { flags: { "wod5e-mage": { focus: { credoFamily: "correspondence" } } } });
   assert.deepEqual(pick.familySpheres, { correspondence: true, prime: false });
-  assert.deepEqual(pick.selectedSpheres, { correspondence: true, prime: true });
-  const swap = lineageSphereChanges({ ...empty, credo: "dati", credoFamily: "correspondence" }, { flags: { "wod5e-mage": { focus: { credoFamily: "prime" } } } });
+  assert.deepEqual(pick.selectedSpheres, { correspondence: true, prime: false });
+  assert.deepEqual(pick.spheres, { correspondence: 1 });
+  // Cambiare scelta: la vecchia esce (aveva solo il segno), la nuova entra.
+  const swap = lineageSphereChanges({ ...empty, credo: "dati", credoFamily: "correspondence", spheres: { correspondence: 1 } }, { flags: { "wod5e-mage": { focus: { credoFamily: "prime" } } } });
   assert.deepEqual(swap.familySpheres, { correspondence: false, prime: true });
+  assert.deepEqual(swap.selectedSpheres, { correspondence: false, prime: true });
+  assert.deepEqual(swap.spheres, { correspondence: 0, prime: 1 });
+  // I pallini comprati sull'altra Sfera del Credo restano.
+  const comprata = lineageSphereChanges({ ...empty, credo: "dati", spheres: { prime: 3 } }, { flags: { "wod5e-mage": { focus: { credoFamily: "correspondence" } } } });
+  assert.deepEqual(comprata.selectedSpheres, { correspondence: true });
   // Una Sfera che non è del Credo non vale come scelta.
   assert.equal(credoFamilySphere("dati", null, "forces"), "");
   assert.equal(credoFamilySphere("dati", null, "prime"), "prime");
@@ -104,10 +111,10 @@ assert.deepEqual(
   lineageSphereChanges({ ...empty, lineage: { famiglia: "hermes" } }, { flags: { "wod5e-mage": { lineage: { famiglia: "hermes", sottofamiglia: "quaesitor" } } } }),
   { selectedSpheres: { correspondence: true }, familySpheres: { correspondence: true }, spheres: { correspondence: 1 } }
 );
-// Il Credo sblocca le sue due Sfere senza il pallino, e scrive cos'è ogni
+// Il Credo da solo non apre Domini (25/9 sera: serve la scelta), e scrive cos'è ogni
 // Sfera nella sua ottica nelle caselle vuote (le parole del giocatore restano).
 const arte = lineageSphereChanges({ ...empty, sphereNotes: { forces: "<p>la mia</p>", mind: "<p></p>" } }, { flags: { "wod5e-mage": { focus: { credo: "arte", sphereNotes: { time: "scritta ora" } } } } });
-assert.deepEqual(arte.selectedSpheres, { matter: true, mind: true });
+assert.deepEqual(arte.selectedSpheres, { matter: false, mind: false });
 assert.deepEqual(arte.familySpheres, { matter: false, mind: false }, "di famiglia solo la scelta (11/9)");
 assert.deepEqual(Object.keys(arte.focus.sphereNotes).sort(), ["correspondence", "entropy", "life", "matter", "mind", "prime", "spirit"]);
 assert.match(arte.focus.sphereNotes.correspondence, /^<p>Corrispondenza è la Tela\./);
@@ -115,14 +122,14 @@ assert.match(arte.focus.sphereNotes.correspondence, /^<p>Corrispondenza è la Te
 const potere = lineageSphereChanges(empty, { flags: { "wod5e-mage": { focus: { credo: "potere" } } } });
 assert.equal(potere.selectedSpheres, undefined);
 assert.equal(Object.keys(potere.focus.sphereNotes).length, 9);
-// Potere e Scienza: le due Sfere le sceglie il giocatore (6/9); scelte, si sbloccano di sola presenza.
+// Potere e Scienza: le due Sfere le sceglie il giocatore (6/9); scelte, sono le candidate, e fra i Domini entra quella scelta.
 assert.equal(isFreeCredo("potere"), true);
 assert.equal(isFreeCredo("arte"), false);
 assert.deepEqual(chosenCredoSpheres({ first: "forces", second: "forces" }), ["forces"]);
 assert.deepEqual(credoSpheresFor("scienza", { first: "matter", second: "life" }), ["matter", "life"]);
 assert.deepEqual(credoSpheresFor("arte", { first: "matter" }), ["matter", "mind"]);
 const scelta = lineageSphereChanges({ ...empty, credo: "potere" }, { flags: { "wod5e-mage": { focus: { credoSpheres: { first: "forces", second: "time" } } } } });
-assert.deepEqual(scelta.selectedSpheres, { forces: true, time: true });
+assert.deepEqual(scelta.selectedSpheres, { forces: false, time: false });
 assert.deepEqual(scelta.familySpheres, { forces: false, time: false });
 assert.equal(scelta.spheres, undefined);
 assert.equal(lineageSphereChanges({ ...empty, credo: "arte" }, { flags: { "wod5e-mage": { focus: { credoSpheres: { first: "forces" } } } } }), null);

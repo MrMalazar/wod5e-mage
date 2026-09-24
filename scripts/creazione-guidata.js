@@ -32,7 +32,7 @@ import { getMagickBalance, MAGICK_TRACK_MAX } from "./magick-balance.js";
 import { prepareMemo } from "./memo.js";
 import { PERSONAGGIO_TABLES, prepareAnchors, prepareConvictions } from "./personaggio-extra.js";
 import { potereLabel, poteriDelPersonaggio, poteriOfSphere } from "./poteri.js";
-import { GRADI, prepareCreationSummary } from "./riepilogo.js";
+import { dominiDellaCreazione, GRADI, prepareCreationSummary } from "./riepilogo.js";
 import { prepareSpheres, SPHERES } from "./spheres.js";
 import { ATTRIBUTE_KEYS, traitIcon } from "./tratti-icone.js";
 
@@ -195,8 +195,8 @@ export function passiFatti(actor, summary) {
     bussola: hasText(headers.ambition) && hasText(headers.desire) && convinzioni,
     tipo: FOCUS_FORMS.includes(focus.practiceForm),
     concetto: Boolean(checks.concept?.ok),
-    // I Domini (25/9): almeno un Dominio aperto, e un potere per ciascuno (più quelli del grado e della Sfida).
-    sfere: (counts.domini?.value ?? 0) >= 1 && counts.poteri?.state === "exact",
+    // I Domini (25/9 sera): i tre della creazione aperti, e un potere per ciascuno (più quello della Sfida).
+    sfere: counts.domini?.state === "exact" && counts.poteri?.state === "exact",
     strumenti: Boolean(checks.instruments?.ok),
     arete: Boolean(checks.arete?.ok),
     attributi: counts.attributes?.state === "exact",
@@ -383,23 +383,35 @@ export function passoConcetto(actor, summary, { localize = (key) => key, catalog
 /**
  * Passo 6, i Domini (Blue, 25/9: «in creazione un personaggio non ha più
  * pallini sfere, ha pallini poteri. In creazione prende 1 potere per ogni
- * dominio al quale ha accesso»): le nove Sfere come Domini a cui si ha o
- * non si ha accesso, e sotto ogni Dominio aperto i poteri presi lì. Niente
- * livelli (25/9 sera: «creano solo confusione»).
+ * dominio al quale ha accesso»; 25/9 sera: «ha accesso a 3 domini: quello
+ * della famiglia, sottofamiglia e uno a scelta del credo»): le nove Sfere,
+ * con la parte che hanno nella creazione (Famiglia, via, Credo), l'accesso
+ * che ne segue, e sotto ogni Dominio aperto i poteri presi lì. Le Sfere di
+ * Famiglia e via sono fisse, fra le due del Credo se ne sceglie una, le altre
+ * restano chiuse. Niente livelli.
  */
 export function passoSfere(actor, summary, { localize = (key) => key, locale = "it" } = {}) {
   const counts = Object.fromEntries((summary?.counts ?? []).map((entry) => [entry.id, entry]));
-  const domini = counts.domini ?? { value: 0, target: null, state: "" };
+  const domini = counts.domini ?? { value: 0, target: 3, state: "under" };
   const poteri = counts.poteri ?? { value: 0, target: 0, state: "under" };
   const rows = poteriDelPersonaggio(actor);
+  const creazione = dominiDellaCreazione(actor);
   const spheres = prepareSpheres(actor, { localize, locale }).all.map((sphere) => {
     const presi = poteriOfSphere(rows, sphere.id).map((power) => ({ id: power.id, label: potereLabel(power, localize), dot: power.dot }));
+    // La parte nella creazione: Famiglia e via fisse, il Credo a scelta fra due.
+    const ruolo = sphere.id === creazione.famiglia ? "famiglia" : sphere.id === creazione.via ? "via" : creazione.credo.includes(sphere.id) ? "credo" : "";
     return {
       id: sphere.id,
       label: localize(sphere.label),
       icon: sphere.icon,
       family: Boolean(sphere.family),
       selected: Boolean(sphere.selected),
+      ruolo,
+      ruoloLabel: ruolo ? localize(`WOD5E_MAGE.Guidata.Sfere.Ruoli.${ruolo}`) : "",
+      fissa: ruolo === "famiglia" || ruolo === "via",
+      // Fra le due del Credo il tasto sceglie; le altre Sfere alla creazione non si aprono.
+      scelta: ruolo === "credo",
+      sceltaFatta: ruolo === "credo" && creazione.scelta === sphere.id,
       poteri: presi,
       // Un Dominio aperto senza il suo potere: manca la scelta.
       vuoto: Boolean(sphere.selected) && presi.length === 0
@@ -408,6 +420,8 @@ export function passoSfere(actor, summary, { localize = (key) => key, locale = "
   const testo = (conto) => (conto.target === null || conto.target === undefined ? String(conto.value) : `${conto.value}/${conto.target}`);
   return {
     spheres,
+    // Senza Credo o Famiglia scelti i Domini non ci sono ancora: il passo lo dice.
+    senzaAppartenenza: !creazione.famiglia && !creazione.credo.length,
     conto: { domini: { ...domini, text: testo(domini) }, poteri: { ...poteri, text: testo(poteri) } },
     // I poteri oltre l'uno per Dominio: dal grado e dalla Sfida.
     extra: Math.max(poteri.target - domini.value, 0),

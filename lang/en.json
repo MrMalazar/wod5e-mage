@@ -49,9 +49,9 @@
         "tradizioni": "The nine Traditions",
         "disparati": "The ten Crafts of the Disparate"
       },
-      "CredoFamilyOn": "Family Sphere",
-      "CredoFamilyPick": "click to make it the family one",
-      "CredoSphere": "Family Sphere of the Creed",
+      "CredoFamilyOn": "Creed Domain: open and family",
+      "CredoFamilyPick": "click to open this Creed Domain (one of the two)",
+      "CredoSphere": "The Creed's Domain: one of its two Spheres, by choice",
       "CredoSphereNone": "Sphere…"
     },
     "Experience": {
@@ -762,12 +762,28 @@
       "MaintainedStatus": "Maintained",
       "RunningStatus": "Running",
       "MaintainedLocked": "“{name}” is among the ongoing Magick: it locks 1 permanent Paradox while it stands.",
-      "LockHint": "Standing Vulgar: 1 permanent Paradox locked while it stays on",
+      "LockHint": "Locks 1 permanent Paradox while it stays on: a click unlocks it",
       "MaintainedAdded": "“{name}” is now among the Ongoing Magicks.",
       "Name": "Name",
       "Effect": "Effect",
       "On": "On",
-      "Off": "Off"
+      "Off": "Off",
+      "Volgare": "Vulgar",
+      "VolgareHint": "Vulgar cast: reality saw it",
+      "Permanente": "Permanent Paradox",
+      "LockOffHint": "Locks no Paradox: a click locks 1 permanent Paradox",
+      "DalTiro": "from the roll",
+      "DalTiroHint": "Written by the module when the cast was rolled",
+      "Lanciata": "Cast by",
+      "Mantenuta": "Maintained by",
+      "Chi": "who cast it",
+      "Nessuno": "nobody",
+      "Composizione": "Composition",
+      "ComposizioneHint": "the Spheres, the matrix, the power",
+      "Soglia": "Threshold",
+      "AmbitiHint": "the Scopes and their levels",
+      "BonusMalus": "Bonuses and penalties",
+      "BonusMalusHint": "extra or fewer dice, Quintessence spent, Harmony"
     },
     "Poteri": {
       "SfereConosciute": "{count} known",
@@ -861,7 +877,10 @@
         "numero": "{n} {sphere} powers",
         "poteri": "requires {names}"
       },
-      "PrerequisitiMancano": "This power's prerequisites are missing: see its row in the Add window."
+      "PrerequisitiMancano": "This power's prerequisites are missing: see its row in the Add window.",
+      "CreazioneRegola": "At creation: one base power (grade 1) of the Sphere, or one of any Sphere; no prerequisites.",
+      "CreazioneGrado": "At creation you take a base power (grade 1) of the Sphere, or one of any Sphere.",
+      "CreazionePrerequisiti": "At creation powers with prerequisites cannot be taken."
     },
     "Tratti": {
       "Vantaggi": "Advantages",
@@ -1125,7 +1144,8 @@
         "poteri": "power"
       },
       "ConceptBreve": "Concept",
-      "SkillCapBreve": "over the cap"
+      "SkillCapBreve": "over the cap",
+      "DominiHint": "Three at creation: the Family's Sphere, the path's, one chosen between the Creed's two."
     },
     "Salute": {
       "Label": "Health",
@@ -1313,7 +1333,9 @@
       "Show": "Show the reset buttons",
       "ShowHint": "Creation mode: the reset buttons appear in their sections and the X clears a single trait.",
       "Confirm": "{label}: this clears that part of the sheet. Proceed?",
-      "All": "Reset sheet"
+      "All": "Reset sheet",
+      "ConfermaNome": "{label}: clears the whole sheet, Attributes, Skills, Advantages, Spheres, Creed, Lineage and Compass. To proceed, type the character's name ({name}).",
+      "ConfermaNomeCampo": "The character's name"
     },
     "Note": {
       "Add": "Add a box",
@@ -1405,8 +1427,7 @@
       "Mental": "{n} mental",
       "MentalOne": "1 mental",
       "Aggravated": "{n} aggravated",
-      "AggravatedOne": "1 aggravated",
-      "Sphere": "Highest Sphere used (points to the Storyteller)"
+      "AggravatedOne": "1 aggravated"
     },
     "Volonta": {
       "Label": "Willpower",
@@ -1525,9 +1546,9 @@
       "Burn": "Burn",
       "Give": "Give to the Storyteller",
       "BurnHint": "Burn: {burn} damage on you, marked on Health and locked for the scene. The Wheel discharges {burn}.",
-      "GiveHint": "Give to the Storyteller: {points} Paradox points (equal to the Sphere used) into the Storyteller's pool, and reality strikes where it wants. The Wheel discharges {points}.",
+      "GiveHint": "Give to the Storyteller: {points} Paradox points (equal to the cast's threshold) into the Storyteller's pool, and reality strikes where it wants. The Wheel discharges {points}.",
       "BurnedShort": "{burn} damage marked on Health.",
-      "Given": "{points} Paradox points to the Storyteller (equal to the Sphere used). The Wheel discharges {discharged}.",
+      "Given": "{points} Paradox points to the Storyteller (equal to the cast's threshold). The Wheel discharges {discharged}.",
       "BurnDone": "Burn: {burn} marked on Health, locked for the scene.",
       "GiveDone": "Give to the Storyteller: {points} Paradox points handed over."
     },
@@ -1815,10 +1836,10 @@
         },
         "sfere": {
           "Label": "Domains",
-          "Domanda": "Which Domains do you have access to, and which power do you take in each?",
-          "Sotto": "one power per Domain",
+          "Domanda": "Which Creed Sphere do you open, and which power do you take in each Domain?",
+          "Sotto": "three Domains · one power per Domain",
           "Perche": "The nine Spheres are the Domains of Magick. Having access to a Domain means being able to do Magick on it: there are no Sphere levels, what counts is which Domains you have and which powers you know.",
-          "PercheDue": "At creation you open access to the character's Domains (the family Sphere and the path Sphere are already open) and take one power in each. Powers are bought along the hierarchy: each power has a grade, which says how much it weighs, but what opens it are the prerequisites, so many known powers or specific powers. The character's grade and the Challenge give extra powers."
+          "PercheDue": "At creation the Domains are three: the Family's, the path's and one chosen between the Creed's two. In each Domain you take a base power, or one of any Sphere if the base ones do not suit you. If you completed the whole Concept Challenge you take one more power, without prerequisites. The rest is bought with Experience, following the hierarchy of prerequisites."
         },
         "strumenti": {
           "Label": "Instruments",
@@ -1947,7 +1968,17 @@
         "Scegli": "Choose the power",
         "Famiglia": "Family Sphere",
         "FamigliaHint": "Family Spheres (Family, path, Creed) cost less with Experience.",
-        "Sfida": "from the Challenge"
+        "Sfida": "from the Challenge",
+        "Ruoli": {
+          "famiglia": "Family",
+          "via": "Path",
+          "credo": "Creed"
+        },
+        "Fissa": "The lineage Domain is fixed: it comes from the Family or the path.",
+        "FuoriCreazione": "At creation the Domains are three: the Family's, the path's and one chosen between the Creed's two.",
+        "CredoScegli": "Choose this one between the Creed's two Spheres",
+        "CredoTogli": "Remove the choice: the Creed's Sphere goes back out",
+        "SenzaAppartenenza": "Choose the Creed and the Family first: the Domains come from there."
       },
       "Strumenti": {
         "Scelti": "Instruments chosen",

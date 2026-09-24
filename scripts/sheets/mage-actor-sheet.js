@@ -13,7 +13,6 @@ import { onResetSection, prepareResetsById } from "../reset.js";
 import { onCredoFamilyPick } from "../famiglie.js";
 import { onStrumentiSuggest } from "../strumenti.js";
 import { getArete, onAreteChange, onAreteRoll, onAreteSimple } from "../arete.js";
-import { onBonusAdd, onBonusDelete, prepareBonuses } from "../bonuses.js";
 import { prepareConceptChallenge } from "../concept-challenge.js";
 import {
   BELONGING_TABLES,
@@ -53,7 +52,7 @@ import {
   onMagickBalanceChange,
   prepareMagickTrack
 } from "../magick-balance.js";
-import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
+import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickLock, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
 import { onPotereApri, onPotereCatalogo, onPotereCatalogoCompleto, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriFiltri, preparePoteriPagina, riapriPoteri } from "../poteri-scheda.js";
 import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
@@ -451,8 +450,6 @@ export class MageActorSheet extends MortalActorSheet {
       credoModifica: onCredoModifica,
       belongingArchivio: onBelongingArchivio,
       belongingDelete: onBelongingDelete,
-      bonusAdd: onBonusAdd,
-      bonusDelete: onBonusDelete,
       contraccolpoNega: onContraccolpoNega,
       paradoxBurst: onParadoxBurst,
       customSkillAdd: onCustomSkillAdd,
@@ -477,6 +474,7 @@ export class MageActorSheet extends MortalActorSheet {
       ongoingMagickAdd: onOngoingMagickAdd,
       ongoingMagickDelete: onOngoingMagickDelete,
       ongoingMagickToggle: onOngoingMagickToggle,
+      ongoingMagickLock: onOngoingMagickLock,
       // I poteri inseriti dal giocatore (21/9): la pagina Magick.
       potereNuovo: onPotereNuovo,
       potereDaCatalogo: onPotereDaCatalogo,
@@ -577,8 +575,7 @@ export class MageActorSheet extends MortalActorSheet {
         `${MODULE}/parts/stat-attributi.hbs`,
         `${MODULE}/parts/stat-tratti.hbs`,
         `${MODULE}/parts/stat-abilita.hbs`,
-        `${MODULE}/parts/stat-tiro.hbs`,
-        `${MODULE}/parts/bonuses.hbs`
+        `${MODULE}/parts/stat-tiro.hbs`
       ],
       scrollable: [".wod5e-mage-riq-scroll", ".wod5e-mage-riq-body"]
     },
@@ -816,7 +813,7 @@ export class MageActorSheet extends MortalActorSheet {
     // Condizioni, Dettagli della Ruota, il memo di creazione.
     this._drawersOpen ??= {};
     // Anche la tavola degli Ambiti della pagina Magick (Blue, 25/9: si chiudeva da sola coi pallini).
-    for (const [key, selector] of [["condizioni", ".wod5e-mage-condizioni-drawer"], ["ruota", ".wod5e-mage-ruota-dettagli"], ["saggezza", ".wod5e-mage-saggezza-tendina"], ["bonus", ".wod5e-mage-stat-bonus"], ["ambitiTavola", ".wod5e-mage-riq-ambiti-tavola"]]) {
+    for (const [key, selector] of [["condizioni", ".wod5e-mage-condizioni-drawer"], ["ruota", ".wod5e-mage-ruota-dettagli"], ["saggezza", ".wod5e-mage-saggezza-tendina"], ["ambitiTavola", ".wod5e-mage-riq-ambiti-tavola"]]) {
       const drawer = this.element?.querySelector(selector);
       if (!drawer) continue;
       drawer.open = Boolean(this._drawersOpen[key]);
@@ -1041,7 +1038,6 @@ export class MageActorSheet extends MortalActorSheet {
     context.tiro = prepareTiroContext(actor, tiro);
 
     // I Bonus scritti, sotto i riquadri (il memo sta nel contesto di base).
-    context.bonuses = prepareBonuses(actor);
     return context;
   }
 
@@ -1066,7 +1062,7 @@ export class MageActorSheet extends MortalActorSheet {
       context.scopeTable = prepareScopeTable(game.i18n.localize.bind(game.i18n));
       context.magickTrack = prepareMagickTrack(actor);
       context.persistentMagickResources = getPersistentMagickResources(actor);
-      context.ongoingMagick = prepareOngoingMagick(actor);
+      context.ongoingMagick = prepareOngoingMagick(actor, game.i18n.localize.bind(game.i18n));
       // La pagina rifatta (21/9): le nove Sfere in lista, i poteri inseriti Sfera per Sfera.
       Object.assign(context, preparePoteriPagina(actor, this, {
         localize: game.i18n.localize.bind(game.i18n),

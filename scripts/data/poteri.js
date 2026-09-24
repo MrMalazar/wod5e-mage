@@ -5,7 +5,7 @@
 // (`spheres`, con "any" per Qualsiasi), la matrice di provenienza, il testo intero, il costo in
 // Quintessenza, il limite d'uso, `effects` (gli effetti sul tiro: poteri.js li applica), `scelta`
 // (cosa il giocatore sceglie all'acquisto: un Ambito, un'Abilità, un incantesimo) e `prerequisiti`
-// (quanti poteri della Sfera, o quali, servono per prenderlo; null = nessuno).
+// (le condizioni d'acquisto, una per riga: numero, potere o testo; null = nessuna).
 export const POTERI = Object.freeze([
   {
     "id": "da-qualche-parte",

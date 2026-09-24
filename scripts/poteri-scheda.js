@@ -27,6 +27,7 @@ import {
   poteriDelPersonaggio,
   poteriOfSphere,
   potereLabel,
+  condizioniDelPotere,
   prerequisitiMancanti,
   puoUsare,
   registraUso,
@@ -35,7 +36,7 @@ import {
   usiDelPotere,
   voceDelCatalogo
 } from "./poteri.js";
-import { openCatalogoCompleto, openCatalogoPoteri, tipiDelPotere } from "./catalogo-poteri.js";
+import { chiusoAllaCreazione, openCatalogoCompleto, openCatalogoPoteri, tipiDelPotere } from "./catalogo-poteri.js";
 import { getMagickBalance } from "./magick-balance.js";
 import { prepareIncantesimi } from "./incantesimi.js";
 import { prepareMageRollTraits } from "./mage-roll-selection.js";
@@ -201,16 +202,23 @@ export async function onPotereNuovo(event, target) {
  * Sfera da cui si è scelta (il catalogo ne apre più d'una). Torna true se
  * l'ha messa; false se non c'è, o se il personaggio la conosce già.
  */
-export async function aggiungiDalCatalogo(actor, sphere, catalogId) {
+export async function aggiungiDalCatalogo(actor, sphere, catalogId, { creazione = false } = {}) {
   const entry = POTERI.find((power) => power.id === String(catalogId ?? ""));
   if (!entry) return false;
   const rows = { ...(actor.getFlag(MODULE_ID, POTERI_FLAG) ?? {}) };
   if (Object.values(rows).some((row) => row?.catalogId === entry.id)) return false;
   const dove = SPHERES.includes(sphere) ? sphere : entry.sphere;
   // I prerequisiti (25/9): tanti poteri della Sfera, o poteri specifici; il grado non chiude niente.
-  const mancano = prerequisitiMancanti(entry, { owned: poteriOfSphere(Object.entries(rows).map(([id, row]) => ({ id, ...row })), dove), tutti: Object.values(rows) });
+  const owned = poteriOfSphere(Object.entries(rows).map(([id, row]) => ({ id, ...row })), dove);
+  const mancano = prerequisitiMancanti(entry, { owned, tutti: Object.values(rows) });
   if (mancano) {
     ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Poteri.PrerequisitiMancano"));
+    return false;
+  }
+  // Alla creazione (25/9 sera): un potere di base o di qualsiasi Sfera, senza prerequisiti.
+  const chiuso = creazione ? chiusoAllaCreazione(entry, condizioniDelPotere(entry, { owned, tutti: Object.values(rows) })) : "";
+  if (chiuso) {
+    ui.notifications.warn(game.i18n.localize(chiuso === "grado" ? "WOD5E_MAGE.Poteri.CreazioneGrado" : "WOD5E_MAGE.Poteri.CreazionePrerequisiti"));
     return false;
   }
   await actor.setFlag(MODULE_ID, POTERI_FLAG, { ...rows, [idNuovo(rows)]: nuovoPotere(dove, entry) });

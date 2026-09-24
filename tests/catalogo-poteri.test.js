@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import Handlebars from "handlebars";
 import { POTERI } from "../scripts/data/poteri.js";
-import { pastiglieDelleSfere, prepareCatalogoCompleto, prepareCatalogoPoteri, prezzoDelPotere, testoPrerequisiti, tipiDelPotere } from "../scripts/catalogo-poteri.js";
+import { chiusoAllaCreazione, pastiglieDelleSfere, prepareCatalogoCompleto, prepareCatalogoPoteri, prezzoDelPotere, testoCondizione, testoPrerequisiti, tipiDelPotere } from "../scripts/catalogo-poteri.js";
 
 // La finestra «Aggiungi» (24/9 sera; 25/9: «i poteri sono acquistabili a
 // principio dalla gerarchia», niente quota sui pallini): tutti i poteri che
@@ -24,13 +24,17 @@ const guasto = materia.propri.find((riga) => riga.id === "guasto");
 assert.deepEqual([guasto.known, guasto.locked, guasto.cost, guasto.tipi, guasto.formulaName], [true, false, "1 WOD5E_MAGE.Poteri.QuintessenzaBreve", { attivo: true, passivo: false }, "Creare e Distruggere"]);
 assert.ok(guasto.blocchi.length >= 1 && guasto.blocchi[0].titolo === "Effetto attivo");
 assert.equal(materia.conosciuti, 1);
-// I prerequisiti scritti chiudono la riga e dicono cosa serve.
-const catalogo = POTERI.map((p) => (p.id === "baratto" ? { ...p, prerequisiti: { numero: 2, poteri: ["guasto", "bottino"] } } : p));
+// I prerequisiti scritti, una condizione per riga (25/9 sera): chiudono la riga e dicono cosa serve.
+const catalogo = POTERI.map((p) => (p.id === "baratto" ? { ...p, prerequisiti: [{ numero: 2 }, { potere: "guasto" }, { potere: "bottino" }, { testo: "Aver venduto qualcosa a un Risvegliato" }] } : p));
 const conChiusi = prepareCatalogoPoteri("matter", { catalog: catalogo, owned, tutti: owned, localize });
 const baratto = conChiusi.propri.find((riga) => riga.id === "baratto");
-assert.deepEqual([conChiusi.chiusi, baratto.locked, baratto.chiuso], [1, true, { numero: 2, poteri: ["bottino"] }]);
+assert.deepEqual([conChiusi.chiusi, baratto.locked, baratto.chiuso.map((riga) => riga.id || riga.n)], [1, true, [2, "bottino"]]);
+assert.deepEqual(baratto.condizioni.map((riga) => [riga.stato, riga.icona]), [["manca", "fa-lock"], ["ok", "fa-check"], ["manca", "fa-lock"], ["tavolo", "fa-circle-dot"]], "ogni riga col suo stato");
+assert.equal(baratto.serveConto, "2/4");
 assert.equal(baratto.lockedHint, "WOD5E_MAGE.Poteri.Prerequisito.numero · WOD5E_MAGE.Poteri.Prerequisito.poteri".replace("{n}", "2"));
-assert.equal(testoPrerequisiti({ numero: 2, poteri: ["bottino"] }, catalogo.find((p) => p.id === "baratto"), (k) => ({ "WOD5E_MAGE.Poteri.Prerequisito.numero": "{n} poteri di {sphere}", "WOD5E_MAGE.Poteri.Prerequisito.poteri": "richiede {names}", "WOD5E_MAGE.Spheres.matter": "Materia" }[k] ?? k), new Map([["bottino", "Bottino"]])), "2 poteri di Materia · richiede Bottino");
+const parole = (k) => ({ "WOD5E_MAGE.Poteri.Prerequisito.numero": "{n} poteri di {sphere}", "WOD5E_MAGE.Poteri.Prerequisito.poteri": "richiede {names}", "WOD5E_MAGE.Spheres.matter": "Materia" }[k] ?? k);
+assert.equal(testoPrerequisiti([{ kind: "numero", n: 2 }, { kind: "potere", id: "bottino" }], catalogo.find((p) => p.id === "baratto"), parole, new Map([["bottino", "Bottino"]])), "2 poteri di Materia · richiede Bottino");
+assert.equal(testoCondizione({ kind: "testo", testo: "Aver toccato l'oro" }, null, parole), "Aver toccato l'oro");
 // Il grado col prezzo in Esperienza (25/9 sera: «nell'elenco non è capibile»): per 5 di famiglia, per 7 esterno.
 assert.deepEqual(prezzoDelPotere(2, true), { grado: 2, famiglia: 10, esterno: 14, pe: 10 });
 assert.deepEqual(prezzoDelPotere(3, false).pe, 21);
@@ -46,10 +50,22 @@ const guastoFamiglia = famiglia.propri.find((riga) => riga.id === "guasto");
 assert.deepEqual([guastoFamiglia.gradoLabel, guastoFamiglia.prezzoLabel], ["WOD5E_MAGE.Poteri.GradoNessuno", ""]);
 // I prerequisiti si scrivono sempre: col lucchetto se mancano, con la spunta se ci sono già.
 const barattoFamiglia = famiglia.propri.find((riga) => riga.id === "baratto");
-assert.deepEqual([barattoFamiglia.serve, barattoFamiglia.serveOk, barattoFamiglia.locked], ["WOD5E_MAGE.Poteri.Prerequisito.numero · WOD5E_MAGE.Poteri.Prerequisito.poteri".replace("{n}", "2"), false, true]);
+assert.deepEqual([barattoFamiglia.serve.split(" · ").length, barattoFamiglia.serveOk, barattoFamiglia.locked], [4, false, true]);
 const conTutto = prepareCatalogoPoteri("matter", { catalog: catalogo, owned: [{ catalogId: "guasto" }, { catalogId: "bottino" }], tutti: [{ catalogId: "guasto" }, { catalogId: "bottino" }], localize, family: true });
 const barattoAperto = conTutto.propri.find((riga) => riga.id === "baratto");
-assert.deepEqual([barattoAperto.serveOk, barattoAperto.locked, barattoAperto.lockedHint, conTutto.conPrerequisiti], [true, false, "", 1]);
+assert.deepEqual([barattoAperto.serveOk, barattoAperto.locked, barattoAperto.lockedHint, conTutto.conPrerequisiti, barattoAperto.serveConto], [true, false, "", 1, "4/4"], "la condizione del tavolo non chiude");
+// Alla creazione (25/9 sera): solo i poteri di base (grado 1) o di qualsiasi Sfera, senza prerequisiti.
+const creazione = prepareCatalogoPoteri("matter", { catalog: catalogo, owned: [], tutti: [], localize, family: true, creazione: true });
+assert.equal(creazione.creazione, true);
+const aperti = creazione.propri.filter((riga) => !riga.locked);
+assert.ok(aperti.length > 0 && aperti.every((riga) => riga.dot === 1 && !riga.condizioni.length), "di Materia restano i poteri di base senza prerequisiti");
+assert.ok(creazione.qualsiasi.filter((riga) => !riga.locked).every((riga) => !riga.condizioni.length) && creazione.qualsiasi.some((riga) => !riga.locked && riga.dot !== 1), "di qualsiasi Sfera anche oltre il grado 1");
+const barattoCreazione = creazione.propri.find((riga) => riga.id === "baratto");
+assert.deepEqual([barattoCreazione.locked, barattoCreazione.creazioneChiuso, barattoCreazione.lockedHint], [true, "prerequisiti", "WOD5E_MAGE.Poteri.CreazionePrerequisiti"], "Baratto è di grado 1 ma ha prerequisiti");
+const opera = creazione.propri.find((riga) => riga.id === "opera");
+assert.deepEqual([opera.locked, opera.creazioneChiuso, opera.lockedHint], [true, "grado", "WOD5E_MAGE.Poteri.CreazioneGrado"]);
+assert.deepEqual([chiusoAllaCreazione({ dot: 1, spheres: ["matter"] }, []), chiusoAllaCreazione({ dot: 3, spheres: ["any"] }, []), chiusoAllaCreazione({ dot: 2, spheres: ["matter"] }, []), chiusoAllaCreazione({ dot: 1, spheres: ["matter"] }, [{ kind: "numero" }])], ["", "", "grado", "prerequisiti"]);
+assert.equal(prepareCatalogoPoteri("matter", { catalog: catalogo, owned: [], localize }).propri.find((riga) => riga.id === "opera").locked, false, "fuori dalla creazione Opera si prende");
 // I tipi: attivo, passivo, tutti e due.
 assert.deepEqual(tipiDelPotere("attivo e passivo"), { attivo: true, passivo: true });
 assert.deepEqual(tipiDelPotere("passivo"), { attivo: false, passivo: true });
@@ -89,9 +105,11 @@ assert.ok(!html.includes("CatalogoChiusi") && !html.includes("catalogo-row chius
 const htmlChiusi = template({ ...conChiusi, pastiglie, icon: "m.png" });
 assert.ok(htmlChiusi.includes("WOD5E_MAGE.Poteri.CatalogoChiusi(n&#x3D;1)") && htmlChiusi.includes('wod5e-mage-catalogo-row chiusa"') && htmlChiusi.includes("wod5e-mage-catalogo-lucchetto") && htmlChiusi.includes("WOD5E_MAGE.Poteri.Prerequisito.Label"), "la riga chiusa col lucchetto e cosa serve");
 assert.ok(/data-role="catalogoAggiungi" data-catalogo="baratto" disabled title="/.test(htmlChiusi), "il tasto spento dice cosa serve");
-assert.ok(htmlChiusi.includes('<small class="serve manca"'), "la pastiglia dei prerequisiti che mancano");
+assert.ok(htmlChiusi.includes('<small class="serve manca"') && (htmlChiusi.match(/<li class="manca">/g) ?? []).length === 2 && htmlChiusi.includes('<li class="ok">') && htmlChiusi.includes('<li class="tavolo">'), "la pastiglia dei prerequisiti che mancano, e una riga per condizione");
 const htmlAperto = template({ ...conTutto, pastiglie, icon: "m.png" });
 assert.ok(htmlAperto.includes('<small class="serve ok"') && htmlAperto.includes("wod5e-mage-catalogo-serve ok") && !htmlAperto.includes("catalogo-row chiusa"), "i prerequisiti soddisfatti con la spunta");
+const htmlCreazione = template({ ...creazione, pastiglie, icon: "m.png" });
+assert.ok(htmlCreazione.includes("WOD5E_MAGE.Poteri.CreazioneRegola") && htmlCreazione.includes('data-role="catalogoAggiungi" data-catalogo="opera" disabled title="WOD5E_MAGE.Poteri.CreazioneGrado"'), "la regola in testa e il tasto spento che dice perché");
 const htmlCompleto = template({ ...completo });
 assert.ok(!htmlCompleto.includes('data-role="catalogoAggiungi"') && !htmlCompleto.includes("catalogoSfera") && htmlCompleto.includes("wod5e-mage-catalogo-spunta"), "il completo si legge e basta");
 console.log("catalogo dei poteri: ok");

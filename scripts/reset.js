@@ -142,7 +142,7 @@ export async function onResetSection(event, target) {
     return;
   }
   const label = game.i18n.localize(id === "all" ? RESET_ALL.label : RESETS[id].label);
-  const confirmed = await foundry.applications.api.DialogV2.confirm({
+  const confirmed = id === "all" ? await confermaColNome(actor, label) : await foundry.applications.api.DialogV2.confirm({
     window: { title: label },
     content: `<p>${game.i18n.format("WOD5E_MAGE.Reset.Confirm", { label })}</p>`,
     rejectClose: false,
@@ -150,4 +150,41 @@ export async function onResetSection(event, target) {
   });
   if (!confirmed) return;
   await applyReset(actor, id);
+}
+
+/** Il nome scritto vale se è quello del personaggio, senza badare a maiuscole e spazi. */
+export function nomeConferma(typed, name) {
+  const pulisci = (value) => String(value ?? "").trim().replace(/\s+/g, " ").toLocaleLowerCase("it");
+  return pulisci(name) !== "" && pulisci(typed) === pulisci(name);
+}
+
+/**
+ * Il reset della scheda intera chiede una seconda conferma (Blue, 25/9
+ * sera): si scrive il nome del personaggio, così non si rifà la scheda per
+ * sbaglio. Il tasto resta spento finché il nome non è quello.
+ */
+async function confermaColNome(actor, label) {
+  const name = String(actor?.name ?? "");
+  const testo = foundry.utils.escapeHTML(game.i18n.format("WOD5E_MAGE.Reset.ConfermaNome", { label, name }));
+  const answer = await foundry.applications.api.DialogV2.wait({
+    window: { title: label },
+    classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog"],
+    content: `<p>${testo}</p><input type="text" name="nome" class="wod5e-mage-reset-nome" autocomplete="off" placeholder="${foundry.utils.escapeHTML(name)}" aria-label="${foundry.utils.escapeHTML(game.i18n.localize("WOD5E_MAGE.Reset.ConfermaNomeCampo"))}">`,
+    buttons: [
+      { action: "reset", icon: "fa-solid fa-rotate-left", label: game.i18n.localize("WOD5E_MAGE.Reset.All"), callback: (_event, button) => nomeConferma(button.form?.elements?.nome?.value, name) },
+      { action: "cancel", icon: "fas fa-times", label: game.i18n.localize("WOD5E.Cancel"), default: true, callback: () => false }
+    ],
+    rejectClose: false,
+    modal: true,
+    render: (_event, dialog) => {
+      const root = dialog.element;
+      const input = root.querySelector("input[name=nome]");
+      const button = root.querySelector("button[data-action=reset]");
+      if (!input || !button) return;
+      button.disabled = true;
+      input.addEventListener("input", () => { button.disabled = !nomeConferma(input.value, name); });
+      input.focus();
+    }
+  });
+  return answer === true;
 }

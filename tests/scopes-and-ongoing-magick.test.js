@@ -18,6 +18,8 @@ import {
 import {
   lockedParadox,
   maintainedEffectRow,
+  onOngoingMagickLock,
+  scopesInParole,
   onOngoingMagickAdd,
   onOngoingMagickDelete,
   prepareOngoingMagick,
@@ -201,8 +203,14 @@ assert.deepEqual([rows[0].vulgar, rows[0].duration, rows[0].threshold, rows[0].l
 
 // Le Magick in atto (6/9): il Volgare in piedi blocca 1 Paradosso permanente;
 // si segna quando è mantenuto o ha una Durata.
-const vulgarRow = maintainedEffectRow({ name: "Fiamma", vulgar: true, duration: 2, threshold: 4, maintained: true, status: "Mantenuto" });
+const vulgarRow = maintainedEffectRow({ name: "Fiamma", vulgar: true, duration: 2, threshold: 4, maintained: true, status: "Mantenuto", caster: "Guendalina", spheres: ["forces", "prime", "boh"], scopes: { potency: 3, duration: 2, boh: 9 }, composition: "Forze + Primordio · Formula: Danneggiare", scopesText: "Potenza 3, Durata 2", modifiers: "Armonia +1" });
 assert.deepEqual([vulgarRow.lock, vulgarRow.duration, vulgarRow.threshold, vulgarRow.vulgar, vulgarRow.nameSpheres], [1, 2, 4, true, "Fiamma"]);
+// La riga dal tiro (25/9 sera): chi l'ha lanciata e la mantiene, le Sfere, gli Ambiti, la composizione, i bonus.
+assert.deepEqual([vulgarRow.fromRoll, vulgarRow.caster, vulgarRow.maintainer, vulgarRow.spheres, vulgarRow.scopes, vulgarRow.composition, vulgarRow.scopesText, vulgarRow.modifiers], [true, "Guendalina", "Guendalina", ["forces", "prime"], { potency: 3, duration: 2 }, "Forze + Primordio · Formula: Danneggiare", "Potenza 3, Durata 2", "Armonia +1"]);
+assert.equal(maintainedEffectRow({ name: "Velo", caster: "Guendalina", maintained: false }).maintainer, "", "non mantenuta: nessuno la mantiene");
+assert.equal(scopesInParole({ potency: 3, range: 1, boh: 4 }, (k) => k.split(".").pop(), { range: "Città" }), "potency 3, range 1 (Città)");
+const rigaDalTiro = prepareOngoingMagick(mageActor({ ongoingMagick: { r: vulgarRow } }), (k) => k.split(".").pop())[0];
+assert.deepEqual([rigaDalTiro.fromRoll, rigaDalTiro.caster, rigaDalTiro.spheres.map((s) => [s.id, s.label]), rigaDalTiro.scopes.map((s) => [s.id, s.level])], [true, "Guendalina", [["forces", "forces"], ["prime", "prime"]], [["duration", 2], ["potency", 3]]], "gli Ambiti nell'ordine della tavola");
 assert.equal(maintainedEffectRow({ name: "Sussurro", vulgar: false, duration: 1 }).lock, 0);
 assert.equal(shouldRecordEffect({ maintained: false, duration: 0 }), false);
 assert.equal(shouldRecordEffect({ maintained: true, duration: 0 }), true);
@@ -214,7 +222,8 @@ assert.equal(maintainedEffectRow({ name: "Velo", effect: "sparire alla vista" })
 assert.equal(lockedParadox(mageActor({ ongoingMagick: { a: { lock: 1, active: false }, c: vulgarRow } })), 1);
 assert.equal(prepareOngoingMagick(mageActor({ ongoingMagick: { a: { lock: 1, active: false }, b: { lock: 1 } } })).map((row) => row.active).join(","), "false,true");
 const spheresOngoing = readFileSync(new URL("../templates/actor/parts/spheres.hbs", import.meta.url), "utf8");
-assert.match(spheresOngoing, /data-action="ongoingMagickToggle" data-row="\{\{row\.id\}\}"[\s\S]*OngoingMagick\.On[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.nameSpheres[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.triggerEffect/);
+assert.match(spheresOngoing, /data-action="ongoingMagickToggle" data-row="\{\{row\.id\}\}"[\s\S]*OngoingMagick\.On[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.nameSpheres[\s\S]*data-action="ongoingMagickLock" data-row="\{\{row\.id\}\}"[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.caster[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.maintainer[\s\S]*wod5e-mage-atto-sigilli[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.composition[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.threshold[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.scopesText[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.modifiers[\s\S]*ongoingMagick\.\{\{row\.id\}\}\.triggerEffect/, "la carta della Magick in atto (25/9 sera)");
+assert.match(readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8"), /ongoingMagickLock: onOngoingMagickLock/);
 assert.doesNotMatch(spheresOngoing, /ongoingMagick\.\{\{row\.id\}\}\.status/);
 assert.equal(lockedParadox(mageActor()), 0);
 
@@ -246,8 +255,20 @@ assert.deepEqual(storedRows.newRow, {
   nameSpheres: "",
   status: "",
   triggerEffect: "",
+  caster: "",
+  maintainer: "",
+  composition: "",
+  scopesText: "",
+  modifiers: "",
+  fromRoll: false,
   active: true
 });
+// Il lucchetto del Paradosso permanente (25/9 sera) si accende e si spegne a mano.
+await onOngoingMagickLock.call({ actor: editableActor }, event, { dataset: { row: "newRow" } });
+assert.deepEqual(editableActor.lastUpdate, { "flags.wod5e-mage.ongoingMagick.newRow.lock": 1 });
+storedRows.newRow.lock = 1;
+await onOngoingMagickLock.call({ actor: editableActor }, event, { dataset: { row: "newRow" } });
+assert.deepEqual(editableActor.lastUpdate, { "flags.wod5e-mage.ongoingMagick.newRow.lock": 0 });
 
 await onOngoingMagickDelete.call(
   { actor: editableActor },

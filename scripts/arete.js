@@ -21,7 +21,7 @@ import {
   rollSymbols
 } from "./roll-card.js";
 import { FOCUS_FORMS, PERCEIVE_TOOL_ID } from "./focus.js";
-import { maintainedEffectRow, shouldRecordEffect } from "./ongoing-magick.js";
+import { maintainedEffectRow, scopesInParole, shouldRecordEffect } from "./ongoing-magick.js";
 import { effectSphereLevels, openGrimorio } from "./grimorio.js";
 import { normalizeEffectKind } from "./paradox-burst.js";
 
@@ -303,8 +303,9 @@ export function dotReadings(localize = (key) => key, { arete = null } = {}) {
   const spheres = INFLUENCE_LABELS.slice(1).map((key) => String(localize(key)));
   return (kind, id, level) => {
     // Gli Ambiti hanno una lettura anche allo 0 (la base: «A contatto», «Un
-    // bersaglio»); le Sfere no.
+    // bersaglio»); le Sfere non hanno più livelli (25/9 sera): nessuna lettura.
     if (kind === "scope") return scopes[id]?.[Math.max(level, 0)] ?? [];
+    if (kind === "sphere") return [];
     if (level <= 0) return [];
     return spheres[level - 1] ? [{ sub: "", text: spheres[level - 1] }] : [];
   };
@@ -484,7 +485,8 @@ export function spellFromResult(actor, result, { traits, rollSpheres, localize =
   const options = normalizeMagickRollOptions(result);
   const spheres = {};
   for (const sphere of rollSpheres ?? []) {
-    const level = Math.min(Math.max(Math.trunc(Number(result[`sphere-${sphere.id}`]) || 0), 0), Math.max(sphere.value, 1));
+    // La Sfera scelta vale 1: senza livelli (25/9 sera) il numero dice solo che c'è.
+    const level = Math.min(Math.max(Math.trunc(Number(result[`sphere-${sphere.id}`]) || 0), 0), 1);
     if (level > 0) spheres[sphere.id] = level;
   }
   const scopes = {};
@@ -499,9 +501,11 @@ export function spellFromResult(actor, result, { traits, rollSpheres, localize =
     })
     .filter(Boolean);
   const focus = actor.getFlag(MODULE_ID, "focus") ?? {};
-  // Un effetto percettivo (tutte le Sfere al primo pallino) usa lo Strumento
-  // di Percepire (9/9), se c'è; altrimenti gli Strumenti delle Sfere usate.
-  const perceptive = Object.keys(spheres).length > 0 && Object.values(spheres).every((level) => level <= 1);
+  // Un effetto percettivo usa lo Strumento di Percepire (9/9), se c'è;
+  // altrimenti gli Strumenti delle Sfere usate. Senza livelli di Sfera (25/9
+  // sera) percettivo è l'incantesimo che viene dalla matrice Percepire.
+  const formula = String(result.formula ?? "").trim();
+  const perceptive = formula === "percepire";
   const perceiveRow = focus.sphereInstruments?.[PERCEIVE_TOOL_ID] ?? {};
   const instrumentIds = perceptive && (perceiveRow.tool || String(perceiveRow.name ?? "").trim())
     ? [PERCEIVE_TOOL_ID]
@@ -528,7 +532,8 @@ export function spellFromResult(actor, result, { traits, rollSpheres, localize =
     scopes,
     credo: String(focus.credo ?? ""),
     practiceForm: FOCUS_FORMS.includes(focus.practiceForm) ? focus.practiceForm : "",
-    instruments
+    instruments,
+    ...(formula ? { formula } : {})
   };
 }
 
@@ -561,6 +566,7 @@ function applyAretePreset(dialog, preset) {
   setValue("#wod5e-mage-arete-goal", preset.goal);
   setValue("#wod5e-mage-arete-effect-kind", preset.effectKind);
   setValue("#wod5e-mage-arete-spell-name", preset.name);
+  setValue("#wod5e-mage-arete-formula", preset.formula ?? "");
   setValue("#wod5e-mage-arete-narrative", preset.narrative);
   for (const [kind, levels] of [["sphere", preset.spheres ?? {}], ["scope", preset.scopes ?? {}]]) {
     for (const [id, level] of Object.entries(levels)) {
@@ -602,6 +608,8 @@ function wireGrimorio(dialog, sphereLevels) {
       goal.value = entry.formula.use;
       const name = root.querySelector("#wod5e-mage-arete-spell-name");
       if (name && !name.value) name.value = entry.formula.name;
+      const formula = root.querySelector("#wod5e-mage-arete-formula");
+      if (formula) formula.value = entry.formula.id;
       for (const sphere of Object.keys(sphereLevels)) setDots("sphere", sphere, entry.spheres[sphere] ?? 0);
       for (const scope of SCOPES) setDots("scope", scope, entry.scopes[scope] ?? 0);
       return;
@@ -781,12 +789,12 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   // usa. Le Specialità delle Sfere non esistono più (Blue, 21/9): nessuna
   // Sfera porta un Ambito di Specialità.
   const specialties = {};
-  // Le Sfere conosciute sono i Domini (Blue, 25/9 sera): una Sfera senza
-  // livello entra lo stesso, con un pallino solo.
+  // Le Sfere conosciute sono i Domini (Blue, 25/9 sera): niente livelli, la
+  // Sfera si sceglie e basta, un segno solo per Sfera.
   const rollSpheres = prepareSpheres(actor).selected
     .map((sphere) => ({
       ...sphere,
-      steps: Array.from({ length: Math.max(sphere.value, 1) }, (_, index) => ({ value: index + 1 })),
+      steps: [{ value: 1 }],
       specialtyScope: specialties[sphere.id] ?? "",
       specialtyLabel: specialties[sphere.id] ? `WOD5E_MAGE.Scopes.${specialties[sphere.id]}` : ""
     }));
@@ -983,11 +991,18 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     threshold,
     goal,
     fallbackName: goal || sphereEntries
-      .map((entry) => `${localize(`WOD5E_MAGE.Spheres.${entry.id}`)} ${entry.level}`)
-      .join(", ") || rollLabel
+      .map((entry) => localize(`WOD5E_MAGE.Spheres.${entry.id}`))
+      .join(", ") || rollLabel,
+    // La riga fra le Magick in atto (25/9 sera): chi lancia, la composizione, gli Ambiti in parole, i bonus.
+    caster: String(actor.name ?? ""),
+    spheres: sphereEntries.map((entry) => entry.id),
+    scopes: Object.fromEntries(scopeEntries.map((entry) => [entry.scopeId, entry.level])),
+    composition: [sphereEntries.map((entry) => localize(`WOD5E_MAGE.Spheres.${entry.id}`)).join(" + "), String(result.spellName ?? "").trim()].filter(Boolean).join(" · "),
+    scopesText: scopesInParole(Object.fromEntries(scopeEntries.map((entry) => [entry.scopeId, entry.level])), localize),
+    modifiers: bonusParts.join(" · ")
   };
   // L'ultima soglia lanciata: la usa lo Scoppio del Paradosso come proposta.
-  if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: threshold, [`flags.${MODULE_ID}.lastSphereMax`]: sphereMax });
+  if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: threshold });
   const flavor = card;
 
   const paradoxGain = paradoxGainForMagickType(options);
@@ -1104,7 +1119,13 @@ export async function recordEffect(actor, result, effect = {}) {
     threshold: effect.threshold,
     maintained,
     effect: effect.goal,
-    status: game.i18n.localize(maintained ? "WOD5E_MAGE.OngoingMagick.MaintainedStatus" : "WOD5E_MAGE.OngoingMagick.RunningStatus")
+    status: game.i18n.localize(maintained ? "WOD5E_MAGE.OngoingMagick.MaintainedStatus" : "WOD5E_MAGE.OngoingMagick.RunningStatus"),
+    caster: effect.caster ?? String(actor.name ?? ""),
+    spheres: effect.spheres ?? [],
+    scopes: effect.scopes ?? {},
+    composition: effect.composition ?? "",
+    scopesText: effect.scopesText ?? "",
+    modifiers: effect.modifiers ?? ""
   });
 
   const rows = { ...(actor.getFlag(MODULE_ID, "ongoingMagick") ?? {}) };

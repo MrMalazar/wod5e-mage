@@ -25,8 +25,8 @@ import { PERSONAGGIO_TABLES } from "./personaggio-extra.js";
 import { POTERI_FLAG } from "./poteri.js";
 import { aggiungiDalCatalogo, sferePerCatalogo } from "./poteri-scheda.js";
 import { openCatalogoPoteri } from "./catalogo-poteri.js";
-import { creationTargets } from "./riepilogo.js";
-import { getSphereSelection, SPHERES } from "./spheres.js";
+import { creationTargets, dominiDellaCreazione } from "./riepilogo.js";
+import { SPHERES } from "./spheres.js";
 import { isChiaro, TEMA_CLASSE, TEMA_SETTING } from "./tema.js";
 import { ATTRIBUTE_KEYS } from "./tratti-icone.js";
 
@@ -311,25 +311,33 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
   }
 
   /**
-   * L'accesso a un Dominio (25/9): la Sfera entra fra le conosciute (il
-   * vecchio numero della Sfera resta solo come segno interno: 1 aperto, 0
-   * chiuso). I poteri presi lì restano sulla scheda.
+   * I Domini della creazione (25/9 sera): Famiglia e via sono fissi, fra le
+   * due Sfere del Credo il tasto sceglie (la scelta è la Sfera di famiglia del
+   * Credo, e l'appartenenza la apre da sé), le altre Sfere alla creazione non
+   * si aprono. I poteri presi restano sulla scheda.
    */
   static async #onDominioAccesso(event, target) {
     event.preventDefault();
     if (this.#avvisaNonPuoi()) return;
     const sphere = String(target.dataset.sphere ?? "");
     if (!SPHERES.includes(sphere)) return;
-    const selection = getSphereSelection(this.actor);
-    const aperto = !selection[sphere];
-    const level = Math.trunc(Number(this.actor.getFlag(MODULE_ID, "spheres")?.[sphere]) || 0);
-    const changes = { [`flags.${MODULE_ID}.selectedSpheres`]: { ...selection, [sphere]: aperto } };
-    if (aperto && level < 1) changes[`flags.${MODULE_ID}.spheres.${sphere}`] = 1;
-    if (!aperto) changes[`flags.${MODULE_ID}.spheres.${sphere}`] = 0;
-    await this.actor.update(changes);
+    const creazione = dominiDellaCreazione(this.actor);
+    if (sphere === creazione.famiglia || sphere === creazione.via) {
+      ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Guidata.Sfere.Fissa"));
+      return;
+    }
+    if (!creazione.credo.includes(sphere)) {
+      ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Guidata.Sfere.FuoriCreazione"));
+      return;
+    }
+    await this.actor.update({ [`flags.${MODULE_ID}.focus.credoFamily`]: creazione.scelta === sphere ? "" : sphere });
   }
 
-  /** Il potere del Dominio: la finestra «Aggiungi» della scheda, aperta su quella Sfera. */
+  /**
+   * Il potere del Dominio: la finestra «Aggiungi» della scheda, aperta su
+   * quella Sfera, con le regole della creazione (25/9 sera): un potere di
+   * base o di qualsiasi Sfera, senza prerequisiti.
+   */
   static async #onDominioPotere(event, target) {
     event.preventDefault();
     if (this.#avvisaNonPuoi()) return;
@@ -337,7 +345,7 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
     const spheres = sferePerCatalogo(this.actor);
     if (!spheres.some((entry) => entry.id === sphere)) return;
     const actor = this.actor;
-    await openCatalogoPoteri({ spheres, sphere, onAdd: (dove, catalogId) => aggiungiDalCatalogo(actor, dove, catalogId) });
+    await openCatalogoPoteri({ spheres, sphere, creazione: true, onAdd: (dove, catalogId) => aggiungiDalCatalogo(actor, dove, catalogId, { creazione: true }) });
   }
 
   static async #onDominioPotereTogli(event, target) {

@@ -163,8 +163,9 @@ export function findSottofamiglia(famigliaId, id) {
 }
 
 /**
- * Le Sfere che l'appartenenza porta: Famiglia e Sottofamiglia a 1,
- * il Credo di sola presenza.
+ * Le Sfere che l'appartenenza porta: Famiglia e Sottofamiglia a 1 (`dotted`);
+ * le due del Credo sono le candidate (`present`): fra i Domini entra solo
+ * quella scelta (25/9 sera).
  */
 export function lineageSpheres({ famiglia = "", sottofamiglia = "", credo = "", credoSpheres = null } = {}) {
   const dotted = [];
@@ -236,12 +237,22 @@ export function lineageSphereChanges(before, changes) {
   };
   if (familyChanged) unlock(findFamiglia(famiglia)?.sphere, true);
   if (subChanged) unlock(findSottofamiglia(famiglia, sottofamiglia)?.sphere, true);
-  // Le due Sfere del Credo si sbloccano di sola presenza; di famiglia è solo
-  // quella scelta (11/9), e non tocca quelle che Famiglia e Sottofamiglia danno a 1.
+  // Del Credo entra fra i Domini solo la Sfera scelta (Blue, 25/9 sera: «uno a
+  // scelta del credo»), di famiglia e col segno a 1; l'altra resta fuori, salvo
+  // i pallini comprati. Non si toccano quelle che Famiglia e Sottofamiglia danno a 1.
   if (credoChanged || (choiceChanged && isFreeCredo(credo)) || familyPickChanged) {
     for (const id of credoSpheresFor(credo, choice)) {
       if (isLineage.dotted.includes(id)) continue;
-      unlock(id, false, id === familyPick);
+      if (id === familyPick) {
+        unlock(id, true, true);
+        continue;
+      }
+      out.familySpheres[id] = false;
+      const value = Math.max(Math.trunc(Number(values[id]) || 0), 0);
+      if (value <= 1) {
+        out.selectedSpheres[id] = false;
+        if (value > 0) out.spheres[id] = 0;
+      }
     }
   }
   // Se il Credo cambia e la Sfera scelta non è più sua, la scelta si azzera.

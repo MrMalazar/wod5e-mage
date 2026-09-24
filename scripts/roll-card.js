@@ -44,12 +44,13 @@ export function rollSymbols({ spheres = [], scopes = [], prize = 0 } = {}) {
       icon: ARETE_SIGIL
     });
   }
+  // Le Sfere senza numero (Blue, 25/9 sera: niente livelli): il sigillo e il nome al sorvolo.
   for (const sphere of spheres) {
     symbols.push({
       kind: "sphere",
       id: sphere.id,
       label: `WOD5E_MAGE.Spheres.${sphere.id}`,
-      value: String(sphere.level),
+      value: "",
       icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere.id}.png`
     });
   }
@@ -72,7 +73,7 @@ function renderSymbol(symbol, localize) {
   const picture = symbol.icon
     ? `<img src="${escapeHtml(symbol.icon)}" alt="${name}">`
     : `<i class="${escapeHtml(symbol.faIcon)}" aria-hidden="true"></i>`;
-  return `<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-${symbol.kind}" title="${title}">${picture}<b>${escapeHtml(symbol.value)}</b></span>`;
+  return `<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-${symbol.kind}" title="${title}">${picture}${symbol.value ? `<b>${escapeHtml(symbol.value)}</b>` : ""}</span>`;
 }
 
 /** La fila dei simboli, da mettere sopra i dadi (messaggi vecchi). Vuota se non c'è niente. */

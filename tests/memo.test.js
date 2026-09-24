@@ -11,7 +11,7 @@ const summary = {
     { id: "backgrounds", value: 3, target: null, state: "", sfida: 0 },
     { id: "merits", value: 9, target: 9, state: "exact", sfida: 2 },
     { id: "flaws", value: 3, target: 2, state: "over", sfida: 0 },
-    { id: "domini", value: 3, target: null, state: "", sfida: 0 },
+    { id: "domini", value: 3, target: 3, state: "exact", sfida: 0 },
     { id: "poteri", value: 3, target: 3, state: "exact", sfida: 0 }
   ],
   checks: [
@@ -31,7 +31,7 @@ assert.deepEqual([memo.boxes.attributi.text, memo.boxes.attributi.state], ["12/2
 assert.deepEqual([memo.boxes.abilita.text, memo.boxes.abilita.state, memo.boxes.abilita.sfida, memo.boxes.abilita.tetto.ok], ["20/20", "exact", 1, true]);
 assert.deepEqual([memo.boxes.identita.state, memo.boxes.identita.concetto], ["under", false]);
 // La Magick (25/9): i Domini aperti senza traguardo, i poteri uno per Dominio.
-assert.deepEqual([memo.boxes.magick.state, memo.boxes.magick.arete.ok, memo.boxes.magick.domini.text, memo.boxes.magick.poteri.text], ["exact", true, "3", "3/3"]);
+assert.deepEqual([memo.boxes.magick.state, memo.boxes.magick.arete.ok, memo.boxes.magick.domini.text, memo.boxes.magick.poteri.text], ["exact", true, "3/3", "3/3"]);
 // I Tratti: i Vantaggi pari ma i Difetti sopra il traguardo: giallo.
 assert.deepEqual([memo.boxes.tratti.state, memo.boxes.tratti.vantaggi.text, memo.boxes.tratti.vantaggi.sfida, memo.boxes.tratti.difetti.state], ["over", "9/9", 2, "over"]);
 // Le linguette: la Bussola rossa (manca la Convinzione), il Credo verde, la Sfida senza colore finché non è completa, i Tratti come il riquadro.
@@ -51,7 +51,10 @@ assert.deepEqual([statoInsieme(["exact", "under"]), statoInsieme(["exact", "over
 
 // I template: la barra del memo, i conti sui titoli, le linguette con lookup.
 const read = (name) => readFileSync(new URL(`../templates/actor/parts/${name}`, import.meta.url), "utf8");
-assert.match(read("stat.hbs"), /wod5e-mage-creazione-barra\{\{#if memo\.on\}\} acceso\{\{\/if\}\}[\s\S]*name="flags\.wod5e-mage\.creazione\.memo"[\s\S]*wod5e-mage-stat-bonus/);
+assert.match(read("stat.hbs"), /wod5e-mage-creazione-barra\{\{#if memo\.on\}\} acceso\{\{\/if\}\}[\s\S]*name="flags\.wod5e-mage\.creazione\.memo"/);
+// La tendina dei Bonus scritti non sta più nella barra del memo (Blue, 25/9 sera).
+assert.doesNotMatch(read("stat.hbs"), /wod5e-mage-stat-bonus|bonuses\.hbs/);
+assert.doesNotMatch(readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8"), /prepareBonuses|bonusAdd|bonuses\.hbs/);
 for (const [file, box] of [["stat-attributi.hbs", "attributi"], ["stat-abilita.hbs", "abilita"], ["stat-magick.hbs", "magick"], ["stat-tratti.hbs", "tratti"], ["stat-identita.hbs", "identita"]]) {
   assert.match(read(file), new RegExp(`wod5e-mage-riq-title[a-z0-9 -]*\\{\\{#if memo\\.on\\}\\} memo-\\{\\{memo\\.boxes\\.${box}\\.state\\}\\}\\{\\{\\/if\\}\\}`), file);
   assert.match(read(file), /wod5e-mage-memo-conto/, file);

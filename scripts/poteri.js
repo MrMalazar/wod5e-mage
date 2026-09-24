@@ -204,23 +204,39 @@ export function sfereDellaVoce(entry) {
  */
 /**
  * I prerequisiti d'acquisto di una voce (Blue, 25/9: «i poteri sono
- * acquistabili a principio dalla gerarchia»): `numero`, quanti poteri della
- * stessa Sfera bisogna già conoscere; `poteri`, gli id dei poteri specifici
- * richiesti. Torna cosa manca: { numero, poteri: [id] }, o null se si può
- * prendere. Il grado (`dot`) non chiude niente da solo: è la misura della
- * potenza. `owned` sono le righe del personaggio nella Sfera, `tutti` tutte
- * le sue righe (per i poteri specifici, che possono stare su altre Sfere).
+ * acquistabili a principio dalla gerarchia»; 25/9 sera: «li scriviamo in più
+ * righe, una riga per ogni condizione»). `entry.prerequisiti` è una lista di
+ * condizioni, una per riga: `{ numero: N }` (tanti poteri della stessa Sfera
+ * già conosciuti), `{ potere: id }` (un potere preciso, anche di un'altra
+ * Sfera), `{ testo: "…" }` (una condizione che giudica il tavolo: il modulo
+ * la scrive e basta). Il vecchio formato `{ numero, poteri }` si legge ancora.
+ * Torna una riga per condizione: { kind, n, id, testo, ok } con ok true
+ * (c'è), false (manca) o null (la giudica il tavolo). Il grado (`dot`) non
+ * chiude niente da solo. `owned` sono le righe del personaggio nella Sfera,
+ * `tutti` tutte le sue righe.
  */
-export function prerequisitiMancanti(entry, { owned = [], tutti = null } = {}) {
+export function condizioniDelPotere(entry, { owned = [], tutti = null } = {}) {
   const voce = entry?.prerequisiti;
-  if (!voce || typeof voce !== "object") return null;
+  if (!voce || typeof voce !== "object") return [];
+  const lista = Array.isArray(voce)
+    ? voce
+    : [...(count(voce.numero) ? [{ numero: count(voce.numero) }] : []), ...((voce.poteri ?? []).map((id) => ({ potere: id })))];
   const conosciuti = (owned ?? []).filter((power) => power?.catalogId !== entry.id).length;
   const have = new Set((tutti ?? owned ?? []).map((power) => power?.catalogId).filter(Boolean));
-  const mancano = {};
-  if (count(voce.numero) > conosciuti) mancano.numero = count(voce.numero);
-  const poteri = (voce.poteri ?? []).filter((id) => !have.has(id));
-  if (poteri.length) mancano.poteri = poteri;
-  return Object.keys(mancano).length ? mancano : null;
+  const righe = [];
+  for (const condizione of lista) {
+    if (!condizione || typeof condizione !== "object") continue;
+    if (count(condizione.numero)) righe.push({ kind: "numero", n: count(condizione.numero), id: "", testo: "", ok: conosciuti >= count(condizione.numero) });
+    else if (testo(condizione.potere)) righe.push({ kind: "potere", n: 0, id: testo(condizione.potere), testo: "", ok: have.has(testo(condizione.potere)) });
+    else if (testo(condizione.testo)) righe.push({ kind: "testo", n: 0, id: "", testo: testo(condizione.testo), ok: null });
+  }
+  return righe;
+}
+
+/** Cosa manca per prendere il potere: le condizioni non soddisfatte, o null se si può prendere. */
+export function prerequisitiMancanti(entry, { owned = [], tutti = null } = {}) {
+  const mancano = condizioniDelPotere(entry, { owned, tutti }).filter((riga) => riga.ok === false);
+  return mancano.length ? mancano : null;
 }
 
 /**
@@ -240,7 +256,9 @@ export function catalogoDellaSfera(sphere, { catalog = POTERI, owned = [], tutti
   return (catalog ?? [])
     .filter((entry) => sfereDellaVoce(entry).includes(sphere))
     .map((entry) => {
-      const chiuso = prerequisitiMancanti(entry, { owned, tutti });
+      // Le condizioni, una per riga (25/9 sera); chiuso se una manca.
+      const condizioni = condizioniDelPotere(entry, { owned, tutti });
+      const chiuso = condizioni.filter((riga) => riga.ok === false);
       return {
         id: entry.id,
         name: testo(entry.name),
@@ -250,8 +268,9 @@ export function catalogoDellaSfera(sphere, { catalog = POTERI, owned = [], tutti
         formulaName: testo(entry.formulaName),
         proposal: entry.link === "proposta",
         known: have.has(entry.id),
-        chiuso,
-        locked: Boolean(chiuso)
+        condizioni,
+        chiuso: chiuso.length ? chiuso : null,
+        locked: chiuso.length > 0
       };
     })
     // In ordine di grado e poi di nome; i poteri col grado ancora da assegnare in coda (25/9 sera).

@@ -32,8 +32,8 @@
          pagine fuori dalla prima colorano la linguetta, e i tasti di reset
          si accendono (la stessa spunta, Blue 23/9); qui restano il grado del
          Risvegliato (decide i traguardi), la Sfida coi suoi premi e il reset
-         della scheda intera. I Bonus scritti stanno nella loro tendina, a
-         destra. --}}
+         della scheda intera. La tendina dei Bonus scritti non c'è più (Blue,
+         25/9 sera: «va rimosso completamente da quella parte di scheda»). --}}
     <div class="wod5e-mage-stat-creazione wod5e-mage-creazione-barra{{#if memo.on}} acceso{{/if}}">
         <label class="wod5e-mage-memo-spunta" title="{{localize 'WOD5E_MAGE.Riepilogo.MemoHint'}}">
             <input type="checkbox" name="flags.wod5e-mage.creazione.memo" {{#if memo.on}}checked{{/if}} {{#if locked}}disabled{{/if}}>
@@ -64,14 +64,5 @@
                 <i class="fa-solid {{resetsById.all.icon}}" aria-hidden="true"></i> {{resetsById.all.label}}
             </button>
         {{/if}}
-        <details class="wod5e-mage-stat-bonus">
-            <summary>
-                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                <span>{{localize "WOD5E_MAGE.Bonuses.Label"}}</span>
-            </summary>
-            <div class="wod5e-mage-stat-bonus-body">
-                {{> "modules/wod5e-mage/templates/actor/parts/bonuses.hbs"}}
-            </div>
-        </details>
     </div>
 </section>

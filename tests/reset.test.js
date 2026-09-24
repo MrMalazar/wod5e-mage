@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { applyReset, onResetSection, prepareResets, prepareResetsById, RESET_IDS, RESETS } from "../scripts/reset.js";
+import { applyReset, nomeConferma, onResetSection, prepareResets, prepareResetsById, RESET_IDS, RESETS } from "../scripts/reset.js";
 
 // Sette tasti, nell'ordine chiesto.
 assert.deepEqual(RESET_IDS, ["attributes", "skills", "advantages", "spheres", "credo", "lineage", "compass"]);
@@ -74,6 +74,28 @@ assert.equal(actor.updates.length, 1);
 await onResetSection.call({ actor }, { preventDefault() {} }, { dataset: { reset: "boh" } });
 assert.equal(asked, 2);
 
+// Il reset della scheda intera (Blue, 25/9 sera): la seconda conferma è il nome del personaggio scritto.
+assert.equal(nomeConferma("Guendalina", "Guendalina"), true);
+assert.equal(nomeConferma("  guendalina ", "Guendalina"), true, "maiuscole e spazi non contano");
+assert.equal(nomeConferma("Guenda", "Guendalina"), false);
+assert.equal(nomeConferma("", ""), false, "senza nome non si conferma");
+let scrittoNome = false;
+let contenuto = "";
+globalThis.foundry.utils = { escapeHTML: (s) => String(s) };
+globalThis.foundry.applications.api.DialogV2.wait = async ({ content, buttons }) => {
+  contenuto = content;
+  const reset = buttons.find((b) => b.action === "reset");
+  return reset.callback({}, { form: { elements: { nome: { value: scrittoNome ? "Test" : "altro" } } } });
+};
+actor = actorStub();
+await onResetSection.call({ actor }, { preventDefault() {} }, { dataset: { reset: "all" } });
+assert.equal(actor.updates.length, 0, "col nome sbagliato non si azzera");
+assert.ok(contenuto.includes('name="nome"') && contenuto.includes("WOD5E_MAGE.Reset.ConfermaNome"));
+scrittoNome = true;
+await onResetSection.call({ actor }, { preventDefault() {} }, { dataset: { reset: "all" } });
+assert.equal(actor.updates.length, 7, "col nome giusto la scheda si azzera");
+assert.equal(asked, 2, "il reset della scheda non passa dalla conferma semplice");
+
 // La scheda (11/9): la spunta «Mostra i tasti di reset» e il reset della
 // scheda intera nel memo; ogni altro tasto nella sua sezione, a sinistra del
 // titolo, dentro {{#if creazioneReset}}; l'azione registrata; la lingua.
@@ -107,6 +129,7 @@ for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
   for (const id of RESET_IDS) assert.equal(typeof strings.WOD5E_MAGE.Reset[RESETS[id].label.split(".").pop()], "string", `${lang} ${id}`);
   assert.match(strings.WOD5E_MAGE.Reset.Confirm, /\{label\}/);
+  assert.match(strings.WOD5E_MAGE.Reset.ConfermaNome, /\{name\}/);
 }
 
 console.log("Reset tests passed.");

@@ -1,18 +1,21 @@
-{{!-- Passo 6 · i Domini (25/9): a quali si ha accesso, e un potere per ciascuno; niente livelli (25/9 sera). --}}
+{{!-- Passo 6 · i Domini (25/9 sera): tre alla creazione, Famiglia e via fissi, uno a scelta fra i due del Credo;
+     un potere per Dominio (di base, o di qualsiasi Sfera); niente livelli. --}}
 <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
     <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
     <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
     <div class="wod5e-mage-guidata-conto-riga">
-        <span class="wod5e-mage-guidata-conto {{corpo.conto.domini.state}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Domini"}} <b>{{corpo.conto.domini.text}}</b></span>
+        <span class="wod5e-mage-guidata-conto {{corpo.conto.domini.state}}" title="{{localize 'WOD5E_MAGE.Riepilogo.DominiHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Domini"}} <b>{{corpo.conto.domini.text}}</b></span>
         <span class="wod5e-mage-guidata-conto {{corpo.conto.poteri.state}}" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.PoteriHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Poteri"}} <b>{{corpo.conto.poteri.text}}</b>{{#if corpo.extra}} <small>{{localize "WOD5E_MAGE.Guidata.Sfere.Extra" n=corpo.extra}}</small>{{/if}}</span>
     </div>
+    {{#if corpo.senzaAppartenenza}}<p class="wod5e-mage-guidata-nota-passo under">{{localize "WOD5E_MAGE.Guidata.Sfere.SenzaAppartenenza"}}</p>{{/if}}
     <div class="wod5e-mage-guidata-righe">
         {{#each corpo.spheres as |sphere|}}
-            <div class="wod5e-mage-guidata-dominio{{#if sphere.selected}} scelta{{/if}}{{#if sphere.family}} famiglia{{/if}}{{#if sphere.vuoto}} vuoto{{/if}}">
+            <div class="wod5e-mage-guidata-dominio{{#if sphere.selected}} scelta{{/if}}{{#if sphere.family}} famiglia{{/if}}{{#if sphere.vuoto}} vuoto{{/if}}{{#unless sphere.ruolo}} fuori{{/unless}}">
                 <div class="wod5e-mage-guidata-dominio-testa">
-                    <button type="button" class="wod5e-mage-guidata-accesso{{#if sphere.selected}} acceso{{/if}}" data-action="dominioAccesso" data-sphere="{{sphere.id}}" aria-pressed="{{#if sphere.selected}}true{{else}}false{{/if}}" title="{{#if sphere.selected}}{{localize 'WOD5E_MAGE.Guidata.Sfere.AccessoTogli'}}{{else}}{{localize 'WOD5E_MAGE.Guidata.Sfere.AccessoDai'}}{{/if}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid {{#if sphere.selected}}fa-circle-check{{else}}fa-circle{{/if}}" aria-hidden="true"></i></button>
+                    {{!-- Famiglia e via: fisse. Le due del Credo: il tasto sceglie. Le altre: chiuse alla creazione. --}}
+                    <button type="button" class="wod5e-mage-guidata-accesso{{#if sphere.selected}} acceso{{/if}}{{#if sphere.scelta}} scelta{{/if}}" data-action="dominioAccesso" data-sphere="{{sphere.id}}" aria-pressed="{{#if sphere.selected}}true{{else}}false{{/if}}" title="{{#if sphere.fissa}}{{localize 'WOD5E_MAGE.Guidata.Sfere.Fissa'}}{{else if sphere.sceltaFatta}}{{localize 'WOD5E_MAGE.Guidata.Sfere.CredoTogli'}}{{else if sphere.scelta}}{{localize 'WOD5E_MAGE.Guidata.Sfere.CredoScegli'}}{{else}}{{localize 'WOD5E_MAGE.Guidata.Sfere.FuoriCreazione'}}{{/if}}" {{#unless @root.canEdit}}disabled{{/unless}}{{#if sphere.fissa}} disabled{{/if}}{{#unless sphere.ruolo}} disabled{{/unless}}><i class="fa-solid {{#if sphere.selected}}fa-circle-check{{else}}fa-circle{{/if}}" aria-hidden="true"></i></button>
                     <img class="wod5e-mage-guidata-riga-icona sigillo" src="{{sphere.icon}}" alt="">
-                    <span class="wod5e-mage-guidata-riga-nome">{{sphere.label}}{{#if sphere.family}} <small class="wod5e-mage-guidata-tag oro" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.FamigliaHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Famiglia"}}</small>{{/if}}</span>
+                    <span class="wod5e-mage-guidata-riga-nome">{{sphere.label}}{{#if sphere.ruolo}} <small class="wod5e-mage-guidata-tag{{#if sphere.selected}} oro{{/if}}" title="{{localize 'WOD5E_MAGE.Riepilogo.DominiHint'}}">{{sphere.ruoloLabel}}</small>{{/if}}{{#if sphere.family}} <small class="wod5e-mage-guidata-tag oro" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.FamigliaHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Famiglia"}}</small>{{/if}}</span>
                     {{#if sphere.selected}}
                         <button type="button" class="wod5e-mage-guidata-tastino" data-action="dominioPotere" data-sphere="{{sphere.id}}" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.Scegli'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
                     {{/if}}

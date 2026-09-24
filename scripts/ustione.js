@@ -30,10 +30,9 @@ export function ustioneState(ustione) {
   return { show: !chosen, chosen, threshold, points: givenPoints(ustione) };
 }
 
-/** I punti Paradosso al Narratore: il livello della Sfera usata; senza Sfera (i messaggi vecchi), la soglia. */
+/** I punti Paradosso al Narratore: la soglia del lancio (Blue, 25/9 sera: senza livelli di Sfera). */
 export function givenPoints(ustione) {
-  const sphere = Math.max(Math.trunc(Number(ustione?.sphere) || 0), 0);
-  return sphere > 0 ? sphere : Math.max(Math.trunc(Number(ustione?.threshold) || 0), 0);
+  return Math.max(Math.trunc(Number(ustione?.threshold) || 0), 0);
 }
 
 /** I due tasti: Brucia (rosso) e Dai al Narratore (viola), con l'Ustione nel numero. */

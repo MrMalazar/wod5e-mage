@@ -28,6 +28,8 @@
                     <input type="text" name="spellName" id="wod5e-mage-arete-spell-name" placeholder="{{localize 'WOD5E_MAGE.Incantesimi.NameHint'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Name'}}">
                 </label>
             {{/if}}
+            {{!-- La matrice da cui viene l'incantesimo (25/9 sera): dice se è un effetto percettivo. --}}
+            <input type="hidden" name="formula" id="wod5e-mage-arete-formula" value="">
             {{!-- L'Obiettivo in cima (10/9 notte): cosa vuoi ottenere, scritto a mano o scelto dal
                  Grimorio (il libro), che accende anche le Sfere coinvolte. È un riquadro (6/9):
                  c'è spazio per scrivere, e la colonna sinistra pareggia la destra. --}}
