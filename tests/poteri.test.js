@@ -1,8 +1,16 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
+  ambitiDellaScelta,
   applyPotere,
   blocchiDelTesto,
+  effettiDelPotere,
+  idVarianteAttiva,
+  POTERE_EFFECTS,
+  riuscitaSenzaTirare,
+  spezzaIdPotere,
+  tiroDelPotere,
+  variantiDelPotere,
   cartaPotere,
   catalogoDellaSfera,
   POTERI_USI_FLAG,
@@ -43,8 +51,8 @@ assert.equal(POTERI_FLAG, "poteri");
 
 // Una riga della bandiera letta pulita: i campi al loro posto, il resto scartato.
 const riga = normalizzaPotere("abc", { sphere: "forces", name: " Conduttore ", dot: "7", type: "passivo", text: "Un dado in più.", amalgam: "mind", amalgamText: "Anche la mente", cost: "1 Quintessenza", source: "catalogo", catalogId: "P001-Fo" });
-assert.deepEqual(riga, { id: "abc", sphere: "forces", name: "Conduttore", dot: 5, type: "passivo", text: "Un dado in più.", amalgam: "mind", amalgamText: "Anche la mente", flavor: "", cost: "1 Quintessenza", source: "catalogo", catalogId: "P001-Fo", formula: "", formulaName: "", link: "", costValue: 0, uses: null, paradox: "", effects: [] });
-assert.deepEqual(normalizzaPotere("x", { sphere: "boh", type: "strano", dot: -2, amalgam: "nessuna" }), { id: "x", sphere: "", name: "", dot: 0, type: "", text: "", amalgam: "", amalgamText: "", flavor: "", cost: "", source: "mano", catalogId: "", formula: "", formulaName: "", link: "", costValue: 0, uses: null, paradox: "", effects: [] });
+assert.deepEqual(riga, { id: "abc", sphere: "forces", name: "Conduttore", dot: 5, type: "passivo", text: "Un dado in più.", amalgam: "mind", amalgamText: "Anche la mente", flavor: "", cost: "1 Quintessenza", source: "catalogo", catalogId: "P001-Fo", formula: "", formulaName: "", link: "", costValue: 0, uses: null, paradox: "", effects: [], scelta: "" });
+assert.deepEqual(normalizzaPotere("x", { sphere: "boh", type: "strano", dot: -2, amalgam: "nessuna" }), { id: "x", sphere: "", name: "", dot: 0, type: "", text: "", amalgam: "", amalgamText: "", flavor: "", cost: "", source: "mano", catalogId: "", formula: "", formulaName: "", link: "", costValue: 0, uses: null, paradox: "", effects: [], scelta: "" });
 // Dal catalogo del 24/9 restano la matrice, il legame, il costo e il limite d'uso.
 assert.deepEqual(normalizzaPotere("y", { sphere: "life", name: "Pronto soccorso", formula: "guarire", formulaName: "Guarire", link: "proposta", costValue: "2", uses: { per: "scena", n: 0 } }).uses, { per: "scena", n: 1 });
 
@@ -104,14 +112,20 @@ assert.deepEqual([velocista.sphere, velocista.formulaName, velocista.link, veloc
 
 // Gli effetti sul conto: soglia (mai sotto zero), dadi, riuscita da. Un potere senza effetti non tocca niente.
 const conto = { threshold: 5, dice: 0, difficulty: null };
-assert.deepEqual(applyPotere(conto, poteri[0]), { threshold: 5, dice: 0, difficulty: null, notes: [] });
+const vuoto = { threshold: 5, thresholdDelta: 0, dice: 0, difficulty: null, prize: 0, freeScopes: {}, quintessenceOnSkills: false, autoSuccess: [], notes: [], esclusi: [], attivo: false };
+assert.deepEqual(applyPotere(conto, poteri[0]), vuoto);
 const sconto = { ...poteri[1], effects: [{ on: "threshold", value: -2 }, { on: "dice", value: 1 }] };
-assert.deepEqual(applyPotere(conto, sconto), { threshold: 3, dice: 1, difficulty: null, notes: [{ on: "threshold", value: -2 }, { on: "dice", value: 1 }] });
-assert.equal(applyPotere({ threshold: 1 }, { effects: [{ on: "threshold", value: -4 }] }).threshold, 0);
-assert.equal(applyPotere(conto, { effects: [{ on: "successFrom", value: 8 }] }).difficulty, 8);
-assert.equal(applyPotere(conto, { effects: [{ on: "successFrom", value: 0 }] }).difficulty, null);
-assert.equal(applyPotere(conto, { effects: [{ on: "altro", value: 3 }] }).threshold, 5, "un gancio sconosciuto non fa niente");
-assert.deepEqual(applyPotere(undefined, null), { threshold: 0, dice: 0, difficulty: null, notes: [] });
+const applicato = applyPotere(conto, sconto, { magick: true });
+assert.deepEqual([applicato.threshold, applicato.thresholdDelta, applicato.dice, applicato.difficulty], [3, -2, 1, null]);
+assert.deepEqual(applicato.notes, [{ on: "threshold", value: -2, nota: "" }, { on: "dice", value: 1, nota: "" }]);
+assert.equal(applyPotere({ threshold: 1 }, { effects: [{ on: "threshold", value: -4 }] }, { magick: true }).threshold, 0);
+assert.equal(applyPotere(conto, { effects: [{ on: "successFrom", value: 8 }] }, { magick: true }).difficulty, 8);
+assert.equal(applyPotere(conto, { effects: [{ on: "successFrom", value: 0 }] }, { magick: true }).difficulty, null);
+assert.equal(applyPotere(conto, { effects: [{ on: "altro", value: 3 }] }, { magick: true }).threshold, 5, "un gancio sconosciuto non fa niente");
+assert.deepEqual(applyPotere(undefined, null), { ...vuoto, threshold: 0 });
+// Senza `magick` nel contesto il tiro è di Abilità: un effetto della Magick resta fuori, col perché.
+const fuori = applyPotere(conto, sconto, {});
+assert.deepEqual([fuori.threshold, fuori.dice, fuori.esclusi.map((e) => e.motivo)], [5, 0, ["tiro:magick", "tiro:magick"]]);
 
 // La pagina Magick e la prima pagina leggono i poteri inseriti, non i segnaposto.
 const scheda = readFileSync(new URL("../scripts/poteri-scheda.js", import.meta.url), "utf8");
@@ -119,7 +133,7 @@ assert.match(scheda, /export function preparePoteriPagina\(actor, sheet/);
 assert.match(scheda, /export async function onPotereNuovo[\s\S]*nuovoPotere\(sphere\)/);
 assert.match(scheda, /export async function onPotereTogli[\s\S]*\.-=\$\{id\}`\]: null/);
 const tiroScheda = readFileSync(new URL("../scripts/tiro-scheda.js", import.meta.url), "utf8");
-assert.match(tiroScheda, /findPotere\(tiro\.power, poteriDelPersonaggio\(actor\)\)/);
+assert.match(tiroScheda, /findPotere\(powerId, rows\)/);
 assert.match(tiroScheda, /export function preparePoteriRows[\s\S]*poteriDelPersonaggio\(actor, \{ order \}\)/);
 assert.doesNotMatch(tiroScheda, /placeholder|poteriSegnaposto/);
 const reset = readFileSync(new URL("../scripts/reset.js", import.meta.url), "utf8");
@@ -165,3 +179,103 @@ const salute = readFileSync(new URL("../scripts/salute.js", import.meta.url), "u
 assert.match(salute, /riarmaUsi\(actor\.getFlag\(MODULE_ID, POTERI_USI_FLAG\) \?\? \{\}, "scena"\)/);
 assert.match(salute, /riarmaUsi\(actor\.getFlag\(MODULE_ID, POTERI_USI_FLAG\) \?\? \{\}, "sessione"\)/);
 console.log("poteri, tasto Usa: ok");
+
+
+// Gli effetti sul tiro dai dati (tappa 3, 24/9): il catalogo li porta, la
+// riga li legge dal catalogo, le condizioni e le varianti si giudicano.
+{
+  const conEffetti = POTERI.filter((power) => power.effects.length);
+  assert.equal(conEffetti.length, 36, "36 poteri con effetti sul tiro");
+  for (const power of conEffetti) {
+    for (const effect of power.effects) {
+      assert.ok(POTERE_EFFECTS.includes(effect.on), `${power.name}: gancio ${effect.on}`);
+      assert.ok(effect.nota && power.text.replace(/\s+/g, " ").includes(effect.nota.replace(/\s+/g, " ")), `${power.name}: la nota sta nel testo`);
+    }
+  }
+  assert.deepEqual(POTERI.find((power) => power.id === "ambito-di-casa").scelta.kind, "ambito");
+  assert.deepEqual(POTERI.find((power) => power.id === "mestiere").scelta, { kind: "abilita" });
+  assert.equal(POTERI.find((power) => power.id === "appoggio").scelta, null);
+
+  // L'id con la variante.
+  assert.deepEqual(spezzaIdPotere("r1#attivo"), { id: "r1", variant: "attivo" });
+  assert.deepEqual(spezzaIdPotere("r1"), { id: "r1", variant: "" });
+  assert.deepEqual(spezzaIdPotere("r1#boh"), { id: "r1", variant: "" });
+  assert.equal(idVarianteAttiva("r1"), "r1#attivo");
+
+  const riga = (id, sphere, scelta = "") => ({ ...normalizzaPotere(id, { ...nuovoPotere(sphere, POTERI.find((power) => power.id === id)), scelta }), id: `riga-${id}` });
+
+  // Appoggio: la Potenza non conta fino a 4 (l'eccedenza conta), solo nella Magick.
+  const appoggio = riga("appoggio", "forces");
+  assert.deepEqual(variantiDelPotere(appoggio), { passivo: true, attivo: false });
+  assert.equal(tiroDelPotere(appoggio), "magick");
+  const conAppoggio = applyPotere({ threshold: 0 }, appoggio, { magick: true });
+  assert.deepEqual([conAppoggio.freeScopes, conAppoggio.notes[0].on, conAppoggio.notes[0].scope, conAppoggio.attivo], [{ potency: 4 }, "freeScope", "potency", false]);
+  assert.deepEqual(applyPotere({ threshold: 0 }, appoggio, { magick: false }).esclusi.map((e) => e.motivo), ["tiro:magick"]);
+
+  // Ambito di casa: l'Ambito scelto nella riga, fino ai poteri conosciuti nella Sfera; la variante attiva a qualunque livello.
+  const casa = riga("ambito-di-casa", "forces", "potency");
+  assert.deepEqual(variantiDelPotere(casa), { passivo: true, attivo: true });
+  assert.deepEqual(ambitiDellaScelta(casa), ["potency", "range"]);
+  assert.deepEqual(ambitiDellaScelta(riga("ambito-di-casa", "spirit")), []);
+  assert.deepEqual([tiroDelPotere(casa), tiroDelPotere(casa, "attivo")], ["magick", "magick"]);
+  assert.equal(applyPotere({}, casa, { magick: true, poteriConti: { forces: 3 } }).freeScopes.potency, 3);
+  const casaAttiva = applyPotere({}, casa, { magick: true, variant: "attivo", poteriConti: { forces: 3 } });
+  assert.deepEqual([casaAttiva.freeScopes.potency, casaAttiva.attivo], [7, true]);
+  assert.equal(applyPotere({}, casa, { magick: true, poteriConti: { forces: 3 } }).attivo, false, "senza variante gli attivi restano fuori");
+  const casaSenzaScelta = applyPotere({}, riga("ambito-di-casa", "forces"), { magick: true, poteriConti: { forces: 3 } });
+  assert.deepEqual([casaSenzaScelta.freeScopes, casaSenzaScelta.esclusi.map((e) => e.motivo)], [{}, ["attivo", "scelta"]], "l'attivo non scelto, e la scelta che manca");
+
+  // Mestiere: un dado per Sfera conosciuta (fino a 3) sull'Abilità scelta, fuori dalla Magick; l'attivo la porta nella Magick.
+  const mestiere = riga("mestiere", "mind", "skill:persuasion");
+  assert.deepEqual([tiroDelPotere(mestiere), tiroDelPotere(mestiere, "attivo")], ["abilita", "magick"]);
+  const ctxMestiere = { magick: false, skill: "skill:persuasion", spheresOwned: ["mind", "time", "forces", "life"] };
+  assert.equal(applyPotere({}, mestiere, ctxMestiere).dice, 3);
+  assert.equal(applyPotere({}, mestiere, { ...ctxMestiere, spheresOwned: ["mind", "time"] }).dice, 2);
+  assert.deepEqual(applyPotere({}, mestiere, { ...ctxMestiere, skill: "skill:athletics" }).esclusi.map((e) => e.motivo), ["abilitaScelta", "tiro:magick"]);
+  const mestiereMagick = applyPotere({}, mestiere, { ...ctxMestiere, magick: true, variant: "attivo" });
+  assert.deepEqual([mestiereMagick.dice, mestiereMagick.attivo], [3, true]);
+
+  // Fortuna del principiante: solo attivo, quindi sceglierlo è attivarlo; vale con un'Abilità a un pallino.
+  const fortuna = riga("fortuna-del-principiante", "entropy");
+  assert.deepEqual(variantiDelPotere(fortuna), { passivo: false, attivo: true });
+  assert.equal(tiroDelPotere(fortuna), "abilita");
+  const fortunaOk = applyPotere({}, fortuna, { magick: false, skillValue: 1 });
+  assert.deepEqual([fortunaOk.attivo, fortunaOk.autoSuccess.length, fortunaOk.autoSuccess[0].when], [true, 1, []]);
+  assert.deepEqual(applyPotere({}, fortuna, { magick: false, skillValue: 3 }).esclusi.map((e) => e.motivo), ["abilita1"]);
+
+  // Niente al caso: la riuscita senza tirare vuole due dadi; nella Magick serve Primordio.
+  const niente = riga("niente-al-caso", "entropy");
+  assert.equal(tiroDelPotere(niente), "any");
+  const nienteAbilita = applyPotere({}, niente, { magick: false });
+  assert.deepEqual(nienteAbilita.autoSuccess.map((a) => a.when), [["dadi2"]]);
+  assert.deepEqual(riuscitaSenzaTirare(nienteAbilita.autoSuccess, 2).ok, true);
+  assert.deepEqual(riuscitaSenzaTirare(nienteAbilita.autoSuccess, 1), { ok: false, nota: "", motivo: "dadi2" });
+  assert.deepEqual(applyPotere({}, niente, { magick: true, spheresOwned: ["entropy"] }).esclusi.map((e) => e.motivo), ["tiro:abilita", "sfera:prime"]);
+  assert.equal(applyPotere({}, niente, { magick: true, spheresOwned: ["entropy", "prime"] }).autoSuccess.length, 1);
+
+  // Voce dell'Avatar: il premio doppio. Anche a mani nude: la Quintessenza nei tiri di Abilità.
+  assert.equal(applyPotere({ prize: 3 }, riga("voce-dell-avatar", "spirit"), { magick: true }).prize, 6);
+  assert.equal(applyPotere({}, riga("anche-a-mani-nude", "prime"), { magick: false }).quintessenceOnSkills, true);
+  assert.equal(applyPotere({}, riga("anche-a-mani-nude", "prime"), { magick: true }).quintessenceOnSkills, false);
+
+  // Adrenalina: soglia -2 sotto metà Salute. Terra sacra: dadi pari ai poteri di Spirito, con Spirito.
+  assert.equal(applyPotere({ threshold: 4 }, riga("adrenalina", "life"), { magick: true, saluteMeta: true }).threshold, 2);
+  assert.deepEqual(applyPotere({ threshold: 4 }, riga("adrenalina", "life"), { magick: true, saluteMeta: false }).esclusi.map((e) => e.motivo), ["saluteMeta"]);
+  assert.equal(applyPotere({}, riga("terra-sacra", "prime"), { magick: true, spheresOwned: ["prime", "spirit"], poteriConti: { spirit: 2 } }).dice, 2);
+  assert.deepEqual(applyPotere({}, riga("terra-sacra", "prime"), { magick: true, spheresOwned: ["prime"] }).esclusi.map((e) => e.motivo), ["sfera:spirit"]);
+
+  // Semplice violenza: la nota solo con Potenza 3 o più. La Pratica: -2 sull'incantesimo scelto.
+  assert.equal(applyPotere({}, riga("semplice-violenza", "forces"), { magick: true, scopes: { potency: 3 } }).notes.length, 1);
+  assert.equal(applyPotere({}, riga("semplice-violenza", "forces"), { magick: true, scopes: { potency: 2 } }).notes.length, 0);
+  const pratica = riga("la-pratica-rende-perfetti", "mind", "s1");
+  assert.equal(applyPotere({ threshold: 3 }, pratica, { magick: true, spell: "s1" }).threshold, 1);
+  assert.deepEqual(applyPotere({ threshold: 3 }, pratica, { magick: true, spell: "s2" }).esclusi.map((e) => e.motivo), ["incantesimoScelto", "attivo"]);
+  const praticaAttiva = applyPotere({ threshold: 3 }, pratica, { magick: true, spell: "s1", variant: "attivo" });
+  assert.deepEqual([praticaAttiva.threshold, praticaAttiva.autoSuccess.map((a) => a.when), praticaAttiva.attivo], [1, [["dadi1"]], true]);
+
+  // Un potere scritto a mano con effetti suoi li tiene; una riga del catalogo legge il catalogo, non la copia.
+  assert.equal(effettiDelPotere({ catalogId: "", effects: [{ on: "dice", value: 2, nota: "x" }] }).length, 1);
+  assert.equal(effettiDelPotere({ catalogId: "appoggio", effects: [] }).length, 1);
+  assert.equal(effettiDelPotere({ catalogId: "da-qualche-parte", effects: [] }).length, 0);
+  console.log("poteri, effetti sul tiro: ok");
+}

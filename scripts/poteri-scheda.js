@@ -12,6 +12,7 @@
  */
 import { MODULE_ID } from "./constants.js";
 import {
+  ambitiDellaScelta,
   cartaPotere,
   catalogoDellaSfera,
   contoPoteri,
@@ -28,9 +29,12 @@ import {
   puoUsare,
   registraUso,
   ruotaDopoUso,
+  sceltaDelPotere,
   usiDelPotere
 } from "./poteri.js";
 import { getMagickBalance } from "./magick-balance.js";
+import { prepareIncantesimi } from "./incantesimi.js";
+import { prepareMageRollTraits } from "./mage-roll-selection.js";
 import { prepareSpheres, SPHERES } from "./spheres.js";
 
 const SPHERE_ICON = (sphere) => `modules/${MODULE_ID}/assets/icons/sheet/${sphere}.png`;
@@ -65,6 +69,26 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
   // Il tasto «Usa» (24/9): gli usi del periodo e la Quintessenza sulla Ruota.
   const usi = actor.getFlag?.(MODULE_ID, POTERI_USI_FLAG) ?? {};
   const quintessence = getMagickBalance(actor).quintessence;
+  // Le scelte all'acquisto (tappa 3): le Abilità e gli incantesimi del personaggio, letti una volta.
+  const scelte = { skills: null, spells: null };
+  const sceltaCampo = (power) => {
+    const scelta = sceltaDelPotere(power);
+    if (!scelta) return null;
+    let options = [];
+    if (scelta.kind === "ambito") options = ambitiDellaScelta(power).map((scope) => ({ value: scope, label: localize(`WOD5E_MAGE.Scopes.${scope}`) }));
+    else if (scelta.kind === "abilita") {
+      scelte.skills ??= prepareMageRollTraits(actor, { localize, lang: locale }).skills;
+      options = scelte.skills.map((trait) => ({ value: trait.key, label: trait.label }));
+    } else {
+      scelte.spells ??= prepareIncantesimi(actor, localize);
+      options = scelte.spells.map((spell) => ({ value: spell.id, label: spell.name || localize("WOD5E_MAGE.Poteri.SenzaNome") }));
+    }
+    return {
+      kind: scelta.kind,
+      label: localize(`WOD5E_MAGE.Poteri.Scelta.${scelta.kind}`),
+      options: options.map((option) => ({ ...option, selected: option.value === power.scelta }))
+    };
+  };
 
   const righe = sphereData.all.map((sphere) => ({ ...sphere, conto: conti[sphere.id] ?? 0 }));
   const sezioni = sphereData.selected.map((sphere) => ({
@@ -83,6 +107,7 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
       amalgamOwned: power.amalgam ? Boolean(selezione[power.amalgam]) : false,
       usesLabel: power.uses?.per ? localize(`WOD5E_MAGE.Poteri.Usi.${power.uses.per}`) : "",
       usa: usaContesto(power, usi, quintessence, localize),
+      sceltaCampo: sceltaCampo(power),
       editing: editing.has(power.id),
       options
     }))

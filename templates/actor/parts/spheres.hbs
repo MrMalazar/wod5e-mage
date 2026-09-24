@@ -144,6 +144,15 @@
                                         </div>
                                     {{else}}
                                         {{#if p.formulaName}}<p class="wod5e-mage-potere-testo wod5e-mage-potere-matrice"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.Matrice"}}</span>{{p.formulaName}}{{#if p.usesLabel}} · {{p.usesLabel}}{{/if}}</p>{{/if}}
+                                        {{!-- La scelta fatta all'acquisto (tappa 3): l'Ambito, l'Abilità o l'incantesimo che il potere chiede; la salva il foglio. --}}
+                                        {{#if p.sceltaCampo}}
+                                            <label class="wod5e-mage-potere-testo wod5e-mage-potere-scelta{{#unless p.scelta}} manca{{/unless}}"><span class="wod5e-mage-potere-k">{{p.sceltaCampo.label}}</span>
+                                                <select name="flags.wod5e-mage.poteri.{{p.id}}.scelta" {{#if ../../locked}}disabled{{/if}}>
+                                                    <option value=""{{#unless p.scelta}} selected{{/unless}}>{{localize "WOD5E_MAGE.Poteri.SceltaNessuna"}}</option>
+                                                    {{#each p.sceltaCampo.options as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}
+                                                </select>
+                                            </label>
+                                        {{/if}}
                                         <p class="wod5e-mage-potere-testo"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.CosaFa"}}</span>{{#if p.text}}{{p.text}}{{else}}<em>{{localize "WOD5E_MAGE.Poteri.CosaFaVuoto"}}</em>{{/if}}</p>
                                         {{#if p.amalgam}}
                                             {{!-- L'Amalgama si legge: piena se la Sfera ce l'hai, tratteggiata se no. --}}

@@ -183,12 +183,12 @@ export function renderAutoVictoryContent({ card, notes = [] }, localize = (key) 
  * parola (10/9 notte): Successo o Fallimento; con la realtà sforzata o la
  * vittoria a un prezzo, Successo con la sua ragione.
  */
-export function rollOutcome(total, difficulty, localize = (key) => key, { forced = false, priced = false, bought = false } = {}) {
+export function rollOutcome(total, difficulty, localize = (key) => key, { forced = false, priced = false, bought = false, boughtText = "" } = {}) {
   const successes = Math.max(Math.trunc(Number(total) || 0), 0);
   const goal = Math.max(Math.trunc(Number(difficulty) || 0), 0);
   if (goal <= 0) return { total: successes, cssClass: "", text: "", missing: 0 };
   // La riuscita comprata con la Quintessenza (ramo C): riuscito senza tirare.
-  if (bought) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Bought"), missing: 0 };
+  if (bought) return { total: successes, cssClass: "success", text: boughtText || localize("WOD5E_MAGE.RollCard.Bought"), missing: 0 };
   if (forced) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Forced"), missing: 0 };
   if (priced) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Priced"), missing: 0 };
   if (successes >= goal) return { total: successes, cssClass: "success", text: localize("WOD5E_MAGE.RollCard.Success"), missing: 0 };
@@ -197,7 +197,7 @@ export function rollOutcome(total, difficulty, localize = (key) => key, { forced
 
 function applyMageTotal(html, data) {
   if (!Number.isFinite(Number(data.total))) return;
-  const outcome = rollOutcome(data.total, data.difficulty, game.i18n.localize.bind(game.i18n), { forced: Boolean(data.forced), priced: Boolean(data.priced), bought: Boolean(data.bought) });
+  const outcome = rollOutcome(data.total, data.difficulty, game.i18n.localize.bind(game.i18n), { forced: Boolean(data.forced), priced: Boolean(data.priced), bought: Boolean(data.bought), boughtText: String(data.banner ?? "") });
   const totalOut = html.querySelector(".total-contents");
   if (totalOut) {
     totalOut.textContent = String(outcome.total);
@@ -293,7 +293,7 @@ export function decorateRollCard(message, html) {
   const top = document.createElement("div");
   top.className = "wod5e-mage-roll-top";
   top.innerHTML = [
-    data.automatic ? renderAutoVictoryBanner(localize, data.bought ? localize("WOD5E_MAGE.RamoC.BoughtBanner") : "") : "",
+    data.automatic ? renderAutoVictoryBanner(localize, data.bought ? (data.banner || localize("WOD5E_MAGE.RamoC.BoughtBanner")) : "") : "",
     // I messaggi di prima della 0.86.0 non hanno i glifi nelle righe: la fila resta a loro.
     data.traits ? "" : renderRollSymbols(data.symbols ?? [], localize)
   ].join("");

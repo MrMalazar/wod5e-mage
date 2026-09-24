@@ -34,6 +34,18 @@
                 {{/each}}
             </div>
 
+            {{!-- Il potere scelto (tappa 3, 24/9): le sue note (il numero e la frase del
+                 libretto), gli effetti rimasti fuori col perché, la riuscita senza tirare. --}}
+            {{#if tiro.potere}}
+                <div class="wod5e-mage-tiro-potere{{#if tiro.potere.autoSuccess}} riesce{{/if}}">
+                    {{#if tiro.potere.autoSuccess}}<p class="wod5e-mage-tiro-potere-riesce"><i class="fa-solid fa-check" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.RiesceSenzaTirare" name=tiro.potere.name}}</p>{{/if}}
+                    {{#if tiro.potere.autoSuccessMotivo}}<p class="wod5e-mage-tiro-potere-fuori">{{tiro.potere.name}}: {{tiro.potere.autoSuccessMotivo}}</p>{{/if}}
+                    {{#each tiro.potere.note as |nota|}}<p class="wod5e-mage-tiro-potere-nota">{{nota}}</p>{{/each}}
+                    {{#each tiro.potere.esclusi as |nota|}}<p class="wod5e-mage-tiro-potere-fuori">{{nota}}</p>{{/each}}
+                    {{#if tiro.potere.cost}}<p class="wod5e-mage-tiro-potere-nota"><i class="fa-solid fa-droplet" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.PotereCosto" points=tiro.potere.cost}}</p>{{/if}}
+                </div>
+            {{/if}}
+
             <div class="wod5e-mage-tiro-opzioni">
                 {{#if tiro.magick}}
                     <label class="wod5e-mage-tiro-riga wod5e-mage-tiro-premio{{#if tiro.prize.on}} acceso{{/if}}" title="{{localize 'WOD5E_MAGE.Arete.PrizeHint' arete=tiro.prize.arete}}">
@@ -43,6 +55,9 @@
                             <b>−{{tiro.prize.arete}}</b>
                         </span>
                     </label>
+                {{/if}}
+                {{!-- La Quintessenza: nella Magick, e nei tiri di Abilità se il potere lo dice (Anche a mani nude). --}}
+                {{#if tiro.quintessence.allowed}}
                     <div class="wod5e-mage-tiro-riga wod5e-mage-tiro-quintessenza">
                         <span class="wod5e-mage-tiro-etichetta" title="{{localize 'WOD5E_MAGE.Tiro.QuintessenceHint'}}"><i class="fa-solid fa-droplet" aria-hidden="true"></i> {{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</span>
                         <span class="wod5e-mage-tiro-comandi">

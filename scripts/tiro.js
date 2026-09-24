@@ -19,7 +19,9 @@
  * - i dadi extra (l'Armonia, i dadi dati al tavolo) entrano fino a +3;
  *   i Tratti scelti entrano per intero;
  * - un potere solo per lancio: i suoi effetti li applica poteri.js, e il
- *   potere porta con sé la sua Sfera;
+ *   potere porta con sé la sua Sfera; un potere che vale nei tiri di
+ *   Abilità (tappa 3, 24/9) entra senza accendere l'Areté e resta in
+ *   catena quando l'Areté si spegne;
  * - un incantesimo del Grimorio entra tutto insieme (Blue, 16/9 sera):
  *   Areté, Sfere, Ambiti, Attributo, Abilità, premio e tipo com'erano
  *   scritti; poi si tira coi tre tasti;
@@ -29,7 +31,7 @@
  */
 import { calculateAretePrize, calculateMagickThreshold, capBonusDice, SKILL_SPECIALTY_DICE, THRESHOLD_CAP } from "./arete.js";
 import { BUSSOLA_DICE } from "./bussola.js";
-import { applyPotere } from "./poteri.js";
+import { applyPotere, riuscitaSenzaTirare, spezzaIdPotere } from "./poteri.js";
 import { ramoCDice, successThreshold, usesAdvancedDifficulty } from "./ramo-c.js";
 import { normalizeScopeLevels, SCOPE_ALIASES } from "./scopes.js";
 
@@ -57,6 +59,8 @@ export function emptyTiro() {
     specialty: null,
     traits: [],
     power: null,
+    // Il potere vale anche fuori dalla Magick (tappa 3): non accende l'Areté e resta quando si spegne.
+    powerAny: false,
     difficulty: null,
     quintessence: 0,
     extra: 0,
@@ -90,7 +94,8 @@ export function isMagick(tiro) {
 /**
  * L'Areté: acceso, il tiro è di Magick e il premio parte acceso (il
  * Narratore può spegnerlo). Spento, la Magick esce tutta dalla catena:
- * Sfere, Ambiti, potere, tipo, premio.
+ * Sfere, Ambiti, potere, tipo, premio. Resta il potere che vale anche
+ * nei tiri di Abilità (tappa 3).
  */
 export function toggleArete(tiro) {
   const next = clone(tiro);
@@ -99,7 +104,7 @@ export function toggleArete(tiro) {
     next.prize = false;
     next.spheres = [];
     next.scopes = {};
-    next.power = null;
+    if (!next.powerAny) next.power = null;
     next.kind = null;
     return next;
   }
@@ -213,15 +218,20 @@ export function powerSphere(id) {
  * toglie. Il potere porta con sé la sua Sfera (dal cassetto della Sfera,
  * 16/9 sera): se non è in catena, entra. La Sfera arriva con `sphere`
  * (la casella la porta); senza, si legge dall'id se è di quella forma.
+ * Con `any` (tappa 3: il potere vale anche nei tiri di Abilità) il potere
+ * entra da solo: niente Areté acceso, niente Sfera in catena.
  */
-export function pickPower(tiro, id, sphere = "") {
+export function pickPower(tiro, id, sphere = "", { any = false } = {}) {
   const next = clone(tiro);
   const key = String(id ?? "");
   if (!key || next.power === key) {
     next.power = null;
+    next.powerAny = false;
     return next;
   }
   next.power = key;
+  next.powerAny = Boolean(any);
+  if (any) return next;
   const owner = String(sphere ?? "") || powerSphere(key);
   if (owner && !next.spheres.includes(owner)) next.spheres = [...next.spheres, owner];
   return withMagick(next);
@@ -414,14 +424,27 @@ export function quintessenceDice(requested, { available = 0, arete = 0 } = {}) {
 }
 
 /**
+ * La lettura di «non conta sino al livello N» (tappa 3): i livelli fino a
+ * N non contano, sopra N conta l'eccedenza (Potenza 5 con N 4 vale 1).
+ * L'altra lettura (sopra N l'Ambito conta per intero) aspetta il verdetto
+ * di Blue: qui si cambia in un punto solo.
+ */
+export function livelloContato(level, free) {
+  return Math.max(count(level) - count(free), 0);
+}
+
+/**
  * Il conto del tiro composto. Prende lo stato e i numeri della scheda:
  * arete, attributeValue, skillValue, traitDice (la somma dei Tratti scelti),
  * harmony, bussola (1 se rispettata), quintessenceAvailable, form (il Tipo
  * di Magick del Credo: l'Ibrida non prende il premio), power (il potere
- * scelto, per i suoi effetti).
+ * scelto, per i suoi effetti) e powerCtx (quello che le sue condizioni
+ * chiedono: Sfere conosciute, poteri per Sfera, Salute sotto metà).
  * Torna riserva, soglia dagli Ambiti, premio, soglia calcolata, difficoltà
  * effettiva (scritta a mano o calcolata), dadi, riuscita da (6 o 8),
- * Quintessenza spesa e la nota del potere.
+ * Quintessenza spesa, le note del potere, gli effetti esclusi col motivo,
+ * la riuscita senza tirare e se il potere è entrato «attivo» (si paga il
+ * suo costo e si conta l'uso).
  */
 export function contoTiro(tiro, {
   arete = 0,
@@ -432,13 +455,30 @@ export function contoTiro(tiro, {
   bussola = 0,
   quintessenceAvailable = 0,
   form = "",
-  power = null
+  power = null,
+  powerCtx = {}
 } = {}) {
   const magick = isMagick(tiro);
   const areteValue = count(arete);
   const specialtyDice = tiro?.skill && tiro?.specialty ? SKILL_SPECIALTY_DICE : 0;
   const bussolaDice = count(bussola) > 0 ? BUSSOLA_DICE : 0;
-  const quintessence = magick ? quintessenceDice(tiro?.quintessence, { available: quintessenceAvailable, arete: areteValue }) : 0;
+
+  // Il potere scelto (tappa 3): i suoi effetti, giudicati su questo tiro.
+  const ctx = {
+    ...powerCtx,
+    magick,
+    variant: spezzaIdPotere(tiro?.power).variant,
+    skillValue: count(skillValue),
+    skill: tiro?.skill ?? "",
+    spell: tiro?.spell ?? "",
+    scopes: tiro?.scopes ?? {}
+  };
+  const prizeBase = magick && tiro?.prize ? calculateAretePrize(areteValue, form) : 0;
+  const powered = applyPotere({ threshold: 0, dice: 0, difficulty: null, prize: prizeBase }, power, ctx);
+
+  // La Quintessenza dà dadi nella Magick; nei tiri di Abilità solo se un potere lo dice.
+  const quintessenceAllowed = magick || powered.quintessenceOnSkills;
+  const quintessence = quintessenceAllowed ? quintessenceDice(tiro?.quintessence, { available: quintessenceAvailable, arete: areteValue }) : 0;
   const extra = capBonusDice(count(harmony) + count(tiro?.extra));
   const traits = count(attributeValue) + count(skillValue);
   const bonus = extra + Math.trunc(Number(traitDice) || 0) + specialtyDice + bussolaDice + quintessence;
@@ -446,16 +486,20 @@ export function contoTiro(tiro, {
 
   const scopeLevels = Object.entries(tiro?.scopes ?? {}).map(([id, level]) => ({ id, level: count(level) }));
   const scopeThreshold = magick ? calculateMagickThreshold({ scopeLevels }) : 0;
-  const prize = magick && tiro?.prize ? calculateAretePrize(areteValue, form) : 0;
-  const base = magick ? calculateMagickThreshold({ scopeLevels, prize }) : 0;
-  const powered = magick && power ? applyPotere({ threshold: base, dice: 0, difficulty: null }, power) : { threshold: base, dice: 0, difficulty: null, notes: [] };
-  const computed = count(powered.threshold);
+  // Gli Ambiti che il potere fa saltare fino a un livello: conta l'eccedenza.
+  const countedLevels = scopeLevels.map(({ id, level }) => ({ id, level: livelloContato(level, powered.freeScopes[id]) }));
+  const prize = magick ? count(powered.prize) : 0;
+  // Il premio doppio (Voce dell'Avatar) passa il tetto dell'Areté: la sottrazione è diretta.
+  const base = magick ? Math.max(calculateMagickThreshold({ scopeLevels: countedLevels }) - prize, 0) : 0;
+  const computed = magick ? Math.max(base + powered.thresholdDelta, 0) : 0;
   const manual = tiro?.difficulty !== null && tiro?.difficulty !== undefined;
   const difficulty = manual ? count(tiro.difficulty) : computed;
   // Il ritocco dei Dadi (23/9): sul totale, fuori dal tetto, anche in meno.
   const adjust = Math.max(Math.min(Math.trunc(Number(tiro?.dadi) || 0), DADI_ADJUST_CAP), -DADI_ADJUST_CAP);
   const conto = ramoCDice(Math.max(pool + count(powered.dice) + adjust, 0), difficulty);
   const successFrom = powered.difficulty ?? successThreshold(magick && usesAdvancedDifficulty({ witnesses: tiro?.kind === "testimoni" }));
+  // La riuscita senza tirare, a conto fatto (le condizioni sui dadi si giudicano qui).
+  const riuscita = riuscitaSenzaTirare(powered.autoSuccess, conto.dice);
 
   return {
     magick,
@@ -464,6 +508,7 @@ export function contoTiro(tiro, {
     specialtyDice,
     bussolaDice,
     quintessence,
+    quintessenceAllowed,
     extra,
     // La riserva com'è (Attributo + Abilità + bonus), prima del ritocco dei Dadi.
     riserva: pool,
@@ -476,8 +521,14 @@ export function contoTiro(tiro, {
     difficulty,
     dice: conto.dice,
     adjust,
-    impossible: conto.dice === 0,
+    impossible: conto.dice === 0 && !riuscita.ok,
     successFrom,
-    powerNotes: powered.notes ?? []
+    powerNotes: powered.notes ?? [],
+    powerSkipped: (powered.esclusi ?? []).filter((entry) => entry.motivo !== "attivo").map((entry) => ({ motivo: entry.motivo, nota: entry.effect?.nota ?? "" })),
+    powerActive: Boolean(powered.attivo),
+    powerDice: count(powered.dice),
+    autoSuccess: riuscita.ok,
+    autoSuccessNota: riuscita.nota,
+    autoSuccessMotivo: riuscita.motivo
   };
 }

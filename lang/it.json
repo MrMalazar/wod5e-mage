@@ -828,7 +828,13 @@
         "Pagato": "Pagato",
         "Usi": "Usi rimasti",
         "Paradosso": "Paradosso"
-      }
+      },
+      "Scelta": {
+        "ambito": "Ambito scelto",
+        "abilita": "Abilità scelta",
+        "incantesimo": "Incantesimo scelto"
+      },
+      "SceltaNessuna": "(da scegliere)"
     },
     "Tratti": {
       "Vantaggi": "Vantaggi",
@@ -1630,7 +1636,33 @@
       "Catena": "Nel tiro",
       "CatenaHint": "Quello che hai cliccato: la × toglie il pezzo.",
       "PillolaVia": "Togli dal tiro",
-      "ScopeCapWarning": "In un lancio si alzano sopra lo 0 al massimo {n} Ambiti: abbassane uno prima di alzarne un altro."
+      "ScopeCapWarning": "In un lancio si alzano sopra lo 0 al massimo {n} Ambiti: abbassane uno prima di alzarne un altro.",
+      "PotereNote": {
+        "dice": "{name}: {value} dadi",
+        "threshold": "{name}: soglia {value}",
+        "successFrom": "{name}: riuscita dal {value}",
+        "freeScope": "{name}: {scope} non conta fino a {value}",
+        "quintessenceOnSkills": "{name}: la Quintessenza dà dadi anche qui",
+        "prizeDouble": "{name}: il premio dell'Areté vale doppio ({value})",
+        "autoSuccess": "{name}: riesce senza tirare"
+      },
+      "PotereEscluso": {
+        "tiro": {
+          "magick": "vale nei lanci di Magick",
+          "abilita": "vale nei tiri di Abilità"
+        },
+        "sfera": "serve {sphere}",
+        "scelta": "scegli l'Ambito nella riga del potere (pagina Magick)",
+        "saluteMeta": "vale sotto metà Salute",
+        "abilita1": "vale con un'Abilità a un solo pallino",
+        "dadi1": "serve almeno un dado dopo la soglia",
+        "dadi2": "servono almeno due dadi dopo la soglia",
+        "incantesimoScelto": "vale sull'incantesimo scelto nella riga del potere (pagina Magick)",
+        "abilitaScelta": "vale sull'Abilità scelta nella riga del potere (pagina Magick)",
+        "potenza3": "vale con Potenza 3 o più"
+      },
+      "RiesceSenzaTirare": "Riesce senza tirare: {name}",
+      "PotereCosto": "Il potere costa {points} Quintessenza."
     },
     "Ritratti": {
       "NextHint": "Gira i ritratti: quello che vedi è anche l'immagine sulla mappa e in chat",

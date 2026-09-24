@@ -47,12 +47,16 @@
                         <button type="button" class="wod5e-mage-sfera-potere{{#if sphere.potere}} pieno{{/if}}" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Tiro.PoteriHint'}}" aria-label="{{localize 'WOD5E_MAGE.Stat.PotereScegli'}}">
                             <span>{{#if sphere.potere}}{{sphere.potere.short}}{{else}}{{localize "WOD5E_MAGE.Stat.PotereScegli"}}{{/if}}</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                         </button>
-                        {{!-- La tendina a caselle: un potere per riga, la casella spuntata su quello scelto. --}}
+                        {{!-- La tendina a caselle: un potere per riga, la casella spuntata su quello scelto.
+                             Dalla tappa 3 (24/9) la riga porta in che tiri entra (`data-any`: anche fuori
+                             dalla Magick, senza accendere l'Areté), e un potere con effetti passivi e
+                             attivi sul tiro ha la seconda riga «· attivo» (costo e usi in piccolo, spenta
+                             se gli usi sono finiti o la Quintessenza manca). --}}
                         <div class="wod5e-mage-cassetto wod5e-mage-cassetto-poteri" role="group" aria-label="{{localize 'WOD5E_MAGE.Stat.Poteri'}}">
                             {{#each sphere.poteri as |power|}}
-                                <button type="button" class="wod5e-mage-potere-voce{{#if power.selected}} scelta{{/if}}" role="checkbox" aria-checked="{{power.selected}}" data-action="tiroPower" data-power="{{power.id}}" data-sphere="{{power.sphere}}" title="{{power.text}}">
+                                <button type="button" class="wod5e-mage-potere-voce{{#if power.selected}} scelta{{/if}}{{#if power.variant}} variante{{/if}}{{#unless power.ok}} spenta{{/unless}}" role="checkbox" aria-checked="{{power.selected}}" data-action="tiroPower" data-power="{{power.id}}" data-sphere="{{power.sphere}}" data-any="{{power.any}}" title="{{#if power.hint}}{{power.hint}}&#10;{{/if}}{{power.text}}">
                                     <i class="wod5e-mage-casella{{#if power.selected}} spuntata{{/if}}" aria-hidden="true"></i>
-                                    <span>{{power.label}}</span>
+                                    <span>{{power.label}}</span>{{#if power.nota}}<small class="wod5e-mage-potere-voce-nota">{{power.nota}}</small>{{/if}}
                                 </button>
                             {{/each}}
                         </div>

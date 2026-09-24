@@ -204,4 +204,80 @@ assert.equal(sheetFinta._tiro.spell, null, "lo stesso incantesimo cliccato di nu
 await S.onTiroIncantesimo.call(sheetFinta, { preventDefault() {} }, { dataset: { row: "nessuno" } });
 assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
 
+// Gli effetti dei poteri sul tiro (tappa 3, 24/9), coi poteri del catalogo.
+{
+  strings["WOD5E_MAGE.Tiro.PotereNote.dice"] = "{name}: {value} dadi";
+  strings["WOD5E_MAGE.Tiro.PotereNote.freeScope"] = "{name}: {scope} non conta fino a {value}";
+  strings["WOD5E_MAGE.Tiro.PotereEscluso.dadi2"] = "servono due dadi";
+  strings["WOD5E_MAGE.Tiro.RiesceSenzaTirare"] = "Riesce senza tirare: {name}";
+  strings["WOD5E_MAGE.Poteri.Tipo.attivo"] = "attivo";
+  strings["WOD5E_MAGE.Poteri.Usi.scena"] = "per scena";
+  strings["WOD5E_MAGE.Poteri.UsiFiniti"] = "usi finiti";
+  flags["wod5e-mage"].poteri.pmest = { sphere: "mind", name: "Mestiere", dot: 0, type: "attivo", source: "catalogo", catalogId: "mestiere", scelta: "skill:athletics" };
+  flags["wod5e-mage"].poteri.pniente = { sphere: "forces", name: "Niente al caso", dot: 0, type: "attivo", source: "catalogo", catalogId: "niente-al-caso", uses: { per: "scena", n: 1 } };
+  flags["wod5e-mage"].poteri.pcasa = { sphere: "forces", name: "Ambito di Casa", dot: 0, type: "attivo", source: "catalogo", catalogId: "ambito-di-casa", costValue: 4, scelta: "potency" };
+  flags["wod5e-mage"].poteri.pappoggio = { sphere: "forces", name: "Appoggio", dot: 0, type: "attivo", source: "catalogo", catalogId: "appoggio", costValue: 2 };
+  delete flags["wod5e-mage"].poteriUsi;
+  flags["wod5e-mage"].magickBalance = { quintessence: 6, paradox: 1 };
+
+  // La tendina: Mestiere vale fuori dalla Magick; Ambito di casa ha la riga «· attivo» col costo.
+  const righe = S.preparePoteriRows(actor, T.emptyTiro(), (k) => strings[k] ?? k);
+  const mestiereRiga = righe.find((r) => r.id === "pmest");
+  assert.deepEqual([mestiereRiga.any, mestiereRiga.roll, mestiereRiga.variant], [true, "abilita", ""]);
+  const casaAttiva = righe.find((r) => r.id === "pcasa#attivo");
+  assert.deepEqual([casaAttiva.any, casaAttiva.attivo, casaAttiva.label, casaAttiva.nota, casaAttiva.hint, casaAttiva.ok], [false, true, "Ambito di Casa · attivo", "4 WOD5E_MAGE.Poteri.QuintessenzaBreve", "4 WOD5E_MAGE.Poteri.QuintessenzaBreve", true]);
+  assert.deepEqual([righe.find((r) => r.id === "pcasa").attivo, righe.find((r) => r.id === "pappoggio#attivo")], [false, undefined], "Appoggio non ha attivi sul tiro: una riga sola");
+
+  // Mestiere in un tiro di Abilità: Forze e Mente sono le Sfere conosciute, due dadi in più su Atletica.
+  const sheetPotere = { actor, _tiro: T.setDifficulty(T.pickSkill(T.pickAttribute(T.emptyTiro(), "dexterity"), "skill:athletics"), 2), render: async () => {} };
+  await S.onTiroPower.call(sheetPotere, { preventDefault() {} }, { dataset: { power: "pmest", sphere: "mind", any: "true" } });
+  const conMestiere = sheetPotere._tiro;
+  assert.deepEqual([conMestiere.arete, conMestiere.power, conMestiere.powerAny], [false, "pmest", true], "niente Areté: resta un tiro di Abilità");
+  const ctxMestiere = S.prepareTiroContext(actor, conMestiere);
+  assert.deepEqual([ctxMestiere.magick, ctxMestiere.pool, ctxMestiere.dice, ctxMestiere.potere.note], [false, 6 + 2, 6, ["Mestiere: +2 dadi · Quando tiri quell'Abilità non a scopo di Magick ottieni un dado in più per ogni tua Sfera di cui riesci a giustificare l'utilizzo, fino a 3."]]);
+  globalThis.__sim.faces = [6, 6, 6, 6, 6, 6];
+  const mMestiere = await S.launchTiro(actor, conMestiere);
+  assert.equal(globalThis.__sim.rolls.at(-1).formula, "6dmcs>5 + 0dpcs>5", "riserva 8 meno Difficoltà 2");
+  assert.match(mMestiere.flavor, /Mestiere: \+2 dadi/);
+  assert.equal(mMestiere.getFlag("wod5e-mage", ROLL_CARD_FLAG).tiro.power, "pmest");
+
+  // Niente al caso: riesce senza tirare con due dadi; l'uso per scena si conta, e il secondo non parte.
+  const tiroNiente = T.pickPower(T.setDifficulty(T.pickSkill(T.pickAttribute(T.emptyTiro(), "dexterity"), "skill:athletics"), 4), "pniente", "forces", { any: true });
+  const ctxNiente = S.prepareTiroContext(actor, tiroNiente);
+  assert.deepEqual([ctxNiente.dice, ctxNiente.potere.autoSuccess, ctxNiente.potere.active], [2, true, true]);
+  const primaDiNiente = globalThis.__sim.rolls.length;
+  const mNiente = await S.launchTiro(actor, tiroNiente);
+  assert.equal(globalThis.__sim.rolls.length, primaDiNiente, "nessun dado tirato");
+  assert.match(mNiente.content, /Riesce senza tirare: Niente al caso/);
+  assert.deepEqual([mNiente.getFlag("wod5e-mage", ROLL_CARD_FLAG).total, mNiente.getFlag("wod5e-mage", ROLL_CARD_FLAG).bought], [1, true]);
+  assert.deepEqual(flags["wod5e-mage"].poteriUsi, { pniente: { scena: 1 } }, "l'uso si conta");
+  assert.equal(await S.launchTiro(actor, tiroNiente), null, "una volta per scena");
+  assert.equal(infos.at(-1), "WARN usi finiti");
+  // Con un dado solo dopo la soglia non riesce: si tira come sempre.
+  const ctxNienteNo = S.prepareTiroContext(actor, T.setDifficulty(tiroNiente, 5));
+  assert.deepEqual([ctxNienteNo.dice, ctxNienteNo.potere.autoSuccess, ctxNienteNo.potere.autoSuccessMotivo], [1, false, "servono due dadi"]);
+
+  // Appoggio nella Magick: Potenza 5 conta 1 sopra il 4, meno il premio 3: soglia 0.
+  const tiroAppoggio = T.setScope(T.pickPower(T.pickSkill(T.pickAttribute(T.toggleArete(T.emptyTiro()), "dexterity"), "skill:occult"), "pappoggio", "forces"), "potency", 5);
+  const ctxAppoggio = S.prepareTiroContext(actor, tiroAppoggio);
+  assert.deepEqual([ctxAppoggio.magick, ctxAppoggio.computed, ctxAppoggio.prize.value, ctxAppoggio.potere.note[0]], [true, 0, 3, "Appoggio: Potenza non conta fino a 4 · Il punteggio dell'Ambito di Potenza non conta sino al 4° pallino quando la tua Sfera trova la sua leva già in scena"]);
+
+  // Ambito di casa attivo: paga 4 Quintessenza (la Ruota ne ha 2: la riga lo sa, e il lancio non parte).
+  flags["wod5e-mage"].magickBalance = { quintessence: 2, paradox: 1 };
+  const righePovere = S.preparePoteriRows(actor, T.emptyTiro(), (k) => strings[k] ?? k);
+  assert.deepEqual([righePovere.find((r) => r.id === "pcasa#attivo").ok, righePovere.find((r) => r.id === "pcasa").ok], [false, true]);
+  const tiroCasa = T.setKind(T.setScope(T.pickPower(T.pickSkill(T.pickAttribute(T.toggleArete(T.emptyTiro()), "dexterity"), "skill:occult"), "pcasa#attivo", "forces"), "potency", 6), "accidentale");
+  assert.equal(S.prepareTiroContext(actor, tiroCasa).computed, 0, "l'Ambito scelto non conta a nessun livello");
+  assert.equal(await S.launchTiro(actor, tiroCasa), null, "senza la Quintessenza del potere non si tira");
+  // Con la Quintessenza: il lancio paga il costo del potere oltre ai dadi, e conta niente (nessun limite d'uso).
+  flags["wod5e-mage"].magickBalance = { quintessence: 6, paradox: 0 };
+  const ctxCasa = S.prepareTiroContext(actor, T.setQuintessence(tiroCasa, 1));
+  assert.deepEqual([ctxCasa.quintessence.available, ctxCasa.quintessence.dice, ctxCasa.potere.cost], [2, 1, 4], "in dadi resta quello che avanza dal costo");
+  globalThis.__sim.faces = [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8];
+  const mCasa = await S.launchTiro(actor, T.setQuintessence(tiroCasa, 1));
+  assert.ok(mCasa);
+  assert.equal(flags["wod5e-mage"].magickBalance.quintessence, 6 - 4 - 1, "4 del potere e 1 in dadi");
+  assert.equal(flags["wod5e-mage"].poteriUsi.pcasa, undefined);
+}
+
 console.log("compositore: ok,", globalThis.__sim.messages.length, "messaggi");

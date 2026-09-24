@@ -17,7 +17,23 @@ import { FOCUS_FORMS } from "./focus.js";
 import { addParadoxToBalance, getMagickBalance, paradoxGainForMagickType } from "./magick-balance.js";
 import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
 import { findMageRollTrait, selectorsForMageRollTrait, skillRollCard } from "./mage-roll-selection.js";
-import { findPotere, potereLabel, poteriDelPersonaggio, poteriOfSphere } from "./poteri.js";
+import {
+  attivaEffetti,
+  contoPoteri,
+  findPotere,
+  idVarianteAttiva,
+  POTERI_USI_FLAG,
+  potereLabel,
+  poteriDelPersonaggio,
+  poteriOfSphere,
+  puoUsare,
+  registraUso,
+  spezzaIdPotere,
+  tiroDelPotere,
+  VARIANTE_ATTIVA,
+  variantiDelPotere
+} from "./poteri.js";
+import { getSalute } from "./salute.js";
 
 export { poteriOfSphere };
 import { renderRollCard, ROLL_CARD_FLAG, rollSymbols } from "./roll-card.js";
@@ -88,14 +104,28 @@ export function traitDiceOf(actor, ids = []) {
   return total;
 }
 
+/** Sotto metà Salute (Adrenalina): le caselle libere sono meno della metà. */
+export function saluteSottoMeta(actor) {
+  const salute = getSalute(actor);
+  return salute.max > 0 && (salute.max - salute.total) < salute.max / 2;
+}
+
 /**
  * I numeri della scheda che il conto vuole: Areté, Attributo, Abilità,
- * Tratti, Quintessenza sulla Ruota, Tipo del Credo, potere scelto.
+ * Tratti, Quintessenza sulla Ruota, Tipo del Credo, potere scelto (con
+ * la variante «attivo» e quello che i suoi effetti chiedono: le Sfere
+ * conosciute, i poteri per Sfera, la Salute). Con un potere attivo la
+ * Quintessenza spendibile in dadi è quella che resta dopo il suo costo.
  */
 export function contoInputs(actor, tiro, { traits = null } = {}) {
   const known = traits ?? prepareAreteTraits(actor, { localize: game.i18n.localize.bind(game.i18n), lang: game.i18n.lang });
   const attribute = tiro.attribute ? findMageRollTrait(known, `attribute:${tiro.attribute}`) : null;
   const skill = tiro.skill ? findMageRollTrait(known, tiro.skill) : null;
+  // Il potere scelto, fra quelli che il personaggio ha inserito (21/9); l'id porta la variante (tappa 3).
+  const rows = poteriDelPersonaggio(actor);
+  const { id: powerId, variant } = spezzaIdPotere(tiro.power);
+  const power = tiro.power ? findPotere(powerId, rows) : null;
+  const powerCost = power && attivaEffetti(power, variant) ? count(power.costValue) : 0;
   return {
     known,
     attribute,
@@ -105,11 +135,44 @@ export function contoInputs(actor, tiro, { traits = null } = {}) {
       attributeValue: attribute?.value ?? 0,
       skillValue: skill?.value ?? 0,
       traitDice: traitDiceOf(actor, tiro.traits),
-      quintessenceAvailable: getMagickBalance(actor).quintessence,
+      quintessenceAvailable: Math.max(getMagickBalance(actor).quintessence - powerCost, 0),
       form: practiceForm(actor),
-      // Il potere scelto, fra quelli che il personaggio ha inserito (21/9).
-      power: tiro.power ? findPotere(tiro.power, poteriDelPersonaggio(actor)) : null
+      power,
+      powerCost,
+      powerCtx: power ? {
+        spheresOwned: prepareSpheres(actor).selected.map((sphere) => sphere.id),
+        poteriConti: contoPoteri(rows),
+        saluteMeta: saluteSottoMeta(actor)
+      } : {}
     }
+  };
+}
+
+/** Il testo di una nota del potere per la scheda e la carta: il numero e la frase del libretto. */
+export function testoNotaPotere(note, name, localize, format) {
+  const scope = note.scope ? localize(`WOD5E_MAGE.Scopes.${note.scope}`) : "";
+  const value = note.value > 0 && ["dice", "threshold"].includes(note.on) ? `+${note.value}` : String(note.value ?? "");
+  const testa = note.on === "nota" ? name : format(`WOD5E_MAGE.Tiro.PotereNote.${note.on}`, { name, value, scope });
+  return note.nota ? `${testa} · ${note.nota}` : testa;
+}
+
+/** Il perché un effetto resta fuori: il tipo di tiro, una Sfera che manca, una condizione, la scelta da fare. */
+export function testoEsclusoPotere(entry, name, localize, format) {
+  const motivo = String(entry?.motivo ?? "");
+  let perche;
+  if (motivo.startsWith("sfera:")) perche = format("WOD5E_MAGE.Tiro.PotereEscluso.sfera", { sphere: localize(`WOD5E_MAGE.Spheres.${motivo.slice("sfera:".length)}`) });
+  else if (motivo.startsWith("tiro:")) perche = localize(`WOD5E_MAGE.Tiro.PotereEscluso.tiro.${motivo.slice("tiro:".length)}`);
+  else perche = localize(`WOD5E_MAGE.Tiro.PotereEscluso.${motivo}`);
+  return `${name}: ${perche}`;
+}
+
+/** Le righe del potere per il riquadro e la carta: le note che valgono, e gli effetti rimasti fuori col perché. */
+export function notePotere(conto, power, localize, format) {
+  if (!power) return { note: [], esclusi: [] };
+  const name = potereLabel(power, localize);
+  return {
+    note: (conto.powerNotes ?? []).map((note) => testoNotaPotere(note, name, localize, format)),
+    esclusi: (conto.powerSkipped ?? []).map((entry) => testoEsclusoPotere(entry, name, localize, format))
   };
 }
 
@@ -128,7 +191,8 @@ function pillNames(actor, tiro, { known, inputs }) {
     scopes: Object.fromEntries(SCOPES.map((id) => [id, localize(`WOD5E_MAGE.Scopes.${id}`)])),
     attributes: Object.fromEntries((known?.attributes ?? []).map((trait) => [trait.id, { label: trait.label, value: trait.value }])),
     skills: Object.fromEntries((known?.skills ?? []).map((trait) => [trait.key, { label: trait.label, value: trait.value }])),
-    power: tiro.power && inputs?.power ? { [tiro.power]: potereLabel(inputs.power, localize) } : {},
+    // Il potere, con «· attivo» se è la variante attiva (tappa 3).
+    power: tiro.power && inputs?.power ? { [tiro.power]: spezzaIdPotere(tiro.power).variant ? `${potereLabel(inputs.power, localize)} · ${localize("WOD5E_MAGE.Poteri.Tipo.attivo")}` : potereLabel(inputs.power, localize) } : {},
     traits: Object.fromEntries((tiro.traits ?? []).map((id) => {
       const item = actor.items?.get?.(id);
       const dice = traitDiceOf(actor, [id]);
@@ -152,6 +216,8 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   const conto = contoTiro(tiro, inputs);
   const arete = getArete(actor);
   const magick = isMagick(tiro);
+  const format = game.i18n.format.bind(game.i18n);
+  const potere = notePotere(conto, inputs.power, localize, format);
   const pills = pillsOf(tiro, pillNames(actor, tiro, { known, inputs })).map((pill) => ({
     ...pill,
     text: pill.kind === "scope"
@@ -174,7 +240,18 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     impossible: conto.impossible && tiroSize(tiro) > 0,
     successFrom: conto.successFrom,
     prize: { on: Boolean(tiro.prize) && magick, value: conto.prize, arete: arete.value },
-    quintessence: { value: tiro.quintessence, dice: conto.quintessence, available: inputs.quintessenceAvailable },
+    // La Quintessenza: nella Magick, o nei tiri di Abilità se il potere lo dice (Anche a mani nude).
+    quintessence: { value: tiro.quintessence, dice: conto.quintessence, available: inputs.quintessenceAvailable, allowed: conto.quintessenceAllowed },
+    // Il potere scelto (tappa 3): le sue note, gli effetti fuori, la riuscita senza tirare, il costo.
+    potere: inputs.power ? {
+      name: potereLabel(inputs.power, localize),
+      note: potere.note,
+      esclusi: potere.esclusi,
+      autoSuccess: conto.autoSuccess,
+      autoSuccessMotivo: conto.autoSuccessMotivo ? localize(`WOD5E_MAGE.Tiro.PotereEscluso.${conto.autoSuccessMotivo}`) : "",
+      active: conto.powerActive,
+      cost: inputs.powerCost
+    } : null,
     extra: { value: tiro.extra, dice: conto.extra, cap: EXTRA_DICE_CAP },
     sforza: Boolean(tiro.sforza),
     kinds: TIRO_KINDS.map((kind) => ({ kind, label: localize(`WOD5E_MAGE.Tiro.Kinds.${kind}`), hint: localize(`WOD5E_MAGE.Tiro.KindHints.${kind}`) })),
@@ -276,21 +353,52 @@ export async function onScopeMode(event, target) {
  * I poteri del personaggio per il riquadro: quelli che ha inserito nella
  * pagina Magick (Blue, 21/9: il conto è dei poteri inseriti, non degli
  * slot), nell'ordine delle Sfere della scheda, col nome e lo stato «scelto».
+ * Dalla tappa 3 ogni riga dice in che tiri entra (`any`: anche fuori dalla
+ * Magick), e un potere con effetti passivi e attivi sul tiro ha una
+ * seconda riga, «· attivo», che costa la Quintessenza del potere e conta
+ * un uso: la riga sa se si può (usi e Quintessenza).
  */
 export function preparePoteriRows(actor, tiro, localize = (key) => key) {
   const order = prepareSpheres(actor).selected.map((sphere) => sphere.id);
-  return poteriDelPersonaggio(actor, { order }).map((power) => ({
-    id: power.id,
-    sphere: power.sphere,
-    sphereLabel: localize(`WOD5E_MAGE.Spheres.${power.sphere}`),
-    dot: power.dot,
-    type: power.type,
-    label: potereLabel(power, localize),
-    // Nella pastiglia della Sfera il nome della Sfera è già sulla riga: resta il nome del potere.
-    short: potereLabel(power, localize),
-    text: power.text,
-    selected: tiro?.power === power.id
-  }));
+  const usi = actor.getFlag?.(MODULE_ID, POTERI_USI_FLAG) ?? {};
+  const quintessence = getMagickBalance(actor).quintessence;
+  const rows = [];
+  for (const power of poteriDelPersonaggio(actor, { order })) {
+    const label = potereLabel(power, localize);
+    const varianti = variantiDelPotere(power);
+    const riga = (id, variant) => {
+      const attivo = attivaEffetti(power, variant);
+      const verdetto = attivo ? puoUsare(power, { usi, quintessence }) : { ok: true, motivo: "", usi: null };
+      const parti = [];
+      if (attivo && verdetto.usi) parti.push(`${verdetto.usi.restanti}/${verdetto.usi.max} ${localize(`WOD5E_MAGE.Poteri.Usi.${verdetto.usi.per}`)}`);
+      if (attivo && count(power.costValue)) parti.push(`${count(power.costValue)} ${localize("WOD5E_MAGE.Poteri.QuintessenzaBreve")}`);
+      const tiro3 = tiroDelPotere(power, variant);
+      return {
+        id,
+        sphere: power.sphere,
+        sphereLabel: localize(`WOD5E_MAGE.Spheres.${power.sphere}`),
+        dot: power.dot,
+        type: power.type,
+        label: variant ? `${label} · ${localize("WOD5E_MAGE.Poteri.Tipo.attivo")}` : label,
+        // Nella pastiglia della Sfera il nome della Sfera è già sulla riga: resta il nome del potere.
+        short: variant ? `${label} · ${localize("WOD5E_MAGE.Poteri.Tipo.attivo")}` : label,
+        text: power.text,
+        selected: tiro?.power === id,
+        variant,
+        attivo,
+        // In che tiri entra: «abilita» e «any» non accendono l'Areté.
+        roll: tiro3,
+        any: tiro3 === "abilita" || tiro3 === "any",
+        ok: verdetto.ok,
+        // In piccolo sulla riga: gli usi e il costo; nel sorvolo anche il perché non si può.
+        nota: parti.join(" · "),
+        hint: [parti.join(" · "), verdetto.ok ? "" : localize(verdetto.motivo === "usi" ? "WOD5E_MAGE.Poteri.UsiFiniti" : "WOD5E_MAGE.Poteri.QuintessenzaManca")].filter(Boolean).join("\n")
+      };
+    };
+    rows.push(riga(power.id, ""));
+    if (varianti.passivo && varianti.attivo) rows.push(riga(idVarianteAttiva(power.id), VARIANTE_ATTIVA));
+  }
+  return rows;
 }
 
 /**
@@ -377,8 +485,9 @@ export async function onTiroTrait(event, target) {
 
 export async function onTiroPower(event, target) {
   event.preventDefault();
-  // La casella porta la sua Sfera (21/9: gli id dei poteri non la dicono più).
-  return repaint(this, pickPower(tiroOf(this), target.dataset.power, target.dataset.sphere));
+  // La casella porta la sua Sfera (21/9: gli id dei poteri non la dicono più)
+  // e dice se il potere vale anche fuori dalla Magick (tappa 3).
+  return repaint(this, pickPower(tiroOf(this), target.dataset.power, target.dataset.sphere, { any: target.dataset.any === "true" }));
 }
 
 /**
@@ -471,6 +580,27 @@ export async function onTiroRoll(event, target) {
 /* Il lancio.                                                        */
 /* ---------------------------------------------------------------- */
 
+/**
+ * Il potere a tiro fatto (tappa 3): l'uso dell'attivo si conta nella
+ * bandiera; la Quintessenza (i dadi, e il costo dell'attivo) scende, salvo
+ * che la Ruota abbia già pagato (`pagato`: il lancio di Magick paga prima).
+ */
+export async function pagaPotere(actor, conto, inputs, { pagato = false } = {}) {
+  if (!actor.isOwner) return;
+  const update = {};
+  const power = inputs?.power;
+  if (power && conto.powerActive) {
+    update[`flags.${MODULE_ID}.${POTERI_USI_FLAG}`] = registraUso(actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {}, power);
+  }
+  const spesa = pagato ? 0 : count(conto.quintessence) + (power && conto.powerActive ? count(inputs.powerCost) : 0);
+  if (spesa > 0) {
+    const balance = getMagickBalance(actor);
+    update[`flags.${MODULE_ID}.magickBalance`] = { quintessence: Math.max(balance.quintessence - spesa, 0), paradox: balance.paradox };
+    ui.notifications.info(game.i18n.format("WOD5E_MAGE.Arete.QuintessenceSpent", { points: spesa }));
+  }
+  if (Object.keys(update).length) await actor.update(update);
+}
+
 export async function launchTiro(actor, tiro) {
   const localize = game.i18n.localize.bind(game.i18n);
   const format = game.i18n.format.bind(game.i18n);
@@ -489,6 +619,15 @@ export async function launchTiro(actor, tiro) {
   if (!conto.difficultySet) {
     ui.notifications.warn(localize("WOD5E_MAGE.Tiro.DifficultyWarning"));
     return null;
+  }
+  // Il potere entrato «attivo» (tappa 3): serve un uso nel periodo e la sua Quintessenza.
+  const power = inputs.power;
+  if (power && conto.powerActive) {
+    const verdetto = puoUsare(power, { usi: actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {}, quintessence: getMagickBalance(actor).quintessence });
+    if (!verdetto.ok) {
+      ui.notifications.warn(localize(verdetto.motivo === "usi" ? "WOD5E_MAGE.Poteri.UsiFiniti" : "WOD5E_MAGE.Poteri.QuintessenzaManca"));
+      return null;
+    }
   }
   const arete = getArete(actor);
   // L'incantesimo caricato dal Grimorio dà il nome e l'Obiettivo al lancio.
@@ -521,6 +660,16 @@ export async function launchTiro(actor, tiro) {
   if (tiro.sforza) notes.push(localize("WOD5E_MAGE.Tiro.SforzaNote"));
   const notaNarratore = notaVerdetto(conto, format);
   if (notaNarratore) notes.push(notaNarratore);
+  // Il potere scelto: il nome, le sue note, gli effetti rimasti fuori col perché (tappa 3).
+  if (power) {
+    notes.push(format("WOD5E_MAGE.Tiro.PowerNote", { name: potereLabel(power, localize) }));
+    const potereNote = notePotere(conto, power, localize, format);
+    notes.push(...potereNote.note, ...potereNote.esclusi);
+    if (conto.powerActive && inputs.powerCost > 0) notes.push(format("WOD5E_MAGE.Tiro.PotereCosto", { points: inputs.powerCost }));
+  }
+  // La riuscita senza tirare: la fascia della carta lo dice col nome del potere.
+  const senzaTirare = Boolean(power) && conto.autoSuccess;
+  const banner = senzaTirare ? format("WOD5E_MAGE.Tiro.RiesceSenzaTirare", { name: potereLabel(power, localize) }) : "";
 
   if (conto.extra > 0) bonusParts.push(format("WOD5E_MAGE.Tiro.ExtraFlavor", { dice: conto.extra }));
   // Il ritocco dei Dadi (23/9): in carta, perché si sappia.
@@ -528,9 +677,11 @@ export async function launchTiro(actor, tiro) {
 
   // Il tiro di Abilità: niente rossi, riuscita dal 6, la Difficoltà solo a mano.
   if (!magick) {
+    if (conto.quintessence > 0) bonusParts.push(format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: conto.quintessence }));
     const card = skillRollCard({ traits: traitRows, flatMod: conto.bonus }, localize);
+    let esito = null;
     try {
-      return await rollRamoCDirect({
+      esito = await rollRamoCDirect({
         actor,
         data: actor.system,
         pool: conto.pool,
@@ -538,9 +689,11 @@ export async function launchTiro(actor, tiro) {
         successFrom: conto.successFrom,
         paradoxRating: 0,
         skill: true,
+        bought: senzaTirare,
+        banner,
         title: rollLabel,
         flavor: card,
-        card: { symbols: [], traits: traitRows, tiro: { traits: chosenTraits.map((item) => item.id), specialty: tiro.specialty ?? "" } },
+        card: { symbols: [], traits: traitRows, tiro: { power: tiro.power ?? "", traits: chosenTraits.map((item) => item.id), specialty: tiro.specialty ?? "" } },
         activeModifiers: chosenTraits.map((item) => ({ label: item.name, value: `${traitDiceOf(actor, [item.id]) >= 0 ? "+" : ""}${traitDiceOf(actor, [item.id])}` })),
         notes
       });
@@ -548,6 +701,9 @@ export async function launchTiro(actor, tiro) {
       console.warn("wod5e-mage | Tiro di Abilità interrotto.", error);
       return null;
     }
+    // A tiro fatto: la Quintessenza spesa (in dadi, o per il potere attivo) scende, l'uso si conta.
+    if (esito) await pagaPotere(actor, conto, inputs);
+    return esito;
   }
 
   // La Magick: il tipo dai tre tasti, le Sfere senza livello, gli Ambiti a soglia.
@@ -563,8 +719,6 @@ export async function launchTiro(actor, tiro) {
   if (options.vulgar) selectors.push("magick.vulgar");
   if (options.witnesses) selectors.push("magick.vulgar-with-witnesses");
   if (conto.quintessence > 0) bonusParts.push(format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: conto.quintessence }));
-  const power = inputs.power;
-  if (power) notes.push(format("WOD5E_MAGE.Tiro.PowerNote", { name: potereLabel(power, localize) }));
   if (conto.manual && conto.difficulty !== conto.computed) notes.push(format("WOD5E_MAGE.Tiro.ManualDifficultyNote", { computed: conto.computed, difficulty: conto.difficulty }));
 
   const card = renderRollCard({
@@ -589,17 +743,19 @@ export async function launchTiro(actor, tiro) {
   const sphereMax = Math.max(0, ...sphereEntries.map((entry) => entry.level));
   if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: conto.difficulty, [`flags.${MODULE_ID}.lastSphereMax`]: sphereMax });
 
-  // La Ruota paga subito: la Quintessenza spesa scende, il Volgare sale verso il Paradosso.
+  // La Ruota paga subito: la Quintessenza spesa (in dadi, e il costo del
+  // potere attivo) scende, il Volgare sale verso il Paradosso.
   const paradoxGain = paradoxGainForMagickType(options);
   const balanceBefore = getMagickBalance(actor);
+  const spesa = conto.quintessence + (conto.powerActive ? count(inputs.powerCost) : 0);
   let balanceMoved = false;
-  if ((conto.quintessence > 0 || paradoxGain > 0) && actor.isOwner) {
-    const spent = { quintessence: Math.max(balanceBefore.quintessence - conto.quintessence, 0), paradox: balanceBefore.paradox };
+  if ((spesa > 0 || paradoxGain > 0) && actor.isOwner) {
+    const spent = { quintessence: Math.max(balanceBefore.quintessence - spesa, 0), paradox: balanceBefore.paradox };
     const balanceAfter = addParadoxToBalance(spent, paradoxGain);
     if (balanceAfter.paradox !== balanceBefore.paradox || balanceAfter.quintessence !== balanceBefore.quintessence) {
       await actor.setFlag(MODULE_ID, "magickBalance", balanceAfter);
       balanceMoved = true;
-      if (conto.quintessence > 0) ui.notifications.info(format("WOD5E_MAGE.Arete.QuintessenceSpent", { points: conto.quintessence }));
+      if (spesa > 0) ui.notifications.info(format("WOD5E_MAGE.Arete.QuintessenceSpent", { points: spesa }));
       if (paradoxGain > 0) ui.notifications.info(format("WOD5E_MAGE.MagickBalance.ParadoxGained", { amount: paradoxGain }));
     }
   }
@@ -614,6 +770,8 @@ export async function launchTiro(actor, tiro) {
       threshold: conto.difficulty,
       successFrom: conto.successFrom,
       paradoxRating,
+      bought: senzaTirare,
+      banner,
       burn: conto.difficulty,
       sphereLevel: sphereMax,
       arete: arete.value,
@@ -638,7 +796,9 @@ export async function launchTiro(actor, tiro) {
     }
     return null;
   }
-  // A tiro fatto: la Durata dichiarata scrive il lancio fra le Magick in atto.
+  // A tiro fatto: l'uso del potere attivo si conta (la Ruota ha già pagato).
+  await pagaPotere(actor, conto, inputs, { pagato: true });
+  // La Durata dichiarata scrive il lancio fra le Magick in atto.
   const total = Number(outcome?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG)?.total);
   if (effect.vulgar && Number.isFinite(total) && total < 1 && actor.isOwner) {
     const { quintessenceAfterFailedVulgar } = await import("./arete.js");

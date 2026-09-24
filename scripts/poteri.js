@@ -13,9 +13,10 @@
  * (il catalogo di data/poteri.js, o la mano del giocatore). Il conto dei
  * poteri conosciuti di una Sfera è il numero di queste righe.
  *
- * Il gancio per quando i poteri faranno qualcosa nel conto è `effects`: una
- * lista di { on: "threshold" | "dice" | "successFrom", value }, che
- * applyPotere mette nel conto. Tutto qui è puro.
+ * Gli effetti sul tiro (tappa 3, 24/9) stanno nel catalogo, in `effects`
+ * (scritti a mano dal testo in tools/dati/effetti_poteri.json): una lista
+ * di { on, value, scope, roll, mode, requires, when, nota }, che applyPotere
+ * mette nel conto del tiro composto. Tutto qui è puro.
  */
 import { MODULE_ID } from "./constants.js";
 import { SPHERES } from "./spheres.js";
@@ -32,8 +33,26 @@ export const POTERE_DOTS = 5;
 /** I due tipi (foglio, colonna Tipo): attivo lo decide il giocatore e paga qualcosa, passivo scatta da solo. */
 export const POTERE_TIPI = Object.freeze(["attivo", "passivo"]);
 
-/** I ganci previsti per gli effetti di un potere sul tiro. */
-export const POTERE_EFFECTS = Object.freeze(["threshold", "dice", "successFrom"]);
+/**
+ * I ganci degli effetti sul tiro: dadi in più, soglia, da che numero si
+ * riesce, riuscita senza tirare, un Ambito che non conta fino a un livello,
+ * la Quintessenza anche nei tiri di Abilità, il premio dell'Areté doppio,
+ * e la sola nota in carta.
+ */
+export const POTERE_EFFECTS = Object.freeze(["dice", "threshold", "successFrom", "autoSuccess", "freeScope", "quintessenceOnSkills", "prizeDouble", "nota"]);
+
+/** Le condizioni che il modulo sa controllare da sé (le altre le vede il Narratore in carta). */
+export const POTERE_CONDIZIONI = Object.freeze(["saluteMeta", "abilita1", "dadi1", "dadi2", "incantesimoScelto", "abilitaScelta", "potenza3"]);
+
+/** Le condizioni sui dadi si controllano a conto fatto: le altre prima. */
+const CONDIZIONI_SUI_DADI = Object.freeze(["dadi1", "dadi2"]);
+
+/** Cosa si sceglie all'acquisto: un Ambito (Ambito di casa), un'Abilità (Mestiere), un incantesimo (La Pratica rende Perfetti). */
+export const POTERE_SCELTE = Object.freeze(["ambito", "abilita", "incantesimo"]);
+
+/** La variante «attivo» di un potere nel lancio: l'id della riga più questo suffisso. */
+export const VARIANTE_ATTIVA = "attivo";
+const SEPARATORE_VARIANTE = "#";
 
 function count(value) {
   return Math.max(Math.trunc(Number(value) || 0), 0);
@@ -72,7 +91,9 @@ export function normalizzaPotere(id, row = {}) {
     costValue: count(row?.costValue),
     uses: row?.uses && typeof row.uses === "object" ? { per: testo(row.uses.per), n: Math.max(count(row.uses.n), 1) } : null,
     paradox: testo(row?.paradox),
-    effects: Array.isArray(row?.effects) ? row.effects : []
+    effects: Array.isArray(row?.effects) ? row.effects : [],
+    // La scelta fatta all'acquisto (tappa 3): l'Ambito, l'Abilità o l'incantesimo che il potere chiede.
+    scelta: testo(row?.scelta)
   };
 }
 
@@ -199,36 +220,261 @@ export function catalogoDellaSfera(sphere, { catalog = POTERI, rating = 0, owned
     .sort((a, b) => a.name.localeCompare(b.name, "it"));
 }
 
+/* ------------------------------------------------------------------ */
+/* Gli effetti sul tiro (tappa 3, 24/9). Il potere scelto nel lancio    */
+/* porta i suoi effetti nel conto: quelli passivi sempre, quelli attivi */
+/* se il giocatore sceglie la variante «attivo» (o se il potere non ha  */
+/* effetti passivi sul tiro: allora sceglierlo È attivarlo). Un effetto  */
+/* attivo costa la Quintessenza del potere e conta un uso.               */
+/* ------------------------------------------------------------------ */
+
+/** L'id scelto nel lancio, spezzato: «riga#attivo» → la riga e la variante. */
+export function spezzaIdPotere(id) {
+  const [base, variant = ""] = String(id ?? "").split(SEPARATORE_VARIANTE);
+  return { id: base, variant: variant === VARIANTE_ATTIVA ? VARIANTE_ATTIVA : "" };
+}
+
+/** L'id della variante «attivo» di una riga. */
+export function idVarianteAttiva(id) {
+  return `${String(id ?? "")}${SEPARATORE_VARIANTE}${VARIANTE_ATTIVA}`;
+}
+
+/** La voce del catalogo da cui viene la riga, se c'è. */
+export function voceDelCatalogo(power, catalog = POTERI) {
+  const id = testo(power?.catalogId);
+  return id ? (catalog ?? []).find((entry) => entry.id === id) ?? null : null;
+}
+
+function normalizzaEffetto(effect) {
+  const on = testo(effect?.on);
+  if (!POTERE_EFFECTS.includes(on)) return null;
+  const value = effect?.value && typeof effect.value === "object"
+    ? { from: testo(effect.value.from), sphere: sfera(effect.value.sphere), max: count(effect.value.max) }
+    : Math.trunc(Number(effect?.value) || 0);
+  return {
+    on,
+    value,
+    scope: testo(effect?.scope),
+    roll: ["magick", "abilita", "any"].includes(effect?.roll) ? effect.roll : "magick",
+    mode: effect?.mode === "attivo" ? "attivo" : "passivo",
+    requires: [].concat(effect?.requires ?? []).map(sfera).filter(Boolean),
+    when: [].concat(effect?.when ?? []).map(testo).filter((w) => POTERE_CONDIZIONI.includes(w)),
+    nota: testo(effect?.nota)
+  };
+}
+
 /**
- * Gli effetti del potere sul conto: `threshold` aggiunge (o toglie, se
- * negativo) alla soglia calcolata, mai sotto zero; `dice` aggiunge dadi
- * alla riserva; `successFrom` fissa da che numero si riesce. Torna il conto
- * toccato e le note per la carta. Un potere senza effetti non cambia niente.
+ * Gli effetti sul tiro di una riga: quelli del catalogo, se la riga viene
+ * da lì (il catalogo è il sorgente: si aggiorna coi dati), altrimenti
+ * quelli scritti nella riga. Puliti: ganci, tiri e condizioni conosciuti.
  */
-export function applyPotere(conto, power) {
-  const next = { threshold: count(conto?.threshold), dice: Math.trunc(Number(conto?.dice) || 0), difficulty: conto?.difficulty ?? null, notes: [] };
-  for (const effect of power?.effects ?? []) {
-    const value = Math.trunc(Number(effect?.value) || 0);
-    switch (effect?.on) {
+export function effettiDelPotere(power, catalog = POTERI) {
+  const voce = voceDelCatalogo(power, catalog);
+  const lista = Array.isArray(voce?.effects) && voce.effects.length ? voce.effects : (power?.effects ?? []);
+  return lista.map(normalizzaEffetto).filter(Boolean);
+}
+
+/** La scelta che il potere chiede all'acquisto ({ kind, options }), dal catalogo; null se non ne chiede. */
+export function sceltaDelPotere(power, catalog = POTERI) {
+  const scelta = voceDelCatalogo(power, catalog)?.scelta;
+  if (!scelta || !POTERE_SCELTE.includes(scelta.kind)) return null;
+  return { kind: scelta.kind, options: scelta.options ?? null };
+}
+
+/** Le opzioni della scelta «ambito» per la Sfera della riga: gli Ambiti fra cui scegliere. */
+export function ambitiDellaScelta(power, catalog = POTERI) {
+  const scelta = sceltaDelPotere(power, catalog);
+  if (scelta?.kind !== "ambito") return [];
+  return [...(scelta.options?.[power?.sphere] ?? [])];
+}
+
+/**
+ * Le varianti del potere nel lancio: `passivo` se ha effetti passivi sul
+ * tiro, `attivo` se ne ha di attivi. Con tutti e due, la tendina offre due
+ * righe (il potere, e «potere · attivo»); con i soli attivi, sceglierlo
+ * è attivarlo; con i soli passivi, o senza effetti, una riga sola.
+ */
+export function variantiDelPotere(power, catalog = POTERI) {
+  const effetti = effettiDelPotere(power, catalog);
+  return {
+    passivo: effetti.some((effect) => effect.mode === "passivo"),
+    attivo: effetti.some((effect) => effect.mode === "attivo")
+  };
+}
+
+/** Il potere scelto attiva i suoi effetti attivi? Con la variante «attivo», o se non ha passivi. */
+export function attivaEffetti(power, variant = "", catalog = POTERI) {
+  const varianti = variantiDelPotere(power, catalog);
+  if (!varianti.attivo) return false;
+  return variant === VARIANTE_ATTIVA || !varianti.passivo;
+}
+
+/**
+ * In che tiri entra il potere con quella variante: «magick», «abilita»,
+ * «any» (in tutti e due), oppure «» se non ha effetti sul tiro. Contano
+ * gli effetti che la variante porta: gli attivi se la attiva, i passivi
+ * altrimenti. La scheda accende l'Areté solo per «magick» (e per «»:
+ * un potere senza effetti resta della Magick, come dal 16/9).
+ */
+export function tiroDelPotere(power, variant = "", catalog = POTERI) {
+  const attivo = attivaEffetti(power, variant, catalog);
+  const effetti = effettiDelPotere(power, catalog).filter((effect) => (effect.mode === "attivo") === attivo);
+  if (!effetti.length) return "";
+  const tiri = new Set(effetti.map((effect) => effect.roll));
+  if (tiri.has("any") || (tiri.has("magick") && tiri.has("abilita"))) return "any";
+  return tiri.has("abilita") ? "abilita" : "magick";
+}
+
+/** Il numero di un valore: fisso, oppure «i poteri conosciuti nella Sfera» o «le Sfere conosciute, fino a max». */
+export function valoreEffetto(value, power, ctx = {}) {
+  if (typeof value !== "object" || value === null) return Math.trunc(Number(value) || 0);
+  if (value.from === "poteri") return count(ctx.poteriConti?.[value.sphere || power?.sphere]);
+  if (value.from === "sfere") {
+    const sfere = count((ctx.spheresOwned ?? []).length);
+    return value.max > 0 ? Math.min(sfere, value.max) : sfere;
+  }
+  return 0;
+}
+
+/**
+ * Una condizione vale? `ctx` porta quello che serve: saluteMeta (sotto
+ * metà Salute), skillValue, dice (a conto fatto), spell e skill del tiro,
+ * scopes, e la scelta della riga. Una condizione sui dadi senza i dadi
+ * nel contesto non si giudica ancora (torna null).
+ */
+export function condizioneVale(when, power, ctx = {}) {
+  switch (when) {
+    case "saluteMeta": return Boolean(ctx.saluteMeta);
+    case "abilita1": return count(ctx.skillValue) === 1;
+    case "dadi1": return ctx.dice === undefined || ctx.dice === null ? null : count(ctx.dice) >= 1;
+    case "dadi2": return ctx.dice === undefined || ctx.dice === null ? null : count(ctx.dice) >= 2;
+    case "incantesimoScelto": return Boolean(power?.scelta) && testo(ctx.spell) === testo(power.scelta);
+    case "abilitaScelta": return Boolean(power?.scelta) && testo(ctx.skill) === testo(power.scelta);
+    case "potenza3": return count(ctx.scopes?.potency) >= 3;
+    default: return false;
+  }
+}
+
+/**
+ * Gli effetti che entrano in questo tiro, e quelli che restano fuori col
+ * perché: il tipo di tiro (magick o abilita), la variante scelta, le Sfere
+ * richieste (le Amalgame), le condizioni che si giudicano prima dei dadi.
+ * Torna { applicati, esclusi: [{ effect, motivo }] }; motivo è «tiro»,
+ * «attivo», «sfera:<id>» o la condizione che non vale.
+ */
+export function effettiApplicabili(power, ctx = {}, catalog = POTERI) {
+  const magick = Boolean(ctx.magick);
+  const attivo = attivaEffetti(power, ctx.variant ?? "", catalog);
+  const owned = new Set(ctx.spheresOwned ?? []);
+  const applicati = [];
+  const esclusi = [];
+  for (const effect of effettiDelPotere(power, catalog)) {
+    if (effect.roll !== "any" && (effect.roll === "magick") !== magick) { esclusi.push({ effect, motivo: `tiro:${effect.roll}` }); continue; }
+    if (effect.mode === "attivo" && !attivo) { esclusi.push({ effect, motivo: "attivo" }); continue; }
+    const manca = effect.requires.find((sphere) => !owned.has(sphere));
+    if (manca) { esclusi.push({ effect, motivo: `sfera:${manca}` }); continue; }
+    const caduta = effect.when.filter((when) => !CONDIZIONI_SUI_DADI.includes(when)).find((when) => !condizioneVale(when, power, ctx));
+    if (caduta) { esclusi.push({ effect, motivo: caduta }); continue; }
+    applicati.push(effect);
+  }
+  return { applicati, esclusi, attivo };
+}
+
+/**
+ * Gli effetti del potere sul conto. `conto` porta soglia (dagli Ambiti,
+ * già col premio), dadi, difficoltà (da che numero si riesce) e premio;
+ * `ctx` quello che le condizioni e i valori chiedono (vedi condizioneVale
+ * e valoreEffetto), più `magick` e `variant`.
+ *
+ * Torna il conto toccato: `threshold` (mai sotto zero), `dice` (in più
+ * sulla riserva), `difficulty`, `prize` (doppio con prizeDouble),
+ * `freeScopes` ({ ambito: livelli che non contano }: il chiamante li
+ * toglie dalla soglia prima, perché la soglia si rifà dagli Ambiti),
+ * `quintessenceOnSkills`, `autoSuccess` (la lista delle riuscite senza
+ * tirare, ognuna con le condizioni sui dadi ancora da giudicare), le note
+ * per la carta ({ on, value, scope, nota }), gli esclusi col motivo, e
+ * `attivo` (gli effetti attivi sono entrati: si paga e si conta l'uso).
+ * Un potere senza effetti non cambia niente.
+ */
+export function applyPotere(conto, power, ctx = {}) {
+  const next = {
+    threshold: count(conto?.threshold),
+    // La somma dei ritocchi alla soglia, a parte: chi rifà la soglia dagli Ambiti la somma dopo.
+    thresholdDelta: 0,
+    dice: Math.trunc(Number(conto?.dice) || 0),
+    difficulty: conto?.difficulty ?? null,
+    prize: count(conto?.prize),
+    freeScopes: {},
+    quintessenceOnSkills: false,
+    autoSuccess: [],
+    notes: [],
+    esclusi: [],
+    attivo: false
+  };
+  if (!power) return next;
+  const { applicati, esclusi, attivo } = effettiApplicabili(power, ctx);
+  next.esclusi = esclusi;
+  next.attivo = attivo;
+  for (const effect of applicati) {
+    const value = valoreEffetto(effect.value, power, ctx);
+    switch (effect.on) {
       case "threshold":
         next.threshold = Math.max(next.threshold + value, 0);
-        next.notes.push({ on: "threshold", value });
+        next.thresholdDelta += value;
+        next.notes.push({ on: "threshold", value, nota: effect.nota });
         break;
       case "dice":
         next.dice += value;
-        next.notes.push({ on: "dice", value });
+        next.notes.push({ on: "dice", value, nota: effect.nota });
         break;
       case "successFrom":
         if (value > 0) {
           next.difficulty = value;
-          next.notes.push({ on: "successFrom", value });
+          next.notes.push({ on: "successFrom", value, nota: effect.nota });
         }
+        break;
+      case "freeScope": {
+        // L'Ambito scelto nella riga, o quello scritto nell'effetto.
+        const scope = effect.scope === "scelta" ? testo(power.scelta) : effect.scope;
+        if (!scope) { next.esclusi.push({ effect, motivo: "scelta" }); break; }
+        next.freeScopes[scope] = Math.max(count(next.freeScopes[scope]), value);
+        next.notes.push({ on: "freeScope", value, scope, nota: effect.nota });
+        break;
+      }
+      case "quintessenceOnSkills":
+        next.quintessenceOnSkills = true;
+        next.notes.push({ on: "quintessenceOnSkills", value: 0, nota: effect.nota });
+        break;
+      case "prizeDouble":
+        next.prize = next.prize * 2;
+        next.notes.push({ on: "prizeDouble", value: next.prize, nota: effect.nota });
+        break;
+      case "autoSuccess":
+        next.autoSuccess.push({ when: effect.when.filter((when) => CONDIZIONI_SUI_DADI.includes(when)), nota: effect.nota });
+        break;
+      case "nota":
+        next.notes.push({ on: "nota", value: 0, nota: effect.nota });
         break;
       default:
         break;
     }
   }
   return next;
+}
+
+/**
+ * La riuscita senza tirare, a conto fatto: vale se almeno una delle
+ * riuscite del potere passa le sue condizioni sui dadi. Torna la nota
+ * della riuscita che vale, oppure il motivo della prima che non vale.
+ */
+export function riuscitaSenzaTirare(autoSuccess, dice) {
+  let motivo = "";
+  for (const auto of autoSuccess ?? []) {
+    const caduta = (auto.when ?? []).find((when) => condizioneVale(when, null, { dice }) === false);
+    if (!caduta) return { ok: true, nota: auto.nota ?? "", motivo: "" };
+    motivo ||= caduta;
+  }
+  return { ok: false, nota: "", motivo };
 }
 
 /* ------------------------------------------------------------------ */

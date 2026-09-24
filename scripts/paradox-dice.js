@@ -429,7 +429,9 @@ export async function executeRamoCRoll({
   arete = 0,
   bussolaKept = null,
   excess = 0,
-  notes = []
+  notes = [],
+  // La riuscita senza tirare di un potere (tappa 3): la fascia dice il suo testo, non «comprata».
+  banner = ""
 }) {
   const format = game.i18n.format.bind(game.i18n);
   const localize = game.i18n.localize.bind(game.i18n);
@@ -473,7 +475,8 @@ export async function executeRamoCRoll({
     arete,
     skill,
     bought,
-    automatic: bought
+    automatic: bought,
+    banner: bought ? String(banner ?? "") : ""
   };
 
   // Nessun dado da tirare: la riuscita comprata senza rossi, oppure
@@ -486,7 +489,7 @@ export async function executeRamoCRoll({
     return postDicelessMessage(actor, title, {
       flavor: flavorOut,
       cardData,
-      banner: bought ? localize("WOD5E_MAGE.RamoC.BoughtBanner") : "",
+      banner: bought ? (banner || localize("WOD5E_MAGE.RamoC.BoughtBanner")) : "",
       rollMode: mode
     });
   }
@@ -572,7 +575,8 @@ export async function rollRamoCDirect({
   activeModifiers = [],
   rollMode = null,
   bussolaKept = null,
-  notes = []
+  notes = [],
+  banner = ""
 }) {
   const reds = skill ? 0 : Math.max(Math.trunc(Number(paradoxRating) || 0), 0);
   const conto = contoDice({ pool, threshold, paradoxRating: reds, bought, onlyParadox: false });
@@ -595,6 +599,7 @@ export async function rollRamoCDirect({
     effectKind,
     arete,
     bussolaKept,
-    notes
+    notes,
+    banner
   });
 }

@@ -12948,3 +12948,84 @@
   color: var(--mage-tenue, #ab9f85);
   margin: 0.2rem 0 0;
 }
+
+/* ------------------------------------------------------------------ */
+/* Gli effetti dei poteri sul tiro (tappa 3, 24/9): la riga «· attivo»  */
+/* nella tendina, le note del potere nel riquadro del Tiro, la scelta    */
+/* all'acquisto nella riga del potere (pagina Magick).                   */
+/* ------------------------------------------------------------------ */
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce.variante > span {
+  font-style: italic;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce > .wod5e-mage-potere-voce-nota {
+  color: var(--mage-tenue);
+  flex: 0 0 auto;
+  font-size: 0.62rem;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce.spenta {
+  opacity: 0.55;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-voce.spenta > .wod5e-mage-potere-voce-nota {
+  color: var(--mage-rosso-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere {
+  border-left: 2px solid var(--mage-oro-tenue);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 2px 0 6px;
+  padding: 2px 0 2px 8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere.riesce {
+  border-left-color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere > p {
+  font-size: 0.68rem;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere > .wod5e-mage-tiro-potere-nota {
+  color: var(--mage-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere > .wod5e-mage-tiro-potere-fuori {
+  color: var(--mage-tenue);
+  font-style: italic;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere > .wod5e-mage-tiro-potere-riesce {
+  color: var(--mage-oro);
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-scelta {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-scelta > select {
+  background: transparent;
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 4px;
+  color: var(--mage-testo);
+  font-size: 0.78rem;
+  height: 22px;
+  max-width: 220px;
+  padding: 0 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-scelta.manca > select {
+  border-style: dashed;
+  color: var(--mage-tenue);
+}

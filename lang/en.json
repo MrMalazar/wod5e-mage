@@ -828,7 +828,13 @@
         "Pagato": "Paid",
         "Usi": "Uses left",
         "Paradosso": "Paradox"
-      }
+      },
+      "Scelta": {
+        "ambito": "Chosen Scope",
+        "abilita": "Chosen Skill",
+        "incantesimo": "Chosen spell"
+      },
+      "SceltaNessuna": "(to choose)"
     },
     "Tratti": {
       "Vantaggi": "Advantages",
@@ -1630,7 +1636,33 @@
       "Catena": "In the roll",
       "CatenaHint": "What you clicked: the × removes the piece.",
       "PillolaVia": "Remove from the roll",
-      "ScopeCapWarning": "In one casting at most {n} Scopes rise above 0: lower one before raising another."
+      "ScopeCapWarning": "In one casting at most {n} Scopes rise above 0: lower one before raising another.",
+      "PotereNote": {
+        "dice": "{name}: {value} dice",
+        "threshold": "{name}: threshold {value}",
+        "successFrom": "{name}: success from {value}",
+        "freeScope": "{name}: {scope} does not count up to {value}",
+        "quintessenceOnSkills": "{name}: Quintessence gives dice here too",
+        "prizeDouble": "{name}: the Areté prize counts double ({value})",
+        "autoSuccess": "{name}: succeeds without rolling"
+      },
+      "PotereEscluso": {
+        "tiro": {
+          "magick": "applies to Magick casts",
+          "abilita": "applies to Skill rolls"
+        },
+        "sfera": "needs {sphere}",
+        "scelta": "pick the Scope on the power's row (Magick page)",
+        "saluteMeta": "applies below half Health",
+        "abilita1": "applies with a one-dot Skill",
+        "dadi1": "needs at least one die after the threshold",
+        "dadi2": "needs at least two dice after the threshold",
+        "incantesimoScelto": "applies to the spell chosen on the power's row (Magick page)",
+        "abilitaScelta": "applies to the Skill chosen on the power's row (Magick page)",
+        "potenza3": "applies with Potency 3 or more"
+      },
+      "RiesceSenzaTirare": "Succeeds without rolling: {name}",
+      "PotereCosto": "The power costs {points} Quintessence."
     },
     "Ritratti": {
       "NextHint": "Cycle the portraits: the one you see is also the image on the map and in chat",

@@ -12,9 +12,16 @@ const radice = path.resolve(qui, "..");
 const leggi = (nome) => JSON.parse(readFileSync(path.join(qui, "dati", nome), "utf8"));
 const formule = leggi("formule.json");
 const poteri = leggi("poteri.json");
+// Gli effetti sul tiro (tappa 3): scritti a mano, potere per potere, in effetti_poteri.json.
+const effetti = leggi("effetti_poteri.json");
 
 const SFERE = ["correspondence", "entropy", "forces", "life", "matter", "mind", "prime", "spirit", "time"];
 const AMBITI = ["targets", "conditions", "duration", "impact", "range", "potency", "precision"];
+const GANCI = ["dice", "threshold", "successFrom", "autoSuccess", "freeScope", "quintessenceOnSkills", "prizeDouble", "nota"];
+const TIRI = ["magick", "abilita", "any"];
+const MODI = ["passivo", "attivo"];
+const CONDIZIONI = ["saluteMeta", "abilita1", "dadi1", "dadi2", "incantesimoScelto", "abilitaScelta", "potenza3"];
+const SCELTE = ["ambito", "abilita", "incantesimo"];
 
 // Le Formule vecchie (ramo B, effetti.js) che oggi stanno in una matrice fusa,
 // o hanno cambiato nome: così le righe degli effetti trovano la matrice.
@@ -44,6 +51,52 @@ function controlla() {
   for (const p of poteri.poteri) {
     if (p.formula && !idFormule.has(p.formula)) throw new Error(`${p.name}: Formula ${p.formula} non trovata`);
     for (const s of [...p.access, ...p.amalgams]) if (s !== "any" && !SFERE.includes(s)) throw new Error(`${p.name}: Sfera sconosciuta ${s}`);
+  }
+  controllaEffetti();
+}
+
+/** Il testo intero di un potere, con gli spazi normalizzati: per cercare le note. */
+function testoPiatto(p) {
+  return testoPotere(p).replace(/\s+/g, " ");
+}
+
+/**
+ * Gli effetti scritti a mano: il potere esiste, i ganci sono quelli previsti,
+ * la nota è una frase del testo del potere (nessuna regola inventata), le
+ * Sfere e gli Ambiti esistono, la scelta ha un tipo previsto.
+ */
+function controllaEffetti() {
+  const perId = new Map(poteri.poteri.map((p) => [p.id, p]));
+  for (const [id, lista] of Object.entries(effetti.effetti)) {
+    const p = perId.get(id);
+    if (!p) throw new Error(`effetti: potere ${id} non trovato`);
+    if (!Array.isArray(lista) || !lista.length) throw new Error(`${p.name}: effetti vuoti`);
+    const testo = testoPiatto(p);
+    for (const e of lista) {
+      if (!GANCI.includes(e.on)) throw new Error(`${p.name}: gancio sconosciuto ${e.on}`);
+      if (e.roll !== undefined && !TIRI.includes(e.roll)) throw new Error(`${p.name}: tiro sconosciuto ${e.roll}`);
+      if (e.mode !== undefined && !MODI.includes(e.mode)) throw new Error(`${p.name}: modo sconosciuto ${e.mode}`);
+      for (const w of [].concat(e.when ?? [])) if (!CONDIZIONI.includes(w)) throw new Error(`${p.name}: condizione sconosciuta ${w}`);
+      for (const s of [].concat(e.requires ?? [])) if (!SFERE.includes(s)) throw new Error(`${p.name}: Sfera richiesta sconosciuta ${s}`);
+      if (e.on === "freeScope" && e.scope !== "scelta" && !AMBITI.includes(e.scope)) throw new Error(`${p.name}: Ambito sconosciuto ${e.scope}`);
+      if (e.value !== undefined && typeof e.value !== "number") {
+        if (!["poteri", "sfere"].includes(e.value?.from)) throw new Error(`${p.name}: valore sconosciuto ${JSON.stringify(e.value)}`);
+        if (e.value.sphere !== undefined && !SFERE.includes(e.value.sphere)) throw new Error(`${p.name}: Sfera del valore sconosciuta ${e.value.sphere}`);
+      }
+      if (typeof e.nota !== "string" || !e.nota.trim()) throw new Error(`${p.name}: manca la nota`);
+      if (!testo.includes(e.nota.replace(/\s+/g, " "))) throw new Error(`${p.name}: la nota non sta nel testo del potere: «${e.nota}»`);
+    }
+  }
+  for (const [id, scelta] of Object.entries(effetti.scelte)) {
+    const p = perId.get(id);
+    if (!p) throw new Error(`scelte: potere ${id} non trovato`);
+    if (!SCELTE.includes(scelta.kind)) throw new Error(`${p.name}: scelta sconosciuta ${scelta.kind}`);
+    if (scelta.kind === "ambito") {
+      for (const [s, ambiti] of Object.entries(scelta.options ?? {})) {
+        if (!SFERE.includes(s)) throw new Error(`${p.name}: Sfera della scelta sconosciuta ${s}`);
+        for (const a of ambiti) if (!AMBITI.includes(a)) throw new Error(`${p.name}: Ambito della scelta sconosciuto ${a}`);
+      }
+    }
   }
 }
 
@@ -83,7 +136,7 @@ scrivi("formule.js",
   `\n/** Le Formule di ieri (ramo B) che oggi hanno un altro id: le righe degli effetti le cercano qui. */\nexport const FORMULE_ALIAS = Object.freeze(${JSON.stringify(ALIAS, null, 2)});\n`);
 
 scrivi("poteri.js",
-  `// GENERATO da tools/genera-dati.mjs (sorgente: tools/dati/poteri.json, dal libretto dei poteri e dai poteri nuovi del 23-24/9).\n// Non si scrive a mano. Il catalogo dei poteri delle Sfere: ogni voce ha le Sfere che la aprono\n// (\`spheres\`, con "any" per Qualsiasi), la matrice di provenienza, il testo intero, il costo in\n// Quintessenza, il limite d'uso e \`effects\` (vuoto finché il potere non fa qualcosa nel conto).`,
+  `// GENERATO da tools/genera-dati.mjs (sorgenti: tools/dati/poteri.json, dal libretto dei poteri e dai poteri nuovi del 23-24/9;\n// tools/dati/effetti_poteri.json, gli effetti sul tiro scritti a mano dal testo, tappa 3 del 24/9).\n// Non si scrive a mano. Il catalogo dei poteri delle Sfere: ogni voce ha le Sfere che la aprono\n// (\`spheres\`, con "any" per Qualsiasi), la matrice di provenienza, il testo intero, il costo in\n// Quintessenza, il limite d'uso, \`effects\` (gli effetti sul tiro: poteri.js li applica) e \`scelta\`\n// (cosa il giocatore sceglie all'acquisto: un Ambito, un'Abilità, un incantesimo).`,
   "POTERI",
   poteri.poteri.map((p) => ({
     id: p.id,
@@ -106,7 +159,9 @@ scrivi("poteri.js",
     link: p.link,
     page: p.page,
     hooks: p.hooks,
-    effects: []
+    effects: effetti.effetti[p.id] ?? [],
+    scelta: effetti.scelte[p.id] ?? null
   })));
 
-console.log(`formule ${formule.formule.length}, poteri ${poteri.poteri.length}: scritti scripts/data/formule.js e scripts/data/poteri.js`);
+const conEffetti = Object.keys(effetti.effetti).length;
+console.log(`formule ${formule.formule.length}, poteri ${poteri.poteri.length} (${conEffetti} con effetti sul tiro): scritti scripts/data/formule.js e scripts/data/poteri.js`);

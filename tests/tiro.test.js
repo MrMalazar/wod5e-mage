@@ -8,6 +8,7 @@ import {
   EXTRA_DICE_CAP,
   hasDifficulty,
   isMagick,
+  livelloContato,
   loadSpell,
   pickAttribute,
   pickPower,
@@ -235,7 +236,7 @@ assert.equal(conto.extra, 3, "scheda e Armonia insieme non passano il tetto");
 const sconto = { id: "forces-2-1", sphere: "forces", dot: 2, slot: 1, name: "Dono della forza", text: "", effects: [{ on: "threshold", value: -1 }] };
 conto = contoTiro(pickPower(magick, "forces-2-1"), { arete: 2, attributeValue: 4, skillValue: 5, power: sconto });
 assert.deepEqual([conto.computed, conto.difficulty, conto.dice], [5, 5, 4]);
-assert.deepEqual(conto.powerNotes, [{ on: "threshold", value: -1 }]);
+assert.deepEqual(conto.powerNotes, [{ on: "threshold", value: -1, nota: "" }]);
 const segnaposto = { id: "forces-1-1", sphere: "forces", dot: 1, slot: 1, name: "", text: "", effects: [] };
 conto = contoTiro(pickPower(magick, "forces-1-1"), { arete: 2, attributeValue: 4, skillValue: 5, power: segnaposto });
 assert.deepEqual([conto.computed, conto.dice, conto.powerNotes], [6, 3, []]);
@@ -260,6 +261,62 @@ assert.deepEqual([setDadi(magick, 2).dadi, setDadi(magick, -3).dadi, setDadi(mag
   const pills = pillsOf(conSpell, { ...names, spells: { s1: "Lama di fuoco" } });
   assert.deepEqual([pills[0].kind, pills[0].label], ["spell", "Lama di fuoco"]);
   assert.equal(tiroSize(removePill(conSpell, { kind: "spell", id: "s1" })), 0);
+}
+
+// Gli effetti dei poteri sul tiro (tappa 3, 24/9).
+{
+  const numeri = { arete: 2, attributeValue: 4, skillValue: 5 };
+  // Una Magick pulita: Areté, Forze, Destrezza e Occulto, senza Ambiti.
+  const pulita = pickSkill(pickAttribute(toggleSphere(toggleArete(emptyTiro()), "forces"), "dexterity"), "skill:occult");
+  // Un potere che vale nei tiri di Abilità entra senza accendere l'Areté, e resta quando l'Areté si spegne.
+  const abilita = pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-mestiere", "mind", { any: true });
+  assert.deepEqual([abilita.arete, abilita.spheres, abilita.power, abilita.powerAny], [false, [], "r-mestiere", true]);
+  assert.equal(toggleArete(toggleArete(abilita)).power, "r-mestiere", "spento l'Areté il potere resta");
+  assert.equal(toggleArete(pickPower(toggleArete(emptyTiro()), "r-x", "forces")).power, null, "un potere della Magick esce con l'Areté");
+  assert.deepEqual([pickPower(abilita, "r-mestiere").power, pickPower(abilita, "r-mestiere").powerAny], [null, false]);
+  assert.equal(livelloContato(5, 4), 1);
+  assert.equal(livelloContato(3, 4), 0);
+
+  // Appoggio: Potenza 5 e Portata 2, la Potenza conta 1 sopra il 4: soglia 3, meno il premio 2.
+  const appoggio = { id: "r-appoggio", sphere: "forces", name: "Appoggio", effects: [{ on: "freeScope", scope: "potency", value: 4, nota: "leva" }] };
+  const conAppoggio = contoTiro(setScope(setScope(pickPower(pulita, "r-appoggio", "forces"), "potency", 5), "range", 2), { ...numeri, power: appoggio });
+  assert.deepEqual([conAppoggio.scopeThreshold, conAppoggio.computed, conAppoggio.powerNotes[0].scope], [7, 1, "potency"]);
+
+  // Voce dell'Avatar: il premio doppio passa il tetto dell'Areté.
+  const voce = { id: "r-voce", sphere: "spirit", name: "Voce", effects: [{ mode: "attivo", on: "prizeDouble", nota: "doppio" }] };
+  const conVoce = contoTiro(setScope(pickPower(pulita, "r-voce", "spirit"), "potency", 6), { ...numeri, power: voce });
+  assert.deepEqual([conVoce.prize, conVoce.computed, conVoce.powerActive], [4, 2, true]);
+
+  // Anche a mani nude: la Quintessenza dà dadi anche nel tiro di Abilità, dentro il tetto 2 + Areté.
+  const mani = { id: "r-mani", sphere: "prime", name: "Mani nude", effects: [{ on: "quintessenceOnSkills", roll: "abilita", nota: "punti" }] };
+  const conMani = contoTiro(setQuintessence(setDifficulty(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-mani", "prime", { any: true }), 2), 9), { ...numeri, quintessenceAvailable: 9, power: mani });
+  assert.deepEqual([conMani.magick, conMani.quintessenceAllowed, conMani.quintessence, conMani.pool], [false, true, 4, 9 + 4]);
+  assert.equal(contoTiro(setQuintessence(setDifficulty(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), 2), 9), { ...numeri, quintessenceAvailable: 9 }).quintessence, 0, "senza il potere, niente Quintessenza fuori dalla Magick");
+
+  // Niente al caso: riesce senza tirare con almeno due dadi dopo la soglia; con uno no, e il riquadro dice perché.
+  const niente = { id: "r-niente", sphere: "entropy", name: "Niente al caso", effects: [{ mode: "attivo", on: "autoSuccess", roll: "abilita", when: "dadi2", nota: "due dadi" }] };
+  const tiroNiente = pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-niente", "entropy", { any: true });
+  const nienteOk = contoTiro(setDifficulty(tiroNiente, 7), { ...numeri, power: niente });
+  assert.deepEqual([nienteOk.dice, nienteOk.autoSuccess, nienteOk.powerActive], [2, true, true]);
+  const nienteNo = contoTiro(setDifficulty(tiroNiente, 8), { ...numeri, power: niente });
+  assert.deepEqual([nienteNo.dice, nienteNo.autoSuccess, nienteNo.autoSuccessMotivo], [1, false, "dadi2"]);
+  // A zero dadi il tiro è impossibile, salvo che riesca senza tirare.
+  const fucile = { id: "r-fucile", sphere: "matter", name: "Fucile", effects: [{ mode: "attivo", on: "autoSuccess", roll: "any", nota: "riesce" }] };
+  const conFucile = contoTiro(setDifficulty(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-fucile", "matter", { any: true }), 12), { ...numeri, power: fucile });
+  assert.deepEqual([conFucile.dice, conFucile.autoSuccess, conFucile.impossible], [0, true, false]);
+
+  // Un effetto della Magick scelto in un tiro di Abilità resta fuori, col perché.
+  const conFuori = contoTiro(setDifficulty(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-appoggio", "forces", { any: true }), 3), { ...numeri, power: appoggio });
+  assert.deepEqual([conFuori.powerNotes, conFuori.powerSkipped], [[], [{ motivo: "tiro:magick", nota: "leva" }]]);
+
+  // La variante «attivo» arriva nell'id: la riga la spezza, il conto la passa agli effetti.
+  const casa = { id: "r-casa", sphere: "forces", name: "Casa", scelta: "potency", effects: [{ on: "freeScope", scope: "scelta", value: { from: "poteri" }, nota: "fino ai poteri" }, { mode: "attivo", on: "freeScope", scope: "scelta", value: 7, nota: "tutto" }] };
+  const tiroCasa = setScope(pickPower(pulita, "r-casa", "forces"), "potency", 6);
+  assert.equal(contoTiro(tiroCasa, { ...numeri, power: casa, powerCtx: { poteriConti: { forces: 2 } } }).computed, 6 - 2 - 2);
+  const tiroCasaAttiva = setScope(pickPower(pulita, "r-casa#attivo", "forces"), "potency", 6);
+  const conCasaAttiva = contoTiro(tiroCasaAttiva, { ...numeri, power: casa, powerCtx: { poteriConti: { forces: 2 } } });
+  assert.deepEqual([conCasaAttiva.computed, conCasaAttiva.powerActive], [0, true]);
+  assert.equal(pillsOf(tiroCasaAttiva, names).find((pill) => pill.kind === "power").id, "r-casa#attivo", "la pillola porta l'id con la variante");
 }
 
 console.log("tiro: ok");
