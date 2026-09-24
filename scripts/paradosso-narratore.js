@@ -2,6 +2,7 @@ import { calculateMagickThreshold, THRESHOLD_CAP } from "./arete.js";
 import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
 import { ROLL_CARD_FLAG } from "./roll-card.js";
+import { MAGHI_SETTING } from "./menu-paradosso.js";
 import { SCOPE_ICONS, SCOPES } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
 
@@ -88,6 +89,23 @@ export function isInLobby(actor) {
 /** I personaggi in lobby: i Maghi che hanno premuto «Nuova sessione». */
 export function lobbyActors(actors = []) {
   return [...actors].filter((actor) => isMageActor(actor) && isInLobby(actor));
+}
+
+/**
+ * I maghi della Scheda del Paradosso: dal 24/9 li sceglie il Narratore nel
+ * Quadro (la Nuova sessione o «aggiungi»); se non ne ha scelti, valgono
+ * ancora quelli entrati in lobby da soli.
+ */
+export function attoriScheda() {
+  const ids = game.settings?.get?.(MODULE_ID, MAGHI_SETTING)?.ids ?? [];
+  const scelti = ids.map((id) => game.actors?.get(id)).filter((actor) => actor && isMageActor(actor));
+  return scelti.length ? scelti : lobbyActors(game.actors?.contents ?? []);
+}
+
+/** Il Quadro del Narratore (quadro-narratore.js) si registra qui, così la barra lo apre senza importarlo. */
+let apriQuadro = null;
+export function setApriQuadro(fn) {
+  apriQuadro = typeof fn === "function" ? fn : null;
 }
 
 /**
@@ -293,7 +311,7 @@ class PannelloParadosso {
       return;
     }
     const localize = game.i18n.localize.bind(game.i18n);
-    const lobby = lobbyActors(game.actors?.contents ?? []);
+    const lobby = attoriScheda();
     const scheda = schedaParadosso(lobby).map((row) => ({ ...row, label: localize(row.label) }));
     const log = pool.log.slice(-8).reverse().map((entry) => ({
       ...entry,
@@ -460,7 +478,7 @@ export async function openSpendDialog() {
   if (!game.user.isGM) return null;
   const localize = game.i18n.localize.bind(game.i18n);
   const pool = getPool();
-  const scheda = schedaParadosso(lobbyActors(game.actors?.contents ?? []));
+  const scheda = schedaParadosso(attoriScheda());
   const content = await foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/dialogs/paradosso-spesa.hbs`,
     {
@@ -574,27 +592,29 @@ export function registerParadossoNarratore() {
       activeTool: "pannello",
       onChange: (_event, active) => {
         if (!active) return;
-        PannelloParadosso.toggle();
+        // Dal 24/9 il Narratore apre il Quadro (contatore, menù, giocatori); i giocatori il pannello col numero.
+        if (gm && apriQuadro) apriQuadro("contatore");
+        else PannelloParadosso.toggle();
         backToPreviousControl();
       },
       tools: {
         pannello: {
           name: "pannello",
-          title: "WOD5E_MAGE.Paradosso.Panel",
-          icon: "fa-solid fa-eye",
+          title: gm ? "WOD5E_MAGE.Menu.QuadroTitle" : "WOD5E_MAGE.Paradosso.Panel",
+          icon: gm ? "fa-solid fa-table-cells-large" : "fa-solid fa-eye",
           order: 1,
           button: true,
           visible: true,
-          onChange: () => PannelloParadosso.toggle()
+          onChange: () => ((gm && apriQuadro) ? apriQuadro("contatore") : PannelloParadosso.toggle())
         },
         spendi: {
           name: "spendi",
-          title: "WOD5E_MAGE.Paradosso.Spend",
-          icon: "fa-solid fa-wand-sparkles",
+          title: "WOD5E_MAGE.Menu.Modi.menu",
+          icon: "fa-solid fa-book-open",
           order: 2,
           button: true,
           visible: gm,
-          onChange: () => openSpendDialog()
+          onChange: () => (apriQuadro ? apriQuadro("menu") : openSpendDialog())
         }
       }
     };

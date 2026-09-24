@@ -46,9 +46,10 @@
    rosso mattone solo per il Paradosso. Si accende dal tasto accanto ai tre
    pallini della finestra (impostazione del giocatore, sheetTheme).
    ========================================================================== */
-/* Anche la creazione guidata (23/9) veste il tema chiaro con questi colori. */
+/* Anche la creazione guidata (23/9) e il Quadro del Narratore (24/9) vestono il tema chiaro con questi colori. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara,
-.application.wod5e-mage-guidata.wod5e-mage-chiara {
+.application.wod5e-mage-guidata.wod5e-mage-chiara,
+.application.wod5e-mage-quadro.wod5e-mage-chiara {
   --mortal-color-1: #282051;      /* viola profondo: barra del titolo e livrea */
   --mortal-color-2: #3B336B;      /* viola medio */
   --mortal-color-3: #F6F2E6;
@@ -89,7 +90,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .window-content,
-.application.wod5e-mage-guidata.wod5e-mage-chiara .window-content {
+.application.wod5e-mage-guidata.wod5e-mage-chiara .window-content,
+.application.wod5e-mage-quadro.wod5e-mage-chiara .window-content {
   background: #FBF8F0;
   color: var(--mage-testo);
 }
@@ -97,7 +99,8 @@
 /* La barra del titolo e la barra delle linguette in viola profondo, le
    linguette spente in crema col simbolo viola, accesa in oro testatina. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .window-header,
-.application.wod5e-mage-guidata.wod5e-mage-chiara .window-header {
+.application.wod5e-mage-guidata.wod5e-mage-chiara .window-header,
+.application.wod5e-mage-quadro.wod5e-mage-chiara .window-header {
   background: #282051;
   color: #F6F2E6;
 }
@@ -14030,4 +14033,970 @@
 .wod5e-mage-catalogo-tag > small.attivo::before,
 .wod5e-mage-catalogo-tag > small.passivo::before {
   content: "";
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Il Quadro del Narratore (Blue, 24/9): una finestra sola in tre modi  */
+/* (il contatore del Paradosso, il menù del Paradosso, i giocatori),    */
+/* il modo si cambia coi tre bottoni in testa. Il mock del 24/9 sera:   */
+/* viola per la scelta, oro per i prezzi, le famiglie chiuse, i         */
+/* dettagli a un clic. Veste i gettoni della scheda e il tema chiaro.   */
+/* ------------------------------------------------------------------ */
+.application.wod5e-mage-quadro {
+  --quadro-fondo: #1b160f;
+  --quadro-riga: 1px solid rgb(152 119 43 / 45%);
+  --quadro-scelta: #2a2038;
+  --quadro-testo: 13px;
+  --quadro-verde: #7fd18a;
+  --quadro-spento: #6b6355;
+  /* I numeri e i nomi in risalto: il colore delle intestazioni della finestra (come nella guidata). */
+  --quadro-titolo: var(--mortal-color-3);
+}
+
+.application.wod5e-mage-quadro.wod5e-mage-chiara {
+  --quadro-fondo: #FBF8F0;
+  --quadro-riga: 1px solid #D9C28A;
+  --quadro-scelta: #ECE7F4;
+  --quadro-verde: #2E7D4F;
+  --quadro-spento: #B9B3A6;
+  --quadro-titolo: #3B336B;
+}
+
+.application.wod5e-mage-quadro .window-header {
+  background: var(--mortal-color-1);
+  color: #fff;
+}
+
+.application.wod5e-mage-quadro .window-content {
+  background: var(--quadro-fondo);
+  color: var(--mage-testo);
+  display: flex;
+  flex-direction: column;
+  font-family: "Signika", sans-serif;
+  font-size: var(--quadro-testo);
+  gap: 0;
+  line-height: 1.35;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* I bottoni a più righe riprendono l'altezza dal contenuto (come nella guidata). */
+.application.wod5e-mage-quadro button {
+  box-shadow: none;
+  font-family: "Signika", sans-serif;
+  height: auto;
+  line-height: 1.25;
+  min-height: 0;
+  outline: none;
+  text-shadow: none;
+  width: auto;
+}
+
+.application.wod5e-mage-quadro button:hover,
+.application.wod5e-mage-quadro button:focus {
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.application.wod5e-mage-quadro button:focus-visible {
+  outline: 2px solid var(--mage-viola-chiaro);
+  outline-offset: 1px;
+}
+
+/* Il bottone del Quadro: cornice d'oro scuro, testo del fondo; «ghost» senza cornice; «primo» viola. */
+.application.wod5e-mage-quadro .wod5e-mage-quadro-tasti button,
+.application.wod5e-mage-quadro .wod5e-mage-quadro-riga-testa button,
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .testa button.ghost,
+.application.wod5e-mage-quadro .wod5e-mage-quadro-numero button,
+.application.wod5e-mage-quadro .wod5e-mage-quadro-visibile,
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .tasti button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 6px;
+  color: var(--mage-testo);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 600;
+  gap: 6px;
+  justify-content: center;
+  padding: 6px 12px;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro button.ghost {
+  border-color: transparent;
+  color: var(--mage-tenue);
+}
+
+.application.wod5e-mage-quadro button.ghost:hover,
+.application.wod5e-mage-quadro .wod5e-mage-quadro-tasti button:hover,
+.application.wod5e-mage-quadro .wod5e-mage-quadro-numero button:hover,
+.application.wod5e-mage-quadro .wod5e-mage-quadro-visibile:hover {
+  background: var(--mage-riga-sorvolo);
+  color: var(--mage-testo);
+}
+
+.application.wod5e-mage-quadro button.piccolo {
+  font-size: 11px;
+  padding: 3px 8px;
+}
+
+/* La testa: i tre modi come linguette, la scena e la riserva in pillole. */
+.application.wod5e-mage-quadro .wod5e-mage-quadro-testa {
+  border-bottom: var(--quadro-riga);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-modi {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-quadro-modo {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  color: var(--mage-tenue);
+  display: inline-flex;
+  font-size: 12.5px;
+  font-weight: 600;
+  gap: 6px;
+  justify-content: center;
+  padding: 7px 8px;
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-quadro-modo:hover {
+  color: var(--mage-testo);
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-quadro-modo.attivo {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: #fff;
+}
+
+.application.wod5e-mage-quadro.wod5e-mage-chiara button.wod5e-mage-quadro-modo.attivo {
+  background: var(--mage-viola);
+  color: #F6F2E6;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-stato {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-pill {
+  align-items: center;
+  background: rgb(0 0 0 / 25%);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 10px;
+  color: var(--quadro-titolo);
+  display: inline-flex;
+  font-size: 11px;
+  gap: 5px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro.wod5e-mage-chiara .wod5e-mage-quadro-pill {
+  background: var(--mage-velluto);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-pill.tenue {
+  color: var(--mage-tenue);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-riserva {
+  color: var(--mage-tenue);
+  font-size: 11.5px;
+  margin-left: auto;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-riserva b {
+  color: var(--mage-oro);
+  font-size: 15px;
+}
+
+/* Il corpo: scorre da solo, la testa resta. */
+.application.wod5e-mage-quadro .wod5e-mage-quadro-corpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  overflow: auto;
+  padding: 10px;
+  scrollbar-width: thin;
+}
+
+.application.wod5e-mage-quadro .tenue {
+  color: var(--mage-tenue);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-vuoto {
+  border: 1px dashed var(--mage-oro-tenue);
+  border-radius: 6px;
+  color: var(--mage-tenue);
+  font-size: 12px;
+  margin: 0;
+  padding: 8px 10px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-tit {
+  align-items: center;
+  border: 0;
+  border-bottom: var(--quadro-riga);
+  color: var(--mage-oro);
+  display: flex;
+  font: 700 10.5px/1 sans-serif;
+  gap: 8px;
+  letter-spacing: 0.16em;
+  margin: 6px 0 0;
+  padding: 2px 0 6px;
+  text-shadow: none;
+  text-transform: uppercase;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-tit small {
+  color: var(--mage-tenue);
+  font: 600 11px "Signika", sans-serif;
+  letter-spacing: 0.02em;
+  margin-left: auto;
+  text-transform: none;
+}
+
+/* 1 · Il contatore: il numero grande, il ritmo, quello che il Paradosso ha in scena. */
+.application.wod5e-mage-quadro .wod5e-mage-quadro-numero {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  padding: 4px 0 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-numero b {
+  color: var(--quadro-titolo);
+  font: 700 48px/1 "Modesto Condensed", Georgia, serif;
+  min-width: 2ch;
+  text-align: center;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-numero button {
+  padding: 4px 9px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sotto {
+  color: var(--mage-tenue);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-ritmo {
+  color: var(--mage-tenue);
+  font-size: 11.5px;
+  margin: 0;
+  text-align: center;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-ritmo i {
+  color: var(--mage-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-visibile {
+  align-self: center;
+  border-color: transparent;
+  color: var(--mage-tenue);
+  font-size: 11px;
+  font-weight: 400;
+  padding: 3px 8px;
+  white-space: normal;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena {
+  display: flex;
+  flex-direction: column;
+  font-size: 11.5px;
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena li {
+  align-items: center;
+  display: flex;
+  gap: 7px;
+  min-height: 22px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena svg {
+  flex: 0 0 18px;
+  height: 18px;
+  width: 18px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena li > i.fa-solid {
+  color: var(--mage-viola-chiaro);
+  text-align: center;
+  width: 18px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .nome {
+  font-weight: 600;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .conto {
+  color: var(--mage-oro);
+  font-weight: 700;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena li.pieno .conto {
+  color: var(--mage-rosso-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .tasti {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .tasti button {
+  border-color: transparent;
+  color: var(--mage-tenue);
+  padding: 2px 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .tasti button:hover {
+  background: var(--mage-riga-sorvolo);
+  color: var(--mage-testo);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-tasti {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 1fr 1fr;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-tasti button.ghost {
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-registro {
+  border-top: var(--quadro-riga);
+  display: flex;
+  flex-direction: column;
+  font-size: 11.5px;
+  gap: 3px;
+  list-style: none;
+  margin: 0;
+  max-height: 180px;
+  overflow: auto;
+  padding: 6px 0 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-registro li {
+  display: flex;
+  gap: 8px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-registro b {
+  flex: 0 0 2.6em;
+  text-align: right;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-registro b.su {
+  color: var(--quadro-verde);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-registro b.giu {
+  color: var(--mage-rosso-chiaro);
+}
+
+/* 2 · Il menù: la scena in tendina, la cerca, le famiglie a cassetti chiusi. */
+.application.wod5e-mage-quadro .wod5e-mage-menu-testa {
+  display: flex;
+  gap: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-testa select,
+.application.wod5e-mage-quadro .wod5e-mage-menu-testa input,
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa select,
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa input,
+.application.wod5e-mage-quadro .wod5e-mage-quadro-form select {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  color: var(--mage-testo);
+  font-family: "Signika", sans-serif;
+  font-size: 12px;
+  height: 28px;
+  min-width: 0;
+  padding: 3px 8px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-testa select {
+  flex: 1;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-testa input {
+  flex: 0 1 160px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-testa input::placeholder,
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa input::placeholder {
+  color: var(--mage-tenue);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto {
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.nascosta,
+.application.wod5e-mage-quadro .wod5e-mage-menu-voce.nascosta {
+  display: none;
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  color: var(--mage-testo);
+  display: flex;
+  font-size: 12.5px;
+  font-weight: 600;
+  gap: 8px;
+  padding: 6px 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa > i:first-child {
+  color: var(--mage-oro);
+  text-align: center;
+  width: 16px;
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa small {
+  color: var(--mage-tenue);
+  flex: 1;
+  font-size: 11px;
+  font-weight: 400;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa .freccia {
+  color: var(--mage-tenue);
+  font-size: 10px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.aperto > button.wod5e-mage-menu-cassetto-testa {
+  background: var(--mage-riga-sorvolo);
+  border-bottom: 1px solid var(--mage-oro-tenue);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-voci {
+  display: none;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.aperto > .wod5e-mage-menu-voci {
+  display: block;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-voce {
+  border-top: 1px solid rgb(107 79 18 / 45%);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-voce:first-child {
+  border-top: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-voce.aperta {
+  background: var(--quadro-scelta);
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  color: var(--mage-testo);
+  display: grid;
+  font-size: 12.5px;
+  gap: 8px;
+  grid-template-columns: 16px 1fr auto;
+  padding: 6px 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga:hover {
+  background: var(--mage-riga-sorvolo);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-voce.aperta button.wod5e-mage-menu-voce-riga:hover {
+  background: transparent;
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga > i {
+  color: var(--mage-oro);
+  font-size: 11px;
+  text-align: center;
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .nome {
+  font-weight: 600;
+  min-width: 0;
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .faccia {
+  color: var(--mage-tenue);
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-voce.aperta .faccia {
+  color: var(--mage-testo);
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .prezzo {
+  color: var(--mage-oro);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-scheda {
+  border-top: 1px solid rgb(181 138 222 / 35%);
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  gap: 4px;
+  padding: 6px 10px 4px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-scheda p {
+  margin: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-scheda p > b {
+  color: var(--mage-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-scheda .esempio {
+  color: var(--mage-tenue);
+  font-style: italic;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-mossa,
+.wod5e-mage-menu-card .wod5e-mage-menu-mossa {
+  background: var(--mage-scelta-tenue, #3b2a55);
+  border: 1px solid var(--mage-viola-chiaro, #b58ade);
+  border-radius: 6px;
+  color: var(--mage-scelta-tenue-testo, #fff);
+  display: inline-block;
+  font-size: 11.5px;
+  font-style: normal;
+  margin: 1px 3px 1px 0;
+  padding: 1px 7px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-avviso {
+  color: var(--mage-tenue);
+  font-size: 11.5px;
+  margin: 0;
+  padding: 4px 10px 8px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-avviso i {
+  color: var(--mage-rosso-chiaro);
+}
+
+/* La spesa in fondo alla voce aperta: i campi a due colonne, il prezzo vivo, il tasto viola. */
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa {
+  border-top: 1px solid rgb(181 138 222 / 35%);
+  display: grid;
+  gap: 6px 8px;
+  grid-template-columns: 1fr 1fr;
+  padding: 6px 10px 8px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo {
+  color: var(--mage-tenue);
+  display: flex;
+  flex-direction: column;
+  font-size: 11.5px;
+  gap: 3px;
+  min-width: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo.corto {
+  max-width: 100%;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .nota {
+  color: var(--mage-tenue);
+  font-size: 11px;
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-conto {
+  align-items: center;
+  color: var(--mage-tenue);
+  display: flex;
+  font-size: 11.5px;
+  gap: 10px;
+  grid-column: 1 / -1;
+  margin-top: 2px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-conto b {
+  color: var(--mage-oro);
+  font: 700 18px/1 "Modesto Condensed", Georgia, serif;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa.troppo .wod5e-mage-menu-conto b[data-role="prezzoVivo"],
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa.troppo .wod5e-mage-menu-conto b[data-role="riservaDopo"] {
+  color: var(--mage-rosso-chiaro);
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-spendi {
+  align-items: center;
+  background: var(--mage-viola);
+  border: 1px solid var(--mage-viola-chiaro);
+  border-radius: 6px;
+  color: #fff;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 600;
+  gap: 6px;
+  margin-left: auto;
+  padding: 6px 12px;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro.wod5e-mage-chiara button.wod5e-mage-menu-spendi {
+  color: #F6F2E6;
+}
+
+.application.wod5e-mage-quadro button.wod5e-mage-menu-spendi:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-legenda {
+  color: var(--mage-tenue);
+  font-size: 11px;
+  margin: 2px 0 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-legenda i {
+  color: var(--mage-oro);
+}
+
+/* 3 · I giocatori: un riquadro per mago, chiuso coi conti, aperto con le tre righe. */
+.application.wod5e-mage-quadro .wod5e-mage-quadro-riga-testa {
+  align-items: center;
+  color: var(--mage-tenue);
+  display: flex;
+  font-size: 11.5px;
+  justify-content: space-between;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago {
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 7px 10px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago.aperto {
+  border-color: var(--mage-viola-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .testa {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .ritratto {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 50%;
+  flex: 0 0 30px;
+  height: 30px;
+  object-fit: cover;
+  width: 30px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago button.nome {
+  align-items: flex-start;
+  background: transparent;
+  border: 0;
+  color: var(--mage-testo);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.15;
+  min-width: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago button.nome small {
+  align-items: center;
+  color: var(--mage-tenue);
+  display: flex;
+  font-size: 10.5px;
+  font-weight: 400;
+  gap: 5px;
+}
+
+.application.wod5e-mage-quadro .punto {
+  background: var(--quadro-spento);
+  border-radius: 50%;
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+}
+
+.application.wod5e-mage-quadro .punto.on {
+  background: var(--quadro-verde);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato > span {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  display: inline-flex;
+  font-size: 11px;
+  gap: 4px;
+  padding: 2px 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato i {
+  color: var(--mage-oro);
+  font-size: 10px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato b {
+  color: var(--quadro-titolo);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato > span.cond {
+  border-color: var(--mage-viola-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato > span.cond i {
+  color: var(--mage-viola-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .gruppo {
+  align-items: start;
+  display: grid;
+  font-size: 11.5px;
+  gap: 6px;
+  grid-template-columns: 76px 1fr;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .gruppo .k {
+  color: var(--mage-tenue);
+  font: 700 9.5px/1.6 sans-serif;
+  letter-spacing: 0.12em;
+  padding-top: 3px;
+  text-transform: uppercase;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .gruppo .k b {
+  color: var(--quadro-titolo);
+  font-family: "Signika", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0;
+  margin-left: 4px;
+}
+
+.application.wod5e-mage-quadro .chips,
+.application.wod5e-mage-quadro .conti {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.application.wod5e-mage-quadro .chip {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  display: inline-flex;
+  font-size: 11.5px;
+  gap: 5px;
+  padding: 2px 7px;
+}
+
+.application.wod5e-mage-quadro .chip > i {
+  color: var(--mage-oro);
+  font-size: 10px;
+}
+
+.application.wod5e-mage-quadro .chip small {
+  color: var(--mage-tenue);
+}
+
+.application.wod5e-mage-quadro .chip.par {
+  background: var(--quadro-scelta);
+  border-color: var(--mage-viola-chiaro);
+}
+
+.application.wod5e-mage-quadro .chip.par > i {
+  color: var(--mage-viola-chiaro);
+}
+
+.application.wod5e-mage-quadro .chip.vuoto {
+  border-style: dashed;
+  color: var(--mage-tenue);
+}
+
+.application.wod5e-mage-quadro .chip button {
+  background: transparent;
+  border: 0;
+  color: var(--mage-tenue);
+  font-size: 10px;
+  line-height: 1;
+  padding: 0 0 0 2px;
+}
+
+.application.wod5e-mage-quadro .chip button:hover {
+  color: var(--mage-rosso-chiaro);
+}
+
+/* Le finestre di dialogo del Quadro: Nuova sessione, Cambio scena, Aggiungi. */
+.wod5e-mage-quadro-form {
+  display: flex;
+  flex-direction: column;
+  font-family: "Signika", sans-serif;
+  gap: 8px;
+}
+
+.wod5e-mage-quadro-form .wod5e-mage-quadro-domanda {
+  font: 600 18px "Modesto Condensed", Georgia, serif;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.wod5e-mage-quadro-form .wod5e-mage-quadro-hint {
+  font-size: 12px;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.wod5e-mage-quadro-form .wod5e-mage-quadro-scelta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.wod5e-mage-quadro-form .wod5e-mage-quadro-scelta-riga {
+  align-items: center;
+  border: 1px solid rgb(128 128 128 / 35%);
+  border-radius: 8px;
+  cursor: pointer;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 18px 30px 1fr auto;
+  padding: 5px 10px;
+}
+
+.wod5e-mage-quadro-form .wod5e-mage-quadro-scelta-riga:has(input:checked) {
+  background: rgb(90 43 130 / 18%);
+  border-color: #b58ade;
+}
+
+.wod5e-mage-quadro-form .wod5e-mage-quadro-scelta-riga img {
+  border-radius: 50%;
+  height: 30px;
+  object-fit: cover;
+  width: 30px;
+}
+
+.wod5e-mage-quadro-form .wod5e-mage-quadro-scelta-riga .nome {
+  font-weight: 600;
+}
+
+.wod5e-mage-quadro-form .wod5e-mage-quadro-scelta-riga .gioc {
+  align-items: center;
+  display: inline-flex;
+  font-size: 11px;
+  gap: 5px;
+  opacity: 0.8;
+}
+
+.wod5e-mage-quadro-form .punto {
+  background: #6b6355;
+  border-radius: 50%;
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+}
+
+.wod5e-mage-quadro-form .punto.on {
+  background: #7fd18a;
+}
+
+.wod5e-mage-quadro-form .wod5e-mage-quadro-campo {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  gap: 3px;
+}
+
+/* La carta del menù in chat: il banner viola, le mosse come chip. */
+.wod5e-mage-menu-card .wod5e-mage-menu-mosse .wod5e-mage-roll-value {
+  line-height: 1.7;
+}
+
+.wod5e-mage-menu-card .wod5e-mage-paradosso-banner small {
+  font-size: 0.75em;
+  font-weight: 400;
+  letter-spacing: 0;
+  opacity: 0.8;
+  text-transform: none;
 }

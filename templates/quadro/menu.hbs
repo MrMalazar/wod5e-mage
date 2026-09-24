@@ -1,0 +1,93 @@
+{{!-- Il menù (24/9): la scena in tendina, la cerca, le famiglie a cassetti chiusi; una voce aperta è la scheda del PDF con la spesa in fondo. --}}
+<div class="wod5e-mage-quadro-corpo wod5e-mage-quadro-menu">
+    <div class="wod5e-mage-menu-testa">
+        <select data-role="scena" aria-label="{{localize 'WOD5E_MAGE.Menu.Scena'}}">
+            <option value="">{{localize "WOD5E_MAGE.Menu.NessunaScena"}}</option>
+            {{#each scene as |s|}}<option value="{{s.id}}" {{#if s.selected}}selected{{/if}}>{{s.nome}}</option>{{/each}}
+        </select>
+        <input type="search" data-role="cerca" value="{{cerca}}" placeholder="{{localize 'WOD5E_MAGE.Menu.Cerca'}}" aria-label="{{localize 'WOD5E_MAGE.Menu.Cerca'}}">
+    </div>
+    {{#each cassetti as |cassetto|}}
+        <section class="wod5e-mage-menu-cassetto{{#if cassetto.aperto}} aperto{{/if}}" data-famiglia="{{cassetto.famiglia}}">
+            <button type="button" class="wod5e-mage-menu-cassetto-testa" data-action="cassetto" data-famiglia="{{cassetto.famiglia}}" aria-expanded="{{cassetto.aperto}}">
+                <i class="{{cassetto.icona}}" aria-hidden="true"></i>
+                <span class="nome">{{cassetto.label}}</span>
+                <small>{{cassetto.conto}}{{#if cassetto.faccia}} · {{cassetto.faccia}}{{/if}}</small>
+                <i class="fa-solid {{#if cassetto.aperto}}fa-chevron-up{{else}}fa-chevron-down{{/if}} freccia" aria-hidden="true"></i>
+            </button>
+            <div class="wod5e-mage-menu-voci">
+                {{#each cassetto.voci as |voce|}}
+                    <div class="wod5e-mage-menu-voce{{#if voce.aperta}} aperta{{/if}}{{#if voce.scoppio}} scoppio{{/if}}" data-voce="{{voce.id}}" data-testo="{{voce.testoCerca}}">
+                        <button type="button" class="wod5e-mage-menu-voce-riga" data-action="voce" data-voce="{{voce.id}}" aria-expanded="{{voce.aperta}}">
+                            <i class="{{voce.iconaModo}}" title="{{voce.modoLabel}}" aria-hidden="true"></i>
+                            <span class="nome">{{voce.nome}}{{#if voce.faccia}}<span class="faccia">{{voce.faccia.testo}}</span>{{else}}{{#if voce.scettro}}<span class="faccia">{{voce.effetto}}</span>{{/if}}{{/if}}</span>
+                            <span class="prezzo">{{voce.prezzoLabel}}</span>
+                        </button>
+                        {{#if voce.aperta}}
+                            <div class="wod5e-mage-menu-scheda">
+                                <p><b>{{localize "WOD5E_MAGE.Menu.Quando"}}</b> {{voce.quando}}</p>
+                                {{#if voce.segno}}<p><b>{{localize "WOD5E_MAGE.Menu.Segno"}}</b> {{voce.segno}}</p>{{/if}}
+                                <p><b>{{localize "WOD5E_MAGE.Menu.Effetto"}}</b> {{voce.effetto}}</p>
+                                <p><b>{{localize "WOD5E_MAGE.Menu.Mosse"}}</b> {{#each voce.mosse as |mossa|}}<span class="wod5e-mage-menu-mossa">{{mossa}}</span>{{/each}}</p>
+                                {{#if voce.poi}}<p><b>{{localize "WOD5E_MAGE.Menu.Poi"}}</b> {{voce.poi}}</p>{{/if}}
+                                {{#if voce.esempio}}<p class="esempio"><b>{{localize "WOD5E_MAGE.Menu.Esempio"}}</b> {{voce.esempio}}</p>{{/if}}
+                            </div>
+                            {{#if voce.scoppio}}
+                                <p class="wod5e-mage-menu-avviso"><i class="fa-solid fa-burst" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.SoloScoppio"}}</p>
+                            {{else}}
+                                <div class="wod5e-mage-menu-spesa" data-voce="{{voce.id}}">
+                                    <label class="campo">
+                                        <span>{{localize "WOD5E_MAGE.Menu.Risponde"}}</span>
+                                        <select data-role="rispondeA" data-prezzo="1">
+                                            {{#each voce.volgari as |v|}}<option value="{{v.messageId}}" data-actor="{{v.actorId}}" data-soglia="{{v.soglia}}" {{#if v.selected}}selected{{/if}}>{{v.label}}</option>{{/each}}
+                                            <option value="" data-soglia="0"{{#unless voce.volgari.length}} selected{{/unless}}>{{localize "WOD5E_MAGE.Menu.NessunVolgare"}}</option>
+                                        </select>
+                                    </label>
+                                    <label class="campo">
+                                        <span>{{localize "WOD5E_MAGE.Menu.SuChi"}}</span>
+                                        <select data-role="suChi">
+                                            {{#each voce.maghi as |m|}}<option value="{{m.id}}" {{#if m.selected}}selected{{/if}}>{{m.name}}</option>{{/each}}
+                                            <option value=""{{#if voce.suChiVuoto}} selected{{/if}}>{{localize "WOD5E_MAGE.Menu.Nessuno"}}</option>
+                                        </select>
+                                    </label>
+                                    {{#if voce.campi.soglia}}
+                                        <p class="nota">{{localize "WOD5E_MAGE.Menu.SogliaDalVolgare"}}</p>
+                                    {{/if}}
+                                    {{#if voce.campi.suaSoglia}}
+                                        <label class="campo corto"><span>{{localize "WOD5E_MAGE.Menu.SuaSoglia"}}</span><input type="number" data-role="suaSoglia" data-prezzo="1" min="1" max="13" value="{{voce.suaSogliaDefault}}"></label>
+                                    {{/if}}
+                                    {{#if voce.campi.vuole}}
+                                        <label class="campo"><span>{{localize "WOD5E_MAGE.Menu.Vuole"}}</span><input type="text" data-role="vuole" placeholder="{{localize 'WOD5E_MAGE.Menu.VuoleHint'}}"></label>
+                                    {{/if}}
+                                    {{#if voce.campi.pallini}}
+                                        <label class="campo corto"><span>{{localize "WOD5E_MAGE.Menu.Pallini"}}</span><select data-role="pallini" data-prezzo="1">{{#each voce.pallini as |p|}}<option value="{{p.value}}">{{p.label}}</option>{{/each}}</select></label>
+                                    {{/if}}
+                                    {{#if voce.campi.orologio}}
+                                        <label class="campo corto"><span>{{localize "WOD5E_MAGE.Menu.Segmenti"}}</span><input type="number" data-role="segmenti" min="3" max="16" value="{{#if voce.presenza}}3{{else}}4{{/if}}"></label>
+                                    {{/if}}
+                                    {{#if voce.campi.rimbalzo}}
+                                        <label class="campo"><span>{{localize "WOD5E_MAGE.Menu.Scatta"}}</span><select data-role="rimbalzo" data-prezzo="1">{{#each voce.rimbalzi as |r|}}<option value="{{r.id}}" data-prezzo="{{r.prezzo}}">{{r.nome}} · {{r.prezzo}}</option>{{/each}}</select></label>
+                                    {{/if}}
+                                    {{#if voce.campi.ancora}}
+                                        <label class="campo"><span>{{localize "WOD5E_MAGE.Menu.Ancora"}}</span><select data-role="ancora">{{#each voce.ancore as |a|}}<option value="{{a.id}}">{{a.name}}</option>{{else}}<option value="">{{localize "WOD5E_MAGE.Menu.NessunaAncora"}}</option>{{/each}}</select></label>
+                                    {{/if}}
+                                    <label class="campo"><span>{{localize "WOD5E_MAGE.Menu.Nota"}}</span><input type="text" data-role="nota" placeholder="{{localize 'WOD5E_MAGE.Menu.NotaHint'}}"></label>
+                                    <label class="campo corto">
+                                        <span>{{localize "WOD5E_MAGE.Menu.ChiVede"}}</span>
+                                        <select data-role="vede"><option value="tutti">{{localize "WOD5E_MAGE.Menu.Tutti"}}</option><option value="narratori">{{localize "WOD5E_MAGE.Paradosso.Whisper"}}</option></select>
+                                    </label>
+                                    <div class="wod5e-mage-menu-conto">
+                                        <span>{{localize "WOD5E_MAGE.Paradosso.Price"}} <b data-role="prezzoVivo">{{voce.stima}}</b> · {{localize "WOD5E_MAGE.Menu.RiservaDopo"}} <b data-role="riservaDopo"></b></span>
+                                        <button type="button" class="wod5e-mage-menu-spendi" data-action="spendi" data-voce="{{voce.id}}"><i class="fa-solid fa-bolt" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.SpendiManda"}}</button>
+                                    </div>
+                                </div>
+                            {{/if}}
+                        {{/if}}
+                    </div>
+                {{/each}}
+            </div>
+        </section>
+    {{/each}}
+    {{#if nessunaVoce}}<p class="wod5e-mage-quadro-vuoto">{{localize "WOD5E_MAGE.Menu.NessunaVoce"}}</p>{{/if}}
+    <p class="wod5e-mage-menu-legenda"><i class="fa-regular fa-eye" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.Modo.annunciato"}} &nbsp; <i class="fa-solid fa-bolt" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.Modo.immediato"}} &nbsp; <i class="fa-solid fa-eye-slash" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.Modo.nascosto"}} &nbsp; <i class="fa-solid fa-burst" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.Modo.scoppio"}}</p>
+</div>

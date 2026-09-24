@@ -1,0 +1,16 @@
+{{!-- Il Cambio scena (24/9): cosa finisce, la scena dopo, il posto. --}}
+<form class="dialog-contents wod5e-mage-quadro-form">
+    <p class="wod5e-mage-quadro-domanda">{{localize "WOD5E_MAGE.Menu.ScenaDopo" n=numero}}</p>
+    {{#if finiscono.length}}
+        <p class="wod5e-mage-quadro-hint"><b>{{localize "WOD5E_MAGE.Menu.Finisce"}}</b> {{#each finiscono as |f|}}{{f}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+    {{else}}
+        <p class="wod5e-mage-quadro-hint">{{localize "WOD5E_MAGE.Menu.FinisceNiente"}}</p>
+    {{/if}}
+    <label class="wod5e-mage-quadro-campo"><span>{{localize "WOD5E_MAGE.Menu.Scena"}}</span>
+        <select name="scena"><option value="">{{localize "WOD5E_MAGE.Menu.NessunaScena"}}</option>{{#each scene as |s|}}<option value="{{s.id}}" {{#if s.selected}}selected{{/if}}>{{s.nome}}</option>{{/each}}</select>
+    </label>
+    <label class="wod5e-mage-quadro-campo"><span>{{localize "WOD5E_MAGE.Menu.Posto"}}</span>
+        <select name="posto">{{#each posti as |p|}}<option value="{{p.id}}" {{#if p.selected}}selected{{/if}}>{{p.label}}</option>{{/each}}</select>
+    </label>
+    <p class="wod5e-mage-quadro-hint">{{localize "WOD5E_MAGE.Menu.PostoHint"}}</p>
+</form>

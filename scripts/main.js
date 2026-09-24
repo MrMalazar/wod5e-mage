@@ -11,6 +11,7 @@ import { registerSforzo } from "./sforzo.js";
 import { registerPrezzo } from "./prezzo.js";
 import { registerUstione } from "./ustione.js";
 import { registerParadossoNarratore } from "./paradosso-narratore.js";
+import { registerQuadroNarratore } from "./quadro-narratore.js";
 import { registerGrimorioComune } from "./grimorio-comune.js";
 import { registraSocketVerdetto } from "./verdetto-narratore.js";
 import { SCALA_PREDEFINITA, SCALA_SETTING, TEMA_CHIARO, TEMA_SCURO, TEMA_SETTING } from "./tema.js";
@@ -173,6 +174,7 @@ Hooks.once("init", () => {
   // Paradosso del Narratore col pannello e la lobby.
   registerUstione();
   registerParadossoNarratore();
+  registerQuadroNarratore();
   registerGrimorioComune();
   registerLineageSpheres();
   registerParadoxDice();

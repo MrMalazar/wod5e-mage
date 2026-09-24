@@ -1,0 +1,62 @@
+{{!-- Il contatore (24/9): il numero, il ritmo, quello che il Paradosso ha in scena, i tasti. --}}
+<div class="wod5e-mage-quadro-corpo wod5e-mage-quadro-contatore">
+    <div class="wod5e-mage-quadro-numero">
+        <button type="button" data-action="meno" title="{{localize 'WOD5E_MAGE.Paradosso.Minus'}}" aria-label="{{localize 'WOD5E_MAGE.Paradosso.Minus'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+        <b>{{points}}</b>
+        <button type="button" data-action="piu" title="{{localize 'WOD5E_MAGE.Paradosso.Plus'}}" aria-label="{{localize 'WOD5E_MAGE.Paradosso.Plus'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+    </div>
+    <p class="wod5e-mage-quadro-sotto">{{localize "WOD5E_MAGE.Menu.PuntiRiserva"}}</p>
+    <p class="wod5e-mage-quadro-ritmo">
+        <i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>
+        {{#if round}}{{localize "WOD5E_MAGE.Menu.RitmoTurno" n=ritmo.turno}} · {{/if}}{{localize "WOD5E_MAGE.Menu.RitmoScena" n=ritmo.scena}}
+        {{#if ritmo.perMago.length}}<span class="tenue">({{#each ritmo.perMago as |m|}}{{m.name}} {{m.n}}{{#unless @last}} · {{/unless}}{{/each}})</span>{{/if}}
+    </p>
+    <button type="button" class="wod5e-mage-quadro-visibile" data-action="visibile">
+        <i class="fa-solid {{#if visible}}fa-eye{{else}}fa-eye-slash{{/if}}" aria-hidden="true"></i>
+        {{#if visible}}{{localize "WOD5E_MAGE.Paradosso.HideHint"}}{{else}}{{localize "WOD5E_MAGE.Paradosso.ShowHint"}}{{/if}}
+    </button>
+
+    <h3 class="wod5e-mage-quadro-tit">{{localize "WOD5E_MAGE.Menu.InScena"}} <small>{{inScena}}</small></h3>
+    {{#if inScena}}
+        <ul class="wod5e-mage-quadro-inscena">
+            {{#each orologi as |c|}}
+                <li class="orologio{{#if c.pieno}} pieno{{/if}}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="{{c.tracciato}}" fill="none" stroke="{{c.colore}}" stroke-width="2.6" stroke-linejoin="round"/></svg>
+                    <span class="nome">{{c.titolo}}</span>
+                    <span class="conto">{{c.pieni}}/{{c.segmenti}}</span>
+                    {{#if c.scattaLabel}}<span class="tenue">· {{c.scattaLabel}}</span>{{/if}}
+                    {{#unless c.visibile}}<i class="fa-solid fa-eye-slash tenue" title="{{localize 'WOD5E_MAGE.Paradosso.Whisper'}}" aria-hidden="true"></i>{{/unless}}
+                    <span class="tasti">
+                        {{#unless c.pieno}}<button type="button" data-action="orologioAvanti" data-id="{{c.id}}" title="{{localize 'WOD5E_MAGE.Menu.Avanti'}}" aria-label="{{localize 'WOD5E_MAGE.Menu.Avanti'}}"><i class="fa-solid fa-forward-step" aria-hidden="true"></i></button>{{/unless}}
+                        <button type="button" data-action="orologioChiudi" data-id="{{c.id}}" title="{{localize 'WOD5E_MAGE.Menu.Chiudi'}}" aria-label="{{localize 'WOD5E_MAGE.Menu.Chiudi'}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                    </span>
+                </li>
+            {{/each}}
+            {{#each presenze as |p|}}
+                <li class="presenza"><i class="fa-solid fa-ghost" aria-hidden="true"></i><span class="nome">{{p.nome}}</span><span class="tenue">· {{p.actorName}}{{#if p.testo}} · {{p.testo}}{{/if}}</span></li>
+            {{/each}}
+            {{#each ancore as |a|}}
+                <li class="ancora"><i class="fa-solid fa-anchor" aria-hidden="true"></i><span class="nome">{{a.nome}}</span><span class="tenue">· {{a.actorName}}{{#if a.testo}} · {{a.testo}}{{/if}}</span></li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p class="wod5e-mage-quadro-vuoto">{{localize "WOD5E_MAGE.Menu.NienteInScena"}}</p>
+    {{/if}}
+
+    <div class="wod5e-mage-quadro-tasti">
+        <button type="button" data-action="cambioScena"><i class="fa-solid fa-clapperboard" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.CambioScena"}}</button>
+        <button type="button" data-action="nuovaSessione"><i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Paradosso.NewSession"}}</button>
+        <button type="button" data-action="magickParadosso" title="{{localize 'WOD5E_MAGE.Paradosso.SpendHint'}}"><i class="fa-solid fa-wand-sparkles" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.MagickParadosso"}}</button>
+        <button type="button" data-action="registro" class="ghost"><i class="fa-solid fa-list" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.Registro"}}</button>
+        <button type="button" data-action="azzera" class="ghost" title="{{localize 'WOD5E_MAGE.Paradosso.ResetHint'}}"><i class="fa-solid fa-eraser" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Paradosso.Reset"}}</button>
+    </div>
+    {{#if registro}}
+        <ul class="wod5e-mage-quadro-registro">
+            {{#each log as |entry|}}
+                <li><b class="{{#if (gt entry.amount 0)}}su{{else}}giu{{/if}}">{{entry.sign}}</b> <span>{{entry.text}}</span></li>
+            {{else}}
+                <li class="tenue">{{localize "WOD5E_MAGE.Menu.RegistroVuoto"}}</li>
+            {{/each}}
+        </ul>
+    {{/if}}
+</div>

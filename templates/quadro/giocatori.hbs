@@ -1,0 +1,47 @@
+{{!-- I giocatori (24/9): un riquadro per mago, chiuso con lo status e tre conti, aperto con Attivi, Passivi e Magick in atto. Chi c'è lo decide il Narratore. --}}
+<div class="wod5e-mage-quadro-corpo wod5e-mage-quadro-giocatori">
+    <div class="wod5e-mage-quadro-riga-testa">
+        <span>{{localize "WOD5E_MAGE.Menu.InGioco" n=maghi.length}}</span>
+        <button type="button" class="ghost" data-action="magoAggiungi"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.Aggiungi"}}</button>
+    </div>
+    {{#each maghi as |m|}}
+        <div class="wod5e-mage-quadro-mago{{#if m.aperto}} aperto{{/if}}">
+            <div class="testa">
+                <img class="ritratto" src="{{m.img}}" alt="">
+                <button type="button" class="nome" data-action="mago" data-id="{{m.id}}" aria-expanded="{{m.aperto}}">
+                    <span>{{m.name}}</span>
+                    <small>{{#each m.utenti as |u|}}<i class="punto{{#if u.active}} on{{/if}}" aria-hidden="true"></i> {{u.name}}{{#unless @last}} · {{/unless}}{{else}}<i class="punto" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.SenzaGiocatore"}}{{/each}}</small>
+                </button>
+                <button type="button" class="ghost piccolo" data-action="schedaApri" data-id="{{m.id}}" title="{{localize 'WOD5E_MAGE.Menu.ApriScheda'}}" aria-label="{{localize 'WOD5E_MAGE.Menu.ApriScheda'}}"><i class="fa-solid fa-address-card" aria-hidden="true"></i></button>
+                <button type="button" class="ghost piccolo" data-action="magoTogli" data-id="{{m.id}}" title="{{localize 'WOD5E_MAGE.Menu.Togli'}}" aria-label="{{localize 'WOD5E_MAGE.Menu.Togli'}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </div>
+            <div class="stato">
+                <span title="{{localize 'WOD5E_MAGE.Menu.Salute'}}"><i class="fa-solid fa-heart" aria-hidden="true"></i> <b>{{m.salute.resta}}/{{m.salute.max}}</b></span>
+                <span title="{{localize 'WOD5E_MAGE.Menu.Volonta'}}"><i class="fa-solid fa-brain" aria-hidden="true"></i> <b>{{m.volonta.resta}}/{{m.volonta.max}}</b></span>
+                <span title="{{localize 'WOD5E_MAGE.Menu.Quintessenza'}}"><i class="fa-solid fa-star" aria-hidden="true"></i> <b>{{m.quintessenza}}</b></span>
+                <span title="{{localize 'WOD5E_MAGE.Menu.Ruota'}}"><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.Ruota"}} <b>{{m.ruota}}</b></span>
+                {{#each m.condizioni as |c|}}<span class="cond"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> {{c}}</span>{{/each}}
+            </div>
+            {{#if m.aperto}}
+                <div class="gruppo"><span class="k">{{localize "WOD5E_MAGE.Menu.Attivi"}} <b>{{m.attivi.length}}</b></span>
+                    <span class="chips">{{#each m.attivi as |a|}}<span class="chip par"><i class="{{a.icona}}" aria-hidden="true"></i> {{a.nome}} <small>{{a.durataLabel}}</small><button type="button" data-action="attivoTogli" data-actor="{{m.id}}" data-id="{{a.id}}" title="{{localize 'WOD5E_MAGE.Menu.Togli'}}" aria-label="{{localize 'WOD5E_MAGE.Menu.Togli'}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>{{else}}<span class="chip vuoto">{{localize "WOD5E_MAGE.Menu.NienteAddosso"}}</span>{{/each}}</span>
+                </div>
+                <div class="gruppo"><span class="k">{{localize "WOD5E_MAGE.Menu.Passivi"}} <b>{{m.passivi.length}}</b></span>
+                    <span class="chips">{{#each m.passivi as |p|}}<span class="chip"><i class="fa-solid fa-shield" aria-hidden="true"></i> {{p.nome}}</span>{{else}}<span class="chip vuoto">{{localize "WOD5E_MAGE.Menu.Nessuno"}}</span>{{/each}}</span>
+                </div>
+                <div class="gruppo"><span class="k">{{localize "WOD5E_MAGE.Menu.MagickInAtto"}} <b>{{m.magick.length}}</b></span>
+                    <span class="chips">{{#each m.magick as |g|}}<span class="chip"><i class="fa-solid fa-wand-sparkles" aria-hidden="true"></i> {{g.nome}} <small>{{g.tipo}}{{#if g.threshold}} · {{localize "WOD5E_MAGE.Menu.Soglia"}} {{g.threshold}}{{/if}}</small></span>{{else}}<span class="chip vuoto">{{localize "WOD5E_MAGE.Menu.Nessuna"}}</span>{{/each}}</span>
+                </div>
+            {{else}}
+                <div class="conti">
+                    {{#if m.vuoto}}<span class="chip vuoto">{{localize "WOD5E_MAGE.Menu.NienteAddosso"}}</span>{{else}}
+                    <span class="chip par"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"></i> {{m.attivi.length}} {{localize "WOD5E_MAGE.Menu.AttiviCorti"}}</span>
+                    <span class="chip"><i class="fa-solid fa-shield" aria-hidden="true"></i> {{m.passivi.length}} {{localize "WOD5E_MAGE.Menu.PassiviCorti"}}</span>
+                    <span class="chip"><i class="fa-solid fa-wand-sparkles" aria-hidden="true"></i> {{m.magick.length}} Magick</span>
+                    {{/if}}
+                </div>
+            {{/if}}
+        </div>
+    {{/each}}
+    {{#if nessunMago}}<p class="wod5e-mage-quadro-vuoto">{{localize "WOD5E_MAGE.Menu.NessunMago"}}</p>{{/if}}
+</div>

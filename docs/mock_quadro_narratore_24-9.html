@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Il Quadro del Narratore · tre riquadri (24/9, terza proposta)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+  :root{
+    --oro:#d9a827; --oro-scuro:#98772b; --oro-tenue:#6b4f12; --oro-chiaro:#f5e7b2;
+    --testo:#e6dcc2; --tenue:#ab9f85; --incavo:#15130f; --viola:#5a2b82; --viola-chiaro:#b58ade; --lilla:#3b2a55;
+    --rosso-chiaro:#e08a84; --verde:#7fd18a; --ambra:#e0a040;
+    --riq:linear-gradient(#2a2314,#1f1a10); --riga:#2f2a1f; --cassetto:#1a160f; --su-oro:#1a140a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#121009;color:var(--testo);font:13px/1.35 "Signika","Segoe UI",system-ui,sans-serif;padding:28px 32px 60px}
+  h1{font:600 22px "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro);margin:0 0 4px;letter-spacing:.02em}
+  .sub{color:var(--tenue);margin:0 0 26px;font-size:13px;max-width:1100px} .sub b{color:var(--testo)}
+  h2.sez{font:600 17px "Modesto Condensed",Georgia,serif;color:var(--oro);margin:40px 0 12px;letter-spacing:.04em;border-bottom:1px solid var(--oro-tenue);padding-bottom:4px;max-width:1500px}
+  .legenda{font-size:12.5px;color:var(--tenue);max-width:1120px;margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .legenda h3{font:600 15px "Modesto Condensed",Georgia,serif;color:var(--oro);margin:0 0 6px;letter-spacing:.04em}
+  .legenda ol{margin:0;padding-left:18px} .legenda li{margin:0 0 7px} .legenda b{color:var(--testo)}
+  .legenda.una{display:block;max-width:420px}
+  .blocco{display:grid;grid-template-columns:auto 1fr;gap:34px;align-items:start}
+
+  .win{background:#1b160f;border:1px solid var(--oro-scuro);border-radius:8px;box-shadow:0 14px 40px rgb(0 0 0 / 60%);overflow:hidden}
+  .win-h{display:flex;align-items:center;gap:10px;padding:6px 10px;background:#59420e;color:#fff;font:600 13px sans-serif}
+  .win-h .x{margin-left:auto;opacity:.8}
+  .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--oro-scuro);border-radius:6px;background:transparent;color:var(--testo);font:600 12px "Signika";padding:6px 12px;white-space:nowrap}
+  .btn.primo{background:var(--viola);border-color:var(--viola-chiaro);color:#fff}
+  .btn.ghost{color:var(--tenue);border-color:transparent}
+  .btn.piccolo{padding:3px 8px;font-size:11px}
+  .pill{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--oro-tenue);border-radius:10px;padding:2px 8px;font-size:11px;color:var(--oro-chiaro);background:rgb(0 0 0 / 25%);white-space:nowrap}
+  .pill.on{background:var(--viola);border-color:var(--viola-chiaro);color:#fff}
+  .pill.tenue{color:var(--tenue)}
+  .prezzo{color:var(--oro);font-weight:700;white-space:nowrap}
+  .tit{display:flex;align-items:center;gap:8px;font:700 10.5px/1 sans-serif;letter-spacing:.16em;color:var(--oro);text-transform:uppercase;padding:2px 0 6px;border-bottom:1px solid rgb(152 119 43 / 45%)}
+  .tit small{margin-left:auto;font:600 11px "Signika";letter-spacing:.02em;text-transform:none;color:var(--tenue)}
+  .nota{font-size:11.5px;color:var(--tenue)} .nota b{color:var(--testo)}
+  .campo{display:flex;flex-direction:column;gap:3px;font-size:11.5px;color:var(--tenue)}
+  .campo .val{display:flex;align-items:center;gap:6px;background:var(--incavo);border:1px solid var(--oro-tenue);border-radius:6px;padding:5px 8px;color:var(--testo);font-size:12px;min-height:28px}
+  .campo .val i.fa-chevron-down{margin-left:auto;color:var(--tenue);font-size:10px}
+  .punto{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--verde)} .punto.off{background:#6b6355}
+  .chips{display:flex;flex-wrap:wrap;gap:4px}
+  .chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--oro-tenue);border-radius:6px;padding:2px 7px;font-size:11.5px;background:var(--incavo)}
+  .chip i{font-size:10px;color:var(--oro)} .chip small{color:var(--tenue)}
+  .chip.par{border-color:var(--viola-chiaro);background:#2a2038} .chip.par i{color:var(--viola-chiaro)}
+  .chip.vuoto{border-style:dashed;color:var(--tenue)}
+  .chip.mossa{border-color:var(--viola-chiaro);color:#fff;background:var(--lilla)}
+
+  /* il quadro a tre riquadri */
+  .quadro{width:1160px}
+  .tre{display:grid;grid-template-columns:230px 470px 1fr;gap:12px;padding:12px}
+  .riq{background:var(--riq);border:1px solid var(--oro-scuro);border-radius:8px;padding:8px 10px 10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+
+  /* 1 · il contatore */
+  .numero{display:flex;align-items:center;justify-content:center;gap:14px;padding:4px 0}
+  .numero b{font:700 48px/1 "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro)}
+  .numero .btn{padding:4px 9px}
+  .sotto{text-align:center;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);margin-top:-8px}
+  .inscena{display:flex;flex-direction:column;gap:5px;font-size:11.5px}
+  .inscena .r{display:flex;align-items:center;gap:7px} .inscena svg{width:18px;height:18px;flex:0 0 18px} .inscena small{margin-left:auto;color:var(--tenue);white-space:nowrap}
+  .inscena .r i.fa-solid{width:18px;text-align:center;color:var(--viola-chiaro)}
+  .colonna-btn{display:flex;flex-direction:column;gap:5px} .colonna-btn .btn{justify-content:center}
+
+  /* 2 · il menù */
+  .menu-testa{display:flex;align-items:center;gap:6px}
+  .menu-testa .campo{flex:1} .menu-testa .campo .val{min-height:26px;padding:3px 8px}
+  .menu-testa .cerca{display:flex;align-items:center;gap:6px;background:var(--incavo);border:1px solid var(--oro-tenue);border-radius:6px;padding:4px 8px;color:var(--tenue);font-size:11.5px;width:150px}
+  .fam{border:1px solid var(--oro-tenue);border-radius:7px;background:var(--riga);overflow:hidden}
+  .fam .fh{display:flex;align-items:center;gap:8px;padding:6px 10px;font-weight:600;font-size:12.5px;cursor:pointer}
+  .fam .fh small{margin-left:auto;color:var(--tenue);font-weight:400;font-size:11px} .fam .fh i.fa-chevron-down,.fam .fh i.fa-chevron-up{color:var(--tenue);font-size:10px}
+  .fam.aperta .fh{border-bottom:1px solid var(--oro-tenue);background:#33291a}
+  .voce{display:grid;grid-template-columns:16px 1fr auto;gap:8px;align-items:center;padding:6px 10px;border-top:1px solid rgb(107 79 18 / 45%);font-size:12.5px}
+  .voce i{color:var(--oro);font-size:11px;text-align:center}
+  .voce .l{color:var(--tenue);font-size:11px;display:block}
+  .voce.aperta{background:#2a2038;grid-template-columns:16px 1fr auto}
+  .voce.aperta .l{color:#cfc3e6}
+  .carta-voce{grid-column:1 / -1;display:flex;flex-direction:column;gap:5px;font-size:12px;padding:4px 0 2px;border-top:1px solid rgb(181 138 222 / 35%)}
+  .carta-voce .et{color:var(--oro);font-weight:700}
+  .spesa-riga{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}
+  .spendi{display:flex;align-items:center;gap:10px;margin-top:4px}
+  .spendi .conto{font-size:11.5px;color:var(--tenue)} .spendi .conto b{font:700 18px/1 "Modesto Condensed",Georgia,serif;color:var(--oro)}
+  .spendi .btn{margin-left:auto}
+
+  /* 3 · i giocatori */
+  .mago{border:1px solid var(--oro-tenue);border-radius:7px;background:var(--riga);padding:7px 10px;display:flex;flex-direction:column;gap:6px}
+  .mago.aperto{border-color:var(--viola-chiaro)}
+  .mago .testa{display:flex;align-items:center;gap:8px}
+  .ritratto{width:30px;height:30px;border-radius:50%;background:var(--incavo);border:1px solid var(--oro-tenue);display:flex;align-items:center;justify-content:center;color:var(--oro);font-size:13px;flex:0 0 30px}
+  .mago .nome{font-weight:600;font-size:13px;display:flex;flex-direction:column;line-height:1.15}
+  .mago .nome small{font-weight:400;color:var(--tenue);font-size:10.5px;display:flex;align-items:center;gap:5px}
+  .mago .testa .btn{margin-left:auto}
+  .stato{display:flex;gap:5px;flex-wrap:wrap}
+  .stato span{display:inline-flex;align-items:center;gap:4px;background:var(--incavo);border:1px solid var(--oro-tenue);border-radius:6px;padding:2px 6px;font-size:11px}
+  .stato i{color:var(--oro);font-size:10px} .stato b{color:var(--oro-chiaro)}
+  .stato span.cond{border-color:var(--viola-chiaro)} .stato span.cond i{color:var(--viola-chiaro)}
+  .gruppo{display:grid;grid-template-columns:64px 1fr;gap:6px;align-items:start;font-size:11.5px}
+  .gruppo .k{color:var(--tenue);font:700 9.5px/1.6 sans-serif;letter-spacing:.12em;text-transform:uppercase;padding-top:3px}
+  .gruppo .k b{color:var(--oro-chiaro);margin-left:4px;font-family:"Signika";font-size:11px;letter-spacing:0}
+  .conti{display:flex;gap:5px;flex-wrap:wrap}
+
+  /* nuova sessione */
+  .sess{width:520px}
+  .sess .corpo{padding:12px;display:flex;flex-direction:column;gap:10px}
+  h2.domanda{margin:0;font:600 19px "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro);letter-spacing:.02em}
+  .domanda small{display:block;font:400 12px "Signika";color:var(--tenue);margin-top:2px;letter-spacing:0}
+  .scelta-maghi{display:flex;flex-direction:column;gap:5px}
+  .sm{display:grid;grid-template-columns:22px 30px 1fr auto;gap:10px;align-items:center;background:var(--riga);border:1px solid var(--oro-tenue);border-radius:8px;padding:6px 10px}
+  .sm.on{border-color:var(--viola-chiaro);background:#2a2038}
+  .sm .box{width:16px;height:16px;border:1px solid var(--oro-tenue);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;background:var(--incavo)}
+  .sm.on .box{background:var(--viola);border-color:var(--viola-chiaro);color:#fff}
+  .sm .nome{font-weight:600} .sm .nome small{display:block;font-weight:400;color:var(--tenue);font-size:10.5px}
+  .sm .gioc{font-size:11px;color:var(--tenue);display:flex;align-items:center;gap:6px}
+  .footer{display:flex;align-items:center;gap:8px;padding:8px 12px 12px;border-top:1px solid rgb(152 119 43 / 30%)}
+  .footer .btn.avanti{margin-left:auto}
+</style>
+</head>
+<body>
+<h1>Il Quadro del Narratore · tre riquadri (24/9/2026, terza proposta)</h1>
+<p class="sub">Una finestra sola con i tre riquadri che hai chiesto: <b>il contatore</b> del Paradosso, <b>il menù</b> del Paradosso e <b>il controllo dei giocatori</b>. Niente passi guidati: il Narratore apre il menù, sceglie la voce e spende. I tre riquadri si possono staccare e tenere come tre finestre, se preferisci averle separate. Viola per la scelta, oro per i prezzi, i dettagli a un clic.</p>
+
+<h2 class="sez">1 · Il Quadro</h2>
+<div class="win quadro">
+  <div class="win-h"><i class="fa-solid fa-table-cells-large"></i> Il Quadro del Narratore <span class="pill tenue" style="margin-left:6px"><i class="fa-solid fa-khanda"></i> Combattimento · turno 3</span><span class="x"><i class="fa-solid fa-xmark"></i></span></div>
+  <div class="tre">
+
+    <div class="riq">
+      <div class="tit">Paradosso</div>
+      <div class="numero"><span class="btn"><i class="fa-solid fa-minus"></i></span><b>12</b><span class="btn"><i class="fa-solid fa-plus"></i></span></div>
+      <div class="sotto">punti nella riserva</div>
+      <div class="nota" style="text-align:center"><i class="fa-solid fa-hourglass-half" style="color:var(--oro)"></i> una spesa in questo turno</div>
+      <div class="tit" style="margin-top:4px">In scena <small>3</small></div>
+      <div class="inscena">
+        <div class="r"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#3b2a55" stroke-width="4"/><circle cx="12" cy="12" r="9" fill="none" stroke="#b58ade" stroke-width="4" stroke-dasharray="28 29" transform="rotate(-90 12 12)"/></svg><span>Carica</span><small>2/4 · Specchio</small></div>
+        <div class="r"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="#5a3a10" stroke-width="4"/><rect x="3" y="3" width="18" height="18" rx="3" fill="none" stroke="#e0a040" stroke-width="4" stroke-dasharray="36 36"/></svg><span>Arrivo</span><small>1/2 · Ombra</small></div>
+        <div class="r"><i class="fa-solid fa-ghost"></i><span>Ombra</span><small>soglia 2</small></div>
+      </div>
+      <div class="colonna-btn" style="margin-top:auto">
+        <span class="btn"><i class="fa-solid fa-clapperboard"></i> Cambio scena</span>
+        <span class="btn"><i class="fa-solid fa-sun"></i> Nuova sessione</span>
+        <span class="btn ghost piccolo"><i class="fa-solid fa-book"></i> Scheda del Paradosso</span>
+        <span class="btn ghost piccolo"><i class="fa-solid fa-list"></i> Registro</span>
+      </div>
+    </div>
+
+    <div class="riq">
+      <div class="tit">Il menù</div>
+      <div class="menu-testa">
+        <div class="campo"><span class="val"><i class="fa-solid fa-khanda" style="color:var(--oro)"></i> Combattimento <i class="fa-solid fa-chevron-down"></i></span></div>
+        <span class="cerca"><i class="fa-solid fa-magnifying-glass"></i> cerca…</span>
+      </div>
+      <div class="fam"><div class="fh"><i class="fa-solid fa-hand-sparkles" style="color:var(--oro)"></i> Tocchi <small>6 · 1 punto</small> <i class="fa-solid fa-chevron-down"></i></div></div>
+      <div class="fam aperta">
+        <div class="fh"><i class="fa-solid fa-circle-nodes" style="color:var(--oro)"></i> Comuni <small>6</small> <i class="fa-solid fa-chevron-up"></i></div>
+        <div class="voce"><i class="fa-solid fa-eye"></i><span>Testimone<span class="l">il telefono dall'altra parte della strada</span></span><span class="prezzo">2</span></div>
+        <div class="voce aperta">
+          <i class="fa-solid fa-eye"></i><span>Ritorno<span class="l">il muro che ha deciso lo scontro sfarfalla, e al turno dopo non c'è più</span></span><span class="prezzo">la soglia</span>
+          <div class="carta-voce">
+            <span><span class="et">Quando:</span> la Magick ha sciolto un ostacolo che avevi preparato, o ha deciso una scena.</span>
+            <span><span class="et">Segno:</span> l'effetto sfarfalla a fine turno, e il tavolo lo vede.</span>
+            <span><span class="et">Effetto:</span> al turno dopo l'effetto finisce per coincidenza, e l'ostacolo torna com'era.</span>
+            <span><span class="et">Mosse:</span> <span class="chips" style="display:inline-flex"><span class="chip mossa">rilanciare prima che cada</span><span class="chip mossa">spegnerlo da soli</span><span class="chip mossa">aggirare senza Magick</span></span></span>
+            <span><span class="et">Poi:</span> se lo spengono da soli, la spesa ha fatto il suo. Se lo rilanciano, il nuovo Volgare è tuo.</span>
+            <div class="spesa-riga">
+              <div class="campo"><span>Risponde a</span><span class="val">Muro di ghiaccio · Guendalina · soglia 5 <i class="fa-solid fa-chevron-down"></i></span></div>
+              <div class="campo"><span>Chi la vede</span><span class="val"><span class="pill on">tutti</span><span class="pill">Narratori</span></span></div>
+            </div>
+            <div class="spendi"><span class="conto">prezzo <b>5</b> · riserva dopo 7</span><span class="btn primo"><i class="fa-solid fa-bolt"></i> Spendi e manda la carta</span></div>
+          </div>
+        </div>
+        <div class="voce"><i class="fa-solid fa-bolt"></i><span>Residuo<span class="l">il fuoco si allarga, la porta gelata esplode</span></span><span class="prezzo">2</span></div>
+        <div class="voce"><i class="fa-solid fa-eye"></i><span>Specchio<span class="l">il colpo si piega e torna indietro</span></span><span class="prezzo">la soglia</span></div>
+        <div class="voce"><i class="fa-solid fa-bolt"></i><span>In mezzo<span class="l">il passante, l'ostaggio</span></span><span class="prezzo">2</span></div>
+        <div class="voce"><i class="fa-solid fa-eye"></i><span>Il luogo<span class="l">il pavimento crepato da Forza cede</span></span><span class="prezzo">2</span></div>
+      </div>
+      <div class="fam"><div class="fh"><i class="fa-solid fa-khanda" style="color:var(--oro)"></i> Di scena <small>5 · Anticipo, Rinforzo, Stop, Ritirata, Fuga</small> <i class="fa-solid fa-chevron-down"></i></div></div>
+      <div class="fam"><div class="fh"><i class="fa-solid fa-ghost" style="color:var(--oro)"></i> Presenze <small>3 · la loro soglia</small> <i class="fa-solid fa-chevron-down"></i></div></div>
+      <div class="fam"><div class="fh"><i class="fa-solid fa-clock" style="color:var(--oro)"></i> Orologi <small>6</small> <i class="fa-solid fa-chevron-down"></i></div></div>
+      <div class="fam"><div class="fh"><i class="fa-solid fa-anchor" style="color:var(--oro)"></i> Ancore <small>5</small> <i class="fa-solid fa-chevron-down"></i></div></div>
+      <div class="fam"><div class="fh"><i class="fa-solid fa-burst" style="color:var(--oro)"></i> Grandi <small>4 · solo allo scoppio</small> <i class="fa-solid fa-chevron-down"></i></div></div>
+      <div class="nota"><i class="fa-solid fa-eye" style="color:var(--oro)"></i> annunciato &nbsp; <i class="fa-solid fa-bolt" style="color:var(--oro)"></i> immediato · la riga in grigio è la faccia della voce in questa scena</div>
+    </div>
+
+    <div class="riq">
+      <div class="tit">Giocatori <small>3 in gioco</small><span class="btn piccolo ghost" style="margin-left:6px"><i class="fa-solid fa-plus"></i> aggiungi</span></div>
+      <div class="mago aperto">
+        <div class="testa"><span class="ritratto"><i class="fa-solid fa-user"></i></span><span class="nome">Guendalina <small><span class="punto"></span> Sara</small></span><span class="btn piccolo ghost"><i class="fa-solid fa-chevron-up"></i></span></div>
+        <div class="stato"><span><i class="fa-solid fa-heart"></i> <b>6/8</b></span><span><i class="fa-solid fa-brain"></i> <b>4/6</b></span><span><i class="fa-solid fa-star"></i> <b>3</b></span><span><i class="fa-solid fa-circle-half-stroke"></i> Ruota <b>4</b></span><span class="cond"><i class="fa-solid fa-sun"></i> Abbagliato</span></div>
+        <div class="gruppo"><span class="k">Attivi <b>2</b></span><span class="chips"><span class="chip par"><i class="fa-solid fa-hand-sparkles"></i> Tremore <small>−2 · prossimo lancio</small></span><span class="chip par"><i class="fa-solid fa-eye"></i> Testimone <small>fine scena</small></span></span></div>
+        <div class="gruppo"><span class="k">Passivi <b>2</b></span><span class="chips"><span class="chip"><i class="fa-solid fa-clock"></i> Quadrante</span><span class="chip"><i class="fa-solid fa-hand-holding-dollar"></i> Risarcimento</span></span></div>
+        <div class="gruppo"><span class="k">Magick <b>1</b></span><span class="chips"><span class="chip"><i class="fa-solid fa-wand-sparkles"></i> Muro di ghiaccio <small>Volgare · soglia 5 · turno 2</small></span></span></div>
+      </div>
+      <div class="mago">
+        <div class="testa"><span class="ritratto"><i class="fa-solid fa-user"></i></span><span class="nome">Luca <small><span class="punto"></span> Marco</small></span><span class="btn piccolo ghost"><i class="fa-solid fa-chevron-down"></i></span></div>
+        <div class="stato"><span><i class="fa-solid fa-heart"></i> <b>8/8</b></span><span><i class="fa-solid fa-brain"></i> <b>5/5</b></span><span><i class="fa-solid fa-star"></i> <b>1</b></span><span><i class="fa-solid fa-circle-half-stroke"></i> Ruota <b>2</b></span></div>
+        <div class="conti"><span class="chip par"><i class="fa-solid fa-hand-sparkles"></i> 1 attivo</span><span class="chip"><i class="fa-solid fa-shield"></i> 1 passivo</span><span class="chip"><i class="fa-solid fa-wand-sparkles"></i> 1 Magick</span></div>
+      </div>
+      <div class="mago">
+        <div class="testa"><span class="ritratto"><i class="fa-solid fa-user"></i></span><span class="nome">Ianira <small><span class="punto off"></span> Elena, non collegata</small></span><span class="btn piccolo ghost"><i class="fa-solid fa-chevron-down"></i></span></div>
+        <div class="stato"><span><i class="fa-solid fa-heart"></i> <b>7/7</b></span><span><i class="fa-solid fa-brain"></i> <b>3/6</b></span><span><i class="fa-solid fa-star"></i> <b>2</b></span><span><i class="fa-solid fa-circle-half-stroke"></i> Ruota <b>0</b></span></div>
+        <div class="conti"><span class="chip vuoto">niente addosso</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="legenda">
+  <div><h3>1 · Il contatore</h3><ol>
+    <li><b>Il numero</b> con meno e più, e il ritmo in una riga.</li>
+    <li><b>In scena</b>: solo le cose del Paradosso, cioè gli orologi (con la loro forma) e le Presenze. Tre righe al massimo, poi una voce «altri».</li>
+    <li>I tasti: Cambio scena, Nuova sessione; Scheda del Paradosso e Registro in piccolo, aprono a parte.</li>
+  </ol></div>
+  <div><h3>2 · Il menù</h3><ol>
+    <li><b>La scena</b> in una tendina in testa, la cerca accanto. Nessun passo guidato: si apre, si sceglie, si spende.</li>
+    <li><b>Le famiglie</b> come cassetti chiusi, col conto delle voci. Aperto un cassetto, ogni voce è una riga: modo (occhio o fulmine), nome, la faccia in questa scena, il prezzo.</li>
+    <li><b>La voce aperta</b> è la scheda del PDF, e in fondo la spesa: a quale Volgare risponde (gli ultimi in chat, già con la soglia), chi vede la carta, il tasto. Per Presenze, orologi e Ancore compaiono qui i loro campi.</li>
+  </ol></div>
+  <div><h3>3 · I giocatori</h3><ol>
+    <li><b>Chi c'è</b> lo decide il Narratore: dalla Nuova sessione o dal tasto «aggiungi». Nessuno entra da solo premendo un tasto.</li>
+    <li><b>Ogni mago</b> chiuso: ritratto, nome e giocatore col pallino, lo status (Salute, Volontà, Quintessenza, Ruota, le Condizioni) e tre conti.</li>
+    <li><b>Aperto</b>: Attivi (dal Paradosso, con la durata), Passivi (poteri e Difetti che contano per te), Magick in atto (gli effetti in scena con la soglia).</li>
+  </ol></div>
+</div>
+
+<h2 class="sez">2 · Nuova sessione</h2>
+<div class="blocco">
+<div class="win sess">
+  <div class="win-h"><i class="fa-solid fa-sun"></i> Nuova sessione <span class="x"><i class="fa-solid fa-xmark"></i></span></div>
+  <div class="corpo">
+    <h2 class="domanda">Chi gioca stasera?<small>Entra nel Quadro solo chi spunti tu. Puoi aggiungere o togliere dopo, dal riquadro dei giocatori.</small></h2>
+    <div class="scelta-maghi">
+      <div class="sm on"><span class="box"><i class="fa-solid fa-check"></i></span><span class="ritratto"><i class="fa-solid fa-user"></i></span><span class="nome">Guendalina <small>Tutto è Illusione</small></span><span class="gioc"><span class="punto"></span> Sara</span></div>
+      <div class="sm on"><span class="box"><i class="fa-solid fa-check"></i></span><span class="ritratto"><i class="fa-solid fa-user"></i></span><span class="nome">Luca <small>Tutto è Sacro</small></span><span class="gioc"><span class="punto"></span> Marco</span></div>
+      <div class="sm on"><span class="box"><i class="fa-solid fa-check"></i></span><span class="ritratto"><i class="fa-solid fa-user"></i></span><span class="nome">Ianira <small>Tutto è Polvere</small></span><span class="gioc"><span class="punto off"></span> Elena, non collegata</span></div>
+      <div class="sm"><span class="box"></span><span class="ritratto"><i class="fa-solid fa-user"></i></span><span class="nome">Olivio <small>Tutto è Dati</small></span><span class="gioc"><span class="punto off"></span> senza giocatore</span></div>
+    </div>
+    <div class="campo"><span>Prima scena</span><span class="val"><span class="pill on">Città</span><span class="pill">Indagine</span><span class="pill">Santuario</span><span class="pill tenue">altre…</span></span></div>
+    <div class="nota">La riserva passa da 12 a 0, il registro si chiude, gli orologi del Paradosso rimasti si cancellano. I tuoi orologi restano.</div>
+  </div>
+  <div class="footer"><span class="btn ghost">Annulla</span><span class="btn primo avanti"><i class="fa-solid fa-play"></i> Inizia con 3 maghi</span></div>
+</div>
+<div class="legenda una">
+  <h3>Lo decide il Narratore</h3>
+  <ol>
+    <li><b>La spunta</b> è l'unica porta: chi è spuntato entra nel Quadro e nella Scheda del Paradosso, collegato o no. Chi non è spuntato resta fuori anche se il suo giocatore è online.</li>
+    <li><b>A metà sessione</b> si aggiunge o si toglie dal riquadro dei giocatori, con «aggiungi» e con la x sul mago. Nessun automatismo.</li>
+    <li><b>I PNG</b> non compaiono nella lista: le loro soglie le regoli come sempre, e se entrano per il Paradosso sono Presenze.</li>
+  </ol>
+</div>
+</div>
+
+<h2 class="sez">Domande</h2>
+<div class="legenda una" style="max-width:1000px">
+  <ol>
+    <li><b>Una finestra o tre.</b> I tre riquadri stanno in una finestra sola, larga; si possono staccare come tre finestre. Quale delle due preferisci di partenza?</li>
+    <li><b>Le famiglie a cassetti</b> nel menù, con la scena in tendina: va bene così, o vuoi i cassetti già aperti sulla scena?</li>
+    <li><b>Lo status del mago</b>: Salute, Volontà, Quintessenza, Ruota e le Condizioni. Manca qualcosa?</li>
+  </ol>
+</div>
+</body></html>

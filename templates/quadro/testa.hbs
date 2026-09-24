@@ -1,0 +1,14 @@
+{{!-- La testa del Quadro (24/9): i tre modi come bottoni, la scena in corso, la riserva. --}}
+<div class="wod5e-mage-quadro-testa">
+    <div class="wod5e-mage-quadro-modi" role="tablist">
+        {{#each modi as |m|}}
+            <button type="button" class="wod5e-mage-quadro-modo{{#if m.attivo}} attivo{{/if}}" data-action="modo" data-modo="{{m.id}}" role="tab" aria-selected="{{m.attivo}}"><i class="{{m.icona}}" aria-hidden="true"></i> {{m.label}}</button>
+        {{/each}}
+    </div>
+    <div class="wod5e-mage-quadro-stato">
+        <span class="wod5e-mage-quadro-pill"><i class="{{scena.icona}}" aria-hidden="true"></i> {{scena.nome}} · {{scena.numero}}</span>
+        {{#if posto}}<span class="wod5e-mage-quadro-pill tenue">{{posto}}</span>{{/if}}
+        {{#if round}}<span class="wod5e-mage-quadro-pill tenue">{{localize "WOD5E_MAGE.Menu.Giro"}} {{round}}</span>{{/if}}
+        <span class="wod5e-mage-quadro-riserva">{{localize "WOD5E_MAGE.Menu.Riserva"}} <b>{{points}}</b></span>
+    </div>
+</div>

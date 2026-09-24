@@ -140,7 +140,7 @@ for (const lang of ["it", "en"]) {
 
 // Il CSS: il blocco chiaro coi colori del manuale, agganciato alla classe.
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
-assert.match(css, /\.wod5e-mage\.wod5e\.actor\.sheet\.wod5e-mage-chiara,\n\.application\.wod5e-mage-guidata\.wod5e-mage-chiara \{\n\s+--mortal-color-1: #282051;/, "il tema chiaro veste anche la creazione guidata (23/9)");
+assert.match(css, /\.wod5e-mage\.wod5e\.actor\.sheet\.wod5e-mage-chiara,\n\.application\.wod5e-mage-guidata\.wod5e-mage-chiara,\n\.application\.wod5e-mage-quadro\.wod5e-mage-chiara \{\n\s+--mortal-color-1: #282051;/, "il tema chiaro veste anche la creazione guidata (23/9) e il Quadro del Narratore (24/9)");
 assert.match(css, /\.wod5e-mage-chiara \{[^}]*--mage-oro: #B3924A;/);
 assert.match(css, /\.wod5e-mage-chiara \{[^}]*--mage-rosso: #A4444A;/);
 assert.match(css, /\.wod5e-mage-chiara \{[^}]*--mage-riq-fondo: #F6F2E6;/);

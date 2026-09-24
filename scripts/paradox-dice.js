@@ -476,7 +476,10 @@ export async function executeRamoCRoll({
     skill,
     bought,
     automatic: bought,
-    banner: bought ? String(banner ?? "") : ""
+    banner: bought ? String(banner ?? "") : "",
+    // Per il menù del Paradosso (24/9): il titolo del lancio e il giro di combattimento in cui è nato.
+    title: String(title ?? ""),
+    round: Math.max(Math.trunc(Number(globalThis.game?.combat?.round) || 0), 0)
   };
 
   // Nessun dado da tirare: la riuscita comprata senza rossi, oppure

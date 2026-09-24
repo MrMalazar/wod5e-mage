@@ -1,0 +1,24 @@
+{{!-- La Nuova sessione del Narratore (24/9): chi gioca lo decide lui con la spunta; la prima scena e il posto; la riserva a zero. --}}
+<form class="dialog-contents wod5e-mage-quadro-form">
+    <p class="wod5e-mage-quadro-domanda">{{localize "WOD5E_MAGE.Menu.ChiGioca"}}</p>
+    <p class="wod5e-mage-quadro-hint">{{localize "WOD5E_MAGE.Menu.ChiGiocaHint"}}</p>
+    <div class="wod5e-mage-quadro-scelta">
+        {{#each maghi as |m|}}
+            <label class="wod5e-mage-quadro-scelta-riga">
+                <input type="checkbox" name="mago" value="{{m.id}}" {{#if m.checked}}checked{{/if}}>
+                <img src="{{m.img}}" alt="">
+                <span class="nome">{{m.name}}</span>
+                <span class="gioc">{{#each m.utenti as |u|}}<i class="punto{{#if u.active}} on{{/if}}" aria-hidden="true"></i> {{u.name}}{{#unless @last}} · {{/unless}}{{else}}{{localize "WOD5E_MAGE.Menu.SenzaGiocatore"}}{{/each}}</span>
+            </label>
+        {{else}}
+            <p class="wod5e-mage-quadro-hint">{{localize "WOD5E_MAGE.Menu.NessunMagoNelMondo"}}</p>
+        {{/each}}
+    </div>
+    <label class="wod5e-mage-quadro-campo"><span>{{localize "WOD5E_MAGE.Menu.PrimaScena"}}</span>
+        <select name="scena"><option value="">{{localize "WOD5E_MAGE.Menu.NessunaScena"}}</option>{{#each scene as |s|}}<option value="{{s.id}}">{{s.nome}}</option>{{/each}}</select>
+    </label>
+    <label class="wod5e-mage-quadro-campo"><span>{{localize "WOD5E_MAGE.Menu.Posto"}}</span>
+        <select name="posto">{{#each posti as |p|}}<option value="{{p.id}}">{{p.label}}</option>{{/each}}</select>
+    </label>
+    <p class="wod5e-mage-quadro-hint">{{localize "WOD5E_MAGE.Menu.SessioneAzzera" points=points}}</p>
+</form>
