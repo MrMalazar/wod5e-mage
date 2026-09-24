@@ -6,7 +6,9 @@ import {
   belongingArchivioTable,
   onBelongingAdd,
   onBelongingDelete,
-  prepareBelongings
+  onItemFieldChange,
+  prepareBelongings,
+  valoreCampoOggetto
 } from "../scripts/dotazione-extra.js";
 import { ATTRIBUTE_KEYS, applyTraitIcons, traitIcon } from "../scripts/tratti-icone.js";
 import {
@@ -254,3 +256,42 @@ assert.equal(belongingArchivioTable({ dataset: { table: "storyBelongings" } }), 
 assert.equal(belongingArchivioTable({ dataset: { table: "altriOggetti" } }), null);
 assert.equal(belongingArchivioTable({ dataset: { table: "altro" } }), null);
 console.log("Libro degli Elementi: test passati.");
+
+// I dettagli in riga dei Tratti (Blue, 24/9 sera): la casella accanto al
+// Background, al Pregio, all'arma scrive sull'oggetto senza aprirlo; per
+// l'arma anche il danno base e il tipo, per l'armatura il valore.
+{
+  assert.equal(valoreCampoOggetto("flags.wod5e-mage.dettagli", "  in via Torino, al terzo piano "), "in via Torino, al terzo piano");
+  assert.deepEqual([valoreCampoOggetto("system.weaponvalue", "3"), valoreCampoOggetto("system.weaponvalue", "-2"), valoreCampoOggetto("system.weaponvalue", "x"), valoreCampoOggetto("system.armorvalue", "12")], [3, 0, 0, 9]);
+  assert.deepEqual([valoreCampoOggetto("system.weaponType", "ranged"), valoreCampoOggetto("system.weaponType", "laser")], ["ranged", "melee"]);
+  assert.equal(valoreCampoOggetto("system.description", "x"), null, "solo i campi in riga");
+  const updates = [];
+  globalThis.foundry.utils.getProperty = (obj, path) => path.split(".").reduce((o, k) => o?.[k], obj);
+  const item = { flags: { "wod5e-mage": { dettagli: "" } }, system: { weaponvalue: 2, weaponType: "melee" }, update: async (data) => { updates.push(data); } };
+  const actor = mageActor({}, {});
+  actor.items = { get: (id) => (id === "i1" ? item : undefined) };
+  const sheet = { actor };
+  await onItemFieldChange.call(sheet, { preventDefault() {} }, { dataset: { itemId: "i1", itemField: "flags.wod5e-mage.dettagli" }, value: "un coltello da cucina" });
+  await onItemFieldChange.call(sheet, { preventDefault() {} }, { dataset: { itemId: "i1", itemField: "system.weaponvalue" }, value: "2" });
+  await onItemFieldChange.call(sheet, { preventDefault() {} }, { dataset: { itemId: "i1", itemField: "system.weaponType" }, value: "ranged" });
+  await onItemFieldChange.call(sheet, { preventDefault() {} }, { dataset: { itemId: "i1", itemField: "system.description" }, value: "no" });
+  await onItemFieldChange.call(sheet, { preventDefault() {} }, { dataset: { itemId: "manca", itemField: "system.weaponvalue" }, value: "5" });
+  assert.deepEqual(updates, [{ "flags.wod5e-mage.dettagli": "un coltello da cucina" }, { "system.weaponType": "ranged" }], "scrive solo quel che cambia, solo i campi in riga");
+  const bloccato = mageActor({}, { locked: true });
+  bloccato.items = actor.items;
+  await onItemFieldChange.call({ actor: bloccato }, { preventDefault() {} }, { dataset: { itemId: "i1", itemField: "system.weaponvalue" }, value: "5" });
+  assert.equal(updates.length, 2, "a scheda bloccata non scrive");
+  const vantaggi = readFileSync(new URL("../templates/actor/parts/core-features.hbs", import.meta.url), "utf8");
+  assert.match(vantaggi, /wod5e-mage-riga-testa wod5e-mage-oggetto-testa"[\s\S]*data-action="rigaApri"[\s\S]*wod5e-mage-oggetto-pallini[\s\S]*data-action="itemEdit"[\s\S]*data-action="itemDelete"[\s\S]*<input type="text" class="wod5e-mage-oggetto-dettagli" data-item-id="\{\{item\._id\}\}" data-item-field="flags\.wod5e-mage\.dettagli" value="\{\{item\.flags\.\[wod5e-mage\]\.dettagli\}\}" placeholder="\{\{localize \(concat 'WOD5E_MAGE\.Tratti\.Dettagli\.' key\)\}\}"[^>]*\{\{#if @root\.locked\}\}disabled\{\{\/if\}\}>\s*<\/div>\s*<div class="wod5e-mage-riga-spiega/, "nome, pallini, matita, cestino, la casella in coda");
+  assert.doesNotMatch(vantaggi, /wod5e-mage-oggetto-dettagli"[^>]*\sname=/, "senza name: non passa dal form del personaggio");
+  const inventario = readFileSync(new URL("../templates/actor/parts/equipment-list.hbs", import.meta.url), "utf8");
+  assert.match(inventario, /data-action="itemDelete"[\s\S]*\{\{#if \(eq key "weapon"\)\}\}[\s\S]*<input type="number" class="wod5e-mage-oggetto-numero" data-item-id="\{\{item\._id\}\}" data-item-field="system\.weaponvalue"[\s\S]*<select class="wod5e-mage-oggetto-tipo" data-item-id="\{\{item\._id\}\}" data-item-field="system\.weaponType"[\s\S]*<option value="melee"[\s\S]*WOD5E\.EquipmentList\.Melee[\s\S]*<option value="ranged"[\s\S]*<option value="supernatural"[\s\S]*\{\{else if \(eq key "armor"\)\}\}[\s\S]*data-item-field="system\.armorvalue"[\s\S]*\{\{\/if\}\}\s*<input type="text" class="wod5e-mage-oggetto-dettagli"[^>]*data-item-field="flags\.wod5e-mage\.dettagli"[^>]*Tratti\.Dettagli\.oggetto/, "matita, cestino, danno, tipo, la casella in coda");
+  const sheetSource = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+  assert.match(sheetSource, /querySelectorAll\("\[data-item-field\]\[data-item-id\]"\)[\s\S]*addEventListener\("change", \(event\) => onItemFieldChange\.call\(this, event, field\)\)/);
+  for (const lang of ["it", "en"]) {
+    const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8")).WOD5E_MAGE.Tratti;
+    assert.deepEqual(Object.keys(strings.Dettagli), ["background", "merit", "flaw", "boon", "oggetto"]);
+    assert.ok(strings.DettagliLabel && strings.DettagliHint);
+  }
+  console.log("Dettagli in riga dei Tratti: test passati.");
+}

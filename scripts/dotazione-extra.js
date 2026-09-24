@@ -136,3 +136,42 @@ export async function onBelongingDelete(event, target) {
     [`flags.${MODULE_ID}.${flagKey}.-=${rowId}`]: null
   });
 }
+
+/**
+ * I dettagli in riga dei Tratti (Blue, 24/9 sera): accanto al Background, al
+ * Pregio, all'arma, una casella che scrive sull'oggetto senza aprirlo. Solo
+ * i campi qui elencati: il testo dei dettagli (nel flag del modulo), il danno
+ * e il tipo dell'arma, il valore dell'armatura (i campi del sistema).
+ */
+export const CAMPI_OGGETTO = Object.freeze({
+  [`flags.${MODULE_ID}.dettagli`]: "testo",
+  "system.weaponvalue": "numero",
+  "system.weaponType": "tipoArma",
+  "system.armorvalue": "numero"
+});
+
+export const TIPI_ARMA = Object.freeze(["melee", "ranged", "supernatural"]);
+
+/** Il valore da scrivere sull'oggetto, pulito per campo; null se il campo non è fra quelli in riga. */
+export function valoreCampoOggetto(field, raw) {
+  const kind = CAMPI_OGGETTO[field];
+  if (!kind) return null;
+  if (kind === "numero") {
+    const n = Math.trunc(Number(raw));
+    return Number.isFinite(n) ? Math.min(Math.max(n, 0), 9) : 0;
+  }
+  if (kind === "tipoArma") return TIPI_ARMA.includes(String(raw)) ? String(raw) : TIPI_ARMA[0];
+  return String(raw ?? "").trim();
+}
+
+export async function onItemFieldChange(event, target) {
+  const actor = this.actor;
+  const item = actor?.items?.get?.(String(target?.dataset?.itemId ?? ""));
+  if (!item || !canEdit(actor)) return;
+  const field = String(target.dataset.itemField ?? "");
+  const value = valoreCampoOggetto(field, target.value);
+  if (value === null) return;
+  const current = foundry.utils.getProperty(item, field);
+  if (current === value || (current == null && value === "")) return;
+  await item.update({ [field]: value });
+}

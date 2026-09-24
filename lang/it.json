@@ -781,7 +781,7 @@
       "Uno": "potere",
       "Tanti": "poteri",
       "Aggiungi": "Aggiungi",
-      "AggiungiHint": "Apre il catalogo dei poteri di questa Sfera: la cerca, il testo di ogni potere, Aggiungi",
+      "AggiungiHint": "Apre la finestra dei poteri che puoi prendere adesso: la cerca, il testo di ogni potere, Aggiungi",
       "CatalogoVuoto": "Il catalogo dei poteri non è ancora nel modulo: scrivi il potere a mano.",
       "Chiuso": "serve il pallino {dot}",
       "Conosciuto": "Lo conosci già",
@@ -835,13 +835,22 @@
         "incantesimo": "Incantesimo scelto"
       },
       "SceltaNessuna": "(da scegliere)",
-      "CatalogoTitolo": "Catalogo dei poteri · {sphere}",
+      "CatalogoTitolo": "Aggiungi un potere",
       "CatalogoCerca": "Cerca un potere o una matrice",
-      "CatalogoConto": "{total} poteri · {known} conosciuti",
-      "CatalogoChiusi": "{n} chiedono più pallini di quelli che hai nella Sfera ({rating}): stanno col lucchetto.",
+      "CatalogoConto": "{total} poteri, ne conosci {known}",
+      "CatalogoChiusi": "{n} chiedono più pallini di quelli che hai nella Sfera ({rating}): li leggi nel Catalogo completo.",
       "CatalogoDiSfera": "Di {sphere}",
       "CatalogoQualsiasi": "Di qualsiasi Sfera",
-      "CatalogoVuotoSfera": "Nessun potere si apre da questa Sfera sola."
+      "CatalogoVuotoSfera": "Nessun potere si apre da questa Sfera sola.",
+      "CatalogoCompletoTitolo": "Catalogo completo dei poteri",
+      "CatalogoCompleto": "Catalogo completo",
+      "CatalogoCompletoHint": "Tutti i poteri, Sfera per Sfera, da leggere: per aggiungerne uno, Aggiungi",
+      "CatalogoQuota": "poteri {known}/{rating}: uno per pallino",
+      "CatalogoPieno": "{sphere}: hai tanti poteri quanti i pallini ({rating}). Per prenderne un altro serve un pallino in più, o togline uno.",
+      "CatalogoPosti": "{sphere}: poteri {known}/{rating} (uno per pallino), ne puoi prendere ancora {n}.",
+      "QuotaPiena": "{sphere}: hai già tanti poteri quanti i pallini ({rating}).",
+      "Mostra": "Mostra",
+      "MostraHint": "Manda in chat la carta del potere (è passivo: scatta da solo)"
     },
     "Tratti": {
       "Vantaggi": "Vantaggi",
@@ -863,7 +872,16 @@
         "merit": "Nessun Pregio: il libro pesca dall'archivio, il + ne crea uno.",
         "flaw": "Nessun Difetto: il libro pesca dall'archivio, il + ne crea uno.",
         "boon": "Nessun Favore."
-      }
+      },
+      "Dettagli": {
+        "background": "dov'è, cos'è",
+        "merit": "i dettagli",
+        "flaw": "i dettagli",
+        "boon": "i dettagli",
+        "oggetto": "altre informazioni"
+      },
+      "DettagliLabel": "dettagli",
+      "DettagliHint": "I dettagli, in riga: si salvano da soli quando esci dalla casella."
     },
     "Spheres": {
       "Hint": "Seleziona le Sfere da mostrare e assegna loro un valore da zero a cinque.",

@@ -10363,12 +10363,34 @@
   background: var(--mage-riga-sorvolo);
 }
 
+/* La testa della riga (24/9 sera, la lista senza Sfere): il sigillo della
+   Sfera, il pallino, il nome, le pastiglie del tipo, l'Amalgama, il costo,
+   la freccia (un tasto: apre e chiude come il nome). */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-testa {
   align-items: center;
   display: grid;
   gap: 8px;
-  grid-template-columns: 20px minmax(0, 1fr) 62px 24px minmax(0, 120px) 14px;
+  grid-template-columns: 22px 20px minmax(0, 1fr) auto 24px minmax(0, 110px) 18px;
   min-height: 28px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-testa > .wod5e-mage-potere-sfera {
+  background: var(--mage-oro);
+  border: none;
+  border-radius: 50%;
+  box-sizing: border-box;
+  height: 22px;
+  padding: 3px;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-tipi {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-tipi > .wod5e-mage-potere-tipo {
+  padding: 3px 7px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-pallino {
@@ -10494,13 +10516,34 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-chevron {
+  align-items: center;
+  background: transparent;
+  border: 0;
   color: var(--mage-oro);
+  cursor: pointer;
+  display: inline-flex;
   font-size: 0.6rem;
+  height: 22px;
+  justify-content: center;
+  line-height: 1;
+  min-height: 0;
+  padding: 0;
   text-align: center;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-chevron:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-chevron:focus {
+  box-shadow: none;
+  color: var(--mage-testo);
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-chevron > i {
   transition: transform 0.15s;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-riga.aperta .wod5e-mage-potere-chevron {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-riga.aperta .wod5e-mage-potere-chevron > i {
   transform: rotate(180deg);
 }
 
@@ -10919,6 +10962,98 @@
   color: var(--mage-su-oro);
 }
 
+/* I dettagli in riga (Blue, 24/9 sera): il nome tiene una colonna fissa, i
+   pallini e i tastini stanno al loro posto, la casella dei dettagli prende
+   quel che resta; per l'arma il danno e il tipo stanno prima della casella. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-oggetto-testa {
+  flex-wrap: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-oggetto-testa > .wod5e-mage-riga-nome {
+  flex: 0 1 170px;
+}
+
+/* Nell'inventario (la colonna più stretta, con danno e tipo prima della
+   casella) il nome tiene meno posto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-inventario > .wod5e-mage-oggetto-testa > .wod5e-mage-riga-nome {
+  flex: 0 1 140px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-oggetto-testa > .wod5e-mage-riga-nome > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-oggetto-testa > .wod5e-mage-riga-tastini {
+  margin-left: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > input.wod5e-mage-oggetto-dettagli {
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: var(--mage-inchiostro);
+  flex: 1 1 90px;
+  font-size: 0.82rem;
+  height: 22px;
+  min-width: 0;
+  padding: 0 6px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > input.wod5e-mage-oggetto-numero {
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: var(--mage-inchiostro);
+  flex: 0 0 42px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  height: 22px;
+  min-width: 0;
+  padding: 0 4px;
+  text-align: center;
+  width: 42px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > select.wod5e-mage-oggetto-tipo {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 9px;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: 0.58rem;
+  font-weight: 700;
+  height: 20px;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  max-width: 120px;
+  padding: 0 8px;
+  text-align: center;
+  text-transform: uppercase;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > input.wod5e-mage-oggetto-dettagli:focus,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > input.wod5e-mage-oggetto-numero:focus,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > select.wod5e-mage-oggetto-tipo:focus {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > :is(input, select):disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-oggetto-spiega :is(p, ul, ol) {
   margin: 0 0 4px;
 }
@@ -11008,21 +11143,63 @@
   gap: 3px;
 }
 
-/* La pastiglia dello Strumento sta sulla seconda linea, a sinistra sotto il
-   nome della Sfera (Blue, 23/9); il tuo di preciso a destra fino in fondo. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-strumento-pastiglia {
-  flex: 0 1 auto;
-  margin-left: 0;
-  max-width: 180px;
+/* Le righe degli Strumenti su una linea sola, in colonne allineate (Blue,
+   24/9 sera): il sigillo, la pastiglia dello Strumento, il mestiere (o la
+   colonna vuota), il tuo di preciso, la lampadina (o la colonna vuota). Le
+   colonne fisse tengono le caselle del testo incolonnate riga per riga. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-apribile > .wod5e-mage-riga-testa.wod5e-mage-strumento-riga {
+  display: grid;
+  gap: 7px;
+  grid-template-columns: 22px minmax(0, 160px) minmax(0, 150px) minmax(60px, 1fr) 22px;
+  padding: 3px 6px 3px 4px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-strumento-sotto > input.wod5e-mage-focus-instrument-name {
-  flex: 1 1 60px;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-strumento-riga > .wod5e-mage-riga-icona {
+  justify-self: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-strumento-riga > .wod5e-mage-strumento-pastiglia {
+  justify-self: stretch;
+  margin-left: 0;
+  max-width: none;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-strumento-riga > .wod5e-mage-strumento-pastiglia > span {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-strumento-riga > input {
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: var(--mage-inchiostro);
+  font-size: 0.85rem;
+  height: 24px;
+  min-width: 0;
+  padding: 0 7px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-strumento-riga > input:focus {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-strumento-riga > .wod5e-mage-strumento-vuoto {
+  display: block;
   min-width: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument .wod5e-mage-riga-nome {
-  flex: 0 1 auto;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-strumento-riga > .wod5e-mage-riga-tastino {
+  justify-self: center;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-cassetto-strumenti {
@@ -11033,10 +11210,6 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-cassetto-strumenti > .wod5e-mage-riq-occhiello {
   margin-top: 4px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-strumento-sotto > input.wod5e-mage-focus-instrument-profession {
-  flex: 0 0 160px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-focus-instrument-note {
@@ -13234,4 +13407,98 @@
 .wod5e-mage-catalogo-flavor {
   color: var(--mage-tenue, #b8ad93);
   margin: 0;
+}
+
+/* La testa dei Poteri conosciuti (24/9 sera): il conto, poi a destra il
+   Catalogo completo e Aggiungi. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title-tasti > .wod5e-mage-riq-tasti {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-title-tasti > .wod5e-mage-riq-tasti > .wod5e-mage-poteri-aggiungi {
+  margin-left: 0;
+}
+
+/* «Mostra» sui soli passivi: la carta in chat e basta, in tenue. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo > button.wod5e-mage-potere-usa.mostra {
+  border-color: transparent;
+  color: var(--mage-tenue);
+}
+
+/* Le pastiglie delle Sfere in testa alla finestra Aggiungi: sigillo, nome,
+   il conto «poteri / pallini»; quella aperta in oro, quella piena spenta. */
+.wod5e-mage-catalogo-sfere {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.wod5e-mage-catalogo-sfera {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgb(152 119 43 / 45%);
+  border-radius: 14px;
+  color: var(--mage-testo, #e6dcc2);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  gap: 0.3rem;
+  line-height: 1;
+  margin: 0;
+  min-height: 0;
+  padding: 0.25rem 0.6rem 0.25rem 0.35rem;
+  width: auto;
+}
+
+.wod5e-mage-catalogo-sfera > img {
+  border: none;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  height: 16px;
+  width: 16px;
+}
+
+.wod5e-mage-catalogo-sfera > small {
+  color: var(--mage-tenue, #b8ad93);
+  font-size: 0.68rem;
+}
+
+.wod5e-mage-catalogo-sfera.attiva {
+  background: rgb(217 168 39 / 18%);
+  border-color: var(--mage-oro, #d9a827);
+}
+
+.wod5e-mage-catalogo-sfera.piena:not(.attiva) {
+  opacity: 0.6;
+}
+
+.wod5e-mage-catalogo-avviso.pieno {
+  color: var(--mage-oro, #d9a827);
+}
+
+.wod5e-mage-catalogo-spunta {
+  color: var(--mage-oro, #d9a827);
+  flex: 0 0 auto;
+}
+
+.wod5e-mage-catalogo-tag > small.attivo {
+  border: 1px solid rgb(217 168 39 / 70%);
+  border-radius: 8px;
+  color: var(--mage-testo, #e6dcc2);
+  padding: 1px 6px;
+}
+
+.wod5e-mage-catalogo-tag > small.passivo {
+  border: 1px solid rgb(152 119 43 / 45%);
+  border-radius: 8px;
+  padding: 1px 6px;
+}
+
+.wod5e-mage-catalogo-tag > small.attivo + small.passivo::before,
+.wod5e-mage-catalogo-tag > small.attivo::before,
+.wod5e-mage-catalogo-tag > small.passivo::before {
+  content: "";
 }

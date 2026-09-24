@@ -20,7 +20,8 @@ import {
   onBelongingAdd,
   onBelongingArchivio,
   onBelongingDelete,
-  prepareBelongings
+  prepareBelongings,
+  onItemFieldChange
 } from "../dotazione-extra.js";
 import {
   bindExperienceCalculator,
@@ -54,7 +55,7 @@ import {
 } from "../magick-balance.js";
 import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
-import { onPotereApri, onPotereCatalogo, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriPagina } from "../poteri-scheda.js";
+import { onPotereApri, onPotereCatalogo, onPotereCatalogoCompleto, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriPagina } from "../poteri-scheda.js";
 import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { prepareMemo } from "../memo.js";
@@ -467,8 +468,9 @@ export class MageActorSheet extends MortalActorSheet {
       // I poteri inseriti dal giocatore (21/9): la pagina Magick.
       potereNuovo: onPotereNuovo,
       potereDaCatalogo: onPotereDaCatalogo,
-      // La finestra del catalogo (24/9 sera).
+      // La finestra del catalogo (24/9 sera), e il Catalogo completo da leggere.
       potereCatalogo: onPotereCatalogo,
+      potereCatalogoCompleto: onPotereCatalogoCompleto,
       potereModifica: onPotereModifica,
       potereTogli: onPotereTogli,
       potereApri: onPotereApri,
@@ -840,6 +842,11 @@ export class MageActorSheet extends MortalActorSheet {
       const id = sphere.dataset.sphere;
       if (id in this._focusSphereOpen) sphere.open = this._focusSphereOpen[id];
       sphere.addEventListener("toggle", () => { this._focusSphereOpen[id] = sphere.open; });
+    }
+    // I dettagli in riga dei Tratti (Blue, 24/9 sera): le caselle accanto al
+    // tratto e all'oggetto scrivono sull'oggetto al cambio, senza aprirlo.
+    for (const field of this.element?.querySelectorAll("[data-item-field][data-item-id]") ?? []) {
+      field.addEventListener("change", (event) => onItemFieldChange.call(this, event, field));
     }
     // Le domande della Sfida del concetto: ogni tendina ricorda com'era.
     this._conceptOpen ??= {};

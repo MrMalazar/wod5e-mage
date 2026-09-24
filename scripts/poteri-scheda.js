@@ -29,9 +29,10 @@ import {
   registraUso,
   ruotaDopoUso,
   sceltaDelPotere,
-  usiDelPotere
+  usiDelPotere,
+  voceDelCatalogo
 } from "./poteri.js";
-import { openCatalogoPoteri } from "./catalogo-poteri.js";
+import { openCatalogoCompleto, openCatalogoPoteri, tipiDelPotere } from "./catalogo-poteri.js";
 import { getMagickBalance } from "./magick-balance.js";
 import { prepareIncantesimi } from "./incantesimi.js";
 import { prepareMageRollTraits } from "./mage-roll-selection.js";
@@ -90,15 +91,19 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
     };
   };
 
-  const righe = sphereData.all.map((sphere) => ({ ...sphere, conto: conti[sphere.id] ?? 0 }));
-  const sezioni = sphereData.selected.map((sphere) => ({
-    ...sphere,
-    conto: conti[sphere.id] ?? 0,
-    steps: Array.from({ length: POTERE_DOTS }, (_, index) => ({ lit: index + 1 <= sphere.value })),
-    poteri: poteriOfSphere(poteri, sphere.id).map((power) => ({
+  const righe = sphereData.all.map((sphere) => ({ ...sphere, conto: conti[sphere.id] ?? 0, pieno: (conti[sphere.id] ?? 0) >= Math.min(count(sphere.value), POTERE_DOTS) }));
+  // La lista dei poteri (Blue, 24/9 sera: «una semplice lista», senza la
+  // divisione per Sfere): in ordine di nome, ogni riga col sigillo della sua
+  // Sfera e i tipi (attivo, passivo, tutti e due) come pastiglie.
+  const lista = [...poteri].sort((a, b) => potereLabel(a, localize).localeCompare(potereLabel(b, localize), locale)).map((power) => {
+    const tipi = tipiDelPotere(voceDelCatalogo(power)?.kind, power.type);
+    return {
       ...power,
       label: potereLabel(power, localize),
+      sphereIcon: SPHERE_ICON(power.sphere),
+      sphereLabel: power.sphere ? localize(`WOD5E_MAGE.Spheres.${power.sphere}`) : "",
       dotShown: power.dot ? String(power.dot) : "",
+      tipi,
       typeLabel: power.type ? localize(`WOD5E_MAGE.Poteri.Tipo.${power.type}`) : "",
       amalgamIcon: power.amalgam ? SPHERE_ICON(power.amalgam) : "",
       amalgamLabel: power.amalgam ? localize(`WOD5E_MAGE.Spheres.${power.amalgam}`) : "",
@@ -108,15 +113,35 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
       sceltaCampo: sceltaCampo(power),
       editing: editing.has(power.id),
       options
-    }))
-  }));
+    };
+  });
 
   return {
     sfereConosciute: righe.filter((sphere) => sphere.selected),
     sfereAltre: righe.filter((sphere) => !sphere.selected),
-    poteriSezioni: sezioni,
+    poteriLista: lista,
     poteriTotale: poteri.length
   };
+}
+
+function count(value) {
+  return Math.max(Math.trunc(Number(value) || 0), 0);
+}
+
+/** Le Sfere conosciute per la finestra del catalogo: id, pallini, le righe che il personaggio ha in quella Sfera. */
+export function sferePerCatalogo(actor) {
+  const rows = poteriDelPersonaggio(actor);
+  return prepareSpheres(actor).selected.map((sphere) => ({ id: sphere.id, rating: count(sphere.value), owned: poteriOfSphere(rows, sphere.id) }));
+}
+
+/**
+ * Quanti poteri si possono avere in una Sfera: tanti quanti i pallini (Blue,
+ * 24/9 sera). Torna { rating, conosciuti, pieno }.
+ */
+export function quotaDellaSfera(actor, sphere) {
+  const rating = Math.min(count(prepareSpheres(actor).all.find((entry) => entry.id === sphere)?.value), POTERE_DOTS);
+  const conosciuti = poteriOfSphere(poteriDelPersonaggio(actor), sphere).length;
+  return { rating, conosciuti, pieno: conosciuti >= rating };
 }
 
 /** Il tasto «Usa» della riga: se si può, quanti usi restano, cosa costa, perché no. */
@@ -164,6 +189,11 @@ export async function onPotereNuovo(event, target) {
   if (!canEdit(actor)) return;
   const sphere = String(target.dataset.sphere ?? "");
   if (!SPHERES.includes(sphere)) return;
+  const quota = quotaDellaSfera(actor, sphere);
+  if (quota.pieno) {
+    ui.notifications.warn(game.i18n.format("WOD5E_MAGE.Poteri.QuotaPiena", { sphere: game.i18n.localize(`WOD5E_MAGE.Spheres.${sphere}`), rating: quota.rating }));
+    return;
+  }
   const rows = { ...(actor.getFlag(MODULE_ID, POTERI_FLAG) ?? {}) };
   const id = idNuovo(rows);
   inModifica(this).add(id);
@@ -180,7 +210,14 @@ export async function aggiungiDalCatalogo(actor, sphere, catalogId) {
   if (!entry) return false;
   const rows = { ...(actor.getFlag(MODULE_ID, POTERI_FLAG) ?? {}) };
   if (Object.values(rows).some((row) => row?.catalogId === entry.id)) return false;
-  await actor.setFlag(MODULE_ID, POTERI_FLAG, { ...rows, [idNuovo(rows)]: nuovoPotere(SPHERES.includes(sphere) ? sphere : entry.sphere, entry) });
+  const dove = SPHERES.includes(sphere) ? sphere : entry.sphere;
+  // Tanti poteri quanti i pallini della Sfera (Blue, 24/9 sera).
+  const quota = quotaDellaSfera(actor, dove);
+  if (quota.pieno) {
+    ui.notifications.warn(game.i18n.format("WOD5E_MAGE.Poteri.QuotaPiena", { sphere: game.i18n.localize(`WOD5E_MAGE.Spheres.${dove}`), rating: quota.rating }));
+    return false;
+  }
+  await actor.setFlag(MODULE_ID, POTERI_FLAG, { ...rows, [idNuovo(rows)]: nuovoPotere(dove, entry) });
   return true;
 }
 
@@ -201,17 +238,24 @@ export async function onPotereCatalogo(event, target) {
   event.preventDefault();
   const actor = this.actor;
   if (!canEdit(actor)) return;
-  const sphere = String(target.dataset.sphere ?? "");
-  if (!SPHERES.includes(sphere)) return;
-  const sphereData = prepareSpheres(actor).all.find((entry) => entry.id === sphere);
+  const spheres = sferePerCatalogo(actor);
+  if (!spheres.length) {
+    ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Spheres.Empty"));
+    return;
+  }
   const sheet = this;
   await openCatalogoPoteri({
-    sphere,
-    rating: sphereData?.value ?? 0,
-    owned: poteriOfSphere(poteriDelPersonaggio(actor), sphere),
-    onAdd: (catalogId) => aggiungiDalCatalogo(actor, sphere, catalogId),
-    onMano: () => onPotereNuovo.call(sheet, { preventDefault() {} }, { dataset: { sphere } })
+    spheres,
+    sphere: String(target.dataset.sphere ?? ""),
+    onAdd: (sphere, catalogId) => aggiungiDalCatalogo(actor, sphere, catalogId),
+    onMano: (sphere) => onPotereNuovo.call(sheet, { preventDefault() {} }, { dataset: { sphere } })
   });
+}
+
+/** Il Catalogo completo (24/9 sera): tutti i poteri, Sfera per Sfera, da leggere. */
+export async function onPotereCatalogoCompleto(event) {
+  event.preventDefault();
+  await openCatalogoCompleto({ owned: poteriDelPersonaggio(this.actor) });
 }
 
 /** Modifica / Fatto: la riga passa agli input e torna al testo. */

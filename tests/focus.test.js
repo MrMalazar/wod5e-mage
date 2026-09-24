@@ -154,11 +154,13 @@ console.log("Focus tests passed.");
   const template = readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8");
   assert.match(template, /\{\{#if focus\.perceiveInstrument\}\}\s*\{\{> "modules\/wod5e-mage\/templates\/actor\/parts\/strumento-riga\.hbs" row=focus\.perceiveInstrument locked=locked\}\}/);
   const riga = readFileSync(new URL("../templates/actor/parts/strumento-riga.hbs", import.meta.url), "utf8");
-  assert.match(riga, /\{\#unless row\.perceive\}\}[\s\S]*data-action="strumentiSuggest"/);
+  assert.match(riga, /\{\{#if row\.perceive\}\}\s*<span class="wod5e-mage-strumento-vuoto"[\s\S]*\{\{else\}\}[\s\S]*data-action="strumentiSuggest"/, "la lampadina non c'è su Percepire: la colonna resta vuota");
   // Lo Strumento (21/9): la pastiglia apre la tendina, le pastiglie scrivono la bandiera (strumentoPick); via la select.
-    // La pastiglia sta sulla seconda linea, a sinistra del tuo di preciso (23/9); la tendina si apre sotto tutta la riga.
-  assert.match(riga, /wod5e-mage-strumento-sotto">\s*<button type="button" class="wod5e-mage-sfera-potere wod5e-mage-strumento-pastiglia\{\{#if row\.tool\}\} pieno\{\{\/if\}\}" data-action="cassettoToggle"[\s\S]*name="flags\.wod5e-mage\.focus\.sphereInstruments\.\{\{row\.id\}\}\.name"[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-strumenti[\s\S]*data-action="strumentoPick" data-sphere="\{\{\.\.\/\.\.\/row\.id\}\}" data-tool="\{\{tool\.id\}\}"/);
-  assert.doesNotMatch(riga, /wod5e-mage-riga-testa">[\s\S]*wod5e-mage-strumento-pastiglia[\s\S]*<\/div>\s*\{\{!-- La seconda linea/);
+  // Una linea sola in colonne allineate (Blue, 24/9 sera): sigillo, pastiglia, mestiere o colonna vuota, il tuo di preciso, lampadina; la tendina si apre sotto tutta la riga.
+  assert.match(riga, /wod5e-mage-riga-testa wod5e-mage-strumento-riga"[^>]*>\s*\{\{#if row\.faIcon\}\}[\s\S]*?<button type="button" class="wod5e-mage-sfera-potere wod5e-mage-strumento-pastiglia\{\{#if row\.tool\}\} pieno\{\{\/if\}\}" data-action="cassettoToggle"[\s\S]*\{\{#if row\.needsProfession\}\}\s*<input type="text" class="wod5e-mage-focus-instrument-profession"[\s\S]*\{\{else\}\}\s*<span class="wod5e-mage-strumento-vuoto"[\s\S]*name="flags\.wod5e-mage\.focus\.sphereInstruments\.\{\{row\.id\}\}\.name"[\s\S]*<\/div>\s*\{\{!-- La tendina[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-strumenti[\s\S]*data-action="strumentoPick" data-sphere="\{\{\.\.\/\.\.\/row\.id\}\}" data-tool="\{\{tool\.id\}\}"/);
+  assert.doesNotMatch(riga, /wod5e-mage-strumento-sotto|wod5e-mage-riga-sotto/, "niente seconda linea");
+  const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+  assert.match(css, /\.wod5e-mage-strumento-riga \{\s*display: grid;\s*gap: 7px;\s*grid-template-columns: 22px minmax\(0, 160px\) minmax\(0, 150px\) minmax\(60px, 1fr\) 22px;/, "le colonne fisse tengono le caselle incolonnate");
   assert.doesNotMatch(riga, /<select/);
   const focusJs = readFileSync(new URL("../scripts/focus.js", import.meta.url), "utf8");
   assert.match(focusJs, /export async function onStrumentoPick[\s\S]*focus\.sphereInstruments\.\$\{sphere\}\.tool`\]: current === tool \? "" : tool/);

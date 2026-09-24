@@ -1,14 +1,19 @@
 /**
  * Il catalogo dei poteri in una finestra (24/9 sera, Blue: la tendina sotto
- * la Sfera «è orribile, bisogna cambiare drasticamente»). Dal tasto
- * «Aggiungi» della pagina Magick si apre una finestra come il Grimorio: la
- * cerca in testa, due gruppi (i poteri della Sfera, poi quelli di qualsiasi
- * Sfera), una riga per potere col pallino, il nome, la matrice, il tipo, il
- * costo e il limite d'uso; la riga si apre sul testo intero (attivo, passivo,
- * Amalgama, Paradosso, Flavor) e il tasto «Aggiungi» lo mette sul
- * personaggio senza chiudere la finestra. Chi lo conosce già ha la spunta;
- * chi chiede più pallini della Sfera ha il lucchetto. In fondo, «Scrivi a
- * mano». Qui la parte pura (le righe) e l'apertura della finestra.
+ * la Sfera «è orribile, bisogna cambiare drasticamente»; poi: «solo quelli
+ * che ho accesso con le Sfere attuali, per non creare sovraccarico visivo»,
+ * e «i poteri selezionabili in una Sfera devono essere pari al numero dei
+ * pallini»).
+ *
+ * Due finestre. Quella di «Aggiungi» (pagina Magick): in testa le pastiglie
+ * delle Sfere conosciute (col conto «poteri / pallini»), la cerca e il conto;
+ * sotto, solo i poteri che il personaggio può prendere adesso con quella
+ * Sfera (il pallino richiesto non oltre i pallini della Sfera), in due
+ * gruppi (della Sfera, di qualsiasi Sfera), una riga per potere che si apre
+ * sul testo intero; «Aggiungi» lo mette sul personaggio senza chiudere la
+ * finestra. Quando i poteri della Sfera sono quanti i pallini, i tasti si
+ * spengono. Quella del «Catalogo completo»: tutti i 187, Sfera per Sfera, da
+ * leggere e basta, con la cerca. Qui la parte pura (le righe) e le finestre.
  */
 import { MODULE_ID } from "./constants.js";
 import { blocchiDelTesto, catalogoDellaSfera, POTERE_DOTS, POTERI, sfereDellaVoce } from "./poteri.js";
@@ -22,13 +27,24 @@ function count(value) {
   return Math.max(Math.trunc(Number(value) || 0), 0);
 }
 
+/** I due tipi di un potere: attivo, passivo, o tutti e due (dal `kind` del catalogo, o dal tipo della riga). */
+export function tipiDelPotere(kind, type = "") {
+  const k = testo(kind) || testo(type);
+  return {
+    attivo: k === "attivo" || k === "attivo e passivo",
+    passivo: k === "passivo" || k === "attivo e passivo"
+  };
+}
+
 /** La voce intera per la riga della finestra: le colonne della testa e il testo a blocchi. */
-function rigaDelCatalogo(voce, entry, sphere, localize) {
+function rigaDelCatalogo(voce, entry, localize) {
   const uses = entry?.uses?.per ? localize(`WOD5E_MAGE.Poteri.Usi.${entry.uses.per}`) : "";
   const cost = count(entry?.costValue) ? `${count(entry.costValue)} ${localize("WOD5E_MAGE.Poteri.QuintessenzaBreve")}` : "";
+  const tipi = tipiDelPotere(entry?.kind, voce.type);
   return {
     ...voce,
-    typeLabel: voce.type ? localize(`WOD5E_MAGE.Poteri.Tipo.${voce.type}`) : "",
+    tipi,
+    typeLabel: [tipi.attivo ? localize("WOD5E_MAGE.Poteri.Tipo.attivo") : "", tipi.passivo ? localize("WOD5E_MAGE.Poteri.Tipo.passivo") : ""].filter(Boolean).join(" · "),
     cost,
     uses,
     // Il potere di «Qualsiasi» Sfera sta nel secondo gruppo.
@@ -42,103 +58,200 @@ function rigaDelCatalogo(voce, entry, sphere, localize) {
 }
 
 /**
- * Le righe della finestra per una Sfera: `propri` (i poteri che la Sfera
- * apre da sola) e `qualsiasi` (quelli di ogni Sfera), in ordine alfabetico,
- * con `known` (già sul personaggio) e `locked` (chiede più pallini di
- * `rating`). `owned` sono le righe del personaggio per quella Sfera.
+ * Le righe della finestra «Aggiungi» per una Sfera: solo i poteri che si
+ * possono prendere adesso (il pallino richiesto entro `rating`), in due
+ * gruppi, `propri` (i poteri che la Sfera apre da sola) e `qualsiasi`, in
+ * ordine alfabetico, con `known` (già sul personaggio). `owned` sono le
+ * righe del personaggio per quella Sfera: se sono quante i pallini
+ * (`pieno`), non se ne aggiungono altre. `chiusi` conta quelli che restano
+ * fuori perché chiedono più pallini: si leggono nel Catalogo completo.
  */
 export function prepareCatalogoPoteri(sphere, { catalog = POTERI, rating = 0, owned = [], localize = (key) => key } = {}) {
   const voci = catalogoDellaSfera(sphere, { catalog, rating, owned });
   const perId = new Map((catalog ?? []).map((entry) => [entry.id, entry]));
-  const righe = voci.map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), sphere, localize));
+  const righe = voci.filter((voce) => !voce.locked).map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), localize));
   const sphereLabel = localize(`WOD5E_MAGE.Spheres.${sphere}`);
   const propri = righe.filter((riga) => !riga.any);
   const qualsiasi = righe.filter((riga) => riga.any);
+  const conosciuti = count((owned ?? []).length);
+  const pallini = Math.min(count(rating), POTERE_DOTS);
   return {
     sphere,
     sphereLabel,
-    rating: Math.min(count(rating), POTERE_DOTS),
+    rating: pallini,
+    conosciuti,
+    // Quanti se ne possono ancora prendere: i pallini della Sfera meno i poteri che ha.
+    posti: Math.max(pallini - conosciuti, 0),
+    pieno: conosciuti >= pallini,
     propri,
     qualsiasi,
-    // I due gruppi della finestra, nell'ordine: prima i poteri della Sfera, poi quelli di qualsiasi Sfera.
     gruppi: [
       { id: "propri", label: localize("WOD5E_MAGE.Poteri.CatalogoDiSfera").replace("{sphere}", sphereLabel), righe: propri },
       { id: "qualsiasi", label: localize("WOD5E_MAGE.Poteri.CatalogoQualsiasi"), righe: qualsiasi }
     ].filter((gruppo) => gruppo.righe.length || gruppo.id === "propri"),
     totale: righe.length,
-    conosciuti: righe.filter((riga) => riga.known).length,
-    chiusi: righe.filter((riga) => riga.locked).length
+    chiusi: voci.filter((voce) => voce.locked).length
   };
 }
 
-/** Le Sfere che una voce apre, per la finestra: l'ordine del modulo. */
-export function sfereDiVoce(entry) {
-  return sfereDellaVoce(entry).filter((sphere) => SPHERES.includes(sphere));
+/**
+ * Il Catalogo completo: tutti i poteri, un gruppo per Sfera (nell'ordine del
+ * modulo) e in coda quelli di qualsiasi Sfera, da leggere. `owned` sono
+ * tutte le righe del personaggio (la spunta su quelli che ha).
+ */
+export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize = (key) => key } = {}) {
+  const have = new Set((owned ?? []).map((power) => power.catalogId).filter(Boolean));
+  const riga = (entry) => rigaDelCatalogo({
+    id: entry.id,
+    name: testo(entry.name),
+    dot: Math.min(count(entry.dot), POTERE_DOTS),
+    type: testo(entry.type),
+    amalgam: "",
+    formulaName: testo(entry.formulaName),
+    proposal: entry.link === "proposta",
+    known: have.has(entry.id),
+    locked: false
+  }, entry, localize);
+  const ordina = (righe) => righe.sort((a, b) => a.name.localeCompare(b.name, "it"));
+  const gruppi = SPHERES.map((sphere) => ({
+    id: sphere,
+    label: localize(`WOD5E_MAGE.Spheres.${sphere}`),
+    righe: ordina((catalog ?? []).filter((entry) => Array.isArray(entry.spheres) && !entry.spheres.includes("any") && sfereDellaVoce(entry).includes(sphere)).map(riga))
+  }));
+  gruppi.push({ id: "qualsiasi", label: localize("WOD5E_MAGE.Poteri.CatalogoQualsiasi"), righe: ordina((catalog ?? []).filter((entry) => Array.isArray(entry.spheres) && entry.spheres.includes("any")).map(riga)) });
+  return {
+    tutto: true,
+    gruppi: gruppi.filter((gruppo) => gruppo.righe.length),
+    totale: (catalog ?? []).length,
+    conosciuti: have.size
+  };
 }
 
+/** Le pastiglie delle Sfere conosciute per la testa della finestra: il conto «poteri / pallini». */
+export function pastiglieDelleSfere(spheres, { localize = (key) => key, attiva = "" } = {}) {
+  return (spheres ?? []).map((sphere) => ({
+    id: sphere.id,
+    label: localize(`WOD5E_MAGE.Spheres.${sphere.id}`),
+    icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere.id}.png`,
+    conto: count(sphere.conto),
+    rating: Math.min(count(sphere.rating), POTERE_DOTS),
+    pieno: count(sphere.conto) >= Math.min(count(sphere.rating), POTERE_DOTS),
+    attiva: sphere.id === attiva
+  }));
+}
+
+const CLASSI = ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog", "wod5e-mage-grimorio", "wod5e-mage-catalogo"];
+
 /**
- * La finestra del catalogo per una Sfera. `onAdd(id)` aggiunge la voce al
- * personaggio (torna true se l'ha messa); `onMano()` apre una riga vuota
- * da scrivere a mano e chiude la finestra. La finestra resta aperta dopo
- * un'aggiunta: la riga prende la spunta e il conto si aggiorna.
+ * La finestra «Aggiungi». `spheres` sono le Sfere conosciute: [{ id, rating,
+ * owned }] (le righe del personaggio per Sfera); `sphere` quella aperta
+ * all'inizio; `onAdd(sphere, id)` aggiunge la voce al personaggio (torna
+ * true se l'ha messa); `onMano(sphere)` apre una riga vuota da scrivere a
+ * mano e chiude la finestra. Le pastiglie in testa cambiano Sfera senza
+ * chiudere; la finestra resta aperta dopo un'aggiunta.
  */
-export async function openCatalogoPoteri({ sphere, rating = 0, owned = [], onAdd = null, onMano = null } = {}) {
+export async function openCatalogoPoteri({ spheres = [], sphere = "", onAdd = null, onMano = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
   const format = game.i18n.format.bind(game.i18n);
-  const dati = prepareCatalogoPoteri(sphere, { rating, owned, localize });
-  const content = await foundry.applications.handlebars.renderTemplate(
-    `modules/${MODULE_ID}/templates/dialogs/catalogo-poteri.hbs`,
-    { ...dati, icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere}.png` }
-  );
+  const stato = { sphere: spheres.some((entry) => entry.id === sphere) ? sphere : (spheres[0]?.id ?? ""), spheres: spheres.map((entry) => ({ ...entry, owned: [...(entry.owned ?? [])] })) };
+  const corpo = async () => {
+    const attuale = stato.spheres.find((entry) => entry.id === stato.sphere);
+    const dati = attuale ? prepareCatalogoPoteri(attuale.id, { rating: attuale.rating, owned: attuale.owned, localize }) : null;
+    return foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/catalogo-poteri.hbs`, {
+      ...(dati ?? { gruppi: [], totale: 0, conosciuti: 0 }),
+      pastiglie: pastiglieDelleSfere(stato.spheres.map((entry) => ({ id: entry.id, conto: entry.owned.length, rating: entry.rating })), { localize, attiva: stato.sphere }),
+      icon: attuale ? `modules/${MODULE_ID}/assets/icons/sheet/${attuale.id}.png` : ""
+    });
+  };
   const buttons = [];
-  if (onMano) buttons.push({ action: "mano", icon: "fa-solid fa-pen", label: localize("WOD5E_MAGE.Poteri.ScriviMano"), callback: () => onMano() });
+  if (onMano) buttons.push({ action: "mano", icon: "fa-solid fa-pen", label: localize("WOD5E_MAGE.Poteri.ScriviMano"), callback: () => onMano(stato.sphere) });
   buttons.push({ action: "close", icon: "fas fa-times", label: localize("WOD5E.Close"), default: true });
   await foundry.applications.api.DialogV2.wait({
-    window: { title: format("WOD5E_MAGE.Poteri.CatalogoTitolo", { sphere: dati.sphereLabel }) },
-    classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog", "wod5e-mage-grimorio", "wod5e-mage-catalogo"],
+    window: { title: localize("WOD5E_MAGE.Poteri.CatalogoTitolo") },
+    classes: CLASSI,
     position: { width: 720 },
-    content,
+    content: `<div data-role="catalogoCorpo">${await corpo()}</div>`,
     buttons,
     rejectClose: false,
     render: (_event, dialog) => {
       const root = dialog.element;
-      const conto = root.querySelector("[data-role=catalogoConto]");
-      const ripaintaConto = () => {
-        if (!conto) return;
-        const conosciuti = root.querySelectorAll(".wod5e-mage-catalogo-row.known").length;
-        conto.textContent = format("WOD5E_MAGE.Poteri.CatalogoConto", { total: dati.totale, known: conosciuti });
+      const contenitore = () => root.querySelector("[data-role=catalogoCorpo]");
+      const ridisegna = async () => {
+        const box = contenitore();
+        if (box) box.innerHTML = await corpo();
+        box?.querySelector("[data-role=catalogoSearch]")?.focus();
       };
       // La cerca: nome o matrice; i gruppi senza righe visibili si nascondono.
-      const search = root.querySelector("[data-role=catalogoSearch]");
-      const filtra = () => {
-        const wanted = String(search?.value ?? "").trim().toLowerCase();
+      root.addEventListener("input", (event) => {
+        const search = event.target.closest?.("[data-role=catalogoSearch]");
+        if (!search) return;
+        const wanted = String(search.value ?? "").trim().toLowerCase();
         root.querySelectorAll(".wod5e-mage-catalogo-row").forEach((row) => {
           row.hidden = Boolean(wanted) && !String(row.dataset.search ?? "").includes(wanted);
         });
         root.querySelectorAll("[data-catalogo-gruppo]").forEach((gruppo) => {
           gruppo.hidden = !gruppo.querySelector(".wod5e-mage-catalogo-row:not([hidden])");
         });
-      };
-      search?.addEventListener("input", filtra);
-      search?.focus();
-      // «Aggiungi»: la voce va sul personaggio, la riga prende la spunta, la finestra resta.
+      });
       root.addEventListener("click", async (event) => {
+        // La pastiglia di un'altra Sfera: la finestra cambia lista.
+        const pastiglia = event.target.closest?.("[data-role=catalogoSfera]");
+        if (pastiglia) {
+          event.preventDefault();
+          if (pastiglia.dataset.sphere && pastiglia.dataset.sphere !== stato.sphere) {
+            stato.sphere = pastiglia.dataset.sphere;
+            await ridisegna();
+          }
+          return;
+        }
+        // «Aggiungi»: la voce va sul personaggio, la riga prende la spunta, la finestra resta.
         const button = event.target.closest?.("[data-role=catalogoAggiungi]");
         if (!button) return;
         event.preventDefault();
         event.stopPropagation();
         if (button.disabled || !onAdd) return;
         button.disabled = true;
-        const ok = await onAdd(button.dataset.catalogo);
-        const row = button.closest(".wod5e-mage-catalogo-row");
-        if (ok) {
-          row?.classList.add("known");
-          button.innerHTML = `<i class="fa-solid fa-check" aria-hidden="true"></i> ${localize("WOD5E_MAGE.Poteri.Conosciuto")}`;
-          ripaintaConto();
-        } else {
+        const ok = await onAdd(stato.sphere, button.dataset.catalogo);
+        if (!ok) {
           button.disabled = false;
+          return;
         }
+        const attuale = stato.spheres.find((entry) => entry.id === stato.sphere);
+        attuale?.owned.push({ catalogId: button.dataset.catalogo });
+        await ridisegna();
       });
+      contenitore()?.querySelector("[data-role=catalogoSearch]")?.focus();
+    }
+  });
+}
+
+/** Il Catalogo completo: tutti i poteri, Sfera per Sfera, da leggere. `owned` sono le righe del personaggio. */
+export async function openCatalogoCompleto({ owned = [] } = {}) {
+  const localize = game.i18n.localize.bind(game.i18n);
+  const content = await foundry.applications.handlebars.renderTemplate(
+    `modules/${MODULE_ID}/templates/dialogs/catalogo-poteri.hbs`,
+    prepareCatalogoCompleto({ owned, localize })
+  );
+  await foundry.applications.api.DialogV2.wait({
+    window: { title: localize("WOD5E_MAGE.Poteri.CatalogoCompletoTitolo") },
+    classes: [...CLASSI, "wod5e-mage-catalogo-completo"],
+    position: { width: 720 },
+    content,
+    buttons: [{ action: "close", icon: "fas fa-times", label: localize("WOD5E.Close"), default: true }],
+    rejectClose: false,
+    render: (_event, dialog) => {
+      const root = dialog.element;
+      const search = root.querySelector("[data-role=catalogoSearch]");
+      search?.addEventListener("input", () => {
+        const wanted = String(search.value ?? "").trim().toLowerCase();
+        root.querySelectorAll(".wod5e-mage-catalogo-row").forEach((row) => {
+          row.hidden = Boolean(wanted) && !String(row.dataset.search ?? "").includes(wanted);
+        });
+        root.querySelectorAll("[data-catalogo-gruppo]").forEach((gruppo) => {
+          gruppo.hidden = !gruppo.querySelector(".wod5e-mage-catalogo-row:not([hidden])");
+        });
+      });
+      search?.focus();
     }
   });
 }

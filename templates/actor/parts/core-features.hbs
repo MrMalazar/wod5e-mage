@@ -2,7 +2,10 @@
      per Background, Pregi e Difetti coi tre tastini (il libro dell'archivio
      M6, la lente del compendio, il + che crea da zero); la riga del tratto con
      l'immagine dell'oggetto o la lettera nel disco (il clic manda in chat), il nome che apre la
-     descrizione, i cinque pallini, la matita e il cestino. Le azioni sono
+     descrizione, i cinque pallini, la matita e il cestino, e in coda (Blue,
+     24/9 sera) la casella dei dettagli, da scrivere senza aprire niente: dov'è
+     il Rifugio, cos'è, di chi sono i Contatti. Sta nel flag dell'oggetto
+     (flags.wod5e-mage.dettagli) e si salva al cambio. Le azioni sono
      quelle del sistema wod5e (5.3.x): itemChat, createItem, searchItem,
      itemEdit (la matita del modulo), itemDelete, dotCounterChange sugli
      oggetti, expendItemUse e restoreItemUses. --}}
@@ -21,7 +24,7 @@
     </span>
     {{#each feature as |item|}}
         <div class="wod5e-mage-riga wod5e-mage-riga-apribile wod5e-mage-riga-oggetto wod5e-mage-riga-vantaggio tipo-{{key}}" data-drag="true" data-item-id="{{item.id}}" data-document-uuid="{{item.uuid}}" data-type="Item">
-            <div class="wod5e-mage-riga-testa">
+            <div class="wod5e-mage-riga-testa wod5e-mage-oggetto-testa">
                 {{!-- L'immagine dell'oggetto (il Rifugio ha la sua, 23/9); la lettera nel disco solo col segnaposto. Il clic manda in chat. --}}
                 {{#if (mageIconaPropria item.img)}}
                     <a class="wod5e-mage-oggetto-icona clickable" data-action="itemChat" data-item-id="{{item._id}}" title="{{localize 'WOD5E.ItemsList.ShowToChat'}}"><img src="{{item.img}}" alt=""></a>
@@ -48,6 +51,8 @@
                     <a class="item-control item-edit wod5e-mage-riga-tastino" data-action="itemEdit" data-item-id="{{item._id}}" title="{{localize 'WOD5E.Edit'}}"><i class="fas fa-edit" aria-hidden="true"></i></a>
                     <a class="item-control item-delete wod5e-mage-riga-tastino" data-action="itemDelete" data-item-id="{{item._id}}" title="{{localize 'WOD5E.Delete'}}"><i class="fas fa-trash" aria-hidden="true"></i></a>
                 </div>
+                {{!-- I dettagli in riga: senza name, così il modulo li scrive sull'oggetto e non sul personaggio. --}}
+                <input type="text" class="wod5e-mage-oggetto-dettagli" data-item-id="{{item._id}}" data-item-field="flags.wod5e-mage.dettagli" value="{{item.flags.[wod5e-mage].dettagli}}" placeholder="{{localize (concat 'WOD5E_MAGE.Tratti.Dettagli.' key)}}" aria-label="{{item.name}}: {{localize 'WOD5E_MAGE.Tratti.DettagliLabel'}}" title="{{localize 'WOD5E_MAGE.Tratti.DettagliHint'}}" {{#if @root.locked}}disabled{{/if}}>
             </div>
             <div class="wod5e-mage-riga-spiega wod5e-mage-oggetto-spiega">
                 {{#if item.system.enrichedDescription}}{{{item.system.enrichedDescription}}}{{else}}<p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Tratti.SenzaTesto"}}</p>{{/if}}

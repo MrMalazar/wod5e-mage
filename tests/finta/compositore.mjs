@@ -289,16 +289,27 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   const P = await import(new URL("../../scripts/poteri-scheda.js", import.meta.url).href);
   flags["wod5e-mage"].poteri.ppratica = { sphere: "mind", name: "La Pratica rende Perfetti", dot: 0, type: "attivo", source: "catalogo", catalogId: "la-pratica-rende-perfetti", scelta: "s1" };
   const pagina = P.preparePoteriPagina(actor, { _poteriInModifica: new Set() }, { localize: (k) => strings[k] ?? k, locale: "it" });
-  const forze = pagina.poteriSezioni.find((s) => s.id === "forces");
-  const casaRiga = forze.poteri.find((p) => p.catalogId === "ambito-di-casa");
+  // Una semplice lista (Blue, 24/9 sera): in ordine di nome, col sigillo della Sfera e i tipi.
+  const lista = pagina.poteriLista;
+  assert.equal(lista.length, pagina.poteriTotale);
+  assert.deepEqual(lista.map((p) => p.label), [...lista.map((p) => p.label)].sort((a, b) => a.localeCompare(b, "it")), "in ordine di nome");
+  assert.ok(lista.every((p) => p.sphereIcon && p.sphereLabel && p.tipi && typeof p.tipi.attivo === "boolean"), "sigillo e tipi su ogni riga");
+  const casaRiga = lista.find((p) => p.catalogId === "ambito-di-casa");
+  assert.deepEqual([casaRiga.sphere, casaRiga.tipi], ["forces", { attivo: true, passivo: true }]);
   assert.deepEqual([casaRiga.sceltaCampo.kind, casaRiga.sceltaCampo.options.map((o) => o.value), casaRiga.sceltaCampo.options.find((o) => o.selected)?.value], ["ambito", ["potency", "range"], "potency"]);
-  assert.equal(forze.poteri.find((p) => p.catalogId === "appoggio").sceltaCampo, null, "Appoggio non chiede niente");
-  const mente = pagina.poteriSezioni.find((s) => s.id === "mind");
-  const mestiereRiga = mente.poteri.find((p) => p.catalogId === "mestiere");
+  assert.equal(lista.find((p) => p.catalogId === "appoggio").sceltaCampo, null, "Appoggio non chiede niente");
+  const mestiereRiga = lista.find((p) => p.catalogId === "mestiere");
   assert.deepEqual([mestiereRiga.sceltaCampo.kind, mestiereRiga.sceltaCampo.options.map((o) => o.value), mestiereRiga.sceltaCampo.options.find((o) => o.selected)?.value], ["abilita", ["skill:athletics", "skill:occult"], "skill:athletics"]);
-  const praticaRiga = mente.poteri.find((p) => p.catalogId === "la-pratica-rende-perfetti");
+  const praticaRiga = lista.find((p) => p.catalogId === "la-pratica-rende-perfetti");
   assert.deepEqual([praticaRiga.sceltaCampo.kind, praticaRiga.sceltaCampo.options.map((o) => [o.value, o.label, o.selected])], ["incantesimo", [["s1", "Lama di fuoco", true]]]);
-  assert.ok(forze.poteri.every((p) => p.options?.pallini?.length === 5), "le tendine dei pallini restano");
+  assert.ok(lista.every((p) => p.options?.pallini?.length === 5), "le tendine dei pallini restano");
+  // Le Sfere conosciute con il conto dei poteri e la quota (tanti quanti i pallini).
+  const forze = pagina.sfereConosciute.find((s) => s.id === "forces");
+  assert.ok(forze && typeof forze.conto === "number" && typeof forze.pieno === "boolean");
+  assert.equal(forze.conto, lista.filter((p) => p.sphere === "forces").length);
+  const quota = P.quotaDellaSfera(actor, "forces");
+  assert.deepEqual([quota.conosciuti, quota.pieno], [forze.conto, forze.conto >= quota.rating]);
+  assert.ok(P.sferePerCatalogo(actor).every((s) => s.id && Array.isArray(s.owned) && typeof s.rating === "number"));
   delete flags["wod5e-mage"].poteri.ppratica;
 }
 
