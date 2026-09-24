@@ -11339,15 +11339,18 @@
 }
 
 /* --- Esperienza ----------------------------------------------------- */
+/* Due colonne (Blue, 25/9: «gli spazi sono molto sfasati»): a sinistra il
+   conto, le prese e il listino, uno sotto l'altro; a destra le spese, con le
+   proposte, che è dove si lavora. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-esperienza-layout {
   align-items: start;
   display: grid;
   gap: 12px;
   grid-template-areas:
-    "conto conto"
+    "conto spese"
     "prese spese"
-    "listino listino";
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+    "listino spese";
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
   padding: 0 1rem 1rem;
 }
 
@@ -11356,19 +11359,23 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-exp-spese { grid-area: spese; }
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-exp-listino { grid-area: listino; }
 
-/* Il conto: tre numeri grandi, come Riserva e Dadi nel Tiro. */
+/* Il conto: tre numeri, la parola a sinistra e il numero a destra, in una riga bassa. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-totali {
   display: grid;
-  gap: 8px;
+  gap: 6px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  padding: 4px 2px 2px;
+  padding: 2px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-totali > div {
+  align-items: baseline;
   background: var(--mage-riga-fondo);
   border-radius: 6px;
-  padding: 8px 10px;
-  text-align: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 5px 8px;
+  text-align: left;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-totali small {
@@ -11377,14 +11384,14 @@
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.14em;
-  margin-bottom: 4px;
+  margin: 0;
   text-transform: uppercase;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-exp-totali strong {
   color: var(--mage-oro);
   font-family: var(--font-modesto, "Modesto Condensed", Georgia, serif);
-  font-size: 1.9rem;
+  font-size: 1.5rem;
   font-weight: 600;
   line-height: 1;
 }

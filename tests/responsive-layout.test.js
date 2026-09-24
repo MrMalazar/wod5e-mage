@@ -313,3 +313,8 @@ assert.match(css, /\.wod5e-mage-arete-type-grid\s*\{[^}]*grid-template-columns:/
 assert.match(css, /\.wod5e-mage-arete-type-grid > em\s*\{[^}]*font-style: italic;/s);
 
 console.log("Responsive Mage sheet layout tests passed.");
+
+// L'Esperienza a due colonne (Blue, 25/9: «gli spazi sono molto sfasati»): a sinistra il conto, le prese e il
+// listino; a destra le spese con le proposte. Sotto i 900 px tutto in colonna.
+assert.match(css, /\.wod5e-mage-esperienza-layout \{[^}]*grid-template-areas:\s*"conto spese"\s*"prese spese"\s*"listino spese";[^}]*grid-template-columns: minmax\(0, 0\.85fr\) minmax\(0, 1\.15fr\);/s);
+console.log("Esperienza a due colonne: ok");
