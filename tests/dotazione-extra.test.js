@@ -293,5 +293,8 @@ console.log("Libro degli Elementi: test passati.");
     assert.deepEqual(Object.keys(strings.Dettagli), ["background", "merit", "flaw", "boon", "oggetto"]);
     assert.ok(strings.DettagliLabel && strings.DettagliHint);
   }
+  // Le liste degli oggetti da bordo a bordo (1.9.1): il sistema le stringeva al contenuto.
+  const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+  assert.match(css, /\.wod5e-mage-riq-body\.item-list \{\s*align-self: stretch;\s*width: 100%;/, "i Vantaggi e l'inventario prendono tutto il riquadro");
   console.log("Dettagli in riga dei Tratti: test passati.");
 }

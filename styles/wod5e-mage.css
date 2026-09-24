@@ -10098,6 +10098,15 @@
   overflow: visible;
 }
 
+/* Il sistema stringe le liste degli oggetti (`.actor.sheet .item-list`:
+   align-self flex-start): i Vantaggi e l'inventario prendevano metà del
+   riquadro, e tutto quanto solo con una descrizione aperta (Blue, 24/9
+   sera). Qui la lista va da bordo a bordo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-body.item-list {
+  align-self: stretch;
+  width: 100%;
+}
+
 /* Il conto in testa al riquadro, a destra del titolo. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-conto {
   color: var(--mage-testo);
