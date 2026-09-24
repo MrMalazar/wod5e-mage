@@ -810,7 +810,15 @@
       "Modifica": "Edit",
       "Fatto": "Done",
       "Togli": "Remove",
-      "Tavola": "The table of the seven levels"
+      "Tavola": "The table of the seven levels",
+      "Matrice": "Formula",
+      "Usi": {
+        "scena": "once per scene",
+        "sessione": "once per session",
+        "campagna": "once per chronicle",
+        "turno": "once per turn",
+        "bersaglio": "once per target"
+      }
     },
     "Tratti": {
       "Vantaggi": "Advantages",
@@ -1378,7 +1386,7 @@
     "Grimorio": {
       "Title": "Grimoire",
       "Open": "Open the Grimoire",
-      "Search": "Search an effect…",
+      "Search": "Search a Formula or an effect…",
       "Empty": "No effects: you need Spheres with at least one dot.",
       "Scopes": "Suggested Scopes:",
       "Required": "direct",
@@ -1392,7 +1400,21 @@
       "ShortMany": "{n} dots short",
       "Absent": "Sphere you lack",
       "WithoutPrime": "Without Prime: you pay in Quintessence.",
-      "Close": "Close the Grimoire and go back to the sheet"
+      "Close": "Close the Grimoire and go back to the sheet",
+      "Access": "Access with",
+      "Amalgams": "Amalgams with",
+      "AmalgamsFree": "up to the player",
+      "Description": "Description",
+      "Limit": "Limit",
+      "Threshold": "Base threshold",
+      "Powers": "Powers",
+      "Proposal": "new power, to be approved",
+      "ChooseAccess": "Open with",
+      "ChooseAmalgam": "Amalgam",
+      "FormulaSave": "Write in the Grimoire",
+      "FormulaRoll": "Cast",
+      "FormulaPick": "Choose",
+      "NoAccess": "None of the Access Spheres is yours: the matrix is read-only."
     },
     "Incantesimi": {
       "DialogTitle": "Write a spell",
@@ -1412,7 +1434,8 @@
       "Empty": "No spells: the + opens the roll window and saves instead of rolling.",
       "NoSphere": "No Sphere",
       "FromEffetti": "Add effects from the book",
-      "NoType": "Type chosen when cast"
+      "NoType": "Type chosen when cast",
+      "Formula": "Formula"
     },
     "GrimorioComune": {
       "Label": "Shared Grimoire (M6)",

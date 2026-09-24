@@ -65,6 +65,12 @@ export function normalizzaPotere(id, row = {}) {
     cost: testo(row?.cost),
     source: row?.source === "catalogo" ? "catalogo" : "mano",
     catalogId: testo(row?.catalogId),
+    // Dal catalogo del 24/9: la matrice di provenienza, il legame, il costo e il limite d'uso.
+    formula: testo(row?.formula),
+    formulaName: testo(row?.formulaName),
+    link: testo(row?.link),
+    costValue: count(row?.costValue),
+    uses: row?.uses && typeof row.uses === "object" ? { per: testo(row.uses.per), n: Math.max(count(row.uses.n), 1) } : null,
     effects: Array.isArray(row?.effects) ? row.effects : []
   };
 }
@@ -137,6 +143,8 @@ export function nuovoPotere(sphere, entry = null) {
   if (!entry) return base;
   return {
     ...base,
+    // La Sfera è quella scelta nella tendina (il catalogo del 24/9 ne apre più d'una).
+    sphere: sfera(sphere) || sfera(entry.sphere) || sfera(entry.spheres?.[0]),
     name: testo(entry.name),
     dot: Math.min(count(entry.dot), POTERE_DOTS),
     type: POTERE_TIPI.includes(testo(entry.type)) ? testo(entry.type) : "",
@@ -147,8 +155,22 @@ export function nuovoPotere(sphere, entry = null) {
     cost: testo(entry.cost),
     source: "catalogo",
     catalogId: testo(entry.id),
+    formula: testo(entry.formula),
+    formulaName: testo(entry.formulaName),
+    link: testo(entry.link),
+    costValue: count(entry.costValue),
+    uses: entry.uses && typeof entry.uses === "object" ? { per: testo(entry.uses.per), n: Math.max(count(entry.uses.n), 1) } : null,
     effects: Array.isArray(entry.effects) ? entry.effects : []
   };
+}
+
+/** Le Sfere che aprono una voce del catalogo: `spheres` (con «any» per tutte), o la vecchia `sphere` sola. */
+export function sfereDellaVoce(entry) {
+  if (Array.isArray(entry?.spheres) && entry.spheres.length) {
+    return entry.spheres.includes("any") ? [...SPHERES] : entry.spheres.filter((sphere) => SPHERES.includes(sphere));
+  }
+  const one = sfera(entry?.sphere);
+  return one ? [one] : [];
 }
 
 /**
@@ -160,17 +182,19 @@ export function nuovoPotere(sphere, entry = null) {
 export function catalogoDellaSfera(sphere, { catalog = POTERI, rating = 0, owned = [] } = {}) {
   const have = new Set((owned ?? []).map((power) => power.catalogId).filter(Boolean));
   return (catalog ?? [])
-    .filter((entry) => entry.sphere === sphere)
+    .filter((entry) => sfereDellaVoce(entry).includes(sphere))
     .map((entry) => ({
       id: entry.id,
       name: testo(entry.name),
       dot: Math.min(count(entry.dot), POTERE_DOTS),
       type: testo(entry.type),
       amalgam: sfera(entry.amalgam),
+      formulaName: testo(entry.formulaName),
+      proposal: entry.link === "proposta",
       known: have.has(entry.id),
       locked: Math.min(count(entry.dot), POTERE_DOTS) > count(rating)
     }))
-    .sort((a, b) => (a.dot || 99) - (b.dot || 99) || a.name.localeCompare(b.name, "it"));
+    .sort((a, b) => a.name.localeCompare(b.name, "it"));
 }
 
 /**

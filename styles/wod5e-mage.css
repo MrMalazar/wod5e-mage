@@ -12694,3 +12694,200 @@
     position: static;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Le matrici nel Grimorio (24/9): la vista per Formula sulle 48       */
+/* matrici del formato di Blue. La riga chiusa: nome, «In genere», i   */
+/* sigilli d'Accesso; aperta, la matrice intera con le scelte e i      */
+/* tasti.                                                               */
+/* ------------------------------------------------------------------ */
+.wod5e-mage-grimorio-accessi {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.15rem;
+}
+
+.wod5e-mage-grimorio-accessi > img {
+  border: none;
+  filter: brightness(0) invert(78%);
+  height: 16px;
+  opacity: 0.4;
+  width: 16px;
+}
+
+.wod5e-mage-grimorio-accessi > img.lit {
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  opacity: 1;
+}
+
+.wod5e-mage-matrice {
+  border-top: 1px solid rgb(152 119 43 / 30%);
+  color: var(--mage-testo, #e6dcc2);
+  display: flex;
+  flex-direction: column;
+  font-size: 0.84rem;
+  gap: 0.3rem;
+  line-height: 1.45;
+  margin-top: 0.3rem;
+  padding: 0.4rem 0.2rem 0.2rem;
+}
+
+.wod5e-mage-matrice > p {
+  margin: 0;
+}
+
+.wod5e-mage-matrice b {
+  color: var(--mage-oro, #d9a827);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  margin-right: 0.3rem;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-matrice-riga {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.5rem;
+}
+
+.wod5e-mage-matrice-sfera {
+  align-items: center;
+  color: var(--mage-tenue, #b8ad93);
+  display: inline-flex;
+  gap: 0.2rem;
+  opacity: 0.6;
+}
+
+.wod5e-mage-matrice-sfera.lit {
+  color: var(--mage-testo, #e6dcc2);
+  opacity: 1;
+}
+
+.wod5e-mage-matrice-sfera > img,
+.wod5e-mage-matrice-sfera-riga > img,
+.wod5e-mage-matrice-scelta > img {
+  border: none;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  height: 14px;
+  vertical-align: -0.15rem;
+  width: 14px;
+}
+
+.wod5e-mage-matrice-sfera:not(.lit) > img {
+  filter: brightness(0) invert(78%);
+}
+
+/* Una riga per Sfera nella Descrizione (Blue, 24/9): il sigillo, il nome in
+   oro, il testo; spenta se la Sfera non è del personaggio. */
+.wod5e-mage-matrice-sfera-riga {
+  padding-left: 1.1rem;
+  text-indent: -1.1rem;
+}
+
+.wod5e-mage-matrice-sfera-riga > b {
+  color: var(--mage-testo, #e6dcc2);
+  font-size: 0.84rem;
+  letter-spacing: 0;
+  margin: 0 0.15rem 0 0.25rem;
+  text-transform: none;
+}
+
+.wod5e-mage-matrice-sfera-riga:not(.lit) {
+  opacity: 0.6;
+}
+
+.wod5e-mage-matrice-soglia {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.6rem;
+}
+
+.wod5e-mage-matrice-soglia > span {
+  color: var(--mage-testo, #e6dcc2);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.wod5e-mage-matrice-uso {
+  color: var(--mage-tenue, #b8ad93);
+}
+
+.wod5e-mage-matrice-poteri > span {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.wod5e-mage-matrice-poteri > span.proposta::after {
+  color: var(--mage-oro, #d9a827);
+  content: " ◇";
+}
+
+/* Le scelte: la Sfera d'Accesso (una), le Amalgame (zero o più). */
+.wod5e-mage-matrice-scelte {
+  align-items: center;
+  border-top: 1px dashed rgb(152 119 43 / 30%);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.6rem;
+  padding-top: 0.3rem;
+}
+
+.wod5e-mage-matrice-k {
+  color: var(--mage-oro, #d9a827);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-matrice-scelta {
+  align-items: center;
+  color: var(--mage-testo, #e6dcc2);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.wod5e-mage-matrice-scelta > input {
+  margin: 0;
+}
+
+.wod5e-mage-matrice-tasti {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+  padding-top: 0.2rem;
+}
+
+.wod5e-mage-matrice-tasti > button {
+  background: rgb(217 168 39 / 12%);
+  border: 1px solid var(--mage-oro, #d9a827);
+  border-radius: 4px;
+  color: var(--mage-testo, #e6dcc2);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.6;
+  margin: 0;
+  min-height: 0;
+  padding: 0.15rem 0.7rem;
+  width: auto;
+}
+
+.wod5e-mage-matrice-tasti > button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+.wod5e-mage-matrice-tasti > button.taken {
+  background: rgb(217 168 39 / 35%);
+}
+
+/* Il nome della matrice sotto il potere, nella tendina del catalogo e nella riga. */
+.wod5e-mage-potere-formula {
+  color: var(--mage-tenue, #b8ad93);
+  display: block;
+  font-size: 0.7rem;
+  font-style: italic;
+}

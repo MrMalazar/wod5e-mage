@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import {
   applyPotere,
   catalogoDellaSfera,
+  sfereDellaVoce,
   contoPoteri,
   findPotere,
   normalizzaPotere,
@@ -17,16 +18,27 @@ import {
   potereLabel
 } from "../scripts/poteri.js";
 
-// Il catalogo: vuoto finché il foglio di Blue non è fermo; i poteri li inserisce il giocatore (21/9).
+// Il catalogo (24/9): i 187 poteri del libretto e dei nuovi, generati dai dati;
+// ogni voce dice le Sfere che la aprono («any» per Qualsiasi) e la matrice.
 assert.equal(POTERE_DOTS, 5);
 assert.deepEqual([...POTERE_TIPI], ["attivo", "passivo"]);
-assert.deepEqual([...POTERI], []);
+assert.equal(POTERI.length, 187);
+assert.equal(new Set(POTERI.map((power) => power.id)).size, POTERI.length);
+assert.ok(POTERI.every((power) => power.name && power.spheres.length && power.formula && Array.isArray(power.effects)));
+assert.deepEqual(sfereDellaVoce(POTERI.find((power) => power.id === "velocista")), ["forces", "time"]);
+assert.equal(sfereDellaVoce(POTERI.find((power) => power.id === "la-pratica-rende-perfetti")).length, 9);
+assert.deepEqual(sfereDellaVoce({ sphere: "life" }), ["life"]);
+assert.deepEqual(POTERI.find((power) => power.id === "velocista").uses, null);
+assert.deepEqual(POTERI.find((power) => power.id === "conosco-un-posto").uses, { per: "sessione", n: 1 });
+assert.equal(POTERI.find((power) => power.id === "pronto-soccorso").costValue, 2);
 assert.equal(POTERI_FLAG, "poteri");
 
 // Una riga della bandiera letta pulita: i campi al loro posto, il resto scartato.
 const riga = normalizzaPotere("abc", { sphere: "forces", name: " Conduttore ", dot: "7", type: "passivo", text: "Un dado in più.", amalgam: "mind", amalgamText: "Anche la mente", cost: "1 Quintessenza", source: "catalogo", catalogId: "P001-Fo" });
-assert.deepEqual(riga, { id: "abc", sphere: "forces", name: "Conduttore", dot: 5, type: "passivo", text: "Un dado in più.", amalgam: "mind", amalgamText: "Anche la mente", flavor: "", cost: "1 Quintessenza", source: "catalogo", catalogId: "P001-Fo", effects: [] });
-assert.deepEqual(normalizzaPotere("x", { sphere: "boh", type: "strano", dot: -2, amalgam: "nessuna" }), { id: "x", sphere: "", name: "", dot: 0, type: "", text: "", amalgam: "", amalgamText: "", flavor: "", cost: "", source: "mano", catalogId: "", effects: [] });
+assert.deepEqual(riga, { id: "abc", sphere: "forces", name: "Conduttore", dot: 5, type: "passivo", text: "Un dado in più.", amalgam: "mind", amalgamText: "Anche la mente", flavor: "", cost: "1 Quintessenza", source: "catalogo", catalogId: "P001-Fo", formula: "", formulaName: "", link: "", costValue: 0, uses: null, effects: [] });
+assert.deepEqual(normalizzaPotere("x", { sphere: "boh", type: "strano", dot: -2, amalgam: "nessuna" }), { id: "x", sphere: "", name: "", dot: 0, type: "", text: "", amalgam: "", amalgamText: "", flavor: "", cost: "", source: "mano", catalogId: "", formula: "", formulaName: "", link: "", costValue: 0, uses: null, effects: [] });
+// Dal catalogo del 24/9 restano la matrice, il legame, il costo e il limite d'uso.
+assert.deepEqual(normalizzaPotere("y", { sphere: "life", name: "Pronto soccorso", formula: "guarire", formulaName: "Guarire", link: "proposta", costValue: "2", uses: { per: "scena", n: 0 } }).uses, { per: "scena", n: 1 });
 
 // I poteri del personaggio: dalla bandiera, in ordine di Sfera (come la scheda), pallino, nome.
 const actor = { getFlag: (module, key) => (module === "wod5e-mage" && key === "poteri" ? {
@@ -70,9 +82,17 @@ const catalog = [
 ];
 const owned = [normalizzaPotere("k", { sphere: "matter", name: "Radiografia", source: "catalogo", catalogId: "M1" })];
 const tendina = catalogoDellaSfera("matter", { catalog, rating: 3, owned });
-assert.deepEqual(tendina.map((entry) => [entry.id, entry.known, entry.locked]), [["M1", true, false], ["M3", false, false], ["M5", false, true]]);
+// In ordine di nome (24/9: i pallini sono quasi tutti da assegnare), spuntate se conosciute, chiuse sopra i pallini.
+assert.deepEqual(tendina.map((entry) => [entry.id, entry.known, entry.locked]), [["M3", false, false], ["M5", false, true], ["M1", true, false]]);
 assert.deepEqual(catalogoDellaSfera("matter", { catalog: [], rating: 3 }), []);
 assert.deepEqual(catalogoDellaSfera("spirit", { catalog, rating: 5 }), []);
+// Il catalogo vero: un potere con più Sfere d'Accesso sta in ogni tendina, «Qualsiasi» in tutte; la Sfera scelta è quella della tendina.
+assert.ok(catalogoDellaSfera("forces", { catalog: POTERI }).some((entry) => entry.id === "velocista"));
+assert.ok(catalogoDellaSfera("time", { catalog: POTERI }).some((entry) => entry.id === "velocista"));
+assert.ok(!catalogoDellaSfera("life", { catalog: POTERI }).some((entry) => entry.id === "velocista"));
+assert.ok(catalogoDellaSfera("spirit", { catalog: POTERI }).some((entry) => entry.id === "la-pratica-rende-perfetti"));
+const velocista = nuovoPotere("time", POTERI.find((power) => power.id === "velocista"));
+assert.deepEqual([velocista.sphere, velocista.formulaName, velocista.link, velocista.costValue, velocista.source], ["time", "Accelerare e Rallentare", "proposta", 2, "catalogo"]);
 
 // Gli effetti sul conto: soglia (mai sotto zero), dadi, riuscita da. Un potere senza effetti non tocca niente.
 const conto = { threshold: 5, dice: 0, difficulty: null };

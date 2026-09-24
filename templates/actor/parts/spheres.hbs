@@ -108,7 +108,7 @@
                                     <button type="button" class="wod5e-mage-potere-voce{{#if voce.known}} scelta{{/if}}{{#if voce.locked}} chiusa{{/if}}" data-action="potereDaCatalogo" data-sphere="{{sez.id}}" data-catalogo="{{voce.id}}" title="{{#if voce.known}}{{localize 'WOD5E_MAGE.Poteri.Conosciuto'}}{{else}}{{voce.lockedHint}}{{/if}}" {{#if voce.known}}disabled{{else if voce.locked}}disabled{{/if}}>
                                         <i class="wod5e-mage-casella{{#if voce.known}} spuntata{{/if}}" aria-hidden="true"></i>
                                         <b class="wod5e-mage-potere-pallino">{{voce.dot}}</b>
-                                        <span>{{voce.name}}</span>
+                                        <span>{{voce.name}}{{#if voce.formulaName}}<small class="wod5e-mage-potere-formula">{{voce.formulaName}}{{#if voce.proposal}} ◇{{/if}}</small>{{/if}}</span>
                                         {{#if voce.locked}}<small class="wod5e-mage-potere-lucchetto"><i class="fa-solid fa-lock" aria-hidden="true"></i> {{voce.lockedHint}}</small>{{/if}}
                                     </button>
                                 {{else}}
@@ -143,6 +143,7 @@
                                             <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.Flavor"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.flavor" rows="2">{{p.flavor}}</textarea></label>
                                         </div>
                                     {{else}}
+                                        {{#if p.formulaName}}<p class="wod5e-mage-potere-testo wod5e-mage-potere-matrice"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.Matrice"}}</span>{{p.formulaName}}{{#if p.usesLabel}} · {{p.usesLabel}}{{/if}}</p>{{/if}}
                                         <p class="wod5e-mage-potere-testo"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.CosaFa"}}</span>{{#if p.text}}{{p.text}}{{else}}<em>{{localize "WOD5E_MAGE.Poteri.CosaFaVuoto"}}</em>{{/if}}</p>
                                         {{#if p.amalgam}}
                                             {{!-- L'Amalgama si legge: piena se la Sfera ce l'hai, tratteggiata se no. --}}

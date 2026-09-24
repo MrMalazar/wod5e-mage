@@ -70,6 +70,7 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
       amalgamIcon: power.amalgam ? SPHERE_ICON(power.amalgam) : "",
       amalgamLabel: power.amalgam ? localize(`WOD5E_MAGE.Spheres.${power.amalgam}`) : "",
       amalgamOwned: power.amalgam ? Boolean(selezione[power.amalgam]) : false,
+      usesLabel: power.uses?.per ? localize(`WOD5E_MAGE.Poteri.Usi.${power.uses.per}`) : "",
       editing: editing.has(power.id),
       options
     }))
@@ -123,7 +124,9 @@ export async function onPotereDaCatalogo(event, target) {
   if (!entry) return;
   const rows = { ...(actor.getFlag(MODULE_ID, POTERI_FLAG) ?? {}) };
   if (Object.values(rows).some((row) => row?.catalogId === entry.id)) return;
-  await actor.setFlag(MODULE_ID, POTERI_FLAG, { ...rows, [idNuovo(rows)]: nuovoPotere(entry.sphere, entry) });
+  // La Sfera è quella della tendina da cui si è scelto (il catalogo ne apre più d'una).
+  const sphere = String(target.dataset.sphere ?? "");
+  await actor.setFlag(MODULE_ID, POTERI_FLAG, { ...rows, [idNuovo(rows)]: nuovoPotere(SPHERES.includes(sphere) ? sphere : entry.sphere, entry) });
 }
 
 /** Modifica / Fatto: la riga passa agli input e torna al testo. */

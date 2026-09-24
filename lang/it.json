@@ -810,7 +810,15 @@
       "Modifica": "Modifica",
       "Fatto": "Fatto",
       "Togli": "Togli",
-      "Tavola": "La tavola dei sette livelli"
+      "Tavola": "La tavola dei sette livelli",
+      "Matrice": "Formula",
+      "Usi": {
+        "scena": "una volta per scena",
+        "sessione": "una volta per sessione",
+        "campagna": "una volta per campagna",
+        "turno": "una volta per turno",
+        "bersaglio": "una volta per bersaglio"
+      }
     },
     "Tratti": {
       "Vantaggi": "Vantaggi",
@@ -1378,7 +1386,7 @@
     "Grimorio": {
       "Title": "Grimorio",
       "Open": "Apri il Grimorio",
-      "Search": "Cerca un effetto…",
+      "Search": "Cerca una Formula o un effetto…",
       "Empty": "Nessun effetto: servono Sfere con almeno un pallino.",
       "Scopes": "Ambiti consigliati:",
       "Required": "diretta",
@@ -1392,7 +1400,21 @@
       "ShortMany": "ti mancano {n} pallini",
       "Absent": "Sfera che non hai",
       "WithoutPrime": "Senza Primordio: si paga in Quintessenza.",
-      "Close": "Chiudi il Grimorio e torna alla scheda"
+      "Close": "Chiudi il Grimorio e torna alla scheda",
+      "Access": "Accesso con",
+      "Amalgams": "Amalgame con",
+      "AmalgamsFree": "a fantasia del giocatore",
+      "Description": "Descrizione",
+      "Limit": "Limite",
+      "Threshold": "Soglia base",
+      "Powers": "Poteri",
+      "Proposal": "potere nuovo, da vistare",
+      "ChooseAccess": "Apri con",
+      "ChooseAmalgam": "Amalgama",
+      "FormulaSave": "Scrivi nel Grimorio",
+      "FormulaRoll": "Lancia",
+      "FormulaPick": "Scegli",
+      "NoAccess": "Nessuna delle Sfere d'Accesso è tua: la matrice si legge e basta."
     },
     "Incantesimi": {
       "DialogTitle": "Scrivi un incantesimo",
@@ -1412,7 +1434,8 @@
       "Empty": "Nessun incantesimo: il + apre la finestra del tiro, e invece di tirare salva.",
       "NoSphere": "Senza Sfera",
       "FromEffetti": "Aggiungi effetti del manuale",
-      "NoType": "Tipologia al lancio"
+      "NoType": "Tipologia al lancio",
+      "Formula": "Formula"
     },
     "GrimorioComune": {
       "Label": "Grimorio comune (M6)",

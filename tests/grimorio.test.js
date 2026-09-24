@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { EFFETTI, FORMULE } from "../scripts/data/effetti.js";
-import { effectAvailable, effectSphereLevels, findEffetto, formuleLabels, prepareGrimorio, prepareGrimorioFormule, prepareGrimorioSpheres, splitScopes } from "../scripts/grimorio.js";
+import { FORMULE_M6 } from "../scripts/data/formule.js";
+import { effectAvailable, effectSphereLevels, findEffetto, findFormula, formulaPick, formuleLabels, prepareGrimorio, prepareGrimorioFormule, prepareGrimorioSpheres, splitScopes } from "../scripts/grimorio.js";
 import { ustioneSplit, normalizeEffectKind } from "../scripts/paradox-burst.js";
 import { paintSalute } from "../scripts/salute.js";
 import { renderRollCard } from "../scripts/roll-card.js";
@@ -163,39 +164,66 @@ assert.deepEqual(splitScopes("Area per un campo, un giardino, un raccolto. Durat
 assert.deepEqual(prepareGrimorio({ correspondence: 2 }, (k) => k)[0].levels[1].entries.find((entry) => entry.name === "Marchiare un bersaglio").pairings, []);
 assert.match(readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8"), /wod5e-mage-grimorio-pairings[\s\S]*pairing\.icon[\s\S]*wod5e-mage-grimorio-scopes[\s\S]*Grimorio\.Scopes/);
 
-// Le Formule del ramo B come verbi universali (verdetto di Blue, 6/9): 52 su
-// cinque gradi, ogni effetto ne porta almeno una, e il Grimorio le mostra
-// anche «per Formula»: per grado, Sfera per Sfera, aperto / pallini che
-// mancano / Sfera che non hai. Solo le righe aperte scelgono.
+// Le Formule di ieri (ramo B, 52 su cinque gradi) restano nei dati degli
+// effetti: ogni effetto ne porta almeno una. Dal 24/9 il Grimorio mostra
+// «per Formula» le 48 matrici del formato di Blue (formule.js): le etichette
+// sugli effetti sono i nomi di oggi, senza grado, con le coppie fuse.
 assert.equal(FORMULE.length, 52);
 assert.equal(EFFETTI.length, 269);
 assert.equal(EFFETTI.every((entry) => entry.formule.length > 0 && entry.formule.every((id) => FORMULE.some((formula) => formula.id === id))), true);
-assert.deepEqual(FORMULE.find((formula) => formula.id === "danneggiare").grade, 3);
-assert.deepEqual(formuleLabels(findEffetto("forces-3-onda-d-urto")), ["Danneggiare · 3"]);
-assert.deepEqual(formuleLabels(findEffetto("life-3-curare-malattie")), ["Guarire · 3", "Riparare · 2"]);
+assert.deepEqual(formuleLabels(findEffetto("forces-3-onda-d-urto")), ["Danneggiare"]);
+assert.deepEqual(formuleLabels(findEffetto("life-3-curare-malattie")), ["Guarire", "Riparare"]);
+assert.equal(findFormula("accelerare").id, "accelerare-e-rallentare");
+assert.equal(findFormula("rallentare").id, "accelerare-e-rallentare");
+assert.equal(findFormula("guarire").name, "Guarire");
+assert.equal(findFormula("boh"), null);
 assert.ok(EFFETTI.some((entry) => entry.sphere === "correspondence" && entry.formule.includes("danneggiare")));
-assert.ok(EFFETTI.filter((entry) => entry.formule.includes("contrastare")).length >= 9);
+// Ogni Formula di ieri trova una matrice di oggi.
+assert.ok(FORMULE.every((formula) => findFormula(formula.id)));
 const perFormula = prepareGrimorioFormule({ forces: 3, mind: 2, life: 1 }, (k) => k);
-assert.deepEqual(perFormula.map((group) => group.grade), [1, 2, 3, 4, 5]);
-const danneggiare = perFormula[2].formule.find((formula) => formula.id === "danneggiare");
+assert.equal(perFormula.length, 48);
+assert.deepEqual(perFormula.map((formula) => formula.name), [...perFormula.map((formula) => formula.name)].sort((a, b) => a.localeCompare(b, "it")));
+const danneggiare = perFormula.find((formula) => formula.id === "danneggiare");
 assert.equal(danneggiare.open, true);
-assert.deepEqual(danneggiare.rows.filter((row) => row.status === "open").map((row) => row.sphere), ["forces", "forces"]);
-assert.equal(danneggiare.rows.find((row) => row.sphere === "mind").status, "short");
-assert.deepEqual(danneggiare.rows.map((row) => row.status), [...danneggiare.rows.map((row) => row.status)].sort((x, y) => ({ open: 0, short: 1, absent: 2 })[x] - ({ open: 0, short: 1, absent: 2 })[y]));
-assert.equal(danneggiare.rows.find((row) => row.sphere === "mind").statusText, "WOD5E_MAGE.Grimorio.ShortOne");
-assert.equal(danneggiare.rows.find((row) => row.sphere === "life").statusText, "WOD5E_MAGE.Grimorio.ShortMany".replace("{n}", "2"));
-assert.equal(danneggiare.rows.find((row) => row.sphere === "spirit").status, "absent");
-assert.equal(danneggiare.rows.every((row) => row.subject !== undefined), true);
-// Una Formula che nessuna Sfera del personaggio tocca non compare; senza Sfere, niente.
-assert.equal(perFormula.flatMap((group) => group.formule).every((formula) => formula.rows.some((row) => row.status !== "absent")), true);
-assert.equal(prepareGrimorioFormule({}).length, 0);
-assert.deepEqual(prepareGrimorio({ forces: 3 }, (k) => k)[0].levels[2].entries.find((entry) => entry.id === "forces-3-onda-d-urto").formule, ["Danneggiare · 3"]);
-assert.match(grimorioTemplate, /data-view-panel="sphere"[\s\S]*wod5e-mage-grimorio-formula[\s\S]*data-view-panel="formula"[\s\S]*data-effetto="\{\{row\.id\}\}"/);
+assert.deepEqual(danneggiare.accessOwned.map((sphere) => sphere.id), ["forces", "mind", "life"]);
+assert.equal(danneggiare.thresholds[0].base, 4);
+assert.deepEqual(danneggiare.thresholds[0].scopes.map((scope) => [scope.id, scope.level]), [["potency", 3], ["impact", 1]]);
+assert.equal(danneggiare.thresholds[0].text, "4 (WOD5E_MAGE.Scopes.potency 3, WOD5E_MAGE.Scopes.impact 1)");
+assert.equal(danneggiare.rows.find((row) => row.key === "forces").owned, true);
+assert.equal(danneggiare.rows.find((row) => row.key === "spirit").owned, false);
+assert.ok(danneggiare.powers.some((power) => power.name === "Onda d'urto"));
+assert.ok(danneggiare.powers.some((power) => power.name === "Sferzata" && power.proposal));
+// Le Amalgame scritte si scelgono fra quelle possedute; se non ce ne sono scritte, fra le Sfere fuori dall'Accesso.
+const guarire = perFormula.find((formula) => formula.id === "guarire");
+assert.deepEqual(guarire.amalgams.map((sphere) => sphere.id), ["matter", "spirit"]);
+assert.deepEqual(guarire.amalgamChoices, []);
+const percepire = perFormula.find((formula) => formula.id === "percepire");
+assert.equal(percepire.amalgamsFree, true);
+assert.deepEqual(percepire.amalgamChoices, []);
+const riavvolgere = perFormula.find((formula) => formula.id === "riavvolgere");
+assert.equal(riavvolgere.open, false);
+assert.deepEqual(riavvolgere.amalgamChoices.map((sphere) => sphere.id), ["mind", "life"]);
+// Annientare ha due soglie: 8 o 11.
+assert.deepEqual(perFormula.find((formula) => formula.id === "annientare").thresholds.map((threshold) => threshold.base), [8, 11]);
+// Senza Sfere le matrici si leggono, ma nessuna si apre.
+assert.equal(prepareGrimorioFormule({}).length, 48);
+assert.equal(prepareGrimorioFormule({}).every((formula) => !formula.open), true);
+// La scelta: Sfera d'Accesso posseduta, Amalgame possedute, gli Ambiti della soglia base.
+const pick = formulaPick(FORMULE_M6.find((formula) => formula.id === "guarire"), { access: "life", amalgams: ["matter", "forces", "life"], sphereLevels: { life: 2, matter: 1, forces: 3 } });
+assert.deepEqual(pick.spheres, { life: 2, matter: 1 });
+assert.deepEqual(pick.amalgams, ["matter"]);
+assert.deepEqual(pick.scopes, { potency: 3, impact: 1 });
+assert.equal(pick.threshold, 4);
+assert.equal(formulaPick(FORMULE_M6.find((formula) => formula.id === "guarire"), { access: "forces", sphereLevels: { forces: 3 } }), null);
+assert.equal(formulaPick(FORMULE_M6.find((formula) => formula.id === "guarire"), { access: "life", sphereLevels: { forces: 3 } }), null);
+assert.equal(formulaPick(FORMULE_M6.find((formula) => formula.id === "annientare"), { access: "matter", threshold: 1, sphereLevels: { matter: 1 } }).threshold, 11);
+assert.deepEqual(prepareGrimorio({ forces: 3 }, (k) => k)[0].levels[2].entries.find((entry) => entry.id === "forces-3-onda-d-urto").formule, ["Danneggiare"]);
+assert.match(grimorioTemplate, /data-view-panel="sphere"[\s\S]*wod5e-mage-grimorio-formula[\s\S]*data-view-panel="formula"[\s\S]*data-formula="\{\{formula\.id\}\}"[\s\S]*data-role="formulaAccess"[\s\S]*data-role="formulaAmalgam"[\s\S]*data-role="formulaSave"[\s\S]*data-role="formulaRoll"[\s\S]*data-role="formulaPick"/);
 console.log("Formule: test passati.");
 
 // I simboli delle Sfere in cima, le schede dei gradi, la riga aperta in evidenza (7/9).
 assert.deepEqual(prepareGrimorioSpheres({ forces: 3, life: 1 }, (k) => k, new Set(["life"])).map((s) => [s.sphere, s.lit, s.dots]), [["forces", true, "●●●"], ["life", false, "●"]]);
-assert.match(grimorioTemplate, /data-role="grimorioSphere" data-sphere="\{\{s\.sphere\}\}"[\s\S]*data-sphere-group="\{\{group\.sphere\}\}"[\s\S]*data-role="grimorioGrade" data-grade="\{\{grade\.grade\}\}"[\s\S]*data-grade-panel="\{\{grade\.grade\}\}"[\s\S]*data-sphere-row="\{\{row\.sphere\}\}"/);
+assert.match(grimorioTemplate, /data-role="grimorioSphere" data-sphere="\{\{s\.sphere\}\}"[\s\S]*data-sphere-group="\{\{group\.sphere\}\}"/);
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
 assert.match(css, /\.wod5e-mage-grimorio-row\[open\] \{/);
 assert.match(css, /\.wod5e-mage-roll-symbol-sphere > img \{\r?\n  filter: brightness\(0\)/);

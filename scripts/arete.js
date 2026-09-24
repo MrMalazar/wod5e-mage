@@ -584,18 +584,31 @@ function wireGrimorio(dialog, sphereLevels) {
   const button = root?.querySelector("[data-role=grimorioOpen]");
   const goal = root?.querySelector("#wod5e-mage-arete-goal");
   if (!button || !goal) return;
+  const setDots = (kind, id, level, cap = null) => {
+    const row = root.querySelector(`[data-role=dotRow][data-kind=${kind}][data-id="${id}"]`);
+    const input = row?.querySelector("input[type=hidden]");
+    if (!input) return;
+    input.value = String(cap === null ? level : Math.min(level, cap));
+    row._paint?.();
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  };
   button.addEventListener("click", async (event) => {
     event.preventDefault();
     const entry = await openGrimorio(sphereLevels);
     if (!entry) return;
+    // Una matrice (24/9): l'Obiettivo è «In genere», le Sfere scelte si
+    // accendono al loro livello, gli Ambiti vanno ai livelli della soglia base.
+    if (entry.formula) {
+      goal.value = entry.formula.use;
+      const name = root.querySelector("#wod5e-mage-arete-spell-name");
+      if (name && !name.value) name.value = entry.formula.name;
+      for (const sphere of Object.keys(sphereLevels)) setDots("sphere", sphere, entry.spheres[sphere] ?? 0);
+      for (const scope of SCOPES) setDots("scope", scope, entry.scopes[scope] ?? 0);
+      return;
+    }
     goal.value = entry.name;
     for (const [sphere, level] of Object.entries(effectSphereLevels(entry))) {
-      const row = root.querySelector(`[data-role=dotRow][data-kind=sphere][data-id="${sphere}"]`);
-      const input = row?.querySelector("input[type=hidden]");
-      if (!input) continue;
-      input.value = String(Math.min(level, Math.max(Math.trunc(Number(sphereLevels[sphere]) || 0), 0)));
-      row._paint?.();
-      input.dispatchEvent(new Event("change", { bubbles: true }));
+      setDots("sphere", sphere, level, Math.max(Math.trunc(Number(sphereLevels[sphere]) || 0), 0));
     }
   });
 }

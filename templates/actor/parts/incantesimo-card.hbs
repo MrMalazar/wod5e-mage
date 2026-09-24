@@ -20,6 +20,7 @@
         <button type="button" data-action="incantesimoDelete" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Remove'}}" {{#if @root.locked}}disabled{{/if}}><i class="fa-solid fa-trash"></i></button>
     </span>
     <div class="wod5e-mage-incantesimo-grid">
+        {{#if spell.formulaName}}<span><b>{{localize "WOD5E_MAGE.Incantesimi.Formula"}}</b> {{spell.formulaName}}</span>{{/if}}
         {{#if spell.credo}}<span><b>{{localize "WOD5E_MAGE.Focus.Credo"}}</b> {{spell.credo}}</span>{{/if}}
         {{#if spell.practiceForm}}<span><b>{{localize "WOD5E_MAGE.Focus.Type"}}</b> {{spell.practiceForm}}</span>{{/if}}
         {{#if spell.instruments}}<span><b>{{localize "WOD5E_MAGE.Incantesimi.Instrument"}}</b> {{spell.instruments}}</span>{{/if}}

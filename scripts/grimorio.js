@@ -1,5 +1,8 @@
 import { MODULE_ID } from "./constants.js";
 import { EFFETTI, FORMULE } from "./data/effetti.js";
+import { FORMULE_ALIAS, FORMULE_M6 } from "./data/formule.js";
+import { POTERI } from "./data/poteri.js";
+import { SCOPES } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
 
 /**
@@ -115,75 +118,130 @@ export function prepareGrimorio(sphereLevels = {}, localize = (key) => key) {
     .filter((group) => group.levels.length);
 }
 
-/** I nomi delle Formule di un effetto, «Danneggiare · 3». */
-export function formuleLabels(entry) {
-  return (entry.formule ?? [])
-    .map((id) => FORMULE.find((formula) => formula.id === id))
-    .filter(Boolean)
-    .map((formula) => `${formula.name} · ${formula.grade}`);
+/** La matrice di oggi per una Formula di ieri: l'id fuso o cambiato, poi la voce. */
+export function findFormula(id) {
+  const key = FORMULE_ALIAS[id] ?? id;
+  return FORMULE_M6.find((formula) => formula.id === key) ?? null;
 }
 
-const STATUS_ORDER = Object.freeze({ open: 0, short: 1, absent: 2 });
+/** I nomi delle matrici di un effetto: «Danneggiare», «Accelerare e Rallentare» (senza grado dal 24/9). */
+export function formuleLabels(entry) {
+  const names = (entry.formule ?? [])
+    .map((id) => findFormula(id)?.name ?? FORMULE.find((formula) => formula.id === id)?.name ?? "")
+    .filter(Boolean);
+  return names.filter((name, index) => names.indexOf(name) === index);
+}
 
 /**
- * La vista «per Formula» (le Formule del ramo B come verbi universali, 6/9):
- * per grado, ogni Formula con la sua glossa e, Sfera per Sfera, gli effetti
- * che la portano. Si mostra una Formula se almeno una Sfera del personaggio
- * la tocca; le righe dicono se l'effetto è aperto, quanti pallini mancano,
- * o che la Sfera non c'è.
+ * La vista «per Formula» (24/9): le 48 matrici del formato di Blue, in
+ * ordine alfabetico e senza gradi. Ogni matrice porta le Sfere d'Accesso
+ * (accese se il personaggio le ha), le Amalgame, la Descrizione con una riga
+ * per Sfera, il Limite, la soglia base come Ambiti, «In genere» e i poteri
+ * legati. Si apre se almeno una Sfera d'Accesso è del personaggio; senza,
+ * la matrice si legge e basta.
  */
+function sphereRef(sphere, sphereLevels, localize) {
+  return {
+    id: sphere,
+    label: localize(`WOD5E_MAGE.Spheres.${sphere}`),
+    icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere}.png`,
+    owned: level(sphereLevels[sphere]) > 0,
+    level: level(sphereLevels[sphere])
+  };
+}
+
+/** Le righe «Sfera: testo» della Descrizione; la chiave «forces+prime» vale per le Sfere insieme. */
+export function formulaSphereRows(formula, sphereLevels = {}, localize = (key) => key) {
+  return Object.entries(formula.bySphere ?? {}).map(([key, text]) => {
+    const ids = key.split("+").filter((id) => SPHERES.includes(id));
+    return {
+      key,
+      spheres: ids.map((id) => sphereRef(id, sphereLevels, localize)),
+      label: ids.map((id) => localize(`WOD5E_MAGE.Spheres.${id}`)).join(" + "),
+      owned: ids.length > 0 && ids.every((id) => level(sphereLevels[id]) > 0),
+      text
+    };
+  });
+}
+
+/** La soglia base letta: «4 (Durata 1, Impatto 3)», gli Ambiti nell'ordine in cui Blue li scrive, con le etichette nella lingua in uso. */
+export function formulaThresholds(formula, localize = (key) => key) {
+  return (formula.thresholds ?? []).map((threshold) => {
+    const scopes = Object.keys(threshold.scopes ?? {})
+      .filter((scope) => SCOPES.includes(scope) && level(threshold.scopes[scope]) > 0)
+      .map((scope) => ({ id: scope, label: localize(`WOD5E_MAGE.Scopes.${scope}`), level: level(threshold.scopes[scope]) }));
+    return {
+      base: threshold.base,
+      scopes,
+      text: `${threshold.base} (${scopes.map((scope) => `${scope.label} ${scope.level}`).join(", ")})`
+    };
+  });
+}
+
+/** I poteri legati a una matrice, dal catalogo: nome, Sfere, segno del legame. */
+export function formulaPowers(formula) {
+  return (formula.powers ?? [])
+    .map((id) => POTERI.find((power) => power.id === id))
+    .filter(Boolean)
+    .map((power) => ({ id: power.id, name: power.name, link: power.link, proposal: power.link === "proposta", spheres: power.spheres }));
+}
+
+export function prepareMatrice(formula, sphereLevels = {}, localize = (key) => key) {
+  const access = formula.access.map((sphere) => sphereRef(sphere, sphereLevels, localize));
+  const amalgams = formula.amalgams.map((sphere) => sphereRef(sphere, sphereLevels, localize));
+  // L'Amalgama si sceglie fra le Sfere che il personaggio ha: quelle scritte
+  // nella matrice, o, se la matrice non ne scrive, qualunque sua Sfera fuori
+  // dall'Accesso («a fantasia del giocatore»).
+  const amalgamChoices = (formula.amalgams.length ? formula.amalgams : SPHERES.filter((sphere) => !formula.access.includes(sphere)))
+    .filter((sphere) => level(sphereLevels[sphere]) > 0)
+    .map((sphere) => sphereRef(sphere, sphereLevels, localize));
+  const accessOwned = access.filter((sphere) => sphere.owned)
+    // Con una Sfera d'Accesso sola la scelta è già fatta; il nome del gruppo di
+    // radio porta l'id della matrice (i partial non vedono il contesto sopra).
+    .map((sphere, index, all) => ({ ...sphere, formulaId: formula.id, checked: all.length === 1 && index === 0 }));
+  return {
+    id: formula.id,
+    name: formula.name,
+    intro: formula.intro,
+    rows: formulaSphereRows(formula, sphereLevels, localize),
+    coda: formula.coda,
+    limit: formula.limit,
+    use: formula.use,
+    thresholds: formulaThresholds(formula, localize).map((threshold) => ({ ...threshold, formulaId: formula.id })),
+    thresholdText: formula.thresholdText,
+    access,
+    accessOwned,
+    amalgams,
+    amalgamsFree: formula.amalgams.length === 0,
+    amalgamsNote: formula.amalgamsNote ?? "",
+    amalgamChoices,
+    open: access.some((sphere) => sphere.owned),
+    powers: formulaPowers(formula),
+    byBlue: Boolean(formula.byBlue)
+  };
+}
+
 export function prepareGrimorioFormule(sphereLevels = {}, localize = (key) => key) {
-  const anySphere = SPHERES.some((sphere) => level(sphereLevels[sphere]) > 0);
-  if (!anySphere) return [];
-  return [1, 2, 3, 4, 5]
-    .map((grade) => ({
-      grade,
-      dots: "●".repeat(grade),
-      label: `${localize("WOD5E_MAGE.Grimorio.Grade")} ${grade}`,
-      formule: FORMULE
-        .filter((formula) => formula.grade === grade)
-        .map((formula) => {
-          const rows = SPHERES
-            .flatMap((sphere) => EFFETTI
-              .filter((entry) => entry.sphere === sphere && (entry.formule ?? []).includes(formula.id))
-              .map((entry) => {
-                const owned = level(sphereLevels[sphere]);
-                const status = owned <= 0 ? "absent" : owned >= entry.level ? "open" : "short";
-                const short = entry.level - owned;
-                return {
-                  id: entry.id,
-                  name: entry.name,
-                  level: entry.level,
-                  dots: "●".repeat(entry.level),
-                  sphere,
-                  label: localize(`WOD5E_MAGE.Spheres.${sphere}`),
-                  icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere}.png`,
-                  subject: formula.subjects?.[sphere] ?? "",
-                  status,
-                  open: status === "open",
-                  short: status === "short" ? short : 0,
-                  statusText: status === "open"
-                    ? localize("WOD5E_MAGE.Grimorio.OpenRow")
-                    : status === "short"
-                      ? localize(short === 1 ? "WOD5E_MAGE.Grimorio.ShortOne" : "WOD5E_MAGE.Grimorio.ShortMany").replace("{n}", String(short))
-                      : localize("WOD5E_MAGE.Grimorio.Absent")
-                };
-              }))
-            .sort((a, b) => (STATUS_ORDER[a.status] - STATUS_ORDER[b.status]) || (a.short - b.short) || (a.level - b.level) || a.label.localeCompare(b.label));
-          return {
-            id: formula.id,
-            name: formula.name,
-            grade: formula.grade,
-            title: `${formula.name} · ${formula.grade}`,
-            text: formula.text,
-            rows,
-            open: rows.some((row) => row.open),
-            touched: rows.some((row) => row.status !== "absent")
-          };
-        })
-        .filter((formula) => formula.touched)
-    }))
-    .filter((group) => group.formule.length);
+  return [...FORMULE_M6]
+    .sort((a, b) => a.name.localeCompare(b.name, "it"))
+    .map((formula) => prepareMatrice(formula, sphereLevels, localize));
+}
+
+/**
+ * La scelta di una matrice dal Grimorio: la Sfera d'Accesso (una delle
+ * possedute), le Amalgame (zero o più, possedute), gli Ambiti della soglia
+ * base. Torna null se la Sfera d'Accesso non apre la Formula o non è del
+ * personaggio.
+ */
+export function formulaPick(formula, { access, amalgams = [], threshold = 0, sphereLevels = {} } = {}) {
+  if (!formula || !formula.access.includes(access) || level(sphereLevels[access]) <= 0) return null;
+  // Le Amalgame ammesse: quelle scritte nella matrice; se non ne scrive, qualunque Sfera fuori dall'Accesso.
+  const allowed = formula.amalgams?.length ? formula.amalgams : SPHERES.filter((sphere) => !formula.access.includes(sphere));
+  const chosen = (amalgams ?? []).filter((sphere) => allowed.includes(sphere) && sphere !== access && level(sphereLevels[sphere]) > 0);
+  const soglia = formula.thresholds?.[Math.min(Math.max(threshold, 0), (formula.thresholds?.length ?? 1) - 1)] ?? { base: 0, scopes: {} };
+  const spheres = { [access]: level(sphereLevels[access]) };
+  for (const sphere of chosen) spheres[sphere] = level(sphereLevels[sphere]);
+  return { formula, access, amalgams: chosen, spheres, scopes: { ...soglia.scopes }, threshold: soglia.base };
 }
 
 export function findEffetto(id) {
@@ -197,7 +255,6 @@ export function findEffetto(id) {
  */
 // Si apre per Formula (verdetto di Blue, 10/9); poi si ricorda l'ultima vista.
 let lastView = "formula";
-let lastGrade = 1;
 // Le Sfere spente coi simboli in cima (7/9): si ricordano finché il mondo resta aperto.
 const dimmedSpheres = new Set();
 
@@ -214,17 +271,31 @@ export function prepareGrimorioSpheres(sphereLevels = {}, localize = (key) => ke
     }));
 }
 
-export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
+/** Legge dalla riga della matrice la Sfera d'Accesso e le Amalgame spuntate. */
+function readFormulaChoice(row, formula, sphereLevels) {
+  const access = row.querySelector("input[data-role=formulaAccess]:checked")?.value ?? "";
+  const amalgams = [...row.querySelectorAll("input[data-role=formulaAmalgam]:checked")].map((input) => input.value);
+  const threshold = Number(row.querySelector("input[data-role=formulaThreshold]:checked")?.value ?? 0);
+  return formulaPick(formula, { access, amalgams, threshold, sphereLevels });
+}
+
+/**
+ * `onFormula(pick)` e `onFormulaRoll(pick)` servono la pagina del Grimorio:
+ * la matrice scelta si scrive fra gli incantesimi, o si lancia subito. Senza
+ * (dalla finestra del tiro) la scelta della matrice chiude la finestra e
+ * torna `pick` ({ formula, access, amalgams, spheres, scopes }): chi ha
+ * aperto il Grimorio la legge come una scelta.
+ */
+export async function openGrimorio(sphereLevels, { onPick = null, onFormula = null, onFormulaRoll = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
-  const grades = prepareGrimorioFormule(sphereLevels, localize);
-  if (!grades.some((group) => group.grade === lastGrade)) lastGrade = grades[0]?.grade ?? 1;
   const content = await foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/dialogs/grimorio.hbs`,
     {
       groups: prepareGrimorio(sphereLevels, localize),
-      grades: grades.map((group) => ({ ...group, current: group.grade === lastGrade })),
+      formule: prepareGrimorioFormule(sphereLevels, localize),
       spheres: prepareGrimorioSpheres(sphereLevels, localize, dimmedSpheres),
-      view: lastView
+      view: lastView,
+      inSheet: Boolean(onFormula || onFormulaRoll)
     }
   );
   let chosen = null;
@@ -249,18 +320,19 @@ export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
       });
       showView(lastView);
       const search = root.querySelector("[data-role=grimorioSearch]");
-      // Le schede dei gradi (7/9): una alla volta; con la cerca piena si
-      // vedono tutte, così si cerca in tutto il Grimorio.
-      const showGrade = () => {
-        const wanted = search?.value.trim() ?? "";
-        root.querySelectorAll("[data-grade-panel]").forEach((panel) => {
-          panel.hidden = !wanted && Number(panel.dataset.gradePanel) !== lastGrade;
+      // Le matrici (24/9): la Sfera d'Accesso, le Amalgame e i due tasti stanno
+      // dentro ogni riga; i tasti si accendono solo con una Sfera d'Accesso scelta.
+      const armFormulaRows = () => {
+        root.querySelectorAll("[data-formula]").forEach((row) => {
+          const paint = () => {
+            const ready = Boolean(row.querySelector("input[data-role=formulaAccess]:checked"));
+            row.querySelectorAll("[data-role=formulaSave], [data-role=formulaRoll], [data-role=formulaPick]").forEach((button) => { button.disabled = !ready; });
+          };
+          row.querySelectorAll("input[data-role=formulaAccess]").forEach((input) => input.addEventListener("change", paint));
+          paint();
         });
-        root.querySelectorAll("[data-role=grimorioGrade]").forEach((button) => button.classList.toggle("active", Number(button.dataset.grade) === lastGrade));
       };
-      root.querySelectorAll("[data-role=grimorioGrade]").forEach((button) => {
-        button.addEventListener("click", (event) => { event.preventDefault(); lastGrade = Number(button.dataset.grade); showGrade(); });
-      });
+      armFormulaRows();
       // I simboli delle Sfere (7/9): spenta una Sfera, sparisce dalla vista
       // per Sfera e dalle righe della vista per Formula.
       const applySpheres = () => {
@@ -277,15 +349,35 @@ export async function openGrimorio(sphereLevels, { onPick = null } = {}) {
         });
       });
       applySpheres();
-      showGrade();
       search?.addEventListener("input", () => {
         const wanted = search.value.trim().toLowerCase();
         root.querySelectorAll(".wod5e-mage-grimorio-row").forEach((row) => {
           row.hidden = Boolean(wanted) && !row.textContent.toLowerCase().includes(wanted);
         });
-        showGrade();
       });
       root.addEventListener("click", async (event) => {
+        // I tasti della matrice: scrivi nel Grimorio, lancia, o scegli (dal tiro).
+        const formulaButton = event.target.closest?.("[data-role=formulaSave], [data-role=formulaRoll], [data-role=formulaPick]");
+        if (formulaButton) {
+          event.preventDefault();
+          const formulaRow = formulaButton.closest("[data-formula]");
+          const formula = findFormula(formulaRow?.dataset.formula ?? "");
+          const pick = formulaRow && formula ? readFormulaChoice(formulaRow, formula, sphereLevels) : null;
+          if (!pick) return;
+          if (formulaButton.dataset.role === "formulaSave" && onFormula) {
+            await onFormula(pick);
+            formulaButton.classList.add("taken");
+            return;
+          }
+          if (formulaButton.dataset.role === "formulaRoll" && onFormulaRoll) {
+            dialog.close();
+            await onFormulaRoll(pick);
+            return;
+          }
+          chosen = pick;
+          dialog.close();
+          return;
+        }
         const row = event.target.closest?.("[data-effetto]");
         if (!row) return;
         event.preventDefault();

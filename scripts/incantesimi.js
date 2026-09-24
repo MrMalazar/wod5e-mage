@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { FORMULE_M6 } from "./data/formule.js";
 import { normalizeScopeLevels, SCOPES, SCOPE_ICONS } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
 
@@ -57,8 +58,16 @@ export function prepareIncantesimo(id, spell, localize = (key) => key) {
     maintained: Boolean(spell?.maintained),
     spheres,
     scopes,
+    // La matrice da cui nasce (24/9): l'id e il nome, per la scheda e la carta.
+    formula: String(spell?.formula ?? ""),
+    formulaName: formulaNameOf(spell?.formula),
     sort: Number(spell?.sort) || 0
   };
+}
+
+function formulaNameOf(id) {
+  if (!id) return "";
+  return FORMULE_M6.find((formula) => formula.id === id)?.name ?? "";
 }
 
 export function prepareIncantesimi(actor, localize = (key) => key) {
@@ -122,6 +131,27 @@ export function spellFromEffetto(actor, entry, sphereLevels, localize = (key) =>
     practiceForm: String(focus.practiceForm ?? ""),
     instruments,
     effetto: entry.id
+  };
+}
+
+/**
+ * Una matrice scelta nel Grimorio diventa un incantesimo del personaggio
+ * (24/9): il nome della Formula, «In genere» come Obiettivo, la Sfera
+ * d'Accesso e le Amalgame scelte, gli Ambiti ai livelli della soglia base,
+ * Credo, Tipo e Strumenti dalla scheda. Da lì il giocatore lo personalizza
+ * con la matita o lo lancia col dado.
+ */
+export function spellFromFormula(actor, pick, localize = (key) => key) {
+  const base = spellFromEffetto(actor, { name: pick.formula.name, text: pick.formula.use, id: "" }, pick.spheres, localize);
+  return {
+    ...base,
+    goal: pick.formula.use,
+    spheres: { ...pick.spheres },
+    scopes: { ...pick.scopes },
+    effetto: "",
+    formula: pick.formula.id,
+    access: pick.access,
+    amalgams: [...pick.amalgams]
   };
 }
 
@@ -199,14 +229,20 @@ export async function onIncantesimoFromEffetti(event) {
   const { prepareSpheres } = await import("./spheres.js");
   const localize = game.i18n.localize.bind(game.i18n);
   const owned = Object.fromEntries(prepareSpheres(actor).selected.filter((sphere) => sphere.value > 0).map((sphere) => [sphere.id, sphere.value]));
+  const salva = async (spell) => {
+    const stored = actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {};
+    let id = foundry.utils.randomID();
+    while (stored[id]) id = foundry.utils.randomID();
+    await saveSpell(actor, id, { ...spell, sort: Object.keys(stored).length });
+    ui.notifications.info(game.i18n.format("WOD5E_MAGE.Incantesimi.Saved", { name: spell.name }));
+  };
   await openGrimorio(owned, {
-    onPick: async (entry) => {
-      const stored = actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {};
-      let id = foundry.utils.randomID();
-      while (stored[id]) id = foundry.utils.randomID();
-      const spell = spellFromEffetto(actor, entry, effectSphereLevels(entry), localize);
-      await saveSpell(actor, id, { ...spell, sort: Object.keys(stored).length });
-      ui.notifications.info(game.i18n.format("WOD5E_MAGE.Incantesimi.Saved", { name: spell.name }));
+    onPick: async (entry) => salva(spellFromEffetto(actor, entry, effectSphereLevels(entry), localize)),
+    // La matrice (24/9): «Scrivi nel Grimorio» la salva, «Lancia» apre il tiro già riempito.
+    onFormula: async (pick) => salva(spellFromFormula(actor, pick, localize)),
+    onFormulaRoll: async (pick) => {
+      const { launchArete } = await import("./arete.js");
+      return launchArete(actor, { mode: "roll", preset: spellFromFormula(actor, pick, localize) });
     }
   });
 }
