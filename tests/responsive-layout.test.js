@@ -178,8 +178,16 @@ assert.match(abilitaTemplate, /data-action="skillsFlatToggle"[\s\S]*data-action=
 assert.match(abilitaTemplate, /\{\{#if group\.label\}\}<span class="wod5e-mage-riq-occhiello">/);
 // Le Specializzazioni si aprono col tastino, come gli Ambiti (Blue, 25/9: il sorvolo era scomodo): la riga è
 // `con-tendina`, la freccetta è un cassettoToggle con la pastiglia della Specializzazione nel tiro.
-assert.match(abilitaTemplate, /wod5e-mage-riga-abilita\{\{#if skill\.chosen\}\} scelta\{\{\/if\}\}\{\{#if skill\.hasSpecialties\}\} con-tendina\{\{\/if\}\}"[\s\S]*<button type="button" class="wod5e-mage-riga-tastino wod5e-mage-abilita-tendina\{\{#if skill\.specialtyChosen\}\} pieno\{\{\/if\}\}" data-action="cassettoToggle"[\s\S]*wod5e-mage-ambito-tag">\{\{skill\.specialtyChosen\}\}[\s\S]*fa-chevron-down[\s\S]*<div class="wod5e-mage-cassetto" role="group"/);
+// La freccetta sta in testa alla riga, prima del simbolo e del nome (Blue, 25/9 sera).
+assert.match(abilitaTemplate, /wod5e-mage-riga-abilita\{\{#if skill\.chosen\}\} scelta\{\{\/if\}\}\{\{#if skill\.hasSpecialties\}\} con-tendina\{\{\/if\}\}" data-cassetto="abilita-\{\{skill\.id\}\}">\s*\{\{#if skill\.slots\.length\}\}[\s\S]*?<button type="button" class="wod5e-mage-riga-tastino wod5e-mage-abilita-tendina\{\{#if skill\.specialtyChosen\}\} pieno\{\{\/if\}\}" data-action="cassettoToggle"[^>]*><i class="fa-solid fa-chevron-down"[\s\S]*?\{\{\/if\}\}\s*<button type="button" class="wod5e-mage-riga-nome" data-action="tiroSkill"[\s\S]*wod5e-mage-abilita-scelta"[\s\S]*<div class="wod5e-mage-cassetto" role="group"/);
 assert.doesNotMatch(abilitaTemplate, /con-cassetto/);
+// Le tendine delle righe si ricordano per chiave e il render le riapre (Blue, 25/9 sera: coi pallini «si chiudono da sole»).
+for (const [file, key] of [["stat-magick.hbs", 'data-cassetto="sfera-{{sphere.id}}"'], ["stat-magick.hbs", 'data-cassetto="ambito-{{scope.id}}"'], ["strumento-riga.hbs", 'data-cassetto="strumento-{{row.id}}"'], ["stat-abilita.hbs", 'data-cassetto="abilita-{{skill.id}}"']]) {
+  assert.ok(readFileSync(new URL(`../templates/actor/parts/${file}`, import.meta.url), "utf8").includes(key), `${file}: ${key}`);
+}
+assert.match(sheetJs, /const aperte = \(this\._cassettiAperti \?\?= new Set\(\)\);[\s\S]*aperte\[open \? "add" : "delete"\]\(row\.dataset\.cassetto\)/);
+assert.match(sheetJs, /function riapriCassetti\(sheet\)[\s\S]*row\.classList\.add\("aperto"\);\s*flipCassetto\(row\);/);
+assert.match(sheetJs, /riapriPoteri\(this\);\s*riapriCassetti\(this\);/);
 assert.match(sheetJs, /const specialtyChosen = slots\.find\(\(slot\) => slot\.chosen\)\?\.name \?\? ""/);
 // La carta del potere in chat va a capo (Blue, 25/9: «mi esce tagliata»): colonna sola, non la griglia del tiro.
 assert.match(css, /\.wod5e-mage-roll-card\.wod5e-mage-potere-chat \{\s*display: flex;\s*flex-direction: column;/);
@@ -187,7 +195,7 @@ assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes\b|wod5e-mage-persistent-r
 // La pagina Magick (21/9, dal mock): a sinistra le Sfere e le Magick in atto,
 // a destra i poteri conosciuti, in fondo la tendina della tavola degli Ambiti.
 // Le Specialità delle Sfere, il selettore a cerchietti e la colonna Influenza non ci sono più.
-assert.match(css, /\.wod5e-mage-magick-layout\s*\{[^}]*"sinistra poteri"\s*"ambiti ambiti";[^}]*grid-template-columns: 350px minmax\(0, 1fr\);/s);
+assert.match(css, /\.wod5e-mage-magick-layout\s*\{[^}]*"sinistra poteri"\s*"ambiti ambiti";[^}]*grid-template-columns: 440px minmax\(0, 1fr\);/s);
 assert.match(css, /\.wod5e-mage-magick-sinistra\s*\{[^}]*grid-area: sinistra;/s);
 assert.match(css, /\.wod5e-mage-riq-conosciuti\s*\{\s*grid-area: poteri;/);
 assert.match(css, /\.wod5e-mage-riq-ambiti-tavola\s*\{\s*grid-area: ambiti;/);
@@ -196,7 +204,7 @@ assert.doesNotMatch(css, /wod5e-mage-sphere-specialt|wod5e-mage-sphere-selector|
 assert.match(magickTemplate, /wod5e-mage-magick-sinistra[\s\S]*wod5e-mage-riq-sfere[\s\S]*wod5e-mage-ongoing-magick[\s\S]*wod5e-mage-riq-conosciuti[\s\S]*<details class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-ambiti-tavola">[\s\S]*parts\/scope-table\.hbs/);
 assert.doesNotMatch(magickTemplate, /SphereSpecialties|Spheres\.Influence|Spheres\.Selector|wod5e-mage-sphere-choice/);
 // La lista delle Sfere: il sigillo prende la Sfera, i pallini, la casetta, il conto; le altre spente.
-assert.match(magickTemplate, /wod5e-mage-riga wod5e-mage-riga-sfera-pagina\{\{#if sphere\.family\}\} family\{\{\/if\}\}"[\s\S]*wod5e-mage-sfera-prendi" data-action="sphereSelectionChange" data-sphere="\{\{sphere\.id\}\}" data-selected="true"[\s\S]*data-name="flags\.wod5e-mage\.spheres\.\{\{sphere\.id\}\}"[\s\S]*data-action="dotCounterChange"[\s\S]*wod5e-mage-sfera-casa\{\{#if sphere\.family\}\} on\{\{\/if\}\}" data-action="familySphereToggle"[\s\S]*wod5e-mage-sfera-conto\{\{#unless sphere\.conto\}\} vuoto\{\{\/unless\}\}"[\s\S]*Poteri\.AltreSfere[\s\S]*wod5e-mage-riga-sfera-pagina spenta"[\s\S]*data-selected="false"/);
+assert.match(magickTemplate, /wod5e-mage-riga wod5e-mage-riga-sfera-pagina\{\{#if sphere\.family\}\} family\{\{\/if\}\}"[\s\S]*wod5e-mage-sfera-prendi" data-action="sphereSelectionChange" data-sphere="\{\{sphere\.id\}\}" data-selected="true"[\s\S]*data-name="flags\.wod5e-mage\.spheres\.\{\{sphere\.id\}\}"[\s\S]*data-action="sphereDotChange" data-sphere="\{\{sphere\.id\}\}" data-index="\{\{this\}\}"[\s\S]*wod5e-mage-sfera-casa\{\{#if sphere\.family\}\} on\{\{\/if\}\}" data-action="familySphereToggle"[\s\S]*wod5e-mage-sfera-conto\{\{#unless sphere\.conto\}\} vuoto\{\{\/unless\}\}"[\s\S]*Poteri\.AltreSfere[\s\S]*wod5e-mage-riga-sfera-pagina spenta"[\s\S]*data-selected="false"/);
 // I poteri conosciuti (24/9 sera): una lista sola, senza la divisione per Sfere; in testa il conto, il
 // Catalogo completo e Aggiungi (la finestra con le pastiglie delle Sfere); la riga del potere a colonne
 // (sigillo della Sfera, pallino, nome, le pastiglie del tipo, Amalgama, costo, la freccia che è un tasto),

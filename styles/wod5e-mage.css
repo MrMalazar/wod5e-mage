@@ -7935,26 +7935,28 @@
   box-shadow: none;
 }
 
-/* La freccetta delle Specializzazioni in fondo alla riga dell'Abilità (Blue,
-   25/9: come per gli Ambiti, un clic e si sceglie); con una Specializzazione
-   nel tiro, la pastiglia col nome accanto alla freccia. */
+/* La freccetta delle Specializzazioni in testa alla riga dell'Abilità, prima
+   del simbolo e del nome (Blue, 25/9: come per gli Ambiti, un clic e si
+   sceglie); con una Specializzazione nel tiro, la freccia si accende e la
+   pastiglia col nome sta dopo i pallini. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita > .wod5e-mage-abilita-tendina {
-  flex: 0 0 auto;
-  gap: 4px;
-  margin-left: 2px;
-  padding: 0 4px;
-  width: auto;
+  flex: 0 0 18px;
+  height: 18px;
+  width: 18px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita > .wod5e-mage-abilita-tendina > .wod5e-mage-ambito-tag {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita > .wod5e-mage-abilita-tendina.pieno {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro);
+  color: var(--mage-su-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita > .wod5e-mage-abilita-scelta {
+  flex: 0 1 auto;
   max-width: 90px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita > .wod5e-mage-abilita-tendina.pieno {
-  border-color: var(--mage-oro);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-tastino > i {
@@ -10152,7 +10154,8 @@
   grid-template-areas:
     "sinistra poteri"
     "ambiti ambiti";
-  grid-template-columns: 350px minmax(0, 1fr);
+  /* 440 (Blue, 25/9: «la tab Magick in atto è troppo piccola»): prima 350. */
+  grid-template-columns: 440px minmax(0, 1fr);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-layout > * {
@@ -10293,7 +10296,7 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-nome,
-.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-effetto {
+.wod5e-mage.wod5e.actor.sheet .window-content textarea.wod5e-mage-atto-effetto {
   background: transparent;
   border: 0;
   border-bottom: 1px solid transparent;
@@ -10312,14 +10315,22 @@
   font-weight: 600;
 }
 
-.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-effetto {
+/* L'effetto su più righe (25/9): due righe di partenza, cresce col testo. */
+.wod5e-mage.wod5e.actor.sheet .window-content textarea.wod5e-mage-atto-effetto {
   color: var(--mage-tenue);
+  field-sizing: content;
+  font-family: inherit;
   font-size: 0.8rem;
+  height: auto;
+  line-height: 1.35;
   margin-left: 2px;
+  min-height: 2.7em;
+  resize: vertical;
+  width: 100%;
 }
 
 .wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-nome:focus,
-.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-effetto:focus {
+.wod5e-mage.wod5e.actor.sheet .window-content textarea.wod5e-mage-atto-effetto:focus {
   border-bottom-color: var(--mage-oro);
   box-shadow: none;
   outline: none;
@@ -12645,6 +12656,111 @@
   width: 14px;
 }
 
+/* I Domini (25/9): l'accesso, il sigillo, il nome, il livello promemoria, il più; sotto, i poteri presi. */
+.wod5e-mage-guidata-dominio {
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  padding: 6px 8px;
+}
+
+.wod5e-mage-guidata-dominio.scelta {
+  background: var(--mage-scelta-tenue);
+  border-color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage-guidata-dominio.vuoto {
+  border-color: #e2655a;
+}
+
+.wod5e-mage-guidata-dominio-testa {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  min-height: 26px;
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-accesso {
+  background: transparent;
+  border: 0;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  flex: 0 0 22px;
+  font-size: 1.05rem;
+  height: 22px;
+  line-height: 1;
+  padding: 0;
+  width: 22px;
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-accesso.acceso {
+  color: #7fd18a;
+}
+
+.wod5e-mage-guidata-dominio-livello {
+  color: var(--mage-tenue);
+  font-size: 0.8rem;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.wod5e-mage-guidata-dominio-livello > b {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage-guidata-dominio-poteri {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 0 30px;
+}
+
+.wod5e-mage-guidata-potere {
+  align-items: center;
+  background: var(--mage-cassetto-fondo);
+  border: 1px solid var(--mage-viola-chiaro);
+  border-radius: 999px;
+  color: var(--mage-testo);
+  display: inline-flex;
+  font-size: 0.85rem;
+  gap: 6px;
+  min-height: 26px;
+  padding: 2px 6px 2px 10px;
+}
+
+.wod5e-mage-guidata-potere > small {
+  color: var(--mage-oro);
+  font-weight: 700;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-potere > button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  display: inline-flex;
+  height: 18px;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  width: 18px;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-potere > button:hover {
+  color: #e2655a;
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-potere.vuoto {
+  border-color: var(--mage-oro-scuro);
+  border-style: dashed;
+  color: var(--mage-oro);
+  cursor: pointer;
+  font-family: inherit;
+  padding: 2px 12px;
+}
+
 .wod5e-mage-guidata-conto-riga {
   align-items: center;
   display: flex;
@@ -13673,12 +13789,15 @@
   border-color: var(--mage-oro, #d9a827);
 }
 
-.wod5e-mage-catalogo-sfera.piena:not(.attiva) {
-  opacity: 0.6;
+/* Il lucchetto dei prerequisiti (25/9): accanto al nome, e la riga «Serve» in testa al testo. */
+.wod5e-mage-catalogo-lucchetto {
+  color: var(--mage-tenue, #b8ad93);
+  font-size: 0.7rem;
+  margin-left: 4px;
 }
 
-.wod5e-mage-catalogo-avviso.pieno {
-  color: var(--mage-oro, #d9a827);
+.wod5e-mage-catalogo-serve > b {
+  color: var(--mage-rosso-chiaro, #e2a79e);
 }
 
 .wod5e-mage-catalogo-spunta {

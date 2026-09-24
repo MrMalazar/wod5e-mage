@@ -781,9 +781,8 @@
       "Uno": "power",
       "Tanti": "powers",
       "Aggiungi": "Add",
-      "AggiungiHint": "Opens the window of the powers you can take now: search, each power's text, Add",
+      "AggiungiHint": "Opens the Sphere's powers by grade: the search, each power's text, Add",
       "CatalogoVuoto": "The power catalogue is not in the module yet: write the power by hand.",
-      "Chiuso": "needs dot {dot}",
       "Conosciuto": "Already known",
       "ScriviMano": "Write a power by hand",
       "Vuoto": "No power yet: Add puts one in.",
@@ -838,19 +837,23 @@
       "CatalogoTitolo": "Add a power",
       "CatalogoCerca": "Search a power or a matrix",
       "CatalogoConto": "{total} powers, you know {known}",
-      "CatalogoChiusi": "{n} need more dots than you have in the Sphere ({rating}): read them in the full catalogue.",
+      "CatalogoChiusi": "{n} have prerequisites still missing: they show a lock and say what is needed.",
       "CatalogoDiSfera": "Of {sphere}",
       "CatalogoQualsiasi": "Of any Sphere",
       "CatalogoVuotoSfera": "No power opens from this Sphere alone.",
       "CatalogoCompletoTitolo": "Full power catalogue",
       "CatalogoCompleto": "Full catalogue",
       "CatalogoCompletoHint": "Every power, Sphere by Sphere, to read: to take one, use Add",
-      "CatalogoQuota": "powers {known}/{rating}: one per dot",
-      "CatalogoPieno": "{sphere}: you have as many powers as dots ({rating}). To take another, add a dot or remove a power.",
-      "CatalogoPosti": "{sphere}: powers {known}/{rating} (one per dot), you can still take {n}.",
-      "QuotaPiena": "{sphere}: you already have as many powers as dots ({rating}).",
       "Mostra": "Show",
-      "MostraHint": "Posts the power's card to chat (it is passive: it triggers by itself)"
+      "MostraHint": "Posts the power's card to chat (it is passive: it triggers by itself)",
+      "CatalogoConosciuti": "{known} powers known",
+      "Grado": "Grade: the power's potency",
+      "Prerequisito": {
+        "Label": "Needs",
+        "numero": "{n} {sphere} powers",
+        "poteri": "requires {names}"
+      },
+      "PrerequisitiMancano": "This power's prerequisites are missing: see its row in the Add window."
     },
     "Tratti": {
       "Vantaggi": "Advantages",
@@ -1086,7 +1089,11 @@
       "Backgrounds": "Background dots",
       "Merits": "Merit dots",
       "Flaws": "Flaw dots",
-      "Spheres": "Sphere dots",
+      "Domini": "Open Domains",
+      "DominiBreve": "Domains",
+      "Poteri": "Powers taken",
+      "PoteriBreve": "Powers",
+      "PoteriHint": "One power per open Domain, plus those from the grade and the Challenge.",
       "Concept": "Concept filled",
       "Anchors": "At least one Anchor",
       "Convictions": "At least one Conviction",
@@ -1753,7 +1760,7 @@
         "bussola": "On the sheet: the Compass, on the Character page",
         "tipo": "On the sheet: Magick Type {tipo}",
         "concetto": "On the sheet: the Concept, in Identity",
-        "sfere": "On the sheet: the Sphere dots, live",
+        "sfere": "On the sheet: the known Spheres and the powers, on the Magick page",
         "strumenti": "On the sheet: the Instruments, on the Creed page",
         "arete": "On the sheet: Arete {arete}",
         "attributi": "On the sheet: the Attribute dots, live",
@@ -1799,11 +1806,11 @@
           "PercheDue": "It takes a real person, with an anonymous job and a tension inside, not an archetype. The Concept Challenge is twenty-one questions in three groups of seven: optional, and the game pays you back in proportion to how deep you go."
         },
         "sfere": {
-          "Label": "Spheres",
-          "Domanda": "How far do you reach, in each of the nine domains?",
-          "Sotto": "six dots · cap Arete + 2",
-          "Perche": "The nine domains of Magick, and the rating says how far you reach in each. They are the only thing on the sheet that says what your mage can really do.",
-          "PercheDue": "You have six dots, to spend in one of two shapes: 3-2-1 (one that leads, one that supports, one that sprouts) or 3-3 (two roads beaten deep). The family and path Spheres already have their first dot. Each Sphere's cap at creation is Arete + 2: read the two or three you care about in the Magick chapter before marking."
+          "Label": "Domains",
+          "Domanda": "Which Domains do you have access to, and which power do you take in each?",
+          "Sotto": "one power per Domain · the level is only a reminder",
+          "Perche": "The nine Spheres are the Domains of Magick. Having access to a Domain means being able to do Magick on it: no Sphere level is needed. The level stays on the Magick page only to remember how far the mage has come.",
+          "PercheDue": "At creation you open access to the character's Domains (the family Sphere and the path Sphere are already open) and take one power in each. Powers are bought along the hierarchy: each power has a grade, which says how much it weighs, but what opens it are the prerequisites, so many known powers or specific powers. The character's grade and the Challenge give extra powers."
         },
         "strumenti": {
           "Label": "Instruments",
@@ -1923,14 +1930,18 @@
         "DaPrendere": "with {n}"
       },
       "Sfere": {
-        "Pallini": "Sphere dots",
-        "Tetto": "Cap per Sphere at creation",
-        "TettoHint": "Arete + 2: no Sphere passes {cap}",
+        "Domini": "Open Domains",
+        "Poteri": "Powers",
+        "PoteriHint": "One power per open Domain, plus those from the grade and the Challenge.",
+        "Extra": "of which {n} extra from the grade and the Challenge",
+        "AccessoDai": "Open access to this Domain",
+        "AccessoTogli": "Remove access to this Domain",
+        "Scegli": "Choose the power",
+        "Livello": "Level",
+        "LivelloHint": "The Sphere level is only a reminder: it is marked on the Magick page.",
         "Famiglia": "Family Sphere",
         "FamigliaHint": "Family Spheres (Family, path, Creed) cost less with Experience.",
-        "TettoAvviso": "At creation a Sphere does not pass Arete + 2 ({cap}).",
-        "Sfida": "from the Challenge",
-        "Chiusa": "closed: it opens with the first dot"
+        "Sfida": "from the Challenge"
       },
       "Strumenti": {
         "Scelti": "Instruments chosen",

@@ -1,0 +1,10 @@
+{
+  "generated": "2026-09-25",
+  "leggimi": [
+    "I prerequisiti d'acquisto dei poteri (Blue, 25/9: «i poteri sono acquistabili a principio dalla gerarchia; ogni potere ha un grado per indicare la potenza, ma dipende se ha prerequisiti di poteri conosciuti per essere comprato, se ha prerequisiti di numero o richiede altri poteri specifici»).",
+    "Una voce per potere, con l'id del catalogo: `numero` = quanti poteri della stessa Sfera bisogna conoscere già; `poteri` = gli id dei poteri specifici che bisogna conoscere. Tutti e due, uno solo, o niente.",
+    "Il grado (`dot` nel catalogo) resta la misura della potenza e non chiude niente da solo. Un potere senza voce qui si può prendere subito.",
+    "Le voci le decide Blue: finché non ci sono, la finestra Aggiungi mostra tutti i poteri della Sfera aperti."
+  ],
+  "prerequisiti": {}
+}

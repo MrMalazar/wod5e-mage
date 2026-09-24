@@ -781,9 +781,8 @@
       "Uno": "potere",
       "Tanti": "poteri",
       "Aggiungi": "Aggiungi",
-      "AggiungiHint": "Apre la finestra dei poteri che puoi prendere adesso: la cerca, il testo di ogni potere, Aggiungi",
+      "AggiungiHint": "Apre la finestra dei poteri della Sfera, in ordine di grado: la cerca, il testo di ogni potere, Aggiungi",
       "CatalogoVuoto": "Il catalogo dei poteri non è ancora nel modulo: scrivi il potere a mano.",
-      "Chiuso": "serve il pallino {dot}",
       "Conosciuto": "Lo conosci già",
       "ScriviMano": "Scrivi un potere a mano",
       "Vuoto": "Nessun potere ancora: Aggiungi ne mette uno.",
@@ -838,19 +837,23 @@
       "CatalogoTitolo": "Aggiungi un potere",
       "CatalogoCerca": "Cerca un potere o una matrice",
       "CatalogoConto": "{total} poteri, ne conosci {known}",
-      "CatalogoChiusi": "{n} chiedono più pallini di quelli che hai nella Sfera ({rating}): li leggi nel Catalogo completo.",
+      "CatalogoChiusi": "{n} hanno prerequisiti che ancora mancano: stanno col lucchetto, e dicono cosa serve.",
       "CatalogoDiSfera": "Di {sphere}",
       "CatalogoQualsiasi": "Di qualsiasi Sfera",
       "CatalogoVuotoSfera": "Nessun potere si apre da questa Sfera sola.",
       "CatalogoCompletoTitolo": "Catalogo completo dei poteri",
       "CatalogoCompleto": "Catalogo completo",
       "CatalogoCompletoHint": "Tutti i poteri, Sfera per Sfera, da leggere: per aggiungerne uno, Aggiungi",
-      "CatalogoQuota": "poteri {known}/{rating}: uno per pallino",
-      "CatalogoPieno": "{sphere}: hai tanti poteri quanti i pallini ({rating}). Per prenderne un altro serve un pallino in più, o togline uno.",
-      "CatalogoPosti": "{sphere}: poteri {known}/{rating} (uno per pallino), ne puoi prendere ancora {n}.",
-      "QuotaPiena": "{sphere}: hai già tanti poteri quanti i pallini ({rating}).",
       "Mostra": "Mostra",
-      "MostraHint": "Manda in chat la carta del potere (è passivo: scatta da solo)"
+      "MostraHint": "Manda in chat la carta del potere (è passivo: scatta da solo)",
+      "CatalogoConosciuti": "{known} poteri conosciuti",
+      "Grado": "Grado: la potenza del potere",
+      "Prerequisito": {
+        "Label": "Serve",
+        "numero": "{n} poteri di {sphere}",
+        "poteri": "richiede {names}"
+      },
+      "PrerequisitiMancano": "Mancano i prerequisiti di questo potere: guarda la riga nella finestra Aggiungi."
     },
     "Tratti": {
       "Vantaggi": "Vantaggi",
@@ -1086,7 +1089,11 @@
       "Backgrounds": "Pallini Background",
       "Merits": "Pallini Vantaggi",
       "Flaws": "Pallini Difetti",
-      "Spheres": "Pallini Sfere",
+      "Domini": "Domini aperti",
+      "DominiBreve": "Domini",
+      "Poteri": "Poteri presi",
+      "PoteriBreve": "Poteri",
+      "PoteriHint": "Un potere per Dominio aperto, più quelli del grado e della Sfida.",
       "Concept": "Concetto compilato",
       "Anchors": "Almeno un'Ancora",
       "Convictions": "Almeno una Convinzione",
@@ -1753,7 +1760,7 @@
         "bussola": "Sulla scheda: la Bussola, nella pagina Personaggio",
         "tipo": "Sulla scheda: Tipo di Magick {tipo}",
         "concetto": "Sulla scheda: il Concetto, in Identità",
-        "sfere": "Sulla scheda: i pallini delle Sfere, in tempo reale",
+        "sfere": "Sulla scheda: le Sfere conosciute e i poteri, nella pagina Magick",
         "strumenti": "Sulla scheda: gli Strumenti, nella pagina Credo",
         "arete": "Sulla scheda: Areté {arete}",
         "attributi": "Sulla scheda: i pallini degli Attributi, in tempo reale",
@@ -1799,11 +1806,11 @@
           "PercheDue": "Serve una persona vera, con un mestiere anonimo e una tensione dentro, non un archetipo. La Sfida del Concetto sono ventuno domande in tre gruppi da sette: è facoltativa, e il gioco te la paga in proporzione a quanto scendi."
         },
         "sfere": {
-          "Label": "Sfere",
-          "Domanda": "Fin dove arrivi, in ciascuno dei nove domini?",
-          "Sotto": "sei pallini · tetto Areté + 2",
-          "Perche": "I nove domini della Magick, e il punteggio dice fin dove arrivi in ciascuno. Sono l'unica cosa sulla scheda che dice cosa il tuo mago sa fare davvero.",
-          "PercheDue": "Hai sei pallini, da spendere in una di due forme: 3-2-1 (una guida, una che sostiene, una che germoglia) o 3-3 (due strade battute a fondo). Le Sfere di famiglia e della via hanno già il primo pallino. Il tetto di ogni Sfera alla creazione è Areté + 2: leggi le due o tre che ti interessano nel capitolo della Magick prima di segnare."
+          "Label": "Domini",
+          "Domanda": "A quali Domini hai accesso, e quale potere prendi in ciascuno?",
+          "Sotto": "un potere per Dominio · il livello è solo un promemoria",
+          "Perche": "Le nove Sfere sono i Domini della Magick. Avere accesso a un Dominio vuol dire poter fare Magick su quello: non serve un livello di Sfera. Il livello resta sulla pagina Magick solo per ricordare dov'è arrivato il mago.",
+          "PercheDue": "Alla creazione si apre l'accesso ai Domini del personaggio (la Sfera di famiglia e quella della via sono già aperte) e in ciascuno si prende un potere. I poteri si comprano seguendo la gerarchia: ogni potere ha un grado, che dice quanto pesa, ma quello che lo apre sono i prerequisiti, tanti poteri conosciuti o poteri precisi. Il grado del personaggio e la Sfida danno poteri in più."
         },
         "strumenti": {
           "Label": "Strumenti",
@@ -1923,14 +1930,18 @@
         "DaPrendere": "con {n}"
       },
       "Sfere": {
-        "Pallini": "Pallini delle Sfere",
-        "Tetto": "Tetto per Sfera alla creazione",
-        "TettoHint": "Areté + 2: nessuna Sfera passa il {cap}",
+        "Domini": "Domini aperti",
+        "Poteri": "Poteri",
+        "PoteriHint": "Un potere per Dominio aperto, più quelli del grado e della Sfida.",
+        "Extra": "di cui {n} in più dal grado e dalla Sfida",
+        "AccessoDai": "Apri l'accesso a questo Dominio",
+        "AccessoTogli": "Togli l'accesso a questo Dominio",
+        "Scegli": "Scegli il potere",
+        "Livello": "Livello",
+        "LivelloHint": "Il livello della Sfera è solo un promemoria: si segna sulla pagina Magick.",
         "Famiglia": "Sfera di famiglia",
         "FamigliaHint": "Le Sfere di famiglia (Famiglia, via, Credo) costano meno con l'Esperienza.",
-        "TettoAvviso": "Alla creazione una Sfera non passa Areté + 2 ({cap}).",
-        "Sfida": "dalla Sfida",
-        "Chiusa": "chiusa: si apre col primo pallino"
+        "Sfida": "dalla Sfida"
       },
       "Strumenti": {
         "Scelti": "Strumenti scelti",

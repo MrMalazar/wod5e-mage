@@ -53,7 +53,9 @@ export function prepareMemo(summary, { on = false } = {}) {
   const abilita = conto(counts.skills);
   const vantaggi = conto(counts.merits);
   const difetti = conto(counts.flaws);
-  const sfere = conto(counts.spheres);
+  // I Domini e i poteri (25/9): al posto dei pallini delle Sfere.
+  const domini = conto(counts.domini);
+  const poteri = conto(counts.poteri);
   const tetto = checks.skillCap ? { ok: Boolean(checks.skillCap.ok), target: checks.skillCap.target } : null;
   const arete = checks.arete ? { ok: Boolean(checks.arete.ok), target: checks.arete.target } : null;
   const concetto = checks.concept ? Boolean(checks.concept.ok) : null;
@@ -71,11 +73,12 @@ export function prepareMemo(summary, { on = false } = {}) {
       tetto,
       state: statoInsieme([abilita?.state, tetto ? statoSpunta(tetto.ok) : ""])
     },
-    // La Magick: l'Areté del grado e i pallini delle Sfere.
+    // La Magick: l'Areté del grado, i Domini a cui si ha accesso, i poteri.
     magick: {
       arete,
-      sfere,
-      state: statoInsieme([sfere?.state, arete ? statoSpunta(arete.ok) : ""])
+      domini,
+      poteri,
+      state: statoInsieme([domini?.state, poteri?.state, arete ? statoSpunta(arete.ok) : ""])
     },
     // I Tratti: Background e Pregi insieme, e i Difetti.
     tratti: {

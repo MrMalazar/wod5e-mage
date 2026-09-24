@@ -27,6 +27,16 @@ function level(value) {
 }
 
 /**
+ * L'accesso a un Dominio (Blue, 25/9: «quando hai accesso a un dominio puoi
+ * fare magick su quel dominio, non serve avere un livello di sfera»): una
+ * Sfera è del personaggio se sta fra le sue, anche a livello 0; il livello
+ * resta un promemoria. Le tavole vecchie degli effetti restano a livelli.
+ */
+function accessed(sphereLevels, sphere) {
+  return Boolean(sphereLevels) && Object.hasOwn(sphereLevels, sphere) && sphereLevels[sphere] !== null && sphereLevels[sphere] !== undefined && sphereLevels[sphere] !== false;
+}
+
+/**
  * Un effetto si apre se la Sfera che lo porta basta. Le compagne «dirette»
  * (regola del ponte, 6/9) non chiudono la porta: senza, l'effetto riesce di
  * lato e sale di un grado. Le tavole vecchie (senza compagne) tengono ancora
@@ -145,7 +155,7 @@ function sphereRef(sphere, sphereLevels, localize) {
     id: sphere,
     label: localize(`WOD5E_MAGE.Spheres.${sphere}`),
     icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere}.png`,
-    owned: level(sphereLevels[sphere]) > 0,
+    owned: accessed(sphereLevels, sphere),
     level: level(sphereLevels[sphere])
   };
 }
@@ -158,7 +168,7 @@ export function formulaSphereRows(formula, sphereLevels = {}, localize = (key) =
       key,
       spheres: ids.map((id) => sphereRef(id, sphereLevels, localize)),
       label: ids.map((id) => localize(`WOD5E_MAGE.Spheres.${id}`)).join(" + "),
-      owned: ids.length > 0 && ids.every((id) => level(sphereLevels[id]) > 0),
+      owned: ids.length > 0 && ids.every((id) => accessed(sphereLevels, id)),
       text
     };
   });
@@ -193,7 +203,7 @@ export function prepareMatrice(formula, sphereLevels = {}, localize = (key) => k
   // nella matrice, o, se la matrice non ne scrive, qualunque sua Sfera fuori
   // dall'Accesso («a fantasia del giocatore»).
   const amalgamChoices = (formula.amalgams.length ? formula.amalgams : SPHERES.filter((sphere) => !formula.access.includes(sphere)))
-    .filter((sphere) => level(sphereLevels[sphere]) > 0)
+    .filter((sphere) => accessed(sphereLevels, sphere))
     .map((sphere) => sphereRef(sphere, sphereLevels, localize));
   const accessOwned = access.filter((sphere) => sphere.owned)
     // Con una Sfera d'Accesso sola la scelta è già fatta; il nome del gruppo di
@@ -234,10 +244,10 @@ export function prepareGrimorioFormule(sphereLevels = {}, localize = (key) => ke
  * personaggio.
  */
 export function formulaPick(formula, { access, amalgams = [], threshold = 0, sphereLevels = {} } = {}) {
-  if (!formula || !formula.access.includes(access) || level(sphereLevels[access]) <= 0) return null;
+  if (!formula || !formula.access.includes(access) || !accessed(sphereLevels, access)) return null;
   // Le Amalgame ammesse: quelle scritte nella matrice; se non ne scrive, qualunque Sfera fuori dall'Accesso.
   const allowed = formula.amalgams?.length ? formula.amalgams : SPHERES.filter((sphere) => !formula.access.includes(sphere));
-  const chosen = (amalgams ?? []).filter((sphere) => allowed.includes(sphere) && sphere !== access && level(sphereLevels[sphere]) > 0);
+  const chosen = (amalgams ?? []).filter((sphere) => allowed.includes(sphere) && sphere !== access && accessed(sphereLevels, sphere));
   const soglia = formula.thresholds?.[Math.min(Math.max(threshold, 0), (formula.thresholds?.length ?? 1) - 1)] ?? { base: 0, scopes: {} };
   const spheres = { [access]: level(sphereLevels[access]) };
   for (const sphere of chosen) spheres[sphere] = level(sphereLevels[sphere]);

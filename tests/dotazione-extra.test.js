@@ -189,6 +189,9 @@ const summaryActor = {
   ],
   getFlag: (_m, key) => {
     if (key === "spheres") return { forces: 3, time: 1 };
+    // Due Domini aperti (Forze e Tempo) e un potere solo: ne serve uno per Dominio.
+    if (key === "selectedSpheres") return { forces: true, time: true };
+    if (key === "poteri") return { p1: { sphere: "forces", catalogId: "faro", name: "Faro" } };
     if (key === "ancore") return { a: { name: "", description: "" } };
     if (key === "convinzioni") return { c: { group: "lealta", text: "Mai vendere un amico" } };
     // Forze e Tempo hanno pallini, ma solo Forze ha lo Strumento.
@@ -199,25 +202,26 @@ const summaryActor = {
 const summary = prepareCreationSummary(summaryActor);
 const byId = Object.fromEntries(summary.counts.map((count) => [count.id, count.value]));
 // melee è un'abilità assorbita: i suoi pallini non contano. I Vantaggi contano Background e Pregi insieme (7/9).
-assert.deepEqual(byId, { attributes: 5, skills: 5, backgrounds: 3, merits: 6, flaws: 1, spheres: 4 });
-// I traguardi del Neofita: 22, 19 (V6 più uno, tetto 3), 7, 2, 6; rosso sotto, giallo sopra, verde pari (7/9, 11/9).
+assert.deepEqual(byId, { attributes: 5, skills: 5, backgrounds: 3, merits: 6, flaws: 1, domini: 2, poteri: 1 });
+// I traguardi del Neofita: 22, 19 (V6 più uno, tetto 3), 7, 2; i Domini senza traguardo (25/9) e i poteri
+// uno per Dominio aperto; rosso sotto, giallo sopra, verde pari (7/9, 11/9).
 const byTarget = Object.fromEntries(summary.counts.map((count) => [count.id, [count.target, count.state]]));
-assert.deepEqual(byTarget, { attributes: [22, "under"], skills: [19, "under"], backgrounds: [null, ""], merits: [7, "under"], flaws: [2, "under"], spheres: [6, "under"] });
+assert.deepEqual(byTarget, { attributes: [22, "under"], skills: [19, "under"], backgrounds: [null, ""], merits: [7, "under"], flaws: [2, "under"], domini: [null, ""], poteri: [2, "under"] });
 assert.deepEqual(summary.grades.map((g) => g.id), ["neofita", "risvegliato", "discepolo", "anziano", "maestro"]);
 assert.equal(summary.grades[0].selected, true);
 assert.equal(summary.profiles, undefined);
 const { creationTargets, compareCount, sfidaBonuses, sfidaSummary } = await import("../scripts/riepilogo.js");
-// I premi della Sfida si sommano (LIBRO 05_015; 23/9): un gruppo +1 Abilità, due +2 Vantaggi, tre +1 Sfera.
-// Il terzo premio è un potere in più (Blue, 23/9), non un pallino di Sfera: le Sfere restano al grado.
-assert.deepEqual(creationTargets("maestro", 3), { grado: "maestro", arete: 4, attributes: 24, skills: 27, skillCap: 3, merits: 16, flaws: 6, spheres: 10, poteri: 1 });
-assert.deepEqual(creationTargets("risvegliato", 2), { grado: "risvegliato", arete: 2, attributes: 22, skills: 22, skillCap: 3, merits: 9, flaws: 3, spheres: 7, poteri: 0 });
-assert.deepEqual(creationTargets("neofita", 1), { grado: "neofita", arete: 1, attributes: 22, skills: 20, skillCap: 3, merits: 7, flaws: 2, spheres: 6, poteri: 0 });
-assert.deepEqual(creationTargets("neofita", 0), { grado: "neofita", arete: 1, attributes: 22, skills: 19, skillCap: 3, merits: 7, flaws: 2, spheres: 6, poteri: 0 });
-assert.deepEqual([sfidaBonuses(0), sfidaBonuses(1), sfidaBonuses(2), sfidaBonuses(3)], [{ skills: 0, merits: 0, spheres: 0, poteri: 0 }, { skills: 1, merits: 0, spheres: 0, poteri: 0 }, { skills: 1, merits: 2, spheres: 0, poteri: 0 }, { skills: 1, merits: 2, spheres: 0, poteri: 1 }]);
+// I premi della Sfida si sommano (LIBRO 05_015; 23/9): un gruppo +1 Abilità, due +2 Vantaggi, tre +1 potere.
+// Niente pallini di Sfera (25/9): i pallini del grado sono poteri in più, oltre l'uno per Dominio.
+assert.deepEqual(creationTargets("maestro", 3), { grado: "maestro", arete: 4, attributes: 24, skills: 27, skillCap: 3, merits: 16, flaws: 6, poteri: 5 });
+assert.deepEqual(creationTargets("risvegliato", 2), { grado: "risvegliato", arete: 2, attributes: 22, skills: 22, skillCap: 3, merits: 9, flaws: 3, poteri: 1 });
+assert.deepEqual(creationTargets("neofita", 1), { grado: "neofita", arete: 1, attributes: 22, skills: 20, skillCap: 3, merits: 7, flaws: 2, poteri: 0 });
+assert.deepEqual(creationTargets("neofita", 0), { grado: "neofita", arete: 1, attributes: 22, skills: 19, skillCap: 3, merits: 7, flaws: 2, poteri: 0 });
+assert.deepEqual([sfidaBonuses(0), sfidaBonuses(1), sfidaBonuses(2), sfidaBonuses(3)], [{ skills: 0, merits: 0, poteri: 0 }, { skills: 1, merits: 0, poteri: 0 }, { skills: 1, merits: 2, poteri: 0 }, { skills: 1, merits: 2, poteri: 1 }]);
 assert.deepEqual(sfidaSummary(2).prizes.map((p) => [p.count, p.bonus, p.earned]), [["skills", 1, true], ["merits", 2, true], ["poteri", 1, false]]);
 assert.deepEqual([sfidaSummary(2).done, sfidaSummary(2).total, sfidaSummary(2).complete, sfidaSummary(3).complete], [2, 3, false, true]);
 assert.deepEqual(summary.sfida.done, 0);
-assert.deepEqual(summary.counts.map((count) => count.sfida), [0, 0, 0, 0, 0, 0]);
+assert.deepEqual(summary.counts.map((count) => count.sfida), [0, 0, 0, 0, 0, 0, 0]);
 assert.deepEqual([compareCount(22, 22), compareCount(20, 22), compareCount(25, 22)], ["exact", "under", "over"]);
 assert.equal(prepareCreationSummary(summaryActor, 1).checks.find((check) => check.id === "arete").ok, true);
 assert.equal(prepareCreationSummary(summaryActor, 2).checks.find((check) => check.id === "arete").ok, false);

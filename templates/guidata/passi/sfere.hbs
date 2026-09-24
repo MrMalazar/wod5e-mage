@@ -1,22 +1,32 @@
-{{!-- Passo 6 · le nove Sfere coi pallini; il tetto Areté + 2; il conto del memo. --}}
+{{!-- Passo 6 · i Domini (25/9): a quali si ha accesso, e un potere per ciascuno; il livello della Sfera resta sulla pagina Magick come promemoria. --}}
 <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
     <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
     <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
     <div class="wod5e-mage-guidata-conto-riga">
-        <span class="wod5e-mage-guidata-conto {{corpo.conto.state}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Pallini"}} <b>{{corpo.conto.text}}</b></span>
-        <span class="wod5e-mage-guidata-conto" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.TettoHint' cap=corpo.cap}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Tetto"}} <b>{{corpo.cap}}</b></span>
+        <span class="wod5e-mage-guidata-conto {{corpo.conto.domini.state}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Domini"}} <b>{{corpo.conto.domini.text}}</b></span>
+        <span class="wod5e-mage-guidata-conto {{corpo.conto.poteri.state}}" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.PoteriHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Poteri"}} <b>{{corpo.conto.poteri.text}}</b>{{#if corpo.extra}} <small>{{localize "WOD5E_MAGE.Guidata.Sfere.Extra" n=corpo.extra}}</small>{{/if}}</span>
     </div>
     <div class="wod5e-mage-guidata-righe">
         {{#each corpo.spheres as |sphere|}}
-            <div class="wod5e-mage-guidata-riga{{#if sphere.value}} scelta{{/if}}{{#if sphere.family}} famiglia{{/if}}">
-                <img class="wod5e-mage-guidata-riga-icona sigillo" src="{{sphere.icon}}" alt="">
-                <span class="wod5e-mage-guidata-riga-nome">{{sphere.label}}{{#if sphere.family}} <small class="wod5e-mage-guidata-tag oro" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.FamigliaHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Famiglia"}}</small>{{/if}}</span>
-                <span class="wod5e-mage-guidata-pallini" role="group" aria-label="{{sphere.label}}">
-                    <button type="button" class="wod5e-mage-guidata-pallino zero" data-action="sferaPallino" data-sphere="{{sphere.id}}" data-value="0" title="0" {{#unless @root.canEdit}}disabled{{/unless}}></button>
-                    {{#each sphere.steps as |step|}}
-                        <button type="button" class="wod5e-mage-guidata-pallino{{#if step.lit}} lit{{/if}}{{#if step.oltre}} oltre{{/if}}" data-action="sferaPallino" data-sphere="{{sphere.id}}" data-value="{{step.value}}" title="{{step.value}}{{#if step.oltre}} · {{localize 'WOD5E_MAGE.Guidata.Sfere.TettoHint' cap=../../corpo.cap}}{{/if}}" {{#unless @root.canEdit}}disabled{{/unless}}></button>
-                    {{/each}}
-                </span>
+            <div class="wod5e-mage-guidata-dominio{{#if sphere.selected}} scelta{{/if}}{{#if sphere.family}} famiglia{{/if}}{{#if sphere.vuoto}} vuoto{{/if}}">
+                <div class="wod5e-mage-guidata-dominio-testa">
+                    <button type="button" class="wod5e-mage-guidata-accesso{{#if sphere.selected}} acceso{{/if}}" data-action="dominioAccesso" data-sphere="{{sphere.id}}" aria-pressed="{{#if sphere.selected}}true{{else}}false{{/if}}" title="{{#if sphere.selected}}{{localize 'WOD5E_MAGE.Guidata.Sfere.AccessoTogli'}}{{else}}{{localize 'WOD5E_MAGE.Guidata.Sfere.AccessoDai'}}{{/if}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid {{#if sphere.selected}}fa-circle-check{{else}}fa-circle{{/if}}" aria-hidden="true"></i></button>
+                    <img class="wod5e-mage-guidata-riga-icona sigillo" src="{{sphere.icon}}" alt="">
+                    <span class="wod5e-mage-guidata-riga-nome">{{sphere.label}}{{#if sphere.family}} <small class="wod5e-mage-guidata-tag oro" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.FamigliaHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Famiglia"}}</small>{{/if}}</span>
+                    {{#if sphere.selected}}
+                        <span class="wod5e-mage-guidata-dominio-livello" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.LivelloHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Livello"}} <b>{{sphere.level}}</b></span>
+                        <button type="button" class="wod5e-mage-guidata-tastino" data-action="dominioPotere" data-sphere="{{sphere.id}}" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.Scegli'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                    {{/if}}
+                </div>
+                {{#if sphere.selected}}
+                    <div class="wod5e-mage-guidata-dominio-poteri">
+                        {{#each sphere.poteri as |p|}}
+                            <span class="wod5e-mage-guidata-potere">{{#if p.dot}}<small title="{{localize 'WOD5E_MAGE.Poteri.Grado'}}">{{p.dot}}</small>{{/if}}<b>{{p.label}}</b><button type="button" data-action="dominioPotereTogli" data-row="{{p.id}}" title="{{localize 'WOD5E_MAGE.Poteri.Togli'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
+                        {{else}}
+                            <button type="button" class="wod5e-mage-guidata-potere vuoto" data-action="dominioPotere" data-sphere="{{sphere.id}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-book-open" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.Scegli"}}</button>
+                        {{/each}}
+                    </div>
+                {{/if}}
             </div>
         {{/each}}
     </div>
@@ -26,9 +36,10 @@
     <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-guadagni">
         <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Guadagni"}}</span></header>
         <div class="wod5e-mage-guidata-voci">
-            <div class="wod5e-mage-guidata-voce {{corpo.conto.state}}"><i class="fa-solid fa-circle-nodes" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.Pallini"}} <b>{{corpo.conto.text}}</b></div>
-            <div class="wod5e-mage-guidata-voce"><img class="wod5e-mage-guidata-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt=""> {{localize "WOD5E_MAGE.Guidata.Sfere.Tetto"}} <b>{{corpo.cap}}</b></div>
+            <div class="wod5e-mage-guidata-voce {{corpo.conto.domini.state}}"><i class="fa-solid fa-circle-nodes" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.Domini"}} <b>{{corpo.conto.domini.text}}</b></div>
+            <div class="wod5e-mage-guidata-voce {{corpo.conto.poteri.state}}"><i class="fa-solid fa-wand-sparkles" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.Poteri"}} <b>{{corpo.conto.poteri.text}}</b></div>
             <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-house-chimney" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.FamigliaHint"}}</div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-gauge" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.LivelloHint"}}</div>
         </div>
     </section>
 </aside>

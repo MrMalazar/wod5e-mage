@@ -3,29 +3,34 @@ import { CHIAVI_VIVE, TETTO_CREAZIONE, skillsOverCap } from "./abilita-essenzial
 import { ATTRIBUTE_KEYS } from "./tratti-icone.js";
 import { PERSONAGGIO_TABLES } from "./personaggio-extra.js";
 import { getSphereSelection, SPHERES } from "./spheres.js";
+import { poteriDelPersonaggio } from "./poteri.js";
 import { FOCUS_TOOL_IDS } from "./focus.js";
 import { CONCEPT_CHALLENGE_GROUPS } from "./concept-challenge.js";
 
 /**
  * I gradi delle partenze avanzate (LIBRO 4.10, «Partenze avanzate»): pallini
  * in più sopra la creazione base, e l'Areté pieno. Il Neofita è la base.
+ * Dal 25/9 (Blue: «non ha più pallini Sfere, ha pallini poteri») i pallini di
+ * Sfera del grado sono poteri in più, da prendere nei Domini a cui si ha accesso.
  */
 export const GRADI = Object.freeze([
-  Object.freeze({ id: "neofita", arete: 1, spheres: 0, attributes: 0, skills: 0, merits: 0, flaws: 0 }),
-  Object.freeze({ id: "risvegliato", arete: 2, spheres: 1, attributes: 0, skills: 2, merits: 0, flaws: 1 }),
-  Object.freeze({ id: "discepolo", arete: 3, spheres: 2, attributes: 1, skills: 3, merits: 2, flaws: 2 }),
-  Object.freeze({ id: "anziano", arete: 3, spheres: 3, attributes: 1, skills: 5, merits: 5, flaws: 3 }),
-  Object.freeze({ id: "maestro", arete: 4, spheres: 4, attributes: 2, skills: 7, merits: 7, flaws: 4 })
+  Object.freeze({ id: "neofita", arete: 1, poteri: 0, attributes: 0, skills: 0, merits: 0, flaws: 0 }),
+  Object.freeze({ id: "risvegliato", arete: 2, poteri: 1, attributes: 0, skills: 2, merits: 0, flaws: 1 }),
+  Object.freeze({ id: "discepolo", arete: 3, poteri: 2, attributes: 1, skills: 3, merits: 2, flaws: 2 }),
+  Object.freeze({ id: "anziano", arete: 3, poteri: 3, attributes: 1, skills: 5, merits: 5, flaws: 3 }),
+  Object.freeze({ id: "maestro", arete: 4, poteri: 4, attributes: 2, skills: 7, merits: 7, flaws: 4 })
 ]);
 
 /**
  * La creazione base: 22 Attributi, 19 pallini di Abilità liberi col tetto a 3
  * (V6: 18 su tredici voci; qui una voce in più vale un pallino in più, verdetto
  * di Blue dell'11/9; le tre ripartizioni del 18/8 non esistono più), 7 fra Background
- * e Pregi, 2 Difetti, 6 Sfere. Sopra la base i premi della Sfida (PREMI_SFIDA)
- * e i pallini del grado.
+ * e Pregi, 2 Difetti. Niente pallini di Sfera (Blue, 25/9): si ha accesso a
+ * dei Domini (le Sfere conosciute) e in ciascuno si prende un potere; quanti
+ * Domini si aprano alla creazione non è ancora scritto, il conto è libero.
+ * Sopra la base i premi della Sfida (PREMI_SFIDA) e i poteri in più del grado.
  */
-export const BASE_CREAZIONE = Object.freeze({ attributes: 22, skills: 19, skillCap: TETTO_CREAZIONE, merits: 7, flaws: 2, spheres: 6 });
+export const BASE_CREAZIONE = Object.freeze({ attributes: 22, skills: 19, skillCap: TETTO_CREAZIONE, merits: 7, flaws: 2 });
 
 /**
  * I premi della Sfida del Concetto (LIBRO 05_015, «i premi si sommano»): un
@@ -45,7 +50,7 @@ export const PREMI_SFIDA = Object.freeze([
 /** Quanto la Sfida aggiunge a ogni conto coi gruppi completati. */
 export function sfidaBonuses(groupsDone = 0) {
   const done = Math.max(Math.trunc(Number(groupsDone) || 0), 0);
-  const bonuses = { skills: 0, merits: 0, spheres: 0, poteri: 0 };
+  const bonuses = { skills: 0, merits: 0, poteri: 0 };
   for (const premio of PREMI_SFIDA) if (done >= premio.groups) bonuses[premio.count] += premio.bonus;
   return bonuses;
 }
@@ -62,8 +67,8 @@ export function creationTargets(gradoId = "neofita", groupsDone = 0) {
     skillCap: BASE_CREAZIONE.skillCap,
     merits: BASE_CREAZIONE.merits + sfida.merits + grado.merits,
     flaws: BASE_CREAZIONE.flaws + grado.flaws,
-    spheres: BASE_CREAZIONE.spheres + grado.spheres,
-    poteri: sfida.poteri
+    // I poteri oltre l'uno per Dominio: quelli del grado e quello della Sfida.
+    poteri: grado.poteri + sfida.poteri
   };
 }
 
@@ -132,7 +137,9 @@ function everySphereHasInstrument(actor) {
 export function prepareCreationSummary(actor, areteValue = null) {
   const system = actor.system ?? {};
   const items = actor.items ? Array.from(actor.items) : [];
-  const sphereValues = actor.getFlag(MODULE_ID, "spheres") ?? {};
+  const selection = getSphereSelection(actor);
+  const domini = SPHERES.filter((id) => selection[id]).length;
+  const poteriConosciuti = poteriDelPersonaggio(actor).length;
   const creazione = actor.getFlag(MODULE_ID, "creazione") ?? {};
   const groupsDone = conceptGroupsDone(actor);
   const targets = creationTargets(creazione.grado, groupsDone);
@@ -146,15 +153,10 @@ export function prepareCreationSummary(actor, areteValue = null) {
     // Background e Pregi si contano insieme: sette punti (LIBRO, «I Vantaggi»).
     { id: "merits", label: "WOD5E_MAGE.Riepilogo.Merits", hint: "WOD5E_MAGE.Riepilogo.MeritsHint", value: backgrounds + merits, target: targets.merits },
     { id: "flaws", label: "WOD5E_MAGE.Riepilogo.Flaws", value: featureDots(items, "flaw"), target: targets.flaws },
-    {
-      id: "spheres",
-      label: "WOD5E_MAGE.Riepilogo.Spheres",
-      value: SPHERES.reduce(
-        (sum, id) => sum + Math.min(Math.max(Math.trunc(Number(sphereValues[id]) || 0), 0), 5),
-        0
-      ),
-      target: targets.spheres
-    }
+    // I Domini a cui si ha accesso (le Sfere conosciute; il numero è libero) e i
+    // poteri: uno per Dominio, più quelli del grado e della Sfida (25/9).
+    { id: "domini", label: "WOD5E_MAGE.Riepilogo.Domini", value: domini, target: null },
+    { id: "poteri", label: "WOD5E_MAGE.Riepilogo.Poteri", hint: "WOD5E_MAGE.Riepilogo.PoteriHint", value: poteriConosciuti, target: domini + targets.poteri }
   ];
   const sfidaBonus = sfidaBonuses(groupsDone);
   const counts = raw.map((count) => ({

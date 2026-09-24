@@ -303,13 +303,12 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   const praticaRiga = lista.find((p) => p.catalogId === "la-pratica-rende-perfetti");
   assert.deepEqual([praticaRiga.sceltaCampo.kind, praticaRiga.sceltaCampo.options.map((o) => [o.value, o.label, o.selected])], ["incantesimo", [["s1", "Lama di fuoco", true]]]);
   assert.ok(lista.every((p) => p.options?.pallini?.length === 5), "le tendine dei pallini restano");
-  // Le Sfere conosciute con il conto dei poteri e la quota (tanti quanti i pallini).
+  // Le Sfere conosciute con il conto dei poteri; niente quota (25/9: i pallini sono un promemoria).
   const forze = pagina.sfereConosciute.find((s) => s.id === "forces");
-  assert.ok(forze && typeof forze.conto === "number" && typeof forze.pieno === "boolean");
+  assert.ok(forze && typeof forze.conto === "number" && forze.pieno === undefined);
   assert.equal(forze.conto, lista.filter((p) => p.sphere === "forces").length);
-  const quota = P.quotaDellaSfera(actor, "forces");
-  assert.deepEqual([quota.conosciuti, quota.pieno], [forze.conto, forze.conto >= quota.rating]);
-  assert.ok(P.sferePerCatalogo(actor).every((s) => s.id && Array.isArray(s.owned) && typeof s.rating === "number"));
+  assert.ok(P.sferePerCatalogo(actor).every((s) => s.id && Array.isArray(s.owned) && s.rating === undefined));
+  assert.equal(P.quotaDellaSfera, undefined, "la quota non c'è più");
   // Le due schede della prima pagina (Blue, 25/9): Poteri attivi e Poteri passivi, col testo dell'effetto.
   const filtri = P.preparePoteriFiltri(actor, S.preparePoteriRows(actor, T.emptyTiro(), (k) => strings[k] ?? k), { localize: (k) => strings[k] ?? k, locale: "it" });
   assert.deepEqual(filtri.map((r) => r.name), [...filtri.map((r) => r.name)].sort((a, b) => a.localeCompare(b, "it")), "in ordine di nome");

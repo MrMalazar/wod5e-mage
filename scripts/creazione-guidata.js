@@ -31,6 +31,7 @@ import { getLineage } from "./lineage.js";
 import { getMagickBalance, MAGICK_TRACK_MAX } from "./magick-balance.js";
 import { prepareMemo } from "./memo.js";
 import { PERSONAGGIO_TABLES, prepareAnchors, prepareConvictions } from "./personaggio-extra.js";
+import { potereLabel, poteriDelPersonaggio, poteriOfSphere } from "./poteri.js";
 import { GRADI, prepareCreationSummary } from "./riepilogo.js";
 import { prepareSpheres, SPHERES } from "./spheres.js";
 import { ATTRIBUTE_KEYS, traitIcon } from "./tratti-icone.js";
@@ -194,7 +195,8 @@ export function passiFatti(actor, summary) {
     bussola: hasText(headers.ambition) && hasText(headers.desire) && convinzioni,
     tipo: FOCUS_FORMS.includes(focus.practiceForm),
     concetto: Boolean(checks.concept?.ok),
-    sfere: counts.spheres?.state === "exact",
+    // I Domini (25/9): almeno un Dominio aperto, e un potere per ciascuno (più quelli del grado e della Sfida).
+    sfere: (counts.domini?.value ?? 0) >= 1 && counts.poteri?.state === "exact",
     strumenti: Boolean(checks.instruments?.ok),
     arete: Boolean(checks.arete?.ok),
     attributi: counts.attributes?.state === "exact",
@@ -378,23 +380,40 @@ export function passoConcetto(actor, summary, { localize = (key) => key, catalog
   };
 }
 
-/** Passo 6: le nove Sfere coi pallini, il tetto Areté + 2, il conto del memo. */
+/**
+ * Passo 6, i Domini (Blue, 25/9: «in creazione un personaggio non ha più
+ * pallini sfere, ha pallini poteri. In creazione prende 1 potere per ogni
+ * dominio al quale ha accesso»): le nove Sfere come Domini a cui si ha o
+ * non si ha accesso, e sotto ogni Dominio aperto i poteri presi lì. Il
+ * livello della Sfera resta sulla pagina Magick, solo come promemoria.
+ */
 export function passoSfere(actor, summary, { localize = (key) => key, locale = "it" } = {}) {
-  const arete = getArete(actor).value;
-  const cap = tettoSfera(arete);
   const counts = Object.fromEntries((summary?.counts ?? []).map((entry) => [entry.id, entry]));
-  const conto = counts.spheres ?? { value: 0, target: 6, state: "under" };
-  const spheres = prepareSpheres(actor, { localize, locale }).all.map((sphere) => ({
-    ...sphere,
-    label: localize(sphere.label),
-    steps: Array.from({ length: 5 }, (_, index) => ({
-      value: index + 1,
-      lit: index + 1 <= sphere.value,
-      // Oltre il tetto della creazione il pallino non si prende.
-      oltre: index + 1 > cap
-    }))
-  }));
-  return { spheres, cap, arete, conto: { ...conto, text: `${conto.value}/${conto.target}` }, sfida: summary?.sfida?.done ?? 0 };
+  const domini = counts.domini ?? { value: 0, target: null, state: "" };
+  const poteri = counts.poteri ?? { value: 0, target: 0, state: "under" };
+  const rows = poteriDelPersonaggio(actor);
+  const spheres = prepareSpheres(actor, { localize, locale }).all.map((sphere) => {
+    const presi = poteriOfSphere(rows, sphere.id).map((power) => ({ id: power.id, label: potereLabel(power, localize), dot: power.dot }));
+    return {
+      id: sphere.id,
+      label: localize(sphere.label),
+      icon: sphere.icon,
+      family: Boolean(sphere.family),
+      selected: Boolean(sphere.selected),
+      level: sphere.value,
+      poteri: presi,
+      // Un Dominio aperto senza il suo potere: manca la scelta.
+      vuoto: Boolean(sphere.selected) && presi.length === 0
+    };
+  });
+  const testo = (conto) => (conto.target === null || conto.target === undefined ? String(conto.value) : `${conto.value}/${conto.target}`);
+  return {
+    spheres,
+    conto: { domini: { ...domini, text: testo(domini) }, poteri: { ...poteri, text: testo(poteri) } },
+    // I poteri oltre l'uno per Dominio: dal grado e dalla Sfida.
+    extra: Math.max(poteri.target - domini.value, 0),
+    sfida: summary?.sfida?.done ?? 0
+  };
 }
 
 /** Passo 7: uno Strumento per ogni Sfera sbloccata, e quello di Percepire; il consiglio del Credo. */

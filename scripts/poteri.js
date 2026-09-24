@@ -202,22 +202,53 @@ export function sfereDellaVoce(entry) {
  * `locked` se chiede più pallini di quelli della Sfera (`rating`). Un
  * catalogo vuoto dà una lista vuota: resta la scrittura a mano.
  */
-export function catalogoDellaSfera(sphere, { catalog = POTERI, rating = 0, owned = [] } = {}) {
+/**
+ * I prerequisiti d'acquisto di una voce (Blue, 25/9: «i poteri sono
+ * acquistabili a principio dalla gerarchia»): `numero`, quanti poteri della
+ * stessa Sfera bisogna già conoscere; `poteri`, gli id dei poteri specifici
+ * richiesti. Torna cosa manca: { numero, poteri: [id] }, o null se si può
+ * prendere. Il grado (`dot`) non chiude niente da solo: è la misura della
+ * potenza. `owned` sono le righe del personaggio nella Sfera, `tutti` tutte
+ * le sue righe (per i poteri specifici, che possono stare su altre Sfere).
+ */
+export function prerequisitiMancanti(entry, { owned = [], tutti = null } = {}) {
+  const voce = entry?.prerequisiti;
+  if (!voce || typeof voce !== "object") return null;
+  const conosciuti = (owned ?? []).filter((power) => power?.catalogId !== entry.id).length;
+  const have = new Set((tutti ?? owned ?? []).map((power) => power?.catalogId).filter(Boolean));
+  const mancano = {};
+  if (count(voce.numero) > conosciuti) mancano.numero = count(voce.numero);
+  const poteri = (voce.poteri ?? []).filter((id) => !have.has(id));
+  if (poteri.length) mancano.poteri = poteri;
+  return Object.keys(mancano).length ? mancano : null;
+}
+
+/**
+ * Il catalogo di una Sfera: tutte le voci che la Sfera apre (le sue, e
+ * quelle di Qualsiasi Sfera), in ordine di grado e poi di nome, con `known`
+ * (già sul personaggio) e `chiuso` (i prerequisiti che mancano, o null).
+ * Niente quota sui pallini (25/9): i livelli della Sfera sono un promemoria.
+ */
+export function catalogoDellaSfera(sphere, { catalog = POTERI, owned = [], tutti = null } = {}) {
   const have = new Set((owned ?? []).map((power) => power.catalogId).filter(Boolean));
   return (catalog ?? [])
     .filter((entry) => sfereDellaVoce(entry).includes(sphere))
-    .map((entry) => ({
-      id: entry.id,
-      name: testo(entry.name),
-      dot: Math.min(count(entry.dot), POTERE_DOTS),
-      type: testo(entry.type),
-      amalgam: sfera(entry.amalgam),
-      formulaName: testo(entry.formulaName),
-      proposal: entry.link === "proposta",
-      known: have.has(entry.id),
-      locked: Math.min(count(entry.dot), POTERE_DOTS) > count(rating)
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name, "it"));
+    .map((entry) => {
+      const chiuso = prerequisitiMancanti(entry, { owned, tutti });
+      return {
+        id: entry.id,
+        name: testo(entry.name),
+        dot: Math.min(count(entry.dot), POTERE_DOTS),
+        type: testo(entry.type),
+        amalgam: sfera(entry.amalgam),
+        formulaName: testo(entry.formulaName),
+        proposal: entry.link === "proposta",
+        known: have.has(entry.id),
+        chiuso,
+        locked: Boolean(chiuso)
+      };
+    })
+    .sort((a, b) => a.dot - b.dot || a.name.localeCompare(b.name, "it"));
 }
 
 /* ------------------------------------------------------------------ */

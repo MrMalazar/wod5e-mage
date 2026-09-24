@@ -27,6 +27,7 @@ import {
   poteriDelPersonaggio,
   poteriOfSphere,
   potereLabel,
+  prerequisitiMancanti,
   puoUsare,
   registraUso,
   ruotaDopoUso,
@@ -93,7 +94,8 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
     };
   };
 
-  const righe = sphereData.all.map((sphere) => ({ ...sphere, conto: conti[sphere.id] ?? 0, pieno: (conti[sphere.id] ?? 0) >= Math.min(count(sphere.value), POTERE_DOTS) }));
+  // Il conto dei poteri per Sfera; i pallini della Sfera sono un promemoria, non una quota (25/9).
+  const righe = sphereData.all.map((sphere) => ({ ...sphere, conto: conti[sphere.id] ?? 0 }));
   // La lista dei poteri (Blue, 24/9 sera: «una semplice lista», senza la
   // divisione per Sfere): in ordine di nome, ogni riga col sigillo della sua
   // Sfera e i tipi (attivo, passivo, tutti e due) come pastiglie.
@@ -136,20 +138,10 @@ function count(value) {
   return Math.max(Math.trunc(Number(value) || 0), 0);
 }
 
-/** Le Sfere conosciute per la finestra del catalogo: id, pallini, le righe che il personaggio ha in quella Sfera. */
+/** Le Sfere conosciute per la finestra del catalogo: id e le righe che il personaggio ha in quella Sfera. */
 export function sferePerCatalogo(actor) {
   const rows = poteriDelPersonaggio(actor);
-  return prepareSpheres(actor).selected.map((sphere) => ({ id: sphere.id, rating: count(sphere.value), owned: poteriOfSphere(rows, sphere.id) }));
-}
-
-/**
- * Quanti poteri si possono avere in una Sfera: tanti quanti i pallini (Blue,
- * 24/9 sera). Torna { rating, conosciuti, pieno }.
- */
-export function quotaDellaSfera(actor, sphere) {
-  const rating = Math.min(count(prepareSpheres(actor).all.find((entry) => entry.id === sphere)?.value), POTERE_DOTS);
-  const conosciuti = poteriOfSphere(poteriDelPersonaggio(actor), sphere).length;
-  return { rating, conosciuti, pieno: conosciuti >= rating };
+  return prepareSpheres(actor).selected.map((sphere) => ({ id: sphere.id, owned: poteriOfSphere(rows, sphere.id) }));
 }
 
 /** Il tasto «Usa» della riga: se si può, quanti usi restano, cosa costa, perché no. */
@@ -197,11 +189,6 @@ export async function onPotereNuovo(event, target) {
   if (!canEdit(actor)) return;
   const sphere = String(target.dataset.sphere ?? "");
   if (!SPHERES.includes(sphere)) return;
-  const quota = quotaDellaSfera(actor, sphere);
-  if (quota.pieno) {
-    ui.notifications.warn(game.i18n.format("WOD5E_MAGE.Poteri.QuotaPiena", { sphere: game.i18n.localize(`WOD5E_MAGE.Spheres.${sphere}`), rating: quota.rating }));
-    return;
-  }
   const rows = { ...(actor.getFlag(MODULE_ID, POTERI_FLAG) ?? {}) };
   const id = idNuovo(rows);
   inModifica(this).add(id);
@@ -219,10 +206,10 @@ export async function aggiungiDalCatalogo(actor, sphere, catalogId) {
   const rows = { ...(actor.getFlag(MODULE_ID, POTERI_FLAG) ?? {}) };
   if (Object.values(rows).some((row) => row?.catalogId === entry.id)) return false;
   const dove = SPHERES.includes(sphere) ? sphere : entry.sphere;
-  // Tanti poteri quanti i pallini della Sfera (Blue, 24/9 sera).
-  const quota = quotaDellaSfera(actor, dove);
-  if (quota.pieno) {
-    ui.notifications.warn(game.i18n.format("WOD5E_MAGE.Poteri.QuotaPiena", { sphere: game.i18n.localize(`WOD5E_MAGE.Spheres.${dove}`), rating: quota.rating }));
+  // I prerequisiti (25/9): tanti poteri della Sfera, o poteri specifici; il grado non chiude niente.
+  const mancano = prerequisitiMancanti(entry, { owned: poteriOfSphere(Object.entries(rows).map(([id, row]) => ({ id, ...row })), dove), tutti: Object.values(rows) });
+  if (mancano) {
+    ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Poteri.PrerequisitiMancano"));
     return false;
   }
   await actor.setFlag(MODULE_ID, POTERI_FLAG, { ...rows, [idNuovo(rows)]: nuovoPotere(dove, entry) });
@@ -300,6 +287,27 @@ export function onPotereApri(event, target) {
   if (!riga) return;
   const aperta = riga.classList.toggle("aperta");
   target.setAttribute("aria-expanded", String(aperta));
+  // La riga ricorda com'era attraverso i render (Blue, 25/9: i pallini della
+  // Sfera chiudevano tutte le tendine): l'insieme sta sulla scheda.
+  const aperte = poteriAperti(this);
+  if (aperta) aperte.add(String(riga.dataset.row ?? ""));
+  else aperte.delete(String(riga.dataset.row ?? ""));
+}
+
+/** Le righe dei poteri aperte, tenute sulla scheda finché è aperta. */
+export function poteriAperti(sheet) {
+  if (!(sheet._poteriAperti instanceof Set)) sheet._poteriAperti = new Set();
+  return sheet._poteriAperti;
+}
+
+/** Dopo un render: le righe che erano aperte tornano aperte. */
+export function riapriPoteri(sheet) {
+  const aperte = poteriAperti(sheet);
+  for (const riga of sheet.element?.querySelectorAll(".wod5e-mage-potere-riga[data-row]") ?? []) {
+    if (!aperte.has(String(riga.dataset.row))) continue;
+    riga.classList.add("aperta");
+    riga.querySelector(".wod5e-mage-potere-nome")?.setAttribute("aria-expanded", "true");
+  }
 }
 
 /**

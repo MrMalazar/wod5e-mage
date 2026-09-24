@@ -14,6 +14,7 @@ const formule = leggi("formule.json");
 const poteri = leggi("poteri.json");
 // Gli effetti sul tiro (tappa 3): scritti a mano, potere per potere, in effetti_poteri.json.
 const effetti = leggi("effetti_poteri.json");
+const prerequisiti = leggi("prerequisiti_poteri.json");
 
 const SFERE = ["correspondence", "entropy", "forces", "life", "matter", "mind", "prime", "spirit", "time"];
 const AMBITI = ["targets", "conditions", "duration", "impact", "range", "potency", "precision"];
@@ -53,6 +54,24 @@ function controlla() {
     for (const s of [...p.access, ...p.amalgams]) if (s !== "any" && !SFERE.includes(s)) throw new Error(`${p.name}: Sfera sconosciuta ${s}`);
   }
   controllaEffetti();
+  controllaPrerequisiti();
+}
+
+/**
+ * I prerequisiti d'acquisto (25/9): il potere esiste, `numero` è un intero da 1
+ * in su, i `poteri` richiesti esistono e non sono il potere stesso.
+ */
+function controllaPrerequisiti() {
+  const idPoteri = new Set(poteri.poteri.map((p) => p.id));
+  for (const [id, voce] of Object.entries(prerequisiti.prerequisiti)) {
+    if (!idPoteri.has(id)) throw new Error(`prerequisiti: potere ${id} non trovato`);
+    if (voce.numero !== undefined && (!Number.isInteger(voce.numero) || voce.numero < 1)) throw new Error(`prerequisiti di ${id}: numero ${voce.numero}`);
+    for (const richiesto of voce.poteri ?? []) {
+      if (!idPoteri.has(richiesto)) throw new Error(`prerequisiti di ${id}: potere ${richiesto} non trovato`);
+      if (richiesto === id) throw new Error(`prerequisiti di ${id}: richiede se stesso`);
+    }
+    for (const chiave of Object.keys(voce)) if (!["numero", "poteri"].includes(chiave)) throw new Error(`prerequisiti di ${id}: campo ${chiave} sconosciuto`);
+  }
 }
 
 /** Il testo intero di un potere, con gli spazi normalizzati: per cercare le note. */
@@ -136,7 +155,7 @@ scrivi("formule.js",
   `\n/** Le Formule di ieri (ramo B) che oggi hanno un altro id: le righe degli effetti le cercano qui. */\nexport const FORMULE_ALIAS = Object.freeze(${JSON.stringify(ALIAS, null, 2)});\n`);
 
 scrivi("poteri.js",
-  `// GENERATO da tools/genera-dati.mjs (sorgenti: tools/dati/poteri.json, dal libretto dei poteri e dai poteri nuovi del 23-24/9;\n// tools/dati/effetti_poteri.json, gli effetti sul tiro scritti a mano dal testo, tappa 3 del 24/9).\n// Non si scrive a mano. Il catalogo dei poteri delle Sfere: ogni voce ha le Sfere che la aprono\n// (\`spheres\`, con "any" per Qualsiasi), la matrice di provenienza, il testo intero, il costo in\n// Quintessenza, il limite d'uso, \`effects\` (gli effetti sul tiro: poteri.js li applica) e \`scelta\`\n// (cosa il giocatore sceglie all'acquisto: un Ambito, un'Abilità, un incantesimo).`,
+  `// GENERATO da tools/genera-dati.mjs (sorgenti: tools/dati/poteri.json, dal libretto dei poteri e dai poteri nuovi del 23-24/9;\n// tools/dati/effetti_poteri.json, gli effetti sul tiro scritti a mano dal testo, tappa 3 del 24/9;\n// tools/dati/prerequisiti_poteri.json, i prerequisiti d'acquisto, 25/9).\n// Non si scrive a mano. Il catalogo dei poteri delle Sfere: ogni voce ha le Sfere che la aprono\n// (\`spheres\`, con "any" per Qualsiasi), la matrice di provenienza, il testo intero, il costo in\n// Quintessenza, il limite d'uso, \`effects\` (gli effetti sul tiro: poteri.js li applica), \`scelta\`\n// (cosa il giocatore sceglie all'acquisto: un Ambito, un'Abilità, un incantesimo) e \`prerequisiti\`\n// (quanti poteri della Sfera, o quali, servono per prenderlo; null = nessuno).`,
   "POTERI",
   poteri.poteri.map((p) => ({
     id: p.id,
@@ -160,7 +179,8 @@ scrivi("poteri.js",
     page: p.page,
     hooks: p.hooks,
     effects: effetti.effetti[p.id] ?? [],
-    scelta: effetti.scelte[p.id] ?? null
+    scelta: effetti.scelte[p.id] ?? null,
+    prerequisiti: prerequisiti.prerequisiti[p.id] ?? null
   })));
 
 const conEffetti = Object.keys(effetti.effetti).length;

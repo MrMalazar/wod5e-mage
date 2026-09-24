@@ -228,7 +228,8 @@ export async function onIncantesimoFromEffetti(event) {
   const { openGrimorio, effectSphereLevels } = await import("./grimorio.js");
   const { prepareSpheres } = await import("./spheres.js");
   const localize = game.i18n.localize.bind(game.i18n);
-  const owned = Object.fromEntries(prepareSpheres(actor).selected.filter((sphere) => sphere.value > 0).map((sphere) => [sphere.id, sphere.value]));
+  // I Domini a cui si ha accesso (25/9): le Sfere conosciute, anche a livello 0.
+  const owned = Object.fromEntries(prepareSpheres(actor).selected.map((sphere) => [sphere.id, sphere.value]));
   const salva = async (spell) => {
     const stored = actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {};
     let id = foundry.utils.randomID();

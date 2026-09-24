@@ -1,18 +1,16 @@
 /**
  * Il catalogo dei poteri in una finestra (24/9 sera, Blue: la tendina sotto
- * la Sfera «è orribile, bisogna cambiare drasticamente»; poi: «solo quelli
- * che ho accesso con le Sfere attuali, per non creare sovraccarico visivo»,
- * e «i poteri selezionabili in una Sfera devono essere pari al numero dei
- * pallini»).
+ * la Sfera «è orribile, bisogna cambiare drasticamente»; 25/9: «i poteri sono
+ * acquistabili a principio dalla gerarchia», niente quota sui pallini).
  *
  * Due finestre. Quella di «Aggiungi» (pagina Magick): in testa le pastiglie
- * delle Sfere conosciute (col conto «poteri / pallini»), la cerca e il conto;
- * sotto, solo i poteri che il personaggio può prendere adesso con quella
- * Sfera (il pallino richiesto non oltre i pallini della Sfera), in due
- * gruppi (della Sfera, di qualsiasi Sfera), una riga per potere che si apre
- * sul testo intero; «Aggiungi» lo mette sul personaggio senza chiudere la
- * finestra. Quando i poteri della Sfera sono quanti i pallini, i tasti si
- * spengono. Quella del «Catalogo completo»: tutti i 187, Sfera per Sfera, da
+ * delle Sfere conosciute (col conto dei poteri che si hanno), la cerca e il
+ * conto; sotto, tutti i poteri che quella Sfera apre, in ordine di grado e
+ * poi di nome, in due gruppi (della Sfera, di qualsiasi Sfera), una riga per
+ * potere che si apre sul testo intero; una riga coi prerequisiti che mancano
+ * (tanti poteri della Sfera, o poteri specifici) sta col lucchetto e dice
+ * cosa serve; «Aggiungi» mette la voce sul personaggio senza chiudere la
+ * finestra. Quella del «Catalogo completo»: tutti i 187, Sfera per Sfera, da
  * leggere e basta, con la cerca. Qui la parte pura (le righe) e le finestre.
  */
 import { MODULE_ID } from "./constants.js";
@@ -53,36 +51,46 @@ function rigaDelCatalogo(voce, entry, localize) {
     paradox: testo(entry?.paradox),
     flavor: testo(entry?.flavor),
     search: `${voce.name} ${voce.formulaName}`.toLowerCase(),
-    lockedHint: voce.locked ? localize("WOD5E_MAGE.Poteri.Chiuso").replace("{dot}", String(voce.dot)) : ""
+    lockedHint: voce.chiuso ? testoPrerequisiti(voce.chiuso, entry, localize, catalogoPerNome) : ""
   };
 }
 
+let catalogoPerNome = null;
+
+/** Cosa manca per prendere il potere, in parole: «servono 2 poteri di Forze», «richiede Incassare». */
+export function testoPrerequisiti(mancano, entry, localize = (key) => key, nomi = null) {
+  const parti = [];
+  if (mancano?.numero) {
+    const sphere = Array.isArray(entry?.spheres) && entry.spheres[0] && entry.spheres[0] !== "any" ? localize(`WOD5E_MAGE.Spheres.${entry.spheres[0]}`) : localize("WOD5E_MAGE.Poteri.CatalogoQualsiasi");
+    parti.push(localize("WOD5E_MAGE.Poteri.Prerequisito.numero").replace("{n}", String(mancano.numero)).replace("{sphere}", sphere));
+  }
+  if (mancano?.poteri?.length) {
+    const nome = (id) => nomi?.get?.(id) ?? id;
+    parti.push(localize("WOD5E_MAGE.Poteri.Prerequisito.poteri").replace("{names}", mancano.poteri.map(nome).join(", ")));
+  }
+  return parti.join(" · ");
+}
+
 /**
- * Le righe della finestra «Aggiungi» per una Sfera: solo i poteri che si
- * possono prendere adesso (il pallino richiesto entro `rating`), in due
- * gruppi, `propri` (i poteri che la Sfera apre da sola) e `qualsiasi`, in
- * ordine alfabetico, con `known` (già sul personaggio). `owned` sono le
- * righe del personaggio per quella Sfera: se sono quante i pallini
- * (`pieno`), non se ne aggiungono altre. `chiusi` conta quelli che restano
- * fuori perché chiedono più pallini: si leggono nel Catalogo completo.
+ * Le righe della finestra «Aggiungi» per una Sfera: tutti i poteri che la
+ * Sfera apre, in ordine di grado e poi di nome, in due gruppi, `propri` (i
+ * poteri che la Sfera apre da sola) e `qualsiasi`, con `known` (già sul
+ * personaggio) e `locked` (mancano i prerequisiti: la riga resta, col
+ * lucchetto e cosa serve). `owned` sono le righe del personaggio per quella
+ * Sfera, `tutti` tutte le sue righe. `chiusi` conta le righe col lucchetto.
  */
-export function prepareCatalogoPoteri(sphere, { catalog = POTERI, rating = 0, owned = [], localize = (key) => key } = {}) {
-  const voci = catalogoDellaSfera(sphere, { catalog, rating, owned });
+export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tutti = null, localize = (key) => key } = {}) {
+  const voci = catalogoDellaSfera(sphere, { catalog, owned, tutti });
   const perId = new Map((catalog ?? []).map((entry) => [entry.id, entry]));
-  const righe = voci.filter((voce) => !voce.locked).map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), localize));
+  catalogoPerNome = new Map((catalog ?? []).map((entry) => [entry.id, testo(entry.name)]));
+  const righe = voci.map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), localize));
   const sphereLabel = localize(`WOD5E_MAGE.Spheres.${sphere}`);
   const propri = righe.filter((riga) => !riga.any);
   const qualsiasi = righe.filter((riga) => riga.any);
-  const conosciuti = count((owned ?? []).length);
-  const pallini = Math.min(count(rating), POTERE_DOTS);
   return {
     sphere,
     sphereLabel,
-    rating: pallini,
-    conosciuti,
-    // Quanti se ne possono ancora prendere: i pallini della Sfera meno i poteri che ha.
-    posti: Math.max(pallini - conosciuti, 0),
-    pieno: conosciuti >= pallini,
+    conosciuti: count((owned ?? []).length),
     propri,
     qualsiasi,
     gruppi: [
@@ -90,7 +98,7 @@ export function prepareCatalogoPoteri(sphere, { catalog = POTERI, rating = 0, ow
       { id: "qualsiasi", label: localize("WOD5E_MAGE.Poteri.CatalogoQualsiasi"), righe: qualsiasi }
     ].filter((gruppo) => gruppo.righe.length || gruppo.id === "propri"),
     totale: righe.length,
-    chiusi: voci.filter((voce) => voce.locked).length
+    chiusi: righe.filter((riga) => riga.locked).length
   };
 }
 
@@ -110,9 +118,11 @@ export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize
     formulaName: testo(entry.formulaName),
     proposal: entry.link === "proposta",
     known: have.has(entry.id),
+    chiuso: null,
     locked: false
   }, entry, localize);
-  const ordina = (righe) => righe.sort((a, b) => a.name.localeCompare(b.name, "it"));
+  // In ordine di grado e poi di nome: la gerarchia si legge (25/9).
+  const ordina = (righe) => righe.sort((a, b) => a.dot - b.dot || a.name.localeCompare(b.name, "it"));
   const gruppi = SPHERES.map((sphere) => ({
     id: sphere,
     label: localize(`WOD5E_MAGE.Spheres.${sphere}`),
@@ -127,15 +137,13 @@ export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize
   };
 }
 
-/** Le pastiglie delle Sfere conosciute per la testa della finestra: il conto «poteri / pallini». */
+/** Le pastiglie delle Sfere conosciute per la testa della finestra: il conto dei poteri che si hanno. */
 export function pastiglieDelleSfere(spheres, { localize = (key) => key, attiva = "" } = {}) {
   return (spheres ?? []).map((sphere) => ({
     id: sphere.id,
     label: localize(`WOD5E_MAGE.Spheres.${sphere.id}`),
     icon: `modules/${MODULE_ID}/assets/icons/sheet/${sphere.id}.png`,
     conto: count(sphere.conto),
-    rating: Math.min(count(sphere.rating), POTERE_DOTS),
-    pieno: count(sphere.conto) >= Math.min(count(sphere.rating), POTERE_DOTS),
     attiva: sphere.id === attiva
   }));
 }
@@ -143,23 +151,23 @@ export function pastiglieDelleSfere(spheres, { localize = (key) => key, attiva =
 const CLASSI = ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog", "wod5e-mage-grimorio", "wod5e-mage-catalogo"];
 
 /**
- * La finestra «Aggiungi». `spheres` sono le Sfere conosciute: [{ id, rating,
- * owned }] (le righe del personaggio per Sfera); `sphere` quella aperta
- * all'inizio; `onAdd(sphere, id)` aggiunge la voce al personaggio (torna
- * true se l'ha messa); `onMano(sphere)` apre una riga vuota da scrivere a
- * mano e chiude la finestra. Le pastiglie in testa cambiano Sfera senza
- * chiudere; la finestra resta aperta dopo un'aggiunta.
+ * La finestra «Aggiungi». `spheres` sono le Sfere conosciute: [{ id, owned }]
+ * (le righe del personaggio per Sfera); `sphere` quella aperta all'inizio;
+ * `onAdd(sphere, id)` aggiunge la voce al personaggio (torna true se l'ha
+ * messa); `onMano(sphere)` apre una riga vuota da scrivere a mano e chiude
+ * la finestra. Le pastiglie in testa cambiano Sfera senza chiudere; la
+ * finestra resta aperta dopo un'aggiunta.
  */
 export async function openCatalogoPoteri({ spheres = [], sphere = "", onAdd = null, onMano = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
-  const format = game.i18n.format.bind(game.i18n);
   const stato = { sphere: spheres.some((entry) => entry.id === sphere) ? sphere : (spheres[0]?.id ?? ""), spheres: spheres.map((entry) => ({ ...entry, owned: [...(entry.owned ?? [])] })) };
   const corpo = async () => {
     const attuale = stato.spheres.find((entry) => entry.id === stato.sphere);
-    const dati = attuale ? prepareCatalogoPoteri(attuale.id, { rating: attuale.rating, owned: attuale.owned, localize }) : null;
+    const tutti = stato.spheres.flatMap((entry) => entry.owned);
+    const dati = attuale ? prepareCatalogoPoteri(attuale.id, { owned: attuale.owned, tutti, localize }) : null;
     return foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/catalogo-poteri.hbs`, {
       ...(dati ?? { gruppi: [], totale: 0, conosciuti: 0 }),
-      pastiglie: pastiglieDelleSfere(stato.spheres.map((entry) => ({ id: entry.id, conto: entry.owned.length, rating: entry.rating })), { localize, attiva: stato.sphere }),
+      pastiglie: pastiglieDelleSfere(stato.spheres.map((entry) => ({ id: entry.id, conto: entry.owned.length })), { localize, attiva: stato.sphere }),
       icon: attuale ? `modules/${MODULE_ID}/assets/icons/sheet/${attuale.id}.png` : ""
     });
   };

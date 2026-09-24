@@ -5,7 +5,7 @@
      mestiere quando serve (altrimenti la colonna resta vuota, così le caselle
      del testo stanno incolonnate), il tuo di preciso, la lampadina dei consigli
      (non per Percepire). Sotto, la tendina; le note stanno nel sorvolo della pastiglia. --}}
-<div class="wod5e-mage-riga wod5e-mage-riga-apribile wod5e-mage-focus-instrument con-tendina{{#if row.sharedWith.length}} shared{{/if}}{{#if row.outsideForm}} outside{{/if}}{{#if row.perceive}} perceive{{/if}}">
+<div class="wod5e-mage-riga wod5e-mage-riga-apribile wod5e-mage-focus-instrument con-tendina{{#if row.sharedWith.length}} shared{{/if}}{{#if row.outsideForm}} outside{{/if}}{{#if row.perceive}} perceive{{/if}}" data-cassetto="strumento-{{row.id}}">
     <div class="wod5e-mage-riga-testa wod5e-mage-strumento-riga" title="{{localize row.label}}">
         {{#if row.faIcon}}<i class="{{row.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>{{else}}<img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{row.icon}}" alt="{{localize row.label}}">{{/if}}
         {{!-- Le note (Percepire, lo Strumento in comune, fuori dal Tipo) stanno nel sorvolo della pastiglia: niente frasi in corsivo sotto la riga (Blue, 25/9). --}}

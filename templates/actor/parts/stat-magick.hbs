@@ -12,7 +12,7 @@
     {{!-- Col memo di creazione acceso (23/9): l'Areté del grado e i pallini delle Sfere (col premio della Sfida se c'è). --}}
     <header class="wod5e-mage-riq-title{{#if memo.on}} memo-{{memo.boxes.magick.state}}{{/if}}">
         {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.spheres}}{{/if}}
-        <span>{{localize "WOD5E_MAGE.Tabs.Magick"}}{{#if memo.on}} <b class="wod5e-mage-memo-conto">{{#if memo.boxes.magick.arete}}<span class="wod5e-mage-memo-voce {{#if memo.boxes.magick.arete.ok}}exact{{else}}under{{/if}}" title="{{localize 'WOD5E_MAGE.Riepilogo.Arete'}}">{{localize "WOD5E_MAGE.Arete.Label"}} {{memo.boxes.magick.arete.target}}</span> · {{/if}}<span class="wod5e-mage-memo-voce {{memo.boxes.magick.sfere.state}}" title="{{localize 'WOD5E_MAGE.Riepilogo.Spheres'}}">{{localize "WOD5E_MAGE.Tabs.Spheres"}} {{memo.boxes.magick.sfere.text}}</span>{{#if memo.boxes.magick.sfere.sfida}} <small class="wod5e-mage-memo-premio preso" title="{{localize 'WOD5E_MAGE.Riepilogo.SfidaPremi.spheres'}}">+{{memo.boxes.magick.sfere.sfida}} {{localize "WOD5E_MAGE.Tabs.Short.conceptChallenge"}}</small>{{/if}}</b>{{/if}}</span>
+        <span>{{localize "WOD5E_MAGE.Tabs.Magick"}}{{#if memo.on}} <b class="wod5e-mage-memo-conto">{{#if memo.boxes.magick.arete}}<span class="wod5e-mage-memo-voce {{#if memo.boxes.magick.arete.ok}}exact{{else}}under{{/if}}" title="{{localize 'WOD5E_MAGE.Riepilogo.Arete'}}">{{localize "WOD5E_MAGE.Arete.Label"}} {{memo.boxes.magick.arete.target}}</span> · {{/if}}<span class="wod5e-mage-memo-voce {{memo.boxes.magick.domini.state}}" title="{{localize 'WOD5E_MAGE.Riepilogo.Domini'}}">{{localize "WOD5E_MAGE.Riepilogo.DominiBreve"}} {{memo.boxes.magick.domini.text}}</span> · <span class="wod5e-mage-memo-voce {{memo.boxes.magick.poteri.state}}" title="{{localize 'WOD5E_MAGE.Riepilogo.PoteriHint'}}">{{localize "WOD5E_MAGE.Riepilogo.PoteriBreve"}} {{memo.boxes.magick.poteri.text}}</span>{{#if memo.boxes.magick.poteri.sfida}} <small class="wod5e-mage-memo-premio preso" title="{{localize 'WOD5E_MAGE.Riepilogo.SfidaPremi.poteri'}}">+{{memo.boxes.magick.poteri.sfida}} {{localize "WOD5E_MAGE.Tabs.Short.conceptChallenge"}}</small>{{/if}}</b>{{/if}}</span>
     </header>
     <div class="wod5e-mage-riq-body">
         {{!-- La riga dell'Areté: il nome è il tasto, i pallini il valore. --}}
@@ -37,7 +37,7 @@
                      fondo la scelta del potere: una tendina a caselle, come un
                      menù, un potere solo per lancio (la casella scelta si spegne
                      con un altro clic; scegliere un potere porta con sé la Sfera). --}}
-                <div class="wod5e-mage-riga wod5e-mage-riga-sfera{{#if sphere.chosen}} scelta{{/if}}{{#if sphere.family}} family{{/if}}{{#if sphere.poteri.length}} con-tendina{{/if}}">
+                <div class="wod5e-mage-riga wod5e-mage-riga-sfera{{#if sphere.chosen}} scelta{{/if}}{{#if sphere.family}} family{{/if}}{{#if sphere.poteri.length}} con-tendina{{/if}}" data-cassetto="sfera-{{sphere.id}}">
                     <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt="">
                     <b class="wod5e-mage-sfera-conto{{#unless sphere.poteri.length}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Stat.PoteriConosciuti'}}" data-tooltip="{{localize 'WOD5E_MAGE.Stat.PoteriConosciuti'}}">{{sphere.poteri.length}}</b>
                     <button type="button" class="wod5e-mage-riga-nome" data-action="tiroSphere" data-sphere="{{sphere.id}}" aria-pressed="{{sphere.chosen}}" title="{{localize 'WOD5E_MAGE.Tiro.SphereHint'}}">
@@ -81,7 +81,7 @@
                      non c'è più (Blue, 23/9: «il sottoambito dà fastidio, crea
                      spazio tra i pallini»); il testo del livello scelto sta nel
                      tooltip del pallino e nel Tiro. --}}
-                <div class="wod5e-mage-riga wod5e-mage-riga-ambito{{#if scope.multi}} con-tendina{{/if}}{{#if scope.level}} scelta{{/if}}" {{#if scope.reading}}title="{{scope.reading}}"{{/if}}>
+                <div class="wod5e-mage-riga wod5e-mage-riga-ambito{{#if scope.multi}} con-tendina{{/if}}{{#if scope.level}} scelta{{/if}}" data-cassetto="ambito-{{scope.id}}" {{#if scope.reading}}title="{{scope.reading}}"{{/if}}>
                     <div class="wod5e-mage-riga-testa">
                         <i class="{{scope.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>
                         {{#if scope.multi}}

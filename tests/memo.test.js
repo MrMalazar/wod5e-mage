@@ -11,7 +11,8 @@ const summary = {
     { id: "backgrounds", value: 3, target: null, state: "", sfida: 0 },
     { id: "merits", value: 9, target: 9, state: "exact", sfida: 2 },
     { id: "flaws", value: 3, target: 2, state: "over", sfida: 0 },
-    { id: "spheres", value: 6, target: 6, state: "exact", sfida: 0 }
+    { id: "domini", value: 3, target: null, state: "", sfida: 0 },
+    { id: "poteri", value: 3, target: 3, state: "exact", sfida: 0 }
   ],
   checks: [
     { id: "skillCap", ok: true, target: 3 },
@@ -21,7 +22,7 @@ const summary = {
     { id: "instruments", ok: true },
     { id: "arete", ok: true, target: 1 }
   ],
-  sfida: { done: 2, total: 3, complete: false, prizes: [{ count: "skills", bonus: 1, earned: true }, { count: "merits", bonus: 2, earned: true }, { count: "spheres", bonus: 1, earned: false }] }
+  sfida: { done: 2, total: 3, complete: false, prizes: [{ count: "skills", bonus: 1, earned: true }, { count: "merits", bonus: 2, earned: true }, { count: "poteri", bonus: 1, earned: false }] }
 };
 
 const memo = prepareMemo(summary, { on: true });
@@ -29,7 +30,8 @@ assert.equal(memo.on, true);
 assert.deepEqual([memo.boxes.attributi.text, memo.boxes.attributi.state], ["12/22", "under"]);
 assert.deepEqual([memo.boxes.abilita.text, memo.boxes.abilita.state, memo.boxes.abilita.sfida, memo.boxes.abilita.tetto.ok], ["20/20", "exact", 1, true]);
 assert.deepEqual([memo.boxes.identita.state, memo.boxes.identita.concetto], ["under", false]);
-assert.deepEqual([memo.boxes.magick.state, memo.boxes.magick.arete.ok, memo.boxes.magick.sfere.text], ["exact", true, "6/6"]);
+// La Magick (25/9): i Domini aperti senza traguardo, i poteri uno per Dominio.
+assert.deepEqual([memo.boxes.magick.state, memo.boxes.magick.arete.ok, memo.boxes.magick.domini.text, memo.boxes.magick.poteri.text], ["exact", true, "3", "3/3"]);
 // I Tratti: i Vantaggi pari ma i Difetti sopra il traguardo: giallo.
 assert.deepEqual([memo.boxes.tratti.state, memo.boxes.tratti.vantaggi.text, memo.boxes.tratti.vantaggi.sfida, memo.boxes.tratti.difetti.state], ["over", "9/9", 2, "over"]);
 // Le linguette: la Bussola rossa (manca la Convinzione), il Credo verde, la Sfida senza colore finché non è completa, i Tratti come il riquadro.

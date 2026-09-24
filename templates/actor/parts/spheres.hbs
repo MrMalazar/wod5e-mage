@@ -27,11 +27,12 @@
                             <div class="wod5e-mage-riga wod5e-mage-riga-sfera-pagina{{#if sphere.family}} family{{/if}}">
                                 <button type="button" class="wod5e-mage-sfera-prendi" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="true" title="{{localize 'WOD5E_MAGE.Poteri.Lascia'}}" aria-pressed="true" {{#if ../locked}}disabled{{/if}}><img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt=""></button>
                                 <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize sphere.label}}</span></span>
+                                {{!-- I pallini del livello: un promemoria, non un conto (Blue, 25/9: «servono solo a ricordare
+                                     qual è il livello attuale»). Il vuoto a sinistra riporta a zero; l'ultimo acceso si spegne col clic. --}}
                                 <div class="resource-value" data-value="{{sphere.value}}" data-name="flags.wod5e-mage.spheres.{{sphere.id}}">
-                                    {{!-- Come le Abilità: il vuoto a sinistra riporta la Sfera a zero. --}}
                                     <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
                                     {{#numLoop 5}}
-                                        <span class="resource-value-step" data-action="dotCounterChange" data-index="{{this}}" title="{{this}}"></span>
+                                        <span class="resource-value-step" data-action="sphereDotChange" data-sphere="{{sphere.id}}" data-index="{{this}}" title="{{this}}"></span>
                                     {{/numLoop}}
                                 </div>
                                 <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-sfera-casa{{#if sphere.family}} on{{/if}}" data-action="familySphereToggle" data-sphere="{{sphere.id}}" title="{{#if sphere.family}}{{localize 'WOD5E_MAGE.Poteri.Casa'}}{{else}}{{localize 'WOD5E_MAGE.Poteri.CasaOff'}}{{/if}}" aria-pressed="{{sphere.family}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-house" aria-hidden="true"></i></button>
@@ -75,7 +76,8 @@
                                 </span>
                                 <button type="button" class="wod5e-mage-riq-tasto-piccolo wod5e-mage-atto-cestino" data-action="ongoingMagickDelete" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Remove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
                             </div>
-                            <input type="text" class="wod5e-mage-atto-effetto" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.triggerEffect" value="{{row.triggerEffect}}" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" {{#if ../locked}}disabled{{/if}}>
+                            {{!-- L'effetto su più righe (Blue, 25/9: il riquadro era troppo piccolo). --}}
+                            <textarea class="wod5e-mage-atto-effetto" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.triggerEffect" rows="2" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" {{#if ../locked}}disabled{{/if}}>{{row.triggerEffect}}</textarea>
                         </div>
                     {{/each}}
                 </div>

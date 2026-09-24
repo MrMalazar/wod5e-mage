@@ -55,8 +55,8 @@ import {
 } from "../magick-balance.js";
 import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
-import { onPotereApri, onPotereCatalogo, onPotereCatalogoCompleto, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriFiltri, preparePoteriPagina } from "../poteri-scheda.js";
-import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
+import { onPotereApri, onPotereCatalogo, onPotereCatalogoCompleto, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriFiltri, preparePoteriPagina, riapriPoteri } from "../poteri-scheda.js";
+import { onFamilySphereToggle, onSphereDotChange, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { prepareMemo } from "../memo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
@@ -298,9 +298,27 @@ function onCassettoToggle(event, target) {
   const row = target?.closest?.(".wod5e-mage-riga.con-tendina, .wod5e-mage-riga.con-cassetto");
   if (!row) return;
   const open = !row.classList.contains("aperto");
-  for (const other of row.closest(".wod5e-mage-riq-body")?.querySelectorAll(".wod5e-mage-riga.aperto") ?? []) other.classList.remove("aperto");
+  // Le tendine aperte si ricordano per chiave (Blue, 25/9: coi pallini delle
+  // Sfere «si chiudono da sole»): il render le riapre com'erano.
+  const aperte = (this._cassettiAperti ??= new Set());
+  for (const other of row.closest(".wod5e-mage-riq-body")?.querySelectorAll(".wod5e-mage-riga.aperto") ?? []) {
+    other.classList.remove("aperto");
+    if (other.dataset.cassetto) aperte.delete(other.dataset.cassetto);
+  }
   row.classList.toggle("aperto", open);
+  if (row.dataset.cassetto) aperte[open ? "add" : "delete"](row.dataset.cassetto);
   if (open) flipCassetto(row);
+}
+
+/** Dopo il render: le tendine con la chiave ricordata tornano aperte. */
+function riapriCassetti(sheet) {
+  const aperte = sheet._cassettiAperti;
+  if (!aperte?.size) return;
+  for (const row of sheet.element?.querySelectorAll(".wod5e-mage-riga.con-tendina[data-cassetto]") ?? []) {
+    if (!aperte.has(row.dataset.cassetto)) continue;
+    row.classList.add("aperto");
+    flipCassetto(row);
+  }
 }
 
 /**
@@ -480,6 +498,7 @@ export class MageActorSheet extends MortalActorSheet {
       familySphereToggle: onFamilySphereToggle,
       credoFamilyPick: onCredoFamilyPick,
       sphereSelectionChange: onSphereSelectionChange,
+      sphereDotChange: onSphereDotChange,
       wheelModeToggle: onWheelModeToggle,
       // La modalità chiara (16/9) e la misura del testo (16/9 sera): i tasti accanto ai tre pallini della finestra.
       [TEMA_AZIONE]: onTemaToggle,
@@ -797,7 +816,8 @@ export class MageActorSheet extends MortalActorSheet {
     // Le tendine della prima pagina restano com'erano attraverso i render:
     // Condizioni, Dettagli della Ruota, il memo di creazione.
     this._drawersOpen ??= {};
-    for (const [key, selector] of [["condizioni", ".wod5e-mage-condizioni-drawer"], ["ruota", ".wod5e-mage-ruota-dettagli"], ["saggezza", ".wod5e-mage-saggezza-tendina"], ["bonus", ".wod5e-mage-stat-bonus"]]) {
+    // Anche la tavola degli Ambiti della pagina Magick (Blue, 25/9: si chiudeva da sola coi pallini).
+    for (const [key, selector] of [["condizioni", ".wod5e-mage-condizioni-drawer"], ["ruota", ".wod5e-mage-ruota-dettagli"], ["saggezza", ".wod5e-mage-saggezza-tendina"], ["bonus", ".wod5e-mage-stat-bonus"], ["ambitiTavola", ".wod5e-mage-riq-ambiti-tavola"]]) {
       const drawer = this.element?.querySelector(selector);
       if (!drawer) continue;
       drawer.open = Boolean(this._drawersOpen[key]);
@@ -837,6 +857,9 @@ export class MageActorSheet extends MortalActorSheet {
       if (id in this._focusSphereOpen) sphere.open = this._focusSphereOpen[id];
       sphere.addEventListener("toggle", () => { this._focusSphereOpen[id] = sphere.open; });
     }
+    // Le righe dei poteri della pagina Magick e le tendine delle righe tornano aperte com'erano (Blue, 25/9).
+    riapriPoteri(this);
+    riapriCassetti(this);
     // I dettagli in riga dei Tratti (Blue, 24/9 sera): le caselle accanto al
     // tratto e all'oggetto scrivono sull'oggetto al cambio, senza aprirlo.
     for (const field of this.element?.querySelectorAll("[data-item-field][data-item-id]") ?? []) {

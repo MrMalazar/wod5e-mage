@@ -1,9 +1,11 @@
 // GENERATO da tools/genera-dati.mjs (sorgenti: tools/dati/poteri.json, dal libretto dei poteri e dai poteri nuovi del 23-24/9;
-// tools/dati/effetti_poteri.json, gli effetti sul tiro scritti a mano dal testo, tappa 3 del 24/9).
+// tools/dati/effetti_poteri.json, gli effetti sul tiro scritti a mano dal testo, tappa 3 del 24/9;
+// tools/dati/prerequisiti_poteri.json, i prerequisiti d'acquisto, 25/9).
 // Non si scrive a mano. Il catalogo dei poteri delle Sfere: ogni voce ha le Sfere che la aprono
 // (`spheres`, con "any" per Qualsiasi), la matrice di provenienza, il testo intero, il costo in
-// Quintessenza, il limite d'uso, `effects` (gli effetti sul tiro: poteri.js li applica) e `scelta`
-// (cosa il giocatore sceglie all'acquisto: un Ambito, un'Abilità, un incantesimo).
+// Quintessenza, il limite d'uso, `effects` (gli effetti sul tiro: poteri.js li applica), `scelta`
+// (cosa il giocatore sceglie all'acquisto: un Ambito, un'Abilità, un incantesimo) e `prerequisiti`
+// (quanti poteri della Sfera, o quali, servono per prenderlo; null = nessuno).
 export const POTERI = Object.freeze([
   {
     "id": "da-qualche-parte",
@@ -29,7 +31,8 @@ export const POTERI = Object.freeze([
     "page": "Corrispondenza",
     "hooks": [],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "tasca-di-mary",
@@ -67,7 +70,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "torna-sempre",
@@ -97,7 +101,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "armonia-a-distanza",
@@ -140,7 +145,8 @@ export const POTERI = Object.freeze([
         "nota": "Accesso con Primordio: i dadi di Armonia a distanza valgono anche nei lanci di Magick."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "conosco-un-posto",
@@ -174,7 +180,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "planimetria",
@@ -207,7 +214,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "rifornimento",
@@ -240,7 +248,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "schieramento",
@@ -269,7 +278,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pedina",
@@ -298,7 +308,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "strada-facendo",
@@ -328,7 +339,8 @@ export const POTERI = Object.freeze([
       "orologi"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "giochiamo-in-casa",
@@ -361,7 +373,8 @@ export const POTERI = Object.freeze([
       "uso"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "uscita-d-emergenza",
@@ -394,7 +407,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "colpo-di-fortuna",
@@ -433,7 +447,8 @@ export const POTERI = Object.freeze([
         "nota": "Quando in un tuo tiro riuscito escono due 10, aggiungi un effetto a scelta: 1 danno in più, una Condizione al bersaglio o un'informazione dal Narratore."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-dado-e-tratto",
@@ -469,7 +484,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "inseparabili",
@@ -499,7 +515,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "non-tutto-il-male",
@@ -528,7 +545,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "testa-o-croce",
@@ -582,7 +600,8 @@ export const POTERI = Object.freeze([
         "nota": "Negli scontri di dadi (iniziativa, contese) vinci i pareggi."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "angolo-morto",
@@ -614,7 +633,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "chi-la-fa-l-aspetti",
@@ -643,7 +663,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "fortuna-del-principiante",
@@ -683,7 +704,8 @@ export const POTERI = Object.freeze([
         "nota": "Una volta per sessione un tiro di un'Abilità in cui hai un solo pallino riesce."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-banco-vince",
@@ -716,7 +738,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "legge-di-murphy",
@@ -749,7 +772,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "niente-al-caso",
@@ -799,7 +823,8 @@ export const POTERI = Object.freeze([
         "nota": "Accesso con Primordio: vale anche nei lanci di Magick, se dopo la soglia ti restano almeno 2 dadi."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "si-trova-tutto",
@@ -828,7 +853,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "tiri-gemelli",
@@ -863,7 +889,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "contagio",
@@ -896,7 +923,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "fuori-dai-piedi",
@@ -929,7 +957,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-fucile-di-echov",
@@ -969,7 +998,8 @@ export const POTERI = Object.freeze([
         "nota": "Una volta per sessione indichi un oggetto in scena: quando lo usi, entro la sessione, il tiro riesce."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "ladro-di-fortuna",
@@ -1019,7 +1049,8 @@ export const POTERI = Object.freeze([
         "nota": "Accesso con Primordio: vale anche coi lanci di Magick, sia per togliere il dado sia per metterlo."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "lascia-o-raddoppia",
@@ -1055,7 +1086,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "porto-sfortuna-io",
@@ -1091,7 +1123,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "roulette",
@@ -1123,7 +1156,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "scommessa",
@@ -1157,7 +1191,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-pezzo-mancante",
@@ -1191,7 +1226,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "nerf",
@@ -1224,7 +1260,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "tarocchi",
@@ -1257,7 +1294,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-narratore-ti-ascolta",
@@ -1292,7 +1330,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "scambio-di-sorte",
@@ -1326,7 +1365,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "a-stordire",
@@ -1357,7 +1397,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "mi-metto-in-mezzo",
@@ -1386,7 +1427,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "brucia-ancora",
@@ -1416,7 +1458,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "bruciature",
@@ -1449,7 +1492,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "nessuno-scappa",
@@ -1480,7 +1524,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "onda-d-urto",
@@ -1510,7 +1555,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "perforante",
@@ -1539,7 +1585,8 @@ export const POTERI = Object.freeze([
       "salute"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "semplice-violenza",
@@ -1575,7 +1622,8 @@ export const POTERI = Object.freeze([
         "nota": "I danni dei tuoi lanci di Forza con Potenza 3 o più sono aggravati."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "colpo-decisivo",
@@ -1608,7 +1656,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "baratto",
@@ -1637,7 +1686,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "bottino",
@@ -1666,7 +1716,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "ce-l-ho",
@@ -1697,7 +1748,8 @@ export const POTERI = Object.freeze([
       "uso"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "fai-da-te",
@@ -1730,7 +1782,8 @@ export const POTERI = Object.freeze([
       "quintessenza"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-giusto-attrezzo",
@@ -1769,7 +1822,8 @@ export const POTERI = Object.freeze([
         "nota": "Una volta per scena, se l'attrezzo che usi c'entra col tiro (un piede di porco, un grimaldello, un bisturi), non paghi il Prezzo della riuscita."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "tutto-e-un-arma",
@@ -1797,7 +1851,8 @@ export const POTERI = Object.freeze([
       "salute"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "fatto-da-me",
@@ -1826,7 +1881,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "opera",
@@ -1854,7 +1910,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "oggetto-sacrificale",
@@ -1889,7 +1946,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "ho-letto-qualcosa",
@@ -1929,7 +1987,8 @@ export const POTERI = Object.freeze([
         "nota": "Una volta per sessione, in un tiro di conoscenza, hai 3 dadi in più."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-mondo-e-piccolo",
@@ -1962,7 +2021,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "l-ho-sentito-dire",
@@ -1993,7 +2053,8 @@ export const POTERI = Object.freeze([
       "uso"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "mai-colto-di-sorpresa",
@@ -2021,7 +2082,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "al-posto-tuo",
@@ -2052,7 +2114,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "conto-degli-indizi",
@@ -2081,7 +2144,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "morale",
@@ -2111,7 +2175,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pace",
@@ -2141,7 +2206,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pane-e-sale",
@@ -2169,7 +2235,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pensiero-laterale",
@@ -2200,7 +2267,8 @@ export const POTERI = Object.freeze([
       "uso"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "valvola-di-sfogo",
@@ -2229,7 +2297,8 @@ export const POTERI = Object.freeze([
       "condizione"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "volonta-prestata",
@@ -2259,7 +2328,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "chiodo-fisso",
@@ -2288,7 +2358,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "come-da-piano",
@@ -2323,7 +2394,8 @@ export const POTERI = Object.freeze([
         "nota": "Se il gruppo segue un piano che hai spiegato prima della scena, per quella scena ognuno ha 2 dadi in più nei tiri di Abilità."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "due-mosse-avanti",
@@ -2355,7 +2427,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "tre-ipotesi",
@@ -2387,7 +2460,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "vedo-il-bluff",
@@ -2421,7 +2495,8 @@ export const POTERI = Object.freeze([
         "nota": "Nelle contese sociali tiri dopo l'avversario, sapendo il suo risultato, e puoi ritirarti senza perdere."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "alle-strette",
@@ -2453,7 +2528,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "distrazione",
@@ -2492,7 +2568,8 @@ export const POTERI = Object.freeze([
         "nota": "Una volta per scena, quando qualcuno sta per tirare, un tuo tiro sociale riuscito gli fa perdere il tiro."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "parole-che-pesano",
@@ -2527,7 +2604,8 @@ export const POTERI = Object.freeze([
         "nota": "Un tuo tiro sociale riuscito può infliggere una Condizione mentale (spaventato, confuso, ossessionato), senza Magick."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "goccia-a-goccia",
@@ -2562,7 +2640,8 @@ export const POTERI = Object.freeze([
         "nota": "Con un PNG che hai incontrato in tre scene diverse, un tiro sociale riuscito lo cambia per sempre: diventa amico, alleato o debitore."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-mio-disastro",
@@ -2602,7 +2681,8 @@ export const POTERI = Object.freeze([
         "nota": "Una volta per sessione descrivi tu come scoppia un tuo dado rosso, e il racconto non deve farti comodo."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "niente-di-perso",
@@ -2631,7 +2711,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pulito",
@@ -2661,7 +2742,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "risarcimento",
@@ -2691,7 +2773,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "strumento-di-fortuna",
@@ -2728,7 +2811,8 @@ export const POTERI = Object.freeze([
         "nota": "Paga 1 Quintessenza: per un lancio usi uno Strumento che non è il tuo come se fosse tuo. Il premio dell'Areté lo decide sempre il Narratore."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "travaso",
@@ -2759,7 +2843,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "anche-a-mani-nude",
@@ -2794,7 +2879,8 @@ export const POTERI = Object.freeze([
         "nota": "Spendi Quintessenza anche nei tiri di Abilità: ogni punto è un dado, dentro il tetto."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "bussola-comune",
@@ -2823,7 +2909,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "cambiavalute",
@@ -2860,7 +2947,8 @@ export const POTERI = Object.freeze([
       "salute"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "casa-dolce-casa",
@@ -2892,7 +2980,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "coro",
@@ -2926,7 +3015,8 @@ export const POTERI = Object.freeze([
         "nota": "I dadi di Armonia che ricevi in un lancio valgono 1 più il numero di chi partecipa."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pila",
@@ -2954,7 +3044,8 @@ export const POTERI = Object.freeze([
       "quintessenza"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "prendo-io",
@@ -2984,7 +3075,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "tabu",
@@ -3018,7 +3110,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "tenuta",
@@ -3048,7 +3141,8 @@ export const POTERI = Object.freeze([
       "salute"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "a-credito",
@@ -3082,7 +3176,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "recupero",
@@ -3120,7 +3215,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "scuola",
@@ -3150,7 +3246,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "sifone",
@@ -3180,7 +3277,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "terra-sacra",
@@ -3224,7 +3322,8 @@ export const POTERI = Object.freeze([
         "nota": "Accesso con Spirito: lì i tuoi lanci verso l'effimera hanno dadi in più pari ai poteri che conosci in Spirito."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pagare-in-paradosso",
@@ -3253,7 +3352,8 @@ export const POTERI = Object.freeze([
       "paradosso"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "parafulmine",
@@ -3283,7 +3383,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "doppia-modifica",
@@ -3314,7 +3415,8 @@ export const POTERI = Object.freeze([
       "uso"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "di-la-non-contano",
@@ -3345,7 +3447,8 @@ export const POTERI = Object.freeze([
       "uso"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "interprete",
@@ -3373,7 +3476,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pellegrino",
@@ -3403,7 +3507,8 @@ export const POTERI = Object.freeze([
       "quintessenza"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "reliquia",
@@ -3432,7 +3537,8 @@ export const POTERI = Object.freeze([
       "condizione"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "segni",
@@ -3464,7 +3570,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "favori",
@@ -3493,7 +3600,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "lascio-fare-a-lui",
@@ -3534,7 +3642,8 @@ export const POTERI = Object.freeze([
         "nota": "Una volta per scena lasci il comando al tuo totem: il Narratore sceglie la tua azione, e l'azione riesce."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "l-avatar-reagisce",
@@ -3566,7 +3675,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "angelo-custode",
@@ -3598,7 +3708,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "voce-dell-avatar",
@@ -3638,7 +3749,8 @@ export const POTERI = Object.freeze([
         "nota": "Una volta per sessione il Narratore ti dice la cosa giusta da fare nella scena; se la fai, il premio dell'Areté vale doppio."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-ritorno",
@@ -3671,7 +3783,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "patto-col-diavolo",
@@ -3703,7 +3816,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-prezzo-prima",
@@ -3735,7 +3849,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "prestito-dal-futuro",
@@ -3790,7 +3905,8 @@ export const POTERI = Object.freeze([
         "nota": "Accesso con Entropia + Primordio: vale anche fra lanci di Magick."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pronto-all-uso",
@@ -3820,7 +3936,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "puntuale",
@@ -3846,7 +3963,8 @@ export const POTERI = Object.freeze([
     "page": "Tempo",
     "hooks": [],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "quadrante",
@@ -3875,7 +3993,8 @@ export const POTERI = Object.freeze([
       "orologi"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "sotto-tiro",
@@ -3901,7 +4020,8 @@ export const POTERI = Object.freeze([
     "page": "Tempo",
     "hooks": [],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "straordinari",
@@ -3929,7 +4049,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "adesso-e-non-dopo",
@@ -3961,7 +4082,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "allo-scadere",
@@ -3991,7 +4113,8 @@ export const POTERI = Object.freeze([
       "orologi"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "ci-penso-domani",
@@ -4023,7 +4146,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "colpo-in-canna",
@@ -4052,7 +4176,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "contrattempo",
@@ -4083,7 +4208,8 @@ export const POTERI = Object.freeze([
       "uso"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "l-avevo-preparata",
@@ -4116,7 +4242,8 @@ export const POTERI = Object.freeze([
       "uso"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "montaggio-alternato",
@@ -4146,7 +4273,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "primo-istante",
@@ -4176,7 +4304,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "ciak-si-gira",
@@ -4207,7 +4336,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "l-avevo-previsto",
@@ -4239,7 +4369,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "preparato-a-casa",
@@ -4268,7 +4399,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "salto",
@@ -4300,7 +4432,8 @@ export const POTERI = Object.freeze([
       "tiro"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "slancio",
@@ -4333,7 +4466,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "ero-gia-li",
@@ -4365,7 +4499,8 @@ export const POTERI = Object.freeze([
       "quintessenza"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "flash-forward",
@@ -4396,7 +4531,8 @@ export const POTERI = Object.freeze([
       "uso"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "flashback",
@@ -4429,7 +4565,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "minute-man",
@@ -4463,7 +4600,8 @@ export const POTERI = Object.freeze([
       "orologi"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "c-ho-ripensato",
@@ -4492,7 +4630,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pisolino",
@@ -4518,7 +4657,8 @@ export const POTERI = Object.freeze([
     "page": "Vita",
     "hooks": [],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "piu-forte-di-prima",
@@ -4547,7 +4687,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "tempra",
@@ -4576,7 +4717,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "allenamento",
@@ -4607,7 +4749,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "buona-forchetta",
@@ -4637,7 +4780,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "il-dolore-sveglia",
@@ -4667,7 +4811,8 @@ export const POTERI = Object.freeze([
       "salute"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "infermeria",
@@ -4701,7 +4846,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "sangue-per-sangue",
@@ -4730,7 +4876,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "stesso-sangue",
@@ -4759,7 +4906,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "vaccino",
@@ -4788,7 +4936,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "bisturi",
@@ -4816,7 +4965,8 @@ export const POTERI = Object.freeze([
       "salute"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "canto-del-cigno",
@@ -4846,7 +4996,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "ferro-nel-sangue",
@@ -4876,7 +5027,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "in-piedi",
@@ -4910,7 +5062,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "memoria-muscolare",
@@ -4944,7 +5097,8 @@ export const POTERI = Object.freeze([
         "nota": "Un tiro fisico che ti è già riuscito nella scena, se lo rifai, riesce senza tirare."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "parassita",
@@ -4972,7 +5126,8 @@ export const POTERI = Object.freeze([
       "salute"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "doppio-cuore",
@@ -5004,7 +5159,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "duro-a-morire",
@@ -5037,7 +5193,8 @@ export const POTERI = Object.freeze([
       "salute"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "non-sotto-il-mio-turno",
@@ -5066,7 +5223,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "appoggio",
@@ -5103,7 +5261,8 @@ export const POTERI = Object.freeze([
         "nota": "Il punteggio dell'Ambito di Potenza non conta sino al 4° pallino quando la tua Sfera trova la sua leva già in scena"
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "coperto",
@@ -5134,7 +5293,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "difendersi-dalla-sfera",
@@ -5166,7 +5326,8 @@ export const POTERI = Object.freeze([
       "salute"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "fatto-per-durare",
@@ -5205,7 +5366,8 @@ export const POTERI = Object.freeze([
         "nota": "Il punteggio dell'Ambito di Durata non conta sino al 4° pallino, ma l'effetto dura solo finché regge l'appoggio della tua Sfera"
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "folla",
@@ -5243,7 +5405,8 @@ export const POTERI = Object.freeze([
         "nota": "Il punteggio dell'Ambito di Bersagli non conta sino al 4° pallino quando per la tua Sfera la folla è una cosa sola"
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "impresa-impossibile",
@@ -5277,7 +5440,8 @@ export const POTERI = Object.freeze([
       "narratore"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "la-pratica-rende-perfetti",
@@ -5328,7 +5492,8 @@ export const POTERI = Object.freeze([
     ],
     "scelta": {
       "kind": "incantesimo"
-    }
+    },
+    "prerequisiti": null
   },
   {
     "id": "legame",
@@ -5370,7 +5535,8 @@ export const POTERI = Object.freeze([
         "nota": "Il punteggio dell'Ambito di Portata non conta sino al 4° pallino verso ciò con cui hai un legame"
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "mestiere",
@@ -5423,7 +5589,8 @@ export const POTERI = Object.freeze([
     ],
     "scelta": {
       "kind": "abilita"
-    }
+    },
+    "prerequisiti": null
   },
   {
     "id": "modello",
@@ -5452,7 +5619,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "segnale",
@@ -5491,7 +5659,8 @@ export const POTERI = Object.freeze([
         "nota": "Il punteggio dell'Ambito di Condizioni non conta sino al 4° pallino quando il segnale è preciso"
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "sentinella",
@@ -5530,7 +5699,8 @@ export const POTERI = Object.freeze([
         "nota": "hai diritto a una reazione istintiva a soglia -2"
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "sesto-senso",
@@ -5570,7 +5740,8 @@ export const POTERI = Object.freeze([
         "nota": "Quando un tiro di Abilità è coerente con quello che percepisci nella scena, il Narratore può concederti soglia -2 oppure 2 dadi in più."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "adrenalina",
@@ -5614,7 +5785,8 @@ export const POTERI = Object.freeze([
         "nota": "quando sei sotto metà Salute"
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "ambito-di-casa",
@@ -5699,7 +5871,8 @@ export const POTERI = Object.freeze([
           "targets"
         ]
       }
-    }
+    },
+    "prerequisiti": null
   },
   {
     "id": "bussola-doppia",
@@ -5737,7 +5910,8 @@ export const POTERI = Object.freeze([
         "nota": "Quando rispetti la Bussola in un lancio della tua Sfera, i dadi in più diventano due."
       }
     ],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "incassare",
@@ -5780,7 +5954,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "rigenerazione",
@@ -5823,7 +5998,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "seconda-possibilita",
@@ -5865,7 +6041,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "senza-residuo",
@@ -5897,7 +6074,8 @@ export const POTERI = Object.freeze([
       "quintessenza"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "guasto",
@@ -5931,7 +6109,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "miraggio",
@@ -5964,7 +6143,8 @@ export const POTERI = Object.freeze([
       "quintessenza"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "dettaglio",
@@ -6002,7 +6182,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "convalescenza",
@@ -6044,7 +6225,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "copertura",
@@ -6083,7 +6265,8 @@ export const POTERI = Object.freeze([
       "scena"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "interruttore",
@@ -6116,7 +6299,8 @@ export const POTERI = Object.freeze([
       "quintessenza"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "velocista",
@@ -6146,7 +6330,8 @@ export const POTERI = Object.freeze([
       "combattimento"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "rallentare",
@@ -6178,7 +6363,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "pronto-soccorso",
@@ -6217,7 +6403,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "sferzata",
@@ -6257,7 +6444,8 @@ export const POTERI = Object.freeze([
       "altri"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   },
   {
     "id": "bussola",
@@ -6292,6 +6480,7 @@ export const POTERI = Object.freeze([
       "quintessenza"
     ],
     "effects": [],
-    "scelta": null
+    "scelta": null,
+    "prerequisiti": null
   }
 ]);

@@ -16,13 +16,15 @@ import {
   PASSI,
   passoSalvato,
   prepareGuidata,
-  QUINTESSENZA_INIZIALE,
-  tettoSfera
+  QUINTESSENZA_INIZIALE
 } from "./creazione-guidata.js";
 import { findFamiglia, findSottofamiglia } from "./famiglie.js";
 import { FOCUS_CREDOS, FOCUS_FORMS, FOCUS_TOOL_IDS } from "./focus.js";
 import { applyMagickBalanceDelta, getMagickBalance } from "./magick-balance.js";
 import { PERSONAGGIO_TABLES } from "./personaggio-extra.js";
+import { POTERI_FLAG } from "./poteri.js";
+import { aggiungiDalCatalogo, sferePerCatalogo } from "./poteri-scheda.js";
+import { openCatalogoPoteri } from "./catalogo-poteri.js";
 import { creationTargets } from "./riepilogo.js";
 import { getSphereSelection, SPHERES } from "./spheres.js";
 import { isChiaro, TEMA_CLASSE, TEMA_SETTING } from "./tema.js";
@@ -82,7 +84,9 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
       rigaTogli: CreazioneGuidata.#onRigaTogli,
       rigaNuova: CreazioneGuidata.#onRigaNuova,
       sfidaApri: CreazioneGuidata.#onSfidaApri,
-      sferaPallino: CreazioneGuidata.#onSferaPallino,
+      dominioAccesso: CreazioneGuidata.#onDominioAccesso,
+      dominioPotere: CreazioneGuidata.#onDominioPotere,
+      dominioPotereTogli: CreazioneGuidata.#onDominioPotereTogli,
       strumentoUsa: CreazioneGuidata.#onStrumentoUsa,
       areteScegli: CreazioneGuidata.#onAreteScegli,
       aretePartenza: CreazioneGuidata.#onAretePartenza,
@@ -306,24 +310,43 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
     sheet.changeTab?.("conceptChallenge", "primary");
   }
 
-  static async #onSferaPallino(event, target) {
+  /**
+   * L'accesso a un Dominio (25/9): la Sfera entra fra le conosciute, e il
+   * livello segna 1 come promemoria; tolto l'accesso, la Sfera torna fuori
+   * e il livello a 0. I poteri presi lì restano sulla scheda.
+   */
+  static async #onDominioAccesso(event, target) {
     event.preventDefault();
     if (this.#avvisaNonPuoi()) return;
     const sphere = String(target.dataset.sphere ?? "");
     if (!SPHERES.includes(sphere)) return;
-    const value = Math.min(Math.max(Math.trunc(Number(target.dataset.value) || 0), 0), 5);
-    const cap = tettoSfera(getArete(this.actor).value);
-    if (value > cap) {
-      ui.notifications.warn(game.i18n.format("WOD5E_MAGE.Guidata.Sfere.TettoAvviso", { cap }));
-      return;
-    }
-    const changes = { [`flags.${MODULE_ID}.spheres.${sphere}`]: value };
-    // Una Sfera con pallini è sbloccata: senza una selezione salvata si scrive intera.
-    if (value > 0) {
-      const selection = getSphereSelection(this.actor);
-      if (!selection[sphere]) changes[`flags.${MODULE_ID}.selectedSpheres`] = { ...selection, [sphere]: true };
-    }
+    const selection = getSphereSelection(this.actor);
+    const aperto = !selection[sphere];
+    const level = Math.trunc(Number(this.actor.getFlag(MODULE_ID, "spheres")?.[sphere]) || 0);
+    const changes = { [`flags.${MODULE_ID}.selectedSpheres`]: { ...selection, [sphere]: aperto } };
+    if (aperto && level < 1) changes[`flags.${MODULE_ID}.spheres.${sphere}`] = 1;
+    if (!aperto) changes[`flags.${MODULE_ID}.spheres.${sphere}`] = 0;
     await this.actor.update(changes);
+  }
+
+  /** Il potere del Dominio: la finestra «Aggiungi» della scheda, aperta su quella Sfera. */
+  static async #onDominioPotere(event, target) {
+    event.preventDefault();
+    if (this.#avvisaNonPuoi()) return;
+    const sphere = String(target.dataset.sphere ?? "");
+    const spheres = sferePerCatalogo(this.actor);
+    if (!spheres.some((entry) => entry.id === sphere)) return;
+    const actor = this.actor;
+    await openCatalogoPoteri({ spheres, sphere, onAdd: (dove, catalogId) => aggiungiDalCatalogo(actor, dove, catalogId) });
+  }
+
+  static async #onDominioPotereTogli(event, target) {
+    event.preventDefault();
+    if (this.#avvisaNonPuoi()) return;
+    const id = String(target.dataset.row ?? "");
+    const rows = this.actor.getFlag(MODULE_ID, POTERI_FLAG) ?? {};
+    if (!Object.hasOwn(rows, id)) return;
+    await this.actor.update({ [`flags.${MODULE_ID}.${POTERI_FLAG}.-=${id}`]: null });
   }
 
   /** Il consiglio del Credo cliccato: lo Strumento, il tuo di preciso se manca, il mestiere se serve. */

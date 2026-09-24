@@ -183,15 +183,23 @@ assert.deepEqual(g5.corpo.premi.map((p) => p.earned), [true, false, false]);
 assert.equal(g5.corpo.proposte[0].name, "Infermiera di corsia");
 assert.equal(g5.passi[4].fatto, true);
 
-// Il passo 6: nove Sfere, il tetto Areté + 2, il conto.
-const g6 = prepareGuidata(attore({ flags: { arete: { value: 1 }, spheres: { life: 1, spirit: 2, forces: 3 }, familySpheres: { life: true, spirit: true } } }), { passo: 6, localize, lang: "it" });
+// Il passo 6, i Domini (25/9): le nove Sfere con l'accesso, un potere per Dominio aperto, il livello solo promemoria.
+const g6 = prepareGuidata(attore({ flags: { arete: { value: 1 }, spheres: { life: 1, spirit: 1, forces: 2 }, selectedSpheres: { life: true, spirit: true, forces: true }, familySpheres: { life: true, spirit: true }, poteri: { a: { sphere: "life", catalogId: "pronto-soccorso", name: "Pronto soccorso", dot: 1 }, b: { sphere: "forces", catalogId: "faro", name: "Faro", dot: 2 } } } }), { passo: 6, localize, lang: "it" });
 assert.equal(g6.corpo.spheres.length, 9);
-assert.equal(g6.corpo.cap, 3);
-assert.deepEqual([g6.corpo.conto.value, g6.corpo.conto.target, g6.corpo.conto.state, g6.corpo.conto.text], [6, 6, "exact", "6/6"]);
+assert.deepEqual([g6.corpo.conto.domini.value, g6.corpo.conto.domini.target, g6.corpo.conto.domini.text], [3, null, "3"]);
+assert.deepEqual([g6.corpo.conto.poteri.value, g6.corpo.conto.poteri.target, g6.corpo.conto.poteri.state, g6.corpo.conto.poteri.text], [2, 3, "under", "2/3"]);
 const forze = g6.corpo.spheres.find((s) => s.id === "forces");
-assert.deepEqual(forze.steps.map((s) => [s.lit, s.oltre]), [[true, false], [true, false], [true, false], [false, true], [false, true]]);
-assert.equal(g6.corpo.spheres.find((s) => s.id === "life").family, true);
-assert.equal(g6.passi[5].fatto, true);
+assert.deepEqual([forze.selected, forze.level, forze.vuoto, forze.poteri.map((p) => [p.id, p.label, p.dot])], [true, 2, false, [["b", "Faro", 2]]]);
+const spirito = g6.corpo.spheres.find((s) => s.id === "spirit");
+assert.deepEqual([spirito.selected, spirito.family, spirito.vuoto, spirito.poteri], [true, true, true, []], "Spirito è aperto ma senza il suo potere");
+assert.equal(g6.corpo.spheres.find((s) => s.id === "matter").selected, false);
+assert.equal(g6.corpo.extra, 0);
+assert.equal(g6.passi[5].fatto, false);
+// Col potere di Spirito il passo è fatto; il grado Discepolo chiede due poteri in più.
+const g6b = prepareGuidata(attore({ flags: { arete: { value: 1 }, selectedSpheres: { life: true }, poteri: { a: { sphere: "life", catalogId: "pronto-soccorso", name: "Pronto soccorso" } } } }), { passo: 6, localize, lang: "it" });
+assert.deepEqual([g6b.corpo.conto.poteri.text, g6b.passi[5].fatto], ["1/1", true]);
+const g6c = prepareGuidata(attore({ flags: { arete: { value: 3 }, creazione: { grado: "discepolo" }, selectedSpheres: { life: true }, poteri: { a: { sphere: "life", catalogId: "pronto-soccorso", name: "Pronto soccorso" } } } }), { passo: 6, localize, lang: "it" });
+assert.deepEqual([g6c.corpo.conto.poteri.text, g6c.corpo.extra, g6c.passi[5].fatto], ["1/3", 2, false]);
 
 // Il passo 7: uno Strumento per Sfera aperta e quello di Percepire; il consiglio del Credo per Sfera.
 const g7 = prepareGuidata(attore({ flags: { focus: { credo: "vivo", practiceForm: "magick", sphereInstruments: { life: { tool: "herbs", name: "la salvia del balcone" } } }, spheres: { life: 1, forces: 2 }, selectedSpheres: { life: true, forces: true } } }), { passo: 7, localize, lang: "it" });
@@ -251,6 +259,8 @@ const intero = attore({
     arete: { value: 1 },
     spheres: { life: 3, forces: 2, spirit: 1 },
     selectedSpheres: { life: true, forces: true, spirit: true },
+    // Un potere per Dominio aperto (25/9).
+    poteri: { a: { sphere: "life", catalogId: "pronto-soccorso", name: "Pronto soccorso" }, b: { sphere: "forces", catalogId: "faro", name: "Faro" }, c: { sphere: "spirit", catalogId: "coro", name: "Coro" } },
     ancore: { x1: { name: "Il partner", description: "" } },
     convinzioni: { r1: { text: "Nessuno decide", group: "morte" } }
   },
@@ -283,6 +293,12 @@ assert.match(finestra, /templates: \[`\$\{RADICE\}\/perche\.hbs`, \.\.\.PASSI\.m
 assert.match(finestra, /Hooks\.on\("createActor"/);
 assert.match(finestra, /game\.settings\.register\(MODULE_ID, GUIDA_TESTI_SETTING/);
 for (const id of PASSI) readFileSync(new URL(`../templates/guidata/passi/${id}.hbs`, import.meta.url), "utf8");
+// Il passo dei Domini (25/9): l'accesso, il più che apre la finestra Aggiungi, il potere con la ×, niente pallini.
+const sfereHbs = readFileSync(new URL("../templates/guidata/passi/sfere.hbs", import.meta.url), "utf8");
+for (const marker of ['data-action="dominioAccesso" data-sphere="{{sphere.id}}"', 'data-action="dominioPotere" data-sphere="{{sphere.id}}"', 'data-action="dominioPotereTogli" data-row="{{p.id}}"', "wod5e-mage-guidata-dominio-livello", "WOD5E_MAGE.Guidata.Sfere.Scegli"]) assert.ok(sfereHbs.includes(marker), `manca ${marker}`);
+assert.ok(!sfereHbs.includes("sferaPallino") && !sfereHbs.includes("wod5e-mage-guidata-pallino"), "niente pallini di Sfera");
+assert.match(finestra, /dominioAccesso: CreazioneGuidata\.#onDominioAccesso,\s+dominioPotere: CreazioneGuidata\.#onDominioPotere,\s+dominioPotereTogli: CreazioneGuidata\.#onDominioPotereTogli/);
+assert.ok(!finestra.includes("sferaPallino"));
 const corpo = readFileSync(new URL("../templates/guidata/corpo.hbs", import.meta.url), "utf8");
 assert.match(corpo, /\{\{> \(lookup passo "partial"\)\}\}/);
 const perche = readFileSync(new URL("../templates/guidata/perche.hbs", import.meta.url), "utf8");
