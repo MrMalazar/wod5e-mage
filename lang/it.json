@@ -1662,7 +1662,8 @@
         "potenza3": "vale con Potenza 3 o più"
       },
       "RiesceSenzaTirare": "Riesce senza tirare: {name}",
-      "PotereCosto": "Il potere costa {points} Quintessenza."
+      "PotereCosto": "Il potere costa {points} Quintessenza.",
+      "PotereDadiFlavor": "{name} +{dice}"
     },
     "Ritratti": {
       "NextHint": "Gira i ritratti: quello che vedi è anche l'immagine sulla mappa e in chat",

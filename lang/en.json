@@ -1662,7 +1662,8 @@
         "potenza3": "applies with Potency 3 or more"
       },
       "RiesceSenzaTirare": "Succeeds without rolling: {name}",
-      "PotereCosto": "The power costs {points} Quintessence."
+      "PotereCosto": "The power costs {points} Quintessence.",
+      "PotereDadiFlavor": "{name} +{dice}"
     },
     "Ritratti": {
       "NextHint": "Cycle the portraits: the one you see is also the image on the map and in chat",

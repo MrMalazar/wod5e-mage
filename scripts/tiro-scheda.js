@@ -678,7 +678,8 @@ export async function launchTiro(actor, tiro) {
   // Il tiro di Abilità: niente rossi, riuscita dal 6, la Difficoltà solo a mano.
   if (!magick) {
     if (conto.quintessence > 0) bonusParts.push(format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: conto.quintessence }));
-    const card = skillRollCard({ traits: traitRows, flatMod: conto.bonus }, localize);
+    // I dadi del potere stanno nel numero in carta, con gli altri bonus.
+    const card = skillRollCard({ traits: traitRows, flatMod: conto.bonus + conto.powerDice }, localize);
     let esito = null;
     try {
       esito = await rollRamoCDirect({
@@ -719,6 +720,8 @@ export async function launchTiro(actor, tiro) {
   if (options.vulgar) selectors.push("magick.vulgar");
   if (options.witnesses) selectors.push("magick.vulgar-with-witnesses");
   if (conto.quintessence > 0) bonusParts.push(format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: conto.quintessence }));
+  // I dadi del potere (tappa 3) fra i bonus della carta.
+  if (conto.powerDice > 0) bonusParts.push(format("WOD5E_MAGE.Tiro.PotereDadiFlavor", { name: potereLabel(power, localize), dice: conto.powerDice }));
   if (conto.manual && conto.difficulty !== conto.computed) notes.push(format("WOD5E_MAGE.Tiro.ManualDifficultyNote", { computed: conto.computed, difficulty: conto.difficulty }));
 
   const card = renderRollCard({

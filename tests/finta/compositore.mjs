@@ -239,6 +239,7 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   const mMestiere = await S.launchTiro(actor, conMestiere);
   assert.equal(globalThis.__sim.rolls.at(-1).formula, "6dmcs>5 + 0dpcs>5", "riserva 8 meno Difficoltà 2");
   assert.match(mMestiere.flavor, /Mestiere: \+2 dadi/);
+  assert.match(mMestiere.flavor, /\+2/, "i dadi del potere stanno nel numero della carta");
   assert.equal(mMestiere.getFlag("wod5e-mage", ROLL_CARD_FLAG).tiro.power, "pmest");
 
   // Niente al caso: riesce senza tirare con due dadi; l'uso per scena si conta, e il secondo non parte.
