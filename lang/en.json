@@ -1632,7 +1632,7 @@
       "Scena": "Scene",
       "Cerca": "Search an entry…",
       "Famiglie": {
-        "tocchi": "Touches",
+        "tocchi": "Magick Consequences",
         "comuni": "Common options",
         "scena": "Scene options",
         "scettro": "The empowered sceptre",
@@ -1717,7 +1717,7 @@
       "ScattaEntra": "{nome} enters the scene",
       "ScattaCade": "{nome} falls",
       "ScattaChiamata": "the Anchor calls",
-      "ScattaTocco": "a Touch to the caster",
+      "ScattaTocco": "a Consequence to the caster",
       "Orologio": "Clock",
       "Forme": {
         "cerchio": "circle",
@@ -1745,7 +1745,15 @@
         "scena": "for the scene",
         "sessione": "for the session"
       },
-      "CosaFate": "What you do"
+      "CosaFate": "What you do",
+      "FuoriQuadro": "not on the Board",
+      "NessunaVoceQui": "No entry of this family in the chosen scene.",
+      "Rimbalzo": "The rebound that fires",
+      "OrologioNuovo": "The clock that opens",
+      "Titolo": "Name",
+      "TitoloHint": "as the table sees it",
+      "ScattaHint": "what happens when it is full",
+      "OrologioAperto": "Clock \"{nome}\" opened ({forma} {colore}): see it in the Counter."
     },
     "Stat": {
       "Identita": "Identity",

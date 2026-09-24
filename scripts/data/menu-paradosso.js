@@ -1,6 +1,7 @@
 // Generato da tools/build-menu-paradosso.py dal sorgente del menù (tools/dati/menu_paradosso.md, il testo del PDF del 24/9/2026): non toccare a mano.
-// Le 65 voci del menù del Paradosso: famiglia, scena, modo (annunciato, immediato, nascosto, scoppio), prezzo, la scheda (quando, segno, effetto, mosse, poi, esempio),
+// Le 65 voci del menù del Paradosso: famiglia, scena, modo (annunciato, immediato, nascosto, scoppio), prezzo (col suo breve), la riga breve, la scheda (quando, segno, effetto, mosse, poi, esempio),
 // la faccia delle comuni in ogni scena e la durata addosso al mago (lancio, turno, scena, sessione; vuota se la voce non sta addosso a nessuno).
+// I Tocchi si chiamano Conseguenze Magick (Blue, 24/9 sera): la rinomina è fatta qui, il PDF segue.
 
 export const FAMIGLIE_PARADOSSO = Object.freeze(["tocchi", "comuni", "scena", "scettro", "presenze", "orologi", "ancore", "grandi"]);
 
@@ -125,6 +126,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -140,6 +142,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Le dita non chiudono il segno: meno due al prossimo.»",
     "durata": "lancio",
     "ordine": 1,
+    "breve": "−2 dadi al prossimo lancio di Magick",
     "facce": {}
   },
   {
@@ -151,6 +154,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -166,6 +170,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«L'aria intorno a te si fa densa, come acqua.»",
     "durata": "lancio",
     "ordine": 2,
+    "breve": "il prossimo Volgare riesce solo con l'8",
     "facce": {}
   },
   {
@@ -177,6 +182,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -192,6 +198,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Un ronzio nei denti, e la sensazione che qualcosa stia per rompersi.»",
     "durata": "lancio",
     "ordine": 3,
+    "breve": "al prossimo Volgare i rossi scoppiano anche col 2",
     "facce": {}
   },
   {
@@ -203,6 +210,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -218,6 +226,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Il fiato è corto, le gambe pesanti: da qui in poi sei a sei dadi.»",
     "durata": "scena",
     "ordine": 4,
+    "breve": "al massimo 6 dadi fino a fine scena",
     "facce": {}
   },
   {
@@ -229,6 +238,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -244,6 +254,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«La pelle del braccio è rossa dove è passato il fulmine: un livello superficiale.»",
     "durata": "sessione",
     "ordine": 5,
+    "breve": "1 danno superficiale, il segno resta",
     "facce": {}
   },
   {
@@ -255,6 +266,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -270,6 +282,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Il lampo ti resta negli occhi: Abbagliato fino al tuo prossimo turno.»",
     "durata": "turno",
     "ordine": 6,
+    "breve": "Abbagliato o Ovattato per un turno",
     "facce": {}
   },
   {
@@ -281,6 +294,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la soglia dell'effetto",
+      "breve": "la soglia",
       "tipo": "soglia",
       "valore": 0
     },
@@ -296,6 +310,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la serratura aperta con Materia suda ruggine a fine turno; al turno dopo è chiusa, e c'è anche il catenaccio.",
     "durata": "turno",
     "ordine": 7,
+    "breve": "al turno dopo l'effetto finisce e l'ostacolo torna",
     "facce": {
       "indagine": {
         "testo": "la pista trovata con Tempo si richiude: il luogo non ricorda più",
@@ -344,6 +359,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -359,6 +375,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il muro di ghiaccio che bloccava il corridoio si allarga, e chiude anche l'uscita alle spalle dei maghi.",
     "durata": "scena",
     "ordine": 8,
+    "breve": "l'effetto fa di testa sua fino a fine scena",
     "facce": {
       "indagine": {
         "testo": "la visione continua a mostrare pezzi, anche quando il mago non vuole",
@@ -407,6 +424,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la soglia",
+      "breve": "la soglia",
       "tipo": "soglia",
       "valore": 0
     },
@@ -422,6 +440,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "lo scudo che la maga aveva alzato contro i proiettili si chiude intorno a lei, e non la lascia più uscire.",
     "durata": "scena",
     "ordine": 9,
+    "breve": "un loro incantesimo torna contro di loro, storpiato",
     "facce": {
       "indagine": {
         "testo": "la Mente che ha letto un pensiero ne riceve uno indietro",
@@ -470,6 +489,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -485,6 +505,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "al primo piano si accende una finestra, e una signora esce sul balcone col telefono in mano.",
     "durata": "scena",
     "ordine": 10,
+    "breve": "da qui in poi i Volgari contano con testimoni",
     "facce": {
       "indagine": {
         "testo": "in un archivio, in una casa o in un obitorio c'è sempre qualcuno che lavora",
@@ -533,6 +554,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -548,6 +570,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il fulmine stacca la pensilina della fermata, e sotto c'è un rider fermo col motorino.",
     "durata": "turno",
     "ordine": 11,
+    "breve": "un Dormiente finisce dentro l'effetto: salvarlo costa un'azione",
     "facce": {
       "indagine": {
         "testo": "l'archivista, la vicina, il custode del cimitero",
@@ -596,6 +619,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -607,10 +631,11 @@ export const MENU_PARADOSSO = Object.freeze([
       "usarlo",
       "uscire"
     ],
-    "poi": "un Volgare lanciato dentro la zona prende un Tocco a tua scelta, senza pagarlo.",
+    "poi": "un Volgare lanciato dentro la zona prende una Conseguenza a tua scelta, senza pagarlo.",
     "esempio": "l'impianto del capannone va in corto, e l'angolo dei quadri elettrici scarica a ogni turno.",
     "durata": "scena",
     "ordine": 12,
+    "breve": "il posto morde: 1 danno a fine turno, o una Condizione a tutti",
     "facce": {
       "indagine": {
         "testo": "l'archivio si allaga, il cimitero si copre di nebbia (Offuscato)",
@@ -659,6 +684,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la sua soglia, intorno a 2",
+      "breve": "la sua soglia (≈2)",
       "tipo": "suaSoglia",
       "valore": 2
     },
@@ -674,6 +700,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "l'ombra del mago sul muro alza la mano un secondo dopo di lui, poi si stacca e resta in piedi da sola.",
     "durata": "",
     "ordine": 13,
+    "breve": "entra un'Ombra che copia il mago e vuole una cosa piccola",
     "facce": {}
   },
   {
@@ -685,6 +712,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la sua soglia, intorno a 4",
+      "breve": "la sua soglia (≈4)",
       "tipo": "suaSoglia",
       "valore": 4
     },
@@ -700,6 +728,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il vecchio che avevano fatto respirare di nuovo si mette a sedere, e dietro di lui c'è un uomo in cappotto che chiede chi ha firmato.",
     "durata": "",
     "ordine": 14,
+    "breve": "entra chi vuole l'effetto disfatto, o un prezzo al posto suo",
     "facce": {}
   },
   {
@@ -711,6 +740,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la sua soglia",
+      "breve": "la sua soglia",
       "tipo": "suaSoglia",
       "valore": 0
     },
@@ -726,6 +756,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "una figura in fondo al corridoio guarda il cerchio, e vuole che uno dei maghi le dica il nome che aveva da bambino.",
     "durata": "",
     "ordine": 15,
+    "breve": "entra un testimone che conta: ogni Volgare è con testimoni",
     "facce": {}
   },
   {
@@ -737,6 +768,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "1 punto, più il rimbalzo",
+      "breve": "1 pt + rimbalzo",
       "tipo": "orologioRimbalzo",
       "valore": 1
     },
@@ -752,6 +784,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Quattro segmenti. Quando è pieno, il fuoco che avete acceso torna indietro.»",
     "durata": "",
     "ordine": 16,
+    "breve": "orologio: si riempie coi Volgari, pieno scatta il rimbalzo scelto",
     "facce": {}
   },
   {
@@ -763,6 +796,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -778,6 +812,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Il muro di ghiaccio, tre segmenti: al terzo si scioglie.»",
     "durata": "",
     "ordine": 17,
+    "breve": "orologio: un segmento a turno, pieno l'effetto cade",
     "facce": {}
   },
   {
@@ -789,6 +824,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -804,6 +840,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Due segmenti, senza nome. Al primo le ombre si muovono in ritardo.»",
     "durata": "",
     "ordine": 18,
+    "breve": "orologio: un segmento a turno, pieno entra una Presenza",
     "facce": {}
   },
   {
@@ -815,6 +852,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "nascosto",
     "prezzo": {
       "testo": "1 punto, più il rimbalzo",
+      "breve": "1 pt + rimbalzo",
       "tipo": "orologioRimbalzo",
       "valore": 1
     },
@@ -828,6 +866,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la maga con Quadrante sente un conto alla rovescia che gli altri non sentono, e sono già a tre Volgari.",
     "durata": "",
     "ordine": 19,
+    "breve": "come Carica, ma l'orologio lo vede solo chi ha Quadrante",
     "facce": {}
   },
   {
@@ -839,12 +878,13 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
     "quando": "la scena è in un posto Dissonante (lo hai dichiarato tu, gratis) e vuoi che il posto morda da solo.",
     "segno": "l'orologio gira in vista, con un timer.",
-    "effetto": "a ogni giro completo, un Tocco a tua scelta a chi ha lanciato Volgare in quel giro, senza pagarlo.",
+    "effetto": "a ogni giro completo, una Conseguenza a tua scelta a chi ha lanciato Volgare in quel giro, senza pagarlo.",
     "mosse": [
       "lanciare fra un giro e l'altro",
       "uscire",
@@ -854,6 +894,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Ogni due minuti il posto scarica: chi ha lanciato prende Tremore.»",
     "durata": "",
     "ordine": 20,
+    "breve": "orologio: a ogni giro pieno, una Conseguenza gratis a chi ha lanciato Volgare",
     "facce": {}
   },
   {
@@ -865,6 +906,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -880,6 +922,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Tre segmenti: uno per ogni scena in cui tua sorella non ha una risposta.»",
     "durata": "",
     "ordine": 21,
+    "breve": "orologio: un segmento a scena, pieno il guaio dell'Ancora arriva",
     "facce": {}
   },
   {
@@ -891,6 +934,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -906,6 +950,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«È Marta. Dice che c'è qualcuno sotto casa, e che non è la polizia.»",
     "durata": "scena",
     "ordine": 22,
+    "breve": "l'Ancora chiama: il gruppo va da lei, o si apre l'orologio",
     "facce": {}
   },
   {
@@ -917,6 +962,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "3 punti",
+      "breve": "3 pt",
       "tipo": "fisso",
       "valore": 3
     },
@@ -932,6 +978,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la sorella di uno lavora nel bar dove il figlio dell'altra ha appena fatto a botte.",
     "durata": "scena",
     "ordine": 23,
+    "breve": "le Ancore di due maghi nello stesso guaio",
     "facce": {}
   },
   {
@@ -943,6 +990,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -958,6 +1006,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la porta del bar che Forza ha sfondato era quella dove lavora la sorella di Luca.",
     "durata": "scena",
     "ordine": 24,
+    "breve": "l'Ancora entra nell'effetto: In mezzo e Testimone insieme",
     "facce": {}
   },
   {
@@ -969,6 +1018,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la soglia",
+      "breve": "la soglia",
       "tipo": "soglia",
       "valore": 0
     },
@@ -984,6 +1034,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il ricordo che dovevano cancellare al testimone è sparito a Marta, che non sa più dove abita.",
     "durata": "sessione",
     "ordine": 25,
+    "breve": "l'effetto è andato sull'Ancora, storpiato",
     "facce": {}
   },
   {
@@ -995,6 +1046,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "1 punto, più l'orologio",
+      "breve": "1 pt + orologio",
       "tipo": "fisso",
       "valore": 1,
       "orologio": true
@@ -1011,6 +1063,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "quattro segmenti col nome di Marta; al secondo, un messaggio di notte: «ho perso il lavoro».",
     "durata": "scena",
     "ordine": 26,
+    "breve": "orologio sull'Ancora: ogni Volgare un segmento, pieno scatta La chiamata",
     "facce": {}
   },
   {
@@ -1022,6 +1075,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1037,6 +1091,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la visione mostra l'uomo col coltello e il bar, ma non la sera.",
     "durata": "scena",
     "ordine": 27,
+    "breve": "la risposta è vera ma manca un pezzo",
     "facce": {}
   },
   {
@@ -1048,6 +1103,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1063,6 +1119,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la donna sul tram chiude il telefono, scende alla fermata sbagliata e si guarda alle spalle.",
     "durata": "scena",
     "ordine": 28,
+    "breve": "il bersaglio sente lo sguardo e cambia le mosse",
     "facce": {}
   },
   {
@@ -1074,6 +1131,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1089,6 +1147,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il portiere blocca l'ascensore col piede: «Voi chi siete, di preciso? E com'è che la luce si è spenta solo qui?».",
     "durata": "scena",
     "ordine": 29,
+    "breve": "un PNG fa le domande che i maghi non sanno spiegare, e Mente non le toglie",
     "facce": {}
   },
   {
@@ -1100,6 +1159,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1115,6 +1175,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "sanno dov'è il corpo, ma il video del telefono ha solo neve.",
     "durata": "scena",
     "ordine": 30,
+    "breve": "la prova si cancella da sola, anche rifatta con la Magick",
     "facce": {}
   },
   {
@@ -1126,6 +1187,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la soglia dell'effetto",
+      "breve": "la soglia",
       "tipo": "soglia",
       "valore": 0
     },
@@ -1141,6 +1203,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la guardia convinta a far passare i maghi, dieci minuti dopo, chiede di rivedere i documenti.",
     "durata": "scena",
     "ordine": 31,
+    "breve": "a fine scena l'accordo torna com'era prima",
     "facce": {}
   },
   {
@@ -1152,6 +1215,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1167,6 +1231,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Voglio che me lo giuri su tua sorella.» Da quel momento la Mente su di lui non prende.",
     "durata": "scena",
     "ordine": 32,
+    "breve": "la promessa è legata: romperla con la Magick fa fallire l'effetto",
     "facce": {}
   },
   {
@@ -1178,6 +1243,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "3 punti",
+      "breve": "3 pt",
       "tipo": "fisso",
       "valore": 3
     },
@@ -1193,6 +1259,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la bara che i maghi hanno appena trovato con Corrispondenza ha già un'offerta sopra, firmata.",
     "durata": "scena",
     "ordine": 33,
+    "breve": "un terzo entra in gara, e la coincidenza lavora per lui",
     "facce": {}
   },
   {
@@ -1204,6 +1271,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1219,6 +1287,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Ho un treno alle otto», e l'orologio della stazione resta sulle otto meno un quarto qualunque cosa faccia il mago del Tempo.",
     "durata": "scena",
     "ordine": 34,
+    "breve": "l'ora è fissa: la Magick sul tempo fallisce, poi l'accordo salta",
     "facce": {}
   },
   {
@@ -1230,6 +1299,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1245,6 +1315,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la luce rossa sopra la porta lampeggia due volte.",
     "durata": "scena",
     "ordine": 35,
+    "breve": "il sistema ha registrato: i Volgari nel palazzo sono con testimoni",
     "facce": {}
   },
   {
@@ -1256,6 +1327,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1271,6 +1343,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il buio chiesto con Forza dura un secondo, poi tutto il piano si accende, corridoi compresi.",
     "durata": "scena",
     "ordine": 36,
+    "breve": "l'edificio reagisce: allarme, porte chiuse, luci a caso",
     "facce": {}
   },
   {
@@ -1282,6 +1355,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la soglia",
+      "breve": "la soglia",
       "tipo": "soglia",
       "valore": 0
     },
@@ -1297,6 +1371,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il muro della cantina che avevano attraversato è di nuovo un muro, e stavolta c'è un armadio davanti.",
     "durata": "scena",
     "ordine": 37,
+    "breve": "l'uscita si chiude: non è più l'entrata",
     "facce": {}
   },
   {
@@ -1308,6 +1383,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -1323,6 +1399,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "l'illusione regge su tutti, tranne che sulla guardia col cane, che si ferma proprio lì.",
     "durata": "scena",
     "ordine": 38,
+    "breve": "la guardia è sorda alla Magick: si evita da Dormienti",
     "facce": {}
   },
   {
@@ -1334,6 +1411,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -1349,6 +1427,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la sfera di fuoco è pronta, ma il grilletto è già partito.",
     "durata": "turno",
     "ordine": 39,
+    "breve": "il Volgare di questo turno arriva a fine turno",
     "facce": {}
   },
   {
@@ -1360,6 +1439,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la sua soglia",
+      "breve": "la sua soglia",
       "tipo": "suaSoglia",
       "valore": 0
     },
@@ -1375,6 +1455,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "dal varco di Corrispondenza aperto per entrare esce qualcosa che ha la loro stessa faccia.",
     "durata": "",
     "ordine": 40,
+    "breve": "al secondo segmento entra un rinforzo uscito dalla loro Magick",
     "facce": {}
   },
   {
@@ -1386,6 +1467,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1401,6 +1483,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "le sirene sembrano lontane, e la maga apre la mano: niente.",
     "durata": "turno",
     "ordine": 41,
+    "breve": "al turno dopo, per un turno, nessuna Magick in scena",
     "facce": {}
   },
   {
@@ -1412,6 +1495,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1427,6 +1511,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "le guardie rientrano nella guardiola, e la porta di ferro non si apre né con Materia né con Forza.",
     "durata": "scena",
     "ordine": 42,
+    "breve": "i nemici si ritirano e la Magick non li segue",
     "facce": {}
   },
   {
@@ -1438,6 +1523,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "3 punti",
+      "breve": "3 pt",
       "tipo": "fisso",
       "valore": 3
     },
@@ -1453,6 +1539,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il capo della banda è dietro la vetrina, poi c'è solo il riflesso della vetrina, e la vetrina è intera.",
     "durata": "scena",
     "ordine": 43,
+    "breve": "scappa in modo soprannaturale: Corrispondenza e Tempo non lo trovano",
     "facce": {}
   },
   {
@@ -1464,6 +1551,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1479,6 +1567,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "l'ago di Corrispondenza gira su se stesso per un turno, e il motorino è già oltre il semaforo.",
     "durata": "scena",
     "ordine": 44,
+    "breve": "chi scappa sparisce dalla Magick per un turno, non dagli occhi",
     "facce": {}
   },
   {
@@ -1490,6 +1579,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "3 punti",
+      "breve": "3 pt",
       "tipo": "fisso",
       "valore": 3
     },
@@ -1505,6 +1595,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il ragazzo bloccato da Forza contro il muro ha la faccia sbagliata e il telefono in mano.",
     "durata": "scena",
     "ordine": 45,
+    "breve": "hanno preso quello sbagliato: quello giusto corre ancora",
     "facce": {}
   },
   {
@@ -1516,6 +1607,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -1531,6 +1623,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il tram attraversa l'incrocio, e il salto di Corrispondenza finisce sulla pensilina.",
     "durata": "scena",
     "ordine": 46,
+    "breve": "un ostacolo che non si scavalca con la Magick, solo da Dormienti",
     "facce": {}
   },
   {
@@ -1542,6 +1635,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1557,6 +1651,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la strada finisce nel mercato del sabato, e il ladro è in mezzo alle bancarelle, esattamente come i maghi.",
     "durata": "scena",
     "ordine": 47,
+    "breve": "la corsa finisce in mezzo alla gente: da lì con testimoni",
     "facce": {}
   },
   {
@@ -1568,6 +1663,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1583,6 +1679,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la fiamma del braciere si piega verso il mago, e il secondo Passo va rifatto.",
     "durata": "scena",
     "ordine": 48,
+    "breve": "un Passo del rito si guasta: si tiene senza i suoi dadi, o si rifà",
     "facce": {}
   },
   {
@@ -1594,6 +1691,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1609,6 +1707,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il cerchio di sale si apre da solo davanti alla borsa della maga, e vuole il libro che c'è dentro.",
     "durata": "scena",
     "ordine": 49,
+    "breve": "il rito chiede una cosa in più: un Passo, una Quintessenza, un oggetto",
     "facce": {}
   },
   {
@@ -1620,6 +1719,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la sua soglia",
+      "breve": "la sua soglia",
       "tipo": "suaSoglia",
       "valore": 0
     },
@@ -1635,6 +1735,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "una figura in fondo al corridoio guarda il cerchio, e chiede di sedersi al posto vuoto.",
     "durata": "",
     "ordine": 50,
+    "breve": "entra un Ospite che vuole un posto nel rito: ogni Volgare è con testimoni",
     "facce": {}
   },
   {
@@ -1646,6 +1747,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1661,6 +1763,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il varco aperto per far passare uno resta aperto anche per chi era nel corridoio.",
     "durata": "scena",
     "ordine": 51,
+    "breve": "l'effetto sbava fuori dal cerchio, per questa scena e quella dopo",
     "facce": {}
   },
   {
@@ -1672,6 +1775,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1687,6 +1791,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il ponte si allunga a ogni passo, finché la maga non lascia cadere una moneta di luce nell'acqua.",
     "durata": "scena",
     "ordine": 52,
+    "breve": "ogni Volgare costa 1 Quintessenza in più fino a fine scena",
     "facce": {}
   },
   {
@@ -1698,6 +1803,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -1713,6 +1819,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "dal fondo del corridoio la voce della madre di Luca dice il suo nome da bambino.",
     "durata": "scena",
     "ordine": 53,
+    "breve": "una voce chiama: −2 dadi a chi non le va incontro",
     "facce": {}
   },
   {
@@ -1724,6 +1831,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -1739,6 +1847,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "le scale scendono ma il mago sale, e da quel momento vede tutto sfocato.",
     "durata": "scena",
     "ordine": 54,
+    "breve": "un dettaglio sbagliato morde: Abbagliato o Ovattato per la scena",
     "facce": {}
   },
   {
@@ -1750,6 +1859,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "la soglia dell'effetto",
+      "breve": "la soglia",
       "tipo": "soglia",
       "valore": 0
     },
@@ -1765,6 +1875,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il sigillo sulla porta del Nodo si scrosta, e i cani del vicino smettono di girare al largo.",
     "durata": "scena",
     "ordine": 55,
+    "breve": "la protezione cede: quello che teneva fuori può entrare",
     "facce": {}
   },
   {
@@ -1776,6 +1887,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1791,6 +1903,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la vasca in cortile ha l'acqua ferma e grigia, e la maga sente che stasera non c'è niente da prendere.",
     "durata": "scena",
     "ordine": 56,
+    "breve": "il Nodo non dà Quintessenza e in casa i Volgari riescono con l'8",
     "facce": {}
   },
   {
@@ -1802,6 +1915,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1817,6 +1931,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il vicino di pianerottolo è in cucina con la torta, e la cucina è ancora piena del fumo del rito.",
     "durata": "scena",
     "ordine": 57,
+    "breve": "qualcuno entra oltre le protezioni, e ha visto",
     "facce": {}
   },
   {
@@ -1828,6 +1943,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "1 punto",
+      "breve": "1 pt",
       "tipo": "fisso",
       "valore": 1
     },
@@ -1843,6 +1959,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il salto di Corrispondenza li lascia nel cortile del palazzo accanto, con la portinaia che guarda.",
     "durata": "scena",
     "ordine": 58,
+    "breve": "la scorciatoia arriva nel posto sbagliato, con gente intorno",
     "facce": {}
   },
   {
@@ -1854,6 +1971,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1869,6 +1987,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il documento fatto con Mente è perfetto finché l'agente non lo gira: dietro è bianco.",
     "durata": "scena",
     "ordine": 59,
+    "breve": "il controllo vede: la Magick su documento, targa e faccia salta",
     "facce": {}
   },
   {
@@ -1880,6 +1999,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "annunciato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1895,6 +2015,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la piazza si volta verso la maga, e il cerchio di persone intorno a lei si stringe invece di aprirsi.",
     "durata": "scena",
     "ordine": 60,
+    "breve": "la folla si chiude: nessun posto senza testimoni per la scena",
     "facce": {}
   },
   {
@@ -1906,6 +2027,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "immediato",
     "prezzo": {
       "testo": "2 punti",
+      "breve": "2 pt",
       "tipo": "fisso",
       "valore": 2
     },
@@ -1921,6 +2043,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "l'archivio chiude alle sette, e la serratura non sente né Materia né la spallata.",
     "durata": "scena",
     "ordine": 61,
+    "breve": "la chiusura tiene: Materia, Forza e Corrispondenza scivolano",
     "facce": {}
   },
   {
@@ -1932,6 +2055,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "scoppio",
     "prezzo": {
       "testo": "3 punti a pallino, fino a due",
+      "breve": "3 pt a pallino",
       "tipo": "pallino",
       "valore": 3,
       "massimo": 2
@@ -1948,6 +2072,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "il cane del portiere ringhia al mago dal fuoco, e a nessun altro.",
     "durata": "sessione",
     "ordine": 62,
+    "breve": "il mago prende il Difetto Echi: un dado a chi lo cerca, per pallino",
     "facce": {}
   },
   {
@@ -1959,6 +2084,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "scoppio",
     "prezzo": {
       "testo": "5 punti",
+      "breve": "5 pt",
       "tipo": "fisso",
       "valore": 5
     },
@@ -1974,6 +2100,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "da quella sera il mago non riesce più a guardare il fuoco.",
     "durata": "sessione",
     "ordine": 63,
+    "breve": "metà dell'Ustione va sulla Saggezza",
     "facce": {}
   },
   {
@@ -1985,6 +2112,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "scoppio",
     "prezzo": {
       "testo": "5 punti",
+      "breve": "5 pt",
       "tipo": "fisso",
       "valore": 5
     },
@@ -2000,6 +2128,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "un esattore in giacca grigia, un cane nero, un impiegato senza volto.",
     "durata": "sessione",
     "ordine": 64,
+    "breve": "un'entità viene a riscuotere nella sessione dopo",
     "facce": {}
   },
   {
@@ -2011,6 +2140,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "modo": "scoppio",
     "prezzo": {
       "testo": "10 punti",
+      "breve": "10 pt",
       "tipo": "fisso",
       "valore": 10
     },
@@ -2026,6 +2156,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "una città vuota, una stanza senza fine, un giorno che si ripete.",
     "durata": "sessione",
     "ordine": 65,
+    "breve": "il mago finisce in una bolla fuori dal mondo: uscirne è la sessione dopo",
     "facce": {}
   }
 ]);

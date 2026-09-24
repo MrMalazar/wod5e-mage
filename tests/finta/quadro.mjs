@@ -221,14 +221,62 @@ await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
   assert.ok(ritorno.aperta);
   assert.equal(ritorno.volgari.length, 1);
   assert.match(ritorno.volgari[0].label, /Guendalina · Fulmine · Volgare con testimoni · soglia 5/);
-  assert.ok(ritorno.maghi.find((m) => m.id === "a1").selected, "su chi: il mago del Volgare");
+  assert.ok(ritorno.bersagli.find((m) => m.id === "a1").selected, "su chi: il mago del Volgare");
   assert.equal(ritorno.suChiVuoto, false);
+  assert.equal(ritorno.breve, "al turno dopo l'effetto finisce e l'ostacolo torna");
+  assert.equal(ritorno.prezzoLabel, "la soglia");
+  assert.match(aperto.html, /<span class="breve">al turno dopo l&#x27;effetto finisce e l&#x27;ostacolo torna<\/span>/);
+  assert.match(aperto.html, /Conseguenze Magick/);
+  assert.ok(!aperto.html.includes("I Tocchi"));
   assert.equal(ritorno.stima, 5, "la soglia del Volgare");
   assert.match(aperto.html, /wod5e-mage-menu-scheda/);
   assert.match(aperto.html, /wod5e-mage-menu-spesa" data-voce="ritorno"/);
   assert.match(aperto.html, /<option value="v1" data-actor="a1" data-soglia="5" selected>/);
   assert.match(aperto.html, /Il prezzo è la soglia del Volgare/);
   assert.match(aperto.html, /data-action="spendi" data-voce="ritorno"/);
+}
+
+// 4b. Un Volgare di Ianira (fuori dal Quadro), alias vuoto e flavor a capo: l'etichetta senza buchi, e lei fra i bersagli come «fuori dal Quadro».
+{
+  const fuori = { id: "v0", timestamp: inizioSessione + 12, speaker: { actor: "a3", alias: "" }, flavor: "<div>\n<b>Nebbia</b></div>", flags: { [MODULE]: { rollCard: { vulgar: true, advancedDifficulty: false, threshold: 4 } } }, update: async () => fuori };
+  sim.messages.push(fuori);
+  const { ctx, html } = await contesto("menu");
+  const ritorno = ctx.cassetti.find((c) => c.famiglia === "comuni").voci.find((v) => v.id === "ritorno");
+  assert.equal(ritorno.volgari[0].label, "Nebbia · Volgare · soglia 4", "niente «· ·» quando manca il nome");
+  const ianira = ritorno.bersagli.find((b) => b.id === "a3");
+  assert.ok(ianira?.fuori && ianira.selected, "chi ha lanciato entra fra i bersagli anche da fuori");
+  assert.equal(ianira.label, "Ianira (fuori dal Quadro)");
+  assert.equal(ritorno.suChiVuoto, false);
+  assert.ok(html.includes("Ianira (fuori dal Quadro)"));
+  sim.messages.pop();
+}
+
+// 4c. Una voce con l'orologio aperta: il riquadro precompilato (nome, segmenti a scelta rapida, cosa scatta dal rimbalzo).
+{
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "carica" } });
+  const { ctx, html } = await contesto("menu");
+  const carica = ctx.cassetti.find((c) => c.famiglia === "orologi").voci.find((v) => v.id === "carica");
+  assert.ok(carica.aperta && carica.campi.orologio && carica.campi.rimbalzo);
+  assert.equal(carica.titoloDefault, "Carica");
+  assert.equal(carica.segmentiDefault, 4);
+  assert.deepEqual(carica.segmentiScelte.map((s) => `${s.n}${s.attivo ? "*" : ""}`), ["3", "4*", "6", "8"]);
+  assert.ok(carica.rimbalzi.length > 0);
+  assert.equal(carica.scattaDefault, carica.rimbalzi[0].nome, "cosa scatta parte dal primo rimbalzo");
+  assert.match(html, /wod5e-mage-menu-orologio/);
+  assert.match(html, /data-role="titolo" value="Carica"/);
+  assert.match(html, /<button type="button" class="attivo" data-n="4">4<\/button>/);
+  assert.match(html, new RegExp(`data-role="scatta" value="${carica.rimbalzi[0].nome}"`));
+  assert.match(html, new RegExp(`data-nome="${carica.rimbalzi[0].nome}"`));
+  const ombra = cassettiApertiPer("ombra");
+  await ombra;
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "carica" } });
+}
+async function cassettiApertiPer(id) {
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: id } });
+  const { ctx } = await contesto("menu");
+  const voce = ctx.cassetti.flatMap((c) => c.voci).find((v) => v.id === id);
+  assert.equal(voce.segmentiDefault, 3, "una Presenza parte da tre segmenti");
+  assert.equal(voce.scattaDefault, "Ombra entra in scena");
 }
 
 // 5. La spesa: Ritorno su Guendalina, risponde a Fulmine; poi Carica con l'orologio.
@@ -367,3 +415,20 @@ assert.equal(game.settings.get(MODULE, SCENA_SETTING).tipo, "rituale");
 assert.deepEqual(game.settings.get(MODULE, MAGHI_SETTING).ids, ["a1"]);
 
 console.log(`finta Foundry, il Quadro: ok, messaggi: ${sim.messages.length}, notifiche: ${sim.notifiche.length}`);
+
+// Con QUADRO_PAGINA=<cartella>: scrive i tre modi in HTML (e una carta in chat) per guardarli in un browser con il CSS del modulo.
+if (process.env.QUADRO_PAGINA) {
+  const { mkdirSync, writeFileSync } = await import("node:fs");
+  const dir = process.env.QUADRO_PAGINA;
+  mkdirSync(dir, { recursive: true });
+  await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 7 });
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.cassetto.call(app, { preventDefault() {} }, { dataset: { famiglia: "tocchi" } });
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.cassetto.call(app, { preventDefault() {} }, { dataset: { famiglia: "orologi" } });
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "carica" } });
+  for (const modo of ["contatore", "menu", "giocatori"]) {
+    const { html } = await contesto(modo);
+    writeFileSync(`${dir}/${modo}.html`, html);
+  }
+  writeFileSync(`${dir}/carta.html`, sim.messages.filter((m) => m.content).map((m) => m.content).join("\n"));
+  console.log(`pagine scritte in ${dir}`);
+}

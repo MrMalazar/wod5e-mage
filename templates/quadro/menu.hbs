@@ -16,11 +16,12 @@
                 <i class="fa-solid {{#if cassetto.aperto}}fa-chevron-up{{else}}fa-chevron-down{{/if}} freccia" aria-hidden="true"></i>
             </button>
             <div class="wod5e-mage-menu-voci">
+                {{#unless cassetto.voci.length}}<p class="wod5e-mage-menu-vuoto">{{localize "WOD5E_MAGE.Menu.NessunaVoceQui"}}</p>{{/unless}}
                 {{#each cassetto.voci as |voce|}}
                     <div class="wod5e-mage-menu-voce{{#if voce.aperta}} aperta{{/if}}{{#if voce.scoppio}} scoppio{{/if}}" data-voce="{{voce.id}}" data-testo="{{voce.testoCerca}}">
                         <button type="button" class="wod5e-mage-menu-voce-riga" data-action="voce" data-voce="{{voce.id}}" aria-expanded="{{voce.aperta}}">
                             <i class="{{voce.iconaModo}}" title="{{voce.modoLabel}}" aria-hidden="true"></i>
-                            <span class="nome">{{voce.nome}}{{#if voce.faccia}}<span class="faccia">{{voce.faccia.testo}}</span>{{else}}{{#if voce.scettro}}<span class="faccia">{{voce.effetto}}</span>{{/if}}{{/if}}</span>
+                            <span class="nome">{{voce.nome}}<span class="breve">{{voce.breve}}</span>{{#if voce.faccia}}<span class="faccia">{{voce.faccia.testo}}</span>{{/if}}</span>
                             <span class="prezzo">{{voce.prezzoLabel}}</span>
                         </button>
                         {{#if voce.aperta}}
@@ -46,7 +47,7 @@
                                     <label class="campo">
                                         <span>{{localize "WOD5E_MAGE.Menu.SuChi"}}</span>
                                         <select data-role="suChi">
-                                            {{#each voce.maghi as |m|}}<option value="{{m.id}}" {{#if m.selected}}selected{{/if}}>{{m.name}}</option>{{/each}}
+                                            {{#each voce.bersagli as |m|}}<option value="{{m.id}}" {{#if m.selected}}selected{{/if}}>{{m.label}}</option>{{/each}}
                                             <option value=""{{#if voce.suChiVuoto}} selected{{/if}}>{{localize "WOD5E_MAGE.Menu.Nessuno"}}</option>
                                         </select>
                                     </label>
@@ -62,11 +63,22 @@
                                     {{#if voce.campi.pallini}}
                                         <label class="campo corto"><span>{{localize "WOD5E_MAGE.Menu.Pallini"}}</span><select data-role="pallini" data-prezzo="1">{{#each voce.pallini as |p|}}<option value="{{p.value}}">{{p.label}}</option>{{/each}}</select></label>
                                     {{/if}}
-                                    {{#if voce.campi.orologio}}
-                                        <label class="campo corto"><span>{{localize "WOD5E_MAGE.Menu.Segmenti"}}</span><input type="number" data-role="segmenti" min="3" max="16" value="{{#if voce.presenza}}3{{else}}4{{/if}}"></label>
-                                    {{/if}}
                                     {{#if voce.campi.rimbalzo}}
-                                        <label class="campo"><span>{{localize "WOD5E_MAGE.Menu.Scatta"}}</span><select data-role="rimbalzo" data-prezzo="1">{{#each voce.rimbalzi as |r|}}<option value="{{r.id}}" data-prezzo="{{r.prezzo}}">{{r.nome}} · {{r.prezzo}}</option>{{/each}}</select></label>
+                                        <label class="campo"><span>{{localize "WOD5E_MAGE.Menu.Rimbalzo"}}</span><select data-role="rimbalzo" data-prezzo="1">{{#each voce.rimbalzi as |r|}}<option value="{{r.id}}" data-prezzo="{{r.prezzo}}" data-nome="{{r.nome}}">{{r.nome}} · {{r.prezzo}}</option>{{/each}}</select></label>
+                                    {{/if}}
+                                    {{#if voce.campi.orologio}}
+                                        <div class="wod5e-mage-menu-orologio">
+                                            <span class="titolo"><i class="fa-solid fa-clock" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.OrologioNuovo"}}</span>
+                                            <label class="campo"><span>{{localize "WOD5E_MAGE.Menu.Titolo"}}</span><input type="text" data-role="titolo" value="{{voce.titoloDefault}}" placeholder="{{localize 'WOD5E_MAGE.Menu.TitoloHint'}}"></label>
+                                            <div class="campo">
+                                                <span>{{localize "WOD5E_MAGE.Menu.Segmenti"}}</span>
+                                                <span class="wod5e-mage-menu-segmenti">
+                                                    {{#each voce.segmentiScelte as |s|}}<button type="button" class="{{#if s.attivo}}attivo{{/if}}" data-n="{{s.n}}">{{s.n}}</button>{{/each}}
+                                                    <input type="number" data-role="segmenti" min="3" max="16" value="{{voce.segmentiDefault}}" aria-label="{{localize 'WOD5E_MAGE.Menu.Segmenti'}}">
+                                                </span>
+                                            </div>
+                                            <label class="campo largo"><span>{{localize "WOD5E_MAGE.Menu.Scatta"}}</span><input type="text" data-role="scatta" value="{{voce.scattaDefault}}" placeholder="{{localize 'WOD5E_MAGE.Menu.ScattaHint'}}"></label>
+                                        </div>
                                     {{/if}}
                                     {{#if voce.campi.ancora}}
                                         <label class="campo"><span>{{localize "WOD5E_MAGE.Menu.Ancora"}}</span><select data-role="ancora">{{#each voce.ancore as |a|}}<option value="{{a.id}}">{{a.name}}</option>{{else}}<option value="">{{localize "WOD5E_MAGE.Menu.NessunaAncora"}}</option>{{/each}}</select></label>

@@ -14042,14 +14042,18 @@
 /* il modo si cambia coi tre bottoni in testa. Il mock del 24/9 sera:   */
 /* viola per la scelta, oro per i prezzi, le famiglie chiuse, i         */
 /* dettagli a un clic. Veste i gettoni della scheda e il tema chiaro.   */
+/* Il collaudo di Blue (24/9 notte): testo più grande e più leggibile,  */
+/* le famiglie che non si schiacciano, i tasti della cornice intatti.   */
 /* ------------------------------------------------------------------ */
 .application.wod5e-mage-quadro {
   --quadro-fondo: #1b160f;
   --quadro-riga: 1px solid rgb(152 119 43 / 45%);
   --quadro-scelta: #2a2038;
-  --quadro-testo: 13px;
+  --quadro-testo: 15px;
   --quadro-verde: #7fd18a;
   --quadro-spento: #6b6355;
+  /* Il commento a margine, più chiaro del «tenue» della scheda: Blue lo leggeva male (24/9 notte). */
+  --quadro-tenue: #cdc2a9;
   /* I numeri e i nomi in risalto: il colore delle intestazioni della finestra (come nella guidata). */
   --quadro-titolo: var(--mortal-color-3);
 }
@@ -14060,6 +14064,7 @@
   --quadro-scelta: #ECE7F4;
   --quadro-verde: #2E7D4F;
   --quadro-spento: #B9B3A6;
+  --quadro-tenue: #5C5C68;
   --quadro-titolo: #3B336B;
 }
 
@@ -14082,8 +14087,10 @@
   padding: 0;
 }
 
-/* I bottoni a più righe riprendono l'altezza dal contenuto (come nella guidata). */
-.application.wod5e-mage-quadro button {
+/* I bottoni dentro la finestra riprendono l'altezza dal contenuto (come nella guidata).
+   Solo dentro .window-content: i tasti della cornice (chiudi, i controlli) portano
+   l'icona come classe sul bottone stesso, e un font imposto li spegneva (24/9 notte). */
+.application.wod5e-mage-quadro .window-content button {
   box-shadow: none;
   font-family: "Signika", sans-serif;
   height: auto;
@@ -14094,13 +14101,13 @@
   width: auto;
 }
 
-.application.wod5e-mage-quadro button:hover,
-.application.wod5e-mage-quadro button:focus {
+.application.wod5e-mage-quadro .window-content button:hover,
+.application.wod5e-mage-quadro .window-content button:focus {
   box-shadow: none;
   text-shadow: none;
 }
 
-.application.wod5e-mage-quadro button:focus-visible {
+.application.wod5e-mage-quadro .window-content button:focus-visible {
   outline: 2px solid var(--mage-viola-chiaro);
   outline-offset: 1px;
 }
@@ -14118,20 +14125,20 @@
   border-radius: 6px;
   color: var(--mage-testo);
   display: inline-flex;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   gap: 6px;
   justify-content: center;
-  padding: 6px 12px;
+  padding: 7px 12px;
   white-space: nowrap;
 }
 
-.application.wod5e-mage-quadro button.ghost {
+.application.wod5e-mage-quadro .window-content button.ghost {
   border-color: transparent;
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
 }
 
-.application.wod5e-mage-quadro button.ghost:hover,
+.application.wod5e-mage-quadro .window-content button.ghost:hover,
 .application.wod5e-mage-quadro .wod5e-mage-quadro-tasti button:hover,
 .application.wod5e-mage-quadro .wod5e-mage-quadro-numero button:hover,
 .application.wod5e-mage-quadro .wod5e-mage-quadro-visibile:hover {
@@ -14139,9 +14146,9 @@
   color: var(--mage-testo);
 }
 
-.application.wod5e-mage-quadro button.piccolo {
-  font-size: 11px;
-  padding: 3px 8px;
+.application.wod5e-mage-quadro .window-content button.piccolo {
+  font-size: 13px;
+  padding: 4px 9px;
 }
 
 /* La testa: i tre modi come linguette, la scena e la riserva in pillole. */
@@ -14149,13 +14156,14 @@
   border-bottom: var(--quadro-riga);
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 8px 10px 6px;
+  flex-shrink: 0;
+  gap: 8px;
+  padding: 10px 12px 8px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-modi {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   grid-template-columns: repeat(3, 1fr);
 }
 
@@ -14164,13 +14172,13 @@
   background: var(--mage-incavo);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 6px;
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
   display: inline-flex;
-  font-size: 12.5px;
+  font-size: 15px;
   font-weight: 600;
-  gap: 6px;
+  gap: 8px;
   justify-content: center;
-  padding: 7px 8px;
+  padding: 9px 8px;
 }
 
 .application.wod5e-mage-quadro button.wod5e-mage-quadro-modo:hover {
@@ -14192,7 +14200,7 @@
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 6px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-pill {
@@ -14202,9 +14210,9 @@
   border-radius: 10px;
   color: var(--quadro-titolo);
   display: inline-flex;
-  font-size: 11px;
-  gap: 5px;
-  padding: 2px 8px;
+  font-size: 13.5px;
+  gap: 6px;
+  padding: 3px 10px;
   white-space: nowrap;
 }
 
@@ -14213,43 +14221,48 @@
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-pill.tenue {
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-riserva {
-  color: var(--mage-tenue);
-  font-size: 11.5px;
+  color: var(--quadro-tenue);
+  font-size: 14px;
   margin-left: auto;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-riserva b {
   color: var(--mage-oro);
-  font-size: 15px;
+  font-size: 19px;
 }
 
-/* Il corpo: scorre da solo, la testa resta. */
+/* Il corpo: scorre da solo, la testa resta. I riquadri dentro non si schiacciano
+   quando la finestra è bassa: scorrono (il collaudo di Blue del 24/9 notte). */
 .application.wod5e-mage-quadro .wod5e-mage-quadro-corpo {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   min-height: 0;
   overflow: auto;
-  padding: 10px;
+  padding: 12px;
   scrollbar-width: thin;
 }
 
+.application.wod5e-mage-quadro .wod5e-mage-quadro-corpo > * {
+  flex: 0 0 auto;
+}
+
 .application.wod5e-mage-quadro .tenue {
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-vuoto {
   border: 1px dashed var(--mage-oro-tenue);
   border-radius: 6px;
-  color: var(--mage-tenue);
-  font-size: 12px;
+  color: var(--quadro-tenue);
+  font-size: 14px;
   margin: 0;
-  padding: 8px 10px;
+  padding: 10px 12px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-tit {
@@ -14258,18 +14271,18 @@
   border-bottom: var(--quadro-riga);
   color: var(--mage-oro);
   display: flex;
-  font: 700 10.5px/1 sans-serif;
+  font: 700 12px/1 sans-serif;
   gap: 8px;
   letter-spacing: 0.16em;
-  margin: 6px 0 0;
-  padding: 2px 0 6px;
+  margin: 8px 0 0;
+  padding: 2px 0 7px;
   text-shadow: none;
   text-transform: uppercase;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-tit small {
-  color: var(--mage-tenue);
-  font: 600 11px "Signika", sans-serif;
+  color: var(--quadro-tenue);
+  font: 600 13px "Signika", sans-serif;
   letter-spacing: 0.02em;
   margin-left: auto;
   text-transform: none;
@@ -14279,25 +14292,26 @@
 .application.wod5e-mage-quadro .wod5e-mage-quadro-numero {
   align-items: center;
   display: flex;
-  gap: 14px;
+  gap: 16px;
   justify-content: center;
-  padding: 4px 0 0;
+  padding: 6px 0 0;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-numero b {
   color: var(--quadro-titolo);
-  font: 700 48px/1 "Modesto Condensed", Georgia, serif;
+  font: 700 58px/1 "Modesto Condensed", Georgia, serif;
   min-width: 2ch;
   text-align: center;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-numero button {
-  padding: 4px 9px;
+  font-size: 16px;
+  padding: 6px 12px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-sotto {
-  color: var(--mage-tenue);
-  font-size: 10.5px;
+  color: var(--quadro-tenue);
+  font-size: 12px;
   letter-spacing: 0.14em;
   margin: 0;
   text-align: center;
@@ -14305,8 +14319,8 @@
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-ritmo {
-  color: var(--mage-tenue);
-  font-size: 11.5px;
+  color: var(--quadro-tenue);
+  font-size: 14px;
   margin: 0;
   text-align: center;
 }
@@ -14318,18 +14332,18 @@
 .application.wod5e-mage-quadro .wod5e-mage-quadro-visibile {
   align-self: center;
   border-color: transparent;
-  color: var(--mage-tenue);
-  font-size: 11px;
+  color: var(--quadro-tenue);
+  font-size: 13.5px;
   font-weight: 400;
-  padding: 3px 8px;
+  padding: 4px 10px;
   white-space: normal;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-inscena {
   display: flex;
   flex-direction: column;
-  font-size: 11.5px;
-  gap: 5px;
+  font-size: 14.5px;
+  gap: 7px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -14337,21 +14351,27 @@
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-inscena li {
   align-items: center;
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
   display: flex;
-  gap: 7px;
-  min-height: 22px;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 28px;
+  padding: 5px 9px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-inscena svg {
-  flex: 0 0 18px;
-  height: 18px;
-  width: 18px;
+  flex: 0 0 24px;
+  height: 24px;
+  width: 24px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-inscena li > i.fa-solid {
   color: var(--mage-viola-chiaro);
+  font-size: 16px;
   text-align: center;
-  width: 18px;
+  width: 24px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .nome {
@@ -14369,14 +14389,14 @@
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .tasti {
   display: inline-flex;
-  gap: 3px;
+  gap: 4px;
   margin-left: auto;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .tasti button {
   border-color: transparent;
-  color: var(--mage-tenue);
-  padding: 2px 6px;
+  color: var(--quadro-tenue);
+  padding: 3px 8px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .tasti button:hover {
@@ -14386,33 +14406,33 @@
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-tasti {
   display: grid;
-  gap: 5px;
+  gap: 6px;
   grid-template-columns: 1fr 1fr;
   margin-top: auto;
-  padding-top: 6px;
+  padding-top: 8px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-tasti button.ghost {
-  font-size: 11px;
-  padding: 4px 8px;
+  font-size: 13px;
+  padding: 5px 9px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-registro {
   border-top: var(--quadro-riga);
   display: flex;
   flex-direction: column;
-  font-size: 11.5px;
-  gap: 3px;
+  font-size: 14px;
+  gap: 4px;
   list-style: none;
   margin: 0;
-  max-height: 180px;
+  max-height: 220px;
   overflow: auto;
-  padding: 6px 0 0;
+  padding: 8px 0 0;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-registro li {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-registro b {
@@ -14431,7 +14451,7 @@
 /* 2 · Il menù: la scena in tendina, la cerca, le famiglie a cassetti chiusi. */
 .application.wod5e-mage-quadro .wod5e-mage-menu-testa {
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-testa select,
@@ -14444,10 +14464,10 @@
   border-radius: 6px;
   color: var(--mage-testo);
   font-family: "Signika", sans-serif;
-  font-size: 12px;
-  height: 28px;
+  font-size: 14px;
+  height: 32px;
   min-width: 0;
-  padding: 3px 8px;
+  padding: 4px 9px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-testa select {
@@ -14455,12 +14475,13 @@
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-testa input {
-  flex: 0 1 160px;
+  flex: 0 1 200px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-testa input::placeholder,
 .application.wod5e-mage-quadro .wod5e-mage-menu-spesa input::placeholder {
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
+  opacity: 0.8;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-cassetto {
@@ -14482,10 +14503,10 @@
   border-radius: 0;
   color: var(--mage-testo);
   display: flex;
-  font-size: 12.5px;
+  font-size: 15px;
   font-weight: 600;
-  gap: 8px;
-  padding: 6px 10px;
+  gap: 10px;
+  padding: 8px 12px;
   text-align: left;
   width: 100%;
 }
@@ -14493,13 +14514,13 @@
 .application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa > i:first-child {
   color: var(--mage-oro);
   text-align: center;
-  width: 16px;
+  width: 18px;
 }
 
 .application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa small {
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
   flex: 1;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
   overflow: hidden;
   text-align: right;
@@ -14508,8 +14529,8 @@
 }
 
 .application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa .freccia {
-  color: var(--mage-tenue);
-  font-size: 10px;
+  color: var(--quadro-tenue);
+  font-size: 12px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.aperto > button.wod5e-mage-menu-cassetto-testa {
@@ -14523,6 +14544,13 @@
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.aperto > .wod5e-mage-menu-voci {
   display: block;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-vuoto {
+  color: var(--quadro-tenue);
+  font-size: 13.5px;
+  margin: 0;
+  padding: 8px 12px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-voce {
@@ -14544,10 +14572,10 @@
   border-radius: 0;
   color: var(--mage-testo);
   display: grid;
-  font-size: 12.5px;
-  gap: 8px;
-  grid-template-columns: 16px 1fr auto;
-  padding: 6px 10px;
+  font-size: 15px;
+  gap: 10px;
+  grid-template-columns: 18px 1fr auto;
+  padding: 7px 12px;
   text-align: left;
   width: 100%;
 }
@@ -14562,7 +14590,7 @@
 
 .application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga > i {
   color: var(--mage-oro);
-  font-size: 11px;
+  font-size: 13px;
   text-align: center;
 }
 
@@ -14571,20 +14599,26 @@
   min-width: 0;
 }
 
+/* La riga breve sotto il nome (Blue, 24/9 notte: «Tremore, −2 al prossimo lancio, 1 pt»), e la faccia della scena in corsivo. */
+.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .breve,
 .application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .faccia {
-  color: var(--mage-tenue);
+  color: var(--mage-testo);
   display: block;
-  font-size: 11px;
+  font-size: 13.5px;
   font-weight: 400;
   line-height: 1.3;
+  opacity: 0.88;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-voce.aperta .faccia {
-  color: var(--mage-testo);
+.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .faccia {
+  color: var(--quadro-tenue);
+  font-style: italic;
+  opacity: 1;
 }
 
 .application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .prezzo {
   color: var(--mage-oro);
+  font-size: 15px;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -14593,9 +14627,9 @@
   border-top: 1px solid rgb(181 138 222 / 35%);
   display: flex;
   flex-direction: column;
-  font-size: 12px;
-  gap: 4px;
-  padding: 6px 10px 4px;
+  font-size: 14.5px;
+  gap: 5px;
+  padding: 8px 12px 6px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-scheda p {
@@ -14607,7 +14641,7 @@
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-scheda .esempio {
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
   font-style: italic;
 }
 
@@ -14618,17 +14652,17 @@
   border-radius: 6px;
   color: var(--mage-scelta-tenue-testo, #fff);
   display: inline-block;
-  font-size: 11.5px;
+  font-size: 13.5px;
   font-style: normal;
-  margin: 1px 3px 1px 0;
-  padding: 1px 7px;
+  margin: 2px 4px 2px 0;
+  padding: 2px 8px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-avviso {
-  color: var(--mage-tenue);
-  font-size: 11.5px;
+  color: var(--quadro-tenue);
+  font-size: 14px;
   margin: 0;
-  padding: 4px 10px 8px;
+  padding: 6px 12px 10px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-avviso i {
@@ -14639,17 +14673,17 @@
 .application.wod5e-mage-quadro .wod5e-mage-menu-spesa {
   border-top: 1px solid rgb(181 138 222 / 35%);
   display: grid;
-  gap: 6px 8px;
+  gap: 8px 10px;
   grid-template-columns: 1fr 1fr;
-  padding: 6px 10px 8px;
+  padding: 8px 12px 10px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo {
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
   display: flex;
   flex-direction: column;
-  font-size: 11.5px;
-  gap: 3px;
+  font-size: 13.5px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -14657,18 +14691,77 @@
   max-width: 100%;
 }
 
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo.largo {
+  grid-column: 1 / -1;
+}
+
 .application.wod5e-mage-quadro .wod5e-mage-menu-spesa .nota {
-  color: var(--mage-tenue);
-  font-size: 11px;
+  color: var(--quadro-tenue);
+  font-size: 13.5px;
   grid-column: 1 / -1;
   margin: 0;
 }
 
+/* L'orologio che si apre: un riquadro suo, precompilato (nome, segmenti a scelta rapida, cosa scatta). */
+.application.wod5e-mage-quadro .wod5e-mage-menu-orologio {
+  background: rgb(0 0 0 / 18%);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  display: grid;
+  gap: 8px 10px;
+  grid-column: 1 / -1;
+  grid-template-columns: 1fr 1fr;
+  padding: 8px 10px 10px;
+}
+
+.application.wod5e-mage-quadro.wod5e-mage-chiara .wod5e-mage-menu-orologio {
+  background: var(--mage-velluto);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-orologio .titolo {
+  color: var(--mage-oro);
+  font: 700 12px/1 sans-serif;
+  grid-column: 1 / -1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-orologio .titolo i {
+  margin-right: 4px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti button {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  color: var(--mage-testo);
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 36px;
+  padding: 5px 8px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti button.attivo {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: #fff;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti input {
+  width: 64px;
+}
+
 .application.wod5e-mage-quadro .wod5e-mage-menu-conto {
   align-items: center;
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
   display: flex;
-  font-size: 11.5px;
+  font-size: 14px;
   gap: 10px;
   grid-column: 1 / -1;
   margin-top: 2px;
@@ -14676,7 +14769,7 @@
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-conto b {
   color: var(--mage-oro);
-  font: 700 18px/1 "Modesto Condensed", Georgia, serif;
+  font: 700 21px/1 "Modesto Condensed", Georgia, serif;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-spesa.troppo .wod5e-mage-menu-conto b[data-role="prezzoVivo"],
@@ -14691,11 +14784,11 @@
   border-radius: 6px;
   color: #fff;
   display: inline-flex;
-  font-size: 12px;
+  font-size: 14.5px;
   font-weight: 600;
-  gap: 6px;
+  gap: 8px;
   margin-left: auto;
-  padding: 6px 12px;
+  padding: 8px 14px;
   white-space: nowrap;
 }
 
@@ -14709,8 +14802,8 @@
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-legenda {
-  color: var(--mage-tenue);
-  font-size: 11px;
+  color: var(--quadro-tenue);
+  font-size: 13px;
   margin: 2px 0 0;
 }
 
@@ -14721,9 +14814,9 @@
 /* 3 · I giocatori: un riquadro per mago, chiuso coi conti, aperto con le tre righe. */
 .application.wod5e-mage-quadro .wod5e-mage-quadro-riga-testa {
   align-items: center;
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
   display: flex;
-  font-size: 11.5px;
+  font-size: 14px;
   justify-content: space-between;
 }
 
@@ -14733,8 +14826,8 @@
   border-radius: 7px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 7px 10px;
+  gap: 8px;
+  padding: 9px 12px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago.aperto {
@@ -14744,17 +14837,17 @@
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago .testa {
   align-items: center;
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago .ritratto {
   background: var(--mage-incavo);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 50%;
-  flex: 0 0 30px;
-  height: 30px;
+  flex: 0 0 36px;
+  height: 36px;
   object-fit: cover;
-  width: 30px;
+  width: 36px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago button.nome {
@@ -14765,7 +14858,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.15;
   min-width: 0;
@@ -14775,19 +14868,19 @@
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago button.nome small {
   align-items: center;
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
   display: flex;
-  font-size: 10.5px;
+  font-size: 12.5px;
   font-weight: 400;
-  gap: 5px;
+  gap: 6px;
 }
 
 .application.wod5e-mage-quadro .punto {
   background: var(--quadro-spento);
   border-radius: 50%;
   display: inline-block;
-  height: 8px;
-  width: 8px;
+  height: 9px;
+  width: 9px;
 }
 
 .application.wod5e-mage-quadro .punto.on {
@@ -14797,7 +14890,7 @@
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 6px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato > span {
@@ -14806,14 +14899,14 @@
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 6px;
   display: inline-flex;
-  font-size: 11px;
-  gap: 4px;
-  padding: 2px 6px;
+  font-size: 13.5px;
+  gap: 5px;
+  padding: 3px 8px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato i {
   color: var(--mage-oro);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato b {
@@ -14831,23 +14924,23 @@
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago .gruppo {
   align-items: start;
   display: grid;
-  font-size: 11.5px;
-  gap: 6px;
-  grid-template-columns: 76px 1fr;
+  font-size: 14px;
+  gap: 8px;
+  grid-template-columns: minmax(96px, max-content) 1fr;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago .gruppo .k {
-  color: var(--mage-tenue);
-  font: 700 9.5px/1.6 sans-serif;
+  color: var(--quadro-tenue);
+  font: 700 11px/1.6 sans-serif;
   letter-spacing: 0.12em;
-  padding-top: 3px;
+  padding-top: 4px;
   text-transform: uppercase;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago .gruppo .k b {
   color: var(--quadro-titolo);
   font-family: "Signika", sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0;
   margin-left: 4px;
 }
@@ -14856,7 +14949,7 @@
 .application.wod5e-mage-quadro .conti {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 5px;
 }
 
 .application.wod5e-mage-quadro .chip {
@@ -14865,18 +14958,19 @@
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 6px;
   display: inline-flex;
-  font-size: 11.5px;
-  gap: 5px;
-  padding: 2px 7px;
+  font-size: 13.5px;
+  gap: 6px;
+  padding: 3px 9px;
 }
 
 .application.wod5e-mage-quadro .chip > i {
   color: var(--mage-oro);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .application.wod5e-mage-quadro .chip small {
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
+  font-size: 12.5px;
 }
 
 .application.wod5e-mage-quadro .chip.par {
@@ -14890,16 +14984,16 @@
 
 .application.wod5e-mage-quadro .chip.vuoto {
   border-style: dashed;
-  color: var(--mage-tenue);
+  color: var(--quadro-tenue);
 }
 
 .application.wod5e-mage-quadro .chip button {
   background: transparent;
   border: 0;
-  color: var(--mage-tenue);
-  font-size: 10px;
+  color: var(--quadro-tenue);
+  font-size: 12px;
   line-height: 1;
-  padding: 0 0 0 2px;
+  padding: 0 0 0 3px;
 }
 
 .application.wod5e-mage-quadro .chip button:hover {
@@ -14911,26 +15005,27 @@
   display: flex;
   flex-direction: column;
   font-family: "Signika", sans-serif;
-  gap: 8px;
+  font-size: 15px;
+  gap: 10px;
 }
 
 .wod5e-mage-quadro-form .wod5e-mage-quadro-domanda {
-  font: 600 18px "Modesto Condensed", Georgia, serif;
+  font: 600 20px "Modesto Condensed", Georgia, serif;
   letter-spacing: 0.02em;
   margin: 0;
 }
 
 .wod5e-mage-quadro-form .wod5e-mage-quadro-hint {
-  font-size: 12px;
+  font-size: 13.5px;
   margin: 0;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .wod5e-mage-quadro-form .wod5e-mage-quadro-scelta {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  max-height: 320px;
+  gap: 6px;
+  max-height: 340px;
   overflow: auto;
 }
 
@@ -14941,8 +15036,8 @@
   cursor: pointer;
   display: grid;
   gap: 10px;
-  grid-template-columns: 18px 30px 1fr auto;
-  padding: 5px 10px;
+  grid-template-columns: 18px 34px 1fr auto;
+  padding: 6px 10px;
 }
 
 .wod5e-mage-quadro-form .wod5e-mage-quadro-scelta-riga:has(input:checked) {
@@ -14952,9 +15047,9 @@
 
 .wod5e-mage-quadro-form .wod5e-mage-quadro-scelta-riga img {
   border-radius: 50%;
-  height: 30px;
+  height: 34px;
   object-fit: cover;
-  width: 30px;
+  width: 34px;
 }
 
 .wod5e-mage-quadro-form .wod5e-mage-quadro-scelta-riga .nome {
@@ -14964,17 +15059,17 @@
 .wod5e-mage-quadro-form .wod5e-mage-quadro-scelta-riga .gioc {
   align-items: center;
   display: inline-flex;
-  font-size: 11px;
-  gap: 5px;
-  opacity: 0.8;
+  font-size: 13px;
+  gap: 6px;
+  opacity: 0.85;
 }
 
 .wod5e-mage-quadro-form .punto {
   background: #6b6355;
   border-radius: 50%;
   display: inline-block;
-  height: 8px;
-  width: 8px;
+  height: 9px;
+  width: 9px;
 }
 
 .wod5e-mage-quadro-form .punto.on {
@@ -14984,19 +15079,61 @@
 .wod5e-mage-quadro-form .wod5e-mage-quadro-campo {
   display: flex;
   flex-direction: column;
-  font-size: 12px;
-  gap: 3px;
+  font-size: 13.5px;
+  gap: 4px;
 }
 
-/* La carta del menù in chat: il banner viola, le mosse come chip. */
-.wod5e-mage-menu-card .wod5e-mage-menu-mosse .wod5e-mage-roll-value {
-  line-height: 1.7;
+/* La carta del menù in chat: le righe una sotto l'altra (la griglia a due colonne
+   la schiacciava, Blue 24/9 notte), la fascia più sobria, le mosse come chip. */
+.wod5e-mage-menu-card {
+  font-size: 1rem;
+}
+
+.wod5e-mage-menu-card .wod5e-mage-paradosso-banner {
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+  padding: 0.3rem 0.5rem;
+  text-align: left;
 }
 
 .wod5e-mage-menu-card .wod5e-mage-paradosso-banner small {
-  font-size: 0.75em;
+  font-size: 0.72em;
   font-weight: 400;
-  letter-spacing: 0;
-  opacity: 0.8;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
   text-transform: none;
+}
+
+.wod5e-mage-menu-card .wod5e-mage-roll-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0.2rem 0 0.4rem;
+}
+
+.wod5e-mage-menu-card .wod5e-mage-roll-row {
+  display: block;
+}
+
+.wod5e-mage-menu-card .wod5e-mage-roll-key {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.1rem;
+}
+
+.wod5e-mage-menu-card .wod5e-mage-roll-value {
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.wod5e-mage-menu-card .wod5e-mage-menu-mosse .wod5e-mage-roll-value {
+  line-height: 1.9;
+}
+
+.wod5e-mage-menu-card .wod5e-mage-menu-poi .wod5e-mage-roll-value {
+  font-size: 0.9rem;
+  opacity: 0.9;
 }

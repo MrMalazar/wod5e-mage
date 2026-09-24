@@ -1632,7 +1632,7 @@
       "Scena": "Scena",
       "Cerca": "Cerca una voce…",
       "Famiglie": {
-        "tocchi": "I Tocchi",
+        "tocchi": "Conseguenze Magick",
         "comuni": "Le opzioni comuni",
         "scena": "Le opzioni di scena",
         "scettro": "Lo scettro potenziato",
@@ -1717,7 +1717,7 @@
       "ScattaEntra": "{nome} entra in scena",
       "ScattaCade": "{nome} cade",
       "ScattaChiamata": "l'Ancora chiama",
-      "ScattaTocco": "un Tocco a chi lancia",
+      "ScattaTocco": "una Conseguenza a chi lancia",
       "Orologio": "Orologio",
       "Forme": {
         "cerchio": "cerchio",
@@ -1745,7 +1745,15 @@
         "scena": "per la scena",
         "sessione": "per la sessione"
       },
-      "CosaFate": "Cosa fate"
+      "CosaFate": "Cosa fate",
+      "FuoriQuadro": "fuori dal Quadro",
+      "NessunaVoceQui": "Nessuna voce di questa famiglia nella scena scelta.",
+      "Rimbalzo": "Il rimbalzo che scatta",
+      "OrologioNuovo": "L'orologio che si apre",
+      "Titolo": "Nome",
+      "TitoloHint": "come lo vedono al tavolo",
+      "ScattaHint": "cosa succede quando è pieno",
+      "OrologioAperto": "Orologio «{nome}» aperto ({forma} {colore}): lo vedi nel Contatore."
     },
     "Stat": {
       "Identita": "Identità",

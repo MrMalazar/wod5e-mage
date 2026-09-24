@@ -150,7 +150,7 @@ export function volgariRecenti(messages = [], { dal = 0, massimo = 12 } = {}) {
       messageId: String(message.id ?? ""),
       actorId: String(message?.speaker?.actor ?? ""),
       actorName: String(message?.speaker?.alias ?? ""),
-      titolo: testo(card.title) || testo(message?.flavor).replace(/<[^>]+>/g, "").split("\n")[0] || "",
+      titolo: testo(card.title) || primaRiga(message?.flavor),
       soglia: count(card.threshold),
       testimoni: Boolean(card.advancedDifficulty),
       quando,
@@ -159,6 +159,23 @@ export function volgariRecenti(messages = [], { dal = 0, massimo = 12 } = {}) {
     if (out.length >= massimo) break;
   }
   return out;
+}
+
+/** La prima riga piena di un flavor in HTML: il titolo del lancio nelle carte di prima del 24/9. */
+function primaRiga(html) {
+  return String(html ?? "").replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, " ").split("\n")
+    .map((riga) => riga.replace(/\s+/g, " ").trim())
+    .find(Boolean) ?? "";
+}
+
+/** L'etichetta di un Volgare nella tendina «risponde a»: mago, titolo, tipo, soglia, senza i pezzi vuoti. */
+export function etichettaVolgare(volgare, localize = (key) => key) {
+  return [
+    volgare?.actorName,
+    volgare?.titolo,
+    localize(volgare?.testimoni ? "WOD5E_MAGE.Menu.ConTestimoni" : "WOD5E_MAGE.Menu.Volgare"),
+    `${localize("WOD5E_MAGE.Menu.Soglia")} ${count(volgare?.soglia)}`
+  ].map((parte) => testo(parte)).filter(Boolean).join(" · ");
 }
 
 /**
@@ -267,6 +284,23 @@ export function nuovoOrologioParadosso({ id, titolo = "", segmenti = 4, visibile
 
 export function isOrologioParadosso(orologio) {
   return Boolean(orologio?.paradosso);
+}
+
+/**
+ * Cosa scatta quando l'orologio è pieno, precompilato per la voce (24/9 sera,
+ * Blue: «opzioni veloci, con esempi o caselle precompilate»): il rimbalzo scelto
+ * per Carica e Nascosto, chi entra per le Presenze e l'Arrivo, l'effetto che
+ * cade per Scadenza, la chiamata dell'Ancora, la Conseguenza del Ciclo.
+ */
+export function scattaPredefinito(voce, { rimbalzo = "", risponde = "", chi = "" } = {}, localize = (key) => key, format = (key) => key) {
+  if (!voce) return "";
+  if (voce.prezzo?.tipo === "orologioRimbalzo") return testo(rimbalzo);
+  if (voce.presenza) return format("WOD5E_MAGE.Menu.ScattaEntra", { nome: testo(chi) || voce.nome });
+  if (voce.id === "arrivo") return format("WOD5E_MAGE.Menu.ScattaEntra", { nome: testo(chi) || localize("WOD5E_MAGE.Menu.Famiglie.presenze") });
+  if (voce.id === "scadenza") return format("WOD5E_MAGE.Menu.ScattaCade", { nome: testo(risponde) || voce.nome });
+  if (voce.id === "ancora" || voce.prezzo?.orologio) return localize("WOD5E_MAGE.Menu.ScattaChiamata");
+  if (voce.id === "ciclo") return localize("WOD5E_MAGE.Menu.ScattaTocco");
+  return testo(voce.breve) || testo(voce.effetto);
 }
 
 /** Un segmento in più: torna l'orologio cambiato e se è arrivato in fondo. */

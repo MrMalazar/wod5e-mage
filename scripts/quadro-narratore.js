@@ -23,6 +23,7 @@ import {
   copiaDaCarta,
   COPIA_FLAG,
   coppiaLibera,
+  etichettaVolgare,
   inizioSessione,
   MAGHI_SETTING,
   MODI_QUADRO,
@@ -35,6 +36,7 @@ import {
   righeAddosso,
   SCENA_SETTING,
   SCENE_PARADOSSO,
+  scattaPredefinito,
   scenaById,
   voceById,
   volgariRecenti
@@ -238,7 +240,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       resizable: true,
       contentClasses: ["wod5e-mage-quadro-contenuto"]
     },
-    position: { width: 560, height: 720 },
+    position: { width: 720, height: 840 },
     actions: {
       modo: QuadroNarratore.#onModo,
       meno: QuadroNarratore.#onMeno,
@@ -391,23 +393,37 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     const soglia = primo?.soglia ?? 0;
     const stima = prezzoVoce(voce, { soglia, suaSoglia: voce.prezzo.valore || 2, pallini: 1, rimbalzo: 0 });
     const scoppio = voce.modo === "scoppio";
+    // «Su chi»: i maghi del Quadro, più chi ha lanciato un Volgare recente anche se sta fuori dal Quadro.
+    const bersagli = maghi.map((m) => ({ ...m, fuori: false }));
+    for (const v of volgari) {
+      if (!v.actorId || bersagli.some((b) => b.id === v.actorId)) continue;
+      const actor = game.actors?.get(v.actorId);
+      if (actor && isMageActor(actor)) bersagli.push({ id: actor.id, name: actor.name, fuori: true });
+    }
+    const rimbalzi = aperta && campi.rimbalzo ? this.#rimbalziPossibili(soglia) : [];
+    const rispondeLabel = primo ? etichettaVolgare(primo, localize) : "";
     return {
       ...voce,
       aperta,
-      testoCerca: `${voce.nome} ${voce.effetto} ${voce.quando}`.toLowerCase(),
+      testoCerca: `${voce.nome} ${voce.breve} ${voce.effetto} ${voce.quando}`.toLowerCase(),
       iconaModo: ICONE_MODO_VOCE[voce.modo] ?? "fa-solid fa-bolt",
       modoLabel: localize(`WOD5E_MAGE.Menu.Modo.${voce.modo}`),
-      prezzoLabel: voce.prezzo.testo,
+      prezzoLabel: voce.prezzo.breve || voce.prezzo.testo,
       scoppio,
       scettro: voce.famiglia === "scettro",
       campi,
-      volgari: volgari.map((v, index) => ({ ...v, selected: index === 0, label: `${v.actorName} · ${v.titolo} · ${localize(v.testimoni ? "WOD5E_MAGE.Menu.ConTestimoni" : "WOD5E_MAGE.Menu.Volgare")} · ${localize("WOD5E_MAGE.Menu.Soglia")} ${v.soglia}` })),
-      maghi: maghi.map((m) => ({ ...m, selected: m.id === primo?.actorId })),
-      suChiVuoto: !maghi.some((m) => m.id === primo?.actorId),
+      volgari: volgari.map((v, index) => ({ ...v, selected: index === 0, label: etichettaVolgare(v, localize) })),
+      bersagli: bersagli.map((b) => ({ ...b, selected: b.id === primo?.actorId, label: b.fuori ? `${b.name} (${localize("WOD5E_MAGE.Menu.FuoriQuadro")})` : b.name })),
+      suChiVuoto: !bersagli.some((b) => b.id === primo?.actorId),
       ancore: aperta && campi.ancora ? this.#ancoreDi(primo?.actorId ?? maghi[0]?.id) : [],
-      rimbalzi: aperta && campi.rimbalzo ? this.#rimbalziPossibili(soglia) : [],
+      rimbalzi,
       pallini: campi.pallini ? Array.from({ length: voce.prezzo.massimo || 1 }, (_, index) => ({ value: index + 1, label: String(index + 1) })) : [],
       suaSogliaDefault: voce.prezzo.valore || 2,
+      // L'orologio precompilato: il titolo, i segmenti a scelta rapida, cosa scatta.
+      titoloDefault: voce.nome,
+      segmentiDefault: voce.presenza ? 3 : 4,
+      segmentiScelte: [3, 4, 6, 8].map((n) => ({ n, attivo: n === (voce.presenza ? 3 : 4) })),
+      scattaDefault: aperta && campi.orologio ? scattaPredefinito(voce, { rimbalzo: rimbalzi[0]?.nome ?? "", risponde: rispondeLabel }, localize, game.i18n.format.bind(game.i18n)) : "",
       stima: stima ?? "",
       troppo: stima !== null && stima > pool.points
     };
@@ -421,7 +437,8 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
 
   #rimbalziPossibili(soglia) {
     return cassettiPerScena(getScena().tipo)
-      .filter((cassetto) => ["comuni", "tocchi", "presenze", "scena"].includes(cassetto.famiglia))
+      .filter((cassetto) => ["comuni", "presenze", "scena", "tocchi"].includes(cassetto.famiglia))
+      .sort((a, b) => ["comuni", "presenze", "scena", "tocchi"].indexOf(a.famiglia) - ["comuni", "presenze", "scena", "tocchi"].indexOf(b.famiglia))
       .flatMap((cassetto) => cassetto.voci)
       .filter((voce) => voce.famiglia !== "orologi" && voce.modo !== "scoppio")
       .map((voce) => ({ id: voce.id, nome: voce.nome, prezzo: prezzoVoce(voce, { soglia, suaSoglia: voce.prezzo.valore || 2 }) ?? 0 }))
@@ -461,6 +478,28 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       input.addEventListener("input", (event) => this.#aggiornaPrezzo(event.target.closest(".wod5e-mage-menu-spesa")));
     }
     for (const box of this.element.querySelectorAll(".wod5e-mage-menu-spesa")) this.#aggiornaPrezzo(box);
+    // I segmenti a scelta rapida scrivono nel numero; il rimbalzo scelto riscrive cosa scatta.
+    for (const tasto of this.element.querySelectorAll(".wod5e-mage-menu-segmenti button")) {
+      tasto.addEventListener("click", (event) => {
+        event.preventDefault();
+        const box = tasto.closest(".wod5e-mage-menu-spesa");
+        const numero = box?.querySelector("[data-role=segmenti]");
+        if (numero) numero.value = tasto.dataset.n;
+        for (const altro of tasto.parentElement.querySelectorAll("button")) altro.classList.toggle("attivo", altro === tasto);
+      });
+    }
+    for (const numero of this.element.querySelectorAll(".wod5e-mage-menu-spesa [data-role=segmenti]")) {
+      numero.addEventListener("input", () => {
+        for (const tasto of numero.closest(".wod5e-mage-menu-spesa")?.querySelectorAll(".wod5e-mage-menu-segmenti button") ?? []) tasto.classList.toggle("attivo", tasto.dataset.n === String(numero.value));
+      });
+    }
+    for (const select of this.element.querySelectorAll(".wod5e-mage-menu-spesa [data-role=rimbalzo]")) {
+      select.addEventListener("change", () => {
+        const scatta = select.closest(".wod5e-mage-menu-spesa")?.querySelector("[data-role=scatta]");
+        const nome = select.selectedOptions[0]?.dataset.nome ?? "";
+        if (scatta && nome) scatta.value = nome;
+      });
+    }
   }
 
   _onClose(options) {
@@ -516,9 +555,11 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     const ancoraNome = q("ancora")?.selectedOptions?.[0]?.textContent?.trim() ?? "";
     const vuole = String(q("vuole")?.value ?? "").trim();
     const nota = String(q("nota")?.value ?? "").trim();
+    const titolo = String(q("titolo")?.value ?? "").trim();
+    const scatta = String(q("scatta")?.value ?? "").trim();
     const prezzo = prezzoVoce(voce, { soglia, suaSoglia, pallini, rimbalzo: rimbalzoPrezzo });
     return {
-      messageId, soglia, suChi, vede, suaSoglia, pallini, segmenti, rimbalzoId, rimbalzoPrezzo, ancoraId, ancoraNome, vuole, nota, prezzo,
+      messageId, soglia, suChi, vede, suaSoglia, pallini, segmenti, rimbalzoId, rimbalzoPrezzo, ancoraId, ancoraNome, vuole, nota, titolo, scatta, prezzo,
       risponde: opzione && messageId ? opzione.textContent.trim() : "",
       actorDelVolgare: opzione?.dataset.actor ?? ""
     };
@@ -568,16 +609,12 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       const esistenti = [...getOrologi(), ...(orologioModuloAttivo() ? Object.values(game.settings.get(OROLOGIO_MODULO, "orologi") ?? {}) : [])];
       const coppia = coppiaLibera(esistenti);
       const rimbalzo = lettura.rimbalzoId ? voceById(lettura.rimbalzoId) : null;
-      const scatta = rimbalzo ? rimbalzo.nome
-        : voce.presenza ? format("WOD5E_MAGE.Menu.ScattaEntra", { nome: voce.nome })
-        : voce.id === "scadenza" ? format("WOD5E_MAGE.Menu.ScattaCade", { nome: lettura.risponde || voce.nome })
-        : voce.id === "ancora" || voce.prezzo.orologio ? localize("WOD5E_MAGE.Menu.ScattaChiamata")
-        : voce.id === "ciclo" ? localize("WOD5E_MAGE.Menu.ScattaTocco")
-        : voce.effetto;
+      const scatta = lettura.scatta || scattaPredefinito(voce, { rimbalzo: rimbalzo?.nome ?? "", risponde: lettura.risponde, chi: lettura.vuole }, localize, format);
+      const base = lettura.titolo || voce.nome;
       orologio = nuovoOrologioParadosso({
         id: idSpesa,
-        titolo: `${voce.nome}${target ? ` · ${target.name}` : ""}`,
-        segmenti: campi.suaSoglia && !lettura.segmenti ? 2 : lettura.segmenti,
+        titolo: target && !base.includes(target.name) ? `${base} · ${target.name}` : base,
+        segmenti: lettura.segmenti,
         visibile: voce.modo !== "nascosto" && lettura.vede !== "narratori",
         colore: coppia.colore,
         forma: coppia.forma,
@@ -620,6 +657,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       flags: { [MODULE_ID]: { paradossoMenu: { voce: voce.id, id: idSpesa, actorId: target?.id ?? "", prezzo: lettura.prezzo } } }
     });
     ui.notifications.info(format("WOD5E_MAGE.Menu.Speso", { nome: voce.nome, prezzo: lettura.prezzo, resto: next.points }));
+    if (orologio) ui.notifications.info(format("WOD5E_MAGE.Menu.OrologioAperto", { nome: orologio.titolo, forma: localize(`WOD5E_MAGE.Menu.Forme.${orologio.forma}`), colore: localize(`WOD5E_MAGE.Menu.Colori.${orologio.colore}`) }));
     this.#voceAperta = "";
     await this.render();
   }

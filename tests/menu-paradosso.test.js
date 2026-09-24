@@ -11,6 +11,7 @@ import {
   copiaDaCarta,
   COPPIE_OROLOGIO,
   coppiaLibera,
+  etichettaVolgare,
   FAMIGLIE_PARADOSSO,
   inizioSessione,
   isOrologioParadosso,
@@ -25,6 +26,7 @@ import {
   righeAddosso,
   SCENA_SETTING,
   SCENE_PARADOSSO,
+  scattaPredefinito,
   scenaById,
   voceById,
   volgariRecenti
@@ -50,6 +52,11 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
     assert.ok(["immediato", "annunciato", "nascosto", "scoppio"].includes(voce.modo), `${voce.id}: modo ${voce.modo}`);
     assert.ok(["fisso", "soglia", "suaSoglia", "pallino", "orologioRimbalzo"].includes(voce.prezzo.tipo), `${voce.id}: prezzo ${voce.prezzo.tipo}`);
     assert.ok(voce.quando && voce.effetto, `${voce.id}: senza quando o effetto`);
+    // La riga breve e il prezzo breve (24/9 notte): ogni voce li ha, corti.
+    assert.ok(voce.breve && voce.breve.length <= 90, `${voce.id}: riga breve ${voce.breve}`);
+    assert.ok(voce.prezzo.breve && voce.prezzo.breve.length <= 22, `${voce.id}: prezzo breve ${voce.prezzo.breve}`);
+    // I Tocchi si chiamano Conseguenze Magick: la parola vecchia non resta in nessun testo.
+    assert.ok(!/\bTocc[oh]/.test(JSON.stringify(voce)), `${voce.id}: c'è ancora «Tocco»`);
     assert.ok(voce.mosse.length >= 1 && voce.mosse.length <= 3, `${voce.id}: da una a tre mosse`);
     assert.ok(["", "lancio", "turno", "scena", "sessione"].includes(voce.durata), `${voce.id}: durata ${voce.durata}`);
     if (voce.famiglia === "grandi") assert.equal(voce.modo, "scoppio", `${voce.id}: i Grandi arrivano allo scoppio`);
@@ -138,6 +145,11 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.deepEqual(volgari[0], { messageId: "m2", actorId: "a1", actorName: "Guendalina", titolo: "Fulmine", soglia: 3, testimoni: true, quando: 1000, round: 2 });
   const senzaTitolo = volgariRecenti([carta("m5")]);
   assert.equal(senzaTitolo[0].titolo, "Muro di ghiaccio", "senza titolo vale la prima riga del flavor, senza tag");
+  const flavorACapo = { ...carta("m6"), flavor: "<div class=\"x\">\n  <b>Lama</b> di fuoco<br>altro</div>" };
+  assert.equal(volgariRecenti([flavorACapo])[0].titolo, "Lama di fuoco", "la prima riga piena, non quella vuota prima del tag");
+  // L'etichetta della tendina: senza i pezzi vuoti (il «Al · · Volgare» del collaudo del 24/9 notte).
+  assert.equal(etichettaVolgare({ actorName: "Guendalina", titolo: "Fulmine", testimoni: true, soglia: 5 }, (k) => k.split(".").pop()), "Guendalina · Fulmine · ConTestimoni · Soglia 5");
+  assert.equal(etichettaVolgare({ actorName: "", titolo: "", testimoni: false, soglia: 7 }, (k) => k.split(".").pop()), "Volgare · Soglia 7");
   assert.equal(volgariRecenti([carta("a"), carta("b"), carta("c")], { massimo: 2 }).length, 2);
   assert.equal(volgariRecenti([carta("a"), carta("b")])[0].messageId, "b", "dal più recente");
   // La copia automatica: 1 punto per un Volgare, 2 con testimoni, niente se già copiato o non Volgare.
@@ -203,6 +215,20 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.equal(nuovoOrologioParadosso({ segmenti: 1, ordine: 3 }).segmenti, 3, "almeno tre segmenti");
   assert.equal(nuovoOrologioParadosso({ segmenti: 40, ordine: 3 }).segmenti, 16, "al massimo sedici");
   assert.equal(nuovoOrologioParadosso({ ordine: 3 }).id, "paradosso-3");
+  // Cosa scatta, precompilato per la voce.
+  const l = (k) => k.split(".").pop();
+  const f = (k, d) => `${k.split(".").pop()}:${d.nome}`;
+  assert.equal(scattaPredefinito(voceById("carica"), { rimbalzo: "Residuo" }, l, f), "Residuo");
+  assert.equal(scattaPredefinito(voceById("nascosto"), {}, l, f), "", "senza rimbalzo scelto resta vuoto");
+  assert.equal(scattaPredefinito(voceById("ombra"), { chi: "l'Ombra di Guendalina" }, l, f), "ScattaEntra:l'Ombra di Guendalina");
+  assert.equal(scattaPredefinito(voceById("ombra"), {}, l, f), "ScattaEntra:Ombra");
+  assert.equal(scattaPredefinito(voceById("arrivo"), {}, l, f), "ScattaEntra:presenze");
+  assert.equal(scattaPredefinito(voceById("scadenza"), { risponde: "Fulmine" }, l, f), "ScattaCade:Fulmine");
+  assert.equal(scattaPredefinito(voceById("ancora"), {}, l, f), "ScattaChiamata");
+  assert.equal(scattaPredefinito(voceById("il-ritmo"), {}, l, f), "ScattaChiamata");
+  assert.equal(scattaPredefinito(voceById("ciclo"), {}, l, f), "ScattaTocco");
+  assert.equal(scattaPredefinito(voceById("combattimento-rinforzo"), {}, l, f), "ScattaEntra:Rinforzo");
+  assert.equal(scattaPredefinito(null), "");
   assert.deepEqual(nuovoOrologioParadosso({ ordine: 3 }).eventi, {}, "senza testo, niente evento");
   let passo = avanzaOrologio({ ...orologio, segmenti: 2 });
   assert.equal(passo.orologio.pieni, 1);
@@ -267,6 +293,9 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.equal((testa.match(/data-action="modo"/g) ?? []).length, 1, "i modi in un {{#each}}");
   const menu = readFileSync(new URL("../templates/quadro/menu.hbs", import.meta.url), "utf8");
   assert.ok(menu.includes('data-action="cassetto"') && menu.includes('data-action="spendi"') && menu.includes('data-testo="{{voce.testoCerca}}"'));
+  for (const marker of ['<span class="breve">{{voce.breve}}</span>', 'data-role="titolo"', 'wod5e-mage-menu-segmenti', 'data-role="scatta"', 'data-nome="{{r.nome}}"', "{{#each voce.bersagli as |m|}}", "WOD5E_MAGE.Menu.NessunaVoceQui"]) {
+    assert.ok(menu.includes(marker), `menu.hbs: manca ${marker}`);
+  }
   assert.ok(!menu.includes("{{lowercase"), "niente helper che Foundry non ha");
   const giocatori = readFileSync(new URL("../templates/quadro/giocatori.hbs", import.meta.url), "utf8");
   for (const marker of ['data-action="magoAggiungi"', 'data-action="attivoTogli"', 'data-action="schedaApri"', "WOD5E_MAGE.Menu.Attivi", "WOD5E_MAGE.Menu.Passivi", "WOD5E_MAGE.Menu.MagickInAtto"]) {
@@ -289,6 +318,12 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
     assert.deepEqual(Object.keys(en.Menu[gruppo]), Object.keys(it.Menu[gruppo]), `Menu.${gruppo}: le stesse chiavi nelle due lingue`);
   }
   assert.deepEqual(Object.keys(en.Menu), Object.keys(it.Menu), "Menu: le stesse chiavi nelle due lingue");
+  assert.equal(it.Menu.Famiglie.tocchi, "Conseguenze Magick", "Blue, 24/9 notte: «I Tocchi non si può sentire»");
+  // Il CSS: i tasti della cornice non prendono il font dei bottoni del Quadro; i riquadri del corpo non si schiacciano; la carta in chat a righe.
+  const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+  assert.doesNotMatch(css, /\.application\.wod5e-mage-quadro button \{/, "niente regola su tutti i bottoni della finestra: spegneva la X della cornice");
+  assert.match(css, /\.application\.wod5e-mage-quadro \.wod5e-mage-quadro-corpo > \* \{\s*flex: 0 0 auto;/);
+  assert.match(css, /\.wod5e-mage-menu-card \.wod5e-mage-roll-row \{\s*display: block;/);
 }
 
 console.log("Menu paradosso tests passed.");
