@@ -249,8 +249,9 @@ export function formulaPick(formula, { access, amalgams = [], threshold = 0, sph
   const allowed = formula.amalgams?.length ? formula.amalgams : SPHERES.filter((sphere) => !formula.access.includes(sphere));
   const chosen = (amalgams ?? []).filter((sphere) => allowed.includes(sphere) && sphere !== access && accessed(sphereLevels, sphere));
   const soglia = formula.thresholds?.[Math.min(Math.max(threshold, 0), (formula.thresholds?.length ?? 1) - 1)] ?? { base: 0, scopes: {} };
-  const spheres = { [access]: level(sphereLevels[access]) };
-  for (const sphere of chosen) spheres[sphere] = level(sphereLevels[sphere]);
+  // Una Sfera senza livello vale 1 nel lancio: l'accesso basta (25/9 sera).
+  const spheres = { [access]: Math.max(level(sphereLevels[access]), 1) };
+  for (const sphere of chosen) spheres[sphere] = Math.max(level(sphereLevels[sphere]), 1);
   return { formula, access, amalgams: chosen, spheres, scopes: { ...soglia.scopes }, threshold: soglia.base };
 }
 

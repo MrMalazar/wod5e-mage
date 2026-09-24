@@ -10209,26 +10209,33 @@
   white-space: nowrap;
 }
 
-/* La riga della Sfera nella lista: il sigillo è il tasto che prende o
-   lascia la Sfera, poi il nome, i cinque pallini, la casetta, il conto. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-prendi {
+/* La riga della Sfera nella lista (Blue, 25/9 sera: niente livelli): il segno
+   dell'accesso apre o chiude il Dominio, poi il sigillo, il conto dei poteri
+   conosciuti, il nome, la casetta. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso {
   align-items: center;
   background: transparent;
   border: 0;
   border-radius: 50%;
+  color: var(--mage-tenue);
   cursor: pointer;
   display: inline-flex;
-  flex: 0 0 22px;
-  height: 22px;
+  flex: 0 0 20px;
+  font-size: 1rem;
+  height: 20px;
   justify-content: center;
   line-height: 1;
   min-height: 0;
   padding: 0;
-  width: 22px;
+  width: 20px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-prendi:hover,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-prendi:focus {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso.acceso {
+  color: #7fd18a;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-accesso:focus {
   box-shadow: 0 0 0 1px var(--mage-oro);
   outline: none;
 }
@@ -10245,15 +10252,8 @@
   font-size: 0.95rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina > .resource-value {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina > .wod5e-mage-sfera-casa {
   margin-left: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina > .resource-value > :is(.resource-value-step, .resource-value-empty) {
-  flex: 0 0 16px;
-  height: 16px;
-  min-width: 16px;
-  width: 16px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sfera-casa.on {
@@ -10263,8 +10263,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-sfera-pagina .wod5e-mage-sfera-conto {
-  min-width: 22px;
-  text-align: right;
+  min-width: 16px;
+  text-align: center;
 }
 
 /* Le Magick in atto: due linee per riga, On/Off, nome, segni, cestino; sotto l'effetto. */
@@ -12681,6 +12681,10 @@
   min-height: 26px;
 }
 
+.wod5e-mage-guidata-dominio-testa > .wod5e-mage-guidata-tastino {
+  margin-left: auto;
+}
+
 .application.wod5e-mage-guidata button.wod5e-mage-guidata-accesso {
   background: transparent;
   border: 0;
@@ -12696,17 +12700,6 @@
 
 .application.wod5e-mage-guidata button.wod5e-mage-guidata-accesso.acceso {
   color: #7fd18a;
-}
-
-.wod5e-mage-guidata-dominio-livello {
-  color: var(--mage-tenue);
-  font-size: 0.8rem;
-  margin-left: auto;
-  white-space: nowrap;
-}
-
-.wod5e-mage-guidata-dominio-livello > b {
-  color: var(--mage-oro);
 }
 
 .wod5e-mage-guidata-dominio-poteri {
@@ -13798,6 +13791,53 @@
 
 .wod5e-mage-catalogo-serve > b {
   color: var(--mage-rosso-chiaro, #e2a79e);
+}
+
+.wod5e-mage-catalogo-serve.ok > b,
+.wod5e-mage-catalogo-serve.ok > span > i {
+  color: #7fd18a;
+}
+
+/* Il grado col prezzo, e i prerequisiti, scritti per esteso nella testa della riga (25/9 sera). */
+.wod5e-mage-catalogo-tag > small.grado {
+  color: var(--mage-oro, #d9a827);
+  font-weight: 600;
+}
+
+.wod5e-mage-catalogo-tag > small.serve {
+  border: 1px solid rgb(152 119 43 / 45%);
+  border-radius: 8px;
+  padding: 1px 6px;
+}
+
+.wod5e-mage-catalogo-tag > small.serve.ok {
+  border-color: rgb(127 209 138 / 60%);
+  color: #7fd18a;
+}
+
+.wod5e-mage-catalogo-tag > small.serve.manca {
+  border-color: rgb(226 167 158 / 60%);
+  color: var(--mage-rosso-chiaro, #e2a79e);
+}
+
+.wod5e-mage-catalogo-tag > small.grado + small.serve::before,
+.wod5e-mage-catalogo-tag > small.serve + small.attivo::before,
+.wod5e-mage-catalogo-tag > small.serve + small.passivo::before,
+.wod5e-mage-catalogo-tag > small.grado + small.attivo::before,
+.wod5e-mage-catalogo-tag > small.grado + small.passivo::before {
+  content: "";
+}
+
+.wod5e-mage-catalogo-prezzo > b {
+  color: var(--mage-oro, #d9a827);
+}
+
+.wod5e-mage-catalogo-avviso.wod5e-mage-catalogo-dominio {
+  color: var(--mage-testo, #e6dcc2);
+}
+
+.wod5e-mage-catalogo-avviso.wod5e-mage-catalogo-dominio > i {
+  color: var(--mage-oro, #d9a827);
 }
 
 .wod5e-mage-catalogo-spunta {

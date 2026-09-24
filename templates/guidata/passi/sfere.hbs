@@ -1,4 +1,4 @@
-{{!-- Passo 6 · i Domini (25/9): a quali si ha accesso, e un potere per ciascuno; il livello della Sfera resta sulla pagina Magick come promemoria. --}}
+{{!-- Passo 6 · i Domini (25/9): a quali si ha accesso, e un potere per ciascuno; niente livelli (25/9 sera). --}}
 <section class="wod5e-mage-guidata-riq wod5e-mage-guidata-cosa">
     <header class="wod5e-mage-guidata-riq-titolo"><span>{{localize "WOD5E_MAGE.Guidata.Cosa"}}</span><small>{{passo.sotto}}</small></header>
     <h2 class="wod5e-mage-guidata-domanda">{{passo.domanda}}</h2>
@@ -14,7 +14,6 @@
                     <img class="wod5e-mage-guidata-riga-icona sigillo" src="{{sphere.icon}}" alt="">
                     <span class="wod5e-mage-guidata-riga-nome">{{sphere.label}}{{#if sphere.family}} <small class="wod5e-mage-guidata-tag oro" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.FamigliaHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Famiglia"}}</small>{{/if}}</span>
                     {{#if sphere.selected}}
-                        <span class="wod5e-mage-guidata-dominio-livello" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.LivelloHint'}}">{{localize "WOD5E_MAGE.Guidata.Sfere.Livello"}} <b>{{sphere.level}}</b></span>
                         <button type="button" class="wod5e-mage-guidata-tastino" data-action="dominioPotere" data-sphere="{{sphere.id}}" title="{{localize 'WOD5E_MAGE.Guidata.Sfere.Scegli'}}" {{#unless @root.canEdit}}disabled{{/unless}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
                     {{/if}}
                 </div>
@@ -39,7 +38,6 @@
             <div class="wod5e-mage-guidata-voce {{corpo.conto.domini.state}}"><i class="fa-solid fa-circle-nodes" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.Domini"}} <b>{{corpo.conto.domini.text}}</b></div>
             <div class="wod5e-mage-guidata-voce {{corpo.conto.poteri.state}}"><i class="fa-solid fa-wand-sparkles" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.Poteri"}} <b>{{corpo.conto.poteri.text}}</b></div>
             <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-house-chimney" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.FamigliaHint"}}</div>
-            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-gauge" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Sfere.LivelloHint"}}</div>
         </div>
     </section>
 </aside>

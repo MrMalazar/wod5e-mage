@@ -14,7 +14,8 @@
  * leggere e basta, con la cerca. Qui la parte pura (le righe) e le finestre.
  */
 import { MODULE_ID } from "./constants.js";
-import { blocchiDelTesto, catalogoDellaSfera, POTERE_DOTS, POTERI, sfereDellaVoce } from "./poteri.js";
+import { EXPERIENCE_COSTS } from "./experience-window.js";
+import { blocchiDelTesto, catalogoDellaSfera, gradoPerOrdine, POTERE_DOTS, POTERI, sfereDellaVoce } from "./poteri.js";
 import { SPHERES } from "./spheres.js";
 
 function testo(value) {
@@ -34,17 +35,51 @@ export function tipiDelPotere(kind, type = "") {
   };
 }
 
-/** La voce intera per la riga della finestra: le colonne della testa e il testo a blocchi. */
-function rigaDelCatalogo(voce, entry, localize) {
+/**
+ * Il prezzo in Esperienza di un potere del catalogo: il grado per 5 in un
+ * Dominio di famiglia, per 7 in uno esterno (il listino del 21/9); senza
+ * grado non si sa. `family` è null quando la Sfera non è del personaggio
+ * (il Catalogo completo): si scrivono tutti e due i prezzi.
+ */
+export function prezzoDelPotere(dot, family = null) {
+  const grado = count(dot);
+  if (!grado) return null;
+  const famiglia = grado * EXPERIENCE_COSTS.potereFamiglia.multiplier;
+  const esterno = grado * EXPERIENCE_COSTS.potereEsterno.multiplier;
+  return { grado, famiglia, esterno, pe: family === null ? null : (family ? famiglia : esterno) };
+}
+
+/**
+ * La voce intera per la riga della finestra: le colonne della testa e il
+ * testo a blocchi. Dal 25/9 sera (Blue: «nell'elenco non è capibile») la
+ * riga scrive per esteso il grado col suo prezzo in Esperienza, e i
+ * prerequisiti anche quando ci sono già (la spunta), non solo quando
+ * mancano (il lucchetto).
+ */
+function rigaDelCatalogo(voce, entry, localize, family = null) {
   const uses = entry?.uses?.per ? localize(`WOD5E_MAGE.Poteri.Usi.${entry.uses.per}`) : "";
   const cost = count(entry?.costValue) ? `${count(entry.costValue)} ${localize("WOD5E_MAGE.Poteri.QuintessenzaBreve")}` : "";
   const tipi = tipiDelPotere(entry?.kind, voce.type);
+  const prezzo = prezzoDelPotere(voce.dot, family);
+  const prerequisiti = entry?.prerequisiti && (count(entry.prerequisiti.numero) || entry.prerequisiti.poteri?.length) ? entry.prerequisiti : null;
+  const serve = prerequisiti ? testoPrerequisiti({ numero: count(prerequisiti.numero) || 0, poteri: Array.isArray(prerequisiti.poteri) ? prerequisiti.poteri : [] }, entry, localize, catalogoPerNome) : "";
   return {
     ...voce,
     tipi,
     typeLabel: [tipi.attivo ? localize("WOD5E_MAGE.Poteri.Tipo.attivo") : "", tipi.passivo ? localize("WOD5E_MAGE.Poteri.Tipo.passivo") : ""].filter(Boolean).join(" · "),
     cost,
     uses,
+    // Il grado scritto per esteso, e quanto costa in Esperienza in questo Dominio.
+    gradoLabel: prezzo ? localize("WOD5E_MAGE.Poteri.GradoN").replace("{n}", String(prezzo.grado)) : localize("WOD5E_MAGE.Poteri.GradoNessuno"),
+    prezzo,
+    prezzoLabel: prezzo
+      ? (prezzo.pe === null
+        ? localize("WOD5E_MAGE.Poteri.PrezzoDue").replace("{famiglia}", String(prezzo.famiglia)).replace("{esterno}", String(prezzo.esterno))
+        : localize("WOD5E_MAGE.Poteri.PrezzoPE").replace("{pe}", String(prezzo.pe)))
+      : "",
+    // I prerequisiti scritti nei dati: la riga li dice sempre; `locked` dice se mancano.
+    serve,
+    serveOk: Boolean(serve) && !voce.locked,
     // Il potere di «Qualsiasi» Sfera sta nel secondo gruppo.
     any: Array.isArray(entry?.spheres) && entry.spheres.includes("any"),
     blocchi: blocchiDelTesto(entry?.text),
@@ -79,17 +114,22 @@ export function testoPrerequisiti(mancano, entry, localize = (key) => key, nomi 
  * lucchetto e cosa serve). `owned` sono le righe del personaggio per quella
  * Sfera, `tutti` tutte le sue righe. `chiusi` conta le righe col lucchetto.
  */
-export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tutti = null, localize = (key) => key } = {}) {
+export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tutti = null, localize = (key) => key, family = false } = {}) {
   const voci = catalogoDellaSfera(sphere, { catalog, owned, tutti });
   const perId = new Map((catalog ?? []).map((entry) => [entry.id, entry]));
   catalogoPerNome = new Map((catalog ?? []).map((entry) => [entry.id, testo(entry.name)]));
-  const righe = voci.map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), localize));
+  const righe = voci.map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), localize, Boolean(family)));
   const sphereLabel = localize(`WOD5E_MAGE.Spheres.${sphere}`);
   const propri = righe.filter((riga) => !riga.any);
   const qualsiasi = righe.filter((riga) => riga.any);
+  const perGrado = EXPERIENCE_COSTS[family ? "potereFamiglia" : "potereEsterno"].multiplier;
   return {
     sphere,
     sphereLabel,
+    // Il Dominio è di famiglia o esterno: da qui il prezzo di ogni grado (25/9 sera).
+    family: Boolean(family),
+    dominioLabel: localize(family ? "WOD5E_MAGE.Poteri.DominioFamiglia" : "WOD5E_MAGE.Poteri.DominioEsterno").replace("{n}", String(perGrado)),
+    conPrerequisiti: righe.filter((riga) => riga.serve).length,
     conosciuti: count((owned ?? []).length),
     propri,
     qualsiasi,
@@ -122,7 +162,7 @@ export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize
     locked: false
   }, entry, localize);
   // In ordine di grado e poi di nome: la gerarchia si legge (25/9).
-  const ordina = (righe) => righe.sort((a, b) => a.dot - b.dot || a.name.localeCompare(b.name, "it"));
+  const ordina = (righe) => righe.sort((a, b) => gradoPerOrdine(a.dot) - gradoPerOrdine(b.dot) || a.name.localeCompare(b.name, "it"));
   const gruppi = SPHERES.map((sphere) => ({
     id: sphere,
     label: localize(`WOD5E_MAGE.Spheres.${sphere}`),
@@ -164,7 +204,7 @@ export async function openCatalogoPoteri({ spheres = [], sphere = "", onAdd = nu
   const corpo = async () => {
     const attuale = stato.spheres.find((entry) => entry.id === stato.sphere);
     const tutti = stato.spheres.flatMap((entry) => entry.owned);
-    const dati = attuale ? prepareCatalogoPoteri(attuale.id, { owned: attuale.owned, tutti, localize }) : null;
+    const dati = attuale ? prepareCatalogoPoteri(attuale.id, { owned: attuale.owned, tutti, localize, family: Boolean(attuale.family) }) : null;
     return foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/catalogo-poteri.hbs`, {
       ...(dati ?? { gruppi: [], totale: 0, conosciuti: 0 }),
       pastiglie: pastiglieDelleSfere(stato.spheres.map((entry) => ({ id: entry.id, conto: entry.owned.length })), { localize, attiva: stato.sphere }),

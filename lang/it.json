@@ -774,6 +774,8 @@
       "AltreSfere": "Le altre",
       "Prendi": "Clic sul sigillo: prendi la Sfera",
       "Lascia": "Clic sul sigillo: lasci la Sfera",
+      "DominioApri": "Apri il Dominio: la Sfera entra fra le tue e puoi fare Magick su di lei",
+      "DominioChiudi": "Chiudi il Dominio: la Sfera torna fra le altre",
       "Casa": "Sfera di famiglia (costa meno). Clic: la fai esterna.",
       "CasaOff": "Sfera esterna. Clic: la fai di famiglia.",
       "Conto": "poteri conosciuti",
@@ -848,6 +850,12 @@
       "MostraHint": "Manda in chat la carta del potere (è passivo: scatta da solo)",
       "CatalogoConosciuti": "{known} poteri conosciuti",
       "Grado": "Grado: la potenza del potere",
+      "GradoN": "Grado {n}",
+      "GradoNessuno": "Grado da assegnare",
+      "PrezzoPE": "{pe} punti esperienza",
+      "PrezzoDue": "{famiglia} punti esperienza in un Dominio di famiglia, {esterno} in uno esterno",
+      "DominioFamiglia": "Dominio di famiglia: ogni grado del potere costa {n} punti esperienza (alla creazione i poteri sono gratis)",
+      "DominioEsterno": "Dominio esterno: ogni grado del potere costa {n} punti esperienza (alla creazione i poteri sono gratis)",
       "Prerequisito": {
         "Label": "Serve",
         "numero": "{n} poteri di {sphere}",
@@ -1808,8 +1816,8 @@
         "sfere": {
           "Label": "Domini",
           "Domanda": "A quali Domini hai accesso, e quale potere prendi in ciascuno?",
-          "Sotto": "un potere per Dominio · il livello è solo un promemoria",
-          "Perche": "Le nove Sfere sono i Domini della Magick. Avere accesso a un Dominio vuol dire poter fare Magick su quello: non serve un livello di Sfera. Il livello resta sulla pagina Magick solo per ricordare dov'è arrivato il mago.",
+          "Sotto": "un potere per Dominio",
+          "Perche": "Le nove Sfere sono i Domini della Magick. Avere accesso a un Dominio vuol dire poter fare Magick su quello: non ci sono livelli di Sfera, conta quali Domini hai e quali poteri conosci.",
           "PercheDue": "Alla creazione si apre l'accesso ai Domini del personaggio (la Sfera di famiglia e quella della via sono già aperte) e in ciascuno si prende un potere. I poteri si comprano seguendo la gerarchia: ogni potere ha un grado, che dice quanto pesa, ma quello che lo apre sono i prerequisiti, tanti poteri conosciuti o poteri precisi. Il grado del personaggio e la Sfida danno poteri in più."
         },
         "strumenti": {
@@ -1937,8 +1945,6 @@
         "AccessoDai": "Apri l'accesso a questo Dominio",
         "AccessoTogli": "Togli l'accesso a questo Dominio",
         "Scegli": "Scegli il potere",
-        "Livello": "Livello",
-        "LivelloHint": "Il livello della Sfera è solo un promemoria: si segna sulla pagina Magick.",
         "Famiglia": "Sfera di famiglia",
         "FamigliaHint": "Le Sfere di famiglia (Famiglia, via, Credo) costano meno con l'Esperienza.",
         "Sfida": "dalla Sfida"

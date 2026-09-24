@@ -121,8 +121,16 @@ export async function onSphereSelectionChange(event, target) {
   if (!SPHERES.includes(sphereId)) return;
 
   const selection = getSphereSelection(actor);
-  selection[sphereId] = target.dataset.selected !== "true";
-  await actor.setFlag(MODULE_ID, "selectedSpheres", selection);
+  const aperto = target.dataset.selected !== "true";
+  selection[sphereId] = aperto;
+  // L'accesso al Dominio (Blue, 25/9 sera): niente livelli da 1 a 5 sulla
+  // scheda, «creano solo confusione». Il vecchio numero della Sfera resta
+  // solo come segno interno: 1 col Dominio aperto, 0 chiuso.
+  const level = Math.trunc(Number(actor.getFlag(MODULE_ID, "spheres")?.[sphereId]) || 0);
+  const changes = { [`flags.${MODULE_ID}.selectedSpheres`]: selection };
+  if (aperto && level < 1) changes[`flags.${MODULE_ID}.spheres.${sphereId}`] = 1;
+  if (!aperto && level !== 0) changes[`flags.${MODULE_ID}.spheres.${sphereId}`] = 0;
+  await actor.update(changes);
 }
 
 /** Il clic sulla casetta: la Sfera diventa di famiglia, o torna esterna. */
@@ -154,35 +162,4 @@ export async function onFamilySphereToggle(event, target) {
   const family = getFamilySpheres(actor);
   family[sphereId] = !family[sphereId];
   await actor.setFlag(MODULE_ID, "familySpheres", family);
-}
-
-/**
- * Il clic su un pallino della Sfera (Blue, 25/9): un pallino vuoto accende
- * fino a lì; un pallino acceso più in basso riporta lì (da 4, il secondo fa
- * 2); l'ultimo pallino acceso si spegne (da 4, il quarto fa 3). Prima per
- * togliere l'ultimo si doveva cliccare quello prima.
- */
-export function nextSphereValue(currentValue, clickedIndex) {
-  const current = clampSphereValue(currentValue);
-  const clicked = Math.min(Math.max(Math.trunc(Number(clickedIndex) || 0), 0), 4) + 1;
-  return clicked === current ? current - 1 : clicked;
-}
-
-export async function onSphereDotChange(event, target) {
-  event.preventDefault();
-  const actor = this.actor;
-  if (!actor.isOwner) {
-    ui.notifications.warn(game.i18n.format("WOD5E.Notifications.NoSufficientPermission", { string: actor.name }));
-    return;
-  }
-  if (actor.system.locked) {
-    ui.notifications.warn(game.i18n.format("WOD5E.Notifications.CannotModifyResourceString", { string: actor.name }));
-    return;
-  }
-  const sphereId = String(target.dataset.sphere ?? "");
-  if (!SPHERES.includes(sphereId)) return;
-  const values = { ...(actor.getFlag(MODULE_ID, "spheres") ?? {}) };
-  const next = nextSphereValue(values[sphereId], target.dataset.index);
-  if (next === clampSphereValue(values[sphereId])) return;
-  await actor.setFlag(MODULE_ID, "spheres", { ...values, [sphereId]: next });
 }

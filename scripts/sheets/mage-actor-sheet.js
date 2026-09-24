@@ -56,7 +56,7 @@ import {
 import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
 import { onPotereApri, onPotereCatalogo, onPotereCatalogoCompleto, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriFiltri, preparePoteriPagina, riapriPoteri } from "../poteri-scheda.js";
-import { onFamilySphereToggle, onSphereDotChange, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
+import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { prepareMemo } from "../memo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
@@ -498,7 +498,6 @@ export class MageActorSheet extends MortalActorSheet {
       familySphereToggle: onFamilySphereToggle,
       credoFamilyPick: onCredoFamilyPick,
       sphereSelectionChange: onSphereSelectionChange,
-      sphereDotChange: onSphereDotChange,
       wheelModeToggle: onWheelModeToggle,
       // La modalità chiara (16/9) e la misura del testo (16/9 sera): i tasti accanto ai tre pallini della finestra.
       [TEMA_AZIONE]: onTemaToggle,

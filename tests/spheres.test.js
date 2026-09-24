@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import {
-  nextSphereValue,
+  onSphereSelectionChange,
   prepareSpheres,
   sortSpheresAlphabetically
 } from "../scripts/spheres.js";
@@ -98,12 +98,17 @@ console.log("Sphere selection and Influence tests passed.");
   assert.equal(prepared.all.find((sphere) => sphere.id === "mind").family, false);
 }
 
-// Il clic sui pallini della Sfera (Blue, 25/9): un vuoto accende fino a lì, un acceso più in basso riporta lì,
-// l'ultimo acceso si spegne.
-assert.equal(nextSphereValue(0, 2), 3, "da 0, il terzo fa 3");
-assert.equal(nextSphereValue(4, 1), 2, "da 4, il secondo fa 2");
-assert.equal(nextSphereValue(4, 3), 3, "da 4, il quarto (l'ultimo acceso) fa 3");
-assert.equal(nextSphereValue(1, 0), 0, "da 1, il primo fa 0");
-assert.equal(nextSphereValue(2, 4), 5, "da 2, il quinto fa 5");
-assert.equal(nextSphereValue("x", 9), 5, "fuori scala: al massimo il quinto pallino, e il valore rotto vale 0");
-console.log("pallini della Sfera: ok");
+// L'accesso al Dominio (Blue, 25/9 sera): niente livelli sulla scheda. Il tasto apre o chiude la Sfera
+// fra le conosciute, e il vecchio numero resta solo come segno interno: 1 aperto, 0 chiuso.
+{
+  const updates = [];
+  const flags = { spheres: { forces: 0, matter: 3 }, selectedSpheres: { forces: false, matter: true } };
+  const actor = { isOwner: true, system: { locked: false }, getFlag: (_m, key) => flags[key], update: async (changes) => { updates.push(changes); } };
+  const evento = { preventDefault() {} };
+  await onSphereSelectionChange.call({ actor }, evento, { dataset: { sphere: "forces", selected: "false" } });
+  assert.deepEqual(updates.at(-1), { "flags.wod5e-mage.selectedSpheres": { correspondence: false, entropy: false, forces: true, life: false, matter: true, mind: false, prime: false, spirit: false, time: false }, "flags.wod5e-mage.spheres.forces": 1 }, "aperto: fra le conosciute, e il segno a 1");
+  await onSphereSelectionChange.call({ actor }, evento, { dataset: { sphere: "matter", selected: "true" } });
+  assert.deepEqual(updates.at(-1)["flags.wod5e-mage.spheres.matter"], 0, "chiuso: il segno a 0");
+  assert.equal(updates.at(-1)["flags.wod5e-mage.selectedSpheres"].matter, false);
+  console.log("accesso al Dominio: ok");
+}

@@ -311,9 +311,9 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
   }
 
   /**
-   * L'accesso a un Dominio (25/9): la Sfera entra fra le conosciute, e il
-   * livello segna 1 come promemoria; tolto l'accesso, la Sfera torna fuori
-   * e il livello a 0. I poteri presi lì restano sulla scheda.
+   * L'accesso a un Dominio (25/9): la Sfera entra fra le conosciute (il
+   * vecchio numero della Sfera resta solo come segno interno: 1 aperto, 0
+   * chiuso). I poteri presi lì restano sulla scheda.
    */
   static async #onDominioAccesso(event, target) {
     event.preventDefault();

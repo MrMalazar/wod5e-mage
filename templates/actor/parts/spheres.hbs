@@ -1,7 +1,7 @@
 {{!-- La pagina Magick (Blue, 21/9/2026, dal mock docs/mock_pagina_magick_21-9.html):
-     a sinistra le nove Sfere in una lista sola (il clic sul sigillo prende o
-     lascia la Sfera; i pallini; la casetta di famiglia; a destra il conto dei
-     poteri conosciuti, lo stesso numero della prima pagina) e sotto le Magick
+     a sinistra le nove Sfere in una lista sola (il segno dell'accesso apre o
+     chiude il Dominio; niente livelli dal 25/9 sera; la casetta di famiglia; il
+     conto dei poteri conosciuti, lo stesso numero della prima pagina) e sotto le Magick
      in atto; a destra i poteri che il giocatore ha inserito, Sfera per Sfera,
      in righe a colonne allineate (pallino, nome, tipo, Amalgama, costo), col
      testo che si apre al clic sul nome e la tendina Aggiungi (dal catalogo,
@@ -22,21 +22,17 @@
                     <small class="wod5e-mage-riq-conto">{{localize "WOD5E_MAGE.Poteri.SfereConosciute" count=sfereConosciute.length}} · {{localize "WOD5E_MAGE.Poteri.InTutto" count=poteriTotale}}</small>
                 </header>
                 <div class="wod5e-mage-riq-body">
+                    {{!-- Le Sfere come nella prima pagina (Blue, 25/9 sera): niente livelli da 1 a 5,
+                         «creano solo confusione». Il segno dell'accesso apre e chiude il Dominio, poi il
+                         sigillo, il conto dei poteri conosciuti, il nome, la casetta (di famiglia o esterna). --}}
                     <div class="wod5e-mage-sfere-lista">
                         {{#each sfereConosciute as |sphere|}}
                             <div class="wod5e-mage-riga wod5e-mage-riga-sfera-pagina{{#if sphere.family}} family{{/if}}">
-                                <button type="button" class="wod5e-mage-sfera-prendi" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="true" title="{{localize 'WOD5E_MAGE.Poteri.Lascia'}}" aria-pressed="true" {{#if ../locked}}disabled{{/if}}><img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt=""></button>
-                                <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize sphere.label}}</span></span>
-                                {{!-- I pallini del livello: un promemoria, non un conto (Blue, 25/9: «servono solo a ricordare
-                                     qual è il livello attuale»). Il vuoto a sinistra riporta a zero; l'ultimo acceso si spegne col clic. --}}
-                                <div class="resource-value" data-value="{{sphere.value}}" data-name="flags.wod5e-mage.spheres.{{sphere.id}}">
-                                    <span class="resource-value-empty" data-action="dotCounterEmpty"></span>
-                                    {{#numLoop 5}}
-                                        <span class="resource-value-step" data-action="sphereDotChange" data-sphere="{{sphere.id}}" data-index="{{this}}" title="{{this}}"></span>
-                                    {{/numLoop}}
-                                </div>
-                                <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-sfera-casa{{#if sphere.family}} on{{/if}}" data-action="familySphereToggle" data-sphere="{{sphere.id}}" title="{{#if sphere.family}}{{localize 'WOD5E_MAGE.Poteri.Casa'}}{{else}}{{localize 'WOD5E_MAGE.Poteri.CasaOff'}}{{/if}}" aria-pressed="{{sphere.family}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-house" aria-hidden="true"></i></button>
+                                <button type="button" class="wod5e-mage-sfera-accesso acceso" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="true" title="{{localize 'WOD5E_MAGE.Poteri.DominioChiudi'}}" aria-pressed="true" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-circle-check" aria-hidden="true"></i></button>
+                                <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt="">
                                 <b class="wod5e-mage-sfera-conto{{#unless sphere.conto}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Stat.PoteriConosciuti'}}">{{sphere.conto}}</b>
+                                <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize sphere.label}}</span></span>
+                                <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-sfera-casa{{#if sphere.family}} on{{/if}}" data-action="familySphereToggle" data-sphere="{{sphere.id}}" title="{{#if sphere.family}}{{localize 'WOD5E_MAGE.Poteri.Casa'}}{{else}}{{localize 'WOD5E_MAGE.Poteri.CasaOff'}}{{/if}}" aria-pressed="{{sphere.family}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-house" aria-hidden="true"></i></button>
                             </div>
                         {{/each}}
                     </div>
@@ -45,7 +41,8 @@
                         <div class="wod5e-mage-sfere-lista">
                             {{#each sfereAltre as |sphere|}}
                                 <div class="wod5e-mage-riga wod5e-mage-riga-sfera-pagina spenta">
-                                    <button type="button" class="wod5e-mage-sfera-prendi" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="false" title="{{localize 'WOD5E_MAGE.Poteri.Prendi'}}" aria-pressed="false" {{#if ../locked}}disabled{{/if}}><img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt=""></button>
+                                    <button type="button" class="wod5e-mage-sfera-accesso" data-action="sphereSelectionChange" data-sphere="{{sphere.id}}" data-selected="false" title="{{localize 'WOD5E_MAGE.Poteri.DominioApri'}}" aria-pressed="false" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-circle" aria-hidden="true"></i></button>
+                                    <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt="">
                                     <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize sphere.label}}</span></span>
                                 </div>
                             {{/each}}

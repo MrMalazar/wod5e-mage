@@ -219,7 +219,7 @@ assert.equal(formulaPick(FORMULE_M6.find((formula) => formula.id === "guarire"),
 // L'accesso al Dominio (25/9): la Sfera fra le proprie apre la matrice anche a livello 0; il livello è un promemoria.
 const aZero = prepareGrimorioFormule({ life: 0 }, (k) => k).find((formula) => formula.id === "guarire");
 assert.deepEqual([aZero.open, aZero.accessOwned.map((sphere) => [sphere.id, sphere.level])], [true, [["life", 0]]]);
-assert.deepEqual(formulaPick(FORMULE_M6.find((formula) => formula.id === "guarire"), { access: "life", amalgams: ["matter"], sphereLevels: { life: 0, matter: 0 } }).spheres, { life: 0, matter: 0 });
+assert.deepEqual(formulaPick(FORMULE_M6.find((formula) => formula.id === "guarire"), { access: "life", amalgams: ["matter"], sphereLevels: { life: 0, matter: 0 } }).spheres, { life: 1, matter: 1 }, "senza livello la Sfera vale 1 nel lancio");
 assert.equal(formulaPick(FORMULE_M6.find((formula) => formula.id === "annientare"), { access: "matter", threshold: 1, sphereLevels: { matter: 1 } }).threshold, 11);
 assert.deepEqual(prepareGrimorio({ forces: 3 }, (k) => k)[0].levels[2].entries.find((entry) => entry.id === "forces-3-onda-d-urto").formule, ["Danneggiare"]);
 assert.match(grimorioTemplate, /data-view-panel="sphere"[\s\S]*wod5e-mage-grimorio-formula[\s\S]*data-view-panel="formula"[\s\S]*data-formula="\{\{formula\.id\}\}"[\s\S]*data-role="formulaAccess"[\s\S]*data-role="formulaAmalgam"[\s\S]*data-role="formulaSave"[\s\S]*data-role="formulaRoll"[\s\S]*data-role="formulaPick"/);

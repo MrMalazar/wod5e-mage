@@ -189,7 +189,7 @@ assert.equal(g6.corpo.spheres.length, 9);
 assert.deepEqual([g6.corpo.conto.domini.value, g6.corpo.conto.domini.target, g6.corpo.conto.domini.text], [3, null, "3"]);
 assert.deepEqual([g6.corpo.conto.poteri.value, g6.corpo.conto.poteri.target, g6.corpo.conto.poteri.state, g6.corpo.conto.poteri.text], [2, 3, "under", "2/3"]);
 const forze = g6.corpo.spheres.find((s) => s.id === "forces");
-assert.deepEqual([forze.selected, forze.level, forze.vuoto, forze.poteri.map((p) => [p.id, p.label, p.dot])], [true, 2, false, [["b", "Faro", 2]]]);
+assert.deepEqual([forze.selected, forze.level, forze.vuoto, forze.poteri.map((p) => [p.id, p.label, p.dot])], [true, undefined, false, [["b", "Faro", 2]]], "niente livelli nel passo");
 const spirito = g6.corpo.spheres.find((s) => s.id === "spirit");
 assert.deepEqual([spirito.selected, spirito.family, spirito.vuoto, spirito.poteri], [true, true, true, []], "Spirito è aperto ma senza il suo potere");
 assert.equal(g6.corpo.spheres.find((s) => s.id === "matter").selected, false);
@@ -295,8 +295,8 @@ assert.match(finestra, /game\.settings\.register\(MODULE_ID, GUIDA_TESTI_SETTING
 for (const id of PASSI) readFileSync(new URL(`../templates/guidata/passi/${id}.hbs`, import.meta.url), "utf8");
 // Il passo dei Domini (25/9): l'accesso, il più che apre la finestra Aggiungi, il potere con la ×, niente pallini.
 const sfereHbs = readFileSync(new URL("../templates/guidata/passi/sfere.hbs", import.meta.url), "utf8");
-for (const marker of ['data-action="dominioAccesso" data-sphere="{{sphere.id}}"', 'data-action="dominioPotere" data-sphere="{{sphere.id}}"', 'data-action="dominioPotereTogli" data-row="{{p.id}}"', "wod5e-mage-guidata-dominio-livello", "WOD5E_MAGE.Guidata.Sfere.Scegli"]) assert.ok(sfereHbs.includes(marker), `manca ${marker}`);
-assert.ok(!sfereHbs.includes("sferaPallino") && !sfereHbs.includes("wod5e-mage-guidata-pallino"), "niente pallini di Sfera");
+for (const marker of ['data-action="dominioAccesso" data-sphere="{{sphere.id}}"', 'data-action="dominioPotere" data-sphere="{{sphere.id}}"', 'data-action="dominioPotereTogli" data-row="{{p.id}}"', "WOD5E_MAGE.Guidata.Sfere.Scegli"]) assert.ok(sfereHbs.includes(marker), `manca ${marker}`);
+assert.ok(!sfereHbs.includes("sferaPallino") && !sfereHbs.includes("wod5e-mage-guidata-pallino") && !sfereHbs.includes("livello"), "niente pallini né livelli di Sfera");
 assert.match(finestra, /dominioAccesso: CreazioneGuidata\.#onDominioAccesso,\s+dominioPotere: CreazioneGuidata\.#onDominioPotere,\s+dominioPotereTogli: CreazioneGuidata\.#onDominioPotereTogli/);
 assert.ok(!finestra.includes("sferaPallino"));
 const corpo = readFileSync(new URL("../templates/guidata/corpo.hbs", import.meta.url), "utf8");

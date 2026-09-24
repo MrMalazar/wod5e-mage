@@ -484,7 +484,7 @@ export function spellFromResult(actor, result, { traits, rollSpheres, localize =
   const options = normalizeMagickRollOptions(result);
   const spheres = {};
   for (const sphere of rollSpheres ?? []) {
-    const level = Math.min(Math.max(Math.trunc(Number(result[`sphere-${sphere.id}`]) || 0), 0), sphere.value);
+    const level = Math.min(Math.max(Math.trunc(Number(result[`sphere-${sphere.id}`]) || 0), 0), Math.max(sphere.value, 1));
     if (level > 0) spheres[sphere.id] = level;
   }
   const scopes = {};
@@ -781,11 +781,12 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   // usa. Le Specialità delle Sfere non esistono più (Blue, 21/9): nessuna
   // Sfera porta un Ambito di Specialità.
   const specialties = {};
+  // Le Sfere conosciute sono i Domini (Blue, 25/9 sera): una Sfera senza
+  // livello entra lo stesso, con un pallino solo.
   const rollSpheres = prepareSpheres(actor).selected
-    .filter((sphere) => sphere.value > 0)
     .map((sphere) => ({
       ...sphere,
-      steps: Array.from({ length: sphere.value }, (_, index) => ({ value: index + 1 })),
+      steps: Array.from({ length: Math.max(sphere.value, 1) }, (_, index) => ({ value: index + 1 })),
       specialtyScope: specialties[sphere.id] ?? "",
       specialtyLabel: specialties[sphere.id] ? `WOD5E_MAGE.Scopes.${specialties[sphere.id]}` : ""
     }));

@@ -774,6 +774,8 @@
       "AltreSfere": "The others",
       "Prendi": "Click the seal: take the Sphere",
       "Lascia": "Click the seal: drop the Sphere",
+      "DominioApri": "Open the Domain: the Sphere joins yours and you can do Magick on it",
+      "DominioChiudi": "Close the Domain: the Sphere goes back among the others",
       "Casa": "Family Sphere (costs less). Click: make it external.",
       "CasaOff": "External Sphere. Click: make it a family one.",
       "Conto": "known powers",
@@ -848,6 +850,12 @@
       "MostraHint": "Posts the power's card to chat (it is passive: it triggers by itself)",
       "CatalogoConosciuti": "{known} powers known",
       "Grado": "Grade: the power's potency",
+      "GradoN": "Grade {n}",
+      "GradoNessuno": "Grade to assign",
+      "PrezzoPE": "{pe} experience points",
+      "PrezzoDue": "{famiglia} experience points in a family Domain, {esterno} in an outside one",
+      "DominioFamiglia": "Family Domain: each grade of the power costs {n} experience points (at creation powers are free)",
+      "DominioEsterno": "Outside Domain: each grade of the power costs {n} experience points (at creation powers are free)",
       "Prerequisito": {
         "Label": "Needs",
         "numero": "{n} {sphere} powers",
@@ -1808,8 +1816,8 @@
         "sfere": {
           "Label": "Domains",
           "Domanda": "Which Domains do you have access to, and which power do you take in each?",
-          "Sotto": "one power per Domain · the level is only a reminder",
-          "Perche": "The nine Spheres are the Domains of Magick. Having access to a Domain means being able to do Magick on it: no Sphere level is needed. The level stays on the Magick page only to remember how far the mage has come.",
+          "Sotto": "one power per Domain",
+          "Perche": "The nine Spheres are the Domains of Magick. Having access to a Domain means being able to do Magick on it: there are no Sphere levels, what counts is which Domains you have and which powers you know.",
           "PercheDue": "At creation you open access to the character's Domains (the family Sphere and the path Sphere are already open) and take one power in each. Powers are bought along the hierarchy: each power has a grade, which says how much it weighs, but what opens it are the prerequisites, so many known powers or specific powers. The character's grade and the Challenge give extra powers."
         },
         "strumenti": {
@@ -1937,8 +1945,6 @@
         "AccessoDai": "Open access to this Domain",
         "AccessoTogli": "Remove access to this Domain",
         "Scegli": "Choose the power",
-        "Livello": "Level",
-        "LivelloHint": "The Sphere level is only a reminder: it is marked on the Magick page.",
         "Famiglia": "Family Sphere",
         "FamigliaHint": "Family Spheres (Family, path, Creed) cost less with Experience.",
         "Sfida": "from the Challenge"

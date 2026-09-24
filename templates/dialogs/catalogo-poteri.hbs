@@ -20,6 +20,8 @@
         <span class="wod5e-mage-catalogo-conto" data-role="catalogoConto">{{localize "WOD5E_MAGE.Poteri.CatalogoConto" total=totale known=conosciuti}}</span>
     </div>
     {{#unless tutto}}
+        {{!-- Il Dominio è di famiglia o esterno, e quanto costa ogni grado (25/9 sera: «nell'elenco non è capibile»). --}}
+        <p class="wod5e-mage-catalogo-avviso wod5e-mage-catalogo-dominio"><i class="fa-solid {{#if family}}fa-house{{else}}fa-globe{{/if}}" aria-hidden="true"></i> {{dominioLabel}}</p>
         {{#if chiusi}}<p class="wod5e-mage-catalogo-avviso"><i class="fa-solid fa-lock" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.CatalogoChiusi" n=chiusi}}</p>{{/if}}
     {{/unless}}
 
@@ -32,7 +34,7 @@
                     <b class="wod5e-mage-potere-pallino{{#unless voce.dot}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Poteri.Grado'}}">{{#if voce.dot}}{{voce.dot}}{{else}}·{{/if}}</b>
                     <span class="wod5e-mage-catalogo-nome">{{voce.name}}{{#if voce.proposal}} <i class="wod5e-mage-catalogo-proposta" title="{{localize 'WOD5E_MAGE.Grimorio.Proposal'}}">◇</i>{{/if}}{{#if voce.locked}} <i class="fa-solid fa-lock wod5e-mage-catalogo-lucchetto" title="{{voce.lockedHint}}" aria-hidden="true"></i>{{/if}}</span>
                     <em class="wod5e-mage-grimorio-formula">{{voce.formulaName}}</em>
-                    <span class="wod5e-mage-catalogo-tag">{{#if voce.tipi.attivo}}<small class="attivo">{{localize "WOD5E_MAGE.Poteri.Tipo.attivo"}}</small>{{/if}}{{#if voce.tipi.passivo}}<small class="passivo">{{localize "WOD5E_MAGE.Poteri.Tipo.passivo"}}</small>{{/if}}{{#if voce.cost}}<small>{{voce.cost}}</small>{{/if}}{{#if voce.uses}}<small>{{voce.uses}}</small>{{/if}}</span>
+                    <span class="wod5e-mage-catalogo-tag"><small class="grado" title="{{localize 'WOD5E_MAGE.Poteri.Grado'}}">{{voce.gradoLabel}}{{#if voce.prezzoLabel}} · {{voce.prezzoLabel}}{{/if}}</small>{{#if voce.serve}}<small class="serve {{#if voce.serveOk}}ok{{else}}manca{{/if}}" title="{{localize 'WOD5E_MAGE.Poteri.Prerequisito.Label'}}: {{voce.serve}}"><i class="fa-solid {{#if voce.serveOk}}fa-check{{else}}fa-lock{{/if}}" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Prerequisito.Label"}}</small>{{/if}}{{#if voce.tipi.attivo}}<small class="attivo">{{localize "WOD5E_MAGE.Poteri.Tipo.attivo"}}</small>{{/if}}{{#if voce.tipi.passivo}}<small class="passivo">{{localize "WOD5E_MAGE.Poteri.Tipo.passivo"}}</small>{{/if}}{{#if voce.cost}}<small>{{voce.cost}}</small>{{/if}}{{#if voce.uses}}<small>{{voce.uses}}</small>{{/if}}</span>
                     {{#if @root.tutto}}
                         {{#if voce.known}}<span class="wod5e-mage-catalogo-spunta" title="{{localize 'WOD5E_MAGE.Poteri.Conosciuto'}}"><i class="fa-solid fa-check" aria-hidden="true"></i></span>{{/if}}
                     {{else}}
@@ -41,7 +43,9 @@
                     <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                 </summary>
                 <div class="wod5e-mage-catalogo-testo">
-                    {{#if voce.lockedHint}}<p class="wod5e-mage-catalogo-blocco wod5e-mage-catalogo-serve"><b>{{localize "WOD5E_MAGE.Poteri.Prerequisito.Label"}}</b><span>{{voce.lockedHint}}</span></p>{{/if}}
+                    {{!-- I prerequisiti, sempre quando ci sono: la spunta se sono già soddisfatti, il lucchetto se mancano. --}}
+                    {{#if voce.serve}}<p class="wod5e-mage-catalogo-blocco wod5e-mage-catalogo-serve{{#if voce.serveOk}} ok{{/if}}"><b>{{localize "WOD5E_MAGE.Poteri.Prerequisito.Label"}}</b><span><i class="fa-solid {{#if voce.serveOk}}fa-check{{else}}fa-lock{{/if}}" aria-hidden="true"></i> {{#if voce.lockedHint}}{{voce.lockedHint}}{{else}}{{voce.serve}}{{/if}}</span></p>{{/if}}
+                    {{#if voce.prezzoLabel}}<p class="wod5e-mage-catalogo-blocco wod5e-mage-catalogo-prezzo"><b>{{voce.gradoLabel}}</b><span>{{voce.prezzoLabel}}</span></p>{{/if}}
                     {{#each voce.blocchi as |blocco|}}
                         <p class="wod5e-mage-catalogo-blocco{{#if blocco.kind}} {{blocco.kind}}{{/if}}">{{#if blocco.titolo}}<b>{{blocco.titolo}}</b>{{/if}}{{#each blocco.voci as |v|}}<span>{{#if v.chiave}}<strong>{{v.chiave}}:</strong> {{/if}}{{v.testo}}</span>{{/each}}</p>
                     {{/each}}

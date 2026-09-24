@@ -229,6 +229,12 @@ export function prerequisitiMancanti(entry, { owned = [], tutti = null } = {}) {
  * (già sul personaggio) e `chiuso` (i prerequisiti che mancano, o null).
  * Niente quota sui pallini (25/9): i livelli della Sfera sono un promemoria.
  */
+/** Il grado per l'ordine delle liste: senza grado si va in coda. */
+export function gradoPerOrdine(dot) {
+  const grado = Math.trunc(Number(dot) || 0);
+  return grado > 0 ? grado : 99;
+}
+
 export function catalogoDellaSfera(sphere, { catalog = POTERI, owned = [], tutti = null } = {}) {
   const have = new Set((owned ?? []).map((power) => power.catalogId).filter(Boolean));
   return (catalog ?? [])
@@ -248,7 +254,8 @@ export function catalogoDellaSfera(sphere, { catalog = POTERI, owned = [], tutti
         locked: Boolean(chiuso)
       };
     })
-    .sort((a, b) => a.dot - b.dot || a.name.localeCompare(b.name, "it"));
+    // In ordine di grado e poi di nome; i poteri col grado ancora da assegnare in coda (25/9 sera).
+    .sort((a, b) => gradoPerOrdine(a.dot) - gradoPerOrdine(b.dot) || a.name.localeCompare(b.name, "it"));
 }
 
 /* ------------------------------------------------------------------ */

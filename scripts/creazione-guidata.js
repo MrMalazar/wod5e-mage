@@ -384,8 +384,8 @@ export function passoConcetto(actor, summary, { localize = (key) => key, catalog
  * Passo 6, i Domini (Blue, 25/9: «in creazione un personaggio non ha più
  * pallini sfere, ha pallini poteri. In creazione prende 1 potere per ogni
  * dominio al quale ha accesso»): le nove Sfere come Domini a cui si ha o
- * non si ha accesso, e sotto ogni Dominio aperto i poteri presi lì. Il
- * livello della Sfera resta sulla pagina Magick, solo come promemoria.
+ * non si ha accesso, e sotto ogni Dominio aperto i poteri presi lì. Niente
+ * livelli (25/9 sera: «creano solo confusione»).
  */
 export function passoSfere(actor, summary, { localize = (key) => key, locale = "it" } = {}) {
   const counts = Object.fromEntries((summary?.counts ?? []).map((entry) => [entry.id, entry]));
@@ -400,7 +400,6 @@ export function passoSfere(actor, summary, { localize = (key) => key, locale = "
       icon: sphere.icon,
       family: Boolean(sphere.family),
       selected: Boolean(sphere.selected),
-      level: sphere.value,
       poteri: presi,
       // Un Dominio aperto senza il suo potere: manca la scelta.
       vuoto: Boolean(sphere.selected) && presi.length === 0

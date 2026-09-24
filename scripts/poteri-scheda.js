@@ -141,7 +141,8 @@ function count(value) {
 /** Le Sfere conosciute per la finestra del catalogo: id e le righe che il personaggio ha in quella Sfera. */
 export function sferePerCatalogo(actor) {
   const rows = poteriDelPersonaggio(actor);
-  return prepareSpheres(actor).selected.map((sphere) => ({ id: sphere.id, owned: poteriOfSphere(rows, sphere.id) }));
+  // `family` dice il prezzo dei poteri nella finestra: per 5 di famiglia, per 7 esterno (25/9 sera).
+  return prepareSpheres(actor).selected.map((sphere) => ({ id: sphere.id, owned: poteriOfSphere(rows, sphere.id), family: Boolean(sphere.family) }));
 }
 
 /** Il tasto «Usa» della riga: se si può, quanti usi restano, cosa costa, perché no. */
