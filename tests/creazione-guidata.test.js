@@ -244,11 +244,14 @@ const troppo = prepareGuidata(attore({ skills: { ...ABILITA, occult: 4 } }), { p
 assert.deepEqual([troppo.corpo.tettoOk, troppo.corpo.oltre], [false, ["occult"]]);
 assert.equal(troppo.corpo.gruppi[2].abilita.find((s) => s.id === "occult").oltre, true);
 
-// Il passo 11: Background, Pregi e Difetti coi conti.
-const g11 = prepareGuidata(attore({ items: [feature("Alleati", "background", 3), feature("Ambidestro", "merit", 2), feature("Contatti", "background", 2), feature("Dipendenza", "flaw", 2)] }), { passo: 11, localize });
+// Il passo 11: Background, Pregi e Difetti coi conti (24/9: 5 Pregi più 4 Background, 2 Difetti obbligatori).
+const g11 = prepareGuidata(attore({ items: [feature("Alleati", "background", 3), feature("Ambidestro", "merit", 4), feature("Contatti", "background", 2), feature("Dipendenza", "flaw", 2)] }), { passo: 11, localize });
 assert.deepEqual(g11.corpo.background.map((i) => i.name), ["Alleati", "Contatti"]);
-assert.deepEqual([g11.corpo.conto.vantaggi.text, g11.corpo.conto.vantaggi.state, g11.corpo.conto.difetti.text, g11.corpo.conto.difetti.state], ["7/7", "exact", "2/2", "exact"]);
-assert.deepEqual(g11.corpo.pregi[0].steps.map((s) => s.lit), [true, true, false, false, false]);
+assert.deepEqual([g11.corpo.conto.vantaggi.text, g11.corpo.conto.vantaggi.state, g11.corpo.conto.difetti.text, g11.corpo.conto.difetti.state], ["9/9", "exact", "2/2", "exact"]);
+// Un Difetto in più rende un punto: con 3 Difetti i Vantaggi vogliono 10, e i Difetti restano verdi.
+const g11b = prepareGuidata(attore({ items: [feature("Alleati", "background", 3), feature("Ambidestro", "merit", 4), feature("Contatti", "background", 2), feature("Dipendenza", "flaw", 3)] }), { passo: 11, localize });
+assert.deepEqual([g11b.corpo.conto.vantaggi.text, g11b.corpo.conto.vantaggi.state, g11b.corpo.conto.difetti.text, g11b.corpo.conto.difetti.state], ["9/10", "under", "3/2", "exact"]);
+assert.deepEqual(g11.corpo.pregi[0].steps.map((s) => s.lit), [true, true, true, true, false]);
 assert.equal(g11.passi[10].fatto, true);
 
 // Il passo 12: le Ancore, con le proposte del catalogo.
@@ -274,7 +277,7 @@ const intero = attore({
     convinzioni: { r1: { text: "Nessuno decide", group: "morte" } }
   },
   headers: { concept: "Infermiera", ambition: "a", desire: "b" },
-  items: [feature("Alleati", "background", 3), feature("Ambidestro", "merit", 4), feature("Dipendenza", "flaw", 2)]
+  items: [feature("Alleati", "background", 4), feature("Ambidestro", "merit", 5), feature("Dipendenza", "flaw", 2)]
 });
 const done = passiFatti(intero, prepareCreationSummary(intero, 1));
 assert.deepEqual(Object.entries(done).filter(([, ok]) => !ok), [], "tutti i passi fatti");

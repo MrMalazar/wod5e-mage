@@ -80,11 +80,12 @@ export function prepareMemo(summary, { on = false } = {}) {
       poteri,
       state: statoInsieme([domini?.state, poteri?.state, arete ? statoSpunta(arete.ok) : ""])
     },
-    // I Tratti: Background e Pregi insieme, e i Difetti.
+    // I Tratti: Background e Pregi insieme, e i Difetti (col tetto dei cinque punti, 24/9).
     tratti: {
       vantaggi,
       difetti,
-      state: statoInsieme([vantaggi?.state, difetti?.state])
+      tetto: checks.flawsCap ? { ok: Boolean(checks.flawsCap.ok), target: checks.flawsCap.target } : null,
+      state: statoInsieme([vantaggi?.state, difetti?.state, checks.flawsCap ? statoSpunta(Boolean(checks.flawsCap.ok)) : ""])
     }
   };
 

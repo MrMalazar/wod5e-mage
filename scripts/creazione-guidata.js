@@ -583,7 +583,7 @@ function featureRows(items, featuretype) {
 export function passoVantaggi(actor, summary) {
   const items = actor?.items ? Array.from(actor.items) : [];
   const counts = Object.fromEntries((summary?.counts ?? []).map((entry) => [entry.id, entry]));
-  const vantaggi = counts.merits ?? { value: 0, target: 7, state: "under", sfida: 0 };
+  const vantaggi = counts.merits ?? { value: 0, target: 9, state: "under", sfida: 0 };
   const difetti = counts.flaws ?? { value: 0, target: 2, state: "under" };
   return {
     background: featureRows(items, "background"),

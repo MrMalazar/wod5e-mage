@@ -201,28 +201,36 @@ const summaryActor = {
 };
 const summary = prepareCreationSummary(summaryActor);
 const byId = Object.fromEntries(summary.counts.map((count) => [count.id, count.value]));
-// melee è un'abilità assorbita: i suoi pallini non contano. I Vantaggi contano Background e Pregi insieme (7/9).
-assert.deepEqual(byId, { attributes: 5, skills: 5, backgrounds: 3, merits: 6, flaws: 1, domini: 2, poteri: 1 });
-// I traguardi del Neofita: 22, 19 (V6 più uno, tetto 3), 7, 2; tre Domini (25/9 sera) e i poteri
-// uno per Dominio aperto; rosso sotto, giallo sopra, verde pari (7/9, 11/9).
+// melee è un'abilità assorbita: i suoi pallini non contano. I Vantaggi contano Background e Pregi insieme (7/9),
+// e dal 24/9 le due basi si vedono anche da sole (4 di Background, 5 di Pregi).
+assert.deepEqual(byId, { attributes: 5, skills: 5, backgrounds: 3, pregi: 3, merits: 6, flaws: 1, domini: 2, poteri: 1 });
+// I traguardi del Neofita: 22, 19 (V6 più uno, tetto 3), 9 di Vantaggi (5 più 4), 2 Difetti; tre Domini (25/9 sera)
+// e i poteri uno per Dominio aperto; rosso sotto, giallo sopra, verde pari (7/9, 11/9).
 const byTarget = Object.fromEntries(summary.counts.map((count) => [count.id, [count.target, count.state]]));
 // I Domini: tre alla creazione (25/9 sera), due aperti qui.
-assert.deepEqual(byTarget, { attributes: [22, "under"], skills: [19, "under"], backgrounds: [null, ""], merits: [7, "under"], flaws: [2, "under"], domini: [3, "under"], poteri: [2, "under"] });
+assert.deepEqual(byTarget, { attributes: [22, "under"], skills: [19, "under"], backgrounds: [4, "under"], pregi: [5, "under"], merits: [9, "under"], flaws: [2, "under"], domini: [3, "under"], poteri: [2, "under"] });
 assert.deepEqual(summary.grades.map((g) => g.id), ["neofita", "risvegliato", "discepolo", "anziano", "maestro"]);
 assert.equal(summary.grades[0].selected, true);
 assert.equal(summary.profiles, undefined);
-const { creationTargets, compareCount, sfidaBonuses, sfidaSummary } = await import("../scripts/riepilogo.js");
+const { creationTargets, compareCount, sfidaBonuses, sfidaSummary, flawsExtraPoints, statoConto } = await import("../scripts/riepilogo.js");
 // I premi della Sfida si sommano (LIBRO 05_015; 23/9): un gruppo +1 Abilità, due +2 Vantaggi, tre +1 potere.
 // Niente pallini di Sfera (25/9): i pallini del grado sono poteri in più, oltre l'uno per Dominio.
-assert.deepEqual(creationTargets("maestro", 3), { grado: "maestro", arete: 4, attributes: 24, skills: 27, skillCap: 3, merits: 16, flaws: 6, poteri: 5 });
-assert.deepEqual(creationTargets("risvegliato", 2), { grado: "risvegliato", arete: 2, attributes: 22, skills: 22, skillCap: 3, merits: 9, flaws: 3, poteri: 1 });
-assert.deepEqual(creationTargets("neofita", 1), { grado: "neofita", arete: 1, attributes: 22, skills: 20, skillCap: 3, merits: 7, flaws: 2, poteri: 0 });
-assert.deepEqual(creationTargets("neofita", 0), { grado: "neofita", arete: 1, attributes: 22, skills: 19, skillCap: 3, merits: 7, flaws: 2, poteri: 0 });
+// I Vantaggi (24/9): 5 Pregi più 4 Background, più i due della Sfida e i punti resi dai Difetti in più.
+assert.deepEqual(creationTargets("maestro", 3), { grado: "maestro", arete: 4, attributes: 24, skills: 27, skillCap: 3, pregi: 5, backgrounds: 4, merits: 18, flaws: 6, flawsMax: 9, flawsExtra: 0, poteri: 5 });
+assert.deepEqual(creationTargets("risvegliato", 2), { grado: "risvegliato", arete: 2, attributes: 22, skills: 22, skillCap: 3, pregi: 5, backgrounds: 4, merits: 11, flaws: 3, flawsMax: 6, flawsExtra: 0, poteri: 1 });
+assert.deepEqual(creationTargets("neofita", 1), { grado: "neofita", arete: 1, attributes: 22, skills: 20, skillCap: 3, pregi: 5, backgrounds: 4, merits: 9, flaws: 2, flawsMax: 5, flawsExtra: 0, poteri: 0 });
+assert.deepEqual(creationTargets("neofita", 0), { grado: "neofita", arete: 1, attributes: 22, skills: 19, skillCap: 3, pregi: 5, backgrounds: 4, merits: 9, flaws: 2, flawsMax: 5, flawsExtra: 0, poteri: 0 });
+// I Difetti oltre i due rendono un punto ciascuno, fino a cinque (24/9): con 4 Difetti i Vantaggi salgono a 11, con 7 restano a 12.
+assert.deepEqual([flawsExtraPoints(0), flawsExtraPoints(2), flawsExtraPoints(4), flawsExtraPoints(5), flawsExtraPoints(7)], [0, 0, 2, 3, 3]);
+assert.deepEqual([creationTargets("neofita", 0, 4).merits, creationTargets("neofita", 0, 4).flawsExtra, creationTargets("neofita", 2, 5).merits], [11, 2, 14]);
+// Lo stato dei conti: i Difetti resi sono verdi fino al tetto, poi gialli; le basi dei Vantaggi non sono mai gialle.
+assert.deepEqual([statoConto({ id: "flaws", value: 4, target: 2, max: 5 }), statoConto({ id: "flaws", value: 6, target: 2, max: 5 }), statoConto({ id: "flaws", value: 1, target: 2, max: 5 })], ["exact", "over", "under"]);
+assert.deepEqual([statoConto({ id: "pregi", value: 7, target: 5, soft: true }), statoConto({ id: "pregi", value: 3, target: 5, soft: true }), statoConto({ id: "merits", value: 10, target: 9 })], ["", "under", "over"]);
 assert.deepEqual([sfidaBonuses(0), sfidaBonuses(1), sfidaBonuses(2), sfidaBonuses(3)], [{ skills: 0, merits: 0, poteri: 0 }, { skills: 1, merits: 0, poteri: 0 }, { skills: 1, merits: 2, poteri: 0 }, { skills: 1, merits: 2, poteri: 1 }]);
 assert.deepEqual(sfidaSummary(2).prizes.map((p) => [p.count, p.bonus, p.earned]), [["skills", 1, true], ["merits", 2, true], ["poteri", 1, false]]);
 assert.deepEqual([sfidaSummary(2).done, sfidaSummary(2).total, sfidaSummary(2).complete, sfidaSummary(3).complete], [2, 3, false, true]);
 assert.deepEqual(summary.sfida.done, 0);
-assert.deepEqual(summary.counts.map((count) => count.sfida), [0, 0, 0, 0, 0, 0, 0]);
+assert.deepEqual(summary.counts.map((count) => count.sfida), [0, 0, 0, 0, 0, 0, 0, 0]);
 assert.deepEqual([compareCount(22, 22), compareCount(20, 22), compareCount(25, 22)], ["exact", "under", "over"]);
 assert.equal(prepareCreationSummary(summaryActor, 1).checks.find((check) => check.id === "arete").ok, true);
 assert.equal(prepareCreationSummary(summaryActor, 2).checks.find((check) => check.id === "arete").ok, false);
@@ -236,7 +244,7 @@ assert.match(readFileSync(new URL("../templates/actor/parts/stat.hbs", import.me
 assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/stat.hbs", import.meta.url), "utf8"), /wod5e-mage-riepilogo-chip/);
 assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/stat.hbs", import.meta.url), "utf8"), /creazione\.profilo/);
 const checkById = Object.fromEntries(summary.checks.map((check) => [check.id, check.ok]));
-assert.deepEqual(checkById, { skillCap: true, concept: true, anchors: false, convictions: true, instruments: false });
+assert.deepEqual(checkById, { skillCap: true, flawsCap: true, concept: true, anchors: false, convictions: true, instruments: false });
 // Con lo Strumento anche su Tempo, il controllo passa.
 summaryActor.getFlag = ((original) => (m, key) => key === "focus"
   ? { sphereInstruments: { forces: { tool: "weapons" }, time: { tool: "trance" } } }

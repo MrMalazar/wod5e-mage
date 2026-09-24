@@ -5,9 +5,14 @@ Uso: python3 tools/build-archivi.py "<cartella della casa MAGHI M6>"
 
 Legge i Cataloghi (capitolo 08), i Concetti (05_011) e gli studi dei Credi
 e scrive in packs/ un file .db (NeDB, una riga per documento) per archivio:
-Pregi, Difetti, Background (Item feature), Credi, Concetti, Ambizioni,
-Desideri, Ancore, Convinzioni (JournalEntry), Strumenti per la Magick
-(Item equipment, dalla tavola di ramo_a_regole.md). Solo italiano.
+Credi, Concetti, Ambizioni, Desideri, Ancore, Convinzioni (JournalEntry),
+Condizioni, Strumenti per la Magick (Item equipment, dalla tavola di
+ramo_a_regole.md). Solo italiano.
+
+Dal 24/9 i Pregi, i Difetti e i Background NON vengono più da qui: li scrive
+tools/build-vantaggi.py dal catalogo aggiornato tools/dati/vantaggi.md (i
+verdetti di Blue sui Vantaggi). Le funzioni restano per il confronto col
+LIBRO: si lanciano solo con `--vecchi-vantaggi`.
 """
 import hashlib
 import html
@@ -589,8 +594,9 @@ def build_strumenti():
 if __name__ == "__main__":
     if not CAT.exists():
         sys.exit(f"Cartella dei Cataloghi non trovata: {CAT}")
-    build_traits()
-    build_backgrounds()
+    if "--vecchi-vantaggi" in sys.argv:
+        build_traits()
+        build_backgrounds()
     build_credi()
     build_concetti()
     spunti("ambizione", "08_095_*.md", "Ambizioni", "ambizioni")

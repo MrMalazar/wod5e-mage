@@ -75,7 +75,7 @@ assert.equal(entry.content, "<p>c</p>");
 
 // I nove compendi esistono, sono JSON riga per riga e portano la bandiera.
 const manifest = JSON.parse(readFileSync(new URL("../module.json", import.meta.url), "utf8"));
-const expected = { "mage-pregi": 90, "mage-difetti": 85, "mage-background": 18, "mage-credi": 13, "mage-concetti": 24, "mage-ambizioni": 120, "mage-desideri": 120, "mage-ancore": 12, "mage-convinzioni": 110, "mage-condizioni": 25, "mage-strumenti": 22 };
+const expected = { "mage-pregi": 70, "mage-difetti": 65, "mage-background": 17, "mage-credi": 13, "mage-concetti": 24, "mage-ambizioni": 120, "mage-desideri": 120, "mage-ancore": 12, "mage-convinzioni": 110, "mage-condizioni": 25, "mage-strumenti": 22 };
 for (const [name, minimum] of Object.entries(expected)) {
   const pack = manifest.packs.find((candidate) => candidate.name === name);
   assert.ok(pack, name);

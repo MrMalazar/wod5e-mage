@@ -26,14 +26,24 @@ export const GRADI = Object.freeze([
 /**
  * La creazione base: 22 Attributi, 19 pallini di Abilità liberi col tetto a 3
  * (V6: 18 su tredici voci; qui una voce in più vale un pallino in più, verdetto
- * di Blue dell'11/9; le tre ripartizioni del 18/8 non esistono più), 7 fra Background
- * e Pregi, 2 Difetti. Niente pallini di Sfera (Blue, 25/9): si ha accesso a
- * tre Domini (25/9 sera: quello della Famiglia, quello della via e uno a
- * scelta fra i due del Credo; una Craft senza vie ne ha due) e in ciascuno
- * si prende un potere. Sopra la base il potere della Sfida completa
- * (PREMI_SFIDA) e i poteri in più del grado.
+ * di Blue dell'11/9; le tre ripartizioni del 18/8 non esistono più). I Vantaggi
+ * dal 24/9 (Blue): 5 punti di Pregi e 4 di Background, 2 Difetti obbligatori;
+ * i Difetti in più, fino a 5 in tutto, rendono un punto ciascuno da mettere in
+ * Pregi o in Background a scelta del giocatore (`flawsMax`, `flawsBase`).
+ * Niente pallini di Sfera (Blue, 25/9): si ha accesso a tre Domini (25/9 sera:
+ * quello della Famiglia, quello della via e uno a scelta fra i due del Credo;
+ * una Craft senza vie ne ha due) e in ciascuno si prende un potere. Sopra la
+ * base il potere della Sfida completa (PREMI_SFIDA) e i poteri in più del grado.
  */
-export const BASE_CREAZIONE = Object.freeze({ attributes: 22, skills: 19, skillCap: TETTO_CREAZIONE, merits: 7, flaws: 2 });
+export const BASE_CREAZIONE = Object.freeze({ attributes: 22, skills: 19, skillCap: TETTO_CREAZIONE, merits: 5, backgrounds: 4, flaws: 2, flawsMax: 5 });
+
+/** I punti che i Difetti oltre i due obbligatori rendono: uno a uno, fino al tetto di cinque. */
+export function flawsExtraPoints(flawsTaken = 0, gradoId = "neofita") {
+  const grado = GRADI.find((g) => g.id === gradoId) ?? GRADI[0];
+  const base = BASE_CREAZIONE.flaws + grado.flaws;
+  const taken = Math.max(Math.trunc(Number(flawsTaken) || 0), 0);
+  return Math.max(Math.min(taken, BASE_CREAZIONE.flawsMax + grado.flaws) - base, 0);
+}
 
 /**
  * I premi della Sfida del Concetto (LIBRO 05_015, «i premi si sommano»): un
@@ -58,18 +68,29 @@ export function sfidaBonuses(groupsDone = 0) {
   return bonuses;
 }
 
-/** I traguardi della creazione per grado e gruppi della Sfida completati. */
-export function creationTargets(gradoId = "neofita", groupsDone = 0) {
+/**
+ * I traguardi della creazione per grado, gruppi della Sfida completati e
+ * Difetti presi. `merits` è il conto dei Vantaggi insieme (Pregi più
+ * Background): la base dei due, i due punti della Sfida e quelli resi dai
+ * Difetti in più vanno dove vuole il giocatore, quindi si sommano lì;
+ * `pregi` e `backgrounds` sono le due basi da sole.
+ */
+export function creationTargets(gradoId = "neofita", groupsDone = 0, flawsTaken = 0) {
   const grado = GRADI.find((g) => g.id === gradoId) ?? GRADI[0];
   const sfida = sfidaBonuses(groupsDone);
+  const extra = flawsExtraPoints(flawsTaken, grado.id);
   return {
     grado: grado.id,
     arete: grado.arete,
     attributes: BASE_CREAZIONE.attributes + grado.attributes,
     skills: BASE_CREAZIONE.skills + sfida.skills + grado.skills,
     skillCap: BASE_CREAZIONE.skillCap,
-    merits: BASE_CREAZIONE.merits + sfida.merits + grado.merits,
+    pregi: BASE_CREAZIONE.merits,
+    backgrounds: BASE_CREAZIONE.backgrounds,
+    merits: BASE_CREAZIONE.merits + BASE_CREAZIONE.backgrounds + sfida.merits + grado.merits + extra,
     flaws: BASE_CREAZIONE.flaws + grado.flaws,
+    flawsMax: BASE_CREAZIONE.flawsMax + grado.flaws,
+    flawsExtra: extra,
     // I poteri oltre l'uno per Dominio: quelli del grado e quello della Sfida.
     poteri: grado.poteri + sfida.poteri
   };
@@ -87,6 +108,20 @@ export function sfidaSummary(groupsDone = 0) {
     complete: done >= CONCEPT_CHALLENGE_GROUPS.length,
     prizes: PREMI_SFIDA.map((premio) => ({ ...premio, earned: done >= premio.groups }))
   };
+}
+
+/**
+ * Lo stato di un conto del memo. I Difetti fra i due obbligatori e il tetto
+ * non sono «sopra»: sono punti resi, quindi verdi. Le due basi dei Vantaggi
+ * (`soft`) sono rosse sotto la base e senza colore sopra, perché i punti in
+ * più vanno dove vuole il giocatore e li giudica il conto insieme.
+ */
+export function statoConto(count) {
+  if (count.target === null || count.target === undefined) return "";
+  if (count.id === "flaws" && count.value > count.target && count.value <= (count.max ?? count.target)) return "exact";
+  const state = compareCount(count.value, count.target);
+  if (count.soft && state === "over") return "";
+  return state;
 }
 
 /** Rosso sotto, giallo sopra, verde pari (verdetto di Blue, 7/9). */
@@ -170,17 +205,22 @@ export function prepareCreationSummary(actor, areteValue = null) {
   const poteriConosciuti = poteriDelPersonaggio(actor).length;
   const creazione = actor.getFlag(MODULE_ID, "creazione") ?? {};
   const groupsDone = conceptGroupsDone(actor);
-  const targets = creationTargets(creazione.grado, groupsDone);
+  const flaws = featureDots(items, "flaw");
+  const targets = creationTargets(creazione.grado, groupsDone, flaws);
 
   const backgrounds = featureDots(items, "background");
   const merits = featureDots(items, "merit");
   const raw = [
     { id: "attributes", label: "WOD5E_MAGE.Riepilogo.Attributes", value: sumDots(system.attributes, ATTRIBUTE_KEYS), target: targets.attributes },
     { id: "skills", label: "WOD5E_MAGE.Riepilogo.Skills", value: sumDots(system.skills, [...CHIAVI_VIVE]), target: targets.skills },
-    { id: "backgrounds", label: "WOD5E_MAGE.Riepilogo.Backgrounds", value: backgrounds, target: null },
-    // Background e Pregi si contano insieme: sette punti (LIBRO, «I Vantaggi»).
-    { id: "merits", label: "WOD5E_MAGE.Riepilogo.Merits", hint: "WOD5E_MAGE.Riepilogo.MeritsHint", value: backgrounds + merits, target: targets.merits },
-    { id: "flaws", label: "WOD5E_MAGE.Riepilogo.Flaws", value: featureDots(items, "flaw"), target: targets.flaws },
+    // Le due basi (24/9: 4 di Background, 5 di Pregi) si guardano da sole, ma il conto che
+    // deve tornare è quello dei Vantaggi insieme, perché i punti della Sfida e quelli
+    // resi dai Difetti in più vanno dove vuole il giocatore.
+    { id: "backgrounds", label: "WOD5E_MAGE.Riepilogo.Backgrounds", hint: "WOD5E_MAGE.Riepilogo.BackgroundsHint", value: backgrounds, target: targets.backgrounds, soft: true },
+    { id: "pregi", label: "WOD5E_MAGE.Riepilogo.Pregi", hint: "WOD5E_MAGE.Riepilogo.PregiHint", value: merits, target: targets.pregi, soft: true },
+    { id: "merits", label: "WOD5E_MAGE.Riepilogo.Merits", hint: "WOD5E_MAGE.Riepilogo.MeritsHint", value: backgrounds + merits, target: targets.merits, extra: targets.flawsExtra },
+    // I Difetti: due obbligatori, fino a cinque; oltre i due ogni punto ne rende uno ai Vantaggi.
+    { id: "flaws", label: "WOD5E_MAGE.Riepilogo.Flaws", hint: "WOD5E_MAGE.Riepilogo.FlawsHint", value: flaws, target: targets.flaws, max: targets.flawsMax },
     // I Domini a cui si ha accesso (le Sfere conosciute): tre alla creazione (25/9 sera), e i
     // poteri: uno per Dominio, più quelli del grado e della Sfida (25/9).
     { id: "domini", label: "WOD5E_MAGE.Riepilogo.Domini", hint: "WOD5E_MAGE.Riepilogo.DominiHint", value: domini, target: dominiCreazione.target },
@@ -189,7 +229,7 @@ export function prepareCreationSummary(actor, areteValue = null) {
   const sfidaBonus = sfidaBonuses(groupsDone);
   const counts = raw.map((count) => ({
     ...count,
-    state: count.target === null ? "" : compareCount(count.value, count.target),
+    state: statoConto(count),
     // Quanto del traguardo viene dalla Sfida (23/9): si scrive accanto al conto.
     sfida: sfidaBonus[count.id] ?? 0
   }));
@@ -199,6 +239,8 @@ export function prepareCreationSummary(actor, areteValue = null) {
   const checks = [
     // Nessuna Abilità oltre il tetto della creazione (V6: tre pallini).
     { id: "skillCap", label: "WOD5E_MAGE.Riepilogo.SkillCap", ok: overCap.length === 0, target: targets.skillCap },
+    // Non più di cinque punti di Difetti (24/9).
+    { id: "flawsCap", label: "WOD5E_MAGE.Riepilogo.FlawsCap", ok: flaws <= targets.flawsMax, target: targets.flawsMax },
     {
       id: "concept",
       label: "WOD5E_MAGE.Riepilogo.Concept",
