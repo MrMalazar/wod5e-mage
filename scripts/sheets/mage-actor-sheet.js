@@ -55,7 +55,7 @@ import {
 } from "../magick-balance.js";
 import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
-import { onPotereApri, onPotereCatalogo, onPotereCatalogoCompleto, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriPagina } from "../poteri-scheda.js";
+import { onPotereApri, onPotereCatalogo, onPotereCatalogoCompleto, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriFiltri, preparePoteriPagina } from "../poteri-scheda.js";
 import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { prepareMemo } from "../memo.js";
@@ -340,8 +340,8 @@ async function onEssentialSkillDotChange(event, target) {
  * (`data-filters`). Nascondono le righe che non combaciano; il testo e la
  * specie scelti restano nella scheda attraverso i render.
  */
-/** La scheda dei Tratti in uso (23/9): quella scelta, o il Background. */
-export const SCHEDE_TRATTI = Object.freeze(["background", "merit", "flaw", "equipment", "other", "grimorio"]);
+/** La scheda dei Tratti in uso (23/9; le sei di Blue del 25/9): quella scelta, o i Tratti. */
+export const SCHEDE_TRATTI = Object.freeze(["tratti", "equipment", "attivi", "passivi", "other", "grimorio"]);
 export function schedaTratti(state) {
   const kind = String(state?.kind ?? "");
   return SCHEDE_TRATTI.includes(kind) ? kind : SCHEDE_TRATTI[0];
@@ -356,17 +356,11 @@ function wireStatFilters(sheet) {
     const state = sheet._filters[name] ?? {};
     const needle = String(state.text ?? "").trim().toLocaleLowerCase(game.i18n.lang);
     const kind = String(state.kind ?? "");
-    const visible = {};
-    for (const row of list.querySelectorAll("[data-search]:not(.wod5e-mage-tratti-vuoto)")) {
+    for (const row of list.querySelectorAll("[data-search]")) {
       const text = String(row.dataset.search ?? "").toLocaleLowerCase(game.i18n.lang);
       const okText = !needle || text.includes(needle);
       const okKind = !kind || row.dataset.kind === kind;
       row.hidden = !(okText && okKind);
-      if (!row.hidden) visible[row.dataset.kind] = true;
-    }
-    // La riga di vuoto della scheda scelta, solo se non c'è niente da vedere (23/9).
-    for (const empty of list.querySelectorAll(".wod5e-mage-tratti-vuoto")) {
-      empty.hidden = Boolean(needle) || empty.dataset.kind !== kind || Boolean(visible[kind]);
     }
     for (const button of root.querySelectorAll(`[data-filters="${name}"] .wod5e-mage-filtro`)) {
       const active = String(button.dataset.kind ?? "") === kind;
@@ -958,7 +952,9 @@ export class MageActorSheet extends MortalActorSheet {
           name: names[index] ?? "",
           chosen: tiro.skill === key && tiro.specialty === names[index]
         }));
-        return { ...skill, key, chosen: tiro.skill === key, hasSpecialties: slots.length > 0, slots };
+        // La tendina delle Specializzazioni si apre col tastino (Blue, 25/9: il sorvolo era scomodo); piena se una è nel tiro.
+        const specialtyChosen = slots.find((slot) => slot.chosen)?.name ?? "";
+        return { ...skill, key, chosen: tiro.skill === key, hasSpecialties: slots.length > 0, slots, specialtyChosen };
       })
     }));
     context.customSkills = prepareCustomSkills(actor).map((skill) => ({ ...skill, chosen: tiro.skill === `custom:${skill.id}`, custom: true }));
@@ -974,19 +970,20 @@ export class MageActorSheet extends MortalActorSheet {
     context.specialties = prepareSpecialties(actor, i18n);
 
     // Tratti: gli oggetti del personaggio in un elenco piatto, con la specie
-    // (Background, Pregi, Difetti, Equipaggiamento, altro) per le schede in
-    // testa al riquadro (23/9), più il Grimorio: sempre tutte e sei, nell'ordine
-    // di Blue; la scheda scelta resta nella scheda attraverso i render.
+    // per le schede in testa al riquadro (23/9; le sei di Blue del 25/9):
+    // Tratti (Background, Pregi e Difetti insieme), Equipaggiamento, Poteri
+    // attivi, Poteri passivi, Altro, e il Grimorio; tutto in ordine di nome.
+    // La scheda scelta resta nella scheda attraverso i render.
     const kinds = [
-      { id: "background", label: localize("WOD5E_MAGE.Stat.TrattiBackground") },
-      { id: "merit", label: localize("WOD5E_MAGE.Stat.TrattiPregi") },
-      { id: "flaw", label: localize("WOD5E_MAGE.Stat.TrattiDifetti") },
+      { id: "tratti", label: localize("WOD5E_MAGE.Stat.Tratti") },
       { id: "equipment", label: localize("WOD5E_MAGE.Stat.TrattiEquipaggiamento") },
+      { id: "attivi", label: localize("WOD5E_MAGE.Stat.PoteriAttivi") },
+      { id: "passivi", label: localize("WOD5E_MAGE.Stat.PoteriPassivi") },
       { id: "other", label: localize("WOD5E_MAGE.Stat.TrattiAltri") },
       { id: "grimorio", label: localize("WOD5E_MAGE.Tabs.Grimorio") }
     ];
     const kindOf = (item) => {
-      if (item.type === "feature") return ["merit", "flaw", "background"].includes(item.system?.featuretype) ? item.system.featuretype : "background";
+      if (item.type === "feature") return "tratti";
       if (["weapon", "armor", "gear"].includes(item.type)) return "equipment";
       if (["boon", "trait", "customRoll"].includes(item.type)) return "other";
       return null;
@@ -1008,13 +1005,13 @@ export class MageActorSheet extends MortalActorSheet {
         hint: dice ? localize("WOD5E_MAGE.Tiro.TraitHintDice").replace("{dice}", String(dice)) : localize("WOD5E_MAGE.Tiro.TraitHint")
       });
     }
-    const kindRank = new Map(kinds.map((kind, index) => [kind.id, index]));
-    context.traitRows = rows.sort((a, b) => kindRank.get(a.kind) - kindRank.get(b.kind) || a.name.localeCompare(b.name, lang));
+    context.traitRows = rows.sort((a, b) => a.name.localeCompare(b.name, lang));
+    // I poteri con il testo dell'effetto, nelle due schede (Blue, 25/9).
+    context.poteriFiltri = preparePoteriFiltri(actor, context.poteri, { localize, locale: lang });
     context.trattiScheda = schedaTratti(this._filters?.tratti);
     context.traitKinds = kinds.map((kind) => ({
       ...kind,
-      short: localize(`WOD5E_MAGE.Stat.Schede.${kind.id}`),
-      empty: localize(`WOD5E_MAGE.Stat.Vuoti.${kind.id}`),
+      short: localize(`WOD5E_MAGE.Stat.Filtri.${kind.id}`),
       active: kind.id === context.trattiScheda
     }));
 

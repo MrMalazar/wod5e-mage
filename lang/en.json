@@ -1577,10 +1577,6 @@
       "Tratti": "Traits",
       "CercaTratto": "Search the traits…",
       "Tutti": "All",
-      "TrattiVuoti": "No traits on the sheet: Merits, Flaws, Backgrounds and Equipment live on the Traits page.",
-      "TrattiPregi": "Merits",
-      "TrattiDifetti": "Flaws",
-      "TrattiBackground": "Backgrounds",
       "TrattiEquipaggiamento": "Equipment",
       "TrattiAltri": "Other",
       "IlTiro": "The Roll",
@@ -1590,16 +1586,19 @@
         "flaw": "Flaws",
         "equipment": "Gear",
         "other": "Other",
+        "grimorio": "Grimoire",
+        "boon": "Boons"
+      },
+      "Filtri": {
+        "tratti": "Traits",
+        "equipment": "Equip.",
+        "attivi": "Active",
+        "passivi": "Passive",
+        "other": "Other",
         "grimorio": "Grimoire"
       },
-      "Vuoti": {
-        "background": "No Background on the sheet: add one on the Traits page.",
-        "merit": "No Merit on the sheet: add one on the Traits page.",
-        "flaw": "No Flaw on the sheet: add one on the Traits page.",
-        "equipment": "No equipment: add some on the Traits page.",
-        "other": "No other trait on the sheet.",
-        "grimorio": "No spell written yet: write them on the Grimoire page (the book above)."
-      }
+      "PoteriAttivi": "Active powers",
+      "PoteriPassivi": "Passive powers"
     },
     "Tiro": {
       "KindMagick": "Magick roll",

@@ -4,11 +4,15 @@
      quando c'è) che apre col clic la tendina dei ventidue per famiglia, il
      mestiere quando serve (altrimenti la colonna resta vuota, così le caselle
      del testo stanno incolonnate), il tuo di preciso, la lampadina dei consigli
-     (non per Percepire). Sotto, la tendina e le note. --}}
+     (non per Percepire). Sotto, la tendina; le note stanno nel sorvolo della pastiglia. --}}
 <div class="wod5e-mage-riga wod5e-mage-riga-apribile wod5e-mage-focus-instrument con-tendina{{#if row.sharedWith.length}} shared{{/if}}{{#if row.outsideForm}} outside{{/if}}{{#if row.perceive}} perceive{{/if}}">
     <div class="wod5e-mage-riga-testa wod5e-mage-strumento-riga" title="{{localize row.label}}">
         {{#if row.faIcon}}<i class="{{row.faIcon}} wod5e-mage-riga-icona" aria-hidden="true"></i>{{else}}<img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{row.icon}}" alt="{{localize row.label}}">{{/if}}
-        <button type="button" class="wod5e-mage-sfera-potere wod5e-mage-strumento-pastiglia{{#if row.tool}} pieno{{/if}}" data-action="cassettoToggle" title="{{localize row.label}} · {{localize 'WOD5E_MAGE.Focus.ToolPick'}}" aria-label="{{localize row.label}}: {{localize 'WOD5E_MAGE.Focus.Tool'}}" {{#if locked}}disabled{{/if}}>
+        {{!-- Le note (Percepire, lo Strumento in comune, fuori dal Tipo) stanno nel sorvolo della pastiglia: niente frasi in corsivo sotto la riga (Blue, 25/9). --}}
+        <button type="button" class="wod5e-mage-sfera-potere wod5e-mage-strumento-pastiglia{{#if row.tool}} pieno{{/if}}" data-action="cassettoToggle" title="{{localize row.label}} · {{localize 'WOD5E_MAGE.Focus.ToolPick'}}{{#if row.perceive}}
+{{localize 'WOD5E_MAGE.Focus.PerceiveToolHint'}}{{/if}}{{#if row.sharedWith.length}}
+{{localize 'WOD5E_MAGE.Focus.SharedTool' others=row.sharedList}}{{/if}}{{#if row.outsideForm}}
+{{localize 'WOD5E_MAGE.Focus.ToolOutsideType'}}{{/if}}" aria-label="{{localize row.label}}: {{localize 'WOD5E_MAGE.Focus.Tool'}}" {{#if locked}}disabled{{/if}}>
             <span>{{#if row.tool}}{{row.toolLabel}}{{else}}{{localize "WOD5E_MAGE.Focus.ToolScegli"}}{{/if}}</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
         </button>
         {{#if row.needsProfession}}
@@ -35,13 +39,4 @@
             </div>
         {{/each}}
     </div>
-    {{#if row.perceive}}
-        <small class="wod5e-mage-focus-instrument-note">{{localize "WOD5E_MAGE.Focus.PerceiveToolHint"}}</small>
-    {{/if}}
-    {{#if row.sharedWith.length}}
-        <small class="wod5e-mage-focus-instrument-note">{{localize "WOD5E_MAGE.Focus.SharedTool" others=row.sharedList}}</small>
-    {{/if}}
-    {{#if row.outsideForm}}
-        <small class="wod5e-mage-focus-instrument-note">{{localize "WOD5E_MAGE.Focus.ToolOutsideType"}}</small>
-    {{/if}}
 </div>

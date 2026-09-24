@@ -310,6 +310,17 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   const quota = P.quotaDellaSfera(actor, "forces");
   assert.deepEqual([quota.conosciuti, quota.pieno], [forze.conto, forze.conto >= quota.rating]);
   assert.ok(P.sferePerCatalogo(actor).every((s) => s.id && Array.isArray(s.owned) && typeof s.rating === "number"));
+  // Le due schede della prima pagina (Blue, 25/9): Poteri attivi e Poteri passivi, col testo dell'effetto.
+  const filtri = P.preparePoteriFiltri(actor, S.preparePoteriRows(actor, T.emptyTiro(), (k) => strings[k] ?? k), { localize: (k) => strings[k] ?? k, locale: "it" });
+  assert.deepEqual(filtri.map((r) => r.name), [...filtri.map((r) => r.name)].sort((a, b) => a.localeCompare(b, "it")), "in ordine di nome");
+  const casaAttivo = filtri.find((r) => r.id === "pcasa" && r.kind === "attivi");
+  const casaPassivo = filtri.find((r) => r.id === "pcasa" && r.kind === "passivi");
+  assert.ok(casaAttivo && casaPassivo, "Ambito di casa sta in tutte e due le schede");
+  assert.equal(casaAttivo.pick, "pcasa#attivo", "l'attivo sceglie la riga «· attivo» per il tiro");
+  assert.equal(casaPassivo.pick, "pcasa");
+  assert.ok(casaAttivo.blocchi.every((b) => b.kind === "attivo") && casaPassivo.blocchi.every((b) => b.kind === "passivo" || b.kind === "amalgama"));
+  assert.ok(casaAttivo.search.includes("Ambito di Casa") && casaAttivo.sphereIcon.endsWith("/forces.png"));
+  assert.ok(filtri.every((r) => ["attivi", "passivi"].includes(r.kind) && Array.isArray(r.blocchi)));
   delete flags["wod5e-mage"].poteri.ppratica;
 }
 

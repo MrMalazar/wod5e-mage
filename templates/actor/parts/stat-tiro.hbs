@@ -29,8 +29,6 @@
                         <span class="wod5e-mage-pillola-testo">{{pill.text}}</span>
                         <button type="button" class="wod5e-mage-pillola-via" data-action="tiroPill" data-kind="{{pill.kind}}" data-id="{{pill.id}}" {{#if pill.skill}}data-skill="{{pill.skill}}"{{/if}} title="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}: {{pill.text}}">×</button>
                     </span>
-                {{else}}
-                    <p class="wod5e-mage-riq-vuoto wod5e-mage-tiro-vuoto">{{localize "WOD5E_MAGE.Tiro.Empty"}}</p>
                 {{/each}}
             </div>
 

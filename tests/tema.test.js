@@ -129,9 +129,11 @@ for (const lang of ["it", "en"]) {
   assert.deepEqual(Object.keys(strings.Scala), ["Piccolo", "Medio", "Grande", "Tasto"], lang);
   assert.match(strings.Scala.Tasto, /\{current\}[\s\S]*\{next\}/, lang);
   for (const key of ["AbilitaInFila", "AbilitaFamiglie"]) assert.ok(strings.Stat[key], `${lang} Stat.${key}`);
-  // Il Grimorio dentro i Tratti a schede (23/9): le sei schede e le sei righe di vuoto.
-  assert.deepEqual(Object.keys(strings.Stat.Schede), ["background", "merit", "flaw", "equipment", "other", "grimorio"], lang);
-  assert.deepEqual(Object.keys(strings.Stat.Vuoti), ["background", "merit", "flaw", "equipment", "other", "grimorio"], lang);
+  // Le sei schede dei Tratti della prima pagina (25/9): Tratti, Equipaggiamento, Poteri attivi, Poteri passivi, Altro, Grimorio; niente righe di vuoto.
+  assert.deepEqual(Object.keys(strings.Stat.Filtri), ["tratti", "equipment", "attivi", "passivi", "other", "grimorio"], lang);
+  assert.ok(strings.Stat.PoteriAttivi && strings.Stat.PoteriPassivi && !strings.Stat.Vuoti && !strings.Stat.TrattiVuoti, lang);
+  // Gli occhielli della pagina Tratti (core-features.hbs) leggono Stat.Schede per specie, Favori compresi.
+  assert.deepEqual(Object.keys(strings.Stat.Schede), ["background", "merit", "flaw", "equipment", "other", "grimorio", "boon"], lang);
   for (const key of ["ScopeHint", "PoteriHint", "IncantesimoHint"]) assert.ok(strings.Tiro[key], `${lang} Tiro.${key}`);
   assert.ok(!strings.Stat.CercaPotere && !strings.Stat.PoteriVuoti, `${lang}: le chiavi del riquadro Poteri sono sparite`);
 }

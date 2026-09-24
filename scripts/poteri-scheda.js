@@ -13,9 +13,11 @@
 import { MODULE_ID } from "./constants.js";
 import {
   ambitiDellaScelta,
+  blocchiDelTesto,
   cartaPotere,
   contoPoteri,
   findPotere,
+  idVarianteAttiva,
   nuovoPotere,
   POTERE_DOTS,
   POTERE_TIPI,
@@ -97,8 +99,14 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
   // Sfera e i tipi (attivo, passivo, tutti e due) come pastiglie.
   const lista = [...poteri].sort((a, b) => potereLabel(a, localize).localeCompare(potereLabel(b, localize), locale)).map((power) => {
     const tipi = tipiDelPotere(voceDelCatalogo(power)?.kind, power.type);
+    // Il testo a blocchi (Blue, 25/9): Effetto attivo, Effetto passivo, Effetto
+    // Amalgama, con le righe «Accesso con X» in evidenza; il riquadro «Con
+    // Sfera» resta solo per il testo scritto a mano, senza il blocco Amalgama.
+    const blocchi = blocchiDelTesto(power.text || voceDelCatalogo(power)?.text);
     return {
       ...power,
+      blocchi,
+      conAmalgama: Boolean(power.amalgam) && !blocchi.some((blocco) => blocco.kind === "amalgama"),
       label: potereLabel(power, localize),
       sphereIcon: SPHERE_ICON(power.sphere),
       sphereLabel: power.sphere ? localize(`WOD5E_MAGE.Spheres.${power.sphere}`) : "",
@@ -328,4 +336,52 @@ export async function onPotereUsa(event, target) {
   });
   const content = await foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/chat/potere.hbs`, { carta });
   return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content });
+}
+
+/**
+ * I poteri nel riquadro dei Tratti della prima pagina (Blue, 25/9): due
+ * schede, «Poteri attivi» e «Poteri passivi», con il testo dell'effetto sotto
+ * il nome, per ricordare quali effetti passivi si hanno e quali attivi si
+ * possono fare. Un potere con tutte e due le parti sta in tutte e due le
+ * schede, ognuna col suo blocco; l'Amalgama va con i passivi (o con gli
+ * attivi, se passivi non ce ne sono); il testo scritto a mano, senza titoli,
+ * va intero nella scheda del suo tipo. Il clic sceglie il potere per il tiro
+ * come la tendina del Tiro (`righe` sono le righe di `preparePoteriRows`:
+ * per l'attivo, la riga «· attivo» se il potere ce l'ha).
+ */
+export function preparePoteriFiltri(actor, righe, { localize = (key) => key, locale = "it" } = {}) {
+  const rows = [];
+  for (const power of poteriDelPersonaggio(actor)) {
+    const tipi = tipiDelPotere(voceDelCatalogo(power)?.kind, power.type);
+    const blocchi = blocchiDelTesto(power.text || voceDelCatalogo(power)?.text);
+    const senzaTitoli = !blocchi.some((blocco) => blocco.kind);
+    const del = (kind) => (senzaTitoli ? blocchi : blocchi.filter((blocco) => blocco.kind === kind));
+    const amalgama = blocchi.filter((blocco) => blocco.kind === "amalgama");
+    const base = righe.find((riga) => riga.id === power.id) ?? null;
+    const attiva = righe.find((riga) => riga.id === idVarianteAttiva(power.id)) ?? base;
+    const comune = {
+      id: power.id,
+      name: potereLabel(power, localize),
+      sphere: power.sphere,
+      sphereLabel: power.sphere ? localize(`WOD5E_MAGE.Spheres.${power.sphere}`) : "",
+      sphereIcon: SPHERE_ICON(power.sphere),
+      cost: String(power.cost ?? ""),
+      usesLabel: power.uses?.per ? localize(`WOD5E_MAGE.Poteri.Usi.${power.uses.per}`) : "",
+      amalgamOwned: power.amalgam ? Boolean(prepareSpheres(actor).selected.some((sphere) => sphere.id === power.amalgam)) : true
+    };
+    const riga = (kind, scelta, blocchiRiga) => ({
+      ...comune,
+      kind,
+      pick: scelta?.id ?? power.id,
+      any: Boolean(scelta?.any),
+      chosen: Boolean(scelta?.selected),
+      nota: scelta?.nota ?? "",
+      hint: [comune.sphereLabel, scelta?.hint ?? "", localize("WOD5E_MAGE.Tiro.PoteriHint")].filter(Boolean).join("\n"),
+      blocchi: blocchiRiga,
+      search: [comune.name, comune.sphereLabel, ...blocchiRiga.flatMap((blocco) => blocco.righe)].join(" ")
+    });
+    if (tipi.attivo) rows.push(riga("attivi", attiva, [...del("attivo"), ...(tipi.passivo ? [] : amalgama)]));
+    if (tipi.passivo) rows.push(riga("passivi", base, [...del("passivo"), ...amalgama]));
+  }
+  return rows.sort((a, b) => a.name.localeCompare(b.name, locale) || a.kind.localeCompare(b.kind, locale));
 }

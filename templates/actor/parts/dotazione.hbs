@@ -58,8 +58,6 @@
                                     <button type="button" class="wod5e-mage-riga-tastino" data-action="belongingDelete" data-table="{{table.flag}}" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Belongings.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Belongings.Remove'}}" {{#if ../../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
                                 </div>
                             </div>
-                        {{else}}
-                            <p class="wod5e-mage-riq-vuoto">{{localize table.empty}}</p>
                         {{/each}}
                     {{/each}}
                 </div>
@@ -93,8 +91,6 @@
                                 <button type="button" class="wod5e-mage-riga-tastino" data-action="belongingDelete" data-table="altriOggetti" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Belongings.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Belongings.Remove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
                             </div>
                         </div>
-                    {{else}}
-                        <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Belongings.ItemsEmpty"}}</p>
                     {{/each}}
                 </div>
             </section>

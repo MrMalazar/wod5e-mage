@@ -6675,6 +6675,18 @@
   grid-template-columns: minmax(540px, 1.5fr) minmax(270px, 0.8fr);
 }
 
+/* La finestra di spesa del Paradosso del Narratore (Blue, 25/9: «tagliata
+   male»): riusa il corpo dell'Areté ma è larga 820, non 940; le due colonne
+   si dividono la larghezza che c'è invece di chiedere 540 + 270 fissi. */
+.wod5e-mage-arete-body.wod5e-mage-paradosso-spesa .wod5e-mage-arete-layout:not(.wod5e-mage-arete-simple) {
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+}
+
+.wod5e-mage-arete-body.wod5e-mage-paradosso-spesa .wod5e-mage-arete-side > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .wod5e-mage-arete-body .wod5e-mage-arete-dot-reading > [data-role="readingText"] {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -7923,6 +7935,28 @@
   box-shadow: none;
 }
 
+/* La freccetta delle Specializzazioni in fondo alla riga dell'Abilità (Blue,
+   25/9: come per gli Ambiti, un clic e si sceglie); con una Specializzazione
+   nel tiro, la pastiglia col nome accanto alla freccia. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita > .wod5e-mage-abilita-tendina {
+  flex: 0 0 auto;
+  gap: 4px;
+  margin-left: 2px;
+  padding: 0 4px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita > .wod5e-mage-abilita-tendina > .wod5e-mage-ambito-tag {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita > .wod5e-mage-abilita-tendina.pieno {
+  border-color: var(--mage-oro);
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-tastino > i {
   transition: transform 0.15s;
 }
@@ -8358,6 +8392,60 @@
 
 .wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga[hidden] {
   display: none;
+}
+
+/* I poteri nel riquadro dei Tratti (Blue, 25/9): la riga va a capo e sotto
+   il nome sta il testo dell'effetto (attivo o passivo, con le righe «Accesso
+   con X» in grassetto e l'Amalgama col suo titolo), per ricordarlo senza
+   aprire niente. */
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga-potere-filtro {
+  flex-wrap: wrap;
+  padding-bottom: 4px;
+  padding-top: 3px;
+  row-gap: 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-potere-filtro > .wod5e-mage-riga-nome-testo {
+  flex: 1 1 auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-effetto {
+  color: var(--mage-tenue);
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+  font-size: 0.78rem;
+  font-weight: 400;
+  gap: 2px;
+  line-height: 1.35;
+  min-width: 0;
+  padding-left: 24px;
+  white-space: normal;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga.scelta .wod5e-mage-riga-effetto {
+  color: var(--mage-scelta-testo);
+  opacity: 0.85;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-effetto-blocco {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-effetto-blocco.amalgama {
+  border-left: 2px solid var(--mage-viola-chiaro);
+  padding-left: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-effetto b {
+  color: var(--mage-testo);
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga.scelta .wod5e-mage-riga-effetto b {
+  color: var(--mage-scelta-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-spunta {
@@ -10379,7 +10467,7 @@
   align-items: center;
   display: grid;
   gap: 8px;
-  grid-template-columns: 22px 20px minmax(0, 1fr) auto 24px minmax(0, 110px) 18px;
+  grid-template-columns: 22px 20px minmax(0, 1fr) auto 24px minmax(0, 110px) auto 18px;
   min-height: 28px;
 }
 
@@ -13093,30 +13181,65 @@
   font-style: italic;
 }
 
-/* Il tasto «Usa» sulla riga del potere (24/9): in oro, spento quando gli usi
-   sono finiti o manca la Quintessenza; sotto, gli usi che restano e il costo. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo > button.wod5e-mage-potere-usa {
-  border-color: var(--mage-oro-scuro);
+/* Il tasto «Usa» nella testa della riga del potere (24/9, in testa dal 25/9:
+   senza aprire la tendina): in oro, spento quando gli usi sono finiti o manca
+   la Quintessenza; accanto, in piccolo, gli usi che restano e il costo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-testa > button.wod5e-mage-potere-usa {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 5px;
   color: var(--mage-oro);
-  margin-right: auto;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.6rem;
+  font-weight: 700;
+  gap: 4px;
+  height: 20px;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  min-height: 0;
+  padding: 0 7px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo > button.wod5e-mage-potere-usa > small {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-testa > button.wod5e-mage-potere-usa:hover {
+  box-shadow: 0 0 0 1px var(--mage-oro);
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-testa > button.wod5e-mage-potere-usa > small {
   color: var(--mage-tenue);
   font-size: 0.55rem;
   font-weight: 400;
   letter-spacing: 0.04em;
-  margin-left: 6px;
   text-transform: none;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo > button.wod5e-mage-potere-usa.spento {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-testa > button.wod5e-mage-potere-usa.spento {
   border-color: transparent;
   color: var(--mage-tenue);
   opacity: 0.55;
 }
 
-/* La carta del potere in chat: come quella dell'incantesimo, coi blocchi del testo. */
+/* La carta del potere in chat: come quella dell'incantesimo, coi blocchi del
+   testo. Non è la griglia a due colonne della carta del tiro: i blocchi
+   finivano nella colonna «max-content» e il testo usciva dalla chat senza
+   andare a capo (Blue, 25/9: «mi esce tagliata»). */
+.wod5e-mage-roll-card.wod5e-mage-potere-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.wod5e-mage-roll-card.wod5e-mage-potere-chat > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .wod5e-mage-potere-chat-riga {
   margin: 0 0 0.2rem;
 }
@@ -13408,6 +13531,23 @@
   text-transform: uppercase;
 }
 
+/* I generi dei blocchi (25/9): il passivo in tenue, l'Amalgama in viola; le
+   righe «Accesso con X» con la chiave in grassetto. Vale anche in chat. */
+.wod5e-mage-catalogo-blocco.passivo > b,
+.wod5e-mage-potere-chat-blocco.passivo > b {
+  color: var(--mage-tenue, #b8ad93);
+}
+
+.wod5e-mage-catalogo-blocco.amalgama > b,
+.wod5e-mage-potere-chat-blocco.amalgama > b {
+  color: var(--mage-viola-chiaro, #b58ade);
+}
+
+.wod5e-mage-catalogo-blocco > span > strong,
+.wod5e-mage-potere-chat-blocco > p > strong {
+  font-weight: 700;
+}
+
 .wod5e-mage-catalogo-paradosso {
   border-top: 1px dashed rgb(152 119 43 / 30%);
   padding-top: 0.3rem;
@@ -13432,9 +13572,55 @@
 }
 
 /* «Mostra» sui soli passivi: la carta in chat e basta, in tenue. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-fondo > button.wod5e-mage-potere-usa.mostra {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-testa > button.wod5e-mage-potere-usa.mostra {
   border-color: transparent;
   color: var(--mage-tenue);
+}
+
+/* Il testo del potere a blocchi (Blue, 25/9): il titolo in pastiglia come i
+   tipi nella testa (attivo pieno, passivo tenue, Amalgama in viola), le righe
+   sotto con «Accesso con X» in grassetto; l'Amalgama tratteggiata se la
+   Sfera manca. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco {
+  border-left: 2px solid var(--mage-oro-tenue);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 1px 0 1px 8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco.attivo {
+  border-left-color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco.amalgama {
+  border-left-color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco.amalgama.manca {
+  border-left-style: dashed;
+  opacity: 0.75;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco-titolo {
+  color: var(--mage-tenue);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco.attivo > .wod5e-mage-potere-blocco-titolo {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco.amalgama > .wod5e-mage-potere-blocco-titolo {
+  color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco-riga > b {
+  color: var(--mage-testo);
+  font-weight: 700;
 }
 
 /* Le pastiglie delle Sfere in testa alla finestra Aggiungi: sigillo, nome,

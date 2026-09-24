@@ -53,10 +53,8 @@
                 <input type="text" class="wod5e-mage-oggetto-dettagli" data-item-id="{{item._id}}" data-item-field="flags.wod5e-mage.dettagli" value="{{item.flags.[wod5e-mage].dettagli}}" placeholder="{{localize 'WOD5E_MAGE.Tratti.Dettagli.oggetto'}}" aria-label="{{item.name}}: {{localize 'WOD5E_MAGE.Tratti.DettagliLabel'}}" title="{{localize 'WOD5E_MAGE.Tratti.DettagliHint'}}" {{#if @root.locked}}disabled{{/if}}>
             </div>
             <div class="wod5e-mage-riga-spiega wod5e-mage-oggetto-spiega">
-                {{#if item.system.enrichedDescription}}{{{item.system.enrichedDescription}}}{{else}}<p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Tratti.SenzaTesto"}}</p>{{/if}}
+                {{#if item.system.enrichedDescription}}{{{item.system.enrichedDescription}}}{{/if}}
             </div>
         </div>
-    {{else}}
-        <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Tratti.InventarioVuoto"}}</p>
     {{/each}}
 {{/each}}

@@ -6,9 +6,9 @@
     {{#if carta.spent}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Pagato"}}</b> {{carta.spent}} {{localize "WOD5E_MAGE.Poteri.QuintessenzaBreve"}}</p>{{/if}}
     {{#if carta.usi}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Usi"}}</b> {{carta.usi.restanti}}/{{carta.usi.max}} ({{carta.usi.label}})</p>{{/if}}
     {{#each carta.blocchi as |blocco|}}
-        <div class="wod5e-mage-potere-chat-blocco">
+        <div class="wod5e-mage-potere-chat-blocco{{#if blocco.kind}} {{blocco.kind}}{{/if}}">
             {{#if blocco.titolo}}<b>{{blocco.titolo}}</b>{{/if}}
-            {{#each blocco.righe as |riga|}}<p>{{riga}}</p>{{/each}}
+            {{#each blocco.voci as |v|}}<p>{{#if v.chiave}}<strong>{{v.chiave}}:</strong> {{/if}}{{v.testo}}</p>{{/each}}
         </div>
     {{/each}}
     {{#if carta.paradox}}<p class="wod5e-mage-potere-chat-riga wod5e-mage-potere-chat-paradosso"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Paradosso"}}</b> {{carta.paradox}}</p>{{/if}}

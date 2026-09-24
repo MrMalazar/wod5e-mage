@@ -1577,12 +1577,8 @@
       "Tratti": "Tratti",
       "CercaTratto": "Cerca fra i tratti…",
       "Tutti": "Tutti",
-      "TrattiVuoti": "Nessun tratto sulla scheda: Pregi, Difetti, Background ed Equipaggiamento stanno nella pagina Tratti.",
-      "TrattiPregi": "Pregi",
-      "TrattiDifetti": "Difetti",
-      "TrattiBackground": "Background",
       "TrattiEquipaggiamento": "Equipaggiamento",
-      "TrattiAltri": "Altri",
+      "TrattiAltri": "Altro",
       "IlTiro": "Il Tiro",
       "Schede": {
         "background": "Background",
@@ -1590,16 +1586,19 @@
         "flaw": "Difetti",
         "equipment": "Equip.",
         "other": "Altri",
+        "grimorio": "Grimorio",
+        "boon": "Favori"
+      },
+      "Filtri": {
+        "tratti": "Tratti",
+        "equipment": "Equip.",
+        "attivi": "Attivi",
+        "passivi": "Passivi",
+        "other": "Altro",
         "grimorio": "Grimorio"
       },
-      "Vuoti": {
-        "background": "Nessun Background sulla scheda: si aggiunge nella pagina Tratti.",
-        "merit": "Nessun Pregio sulla scheda: si aggiunge nella pagina Tratti.",
-        "flaw": "Nessun Difetto sulla scheda: si aggiunge nella pagina Tratti.",
-        "equipment": "Niente equipaggiamento: si aggiunge nella pagina Tratti.",
-        "other": "Nessun altro tratto sulla scheda.",
-        "grimorio": "Nessun incantesimo scritto: si scrivono nella pagina del Grimorio (il libro qui sopra)."
-      }
+      "PoteriAttivi": "Poteri attivi",
+      "PoteriPassivi": "Poteri passivi"
     },
     "Tiro": {
       "KindMagick": "Tiro di Magick",

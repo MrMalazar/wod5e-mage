@@ -1,6 +1,7 @@
 {{!-- Abilità (16/9): per famiglia, il nome è il tasto che la mette nel tiro
-     (una sola); al sorvolo si apre il cassetto delle Specializzazioni, tre
-     posti (uno a 1 pallino, due a 3, tre a 5): un nome la sceglie insieme
+     (una sola); la freccetta in fondo alla riga apre la tendina delle
+     Specializzazioni come per gli Ambiti (Blue, 25/9: il sorvolo era scomodo),
+     tre posti (uno a 1 pallino, due a 3, tre a 5): un nome la sceglie insieme
      all'Abilità, un posto vuoto ne aggiunge una. I pallini restano quelli
      della scheda. Le Abilità Specifiche del giocatore chiudono la lista.
      Il tasto accanto al + (16/9 sera) scioglie le famiglie: tutte in fila,
@@ -32,7 +33,7 @@
                             <button type="button" class="wod5e-mage-custom-skill-delete" data-action="customSkillDelete" data-row="{{skill.id}}" title="{{localize 'WOD5E_MAGE.CustomSkills.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.CustomSkills.Remove'}}" {{#if ../../locked}}disabled{{/if}}><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
                         </div>
                     {{else}}
-                        <div class="wod5e-mage-riga wod5e-mage-riga-tratto wod5e-mage-riga-abilita{{#if skill.chosen}} scelta{{/if}}{{#if skill.hasSpecialties}} con-cassetto{{/if}}">
+                        <div class="wod5e-mage-riga wod5e-mage-riga-tratto wod5e-mage-riga-abilita{{#if skill.chosen}} scelta{{/if}}{{#if skill.hasSpecialties}} con-tendina{{/if}}">
                             <button type="button" class="wod5e-mage-riga-nome" data-action="tiroSkill" data-key="{{skill.key}}" aria-pressed="{{skill.chosen}}" title="{{localize 'WOD5E_MAGE.Tiro.SkillHint'}}">
                                 {{#if skill.icon}}<img class="wod5e-mage-riga-icona" src="{{skill.icon}}" alt="">{{/if}}
                                 <span>{{skill.displayName}}</span>
@@ -52,6 +53,8 @@
                                 </div>
                             {{/if}}
                             {{#if skill.slots.length}}
+                                {{!-- La freccetta: apre e chiude la tendina; piena col nome quando una Specializzazione è nel tiro. --}}
+                                <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-abilita-tendina{{#if skill.specialtyChosen}} pieno{{/if}}" data-action="cassettoToggle" title="{{#if skill.specialtyChosen}}{{skill.specialtyChosen}} · {{/if}}{{localize 'WOD5E.SkillsList.Specialties'}}" aria-label="{{skill.displayName}}: {{localize 'WOD5E.SkillsList.Specialties'}}">{{#if skill.specialtyChosen}}<small class="wod5e-mage-ambito-tag">{{skill.specialtyChosen}}</small>{{/if}}<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
                                 <div class="wod5e-mage-cassetto" role="group" aria-label="{{localize 'WOD5E.SkillsList.Specialties'}}">
                                     {{#each skill.slots as |slot|}}
                                         {{#if slot.name}}

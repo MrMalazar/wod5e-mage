@@ -77,7 +77,7 @@ assert.equal(itScopes.Table.conditionsComplexity["7"], "Livello contratto");
 // Precisione nello scontro parla per cose, gli esempi stanno nel sorvolo.
 assert.deepEqual(Object.values(itScopes.Table.precision), ["Dove capita", "Il corpo", "Un arto", "L'oggetto impegnato", "Il punto debole", "Un punto minuscolo", "La parte interna", "Un punto del Modello"]);
 assert.match(itScopes.Hint.precision["3"], /la mano che impugna/);
-assert.match(scopeTableTemplate, /wod5e-mage-scope-table-note[\s\S]*Scopes\.TableHint[\s\S]*Scopes\.TableModes[\s\S]*Scopes\.TableNote/);
+assert.doesNotMatch(scopeTableTemplate, /wod5e-mage-scope-table-note|Scopes\.TableHint|Scopes\.TableModes|Scopes\.TableNote/, "niente note in corsivo sotto la tavola (Blue, 25/9)");
 // Due colonne di testa (7/9): il nome dell'Ambito su tutte le sue righe (col
 // sorvolo che dice cosa misura), poi la lente; la colonna dello 0 in ombra.
 assert.match(scopeTableTemplate, /Scopes\.TableReading[\s\S]*scopeTable\.groups[\s\S]*group\.rows[\s\S]*@first[\s\S]*wod5e-mage-scope-group" rowspan="\{\{group\.span\}\}" title="\{\{localize group\.desc\}\}"[\s\S]*wod5e-mage-scope-reading[\s\S]*row\.title/);

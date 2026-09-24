@@ -33,8 +33,6 @@
                         <input type="text" class="wod5e-mage-exp-testo" name="flags.wod5e-mage.experienceGains.{{row.id}}.when" value="{{row.when}}" placeholder="{{localize 'WOD5E_MAGE.Experience.GainsWhenHint'}}" aria-label="{{localize 'WOD5E_MAGE.Experience.GainsWhen'}}" {{#if ../locked}}disabled{{/if}}>
                         <button type="button" class="wod5e-mage-riq-tasto-piccolo wod5e-mage-exp-cestino" data-action="experienceLogDelete" data-table="experienceGains" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Experience.LogRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Experience.LogRemove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
                     </div>
-                {{else}}
-                    <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Experience.GainsEmpty"}}</p>
                 {{/each}}
             </div>
         </section>
@@ -53,8 +51,6 @@
                         <input type="text" class="wod5e-mage-exp-testo" name="flags.wod5e-mage.experienceLog.{{row.id}}.what" value="{{row.what}}" placeholder="{{localize 'WOD5E_MAGE.Experience.LogWhatHint'}}" aria-label="{{localize 'WOD5E_MAGE.Experience.LogWhat'}}" {{#if ../locked}}disabled{{/if}}>
                         <button type="button" class="wod5e-mage-riq-tasto-piccolo wod5e-mage-exp-cestino" data-action="experienceLogDelete" data-table="experienceLog" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Experience.LogRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Experience.LogRemove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
                     </div>
-                {{else}}
-                    <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Experience.LogEmpty"}}</p>
                 {{/each}}
                 {{#if experience.proposals.length}}
                     <span class="wod5e-mage-riq-occhiello" title="{{localize 'WOD5E_MAGE.Experience.ProposteHint'}}">{{localize "WOD5E_MAGE.Experience.Proposte"}}</span>

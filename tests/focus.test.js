@@ -166,6 +166,9 @@ console.log("Focus tests passed.");
   assert.match(focusJs, /export async function onStrumentoPick[\s\S]*focus\.sphereInstruments\.\$\{sphere\}\.tool`\]: current === tool \? "" : tool/);
   assert.match(focusJs, /export async function onFocusForm[\s\S]*focus\.practiceForm`\]: current === form \? "" : form/);
   assert.match(focusJs, /export async function onCredoModifica[\s\S]*_credoInModifica/);
-  assert.match(template, /data-action="focusForm" data-form="\{\{form\.id\}\}"[\s\S]*Focus\.CredoInTestata[\s\S]*wod5e-mage-focus-spheres[\s\S]*wod5e-mage-riga-credo-sfera\{\{#if sphere\.editing\}\} aperta modifica\{\{\/if\}\}"[\s\S]*data-action="rigaApri"[\s\S]*data-action="credoModifica" data-sphere="\{\{sphere\.id\}\}"[\s\S]*<prose-mirror name="flags\.wod5e-mage\.focus\.sphereNotes\.\{\{sphere\.id\}\}"/);
+  assert.doesNotMatch(template, /wod5e-mage-riq-vuoto|Focus\.CredoInTestata/, "niente frasi in corsivo (Blue, 25/9)");
+  assert.match(riga, /wod5e-mage-strumento-pastiglia[^>]*title="[^"]*Focus\.PerceiveToolHint[^"]*Focus\.SharedTool[^"]*Focus\.ToolOutsideType/, "le note stanno nel sorvolo della pastiglia");
+  assert.doesNotMatch(riga, /wod5e-mage-focus-instrument-note/);
+  assert.match(template, /data-action="focusForm" data-form="\{\{form\.id\}\}"[\s\S]*wod5e-mage-focus-spheres[\s\S]*wod5e-mage-riga-credo-sfera\{\{#if sphere\.editing\}\} aperta modifica\{\{\/if\}\}"[\s\S]*data-action="rigaApri"[\s\S]*data-action="credoModifica" data-sphere="\{\{sphere\.id\}\}"[\s\S]*<prose-mirror name="flags\.wod5e-mage\.focus\.sphereNotes\.\{\{sphere\.id\}\}"/);
   assert.doesNotMatch(template, /<select name="flags\.wod5e-mage\.focus\.practiceForm"/);
 }

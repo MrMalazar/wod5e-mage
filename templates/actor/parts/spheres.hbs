@@ -37,8 +37,6 @@
                                 <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-sfera-casa{{#if sphere.family}} on{{/if}}" data-action="familySphereToggle" data-sphere="{{sphere.id}}" title="{{#if sphere.family}}{{localize 'WOD5E_MAGE.Poteri.Casa'}}{{else}}{{localize 'WOD5E_MAGE.Poteri.CasaOff'}}{{/if}}" aria-pressed="{{sphere.family}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-house" aria-hidden="true"></i></button>
                                 <b class="wod5e-mage-sfera-conto{{#unless sphere.conto}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Stat.PoteriConosciuti'}}">{{sphere.conto}}</b>
                             </div>
-                        {{else}}
-                            <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Spheres.Empty"}}</p>
                         {{/each}}
                     </div>
                     {{#if sfereAltre.length}}
@@ -79,8 +77,6 @@
                             </div>
                             <input type="text" class="wod5e-mage-atto-effetto" name="flags.wod5e-mage.ongoingMagick.{{row.id}}.triggerEffect" value="{{row.triggerEffect}}" placeholder="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" aria-label="{{localize 'WOD5E_MAGE.OngoingMagick.Effect'}}" {{#if ../locked}}disabled{{/if}}>
                         </div>
-                    {{else}}
-                        <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.OngoingMagick.Empty"}}</p>
                     {{/each}}
                 </div>
             </section>
@@ -112,6 +108,9 @@
                             <span class="wod5e-mage-potere-tipi">{{#if p.tipi.attivo}}<small class="wod5e-mage-potere-tipo attivo">{{localize "WOD5E_MAGE.Poteri.Tipo.attivo"}}</small>{{/if}}{{#if p.tipi.passivo}}<small class="wod5e-mage-potere-tipo passivo">{{localize "WOD5E_MAGE.Poteri.Tipo.passivo"}}</small>{{/if}}</span>
                             <span class="wod5e-mage-potere-amalgama{{#if p.amalgam}}{{#unless p.amalgamOwned}} manca{{/unless}}{{else}} niente{{/if}}" title="{{#if p.amalgam}}{{localize 'WOD5E_MAGE.Poteri.Con' sphere=p.amalgamLabel}}{{/if}}">{{#if p.amalgam}}<img src="{{p.amalgamIcon}}" alt="{{p.amalgamLabel}}">{{/if}}</span>
                             <small class="wod5e-mage-potere-costo">{{p.cost}}</small>
+                            {{!-- «Usa» nella testa della riga, senza aprire la tendina (Blue, 25/9): sui poteri con
+                                 una parte attiva paga, conta gli usi e manda la carta; sui soli passivi «Mostra», la carta e basta. --}}
+                            <button type="button" class="wod5e-mage-potere-usa{{#unless p.usa.ok}} spento{{/unless}}{{#unless p.tipi.attivo}} mostra{{/unless}}" data-action="potereUsa" data-row="{{p.id}}" title="{{#if p.tipi.attivo}}{{p.usa.hint}}{{else}}{{localize 'WOD5E_MAGE.Poteri.MostraHint'}}{{/if}}"><i class="fa-solid {{#if p.tipi.attivo}}fa-hand-sparkles{{else}}fa-comment{{/if}}" aria-hidden="true"></i> {{#if p.tipi.attivo}}{{localize "WOD5E_MAGE.Poteri.Usa"}}{{else}}{{localize "WOD5E_MAGE.Poteri.Mostra"}}{{/if}}{{#if p.usa.label}}<small>{{p.usa.label}}</small>{{/if}}</button>
                             {{!-- La freccia apre e chiude come il nome (Blue, 24/9 sera: «la freccetta non funziona»). --}}
                             <button type="button" class="wod5e-mage-potere-chevron" data-action="potereApri" title="{{localize 'WOD5E_MAGE.Poteri.Apri'}}" aria-label="{{localize 'WOD5E_MAGE.Poteri.Apri'}}"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
                         </div>
@@ -139,24 +138,30 @@
                                         </select>
                                     </label>
                                 {{/if}}
-                                <p class="wod5e-mage-potere-testo"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.CosaFa"}}</span>{{#if p.text}}{{p.text}}{{else}}<em>{{localize "WOD5E_MAGE.Poteri.CosaFaVuoto"}}</em>{{/if}}</p>
-                                {{#if p.amalgam}}
-                                    {{!-- L'Amalgama si legge: piena se la Sfera ce l'hai, tratteggiata se no. --}}
+                                {{!-- Il testo a blocchi (Blue, 25/9: «non si distingue»): Effetto attivo, Effetto passivo,
+                                     Effetto Amalgama, ognuno col suo titolo; le righe «Accesso con X» con la chiave in evidenza.
+                                     Il testo scritto a mano, senza titoli, sta in un blocco solo con «Cosa fa». --}}
+                                {{#each p.blocchi as |b|}}
+                                    <div class="wod5e-mage-potere-blocco{{#if b.kind}} {{b.kind}}{{/if}}{{#if (eq b.kind "amalgama")}}{{#unless p.amalgamOwned}} manca{{/unless}}{{/if}}">
+                                        <span class="wod5e-mage-potere-blocco-titolo">{{#if b.titolo}}{{b.titolo}}{{else}}{{localize "WOD5E_MAGE.Poteri.CosaFa"}}{{/if}}</span>
+                                        {{#each b.voci as |v|}}<p class="wod5e-mage-potere-blocco-riga">{{#if v.chiave}}<b>{{v.chiave}}:</b> {{/if}}{{v.testo}}</p>{{/each}}
+                                        {{#if (eq b.kind "amalgama")}}{{#unless p.amalgamOwned}}<p class="wod5e-mage-potere-blocco-riga"><em>{{localize "WOD5E_MAGE.Poteri.NonHai" sphere=p.amalgamLabel}}</em></p>{{/unless}}{{/if}}
+                                    </div>
+                                {{else}}
+                                    <p class="wod5e-mage-potere-testo"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.CosaFa"}}</span><em>{{localize "WOD5E_MAGE.Poteri.CosaFaVuoto"}}</em></p>
+                                {{/each}}
+                                {{#if p.conAmalgama}}
+                                    {{!-- L'Amalgama scritta a mano: piena se la Sfera ce l'hai, tratteggiata se no. --}}
                                     <div class="wod5e-mage-potere-con{{#unless p.amalgamOwned}} manca{{/unless}}"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.Con" sphere=p.amalgamLabel}}</span>{{p.amalgamText}}{{#unless p.amalgamOwned}} <em>{{localize "WOD5E_MAGE.Poteri.NonHai" sphere=p.amalgamLabel}}</em>{{/unless}}</div>
                                 {{/if}}
                                 {{#if p.flavor}}<p class="wod5e-mage-potere-flavor"><em>{{p.flavor}}</em></p>{{/if}}
                             {{/if}}
                             <div class="wod5e-mage-potere-fondo">
-                                {{!-- «Usa» (24/9) sui poteri con una parte attiva: senza tirare; conta gli usi, scala la
-                                     Quintessenza, manda la carta in chat. Sui soli passivi «Mostra»: la carta e basta. --}}
-                                <button type="button" class="wod5e-mage-potere-usa{{#unless p.usa.ok}} spento{{/unless}}{{#unless p.tipi.attivo}} mostra{{/unless}}" data-action="potereUsa" data-row="{{p.id}}" title="{{#if p.tipi.attivo}}{{p.usa.hint}}{{else}}{{localize 'WOD5E_MAGE.Poteri.MostraHint'}}{{/if}}"><i class="fa-solid {{#if p.tipi.attivo}}fa-hand-sparkles{{else}}fa-comment{{/if}}" aria-hidden="true"></i> {{#if p.tipi.attivo}}{{localize "WOD5E_MAGE.Poteri.Usa"}}{{else}}{{localize "WOD5E_MAGE.Poteri.Mostra"}}{{/if}}{{#if p.usa.label}}<small>{{p.usa.label}}</small>{{/if}}</button>
                                 <button type="button" data-action="potereModifica" data-row="{{p.id}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid {{#if p.editing}}fa-check{{else}}fa-pen{{/if}}" aria-hidden="true"></i> {{#if p.editing}}{{localize "WOD5E_MAGE.Poteri.Fatto"}}{{else}}{{localize "WOD5E_MAGE.Poteri.Modifica"}}{{/if}}</button>
                                 <button type="button" data-action="potereTogli" data-row="{{p.id}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Togli"}}</button>
                             </div>
                         </div>
                     </div>
-                {{else}}
-                    <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Poteri.Vuoto"}}</p>
                 {{/each}}
             </div>
         </section>

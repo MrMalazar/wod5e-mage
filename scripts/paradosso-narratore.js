@@ -474,7 +474,8 @@ export async function openSpendDialog() {
     window: { title: localize("WOD5E_MAGE.Paradosso.SpendTitle") },
     content,
     classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog", "wod5e-mage-paradosso-dialog"],
-    position: { width: 720, height: "auto" },
+    // 820 di larghezza (25/9): a 720 la colonna di destra usciva dalla finestra.
+    position: { width: 820, height: "auto" },
     buttons: [
       {
         action: "spend",

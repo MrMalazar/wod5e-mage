@@ -103,7 +103,7 @@ for (const azione of ["visibile", "chiudi", "meno", "piu", "spendi", "nuovaSessi
 const spesa = readFileSync(new URL("../templates/dialogs/paradosso-spesa.hbs", import.meta.url), "utf8");
 assert.match(spesa, /data-role="spendRow" data-kind="sphere"/);
 assert.match(spesa, /data-role="price"/);
-assert.match(spesa, /Paradosso\.InterventionsTodo/);
+assert.doesNotMatch(spesa, /Paradosso\.InterventionsTodo|wod5e-mage-paradosso-interventi/, "niente segnaposto in corsivo (Blue, 25/9)");
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
 assert.match(css, /#wod5e-mage-paradosso-panel\s*\{/);
 assert.match(css, /@keyframes wod5e-mage-paradosso-rise/);

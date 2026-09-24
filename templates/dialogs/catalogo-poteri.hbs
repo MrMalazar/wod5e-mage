@@ -46,7 +46,7 @@
                 </summary>
                 <div class="wod5e-mage-catalogo-testo">
                     {{#each voce.blocchi as |blocco|}}
-                        <p class="wod5e-mage-catalogo-blocco">{{#if blocco.titolo}}<b>{{blocco.titolo}}</b>{{/if}}{{#each blocco.righe as |riga|}}<span>{{riga}}</span>{{/each}}</p>
+                        <p class="wod5e-mage-catalogo-blocco{{#if blocco.kind}} {{blocco.kind}}{{/if}}">{{#if blocco.titolo}}<b>{{blocco.titolo}}</b>{{/if}}{{#each blocco.voci as |v|}}<span>{{#if v.chiave}}<strong>{{v.chiave}}:</strong> {{/if}}{{v.testo}}</span>{{/each}}</p>
                     {{/each}}
                     {{#if voce.paradox}}<p class="wod5e-mage-catalogo-blocco wod5e-mage-catalogo-paradosso"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Paradosso"}}</b><span>{{voce.paradox}}</span></p>{{/if}}
                     {{#if voce.flavor}}<p class="wod5e-mage-catalogo-flavor"><em>{{voce.flavor}}</em></p>{{/if}}

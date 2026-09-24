@@ -26,7 +26,6 @@
                             <button type="button" class="wod5e-mage-pastiglia wod5e-mage-pastiglia-modo{{#if form.selected}} scelta{{/if}}" data-action="focusForm" data-form="{{form.id}}" aria-pressed="{{form.selected}}" {{#if ../locked}}disabled{{/if}}>{{form.label}}</button>
                         {{/each}}
                     </div>
-                    <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Focus.CredoInTestata"}}</p>
                 </div>
             </section>
 
@@ -41,8 +40,6 @@
                 <div class="wod5e-mage-riq-body wod5e-mage-focus-instrument-list">
                     {{#each focus.instruments as |row|}}
                         {{> "modules/wod5e-mage/templates/actor/parts/strumento-riga.hbs" row=row locked=../locked}}
-                    {{else}}
-                        <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Focus.NoSpheres"}}</p>
                     {{/each}}
                     {{#if focus.perceiveInstrument}}
                         {{> "modules/wod5e-mage/templates/actor/parts/strumento-riga.hbs" row=focus.perceiveInstrument locked=locked}}
@@ -74,13 +71,9 @@
                                 </prose-mirror>
                             {{else if sphere.notes}}
                                 <div class="wod5e-mage-credo-testo">{{{sphere.enrichedNotes}}}</div>
-                            {{else}}
-                                <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Focus.NoteVuote"}}</p>
                             {{/if}}
                         </div>
                     </div>
-                {{else}}
-                    <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Focus.SpheresEmpty"}}</p>
                 {{/each}}
             </div>
         </section>

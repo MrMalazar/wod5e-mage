@@ -1,16 +1,16 @@
-{{!-- Tratti (16/9; 23/9): Pregi, Difetti, Background, Equipaggiamento e
-     gli altri oggetti, e con loro il Grimorio (Blue, 23/9: «vorrei che il
-     Grimorio ci andasse dentro, in maniera che si andasse proprio a
-     selezionare»). Al posto della parola Tratti, in testa, un menù a schede:
-     una scheda per specie, l'ultima è il Grimorio; sotto la cerca, poi le
-     righe della scheda scelta. Ogni tratto si mette nel tiro con un clic,
-     anche più d'uno; a destra il bonus scritto sull'oggetto, se ce l'ha. Un
-     incantesimo cliccato si carica nel compositore com'è scritto (Areté,
-     Sfere, Ambiti, Attributo, Abilità, premio, tipo) e i tre tasti del Tiro
-     tirano; un altro clic lo toglie. Il libro accanto alla cerca, sulla
-     scheda del Grimorio, apre la pagina dove gli incantesimi si scrivono.
-     Le schede sono i filtri di specie (`data-filters`): la scelta resta
-     nella scheda attraverso i render. --}}
+{{!-- Tratti (16/9; 23/9; 25/9): al posto della parola Tratti, in testa, un menù a
+     schede, le sei di Blue: Tratti (Background, Pregi e Difetti insieme),
+     Equipaggiamento, Poteri attivi, Poteri passivi, Altro, Grimorio; sotto la
+     cerca, poi le righe della scheda scelta, in ordine di nome. Ogni tratto si
+     mette nel tiro con un clic, anche più d'uno; a destra il bonus scritto
+     sull'oggetto, se ce l'ha. I poteri stanno con il testo dell'effetto sotto
+     il nome (per ricordare quali passivi si hanno e quali attivi si possono
+     fare); il clic sceglie il potere per il tiro come la tendina del Tiro. Un
+     incantesimo cliccato si carica nel compositore com'è scritto e i tre
+     tasti del Tiro tirano; un altro clic lo toglie. Il libro accanto alla
+     cerca, sulla scheda del Grimorio, apre la pagina dove gli incantesimi si
+     scrivono. Le schede sono i filtri di specie (`data-filters`): la scelta
+     resta nella scheda attraverso i render. Niente righe di vuoto (25/9). --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-tratti" data-scheda="{{trattiScheda}}">
     <header class="wod5e-mage-riq-title wod5e-mage-riq-schede{{#if memo.on}} memo-{{memo.boxes.tratti.state}}{{/if}}" role="tablist" aria-label="{{localize 'WOD5E_MAGE.Stat.Tratti'}}">
         <div class="wod5e-mage-schede" role="group" data-filters="tratti">
@@ -40,6 +40,15 @@
                     <small class="wod5e-mage-riga-coda">{{#if row.dice}}<b>{{row.dice}}</b>{{/if}}</small>
                 </button>
             {{/each}}
+            {{#each poteriFiltri as |p|}}
+                <button type="button" class="wod5e-mage-riga wod5e-mage-riga-oggetto wod5e-mage-riga-potere-filtro{{#if p.chosen}} scelta{{/if}}" data-action="tiroPower" data-power="{{p.pick}}" data-sphere="{{p.sphere}}" data-any="{{p.any}}" data-kind="{{p.kind}}" data-search="{{p.search}}" aria-pressed="{{p.chosen}}" title="{{p.hint}}">
+                    <span class="wod5e-mage-riga-spunta" aria-hidden="true"></span>
+                    <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{p.sphereIcon}}" alt="">
+                    <span class="wod5e-mage-riga-nome-testo">{{p.name}}</span>
+                    <small class="wod5e-mage-riga-coda">{{#if p.nota}}{{p.nota}}{{else}}{{p.cost}}{{/if}}</small>
+                    <span class="wod5e-mage-riga-effetto">{{#each p.blocchi as |b|}}<span class="wod5e-mage-riga-effetto-blocco{{#if b.kind}} {{b.kind}}{{/if}}">{{#if (eq b.kind "amalgama")}}<b>{{b.titolo}}:</b> {{/if}}{{#each b.voci as |v|}}<span>{{#if v.chiave}}<b>{{v.chiave}}:</b> {{/if}}{{v.testo}}</span>{{/each}}</span>{{/each}}</span>
+                </button>
+            {{/each}}
             {{#each incantesimi as |spell|}}
                 <button type="button" class="wod5e-mage-riga wod5e-mage-riga-oggetto wod5e-mage-riga-incantesimo{{#if spell.chosen}} scelta{{/if}}" data-action="tiroIncantesimo" data-row="{{spell.id}}" data-kind="grimorio" data-search="{{spell.name}} {{spell.coda}}" aria-pressed="{{spell.chosen}}" title="{{spell.hint}}">
                     <span class="wod5e-mage-riga-spunta" aria-hidden="true"></span>
@@ -47,10 +56,6 @@
                     <span class="wod5e-mage-riga-nome-testo">{{spell.name}}</span>
                     <small class="wod5e-mage-riga-coda">{{spell.coda}}</small>
                 </button>
-            {{/each}}
-            {{!-- Una riga di vuoto per scheda: la cerca e le schede nascondono le altre. --}}
-            {{#each traitKinds as |kind|}}
-                <p class="wod5e-mage-riq-vuoto wod5e-mage-tratti-vuoto" data-kind="{{kind.id}}" data-search="" hidden>{{kind.empty}}</p>
             {{/each}}
         </div>
     </div>

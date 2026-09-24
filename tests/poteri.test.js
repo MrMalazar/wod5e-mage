@@ -3,35 +3,37 @@ import { readFileSync } from "node:fs";
 import {
   ambitiDellaScelta,
   applyPotere,
+  blocchiDelGenere,
   blocchiDelTesto,
-  effettiDelPotere,
-  idVarianteAttiva,
-  POTERE_EFFECTS,
-  riuscitaSenzaTirare,
-  spezzaIdPotere,
-  tiroDelPotere,
-  variantiDelPotere,
   cartaPotere,
   catalogoDellaSfera,
-  POTERI_USI_FLAG,
-  puoUsare,
-  registraUso,
-  riarmaUsi,
-  ruotaDopoUso,
-  sfereDellaVoce,
-  usiDelPotere,
   contoPoteri,
+  effettiDelPotere,
   findPotere,
+  idVarianteAttiva,
   normalizzaPotere,
   nuovoPotere,
   ordinaPoteri,
   POTERE_DOTS,
+  POTERE_EFFECTS,
   POTERE_TIPI,
+  potereLabel,
   POTERI,
   POTERI_FLAG,
+  POTERI_USI_FLAG,
   poteriDelPersonaggio,
   poteriOfSphere,
-  potereLabel
+  puoUsare,
+  registraUso,
+  riarmaUsi,
+  riuscitaSenzaTirare,
+  ruotaDopoUso,
+  sfereDellaVoce,
+  spezzaIdPotere,
+  tiroDelPotere,
+  usiDelPotere,
+  variantiDelPotere,
+  voceDellaRiga
 } from "../scripts/poteri.js";
 
 // Il catalogo (24/9): i 187 poteri del libretto e dei nuovi, generati dai dati;
@@ -167,7 +169,16 @@ assert.deepEqual(riarmaUsi({}, "scena"), {});
 assert.deepEqual(ruotaDopoUso({ quintessence: 3, paradox: 2 }, pronto), { quintessence: 1, paradox: 2 });
 assert.deepEqual(ruotaDopoUso({ quintessence: 1, paradox: 2 }, pronto), { quintessence: 0, paradox: 2 });
 const blocchi = blocchiDelTesto("Effetto attivo: Paga 2 Quintessenza: cura.\nAccesso con Vita: ferite.\n\nEffetto passivo: In una scena di cure, un danno in più.");
-assert.deepEqual(blocchi, [{ titolo: "Effetto attivo", righe: ["Paga 2 Quintessenza: cura.", "Accesso con Vita: ferite."] }, { titolo: "Effetto passivo", righe: ["In una scena di cure, un danno in più."] }]);
+assert.deepEqual(blocchi, [
+  { titolo: "Effetto attivo", kind: "attivo", righe: ["Paga 2 Quintessenza: cura.", "Accesso con Vita: ferite."], voci: [{ chiave: "Paga 2 Quintessenza", testo: "cura." }, { chiave: "Accesso con Vita", testo: "ferite." }] },
+  { titolo: "Effetto passivo", kind: "passivo", righe: ["In una scena di cure, un danno in più."], voci: [{ chiave: "", testo: "In una scena di cure, un danno in più." }] }
+]);
+// Il testo scritto a mano: un blocco senza titolo né genere; l'Amalgama ha il suo genere; le chiavi «Con N poteri».
+assert.deepEqual(blocchiDelTesto("Fa una cosa.\nCon 2 poteri: due cose."), [{ titolo: "", kind: "", righe: ["Fa una cosa.", "Con 2 poteri: due cose."], voci: [{ chiave: "", testo: "Fa una cosa." }, { chiave: "Con 2 poteri", testo: "due cose." }] }]);
+assert.deepEqual(blocchiDelTesto("Effetto Amalgama: Con più Sfere.\nAccesso con Primordio + Tempo: anche il resto.").map((b) => [b.kind, b.voci.map((v) => v.chiave)]), [["amalgama", ["", "Accesso con Primordio + Tempo"]]]);
+assert.deepEqual(blocchiDelGenere("Effetto attivo: A.\n\nEffetto passivo: P.", "passivo").map((b) => b.righe), [["P."]]);
+assert.deepEqual(voceDellaRiga("Accesso con Mente: danni mentali."), { chiave: "Accesso con Mente", testo: "danni mentali." });
+assert.deepEqual(voceDellaRiga("Una frase con i due punti dopo: qui."), { chiave: "", testo: "Una frase con i due punti dopo: qui." });
 const carta = cartaPotere(pronto, { sphereLabel: "Vita", usi: null, spent: 2, localize: (key) => key });
 assert.deepEqual([carta.name, carta.sphere, carta.formula, carta.kind, carta.spent, carta.usi, carta.blocchi.length > 1, Boolean(carta.paradox)], ["Pronto soccorso", "Vita", "Guarire", "WOD5E_MAGE.Poteri.Tipo.attivo", 2, null, true, true]);
 assert.equal(cartaPotere(conoscoRiga, { usi: usiDelPotere(conoscoRiga, dopo), localize: (key) => key }).usi.label, "WOD5E_MAGE.Poteri.Usi.sessione");

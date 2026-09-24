@@ -546,19 +546,36 @@ export function ruotaDopoUso(balance, power) {
 }
 
 /**
- * I blocchi del testo di un potere per la carta: «Effetto attivo: …»,
- * «Effetto passivo: …», «Effetto Amalgama: …», ognuno col titolo e le righe.
+ * I blocchi del testo di un potere: «Effetto attivo: …», «Effetto passivo: …»,
+ * «Effetto Amalgama: …», ognuno col titolo, il genere (attivo, passivo,
+ * amalgama, o niente per il testo scritto a mano), le righe come stanno, e le
+ * voci: la riga spezzata in chiave e testo quando comincia con «Accesso con
+ * X:», «Paga N …:» o «Con N poteri:», così la scheda, la finestra e la carta
+ * mettono la chiave in evidenza (Blue, 25/9: «non si distingue»).
  */
+const GENERI_BLOCCO = Object.freeze({ attivo: "attivo", passivo: "passivo", amalgama: "amalgama" });
+
+export function voceDellaRiga(riga) {
+  const m = String(riga ?? "").match(/^((?:Accesso con|Con) [^:]{1,40}|Paga [^:]{1,30}):\s*([\s\S]*)$/);
+  return m ? { chiave: m[1].trim(), testo: m[2].trim() } : { chiave: "", testo: String(riga ?? "").trim() };
+}
+
 export function blocchiDelTesto(text) {
   return String(text ?? "")
     .split(/\n\s*\n/)
     .map((blocco) => blocco.trim())
     .filter(Boolean)
     .map((blocco) => {
-      const m = blocco.match(/^(Effetto (?:attivo|passivo|Amalgama)):\s*([\s\S]*)$/i);
-      const corpo = m ? m[2] : blocco;
-      return { titolo: m ? m[1] : "", righe: corpo.split("\n").map((riga) => riga.trim()).filter(Boolean) };
+      const m = blocco.match(/^(Effetto (attivo|passivo|Amalgama)):\s*([\s\S]*)$/i);
+      const corpo = m ? m[3] : blocco;
+      const righe = corpo.split("\n").map((riga) => riga.trim()).filter(Boolean);
+      return { titolo: m ? m[1] : "", kind: m ? GENERI_BLOCCO[m[2].toLowerCase()] : "", righe, voci: righe.map(voceDellaRiga) };
     });
+}
+
+/** I blocchi di un genere (attivo, passivo, amalgama) nel testo del potere. */
+export function blocchiDelGenere(text, kind) {
+  return blocchiDelTesto(text).filter((blocco) => blocco.kind === kind);
 }
 
 /**
