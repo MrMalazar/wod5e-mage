@@ -54,7 +54,7 @@ import {
 } from "../magick-balance.js";
 import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
-import { onPotereApri, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriPagina } from "../poteri-scheda.js";
+import { onPotereApri, onPotereCatalogo, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriPagina } from "../poteri-scheda.js";
 import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { prepareMemo } from "../memo.js";
@@ -467,6 +467,8 @@ export class MageActorSheet extends MortalActorSheet {
       // I poteri inseriti dal giocatore (21/9): la pagina Magick.
       potereNuovo: onPotereNuovo,
       potereDaCatalogo: onPotereDaCatalogo,
+      // La finestra del catalogo (24/9 sera).
+      potereCatalogo: onPotereCatalogo,
       potereModifica: onPotereModifica,
       potereTogli: onPotereTogli,
       potereApri: onPotereApri,
@@ -562,7 +564,6 @@ export class MageActorSheet extends MortalActorSheet {
         `${MODULE}/parts/stat-tratti.hbs`,
         `${MODULE}/parts/stat-abilita.hbs`,
         `${MODULE}/parts/stat-tiro.hbs`,
-        `${MODULE}/parts/wisdom.hbs`,
         `${MODULE}/parts/bonuses.hbs`
       ],
       scrollable: [".wod5e-mage-riq-scroll", ".wod5e-mage-riq-body"]
@@ -580,10 +581,7 @@ export class MageActorSheet extends MortalActorSheet {
       templates: [`${MODULE}/parts/strumento-riga.hbs`]
     },
     conceptChallenge: { template: `${MODULE}/parts/concept-challenge.hbs` },
-    personaggio: {
-      template: `${MODULE}/parts/personaggio.hbs`,
-      templates: [`${MODULE}/parts/wisdom.hbs`]
-    },
+    personaggio: { template: `${MODULE}/parts/personaggio.hbs` },
     dotazione: {
       template: `${MODULE}/parts/dotazione.hbs`,
       templates: [

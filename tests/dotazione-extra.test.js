@@ -132,7 +132,7 @@ assert.equal(credoConviction.serve, "lasci l'opera parlare");
 // In cima al Personaggio la Saggezza e poi le Convinzioni (4/9 notte); niente delle due col Credo.
 const focusSource = readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8");
 assert.doesNotMatch(focusSource, /wisdom\.hbs|data-table="convinzioni"/);
-assert.match(personaggioSource(), /wod5e-mage-personaggio-columns[\s\S]*wod5e-mage-personaggio-col-left[\s\S]*IdentityLabel[\s\S]*AnchorsLabel[\s\S]*wod5e-mage-personaggio-col-right[\s\S]*wisdom\.hbs[\s\S]*ConvictionsLabel[\s\S]*convinzioni\.\{\{row\.id\}\}\.serve[\s\S]*convinzioni\.\{\{row\.id\}\}\.cross/);
+assert.match(personaggioSource(), /wod5e-mage-personaggio-columns[\s\S]*wod5e-mage-personaggio-col-left[\s\S]*IdentityLabel[\s\S]*AnchorsLabel[\s\S]*wod5e-mage-personaggio-col-right[\s\S]*wisdomStatus[\s\S]*ConvictionsLabel[\s\S]*convinzioni\.\{\{row\.id\}\}\.serve[\s\S]*convinzioni\.\{\{row\.id\}\}\.cross/);
 // L'Appartenenza sta in testata (4/9 notte), non più nel Personaggio.
 assert.doesNotMatch(personaggioSource(), /flags\.wod5e-mage\.lineage/);
 const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza.hbs", import.meta.url), "utf8");
@@ -236,11 +236,13 @@ summaryActor.getFlag = ((original) => (m, key) => key === "focus"
   : original(m, key))(summaryActor.getFlag);
 assert.equal(prepareCreationSummary(summaryActor).checks.find((check) => check.id === "instruments").ok, true);
 
-// L'inventario in un riquadro solo; lo stato della Saggezza accanto alla barra;
+// L'inventario in un riquadro solo; lo stato del Risvegliato in cima al
+// Personaggio, senza la fila della Saggezza (24/9 sera: sta nelle Risorse);
 // nome del PG e del giocatore in una colonna sola.
 const dotazioneTemplate = readFileSync(new URL("../templates/actor/parts/dotazione.hbs", import.meta.url), "utf8");
 assert.match(dotazioneTemplate, /wod5e-mage-inventario[\s\S]*Dotazione\.Inventory[\s\S]*equipment-list\.hbs/);
-assert.match(personaggioSource(), /wod5e-mage-wisdom-row[\s\S]*wisdom\.hbs[\s\S]*flags\.wod5e-mage\.wisdomStatus/);
+assert.match(personaggioSource(), /wod5e-mage-wisdom-row[\s\S]*flags\.wod5e-mage\.wisdomStatus/);
+assert.doesNotMatch(personaggioSource(), /wisdom\.hbs/, "la Saggezza non sta più nella Bussola");
 const identitaTemplate = readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8");
 assert.match(identitaTemplate, /wod5e-mage-names[\s\S]*name-field[\s\S]*wod5e-mage-player-field/);
 

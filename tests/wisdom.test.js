@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import {
   WISDOM_BASE,
   applyWisdomStateChange,
@@ -75,8 +75,10 @@ const read = (name) => readFileSync(new URL(`../${name}`, import.meta.url), "utf
 const sheet = read("scripts/sheets/mage-actor-sheet.js");
 assert.match(sheet, /wisdomCellChange: \{ handler: onWisdomCellChange, buttons: \[0, 2\] \}/);
 for (const action of ["wisdomSegna: onWisdomSegna", "wisdomCura: onWisdomCura", "wisdomReset: onWisdomReset", "faiCadereInchiostro(this)"]) assert.ok(sheet.includes(action), action);
-assert.match(read("templates/actor/parts/wisdom.hbs"), /wod5e-mage-inchiostro-fila[\s\S]*wod5e-mage-inchiostro-cella" data-state="\{\{cell\.state\}\}" data-action="wisdomCellChange"/);
-assert.doesNotMatch(read("templates/actor/parts/wisdom.hbs"), /squareCounterChange|resource-counter-step/);
+// La fila sta nelle Risorse della prima pagina (il partial wisdom.hbs della Bussola non c'è più, 24/9 sera).
+assert.match(read("templates/actor/parts/stat-risorse.hbs"), /wod5e-mage-inchiostro-fila[\s\S]*wod5e-mage-inchiostro-cella" data-state="\{\{cell\.state\}\}" data-action="wisdomCellChange"/);
+assert.doesNotMatch(read("templates/actor/parts/stat-risorse.hbs"), /squareCounterChange|resource-counter-step/);
+assert.ok(!existsSync(new URL("../templates/actor/parts/wisdom.hbs", import.meta.url)), "wisdom.hbs tolto");
 assert.match(read("templates/dialogs/saggezza-macchie.hbs"), /name="amount"[\s\S]*name="state"[\s\S]*data-role="macchiaSign" data-state="\{\{sign\.state\}\}"[\s\S]*wod5e-mage-inchiostro-glyph/);
 const css = read("styles/wod5e-mage.css");
 for (const rule of ['.wod5e-mage-inchiostro-cella[data-state="s"]::after', '.wod5e-mage-inchiostro-cella[data-state="a"]::after', ".wod5e-mage-inchiostro-cella.cade::before", "@keyframes wod5e-mage-goccia-cade", "@keyframes wod5e-mage-macchia-allarga"]) assert.ok(css.includes(rule), rule);

@@ -14,7 +14,6 @@ import { MODULE_ID } from "./constants.js";
 import {
   ambitiDellaScelta,
   cartaPotere,
-  catalogoDellaSfera,
   contoPoteri,
   findPotere,
   nuovoPotere,
@@ -32,6 +31,7 @@ import {
   sceltaDelPotere,
   usiDelPotere
 } from "./poteri.js";
+import { openCatalogoPoteri } from "./catalogo-poteri.js";
 import { getMagickBalance } from "./magick-balance.js";
 import { prepareIncantesimi } from "./incantesimi.js";
 import { prepareMageRollTraits } from "./mage-roll-selection.js";
@@ -95,8 +95,6 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
     ...sphere,
     conto: conti[sphere.id] ?? 0,
     steps: Array.from({ length: POTERE_DOTS }, (_, index) => ({ lit: index + 1 <= sphere.value })),
-    catalogo: catalogoDellaSfera(sphere.id, { catalog: POTERI, rating: sphere.value, owned: poteriOfSphere(poteri, sphere.id) })
-      .map((entry) => ({ ...entry, lockedHint: entry.locked ? localize("WOD5E_MAGE.Poteri.Chiuso").replace("{dot}", String(entry.dot)) : "" })),
     poteri: poteriOfSphere(poteri, sphere.id).map((power) => ({
       ...power,
       label: potereLabel(power, localize),
@@ -172,18 +170,48 @@ export async function onPotereNuovo(event, target) {
   await actor.setFlag(MODULE_ID, POTERI_FLAG, { ...rows, [id]: nuovoPotere(sphere) });
 }
 
-/** Una voce del catalogo: entra com'è scritta, già chiusa. */
+/**
+ * Una voce del catalogo entra sul personaggio com'è scritta, già chiusa, sulla
+ * Sfera da cui si è scelta (il catalogo ne apre più d'una). Torna true se
+ * l'ha messa; false se non c'è, o se il personaggio la conosce già.
+ */
+export async function aggiungiDalCatalogo(actor, sphere, catalogId) {
+  const entry = POTERI.find((power) => power.id === String(catalogId ?? ""));
+  if (!entry) return false;
+  const rows = { ...(actor.getFlag(MODULE_ID, POTERI_FLAG) ?? {}) };
+  if (Object.values(rows).some((row) => row?.catalogId === entry.id)) return false;
+  await actor.setFlag(MODULE_ID, POTERI_FLAG, { ...rows, [idNuovo(rows)]: nuovoPotere(SPHERES.includes(sphere) ? sphere : entry.sphere, entry) });
+  return true;
+}
+
+/** Una voce del catalogo da un tasto con `data-catalogo` e `data-sphere`. */
 export async function onPotereDaCatalogo(event, target) {
   event.preventDefault();
   const actor = this.actor;
   if (!canEdit(actor)) return;
-  const entry = POTERI.find((power) => power.id === String(target.dataset.catalogo ?? ""));
-  if (!entry) return;
-  const rows = { ...(actor.getFlag(MODULE_ID, POTERI_FLAG) ?? {}) };
-  if (Object.values(rows).some((row) => row?.catalogId === entry.id)) return;
-  // La Sfera è quella della tendina da cui si è scelto (il catalogo ne apre più d'una).
+  await aggiungiDalCatalogo(actor, String(target.dataset.sphere ?? ""), String(target.dataset.catalogo ?? ""));
+}
+
+/**
+ * «Aggiungi» (24/9 sera): la finestra del catalogo della Sfera, con la cerca,
+ * i due gruppi e il testo di ogni potere; «Aggiungi» sulla riga lo mette sul
+ * personaggio senza chiudere la finestra; «Scrivi a mano» apre una riga vuota.
+ */
+export async function onPotereCatalogo(event, target) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEdit(actor)) return;
   const sphere = String(target.dataset.sphere ?? "");
-  await actor.setFlag(MODULE_ID, POTERI_FLAG, { ...rows, [idNuovo(rows)]: nuovoPotere(SPHERES.includes(sphere) ? sphere : entry.sphere, entry) });
+  if (!SPHERES.includes(sphere)) return;
+  const sphereData = prepareSpheres(actor).all.find((entry) => entry.id === sphere);
+  const sheet = this;
+  await openCatalogoPoteri({
+    sphere,
+    rating: sphereData?.value ?? 0,
+    owned: poteriOfSphere(poteriDelPersonaggio(actor), sphere),
+    onAdd: (catalogId) => aggiungiDalCatalogo(actor, sphere, catalogId),
+    onMano: () => onPotereNuovo.call(sheet, { preventDefault() {} }, { dataset: { sphere } })
+  });
 }
 
 /** Modifica / Fatto: la riga passa agli input e torna al testo. */

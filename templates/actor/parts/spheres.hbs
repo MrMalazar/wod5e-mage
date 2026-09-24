@@ -95,27 +95,17 @@
             <div class="wod5e-mage-riq-body">
                 {{#each poteriSezioni as |sez|}}
                     <div class="wod5e-mage-poteri-sezione">
-                        {{!-- La testa della Sfera: sigillo, nome, i pallini in eco, il conto, Aggiungi (la tendina si apre col clic). --}}
-                        <div class="wod5e-mage-riga wod5e-mage-poteri-testa con-tendina">
+                        {{!-- La testa della Sfera: sigillo, nome, i pallini in eco, il conto, Aggiungi
+                             (dal 24/9 sera apre la finestra del catalogo, con la cerca e il testo di
+                             ogni potere; la tendina sotto la Sfera non c'è più) e la penna per
+                             scrivere un potere a mano. --}}
+                        <div class="wod5e-mage-riga wod5e-mage-poteri-testa">
                             <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{sez.icon}}" alt="">
                             <span class="wod5e-mage-poteri-sfera">{{localize sez.label}}</span>
                             <span class="wod5e-mage-poteri-eco" aria-hidden="true">{{#each sez.steps as |step|}}<i class="wod5e-mage-eco-pallino{{#if step.lit}} lit{{/if}}"></i>{{/each}}</span>
                             <span class="wod5e-mage-poteri-conto" title="{{localize 'WOD5E_MAGE.Stat.PoteriConosciuti'}}"><b{{#unless sez.conto}} class="vuoto"{{/unless}}>{{sez.conto}}</b><small>{{#if (eq sez.conto 1)}}{{localize "WOD5E_MAGE.Poteri.Uno"}}{{else}}{{localize "WOD5E_MAGE.Poteri.Tanti"}}{{/if}}</small></span>
-                            <button type="button" class="wod5e-mage-sfera-potere wod5e-mage-poteri-aggiungi" data-action="cassettoToggle" title="{{localize 'WOD5E_MAGE.Poteri.AggiungiHint'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Poteri.Aggiungi"}}</span></button>
-                            {{!-- La tendina: le voci del catalogo (spuntate se già conosciute, col lucchetto sopra i pallini della Sfera), e in fondo la scrittura a mano. --}}
-                            <div class="wod5e-mage-cassetto wod5e-mage-cassetto-poteri wod5e-mage-cassetto-catalogo" role="group" aria-label="{{localize 'WOD5E_MAGE.Poteri.AggiungiHint'}}">
-                                {{#each sez.catalogo as |voce|}}
-                                    <button type="button" class="wod5e-mage-potere-voce{{#if voce.known}} scelta{{/if}}{{#if voce.locked}} chiusa{{/if}}" data-action="potereDaCatalogo" data-sphere="{{sez.id}}" data-catalogo="{{voce.id}}" title="{{#if voce.known}}{{localize 'WOD5E_MAGE.Poteri.Conosciuto'}}{{else}}{{voce.lockedHint}}{{/if}}" {{#if voce.known}}disabled{{else if voce.locked}}disabled{{/if}}>
-                                        <i class="wod5e-mage-casella{{#if voce.known}} spuntata{{/if}}" aria-hidden="true"></i>
-                                        <b class="wod5e-mage-potere-pallino">{{voce.dot}}</b>
-                                        <span>{{voce.name}}{{#if voce.formulaName}}<small class="wod5e-mage-potere-formula">{{voce.formulaName}}{{#if voce.proposal}} ◇{{/if}}</small>{{/if}}</span>
-                                        {{#if voce.locked}}<small class="wod5e-mage-potere-lucchetto"><i class="fa-solid fa-lock" aria-hidden="true"></i> {{voce.lockedHint}}</small>{{/if}}
-                                    </button>
-                                {{else}}
-                                    <p class="wod5e-mage-riq-vuoto">{{localize "WOD5E_MAGE.Poteri.CatalogoVuoto"}}</p>
-                                {{/each}}
-                                <button type="button" class="wod5e-mage-potere-voce wod5e-mage-potere-mano" data-action="potereNuovo" data-sphere="{{sez.id}}"><i class="fa-solid fa-pen" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Poteri.ScriviMano"}}</span></button>
-                            </div>
+                            <button type="button" class="wod5e-mage-sfera-potere wod5e-mage-poteri-aggiungi" data-action="potereCatalogo" data-sphere="{{sez.id}}" title="{{localize 'WOD5E_MAGE.Poteri.AggiungiHint'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Poteri.Aggiungi"}}</span></button>
+                            <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-poteri-penna" data-action="potereNuovo" data-sphere="{{sez.id}}" title="{{localize 'WOD5E_MAGE.Poteri.ScriviMano'}}" aria-label="{{localize 'WOD5E_MAGE.Poteri.ScriviMano'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
                         </div>
 
                         {{#each sez.poteri as |p|}}

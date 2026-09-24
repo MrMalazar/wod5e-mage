@@ -8,20 +8,21 @@ import { askSegno } from "./salute.js";
  * 04_102: le sbarre se ne vanno una alla volta scegliendo quando costa, le
  * croci le toglie solo lo Spirito). Dal 23/9 (Blue: «una possibilità
  * equivalente alla Salute») la fila ha la formula come la Salute, le caselle
- * in più col meno e il più, il clic sulla casella apre il menù dei segni
- * (sbarra, croce, vuota) e la ruota a sei: Tira, Segna, Cura, Reset, meno,
- * più. I segni sono macchie d'inchiostro: la sbarra è una goccia che macchia
- * mezza casella, la croce la casella tutta d'inchiostro (CSS).
+ * in più col meno e il più, il clic sulla casella apre il menù delle macchie
+ * (superficiale, aggravata, vuota: dal 24/9 sera si chiamano come i danni
+ * della Salute, Blue) e la ruota a sei: Tira, Segna, Cura, Reset, meno, più.
+ * Le macchie sono d'inchiostro: la superficiale è una goccia che macchia
+ * mezza casella, l'aggravata la casella tutta d'inchiostro (CSS).
  *
- * Nella bandiera `wisdom`: `superficial` (le sbarre), `aggravated` (le
- * croci), `extra` (le caselle in più, anche negative). Il vecchio `max`
+ * Nella bandiera `wisdom`: `superficial` (le macchie superficiali),
+ * `aggravated` (le aggravate), `extra` (le caselle in più, anche negative). Il vecchio `max`
  * scritto a mano (fino alla 1.1.0) si converte in `extra` al primo
  * passaggio, così nessuna fila cambia lunghezza da sola.
  */
 
 export const WISDOM_BASE = 3;
 
-/** I segni della fila: vuota, sbarra (superficiale), croce (aggravato). */
+/** Le macchie della fila: vuota, superficiale («s»), aggravata («a»). */
 export const WISDOM_STATES = Object.freeze(["", "s", "a"]);
 
 const DEFAULT_WISDOM = Object.freeze({ superficial: 0, aggravated: 0, extra: 0 });

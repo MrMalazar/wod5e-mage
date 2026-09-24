@@ -78,25 +78,36 @@
                 <span class="wod5e-mage-grimorio-accessi">{{#each formula.access as |s|}}<img src="{{s.icon}}" alt="{{s.label}}" title="{{s.label}}" class="{{#if s.owned}}lit{{/if}}">{{/each}}</span>
                 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
             </summary>
+            {{!-- La matrice (24/9 sera, Blue: «l'esposizione del testo non è ordinata»):
+                 una tavola a due colonne, l'etichetta a sinistra e il contenuto a
+                 destra; nella Descrizione ogni Sfera sta su una riga sua coi sigilli
+                 in fila prima del nome. --}}
             <div class="wod5e-mage-matrice">
-                <p class="wod5e-mage-matrice-riga"><b>{{localize "WOD5E_MAGE.Grimorio.Access"}}</b> {{#each formula.access as |s|}}<span class="wod5e-mage-matrice-sfera{{#if s.owned}} lit{{/if}}"><img src="{{s.icon}}" alt="">{{s.label}}</span>{{/each}}</p>
-                <p class="wod5e-mage-matrice-riga"><b>{{localize "WOD5E_MAGE.Grimorio.Amalgams"}}</b> {{#if formula.amalgamsFree}}<em>{{#if formula.amalgamsNote}}{{formula.amalgamsNote}}{{else}}{{localize "WOD5E_MAGE.Grimorio.AmalgamsFree"}}{{/if}}</em>{{else}}{{#each formula.amalgams as |s|}}<span class="wod5e-mage-matrice-sfera{{#if s.owned}} lit{{/if}}"><img src="{{s.icon}}" alt="">{{s.label}}</span>{{/each}}{{/if}}</p>
-                <p class="wod5e-mage-matrice-testo"><b>{{localize "WOD5E_MAGE.Grimorio.Description"}}</b> {{formula.intro}}</p>
-                {{#each formula.rows as |row|}}
-                    <p class="wod5e-mage-matrice-sfera-riga{{#if row.owned}} lit{{/if}}">{{#each row.spheres as |s|}}<img src="{{s.icon}}" alt="">{{/each}}<b>{{row.label}}:</b> {{row.text}}</p>
-                {{/each}}
-                {{#if formula.coda}}<p class="wod5e-mage-matrice-testo">{{formula.coda}}</p>{{/if}}
-                <p class="wod5e-mage-matrice-testo"><b>{{localize "WOD5E_MAGE.Grimorio.Limit"}}</b> {{formula.limit}}</p>
-                <p class="wod5e-mage-matrice-soglia"><b>{{localize "WOD5E_MAGE.Grimorio.Threshold"}}</b>
+                <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Access"}}</b>
+                <div class="wod5e-mage-matrice-corpo wod5e-mage-matrice-riga">{{#each formula.access as |s|}}<span class="wod5e-mage-matrice-sfera{{#if s.owned}} lit{{/if}}"><img src="{{s.icon}}" alt="">{{s.label}}</span>{{/each}}</div>
+                <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Amalgams"}}</b>
+                <div class="wod5e-mage-matrice-corpo wod5e-mage-matrice-riga">{{#if formula.amalgamsFree}}<em>{{#if formula.amalgamsNote}}{{formula.amalgamsNote}}{{else}}{{localize "WOD5E_MAGE.Grimorio.AmalgamsFree"}}{{/if}}</em>{{else}}{{#each formula.amalgams as |s|}}<span class="wod5e-mage-matrice-sfera{{#if s.owned}} lit{{/if}}"><img src="{{s.icon}}" alt="">{{s.label}}</span>{{/each}}{{/if}}</div>
+                <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Description"}}</b>
+                <div class="wod5e-mage-matrice-corpo wod5e-mage-matrice-descrizione">
+                    {{#if formula.intro}}<p class="wod5e-mage-matrice-testo">{{formula.intro}}</p>{{/if}}
+                    {{#each formula.rows as |row|}}
+                        <p class="wod5e-mage-matrice-sfera-riga{{#if row.owned}} lit{{/if}}"><span class="wod5e-mage-matrice-sigilli">{{#each row.spheres as |s|}}<img src="{{s.icon}}" alt="">{{/each}}</span><span class="wod5e-mage-matrice-sfera-testo"><b>{{row.label}}:</b> {{row.text}}</span></p>
+                    {{/each}}
+                    {{#if formula.coda}}<p class="wod5e-mage-matrice-testo">{{formula.coda}}</p>{{/if}}
+                </div>
+                <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Limit"}}</b>
+                <div class="wod5e-mage-matrice-corpo"><p class="wod5e-mage-matrice-testo">{{formula.limit}}</p></div>
+                <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Threshold"}}</b>
+                <div class="wod5e-mage-matrice-corpo wod5e-mage-matrice-soglia">
                     {{#if (gt formula.thresholds.length 1)}}
                         {{#each formula.thresholds as |t|}}<label class="wod5e-mage-matrice-scelta"><input type="radio" name="soglia-{{t.formulaId}}" data-role="formulaThreshold" value="{{@index}}"{{#unless @index}} checked{{/unless}}> {{t.text}}</label>{{/each}}
                     {{else}}
                         {{#each formula.thresholds as |t|}}<span>{{t.text}}</span>{{/each}}
                     {{/if}}
-                </p>
-                <p class="wod5e-mage-matrice-uso"><em>{{formula.use}}</em></p>
+                </div>
                 {{#if formula.powers.length}}
-                    <p class="wod5e-mage-matrice-poteri"><b>{{localize "WOD5E_MAGE.Grimorio.Powers"}}</b> {{#each formula.powers as |power|}}<span{{#if power.proposal}} class="proposta" title="{{localize 'WOD5E_MAGE.Grimorio.Proposal'}}"{{/if}}>{{power.name}}</span>{{/each}}</p>
+                    <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Powers"}}</b>
+                    <div class="wod5e-mage-matrice-corpo wod5e-mage-matrice-poteri">{{#each formula.powers as |power|}}<span{{#if power.proposal}} class="proposta" title="{{localize 'WOD5E_MAGE.Grimorio.Proposal'}}"{{/if}}>{{power.name}}</span>{{/each}}</div>
                 {{/if}}
                 {{#if formula.open}}
                     <div class="wod5e-mage-matrice-scelte">

@@ -1,0 +1,42 @@
+{{!-- Il catalogo dei poteri di una Sfera (24/9 sera, Blue: la tendina sotto la
+     Sfera «è orribile, bisogna cambiare drasticamente»): la cerca in testa, il
+     conto, due gruppi (i poteri della Sfera, poi quelli di qualsiasi Sfera), una
+     riga per potere (pallino, nome, matrice, tipo, costo, limite d'uso, il
+     lucchetto se chiede più pallini della Sfera) che si apre sul testo intero;
+     «Aggiungi» lo mette sul personaggio e la riga prende la spunta. --}}
+<div class="wod5e-mage-grimorio-body wod5e-mage-catalogo-body">
+    <div class="wod5e-mage-grimorio-top wod5e-mage-catalogo-top">
+        <img class="wod5e-mage-catalogo-sigillo" src="{{icon}}" alt="">
+        <input type="search" class="wod5e-mage-grimorio-search" data-role="catalogoSearch" placeholder="{{localize 'WOD5E_MAGE.Poteri.CatalogoCerca'}}" aria-label="{{localize 'WOD5E_MAGE.Poteri.CatalogoCerca'}}">
+        <span class="wod5e-mage-catalogo-conto" data-role="catalogoConto">{{localize "WOD5E_MAGE.Poteri.CatalogoConto" total=totale known=conosciuti}}</span>
+    </div>
+    {{#if chiusi}}<p class="wod5e-mage-catalogo-avviso"><i class="fa-solid fa-lock" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.CatalogoChiusi" n=chiusi rating=rating}}</p>{{/if}}
+
+    {{#each gruppi as |gruppo|}}
+        <section class="wod5e-mage-catalogo-gruppo" data-catalogo-gruppo="{{gruppo.id}}">
+            <h3 class="wod5e-mage-catalogo-titolo"><span>{{gruppo.label}}</span><small>{{gruppo.righe.length}}</small></h3>
+            {{#each gruppo.righe as |voce|}}
+            <details class="wod5e-mage-grimorio-row wod5e-mage-catalogo-row{{#if voce.known}} known{{/if}}{{#if voce.locked}} chiusa{{/if}}" data-catalogo="{{voce.id}}" data-search="{{voce.search}}">
+                <summary>
+                    <b class="wod5e-mage-potere-pallino{{#unless voce.dot}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Poteri.Pallino'}}">{{#if voce.dot}}{{voce.dot}}{{else}}·{{/if}}</b>
+                    <span class="wod5e-mage-catalogo-nome">{{voce.name}}{{#if voce.proposal}} <i class="wod5e-mage-catalogo-proposta" title="{{localize 'WOD5E_MAGE.Grimorio.Proposal'}}">◇</i>{{/if}}</span>
+                    <em class="wod5e-mage-grimorio-formula">{{voce.formulaName}}</em>
+                    <span class="wod5e-mage-catalogo-tag">{{#if voce.typeLabel}}<small>{{voce.typeLabel}}</small>{{/if}}{{#if voce.cost}}<small>{{voce.cost}}</small>{{/if}}{{#if voce.uses}}<small>{{voce.uses}}</small>{{/if}}</span>
+                    {{#if voce.locked}}<small class="wod5e-mage-potere-lucchetto" title="{{voce.lockedHint}}"><i class="fa-solid fa-lock" aria-hidden="true"></i> {{voce.lockedHint}}</small>{{/if}}
+                    <button type="button" class="wod5e-mage-catalogo-aggiungi" data-role="catalogoAggiungi" data-catalogo="{{voce.id}}" {{#if voce.known}}disabled{{else if voce.locked}}disabled{{/if}}>{{#if voce.known}}<i class="fa-solid fa-check" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Conosciuto"}}{{else}}<i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Aggiungi"}}{{/if}}</button>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                </summary>
+                <div class="wod5e-mage-catalogo-testo">
+                    {{#each voce.blocchi as |blocco|}}
+                        <p class="wod5e-mage-catalogo-blocco">{{#if blocco.titolo}}<b>{{blocco.titolo}}</b>{{/if}}{{#each blocco.righe as |riga|}}<span>{{riga}}</span>{{/each}}</p>
+                    {{/each}}
+                    {{#if voce.paradox}}<p class="wod5e-mage-catalogo-blocco wod5e-mage-catalogo-paradosso"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Paradosso"}}</b><span>{{voce.paradox}}</span></p>{{/if}}
+                    {{#if voce.flavor}}<p class="wod5e-mage-catalogo-flavor"><em>{{voce.flavor}}</em></p>{{/if}}
+                </div>
+            </details>
+            {{else}}
+                <p class="wod5e-mage-grimorio-empty">{{localize "WOD5E_MAGE.Poteri.CatalogoVuotoSfera"}}</p>
+            {{/each}}
+        </section>
+    {{/each}}
+</div>

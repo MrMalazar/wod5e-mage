@@ -74,13 +74,10 @@
             </div>
 
             <div class="wod5e-mage-personaggio-col wod5e-mage-personaggio-col-right">
-                {{!-- In cima al Personaggio: la Saggezza e, sotto, le Convinzioni (4/9 notte). --}}
-                {{!-- La Saggezza e, a destra, lo stato del Risvegliato: per ora
-                     una casella libera, la barra vera arriverà col design. --}}
+                {{!-- In cima al Personaggio: lo stato del Risvegliato (una casella libera) e, sotto, le
+                     Convinzioni (4/9 notte). La Saggezza non sta più qui (Blue, 24/9 sera: «togliere
+                     Saggezza da Bussola dato che è già nella tab Stat»): la fila è nelle Risorse. --}}
                 <div class="wod5e-mage-wisdom-row">
-                    <div class="wod5e-mage-focus-wisdom">
-                        {{> "modules/wod5e-mage/templates/actor/parts/wisdom.hbs"}}
-                    </div>
                     <div class="wod5e-mage-wisdom-status">
                         <label class="wod5e-mage-wisdom-head" for="wod5e-mage-wisdom-status">{{localize "WOD5E_MAGE.Wisdom.Status"}}</label>
                         <input type="text" id="wod5e-mage-wisdom-status" name="flags.wod5e-mage.wisdomStatus" value="{{wisdomStatus}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Status'}}" {{#if locked}}disabled{{/if}}>
