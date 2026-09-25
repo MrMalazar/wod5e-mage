@@ -178,7 +178,8 @@ assert.match(abilitaTemplate, /data-action="skillsFlatToggle"[\s\S]*data-action=
 assert.match(abilitaTemplate, /\{\{#if group\.label\}\}<span class="wod5e-mage-riq-occhiello">/);
 // Le Specializzazioni stanno in riga sotto l'Abilità (Blue, 26/9: via la finestra e la tendina): la riga è
 // `con-specializzazioni` e va a capo, sotto le pastiglie e la casella che ne scrive una; niente tendina.
-assert.match(abilitaTemplate, /wod5e-mage-riga-abilita\{\{#if skill\.chosen\}\} scelta\{\{\/if\}\}\{\{#if skill\.spec\.slots\}\} con-specializzazioni\{\{\/if\}\}">\s*<button type="button" class="wod5e-mage-riga-nome" data-action="tiroSkill"[\s\S]*<div class="wod5e-mage-specializzazioni" role="group"[\s\S]*data-action="tiroSpecialty"[\s\S]*data-specialty-add="\{\{skill\.id\}\}"/);
+// La freccetta in fondo (26/9 sera) apre e chiude la riga (`aperta`), che nasce aperta con la Specializzazione nel Tiro.
+assert.match(abilitaTemplate, /wod5e-mage-riga-abilita\{\{#if skill\.chosen\}\} scelta\{\{\/if\}\}\{\{#if skill\.spec\.slots\}\} con-specializzazioni\{\{#if skill\.spec\.chosen\}\} aperta\{\{\/if\}\}\{\{\/if\}\}" data-skill="\{\{skill\.id\}\}">\s*<button type="button" class="wod5e-mage-riga-nome" data-action="tiroSkill"[\s\S]*<button type="button" class="wod5e-mage-abilita-apri\{\{#if skill\.spec\.scritte\.length\}\} piena\{\{\/if\}\}" data-action="specialtyToggle" aria-expanded="[\s\S]*<div class="wod5e-mage-specializzazioni" role="group"[\s\S]*data-action="tiroSpecialty"[\s\S]*data-specialty-add="\{\{skill\.id\}\}"/);
 assert.doesNotMatch(abilitaTemplate, /con-cassetto|con-tendina|cassettoToggle|wod5e-mage-cassetto/);
 // Le tendine delle righe si ricordano per chiave e il render le riapre (Blue, 25/9 sera: coi pallini «si chiudono da sole»).
 for (const [file, key] of [["stat-magick.hbs", 'data-cassetto="sfera-{{sphere.id}}"'], ["stat-magick.hbs", 'data-cassetto="ambito-{{scope.id}}"'], ["strumento-riga.hbs", 'data-cassetto="strumento-{{row.id}}"']]) {

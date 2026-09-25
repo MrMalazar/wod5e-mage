@@ -8,7 +8,7 @@ import { onCondizioneToggle, prepareCondizioni, prepareConditionRows } from "../
 import { onParadoxBurst } from "../paradox-burst.js";
 import { groupIncantesimiBySphere, onIncantesimoAdd, onIncantesimoChat, onIncantesimoDelete, onIncantesimoEdit, onIncantesimoFromEffetti, onIncantesimoRoll, prepareIncantesimi } from "../incantesimi.js";
 import { onGrimorioComuneOpen, onIncantesimoShare } from "../grimorio-comune.js";
-import { onFormulaLancia, onFormulaScrivi, onFormuleTutte, prepareFormulePagina, sfereAccessibili, wireFormule } from "../formule-scheda.js";
+import { onFormulaLancia, onFormulaScrivi, onFormuleTutte, prepareFormulePagina, sfereAccessibili, sfereDelFiltro, wireFormule } from "../formule-scheda.js";
 import { bindNoteBoard, noteBoardHeight, onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResetsById } from "../reset.js";
 import { onCredoFamilyPick } from "../famiglie.js";
@@ -63,7 +63,7 @@ import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from ".
 import { prepareCreationSummary } from "../riepilogo.js";
 import { prepareMemo } from "../memo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
-import { onSpecialtyDelete, prepareSpecialties, rigaSpecializzazioni, wireSpecialtyInputs } from "../specializzazioni.js";
+import { onSpecialtyDelete, onSpecialtyToggle, prepareSpecialties, riapriSpecializzazioni, rigaSpecializzazioni, wireSpecialtyInputs } from "../specializzazioni.js";
 import { skillSpecialtyNames } from "../arete.js";
 import {
   onTiroArete,
@@ -376,12 +376,25 @@ function wireStatFilters(sheet) {
     if (!list) return;
     const state = sheet._filters[name] ?? {};
     const needle = String(state.text ?? "").trim().toLocaleLowerCase(game.i18n.lang);
-    const kind = String(state.kind ?? "");
+    let kind = String(state.kind ?? "");
+    // Un filtro rimasto senza il suo tasto (la Sfera sparita dalla lista: le
+    // Formule tornate alle accessibili, un effetto tolto) si spegne da sé.
+    const group = root.querySelector(`[data-filters="${name}"]`);
+    if (kind && group && !group.querySelector(`.wod5e-mage-filtro[data-kind="${kind}"]`)) {
+      kind = "";
+      sheet._filters[name] = { ...state, kind };
+    }
     for (const row of list.querySelectorAll("[data-search]")) {
       const text = String(row.dataset.search ?? "").toLocaleLowerCase(game.i18n.lang);
       const okText = !needle || text.includes(needle);
-      const okKind = !kind || row.dataset.kind === kind;
+      // Il genere della riga, o i suoi generi (le Sfere di una Formula o di un effetto, 26/9 sera).
+      const kinds = String(row.dataset.kinds ?? "").split(" ").filter(Boolean);
+      const okKind = !kind || row.dataset.kind === kind || kinds.includes(kind);
       row.hidden = !(okText && okKind);
+    }
+    // I gruppi (gli effetti per Sfera) senza righe in vista si nascondono.
+    for (const gruppo of list.querySelectorAll("[data-gruppo]")) {
+      gruppo.hidden = ![...gruppo.querySelectorAll("[data-search]")].some((row) => !row.hidden);
     }
     for (const button of root.querySelectorAll(`[data-filters="${name}"] .wod5e-mage-filtro`)) {
       const active = String(button.dataset.kind ?? "") === kind;
@@ -449,6 +462,8 @@ export class MageActorSheet extends MortalActorSheet {
       formuleTutte: onFormuleTutte,
       formulaScrivi: onFormulaScrivi,
       formulaLancia: onFormulaLancia,
+      // La freccetta della riga dell'Abilità (26/9 sera): apre e chiude le Specializzazioni.
+      specialtyToggle: onSpecialtyToggle,
       noteAdd: onNoteAdd,
       noteDelete: onNoteDelete,
       areteChange: onAreteChange,
@@ -596,7 +611,7 @@ export class MageActorSheet extends MortalActorSheet {
     },
     grimorio: {
       template: `${MODULE}/parts/grimorio.hbs`,
-      templates: [`${MODULE}/parts/incantesimo-card.hbs`, `${MODULE}/parts/formula-scheda.hbs`]
+      templates: [`${MODULE}/parts/incantesimo-card.hbs`, `${MODULE}/parts/formula-scheda.hbs`, `${MODULE}/parts/filtro-sfere.hbs`]
     },
     focus: {
       template: `${MODULE}/parts/focus.hbs`,
@@ -838,6 +853,7 @@ export class MageActorSheet extends MortalActorSheet {
     wireCassetti(this);
     // Le caselle delle Specializzazioni (26/9): Invio o l'uscita dal campo scrivono.
     wireSpecialtyInputs(this.element, this.actor);
+    riapriSpecializzazioni(this);
     // Le Specialità delle Sfere: il testo del potere si apre dal titolo.
     this._specialtyOpen ??= {};
     for (const article of this.element?.querySelectorAll(".wod5e-mage-sphere-specialty[data-slot]") ?? []) {
@@ -1133,9 +1149,11 @@ export class MageActorSheet extends MortalActorSheet {
     if (partId === "grimorio") {
       context.tab = context.tabs.grimorio;
       const localize = game.i18n.localize.bind(game.i18n);
-      context.formule = prepareFormulePagina(sfereAccessibili(actor), { tutte: Boolean(this._formuleTutte), localize });
+      context.formule = prepareFormulePagina(sfereAccessibili(actor), { tutte: Boolean(this._formuleTutte), localize, lang: game.i18n.lang });
       context.incantesimi = [...prepareIncantesimi(actor, localize)].sort((a, b) => a.name.localeCompare(b.name, game.i18n.lang));
       context.incantesimiGroups = groupIncantesimiBySphere(context.incantesimi, localize);
+      // Il filtro per Sfera degli effetti (26/9 sera): le Sfere che gli effetti usano.
+      context.effettiSfere = sfereDelFiltro(context.incantesimi.map((spell) => spell.spheres.map((sphere) => sphere.id)), localize, game.i18n.lang);
     }
 
     if (partId === "note") {

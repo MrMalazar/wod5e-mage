@@ -15516,23 +15516,27 @@
 
 /* La Bussola (Blue, 26/9): via lo Stato; a sinistra l'Identità e le
    Convinzioni, a destra le Ancore. Le note dell'Ancora sono un campo come
-   gli altri, dello stesso colore; chiuse mostrano una riga, la freccia le
+   gli altri, dello stesso colore; chiuse mostrano tre righe, la freccia le
    apre e crescono col testo (le tre lineette del ridimensionamento non
    bastavano). */
 .wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora-note > textarea.wod5e-mage-bussola-note {
   color: var(--mage-testo);
   flex: 1 1 0;
+  line-height: 1.4;
   margin-left: 0;
-  max-height: 1.6em;
-  min-height: 1.5em;
+  max-height: 4.4em;
+  min-height: 4.4em;
   overflow: hidden;
   resize: none;
   width: auto;
 }
 
+/* Aperte (Blue, 26/9 sera: «più spazio alle note»): nove righe almeno, e
+   crescono col testo (field-sizing); le tre lineette per chi vuole di più. */
 .wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora.aperta .wod5e-mage-ancora-note > textarea.wod5e-mage-bussola-note {
+  field-sizing: content;
   max-height: none;
-  min-height: 4.2em;
+  min-height: 9em;
   overflow: auto;
   resize: vertical;
 }
@@ -15855,4 +15859,207 @@
 .application.wod5e-mage-guidata button.wod5e-mage-guidata-pastiglia-via:disabled {
   cursor: default;
   opacity: 0.4;
+}
+
+/* ==========================================================================
+   La pagina Formule, seconda passata (Blue, 26/9 sera): sta nella misura
+   della scheda e ogni colonna scorre da sé; i titoli delle Formule hanno
+   tutti la stessa larghezza e le glosse cominciano e finiscono alla stessa
+   verticale; il filtro per Sfera in testa alle due liste.
+   ========================================================================== */
+.wod5e-mage.wod5e.actor.sheet .window-content section.tab.wod5e-mage-grimorio-page.active {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-grimorio-page > .wod5e-mage-section-title {
+  flex: 0 0 auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-grimorio-page > .wod5e-mage-formule-layout {
+  align-items: stretch;
+  flex: 1 1 auto;
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-grimorio-page .wod5e-mage-formule-col {
+  min-height: 0;
+}
+
+/* Il riquadro prende l'altezza del contenuto, fino a quella della colonna;
+   oltre, il corpo scorre (la testa e i filtri restano fermi). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-col > .wod5e-mage-riq.wod5e-mage-riq-pagina {
+  flex: 0 1 auto;
+  max-height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-col > .wod5e-mage-riq-pagina > .wod5e-mage-riq-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-col .wod5e-mage-riq-cerca-riga,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-col .wod5e-mage-filtri-sfere {
+  flex: 0 0 auto;
+}
+
+/* Il filtro per Sfera: «Tutte» e i sigilli sul disco d'oro; l'acceso in oro scuro. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-filtri-sfere {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 1px 0 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-filtri-sfere > .wod5e-mage-filtro {
+  align-items: center;
+  display: inline-flex;
+  height: 22px;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-filtri-sfere > .wod5e-mage-filtro-sfera {
+  border-radius: 50%;
+  padding: 0;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-filtri-sfere > .wod5e-mage-filtro-sfera > img.wod5e-mage-sfera-inline {
+  height: 16px;
+  margin: 0;
+  width: 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-filtri-sfere > .wod5e-mage-filtro-sfera:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-filtri-sfere > .wod5e-mage-filtro-sfera.active {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  box-shadow: 0 0 0 1px var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimi-group[hidden],
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo[hidden] {
+  display: none;
+}
+
+/* La testa della Formula a griglia: il titolo in una colonna fissa (va a capo
+   se è lungo: «Accelerare e Rallentare»), la glossa nella seconda, i sigilli
+   d'Accesso in una colonna fissa a destra, la freccia; così i testi di tutte
+   le righe cominciano e finiscono alla stessa verticale. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula > summary {
+  align-items: center;
+  column-gap: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 8.6em) minmax(0, 1fr) 3.4em 0.8em;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula > summary > .wod5e-mage-grimorio-formula-name {
+  line-height: 1.15;
+  padding-left: 0;
+  white-space: normal;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula > summary > .wod5e-mage-grimorio-formula-brief {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula[open] > summary > .wod5e-mage-grimorio-formula-brief {
+  -webkit-line-clamp: unset;
+  display: block;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula > summary > .wod5e-mage-grimorio-accessi {
+  display: inline-flex;
+  gap: 2px;
+  justify-content: flex-end;
+  justify-self: end;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula > summary > i {
+  justify-self: end;
+  margin: 0;
+}
+
+@media (width <= 900px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-grimorio-page > .wod5e-mage-formule-layout {
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* La freccetta delle Specializzazioni (Blue, 26/9 sera: «un compromesso tra
+   prima e dopo»): in fondo alla riga dell'Abilità, col conto delle scritte;
+   la riga delle pastiglie si vede solo da aperta. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita > .wod5e-mage-specializzazioni {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita.aperta > .wod5e-mage-specializzazioni {
+  display: flex;
+}
+
+/* Il nome parte stretto e cresce: così la freccetta resta sulla prima riga
+   anche con un nome lungo (Accademiche), invece di andare a capo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita.con-specializzazioni > .wod5e-mage-riga-nome {
+  flex: 1 1 3rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-abilita-apri {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 2px;
+  height: 18px;
+  line-height: 1;
+  margin: 0 -2px 0 0;
+  min-height: 0;
+  padding: 0 2px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-abilita-apri.piena {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-abilita-apri > small {
+  font-size: 0.64rem;
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-abilita-apri > i {
+  font-size: 0.6rem;
+  transition: transform 0.15s;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-abilita-apri:hover {
+  box-shadow: none;
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita.aperta > button.wod5e-mage-abilita-apri > i {
+  transform: rotate(180deg);
 }

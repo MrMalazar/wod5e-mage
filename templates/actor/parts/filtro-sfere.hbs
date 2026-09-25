@@ -1,0 +1,11 @@
+{{!-- Il filtro per Sfera in testa a una lista (Blue, 26/9 sera: «un filtro di
+     ricerca per sfere»): «Tutte» e un sigillo per ogni Sfera che compare nelle
+     righe; filtra sul posto, senza render, come la cerca (wireStatFilters:
+     `data-filters` col nome della lista, `data-kind` sul tasto, `data-kinds`
+     sulle righe). --}}
+{{#if sfere.length}}
+<div class="wod5e-mage-filtri-sfere" data-filters="{{nome}}" role="group" aria-label="{{localize 'WOD5E_MAGE.Formule.FiltroSfere'}}">
+    <button type="button" class="wod5e-mage-filtro active" data-kind="" title="{{localize 'WOD5E_MAGE.Formule.SfereTutte'}}">{{localize "WOD5E_MAGE.Formule.SfereTutteBreve"}}</button>
+    {{#each sfere as |s|}}<button type="button" class="wod5e-mage-filtro wod5e-mage-filtro-sfera" data-kind="{{s.id}}" title="{{localize 'WOD5E_MAGE.Formule.SferaFiltro' sphere=s.label}}" aria-label="{{localize 'WOD5E_MAGE.Formule.SferaFiltro' sphere=s.label}}"><img class="wod5e-mage-sfera-inline" src="{{s.icon}}" alt=""></button>{{/each}}
+</div>
+{{/if}}

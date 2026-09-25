@@ -101,7 +101,9 @@ margin placeholder. In the right side panel, under Custom Rolls, a small Bonuses
 table (number, type, description) lets the player note reminders such as
 "+3 · Forces Scope"; rows are stored in module flags and never touch the
 dice, and each value is capped at ±3. Specialties sit in a line under each
-Skill, on the first page and in the creation wizard: every Specialty is a pill
+Skill, on the first page (where the chevron at the end of the Skill row opens
+and closes the line, and counts the written ones; a row whose Specialty is in
+the Roll box starts open) and in the creation wizard: every Specialty is a pill
 (click to roll with it, × to remove it) and, while a slot is free (one at the
 first dot, two at the third, three at the fifth), a dashed box writes a new
 one, typed or picked from the six catalogue suggestions, on Enter; there is no
@@ -171,16 +173,22 @@ at render time, leaving the native WoD5e dice registry and Mortal rolls intact.
 
 ## Formulas page
 
-The Formulas page has two full-width columns. On the left, the 48 Formulas
-the character's Spheres open (a button shows all of them), each row the same
-matrix as the Grimoire dialog, with the Access Sphere, the Amalgams and the
-threshold chosen by buttons; "Write among the effects" saves it as a Magick
-effect, "Cast from the Roll box" loads it into the Roll box on the first page
-with its values. On the right, the player's Magick effects, one collapsible
-card each, in name order: closed, the card keeps the name and the Goal; the
-die loads the effect into the Roll box the same way. Scope selectors show
-eight dots everywhere: the first is level 0, the base effect, always lit and
-never clickable.
+The Formulas page has two full-width columns that stay within the sheet's
+height: each column scrolls on its own, with its title, search box and Sphere
+filter fixed at the top. On the left, the 48 Formulas the character's Spheres
+open (a button shows all of them), each row the same matrix as the Grimoire
+dialog, with the Access Sphere, the Amalgams and the threshold chosen by
+buttons; "Write among the effects" saves it as a Magick effect, "Cast from
+the Roll box" loads it into the Roll box on the first page with its values.
+Row titles share one fixed column, so every description starts and ends at
+the same vertical line. On the right, the player's Magick effects, one
+collapsible card each, grouped by Sphere and in name order: closed, the card
+keeps the name and the Goal; the die loads the effect into the Roll box the
+same way. Both columns filter on the spot by text and by Sphere (the row of
+sigils shows the Spheres that appear in the list; "All" clears it). Scope
+selectors show eight dots everywhere: the first is level 0, the base effect,
+always lit and never clickable; hovering it reads the base of the Scope (the
+chosen lens, or every lens with its name).
 
 ## Narrator's Board
 

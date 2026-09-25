@@ -139,3 +139,33 @@ for (const morta of ["Deduzione", "Selva", "Fondo", "Lancio", "Aure", "Disarmo",
   assert.equal(it.Add, undefined, "la finestra non c'è più: niente Aggiungi");
 }
 console.log("Specializzazioni in riga (26/9): ok");
+
+// La freccetta della riga (Blue, 26/9 sera: «un compromesso tra prima e dopo»):
+// apre e chiude la riga delle Specializzazioni con una classe, la scheda
+// ricorda com'era e il render dopo la rimette com'era.
+{
+  const { onSpecialtyToggle, riapriSpecializzazioni } = await import("../scripts/specializzazioni.js");
+  const riga = (skill, aperta = false) => {
+    const el = { dataset: { skill }, classes: new Set(aperta ? ["aperta"] : []), tasto: { attrs: {} } };
+    el.classList = { toggle: (c, on) => { const next = on ?? !el.classes.has(c); next ? el.classes.add(c) : el.classes.delete(c); return next; }, contains: (c) => el.classes.has(c) };
+    el.tasto.setAttribute = (k, v) => { el.tasto.attrs[k] = v; };
+    el.tasto.closest = () => el;
+    el.querySelector = (selector) => (selector === "[data-action=specialtyToggle]" ? el.tasto : null);
+    return el;
+  };
+  const velo = riga("occult", true), atletica = riga("athletics");
+  const righe = [velo, atletica];
+  const sheet = { element: { querySelectorAll: () => righe } };
+  onSpecialtyToggle.call(sheet, { preventDefault() {} }, velo.tasto);
+  assert.deepEqual([velo.classes.has("aperta"), velo.tasto.attrs["aria-expanded"], sheet._specializzazioniAperte], [false, "false", { occult: false }]);
+  onSpecialtyToggle.call(sheet, { preventDefault() {} }, atletica.tasto);
+  assert.deepEqual([atletica.classes.has("aperta"), sheet._specializzazioniAperte], [true, { occult: false, athletics: true }]);
+  // Dopo il render le righe tornano come le ha lasciate il giocatore (Velo chiusa anche se nasce aperta).
+  const dopo = [riga("occult", true), riga("athletics"), riga("brawl")];
+  riapriSpecializzazioni({ ...sheet, element: { querySelectorAll: () => dopo } });
+  assert.deepEqual(dopo.map((el) => el.classes.has("aperta")), [false, true, false]);
+  assert.deepEqual([dopo[0].tasto.attrs["aria-expanded"], dopo[1].tasto.attrs["aria-expanded"], dopo[2].tasto.attrs["aria-expanded"]], ["false", "true", undefined]);
+  riapriSpecializzazioni({});
+  onSpecialtyToggle.call(sheet, { preventDefault() {} }, { closest: () => null });
+}
+console.log("freccetta delle Specializzazioni: ok");

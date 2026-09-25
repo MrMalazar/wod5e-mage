@@ -143,7 +143,7 @@ assert.doesNotMatch(focusSource, /wisdom\.hbs|data-table="convinzioni"/);
 assert.match(personaggioSource(), /wod5e-mage-personaggio-columns[\s\S]*wod5e-mage-personaggio-col-left[\s\S]*IdentityLabel[\s\S]*ConvictionsLabel[\s\S]*convinzioni\.\{\{row\.id\}\}\.serve[\s\S]*convinzioni\.\{\{row\.id\}\}\.cross[\s\S]*wod5e-mage-personaggio-col-right[\s\S]*AnchorsLabel/);
 assert.doesNotMatch(personaggioSource(), /wod5e-mage-riq-stato|wisdomStatus/);
 // Le note dell'Ancora (26/9): la freccia apre la carta, le note sono un campo come gli altri.
-assert.match(personaggioSource(), /wod5e-mage-ancora wod5e-mage-riga-apribile" data-row="\{\{row\.id\}\}"[\s\S]*wod5e-mage-ancora-apri" data-action="rigaApri"[\s\S]*wod5e-mage-bussola-campo largo wod5e-mage-ancora-note[\s\S]*textarea class="wod5e-mage-bussola-note" name="flags\.wod5e-mage\.ancore\.\{\{row\.id\}\}\.description" rows="3"/);
+assert.match(personaggioSource(), /wod5e-mage-ancora wod5e-mage-riga-apribile" data-row="\{\{row\.id\}\}"[\s\S]*wod5e-mage-ancora-apri" data-action="rigaApri"[\s\S]*wod5e-mage-bussola-campo largo wod5e-mage-ancora-note[\s\S]*textarea class="wod5e-mage-bussola-note" name="flags\.wod5e-mage\.ancore\.\{\{row\.id\}\}\.description" rows="6"/);
 // L'Appartenenza sta in testata (4/9 notte), non più nel Personaggio.
 assert.doesNotMatch(personaggioSource(), /flags\.wod5e-mage\.lineage/);
 const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza.hbs", import.meta.url), "utf8");

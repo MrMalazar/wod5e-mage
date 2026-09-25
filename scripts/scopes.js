@@ -235,6 +235,19 @@ export function scopeModes(localize = (key) => key, { arete = null } = {}) {
   return out;
 }
 
+/**
+ * La lettura dello 0 di un Ambito quando nessuna lente è scelta (Blue, 26/9
+ * sera: «Bersagli 0 dirà 1 Bersaglio»): la base di ogni lente col nome della
+ * lente («Effetto: Un bersaglio · Area: Un punto»), o una sola se coincidono.
+ */
+export function zeroReading(scope, localize = (key) => key, { arete = null } = {}) {
+  const lenti = scopeModes(localize, { arete })[scope] ?? [];
+  const letture = lenti.map((lens) => ({ nome: lens.short || lens.label, testo: lens.readings?.[0] ?? "" })).filter((entry) => entry.testo);
+  if (!letture.length) return "";
+  if (new Set(letture.map((entry) => entry.testo)).size === 1) return letture[0].testo;
+  return letture.map((entry) => (entry.nome ? `${entry.nome}: ${entry.testo}` : entry.testo)).join(" · ");
+}
+
 /** La lente scelta di un Ambito: quella chiesta se c'è, altrimenti la prima. */
 export function scopeModeOf(modes, scope, chosen) {
   const options = modes?.[scope] ?? [];

@@ -1,10 +1,13 @@
-{{!-- La pagina Formule (Blue, 26/9): due colonne a tutta pagina. A sinistra le
-     Formule, accessibili dalle Sfere possedute o tutte col tasto in testa, con
-     la cerca; ogni riga è la matrice del Grimorio con la scelta della Sfera
-     d'Accesso, delle Amalgame e della soglia, e i due tasti (scrivi fra gli
-     effetti, lancia dal Tiro). A destra gli effetti di Magick scritti dal
-     giocatore, per Sfera, ognuno a tendina: chiuso resta l'Obiettivo, aperto
-     tutto; il dado lo carica nel Tiro della prima pagina coi suoi valori. --}}
+{{!-- La pagina Formule (Blue, 26/9): due colonne a tutta pagina, nella misura
+     della scheda (26/9 sera: «l'elenco integrale è troppo lungo», ogni colonna
+     scorre da sé). A sinistra le Formule, accessibili dalle Sfere possedute o
+     tutte col tasto in testa, con la cerca e il filtro per Sfera; ogni riga è
+     la matrice del Grimorio con la scelta della Sfera d'Accesso, delle
+     Amalgame e della soglia, e i due tasti (scrivi fra gli effetti, lancia dal
+     Tiro). A destra gli effetti di Magick scritti dal giocatore, per Sfera,
+     con la cerca e il filtro per Sfera, ognuno a tendina: chiuso resta
+     l'Obiettivo, aperto tutto; il dado lo carica nel Tiro della prima pagina
+     coi suoi valori. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-grimorio-page" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     <header class="wod5e-mage-section-title wod5e-mage-note-head">
         <span>{{localize "WOD5E_MAGE.Tabs.Short.grimorio"}}</span>
@@ -30,6 +33,7 @@
                             <input type="search" placeholder="{{localize 'WOD5E_MAGE.Formule.Cerca'}}" aria-label="{{localize 'WOD5E_MAGE.Formule.Cerca'}}" data-filter="formule">
                         </label>
                     </div>
+                    {{> "modules/wod5e-mage/templates/actor/parts/filtro-sfere.hbs" nome="formule" sfere=formule.sfere}}
                     <div class="wod5e-mage-formule-lista" data-list="formule">
                         {{#each formule.righe as |formula|}}
                             {{> "modules/wod5e-mage/templates/actor/parts/formula-scheda.hbs" formula=formula}}
@@ -56,10 +60,17 @@
                 </header>
                 <div class="wod5e-mage-riq-body">
                     {{#if incantesimi.length}}
+                        <div class="wod5e-mage-riq-cerca-riga">
+                            <label class="wod5e-mage-riq-cerca">
+                                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                                <input type="search" placeholder="{{localize 'WOD5E_MAGE.Formule.CercaEffetti'}}" aria-label="{{localize 'WOD5E_MAGE.Formule.CercaEffetti'}}" data-filter="effetti">
+                            </label>
+                        </div>
+                        {{> "modules/wod5e-mage/templates/actor/parts/filtro-sfere.hbs" nome="effetti" sfere=effettiSfere}}
                         {{!-- Per Sfere: ogni effetto sotto la Sfera più alta che usa; a pari merito compare in tutte e due. --}}
-                        <div class="wod5e-mage-incantesimi">
+                        <div class="wod5e-mage-incantesimi" data-list="effetti">
                             {{#each incantesimiGroups as |group|}}
-                                <section class="wod5e-mage-incantesimi-group">
+                                <section class="wod5e-mage-incantesimi-group" data-gruppo="{{group.sphere}}">
                                     <h3 class="wod5e-mage-incantesimi-sphere">{{#if group.icon}}<img src="{{group.icon}}" alt="">{{/if}}{{group.label}} <small>{{group.spells.length}}</small></h3>
                                     {{#each group.spells as |spell|}}
                                         {{> "modules/wod5e-mage/templates/actor/parts/incantesimo-card.hbs" spell=spell}}

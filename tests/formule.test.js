@@ -66,7 +66,7 @@ console.log("Matrici e catalogo dei poteri: test passati.");
 // Sfere possedute, o tutte; le scelte sulla riga sono tasti; i due tasti in
 // fondo scrivono fra gli effetti o caricano il Tiro della prima pagina.
 {
-  const { accendiScelta, prepareFormulePagina, sceltaDellaRiga } = await import("../scripts/formule-scheda.js");
+  const { accendiScelta, prepareFormulePagina, rigaDellaFormula, sceltaDellaRiga, sfereDelFiltro } = await import("../scripts/formule-scheda.js");
   const conForze = prepareFormulePagina({ forces: 2 }, { localize: (key) => key });
   assert.equal(conForze.totale, 48);
   assert.ok(conForze.aperte > 0 && conForze.aperte < 48);
@@ -77,6 +77,20 @@ console.log("Matrici e catalogo dei poteri: test passati.");
   assert.deepEqual([tutte.righe.length, tutte.aperte, tutte.tutte], [48, conForze.aperte, true]);
   assert.deepEqual(tutte.righe.map((formula) => formula.name), [...tutte.righe.map((formula) => formula.name)].sort((a, b) => a.localeCompare(b, "it")), "in ordine di nome");
   assert.deepEqual(prepareFormulePagina({}, { localize: (key) => key }).righe, [], "senza Sfere niente accessibili");
+  // Il filtro per Sfera (26/9 sera): ogni riga porta le sue Sfere d'Accesso in
+  // `kinds`, e la pagina le Sfere che compaiono nelle righe mostrate, in ordine di nome.
+  assert.ok(conForze.righe.every((formula) => formula.kinds === formula.access.map((sphere) => sphere.id).join(" ")));
+  assert.ok(conForze.sfere.some((sphere) => sphere.id === "forces") && conForze.sfere.every((sphere) => sphere.label && sphere.icon.endsWith(`/${sphere.id}.png`)));
+  assert.ok(conForze.sfere.length <= tutte.sfere.length && tutte.sfere.length === 9, "con «tutte» compaiono tutte le Sfere");
+  assert.deepEqual(sfereDelFiltro([["forces", "time"], ["forces"], []], (key) => key.split(".").pop()).map((sphere) => sphere.id), ["forces", "time"]);
+  assert.deepEqual(sfereDelFiltro([["time", "forces"]], (key) => ({ "WOD5E_MAGE.Spheres.forces": "Forze", "WOD5E_MAGE.Spheres.time": "Tempo" })[key]).map((sphere) => sphere.label), ["Forze", "Tempo"], "in ordine di nome");
+  assert.deepEqual(sfereDelFiltro([]), []);
+  // La riga di un tasto (il bug del 26/9 sera: i tasti in fondo portano anch'essi
+  // `data-formula`, e `closest` parte da sé: la scelta si leggeva sul tasto, vuota).
+  const dettagli = { tag: "DETAILS" };
+  const tastoInFondo = { tag: "BUTTON", closest: (selector) => (selector === "[data-formula]" ? tastoInFondo : dettagli) };
+  assert.equal(rigaDellaFormula(tastoInFondo), dettagli);
+  assert.equal(rigaDellaFormula(null), null);
   // La lettura della riga: la Sfera d'Accesso accesa, le Amalgame accese, la soglia accesa.
   const tasto = (role, dataset, scelta = true) => ({ dataset: { role, ...dataset }, classe: scelta });
   const riga = (tasti) => ({ querySelectorAll: (selector) => tasti.filter((t) => selector.includes(`[data-role=${t.dataset.role}]`) && (!selector.endsWith(".scelta") || t.classe)) });
@@ -107,7 +121,7 @@ console.log("Matrici e catalogo dei poteri: test passati.");
 // delle Formule coi tasti (senza campi col nome: siamo nel form della scheda),
 // gli effetti a tendina con l'Obiettivo da chiusi.
 {
-  const { prepareFormulePagina } = await import("../scripts/formule-scheda.js");
+  const { prepareFormulePagina, sfereDelFiltro } = await import("../scripts/formule-scheda.js");
   const { prepareIncantesimo, groupIncantesimiBySphere } = await import("../scripts/incantesimi.js");
   Handlebars.registerHelper("localize", (key, options) => {
     const hash = options?.hash ?? {};
@@ -115,15 +129,15 @@ console.log("Matrici e catalogo dei poteri: test passati.");
   });
   Handlebars.registerHelper("gt", (a, b) => a > b);
   Handlebars.registerHelper("concat", (...args) => args.slice(0, -1).join(""));
-  for (const name of ["formula-scheda", "incantesimo-card"]) {
+  for (const name of ["formula-scheda", "incantesimo-card", "filtro-sfere"]) {
     Handlebars.registerPartial(`modules/wod5e-mage/templates/actor/parts/${name}.hbs`, readFileSync(new URL(`../templates/actor/parts/${name}.hbs`, import.meta.url), "utf8"));
   }
   const pagina = Handlebars.compile(readFileSync(new URL("../templates/actor/parts/grimorio.hbs", import.meta.url), "utf8"), { strict: false });
   const localize = (key) => key;
   const formule = prepareFormulePagina({ forces: 2, prime: 1 }, { localize });
   const incantesimi = [prepareIncantesimo("s1", { name: "Lama di fuoco", goal: "Una lama che brucia", spheres: { forces: 2 }, scopes: { potency: 2 }, magickType: "vulgar" }, localize)];
-  const html = pagina({ tab: { cssClass: "active", id: "grimorio", group: "primary" }, locked: false, formule, incantesimi, incantesimiGroups: groupIncantesimiBySphere(incantesimi, localize) });
-  for (const marker of ["wod5e-mage-formule-layout", 'data-action="formuleTutte"', 'data-filter="formule"', 'data-list="formule"', "WOD5E_MAGE.Formule.Conto(", 'wod5e-mage-formula" data-formula="danneggiare"', 'data-role="formulaAccess" data-sphere="forces"', 'data-action="formulaScrivi" data-formula="danneggiare"', 'data-action="formulaLancia" data-formula="danneggiare"', "wod5e-mage-riq-effetti", 'data-action="incantesimoFromEffetti"', 'data-action="incantesimoAdd"', 'data-action="grimorioClose"', '<span class="wod5e-mage-incantesimo-obiettivo" title="Una lama che brucia"><b>WOD5E_MAGE.Arete.Goal</b> Una lama che brucia</span>', 'data-action="incantesimoRoll" data-row="s1" title="WOD5E_MAGE.Incantesimi.RollHint"']) {
+  const html = pagina({ tab: { cssClass: "active", id: "grimorio", group: "primary" }, locked: false, formule, incantesimi, incantesimiGroups: groupIncantesimiBySphere(incantesimi, localize), effettiSfere: sfereDelFiltro(incantesimi.map((spell) => spell.spheres.map((sphere) => sphere.id)), localize) });
+  for (const marker of ["wod5e-mage-formule-layout", 'data-action="formuleTutte"', 'data-filter="formule"', 'data-list="formule"', "WOD5E_MAGE.Formule.Conto(", 'wod5e-mage-formula" data-formula="danneggiare"', `data-formula="${formule.righe[0].id}" data-search="${formule.righe[0].name} ${formule.righe[0].use}" data-kinds="${formule.righe[0].kinds}"`, 'wod5e-mage-filtri-sfere" data-filters="formule"', 'wod5e-mage-filtro active" data-kind="" title="WOD5E_MAGE.Formule.SfereTutte">WOD5E_MAGE.Formule.SfereTutteBreve</button>', 'wod5e-mage-filtro wod5e-mage-filtro-sfera" data-kind="forces" title="WOD5E_MAGE.Formule.SferaFiltro(sphere&#x3D;WOD5E_MAGE.Spheres.forces)"', 'data-filter="effetti"', 'wod5e-mage-filtri-sfere" data-filters="effetti"', 'data-list="effetti"', 'wod5e-mage-incantesimi-group" data-gruppo="forces"', 'wod5e-mage-incantesimo" data-row="s1" data-search="Lama di fuoco Una lama che brucia" data-kinds="forces"', 'data-role="formulaAccess" data-sphere="forces"', 'data-action="formulaScrivi" data-formula="danneggiare"', 'data-action="formulaLancia" data-formula="danneggiare"', "wod5e-mage-riq-effetti", 'data-action="incantesimoFromEffetti"', 'data-action="incantesimoAdd"', 'data-action="grimorioClose"', '<span class="wod5e-mage-incantesimo-obiettivo" title="Una lama che brucia"><b>WOD5E_MAGE.Arete.Goal</b> Una lama che brucia</span>', 'data-action="incantesimoRoll" data-row="s1" title="WOD5E_MAGE.Incantesimi.RollHint"']) {
     assert.ok(html.includes(marker), `manca ${marker}`);
   }
   const righeFormule = html.slice(html.indexOf('data-list="formule"'), html.indexOf("wod5e-mage-riq-effetti"));
@@ -133,7 +147,8 @@ console.log("Matrici e catalogo dei poteri: test passati.");
   const conTutte = pagina({ tab: { cssClass: "active", id: "grimorio", group: "primary" }, locked: true, formule: prepareFormulePagina({ forces: 2 }, { tutte: true, localize }), incantesimi: [], incantesimiGroups: [] });
   assert.ok(conTutte.includes("wod5e-mage-formule-tutte active") && conTutte.includes(" closed") && conTutte.includes("WOD5E_MAGE.Grimorio.NoAccess") && conTutte.includes("WOD5E_MAGE.Incantesimi.Empty"), "con «tutte» anche le chiuse, e la lista vuota degli effetti");
   assert.ok(conTutte.includes('data-action="formulaScrivi" data-formula="danneggiare" title="WOD5E_MAGE.Formule.ScriviHint" disabled data-fermo="true"'), "scheda bloccata: non si scrive, si può ancora lanciare");
-  const vuota = pagina({ tab: { cssClass: "active", id: "grimorio", group: "primary" }, locked: false, formule: prepareFormulePagina({}, { localize }), incantesimi: [], incantesimiGroups: [] });
+  const vuota = pagina({ tab: { cssClass: "active", id: "grimorio", group: "primary" }, locked: false, formule: prepareFormulePagina({}, { localize }), incantesimi: [], incantesimiGroups: [], effettiSfere: [] });
   assert.ok(vuota.includes("WOD5E_MAGE.Formule.Vuote"));
+  assert.ok(!vuota.includes("wod5e-mage-filtri-sfere") && !vuota.includes('data-filter="effetti"'), "senza righe niente filtri");
 }
 console.log("pagina Formule: ok");

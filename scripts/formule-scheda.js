@@ -14,7 +14,7 @@
 import { MODULE_ID } from "./constants.js";
 import { findFormula, formulaPick, prepareGrimorioFormule } from "./grimorio.js";
 import { INCANTESIMI_FLAG, spellFromFormula } from "./incantesimi.js";
-import { prepareSpheres } from "./spheres.js";
+import { SPHERES, prepareSpheres } from "./spheres.js";
 import { caricaNelTiro } from "./tiro-scheda.js";
 
 /** I Domini a cui il personaggio ha accesso: le Sfere conosciute col loro livello (anche 0). */
@@ -26,10 +26,31 @@ export function sfereAccessibili(actor) {
  * Il contesto della colonna delle Formule: le righe (le accessibili, o tutte
  * con `tutte`), quante si aprono e quante sono in tutto.
  */
-export function prepareFormulePagina(sphereLevels = {}, { tutte = false, localize = (key) => key } = {}) {
-  const righe = prepareGrimorioFormule(sphereLevels, localize);
+export function prepareFormulePagina(sphereLevels = {}, { tutte = false, localize = (key) => key, lang = "it" } = {}) {
+  // `kinds`: le Sfere d'Accesso della riga, per il filtro per Sfera (26/9 sera).
+  const righe = prepareGrimorioFormule(sphereLevels, localize).map((formula) => ({ ...formula, kinds: formula.access.map((sphere) => sphere.id).join(" ") }));
   const aperte = righe.filter((formula) => formula.open);
-  return { righe: tutte ? righe : aperte, aperte: aperte.length, totale: righe.length, tutte: Boolean(tutte) };
+  const mostrate = tutte ? righe : aperte;
+  return {
+    righe: mostrate,
+    aperte: aperte.length,
+    totale: righe.length,
+    tutte: Boolean(tutte),
+    sfere: sfereDelFiltro(mostrate.map((formula) => formula.access.map((sphere) => sphere.id)), localize, lang)
+  };
+}
+
+/**
+ * Le Sfere del filtro in testa a una lista (Blue, 26/9 sera: «un filtro di
+ * ricerca per sfere»): quelle che compaiono nelle righe, in ordine di nome.
+ * `liste` sono le Sfere di ogni riga (le Sfere d'Accesso di una Formula, le
+ * Sfere di un effetto).
+ */
+export function sfereDelFiltro(liste = [], localize = (key) => key, lang = "it") {
+  const presenti = new Set(liste.flat());
+  return SPHERES.filter((id) => presenti.has(id))
+    .map((id) => ({ id, label: localize(`WOD5E_MAGE.Spheres.${id}`), icon: `modules/${MODULE_ID}/assets/icons/sheet/${id}.png` }))
+    .sort((a, b) => a.label.localeCompare(b.label, lang));
 }
 
 /** Le scelte fatte sulla riga: la Sfera d'Accesso (una), le Amalgame (anche più d'una), la soglia (l'indice). */
@@ -48,7 +69,7 @@ export function sceltaDellaRiga(row) {
  * e vengono una per una.
  */
 export function accendiScelta(button, { single = true } = {}) {
-  const row = button.closest("[data-formula]");
+  const row = rigaDellaFormula(button);
   const role = button.dataset.role;
   if (single) {
     for (const other of row?.querySelectorAll(`[data-role="${role}"]`) ?? []) {
@@ -96,9 +117,14 @@ export function wireFormule(sheet) {
   }
 }
 
+/** La riga (la tendina) di un tasto: i tasti in fondo portano anch'essi `data-formula`, e `closest` parte da sé. */
+export function rigaDellaFormula(target) {
+  return target?.closest?.(".wod5e-mage-formula[data-formula]") ?? null;
+}
+
 /** La scelta della riga letta come scelta della matrice; null (con l'avviso) se manca la Sfera d'Accesso. */
 function pickDallaRiga(sheet, target) {
-  const row = target?.closest?.("[data-formula]");
+  const row = rigaDellaFormula(target);
   const formula = findFormula(String(row?.dataset?.formula ?? ""));
   if (!row || !formula) return null;
   const pick = formulaPick(formula, { ...sceltaDellaRiga(row), sphereLevels: sfereAccessibili(sheet.actor) });

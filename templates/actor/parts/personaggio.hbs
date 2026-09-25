@@ -153,11 +153,11 @@
                                 <label class="wod5e-mage-bussola-campo"><span>{{localize "WOD5E_MAGE.Personaggio.AnchorBites"}}</span><input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.bites" value="{{row.bites}}" {{#if ../locked}}disabled{{/if}}></label>
                             </div>
                             {{!-- Le note (il vecchio campo «perché conta, e cosa non sa»): un campo come gli altri,
-                                 dello stesso colore (Blue, 26/9: «non sembra importante»); chiuse una riga, aperte
-                                 con la freccia crescono col testo. --}}
+                                 dello stesso colore (Blue, 26/9: «non sembra importante»); chiuse due righe, aperte
+                                 con la freccia hanno spazio (26/9 sera: «più spazio alle note») e crescono col testo. --}}
                             <label class="wod5e-mage-bussola-campo largo wod5e-mage-ancora-note">
                                 <span>{{localize "WOD5E_MAGE.Personaggio.AnchorNotes"}}</span>
-                                <textarea class="wod5e-mage-bussola-note" name="flags.wod5e-mage.ancore.{{row.id}}.description" rows="3" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorDescription'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorNotes'}}" {{#if ../locked}}disabled{{/if}}>{{row.description}}</textarea>
+                                <textarea class="wod5e-mage-bussola-note" name="flags.wod5e-mage.ancore.{{row.id}}.description" rows="6" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorDescription'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorNotes'}}" {{#if ../locked}}disabled{{/if}}>{{row.description}}</textarea>
                             </label>
                         </div>
                     {{else}}

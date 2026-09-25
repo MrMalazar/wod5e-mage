@@ -65,6 +65,13 @@ assert.equal(S.contoInputs(actor, T.pickPower(T.emptyTiro(), "zzz", "forces")).i
 assert.equal(rows.find((r) => r.id === "potency").steps[3].reading, rows.find((r) => r.id === "potency").reading, "la lettura sul numero è quella della riga");
 // Senza una lettura scelta (21/9) la Potenza, che ne ha due, non stampa nessuna lettura: solo il numero.
 assert.deepEqual([rows.find((r) => r.id === "potency").reading, rows.find((r) => r.id === "potency").steps[3].tip], ["", "4"]);
+// Ma lo 0 legge sempre (Blue, 26/9 sera: «Bersagli 0 dirà 1 Bersaglio»): senza
+// lente scelta, la base di ogni lente col suo nome; il sorvolo parte da «0 · ».
+const potenzaZero = rows.find((r) => r.id === "potency").zero;
+assert.match(potenzaZero.reading, /Table\.potencyWeight\.0/);
+assert.match(potenzaZero.reading, /Sub\.potencyDamage: /, "la lente dei Danni col suo nome");
+assert.ok(potenzaZero.reading.includes(" · "), "le due lenti, separate");
+assert.ok(potenzaZero.tip.startsWith(`0 · ${potenzaZero.reading}`));
 // La lettura («lente») dell'Ambito (16/9 sera; tavola del 23/9: due lenti l'uno): la prima della tavola, o quella scelta col tastino.
 const potenza = rows.find((r) => r.id === "potency");
 assert.deepEqual([potenza.mode, potenza.modeCount, potenza.modeLabel, potenza.nextModeLabel], ["potencyDamage", 2, "WOD5E_MAGE.Scopes.Sub.potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight"]);

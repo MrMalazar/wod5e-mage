@@ -1250,7 +1250,8 @@
       "Scrivi": "+ specializzazione",
       "ScriviHint": "Scrivi il nome e premi Invio, o scegli dalla tendina: {free} posti liberi su {slots} (una al primo pallino, una al terzo, una al quinto). Vale un dado in più quando conta nel tiro.",
       "Doppione": "«{name}» c'è già su questa Abilità.",
-      "Full": "{skill} ha già le sue {slots} Specializzazioni."
+      "Full": "{skill} ha già le sue {slots} Specializzazioni.",
+      "Apri": "Apri e chiudi le Specializzazioni"
     },
     "CustomSkills": {
       "Label": "Abilità Specifiche",
@@ -2285,7 +2286,12 @@
       "ScriviHint": "La Formula com'è scelta diventa un effetto di Magick tuo, nella colonna a destra: poi la ritocchi con la matita.",
       "Lancia": "Lancia dal Tiro",
       "LanciaHint": "La Formula com'è scelta entra nel Tiro della prima pagina coi suoi valori: scegli Attributo e Abilità e tira.",
-      "ScegliAccesso": "Scegli prima la Sfera d'Accesso."
+      "ScegliAccesso": "Scegli prima la Sfera d'Accesso.",
+      "CercaEffetti": "Cerca un effetto…",
+      "FiltroSfere": "Filtro per Sfera",
+      "SfereTutte": "Tutte le Sfere",
+      "SfereTutteBreve": "Tutte",
+      "SferaFiltro": "Solo {sphere}"
     }
   },
   "WOD5E": {

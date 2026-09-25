@@ -39,7 +39,7 @@ import { getSalute } from "./salute.js";
 
 export { poteriOfSphere };
 import { renderRollCard, ROLL_CARD_FLAG, rollSymbols } from "./roll-card.js";
-import { canRaiseScope, nextScopeMode, SCOPE_ICONS, SCOPES, scopeModeOf, scopeModes, SCOPES_PER_CAST } from "./scopes.js";
+import { canRaiseScope, nextScopeMode, SCOPE_ICONS, SCOPES, scopeModeOf, scopeModes, SCOPES_PER_CAST, zeroReading } from "./scopes.js";
 import { prepareSpheres } from "./spheres.js";
 import {
   bumpDifficulty,
@@ -317,6 +317,10 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
     const hintOf = (step) => (modeChosen ? mode?.hints?.[step] ?? "" : "");
     // Sul pallino: il livello e la lettura, e a capo la spiegazione della tavola.
     const tipOf = (step) => [readingOf(step) ? `${step} · ${readingOf(step)}` : String(step), hintOf(step)].filter(Boolean).join("\n");
+    // Lo 0 legge sempre (Blue, 26/9 sera: «Bersagli 0 dirà 1 Bersaglio»): con
+    // la lente scelta la sua base, senza, la base di ogni lente col suo nome.
+    const zeroReadingOf = () => (modeChosen ? readingOf(0) : zeroReading(id, localize, { arete }));
+    const zeroTip = () => [zeroReadingOf() ? `0 · ${zeroReadingOf()}` : "0", hintOf(0)].filter(Boolean).join("\n");
     return {
       id,
       label: localize(`WOD5E_MAGE.Scopes.${id}`),
@@ -336,7 +340,7 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
       modes: options.map((option) => ({ id: option.id, label: option.label, selected: modeChosen && option.id === mode?.id })),
       // Il primo pallino è lo 0 (Blue, 26/9): l'effetto di base, acceso sempre e
       // non cliccabile, col suo testo nel sorvolo; i sette dopo si dichiarano.
-      zero: { value: 0, reading: readingOf(0), hint: hintOf(0), tip: tipOf(0) },
+      zero: { value: 0, reading: zeroReadingOf(), hint: hintOf(0), tip: zeroTip() },
       steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({
         value: index + 1,
         active: index + 1 === level,

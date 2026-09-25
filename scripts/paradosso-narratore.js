@@ -3,7 +3,7 @@ import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
 import { ROLL_CARD_FLAG } from "./roll-card.js";
 import { MAGHI_SETTING } from "./menu-paradosso.js";
-import { SCOPE_ICONS, SCOPES } from "./scopes.js";
+import { SCOPE_ICONS, SCOPES, zeroReading } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
 
 /**
@@ -484,7 +484,7 @@ export async function openSpendDialog() {
     {
       points: pool.points,
       spheres: scheda.map((row) => ({ ...row, steps: Array.from({ length: row.level }, (_, index) => ({ value: index + 1 })) })),
-      scopes: SCOPES.map((id) => ({ id, label: `WOD5E_MAGE.Scopes.${id}`, faIcon: SCOPE_ICONS[id] ?? "", zero: { value: 0 }, steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 })) }))
+      scopes: SCOPES.map((id) => ({ id, label: `WOD5E_MAGE.Scopes.${id}`, faIcon: SCOPE_ICONS[id] ?? "", zero: { value: 0, reading: zeroReading(id, localize) }, steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 })) }))
     }
   );
   let choice = null;

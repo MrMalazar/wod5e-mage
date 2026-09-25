@@ -57,6 +57,8 @@ export function prepareIncantesimo(id, spell, localize = (key) => key) {
     prize: Boolean(spell?.prize),
     maintained: Boolean(spell?.maintained),
     spheres,
+    // Le Sfere in una parola, per il filtro per Sfera della pagina Formule (26/9 sera).
+    kinds: spheres.map((sphere) => sphere.id).join(" "),
     scopes,
     // La matrice da cui nasce (24/9): l'id e il nome, per la scheda e la carta.
     formula: String(spell?.formula ?? ""),

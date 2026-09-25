@@ -1250,7 +1250,8 @@
       "Scrivi": "+ specialty",
       "ScriviHint": "Type the name and press Enter, or pick from the list: {free} free of {slots} (one at the first dot, one at the third, one at the fifth). Worth one extra die whenever it applies to the roll.",
       "Doppione": "“{name}” is already on this Skill.",
-      "Full": "{skill} already has its {slots} Specialties."
+      "Full": "{skill} already has its {slots} Specialties.",
+      "Apri": "Open and close the Specialties"
     },
     "CustomSkills": {
       "Label": "Specific Skills",
@@ -2285,7 +2286,12 @@
       "ScriviHint": "The Formula as chosen becomes one of your Magick effects, in the right column: then you refine it with the pencil.",
       "Lancia": "Cast from the Roll box",
       "LanciaHint": "The Formula as chosen enters the Roll box on the first page with its values: pick Attribute and Skill and roll.",
-      "ScegliAccesso": "Pick the Access Sphere first."
+      "ScegliAccesso": "Pick the Access Sphere first.",
+      "CercaEffetti": "Search an effect…",
+      "FiltroSfere": "Filter by Sphere",
+      "SfereTutte": "All Spheres",
+      "SfereTutteBreve": "All",
+      "SferaFiltro": "Only {sphere}"
     }
   }
 }

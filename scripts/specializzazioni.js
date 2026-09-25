@@ -184,4 +184,32 @@ export async function onSpecialtyDelete(event, target) {
   await togliSpecializzazione(this.actor, String(target.dataset.skill ?? ""), target.dataset.index);
 }
 
+/**
+ * La freccetta della riga (Blue, 26/9 sera: «devo poter aprire e chiudere
+ * l'abilità con la freccetta che scende e poi vado a cliccare sulla
+ * specializzazione, un compromesso tra prima e dopo»): apre e chiude la riga
+ * delle Specializzazioni sotto l'Abilità. Solo una classe, niente render; la
+ * scheda ricorda com'era attraverso i render. Una riga con la Specializzazione
+ * nel Tiro nasce aperta (dal template), finché il giocatore non la chiude.
+ */
+export function onSpecialtyToggle(event, target) {
+  event?.preventDefault?.();
+  const row = target?.closest?.(".wod5e-mage-riga-abilita[data-skill]");
+  if (!row) return;
+  const aperta = row.classList.toggle("aperta");
+  target.setAttribute("aria-expanded", String(aperta));
+  (this._specializzazioniAperte ??= {})[row.dataset.skill] = aperta;
+}
+
+/** Dopo il render: le righe tornano aperte o chiuse come le ha lasciate il giocatore. */
+export function riapriSpecializzazioni(sheet) {
+  const stato = sheet?._specializzazioniAperte ?? {};
+  for (const row of sheet?.element?.querySelectorAll?.(".wod5e-mage-riga-abilita[data-skill]") ?? []) {
+    const id = row.dataset.skill;
+    if (!(id in stato)) continue;
+    row.classList.toggle("aperta", Boolean(stato[id]));
+    row.querySelector("[data-action=specialtyToggle]")?.setAttribute("aria-expanded", String(Boolean(stato[id])));
+  }
+}
+
 export { SPECIALIZZAZIONI, SPECIALIZZAZIONI_PER_VOCE, specialtySuggestions };

@@ -14,7 +14,7 @@ import {
   selectorsForMageRollTrait
 } from "./mage-roll-selection.js";
 import { INFLUENCE_LABELS, prepareSpheres } from "./spheres.js";
-import { prepareScopeTable, scopeReadings, SCOPE_ICONS, SCOPES } from "./scopes.js";
+import { prepareScopeTable, scopeReadings, SCOPE_ICONS, SCOPES, zeroReading } from "./scopes.js";
 import {
   ROLL_CARD_FLAG,
   renderRollCard,
@@ -798,18 +798,19 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       specialtyScope: specialties[sphere.id] ?? "",
       specialtyLabel: specialties[sphere.id] ? `WOD5E_MAGE.Scopes.${specialties[sphere.id]}` : ""
     }));
-  // I sette Ambiti, a otto pallini l'uno: lo 0 davanti, fisso (Blue, 26/9), poi i sette livelli.
+  const localize = game.i18n.localize.bind(game.i18n);
+  const readingFor = dotReadings(localize, { arete: arete.value });
+  // I sette Ambiti, a otto pallini l'uno: lo 0 davanti, fisso (Blue, 26/9), poi
+  // i sette livelli; sullo 0 la lettura della base (26/9 sera).
   const scopeOptions = SCOPES.map((id) => ({
     id,
     label: `WOD5E_MAGE.Scopes.${id}`,
     faIcon: SCOPE_ICONS[id] ?? "",
-    zero: { value: 0 },
+    zero: { value: 0, reading: zeroReading(id, localize, { arete: arete.value }) },
     steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 }))
   }));
   const quintessenceAvailable = getMagickBalance(actor).quintessence;
   const sphereLevelsOwned = Object.fromEntries(rollSpheres.map((sphere) => [sphere.id, sphere.value]));
-  const localize = game.i18n.localize.bind(game.i18n);
-  const readingFor = dotReadings(localize, { arete: arete.value });
   // La Bussola rispettata (11/9, al posto della Convinzione del 9/9): Ambizione,
   // Desiderio e Convinzioni in tendina, un dado in più e +1 Quintessenza a tiro fatto.
   const bussola = prepareBussolaChoice(actor);

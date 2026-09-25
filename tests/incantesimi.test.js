@@ -68,7 +68,7 @@ assert.equal(prepareIncantesimo("x", {}).name, "WOD5E_MAGE.Incantesimi.Unnamed")
 
 // La scheda: la pagina Grimorio dopo la Magick, i cinque comandi, il dialogo in modo «salva».
 const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
-assert.match(sheet, /grimorio: \{\s*template: `\$\{MODULE\}\/parts\/grimorio\.hbs`,\s*templates: \[`\$\{MODULE\}\/parts\/incantesimo-card\.hbs`, `\$\{MODULE\}\/parts\/formula-scheda\.hbs`\]/);
+assert.match(sheet, /grimorio: \{\s*template: `\$\{MODULE\}\/parts\/grimorio\.hbs`,\s*templates: \[`\$\{MODULE\}\/parts\/incantesimo-card\.hbs`, `\$\{MODULE\}\/parts\/formula-scheda\.hbs`, `\$\{MODULE\}\/parts\/filtro-sfere\.hbs`\]/);
 assert.match(sheet, /magick: \{[\s\S]*\},\s*\/\/ Il Grimorio del personaggio[\s\S]*grimorio: \{\s*id: "grimorio"[\s\S]*focus: \{/);
 const page = readFileSync(new URL("../templates/actor/parts/grimorio.hbs", import.meta.url), "utf8");
 const card = readFileSync(new URL("../templates/actor/parts/incantesimo-card.hbs", import.meta.url), "utf8");
@@ -218,9 +218,14 @@ console.log("Grimorio del personaggio: test passati.");
   const roll = incantesimiScript.slice(incantesimiScript.indexOf("export async function onIncantesimoRoll"), incantesimiScript.indexOf("export async function onIncantesimoFromEffetti"));
   assert.match(roll, /caricaNelTiro\(this, id, current\)/);
   assert.doesNotMatch(roll, /launchArete/);
-  assert.match(sheet, /grimorio: \{\s*template: `\$\{MODULE\}\/parts\/grimorio\.hbs`,\s*templates: \[`\$\{MODULE\}\/parts\/incantesimo-card\.hbs`, `\$\{MODULE\}\/parts\/formula-scheda\.hbs`\]/);
+  assert.match(sheet, /grimorio: \{\s*template: `\$\{MODULE\}\/parts\/grimorio\.hbs`,\s*templates: \[`\$\{MODULE\}\/parts\/incantesimo-card\.hbs`, `\$\{MODULE\}\/parts\/formula-scheda\.hbs`, `\$\{MODULE\}\/parts\/filtro-sfere\.hbs`\]/);
   assert.match(sheet, /formuleTutte: onFormuleTutte,\s*formulaScrivi: onFormulaScrivi,\s*formulaLancia: onFormulaLancia/);
-  assert.match(sheet, /context\.formule = prepareFormulePagina\(sfereAccessibili\(actor\), \{ tutte: Boolean\(this\._formuleTutte\), localize \}\)/);
+  assert.match(sheet, /context\.formule = prepareFormulePagina\(sfereAccessibili\(actor\), \{ tutte: Boolean\(this\._formuleTutte\), localize, lang: game\.i18n\.lang \}\)/);
   assert.match(sheet, /wireFormule\(this\)/);
   assert.match(page, /wod5e-mage-formule-layout[\s\S]*wod5e-mage-riq-formule[\s\S]*formula-scheda\.hbs" formula=formula[\s\S]*wod5e-mage-riq-effetti[\s\S]*incantesimo-card\.hbs" spell=spell/);
 }
+
+// Il filtro per Sfera della pagina Formule (26/9 sera): ogni effetto porta le sue Sfere in una parola.
+assert.equal(prepareIncantesimo("k1", { name: "Due Sfere", spheres: { time: 1, forces: 2 } }).kinds, "forces time");
+assert.equal(prepareIncantesimo("k2", { name: "Senza" }).kinds, "");
+console.log("generi degli effetti: ok");
