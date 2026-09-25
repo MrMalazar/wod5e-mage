@@ -1,0 +1,803 @@
+[
+ {
+  "it": "Il Velo si assottiglia qui.",
+  "o": {
+   "testimone": "tessitura"
+  }
+ },
+ {
+  "it": "Apro la porta con la mia volontà.",
+  "o": {
+   "testimone": "occhi",
+   "consenso": "volgare"
+  }
+ },
+ {
+  "it": "Chiamo il mio Avatar nella notte.",
+  "o": {
+   "consenso": "coincidente"
+  }
+ },
+ {
+  "it": "Dimmi il tuo nome vero.",
+  "o": {}
+ },
+ {
+  "it": "Non pagherò questo prezzo.",
+  "o": {}
+ },
+ {
+  "it": "Il Paradosso ricorda ogni cosa.",
+  "o": {}
+ },
+ {
+  "it": "Ho visto la Tessitura spezzarsi.",
+  "o": {
+   "testimone": "occhi"
+  }
+ },
+ {
+  "it": "Vieni, siediti, ascolta.",
+  "o": {
+   "modo": "imperativo"
+  }
+ },
+ {
+  "it": "I dormienti non vedono niente.",
+  "o": {}
+ },
+ {
+  "it": "Che il tuo Risveglio sia puro.",
+  "o": {}
+ },
+ {
+  "it": "Che il tuo Risveglio sia puro.",
+  "o": {},
+  "va": "ferish khanrâ i ka.",
+  "legge": "FE-risc can-RÀ i ka."
+ },
+ {
+  "it": "Il Velo si assottiglia qui.",
+  "o": {
+   "testimone": "tessitura"
+  },
+  "va": "hann 'asharilsa e'samlâ she.",
+  "legge": "hann ʼa-scia-RIL-sa eʼ-sam-LÀ sce."
+ },
+ {
+  "it": "Apro la porta con la mia volontà.",
+  "o": {
+   "testimone": "occhi",
+   "consenso": "volgare"
+  },
+  "va": "'afarilmi e'ofur e'valnâum i mi ne thak.",
+  "legge": "ʼa-fa-RIL-mi e-ʼO-fur eʼ-val-NÀUM i mi ne tak."
+ },
+ {
+  "it": "Chiamo il mio Avatar.",
+  "o": {
+   "consenso": "coincidente"
+  },
+  "va": "vakharilmi î'shi'âr i mi va.",
+  "legge": "va-ca-RIL-mi ìʼ-sci-ʼÀR i mi va."
+ },
+ {
+  "it": "Dimmi il tuo nome vero.",
+  "o": {},
+  "va": "vatharê miar e'vothur i ka verish.",
+  "legge": "va-ta-RÈ miar eʼ-VO-tur i ka VE-risc."
+ },
+ {
+  "it": "Non pagherò questo prezzo.",
+  "o": {},
+  "va": "ûshalavâsmi han shalvâ.",
+  "legge": "ù-scia-la-VÀS-mi han scial-VÀ."
+ },
+ {
+  "it": "Ho visto la Tessitura spezzarsi.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "vazarmi ramaf î'tharmâ ne.",
+  "legge": "va-ZAR-mi RA-maf ìʼ-tar-MÀ ne."
+ },
+ {
+  "it": "Questo patto ci lega.",
+  "o": {},
+  "va": "nakhathilsa han fakhthâen mir.",
+  "legge": "na-ca-TIL-sa han fac-TÀEN mir."
+ },
+ {
+  "it": "Vieni. Siediti. Ascolta.",
+  "o": {},
+  "va": "vanarê. shazarê. 'ashakhê.",
+  "legge": "va-na-RÈ. scia-za-RÈ. ʼa-scia-CHÈ."
+ },
+ {
+  "it": "Me l'ha detto il mio Avatar.",
+  "o": {
+   "testimone": "avatar"
+  },
+  "va": "vatharsa mien î'shi'âr i mi shi.",
+  "legge": "va-TAR-sa mien ìʼ-sci-ʼÀR i mi sci."
+ },
+ {
+  "it": "Il Dormiente è morto.",
+  "o": {
+   "testimone": "occhi",
+   "registro": "reale"
+  },
+  "va": "samarash î'zirâm ne.",
+  "legge": "sa-MA-rasc ìʼ-zi-RÀM ne."
+ },
+ {
+  "it": "Chi sei?",
+  "o": {},
+  "va": "man hu",
+  "legge": "man hu"
+ },
+ {
+  "it": "Come ti chiami?",
+  "o": {},
+  "va": "vakharilka kayp ka hu",
+  "legge": "va-ca-RIL-ka kaip ka hu"
+ },
+ {
+  "it": "Sei un Risvegliato?",
+  "o": {},
+  "va": "khinâr hu",
+  "legge": "chi-NÀR hu"
+ },
+ {
+  "it": "Vengo dalle Tradizioni.",
+  "o": {},
+  "va": "vanarilmi e'tharzâolum.",
+  "legge": "va-na-RIL-mi eʼ-tar-ZÀO-lum."
+ },
+ {
+  "it": "Non ti conosco.",
+  "o": {},
+  "va": "ûnashakhilmi ka.",
+  "legge": "Ù-na-scia-chil-mi ka."
+ },
+ {
+  "it": "Chi ti manda?",
+  "o": {},
+  "va": "manarilsa manen ka hu",
+  "legge": "ma-na-RIL-sa MA-nen ka hu"
+ },
+ {
+  "it": "Non mi manda nessuno.",
+  "o": {},
+  "va": "manarilsa mien lâman.",
+  "legge": "ma-na-RIL-sa mien LÀ-man."
+ },
+ {
+  "it": "Lui è con me.",
+  "o": {},
+  "va": "sa mium.",
+  "legge": "sa mium."
+ },
+ {
+  "it": "Siediti con noi.",
+  "o": {},
+  "va": "shazarê mirum.",
+  "legge": "scia-za-RÈ MI-rum."
+ },
+ {
+  "it": "Di chi è questo?",
+  "o": {},
+  "va": "mani han hu",
+  "legge": "MA-ni han hu"
+ },
+ {
+  "it": "Andiamo.",
+  "o": {},
+  "va": "'amavilmir.",
+  "legge": "ʼa-ma-VIL-mir."
+ },
+ {
+  "it": "Aspetta.",
+  "o": {},
+  "va": "'akhashê.",
+  "legge": "ʼa-ca-SCÈ."
+ },
+ {
+  "it": "Aspetta ancora.",
+  "o": {},
+  "va": "'ôd 'akhashê.",
+  "legge": "ʼòd ʼa-ca-SCÈ."
+ },
+ {
+  "it": "Vieni con me.",
+  "o": {},
+  "va": "vanarê mium.",
+  "legge": "va-na-RÈ mium."
+ },
+ {
+  "it": "Vieni dietro di me.",
+  "o": {},
+  "va": "vanarê bathar mi.",
+  "legge": "va-na-RÈ BA-tar mi."
+ },
+ {
+  "it": "Resta qui.",
+  "o": {},
+  "va": "hann manarê.",
+  "legge": "hann ma-na-RÈ."
+ },
+ {
+  "it": "Torna indietro.",
+  "o": {},
+  "va": "vanarê 'anrâ.",
+  "legge": "va-na-RÈ ʼan-RÀ."
+ },
+ {
+  "it": "Andiamo adagio.",
+  "o": {},
+  "va": "'amavilmir 'azgâ.",
+  "legge": "ʼa-ma-VIL-mir ʼaz-GÀ."
+ },
+ {
+  "it": "Dove andiamo?",
+  "o": {},
+  "va": "'ana 'amavilmir hu",
+  "legge": "ʼA-na ʼa-ma-VIL-mir hu"
+ },
+ {
+  "it": "Questa strada è chiusa.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "khalaz han 'othun ne.",
+  "legge": "CA-laz han ʼO-tun ne."
+ },
+ {
+  "it": "Vai.",
+  "o": {},
+  "va": "'amavê.",
+  "legge": "ʼa-ma-VÈ."
+ },
+ {
+  "it": "Corri.",
+  "o": {},
+  "va": "kharanê.",
+  "legge": "ca-ra-NÈ."
+ },
+ {
+  "it": "Entra.",
+  "o": {},
+  "va": "'anagê.",
+  "legge": "ʼa-na-GÈ."
+ },
+ {
+  "it": "Esci.",
+  "o": {},
+  "va": "'agarê.",
+  "legge": "ʼa-ga-RÈ."
+ },
+ {
+  "it": "Sali.",
+  "o": {},
+  "va": "sharagê.",
+  "legge": "scia-ra-GÈ."
+ },
+ {
+  "it": "Scendi.",
+  "o": {},
+  "va": "shanarê.",
+  "legge": "scia-na-RÈ."
+ },
+ {
+  "it": "Apri la porta.",
+  "o": {},
+  "va": "'afarê e'ofur.",
+  "legge": "ʼa-fa-RÈ e-ʼO-fur."
+ },
+ {
+  "it": "Chiudi la porta.",
+  "o": {},
+  "va": "khalazê e'ofur.",
+  "legge": "ca-la-ZÈ e-ʼO-fur."
+ },
+ {
+  "it": "Prendi questo.",
+  "o": {},
+  "va": "khafarê han.",
+  "legge": "ca-fa-RÈ han."
+ },
+ {
+  "it": "Lascia stare.",
+  "o": {},
+  "va": "lanakhê.",
+  "legge": "la-na-CHÈ."
+ },
+ {
+  "it": "Non parlate.",
+  "o": {},
+  "va": "ûvatharê.",
+  "legge": "ù-va-ta-RÈ."
+ },
+ {
+  "it": "Non guardate.",
+  "o": {},
+  "va": "ûvazarê.",
+  "legge": "ù-va-za-RÈ."
+ },
+ {
+  "it": "Non toccate.",
+  "o": {},
+  "va": "ûthanagê.",
+  "legge": "ù-ta-na-GÈ."
+ },
+ {
+  "it": "Non entrate.",
+  "o": {},
+  "va": "û'anagê.",
+  "legge": "ù-ʼa-na-GÈ."
+ },
+ {
+  "it": "Non uscite.",
+  "o": {},
+  "va": "û'agarê.",
+  "legge": "ù-ʼa-ga-RÈ."
+ },
+ {
+  "it": "Non correte.",
+  "o": {},
+  "va": "ûkharanê.",
+  "legge": "ù-ca-ra-NÈ."
+ },
+ {
+  "it": "Non aspettate.",
+  "o": {},
+  "va": "û'akhashê.",
+  "legge": "ù-ʼa-ca-SCÈ."
+ },
+ {
+  "it": "Non chiedete.",
+  "o": {},
+  "va": "ûfashakhê.",
+  "legge": "ù-fa-scia-CHÈ."
+ },
+ {
+  "it": "Non pagate.",
+  "o": {},
+  "va": "ûshalavê.",
+  "legge": "ù-scia-la-VÈ."
+ },
+ {
+  "it": "Non mentite.",
+  "o": {},
+  "va": "ûmanathê.",
+  "legge": "ù-ma-na-TÈ."
+ },
+ {
+  "it": "Loro arrivano.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "vanarilsar sar ne.",
+  "legge": "va-na-RIL-sar sar ne."
+ },
+ {
+  "it": "Qualcuno arriva.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "vanarilsa 'ayman ne.",
+  "legge": "va-na-RIL-sa ʼAI-man ne."
+ },
+ {
+  "it": "Ci hanno visti.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "vazarsar mir ne.",
+  "legge": "va-ZAR-sar mir ne."
+ },
+ {
+  "it": "Qualcuno ci guarda.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "vazarilsa 'aymanen mir ne.",
+  "legge": "va-za-RIL-sa ʼai-MA-nen mir ne."
+ },
+ {
+  "it": "Nessuno si muove.",
+  "o": {},
+  "va": "'amavilsa lâman.",
+  "legge": "ʼa-ma-VIL-sa LÀ-man."
+ },
+ {
+  "it": "Scappa.",
+  "o": {},
+  "va": "bagarê.",
+  "legge": "ba-ga-RÈ."
+ },
+ {
+  "it": "Resta nascosto.",
+  "o": {},
+  "va": "manarê nashthâ.",
+  "legge": "ma-na-RÈ nasc-TÀ."
+ },
+ {
+  "it": "È armato.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "'aransa ne.",
+  "legge": "ʼa-RAN-sa ne."
+ },
+ {
+  "it": "Ho paura.",
+  "o": {},
+  "va": "'avarilmi thamrâ.",
+  "legge": "ʼa-va-RIL-mi tam-RÀ."
+ },
+ {
+  "it": "Non ho paura.",
+  "o": {},
+  "va": "û'avarilmi thamrâ.",
+  "legge": "Ù-ʼa-va-ril-mi tam-RÀ."
+ },
+ {
+  "it": "Qui dormono tutti.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "hann zaramilsar kull ne.",
+  "legge": "hann za-ra-MIL-sar kull ne."
+ },
+ {
+  "it": "Lui dorme.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "zaramilsa sa ne.",
+  "legge": "za-ra-MIL-sa sa ne."
+ },
+ {
+  "it": "Lei è sveglia.",
+  "o": {
+   "testimone": "tessitura"
+  },
+  "va": "khanarilsa sa she.",
+  "legge": "ca-na-RIL-sa sa sce."
+ },
+ {
+  "it": "Questo uomo dorme.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "zaramilsa han 'imân ne.",
+  "legge": "za-ra-MIL-sa han ʼi-MÀN ne."
+ },
+ {
+  "it": "Il Velo è sottile qui.",
+  "o": {
+   "testimone": "tessitura"
+  },
+  "va": "hann e'samlâ thenish she.",
+  "legge": "hann eʼ-sam-LÀ TE-nisc sce."
+ },
+ {
+  "it": "Hai rotto il Velo.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "ramafka e'samlâ ne.",
+  "legge": "ra-MAF-ka eʼ-sam-LÀ ne."
+ },
+ {
+  "it": "Il Paradosso ti ha trovato.",
+  "o": {
+   "testimone": "tessitura"
+  },
+  "va": "'anavsa î'nazkhâên ka she.",
+  "legge": "ʼa-NAV-sa ìʼ-naz-cà-ÈN ka sce."
+ },
+ {
+  "it": "Nessuno ti vede.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "vazarilsa lâmanen ka ne.",
+  "legge": "va-za-RIL-sa LÀ-ma-nen ka ne."
+ },
+ {
+  "it": "Nessuno ha visto.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "vazarsa lâman ne.",
+  "legge": "va-ZAR-sa LÀ-man ne."
+ },
+ {
+  "it": "Copri il segno.",
+  "o": {},
+  "va": "samalê e'farthâ.",
+  "legge": "sa-ma-LÈ eʼ-far-TÀ."
+ },
+ {
+  "it": "Adesso lavoro.",
+  "o": {
+   "consenso": "coincidente"
+  },
+  "va": "'adnath lavarilmi va.",
+  "legge": "ʼAD-nat la-va-RIL-mi va."
+ },
+ {
+  "it": "Ho aperto la porta.",
+  "o": {
+   "testimone": "occhi",
+   "consenso": "coincidente"
+  },
+  "va": "'afarmi e'ofur ne va.",
+  "legge": "ʼa-FAR-mi e-ʼO-fur ne va."
+ },
+ {
+  "it": "Ho spento la luce.",
+  "o": {
+   "testimone": "occhi",
+   "consenso": "coincidente"
+  },
+  "va": "shafarmi e'lakhshâ ne va.",
+  "legge": "scia-FAR-mi eʼ-lac-SCÀ ne va."
+ },
+ {
+  "it": "Sento la Tessitura.",
+  "o": {
+   "testimone": "tessitura"
+  },
+  "va": "'ashakhilmi î'tharmâ she.",
+  "legge": "ʼa-scia-CHIL-mi ìʼ-tar-MÀ sce."
+ },
+ {
+  "it": "Chiamo il mio Avatar.",
+  "o": {
+   "consenso": "coincidente"
+  },
+  "va": "vakharilmi î'shi'âr i mi va.",
+  "legge": "va-ca-RIL-mi ìʼ-sci-ʼÀR i mi va."
+ },
+ {
+  "it": "Il mio Avatar non parla.",
+  "o": {
+   "testimone": "avatar"
+  },
+  "va": "ûvatharilsa î'shi'âr i mi shi.",
+  "legge": "Ù-va-ta-ril-sa ìʼ-sci-ʼÀR i mi sci."
+ },
+ {
+  "it": "La mia Sfera è troppo bassa.",
+  "o": {
+   "testimone": "tessitura"
+  },
+  "va": "e'shafrâ i mi yathar ferib she.",
+  "legge": "eʼ-sciaf-RÀ i mi IA-tar FE-rib sce."
+ },
+ {
+  "it": "La mia Volontà è finita.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "banar e'valnâ i mi ne.",
+  "legge": "BA-nar eʼ-val-NÀ i mi ne."
+ },
+ {
+  "it": "Ho speso la Quintessenza.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "'avarilmi shafshâen î'ashnâ ne.",
+  "legge": "ʼa-va-RIL-mi sciaf-SCÀEN ì-ʼasc-NÀ ne."
+ },
+ {
+  "it": "Nascondi il mio lavoro.",
+  "o": {},
+  "va": "khalarê e'lavrâ i mi.",
+  "legge": "ca-la-RÈ eʼ-lav-RÀ i mi."
+ },
+ {
+  "it": "Ti ascolto.",
+  "o": {},
+  "va": "'ashakhilmi ka.",
+  "legge": "ʼa-scia-CHIL-mi ka."
+ },
+ {
+  "it": "Porto un dono.",
+  "o": {},
+  "va": "farakilmi zonur.",
+  "legge": "fa-ra-KIL-mi ZO-nur."
+ },
+ {
+  "it": "Prendi questo dono?",
+  "o": {},
+  "va": "khafarilka han zonur hu",
+  "legge": "ca-fa-RIL-ka han ZO-nur hu"
+ },
+ {
+  "it": "Che prezzo chiedi?",
+  "o": {},
+  "va": "fashakhilka kharmâen shalvâ hu",
+  "legge": "fa-scia-CHIL-ka car-MÀEN scial-VÀ hu"
+ },
+ {
+  "it": "Chiedo il passaggio.",
+  "o": {},
+  "va": "fashakhilmi e'fashgâ.",
+  "legge": "fa-scia-CHIL-mi eʼ-fasc-GÀ."
+ },
+ {
+  "it": "Ti chiedo la benedizione.",
+  "o": {},
+  "va": "vanazilka ka sar.",
+  "legge": "va-na-ZIL-ka ka sar."
+ },
+ {
+  "it": "Ho parlato con il fiume.",
+  "o": {
+   "testimone": "tessitura"
+  },
+  "va": "vatharmi e'akhvâum she.",
+  "legge": "va-TAR-mi e-ʼac-VÀUM sce."
+ },
+ {
+  "it": "La terra ha risposto.",
+  "o": {
+   "testimone": "tessitura"
+  },
+  "va": "'avarilsa e'thalshâen rashthâ she.",
+  "legge": "ʼa-va-RIL-sa eʼ-tal-SCÀEN rasc-TÀ sce."
+ },
+ {
+  "it": "Il Nodo respira.",
+  "o": {
+   "testimone": "tessitura"
+  },
+  "va": "balathilsa î'nakhshâ she.",
+  "legge": "ba-la-TIL-sa ìʼ-nac-SCÀ sce."
+ },
+ {
+  "it": "Sento il Nodo.",
+  "o": {
+   "testimone": "tessitura"
+  },
+  "va": "'ashakhilmi î'nakhshâ she.",
+  "legge": "ʼa-scia-CHIL-mi ìʼ-nac-SCÀ sce."
+ },
+ {
+  "it": "Ti devo una cosa.",
+  "o": {},
+  "va": "zavarilmi kaen mah.",
+  "legge": "za-va-RIL-mi kaen mah."
+ },
+ {
+  "it": "Mi devi una cosa.",
+  "o": {},
+  "va": "zavarilka mien mah.",
+  "legge": "za-va-RIL-ka mien mah."
+ },
+ {
+  "it": "Ho un debito con te.",
+  "o": {},
+  "va": "'avarilmi shalvâ kaum.",
+  "legge": "ʼa-va-RIL-mi scial-VÀ kaum."
+ },
+ {
+  "it": "Non ti devo niente.",
+  "o": {},
+  "va": "ûzavarilmi kaen lâmah.",
+  "legge": "Ù-za-va-ril-mi kaen LÀ-mah."
+ },
+ {
+  "it": "Non mi devi niente.",
+  "o": {},
+  "va": "ûzavarilka mien lâmah.",
+  "legge": "Ù-za-va-ril-ka mien LÀ-mah."
+ },
+ {
+  "it": "Il debito è chiuso.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "khalaz e'shalvâ ne.",
+  "legge": "CA-laz eʼ-scial-VÀ ne."
+ },
+ {
+  "it": "Il prezzo è troppo alto.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "e'shalvâ yathar 'elith ne.",
+  "legge": "eʼ-scial-VÀ IA-tar ʼE-lit ne."
+ },
+ {
+  "it": "Ho già pagato.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "kabar shalavsa ne.",
+  "legge": "KA-bar scia-LAV-sa ne."
+ },
+ {
+  "it": "Pagherò domani.",
+  "o": {},
+  "va": "yamnâs shalavâsmi.",
+  "legge": "iam-NÀS scia-la-VÀS-mi."
+ },
+ {
+  "it": "Non ho niente.",
+  "o": {},
+  "va": "û'avarilmi lâmah.",
+  "legge": "Ù-ʼa-va-ril-mi LÀ-mah."
+ },
+ {
+  "it": "Sei ferito.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "lazar ne.",
+  "legge": "LA-zar ne."
+ },
+ {
+  "it": "Mostrami la ferita.",
+  "o": {},
+  "va": "ravalê miar e'lozur.",
+  "legge": "ra-va-LÈ miar eʼ-LO-zur."
+ },
+ {
+  "it": "Curo la tua ferita.",
+  "o": {},
+  "va": "shanarilmi e'lozur i ka.",
+  "legge": "scia-na-RIL-mi eʼ-LO-zur i ka."
+ },
+ {
+  "it": "Guarirai.",
+  "o": {},
+  "va": "shanarâska.",
+  "legge": "scia-na-RÀS-ka."
+ },
+ {
+  "it": "Vivrai.",
+  "o": {},
+  "va": "vagarâska.",
+  "legge": "va-ga-RÀS-ka."
+ },
+ {
+  "it": "È morto.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "marash ne.",
+  "legge": "MA-rasc ne."
+ },
+ {
+  "it": "Prendi la mia mano.",
+  "o": {},
+  "va": "khafarê e'manshâ i mi.",
+  "legge": "ca-fa-RÈ eʼ-man-SCÀ i mi."
+ },
+ {
+  "it": "Ho finito.",
+  "o": {
+   "testimone": "occhi"
+  },
+  "va": "banarmi ne.",
+  "legge": "ba-NAR-mi ne."
+ },
+ {
+  "it": "Torniamo a casa.",
+  "o": {},
+  "va": "vanarilmir tharzâar.",
+  "legge": "va-na-RIL-mir tar-ZÀAR."
+ },
+ {
+  "it": "Ti ringrazio.",
+  "o": {},
+  "va": "ranarilmi ka.",
+  "legge": "ra-na-RIL-mi ka."
+ }
+]

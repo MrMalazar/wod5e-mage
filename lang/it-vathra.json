@@ -1,0 +1,117 @@
+{
+  "WOD5E_MAGE": {
+    "Vathra": {
+      "Titolo": "Vathrâ · il traduttore",
+      "Controllo": "Traduttore del Vathrâ",
+      "Pagine": {
+        "traduttore": "Traduttore",
+        "radice": "Radice",
+        "alfabeto": "Alfabeto",
+        "frasario": "Frasario"
+      },
+      "ScriviItaliano": "Scrivi in italiano",
+      "Segnaposto": "Frasi corte: un soggetto, un verbo, un oggetto. La virgola separa due frasi.",
+      "Mano": {
+        "filata": "Mano filata",
+        "sciolta": "Mano sciolta",
+        "PassaSciolta": "passa alla mano sciolta",
+        "PassaFilata": "torna alla mano filata"
+      },
+      "DaLeggere": "Da leggere ad alta voce",
+      "ComeSiLegge": "Come si legge: la sillaba in maiuscolo porta l'accento",
+      "SeServe": "Se serve",
+      "Gettoni": {
+        "testimone": {
+          "occhi": "l'ho visto",
+          "tessitura": "nella Tessitura",
+          "riferito": "me l'hanno detto",
+          "avatar": "l'ha detto l'Avatar"
+        },
+        "consenso": {
+          "coincidente": "il mondo ha acconsentito",
+          "volgare": "strappata al mondo"
+        },
+        "registro": {
+          "reale": "quello che è successo davvero"
+        },
+        "Eco": "lo dice già la tua frase"
+      },
+      "Ascolta": "Ascolta",
+      "CopiaLettura": "Copia la lettura",
+      "CopiaGlifi": "Copia i glifi",
+      "Copiato": "Copiato negli appunti.",
+      "CopiaNo": "Non riesco a copiare negli appunti.",
+      "SenzaVoce": "Questo browser non ha una voce per leggere la frase.",
+      "ChiCapisce": "Chi capisce",
+      "ChiCapisceNota": "In chat tutti vedono i glifi e la lettura. Il senso in italiano lo vedono il Narratore, chi scrive e i giocatori che accendi qui.",
+      "NessunGiocatore": "Nessun altro giocatore nel mondo.",
+      "Parla": "Parla: {nome}",
+      "Manda": "Manda in chat",
+      "Mandato": "Frase mandata in chat.",
+      "Vuoto": "Scrivi una frase prima di mandarla.",
+      "Manopole": {
+        "Titolo": "Tutte le manopole",
+        "testimone": {
+          "Nome": "Testimonianza",
+          "auto": "la legge dalla frase italiana",
+          "nessuna": "nessuna: verità che sta da sé",
+          "occhi": "ne: l'ho visto con gli occhi",
+          "tessitura": "she: l'ho sentito nella Tessitura",
+          "riferito": "ro: me l'hanno detto",
+          "avatar": "shi: me l'ha detto il mio Avatar"
+        },
+        "consenso": {
+          "Nome": "Consenso",
+          "nessuno": "nessuno: niente magia",
+          "coincidente": "va: la realtà ha acconsentito",
+          "volgare": "thak: strappata al mondo"
+        },
+        "modo": {
+          "Nome": "Modo",
+          "auto": "automatico",
+          "imperativo": "comando",
+          "racconto": "racconto"
+        },
+        "registro": {
+          "Nome": "Registro",
+          "consensuale": "consensuale: quello che è successo",
+          "reale": "sa-: quello che è successo davvero"
+        },
+        "risvegliato": {
+          "Nome": "Chi agisce",
+          "auto": "lo decide il lessico",
+          "si": "è risvegliato: î' e -ên",
+          "no": "dorme: e' e -en"
+        },
+        "nomiPropri": {
+          "Nome": "Nomi propri",
+          "lascia": "lasciali come sono",
+          "muta": "passali per la Mutazione"
+        }
+      },
+      "Carta": {
+        "Senso": "Il senso",
+        "Capiscono": "Capiscono"
+      },
+      "Radice": {
+        "Nota": "Scrivi una parola italiana e vedi la radice che le sta sotto, con tutti i suoi Modi.",
+        "Parola": "La parola italiana",
+        "Modo": "Modo",
+        "Vathra": "Vathrâ",
+        "Inciso": "Inciso",
+        "DalLessico": "dal lessico",
+        "DallaMutazione": "dalla Prima Mutazione",
+        "Regole": "Le sette regole"
+      },
+      "Alfabeto": {
+        "Nota": "Ogni segno sta nel suo riquadro: sopra la mano filata, sotto la sciolta.",
+        "Suoni": "I suoni che non si indovinano",
+        "SuoniNota": "Otto segni non si leggono come in italiano. Toccali e senti come suonano, detti lenti dentro una parola vera."
+      },
+      "Frasario": {
+        "Nota": "Tocca una frase per portarla nel traduttore; il triangolo la fa sentire.",
+        "Cerca": "Cerca una frase, in italiano o in Vathrâ"
+      }
+    }
+  }
+}

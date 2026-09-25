@@ -20,6 +20,8 @@ import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 import { NemicoSheet } from "./sheets/nemico-sheet.js";
 import { registraNemicoChat } from "./nemico-chat.js";
 import { registraHelperIcone } from "./icone-oggetti.js";
+import { apriVathra, mandaVathra, registraVathra } from "./vathra/traduttore.js";
+import { traduciTesto } from "./vathra/vathra.js";
 
 /**
  * Return the public API exposed by this module.
@@ -60,6 +62,13 @@ function createApi() {
 
       return actor.update(update);
     },
+
+    /** Il Vathrâ (25/9): il traduttore, la carta in chat, la traduzione nuda per le macro. */
+    vathra: Object.freeze({
+      apri: apriVathra,
+      manda: mandaVathra,
+      traduci: traduciTesto
+    }),
 
     /** Le Condizioni per il Master: la finestra, o l'assegnazione diretta. */
     condizioni: Object.freeze({
@@ -197,6 +206,8 @@ Hooks.once("init", () => {
   registerParadoxDice();
   // La creazione guidata (23/9): i testi del Narratore e l'apertura sul Mago nuovo.
   registraCreazioneGuidata();
+  // Il Vathrâ (25/9): il traduttore per tutti, la carta in chat col senso a chi capisce, le due mani fra i caratteri.
+  registraVathra();
 
   const module = game.modules.get(MODULE_ID);
   if (module) module.api = createApi();
