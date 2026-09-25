@@ -1688,7 +1688,7 @@
         "scoppio": "allo scoppio"
       },
       "InGioco": "In gioco: {n}",
-      "Aggiungi": "Aggiungi",
+      "TrascinaQui": "trascina qui un mago dagli Attori",
       "SenzaGiocatore": "senza giocatore",
       "ApriScheda": "Apri la scheda",
       "Togli": "Togli",
@@ -1703,7 +1703,7 @@
       "Nessuna": "nessuna",
       "AttiviCorti": "attivi",
       "PassiviCorti": "passivi",
-      "NessunMago": "Nessun mago nel Quadro: la Nuova sessione o «Aggiungi» li mettono in gioco.",
+      "NessunMago": "Nessun mago nel Quadro: la Nuova sessione li mette in gioco, oppure trascina qui un mago dagli Attori.",
       "ChiGioca": "Chi gioca stasera?",
       "ChiGiocaHint": "Spunta i maghi in gioco: entrano nel Quadro e nella Scheda del Paradosso. Chi non spunti resta fuori anche se preme Nuova sessione.",
       "NessunMagoNelMondo": "Nessun mago nel mondo.",
@@ -1714,11 +1714,14 @@
       "Finisce": "Finisce:",
       "FinisceNiente": "Nessun effetto addosso finisce col cambio di scena.",
       "PostoHint": "Il posto dissonante o assonante conta nel verdetto del lancio, non nei prezzi del menù.",
-      "AggiungiHint": "I maghi del mondo che non sono nel Quadro.",
+      "Trascina": {
+        "nonMago": "{name} non è un mago: nel Quadro entrano solo i maghi.",
+        "giaDentro": "{name} è già nel Quadro.",
+        "compendio": "{name} viene da un compendio: importalo fra gli Attori, poi trascinalo qui."
+      },
       "Inizia": "Inizia",
       "Cambia": "Cambia",
       "SessioneIniziata": "Nuova sessione: {n} maghi nel Quadro, riserva a zero.",
-      "NessunoDaAggiungere": "Tutti i maghi del mondo sono già nel Quadro.",
       "Speso": "{nome}: {prezzo} punti spesi, ne restano {resto}.",
       "PrezzoManca": "Manca un numero per il prezzo: scegli il Volgare, la soglia o i pallini.",
       "LogCopia": "{kind} di {name}",
@@ -1757,7 +1760,7 @@
         "scena": "per la scena",
         "sessione": "per la sessione"
       },
-      "CosaFate": "Cosa fate",
+      "Possibilita": "Possibilità",
       "FuoriQuadro": "fuori dal Quadro",
       "NessunaVoceQui": "Nessuna voce di questa famiglia nella scena scelta.",
       "Rimbalzo": "Il rimbalzo che scatta",

@@ -420,10 +420,36 @@ assert.equal(getOrologi()[0].pieni, 1, "la Carica avanza col Volgare");
   assert.match(html, /Quadrante/);
   assert.match(html, /Muro di ghiaccio <small>Volgare · soglia 5<\/small>/);
   assert.match(html, /niente addosso/);
-  assert.match(html, /data-action="magoAggiungi"/);
+  assert.doesNotMatch(html, /magoAggiungi/, "via il tasto Aggiungi e la sua finestra (25/9)");
+  assert.match(html, /wod5e-mage-quadro-trascina[\s\S]*trascina qui un mago dagli Attori/, "in testa, l'invito a trascinare");
   const stato = statusMago(ianira, { localize });
   assert.deepEqual(stato.utenti, []);
   assert.ok(stato.vuoto);
+}
+
+// 7b. Il trascinamento dagli Attori (25/9): un mago del mondo entra in coda; un PNG che non è mago, un mago già dentro
+// o un attore di compendio avvisano e non entrano; un oggetto resta muto.
+{
+  globalThis.fromUuid = async (uuid) => actors.find((a) => a.id === String(uuid).split(".").pop()) ?? null;
+  const prima = sim.notifiche.length;
+  assert.equal((await app.accogli({ type: "Actor", uuid: "Actor.n1" })).motivo, "nonMago");
+  assert.match(sim.notifiche.at(-1), /^!Guardia non è un mago/);
+  assert.equal((await app.accogli({ type: "Actor", uuid: "Actor.a1" })).motivo, "giaDentro");
+  assert.match(sim.notifiche.at(-1), /^!Guendalina è già nel Quadro/);
+  assert.equal((await app.accogli({ type: "Actor", uuid: "Compendium.wod5e-mage.maghi.Actor.a3" })).motivo, "compendio");
+  assert.match(sim.notifiche.at(-1), /viene da un compendio/);
+  assert.equal((await app.accogli({ type: "Item", uuid: "Item.x1" })).ok, false);
+  assert.equal((await app.accogli(null)).ok, false);
+  assert.equal(sim.notifiche.length, prima + 3, "solo i tre casi avvisano");
+  assert.deepEqual(attoriDelQuadro().map((a) => a.id), ["a1", "a2"], "nessuno è entrato");
+  const esito = await app.accogli({ type: "Actor", uuid: "Actor.a3" });
+  assert.equal(esito.ok, true);
+  assert.deepEqual(attoriDelQuadro().map((a) => a.id), ["a1", "a2", "a3"], "Ianira entra in coda");
+  const { html } = await contesto("giocatori");
+  assert.match(html, /In gioco: 3/);
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.magoTogli.call(app, { preventDefault() {} }, { dataset: { id: "a3" } });
+  assert.deepEqual(attoriDelQuadro().map((a) => a.id), ["a1", "a2"]);
+  delete globalThis.fromUuid;
 }
 
 // 8. Il Cambio scena: Ritorno (fino al giro dopo) finisce, la scena diventa la 2, Rituale.

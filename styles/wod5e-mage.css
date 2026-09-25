@@ -482,7 +482,6 @@
   color: var(--mage-inchiostro);
 }
 
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-section-title {
   align-items: center;
   color: var(--mage-oro);
@@ -948,24 +947,6 @@
   padding: 1rem;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-hint {
   margin: 0.75rem 0 1rem;
   text-align: center;
@@ -1117,14 +1098,6 @@
   text-align: center;
   width: 68px;
 }
-
-
-
-
-
-
-
-
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-arete {
   align-items: center;
@@ -1316,8 +1289,6 @@
   width: 15px;
 }
 
-
-
 /* On/Off (6/9): acceso in oro, spento sul fondo incassato. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ongoing-toggle {
   background: var(--mage-incavo);
@@ -1368,12 +1339,6 @@
   color: #e05a5a;
   font-size: 0.85rem;
 }
-
-
-
-
-
-
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-content {
   border: 1px solid var(--mortal-color-2);
@@ -1519,42 +1484,6 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-concept-field prose-mirror .editor-content *:not(a) {
   color: var(--mage-inchiostro);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ==========================================================================
    La carta del tiro in chat: sopra i dadi la vittoria automatica e i
@@ -1708,8 +1637,6 @@
   height: 40px;
   width: 40px;
 }
-
-
 
 /* Le due finestre del tiro vestono i colori della scheda. */
 .application.wod5e-mage.wod5e-mage-roll-dialog .window-content {
@@ -2336,9 +2263,6 @@
     height: 125px;
   }
 
-
-
-
 }
 
 /* Le Abilità Essenziali sono una fila unica alfabetica: sotto le colonne
@@ -2465,90 +2389,6 @@
   width: 100%;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-content {
-  margin: 0.75rem auto 0;
-  width: calc(100% - 1.5rem);
-}
-
-/* Personaggio nella gabbia a tendine: identità su due colonne, poi le
-   tavole di Ancore e Convinzioni con la riga del + accanto al suggerimento. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-grid {
-  display: grid;
-  gap: 0.75rem 1.25rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-bottom: 0.9rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-field > span {
-  color: var(--mage-oro-chiaro);
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-field > input,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-field > textarea,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-anchor-grid > input,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-grid > input {
-  --input-text-color: var(--mage-inchiostro);
-  color: var(--mage-inchiostro);
-  min-width: 0;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-identity-field > textarea {
-  background: var(--mage-carta);
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 3px;
-  font-size: 0.85rem;
-  padding: 0.3rem 0.4rem;
-  resize: vertical;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-row-head {
-  align-items: center;
-  display: flex;
-  gap: 0.5rem;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-row-hint {
   color: var(--mage-tenue);
   font-size: 0.75rem;
@@ -2566,201 +2406,6 @@
   min-height: 24px;
   padding: 0;
   width: 24px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-anchor-grid,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-grid {
-  align-items: start;
-  display: grid;
-  gap: 0.3rem 0.4rem;
-  margin-bottom: 1rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-mini-textarea {
-  --input-text-color: var(--mage-inchiostro);
-  background: var(--mage-carta);
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 3px;
-  color: var(--mage-inchiostro);
-  font-size: 0.85rem;
-  min-width: 0;
-  padding: 0.3rem 0.4rem;
-  resize: vertical;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-anchor-grid {
-  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr) 26px;
-}
-
-/* Le Ancore a sette righe (25/9): una carta per Ancora, il nome in testa con
-   ruolo, mestiere ed età, sotto cosa ti dà e la Convinzione legata, poi cosa
-   non sa e dove morde, in coda le note. Il dado tira i campi vuoti. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-row-head > .wod5e-mage-ancora-genera {
-  margin-left: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancore {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora {
-  background: rgb(152 119 43 / 8%);
-  border: 1px solid rgb(152 119 43 / 45%);
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  padding: 0.4rem 0.5rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga {
-  align-items: center;
-  display: flex;
-  gap: 0.35rem;
-  min-width: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga > label {
-  align-items: center;
-  display: flex;
-  flex: 1 1 0;
-  gap: 0.3rem;
-  min-width: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga > label > span {
-  color: var(--mage-oro);
-  flex: 0 0 auto;
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga input,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga select,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga > label > input,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga > label > select {
-  --input-text-color: var(--mage-inchiostro);
-  background: var(--mage-carta);
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 3px;
-  color: var(--mage-inchiostro);
-  flex: 1 1 0;
-  font-size: 0.85rem;
-  height: 26px;
-  margin: 0;
-  min-width: 0;
-  padding: 0 0.35rem;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-testa > input:first-child {
-  flex: 1.4 1 0;
-  font-weight: 700;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-testa > select {
-  flex: 1 1 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-eta {
-  flex: 0 0 3.2rem !important;
-  text-align: center;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-tasto {
-  align-items: center;
-  display: inline-flex;
-  flex: 0 0 26px;
-  height: 26px;
-  justify-content: center;
-  margin: 0;
-  min-height: 26px;
-  padding: 0;
-  width: 26px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-note {
-  font-size: 0.8rem;
-  min-height: 1.8rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-grid {
-  grid-template-columns: minmax(110px, 0.4fr) minmax(0, 1.6fr) 26px;
-  margin-bottom: 0.3rem;
-}
-
-/* Ogni Convinzione su tre righe (9/9): la riga del tipo e del testo, poi
-   «La servi quando» e «La attraversi quando», ognuna col nome a sinistra e
-   la descrizione a destra; fra una Convinzione e l'altra c'è aria. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-list {
-  display: grid;
-  gap: 1.1rem;
-  margin-bottom: 1rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction {
-  border-bottom: 1px solid rgb(152 119 43 / 30%);
-  padding-bottom: 0.9rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-when {
-  display: grid;
-  gap: 0.45rem;
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-when > label {
-  align-items: start;
-  display: grid;
-  gap: 0.5rem;
-  grid-template-columns: 7.5rem minmax(0, 1fr);
-  min-width: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-when > label > span {
-  color: var(--mage-oro);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1.3;
-  padding-top: 0.35rem;
-  text-transform: uppercase;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-when textarea {
-  resize: vertical;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-anchor-grid, .wod5e-mage-conviction-grid) > span {
-  color: var(--mage-oro);
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-grid > select {
-  margin: 0;
-  min-width: 0;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-anchor-grid, .wod5e-mage-conviction-grid) > button {
-  align-items: center;
-  display: inline-flex;
-  height: 26px;
-  justify-content: center;
-  margin: 0;
-  min-height: 26px;
-  padding: 0;
-  width: 26px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-row-empty {
@@ -2919,9 +2564,6 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riepilogo-check.ok {
   color: var(--mage-oro);
 }
-
-
-
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-note-bottom .note-container prose-mirror {
   min-height: 16rem;
@@ -3128,8 +2770,6 @@
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-custom-skill-delete:hover {
   color: var(--mage-rosso-chiaro);
 }
-
-
 
 /* Le Specializzazioni: Abilità, nome, matita, cestino. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-specialties-grid {
@@ -3680,20 +3320,6 @@
   width: auto;
 }
 
-
-
-/* Il nome centrato sopra la fila, grande come «Salute»; più e meno ai lati. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-head {
-  align-items: center;
-  font-size: 16pt;
-  gap: 0.6rem;
-  justify-content: center;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-head .resource-control {
-  font-size: 12pt;
-}
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom .resource-counter .resource-counter-step {
   height: 22px;
   width: 22px;
@@ -3765,7 +3391,6 @@
   width: 22px;
 }
 
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-nosphere {
   border: 1px dashed rgb(152 119 43 / 45%);
   border-radius: 50%;
@@ -3788,30 +3413,6 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ============================================================
    THE WHEEL, ARC OR BAR — the player picks (client setting).
@@ -4236,10 +3837,6 @@
 .wod5e-mage-archivio-content .lead {
   color: var(--mage-oro-chiaro, #e8c766);
 }
-
-
-
-
 
 .wod5e-mage-strumenti-consigli .wod5e-mage-archivio-list {
   max-height: 60vh;
@@ -4742,77 +4339,10 @@
   border: 1px solid var(--mage-oro-scuro);
 }
 
-/* Personaggio su due colonne: a sinistra Concetto, Ambizione, Desiderio e
-   Ancore; a destra la Saggezza e le Convinzioni. Nella colonna stretta i
-   campi dell'identità stanno uno sotto l'altro. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-columns {
-  align-items: start;
-  display: grid;
-  gap: 1.25rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-col {
-  min-width: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-col .wod5e-mage-identity-grid {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-
 @media (width <= 900px) {
   .wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-columns {
     grid-template-columns: minmax(0, 1fr);
   }
-}
-
-
-
-
-
-
-
-
-
-
-
-/* Lo stato del Risvegliato (una casella, per ora), in cima al Personaggio:
-   la Saggezza sta nelle Risorse della prima pagina (24/9 sera). */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-row {
-  align-items: stretch;
-  display: flex;
-  gap: 0.75rem;
-  margin: 0.5rem 0 1rem;
-}
-
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-status {
-  background: var(--mage-velluto);
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 4px;
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  gap: 0.35rem;
-  min-width: 0;
-  padding: 0.5rem 0.9rem 0.6rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-status > .wod5e-mage-wisdom-head {
-  color: var(--mage-oro-chiaro);
-  display: block;
-  text-align: center;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-status > input {
-  --input-text-color: var(--mage-inchiostro);
-  background: var(--mage-carta);
-  border: 1px solid var(--mage-oro-scuro);
-  color: var(--mage-inchiostro);
-  height: 30px;
-  text-align: center;
-  width: 100%;
 }
 
 /* Condizioni (compromesso di Blue): sopra la striscia dei simboli accesi,
@@ -5223,14 +4753,6 @@
   border-color: var(--mage-oro, #c9a14a);
   border-style: dashed;
 }
-
-
-
-
-
-
-
-
 
 /* La parola PARADOSSO sulla Ruota è un tasto: lo Scoppio, solo i rossi. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-magick-end > .wod5e-mage-paradox-burst {
@@ -8265,7 +7787,6 @@
   line-height: 1;
 }
 
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-pastiglia {
   align-items: stretch;
   background: var(--mage-riga-fondo);
@@ -10399,9 +9920,13 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-testa > .wod5e-mage-ongoing-marks {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   margin-left: auto;
-  white-space: nowrap;
+  min-width: 0;
+  row-gap: 3px;
+  white-space: normal;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-testa > .wod5e-mage-ongoing-toggle,
@@ -10427,6 +9952,14 @@
 
 .wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-atto-nome {
   font-weight: 600;
+}
+
+/* Il nome non sparisce più sotto le pastiglie (Blue, 25/9 sera): tiene almeno
+   sette rem, e le pastiglie vanno a capo quando non c'è posto; il cestino
+   resta nella carta. */
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-atto-testa > input.wod5e-mage-atto-nome {
+  flex: 1 1 7rem;
+  min-width: 7rem;
 }
 
 /* L'effetto su più righe (25/9): due righe di partenza, cresce col testo. */
@@ -10512,14 +10045,16 @@
   grid-column: 1 / -1;
 }
 
+/* L'etichetta a larghezza fissa (Blue, 25/9 sera): Lanciata da, Mantenuta da,
+   Composizione, Soglia e Bonus e malus partono dalla stessa colonna. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-atto-campo > span {
   color: var(--mage-oro);
-  flex: 0 0 auto;
+  flex: 0 0 var(--atto-etichetta, 6.4rem);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.03em;
+  line-height: 1.15;
   text-transform: uppercase;
-  white-space: nowrap;
 }
 
 .wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-atto-campo > input[type="text"],
@@ -11838,7 +11373,6 @@
     grid-template-columns: 1fr;
   }
 }
-
 
 /* ------------------------------------------------------------------ */
 /* La creazione guidata (Blue, 21/9 e 23/9): la finestra a passi, come  */
@@ -14204,7 +13738,6 @@
   content: "";
 }
 
-
 /* ------------------------------------------------------------------ */
 /* Il Quadro del Narratore (Blue, 24/9): una finestra sola in tre modi  */
 /* (il contatore del Paradosso, il menù del Paradosso, i giocatori),    */
@@ -15050,6 +14583,25 @@
   justify-content: space-between;
 }
 
+/* Il trascinamento dagli Attori (25/9): in testa ai giocatori la scritta che
+   invita; mentre un attore passa sul Quadro la cornice s'accende d'oro. */
+.application.wod5e-mage-quadro .wod5e-mage-quadro-trascina {
+  align-items: center;
+  color: var(--quadro-tenue);
+  display: inline-flex;
+  font-size: 13px;
+  font-style: italic;
+  gap: 6px;
+}
+
+.application.wod5e-mage-quadro.trascinando .wod5e-mage-quadro-trascina {
+  color: var(--mage-oro);
+}
+
+.application.wod5e-mage-quadro.trascinando .window-content {
+  box-shadow: inset 0 0 0 2px var(--mage-oro), inset 0 0 18px rgb(217 168 39 / 30%);
+}
+
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago {
   background: var(--mage-riga-fondo);
   border: 1px solid var(--mage-oro-tenue);
@@ -15366,4 +14918,185 @@
 .wod5e-mage-menu-card .wod5e-mage-menu-poi .wod5e-mage-roll-value {
   font-size: 0.9rem;
   opacity: 0.9;
+}
+
+/* ==========================================================================
+   LA BUSSOLA COME LA MAGICK IN ATTO (Blue, 25/9 sera): il titolo di pagina e
+   le misure della pagina Magick (stesso margine, stessa distanza fra i
+   riquadri), riquadri col titolo d'oro, carte scure, campi trasparenti con la
+   riga d'oro sotto, etichette in oro maiuscolo a larghezza fissa, così le
+   caselle stanno in colonna. Niente più caselle crema. A sinistra Concetto e
+   Cronaca con le Ancore, a destra lo Stato e le Convinzioni.
+   ========================================================================== */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-columns {
+  --bussola-etichetta: 7.6rem;
+  align-items: start;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-personaggio-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* Nelle Convinzioni l'etichetta più lunga («La attraversi quando») sta su una riga. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-convinzioni {
+  --bussola-etichetta: 9.4rem;
+}
+
+/* La carta: il fondo delle righe, come la Magick in atto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bussola-carta {
+  background: var(--mage-riga-fondo);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 4px 6px 5px 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bussola-campi {
+  display: grid;
+  gap: 3px 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bussola-campo {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bussola-campo.largo {
+  grid-column: 1 / -1;
+}
+
+/* L'etichetta a larghezza fissa: le caselle partono tutte dalla stessa colonna. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bussola-campo > span {
+  color: var(--mage-oro);
+  flex: 0 0 var(--bussola-etichetta);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+/* I campi: trasparenti, la riga d'oro sotto, il testo del fondo scuro. */
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-bussola-campo > input[type="text"],
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-bussola-campo > select,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-bussola-campo > textarea,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora-testa > input[type="text"],
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora-testa > select,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-conviction-testa > input[type="text"],
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-conviction-testa > select,
+.wod5e-mage.wod5e.actor.sheet .window-content textarea.wod5e-mage-bussola-note {
+  --input-text-color: var(--mage-testo);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--mage-oro-tenue);
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--mage-testo);
+  flex: 1 1 0;
+  font-size: 0.8rem;
+  height: 20px;
+  margin: 0;
+  min-width: 0;
+  padding: 0 2px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-bussola-campo > :is(input, select, textarea):focus,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora-testa > :is(input, select):focus,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-conviction-testa > :is(input, select):focus,
+.wod5e-mage.wod5e.actor.sheet .window-content textarea.wod5e-mage-bussola-note:focus {
+  border-bottom-color: var(--mage-oro);
+  box-shadow: none;
+  outline: none;
+}
+
+/* Le tendine (il ruolo, la Convinzione legata, il gruppo): scure anche aperte. */
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-bussola-campo > select,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora-testa > select,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-conviction-testa > select {
+  cursor: pointer;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-personaggio-columns :is(select > option, select > optgroup) {
+  background: var(--mage-cassetto-fondo);
+  color: var(--mage-testo);
+}
+
+/* Il testo lungo (quando si attiva, la servi, la attraversi, le note): cresce col testo. */
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-bussola-campo > textarea,
+.wod5e-mage.wod5e.actor.sheet .window-content textarea.wod5e-mage-bussola-note {
+  field-sizing: content;
+  font-family: inherit;
+  height: auto;
+  line-height: 1.35;
+  min-height: 1.5em;
+  resize: vertical;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content textarea.wod5e-mage-bussola-note {
+  color: var(--mage-tenue);
+  margin-left: 2px;
+  width: 100%;
+}
+
+/* Il libro, il dado e il cestino nelle righe: i tasti piccoli dei riquadri, a filo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bussola-campo > .wod5e-mage-riq-tasto-piccolo,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-testa > .wod5e-mage-riq-tasto-piccolo,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-testa > .wod5e-mage-riq-tasto-piccolo {
+  flex: 0 0 auto;
+}
+
+/* La testa dell'Ancora (nome, ruolo, mestiere, età, dado, cestino) e della
+   Convinzione (gruppo, testo, cestino). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-testa,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-testa {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  min-height: 24px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora-testa > input:first-child,
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-conviction-testa > input[type="text"] {
+  font-weight: 600;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora-testa > input:first-child {
+  flex: 1.4 1 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora-testa > input.wod5e-mage-ancora-eta {
+  flex: 0 0 3rem;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-conviction-testa > select {
+  flex: 0 0 8.5rem;
+}
+
+/* Lo stato del Risvegliato: la casella sola, al centro. */
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-riq-stato input[type="text"] {
+  text-align: center;
+}
+
+/* Niente Ancore, niente Convinzioni: la riga tratteggiata dei riquadri. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bussola-vuoto {
+  border: 1px dashed var(--mage-oro-tenue);
+  border-radius: 6px;
+  color: var(--mage-tenue);
+  font-size: 0.8rem;
+  margin: 0;
+  padding: 6px 8px;
 }

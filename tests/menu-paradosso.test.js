@@ -335,7 +335,7 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.ok(!menu.includes("{{lowercase"), "niente helper che Foundry non ha");
   assert.ok(quadro.includes("#testiAperti") && !quadro.includes("#cassetti"), "il testo si apre a richiesta, i cassetti non ci sono più");
   const giocatori = readFileSync(new URL("../templates/quadro/giocatori.hbs", import.meta.url), "utf8");
-  for (const marker of ['data-action="magoAggiungi"', 'data-action="attivoTogli"', 'data-action="schedaApri"', "WOD5E_MAGE.Menu.Attivi", "WOD5E_MAGE.Menu.Passivi", "WOD5E_MAGE.Menu.MagickInAtto"]) {
+  for (const marker of ['wod5e-mage-quadro-trascina', "WOD5E_MAGE.Menu.TrascinaQui", 'data-action="attivoTogli"', 'data-action="schedaApri"', "WOD5E_MAGE.Menu.Attivi", "WOD5E_MAGE.Menu.Passivi", "WOD5E_MAGE.Menu.MagickInAtto"]) {
     assert.ok(giocatori.includes(marker), `giocatori.hbs: manca ${marker}`);
   }
   const sessione = readFileSync(new URL("../templates/dialogs/nuova-sessione-narratore.hbs", import.meta.url), "utf8");
@@ -343,7 +343,7 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   // Le chiavi di lingua usate dal Quadro esistono in it.json e en.json.
   const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE;
   const en = JSON.parse(readFileSync(new URL("../lang/en.json", import.meta.url), "utf8")).WOD5E_MAGE;
-  const sorgenti = ["scripts/quadro-narratore.js", "scripts/menu-paradosso.js", "scripts/paradosso-narratore.js", "templates/quadro/testa.hbs", "templates/quadro/contatore.hbs", "templates/quadro/menu.hbs", "templates/quadro/giocatori.hbs", "templates/dialogs/nuova-sessione-narratore.hbs", "templates/dialogs/cambio-scena.hbs", "templates/dialogs/aggiungi-maghi.hbs"]
+  const sorgenti = ["scripts/quadro-narratore.js", "scripts/menu-paradosso.js", "scripts/paradosso-narratore.js", "templates/quadro/testa.hbs", "templates/quadro/contatore.hbs", "templates/quadro/menu.hbs", "templates/quadro/giocatori.hbs", "templates/dialogs/nuova-sessione-narratore.hbs", "templates/dialogs/cambio-scena.hbs"]
     .map((file) => readFileSync(new URL(`../${file}`, import.meta.url), "utf8")).join("\n");
   const chiavi = new Set([...sorgenti.matchAll(/WOD5E_MAGE\.((?:Menu|Paradosso)\.[A-Za-z0-9_.]*[A-Za-z0-9_])/g)].map((m) => m[1]));
   const leggi = (albero, chiave) => chiave.split(".").reduce((nodo, parte) => (nodo && typeof nodo === "object" ? nodo[parte] : undefined), albero);
