@@ -1,7 +1,7 @@
 {
   "WOD5E_MAGE": {
     "Vathra": {
-      "Titolo": "Vathrâ · the translator",
+      "Titolo": "Vathrâ",
       "Controllo": "Vathrâ translator",
       "Pagine": {
         "traduttore": "Translator",
@@ -9,17 +9,12 @@
         "alfabeto": "Alphabet",
         "frasario": "Phrasebook"
       },
-      "ScriviItaliano": "Write in Italian",
-      "Segnaposto": "Short sentences, in Italian: a subject, a verb, an object. A comma splits two clauses.",
+      "ScriviItaliano": "Write in Italian…",
       "Mano": {
-        "filata": "Spun hand",
-        "sciolta": "Loose hand",
-        "PassaSciolta": "switch to the loose hand",
-        "PassaFilata": "back to the spun hand"
+        "PassaSciolta": "Switch to the loose hand",
+        "PassaFilata": "Back to the spun hand"
       },
-      "DaLeggere": "To read aloud",
-      "ComeSiLegge": "How to read it: the capitalised syllable carries the stress",
-      "SeServe": "If needed",
+      "ComeSiLegge": "How to read it",
       "Gettoni": {
         "testimone": {
           "occhi": "I saw it",
@@ -37,45 +32,21 @@
         "Eco": "your sentence already says it"
       },
       "Ascolta": "Listen",
-      "CopiaLettura": "Copy the reading",
       "CopiaGlifi": "Copy the glyphs",
       "Copiato": "Copied to the clipboard.",
       "CopiaNo": "Could not copy to the clipboard.",
       "SenzaVoce": "This browser has no voice to read the sentence.",
-      "ChiCapisce": "Who understands",
-      "ChiCapisceNota": "In chat everyone sees the glyphs and the reading. The Italian meaning is shown to the Storyteller, to the writer and to the players you switch on here.",
+      "ChiCapisce": "Understood by",
+      "ChiCapisceNota": "Everyone sees the glyphs and the reading. The Italian meaning is shown to the Storyteller, to the writer and to the players switched on here.",
       "NessunGiocatore": "No other players in the world.",
-      "Parla": "Speaking: {nome}",
-      "Manda": "Send to chat",
       "Mandato": "Sentence sent to chat.",
       "Vuoto": "Write a sentence before sending it.",
       "Manopole": {
-        "Titolo": "All the dials",
-        "testimone": {
-          "Nome": "Evidence",
-          "auto": "read it from the Italian sentence",
-          "nessuna": "none: a truth that stands on its own",
-          "occhi": "ne: I saw it with my own eyes",
-          "tessitura": "she: I felt it in the Tapestry",
-          "riferito": "ro: I was told",
-          "avatar": "shi: my Avatar told me"
-        },
-        "consenso": {
-          "Nome": "Consent",
-          "nessuno": "none: no magic",
-          "coincidente": "va: reality consented",
-          "volgare": "thak: torn from the world"
-        },
         "modo": {
           "Nome": "Mood",
           "auto": "automatic",
           "imperativo": "command",
           "racconto": "narration"
-        },
-        "registro": {
-          "Nome": "Register",
-          "consensuale": "consensual: what happened",
-          "reale": "sa-: what truly happened"
         },
         "risvegliato": {
           "Nome": "Who acts",
@@ -90,28 +61,19 @@
         }
       },
       "Carta": {
-        "Senso": "The meaning",
-        "Capiscono": "Understood by"
+        "Capiscono": "Who understands"
       },
       "Radice": {
-        "Nota": "Write an Italian word and see the root beneath it, with all its Modes.",
-        "Parola": "The Italian word",
-        "Modo": "Mode",
-        "Vathra": "Vathrâ",
-        "Inciso": "Carved",
+        "Parola": "An Italian word",
         "DalLessico": "from the lexicon",
         "DallaMutazione": "from the First Mutation",
         "Regole": "The seven rules"
       },
-      "Alfabeto": {
-        "Nota": "Each sign sits in its own box: the spun hand above, the loose hand below.",
-        "Suoni": "The sounds you cannot guess",
-        "SuoniNota": "Eight signs are not read as in Italian. Touch them to hear them, said slowly inside a real word."
-      },
       "Frasario": {
-        "Nota": "Touch a sentence to bring it into the translator; the triangle plays it.",
-        "Cerca": "Search a sentence, in Italian or in Vathrâ"
-      }
+        "Cerca": "Search a sentence"
+      },
+      "MandaCome": "Send as {nome}",
+      "Particelle": "Particles and dials"
     }
   }
 }

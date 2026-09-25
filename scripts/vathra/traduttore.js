@@ -4,12 +4,16 @@
  * 03_FABBRICA/vathra portata nel modulo:
  *
  * - la finestra, per tutti: Traduttore (la frase, i glifi nelle due mani, la
- *   lettura, come si legge, la glossa, i gettoni delle particelle, Ascolta,
- *   tutte le manopole), Radice (i sette Modi), Alfabeto (la tavola e gli
- *   otto suoni), Frasario (le frasi di scena e le cento da tavolo);
- * - la carta in chat: glifi, lettura e come si legge per tutti; il senso in
- *   italiano e la glossa per il Narratore, per chi scrive e per i giocatori
- *   accesi all'invio (li si può accendere anche dopo, dalla carta);
+ *   lettura col ▶, chi capisce, Manda; particelle e manopole chiuse),
+ *   Frasario (le frasi di scena e le cento da tavolo), Radice (i sette
+ *   Modi), Alfabeto (la tavola, coi suoni registrati);
+ * - la carta in chat: glifi e lettura col ▶ per tutti; il senso in italiano
+ *   per il Narratore, per chi scrive e per i giocatori accesi all'invio (li
+ *   si accende anche dopo, dal tasto piccolo della carta);
+ *
+ * La forma è quella semplificata chiesta da Blue il 25/9 («riduci il
+ * bombardamento informativo»): come si legge e la glossa stanno nei
+ * suggerimenti al passaggio del mouse, non a schermo.
  * - il tasto nella barra dei token e il comando «/vathra <frase>»;
  * - le due mani fra i caratteri di Foundry, per i diari e il Testo sulla mappa.
  *
@@ -22,7 +26,7 @@ import { isChiaro, TEMA_CLASSE, TEMA_SETTING } from "../tema.js";
 import { LETTERE, REGOLE, SUONI } from "./dati.js";
 import { perLaVoce } from "./lettura.js";
 import {
-  capisce, datiCarta, fraseCorrisponde, fraseDelFrasario, frasarioTradotto, leggiComando, MANOPOLE,
+  capisce, datiCarta, fraseCorrisponde, fraseDelFrasario, frasarioTradotto, leggiComando, MANOPOLE, MANOPOLE_TENDINA,
   normalizzaOpzioni, OPZIONI_BASE, opzioniFrase, PAGINE, radice, registrazione, statoGettoni,
   toggleCapisce, toggleGettone, traduciTesto, VATHRA_FLAG
 } from "./vathra.js";
@@ -36,6 +40,8 @@ const TEMPLATE_CARTA = `${RADICE_MODULO}/templates/vathra/carta.hbs`;
 
 const localize = (key) => game.i18n.localize(key);
 const format = (key, data) => game.i18n.format(key, data);
+/** Il suggerimento della lettura: «Come si legge: va-ca-RIL-mi …». */
+const titoloLegge = (legge) => (legge ? `${localize("WOD5E_MAGE.Vathra.ComeSiLegge")}: ${legge}` : "");
 const escape = (testo) => String(testo ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 /* ------------------------------------------------------------------ */
@@ -135,10 +141,7 @@ export async function mandaVathra({ testo = "", opzioni = {}, mano = "filata", c
     return null;
   }
   const dati = datiCarta({ testo, traduzione, mano, capiscono, autoreId: game.user?.id ?? null });
-  const content = await foundry.applications.handlebars.renderTemplate(TEMPLATE_CARTA, {
-    ...dati,
-    etichettaLegge: localize("WOD5E_MAGE.Vathra.ComeSiLegge")
-  });
+  const content = await foundry.applications.handlebars.renderTemplate(TEMPLATE_CARTA, { ...dati, leggeTitolo: titoloLegge(dati.legge) });
   return ChatMessage.create({
     speaker: ChatMessage.getSpeaker(),
     content,
@@ -150,75 +153,99 @@ function autoreDi(message) {
   return message?.author?.id ?? message?.user?.id ?? message?._source?.author ?? message?._source?.user ?? null;
 }
 
+/** Le carte di cui il Narratore (o chi ha scritto) ha aperto la riga dei giocatori: restano aperte dopo un clic. */
+const chiAperti = new Set();
+
+function bottone(doc, classe, icona, etichetta) {
+  const b = doc.createElement("button");
+  b.type = "button";
+  b.className = classe;
+  b.setAttribute("aria-label", etichetta);
+  b.title = etichetta;
+  b.innerHTML = `<i class="${icona}" aria-hidden="true"></i>`;
+  return b;
+}
+
 /**
- * La carta, per chi la guarda: Ascolta per tutti; il senso per chi capisce;
- * per il Narratore e per chi l'ha scritta, i giocatori da accendere o
- * spegnere dopo l'invio (un tiro riuscito di Poliglotta, per esempio).
+ * La carta, per chi la guarda. Per tutti il ▶ accanto alla lettura; per chi
+ * capisce il senso in una riga (la glossa al passaggio del mouse); per il
+ * Narratore e per chi l'ha scritta un tasto piccolo col numero di chi
+ * capisce, che apre i giocatori da accendere o spegnere anche dopo l'invio
+ * (un tiro riuscito di Poliglotta, per esempio).
  */
 export function decoraCartaVathra(message, html) {
   const dati = message?.getFlag?.(MODULE_ID, VATHRA_FLAG);
   if (!dati || !html?.querySelector) return false;
   const carta = html.querySelector(".wod5e-mage-vathra-carta");
-  if (!carta || carta.querySelector(".wod5e-mage-vathra-carta-tasti")) return false;
+  if (!carta || carta.querySelector(".wod5e-mage-vathra-carta-play")) return false;
   const user = game.user;
   const autoreId = autoreDi(message);
   const doc = carta.ownerDocument ?? globalThis.document;
+  // Le carte della 1.26.0 non hanno la riga della lettura: il ▶ va in fondo alla carta.
+  const riga = carta.querySelector(".wod5e-mage-vathra-carta-lettura") ?? carta;
 
-  const tasti = doc.createElement("div");
-  tasti.className = "wod5e-mage-vathra-carta-tasti";
-  const ascolta = doc.createElement("button");
-  ascolta.type = "button";
-  ascolta.className = "wod5e-mage-vathra-carta-ascolta";
-  ascolta.innerHTML = `<i class="fa-solid fa-play" aria-hidden="true"></i> ${escape(localize("WOD5E_MAGE.Vathra.Ascolta"))}`;
-  ascolta.addEventListener("click", (event) => {
+  const play = bottone(doc, "wod5e-mage-vathra-carta-play", "fa-solid fa-play", localize("WOD5E_MAGE.Vathra.Ascolta"));
+  play.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();
     diLettura(dati.romanizzazione);
   });
-  tasti.append(ascolta);
-  carta.append(tasti);
+  riga.append(play);
 
-  if (capisce({ userId: user?.id, isGM: Boolean(user?.isGM), autoreId, capiscono: dati.capiscono })) {
-    const senso = doc.createElement("div");
-    senso.className = "wod5e-mage-vathra-senso";
-    senso.innerHTML = `<div class="wod5e-mage-vathra-senso-testa">${escape(localize("WOD5E_MAGE.Vathra.Carta.Senso"))}</div>`
-      + `<div class="wod5e-mage-vathra-senso-it">${escape(dati.italiano)}</div>`
-      + (dati.glossa ? `<div class="wod5e-mage-vathra-senso-glossa">${escape(dati.glossa)}</div>` : "");
-    carta.append(senso);
-  }
-
-  const puoCambiare = Boolean(user?.isGM) || (autoreId && user?.id === autoreId);
-  if (puoCambiare) {
-    const giocatori = tuttiGliUtenti().filter((u) => !u.isGM && u.id !== autoreId);
-    if (giocatori.length) {
-      const riga = doc.createElement("div");
-      riga.className = "wod5e-mage-vathra-carta-chi";
-      const testa = doc.createElement("span");
-      testa.className = "wod5e-mage-vathra-carta-chi-testa";
-      testa.textContent = localize("WOD5E_MAGE.Vathra.Carta.Capiscono");
-      riga.append(testa);
-      for (const u of giocatori) {
-        const acceso = (dati.capiscono ?? []).includes(u.id);
-        const chip = doc.createElement("button");
-        chip.type = "button";
-        chip.className = `wod5e-mage-vathra-chip${acceso ? " scelto" : ""}`;
-        chip.dataset.user = u.id;
-        chip.setAttribute("aria-pressed", String(acceso));
-        chip.textContent = u.character?.name ? `${u.name} · ${u.character.name}` : u.name;
-        chip.addEventListener("click", async (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          chip.disabled = true;
-          const nuovi = toggleCapisce(dati.capiscono ?? [], u.id);
-          await message.update({ [`flags.${MODULE_ID}.${VATHRA_FLAG}.capiscono`]: nuovi }).catch(() => {
-            chip.disabled = false;
-          });
+  const capiscono = dati.capiscono ?? [];
+  const puoCambiare = Boolean(user?.isGM) || Boolean(autoreId && user?.id === autoreId);
+  const giocatori = puoCambiare ? tuttiGliUtenti().filter((u) => !u.isGM && u.id !== autoreId) : [];
+  let rigaChi = null;
+  if (giocatori.length) {
+    const quanti = capiscono.filter((id) => giocatori.some((u) => u.id === id)).length;
+    const tasto = bottone(doc, "wod5e-mage-vathra-carta-chi-tasto", "fa-solid fa-user-check", localize("WOD5E_MAGE.Vathra.Carta.Capiscono"));
+    tasto.innerHTML += `<span>${quanti}</span>`;
+    riga.append(tasto);
+    rigaChi = doc.createElement("div");
+    rigaChi.className = "wod5e-mage-vathra-carta-chi";
+    const aperta = chiAperti.has(message.id);
+    rigaChi.hidden = !aperta;
+    tasto.setAttribute("aria-expanded", String(aperta));
+    tasto.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      rigaChi.hidden = !rigaChi.hidden;
+      tasto.setAttribute("aria-expanded", String(!rigaChi.hidden));
+      if (rigaChi.hidden) chiAperti.delete(message.id); else chiAperti.add(message.id);
+    });
+    for (const u of giocatori) {
+      const acceso = capiscono.includes(u.id);
+      const chip = doc.createElement("button");
+      chip.type = "button";
+      chip.className = `wod5e-mage-vathra-chip${acceso ? " scelto" : ""}`;
+      chip.dataset.user = u.id;
+      chip.setAttribute("aria-pressed", String(acceso));
+      chip.textContent = u.name;
+      if (u.character?.name) chip.title = u.character.name;
+      chip.addEventListener("click", async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        chip.disabled = true;
+        chiAperti.add(message.id);
+        await message.update({ [`flags.${MODULE_ID}.${VATHRA_FLAG}.capiscono`]: toggleCapisce(capiscono, u.id) }).catch(() => {
+          chip.disabled = false;
         });
-        riga.append(chip);
-      }
-      carta.append(riga);
+      });
+      rigaChi.append(chip);
     }
   }
+
+  if (capisce({ userId: user?.id, isGM: Boolean(user?.isGM), autoreId, capiscono })) {
+    const senso = doc.createElement("div");
+    senso.className = "wod5e-mage-vathra-senso";
+    senso.innerHTML = `<i class="fa-solid fa-eye" aria-hidden="true"></i> `;
+    const testo = doc.createElement("span");
+    testo.textContent = dati.italiano ?? "";
+    senso.append(testo);
+    if (dati.glossa) senso.title = dati.glossa;
+    carta.append(senso);
+  }
+  if (rigaChi) carta.append(rigaChi);
   return true;
 }
 
@@ -255,7 +282,7 @@ export class VathraTraduttore extends HandlebarsApplicationMixin(ApplicationV2) 
       resizable: true,
       contentClasses: ["wod5e-mage-vathra-contenuto"]
     },
-    position: { width: 640, height: 800 },
+    position: { width: 560, height: 520 },
     actions: {
       pagina: VathraTraduttore.#onPagina,
       gettone: VathraTraduttore.#onGettone,
@@ -301,6 +328,7 @@ export class VathraTraduttore extends HandlebarsApplicationMixin(ApplicationV2) 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const uscita = traduciTesto(this.#testo, this.#opzioni);
+    uscita.leggeTitolo = titoloLegge(uscita.legge);
     const sciolta = this.#mano === "sciolta";
     const r = radice(this.#parola);
     return Object.assign(context, {
@@ -309,7 +337,6 @@ export class VathraTraduttore extends HandlebarsApplicationMixin(ApplicationV2) 
       testo: this.#testo,
       uscita,
       sciolta,
-      manoLabel: localize(sciolta ? "WOD5E_MAGE.Vathra.Mano.sciolta" : "WOD5E_MAGE.Vathra.Mano.filata"),
       manoAltra: localize(sciolta ? "WOD5E_MAGE.Vathra.Mano.PassaFilata" : "WOD5E_MAGE.Vathra.Mano.PassaSciolta"),
       gettoni: statoGettoni(this.#testo, this.#opzioni).map((g) => (g.sep ? g : {
         ...g,
@@ -317,19 +344,18 @@ export class VathraTraduttore extends HandlebarsApplicationMixin(ApplicationV2) 
         eco: g.eco,
         ecoLabel: g.eco ? localize("WOD5E_MAGE.Vathra.Gettoni.Eco") : ""
       })),
-      manopole: Object.entries(MANOPOLE).map(([k, valori]) => ({
+      manopole: MANOPOLE_TENDINA.map((k) => [k, MANOPOLE[k]]).map(([k, valori]) => ({
         k,
         label: localize(`WOD5E_MAGE.Vathra.Manopole.${k}.Nome`),
         scelte: valori.map((v) => ({ v, label: localize(`WOD5E_MAGE.Vathra.Manopole.${k}.${v}`), scelto: this.#opzioni[k] === v }))
       })),
       giocatori: giocatoriDaAccendere(this.#capiscono),
-      parlaLabel: format("WOD5E_MAGE.Vathra.Parla", { nome: nomeDiChiParla() }),
+      parlaLabel: format("WOD5E_MAGE.Vathra.MandaCome", { nome: nomeDiChiParla() }),
       isGM: Boolean(game.user?.isGM),
       parola: this.#parola,
       radiceHtml: radiceHtml(r),
       regole: REGOLE,
-      alfabeto: LETTERE.map((g) => ({ titolo: g.titolo, lettere: g.lettere.map(([glifo, roman, nota]) => ({ glifo, roman, nota })) })),
-      suoni: SUONI,
+      alfabeto: alfabetoConSuoni(),
       filtro: this.#filtro,
       frasario: frasarioTradotto().map((g, n) => {
         const frasi = g.frasi.map((f) => ({ ...f, nascosta: !fraseCorrisponde(f.cerca, this.#filtro) }));
@@ -354,6 +380,8 @@ export class VathraTraduttore extends HandlebarsApplicationMixin(ApplicationV2) 
       this.#testo = event.currentTarget.value;
       this.#aggiornaUscita();
     });
+    // Appena aperto si scrive subito: il cursore sta nella casella.
+    if (options?.isFirstRender && this.#pagina === "traduttore") testo?.focus?.();
     for (const select of root.querySelectorAll("select[data-manopola]")) {
       select.addEventListener("change", (event) => {
         this.#opzioni = normalizzaOpzioni({ ...this.#opzioni, [event.currentTarget.dataset.manopola]: event.currentTarget.value });
@@ -382,7 +410,7 @@ export class VathraTraduttore extends HandlebarsApplicationMixin(ApplicationV2) 
   /** Il nome di chi parla, quando si sceglie un altro token. */
   aggiornaParla() {
     const box = this.element?.querySelector?.("[data-ruolo=parla]");
-    if (box) box.textContent = format("WOD5E_MAGE.Vathra.Parla", { nome: nomeDiChiParla() });
+    if (box) box.textContent = format("WOD5E_MAGE.Vathra.MandaCome", { nome: nomeDiChiParla() });
   }
 
   /** Riscrive la traduzione senza render: il cursore resta dov'è. */
@@ -390,14 +418,15 @@ export class VathraTraduttore extends HandlebarsApplicationMixin(ApplicationV2) 
     const root = this.element;
     if (!root) return;
     const uscita = traduciTesto(this.#testo, this.#opzioni);
-    const metti = (ruolo, valore) => {
+    // Come si legge e la glossa stanno nel suggerimento (title, testo semplice).
+    const metti = (ruolo, valore, suggerimento) => {
       const box = root.querySelector(`[data-ruolo=${ruolo}]`);
-      if (box) box.textContent = valore;
+      if (!box) return;
+      box.textContent = valore;
+      box.title = suggerimento;
     };
-    metti("glifi", uscita.glifi);
-    metti("roman", uscita.romanizzazione);
-    metti("legge", uscita.legge);
-    metti("glossa", uscita.glossa);
+    metti("glifi", uscita.glifi, uscita.glossa);
+    metti("roman", uscita.romanizzazione, titoloLegge(uscita.legge));
     root.querySelector("[data-ruolo=uscita]")?.classList.toggle("vuota", uscita.vuoto);
     const manda = root.querySelector("[data-action=manda]");
     if (manda) manda.disabled = uscita.vuoto;
@@ -480,10 +509,13 @@ export class VathraTraduttore extends HandlebarsApplicationMixin(ApplicationV2) 
     const sciolta = this.#mano === "sciolta";
     const root = this.element;
     root?.querySelector(".wod5e-mage-vathra-corpo")?.classList.toggle("mano-sciolta", sciolta);
-    const nome = root?.querySelector("[data-ruolo=nomeMano]");
-    if (nome) nome.textContent = localize(sciolta ? "WOD5E_MAGE.Vathra.Mano.sciolta" : "WOD5E_MAGE.Vathra.Mano.filata");
-    const bottone = root?.querySelector("[data-action=mano]");
-    if (bottone) bottone.textContent = localize(sciolta ? "WOD5E_MAGE.Vathra.Mano.PassaFilata" : "WOD5E_MAGE.Vathra.Mano.PassaSciolta");
+    const bottone = root?.querySelector("[data-ruolo=mano]");
+    if (bottone) {
+      const testo = localize(sciolta ? "WOD5E_MAGE.Vathra.Mano.PassaFilata" : "WOD5E_MAGE.Vathra.Mano.PassaSciolta");
+      bottone.dataset.tooltip = testo;
+      bottone.setAttribute("aria-label", testo);
+      bottone.classList.toggle("acceso", sciolta);
+    }
   }
 
   static #onAscolta(event) {
@@ -495,7 +527,7 @@ export class VathraTraduttore extends HandlebarsApplicationMixin(ApplicationV2) 
     event?.preventDefault?.();
     const uscita = traduciTesto(this.#testo, this.#opzioni);
     const cosa = target?.dataset?.cosa;
-    const testo = cosa === "glifi" ? uscita.glifi : cosa === "legge" ? uscita.legge : uscita.romanizzazione;
+    const testo = cosa === "roman" ? uscita.romanizzazione : cosa === "legge" ? uscita.legge : uscita.glifi;
     if (!testo) return;
     try {
       await (game.clipboard?.copyPlainText?.(testo) ?? navigator.clipboard.writeText(testo));
@@ -551,12 +583,20 @@ export class VathraTraduttore extends HandlebarsApplicationMixin(ApplicationV2) 
 export function radiceHtml(r) {
   if (!r) return "";
   const fonte = localize(r.dalLessico ? "WOD5E_MAGE.Vathra.Radice.DalLessico" : "WOD5E_MAGE.Vathra.Radice.DallaMutazione");
-  const righe = r.modi.map((m) => `<tr><td class="modo"><b>${escape(m.nome)}</b> <span>${escape(m.senso)}</span></td>`
-    + `<td class="vathra">${escape(m.vathra)}<small>${escape(m.legge)}</small></td>`
+  const righe = r.modi.map((m) => `<tr><td class="modo" title="${escape(m.senso)}">${escape(m.nome)}</td>`
+    + `<td class="vathra" title="${escape(m.legge)}">${escape(m.vathra)}</td>`
     + `<td class="glifi">${escape(m.glifi)}</td></tr>`).join("");
-  return `<table class="wod5e-mage-vathra-modi"><thead><tr><th>${escape(localize("WOD5E_MAGE.Vathra.Radice.Modo"))}</th>`
-    + `<th>${escape(localize("WOD5E_MAGE.Vathra.Radice.Vathra"))}</th><th>${escape(localize("WOD5E_MAGE.Vathra.Radice.Inciso"))}</th></tr></thead>`
-    + `<tbody><tr><td colspan="3" class="radice">${escape(r.radice)} · ${escape(fonte)}</td></tr>${righe}</tbody></table>`;
+  return `<div class="wod5e-mage-vathra-radice" title="${escape(fonte)}">${escape(r.radice)}</div>`
+    + `<table class="wod5e-mage-vathra-modi"><tbody>${righe}</tbody></table>`;
+}
+
+/** La tavola dei segni: a chi ha un suono registrato va il ▶ (voce/L<indice>.mp3). */
+export function alfabetoConSuoni() {
+  const perSegno = new Map(SUONI.map((suono, indice) => [suono.seg.replace(/'/g, "\u02BC"), { indice, parola: suono.parola }]));
+  return LETTERE.map((g) => ({
+    titolo: g.titolo,
+    lettere: g.lettere.map(([glifo, roman, nota]) => ({ glifo, roman, nota, suono: perSegno.get(roman) ?? null }))
+  }));
 }
 
 /** Apre il traduttore; con un testo, lo porta dentro. */

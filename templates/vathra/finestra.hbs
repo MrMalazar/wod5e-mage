@@ -1,7 +1,10 @@
-{{!-- Il traduttore del Vathrâ (Blue, 25/9): la pagina di 03_FABBRICA/vathra
-     dentro Foundry. Quattro pagine: Traduttore, Radice, Alfabeto, Frasario.
-     La traduzione si riscrive senza render mentre si scrive (traduttore.js),
-     per questo i campi che cambiano portano data-ruolo. --}}
+{{!-- Il traduttore del Vathrâ (Blue, 25/9), nella forma semplificata chiesta
+     da Blue lo stesso giorno («riduci il bombardamento informativo»): la
+     casella, i glifi grandi con la lettura e il ▶, chi capisce e Manda. Il
+     resto è chiuso (Particelle) o sta nelle altre pagine; le spiegazioni
+     sono nei suggerimenti al passaggio del mouse. La traduzione si
+     riscrive senza render mentre si scrive (traduttore.js): i campi che
+     cambiano portano data-ruolo. --}}
 <div class="wod5e-mage-vathra-corpo{{#if sciolta}} mano-sciolta{{/if}}">
     <nav class="wod5e-mage-vathra-linguette" role="tablist">
         {{#each pagine}}
@@ -10,52 +13,39 @@
     </nav>
 
     <section class="wod5e-mage-vathra-pagina{{#if (eq pagina "traduttore")}} attiva{{/if}}" data-pagina="traduttore">
-        <label class="wod5e-mage-vathra-etichetta" for="wod5e-mage-vathra-testo">{{localize "WOD5E_MAGE.Vathra.ScriviItaliano"}}</label>
-        <textarea id="wod5e-mage-vathra-testo" name="testo" rows="3" spellcheck="false" placeholder="{{localize "WOD5E_MAGE.Vathra.Segnaposto"}}">{{testo}}</textarea>
+        <textarea name="testo" rows="2" spellcheck="false" placeholder="{{localize "WOD5E_MAGE.Vathra.ScriviItaliano"}}" aria-label="{{localize "WOD5E_MAGE.Vathra.ScriviItaliano"}}" data-tooltip="{{localize "WOD5E_MAGE.Vathra.Segnaposto"}}">{{testo}}</textarea>
 
         <div class="wod5e-mage-vathra-uscita{{#if uscita.vuoto}} vuota{{/if}}" data-ruolo="uscita">
-            <div class="wod5e-mage-vathra-riga-testa">
-                <span class="wod5e-mage-vathra-etichetta" data-ruolo="nomeMano">{{manoLabel}}</span>
-                <button type="button" class="wod5e-mage-vathra-link" data-action="mano">{{manoAltra}}</button>
+            <div class="wod5e-mage-vathra-angolo">
+                <button type="button" class="wod5e-mage-vathra-icona" data-action="mano" data-ruolo="mano" data-tooltip="{{manoAltra}}" aria-label="{{manoAltra}}"><i class="fa-solid fa-feather-pointed" aria-hidden="true"></i></button>
+                <button type="button" class="wod5e-mage-vathra-icona" data-action="copia" data-cosa="glifi" data-tooltip="{{localize "WOD5E_MAGE.Vathra.CopiaGlifi"}}" aria-label="{{localize "WOD5E_MAGE.Vathra.CopiaGlifi"}}"><i class="fa-regular fa-copy" aria-hidden="true"></i></button>
             </div>
-            <div class="wod5e-mage-vathra-glifi" data-ruolo="glifi">{{uscita.glifi}}</div>
-            <div class="wod5e-mage-vathra-etichetta">{{localize "WOD5E_MAGE.Vathra.DaLeggere"}}</div>
-            <div class="wod5e-mage-vathra-roman" data-ruolo="roman">{{uscita.romanizzazione}}</div>
-            <div class="wod5e-mage-vathra-legge" data-ruolo="legge" title="{{localize "WOD5E_MAGE.Vathra.ComeSiLegge"}}">{{uscita.legge}}</div>
-            <div class="wod5e-mage-vathra-glossa" data-ruolo="glossa">{{uscita.glossa}}</div>
-
-            <div class="wod5e-mage-vathra-gettoni">
-                <span class="wod5e-mage-vathra-etichetta">{{localize "WOD5E_MAGE.Vathra.SeServe"}}</span>
-                {{#each gettoni}}
-                {{#if sep}}<span class="wod5e-mage-vathra-sep" aria-hidden="true"></span>{{else}}<button type="button" class="wod5e-mage-vathra-gettone{{#if acceso}} acceso{{/if}}{{#if eco}} eco{{/if}}" data-action="gettone" data-k="{{k}}" data-v="{{v}}" aria-pressed="{{#if acceso}}true{{else}}false{{/if}}" title="{{ecoLabel}}">{{label}}</button>{{/if}}
-                {{/each}}
-            </div>
-
-            <div class="wod5e-mage-vathra-tasti">
-                <button type="button" data-action="ascolta"><i class="fa-solid fa-play" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Vathra.Ascolta"}}</button>
-                <button type="button" data-action="copia" data-cosa="roman">{{localize "WOD5E_MAGE.Vathra.CopiaLettura"}}</button>
-                <button type="button" data-action="copia" data-cosa="glifi">{{localize "WOD5E_MAGE.Vathra.CopiaGlifi"}}</button>
+            <div class="wod5e-mage-vathra-glifi" data-ruolo="glifi" title="{{uscita.glossa}}">{{uscita.glifi}}</div>
+            <div class="wod5e-mage-vathra-lettura">
+                <span class="wod5e-mage-vathra-roman" data-ruolo="roman" title="{{uscita.leggeTitolo}}">{{uscita.romanizzazione}}</span>
+                <button type="button" class="wod5e-mage-vathra-icona" data-action="ascolta" data-tooltip="{{localize "WOD5E_MAGE.Vathra.Ascolta"}}" aria-label="{{localize "WOD5E_MAGE.Vathra.Ascolta"}}"><i class="fa-solid fa-play" aria-hidden="true"></i></button>
             </div>
         </div>
 
         <div class="wod5e-mage-vathra-invio">
-            <div class="wod5e-mage-vathra-etichetta">{{localize "WOD5E_MAGE.Vathra.ChiCapisce"}}</div>
-            <p class="wod5e-mage-vathra-nota">{{localize "WOD5E_MAGE.Vathra.ChiCapisceNota"}}</p>
+            <span class="wod5e-mage-vathra-etichetta" data-tooltip="{{localize "WOD5E_MAGE.Vathra.ChiCapisceNota"}}">{{localize "WOD5E_MAGE.Vathra.ChiCapisce"}}</span>
             <div class="wod5e-mage-vathra-chi">
                 {{#each giocatori}}
-                <button type="button" class="wod5e-mage-vathra-chip{{#if scelto}} scelto{{/if}}{{#unless attivo}} assente{{/unless}}" data-action="capisce" data-user="{{id}}" aria-pressed="{{#if scelto}}true{{else}}false{{/if}}">{{nome}}{{#if personaggio}} <small>{{personaggio}}</small>{{/if}}</button>
+                <button type="button" class="wod5e-mage-vathra-chip{{#if scelto}} scelto{{/if}}{{#unless attivo}} assente{{/unless}}" data-action="capisce" data-user="{{id}}" aria-pressed="{{#if scelto}}true{{else}}false{{/if}}"{{#if personaggio}} title="{{personaggio}}"{{/if}}>{{nome}}</button>
                 {{else}}
                 <span class="wod5e-mage-vathra-nota">{{localize "WOD5E_MAGE.Vathra.NessunGiocatore"}}</span>
                 {{/each}}
             </div>
-            <div class="wod5e-mage-vathra-manda">
-                <span class="wod5e-mage-vathra-parla" data-ruolo="parla">{{parlaLabel}}</span>
-                <button type="button" class="primo" data-action="manda"{{#if uscita.vuoto}} disabled{{/if}}><i class="fa-solid fa-comment" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Vathra.Manda"}}</button>
-            </div>
+            <button type="button" class="primo" data-action="manda"{{#if uscita.vuoto}} disabled{{/if}}><i class="fa-solid fa-comment" aria-hidden="true"></i> <span data-ruolo="parla">{{parlaLabel}}</span></button>
         </div>
 
-        <details class="wod5e-mage-vathra-manopole">
-            <summary>{{localize "WOD5E_MAGE.Vathra.Manopole.Titolo"}}</summary>
+        <details class="wod5e-mage-vathra-particelle">
+            <summary>{{localize "WOD5E_MAGE.Vathra.Particelle"}}</summary>
+            <div class="wod5e-mage-vathra-gettoni">
+                {{#each gettoni}}
+                {{#if sep}}<span class="wod5e-mage-vathra-sep" aria-hidden="true"></span>{{else}}<button type="button" class="wod5e-mage-vathra-gettone{{#if acceso}} acceso{{/if}}{{#if eco}} eco{{/if}}" data-action="gettone" data-k="{{k}}" data-v="{{v}}" aria-pressed="{{#if acceso}}true{{else}}false{{/if}}" title="{{ecoLabel}}">{{label}}</button>{{/if}}
+                {{/each}}
+            </div>
             <div class="wod5e-mage-vathra-griglia">
                 {{#each manopole}}
                 <label class="wod5e-mage-vathra-campo">
@@ -69,56 +59,44 @@
         </details>
     </section>
 
-    <section class="wod5e-mage-vathra-pagina{{#if (eq pagina "radice")}} attiva{{/if}}" data-pagina="radice">
-        <p class="wod5e-mage-vathra-nota">{{localize "WOD5E_MAGE.Vathra.Radice.Nota"}}</p>
-        <input type="text" name="parola" value="{{parola}}" spellcheck="false" aria-label="{{localize "WOD5E_MAGE.Vathra.Radice.Parola"}}">
-        <div data-ruolo="radice">{{{radiceHtml}}}</div>
-        <div class="wod5e-mage-vathra-etichetta">{{localize "WOD5E_MAGE.Vathra.Radice.Regole"}}</div>
-        <ol class="wod5e-mage-vathra-regole">
-            {{#each regole}}<li>{{{this}}}</li>{{/each}}
-        </ol>
-    </section>
-
-    <section class="wod5e-mage-vathra-pagina{{#if (eq pagina "alfabeto")}} attiva{{/if}}" data-pagina="alfabeto">
-        <p class="wod5e-mage-vathra-nota">{{localize "WOD5E_MAGE.Vathra.Alfabeto.Nota"}}</p>
-        <div class="wod5e-mage-vathra-tavola">
-            {{#each alfabeto}}
-            <div class="wod5e-mage-vathra-tavola-gruppo">{{titolo}}</div>
-            {{#each lettere}}
-            <div class="wod5e-mage-vathra-cella">
-                <div class="g filata">{{glifo}}</div>
-                <div class="g sciolta">{{glifo}}</div>
-                <div class="r">{{roman}}</div>
-                {{#if nota}}<div class="p">{{nota}}</div>{{/if}}
-            </div>
-            {{/each}}
-            {{/each}}
-        </div>
-        <div class="wod5e-mage-vathra-etichetta">{{localize "WOD5E_MAGE.Vathra.Alfabeto.Suoni"}}</div>
-        <p class="wod5e-mage-vathra-nota">{{localize "WOD5E_MAGE.Vathra.Alfabeto.SuoniNota"}}</p>
-        <div class="wod5e-mage-vathra-suoni">
-            {{#each suoni}}
-            <button type="button" class="wod5e-mage-vathra-suono" data-action="suono" data-indice="{{@index}}">
-                <span class="sg">{{seg}}</span><span class="sp">{{parola}}</span><span class="sn">{{nota}}</span>
-            </button>
-            {{/each}}
-        </div>
-    </section>
-
     <section class="wod5e-mage-vathra-pagina{{#if (eq pagina "frasario")}} attiva{{/if}}" data-pagina="frasario">
-        <p class="wod5e-mage-vathra-nota">{{localize "WOD5E_MAGE.Vathra.Frasario.Nota"}}</p>
         <input type="search" name="filtro" value="{{filtro}}" placeholder="{{localize "WOD5E_MAGE.Vathra.Frasario.Cerca"}}" aria-label="{{localize "WOD5E_MAGE.Vathra.Frasario.Cerca"}}">
         {{#each frasario}}
         <details class="wod5e-mage-vathra-gruppo" data-gruppo="{{id}}"{{#if aperto}} open{{/if}}{{#if nascosto}} hidden{{/if}}>
-            <summary>{{titolo}} <small>{{frasi.length}}</small></summary>
+            <summary>{{titolo}}</summary>
             {{#each frasi}}
-            <div class="wod5e-mage-vathra-frase" data-action="frase" data-gruppo="{{../id}}" data-indice="{{indice}}" data-cerca="{{cerca}}" role="button" tabindex="0"{{#if nascosta}} hidden{{/if}}>
-                <div class="it">{{it}}</div>
-                <div class="va"><button type="button" class="wod5e-mage-vathra-play{{#if registrata}} registrata{{/if}}" data-action="fraseAscolta" data-gruppo="{{../id}}" data-indice="{{indice}}" aria-label="{{localize "WOD5E_MAGE.Vathra.Ascolta"}}"><i class="fa-solid fa-play" aria-hidden="true"></i></button>{{romanizzazione}}</div>
-                <div class="gl">{{glifi}}</div>
+            <div class="wod5e-mage-vathra-frase" data-action="frase" data-gruppo="{{../id}}" data-indice="{{indice}}" data-cerca="{{cerca}}" role="button" tabindex="0" title="{{romanizzazione}}"{{#if nascosta}} hidden{{/if}}>
+                <span class="it">{{it}}</span>
+                <button type="button" class="wod5e-mage-vathra-icona{{#if registrata}} registrata{{/if}}" data-action="fraseAscolta" data-gruppo="{{../id}}" data-indice="{{indice}}" aria-label="{{localize "WOD5E_MAGE.Vathra.Ascolta"}}"><i class="fa-solid fa-play" aria-hidden="true"></i></button>
             </div>
             {{/each}}
         </details>
+        {{/each}}
+    </section>
+
+    <section class="wod5e-mage-vathra-pagina{{#if (eq pagina "radice")}} attiva{{/if}}" data-pagina="radice">
+        <input type="text" name="parola" value="{{parola}}" spellcheck="false" placeholder="{{localize "WOD5E_MAGE.Vathra.Radice.Parola"}}" aria-label="{{localize "WOD5E_MAGE.Vathra.Radice.Parola"}}">
+        <div data-ruolo="radice">{{{radiceHtml}}}</div>
+        <details class="wod5e-mage-vathra-particelle">
+            <summary>{{localize "WOD5E_MAGE.Vathra.Radice.Regole"}}</summary>
+            <ol class="wod5e-mage-vathra-regole">
+                {{#each regole}}<li>{{{this}}}</li>{{/each}}
+            </ol>
+        </details>
+    </section>
+
+    <section class="wod5e-mage-vathra-pagina{{#if (eq pagina "alfabeto")}} attiva{{/if}}" data-pagina="alfabeto">
+        {{#each alfabeto}}
+        <div class="wod5e-mage-vathra-tavola-gruppo">{{titolo}}</div>
+        <div class="wod5e-mage-vathra-tavola">
+            {{#each lettere}}
+            {{#if suono}}
+            <button type="button" class="wod5e-mage-vathra-cella con-suono" data-action="suono" data-indice="{{suono.indice}}" title="{{#if nota}}{{nota}} · {{/if}}{{suono.parola}}"><span class="g">{{glifo}}</span><span class="r">{{roman}}</span><i class="fa-solid fa-play" aria-hidden="true"></i></button>
+            {{else}}
+            <div class="wod5e-mage-vathra-cella"{{#if nota}} title="{{nota}}"{{/if}}><span class="g">{{glifo}}</span><span class="r">{{roman}}</span></div>
+            {{/if}}
+            {{/each}}
+        </div>
         {{/each}}
     </section>
 </div>

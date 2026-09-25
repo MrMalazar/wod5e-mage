@@ -1,9 +1,9 @@
 /* ==========================================================================
    IL VATHRÂ (Blue, 25/9): il traduttore della lingua dei Risvegliati e la
-   sua carta in chat. Le due mani vengono da 03_FABBRICA/vathra: la filata
-   per leggere, la sciolta per firmare. Il foglio sta a parte da
-   wod5e-mage.css; i colori riprendono la scheda (scuro e chiaro) e, per
-   i glifi, l'inchiostro viola e l'oro della pagina del traduttore.
+   sua carta in chat, nella forma semplificata («riduci il bombardamento
+   informativo»): a schermo solo la frase, i glifi, la lettura, chi capisce;
+   il resto nei suggerimenti o nei cassetti chiusi. Le due mani vengono da
+   03_FABBRICA/vathra: la filata per leggere, la sciolta per firmare.
    ========================================================================== */
 
 @font-face {
@@ -21,20 +21,17 @@
 /* ---- la finestra ---- */
 .application.wod5e-mage-vathra {
   --vathra-fondo: #1b160f;
-  --vathra-pannello: rgb(255 255 255 / 3.5%);
   --vathra-campo: rgb(0 0 0 / 28%);
-  --vathra-bordo: rgb(201 162 39 / 30%);
-  --vathra-bordo-forte: rgb(201 162 39 / 55%);
+  --vathra-bordo: rgb(201 162 39 / 26%);
+  --vathra-bordo-forte: rgb(201 162 39 / 50%);
   --vathra-uscita: linear-gradient(180deg, #2a1f3b, #1a1226);
   --vathra-glifi: #e9d08a;
   --vathra-roman: #ffffff;
   --vathra-testo: #e6dcc2;
-  --vathra-tenue: #cdc2a9;
-  --vathra-tenue-uscita: #b9aec9;
+  --vathra-tenue: #b9ae98;
   --vathra-oro: #c9a227;
   --vathra-scelta: rgb(201 162 39 / 18%);
-  --vathra-sorvolo: rgb(201 162 39 / 11%);
-  --vathra-seconda: #b9a2d6;
+  --vathra-sorvolo: rgb(201 162 39 / 12%);
 }
 
 .application.wod5e-mage-vathra.wod5e-mage-chiara {
@@ -43,7 +40,6 @@
   --mage-viola: #282051;
   --mage-viola-chiaro: #7a6fa0;
   --vathra-fondo: #fbf8f0;
-  --vathra-pannello: #f6f2e6;
   --vathra-campo: #fffdf8;
   --vathra-bordo: #d9c28a;
   --vathra-bordo-forte: #b3924a;
@@ -52,11 +48,9 @@
   --vathra-roman: #1e1b2e;
   --vathra-testo: #1e1b2e;
   --vathra-tenue: #5c5c68;
-  --vathra-tenue-uscita: #5c5c68;
   --vathra-oro: #b3924a;
   --vathra-scelta: #ece7f4;
   --vathra-sorvolo: #f1ecf8;
-  --vathra-seconda: #3b336b;
 }
 
 .application.wod5e-mage-vathra .window-header {
@@ -94,7 +88,7 @@
   justify-content: center;
   line-height: 1.25;
   min-height: 0;
-  padding: 6px 12px;
+  padding: 5px 11px;
   text-shadow: none;
   width: auto;
 }
@@ -121,11 +115,28 @@
   border-color: var(--mage-viola-chiaro, #b58ade);
   color: #fff;
   font-weight: 600;
-  padding: 8px 16px;
+  margin-left: auto;
+  padding: 7px 14px;
 }
 
 .application.wod5e-mage-vathra .window-content button.primo:hover:not(:disabled) {
   filter: brightness(1.15);
+}
+
+/* Il tasto a icona: niente cornice, il colore del commento, l'oro al passaggio. */
+.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-icona {
+  border: 0;
+  color: var(--vathra-tenue);
+  flex: none;
+  font-size: 13px;
+  height: 28px;
+  padding: 0;
+  width: 28px;
+}
+
+.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-icona:hover,
+.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-icona.acceso {
+  color: var(--vathra-glifi);
 }
 
 .wod5e-mage-vathra-corpo {
@@ -141,7 +152,7 @@
   display: flex;
   flex: none;
   gap: 2px;
-  padding: 8px 12px 0;
+  padding: 6px 10px 0;
 }
 
 .application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-linguetta {
@@ -149,10 +160,9 @@
   border-bottom: 2px solid transparent;
   border-radius: 0;
   color: var(--vathra-tenue);
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  padding: 7px 12px 8px;
+  padding: 6px 11px 7px;
 }
 
 .application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-linguetta.attiva {
@@ -168,7 +178,7 @@
   gap: 10px;
   min-height: 0;
   overflow-y: auto;
-  padding: 14px 16px 20px;
+  padding: 12px 14px 16px;
 }
 
 .wod5e-mage-vathra-pagina.attiva {
@@ -177,16 +187,16 @@
 
 .wod5e-mage-vathra-etichetta {
   color: var(--vathra-tenue);
+  cursor: help;
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .wod5e-mage-vathra-nota {
   color: var(--vathra-tenue);
-  font-size: 13.5px;
-  margin: 0;
+  font-size: 13px;
 }
 
 .application.wod5e-mage-vathra textarea,
@@ -203,19 +213,21 @@
 }
 
 .application.wod5e-mage-vathra textarea {
-  font-size: 17px;
-  line-height: 1.45;
-  min-height: 84px;
-  padding: 10px 12px;
+  flex: none;
+  font-size: 16px;
+  line-height: 1.4;
+  min-height: 62px;
+  padding: 8px 11px;
   resize: vertical;
   width: 100%;
 }
 
 .application.wod5e-mage-vathra input[type="text"],
 .application.wod5e-mage-vathra input[type="search"] {
-  font-size: 16px;
+  flex: none;
+  font-size: 15px;
   height: auto;
-  padding: 7px 10px;
+  padding: 6px 10px;
   width: 100%;
 }
 
@@ -227,105 +239,145 @@
   outline: none;
 }
 
-/* ---- la traduzione ---- */
+/* ---- la traduzione: i glifi grandi e una riga di lettura ---- */
 .wod5e-mage-vathra-uscita {
   background: var(--vathra-uscita);
   border: 1px solid var(--vathra-bordo-forte);
   border-radius: 6px;
+  flex: none;
+  padding: 12px 14px 10px;
+  position: relative;
+}
+
+.wod5e-mage-vathra-angolo {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 14px 16px;
-}
-
-.wod5e-mage-vathra-uscita .wod5e-mage-vathra-etichetta {
-  color: var(--vathra-tenue-uscita);
-}
-
-.wod5e-mage-vathra-riga-testa {
-  align-items: baseline;
-  display: flex;
-  justify-content: space-between;
-}
-
-.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-link {
-  border: 0;
-  color: var(--vathra-tenue-uscita);
-  font-size: 11.5px;
-  letter-spacing: 0.1em;
-  padding: 0;
-  text-transform: uppercase;
-}
-
-.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-link:hover {
-  background: none;
-  color: var(--vathra-glifi);
+  gap: 2px;
+  position: absolute;
+  right: 6px;
+  top: 6px;
 }
 
 .wod5e-mage-vathra-glifi {
   color: var(--vathra-glifi);
   font-family: "Vathra Filata", serif;
-  font-size: 40px;
-  line-height: 1.6;
-  min-height: 1.6em;
+  font-size: 38px;
+  line-height: 1.5;
+  min-height: 1.5em;
   overflow-wrap: anywhere;
+  padding-right: 58px;
+}
+
+.wod5e-mage-vathra-lettura {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
 }
 
 .wod5e-mage-vathra-roman {
   color: var(--vathra-roman);
+  cursor: help;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 21px;
-  letter-spacing: 0.02em;
+  font-size: 18px;
   line-height: 1.35;
 }
 
-.wod5e-mage-vathra-legge {
-  color: var(--vathra-glifi);
-  font-size: 15px;
-  letter-spacing: 0.03em;
-}
-
-.wod5e-mage-vathra-glossa {
-  color: var(--vathra-tenue-uscita);
-  font-size: 12.5px;
-  letter-spacing: 0.02em;
-}
-
-.wod5e-mage-vathra-uscita.vuota .wod5e-mage-vathra-legge,
-.wod5e-mage-vathra-uscita.vuota .wod5e-mage-vathra-glossa {
-  display: none;
+.wod5e-mage-vathra-uscita.vuota .wod5e-mage-vathra-lettura,
+.wod5e-mage-vathra-uscita.vuota .wod5e-mage-vathra-angolo {
+  visibility: hidden;
 }
 
 /* La mano sciolta: gli stessi segni, di fretta. */
 .mano-sciolta .wod5e-mage-vathra-glifi,
 .mano-sciolta .wod5e-mage-vathra-modi td.glifi,
-.mano-sciolta .wod5e-mage-vathra-frase .gl {
+.mano-sciolta .wod5e-mage-vathra-cella .g {
   font-family: "Vathra Sciolta", serif;
+}
+
+/* ---- chi capisce, e l'invio: una riga ---- */
+.wod5e-mage-vathra-invio {
+  align-items: center;
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wod5e-mage-vathra-chi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-chip,
+.chat-message .wod5e-mage-vathra-chip {
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 14px;
+  color: var(--vathra-tenue, #b9ae98);
+  font-size: 13px;
+  padding: 3px 10px;
+}
+
+.application.wod5e-mage-vathra.wod5e-mage-chiara .window-content button.wod5e-mage-vathra-chip {
+  border-color: #cfc6dd;
+}
+
+.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-chip.scelto {
+  background: var(--vathra-scelta);
+  border-color: var(--vathra-oro);
+  color: var(--vathra-roman);
+}
+
+.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-chip.assente {
+  opacity: 0.6;
+}
+
+/* ---- particelle e manopole: chiuse ---- */
+.wod5e-mage-vathra-particelle > summary {
+  color: var(--vathra-tenue);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  list-style: none;
+  padding: 2px 0;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-vathra-particelle > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage-vathra-particelle > summary::before {
+  color: var(--vathra-oro);
+  content: "+ ";
+}
+
+.wod5e-mage-vathra-particelle[open] > summary::before {
+  content: "– ";
 }
 
 .wod5e-mage-vathra-gettoni {
   align-items: center;
-  border-top: 1px solid var(--vathra-bordo);
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 6px;
-  padding-top: 10px;
+  padding-top: 8px;
 }
 
 .wod5e-mage-vathra-sep {
   background: var(--vathra-bordo);
   height: 16px;
-  margin: 0 3px;
+  margin: 0 2px;
   width: 1px;
 }
 
 .application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-gettone {
   border-color: rgb(255 255 255 / 16%);
   border-radius: 14px;
-  color: var(--vathra-tenue-uscita);
-  font-size: 13px;
-  padding: 4px 11px;
+  color: var(--vathra-tenue);
+  font-size: 12.5px;
+  padding: 3px 10px;
 }
 
 .application.wod5e-mage-vathra.wod5e-mage-chiara .window-content button.wod5e-mage-vathra-gettone {
@@ -344,175 +396,109 @@
   color: var(--vathra-glifi);
 }
 
-.wod5e-mage-vathra-tasti {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-/* ---- chi capisce, e l'invio ---- */
-.wod5e-mage-vathra-invio {
-  background: var(--vathra-pannello);
-  border: 1px solid var(--vathra-bordo);
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px 14px;
-}
-
-.wod5e-mage-vathra-chi {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-chip,
-.chat-message .wod5e-mage-vathra-chip {
-  border: 1px solid rgb(255 255 255 / 18%);
-  border-radius: 14px;
-  color: var(--vathra-tenue, #cdc2a9);
-  font-size: 13px;
-  padding: 4px 11px;
-}
-
-.application.wod5e-mage-vathra.wod5e-mage-chiara .window-content button.wod5e-mage-vathra-chip {
-  border-color: #cfc6dd;
-}
-
-.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-chip small {
-  color: var(--vathra-tenue);
-  font-size: 11.5px;
-}
-
-.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-chip.scelto {
-  background: var(--vathra-scelta);
-  border-color: var(--vathra-oro);
-  color: var(--vathra-roman);
-}
-
-.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-chip.assente {
-  opacity: 0.6;
-}
-
-.wod5e-mage-vathra-manda {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: space-between;
-  margin-top: 2px;
-}
-
-.wod5e-mage-vathra-parla {
-  color: var(--vathra-tenue);
-  font-size: 13.5px;
-}
-
-/* ---- tutte le manopole ---- */
-.wod5e-mage-vathra-manopole > summary {
-  color: var(--vathra-tenue);
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  list-style: none;
-  padding: 4px 0;
-  text-transform: uppercase;
-}
-
-.wod5e-mage-vathra-manopole > summary::-webkit-details-marker {
-  display: none;
-}
-
-.wod5e-mage-vathra-manopole > summary::before {
-  color: var(--vathra-oro);
-  content: "+ ";
-}
-
-.wod5e-mage-vathra-manopole[open] > summary::before {
-  content: "– ";
-}
-
 .wod5e-mage-vathra-griglia {
   display: grid;
-  gap: 10px 14px;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  padding-top: 8px;
+  gap: 8px 12px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  padding-top: 10px;
 }
 
 .wod5e-mage-vathra-campo {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .wod5e-mage-vathra-campo > span {
   color: var(--vathra-tenue);
   font-size: 11px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .application.wod5e-mage-vathra .wod5e-mage-vathra-campo select {
-  font-size: 14px;
+  font-size: 13.5px;
   height: auto;
-  padding: 5px 7px;
+  padding: 4px 6px;
   width: 100%;
+}
+
+/* ---- il frasario: una riga per frase ---- */
+.wod5e-mage-vathra-gruppo > summary {
+  color: var(--vathra-oro);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  padding: 5px 0;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-vathra-frase {
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 3px 4px 3px 10px;
+}
+
+.wod5e-mage-vathra-frase:hover {
+  background: var(--vathra-sorvolo);
+}
+
+.wod5e-mage-vathra-frase .it {
+  color: var(--vathra-testo);
+  font-size: 14.5px;
+}
+
+.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-icona.registrata {
+  color: var(--vathra-oro);
 }
 
 /* ---- la radice ---- */
-.wod5e-mage-vathra-modi {
-  border-collapse: collapse;
-  font-size: 14.5px;
-  width: 100%;
+.wod5e-mage-vathra-radice {
+  color: var(--vathra-oro);
+  cursor: help;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  margin-bottom: 2px;
 }
 
-.wod5e-mage-vathra-modi th {
-  border-bottom: 1px solid var(--vathra-bordo);
-  color: var(--vathra-tenue);
-  font-size: 11px;
-  letter-spacing: 0.13em;
-  padding: 6px 8px;
-  text-align: left;
-  text-transform: uppercase;
+.wod5e-mage-vathra-modi {
+  border-collapse: collapse;
+  width: 100%;
 }
 
 .wod5e-mage-vathra-modi td {
   border-bottom: 1px solid rgb(255 255 255 / 7%);
-  padding: 6px 8px;
+  padding: 4px 6px;
   vertical-align: middle;
 }
 
-.wod5e-mage-vathra-modi td.radice {
-  color: var(--vathra-oro);
-  letter-spacing: 0.1em;
+.application.wod5e-mage-vathra.wod5e-mage-chiara .wod5e-mage-vathra-modi td {
+  border-bottom-color: #ece5d3;
 }
 
-.wod5e-mage-vathra-modi td.modo span {
+.wod5e-mage-vathra-modi td.modo {
   color: var(--vathra-tenue);
-  display: block;
-  font-size: 12.5px;
+  cursor: help;
+  font-size: 13.5px;
+  width: 26%;
 }
 
 .wod5e-mage-vathra-modi td.vathra {
   color: var(--vathra-roman);
+  cursor: help;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 17px;
-}
-
-.wod5e-mage-vathra-modi td.vathra small {
-  color: var(--vathra-tenue);
-  display: block;
-  font-family: "Signika", sans-serif;
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .wod5e-mage-vathra-modi td.glifi {
   color: var(--vathra-glifi);
   font-family: "Vathra Filata", serif;
-  font-size: 28px;
+  font-size: 26px;
   line-height: 1.3;
 }
 
@@ -521,7 +507,7 @@
   font-size: 13.5px;
   line-height: 1.6;
   list-style: none;
-  margin: 0;
+  margin: 6px 0 0;
   padding: 0;
 }
 
@@ -536,157 +522,57 @@
   padding: 0 5px;
 }
 
-/* ---- l'alfabeto ---- */
-.wod5e-mage-vathra-tavola {
-  display: grid;
-  gap: 8px;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-}
-
+/* ---- l'alfabeto: il segno e la lettera, il suono dove c'è ---- */
 .wod5e-mage-vathra-tavola-gruppo {
   color: var(--vathra-oro);
   font-size: 11px;
-  grid-column: 1 / -1;
-  letter-spacing: 0.16em;
-  margin-top: 8px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.wod5e-mage-vathra-cella {
-  background: var(--vathra-pannello);
+.wod5e-mage-vathra-tavola {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+}
+
+.wod5e-mage-vathra-cella,
+.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-cella {
+  align-items: center;
+  background: rgb(255 255 255 / 3%);
   border: 1px solid var(--vathra-bordo);
   border-radius: 4px;
-  padding: 8px 6px;
-  text-align: center;
+  cursor: help;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 5px 4px 4px;
+  position: relative;
+}
+
+.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-cella.con-suono {
+  cursor: pointer;
 }
 
 .wod5e-mage-vathra-cella .g {
   color: var(--vathra-glifi);
   font-family: "Vathra Filata", serif;
-  font-size: 32px;
+  font-size: 28px;
   line-height: 1.15;
-}
-
-.wod5e-mage-vathra-cella .g.sciolta {
-  color: var(--vathra-seconda);
-  font-family: "Vathra Sciolta", serif;
 }
 
 .wod5e-mage-vathra-cella .r {
   color: var(--vathra-roman);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 18px;
-  margin-top: 4px;
+  font-size: 14px;
 }
 
-.wod5e-mage-vathra-cella .p {
-  color: var(--vathra-tenue);
-  font-size: 11.5px;
-  line-height: 1.25;
-  margin-top: 2px;
-}
-
-.wod5e-mage-vathra-suoni {
-  display: grid;
-  gap: 8px;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-}
-
-.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-suono {
-  align-items: stretch;
-  background: var(--vathra-pannello);
-  border-color: var(--vathra-bordo);
-  border-radius: 4px;
-  flex-direction: column;
-  gap: 2px;
-  padding: 9px 8px;
-  text-align: center;
-}
-
-.wod5e-mage-vathra-suono .sg {
-  color: var(--vathra-glifi);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 21px;
-}
-
-.wod5e-mage-vathra-suono .sp {
-  color: var(--vathra-roman);
-  font-size: 13px;
-}
-
-.wod5e-mage-vathra-suono .sn {
-  color: var(--vathra-tenue);
-  font-size: 11px;
-  line-height: 1.25;
-}
-
-/* ---- il frasario ---- */
-.wod5e-mage-vathra-gruppo {
-  border-bottom: 1px solid var(--vathra-bordo);
-  padding: 4px 0 6px;
-}
-
-.wod5e-mage-vathra-gruppo > summary {
+.wod5e-mage-vathra-cella > i {
   color: var(--vathra-oro);
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  padding: 6px 0;
-  text-transform: uppercase;
-}
-
-.wod5e-mage-vathra-gruppo > summary small {
-  color: var(--vathra-tenue);
-  font-weight: 400;
-  letter-spacing: 0;
-}
-
-.wod5e-mage-vathra-frase {
-  border-left: 2px solid var(--vathra-bordo-forte);
-  border-radius: 0 4px 4px 0;
-  cursor: pointer;
-  margin: 0 0 7px;
-  padding: 7px 12px;
-}
-
-.wod5e-mage-vathra-frase:hover {
-  background: var(--vathra-sorvolo);
-}
-
-.wod5e-mage-vathra-frase .it {
-  color: var(--vathra-testo);
-  font-size: 14.5px;
-}
-
-.wod5e-mage-vathra-frase .va {
-  align-items: center;
-  color: var(--vathra-glifi);
-  display: flex;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 16px;
-  gap: 6px;
-  margin-top: 2px;
-}
-
-.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-play {
-  border: 0;
-  color: var(--vathra-tenue);
-  font-size: 12px;
-  padding: 2px 4px;
-}
-
-.application.wod5e-mage-vathra .window-content button.wod5e-mage-vathra-play.registrata {
-  color: var(--vathra-oro);
-}
-
-.wod5e-mage-vathra-frase .gl {
-  color: var(--vathra-oro);
-  font-family: "Vathra Filata", serif;
-  font-size: 24px;
-  line-height: 1.35;
-  margin-top: 2px;
-  overflow-wrap: anywhere;
+  font-size: 8px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
 }
 
 /* ---- la carta in chat: l'inchiostro del traduttore, su ogni tema ---- */
@@ -697,15 +583,15 @@
   color: #e6dcc2;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 9px 11px 10px;
+  gap: 2px;
+  padding: 8px 10px;
 }
 
 .chat-message .wod5e-mage-vathra-carta-glifi {
   color: #e9d08a;
   font-family: "Vathra Filata", serif;
-  font-size: 30px;
-  line-height: 1.5;
+  font-size: 28px;
+  line-height: 1.45;
   overflow-wrap: anywhere;
 }
 
@@ -713,81 +599,79 @@
   font-family: "Vathra Sciolta", serif;
 }
 
+.chat-message .wod5e-mage-vathra-carta-lettura {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+}
+
 .chat-message .wod5e-mage-vathra-carta-roman {
   color: #fff;
+  cursor: help;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.3;
 }
 
+/* Le carte della 1.26.0 avevano «come si legge» in chiaro: ora sta nel suggerimento. */
 .chat-message .wod5e-mage-vathra-carta-legge {
-  color: #b9aec9;
-  font-size: 12.5px;
-  letter-spacing: 0.02em;
+  display: none;
 }
 
-.chat-message .wod5e-mage-vathra-carta-tasti {
-  display: flex;
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.chat-message .wod5e-mage-vathra-carta-ascolta {
+.chat-message .wod5e-mage-vathra-carta-play,
+.chat-message .wod5e-mage-vathra-carta-chi-tasto {
   align-items: center;
   background: transparent;
-  border: 1px solid rgb(201 162 39 / 45%);
-  border-radius: 5px;
-  color: #e9d08a;
+  border: 0;
+  color: #c9a227;
   cursor: pointer;
-  flex: none;
   display: inline-flex;
-  font: 600 12px "Signika", sans-serif;
-  gap: 5px;
-  height: auto;
-  line-height: 1.2;
+  flex: none;
+  font-size: 11px;
+  gap: 4px;
+  height: 22px;
+  justify-content: center;
+  line-height: 1;
   min-height: 0;
-  padding: 4px 10px;
+  padding: 0 4px;
   width: auto;
 }
 
-.chat-message .wod5e-mage-vathra-carta-ascolta:hover {
-  background: rgb(201 162 39 / 15%);
+.chat-message .wod5e-mage-vathra-carta-chi-tasto {
+  color: #9c90ae;
+  margin-left: auto;
+}
+
+.chat-message .wod5e-mage-vathra-carta-play:hover,
+.chat-message .wod5e-mage-vathra-carta-chi-tasto:hover,
+.chat-message .wod5e-mage-vathra-carta-chi-tasto[aria-expanded="true"] {
+  color: #e9d08a;
 }
 
 .chat-message .wod5e-mage-vathra-senso {
-  border-top: 1px dashed rgb(201 162 39 / 40%);
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-top: 6px;
-  padding-top: 7px;
+  border-top: 1px dashed rgb(201 162 39 / 35%);
+  color: #e9d08a;
+  font-size: 13.5px;
+  font-style: italic;
+  margin-top: 4px;
+  padding-top: 5px;
 }
 
-.chat-message .wod5e-mage-vathra-senso-testa,
-.chat-message .wod5e-mage-vathra-carta-chi-testa {
-  color: #c9a227;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.chat-message .wod5e-mage-vathra-senso-it {
-  color: #fff;
-  font-size: 14px;
-}
-
-.chat-message .wod5e-mage-vathra-senso-glossa {
-  color: #b9aec9;
-  font-size: 11.5px;
+.chat-message .wod5e-mage-vathra-senso > i {
+  font-size: 11px;
+  margin-right: 3px;
+  opacity: 0.8;
 }
 
 .chat-message .wod5e-mage-vathra-carta-chi {
-  align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  margin-top: 6px;
+  margin-top: 5px;
+}
+
+.chat-message .wod5e-mage-vathra-carta-chi[hidden] {
+  display: none;
 }
 
 .chat-message .wod5e-mage-vathra-chip {

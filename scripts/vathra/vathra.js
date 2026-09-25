@@ -24,7 +24,7 @@ export const MANI = Object.freeze(["filata", "sciolta"]);
 export const FONT_MANO = Object.freeze({ filata: "Vathra Filata", sciolta: "Vathra Sciolta" });
 
 /** Le pagine della finestra. */
-export const PAGINE = Object.freeze(["traduttore", "radice", "alfabeto", "frasario"]);
+export const PAGINE = Object.freeze(["traduttore", "frasario", "radice", "alfabeto"]);
 
 /** Le manopole del traduttore e i loro valori, come nella pagina di 03_FABBRICA. */
 export const MANOPOLE = Object.freeze({
@@ -35,6 +35,12 @@ export const MANOPOLE = Object.freeze({
   risvegliato: Object.freeze(["auto", "si", "no"]),
   nomiPropri: Object.freeze(["lascia", "muta"])
 });
+
+/**
+ * Le manopole che la finestra mostra come tendine, sotto «Particelle e
+ * manopole»: testimonianza, consenso e registro si girano dai gettoni.
+ */
+export const MANOPOLE_TENDINA = Object.freeze(["modo", "risvegliato", "nomiPropri"]);
 
 /** Il primo valore di ogni manopola è quello di partenza. */
 export const OPZIONI_BASE = Object.freeze(Object.fromEntries(Object.entries(MANOPOLE).map(([k, valori]) => [k, valori[0]])));

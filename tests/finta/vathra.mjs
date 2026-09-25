@@ -158,22 +158,32 @@ async function finestra() {
 }
 {
   const { ctx, html } = await finestra();
-  assert.deepEqual(ctx.pagine.map((p) => p.id), ["traduttore", "radice", "alfabeto", "frasario"]);
+  assert.deepEqual(ctx.pagine.map((p) => p.id), ["traduttore", "frasario", "radice", "alfabeto"], "il Frasario accanto al Traduttore");
   assert.equal(ctx.uscita.romanizzazione, "vakharilmi î'shi'âr i mi.");
   assert.equal(ctx.uscita.legge, "va-ca-RIL-mi ìʼ-sci-ʼÀR i mi.");
+  assert.equal(ctx.uscita.leggeTitolo, "Come si legge: va-ca-RIL-mi ìʼ-sci-ʼÀR i mi.");
   assert.deepEqual(ctx.giocatori.map((g) => g.id), ["u1", "u2", "u3"], "il Narratore non sta fra i giocatori da accendere");
-  assert.equal(ctx.parlaLabel, "Parla: Blue");
+  assert.equal(ctx.parlaLabel, "Manda come Blue");
   assert.equal(ctx.frasario.length, 11);
   assert.equal(ctx.frasario[0].aperto, true);
-  assert.equal(ctx.manopole.length, 6);
+  assert.deepEqual(ctx.manopole.map((m) => m.k), ["modo", "risvegliato", "nomiPropri"], "le tendine rimaste: le altre manopole sono i gettoni");
+  const conSuono = ctx.alfabeto.flatMap((g) => g.lettere).filter((l) => l.suono);
+  assert.deepEqual(conSuono.map((l) => l.roman), ["sh", "th", "kh", "r", "y", "z", "\u02BC", "â"], "gli otto suoni stanno sulle loro lettere");
+  assert.equal(conSuono.find((l) => l.roman === "kh").suono.indice, 0);
   for (const marker of [
-    'data-action="pagina" data-pagina="radice"', 'data-ruolo="glifi">vaxarilmi îʼciʼâr i mi<', 'data-ruolo="legge"',
-    'data-action="gettone" data-k="consenso" data-v="volgare"', 'data-action="capisce" data-user="u1"', "Sara <small>Guendalina</small>",
-    'wod5e-mage-vathra-chip assente" data-action="capisce" data-user="u2"', 'data-action="manda"', 'select name="testimone" data-manopola="testimone"',
+    'data-action="pagina" data-pagina="radice"', 'data-ruolo="glifi" title="', '>vaxarilmi îʼciʼâr i mi<', 'data-ruolo="roman" title="Come si legge: va-ca-RIL-mi',
+    'data-action="ascolta"', 'data-action="mano" data-ruolo="mano"', 'data-action="copia" data-cosa="glifi"',
+    'data-action="gettone" data-k="consenso" data-v="volgare"', 'data-action="capisce" data-user="u1" aria-pressed="false" title="Guendalina">Sara</button>',
+    'wod5e-mage-vathra-chip assente" data-action="capisce" data-user="u2"', 'data-action="manda"', '<span data-ruolo="parla">Manda come Blue</span>',
+    'select name="modo" data-manopola="modo"', '<details class="wod5e-mage-vathra-particelle">',
     'data-action="frase" data-gruppo="scena" data-indice="0"', 'data-action="fraseAscolta" data-gruppo="scena" data-indice="0"',
-    "wod5e-mage-vathra-play registrata", 'data-action="suono" data-indice="7"', "Le sette regole", "wod5e-mage-vathra-tavola"
+    "wod5e-mage-vathra-icona registrata", 'data-action="suono" data-indice="7"', "Le sette regole", "wod5e-mage-vathra-tavola"
   ]) {
     assert.ok(html.includes(marker), `manca ${marker}`);
+  }
+  // La forma semplificata (Blue, 25/9): niente etichette e spiegazioni a schermo.
+  for (const tolto of ['data-ruolo="legge"', 'data-ruolo="glossa"', "Da leggere ad alta voce", "Se serve", 'select name="testimone"', "Copia la lettura", "wod5e-mage-vathra-suoni"]) {
+    assert.ok(!html.includes(tolto), `c'è ancora ${tolto}`);
   }
   assert.ok(!html.includes('data-action="manda" disabled'), "con una frase si può mandare");
   assert.ok(html.includes('class="wod5e-mage-vathra-pagina attiva" data-pagina="traduttore"'));
@@ -218,7 +228,8 @@ let carta;
   assert.deepEqual(dati.capiscono, ["u1"]);
   assert.match(dati.glossa, /porta/);
   assert.ok(carta.content.includes('wod5e-mage-vathra-carta-glifi mano-sciolta">ʼafarilmi eʼofur eʼvalnâum i mi ne qak<'));
-  assert.ok(carta.content.includes("ʼa-fa-RIL-mi e-ʼO-fur eʼ-val-NÀUM i mi ne tak."));
+  assert.ok(carta.content.includes('title="Come si legge: ʼa-fa-RIL-mi e-ʼO-fur eʼ-val-NÀUM i mi ne tak."'), "come si legge nel suggerimento");
+  assert.ok(carta.content.includes('wod5e-mage-vathra-carta-lettura'));
   assert.ok(!carta.content.includes("Apro la porta"), "il senso non sta nel testo della carta");
   assert.ok(sim.notifiche.includes("Frase mandata in chat."));
   // Una frase vuota non parte.
@@ -243,8 +254,15 @@ function cartaPer(user) {
 {
   const [gm, sara, marco, olivio] = users;
   const vistaGM = cartaPer(gm);
-  assert.ok(vistaGM.querySelector(".wod5e-mage-vathra-carta-ascolta"), "Ascolta per tutti");
+  assert.ok(vistaGM.querySelector(".wod5e-mage-vathra-carta-play"), "il ▶ per tutti");
   assert.ok(vistaGM.querySelector(".wod5e-mage-vathra-senso")?.textContent.includes("Apro la porta con la mia volontà."), "il Narratore vede il senso");
+  const tasto = vistaGM.querySelector(".wod5e-mage-vathra-carta-chi-tasto");
+  assert.ok(tasto, "il tasto di chi capisce, per il Narratore");
+  assert.match(tasto.innerHTML, /<span>1<\/span>/, "col numero di chi capisce");
+  const rigaChi = vistaGM.querySelector(".wod5e-mage-vathra-carta-chi");
+  assert.equal(rigaChi.hidden, true, "i giocatori stanno chiusi finché non si preme il tasto");
+  await tasto.click();
+  assert.equal(rigaChi.hidden, false);
   const chips = vistaGM.querySelectorAll(".wod5e-mage-vathra-chip");
   assert.deepEqual(chips.map((c) => c.dataset.user), ["u1", "u2", "u3"], "il Narratore può accendere i giocatori");
   assert.equal(chips[0].attributes["aria-pressed"], "true");
@@ -255,7 +273,8 @@ function cartaPer(user) {
 
   const vistaOlivio = cartaPer(olivio);
   assert.equal(vistaOlivio.querySelector(".wod5e-mage-vathra-senso"), null, "Olivio vede solo i glifi");
-  assert.ok(vistaOlivio.querySelector(".wod5e-mage-vathra-carta-ascolta"));
+  assert.ok(vistaOlivio.querySelector(".wod5e-mage-vathra-carta-play"));
+  assert.equal(vistaOlivio.querySelector(".wod5e-mage-vathra-carta-chi-tasto"), null, "Olivio non tocca chi capisce");
 
   // Il Narratore accende Olivio dalla carta (un tiro riuscito, per esempio).
   game.user = gm;
