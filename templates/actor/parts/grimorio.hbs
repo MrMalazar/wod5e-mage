@@ -1,34 +1,77 @@
-{{!-- Il Grimorio del personaggio: i suoi incantesimi, scritti con la finestra
-     del tiro e salvati. Ogni scheda: nome, Credo e Tipo com'erano, Strumenti,
-     riserva, Sfere e Ambiti, tipo, Obiettivo, la narrativa a tendina. --}}
+{{!-- La pagina Formule (Blue, 26/9): due colonne a tutta pagina. A sinistra le
+     Formule, accessibili dalle Sfere possedute o tutte col tasto in testa, con
+     la cerca; ogni riga è la matrice del Grimorio con la scelta della Sfera
+     d'Accesso, delle Amalgame e della soglia, e i due tasti (scrivi fra gli
+     effetti, lancia dal Tiro). A destra gli effetti di Magick scritti dal
+     giocatore, per Sfera, ognuno a tendina: chiuso resta l'Obiettivo, aperto
+     tutto; il dado lo carica nel Tiro della prima pagina coi suoi valori. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-grimorio-page" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     <header class="wod5e-mage-section-title wod5e-mage-note-head">
-        <span>{{localize "WOD5E_MAGE.Tabs.Grimorio"}}</span>
-        {{!-- L'archivio degli effetti del manuale: liste da aggiungere alla scheda e ritoccare. --}}
-        <button type="button" class="wod5e-mage-archivio-open" data-action="incantesimoFromEffetti" title="{{localize 'WOD5E_MAGE.Incantesimi.FromEffetti'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.FromEffetti'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-book" aria-hidden="true"></i></button>
-        {{!-- Il libro aperto: il Grimorio comune del tavolo. --}}
-        <button type="button" class="wod5e-mage-archivio-open wod5e-mage-grimorio-comune-open" data-action="grimorioComuneOpen" title="{{localize 'WOD5E_MAGE.GrimorioComune.Open'}}" aria-label="{{localize 'WOD5E_MAGE.GrimorioComune.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
-        <button type="button" class="wod5e-mage-row-add" data-action="incantesimoAdd" title="{{localize 'WOD5E_MAGE.Incantesimi.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Add'}}" {{#if locked}}disabled{{/if}}>
-            <i class="fa-solid fa-plus"></i>
-        </button>
-        {{!-- La × in alto a destra (Blue, 16/9): chi apre il Grimorio dalla prima pagina deve poterlo chiudere. --}}
+        <span>{{localize "WOD5E_MAGE.Tabs.Short.grimorio"}}</span>
+        {{!-- La × in alto a destra (Blue, 16/9): chi apre le Formule dalla prima pagina deve poterle chiudere. --}}
         <button type="button" class="wod5e-mage-grimorio-chiudi" data-action="grimorioClose" title="{{localize 'WOD5E_MAGE.Grimorio.Close'}}" aria-label="{{localize 'WOD5E_MAGE.Grimorio.Close'}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
     </header>
 
-    {{#if incantesimi.length}}
-        {{!-- Per Sfere: ogni incantesimo sotto la Sfera più alta che usa; a pari
-             merito compare in tutte e due. --}}
-        <div class="wod5e-mage-incantesimi">
-            {{#each incantesimiGroups as |group|}}
-                <section class="wod5e-mage-incantesimi-group">
-                    <h3 class="wod5e-mage-incantesimi-sphere">{{#if group.icon}}<img src="{{group.icon}}" alt="">{{/if}}{{group.label}} <small>{{group.spells.length}}</small></h3>
-                    {{#each group.spells as |spell|}}
-                        {{> "modules/wod5e-mage/templates/actor/parts/incantesimo-card.hbs" spell=spell}}
-                    {{/each}}
-                </section>
-            {{/each}}
+    <div class="wod5e-mage-spheres-content wod5e-mage-formule-layout">
+        <div class="wod5e-mage-formule-col">
+            <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-formule">
+                <header class="wod5e-mage-riq-title wod5e-mage-riq-title-tasti">
+                    <span>{{localize "WOD5E_MAGE.Formule.Label"}}</span>
+                    <small class="wod5e-mage-riq-conto">{{localize "WOD5E_MAGE.Formule.Conto" aperte=formule.aperte totale=formule.totale}}</small>
+                    <span class="wod5e-mage-riq-tasti">
+                        {{!-- Le accessibili dalle Sfere possedute, o tutte (Blue, 26/9). --}}
+                        <button type="button" class="wod5e-mage-riq-tasto-piccolo wod5e-mage-formule-tutte{{#if formule.tutte}} active{{/if}}" data-action="formuleTutte" aria-pressed="{{formule.tutte}}" title="{{#if formule.tutte}}{{localize 'WOD5E_MAGE.Formule.Accessibili'}}{{else}}{{localize 'WOD5E_MAGE.Formule.Tutte'}}{{/if}}" aria-label="{{#if formule.tutte}}{{localize 'WOD5E_MAGE.Formule.Accessibili'}}{{else}}{{localize 'WOD5E_MAGE.Formule.Tutte'}}{{/if}}"><i class="fa-solid {{#if formule.tutte}}fa-filter{{else}}fa-book-open{{/if}}" aria-hidden="true"></i></button>
+                    </span>
+                </header>
+                <div class="wod5e-mage-riq-body">
+                    <div class="wod5e-mage-riq-cerca-riga">
+                        <label class="wod5e-mage-riq-cerca">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input type="search" placeholder="{{localize 'WOD5E_MAGE.Formule.Cerca'}}" aria-label="{{localize 'WOD5E_MAGE.Formule.Cerca'}}" data-filter="formule">
+                        </label>
+                    </div>
+                    <div class="wod5e-mage-formule-lista" data-list="formule">
+                        {{#each formule.righe as |formula|}}
+                            {{> "modules/wod5e-mage/templates/actor/parts/formula-scheda.hbs" formula=formula}}
+                        {{else}}
+                            <p class="wod5e-mage-bussola-vuoto">{{localize "WOD5E_MAGE.Formule.Vuote"}}</p>
+                        {{/each}}
+                    </div>
+                </div>
+            </section>
         </div>
-    {{else}}
-        <p class="wod5e-mage-row-empty">{{localize "WOD5E_MAGE.Incantesimi.Empty"}}</p>
-    {{/if}}
+
+        <div class="wod5e-mage-formule-col">
+            <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-effetti">
+                <header class="wod5e-mage-riq-title wod5e-mage-riq-title-tasti">
+                    <span>{{localize "WOD5E_MAGE.Formule.Effetti"}}</span>
+                    <small class="wod5e-mage-riq-conto">{{incantesimi.length}}</small>
+                    <span class="wod5e-mage-riq-tasti">
+                        {{!-- L'archivio degli effetti del manuale: liste da aggiungere alla scheda e ritoccare. --}}
+                        <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="incantesimoFromEffetti" title="{{localize 'WOD5E_MAGE.Incantesimi.FromEffetti'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.FromEffetti'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-book" aria-hidden="true"></i></button>
+                        {{!-- Il libro aperto: il Grimorio comune del tavolo. --}}
+                        <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="grimorioComuneOpen" title="{{localize 'WOD5E_MAGE.GrimorioComune.Open'}}" aria-label="{{localize 'WOD5E_MAGE.GrimorioComune.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+                        <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="incantesimoAdd" title="{{localize 'WOD5E_MAGE.Incantesimi.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Add'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                    </span>
+                </header>
+                <div class="wod5e-mage-riq-body">
+                    {{#if incantesimi.length}}
+                        {{!-- Per Sfere: ogni effetto sotto la Sfera più alta che usa; a pari merito compare in tutte e due. --}}
+                        <div class="wod5e-mage-incantesimi">
+                            {{#each incantesimiGroups as |group|}}
+                                <section class="wod5e-mage-incantesimi-group">
+                                    <h3 class="wod5e-mage-incantesimi-sphere">{{#if group.icon}}<img src="{{group.icon}}" alt="">{{/if}}{{group.label}} <small>{{group.spells.length}}</small></h3>
+                                    {{#each group.spells as |spell|}}
+                                        {{> "modules/wod5e-mage/templates/actor/parts/incantesimo-card.hbs" spell=spell}}
+                                    {{/each}}
+                                </section>
+                            {{/each}}
+                        </div>
+                    {{else}}
+                        <p class="wod5e-mage-bussola-vuoto">{{localize "WOD5E_MAGE.Incantesimi.Empty"}}</p>
+                    {{/if}}
+                </div>
+            </section>
+        </div>
+    </div>
 </section>

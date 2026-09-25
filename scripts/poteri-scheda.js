@@ -330,10 +330,11 @@ export function poteriAperti(sheet) {
 /** Dopo un render: le righe che erano aperte tornano aperte. */
 export function riapriPoteri(sheet) {
   const aperte = poteriAperti(sheet);
-  for (const riga of sheet.element?.querySelectorAll(".wod5e-mage-potere-riga[data-row]") ?? []) {
+  // Anche le carte delle Ancore (26/9): la freccia apre le note, e restano aperte attraverso i render.
+  for (const riga of sheet.element?.querySelectorAll(".wod5e-mage-potere-riga[data-row], .wod5e-mage-riga-apribile[data-row]") ?? []) {
     if (!aperte.has(String(riga.dataset.row))) continue;
     riga.classList.add("aperta");
-    riga.querySelector(".wod5e-mage-potere-nome")?.setAttribute("aria-expanded", "true");
+    riga.querySelector(".wod5e-mage-potere-nome, .wod5e-mage-ancora-apri")?.setAttribute("aria-expanded", "true");
   }
 }
 

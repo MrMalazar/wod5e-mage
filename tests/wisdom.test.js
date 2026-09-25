@@ -10,6 +10,8 @@ import {
   paintWisdom,
   wisdomAfterCure,
   wisdomBase,
+  wisdomClean,
+  wisdomStateId,
   wisdomDicePool,
   wisdomExtra,
   wisdomMax,
@@ -89,3 +91,20 @@ for (const lang of ["it", "en"]) {
 }
 
 console.log("Saggezza d'inchiostro: test passati.");
+
+// Lo stato della Saggezza (Blue, 26/9): dalle caselle pulite, non si scrive a mano.
+assert.deepEqual([{ max: 9, superficial: 0, aggravated: 0 }, { max: 8, superficial: 1, aggravated: 0 }, { max: 6, superficial: 1, aggravated: 0 }, { max: 6, superficial: 2, aggravated: 1 }, { max: 6, superficial: 4, aggravated: 1 }, { max: 6, superficial: 3, aggravated: 3 }].map(wisdomStateId), ["sereno", "lucido", "saldo", "incrinato", "inBilico", "segnato"]);
+assert.equal(wisdomClean({ max: 5, superficial: 9, aggravated: 0 }), 0);
+{
+  const attore = { system: { attributes: { charisma: { value: 3 }, resolve: { value: 1 } } }, getFlag: () => ({ superficial: 2, aggravated: 0, extra: 0 }) };
+  const w = getWisdom(attore);
+  assert.deepEqual([w.max, w.puliti, w.stato, w.statoLabel], [6, 4, "incrinato", "WOD5E_MAGE.Wisdom.Stati.incrinato"]);
+  const piena = getWisdom({ ...attore, getFlag: () => ({ superficial: 3, aggravated: 3, extra: 0 }) });
+  assert.deepEqual([piena.segnato, piena.stato], [true, "segnato"]);
+}
+const itWisdom = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE.Wisdom;
+const enWisdom = JSON.parse(readFileSync(new URL("../lang/en.json", import.meta.url), "utf8")).WOD5E_MAGE.Wisdom;
+for (const id of ["segnato", "inBilico", "incrinato", "saldo", "lucido", "sereno"]) assert.ok(itWisdom.Stati[id] && enWisdom.Stati[id], `Stati.${id}`);
+assert.match(readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8"), /wod5e-mage-riga-nome-fermo[^\n]*Wisdom\.Label[\s\S]{0,600}<output class="wod5e-mage-saggezza-stato stato-\{\{wisdom\.stato\}\}"[\s\S]*data-action="wisdomAttributePick"/);
+assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8"), /wod5e-mage-riga-stato/);
+console.log("stato della Saggezza: ok");

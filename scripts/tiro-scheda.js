@@ -96,6 +96,30 @@ function practiceForm(actor) {
   return FOCUS_FORMS.includes(stored) ? stored : "";
 }
 
+/**
+ * L'incantesimo in catena: quello scritto nel Grimorio, o quello che viaggia
+ * nello stato del tiro (una Formula caricata dalla pagina Formule, 26/9).
+ */
+export function spellOf(actor, tiro) {
+  if (!tiro?.spell) return null;
+  const stored = actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {};
+  return stored[tiro.spell] ?? tiro.spellData ?? null;
+}
+
+/**
+ * Un effetto entra nel Tiro della prima pagina (Blue, 26/9: «lanciabile come
+ * lancio attivo fatto dalla scheda prendendo i valori preparati
+ * nell'effetto»): Areté, Sfere, Ambiti, Attributo e Abilità com'erano
+ * scritti, il premio e il tipo; la scheda va alla prima pagina, e lì si tira
+ * coi tre tasti. Entra sempre da capo: il compositore si svuota prima.
+ */
+export async function caricaNelTiro(sheet, id, spell) {
+  const owned = prepareSpheres(sheet.actor).selected.map((sphere) => sphere.id);
+  sheet._tiro = loadSpell(emptyTiro(), id, spell, { owned });
+  sheet.changeTab("stats", "primary");
+  await sheet.render({ parts: ["stats"] });
+}
+
 /** I dadi dei Tratti scelti: la somma dei bonus scritti sugli oggetti. */
 export function traitDiceOf(actor, ids = []) {
   let total = 0;
@@ -186,7 +210,7 @@ export function notePotere(conto, power, localize, format) {
 function pillNames(actor, tiro, { known, inputs }) {
   const localize = game.i18n.localize.bind(game.i18n);
   const arete = getArete(actor);
-  const spell = tiro.spell ? ((actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {})[tiro.spell] ?? null) : null;
+  const spell = spellOf(actor, tiro);
   return {
     arete: { label: localize("WOD5E_MAGE.Arete.Label"), value: arete.value },
     spheres: Object.fromEntries(prepareSpheres(actor).all.map((sphere) => [sphere.id, localize(sphere.label)])),
@@ -267,9 +291,9 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
 }
 
 /**
- * Le righe degli Ambiti per il riquadro della Magick: sette pallini, dal
- * livello 1 al 7 (nessun pallino è lo 0, la base che non costa), quello
- * dichiarato acceso. Ogni Ambito ha due lenti (la tavola del 23/9): la
+ * Le righe degli Ambiti per il riquadro della Magick: otto pallini, il
+ * primo è lo 0 (la base che non costa, acceso sempre, non si clicca: Blue,
+ * 26/9) e poi i sette livelli, quello dichiarato acceso. Ogni Ambito ha due lenti (la tavola del 23/9): la
  * riga legge con quella scelta dalla tendina, o con la prima.
  */
 export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, modes = {} } = {}) {
@@ -310,6 +334,9 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
       modeChosen,
       modeShown: multi && modeChosen && !level,
       modes: options.map((option) => ({ id: option.id, label: option.label, selected: modeChosen && option.id === mode?.id })),
+      // Il primo pallino è lo 0 (Blue, 26/9): l'effetto di base, acceso sempre e
+      // non cliccabile, col suo testo nel sorvolo; i sette dopo si dichiarano.
+      zero: { value: 0, reading: readingOf(0), hint: hintOf(0), tip: tipOf(0) },
       steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({
         value: index + 1,
         active: index + 1 === level,
@@ -409,7 +436,9 @@ export function preparePoteriRows(actor, tiro, localize = (key) => key) {
  * con l'Obiettivo e gli Ambiti, e lo stato «scelto» (caricato nel tiro).
  */
 export function prepareIncantesimiRows(actor, tiro, localize = (key) => key) {
-  return prepareIncantesimi(actor, localize).map((row) => {
+  const lang = globalThis.game?.i18n?.lang ?? "it";
+  // In ordine di nome come le altre schede del riquadro (Blue, 26/9), non nell'ordine in cui sono scritti.
+  return [...prepareIncantesimi(actor, localize)].sort((a, b) => a.name.localeCompare(b.name, lang)).map((row) => {
     const top = [...row.spheres].sort((a, b) => b.level - a.level)[0];
     // Le Sfere senza numero (25/9 sera: niente livelli).
     const spheresText = row.spheres.map((sphere) => sphere.label).join(", ");
@@ -633,8 +662,8 @@ export async function launchTiro(actor, tiro) {
     }
   }
   const arete = getArete(actor);
-  // L'incantesimo caricato dal Grimorio dà il nome e l'Obiettivo al lancio.
-  const spell = tiro.spell ? ((actor.getFlag(MODULE_ID, INCANTESIMI_FLAG) ?? {})[tiro.spell] ?? null) : null;
+  // L'incantesimo caricato dal Grimorio (o la Formula di passaggio) dà il nome e l'Obiettivo al lancio.
+  const spell = spellOf(actor, tiro);
   const spellName = String(spell?.name ?? "").trim();
   const traitLabel = selectedTraits.map((trait) => trait.label).join(" + ") + (tiro.specialty ? ` · ${tiro.specialty}` : "");
   const rollLabel = spellName ? `${spellName} · ${traitLabel}` : traitLabel;

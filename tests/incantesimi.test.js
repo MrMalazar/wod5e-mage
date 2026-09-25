@@ -68,7 +68,7 @@ assert.equal(prepareIncantesimo("x", {}).name, "WOD5E_MAGE.Incantesimi.Unnamed")
 
 // La scheda: la pagina Grimorio dopo la Magick, i cinque comandi, il dialogo in modo «salva».
 const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
-assert.match(sheet, /grimorio: \{\s*template: `\$\{MODULE\}\/parts\/grimorio\.hbs`,\s*templates: \[`\$\{MODULE\}\/parts\/incantesimo-card\.hbs`\]/);
+assert.match(sheet, /grimorio: \{\s*template: `\$\{MODULE\}\/parts\/grimorio\.hbs`,\s*templates: \[`\$\{MODULE\}\/parts\/incantesimo-card\.hbs`, `\$\{MODULE\}\/parts\/formula-scheda\.hbs`\]/);
 assert.match(sheet, /magick: \{[\s\S]*\},\s*\/\/ Il Grimorio del personaggio[\s\S]*grimorio: \{\s*id: "grimorio"[\s\S]*focus: \{/);
 const page = readFileSync(new URL("../templates/actor/parts/grimorio.hbs", import.meta.url), "utf8");
 const card = readFileSync(new URL("../templates/actor/parts/incantesimo-card.hbs", import.meta.url), "utf8");
@@ -210,3 +210,17 @@ assert.equal(prepareIncantesimo("f2", { name: "x" }, (key) => key).formulaName, 
 assert.match(readFileSync(new URL("../templates/actor/parts/incantesimo-card.hbs", import.meta.url), "utf8"), /spell\.formulaName/);
 
 console.log("Grimorio del personaggio: test passati.");
+
+// Il dado dell'effetto (26/9) carica il Tiro della prima pagina, niente finestra;
+// la pagina Formule sta in due colonne, con la riga della Formula come partial.
+{
+  const incantesimiScript = readFileSync(new URL("../scripts/incantesimi.js", import.meta.url), "utf8");
+  const roll = incantesimiScript.slice(incantesimiScript.indexOf("export async function onIncantesimoRoll"), incantesimiScript.indexOf("export async function onIncantesimoFromEffetti"));
+  assert.match(roll, /caricaNelTiro\(this, id, current\)/);
+  assert.doesNotMatch(roll, /launchArete/);
+  assert.match(sheet, /grimorio: \{\s*template: `\$\{MODULE\}\/parts\/grimorio\.hbs`,\s*templates: \[`\$\{MODULE\}\/parts\/incantesimo-card\.hbs`, `\$\{MODULE\}\/parts\/formula-scheda\.hbs`\]/);
+  assert.match(sheet, /formuleTutte: onFormuleTutte,\s*formulaScrivi: onFormulaScrivi,\s*formulaLancia: onFormulaLancia/);
+  assert.match(sheet, /context\.formule = prepareFormulePagina\(sfereAccessibili\(actor\), \{ tutte: Boolean\(this\._formuleTutte\), localize \}\)/);
+  assert.match(sheet, /wireFormule\(this\)/);
+  assert.match(page, /wod5e-mage-formule-layout[\s\S]*wod5e-mage-riq-formule[\s\S]*formula-scheda\.hbs" formula=formula[\s\S]*wod5e-mage-riq-effetti[\s\S]*incantesimo-card\.hbs" spell=spell/);
+}

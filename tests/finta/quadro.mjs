@@ -145,13 +145,20 @@ function rispondi(azione, element) {
 await game.settings.set(MODULE, POOL_SETTING, { points: 4, visible: false, log: [{ kind: "manual", amount: 4, when: 1 }] });
 await guendalina.setFlag(MODULE, ADDOSSO_FLAG, { vecchio: { id: "vecchio", voce: "fiacco", nome: "Fiacco", famiglia: "tocchi", durata: "scena", quando: 1 } });
 await game.settings.set(MODULE, OROLOGI_SETTING, { vecchio: { id: "vecchio", titolo: "Vecchio", segmenti: 4, pieni: 1, paradosso: { voce: "carica" } } });
-rispondi("inizia", elementoDialogo({ maghi: ["a1", "a2"], scena: "combattimento", posto: "dissonante" }));
+// Senza maghi nel Quadro (26/9) la Nuova sessione non parte: avvisa, e la vecchia finestra di scelta non c'è più.
+const dialoghiPrima = sim.dialoghi.length;
+assert.equal(await nuovaSessione(), false);
+assert.equal(sim.dialoghi.length, dialoghiPrima, "nessuna finestra senza maghi nel Quadro");
+assert.match(sim.notifiche.at(-1), /Nessun mago nel Quadro/);
+// Giocano i maghi del Quadro, quelli trascinati dagli Attori: Guendalina e Luca.
+await game.settings.set(MODULE, MAGHI_SETTING, { ids: ["a1", "a2"] });
+rispondi("inizia", elementoDialogo({ scena: "combattimento", posto: "dissonante" }));
 assert.equal(await nuovaSessione(), true);
 {
   const dialogo = sim.dialoghi.at(-1);
-  assert.match(dialogo.content, /name="mago" value="a1" checked/, "i maghi coi giocatori partono spuntati");
-  assert.match(dialogo.content, /name="mago" value="a3"(?! checked)/, "Ianira senza giocatore parte senza spunta");
-  assert.ok(!dialogo.content.includes('value="n1"'), "la Guardia non è un mago");
+  assert.ok(!dialogo.content.includes('name="mago"'), "niente spunte: giocano i maghi del Quadro");
+  assert.match(dialogo.content, /Guendalina[\s\S]*Luca/);
+  assert.ok(!dialogo.content.includes("Ianira") && !dialogo.content.includes('value="n1"'), "chi non è nel Quadro non compare");
   assert.match(dialogo.content, /Sara/);
 }
 assert.deepEqual(attoriDelQuadro().map((a) => a.id), ["a1", "a2"]);

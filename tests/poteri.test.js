@@ -5,6 +5,7 @@ import {
   applyPotere,
   blocchiDelGenere,
   blocchiDelTesto,
+  sfereDellaChiave,
   cartaPotere,
   catalogoDellaSfera,
   contoPoteri,
@@ -216,15 +217,22 @@ assert.deepEqual(ruotaDopoUso({ quintessence: 3, paradox: 2 }, pronto), { quinte
 assert.deepEqual(ruotaDopoUso({ quintessence: 1, paradox: 2 }, pronto), { quintessence: 0, paradox: 2 });
 const blocchi = blocchiDelTesto("Effetto attivo: Paga 2 Quintessenza: cura.\nAccesso con Vita: ferite.\n\nEffetto passivo: In una scena di cure, un danno in più.");
 assert.deepEqual(blocchi, [
-  { titolo: "Effetto attivo", kind: "attivo", righe: ["Paga 2 Quintessenza: cura.", "Accesso con Vita: ferite."], voci: [{ chiave: "Paga 2 Quintessenza", testo: "cura." }, { chiave: "Accesso con Vita", testo: "ferite." }] },
-  { titolo: "Effetto passivo", kind: "passivo", righe: ["In una scena di cure, un danno in più."], voci: [{ chiave: "", testo: "In una scena di cure, un danno in più." }] }
+  { titolo: "Effetto attivo", kind: "attivo", righe: ["Paga 2 Quintessenza: cura.", "Accesso con Vita: ferite."], voci: [{ chiave: "Paga 2 Quintessenza", testo: "cura.", sfere: [], accesso: false }, { chiave: "Accesso con Vita", testo: "ferite.", sfere: ["life"], accesso: true }] },
+  { titolo: "Effetto passivo", kind: "passivo", righe: ["In una scena di cure, un danno in più."], voci: [{ chiave: "", testo: "In una scena di cure, un danno in più.", sfere: [], accesso: false }] }
 ]);
+// «Accesso con X» porta la Sfera come id (Blue, 26/9: sulla scheda sta il sigillo, non la parola):
+// i nomi come li scrive il generatore («Forza»), anche in coppia; un nome che non è una Sfera resta testo.
+assert.deepEqual([sfereDellaChiave("Accesso con Forza"), sfereDellaChiave("Accesso con Entropia + Primordio"), sfereDellaChiave("Accesso con Qualsiasi"), sfereDellaChiave("Paga 2 Quintessenza"), sfereDellaChiave("")], [["forces"], ["entropy", "prime"], [], [], []]);
+assert.deepEqual(voceDellaRiga("Accesso con Forza: un dado."), { chiave: "Accesso con Forza", testo: "un dado.", sfere: ["forces"], accesso: true });
+for (const tpl of ["templates/actor/parts/spheres.hbs", "templates/actor/parts/stat-tratti.hbs", "templates/dialogs/catalogo-poteri.hbs", "templates/chat/potere.hbs"]) {
+  assert.match(readFileSync(new URL(`../${tpl}`, import.meta.url), "utf8"), /\{\{#if v\.accesso\}\}<(?:b|strong) class="wod5e-mage-accesso">\{\{localize "WOD5E_MAGE\.Grimorio\.Access"\}\} \{\{#each v\.sfere as \|sfera\|\}\}<img class="wod5e-mage-sfera-inline" src="modules\/wod5e-mage\/assets\/icons\/sheet\/\{\{sfera\}\}\.png"/, tpl);
+}
 // Il testo scritto a mano: un blocco senza titolo né genere; l'Amalgama ha il suo genere; le chiavi «Con N poteri».
-assert.deepEqual(blocchiDelTesto("Fa una cosa.\nCon 2 poteri: due cose."), [{ titolo: "", kind: "", righe: ["Fa una cosa.", "Con 2 poteri: due cose."], voci: [{ chiave: "", testo: "Fa una cosa." }, { chiave: "Con 2 poteri", testo: "due cose." }] }]);
+assert.deepEqual(blocchiDelTesto("Fa una cosa.\nCon 2 poteri: due cose."), [{ titolo: "", kind: "", righe: ["Fa una cosa.", "Con 2 poteri: due cose."], voci: [{ chiave: "", testo: "Fa una cosa.", sfere: [], accesso: false }, { chiave: "Con 2 poteri", testo: "due cose.", sfere: [], accesso: false }] }]);
 assert.deepEqual(blocchiDelTesto("Effetto Amalgama: Con più Sfere.\nAccesso con Primordio + Tempo: anche il resto.").map((b) => [b.kind, b.voci.map((v) => v.chiave)]), [["amalgama", ["", "Accesso con Primordio + Tempo"]]]);
 assert.deepEqual(blocchiDelGenere("Effetto attivo: A.\n\nEffetto passivo: P.", "passivo").map((b) => b.righe), [["P."]]);
-assert.deepEqual(voceDellaRiga("Accesso con Mente: danni mentali."), { chiave: "Accesso con Mente", testo: "danni mentali." });
-assert.deepEqual(voceDellaRiga("Una frase con i due punti dopo: qui."), { chiave: "", testo: "Una frase con i due punti dopo: qui." });
+assert.deepEqual(voceDellaRiga("Accesso con Mente: danni mentali."), { chiave: "Accesso con Mente", testo: "danni mentali.", sfere: ["mind"], accesso: true });
+assert.deepEqual(voceDellaRiga("Una frase con i due punti dopo: qui."), { chiave: "", testo: "Una frase con i due punti dopo: qui.", sfere: [], accesso: false });
 const carta = cartaPotere(pronto, { sphereLabel: "Vita", usi: null, spent: 2, localize: (key) => key });
 assert.deepEqual([carta.name, carta.sphere, carta.formula, carta.kind, carta.spent, carta.usi, carta.blocchi.length > 1, Boolean(carta.paradox)], ["Pronto soccorso", "Vita", "Guarire", "WOD5E_MAGE.Poteri.Tipo.attivo", 2, null, true, true]);
 assert.equal(cartaPotere(conoscoRiga, { usi: usiDelPotere(conoscoRiga, dopo), localize: (key) => key }).usi.label, "WOD5E_MAGE.Poteri.Usi.sessione");

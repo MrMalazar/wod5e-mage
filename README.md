@@ -100,9 +100,12 @@ the system's Italian "Successo di" / "Fallimento di" labels, which lacked the
 margin placeholder. In the right side panel, under Custom Rolls, a small Bonuses
 table (number, type, description) lets the player note reminders such as
 "+3 · Forces Scope"; rows are stored in module flags and never touch the
-dice, and each value is capped at ±3. Above the Bonuses, a Specialties panel
-lists every Skill specialty with a + to add one (Skill and name) and a bin to
-remove it; it writes the same `bonuses` entries the system's Skill editor
+dice, and each value is capped at ±3. Specialties sit in a line under each
+Skill, on the first page and in the creation wizard: every Specialty is a pill
+(click to roll with it, × to remove it) and, while a slot is free (one at the
+first dot, two at the third, three at the fifth), a dashed box writes a new
+one, typed or picked from the six catalogue suggestions, on Enter; there is no
+dialog. They write the same `bonuses` entries the system's Skill editor
 writes, so the S marker and the roll modifiers keep working. The Skills
 header carries a + that adds a whole Specific Skill (name and dots, stored in
 module flags) under the "Specific Skills" title; these skills roll from the
@@ -122,10 +125,13 @@ own specific detail, and a trade field for the two "trade" Instruments. The
 Type disables the families it cannot use (Machine is Technomagick only, Word
 and Body are Magick only, Hybrid takes all); the same Instrument on two
 Spheres is allowed and flagged. The six family slots of older sheets are
-poured into the Sphere rows until the first save. Wisdom sits as a box at
-the top of the left column and, when its track is full, shows the Marked
-effects beside it. The right column lists only the Spheres currently selected
-in Magick, with a separate rich-text note for each.
+poured into the Sphere rows until the first save. Wisdom shows its state
+(Marked, On the edge, Cracked, Steady, Clear, Serene: computed from the clean
+boxes, never typed) in a box beside its name in the Resources of the first
+page; the Compass page has no Status box, it holds Identity and Convictions on
+the left and the Anchors, with expandable notes, on the right. The right
+column lists only the Spheres currently selected in Magick, with a separate
+rich-text note for each.
 The Mage header carries a single Health track (branch A): 1 + Stamina +
 Resolve boxes, adjustable with plus and minus, holding physical damage (/
 superficial, X aggravated) and mental damage (o superficial, ◎ aggravated).
@@ -162,6 +168,26 @@ configuration.
 Dice rendered in chat for Mage Actors use the module-specific `mage-dice` CSS
 class instead of the native `mortal-dice` class. The replacement happens only
 at render time, leaving the native WoD5e dice registry and Mortal rolls intact.
+
+## Formulas page
+
+The Formulas page has two full-width columns. On the left, the 48 Formulas
+the character's Spheres open (a button shows all of them), each row the same
+matrix as the Grimoire dialog, with the Access Sphere, the Amalgams and the
+threshold chosen by buttons; "Write among the effects" saves it as a Magick
+effect, "Cast from the Roll box" loads it into the Roll box on the first page
+with its values. On the right, the player's Magick effects, one collapsible
+card each, in name order: closed, the card keeps the name and the Goal; the
+die loads the effect into the Roll box the same way. Scope selectors show
+eight dots everywhere: the first is level 0, the base effect, always lit and
+never clickable.
+
+## Narrator's Board
+
+"New session" on the Narrator's Board starts with the mages that are on the
+Board (dragged there from the Actors sidebar): the dialog lists them and asks
+only for the first scene and the place; with an empty Board it warns instead
+of opening. The old dialog that ticked characters is gone.
 
 ## Planned implementation layers
 

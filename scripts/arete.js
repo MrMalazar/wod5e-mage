@@ -798,11 +798,12 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       specialtyScope: specialties[sphere.id] ?? "",
       specialtyLabel: specialties[sphere.id] ? `WOD5E_MAGE.Scopes.${specialties[sphere.id]}` : ""
     }));
-  // I sette Ambiti, a sette pallini l'uno (lo 0 è nessun pallino).
+  // I sette Ambiti, a otto pallini l'uno: lo 0 davanti, fisso (Blue, 26/9), poi i sette livelli.
   const scopeOptions = SCOPES.map((id) => ({
     id,
     label: `WOD5E_MAGE.Scopes.${id}`,
     faIcon: SCOPE_ICONS[id] ?? "",
+    zero: { value: 0 },
     steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 }))
   }));
   const quintessenceAvailable = getMagickBalance(actor).quintessence;

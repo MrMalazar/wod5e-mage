@@ -32,6 +32,7 @@ import { getMagickBalance, MAGICK_TRACK_MAX } from "./magick-balance.js";
 import { prepareMemo } from "./memo.js";
 import { PERSONAGGIO_TABLES, prepareAnchors, prepareConvictions } from "./personaggio-extra.js";
 import { potereLabel, poteriDelPersonaggio, poteriOfSphere } from "./poteri.js";
+import { nomiSpecializzazioni, rigaSpecializzazioni } from "./specializzazioni.js";
 import { dominiDellaCreazione, GRADI, prepareCreationSummary } from "./riepilogo.js";
 import { prepareSpheres, SPHERES } from "./spheres.js";
 import { ATTRIBUTE_KEYS, traitIcon } from "./tratti-icone.js";
@@ -561,11 +562,17 @@ export function passoAttributi(actor, summary, { localize = (key) => key } = {})
 
 const GRUPPI_ABILITA = Object.freeze({ physical: "WOD5E.SPC.Physical", social: "WOD5E.SPC.Social", mental: "WOD5E.SPC.Mental" });
 
-/** Passo 10: le quattordici Abilità a pallini, col tetto della creazione e il conto. */
+/**
+ * Passo 11: le quattordici Abilità a pallini, col tetto della creazione e il
+ * conto; sotto ogni Abilità le sue Specializzazioni (Blue, 26/9: mancavano
+ * nella guidata), in riga come sulla scheda: le scritte, e la casella che ne
+ * scrive una finché c'è posto (una a 1 pallino, due a 3, tre a 5).
+ */
 export function passoAbilita(actor, summary, { localize = (key) => key, lang = "it" } = {}) {
   const system = actor?.system ?? {};
   const byGroup = prepareEssentialSkillsByGroup(system.sortedSkills ?? {}, { localize, lang });
   const cap = summary?.targets?.skillCap ?? 3;
+  const nomi = nomiSpecializzazioni(actor);
   const gruppi = Object.entries(GRUPPI_ABILITA).map(([id, label]) => ({
     id,
     label: localize(label),
@@ -577,20 +584,27 @@ export function passoAbilita(actor, summary, { localize = (key) => key, lang = "
         icon: traitIcon(skill.id),
         value,
         oltre: value > cap,
-        steps: Array.from({ length: 5 }, (_, index) => ({ value: index + 1, lit: index + 1 <= value, oltre: index + 1 > cap }))
+        steps: Array.from({ length: 5 }, (_, index) => ({ value: index + 1, lit: index + 1 <= value, oltre: index + 1 > cap })),
+        spec: rigaSpecializzazioni(skill.id, value, nomi[skill.id] ?? [])
       };
     })
   })).filter((gruppo) => gruppo.abilita.length);
   const counts = Object.fromEntries((summary?.counts ?? []).map((entry) => [entry.id, entry]));
   const conto = counts.skills ?? { value: 0, target: 19, state: "under", sfida: 0 };
   const over = skillsOverCap(system.skills, cap);
+  const tutte = gruppi.flatMap((gruppo) => gruppo.abilita);
   return {
     gruppi,
     cap,
     conto: { ...conto, text: `${conto.value}/${conto.target}` },
     oltre: over,
     tettoOk: over.length === 0,
-    vive: CHIAVI_VIVE.length
+    vive: CHIAVI_VIVE.length,
+    // Le Specializzazioni scritte sui posti che i pallini aprono.
+    specializzazioni: {
+      scritte: tutte.reduce((sum, skill) => sum + skill.spec.scritte.length, 0),
+      posti: tutte.reduce((sum, skill) => sum + skill.spec.slots, 0)
+    }
   };
 }
 

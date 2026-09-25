@@ -75,6 +75,8 @@ assert.match(potenzaPeso.steps[3].tip, /^4 · .*Table\.potencyWeight\.4/);
 // I pallini partono dall'1: lo 0 è la base (23/9), e la riga a riposo la legge.
 const portataRiposo = S.prepareScopeRows(T.emptyTiro(), (k) => strings[k] ?? k, { arete: 3, modes: { range: "range" } }).find((r) => r.id === "range");
 assert.deepEqual([portataRiposo.level, portataRiposo.reading, portataRiposo.steps.length, portataRiposo.steps[0].value], [0, "WOD5E_MAGE.Scopes.Table.range.0", 7, 1]);
+// Lo 0 è il primo pallino (Blue, 26/9): fisso, con la lettura della base nel sorvolo; i sette dopo restano quelli.
+assert.deepEqual([portataRiposo.zero.value, portataRiposo.zero.reading, portataRiposo.zero.tip.startsWith("0 · ")], [0, "WOD5E_MAGE.Scopes.Table.range.0", true]);
 assert.equal(rows.every((r) => r.modeCount === 2), true, "ogni Ambito ha due lenti (23/9)");
 const conDanni = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyDamage", targets: "boh" } }).find((r) => r.id === "potency");
 assert.deepEqual([conDanni.mode, conDanni.nextModeLabel], ["potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight"], "dai Danni si passa al Peso");

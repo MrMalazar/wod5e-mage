@@ -1,0 +1,59 @@
+{{!-- Una Formula nella pagina (26/9): chiusa, il nome, «In genere» e i sigilli
+     d'Accesso (accesi se la Sfera è del personaggio); aperta, la matrice a due
+     colonne come nel Grimorio, poi la scelta della Sfera d'Accesso, delle
+     Amalgame e della soglia (tasti, non radio: siamo nel form della scheda) e
+     i due tasti, scrivi fra gli effetti e lancia dal Tiro. --}}
+<details class="wod5e-mage-grimorio-row wod5e-mage-grimorio-formula-row wod5e-mage-formula{{#unless formula.open}} closed{{/unless}}" data-formula="{{formula.id}}" data-search="{{formula.name}} {{formula.use}}">
+    <summary>
+        <span class="wod5e-mage-grimorio-formula-name">{{formula.name}}</span>
+        <span class="wod5e-mage-grimorio-formula-brief">{{formula.use}}</span>
+        <span class="wod5e-mage-grimorio-accessi">{{#each formula.access as |s|}}<img src="{{s.icon}}" alt="{{s.label}}" title="{{s.label}}" class="{{#if s.owned}}lit{{/if}}">{{/each}}</span>
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+    </summary>
+    <div class="wod5e-mage-matrice">
+        <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Access"}}</b>
+        <div class="wod5e-mage-matrice-corpo wod5e-mage-matrice-riga">{{#each formula.access as |s|}}<span class="wod5e-mage-matrice-sfera{{#if s.owned}} lit{{/if}}"><img src="{{s.icon}}" alt="">{{s.label}}</span>{{/each}}</div>
+        <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Amalgams"}}</b>
+        <div class="wod5e-mage-matrice-corpo wod5e-mage-matrice-riga">{{#if formula.amalgamsFree}}<em>{{#if formula.amalgamsNote}}{{formula.amalgamsNote}}{{else}}{{localize "WOD5E_MAGE.Grimorio.AmalgamsFree"}}{{/if}}</em>{{else}}{{#each formula.amalgams as |s|}}<span class="wod5e-mage-matrice-sfera{{#if s.owned}} lit{{/if}}"><img src="{{s.icon}}" alt="">{{s.label}}</span>{{/each}}{{/if}}</div>
+        <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Description"}}</b>
+        <div class="wod5e-mage-matrice-corpo wod5e-mage-matrice-descrizione">
+            {{#if formula.intro}}<p class="wod5e-mage-matrice-testo">{{formula.intro}}</p>{{/if}}
+            {{#each formula.rows as |row|}}
+                <p class="wod5e-mage-matrice-sfera-riga{{#if row.owned}} lit{{/if}}"><span class="wod5e-mage-matrice-sigilli">{{#each row.spheres as |s|}}<img src="{{s.icon}}" alt="">{{/each}}</span><span class="wod5e-mage-matrice-sfera-testo"><b>{{row.label}}:</b> {{row.text}}</span></p>
+            {{/each}}
+            {{#if formula.coda}}<p class="wod5e-mage-matrice-testo">{{formula.coda}}</p>{{/if}}
+        </div>
+        <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Limit"}}</b>
+        <div class="wod5e-mage-matrice-corpo"><p class="wod5e-mage-matrice-testo">{{formula.limit}}</p></div>
+        <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Threshold"}}</b>
+        <div class="wod5e-mage-matrice-corpo wod5e-mage-matrice-soglia">
+            {{#if (gt formula.thresholds.length 1)}}
+                {{#each formula.thresholds as |t|}}<button type="button" class="wod5e-mage-formula-scelta{{#unless @index}} scelta{{/unless}}" data-role="formulaThreshold" data-index="{{@index}}" aria-pressed="{{#if @index}}false{{else}}true{{/if}}">{{t.text}}</button>{{/each}}
+            {{else}}
+                {{#each formula.thresholds as |t|}}<span>{{t.text}}</span>{{/each}}
+            {{/if}}
+        </div>
+        {{#if formula.powers.length}}
+            <b class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.Powers"}}</b>
+            <div class="wod5e-mage-matrice-corpo wod5e-mage-matrice-poteri">{{#each formula.powers as |power|}}<span{{#if power.proposal}} class="proposta" title="{{localize 'WOD5E_MAGE.Grimorio.Proposal'}}"{{/if}}>{{power.name}}</span>{{/each}}</div>
+        {{/if}}
+        {{#if formula.open}}
+            <div class="wod5e-mage-matrice-scelte">
+                <span class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.ChooseAccess"}}</span>
+                {{#each formula.accessOwned as |s|}}<button type="button" class="wod5e-mage-formula-scelta{{#if s.checked}} scelta{{/if}}" data-role="formulaAccess" data-sphere="{{s.id}}" aria-pressed="{{s.checked}}"><img src="{{s.icon}}" alt="">{{s.label}}</button>{{/each}}
+            </div>
+            {{#if formula.amalgamChoices.length}}
+                <div class="wod5e-mage-matrice-scelte">
+                    <span class="wod5e-mage-matrice-k">{{localize "WOD5E_MAGE.Grimorio.ChooseAmalgam"}}</span>
+                    {{#each formula.amalgamChoices as |s|}}<button type="button" class="wod5e-mage-formula-scelta" data-role="formulaAmalgam" data-sphere="{{s.id}}" aria-pressed="false"><img src="{{s.icon}}" alt="">{{s.label}}</button>{{/each}}
+                </div>
+            {{/if}}
+            <div class="wod5e-mage-matrice-tasti">
+                <button type="button" data-action="formulaScrivi" data-formula="{{formula.id}}" title="{{localize 'WOD5E_MAGE.Formule.ScriviHint'}}" {{#if @root.locked}}disabled data-fermo="true"{{/if}}><i class="fa-solid fa-feather" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Formule.Scrivi"}}</button>
+                <button type="button" data-action="formulaLancia" data-formula="{{formula.id}}" title="{{localize 'WOD5E_MAGE.Formule.LanciaHint'}}"><i class="fa-solid fa-dice" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Formule.Lancia"}}</button>
+            </div>
+        {{else}}
+            <p class="wod5e-mage-grimorio-missing">{{localize "WOD5E_MAGE.Grimorio.NoAccess"}}</p>
+        {{/if}}
+    </div>
+</details>

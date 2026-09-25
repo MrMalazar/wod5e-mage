@@ -15184,3 +15184,618 @@
   white-space: nowrap;
 }
 
+
+/* ==========================================================================
+   1.22.0 (Blue, 26/9): la prima pagina, l'Appartenenza, le pagine Tratti e
+   Magick, «Accesso con» col sigillo.
+   ========================================================================== */
+
+/* Il Tiro: la catena in colonna (Blue, 26/9: «devono apparire a elenco
+   verticale e non si devono affiancare»): una pillola per riga, larga
+   quanto la catena, il testo a sinistra e la × in fondo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-catena {
+  align-items: stretch;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola {
+  border-radius: 6px;
+  height: auto;
+  min-height: 22px;
+  padding: 2px 3px 2px 8px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-testo {
+  flex: 1 1 auto;
+  max-width: none;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-via {
+  flex: 0 0 16px;
+}
+
+/* Le schede Attivi e Passivi (Blue, 26/9: «si sovrappongono e non si
+   compattano»): il tasto-riga cresce col testo dell'effetto invece di
+   restare all'altezza fissa dei tasti di Foundry, e la riga sotto non gli
+   finisce più addosso. */
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga {
+  height: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga-potere-filtro {
+  line-height: 1.2;
+}
+
+/* L'Appartenenza (Blue, 26/9: i simboli delle Sfere «contraddistinti dal
+   background e dai colori»): il sigillo scuro su un disco d'oro, come nella
+   lista dei poteri conosciuti, così si vede su ogni fondo; quello del Credo
+   non scelto resta in grigio ma leggibile, quello di famiglia porta l'anello
+   viola. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick > img,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick-double > img {
+  background: var(--mage-oro);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 35%);
+  box-sizing: border-box;
+  flex: 0 0 26px;
+  height: 26px;
+  object-fit: contain;
+  padding: 3px;
+  width: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick > .wod5e-mage-lineage-nosphere,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-lineage-pick-double > .wod5e-mage-lineage-nosphere {
+  flex: 0 0 26px;
+  height: 26px;
+  width: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-credo-sphere-family {
+  box-shadow: 0 0 0 2px var(--mage-viola-chiaro);
+  filter: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-credo-sphere-dim {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-credo-sphere-dim:hover {
+  opacity: 0.9;
+}
+
+/* «Accesso con» col sigillo della Sfera al posto della parola (Blue, 26/9):
+   il sigillo scuro su un disco d'oro, che si distingue su ogni fondo, nella
+   lista dei poteri, nel riquadro dei Tratti, nel catalogo e in chat. */
+.wod5e-mage-accesso {
+  white-space: nowrap;
+}
+
+.wod5e-mage-sfera-inline {
+  background: var(--mage-oro, #d9a827);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 35%);
+  box-sizing: border-box;
+  display: inline-block;
+  height: 17px;
+  margin: 0 1px;
+  object-fit: contain;
+  padding: 2px;
+  vertical-align: -4px;
+  width: 17px;
+}
+
+/* Le pagine Tratti e Magick (Blue, 26/9: «troppo piccola in dimensioni
+   caratteri di ogni cosa»): il testo cresce, e i titoli dei riquadri stanno
+   sopra al testo. Le misure delle altre pagine non cambiano. */
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riq-title {
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  padding-bottom: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riq-conto {
+  font-size: 0.82rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riq-occhiello {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riga-nome,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-nome,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riga-oggetto .wod5e-mage-riga-nome,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riga-sfera-pagina .wod5e-mage-riga-nome {
+  font-size: 1.08rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riga-spiega,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-spiega,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-con,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-blocco-riga,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-testo,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-flavor {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-blocco-titolo,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-k,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-tipo,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-testa > button.wod5e-mage-potere-usa,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-fondo > button,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-sfera-potere,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-atto-pastiglia {
+  font-size: 0.7rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-costo,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-oggetto-tag,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-testa > button.wod5e-mage-potere-usa > small,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-bussola-vuoto,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riq-vuoto {
+  font-size: 0.82rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-testa > button.wod5e-mage-potere-usa,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-potere-fondo > button,
+.wod5e-mage.wod5e.actor.sheet :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-sfera-potere {
+  height: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-oggetto-testa > select.wod5e-mage-oggetto-tipo {
+  font-size: 0.7rem;
+  height: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-oggetto-testa > input.wod5e-mage-oggetto-dettagli,
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-oggetto-testa > input.wod5e-mage-oggetto-numero,
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riga input.wod5e-mage-elemento-nome,
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riga input.wod5e-mage-oggetto-nome,
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-riga input.wod5e-mage-oggetto-nota,
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) input.wod5e-mage-atto-nome,
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) textarea.wod5e-mage-atto-effetto,
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-atto-campo > input[type="text"],
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) .wod5e-mage-atto-campo > input[type="number"] {
+  font-size: 0.95rem;
+  height: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content :is(.wod5e-mage-dotazione, .wod5e-mage-spheres) textarea.wod5e-mage-atto-effetto {
+  height: auto;
+  min-height: 3em;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres .wod5e-mage-atto-campo {
+  --atto-etichetta: 7.8rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres .wod5e-mage-atto-campo > span {
+  font-size: 0.8rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres .wod5e-mage-riga-sfera-pagina .wod5e-mage-riga-icona,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres .wod5e-mage-potere-testa > .wod5e-mage-potere-sfera {
+  flex-basis: 24px;
+  height: 24px;
+  width: 24px;
+}
+
+/* Gli Ambiti a otto pallini (Blue, 26/9): il primo è lo 0, l'effetto di base,
+   acceso sempre e non cliccabile (il sorvolo lo legge), staccato da un filo
+   dai sette livelli che si dichiarano; nella prima pagina e nelle finestre. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito.zero {
+  background: var(--mage-oro-scuro);
+  border-color: var(--mage-oro);
+  cursor: help;
+  margin-right: 4px;
+  position: relative;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito.zero::after {
+  border-right: 1px solid var(--mage-oro-tenue);
+  content: "";
+  height: 14px;
+  position: absolute;
+  right: -5px;
+  top: 0;
+}
+
+.wod5e-mage-arete-sphere-dot.zero,
+.wod5e-mage-arete-sphere-dot.zero.active {
+  background: var(--mage-oro-scuro, #7a5d1e);
+  border-color: var(--mage-oro, #d9a827);
+  cursor: help;
+  margin-right: 5px;
+  position: relative;
+}
+
+.wod5e-mage-arete-sphere-dot.zero::after {
+  border-right: 1px solid rgb(152 119 43 / 55%);
+  content: "";
+  height: 13px;
+  position: absolute;
+  right: -4px;
+  top: 0;
+}
+
+/* Lo stato della Saggezza (Blue, 26/9): la casella a destra del nome, che il
+   giocatore non scrive; il carattere dei titoli, in oro; con la fila piena
+   («Segnato») vira al rosso. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-stato {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 4px;
+  color: var(--mage-oro);
+  cursor: help;
+  flex: 0 1 auto;
+  font-family: "Modesto Condensed", serif;
+  font-size: 0.98rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin-left: 2px;
+  min-width: 0;
+  overflow: hidden;
+  padding: 3px 7px 2px;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-stato.stato-segnato {
+  border-color: var(--mage-rosso-chiaro);
+  color: var(--mage-rosso-chiaro);
+}
+
+/* La Bussola (Blue, 26/9): via lo Stato; a sinistra l'Identità e le
+   Convinzioni, a destra le Ancore. Le note dell'Ancora sono un campo come
+   gli altri, dello stesso colore; chiuse mostrano una riga, la freccia le
+   apre e crescono col testo (le tre lineette del ridimensionamento non
+   bastavano). */
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora-note > textarea.wod5e-mage-bussola-note {
+  color: var(--mage-testo);
+  flex: 1 1 0;
+  margin-left: 0;
+  max-height: 1.6em;
+  min-height: 1.5em;
+  overflow: hidden;
+  resize: none;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-ancora.aperta .wod5e-mage-ancora-note > textarea.wod5e-mage-bussola-note {
+  max-height: none;
+  min-height: 4.2em;
+  overflow: auto;
+  resize: vertical;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-apri > i {
+  transition: transform 0.15s;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora.aperta .wod5e-mage-ancora-apri > i {
+  transform: rotate(180deg);
+}
+
+/* La pagina Formule (Blue, 26/9): due colonne a tutta pagina, le Formule a
+   sinistra (la matrice del Grimorio, coi tasti di scelta al posto delle
+   radio) e gli effetti di Magick a destra, a tendina con l'Obiettivo da
+   chiusi. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-layout {
+  align-items: start;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula {
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula[hidden] {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formula > summary > .wod5e-mage-grimorio-formula-name {
+  font-size: 1rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formula > summary > .wod5e-mage-grimorio-formula-brief {
+  font-size: 0.82rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formula .wod5e-mage-matrice {
+  font-size: 0.9rem;
+}
+
+/* I tasti di scelta (Sfera d'Accesso, Amalgame, soglia): pastiglie col
+   sigillo, quella scelta in viola. */
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-formula-scelta {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 12px;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.8rem;
+  gap: 4px;
+  height: 24px;
+  line-height: 1;
+  margin: 0 4px 4px 0;
+  min-height: 0;
+  padding: 0 9px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-formula-scelta:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-formula-scelta.scelta {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-formula-scelta > img {
+  border: 0;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  height: 14px;
+  width: 14px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formula .wod5e-mage-matrice-scelte {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formula .wod5e-mage-matrice-tasti {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formula .wod5e-mage-matrice-tasti > button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro);
+  border-radius: 5px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 700;
+  gap: 5px;
+  height: 26px;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  min-height: 0;
+  padding: 0 10px;
+  text-transform: uppercase;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formula .wod5e-mage-matrice-tasti > button:hover {
+  box-shadow: 0 0 0 1px var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formula .wod5e-mage-matrice-tasti > button:disabled {
+  border-color: var(--mage-oro-tenue);
+  color: var(--mage-tenue);
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* Gli effetti: la lista senza il margine della pagina vecchia; la testa va a
+   capo e l'Obiettivo sta sotto il nome da chiusa, sparisce da aperta. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-effetti .wod5e-mage-incantesimi {
+  padding: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-head {
+  flex-wrap: wrap;
+  row-gap: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-obiettivo {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--mage-testo);
+  display: -webkit-box;
+  flex: 1 1 100%;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  overflow: hidden;
+  padding-left: 1.3rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-obiettivo > b {
+  color: var(--mage-oro);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo[open] > .wod5e-mage-incantesimo-head > .wod5e-mage-incantesimo-obiettivo {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-incantesimo-name {
+  font-size: 1.05rem;
+}
+
+@media (width <= 900px) {
+  .wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Le Specializzazioni in riga sotto l'Abilità (Blue, 26/9: via la finestra
+   e la tendina): la riga va a capo, sotto stanno le pastiglie (il clic nel
+   tiro, la × toglie; quella nel tiro in viola) e, finché c'è posto, la
+   casella tratteggiata che ne scrive una, a mano o dai suggerimenti. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita.con-specializzazioni {
+  flex-wrap: wrap;
+  padding-bottom: 3px;
+  row-gap: 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-specializzazioni {
+  align-items: center;
+  display: flex;
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+  gap: 3px 4px;
+  min-width: 0;
+  padding-left: 27px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-specializzazioni > .wod5e-mage-pastiglia {
+  flex: 0 1 auto;
+  height: 20px;
+  max-width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-specializzazioni .wod5e-mage-pastiglia-nome {
+  font-size: 0.74rem;
+  padding: 0 7px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-specializzazioni .wod5e-mage-pastiglia-via {
+  flex: 0 0 16px;
+  font-size: 0.75rem;
+  width: 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-pastiglia-scrivi,
+.application.wod5e-mage-guidata input.wod5e-mage-guidata-pastiglia-scrivi {
+  background: transparent;
+  border: 1px dashed var(--mage-oro-tenue);
+  border-radius: 11px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: var(--mage-testo);
+  flex: 0 1 8.5rem;
+  font-size: 0.74rem;
+  height: 20px;
+  line-height: 1;
+  margin: 0;
+  min-width: 6rem;
+  padding: 0 8px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-pastiglia-scrivi:focus,
+.application.wod5e-mage-guidata input.wod5e-mage-guidata-pastiglia-scrivi:focus {
+  border-color: var(--mage-oro);
+  border-style: solid;
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-pastiglia-scrivi::placeholder,
+.application.wod5e-mage-guidata input.wod5e-mage-guidata-pastiglia-scrivi::placeholder {
+  color: var(--mage-tenue);
+  font-style: italic;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content input.wod5e-mage-pastiglia-scrivi:disabled,
+.application.wod5e-mage-guidata input.wod5e-mage-guidata-pastiglia-scrivi:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* Nella creazione guidata: la stessa riga sotto l'Abilità del passo 11. */
+.wod5e-mage-guidata-riga.con-specializzazioni {
+  flex-wrap: wrap;
+  row-gap: 3px;
+}
+
+.wod5e-mage-guidata-specializzazioni {
+  align-items: center;
+  display: flex;
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+  gap: 3px 5px;
+  min-width: 0;
+  padding-left: 28px;
+}
+
+.wod5e-mage-guidata-pastiglia {
+  align-items: stretch;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 11px;
+  box-sizing: border-box;
+  display: inline-flex;
+  height: 21px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.wod5e-mage-guidata-pastiglia > span {
+  color: var(--mage-testo);
+  font-size: 0.76rem;
+  line-height: 19px;
+  overflow: hidden;
+  padding: 0 7px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-pastiglia-via {
+  background: transparent;
+  border: 0;
+  border-left: 1px solid rgb(152 119 43 / 40%);
+  border-radius: 0;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  flex: 0 0 17px;
+  font-size: 0.8rem;
+  height: auto;
+  line-height: 1;
+  min-height: 0;
+  padding: 0;
+  width: 17px;
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-pastiglia-via:hover {
+  box-shadow: none;
+  color: var(--mage-rosso-chiaro);
+}
+
+.application.wod5e-mage-guidata button.wod5e-mage-guidata-pastiglia-via:disabled {
+  cursor: default;
+  opacity: 0.4;
+}

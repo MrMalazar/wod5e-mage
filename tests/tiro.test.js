@@ -320,3 +320,12 @@ assert.deepEqual([setDadi(magick, 2).dadi, setDadi(magick, -3).dadi, setDadi(mag
 }
 
 console.log("tiro: ok");
+
+// Una Formula caricata dalla pagina (26/9) non sta nel Grimorio: viaggia nello stato del tiro.
+{
+  const formula = { name: "Danneggiare", goal: "In genere…", spheres: { forces: 1 }, scopes: { potency: 3 }, magickType: "", prize: false, traits: [] };
+  const caricato = loadSpell(emptyTiro(), "formula:danneggiare", formula, { owned: ["forces"] });
+  assert.deepEqual([caricato.spell, caricato.spellData.name, caricato.spheres, caricato.scopes, caricato.arete, caricato.kind], ["formula:danneggiare", "Danneggiare", ["forces"], { potency: 3 }, true, null]);
+  assert.equal(emptyTiro().spellData, null);
+  assert.equal(removePill(caricato, { kind: "spell", id: "formula:danneggiare" }).spellData, null);
+}

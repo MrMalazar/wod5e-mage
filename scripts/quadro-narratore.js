@@ -954,24 +954,23 @@ async function avanzaOrologiPer(evento) {
 /*  Nuova sessione, Cambio scena                                       */
 /* ------------------------------------------------------------------ */
 
-function maghiDelMondo() {
-  return (game.actors?.contents ?? [])
-    .filter((actor) => isMageActor(actor))
-    .map((actor) => ({ id: actor.id, name: actor.name, img: actor.img, utenti: utentiDi(actor), giocatore: Boolean(actor.hasPlayerOwner) }))
-    .sort((a, b) => Number(b.giocatore) - Number(a.giocatore) || a.name.localeCompare(b.name, "it"));
-}
-
-function leggiScelti(root) {
-  return [...root.querySelectorAll("input[name=mago]:checked")].map((input) => input.value);
-}
-
-/** La Nuova sessione del Narratore: chi gioca (lo decide lui), la prima scena, il posto; la riserva a zero. */
+/**
+ * La Nuova sessione del Narratore (24/9; 26/9, Blue: la finestra di scelta
+ * dei personaggi «va eliminata»): giocano i maghi che stanno nel Quadro,
+ * quelli trascinati dagli Attori; la finestra li mostra e chiede solo la
+ * prima scena e il posto. Senza maghi nel Quadro avvisa e non parte. La
+ * riserva torna a zero.
+ */
 export async function nuovaSessione() {
   if (!game.user?.isGM) return false;
   const localize = localizer();
-  const attuali = new Set(attoriDelQuadro().map((actor) => actor.id));
+  const maghi = attoriDelQuadro();
+  if (!maghi.length) {
+    ui.notifications.warn(localize("WOD5E_MAGE.Menu.NessunMagoSessione"));
+    return false;
+  }
   const content = await foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/nuova-sessione-narratore.hbs`, {
-    maghi: maghiDelMondo().map((mago) => ({ ...mago, checked: attuali.size ? attuali.has(mago.id) : mago.giocatore, collegato: mago.utenti.some((user) => user.active) })),
+    maghi: maghi.map((actor) => ({ id: actor.id, name: actor.name, img: actor.img, utenti: utentiDi(actor) })),
     scene: SCENE_PARADOSSO.map((scena) => ({ id: scena.id, nome: scena.nome })),
     posti: POSTI.map((id) => ({ id, label: localize(`WOD5E_MAGE.Menu.Posti.${id}`) })),
     points: getPool().points
@@ -990,7 +989,6 @@ export async function nuovaSessione() {
         default: true,
         callback: (_event, _button, dialog) => {
           scelta = {
-            ids: leggiScelti(dialog.element),
             tipo: dialog.element.querySelector("[name=scena]")?.value ?? "",
             posto: dialog.element.querySelector("[name=posto]")?.value ?? "normale"
           };
@@ -1001,6 +999,7 @@ export async function nuovaSessione() {
     ]
   }).catch(() => null);
   if (answer !== "inizia" || !scelta) return false;
+  const ids = maghi.map((actor) => actor.id);
   // Gli effetti della sessione scaduta e la lobby vecchia si puliscono.
   for (const actor of game.actors?.contents ?? []) {
     if (!isMageActor(actor)) continue;
@@ -1011,10 +1010,10 @@ export async function nuovaSessione() {
   }
   for (const orologio of getOrologi()) await specchiaOrologio(orologio, { elimina: true });
   await game.settings.set(MODULE_ID, OROLOGI_SETTING, {});
-  await setMaghi(scelta.ids);
+  await setMaghi(ids);
   await setScena({ tipo: scelta.tipo, posto: scelta.posto, numero: 1, inizio: Date.now() });
   await game.settings.set(MODULE_ID, POOL_SETTING, resetPool(getPool()));
-  ui.notifications.info(game.i18n.format("WOD5E_MAGE.Menu.SessioneIniziata", { n: scelta.ids.length }));
+  ui.notifications.info(game.i18n.format("WOD5E_MAGE.Menu.SessioneIniziata", { n: ids.length }));
   QuadroNarratore.aggiorna();
   return true;
 }

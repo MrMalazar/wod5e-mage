@@ -61,3 +61,79 @@ assert.match(html, /data-role="formulaAccess" value="life" checked/);
 const dalTiro = template({ groups: [], formule: prepareGrimorioFormule(levels), spheres: [], view: "formula", inSheet: false });
 assert.ok(dalTiro.includes('data-role="formulaPick"') && !dalTiro.includes('data-role="formulaSave"'));
 console.log("Matrici e catalogo dei poteri: test passati.");
+
+// La pagina Formule (Blue, 26/9): a sinistra le Formule accessibili dalle
+// Sfere possedute, o tutte; le scelte sulla riga sono tasti; i due tasti in
+// fondo scrivono fra gli effetti o caricano il Tiro della prima pagina.
+{
+  const { accendiScelta, prepareFormulePagina, sceltaDellaRiga } = await import("../scripts/formule-scheda.js");
+  const conForze = prepareFormulePagina({ forces: 2 }, { localize: (key) => key });
+  assert.equal(conForze.totale, 48);
+  assert.ok(conForze.aperte > 0 && conForze.aperte < 48);
+  assert.equal(conForze.righe.length, conForze.aperte, "senza «tutte» restano le accessibili");
+  assert.ok(conForze.righe.every((formula) => formula.open && formula.access.some((sphere) => sphere.id === "forces" && sphere.owned)));
+  assert.equal(conForze.tutte, false);
+  const tutte = prepareFormulePagina({ forces: 2 }, { tutte: true, localize: (key) => key });
+  assert.deepEqual([tutte.righe.length, tutte.aperte, tutte.tutte], [48, conForze.aperte, true]);
+  assert.deepEqual(tutte.righe.map((formula) => formula.name), [...tutte.righe.map((formula) => formula.name)].sort((a, b) => a.localeCompare(b, "it")), "in ordine di nome");
+  assert.deepEqual(prepareFormulePagina({}, { localize: (key) => key }).righe, [], "senza Sfere niente accessibili");
+  // La lettura della riga: la Sfera d'Accesso accesa, le Amalgame accese, la soglia accesa.
+  const tasto = (role, dataset, scelta = true) => ({ dataset: { role, ...dataset }, classe: scelta });
+  const riga = (tasti) => ({ querySelectorAll: (selector) => tasti.filter((t) => selector.includes(`[data-role=${t.dataset.role}]`) && (!selector.endsWith(".scelta") || t.classe)) });
+  assert.deepEqual(sceltaDellaRiga(riga([tasto("formulaAccess", { sphere: "forces" }), tasto("formulaAccess", { sphere: "prime" }, false), tasto("formulaAmalgam", { sphere: "matter" }), tasto("formulaAmalgam", { sphere: "life" }, false), tasto("formulaThreshold", { index: "1" })])), { access: "forces", amalgams: ["matter"], threshold: 1 });
+  assert.deepEqual(sceltaDellaRiga(riga([])), { access: "", amalgams: [], threshold: 0 });
+  assert.deepEqual(sceltaDellaRiga(null), { access: "", amalgams: [], threshold: 0 });
+  // I tasti: l'Accesso e la soglia ne tengono uno acceso, le Amalgame vanno e vengono.
+  const finto = (role, sphere) => {
+    const el = { dataset: { role, sphere }, attrs: {}, classes: new Set() };
+    el.classList = { add: (c) => el.classes.add(c), remove: (c) => el.classes.delete(c), contains: (c) => el.classes.has(c), toggle: (c, on) => { on ? el.classes.add(c) : el.classes.delete(c); return on; } };
+    el.setAttribute = (k, v) => { el.attrs[k] = v; };
+    return el;
+  };
+  const a = finto("formulaAccess", "forces"), b = finto("formulaAccess", "prime"), m = finto("formulaAmalgam", "matter");
+  const row = { querySelectorAll: (selector) => [a, b, m].filter((el) => selector.includes(el.dataset.role)) };
+  for (const el of [a, b, m]) el.closest = () => row;
+  b.classes.add("scelta");
+  accendiScelta(a);
+  assert.deepEqual([a.classes.has("scelta"), b.classes.has("scelta"), a.attrs["aria-pressed"], b.attrs["aria-pressed"]], [true, false, "true", "false"]);
+  accendiScelta(a);
+  assert.equal(a.classes.has("scelta"), true, "l'Accesso non si spegne da solo");
+  assert.equal(accendiScelta(m, { single: false }), true);
+  assert.equal(accendiScelta(m, { single: false }), false);
+  assert.equal(m.classes.has("scelta"), false);
+}
+
+// La pagina si compila: due colonne, la cerca, il tasto «tutte», le righe
+// delle Formule coi tasti (senza campi col nome: siamo nel form della scheda),
+// gli effetti a tendina con l'Obiettivo da chiusi.
+{
+  const { prepareFormulePagina } = await import("../scripts/formule-scheda.js");
+  const { prepareIncantesimo, groupIncantesimiBySphere } = await import("../scripts/incantesimi.js");
+  Handlebars.registerHelper("localize", (key, options) => {
+    const hash = options?.hash ?? {};
+    return Object.keys(hash).length ? `${key}(${Object.entries(hash).map(([k, v]) => `${k}=${v}`).join(",")})` : String(key);
+  });
+  Handlebars.registerHelper("gt", (a, b) => a > b);
+  Handlebars.registerHelper("concat", (...args) => args.slice(0, -1).join(""));
+  for (const name of ["formula-scheda", "incantesimo-card"]) {
+    Handlebars.registerPartial(`modules/wod5e-mage/templates/actor/parts/${name}.hbs`, readFileSync(new URL(`../templates/actor/parts/${name}.hbs`, import.meta.url), "utf8"));
+  }
+  const pagina = Handlebars.compile(readFileSync(new URL("../templates/actor/parts/grimorio.hbs", import.meta.url), "utf8"), { strict: false });
+  const localize = (key) => key;
+  const formule = prepareFormulePagina({ forces: 2, prime: 1 }, { localize });
+  const incantesimi = [prepareIncantesimo("s1", { name: "Lama di fuoco", goal: "Una lama che brucia", spheres: { forces: 2 }, scopes: { potency: 2 }, magickType: "vulgar" }, localize)];
+  const html = pagina({ tab: { cssClass: "active", id: "grimorio", group: "primary" }, locked: false, formule, incantesimi, incantesimiGroups: groupIncantesimiBySphere(incantesimi, localize) });
+  for (const marker of ["wod5e-mage-formule-layout", 'data-action="formuleTutte"', 'data-filter="formule"', 'data-list="formule"', "WOD5E_MAGE.Formule.Conto(", 'wod5e-mage-formula" data-formula="danneggiare"', 'data-role="formulaAccess" data-sphere="forces"', 'data-action="formulaScrivi" data-formula="danneggiare"', 'data-action="formulaLancia" data-formula="danneggiare"', "wod5e-mage-riq-effetti", 'data-action="incantesimoFromEffetti"', 'data-action="incantesimoAdd"', 'data-action="grimorioClose"', '<span class="wod5e-mage-incantesimo-obiettivo" title="Una lama che brucia"><b>WOD5E_MAGE.Arete.Goal</b> Una lama che brucia</span>', 'data-action="incantesimoRoll" data-row="s1" title="WOD5E_MAGE.Incantesimi.RollHint"']) {
+    assert.ok(html.includes(marker), `manca ${marker}`);
+  }
+  const righeFormule = html.slice(html.indexOf('data-list="formule"'), html.indexOf("wod5e-mage-riq-effetti"));
+  assert.doesNotMatch(righeFormule, /<(?:input|select|textarea)\b[^>]*\sname=/, "nessun campo col nome dentro le righe delle Formule");
+  assert.ok(!righeFormule.includes(" closed"), "senza «tutte» ogni riga è accessibile");
+  assert.equal((righeFormule.match(/wod5e-mage-formula-scelta scelta" data-role="formulaAccess"/g) ?? []).length, formule.righe.filter((formula) => formula.accessOwned.length === 1).length, "con una Sfera d'Accesso sola è già scelta");
+  const conTutte = pagina({ tab: { cssClass: "active", id: "grimorio", group: "primary" }, locked: true, formule: prepareFormulePagina({ forces: 2 }, { tutte: true, localize }), incantesimi: [], incantesimiGroups: [] });
+  assert.ok(conTutte.includes("wod5e-mage-formule-tutte active") && conTutte.includes(" closed") && conTutte.includes("WOD5E_MAGE.Grimorio.NoAccess") && conTutte.includes("WOD5E_MAGE.Incantesimi.Empty"), "con «tutte» anche le chiuse, e la lista vuota degli effetti");
+  assert.ok(conTutte.includes('data-action="formulaScrivi" data-formula="danneggiare" title="WOD5E_MAGE.Formule.ScriviHint" disabled data-fermo="true"'), "scheda bloccata: non si scrive, si può ancora lanciare");
+  const vuota = pagina({ tab: { cssClass: "active", id: "grimorio", group: "primary" }, locked: false, formule: prepareFormulePagina({}, { localize }), incantesimi: [], incantesimiGroups: [] });
+  assert.ok(vuota.includes("WOD5E_MAGE.Formule.Vuote"));
+}
+console.log("pagina Formule: ok");

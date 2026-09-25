@@ -134,7 +134,11 @@ assert.equal(credoConviction.serve, "lasci l'opera parlare");
 // In cima al Personaggio la Saggezza e poi le Convinzioni (4/9 notte); niente delle due col Credo.
 const focusSource = readFileSync(new URL("../templates/actor/parts/focus.hbs", import.meta.url), "utf8");
 assert.doesNotMatch(focusSource, /wisdom\.hbs|data-table="convinzioni"/);
-assert.match(personaggioSource(), /wod5e-mage-personaggio-columns[\s\S]*wod5e-mage-personaggio-col-left[\s\S]*IdentityLabel[\s\S]*AnchorsLabel[\s\S]*wod5e-mage-personaggio-col-right[\s\S]*wisdomStatus[\s\S]*ConvictionsLabel[\s\S]*convinzioni\.\{\{row\.id\}\}\.serve[\s\S]*convinzioni\.\{\{row\.id\}\}\.cross/);
+// La Bussola rifatta (26/9): a sinistra l'Identità e le Convinzioni, a destra le Ancore; niente Stato.
+assert.match(personaggioSource(), /wod5e-mage-personaggio-columns[\s\S]*wod5e-mage-personaggio-col-left[\s\S]*IdentityLabel[\s\S]*ConvictionsLabel[\s\S]*convinzioni\.\{\{row\.id\}\}\.serve[\s\S]*convinzioni\.\{\{row\.id\}\}\.cross[\s\S]*wod5e-mage-personaggio-col-right[\s\S]*AnchorsLabel/);
+assert.doesNotMatch(personaggioSource(), /wod5e-mage-riq-stato|wisdomStatus/);
+// Le note dell'Ancora (26/9): la freccia apre la carta, le note sono un campo come gli altri.
+assert.match(personaggioSource(), /wod5e-mage-ancora wod5e-mage-riga-apribile" data-row="\{\{row\.id\}\}"[\s\S]*wod5e-mage-ancora-apri" data-action="rigaApri"[\s\S]*wod5e-mage-bussola-campo largo wod5e-mage-ancora-note[\s\S]*textarea class="wod5e-mage-bussola-note" name="flags\.wod5e-mage\.ancore\.\{\{row\.id\}\}\.description" rows="3"/);
 // L'Appartenenza sta in testata (4/9 notte), non più nel Personaggio.
 assert.doesNotMatch(personaggioSource(), /flags\.wod5e-mage\.lineage/);
 const appartenenza = readFileSync(new URL("../templates/actor/parts/appartenenza.hbs", import.meta.url), "utf8");
@@ -190,7 +194,7 @@ assert.doesNotMatch(personaggio, /wod5e-mage-concept-group|wod5e-mage-identity-g
   assert.doesNotMatch(css, /wod5e-mage-identity-grid|wod5e-mage-mini-textarea|wod5e-mage-anchor-grid|wod5e-mage-wisdom-status|wod5e-mage-personaggio-content/, "via il CSS delle caselle crema");
 }
 assert.match(personaggio, /flags\.wod5e-mage\.ambitionTrigger[\s\S]*flags\.wod5e-mage\.desireTrigger/);
-assert.match(personaggio, /data-table="ancore"[\s\S]*data-table="convinzioni"/);
+assert.match(personaggio, /data-table="convinzioni"[\s\S]*data-table="ancore"/);
 assert.doesNotMatch(personaggio, /chronicle-tenets|touchstones-convictions/);
 
 // Il memo di creazione: conta i pallini e verifica i campi minimi.
@@ -272,12 +276,12 @@ summaryActor.getFlag = ((original) => (m, key) => key === "focus"
   : original(m, key))(summaryActor.getFlag);
 assert.equal(prepareCreationSummary(summaryActor).checks.find((check) => check.id === "instruments").ok, true);
 
-// L'inventario in un riquadro solo; lo stato del Risvegliato in cima al
-// Personaggio, senza la fila della Saggezza (24/9 sera: sta nelle Risorse);
-// nome del PG e del giocatore in una colonna sola.
+// L'inventario in un riquadro solo; lo stato della Saggezza (26/9) sta nelle
+// Risorse della prima pagina, calcolato, non nella Bussola; nome del PG e del
+// giocatore in una colonna sola.
 const dotazioneTemplate = readFileSync(new URL("../templates/actor/parts/dotazione.hbs", import.meta.url), "utf8");
 assert.match(dotazioneTemplate, /wod5e-mage-inventario[\s\S]*Dotazione\.Inventory[\s\S]*equipment-list\.hbs/);
-assert.match(personaggioSource(), /wod5e-mage-riq-stato[\s\S]*flags\.wod5e-mage\.wisdomStatus/);
+assert.match(readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8"), /<output class="wod5e-mage-saggezza-stato stato-\{\{wisdom\.stato\}\}"[^>]*>\{\{localize wisdom\.statoLabel\}\}<\/output>/);
 assert.doesNotMatch(personaggioSource(), /wisdom\.hbs/, "la Saggezza non sta più nella Bussola");
 const identitaTemplate = readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8");
 assert.match(identitaTemplate, /wod5e-mage-names[\s\S]*name-field[\s\S]*wod5e-mage-player-field/);

@@ -46,7 +46,7 @@
                     <img class="wod5e-mage-riga-icona wod5e-mage-sfera-sigillo" src="{{p.sphereIcon}}" alt="">
                     <span class="wod5e-mage-riga-nome-testo">{{p.name}}</span>
                     <small class="wod5e-mage-riga-coda">{{#if p.nota}}{{p.nota}}{{else}}{{p.cost}}{{/if}}</small>
-                    <span class="wod5e-mage-riga-effetto">{{#each p.blocchi as |b|}}<span class="wod5e-mage-riga-effetto-blocco{{#if b.kind}} {{b.kind}}{{/if}}">{{#if (eq b.kind "amalgama")}}<b>{{b.titolo}}:</b> {{/if}}{{#each b.voci as |v|}}<span>{{#if v.chiave}}<b>{{v.chiave}}:</b> {{/if}}{{v.testo}}</span>{{/each}}</span>{{/each}}</span>
+                    <span class="wod5e-mage-riga-effetto">{{#each p.blocchi as |b|}}<span class="wod5e-mage-riga-effetto-blocco{{#if b.kind}} {{b.kind}}{{/if}}">{{#if (eq b.kind "amalgama")}}<b>{{b.titolo}}:</b> {{/if}}{{#each b.voci as |v|}}<span>{{#if v.accesso}}<b class="wod5e-mage-accesso">{{localize "WOD5E_MAGE.Grimorio.Access"}} {{#each v.sfere as |sfera|}}<img class="wod5e-mage-sfera-inline" src="modules/wod5e-mage/assets/icons/sheet/{{sfera}}.png" alt="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}" title="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}">{{/each}}:</b> {{else if v.chiave}}<b>{{v.chiave}}:</b> {{/if}}{{v.testo}}</span>{{/each}}</span>{{/each}}</span>
                 </button>
             {{/each}}
             {{#each incantesimi as |spell|}}

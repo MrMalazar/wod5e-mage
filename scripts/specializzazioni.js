@@ -2,11 +2,16 @@ import { prepareEssentialSkillList } from "./abilita-essenziali.js";
 import { SPECIALIZZAZIONI, SPECIALIZZAZIONI_PER_VOCE, specialtySuggestions } from "./data/specializzazioni.js";
 
 /**
- * Le Specializzazioni delle Abilità, in un pannello dei Tratti: una riga
- * per specializzazione (Abilità e nome), il + per aggiungerne una, il
- * cestino per toglierla. Scrivono dove scrive il sistema, cioè nei
- * `bonuses` dell'Abilità (+1 dado, sempre in mostra), così il sistema le
- * conta nei tiri e la S accanto al nome si accende da sola.
+ * Le Specializzazioni delle Abilità (26/9, senza più la finestra: Blue, «un
+ * menù a pop anti intuitivo e scomodo»): stanno in riga sotto l'Abilità,
+ * nella prima pagina e nel passo Abilità della creazione guidata. Ogni
+ * Specializzazione è una pastiglia (sulla scheda il clic la mette nel tiro;
+ * la × la toglie); finché c'è un posto libero, in coda c'è una casella
+ * vuota: si scrive il nome, o si sceglie fra i sei del catalogo che la
+ * casella suggerisce, e a Invio (o uscendo dal campo) si salva. Scrivono
+ * dove scrive il sistema, cioè nei `bonuses` dell'Abilità (+1 dado, sempre
+ * in mostra), così il sistema le conta nei tiri e la S accanto al nome si
+ * accende da sola.
  */
 export const SPECIALTY_VALUE = 1;
 
@@ -25,23 +30,6 @@ export function specialtySlots(value) {
 function skillList(actor, { localize, lang } = {}) {
   return prepareEssentialSkillList(actor.system?.sortedSkills, { localize, lang })
     .map((skill) => ({ id: skill.id, label: String(skill.displayName ?? skill.id), value: Math.max(Math.trunc(Number(skill.value) || 0), 0) }));
-}
-
-/**
- * Le Abilità che possono prendere un'altra Specializzazione: quelle con un
- * posto libero (`used` è quante ne hanno già). Ogni voce porta `slots` e `used`.
- */
-export function specialtySkillChoices(skills, used = {}) {
-  return (skills ?? [])
-    .map((skill) => ({ ...skill, slots: specialtySlots(skill.value), used: Math.max(Math.trunc(Number(used[skill.id]) || 0), 0) }))
-    .filter((skill) => skill.used < skill.slots);
-}
-
-/** Quante Specializzazioni ha già ogni Abilità (i bonuses del sistema). */
-export function specialtyCounts(rows) {
-  const counts = {};
-  for (const row of rows ?? []) counts[row.skill] = (counts[row.skill] ?? 0) + 1;
-  return counts;
 }
 
 export function prepareSpecialties(actor, { localize = (key) => key, lang = "it" } = {}) {
@@ -73,43 +61,53 @@ export function specialtyBonus(skillId, source) {
   };
 }
 
-/**
- * I suggerimenti del catalogo, in ordine alfabetico (Blue, 11/9: la tendina
- * nativa era storta e non ordinata). `filter` tiene solo quelli che cominciano
- * con quel che si sta scrivendo. Torna le voci `<li>`.
- */
-export function suggestionOptions(skillId, filter = "", lang = "it") {
-  const needle = String(filter ?? "").trim().toLocaleLowerCase(lang);
-  return [...specialtySuggestions(skillId)]
-    .sort((a, b) => a.localeCompare(b, lang))
-    .filter((name) => !needle || name.toLocaleLowerCase(lang).startsWith(needle))
-    .map((name) => `<li data-value="${name}">${name}</li>`)
-    .join("");
+/** I nomi delle Specializzazioni di ogni Abilità, dai bonuses del sistema. */
+export function nomiSpecializzazioni(actor) {
+  const out = {};
+  for (const [id, skill] of Object.entries(actor?.system?.skills ?? {})) {
+    const names = (skill?.bonuses ?? []).map((bonus) => String(bonus?.source ?? "").trim()).filter(Boolean);
+    if (names.length) out[id] = names;
+  }
+  return out;
 }
 
-/** La tendina di casa sotto il campo: si riempie dall'Abilità scelta, si filtra scrivendo, un clic sceglie. */
-function wireSuggestions(root) {
-  const select = root?.querySelector?.("select[name=\"skill\"]");
-  const input = root?.querySelector?.("input[name=\"source\"]");
-  const list = root?.querySelector?.("[data-role=\"suggest\"]");
-  if (!select || !input || !list) return;
-  const lang = game.i18n?.lang ?? "it";
-  const refresh = () => {
-    list.innerHTML = suggestionOptions(select.value, input.value, lang);
-    list.hidden = !list.children.length;
+/**
+ * La riga delle Specializzazioni di un'Abilità, per la scheda e la guidata:
+ * le scritte (con l'indice per toglierle, e `chosen` su quella nel tiro), i
+ * posti (una a 1, due a 3, tre a 5), quanti ne restano liberi, e i sei
+ * suggerimenti del catalogo in ordine alfabetico per la casella vuota.
+ */
+export function rigaSpecializzazioni(skillId, value, names = [], { chosen = "" } = {}) {
+  const slots = specialtySlots(value);
+  const wanted = String(chosen ?? "").trim();
+  const scritte = (names ?? []).map((name, index) => ({ index, name: String(name), chosen: Boolean(wanted) && String(name) === wanted }));
+  return {
+    slots,
+    scritte,
+    free: Math.max(slots - scritte.length, 0),
+    suggestions: [...specialtySuggestions(skillId)].sort((a, b) => a.localeCompare(b, "it")),
+    chosen: scritte.find((entry) => entry.chosen)?.name ?? ""
   };
-  select.addEventListener("change", refresh);
-  input.addEventListener("input", refresh);
-  input.addEventListener("focus", refresh);
-  input.addEventListener("blur", () => setTimeout(() => { list.hidden = true; }, 150));
-  list.addEventListener("mousedown", (event) => {
-    const item = event.target.closest("li[data-value]");
-    if (!item) return;
-    event.preventDefault();
-    input.value = item.dataset.value;
-    list.hidden = true;
-  });
-  list.hidden = true;
+}
+
+/** I bonuses con una Specializzazione in più: il nome pulito, il posto libero, niente doppioni. */
+export function conSpecializzazione(bonuses, skillId, value, source) {
+  const name = String(source ?? "").trim();
+  const list = [...(bonuses ?? [])];
+  if (!name) return { ok: false, motivo: "vuoto", bonuses: list };
+  const stesso = (bonus) => String(bonus?.source ?? "").trim().toLocaleLowerCase("it") === name.toLocaleLowerCase("it");
+  if (list.some(stesso)) return { ok: false, motivo: "doppione", bonuses: list };
+  if (list.length >= specialtySlots(value)) return { ok: false, motivo: "pieno", bonuses: list };
+  return { ok: true, motivo: "", bonuses: [...list, specialtyBonus(skillId, name)] };
+}
+
+/** I bonuses senza la Specializzazione all'indice dato; com'erano se l'indice non c'è. */
+export function senzaSpecializzazione(bonuses, index) {
+  const list = [...(bonuses ?? [])];
+  const i = Math.trunc(Number(index));
+  if (!Number.isInteger(i) || i < 0 || i >= list.length) return list;
+  list.splice(i, 1);
+  return list;
 }
 
 function canEditSpecialties(actor) {
@@ -128,63 +126,62 @@ function canEditSpecialties(actor) {
   return true;
 }
 
-export async function onSpecialtyAdd(event, target = null) {
-  event.preventDefault();
-  const actor = this.actor;
-  if (!canEditSpecialties(actor)) return;
-
-  const localize = game.i18n.localize.bind(game.i18n);
-  // Solo le Abilità con un posto libero: una a 1, due a 3, tre a 5 (verdetto di Blue, 11/9).
-  const prepared = prepareSpecialties(actor, { localize, lang: game.i18n.lang });
-  // Dal posto vuoto del cassetto (16/9) l'Abilità arriva già scelta.
-  const preset = String(target?.dataset?.skill ?? "");
-  const skills = specialtySkillChoices(prepared.skills, specialtyCounts(prepared.rows))
-    .map((skill) => ({ ...skill, selected: skill.id === preset }));
-  const content = await foundry.applications.handlebars.renderTemplate(
-    "modules/wod5e-mage/templates/dialogs/specialty-add.hbs",
-    { skills, steps: SPECIALTY_STEPS.join(", ") }
-  );
-
-  const result = await foundry.applications.api.DialogV2.input({
-    window: { title: localize("WOD5E_MAGE.Specialties.Add") },
-    content,
-    ok: { icon: "fas fa-check", label: localize("WOD5E.Add") },
-    buttons: [{ action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") }],
-    classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem],
-    position: { width: "auto", height: "auto" },
-    render: (event, dialog) => wireSuggestions(dialog.element)
-  });
-  if (!result || result === "cancel") return;
-
-  const skillId = String(result.skill ?? "");
-  const source = String(result.source ?? "").trim();
-  if (!skills.some((skill) => skill.id === skillId) || !source) {
-    ui.notifications.warn(localize("WOD5E_MAGE.Specialties.Incomplete"));
-    return;
+/**
+ * Scrive una Specializzazione sull'Abilità (dalla casella vuota): salva nei
+ * bonuses e torna true; avvisa e torna false se il posto manca, se c'è già,
+ * o se la scheda non si può scrivere.
+ */
+export async function scriviSpecializzazione(actor, skillId, source, { label = "" } = {}) {
+  if (!canEditSpecialties(actor)) return false;
+  const id = String(skillId ?? "");
+  const skill = actor.system?.skills?.[id];
+  if (!skill) return false;
+  const esito = conSpecializzazione(skill.bonuses, id, skill.value, source);
+  if (!esito.ok) {
+    if (esito.motivo === "pieno") ui.notifications.warn(game.i18n.format("WOD5E_MAGE.Specialties.Full", { skill: label || id, slots: specialtySlots(skill.value) }));
+    else if (esito.motivo === "doppione") ui.notifications.warn(game.i18n.format("WOD5E_MAGE.Specialties.Doppione", { name: String(source ?? "").trim() }));
+    return false;
   }
+  await actor.update({ [`system.skills.${id}.bonuses`]: esito.bonuses });
+  return true;
+}
 
-  const bonuses = [...(actor.system.skills?.[skillId]?.bonuses ?? [])];
-  const chosen = skills.find((skill) => skill.id === skillId);
-  if (bonuses.length >= chosen.slots) {
-    ui.notifications.warn(game.i18n.format("WOD5E_MAGE.Specialties.Full", { skill: chosen.label, slots: chosen.slots }));
-    return;
+/** Toglie la Specializzazione all'indice dato (la × della pastiglia). */
+export async function togliSpecializzazione(actor, skillId, index) {
+  if (!canEditSpecialties(actor)) return false;
+  const id = String(skillId ?? "");
+  const bonuses = actor.system?.skills?.[id]?.bonuses ?? [];
+  const dopo = senzaSpecializzazione(bonuses, index);
+  if (dopo.length === bonuses.length) return false;
+  await actor.update({ [`system.skills.${id}.bonuses`]: dopo });
+  return true;
+}
+
+/**
+ * Le caselle vuote (`input[data-specialty-add]`): Invio o l'uscita dal campo
+ * scrivono; se non si può, il testo resta nella casella per correggerlo. Il
+ * cambio non risale al form della scheda: scrive solo la Specializzazione.
+ * Va chiamata a ogni render, sulla scheda e sulla finestra guidata.
+ */
+export function wireSpecialtyInputs(root, actor) {
+  for (const input of root?.querySelectorAll?.("input[data-specialty-add]") ?? []) {
+    input.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      input.blur();
+    });
+    input.addEventListener("change", async (event) => {
+      event.stopPropagation();
+      if (!input.value.trim()) return;
+      const ok = await scriviSpecializzazione(actor, input.dataset.specialtyAdd, input.value, { label: input.dataset.skillLabel ?? "" });
+      if (!ok) input.focus();
+    });
   }
-  bonuses.push(specialtyBonus(skillId, source));
-  await actor.update({ [`system.skills.${skillId}.bonuses`]: bonuses });
 }
 
 export async function onSpecialtyDelete(event, target) {
   event.preventDefault();
-  const actor = this.actor;
-  if (!canEditSpecialties(actor)) return;
-
-  const skillId = String(target.dataset.skill ?? "");
-  const index = Math.trunc(Number(target.dataset.index));
-  const bonuses = [...(actor.system.skills?.[skillId]?.bonuses ?? [])];
-  if (!Number.isInteger(index) || index < 0 || index >= bonuses.length) return;
-
-  bonuses.splice(index, 1);
-  await actor.update({ [`system.skills.${skillId}.bonuses`]: bonuses });
+  await togliSpecializzazione(this.actor, String(target.dataset.skill ?? ""), target.dataset.index);
 }
 
-export { SPECIALIZZAZIONI, SPECIALIZZAZIONI_PER_VOCE };
+export { SPECIALIZZAZIONI, SPECIALIZZAZIONI_PER_VOCE, specialtySuggestions };

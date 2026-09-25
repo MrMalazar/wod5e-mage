@@ -156,7 +156,7 @@
                                 {{#each p.blocchi as |b|}}
                                     <div class="wod5e-mage-potere-blocco{{#if b.kind}} {{b.kind}}{{/if}}{{#if (eq b.kind "amalgama")}}{{#unless p.amalgamOwned}} manca{{/unless}}{{/if}}">
                                         <span class="wod5e-mage-potere-blocco-titolo">{{#if b.titolo}}{{b.titolo}}{{else}}{{localize "WOD5E_MAGE.Poteri.CosaFa"}}{{/if}}</span>
-                                        {{#each b.voci as |v|}}<p class="wod5e-mage-potere-blocco-riga">{{#if v.chiave}}<b>{{v.chiave}}:</b> {{/if}}{{v.testo}}</p>{{/each}}
+                                        {{#each b.voci as |v|}}<p class="wod5e-mage-potere-blocco-riga">{{#if v.accesso}}<b class="wod5e-mage-accesso">{{localize "WOD5E_MAGE.Grimorio.Access"}} {{#each v.sfere as |sfera|}}<img class="wod5e-mage-sfera-inline" src="modules/wod5e-mage/assets/icons/sheet/{{sfera}}.png" alt="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}" title="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}">{{/each}}:</b> {{else if v.chiave}}<b>{{v.chiave}}:</b> {{/if}}{{v.testo}}</p>{{/each}}
                                         {{#if (eq b.kind "amalgama")}}{{#unless p.amalgamOwned}}<p class="wod5e-mage-potere-blocco-riga"><em>{{localize "WOD5E_MAGE.Poteri.NonHai" sphere=p.amalgamLabel}}</em></p>{{/unless}}{{/if}}
                                     </div>
                                 {{else}}

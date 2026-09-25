@@ -749,7 +749,8 @@
         "potencyWeight": "Peso",
         "precision": "Scontro",
         "precisionNarrative": "Narr."
-      }
+      },
+      "Zero": "Lo 0 è l'effetto di base: c'è sempre, non si toglie e non costa. I sette pallini dopo lo alzano."
     },
     "OngoingMagick": {
       "Label": "Magick in atto",
@@ -981,7 +982,16 @@
       "Reset": "Reset",
       "ResetHint": "La fila torna pulita.",
       "AttributeHint": "3 + {attribute} {value}, caselle in più {extra}. Clic: scegli fra Carisma e Fermezza.",
-      "AttributePick": "Scegli l'Attributo della Saggezza: Carisma o Fermezza"
+      "AttributePick": "Scegli l'Attributo della Saggezza: Carisma o Fermezza",
+      "StatoHint": "Lo stato della Saggezza, dalle caselle pulite: {clean} su {max}. Non si scrive: cambia con le macchie.",
+      "Stati": {
+        "segnato": "Segnato",
+        "inBilico": "In bilico",
+        "incrinato": "Incrinato",
+        "saldo": "Saldo",
+        "lucido": "Lucido",
+        "sereno": "Sereno"
+      }
     },
     "MagickBalance": {
       "Magick": "Magick",
@@ -1124,7 +1134,8 @@
       "AnchorBites": "Dove morde",
       "AnchorGenerate": "Genera",
       "AnchorGenerateHint": "Tira i campi vuoti di questa Ancora: nome, ruolo, mestiere, età, cosa ti dà, cosa non sa, dove morde. Per ritirarne uno, svuotalo e premi di nuovo.",
-      "AnchorGenerateNew": "Genera un'Ancora nuova, tutta tirata"
+      "AnchorGenerateNew": "Genera un'Ancora nuova, tutta tirata",
+      "AnchorNotesOpen": "Apri e chiudi le note dell'Ancora"
     },
     "Riepilogo": {
       "Label": "Memo creazione",
@@ -1235,20 +1246,10 @@
       "WheelFull": "I tre punti portano la Ruota al massimo: Difetto paradossale oppure scoppio."
     },
     "Specialties": {
-      "Label": "Specializzazioni",
-      "Add": "Aggiungi una Specializzazione",
       "Remove": "Togli la Specializzazione",
-      "Edit": "Apri l'editor dell'Abilità",
-      "Skill": "Abilità",
-      "Name": "Specializzazione",
-      "NameHint": "es. Lame, Chirurgia, Pistole: scegli dalla tendina o scrivi la tua",
-      "Hint": "Vale un dado in più quando la specializzazione conta nel tiro.",
-      "Empty": "Nessuna Specializzazione: il + ne aggiunge una (Abilità e nome).",
-      "Incomplete": "Serve un'Abilità e il nome della Specializzazione.",
-      "Roll": "Tira con la Specializzazione: il dado in più è già dentro",
-      "NoSkill": "Nessuna Abilità con un posto libero",
-      "MinHint": "Una al primo pallino, una al terzo, una al quinto ({steps}).",
-      "Slots": "{used} di {slots}",
+      "Scrivi": "+ specializzazione",
+      "ScriviHint": "Scrivi il nome e premi Invio, o scegli dalla tendina: {free} posti liberi su {slots} (una al primo pallino, una al terzo, una al quinto). Vale un dado in più quando conta nel tiro.",
+      "Doppione": "«{name}» c'è già su questa Abilità.",
       "Full": "{skill} ha già le sue {slots} Specializzazioni."
     },
     "CustomSkills": {
@@ -1534,7 +1535,8 @@
       "NoSphere": "Senza Sfera",
       "FromEffetti": "Aggiungi effetti del manuale",
       "NoType": "Tipologia al lancio",
-      "Formula": "Formula"
+      "Formula": "Formula",
+      "RollHint": "Carica l'effetto nel Tiro della prima pagina, coi suoi valori: lì si tira coi tre tasti."
     },
     "GrimorioComune": {
       "Label": "Grimorio comune (M6)",
@@ -1708,10 +1710,9 @@
       "Nessuna": "nessuna",
       "AttiviCorti": "attivi",
       "PassiviCorti": "passivi",
-      "NessunMago": "Nessun mago nel Quadro: la Nuova sessione li mette in gioco, oppure trascina qui un mago dagli Attori.",
-      "ChiGioca": "Chi gioca stasera?",
-      "ChiGiocaHint": "Spunta i maghi in gioco: entrano nel Quadro e nella Scheda del Paradosso. Chi non spunti resta fuori anche se preme Nuova sessione.",
-      "NessunMagoNelMondo": "Nessun mago nel mondo.",
+      "NessunMago": "Nessun mago nel Quadro: trascina qui un mago dagli Attori; la Nuova sessione parte con quelli che ci sono.",
+      "ChiGioca": "Giocano i maghi del Quadro",
+      "ChiGiocaHint": "Per cambiare chi gioca: trascina un mago dagli Attori sul Quadro, o toglilo con la × nel Quadro. Chi non è nel Quadro resta fuori anche se preme Nuova sessione.",
       "PrimaScena": "Prima scena",
       "Posto": "Posto",
       "SessioneAzzera": "La riserva ({points}) torna a zero, gli effetti addosso e gli orologi del Paradosso si chiudono.",
@@ -1776,7 +1777,8 @@
       "OrologioAperto": "Orologio «{nome}» aperto ({forma} {colore}): lo vedi nel Contatore.",
       "ScenaInCorso": "scena in corso",
       "LeggiVoce": "Leggi la voce",
-      "InQuestaScena": "In questa scena."
+      "InQuestaScena": "In questa scena.",
+      "NessunMagoSessione": "Nessun mago nel Quadro: trascina un mago dagli Attori sul Quadro, poi premi Nuova sessione."
     },
     "Stat": {
       "Identita": "Identità",
@@ -2213,7 +2215,7 @@
         "TettoHint": "nessuna voce oltre il {cap}",
         "TettoAvviso": "Alla creazione nessuna Abilità passa il {cap}.",
         "Specializzazioni": "Le Specializzazioni",
-        "SpecializzazioniHint": "una al primo pallino, al terzo e al quinto, dalla scheda",
+        "SpecializzazioniHint": "Una al primo pallino, una al terzo, una al quinto: scrivile qui, nella casella sotto l'Abilità.",
         "Sfida": "dalla Sfida",
         "Oltre": "oltre il tetto: {list}"
       },
@@ -2256,6 +2258,20 @@
         "Mancano": "Mancano {n} passi: cliccali nella barra in alto.",
         "Chiudi": "Chiudi la guida e vai alla scheda"
       }
+    },
+    "Formule": {
+      "Label": "Formule",
+      "Effetti": "Effetti di Magick",
+      "Conto": "{aperte} accessibili · {totale} in tutto",
+      "Tutte": "Mostra tutte le Formule, anche quelle che le tue Sfere non aprono",
+      "Accessibili": "Solo le Formule che le tue Sfere aprono",
+      "Cerca": "Cerca una Formula…",
+      "Vuote": "Nessuna Formula accessibile: apri un Dominio nella pagina Magick, o mostra tutte le Formule.",
+      "Scrivi": "Scrivi fra gli effetti",
+      "ScriviHint": "La Formula com'è scelta diventa un effetto di Magick tuo, nella colonna a destra: poi la ritocchi con la matita.",
+      "Lancia": "Lancia dal Tiro",
+      "LanciaHint": "La Formula com'è scelta entra nel Tiro della prima pagina coi suoi valori: scegli Attributo e Abilità e tira.",
+      "ScegliAccesso": "Scegli prima la Sfera d'Accesso."
     }
   },
   "WOD5E": {

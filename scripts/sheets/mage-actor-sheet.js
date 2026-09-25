@@ -8,6 +8,7 @@ import { onCondizioneToggle, prepareCondizioni, prepareConditionRows } from "../
 import { onParadoxBurst } from "../paradox-burst.js";
 import { groupIncantesimiBySphere, onIncantesimoAdd, onIncantesimoChat, onIncantesimoDelete, onIncantesimoEdit, onIncantesimoFromEffetti, onIncantesimoRoll, prepareIncantesimi } from "../incantesimi.js";
 import { onGrimorioComuneOpen, onIncantesimoShare } from "../grimorio-comune.js";
+import { onFormulaLancia, onFormulaScrivi, onFormuleTutte, prepareFormulePagina, sfereAccessibili, wireFormule } from "../formule-scheda.js";
 import { bindNoteBoard, noteBoardHeight, onNoteAdd, onNoteDelete, prepareNote } from "../note.js";
 import { onResetSection, prepareResetsById } from "../reset.js";
 import { onCredoFamilyPick } from "../famiglie.js";
@@ -60,7 +61,7 @@ import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from ".
 import { prepareCreationSummary } from "../riepilogo.js";
 import { prepareMemo } from "../memo.js";
 import { applyTraitIcons } from "../tratti-icone.js";
-import { onSpecialtyAdd, onSpecialtyDelete, prepareSpecialties, specialtySlots } from "../specializzazioni.js";
+import { onSpecialtyDelete, prepareSpecialties, rigaSpecializzazioni, wireSpecialtyInputs } from "../specializzazioni.js";
 import { skillSpecialtyNames } from "../arete.js";
 import {
   onTiroArete,
@@ -182,8 +183,8 @@ async function onSkillsFlatToggle(event) {
 }
 
 /**
- * I cassetti (Specializzazioni, poteri delle Sfere, livelli degli Ambiti)
- * si aprono sotto la riga; se sotto non c'è posto nel riquadro, si aprono
+ * I cassetti (poteri delle Sfere, livelli degli Ambiti; le Specializzazioni
+ * no, dal 26/9 stanno in riga) si aprono sotto la riga; se sotto non c'è posto nel riquadro, si aprono
  * sopra (Blue, 16/9 sera: quello di Velo era tagliato). Si misura a
  * cassetto mostrato: al sorvolo, o col tastino.
  */
@@ -439,6 +440,10 @@ export class MageActorSheet extends MortalActorSheet {
       incantesimoShare: onIncantesimoShare,
       incantesimoFromEffetti: onIncantesimoFromEffetti,
       grimorioComuneOpen: onGrimorioComuneOpen,
+      // La pagina Formule (26/9): tutte o le accessibili, e i due tasti della matrice.
+      formuleTutte: onFormuleTutte,
+      formulaScrivi: onFormulaScrivi,
+      formulaLancia: onFormulaLancia,
       noteAdd: onNoteAdd,
       noteDelete: onNoteDelete,
       areteChange: onAreteChange,
@@ -492,7 +497,6 @@ export class MageActorSheet extends MortalActorSheet {
       personaggioRowAdd: onPersonaggioRowAdd,
       personaggioRowDelete: onPersonaggioRowDelete,
       ancoraGenera: onAncoraGenera,
-      specialtyAdd: onSpecialtyAdd,
       specialtyRoll: onSpecialtyRoll,
       specialtyDelete: onSpecialtyDelete,
       familySphereToggle: onFamilySphereToggle,
@@ -587,7 +591,7 @@ export class MageActorSheet extends MortalActorSheet {
     },
     grimorio: {
       template: `${MODULE}/parts/grimorio.hbs`,
-      templates: [`${MODULE}/parts/incantesimo-card.hbs`]
+      templates: [`${MODULE}/parts/incantesimo-card.hbs`, `${MODULE}/parts/formula-scheda.hbs`]
     },
     focus: {
       template: `${MODULE}/parts/focus.hbs`,
@@ -827,6 +831,8 @@ export class MageActorSheet extends MortalActorSheet {
     wireStatFilters(this);
     // I cassetti al sorvolo si aprono sopra quando sotto non c'è posto.
     wireCassetti(this);
+    // Le caselle delle Specializzazioni (26/9): Invio o l'uscita dal campo scrivono.
+    wireSpecialtyInputs(this.element, this.actor);
     // Le Specialità delle Sfere: il testo del potere si apre dal titolo.
     this._specialtyOpen ??= {};
     for (const article of this.element?.querySelectorAll(".wod5e-mage-sphere-specialty[data-slot]") ?? []) {
@@ -848,6 +854,8 @@ export class MageActorSheet extends MortalActorSheet {
         button.addEventListener("click", (event) => event.preventDefault());
       }
     }
+    // La pagina Formule (26/9): le righe ricordano com'erano, i tasti di scelta si accendono al clic.
+    wireFormule(this);
     // Le Sfere del Credo: ogni tendina ricorda com'era.
     this._focusSphereOpen ??= {};
     for (const sphere of this.element?.querySelectorAll(".wod5e-mage-focus-sphere[data-sphere]") ?? []) {
@@ -882,7 +890,6 @@ export class MageActorSheet extends MortalActorSheet {
     const context = await super._prepareContext();
     context.currentTypeLabel = "WOD5E_MAGE.Sheets.Awakened";
     context.wisdom = getWisdom(this.actor);
-    context.wisdomStatus = String(this.actor.getFlag(MODULE_ID, "wisdomStatus") ?? "");
     // I tasti di reset (11/9): ognuno nella sua sezione, visibili solo con la
     // spunta «Mostra i tasti di reset» del memo di creazione; con loro la X
     // che azzera un tratto solo.
@@ -967,15 +974,9 @@ export class MageActorSheet extends MortalActorSheet {
       label: localize(groupLabels[group] ?? group),
       rows: (rows ?? []).map((skill) => {
         const key = `skill:${skill.id}`;
-        const names = specialtyNames[skill.id] ?? [];
-        const slots = Array.from({ length: specialtySlots(skill.value) }, (_, index) => ({
-          index,
-          name: names[index] ?? "",
-          chosen: tiro.skill === key && tiro.specialty === names[index]
-        }));
-        // La tendina delle Specializzazioni si apre col tastino (Blue, 25/9: il sorvolo era scomodo); piena se una è nel tiro.
-        const specialtyChosen = slots.find((slot) => slot.chosen)?.name ?? "";
-        return { ...skill, key, chosen: tiro.skill === key, hasSpecialties: slots.length > 0, slots, specialtyChosen };
+        // Le Specializzazioni in riga sotto l'Abilità (26/9): le scritte, i posti liberi, i suggerimenti; `chosen` su quella nel tiro.
+        const spec = rigaSpecializzazioni(skill.id, skill.value, specialtyNames[skill.id] ?? [], { chosen: tiro.skill === key ? tiro.specialty ?? "" : "" });
+        return { ...skill, key, chosen: tiro.skill === key, spec, specialtyChosen: spec.chosen };
       })
     }));
     context.customSkills = prepareCustomSkills(actor).map((skill) => ({ ...skill, chosen: tiro.skill === `custom:${skill.id}`, custom: true }));
@@ -1122,11 +1123,13 @@ export class MageActorSheet extends MortalActorSheet {
       context.tab = context.tabs.dotazione;
     }
 
-    // Le Note: riquadri liberi del giocatore, niente campi del sistema.
+    // La pagina Formule (26/9): a sinistra le Formule accessibili (o tutte), a
+    // destra gli effetti di Magick del giocatore, in ordine di nome.
     if (partId === "grimorio") {
       context.tab = context.tabs.grimorio;
       const localize = game.i18n.localize.bind(game.i18n);
-      context.incantesimi = prepareIncantesimi(actor, localize);
+      context.formule = prepareFormulePagina(sfereAccessibili(actor), { tutte: Boolean(this._formuleTutte), localize });
+      context.incantesimi = [...prepareIncantesimi(actor, localize)].sort((a, b) => a.name.localeCompare(b.name, game.i18n.lang));
       context.incantesimiGroups = groupIncantesimiBySphere(context.incantesimi, localize);
     }
 

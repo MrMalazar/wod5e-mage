@@ -618,9 +618,41 @@ export function ruotaDopoUso(balance, power) {
  */
 const GENERI_BLOCCO = Object.freeze({ attivo: "attivo", passivo: "passivo", amalgama: "amalgama" });
 
+/**
+ * I nomi delle Sfere come li scrive il testo dei poteri (tools/genera-dati.mjs:
+ * «Forza», non «Forze»), per riconoscere la Sfera in «Accesso con X».
+ */
+const SFERE_NEL_TESTO = Object.freeze({
+  corrispondenza: "correspondence",
+  entropia: "entropy",
+  forza: "forces",
+  forze: "forces",
+  vita: "life",
+  materia: "matter",
+  mente: "mind",
+  primordio: "prime",
+  spirito: "spirit",
+  tempo: "time"
+});
+
+/**
+ * Le Sfere di una chiave «Accesso con X» (o «Accesso con X + Y»), come id;
+ * niente se la chiave è un'altra o il nome non è una Sfera. Sulla scheda, nel
+ * catalogo e in chat al posto del nome sta il sigillo (Blue, 26/9: «deve
+ * sempre esserci il simbolo e non la parola»).
+ */
+export function sfereDellaChiave(chiave) {
+  const m = String(chiave ?? "").match(/^Accesso con\s+(.+)$/i);
+  if (!m) return [];
+  const ids = m[1].split(/\s*\+\s*/).map((nome) => SFERE_NEL_TESTO[nome.trim().toLowerCase()]);
+  return ids.every(Boolean) ? ids : [];
+}
+
 export function voceDellaRiga(riga) {
   const m = String(riga ?? "").match(/^((?:Accesso con|Con) [^:]{1,40}|Paga [^:]{1,30}):\s*([\s\S]*)$/);
-  return m ? { chiave: m[1].trim(), testo: m[2].trim() } : { chiave: "", testo: String(riga ?? "").trim() };
+  const chiave = m ? m[1].trim() : "";
+  const sfere = sfereDellaChiave(chiave);
+  return { chiave, testo: m ? m[2].trim() : String(riga ?? "").trim(), sfere, accesso: sfere.length > 0 };
 }
 
 export function blocchiDelTesto(text) {

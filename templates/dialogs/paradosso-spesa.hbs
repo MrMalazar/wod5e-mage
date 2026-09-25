@@ -28,6 +28,7 @@
                     <span class="wod5e-mage-arete-dot-label">{{localize scope.label}}</span>
                     <input type="hidden" name="scope-{{scope.id}}" value="0">
                     <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
+                        <span class="wod5e-mage-arete-sphere-dot zero" data-level="0" role="img" aria-label="0" title="{{localize 'WOD5E_MAGE.Scopes.Zero'}}"></span>
                         {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
                     </span>
                     <span class="wod5e-mage-arete-dot-reading"></span>

@@ -1,5 +1,7 @@
-{{!-- La scheda di un incantesimo del Grimorio del personaggio: una tendina
-     (6/9). Chiusa restano il nome e il dado; aperta, tutto il resto. --}}
+{{!-- La scheda di un effetto di Magick del giocatore: una tendina (6/9).
+     Chiusa restano il nome, l'Obiettivo (Blue, 26/9: «deve comunque mostrare
+     l'obiettivo») e il dado, che carica l'effetto nel Tiro della prima
+     pagina; aperta, tutto il resto. --}}
 <details class="wod5e-mage-incantesimo" data-row="{{spell.id}}">
     <summary class="wod5e-mage-incantesimo-head">
         <i class="fa-solid fa-chevron-down wod5e-mage-incantesimo-chevron" aria-hidden="true"></i>
@@ -9,8 +11,9 @@
         <strong class="wod5e-mage-incantesimo-name">{{spell.name}}</strong>
         <span class="wod5e-mage-incantesimo-type {{spell.magickTypeId}}">{{spell.magickType}}</span>
         <span class="wod5e-mage-incantesimo-controls">
-            <button type="button" data-action="incantesimoRoll" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.Roll'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Roll'}}"><i class="fa-solid fa-dice-d10"></i></button>
+            <button type="button" data-action="incantesimoRoll" data-row="{{spell.id}}" title="{{localize 'WOD5E_MAGE.Incantesimi.RollHint'}}" aria-label="{{localize 'WOD5E_MAGE.Incantesimi.Roll'}}"><i class="fa-solid fa-dice-d10"></i></button>
         </span>
+        {{#if spell.goal}}<span class="wod5e-mage-incantesimo-obiettivo" title="{{spell.goal}}"><b>{{localize "WOD5E_MAGE.Arete.Goal"}}</b> {{spell.goal}}</span>{{/if}}
     </summary>
     <div class="wod5e-mage-incantesimo-body">
     <span class="wod5e-mage-incantesimo-controls wod5e-mage-incantesimo-tools">

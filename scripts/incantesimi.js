@@ -210,14 +210,18 @@ export async function onIncantesimoDelete(event, target) {
   await actor.update({ [`flags.${MODULE_ID}.${INCANTESIMI_FLAG}.-=${id}`]: null });
 }
 
-/** Il dado: la finestra del tiro già riempita con l'incantesimo. */
+/**
+ * Il dado (Blue, 26/9: «lanciabile come lancio attivo fatto dalla scheda»):
+ * l'effetto entra nel Tiro della prima pagina coi suoi valori, e si tira da
+ * lì coi tre tasti; niente più finestra.
+ */
 export async function onIncantesimoRoll(event, target) {
   event.preventDefault();
-  const actor = this.actor;
-  const current = storedSpell(actor, target.dataset.row);
+  const id = String(target.dataset.row ?? "");
+  const current = storedSpell(this.actor, id);
   if (!current) return;
-  const { launchArete } = await import("./arete.js");
-  return launchArete(actor, { mode: "roll", preset: current });
+  const { caricaNelTiro } = await import("./tiro-scheda.js");
+  return caricaNelTiro(this, id, current);
 }
 
 /** Il libro degli effetti: liste di effetti del manuale aggiunte alla scheda, da ritoccare poi. */

@@ -23,10 +23,10 @@
                 <div class="wod5e-mage-riga-testa">
                     <i class="fa-solid fa-scale-balanced wod5e-mage-riga-icona" aria-hidden="true"></i>
                     <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo" title="{{localize 'WOD5E_MAGE.Wisdom.Hint'}}"><span>{{localize "WOD5E_MAGE.Wisdom.Label"}}</span></span>
-                    {{#if wisdom.segnato}}
-                        {{!-- La fila piena ha un nome (04_95), e i suoi quattro effetti nel titolo. --}}
-                        <em class="wod5e-mage-riga-stato" title="{{localize 'WOD5E_MAGE.Wisdom.SegnatoEffects'}}">{{localize "WOD5E_MAGE.Wisdom.Segnato"}}</em>
-                    {{/if}}
+                    {{!-- Lo stato (Blue, 26/9): una casella a destra del nome, calcolata dalle caselle
+                         pulite, che il giocatore non scrive; con un carattere suo. Piena, la fila ha il
+                         nome del LIBRO (04_95) e i suoi quattro effetti nel sorvolo. --}}
+                    <output class="wod5e-mage-saggezza-stato stato-{{wisdom.stato}}" title="{{localize 'WOD5E_MAGE.Wisdom.StatoHint' clean=wisdom.puliti max=wisdom.max}}{{#if wisdom.segnato}} · {{localize 'WOD5E_MAGE.Wisdom.SegnatoEffects'}}{{/if}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Status'}}">{{localize wisdom.statoLabel}}</output>
                     {{!-- Il numero delle caselle è un tasto (23/9): sceglie fra Carisma e Fermezza. --}}
                     <button type="button" class="wod5e-mage-riga-valore wod5e-mage-valore-tasto" data-action="wisdomAttributePick" title="{{localize 'WOD5E_MAGE.Wisdom.AttributeHint' attribute=(localize (concat 'WOD5E.AttributesList.' wisdom.attributeLabel)) value=wisdom.attributeValue extra=wisdom.extra}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.AttributePick'}}">{{wisdom.max}}</button>
                     <div class="wod5e-mage-riga-tastini">

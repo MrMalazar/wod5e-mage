@@ -1,11 +1,13 @@
 {{!-- Abilità (16/9): per famiglia, il nome è il tasto che la mette nel tiro
-     (una sola); la freccetta in testa alla riga, prima del simbolo e del nome,
-     apre la tendina delle Specializzazioni come per gli Ambiti (Blue, 25/9),
-     tre posti (uno a 1 pallino, due a 3, tre a 5): un nome la sceglie insieme
-     all'Abilità, un posto vuoto ne aggiunge una. I pallini restano quelli
-     della scheda. Le Abilità Specifiche del giocatore chiudono la lista.
-     Il tasto accanto al + (16/9 sera) scioglie le famiglie: tutte in fila,
-     Specifiche comprese, in ordine alfabetico, senza divisorie. --}}
+     (una sola). Le Specializzazioni (Blue, 26/9: via la finestra e la tendina,
+     «un menù a pop anti intuitivo») stanno in riga sotto l'Abilità, tre posti
+     (uno a 1 pallino, due a 3, tre a 5): ogni nome è una pastiglia che la
+     sceglie insieme all'Abilità, la × la toglie, e finché c'è posto una
+     casella tratteggiata ne scrive una nuova (a mano, o dai sei suggerimenti
+     del catalogo, a Invio). I pallini restano quelli della scheda. Le Abilità
+     Specifiche del giocatore chiudono la lista. Il tasto accanto al + (16/9
+     sera) scioglie le famiglie: tutte in fila, Specifiche comprese, in ordine
+     alfabetico, senza divisorie. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-abilita">
     {{!-- Col memo di creazione acceso (23/9): il conto a destra del titolo (col premio della Sfida se c'è), il tetto se sforato. --}}
     <header class="wod5e-mage-riq-title{{#if memo.on}} memo-{{memo.boxes.abilita.state}}{{/if}}">
@@ -33,12 +35,7 @@
                             <button type="button" class="wod5e-mage-custom-skill-delete" data-action="customSkillDelete" data-row="{{skill.id}}" title="{{localize 'WOD5E_MAGE.CustomSkills.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.CustomSkills.Remove'}}" {{#if ../../locked}}disabled{{/if}}><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
                         </div>
                     {{else}}
-                        <div class="wod5e-mage-riga wod5e-mage-riga-tratto wod5e-mage-riga-abilita{{#if skill.chosen}} scelta{{/if}}{{#if skill.hasSpecialties}} con-tendina{{/if}}" data-cassetto="abilita-{{skill.id}}">
-                            {{#if skill.slots.length}}
-                                {{!-- La freccetta delle Specializzazioni sta in testa alla riga, prima del simbolo e del nome (Blue, 25/9):
-                                     apre e chiude la tendina; piena col nome quando una Specializzazione è nel tiro. --}}
-                                <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-abilita-tendina{{#if skill.specialtyChosen}} pieno{{/if}}" data-action="cassettoToggle" title="{{#if skill.specialtyChosen}}{{skill.specialtyChosen}} · {{/if}}{{localize 'WOD5E.SkillsList.Specialties'}}" aria-label="{{skill.displayName}}: {{localize 'WOD5E.SkillsList.Specialties'}}"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
-                            {{/if}}
+                        <div class="wod5e-mage-riga wod5e-mage-riga-tratto wod5e-mage-riga-abilita{{#if skill.chosen}} scelta{{/if}}{{#if skill.spec.slots}} con-specializzazioni{{/if}}">
                             <button type="button" class="wod5e-mage-riga-nome" data-action="tiroSkill" data-key="{{skill.key}}" aria-pressed="{{skill.chosen}}" title="{{localize 'WOD5E_MAGE.Tiro.SkillHint'}}">
                                 {{#if skill.icon}}<img class="wod5e-mage-riga-icona" src="{{skill.icon}}" alt="">{{/if}}
                                 <span>{{skill.displayName}}</span>
@@ -57,19 +54,20 @@
                                     {{/numLoop}}
                                 </div>
                             {{/if}}
-                            {{#if skill.slots.length}}
-                                {{#if skill.specialtyChosen}}<small class="wod5e-mage-ambito-tag wod5e-mage-abilita-scelta" title="{{skill.specialtyChosen}}">{{skill.specialtyChosen}}</small>{{/if}}
-                                <div class="wod5e-mage-cassetto" role="group" aria-label="{{localize 'WOD5E.SkillsList.Specialties'}}">
-                                    {{#each skill.slots as |slot|}}
-                                        {{#if slot.name}}
-                                            <span class="wod5e-mage-pastiglia{{#if slot.chosen}} scelta{{/if}}">
-                                                <button type="button" class="wod5e-mage-pastiglia-nome" data-action="tiroSpecialty" data-key="{{skill.key}}" data-specialty="{{slot.name}}" aria-pressed="{{slot.chosen}}" title="{{localize 'WOD5E_MAGE.Tiro.SpecialtyHint'}}">{{slot.name}}</button>
-                                                {{#unless ../../../locked}}<button type="button" class="wod5e-mage-pastiglia-via" data-action="specialtyDelete" data-skill="{{skill.id}}" data-index="{{slot.index}}" title="{{localize 'WOD5E_MAGE.Specialties.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Remove'}}">×</button>{{/unless}}
-                                            </span>
-                                        {{else}}
-                                            <button type="button" class="wod5e-mage-pastiglia vuota" data-action="specialtyAdd" data-skill="{{skill.id}}" title="{{localize 'WOD5E_MAGE.Specialties.Add'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Add'}}" {{#if ../../../locked}}disabled{{/if}}></button>
-                                        {{/if}}
+                            {{#if skill.spec.slots}}
+                                {{!-- Le Specializzazioni in riga (Blue, 26/9): le pastiglie (il clic nel tiro, la × toglie) e,
+                                     finché c'è posto, la casella tratteggiata che ne scrive una: a mano, o dai suggerimenti. --}}
+                                <div class="wod5e-mage-specializzazioni" role="group" aria-label="{{skill.displayName}}: {{localize 'WOD5E.SkillsList.Specialties'}}">
+                                    {{#each skill.spec.scritte as |s|}}
+                                        <span class="wod5e-mage-pastiglia wod5e-mage-pastiglia-spec{{#if s.chosen}} scelta{{/if}}">
+                                            <button type="button" class="wod5e-mage-pastiglia-nome" data-action="tiroSpecialty" data-key="{{skill.key}}" data-specialty="{{s.name}}" aria-pressed="{{s.chosen}}" title="{{localize 'WOD5E_MAGE.Tiro.SpecialtyHint'}}">{{s.name}}</button>
+                                            {{#unless @root.locked}}<button type="button" class="wod5e-mage-pastiglia-via" data-action="specialtyDelete" data-skill="{{skill.id}}" data-index="{{s.index}}" title="{{localize 'WOD5E_MAGE.Specialties.Remove'}}" aria-label="{{localize 'WOD5E_MAGE.Specialties.Remove'}}: {{s.name}}">×</button>{{/unless}}
+                                        </span>
                                     {{/each}}
+                                    {{#if skill.spec.free}}
+                                        <input type="text" class="wod5e-mage-pastiglia-scrivi" list="wod5e-mage-spec-{{@root.actor.id}}-{{skill.id}}" data-specialty-add="{{skill.id}}" data-skill-label="{{skill.displayName}}" placeholder="{{localize 'WOD5E_MAGE.Specialties.Scrivi'}}" title="{{localize 'WOD5E_MAGE.Specialties.ScriviHint' free=skill.spec.free slots=skill.spec.slots}}" aria-label="{{skill.displayName}}: {{localize 'WOD5E_MAGE.Specialties.Scrivi'}}" autocomplete="off" maxlength="30" {{#if @root.locked}}disabled{{/if}}>
+                                        {{#if skill.spec.suggestions.length}}<datalist id="wod5e-mage-spec-{{@root.actor.id}}-{{skill.id}}">{{#each skill.spec.suggestions as |nome|}}<option value="{{nome}}"></option>{{/each}}</datalist>{{/if}}
+                                    {{/if}}
                                 </div>
                             {{/if}}
                         </div>

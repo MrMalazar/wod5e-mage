@@ -484,7 +484,7 @@ export async function openSpendDialog() {
     {
       points: pool.points,
       spheres: scheda.map((row) => ({ ...row, steps: Array.from({ length: row.level }, (_, index) => ({ value: index + 1 })) })),
-      scopes: SCOPES.map((id) => ({ id, label: `WOD5E_MAGE.Scopes.${id}`, faIcon: SCOPE_ICONS[id] ?? "", steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 })) }))
+      scopes: SCOPES.map((id) => ({ id, label: `WOD5E_MAGE.Scopes.${id}`, faIcon: SCOPE_ICONS[id] ?? "", zero: { value: 0 }, steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 })) }))
     }
   );
   let choice = null;

@@ -8,7 +8,7 @@
     {{#each carta.blocchi as |blocco|}}
         <div class="wod5e-mage-potere-chat-blocco{{#if blocco.kind}} {{blocco.kind}}{{/if}}">
             {{#if blocco.titolo}}<b>{{blocco.titolo}}</b>{{/if}}
-            {{#each blocco.voci as |v|}}<p>{{#if v.chiave}}<strong>{{v.chiave}}:</strong> {{/if}}{{v.testo}}</p>{{/each}}
+            {{#each blocco.voci as |v|}}<p>{{#if v.accesso}}<strong class="wod5e-mage-accesso">{{localize "WOD5E_MAGE.Grimorio.Access"}} {{#each v.sfere as |sfera|}}<img class="wod5e-mage-sfera-inline" src="modules/wod5e-mage/assets/icons/sheet/{{sfera}}.png" alt="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}" title="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}">{{/each}}:</strong> {{else if v.chiave}}<strong>{{v.chiave}}:</strong> {{/if}}{{v.testo}}</p>{{/each}}
         </div>
     {{/each}}
     {{#if carta.paradox}}<p class="wod5e-mage-potere-chat-riga wod5e-mage-potere-chat-paradosso"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Paradosso"}}</b> {{carta.paradox}}</p>{{/if}}

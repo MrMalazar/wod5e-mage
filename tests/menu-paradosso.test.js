@@ -339,7 +339,8 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
     assert.ok(giocatori.includes(marker), `giocatori.hbs: manca ${marker}`);
   }
   const sessione = readFileSync(new URL("../templates/dialogs/nuova-sessione-narratore.hbs", import.meta.url), "utf8");
-  assert.ok(sessione.includes('name="mago"') && sessione.includes('name="scena"'), "la Nuova sessione: il Narratore sceglie i maghi");
+  assert.ok(!sessione.includes('name="mago"') && sessione.includes('name="scena"') && sessione.includes("WOD5E_MAGE.Menu.ChiGiocaHint"), "la Nuova sessione (26/9): giocano i maghi del Quadro, niente spunte");
+  assert.doesNotMatch(readFileSync(new URL("../scripts/quadro-narratore.js", import.meta.url), "utf8"), /maghiDelMondo|leggiScelti|input\[name=mago\]/);
   // Le chiavi di lingua usate dal Quadro esistono in it.json e en.json.
   const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE;
   const en = JSON.parse(readFileSync(new URL("../lang/en.json", import.meta.url), "utf8")).WOD5E_MAGE;

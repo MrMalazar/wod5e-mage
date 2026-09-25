@@ -94,6 +94,7 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
       risorsa: CreazioneGuidata.#onRisorsa,
       attributoPallino: CreazioneGuidata.#onAttributoPallino,
       abilitaPallino: CreazioneGuidata.#onAbilitaPallino,
+      specialtyTogli: CreazioneGuidata.#onSpecialtyTogli,
       oggettoPunti: CreazioneGuidata.#onOggettoPunti,
       oggettoTogli: CreazioneGuidata.#onOggettoTogli,
       percheRipristina: CreazioneGuidata.#onPercheRipristina,
@@ -167,6 +168,8 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
     if (this.actor?.apps && !this.actor.apps[this.id]) this.actor.apps[this.id] = this;
     CreazioneGuidata.aperte.set(this.actor?.id, this);
     this.element.classList.toggle(TEMA_CLASSE, isChiaro(game.settings.get(MODULE_ID, TEMA_SETTING)));
+    // Le caselle delle Specializzazioni del passo Abilità (26/9): Invio o l'uscita dal campo scrivono.
+    if (this.canEdit) wireSpecialtyInputs(this.element, this.actor);
     // Le immagini delle Famiglie che mancano lasciano il posto al segnaposto
     // (l'onerror sta nel template; qui quelle già fallite in cache).
     for (const img of this.element.querySelectorAll(".wod5e-mage-guidata-arte.immagine img")) {
@@ -430,6 +433,13 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
       return;
     }
     await this.actor.update({ [`system.skills.${id}.value`]: value });
+  }
+
+  /** La × della Specializzazione (26/9): via dai bonuses dell'Abilità. */
+  static async #onSpecialtyTogli(event, target) {
+    event.preventDefault();
+    if (this.#avvisaNonPuoi()) return;
+    await togliSpecializzazione(this.actor, String(target.dataset.skill ?? ""), target.dataset.index);
   }
 
   static async #onOggettoPunti(event, target) {

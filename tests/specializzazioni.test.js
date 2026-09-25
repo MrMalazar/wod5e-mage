@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { prepareSpecialties, specialtyBonus, specialtySkillChoices, specialtyCounts, specialtySlots, suggestionOptions, SPECIALTY_STEPS, SPECIALIZZAZIONI, SPECIALIZZAZIONI_PER_VOCE } from "../scripts/specializzazioni.js";
+import { existsSync, readFileSync } from "node:fs";
+import { conSpecializzazione, nomiSpecializzazioni, prepareSpecialties, rigaSpecializzazioni, senzaSpecializzazione, specialtyBonus, specialtySlots, SPECIALTY_STEPS, SPECIALIZZAZIONI, SPECIALIZZAZIONI_PER_VOCE } from "../scripts/specializzazioni.js";
 import { CHIAVI_VIVE } from "../scripts/abilita-essenziali.js";
 
 const actor = {
@@ -35,6 +35,7 @@ assert.deepEqual(
   [["athletics", 0, "Corsa"], ["occult", 0, "Rituali"], ["occult", 1, "Spiriti"]]
 );
 assert.equal(rows[0].skillLabel, "Atletica");
+assert.deepEqual(nomiSpecializzazioni(actor), { athletics: ["Corsa"], occult: ["Rituali", "Spiriti"], melee: ["Lame"] });
 
 // Il bonus è quello del sistema: +1, sul percorso dell'Abilità, sempre in mostra.
 assert.deepEqual(specialtyBonus("occult", "  Serrature "), {
@@ -44,18 +45,23 @@ assert.deepEqual(specialtyBonus("occult", "  Serrature "), {
   displayWhenInactive: true
 });
 
-// Nel riquadro delle Abilità (16/9): il + delle Abilità Specifiche nel
+// Nel riquadro delle Abilità (16/9; 26/9): il + delle Abilità Specifiche nel
 // titolo, le righe aggiunte sotto il titolo loro col nome che si scrive; le
-// Specializzazioni nel cassetto al sorvolo, un posto vuoto le aggiunge con
-// l'Abilità già scelta, la × le toglie; niente Tiri personalizzati.
+// Specializzazioni in riga sotto l'Abilità, pastiglie con la × e la casella
+// che ne scrive una (niente finestra, niente tendina); niente Tiri personalizzati.
 const abilita = readFileSync(new URL("../templates/actor/parts/stat-abilita.hbs", import.meta.url), "utf8");
 assert.doesNotMatch(abilita, /CustomRolls|customRolls/);
 assert.match(abilita, /wod5e-mage-riq-title[\s\S]*data-action="customSkillAdd"[\s\S]*CustomSkills\.Label[\s\S]*data-key="custom:\{\{skill\.id\}\}"[\s\S]*flags\.wod5e-mage\.customSkills\.\{\{skill\.id\}\}\.name[\s\S]*flags\.wod5e-mage\.customSkills\.\{\{skill\.id\}\}\.value[\s\S]*data-action="customSkillDelete"/);
-assert.match(abilita, /wod5e-mage-cassetto[\s\S]*data-action="tiroSpecialty" data-key="\{\{skill\.key\}\}" data-specialty="\{\{slot\.name\}\}"[\s\S]*data-action="specialtyDelete" data-skill="\{\{skill\.id\}\}" data-index="\{\{slot\.index\}\}"[\s\S]*data-action="specialtyAdd" data-skill="\{\{skill\.id\}\}"/);
-const dialog = readFileSync(new URL("../templates/dialogs/specialty-add.hbs", import.meta.url), "utf8");
-assert.match(dialog, /name="skill"[\s\S]*\{\{#if skill\.selected\}\}selected\{\{\/if\}\}[\s\S]*name="source"/);
+assert.match(abilita, /con-specializzazioni[\s\S]*wod5e-mage-specializzazioni[\s\S]*data-action="tiroSpecialty" data-key="\{\{skill\.key\}\}" data-specialty="\{\{s\.name\}\}"[\s\S]*data-action="specialtyDelete" data-skill="\{\{skill\.id\}\}" data-index="\{\{s\.index\}\}"[\s\S]*<input type="text" class="wod5e-mage-pastiglia-scrivi" list="wod5e-mage-spec-\{\{@root\.actor\.id\}\}-\{\{skill\.id\}\}" data-specialty-add="\{\{skill\.id\}\}"[\s\S]*<datalist id="wod5e-mage-spec-\{\{@root\.actor\.id\}\}-\{\{skill\.id\}\}">/);
+assert.doesNotMatch(abilita, /specialtyAdd|cassettoToggle|wod5e-mage-cassetto|wod5e-mage-abilita-tendina/);
+assert.equal(existsSync(new URL("../templates/dialogs/specialty-add.hbs", import.meta.url)), false, "la finestra non c'è più");
 const specScript = readFileSync(new URL("../scripts/specializzazioni.js", import.meta.url), "utf8");
-assert.match(specScript, /const preset = String\(target\?\.dataset\?\.skill \?\? ""\)/);
+assert.doesNotMatch(specScript, /DialogV2|onSpecialtyAdd|wireSuggestions/);
+assert.match(specScript, /input\[data-specialty-add\]/);
+assert.match(specScript, /event\.stopPropagation\(\)/);
+const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+assert.match(sheet, /wireSpecialtyInputs\(this\.element, this\.actor\)/);
+assert.doesNotMatch(sheet, /specialtyAdd: onSpecialtyAdd/);
 
 // Il clic sulla Specializzazione tira l'Abilità col dado in più già dentro (4/9 notte): la via vecchia resta per chi la chiama.
 const { compileMageTraitRoll } = await import("../scripts/mage-roll-selection.js");
@@ -71,25 +77,42 @@ assert.equal(compiled.label, "Accademiche + Intelligenza · Storia");
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
 assert.match(css, /\.wod5e-mage-roll-dialog \.situational-modifiers \{\s*display: none;/);
 assert.match(readFileSync(new URL("../scripts/mage-dice.js", import.meta.url), "utf8"), /classList\?\.add\("wod5e-mage", "mage", "wod5e-mage-roll-dialog"\)/);
+// La riga sotto l'Abilità va a capo, sulla scheda e nella guidata.
+assert.match(css, /\.wod5e-mage-riga-abilita\.con-specializzazioni \{[^}]*flex-wrap: wrap;/s);
+assert.match(css, /\.wod5e-mage-guidata-riga\.con-specializzazioni \{[^}]*flex-wrap: wrap;/s);
 
 console.log("Specializzazioni tests passed.");
 
 // Le Specializzazioni si prendono a 1, 3 e 5 pallini (11/9, i focus di V6):
-// una a 1, due a 3, tre a 5; la tendina mostra solo le Abilità con un posto libero.
+// una a 1, due a 3, tre a 5.
 assert.deepEqual([...SPECIALTY_STEPS], [1, 3, 5]);
 assert.deepEqual([0, 1, 2, 3, 4, 5, 9].map(specialtySlots), [0, 1, 1, 2, 2, 3, 3]);
+
+// La riga (26/9): le scritte con l'indice, i posti liberi, i suggerimenti in ordine, quella nel tiro.
 {
-  const prepared = prepareSpecialties(actor);
-  const used = specialtyCounts(prepared.rows);
-  assert.deepEqual(used, { athletics: 1, occult: 2 });
-  // Atletica 2 ha un posto e lo usa già; Occulto 3 ha due posti e li usa: nessuna scelta.
-  assert.deepEqual(specialtySkillChoices(prepared.skills, used), []);
-  // Senza Specializzazioni, tutte e due sono in tendina, con i posti.
-  assert.deepEqual(specialtySkillChoices(prepared.skills).map((skill) => [skill.id, skill.used, skill.slots]), [["athletics", 0, 1], ["occult", 0, 2]]);
-  // A zero pallini niente posto.
-  assert.deepEqual(specialtySkillChoices([{ id: "brawl", label: "Mischia", value: 0 }]), []);
-  assert.deepEqual(specialtySkillChoices([]), []);
+  const riga = rigaSpecializzazioni("occult", 3, ["Rituali", "Spiriti"], { chosen: "Spiriti" });
+  assert.deepEqual([riga.slots, riga.free, riga.chosen], [2, 0, "Spiriti"]);
+  assert.deepEqual(riga.scritte, [{ index: 0, name: "Rituali", chosen: false }, { index: 1, name: "Spiriti", chosen: true }]);
+  assert.deepEqual(riga.suggestions, ["Cosmologia", "Esterni", "Fatati", "Licantropi", "Risvegliati", "Vampiri"]);
+  assert.deepEqual([rigaSpecializzazioni("brawl", 0).slots, rigaSpecializzazioni("brawl", 0).free, rigaSpecializzazioni("brawl", 1).free, rigaSpecializzazioni("brawl", 5, ["Lame"]).free], [0, 0, 1, 2]);
+  assert.deepEqual(rigaSpecializzazioni("streetwise", 2).suggestions, []);
+  // Con l'Abilità scesa sotto le Specializzazioni scritte, restano tutte e i posti liberi sono zero.
+  assert.deepEqual([rigaSpecializzazioni("occult", 1, ["Rituali", "Spiriti"]).scritte.length, rigaSpecializzazioni("occult", 1, ["Rituali", "Spiriti"]).free], [2, 0]);
 }
+
+// La scrittura: il nome pulito in coda; niente vuoti, doppioni o posti oltre i pallini.
+{
+  const bonuses = actor.system.skills.athletics.bonuses;
+  const ok = conSpecializzazione(bonuses, "athletics", 3, "  Nuoto ");
+  assert.deepEqual([ok.ok, ok.motivo, ok.bonuses.length, ok.bonuses[1]], [true, "", 2, specialtyBonus("athletics", "Nuoto")]);
+  assert.deepEqual([conSpecializzazione(bonuses, "athletics", 3, "  ").motivo, conSpecializzazione(bonuses, "athletics", 3, "corsa").motivo, conSpecializzazione(bonuses, "athletics", 2, "Nuoto").motivo], ["vuoto", "doppione", "pieno"]);
+  assert.equal(conSpecializzazione(bonuses, "athletics", 2, "Nuoto").bonuses.length, 1, "com'erano");
+  assert.deepEqual(conSpecializzazione(undefined, "brawl", 1, "Lame").bonuses, [specialtyBonus("brawl", "Lame")]);
+  assert.deepEqual(senzaSpecializzazione(actor.system.skills.occult.bonuses, 0).map((b) => b.source), ["Spiriti"]);
+  assert.deepEqual(senzaSpecializzazione(actor.system.skills.occult.bonuses, 5).map((b) => b.source), ["Rituali", "Spiriti"]);
+  assert.deepEqual(senzaSpecializzazione(actor.system.skills.occult.bonuses, "x").length, 2);
+}
+
 // Il catalogo dei suggerimenti copre tutte le chiavi vive, sei per voce (16/9), una parola l'una, senza doppioni.
 assert.deepEqual(Object.keys(SPECIALIZZAZIONI).sort(), [...CHIAVI_VIVE].sort());
 assert.equal(SPECIALIZZAZIONI_PER_VOCE, 6);
@@ -98,18 +121,21 @@ for (const [key, names] of Object.entries(SPECIALIZZAZIONI)) {
   assert.equal(new Set(names).size, names.length, `${key}: doppioni`);
   for (const name of names) assert.doesNotMatch(name, /\s/, `${key}: ${name}`);
 }
-// Le fette uscite il 16/9 non tornano dalla finestra.
+// Le fette uscite il 16/9 non tornano.
 for (const morta of ["Deduzione", "Selva", "Fondo", "Lancio", "Aure", "Disarmo", "Veleni", "Raffica"]) {
   assert.ok(!Object.values(SPECIALIZZAZIONI).some((names) => names.includes(morta)), morta);
 }
-// In ordine alfabetico, filtrati da quel che si scrive (11/9: la tendina nativa era storta).
-assert.equal(suggestionOptions("brawl"), '<li data-value="Difesa">Difesa</li><li data-value="Improvvisate">Improvvisate</li><li data-value="Lame">Lame</li><li data-value="Lotta">Lotta</li><li data-value="Mazze">Mazze</li><li data-value="Pugilato">Pugilato</li>');
-assert.equal(suggestionOptions("brawl", "la"), '<li data-value="Lame">Lame</li>');
-assert.equal(suggestionOptions("streetwise"), "");
+
+// La creazione guidata (26/9): il passo Abilità porta le Specializzazioni, con la stessa casella.
 {
-  const dialog = readFileSync(new URL("../templates/dialogs/specialty-add.hbs", import.meta.url), "utf8");
-  assert.doesNotMatch(dialog.replace(/\{\{!--[\s\S]*?--\}\}/g, ""), /<form/);
-  assert.match(dialog, /\{\{#unless skills\.length\}\}disabled\{\{\/unless\}\}/);
-  assert.match(dialog, /name="source"[^>]*autocomplete="off"[\s\S]*<ul class="wod5e-mage-suggest" data-role="suggest" hidden>/);
-  assert.match(readFileSync(new URL("../scripts/specializzazioni.js", import.meta.url), "utf8"), /specialtySkillChoices\(prepared\.skills, specialtyCounts\(prepared\.rows\)\)/);
+  const guidata = readFileSync(new URL("../templates/guidata/passi/abilita.hbs", import.meta.url), "utf8");
+  assert.match(guidata, /con-specializzazioni[\s\S]*wod5e-mage-guidata-specializzazioni[\s\S]*data-action="specialtyTogli" data-skill="\{\{skill\.id\}\}" data-index="\{\{s\.index\}\}"[\s\S]*class="wod5e-mage-guidata-pastiglia-scrivi" list="wod5e-mage-spec-guidata-\{\{skill\.id\}\}" data-specialty-add="\{\{skill\.id\}\}"/);
+  const finestra = readFileSync(new URL("../scripts/creazione-guidata-finestra.js", import.meta.url), "utf8");
+  assert.match(finestra, /specialtyTogli: CreazioneGuidata\.#onSpecialtyTogli/);
+  assert.match(finestra, /if \(this\.canEdit\) wireSpecialtyInputs\(this\.element, this\.actor\)/);
+  const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE.Specialties;
+  const en = JSON.parse(readFileSync(new URL("../lang/en.json", import.meta.url), "utf8")).WOD5E_MAGE.Specialties;
+  for (const key of ["Remove", "Scrivi", "ScriviHint", "Doppione", "Full"]) assert.ok(it[key] && en[key], key);
+  assert.equal(it.Add, undefined, "la finestra non c'è più: niente Aggiungi");
 }
+console.log("Specializzazioni in riga (26/9): ok");

@@ -72,7 +72,8 @@
                      nome (il chevron in oro se l'Ambito ha più letture: il clic
                      apre la tendina delle letture, una pastiglia per lettura), la
                      pastiglia della lettura scelta subito dopo il nome, e in fondo
-                     i sette pallini, sempre (Blue, 21/9: «lasciamo solo i pallini:
+                     gli otto pallini, sempre: il primo è lo 0, l'effetto di base, acceso e
+                     fermo (Blue, 26/9), poi i sette livelli (Blue, 21/9: «lasciamo solo i pallini:
                      se vuole l'utente può specificare il sottotipo, ma può anche
                      solo cliccare i pallini necessari e via»), della misura e del
                      colore di quelli delle Sfere, a riposo al 40%. Sul pallino il
@@ -90,6 +91,8 @@
                             <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{scope.label}}</span></span>
                         {{/if}}
                         <span class="wod5e-mage-ambito-pallini" role="group" aria-label="{{scope.label}}">
+                            {{!-- Lo 0 (Blue, 26/9): l'effetto di base, acceso sempre, non si clicca; il sorvolo lo legge. --}}
+                            <span class="wod5e-mage-pallino-ambito zero lit" data-tooltip="{{scope.zero.tip}}&#10;{{localize 'WOD5E_MAGE.Scopes.Zero'}}" data-tooltip-class="wod5e-mage-tooltip-righe" role="img" aria-label="{{scope.label}} {{scope.zero.tip}}"></span>
                             {{#each scope.steps as |step|}}
                                 <button type="button" class="wod5e-mage-pallino-ambito{{#if step.lit}} lit{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" data-tooltip="{{step.tip}}" data-tooltip-class="wod5e-mage-tooltip-righe" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.tip}}"></button>
                             {{/each}}

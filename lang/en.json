@@ -749,7 +749,8 @@
         "potencyWeight": "Weight",
         "precision": "Fight",
         "precisionNarrative": "Narr."
-      }
+      },
+      "Zero": "Level 0 is the base effect: always there, never removed, free. The seven dots after it raise it."
     },
     "OngoingMagick": {
       "Label": "Ongoing Magick",
@@ -981,7 +982,16 @@
       "Reset": "Reset",
       "ResetHint": "The track goes clean.",
       "AttributeHint": "3 + {attribute} {value}, extra boxes {extra}. Click: choose between Charisma and Resolve.",
-      "AttributePick": "Choose the Wisdom attribute: Charisma or Resolve"
+      "AttributePick": "Choose the Wisdom attribute: Charisma or Resolve",
+      "StatoHint": "The Wisdom state, from the clean boxes: {clean} of {max}. Not written by hand: it moves with the stains.",
+      "Stati": {
+        "segnato": "Marked",
+        "inBilico": "On the edge",
+        "incrinato": "Cracked",
+        "saldo": "Steady",
+        "lucido": "Clear",
+        "sereno": "Serene"
+      }
     },
     "MagickBalance": {
       "Magick": "Magick",
@@ -1124,7 +1134,8 @@
       "AnchorBites": "Where it bites",
       "AnchorGenerate": "Roll",
       "AnchorGenerateHint": "Rolls the empty fields of this Anchor: name, role, job, age, what they give you, what they don't know, where it bites. To reroll one, clear it and press again.",
-      "AnchorGenerateNew": "Roll a new Anchor, every field"
+      "AnchorGenerateNew": "Roll a new Anchor, every field",
+      "AnchorNotesOpen": "Open and close the Anchor's notes"
     },
     "Riepilogo": {
       "Label": "Creation memo",
@@ -1235,20 +1246,10 @@
       "WheelFull": "The three points bring the Wheel to its maximum: paradox Flaw or default burst."
     },
     "Specialties": {
-      "Label": "Specialties",
-      "Add": "Add a Specialty",
       "Remove": "Remove the Specialty",
-      "Edit": "Open the Skill editor",
-      "Skill": "Skill",
-      "Name": "Specialty",
-      "NameHint": "e.g. Blades, Surgery, Pistols: pick from the list or write your own",
-      "Hint": "Worth one extra die whenever the specialty applies to the roll.",
-      "Empty": "No Specialty: + adds one (Skill and name).",
-      "Incomplete": "A Skill and the Specialty name are both needed.",
-      "Roll": "Roll with the Specialty: the extra die is already in",
-      "NoSkill": "No Skill with a free slot",
-      "MinHint": "One at the first dot, one at the third, one at the fifth ({steps}).",
-      "Slots": "{used} of {slots}",
+      "Scrivi": "+ specialty",
+      "ScriviHint": "Type the name and press Enter, or pick from the list: {free} free of {slots} (one at the first dot, one at the third, one at the fifth). Worth one extra die whenever it applies to the roll.",
+      "Doppione": "“{name}” is already on this Skill.",
       "Full": "{skill} already has its {slots} Specialties."
     },
     "CustomSkills": {
@@ -1534,7 +1535,8 @@
       "NoSphere": "No Sphere",
       "FromEffetti": "Add effects from the book",
       "NoType": "Type chosen when cast",
-      "Formula": "Formula"
+      "Formula": "Formula",
+      "RollHint": "Loads the effect into the Roll box on the first page, with its values: roll there with the three buttons."
     },
     "GrimorioComune": {
       "Label": "Shared Grimoire (M6)",
@@ -1708,10 +1710,9 @@
       "Nessuna": "none",
       "AttiviCorti": "active",
       "PassiviCorti": "passive",
-      "NessunMago": "No mage on the Board: New session puts them in play, or drag a mage here from the Actors.",
-      "ChiGioca": "Who plays tonight?",
-      "ChiGiocaHint": "Tick the mages in play: they enter the Board and the Paradox Sheet. Those you leave unticked stay out even if they press New session.",
-      "NessunMagoNelMondo": "No mage in the world.",
+      "NessunMago": "No mage on the Board: drag a mage here from the Actors; New session starts with those who are here.",
+      "ChiGioca": "The Board's mages play",
+      "ChiGiocaHint": "To change who plays: drag a mage from the Actors onto the Board, or remove it with the × on the Board. Whoever is not on the Board stays out even if they press New session.",
       "PrimaScena": "First scene",
       "Posto": "Place",
       "SessioneAzzera": "The pool ({points}) goes back to zero, effects on the mages and Paradox clocks close.",
@@ -1776,7 +1777,8 @@
       "OrologioAperto": "Clock \"{nome}\" opened ({forma} {colore}): see it in the Counter.",
       "ScenaInCorso": "current scene",
       "LeggiVoce": "Read the entry",
-      "InQuestaScena": "In this scene."
+      "InQuestaScena": "In this scene.",
+      "NessunMagoSessione": "No mage on the Board: drag a mage from the Actors onto the Board, then press New session."
     },
     "Stat": {
       "Identita": "Identity",
@@ -2213,7 +2215,7 @@
         "TettoHint": "no entry above {cap}",
         "TettoAvviso": "At creation no Skill passes {cap}.",
         "Specializzazioni": "Specialties",
-        "SpecializzazioniHint": "one at the first dot, the third and the fifth, from the sheet",
+        "SpecializzazioniHint": "One at the first dot, one at the third, one at the fifth: write them here, in the box under the Skill.",
         "Sfida": "from the Challenge",
         "Oltre": "above the cap: {list}"
       },
@@ -2256,6 +2258,20 @@
         "Mancano": "{n} steps missing: click them in the bar above.",
         "Chiudi": "Close the guide and go to the sheet"
       }
+    },
+    "Formule": {
+      "Label": "Formulas",
+      "Effetti": "Magick effects",
+      "Conto": "{aperte} open · {totale} in all",
+      "Tutte": "Show every Formula, even those your Spheres don't open",
+      "Accessibili": "Only the Formulas your Spheres open",
+      "Cerca": "Search a Formula…",
+      "Vuote": "No Formula open: open a Domain on the Magick page, or show every Formula.",
+      "Scrivi": "Write among the effects",
+      "ScriviHint": "The Formula as chosen becomes one of your Magick effects, in the right column: then you refine it with the pencil.",
+      "Lancia": "Cast from the Roll box",
+      "LanciaHint": "The Formula as chosen enters the Roll box on the first page with its values: pick Attribute and Skill and roll.",
+      "ScegliAccesso": "Pick the Access Sphere first."
     }
   }
 }

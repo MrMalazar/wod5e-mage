@@ -87,6 +87,33 @@ export function paintWisdom(counts, max) {
   return cells;
 }
 
+/**
+ * Lo stato della Saggezza (Blue, 26/9: «uno status di saggezza in base ai
+ * livelli posseduti», non modificabile dal giocatore): i livelli sono le
+ * caselle pulite, senza macchie. A zero la fila è piena e il nome è quello
+ * del LIBRO (04_95, «Segnato»); sopra, cinque gradini. I nomi stanno nella
+ * lingua (Wisdom.Stati), da allineare al canone quando il capitolo li fissa.
+ */
+export const WISDOM_STATE_STEPS = Object.freeze([
+  { min: 9, id: "sereno" },
+  { min: 7, id: "lucido" },
+  { min: 5, id: "saldo" },
+  { min: 3, id: "incrinato" },
+  { min: 1, id: "inBilico" },
+  { min: 0, id: "segnato" }
+]);
+
+/** Le caselle pulite: la fila meno le macchie, mai sotto zero. */
+export function wisdomClean(wisdom) {
+  return Math.max(count(wisdom?.max) - count(wisdom?.superficial) - count(wisdom?.aggravated), 0);
+}
+
+/** L'id dello stato dalle caselle pulite. */
+export function wisdomStateId(wisdom) {
+  const puliti = wisdomClean(wisdom);
+  return WISDOM_STATE_STEPS.find((step) => puliti >= step.min)?.id ?? "segnato";
+}
+
 export function getWisdom(actor) {
   const stored = actor.getFlag(MODULE_ID, "wisdom") ?? {};
   const chosen = WISDOM_ATTRIBUTES.includes(stored.attribute) ? stored.attribute : "";
@@ -98,9 +125,15 @@ export function getWisdom(actor) {
 
   // La fila piena ha un nome (04_95): da lì scattano i quattro effetti.
   const segnato = max > 0 && superficial + aggravated >= max;
+  const puliti = wisdomClean({ max, superficial, aggravated });
+  const stato = segnato ? "segnato" : wisdomStateId({ max, superficial, aggravated });
 
   return {
     max,
+    // Lo stato dai livelli (26/9): l'id e la chiave di lingua, per la casella accanto al nome.
+    puliti,
+    stato,
+    statoLabel: `WOD5E_MAGE.Wisdom.Stati.${stato}`,
     base,
     extra,
     attribute,

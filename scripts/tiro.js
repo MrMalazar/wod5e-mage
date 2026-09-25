@@ -67,7 +67,9 @@ export function emptyTiro() {
     dadi: 0,
     sforza: false,
     kind: null,
-    spell: null
+    spell: null,
+    // L'effetto caricato che non sta nel Grimorio (una Formula dalla pagina, 26/9): viaggia qui.
+    spellData: null
   };
 }
 
@@ -268,6 +270,7 @@ export function loadSpell(tiro, id, spell, { owned = null } = {}) {
   }
   next.kind = KIND_OF_MAGICK_TYPE[String(spell?.magickType ?? "")] ?? null;
   next.spell = key;
+  next.spellData = spell ? { ...spell } : null;
   return next;
 }
 

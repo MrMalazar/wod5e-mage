@@ -176,19 +176,19 @@ assert.match(sheetJs, /box\.dataset\.scheda = kind/);
 const abilitaTemplate = stat("stat-abilita.hbs");
 assert.match(abilitaTemplate, /data-action="skillsFlatToggle"[\s\S]*data-action="customSkillAdd"/);
 assert.match(abilitaTemplate, /\{\{#if group\.label\}\}<span class="wod5e-mage-riq-occhiello">/);
-// Le Specializzazioni si aprono col tastino, come gli Ambiti (Blue, 25/9: il sorvolo era scomodo): la riga è
-// `con-tendina`, la freccetta è un cassettoToggle con la pastiglia della Specializzazione nel tiro.
-// La freccetta sta in testa alla riga, prima del simbolo e del nome (Blue, 25/9 sera).
-assert.match(abilitaTemplate, /wod5e-mage-riga-abilita\{\{#if skill\.chosen\}\} scelta\{\{\/if\}\}\{\{#if skill\.hasSpecialties\}\} con-tendina\{\{\/if\}\}" data-cassetto="abilita-\{\{skill\.id\}\}">\s*\{\{#if skill\.slots\.length\}\}[\s\S]*?<button type="button" class="wod5e-mage-riga-tastino wod5e-mage-abilita-tendina\{\{#if skill\.specialtyChosen\}\} pieno\{\{\/if\}\}" data-action="cassettoToggle"[^>]*><i class="fa-solid fa-chevron-down"[\s\S]*?\{\{\/if\}\}\s*<button type="button" class="wod5e-mage-riga-nome" data-action="tiroSkill"[\s\S]*wod5e-mage-abilita-scelta"[\s\S]*<div class="wod5e-mage-cassetto" role="group"/);
-assert.doesNotMatch(abilitaTemplate, /con-cassetto/);
+// Le Specializzazioni stanno in riga sotto l'Abilità (Blue, 26/9: via la finestra e la tendina): la riga è
+// `con-specializzazioni` e va a capo, sotto le pastiglie e la casella che ne scrive una; niente tendina.
+assert.match(abilitaTemplate, /wod5e-mage-riga-abilita\{\{#if skill\.chosen\}\} scelta\{\{\/if\}\}\{\{#if skill\.spec\.slots\}\} con-specializzazioni\{\{\/if\}\}">\s*<button type="button" class="wod5e-mage-riga-nome" data-action="tiroSkill"[\s\S]*<div class="wod5e-mage-specializzazioni" role="group"[\s\S]*data-action="tiroSpecialty"[\s\S]*data-specialty-add="\{\{skill\.id\}\}"/);
+assert.doesNotMatch(abilitaTemplate, /con-cassetto|con-tendina|cassettoToggle|wod5e-mage-cassetto/);
 // Le tendine delle righe si ricordano per chiave e il render le riapre (Blue, 25/9 sera: coi pallini «si chiudono da sole»).
-for (const [file, key] of [["stat-magick.hbs", 'data-cassetto="sfera-{{sphere.id}}"'], ["stat-magick.hbs", 'data-cassetto="ambito-{{scope.id}}"'], ["strumento-riga.hbs", 'data-cassetto="strumento-{{row.id}}"'], ["stat-abilita.hbs", 'data-cassetto="abilita-{{skill.id}}"']]) {
+for (const [file, key] of [["stat-magick.hbs", 'data-cassetto="sfera-{{sphere.id}}"'], ["stat-magick.hbs", 'data-cassetto="ambito-{{scope.id}}"'], ["strumento-riga.hbs", 'data-cassetto="strumento-{{row.id}}"']]) {
   assert.ok(readFileSync(new URL(`../templates/actor/parts/${file}`, import.meta.url), "utf8").includes(key), `${file}: ${key}`);
 }
 assert.match(sheetJs, /const aperte = \(this\._cassettiAperti \?\?= new Set\(\)\);[\s\S]*aperte\[open \? "add" : "delete"\]\(row\.dataset\.cassetto\)/);
 assert.match(sheetJs, /function riapriCassetti\(sheet\)[\s\S]*row\.classList\.add\("aperto"\);\s*flipCassetto\(row\);/);
 assert.match(sheetJs, /riapriPoteri\(this\);\s*riapriCassetti\(this\);/);
-assert.match(sheetJs, /const specialtyChosen = slots\.find\(\(slot\) => slot\.chosen\)\?\.name \?\? ""/);
+// Le Specializzazioni in riga (26/9): la scheda prepara la riga di ogni Abilità con `rigaSpecializzazioni`.
+assert.match(sheetJs, /const spec = rigaSpecializzazioni\(skill\.id, skill\.value, specialtyNames\[skill\.id\] \?\? \[\], \{ chosen: tiro\.skill === key \? tiro\.specialty \?\? "" : "" \}\);/);
 // La carta del potere in chat va a capo (Blue, 25/9: «mi esce tagliata»): colonna sola, non la griglia del tiro.
 assert.match(css, /\.wod5e-mage-roll-card\.wod5e-mage-potere-chat \{\s*display: flex;\s*flex-direction: column;/);
 assert.doesNotMatch(magickTemplate, /wod5e-mage-scopes\b|wod5e-mage-persistent-resources/);
@@ -256,7 +256,7 @@ assert.match(css, /\.sheet-tabs > \[data-tab\] \.navicon,\s*\.wod5e-mage\.wod5e\
 const attributi = stat("stat-attributi.hbs");
 const abilita = stat("stat-abilita.hbs");
 assert.match(attributi, /attributeGroups[\s\S]*data-action="tiroAttribute" data-attribute="\{\{attribute\.id\}\}"[\s\S]*data-action="dotCounterChange"/);
-assert.match(abilita, /skillGroups[\s\S]*data-action="tiroSkill" data-key="\{\{skill\.key\}\}"[\s\S]*data-action="essentialSkillDotChange"[\s\S]*wod5e-mage-cassetto[\s\S]*data-action="tiroSpecialty"[\s\S]*data-action="specialtyAdd" data-skill="\{\{skill\.id\}\}"/);
+assert.match(abilita, /skillGroups[\s\S]*data-action="tiroSkill" data-key="\{\{skill\.key\}\}"[\s\S]*data-action="essentialSkillDotChange"[\s\S]*wod5e-mage-specializzazioni[\s\S]*data-action="tiroSpecialty"[\s\S]*data-specialty-add="\{\{skill\.id\}\}"/);
 assert.match(attributi, /wod5e-mage-riga-icona[\s\S]*attribute\.icon/);
 assert.match(abilita, /wod5e-mage-riga-icona[\s\S]*skill\.icon/);
 assert.doesNotMatch(readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8"), /traitsLayoutToggle|traitsOrderToggle|parts\/tratti\.hbs|parts\/ruota\.hbs/);

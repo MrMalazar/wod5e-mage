@@ -254,6 +254,17 @@ const g10 = prepareGuidata(vuoto, { passo: 11, localize });
 assert.equal(g10.corpo.gruppi.reduce((sum, g) => sum + g.abilita.length, 0), 14);
 assert.deepEqual([g10.corpo.conto.value, g10.corpo.conto.target, g10.corpo.cap, g10.corpo.tettoOk], [19, 19, 3, true]);
 assert.equal(g10.passi[10].fatto, true);
+// Le Specializzazioni nel passo (26/9): i posti dai pallini, le scritte dai bonuses, i suggerimenti.
+{
+  const conSpec = attore({ skills: { ...ABILITA, occult: 3 } });
+  conSpec.system.skills.occult.bonuses = [{ source: "Rituali", value: 1 }];
+  const g = prepareGuidata(conSpec, { passo: 11, localize });
+  const occult = g.corpo.gruppi.flatMap((gruppo) => gruppo.abilita).find((s) => s.id === "occult");
+  assert.deepEqual([occult.spec.slots, occult.spec.free, occult.spec.scritte.map((s) => s.name), occult.spec.suggestions.length], [2, 1, ["Rituali"], 6]);
+  const posti = g.corpo.gruppi.flatMap((gruppo) => gruppo.abilita).reduce((sum, s) => sum + s.spec.slots, 0);
+  assert.deepEqual(g.corpo.specializzazioni, { scritte: 1, posti });
+  assert.ok(posti >= 2);
+}
 const troppo = prepareGuidata(attore({ skills: { ...ABILITA, occult: 4 } }), { passo: 11, localize });
 assert.deepEqual([troppo.corpo.tettoOk, troppo.corpo.oltre], [false, ["occult"]]);
 assert.equal(troppo.corpo.gruppi[2].abilita.find((s) => s.id === "occult").oltre, true);

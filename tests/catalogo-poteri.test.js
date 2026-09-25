@@ -105,6 +105,8 @@ Handlebars.registerHelper("localize", (key, options) => {
   const hash = options?.hash ?? {};
   return Object.keys(hash).length ? `${key}(${Object.entries(hash).map(([k, v]) => `${k}=${v}`).join(",")})` : String(key);
 });
+// `concat` è di Foundry: incolla gli argomenti (il sigillo dell'Accesso lo usa per il nome della Sfera).
+Handlebars.registerHelper("concat", (...args) => args.slice(0, -1).join(""));
 const template = Handlebars.compile(readFileSync(new URL("../templates/dialogs/catalogo-poteri.hbs", import.meta.url), "utf8"));
 const html = template({ ...materia, pastiglie, icon: "m.png" });
 for (const marker of ['data-role="catalogoSfera" data-sphere="forces"', 'wod5e-mage-catalogo-sfera attiva" role="tab" aria-selected="true" data-role="catalogoSfera" data-sphere="matter"', "WOD5E_MAGE.Poteri.CatalogoConosciuti(known&#x3D;2)", 'data-role="catalogoSearch"', 'data-role="catalogoConto"', 'data-catalogo-gruppo="propri"', 'data-catalogo-gruppo="qualsiasi"', 'wod5e-mage-catalogo-row known"', 'data-catalogo="guasto"', 'data-role="catalogoAggiungi" data-catalogo="guasto" disabled', "WOD5E_MAGE.Poteri.Conosciuto", "Creare e Distruggere", "Effetto attivo", "WOD5E_MAGE.Poteri.Carta.Paradosso", 'wod5e-mage-catalogo-proposta', '<small class="attivo">', "WOD5E_MAGE.Poteri.Grado"]) {
