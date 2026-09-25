@@ -339,6 +339,22 @@ async function askBackgroundNotes(entry) {
   return { who: result.who ?? "", type: picked || result.type || "" };
 }
 
+/** Il contesto della finestra: le voci a gruppi, le linguette degli archivi e dei livelli. */
+export function contestoArchivio(kind, entries, { kinds = [], canAdd = false, localize = (key) => key } = {}) {
+  const config = ARCHIVI[archivioKind(kind)];
+  return {
+    kind,
+    title: config ? localize(config.label) : "",
+    // Le linguette degli archivi (10/9): per gli Elementi, Background, Pregi e Difetti in una finestra.
+    kinds: kinds.filter((id) => archivioKind(id)).map((id) => ({ id, label: localize(ARCHIVI[id].label), active: id === kind })),
+    groups: groupEntries(entries).map((group) => ({ ...group, count: group.entries.length })),
+    count: entries.length,
+    canAdd,
+    // Le linguette dei livelli (9/9), solo dove il costo è a pallini.
+    levels: hasLevels(entries) ? [1, 2, 3, 4, 5] : []
+  };
+}
+
 /** La finestra dell'archivio: cerca, apri la voce, «+» per metterla sulla scheda. */
 export async function openArchivio(actor, kind, { table = "", kinds = [] } = {}) {
   const config = ARCHIVI[archivioKind(kind)];
@@ -348,17 +364,7 @@ export async function openArchivio(actor, kind, { table = "", kinds = [] } = {})
   const title = localize(config.label);
   const content = await foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/dialogs/archivio.hbs`,
-    {
-      kind,
-      title,
-      // Le linguette degli archivi (10/9): per gli Elementi, Background, Pregi e Difetti in una finestra.
-      kinds: kinds.filter((id) => archivioKind(id)).map((id) => ({ id, label: localize(ARCHIVI[id].label), active: id === kind })),
-      groups: groupEntries(entries).map((group) => ({ ...group, count: group.entries.length })),
-      count: entries.length,
-      canAdd: canEdit(actor),
-      // Le linguette dei livelli (9/9), solo dove il costo è a pallini.
-      levels: hasLevels(entries) ? [1, 2, 3, 4, 5] : []
-    }
+    contestoArchivio(kind, entries, { kinds, canAdd: canEdit(actor), localize })
   );
 
   return foundry.applications.api.DialogV2.wait({
@@ -371,20 +377,44 @@ export async function openArchivio(actor, kind, { table = "", kinds = [] } = {})
   });
 }
 
-function wireArchivio(dialog, actor, kind, entries, { table = "", kinds = [] } = {}) {
+/**
+ * Le linguette (Blue, 27/9: «mi ricarica la finestra da capo»): l'altro
+ * archivio prende il posto di questo nella stessa finestra, senza chiuderla e
+ * riaprirla; la cerca resta com'era e il titolo cambia.
+ */
+async function cambiaArchivio(dialog, actor, kind, { table = "", kinds = [], query = "" } = {}) {
+  const root = dialog?.element;
+  const vecchio = root?.querySelector?.(".wod5e-mage-archivio");
+  if (!vecchio) return;
+  const entries = await loadArchivio(kind);
+  const localize = game.i18n.localize.bind(game.i18n);
+  const html = await foundry.applications.handlebars.renderTemplate(
+    `modules/${MODULE_ID}/templates/dialogs/archivio.hbs`,
+    contestoArchivio(kind, entries, { kinds, canAdd: canEdit(actor), localize })
+  );
+  const stampo = document.createElement("template");
+  stampo.innerHTML = html.trim();
+  const nuovo = stampo.content.firstElementChild;
+  if (!nuovo) return;
+  vecchio.replaceWith(nuovo);
+  const titolo = root.querySelector(".window-title");
+  if (titolo) titolo.textContent = game.i18n.format("WOD5E_MAGE.Archivi.WindowTitle", { title: localize(ARCHIVI[kind].label) });
+  wireArchivio(dialog, actor, kind, entries, { table, kinds, query });
+}
+
+function wireArchivio(dialog, actor, kind, entries, { table = "", kinds = [], query = "" } = {}) {
   const root = dialog?.element;
   if (!root) return;
-  // Le linguette degli archivi: un altro archivio nella stessa finestra (si riapre su quello).
+  const search = root.querySelector("[data-role=archivioSearch]");
+  // Le linguette degli archivi: un altro archivio nella stessa finestra, sul posto (27/9).
   root.querySelectorAll("[data-role=archivioKind]").forEach((button) => {
     button.addEventListener("click", async (event) => {
       event.preventDefault();
       const other = archivioKind(button.dataset.kind);
       if (!other || other === kind) return;
-      await dialog.close();
-      await openArchivio(actor, other, { table, kinds });
+      await cambiaArchivio(dialog, actor, other, { table, kinds, query: search?.value ?? "" });
     });
   });
-  const search = root.querySelector("[data-role=archivioSearch]");
   const rows = [...root.querySelectorAll("[data-role=archivioEntry]")];
   const groups = [...root.querySelectorAll("[data-role=archivioGroup]")];
   const levelButtons = [...root.querySelectorAll("[data-role=archivioLevel]")];
@@ -406,6 +436,11 @@ function wireArchivio(dialog, actor, kind, entries, { table = "", kinds = [] } =
     }
   };
   search?.addEventListener("input", filter);
+  // La cerca scritta prima di cambiare linguetta vale anche sull'archivio nuovo.
+  if (search && query) {
+    search.value = query;
+    filter();
+  }
 
   levelButtons.forEach((button) => {
     button.addEventListener("click", (event) => {

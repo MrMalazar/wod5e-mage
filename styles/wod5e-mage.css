@@ -15964,7 +15964,7 @@
   align-items: center;
   column-gap: 8px;
   display: grid;
-  grid-template-columns: minmax(0, 8.6em) minmax(0, 1fr) 3.4em 0.8em;
+  grid-template-columns: minmax(0, 8.6em) minmax(0, 1fr) 88px 0.8em;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula > summary > .wod5e-mage-grimorio-formula-name {
@@ -15987,12 +15987,21 @@
   display: block;
 }
 
+/* I sigilli d'Accesso (Blue, 27/9: «sfasano sotto le scritte»): una colonna
+   fissa da cinque, e da sei a nove vanno a capo dentro la colonna. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula > summary > .wod5e-mage-grimorio-accessi {
-  display: inline-flex;
-  gap: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
   justify-content: flex-end;
   justify-self: end;
   margin: 0;
+  width: 88px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula > summary > .wod5e-mage-grimorio-accessi > img {
+  height: 15px;
+  width: 15px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-formule-lista > .wod5e-mage-formula > summary > i {
@@ -16017,8 +16026,8 @@
   display: flex;
 }
 
-/* Il nome parte stretto e cresce: così la freccetta resta sulla prima riga
-   anche con un nome lungo (Accademiche), invece di andare a capo. */
+/* Il nome parte stretto e cresce: così la freccetta (fra il nome e i pallini,
+   27/9) resta sulla prima riga anche con un nome lungo (Accademiche). */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita.con-specializzazioni > .wod5e-mage-riga-nome {
   flex: 1 1 3rem;
 }
@@ -16035,7 +16044,7 @@
   gap: 2px;
   height: 18px;
   line-height: 1;
-  margin: 0 -2px 0 0;
+  margin: 0;
   min-height: 0;
   padding: 0 2px;
   width: auto;

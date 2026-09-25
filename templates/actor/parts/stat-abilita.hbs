@@ -4,9 +4,10 @@
      (uno a 1 pallino, due a 3, tre a 5): ogni nome è una pastiglia che la
      sceglie insieme all'Abilità, la × la toglie, e finché c'è posto una
      casella tratteggiata ne scrive una nuova (a mano, o dai sei suggerimenti
-     del catalogo, a Invio). La riga si apre e si chiude con la freccetta in
-     fondo (Blue, 26/9 sera: «un compromesso tra prima e dopo»), che porta il
-     conto delle scritte; nasce aperta se la sua Specializzazione è nel Tiro.
+     del catalogo, a Invio). La riga si apre e si chiude con la freccetta fra
+     il nome e i pallini (Blue, 26/9 sera: «un compromesso tra prima e dopo»;
+     27/9: a sinistra della ×, coi pallini allineati), che porta il conto delle
+     scritte; nasce aperta se la sua Specializzazione è nel Tiro.
      I pallini restano quelli della scheda. Le Abilità
      Specifiche del giocatore chiudono la lista. Il tasto accanto al + (16/9
      sera) scioglie le famiglie: tutte in fila, Specifiche comprese, in ordine
@@ -43,6 +44,11 @@
                                 {{#if skill.icon}}<img class="wod5e-mage-riga-icona" src="{{skill.icon}}" alt="">{{/if}}
                                 <span>{{skill.displayName}}</span>
                             </button>
+                            {{#if skill.spec.slots}}
+                                {{!-- La freccetta (26/9 sera; 27/9: a sinistra della × dei pallini, così i pallini restano
+                                     allineati fra le righe): apre e chiude la riga delle Specializzazioni, col conto delle scritte. --}}
+                                <button type="button" class="wod5e-mage-abilita-apri{{#if skill.spec.scritte.length}} piena{{/if}}" data-action="specialtyToggle" aria-expanded="{{#if skill.spec.chosen}}true{{else}}false{{/if}}" title="{{localize 'WOD5E_MAGE.Specialties.Apri'}}" aria-label="{{skill.displayName}}: {{localize 'WOD5E_MAGE.Specialties.Apri'}}">{{#if skill.spec.scritte.length}}<small>{{skill.spec.scritte.length}}</small>{{/if}}<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+                            {{/if}}
                             {{#if ../../settings.skillAttributeInputs}}
                                 {{#if ../../locked}}
                                     <b>{{skill.value}}</b>
@@ -58,8 +64,6 @@
                                 </div>
                             {{/if}}
                             {{#if skill.spec.slots}}
-                                {{!-- La freccetta (26/9 sera): apre e chiude la riga delle Specializzazioni, col conto delle scritte. --}}
-                                <button type="button" class="wod5e-mage-abilita-apri{{#if skill.spec.scritte.length}} piena{{/if}}" data-action="specialtyToggle" aria-expanded="{{#if skill.spec.chosen}}true{{else}}false{{/if}}" title="{{localize 'WOD5E_MAGE.Specialties.Apri'}}" aria-label="{{skill.displayName}}: {{localize 'WOD5E_MAGE.Specialties.Apri'}}">{{#if skill.spec.scritte.length}}<small>{{skill.spec.scritte.length}}</small>{{/if}}<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
                                 {{!-- Le Specializzazioni in riga (Blue, 26/9): le pastiglie (il clic nel tiro, la × toglie) e,
                                      finché c'è posto, la casella tratteggiata che ne scrive una: a mano, o dai suggerimenti. --}}
                                 <div class="wod5e-mage-specializzazioni" role="group" aria-label="{{skill.displayName}}: {{localize 'WOD5E.SkillsList.Specialties'}}">
