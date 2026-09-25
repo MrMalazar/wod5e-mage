@@ -72,36 +72,30 @@ const perNome = (a, b) => a.nome.localeCompare(b.nome, "it");
 /**
  * Le voci del menù a famiglie, tutte in vista (Blue, 25/9: «voglio sempre
  * vedere in tutte le categorie tutte le opzioni, devo essere io che vado a
- * cercare»), in ordine alfabetico dentro ogni famiglia. Le voci di scena e
- * lo scettro stanno a gruppi per scena, la scena in corso per prima; le
- * comuni portano la faccia della scena in corso, se c'è. `tutte: false`
- * tiene il comportamento di prima (solo la scena in corso).
+ * cercare»), in ordine alfabetico dentro ogni famiglia, senza sottotitoli
+ * di scena (Blue, 25/9 sera: «togliamole tutte e lasciamo solo gli
+ * elementi»): ogni voce di scena sa la sua scena (`scenaNome`, per il testo
+ * e la cerca). Le comuni portano la faccia della scena in corso, se c'è.
+ * `tutte: false` tiene il comportamento di prima (solo la scena in corso).
  */
 export function cassettiPerScena(scenaId = "", { cerca = "", tutte = true } = {}) {
   const scena = scenaById(scenaId);
   const filtro = testo(cerca).toLowerCase();
-  const passa = (voce) => !filtro || `${voce.nome} ${voce.breve ?? ""} ${voce.effetto} ${voce.quando}`.toLowerCase().includes(filtro);
+  const passa = (voce) => !filtro || `${voce.nome} ${voce.breve ?? ""} ${voce.effetto} ${voce.quando} ${voce.scenaNome ?? ""}`.toLowerCase().includes(filtro);
   return ORDINE_FAMIGLIE.map((famiglia) => {
     const voci = MENU_PARADOSSO
       .filter((voce) => voce.famiglia === famiglia && (!voce.scena || voce.scena === scenaId || tutte))
-      .filter(passa)
       .map((voce) => ({
         ...voce,
         scenaNome: voce.scena ? (scenaById(voce.scena)?.nome ?? voce.scena) : "",
+        inCorso: Boolean(voce.scena) && voce.scena === scenaId,
         faccia: scenaId && voce.facce?.[scenaId] ? voce.facce[scenaId] : null
       }))
+      .filter(passa)
       .sort(perNome);
-    const perScena = famiglia === "scena" || famiglia === "scettro";
-    const gruppi = perScena
-      ? [...SCENE_PARADOSSO]
-        .sort((a, b) => Number(b.id === scenaId) - Number(a.id === scenaId))
-        .map((s) => ({ scena: s.id, nome: s.nome, attivo: s.id === scenaId, voci: voci.filter((voce) => voce.scena === s.id) }))
-        .filter((gruppo) => gruppo.voci.length > 0)
-      : null;
     return {
       famiglia,
       voci,
-      gruppi,
       conto: voci.length,
       faccia: scena?.facce?.[famiglia] ?? ""
     };

@@ -169,7 +169,7 @@ const inizioSessione = getScena().inizio;
 // 2. Il contatore: il contesto e il template.
 const app = new QuadroNarratore();
 async function contesto(modo) {
-  await game.settings.set(MODULE, QUADRO_SETTING, { modo });
+  await game.settings.set(MODULE, QUADRO_SETTING, { ...game.settings.get(MODULE, QUADRO_SETTING), modo });
   const options = {};
   app._configureRenderOptions(options);
   assert.deepEqual(options.parts, ["testa", modo], "una PART per modo, dietro la testa");
@@ -205,23 +205,32 @@ for (const fn of hooks.createChatMessage) await fn(cartaAbilita);
 assert.equal(getPool().points, 2, "un tiro di Abilità non porta punti");
 await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
 
-// 4. Il menù (25/9): tutte le famiglie in vista, in ordine alfabetico, le voci di scena a gruppi con Combattimento per primo; il Volgare in tendina; la voce aperta coi comandi.
+// 4. Il menù (25/9): tutte le famiglie in vista e apribili, le voci in ordine alfabetico senza sottotitoli di scena; il Volgare in tendina; la voce aperta coi comandi.
 {
   const { ctx, html } = await contesto("menu");
   assert.equal(ctx.cassetti.length, 8);
   assert.equal(ctx.cassetti.reduce((n, c) => n + c.conto, 0), 65, "tutte le 65 voci in vista");
+  assert.ok(ctx.cassetti.every((c) => !c.chiusa), "le famiglie partono aperte");
   const scettro = ctx.cassetti.find((c) => c.famiglia === "scettro");
   assert.equal(scettro.conto, 21);
-  assert.equal(scettro.righe[0].gruppo.nome, "Combattimento", "la scena in corso per prima");
-  assert.ok(scettro.righe[0].gruppo.attivo);
-  assert.deepEqual(scettro.righe.slice(1, 6).map((r) => r.voce.nome), ["Anticipo", "Fuga", "Rinforzo", "Ritirata", "Stop"], "in ordine alfabetico");
-  assert.deepEqual(ctx.cassetti.find((c) => c.famiglia === "tocchi").righe.map((r) => r.voce.nome), ["Condizione", "Fiacco", "Fragile", "Rigidità", "Scottatura", "Tremore"]);
+  assert.deepEqual(scettro.voci.slice(0, 5).map((v) => v.nome), ["Anticipo", "Chiusura", "Concorrenza", "Controllo", "Domande"], "in ordine alfabetico, senza gruppi");
+  assert.deepEqual(ctx.cassetti.find((c) => c.famiglia === "tocchi").voci.map((v) => v.nome), ["Condizione", "Fiacco", "Fragile", "Rigidità", "Scottatura", "Tremore"]);
   assert.match(html, /<option value="combattimento" selected>/);
   assert.ok(!html.includes("wod5e-mage-menu-spesa") && !html.includes('class="wod5e-mage-menu-info"'), "nessuna voce aperta, nessun testo");
   assert.match(html, /wod5e-mage-menu-famiglia" data-famiglia="tocchi"/);
-  assert.match(html, /wod5e-mage-menu-gruppo attivo" data-gruppo>/);
+  assert.ok(!html.includes("data-gruppo"), "niente sottotitoli di scena");
+  assert.match(html, /data-action="famiglia" data-famiglia="tocchi" aria-expanded="true"/);
   assert.match(html, /data-action="testo" data-voce="tremore"/);
   assert.equal((html.match(/data-action="voce"/g) ?? []).length, 65);
+  // Il Narratore chiude le Conseguenze: la famiglia resta col titolo, senza righe; la scelta resta nell'impostazione del client.
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.famiglia.call(app, { preventDefault() {} }, { dataset: { famiglia: "tocchi" } });
+  const chiusa = await contesto("menu");
+  assert.ok(chiusa.ctx.cassetti.find((c) => c.famiglia === "tocchi").chiusa);
+  assert.match(chiusa.html, /wod5e-mage-menu-famiglia chiusa" data-famiglia="tocchi"/);
+  assert.match(chiusa.html, /data-action="famiglia" data-famiglia="tocchi" aria-expanded="false"/);
+  assert.deepEqual(game.settings.get(MODULE, QUADRO_SETTING).chiuse, ["tocchi"]);
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.famiglia.call(app, { preventDefault() {} }, { dataset: { famiglia: "tocchi" } });
+  assert.deepEqual(game.settings.get(MODULE, QUADRO_SETTING).chiuse, []);
   // Il Narratore apre la voce Ritorno: la scheda e la spesa col Volgare di Guendalina.
   await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
   const aperto = await contesto("menu");
@@ -231,9 +240,9 @@ await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
   assert.match(ritorno.volgari[0].label, /Guendalina · Fulmine · Volgare con testimoni · soglia 5/);
   assert.ok(ritorno.bersagli.find((m) => m.id === "a1").selected, "su chi: il mago del Volgare");
   assert.equal(ritorno.suChiVuoto, false);
-  assert.equal(ritorno.breve, "al turno dopo l'effetto finisce e l'ostacolo torna");
+  assert.equal(ritorno.breve, "l'effetto svanisce, l'ostacolo torna");
   assert.equal(ritorno.prezzoLabel, "la soglia");
-  assert.match(aperto.html, /<span class="breve">al turno dopo l&#x27;effetto finisce e l&#x27;ostacolo torna<\/span>/);
+  assert.match(aperto.html, /<span class="breve">l&#x27;effetto svanisce, l&#x27;ostacolo torna<\/span>/);
   assert.match(aperto.html, /Conseguenze Magick/);
   assert.ok(!aperto.html.includes("I Tocchi"));
   assert.ok(!aperto.html.includes('class="wod5e-mage-menu-info"'), "il testo resta chiuso finché non si chiede");
@@ -242,6 +251,10 @@ await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
   const conTesto = await contesto("menu");
   assert.match(conTesto.html, /class="wod5e-mage-menu-info"/);
   assert.match(conTesto.html, /In questa scena\./, "la faccia della scena sta nel testo");
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "combattimento-stop" } });
+  const testoScena = await contesto("menu");
+  assert.match(testoScena.html, /Scena\.<\/b> Combattimento \(scena in corso\)/, "il testo di una voce di scena dice la sua scena");
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "combattimento-stop" } });
   assert.equal((conTesto.html.match(/wod5e-mage-menu-mossa/g) ?? []).length, 3);
   await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
   assert.equal(ritorno.stima, 5, "la soglia del Volgare");

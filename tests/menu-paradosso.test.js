@@ -54,7 +54,7 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
     assert.ok(["fisso", "soglia", "suaSoglia", "pallino", "orologioRimbalzo"].includes(voce.prezzo.tipo), `${voce.id}: prezzo ${voce.prezzo.tipo}`);
     assert.ok(voce.quando && voce.effetto, `${voce.id}: senza quando o effetto`);
     // La riga breve e il prezzo breve (24/9 notte): ogni voce li ha, corti.
-    assert.ok(voce.breve && voce.breve.length <= 90, `${voce.id}: riga breve ${voce.breve}`);
+    assert.ok(voce.breve && voce.breve.length <= 50, `${voce.id}: riga breve da leggere a colpo d'occhio, ${voce.breve.length} caratteri`);
     assert.ok(voce.prezzo.breve && voce.prezzo.breve.length <= 22, `${voce.id}: prezzo breve ${voce.prezzo.breve}`);
     // I Tocchi si chiamano Conseguenze Magick: la parola vecchia non resta in nessun testo.
     assert.ok(!/\bTocc[oh]/.test(JSON.stringify(voce)), `${voce.id}: c'è ancora «Tocco»`);
@@ -79,23 +79,21 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   }
 }
 
-// La lista (25/9): tutte le voci in vista, in ordine alfabetico; le voci di scena a gruppi per scena, la scena in corso per prima; le facce della scena in corso.
+// La lista (25/9): tutte le voci in vista, in ordine alfabetico, senza sottotitoli di scena; ogni voce di scena sa la sua scena; le facce della scena in corso.
 {
   const cassetti = cassettiPerScena("combattimento");
   assert.deepEqual(cassetti.map((c) => c.famiglia), [...FAMIGLIE_PARADOSSO]);
   assert.equal(cassetti.reduce((n, c) => n + c.conto, 0), 65, "tutte le voci, sempre");
   const scettro = cassetti.find((c) => c.famiglia === "scettro");
   assert.equal(scettro.conto, 21);
-  assert.equal(scettro.gruppi[0].scena, "combattimento", "la scena in corso per prima");
-  assert.ok(scettro.gruppi[0].attivo && scettro.gruppi.slice(1).every((g) => !g.attivo));
-  assert.deepEqual(scettro.gruppi[0].voci.map((v) => v.nome), ["Anticipo", "Fuga", "Rinforzo", "Ritirata", "Stop"], "in ordine alfabetico dentro il gruppo");
-  assert.deepEqual(scettro.gruppi.slice(1).map((g) => g.scena), ["indagine", "trattativa", "infiltrazione", "inseguimento", "altrove", "santuario", "citta"], "poi le altre scene nell'ordine del PDF, solo quelle con voci");
+  assert.equal(scettro.gruppi, undefined, "niente gruppi per scena (Blue, 25/9 sera)");
+  assert.deepEqual(scettro.voci.slice(0, 5).map((v) => v.nome), ["Anticipo", "Chiusura", "Concorrenza", "Controllo", "Domande"], "in ordine alfabetico, scene mischiate");
   assert.ok(scettro.voci.every((v) => v.scenaNome), "ogni voce di scena sa la sua scena");
+  assert.deepEqual(scettro.voci.filter((v) => v.inCorso).map((v) => v.nome), ["Anticipo", "Fuga", "Rinforzo", "Ritirata", "Stop"], "le voci della scena in corso sono segnate");
   const scena = cassetti.find((c) => c.famiglia === "scena");
   assert.equal(scena.conto, 14);
-  assert.ok(!scena.gruppi.some((g) => g.scena === "combattimento"), "in Combattimento le cinque voci sono tutte scettro: nessun gruppo vuoto");
+  assert.ok(scena.voci.every((v) => !v.inCorso), "in Combattimento le cinque voci sono tutte scettro");
   const tocchi = cassetti.find((c) => c.famiglia === "tocchi");
-  assert.equal(tocchi.gruppi, null, "le famiglie comuni non hanno gruppi");
   assert.deepEqual(tocchi.voci.map((v) => v.nome), ["Condizione", "Fiacco", "Fragile", "Rigidità", "Scottatura", "Tremore"]);
   const comuni = cassetti.find((c) => c.famiglia === "comuni");
   assert.ok(comuni.voci.every((v) => v.faccia && v.faccia.testo), "le comuni portano la faccia della scena");
@@ -104,7 +102,7 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   const senza = cassettiPerScena("");
   assert.equal(senza.find((c) => c.famiglia === "scena").conto, 14);
   assert.equal(senza.find((c) => c.famiglia === "scettro").conto, 21);
-  assert.ok(senza.find((c) => c.famiglia === "scettro").gruppi.every((g) => !g.attivo));
+  assert.ok(senza.find((c) => c.famiglia === "scettro").voci.every((v) => !v.inCorso));
   assert.ok(senza.find((c) => c.famiglia === "comuni").voci.every((v) => v.faccia === null));
   // Solo la scena in corso, come prima, a richiesta.
   assert.equal(cassettiPerScena("rituale", { tutte: false }).find((c) => c.famiglia === "scena").conto, 4);
@@ -113,6 +111,8 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.ok(cerca.length >= 1 && cerca.every((c) => c.conto > 0));
   assert.ok(cerca.some((c) => c.voci.some((v) => v.id === "rituale-ospite")));
   assert.ok(cassettiPerScena("", { cerca: "−2 dadi" }).some((c) => c.voci.some((v) => v.id === "tremore")));
+  const perScena = cassettiPerScena("", { cerca: "rituale" }).flatMap((c) => c.voci.map((v) => v.id));
+  for (const id of ["rituale-disturbo", "rituale-ospite", "rituale-prezzo-in-piu", "rituale-sbavatura"]) assert.ok(perScena.includes(id), `la cerca trova ${id} per nome di scena`);
   assert.equal(scenaById("citta").nome, "Città");
   assert.equal(scenaById("nessuna"), null);
   assert.equal(voceById("niente"), null);
@@ -324,10 +324,11 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.equal((testa.match(/data-action="modo"/g) ?? []).length, 1, "i modi in un {{#each}}");
   const menu = readFileSync(new URL("../templates/quadro/menu.hbs", import.meta.url), "utf8");
   assert.ok(menu.includes('data-action="voce"') && menu.includes('data-action="spendi"') && menu.includes('data-testo="{{voce.testoCerca}}"'));
-  for (const marker of ['<span class="breve">{{voce.breve}}</span>', 'data-role="titolo"', 'wod5e-mage-menu-segmenti', 'data-role="scatta"', 'data-nome="{{r.nome}}"', "{{#each voce.bersagli as |m|}}", 'data-action="testo"', 'class="wod5e-mage-menu-info"', "wod5e-mage-menu-gruppo", 'data-role="vede" value="tutti"', "wod5e-mage-menu-famiglia-titolo"]) {
+  for (const marker of ['<span class="breve">{{voce.breve}}</span>', 'data-role="titolo"', 'wod5e-mage-menu-segmenti', 'data-role="scatta"', 'data-nome="{{r.nome}}"', "{{#each voce.bersagli as |m|}}", 'data-action="testo"', 'class="wod5e-mage-menu-info"', 'data-action="famiglia"', 'data-role="vede" value="tutti"', "wod5e-mage-menu-famiglia-titolo", "{{voce.scenaNome}}"]) {
     assert.ok(menu.includes(marker), `menu.hbs: manca ${marker}`);
   }
-  assert.ok(!menu.includes('data-action="cassetto"'), "niente cassetti da aprire: le famiglie sono sempre in vista (25/9)");
+  assert.ok(!menu.includes("wod5e-mage-menu-gruppo") && !menu.includes("data-gruppo"), "niente sottotitoli di scena (Blue, 25/9 sera)");
+  assert.ok(quadro.includes("#chiuse") && quadro.includes("chiuse: [...this.#chiuse]"), "le famiglie chiuse restano chiuse, sul client");
   assert.ok(testa.includes("wod5e-mage-quadro-orologi-mini") && testa.includes("{{{c.svg}}}"), "gli orologi in miniatura in testa");
   const contatore = readFileSync(new URL("../templates/quadro/contatore.hbs", import.meta.url), "utf8");
   assert.ok(contatore.includes("{{{c.svg}}}") && !contatore.includes("c.tracciato"), "il contatore disegna gli orologi a spicchi");

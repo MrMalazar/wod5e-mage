@@ -218,6 +218,8 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   #voceAperta = "";
   #testiAperti = new Set();
   #maghiAperti = new Set();
+  /** Le famiglie chiuse dal Narratore (Blue, 25/9 sera: «voglio poter aprire e chiudere le etichette»); restano chiuse, sul client. */
+  #chiuse = new Set(QuadroNarratore.stato.chiuse);
   #cerca = "";
   #registro = false;
 
@@ -248,6 +250,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       orologioChiudi: QuadroNarratore.#onOrologioChiudi,
       voce: QuadroNarratore.#onVoce,
       testo: QuadroNarratore.#onTesto,
+      famiglia: QuadroNarratore.#onFamiglia,
       spendi: QuadroNarratore.#onSpendi,
       mago: QuadroNarratore.#onMago,
       magoAggiungi: QuadroNarratore.#onMagoAggiungi,
@@ -266,7 +269,10 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static get stato() {
     const stored = game.settings.get(MODULE_ID, QUADRO_SETTING) ?? {};
-    return { modo: MODI_QUADRO.includes(stored.modo) ? stored.modo : "contatore" };
+    return {
+      modo: MODI_QUADRO.includes(stored.modo) ? stored.modo : "contatore",
+      chiuse: Array.isArray(stored.chiuse) ? stored.chiuse.map(String) : []
+    };
   }
 
   get modo() {
@@ -370,22 +376,14 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   #contestoMenu(pool, scena, localize) {
     const volgari = volgariRecenti(game.messages?.contents ?? [], { dal: scena.inizio || inizioSessione(pool.log) });
     const maghi = attoriDelQuadro().map((actor) => ({ id: actor.id, name: actor.name }));
-    const cassetti = cassettiPerScena(scena.tipo, { cerca: this.#cerca }).map((cassetto) => {
-      const voci = cassetto.voci.map((voce) => this.#rigaVoce(voce, { volgari, maghi, pool, localize }));
-      const perId = new Map(voci.map((voce) => [voce.id, voce]));
-      const riga = (voce) => ({ voce: perId.get(voce.id) });
-      // Le righe della famiglia: le voci in ordine alfabetico; per le voci di scena e lo scettro, a gruppi per scena (la scena in corso per prima).
-      const righe = cassetto.gruppi
-        ? cassetto.gruppi.flatMap((gruppo) => [{ gruppo: { ...gruppo, icona: ICONE_SCENE[gruppo.scena] ?? "fa-solid fa-clapperboard" } }, ...gruppo.voci.map(riga)])
-        : voci.map((voce) => ({ voce }));
-      return {
-        ...cassetto,
-        label: localize(`WOD5E_MAGE.Menu.Famiglie.${cassetto.famiglia}`),
-        icona: ICONE_FAMIGLIE[cassetto.famiglia],
-        voci,
-        righe
-      };
-    });
+    const cassetti = cassettiPerScena(scena.tipo, { cerca: this.#cerca }).map((cassetto) => ({
+      ...cassetto,
+      label: localize(`WOD5E_MAGE.Menu.Famiglie.${cassetto.famiglia}`),
+      icona: ICONE_FAMIGLIE[cassetto.famiglia],
+      // Chiusa dal Narratore: il titolo resta, le righe no. La cerca la riapre finché dura.
+      chiusa: this.#chiuse.has(cassetto.famiglia) && !this.#cerca,
+      voci: cassetto.voci.map((voce) => this.#rigaVoce(voce, { volgari, maghi, pool, localize }))
+    }));
     return {
       scene: SCENE_PARADOSSO.map((s) => ({ id: s.id, nome: s.nome, selected: s.id === scena.tipo })),
       cerca: this.#cerca,
@@ -534,16 +532,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
         riga.classList.toggle("nascosta", !passa);
         if (passa) visibili += 1;
       }
-      // Il titolo di un gruppo di scena resta solo se sotto gli è rimasta una riga.
-      for (const titolo of famiglia.querySelectorAll("[data-gruppo]")) {
-        let dopo = titolo.nextElementSibling;
-        let qualcosa = false;
-        while (dopo && !dopo.hasAttribute("data-gruppo")) {
-          if (dopo.hasAttribute("data-voce") && !dopo.classList.contains("nascosta")) { qualcosa = true; break; }
-          dopo = dopo.nextElementSibling;
-        }
-        titolo.classList.toggle("nascosta", Boolean(filtro) && !qualcosa);
-      }
+      famiglia.classList.toggle("chiusa", !filtro && this.#chiuse.has(famiglia.dataset.famiglia));
       famiglia.classList.toggle("nascosta", Boolean(filtro) && visibili === 0);
     }
   }
@@ -758,6 +747,16 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     event.preventDefault();
     const id = target.dataset.voce;
     this.#voceAperta = this.#voceAperta === id ? "" : id;
+    await this.render();
+  }
+
+  /** Il titolo di una famiglia la chiude o la riapre; la scelta resta sul client. */
+  static async #onFamiglia(event, target) {
+    event.preventDefault();
+    const famiglia = target.dataset.famiglia;
+    if (this.#chiuse.has(famiglia)) this.#chiuse.delete(famiglia);
+    else this.#chiuse.add(famiglia);
+    await game.settings.set(MODULE_ID, QUADRO_SETTING, { ...QuadroNarratore.stato, chiuse: [...this.#chiuse] });
     await this.render();
   }
 

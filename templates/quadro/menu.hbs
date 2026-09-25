@@ -1,4 +1,4 @@
-{{!-- Il menù (25/9): tutte le famiglie in vista, le voci in ordine alfabetico, una riga per voce (nome, effetto in breve, prezzo); le voci di scena a gruppi per scena, la scena in corso per prima. Il clic sulla riga apre i comandi della spesa, la «i» apre il testo della voce. --}}
+{{!-- Il menù (25/9): le famiglie come titoli che si aprono e si chiudono, le voci in ordine alfabetico, una riga per voce (nome, effetto in breve, prezzo), senza sottotitoli di scena. Il clic sulla riga apre i comandi della spesa, la «i» apre il testo della voce. --}}
 <div class="wod5e-mage-quadro-corpo wod5e-mage-quadro-menu">
     <div class="wod5e-mage-menu-testa">
         <select data-role="scena" aria-label="{{localize 'WOD5E_MAGE.Menu.Scena'}}">
@@ -8,13 +8,14 @@
         <input type="search" data-role="cerca" value="{{cerca}}" placeholder="{{localize 'WOD5E_MAGE.Menu.Cerca'}}" aria-label="{{localize 'WOD5E_MAGE.Menu.Cerca'}}">
     </div>
     {{#each cassetti as |cassetto|}}
-        <section class="wod5e-mage-menu-famiglia" data-famiglia="{{cassetto.famiglia}}">
-            <h3 class="wod5e-mage-menu-famiglia-titolo"><i class="{{cassetto.icona}}" aria-hidden="true"></i> <span>{{cassetto.label}}</span> <small>{{cassetto.conto}}</small></h3>
-            {{#each cassetto.righe as |r|}}
-                {{#if r.gruppo}}
-                    <h4 class="wod5e-mage-menu-gruppo{{#if r.gruppo.attivo}} attivo{{/if}}" data-gruppo><i class="{{r.gruppo.icona}}" aria-hidden="true"></i> {{r.gruppo.nome}}{{#if r.gruppo.attivo}} <small>{{localize "WOD5E_MAGE.Menu.ScenaInCorso"}}</small>{{/if}}</h4>
-                {{else}}
-                    {{#with r.voce as |voce|}}
+        <section class="wod5e-mage-menu-famiglia{{#if cassetto.chiusa}} chiusa{{/if}}" data-famiglia="{{cassetto.famiglia}}">
+            <h3 class="wod5e-mage-menu-famiglia-titolo">
+                <button type="button" data-action="famiglia" data-famiglia="{{cassetto.famiglia}}" aria-expanded="{{#if cassetto.chiusa}}false{{else}}true{{/if}}">
+                    <i class="{{cassetto.icona}}" aria-hidden="true"></i> <span>{{cassetto.label}}</span> <small>{{cassetto.conto}}</small>
+                    <i class="fa-solid {{#if cassetto.chiusa}}fa-chevron-down{{else}}fa-chevron-up{{/if}} freccia" aria-hidden="true"></i>
+                </button>
+            </h3>
+            {{#each cassetto.voci as |voce|}}
                     <div class="wod5e-mage-menu-voce{{#if voce.aperta}} aperta{{/if}}{{#if voce.scoppio}} scoppio{{/if}}" data-voce="{{voce.id}}" data-testo="{{voce.testoCerca}}">
                         <div class="wod5e-mage-menu-riga">
                             <button type="button" class="wod5e-mage-menu-scegli" data-action="voce" data-voce="{{voce.id}}" aria-expanded="{{voce.aperta}}">
@@ -27,6 +28,7 @@
                         </div>
                         {{#if voce.testoAperto}}
                             <div class="wod5e-mage-menu-info">
+                                {{#if voce.scenaNome}}<p><b>{{localize "WOD5E_MAGE.Menu.Scena"}}.</b> {{voce.scenaNome}}{{#if voce.inCorso}} ({{localize "WOD5E_MAGE.Menu.ScenaInCorso"}}){{/if}}</p>{{/if}}
                                 <p><b>{{localize "WOD5E_MAGE.Menu.Quando"}}</b> {{voce.quando}}</p>
                                 {{#if voce.segno}}<p><b>{{localize "WOD5E_MAGE.Menu.Segno"}}</b> {{voce.segno}}</p>{{/if}}
                                 <p><b>{{localize "WOD5E_MAGE.Menu.Effetto"}}</b> {{voce.effetto}}</p>
@@ -101,8 +103,6 @@
                             {{/if}}
                         {{/if}}
                     </div>
-                    {{/with}}
-                {{/if}}
             {{/each}}
         </section>
     {{/each}}
