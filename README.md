@@ -203,6 +203,17 @@ under the roll button, remembered per client, sends the roll straight to
 chat instead; a Storyteller's own roll never waits. Logic in
 `scripts/verdetto-narratore.js`, tests in `tests/verdetto-narratore.test.js`.
 
+## Sheet names on tokens
+
+Since 25 September 2026 every token shows the name of its sheet to the
+Storyteller, always, as its nameplate: a token called "Mortale (4)" reads
+"Sahajiya - Vasco" for a GM. A token whose actor is gone shows its own name
+followed by "(senza scheda)". Players see nothing new: their nameplates
+follow each token's display setting as before. Nothing is written to the
+world; the label is drawn in the GM's client only, and the "Sheet names on
+tokens" client setting, shown to GMs only, turns it off. Logic in
+`scripts/nomi-scheda.js`, tests in `tests/nomi-scheda.test.js`.
+
 ## Narrator's Board
 
 Since 27 September 2026 the Paradox menu on the Board lists its 65 entries in

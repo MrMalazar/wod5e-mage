@@ -1066,6 +1066,10 @@
       "SheetScale": {
         "Name": "La misura del testo della scheda",
         "Hint": "Piccolo, medio o grande: tutta la scheda del Mago cresce o cala in proporzione, ogni cosa con la sua misura. Si gira anche dal tasto a sinistra di quello del tema."
+      },
+      "NomiScheda": {
+        "Name": "Nomi delle schede sui token",
+        "Hint": "Solo per il Narratore: su ogni token compare sempre il nome della scheda, anche quando il token si chiama in un altro modo. I giocatori vedono i nomi come prima."
       }
     },
     "Errors": {
@@ -2600,6 +2604,9 @@
       "ResistiAperto": "Il Tiro di {bersaglio} con la soglia {soglia} dentro.",
       "ResistiSenzaScheda": "{bersaglio} non usa la scheda del Mago.",
       "Bersaglio": "su {bersaglio}"
+    },
+    "NomiScheda": {
+      "SenzaScheda": "senza scheda"
     }
   },
   "WOD5E": {

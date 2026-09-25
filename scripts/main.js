@@ -23,6 +23,7 @@ import { registraNemicoChat } from "./nemico-chat.js";
 import { registraHelperIcone } from "./icone-oggetti.js";
 import { apriVathra, mandaVathra, registraVathra } from "./vathra/traduttore.js";
 import { traduciTesto } from "./vathra/vathra.js";
+import { registraNomiScheda } from "./nomi-scheda.js";
 
 /**
  * Return the public API exposed by this module.
@@ -223,6 +224,8 @@ Hooks.once("init", () => {
   registraCreazioneGuidata();
   // Il Vathrâ (25/9): il traduttore per tutti, la carta in chat col senso a chi capisce, le due mani fra i caratteri.
   registraVathra();
+  // Il nome della scheda sui token (25/9): per il Narratore sempre visibile, per i giocatori niente cambia.
+  registraNomiScheda();
 
   const module = game.modules.get(MODULE_ID);
   if (module) module.api = createApi();

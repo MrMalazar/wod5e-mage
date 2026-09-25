@@ -1066,6 +1066,10 @@
       "SheetScale": {
         "Name": "Sheet text size",
         "Hint": "Small, medium or large: the whole Mage sheet grows or shrinks in proportion, everything at its own size. The button left of the theme button flips it too."
+      },
+      "NomiScheda": {
+        "Name": "Sheet names on tokens",
+        "Hint": "Storyteller only: every token always shows the name of its sheet, even when the token is named differently. Players see names as before."
       }
     },
     "Errors": {
@@ -2600,6 +2604,9 @@
       "ResistiAperto": "{bersaglio}'s Roll box with threshold {soglia} inside.",
       "ResistiSenzaScheda": "{bersaglio} does not use the Mage sheet.",
       "Bersaglio": "on {bersaglio}"
+    },
+    "NomiScheda": {
+      "SenzaScheda": "no sheet"
     }
   }
 }

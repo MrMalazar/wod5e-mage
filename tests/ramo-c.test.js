@@ -195,8 +195,10 @@ for (const lang of ["it", "en"]) {
   assert.equal(strings.WOD5E_MAGE.RamoC.BuyPrice, undefined, `${lang}: BuyPrice`);
   assert.equal(typeof strings.WOD5E_MAGE.Arete.SpecialtyDice, "string");
   assert.equal(strings.WOD5E_MAGE.Arete.AutoVictory, undefined, `${lang}: la vittoria automatica del ramo A è caduta`);
-  // La parola «gettone» non entra (verdetto di Blue).
-  assert.doesNotMatch(JSON.stringify(strings), /gettone|token/i);
+  // La parola «gettone» non entra (verdetto di Blue). Il token della mappa, quello di
+  // Foundry, entra solo nell'impostazione dei nomi delle schede sui token (25/9).
+  const senzaMappa = { ...strings.WOD5E_MAGE, Settings: { ...strings.WOD5E_MAGE.Settings, NomiScheda: undefined } };
+  assert.doesNotMatch(JSON.stringify({ ...strings, WOD5E_MAGE: senzaMappa }), /gettone|token/i);
 }
 
 console.log("Ramo C: test passati.");
