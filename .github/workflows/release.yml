@@ -2,12 +2,22 @@
 # workflow costruisce lo zip come tools/build-release.ps1 e pubblica la
 # release con module.json e wod5e-mage.zip in allegato. Foundry installa da:
 # https://github.com/MrMalazar/wod5e-mage/releases/latest/download/module.json
+#
+# Dal 26/9 parte anche a mano, dalla pagina Actions («Run workflow») o dalla
+# sessione di Claude, col numero di versione: la release crea il tag da sé sul
+# commit scelto, così non serve spingere un tag (la sessione non può).
 name: Release
 
 on:
   push:
     tags:
       - "[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "La versione da pubblicare (es. 1.22.1): deve combaciare con module.json"
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -18,17 +28,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: La versione del manifest deve combaciare col tag
+      - name: La versione da pubblicare (dal tag, o dall'input a mano)
+        id: versione
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            TAG="${{ github.event.inputs.version }}"
+          else
+            TAG="$GITHUB_REF_NAME"
+          fi
+          case "$TAG" in
+            [0-9]*.[0-9]*.[0-9]*) ;;
+            *) echo "Versione non valida: «$TAG» (serve x.y.z senza v)." >&2; exit 1 ;;
+          esac
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: La versione del manifest deve combaciare
+        env:
+          TAG: ${{ steps.versione.outputs.tag }}
         run: |
           VERSION=$(python3 -c "import json; print(json.load(open('module.json'))['version'])")
-          if [ "$VERSION" != "$GITHUB_REF_NAME" ]; then
-            echo "module.json dice $VERSION ma il tag e' $GITHUB_REF_NAME: aggiorna module.json prima di taggare." >&2
+          if [ "$VERSION" != "$TAG" ]; then
+            echo "module.json dice $VERSION ma la versione da pubblicare e' $TAG: aggiorna module.json prima." >&2
             exit 1
           fi
           DOWNLOAD=$(python3 -c "import json; print(json.load(open('module.json'))['download'])")
           case "$DOWNLOAD" in
-            *"/releases/download/$GITHUB_REF_NAME/wod5e-mage.zip") ;;
-            *) echo "Il campo download di module.json non punta alla release $GITHUB_REF_NAME." >&2; exit 1 ;;
+            *"/releases/download/$TAG/wod5e-mage.zip") ;;
+            *) echo "Il campo download di module.json non punta alla release $TAG." >&2; exit 1 ;;
           esac
 
       - name: Costruisci lo zip (stesso contenuto di tools/build-release.ps1)
@@ -44,9 +70,14 @@ jobs:
           cp module.json dist/module.json
           unzip -l dist/wod5e-mage.zip | grep -q " module.json" || { echo "module.json non e' alla radice dello zip" >&2; exit 1; }
 
-      - name: Pubblica la release
+      - name: Pubblica la release (a mano crea anche il tag, sul commit scelto)
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.versione.outputs.tag }}
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/wod5e-mage.zip dist/module.json \
-            --title "$GITHUB_REF_NAME" --generate-notes
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "La release $TAG esiste gia'." >&2
+            exit 1
+          fi
+          gh release create "$TAG" dist/wod5e-mage.zip dist/module.json \
+            --target "$GITHUB_SHA" --title "$TAG" --generate-notes
