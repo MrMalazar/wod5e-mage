@@ -1,9 +1,10 @@
-{{!-- Il Tiro (16/9; 23/9, largo due colonne al posto del Grimorio). A
-     sinistra il tipo riconosciuto con Azzera, la catena di quello che hai
-     selezionato (Areté, Sfere, Ambiti col livello, Attributo, Abilità,
-     Specializzazione, potere, Tratti, l'incantesimo in testa), ognuno con
-     la × per toglierlo, e sotto le opzioni: premio dell'Areté, Quintessenza,
-     Sforza la realtà. A destra i tre numeri, ognuno col meno e il più
+{{!-- Il Tiro (16/9; 23/9, largo due colonne al posto del Grimorio; 27/9,
+     tre colonne dentro). A sinistra il tipo riconosciuto con Azzera, la
+     catena di chi dà dadi (Areté col premio, Attributo, Abilità,
+     Specializzazione, potere, Tratti), ognuno con la × per toglierlo, e
+     sotto le opzioni: premio dell'Areté, Quintessenza, Sforza la realtà. In
+     mezzo la catena di chi dà la soglia (l'incantesimo in testa, le Sfere,
+     gli Ambiti col livello). A destra i tre numeri, ognuno col meno e il più
      (Blue, 23/9): Riserva (i dadi extra che entrano nella riserva, tetto
      3), Soglia (la Difficoltà, dagli Ambiti o a mano) e Dadi (il ritocco
      sul totale, fuori dal tetto); in fondo i tasti. Senza Areté c'è TIRA;
@@ -22,9 +23,10 @@
                 {{/unless}}
             </div>
 
-            {{!-- La catena: una pillola per pezzo, la × lo toglie. --}}
-            <div class="wod5e-mage-tiro-catena" role="group" aria-label="{{localize 'WOD5E_MAGE.Tiro.Catena'}}" title="{{localize 'WOD5E_MAGE.Tiro.CatenaHint'}}">
-                {{#each tiro.pills as |pill|}}
+            {{!-- La catena di chi dà dadi (Blue, 27/9): una pillola per pezzo, la × lo toglie. --}}
+            <div class="wod5e-mage-tiro-colonna-testa">{{localize "WOD5E_MAGE.Tiro.CatenaDadi"}}</div>
+            <div class="wod5e-mage-tiro-catena wod5e-mage-tiro-catena-dadi" role="group" aria-label="{{localize 'WOD5E_MAGE.Tiro.CatenaDadi'}}" title="{{localize 'WOD5E_MAGE.Tiro.CatenaHint'}}">
+                {{#each tiro.pillsDadi as |pill|}}
                     <span class="wod5e-mage-pillola tipo-{{pill.kind}}">
                         <span class="wod5e-mage-pillola-testo">{{pill.text}}</span>
                         <button type="button" class="wod5e-mage-pillola-via" data-action="tiroPill" data-kind="{{pill.kind}}" data-id="{{pill.id}}" {{#if pill.skill}}data-skill="{{pill.skill}}"{{/if}} title="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}: {{pill.text}}">×</button>
@@ -50,7 +52,7 @@
                         <span class="wod5e-mage-tiro-etichetta"><img class="wod5e-mage-arete-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt="" aria-hidden="true"> {{localize "WOD5E_MAGE.Arete.Prize"}}</span>
                         <span class="wod5e-mage-tiro-comandi">
                             <input type="checkbox" data-action="tiroPrize" {{#if tiro.prize.on}}checked{{/if}}>
-                            <b>−{{tiro.prize.arete}}</b>
+                            <b>+{{#if tiro.prize.on}}{{tiro.prize.value}}{{else}}{{tiro.prize.arete}}{{/if}}</b>
                         </span>
                     </label>
                 {{/if}}
@@ -72,6 +74,18 @@
             </div>
         </div>
 
+        {{!-- In mezzo la catena di chi dà la soglia: l'incantesimo, le Sfere, gli Ambiti col livello. --}}
+        <div class="wod5e-mage-tiro-centro">
+            <div class="wod5e-mage-tiro-colonna-testa">{{localize "WOD5E_MAGE.Tiro.CatenaSoglia"}}</div>
+            <div class="wod5e-mage-tiro-catena wod5e-mage-tiro-catena-soglia" role="group" aria-label="{{localize 'WOD5E_MAGE.Tiro.CatenaSoglia'}}" title="{{localize 'WOD5E_MAGE.Tiro.CatenaHint'}}">
+                {{#each tiro.pillsSoglia as |pill|}}
+                    <span class="wod5e-mage-pillola tipo-{{pill.kind}}">
+                        <span class="wod5e-mage-pillola-testo">{{pill.text}}</span>
+                        <button type="button" class="wod5e-mage-pillola-via" data-action="tiroPill" data-kind="{{pill.kind}}" data-id="{{pill.id}}" {{#if pill.skill}}data-skill="{{pill.skill}}"{{/if}} title="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}: {{pill.text}}">×</button>
+                    </span>
+                {{/each}}
+            </div>
+        </div>
         <div class="wod5e-mage-tiro-destra">
             <div class="wod5e-mage-tiro-numeri">
                 {{!-- Riserva: il meno e il più sono i dadi extra dentro la riserva (tetto 3). --}}

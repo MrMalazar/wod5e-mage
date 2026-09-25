@@ -44,10 +44,12 @@ tiro = T.toggleTrait(tiro, "i1");
 const ctx = S.prepareTiroContext(actor, tiro);
 assert.equal(ctx.magick, true);
 assert.equal(ctx.size, 8, "otto pezzi in catena (la catena non si stampa, ma si conta)");
-assert.deepEqual([ctx.pool, ctx.computed, ctx.difficulty, ctx.dice, ctx.successFrom, ctx.ready], [4 + 5 + 1 + 1, 7 - 3, 4, 7, 6, true]);
+// Il premio dell'Areté (3) entra nella riserva (Blue, 27/9); la soglia resta 7.
+assert.deepEqual([ctx.pool, ctx.computed, ctx.difficulty, ctx.dice, ctx.successFrom, ctx.ready], [4 + 5 + 1 + 1 + 3, 7, 7, 7, 6, true]);
+assert.deepEqual([ctx.pillsDadi.map((p) => p.kind), ctx.pillsSoglia.map((p) => p.kind)], [["arete", "attribute", "skill", "specialty", "trait"], ["sphere", "scope", "scope"]], "le due catene: chi dà dadi, chi dà la soglia");
 assert.deepEqual([ctx.extra.value, ctx.extra.cap], [0, 3]);
 const conExtra = S.prepareTiroContext(actor, T.setExtra(tiro, 2));
-assert.deepEqual([conExtra.extra.value, conExtra.extra.dice, conExtra.pool], [2, 2, 13], "i dadi extra entrano nella riserva");
+assert.deepEqual([conExtra.extra.value, conExtra.extra.dice, conExtra.pool], [2, 2, 16], "i dadi extra entrano nella riserva");
 assert.deepEqual([ctx.prize.on, ctx.prize.arete, ctx.quintessence.available], [true, 3, 4]);
 const rows = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3 });
 assert.equal(rows.length, 7);
@@ -132,13 +134,13 @@ const message = await S.launchTiro(actor, tiro);
 assert.ok(message, "il tiro parte");
 const card = message.getFlag("wod5e-mage", ROLL_CARD_FLAG);
 const roll = globalThis.__sim.rolls.at(-1);
-assert.equal(roll.formula, "6dmcs>7 + 3dpcs>7", "riserva 13 (11 + 2 di Quintessenza) meno 4 = 9 dadi; la Ruota paga prima del tiro (+2): 3 rossi convertiti");
-assert.deepEqual([card.pool, card.threshold, card.dice, card.successFrom, card.total], [13, 4, 9, 8, 3]);
+assert.equal(roll.formula, "6dmcs>7 + 3dpcs>7", "riserva 16 (11 + 2 di Quintessenza + 3 del premio) meno 7 = 9 dadi; la Ruota paga prima del tiro (+2): 3 rossi convertiti");
+assert.deepEqual([card.pool, card.threshold, card.dice, card.successFrom, card.total], [16, 7, 9, 8, 3], "il premio (27/9) è nella riserva, la soglia resta 7");
 assert.equal(card.tiro.power, "");
 assert.deepEqual(card.tiro.traits, ["i1"]);
 assert.equal(flags["wod5e-mage"].magickBalance.paradox, 1 + 2, "Volgare con testimoni: +2 Paradosso");
 assert.equal(flags["wod5e-mage"].magickBalance.quintessence, 4 - 2, "la Quintessenza spesa scende");
-assert.equal(flags["wod5e-mage"].lastThreshold, 4);
+assert.equal(flags["wod5e-mage"].lastThreshold, 7, "la soglia salvata è quella piena: il premio non la tocca (27/9)");
 assert.match(message.flavor, /Occhio di lince \+1/);
 
 // Il tiro di Abilità: Destrezza + Atletica, Difficoltà 2 a mano, riuscita dal 6, niente rossi.
@@ -266,10 +268,10 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   const ctxNienteNo = S.prepareTiroContext(actor, T.setDifficulty(tiroNiente, 5));
   assert.deepEqual([ctxNienteNo.dice, ctxNienteNo.potere.autoSuccess, ctxNienteNo.potere.autoSuccessMotivo], [1, false, "servono due dadi"]);
 
-  // Appoggio nella Magick: Potenza 5 conta 1 sopra il 4, meno il premio 3: soglia 0.
+  // Appoggio nella Magick: Potenza 5 conta 1 sopra il 4: soglia 1; il premio 3 va nei dadi.
   const tiroAppoggio = T.setScope(T.pickPower(T.pickSkill(T.pickAttribute(T.toggleArete(T.emptyTiro()), "dexterity"), "skill:occult"), "pappoggio", "forces"), "potency", 5);
   const ctxAppoggio = S.prepareTiroContext(actor, tiroAppoggio);
-  assert.deepEqual([ctxAppoggio.magick, ctxAppoggio.computed, ctxAppoggio.prize.value, ctxAppoggio.potere.note[0]], [true, 0, 3, "Appoggio: Potenza non conta fino a 4 · Il punteggio dell'Ambito di Potenza non conta sino al 4° pallino quando la tua Sfera trova la sua leva già in scena"]);
+  assert.deepEqual([ctxAppoggio.magick, ctxAppoggio.computed, ctxAppoggio.prize.value, ctxAppoggio.potere.note[0]], [true, 1, 3, "Appoggio: Potenza non conta fino a 4 · Il punteggio dell'Ambito di Potenza non conta sino al 4° pallino quando la tua Sfera trova la sua leva già in scena"]);
 
   // Ambito di casa attivo: paga 4 Quintessenza (la Ruota ne ha 2: la riga lo sa, e il lancio non parte).
   flags["wod5e-mage"].magickBalance = { quintessence: 2, paradox: 1 };

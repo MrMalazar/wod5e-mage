@@ -34,7 +34,7 @@ assert.equal(calculateAreteTraitPool(3, 2, 2), 7);
 assert.equal(calculateAreteTraitPool(3), 3);
 assert.equal(calculateAreteTraitPool(), 0);
 
-// Il premio riduce la soglia dell'Areté intera, anche oltre 3; mai all'Ibrida.
+// Il premio vale l'Areté intera, anche oltre 3 (dal 27/9 sono dadi, non soglia); mai all'Ibrida.
 assert.equal(calculateAretePrize(2, "magick"), 2);
 assert.equal(calculateAretePrize(5, "tecnomagick"), 5);
 assert.equal(calculateAretePrize(4, ""), 4);
@@ -79,14 +79,13 @@ assert.equal(calculateMagickThreshold({
   scopeLevels: [{ id: "targets", level: 4 }, { id: "range", level: 4 }],
   specialties: { mind: "targets" }
 }), 8);
-// Il premio si sottrae una volta sola, senza far diventare negativa la soglia.
-assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2, 4], prize: 3 }), 4);
-assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2, 4], prize: 0 }), 7);
-assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2, 4], prize: 5 }), 2);
-assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2], prize: 5 }), 0);
-assert.equal(calculateMagickThreshold({ scopeLevels: [1, 1], prize: 3 }), 0);
-assert.equal(calculateMagickThreshold({ scopeLevels: ["1", "2", "4"], prize: "3" }), 4);
-assert.equal(calculateMagickThreshold({ scopeLevels: [2, 4], prize: calculateAretePrize(5, "ibrida") }), 6);
+// La soglia è la somma degli Ambiti e basta: il premio non la tocca più (Blue, 27/9).
+assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2, 4] }), 7);
+assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2, 4], prize: 3 }), 7, "il premio non entra nella soglia");
+assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2] }), 3);
+assert.equal(calculateMagickThreshold({ scopeLevels: [1, 1] }), 2);
+assert.equal(calculateMagickThreshold({ scopeLevels: ["1", "2", "4"] }), 7);
+assert.equal(calculateMagickThreshold({ scopeLevels: [] }), 0);
 // Nel ramo C danno DADI pari all'Areté (PROPOSTA dell'11/9) quando la
 // Sfera è nel lancio e l'Ambito è dichiarato; una volta sola; senza la
 // coppia, niente. Il conto torna col nome di prima.
@@ -114,18 +113,18 @@ assert.deepEqual(ramoCPool({ traits: 6, threshold: 3 }), { pool: 6, threshold: 3
 assert.equal(ramoCPool({ traits: 6, threshold: 5 }).dice, 1);
 assert.equal(ramoCPool({ traits: 6, threshold: 7 }).dice, 0);
 assert.equal(ramoCPool({ traits: 6, bonus: 2, threshold: 7 }).dice, 1, "l'Armonia aggiunge dadi");
-// Il premio cambia la soglia, non la riserva; non consuma il tetto dei bonus
-// e non crea dadi aggiuntivi quando la soglia è già zero.
+// Il premio (27/9) dà dadi alla riserva, fuori dal tetto dei bonus, e la
+// soglia resta piena; i dadi che restano sono gli stessi di quando la tagliava.
 const rewarded = ramoCPool({
-  traits: 6, bonus: 3,
-  threshold: calculateMagickThreshold({ scopeLevels: [1, 2, 4], prize: 3 })
+  traits: 6, bonus: 3, prize: 3,
+  threshold: calculateMagickThreshold({ scopeLevels: [1, 2, 4] })
 });
-assert.deepEqual([rewarded.pool, rewarded.threshold, rewarded.dice], [9, 4, 5]);
-const zeroThreshold = ramoCPool({
-  traits: 6,
-  threshold: calculateMagickThreshold({ scopeLevels: [1], prize: 5 })
+assert.deepEqual([rewarded.pool, rewarded.threshold, rewarded.dice], [12, 7, 5]);
+const oltreLaSoglia = ramoCPool({
+  traits: 6, prize: 5,
+  threshold: calculateMagickThreshold({ scopeLevels: [1] })
 });
-assert.deepEqual([zeroThreshold.pool, zeroThreshold.threshold, zeroThreshold.dice], [6, 0, 6]);
+assert.deepEqual([oltreLaSoglia.pool, oltreLaSoglia.threshold, oltreLaSoglia.dice], [11, 1, 10], "l'Areté oltre la soglia resta tutto dadi");
 assert.equal(ramoCPool({ traits: 6, bonus: 5, threshold: 0 }).pool, 9, "tetto +3 sui dadi in più");
 // La Quintessenza (16/9): un dado per punto, e basta; il livello della Sfera non compra più niente.
 assert.deepEqual(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).spend, { spent: 2, price: 0, bought: false, dice: 2 });

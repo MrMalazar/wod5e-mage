@@ -247,13 +247,16 @@ function pillNames(actor, tiro, { known, inputs }) {
   };
 }
 
+/** I pezzi della catena che fanno la soglia: l'incantesimo, le Sfere, gli Ambiti (Blue, 27/9). */
+export const KINDS_SOGLIA = Object.freeze(["spell", "sphere", "scope"]);
+
 /**
- * Il contesto del riquadro del Tiro (23/9, largo due colonne): a sinistra
- * la catena a pillole coi nomi veri (torna, con la × per togliere ogni
- * pezzo), a destra i tre numeri col meno e il più: Riserva (i dadi extra
- * dentro la riserva, tetto 3), Soglia (la Difficoltà, calcolata o a mano) e
- * Dadi (il ritocco sul totale, fuori dal tetto); sotto il premio, la
- * Quintessenza, Sforza la realtà e i tasti.
+ * Il contesto del riquadro del Tiro (23/9, largo due colonne; 27/9, tre
+ * colonne): a sinistra la catena di chi dà dadi (con la × per togliere ogni
+ * pezzo) e le opzioni, in mezzo la catena di chi dà la soglia, a destra i
+ * tre numeri col meno e il più: Riserva (i dadi extra dentro la riserva,
+ * tetto 3), Soglia (la Difficoltà, calcolata o a mano) e Dadi (il ritocco
+ * sul totale, fuori dal tetto); sotto, i tasti.
  */
 export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
@@ -269,12 +272,19 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
       ? `${pill.label} ${pill.level}`
       : (pill.value !== null && pill.value !== undefined ? `${pill.label} ${pill.kind === "trait" && pill.value > 0 ? "+" : ""}${pill.value}` : pill.label)
   }));
+  // La catena in due colonne (Blue, 27/9): chi dà dadi (Areté col premio, Attributo,
+  // Abilità, Specializzazione, potere, Tratti) e chi dà la soglia (l'incantesimo in
+  // testa, le Sfere, gli Ambiti col livello).
+  const pillsSoglia = pills.filter((pill) => KINDS_SOGLIA.includes(pill.kind));
+  const pillsDadi = pills.filter((pill) => !KINDS_SOGLIA.includes(pill.kind));
   return {
     magick,
     size: tiroSize(tiro),
     empty: tiroSize(tiro) === 0,
     kindLabel: localize(magick ? "WOD5E_MAGE.Tiro.KindMagick" : (tiro.attribute || tiro.skill ? "WOD5E_MAGE.Tiro.KindSkill" : "WOD5E_MAGE.Tiro.KindNone")),
     pills,
+    pillsDadi,
+    pillsSoglia,
     riserva: conto.riserva,
     pool: conto.pool,
     computed: conto.computed,

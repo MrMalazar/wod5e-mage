@@ -19,14 +19,14 @@ const localize = (key) => key.split(".").reduce((node, part) => node?.[part], it
 // Ogni Ambito ha il suo simbolo.
 for (const scope of SCOPES) assert.match(SCOPE_ICONS[scope], /^fa-solid fa-/, scope);
 
-// I simboli: premio, Sfere col livello, Ambiti col livello, in quest'ordine.
+// I simboli: premio (+N dadi dal 27/9), Sfere col livello, Ambiti col livello, in quest'ordine.
 const symbols = rollSymbols({
   prize: 3,
   spheres: [{ id: "forces", level: 3 }, { id: "life", level: 2 }],
   scopes: [{ id: "potency", level: 2 }, { id: "precision", level: 1 }]
 });
 assert.deepEqual(symbols.map((symbol) => [symbol.kind, symbol.id, symbol.value]), [
-  ["arete", "arete", "−3"],
+  ["arete", "arete", "+3"],
   ["sphere", "forces", ""],
   ["sphere", "life", ""],
   ["scope", "potency", "2"],
@@ -42,7 +42,7 @@ const symbolsHtml = renderRollSymbols(symbols, localize);
 assert.match(symbolsHtml, /^<div class="wod5e-mage-roll-symbols">/);
 assert.match(symbolsHtml, /wod5e-mage-roll-symbol-sphere" title="Forze"><img src="[^"]*forces\.png" alt="Forze"><\/span>/);
 assert.match(symbolsHtml, /wod5e-mage-roll-symbol-scope" title="Potenza 2"><i class="fa-solid fa-burst" aria-hidden="true"><\/i><b>2<\/b>/);
-assert.match(symbolsHtml, /wod5e-mage-roll-symbol-arete"[^>]*><img [^>]*arete\.svg[^>]*><b>−3<\/b>/);
+assert.match(symbolsHtml, /wod5e-mage-roll-symbol-arete"[^>]*><img [^>]*arete\.svg[^>]*><b>\+3<\/b>/);
 
 // La scritta grande, in chiaro.
 assert.equal(renderAutoVictoryBanner(localize), '<p class="wod5e-mage-roll-victory">Vittoria automatica</p>');
@@ -79,7 +79,7 @@ assert.equal(
   + row("spheres", "Sfere", '<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-sphere" title="Forze"><img src="modules/wod5e-mage/assets/icons/sheet/forces.png" alt="Forze"></span>')
   + row("scopes", "Ambiti", '<span class="wod5e-mage-roll-symbol wod5e-mage-roll-symbol-scope" title="Potenza 2"><i class="fa-solid fa-burst" aria-hidden="true"></i><b>2</b></span>')
   + row("threshold", "Soglia", "4")
-  + row("prize", "Premio dell'Areté", "−3")
+  + row("prize", "Premio dell'Areté", "+3")
   + row("type", "Tipo", "Accidentale")
   + row("effect", "Effetto", "Fisico")
   + row("pool", "Riserva", "Forza 3 + Lancio &lt;coltelli&gt; 2 + Armonia 2")
@@ -125,8 +125,8 @@ for (const lang of ["it", "en"]) {
 const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
 assert.match(dialog, /data-kind="sphere"[^>]*>\s*<img class="wod5e-mage-arete-row-icon" src="\{\{sphere\.icon\}\}"/);
 assert.match(dialog, /data-kind="scope"[^>]*>\s*<i class="wod5e-mage-arete-row-icon \{\{scope\.faIcon\}\}"/);
-// Il conto (10/9): la casella col suo +N a sinistra, il nome a destra.
-assert.match(dialog, /name="prize"[^>]*>\s*<span class="wod5e-mage-arete-toggle-value">−\{\{prize\.reduction\}\}<\/span>\s*<\/span>\s*<span class="wod5e-mage-arete-row-label">\{\{localize "WOD5E_MAGE\.Arete\.Prize"\}\}/);
+// Il conto (10/9): la casella col suo +N a sinistra, il nome a destra (dal 27/9 il premio sono dadi).
+assert.match(dialog, /name="prize"[^>]*>\s*<span class="wod5e-mage-arete-toggle-value">\+\{\{prize\.dice\}\}<\/span>\s*<\/span>\s*<span class="wod5e-mage-arete-row-label">\{\{localize "WOD5E_MAGE\.Arete\.Prize"\}\}/);
 assert.doesNotMatch(dialog, /wod5e-mage-arete-row-label-full/);
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
 assert.match(css, /\.wod5e-mage-arete-dots-column\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*18px max-content max-content minmax\(0, 1fr\);/s);

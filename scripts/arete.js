@@ -145,8 +145,9 @@ export function scopeThreshold(scopeLevels = []) {
     .reduce((sum, entry) => sum + entry.level, 0);
 }
 
-export function calculateMagickThreshold({ scopeLevels = [], prize = 0 } = {}) {
-  return Math.max(scopeThreshold(scopeLevels) - calculateAretePrize(prize), 0);
+/** La soglia della Magick: la somma degli Ambiti. Il premio dell'Areté non la tocca (Blue, 27/9): dà dadi. */
+export function calculateMagickThreshold({ scopeLevels = [] } = {}) {
+  return Math.max(scopeThreshold(scopeLevels), 0);
 }
 
 /**
@@ -173,14 +174,16 @@ export function calculateAutomaticSuccesses({ sphereLevels = [], scopeLevels = [
 
 /**
  * La riserva del ramo C prima della soglia: tratti, dadi in più (Armonia e
- * Bonus dentro il tetto), i dadi delle Specialità e la Quintessenza
- * spesa sotto il prezzo della riuscita. Torna i pezzi e il conto dei dadi.
+ * Bonus dentro il tetto), i dadi delle Specialità, il premio dell'Areté
+ * (fuori dal tetto, Blue 27/9) e la Quintessenza spesa sotto il prezzo
+ * della riuscita. Torna i pezzi e il conto dei dadi.
  */
-export function ramoCPool({ traits = 0, bonus = 0, specialtyDice = 0, quintessence = 0, sphereMax = 0, threshold = 0 } = {}) {
+export function ramoCPool({ traits = 0, bonus = 0, specialtyDice = 0, quintessence = 0, sphereMax = 0, threshold = 0, prize = 0 } = {}) {
   const spend = quintessenceSpend(quintessence, sphereMax);
   const pool = Math.max(Math.trunc(Number(traits) || 0), 0)
     + capBonusDice(bonus)
     + Math.max(Math.trunc(Number(specialtyDice) || 0), 0)
+    + Math.max(Math.trunc(Number(prize) || 0), 0)
     + spend.dice;
   return { ...ramoCDice(pool, threshold), spend };
 }
@@ -197,7 +200,7 @@ export function normalizeMagickRollOptions({
   witnesses = false
 } = {}) {
   const options = {
-    // Il giocatore spunta il premio: l'Areté della scheda riduce la soglia.
+    // Il giocatore spunta il premio: l'Areté della scheda dà dadi (Blue, 27/9).
     usePrize: isChecked(prize),
     harmony: normalizeHarmony(harmony),
     coincidental: isChecked(coincidental),
@@ -405,10 +408,9 @@ function wireDifficulty(dialog) {
   const update = () => {
     const sphereLevels = readDotRows(root, "sphere");
     const scopeLevels = readDotRows(root, "scope");
-    const prizeReduction = prizeBox?.checked && !prizeBox.disabled
-      ? calculateAretePrize(prizeBox.dataset.value)
-      : 0;
-    const threshold = calculateMagickThreshold({ scopeLevels, prize: prizeReduction });
+    // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, fuori dal tetto; la soglia non cambia.
+    const prizeDice = prizeBox?.checked && !prizeBox.disabled ? calculateAretePrize(prizeBox.dataset.value) : 0;
+    const threshold = calculateMagickThreshold({ scopeLevels });
     const quintessenceMax = Math.max(Math.trunc(Number(quintessence?.max) || 0), 0);
     const quintessenceSpent = Math.min(Math.max(Math.trunc(Number(quintessence?.value) || 0), 0), quintessenceMax);
     const specialtyDice = calculateAutomaticSuccesses({
@@ -431,7 +433,8 @@ function wireDifficulty(dialog) {
       specialtyDice,
       quintessence: quintessenceSpent,
       sphereMax,
-      threshold
+      threshold,
+      prize: prizeDice
     });
 
     thresholdOut.textContent = String(conto.threshold);
@@ -780,7 +783,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   const storedForm = actor.getFlag(MODULE_ID, "focus")?.practiceForm;
   const form = FOCUS_FORMS.includes(storedForm) ? storedForm : "";
   const prize = {
-    reduction: calculateAretePrize(arete.value, form),
+    dice: calculateAretePrize(arete.value, form),
     allowed: form !== "ibrida"
   };
   // Solo le Sfere sbloccate, con almeno un pallino: sono quelle combinabili.
@@ -897,9 +900,9 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     }))
     .filter((entry) => entry.level > 0);
 
-  const prizeReduction = options.usePrize ? prize.reduction : 0;
+  // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, fuori dal tetto; la soglia resta la somma degli Ambiti.
+  const prizeDice = options.usePrize ? prize.dice : 0;
   const threshold = calculateMagickThreshold({
-    prize: prizeReduction,
     scopeLevels: scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level }))
   });
   // Le Specialità (ramo C): dadi pari all'Areté, la soglia non si tocca.
@@ -929,7 +932,8 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     specialtyDice: specialty.successes,
     quintessence,
     sphereMax,
-    threshold
+    threshold,
+    prize: prizeDice
   });
   const rollLabel = selectedTraits.map((trait) => trait.label).join(" + ");
   const selectedTypes = [];
@@ -978,14 +982,14 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     traits: selectedTraits.map((trait) => ({ label: trait.label, value: trait.value })),
     bonusParts,
     threshold,
-    prize: prizeReduction,
+    prize: prizeDice,
     magickType,
     goal,
     effectKind: effectKind ? `WOD5E_MAGE.Arete.EffectKinds.${effectKind}` : "",
     spheres: sphereEntries.map((entry) => ({ id: entry.id, label: `WOD5E_MAGE.Spheres.${entry.id}`, level: entry.level })),
     scopes: scopeLevels.map((entry) => ({ id: entry.id, label: `WOD5E_MAGE.Scopes.${entry.id}`, level: entry.level }))
   }, localize);
-  const symbols = rollSymbols({ spheres: sphereEntries, scopes: scopeLevels, prize: prizeReduction });
+  const symbols = rollSymbols({ spheres: sphereEntries, scopes: scopeLevels, prize: prizeDice });
   // Quel che resta del lancio dopo il tiro: nome, tipo, Durata e soglia.
   const effect = {
     vulgar: options.vulgar || options.witnesses,

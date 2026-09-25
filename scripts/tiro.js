@@ -478,22 +478,23 @@ export function contoTiro(tiro, {
   };
   const prizeBase = magick && tiro?.prize ? calculateAretePrize(areteValue, form) : 0;
   const powered = applyPotere({ threshold: 0, dice: 0, difficulty: null, prize: prizeBase }, power, ctx);
+  // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, fuori dal tetto +3; la soglia
+  // non la tocca più. Il premio doppio (Voce dell'Avatar) raddoppia i dadi.
+  const prize = magick ? count(powered.prize) : 0;
 
   // La Quintessenza dà dadi nella Magick; nei tiri di Abilità solo se un potere lo dice.
   const quintessenceAllowed = magick || powered.quintessenceOnSkills;
   const quintessence = quintessenceAllowed ? quintessenceDice(tiro?.quintessence, { available: quintessenceAvailable, arete: areteValue }) : 0;
   const extra = capBonusDice(count(harmony) + count(tiro?.extra));
   const traits = count(attributeValue) + count(skillValue);
-  const bonus = extra + Math.trunc(Number(traitDice) || 0) + specialtyDice + bussolaDice + quintessence;
+  const bonus = extra + Math.trunc(Number(traitDice) || 0) + specialtyDice + bussolaDice + quintessence + prize;
   const pool = Math.max(traits + bonus, 0);
 
   const scopeLevels = Object.entries(tiro?.scopes ?? {}).map(([id, level]) => ({ id, level: count(level) }));
   const scopeThreshold = magick ? calculateMagickThreshold({ scopeLevels }) : 0;
   // Gli Ambiti che il potere fa saltare fino a un livello: conta l'eccedenza.
   const countedLevels = scopeLevels.map(({ id, level }) => ({ id, level: livelloContato(level, powered.freeScopes[id]) }));
-  const prize = magick ? count(powered.prize) : 0;
-  // Il premio doppio (Voce dell'Avatar) passa il tetto dell'Areté: la sottrazione è diretta.
-  const base = magick ? Math.max(calculateMagickThreshold({ scopeLevels: countedLevels }) - prize, 0) : 0;
+  const base = magick ? Math.max(calculateMagickThreshold({ scopeLevels: countedLevels }), 0) : 0;
   const computed = magick ? Math.max(base + powered.thresholdDelta, 0) : 0;
   const manual = tiro?.difficulty !== null && tiro?.difficulty !== undefined;
   const difficulty = manual ? count(tiro.difficulty) : computed;

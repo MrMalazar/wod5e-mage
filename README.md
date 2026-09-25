@@ -56,10 +56,11 @@ opens with its M6 sigil, gold on the sheet's dark ground. Clicking Areté opens 
 (branch A of the September 2026 playtest): the pool is Attribute + Skill +
 Skill, any one of them is enough and the chosen ones add up; Areté never
 rolls. Areté enters as the prize of the
-description (a checkbox worth as many dice as Areté, never for Hybrid Magick),
-Harmony is a plain number of dice the other Mages grant (counted at the
-table), and prize, Harmony and every positive modifier share a +3 cap that
-the confirmation dialog enforces. Every unlocked Sphere shows its dots and
+description (a checkbox worth as many extra dice as Areté, outside the +3
+cap, never for Hybrid Magick; since 27 September 2026 the prize adds dice
+and no longer lowers the threshold), Harmony is a plain number of dice the
+other Mages grant (counted at the table), and Harmony and every positive
+modifier share a +3 cap that the confirmation dialog enforces. Every unlocked Sphere shows its dots and
 the player clicks the level used; the seven Scopes (Targets, Conditions,
 Duration, Impact, Range, Potency, Precision) each show seven dots for their
 level, and an icon beside the Scopes header opens the Scopes table for
