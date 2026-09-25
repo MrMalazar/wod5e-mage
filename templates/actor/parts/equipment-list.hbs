@@ -7,7 +7,7 @@
      l'armatura il valore, per tutti la casella delle altre informazioni (nel
      flag flags.wod5e-mage.dettagli). Dal 25/9 (Blue): il libro dell'occhiello
      apre l'archivio dell'Equipaggiamento (Armi, Protezioni, Oggetti in
-     linguette); sull'arma la spunta dell'Aggravato; sull'armatura il tag
+     linguette); sull'arma il tag Aggravato (la spunta sta nella modifica guidata); sull'armatura il tag
      «mentale» e i tasti ▼ (il colpo assorbito toglie un punto) e ▲ (il punto
      che torna, fino al pieno). Le azioni sono quelle del sistema wod5e
      (5.3.x): da risincronizzare quando il sistema cambia questo blocco. --}}
@@ -52,11 +52,9 @@
                         <option value="ranged" {{#if (eq item.system.weaponType "ranged")}}selected{{/if}}>{{localize "WOD5E.EquipmentList.Ranged"}}</option>
                         <option value="supernatural" {{#if (eq item.system.weaponType "supernatural")}}selected{{/if}}>{{localize "WOD5E.EquipmentList.Supernatural"}}</option>
                     </select>
-                    {{!-- La spunta dell'Aggravato (Blue, 25/9): il danno è Superficiale, e diventa Aggravato quando serve. --}}
-                    <label class="wod5e-mage-oggetto-spunta" title="{{localize 'WOD5E_MAGE.Items.AggravatedHint'}}">
-                        <input type="checkbox" data-item-id="{{item._id}}" data-item-field="flags.wod5e-mage.aggravato" aria-label="{{item.name}}: {{localize 'WOD5E_MAGE.Items.Aggravated'}}" {{#if item.flags.[wod5e-mage].aggravato}}checked{{/if}} {{#if @root.locked}}disabled{{/if}}>
-                        <span>{{localize "WOD5E_MAGE.Items.AggravatedShort"}}</span>
-                    </label>
+                    {{!-- La spunta dell'Aggravato (25/9) non sta più nella riga (Blue, 27/9: «le caselle del danno
+                         aggravato non andrebbero lì»): si cambia nella modifica guidata dell'arma; qui solo il tag. --}}
+                    {{#if item.flags.[wod5e-mage].aggravato}}<small class="wod5e-mage-oggetto-tag" title="{{localize 'WOD5E_MAGE.Items.AggravatedHint'}}">{{localize "WOD5E_MAGE.Items.AggravatedShort"}}</small>{{/if}}
                 {{else if (eq key "armor")}}
                     <input type="number" class="wod5e-mage-oggetto-numero" data-item-id="{{item._id}}" data-item-field="system.armorvalue" value="{{item.system.armorvalue}}" min="0" max="7" step="1" title="{{localize 'WOD5E.EquipmentList.ArmorValue'}}" aria-label="{{item.name}}: {{localize 'WOD5E.EquipmentList.ArmorValue'}}" {{#if @root.locked}}disabled{{/if}}>
                     {{#if (eq item.flags.[wod5e-mage].armatura "mentale")}}<small class="wod5e-mage-oggetto-tag">{{localize "WOD5E_MAGE.Items.ArmorKinds.mentale"}}</small>{{/if}}

@@ -1075,7 +1075,7 @@
    "formulaName": "Drenare",
    "link": "regola",
    "grimorioEffect": "Rubare la fortuna",
-   "note": "Quintessenza dai dadi rossi altrui",
+   "note": "+2 dadi dopo il tiro fallito di un altro; con Primordio, Quintessenza dal Paradosso altrui",
    "flavor": "«Il banco vince sempre.»",
    "level": 2,
    "access": [
@@ -1085,7 +1085,7 @@
    "amalgams": [
     "prime"
    ],
-   "amalgamsText": "Primordio (serve)",
+   "amalgamsText": "Primordio",
    "active": {
     "text": "",
     "rows": [],
@@ -1093,8 +1093,13 @@
    },
    "passive": {
     "text": "",
-    "rows": [],
-    "none": true
+    "rows": [
+     {
+      "spheres": [],
+      "text": "Quando a qualcun altro in scena va male un tiro di Abilità, al tuo prossimo tiro di Abilità hai +2 dadi, qualunque sia: non lo scegli tu."
+     }
+    ],
+    "none": false
    },
    "amalgam": {
     "text": "",
@@ -1103,17 +1108,18 @@
       "spheres": [
        "prime"
       ],
-      "text": "quando a qualcun altro in scena scoppia un dado rosso, prendi 1 Quintessenza."
+      "text": "quando a qualcun altro in scena scoppia il Paradosso su un tiro di Magick, recuperi 1 Quintessenza, ma prendi anche tu 1 punto di Paradosso."
      }
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno effetto attivo, nessun rischio effetto passivo.",
    "cost": 0,
-   "kind": "",
+   "kind": "passivo",
    "uses": null,
    "hooks": [
     "tiro",
+    "abilita",
     "quintessenza",
     "paradosso",
     "altri"

@@ -34,8 +34,10 @@ import {
   ruotaDopoUso,
   sceltaDelPotere,
   usiDelPotere,
-  voceDelCatalogo
+  voceDelCatalogo,
+  quattroParti
 } from "./poteri.js";
+import { modDelMondo, modificaBaseDelPotere } from "./poteri-mod.js";
 import { chiusoAllaCreazione, openCatalogoCompleto, openCatalogoPoteri, tipiDelPotere } from "./catalogo-poteri.js";
 import { getMagickBalance } from "./magick-balance.js";
 import { prepareIncantesimi } from "./incantesimi.js";
@@ -121,9 +123,20 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
     // Amalgama, con le righe «Accesso con X» in evidenza; il riquadro «Con
     // Sfera» resta solo per il testo scritto a mano, senza il blocco Amalgama.
     const blocchi = blocchiDelTesto(power.text || voceDelCatalogo(power)?.text);
+    // Le quattro parti (Blue, 27/9): Grado, Prerequisiti, Effetto attivo, Effetto passivo, con la
+    // modifica del Narratore (per tutti) e quella della scheda; il Narratore può cambiare la base.
+    const entry = voceDelCatalogo(power);
+    const parti = quattroParti(power, { entry, mod: entry ? modDelMondo(entry.id) : null, localize });
+    const usa = usaContesto(power, usi, quintessence, localize);
     return {
       ...power,
       blocchi,
+      parti,
+      gradoLabel: parti.grado ? localize("WOD5E_MAGE.Poteri.GradoN").replace("{n}", String(parti.grado)) : localize("WOD5E_MAGE.Poteri.GradoNessuno"),
+      modificaBase: Boolean(entry) && Boolean(globalThis.game?.user?.isGM),
+      // Gli usi e il costo in due colonne loro (27/9), non dentro il tasto Usa.
+      usiTesto: usa.conto ? `${usa.conto.restanti}/${usa.conto.max} ${localize(`WOD5E_MAGE.Poteri.PerBreve.${usa.conto.per}`)}` : "",
+      costoTesto: usa.costo ? `${usa.costo} ${localize("WOD5E_MAGE.Poteri.QuintessenzaBreve")}` : String(power.cost ?? "").trim(),
       conAmalgama: Boolean(power.amalgam) && !blocchi.some((blocco) => blocco.kind === "amalgama"),
       label: potereLabel(power, localize),
       sphereIcon: SPHERE_ICON(power.sphere),
@@ -135,7 +148,7 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
       amalgamLabel: power.amalgam ? localize(`WOD5E_MAGE.Spheres.${power.amalgam}`) : "",
       amalgamOwned: power.amalgam ? Boolean(selezione[power.amalgam]) : false,
       usesLabel: power.uses?.per ? localize(`WOD5E_MAGE.Poteri.Usi.${power.uses.per}`) : "",
-      usa: usaContesto(power, usi, quintessence, localize),
+      usa,
       sceltaCampo: sceltaCampo(power),
       // Di qualsiasi Sfera (25/9 sera): il tag sulla riga, e in modifica la tendina per spostare il segno.
       universale: universale(power),
@@ -289,6 +302,21 @@ export async function onPotereModifica(event, target) {
   if (editing.has(id)) editing.delete(id);
   else editing.add(id);
   await this.render({ parts: ["magick"] });
+}
+
+/**
+ * La modifica di base (Blue, 27/9): il Narratore cambia Prerequisiti, Effetto
+ * attivo ed Effetto passivo di un potere del catalogo, e vale per tutti (il
+ * catalogo e ogni scheda). La finestra parte dal testo che vale adesso per
+ * tutti (la base, o la modifica già scritta), non da quello della scheda.
+ */
+export async function onPotereModificaBase(event, target) {
+  event.preventDefault();
+  if (!game.user?.isGM) return;
+  const power = findPotere(target.dataset.row, poteriDelPersonaggio(this.actor));
+  const entry = voceDelCatalogo(power);
+  if (!entry) return;
+  await modificaBaseDelPotere(entry);
 }
 
 /** Togli: la riga sparisce dal personaggio. */

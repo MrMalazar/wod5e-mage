@@ -18,6 +18,7 @@ import { SCALA_PREDEFINITA, SCALA_SETTING, TEMA_CHIARO, TEMA_SCURO, TEMA_SETTING
 import { registraCreazioneGuidata } from "./creazione-guidata-finestra.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 import { NemicoSheet } from "./sheets/nemico-sheet.js";
+import { POTERI_MOD_SETTING } from "./poteri-mod.js";
 import { registraNemicoChat } from "./nemico-chat.js";
 import { registraHelperIcone } from "./icone-oggetti.js";
 import { apriVathra, mandaVathra, registraVathra } from "./vathra/traduttore.js";
@@ -145,6 +146,18 @@ Hooks.once("init", () => {
   });
 
   // Le Abilità tutte in fila (16/9 sera): il tasto accanto al + della prima pagina.
+  // Le modifiche di base dei poteri (Blue, 27/9): il Narratore le scrive, valgono per tutti; le schede aperte si ridisegnano.
+  game.settings.register(MODULE_ID, POTERI_MOD_SETTING, {
+    scope: "world",
+    config: false,
+    type: Object,
+    default: {},
+    onChange: () => {
+      for (const app of foundry.applications?.instances?.values?.() ?? []) {
+        if (app instanceof MageActorSheet && app.rendered) app.render();
+      }
+    }
+  });
   game.settings.register(MODULE_ID, "skillsFlat", {
     scope: "client",
     config: false,

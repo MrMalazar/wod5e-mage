@@ -95,9 +95,11 @@
         {{!-- I poteri conosciuti (24/9 sera, Blue: «una semplice lista», senza la divisione
              per Sfere): in testa il conto, Aggiungi (la finestra dei poteri che si possono
              prendere adesso, con le pastiglie delle Sfere) e il Catalogo completo da leggere;
-             sotto, una riga per potere in ordine di nome: il sigillo della Sfera, il pallino,
-             il nome (il clic apre il testo, come la freccia in fondo), le pastiglie del tipo
-             (attivo, passivo, tutte e due), l'Amalgama, il costo. --}}
+             sotto, una riga per potere in ordine di nome, a colonne fisse (27/9: «perché si
+             allineino e ognuna abbia uno spazio equo»): il sigillo della Sfera, il grado, il
+             nome (il clic apre il testo, come la freccia in fondo), le pastiglie del tipo
+             (attivo, passivo, tutte e due), l'Amalgama, gli usi, il costo, Usa. Aperta, le
+             quattro parti: Grado, Prerequisiti, Effetto attivo, Effetto passivo. --}}
         <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-conosciuti">
             <header class="wod5e-mage-riq-title wod5e-mage-riq-title-tasti">
                 <span>{{localize "WOD5E_MAGE.Stat.PoteriConosciuti"}}</span>
@@ -114,13 +116,14 @@
                         <div class="wod5e-mage-potere-testa">
                             <img class="wod5e-mage-potere-sfera" src="{{p.sphereIcon}}" alt="{{p.sphereLabel}}" title="{{p.sphereLabel}}">
                             <b class="wod5e-mage-potere-pallino{{#unless p.dot}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Poteri.Pallino'}}">{{#if p.dot}}{{p.dot}}{{else}}·{{/if}}</b>
-                            <button type="button" class="wod5e-mage-potere-nome" data-action="potereApri" title="{{localize 'WOD5E_MAGE.Poteri.Apri'}}" aria-expanded="{{p.editing}}"><span>{{p.label}}</span></button>
+                            <button type="button" class="wod5e-mage-potere-nome" data-action="potereApri" title="{{localize 'WOD5E_MAGE.Poteri.Apri'}}" aria-expanded="{{p.editing}}"><span>{{p.label}}</span>{{#if p.parti.modificato.scheda}}<i class="fa-solid fa-pen wod5e-mage-potere-segno" title="{{localize 'WOD5E_MAGE.Poteri.ModificatoScheda'}}" aria-hidden="true"></i>{{else if p.parti.modificato.mondo}}<i class="fa-solid fa-globe wod5e-mage-potere-segno" title="{{localize 'WOD5E_MAGE.Poteri.ModificatoMondo'}}" aria-hidden="true"></i>{{/if}}</button>
                             <span class="wod5e-mage-potere-tipi">{{#if p.tipi.attivo}}<small class="wod5e-mage-potere-tipo attivo">{{localize "WOD5E_MAGE.Poteri.Tipo.attivo"}}</small>{{/if}}{{#if p.tipi.passivo}}<small class="wod5e-mage-potere-tipo passivo">{{localize "WOD5E_MAGE.Poteri.Tipo.passivo"}}</small>{{/if}}{{#if p.universale}}<small class="wod5e-mage-potere-tipo universale" title="{{localize 'WOD5E_MAGE.Poteri.UniversaleHint' sphere=p.sphereLabel}}">{{localize "WOD5E_MAGE.Poteri.Universale"}}</small>{{/if}}</span>
                             <span class="wod5e-mage-potere-amalgama{{#if p.amalgam}}{{#unless p.amalgamOwned}} manca{{/unless}}{{else}} niente{{/if}}" title="{{#if p.amalgam}}{{localize 'WOD5E_MAGE.Poteri.Con' sphere=p.amalgamLabel}}{{/if}}">{{#if p.amalgam}}<img src="{{p.amalgamIcon}}" alt="{{p.amalgamLabel}}">{{/if}}</span>
-                            <small class="wod5e-mage-potere-costo">{{p.cost}}</small>
+                            <small class="wod5e-mage-potere-usi" title="{{#if p.usesLabel}}{{p.usesLabel}}{{/if}}">{{p.usiTesto}}</small>
+                            <small class="wod5e-mage-potere-costo">{{p.costoTesto}}</small>
                             {{!-- «Usa» nella testa della riga, senza aprire la tendina (Blue, 25/9): sui poteri con
                                  una parte attiva paga, conta gli usi e manda la carta; sui soli passivi «Mostra», la carta e basta. --}}
-                            <button type="button" class="wod5e-mage-potere-usa{{#unless p.usa.ok}} spento{{/unless}}{{#unless p.tipi.attivo}} mostra{{/unless}}" data-action="potereUsa" data-row="{{p.id}}" title="{{#if p.tipi.attivo}}{{p.usa.hint}}{{else}}{{localize 'WOD5E_MAGE.Poteri.MostraHint'}}{{/if}}"><i class="fa-solid {{#if p.tipi.attivo}}fa-hand-sparkles{{else}}fa-comment{{/if}}" aria-hidden="true"></i> {{#if p.tipi.attivo}}{{localize "WOD5E_MAGE.Poteri.Usa"}}{{else}}{{localize "WOD5E_MAGE.Poteri.Mostra"}}{{/if}}{{#if p.usa.label}}<small>{{p.usa.label}}</small>{{/if}}</button>
+                            <button type="button" class="wod5e-mage-potere-usa{{#unless p.usa.ok}} spento{{/unless}}{{#unless p.tipi.attivo}} mostra{{/unless}}" data-action="potereUsa" data-row="{{p.id}}" title="{{#if p.tipi.attivo}}{{p.usa.hint}}{{else}}{{localize 'WOD5E_MAGE.Poteri.MostraHint'}}{{/if}}"><i class="fa-solid {{#if p.tipi.attivo}}fa-hand-sparkles{{else}}fa-comment{{/if}}" aria-hidden="true"></i> {{#if p.tipi.attivo}}{{localize "WOD5E_MAGE.Poteri.Usa"}}{{else}}{{localize "WOD5E_MAGE.Poteri.Mostra"}}{{/if}}</button>
                             {{!-- La freccia apre e chiude come il nome (Blue, 24/9 sera: «la freccetta non funziona»). --}}
                             <button type="button" class="wod5e-mage-potere-chevron" data-action="potereApri" title="{{localize 'WOD5E_MAGE.Poteri.Apri'}}" aria-label="{{localize 'WOD5E_MAGE.Poteri.Apri'}}"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
                         </div>
@@ -134,9 +137,12 @@
                                     <label><span>{{localize "WOD5E_MAGE.Poteri.Costo"}}</span><input type="text" name="flags.wod5e-mage.poteri.{{p.id}}.cost" value="{{p.cost}}"></label>
                                     {{!-- Di qualsiasi Sfera (25/9 sera): il segno si sposta su un'altra Sfera aperta. --}}
                                     {{#if p.universale}}<label><span>{{localize "WOD5E_MAGE.Poteri.SegnatoIn"}}</span><select name="flags.wod5e-mage.poteri.{{p.id}}.sphere">{{#each p.sfereSegno as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/if}}
-                                    <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.CosaFa"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.text" rows="3">{{p.text}}</textarea></label>
+                                    {{!-- Le quattro parti (27/9): vuote, vale il testo di base; il testo di base sta nel segnaposto. --}}
+                                    <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.Prerequisiti"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.prerequisitiTesto" rows="2" placeholder="{{#if p.parti.prerequisiti.testo}}{{p.parti.prerequisiti.testo}}{{else}}{{localize 'WOD5E_MAGE.Poteri.PrerequisitiNessuno'}}{{/if}}">{{p.prerequisitiTesto}}</textarea></label>
+                                    <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.EffettoAttivo"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.attivo" rows="3" placeholder="{{#if p.parti.attivo.testo}}{{p.parti.attivo.testo}}{{else}}{{localize 'WOD5E_MAGE.Poteri.EffettoNessuno'}}{{/if}}">{{p.attivo}}</textarea></label>
+                                    <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.EffettoPassivo"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.passivo" rows="3" placeholder="{{#if p.parti.passivo.testo}}{{p.parti.passivo.testo}}{{else}}{{localize 'WOD5E_MAGE.Poteri.EffettoNessuno'}}{{/if}}">{{p.passivo}}</textarea></label>
                                     <label><span>{{localize "WOD5E_MAGE.Poteri.Amalgama"}}</span><select name="flags.wod5e-mage.poteri.{{p.id}}.amalgam"><option value=""{{#unless p.amalgam}} selected{{/unless}}>{{localize "WOD5E_MAGE.Poteri.AmalgamaNessuna"}}</option>{{#each p.options.sfere as |o|}}<option value="{{o.value}}"{{#if (eq o.value p.amalgam)}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
-                                    <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.ConAmalgama"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.amalgamText" rows="2">{{p.amalgamText}}</textarea></label>
+                                    {{#unless p.catalogId}}<label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.ConAmalgama"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.amalgamText" rows="2">{{p.amalgamText}}</textarea></label>{{/unless}}
                                     <label class="wod5e-mage-potere-campo-largo"><span>{{localize "WOD5E_MAGE.Poteri.Flavor"}}</span><textarea name="flags.wod5e-mage.poteri.{{p.id}}.flavor" rows="2">{{p.flavor}}</textarea></label>
                                 </div>
                             {{else}}
@@ -150,26 +156,29 @@
                                         </select>
                                     </label>
                                 {{/if}}
-                                {{!-- Il testo a blocchi (Blue, 25/9: «non si distingue»): Effetto attivo, Effetto passivo,
-                                     Effetto Amalgama, ognuno col suo titolo; le righe «Accesso con X» con la chiave in evidenza.
-                                     Il testo scritto a mano, senza titoli, sta in un blocco solo con «Cosa fa». --}}
-                                {{#each p.blocchi as |b|}}
-                                    <div class="wod5e-mage-potere-blocco{{#if b.kind}} {{b.kind}}{{/if}}{{#if (eq b.kind "amalgama")}}{{#unless p.amalgamOwned}} manca{{/unless}}{{/if}}">
-                                        <span class="wod5e-mage-potere-blocco-titolo">{{#if b.titolo}}{{b.titolo}}{{else}}{{localize "WOD5E_MAGE.Poteri.CosaFa"}}{{/if}}</span>
-                                        {{#each b.voci as |v|}}<p class="wod5e-mage-potere-blocco-riga">{{#if v.accesso}}<b class="wod5e-mage-accesso">{{localize "WOD5E_MAGE.Grimorio.Access"}} {{#each v.sfere as |sfera|}}<img class="wod5e-mage-sfera-inline" src="modules/wod5e-mage/assets/icons/sheet/{{sfera}}.png" alt="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}" title="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}">{{/each}}:</b> {{else if v.chiave}}<b>{{v.chiave}}:</b> {{/if}}{{v.testo}}</p>{{/each}}
-                                        {{#if (eq b.kind "amalgama")}}{{#unless p.amalgamOwned}}<p class="wod5e-mage-potere-blocco-riga"><em>{{localize "WOD5E_MAGE.Poteri.NonHai" sphere=p.amalgamLabel}}</em></p>{{/unless}}{{/if}}
+                                {{!-- Le quattro parti (Blue, 27/9): Grado, Prerequisiti, Effetto attivo, Effetto passivo, ognuna col suo
+                                     titolo; l'Amalgama sta nel blocco del suo tipo con «Con Sfera» in chiave; le righe «Accesso con X»
+                                     con la chiave in evidenza. Una parte vuota dice «nessuno». --}}
+                                <div class="wod5e-mage-potere-parti">
+                                    <p class="wod5e-mage-potere-testo wod5e-mage-potere-parte-grado"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.Grado"}}</span>{{p.gradoLabel}}</p>
+                                    <div class="wod5e-mage-potere-blocco prerequisiti{{#if p.parti.prerequisiti.vuota}} vuoto{{/if}}">
+                                        <span class="wod5e-mage-potere-blocco-titolo">{{localize "WOD5E_MAGE.Poteri.Prerequisiti"}}</span>
+                                        {{#each p.parti.prerequisiti.righe as |r|}}<p class="wod5e-mage-potere-blocco-riga">{{r}}</p>{{else}}<p class="wod5e-mage-potere-blocco-riga"><em>{{localize "WOD5E_MAGE.Poteri.PrerequisitiNessuno"}}</em></p>{{/each}}
                                     </div>
-                                {{else}}
-                                    <p class="wod5e-mage-potere-testo"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.CosaFa"}}</span><em>{{localize "WOD5E_MAGE.Poteri.CosaFaVuoto"}}</em></p>
-                                {{/each}}
-                                {{#if p.conAmalgama}}
-                                    {{!-- L'Amalgama scritta a mano: piena se la Sfera ce l'hai, tratteggiata se no. --}}
-                                    <div class="wod5e-mage-potere-con{{#unless p.amalgamOwned}} manca{{/unless}}"><span class="wod5e-mage-potere-k">{{localize "WOD5E_MAGE.Poteri.Con" sphere=p.amalgamLabel}}</span>{{p.amalgamText}}{{#unless p.amalgamOwned}} <em>{{localize "WOD5E_MAGE.Poteri.NonHai" sphere=p.amalgamLabel}}</em>{{/unless}}</div>
-                                {{/if}}
+                                    <div class="wod5e-mage-potere-blocco attivo{{#if p.parti.attivo.vuota}} vuoto{{/if}}">
+                                        <span class="wod5e-mage-potere-blocco-titolo">{{localize "WOD5E_MAGE.Poteri.EffettoAttivo"}}</span>
+                                        {{#each p.parti.attivo.voci as |v|}}<p class="wod5e-mage-potere-blocco-riga">{{#if v.accesso}}<b class="wod5e-mage-accesso">{{#if v.con}}{{localize "WOD5E_MAGE.Poteri.ConSfera"}}{{else}}{{localize "WOD5E_MAGE.Grimorio.Access"}}{{/if}} {{#each v.sfere as |sfera|}}<img class="wod5e-mage-sfera-inline" src="modules/wod5e-mage/assets/icons/sheet/{{sfera}}.png" alt="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}" title="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}">{{/each}}:</b> {{else if v.chiave}}<b>{{v.chiave}}:</b> {{/if}}{{v.testo}}</p>{{else}}<p class="wod5e-mage-potere-blocco-riga"><em>{{localize "WOD5E_MAGE.Poteri.EffettoNessuno"}}</em></p>{{/each}}
+                                    </div>
+                                    <div class="wod5e-mage-potere-blocco passivo{{#if p.parti.passivo.vuota}} vuoto{{/if}}">
+                                        <span class="wod5e-mage-potere-blocco-titolo">{{localize "WOD5E_MAGE.Poteri.EffettoPassivo"}}</span>
+                                        {{#each p.parti.passivo.voci as |v|}}<p class="wod5e-mage-potere-blocco-riga">{{#if v.accesso}}<b class="wod5e-mage-accesso">{{#if v.con}}{{localize "WOD5E_MAGE.Poteri.ConSfera"}}{{else}}{{localize "WOD5E_MAGE.Grimorio.Access"}}{{/if}} {{#each v.sfere as |sfera|}}<img class="wod5e-mage-sfera-inline" src="modules/wod5e-mage/assets/icons/sheet/{{sfera}}.png" alt="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}" title="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}">{{/each}}:</b> {{else if v.chiave}}<b>{{v.chiave}}:</b> {{/if}}{{v.testo}}</p>{{else}}<p class="wod5e-mage-potere-blocco-riga"><em>{{localize "WOD5E_MAGE.Poteri.EffettoNessuno"}}</em></p>{{/each}}
+                                    </div>
+                                </div>
                                 {{#if p.flavor}}<p class="wod5e-mage-potere-flavor"><em>{{p.flavor}}</em></p>{{/if}}
                             {{/if}}
                             <div class="wod5e-mage-potere-fondo">
                                 <button type="button" data-action="potereModifica" data-row="{{p.id}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid {{#if p.editing}}fa-check{{else}}fa-pen{{/if}}" aria-hidden="true"></i> {{#if p.editing}}{{localize "WOD5E_MAGE.Poteri.Fatto"}}{{else}}{{localize "WOD5E_MAGE.Poteri.Modifica"}}{{/if}}</button>
+                                {{#if p.modificaBase}}<button type="button" class="wod5e-mage-potere-base" data-action="potereModificaBase" data-row="{{p.id}}" title="{{localize 'WOD5E_MAGE.Poteri.ModificaBaseHint'}}"><i class="fa-solid fa-globe" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.ModificaBase"}}</button>{{/if}}
                                 <button type="button" data-action="potereTogli" data-row="{{p.id}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Togli"}}</button>
                             </div>
                         </div>

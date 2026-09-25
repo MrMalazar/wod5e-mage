@@ -388,7 +388,9 @@ console.log("Libro degli Elementi: test passati.");
   assert.equal(updates.length, 0, "a scheda bloccata non scrive");
 
   const inventario = readFileSync(new URL("../templates/actor/parts/equipment-list.hbs", import.meta.url), "utf8");
-  assert.match(inventario, /<select class="wod5e-mage-oggetto-tipo"[\s\S]*<\/select>\s*\{\{!--[^}]*--\}\}\s*<label class="wod5e-mage-oggetto-spunta"[^>]*>\s*<input type="checkbox" data-item-id="\{\{item\._id\}\}" data-item-field="flags\.wod5e-mage\.aggravato"[^>]*\{\{#if item\.flags\.\[wod5e-mage\]\.aggravato\}\}checked\{\{\/if\}\}/, "la spunta dopo il tipo d'arma");
+  // La spunta dell'Aggravato non sta più nella riga dell'inventario (Blue, 27/9): solo il tag quando c'è; si cambia nella modifica guidata.
+  assert.doesNotMatch(inventario, /data-item-field="flags\.wod5e-mage\.aggravato"/, "niente spunta Aggravato nella riga");
+  assert.match(inventario, /\{\{#if item\.flags\.\[wod5e-mage\]\.aggravato\}\}<small class="wod5e-mage-oggetto-tag"[^>]*>\{\{localize "WOD5E_MAGE\.Items\.AggravatedShort"\}\}<\/small>\{\{\/if\}\}/, "il tag Aggravato sull'arma che lo ha");
   assert.doesNotMatch(inventario, /data-item-field="flags\.wod5e-mage\.aggravato"[^>]*\sname=/, "senza name: non passa dal form del personaggio");
   assert.match(inventario, /data-item-field="system\.armorvalue"[\s\S]*armatura "mentale"[\s\S]*data-action="armaturaColpo" data-item-id="\{\{item\._id\}\}"[\s\S]*fa-angle-down[\s\S]*data-action="armaturaPunto" data-item-id="\{\{item\._id\}\}"[\s\S]*fa-angle-up/, "▼ e ▲ dopo il punteggio");
   const sheetSource = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");

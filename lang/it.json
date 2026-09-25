@@ -871,13 +871,13 @@
       "Mostra": "Mostra",
       "MostraHint": "Manda in chat la carta del potere (è passivo: scatta da solo)",
       "CatalogoConosciuti": "{known} poteri conosciuti",
-      "Grado": "Grado: la potenza del potere",
+      "Grado": "Grado",
       "GradoN": "Grado {n}",
       "GradoNessuno": "Grado da assegnare",
       "PrezzoPE": "{pe} punti esperienza",
       "PrezzoDue": "{famiglia} punti esperienza in un Dominio di famiglia, {esterno} in uno esterno",
-      "DominioFamiglia": "Dominio di famiglia: ogni grado del potere costa {n} punti esperienza (alla creazione i poteri sono gratis)",
-      "DominioEsterno": "Dominio esterno: ogni grado del potere costa {n} punti esperienza (alla creazione i poteri sono gratis)",
+      "DominioFamiglia": "Dominio di famiglia (alla creazione i poteri sono gratis)",
+      "DominioEsterno": "Dominio esterno (alla creazione i poteri sono gratis)",
       "Prerequisito": {
         "Label": "Serve",
         "numero": "{n} poteri di {sphere}",
@@ -886,7 +886,32 @@
       "PrerequisitiMancano": "Mancano i prerequisiti di questo potere: guarda la riga nella finestra Aggiungi.",
       "CreazioneRegola": "Alla creazione: un potere di base (grado 1) della Sfera, oppure uno di qualsiasi Sfera; niente prerequisiti.",
       "CreazioneGrado": "Alla creazione si prende un potere di base (grado 1) della Sfera, o uno di qualsiasi Sfera.",
-      "CreazionePrerequisiti": "Alla creazione i poteri con prerequisiti non si prendono."
+      "CreazionePrerequisiti": "Alla creazione i poteri con prerequisiti non si prendono.",
+      "Prerequisiti": "Prerequisiti",
+      "PrerequisitiNessuno": "nessuno",
+      "EffettoAttivo": "Effetto attivo",
+      "EffettoPassivo": "Effetto passivo",
+      "EffettoNessuno": "nessuno",
+      "ModificaTitolo": "Modifica il potere: {name}",
+      "ModificaMondo": "Vale per tutti: il catalogo e ogni scheda (solo il Narratore).",
+      "ModificaScheda": "Vale solo su questa scheda.",
+      "ModificaNota": "Il grado non si tocca. Quello che lasci uguale al testo di base non si salva; «Torna al testo di base» cancella le modifiche.",
+      "ModificaBase": "Per tutti",
+      "ModificaBaseHint": "Cambia il testo di base del potere: vale sul catalogo e su ogni scheda (solo il Narratore)",
+      "Salva": "Salva",
+      "TornaBase": "Torna al testo di base",
+      "ModificatoMondo": "testo di base modificato dal Narratore",
+      "ModificatoScheda": "testo modificato su questa scheda",
+      "ModificaSalvata": "{name}: testo di base salvato per tutti.",
+      "ModificaTolta": "{name}: torna al testo di base.",
+      "PerBreve": {
+        "scena": "a scena",
+        "sessione": "a sessione",
+        "campagna": "a campagna",
+        "turno": "a turno",
+        "bersaglio": "a bersaglio"
+      },
+      "ConSfera": "Con"
     },
     "Tratti": {
       "Vantaggi": "Vantaggi",
@@ -1666,15 +1691,42 @@
       "Scena": "Scena",
       "Cerca": "Cerca una voce…",
       "Cassetti": {
-        "mago": { "nome": "Sul mago", "sotto": "chi ha lanciato: meno dadi, l'8 per riuscire, un danno" },
-        "incantesimo": { "nome": "Sull'incantesimo", "sotto": "l'effetto già lanciato: finisce, dilaga, si ritorce" },
-        "dormienti": { "nome": "I Dormienti", "sotto": "persone comuni: chi guarda, chi chiede, chi passa" },
-        "presenze": { "nome": "Le Presenze", "sotto": "entità del Paradosso: Ombra, Esattore, Ospite" },
-        "posto": { "nome": "Il posto", "sotto": "il luogo reagisce: una zona, l'impianto, una porta" },
-        "scontro": { "nome": "Scontro e scena", "sotto": "la scena cambia corso: si ferma, scappano, finisce" },
-        "orologi": { "nome": "Gli orologi", "sotto": "il rimbalzo si vede arrivare: a Volgari, a turni, a giri" },
-        "ancore": { "nome": "Le Ancore", "sotto": "le persone care del mago: chiamano, si incrociano, ci finiscono dentro" },
-        "scoppio": { "nome": "Allo scoppio", "sotto": "solo quando un dado rosso scoppia: non si comprano prima" }
+        "mago": {
+          "nome": "Sul mago",
+          "sotto": "chi ha lanciato: meno dadi, l'8 per riuscire, un danno"
+        },
+        "incantesimo": {
+          "nome": "Sull'incantesimo",
+          "sotto": "l'effetto già lanciato: finisce, dilaga, si ritorce"
+        },
+        "dormienti": {
+          "nome": "I Dormienti",
+          "sotto": "persone comuni: chi guarda, chi chiede, chi passa"
+        },
+        "presenze": {
+          "nome": "Le Presenze",
+          "sotto": "entità del Paradosso: Ombra, Esattore, Ospite"
+        },
+        "posto": {
+          "nome": "Il posto",
+          "sotto": "il luogo reagisce: una zona, l'impianto, una porta"
+        },
+        "scontro": {
+          "nome": "Scontro e scena",
+          "sotto": "la scena cambia corso: si ferma, scappano, finisce"
+        },
+        "orologi": {
+          "nome": "Gli orologi",
+          "sotto": "il rimbalzo si vede arrivare: a Volgari, a turni, a giri"
+        },
+        "ancore": {
+          "nome": "Le Ancore",
+          "sotto": "le persone care del mago: chiamano, si incrociano, ci finiscono dentro"
+        },
+        "scoppio": {
+          "nome": "Allo scoppio",
+          "sotto": "solo quando un dado rosso scoppia: non si comprano prima"
+        }
       },
       "Famiglie": {
         "tocchi": "Conseguenze Magick",

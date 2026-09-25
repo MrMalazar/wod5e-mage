@@ -82,6 +82,10 @@ export function normalizzaPotere(id, row = {}) {
     amalgamText: testo(row?.amalgamText),
     flavor: testo(row?.flavor),
     cost: testo(row?.cost),
+    // Le quattro parti scritte sulla scheda (Blue, 27/9): vuote, vale il testo di base (il catalogo, o la modifica del Narratore).
+    prerequisitiTesto: testo(row?.prerequisitiTesto),
+    attivo: testo(row?.attivo),
+    passivo: testo(row?.passivo),
     source: row?.source === "catalogo" ? "catalogo" : "mano",
     catalogId: testo(row?.catalogId),
     // Dal catalogo del 24/9: la matrice di provenienza, il legame, il costo e il limite d'uso.
@@ -642,7 +646,8 @@ const SFERE_NEL_TESTO = Object.freeze({
  * sempre esserci il simbolo e non la parola»).
  */
 export function sfereDellaChiave(chiave) {
-  const m = String(chiave ?? "").match(/^Accesso con\s+(.+)$/i);
+  // «Accesso con X» nelle righe del catalogo; «Con X» nell'Amalgama (27/9).
+  const m = String(chiave ?? "").match(/^(?:Accesso con|Con)\s+(.+)$/i);
   if (!m) return [];
   const ids = m[1].split(/\s*\+\s*/).map((nome) => SFERE_NEL_TESTO[nome.trim().toLowerCase()]);
   return ids.every(Boolean) ? ids : [];
@@ -652,7 +657,8 @@ export function voceDellaRiga(riga) {
   const m = String(riga ?? "").match(/^((?:Accesso con|Con) [^:]{1,40}|Paga [^:]{1,30}):\s*([\s\S]*)$/);
   const chiave = m ? m[1].trim() : "";
   const sfere = sfereDellaChiave(chiave);
-  return { chiave, testo: m ? m[2].trim() : String(riga ?? "").trim(), sfere, accesso: sfere.length > 0 };
+  // `con`: la chiave dell'Amalgama («Con Sfera», 27/9), da scrivere «Con» e non «Accesso con» davanti al sigillo.
+  return { chiave, testo: m ? m[2].trim() : String(riga ?? "").trim(), sfere, accesso: sfere.length > 0, con: sfere.length > 0 && /^Con /.test(chiave) };
 }
 
 export function blocchiDelTesto(text) {
@@ -671,6 +677,95 @@ export function blocchiDelTesto(text) {
 /** I blocchi di un genere (attivo, passivo, amalgama) nel testo del potere. */
 export function blocchiDelGenere(text, kind) {
   return blocchiDelTesto(text).filter((blocco) => blocco.kind === kind);
+}
+
+function righeDelTesto(text) {
+  return String(text ?? "").split("\n").map((riga) => riga.trim()).filter(Boolean);
+}
+
+/**
+ * Il testo a blocchi diviso nei generi: le righe di «Effetto attivo», di
+ * «Effetto passivo» e di «Effetto Amalgama»; un blocco senza titolo (il testo
+ * scritto a mano) va nel genere del tipo del potere (passivo se è passivo,
+ * altrimenti attivo).
+ */
+export function generiDelTesto(text, type = "") {
+  const per = { attivo: [], passivo: [], amalgama: [] };
+  for (const blocco of blocchiDelTesto(text)) {
+    const kind = blocco.kind || (type === "passivo" ? "passivo" : "attivo");
+    per[kind].push(...blocco.righe);
+  }
+  return { attivo: per.attivo.join("\n"), passivo: per.passivo.join("\n"), amalgama: per.amalgama.join("\n") };
+}
+
+/** Le sezioni di una voce del catalogo: quelle separate dal generatore (27/9), o ricavate dal testo a blocchi. */
+function sezioniDellaVoce(entry) {
+  if (!entry) return { attivo: "", passivo: "", amalgama: "" };
+  if (entry.attivo !== undefined || entry.passivo !== undefined || entry.amalgama !== undefined) {
+    return { attivo: testo(entry.attivo), passivo: testo(entry.passivo), amalgama: testo(entry.amalgama) };
+  }
+  return generiDelTesto(entry.text, entry.type);
+}
+
+/** Le righe dei prerequisiti scritti nei dati, in parole: «2 poteri di Forze», «richiede Bottino», o la condizione del tavolo. */
+export function righePrerequisiti(entry, { sphere = "", localize = (key) => key, catalog = POTERI } = {}) {
+  const righe = Array.isArray(entry?.prerequisiti) ? entry.prerequisiti : [];
+  const sfera = sphere || (Array.isArray(entry?.spheres) ? entry.spheres.find((id) => id !== "any") : "") || "";
+  return righe.map((riga) => {
+    if (count(riga?.numero)) return localize("WOD5E_MAGE.Poteri.Prerequisito.numero").replace("{n}", String(count(riga.numero))).replace("{sphere}", sfera ? localize(`WOD5E_MAGE.Spheres.${sfera}`) : "");
+    if (testo(riga?.potere)) return localize("WOD5E_MAGE.Poteri.Prerequisito.poteri").replace("{names}", testo((catalog ?? []).find((voce) => voce.id === riga.potere)?.name) || riga.potere);
+    return testo(riga?.testo);
+  }).filter(Boolean);
+}
+
+/**
+ * Le quattro parti del potere (Blue, 27/9): Grado, Prerequisiti, Effetto
+ * attivo, Effetto passivo. Il testo di base è la voce del catalogo (o il
+ * testo della riga scritta a mano); la modifica del Narratore (`mod`, vale
+ * per tutti) lo sovrascrive parte per parte; le parti scritte sulla scheda
+ * (`power.attivo`, `power.passivo`, `power.prerequisitiTesto`) vincono su
+ * tutto. Una riga del catalogo il cui `text` è stato cambiato a mano con la
+ * vecchia modifica vale come modifica della scheda. L'Amalgama («Con Sfera:
+ * …») sta nel passivo, o nell'attivo se il potere è solo attivo. Ogni parte
+ * torna col testo, le righe lette (`voci`, con le Sfere delle chiavi) e da
+ * dove viene (`fonte`: scheda, mondo, base).
+ */
+export function quattroParti(power, { entry = null, mod = null, localize = (key) => key, catalog = POTERI } = {}) {
+  const tipo = testo(power?.type) || testo(entry?.type);
+  const kind = testo(entry?.kind) || tipo;
+  const base = entry ? sezioniDellaVoce(entry) : generiDelTesto(power?.text, tipo);
+  // La vecchia modifica a mano del testo di una riga del catalogo (prima del 27/9).
+  const vecchia = entry && testo(power?.text) && testo(power.text) !== testo(entry.text) ? generiDelTesto(power.text, tipo) : null;
+  const scelta = (parte, basePart) => {
+    const scheda = testo(power?.[parte === "prerequisiti" ? "prerequisitiTesto" : parte]) || (vecchia && parte !== "prerequisiti" ? vecchia[parte] : "");
+    if (scheda) return { testo: scheda, fonte: "scheda" };
+    const mondo = testo(mod?.[parte]);
+    if (mondo) return { testo: mondo, fonte: "mondo" };
+    return { testo: basePart, fonte: "base" };
+  };
+  // L'Amalgama: le righe del catalogo («Con Sfera: …»), o quella scritta a mano sulla riga.
+  const amalgama = righeDelTesto(vecchia?.amalgama || base.amalgama);
+  const amalgamaMano = testo(power?.amalgamText);
+  if (amalgamaMano && !entry) {
+    const sferaAmalgama = sfera(power?.amalgam);
+    amalgama.push(sferaAmalgama && !/^(Con|Accesso con) /i.test(amalgamaMano) ? `Con ${localize(`WOD5E_MAGE.Spheres.${sferaAmalgama}`)}: ${amalgamaMano}` : amalgamaMano);
+  }
+  const attivo = scelta("attivo", base.attivo);
+  const passivo = scelta("passivo", base.passivo);
+  const doveAmalgama = kind === "attivo" ? attivo : passivo;
+  if (amalgama.length && doveAmalgama.fonte === "base") doveAmalgama.testo = [doveAmalgama.testo, ...amalgama].filter(Boolean).join("\n");
+  const prerequisiti = scelta("prerequisiti", righePrerequisiti(entry, { sphere: sfera(power?.sphere), localize, catalog }).join("\n"));
+  const parte = (p) => ({ ...p, righe: righeDelTesto(p.testo), voci: righeDelTesto(p.testo).map(voceDellaRiga), vuota: !righeDelTesto(p.testo).length });
+  return {
+    grado: Math.min(count(power?.dot) || count(entry?.dot), POTERE_DOTS),
+    prerequisiti: parte(prerequisiti),
+    attivo: parte(attivo),
+    passivo: parte(passivo),
+    modificato: {
+      scheda: [prerequisiti, attivo, passivo].some((p) => p.fonte === "scheda"),
+      mondo: [prerequisiti, attivo, passivo].some((p) => p.fonte === "mondo")
+    }
+  };
 }
 
 /**

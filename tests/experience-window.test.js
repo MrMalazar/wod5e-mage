@@ -12,11 +12,12 @@ assert.equal(experienceCost("arete", 2, 3).total, 30);
 // Il Dominio (l'accesso a una Sfera) costa 15, una volta: da 0 a 1 = 15, poi niente.
 assert.equal(experienceCost("dominio", 0, 1).total, 15);
 assert.deepEqual(experienceCost("dominio", 0, 3).steps, [{ dot: 1, cost: 15 }, { dot: 2, cost: 0 }, { dot: 3, cost: 0 }]);
-// Il potere: il pallino richiesto per 5 (Dominio di famiglia) o per 7 (esterno). «Un potere di 1 e Dominio nuovo costa 20».
-assert.equal(experienceCost("potereFamiglia", 0, 1).total, 5);
-assert.equal(experienceCost("potereEsterno", 2, 3).total, 21);
-assert.equal(experienceCost("dominio", 0, 1).total + potereCost({ dot: 1 }, true), 20);
-assert.equal(potereCost({ dot: 3 }, false), 21);
+// Il potere (Blue, 27/9): il grado per 3 (Dominio di famiglia) o per 5 (esterno). «Un potere di 1 e Dominio nuovo costa 18».
+assert.equal(experienceCost("potereFamiglia", 0, 1).total, 3, "3 per grado in famiglia (27/9)");
+assert.equal(experienceCost("potereEsterno", 2, 3).total, 15, "5 per grado fuori famiglia (27/9)");
+assert.equal(experienceCost("dominio", 0, 1).total + potereCost({ dot: 1 }, true), 18);
+assert.equal(potereCost({ dot: 2 }, false), 10, "un potere esterno di grado 2");
+assert.equal(potereCost({ dot: 3 }, false), 15);
 assert.equal(potereCost({ dot: 0 }, true), null, "senza pallino il prezzo non si sa");
 // La casella di Salute costa quante caselle hai già: da 8 a 9 = 8, da 8 a 10 = 8 + 9.
 assert.equal(experienceCost("health", 8, 9).total, 8);
@@ -53,10 +54,10 @@ assert.equal(page.log.length, 2);
 // Otto voci: Attributo, Abilità, Areté, Dominio, i due poteri, la Salute, il Tratto.
 assert.equal(page.rows.length, 8);
 
-// Le spese proposte: i Domini presi (15) e i poteri inseriti (pallino × 5 di famiglia, × 7 esterno; senza pallino «?»),
+// Le spese proposte: i Domini presi (15) e i poteri inseriti (grado × 3 di famiglia, × 5 esterno; senza pallino «?»),
 // non quelli già segnati fra le spese né quelli ignorati; il potere senza nome non si propone.
 const proposals = prepareExperienceProposals(actor, { log: page.log, localize: (key) => key });
-assert.deepEqual(proposals.map((row) => [row.id, row.cost]), [["dominio:forces", 15], ["dominio:mind", 15], ["potere:p1", 10], ["potere:p2", null]]);
+assert.deepEqual(proposals.map((row) => [row.id, row.cost]), [["dominio:forces", 15], ["dominio:mind", 15], ["potere:p1", 6], ["potere:p2", null]]);
 assert.equal(proposals[3].hint, "WOD5E_MAGE.Experience.SenzaPallino");
 assert.equal(proposals[0].what, "WOD5E_MAGE.Experience.DominioDi", "senza format il testo resta la chiave: la scheda passa game.i18n.format");
 const conFormat = prepareExperienceProposals(actor, {

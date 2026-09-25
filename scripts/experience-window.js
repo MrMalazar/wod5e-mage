@@ -16,8 +16,9 @@ export const EXPERIENCE_COSTS = Object.freeze({
   skill: { multiplier: 2, firstDot: 3 },
   arete: { multiplier: 10 },
   dominio: { flat: 15 },
-  potereFamiglia: { multiplier: 5 },
-  potereEsterno: { multiplier: 7 },
+  // I poteri (Blue, 27/9): 3 per grado in famiglia, 5 per grado fuori.
+  potereFamiglia: { multiplier: 3 },
+  potereEsterno: { multiplier: 5 },
   // La Volontà è caduta: c'è un tracciato solo, la Salute. La casella nuova
   // costa quante caselle hai già (da 8 a 9 costa 8).
   health: { current: true },

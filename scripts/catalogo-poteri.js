@@ -15,7 +15,8 @@
  */
 import { MODULE_ID } from "./constants.js";
 import { EXPERIENCE_COSTS } from "./experience-window.js";
-import { blocchiDelTesto, catalogoDellaSfera, condizioniDelPotere, gradoPerOrdine, POTERE_DOTS, POTERI, sfereDellaVoce } from "./poteri.js";
+import { blocchiDelTesto, catalogoDellaSfera, condizioniDelPotere, gradoPerOrdine, POTERE_DOTS, POTERI, quattroParti, sfereDellaVoce } from "./poteri.js";
+import { modDelMondo, modificaBaseDelPotere, POTERI_MOD_SETTING } from "./poteri-mod.js";
 import { SPHERES } from "./spheres.js";
 
 function testo(value) {
@@ -73,7 +74,7 @@ export function prezzoDelPotere(dot, family = null) {
  * prerequisiti anche quando ci sono già (la spunta), non solo quando
  * mancano (il lucchetto).
  */
-function rigaDelCatalogo(voce, entry, localize, family = null, creazione = false, sphere = "") {
+function rigaDelCatalogo(voce, entry, localize, family = null, creazione = false, sphere = "", mods = {}) {
   const uses = entry?.uses?.per ? localize(`WOD5E_MAGE.Poteri.Usi.${entry.uses.per}`) : "";
   // Alla creazione (25/9 sera): solo i poteri di base o di qualsiasi Sfera, senza prerequisiti.
   const creazioneChiuso = creazione ? chiusoAllaCreazione(entry, voce.condizioni ?? []) : "";
@@ -89,10 +90,13 @@ function rigaDelCatalogo(voce, entry, localize, family = null, creazione = false
     icona: riga.ok === true ? "fa-check" : riga.ok === false ? "fa-lock" : "fa-circle-dot"
   }));
   const serve = condizioni.map((riga) => riga.testo).join(" · ");
+  // Le quattro parti (Blue, 27/9): Grado, Prerequisiti, Effetto attivo, Effetto passivo, con la modifica del Narratore se c'è.
+  const parti = quattroParti({ sphere, dot: voce.dot, type: voce.type }, { entry, mod: modDelMondo(voce.id, mods ?? {}), localize });
   return {
     ...voce,
     locked,
     creazioneChiuso,
+    parti,
     tipi,
     typeLabel: [tipi.attivo ? localize("WOD5E_MAGE.Poteri.Tipo.attivo") : "", tipi.passivo ? localize("WOD5E_MAGE.Poteri.Tipo.passivo") : ""].filter(Boolean).join(" · "),
     cost,
@@ -152,11 +156,11 @@ export function testoPrerequisiti(mancano, entry, localize = (key) => key, nomi 
  * lucchetto e cosa serve). `owned` sono le righe del personaggio per quella
  * Sfera, `tutti` tutte le sue righe. `chiusi` conta le righe col lucchetto.
  */
-export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tutti = null, localize = (key) => key, family = false, creazione = false } = {}) {
+export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tutti = null, localize = (key) => key, family = false, creazione = false, mods = {}, gm = false } = {}) {
   const voci = catalogoDellaSfera(sphere, { catalog, owned, tutti });
   const perId = new Map((catalog ?? []).map((entry) => [entry.id, entry]));
   catalogoPerNome = new Map((catalog ?? []).map((entry) => [entry.id, testo(entry.name)]));
-  const righe = voci.map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), localize, Boolean(family), Boolean(creazione), sphere));
+  const righe = voci.map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), localize, Boolean(family), Boolean(creazione), sphere, mods));
   const sphereLabel = localize(`WOD5E_MAGE.Spheres.${sphere}`);
   const propri = righe.filter((riga) => !riga.any);
   const qualsiasi = righe.filter((riga) => riga.any);
@@ -167,6 +171,8 @@ export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tu
     // Il Dominio è di famiglia o esterno: da qui il prezzo di ogni grado (25/9 sera).
     family: Boolean(family),
     creazione: Boolean(creazione),
+    // Il Narratore (27/9): la matita «Per tutti» su ogni potere.
+    gm: Boolean(gm),
     dominioLabel: localize(family ? "WOD5E_MAGE.Poteri.DominioFamiglia" : "WOD5E_MAGE.Poteri.DominioEsterno").replace("{n}", String(perGrado)),
     conPrerequisiti: righe.filter((riga) => riga.serve).length,
     conosciuti: count((owned ?? []).length),
@@ -187,7 +193,7 @@ export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tu
  * modulo) e in coda quelli di qualsiasi Sfera, da leggere. `owned` sono
  * tutte le righe del personaggio (la spunta su quelli che ha).
  */
-export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize = (key) => key } = {}) {
+export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize = (key) => key, mods = {}, gm = false } = {}) {
   const dove = new Map();
   for (const power of owned ?? []) {
     if (power?.catalogId && !dove.has(power.catalogId)) dove.set(power.catalogId, String(power.sphere ?? ""));
@@ -205,7 +211,7 @@ export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize
     condizioni: condizioniDelPotere(entry, { owned: [], tutti: owned }),
     chiuso: null,
     locked: false
-  }, entry, localize);
+  }, entry, localize, null, false, "", mods);
   // In ordine di grado e poi di nome: la gerarchia si legge (25/9).
   const ordina = (righe) => righe.sort((a, b) => gradoPerOrdine(a.dot) - gradoPerOrdine(b.dot) || a.name.localeCompare(b.name, "it"));
   const gruppi = SPHERES.map((sphere) => ({
@@ -216,6 +222,7 @@ export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize
   gruppi.push({ id: "qualsiasi", label: localize("WOD5E_MAGE.Poteri.CatalogoQualsiasi"), righe: ordina((catalog ?? []).filter((entry) => Array.isArray(entry.spheres) && entry.spheres.includes("any")).map(riga)) });
   return {
     tutto: true,
+    gm: Boolean(gm),
     gruppi: gruppi.filter((gruppo) => gruppo.righe.length),
     totale: (catalog ?? []).length,
     conosciuti: dove.size
@@ -249,7 +256,8 @@ export async function openCatalogoPoteri({ spheres = [], sphere = "", onAdd = nu
   const corpo = async () => {
     const attuale = stato.spheres.find((entry) => entry.id === stato.sphere);
     const tutti = stato.spheres.flatMap((entry) => entry.owned);
-    const dati = attuale ? prepareCatalogoPoteri(attuale.id, { owned: attuale.owned, tutti, localize, family: Boolean(attuale.family), creazione: Boolean(creazione) }) : null;
+    const mods = game.settings.get(MODULE_ID, POTERI_MOD_SETTING) ?? {};
+    const dati = attuale ? prepareCatalogoPoteri(attuale.id, { owned: attuale.owned, tutti, localize, family: Boolean(attuale.family), creazione: Boolean(creazione), mods, gm: Boolean(game.user?.isGM) }) : null;
     return foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/catalogo-poteri.hbs`, {
       ...(dati ?? { gruppi: [], totale: 0, conosciuti: 0 }),
       pastiglie: pastiglieDelleSfere(stato.spheres.map((entry) => ({ id: entry.id, conto: entry.owned.length })), { localize, attiva: stato.sphere }),
@@ -287,6 +295,15 @@ export async function openCatalogoPoteri({ spheres = [], sphere = "", onAdd = nu
         });
       });
       root.addEventListener("click", async (event) => {
+        // La matita del Narratore (27/9): il testo di base del potere, per tutti; poi la lista si ridisegna.
+        const matita = event.target.closest?.("[data-role=catalogoModifica]");
+        if (matita) {
+          event.preventDefault();
+          event.stopPropagation();
+          const entry = POTERI.find((voce) => voce.id === matita.dataset.catalogo);
+          if (entry && await modificaBaseDelPotere(entry)) await ridisegna();
+          return;
+        }
         // La pastiglia di un'altra Sfera: la finestra cambia lista.
         const pastiglia = event.target.closest?.("[data-role=catalogoSfera]");
         if (pastiglia) {
@@ -321,30 +338,47 @@ export async function openCatalogoPoteri({ spheres = [], sphere = "", onAdd = nu
 /** Il Catalogo completo: tutti i poteri, Sfera per Sfera, da leggere. `owned` sono le righe del personaggio. */
 export async function openCatalogoCompleto({ owned = [] } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
-  const content = await foundry.applications.handlebars.renderTemplate(
+  const corpo = () => foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/dialogs/catalogo-poteri.hbs`,
-    prepareCatalogoCompleto({ owned, localize })
+    prepareCatalogoCompleto({ owned, localize, mods: game.settings.get(MODULE_ID, POTERI_MOD_SETTING) ?? {}, gm: Boolean(game.user?.isGM) })
   );
   await foundry.applications.api.DialogV2.wait({
     window: { title: localize("WOD5E_MAGE.Poteri.CatalogoCompletoTitolo") },
     classes: [...CLASSI, "wod5e-mage-catalogo-completo"],
     position: { width: 720 },
-    content,
+    content: `<div data-role="catalogoCorpo">${await corpo()}</div>`,
     buttons: [{ action: "close", icon: "fas fa-times", label: localize("WOD5E.Close"), default: true }],
     rejectClose: false,
     render: (_event, dialog) => {
       const root = dialog.element;
-      const search = root.querySelector("[data-role=catalogoSearch]");
-      search?.addEventListener("input", () => {
-        const wanted = String(search.value ?? "").trim().toLowerCase();
+      const filtra = () => {
+        const wanted = String(root.querySelector("[data-role=catalogoSearch]")?.value ?? "").trim().toLowerCase();
         root.querySelectorAll(".wod5e-mage-catalogo-row").forEach((row) => {
           row.hidden = Boolean(wanted) && !String(row.dataset.search ?? "").includes(wanted);
         });
         root.querySelectorAll("[data-catalogo-gruppo]").forEach((gruppo) => {
           gruppo.hidden = !gruppo.querySelector(".wod5e-mage-catalogo-row:not([hidden])");
         });
+      };
+      root.addEventListener("input", (event) => {
+        if (event.target.closest?.("[data-role=catalogoSearch]")) filtra();
       });
-      search?.focus();
+      // La matita del Narratore (27/9): il testo di base, per tutti; la lista si ridisegna e tiene la cerca.
+      root.addEventListener("click", async (event) => {
+        const matita = event.target.closest?.("[data-role=catalogoModifica]");
+        if (!matita) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const entry = POTERI.find((voce) => voce.id === matita.dataset.catalogo);
+        if (!entry || !(await modificaBaseDelPotere(entry))) return;
+        const cerca = String(root.querySelector("[data-role=catalogoSearch]")?.value ?? "");
+        const box = root.querySelector("[data-role=catalogoCorpo]");
+        if (box) box.innerHTML = await corpo();
+        const search = root.querySelector("[data-role=catalogoSearch]");
+        if (search) search.value = cerca;
+        filtra();
+      });
+      root.querySelector("[data-role=catalogoSearch]")?.focus();
     }
   });
 }

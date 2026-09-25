@@ -1,0 +1,11 @@
+{{!-- La modifica del potere (Blue, 27/9): il grado non si tocca; Prerequisiti, Effetto
+     attivo ed Effetto passivo già pieni del testo che vale adesso; in testa dove vale
+     (per tutti, dal Narratore; o solo su questa scheda). --}}
+<form class="dialog-contents wod5e-mage-potere-modifica">
+    <p class="wod5e-mage-potere-modifica-dove"><i class="fa-solid {{#if mondo}}fa-globe{{else}}fa-user{{/if}}" aria-hidden="true"></i> {{dove}}</p>
+    <p class="wod5e-mage-potere-modifica-grado"><b>{{localize "WOD5E_MAGE.Poteri.Grado"}}</b><span>{{gradoLabel}}</span></p>
+    <label class="wod5e-mage-potere-modifica-campo"><span>{{localize "WOD5E_MAGE.Poteri.Prerequisiti"}}</span><textarea name="prerequisiti" rows="2" placeholder="{{localize 'WOD5E_MAGE.Poteri.PrerequisitiNessuno'}}">{{parti.prerequisiti}}</textarea></label>
+    <label class="wod5e-mage-potere-modifica-campo"><span>{{localize "WOD5E_MAGE.Poteri.EffettoAttivo"}}</span><textarea name="attivo" rows="4" placeholder="{{localize 'WOD5E_MAGE.Poteri.EffettoNessuno'}}">{{parti.attivo}}</textarea></label>
+    <label class="wod5e-mage-potere-modifica-campo"><span>{{localize "WOD5E_MAGE.Poteri.EffettoPassivo"}}</span><textarea name="passivo" rows="4" placeholder="{{localize 'WOD5E_MAGE.Poteri.EffettoNessuno'}}">{{parti.passivo}}</textarea></label>
+    <p class="wod5e-mage-potere-modifica-nota">{{localize "WOD5E_MAGE.Poteri.ModificaNota"}}</p>
+</form>

@@ -141,6 +141,16 @@ function testoPotere(p) {
   return blocchi.join("\n\n");
 }
 
+/**
+ * Il testo di una sezione sola (Blue, 27/9: il potere si legge in quattro parti,
+ * Grado, Prerequisiti, Effetto attivo, Effetto passivo): le righe con «Accesso
+ * con» (o «Con», per l'Amalgama) davanti alla Sfera; vuoto se la sezione non c'è.
+ */
+function testoSezione(s, prefisso = "Accesso con") {
+  if (!s || s.none) return "";
+  return [s.text, ...s.rows.map((r) => (r.spheres.length ? `${prefisso} ${r.spheres.map(nomeSfera).join(" + ")}: ${r.text}` : r.text))].filter(Boolean).join("\n");
+}
+
 const NOMI_SFERE = { correspondence: "Corrispondenza", entropy: "Entropia", forces: "Forza", life: "Vita", matter: "Materia", mind: "Mente", prime: "Primordio", spirit: "Spirito", time: "Tempo", any: "Qualsiasi" };
 function nomeSfera(id) { return NOMI_SFERE[id] ?? id; }
 
@@ -163,7 +173,7 @@ scrivi("formule.js",
   `\n/** Le Formule di ieri (ramo B) che oggi hanno un altro id: le righe degli effetti le cercano qui. */\nexport const FORMULE_ALIAS = Object.freeze(${JSON.stringify(ALIAS, null, 2)});\n`);
 
 scrivi("poteri.js",
-  `// GENERATO da tools/genera-dati.mjs (sorgenti: tools/dati/poteri.json, dal libretto dei poteri e dai poteri nuovi del 23-24/9;\n// tools/dati/effetti_poteri.json, gli effetti sul tiro scritti a mano dal testo, tappa 3 del 24/9;\n// tools/dati/prerequisiti_poteri.json, i prerequisiti d'acquisto, 25/9).\n// Non si scrive a mano. Il catalogo dei poteri delle Sfere: ogni voce ha le Sfere che la aprono\n// (\`spheres\`, con "any" per Qualsiasi), la matrice di provenienza, il testo intero, il costo in\n// Quintessenza, il limite d'uso, \`effects\` (gli effetti sul tiro: poteri.js li applica), \`scelta\`\n// (cosa il giocatore sceglie all'acquisto: un Ambito, un'Abilità, un incantesimo) e \`prerequisiti\`\n// (le condizioni d'acquisto, una per riga: numero, potere o testo; null = nessuna).`,
+  `// GENERATO da tools/genera-dati.mjs (sorgenti: tools/dati/poteri.json, dal libretto dei poteri e dai poteri nuovi del 23-24/9;\n// tools/dati/effetti_poteri.json, gli effetti sul tiro scritti a mano dal testo, tappa 3 del 24/9;\n// tools/dati/prerequisiti_poteri.json, i prerequisiti d'acquisto, 25/9; dal 27/9 attivo, passivo e amalgama separati, per le quattro parti del testo).\n// Non si scrive a mano. Il catalogo dei poteri delle Sfere: ogni voce ha le Sfere che la aprono\n// (\`spheres\`, con "any" per Qualsiasi), la matrice di provenienza, il testo intero, il costo in\n// Quintessenza, il limite d'uso, \`effects\` (gli effetti sul tiro: poteri.js li applica), \`scelta\`\n// (cosa il giocatore sceglie all'acquisto: un Ambito, un'Abilità, un incantesimo) e \`prerequisiti\`\n// (le condizioni d'acquisto, una per riga: numero, potere o testo; null = nessuna).`,
   "POTERI",
   poteri.poteri.map((p) => ({
     id: p.id,
@@ -173,6 +183,10 @@ scrivi("poteri.js",
     type: p.kind === "attivo e passivo" ? "attivo" : p.kind,
     kind: p.kind,
     text: testoPotere(p),
+    // Le quattro parti (27/9): l'attivo, il passivo e l'Amalgama separati; il grado è `dot`, i prerequisiti stanno sotto.
+    attivo: testoSezione(p.active),
+    passivo: testoSezione(p.passive),
+    amalgama: testoSezione(p.amalgam, "Con"),
     amalgam: p.amalgams[0] ?? "",
     amalgams: p.amalgams,
     amalgamText: p.amalgam.none ? "" : [p.amalgam.text, ...p.amalgam.rows.map((r) => (r.spheres.length ? `Accesso con ${r.spheres.map(nomeSfera).join(" + ")}: ${r.text}` : r.text))].filter(Boolean).join("\n"),

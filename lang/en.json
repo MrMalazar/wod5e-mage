@@ -871,13 +871,13 @@
       "Mostra": "Show",
       "MostraHint": "Posts the power's card to chat (it is passive: it triggers by itself)",
       "CatalogoConosciuti": "{known} powers known",
-      "Grado": "Grade: the power's potency",
+      "Grado": "Grade",
       "GradoN": "Grade {n}",
       "GradoNessuno": "Grade to assign",
       "PrezzoPE": "{pe} experience points",
       "PrezzoDue": "{famiglia} experience points in a family Domain, {esterno} in an outside one",
-      "DominioFamiglia": "Family Domain: each grade of the power costs {n} experience points (at creation powers are free)",
-      "DominioEsterno": "Outside Domain: each grade of the power costs {n} experience points (at creation powers are free)",
+      "DominioFamiglia": "Family Domain (powers are free at creation)",
+      "DominioEsterno": "Outside Domain (powers are free at creation)",
       "Prerequisito": {
         "Label": "Needs",
         "numero": "{n} {sphere} powers",
@@ -886,7 +886,32 @@
       "PrerequisitiMancano": "This power's prerequisites are missing: see its row in the Add window.",
       "CreazioneRegola": "At creation: one base power (grade 1) of the Sphere, or one of any Sphere; no prerequisites.",
       "CreazioneGrado": "At creation you take a base power (grade 1) of the Sphere, or one of any Sphere.",
-      "CreazionePrerequisiti": "At creation powers with prerequisites cannot be taken."
+      "CreazionePrerequisiti": "At creation powers with prerequisites cannot be taken.",
+      "Prerequisiti": "Prerequisites",
+      "PrerequisitiNessuno": "none",
+      "EffettoAttivo": "Active effect",
+      "EffettoPassivo": "Passive effect",
+      "EffettoNessuno": "none",
+      "ModificaTitolo": "Edit the power: {name}",
+      "ModificaMondo": "Applies to everyone: the catalogue and every sheet (Storyteller only).",
+      "ModificaScheda": "Applies to this sheet only.",
+      "ModificaNota": "The grade stays. Whatever you leave equal to the base text is not saved; \\u201cBack to the base text\\u201d clears the edits.",
+      "ModificaBase": "For everyone",
+      "ModificaBaseHint": "Change the power's base text: applies to the catalogue and every sheet (Storyteller only)",
+      "Salva": "Save",
+      "TornaBase": "Back to the base text",
+      "ModificatoMondo": "base text edited by the Storyteller",
+      "ModificatoScheda": "text edited on this sheet",
+      "ModificaSalvata": "{name}: base text saved for everyone.",
+      "ModificaTolta": "{name}: back to the base text.",
+      "PerBreve": {
+        "scena": "per scene",
+        "sessione": "per session",
+        "campagna": "per chronicle",
+        "turno": "per turn",
+        "bersaglio": "per target"
+      },
+      "ConSfera": "With"
     },
     "Tratti": {
       "Vantaggi": "Advantages",
@@ -1666,15 +1691,42 @@
       "Scena": "Scene",
       "Cerca": "Search an entry…",
       "Cassetti": {
-        "mago": { "nome": "On the mage", "sotto": "whoever cast: fewer dice, an 8 to succeed, a wound" },
-        "incantesimo": { "nome": "On the spell", "sotto": "the effect already cast: it ends, spreads, turns back" },
-        "dormienti": { "nome": "The Sleepers", "sotto": "ordinary people: who watches, who asks, who passes by" },
-        "presenze": { "nome": "The Presences", "sotto": "Paradox entities: Shadow, Collector, Guest" },
-        "posto": { "nome": "The place", "sotto": "the place reacts: an area, the system, a door" },
-        "scontro": { "nome": "Clash and scene", "sotto": "the scene changes course: it stops, they flee, it ends" },
-        "orologi": { "nome": "The clocks", "sotto": "the rebound can be seen coming: by Vulgar casts, by turns, by rounds" },
-        "ancore": { "nome": "The Anchors", "sotto": "the mage's loved ones: they call, cross paths, end up inside" },
-        "scoppio": { "nome": "At the burst", "sotto": "only when a red die bursts: never bought beforehand" }
+        "mago": {
+          "nome": "On the mage",
+          "sotto": "whoever cast: fewer dice, an 8 to succeed, a wound"
+        },
+        "incantesimo": {
+          "nome": "On the spell",
+          "sotto": "the effect already cast: it ends, spreads, turns back"
+        },
+        "dormienti": {
+          "nome": "The Sleepers",
+          "sotto": "ordinary people: who watches, who asks, who passes by"
+        },
+        "presenze": {
+          "nome": "The Presences",
+          "sotto": "Paradox entities: Shadow, Collector, Guest"
+        },
+        "posto": {
+          "nome": "The place",
+          "sotto": "the place reacts: an area, the system, a door"
+        },
+        "scontro": {
+          "nome": "Clash and scene",
+          "sotto": "the scene changes course: it stops, they flee, it ends"
+        },
+        "orologi": {
+          "nome": "The clocks",
+          "sotto": "the rebound can be seen coming: by Vulgar casts, by turns, by rounds"
+        },
+        "ancore": {
+          "nome": "The Anchors",
+          "sotto": "the mage's loved ones: they call, cross paths, end up inside"
+        },
+        "scoppio": {
+          "nome": "At the burst",
+          "sotto": "only when a red die bursts: never bought beforehand"
+        }
       },
       "Famiglie": {
         "tocchi": "Magick Consequences",

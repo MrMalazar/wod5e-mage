@@ -58,7 +58,7 @@ import {
 } from "../magick-balance.js";
 import { onOngoingMagickAdd, onOngoingMagickDelete, onOngoingMagickLock, onOngoingMagickToggle, prepareOngoingMagick } from "../ongoing-magick.js";
 import { prepareScopeTable } from "../scopes.js";
-import { onPotereApri, onPotereCatalogo, onPotereCatalogoCompleto, onPotereDaCatalogo, onPotereModifica, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriFiltri, preparePoteriPagina, riapriPoteri } from "../poteri-scheda.js";
+import { onPotereApri, onPotereCatalogo, onPotereCatalogoCompleto, onPotereDaCatalogo, onPotereModifica, onPotereModificaBase, onPotereNuovo, onPotereTogli, onPotereUsa, preparePoteriFiltri, preparePoteriPagina, riapriPoteri } from "../poteri-scheda.js";
 import { onFamilySphereToggle, onSphereSelectionChange, prepareSpheres } from "../spheres.js";
 import { prepareCreationSummary } from "../riepilogo.js";
 import { prepareMemo } from "../memo.js";
@@ -508,6 +508,7 @@ export class MageActorSheet extends MortalActorSheet {
       potereCatalogo: onPotereCatalogo,
       potereCatalogoCompleto: onPotereCatalogoCompleto,
       potereModifica: onPotereModifica,
+      potereModificaBase: onPotereModificaBase,
       potereTogli: onPotereTogli,
       potereApri: onPotereApri,
       // «Usa» (24/9): il potere senza tirare, con usi contati, costo e carta.

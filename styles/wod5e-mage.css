@@ -8021,8 +8021,17 @@
    il nome sta il testo dell'effetto (attivo o passivo, con le righe «Accesso
    con X» in grassetto e l'Amalgama col suo titolo), per ricordarlo senza
    aprire niente. */
+/* Le righe che sono un tasto (i poteri filtrati, gli incantesimi) crescono col testo:
+   Foundry dà ai bottoni un'altezza fissa, e il testo dei Passivi traboccava sulle righe
+   sotto (Blue, 27/9, screenshot). */
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga {
+  height: auto;
+  min-height: 26px;
+}
+
 .wod5e-mage.wod5e.actor.sheet button.wod5e-mage-riga-potere-filtro {
   flex-wrap: wrap;
+  height: auto;
   padding-bottom: 4px;
   padding-top: 3px;
   row-gap: 2px;
@@ -10248,15 +10257,31 @@
   background: var(--mage-riga-sorvolo);
 }
 
-/* La testa della riga (24/9 sera, la lista senza Sfere): il sigillo della
-   Sfera, il pallino, il nome, le pastiglie del tipo, l'Amalgama, il costo,
-   la freccia (un tasto: apre e chiude come il nome). */
+/* La testa della riga (24/9 sera, la lista senza Sfere; 27/9, Blue: «a colonne, perché
+   si allineino e ognuna abbia uno spazio equo»): il sigillo della Sfera, il grado, il
+   nome, le pastiglie del tipo, l'Amalgama, gli usi, il costo, Usa, la freccia (un tasto:
+   apre e chiude come il nome). Ogni colonna ha la sua larghezza fissa, tranne il nome. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-testa {
   align-items: center;
   display: grid;
-  gap: 8px;
-  grid-template-columns: 22px 20px minmax(0, 1fr) auto 24px minmax(0, 110px) auto 18px;
+  gap: 6px;
+  grid-template-columns: 22px 20px minmax(0, 1fr) 140px 22px 84px 58px 64px 18px;
   min-height: 28px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-usi {
+  color: var(--mage-tenue);
+  font-size: 0.72rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Il segno sul nome: la matita se il testo è della scheda, il mondo se è del Narratore. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-nome > .wod5e-mage-potere-segno {
+  color: var(--mage-tenue);
+  font-size: 0.6rem;
+  margin-left: 5px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-testa > .wod5e-mage-potere-sfera {
@@ -10271,7 +10296,8 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-tipi {
   display: inline-flex;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 3px;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-tipi > .wod5e-mage-potere-tipo {
@@ -13451,8 +13477,86 @@
   letter-spacing: 0;
 }
 
+/* La riga del catalogo a colonne fisse (Blue, 27/9): grado, nome, matrice, tipo, Aggiungi, freccia. */
 .wod5e-mage-catalogo-row > summary {
+  display: grid;
   gap: 0.45rem;
+  grid-template-columns: 18px minmax(0, 1.15fr) minmax(0, 0.85fr) 96px 112px 14px;
+}
+
+.wod5e-mage-catalogo-completo .wod5e-mage-catalogo-row > summary {
+  grid-template-columns: 18px minmax(0, 1.15fr) minmax(0, 0.85fr) 96px 24px 14px;
+}
+
+.wod5e-mage-catalogo-tipi {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.wod5e-mage-catalogo-tipi > small {
+  border: 1px solid var(--mage-oro-tenue, #6b4f12);
+  border-radius: 9px;
+  color: var(--mage-tenue, #b8ad93);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  padding: 3px 6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage-catalogo-tipi > small.attivo {
+  border-color: var(--mage-oro-scuro, #98772b);
+  color: var(--mage-testo, #e6dcc2);
+}
+
+.wod5e-mage-catalogo-azione {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.wod5e-mage-catalogo-nome > .wod5e-mage-catalogo-segno {
+  color: var(--mage-tenue, #b8ad93);
+  font-size: 0.6rem;
+  margin-left: 4px;
+}
+
+.wod5e-mage-catalogo-nome > .wod5e-mage-catalogo-segnato {
+  display: block;
+  font-weight: 400;
+}
+
+.wod5e-mage-catalogo-blocco.vuoto {
+  opacity: 0.7;
+}
+
+.wod5e-mage-catalogo-modifica {
+  align-items: center;
+  border-top: 1px dashed rgb(152 119 43 / 30%);
+  display: flex;
+  gap: 0.6rem;
+  margin: 0;
+  padding-top: 0.35rem;
+}
+
+.wod5e-mage-catalogo-modifica > button {
+  background: transparent;
+  border: 1px solid var(--mage-oro-tenue, #6b4f12);
+  border-radius: 6px;
+  color: var(--mage-oro, #d9a827);
+  cursor: pointer;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  padding: 3px 8px;
+  width: auto;
+}
+
+.wod5e-mage-catalogo-modifica > small {
+  color: var(--mage-tenue, #b8ad93);
+  font-size: 0.72rem;
 }
 
 .wod5e-mage-catalogo-row > summary > .wod5e-mage-potere-pallino {
@@ -13631,6 +13735,74 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco.attivo {
   border-left-color: var(--mage-oro);
+}
+
+/* Le quattro parti (27/9): il grado in testa, i Prerequisiti col filo tenue, la parte vuota smorzata. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-parti {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco.prerequisiti {
+  border-left-color: var(--mage-oro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco.vuoto {
+  opacity: 0.7;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco.passivo > .wod5e-mage-potere-blocco-titolo {
+  color: var(--mage-tenue);
+}
+
+/* La finestra della modifica del potere (27/9): dove vale, il grado, le tre parti. */
+.wod5e-mage-potere-modifica {
+  display: flex;
+  flex-direction: column;
+  font-family: "Signika", sans-serif;
+  gap: 8px;
+}
+
+.wod5e-mage-potere-modifica .wod5e-mage-potere-modifica-dove {
+  color: var(--mage-tenue, #b8ad93);
+  font-size: 13px;
+  margin: 0;
+}
+
+.wod5e-mage-potere-modifica .wod5e-mage-potere-modifica-grado {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+}
+
+.wod5e-mage-potere-modifica .wod5e-mage-potere-modifica-grado > b,
+.wod5e-mage-potere-modifica .wod5e-mage-potere-modifica-campo > span {
+  color: var(--mage-oro, #d9a827);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-potere-modifica .wod5e-mage-potere-modifica-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.wod5e-mage-potere-modifica textarea {
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  resize: vertical;
+  width: 100%;
+}
+
+.wod5e-mage-potere-modifica .wod5e-mage-potere-modifica-nota {
+  color: var(--mage-tenue, #b8ad93);
+  font-size: 12.5px;
+  margin: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco.amalgama {
@@ -16286,6 +16458,25 @@
   padding: 0;
 }
 
+/* Il sistema (display/wod5e-styling.css) rientra ogni .tab di 45 px per la sua barra
+   delle linguette e mette le sezioni con align-items: flex-start e height: 100%:
+   qui le carte restavano strette e le righe rientrate (Blue, 27/9, screenshot).
+   La scheda del nemico non ha quella barra: i figli si stirano a tutta larghezza. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .tab,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .actor-header {
+  margin-left: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content section.tab {
+  align-items: stretch;
+  height: auto;
+  overflow-y: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content section.tab > * {
+  width: auto;
+}
+
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content > form {
   display: flex;
   flex: 1 1 auto;
@@ -17112,14 +17303,42 @@
   margin-left: 4px;
 }
 
+/* Il testo della riga va a capo e la riga cresce (Blue, 27/9: «si legge solo "Conta anche contro la M"»). */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-eff {
   color: var(--mage-testo);
   font-size: 14px;
+  line-height: 1.35;
   min-width: 0;
   opacity: 0.88;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+/* Il testo dell'effetto (e «Cosa fa» dell'azione) si scrive in un'area che cresce col contenuto. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-eff > textarea,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico label.larga > textarea {
+  box-sizing: border-box;
+  field-sizing: content;
+  flex: 1 1 auto;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.35;
+  min-height: 1.9em;
+  min-width: 0;
+  resize: vertical;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico label.larga > .wod5e-mage-nemico-k {
   white-space: nowrap;
+}
+
+/* La soglia del bersaglio: un numero, largo abbastanza da leggersi. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico input[type="number"][name$=".soglia"],
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico input[type="number"][name$=".bonusSoglia"] {
+  min-width: 54px;
+  text-align: center;
+  width: 54px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cn {

@@ -46,18 +46,18 @@ const parole = (k) => ({ "WOD5E_MAGE.Poteri.Prerequisito.numero": "{n} poteri di
 assert.equal(testoPrerequisiti([{ kind: "numero", n: 2 }, { kind: "potere", id: "bottino" }], catalogo.find((p) => p.id === "baratto"), parole, new Map([["bottino", "Bottino"]])), "2 poteri di Materia · richiede Bottino");
 assert.equal(testoCondizione({ kind: "testo", testo: "Aver toccato l'oro" }, null, parole), "Aver toccato l'oro");
 // Il grado col prezzo in Esperienza (25/9 sera: «nell'elenco non è capibile»): per 5 di famiglia, per 7 esterno.
-assert.deepEqual(prezzoDelPotere(2, true), { grado: 2, famiglia: 10, esterno: 14, pe: 10 });
-assert.deepEqual(prezzoDelPotere(3, false).pe, 21);
+assert.deepEqual(prezzoDelPotere(2, true), { grado: 2, famiglia: 6, esterno: 10, pe: 6 }, "3 per grado in famiglia, 5 fuori (27/9)");
+assert.deepEqual(prezzoDelPotere(3, false).pe, 15);
 assert.deepEqual(prezzoDelPotere(0, true), null, "senza grado non si sa");
 assert.equal(prezzoDelPotere(1).pe, null, "fuori da un Dominio del personaggio tutti e due i prezzi");
 const famiglia = prepareCatalogoPoteri("matter", { catalog: catalogo, owned, tutti: owned, localize, family: true });
 assert.deepEqual([famiglia.family, famiglia.dominioLabel], [true, "WOD5E_MAGE.Poteri.DominioFamiglia".replace("{n}", "5")]);
 assert.equal(materia.dominioLabel, "WOD5E_MAGE.Poteri.DominioEsterno".replace("{n}", "7"));
 const conGrado = famiglia.propri.find((riga) => riga.dot > 0 && riga.id !== "baratto");
-assert.deepEqual([conGrado.gradoLabel, conGrado.prezzoLabel, conGrado.serve], ["WOD5E_MAGE.Poteri.GradoN".replace("{n}", String(conGrado.dot)), "WOD5E_MAGE.Poteri.PrezzoPE".replace("{pe}", String(conGrado.dot * 5)), ""]);
+assert.deepEqual([conGrado.gradoLabel, conGrado.prezzoLabel, conGrado.serve], ["WOD5E_MAGE.Poteri.GradoN".replace("{n}", String(conGrado.dot)), "WOD5E_MAGE.Poteri.PrezzoPE".replace("{pe}", String(conGrado.dot * 3)), ""]);
 // Guasto ha il grado 2 (i gradi di Blue, 25/9 sera): grado e prezzo scritti; Senza residuo aspetta ancora il suo grado.
 const guastoFamiglia = famiglia.propri.find((riga) => riga.id === "guasto");
-assert.deepEqual([guastoFamiglia.gradoLabel, guastoFamiglia.prezzoLabel], ["WOD5E_MAGE.Poteri.GradoN".replace("{n}", "2"), "WOD5E_MAGE.Poteri.PrezzoPE".replace("{pe}", "10")]);
+assert.deepEqual([guastoFamiglia.gradoLabel, guastoFamiglia.prezzoLabel], ["WOD5E_MAGE.Poteri.GradoN".replace("{n}", "2"), "WOD5E_MAGE.Poteri.PrezzoPE".replace("{pe}", "6")]);
 const residuoFamiglia = famiglia.propri.find((riga) => riga.id === "senza-residuo");
 assert.deepEqual([residuoFamiglia.gradoLabel, residuoFamiglia.prezzoLabel], ["WOD5E_MAGE.Poteri.GradoNessuno", ""]);
 // I prerequisiti si scrivono sempre: col lucchetto se mancano, con la spunta se ci sono già.
@@ -109,19 +109,26 @@ Handlebars.registerHelper("localize", (key, options) => {
 Handlebars.registerHelper("concat", (...args) => args.slice(0, -1).join(""));
 const template = Handlebars.compile(readFileSync(new URL("../templates/dialogs/catalogo-poteri.hbs", import.meta.url), "utf8"));
 const html = template({ ...materia, pastiglie, icon: "m.png" });
-for (const marker of ['data-role="catalogoSfera" data-sphere="forces"', 'wod5e-mage-catalogo-sfera attiva" role="tab" aria-selected="true" data-role="catalogoSfera" data-sphere="matter"', "WOD5E_MAGE.Poteri.CatalogoConosciuti(known&#x3D;2)", 'data-role="catalogoSearch"', 'data-role="catalogoConto"', 'data-catalogo-gruppo="propri"', 'data-catalogo-gruppo="qualsiasi"', 'wod5e-mage-catalogo-row known"', 'data-catalogo="guasto"', 'data-role="catalogoAggiungi" data-catalogo="guasto" disabled', "WOD5E_MAGE.Poteri.Conosciuto", "Creare e Distruggere", "Effetto attivo", "WOD5E_MAGE.Poteri.Carta.Paradosso", 'wod5e-mage-catalogo-proposta', '<small class="attivo">', "WOD5E_MAGE.Poteri.Grado"]) {
+for (const marker of ['data-role="catalogoSfera" data-sphere="forces"', 'wod5e-mage-catalogo-sfera attiva" role="tab" aria-selected="true" data-role="catalogoSfera" data-sphere="matter"', "WOD5E_MAGE.Poteri.CatalogoConosciuti(known&#x3D;2)", 'data-role="catalogoSearch"', 'data-role="catalogoConto"', 'data-catalogo-gruppo="propri"', 'data-catalogo-gruppo="qualsiasi"', 'wod5e-mage-catalogo-row known"', 'data-catalogo="guasto"', 'data-role="catalogoAggiungi" data-catalogo="guasto" disabled', "WOD5E_MAGE.Poteri.Conosciuto", "Creare e Distruggere", "WOD5E_MAGE.Poteri.EffettoAttivo", "WOD5E_MAGE.Poteri.Carta.Paradosso", 'wod5e-mage-catalogo-proposta', '<small class="attivo">', "WOD5E_MAGE.Poteri.Grado"]) {
   assert.ok(html.includes(marker), `manca ${marker}`);
 }
-assert.ok(html.includes('<small class="grado" title="WOD5E_MAGE.Poteri.Grado">WOD5E_MAGE.Poteri.GradoN') && html.includes("WOD5E_MAGE.Poteri.PrezzoPE") && html.includes("wod5e-mage-catalogo-dominio") && html.includes("WOD5E_MAGE.Poteri.DominioEsterno"), "il grado col prezzo su ogni riga, e il Dominio in testa");
+// Dal 27/9 (Blue: «mi basta vedere il grado») la riga non dice prezzi: il grado sta nel pallino e nelle quattro parti aperte; il Dominio in testa senza il prezzo.
+assert.ok(!html.includes("WOD5E_MAGE.Poteri.PrezzoPE") && !html.includes('class="grado"') && html.includes("wod5e-mage-catalogo-dominio") && html.includes("WOD5E_MAGE.Poteri.DominioEsterno"), "niente prezzi nella finestra, il Dominio in testa");
+for (const marker of ['<p class="wod5e-mage-catalogo-blocco wod5e-mage-catalogo-grado"><b>WOD5E_MAGE.Poteri.Grado</b><span>WOD5E_MAGE.Poteri.GradoN', "WOD5E_MAGE.Poteri.Prerequisiti</b>", "WOD5E_MAGE.Poteri.EffettoAttivo</b>", "WOD5E_MAGE.Poteri.EffettoPassivo</b>", 'class="wod5e-mage-catalogo-tipi"', '<small class="attivo">WOD5E_MAGE.Poteri.Tipo.attivo</small>', 'class="wod5e-mage-catalogo-azione"']) {
+  assert.ok(html.includes(marker), `quattro parti e colonne: manca ${marker}`);
+}
+assert.ok(!html.includes('data-role="catalogoModifica"'), "senza Narratore niente matita");
+const htmlNarratore = template({ ...materia, gm: true, pastiglie, icon: "m.png" });
+assert.equal((htmlNarratore.match(/data-role="catalogoModifica"/g) ?? []).length, materia.totale, "il Narratore ha la matita «Per tutti» su ogni potere");
 assert.equal((html.match(/data-role="catalogoAggiungi"/g) ?? []).length, materia.totale, "un tasto per potere");
 assert.equal((html.match(/<details /g) ?? []).length, materia.totale, "tutti i poteri della Sfera in lista");
 assert.ok(!html.includes("CatalogoChiusi") && !html.includes("catalogo-row chiusa") && !html.includes("CatalogoPosti") && !html.includes("CatalogoPieno"), "niente avvisi di quota");
 const htmlChiusi = template({ ...conChiusi, pastiglie, icon: "m.png" });
-assert.ok(htmlChiusi.includes("WOD5E_MAGE.Poteri.CatalogoChiusi(n&#x3D;1)") && htmlChiusi.includes('wod5e-mage-catalogo-row chiusa"') && htmlChiusi.includes("wod5e-mage-catalogo-lucchetto") && htmlChiusi.includes("WOD5E_MAGE.Poteri.Prerequisito.Label"), "la riga chiusa col lucchetto e cosa serve");
+assert.ok(htmlChiusi.includes("WOD5E_MAGE.Poteri.CatalogoChiusi(n&#x3D;1)") && htmlChiusi.includes('wod5e-mage-catalogo-row chiusa"') && htmlChiusi.includes("wod5e-mage-catalogo-lucchetto") && htmlChiusi.includes("WOD5E_MAGE.Poteri.Prerequisiti</b>"), "la riga chiusa col lucchetto e cosa serve");
 assert.ok(/data-role="catalogoAggiungi" data-catalogo="baratto" disabled title="/.test(htmlChiusi), "il tasto spento dice cosa serve");
-assert.ok(htmlChiusi.includes('<small class="serve manca"') && (htmlChiusi.match(/<li class="manca">/g) ?? []).length === 2 && htmlChiusi.includes('<li class="ok">') && htmlChiusi.includes('<li class="tavolo">'), "la pastiglia dei prerequisiti che mancano, e una riga per condizione");
+assert.ok(htmlChiusi.includes('wod5e-mage-catalogo-lucchetto') && !htmlChiusi.includes('<small class="serve') && (htmlChiusi.match(/<li class="manca">/g) ?? []).length === 2 && htmlChiusi.includes('<li class="ok">') && htmlChiusi.includes('<li class="tavolo">'), "la pastiglia dei prerequisiti che mancano, e una riga per condizione");
 const htmlAperto = template({ ...conTutto, pastiglie, icon: "m.png" });
-assert.ok(htmlAperto.includes('<small class="serve ok"') && htmlAperto.includes("wod5e-mage-catalogo-serve ok") && !htmlAperto.includes("catalogo-row chiusa"), "i prerequisiti soddisfatti con la spunta");
+assert.ok(htmlAperto.includes('<li class="ok">') && htmlAperto.includes("wod5e-mage-catalogo-serve ok") && !htmlAperto.includes("catalogo-row chiusa"), "i prerequisiti soddisfatti con la spunta");
 const htmlCreazione = template({ ...creazione, pastiglie, icon: "m.png" });
 assert.ok(htmlCreazione.includes("WOD5E_MAGE.Poteri.CreazioneRegola") && htmlCreazione.includes('data-role="catalogoAggiungi" data-catalogo="opera" disabled title="WOD5E_MAGE.Poteri.CreazioneGrado"'), "la regola in testa e il tasto spento che dice perché");
 const htmlCompleto = template({ ...completo });
