@@ -5,7 +5,7 @@
  * lancio, che passa dal motore del ramo C senza finestra di conferma.
  */
 import { MODULE_ID } from "./constants.js";
-import { applicaVerdetto, chiediVerdetto, notaVerdetto, tiroInAttesa } from "./verdetto-narratore.js";
+import { applicaVerdetto, chiediVerdetto, dalNarratore, notaVerdetto, scriviDalNarratore, tiroInAttesa, VERDETTO_SECONDI } from "./verdetto-narratore.js";
 import {
   getArete,
   normalizeMagickRollOptions,
@@ -309,6 +309,12 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     } : null,
     extra: { value: tiro.extra, dice: conto.extra, cap: EXTRA_DICE_CAP },
     sforza: Boolean(tiro.sforza),
+    // «Dal Narratore» (Blue, 27/9): il tiro passa dai Narratori collegati (cinque secondi per
+    // ritoccarlo) o parte subito; è una scelta di chi tira, e il Narratore non la vede.
+    narratore: game.user?.isGM ? null : {
+      on: dalNarratore(),
+      hint: dalNarratore() ? format("WOD5E_MAGE.Verdetto.DalNarratoreHint", { seconds: VERDETTO_SECONDI }) : localize("WOD5E_MAGE.Verdetto.SenzaNarratoreHint")
+    },
     kinds: TIRO_KINDS.map((kind) => ({ kind, label: localize(`WOD5E_MAGE.Tiro.Kinds.${kind}`), hint: localize(`WOD5E_MAGE.Tiro.KindHints.${kind}`) })),
     // Il tiro parte con almeno un tratto (Attributo o Abilità) e con la
     // Difficoltà inserita (Blue, 16/9 sera).
@@ -619,6 +625,13 @@ export async function onTiroSforza(event) {
   return repaint(this, toggleSforza(tiroOf(this)));
 }
 
+/** «Dal Narratore» (27/9): acceso, il tiro passa dai Narratori; spento, parte subito. Vale per questo client. */
+export async function onTiroNarratore(event) {
+  event.preventDefault();
+  await scriviDalNarratore(!dalNarratore());
+  return repaint(this, tiroOf(this));
+}
+
 /** Apri il Grimorio: la pagina del Grimorio del personaggio. */
 export async function onTiroGrimorio(event) {
   event.preventDefault();
@@ -702,9 +715,10 @@ export async function launchTiro(actor, tiro) {
   const traitLabel = selectedTraits.map((trait) => trait.label).join(" + ") + (tiro.specialty ? ` · ${tiro.specialty}` : "");
   const rollLabel = spellName ? `${spellName} · ${traitLabel}` : traitLabel;
 
-  // Il verdetto del Narratore (Blue, 16/9 sera): il tiro gli compare com'è,
-  // ha dieci secondi per ritoccare Difficoltà e dadi o dire OK; poi si tira
-  // coi suoi numeri. Un tiro già mandato non si rimanda.
+  // Il verdetto del Narratore (Blue, 16/9 sera): il tiro compare com'è a
+  // tutti i Narratori collegati, il primo ha cinque secondi per ritoccare
+  // Difficoltà e dadi o dire OK; poi si tira coi suoi numeri. Con «Dal
+  // Narratore» spento parte subito. Un tiro già mandato non si rimanda.
   if (tiroInAttesa(actor.id)) {
     ui.notifications.warn(localize("WOD5E_MAGE.Verdetto.Pending"));
     return null;

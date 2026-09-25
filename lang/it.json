@@ -2004,7 +2004,15 @@
       "Note": "Narratore: {changes}.",
       "NoteDifficulty": "Difficoltà {before} → {after}",
       "NoteDice": "dadi {dice}",
-      "Pending": "Questo tiro è già dal Narratore: aspetta il verdetto."
+      "Pending": "Questo tiro è già dal Narratore: aspetta il verdetto.",
+      "SentMany": "Tiro mandato a {count} Narratori: parte fra {seconds} secondi se nessuno lo ritocca.",
+      "Altri": "La vedono anche altri {count} Narratori: vale il primo che risponde.",
+      "Altrui": "Al tiro di {actor} ha già risposto {name}.",
+      "AltroNarratore": "un altro Narratore",
+      "NoteChi": "Narratore {name}: {changes}.",
+      "DalNarratore": "Dal Narratore",
+      "DalNarratoreHint": "Il tiro passa dal Narratore: ha {seconds} secondi per ritoccarlo o dire OK. Clic per farlo partire subito.",
+      "SenzaNarratoreHint": "Il tiro parte subito, senza passare dal Narratore. Clic per mandarglielo."
     },
     "Tema": {
       "Chiaro": "Modalità chiara",

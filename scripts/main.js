@@ -13,7 +13,7 @@ import { registerUstione } from "./ustione.js";
 import { registerParadossoNarratore } from "./paradosso-narratore.js";
 import { registerQuadroNarratore } from "./quadro-narratore.js";
 import { registerGrimorioComune } from "./grimorio-comune.js";
-import { registraSocketVerdetto } from "./verdetto-narratore.js";
+import { registraSocketVerdetto, TIRO_NARRATORE_SETTING } from "./verdetto-narratore.js";
 import { SCALA_PREDEFINITA, SCALA_SETTING, TEMA_CHIARO, TEMA_SCURO, TEMA_SETTING } from "./tema.js";
 import { registraCreazioneGuidata } from "./creazione-guidata-finestra.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
@@ -147,6 +147,8 @@ Hooks.once("init", () => {
 
   // Le Abilità tutte in fila (16/9 sera): il tasto accanto al + della prima pagina.
   // Le modifiche di base dei poteri (Blue, 27/9): il Narratore le scrive, valgono per tutti; le schede aperte si ridisegnano.
+  // «Dal Narratore» (Blue, 27/9): il tiro passa dal Narratore o parte subito; la scelta di chi tira, per client.
+  game.settings.register(MODULE_ID, TIRO_NARRATORE_SETTING, { scope: "client", config: false, type: Boolean, default: true });
   game.settings.register(MODULE_ID, POTERI_MOD_SETTING, {
     scope: "world",
     config: false,

@@ -191,6 +191,18 @@ selectors show eight dots everywhere: the first is level 0, the base effect,
 always lit and never clickable; hovering it reads the base of the Scope (the
 chosen lens, or every lens with its name).
 
+## Storyteller's verdict on rolls
+
+A roll from the Roll box first goes to every Storyteller connected, not to
+one only: each sees a window with the roll as it is (who, what, pool,
+Difficulty, dice) and a five-second countdown, can raise or lower the
+Difficulty or the dice, or press OK; the first answer counts and closes the
+others' windows, and when the count runs out the roll goes on as it was.
+The card notes what was changed and by whom. The "Dal Narratore" toggle
+under the roll button, remembered per client, sends the roll straight to
+chat instead; a Storyteller's own roll never waits. Logic in
+`scripts/verdetto-narratore.js`, tests in `tests/verdetto-narratore.test.js`.
+
 ## Narrator's Board
 
 Since 27 September 2026 the Paradox menu on the Board lists its 65 entries in

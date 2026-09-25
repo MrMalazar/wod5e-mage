@@ -176,30 +176,40 @@ await S.onTiroIncantesimo.call(sheetFinta, { preventDefault() {} }, { dataset: {
 const caricato = sheetFinta._tiro;
 assert.deepEqual([caricato.arete, caricato.prize, caricato.spheres, caricato.scopes, caricato.attribute, caricato.skill, caricato.kind, caricato.spell], [true, false, ["forces"], { potency: 3 }, "wits", "skill:athletics", "volgare", "s1"], "Primordio non c'è sulla scheda: resta fuori");
 assert.equal(S.prepareIncantesimiRows(actor, caricato, (k) => strings[k] ?? k)[0].chosen, true);
-// Il verdetto del Narratore (16/9 sera): col Narratore collegato il tiro gli
-// arriva sul socket; qui risponde subito alzando la Difficoltà di uno e dando
-// un dado: si tira coi suoi numeri e la carta lo dice.
+// Il verdetto del Narratore (16/9 sera, e 27/9: a tutti i Narratori collegati):
+// il tiro arriva sul socket a tutti e due; qui Blue risponde subito alzando
+// la Difficoltà di uno e dando un dado: si tira coi suoi numeri e la carta lo
+// dice col suo nome. Con «Dal Narratore» spento il tiro parte senza chiedere.
 {
   const V = await import(new URL("../../scripts/verdetto-narratore.js", import.meta.url).href);
   const mandati = [];
   strings["WOD5E_MAGE.Verdetto.Note"] = "Narratore: {changes}.";
+  strings["WOD5E_MAGE.Verdetto.NoteChi"] = "Narratore {name}: {changes}.";
   strings["WOD5E_MAGE.Verdetto.NoteDifficulty"] = "Difficoltà {before} → {after}";
   strings["WOD5E_MAGE.Verdetto.NoteDice"] = "dadi {dice}";
   globalThis.game.user = { id: "p1" };
-  globalThis.game.users = { activeGM: { id: "gm" } };
+  globalThis.game.users = [{ id: "gm", name: "Anna", active: true, isGM: true }, { id: "gm2", name: "Blue", active: true, isGM: true }, { id: "p1", active: true, isGM: false }];
   globalThis.game.socket = {
     emit: (name, payload) => {
       mandati.push(payload);
-      if (payload.type === V.TIPO_RICHIESTA) queueMicrotask(() => V.onSocketVerdetto(V.verdettoTiro(payload, { difficulty: payload.difficulty + 1, dice: 1 })));
+      if (payload.type === V.TIPO_RICHIESTA) queueMicrotask(() => V.onSocketVerdetto(V.verdettoTiro(payload, { difficulty: payload.difficulty + 1, dice: 1 }, { from: "gm2", fromName: "Blue" })));
     }
   };
   globalThis.__sim.faces = [7, 7, 7, 1];
   const conVerdetto = await S.launchTiro(actor, abilita);
   assert.equal(mandati[0].type, V.TIPO_RICHIESTA);
-  assert.deepEqual([mandati[0].pool, mandati[0].difficulty, mandati[0].actorName], [6, 2, "Ianira"]);
+  assert.deepEqual([mandati[0].to, mandati[0].pool, mandati[0].difficulty, mandati[0].actorName], [["gm", "gm2"], 6, 2, "Ianira"], "la richiesta va a tutti e due i Narratori");
   assert.equal(globalThis.__sim.rolls.at(-1).formula, "4dmcs>5 + 0dpcs>5", "riserva 7 meno Difficoltà 3: quattro dadi");
-  assert.match(conVerdetto.flavor, /Narratore: Difficoltà 2 → 3 · dadi \+1\./, "la carta dice cosa ha toccato il Narratore");
+  assert.match(conVerdetto.flavor, /Narratore Blue: Difficoltà 2 → 3 · dadi \+1\./, "la carta dice cosa ha toccato il Narratore, e chi");
   assert.equal(conVerdetto.getFlag("wod5e-mage", ROLL_CARD_FLAG).threshold, 3);
+  // «Dal Narratore» spento: niente richiesta, si tira coi numeri del riquadro.
+  const getPrima = globalThis.game.settings.get;
+  globalThis.game.settings.get = (modulo, key) => (key === V.TIRO_NARRATORE_SETTING ? false : getPrima(modulo, key));
+  globalThis.__sim.faces = [7, 7, 7, 1, 1];
+  const senza = await S.launchTiro(actor, abilita);
+  assert.deepEqual([mandati.length, globalThis.__sim.rolls.at(-1).formula], [1, "4dmcs>5 + 0dpcs>5"], "nessuna richiesta in più; riserva 6 meno Difficoltà 2: quattro dadi, coi numeri del riquadro");
+  assert.doesNotMatch(senza.flavor, /Narratore/);
+  globalThis.game.settings.get = getPrima;
   delete globalThis.game.user; delete globalThis.game.users; delete globalThis.game.socket;
 }
 const ctxSpell = S.prepareTiroContext(actor, caricato);

@@ -137,6 +137,13 @@
             {{else}}
                 <button type="button" class="wod5e-mage-tiro-tira" data-action="tiroRoll" {{#unless tiro.ready}}disabled{{/unless}} title="{{localize 'WOD5E_MAGE.Tiro.RollHint'}}">{{localize "WOD5E_MAGE.Tiro.Roll"}}</button>
             {{/if}}
+            {{!-- «Dal Narratore» (Blue, 27/9): il tiro passa dai Narratori collegati, cinque secondi per
+                 ritoccarlo, oppure parte subito. È la scelta di chi tira; il Narratore non lo vede. --}}
+            {{#if tiro.narratore}}
+                <button type="button" class="wod5e-mage-tiro-narratore{{#if tiro.narratore.on}} acceso{{/if}}" data-action="tiroNarratore" aria-pressed="{{tiro.narratore.on}}" title="{{tiro.narratore.hint}}">
+                    <i class="fa-solid {{#if tiro.narratore.on}}fa-user-check{{else}}fa-user-slash{{/if}}" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Verdetto.DalNarratore"}}
+                </button>
+            {{/if}}
         </div>
     </div>
 </section>

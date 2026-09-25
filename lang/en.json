@@ -2004,7 +2004,15 @@
       "Note": "Storyteller: {changes}.",
       "NoteDifficulty": "Difficulty {before} → {after}",
       "NoteDice": "dice {dice}",
-      "Pending": "This roll is already with the Storyteller: wait for the verdict."
+      "Pending": "This roll is already with the Storyteller: wait for the verdict.",
+      "SentMany": "Roll sent to {count} Storytellers: it starts in {seconds} seconds unless one of them adjusts it.",
+      "Altri": "{count} other Storytellers see this too: the first answer counts.",
+      "Altrui": "{name} already answered {actor}'s roll.",
+      "AltroNarratore": "another Storyteller",
+      "NoteChi": "Storyteller {name}: {changes}.",
+      "DalNarratore": "Via the Storyteller",
+      "DalNarratoreHint": "The roll goes to the Storyteller first: {seconds} seconds to adjust it or say OK. Click to roll at once.",
+      "SenzaNarratoreHint": "The roll starts at once, without the Storyteller. Click to send it to them."
     },
     "Tema": {
       "Chiaro": "Light mode",
