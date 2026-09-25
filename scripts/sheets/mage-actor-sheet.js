@@ -21,7 +21,9 @@ import {
   onBelongingArchivio,
   onBelongingDelete,
   prepareBelongings,
-  onItemFieldChange
+  onItemFieldChange,
+  onArmaturaColpo,
+  onArmaturaPunto
 } from "../dotazione-extra.js";
 import {
   bindExperienceCalculator,
@@ -430,6 +432,9 @@ export class MageActorSheet extends MortalActorSheet {
       // il modulo si porta la sua (10/9).
       itemEdit: onGuidedItemEdit,
       archivioOpen: onArchivioOpen,
+      // L'armatura sulla riga dell'Inventario (Blue, 25/9): ▼ il colpo assorbito, ▲ il punto che torna.
+      armaturaColpo: onArmaturaColpo,
+      armaturaPunto: onArmaturaPunto,
       strumentiSuggest: onStrumentiSuggest,
       resetSection: onResetSection,
       incantesimoAdd: onIncantesimoAdd,

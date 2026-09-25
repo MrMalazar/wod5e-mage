@@ -7,6 +7,11 @@ import {
   onBelongingAdd,
   onBelongingDelete,
   onItemFieldChange,
+  onArmaturaColpo,
+  onArmaturaPunto,
+  armaturaDopoColpo,
+  armaturaDopoPunto,
+  ARMATURA_MASSIMA,
   prepareBelongings,
   valoreCampoOggetto
 } from "../scripts/dotazione-extra.js";
@@ -300,7 +305,7 @@ console.log("Libro degli Elementi: test passati.");
 // l'arma anche il danno base e il tipo, per l'armatura il valore.
 {
   assert.equal(valoreCampoOggetto("flags.wod5e-mage.dettagli", "  in via Torino, al terzo piano "), "in via Torino, al terzo piano");
-  assert.deepEqual([valoreCampoOggetto("system.weaponvalue", "3"), valoreCampoOggetto("system.weaponvalue", "-2"), valoreCampoOggetto("system.weaponvalue", "x"), valoreCampoOggetto("system.armorvalue", "12")], [3, 0, 0, 9]);
+  assert.deepEqual([valoreCampoOggetto("system.weaponvalue", "3"), valoreCampoOggetto("system.weaponvalue", "-2"), valoreCampoOggetto("system.weaponvalue", "x"), valoreCampoOggetto("system.armorvalue", "12"), valoreCampoOggetto("system.weaponvalue", "12")], [3, 0, 0, 7, 9], "l'armatura fino a 7 (Blue, 25/9), il danno fino a 9");
   assert.deepEqual([valoreCampoOggetto("system.weaponType", "ranged"), valoreCampoOggetto("system.weaponType", "laser")], ["ranged", "melee"]);
   assert.equal(valoreCampoOggetto("system.description", "x"), null, "solo i campi in riga");
   const updates = [];
@@ -335,4 +340,68 @@ console.log("Libro degli Elementi: test passati.");
   const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
   assert.match(css, /\.wod5e-mage-riq-body\.item-list \{\s*align-self: stretch;\s*width: 100%;/, "i Vantaggi e l'inventario prendono tutto il riquadro");
   console.log("Dettagli in riga dei Tratti: test passati.");
+}
+
+// L'Equipaggiamento sulla riga (Blue, 25/9): la spunta dell'Aggravato
+// sull'arma, e sull'armatura ▼ (il colpo assorbito toglie un punto) e ▲
+// (il punto che torna, fino al pieno).
+{
+  assert.deepEqual(
+    [true, false, "true", "false", 1, "1", "on", undefined].map((raw) => valoreCampoOggetto("flags.wod5e-mage.aggravato", raw)),
+    [true, false, true, false, true, true, false, false],
+    "la spunta è vera solo se è vera"
+  );
+  assert.equal(ARMATURA_MASSIMA, 7);
+  assert.deepEqual([armaturaDopoColpo(5), armaturaDopoColpo(1), armaturaDopoColpo(0), armaturaDopoColpo("x")], [4, 0, 0, 0]);
+  assert.deepEqual([armaturaDopoPunto(3, 5), armaturaDopoPunto(5, 5), armaturaDopoPunto(6, 5), armaturaDopoPunto(6, 0), armaturaDopoPunto(7, undefined), armaturaDopoPunto(-2, 4)], [4, 5, 6, 7, 7, 1]);
+
+  globalThis.foundry.utils.getProperty = (obj, path) => path.split(".").reduce((o, k) => o?.[k], obj);
+  const updates = [];
+  const arma = { type: "weapon", flags: { "wod5e-mage": {} }, system: { weaponvalue: 4 }, update: async (data) => { updates.push(data); } };
+  const giubbotto = { type: "armor", flags: { "wod5e-mage": { armaturaPiena: 5 } }, system: { armorvalue: 5 }, update: async (data) => { updates.push(data); Object.assign(giubbotto.system, { armorvalue: data["system.armorvalue"] ?? giubbotto.system.armorvalue }); } };
+  const vecchia = { type: "armor", flags: {}, system: { armorvalue: 3 }, update: async (data) => { updates.push(data); } };
+  const actor = mageActor({}, {});
+  actor.items = { get: (id) => ({ a: arma, g: giubbotto, v: vecchia })[id] };
+  const sheet = { actor };
+  await onItemFieldChange.call(sheet, { preventDefault() {} }, { type: "checkbox", checked: true, value: "on", dataset: { itemId: "a", itemField: "flags.wod5e-mage.aggravato" } });
+  assert.deepEqual(updates.pop(), { "flags.wod5e-mage.aggravato": true }, "la spunta legge checked, non value");
+  await onItemFieldChange.call(sheet, { preventDefault() {} }, { value: "6", dataset: { itemId: "g", itemField: "system.armorvalue" } });
+  assert.deepEqual(updates.pop(), { "system.armorvalue": 6, "flags.wod5e-mage.armaturaPiena": 6 }, "a mano oltre il pieno: il pieno sale");
+  giubbotto.system.armorvalue = 5;
+  giubbotto.flags["wod5e-mage"].armaturaPiena = 5;
+  await onItemFieldChange.call(sheet, { preventDefault() {} }, { value: "2", dataset: { itemId: "g", itemField: "system.armorvalue" } });
+  assert.deepEqual(updates.pop(), { "system.armorvalue": 2 }, "a mano sotto il pieno: il pieno resta");
+  giubbotto.system.armorvalue = 5;
+  await onArmaturaColpo.call(sheet, { preventDefault() {} }, { dataset: { itemId: "g" } });
+  assert.deepEqual(updates.pop(), { "system.armorvalue": 4 }, "▼ toglie un punto");
+  await onArmaturaPunto.call(sheet, { preventDefault() {} }, { dataset: { itemId: "g" } });
+  assert.deepEqual(updates.pop(), { "system.armorvalue": 5 }, "▲ lo rimette");
+  await onArmaturaPunto.call(sheet, { preventDefault() {} }, { dataset: { itemId: "g" } });
+  assert.equal(updates.length, 0, "al pieno ▲ non fa niente");
+  await onArmaturaColpo.call(sheet, { preventDefault() {} }, { dataset: { itemId: "v" } });
+  assert.deepEqual(updates.pop(), { "system.armorvalue": 2, "flags.wod5e-mage.armaturaPiena": 3 }, "l'armatura senza pieno lo prende al primo colpo");
+  await onArmaturaColpo.call(sheet, { preventDefault() {} }, { dataset: { itemId: "a" } });
+  assert.equal(updates.length, 0, "▼ vale solo per le armature");
+  const bloccato = mageActor({}, { locked: true });
+  bloccato.items = actor.items;
+  await onArmaturaColpo.call({ actor: bloccato }, { preventDefault() {} }, { dataset: { itemId: "g" } });
+  assert.equal(updates.length, 0, "a scheda bloccata non scrive");
+
+  const inventario = readFileSync(new URL("../templates/actor/parts/equipment-list.hbs", import.meta.url), "utf8");
+  assert.match(inventario, /<select class="wod5e-mage-oggetto-tipo"[\s\S]*<\/select>\s*\{\{!--[^}]*--\}\}\s*<label class="wod5e-mage-oggetto-spunta"[^>]*>\s*<input type="checkbox" data-item-id="\{\{item\._id\}\}" data-item-field="flags\.wod5e-mage\.aggravato"[^>]*\{\{#if item\.flags\.\[wod5e-mage\]\.aggravato\}\}checked\{\{\/if\}\}/, "la spunta dopo il tipo d'arma");
+  assert.doesNotMatch(inventario, /data-item-field="flags\.wod5e-mage\.aggravato"[^>]*\sname=/, "senza name: non passa dal form del personaggio");
+  assert.match(inventario, /data-item-field="system\.armorvalue"[\s\S]*armatura "mentale"[\s\S]*data-action="armaturaColpo" data-item-id="\{\{item\._id\}\}"[\s\S]*fa-angle-down[\s\S]*data-action="armaturaPunto" data-item-id="\{\{item\._id\}\}"[\s\S]*fa-angle-up/, "▼ e ▲ dopo il punteggio");
+  const sheetSource = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+  assert.match(sheetSource, /armaturaColpo: onArmaturaColpo,\s*armaturaPunto: onArmaturaPunto/);
+  const guided = readFileSync(new URL("../scripts/oggetti-guidati.js", import.meta.url), "utf8");
+  assert.match(guided, /export function buildGuidedItemFlags\(type, form = \{\}\)[\s\S]*aggravato:[\s\S]*armaturaPiena: value/);
+  assert.match(guided, /flags: \{ \[MODULE_ID\]: flags \}/);
+  const dialog = readFileSync(new URL("../templates/dialogs/item-create.hbs", import.meta.url), "utf8");
+  assert.match(dialog, /\{\{#if isWeapon\}\}[\s\S]*name="aggravato"[\s\S]*\{\{#if isArmor\}\}[\s\S]*name="armatura"/);
+  for (const lang of ["it", "en"]) {
+    const items = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8")).WOD5E_MAGE.Items;
+    for (const key of ["Aggravated", "AggravatedShort", "AggravatedHint", "ArmorKind", "ArmorHit", "ArmorBack"]) assert.equal(typeof items[key], "string", `${lang} ${key}`);
+    assert.deepEqual(Object.keys(items.ArmorKinds), ["fisica", "mentale"]);
+  }
+  console.log("Equipaggiamento in riga: test passati.");
 }

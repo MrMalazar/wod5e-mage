@@ -1265,9 +1265,9 @@
       "Description": "Description",
       "WeaponType": "Weapon type",
       "Damage": "Damage",
-      "DamageHint": "The weapon's damage dice.",
+      "DamageHint": "The weapon's damage, in Superficial.",
       "ArmorValue": "Armor",
-      "ArmorHint": "The armor dice it absorbs.",
+      "ArmorHint": "Armor points, 1 to 7: taken off the damage of every hit.",
       "Quantity": "Quantity",
       "Points": "Dots",
       "PointsHint": "The level, 1 to 5.",
@@ -1308,7 +1308,17 @@
         "merit": "what it does in play",
         "flaw": "what it costs you in play",
         "background": "who, what, how much"
-      }
+      },
+      "Aggravated": "Aggravated",
+      "AggravatedShort": "Aggr.",
+      "AggravatedHint": "Checked, this weapon deals Aggravated damage; check it when it applies, like silver bullets against a werewolf.",
+      "ArmorKind": "Armor kind",
+      "ArmorKinds": {
+        "fisica": "Physical",
+        "mentale": "Mental"
+      },
+      "ArmorHit": "Hit absorbed: the armor loses 1 point",
+      "ArmorBack": "A point comes back (repair, or the scene that rebuilds it), up to full"
     },
     "Archivi": {
       "KindTabs": "Archives",
@@ -1330,7 +1340,10 @@
         "desiderio": "Desires",
         "ancora": "Anchors",
         "convinzione": "Convictions",
-        "condizione": "Conditions"
+        "condizione": "Conditions",
+        "equip-weapon": "Weapons",
+        "equip-armor": "Protection",
+        "equip-gear": "Items"
       },
       "Who": "Who or what",
       "WhoHint": "The name: who or what it is",
@@ -1342,7 +1355,8 @@
       "UnfoldAll": "Open all",
       "FoldHint": "Closes or opens every group",
       "Level": "Level",
-      "LevelAll": "All"
+      "LevelAll": "All",
+      "OpenEquip": "Pick from the Equipment archive"
     },
     "Reset": {
       "Attributes": "Reset Attributes",

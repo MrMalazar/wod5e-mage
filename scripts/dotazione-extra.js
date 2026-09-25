@@ -141,14 +141,20 @@ export async function onBelongingDelete(event, target) {
  * I dettagli in riga dei Tratti (Blue, 24/9 sera): accanto al Background, al
  * Pregio, all'arma, una casella che scrive sull'oggetto senza aprirlo. Solo
  * i campi qui elencati: il testo dei dettagli (nel flag del modulo), il danno
- * e il tipo dell'arma, il valore dell'armatura (i campi del sistema).
+ * e il tipo dell'arma, il valore dell'armatura (i campi del sistema), e dal
+ * 25/9 la spunta dell'Aggravato sull'arma (Blue: «lasciamo che sia
+ * personalizzabile il danno con una spunta»).
  */
 export const CAMPI_OGGETTO = Object.freeze({
   [`flags.${MODULE_ID}.dettagli`]: "testo",
+  [`flags.${MODULE_ID}.aggravato`]: "spunta",
   "system.weaponvalue": "numero",
   "system.weaponType": "tipoArma",
-  "system.armorvalue": "numero"
+  "system.armorvalue": "armatura"
 });
+
+/** I punti armatura: da 0 a 7 per le regole (Blue, 25/9); il pieno, se l'oggetto non lo ricorda, è 7. */
+export const ARMATURA_MASSIMA = 7;
 
 export const TIPI_ARMA = Object.freeze(["melee", "ranged", "supernatural"]);
 
@@ -156,12 +162,69 @@ export const TIPI_ARMA = Object.freeze(["melee", "ranged", "supernatural"]);
 export function valoreCampoOggetto(field, raw) {
   const kind = CAMPI_OGGETTO[field];
   if (!kind) return null;
-  if (kind === "numero") {
+  if (kind === "numero" || kind === "armatura") {
     const n = Math.trunc(Number(raw));
-    return Number.isFinite(n) ? Math.min(Math.max(n, 0), 9) : 0;
+    // Il danno fino a 9; l'armatura fino a 7 (Blue, 25/9: «può arrivare fino a 7 punti armatura»).
+    const max = kind === "armatura" ? ARMATURA_MASSIMA : 9;
+    return Number.isFinite(n) ? Math.min(Math.max(n, 0), max) : 0;
   }
   if (kind === "tipoArma") return TIPI_ARMA.includes(String(raw)) ? String(raw) : TIPI_ARMA[0];
+  if (kind === "spunta") return raw === true || raw === "true" || raw === 1 || raw === "1";
   return String(raw ?? "").trim();
+}
+
+/**
+ * L'armatura (Blue, 25/9): «ogni volta che un'armatura assorbe un colpo,
+ * riduci il punteggio armatura di 1». La riparazione (la fisica) o la scena
+ * che la ricostruisce (la mentale) rimette un punto alla volta, fino al pieno.
+ */
+export function armaturaDopoColpo(value) {
+  const n = Math.trunc(Number(value));
+  return Number.isFinite(n) ? Math.max(n - 1, 0) : 0;
+}
+
+export function armaturaDopoPunto(value, piena) {
+  const n = Math.max(Math.trunc(Number(value)) || 0, 0);
+  const full = Math.trunc(Number(piena));
+  const cap = Number.isFinite(full) && full > 0 ? full : ARMATURA_MASSIMA;
+  return Math.min(n + 1, Math.max(cap, n));
+}
+
+function armaturaPiena(item) {
+  const value = Math.trunc(Number(foundry.utils.getProperty(item, `flags.${MODULE_ID}.armaturaPiena`)));
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+function armaturaDellaRiga(sheet, target) {
+  const actor = sheet.actor;
+  const item = actor?.items?.get?.(String(target?.dataset?.itemId ?? ""));
+  if (!item || item.type !== "armor" || !canEdit(actor)) return null;
+  return item;
+}
+
+/** Il tasto ▼ sulla riga dell'armatura: il colpo assorbito le toglie un punto. */
+export async function onArmaturaColpo(event, target) {
+  event?.preventDefault?.();
+  const item = armaturaDellaRiga(this, target);
+  if (!item) return;
+  const current = Math.max(Math.trunc(Number(item.system?.armorvalue)) || 0, 0);
+  const next = armaturaDopoColpo(current);
+  if (next === current) return;
+  const update = { "system.armorvalue": next };
+  // Un'armatura che non ricorda il suo pieno lo prende dal punteggio di prima del colpo.
+  if (!armaturaPiena(item)) update[`flags.${MODULE_ID}.armaturaPiena`] = current;
+  await item.update(update);
+}
+
+/** Il tasto ▲: un punto torna, fino al pieno dell'armatura. */
+export async function onArmaturaPunto(event, target) {
+  event?.preventDefault?.();
+  const item = armaturaDellaRiga(this, target);
+  if (!item) return;
+  const current = Math.max(Math.trunc(Number(item.system?.armorvalue)) || 0, 0);
+  const next = armaturaDopoPunto(current, armaturaPiena(item));
+  if (next === current) return;
+  await item.update({ "system.armorvalue": next });
 }
 
 export async function onItemFieldChange(event, target) {
@@ -169,9 +232,14 @@ export async function onItemFieldChange(event, target) {
   const item = actor?.items?.get?.(String(target?.dataset?.itemId ?? ""));
   if (!item || !canEdit(actor)) return;
   const field = String(target.dataset.itemField ?? "");
-  const value = valoreCampoOggetto(field, target.value);
+  // La spunta dice checked, le caselle dicono value.
+  const raw = target?.type === "checkbox" ? Boolean(target.checked) : target.value;
+  const value = valoreCampoOggetto(field, raw);
   if (value === null) return;
   const current = foundry.utils.getProperty(item, field);
   if (current === value || (current == null && value === "")) return;
-  await item.update({ [field]: value });
+  const update = { [field]: value };
+  // Il punteggio dell'armatura scritto a mano oltre il pieno: il pieno sale con lui.
+  if (field === "system.armorvalue" && value > armaturaPiena(item)) update[`flags.${MODULE_ID}.armaturaPiena`] = value;
+  await item.update(update);
 }

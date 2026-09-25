@@ -10915,6 +10915,63 @@
   width: auto;
 }
 
+/* La spunta dell'Aggravato sull'arma (Blue, 25/9): una pastiglia come il tipo,
+   rossa quando è spuntata. */
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > label.wod5e-mage-oggetto-spunta {
+  align-items: center;
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 9px;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.58rem;
+  font-weight: 700;
+  gap: 3px;
+  height: 20px;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  margin: 0;
+  padding: 0 6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > label.wod5e-mage-oggetto-spunta > input {
+  flex: 0 0 11px;
+  height: 11px;
+  margin: 0;
+  width: 11px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > label.wod5e-mage-oggetto-spunta:has(> input:checked) {
+  border-color: var(--mage-rosso);
+  color: var(--mage-rosso-chiaro);
+}
+
+/* I tasti dell'armatura (Blue, 25/9): ▼ il colpo assorbito, ▲ il punto che torna. */
+.wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > button.wod5e-mage-riga-tastino:is(.wod5e-mage-armatura-colpo, .wod5e-mage-armatura-punto) {
+  flex: 0 0 20px;
+  margin: 0;
+}
+
+/* Nella finestra del + la spunta sta in riga col suo nome. */
+.wod5e-mage-item-field.wod5e-mage-item-spunta {
+  align-items: center;
+  column-gap: 0.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.wod5e-mage-item-field.wod5e-mage-item-spunta > input {
+  justify-self: start;
+  width: auto;
+}
+
+.wod5e-mage-item-field.wod5e-mage-item-spunta > small {
+  grid-column: 1 / -1;
+}
+
 .wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > input.wod5e-mage-oggetto-dettagli:focus,
 .wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > input.wod5e-mage-oggetto-numero:focus,
 .wod5e-mage.wod5e.actor.sheet .window-content .wod5e-mage-oggetto-testa > select.wod5e-mage-oggetto-tipo:focus {

@@ -1,4 +1,5 @@
 import { _onCreateItem } from "/systems/wod5e/system/actor/scripts/item-actions.js";
+import { MODULE_ID } from "./constants.js";
 
 /**
  * L'inserimento guidato: quando il giocatore preme il + di armi, armature,
@@ -9,6 +10,8 @@ import { _onCreateItem } from "/systems/wod5e/system/actor/scripts/item-actions.
 export const GUIDED_TYPES = Object.freeze(["weapon", "armor", "gear", "feature"]);
 export const WEAPON_TYPES = Object.freeze(["melee", "ranged", "supernatural"]);
 export const FEATURE_TYPES = Object.freeze(["merit", "flaw", "background"]);
+/** L'armatura fisica si ripara, la mentale si ricostruisce (Blue, 25/9). */
+export const ARMOR_KINDS = Object.freeze(["fisica", "mentale"]);
 
 /** Il pezzo di `system` che l'oggetto nuovo riceve, dal modulo compilato. */
 export function buildGuidedItemData(type, subtype, form = {}) {
@@ -20,7 +23,8 @@ export function buildGuidedItemData(type, subtype, form = {}) {
     data.weaponType = WEAPON_TYPES.includes(form.weaponType) ? form.weaponType : (WEAPON_TYPES.includes(subtype) ? subtype : "melee");
     data.weaponvalue = number(form.value, 0, 20);
   } else if (type === "armor") {
-    data.armorvalue = number(form.value, 0, 20);
+    // L'armatura arriva fino a 7 punti (Blue, 25/9).
+    data.armorvalue = number(form.value, 0, 7);
   } else if (type === "gear") {
     data.quantity = number(form.quantity, 1, 999);
   } else if (type === "feature") {
@@ -28,6 +32,23 @@ export function buildGuidedItemData(type, subtype, form = {}) {
     data.points = number(form.points, 0, 5);
   }
   return data;
+}
+
+/**
+ * I flag del modulo sull'oggetto nuovo (25/9): per l'arma la spunta
+ * dell'Aggravato, per l'armatura se è fisica o mentale e il suo pieno (il
+ * tasto ▲ della riga rimette i punti fino a lì).
+ */
+export function buildGuidedItemFlags(type, form = {}) {
+  if (type === "weapon") {
+    const spunta = form.aggravato;
+    return { aggravato: spunta === true || spunta === "true" || spunta === "on" };
+  }
+  if (type === "armor") {
+    const value = Math.min(Math.max(Math.trunc(Number(form.value) || 0), 0), 7);
+    return { armatura: ARMOR_KINDS.includes(form.armatura) ? form.armatura : ARMOR_KINDS[0], armaturaPiena: value };
+  }
+  return {};
 }
 
 /**
@@ -67,6 +88,7 @@ export async function onGuidedItemCreate(event, target) {
       isGear: type === "gear",
       isFeature: type === "feature",
       weaponTypes: WEAPON_TYPES.map((id) => ({ id, label: localize(`WOD5E_MAGE.Items.WeaponTypes.${id}`), selected: id === subtype })),
+      armorKinds: ARMOR_KINDS.map((id) => ({ id, label: localize(`WOD5E_MAGE.Items.ArmorKinds.${id}`) })),
       points: [0, 1, 2, 3, 4, 5]
     }
   );
@@ -87,8 +109,14 @@ export async function onGuidedItemCreate(event, target) {
     return;
   }
 
+  const flags = buildGuidedItemFlags(type, result);
   await Item.create(
-    { name, type, system: buildGuidedItemData(type, subtype, result) },
+    {
+      name,
+      type,
+      system: buildGuidedItemData(type, subtype, result),
+      ...(Object.keys(flags).length ? { flags: { [MODULE_ID]: flags } } : {})
+    },
     { parent: actor }
   );
 }

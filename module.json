@@ -2,10 +2,10 @@
   "id": "wod5e-mage",
   "title": "Mage for World of Darkness 5e",
   "description": "Adds Mage support to the World of Darkness 5e system.",
-  "version": "1.22.1",
+  "version": "1.23.0",
   "url": "https://github.com/MrMalazar/wod5e-mage",
   "manifest": "https://github.com/MrMalazar/wod5e-mage/releases/latest/download/module.json",
-  "download": "https://github.com/MrMalazar/wod5e-mage/releases/download/1.22.1/wod5e-mage.zip",
+  "download": "https://github.com/MrMalazar/wod5e-mage/releases/download/1.23.0/wod5e-mage.zip",
   "authors": [
     {
       "name": "wod5e-mage contributors"
@@ -179,6 +179,17 @@
       }
     },
     {
+      "label": "Equipaggiamento (M6)",
+      "type": "Item",
+      "name": "mage-equipaggiamento",
+      "path": "packs/mage-equipaggiamento",
+      "system": "wod5e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
       "label": "Macro del Master (M6)",
       "type": "Macro",
       "name": "mage-macros",
@@ -208,6 +219,7 @@
         "mage-convinzioni",
         "mage-condizioni",
         "mage-strumenti",
+        "mage-equipaggiamento",
         "mage-macros"
       ],
       "color": "#98772b"

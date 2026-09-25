@@ -19,7 +19,7 @@ import {
 } from "../scripts/archivi.js";
 
 // Nove archivi, e il sottotipo del sistema porta al suo.
-assert.deepEqual(Object.keys(ARCHIVI), ["pregio", "difetto", "background", "credo", "concetto", "ambizione", "desiderio", "ancora", "convinzione", "condizione"]);
+assert.deepEqual(Object.keys(ARCHIVI), ["pregio", "difetto", "background", "credo", "concetto", "ambizione", "desiderio", "ancora", "convinzione", "condizione", "equip-weapon", "equip-armor", "equip-gear"]);
 assert.equal(archivioKind("ambizione"), "ambizione");
 assert.equal(archivioKind("altro"), null);
 assert.equal(FEATURE_KINDS.merit, "pregio");
@@ -177,7 +177,8 @@ const dialog = readFileSync(new URL("../templates/dialogs/archivio.hbs", import.
 assert.match(dialog, /data-role="archivioSearch"[\s\S]*data-role="archivioGroup"[\s\S]*data-role="archivioEntry"[\s\S]*data-role="archivioToggle"[\s\S]*data-role="archivioAdd"/);
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
-  assert.equal(Object.keys(strings.WOD5E_MAGE.Archivi.Kinds).length, 10, lang);
+  // Dieci archivi dei Cataloghi, più i tre dell'Equipaggiamento (25/9).
+  assert.equal(Object.keys(strings.WOD5E_MAGE.Archivi.Kinds).length, 13, lang);
   assert.equal(typeof strings.WOD5E_MAGE.Focus.Credos.vivo, "string", lang);
 }
 

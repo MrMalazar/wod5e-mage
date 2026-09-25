@@ -3,8 +3,8 @@ import { MODULE_ID } from "./constants.js";
 
 /**
  * Gli archivi del Mago: i Cataloghi del manuale in compendi (Pregi, Difetti,
- * Background come oggetti; Credi, Concetti, Ambizioni, Desideri, Ancore e
- * Convinzioni come voci di diario). Dalla scheda un'icona del libro apre
+ * Background e l'Equipaggiamento come oggetti; Credi, Concetti, Ambizioni,
+ * Desideri, Ancore e Convinzioni come voci di diario). Dalla scheda un'icona del libro apre
  * l'archivio della voce; il «+» accanto a una voce la mette sulla scheda.
  * Le funzioni pure stanno in cima: si provano fuori da Foundry.
  */
@@ -21,8 +21,28 @@ export const ARCHIVI = Object.freeze({
   desiderio: { pack: "mage-desideri", type: "JournalEntry", add: "header", field: "desire", label: "WOD5E_MAGE.Archivi.Kinds.desiderio" },
   ancora: { pack: "mage-ancore", type: "JournalEntry", add: "row", table: "ancore", label: "WOD5E_MAGE.Archivi.Kinds.ancora" },
   convinzione: { pack: "mage-convinzioni", type: "JournalEntry", add: "row", table: "convinzioni", label: "WOD5E_MAGE.Archivi.Kinds.convinzione" },
-  condizione: { pack: "mage-condizioni", type: "Item", add: "item", label: "WOD5E_MAGE.Archivi.Kinds.condizione" }
+  condizione: { pack: "mage-condizioni", type: "Item", add: "item", label: "WOD5E_MAGE.Archivi.Kinds.condizione" },
+  // L'Equipaggiamento (Blue, 25/9): un compendio solo, tre archivi per tipo
+  // d'oggetto del sistema, aperti dal libro di ogni occhiello dell'Inventario.
+  "equip-weapon": { pack: "mage-equipaggiamento", type: "Item", add: "item", itemTypes: ["weapon"], label: "WOD5E_MAGE.Archivi.Kinds.equip-weapon" },
+  "equip-armor": { pack: "mage-equipaggiamento", type: "Item", add: "item", itemTypes: ["armor"], label: "WOD5E_MAGE.Archivi.Kinds.equip-armor" },
+  "equip-gear": { pack: "mage-equipaggiamento", type: "Item", add: "item", itemTypes: ["gear"], label: "WOD5E_MAGE.Archivi.Kinds.equip-gear" }
 });
+
+/** I tre archivi dell'Equipaggiamento, nell'ordine delle linguette. */
+export const EQUIP_ARCHIVI = Object.freeze(["equip-weapon", "equip-armor", "equip-gear"]);
+
+/** I documenti di un compendio che valgono per l'archivio: tutti, o solo quelli dei tipi indicati. */
+export function filterByItemTypes(docs, itemTypes) {
+  const list = [...(docs ?? [])];
+  if (!Array.isArray(itemTypes) || !itemTypes.length) return list;
+  return list.filter((doc) => itemTypes.includes(doc?.type));
+}
+
+/** Le linguette chieste dal tasto (data-kinds="a,b,c"): solo gli archivi che esistono. */
+export function kindsFromDataset(value) {
+  return String(value ?? "").split(",").map((id) => id.trim()).filter((id) => archivioKind(id));
+}
 
 /** Il «+» dei Pregi, Difetti e Background del sistema parla per sottotipo. */
 export const FEATURE_KINDS = Object.freeze({ merit: "pregio", flaw: "difetto", background: "background" });
@@ -228,7 +248,7 @@ export async function loadArchivio(kind) {
   const pack = game.packs.get(`${MODULE_ID}.${config.pack}`);
   if (!pack) return [];
   const docs = await pack.getDocuments();
-  return docs
+  return filterByItemTypes(docs, config.itemTypes)
     .map((doc) => entryFromDocument(doc))
     .sort((a, b) => a.sort - b.sort);
 }
@@ -445,5 +465,6 @@ export async function onArchivioOpen(event, target) {
   event.preventDefault();
   const kind = archivioKind(target.dataset.kind) ?? FEATURE_KINDS[target.dataset.subtype];
   if (!kind) return;
-  await openArchivio(this.actor, kind);
+  // Le linguette (25/9): dall'Inventario, Armi, Protezioni e Oggetti in una finestra.
+  await openArchivio(this.actor, kind, { kinds: kindsFromDataset(target.dataset.kinds) });
 }

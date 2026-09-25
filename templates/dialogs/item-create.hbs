@@ -16,12 +16,25 @@
             <input type="number" name="value" min="0" max="20" step="1" value="1">
             <small>{{localize "WOD5E_MAGE.Items.DamageHint"}}</small>
         </label>
+        {{!-- La spunta dell'Aggravato (Blue, 25/9): spenta, il danno è Superficiale. --}}
+        <label class="wod5e-mage-item-field wod5e-mage-item-spunta">
+            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Items.Aggravated"}}</span>
+            <input type="checkbox" name="aggravato">
+            <small>{{localize "WOD5E_MAGE.Items.AggravatedHint"}}</small>
+        </label>
     {{/if}}
     {{#if isArmor}}
         <label class="wod5e-mage-item-field">
             <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Items.ArmorValue"}}</span>
-            <input type="number" name="value" min="0" max="20" step="1" value="1">
+            <input type="number" name="value" min="0" max="7" step="1" value="1">
             <small>{{localize "WOD5E_MAGE.Items.ArmorHint"}}</small>
+        </label>
+        {{!-- Fisica o mentale (Blue, 25/9): la fisica si ripara, la mentale si ricostruisce. --}}
+        <label class="wod5e-mage-item-field">
+            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Items.ArmorKind"}}</span>
+            <select name="armatura">
+                {{#each armorKinds as |kind|}}<option value="{{kind.id}}">{{kind.label}}</option>{{/each}}
+            </select>
         </label>
     {{/if}}
     {{#if isGear}}

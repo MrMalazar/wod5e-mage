@@ -1265,9 +1265,9 @@
       "Description": "Descrizione",
       "WeaponType": "Tipo d'arma",
       "Damage": "Danno",
-      "DamageHint": "I dadi di danno dell'arma.",
+      "DamageHint": "Il danno dell'arma, in Superficiali.",
       "ArmorValue": "Armatura",
-      "ArmorHint": "I dadi d'armatura che assorbono.",
+      "ArmorHint": "I punti armatura, da 1 a 7: si tolgono al danno di ogni colpo.",
       "Quantity": "Quantità",
       "Points": "Pallini",
       "PointsHint": "Il livello, da 1 a 5.",
@@ -1308,7 +1308,17 @@
         "merit": "cosa fa in gioco",
         "flaw": "cosa ti costa in gioco",
         "background": "chi, cosa, quanto"
-      }
+      },
+      "Aggravated": "Aggravato",
+      "AggravatedShort": "Aggr.",
+      "AggravatedHint": "Spuntata, il danno di quest'arma è Aggravato; si spunta quando serve, come coi proiettili d'argento contro un licantropo.",
+      "ArmorKind": "Che armatura",
+      "ArmorKinds": {
+        "fisica": "Fisica",
+        "mentale": "Mentale"
+      },
+      "ArmorHit": "Colpo assorbito: l'armatura perde 1 punto",
+      "ArmorBack": "Un punto torna (la riparazione, o la scena che la ricostruisce), fino al pieno"
     },
     "Archivi": {
       "KindTabs": "Archivi",
@@ -1330,7 +1340,10 @@
         "desiderio": "Desideri",
         "ancora": "Ancore",
         "convinzione": "Convinzioni",
-        "condizione": "Condizioni"
+        "condizione": "Condizioni",
+        "equip-weapon": "Armi",
+        "equip-armor": "Protezioni",
+        "equip-gear": "Oggetti"
       },
       "Who": "Chi o cosa",
       "WhoHint": "Il nome: chi è, o che cos'è",
@@ -1342,7 +1355,8 @@
       "UnfoldAll": "Apri tutte",
       "FoldHint": "Chiude o apre tutte le tendine dei gruppi",
       "Level": "Livello",
-      "LevelAll": "Tutti"
+      "LevelAll": "Tutti",
+      "OpenEquip": "Scegli dall'archivio dell'Equipaggiamento"
     },
     "Reset": {
       "Attributes": "Reset Attributi",
