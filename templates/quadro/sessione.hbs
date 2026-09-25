@@ -1,0 +1,36 @@
+{{!-- La Nuova sessione dentro il Quadro (Blue, 27/9): al posto della finestra, una pagina che
+     prende il posto del modo in uso: i maghi del Quadro in breve (ritratto, nome, chi li muove,
+     la × per toglierli), dove trascinare dagli Attori chi manca (come nei Giocatori), la prima
+     scena e il posto, poi Inizia. Annulla torna al modo di prima. --}}
+<div class="wod5e-mage-quadro-corpo wod5e-mage-quadro-sessione">
+    <div class="wod5e-mage-quadro-riga-testa">
+        <span><i class="fa-solid fa-sun" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Paradosso.NewSession"}} · {{localize "WOD5E_MAGE.Menu.InGioco" n=maghi.length}}</span>
+        <span class="wod5e-mage-quadro-trascina" data-role="trascina"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.TrascinaQui"}}</span>
+    </div>
+    <p class="wod5e-mage-quadro-sessione-spiega">{{localize "WOD5E_MAGE.Menu.SessioneSpiega"}}</p>
+    <div class="wod5e-mage-quadro-sessione-maghi">
+        {{#each maghi as |m|}}
+            <div class="wod5e-mage-quadro-sessione-mago">
+                <img class="ritratto" src="{{m.img}}" alt="">
+                <span class="nome">{{m.name}}</span>
+                <span class="gioc">{{#each m.utenti as |u|}}<i class="punto{{#if u.active}} on{{/if}}" aria-hidden="true"></i> {{u.name}}{{#unless @last}} · {{/unless}}{{else}}<i class="punto" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.SenzaGiocatore"}}{{/each}}</span>
+                <button type="button" class="ghost piccolo" data-action="magoTogli" data-id="{{m.id}}" title="{{localize 'WOD5E_MAGE.Menu.Togli'}}" aria-label="{{localize 'WOD5E_MAGE.Menu.Togli'}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </div>
+        {{else}}
+            <p class="wod5e-mage-quadro-vuoto">{{localize "WOD5E_MAGE.Menu.NessunMago"}}</p>
+        {{/each}}
+    </div>
+    <div class="wod5e-mage-quadro-sessione-scelte">
+        <label class="wod5e-mage-quadro-campo"><span>{{localize "WOD5E_MAGE.Menu.PrimaScena"}}</span>
+            <select name="scena"><option value="">{{localize "WOD5E_MAGE.Menu.NessunaScena"}}</option>{{#each scene as |s|}}<option value="{{s.id}}" {{#if s.selected}}selected{{/if}}>{{s.nome}}</option>{{/each}}</select>
+        </label>
+        <label class="wod5e-mage-quadro-campo"><span>{{localize "WOD5E_MAGE.Menu.Posto"}}</span>
+            <select name="posto">{{#each posti as |p|}}<option value="{{p.id}}" {{#if p.selected}}selected{{/if}}>{{p.label}}</option>{{/each}}</select>
+        </label>
+    </div>
+    <p class="wod5e-mage-quadro-hint">{{localize "WOD5E_MAGE.Menu.SessioneAzzera" points=points}}</p>
+    <div class="wod5e-mage-quadro-tasti">
+        <button type="button" data-action="sessioneInizia" {{#if nessunMago}}disabled{{/if}}><i class="fa-solid fa-play" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.Inizia"}}</button>
+        <button type="button" class="ghost" data-action="sessioneAnnulla"><i class="fa-solid fa-xmark" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.SessioneAnnulla"}}</button>
+    </div>
+</div>

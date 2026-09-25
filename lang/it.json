@@ -1793,7 +1793,9 @@
       "ScenaInCorso": "scena in corso",
       "LeggiVoce": "Leggi la voce",
       "InQuestaScena": "In questa scena.",
-      "NessunMagoSessione": "Nessun mago nel Quadro: trascina un mago dagli Attori sul Quadro, poi premi Nuova sessione."
+      "NessunMagoSessione": "Nessun mago nel Quadro: trascina qui un mago dagli Attori, poi premi Inizia.",
+      "SessioneSpiega": "Giocano i maghi del Quadro. Trascina qui dagli Attori chi manca, scegli la prima scena e il posto, poi Inizia: gli effetti della sessione prima se ne vanno e la riserva torna a zero.",
+      "SessioneAnnulla": "Annulla"
     },
     "Stat": {
       "Identita": "Identità",

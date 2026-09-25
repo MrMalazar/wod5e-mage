@@ -14862,7 +14862,80 @@
   color: var(--mage-rosso-chiaro);
 }
 
-/* Le finestre di dialogo del Quadro: Nuova sessione, Cambio scena, Aggiungi. */
+/* La Nuova sessione dentro il Quadro (27/9): i maghi in breve, le due tendine, i tasti. */
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sessione-spiega {
+  color: var(--quadro-tenue);
+  font-size: 13.5px;
+  margin: 0 0 4px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sessione-maghi {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sessione-mago {
+  align-items: center;
+  background: var(--quadro-fondo);
+  border: var(--quadro-riga);
+  border-radius: 8px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 34px minmax(0, 1fr) auto auto;
+  padding: 6px 10px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sessione-mago .ritratto {
+  border-radius: 50%;
+  height: 34px;
+  object-fit: cover;
+  width: 34px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sessione-mago .nome {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sessione-mago .gioc {
+  align-items: center;
+  color: var(--quadro-tenue);
+  display: inline-flex;
+  font-size: 13px;
+  gap: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sessione-scelte {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sessione .wod5e-mage-quadro-campo {
+  display: flex;
+  flex-direction: column;
+  font-size: 13.5px;
+  gap: 4px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sessione select {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  color: inherit;
+  height: 32px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-sessione .wod5e-mage-quadro-hint {
+  color: var(--quadro-tenue);
+  font-size: 13.5px;
+  margin: 0;
+}
+
+/* Le finestre di dialogo del Quadro: Cambio scena, Aggiungi. */
 .wod5e-mage-quadro-form {
   display: flex;
   flex-direction: column;

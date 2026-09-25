@@ -252,6 +252,8 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   #chiuse = new Set(QuadroNarratore.stato.chiuse);
   #cerca = "";
   #registro = false;
+  /** La pagina della Nuova sessione (Blue, 27/9): prende il posto del modo in uso finché si inizia o si annulla. */
+  #sessione = false;
 
   constructor(options = {}) {
     super({ id: "wod5e-mage-quadro", ...options });
@@ -275,6 +277,8 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       registro: QuadroNarratore.#onRegistro,
       magickParadosso: QuadroNarratore.#onMagickParadosso,
       nuovaSessione: QuadroNarratore.#onNuovaSessione,
+      sessioneInizia: QuadroNarratore.#onSessioneInizia,
+      sessioneAnnulla: QuadroNarratore.#onSessioneAnnulla,
       cambioScena: QuadroNarratore.#onCambioScena,
       orologioAvanti: QuadroNarratore.#onOrologioAvanti,
       orologioChiudi: QuadroNarratore.#onOrologioChiudi,
@@ -293,7 +297,8 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     testa: { template: `${RADICE}/testa.hbs` },
     contatore: { template: `${RADICE}/contatore.hbs`, scrollable: [""] },
     menu: { template: `${RADICE}/menu.hbs`, scrollable: [""] },
-    giocatori: { template: `${RADICE}/giocatori.hbs`, scrollable: [""] }
+    giocatori: { template: `${RADICE}/giocatori.hbs`, scrollable: [""] },
+    sessione: { template: `${RADICE}/sessione.hbs`, scrollable: [""] }
   };
 
   static get stato() {
@@ -306,6 +311,15 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
 
   get modo() {
     return QuadroNarratore.stato.modo;
+  }
+
+  /** La pagina della Nuova sessione al posto del modo in uso (Blue, 27/9). */
+  apriSessione() {
+    this.#sessione = true;
+  }
+
+  get sessioneAperta() {
+    return this.#sessione;
   }
 
   /** Apre il Quadro (o lo porta davanti), nel modo chiesto. */
@@ -325,7 +339,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
 
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
-    options.parts = ["testa", this.modo];
+    options.parts = ["testa", this.#sessione ? "sessione" : this.modo];
   }
 
   /** Un modo alla volta: la PART del modo di prima esce dalla finestra quando si cambia modo. */
@@ -347,7 +361,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       gm: true,
       points: pool.points,
       visible: pool.visible,
-      modi: MODI_QUADRO.map((id) => ({ id, label: localize(`WOD5E_MAGE.Menu.Modi.${id}`), icona: ICONE_MODI[id], attivo: id === modo })),
+      modi: MODI_QUADRO.map((id) => ({ id, label: localize(`WOD5E_MAGE.Menu.Modi.${id}`), icona: ICONE_MODI[id], attivo: id === modo && !this.#sessione })),
       scena: { ...scena, nome: scenaDati ? scenaDati.nome : localize("WOD5E_MAGE.Menu.NessunaScena"), icona: ICONE_SCENE[scena.tipo] ?? "fa-solid fa-clapperboard" },
       posto: scena.posto === "normale" ? "" : localize(`WOD5E_MAGE.Menu.Posti.${scena.posto}`),
       round: count(game.combat?.round),
@@ -357,6 +371,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     if (modo === "contatore") Object.assign(base, this.#contestoContatore(pool, scena, localize));
     if (modo === "menu") Object.assign(base, this.#contestoMenu(pool, scena, localize));
     if (modo === "giocatori") Object.assign(base, this.#contestoGiocatori(scena, localize));
+    if (this.#sessione) Object.assign(base, this.#contestoSessione(scena, localize), { sessione: true });
     return Object.assign(context, base);
   }
 
@@ -486,6 +501,18 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   #contestoGiocatori(scena, localize) {
     const maghi = attoriDelQuadro().map((actor) => statusMago(actor, { localize, aperto: this.#maghiAperti.has(actor.id), scena: scena.numero }));
     return { maghi, nessunMago: !maghi.length };
+  }
+
+  /** La pagina della Nuova sessione (27/9): i maghi del Quadro in breve, la prima scena, il posto, la riserva. */
+  #contestoSessione(scena, localize) {
+    const maghi = attoriDelQuadro().map((actor) => ({ id: actor.id, name: actor.name, img: actor.img, utenti: utentiDi(actor) }));
+    return {
+      maghi,
+      nessunMago: !maghi.length,
+      scene: SCENE_PARADOSSO.map((s) => ({ id: s.id, nome: s.nome, selected: s.id === scena.tipo })),
+      posti: POSTI.map((id) => ({ id, label: localize(`WOD5E_MAGE.Menu.Posti.${id}`), selected: id === scena.posto })),
+      points: getPool().points
+    };
   }
 
   _onRender(context, options) {
@@ -717,6 +744,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     event.preventDefault();
     const modo = target.dataset.modo;
     if (!MODI_QUADRO.includes(modo)) return;
+    this.#sessione = false;
     await game.settings.set(MODULE_ID, QUADRO_SETTING, { ...QuadroNarratore.stato, modo });
     await this.render();
   }
@@ -757,7 +785,26 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static async #onNuovaSessione(event) {
     event.preventDefault();
-    await nuovaSessione();
+    this.apriSessione();
+    await this.render();
+  }
+
+  /** Inizia dalla pagina: legge la prima scena e il posto dalle tendine; a sessione partita la pagina si chiude. */
+  static async #onSessioneInizia(event, target) {
+    event.preventDefault();
+    const radice = target?.closest?.(".wod5e-mage-quadro-sessione") ?? this.element;
+    const scelta = {
+      tipo: radice?.querySelector?.("[name=scena]")?.value ?? "",
+      posto: radice?.querySelector?.("[name=posto]")?.value ?? "normale"
+    };
+    if (await iniziaSessione(scelta)) this.#sessione = false;
+    await this.render();
+  }
+
+  static async #onSessioneAnnulla(event) {
+    event.preventDefault();
+    this.#sessione = false;
+    await this.render();
   }
 
   static async #onCambioScena(event) {
@@ -956,12 +1003,28 @@ async function avanzaOrologiPer(evento) {
 
 /**
  * La Nuova sessione del Narratore (24/9; 26/9, Blue: la finestra di scelta
- * dei personaggi «va eliminata»): giocano i maghi che stanno nel Quadro,
- * quelli trascinati dagli Attori; la finestra li mostra e chiede solo la
- * prima scena e il posto. Senza maghi nel Quadro avvisa e non parte. La
- * riserva torna a zero.
+ * dei personaggi «va eliminata»; 27/9, Blue: niente finestra, una pagina del
+ * Quadro che prende il posto del modo in uso): apre il Quadro sulla pagina
+ * della sessione, coi maghi del Quadro in breve, dove si trascinano dagli
+ * Attori quelli che mancano, si scelgono la prima scena e il posto, e
+ * Inizia fa partire la sessione (`iniziaSessione`).
  */
 export async function nuovaSessione() {
+  if (!game.user?.isGM) return false;
+  const app = await QuadroNarratore.apri();
+  if (!app) return false;
+  app.apriSessione();
+  await app.render();
+  return true;
+}
+
+/**
+ * L'inizio della sessione: giocano i maghi che stanno nel Quadro; senza
+ * maghi avvisa e non parte. Gli effetti della sessione prima e la lobby
+ * vecchia si puliscono, gli orologi si chiudono, la scena riparte da 1 col
+ * posto scelto, la riserva torna a zero.
+ */
+export async function iniziaSessione({ tipo = "", posto = "normale" } = {}) {
   if (!game.user?.isGM) return false;
   const localize = localizer();
   const maghi = attoriDelQuadro();
@@ -969,36 +1032,6 @@ export async function nuovaSessione() {
     ui.notifications.warn(localize("WOD5E_MAGE.Menu.NessunMagoSessione"));
     return false;
   }
-  const content = await foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/nuova-sessione-narratore.hbs`, {
-    maghi: maghi.map((actor) => ({ id: actor.id, name: actor.name, img: actor.img, utenti: utentiDi(actor) })),
-    scene: SCENE_PARADOSSO.map((scena) => ({ id: scena.id, nome: scena.nome })),
-    posti: POSTI.map((id) => ({ id, label: localize(`WOD5E_MAGE.Menu.Posti.${id}`) })),
-    points: getPool().points
-  });
-  let scelta = null;
-  const answer = await foundry.applications.api.DialogV2.wait({
-    window: { title: localize("WOD5E_MAGE.Paradosso.NewSession"), icon: "fa-solid fa-sun" },
-    content,
-    classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-quadro-dialogo"],
-    position: { width: 520, height: "auto" },
-    buttons: [
-      {
-        action: "inizia",
-        icon: "fa-solid fa-play",
-        label: localize("WOD5E_MAGE.Menu.Inizia"),
-        default: true,
-        callback: (_event, _button, dialog) => {
-          scelta = {
-            tipo: dialog.element.querySelector("[name=scena]")?.value ?? "",
-            posto: dialog.element.querySelector("[name=posto]")?.value ?? "normale"
-          };
-          return "inizia";
-        }
-      },
-      { action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") }
-    ]
-  }).catch(() => null);
-  if (answer !== "inizia" || !scelta) return false;
   const ids = maghi.map((actor) => actor.id);
   // Gli effetti della sessione scaduta e la lobby vecchia si puliscono.
   for (const actor of game.actors?.contents ?? []) {
@@ -1011,7 +1044,12 @@ export async function nuovaSessione() {
   for (const orologio of getOrologi()) await specchiaOrologio(orologio, { elimina: true });
   await game.settings.set(MODULE_ID, OROLOGI_SETTING, {});
   await setMaghi(ids);
-  await setScena({ tipo: scelta.tipo, posto: scelta.posto, numero: 1, inizio: Date.now() });
+  await setScena({
+    tipo: SCENE_PARADOSSO.some((scena) => scena.id === tipo) ? tipo : "",
+    posto: POSTI.includes(posto) ? posto : "normale",
+    numero: 1,
+    inizio: Date.now()
+  });
   await game.settings.set(MODULE_ID, POOL_SETTING, resetPool(getPool()));
   ui.notifications.info(game.i18n.format("WOD5E_MAGE.Menu.SessioneIniziata", { n: ids.length }));
   QuadroNarratore.aggiorna();

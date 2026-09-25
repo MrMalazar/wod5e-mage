@@ -193,10 +193,13 @@ chosen lens, or every lens with its name).
 
 ## Narrator's Board
 
-"New session" on the Narrator's Board starts with the mages that are on the
-Board (dragged there from the Actors sidebar): the dialog lists them and asks
-only for the first scene and the place; with an empty Board it warns instead
-of opening. The old dialog that ticked characters is gone.
+"New session" on the Narrator's Board opens no dialog: since 27 September
+2026 it turns the Board into a session page that takes the place of the mode
+in use, with the mages on the Board in short (portrait, name, who plays
+them, a × to remove one), a drop area for the mages still missing (drag them
+from the Actors sidebar, as in the Players mode), the first scene, the place
+and Start; Cancel goes back to the previous mode. Start refuses with an
+empty Board and warns. The old dialog that ticked characters is gone.
 
 ## Enemy sheet (M6)
 

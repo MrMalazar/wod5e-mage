@@ -1793,7 +1793,9 @@
       "ScenaInCorso": "current scene",
       "LeggiVoce": "Read the entry",
       "InQuestaScena": "In this scene.",
-      "NessunMagoSessione": "No mage on the Board: drag a mage from the Actors onto the Board, then press New session."
+      "NessunMagoSessione": "No mage on the Board: drag a mage here from the Actors, then press Start.",
+      "SessioneSpiega": "The mages on the Board play. Drag whoever is missing here from the Actors, pick the first scene and the place, then Start: last session's effects go away and the pool returns to zero.",
+      "SessioneAnnulla": "Cancel"
     },
     "Stat": {
       "Identita": "Identity",

@@ -102,7 +102,7 @@ globalThis.game = {
 };
 
 const { registerParadossoNarratore, getPool, POOL_SETTING, attoriScheda } = await import(new URL("scripts/paradosso-narratore.js", ROOT).href);
-const { registerQuadroNarratore, QuadroNarratore, nuovaSessione, cambioScena, getScena, getOrologi, attoriDelQuadro, statusMago, OROLOGI_SETTING } = await import(new URL("scripts/quadro-narratore.js", ROOT).href);
+const { registerQuadroNarratore, QuadroNarratore, nuovaSessione, iniziaSessione, cambioScena, getScena, getOrologi, attoriDelQuadro, statusMago, OROLOGI_SETTING } = await import(new URL("scripts/quadro-narratore.js", ROOT).href);
 const { ADDOSSO_FLAG, MAGHI_SETTING, QUADRO_SETTING, SCENA_SETTING } = await import(new URL("scripts/menu-paradosso.js", ROOT).href);
 registerParadossoNarratore();
 // Il pannello dei giocatori vuole il DOM: al ready passano solo i ganci del Quadro.
@@ -145,22 +145,40 @@ function rispondi(azione, element) {
 await game.settings.set(MODULE, POOL_SETTING, { points: 4, visible: false, log: [{ kind: "manual", amount: 4, when: 1 }] });
 await guendalina.setFlag(MODULE, ADDOSSO_FLAG, { vecchio: { id: "vecchio", voce: "fiacco", nome: "Fiacco", famiglia: "tocchi", durata: "scena", quando: 1 } });
 await game.settings.set(MODULE, OROLOGI_SETTING, { vecchio: { id: "vecchio", titolo: "Vecchio", segmenti: 4, pieni: 1, paradosso: { voce: "carica" } } });
-// Senza maghi nel Quadro (26/9) la Nuova sessione non parte: avvisa, e la vecchia finestra di scelta non c'è più.
+// Senza maghi nel Quadro (27/9) la Nuova sessione apre lo stesso la pagina del Quadro (i maghi
+// ci si trascinano), ma Inizia non parte: avvisa. La vecchia finestra di scelta non c'è più.
 const dialoghiPrima = sim.dialoghi.length;
-assert.equal(await nuovaSessione(), false);
-assert.equal(sim.dialoghi.length, dialoghiPrima, "nessuna finestra senza maghi nel Quadro");
+assert.equal(await nuovaSessione(), true, "la pagina della sessione si apre");
+assert.equal(sim.dialoghi.length, dialoghiPrima, "nessuna finestra");
+const appSessione = QuadroNarratore.aperto;
+assert.equal(appSessione.sessioneAperta, true);
+{
+  const options = {};
+  appSessione._configureRenderOptions(options);
+  assert.deepEqual(options.parts, ["testa", "sessione"], "la pagina prende il posto del modo in uso");
+}
+assert.equal(await iniziaSessione({ tipo: "combattimento", posto: "dissonante" }), false, "senza maghi non parte");
 assert.match(sim.notifiche.at(-1), /Nessun mago nel Quadro/);
 // Giocano i maghi del Quadro, quelli trascinati dagli Attori: Guendalina e Luca.
 await game.settings.set(MODULE, MAGHI_SETTING, { ids: ["a1", "a2"] });
-rispondi("inizia", elementoDialogo({ scena: "combattimento", posto: "dissonante" }));
-assert.equal(await nuovaSessione(), true);
 {
-  const dialogo = sim.dialoghi.at(-1);
-  assert.ok(!dialogo.content.includes('name="mago"'), "niente spunte: giocano i maghi del Quadro");
-  assert.match(dialogo.content, /Guendalina[\s\S]*Luca/);
-  assert.ok(!dialogo.content.includes("Ianira") && !dialogo.content.includes('value="n1"'), "chi non è nel Quadro non compare");
-  assert.match(dialogo.content, /Sara/);
+  const options = {};
+  appSessione._configureRenderOptions(options);
+  const ctx = await appSessione._prepareContext(options);
+  assert.equal(ctx.sessione, true);
+  assert.deepEqual(ctx.maghi.map((m) => m.name), ["Guendalina", "Luca"]);
+  assert.equal(ctx.modi.some((m) => m.attivo), false, "nessun modo acceso mentre la pagina è aperta");
+  const html = (await renderTemplate(`modules/${MODULE}/templates/quadro/testa.hbs`, ctx)) + (await renderTemplate(`modules/${MODULE}/templates/quadro/sessione.hbs`, ctx));
+  assert.match(html, /wod5e-mage-quadro-sessione[\s\S]*Guendalina[\s\S]*Luca/);
+  assert.ok(!html.includes("Ianira") && !html.includes('data-id="n1"'), "chi non è nel Quadro non compare");
+  assert.match(html, /Sara/);
+  for (const marker of ['data-role="trascina"', 'name="scena"', 'name="posto"', 'data-action="magoTogli" data-id="a1"', 'data-action="sessioneInizia"', 'data-action="sessioneAnnulla"']) assert.ok(html.includes(marker), `sessione.hbs: manca ${marker}`);
+  assert.ok(!html.includes('data-action="sessioneInizia" disabled'), "con i maghi Inizia è acceso");
 }
+// Inizia dalla pagina: legge le tendine, parte, e la pagina si chiude sul modo di prima.
+const tendine = { querySelector: (sel) => (sel === "[name=scena]" ? { value: "combattimento" } : sel === "[name=posto]" ? { value: "dissonante" } : null) };
+await QuadroNarratore.DEFAULT_OPTIONS.actions.sessioneInizia.call(appSessione, { preventDefault() {} }, { closest: () => tendine });
+assert.equal(appSessione.sessioneAperta, false, "a sessione iniziata la pagina si chiude");
 assert.deepEqual(attoriDelQuadro().map((a) => a.id), ["a1", "a2"]);
 assert.deepEqual(attoriScheda().map((a) => a.id), ["a1", "a2"], "la Scheda del Paradosso legge i maghi del Quadro");
 assert.equal(getPool().points, 0);
@@ -477,8 +495,9 @@ assert.equal(getPool().log.at(-1).kind, "scena");
 // 9. Togli un mago dal Quadro, e Nuova sessione annullata non cambia niente.
 await QuadroNarratore.DEFAULT_OPTIONS.actions.magoTogli.call(app, { preventDefault() {} }, { dataset: { id: "a2" } });
 assert.deepEqual(attoriDelQuadro().map((a) => a.id), ["a1"]);
-rispondi("cancel", elementoDialogo());
-assert.equal(await nuovaSessione(), false);
+assert.equal(await nuovaSessione(), true);
+await QuadroNarratore.DEFAULT_OPTIONS.actions.sessioneAnnulla.call(QuadroNarratore.aperto, { preventDefault() {} });
+assert.equal(QuadroNarratore.aperto.sessioneAperta, false, "Annulla chiude la pagina senza toccare niente");
 assert.equal(getScena().numero, 2);
 assert.equal(game.settings.get(MODULE, SCENA_SETTING).tipo, "rituale");
 assert.deepEqual(game.settings.get(MODULE, MAGHI_SETTING).ids, ["a1"]);
@@ -496,6 +515,14 @@ if (process.env.QUADRO_PAGINA) {
   for (const modo of ["contatore", "menu", "giocatori"]) {
     const { html } = await contesto(modo);
     writeFileSync(`${dir}/${modo}.html`, html);
+  }
+  // La pagina della Nuova sessione (27/9), con Guendalina sola nel Quadro.
+  app.apriSessione();
+  {
+    const options = {};
+    app._configureRenderOptions(options);
+    const ctx = await app._prepareContext(options);
+    writeFileSync(`${dir}/sessione.html`, (await renderTemplate(`modules/${MODULE}/templates/quadro/testa.hbs`, ctx)) + (await renderTemplate(`modules/${MODULE}/templates/quadro/sessione.hbs`, ctx)));
   }
   writeFileSync(`${dir}/carta.html`, sim.messages.filter((m) => m.content).map((m) => m.content).join("\n"));
   console.log(`pagine scritte in ${dir}`);

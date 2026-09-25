@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import {
   ADDOSSO_FLAG,
   addossoDopo,
@@ -318,7 +318,7 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
 {
   const quadro = readFileSync(new URL("../scripts/quadro-narratore.js", import.meta.url), "utf8");
   assert.ok(quadro.includes('modo: QuadroNarratore.#modo') || quadro.includes("modo:"), "l'azione del modo");
-  assert.ok(quadro.includes('options.parts = ["testa", this.modo]'), "una PART per modo, dietro la testa");
+  assert.ok(quadro.includes('options.parts = ["testa", this.#sessione ? "sessione" : this.modo]'), "una PART per modo, dietro la testa; la pagina della sessione al posto del modo (27/9)");
   assert.ok(quadro.includes("setApriQuadro("), "la barra apre il Quadro senza importarlo");
   const testa = readFileSync(new URL("../templates/quadro/testa.hbs", import.meta.url), "utf8");
   assert.equal((testa.match(/data-action="modo"/g) ?? []).length, 1, "i modi in un {{#each}}");
@@ -338,13 +338,14 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   for (const marker of ['wod5e-mage-quadro-trascina', "WOD5E_MAGE.Menu.TrascinaQui", 'data-action="attivoTogli"', 'data-action="schedaApri"', "WOD5E_MAGE.Menu.Attivi", "WOD5E_MAGE.Menu.Passivi", "WOD5E_MAGE.Menu.MagickInAtto"]) {
     assert.ok(giocatori.includes(marker), `giocatori.hbs: manca ${marker}`);
   }
-  const sessione = readFileSync(new URL("../templates/dialogs/nuova-sessione-narratore.hbs", import.meta.url), "utf8");
-  assert.ok(!sessione.includes('name="mago"') && sessione.includes('name="scena"') && sessione.includes("WOD5E_MAGE.Menu.ChiGiocaHint"), "la Nuova sessione (26/9): giocano i maghi del Quadro, niente spunte");
+  const sessione = readFileSync(new URL("../templates/quadro/sessione.hbs", import.meta.url), "utf8");
+  assert.ok(!sessione.includes('name="mago"') && sessione.includes('name="scena"') && sessione.includes('data-action="sessioneInizia"') && sessione.includes("WOD5E_MAGE.Menu.TrascinaQui"), "la Nuova sessione (27/9): una pagina del Quadro coi maghi da trascinare, niente spunte");
+  assert.ok(!existsSync(new URL("../templates/dialogs/nuova-sessione-narratore.hbs", import.meta.url)), "la finestra della Nuova sessione non c'è più");
   assert.doesNotMatch(readFileSync(new URL("../scripts/quadro-narratore.js", import.meta.url), "utf8"), /maghiDelMondo|leggiScelti|input\[name=mago\]/);
   // Le chiavi di lingua usate dal Quadro esistono in it.json e en.json.
   const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE;
   const en = JSON.parse(readFileSync(new URL("../lang/en.json", import.meta.url), "utf8")).WOD5E_MAGE;
-  const sorgenti = ["scripts/quadro-narratore.js", "scripts/menu-paradosso.js", "scripts/paradosso-narratore.js", "templates/quadro/testa.hbs", "templates/quadro/contatore.hbs", "templates/quadro/menu.hbs", "templates/quadro/giocatori.hbs", "templates/dialogs/nuova-sessione-narratore.hbs", "templates/dialogs/cambio-scena.hbs"]
+  const sorgenti = ["scripts/quadro-narratore.js", "scripts/menu-paradosso.js", "scripts/paradosso-narratore.js", "templates/quadro/testa.hbs", "templates/quadro/contatore.hbs", "templates/quadro/menu.hbs", "templates/quadro/giocatori.hbs", "templates/quadro/sessione.hbs", "templates/dialogs/cambio-scena.hbs"]
     .map((file) => readFileSync(new URL(`../${file}`, import.meta.url), "utf8")).join("\n");
   const chiavi = new Set([...sorgenti.matchAll(/WOD5E_MAGE\.((?:Menu|Paradosso)\.[A-Za-z0-9_.]*[A-Za-z0-9_])/g)].map((m) => m[1]));
   const leggi = (albero, chiave) => chiave.split(".").reduce((nodo, parte) => (nodo && typeof nodo === "object" ? nodo[parte] : undefined), albero);
