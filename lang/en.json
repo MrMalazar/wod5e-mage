@@ -1688,7 +1688,7 @@
         "scoppio": "on burst"
       },
       "InGioco": "In play: {n}",
-      "Aggiungi": "Add",
+      "TrascinaQui": "drag a mage here from the Actors",
       "SenzaGiocatore": "no player",
       "ApriScheda": "Open the sheet",
       "Togli": "Remove",
@@ -1703,7 +1703,7 @@
       "Nessuna": "none",
       "AttiviCorti": "active",
       "PassiviCorti": "passive",
-      "NessunMago": "No mage on the Board: New session or \"Add\" puts them in play.",
+      "NessunMago": "No mage on the Board: New session puts them in play, or drag a mage here from the Actors.",
       "ChiGioca": "Who plays tonight?",
       "ChiGiocaHint": "Tick the mages in play: they enter the Board and the Paradox Sheet. Those you leave unticked stay out even if they press New session.",
       "NessunMagoNelMondo": "No mage in the world.",
@@ -1714,11 +1714,14 @@
       "Finisce": "Ends:",
       "FinisceNiente": "No effect on the mages ends with the scene change.",
       "PostoHint": "A dissonant or assonant place counts in the roll's verdict, not in the menu prices.",
-      "AggiungiHint": "The mages of the world who are not on the Board.",
+      "Trascina": {
+        "nonMago": "{name} is not a mage: only mages enter the Board.",
+        "giaDentro": "{name} is already on the Board.",
+        "compendio": "{name} comes from a compendium: import it among the Actors, then drag it here."
+      },
       "Inizia": "Start",
       "Cambia": "Change",
       "SessioneIniziata": "New session: {n} mages on the Board, pool at zero.",
-      "NessunoDaAggiungere": "Every mage of the world is already on the Board.",
       "Speso": "{nome}: {prezzo} points spent, {resto} left.",
       "PrezzoManca": "A number is missing for the price: pick the Vulgar, the threshold or the dots.",
       "LogCopia": "{kind} by {name}",
@@ -1757,7 +1760,7 @@
         "scena": "for the scene",
         "sessione": "for the session"
       },
-      "CosaFate": "What you do",
+      "Possibilita": "Possibilities",
       "FuoriQuadro": "not on the Board",
       "NessunaVoceQui": "No entry of this family in the chosen scene.",
       "Rimbalzo": "The rebound that fires",

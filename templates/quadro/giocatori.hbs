@@ -1,8 +1,9 @@
-{{!-- I giocatori (24/9): un riquadro per mago, chiuso con lo status e tre conti, aperto con Attivi, Passivi e Magick in atto. Chi c'è lo decide il Narratore. --}}
+{{!-- I giocatori (24/9): un riquadro per mago, chiuso con lo status e tre conti, aperto con Attivi, Passivi e Magick in atto.
+     Chi c'è lo decide il Narratore: la Nuova sessione, o un mago trascinato dagli Attori sul Quadro (25/9): entra in coda. --}}
 <div class="wod5e-mage-quadro-corpo wod5e-mage-quadro-giocatori">
     <div class="wod5e-mage-quadro-riga-testa">
         <span>{{localize "WOD5E_MAGE.Menu.InGioco" n=maghi.length}}</span>
-        <button type="button" class="ghost" data-action="magoAggiungi"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.Aggiungi"}}</button>
+        <span class="wod5e-mage-quadro-trascina" data-role="trascina"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.TrascinaQui"}}</span>
     </div>
     {{#each maghi as |m|}}
         <div class="wod5e-mage-quadro-mago{{#if m.aperto}} aperto{{/if}}">

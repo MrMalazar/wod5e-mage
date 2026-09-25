@@ -1,173 +1,177 @@
-{{!-- Personaggio, nella gabbia a tendine della Sfida, su due colonne:
-     a sinistra Concetto e Cronaca (con Ambizione e Desiderio descritti) e le
-     Ancore; a destra la Saggezza e le Convinzioni. L'Appartenenza sta in testata. --}}
+{{!-- La Bussola (Blue, 25/9 sera: «come la Magick in atto»): il titolo di pagina e
+     le misure della pagina Magick, riquadri col titolo d'oro, carte scure, campi
+     trasparenti con la riga d'oro sotto, etichette in oro maiuscolo a larghezza
+     fissa così le caselle stanno in colonna. Su due colonne: a sinistra Concetto
+     e Cronaca (con Ambizione e Desiderio e il loro «quando si attiva») e le
+     Ancore; a destra lo Stato e le Convinzioni. L'Appartenenza sta in testata. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-personaggio" data-tab="{{tab.id}}" data-group="{{tab.group}}">
-    <div class="wod5e-mage-concept-content wod5e-mage-personaggio-content">
-        <div class="wod5e-mage-personaggio-columns">
-            <div class="wod5e-mage-personaggio-col wod5e-mage-personaggio-col-left">
-                <details class="wod5e-mage-concept-group" open>
-                    <summary>
-                        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                        {{!-- Il reset della Bussola (Ambizione, Desiderio, Convinzioni, Ancore), 11/9. --}}
-                        {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.compass}}{{/if}}
-                        <span>{{localize "WOD5E_MAGE.Personaggio.IdentityLabel"}}</span>
-                    </summary>
+    <header class="wod5e-mage-section-title">
+        {{!-- Il reset della Bussola (Ambizione, Desiderio, Convinzioni, Ancore), 11/9. --}}
+        {{#if creazioneReset}}{{> "modules/wod5e-mage/templates/actor/parts/reset-tasto.hbs" resetsById.compass}}{{/if}}
+        <span>{{localize "WOD5E_MAGE.Tabs.Short.personaggio"}}</span>
+    </header>
 
-                    <div class="wod5e-mage-identity-grid">
-                        <label class="wod5e-mage-identity-field">
-                            <span>{{localize "WOD5E.BiographyList.Concept"}} <button type="button" class="wod5e-mage-archivio-open" data-action="archivioOpen" data-kind="concetto" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button></span>
-                            <input type="text" name="system.headers.concept" value="{{concept}}" placeholder="{{localize 'WOD5E.BiographyList.Concept'}}"/>
-                        </label>
-                        <label class="wod5e-mage-identity-field">
+    <div class="wod5e-mage-spheres-content wod5e-mage-personaggio-columns">
+        <div class="wod5e-mage-personaggio-col wod5e-mage-personaggio-col-left">
+            <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-bussola-identita">
+                <header class="wod5e-mage-riq-title">
+                    <span>{{localize "WOD5E_MAGE.Personaggio.IdentityLabel"}}</span>
+                </header>
+                <div class="wod5e-mage-riq-body">
+                    <div class="wod5e-mage-bussola-carta">
+                        <div class="wod5e-mage-bussola-campo">
+                            <span>{{localize "WOD5E.BiographyList.Concept"}}</span>
+                            <input type="text" name="system.headers.concept" value="{{concept}}" placeholder="{{localize 'WOD5E.BiographyList.Concept'}}" aria-label="{{localize 'WOD5E.BiographyList.Concept'}}" {{#if locked}}disabled{{/if}}>
+                            <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="archivioOpen" data-kind="concetto" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+                        </div>
+                        <label class="wod5e-mage-bussola-campo">
                             <span>{{localize "WOD5E.BiographyList.Chronicle"}}</span>
-                            <input type="text" name="system.headers.chronicle" value="{{chronicle}}" placeholder="{{localize 'WOD5E.BiographyList.Chronicle'}}"/>
+                            <input type="text" name="system.headers.chronicle" value="{{chronicle}}" placeholder="{{localize 'WOD5E.BiographyList.Chronicle'}}" {{#if locked}}disabled{{/if}}>
                         </label>
                     </div>
 
-                    {{!-- Ambizione e Desiderio: il nome, e sotto quando si attiva.
+                    {{!-- Ambizione e Desiderio: il nome e, sotto, quando si attiva.
                          Il libro apre l'archivio dei Cataloghi; il «+» dell'archivio accoda. --}}
-                    <div class="wod5e-mage-identity-grid">
-                        <div class="wod5e-mage-identity-field">
-                            <span>{{localize "WOD5E.BiographyList.Ambition"}} <button type="button" class="wod5e-mage-archivio-open" data-action="archivioOpen" data-kind="ambizione" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button></span>
-                            <input type="text" name="system.headers.ambition" value="{{ambition}}" placeholder="{{localize 'WOD5E.BiographyList.Ambition'}}"/>
-                            <textarea name="flags.wod5e-mage.ambitionTrigger" rows="2" placeholder="{{localize 'WOD5E_MAGE.Personaggio.TriggerHint'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.TriggerHint'}}" {{#if locked}}disabled{{/if}}>{{ambitionTrigger}}</textarea>
+                    <div class="wod5e-mage-bussola-carta">
+                        <div class="wod5e-mage-bussola-campo">
+                            <span>{{localize "WOD5E.BiographyList.Ambition"}}</span>
+                            <input type="text" name="system.headers.ambition" value="{{ambition}}" placeholder="{{localize 'WOD5E.BiographyList.Ambition'}}" aria-label="{{localize 'WOD5E.BiographyList.Ambition'}}" {{#if locked}}disabled{{/if}}>
+                            <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="archivioOpen" data-kind="ambizione" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
                         </div>
-                        <div class="wod5e-mage-identity-field">
-                            <span>{{localize "WOD5E.BiographyList.Desire"}} <button type="button" class="wod5e-mage-archivio-open" data-action="archivioOpen" data-kind="desiderio" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button></span>
-                            <input type="text" name="system.headers.desire" value="{{desire}}" placeholder="{{localize 'WOD5E.BiographyList.Desire'}}"/>
-                            <textarea name="flags.wod5e-mage.desireTrigger" rows="2" placeholder="{{localize 'WOD5E_MAGE.Personaggio.TriggerHint'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.TriggerHint'}}" {{#if locked}}disabled{{/if}}>{{desireTrigger}}</textarea>
+                        <label class="wod5e-mage-bussola-campo">
+                            <span>{{localize "WOD5E_MAGE.Personaggio.TriggerHint"}}</span>
+                            <textarea name="flags.wod5e-mage.ambitionTrigger" rows="1" placeholder="{{localize 'WOD5E_MAGE.Personaggio.TriggerHint'}}" {{#if locked}}disabled{{/if}}>{{ambitionTrigger}}</textarea>
+                        </label>
+                    </div>
+                    <div class="wod5e-mage-bussola-carta">
+                        <div class="wod5e-mage-bussola-campo">
+                            <span>{{localize "WOD5E.BiographyList.Desire"}}</span>
+                            <input type="text" name="system.headers.desire" value="{{desire}}" placeholder="{{localize 'WOD5E.BiographyList.Desire'}}" aria-label="{{localize 'WOD5E.BiographyList.Desire'}}" {{#if locked}}disabled{{/if}}>
+                            <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="archivioOpen" data-kind="desiderio" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
                         </div>
-                    </div>
-                </details>
-
-                <details class="wod5e-mage-concept-group" open>
-                    <summary>
-                        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                        <span>{{localize "WOD5E_MAGE.Personaggio.AnchorsLabel"}}</span>
-                    </summary>
-
-                    <div class="wod5e-mage-row-head">
-                        <button type="button" class="wod5e-mage-archivio-open" data-action="archivioOpen" data-kind="ancora" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
-                        {{!-- Genera (25/9): un'Ancora nuova con tutte e sette le righe tirate; la Convinzione resta al giocatore. --}}
-                        <button type="button" class="wod5e-mage-row-add wod5e-mage-ancora-genera" data-action="ancoraGenera" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerateNew'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerateNew'}}" {{#if locked}}disabled{{/if}}>
-                            <i class="fa-solid fa-dice"></i>
-                        </button>
-                        <button type="button" class="wod5e-mage-row-add" data-action="personaggioRowAdd" data-table="ancore" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorAdd'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorAdd'}}" {{#if locked}}disabled{{/if}}>
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
-                    </div>
-
-                    {{#if anchors.length}}
-                    <div class="wod5e-mage-ancore">
-                        {{#each anchors as |row|}}
-                            {{!-- Le sette righe della Bussola rifatta (25/9): nome, ruolo, mestiere, età, cosa ti dà, la Convinzione legata, cosa non sa, dove morde. --}}
-                            <div class="wod5e-mage-ancora" data-row="{{row.id}}">
-                                <div class="wod5e-mage-ancora-riga wod5e-mage-ancora-testa">
-                                    <input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.name" value="{{row.name}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorName'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorName'}}" {{#if ../locked}}disabled{{/if}}>
-                                    <select name="flags.wod5e-mage.ancore.{{row.id}}.role" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorRole'}}" {{#if ../locked}}disabled{{/if}}>
-                                        <option value="">{{localize "WOD5E_MAGE.Personaggio.AnchorRole"}}</option>
-                                        {{#each row.roles as |ruolo|}}
-                                            <option value="{{ruolo.id}}" title="{{ruolo.definizione}}" {{#if ruolo.selected}}selected{{/if}}>{{ruolo.id}}</option>
-                                        {{/each}}
-                                    </select>
-                                    <input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.job" value="{{row.job}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorJob'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorJob'}}" {{#if ../locked}}disabled{{/if}}>
-                                    <input type="text" class="wod5e-mage-ancora-eta" name="flags.wod5e-mage.ancore.{{row.id}}.age" value="{{row.age}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorAge'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorAge'}}" inputmode="numeric" {{#if ../locked}}disabled{{/if}}>
-                                    <button type="button" class="wod5e-mage-ancora-tasto" data-action="ancoraGenera" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerateHint'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerate'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-dice" aria-hidden="true"></i></button>
-                                    <button type="button" class="wod5e-mage-ancora-tasto" data-action="personaggioRowDelete" data-table="ancore" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorRemove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
-                                </div>
-                                <div class="wod5e-mage-ancora-riga">
-                                    <label><span>{{localize "WOD5E_MAGE.Personaggio.AnchorGives"}}</span><input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.gives" value="{{row.gives}}" {{#if ../locked}}disabled{{/if}}></label>
-                                    <label><span>{{localize "WOD5E_MAGE.Personaggio.AnchorConviction"}}</span>
-                                        <select name="flags.wod5e-mage.ancore.{{row.id}}.conviction" {{#if ../locked}}disabled{{/if}}>
-                                            <option value="">{{localize "WOD5E_MAGE.Personaggio.AnchorConvictionNone"}}</option>
-                                            {{#each row.convictions as |conv|}}
-                                                <option value="{{conv.id}}" {{#if conv.selected}}selected{{/if}}>{{conv.text}}</option>
-                                            {{/each}}
-                                        </select>
-                                    </label>
-                                </div>
-                                <div class="wod5e-mage-ancora-riga">
-                                    <label><span>{{localize "WOD5E_MAGE.Personaggio.AnchorUnknown"}}</span><input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.unknown" value="{{row.unknown}}" {{#if ../locked}}disabled{{/if}}></label>
-                                    <label><span>{{localize "WOD5E_MAGE.Personaggio.AnchorBites"}}</span><input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.bites" value="{{row.bites}}" {{#if ../locked}}disabled{{/if}}></label>
-                                </div>
-                                {{!-- Le note: il vecchio campo «perché conta, e cosa non sa» resta leggibile qui. --}}
-                                <textarea rows="1" class="wod5e-mage-mini-textarea wod5e-mage-ancora-note" name="flags.wod5e-mage.ancore.{{row.id}}.description" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorNotes'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorNotes'}}" {{#if ../locked}}disabled{{/if}}>{{row.description}}</textarea>
-                            </div>
-                        {{/each}}
-                    </div>
-                    {{else}}
-                        <p class="wod5e-mage-row-empty">{{localize "WOD5E_MAGE.Personaggio.AnchorsEmpty"}}</p>
-                    {{/if}}
-                </details>
-            </div>
-
-            <div class="wod5e-mage-personaggio-col wod5e-mage-personaggio-col-right">
-                {{!-- In cima al Personaggio: lo stato del Risvegliato (una casella libera) e, sotto, le
-                     Convinzioni (4/9 notte). La Saggezza non sta più qui (Blue, 24/9 sera: «togliere
-                     Saggezza da Bussola dato che è già nella tab Stat»): la fila è nelle Risorse. --}}
-                <div class="wod5e-mage-wisdom-row">
-                    <div class="wod5e-mage-wisdom-status">
-                        <label class="wod5e-mage-wisdom-head" for="wod5e-mage-wisdom-status">{{localize "WOD5E_MAGE.Wisdom.Status"}}</label>
-                        <input type="text" id="wod5e-mage-wisdom-status" name="flags.wod5e-mage.wisdomStatus" value="{{wisdomStatus}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Status'}}" {{#if locked}}disabled{{/if}}>
+                        <label class="wod5e-mage-bussola-campo">
+                            <span>{{localize "WOD5E_MAGE.Personaggio.TriggerHint"}}</span>
+                            <textarea name="flags.wod5e-mage.desireTrigger" rows="1" placeholder="{{localize 'WOD5E_MAGE.Personaggio.TriggerHint'}}" {{#if locked}}disabled{{/if}}>{{desireTrigger}}</textarea>
+                        </label>
                     </div>
                 </div>
+            </section>
 
-                <details class="wod5e-mage-concept-group" open>
-                    <summary>
-                        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-                        <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionsLabel"}}</span>
-                    </summary>
-
-                    <div class="wod5e-mage-row-head">
-                        <button type="button" class="wod5e-mage-archivio-open" data-action="archivioOpen" data-kind="convinzione" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
-                        <button type="button" class="wod5e-mage-row-add" data-action="personaggioRowAdd" data-table="convinzioni" title="{{localize 'WOD5E_MAGE.Personaggio.ConvictionAdd'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionAdd'}}" {{#if locked}}disabled{{/if}}>
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
-                    </div>
-
-                    {{#if convictions.length}}
-                    <div class="wod5e-mage-conviction-list">
-                        {{!-- Ogni Convinzione su tre righe (9/9): gruppo (o Credo) e testo; «La servi
-                             quando» con la sua descrizione; «La attraversi quando» con la sua. --}}
-                        {{#each convictions as |row|}}
-                            <div class="wod5e-mage-conviction">
-                                <div class="wod5e-mage-conviction-grid">
-                                    <select name="flags.wod5e-mage.convinzioni.{{row.id}}.group" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroup'}}" {{#if ../locked}}disabled{{/if}}>
-                                        <option value="">{{localize "WOD5E_MAGE.Personaggio.ConvictionGroupNone"}}</option>
-                                        <optgroup label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroupsCatalog'}}">
-                                            {{#each row.groups as |group|}}
-                                                <option value="{{group.id}}" {{#if group.selected}}selected{{/if}}>{{group.label}}</option>
-                                            {{/each}}
-                                        </optgroup>
-                                        <optgroup label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroupsCredi'}}">
-                                            {{#each row.credos as |group|}}
-                                                <option value="{{group.id}}" {{#if group.selected}}selected{{/if}}>{{group.label}}</option>
-                                            {{/each}}
-                                        </optgroup>
-                                    </select>
-                                    <input type="text" name="flags.wod5e-mage.convinzioni.{{row.id}}.text" value="{{row.text}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.ConvictionText'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionText'}}" {{#if ../locked}}disabled{{/if}}>
-                                    <button type="button" data-action="personaggioRowDelete" data-table="convinzioni" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.ConvictionRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionRemove'}}" {{#if ../locked}}disabled{{/if}}>
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                                <div class="wod5e-mage-conviction-when">
-                                    <label>
-                                        <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionServe"}}</span>
-                                        <textarea class="wod5e-mage-mini-textarea" name="flags.wod5e-mage.convinzioni.{{row.id}}.serve" rows="2" placeholder="{{localize 'WOD5E_MAGE.Personaggio.ConvictionServeHint'}}" {{#if ../locked}}disabled{{/if}}>{{row.serve}}</textarea>
-                                    </label>
-                                    <label>
-                                        <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionCross"}}</span>
-                                        <textarea class="wod5e-mage-mini-textarea" name="flags.wod5e-mage.convinzioni.{{row.id}}.cross" rows="2" placeholder="{{localize 'WOD5E_MAGE.Personaggio.ConvictionCrossHint'}}" {{#if ../locked}}disabled{{/if}}>{{row.cross}}</textarea>
-                                    </label>
-                                </div>
+            {{!-- Le Ancore a sette righe (25/9): una carta per Ancora. In testa il nome, il ruolo, il
+                 mestiere, l'età, il dado che tira i campi vuoti e il cestino; sotto cosa ti dà e la
+                 Convinzione legata, cosa non sa e dove morde; in coda le note. Nel titolo il libro
+                 delle dodici montate, il dado che genera un'Ancora nuova, il + di una vuota. --}}
+            <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-ancore">
+                <header class="wod5e-mage-riq-title wod5e-mage-riq-title-tasti">
+                    <span>{{localize "WOD5E_MAGE.Personaggio.AnchorsLabel"}}</span>
+                    <span class="wod5e-mage-riq-tasti">
+                        <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="archivioOpen" data-kind="ancora" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+                        <button type="button" class="wod5e-mage-riq-tasto-piccolo wod5e-mage-ancora-genera" data-action="ancoraGenera" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerateNew'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerateNew'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-dice" aria-hidden="true"></i></button>
+                        <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="personaggioRowAdd" data-table="ancore" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorAdd'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorAdd'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                    </span>
+                </header>
+                <div class="wod5e-mage-riq-body">
+                    {{#each anchors as |row|}}
+                        <div class="wod5e-mage-bussola-carta wod5e-mage-ancora" data-row="{{row.id}}">
+                            <div class="wod5e-mage-ancora-testa">
+                                <input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.name" value="{{row.name}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorName'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorName'}}" {{#if ../locked}}disabled{{/if}}>
+                                <select name="flags.wod5e-mage.ancore.{{row.id}}.role" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorRole'}}" {{#if ../locked}}disabled{{/if}}>
+                                    <option value="">{{localize "WOD5E_MAGE.Personaggio.AnchorRole"}}</option>
+                                    {{#each row.roles as |ruolo|}}
+                                        <option value="{{ruolo.id}}" title="{{ruolo.definizione}}" {{#if ruolo.selected}}selected{{/if}}>{{ruolo.id}}</option>
+                                    {{/each}}
+                                </select>
+                                <input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.job" value="{{row.job}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorJob'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorJob'}}" {{#if ../locked}}disabled{{/if}}>
+                                <input type="text" class="wod5e-mage-ancora-eta" name="flags.wod5e-mage.ancore.{{row.id}}.age" value="{{row.age}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorAge'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorAge'}}" inputmode="numeric" {{#if ../locked}}disabled{{/if}}>
+                                <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="ancoraGenera" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerateHint'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerate'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-dice" aria-hidden="true"></i></button>
+                                <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="personaggioRowDelete" data-table="ancore" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorRemove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
                             </div>
-                        {{/each}}
-                    </div>
+                            <div class="wod5e-mage-bussola-campi">
+                                <label class="wod5e-mage-bussola-campo"><span>{{localize "WOD5E_MAGE.Personaggio.AnchorGives"}}</span><input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.gives" value="{{row.gives}}" {{#if ../locked}}disabled{{/if}}></label>
+                                <label class="wod5e-mage-bussola-campo"><span>{{localize "WOD5E_MAGE.Personaggio.AnchorConviction"}}</span>
+                                    <select name="flags.wod5e-mage.ancore.{{row.id}}.conviction" {{#if ../locked}}disabled{{/if}}>
+                                        <option value="">{{localize "WOD5E_MAGE.Personaggio.AnchorConvictionNone"}}</option>
+                                        {{#each row.convictions as |conv|}}
+                                            <option value="{{conv.id}}" {{#if conv.selected}}selected{{/if}}>{{conv.text}}</option>
+                                        {{/each}}
+                                    </select>
+                                </label>
+                                <label class="wod5e-mage-bussola-campo"><span>{{localize "WOD5E_MAGE.Personaggio.AnchorUnknown"}}</span><input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.unknown" value="{{row.unknown}}" {{#if ../locked}}disabled{{/if}}></label>
+                                <label class="wod5e-mage-bussola-campo"><span>{{localize "WOD5E_MAGE.Personaggio.AnchorBites"}}</span><input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.bites" value="{{row.bites}}" {{#if ../locked}}disabled{{/if}}></label>
+                            </div>
+                            {{!-- Le note: il vecchio campo «perché conta, e cosa non sa» resta leggibile qui. --}}
+                            <textarea class="wod5e-mage-bussola-note" name="flags.wod5e-mage.ancore.{{row.id}}.description" rows="1" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorNotes'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorNotes'}}" {{#if ../locked}}disabled{{/if}}>{{row.description}}</textarea>
+                        </div>
                     {{else}}
-                        <p class="wod5e-mage-row-empty">{{localize "WOD5E_MAGE.Personaggio.ConvictionsEmpty"}}</p>
-                    {{/if}}
-                </details>
-            </div>
+                        <p class="wod5e-mage-bussola-vuoto">{{localize "WOD5E_MAGE.Personaggio.AnchorsEmpty"}}</p>
+                    {{/each}}
+                </div>
+            </section>
+        </div>
+
+        <div class="wod5e-mage-personaggio-col wod5e-mage-personaggio-col-right">
+            {{!-- In cima: lo stato del Risvegliato (una casella libera). La Saggezza non sta più
+                 qui (Blue, 24/9 sera: «togliere Saggezza da Bussola dato che è già nella tab Stat»):
+                 la fila è nelle Risorse. --}}
+            <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-stato">
+                <header class="wod5e-mage-riq-title">
+                    <span>{{localize "WOD5E_MAGE.Wisdom.Status"}}</span>
+                </header>
+                <div class="wod5e-mage-riq-body">
+                    <div class="wod5e-mage-bussola-carta">
+                        <label class="wod5e-mage-bussola-campo">
+                            <input type="text" id="wod5e-mage-wisdom-status" name="flags.wod5e-mage.wisdomStatus" value="{{wisdomStatus}}" placeholder="{{localize 'WOD5E_MAGE.Wisdom.Status'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Status'}}" {{#if locked}}disabled{{/if}}>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            {{!-- Ogni Convinzione è una carta (9/9): il gruppo (o il Credo) e il testo con il
+                 cestino; sotto «La servi quando» e «La attraversi quando», con la descrizione. --}}
+            <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-convinzioni">
+                <header class="wod5e-mage-riq-title wod5e-mage-riq-title-tasti">
+                    <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionsLabel"}}</span>
+                    <span class="wod5e-mage-riq-tasti">
+                        <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="archivioOpen" data-kind="convinzione" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+                        <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="personaggioRowAdd" data-table="convinzioni" title="{{localize 'WOD5E_MAGE.Personaggio.ConvictionAdd'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionAdd'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                    </span>
+                </header>
+                <div class="wod5e-mage-riq-body">
+                    {{#each convictions as |row|}}
+                        <div class="wod5e-mage-bussola-carta wod5e-mage-conviction">
+                            <div class="wod5e-mage-conviction-testa">
+                                <select name="flags.wod5e-mage.convinzioni.{{row.id}}.group" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroup'}}" {{#if ../locked}}disabled{{/if}}>
+                                    <option value="">{{localize "WOD5E_MAGE.Personaggio.ConvictionGroupNone"}}</option>
+                                    <optgroup label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroupsCatalog'}}">
+                                        {{#each row.groups as |group|}}
+                                            <option value="{{group.id}}" {{#if group.selected}}selected{{/if}}>{{group.label}}</option>
+                                        {{/each}}
+                                    </optgroup>
+                                    <optgroup label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroupsCredi'}}">
+                                        {{#each row.credos as |group|}}
+                                            <option value="{{group.id}}" {{#if group.selected}}selected{{/if}}>{{group.label}}</option>
+                                        {{/each}}
+                                    </optgroup>
+                                </select>
+                                <input type="text" name="flags.wod5e-mage.convinzioni.{{row.id}}.text" value="{{row.text}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.ConvictionText'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionText'}}" {{#if ../locked}}disabled{{/if}}>
+                                <button type="button" class="wod5e-mage-riq-tasto-piccolo" data-action="personaggioRowDelete" data-table="convinzioni" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.ConvictionRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionRemove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                            </div>
+                            <div class="wod5e-mage-bussola-campi wod5e-mage-conviction-when">
+                                <label class="wod5e-mage-bussola-campo largo">
+                                    <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionServe"}}</span>
+                                    <textarea name="flags.wod5e-mage.convinzioni.{{row.id}}.serve" rows="1" placeholder="{{localize 'WOD5E_MAGE.Personaggio.ConvictionServeHint'}}" {{#if ../locked}}disabled{{/if}}>{{row.serve}}</textarea>
+                                </label>
+                                <label class="wod5e-mage-bussola-campo largo">
+                                    <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionCross"}}</span>
+                                    <textarea name="flags.wod5e-mage.convinzioni.{{row.id}}.cross" rows="1" placeholder="{{localize 'WOD5E_MAGE.Personaggio.ConvictionCrossHint'}}" {{#if ../locked}}disabled{{/if}}>{{row.cross}}</textarea>
+                                </label>
+                            </div>
+                        </div>
+                    {{else}}
+                        <p class="wod5e-mage-bussola-vuoto">{{localize "WOD5E_MAGE.Personaggio.ConvictionsEmpty"}}</p>
+                    {{/each}}
+                </div>
+            </section>
         </div>
     </div>
 </section>

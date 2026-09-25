@@ -384,8 +384,8 @@ function escapeHtml(value) {
 
 /**
  * «Il Paradosso agisce» per una voce del menù: il nome col modo, a quale
- * Volgare risponde, il Segno (se è annunciata) e l'Effetto, «cosa fate?»
- * con le tre mosse, il Poi. Il prezzo non ci va: lo vede il Narratore nel
+ * Volgare risponde, il Segno (se è annunciata) e l'Effetto, le «Possibilità»
+ * (le tre mosse; Blue, 25/9: prima «cosa fate»), il Poi. Il prezzo non ci va: lo vede il Narratore nel
  * registro. `dettagli` porta le righe in più (chi entra e cosa vuole, i
  * segmenti dell'orologio, l'Ancora).
  */
@@ -402,7 +402,7 @@ export function renderCartaVoce(voce, { risponde = "", suChi = "", dettagli = []
   }
   if (nota) rows.push(riga(localize("WOD5E_MAGE.Paradosso.What"), escapeHtml(nota)));
   if (voce.mosse?.length) {
-    rows.push(riga(localize("WOD5E_MAGE.Menu.CosaFate"), voce.mosse.map((mossa) => `<span class="wod5e-mage-menu-mossa">${escapeHtml(mossa)}</span>`).join(" "), "wod5e-mage-menu-mosse"));
+    rows.push(riga(localize("WOD5E_MAGE.Menu.Possibilita"), voce.mosse.map((mossa) => `<span class="wod5e-mage-menu-mossa">${escapeHtml(mossa)}</span>`).join(" "), "wod5e-mage-menu-mosse"));
   }
   if (voce.poi) rows.push(riga(localize("WOD5E_MAGE.Menu.Poi"), escapeHtml(voce.poi), "wod5e-mage-menu-poi"));
   const modo = localize(`WOD5E_MAGE.Menu.Modo.${voce.modo}`);

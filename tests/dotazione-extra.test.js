@@ -173,9 +173,22 @@ actor = mageActor({ convinzioni: { c: { group: "", text: "" } } });
 await onPersonaggioRowDelete.call({ actor }, { preventDefault() {} }, { dataset: { table: "convinzioni", row: "c" } });
 assert.deepEqual(actor.lastUpdate, { "flags.wod5e-mage.convinzioni.-=c": null });
 
-// Il template del Personaggio: gabbia a tendine, trigger e tavole.
+// Il template del Personaggio: la Bussola come la Magick in atto (Blue, 25/9 sera): il titolo di
+// pagina, i riquadri con le carte scure, i campi trasparenti; poi i trigger e le tavole.
 const personaggio = readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");
-assert.match(personaggio, /wod5e-mage-concept-content[\s\S]*wod5e-mage-concept-group/);
+assert.match(personaggio, /wod5e-mage-section-title[\s\S]*Tabs\.Short\.personaggio[\s\S]*wod5e-mage-riq-pagina[\s\S]*wod5e-mage-bussola-carta[\s\S]*wod5e-mage-bussola-campo/);
+assert.doesNotMatch(personaggio, /wod5e-mage-concept-group|wod5e-mage-identity-grid|wod5e-mage-mini-textarea/, "niente gabbia a tendine né caselle crema");
+{
+  // Il CSS: etichette a larghezza fissa nelle carte di tutte e due le pagine, i campi con la riga d'oro,
+  // il nome della Magick in atto che non sparisce sotto le pastiglie, le pastiglie a capo.
+  const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+  assert.match(css, /\.wod5e-mage-bussola-campo > span \{[^}]*flex: 0 0 var\(--bussola-etichetta\)/);
+  assert.match(css, /\.wod5e-mage-atto-campo > span \{[^}]*flex: 0 0 var\(--atto-etichetta, 6\.4rem\)/);
+  assert.match(css, /\.wod5e-mage-bussola-campo > input\[type="text"\],[\s\S]*?\{[^}]*background: transparent;[^}]*border-bottom: 1px solid var\(--mage-oro-tenue\)/);
+  assert.match(css, /\.wod5e-mage-atto-testa > input\.wod5e-mage-atto-nome \{[^}]*min-width: 7rem/);
+  assert.match(css, /\.wod5e-mage-atto-testa > \.wod5e-mage-ongoing-marks \{[^}]*flex-wrap: wrap/);
+  assert.doesNotMatch(css, /wod5e-mage-identity-grid|wod5e-mage-mini-textarea|wod5e-mage-anchor-grid|wod5e-mage-wisdom-status|wod5e-mage-personaggio-content/, "via il CSS delle caselle crema");
+}
 assert.match(personaggio, /flags\.wod5e-mage\.ambitionTrigger[\s\S]*flags\.wod5e-mage\.desireTrigger/);
 assert.match(personaggio, /data-table="ancore"[\s\S]*data-table="convinzioni"/);
 assert.doesNotMatch(personaggio, /chronicle-tenets|touchstones-convictions/);
@@ -264,7 +277,7 @@ assert.equal(prepareCreationSummary(summaryActor).checks.find((check) => check.i
 // nome del PG e del giocatore in una colonna sola.
 const dotazioneTemplate = readFileSync(new URL("../templates/actor/parts/dotazione.hbs", import.meta.url), "utf8");
 assert.match(dotazioneTemplate, /wod5e-mage-inventario[\s\S]*Dotazione\.Inventory[\s\S]*equipment-list\.hbs/);
-assert.match(personaggioSource(), /wod5e-mage-wisdom-row[\s\S]*flags\.wod5e-mage\.wisdomStatus/);
+assert.match(personaggioSource(), /wod5e-mage-riq-stato[\s\S]*flags\.wod5e-mage\.wisdomStatus/);
 assert.doesNotMatch(personaggioSource(), /wisdom\.hbs/, "la Saggezza non sta più nella Bussola");
 const identitaTemplate = readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8");
 assert.match(identitaTemplate, /wod5e-mage-names[\s\S]*name-field[\s\S]*wod5e-mage-player-field/);

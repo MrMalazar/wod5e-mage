@@ -6,7 +6,8 @@
  * famiglia, chiusi, con la scena in tendina: si apre una voce, si legge la
  * scheda, si spende); il controllo dei giocatori (un riquadro per mago con
  * lo status, gli effetti attivi del Paradosso, i passivi, la Magick in atto;
- * chi c'è lo decide il Narratore, nella Nuova sessione o con «aggiungi»).
+ * chi c'è lo decide il Narratore, nella Nuova sessione o trascinando un mago
+ * dagli Attori sul Quadro, 25/9).
  * I conti puri stanno in menu-paradosso.js.
  */
 import { MODULE_ID } from "./constants.js";
@@ -114,6 +115,35 @@ export function attoriDelQuadro() {
 
 async function setMaghi(ids) {
   return game.settings.set(MODULE_ID, MAGHI_SETTING, { ids: [...new Set(ids.map(String))] });
+}
+
+/**
+ * Un attore lasciato sul Quadro (Blue, 25/9): entra in coda ai giocatori se è
+ * un mago del mondo che non c'è già. Un PNG che non è mago, un mago già
+ * dentro o un attore di compendio non entrano e dicono perché (`motivo`);
+ * il resto (un oggetto, un dato rotto) resta muto.
+ */
+export async function accogliTrascinato(data) {
+  if (data?.type !== "Actor" || !data.uuid) return { ok: false, motivo: "" };
+  const uuid = String(data.uuid);
+  const actor = await Promise.resolve().then(() => globalThis.fromUuid?.(uuid)).catch(() => null);
+  const name = String(actor?.name ?? uuid);
+  if (uuid.startsWith("Compendium.") || actor?.pack) return { ok: false, motivo: "compendio", name };
+  if (!actor) return { ok: false, motivo: "" };
+  if (!isMageActor(actor)) return { ok: false, motivo: "nonMago", name };
+  if (attoriDelQuadro().some((dentro) => dentro.id === actor.id)) return { ok: false, motivo: "giaDentro", name };
+  return { ok: true, actor, name };
+}
+
+/** I dati di un trascinamento (l'attore dalla barra): il lettore di Foundry se c'è, altrimenti il JSON del dataTransfer. */
+function leggiTrascinato(event) {
+  const lettore = foundry.applications?.ux?.TextEditor?.implementation ?? globalThis.TextEditor;
+  if (typeof lettore?.getDragEventData === "function") return lettore.getDragEventData(event);
+  try {
+    return JSON.parse(event?.dataTransfer?.getData?.("text/plain") || "null");
+  } catch {
+    return null;
+  }
 }
 
 export function getOrologi() {
@@ -253,7 +283,6 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       famiglia: QuadroNarratore.#onFamiglia,
       spendi: QuadroNarratore.#onSpendi,
       mago: QuadroNarratore.#onMago,
-      magoAggiungi: QuadroNarratore.#onMagoAggiungi,
       magoTogli: QuadroNarratore.#onMagoTogli,
       attivoTogli: QuadroNarratore.#onAttivoTogli,
       schedaApri: QuadroNarratore.#onSchedaApri
@@ -462,6 +491,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   _onRender(context, options) {
     super._onRender?.(context, options);
     QuadroNarratore.aperto = this;
+    this.#collegaTrascinamento();
     this.element.classList.toggle(TEMA_CLASSE, isChiaro(game.settings.get(MODULE_ID, TEMA_SETTING)));
     const scena = this.element.querySelector("[data-role=scena]");
     scena?.addEventListener("change", async (event) => {
@@ -784,15 +814,59 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     await this.render();
   }
 
-  static async #onMagoAggiungi(event) {
-    event.preventDefault();
-    await aggiungiMaghi();
-  }
-
   static async #onMagoTogli(event, target) {
     event.preventDefault();
     const ids = attoriDelQuadro().map((actor) => actor.id).filter((id) => id !== target.dataset.id);
     await setMaghi(ids);
+  }
+
+  /**
+   * Il trascinamento dagli Attori (25/9): mentre un attore passa sul Quadro la
+   * cornice s'accende d'oro, il drop lo accoglie. Si collega una volta per
+   * elemento: la cornice resta la stessa attraverso i render.
+   */
+  #collegaTrascinamento() {
+    const root = this.element;
+    if (!root?.addEventListener || root.dataset?.trascinamento === "1") return;
+    if (root.dataset) root.dataset.trascinamento = "1";
+    // dragleave arriva anche passando da un figlio all'altro della finestra: si conta, e la cornice si spegne solo all'ultimo.
+    let dentro = 0;
+    const accendi = (on) => {
+      if (!on) dentro = 0;
+      root.classList?.toggle("trascinando", on);
+    };
+    root.addEventListener("dragenter", (event) => {
+      if (!game.user?.isGM) return;
+      event.preventDefault();
+      dentro += 1;
+      accendi(true);
+    });
+    root.addEventListener("dragover", (event) => {
+      if (!game.user?.isGM) return;
+      event.preventDefault();
+      if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
+    });
+    root.addEventListener("dragleave", () => {
+      dentro = Math.max(dentro - 1, 0);
+      if (!dentro) accendi(false);
+    });
+    root.addEventListener("drop", async (event) => {
+      event.preventDefault();
+      accendi(false);
+      if (!game.user?.isGM) return;
+      await this.accogli(leggiTrascinato(event));
+    });
+  }
+
+  /** Cosa fa il Quadro di un attore lasciato sopra: lo mette in coda ai giocatori, o avvisa perché no. */
+  async accogli(data) {
+    const esito = await accogliTrascinato(data);
+    if (!esito.ok) {
+      if (esito.motivo) ui.notifications.warn(game.i18n.format(`WOD5E_MAGE.Menu.Trascina.${esito.motivo}`, { name: esito.name }));
+      return esito;
+    }
+    await setMaghi([...attoriDelQuadro().map((actor) => actor.id), esito.actor.id]);
+    return esito;
   }
 
   static async #onAttivoTogli(event, target) {
@@ -877,7 +951,7 @@ async function avanzaOrologiPer(evento) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Nuova sessione, Cambio scena, aggiungi                             */
+/*  Nuova sessione, Cambio scena                                       */
 /* ------------------------------------------------------------------ */
 
 function maghiDelMondo() {
@@ -997,33 +1071,6 @@ export async function cambioScena() {
   await game.settings.set(MODULE_ID, POOL_SETTING, { ...pool, log: [...pool.log, { kind: "scena", amount: 0, when: Date.now(), scena: scena.numero + 1 }] });
   await setScena({ tipo: scelta.tipo, posto: scelta.posto, numero: scena.numero + 1 });
   QuadroNarratore.aggiorna();
-  return true;
-}
-
-/** «aggiungi» nel riquadro dei giocatori: i maghi del mondo che non sono nel Quadro. */
-export async function aggiungiMaghi() {
-  if (!game.user?.isGM) return false;
-  const localize = localizer();
-  const dentro = new Set(attoriDelQuadro().map((actor) => actor.id));
-  const fuori = maghiDelMondo().filter((mago) => !dentro.has(mago.id)).map((mago) => ({ ...mago, checked: false, collegato: mago.utenti.some((user) => user.active) }));
-  if (!fuori.length) {
-    ui.notifications.info(localize("WOD5E_MAGE.Menu.NessunoDaAggiungere"));
-    return false;
-  }
-  const content = await foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/aggiungi-maghi.hbs`, { maghi: fuori });
-  let ids = [];
-  const answer = await foundry.applications.api.DialogV2.wait({
-    window: { title: localize("WOD5E_MAGE.Menu.Aggiungi"), icon: "fa-solid fa-plus" },
-    content,
-    classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-quadro-dialogo"],
-    position: { width: 460, height: "auto" },
-    buttons: [
-      { action: "aggiungi", icon: "fa-solid fa-plus", label: localize("WOD5E_MAGE.Menu.Aggiungi"), default: true, callback: (_event, _button, dialog) => { ids = leggiScelti(dialog.element); return "aggiungi"; } },
-      { action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") }
-    ]
-  }).catch(() => null);
-  if (answer !== "aggiungi" || !ids.length) return false;
-  await setMaghi([...dentro, ...ids]);
   return true;
 }
 
