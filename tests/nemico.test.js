@@ -11,7 +11,10 @@ import {
   probabilitaSuccesso,
   righeOrdinate,
   riservaScalata,
-  sogliaDagliAmbiti
+  segnoDi,
+  sogliaDagliAmbiti,
+  vociTesto,
+  datiNemico
 } from "../scripts/nemico.js";
 import { IMPOSSIBLE_SURCHARGE, SCOPES_PER_CAST } from "../scripts/scopes.js";
 
@@ -39,6 +42,18 @@ const ferma = riservaScalata(5, []);
 assert.deepEqual([ferma.totale, ferma.cambiata, ferma.testo], [5, false, "5"]);
 assert.equal(riservaScalata(1, [{ nome: "Atterrato", value: -2 }]).totale, 0, "mai sotto zero");
 assert.equal(riservaScalata(4, [{ nome: "Bonus", value: 2 }]).totale, 4, "i bonus non contano: la riserva resta quella scritta");
+
+// La mano del Narratore (Blue, 27/9): l'unico ritocco in più o in meno oltre alle Condizioni; entra nel conto e fra le voci, col segno.
+const mano = riservaScalata(5, [{ nome: "Atterrato", value: -2 }], { nome: "Mano del Narratore", value: 2 });
+assert.deepEqual([mano.totale, mano.mano, mano.cambiata, mano.testo], [5, 2, true, "5 -2 Atterrato +2 Mano del Narratore"]);
+assert.deepEqual(mano.voci, [{ nome: "Atterrato", value: -2 }, { nome: "Mano del Narratore", value: 2 }]);
+assert.equal(riservaScalata(4, [], { nome: "Mano del Narratore", value: -1 }).testo, "4 -1 Mano del Narratore");
+assert.equal(riservaScalata(1, [], { nome: "Mano del Narratore", value: -3 }).totale, 0, "mai sotto zero");
+assert.deepEqual([riservaScalata(4, [], { nome: "Mano del Narratore", value: 0 }).cambiata, riservaScalata(4, [], null).voci], [false, []]);
+assert.deepEqual([segnoDi(2), segnoDi(-2), segnoDi(0), segnoDi("x")], ["+2", "-2", "0", "0"]);
+assert.equal(vociTesto([{ nome: "A", value: -1 }, { nome: "B", value: 3 }]), "-1 A +3 B");
+// Nella bandiera: un intero fra −10 e +10, 0 se manca.
+assert.deepEqual([datiNemico({ manoNarratore: "2" }).manoNarratore, datiNemico({ manoNarratore: -30 }).manoNarratore, datiNemico({}).manoNarratore, datiNemico({ manoNarratore: 2.7 }).manoNarratore], [2, -10, 0, 2]);
 
 // La soglia a mano: la somma degli Ambiti alzati, al massimo tre, più 5 per l'impresa impossibile.
 assert.deepEqual(sogliaDagliAmbiti({ potency: 3, range: 2 }), { soglia: 5, ambiti: [{ id: "range", level: 2 }, { id: "potency", level: 3 }], fuoriTetto: [], impossibile: false, extra: 0 });

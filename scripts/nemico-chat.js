@@ -15,7 +15,7 @@
 import { activeCondizioni, findCondizioneByName, toggleCondizione } from "./condizioni.js";
 import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
-import { armaturaDi, contoDelTiro, RIESCE_DAL } from "./nemico.js";
+import { armaturaDi, contoDelTiro, RIESCE_DAL, segnoDi } from "./nemico.js";
 import { renderRollCard, ROLL_CARD_FLAG, rollActionsBox } from "./roll-card.js";
 import { addSaluteDamage } from "./salute.js";
 
@@ -46,7 +46,7 @@ export async function tiraNemico(actor, { nome = "", riserva, soglia = 0, danno 
   const notes = armatura?.totale ? [format("WOD5E_MAGE.Nemico.ArmaturaBersaglio", { bersaglio: bersaglio.name, punti: armatura.totale })] : [];
   const flavor = renderRollCard({
     traits: [{ label: riserva.label ?? "", value: riserva.base }],
-    bonusParts: (riserva.voci ?? []).map((voce) => `${voce.value} ${voce.nome}`),
+    bonusParts: (riserva.voci ?? []).map((voce) => `${segnoDi(voce.value)} ${voce.nome}`),
     threshold: Math.max(Math.trunc(Number(soglia) || 0), 0)
   }, localize);
   const { rollRamoCDirect } = await import("./paradox-dice.js");
@@ -65,7 +65,7 @@ export async function tiraNemico(actor, { nome = "", riserva, soglia = 0, danno 
       traits: [{ id: String(riserva.id ?? ""), type: "nemico", label: riserva.label ?? "", value: riserva.totale }],
       nemico: { ...conto, bersaglio: conto.bersaglio, armatura: armatura?.totale ?? 0, applicato: false }
     },
-    activeModifiers: (riserva.voci ?? []).map((voce) => ({ label: voce.nome, value: String(voce.value) })),
+    activeModifiers: (riserva.voci ?? []).map((voce) => ({ label: voce.nome, value: segnoDi(voce.value) })),
     notes
   });
 }

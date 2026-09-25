@@ -2411,6 +2411,10 @@
       "Nessuna": "nessuna",
       "CondizioneTogli": "Togli la Condizione",
       "CondizioneAggiungi": "Aggiungi una Condizione",
+      "ManoNarratore": "Mano del Narratore",
+      "ManoNarratoreScrivi": "I dadi in più o in meno che il Narratore dà a ogni tiro di questo nemico: l'unico ritocco oltre alle Condizioni, si legge nella carta",
+      "ManoNarratoreZero": "nessun ritocco",
+      "ManoNarratoreDadi": "{dadi} dadi a ogni tiro",
       "Malus": "{value} {campo}",
       "Pagine": {
         "gioco": "In gioco",

@@ -221,7 +221,11 @@ default on its own. The header stays on every page: portrait (the + changes
 it, and the same file goes on the map), name, concept, Nature and Faction;
 on the right the Health track of the mage sheet with its wheel (damage, rest,
 reset), the armour points of the protection worn, and the Conditions with
-their malus (the × removes one, the drawer adds any of the list). A coloured
+their malus (the × removes one, the drawer adds any of the list), and under
+them the Narrator's hand: the one adjustment besides Conditions, dice added
+to or taken from every roll of this enemy (a ± number in the header, gold
+when it gives, purple when it takes), counted in every pool, dice case and
+action and written in the chat card's count. A coloured
 line on top follows the disposition of the prototype token: hostile, neutral,
 friendly, secret. Below, four pages. "In gioco" has three cards, Physical,
 Social and Mental: on the left the threshold, the dice the enemy takes from a

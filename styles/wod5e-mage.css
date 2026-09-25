@@ -16828,6 +16828,32 @@
   font-weight: 600;
 }
 
+/* La mano del Narratore (27/9): il ritocco ± in testa, oro se dà dadi, viola se li toglie. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mano-riga {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  min-height: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mano-segno {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mano-segno.piu {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mano-segno.meno {
+  color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-mano-scrivi {
+  text-align: right;
+  width: 42px;
+}
+
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-togli {
   background: transparent;
   border: 0;

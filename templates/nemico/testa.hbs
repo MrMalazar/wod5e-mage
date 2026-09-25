@@ -90,6 +90,15 @@
                     {{/each}}
                 </div>
             </details>
+
+            {{!-- La mano del Narratore (Blue, 27/9): l'unico ritocco ai dadi oltre alle Condizioni, ± su ogni
+                 tiro di questo nemico; entra nelle riserve, nei casi a dadi, nelle azioni, e si legge nella carta. --}}
+            <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.ManoNarratore"}}</span>
+            <div class="wod5e-mage-nemico-mano-riga" title="{{localize 'WOD5E_MAGE.Nemico.ManoNarratoreScrivi'}}">
+                {{#if manoNarratore.on}}<b class="wod5e-mage-nemico-mano-segno{{#if manoNarratore.meno}} meno{{else}} piu{{/if}}">{{manoNarratore.dadiTesto}}</b>{{else}}<em class="wod5e-mage-nemico-nessuna">{{localize "WOD5E_MAGE.Nemico.ManoNarratoreZero"}}</em>{{/if}}
+            </div>
+            <span class="wod5e-mage-nemico-v">{{#if locked}}{{manoNarratore.segno}}{{else}}<input type="number" class="wod5e-mage-nemico-max wod5e-mage-nemico-mano-scrivi" name="flags.wod5e-mage.nemico.manoNarratore" value="{{manoNarratore.value}}" min="-10" max="10" step="1" title="{{localize 'WOD5E_MAGE.Nemico.ManoNarratoreScrivi'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.ManoNarratore'}}">{{/if}}</span>
+            <span></span>
         </div>
     </div>
     <nav class="wod5e-mage-nemico-pagine tabs" data-group="primary">

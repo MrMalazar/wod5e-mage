@@ -151,7 +151,7 @@ assert.ok(c.condizioniNomi.includes("Bloccato") && c.condizioniScelta.length >= 
 
 // --- i template
 const testa = T.testa(c);
-for (const marker of ['data-disposizione="ostile"', "Ostile", 'name="name" value="Agente Grigi"', 'name="system.headers.concept" value="Uomo in Nero del Nuovo Ordine Mondiale"', 'name="flags.wod5e-mage.nemico.natura"', '<option value="risvegliato" selected>Risvegliato</option>', 'name="flags.wod5e-mage.nemico.fazione" value="Unione Tecnocratica"', 'data-action="saluteCellChange" data-index="0"', 'name="system.health.max" value="7"', 'data-action="ventaglioToggle"', 'data-action="saluteDanni"', 'data-action="saluteReset"', 'data-action="armaturaColpo" data-item-id="a1"', "2/3", "Tessuto balistico", 'data-action="condizioneToggle" data-condizione="atterrato" data-item-id="c1"', "−2 fisico", 'class="wod5e-mage-nemico-pagine tabs" data-group="primary"', 'data-action="tab" data-group="primary" data-tab="gioco"', 'data-tab="magick"', '<span class="wod5e-mage-nemico-conto">3</span>', 'data-action="ritrattoCambia"', "wod5e-mage-nemico-condizioni-tendina", 'data-action="condizioneToggle" data-condizione="bloccato"']) {
+for (const marker of ['data-disposizione="ostile"', "Ostile", 'name="name" value="Agente Grigi"', 'name="system.headers.concept" value="Uomo in Nero del Nuovo Ordine Mondiale"', 'name="flags.wod5e-mage.nemico.natura"', '<option value="risvegliato" selected>Risvegliato</option>', 'name="flags.wod5e-mage.nemico.fazione" value="Unione Tecnocratica"', 'data-action="saluteCellChange" data-index="0"', 'name="system.health.max" value="7"', 'data-action="ventaglioToggle"', 'data-action="saluteDanni"', 'data-action="saluteReset"', 'data-action="armaturaColpo" data-item-id="a1"', "2/3", "Tessuto balistico", 'data-action="condizioneToggle" data-condizione="atterrato" data-item-id="c1"', "−2 fisico", 'class="wod5e-mage-nemico-pagine tabs" data-group="primary"', 'data-action="tab" data-group="primary" data-tab="gioco"', 'data-tab="magick"', '<span class="wod5e-mage-nemico-conto">3</span>', 'data-action="ritrattoCambia"', "wod5e-mage-nemico-condizioni-tendina", 'data-action="condizioneToggle" data-condizione="bloccato"', 'name="flags.wod5e-mage.nemico.manoNarratore" value="0"', "nessun ritocco"]) {
   assert.ok(testa.includes(marker), `testa: manca ${marker}`);
 }
 assert.ok(!testa.includes('data-action="magickAccendi"'), "con la Magick accesa niente «+ Magick»");
@@ -201,6 +201,20 @@ for (const marker of ["lancia Cancellare su Guendalina", "<b>5</b><span>soglia �
 // Il conto del tiro di Spara su Guendalina: Mira 7, −2 Atterrato, 5 dadi, riesce dal 6.
 const conto = N.contoDelTiro({ nome: "Spara", riserva: c.azioni[0].riserva, soglia: 0, bersaglio: { uuid: "Actor.pg", name: "Guendalina" }, danno: 4, aggravato: false, localize, format });
 assert.deepEqual([conto.titolo, conto.conto, conto.dadi, conto.esito], ["Spara · su Guendalina", "Mira 7 -2 Atterrato = 5 dadi · riesce dal 6", 5, "danno 4 Superficiali"]);
+
+// La mano del Narratore (Blue, 27/9): +2 sulla scheda entra in ogni riserva, nei casi a dadi, nelle azioni e nel conto della carta.
+const attoreConMano = { ...actor, getFlag: (scope, key) => (scope === MODULE && key === "nemico" ? { ...flags[MODULE].nemico, manoNarratore: 2 } : flags[scope]?.[key]) };
+const conMano = N.prepareNemicoContext({ actor: attoreConMano, items, salute, stato: {}, nomi, condizioniScelta: prepareCondizioni(items), localize, format, lang: "it" });
+assert.deepEqual(conMano.carte.map((carta) => [carta.id, carta.riserva.totale, carta.riserva.cambiata]), [["physical", 5, true], ["social", 7, true], ["mental", 8, true]], "la mano entra nelle tre riserve");
+assert.deepEqual(conMano.carte[0].casi.map((k) => [k.nome, k.value]), [["Mira", 7], ["Da lontano", 6]], "nei casi a dadi sì, nelle soglie no");
+assert.equal(conMano.carte[0].riserva.hint, "Tira Fisico: 5 -2 Atterrato +2 Mano del Narratore = 5 dadi");
+assert.deepEqual([conMano.manoNarratore.value, conMano.manoNarratore.segno, conMano.manoNarratore.on, conMano.manoNarratore.meno, conMano.manoNarratore.dadiTesto], [2, "+2", true, false, "+2 dadi a ogni tiro"]);
+const contoMano = N.contoDelTiro({ nome: "Spara", riserva: conMano.azioni[0].riserva, soglia: 0, localize, format });
+assert.deepEqual([contoMano.conto, contoMano.dadi], ["Mira 7 -2 Atterrato +2 Mano del Narratore = 7 dadi · riesce dal 6", 7]);
+const testaConMano = T.testa({ ...conMano, locked: false, isGM: true, tabAttiva: "gioco", tabs: {}, tab: { id: "gioco", group: "primary", cssClass: "active" } });
+for (const marker of ['name="flags.wod5e-mage.nemico.manoNarratore" value="2"', 'wod5e-mage-nemico-mano-segno piu">+2 dadi a ogni tiro</b>']) {
+  assert.ok(testaConMano.includes(marker), `testa con la mano: manca ${marker}`);
+}
 
 // --- i dialoghi
 assert.ok(T.caso({ abilita: c.abilitaScelta }).includes('<option value="firearms">Mira</option>'));

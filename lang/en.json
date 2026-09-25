@@ -2411,6 +2411,10 @@
       "Nessuna": "none",
       "CondizioneTogli": "Remove the Condition",
       "CondizioneAggiungi": "Add a Condition",
+      "ManoNarratore": "Narrator's hand",
+      "ManoNarratoreScrivi": "Dice the Narrator adds to or takes from every roll of this enemy: the only adjustment besides Conditions, shown in the chat card",
+      "ManoNarratoreZero": "no adjustment",
+      "ManoNarratoreDadi": "{dadi} dice on every roll",
       "Malus": "{value} {campo}",
       "Pagine": {
         "gioco": "In play",

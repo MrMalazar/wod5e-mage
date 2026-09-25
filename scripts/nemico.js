@@ -124,21 +124,27 @@ export function letturaSoglia(soglia, riserva = 6) {
 /**
  * Una riserva scalata dai malus delle Condizioni: il numero che si stampa (già
  * scalato, in viola se è cambiato) e le voci che lo spiegano («5, −2 Atterrato»).
- * `voci` sono { nome, value } col value negativo.
+ * `voci` sono { nome, value } col value negativo. `mano` è la mano del
+ * Narratore, { nome, value } con segno (Blue, 27/9): l'unico ritocco in più o
+ * in meno oltre alle Condizioni, che entra nel conto e si legge fra le voci.
  */
-export function riservaScalata(base, voci = []) {
+export function riservaScalata(base, voci = [], mano = null) {
   const partenza = intero(base);
   const negative = (voci ?? []).filter((voce) => Math.trunc(Number(voce?.value) || 0) < 0).map((voce) => ({ nome: String(voce.nome ?? ""), value: Math.trunc(Number(voce.value) || 0) }));
   const malus = negative.reduce((sum, voce) => sum + voce.value, 0);
-  const totale = Math.max(partenza + malus, 0);
+  const ritocco = Math.trunc(Number(mano?.value) || 0);
+  const tutte = ritocco ? [...negative, { nome: String(mano?.nome ?? ""), value: ritocco }] : negative;
+  const totale = Math.max(partenza + malus + ritocco, 0);
+  const cambiata = malus !== 0 || ritocco !== 0;
   return {
     base: partenza,
     malus,
+    mano: ritocco,
     totale,
-    cambiata: malus !== 0,
-    voci: negative,
-    // «7 −2 Atterrato»: il conto come si legge sulla carta.
-    testo: malus ? `${partenza} ${negative.map((voce) => `${voce.value} ${voce.nome}`).join(" ")}`.trim() : String(partenza)
+    cambiata,
+    voci: tutte,
+    // «7 -2 Atterrato +2 Mano del Narratore»: il conto come si legge sulla carta.
+    testo: cambiata ? `${partenza} ${vociTesto(tutte)}`.trim() : String(partenza)
   };
 }
 
@@ -205,8 +211,27 @@ export function datiNemico(flag = {}) {
       tipo: TIPI_MAGICK.includes(magick.tipo) ? magick.tipo : "magick",
       effetti: oggetto(magick.effetti)
     },
-    note: { vuole: testo(oggetto(f.note).vuole), molla: testo(oggetto(f.note).molla) }
+    note: { vuole: testo(oggetto(f.note).vuole), molla: testo(oggetto(f.note).molla) },
+    // La mano del Narratore (Blue, 27/9: «solo la mano del master che modifica il tiro»):
+    // i dadi in più o in meno su ogni tiro di questo nemico, fra −10 e +10.
+    manoNarratore: Math.max(Math.min(Math.trunc(Number(f.manoNarratore) || 0), 10), -10)
   };
+}
+
+/** Il segno davanti a un numero, come si legge sulla carta: «+2», «-2», «0». */
+export function segnoDi(value) {
+  const n = Math.trunc(Number(value) || 0);
+  return n > 0 ? `+${n}` : String(n);
+}
+
+/** Le voci di una riserva scalata in una riga: «-2 Atterrato +2 Mano del Narratore». */
+export function vociTesto(voci = []) {
+  return (voci ?? []).map((voce) => `${segnoDi(voce.value)} ${voce.nome}`).join(" ");
+}
+
+/** La mano del Narratore come voce della riserva: il nome e il ritocco (0 se non c'è). */
+export function manoDelNarratore(dati = datiNemico(), localize = (k) => k) {
+  return { nome: localize("WOD5E_MAGE.Nemico.ManoNarratore"), value: Math.trunc(Number(dati?.manoNarratore) || 0) };
 }
 
 /** Il nome M6 di un'Abilità dalla chiave del sistema: le rinominate dal modulo, le altre dal sistema. */
@@ -308,12 +333,13 @@ export function bonusAttivi(dati = datiNemico()) {
 export function carteCampi(system = {}, dati = datiNemico(), { casi = [], malus = malusCondizioni([]), localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
   const bonus = bonusAttivi(dati);
   const pools = oggetto(system?.standarddicepools);
+  const mano = manoDelNarratore(dati, localize);
   return CAMPI.map((campo) => {
     const sogliaBase = dati.soglie[campo];
     const alza = bonus[campo] ?? 0;
     const soglia = Math.max(sogliaBase + alza, 0);
     const lettura = letturaSoglia(soglia);
-    const riserva = riservaScalata(pools[campo]?.value, malus[campo]);
+    const riserva = riservaScalata(pools[campo]?.value, malus[campo], mano);
     return {
       id: campo,
       label: localize(`WOD5E_MAGE.Nemico.Campi.${campo}`),
@@ -322,7 +348,7 @@ export function carteCampi(system = {}, dati = datiNemico(), { casi = [], malus 
       riserva: {
         ...riserva,
         hint: riserva.cambiata
-          ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: localize(`WOD5E_MAGE.Nemico.Campi.${campo}`), base: riserva.base, voci: riserva.voci.map((v) => `${v.value} ${v.nome}`).join(" "), dadi: riserva.totale })
+          ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: localize(`WOD5E_MAGE.Nemico.Campi.${campo}`), base: riserva.base, voci: vociTesto(riserva.voci), dadi: riserva.totale })
           : format("WOD5E_MAGE.Nemico.TiraHint", { nome: localize(`WOD5E_MAGE.Nemico.Campi.${campo}`), conto: riserva.totale })
       },
       casi: casi.filter((caso) => caso.campo === campo).map((caso) => {
@@ -332,8 +358,8 @@ export function carteCampi(system = {}, dati = datiNemico(), { casi = [], malus 
           const letturaCaso = letturaSoglia(value);
           return { ...caso, aSoglia: true, value, mod: alzaCaso !== 0, hint: format("WOD5E_MAGE.Nemico.SogliaHint", { riserva: letturaCaso.riserva, dadi: letturaCaso.dadi, percento: letturaCaso.percento }) };
         }
-        const scalata = riservaScalata(caso.dadi, malus[campo]);
-        return { ...caso, aSoglia: false, value: scalata.totale, mod: scalata.cambiata, riserva: scalata, hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: caso.nome, base: scalata.base, voci: scalata.voci.map((v) => `${v.value} ${v.nome}`).join(" "), dadi: scalata.totale }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: caso.nome, conto: scalata.totale }) };
+        const scalata = riservaScalata(caso.dadi, malus[campo], mano);
+        return { ...caso, aSoglia: false, value: scalata.totale, mod: scalata.cambiata, riserva: scalata, hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: caso.nome, base: scalata.base, voci: vociTesto(scalata.voci), dadi: scalata.totale }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: caso.nome, conto: scalata.totale }) };
       })
     };
   });
@@ -412,10 +438,11 @@ export function azioniDelNemico(dati = datiNemico(), items = [], { system = {}, 
   }
   // Prima le azioni delle armi (il mock: Spara in testa), poi quelle scritte a mano nel loro ordine.
   righe.sort((a, b) => (Number(a.sort) || 0) - (Number(b.sort) || 0) || String(a.nome).localeCompare(String(b.nome), lang));
+  const mano = manoDelNarratore(dati, localize);
   return righe.map((azione) => {
     const senzaTiro = Boolean(azione.senzaTiro);
     const riserva = riservaDellAzione(azione.riserva, { casi, system, localize });
-    const scalata = riservaScalata(riserva.base, malus[riserva.campo]);
+    const scalata = riservaScalata(riserva.base, malus[riserva.campo], mano);
     const danno = intero(azione.danno);
     const aggravato = Boolean(azione.aggravato);
     const pezzi = [];
@@ -440,7 +467,7 @@ export function azioniDelNemico(dati = datiNemico(), items = [], { system = {}, 
       testo: testo(azione.testo),
       // Il testo in breve, quando non è scritto a mano: danno · Condizione · portata.
       breve: { pezzi, condizione, portata },
-      riserva: { ...riserva, ...scalata, dadi: dadiDelTiro(scalata.totale, azione.soglia), hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: riserva.label, base: scalata.base, voci: scalata.voci.map((v) => `${v.value} ${v.nome}`).join(" "), dadi: dadiDelTiro(scalata.totale, azione.soglia) }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: riserva.label, conto: dadiDelTiro(scalata.totale, azione.soglia) }) }
+      riserva: { ...riserva, ...scalata, dadi: dadiDelTiro(scalata.totale, azione.soglia), hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: riserva.label, base: scalata.base, voci: vociTesto(scalata.voci), dadi: dadiDelTiro(scalata.totale, azione.soglia) }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: riserva.label, conto: dadiDelTiro(scalata.totale, azione.soglia) }) }
     };
   });
 }
@@ -700,6 +727,14 @@ export function prepareNemicoContext({ actor = {}, items = [], salute = null, st
     saluteMax: intero(oggetto(system.health).max, 1) || 1,
     armature: armatureTestata(items, { format, localize }),
     condizioni: condizioniTestata(items, { localize, format }),
+    // La mano del Narratore (27/9): il ritocco ± che entra in ogni tiro, in testa sotto le Condizioni.
+    manoNarratore: {
+      value: dati.manoNarratore,
+      segno: segnoDi(dati.manoNarratore),
+      on: dati.manoNarratore !== 0,
+      meno: dati.manoNarratore < 0,
+      dadiTesto: format("WOD5E_MAGE.Nemico.ManoNarratoreDadi", { dadi: segnoDi(dati.manoNarratore) })
+    },
     soglie: dati.soglie,
     carte: carteCampi(system, dati, { casi, malus, localize, format }),
     casi,
@@ -756,7 +791,7 @@ export function contoDelTiro({ nome = "", riserva = null, soglia = 0, bersaglio 
   const scalata = riserva ?? riservaScalata(0, []);
   const dadi = dadiDelTiro(scalata.totale, soglia);
   const titolo = bersaglio?.name ? format("WOD5E_MAGE.Nemico.TiroSu", { azione: nome, bersaglio: bersaglio.name }) : format("WOD5E_MAGE.Nemico.TiroTitolo", { azione: nome });
-  const parti = [`${scalata.label ?? ""} ${scalata.base}`.trim(), ...scalata.voci.map((v) => `${v.value} ${v.nome}`)];
+  const parti = [`${scalata.label ?? ""} ${scalata.base}`.trim(), ...scalata.voci.map((v) => `${segnoDi(v.value)} ${v.nome}`)];
   if (intero(soglia)) parti.push(`− ${intero(soglia)} ${localize("WOD5E_MAGE.Nemico.Soglia")}`);
   const conto = scalata.cambiata || intero(soglia)
     ? format("WOD5E_MAGE.Nemico.Conto", { conto: parti.join(" "), dadi, dal: RIESCE_DAL })

@@ -19,7 +19,7 @@ import { MODULE_ID } from "../constants.js";
 import { POTERI } from "../data/poteri.js";
 import { onArmaturaColpo, onArmaturaPunto } from "../dotazione-extra.js";
 import { findFormula } from "../grimorio.js";
-import { CAMPI, effettoDaFormula, idNuovo, malusCondizioni, NEMICO_FLAG, prepareNemicoContext, puoAlzare, riservaDellAzione, riservaScalata, sogliaDagliAmbiti, TIPI_MAGICK } from "../nemico.js";
+import { CAMPI, effettoDaFormula, idNuovo, malusCondizioni, manoDelNarratore, NEMICO_FLAG, prepareNemicoContext, puoAlzare, riservaDellAzione, riservaScalata, sogliaDagliAmbiti, TIPI_MAGICK } from "../nemico.js";
 import { lanciaNemico, tiraNemico } from "../nemico-chat.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
 import { getSalute, onSaluteCellChange, onSaluteDanni, onSaluteReset, onSaluteRiposo } from "../salute.js";
@@ -114,7 +114,7 @@ async function onNemicoTira(event, target) {
   const ctx = this.contesto();
   const id = String(target.dataset.riserva ?? "physical");
   const riserva = riservaDellAzione(id, { casi: ctx.casi, system: this.actor.system, localize });
-  const scalata = riservaScalata(riserva.base, malusCondizioni(this.actor.items.contents)[riserva.campo]);
+  const scalata = riservaScalata(riserva.base, malusCondizioni(this.actor.items.contents)[riserva.campo], manoDelNarratore(ctx.dati, localize));
   const nome = CAMPI.includes(id) ? format("WOD5E_MAGE.Nemico.TiroCampo", { campo: riserva.label.toLowerCase() }) : riserva.label;
   await tiraNemico(this.actor, { nome, riserva: { ...riserva, ...scalata }, soglia: 0 });
 }
