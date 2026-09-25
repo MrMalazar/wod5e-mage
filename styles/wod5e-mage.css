@@ -10339,6 +10339,12 @@
   color: var(--mage-testo);
 }
 
+/* Di qualsiasi Sfera (25/9 sera): il tag in oro, segnato nella Sfera della riga. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-tipo.universale {
+  border-color: var(--mage-oro);
+  color: var(--mage-oro);
+}
+
 /* Il sigillo dell'Amalgama: il disco d'oro come gli altri sigilli; se la
    Sfera manca, il disco sbiadito con l'anello tratteggiato. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-amalgama {
@@ -15100,3 +15106,81 @@
   margin: 0;
   padding: 6px 8px;
 }
+
+/* ==========================================================================
+   LA CREAZIONE GUIDATA, dopo il collaudo di Blue del 25/9 sera.
+   ========================================================================== */
+/* Le carte dei Vantaggi (passo Vantaggi): i pallini finivano sopra il nome
+   quando andava a capo. Il nome prende la riga intera e va a capo fra le
+   parole; sotto, a destra, i pallini e la ×. */
+.application.wod5e-mage-guidata .wod5e-mage-guidata-riga-lista.oggetto {
+  display: grid;
+  gap: 4px 8px;
+  grid-template-areas: "icona nome nome" "pallini pallini togli";
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-riga-lista.oggetto > .wod5e-mage-guidata-riga-icona {
+  grid-area: icona;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-riga-lista.oggetto > .wod5e-mage-guidata-riga-nome {
+  display: block;
+  grid-area: nome;
+  hyphens: auto;
+  line-height: 1.2;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-riga-lista.oggetto > .wod5e-mage-guidata-pallini {
+  grid-area: pallini;
+  justify-self: end;
+  margin-left: 0;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-riga-lista.oggetto > .wod5e-mage-guidata-tastino {
+  grid-area: togli;
+}
+
+/* Le due Sfere libere del Credo (Potere, Scienza): le due righe si sfalsavano.
+   Una griglia: l'etichetta su una riga sola, le tendine in colonna. */
+.application.wod5e-mage-guidata .wod5e-mage-guidata-scelta-sfere {
+  align-items: center;
+  display: grid;
+  gap: 6px 10px;
+  grid-template-columns: max-content minmax(10rem, 16rem);
+  margin-top: 12px;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-scelta-sfere > p {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-scelta-sfere > label {
+  display: contents;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-scelta-sfere > label > span {
+  color: var(--mage-oro);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-scelta-sfere > label > select {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+/* La finestra Aggiungi (25/9 sera): il potere già preso in un'altra Sfera dice dove è segnato. */
+.wod5e-mage-catalogo .wod5e-mage-catalogo-segnato {
+  color: var(--mage-oro);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+

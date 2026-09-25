@@ -36,10 +36,11 @@ import { dominiDellaCreazione, GRADI, prepareCreationSummary } from "./riepilogo
 import { prepareSpheres, SPHERES } from "./spheres.js";
 import { ATTRIBUTE_KEYS, traitIcon } from "./tratti-icone.js";
 
-/** I tredici passi, nell'ordine del 5/9 (il mock del 23/9). */
+/** I quattordici passi, nell'ordine del 5/9 (il mock del 23/9); la Sottofamiglia a parte dal 25/9 sera (Blue). */
 export const PASSI = Object.freeze([
   "credo",
   "famiglia",
+  "sottofamiglia",
   "bussola",
   "tipo",
   "concetto",
@@ -114,7 +115,7 @@ export function indicePasso(id) {
   return index < 0 ? 0 : index;
 }
 
-/** Il passo salvato sul personaggio (1..13), o il primo. */
+/** Il passo salvato sul personaggio (1..14), o il primo. */
 export function passoSalvato(actor) {
   const stored = actor?.getFlag?.(MODULE_ID, GUIDATA_FLAG)?.guidata ?? {};
   const n = Math.trunc(Number(stored.passo) || 0);
@@ -191,7 +192,9 @@ export function passiFatti(actor, summary) {
   const convinzioni = Object.values(actor?.getFlag?.(MODULE_ID, PERSONAGGIO_TABLES.convictions) ?? {}).some((row) => hasText(row?.text));
   const done = {
     credo: FOCUS_CREDOS.includes(focus.credo) && (!isFreeCredo(focus.credo) || credoSpheresFor(focus.credo, focus.credoSpheres).length === 2),
-    famiglia: Boolean(family) && (!family.sottofamiglie.length || Boolean(findSottofamiglia(lineage.famiglia, lineage.sottofamiglia))),
+    famiglia: Boolean(family),
+    // La via a parte (Blue, 25/9 sera): fatta con la Sottofamiglia scelta; una Craft non ha vie.
+    sottofamiglia: Boolean(family) && (!family.sottofamiglie.length || Boolean(findSottofamiglia(lineage.famiglia, lineage.sottofamiglia))),
     bussola: hasText(headers.ambition) && hasText(headers.desire) && convinzioni,
     tipo: FOCUS_FORMS.includes(focus.practiceForm),
     concetto: Boolean(checks.concept?.ok),
@@ -265,7 +268,24 @@ function famigliaCard(famiglia, { localize, lineage, credo }) {
   };
 }
 
-/** Passo 2: la Famiglia (le nove Tradizioni e le dieci Craft) e sotto la via, con le Sfere che portano. */
+/** Le carte delle vie di una Famiglia, in alfabetico, con la Sfera, il Credo e la pratica che ognuna consiglia. */
+function sottofamiglieCards(family, { localize, lineage, credo, lang }) {
+  if (!family) return [];
+  return alphabetical(family.sottofamiglie.map((sub) => ({
+    id: sub.id,
+    label: sub.label,
+    sphere: sphereBadge(sub.sphere, localize),
+    image: `${IMMAGINI_FAMIGLIE}${family.id}-${sub.id}.webp`,
+    initial: sub.label.replace(/^(L'|Le |I |Gli |Il |La |Casa |Comitato per il |Commissione per gli )/u, "").charAt(0).toUpperCase(),
+    selected: lineage.sottofamiglia === sub.id,
+    delCredo: Boolean(credo) && credoConsigliato(family.id, sub.id) === credo,
+    credo: credoConsigliato(family.id, sub.id),
+    credoLabel: credoConsigliato(family.id, sub.id) ? localize(`WOD5E_MAGE.Focus.Credos.${credoConsigliato(family.id, sub.id)}`) : "",
+    pratica: praticaDi(family.id, sub.id).forma
+  })), lang);
+}
+
+/** Passo 2: la Famiglia (le nove Tradizioni e le dieci Craft), con la Sfera che porta; la via è il passo 3. */
 export function passoFamiglia(actor, { localize = (key) => key, lang = "it" } = {}) {
   const focus = focusOf(actor);
   const credo = FOCUS_CREDOS.includes(focus.credo) ? focus.credo : "";
@@ -277,28 +297,31 @@ export function passoFamiglia(actor, { localize = (key) => key, lang = "it" } = 
     return { id: fazione, label: localize(label), famiglie: ordered };
   });
   const family = findFamiglia(lineage.famiglia);
-  const sottofamiglie = family
-    ? alphabetical(family.sottofamiglie.map((sub) => ({
-      id: sub.id,
-      label: sub.label,
-      sphere: sphereBadge(sub.sphere, localize),
-      image: `${IMMAGINI_FAMIGLIE}${family.id}-${sub.id}.webp`,
-      initial: sub.label.replace(/^(L'|Le |I |Gli |Il |La |Casa |Comitato per il |Commissione per gli )/u, "").charAt(0).toUpperCase(),
-      selected: lineage.sottofamiglia === sub.id,
-      delCredo: Boolean(credo) && credoConsigliato(family.id, sub.id) === credo,
-      credo: credoConsigliato(family.id, sub.id),
-      credoLabel: credoConsigliato(family.id, sub.id) ? localize(`WOD5E_MAGE.Focus.Credos.${credoConsigliato(family.id, sub.id)}`) : "",
-      pratica: praticaDi(family.id, sub.id).forma
-    })), lang)
-    : [];
-  const sub = findSottofamiglia(lineage.famiglia, lineage.sottofamiglia);
   return {
     credo,
     credoLabel: credo ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "",
     gruppi,
-    family: family ? { id: family.id, label: family.label, subKind: family.subKind ?? "", sphere: sphereBadge(family.sphere, localize), craft: family.fazione === "disparati" } : null,
-    sottofamiglie,
-    sub: sub ? { id: sub.id, label: sub.label, sphere: sphereBadge(sub.sphere, localize) } : null,
+    family: family ? { id: family.id, label: family.label, subKind: family.subKind ?? "", sphere: sphereBadge(family.sphere, localize), craft: family.fazione === "disparati", conVie: family.sottofamiglie.length > 0 } : null,
+    // Cosa ci guadagni: la Sfera di famiglia a 1; la via, col resto, al passo 3.
+    dotted: family?.sphere ? [sphereBadge(family.sphere, localize)].filter(Boolean) : [],
+    // Una Craft non ha vie: la sua pratica si dice qui.
+    pratica: family && !family.sottofamiglie.length ? praticaDi(family.id).forma : ""
+  };
+}
+
+/** Passo 3 (Blue, 25/9 sera): la Sottofamiglia, le vie della Famiglia scelta, con la Sfera che portano; una Craft non ha vie. */
+export function passoSottofamiglia(actor, { localize = (key) => key, lang = "it" } = {}) {
+  const focus = focusOf(actor);
+  const credo = FOCUS_CREDOS.includes(focus.credo) ? focus.credo : "";
+  const lineage = getLineage(actor);
+  const family = findFamiglia(lineage.famiglia);
+  const sub = findSottofamiglia(lineage.famiglia, lineage.sottofamiglia);
+  return {
+    credo,
+    credoLabel: credo ? localize(`WOD5E_MAGE.Focus.Credos.${credo}`) : "",
+    family: family ? { id: family.id, label: family.label, subKind: family.subKind ?? "", sphere: sphereBadge(family.sphere, localize), craft: family.fazione === "disparati", conVie: family.sottofamiglie.length > 0 } : null,
+    sottofamiglie: sottofamiglieCards(family, { localize, lineage, credo, lang }),
+    sub: sub ? { id: sub.id, label: sub.label, sphere: sphereBadge(sub.sphere, localize), credoLabel: credoConsigliato(family.id, sub.id) ? localize(`WOD5E_MAGE.Focus.Credos.${credoConsigliato(family.id, sub.id)}`) : "" } : null,
     // Cosa ci guadagni: le due Sfere a 1 (la Craft ne porta una), e il resto dopo.
     dotted: [family?.sphere, sub?.sphere].filter((id, index, all) => id && all.indexOf(id) === index).map((id) => sphereBadge(id, localize)).filter(Boolean),
     pratica: praticaDi(lineage.famiglia, lineage.sottofamiglia).forma
@@ -649,6 +672,11 @@ export function notaScheda(id, actor, { localize = (key) => key } = {}) {
       return FOCUS_CREDOS.includes(focus.credo) ? t("credo", { credo: localize(`WOD5E_MAGE.Focus.Credos.${focus.credo}`) }) : t("vuoto");
     case "famiglia":
       return lineage.riga ? t("famiglia", { riga: lineage.riga }) : t("vuoto");
+    case "sottofamiglia": {
+      // Con la via scelta (o con una Craft, che non ne ha) la nota è quella dell'Appartenenza.
+      const family = findFamiglia(lineage.famiglia);
+      return family && lineage.riga && (lineage.sottofamiglia || !family.sottofamiglie.length) ? t("famiglia", { riga: lineage.riga }) : t("vuoto");
+    }
     case "bussola":
       return hasText(headers.ambition) || hasText(headers.desire) ? t("bussola") : t("vuoto");
     case "tipo":
@@ -694,7 +722,7 @@ export function testoPerche(id, testi = {}, localize = (key) => key) {
  *
  * @param {object} actor
  * @param {object} opzioni
- * @param {number} opzioni.passo - il passo in corso (1..13).
+ * @param {number} opzioni.passo - il passo in corso (1..14).
  * @param {function} opzioni.localize
  * @param {string} opzioni.lang
  * @param {object} opzioni.cataloghi - le voci dei compendi già caricate ({ ambizione, desiderio, convinzione, concetto, ancora }).
@@ -721,6 +749,7 @@ export function prepareGuidata(actor, { passo = 1, localize = (key) => key, lang
   switch (id) {
     case "credo": corpo = passoCredo(actor, options); break;
     case "famiglia": corpo = passoFamiglia(actor, options); break;
+    case "sottofamiglia": corpo = passoSottofamiglia(actor, options); break;
     case "bussola": corpo = passoBussola(actor, options); break;
     case "tipo": corpo = passoTipo(actor, options); break;
     case "concetto": corpo = passoConcetto(actor, summary, options); break;

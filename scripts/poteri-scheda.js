@@ -51,12 +51,26 @@ function inModifica(sheet) {
 }
 
 /** Le tendine dei pallini (1-5) e dei tipi per gli input in modifica. */
-function scelte(localize) {
+function scelte(localize, aperte = []) {
   return {
     pallini: Array.from({ length: POTERE_DOTS }, (_, index) => ({ value: index + 1, label: String(index + 1) })),
     tipi: POTERE_TIPI.map((type) => ({ value: type, label: localize(`WOD5E_MAGE.Poteri.Tipo.${type}`) })),
-    sfere: SPHERES.map((sphere) => ({ value: sphere, label: localize(`WOD5E_MAGE.Spheres.${sphere}`) }))
+    sfere: SPHERES.map((sphere) => ({ value: sphere, label: localize(`WOD5E_MAGE.Spheres.${sphere}`) })),
+    // Le Sfere aperte (25/9 sera): dove un potere di qualsiasi Sfera si può segnare.
+    sfereAperte: aperte.filter((sphere) => SPHERES.includes(sphere)).map((sphere) => ({ value: sphere, label: localize(`WOD5E_MAGE.Spheres.${sphere}`) }))
   };
+}
+
+/** Un potere di qualsiasi Sfera (25/9 sera): si segna in una Sfera aperta, e conta come suo potere conosciuto. */
+export function universale(power) {
+  const voce = voceDelCatalogo(power);
+  return Array.isArray(voce?.spheres) && voce.spheres.includes("any");
+}
+
+/** Le Sfere fra cui spostare il segno di un potere di qualsiasi Sfera: quelle aperte, più quella di adesso. */
+export function sfereDelSegno(power, aperte = [], localize = (key) => key) {
+  const ids = [...new Set([...(aperte ?? []), power?.sphere].filter((sphere) => SPHERES.includes(sphere)))];
+  return ids.map((sphere) => ({ value: sphere, label: localize(`WOD5E_MAGE.Spheres.${sphere}`), selected: sphere === power?.sphere }));
 }
 
 /**
@@ -70,7 +84,8 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
   const conti = contoPoteri(poteri);
   const selezione = Object.fromEntries(sphereData.all.map((sphere) => [sphere.id, sphere.selected]));
   const editing = inModifica(sheet);
-  const options = scelte(localize);
+  const aperte = sphereData.all.filter((sphere) => sphere.selected).map((sphere) => sphere.id);
+  const options = scelte(localize, aperte);
   // Il tasto «Usa» (24/9): gli usi del periodo e la Quintessenza sulla Ruota.
   const usi = actor.getFlag?.(MODULE_ID, POTERI_USI_FLAG) ?? {};
   const quintessence = getMagickBalance(actor).quintessence;
@@ -122,6 +137,9 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
       usesLabel: power.uses?.per ? localize(`WOD5E_MAGE.Poteri.Usi.${power.uses.per}`) : "",
       usa: usaContesto(power, usi, quintessence, localize),
       sceltaCampo: sceltaCampo(power),
+      // Di qualsiasi Sfera (25/9 sera): il tag sulla riga, e in modifica la tendina per spostare il segno.
+      universale: universale(power),
+      sfereSegno: universale(power) ? sfereDelSegno(power, aperte, localize) : [],
       editing: editing.has(power.id),
       options
     };

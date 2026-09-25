@@ -38,7 +38,7 @@
         <div class="wod5e-mage-guidata-voci">
             <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-circle-nodes" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Sfere"}} <b>{{#if corpo.spheres.length}}{{#each corpo.spheres as |s|}}{{#if @index}} · {{/if}}{{s.label}}{{/each}}{{else if corpo.chosen.free}}{{localize "WOD5E_MAGE.Guidata.Credo.SfereLibere"}}{{else}}…{{/if}}</b></div>
             <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Mestiere"}} <b>{{#if corpo.chosen.profession}}{{corpo.chosen.profession}}{{else}}…{{/if}}</b></div>
-            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Strumenti"}} <b>{{localize "WOD5E_MAGE.Guidata.Credo.NelPasso" n=7}}</b></div>
+            <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Strumenti"}} <b>{{localize "WOD5E_MAGE.Guidata.Credo.NelPasso" n=8}}</b></div>
             <div class="wod5e-mage-guidata-voce"><i class="fa-solid fa-people-group" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Famiglie"}} <b>{{#if corpo.famiglie.length}}{{#each corpo.famiglie as |f|}}{{#if @index}}, {{/if}}{{f}}{{/each}}{{else if corpo.chosen}}{{localize "WOD5E_MAGE.Guidata.Credo.Nessuna"}}{{else}}{{localize "WOD5E_MAGE.Guidata.Credo.NelPasso" n=2}}{{/if}}</b></div>
             <div class="wod5e-mage-guidata-voce no"><i class="fa-solid fa-coins" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Guidata.Credo.Pallini"}} <b>{{localize "WOD5E_MAGE.Guidata.Credo.Nessuno"}}</b></div>
         </div>

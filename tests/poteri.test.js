@@ -105,6 +105,14 @@ const tendina = catalogoDellaSfera("matter", { catalog, owned });
 // In ordine di grado e poi di nome (25/9: la gerarchia si legge), spuntate se conosciute; il grado non chiude niente.
 assert.deepEqual(tendina.map((entry) => [entry.id, entry.known, entry.locked]), [["M1", true, false], ["M3", false, false], ["M5", false, false]]);
 assert.deepEqual(catalogoDellaSfera("matter", { catalog: [] }), []);
+// Conosciuto anche se preso in un'altra Sfera (25/9 sera): la spunta guarda tutte le righe, e dice dove sta segnato.
+{
+  const conUniversale = [...catalog, { id: "U1", spheres: ["any"], name: "Coperto", dot: 1 }];
+  const altrove = catalogoDellaSfera("matter", { catalog: conUniversale, owned: [], tutti: [normalizzaPotere("u", { sphere: "forces", source: "catalogo", catalogId: "U1" })] });
+  const u1 = altrove.find((entry) => entry.id === "U1");
+  assert.deepEqual([u1.known, u1.knownSphere], [true, "forces"]);
+  assert.deepEqual([altrove.find((entry) => entry.id === "M1").known, altrove.find((entry) => entry.id === "M1").knownSphere], [false, ""]);
+}
 assert.deepEqual(catalogoDellaSfera("spirit", { catalog }), []);
 // I prerequisiti (25/9; 25/9 sera: una condizione per riga): tanti poteri della Sfera, poteri precisi, o una
 // condizione che giudica il tavolo; ogni riga ha il suo stato, e il potere è chiuso se una riga manca.
@@ -160,6 +168,25 @@ assert.doesNotMatch(tiroScheda, /placeholder|poteriSegnaposto/);
 const reset = readFileSync(new URL("../scripts/reset.js", import.meta.url), "utf8");
 assert.match(reset, /POTERI_FLAG\}`\]: null/);
 
+// I gradi dati da Blue il 25/9 sera ai poteri che non l'avevano; Senza residuo aspetta ancora; Annientare non è nel catalogo.
+{
+  const gradi = {
+    1: ["bussola", "coperto", "difendersi-dalla-sfera", "fatto-per-durare", "folla", "sentinella", "sesto-senso", "copertura", "interruttore", "dettaglio"],
+    2: ["bussola-doppia", "appoggio", "legame", "modello", "segnale", "incassare", "guasto", "adrenalina"],
+    3: ["la-pratica-rende-perfetti", "mestiere", "ambito-di-casa", "seconda-possibilita", "sferzata", "miraggio", "rigenerazione", "pronto-soccorso"],
+    4: ["rallentare", "velocista", "convalescenza"],
+    5: ["impresa-impossibile"]
+  };
+  for (const [grado, ids] of Object.entries(gradi)) {
+    for (const id of ids) assert.equal(POTERI.find((p) => p.id === id)?.dot, Number(grado), id);
+  }
+  assert.deepEqual(POTERI.filter((p) => !p.dot).map((p) => p.id), ["senza-residuo"], "un solo potere senza grado");
+  assert.ok(!POTERI.some((p) => /annient/i.test(p.name)), "Annientare non è nel catalogo");
+  // Miraggio: l'illusione tangibile e la prova di chi guarda; Pronto soccorso: l'ultimo danno appena subito, meno uno.
+  assert.match(POTERI.find((p) => p.id === "miraggio").text, /illusione tangibile[\s\S]*Fermezza \+ Allerta, o Fermezza \+ Sotterfugio[\s\S]*Areté più i poteri che conosci nella Sfera/);
+  assert.match(POTERI.find((p) => p.id === "pronto-soccorso").text, /l'ultimo danno che ha appena subito, meno uno/);
+}
+
 console.log("poteri: ok");
 
 // Il tasto «Usa» (tappa 2, 24/9): gli usi per scena e per sessione si
@@ -203,6 +230,9 @@ assert.deepEqual([carta.name, carta.sphere, carta.formula, carta.kind, carta.spe
 assert.equal(cartaPotere(conoscoRiga, { usi: usiDelPotere(conoscoRiga, dopo), localize: (key) => key }).usi.label, "WOD5E_MAGE.Poteri.Usi.sessione");
 assert.equal(POTERI_USI_FLAG, "poteriUsi");
 const spheresPage = readFileSync(new URL("../templates/actor/parts/spheres.hbs", import.meta.url), "utf8");
+// Il tag «qualsiasi Sfera» sulla riga e, in modifica, la tendina del segno (25/9 sera).
+assert.match(spheresPage, /\{\{#if p\.universale\}\}<small class="wod5e-mage-potere-tipo universale"[^>]*>\{\{localize "WOD5E_MAGE\.Poteri\.Universale"\}\}/);
+assert.match(spheresPage, /\{\{#if p\.universale\}\}<label><span>\{\{localize "WOD5E_MAGE\.Poteri\.SegnatoIn"\}\}<\/span><select name="flags\.wod5e-mage\.poteri\.\{\{p\.id\}\}\.sphere">/);
 assert.match(spheresPage, /data-action="potereUsa" data-row="\{\{p\.id\}\}"/);
 assert.match(readFileSync(new URL("../templates/chat/potere.hbs", import.meta.url), "utf8"), /carta\.blocchi/);
 const salute = readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8");

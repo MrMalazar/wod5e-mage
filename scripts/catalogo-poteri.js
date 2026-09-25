@@ -73,7 +73,7 @@ export function prezzoDelPotere(dot, family = null) {
  * prerequisiti anche quando ci sono già (la spunta), non solo quando
  * mancano (il lucchetto).
  */
-function rigaDelCatalogo(voce, entry, localize, family = null, creazione = false) {
+function rigaDelCatalogo(voce, entry, localize, family = null, creazione = false, sphere = "") {
   const uses = entry?.uses?.per ? localize(`WOD5E_MAGE.Poteri.Usi.${entry.uses.per}`) : "";
   // Alla creazione (25/9 sera): solo i poteri di base o di qualsiasi Sfera, senza prerequisiti.
   const creazioneChiuso = creazione ? chiusoAllaCreazione(entry, voce.condizioni ?? []) : "";
@@ -112,6 +112,11 @@ function rigaDelCatalogo(voce, entry, localize, family = null, creazione = false
     serveConto: condizioni.length ? `${condizioni.filter((riga) => riga.ok !== false).length}/${condizioni.length}` : "",
     // Il potere di «Qualsiasi» Sfera sta nel secondo gruppo.
     any: Array.isArray(entry?.spheres) && entry.spheres.includes("any"),
+    // Conosciuto (25/9 sera): anche se preso in un'altra Sfera; il tasto dice dove sta segnato.
+    knownAltrove: Boolean(voce.known) && Boolean(voce.knownSphere) && Boolean(sphere) && voce.knownSphere !== sphere,
+    knownHint: voce.known
+      ? (voce.knownSphere ? localize("WOD5E_MAGE.Poteri.ConosciutoIn").replace("{sphere}", localize(`WOD5E_MAGE.Spheres.${voce.knownSphere}`)) : localize("WOD5E_MAGE.Poteri.Conosciuto"))
+      : "",
     blocchi: blocchiDelTesto(entry?.text),
     paradox: testo(entry?.paradox),
     flavor: testo(entry?.flavor),
@@ -151,7 +156,7 @@ export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tu
   const voci = catalogoDellaSfera(sphere, { catalog, owned, tutti });
   const perId = new Map((catalog ?? []).map((entry) => [entry.id, entry]));
   catalogoPerNome = new Map((catalog ?? []).map((entry) => [entry.id, testo(entry.name)]));
-  const righe = voci.map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), localize, Boolean(family), Boolean(creazione)));
+  const righe = voci.map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), localize, Boolean(family), Boolean(creazione), sphere));
   const sphereLabel = localize(`WOD5E_MAGE.Spheres.${sphere}`);
   const propri = righe.filter((riga) => !riga.any);
   const qualsiasi = righe.filter((riga) => riga.any);
@@ -169,7 +174,8 @@ export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tu
     qualsiasi,
     gruppi: [
       { id: "propri", label: localize("WOD5E_MAGE.Poteri.CatalogoDiSfera").replace("{sphere}", sphereLabel), righe: propri },
-      { id: "qualsiasi", label: localize("WOD5E_MAGE.Poteri.CatalogoQualsiasi"), righe: qualsiasi }
+      // I poteri di qualsiasi Sfera si segnano nella Sfera in cui si prendono (25/9 sera): il gruppo lo dice.
+      { id: "qualsiasi", label: localize("WOD5E_MAGE.Poteri.CatalogoQualsiasi"), nota: localize("WOD5E_MAGE.Poteri.QualsiasiSegnato").replace("{sphere}", sphereLabel), righe: qualsiasi }
     ].filter((gruppo) => gruppo.righe.length || gruppo.id === "propri"),
     totale: righe.length,
     chiusi: righe.filter((riga) => riga.locked).length
@@ -182,7 +188,10 @@ export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tu
  * tutte le righe del personaggio (la spunta su quelli che ha).
  */
 export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize = (key) => key } = {}) {
-  const have = new Set((owned ?? []).map((power) => power.catalogId).filter(Boolean));
+  const dove = new Map();
+  for (const power of owned ?? []) {
+    if (power?.catalogId && !dove.has(power.catalogId)) dove.set(power.catalogId, String(power.sphere ?? ""));
+  }
   const riga = (entry) => rigaDelCatalogo({
     id: entry.id,
     name: testo(entry.name),
@@ -191,7 +200,8 @@ export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize
     amalgam: "",
     formulaName: testo(entry.formulaName),
     proposal: entry.link === "proposta",
-    known: have.has(entry.id),
+    known: dove.has(entry.id),
+    knownSphere: dove.get(entry.id) ?? "",
     condizioni: condizioniDelPotere(entry, { owned: [], tutti: owned }),
     chiuso: null,
     locked: false
@@ -208,7 +218,7 @@ export function prepareCatalogoCompleto({ catalog = POTERI, owned = [], localize
     tutto: true,
     gruppi: gruppi.filter((gruppo) => gruppo.righe.length),
     totale: (catalog ?? []).length,
-    conosciuti: have.size
+    conosciuti: dove.size
   };
 }
 

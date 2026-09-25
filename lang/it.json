@@ -802,6 +802,11 @@
       "AggiungiHint": "Apre la finestra dei poteri della Sfera, in ordine di grado: la cerca, il testo di ogni potere, Aggiungi",
       "CatalogoVuoto": "Il catalogo dei poteri non è ancora nel modulo: scrivi il potere a mano.",
       "Conosciuto": "Lo conosci già",
+      "ConosciutoIn": "Lo conosci già: è segnato in {sphere}",
+      "QualsiasiSegnato": "Un potere di qualsiasi Sfera si segna nella Sfera in cui lo prendi, qui in {sphere}: conta come suo potere conosciuto (prerequisiti, Domini, prezzo). L'effetto vale con ogni Sfera, come sempre.",
+      "Universale": "qualsiasi Sfera",
+      "UniversaleHint": "Potere di qualsiasi Sfera, segnato in {sphere}: conta come suo potere conosciuto; l'effetto vale con ogni Sfera. In modifica lo sposti su un'altra Sfera aperta.",
+      "SegnatoIn": "Segnato in",
       "ScriviMano": "Scrivi un potere a mano",
       "Vuoto": "Nessun potere ancora: Aggiungi ne mette uno.",
       "SenzaNome": "(senza nome)",
@@ -1980,21 +1985,28 @@
           "Domanda": "Cosa credi che la realtà sia?",
           "Sotto": "tredici Credi · uno solo",
           "Perche": "Cosa credi che la realtà sia, e da quello discende tutto il resto: la Verità a cui ti sei votato, e la voce con cui la difendi al tavolo.",
-          "PercheDue": "Ogni setta respira i suoi Credi, di solito due o tre: quella rosa è la strada battuta verso il tuo, non un confine. Il Credo non assegna punti e non vieta niente: le due Sfere che consiglia si aprono, e gli Strumenti che propone arrivano al passo 7."
+          "PercheDue": "Ogni setta respira i suoi Credi, di solito due o tre: quella rosa è la strada battuta verso il tuo, non un confine. Il Credo non assegna punti e non vieta niente: le due Sfere che consiglia si aprono, e gli Strumenti che propone arrivano al passo 8."
         },
         "famiglia": {
           "Label": "Famiglia",
           "Domanda": "Il giorno in cui finirai nei guai, a quale porta andrai a bussare?",
-          "Sotto": "nove Tradizioni e dieci Craft · poi la via",
+          "Sotto": "nove Tradizioni e dieci Craft · una sola",
           "Perche": "Ma tu una Tradizione ce l'hai lo stesso. Perché ti ha insegnato a fare quello che sai fare, e perché quando finisci nei guai è l'unica gente che potrebbe venire.",
           "PercheDue": "Le Tradizioni sopravvivono nelle cabale, il gruppo di maghi con cui vivi, lavori e ti guardi le spalle. Non cercare la migliore, perché non esiste. Una Craft è una strada stretta: una Sfera sola e nessuna via, e nessuno ti chiederà mai di rinunciare a chi sei per stare al tavolo."
+        },
+        "sottofamiglia": {
+          "Label": "Sottofamiglia",
+          "Domanda": "Dentro la tua Famiglia, quale strada hai preso?",
+          "Sotto": "le vie della Famiglia · una sola",
+          "Perche": "Ogni Tradizione si divide in vie, e la via è il modo in cui la tua Famiglia fa quello che fa: la Casa, il Circolo, la Fazione, la Voce, la Scuola, la Corrente. Ti ha insegnato lei, prima ancora della Tradizione.",
+          "PercheDue": "Scegline una fra le quattro: apre la sua Sfera a 1, consiglia un Credo e una pratica, e al passo 8 propone i suoi Strumenti. Una Craft non ha vie: qui non c'è niente da scegliere, e si va avanti."
         },
         "bussola": {
           "Label": "Bussola",
           "Domanda": "Dove vuoi arrivare, cosa ti urge adesso, cosa non tradisci mai?",
           "Sotto": "Ambizione · Desiderio · da una a tre Convinzioni",
           "Perche": "Quattro tratti scritti in poche righe, che valgono più di qualsiasi punteggio: i primi due dicono dove sta andando il personaggio, gli altri due cosa lo tiene umano mentre ci va.",
-          "PercheDue": "L'Ambizione dice dove vuoi arrivare, e non ci arrivi stasera: le migliori sono puramente mortali. Il Desiderio è cosa ti urge adesso, e cambia appena l'ottieni. Le Convinzioni, da una a tre, sono la tua legge morale: assolute nella forma, costose nella pratica, a doppio taglio. Le Ancore arrivano al passo 12."
+          "PercheDue": "L'Ambizione dice dove vuoi arrivare, e non ci arrivi stasera: le migliori sono puramente mortali. Il Desiderio è cosa ti urge adesso, e cambia appena l'ottieni. Le Convinzioni, da una a tre, sono la tua legge morale: assolute nella forma, costose nella pratica, a doppio taglio. Le Ancore arrivano al passo 13."
         },
         "tipo": {
           "Label": "Tipo",
@@ -2094,7 +2106,9 @@
         "Strumenti": "Gli Strumenti della Famiglia",
         "Bussola": "Convinzioni, Ambizione e Desiderio proposti",
         "Tipo": "Il Tipo di Magick consigliato",
-        "ScegliPrima": "Scegli prima la Famiglia: la via compare qui sotto.",
+        "ViaPasso": "La via",
+        "CraftSenzaVia": "{famiglia} è una Craft: una Sfera sola e nessuna via. Qui non c'è niente da scegliere: avanti.",
+        "ScegliPrima": "Scegli prima la Famiglia, al passo 2: le sue vie compaiono qui.",
         "Tradizioni": "Le Tradizioni",
         "Disparati": "Le Craft dei Disparati"
       },
@@ -2165,7 +2179,7 @@
         "PercepireHint": "Per gli effetti percettivi, al primo pallino di ogni Sfera: uno Strumento apposta, uguale a un altro o diverso.",
         "Famiglia": "La Famiglia propone",
         "Via": "La via propone",
-        "Nessuna": "Nessuna Sfera aperta: torna al passo 6.",
+        "Nessuna": "Nessuna Sfera aperta: torna al passo 7.",
         "Tuo": "il tuo di preciso",
         "Mestiere": "il mestiere",
         "Scegli": "Scegli lo Strumento",

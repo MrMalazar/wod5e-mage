@@ -29,17 +29,19 @@
     {{#each gruppi as |gruppo|}}
         <section class="wod5e-mage-catalogo-gruppo" data-catalogo-gruppo="{{gruppo.id}}">
             <h3 class="wod5e-mage-catalogo-titolo"><span>{{gruppo.label}}</span><small>{{gruppo.righe.length}}</small></h3>
+            {{#if gruppo.nota}}{{#unless @root.tutto}}<p class="wod5e-mage-catalogo-avviso wod5e-mage-catalogo-qualsiasi"><i class="fa-solid fa-thumbtack" aria-hidden="true"></i> {{gruppo.nota}}</p>{{/unless}}{{/if}}
             {{#each gruppo.righe as |voce|}}
             <details class="wod5e-mage-grimorio-row wod5e-mage-catalogo-row{{#if voce.known}} known{{/if}}{{#if voce.locked}} chiusa{{/if}}" data-catalogo="{{voce.id}}" data-search="{{voce.search}}">
                 <summary>
                     <b class="wod5e-mage-potere-pallino{{#unless voce.dot}} vuoto{{/unless}}" title="{{localize 'WOD5E_MAGE.Poteri.Grado'}}">{{#if voce.dot}}{{voce.dot}}{{else}}·{{/if}}</b>
                     <span class="wod5e-mage-catalogo-nome">{{voce.name}}{{#if voce.proposal}} <i class="wod5e-mage-catalogo-proposta" title="{{localize 'WOD5E_MAGE.Grimorio.Proposal'}}">◇</i>{{/if}}{{#if voce.locked}} <i class="fa-solid fa-lock wod5e-mage-catalogo-lucchetto" title="{{voce.lockedHint}}" aria-hidden="true"></i>{{/if}}</span>
                     <em class="wod5e-mage-grimorio-formula">{{voce.formulaName}}</em>
+                    {{#if voce.knownAltrove}}<small class="wod5e-mage-catalogo-segnato" title="{{voce.knownHint}}"><i class="fa-solid fa-thumbtack" aria-hidden="true"></i> {{voce.knownHint}}</small>{{/if}}
                     <span class="wod5e-mage-catalogo-tag"><small class="grado" title="{{localize 'WOD5E_MAGE.Poteri.Grado'}}">{{voce.gradoLabel}}{{#if voce.prezzoLabel}} · {{voce.prezzoLabel}}{{/if}}</small>{{#if voce.serve}}<small class="serve {{#if voce.serveOk}}ok{{else}}manca{{/if}}" title="{{localize 'WOD5E_MAGE.Poteri.Prerequisito.Label'}}: {{voce.serve}}"><i class="fa-solid {{#if voce.serveOk}}fa-check{{else}}fa-lock{{/if}}" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Prerequisito.Label"}} {{voce.serveConto}}</small>{{/if}}{{#if voce.tipi.attivo}}<small class="attivo">{{localize "WOD5E_MAGE.Poteri.Tipo.attivo"}}</small>{{/if}}{{#if voce.tipi.passivo}}<small class="passivo">{{localize "WOD5E_MAGE.Poteri.Tipo.passivo"}}</small>{{/if}}{{#if voce.cost}}<small>{{voce.cost}}</small>{{/if}}{{#if voce.uses}}<small>{{voce.uses}}</small>{{/if}}</span>
                     {{#if @root.tutto}}
                         {{#if voce.known}}<span class="wod5e-mage-catalogo-spunta" title="{{localize 'WOD5E_MAGE.Poteri.Conosciuto'}}"><i class="fa-solid fa-check" aria-hidden="true"></i></span>{{/if}}
                     {{else}}
-                        <button type="button" class="wod5e-mage-catalogo-aggiungi" data-role="catalogoAggiungi" data-catalogo="{{voce.id}}" {{#if voce.known}}disabled{{else if voce.locked}}disabled title="{{voce.lockedHint}}"{{/if}}>{{#if voce.known}}<i class="fa-solid fa-check" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Conosciuto"}}{{else}}<i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Aggiungi"}}{{/if}}</button>
+                        <button type="button" class="wod5e-mage-catalogo-aggiungi" data-role="catalogoAggiungi" data-catalogo="{{voce.id}}" {{#if voce.known}}disabled title="{{voce.knownHint}}"{{else if voce.locked}}disabled title="{{voce.lockedHint}}"{{/if}}>{{#if voce.known}}<i class="fa-solid fa-check" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Conosciuto"}}{{else}}<i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Aggiungi"}}{{/if}}</button>
                     {{/if}}
                     <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
                 </summary>
