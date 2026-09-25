@@ -1,0 +1,16 @@
+{{!-- La carta del lancio di Magick di un nemico (Blue, 25/9, dal mock):
+     «<nemico> lancia <effetto> su <bersaglio>»; la soglia in grande con gli
+     Ambiti; cosa fa; i danni se ci sono; «Resiste con …»; il tasto Resisti per
+     chi possiede il bersaglio (lo aggiunge il gancio di chat: apre il Tiro del
+     PG con la soglia già scritta). --}}
+<div class="wod5e-mage-roll-card wod5e-mage-nemico-carta">
+    <div class="wod5e-mage-nemico-carta-testa">
+        {{#if nemico.img}}<img class="wod5e-mage-nemico-carta-av" src="{{nemico.img}}" alt="">{{/if}}
+        <div><b>{{nemico.name}}</b><small>{{titolo}}</small></div>
+    </div>
+    <div class="wod5e-mage-nemico-carta-soglia"><b>{{effetto.soglia}}</b><span>{{sogliaTesto}}</span></div>
+    {{#if effetto.testo}}<div class="wod5e-mage-nemico-carta-testo">{{effetto.testo}}</div>{{else}}{{#if effetto.breve}}<div class="wod5e-mage-nemico-carta-testo">{{effetto.breve}}</div>{{/if}}{{/if}}
+    {{#if effetto.danni}}<div class="wod5e-mage-nemico-carta-danni">{{danniTesto}}</div>{{/if}}
+    <div class="wod5e-mage-nemico-carta-res">{{resisteLabel}}</div>
+    {{#if effetto.comeLabel}}<div class="wod5e-mage-nemico-carta-come">{{effetto.comeLabel}}{{#if effetto.dominioLabel}} · {{effetto.dominioLabel}}{{/if}}</div>{{/if}}
+</div>

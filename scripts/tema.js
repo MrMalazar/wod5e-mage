@@ -107,30 +107,34 @@ export const MARGINE_SCHERMO = 40;
 /** Sotto questa scala non si legge: da lì in giù si accetta lo scorrimento. */
 export const SCALA_MINIMA_SCHERMO = 0.5;
 
-/** Il fattore che fa stare la scheda nello schermo: 1 se ci sta già. */
-export function fattoreSchermo(viewport = {}) {
+/**
+ * Il fattore che fa stare la scheda nello schermo: 1 se ci sta già. `naturale`
+ * è la misura a scala 1 (quella del Mago se non si dice; la scheda del nemico
+ * passa la sua, 27/9).
+ */
+export function fattoreSchermo(viewport = {}, naturale = MISURA_NATURALE) {
   const width = Number(viewport?.innerWidth);
   const height = Number(viewport?.innerHeight);
   if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return 1;
-  const fit = Math.min(1, (width - MARGINE_SCHERMO) / MISURA_NATURALE.width, (height - MARGINE_SCHERMO) / MISURA_NATURALE.height);
+  const fit = Math.min(1, (width - MARGINE_SCHERMO) / naturale.width, (height - MARGINE_SCHERMO) / naturale.height);
   return Math.max(Math.round(fit * 100) / 100, SCALA_MINIMA_SCHERMO);
 }
 
 /** La scala vera sul contenuto: la misura del giocatore per il fattore dello schermo. */
-export function scalaTotale(scala, viewport) {
-  return Math.round(scalaFattore(scala) * fattoreSchermo(viewport) * 1000) / 1000;
+export function scalaTotale(scala, viewport, naturale = MISURA_NATURALE) {
+  return Math.round(scalaFattore(scala) * fattoreSchermo(viewport, naturale) * 1000) / 1000;
 }
 
 /** La finestra che serve a questa scala, dentro lo schermo. */
-export function misuraFinestra(scala, viewport) {
-  const totale = scalaTotale(scala, viewport);
+export function misuraFinestra(scala, viewport, naturale = MISURA_NATURALE) {
+  const totale = scalaTotale(scala, viewport, naturale);
   const width = Number(viewport?.innerWidth);
   const height = Number(viewport?.innerHeight);
   const maxWidth = Number.isFinite(width) && width > 0 ? Math.max(width - MARGINE_SCHERMO, 600) : Infinity;
   const maxHeight = Number.isFinite(height) && height > 0 ? Math.max(height - MARGINE_SCHERMO, 400) : Infinity;
   return {
-    width: Math.min(Math.round(MISURA_NATURALE.width * totale), maxWidth),
-    height: Math.min(Math.round(MISURA_NATURALE.height * totale), maxHeight)
+    width: Math.min(Math.round(naturale.width * totale), maxWidth),
+    height: Math.min(Math.round(naturale.height * totale), maxHeight)
   };
 }
 

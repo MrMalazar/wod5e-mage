@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Scheda del nemico · seconda proposta</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+  :root{
+    --oro:#d9a827; --oro-scuro:#98772b; --oro-tenue:#6b4f12; --oro-chiaro:#f5e7b2;
+    --testo:#ebe3cc; --chiaro:#cfc4a9; --tenue:#a2967c;
+    --fondo:#121009; --win:#19140d; --piano:#221c13; --piano2:#2a2317; --linea:rgb(152 119 43 / 22%);
+    --viola:#5a2b82; --viola-chiaro:#c29ae6; --rosso:#c4493f; --verde:#8fd19a;
+    --oro-filtro:brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--fondo);color:var(--testo);font:15px/1.45 "Signika","Segoe UI",system-ui,sans-serif;padding:34px 44px 90px}
+  button{font:inherit;color:inherit}
+
+  /* testa della pagina */
+  .pagina-testa{max-width:1264px;margin:0 0 24px;display:flex;align-items:flex-end;gap:30px}
+  .pagina-testa > div{flex:1}
+  h1{font:600 25px "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro);margin:0 0 6px;letter-spacing:.02em}
+  h1 span{font:400 14px "Signika",sans-serif;color:var(--tenue);margin-left:10px;letter-spacing:0}
+  .sottotitolo{color:var(--tenue);font-size:14px;line-height:1.55;max-width:820px;margin:0}
+  .esempi{display:flex;align-items:center;gap:8px;flex:none}
+  .esempi > span{font:700 10px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--tenue);margin-right:4px}
+  .esempio{font:600 13px "Signika",sans-serif;background:transparent;border:1px solid var(--oro-tenue);border-radius:15px;padding:5px 14px;cursor:pointer;color:var(--chiaro)}
+  .esempio.on{background:var(--viola);border-color:var(--viola-chiaro);color:#fff}
+
+  /* il palco: la finestra e la chat */
+  .palco{display:grid;grid-template-columns:940px 300px;gap:24px;align-items:start}
+  .win{background:var(--win);border:1px solid var(--oro-scuro);border-top:3px solid var(--rosso);border-radius:10px;box-shadow:0 18px 50px rgb(0 0 0 / 55%);overflow:hidden}
+  .win-h{display:flex;align-items:center;gap:12px;padding:8px 18px;border-bottom:1px solid var(--linea);font-size:13px;color:var(--tenue)}
+  .disp{display:flex;align-items:center;gap:7px;color:var(--rosso);font:700 10.5px/1 sans-serif;letter-spacing:.14em;text-transform:uppercase}
+  .disp i{width:8px;height:8px;border-radius:50%;background:var(--rosso)}
+  .win-h .ctrl{margin-left:auto;display:flex;gap:18px}
+  .win-h .ctrl i{margin-right:5px}
+
+  /* testata: sempre in vista */
+  .testata{display:grid;grid-template-columns:minmax(0,1fr) 392px;gap:26px;padding:18px 22px 18px}
+  .chi{display:flex;gap:18px;align-items:center;min-width:0}
+  .ritratto{position:relative;width:96px;height:96px;border-radius:12px;overflow:hidden;border:1px solid var(--oro-tenue);flex:none}
+  .ritratto svg{width:100%;height:100%;display:block}
+  .cambia{position:absolute;right:5px;bottom:5px;width:22px;height:22px;border-radius:6px;border:1px solid var(--oro-scuro);background:rgb(0 0 0 / 65%);color:var(--oro);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .nome{font:600 29px/1.05 "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro)}
+  .concetto{color:var(--chiaro);font-size:14.5px;margin-top:6px}
+  .appartenenza{color:var(--tenue);font-size:13.5px;margin-top:3px}
+  .stato{display:grid;grid-template-columns:96px minmax(0,1fr) 40px 26px;gap:10px 10px;align-items:center;align-content:center}
+  .k{font:700 10px/1.2 sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue)}
+  .stato .v{font-weight:700;color:var(--oro);font-size:14px;text-align:right}
+  .track{display:flex;gap:4px}
+  .cell{--s:var(--oro-chiaro);width:23px;height:23px;border:1px solid var(--oro-scuro);background:transparent;cursor:pointer;padding:0;flex:none}
+  .cell:hover{border-color:var(--oro)}
+  .cell[data-s=ps]{background:linear-gradient(135deg,transparent 43%,var(--s) 45%,var(--s) 55%,transparent 57%)}
+  .cell[data-s=pa]{background:linear-gradient(45deg,transparent 43%,var(--s) 45%,var(--s) 55%,transparent 57%),linear-gradient(135deg,transparent 43%,var(--s) 45%,var(--s) 55%,transparent 57%)}
+  .cell[data-s=ms]{background:radial-gradient(circle,transparent 32%,var(--s) 36%,var(--s) 48%,transparent 52%)}
+  .cell[data-s=ma]{background:radial-gradient(circle,var(--s) 18%,transparent 22%,transparent 34%,var(--s) 38%,var(--s) 50%,transparent 54%)}
+  .pips{display:flex;gap:4px;align-items:center}
+  .pip{width:13px;height:13px;border-radius:3px;background:var(--oro);border:1px solid var(--oro)}
+  .pip.vuoto{background:transparent;border-color:var(--oro-scuro)}
+  .pips small{color:var(--tenue);font-size:12.5px;margin-left:8px;white-space:nowrap}
+  .conds{display:flex;gap:12px;flex-wrap:wrap;align-items:center;min-height:24px}
+  .cond{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:var(--testo);cursor:pointer}
+  .cond img{width:21px;height:21px;filter:var(--oro-filtro)}
+  .cond .meno{color:var(--viola-chiaro);font-size:12.5px}
+  .cond .togli{background:none;border:none;color:var(--tenue);cursor:pointer;padding:0 2px;font-size:11px}
+  .cond .togli:hover{color:var(--oro)}
+  .nessuna{color:var(--tenue);font-size:13.5px;font-style:italic}
+  .mini{width:24px;height:24px;border-radius:6px;border:1px solid var(--oro-tenue);background:transparent;color:var(--oro);font-size:10.5px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0}
+  .mini:hover{border-color:var(--oro)}
+
+  /* le pagine */
+  .pagine{display:flex;gap:28px;padding:0 22px;border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
+  .pagine button{background:none;border:none;border-bottom:2px solid transparent;color:var(--tenue);font:700 11.5px/1 "Signika",sans-serif;letter-spacing:.16em;text-transform:uppercase;padding:14px 0 12px;cursor:pointer;display:flex;align-items:center;gap:7px}
+  .pagine button.on{color:var(--oro);border-bottom-color:var(--oro)}
+  .pagine button .conto{font:600 11px/1 "Signika";letter-spacing:0;color:var(--tenue)}
+  .pagine button.aggiungi{margin-left:auto;font-weight:600;letter-spacing:.08em;opacity:.8}
+  .corpo{padding:20px 22px 24px;display:flex;flex-direction:column;gap:20px;min-height:470px}
+
+  /* le tre carte */
+  .tre{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .campo{background:var(--piano);border-radius:10px;padding:13px 15px 10px}
+  .campo-t{display:flex;align-items:center;gap:8px;font:700 11px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--oro)}
+  .campo-t i{font-size:13px;opacity:.75}
+  .piu-caso{margin-left:auto;background:none;border:none;color:var(--tenue);cursor:pointer;padding:0;font-size:10px;opacity:.7}
+  .piu-caso:hover{color:var(--oro);opacity:1}
+  .piu-caso i{opacity:1}
+  .coppia{display:grid;grid-template-columns:1fr 1fr;margin:12px 0 10px}
+  .num{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;padding:4px 0 5px;border-radius:8px}
+  .num b{font:600 38px/1 "Modesto Condensed",Georgia,serif}
+  .num.soglia b{color:var(--oro-chiaro)}
+  .num.riserva b{color:var(--oro)}
+  .num small{font:700 9.5px/1 sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);display:flex;align-items:center;gap:5px}
+  .num small svg{width:11px;height:11px}
+  button.num{cursor:pointer}
+  button.num:hover{background:rgb(217 168 39 / 10%)}
+  .num.mod b{color:var(--viola-chiaro)}
+  .casi{list-style:none;margin:0;padding:7px 0 0;border-top:1px solid var(--linea)}
+  .casi li{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;min-height:28px}
+  .casi .s{color:var(--tenue);font-size:13px;white-space:nowrap}
+  .casi .s b{color:var(--oro-chiaro);font-size:15px;margin-left:3px}
+  .casi .s.mod b{color:var(--viola-chiaro)}
+  .casi button{background:none;border:none;color:var(--tenue);font-size:13px;cursor:pointer;padding:2px 6px;border-radius:6px;white-space:nowrap}
+  .casi button b{color:var(--oro);font-size:15px;margin-right:3px}
+  .casi button.mod b{color:var(--viola-chiaro)}
+  .casi button:hover{background:rgb(217 168 39 / 10%)}
+  .casi .vuoti{color:var(--tenue);font-size:13px;font-style:italic;justify-content:flex-start}
+
+  /* sezioni e righe */
+  .sez{display:flex;align-items:center;gap:12px;font:700 11px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--oro)}
+  .sez::after{content:"";flex:1;border-top:1px solid var(--linea);order:1}
+  .sez .agg{order:2;display:flex;gap:14px}
+  .sez .agg button{background:none;border:none;color:var(--tenue);font:600 12.5px "Signika",sans-serif;letter-spacing:0;text-transform:none;cursor:pointer;padding:0}
+  .sez .agg button:hover{color:var(--oro)}
+  .lista{display:flex;flex-direction:column;margin-top:-8px}
+  .riga{display:grid;grid-template-columns:208px minmax(0,1fr) 128px 34px;align-items:center;gap:14px;min-height:42px;border-bottom:1px solid var(--linea);padding:0 2px 0 4px}
+  .riga:last-child{border-bottom:none}
+  .r-nome{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+  .r-nome:hover{color:var(--oro-chiaro)}
+  .r-eff{color:var(--chiaro);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .r-eff .cn{color:var(--viola-chiaro)}
+  .r-eff .res{color:var(--tenue)}
+  .r-costo{text-align:right;color:var(--tenue);font-size:13.5px;white-space:nowrap}
+  .r-costo b{color:var(--oro);font-size:16px;margin-left:5px}
+  .r-costo b.chiaro{color:var(--oro-chiaro)}
+  .r-costo b.mod{color:var(--viola-chiaro)}
+  .bt{width:32px;height:32px;border-radius:8px;border:none;background:none;color:var(--oro);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-size:14px}
+  .bt:hover{background:rgb(217 168 39 / 12%)}
+  .bt svg{width:18px;height:18px}
+  .bt.viola{color:var(--viola-chiaro)}
+  .bt.viola:hover{background:rgb(194 154 230 / 14%)}
+  .bt.parola{width:auto;padding:0 10px;height:28px;font:600 12.5px "Signika",sans-serif;border:1px solid var(--oro-tenue)}
+  .bt.parola.attivo{background:var(--viola);border-color:var(--viola-chiaro);color:#fff}
+  .dettagli{grid-column:1 / -1;padding:2px 4px 12px;display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13.5px;color:var(--chiaro)}
+  .dettagli span{white-space:nowrap}
+  .dettagli .k{margin-right:6px}
+  .riga.aperta{border-bottom-color:transparent}
+  .riga.aperta + .dettagli{border-bottom:1px solid var(--linea)}
+
+  /* magick */
+  .magick-testa{display:flex;gap:30px;align-items:center;flex-wrap:wrap;background:var(--piano);border-radius:10px;padding:12px 16px}
+  .magick-testa > span{display:flex;align-items:center;gap:9px;font-size:14.5px}
+  .dots{display:flex;gap:4px}
+  .d{width:13px;height:13px;border-radius:50%;border:1px solid var(--oro-tenue);background:#15130f}
+  .d.on{background:var(--oro);border-color:var(--oro)}
+  .magick-testa b{color:var(--oro);font-size:16px}
+  .dominio{width:20px;height:20px;filter:var(--oro-filtro)}
+  .cassetto{background:var(--piano);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+  .cassetto[hidden]{display:none}
+  .cerca{display:flex;align-items:center;gap:8px;background:#15130f;border:1px solid var(--oro-tenue);border-radius:8px;padding:6px 10px;color:var(--tenue);font-size:13.5px}
+  .cerca input{background:transparent;border:none;outline:none;color:var(--testo);font:inherit;flex:1}
+  .grimorio{max-height:252px;overflow:auto;display:flex;flex-direction:column}
+  .grimorio .riga{grid-template-columns:230px minmax(0,1fr) 60px 34px;min-height:36px}
+  .grimorio .r-nome{font-size:14.5px}
+  .grimorio .dom{display:flex;gap:4px}
+  .grimorio .dom img{width:16px;height:16px;filter:var(--oro-filtro);opacity:.8}
+  .campi-mano{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;align-items:center;font-size:14px}
+  .campi-mano .v{background:#15130f;border:1px solid var(--oro-tenue);border-radius:6px;padding:5px 10px}
+  .scelte{display:flex;gap:6px}
+  .scelte span{font-size:12.5px;border:1px solid var(--oro-tenue);border-radius:13px;padding:3px 11px;color:var(--chiaro)}
+  .scelte span.on{background:var(--viola);border-color:var(--viola-chiaro);color:#fff}
+  .ambito{display:grid;grid-template-columns:18px 92px 84px auto minmax(0,1fr);gap:10px;align-items:center;min-height:32px;padding:0 6px;border-radius:7px}
+  .ambito.alto{background:rgb(90 43 130 / 38%)}
+  .ambito i{color:var(--oro);font-size:12.5px;text-align:center}
+  .ambito .anm{font-weight:600;font-size:14px}
+  .ambito .lente{font:700 9.5px/1 sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--oro);cursor:pointer;text-align:left}
+  .ambito .liv{display:flex;gap:4px}
+  .ambito .liv button{width:18px;height:18px;border-radius:50%;border:1px solid var(--oro-tenue);background:#15130f;color:rgb(245 231 178 / 45%);font:700 9px/1 sans-serif;cursor:pointer;padding:0}
+  .ambito .liv button.on{background:var(--oro);border-color:var(--oro);color:#1a140a}
+  .ambito .let{font-size:13px;color:var(--chiaro);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .somma{display:flex;align-items:center;gap:18px;border-top:1px solid var(--linea);padding-top:12px}
+  .somma .grande{font:600 36px/1 "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro)}
+  .somma .conto-ambiti{font-size:13px;color:var(--chiaro)}
+  .somma label{margin-left:auto;display:flex;gap:7px;align-items:center;font-size:13.5px;cursor:pointer}
+  .avviso{font-size:13px;color:#e59a92;min-height:0}
+
+  /* note */
+  .nota-campo{display:flex;flex-direction:column;gap:7px}
+  .nota-campo .v{background:var(--piano);border-radius:8px;padding:10px 14px;font-size:14.5px;color:var(--testo);min-height:42px}
+  .nota-campo .v.vuoto{color:var(--tenue);font-style:italic}
+  .solo{color:var(--tenue);font-size:13px;margin:0}
+
+  /* la chat */
+  .chat{background:#15110b;border:1px solid var(--linea);border-radius:10px;padding:14px 12px;align-self:stretch}
+  .chat-t{display:flex;align-items:center;gap:8px;font:700 10.5px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--tenue);margin:0 2px 12px}
+  .msg{background:var(--piano);border:1px solid rgb(152 119 43 / 32%);border-radius:10px;padding:11px 12px 12px;margin-bottom:12px;font-size:13.5px;display:flex;flex-direction:column;gap:8px}
+  .msg-h{display:flex;align-items:center;gap:9px}
+  .msg-h b{display:block;color:var(--oro-chiaro);font-size:14px}
+  .msg-h small{color:var(--tenue);font-size:12.5px}
+  .av{width:30px;height:30px;border-radius:50%;overflow:hidden;border:1px solid var(--oro-scuro);flex:none}
+  .av svg{width:100%;height:100%;display:block}
+  .msg-conto{color:var(--chiaro)}
+  .msg-conto b{color:var(--oro)}
+  .dadi{display:flex;gap:5px;flex-wrap:wrap}
+  .dado{width:28px;height:28px;border-radius:6px;background:#3a2358;border:1px solid var(--viola-chiaro);display:flex;align-items:center;justify-content:center;position:relative}
+  .dado.vuoto{background:#1c1628;border-color:#43365c}
+  .dado img{width:21px;height:21px}
+  .dado span{position:absolute;right:2px;bottom:1px;font:600 8px/1 sans-serif;color:rgb(255 255 255 / 40%)}
+  .esito{font-weight:700;color:var(--verde)}
+  .esito.no{color:#e59a92}
+  .msg-soglia{display:flex;align-items:baseline;gap:8px}
+  .msg-soglia b{font:600 30px/1 "Modesto Condensed",Georgia,serif;color:var(--oro-chiaro)}
+  .msg-soglia span{color:var(--tenue);font-size:12.5px}
+  .msg .res{color:var(--chiaro)}
+  .msg-bt{border:1px solid var(--oro-scuro);border-radius:7px;background:transparent;color:var(--testo);font:600 12.5px "Signika",sans-serif;padding:7px 10px;cursor:pointer}
+  .msg-bt.viola{background:var(--viola);border-color:var(--viola-chiaro);color:#fff}
+  .msg-bt.oro{background:var(--oro);border-color:var(--oro);color:#1a140a}
+
+  /* legenda */
+  .legenda{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px;max-width:1264px;margin-top:40px;padding-top:24px;border-top:1px solid var(--linea)}
+  .legenda h3{font:700 11px/1 sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--oro);margin:0 0 14px}
+  .legenda p{margin:0 0 13px;font-size:14px;line-height:1.55;color:var(--chiaro)}
+  .legenda p b{color:var(--oro-chiaro);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="pagina-testa">
+  <div>
+    <h1>Scheda del nemico <span>seconda proposta</span></h1>
+    <p class="sottotitolo">In alto la testata, che resta sempre: chi è, la Salute, le Condizioni. Sotto, quattro pagine. A destra la chat, dove arrivano le carte. I numeri d'oro tirano, la bacchetta lancia, il nome di una riga la apre.</p>
+  </div>
+  <div class="esempi"><span>Esempio</span><button class="esempio on" data-nemico="grigi">Agente Grigi</button><button class="esempio" data-nemico="buttafuori">Buttafuori</button></div>
+</div>
+
+<div class="palco">
+  <section class="win" id="win"></section>
+  <aside class="chat"><div class="chat-t"><i class="fa-solid fa-comments"></i> Chat</div><div id="carte"></div></aside>
+</div>
+
+<section class="legenda">
+  <div>
+    <h3>Sempre in vista</h3>
+    <p><b>La testata.</b> A sinistra chi è: ritratto (col + si cambia, e lo stesso file fa il token), nome, concetto, Natura e Fazione. A destra lo stato: la Salute col tracciato del mago, i punti armatura della protezione che porta, le Condizioni. Resta uguale su ogni pagina.</p>
+    <p><b>I numeri si aggiornano da soli.</b> Atterrato toglie 2 alle riserve fisiche: il Fisico e la Pistola compaiono in viola, già scalati. La × toglie la Condizione e i numeri tornano; il sorvolo sul nome ne dice l'effetto.</p>
+    <p><b>La chat.</b> La carta di un'azione dice riserva, dadi, esito, e ha il tasto che applica il danno al PG. La carta della Magick dice la soglia e il tiro di resistenza, e il tasto Resisti apre il Tiro del PG con la soglia già dentro.</p>
+  </div>
+  <div>
+    <h3>In gioco</h3>
+    <p><b>Le tre carte.</b> Fisico, Sociale, Mentale. A sinistra la soglia, cioè i dadi che toglie al PG che agisce contro di lui; a destra la riserva, i dadi che tira lui. Sotto stanno i casi: una soglia o una riserva per una cosa precisa, che vale al posto di quella generale. Il + sul titolo ne aggiunge uno.</p>
+    <p><b>Azioni.</b> Una riga per azione: il nome, cosa fa, da che riserva parte, e il dado che tira. Il clic sul nome apre i campi da cambiare. Un'arma addosso porta con sé la sua azione (la Pistola ha fatto nascere Spara).</p>
+    <p><b>Effetti.</b> Quello che il nemico ha di suo senza tirare, una riga ciascuno: si scrivono a mano o si prendono dal catalogo dei poteri dei maghi.</p>
+  </div>
+  <div>
+    <h3>Le altre pagine</h3>
+    <p><b>Magick.</b> C'è solo se il nemico la usa. In testa Areté, Domini e Tipo. Ogni effetto è una soglia che il PG resiste o supera: il Narratore non tira. Si aggiunge dal Grimorio, con la soglia base della Formula, oppure a mano coi pallini degli Ambiti.</p>
+    <p><b>Oggetti.</b> Gli stessi oggetti dei PG, divisi in armi, protezioni e oggetti. La mano li dà a un PG.</p>
+    <p><b>Note.</b> Cosa vuole adesso e quando molla. Le vede solo il Narratore.</p>
+    <p><b>Il buttafuori.</b> Sei numeri e la Salute bastano per giocarlo. La pagina Magick non compare (il + Magick delle linguette la aggiunge), e le sezioni vuote restano una riga.</p>
+  </div>
+</section>
+
+<script>
+const D10 = `<svg viewBox="0 0 24 24"><path d="M12 2.5 L21 10 L12 21.5 L3 10 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M3 10 L12 13.2 L21 10 M12 13.2 L12 21.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
+const DIE_SCINTILLA = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTI4LDEyOCkgc2NhbGUoMi4wKSB0cmFuc2xhdGUoLTUwLC01MCkiPjxwYXRoIGQ9Ik01MCAxMiBMNTggNDIgTDg4IDUwIEw1OCA1OCBMNTAgODggTDQyIDU4IEwxMiA1MCBMNDIgNDIgWiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRDlDMjhBIiBzdHJva2Utd2lkdGg9IjYiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L2c+PC9zdmc+";
+const DIE_STELLINA = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTI4LDEyOCkgc2NhbGUoMi4wKSB0cmFuc2xhdGUoLTUwLC01MCkiPjxwYXRoIGQ9Ik01MCAxNCBMNTcuNSA0Mi41IEw4NiA1MCBMNTcuNSA1Ny41IEw1MCA4NiBMNDIuNSA1Ny41IEwxNCA1MCBMNDIuNSA0Mi41IFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0Q5QzI4QSIgc3Ryb2tlLXdpZHRoPSI1LjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48ZyBzdHJva2U9IiNEOUMyOEEiIHN0cm9rZS13aWR0aD0iNC41IiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxsaW5lIHgxPSIyNSIgeTE9IjI1IiB4Mj0iMzMiIHkyPSIzMyIvPjxsaW5lIHgxPSI3NSIgeTE9IjI1IiB4Mj0iNjciIHkyPSIzMyIvPjxsaW5lIHgxPSIyNSIgeTE9Ijc1IiB4Mj0iMzMiIHkyPSI2NyIvPjxsaW5lIHgxPSI3NSIgeTE9Ijc1IiB4Mj0iNjciIHkyPSI2NyIvPjwvZz48L2c+PC9zdmc+";
+const COND_ICONE = { atterrato: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDMyIDMyIj48ZyB0cmFuc2Zvcm09InNjYWxlKDAuNjgwODUxKSIgc3Ryb2tlPSIjM0IzMzZCIiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMy41MjUiPjxwYXRoIGQ9Ik0gNiAzOSBMIDQxIDM5Ii8+PHBhdGggZD0iTSA5IDM0IEwgMjkgMjciLz48Y2lyY2xlIGN4PSIzNCIgY3k9IjI1IiByPSI0LjUiLz48cGF0aCBkPSJNIDEyIDM1IEwgMTcgMzkiLz48cGF0aCBkPSJNIDIyIDMwIEwgMjQgMzkiLz48L2c+PC9zdmc+" };
+const SIGILLI = { Mente: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF4AAABeCAYAAACq0qNuAAAQAElEQVR4AezdBZT0thEH8GtTZmZ45abM3JTblJmZmZmZmSFlZuY2KaTMzMxNuSnz/7eNvufzeb3rW/vWd7f3NCtLlmV5NBoS3KHXVn9LwcAK8UtB+9raCvErxC8JA0t67YriV4hfEgaW9NoVxW8zxOuw46fN5wxcNXC7wIMDjw88NfCkwCMC9w7cInDZwCkCewVWIRiAwEStAbIukBL3DDw/8InArwI/C3wm8MbAMwMPCdwjcKfAXQP3DzwmsF/gnYHvBn4ZeHfgUYGrBY4Z2JWhDfEnDkYeFvhR4KOBxwVuHjhv4FiBtmdze0M4VHKOHbhM4L6BNwR0xOcTPzFw8cCu6Ygm5B0hCLh94KuBBwZOFBgqHDYVny1wt8D7A18MvDZwlcDhA9sjbKKVdcQfNXW8PPD0wNED9YDFvC2ZePj9EkOY2Gh4QdJvCnwo8O3A3wJdghFx0jxwzQD2pY4H5PocgXo7k7W9Q/2D8OSr55MgIdEk/CW/bw/cIIA6r5z47oFHB54cEBch6lksg9A9V+7dKvCywGcD/wjMG7xfJzw8D3wkoI4zJN4xoYr4W+arbhuoBhoKirtSMl8RIFD/m3hacO8/uXlwAKsiWG+U6wsHzhLQQd9LrFyiucIRU+p6gU8FHhsYkvWl+q0JBfE+Bj9HaeXNVMO7JPHNQBdEpfiG8NfkqAdLOk2uqZevSfzPwLzhyCl4r8D3A08LaHOi7RkK4rEYQ7t8BU2GOljSfcZGxHtS4XUCdHvI/FKu5SeaGQ6XEncM6Ehq7GlzXSWYJHsNlI0zp8ZrB4zY+yS+YcAIpmrnsnuAeIYQgVZ9+oNJdKHGFN9U+GmeMrLYCQwxOv6fkzdPOEoKMdzYEs/N9akDfQeyirJB5X11KkegZNpLc/3pwIsCmxp5EK8n9WrqmARs5fWTq637gey35nWXC1wsQGjPqxXRxMgnHQAh58nzfYyAa6UeI5PC0ETZRh7KZ1QeJmU7BYjft/YEfmzo17LXJX2YZ9dl9pDQ6SiJmnrG1Eeb0Z5czgzUX4hg7NHCKAQMvZkPNhSgtelEBp/b2kVZMLJelYw/BUogr1jhJT1XDHn4V7UwtW8am2HUsDoNvW/kIaqeRg5hcdJ+bpx3UE8/nnheGYD6jJw35xnPae/Jcz1vwL64NHyrZ/bPj1F4/sS3CdCwjDCdkeQkXGLy2+EH4o9TK4/tNA0tQ/p1KatRZ01MO7lg4icE8OYjJe47+Di+Ie9BVYyqed9hVBK82ksQM/wun4exiESNQYcxHksZ1yiaUUhFLg/pVNpVScNFuZ4rhvh/10pC/LlrecrRPq5Qyy9JfJU6WtJ9xzrgLalUhz808bzsJ0UnAfVqOxb05eQYBcdNXA2Qt9/a2p7pUCyL5dw0+smfr1Ue7szSIPT3lQrKJd5KV750MlDBixNrBCrKZWPg39FpjTd7yoRwXtDTpz5CDQJy2SmUUfDDPGUUkAVYpZFbNBTCnjv7jynTFJTfu3KDdV9Jzr6EeA2ol8Q26Mqk+jtyk9BK1BqworO3lujvJjvj1qkO6/hYYiMiUafAIjYK+JcITh1QKnhJLsiwROsCwsMNjL5TVe5Uqb+SPf0S4qlh00t0u4MSuj2x+dKE7QF5/EIBQq+JgHJrZoCDE9ZKEerkllF+s9zjpzIf8b5c4/dcILmcBJ3+yslVhx8vpT97uMNjU4v+eOqd4W5o+/NSPc2C0PtXrhcN3BPmDTjpeF2xXu4O7zBSqvXzIemMat7Ma4j/QEp9OLBo+HoqoD0kWkoww8UCJ5NoQn10wKwP+XkK3DRQV1CS1R4g3pDlQTyovWjrXUKO/ssGaC048E3Ixg7o3OfLu54dmCYgc2uhwM4wYYPgOlcE8R4irC6Si81U8oM8hyfy7+RyNMEcAGI4SVpkFGAXvg+RJGuhwDDDdrCZTVVUEO9hUhzyOYH0JuqRPw1+lxukP+Fmui7JUQaGz7vSMqPa3IKRwMtY/b7qdYo2BrIEV2BU6UgE11hwnswq4pU3tWcqj1pIh6dSGq7vzU0+lE8m5kBTxnDG33gYk70tAmonC0zYcy1o9N/zc+fAdQNsBERE5tH2UDblwwTM9XPfLJhVFE22T27PH+qIL0/ii4TuM5JhuJLwGgvZBJhRQZCighTZVoEDjvuhNJpLAXFx+7KKeWsvmpusca4KU5188Jxjv0l+L2Ea4psqh2TQdG+sefV28fkbrSWf9ctirX+XdIFStte4C+J7ffESKuMqeGHey2+TaM2I5X/qbO57eFHYLYg/WhDFEDpGYoHPh3yiIEhvOewGxPOvsDppXxDM22idJ8EpvRTYDYgnHE1cFARbOoivl/RS4p2OeO5jE9LlO82ccV8TnEtBeHlpaVBJ76TYHCykF75unpSn8bdj+MidinjfZRUcK7Xg2eKsL5TEsmMNXHYbhng/ns6HXurWCVTJkl56vBMRT3thcZcJez4oRtPS+Xq1t3ca4k+Wj6OvFz8Mfk6rWYqRlLZMDdsK8VO/4v83ULidJSxUOfR1U3ffkhgb7CTEc/VabldwbJXEc0pibPFOQfwlg1jUzUrN5RrPKq/jqPi6hhXYCYi3BNHWnTIJbU7hJvlA/D3ROMN2R7xFpdREa3pg2JzvHXJhKjPReMMQiCfktmJ9jbZjJ/ZaFQyblrO+s6QXiU+Xhy1WTdR/0Pi+a7UK7Vmp9HiBIYNNzDa3lXewSh+URB98XdutMOuyyjivnj8MgXgCzjI3U2lm+Odvzfwlr5GiXLuJJsGUHI2mD32dAWbBanVt5OQlff4MgXh1YjeGKeTbK9Rnm21YYJkWvm6FAMq3MmKR91hwaxWxFQlDbOtZ1zZIWpfRQwLFQ7yqTBZb3maRkZ3bFvkD6p6Z/M2AeuzbUj+AeAtYLbBdBLTzkanQ3qpEw4YhEK/Ognit55alZ1sAZHcHMItv4edm4AQqrQBKtRRlUbCqANFUqh7uEpL6rl2dVcQ317/LcyFpl6Og9fP70JAaX7AViNd4Oyws/rcNpitY9K+O6gdY0WZbDUFoldsssI7e2s42sA7SAt7qezqvAq4+3HY9FOILoqw1pPrZPUG7sYepKxDMVd5rw8Cl8lFXDFjDaJXbLCBfaFltYLbK9htn6KTqSeDhnFz0/TME4lENSvlcGuuD+VF8jHwd0gWsUzSblKomgYuXH8ZC1ElGjz/aZY6W8D/wkHq5IA657DcaAvGQjj3QZL6yQHMZMtYysoRV8+v82KekE3M5WNB2q6aNKAtcB3nREIi3SsuepEVWaVFBba+xUsCH09VN31l2Jz00oH4yZNYO9023YwjEW/a8iBXJvevghqrJ7mwDZ99s+kPH9uAQiF/kGwlRJ/nZRlnqIUxRe0nviHhsiLenqIpkmwMIV6xmjAi3O9zSb55S8sixKgiHtlV1a2xo+5gQf8q0jj+dCyCXazZHQPpPJEYINiuwJ6zFdDgel7R5X+fvkA+0Ooeeklcbmt8T4jfU2zXDMYh2XDjrsjyLivjYS3pMsZOhTMI4YQp7rLdNnu35TrnifHOI3royY0C8NTA0GE6q0jiUb0qvpMcUYyW2J0HuPO1iODICqzNla2NAvNNb7cgrH2FzsH1KJT2m2HEqRmLXNjmaBvsxMT95tgviGTLmIVmOjr7F14C15vzYFoU6lAGvtiV98oIZPyY18MTSDlvydcJYhSnEYSEzPqvxNmFLJZ5M4JQPbiyZTMPJUIFYExAsUWa1s2n0PHBCE02Eru0YEkYHh5M5S1KeBWsOU12pck+wPcam30lDksviReldDgPKY1sarGpY5IV2TrK+W1kNyuVnsWUFYm21xI9nvRi12w9KNSTleQ4ZVPbJUrlMWDgtw/Sd/bSlPvfsoS3pMca+g1W7SNvMFe81jeJ5+1At5GExi7wIpesMRwlSuRhEdmbYsFvqRfm0hJIea8x3Y0Qv0j4nQe3ThHgbbK1NWXRYTWucjsDvqu+2QoBH8Cl5yK4Nk83KJTmqgNrZFnaItzWMJ7bt/r7Vj1fQ5LSFnoXvymsC/NgSCILRecQ6y8mpeDSBi710cZIZVViZre2WWXP/Aiol1c1epnpbm9q1FXlYpsl1kzvV98EJVrlPMskv3lUyL8kNYR3FU5VQXKOldcij1q3g+wSuiWobdHWU/f/OCiZgCVusikCltaBgxpETlFDMIVW1Rqgd1duLylhx6gaNx7kCOoeQslpNudaKBrrpTEpHAjuhz8lN8MCp57gBI1enIEzuBLNk9WbsXaUiCj4+XC9U0maTDDMzSnzWs5BIJVSOFuSsRnVrTKmva0yN4yNHHOohJ5jrrEOWITnStc5FyhvR5BV12shv0saMAipk/T0HVRFvqKOgeqGSpnU4e2sWwkv5egw5kF/y+e1RhM2/DpzTcA0t99tiqxgsr/M8fwi/CMFnAZXpO++ZxS7b6u/znt2G9foOqCIeX6oXKGnCpGnIlPuzYu9BGXztpawDHJwhRuVEyVwGEIa9OAeHzTDv1BuCIbDJGhTmZD7/9gKPtXrYPO88qnBpW5/xRG+vVbg/hJQ8FFOu6zH+v8hQdu6Njy/1mklyBkxJG0XOgIEsZ1xCvslnlqI9TIYy9jLvmnft5cBiSfP76AisSd2OTMGfy7uHjLFHfL/6jgmLqiKeI4dQqBYq18qhppLuEkOivUmo0nOQh+e3HTCkI7SFZkOgEl60BAJbZ9CkULb7s1Q376Q1nSkXjvAiFwh6nk8amI51P7d7Dd5nOYmRWK2YpnYwhJZMJ8pRh0q6HlMV6dv4a/1eUxqPpYFQD8szeDg/Np7c9MysPM9jQTQpC1X5jriSLffg1rAW02S4jmurCxEYgVwe2J1nuG9t56ExmeBQpq2Oafc8S5Nj8TOWquWck8aI3OAyYM5OYzmogvAyH2pbY7XC6rUGW6ZNENNApN2HNB+GUqX7gl+kIn4kdVuTCaFmgHQwivtD7s8KFqrSv50zCWFGgzq1HxJpfDrYGcImanxTAcRrJCJKcouej9jUWX3vd5JwYi2VfAPiDUF6KXaQchsCAcVQoqt6CZZh6PPNlI8l0KwIxl9LBdiGevHqkjdEjNJRLzWPDLFGhtB2CL9RgjXNWqQEoXizZ8uINdPEliAndIzVzlggm8a7qM2sfS5u2lb92yAd3tQxuae3JheVH15Fapr5zkr2uksU7yX+Uw6BaPhTCZ1VZqIam/EAKjeUqaqMK2n5WwU6ArIhhVxg0GFPeD1B6xtpbLPaA0++yXdTi627QVh8Wdgc94oOa6qHcWkkYjN77qtwT6JygVfqcRStR81/Vm6vu/RCUM0kuQkRw5dQtl6yen9Z14w6576zPAl91jch6AQ+RKST5hHWs9qvw2lu6vWeDYrENMSr2DI5pj6zGA/Ta2QA1wDPpYqBnjS7YkOvyRDahzXsRgQ1bl5d3Du3GlA7mUZ2OXTCaMBmWOf4PWWDYTeLPZV2m5i3/8uIwH7VO+HppUCJNaEjxgAAAI1JREFU2xBfyogtUiL1zTzhVSQ/xxUgeBhA+KFTMujbY0a272kDMoLKSfugg9uiT6hCpLkEM3AIjDAns6ik5BfjzxyGg4gOXFtbax058yK+raG74R6zn2Bk67CqERj1lX3BKcgqpyLPOzI2aDW7AYmj+MYVxS+pG1aIXyF+SRhY0mtXFL9C/JIwsKTX/g8AAP//6fr44wAAAAZJREFUAwDADznqhShEiQAAAABJRU5ErkJggg==", Forze: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF4AAABeCAYAAACq0qNuAAALb0lEQVR4AeydZawEOxmGF7u4uzsEu1hwd3d3uLgH5yLhBy7hEiw4BJfgFtwtOAR3uMB1d3+ekzMn3W5ntp2V6e7Zk++dTjvttH23U/n6zZzTjzZ/gzCwIX4Q2kejDfEb4gdiYKBsNy1+Q/xADAyU7abFV0z81SnbTQpwY+LeIMD5Od9IxEBOi78YaT4IvluA7xNXvBL3RLCRiIEc4r9KmuuDHwPjT8MZiHdGcDB4MDgCbCRiQBKjoKT3QEJvD94CcuQkIj0N7AfWX3rUMJd4b300h+eC5wGJxWmVT3HlkyBXfEJy465FvBLirfAxHF4DHgL+D1JyHIHPBieDHDkbkV4ITgd2jUj85XvU9uOkeQBI9d+fJvw/IFdeSsQngvOCXSMS/ypqe01QKt8jgT8AzpjcHJ/3xZkqTyHGM8CFwS3ArhEJ+gu1/Tp4NCh93J3xkGxMLo7vdqBLzsTFvcAbQZPnPTjfNSLxX6C2FwBvBe8ElwY+9ufDnYafE8c+HWdMHo/vgi2wdb+Ea+8CDemcjm7LwTQ46y8S7/z831R1D2Cr/x3uPzLxS+KlZiS23rZ7/I00qcHUJ+VaXNsVIvGnUNOwrz47/nODc2UiRbz39T5t4NZJ8QdLXli3QAmyTp/jcCoYWu5LAcLuB+96SkO8XYaD7NC1tP+/6dCFWEb+DfFHkdlnQA1y72ELsZzcG+LN7RMcauhu7kY51r67CYn/NRX+M4jFWY7z9Wn4a5xw2/9fXO89Dc1q93LE77OgI9nqSEi8enNbfVj6D+NxE+SOuNPwfOJ4D5wx+Qo+N0duhNuF63H9o8DW/lDctZaQeCuqVvFYT4ALqyfgHg7sgqbh88Rz7o4zJvfH5y6U9+3C/sR7EFCFcBvcuGwErY/ElWu6g/9RxUeCI0GunEDEcD2Ad0vOwbFkwHwD8Z8MrgTWVmLiXUypOrDy7iCVVvztJEjp6p9OeGqhRXBSfkjoH8HaSky8Ff0Ah3eDPrIviRyEccbksvjuDDayzUCKeC8d4qEnPtSS7jEt4W3B7t2eue3iqoe3ET9LveznD0vc4K6EqQjDyRK1la8nZkkXRfTVkEUQbx/vOBEz4DRx7ziwxX9Wwp8KHgX67JCRrG7pIl7tZN/Su/3n9DNO71rgnHFgwv84whwT/AFuyHlfqTZdF/FW3P1QVcSlFfgDCX4EYnGTxS4nDg/9e+J5GfAJwRndx8O6oYt4p3NaC3yHSqs/0aipa+UZXpO835IuFvtrt/yuwQXjNLgafmHrdiHm3J+gLbk1Ry0RcNZHuohXR/NTqqre5LO4muSVmPG5m0WyCXHQdNcrxE+IJb6BeykQipsptwoD1uG8i3j1LqoQrKePvRvUttgSmDYFW7D9dwPJFYan4k/bPE+lqTqsi3gLrjWYRkyeD4m7kLk/Ps56yDTi1dn8rIKqOqUUFRRlPkWYRrxmeLb6+eTW/y629hJFW/+clpRyGvEWQ316ylTPa8vEWvXzOcT/CXZVF+PsiDtVL8InXI26CZLCc4jjnFxLY04n5E2EqH8PYZoGbsSobibayKmnhlaerzxyiLeS7/CwDVu/c/GX4xfaXr6a8xReR/iLgWpenAlxhqQKOoRpGmiVrF3+v0iptZtzek5XX3KJ/zJVdXqJM/L1mh94UoA3t8TV4jhcLKWiuYDT5GMfLs6iNSX5UkQTFbtFn1q5egW5PhBcB+yoYXKJd1Pk2yT0zZCP4JbKF0mgmSDOmGib2bbQCiOq53cV/a0wsKJz1zg+jXaNqkscF32PwO7XrljOnB26oe/TvEcu8dbRjXBbuo+9/hI4OzLzVJqHE6jdJs5Kiqtqra0l2z1jxyHr60rfbvgF1Oq9wB/Ep/tZnO9VQvx7SPA20FdM69ZinN5B0348Dq/dfyEK+DEg6b4T4HiFd6Tp+RU4uRmwtdvdOCb62qraWd8L27uEeH9Ff1Xu10v+SaqUxtIC2+q5vDJyd0r6K6AFRcOh3bBjlvvLqV5BNfnXSOOPsmeTCP9SxNaQyuhOBK6CVYF7x3YbKg0vSpkbcbrtBMDdtyaszXVqfXgf4lUPu5Jsu3FXuK/v+KjFcez77B/j8Jr8vipkt6LZS1guB3wbjmubMLzzvA/xLt1d8DiSd948cdE3BdtUEFbIfjORbPCge1ECTdk1L+R0Rwy7Hz7rhZMvfYh3g+O1ZOHLxpfALRWnXO7LxukuQ4AzBJyqxB0zTV525uDbpVOBqKWdU+3toHynD/EOEJriPZZsnCI5Py2BG+EONCSfEMcAB/AcuGnyTe6QC7u5Urjx43cc3Csgqx1RjeGqurilN3foQ7yjdzM7sW++LjcrgTtabd2UXY1Tyxy4YPEJyYWDXymcEqb2nF2Ju6Ck6v2kD/G21mZnql+uplpt+JKcqoHetehDvJnZFfTq20y8BvBps4vzkzK9qtOX+L+Tm4Mszq6Vq1JzZ2hx/0/wdOlLvHd2KqW7m6E5insSxRzMQrxKL9UIcaaOAYbnwLhxev2GO3NYFszPfEOoV/JliYMITE1/Cd4Sp5SX3DorOMxCvCvQZnbTZKkRlC8J35KAHPjtG6JOiHNkZxSls5A+8dWdW5emEO47OG+/AwEqtjS0ctFo90rQhJyHEK0gcPJlFuLNJXxF03dlnQZqCaZKNAd+zyBlPuKrOxKgQdWi4cIt1LuotnUVrXrA1n4AFbVOWtOllF9cHvnjFalRZiVe41QfSUnSsldFvwXJxaFE9AfCGZOz4CtuRaQpFcl6WJDIJ9bGYJ2C4K3T33PUgjl1zR+vaE9hVuJ92czNcHXtaugoW7G4Mkwl0mjWlxNS1+YVphogNBlUv+6qvO3+KsTs9+PrltMfMQ5v9c9KvIOSn1pRTdqayZQLrgBVlcbRrk1AH10QybLFT76EL9jZkLoSW87Uvq9hTgS60o5dm5V4b+aWoJsCnveB+g4XZHFauxsH6jh8nn67yPDtlbD1p/JRRRKOB00c+/5UF9Rcn3DnQfy+o9FollWsUzU3wycKR4CzCXeoOF2ISFY4W3FPwG6jLTPHMTfo4+sqDuOwTv88iO/MIPOi5iNhy2uS+Ub4onemXAjaZZrnVTi8D6S+FCXpflmKy2Pih4+Ku9paiLe7idcE1k4tpjs/ni8KjjHhbMzX+VVza4bhzpI2MU4AtHpLtXa/NmXfX1S+Woi30Oo9dGM8KQ6Ys99PxvghUwfa5tb29c7nv0SAK3R17ymdjAtAZ0JEK5OaiHeR4pc+4hq4chRx+Dz9kufGjuuKnPv6Y6mjcScuJ/5EnJqId4X4i4kSjkbOj93XHC34z+5ENcf7yadtLn8815yBOehrN9qMDQSXSU3EW3IrrRvD2cYiZzdNfr/hRHWBZhx2L/vgt0wuEP1ItU+e/X7xLIb7jEltxNvdaI08Vkg8VwTu+uAsXGzFrk7dlH8muT0C+AleB1dnMF4naDapjXgf5dQga3ej+nW22laUujbipUbFm24M1bTqVuLwlfTXSLyfXVEdGxPq/qaGRXH4SvpTxA9dEbublBWDZQ1VuEOXc6b8rcxMN1hQYj8KlxrE3JW68oLyXOptayXe+XyovGpIcbPBb853KbKauFW7tRLvl//aVM1O7TTwr5rYaYWrlXjLra5cN4at3UWNBv7xtZXx10q883Y3vNuIVEvo0l27ybY4VYfXSrz6cE0rusjTVt2PkvqROZ+CrrjVXauVeJVVF8lgy8+sqEfRVj/nk1sZt1xOlBqJt5vx5VzdHBZs7f5PEhdeJV/5y7n3wuLURrxkq27V3t55fAn8j5pOQ++5MLbmeOPaiLdq7vrY1fSBens1i8PXy5p0oLYC2sK1LPMVmL5w71brgY5qD3+pNuKHZ2RJJdgQvySi42w2xMeMLMm/IX5JRMfZbIiPGVmSf0P8koiOszkNAAD//7EqMBYAAAAGSURBVAMAa2p728LP/vsAAAAASUVORK5CYII=" };
+const FORMULE = [{"nome": "Accelerare e Rallentare", "domini": ["Forze"], "soglia": 4, "ambiti": "Durata 1 · Impatto 3", "ambitiLista": [["duration", 1], ["impact", 3]], "testo": "Puoi rendere più veloce e rapido un soggetto, un corpo, un processo o un movimento etc."}, {"nome": "Aprire e Bloccare", "domini": ["Forze", "Mente"], "soglia": 4, "ambiti": "Durata 2 · Impatto 2", "ambitiLista": [["duration", 2], ["impact", 2]], "testo": "Apri o chiudi un passaggio che resta per tutti, oppure fermi qualcosa finché non decidi tu."}, {"nome": "Barriera", "domini": ["Forze"], "soglia": 5, "ambiti": "Bersagli 1 · Durata 2 · Impatto 2", "ambitiLista": [["targets", 1], ["duration", 2], ["impact", 2]], "testo": "Chiudi un perimetro: dentro non entra niente del dominio della tua Sfera."}, {"nome": "Cancellare", "domini": ["Mente"], "soglia": 5, "ambiti": "Impatto 4 · Precisione 1", "ambitiLista": [["impact", 4], ["precision", 1]], "testo": "Disfai ciò che è stato fatto."}, {"nome": "Celare", "domini": ["Forze", "Mente"], "soglia": 3, "ambiti": "Durata 2 · Impatto 1", "ambitiLista": [["duration", 2], ["impact", 1]], "testo": "Nascondi il vero: alla vista, all'udito, alla memoria, ai controlli."}, {"nome": "Comunicare", "domini": ["Forze", "Mente"], "soglia": 3, "ambiti": "Durata 2 · Impatto 1", "ambitiLista": [["duration", 2], ["impact", 1]], "testo": "Parli e ricevi risposta dove la voce non arriva."}, {"nome": "Condizionare", "domini": ["Mente"], "soglia": 4, "ambiti": "Impatto 3 · Durata 1", "ambitiLista": [["impact", 3], ["duration", 1]], "testo": "Fa quello che vuoi tu, e lo crede suo."}, {"nome": "Confondere", "domini": ["Forze", "Mente"], "soglia": 3, "ambiti": "Condizioni 2 · Durata 1", "ambitiLista": [["conditions", 2], ["duration", 1]], "testo": "Dai un malus: perde dadi, perde l'azione, perde il filo."}, {"nome": "Contrastare", "domini": ["Forze", "Mente"], "soglia": 3, "ambiti": "Impatto 3", "ambitiLista": [["impact", 3]], "testo": "Fermi la Magick di un altro mentre la lancia."}, {"nome": "Costruire", "domini": ["Forze", "Mente"], "soglia": 6, "ambiti": "Potenza 2 · Durata 3 · Impatto 1", "ambitiLista": [["potency", 2], ["duration", 3], ["impact", 1]], "testo": "Fai esistere una cosa complessa che regge da sola."}, {"nome": "Creare e Distruggere", "domini": ["Forze", "Mente"], "soglia": 4, "ambiti": "Potenza 1 · Impatto 2 · Durata 1", "ambitiLista": [["potency", 1], ["impact", 2], ["duration", 1]], "testo": "Fai esistere una cosa semplice, e la cosa è vera; oppure la fai smettere di esistere o di funzionare."}, {"nome": "Danneggiare", "domini": ["Forze", "Mente"], "soglia": 4, "ambiti": "Potenza 3 · Impatto 1", "ambitiLista": [["potency", 3], ["impact", 1]], "testo": "Fai male a un bersaglio con la tua Sfera."}, {"nome": "Dominare", "domini": ["Forze", "Mente"], "soglia": 6, "ambiti": "Condizioni 3 · Durata 2 · Impatto 1", "ambitiLista": [["conditions", 3], ["duration", 2], ["impact", 1]], "testo": "Dai un ordine, e obbedisce."}, {"nome": "Drenare", "domini": ["Forze"], "soglia": 4, "ambiti": "Potenza 3 · Impatto 1", "ambitiLista": [["potency", 3], ["impact", 1]], "testo": "Prendi per te ciò che lo teneva in piedi."}, {"nome": "Evocare", "domini": ["Forze"], "soglia": 4, "ambiti": "Impatto 2 · Durata 2", "ambitiLista": [["impact", 2], ["duration", 2]], "testo": "Chiami qui chi esiste altrove, e viene."}, {"nome": "Guarire", "domini": ["Mente"], "soglia": 4, "ambiti": "Potenza 3 · Impatto 1", "ambitiLista": [["potency", 3], ["impact", 1]], "testo": "Che sia corpo, mente o anima, guarisci quella parte del soggetto, chiudi le ferite, rimuovi la febbre, risaldi l'osso, gli dai quel sollievo di pace che da molto cercava."}, {"nome": "Ingannare", "domini": ["Forze", "Mente"], "soglia": 4, "ambiti": "Durata 2 · Impatto 2", "ambitiLista": [["duration", 2], ["impact", 2]], "testo": "Fai vedere il falso: illusioni, immagini, voci, volti."}, {"nome": "Inventare", "domini": ["Forze", "Mente"], "soglia": 8, "ambiti": "Impatto 5 · Potenza 3", "ambitiLista": [["impact", 5], ["potency", 3]], "testo": "Fai esistere ciò che non esisteva per nessuno."}, {"nome": "Invulnerabilità", "domini": ["Forze", "Mente"], "soglia": 7, "ambiti": "Potenza 3 · Durata 2 · Impatto 2", "ambitiLista": [["potency", 3], ["duration", 2], ["impact", 2]], "testo": "Niente ti tocca, per la scena."}, {"nome": "Mutare", "domini": ["Forze"], "soglia": 3, "ambiti": "Durata 2 · Impatto 1", "ambitiLista": [["duration", 2], ["impact", 1]], "testo": "Cambi un dettaglio e lasci intatto il resto."}, {"nome": "Percepire", "domini": ["Forze", "Mente"], "soglia": 2, "ambiti": "Impatto 1 · Durata 1", "ambitiLista": [["impact", 1], ["duration", 1]], "testo": "Capisci se una cosa del dominio della tua Sfera c'è oppure non c'è, qui e adesso, anche dove i sensi non arrivano."}, {"nome": "Possedere", "domini": ["Mente"], "soglia": 7, "ambiti": "Impatto 4 · Durata 2 · Condizioni 1", "ambitiLista": [["impact", 4], ["duration", 2], ["conditions", 1]], "testo": "È tuo anche quando non ci sei."}, {"nome": "Potenziare", "domini": ["Forze", "Mente"], "soglia": 4, "ambiti": "Potenza 2 · Durata 2", "ambitiLista": [["potency", 2], ["duration", 2]], "testo": "Dai un bonus: è più di quello che era."}, {"nome": "Prevedere", "domini": ["Forze", "Mente"], "soglia": 2, "ambiti": "Impatto 2", "ambitiLista": [["impact", 2]], "testo": "Un'idea di cosa sta per accadere."}, {"nome": "Proteggere", "domini": ["Forze", "Mente"], "soglia": 4, "ambiti": "Potenza 2 · Durata 2", "ambitiLista": [["potency", 2], ["duration", 2]], "testo": "Pari: il colpo arriva e non passa."}, {"nome": "Resistere", "domini": ["Forze", "Mente"], "soglia": 3, "ambiti": "Durata 2 · Impatto 1", "ambitiLista": [["duration", 2], ["impact", 1]], "testo": "Ciò che ti entra dentro non fa presa."}, {"nome": "Riparare", "domini": ["Forze"], "soglia": 3, "ambiti": "Potenza 2 · Impatto 1", "ambitiLista": [["potency", 2], ["impact", 1]], "testo": "Riporti a funzionare una cosa."}, {"nome": "Risanare", "domini": ["Mente"], "soglia": 7, "ambiti": "Potenza 3 · Impatto 4", "ambitiLista": [["potency", 3], ["impact", 4]], "testo": "Riporti indietro ciò che era dichiarato perduto."}, {"nome": "Ritoccare", "domini": ["Forze", "Mente"], "soglia": 1, "ambiti": "Impatto 1", "ambitiLista": [["impact", 1]], "testo": "L'effetto minimo che ogni Sfera concede."}, {"nome": "Rivelare", "domini": ["Forze", "Mente"], "soglia": 5, "ambiti": "Impatto 4 · Precisione 1", "ambitiLista": [["impact", 4], ["precision", 1]], "testo": "Qualunque domanda sul dominio della tua Sfera ha risposta, anche sull'inspiegabile."}, {"nome": "Rivoluzionare", "domini": ["Forze"], "soglia": 10, "ambiti": "Impatto 6 · Durata 4", "ambitiLista": [["impact", 6], ["duration", 4]], "testo": "Cambi le leggi con cui una cosa funziona."}, {"nome": "Sapere", "domini": ["Forze", "Mente"], "soglia": 3, "ambiti": "Impatto 2 · Precisione 1", "ambitiLista": [["impact", 2], ["precision", 1]], "testo": "Leggi cosa c'è dentro una cosa, un luogo, una persona."}, {"nome": "Simulare", "domini": ["Forze", "Mente"], "soglia": 5, "ambiti": "Durata 2 · Impatto 2 · Precisione 1", "ambitiLista": [["duration", 2], ["impact", 2], ["precision", 1]], "testo": "Un falso che regge a ogni verifica."}, {"nome": "Spegnere", "domini": ["Forze", "Mente"], "soglia": 3, "ambiti": "Durata 2 · Impatto 1", "ambitiLista": [["duration", 2], ["impact", 1]], "testo": "Spegni senza rompere."}, {"nome": "Spostare", "domini": ["Forze"], "soglia": 4, "ambiti": "Potenza 2 · Portata 2", "ambitiLista": [["potency", 2], ["range", 2]], "testo": "Muovi da qui a là: sollevi, scagli, richiami, voli."}, {"nome": "Suggestionare", "domini": ["Mente"], "soglia": 3, "ambiti": "Impatto 2 · Durata 1", "ambitiLista": [["impact", 2], ["duration", 1]], "testo": "Inclini l'umore e la scelta di qualcuno senza che se ne accorga."}, {"nome": "Trasformare", "domini": ["Forze"], "soglia": 5, "ambiti": "Potenza 2 · Durata 2 · Impatto 1", "ambitiLista": [["potency", 2], ["duration", 2], ["impact", 1]], "testo": "Cambi la forma e lasci la sostanza."}, {"nome": "Trasmutare", "domini": ["Forze", "Mente"], "soglia": 5, "ambiti": "Potenza 2 · Impatto 3", "ambitiLista": [["potency", 2], ["impact", 3]], "testo": "Cambi la sostanza: cosa è, non che forma ha."}, {"nome": "Trovare", "domini": ["Forze", "Mente"], "soglia": 4, "ambiti": "Impatto 2 · Portata 2", "ambitiLista": [["impact", 2], ["range", 2]], "testo": "Sai dove sta quello che cerchi, e dove va."}, {"nome": "Varcare", "domini": ["Mente"], "soglia": 4, "ambiti": "Portata 2 · Impatto 2", "ambitiLista": [["range", 2], ["impact", 2]], "testo": "Passi un confine che il mondo non concede: la distanza, il Velo, un istante."}, {"nome": "Vincolare", "domini": ["Mente"], "soglia": 5, "ambiti": "Durata 3 · Impatto 2", "ambitiLista": [["duration", 3], ["impact", 2]], "testo": "Un legame che resta e regge da solo."}];
+const AMBITI = [{"id": "targets", "nome": "Bersagli", "icona": "fa-user", "lenti": [{"nome": "Effetto", "letture": ["Un bersaglio", "+1 bersaglio", "+2 bersagli", "+3 bersagli", "+4 bersagli", "+5 bersagli", "+6 bersagli", "+7 bersagli"]}, {"nome": "Area", "letture": ["Un punto", "Stanza", "Edificio", "Quartiere", "Città", "Regione", "Continente", "Pianeta"]}]}, {"id": "conditions", "nome": "Condizioni", "icona": "fa-list-check", "lenti": [{"nome": "Malus", "letture": ["Non inabilita", "Disturba: −1 ai dadi", "Toglie un mezzo", "Blocca un'azione", "Ostacola: −2 ai dadi", "Spegne un senso", "Altera ogni tiro", "Stravolge il personaggio"]}, {"nome": "Complessità", "letture": ["Assente", "Molto semplice", "Semplice", "Articolata", "Lunga", "Complessa", "Molto complessa", "Livello contratto"]}]}, {"id": "duration", "nome": "Durata", "icona": "fa-hourglass-half", "lenti": [{"nome": "Gioco", "letture": ["1 turno", "3 turni", "1 scena", "2 scene", "1 sessione", "2 sessioni", "1 storia", "1 cronaca"]}, {"nome": "Mondo", "letture": ["Un'ora", "Un giorno", "Una settimana", "Un mese", "Una stagione", "Un anno", "Un decennio", "Permanente"]}]}, {"id": "impact", "nome": "Impatto", "icona": "fa-stamp", "lenti": [{"nome": "Epicità", "letture": ["Nessun peso sulla storia", "Cambia un dettaglio della scena", "Sposta un momento della scena", "Decide l'esito della scena", "Ha conseguenze nelle scene dopo", "Cambia la direzione del capitolo", "Piega il corso della storia", "Cambia il mondo per tutti"]}, {"nome": "Informazione", "letture": ["Niente che non sapessi già", "Una curiosità della scena", "Un vantaggio nella scena", "Ciò che decide la scena", "Una pista per le scene dopo", "Ciò che cambia il capitolo", "Un segreto della storia", "Un segreto del mondo"]}]}, {"id": "range", "nome": "Portata", "icona": "fa-location-crosshairs", "lenti": [{"nome": "Scontro", "letture": ["A contatto", "Due passi", "La stanza", "Un tiro di pistola", "La strada", "Un tiro di fucile", "Un tiro lungo", "Un cecchino"]}, {"nome": "Narrativa", "letture": ["Lo tocchi", "Lo vedi", "Nei dintorni", "Lontano", "Molto lontano", "Nel continente", "In un altro continente", "Ovunque sia"]}]}, {"id": "potency", "nome": "Potenza", "icona": "fa-burst", "lenti": [{"nome": "Danni", "letture": ["", "", "", "", "", "", "", ""]}, {"nome": "Peso", "letture": ["1 kg", "10 kg", "100 kg", "2 t", "40 t", "400 t", "500.000 t", "Una montagna"]}]}, {"id": "precision", "nome": "Precisione", "icona": "fa-bullseye", "lenti": [{"nome": "Scontro", "letture": ["Dove capita", "Il corpo", "Un arto", "L'oggetto impegnato", "Il punto debole", "Un punto minuscolo", "La parte interna", "Un punto del Modello"]}, {"nome": "Narrativa", "letture": ["A grandi linee", "Quell'oggetto", "Una parte", "Un particolare", "L'ago nel pagliaio", "Un granello", "Una molecola", "Un atomo"]}]}];
+const AMBITO_NOME = Object.fromEntries(AMBITI.map((a) => [a.id, a.nome]));
+const AMBITO_ICONA = Object.fromEntries(AMBITI.map((a) => [a.id, a.icona]));
+
+const NEMICI = {
+  grigi: {
+    nome: "Agente Grigi", concetto: "Uomo in Nero del Nuovo Ordine Mondiale", natura: "Risvegliato", fazione: "Unione Tecnocratica",
+    ritratto: `<svg viewBox="112 16 124 124" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="fondoR" cx="50%" cy="28%" r="78%"><stop offset="0" stop-color="#4d412c"/><stop offset=".55" stop-color="#241e14"/><stop offset="1" stop-color="#100d08"/></radialGradient></defs><rect width="348" height="186" fill="url(#fondoR)"/><path d="M66 186 C76 146 116 126 174 124 C232 126 272 146 282 186 Z" fill="#0c0b09"/><path d="M154 126 L174 168 L194 126 Z" fill="#cfc8b8"/><path d="M170 132 L178 132 L182 166 L174 178 L166 166 Z" fill="#0c0b09"/><path d="M150 127 L173 170 L158 186 L126 186 Z" fill="#1a1712"/><path d="M198 127 L175 170 L190 186 L222 186 Z" fill="#1a1712"/><path d="M159 100 L189 100 L191 130 L157 130 Z" fill="#241f17"/><ellipse cx="174" cy="70" rx="34" ry="41" fill="#241f17"/><path d="M139 64 C137 30 211 30 209 64 C200 46 148 46 139 64 Z" fill="#0c0b09"/><rect x="145" y="64" width="26" height="14" rx="5" fill="#050505"/><rect x="177" y="64" width="26" height="14" rx="5" fill="#050505"/><rect x="170" y="68" width="8" height="3" fill="#050505"/><path d="M150 67 L158 67" stroke="#9a8250" stroke-width="2" stroke-linecap="round"/><path d="M182 67 L190 67" stroke="#9a8250" stroke-width="2" stroke-linecap="round"/><path d="M207 76 C215 80 214 94 206 100" stroke="#4a4030" stroke-width="2" fill="none"/></svg>`, avatar: `<svg viewBox="126 26 96 96" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="fondoV" cx="50%" cy="28%" r="78%"><stop offset="0" stop-color="#4d412c"/><stop offset=".55" stop-color="#241e14"/><stop offset="1" stop-color="#100d08"/></radialGradient></defs><rect width="348" height="186" fill="url(#fondoV)"/><path d="M66 186 C76 146 116 126 174 124 C232 126 272 146 282 186 Z" fill="#0c0b09"/><path d="M154 126 L174 168 L194 126 Z" fill="#cfc8b8"/><path d="M170 132 L178 132 L182 166 L174 178 L166 166 Z" fill="#0c0b09"/><path d="M150 127 L173 170 L158 186 L126 186 Z" fill="#1a1712"/><path d="M198 127 L175 170 L190 186 L222 186 Z" fill="#1a1712"/><path d="M159 100 L189 100 L191 130 L157 130 Z" fill="#241f17"/><ellipse cx="174" cy="70" rx="34" ry="41" fill="#241f17"/><path d="M139 64 C137 30 211 30 209 64 C200 46 148 46 139 64 Z" fill="#0c0b09"/><rect x="145" y="64" width="26" height="14" rx="5" fill="#050505"/><rect x="177" y="64" width="26" height="14" rx="5" fill="#050505"/><rect x="170" y="68" width="8" height="3" fill="#050505"/><path d="M150 67 L158 67" stroke="#9a8250" stroke-width="2" stroke-linecap="round"/><path d="M182 67 L190 67" stroke="#9a8250" stroke-width="2" stroke-linecap="round"/><path d="M207 76 C215 80 214 94 206 100" stroke="#4a4030" stroke-width="2" fill="none"/></svg>`,
+    salute: ["ps", "ps", "ms", "", "", "", ""],
+    armatura: { nome: "Tessuto balistico", punti: 3, restano: 2 },
+    condizioni: ["atterrato"],
+    campi: [
+      { id: "fisico", nome: "Fisico", icona: "fa-hand-fist", soglia: 3, riserva: 5, casi: [
+        { nome: "Da lontano", soglia: 4, riparo: true },
+        { nome: "Pistola", dadi: 7, tiro: "pistola" } ] },
+      { id: "sociale", nome: "Sociale", icona: "fa-comments", soglia: 3, riserva: 5, casi: [
+        { nome: "Mentirgli", soglia: 5 },
+        { nome: "Interrogare", dadi: 7, tiro: "interrogare" } ] },
+      { id: "mentale", nome: "Mentale", icona: "fa-brain", soglia: 4, riserva: 6, casi: [
+        { nome: "Leggergli la mente", soglia: 6 },
+        { nome: "Accorgersi", dadi: 7, tiro: "accorgersi" } ] }
+    ],
+    azioni: [
+      { id: "spara", nome: "Spara", eff: "danno 4 · Un tiro di pistola", riserva: "Pistola", campo: "fisico", base: 7, esito: "danno 4 Superficiali", tasto: "Applica il danno a Guendalina",
+        dettagli: [["Riserva", "Pistola"], ["Danno", "4 Superficiali"], ["Portata", "Un tiro di pistola"], ["Condizione", "nessuna"], ["Limite", "nessuno"], ["Nasce da", "la Pistola"]] },
+      { id: "afferra", nome: "Afferra", eff: '<span class="cn">Bloccato</span> · A contatto', riserva: "Fisico", campo: "fisico", base: 5, esito: "Guendalina è Bloccata", tasto: "Metti Bloccato a Guendalina",
+        dettagli: [["Riserva", "Fisico"], ["Condizione", "Bloccato"], ["Portata", "A contatto"]] },
+      { id: "minaccia", nome: "Minaccia", eff: '<span class="cn">Scosso</span>', riserva: "Sociale", campo: "sociale", base: 5, esito: "Guendalina è Scossa", tasto: "Metti Scosso a Guendalina",
+        dettagli: [["Riserva", "Sociale"], ["Condizione", "Scosso"], ["Limite", "una volta a bersaglio"]] },
+      { id: "riparo", nome: "Al riparo", eff: "Da lontano +2 fino al suo turno", senzaTiro: true,
+        dettagli: [["Tiro", "nessuno"], ["Cosa fa", "si butta dietro l'auto"], ["Dura", "fino al suo turno"]] }
+    ],
+    effetti: [
+      { nome: "Occhiali schermati", eff: "Abbagliato e Offuscato non lo prendono", tipo: "passivo" },
+      { nome: "Mai colto di sorpresa", eff: "negli agguati agisce nel primo turno come tutti", tipo: "passivo", catalogo: true },
+      { nome: "Ultimo ordine", eff: "una volta per scena: a tracciato pieno fa un'ultima azione, poi cade", tipo: "reazione" }
+    ],
+    magick: { arete: 2, domini: ["Mente", "Forze"], tipo: "Tecnomagick", effetti: [
+      { id: "suggestionare", nome: "Suggestionare", breve: "inclina una scelta", resiste: "Fermezza + Autocontrollo", soglia: 3, ambiti: [["impact", 2], ["duration", 1]], da: "Grimorio", come: "Accidentale", dominio: "Mente",
+        cosa: "Inclina la scelta di Guendalina senza che se ne accorga." },
+      { id: "cancellare", nome: "Cancellare", breve: "toglie un ricordo", resiste: "Fermezza + Autocontrollo", soglia: 5, ambiti: [["impact", 4], ["precision", 1]], da: "Grimorio", come: "Accidentale", dominio: "Mente",
+        cosa: "Toglie a Guendalina il ricordo di quello che ha visto stanotte." },
+      { id: "scarica", nome: "Scarica del guanto", breve: "5 danni nella stanza", resiste: "Destrezza + Atletica", soglia: 5, ambiti: [["potency", 3], ["range", 2]], da: "a mano", come: "Volgare", dominio: "Forze",
+        cosa: "Una scarica dal guanto colpisce Guendalina: 5 danni Superficiali." }
+    ] },
+    oggetti: [
+      ["Armi", [{ nome: "Pistola", eff: "danno 4 · Un tiro di pistola · si nasconde", nota: "crea Spara" }]],
+      ["Protezioni", [{ nome: "Tessuto balistico", eff: "3 punti armatura · non si vede", nota: "armatura" }]],
+      ["Oggetti", [{ nome: "Manette", eff: "Immobilizzato a chi non può opporsi", nota: "" }, { nome: "Badge dell'Unione", eff: "entra dove apre, finché nessuno controlla", nota: "" }]]
+    ],
+    note: { vuole: "Riportare in sede il disco rigido prima dell'alba.", molla: "Se resta solo o perde gli occhiali: si ritira e chiama la squadra." }
+  },
+  buttafuori: {
+    nome: "Buttafuori", concetto: "La porta del locale, e chi non deve passarla", natura: "Dormiente", fazione: "",
+    ritratto: `<svg viewBox="118 2 124 124" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="fondoS" cx="50%" cy="30%" r="80%"><stop offset="0" stop-color="#453a28"/><stop offset=".6" stop-color="#211b12"/><stop offset="1" stop-color="#100d08"/></radialGradient></defs><rect width="360" height="130" fill="url(#fondoS)"/><path d="M36 130 C50 90 108 74 180 72 C252 74 310 90 324 130 Z" fill="#0c0b09"/><path d="M160 56 L200 56 L204 80 L156 80 Z" fill="#241f17"/><ellipse cx="180" cy="40" rx="31" ry="33" fill="#241f17"/><path d="M150 50 C156 60 204 60 210 50" stroke="#171410" stroke-width="3" fill="none"/></svg>`, avatar: `<svg viewBox="138 4 84 84" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><defs><radialGradient id="fondoT" cx="50%" cy="30%" r="80%"><stop offset="0" stop-color="#453a28"/><stop offset=".6" stop-color="#211b12"/><stop offset="1" stop-color="#100d08"/></radialGradient></defs><rect width="360" height="130" fill="url(#fondoT)"/><path d="M36 130 C50 90 108 74 180 72 C252 74 310 90 324 130 Z" fill="#0c0b09"/><path d="M160 56 L200 56 L204 80 L156 80 Z" fill="#241f17"/><ellipse cx="180" cy="40" rx="31" ry="33" fill="#241f17"/><path d="M150 50 C156 60 204 60 210 50" stroke="#171410" stroke-width="3" fill="none"/></svg>`,
+    salute: ["", "", "", "", ""], armatura: null, condizioni: [],
+    campi: [
+      { id: "fisico", nome: "Fisico", icona: "fa-hand-fist", soglia: 2, riserva: 5, casi: [] },
+      { id: "sociale", nome: "Sociale", icona: "fa-comments", soglia: 2, riserva: 3, casi: [] },
+      { id: "mentale", nome: "Mentale", icona: "fa-brain", soglia: 1, riserva: 2, casi: [] }
+    ],
+    azioni: [
+      { id: "manganello", nome: "Manganello", eff: "danno 3 · Due passi", riserva: "Fisico", campo: "fisico", base: 5, esito: "danno 3 Superficiali", tasto: "Applica il danno a Guendalina",
+        dettagli: [["Riserva", "Fisico"], ["Danno", "3 Superficiali"], ["Portata", "Due passi"], ["Nasce da", "il Manganello"]] }
+    ],
+    effetti: [], magick: null,
+    oggetti: [["Armi", [{ nome: "Manganello", eff: "danno 3 · Due passi", nota: "crea Manganello" }]]],
+    note: {}
+  }
+};
+
+const TIRI_CAMPO = { fisico: "Fisico", sociale: "Sociale", mentale: "Mentale" };
+const S = { nemico: "grigi", pagina: "gioco", atterrato: true, riparo: false, aperte: new Set(), cassetto: null };
+let carte = [];
+
+const N = () => NEMICI[S.nemico];
+const malus = (campo) => (S.nemico === "grigi" && S.atterrato && campo === "fisico" ? -2 : 0);
+const pct = (n) => (n <= 0 ? 0 : Math.round((1 - Math.pow(0.5, n)) * 100));
+
+function testata() {
+  const n = N();
+  const segnate = n.salute.filter(Boolean).length;
+  const arm = n.armatura
+    ? `<span class="k">Armatura</span><span class="pips">${Array.from({ length: n.armatura.punti }, (_, i) => `<i class="pip${i < n.armatura.restano ? "" : " vuoto"}"></i>`).join("")}<small>${n.armatura.nome}</small></span><span class="v">${n.armatura.restano}/${n.armatura.punti}</span><span></span>`
+    : "";
+  const conds = n.condizioni.length && S.atterrato
+    ? n.condizioni.map((c) => `<span class="cond" title="Sei a terra: −2 alle riserve fisiche. Rialzarsi costa la mezza guardia."><img src="${COND_ICONE[c]}" alt="">Atterrato <span class="meno">−2 fisico</span><button class="togli" data-togli="${c}" title="Togli la Condizione"><i class="fa-solid fa-xmark"></i></button></span>`).join("")
+    : `<span class="nessuna">nessuna</span>`;
+  return `<div class="win-h"><span class="disp"><i></i>Ostile</span><span class="ctrl"><span><i class="fa-regular fa-circle-user"></i>Token</span><span><i class="fa-solid fa-xmark"></i></span></span></div>
+  <div class="testata">
+    <div class="chi"><div class="ritratto">${n.ritratto}<button class="cambia" title="Cambia il ritratto"><i class="fa-solid fa-plus"></i></button></div>
+      <div><div class="nome">${n.nome}</div><div class="concetto">${n.concetto}</div><div class="appartenenza">${[n.natura, n.fazione].filter(Boolean).join(" · ")}</div></div></div>
+    <div class="stato">
+      <span class="k">Salute</span><span class="track">${n.salute.map((s, i) => `<button class="cell" data-cella="${i}" ${s ? `data-s="${s}"` : ""}></button>`).join("")}</span><span class="v">${segnate}/${n.salute.length}</span><button class="mini" title="I comandi della Salute"><i class="fa-solid fa-heart"></i></button>
+      ${arm}
+      <span class="k">Condizioni</span><span class="conds">${conds}</span><span></span><button class="mini" data-aggiungi-cond title="Aggiungi una Condizione"><i class="fa-solid fa-plus"></i></button>
+    </div>
+  </div>`;
+}
+
+function linguette() {
+  const n = N();
+  const pag = [["gioco", "In gioco"]];
+  if (n.magick) pag.push(["magick", `Magick <span class="conto">${n.magick.effetti.length}</span>`]);
+  pag.push(["oggetti", "Oggetti"], ["note", "Note"]);
+  const piu = n.magick ? "" : `<button class="aggiungi" title="Dai la Magick a questo nemico"><i class="fa-solid fa-plus"></i> Magick</button>`;
+  return `<nav class="pagine">${pag.map(([id, t]) => `<button data-pagina="${id}" class="${S.pagina === id ? "on" : ""}">${t}</button>`).join("")}${piu}</nav>`;
+}
+
+function paginaGioco() {
+  const n = N();
+  const carteCampi = n.campi.map((c) => {
+    const m = malus(c.id);
+    const rs = c.riserva + m;
+    const casi = c.casi.length ? c.casi.map((k) => {
+      if (k.soglia !== undefined) {
+        const alza = k.riparo && S.riparo ? 2 : 0;
+        return `<li><span>${k.nome}</span><span class="s${alza ? " mod" : ""}" title="Contro una riserva da 6 restano ${Math.max(0, 6 - k.soglia - alza)} dadi">soglia<b>${k.soglia + alza}</b></span></li>`;
+      }
+      return `<li><span>${k.nome}</span><button class="${m ? "mod" : ""}" data-tiro-caso="${k.tiro}" title="Tira"><b>${k.dadi + m}</b>dadi</button></li>`;
+    }).join("") : "";
+    return `<div class="campo"><div class="campo-t"><i class="fa-solid ${c.icona}"></i>${c.nome}<button class="piu-caso" title="Una soglia o una riserva per una cosa precisa"><i class="fa-solid fa-plus"></i></button></div>
+      <div class="coppia"><div class="num soglia" title="Contro una riserva da 6 restano ${Math.max(0, 6 - c.soglia)} dadi: riesce ${pct(6 - c.soglia)} volte su 100"><b>${c.soglia}</b><small>soglia</small></div>
+      <button class="num riserva${m ? " mod" : ""}" data-tiro-campo="${c.id}" title="Tira ${c.nome}${m ? ": " + c.riserva + ", −2 Atterrato" : ""}"><b>${rs}</b><small>riserva ${D10}</small></button></div>
+      ${casi ? `<ul class="casi">${casi}</ul>` : ""}</div>`;
+  }).join("");
+  const azioni = n.azioni.map((a) => {
+    const aperta = S.aperte.has(a.id);
+    let costo, bottone;
+    if (a.senzaTiro) {
+      costo = `senza tiro`;
+      bottone = `<button class="bt parola${S.riparo ? " attivo" : ""}" data-riparo>${S.riparo ? "Attivo" : "Usa"}</button>`;
+    } else {
+      const m = malus(a.campo);
+      costo = `${a.riserva}<b class="${m ? "mod" : ""}">${a.base + m}</b>`;
+      bottone = `<button class="bt" data-azione="${a.id}" title="Tira">${D10}</button>`;
+    }
+    const riga = `<div class="riga${aperta ? " aperta" : ""}"><span class="r-nome" data-apri="${a.id}">${a.nome}</span><span class="r-eff">${a.eff}</span><span class="r-costo">${costo}</span>${bottone}</div>`;
+    const det = aperta ? `<div class="dettagli">${a.dettagli.map(([k, v]) => `<span><span class="k">${k}</span>${v}</span>`).join("")}<span style="color:var(--tenue)"><i class="fa-solid fa-pen" style="font-size:10px"></i> clic su un campo per cambiarlo</span></div>` : "";
+    return riga + det;
+  }).join("");
+  const effetti = n.effetti.length
+    ? `<div class="lista">${n.effetti.map((e) => `<div class="riga"><span class="r-nome">${e.nome}${e.catalogo ? ' <i class="fa-solid fa-book-open" title="dal catalogo dei poteri" style="font-size:10px;color:var(--tenue);margin-left:4px"></i>' : ""}</span><span class="r-eff">${e.eff}</span><span class="r-costo">${e.tipo}</span><span></span></div>`).join("")}</div>`
+    : "";
+  return `<div class="tre">${carteCampi}</div>
+    <div class="sez"><span>Azioni</span><span class="agg"><button><i class="fa-solid fa-plus"></i> scrivi a mano</button></span></div>
+    <div class="lista">${azioni}</div>
+    <div class="sez"><span>Effetti</span><span class="agg"><button><i class="fa-solid fa-book-open"></i> dal catalogo</button><button><i class="fa-solid fa-plus"></i> a mano</button></span></div>
+    ${effetti}`;
+}
+
+function paginaMagick() {
+  const m = N().magick;
+  const righe = m.effetti.map((e) => {
+    const aperta = S.aperte.has(e.id);
+    const riga = `<div class="riga${aperta ? " aperta" : ""}"><span class="r-nome" data-apri="${e.id}">${e.nome}</span><span class="r-eff">${e.breve} <span class="res">· ${e.resiste === "da scrivere" ? "resistenza da scrivere" : "resiste con " + e.resiste}</span></span><span class="r-costo">soglia<b class="chiaro">${e.soglia}</b></span><button class="bt viola" data-lancia="${e.id}" title="Lancia"><i class="fa-solid fa-wand-sparkles"></i></button></div>`;
+    const det = aperta ? `<div class="dettagli"><span><span class="k">Ambiti</span>${e.ambiti.map(([a, l]) => `<i class="fa-solid ${AMBITO_ICONA[a]}" style="color:var(--oro);font-size:11px"></i> ${AMBITO_NOME[a]} ${l}`).join(" · ")}</span><span><span class="k">Da</span>${e.da}</span><span><span class="k">Come</span>${e.come}</span><span><span class="k">Dominio</span>${e.dominio}</span></div>` : "";
+    return riga + det;
+  }).join("");
+  const grim = S.cassetto === "grimorio" ? `<div class="cassetto"><label class="cerca"><i class="fa-solid fa-magnifying-glass"></i><input id="grimorioCerca" placeholder="cerca fra le Formule di Mente e Forze…"></label><div class="grimorio" id="grimorioLista"></div></div>` : "";
+  const mano = S.cassetto === "mano" ? cassettoMano() : "";
+  return `<div class="magick-testa">
+      <span><span class="k">Areté</span><span class="dots">${Array.from({ length: 5 }, (_, i) => `<i class="d${i < m.arete ? " on" : ""}"></i>`).join("")}</span><b>${m.arete}</b></span>
+      <span><span class="k">Domini</span>${m.domini.map((d) => `<img class="dominio" src="${SIGILLI[d]}" alt="">${d}`).join(" ")}</span>
+      <span><span class="k">Tipo</span>${m.tipo}</span></div>
+    <div class="sez"><span>Effetti di Magick</span><span class="agg"><button data-cassetto="grimorio"><i class="fa-solid fa-book-open"></i> dal Grimorio</button><button data-cassetto="mano"><i class="fa-solid fa-plus"></i> a mano</button></span></div>
+    <div class="lista">${righe}</div>${grim}${mano}`;
+}
+
+const LIV = { targets: 0, conditions: 0, duration: 0, impact: 0, range: 2, potency: 3, precision: 0 };
+const LENTE = { targets: 0, conditions: 0, duration: 0, impact: 0, range: 0, potency: 0, precision: 0 };
+let impossibile = false;
+function lettura(a, lente, liv) {
+  if (a.id === "potency" && lente === 0) return `${N().magick.arete + liv} danni`;
+  return a.lenti[lente].letture[liv];
+}
+function cassettoMano() {
+  const alti = AMBITI.filter((a) => LIV[a.id] > 0);
+  const somma = alti.reduce((s, a) => s + LIV[a.id], 0) + (impossibile ? 5 : 0);
+  const righe = AMBITI.map((a) => {
+    const liv = LIV[a.id], lente = LENTE[a.id];
+    const pallini = Array.from({ length: 8 }, (_, i) => `<button class="${i > 0 && i <= liv ? "on" : ""}" data-ambito="${a.id}" data-liv="${i}" title="${lettura(a, lente, i)}">${i}</button>`).join("");
+    return `<div class="ambito${liv ? " alto" : ""}"><i class="fa-solid ${a.icona}"></i><span class="anm">${a.nome}</span><span class="lente" data-lente="${a.id}" title="Clic: l'altra lente">${a.lenti[lente].nome}</span><span class="liv">${pallini}</span><span class="let">${lettura(a, lente, liv)}</span></div>`;
+  }).join("");
+  const danni = LENTE.potency === 0 ? ` · danni ${N().magick.arete + LIV.potency} (Areté ${N().magick.arete} + Potenza ${LIV.potency})` : "";
+  return `<div class="cassetto">
+    <div class="campi-mano"><span class="k">Nome</span><span class="v">Scarica del guanto</span><span class="k">Cosa fa</span><span class="v">Una scarica dal guanto colpisce un bersaglio nella stanza.</span><span class="k">Si resiste con</span><span class="v">Destrezza + Atletica</span>
+      <span class="k">Dominio, come</span><span class="scelte"><span>Mente</span><span class="on">Forze</span><span style="border:none;width:6px"></span><span>Accidentale</span><span class="on">Volgare</span></span></div>
+    <div>${righe}</div>
+    <div class="avviso" id="avviso"></div>
+    <div class="somma"><div><div class="k">Soglia</div><div class="grande">${somma}</div></div><div class="conto-ambiti">${alti.length ? alti.map((a) => `${a.nome} ${LIV[a.id]}`).join(" + ") + (impossibile ? " + 5" : "") : "tutti a 0"}${danni}</div>
+      <label><input type="checkbox" id="impossibile" ${impossibile ? "checked" : ""}> impresa impossibile, +5</label><button class="msg-bt viola" id="aggiungiMano"><i class="fa-solid fa-plus"></i> Aggiungi</button></div>
+  </div>`;
+}
+
+function paginaOggetti() {
+  return N().oggetti.map(([gruppo, lista]) => `<div class="sez"><span>${gruppo}</span></div><div class="lista">${lista.map((o) => `<div class="riga"><span class="r-nome">${o.nome}</span><span class="r-eff">${o.eff}</span><span class="r-costo">${o.nota}</span><button class="bt" title="Dai a un PG"><i class="fa-solid fa-hand-holding"></i></button></div>`).join("")}</div>`).join("")
+    + `<div class="sez"><span></span><span class="agg"><button><i class="fa-solid fa-book-open"></i> dal compendio</button><button><i class="fa-solid fa-plus"></i> crea</button></span></div>`;
+}
+
+function paginaNote() {
+  const n = N().note;
+  const campo = (k, v, vuoto) => `<div class="nota-campo"><span class="k">${k}</span><div class="v${v ? "" : " vuoto"}">${v || vuoto}</div></div>`;
+  return campo("Cosa vuole adesso", n.vuole, "da scrivere") + campo("Quando molla", n.molla, "da scrivere") + `<p class="solo">Le vede solo il Narratore.</p>`;
+}
+
+function disegna() {
+  const n = N();
+  if (S.pagina === "magick" && !n.magick) S.pagina = "gioco";
+  const corpo = { gioco: paginaGioco, magick: paginaMagick, oggetti: paginaOggetti, note: paginaNote }[S.pagina]();
+  document.getElementById("win").innerHTML = testata() + linguette() + `<div class="corpo">${corpo}</div>`;
+  if (S.cassetto === "grimorio" && S.pagina === "magick") disegnaGrimorio("");
+  document.querySelectorAll(".esempio").forEach((b) => b.classList.toggle("on", b.dataset.nemico === S.nemico));
+}
+
+function disegnaGrimorio(q) {
+  const lista = document.getElementById("grimorioLista");
+  if (!lista) return;
+  const gia = N().magick.effetti.map((e) => e.nome);
+  const trovate = FORMULE.filter((f) => !q || f.nome.toLowerCase().includes(q) || f.testo.toLowerCase().includes(q));
+  lista.innerHTML = trovate.map((f) => {
+    const presa = gia.includes(f.nome);
+    return `<div class="riga"><span class="r-nome" title="${f.testo}">${f.nome}</span><span class="r-eff"><span class="dom" style="display:inline-flex;vertical-align:-3px;margin-right:8px">${f.domini.map((d) => `<img src="${SIGILLI[d]}" alt="" title="${d}">`).join("")}</span><span class="res">${f.ambiti}</span></span><span class="r-costo"><b class="chiaro">${f.soglia}</b></span><button class="bt${presa ? " viola" : ""}" data-formula="${f.nome}" title="${presa ? "Già nella scheda" : "Aggiungi"}"><i class="fa-solid ${presa ? "fa-check" : "fa-plus"}"></i></button></div>`;
+  }).join("") || `<div class="nessuna" style="padding:8px 4px">Nessuna Formula con queste parole.</div>`;
+}
+
+function faccia(d) {
+  if (d >= 10) return `<div class="dado"><img src="${DIE_STELLINA}" alt=""><span>${d}</span></div>`;
+  if (d >= 6) return `<div class="dado"><img src="${DIE_SCINTILLA}" alt=""><span>${d}</span></div>`;
+  return `<div class="dado vuoto"><span>${d}</span></div>`;
+}
+function posta(html) {
+  carte.unshift(html);
+  carte = carte.slice(0, 3);
+  document.getElementById("carte").innerHTML = carte.join("");
+}
+function tira({ titolo, nomeRiserva, base, campo, esito, tasto, contro }, fissi) {
+  const m = malus(campo);
+  const n = Math.max(0, base + m);
+  const dadi = fissi || Array.from({ length: n }, () => 1 + Math.floor(Math.random() * 10));
+  const ok = dadi.some((d) => d >= 6);
+  const conto = m ? `${nomeRiserva} ${base} − 2 Atterrato = <b>${n} dadi</b>` : `${nomeRiserva} <b>${n} dadi</b>`;
+  posta(`<div class="msg"><div class="msg-h"><span class="av">${N().avatar}</span><div><b>${N().nome}</b><small>${titolo}${contro ? " · su Guendalina" : ""}</small></div></div>
+    <div class="msg-conto">${conto} · riesce dal 6</div><div class="dadi">${dadi.map(faccia).join("")}</div>
+    <div class="esito${ok ? "" : " no"}">${ok ? "Riesce" + (esito ? " · " + esito : "") : "Non riesce"}</div>
+    ${ok && tasto ? `<button class="msg-bt oro">${tasto}</button>` : ""}</div>`);
+}
+function lancia(id) {
+  const e = N().magick.effetti.find((x) => x.id === id);
+  posta(`<div class="msg"><div class="msg-h"><span class="av">${N().avatar}</span><div><b>${N().nome}</b><small>lancia ${e.nome} su Guendalina</small></div></div>
+    <div class="msg-soglia"><b>${e.soglia}</b><span>soglia · ${e.ambiti.map(([a, l]) => `${AMBITO_NOME[a]} ${l}`).join(", ")}</span></div>
+    <div>${e.cosa}</div><div class="res">${e.resiste === "da scrivere" ? "Il tiro di resistenza è da scrivere" : "Resiste con " + e.resiste}</div>
+    <button class="msg-bt viola"><i class="fa-solid fa-shield-halved"></i> Resisti · Guendalina</button></div>`);
+}
+
+document.addEventListener("click", (ev) => {
+  const t = ev.target;
+  const q = (sel) => t.closest(sel);
+  let el;
+  if ((el = q("[data-nemico]"))) { S.nemico = el.dataset.nemico; S.pagina = "gioco"; S.aperte.clear(); S.cassetto = null; carte = []; document.getElementById("carte").innerHTML = ""; disegna(); return; }
+  if ((el = q("[data-pagina]"))) { S.pagina = el.dataset.pagina; disegna(); return; }
+  if ((el = q("[data-cella]"))) {
+    const c = ["", "ps", "pa", "ms", "ma"]; const i = +el.dataset.cella; const n = N();
+    n.salute[i] = c[(c.indexOf(n.salute[i]) + 1) % c.length]; disegna(); return;
+  }
+  if ((el = q("[data-togli]"))) { S.atterrato = false; disegna(); return; }
+  if ((el = q("[data-aggiungi-cond]"))) { if (S.nemico === "grigi") { S.atterrato = true; disegna(); } return; }
+  if ((el = q("[data-riparo]"))) { S.riparo = !S.riparo; disegna(); return; }
+  if ((el = q("[data-apri]"))) { const id = el.dataset.apri; S.aperte.has(id) ? S.aperte.delete(id) : S.aperte.add(id); disegna(); return; }
+  if ((el = q("[data-tiro-campo]"))) { const c = N().campi.find((x) => x.id === el.dataset.tiroCampo); tira({ titolo: `tiro ${c.nome.toLowerCase()}`, nomeRiserva: c.nome, base: c.riserva, campo: c.id }); return; }
+  if ((el = q("[data-tiro-caso]"))) {
+    for (const c of N().campi) for (const k of c.casi) if (k.tiro === el.dataset.tiroCaso) tira({ titolo: k.nome, nomeRiserva: k.nome, base: k.dadi, campo: c.id });
+    return;
+  }
+  if ((el = q("[data-azione]"))) { const a = N().azioni.find((x) => x.id === el.dataset.azione); tira({ titolo: a.nome, nomeRiserva: a.riserva, base: a.base, campo: a.campo, esito: a.esito, tasto: a.tasto, contro: true }); return; }
+  if ((el = q("[data-lancia]"))) { lancia(el.dataset.lancia); return; }
+  if ((el = q("[data-cassetto]"))) { S.cassetto = S.cassetto === el.dataset.cassetto ? null : el.dataset.cassetto; disegna(); return; }
+  if ((el = q("[data-formula]"))) {
+    const f = FORMULE.find((x) => x.nome === el.dataset.formula); const m = N().magick;
+    if (!m.effetti.some((e) => e.nome === f.nome)) {
+      m.effetti.push({ id: "f" + m.effetti.length, nome: f.nome, breve: f.testo.replace(/\.$/, "").toLowerCase(), resiste: "da scrivere", soglia: f.soglia,
+        ambiti: f.ambitiLista, da: "Grimorio", come: "Accidentale", dominio: f.domini.join(" o "), cosa: f.testo });
+      disegna(); const inp = document.getElementById("grimorioCerca"); if (inp) inp.focus();
+    }
+    return;
+  }
+  if ((el = q("[data-lente]"))) { LENTE[el.dataset.lente] = LENTE[el.dataset.lente] ? 0 : 1; disegna(); return; }
+  if ((el = q("[data-ambito]"))) {
+    const id = el.dataset.ambito, v = +el.dataset.liv; const nuovo = LIV[id] === v ? 0 : v;
+    const altri = Object.keys(LIV).filter((k) => LIV[k] > 0 && k !== id).length;
+    if (nuovo > 0 && LIV[id] === 0 && altri >= 3) { const a = document.getElementById("avviso"); if (a) a.textContent = "In un lancio si alzano sopra lo 0 al massimo tre Ambiti: abbassane uno prima di alzarne un altro."; return; }
+    LIV[id] = nuovo; disegna(); return;
+  }
+  if ((el = q("#aggiungiMano"))) { el.innerHTML = '<i class="fa-solid fa-check"></i> Nella scheda'; return; }
+});
+document.addEventListener("input", (ev) => { if (ev.target.id === "grimorioCerca") disegnaGrimorio(ev.target.value.trim().toLowerCase()); });
+document.addEventListener("change", (ev) => { if (ev.target.id === "impossibile") { impossibile = ev.target.checked; disegna(); } });
+
+disegna();
+tira({ titolo: "Spara", nomeRiserva: "Pistola", base: 7, campo: "fisico", esito: "danno 4 Superficiali", tasto: "Applica il danno a Guendalina", contro: true }, [3, 7, 1, 10, 5]);
+lancia("cancellare");
+</script>
+</body>
+</html>

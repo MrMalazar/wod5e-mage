@@ -1,0 +1,9 @@
+{{!-- «Dai a un PG»: si sceglie un personaggio dei giocatori; l'oggetto si crea su di lui e si toglie dal nemico. --}}
+<form class="dialog-contents wod5e-mage-item-form wod5e-mage-nemico-form">
+    <div class="form-group">
+        <label>{{localize "WOD5E_MAGE.Nemico.DaiChi"}}</label>
+        <select name="pg" autofocus>
+            {{#each personaggi as |pg|}}<option value="{{pg.id}}">{{pg.name}}</option>{{/each}}
+        </select>
+    </div>
+</form>

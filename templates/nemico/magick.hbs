@@ -1,0 +1,127 @@
+{{!-- Magick (Blue, 25/9, dal mock): c'è solo se il nemico la usa. In testa la
+     fascia (Areté a pallini, Domini coi sigilli, Tipo); poi gli effetti, una
+     riga a colonne: nome (il clic apre i dettagli), cosa fa e «resiste con»,
+     «soglia N», la bacchetta che lancia. A destra del titolo due strade, ognuna
+     apre un cassetto sotto la lista: dal Grimorio (le Formule che i Domini
+     aprono, con la soglia base) o a mano (i sette Ambiti con la lente e i
+     pallini, la soglia che si somma). Il Narratore non tira mai. --}}
+<section class="tab {{tab.cssClass}} wod5e-mage-nemico-corpo" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    {{#if magick.on}}
+        <div class="wod5e-mage-nemico-magick-testa">
+            <span class="wod5e-mage-nemico-arete" title="{{localize 'WOD5E_MAGE.Nemico.Arete'}}">
+                <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Arete"}}</span>
+                <span class="wod5e-mage-nemico-dots">{{#each magick.areteDots as |dot|}}<button type="button" class="wod5e-mage-nemico-d{{#if dot.on}} on{{/if}}" data-action="nemicoArete" data-level="{{dot.value}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Arete'}} {{dot.value}}" {{#if @root.locked}}disabled{{/if}}></button>{{/each}}</span>
+                <b>{{magick.arete}}</b>
+            </span>
+            <span class="wod5e-mage-nemico-domini" title="{{localize 'WOD5E_MAGE.Nemico.DominiHint'}}">
+                <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Domini"}}</span>
+                {{#each magick.domini as |d|}}<button type="button" class="wod5e-mage-nemico-dominio{{#if d.on}} on{{/if}}" data-action="nemicoDominio" data-sfera="{{d.id}}" title="{{d.label}}" aria-label="{{d.label}}" aria-pressed="{{d.on}}" {{#if @root.locked}}disabled{{/if}}><img class="wod5e-mage-sfera-inline" src="{{d.icon}}" alt=""></button>{{/each}}
+                <small>{{#if magick.dominiTesto}}{{magick.dominiTesto}}{{else}}{{localize "WOD5E_MAGE.Nemico.Nessuna"}}{{/if}}</small>
+            </span>
+            <span class="wod5e-mage-nemico-tipo">
+                <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Tipo"}}</span>
+                {{#each magick.tipi as |t|}}<button type="button" class="wod5e-mage-nemico-pastiglia{{#if t.on}} on{{/if}}" data-action="nemicoTipoMagick" data-tipo="{{t.id}}" aria-pressed="{{t.on}}" {{#if @root.locked}}disabled{{/if}}>{{t.label}}</button>{{/each}}
+            </span>
+            {{#unless locked}}<button type="button" class="wod5e-mage-nemico-bt tenue wod5e-mage-nemico-magick-via" data-action="magickSpegni" title="{{localize 'WOD5E_MAGE.Nemico.MagickTogli'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.MagickTogli'}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>{{/unless}}
+        </div>
+
+        <div class="wod5e-mage-nemico-sez">
+            <span>{{localize "WOD5E_MAGE.Nemico.EffettiMagick"}}</span>
+            {{#unless locked}}<span class="wod5e-mage-nemico-agg"><button type="button" class="{{#if (eq cassetto 'grimorio')}}attivo{{/if}}" data-action="nemicoCassetto" data-cassetto="grimorio"><i class="fa-solid fa-book-open" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.DalGrimorio"}}</button><button type="button" class="{{#if (eq cassetto 'mano')}}attivo{{/if}}" data-action="nemicoCassetto" data-cassetto="mano"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.AMano"}}</button></span>{{/unless}}
+        </div>
+        <div class="wod5e-mage-nemico-lista wod5e-mage-nemico-magick-effetti">
+            {{#each magick.effetti as |e|}}
+                <div class="wod5e-mage-nemico-riga{{#if e.aperta}} aperta{{/if}}" data-effetto-magick="{{e.id}}">
+                    <button type="button" class="wod5e-mage-nemico-r-nome" data-action="nemicoMagickApri" data-effetto="{{e.id}}" aria-expanded="{{e.aperta}}" title="{{localize 'WOD5E_MAGE.Nemico.EffettoMagickApri'}}">{{e.nome}}</button>
+                    <span class="wod5e-mage-nemico-r-eff">{{e.breve}} <span class="wod5e-mage-nemico-res">· {{e.resisteLabel}}</span></span>
+                    <span class="wod5e-mage-nemico-r-costo">{{localize "WOD5E_MAGE.Nemico.Soglia"}}<b class="chiaro">{{e.soglia}}</b></span>
+                    <button type="button" class="wod5e-mage-nemico-bt viola" data-action="nemicoLancia" data-effetto="{{e.id}}" title="{{localize 'WOD5E_MAGE.Nemico.LanciaHint' nome=e.nome}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Lancia'}}: {{e.nome}}"><i class="fa-solid fa-wand-sparkles" aria-hidden="true"></i></button>
+                    {{#if e.aperta}}
+                        <div class="wod5e-mage-nemico-dettagli">
+                            <span><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Ambiti"}}</span>{{#each e.ambiti as |a|}}{{#if @index}} · {{/if}}<i class="{{a.faIcon}}" aria-hidden="true"></i> {{a.label}} {{a.level}}{{else}}{{localize "WOD5E_MAGE.Nemico.TuttiZero"}}{{/each}}{{#if e.impossibile}} · +{{@root.extraImpossibile}}{{/if}}</span>
+                            <span><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Da"}}</span>{{e.daLabel}}</span>
+                            <span><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Come"}}</span>{{e.comeLabel}}</span>
+                            {{#if e.dominioLabel}}<span><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Dominio"}}</span>{{e.dominioLabel}}</span>{{/if}}
+                            {{#if e.danni}}<span><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Danno"}}</span>{{e.danni}}</span>{{/if}}
+                            {{#if e.testo}}<span class="larga">{{e.testo}}</span>{{/if}}
+                            {{#unless @root.locked}}
+                                <label class="larga"><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.ManoResiste"}}</span><select name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.resiste.attribute"><option value="">–</option>{{#each @root.attributiScelta as |a|}}<option value="{{a.id}}" {{#if (eq a.id e.resiste.attribute)}}selected{{/if}}>{{a.label}}</option>{{/each}}</select> + <select name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.resiste.skill"><option value="">–</option>{{#each @root.secondoTratto as |s|}}<option value="{{s.id}}" {{#if (eq s.id e.resiste.skill)}}selected{{/if}}>{{s.label}}</option>{{/each}}</select> <input type="text" name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.resiste.testo" value="{{e.resiste.testo}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.ManoResisteTesto'}}"></label>
+                                <button type="button" class="wod5e-mage-nemico-via" data-action="nemicoMagickTogli" data-effetto="{{e.id}}"><i class="fa-solid fa-trash" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.EffettoMagickTogli"}}</button>
+                            {{/unless}}
+                        </div>
+                    {{/if}}
+                </div>
+            {{else}}
+                <p class="wod5e-mage-nemico-vuoto">{{localize "WOD5E_MAGE.Nemico.MagickVuota"}}</p>
+            {{/each}}
+        </div>
+
+        {{#if grimorio}}
+            {{!-- Dal Grimorio: la cerca e le Formule che i Domini aprono; il + la aggiunge com'è. --}}
+            <div class="wod5e-mage-nemico-cassetto" data-cassetto="grimorio">
+                {{#if grimorio.senzaDomini}}
+                    <p class="wod5e-mage-nemico-vuoto">{{localize "WOD5E_MAGE.Nemico.GrimorioSenzaDomini"}}</p>
+                {{else}}
+                    <label class="wod5e-mage-nemico-cerca"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input type="search" data-nemico-cerca="grimorio" value="{{grimorio.cerca}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.GrimorioCerca' domini=grimorio.dominiTesto}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.DalGrimorio'}}"></label>
+                    <div class="wod5e-mage-nemico-grimorio" data-nemico-lista="grimorio">
+                        {{#each grimorio.formule as |f|}}
+                            <div class="wod5e-mage-nemico-riga stretta" data-search="{{f.name}} {{f.use}}">
+                                <span class="wod5e-mage-nemico-r-nome" title="{{f.use}}">{{f.name}}</span>
+                                <span class="wod5e-mage-nemico-r-eff"><span class="wod5e-mage-nemico-accessi">{{#each f.access as |s|}}<img src="{{s.icon}}" alt="{{s.label}}" title="{{s.label}}" class="{{#if s.owned}}lit{{/if}}">{{/each}}</span><span class="wod5e-mage-nemico-res">{{#each f.soglie as |t|}}{{#if @index}} · {{/if}}{{t.ambiti}}{{/each}}</span></span>
+                                <span class="wod5e-mage-nemico-r-costo">{{#each f.soglie as |t|}}{{#if @index}} / {{/if}}<b class="chiaro">{{t.base}}</b>{{/each}}</span>
+                                <span class="wod5e-mage-nemico-r-tasti">{{#each f.soglie as |t|}}<button type="button" class="wod5e-mage-nemico-bt{{#if f.presa}} viola{{/if}}" data-action="nemicoFormula" data-formula="{{f.id}}" data-indice="{{t.index}}" title="{{#if f.presa}}{{localize 'WOD5E_MAGE.Nemico.GrimorioPresa'}}{{else}}{{localize 'WOD5E_MAGE.Nemico.GrimorioAggiungi'}}{{/if}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Aggiungi'}}: {{f.name}} {{t.base}}"><i class="fa-solid {{#if f.presa}}fa-check{{else}}fa-plus{{/if}}" aria-hidden="true"></i></button>{{/each}}</span>
+                            </div>
+                        {{else}}
+                            <p class="wod5e-mage-nemico-vuoto">{{localize "WOD5E_MAGE.Nemico.GrimorioVuoto"}}</p>
+                        {{/each}}
+                        <p class="wod5e-mage-nemico-vuoto" data-nemico-nessuna hidden>{{localize "WOD5E_MAGE.Nemico.GrimorioVuoto"}}</p>
+                    </div>
+                {{/if}}
+            </div>
+        {{/if}}
+
+        {{#if mano}}
+            {{!-- A mano: nome, cosa fa, il tiro di resistenza, Dominio e come; i sette
+                 Ambiti con la lente (il clic la cambia) e i pallini da 0 a 7 con la
+                 lettura; la soglia in grande, i danni se la lente della Potenza è
+                 Danni, «impresa impossibile, +5», Aggiungi. --}}
+            <div class="wod5e-mage-nemico-cassetto" data-cassetto="mano">
+                <div class="wod5e-mage-nemico-campi-mano">
+                    <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.ManoNome"}}</span><input type="text" data-mano="nome" value="{{mano.nome}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.ManoNome'}}">
+                    <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.ManoCosa"}}</span><input type="text" data-mano="cosa" value="{{mano.cosa}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.ManoCosa'}}">
+                    <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.ManoResiste"}}</span>
+                    <span class="wod5e-mage-nemico-resiste">
+                        <select data-mano="attribute" aria-label="{{localize 'WOD5E_MAGE.Nemico.ManoResiste'}}"><option value="">–</option>{{#each attributiScelta as |a|}}<option value="{{a.id}}" {{#if (eq a.id @root.mano.attribute)}}selected{{/if}}>{{a.label}}</option>{{/each}}</select>
+                        <span>+</span>
+                        <select data-mano="skill" aria-label="{{localize 'WOD5E_MAGE.Nemico.CasoSkill'}}"><option value="">–</option>{{#each secondoTratto as |s|}}<option value="{{s.id}}" {{#if (eq s.id @root.mano.skill)}}selected{{/if}}>{{s.label}}</option>{{/each}}</select>
+                        <input type="text" data-mano="resisteTesto" value="{{mano.resisteTesto}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.ManoResisteTesto'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.ManoResisteTesto'}}">
+                    </span>
+                    <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.ManoDominio"}}</span>
+                    <span class="wod5e-mage-nemico-scelte">
+                        {{#each mano.domini as |d|}}<button type="button" class="wod5e-mage-nemico-pastiglia{{#if d.on}} on{{/if}}" data-action="nemicoManoScelta" data-campo="dominio" data-value="{{d.id}}" aria-pressed="{{d.on}}">{{d.label}}</button>{{/each}}
+                        <span class="wod5e-mage-nemico-spazio" aria-hidden="true"></span>
+                        {{#each mano.come as |c|}}<button type="button" class="wod5e-mage-nemico-pastiglia{{#if c.on}} on{{/if}}" data-action="nemicoManoScelta" data-campo="come" data-value="{{c.id}}" aria-pressed="{{c.on}}">{{c.label}}</button>{{/each}}
+                    </span>
+                </div>
+                <div class="wod5e-mage-nemico-ambiti">
+                    {{#each mano.ambiti.righe as |a|}}
+                        <div class="wod5e-mage-nemico-ambito{{#if a.alto}} alto{{/if}}" data-scope="{{a.id}}">
+                            <i class="{{a.faIcon}}" aria-hidden="true"></i>
+                            <span class="wod5e-mage-nemico-anm">{{a.label}}</span>
+                            {{#if a.lente.altra}}<button type="button" class="wod5e-mage-nemico-lente" data-action="nemicoLente" data-scope="{{a.id}}" title="{{localize 'WOD5E_MAGE.Nemico.Lente'}}">{{a.lente.label}}</button>{{else}}<span class="wod5e-mage-nemico-lente ferma">{{a.lente.label}}</span>{{/if}}
+                            <span class="wod5e-mage-nemico-liv">{{#each a.pallini as |p|}}<button type="button" class="{{#if p.on}}on{{/if}}{{#if p.zero}} zero{{/if}}" data-action="nemicoAmbito" data-scope="{{a.id}}" data-level="{{p.value}}" title="{{p.title}}" aria-label="{{a.label}} {{p.value}}">{{p.value}}</button>{{/each}}</span>
+                            <span class="wod5e-mage-nemico-let">{{a.lettura}}</span>
+                        </div>
+                    {{/each}}
+                </div>
+                <div class="wod5e-mage-nemico-avviso" data-nemico-avviso>{{#if mano.ambiti.fuoriTetto.length}}{{localize "WOD5E_MAGE.Nemico.TettoAmbiti"}}{{/if}}</div>
+                <div class="wod5e-mage-nemico-somma">
+                    <div><div class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.SogliaGrande"}}</div><div class="wod5e-mage-nemico-grande">{{mano.ambiti.soglia}}</div></div>
+                    <div class="wod5e-mage-nemico-conto-ambiti">{{mano.ambiti.conto}}{{#if mano.ambiti.danni}} · {{localize "WOD5E_MAGE.Nemico.DanniMagick" danni=mano.ambiti.danni arete=magick.arete potenza=mano.ambiti.potenza}}{{/if}}</div>
+                    <label class="wod5e-mage-nemico-impossibile"><input type="checkbox" data-mano="impossibile" {{#if mano.ambiti.impossibile}}checked{{/if}}> {{localize "WOD5E_MAGE.Nemico.Impossibile" extra=mano.ambiti.extra}}</label>
+                    <button type="button" class="wod5e-mage-nemico-bt parola viola" data-action="nemicoManoAggiungi"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.Aggiungi"}}</button>
+                </div>
+            </div>
+        {{/if}}
+    {{/if}}
+</section>

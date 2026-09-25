@@ -201,7 +201,7 @@ function flipCassetto(row) {
   if (rect.bottom + height > limit.bottom && rect.top - height >= limit.top) row.classList.add("cassetto-su");
 }
 
-function wireCassetti(sheet) {
+export function wireCassetti(sheet) {
   for (const row of sheet.element?.querySelectorAll(".wod5e-mage-riga.con-cassetto") ?? []) {
     row.addEventListener("mouseenter", () => flipCassetto(row));
   }
@@ -230,7 +230,7 @@ function wireCassetti(sheet) {
 }
 
 /** Le ruote dei comandi aperte: via, e le loro righe si chiudono. */
-function chiudiRuote(sheet) {
+export function chiudiRuote(sheet) {
   for (const ruota of sheet.element?.querySelectorAll(".wod5e-mage-ruota-comandi") ?? []) {
     ruota._riga?.classList.remove("aperto");
     ruota.remove();
@@ -247,7 +247,7 @@ function chiudiRuote(sheet) {
  * le stesse) e il tasto al centro per chiudere. Si chiude anche con un
  * comando, con un clic altrove, con Esc e a ogni render.
  */
-function onVentaglioToggle(event, target) {
+export function onVentaglioToggle(event, target) {
   event?.preventDefault?.();
   const row = target?.closest?.(".wod5e-mage-riga.con-ventaglio");
   const source = row?.querySelector(":scope > .wod5e-mage-ventaglio");
@@ -282,7 +282,7 @@ function onVentaglioToggle(event, target) {
   });
 }
 
-function onVentaglioChiudi(event) {
+export function onVentaglioChiudi(event) {
   event?.preventDefault?.();
   chiudiRuote(this);
 }
@@ -757,7 +757,7 @@ export class MageActorSheet extends MortalActorSheet {
   static applicaTemaOvunque(tema = game.settings.get(MODULE_ID, TEMA_SETTING)) {
     const localize = (key) => game.i18n.localize(key);
     for (const app of foundry.applications?.instances?.values?.() ?? []) {
-      if (app instanceof MageActorSheet) applicaTema(app.element, tema, { localize });
+      if (app instanceof MageActorSheet || app.constructor?.SCHEDA_DEL_MODULO) applicaTema(app.element, tema, { localize });
     }
     // Anche le creazioni guidate aperte (23/9) cambiano vestito.
     for (const app of CreazioneGuidata.aperte.values()) applicaTema(app.element, tema, { localize });
@@ -767,7 +767,7 @@ export class MageActorSheet extends MortalActorSheet {
   static applicaScalaOvunque(scala = game.settings.get(MODULE_ID, SCALA_SETTING)) {
     const i18n = { localize: (key) => game.i18n.localize(key), format: (key, data) => game.i18n.format(key, data), viewport: window };
     for (const app of foundry.applications?.instances?.values?.() ?? []) {
-      if (app instanceof MageActorSheet) applicaScala(app.element, scala, i18n);
+      if (app instanceof MageActorSheet || app.constructor?.SCHEDA_DEL_MODULO) applicaScala(app.element, scala, i18n);
     }
   }
 

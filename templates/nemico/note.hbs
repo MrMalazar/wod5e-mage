@@ -1,0 +1,27 @@
+{{!-- Note (Blue, 25/9, dal mock): «Cosa vuole adesso» e «Quando molla», due
+     campi della bandiera; sotto, la biografia che l'attore ha già. Le vede
+     solo il Narratore. --}}
+<section class="tab {{tab.cssClass}} wod5e-mage-nemico-corpo" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    {{#if isGM}}
+        <div class="wod5e-mage-nemico-nota-campo">
+            <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Vuole"}}</span>
+            <textarea name="flags.wod5e-mage.nemico.note.vuole" rows="2" placeholder="{{localize 'WOD5E_MAGE.Nemico.DaScrivere'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Vuole'}}" {{#if locked}}disabled{{/if}}>{{note.vuole}}</textarea>
+        </div>
+        <div class="wod5e-mage-nemico-nota-campo">
+            <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Molla"}}</span>
+            <textarea name="flags.wod5e-mage.nemico.note.molla" rows="2" placeholder="{{localize 'WOD5E_MAGE.Nemico.DaScrivere'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Molla'}}" {{#if locked}}disabled{{/if}}>{{note.molla}}</textarea>
+        </div>
+        <div class="wod5e-mage-nemico-nota-campo wod5e-mage-nemico-biografia">
+            <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Biografia"}}</span>
+            {{!-- La biografia è HTML del sistema: l'editor con la matita, come le note del Credo. --}}
+            {{#if locked}}
+                <div class="wod5e-mage-nemico-testo">{{{biografiaArricchita}}}</div>
+            {{else}}
+                <prose-mirror name="system.biography" value="{{biografia}}" toggled="true" compact="true">
+                    {{{biografiaArricchita}}}
+                </prose-mirror>
+            {{/if}}
+        </div>
+    {{/if}}
+    <p class="wod5e-mage-nemico-solo">{{localize "WOD5E_MAGE.Nemico.SoloNarratore"}}</p>
+</section>

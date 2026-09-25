@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { collectSimpleAnswers, mergeStepAnswers, spellFromResult, stepContext } from "../scripts/arete.js";
 import { groupIncantesimiBySphere, prepareIncantesimo, prepareIncantesimi, spellFromEffetto, spellFromFormula, topSpheres, INCANTESIMI_FLAG } from "../scripts/incantesimi.js";
 import { FORMULE_M6 } from "../scripts/data/formule.js";
-import { formulaPick } from "../scripts/grimorio.js";
+import { formulaPick, testoDellaFormula } from "../scripts/grimorio.js";
 import { groupSharedSpells, sharedItemData, SHARED_PACK_NAME } from "../scripts/grimorio-comune.js";
 
 // Il Grimorio del personaggio (6/9): la finestra del tiro in modo «salva» torna l'incantesimo.
@@ -204,7 +204,10 @@ assert.match(readFileSync(new URL("../scripts/grimorio.js", import.meta.url), "u
 // come Obiettivo, la Sfera d'Accesso e le Amalgame, gli Ambiti della soglia base.
 const guarire = FORMULE_M6.find((formula) => formula.id === "guarire");
 const fromFormula = spellFromFormula(actor, formulaPick(guarire, { access: "life", amalgams: ["spirit"], sphereLevels: { life: 2, spirit: 1 } }), (key) => key.split(".").pop());
-assert.deepEqual([fromFormula.name, fromFormula.goal, fromFormula.spheres, fromFormula.scopes, fromFormula.formula, fromFormula.access, fromFormula.amalgams, fromFormula.credo, fromFormula.effetto], ["Guarire", guarire.use, { life: 2, spirit: 1 }, { potency: 3, impact: 1 }, "guarire", "life", ["spirit"], "dati", ""]);
+assert.deepEqual([fromFormula.name, fromFormula.goal, fromFormula.spheres, fromFormula.scopes, fromFormula.formula, fromFormula.access, fromFormula.amalgams, fromFormula.credo, fromFormula.effetto], ["Guarire", testoDellaFormula(guarire, { access: "life", amalgams: ["spirit"] }), { life: 2, spirit: 1 }, { potency: 3, impact: 1 }, "guarire", "life", ["spirit"], "dati", ""]);
+// Dal lancio nel Grimorio arriva la lettura della Sfera di accesso, non la glossa generica (Blue, 25/9).
+assert.notEqual(fromFormula.goal, guarire.use);
+assert.match(fromFormula.goal, /^il corpo di una persona/);
 assert.equal(prepareIncantesimo("f1", fromFormula, (key) => key.split(".").pop()).formulaName, "Guarire");
 assert.equal(prepareIncantesimo("f2", { name: "x" }, (key) => key).formulaName, "");
 assert.match(readFileSync(new URL("../templates/actor/parts/incantesimo-card.hbs", import.meta.url), "utf8"), /spell\.formulaName/);

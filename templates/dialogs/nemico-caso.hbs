@@ -1,0 +1,26 @@
+{{!-- Un caso nuovo su una carta del nemico: cosa, se vale come soglia o come
+     riserva, quanto, e un'Abilità facoltativa a cui agganciarlo. --}}
+<form class="dialog-contents wod5e-mage-item-form wod5e-mage-nemico-form">
+    <div class="form-group">
+        <label>{{localize "WOD5E_MAGE.Nemico.CasoNome"}}</label>
+        <input type="text" name="nome" placeholder="{{localize 'WOD5E_MAGE.Nemico.CasoNomeHint'}}" required autofocus>
+    </div>
+    <div class="form-group">
+        <label>{{localize "WOD5E_MAGE.Nemico.CasoTipo"}}</label>
+        <select name="tipo">
+            <option value="soglia">{{localize "WOD5E_MAGE.Nemico.CasoSoglia"}}</option>
+            <option value="dadi" selected>{{localize "WOD5E_MAGE.Nemico.CasoDadi"}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>{{localize "WOD5E_MAGE.Nemico.CasoValore"}}</label>
+        <input type="number" name="valore" value="5" min="0" max="30">
+    </div>
+    <div class="form-group">
+        <label>{{localize "WOD5E_MAGE.Nemico.CasoSkill"}}</label>
+        <select name="skill">
+            <option value="">{{localize "WOD5E_MAGE.Nemico.CasoSkillNessuna"}}</option>
+            {{#each abilita as |s|}}<option value="{{s.id}}">{{s.label}}</option>{{/each}}
+        </select>
+    </div>
+</form>

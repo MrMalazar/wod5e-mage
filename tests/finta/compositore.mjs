@@ -66,24 +66,23 @@ assert.equal(rows.find((r) => r.id === "potency").steps[3].reading, rows.find((r
 // Senza una lettura scelta (21/9) la Potenza, che ne ha due, non stampa nessuna lettura: solo il numero.
 assert.deepEqual([rows.find((r) => r.id === "potency").reading, rows.find((r) => r.id === "potency").steps[3].tip], ["", "4"]);
 // Ma lo 0 legge sempre (Blue, 26/9 sera: «Bersagli 0 dirà 1 Bersaglio»): senza
-// lente scelta, la base di ogni lente col suo nome; il sorvolo parte da «0 · ».
+// lente scelta, la base della prima lente; il sorvolo è solo la voce (27/9).
 const potenzaZero = rows.find((r) => r.id === "potency").zero;
-assert.match(potenzaZero.reading, /Table\.potencyWeight\.0/);
-assert.match(potenzaZero.reading, /Sub\.potencyDamage: /, "la lente dei Danni col suo nome");
-assert.ok(potenzaZero.reading.includes(" · "), "le due lenti, separate");
-assert.ok(potenzaZero.tip.startsWith(`0 · ${potenzaZero.reading}`));
+assert.match(potenzaZero.reading, /Scopes\.DamageReading|Areté/, "la base dei Danni, la prima lente");
+assert.equal(potenzaZero.tip, potenzaZero.reading, "sul pallino solo la voce");
 // La lettura («lente») dell'Ambito (16/9 sera; tavola del 23/9: due lenti l'uno): la prima della tavola, o quella scelta col tastino.
 const potenza = rows.find((r) => r.id === "potency");
 assert.deepEqual([potenza.mode, potenza.modeCount, potenza.modeLabel, potenza.nextModeLabel], ["potencyDamage", 2, "WOD5E_MAGE.Scopes.Sub.potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight"]);
 assert.equal(potenza.reading, "", "nessuna lettura scelta: niente testo");
 const potenzaPeso = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyWeight" } }).find((r) => r.id === "potency");
 assert.match(potenzaPeso.reading, /Table\.potencyWeight\.4/);
-assert.match(potenzaPeso.steps[3].tip, /^4 · .*Table\.potencyWeight\.4/);
+assert.match(potenzaPeso.steps[3].tip, /Table\.potencyWeight\.4/);
+assert.ok(!potenzaPeso.steps[3].tip.startsWith("4 · "), "niente numero davanti alla voce (27/9)");
 // I pallini partono dall'1: lo 0 è la base (23/9), e la riga a riposo la legge.
 const portataRiposo = S.prepareScopeRows(T.emptyTiro(), (k) => strings[k] ?? k, { arete: 3, modes: { range: "range" } }).find((r) => r.id === "range");
 assert.deepEqual([portataRiposo.level, portataRiposo.reading, portataRiposo.steps.length, portataRiposo.steps[0].value], [0, "WOD5E_MAGE.Scopes.Table.range.0", 7, 1]);
 // Lo 0 è il primo pallino (Blue, 26/9): fisso, con la lettura della base nel sorvolo; i sette dopo restano quelli.
-assert.deepEqual([portataRiposo.zero.value, portataRiposo.zero.reading, portataRiposo.zero.tip.startsWith("0 · ")], [0, "WOD5E_MAGE.Scopes.Table.range.0", true]);
+assert.deepEqual([portataRiposo.zero.value, portataRiposo.zero.reading, portataRiposo.zero.tip], [0, "WOD5E_MAGE.Scopes.Table.range.0", "WOD5E_MAGE.Scopes.Table.range.0"]);
 assert.equal(rows.every((r) => r.modeCount === 2), true, "ogni Ambito ha due lenti (23/9)");
 const conDanni = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyDamage", targets: "boh" } }).find((r) => r.id === "potency");
 assert.deepEqual([conDanni.mode, conDanni.nextModeLabel], ["potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight"], "dai Danni si passa al Peso");
@@ -107,7 +106,7 @@ const potenzaTendina = righeTendina.find((r) => r.id === "potency");
 assert.deepEqual([potenzaTendina.multi, potenzaTendina.modeChosen, potenzaTendina.modes.map((m) => m.id), potenzaTendina.modes.find((m) => m.selected).id], [true, true, ["potencyDamage", "potencyWeight"], "potencyWeight"]);
 const durataTendina = righeTendina.find((r) => r.id === "duration");
 assert.deepEqual([durataTendina.multi, durataTendina.modeChosen, durataTendina.modeShown, durataTendina.steps.length, durataTendina.steps[2].tip, durataTendina.steps[2].reading, durataTendina.modes.some((m) => m.selected)], [true, false, false, 7, "3", "", false], "più letture, nessuna scelta (21/9): i pallini ci sono lo stesso, col solo numero, e nessuna pastiglia accesa");
-assert.equal(potenzaTendina.steps[3].tip.startsWith("4 · "), true, "con la lettura il tooltip dice livello e lettura");
+assert.equal(potenzaTendina.steps[3].tip, potenzaTendina.steps[3].reading, "con la lettura il tooltip dice solo la voce (27/9)");
 const durataScelta = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { duration: "duration" } }).find((r) => r.id === "duration");
 assert.deepEqual([durataScelta.modeChosen, durataScelta.modeShown], [true, durataScelta.level === 0], "scelta la lettura: i pallini, e la lettura in piccolo finché non c'è il livello");
 // Tre Ambiti per lancio (23/9): il quarto pallino cliccato non si accende, e la scheda avvisa.

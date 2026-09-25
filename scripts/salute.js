@@ -42,6 +42,8 @@ function attributeValue(actor, id) {
 /** Le caselle: 2 + Costituzione + Fermezza (Blue, 11/9), più le caselle in più segnate a mano. */
 export const SALUTE_BASE = 2;
 export function saluteMax(actor, extra = 0) {
+  // Il nemico (un attore spc, 27/9) non ha Attributi: le caselle sono system.health.max, già scritto nel Bestiario.
+  if (actor?.type === "spc") return Math.max(Math.trunc(Number(actor.system?.health?.max) || 0) + Math.trunc(Number(extra) || 0), 1);
   return Math.max(SALUTE_BASE + attributeValue(actor, "stamina") + attributeValue(actor, "resolve") + Math.trunc(Number(extra) || 0), 1);
 }
 

@@ -1,4 +1,4 @@
-import { MAGE_SHEET_ID, MODULE_ID } from "./constants.js";
+import { MAGE_SHEET_ID, MODULE_ID, NEMICO_SHEET_ID } from "./constants.js";
 import {
   EMPTY_DICE_FACE,
   getMageDieImage,
@@ -18,6 +18,12 @@ export function isMageActor(actor) {
   );
 }
 
+/** Il nemico (27/9): l'attore spc con la scheda del nemico. Tira coi dadi del modulo, ma non ha i tasti del Mago. */
+export function isNemicoActor(actor) {
+  if (!actor?.getFlag) return false;
+  return actor.getFlag("core", "sheetClass") === NEMICO_SHEET_ID;
+}
+
 /**
  * Usa uno SVG trasparente per le facce vuote. Il CSS continua a disegnare il
  * quadrato, mentre un src valido impedisce al browser di mostrare l'icona rotta.
@@ -30,7 +36,7 @@ function applyDieFace(die, image, emptyClass) {
 
 export function applyMageDiceClass(message, html) {
   const actor = message?.speakerActor;
-  if (!isMageActor(actor) || !html?.querySelectorAll) return 0;
+  if (!(isMageActor(actor) || isNemicoActor(actor)) || !html?.querySelectorAll) return 0;
 
   const basicDice = html.querySelectorAll(".roll-img.mortal-dice, .roll-img.vampire-dice, .roll-img.hunter-dice, .roll-img.werewolf-dice");
   const messageRoll = message?.rolls?.[0];

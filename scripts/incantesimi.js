@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { testoDellaFormula } from "./grimorio.js";
 import { FORMULE_M6 } from "./data/formule.js";
 import { normalizeScopeLevels, SCOPES, SCOPE_ICONS } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
@@ -144,10 +145,12 @@ export function spellFromEffetto(actor, entry, sphereLevels, localize = (key) =>
  * con la matita o lo lancia col dado.
  */
 export function spellFromFormula(actor, pick, localize = (key) => key) {
-  const base = spellFromEffetto(actor, { name: pick.formula.name, text: pick.formula.use, id: "" }, pick.spheres, localize);
+  // L'Obiettivo è l'effetto delle Sfere scelte (27/9), non la glossa «In genere».
+  const goal = testoDellaFormula(pick.formula, { access: pick.access, amalgams: pick.amalgams });
+  const base = spellFromEffetto(actor, { name: pick.formula.name, text: goal, id: "" }, pick.spheres, localize);
   return {
     ...base,
-    goal: pick.formula.use,
+    goal,
     spheres: { ...pick.spheres },
     scopes: { ...pick.scopes },
     effetto: "",

@@ -89,7 +89,7 @@ const ambiti = html.slice(html.indexOf("wod5e-mage-ambiti-lista"), html.indexOf(
 assert.equal((ambiti.match(/data-action="tiroScope" data-scope="potency"/g) ?? []).length, 7);
 // Lo 0 davanti (26/9): un pallino fisso per Ambito, senza azione, col testo della base e la spiegazione nel sorvolo.
 assert.equal((ambiti.match(/wod5e-mage-pallino-ambito zero lit" data-tooltip="/g) ?? []).length, 3);
-assert.ok(ambiti.includes('class="wod5e-mage-pallino-ambito zero lit" data-tooltip="0 · Un bersaglio&#10;WOD5E_MAGE.Scopes.Zero"'), "il pallino dello 0 dei Bersagli legge la base");
+assert.ok(ambiti.includes('class="wod5e-mage-pallino-ambito zero lit" data-tooltip="0 · Un bersaglio" title="WOD5E_MAGE.Scopes.Zero"'), "il pallino dello 0 dei Bersagli legge la base");
 assert.equal((ambiti.match(/data-action="tiroScope" data-scope="targets"/g) ?? []).length, 7);
 assert.ok(!ambiti.includes('data-scope="area"'), "l'Area non è più un Ambito: è una lente dei Bersagli (23/9)");
 assert.ok(ambiti.includes("title=\"Un bersaglio\""), "a riposo la riga legge lo 0, la base");

@@ -16026,6 +16026,15 @@
   display: flex;
 }
 
+/* La × che azzera i pallini: il sistema la tira a sinistra di 16px (sopra
+   quello che c'è prima). Nelle righe della scheda copriva la freccetta delle
+   Specializzazioni e quella dei Tratti (Blue, 27/9): sta al suo posto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga > .resource-value > .resource-value-empty,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-oggetto-pallini > .resource-value-empty {
+  margin-left: 0;
+  margin-right: 2px;
+}
+
 /* Il nome parte stretto e cresce: così la freccetta (fra il nome e i pallini,
    27/9) resta sulla prima riga anche con un nome lungo (Accademiche). */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita.con-specializzazioni > .wod5e-mage-riga-nome {
@@ -16071,4 +16080,1493 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-abilita.aperta > button.wod5e-mage-abilita-apri > i {
   transform: rotate(180deg);
+}
+
+/* ==========================================================================
+   La scheda del nemico (Blue, 25/9, dal mock docs/mock_scheda_nemico_25-9.html;
+   fatta il 27/9). Una finestra da 940 × 820, la testata sempre in vista, le
+   linguette a parole, righe a colonne come nel menù del Paradosso: poche
+   cornici, un filo sottile fra le righe, oro per i numeri che si cliccano,
+   viola per quello che è cambiato o scelto. Le variabili sono quelle del
+   modulo: il tema chiaro cambia da sé.
+   ========================================================================== */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico {
+  --nemico-disp: var(--mage-rosso-vivo);
+  --nemico-linea: color-mix(in srgb, var(--mage-oro-scuro) 40%, transparent);
+  --nemico-titolo: "Modesto Condensed", Georgia, serif;
+  --nemico-verde: #8fd19a;
+  --nemico-chiaro: #f5e7b2; /* nome, soglie e numeri grandi: l'oro chiaro delle intestazioni */
+}
+
+/* Nel tema chiaro l'oro chiaro parla nel viola medio, come sul mago. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-chiara {
+  --nemico-chiaro: #3B336B;
+}
+
+/* La scheda del nemico nasce a 940 px (MISURA_NEMICO): la larghezza minima
+   delle quattro colonne del mago (1280 px) qui la sfonderebbe a destra. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico:not(.minimized) {
+  min-width: calc(940px * var(--mage-scala, 1));
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-nemico-neutrale { --nemico-disp: #d9c26b; }
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-nemico-amichevole { --nemico-disp: #7fb7d6; }
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-nemico-segreto { --nemico-disp: var(--mage-viola-chiaro); }
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content {
+  border-top: 3px solid var(--nemico-disp);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content > form {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Niente barra delle icone a sinistra: le pagine stanno sotto la testata. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .tab {
+  margin-left: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content section.tab.wod5e-mage-nemico-corpo.active {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 18px 22px 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-k {
+  color: var(--mage-tenue);
+  font: 700 10px/1.2 sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* I campi della scheda: trasparenti, la riga d'oro sotto solo al fuoco. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="text"],
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="number"],
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="search"],
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content select,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content textarea {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: var(--mage-testo);
+  font-family: inherit;
+  font-size: 13.5px;
+  height: 26px;
+  min-height: 0;
+  padding: 2px 8px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input:focus,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content select:focus,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content textarea:focus {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+  outline: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="number"] {
+  width: 4.2rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="checkbox"] {
+  height: auto;
+  width: auto;
+}
+
+/* ---- la testata ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-testa {
+  flex: 0 0 auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-filo {
+  display: flex;
+  padding: 8px 18px 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-disp {
+  align-items: center;
+  color: var(--nemico-disp);
+  display: inline-flex;
+  font: 700 10.5px/1 sans-serif;
+  gap: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-disp > i {
+  background: var(--nemico-disp);
+  border-radius: 50%;
+  height: 8px;
+  width: 8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-testata {
+  display: grid;
+  gap: 26px;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  padding: 10px 22px 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-chi {
+  align-items: center;
+  display: flex;
+  gap: 18px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ritratto {
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 12px;
+  flex: none;
+  height: 96px;
+  overflow: hidden;
+  position: relative;
+  width: 96px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ritratto > img {
+  border: 0;
+  cursor: pointer;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-cambia {
+  align-items: center;
+  background: rgb(0 0 0 / 65%);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 6px;
+  bottom: 5px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: flex;
+  font-size: 10px;
+  height: 22px;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
+  position: absolute;
+  right: 5px;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-nomi {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-nome,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-concetto,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-appartenenza > input,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-appartenenza > select {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  height: auto;
+  padding: 1px 4px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-nome:hover,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-concetto:hover,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-appartenenza > :is(input, select):hover {
+  border-color: var(--mage-oro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-nome {
+  color: var(--nemico-chiaro, #f5e7b2);
+  font: 600 29px/1.05 var(--nemico-titolo);
+  margin-left: -4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-concetto {
+  font-size: 14.5px;
+  margin-left: -4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-appartenenza {
+  align-items: center;
+  color: var(--mage-tenue);
+  display: flex;
+  gap: 4px;
+  margin-left: -4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-appartenenza > :is(input, select) {
+  color: var(--mage-tenue);
+  flex: 0 1 auto;
+  font-size: 13.5px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-appartenenza > input {
+  flex: 1 1 8rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-stato {
+  align-content: center;
+  align-items: center;
+  display: grid;
+  gap: 9px 10px;
+  grid-template-columns: 82px minmax(0, 1fr) 42px 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-v {
+  align-items: baseline;
+  color: var(--mage-oro);
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 700;
+  gap: 1px;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-max {
+  -moz-appearance: textfield;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dashed var(--mage-oro-tenue);
+  border-radius: 0;
+  color: var(--mage-oro);
+  font-size: 14px;
+  font-weight: 700;
+  height: auto;
+  padding: 0;
+  text-align: left;
+  width: 1.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-max::-webkit-inner-spin-button,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-max::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-track {
+  gap: 4px;
+}
+
+/* La riga della ruota: solo il tastino, senza fondo; la ruota si appende alla finestra come sul mago. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ventaglio-riga {
+  background: transparent;
+  border: 0;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mini,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico summary.wod5e-mage-nemico-mini {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 10.5px;
+  height: 24px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  min-height: 0;
+  padding: 0;
+  width: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mini:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico summary.wod5e-mage-nemico-mini::-webkit-details-marker {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pips {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pip {
+  background: var(--mage-oro);
+  border: 1px solid var(--mage-oro);
+  border-radius: 3px;
+  flex: none;
+  height: 13px;
+  width: 13px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pip.vuoto {
+  background: transparent;
+  border-color: var(--mage-oro-scuro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pips > small {
+  color: var(--mage-tenue);
+  font-size: 12.5px;
+  margin-left: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-tastini {
+  display: flex;
+  gap: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-conds {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  min-height: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cond {
+  align-items: center;
+  color: var(--mage-testo);
+  display: inline-flex;
+  font-size: 14px;
+  gap: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cond.spenta {
+  opacity: 0.5;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cond > img,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-condizione > img {
+  border: 0;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  height: 21px;
+  width: 21px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-meno {
+  color: var(--mage-viola-chiaro);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-togli {
+  background: transparent;
+  border: 0;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  min-height: 0;
+  padding: 0 2px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-togli:hover {
+  box-shadow: none;
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-nessuna,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-vuoto {
+  color: var(--mage-tenue);
+  font-size: 13.5px;
+  font-style: italic;
+  margin: 0;
+}
+
+/* La scelta delle Condizioni: la tendina si apre sotto il +, sopra la pagina. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-condizioni-tendina {
+  position: relative;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-condizioni-scelta {
+  background: var(--mage-cassetto-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 45%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 380px;
+  overflow: auto;
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  top: 28px;
+  width: 460px;
+  z-index: 6;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-condizioni-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-condizione {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 11px;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 12.5px;
+  gap: 5px;
+  line-height: 1.2;
+  min-height: 0;
+  padding: 2px 8px 2px 4px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-condizione > img {
+  height: 18px;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-condizione > small {
+  color: var(--mage-viola-chiaro);
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-condizione.lit {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
+}
+
+/* ---- le linguette ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pagine {
+  border-bottom: 1px solid var(--nemico-linea);
+  border-top: 1px solid var(--nemico-linea);
+  display: flex;
+  gap: 28px;
+  padding: 0 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pagina {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  display: flex;
+  font: 700 11.5px/1 var(--font-primary, "Signika", sans-serif);
+  gap: 7px;
+  letter-spacing: 0.16em;
+  min-height: 0;
+  padding: 13px 0 11px;
+  text-transform: uppercase;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pagina:hover {
+  box-shadow: none;
+  color: var(--nemico-chiaro, #f5e7b2);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pagina.active {
+  border-bottom-color: var(--mage-oro);
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-conto {
+  color: var(--mage-tenue);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-aggiungi {
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-left: auto;
+  opacity: 0.8;
+}
+
+/* ---- le tre carte ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-tre {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campo {
+  background: var(--mage-riga-fondo);
+  border-radius: 10px;
+  padding: 13px 15px 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campo-t {
+  align-items: center;
+  color: var(--mage-oro);
+  display: flex;
+  font: 700 11px/1 sans-serif;
+  gap: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campo-t > i {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-piu-caso {
+  background: transparent;
+  border: 0;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  font-size: 10px;
+  margin-left: auto;
+  min-height: 0;
+  padding: 0;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-piu-caso:hover {
+  box-shadow: none;
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-coppia {
+  display: grid;
+  gap: 0 4px;
+  grid-template-columns: 1fr 1fr;
+  margin: 12px 0 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  padding: 4px 0 5px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num > b,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi {
+  font: 600 38px/1 var(--nemico-titolo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num.soglia > b,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi {
+  color: var(--nemico-chiaro, #f5e7b2);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi {
+  -moz-appearance: textfield;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  height: auto;
+  padding: 0;
+  text-align: center;
+  width: 2.1em;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi::-webkit-inner-spin-button,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi::-webkit-outer-spin-button,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-riserva-scrivi::-webkit-inner-spin-button,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-riserva-scrivi::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi:hover {
+  border-color: var(--mage-oro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num.soglia.mod > b.wod5e-mage-nemico-alza {
+  color: var(--mage-viola-chiaro);
+  font-size: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num.riserva > b {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num.riserva.mod > b {
+  color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-num {
+  cursor: pointer;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-num:hover {
+  background: rgb(217 168 39 / 10%);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num > small {
+  align-items: center;
+  color: var(--mage-tenue);
+  display: flex;
+  font: 700 9.5px/1 sans-serif;
+  gap: 5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* La riserva scritta: un numerino sotto la riserva d'oro, che è quella già scalata. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-riserva-scrivi {
+  -moz-appearance: textfield;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--mage-tenue);
+  font-size: 11px;
+  grid-column: 2;
+  height: 18px;
+  justify-self: center;
+  padding: 0;
+  text-align: center;
+  width: 2.6rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-riserva-scrivi:hover {
+  border-color: var(--mage-oro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-casi {
+  border-top: 1px solid var(--nemico-linea);
+  list-style: none;
+  margin: 0;
+  padding: 7px 0 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-casi > li {
+  align-items: center;
+  display: flex;
+  font-size: 14px;
+  gap: 6px;
+  justify-content: space-between;
+  min-height: 28px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-caso-nome {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-caso-s {
+  color: var(--mage-tenue);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-caso-s > b {
+  color: var(--nemico-chiaro, #f5e7b2);
+  font-size: 15px;
+  margin-left: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-caso-s.mod > b {
+  color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-caso-tira {
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  font-size: 13px;
+  min-height: 0;
+  padding: 2px 6px;
+  white-space: nowrap;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-caso-tira > b {
+  color: var(--mage-oro);
+  font-size: 15px;
+  margin-right: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-caso-tira.mod > b {
+  color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-caso-tira:hover {
+  background: rgb(217 168 39 / 10%);
+  box-shadow: none;
+}
+
+/* ---- le sezioni e le righe a colonne ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-sez {
+  align-items: center;
+  color: var(--mage-oro);
+  display: flex;
+  flex: 0 0 auto;
+  font: 700 11px/1 sans-serif;
+  gap: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-sez::after {
+  border-top: 1px solid var(--nemico-linea);
+  content: "";
+  flex: 1;
+  order: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-agg {
+  display: flex;
+  gap: 14px;
+  order: 2;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-agg > button {
+  background: transparent;
+  border: 0;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  font: 600 12.5px var(--font-primary, "Signika", sans-serif);
+  letter-spacing: 0;
+  min-height: 0;
+  padding: 0;
+  text-transform: none;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-agg > button:hover,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-agg > button.attivo {
+  box-shadow: none;
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-lista {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  margin-top: -8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga {
+  align-items: center;
+  border-bottom: 1px solid var(--nemico-linea);
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 200px minmax(0, 1fr) 128px 34px;
+  min-height: 42px;
+  padding: 0 2px 0 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga.stretta {
+  gap: 10px;
+  grid-template-columns: 190px minmax(0, 1fr) 54px 72px;
+  min-height: 36px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga:last-child {
+  border-bottom: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga.aperta {
+  background: color-mix(in srgb, var(--mage-riga-fondo) 60%, transparent);
+  border-radius: 8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga.attiva > .wod5e-mage-nemico-r-nome {
+  color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-nome {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--mage-testo);
+  display: flex;
+  font-size: 15px;
+  font-weight: 600;
+  gap: 6px;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-r-nome {
+  cursor: pointer;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-r-nome:hover {
+  box-shadow: none;
+  color: var(--nemico-chiaro, #f5e7b2);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-nome > i {
+  color: var(--mage-tenue);
+  font-size: 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-libro {
+  color: var(--mage-tenue);
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-eff {
+  color: var(--mage-testo);
+  font-size: 14px;
+  min-width: 0;
+  opacity: 0.88;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cn {
+  color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-res,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-tenue {
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-costo {
+  color: var(--mage-tenue);
+  font-size: 13.5px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-costo > b {
+  color: var(--mage-oro);
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-costo > b.chiaro {
+  color: var(--nemico-chiaro, #f5e7b2);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-costo > b.mod {
+  color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-nome > input,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-eff > input,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-costo > select {
+  background: transparent;
+  border-color: transparent;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-nome > input {
+  font-weight: 600;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-costo > select {
+  color: var(--mage-tenue);
+  text-align: right;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-nome > input:hover,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-eff > input:hover,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-costo > select:hover {
+  border-color: var(--mage-oro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-tasti {
+  display: flex;
+  gap: 2px;
+  justify-content: flex-end;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 14px;
+  height: 32px;
+  justify-content: center;
+  line-height: 1;
+  min-height: 0;
+  padding: 0;
+  width: 32px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt:hover {
+  background: rgb(217 168 39 / 12%);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt.viola {
+  color: var(--mage-viola-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt.tenue {
+  color: var(--mage-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt.parola {
+  border: 1px solid var(--mage-oro-tenue);
+  font: 600 12.5px var(--font-primary, "Signika", sans-serif);
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt.parola.attivo,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt.parola.viola {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+  gap: 6px 18px;
+  grid-column: 1 / -1;
+  padding: 2px 4px 12px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > label,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > span {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > .larga {
+  flex: 1 1 100%;
+  white-space: normal;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > .larga > input[type="text"] {
+  flex: 1 1 auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-via {
+  background: transparent;
+  border: 0;
+  color: var(--mage-rosso-chiaro);
+  cursor: pointer;
+  font-size: 12.5px;
+  margin-left: auto;
+  min-height: 0;
+  padding: 0;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-via:hover {
+  box-shadow: none;
+  color: var(--mage-rosso-vivo);
+}
+
+/* ---- Magick ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-magick-testa {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border-radius: 10px;
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 12px 30px;
+  padding: 12px 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-magick-testa > span {
+  align-items: center;
+  display: flex;
+  font-size: 14.5px;
+  gap: 9px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-magick-testa > span > b {
+  color: var(--mage-oro);
+  font-size: 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-magick-testa > span > small {
+  color: var(--mage-tenue);
+  font-size: 12.5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-d {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 50%;
+  cursor: pointer;
+  height: 13px;
+  min-height: 0;
+  padding: 0;
+  width: 13px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-d.on {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-dominio {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  min-height: 0;
+  opacity: 0.4;
+  padding: 0;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-dominio:hover {
+  box-shadow: none;
+  opacity: 0.8;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-dominio.on {
+  opacity: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pastiglia {
+  background: transparent;
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 13px;
+  color: var(--mage-testo);
+  cursor: pointer;
+  font-size: 12.5px;
+  line-height: 1.2;
+  min-height: 0;
+  padding: 3px 11px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pastiglia:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pastiglia.on {
+  background: var(--mage-viola);
+  border-color: var(--mage-viola-chiaro);
+  color: var(--mage-scelta-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-magick-via {
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cassetto {
+  background: var(--mage-riga-fondo);
+  border-radius: 10px;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cerca {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 8px;
+  color: var(--mage-tenue);
+  display: flex;
+  font-size: 13.5px;
+  gap: 8px;
+  padding: 4px 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-cerca > input {
+  background: transparent;
+  border: 0;
+  flex: 1;
+  height: auto;
+  padding: 2px 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-grimorio {
+  display: flex;
+  flex-direction: column;
+  max-height: 260px;
+  overflow: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-accessi {
+  display: inline-flex;
+  gap: 4px;
+  margin-right: 8px;
+  vertical-align: -3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-accessi > img {
+  border: 0;
+  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
+  height: 16px;
+  opacity: 0.45;
+  width: 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-accessi > img.lit {
+  opacity: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campi-mano {
+  align-items: center;
+  display: grid;
+  font-size: 14px;
+  gap: 8px 12px;
+  grid-template-columns: 120px minmax(0, 1fr);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-campi-mano > input {
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-resiste {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-resiste > input {
+  flex: 1 1 8rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-scelte {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-spazio {
+  width: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ambiti {
+  display: flex;
+  flex-direction: column;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ambito {
+  align-items: center;
+  border-radius: 7px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 18px 92px 84px auto minmax(0, 1fr);
+  min-height: 32px;
+  padding: 0 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ambito.alto {
+  background: color-mix(in srgb, var(--mage-viola) 45%, transparent);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ambito > i {
+  color: var(--mage-oro);
+  font-size: 12.5px;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-anm {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-lente {
+  background: transparent;
+  border: 0;
+  color: var(--mage-oro);
+  cursor: pointer;
+  font: 700 9.5px/1 sans-serif;
+  letter-spacing: 0.1em;
+  min-height: 0;
+  padding: 0;
+  text-align: left;
+  text-transform: uppercase;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-lente.ferma {
+  color: var(--mage-tenue);
+  cursor: default;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-lente:hover {
+  box-shadow: none;
+  color: var(--nemico-chiaro, #f5e7b2);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-liv {
+  display: flex;
+  gap: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-liv > button {
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 50%;
+  color: color-mix(in srgb, var(--nemico-chiaro, #f5e7b2) 45%, transparent);
+  cursor: pointer;
+  font: 700 9px/1 sans-serif;
+  height: 18px;
+  line-height: 1;
+  min-height: 0;
+  padding: 0;
+  width: 18px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-liv > button.zero {
+  border-style: dashed;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-liv > button.on {
+  background: var(--mage-oro);
+  border-color: var(--mage-oro);
+  color: var(--mage-su-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-liv > button:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-let {
+  font-size: 13px;
+  min-width: 0;
+  opacity: 0.85;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-avviso {
+  color: var(--mage-rosso-chiaro);
+  font-size: 13px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-avviso:empty {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-somma {
+  align-items: center;
+  border-top: 1px solid var(--nemico-linea);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  padding-top: 12px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-grande {
+  color: var(--nemico-chiaro, #f5e7b2);
+  font: 600 36px/1 var(--nemico-titolo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-conto-ambiti {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-impossibile {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  font-size: 13.5px;
+  gap: 7px;
+  margin-left: auto;
+}
+
+/* ---- Note e vista limitata ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-nota-campo {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-nota-campo > textarea {
+  background: var(--mage-riga-fondo);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-size: 14.5px;
+  height: auto;
+  line-height: 1.45;
+  min-height: 44px;
+  padding: 10px 14px;
+  resize: vertical;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-solo {
+  color: var(--mage-tenue);
+  font-size: 13px;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-limitata {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 30px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-limitata > img {
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 14px;
+  height: 160px;
+  object-fit: cover;
+  width: 160px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-limitata > h2 {
+  border: 0;
+  color: var(--nemico-chiaro, #f5e7b2);
+  font: 600 28px/1.1 var(--nemico-titolo);
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-limitata > p {
+  color: var(--mage-tenue);
+  font-size: 13.5px;
+  margin: 0;
+}
+
+/* ---- le carte in chat ---- */
+.chat-message .wod5e-mage-nemico-carta {
+  display: flex;
+  flex-direction: column;
+  font-size: 13.5px;
+  gap: 8px;
+}
+
+.chat-message .wod5e-mage-nemico-carta-testa {
+  align-items: center;
+  display: flex;
+  gap: 9px;
+}
+
+.chat-message .wod5e-mage-nemico-carta-av {
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  border-radius: 50%;
+  flex: none;
+  height: 30px;
+  object-fit: cover;
+  width: 30px;
+}
+
+.chat-message .wod5e-mage-nemico-carta-testa b {
+  color: var(--nemico-chiaro, #f5e7b2);
+  display: block;
+  font-size: 14px;
+}
+
+.chat-message .wod5e-mage-nemico-carta-testa small {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 12.5px;
+}
+
+.chat-message .wod5e-mage-nemico-carta-soglia {
+  align-items: baseline;
+  display: flex;
+  gap: 8px;
+}
+
+.chat-message .wod5e-mage-nemico-carta-soglia > b {
+  color: var(--nemico-chiaro, #f5e7b2);
+  font: 600 30px/1 "Modesto Condensed", Georgia, serif;
+}
+
+.chat-message .wod5e-mage-nemico-carta-soglia > span,
+.chat-message .wod5e-mage-nemico-carta-come {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 12.5px;
+}
+
+.chat-message .wod5e-mage-nemico-carta-danni {
+  color: #8fd19a;
+  font-weight: 700;
+}
+
+.chat-message .wod5e-mage-nemico-resisti,
+.chat-message .wod5e-mage-nemico-applica {
+  border-radius: 7px;
+  cursor: pointer;
+  font: 600 12.5px "Signika", sans-serif;
+  padding: 7px 10px;
+  width: 100%;
+}
+
+.chat-message .wod5e-mage-nemico-resisti {
+  background: var(--mage-viola, #5a2b82);
+  border: 1px solid var(--mage-viola-chiaro, #b58ade);
+  color: #fff;
+}
+
+.chat-message .wod5e-mage-nemico-applica {
+  background: var(--mage-oro, #d9a827);
+  border: 1px solid var(--mage-oro, #d9a827);
+  color: #1a140a;
+}
+
+.chat-message .wod5e-mage-nemico-conto {
+  color: var(--mage-testo, #e6dcc2);
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.chat-message .wod5e-mage-nemico-esito {
+  color: #8fd19a;
+  font-weight: 700;
+  margin: 4px 0;
 }

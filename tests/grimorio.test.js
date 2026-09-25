@@ -232,3 +232,19 @@ const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "
 assert.match(css, /\.wod5e-mage-grimorio-row\[open\] \{/);
 assert.match(css, /\.wod5e-mage-roll-symbol-sphere > img \{\r?\n  filter: brightness\(0\)/);
 console.log("Grimorio, simboli e schede: test passati.");
+
+// Il testo della Formula per le Sfere scelte (Blue, 27/9): la riga della Sfera
+// d'Accesso, la riga della coppia con l'Amalgama se c'è, e «In genere» solo senza Sfere.
+{
+  const { testoDellaFormula } = await import("../scripts/grimorio.js");
+  const { FORMULE_M6 } = await import("../scripts/data/formule.js");
+  const f = (id) => FORMULE_M6.find((formula) => formula.id === id);
+  assert.equal(testoDellaFormula(f("danneggiare"), { access: "forces" }), f("danneggiare").bySphere.forces.trim());
+  assert.equal(testoDellaFormula(f("danneggiare"), {}), f("danneggiare").use, "senza Sfere resta la glossa");
+  const coppia = testoDellaFormula(f("aprire-e-bloccare"), { access: "mind", amalgams: ["life"] });
+  assert.equal(coppia, f("aprire-e-bloccare").bySphere["mind+life"].trim(), "la coppia scritta nella matrice");
+  const conAmalgama = testoDellaFormula(f("danneggiare"), { access: "forces", amalgams: ["life"] });
+  assert.ok(conAmalgama.startsWith(f("danneggiare").bySphere.forces.trim()) && conAmalgama.includes(f("danneggiare").bySphere.life.trim()), "l'Amalgama porta la sua riga");
+  assert.equal(testoDellaFormula(null, { access: "forces" }), "");
+}
+console.log("testo della Formula per Sfera: ok");

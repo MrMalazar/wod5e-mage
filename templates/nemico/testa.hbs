@@ -1,0 +1,103 @@
+{{!-- La testata della scheda del nemico (Blue, 25/9, dal mock): resta uguale
+     su ogni pagina. A sinistra chi è: il ritratto (il + lo cambia, e il token
+     lo segue), il nome, il concetto, Natura · Fazione. A destra lo stato:
+     Salute (il tracciato del mago, il conto, il cuore che apre la ruota),
+     Armatura (solo se porta una protezione), Condizioni (col malus in viola,
+     la × che toglie, il + che apre la scelta). In cima l'etichetta della
+     disposizione del token, col suo colore. Sotto, le linguette delle pagine
+     e «+ Magick» se la pagina Magick non c'è. --}}
+<header class="wod5e-mage-nemico-testa" data-disposizione="{{disposizione.id}}">
+    <div class="wod5e-mage-nemico-filo">
+        <span class="wod5e-mage-nemico-disp"><i aria-hidden="true"></i>{{disposizione.label}}</span>
+    </div>
+    <div class="wod5e-mage-nemico-testata">
+        <div class="wod5e-mage-nemico-chi">
+            <div class="wod5e-mage-nemico-ritratto">
+                <img src="{{img}}" alt="{{nome}}" data-action="ritrattoCambia" title="{{localize 'WOD5E_MAGE.Nemico.Ritratto'}}">
+                {{#unless locked}}<button type="button" class="wod5e-mage-nemico-cambia" data-action="ritrattoCambia" title="{{localize 'WOD5E_MAGE.Nemico.Ritratto'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Ritratto'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>{{/unless}}
+            </div>
+            <div class="wod5e-mage-nemico-nomi">
+                <input type="text" class="wod5e-mage-nemico-nome" name="name" value="{{nome}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.Nome'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Nome'}}" {{#if locked}}disabled{{/if}}>
+                <input type="text" class="wod5e-mage-nemico-concetto" name="system.headers.concept" value="{{concetto}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.ConcettoHint'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Concetto'}}" {{#if locked}}disabled{{/if}}>
+                <div class="wod5e-mage-nemico-appartenenza">
+                    <select name="flags.wod5e-mage.nemico.natura" aria-label="{{localize 'WOD5E_MAGE.Nemico.Natura'}}" {{#if locked}}disabled{{/if}}>
+                        {{#each nature as |n|}}<option value="{{n.id}}" {{#if n.on}}selected{{/if}}>{{n.label}}</option>{{/each}}
+                    </select>
+                    <span class="wod5e-mage-nemico-punto" aria-hidden="true">·</span>
+                    <input type="text" name="flags.wod5e-mage.nemico.fazione" value="{{fazione}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.FazioneHint'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Fazione'}}" {{#if locked}}disabled{{/if}}>
+                </div>
+            </div>
+        </div>
+        <div class="wod5e-mage-nemico-stato">
+            {{!-- La Salute: le caselle del mago (il clic sinistro sceglie il segno, il destro svuota), il conto, il cuore che apre la ruota. --}}
+            <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Salute"}}</span>
+            <div class="wod5e-mage-salute-track wod5e-mage-nemico-track" role="group" aria-label="{{localize 'WOD5E_MAGE.Nemico.Salute'}}">
+                {{#each salute.cells as |cell|}}
+                    <button type="button" class="wod5e-mage-salute-cell{{#if cell.locked}} wod5e-mage-salute-locked{{/if}}" data-state="{{cell.state}}" data-action="saluteCellChange" data-index="{{cell.index}}" aria-label="{{localize cell.label}}"></button>
+                {{/each}}
+            </div>
+            <span class="wod5e-mage-nemico-v">{{salute.total}}/{{#if locked}}{{salute.max}}{{else}}<input type="number" class="wod5e-mage-nemico-max" name="system.health.max" value="{{saluteMax}}" min="1" max="20" title="{{localize 'WOD5E_MAGE.Salute.Extra'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Extra'}}">{{/if}}</span>
+            <div class="wod5e-mage-riga con-ventaglio wod5e-mage-nemico-ventaglio-riga">
+                <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-ventaglio-tasto wod5e-mage-nemico-mini" data-action="ventaglioToggle" title="{{localize 'WOD5E_MAGE.Nemico.SaluteRuota'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.SaluteRuota'}}"><i class="fa-solid fa-heart" aria-hidden="true"></i></button>
+                {{!-- La sorgente della ruota: tre comandi (Danni, Riposo, Reset), come sulla scheda del mago. --}}
+                <div class="wod5e-mage-ventaglio wod5e-mage-ventaglio-tre" role="group" aria-label="{{localize 'WOD5E_MAGE.Nemico.SaluteRuota'}}">
+                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 0" data-action="saluteDanni" title="{{localize 'WOD5E_MAGE.Salute.DanniHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Danni'}}"><i class="fa-solid fa-heart-crack" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.DanniBreve"}}</span></button>
+                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 1" data-action="saluteRiposo" title="{{localize 'WOD5E_MAGE.Salute.RiposoHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Riposo'}}"><i class="fa-solid fa-bed" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.Riposo"}}</span></button>
+                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 2" data-action="saluteReset" title="{{localize 'WOD5E_MAGE.Salute.ResetHint'}}" aria-label="{{localize 'WOD5E_MAGE.Salute.Reset'}}"><i class="fa-solid fa-eraser" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Salute.Reset"}}</span></button>
+                </div>
+            </div>
+
+            {{#each armature as |arm|}}
+                <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Armatura"}}</span>
+                <span class="wod5e-mage-nemico-pips" title="{{arm.kindLabel}}">
+                    {{#each arm.pips as |pip|}}<i class="wod5e-mage-nemico-pip{{#unless pip.pieno}} vuoto{{/unless}}" aria-hidden="true"></i>{{/each}}
+                    <small>{{arm.name}}{{#if arm.mentale}} · {{arm.kindLabel}}{{/if}}</small>
+                </span>
+                <span class="wod5e-mage-nemico-v">{{arm.conto}}</span>
+                <span class="wod5e-mage-nemico-tastini">
+                    <button type="button" class="wod5e-mage-nemico-mini" data-action="armaturaColpo" data-item-id="{{arm.id}}" title="{{localize 'WOD5E_MAGE.Nemico.ArmaturaMeno'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.ArmaturaMeno'}}"><i class="fa-solid fa-caret-down" aria-hidden="true"></i></button>
+                    <button type="button" class="wod5e-mage-nemico-mini" data-action="armaturaPunto" data-item-id="{{arm.id}}" title="{{localize 'WOD5E_MAGE.Nemico.ArmaturaPiu'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.ArmaturaPiu'}}"><i class="fa-solid fa-caret-up" aria-hidden="true"></i></button>
+                </span>
+            {{/each}}
+
+            <span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Condizioni"}}</span>
+            <div class="wod5e-mage-nemico-conds">
+                {{#each condizioni as |cond|}}
+                    <span class="wod5e-mage-nemico-cond{{#if cond.suppressed}} spenta{{/if}}" title="{{cond.title}}">
+                        {{#if cond.img}}<img src="{{cond.img}}" alt="">{{/if}}
+                        <span>{{cond.nome}}</span>
+                        {{#if cond.malus}}<b class="wod5e-mage-nemico-meno">{{cond.malus}}</b>{{/if}}
+                        <button type="button" class="wod5e-mage-nemico-togli" data-action="condizioneToggle" data-condizione="{{cond.condizione}}" data-item-id="{{cond.id}}" title="{{localize 'WOD5E_MAGE.Nemico.CondizioneTogli'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.CondizioneTogli'}}: {{cond.nome}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                    </span>
+                {{else}}
+                    <em class="wod5e-mage-nemico-nessuna">{{localize "WOD5E_MAGE.Nemico.Nessuna"}}</em>
+                {{/each}}
+            </div>
+            <span></span>
+            {{!-- Il + apre la scelta delle Condizioni come sulla scheda del mago: le venticinque per gruppo, un clic accende. --}}
+            <details class="wod5e-mage-nemico-condizioni-tendina">
+                <summary class="wod5e-mage-nemico-mini" title="{{localize 'WOD5E_MAGE.Nemico.CondizioneAggiungi'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.CondizioneAggiungi'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></summary>
+                <div class="wod5e-mage-nemico-condizioni-scelta">
+                    {{#each condizioniScelta as |group|}}
+                        <div class="wod5e-mage-nemico-condizioni-gruppo">
+                            <span class="wod5e-mage-nemico-k">{{group.group}}</span>
+                            <div class="wod5e-mage-nemico-condizioni-fila">
+                                {{#each group.entries as |entry|}}
+                                    <button type="button" class="wod5e-mage-nemico-condizione{{#if entry.active}} lit{{/if}}" data-action="condizioneToggle" data-condizione="{{entry.id}}" title="{{entry.title}}" aria-label="{{entry.name}}"><img src="{{entry.icon}}" alt=""><span>{{entry.name}}</span>{{#if entry.dice}}<small>{{entry.dice}}</small>{{/if}}</button>
+                                {{/each}}
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </details>
+        </div>
+    </div>
+    <nav class="wod5e-mage-nemico-pagine tabs" data-group="primary">
+        {{#each pagine as |pagina|}}
+            <button type="button" class="wod5e-mage-nemico-pagina{{#if (eq pagina.id @root.tabAttiva)}} active{{/if}}" data-action="tab" data-group="primary" data-tab="{{pagina.id}}">{{pagina.label}}{{#if pagina.conto}}<span class="wod5e-mage-nemico-conto">{{pagina.conto}}</span>{{/if}}</button>
+        {{/each}}
+        {{#unless magick.on}}
+            <button type="button" class="wod5e-mage-nemico-pagina wod5e-mage-nemico-aggiungi" data-action="magickAccendi" title="{{localize 'WOD5E_MAGE.Nemico.MagickAggiungiHint'}}" {{#if locked}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.MagickAggiungi"}}</button>
+        {{/unless}}
+    </nav>
+</header>

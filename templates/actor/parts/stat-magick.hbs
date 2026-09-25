@@ -92,7 +92,7 @@
                         {{/if}}
                         <span class="wod5e-mage-ambito-pallini" role="group" aria-label="{{scope.label}}">
                             {{!-- Lo 0 (Blue, 26/9): l'effetto di base, acceso sempre, non si clicca; il sorvolo lo legge. --}}
-                            <span class="wod5e-mage-pallino-ambito zero lit" data-tooltip="{{scope.zero.tip}}&#10;{{localize 'WOD5E_MAGE.Scopes.Zero'}}" data-tooltip-class="wod5e-mage-tooltip-righe" role="img" aria-label="{{scope.label}} {{scope.zero.tip}}"></span>
+                            <span class="wod5e-mage-pallino-ambito zero lit" data-tooltip="{{scope.zero.tip}}" title="{{localize 'WOD5E_MAGE.Scopes.Zero'}}" role="img" aria-label="{{scope.label}} {{scope.zero.tip}}"></span>
                             {{#each scope.steps as |step|}}
                                 <button type="button" class="wod5e-mage-pallino-ambito{{#if step.lit}} lit{{/if}}" data-action="tiroScope" data-scope="{{scope.id}}" data-level="{{step.value}}" data-tooltip="{{step.tip}}" data-tooltip-class="wod5e-mage-tooltip-righe" aria-pressed="{{step.active}}" aria-label="{{scope.label}} {{step.tip}}"></button>
                             {{/each}}

@@ -197,6 +197,47 @@ Board (dragged there from the Actors sidebar): the dialog lists them and asks
 only for the first scene and the place; with an empty Board it warns instead
 of opening. The old dialog that ticked characters is gone.
 
+## Enemy sheet (M6)
+
+The module registers a second sheet for the system's `spc` actors, "Scheda
+del nemico (M6)": pick it from the actor's sheet configuration (the cog on
+the window), or make it the default for the type from there. It is not the
+default on its own. The header stays on every page: portrait (the + changes
+it, and the same file goes on the map), name, concept, Nature and Faction;
+on the right the Health track of the mage sheet with its wheel (damage, rest,
+reset), the armour points of the protection worn, and the Conditions with
+their malus (the × removes one, the drawer adds any of the list). A coloured
+line on top follows the disposition of the prototype token: hostile, neutral,
+friendly, secret. Below, four pages. "In gioco" has three cards, Physical,
+Social and Mental: on the left the threshold, the dice the enemy takes from a
+character acting against them; on the right the pool the enemy rolls, taken
+from the system's standard pools and already scaled by the active Conditions;
+under them the cases (a threshold or a pool for one specific thing, the
+system's exceptional pools included). Then the Actions, one row each: name,
+what it does, the pool it starts from and the die that rolls it, with the
+inline editor opened by the name; a weapon in the inventory brings its own
+action (damage, range, aggravated), and an action without a roll has "Usa".
+Then the Effects, what the enemy has without rolling, written by hand or
+taken from the mages' powers catalogue. "Magick" appears only when switched
+on: Areté, Domains and Type in the strip; every effect is a threshold the
+character resists or beats, with the trait pair it resists with; effects
+come from the Grimoire drawer (the Formulas the Domains open, with the base
+threshold of each) or from the hand drawer (name, what it does, resistance,
+Domain and type, the eight dots of every Scope with their lens, the threshold
+summed as on the mage sheet, the damage of Potency). "Oggetti" lists weapons,
+protections and gear, with the compendium, the create button and "Give to a
+character", which moves the item to a character's sheet. "Note" holds "what
+they want now", "when they give up" and the biography, for the Narrator
+only. Rolls go to chat as the mage's dice with the pool, the threshold and
+the outcome, and a button applies damage and Condition to the targeted
+character; a Magick cast puts its threshold in chat with "Resisti", which
+opens the target's sheet with the roll box loaded (attribute, skill and
+difficulty). Active actions with a limit switch off at the end of the
+enemy's combat turn. The pure logic is in `scripts/nemico.js`, with tests
+in `tests/nemico.test.js` and a fake-Foundry scenario in
+`tests/finta/nemico.mjs`; `NEMICO_PAGINA=<dir>` writes the pages as HTML for
+screenshots.
+
 ## Planned implementation layers
 
 1. Define the target Mage rules and actor data stored in module flags.

@@ -1,0 +1,16 @@
+{{!-- Un effetto dal catalogo dei poteri dei maghi: la cerca e la lista; il +
+     copia nome e testo nella scheda del nemico (la riga porta il segno del libro). --}}
+<div class="wod5e-mage-nemico-catalogo">
+    <label class="wod5e-mage-nemico-cerca"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input type="search" data-role="nemicoCatalogoCerca" placeholder="{{localize 'WOD5E_MAGE.Nemico.CatalogoCerca'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.CatalogoCerca'}}" autofocus></label>
+    <div class="wod5e-mage-nemico-catalogo-lista">
+        {{#each poteri as |p|}}
+            <div class="wod5e-mage-nemico-riga stretta" data-role="nemicoCatalogoVoce" data-search="{{p.search}}">
+                <span class="wod5e-mage-nemico-r-nome" title="{{p.testo}}">{{p.name}}</span>
+                <span class="wod5e-mage-nemico-r-eff">{{#each p.sfere as |s|}}<img class="wod5e-mage-sfera-inline" src="{{s.icon}}" alt="{{s.label}}" title="{{s.label}}">{{/each}} {{p.breve}}</span>
+                <span class="wod5e-mage-nemico-r-costo">{{p.tipoLabel}}</span>
+                <button type="button" class="wod5e-mage-nemico-bt" data-role="nemicoCatalogoAggiungi" data-potere="{{p.id}}" title="{{localize 'WOD5E_MAGE.Nemico.Aggiungi'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Aggiungi'}}: {{p.name}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+            </div>
+        {{/each}}
+        <p class="wod5e-mage-nemico-vuoto" data-role="nemicoCatalogoVuoto" hidden>{{localize "WOD5E_MAGE.Nemico.CatalogoVuoto"}}</p>
+    </div>
+</div>

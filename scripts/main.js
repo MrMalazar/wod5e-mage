@@ -17,6 +17,8 @@ import { registraSocketVerdetto } from "./verdetto-narratore.js";
 import { SCALA_PREDEFINITA, SCALA_SETTING, TEMA_CHIARO, TEMA_SCURO, TEMA_SETTING } from "./tema.js";
 import { registraCreazioneGuidata } from "./creazione-guidata-finestra.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
+import { NemicoSheet } from "./sheets/nemico-sheet.js";
+import { registraNemicoChat } from "./nemico-chat.js";
 import { registraHelperIcone } from "./icone-oggetti.js";
 
 /**
@@ -162,6 +164,21 @@ Hooks.once("init", () => {
       canConfigure: true
     }
   );
+
+  // La scheda del nemico (Blue, 25/9; 27/9): una scheda in più per gli attori spc, mai la predefinita.
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(
+    Actor,
+    MODULE_ID,
+    NemicoSheet,
+    {
+      types: ["spc"],
+      label: "WOD5E_MAGE.Nemico.Sheet",
+      makeDefault: false,
+      canBeDefault: true,
+      canConfigure: true
+    }
+  );
+  registraNemicoChat();
 
   registerActorCreationChoice();
   registerMageDiceRendering();

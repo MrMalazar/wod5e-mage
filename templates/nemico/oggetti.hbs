@@ -1,0 +1,31 @@
+{{!-- Oggetti (Blue, 25/9, dal mock): tre gruppi, Armi, Protezioni, Oggetti,
+     gli stessi tipi e lo stesso compendio della scheda del mago. Riga: nome,
+     cosa fa, una nota breve («crea Spara», «armatura»), la mano che lo dà a un
+     PG, la matita e il cestino. In fondo «dal compendio» e «crea»; il
+     trascinamento dal compendio funziona come sul mago. --}}
+<section class="tab {{tab.cssClass}} wod5e-mage-nemico-corpo" data-tab="{{tab.id}}" data-group="{{tab.group}}">
+    {{#each oggettiGruppi as |gruppo|}}
+        <div class="wod5e-mage-nemico-sez">
+            <span>{{gruppo.label}}</span>
+            {{#unless @root.locked}}<span class="wod5e-mage-nemico-agg"><button type="button" data-action="archivioOpen" data-kind="equip-{{gruppo.id}}" data-kinds="equip-weapon,equip-armor,equip-gear"><i class="fa-solid fa-book-open" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.DalCompendio"}}</button><button type="button" data-action="createItem" data-type="{{gruppo.id}}"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.Crea"}}</button></span>{{/unless}}
+        </div>
+        <div class="wod5e-mage-nemico-lista">
+            {{#each gruppo.righe as |o|}}
+                <div class="wod5e-mage-nemico-riga" data-item-id="{{o.id}}" data-drag="true" data-document-uuid="{{o.uuid}}" data-type="Item">
+                    <span class="wod5e-mage-nemico-r-nome">{{o.name}}</span>
+                    <span class="wod5e-mage-nemico-r-eff">{{o.testo}}</span>
+                    <span class="wod5e-mage-nemico-r-costo">{{o.nota}}</span>
+                    <span class="wod5e-mage-nemico-r-tasti">
+                        <button type="button" class="wod5e-mage-nemico-bt" data-action="nemicoDai" data-item-id="{{o.id}}" title="{{localize 'WOD5E_MAGE.Nemico.Dai'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Dai'}}: {{o.name}}"><i class="fa-solid fa-hand-holding" aria-hidden="true"></i></button>
+                        {{#unless @root.locked}}
+                            <button type="button" class="wod5e-mage-nemico-bt tenue" data-action="itemEdit" data-item-id="{{o.id}}" title="{{localize 'WOD5E.Edit'}}" aria-label="{{localize 'WOD5E.Edit'}}: {{o.name}}"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
+                            <button type="button" class="wod5e-mage-nemico-bt tenue" data-action="itemDelete" data-item-id="{{o.id}}" title="{{localize 'WOD5E_MAGE.Nemico.OggettoTogli'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.OggettoTogli'}}: {{o.name}}"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                        {{/unless}}
+                    </span>
+                </div>
+            {{else}}
+                <p class="wod5e-mage-nemico-vuoto">{{localize "WOD5E_MAGE.Nemico.OggettoVuoto"}}</p>
+            {{/each}}
+        </div>
+    {{/each}}
+</section>

@@ -120,6 +120,25 @@ export async function caricaNelTiro(sheet, id, spell) {
   await sheet.render({ parts: ["stats"] });
 }
 
+/**
+ * La resistenza a un effetto del nemico (27/9): il Tiro della prima pagina
+ * con la soglia già scritta e, se ci sono, l'Attributo e l'Abilità già messi.
+ * Non tocca il comportamento del Tiro di oggi: è solo un tiro preparato.
+ */
+export async function caricaResistenza(sheet, { soglia = 0, attribute = "", skill = "" } = {}) {
+  let tiro = emptyTiro();
+  const secondo = String(skill ?? "");
+  if (attribute) tiro = pickAttribute(tiro, String(attribute).replace(/^attribute:/, ""));
+  else if (secondo.startsWith("attribute:")) tiro = pickAttribute(tiro, secondo.slice("attribute:".length));
+  // Il Tiro tiene un Attributo e un'Abilità: un secondo Attributo (Fermezza + Autocontrollo) lo sceglie il giocatore.
+  if (secondo && !secondo.startsWith("attribute:")) tiro = pickSkill(tiro, secondo.includes(":") ? secondo : `skill:${secondo}`);
+  tiro = setDifficulty(tiro, Math.max(Math.trunc(Number(soglia) || 0), 0));
+  sheet._tiro = tiro;
+  sheet.changeTab?.("stats", "primary");
+  await sheet.render({ parts: ["stats"] });
+  return tiro;
+}
+
 /** I dadi dei Tratti scelti: la somma dei bonus scritti sugli oggetti. */
 export function traitDiceOf(actor, ids = []) {
   let total = 0;
@@ -315,12 +334,13 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
     const modeChosen = !multi || options.some((option) => option.id === modes?.[id]);
     const readingOf = (step) => (modeChosen ? mode?.readings?.[step] ?? "" : "");
     const hintOf = (step) => (modeChosen ? mode?.hints?.[step] ?? "" : "");
-    // Sul pallino: il livello e la lettura, e a capo la spiegazione della tavola.
-    const tipOf = (step) => [readingOf(step) ? `${step} · ${readingOf(step)}` : String(step), hintOf(step)].filter(Boolean).join("\n");
+    // Sul pallino solo la voce del livello (Blue, 27/9: «la scritta è eccessiva,
+    // massimo tre parole»): la lettura della lente scelta, o il numero.
+    const tipOf = (step) => readingOf(step) || String(step);
     // Lo 0 legge sempre (Blue, 26/9 sera: «Bersagli 0 dirà 1 Bersaglio»): con
-    // la lente scelta la sua base, senza, la base di ogni lente col suo nome.
-    const zeroReadingOf = () => (modeChosen ? readingOf(0) : zeroReading(id, localize, { arete }));
-    const zeroTip = () => [zeroReadingOf() ? `0 · ${zeroReadingOf()}` : "0", hintOf(0)].filter(Boolean).join("\n");
+    // la lente scelta la sua base, senza, la base della prima lente.
+    const zeroReadingOf = () => (modeChosen ? readingOf(0) : String(options[0]?.readings?.[0] ?? zeroReading(id, localize, { arete })));
+    const zeroTip = () => zeroReadingOf() || "0";
     return {
       id,
       label: localize(`WOD5E_MAGE.Scopes.${id}`),

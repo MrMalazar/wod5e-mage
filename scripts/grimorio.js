@@ -255,6 +255,29 @@ export function formulaPick(formula, { access, amalgams = [], threshold = 0, sph
   return { formula, access, amalgams: chosen, spheres, scopes: { ...soglia.scopes }, threshold: soglia.base };
 }
 
+/**
+ * Il testo della Formula per le Sfere scelte (Blue, 27/9: «deve indicare
+ * l'effetto della Sfera di Apri con ed eventuale effetto dovuto all'Amalgama»):
+ * la riga della Sfera d'Accesso, poi le righe delle coppie Accesso + Amalgama
+ * che la matrice scrive (bySphere «mind+life»), e se una coppia non c'è la
+ * riga dell'Amalgama da sola. Senza righe torna «In genere».
+ */
+export function testoDellaFormula(formula, { access = "", amalgams = [] } = {}) {
+  const righe = formula?.bySphere ?? {};
+  const testi = [];
+  const chiavi = Object.keys(righe);
+  const chiaveCoppia = (a, b) => chiavi.find((key) => key.includes("+") && key.split("+").includes(a) && key.split("+").includes(b));
+  // La riga di una Sfera: la sua, o la prima riga a più Sfere che la comprende (Aprire e Bloccare scrive «mind+life»).
+  const rigaDi = (sfera) => righe[sfera] ?? righe[chiavi.find((key) => key.includes("+") && key.split("+").includes(sfera)) ?? ""];
+  const metti = (testo) => { const pulito = String(testo ?? "").trim(); if (pulito && !testi.includes(pulito)) testi.push(pulito); };
+  if (access) metti(rigaDi(access));
+  for (const amalgam of amalgams ?? []) {
+    const coppia = chiaveCoppia(access, amalgam);
+    metti(coppia ? righe[coppia] : rigaDi(amalgam));
+  }
+  return testi.length ? testi.join(" ") : String(formula?.use ?? "");
+}
+
 export function findEffetto(id) {
   return EFFETTI.find((entry) => entry.id === id) ?? null;
 }
