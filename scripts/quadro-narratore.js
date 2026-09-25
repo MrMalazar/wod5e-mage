@@ -439,7 +439,9 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   #ancoreDi(actorId) {
     const actor = game.actors?.get(actorId);
     if (!actor) return [];
-    return prepareAnchors(actor).filter((row) => row.name).map((row) => ({ id: row.id, name: row.name }));
+    return prepareAnchors(actor)
+      .map((row) => ({ id: row.id, name: [row.name, row.role].map((v) => String(v ?? "").trim()).find(Boolean) ?? "" }))
+      .filter((row) => row.name);
   }
 
   #rimbalziPossibili(soglia) {

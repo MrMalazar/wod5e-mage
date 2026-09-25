@@ -32,7 +32,12 @@ assert.equal(appendText("Vendicarmi. · Trovare mia sorella.", "Trovare mia sore
 assert.equal(appendText("Vendicarmi.", ""), "Vendicarmi.");
 
 // Le righe di Ancore e Convinzioni.
-assert.deepEqual(rowFromEntry("ancora", { text: "Il partner", description: "La normalità." }), { name: "Il partner", description: "La normalità." });
+// Una voce vecchia (nome più glossa) resta com'era; una montata (25/9) porta ruolo, cosa ti dà, cosa non sa e dove morde, e il nome lo tira il dado.
+assert.deepEqual(rowFromEntry("ancora", { text: "Il partner", description: "La normalità." }), { name: "Il partner", role: "", job: "", age: "", gives: "", conviction: "", unknown: "", bites: "", description: "La normalità." });
+assert.deepEqual(
+  rowFromEntry("ancora", { text: "Il partner", role: "partner", gives: "la normalità", unknown: "cosa sei", bites: "può scoprire che menti", description: "…" }),
+  { name: "", role: "partner", job: "", age: "", gives: "la normalità", conviction: "", unknown: "cosa sei", bites: "può scoprire che menti", description: "" }
+);
 // La Convinzione porta i due momenti; il gruppo dell'archivio diventa la chiave della tendina (o il Credo).
 assert.deepEqual(rowFromEntry("convinzione", { group: "Morte", text: "Nessuno decide.", gloss: "lasci andare" }), { group: "morte", text: "Nessuno decide.", serve: "lasci andare", cross: "" });
 assert.deepEqual(rowFromEntry("convinzione", { group: "Tutto è Arte", credo: "arte", text: "Il bello non si spiega.", gloss: "taci", cross: "spieghi" }), { group: "arte", text: "Il bello non si spiega.", serve: "taci", cross: "spieghi" });

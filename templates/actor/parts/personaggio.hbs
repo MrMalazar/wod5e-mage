@@ -48,23 +48,51 @@
 
                     <div class="wod5e-mage-row-head">
                         <button type="button" class="wod5e-mage-archivio-open" data-action="archivioOpen" data-kind="ancora" title="{{localize 'WOD5E_MAGE.Archivi.Open'}}" aria-label="{{localize 'WOD5E_MAGE.Archivi.Open'}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i></button>
+                        {{!-- Genera (25/9): un'Ancora nuova con tutte e sette le righe tirate; la Convinzione resta al giocatore. --}}
+                        <button type="button" class="wod5e-mage-row-add wod5e-mage-ancora-genera" data-action="ancoraGenera" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerateNew'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerateNew'}}" {{#if locked}}disabled{{/if}}>
+                            <i class="fa-solid fa-dice"></i>
+                        </button>
                         <button type="button" class="wod5e-mage-row-add" data-action="personaggioRowAdd" data-table="ancore" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorAdd'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorAdd'}}" {{#if locked}}disabled{{/if}}>
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
 
                     {{#if anchors.length}}
-                    <div class="wod5e-mage-anchor-grid">
-                        <span>{{localize "WOD5E_MAGE.Personaggio.AnchorName"}}</span>
-                        <span>{{localize "WOD5E_MAGE.Personaggio.AnchorDescription"}}</span>
-                        <span aria-hidden="true"></span>
-
+                    <div class="wod5e-mage-ancore">
                         {{#each anchors as |row|}}
-                            <textarea rows="2" class="wod5e-mage-mini-textarea" name="flags.wod5e-mage.ancore.{{row.id}}.name" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorName'}}" {{#if ../locked}}disabled{{/if}}>{{row.name}}</textarea>
-                            <textarea rows="2" class="wod5e-mage-mini-textarea" name="flags.wod5e-mage.ancore.{{row.id}}.description" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorDescription'}}" {{#if ../locked}}disabled{{/if}}>{{row.description}}</textarea>
-                            <button type="button" data-action="personaggioRowDelete" data-table="ancore" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorRemove'}}" {{#if ../locked}}disabled{{/if}}>
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
+                            {{!-- Le sette righe della Bussola rifatta (25/9): nome, ruolo, mestiere, età, cosa ti dà, la Convinzione legata, cosa non sa, dove morde. --}}
+                            <div class="wod5e-mage-ancora" data-row="{{row.id}}">
+                                <div class="wod5e-mage-ancora-riga wod5e-mage-ancora-testa">
+                                    <input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.name" value="{{row.name}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorName'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorName'}}" {{#if ../locked}}disabled{{/if}}>
+                                    <select name="flags.wod5e-mage.ancore.{{row.id}}.role" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorRole'}}" {{#if ../locked}}disabled{{/if}}>
+                                        <option value="">{{localize "WOD5E_MAGE.Personaggio.AnchorRole"}}</option>
+                                        {{#each row.roles as |ruolo|}}
+                                            <option value="{{ruolo.id}}" title="{{ruolo.definizione}}" {{#if ruolo.selected}}selected{{/if}}>{{ruolo.id}}</option>
+                                        {{/each}}
+                                    </select>
+                                    <input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.job" value="{{row.job}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorJob'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorJob'}}" {{#if ../locked}}disabled{{/if}}>
+                                    <input type="text" class="wod5e-mage-ancora-eta" name="flags.wod5e-mage.ancore.{{row.id}}.age" value="{{row.age}}" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorAge'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorAge'}}" inputmode="numeric" {{#if ../locked}}disabled{{/if}}>
+                                    <button type="button" class="wod5e-mage-ancora-tasto" data-action="ancoraGenera" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerateHint'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorGenerate'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-dice" aria-hidden="true"></i></button>
+                                    <button type="button" class="wod5e-mage-ancora-tasto" data-action="personaggioRowDelete" data-table="ancore" data-row="{{row.id}}" title="{{localize 'WOD5E_MAGE.Personaggio.AnchorRemove'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorRemove'}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                                </div>
+                                <div class="wod5e-mage-ancora-riga">
+                                    <label><span>{{localize "WOD5E_MAGE.Personaggio.AnchorGives"}}</span><input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.gives" value="{{row.gives}}" {{#if ../locked}}disabled{{/if}}></label>
+                                    <label><span>{{localize "WOD5E_MAGE.Personaggio.AnchorConviction"}}</span>
+                                        <select name="flags.wod5e-mage.ancore.{{row.id}}.conviction" {{#if ../locked}}disabled{{/if}}>
+                                            <option value="">{{localize "WOD5E_MAGE.Personaggio.AnchorConvictionNone"}}</option>
+                                            {{#each row.convictions as |conv|}}
+                                                <option value="{{conv.id}}" {{#if conv.selected}}selected{{/if}}>{{conv.text}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="wod5e-mage-ancora-riga">
+                                    <label><span>{{localize "WOD5E_MAGE.Personaggio.AnchorUnknown"}}</span><input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.unknown" value="{{row.unknown}}" {{#if ../locked}}disabled{{/if}}></label>
+                                    <label><span>{{localize "WOD5E_MAGE.Personaggio.AnchorBites"}}</span><input type="text" name="flags.wod5e-mage.ancore.{{row.id}}.bites" value="{{row.bites}}" {{#if ../locked}}disabled{{/if}}></label>
+                                </div>
+                                {{!-- Le note: il vecchio campo «perché conta, e cosa non sa» resta leggibile qui. --}}
+                                <textarea rows="1" class="wod5e-mage-mini-textarea wod5e-mage-ancora-note" name="flags.wod5e-mage.ancore.{{row.id}}.description" placeholder="{{localize 'WOD5E_MAGE.Personaggio.AnchorNotes'}}" aria-label="{{localize 'WOD5E_MAGE.Personaggio.AnchorNotes'}}" {{#if ../locked}}disabled{{/if}}>{{row.description}}</textarea>
+                            </div>
                         {{/each}}
                     </div>
                     {{else}}

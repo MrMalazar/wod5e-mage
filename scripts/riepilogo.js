@@ -249,7 +249,7 @@ export function prepareCreationSummary(actor, areteValue = null) {
     {
       id: "anchors",
       label: "WOD5E_MAGE.Riepilogo.Anchors",
-      ok: hasRow(actor.getFlag(MODULE_ID, PERSONAGGIO_TABLES.anchors), ["name", "description"])
+      ok: hasRow(actor.getFlag(MODULE_ID, PERSONAGGIO_TABLES.anchors), ["name", "role", "gives", "description"])
     },
     {
       id: "convictions",

@@ -1079,12 +1079,12 @@
       "IdentityLabel": "Concetto e Cronaca",
       "TriggerHint": "Quando si attiva",
       "AnchorsLabel": "Ancore",
-      "AnchorsHint": "Di norma tre: le persone che ti tengono agganciato al mondo.",
+      "AnchorsHint": "Da una a tre persone. Sette righe l'una: nome, ruolo, mestiere, età, cosa ti dà, la Convinzione che ti fa tenere, cosa non sa, dove morde. Il dado tira tutto tranne la Convinzione.",
       "AnchorName": "Nome",
-      "AnchorDescription": "Descrizione",
+      "AnchorDescription": "Note",
       "AnchorAdd": "Aggiungi un'Ancora",
       "AnchorRemove": "Togli l'Ancora",
-      "AnchorsEmpty": "Nessuna Ancora segnata: il + ne aggiunge una.",
+      "AnchorsEmpty": "Nessuna Ancora segnata: il dado ne tira una, il + ne aggiunge una vuota.",
       "ConvictionsLabel": "Convinzioni",
       "ConvictionsHint": "Di norma tre, ognuna legata a un gruppo del catalogo.",
       "ConvictionGroup": "Gruppo",
@@ -1107,7 +1107,19 @@
       "ConvictionServe": "La servi quando",
       "ConvictionServeHint": "L'atto entra nella parata delle Macchie",
       "ConvictionCross": "La attraversi quando",
-      "ConvictionCrossHint": "Costa un Aggravato"
+      "ConvictionCrossHint": "Costa un Aggravato",
+      "AnchorNotes": "Note",
+      "AnchorRole": "Ruolo",
+      "AnchorJob": "Mestiere",
+      "AnchorAge": "Età",
+      "AnchorGives": "Cosa ti dà",
+      "AnchorConviction": "Convinzione",
+      "AnchorConvictionNone": "nessuna Convinzione legata",
+      "AnchorUnknown": "Cosa non sa",
+      "AnchorBites": "Dove morde",
+      "AnchorGenerate": "Genera",
+      "AnchorGenerateHint": "Tira i campi vuoti di questa Ancora: nome, ruolo, mestiere, età, cosa ti dà, cosa non sa, dove morde. Per ritirarne uno, svuotalo e premi di nuovo.",
+      "AnchorGenerateNew": "Genera un'Ancora nuova, tutta tirata"
     },
     "Riepilogo": {
       "Label": "Memo creazione",
@@ -2039,9 +2051,9 @@
         "ancore": {
           "Label": "Ancore",
           "Domanda": "Chi ti tiene umano?",
-          "Sotto": "da una a tre persone comuni",
-          "Perche": "Da una a tre persone comuni, quasi sempre Dormienti ignari, che tengono il personaggio agganciato al mondo di prima. Ti restituiscono Volontà, e sono il punto da cui verranno a prenderti.",
-          "PercheDue": "Una sola fa una cronaca stretta e feroce, tre fanno più ossigeno e tre volte più ricatti. Scegli persone che il tuo mago vede ancora, non che ricorda. Per ognuna scrivi chi è, perché conta e cosa non sa: la terza è quella da cui nascono tutte le scene."
+          "Sotto": "da una a tre persone, sette righe l'una",
+          "Perche": "Da una a tre persone, quasi sempre Dormienti ignari, che tengono il personaggio agganciato al mondo di prima. Ti restituiscono Volontà, e sono il punto da cui verranno a prenderti.",
+          "PercheDue": "Ogni Ancora si monta in sette righe: nome, ruolo, mestiere, età, cosa ti dà, la Convinzione che ti fa tenere, cosa non sa, dove morde. Il dado tira tutto tranne la Convinzione, e ogni riga si può riscrivere. Una sola fa una cronaca stretta e feroce, tre fanno più ossigeno e tre volte più ricatti."
         },
         "controllo": {
           "Label": "Controllo",
@@ -2200,10 +2212,24 @@
       "Ancore": {
         "Scritte": "Ancore scritte",
         "Volonta": "Ti restituiscono Volontà",
-        "Nome": "chi è",
-        "Descrizione": "perché conta, e cosa non sa",
-        "Vuota": "Nessuna Ancora ancora: prendine una dal catalogo, o dalle proposte.",
-        "Nuova": "Un'Ancora nuova"
+        "Nome": "nome",
+        "Descrizione": "note",
+        "Vuota": "Nessuna Ancora ancora: il dado ne tira una, il catalogo ne propone dodici, il + ne aggiunge una vuota.",
+        "Nuova": "Un'Ancora nuova",
+        "Note": "note",
+        "Ruolo": "ruolo",
+        "Mestiere": "mestiere",
+        "Eta": "età",
+        "CosaTiDa": "Cosa ti dà",
+        "Convinzione": "Convinzione",
+        "ConvinzioneNessuna": "nessuna Convinzione legata",
+        "CosaNonSa": "Cosa non sa",
+        "DoveMorde": "Dove morde",
+        "Genera": "Genera un'Ancora nuova: nome, ruolo, mestiere, età, cosa ti dà, cosa non sa, dove morde; la Convinzione la scegli tu",
+        "GeneraBreve": "Genera",
+        "GeneraRiga": "Tira i campi vuoti di questa Ancora; per ritirarne uno, svuotalo e premi di nuovo",
+        "Montate": "Dodici Ancore già montate: ruolo, cosa ti dà, cosa non sa, dove morde. Il dado aggiunge nome, mestiere ed età.",
+        "Legame": "Ogni Ancora si lega a una tua Convinzione, anche la stessa per tutte"
       },
       "Controllo": {
         "Passi": "I passi",

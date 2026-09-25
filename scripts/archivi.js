@@ -44,7 +44,22 @@ export function appendText(existing, text) {
 /** La riga della scheda che nasce da una voce d'archivio. */
 export function rowFromEntry(kind, entry) {
   if (kind === "ancora") {
-    return { name: String(entry.text ?? entry.name ?? ""), description: String(entry.description ?? "") };
+    // Le dodici montate (25/9): ruolo, cosa ti dà, cosa non sa, dove morde; il nome,
+    // il mestiere e l'età li tira il generatore. Una voce vecchia (nome più glossa) resta com'era.
+    if (entry.role || entry.gives || entry.unknown || entry.bites) {
+      return {
+        name: "",
+        role: String(entry.role ?? ""),
+        job: "",
+        age: "",
+        gives: String(entry.gives ?? ""),
+        conviction: "",
+        unknown: String(entry.unknown ?? ""),
+        bites: String(entry.bites ?? ""),
+        description: ""
+      };
+    }
+    return { name: String(entry.text ?? entry.name ?? ""), role: "", job: "", age: "", gives: "", conviction: "", unknown: "", bites: "", description: String(entry.description ?? "") };
   }
   if (kind === "convinzione") {
     return {
@@ -185,6 +200,10 @@ export function entryFromDocument(doc) {
     description: flag.description,
     gloss: flag.gloss,
     cross: flag.cross,
+    role: flag.role,
+    gives: flag.gives,
+    unknown: flag.unknown,
+    bites: flag.bites,
     cost: flag.cost,
     points: flag.points,
     credo: flag.credo,

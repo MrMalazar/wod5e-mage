@@ -41,6 +41,7 @@ import {
 import { FOCUS_CREDOS } from "../focus.js";
 import { getLineage } from "../lineage.js";
 import {
+  onAncoraGenera,
   onPersonaggioRowAdd,
   onPersonaggioRowDelete,
   prepareAnchors,
@@ -490,6 +491,7 @@ export class MageActorSheet extends MortalActorSheet {
       rigaApri: onPotereApri,
       personaggioRowAdd: onPersonaggioRowAdd,
       personaggioRowDelete: onPersonaggioRowDelete,
+      ancoraGenera: onAncoraGenera,
       specialtyAdd: onSpecialtyAdd,
       specialtyRoll: onSpecialtyRoll,
       specialtyDelete: onSpecialtyDelete,

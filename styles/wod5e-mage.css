@@ -2593,6 +2593,103 @@
   grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr) 26px;
 }
 
+/* Le Ancore a sette righe (25/9): una carta per Ancora, il nome in testa con
+   ruolo, mestiere ed età, sotto cosa ti dà e la Convinzione legata, poi cosa
+   non sa e dove morde, in coda le note. Il dado tira i campi vuoti. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-row-head > .wod5e-mage-ancora-genera {
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancore {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora {
+  background: rgb(152 119 43 / 8%);
+  border: 1px solid rgb(152 119 43 / 45%);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.4rem 0.5rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga {
+  align-items: center;
+  display: flex;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga > label {
+  align-items: center;
+  display: flex;
+  flex: 1 1 0;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga > label > span {
+  color: var(--mage-oro);
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga input,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga select,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga > label > input,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-riga > label > select {
+  --input-text-color: var(--mage-inchiostro);
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 3px;
+  color: var(--mage-inchiostro);
+  flex: 1 1 0;
+  font-size: 0.85rem;
+  height: 26px;
+  margin: 0;
+  min-width: 0;
+  padding: 0 0.35rem;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-testa > input:first-child {
+  flex: 1.4 1 0;
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-testa > select {
+  flex: 1 1 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-eta {
+  flex: 0 0 3.2rem !important;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-tasto {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 26px;
+  height: 26px;
+  justify-content: center;
+  margin: 0;
+  min-height: 26px;
+  padding: 0;
+  width: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ancora-note {
+  font-size: 0.8rem;
+  min-height: 1.8rem;
+}
+
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-grid {
   grid-template-columns: minmax(110px, 0.4fr) minmax(0, 1.6fr) 26px;
   margin-bottom: 0.3rem;
@@ -13097,6 +13194,78 @@
 
 .wod5e-mage-guidata-riga-lista.ancora .wod5e-mage-guidata-riga-testo {
   flex-direction: row;
+}
+
+/* Le Ancore del passo 12 (25/9): una carta per Ancora con le sette righe, il
+   dado accanto al nome tira i campi vuoti, la tendina lega la Convinzione. */
+.wod5e-mage-guidata-tastino.wod5e-mage-guidata-tastino-testo {
+  gap: 6px;
+  padding: 0 10px;
+  width: auto;
+}
+
+.wod5e-mage-guidata-ancora {
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+}
+
+.wod5e-mage-guidata-ancora-riga {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+}
+
+.wod5e-mage-guidata-ancora-riga > label {
+  align-items: center;
+  display: flex;
+  flex: 1 1 0;
+  gap: 6px;
+  min-width: 0;
+}
+
+.wod5e-mage-guidata-ancora-riga > label > span {
+  color: var(--mage-oro);
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-ancora-riga input[type="text"],
+.application.wod5e-mage-guidata .wod5e-mage-guidata-ancora-riga select,
+.application.wod5e-mage-guidata .wod5e-mage-guidata-ancora-note {
+  flex: 1 1 0;
+  height: 30px;
+  width: auto;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-ancora-testa > input[type="text"]:first-child {
+  flex: 1.4 1 0;
+  font-weight: 700;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-ancora-eta {
+  flex: 0 0 4rem !important;
+  text-align: center;
+}
+
+.application.wod5e-mage-guidata .wod5e-mage-guidata-ancora-note {
+  background: var(--mage-carta);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 4px;
+  color: var(--mage-inchiostro);
+  font-family: inherit;
+  font-size: 0.9rem;
+  min-width: 0;
+  padding: 0 8px;
 }
 
 /* I tasti: Avanti pieno di viola, Indietro fantasma. */

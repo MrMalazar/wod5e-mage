@@ -254,11 +254,16 @@ assert.deepEqual([g11b.corpo.conto.vantaggi.text, g11b.corpo.conto.vantaggi.stat
 assert.deepEqual(g11.corpo.pregi[0].steps.map((s) => s.lit), [true, true, true, true, false]);
 assert.equal(g11.passi[10].fatto, true);
 
-// Il passo 12: le Ancore, con le proposte del catalogo.
-const g12 = prepareGuidata(attore({ flags: { ancore: { x1: { name: "Il partner", description: "non sa niente" } } } }), { passo: 12, localize, cataloghi: { ancora: [{ uuid: "n1", name: "La madre che dimentica", text: "La madre che dimentica", description: "…", group: "Ancore" }] } });
-assert.equal(g12.corpo.ancore.length, 1);
-assert.equal(g12.corpo.fatte, 1);
+// Il passo 12: le Ancore a sette righe (25/9), con le dodici montate del catalogo come proposte.
+const g12 = prepareGuidata(attore({ flags: { convinzioni: { c1: { text: "Nessuno decide chi vive e chi muore.", group: "morte" } }, ancore: { x1: { name: "Giacomo", role: "chi ti serve ogni giorno", job: "barista", age: "27", gives: "nessuna domanda", conviction: "c1", unknown: "cosa sei", bites: "può vederti" }, x2: { role: "partner" } } } }), { passo: 12, localize, cataloghi: { ancora: [{ uuid: "n1", name: "La madre che dimentica", text: "La madre che dimentica", role: "genitore", gives: "il prima: chi eri", unknown: "chi sei diventato", bites: "può non riconoscerti più", group: "Ancore" }] } });
+assert.equal(g12.corpo.ancore.length, 2);
+assert.equal(g12.corpo.fatte, 2, "conta anche la riga col solo ruolo");
+assert.equal(g12.corpo.ancore[0].convictionText, "Nessuno decide chi vive e chi muore.");
+assert.equal(g12.corpo.ancore[0].roles.find((r) => r.selected)?.id, "chi ti serve ogni giorno");
+assert.equal(g12.corpo.ancore[0].convictions[0].selected, true);
 assert.equal(g12.corpo.proposte[0].name, "La madre che dimentica");
+assert.equal(g12.corpo.proposte[0].role, "genitore");
+assert.equal(g12.corpo.proposte[0].bites, "può non riconoscerti più");
 assert.equal(g12.passi[11].fatto, true);
 assert.deepEqual(g12.avanti, { n: 13, label: "Controllo" });
 

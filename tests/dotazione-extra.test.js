@@ -150,14 +150,22 @@ assert.doesNotMatch(readFileSync(new URL("../templates/actor/parts/focus.hbs", i
 function personaggioSource() {
   return readFileSync(new URL("../templates/actor/parts/personaggio.hbs", import.meta.url), "utf8");
 }
+// Le Ancore a sette righe (25/9): una riga vecchia (nome e glossa) si legge coi campi nuovi vuoti,
+// le tendine del ruolo e delle Convinzioni pronte.
 const anchors = prepareAnchors(mageActor({
   [PERSONAGGIO_TABLES.anchors]: { a: { name: "Nonna Lucia", description: null } }
 }));
-assert.deepEqual(anchors, [{ id: "a", name: "Nonna Lucia", description: "" }]);
+assert.equal(anchors.length, 1);
+assert.equal(anchors[0].id, "a");
+assert.equal(anchors[0].name, "Nonna Lucia");
+assert.equal(anchors[0].description, "");
+for (const campo of ["role", "job", "age", "gives", "conviction", "unknown", "bites", "convictionText"]) assert.equal(anchors[0][campo], "", campo);
+assert.equal(anchors[0].roles.length, 20);
+assert.deepEqual(anchors[0].convictions, []);
 
 actor = mageActor();
 await onPersonaggioRowAdd.call({ actor }, { preventDefault() {} }, { dataset: { table: PERSONAGGIO_TABLES.anchors } });
-assert.deepEqual(actor.lastFlag, { key: "ancore", value: { row1: { name: "", description: "" } } });
+assert.deepEqual(actor.lastFlag, { key: "ancore", value: { row1: { name: "", role: "", job: "", age: "", gives: "", conviction: "", unknown: "", bites: "", description: "" } } });
 actor = mageActor();
 await onPersonaggioRowAdd.call({ actor }, { preventDefault() {} }, { dataset: { table: PERSONAGGIO_TABLES.convictions } });
 assert.deepEqual(actor.lastFlag, { key: "convinzioni", value: { row1: { group: "", text: "", serve: "", cross: "" } } });

@@ -13,6 +13,10 @@ Dal 24/9 i Pregi, i Difetti e i Background NON vengono più da qui: li scrive
 tools/build-vantaggi.py dal catalogo aggiornato tools/dati/vantaggi.md (i
 verdetti di Blue sui Vantaggi). Le funzioni restano per il confronto col
 LIBRO: si lanciano solo con `--vecchi-vantaggi`.
+
+Dal 25/9 nemmeno le Ambizioni, i Desideri e le Ancore: li scrive
+tools/build-bussola.py dalla Bussola rifatta tools/dati/bussola.md. Le
+funzioni restano per il confronto: si lanciano solo con `--vecchia-bussola`.
 """
 import hashlib
 import html
@@ -599,9 +603,10 @@ if __name__ == "__main__":
         build_backgrounds()
     build_credi()
     build_concetti()
-    spunti("ambizione", "08_095_*.md", "Ambizioni", "ambizioni")
-    spunti("desiderio", "08_096_*.md", "Desideri", "desideri")
+    if "--vecchia-bussola" in sys.argv:
+        spunti("ambizione", "08_095_*.md", "Ambizioni", "ambizioni")
+        spunti("desiderio", "08_096_*.md", "Desideri", "desideri")
+        build_ancore()
     build_convinzioni()
-    build_ancore()
     build_condizioni()
     build_strumenti()

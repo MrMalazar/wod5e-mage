@@ -316,6 +316,11 @@ function proposte(entries, credo, limit = 8) {
     group: String(entry.group ?? ""),
     gloss: String(entry.gloss ?? ""),
     cross: String(entry.cross ?? ""),
+    // Le Ancore montate (25/9): ruolo, cosa ti dà, cosa non sa, dove morde.
+    role: String(entry.role ?? ""),
+    gives: String(entry.gives ?? ""),
+    unknown: String(entry.unknown ?? ""),
+    bites: String(entry.bites ?? ""),
     delCredo: Boolean(credo) && String(entry.credo ?? "") === credo
   }));
 }
@@ -596,13 +601,13 @@ export function passoVantaggi(actor, summary) {
   };
 }
 
-/** Passo 12: le Ancore, da una a tre persone. */
+/** Passo 12: le Ancore, da una a tre persone, sette righe l'una e il tasto Genera (25/9). */
 export function passoAncore(actor, { cataloghi = {} } = {}) {
   const ancore = prepareAnchors(actor);
   return {
     ancore,
-    proposte: proposte(cataloghi.ancora, "", 9),
-    fatte: ancore.filter((row) => hasText(row.name) || hasText(row.description)).length
+    proposte: proposte(cataloghi.ancora, "", 12),
+    fatte: ancore.filter((row) => hasText(row.name) || hasText(row.role) || hasText(row.gives) || hasText(row.description)).length
   };
 }
 

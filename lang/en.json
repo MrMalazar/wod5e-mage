@@ -1079,12 +1079,12 @@
       "IdentityLabel": "Concept and Chronicle",
       "TriggerHint": "When it triggers",
       "AnchorsLabel": "Anchors",
-      "AnchorsHint": "Usually three: the people keeping you tied to the world.",
+      "AnchorsHint": "One to three people. Seven lines each: name, role, job, age, what they give you, the Conviction they make you keep, what they don't know, where it bites. The die rolls everything but the Conviction.",
       "AnchorName": "Name",
-      "AnchorDescription": "Description",
+      "AnchorDescription": "Notes",
       "AnchorAdd": "Add an Anchor",
       "AnchorRemove": "Remove the Anchor",
-      "AnchorsEmpty": "No Anchor noted: + adds one.",
+      "AnchorsEmpty": "No Touchstone yet: the die rolls one, the + adds an empty one.",
       "ConvictionsLabel": "Convictions",
       "ConvictionsHint": "Usually three, each tied to a catalogue group.",
       "ConvictionGroup": "Group",
@@ -1107,7 +1107,19 @@
       "ConvictionServe": "You serve it when",
       "ConvictionServeHint": "The act joins the Stains parade",
       "ConvictionCross": "You cross it when",
-      "ConvictionCrossHint": "It costs an Aggravated"
+      "ConvictionCrossHint": "It costs an Aggravated",
+      "AnchorNotes": "Notes",
+      "AnchorRole": "Role",
+      "AnchorJob": "Job",
+      "AnchorAge": "Age",
+      "AnchorGives": "What they give you",
+      "AnchorConviction": "Conviction",
+      "AnchorConvictionNone": "no linked Conviction",
+      "AnchorUnknown": "What they don't know",
+      "AnchorBites": "Where it bites",
+      "AnchorGenerate": "Roll",
+      "AnchorGenerateHint": "Rolls the empty fields of this Touchstone: name, role, job, age, what they give you, what they don't know, where it bites. To reroll one, clear it and press again.",
+      "AnchorGenerateNew": "Roll a new Touchstone, every field"
     },
     "Riepilogo": {
       "Label": "Creation memo",
@@ -2039,9 +2051,9 @@
         "ancore": {
           "Label": "Touchstones",
           "Domanda": "Who keeps you human?",
-          "Sotto": "one to three ordinary people",
-          "Perche": "One to three ordinary people, almost always unaware Sleepers, who keep the character hooked to the world before. They give you Willpower back, and they are where they will come to get you.",
-          "PercheDue": "One alone makes a tight, fierce chronicle, three make more oxygen and three times the blackmail. Choose people your mage still sees, not remembers. For each write who they are, why they matter and what they do not know: the third is where every scene comes from."
+          "Sotto": "one to three people, seven lines each",
+          "Perche": "One to three people, almost always unaware Sleepers, who keep the character hooked to the world before. They give you Willpower back, and they are where they will come to get you.",
+          "PercheDue": "Every Touchstone is built in seven lines: name, role, job, age, what they give you, the Conviction they make you keep, what they don't know, where it bites. The die rolls everything but the Conviction, and every line can be rewritten. One alone makes a tight, fierce chronicle, three make more oxygen and three times the blackmail."
         },
         "controllo": {
           "Label": "Check",
@@ -2200,10 +2212,24 @@
       "Ancore": {
         "Scritte": "Touchstones written",
         "Volonta": "They give you Willpower back",
-        "Nome": "who they are",
-        "Descrizione": "why they matter, and what they do not know",
-        "Vuota": "No Touchstone yet: take one from the catalogue, or from the proposals.",
-        "Nuova": "A new Touchstone"
+        "Nome": "name",
+        "Descrizione": "notes",
+        "Vuota": "No Touchstone yet: the die rolls one, the catalogue offers twelve, the + adds an empty one.",
+        "Nuova": "A new Touchstone",
+        "Note": "notes",
+        "Ruolo": "role",
+        "Mestiere": "job",
+        "Eta": "age",
+        "CosaTiDa": "What they give you",
+        "Convinzione": "Conviction",
+        "ConvinzioneNessuna": "no linked Conviction",
+        "CosaNonSa": "What they don't know",
+        "DoveMorde": "Where it bites",
+        "Genera": "Roll a new Touchstone: name, role, job, age, what they give you, what they don't know, where it bites; you pick the Conviction",
+        "GeneraBreve": "Roll",
+        "GeneraRiga": "Rolls the empty fields of this Touchstone; to reroll one, clear it and press again",
+        "Montate": "Twelve ready-made Touchstones: role, what they give you, what they don't know, where it bites. The die adds name, job and age.",
+        "Legame": "Every Touchstone is tied to one of your Convictions, even the same one for all"
       },
       "Controllo": {
         "Passi": "The steps",

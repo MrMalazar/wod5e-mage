@@ -21,7 +21,7 @@ import {
 import { findFamiglia, findSottofamiglia } from "./famiglie.js";
 import { FOCUS_CREDOS, FOCUS_FORMS, FOCUS_TOOL_IDS } from "./focus.js";
 import { applyMagickBalanceDelta, getMagickBalance } from "./magick-balance.js";
-import { PERSONAGGIO_TABLES } from "./personaggio-extra.js";
+import { ancoraVuota, onAncoraGenera, PERSONAGGIO_TABLES } from "./personaggio-extra.js";
 import { POTERI_FLAG } from "./poteri.js";
 import { aggiungiDalCatalogo, sferePerCatalogo } from "./poteri-scheda.js";
 import { openCatalogoPoteri } from "./catalogo-poteri.js";
@@ -83,6 +83,7 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
       propostaMetti: CreazioneGuidata.#onPropostaMetti,
       rigaTogli: CreazioneGuidata.#onRigaTogli,
       rigaNuova: CreazioneGuidata.#onRigaNuova,
+      ancoraGenera: CreazioneGuidata.#onAncoraGenera,
       sfidaApri: CreazioneGuidata.#onSfidaApri,
       dominioAccesso: CreazioneGuidata.#onDominioAccesso,
       dominioPotere: CreazioneGuidata.#onDominioPotere,
@@ -297,8 +298,14 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
     const rows = { ...(this.actor.getFlag(MODULE_ID, table) ?? {}) };
     let rowId = foundry.utils.randomID();
     while (rows[rowId]) rowId = foundry.utils.randomID();
-    rows[rowId] = table === PERSONAGGIO_TABLES.anchors ? { name: "", description: "" } : { group: "", text: "", serve: "", cross: "" };
+    rows[rowId] = table === PERSONAGGIO_TABLES.anchors ? ancoraVuota() : { group: "", text: "", serve: "", cross: "" };
     await this.actor.setFlag(MODULE_ID, table, rows);
+  }
+
+  /** Il tasto Genera delle Ancore (25/9): la stessa mossa della scheda. */
+  static async #onAncoraGenera(event, target) {
+    if (this.#avvisaNonPuoi()) return;
+    await onAncoraGenera.call(this, event, target);
   }
 
   /** La Sfida sta sulla scheda: la finestra apre la scheda alla pagina giusta. */
