@@ -38,6 +38,7 @@ import {
   SCENE_PARADOSSO,
   scattaPredefinito,
   scenaById,
+  svgOrologio,
   voceById,
   volgariRecenti
 } from "./menu-paradosso.js";
@@ -77,16 +78,8 @@ const ICONE_SCENE = {
   santuario: "fa-solid fa-house",
   citta: "fa-solid fa-city"
 };
-/** Le forme degli orologi, disegnate a tracciati (viewBox 0 0 24 24). */
-const FORME = {
-  cerchio: "M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z",
-  quadrato: "M4 4h16v16H4z",
-  esagono: "M12 2.5 20.2 7.25v9.5L12 21.5 3.8 16.75v-9.5z",
-  triangolo: "M12 3 21.5 20h-19z",
-  rombo: "M12 2 22 12 12 22 2 12z",
-  ottagono: "M8.2 2.5h7.6l5.7 5.7v7.6l-5.7 5.7H8.2l-5.7-5.7V8.2z"
-};
-const COLORI = { rosso: "#c0392b", ambra: "#d68910", verde: "#27ae60", azzurro: "#2e86c1", viola: "#8e44ad", avorio: "#e8e2d0" };
+/** Il fondo e il vuoto degli orologi disegnati, nel tema scuro e in quello chiaro. */
+const FONDO_OROLOGI = { scuro: { sfondo: "#1b160f", vuoto: "#3a3328" }, chiaro: { sfondo: "#FBF8F0", vuoto: "#DCD6EC" } };
 
 function count(value) {
   return Math.max(Math.trunc(Number(value) || 0), 0);
@@ -222,8 +215,8 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   /** La finestra aperta, una sola. */
   static aperto = null;
 
-  #cassetti = new Set();
   #voceAperta = "";
+  #testiAperti = new Set();
   #maghiAperti = new Set();
   #cerca = "";
   #registro = false;
@@ -253,8 +246,8 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       cambioScena: QuadroNarratore.#onCambioScena,
       orologioAvanti: QuadroNarratore.#onOrologioAvanti,
       orologioChiudi: QuadroNarratore.#onOrologioChiudi,
-      cassetto: QuadroNarratore.#onCassetto,
       voce: QuadroNarratore.#onVoce,
+      testo: QuadroNarratore.#onTesto,
       spendi: QuadroNarratore.#onSpendi,
       mago: QuadroNarratore.#onMago,
       magoAggiungi: QuadroNarratore.#onMagoAggiungi,
@@ -322,7 +315,9 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       modi: MODI_QUADRO.map((id) => ({ id, label: localize(`WOD5E_MAGE.Menu.Modi.${id}`), icona: ICONE_MODI[id], attivo: id === modo })),
       scena: { ...scena, nome: scenaDati ? scenaDati.nome : localize("WOD5E_MAGE.Menu.NessunaScena"), icona: ICONE_SCENE[scena.tipo] ?? "fa-solid fa-clapperboard" },
       posto: scena.posto === "normale" ? "" : localize(`WOD5E_MAGE.Menu.Posti.${scena.posto}`),
-      round: count(game.combat?.round)
+      round: count(game.combat?.round),
+      // Gli orologi aperti, in miniatura, in ogni modo: così si trovano sempre (Blue, 25/9).
+      orologiMini: getOrologi().map((c) => ({ id: c.id, titolo: c.titolo, pieni: count(c.pieni), segmenti: count(c.segmenti), svg: svgOrologio(c, { size: 26, ...this.#fondoOrologi() }) }))
     };
     if (modo === "contatore") Object.assign(base, this.#contestoContatore(pool, scena, localize));
     if (modo === "menu") Object.assign(base, this.#contestoMenu(pool, scena, localize));
@@ -330,13 +325,17 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     return Object.assign(context, base);
   }
 
+  #fondoOrologi() {
+    return isChiaro(game.settings.get(MODULE_ID, TEMA_SETTING)) ? FONDO_OROLOGI.chiaro : FONDO_OROLOGI.scuro;
+  }
+
   #contestoContatore(pool, scena, localize) {
     const ritmo = contoRitmo(pool.log, { scena: scena.numero, round: count(game.combat?.round) });
     const maghi = attoriDelQuadro();
     const orologi = getOrologi().map((c) => ({
       ...c,
-      colore: COLORI[c.colore] ?? COLORI.viola,
-      tracciato: FORME[c.forma] ?? FORME.cerchio,
+      svg: svgOrologio(c, { size: 48, ...this.#fondoOrologi() }),
+      formaLabel: `${localize(`WOD5E_MAGE.Menu.Forme.${c.forma}`)} ${localize(`WOD5E_MAGE.Menu.Colori.${c.colore}`)}`,
       pieno: count(c.pieni) >= count(c.segmenti),
       scattaLabel: c.paradosso?.scatta ?? ""
     }));
@@ -371,13 +370,22 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   #contestoMenu(pool, scena, localize) {
     const volgari = volgariRecenti(game.messages?.contents ?? [], { dal: scena.inizio || inizioSessione(pool.log) });
     const maghi = attoriDelQuadro().map((actor) => ({ id: actor.id, name: actor.name }));
-    const cassetti = cassettiPerScena(scena.tipo, { cerca: this.#cerca }).map((cassetto) => ({
-      ...cassetto,
-      label: localize(`WOD5E_MAGE.Menu.Famiglie.${cassetto.famiglia}`),
-      icona: ICONE_FAMIGLIE[cassetto.famiglia],
-      aperto: this.#cassetti.has(cassetto.famiglia) || Boolean(this.#cerca),
-      voci: cassetto.voci.map((voce) => this.#rigaVoce(voce, { volgari, maghi, pool, localize }))
-    }));
+    const cassetti = cassettiPerScena(scena.tipo, { cerca: this.#cerca }).map((cassetto) => {
+      const voci = cassetto.voci.map((voce) => this.#rigaVoce(voce, { volgari, maghi, pool, localize }));
+      const perId = new Map(voci.map((voce) => [voce.id, voce]));
+      const riga = (voce) => ({ voce: perId.get(voce.id) });
+      // Le righe della famiglia: le voci in ordine alfabetico; per le voci di scena e lo scettro, a gruppi per scena (la scena in corso per prima).
+      const righe = cassetto.gruppi
+        ? cassetto.gruppi.flatMap((gruppo) => [{ gruppo: { ...gruppo, icona: ICONE_SCENE[gruppo.scena] ?? "fa-solid fa-clapperboard" } }, ...gruppo.voci.map(riga)])
+        : voci.map((voce) => ({ voce }));
+      return {
+        ...cassetto,
+        label: localize(`WOD5E_MAGE.Menu.Famiglie.${cassetto.famiglia}`),
+        icona: ICONE_FAMIGLIE[cassetto.famiglia],
+        voci,
+        righe
+      };
+    });
     return {
       scene: SCENE_PARADOSSO.map((s) => ({ id: s.id, nome: s.nome, selected: s.id === scena.tipo })),
       cerca: this.#cerca,
@@ -405,7 +413,8 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     return {
       ...voce,
       aperta,
-      testoCerca: `${voce.nome} ${voce.breve} ${voce.effetto} ${voce.quando}`.toLowerCase(),
+      testoAperto: this.#testiAperti.has(voce.id),
+      testoCerca: `${voce.nome} ${voce.breve} ${voce.effetto} ${voce.quando} ${voce.scenaNome ?? ""}`.toLowerCase(),
       iconaModo: ICONE_MODO_VOCE[voce.modo] ?? "fa-solid fa-bolt",
       modoLabel: localize(`WOD5E_MAGE.Menu.Modo.${voce.modo}`),
       prezzoLabel: voce.prezzo.breve || voce.prezzo.testo,
@@ -493,6 +502,14 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
         for (const tasto of numero.closest(".wod5e-mage-menu-spesa")?.querySelectorAll(".wod5e-mage-menu-segmenti button") ?? []) tasto.classList.toggle("attivo", tasto.dataset.n === String(numero.value));
       });
     }
+    for (const tasto of this.element.querySelectorAll(".wod5e-mage-menu-vede button")) {
+      tasto.addEventListener("click", (event) => {
+        event.preventDefault();
+        const campo = tasto.parentElement.querySelector("[data-role=vede]");
+        if (campo) campo.value = tasto.dataset.vede;
+        for (const altro of tasto.parentElement.querySelectorAll("button")) altro.classList.toggle("attivo", altro === tasto);
+      });
+    }
     for (const select of this.element.querySelectorAll(".wod5e-mage-menu-spesa [data-role=rimbalzo]")) {
       select.addEventListener("change", () => {
         const scatta = select.closest(".wod5e-mage-menu-spesa")?.querySelector("[data-role=scatta]");
@@ -510,15 +527,24 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   /** La cerca filtra le righe senza ridisegnare, così il campo tiene il fuoco. */
   #filtra() {
     const filtro = this.#cerca.trim().toLowerCase();
-    for (const cassetto of this.element.querySelectorAll("[data-famiglia]")) {
+    for (const famiglia of this.element.querySelectorAll("[data-famiglia]")) {
       let visibili = 0;
-      for (const riga of cassetto.querySelectorAll("[data-voce]")) {
+      for (const riga of famiglia.querySelectorAll("[data-voce]")) {
         const passa = !filtro || (riga.dataset.testo ?? "").includes(filtro);
         riga.classList.toggle("nascosta", !passa);
         if (passa) visibili += 1;
       }
-      cassetto.classList.toggle("aperto", Boolean(filtro) ? visibili > 0 : this.#cassetti.has(cassetto.dataset.famiglia));
-      cassetto.classList.toggle("nascosta", Boolean(filtro) && visibili === 0);
+      // Il titolo di un gruppo di scena resta solo se sotto gli è rimasta una riga.
+      for (const titolo of famiglia.querySelectorAll("[data-gruppo]")) {
+        let dopo = titolo.nextElementSibling;
+        let qualcosa = false;
+        while (dopo && !dopo.hasAttribute("data-gruppo")) {
+          if (dopo.hasAttribute("data-voce") && !dopo.classList.contains("nascosta")) { qualcosa = true; break; }
+          dopo = dopo.nextElementSibling;
+        }
+        titolo.classList.toggle("nascosta", Boolean(filtro) && !qualcosa);
+      }
+      famiglia.classList.toggle("nascosta", Boolean(filtro) && visibili === 0);
     }
   }
 
@@ -728,18 +754,19 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     await chiudiOrologioParadosso(target.dataset.id);
   }
 
-  static async #onCassetto(event, target) {
-    event.preventDefault();
-    const famiglia = target.dataset.famiglia;
-    if (this.#cassetti.has(famiglia)) this.#cassetti.delete(famiglia);
-    else this.#cassetti.add(famiglia);
-    await this.render();
-  }
-
   static async #onVoce(event, target) {
     event.preventDefault();
     const id = target.dataset.voce;
     this.#voceAperta = this.#voceAperta === id ? "" : id;
+    await this.render();
+  }
+
+  /** Il testo della voce (Quando, Effetto, Mosse, Poi, Esempio) si apre solo a richiesta: in sessione non c'è tempo di leggere (Blue, 25/9). */
+  static async #onTesto(event, target) {
+    event.preventDefault();
+    const id = target.dataset.voce;
+    if (this.#testiAperti.has(id)) this.#testiAperti.delete(id);
+    else this.#testiAperti.add(id);
     await this.render();
   }
 

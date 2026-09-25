@@ -1753,7 +1753,10 @@
       "Titolo": "Name",
       "TitoloHint": "as the table sees it",
       "ScattaHint": "what happens when it is full",
-      "OrologioAperto": "Clock \"{nome}\" opened ({forma} {colore}): see it in the Counter."
+      "OrologioAperto": "Clock \"{nome}\" opened ({forma} {colore}): see it in the Counter.",
+      "ScenaInCorso": "current scene",
+      "LeggiVoce": "Read the entry",
+      "InQuestaScena": "In this scene."
     },
     "Stat": {
       "Identita": "Identity",

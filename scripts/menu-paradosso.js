@@ -67,27 +67,41 @@ export function scenaById(id) {
   return SCENE_PARADOSSO.find((scena) => scena.id === id) ?? null;
 }
 
+const perNome = (a, b) => a.nome.localeCompare(b.nome, "it");
+
 /**
- * Le voci che il menù mostra in una scena, a cassetti per famiglia: i
- * Tocchi, le comuni (con la faccia di quella scena), le voci della scena,
- * lo scettro potenziato della scena, le Presenze, gli orologi, le Ancore,
- * i Grandi. Senza scena restano le famiglie comuni a tutte.
+ * Le voci del menù a famiglie, tutte in vista (Blue, 25/9: «voglio sempre
+ * vedere in tutte le categorie tutte le opzioni, devo essere io che vado a
+ * cercare»), in ordine alfabetico dentro ogni famiglia. Le voci di scena e
+ * lo scettro stanno a gruppi per scena, la scena in corso per prima; le
+ * comuni portano la faccia della scena in corso, se c'è. `tutte: false`
+ * tiene il comportamento di prima (solo la scena in corso).
  */
-export function cassettiPerScena(scenaId = "", { cerca = "" } = {}) {
+export function cassettiPerScena(scenaId = "", { cerca = "", tutte = true } = {}) {
   const scena = scenaById(scenaId);
   const filtro = testo(cerca).toLowerCase();
-  const passa = (voce) => !filtro || `${voce.nome} ${voce.effetto} ${voce.quando}`.toLowerCase().includes(filtro);
+  const passa = (voce) => !filtro || `${voce.nome} ${voce.breve ?? ""} ${voce.effetto} ${voce.quando}`.toLowerCase().includes(filtro);
   return ORDINE_FAMIGLIE.map((famiglia) => {
     const voci = MENU_PARADOSSO
-      .filter((voce) => voce.famiglia === famiglia && (!voce.scena || voce.scena === scenaId))
+      .filter((voce) => voce.famiglia === famiglia && (!voce.scena || voce.scena === scenaId || tutte))
       .filter(passa)
       .map((voce) => ({
         ...voce,
+        scenaNome: voce.scena ? (scenaById(voce.scena)?.nome ?? voce.scena) : "",
         faccia: scenaId && voce.facce?.[scenaId] ? voce.facce[scenaId] : null
-      }));
+      }))
+      .sort(perNome);
+    const perScena = famiglia === "scena" || famiglia === "scettro";
+    const gruppi = perScena
+      ? [...SCENE_PARADOSSO]
+        .sort((a, b) => Number(b.id === scenaId) - Number(a.id === scenaId))
+        .map((s) => ({ scena: s.id, nome: s.nome, attivo: s.id === scenaId, voci: voci.filter((voce) => voce.scena === s.id) }))
+        .filter((gruppo) => gruppo.voci.length > 0)
+      : null;
     return {
       famiglia,
       voci,
+      gruppi,
       conto: voci.length,
       faccia: scena?.facce?.[famiglia] ?? ""
     };
@@ -284,6 +298,57 @@ export function nuovoOrologioParadosso({ id, titolo = "", segmenti = 4, visibile
 
 export function isOrologioParadosso(orologio) {
   return Boolean(orologio?.paradosso);
+}
+
+/** I colori degli orologi (la tavolozza del modulo Orologio) e i vertici delle forme, in un quadrato 100×100. */
+export const COLORI_OROLOGIO = Object.freeze({ rosso: "#c0392b", ambra: "#d68910", verde: "#27ae60", azzurro: "#2e86c1", viola: "#8e44ad", avorio: "#e8e2d0" });
+
+function poligono(lati, raggio, rotazione) {
+  return Array.from({ length: lati }, (_, i) => {
+    const a = rotazione + (i * 2 * Math.PI) / lati;
+    return [50 + raggio * Math.cos(a), 50 + raggio * Math.sin(a)];
+  });
+}
+
+export const FORME_OROLOGIO = Object.freeze({
+  cerchio: null,
+  quadrato: [[8, 8], [92, 8], [92, 92], [8, 92]],
+  esagono: poligono(6, 46, -Math.PI / 2),
+  triangolo: [[50, 3], [96, 84], [4, 84]],
+  rombo: [[50, 3], [97, 50], [50, 97], [3, 50]],
+  ottagono: poligono(8, 47, -Math.PI / 2 + Math.PI / 8)
+});
+
+const arrotonda = (n) => Math.round(n * 10) / 10;
+
+/**
+ * L'orologio disegnato: la forma della coppia (cerchio, quadrato, esagono,
+ * triangolo, rombo, ottagono) tagliata in tanti spicchi quanti i segmenti,
+ * i pieni nel colore, i vuoti scuri, un filetto fra uno spicchio e l'altro.
+ * Torna il markup SVG, quadrato, della misura chiesta (Blue, 25/9: «gli
+ * orologi con i segmenti di forme e colori diversi, quelli non li trovo»).
+ */
+export function svgOrologio(orologio, { size = 44, sfondo = "#1b160f", vuoto = "#3a3328", classe = "" } = {}) {
+  const segmenti = Math.min(Math.max(count(orologio?.segmenti) || 4, 1), 24);
+  const pieni = Math.min(count(orologio?.pieni), segmenti);
+  const colore = COLORI_OROLOGIO[orologio?.colore] ?? COLORI_OROLOGIO.viola;
+  const forma = orologio?.forma in FORME_OROLOGIO ? orologio.forma : "cerchio";
+  const punti = FORME_OROLOGIO[forma];
+  const id = `oro-${String(orologio?.id ?? "x").replace(/[^a-z0-9_-]/gi, "")}-${size}`;
+  const contorno = punti
+    ? `<polygon points="${punti.map(([x, y]) => `${arrotonda(x)},${arrotonda(y)}`).join(" ")}"`
+    : `<circle cx="50" cy="50" r="46"`;
+  const spicchi = [];
+  for (let i = 0; i < segmenti; i += 1) {
+    const a1 = -Math.PI / 2 + (i * 2 * Math.PI) / segmenti;
+    const a2 = -Math.PI / 2 + ((i + 1) * 2 * Math.PI) / segmenti;
+    const R = 80;
+    const p1 = [50 + R * Math.cos(a1), 50 + R * Math.sin(a1)];
+    const p2 = [50 + R * Math.cos(a2), 50 + R * Math.sin(a2)];
+    const arco = segmenti === 1 ? `A ${R} ${R} 0 1 1 ${arrotonda(50 - R)} 50 A ${R} ${R} 0 1 1 ${arrotonda(p1[0])} ${arrotonda(p1[1])}` : `A ${R} ${R} 0 ${a2 - a1 > Math.PI ? 1 : 0} 1 ${arrotonda(p2[0])} ${arrotonda(p2[1])}`;
+    spicchi.push(`<path d="M50 50 L${arrotonda(p1[0])} ${arrotonda(p1[1])} ${arco} Z" fill="${i < pieni ? colore : vuoto}" stroke="${sfondo}" stroke-width="3" clip-path="url(#${id})"/>`);
+  }
+  return `<svg class="wod5e-mage-orologio${classe ? ` ${classe}` : ""}" viewBox="0 0 100 100" width="${size}" height="${size}" role="img" aria-label="${escapeHtml(orologio?.titolo ?? "")} ${pieni}/${segmenti}"><defs><clipPath id="${id}">${contorno}/></clipPath></defs>${spicchi.join("")}${contorno} fill="none" stroke="${colore}" stroke-width="4"/></svg>`;
 }
 
 /**

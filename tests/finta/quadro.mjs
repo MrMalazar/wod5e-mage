@@ -205,15 +205,23 @@ for (const fn of hooks.createChatMessage) await fn(cartaAbilita);
 assert.equal(getPool().points, 2, "un tiro di Abilità non porta punti");
 await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
 
-// 4. Il menù: le famiglie chiuse, il Volgare in tendina, la voce aperta con la spesa.
+// 4. Il menù (25/9): tutte le famiglie in vista, in ordine alfabetico, le voci di scena a gruppi con Combattimento per primo; il Volgare in tendina; la voce aperta coi comandi.
 {
   const { ctx, html } = await contesto("menu");
   assert.equal(ctx.cassetti.length, 8);
-  assert.ok(ctx.cassetti.every((c) => !c.aperto), "le famiglie partono chiuse");
-  assert.equal(ctx.cassetti.find((c) => c.famiglia === "scettro").conto, 5, "lo scettro di Combattimento");
+  assert.equal(ctx.cassetti.reduce((n, c) => n + c.conto, 0), 65, "tutte le 65 voci in vista");
+  const scettro = ctx.cassetti.find((c) => c.famiglia === "scettro");
+  assert.equal(scettro.conto, 21);
+  assert.equal(scettro.righe[0].gruppo.nome, "Combattimento", "la scena in corso per prima");
+  assert.ok(scettro.righe[0].gruppo.attivo);
+  assert.deepEqual(scettro.righe.slice(1, 6).map((r) => r.voce.nome), ["Anticipo", "Fuga", "Rinforzo", "Ritirata", "Stop"], "in ordine alfabetico");
+  assert.deepEqual(ctx.cassetti.find((c) => c.famiglia === "tocchi").righe.map((r) => r.voce.nome), ["Condizione", "Fiacco", "Fragile", "Rigidità", "Scottatura", "Tremore"]);
   assert.match(html, /<option value="combattimento" selected>/);
-  assert.ok(!html.includes("wod5e-mage-menu-scheda"), "nessuna voce aperta");
-  assert.match(html, /wod5e-mage-menu-cassetto" data-famiglia="tocchi"/);
+  assert.ok(!html.includes("wod5e-mage-menu-spesa") && !html.includes('class="wod5e-mage-menu-info"'), "nessuna voce aperta, nessun testo");
+  assert.match(html, /wod5e-mage-menu-famiglia" data-famiglia="tocchi"/);
+  assert.match(html, /wod5e-mage-menu-gruppo attivo" data-gruppo>/);
+  assert.match(html, /data-action="testo" data-voce="tremore"/);
+  assert.equal((html.match(/data-action="voce"/g) ?? []).length, 65);
   // Il Narratore apre la voce Ritorno: la scheda e la spesa col Volgare di Guendalina.
   await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
   const aperto = await contesto("menu");
@@ -228,9 +236,17 @@ await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
   assert.match(aperto.html, /<span class="breve">al turno dopo l&#x27;effetto finisce e l&#x27;ostacolo torna<\/span>/);
   assert.match(aperto.html, /Conseguenze Magick/);
   assert.ok(!aperto.html.includes("I Tocchi"));
+  assert.ok(!aperto.html.includes('class="wod5e-mage-menu-info"'), "il testo resta chiuso finché non si chiede");
+  // La «i» apre il testo della voce, e resta aperto anche se la voce si chiude.
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
+  const conTesto = await contesto("menu");
+  assert.match(conTesto.html, /class="wod5e-mage-menu-info"/);
+  assert.match(conTesto.html, /In questa scena\./, "la faccia della scena sta nel testo");
+  assert.equal((conTesto.html.match(/wod5e-mage-menu-mossa/g) ?? []).length, 3);
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
   assert.equal(ritorno.stima, 5, "la soglia del Volgare");
-  assert.match(aperto.html, /wod5e-mage-menu-scheda/);
   assert.match(aperto.html, /wod5e-mage-menu-spesa" data-voce="ritorno"/);
+  assert.match(aperto.html, /data-role="vede" value="tutti"/);
   assert.match(aperto.html, /<option value="v1" data-actor="a1" data-soglia="5" selected>/);
   assert.match(aperto.html, /Il prezzo è la soglia del Volgare/);
   assert.match(aperto.html, /data-action="spendi" data-voce="ritorno"/);
@@ -333,13 +349,20 @@ assert.equal(getPool().points, 1, "4 − 3");
   const carta = sim.messages.at(-1);
   assert.deepEqual(carta.whisper, ["gm"], "solo ai Narratori");
   assert.match(carta.content, /3 segmenti · cerchio viola/);
-  // Il contatore lo mostra in scena, con la forma e il colore.
+  // Il contatore lo mostra in scena, disegnato a segmenti (un cerchio viola, tre spicchi); la testa lo porta in miniatura in ogni modo.
   const { ctx, html } = await contesto("contatore");
   assert.equal(ctx.inScena, 1);
-  assert.match(html, /<path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z"/);
-  assert.match(html, /0\/3/);
-  assert.match(html, /· Residuo/);
+  assert.match(html, /<svg class="wod5e-mage-orologio" viewBox="0 0 100 100" width="48" height="48"/);
+  assert.match(html, /<circle cx="50" cy="50" r="46"/);
+  assert.equal((html.match(/clip-path="url\(#oro-/g) ?? []).length, 3 + 3, "tre spicchi grandi nel contatore e tre in miniatura in testa");
+  assert.match(html, /aria-label="Carica · Guendalina 0\/3"/);
+  assert.match(html, /cerchio viola/);
+  assert.match(html, /Scatta: Residuo/);
   assert.match(html, /data-action="orologioAvanti" data-id="/);
+  assert.match(html, /wod5e-mage-quadro-orologi-mini/);
+  const menu = await contesto("menu");
+  assert.match(menu.html, /wod5e-mage-quadro-orologi-mini/, "anche nel menù");
+  assert.match(menu.html, /width="26" height="26"/);
 }
 // Non bastano i punti: la spesa si ferma con l'avviso.
 scatolaSpesa("residuo", { rispondeA: { value: "", soglia: "0" }, suChi: { value: "a2" }, vede: { value: "tutti" } });
@@ -422,9 +445,8 @@ if (process.env.QUADRO_PAGINA) {
   const dir = process.env.QUADRO_PAGINA;
   mkdirSync(dir, { recursive: true });
   await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 7 });
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.cassetto.call(app, { preventDefault() {} }, { dataset: { famiglia: "tocchi" } });
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.cassetto.call(app, { preventDefault() {} }, { dataset: { famiglia: "orologi" } });
   await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "carica" } });
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "tremore" } });
   for (const modo of ["contatore", "menu", "giocatori"]) {
     const { html } = await contesto(modo);
     writeFileSync(`${dir}/${modo}.html`, html);

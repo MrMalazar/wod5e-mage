@@ -1753,7 +1753,10 @@
       "Titolo": "Nome",
       "TitoloHint": "come lo vedono al tavolo",
       "ScattaHint": "cosa succede quando è pieno",
-      "OrologioAperto": "Orologio «{nome}» aperto ({forma} {colore}): lo vedi nel Contatore."
+      "OrologioAperto": "Orologio «{nome}» aperto ({forma} {colore}): lo vedi nel Contatore.",
+      "ScenaInCorso": "scena in corso",
+      "LeggiVoce": "Leggi la voce",
+      "InQuestaScena": "In questa scena."
     },
     "Stat": {
       "Identita": "Identità",

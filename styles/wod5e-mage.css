@@ -14235,6 +14235,35 @@
   font-size: 19px;
 }
 
+/* Gli orologi in miniatura in testa, in ogni modo: la forma coi segmenti, il nome, il conto. */
+.application.wod5e-mage-quadro .wod5e-mage-quadro-orologi-mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-orologi-mini .mini {
+  align-items: center;
+  display: inline-flex;
+  font-size: 13.5px;
+  gap: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-orologi-mini .mini .nome {
+  color: var(--mage-testo);
+  font-weight: 600;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-orologi-mini .mini b {
+  color: var(--mage-oro);
+}
+
+.application.wod5e-mage-quadro svg.wod5e-mage-orologio {
+  display: inline-block;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
 /* Il corpo: scorre da solo, la testa resta. I riquadri dentro non si schiacciano
    quando la finestra è bassa: scorrono (il collaudo di Blue del 24/9 notte). */
 .application.wod5e-mage-quadro .wod5e-mage-quadro-corpo {
@@ -14361,10 +14390,16 @@
   padding: 5px 9px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena svg {
-  flex: 0 0 24px;
-  height: 24px;
-  width: 24px;
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .testo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-inscena .testo .tenue {
+  font-size: 13px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-quadro-inscena li > i.fa-solid {
@@ -14448,7 +14483,9 @@
   color: var(--mage-rosso-chiaro);
 }
 
-/* 2 · Il menù: la scena in tendina, la cerca, le famiglie a cassetti chiusi. */
+/* 2 · Il menù (25/9): tutte le famiglie in vista, una riga per voce (nome, effetto in
+   breve, prezzo, in tre colonne), le voci di scena a gruppi per scena; i comandi
+   della spesa si aprono sotto la riga, il testo della voce solo dalla «i». */
 .application.wod5e-mage-quadro .wod5e-mage-menu-testa {
   display: flex;
   gap: 8px;
@@ -14484,163 +14521,175 @@
   opacity: 0.8;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto {
-  background: var(--mage-riga-fondo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 7px;
-  overflow: hidden;
+.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.nascosta,
-.application.wod5e-mage-quadro .wod5e-mage-menu-voce.nascosta {
+.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia.nascosta,
+.application.wod5e-mage-quadro .wod5e-mage-menu-voce.nascosta,
+.application.wod5e-mage-quadro .wod5e-mage-menu-gruppo.nascosta {
   display: none;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa {
+.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia-titolo {
   align-items: center;
-  background: transparent;
   border: 0;
-  border-radius: 0;
-  color: var(--mage-testo);
+  border-bottom: 1px solid var(--mage-oro-scuro);
+  color: var(--mage-oro);
   display: flex;
-  font-size: 15px;
-  font-weight: 600;
-  gap: 10px;
-  padding: 8px 12px;
-  text-align: left;
-  width: 100%;
+  font: 700 13px/1 sans-serif;
+  gap: 8px;
+  letter-spacing: 0.16em;
+  margin: 6px 0 2px;
+  padding: 4px 4px 7px;
+  text-shadow: none;
+  text-transform: uppercase;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa > i:first-child {
-  color: var(--mage-oro);
+.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia-titolo i {
   text-align: center;
   width: 18px;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa small {
+.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia-titolo small {
   color: var(--quadro-tenue);
-  flex: 1;
-  font-size: 13px;
-  font-weight: 400;
-  overflow: hidden;
-  text-align: right;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font: 600 13px "Signika", sans-serif;
+  letter-spacing: 0.02em;
+  margin-left: auto;
+  text-transform: none;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-cassetto-testa .freccia {
+.application.wod5e-mage-quadro .wod5e-mage-menu-gruppo {
+  align-items: center;
+  border: 0;
   color: var(--quadro-tenue);
-  font-size: 12px;
+  display: flex;
+  font: 600 13.5px "Signika", sans-serif;
+  gap: 7px;
+  margin: 8px 0 0;
+  padding: 2px 4px 3px 30px;
+  text-shadow: none;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.aperto > button.wod5e-mage-menu-cassetto-testa {
-  background: var(--mage-riga-sorvolo);
-  border-bottom: 1px solid var(--mage-oro-tenue);
+.application.wod5e-mage-quadro .wod5e-mage-menu-gruppo.attivo {
+  color: var(--quadro-titolo);
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-voci {
-  display: none;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.aperto > .wod5e-mage-menu-voci {
-  display: block;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-vuoto {
-  color: var(--quadro-tenue);
-  font-size: 13.5px;
-  margin: 0;
-  padding: 8px 12px;
+.application.wod5e-mage-quadro .wod5e-mage-menu-gruppo small {
+  background: var(--mage-viola);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 7px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-voce {
-  border-top: 1px solid rgb(107 79 18 / 45%);
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-voce:first-child {
-  border-top: 0;
+  border-bottom: 1px solid rgb(107 79 18 / 35%);
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-voce.aperta {
   background: var(--quadro-scelta);
+  border-bottom-color: var(--mage-viola-chiaro);
+  border-radius: 6px;
+  margin: 2px 0;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga {
+.application.wod5e-mage-quadro .wod5e-mage-menu-riga {
+  align-items: stretch;
+  display: flex;
+}
+
+/* La riga: icona del modo, nome, effetto in breve, prezzo; le tre colonne allineate in tutta la lista. */
+.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli {
   align-items: center;
   background: transparent;
   border: 0;
   border-radius: 0;
   color: var(--mage-testo);
   display: grid;
+  flex: 1;
   font-size: 15px;
-  gap: 10px;
-  grid-template-columns: 18px 1fr auto;
-  padding: 7px 12px;
+  gap: 14px;
+  grid-template-columns: 18px minmax(120px, 0.55fr) 1.6fr max-content;
+  min-width: 0;
+  padding: 8px 6px 8px 8px;
   text-align: left;
-  width: 100%;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga:hover {
+.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli:hover {
   background: var(--mage-riga-sorvolo);
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-voce.aperta button.wod5e-mage-menu-voce-riga:hover {
+.application.wod5e-mage-quadro .wod5e-mage-menu-voce.aperta button.wod5e-mage-menu-scegli:hover {
   background: transparent;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga > i {
+.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli > i {
   color: var(--mage-oro);
   font-size: 13px;
   text-align: center;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .nome {
-  font-weight: 600;
+.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli .nome {
+  font-weight: 700;
   min-width: 0;
 }
 
-/* La riga breve sotto il nome (Blue, 24/9 notte: «Tremore, −2 al prossimo lancio, 1 pt»), e la faccia della scena in corsivo. */
-.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .breve,
-.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .faccia {
+.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli .breve {
   color: var(--mage-testo);
-  display: block;
-  font-size: 13.5px;
-  font-weight: 400;
+  font-size: 14.5px;
   line-height: 1.3;
-  opacity: 0.88;
+  min-width: 0;
+  opacity: 0.85;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .faccia {
-  color: var(--quadro-tenue);
-  font-style: italic;
-  opacity: 1;
-}
-
-.application.wod5e-mage-quadro button.wod5e-mage-menu-voce-riga .prezzo {
+.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli .prezzo {
   color: var(--mage-oro);
   font-size: 15px;
   font-weight: 700;
+  min-width: 96px;
+  text-align: right;
   white-space: nowrap;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-scheda {
-  border-top: 1px solid rgb(181 138 222 / 35%);
-  display: flex;
-  flex-direction: column;
-  font-size: 14.5px;
-  gap: 5px;
-  padding: 8px 12px 6px;
+.application.wod5e-mage-quadro button.wod5e-mage-menu-info-tasto {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  color: var(--quadro-tenue);
+  flex: 0 0 38px;
+  font-size: 15px;
+  padding: 0;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-scheda p {
+.application.wod5e-mage-quadro button.wod5e-mage-menu-info-tasto:hover,
+.application.wod5e-mage-quadro button.wod5e-mage-menu-info-tasto.attivo {
+  color: var(--mage-viola-chiaro);
+}
+
+/* Il testo della voce, solo a richiesta. */
+.application.wod5e-mage-quadro .wod5e-mage-menu-info {
+  border-top: 1px dashed rgb(181 138 222 / 40%);
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  gap: 5px;
+  padding: 8px 12px 10px 40px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-info p {
   margin: 0;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-scheda p > b {
+.application.wod5e-mage-quadro .wod5e-mage-menu-info p > b {
   color: var(--mage-oro);
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-scheda .esempio {
+.application.wod5e-mage-quadro .wod5e-mage-menu-info .esempio,
+.application.wod5e-mage-quadro .wod5e-mage-menu-info .faccia {
   color: var(--quadro-tenue);
   font-style: italic;
 }
@@ -14662,55 +14711,62 @@
   color: var(--quadro-tenue);
   font-size: 14px;
   margin: 0;
-  padding: 6px 12px 10px;
+  padding: 6px 12px 10px 40px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-avviso i {
   color: var(--mage-rosso-chiaro);
 }
 
-/* La spesa in fondo alla voce aperta: i campi a due colonne, il prezzo vivo, il tasto viola. */
+/* I comandi della spesa sotto la riga: file di controlli, niente testo da leggere. */
 .application.wod5e-mage-quadro .wod5e-mage-menu-spesa {
   border-top: 1px solid rgb(181 138 222 / 35%);
-  display: grid;
-  gap: 8px 10px;
-  grid-template-columns: 1fr 1fr;
-  padding: 8px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 12px 10px 40px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .fila {
+  align-items: flex-end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo {
   color: var(--quadro-tenue);
   display: flex;
+  flex: 1 1 180px;
   flex-direction: column;
-  font-size: 13.5px;
-  gap: 4px;
+  font-size: 13px;
+  gap: 3px;
   min-width: 0;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo.corto {
-  max-width: 100%;
+  flex: 0 0 auto;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo.largo {
-  grid-column: 1 / -1;
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo.corto input[type="number"] {
+  width: 80px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo.cresce {
+  flex: 2 1 220px;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-spesa .nota {
   color: var(--quadro-tenue);
-  font-size: 13.5px;
-  grid-column: 1 / -1;
+  font-size: 13px;
   margin: 0;
 }
 
-/* L'orologio che si apre: un riquadro suo, precompilato (nome, segmenti a scelta rapida, cosa scatta). */
+/* L'orologio che si apre: la sua fila, precompilata (nome, segmenti a scelta rapida, cosa scatta). */
 .application.wod5e-mage-quadro .wod5e-mage-menu-orologio {
   background: rgb(0 0 0 / 18%);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 6px;
-  display: grid;
-  gap: 8px 10px;
-  grid-column: 1 / -1;
-  grid-template-columns: 1fr 1fr;
   padding: 8px 10px 10px;
 }
 
@@ -14720,8 +14776,8 @@
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-orologio .titolo {
   color: var(--mage-oro);
+  flex: 1 0 100%;
   font: 700 12px/1 sans-serif;
-  grid-column: 1 / -1;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -14736,7 +14792,8 @@
   gap: 4px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti button {
+.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti button,
+.application.wod5e-mage-quadro .wod5e-mage-menu-vede button {
   background: var(--mage-incavo);
   border: 1px solid var(--mage-oro-tenue);
   border-radius: 6px;
@@ -14744,10 +14801,11 @@
   font-size: 14px;
   font-weight: 600;
   min-width: 36px;
-  padding: 5px 8px;
+  padding: 6px 9px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti button.attivo {
+.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti button.attivo,
+.application.wod5e-mage-quadro .wod5e-mage-menu-vede button.attivo {
   background: var(--mage-viola);
   border-color: var(--mage-viola-chiaro);
   color: #fff;
@@ -14757,14 +14815,19 @@
   width: 64px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-conto {
+.application.wod5e-mage-quadro .wod5e-mage-menu-vede {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .piede {
   align-items: center;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-conto {
   color: var(--quadro-tenue);
-  display: flex;
   font-size: 14px;
-  gap: 10px;
-  grid-column: 1 / -1;
-  margin-top: 2px;
+  white-space: nowrap;
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-conto b {

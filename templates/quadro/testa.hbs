@@ -11,4 +11,9 @@
         {{#if round}}<span class="wod5e-mage-quadro-pill tenue">{{localize "WOD5E_MAGE.Menu.Giro"}} {{round}}</span>{{/if}}
         <span class="wod5e-mage-quadro-riserva">{{localize "WOD5E_MAGE.Menu.Riserva"}} <b>{{points}}</b></span>
     </div>
+    {{#if orologiMini.length}}
+        <div class="wod5e-mage-quadro-orologi-mini" aria-label="{{localize 'WOD5E_MAGE.Menu.InScena'}}">
+            {{#each orologiMini as |c|}}<span class="mini" title="{{c.titolo}} · {{c.pieni}}/{{c.segmenti}}">{{{c.svg}}}<span class="nome">{{c.titolo}}</span><b>{{c.pieni}}/{{c.segmenti}}</b></span>{{/each}}
+        </div>
+    {{/if}}
 </div>

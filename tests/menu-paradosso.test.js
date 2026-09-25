@@ -28,6 +28,7 @@ import {
   SCENE_PARADOSSO,
   scattaPredefinito,
   scenaById,
+  svgOrologio,
   voceById,
   volgariRecenti
 } from "../scripts/menu-paradosso.js";
@@ -78,28 +79,40 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   }
 }
 
-// La lista per scena: i cassetti nell'ordine delle famiglie, le voci della scena e le facce.
+// La lista (25/9): tutte le voci in vista, in ordine alfabetico; le voci di scena a gruppi per scena, la scena in corso per prima; le facce della scena in corso.
 {
   const cassetti = cassettiPerScena("combattimento");
   assert.deepEqual(cassetti.map((c) => c.famiglia), [...FAMIGLIE_PARADOSSO]);
+  assert.equal(cassetti.reduce((n, c) => n + c.conto, 0), 65, "tutte le voci, sempre");
   const scettro = cassetti.find((c) => c.famiglia === "scettro");
-  assert.ok(scettro.voci.some((v) => v.id === "combattimento-rinforzo"), "Rinforzo sta nello scettro di Combattimento");
-  assert.ok(scettro.voci.every((v) => v.scena === "combattimento"), "solo lo scettro di Combattimento");
-  assert.equal(cassetti.find((c) => c.famiglia === "scena").conto, 0, "in Combattimento le cinque voci sono tutte scettro");
-  const rituale = cassettiPerScena("rituale").find((c) => c.famiglia === "scena");
-  assert.ok(rituale.voci.some((v) => v.id === "rituale-ospite") && rituale.voci.every((v) => v.scena === "rituale"), "le voci di Rituale");
+  assert.equal(scettro.conto, 21);
+  assert.equal(scettro.gruppi[0].scena, "combattimento", "la scena in corso per prima");
+  assert.ok(scettro.gruppi[0].attivo && scettro.gruppi.slice(1).every((g) => !g.attivo));
+  assert.deepEqual(scettro.gruppi[0].voci.map((v) => v.nome), ["Anticipo", "Fuga", "Rinforzo", "Ritirata", "Stop"], "in ordine alfabetico dentro il gruppo");
+  assert.deepEqual(scettro.gruppi.slice(1).map((g) => g.scena), ["indagine", "trattativa", "infiltrazione", "inseguimento", "altrove", "santuario", "citta"], "poi le altre scene nell'ordine del PDF, solo quelle con voci");
+  assert.ok(scettro.voci.every((v) => v.scenaNome), "ogni voce di scena sa la sua scena");
+  const scena = cassetti.find((c) => c.famiglia === "scena");
+  assert.equal(scena.conto, 14);
+  assert.ok(!scena.gruppi.some((g) => g.scena === "combattimento"), "in Combattimento le cinque voci sono tutte scettro: nessun gruppo vuoto");
+  const tocchi = cassetti.find((c) => c.famiglia === "tocchi");
+  assert.equal(tocchi.gruppi, null, "le famiglie comuni non hanno gruppi");
+  assert.deepEqual(tocchi.voci.map((v) => v.nome), ["Condizione", "Fiacco", "Fragile", "Rigidità", "Scottatura", "Tremore"]);
   const comuni = cassetti.find((c) => c.famiglia === "comuni");
   assert.ok(comuni.voci.every((v) => v.faccia && v.faccia.testo), "le comuni portano la faccia della scena");
-  assert.ok(cassetti.find((c) => c.famiglia === "tocchi").faccia, "la faccia di famiglia dei Tocchi");
-  // Senza scena: niente voci di scena, nessuna faccia.
+  assert.ok(tocchi.faccia, "la faccia di famiglia delle Conseguenze");
+  // Senza scena: tutte le voci lo stesso, nessun gruppo in corso, nessuna faccia.
   const senza = cassettiPerScena("");
-  assert.equal(senza.find((c) => c.famiglia === "scena").conto, 0);
-  assert.equal(senza.find((c) => c.famiglia === "scettro").conto, 0);
+  assert.equal(senza.find((c) => c.famiglia === "scena").conto, 14);
+  assert.equal(senza.find((c) => c.famiglia === "scettro").conto, 21);
+  assert.ok(senza.find((c) => c.famiglia === "scettro").gruppi.every((g) => !g.attivo));
   assert.ok(senza.find((c) => c.famiglia === "comuni").voci.every((v) => v.faccia === null));
-  // La cerca tiene solo i cassetti con qualcosa dentro.
+  // Solo la scena in corso, come prima, a richiesta.
+  assert.equal(cassettiPerScena("rituale", { tutte: false }).find((c) => c.famiglia === "scena").conto, 4);
+  // La cerca tiene solo i cassetti con qualcosa dentro, e cerca anche nella riga breve.
   const cerca = cassettiPerScena("rituale", { cerca: "ospite" });
   assert.ok(cerca.length >= 1 && cerca.every((c) => c.conto > 0));
   assert.ok(cerca.some((c) => c.voci.some((v) => v.id === "rituale-ospite")));
+  assert.ok(cassettiPerScena("", { cerca: "−2 dadi" }).some((c) => c.voci.some((v) => v.id === "tremore")));
   assert.equal(scenaById("citta").nome, "Città");
   assert.equal(scenaById("nessuna"), null);
   assert.equal(voceById("niente"), null);
@@ -197,6 +210,25 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.deepEqual(coppiaLibera([{ colore: "viola", forma: "cerchio" }]), { colore: "ambra", forma: "quadrato" });
   assert.deepEqual(coppiaLibera([{ colore: "viola", forma: "quadrato" }]), { colore: "ambra", forma: "quadrato" }, "un colore già in uso si evita anche con un'altra forma");
   assert.deepEqual(coppiaLibera(COPPIE_OROLOGIO.map((c) => ({ ...c }))), { colore: "viola", forma: "cerchio" }, "sei orologi aperti: si ricomincia");
+  // L'orologio disegnato: la forma a spicchi, i pieni nel colore, i vuoti scuri, il contorno; un cerchio o un poligono.
+  const quadrato = svgOrologio({ id: "c 1", titolo: "Carica", segmenti: 4, pieni: 1, colore: "ambra", forma: "quadrato" }, { size: 44 });
+  assert.match(quadrato, /^<svg class="wod5e-mage-orologio" viewBox="0 0 100 100" width="44" height="44" role="img" aria-label="Carica 1\/4">/);
+  assert.match(quadrato, /<clipPath id="oro-c1-44"><polygon points="8,8 92,8 92,92 8,92"\/><\/clipPath>/);
+  assert.equal((quadrato.match(/<path /g) ?? []).length, 4, "quattro spicchi");
+  assert.equal((quadrato.match(/fill="#d68910"/g) ?? []).length, 1, "un pieno color ambra");
+  assert.equal((quadrato.match(/fill="#3a3328"/g) ?? []).length, 3, "tre vuoti");
+  assert.match(quadrato, /<polygon points="8,8 92,8 92,92 8,92" fill="none" stroke="#d68910" stroke-width="4"\/><\/svg>$/);
+  const cerchio = svgOrologio({ id: "x", segmenti: 6, pieni: 6, colore: "viola", forma: "cerchio" }, { size: 26, sfondo: "#FBF8F0", vuoto: "#DCD6EC" });
+  assert.match(cerchio, /<circle cx="50" cy="50" r="46"\/><\/clipPath>/);
+  assert.equal((cerchio.match(/fill="#8e44ad"/g) ?? []).length, 6, "pieno del tutto");
+  assert.match(cerchio, /stroke="#FBF8F0"/, "il filetto fra gli spicchi prende il fondo del tema");
+  const ignoto = svgOrologio({ id: "y", segmenti: 40, pieni: 99, colore: "boh", forma: "stella" });
+  assert.match(ignoto, /aria-label=" 24\/24"/, "al massimo ventiquattro spicchi, mai più pieni dei segmenti");
+  assert.match(ignoto, /<circle /, "una forma ignota è un cerchio");
+  assert.match(ignoto, /fill="#8e44ad"/, "un colore ignoto è viola");
+  for (const forma of ["cerchio", "quadrato", "esagono", "triangolo", "rombo", "ottagono"]) {
+    assert.ok(svgOrologio({ id: forma, segmenti: 3, pieni: 0, colore: "verde", forma }).includes(`oro-${forma}-44`), forma);
+  }
   const orologio = nuovoOrologioParadosso({ id: "o1", titolo: "Carica", segmenti: 4, visibile: false, colore: "ambra", forma: "quadrato", scatta: "il rimbalzo", voce: "carica", actorId: "a1", ordine: 7 });
   assert.equal(orologio.id, "o1");
   assert.equal(orologio.segmenti, 4);
@@ -282,21 +314,25 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.equal(inizioSessione([{ kind: "menu" }]), 0);
 }
 
-// La finestra (quadro-narratore.js): tre modi con un bottone, le famiglie chiuse, gli effetti attivi per mago (Blue, 24/9).
+// La finestra (quadro-narratore.js): tre modi con un bottone, gli effetti attivi per mago (Blue, 24/9); dal 25/9 tutte le voci in vista, il testo a richiesta.
 {
   const quadro = readFileSync(new URL("../scripts/quadro-narratore.js", import.meta.url), "utf8");
   assert.ok(quadro.includes('modo: QuadroNarratore.#modo') || quadro.includes("modo:"), "l'azione del modo");
   assert.ok(quadro.includes('options.parts = ["testa", this.modo]'), "una PART per modo, dietro la testa");
-  assert.ok(quadro.includes("#cassetti = new Set()"), "le famiglie partono chiuse");
   assert.ok(quadro.includes("setApriQuadro("), "la barra apre il Quadro senza importarlo");
   const testa = readFileSync(new URL("../templates/quadro/testa.hbs", import.meta.url), "utf8");
   assert.equal((testa.match(/data-action="modo"/g) ?? []).length, 1, "i modi in un {{#each}}");
   const menu = readFileSync(new URL("../templates/quadro/menu.hbs", import.meta.url), "utf8");
-  assert.ok(menu.includes('data-action="cassetto"') && menu.includes('data-action="spendi"') && menu.includes('data-testo="{{voce.testoCerca}}"'));
-  for (const marker of ['<span class="breve">{{voce.breve}}</span>', 'data-role="titolo"', 'wod5e-mage-menu-segmenti', 'data-role="scatta"', 'data-nome="{{r.nome}}"', "{{#each voce.bersagli as |m|}}", "WOD5E_MAGE.Menu.NessunaVoceQui"]) {
+  assert.ok(menu.includes('data-action="voce"') && menu.includes('data-action="spendi"') && menu.includes('data-testo="{{voce.testoCerca}}"'));
+  for (const marker of ['<span class="breve">{{voce.breve}}</span>', 'data-role="titolo"', 'wod5e-mage-menu-segmenti', 'data-role="scatta"', 'data-nome="{{r.nome}}"', "{{#each voce.bersagli as |m|}}", 'data-action="testo"', 'class="wod5e-mage-menu-info"', "wod5e-mage-menu-gruppo", 'data-role="vede" value="tutti"', "wod5e-mage-menu-famiglia-titolo"]) {
     assert.ok(menu.includes(marker), `menu.hbs: manca ${marker}`);
   }
+  assert.ok(!menu.includes('data-action="cassetto"'), "niente cassetti da aprire: le famiglie sono sempre in vista (25/9)");
+  assert.ok(testa.includes("wod5e-mage-quadro-orologi-mini") && testa.includes("{{{c.svg}}}"), "gli orologi in miniatura in testa");
+  const contatore = readFileSync(new URL("../templates/quadro/contatore.hbs", import.meta.url), "utf8");
+  assert.ok(contatore.includes("{{{c.svg}}}") && !contatore.includes("c.tracciato"), "il contatore disegna gli orologi a spicchi");
   assert.ok(!menu.includes("{{lowercase"), "niente helper che Foundry non ha");
+  assert.ok(quadro.includes("#testiAperti") && !quadro.includes("#cassetti"), "il testo si apre a richiesta, i cassetti non ci sono più");
   const giocatori = readFileSync(new URL("../templates/quadro/giocatori.hbs", import.meta.url), "utf8");
   for (const marker of ['data-action="magoAggiungi"', 'data-action="attivoTogli"', 'data-action="schedaApri"', "WOD5E_MAGE.Menu.Attivi", "WOD5E_MAGE.Menu.Passivi", "WOD5E_MAGE.Menu.MagickInAtto"]) {
     assert.ok(giocatori.includes(marker), `giocatori.hbs: manca ${marker}`);
