@@ -8145,7 +8145,7 @@
    "grimorioEffect": "",
    "note": "Ambito di Potenza: una leva già in scena",
    "flavor": "«Datemi una leva.»",
-   "level": 0,
+   "level": 2,
    "access": [
     "any"
    ],
@@ -8252,7 +8252,7 @@
    "grimorioEffect": "",
    "note": "Accidentale con un aggancio in scena",
    "flavor": "«Nessuno ha visto niente. Nemmeno tu, ufficialmente.»",
-   "level": 0,
+   "level": 1,
    "access": [
     "any"
    ],
@@ -8360,7 +8360,7 @@
    "grimorioEffect": "Contrastare Magick",
    "note": "in difesa",
    "flavor": "«Conosci la tua Sfera e non fai entrare gli estranei.»",
-   "level": 0,
+   "level": 1,
    "access": [
     "any"
    ],
@@ -8424,7 +8424,7 @@
    "grimorioEffect": "",
    "note": "Ambito di Durata: l'effetto regge su un appoggio",
    "flavor": "«Se lo appoggi a qualcosa di vero, resta.»",
-   "level": 0,
+   "level": 1,
    "access": [
     "any"
    ],
@@ -8533,7 +8533,7 @@
    "grimorioEffect": "",
    "note": "Ambito di Bersagli: un tratto comune",
    "flavor": "«Uno o cento, per te è lo stesso lavoro.»",
-   "level": 0,
+   "level": 1,
    "access": [
     "any"
    ],
@@ -8641,7 +8641,7 @@
    "grimorioEffect": "",
    "note": "il +5 statico",
    "flavor": "«Impossibile è una parola per chi non ha studiato abbastanza.»",
-   "level": 0,
+   "level": 5,
    "access": [
     "any"
    ],
@@ -8747,7 +8747,7 @@
    "grimorioEffect": "",
    "note": "un effetto del Grimorio a soglia -2, e senza tirare una volta a sessione",
    "flavor": "«Nel tuo campo non c'è gara.»",
-   "level": 0,
+   "level": 3,
    "access": [
     "any"
    ],
@@ -8803,7 +8803,7 @@
    "grimorioEffect": "Marchiare un bersaglio",
    "note": "Ambito di Portata",
    "flavor": "«Per te la distanza è un dettaglio.»",
-   "level": 0,
+   "level": 2,
    "access": [
     "any"
    ],
@@ -8915,7 +8915,7 @@
    "grimorioEffect": "",
    "note": "dadi ai tiri di Abilità",
    "flavor": "«Prima ancora della Magick, il mestiere.»",
-   "level": 0,
+   "level": 3,
    "access": [
     "any"
    ],
@@ -8967,7 +8967,7 @@
    "grimorioEffect": "",
    "note": "Regola del Bersaglio: conosci il Modello",
    "flavor": "«Qualunque cosa sia, ha un Modello.»",
-   "level": 0,
+   "level": 2,
    "access": [
     "any"
    ],
@@ -9019,7 +9019,7 @@
    "grimorioEffect": "",
    "note": "Ambito di Condizioni",
    "flavor": "«A mezzanotte in punto. Non un secondo prima.»",
-   "level": 0,
+   "level": 2,
    "access": [
     "any"
    ],
@@ -9128,7 +9128,7 @@
    "grimorioEffect": "Percepire la magia",
    "note": "",
    "flavor": "«Non ti serve vedere: lo senti arrivare.»",
-   "level": 0,
+   "level": 1,
    "access": [
     "any"
    ],
@@ -9189,7 +9189,7 @@
    "grimorioEffect": "Percepire salute e condizioni",
    "note": "il primo effetto di Percepire di ogni tavola",
    "flavor": "«Non guardi: sai.»",
-   "level": 0,
+   "level": 1,
    "access": [
     "any"
    ],
@@ -9304,7 +9304,7 @@
    "grimorioEffect": "Potenziare il fisico",
    "note": "soglia su te stesso sotto metà Salute",
    "flavor": "«Quando fa davvero male, funzioni meglio.»",
-   "level": 0,
+   "level": 2,
    "access": [
     "mind",
     "spirit",
@@ -9384,7 +9384,7 @@
    "grimorioEffect": "",
    "note": "un Ambito gratis fino ai poteri conosciuti",
    "flavor": "(da scrivere)",
-   "level": 0,
+   "level": 3,
    "access": [
     "correspondence",
     "entropy",
@@ -9486,7 +9486,7 @@
    "grimorioEffect": "",
    "note": "premio della Bussola",
    "flavor": "«Quando segui la tua stella, il mondo ti paga il doppio.»",
-   "level": 0,
+   "level": 2,
    "access": [
     "entropy",
     "mind"
@@ -9548,7 +9548,7 @@
    "grimorioEffect": "Scudo di forza",
    "note": "Protezione dagli spiriti, Blindare un ricordo, Rinforzare gli abiti",
    "flavor": "«Fa male, sì. Meno di quanto speravi tu.»",
-   "level": 0,
+   "level": 2,
    "access": [
     "forces",
     "matter",
@@ -9650,7 +9650,7 @@
    "grimorioEffect": "Guarire te stesso",
    "note": "Risanare la tua Volontà, Rimettere a posto",
    "flavor": "«Sai che ti farai male, almeno, sei già pronto!»",
-   "level": 0,
+   "level": 3,
    "access": [
     "matter",
     "mind",
@@ -9760,7 +9760,7 @@
    "grimorioEffect": "Riavvolgere la scena",
    "note": "sui dadi",
    "flavor": "«Il primo tiro era una prova.»",
-   "level": 0,
+   "level": 3,
    "access": [
     "entropy",
     "mind",
@@ -9927,7 +9927,7 @@
    "grimorioEffect": "",
    "note": "potere nuovo, da vistare",
    "flavor": "«Si è rotto da solo. Succede.»",
-   "level": 0,
+   "level": 2,
    "access": [
     "entropy",
     "forces",
@@ -10004,7 +10004,7 @@
    "grimorioEffect": "",
    "note": "potere nuovo, da vistare",
    "flavor": "«Guarda meglio. No, ancora meglio.»",
-   "level": 0,
+   "level": 3,
    "access": [
     "forces",
     "mind",
@@ -10020,7 +10020,7 @@
     "rows": [
      {
       "spheres": [],
-      "text": "Paga 2 Quintessenza: per la scena una cosa che non c'è viene vista o sentita, senza tirare, purché sia piccola e ferma (un'ombra dietro la finestra, una voce oltre la porta, un segno sul muro). Chi la tocca scopre l'inganno."
+      "text": "Paga 2 Quintessenza: per la scena crei un'illusione tangibile, una cosa che non c'è e che si vede, si sente e si tocca (un'ombra dietro la finestra, una voce oltre la porta, una porta dove c'era il muro). Chi la guarda ha diritto a una prova di Fermezza + Allerta, o Fermezza + Sotterfugio, contro una soglia pari al tuo Areté più i poteri che conosci nella Sfera: se la supera, scopre l'inganno."
      },
      {
       "spheres": [
@@ -10080,7 +10080,7 @@
    "grimorioEffect": "",
    "note": "potere nuovo, da vistare",
    "flavor": "«Un dettaglio. Nessuno se ne accorge.»",
-   "level": 0,
+   "level": 1,
    "access": [
     "forces",
     "matter",
@@ -10161,7 +10161,7 @@
    "grimorioEffect": "",
    "note": "potere nuovo, da vistare",
    "flavor": "«I medici avevano detto per sempre.»",
-   "level": 0,
+   "level": 4,
    "access": [
     "mind",
     "spirit",
@@ -10252,7 +10252,7 @@
    "grimorioEffect": "",
    "note": "potere nuovo, da vistare",
    "flavor": "«Controlla pure. È tutto in regola.»",
-   "level": 0,
+   "level": 1,
    "access": [
     "entropy",
     "matter",
@@ -10340,7 +10340,7 @@
    "grimorioEffect": "",
    "note": "potere nuovo, da vistare",
    "flavor": "«Basta. Spento.»",
-   "level": 0,
+   "level": 1,
    "access": [
     "forces",
     "mind",
@@ -10416,7 +10416,7 @@
    "grimorioEffect": "",
    "note": "di Blue, 24/9",
    "flavor": "«Quando tu hai finito di pensare, io ho già fatto.»",
-   "level": 0,
+   "level": 4,
    "access": [
     "forces",
     "time"
@@ -10481,7 +10481,7 @@
    "grimorioEffect": "",
    "note": "di Blue, 24/9",
    "flavor": "«Tu aspetta. Io no.»",
-   "level": 0,
+   "level": 4,
    "access": [
     "forces",
     "time"
@@ -10543,7 +10543,7 @@
    "grimorioEffect": "",
    "note": "potere nuovo, da vistare",
    "flavor": "«Respira. Ci sono io.»",
-   "level": 0,
+   "level": 3,
    "access": [
     "mind",
     "life"
@@ -10558,7 +10558,7 @@
     "rows": [
      {
       "spheres": [],
-      "text": "Paga 2 Quintessenza: un compagno che tocchi recupera subito tanti danni superficiali quanti poteri conosci nella Sfera, senza tirare; paga 4 e uno di quei danni può essere aggravato. Una volta per scena a bersaglio."
+      "text": "Paga 2 Quintessenza: un compagno che tocchi recupera subito l'ultimo danno che ha appena subito, meno uno (un colpo da tre ne rende due), senza tirare; paga 4 e uno di quei danni può essere aggravato. Una volta per scena a bersaglio."
      },
      {
       "spheres": [
@@ -10624,7 +10624,7 @@
    "grimorioEffect": "",
    "note": "potere nuovo, da vistare",
    "flavor": "«Non è il pugno che fa male. È quello che porta.»",
-   "level": 0,
+   "level": 3,
    "access": [
     "entropy",
     "forces",
@@ -10712,7 +10712,7 @@
    "grimorioEffect": "",
    "note": "potere nuovo, da vistare",
    "flavor": "«Non so dov'è. So da che parte.»",
-   "level": 0,
+   "level": 1,
    "access": [
     "correspondence",
     "matter",

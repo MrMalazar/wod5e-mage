@@ -187,8 +187,8 @@ This project does not include copyrighted game text or artwork.
 
 Since 1.4.0 the sheet has a wand button in its title bar (and a new Mage opens it
 by itself): the guided creation, a separate window in the spirit of the Roll20
-D&D 5e charactermancer. Thirteen steps in the order of 5 September 2026 (Creed,
-Family and path, Compass, Magick Type, Concept and Challenge, Spheres,
+D&D 5e charactermancer. Fourteen steps in the order of 5 September 2026 (Creed,
+Family, Subfamily, Compass, Magick Type, Concept and Challenge, Spheres,
 Instruments, Arete, Attributes, Skills, Advantages, Touchstones, final check),
 each with the same three blocks: what you choose (cards with the image), why
 (a few lines from the book, which the Storyteller can rewrite with the text

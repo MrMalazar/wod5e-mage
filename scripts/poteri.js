@@ -252,7 +252,12 @@ export function gradoPerOrdine(dot) {
 }
 
 export function catalogoDellaSfera(sphere, { catalog = POTERI, owned = [], tutti = null } = {}) {
-  const have = new Set((owned ?? []).map((power) => power.catalogId).filter(Boolean));
+  // La spunta guarda tutte le righe del personaggio (25/9 sera): un potere si prende una volta sola,
+  // e resta segnato nella Sfera in cui lo si è preso (`knownSphere`), anche se è di qualsiasi Sfera.
+  const dove = new Map();
+  for (const power of tutti ?? owned ?? []) {
+    if (power?.catalogId && !dove.has(power.catalogId)) dove.set(power.catalogId, sfera(power.sphere));
+  }
   return (catalog ?? [])
     .filter((entry) => sfereDellaVoce(entry).includes(sphere))
     .map((entry) => {
@@ -267,7 +272,8 @@ export function catalogoDellaSfera(sphere, { catalog = POTERI, owned = [], tutti
         amalgam: sfera(entry.amalgam),
         formulaName: testo(entry.formulaName),
         proposal: entry.link === "proposta",
-        known: have.has(entry.id),
+        known: dove.has(entry.id),
+        knownSphere: dove.get(entry.id) ?? "",
         condizioni,
         chiuso: chiuso.length ? chiuso : null,
         locked: chiuso.length > 0

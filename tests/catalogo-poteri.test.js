@@ -24,6 +24,16 @@ const guasto = materia.propri.find((riga) => riga.id === "guasto");
 assert.deepEqual([guasto.known, guasto.locked, guasto.cost, guasto.tipi, guasto.formulaName], [true, false, "1 WOD5E_MAGE.Poteri.QuintessenzaBreve", { attivo: true, passivo: false }, "Creare e Distruggere"]);
 assert.ok(guasto.blocchi.length >= 1 && guasto.blocchi[0].titolo === "Effetto attivo");
 assert.equal(materia.conosciuti, 1);
+// Un potere di qualsiasi Sfera preso in Forze sta spuntato anche in Materia, e dice dove è segnato (25/9 sera);
+// il gruppo «Di qualsiasi Sfera» dice in che Sfera si segna quello che prendi qui.
+{
+  const conUniversale = prepareCatalogoPoteri("matter", { catalog: POTERI, owned: [], tutti: [{ catalogId: "coperto", sphere: "forces" }], localize });
+  const coperto = conUniversale.qualsiasi.find((riga) => riga.id === "coperto");
+  assert.deepEqual([coperto.known, coperto.knownSphere, coperto.knownAltrove, coperto.knownHint], [true, "forces", true, "WOD5E_MAGE.Poteri.ConosciutoIn".replace("{sphere}", "WOD5E_MAGE.Spheres.forces")]);
+  assert.equal(conUniversale.gruppi.find((g) => g.id === "qualsiasi").nota, "WOD5E_MAGE.Poteri.QualsiasiSegnato".replace("{sphere}", "WOD5E_MAGE.Spheres.matter"));
+  const guastoQui = materia.propri.find((riga) => riga.id === "guasto");
+  assert.deepEqual([guastoQui.knownAltrove, guastoQui.knownHint], [false, "WOD5E_MAGE.Poteri.Conosciuto"], "senza la Sfera nella riga vecchia resta la spunta semplice");
+}
 // I prerequisiti scritti, una condizione per riga (25/9 sera): chiudono la riga e dicono cosa serve.
 const catalogo = POTERI.map((p) => (p.id === "baratto" ? { ...p, prerequisiti: [{ numero: 2 }, { potere: "guasto" }, { potere: "bottino" }, { testo: "Aver venduto qualcosa a un Risvegliato" }] } : p));
 const conChiusi = prepareCatalogoPoteri("matter", { catalog: catalogo, owned, tutti: owned, localize });
@@ -45,9 +55,11 @@ assert.deepEqual([famiglia.family, famiglia.dominioLabel], [true, "WOD5E_MAGE.Po
 assert.equal(materia.dominioLabel, "WOD5E_MAGE.Poteri.DominioEsterno".replace("{n}", "7"));
 const conGrado = famiglia.propri.find((riga) => riga.dot > 0 && riga.id !== "baratto");
 assert.deepEqual([conGrado.gradoLabel, conGrado.prezzoLabel, conGrado.serve], ["WOD5E_MAGE.Poteri.GradoN".replace("{n}", String(conGrado.dot)), "WOD5E_MAGE.Poteri.PrezzoPE".replace("{pe}", String(conGrado.dot * 5)), ""]);
-// Guasto è una proposta senza grado: «grado da assegnare», nessun prezzo.
+// Guasto ha il grado 2 (i gradi di Blue, 25/9 sera): grado e prezzo scritti; Senza residuo aspetta ancora il suo grado.
 const guastoFamiglia = famiglia.propri.find((riga) => riga.id === "guasto");
-assert.deepEqual([guastoFamiglia.gradoLabel, guastoFamiglia.prezzoLabel], ["WOD5E_MAGE.Poteri.GradoNessuno", ""]);
+assert.deepEqual([guastoFamiglia.gradoLabel, guastoFamiglia.prezzoLabel], ["WOD5E_MAGE.Poteri.GradoN".replace("{n}", "2"), "WOD5E_MAGE.Poteri.PrezzoPE".replace("{pe}", "10")]);
+const residuoFamiglia = famiglia.propri.find((riga) => riga.id === "senza-residuo");
+assert.deepEqual([residuoFamiglia.gradoLabel, residuoFamiglia.prezzoLabel], ["WOD5E_MAGE.Poteri.GradoNessuno", ""]);
 // I prerequisiti si scrivono sempre: col lucchetto se mancano, con la spunta se ci sono già.
 const barattoFamiglia = famiglia.propri.find((riga) => riga.id === "baratto");
 assert.deepEqual([barattoFamiglia.serve.split(" · ").length, barattoFamiglia.serveOk, barattoFamiglia.locked], [4, false, true]);

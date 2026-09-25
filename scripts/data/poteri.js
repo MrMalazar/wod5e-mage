@@ -5232,7 +5232,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Appoggio",
-    "dot": 0,
+    "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: vale come leva anche qualcosa che hai creato tu in questa scena.\n\nEffetto passivo: Il punteggio dell'Ambito di Potenza non conta sino al 4° pallino quando la tua Sfera trova la sua leva già in scena (qualcosa che fa già una parte del lavoro: tu lo spingi, non lo crei).\nAccesso con Corrispondenza: un punto d'arrivo che aspetta ciò che sposti (la mano di un compagno, un contenitore aperto, la tua tasca).\nAccesso con Entropia: una crepa che c'è già (il pilastro stanco, il matrimonio finito, il socio che aspettava un pretesto).\nAccesso con Forza: un'energia già in scena da cavalcare (un temporale, un quadro elettrico, un incendio).\nAccesso con Materia: muovi o sollevi qualcosa con un appoggio già in scena (una leva, una carrucola, un piano inclinato).\nAccesso con Mente: un'emozione che il bersaglio prova già (rabbia, paura, desiderio).\nAccesso con Primordio: plasmi Quintessenza pura dentro un Nodo o con del Tass in mano.\nAccesso con Spirito: un punto dove il Velo è sottile (un cimitero, una corsia d'ospedale di notte, una casa dove è morto qualcuno).\nAccesso con Tempo: invecchi o ringiovanisci qualcosa avendo davanti com'era o come sarà (una foto, un oggetto di quell'epoca, il padre o il figlio).\nAccesso con Vita: la direzione che il corpo sta già prendendo (una ferita che si chiude, una febbre che sale, una gravidanza).",
@@ -5270,7 +5270,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Coperto",
-    "dot": 0,
+    "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 4 Quintessenza: con un aggancio in scena il lancio è Accidentale anche se va oltre il normale (un incidente grave e strano, un fulmine che cade proprio su di lui).\n\nEffetto passivo: Quando la tua Sfera ha un aggancio in scena (qualcosa che c'era già e che può spiegare l'effetto a un Dormiente), il Narratore può contare il lancio come Accidentale anche se va oltre il normale.\nAccesso con Corrispondenza: dove ci si perde di vista (una stazione affollata, un labirinto di corridoi, un palazzo pieno di fumo).\nAccesso con Entropia: il lancio può passare per un incidente (un cavo che cede, una tegola che cade, un motore che si inceppa).\nAccesso con Forza: un luogo già pieno di energia (una centrale, un concerto, un temporale).\nAccesso con Materia: dove la materia si lavora già (un laboratorio chimico, una fonderia, un'officina).\nAccesso con Mente: chi è già fuori di sé (un ubriaco, uno che non dorme da giorni, due che stanno litigando).\nAccesso con Primordio: dentro un Nodo (una chiesa antica, una sorgente, un bosco sacro).\nAccesso con Spirito: dove la gente crede già agli spiriti (una seduta spiritica, una casa che dicono infestata, una veglia funebre).\nAccesso con Tempo: dove si perde il senso del tempo (una festa, una sala d'attesa, un turno di notte).\nAccesso con Vita: curi o alteri un corpo con le mani addosso e la pelle coperta (una benda, un lenzuolo, un camice).",
@@ -5302,7 +5302,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Difendersi dalla Sfera",
-    "dot": 0,
+    "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 1 Quintessenza: chi lancia quella Sfera su di te ha i dadi dimezzati per difetto oppure lancia a soglia +3, a seconda del tiro.\nPaga 3 Quintessenza: la protezione dura una scena.\n\nEffetto passivo: Chi lancia effetti di quella Sfera su di te contro la tua volontà ha 2 dadi in meno oppure soglia +2.\n\nEffetto Amalgama: Avere questo potere in più Sfere copre anche dalle altre Sfere.",
@@ -5335,7 +5335,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Fatto per durare",
-    "dot": 0,
+    "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: quando l'appoggio sta per cedere, sposti l'effetto su un nuovo appoggio della tua Sfera.\n\nEffetto passivo: Il punteggio dell'Ambito di Durata non conta sino al 4° pallino, ma l'effetto dura solo finché regge l'appoggio della tua Sfera (la cosa a cui leghi l'effetto, che lo tiene in piedi al posto tuo). Se l'appoggio cede, l'effetto finisce in anticipo.\nAccesso con Corrispondenza: finché esiste il varco o il luogo su cui l'hai appoggiato, che deve esserci già (una porta, un arco, una stanza).\nAccesso con Entropia: finché resta vera una condizione che fissi col Narratore quando lanci (finché lei non torna, finché la candela brucia, finché nessuno dice il suo nome).\nAccesso con Forza: finché non si interrompe il flusso di energia che lo alimenta (un cavo sotto tensione, un fuoco acceso, il vento).\nAccesso con Materia: finché dura l'oggetto catalizzatore che crei per lui (un anello, una statuetta, un chiodo).\nAccesso con Mente: finché chi lo subisce non se ne accorge (una prova, uno specchio, una voce che conosce).\nAccesso con Primordio: finché riceve energia da una fonte (un Nodo, del Tass, un Talismano carico).\nAccesso con Spirito: finché uno spirito lo tiene per te e tu rispetti il patto (un'offerta, un divieto, un favore).\nAccesso con Tempo: finché non si ferma l'orologio a cui lo leghi (una pendola, una clessidra da girare, un metronomo).\nAccesso con Vita: finché vive l'essere a cui lo leghi (una pianta, un animale, una persona).",
@@ -5375,7 +5375,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Folla",
-    "dot": 0,
+    "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: vale come tratto comune anche qualcosa che hai creato tu in questa scena.\n\nEffetto passivo: Il punteggio dell'Ambito di Bersagli non conta sino al 4° pallino quando per la tua Sfera la folla è una cosa sola (hanno già un tratto comune: qualcosa che li lega tutti, e da lì la tua Sfera li raggiunge insieme).\nAccesso con Corrispondenza: i Bersagli sparsi in luoghi diversi hanno qualcosa in comune che tieni in mano (lo stesso sangue, un oggetto di ciascuno, una lista coi nomi): paghi la Portata del più lontano.\nAccesso con Entropia: lanci su una folla o su un'area senza scegliere uno per uno (un mercato, una tribuna, un ingorgo): paghi solo l'Area.\nAccesso con Forza: la stessa energia li tocca tutti (un pavimento sotto tensione, la musica di un concerto, la luce dei riflettori).\nAccesso con Materia: hanno addosso lo stesso tipo di oggetto (le pistole d'ordinanza, le divise, i telefoni).\nAccesso con Mente: li tiene insieme la stessa emozione (il panico di una fuga, il tifo di uno stadio, la devozione di una setta).\nAccesso con Primordio: portano la stessa Risonanza (chi ha bevuto allo stesso Nodo, i Talismani caricati dalla stessa mano, i presenti a uno stesso rito).\nAccesso con Spirito: veglia su di loro lo stesso spirito (il protettore di una famiglia, lo spirito di una nave, il patrono di un paese).\nAccesso con Tempo: hanno vissuto lo stesso momento (gli invitati di una festa, i testimoni di un incidente, i nati nello stesso giorno).\nAccesso con Vita: guarisci più feriti nella stessa stanza, anche senza toccarli.",
@@ -5414,7 +5414,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Impresa impossibile",
-    "dot": 0,
+    "dot": 5,
     "type": "attivo",
     "kind": "attivo",
     "text": "Effetto attivo: Una volta per sessione un tuo lancio di quella Sfera ignora il +5 statico delle imprese impossibili.\nAccesso con Corrispondenza: creare uno spazio nuovo, come lo spazio per un altro continente (Atlantide).\nAccesso con Entropia: spezzare un destino già scritto (una profezia, la maledizione di una stirpe, una morte annunciata) (Uno su un milione).\nAccesso con Forza: creare un buco nero (Buco nero).\nAccesso con Materia: un materiale nuovo con proprietà uniche (Elemento 119).\nAccesso con Mente: creare una coscienza (Pinocchio).\nAccesso con Primordio: toccare il Paradosso, fare quello che può fare il Narratore (Dietro lo schermo).\nAccesso con Spirito: creare un'anima (Pigmalione).\nAccesso con Tempo: viaggiare nel tempo (Viaggiatore Temporale).\nAccesso con Vita: la resurrezione (Segreto della Resurrezione).",
@@ -5449,7 +5449,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "La Pratica rende Perfetti",
-    "dot": 0,
+    "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Una volta per sessione, paga 2 Quintessenza: l'effetto scelto riesce senza tirare, purché il tiro sia possibile (dopo la soglia ti resta almeno un dado).\n\nEffetto passivo: Scegli un effetto di Magick nel tuo Grimorio (già pronto o che tu abbia creato): quell'effetto ottiene permanentemente -2 alla soglia, senza scendere sotto zero. Devi comunque possedere le Sfere.",
@@ -5501,7 +5501,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Legame",
-    "dot": 0,
+    "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: crei sul momento un legame con un bersaglio con cui hai un legame superficiale (una foto, averlo incontrato una volta, il suo nome), e vale per la sessione.\n\nEffetto passivo: Il punteggio dell'Ambito di Portata non conta sino al 4° pallino verso ciò con cui hai un legame (quello che ti unisce al bersaglio anche quando è lontano). Il legame fa anche da ponte: salti la Regola del Ponte per lo spazio (quella che chiede Corrispondenza per agire su ciò che non vedi).\nAccesso con Corrispondenza: un luogo dove sei già stato, un punto che vedi se ti teletrasporti lì, chi hai marcato toccandolo in questa sessione.\nAccesso con Entropia: un conto aperto fra voi (un debito da saldare, una scommessa persa, una maledizione che gli hai lanciato).\nAccesso con Forza: un oggetto che porta l'energia scelta (un cavo, una tubatura, una ringhiera di ferro) fino al bersaglio, se è un conduttore naturale.\nAccesso con Materia: un pezzo dell'oggetto che tieni con te (una scheggia della statua, un bullone della macchina, l'altra metà di una banconota).\nAccesso con Mente: una mente legata alla tua (chi hai letto nel pensiero, chi ti ha fatto una promessa, chi ti sta pensando in questo momento).\nAccesso con Primordio: un compagno con cui hai condiviso Quintessenza in questa sessione, una volta a scena.\nAccesso con Spirito: uno spirito che hai già incontrato, anche senza avere niente di suo.\nAccesso con Tempo: qualcuno con cui hai un appuntamento (una cena fissata, una partenza insieme, un duello all'alba).\nAccesso con Vita: un pezzo del suo corpo che tieni con te (una goccia di sangue, una ciocca di capelli, un'unghia).",
@@ -5544,7 +5544,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Mestiere",
-    "dot": 0,
+    "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 1 Quintessenza: si attiva anche per l'effetto di Magick.\n\nEffetto passivo: All'acquisto scegli un'Abilità. Quando tiri quell'Abilità non a scopo di Magick ottieni un dado in più per ogni tua Sfera di cui riesci a giustificare l'utilizzo, fino a 3. Se ad esempio scegli Convincere e hai Tempo e Mente, è facile prevedere che cosa dirà e che cosa penserà: per questo hai due dadi in più. Se sullo stesso tiro vale anche Sesto senso, prendi il più alto dei due.",
@@ -5598,7 +5598,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Modello",
-    "dot": 0,
+    "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: per un lancio vale anche su un altro tipo di bersaglio della tua Sfera, fra quelli che di solito chiedono una Sfera compagna.\n\nEffetto passivo: All'acquisto scegli un tipo di bersaglio che di solito chiede una Sfera compagna (la seconda Sfera, quella che tocca il bersaglio per ciò che è: per colpire con Vita un vampiro, che è carne morta, serve Materia). Su quel bersaglio lavori come se avessi anche la compagna, perché ne conosci il Modello (la trama che fa di una cosa quello che è). L'incantesimo può comunque essere Volgare, ma per bersagliare il soggetto salti la Regola del Bersaglio (quella che chiede tutte e due le Sfere quando l'effetto tocca due domini).",
@@ -5628,7 +5628,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Segnale",
-    "dot": 0,
+    "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: fai scattare subito un tuo effetto che aspetta il suo segnale.\n\nEffetto passivo: Il punteggio dell'Ambito di Condizioni non conta sino al 4° pallino quando il segnale è preciso (il segnale è una condizione che dice all'effetto quando scattare, su chi o fino a quando: è preciso se la tua Sfera lo riconosce da sola). Le condizioni che la tua Sfera non riconosce contano come sempre.\nAccesso con Corrispondenza: il segnale è qualcosa che entra, esce o arriva in un posto (qualcuno varca la porta, un'auto lascia il parcheggio, un pacco arriva a destinazione).\nAccesso con Entropia: il segnale lo dà il caso (un bicchiere che si rompe, la moneta che cade su testa, il primo passo falso).\nAccesso con Forza: il segnale è un'energia che cambia (si accende una luce, parte uno sparo, scatta un allarme).\nAccesso con Materia: prepari un oggetto che scatta a comando (esplode, si scioglie, crolla) e il comando è una tua parola o un tuo gesto.\nAccesso con Mente: il segnale è quello che pensa o prova chi lo subisce (pensa a te, sa di mentire, ha paura).\nAccesso con Primordio: il segnale è la Quintessenza che si muove (qualcuno la spende, qualcuno beve dal Nodo, si accende una Meraviglia).\nAccesso con Spirito: il segnale viene da oltre il Velo (uno spirito entra nella stanza, qualcuno passa nell'Umbra, un fantasma si mostra).\nAccesso con Tempo: la Condizione è un momento preciso (l'alba, mezzanotte, il rintocco di una campana).\nAccesso con Vita: il segnale viene dal corpo (il cuore accelera, cade la prima goccia di sangue, il bersaglio si addormenta).",
@@ -5668,7 +5668,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Sentinella",
-    "dot": 0,
+    "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 1 Quintessenza: per una scena la Sentinella copre anche un altro bersaglio. È possibile coprire più bersagli pagando più Quintessenza.\n\nEffetto passivo: Quando qualcuno usa una Sfera che conosci su di te o intorno a te, te ne accorgi prima che il lancio sia completo e hai diritto a una reazione istintiva a soglia -2.\n\nEffetto Amalgama: Avere altre Sfere consente una protezione attiva anche per quelle Sfere.",
@@ -5708,7 +5708,7 @@ export const POTERI = Object.freeze([
       "any"
     ],
     "name": "Sesto senso",
-    "dot": 0,
+    "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: fai una domanda precisa al Narratore su quello che il senso coglie (cosa, quanto, da dove) e hai la risposta senza tirare.\n\nEffetto passivo: Percepisci senza tirare quello che la tua Sfera sa vedere. Quando un tiro di Abilità è coerente con quello che percepisci nella scena, il Narratore può concederti soglia -2 oppure 2 dadi in più. Se ad esempio con Vita vedi che la guardia è avvelenata, può concederlo al tiro di Medicina per salvarla e anche a quello di Convincere per farti dire chi è stato.\nAccesso con Corrispondenza: sai sempre dove sei, con le coordinate X, Y, Z; percepisci le aree più vicine a te, quanto sono vicine e all'incirca cosa sono (una zona industriale, un rifugio montano, un lago).\nAccesso con Entropia: senti dove il caso pende (la serratura che cederà, la trave marcia, il tavolo truccato) e gli eventi fortunati o sfortunati in arrivo.\nAccesso con Forza: pensi a un tipo di energia (elettricità, calore, suono) e sai se c'è e a che intensità.\nAccesso con Materia: guardando un oggetto sai di cosa è fatto e a che cosa serve (una lega, una polvere, un congegno).\nAccesso con Mente: senti le emozioni di chi hai intorno (paura, rabbia, desiderio) e i residui psichici rimasti nei luoghi, e hai una memoria spiccata per quello che hai visto e sentito.\nAccesso con Primordio: percepisci i Risvegliati intorno a te dalla loro Risonanza, e dove c'è o non c'è Quintessenza in eccesso (un Nodo, del Tass, un Talismano).\nAccesso con Spirito: senti se in scena ci sono spiriti, effimera o presenze oltre il Velo, e dove il Velo è sottile.\nAccesso con Tempo: sai sempre che ore sono e che ore NON sono, e senti a pelle le anomalie temporali (un déjà-vu, un ciclo, un rallentamento).\nAccesso con Vita: guardando un corpo sai cosa ha (ferite, veleni, gravidanza).\n\nEffetto Amalgama: Combinando le sensazioni puoi avere una dinamica più precisa: ad esempio combinando Mente e Vita puoi distinguere le tipologie di persone, oppure con Materia e Corrispondenza sai che cosa potrebbero essere quegli edifici in lontananza. Ciononostante non hai un livello di precisione tale da sapere che 2 persone nella stessa stanza sono fratelli, oppure che c'è una bomba nel 3° edificio sulla strada: quella è Magick.",
@@ -5751,7 +5751,7 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Adrenalina",
-    "dot": 0,
+    "dot": 2,
     "type": "passivo",
     "kind": "passivo",
     "text": "Effetto passivo: Accesso con Mente: quando sei sotto metà Salute, i lanci di Mente su te stesso hanno soglia meno 2 e le Condizioni mentali pregresse vengono ignorate per la scena.\nAccesso con Spirito: quando sei sotto metà Salute, i lanci di Spirito su te stesso hanno soglia meno 2 e le Condizioni soprannaturali pregresse vengono ignorate per la scena.\nAccesso con Vita: quando sei sotto metà Salute, i lanci di Vita su te stesso hanno soglia meno 2 e le Condizioni fisiche pregresse vengono ignorate per la scena.\n\nEffetto Amalgama: Per ognuna delle Sfere aggiunte ottieni la protezione dalle Condizioni di quel tipo.\nAccesso con Primordio: se le Condizioni derivano da anomalie paradossali, sono messe in pausa per la scena.",
@@ -5800,7 +5800,7 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Ambito di Casa",
-    "dot": 0,
+    "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 4 Quintessenza: per un lancio l'Ambito scelto non conta nella soglia, a qualunque livello.\n\nEffetto passivo: Scegli l'Ambito all'acquisto, si prende una volta sola. Nei lanci in cui usi la Sfera d'accesso, l'Ambito scelto non conta nella soglia fino a un livello pari al numero di poteri che conosci in quella Sfera. Se ad esempio conosci 3 poteri di Forza e hai scelto Potenza, hai sino a Potenza 3 gratis, da 4 si paga.\nAccesso con Corrispondenza: Portata o Area.\nAccesso con Entropia: Condizioni o Precisione.\nAccesso con Forza: Potenza o Portata.\nAccesso con Materia: Durata o Area.\nAccesso con Mente: Bersagli o Precisione.\nAccesso con Tempo: Durata o Condizioni.\nAccesso con Vita: Potenza o Bersagli.",
@@ -5881,7 +5881,7 @@ export const POTERI = Object.freeze([
       "mind"
     ],
     "name": "Bussola doppia",
-    "dot": 0,
+    "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 1 Quintessenza: per un lancio fuori dalla Bussola prendi lo stesso il dado in più.\n\nEffetto passivo: Quando rispetti la Bussola in un lancio della tua Sfera, i dadi in più diventano due.\n\nEffetto Amalgama: Accesso con Primordio: se il lancio riesce, la Quintessenza guadagnata è 2 invece di 1.",
@@ -5923,7 +5923,7 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Incassare",
-    "dot": 0,
+    "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: per un colpo la riduzione raddoppia.\n\nEffetto passivo: Quando subisci danni li riduci del numero di poteri che conosci nella Sfera; se il danno scende sotto 2 è nullo.\nAccesso con Forza + Vita: danni fisici.\nAccesso con Materia: dichiara un oggetto che porti e ottieni Dadi armatura invece di ridurre il normale danno finché l'hai con te; si rinnova ogni cambio scena.\nAccesso con Mente: danni mentali.\nAccesso con Spirito: danni fisici o mentali causati da creature dell'effimera.\n\nEffetto Amalgama: Avendo più Sfere, ottieni la riduzione anche per quel tipo di danno.\nAccesso con Primordio: riduci anche i danni paradossali, fisici o mentali.",
@@ -5966,7 +5966,7 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Rigenerazione",
-    "dot": 0,
+    "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza, ottieni immediatamente l'effetto passivo.\n\nEffetto passivo: Accesso con Materia: se parte del tuo equipaggiamento si è rovinata o consumata, al cambio scena torna come nuova, purché ce l'abbia ancora tu (la lama scheggiata, le munizioni sparate, la batteria scarica). Quello che ti hanno preso non torna.\nAccesso con Mente: ogni cambio scena rigeneri livelli di Salute superficiale mentale pari al numero di poteri che conosci in Mente.\nAccesso con Spirito: una volta per sessione cancelli una Macchia dalla Saggezza.\nAccesso con Vita: ogni cambio scena rigeneri livelli di Salute superficiale fisica pari al numero di poteri che conosci in Vita.\nCon Mente o con Vita puoi scambiare 2 livelli di Salute superficiale per curare 1 aggravato.\n\nEffetto Amalgama: Accesso con Mente + Vita: al cambio scena rigeneri livelli pari al più alto fra Vita e Mente. Guarisci livelli fisici o mentali a tua scelta, anche spartendoli.\nAccesso con Primordio: guarisci anche le caselle bloccate dal Paradosso.\nAccesso con Tempo: guarisci il doppio dei livelli al cambio scena.",
@@ -6009,7 +6009,7 @@ export const POTERI = Object.freeze([
       "time"
     ],
     "name": "Seconda possibilità",
-    "dot": 0,
+    "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Un tiro andato male si rifà, secondo la tua Sfera.\nAccesso con Entropia: in tutta la sessione ritiri fino a 5 dadi, spartiti come vuoi, mai i rossi (Buona stella); una volta per scena, a tiro fatto, cambi un dado normale tuo o di un compagno in un 8 pagando 2 Quintessenza (Dado fortunato).\nAccesso con Mente: quando ritiri con la Volontà, ritiri 2 dadi in più, normali (Volontà Plus).\nAccesso con Tempo: dopo un tiro fallito, tuo o di un compagno, lo fai ritirare spendendo 2 Quintessenza; non più di una volta per bersaglio (Un'altra chance).\n\nEffetto passivo: Una volta per sessione ritiri un dado gratis, senza dichiararlo prima.\n\nEffetto Amalgama: Accesso con Entropia + Primordio: il dado cambiato in 8 vale anche in un tiro di Magick.\nAccesso con Primordio + Tempo: una volta per scena dichiari un tiro, lo fai e vedi l'esito: se ti piace prosegui, altrimenti annulli e torni a prima del tiro (Prevedere il tiro).",
@@ -6085,7 +6085,7 @@ export const POTERI = Object.freeze([
       "matter"
     ],
     "name": "Guasto",
-    "dot": 0,
+    "dot": 2,
     "type": "attivo",
     "kind": "attivo",
     "text": "Effetto attivo: Paga 1 Quintessenza: un dispositivo che vedi smette di funzionare per la scena, senza tirare (una telecamera, un motore, un telefono).\nAccesso con Entropia: sembra un guasto qualunque, e nessuno ci vede la tua mano.\nAccesso con Forza: si spegne di colpo, e non si riaccende finché non lo dici tu.\nAccesso con Materia: si inceppa: per farlo ripartire serve un tiro di riparazione e un pezzo da sostituire.\n\nEffetto Amalgama: Accesso con Tempo: il guasto scatta quando dici tu, entro la sessione.",
@@ -6120,10 +6120,10 @@ export const POTERI = Object.freeze([
       "time"
     ],
     "name": "Miraggio",
-    "dot": 0,
+    "dot": 3,
     "type": "attivo",
     "kind": "attivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: per la scena una cosa che non c'è viene vista o sentita, senza tirare, purché sia piccola e ferma (un'ombra dietro la finestra, una voce oltre la porta, un segno sul muro). Chi la tocca scopre l'inganno.\nAccesso con Forza: è luce o suono, e la vedono tutti.\nAccesso con Mente: la vede solo chi scegli tu, e la crede.\nAccesso con Tempo: è una scena di ieri che non è andata così, per chi guarda nel passato.\n\nEffetto Amalgama: Accesso con Corrispondenza: la metti in un luogo che vedi da lontano.",
+    "text": "Effetto attivo: Paga 2 Quintessenza: per la scena crei un'illusione tangibile, una cosa che non c'è e che si vede, si sente e si tocca (un'ombra dietro la finestra, una voce oltre la porta, una porta dove c'era il muro). Chi la guarda ha diritto a una prova di Fermezza + Allerta, o Fermezza + Sotterfugio, contro una soglia pari al tuo Areté più i poteri che conosci nella Sfera: se la supera, scopre l'inganno.\nAccesso con Forza: è luce o suono, e la vedono tutti.\nAccesso con Mente: la vede solo chi scegli tu, e la crede.\nAccesso con Tempo: è una scena di ieri che non è andata così, per chi guarda nel passato.\n\nEffetto Amalgama: Accesso con Corrispondenza: la metti in un luogo che vedi da lontano.",
     "amalgam": "correspondence",
     "amalgams": [
       "correspondence"
@@ -6154,7 +6154,7 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Dettaglio",
-    "dot": 0,
+    "dot": 1,
     "type": "passivo",
     "kind": "passivo",
     "text": "Effetto passivo: Una volta per scena cambi un dettaglio piccolo, senza tirare, e dura la scena.\nAccesso con Forza: il colore o il tono di una luce o di un suono (la lampada che vira al rosso, la voce più bassa, il motore che sembra un altro).\nAccesso con Materia: la forma di un oggetto piccolo che tieni in mano (la chiave che entra nella serratura, l'appiglio nel muro liscio, il proiettile del calibro giusto).\nAccesso con Vita: un connotato tuo (il colore degli occhi, i capelli, la voce).\n\nEffetto Amalgama: Accesso con Tempo: il dettaglio dura fino a fine sessione.",
@@ -6194,7 +6194,7 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Convalescenza",
-    "dot": 0,
+    "dot": 4,
     "type": "attivo",
     "kind": "attivo",
     "text": "Effetto attivo: Paga 3 Quintessenza e una sessione di cure: togli a un compagno una cosa che la medicina dava per perduta, senza tirare. Una volta per bersaglio nella campagna.\nAccesso con Vita: una cicatrice che pesa, un arto che non regge, un aggravato che non si chiude.\nAccesso con Mente: una fobia, un vuoto di memoria, una Condizione mentale che non passa.\nAccesso con Spirito: una Macchia.\nAccesso con Tempo: come se non fosse mai successo: niente traccia, e nessun ricordo del male.\n\nEffetto Amalgama: Accesso con Primordio: vale anche su una casella bloccata dal Paradosso.",
@@ -6237,7 +6237,7 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Copertura",
-    "dot": 0,
+    "dot": 1,
     "type": "attivo",
     "kind": "attivo",
     "text": "Effetto attivo: Una volta per sessione, paga 2 Quintessenza: un falso regge a ogni controllo fino a fine sessione, senza tirare. Lo smaschera solo la Magick.\nAccesso con Entropia: un alibi (qualcuno ti ha visto altrove, lo scontrino ha l'ora giusta, la telecamera ti ha perso).\nAccesso con Materia: un oggetto o un documento (un badge, una banconota, una firma).\nAccesso con Mente: un'identità (un nome, una storia, un accento).\nAccesso con Vita: sembri morto, malato o ferito finché vuoi.\n\nEffetto Amalgama: Accesso con Tempo: il falso regge anche a chi guarda nel passato.",
@@ -6276,7 +6276,7 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Interruttore",
-    "dot": 0,
+    "dot": 1,
     "type": "attivo",
     "kind": "attivo",
     "text": "Effetto attivo: Paga 1 Quintessenza: spegni una cosa sola per la scena, senza tirare.\nAccesso con Forza: una luce, un suono, una fiamma piccola (un lampione, un allarme, una candela).\nAccesso con Mente: un'emozione in una persona che vedi (la paura, la rabbia, il desiderio): resta lucida, e quella non la muove.\nAccesso con Vita: il dolore di un ferito: agisce senza malus, e la ferita resta.\n\nEffetto Amalgama: Accesso con Entropia: si spegne nel momento peggiore per chi ci contava.",
@@ -6309,7 +6309,7 @@ export const POTERI = Object.freeze([
       "time"
     ],
     "name": "Velocista",
-    "dot": 0,
+    "dot": 4,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: in questo turno fai un'azione in più.\n\nEffetto passivo: Ogni turno, in base a quanti poteri conosci in Tempo o in Forza (prendi il più alto), puoi fare qualcosa di più.\nCon 2 poteri: un'azione minore in più.\nCon 4 poteri: un'azione maggiore in più, non di Magick.\nCon 6 poteri: due azioni maggiori in più.",
@@ -6340,7 +6340,7 @@ export const POTERI = Object.freeze([
       "time"
     ],
     "name": "Rallentare",
-    "dot": 0,
+    "dot": 4,
     "type": "attivo",
     "kind": "attivo",
     "text": "Effetto attivo: Scegli un bersaglio che vedi.\nPaga 1 azione minore: il bersaglio agisce per ultimo nel turno.\nPaga 2 Quintessenza: non agisce in questo turno, ma in quello seguente ha +2 dadi ai tiri.\nPaga 4 Quintessenza: perde il turno.",
@@ -6373,10 +6373,10 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Pronto soccorso",
-    "dot": 0,
+    "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: un compagno che tocchi recupera subito tanti danni superficiali quanti poteri conosci nella Sfera, senza tirare; paga 4 e uno di quei danni può essere aggravato. Una volta per scena a bersaglio.\nAccesso con Vita: ferite, veleni, febbre.\nAccesso con Mente: la Volontà, e una Condizione mentale (Spaventato, Confuso).\n\nEffetto passivo: In una scena di cure, un compagno recupera un danno superficiale in più per ogni potere che conosci nella Sfera.\n\nEffetto Amalgama: Accesso con Spirito: vale anche su uno spirito, o su un compagno posseduto.",
+    "text": "Effetto attivo: Paga 2 Quintessenza: un compagno che tocchi recupera subito l'ultimo danno che ha appena subito, meno uno (un colpo da tre ne rende due), senza tirare; paga 4 e uno di quei danni può essere aggravato. Una volta per scena a bersaglio.\nAccesso con Vita: ferite, veleni, febbre.\nAccesso con Mente: la Volontà, e una Condizione mentale (Spaventato, Confuso).\n\nEffetto passivo: In una scena di cure, un compagno recupera un danno superficiale in più per ogni potere che conosci nella Sfera.\n\nEffetto Amalgama: Accesso con Spirito: vale anche su uno spirito, o su un compagno posseduto.",
     "amalgam": "spirit",
     "amalgams": [
       "spirit"
@@ -6414,7 +6414,7 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Sferzata",
-    "dot": 0,
+    "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: un bersaglio a contatto prende tanti danni superficiali quanti poteri conosci nella Sfera, senza tirare e senza difesa. Una volta per turno.\nAccesso con Forza: fuoco, scarica o urto, e si vede.\nAccesso con Vita: la carne cede sotto la mano, e sembra un colpo andato male.\nAccesso con Entropia: la caduta sbagliata, l'appoggio che manca, e sembra sfortuna.\n\nEffetto passivo: I tuoi colpi in mischia portano anche il tuo elemento: un danno in più, del tipo della Sfera.\n\nEffetto Amalgama: Accesso con Primordio: i danni dell'effetto attivo sono aggravati.",
@@ -6456,7 +6456,7 @@ export const POTERI = Object.freeze([
       "life"
     ],
     "name": "Bussola",
-    "dot": 0,
+    "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
     "text": "Effetto attivo: Paga 2 Quintessenza: sai anche la distanza, e se si sta muovendo. Paga 4 e la senti ovunque sia, per la sessione.\n\nEffetto passivo: Senti sempre la direzione di una cosa che hai toccato nella sessione, senza tirare, finché resta in città.\nAccesso con Corrispondenza: un luogo dove sei stato.\nAccesso con Mente: una persona.\nAccesso con Materia: un oggetto.\nAccesso con Vita: un vivente, anche un animale.\n\nEffetto Amalgama: Accesso con Tempo: sai anche dove era un'ora fa.",

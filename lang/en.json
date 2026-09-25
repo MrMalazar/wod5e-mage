@@ -802,6 +802,11 @@
       "AggiungiHint": "Opens the Sphere's powers by grade: the search, each power's text, Add",
       "CatalogoVuoto": "The power catalogue is not in the module yet: write the power by hand.",
       "Conosciuto": "Already known",
+      "ConosciutoIn": "Already known: marked under {sphere}",
+      "QualsiasiSegnato": "A power of any Sphere is marked under the Sphere you take it in, here {sphere}: it counts as one of its known powers (prerequisites, Domains, price). Its effect works with every Sphere, as always.",
+      "Universale": "any Sphere",
+      "UniversaleHint": "Power of any Sphere, marked under {sphere}: it counts as one of its known powers; the effect works with every Sphere. In edit mode you can move it to another open Sphere.",
+      "SegnatoIn": "Marked under",
       "ScriviMano": "Write a power by hand",
       "Vuoto": "No power yet: Add puts one in.",
       "SenzaNome": "(unnamed)",
@@ -1980,21 +1985,28 @@
           "Domanda": "What do you believe reality is?",
           "Sotto": "thirteen Creeds · one only",
           "Perche": "What you believe reality is, and everything else follows: the Truth you devoted yourself to, and the voice you defend it with at the table.",
-          "PercheDue": "Every sect breathes its own Creeds, usually two or three: that shortlist is the beaten path to yours, not a border. The Creed assigns no points and forbids nothing: the two Spheres it suggests open up, and the Instruments it proposes come at step 7."
+          "PercheDue": "Every sect breathes its own Creeds, usually two or three: that shortlist is the beaten path to yours, not a border. The Creed assigns no points and forbids nothing: the two Spheres it suggests open up, and the Instruments it proposes come at step 8."
         },
         "famiglia": {
           "Label": "Family",
           "Domanda": "The day you end up in trouble, which door will you knock on?",
-          "Sotto": "nine Traditions and ten Crafts · then the path",
+          "Sotto": "nine Traditions and ten Crafts · one only",
           "Perche": "But you do have a Tradition. Because it taught you to do what you know how to do, and because when you end up in trouble it is the only people who might come.",
           "PercheDue": "Traditions survive in cabals, the group of mages you live, work and watch your back with. Do not look for the best one, because it does not exist. A Craft is a narrow road: a single Sphere and no path, and nobody will ever ask you to give up who you are to sit at the table."
+        },
+        "sottofamiglia": {
+          "Label": "Subfamily",
+          "Domanda": "Within your Family, which road did you take?",
+          "Sotto": "the Family's paths · one only",
+          "Perche": "Every Tradition splits into paths, and the path is how your Family does what it does: the House, the Circle, the Faction, the Voice, the School, the Current. It taught you before the Tradition did.",
+          "PercheDue": "Pick one of the four: it opens its Sphere at 1, suggests a Creed and a practice, and at step 8 it proposes its Instruments. A Craft has no paths: there is nothing to choose here, and you move on."
         },
         "bussola": {
           "Label": "Compass",
           "Domanda": "Where do you want to get, what drives you now, what do you never betray?",
           "Sotto": "Ambition · Desire · one to three Convictions",
           "Perche": "Four traits written in a few lines, worth more than any score: the first two say where the character is going, the other two what keeps them human on the way.",
-          "PercheDue": "The Ambition says where you want to get, and you will not get there tonight: the best ones are purely mortal. The Desire is what drives you now, and it changes as soon as you get it. The Convictions, one to three, are your moral law: absolute in form, costly in practice, double-edged. Touchstones come at step 12."
+          "PercheDue": "The Ambition says where you want to get, and you will not get there tonight: the best ones are purely mortal. The Desire is what drives you now, and it changes as soon as you get it. The Convictions, one to three, are your moral law: absolute in form, costly in practice, double-edged. Touchstones come at step 13."
         },
         "tipo": {
           "Label": "Type",
@@ -2094,7 +2106,9 @@
         "Strumenti": "The Family's Instruments",
         "Bussola": "Convictions, Ambition and Desire proposed",
         "Tipo": "The suggested Magick Type",
-        "ScegliPrima": "Choose the Family first: the path appears below.",
+        "ViaPasso": "The path",
+        "CraftSenzaVia": "{famiglia} is a Craft: one Sphere and no path. There is nothing to choose here: move on.",
+        "ScegliPrima": "Choose the Family first, at step 2: its paths appear here.",
         "Tradizioni": "The Traditions",
         "Disparati": "The Disparate Crafts"
       },
@@ -2165,7 +2179,7 @@
         "PercepireHint": "For perceptive effects, at the first dot of every Sphere: a dedicated Instrument, same as another or different.",
         "Famiglia": "The Family proposes",
         "Via": "The path proposes",
-        "Nessuna": "No Sphere open: go back to step 6.",
+        "Nessuna": "No Sphere open: go back to step 7.",
         "Tuo": "your exact one",
         "Mestiere": "the trade",
         "Scegli": "Choose the Instrument",
