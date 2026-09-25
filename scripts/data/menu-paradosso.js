@@ -2,8 +2,11 @@
 // Le 65 voci del menù del Paradosso: famiglia, scena, modo (annunciato, immediato, nascosto, scoppio), prezzo (col suo breve), la riga breve, la scheda (quando, segno, effetto, mosse, poi, esempio),
 // la faccia delle comuni in ogni scena e la durata addosso al mago (lancio, turno, scena, sessione; vuota se la voce non sta addosso a nessuno).
 // I Tocchi si chiamano Conseguenze Magick (Blue, 24/9 sera): la rinomina è fatta qui, il PDF segue.
+// Dal 27/9 ogni voce ha il suo cassetto (su cosa rimbalza il Paradosso: mago, incantesimo, dormienti, presenze, posto, scontro, orologi, ancore, scoppio) e ogni scena le sue voci consigliate.
 
 export const FAMIGLIE_PARADOSSO = Object.freeze(["tocchi", "comuni", "scena", "scettro", "presenze", "orologi", "ancore", "grandi"]);
+
+export const CASSETTI_PARADOSSO = Object.freeze(["mago", "incantesimo", "dormienti", "presenze", "posto", "scontro", "orologi", "ancore", "scoppio"]);
 
 export const SCENE_PARADOSSO = Object.freeze([
   {
@@ -16,7 +19,19 @@ export const SCENE_PARADOSSO = Object.freeze([
       "presenze": "l'Esattore, se hanno interrogato un morto",
       "orologi": "Scadenza sulla visione: quello che vedono dura tre segmenti",
       "ancore": "Il bersaglio sbagliato: il ricordo che cercavano è sparito a un'Ancora"
-    }
+    },
+    "consigliate": [
+      "indagine-mezza-verita",
+      "indagine-sorvegliato",
+      "rigidita",
+      "testimone",
+      "indagine-domande",
+      "indagine-senza-prove",
+      "il-bersaglio-sbagliato",
+      "ritorno",
+      "esattore",
+      "ancora"
+    ]
   },
   {
     "id": "trattativa",
@@ -28,7 +43,17 @@ export const SCENE_PARADOSSO = Object.freeze([
       "presenze": "un'Ombra, se il Volgare era sulla persona",
       "orologi": "Ora o mai è già un orologio; Scadenza sulla Mente che convince",
       "ancore": "La chiamata nel mezzo della trattativa"
-    }
+    },
+    "consigliate": [
+      "testimone",
+      "indagine-sorvegliato",
+      "rigidita",
+      "trattativa-ripensamento",
+      "trattativa-garanzia",
+      "trattativa-concorrenza",
+      "trattativa-ora-o-mai",
+      "ritorno"
+    ]
   },
   {
     "id": "infiltrazione",
@@ -40,7 +65,18 @@ export const SCENE_PARADOSSO = Object.freeze([
       "presenze": "un'Ombra che li segue di stanza in stanza",
       "orologi": "Scadenza sulla Mente che nasconde: tre segmenti",
       "ancore": "La chiamata, quando sono dentro e non possono rispondere"
-    }
+    },
+    "consigliate": [
+      "infiltrazione-telecamera",
+      "condizione",
+      "tremore",
+      "infiltrazione-sistema",
+      "infiltrazione-ronda",
+      "infiltrazione-uscita",
+      "ritorno",
+      "residuo",
+      "ombra"
+    ]
   },
   {
     "id": "combattimento",
@@ -52,7 +88,24 @@ export const SCENE_PARADOSSO = Object.freeze([
       "presenze": "Rinforzo, oppure un'Ombra al terzo Volgare",
       "orologi": "Carica a quattro segmenti: pieno, scatta lo Specchio",
       "ancore": "In scena: il passante è l'Ancora di uno di loro"
-    }
+    },
+    "consigliate": [
+      "tremore",
+      "rigidita",
+      "scottatura",
+      "condizione",
+      "combattimento-anticipo",
+      "ritorno",
+      "specchio",
+      "residuo",
+      "in-mezzo",
+      "il-luogo",
+      "combattimento-stop",
+      "combattimento-rinforzo",
+      "combattimento-ritirata",
+      "combattimento-fuga",
+      "carica"
+    ]
   },
   {
     "id": "inseguimento",
@@ -64,7 +117,18 @@ export const SCENE_PARADOSSO = Object.freeze([
       "presenze": "un'Ombra che corre accanto al mago, alla sua stessa velocità",
       "orologi": "Scadenza sulla velocità: tre segmenti e finisce",
       "ancore": "L'incrocio: chi scappa entra nel bar dove lavora l'Ancora di uno"
-    }
+    },
+    "consigliate": [
+      "tremore",
+      "fiacco",
+      "inseguimento-ostacolo",
+      "inseguimento-svolta",
+      "inseguimento-scambio",
+      "specchio",
+      "inseguimento-fine-corsa",
+      "ritorno",
+      "combattimento-fuga"
+    ]
   },
   {
     "id": "rituale",
@@ -76,7 +140,17 @@ export const SCENE_PARADOSSO = Object.freeze([
       "presenze": "Ospite, o l'Esattore se hanno riportato qualcuno",
       "orologi": "Scadenza sui Passi: l'alba, la ronda, chi sta arrivando",
       "ancore": "Il bersaglio sbagliato: il rito ha lavorato sull'Ancora"
-    }
+    },
+    "consigliate": [
+      "rituale-disturbo",
+      "fiacco",
+      "rituale-prezzo-in-piu",
+      "rituale-ospite",
+      "rituale-sbavatura",
+      "ritorno",
+      "specchio",
+      "esattore"
+    ]
   },
   {
     "id": "altrove",
@@ -88,7 +162,18 @@ export const SCENE_PARADOSSO = Object.freeze([
       "presenze": "l'Ospite con la faccia del posto, l'Esattore se hanno preso qualcosa",
       "orologi": "Ciclo se il posto è Dissonante, Scadenza sull'uscita che si chiude all'alba",
       "ancore": "La voce è già un'Ancora imitata; Il bersaglio sbagliato attraverso il posto"
-    }
+    },
+    "consigliate": [
+      "altrove-stranezza",
+      "altrove-pedaggio",
+      "specchio",
+      "altrove-la-voce",
+      "il-luogo",
+      "ritorno",
+      "ospite",
+      "ciclo",
+      "rigidita"
+    ]
   },
   {
     "id": "santuario",
@@ -100,7 +185,17 @@ export const SCENE_PARADOSSO = Object.freeze([
       "presenze": "l'Esattore viene a casa, se sa dove abitano",
       "orologi": "Ancora: l'orologio di chi ha chiamato",
       "ancore": "La chiamata, L'incrocio, Il ritmo: la casa è dove le Ancore arrivano"
-    }
+    },
+    "consigliate": [
+      "residuo",
+      "santuario-il-nodo-storto",
+      "tremore",
+      "santuario-falla",
+      "santuario-visita",
+      "la-chiamata",
+      "l-incrocio",
+      "il-ritmo"
+    ]
   },
   {
     "id": "citta",
@@ -112,7 +207,16 @@ export const SCENE_PARADOSSO = Object.freeze([
       "presenze": "un'Ombra nella folla",
       "orologi": "Scadenza sulla Mente che nasconde",
       "ancore": "In scena: la cassiera è la sorella; La chiamata sul tram"
-    }
+    },
+    "consigliate": [
+      "citta-intoppo",
+      "rigidita",
+      "testimone",
+      "citta-controllo",
+      "citta-folla",
+      "citta-chiusura",
+      "ritorno"
+    ]
   }
 ]);
 
@@ -121,6 +225,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "tremore",
     "nome": "Tremore",
     "famiglia": "tocchi",
+    "cassetto": "mago",
     "scena": "",
     "presenza": false,
     "modo": "immediato",
@@ -149,6 +254,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "rigidita",
     "nome": "Rigidità",
     "famiglia": "tocchi",
+    "cassetto": "mago",
     "scena": "",
     "presenza": false,
     "modo": "immediato",
@@ -177,6 +283,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "fragile",
     "nome": "Fragile",
     "famiglia": "tocchi",
+    "cassetto": "mago",
     "scena": "",
     "presenza": false,
     "modo": "immediato",
@@ -205,6 +312,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "fiacco",
     "nome": "Fiacco",
     "famiglia": "tocchi",
+    "cassetto": "mago",
     "scena": "",
     "presenza": false,
     "modo": "immediato",
@@ -233,6 +341,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "scottatura",
     "nome": "Scottatura",
     "famiglia": "tocchi",
+    "cassetto": "mago",
     "scena": "",
     "presenza": false,
     "modo": "immediato",
@@ -261,6 +370,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "condizione",
     "nome": "Condizione",
     "famiglia": "tocchi",
+    "cassetto": "mago",
     "scena": "",
     "presenza": false,
     "modo": "immediato",
@@ -289,6 +399,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "ritorno",
     "nome": "Ritorno",
     "famiglia": "comuni",
+    "cassetto": "incantesimo",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -354,6 +465,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "residuo",
     "nome": "Residuo",
     "famiglia": "comuni",
+    "cassetto": "incantesimo",
     "scena": "",
     "presenza": false,
     "modo": "immediato",
@@ -419,6 +531,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "specchio",
     "nome": "Specchio",
     "famiglia": "comuni",
+    "cassetto": "incantesimo",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -484,6 +597,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "testimone",
     "nome": "Testimone",
     "famiglia": "comuni",
+    "cassetto": "dormienti",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -549,6 +663,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "in-mezzo",
     "nome": "In mezzo",
     "famiglia": "comuni",
+    "cassetto": "dormienti",
     "scena": "",
     "presenza": false,
     "modo": "immediato",
@@ -614,6 +729,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "il-luogo",
     "nome": "Il luogo",
     "famiglia": "comuni",
+    "cassetto": "posto",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -679,6 +795,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "ombra",
     "nome": "Ombra",
     "famiglia": "presenze",
+    "cassetto": "presenze",
     "scena": "",
     "presenza": true,
     "modo": "annunciato",
@@ -707,6 +824,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "esattore",
     "nome": "Esattore",
     "famiglia": "presenze",
+    "cassetto": "presenze",
     "scena": "",
     "presenza": true,
     "modo": "annunciato",
@@ -735,6 +853,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "ospite",
     "nome": "Ospite",
     "famiglia": "presenze",
+    "cassetto": "presenze",
     "scena": "",
     "presenza": true,
     "modo": "annunciato",
@@ -763,6 +882,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "carica",
     "nome": "Carica",
     "famiglia": "orologi",
+    "cassetto": "orologi",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -784,13 +904,14 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Quattro segmenti. Quando è pieno, il fuoco che avete acceso torna indietro.»",
     "durata": "",
     "ordine": 16,
-    "breve": "orologio a Volgari: pieno, scatta il rimbalzo",
+    "breve": "a ogni Volgare → il rimbalzo che hai scelto",
     "facce": {}
   },
   {
     "id": "scadenza",
     "nome": "Scadenza",
     "famiglia": "orologi",
+    "cassetto": "orologi",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -812,13 +933,14 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Il muro di ghiaccio, tre segmenti: al terzo si scioglie.»",
     "durata": "",
     "ordine": 17,
-    "breve": "orologio a turni: pieno, l'effetto cade",
+    "breve": "a ogni turno → l'effetto cade",
     "facce": {}
   },
   {
     "id": "arrivo",
     "nome": "Arrivo",
     "famiglia": "orologi",
+    "cassetto": "orologi",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -840,13 +962,14 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Due segmenti, senza nome. Al primo le ombre si muovono in ritardo.»",
     "durata": "",
     "ordine": 18,
-    "breve": "orologio a turni: pieno, entra una Presenza",
+    "breve": "a ogni turno → entra una Presenza",
     "facce": {}
   },
   {
     "id": "nascosto",
     "nome": "Nascosto",
     "famiglia": "orologi",
+    "cassetto": "orologi",
     "scena": "",
     "presenza": false,
     "modo": "nascosto",
@@ -866,13 +989,14 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la maga con Quadrante sente un conto alla rovescia che gli altri non sentono, e sono già a tre Volgari.",
     "durata": "",
     "ordine": 19,
-    "breve": "orologio invisibile a Volgari: pieno, il rimbalzo",
+    "breve": "a ogni Volgare, invisibile → il rimbalzo",
     "facce": {}
   },
   {
     "id": "ciclo",
     "nome": "Ciclo",
     "famiglia": "orologi",
+    "cassetto": "orologi",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -894,13 +1018,14 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Ogni due minuti il posto scarica: chi ha lanciato prende Tremore.»",
     "durata": "",
     "ordine": 20,
-    "breve": "orologio a giri: pieno, una Conseguenza gratis",
+    "breve": "a ogni giro, col timer → una Conseguenza gratis",
     "facce": {}
   },
   {
     "id": "ancora",
-    "nome": "Ancora",
+    "nome": "L'orologio dell'Ancora",
     "famiglia": "orologi",
+    "cassetto": "ancore",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -922,13 +1047,14 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«Tre segmenti: uno per ogni scena in cui tua sorella non ha una risposta.»",
     "durata": "",
     "ordine": 21,
-    "breve": "orologio a scene: pieno, il guaio dell'Ancora",
+    "breve": "a ogni scena → il guaio dell'Ancora",
     "facce": {}
   },
   {
     "id": "la-chiamata",
     "nome": "La chiamata",
     "famiglia": "ancore",
+    "cassetto": "ancore",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -957,6 +1083,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "l-incrocio",
     "nome": "L'incrocio",
     "famiglia": "ancore",
+    "cassetto": "ancore",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -985,6 +1112,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "in-scena",
     "nome": "In scena",
     "famiglia": "ancore",
+    "cassetto": "ancore",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -1013,6 +1141,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "il-bersaglio-sbagliato",
     "nome": "Il bersaglio sbagliato",
     "famiglia": "ancore",
+    "cassetto": "ancore",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -1041,6 +1170,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "il-ritmo",
     "nome": "Il ritmo",
     "famiglia": "ancore",
+    "cassetto": "ancore",
     "scena": "",
     "presenza": false,
     "modo": "annunciato",
@@ -1070,6 +1200,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "indagine-mezza-verita",
     "nome": "Mezza verità",
     "famiglia": "scena",
+    "cassetto": "incantesimo",
     "scena": "indagine",
     "presenza": false,
     "modo": "immediato",
@@ -1098,6 +1229,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "indagine-sorvegliato",
     "nome": "Sorvegliato",
     "famiglia": "scena",
+    "cassetto": "incantesimo",
     "scena": "indagine",
     "presenza": false,
     "modo": "immediato",
@@ -1126,6 +1258,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "indagine-domande",
     "nome": "Domande",
     "famiglia": "scettro",
+    "cassetto": "dormienti",
     "scena": "indagine",
     "presenza": false,
     "modo": "annunciato",
@@ -1154,6 +1287,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "indagine-senza-prove",
     "nome": "Senza prove",
     "famiglia": "scettro",
+    "cassetto": "incantesimo",
     "scena": "indagine",
     "presenza": false,
     "modo": "immediato",
@@ -1182,6 +1316,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "trattativa-ripensamento",
     "nome": "Ripensamento",
     "famiglia": "scena",
+    "cassetto": "incantesimo",
     "scena": "trattativa",
     "presenza": false,
     "modo": "annunciato",
@@ -1210,6 +1345,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "trattativa-garanzia",
     "nome": "Garanzia",
     "famiglia": "scettro",
+    "cassetto": "scontro",
     "scena": "trattativa",
     "presenza": false,
     "modo": "annunciato",
@@ -1238,6 +1374,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "trattativa-concorrenza",
     "nome": "Concorrenza",
     "famiglia": "scettro",
+    "cassetto": "dormienti",
     "scena": "trattativa",
     "presenza": false,
     "modo": "annunciato",
@@ -1266,6 +1403,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "trattativa-ora-o-mai",
     "nome": "Ora o mai",
     "famiglia": "scettro",
+    "cassetto": "scontro",
     "scena": "trattativa",
     "presenza": false,
     "modo": "annunciato",
@@ -1294,6 +1432,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "infiltrazione-telecamera",
     "nome": "Telecamera",
     "famiglia": "scena",
+    "cassetto": "dormienti",
     "scena": "infiltrazione",
     "presenza": false,
     "modo": "annunciato",
@@ -1322,6 +1461,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "infiltrazione-sistema",
     "nome": "Sistema",
     "famiglia": "scena",
+    "cassetto": "posto",
     "scena": "infiltrazione",
     "presenza": false,
     "modo": "immediato",
@@ -1350,6 +1490,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "infiltrazione-uscita",
     "nome": "Uscita",
     "famiglia": "scena",
+    "cassetto": "incantesimo",
     "scena": "infiltrazione",
     "presenza": false,
     "modo": "annunciato",
@@ -1378,6 +1519,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "infiltrazione-ronda",
     "nome": "Ronda",
     "famiglia": "scettro",
+    "cassetto": "dormienti",
     "scena": "infiltrazione",
     "presenza": false,
     "modo": "annunciato",
@@ -1406,6 +1548,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "combattimento-anticipo",
     "nome": "Anticipo",
     "famiglia": "scettro",
+    "cassetto": "mago",
     "scena": "combattimento",
     "presenza": false,
     "modo": "immediato",
@@ -1434,6 +1577,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "combattimento-rinforzo",
     "nome": "Rinforzo",
     "famiglia": "scettro",
+    "cassetto": "presenze",
     "scena": "combattimento",
     "presenza": true,
     "modo": "annunciato",
@@ -1462,6 +1606,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "combattimento-stop",
     "nome": "Stop",
     "famiglia": "scettro",
+    "cassetto": "scontro",
     "scena": "combattimento",
     "presenza": false,
     "modo": "annunciato",
@@ -1490,6 +1635,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "combattimento-ritirata",
     "nome": "Ritirata",
     "famiglia": "scettro",
+    "cassetto": "scontro",
     "scena": "combattimento",
     "presenza": false,
     "modo": "annunciato",
@@ -1518,6 +1664,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "combattimento-fuga",
     "nome": "Fuga",
     "famiglia": "scettro",
+    "cassetto": "scontro",
     "scena": "combattimento",
     "presenza": false,
     "modo": "immediato",
@@ -1546,6 +1693,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "inseguimento-svolta",
     "nome": "Svolta",
     "famiglia": "scena",
+    "cassetto": "incantesimo",
     "scena": "inseguimento",
     "presenza": false,
     "modo": "immediato",
@@ -1574,6 +1722,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "inseguimento-scambio",
     "nome": "Scambio",
     "famiglia": "scena",
+    "cassetto": "incantesimo",
     "scena": "inseguimento",
     "presenza": false,
     "modo": "immediato",
@@ -1602,6 +1751,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "inseguimento-ostacolo",
     "nome": "Ostacolo",
     "famiglia": "scettro",
+    "cassetto": "posto",
     "scena": "inseguimento",
     "presenza": false,
     "modo": "immediato",
@@ -1630,6 +1780,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "inseguimento-fine-corsa",
     "nome": "Fine corsa",
     "famiglia": "scettro",
+    "cassetto": "scontro",
     "scena": "inseguimento",
     "presenza": false,
     "modo": "annunciato",
@@ -1658,6 +1809,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "rituale-disturbo",
     "nome": "Disturbo",
     "famiglia": "scena",
+    "cassetto": "mago",
     "scena": "rituale",
     "presenza": false,
     "modo": "immediato",
@@ -1686,6 +1838,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "rituale-prezzo-in-piu",
     "nome": "Prezzo in più",
     "famiglia": "scena",
+    "cassetto": "mago",
     "scena": "rituale",
     "presenza": false,
     "modo": "annunciato",
@@ -1714,6 +1867,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "rituale-ospite",
     "nome": "Ospite",
     "famiglia": "scena",
+    "cassetto": "presenze",
     "scena": "rituale",
     "presenza": true,
     "modo": "annunciato",
@@ -1742,6 +1896,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "rituale-sbavatura",
     "nome": "Sbavatura",
     "famiglia": "scena",
+    "cassetto": "incantesimo",
     "scena": "rituale",
     "presenza": false,
     "modo": "immediato",
@@ -1770,6 +1925,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "altrove-pedaggio",
     "nome": "Pedaggio",
     "famiglia": "scettro",
+    "cassetto": "posto",
     "scena": "altrove",
     "presenza": false,
     "modo": "annunciato",
@@ -1798,6 +1954,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "altrove-la-voce",
     "nome": "La voce",
     "famiglia": "scettro",
+    "cassetto": "ancore",
     "scena": "altrove",
     "presenza": false,
     "modo": "annunciato",
@@ -1826,6 +1983,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "altrove-stranezza",
     "nome": "Stranezza",
     "famiglia": "scettro",
+    "cassetto": "mago",
     "scena": "altrove",
     "presenza": false,
     "modo": "immediato",
@@ -1854,6 +2012,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "santuario-falla",
     "nome": "Falla",
     "famiglia": "scena",
+    "cassetto": "incantesimo",
     "scena": "santuario",
     "presenza": false,
     "modo": "annunciato",
@@ -1882,6 +2041,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "santuario-il-nodo-storto",
     "nome": "Il Nodo storto",
     "famiglia": "scena",
+    "cassetto": "posto",
     "scena": "santuario",
     "presenza": false,
     "modo": "annunciato",
@@ -1910,6 +2070,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "santuario-visita",
     "nome": "Visita",
     "famiglia": "scettro",
+    "cassetto": "dormienti",
     "scena": "santuario",
     "presenza": false,
     "modo": "annunciato",
@@ -1938,6 +2099,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "citta-intoppo",
     "nome": "Intoppo",
     "famiglia": "scettro",
+    "cassetto": "incantesimo",
     "scena": "citta",
     "presenza": false,
     "modo": "immediato",
@@ -1966,6 +2128,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "citta-controllo",
     "nome": "Controllo",
     "famiglia": "scettro",
+    "cassetto": "dormienti",
     "scena": "citta",
     "presenza": false,
     "modo": "annunciato",
@@ -1994,6 +2157,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "citta-folla",
     "nome": "Folla",
     "famiglia": "scettro",
+    "cassetto": "dormienti",
     "scena": "citta",
     "presenza": false,
     "modo": "annunciato",
@@ -2022,6 +2186,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "citta-chiusura",
     "nome": "Chiusura",
     "famiglia": "scettro",
+    "cassetto": "posto",
     "scena": "citta",
     "presenza": false,
     "modo": "immediato",
@@ -2050,6 +2215,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "anomalia",
     "nome": "Anomalia",
     "famiglia": "grandi",
+    "cassetto": "scoppio",
     "scena": "",
     "presenza": false,
     "modo": "scoppio",
@@ -2079,6 +2245,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "macchia",
     "nome": "Macchia",
     "famiglia": "grandi",
+    "cassetto": "scoppio",
     "scena": "",
     "presenza": false,
     "modo": "scoppio",
@@ -2107,6 +2274,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "spirito-del-paradosso",
     "nome": "Spirito del Paradosso",
     "famiglia": "grandi",
+    "cassetto": "scoppio",
     "scena": "",
     "presenza": false,
     "modo": "scoppio",
@@ -2135,6 +2303,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "id": "regno-del-paradosso",
     "nome": "Regno del Paradosso",
     "famiglia": "grandi",
+    "cassetto": "scoppio",
     "scena": "",
     "presenza": false,
     "modo": "scoppio",

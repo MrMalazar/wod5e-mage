@@ -1,5 +1,5 @@
 import { MODULE_ID } from "./constants.js";
-import { FAMIGLIE_PARADOSSO, MENU_PARADOSSO, SCENE_PARADOSSO } from "./data/menu-paradosso.js";
+import { CASSETTI_PARADOSSO, FAMIGLIE_PARADOSSO, MENU_PARADOSSO, SCENE_PARADOSSO } from "./data/menu-paradosso.js";
 import { ROLL_CARD_FLAG } from "./roll-card.js";
 
 /**
@@ -12,7 +12,7 @@ import { ROLL_CARD_FLAG } from "./roll-card.js";
  * automatica dei punti. La finestra sta in quadro-narratore.js.
  */
 
-export { FAMIGLIE_PARADOSSO, MENU_PARADOSSO, SCENE_PARADOSSO };
+export { CASSETTI_PARADOSSO, FAMIGLIE_PARADOSSO, MENU_PARADOSSO, SCENE_PARADOSSO };
 
 /** Sull'attore: gli effetti del Paradosso che ha addosso, per id di spesa. */
 export const ADDOSSO_FLAG = "paradossoAddosso";
@@ -46,6 +46,41 @@ export const COPPIE_OROLOGIO = Object.freeze([
 ]);
 
 const ORDINE_FAMIGLIE = FAMIGLIE_PARADOSSO;
+
+/** Una voce come la vede la lista: la sua scena per nome, se è della scena in corso, la faccia delle comuni. */
+function voceInLista(voce, scenaId) {
+  return {
+    ...voce,
+    scenaNome: voce.scena ? (scenaById(voce.scena)?.nome ?? voce.scena) : "",
+    inCorso: Boolean(voce.scena) && voce.scena === scenaId,
+    faccia: scenaId && voce.facce?.[scenaId] ? voce.facce[scenaId] : null
+  };
+}
+
+/**
+ * Il menù in nove cassetti (Blue, 27/9): le voci raggruppate per «su cosa
+ * rimbalza il Paradosso» (mago, incantesimo, dormienti, presenze, posto,
+ * scontro, orologi, ancore, scoppio), nell'ordine del menù, in ordine
+ * alfabetico dentro ogni cassetto, con la stessa cerca di `cassettiPerScena`
+ * (che resta per la tendina del rimbalzo). Con una scena scelta le voci che
+ * il PDF consiglia per quella scena portano `consigliata`; senza scena
+ * niente. La tendina non nasconde mai una voce; la cerca tiene solo i
+ * cassetti con qualcosa dentro.
+ */
+export function cassettiPerRimbalzo(scenaId = "", { cerca = "" } = {}) {
+  const scena = scenaById(scenaId);
+  const consigliate = new Set(scena?.consigliate ?? []);
+  const filtro = testo(cerca).toLowerCase();
+  const passa = (voce) => !filtro || `${voce.nome} ${voce.breve ?? ""} ${voce.effetto} ${voce.quando} ${voce.scenaNome ?? ""}`.toLowerCase().includes(filtro);
+  return CASSETTI_PARADOSSO.map((cassetto) => {
+    const voci = MENU_PARADOSSO
+      .filter((voce) => voce.cassetto === cassetto)
+      .map((voce) => ({ ...voceInLista(voce, scenaId), consigliata: consigliate.has(voce.id) }))
+      .filter(passa)
+      .sort(perNome);
+    return { cassetto, voci, conto: voci.length, consigliate: voci.filter((voce) => voce.consigliata).length };
+  }).filter((cassetto) => cassetto.conto > 0 || !filtro);
+}
 
 function count(value) {
   return Math.max(Math.trunc(Number(value) || 0), 0);

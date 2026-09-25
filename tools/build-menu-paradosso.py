@@ -79,12 +79,12 @@ BREVI = {
     "ombra": "entra un'Ombra: vuole una cosa piccola",
     "esattore": "entra l'Esattore: vuole l'effetto disfatto",
     "ospite": "entra un testimone: Volgari con testimoni",
-    "carica": "orologio a Volgari: pieno, scatta il rimbalzo",
-    "scadenza": "orologio a turni: pieno, l'effetto cade",
-    "arrivo": "orologio a turni: pieno, entra una Presenza",
-    "nascosto": "orologio invisibile a Volgari: pieno, il rimbalzo",
-    "ciclo": "orologio a giri: pieno, una Conseguenza gratis",
-    "ancora": "orologio a scene: pieno, il guaio dell'Ancora",
+    "carica": "a ogni Volgare → il rimbalzo che hai scelto",
+    "scadenza": "a ogni turno → l'effetto cade",
+    "arrivo": "a ogni turno → entra una Presenza",
+    "nascosto": "a ogni Volgare, invisibile → il rimbalzo",
+    "ciclo": "a ogni giro, col timer → una Conseguenza gratis",
+    "ancora": "a ogni scena → il guaio dell'Ancora",
     "la-chiamata": "l'Ancora chiama: si va da lei, o parte l'orologio",
     "l-incrocio": "due Ancore nello stesso guaio",
     "in-scena": "l'Ancora entra nell'effetto: In mezzo + Testimone",
@@ -131,6 +131,47 @@ BREVI = {
     "regno-del-paradosso": "bolla fuori dal mondo: uscirne è la sessione dopo",
 }
 NUMERI = {"uno": 1, "due": 2, "tre": 3}
+# I nove cassetti del menù (Blue, 27/9): le voci raggruppate per «su cosa
+# rimbalza il Paradosso», nell'ordine del menù. Ogni voce sta in un cassetto
+# e uno solo; la famiglia resta e guida la spesa, la carta, gli orologi.
+CASSETTI = {
+    "mago": ["tremore", "rigidita", "fragile", "fiacco", "scottatura", "condizione", "altrove-stranezza", "combattimento-anticipo", "rituale-disturbo", "rituale-prezzo-in-piu"],
+    "incantesimo": ["ritorno", "residuo", "specchio", "rituale-sbavatura", "infiltrazione-uscita", "santuario-falla", "trattativa-ripensamento", "indagine-mezza-verita", "inseguimento-svolta", "inseguimento-scambio", "citta-intoppo", "indagine-senza-prove", "indagine-sorvegliato"],
+    "dormienti": ["testimone", "in-mezzo", "infiltrazione-telecamera", "citta-folla", "indagine-domande", "infiltrazione-ronda", "citta-controllo", "santuario-visita", "trattativa-concorrenza"],
+    "presenze": ["ombra", "esattore", "ospite", "rituale-ospite", "combattimento-rinforzo"],
+    "posto": ["il-luogo", "infiltrazione-sistema", "santuario-il-nodo-storto", "altrove-pedaggio", "citta-chiusura", "inseguimento-ostacolo"],
+    "scontro": ["combattimento-stop", "combattimento-ritirata", "combattimento-fuga", "inseguimento-fine-corsa", "trattativa-ora-o-mai", "trattativa-garanzia"],
+    "orologi": ["carica", "nascosto", "scadenza", "arrivo", "ciclo"],
+    "ancore": ["la-chiamata", "l-incrocio", "in-scena", "il-bersaglio-sbagliato", "il-ritmo", "ancora", "altrove-la-voce"],
+    "scoppio": ["anomalia", "macchia", "spirito-del-paradosso", "regno-del-paradosso"],
+}
+# Le voci che il PDF consiglia per ogni scena (27/9): i tre momenti della
+# pagina della scena più la Conseguenza della tavola «Le famiglie in questa scena».
+CONSIGLIATE = {
+    "indagine": ["indagine-mezza-verita", "indagine-sorvegliato", "rigidita", "testimone", "indagine-domande", "indagine-senza-prove", "il-bersaglio-sbagliato", "ritorno", "esattore", "ancora"],
+    "trattativa": ["testimone", "indagine-sorvegliato", "rigidita", "trattativa-ripensamento", "trattativa-garanzia", "trattativa-concorrenza", "trattativa-ora-o-mai", "ritorno"],
+    "infiltrazione": ["infiltrazione-telecamera", "condizione", "tremore", "infiltrazione-sistema", "infiltrazione-ronda", "infiltrazione-uscita", "ritorno", "residuo", "ombra"],
+    "combattimento": ["tremore", "rigidita", "scottatura", "condizione", "combattimento-anticipo", "ritorno", "specchio", "residuo", "in-mezzo", "il-luogo", "combattimento-stop", "combattimento-rinforzo", "combattimento-ritirata", "combattimento-fuga", "carica"],
+    "inseguimento": ["tremore", "fiacco", "inseguimento-ostacolo", "inseguimento-svolta", "inseguimento-scambio", "specchio", "inseguimento-fine-corsa", "ritorno", "combattimento-fuga"],
+    "rituale": ["rituale-disturbo", "fiacco", "rituale-prezzo-in-piu", "rituale-ospite", "rituale-sbavatura", "ritorno", "specchio", "esattore"],
+    "altrove": ["altrove-stranezza", "altrove-pedaggio", "specchio", "altrove-la-voce", "il-luogo", "ritorno", "ospite", "ciclo", "rigidita"],
+    "santuario": ["residuo", "santuario-il-nodo-storto", "tremore", "santuario-falla", "santuario-visita", "la-chiamata", "l-incrocio", "il-ritmo"],
+    "citta": ["citta-intoppo", "rigidita", "testimone", "citta-controllo", "citta-folla", "citta-chiusura", "ritorno"],
+}
+# I nomi che cambiano qui, non nel sorgente (27/9): l'id resta, perché lo
+# usano il Cambio scena e il testo di cosa scatta.
+RINOMINA_VOCI = {"ancora": "L'orologio dell'Ancora"}
+
+
+def cassetto_di_voce():
+    """La tavola id → cassetto; una voce in due cassetti è un errore."""
+    tavola = {}
+    for cassetto, ids in CASSETTI.items():
+        for vid in ids:
+            if vid in tavola:
+                raise SystemExit(f"la voce {vid} sta in due cassetti: {tavola[vid]} e {cassetto}")
+            tavola[vid] = cassetto
+    return tavola
 
 BLOCCO = re.compile(r"^::: *(\w+)(?: +([^\n]*))?\n(.*?)^:::\s*$", re.M | re.S)
 
@@ -193,6 +234,7 @@ def main():
     facce_famiglia = {} # scena -> famiglia -> testo
     sottotitoli = {}
     ordine = 0
+    cassetti = cassetto_di_voce()
     for i in range(1, len(sezioni), 2):
         titolo = sezioni[i].strip()
         corpo = sezioni[i + 1]
@@ -229,10 +271,14 @@ def main():
             if scena:
                 fam = "scettro" if nome in SCETTRO else "scena"
             ordine += 1
+            vid = (f"{scena}-" if scena else "") + slug(nome)
+            if vid not in cassetti:
+                raise SystemExit(f"la voce {vid} non ha un cassetto")
             voci.append({
-                "id": (f"{scena}-" if scena else "") + slug(nome),
-                "nome": nome,
+                "id": vid,
+                "nome": RINOMINA_VOCI.get(vid, nome),
                 "famiglia": fam,
+                "cassetto": cassetti[vid],
                 "scena": scena,
                 "presenza": fam == "presenze" or nome in PRESENZE_DI_SCENA,
                 "modo": modo,
@@ -260,17 +306,27 @@ def main():
         raise SystemExit(f"attese 65 voci, trovate {len(voci)}")
     if set(BREVI) - {v["id"] for v in voci}:
         raise SystemExit(f"righe brevi di voci che non ci sono: {sorted(set(BREVI) - {v['id'] for v in voci})}")
-    scene = [{"id": sid, "nome": nome, **sottotitoli.get(sid, {"sotto": "", "testo": ""}), "facce": facce_famiglia.get(sid, {})} for nome, sid in SCENE.items()]
+    ids_voci = {v["id"] for v in voci}
+    if set(cassetti) - ids_voci:
+        raise SystemExit(f"cassetti con voci che non ci sono: {sorted(set(cassetti) - ids_voci)}")
+    for sid, ids in CONSIGLIATE.items():
+        if sid not in SCENE.values():
+            raise SystemExit(f"consigliate di una scena che non c'è: {sid}")
+        if set(ids) - ids_voci:
+            raise SystemExit(f"consigliate che non ci sono ({sid}): {sorted(set(ids) - ids_voci)}")
+    scene = [{"id": sid, "nome": nome, **sottotitoli.get(sid, {"sotto": "", "testo": ""}), "facce": facce_famiglia.get(sid, {}), "consigliate": list(CONSIGLIATE.get(sid, []))} for nome, sid in SCENE.items()]
     voci = rinomina(voci)
     scene = rinomina(scene)
     testa = (
         "// Generato da tools/build-menu-paradosso.py dal sorgente del menù (tools/dati/menu_paradosso.md, il testo del PDF del 24/9/2026): non toccare a mano.\n"
         "// Le 65 voci del menù del Paradosso: famiglia, scena, modo (annunciato, immediato, nascosto, scoppio), prezzo (col suo breve), la riga breve, la scheda (quando, segno, effetto, mosse, poi, esempio),\n"
         "// la faccia delle comuni in ogni scena e la durata addosso al mago (lancio, turno, scena, sessione; vuota se la voce non sta addosso a nessuno).\n"
-        "// I Tocchi si chiamano Conseguenze Magick (Blue, 24/9 sera): la rinomina è fatta qui, il PDF segue.\n\n"
+        "// I Tocchi si chiamano Conseguenze Magick (Blue, 24/9 sera): la rinomina è fatta qui, il PDF segue.\n"
+        "// Dal 27/9 ogni voce ha il suo cassetto (su cosa rimbalza il Paradosso: mago, incantesimo, dormienti, presenze, posto, scontro, orologi, ancore, scoppio) e ogni scena le sue voci consigliate.\n\n"
     )
     js = testa
     js += "export const FAMIGLIE_PARADOSSO = Object.freeze([\"tocchi\", \"comuni\", \"scena\", \"scettro\", \"presenze\", \"orologi\", \"ancore\", \"grandi\"]);\n\n"
+    js += "export const CASSETTI_PARADOSSO = Object.freeze(" + json.dumps(list(CASSETTI), ensure_ascii=False) + ");\n\n"
     js += "export const SCENE_PARADOSSO = Object.freeze(" + json.dumps(scene, ensure_ascii=False, indent=2) + ");\n\n"
     js += "export const MENU_PARADOSSO = Object.freeze(" + json.dumps(voci, ensure_ascii=False, indent=2) + ");\n"
     OUT.write_text(js, encoding="utf-8")

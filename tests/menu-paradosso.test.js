@@ -5,6 +5,8 @@ import {
   addossoDopo,
   avanzaOrologio,
   campiSpesa,
+  CASSETTI_PARADOSSO,
+  cassettiPerRimbalzo,
   cassettiPerScena,
   contoRitmo,
   COPIA_FLAG,
@@ -77,6 +79,55 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
     assert.equal(voce.prezzo.tipo, "suaSoglia", `${voce.id}: una Presenza costa la sua soglia`);
     assert.equal(voce.durata, "", `${voce.id}: una Presenza non sta addosso`);
   }
+}
+
+// I nove cassetti (Blue, 27/9): su cosa rimbalza il Paradosso; ogni voce in uno e uno solo; le consigliate della scena.
+{
+  assert.deepEqual([...CASSETTI_PARADOSSO], ["mago", "incantesimo", "dormienti", "presenze", "posto", "scontro", "orologi", "ancore", "scoppio"]);
+  const conto = {};
+  for (const voce of MENU_PARADOSSO) {
+    assert.ok(CASSETTI_PARADOSSO.includes(voce.cassetto), `${voce.id}: cassetto ${voce.cassetto}`);
+    conto[voce.cassetto] = (conto[voce.cassetto] ?? 0) + 1;
+  }
+  assert.deepEqual(conto, { mago: 10, incantesimo: 13, dormienti: 9, presenze: 5, posto: 6, scontro: 6, orologi: 5, ancore: 7, scoppio: 4 });
+  const cassetti = cassettiPerRimbalzo("combattimento");
+  assert.deepEqual(cassetti.map((c) => c.cassetto), [...CASSETTI_PARADOSSO], "nove cassetti, nell'ordine del menù");
+  assert.equal(cassetti.reduce((n, c) => n + c.conto, 0), 65, "ogni voce in un cassetto e uno solo");
+  for (const cassetto of cassetti) {
+    assert.deepEqual(cassetto.voci.map((v) => v.nome), [...cassetto.voci.map((v) => v.nome)].sort((a, b) => a.localeCompare(b, "it")), `${cassetto.cassetto}: in ordine alfabetico`);
+    assert.ok(cassetto.voci.every((v) => v.cassetto === cassetto.cassetto));
+  }
+  assert.deepEqual(cassetti.find((c) => c.cassetto === "orologi").voci.map((v) => v.id), ["arrivo", "carica", "ciclo", "nascosto", "scadenza"], "l'orologio dell'Ancora sta fra le Ancore");
+  assert.deepEqual(cassetti.find((c) => c.cassetto === "scoppio").voci.map((v) => v.modo), ["scoppio", "scoppio", "scoppio", "scoppio"]);
+  // Le 15 consigliate di Combattimento portano il segno; le altre no.
+  const consigliate = cassetti.flatMap((c) => c.voci).filter((v) => v.consigliata).map((v) => v.id).sort();
+  assert.deepEqual(consigliate, ["carica", "combattimento-anticipo", "combattimento-fuga", "combattimento-rinforzo", "combattimento-ritirata", "combattimento-stop", "condizione", "il-luogo", "in-mezzo", "residuo", "rigidita", "ritorno", "scottatura", "specchio", "tremore"]);
+  assert.equal(cassetti.reduce((n, c) => n + c.consigliate, 0), 15);
+  assert.equal(cassetti.find((c) => c.cassetto === "mago").consigliate, 5);
+  assert.ok(cassettiPerRimbalzo("").flatMap((c) => c.voci).every((v) => !v.consigliata), "senza scena non si segna niente");
+  assert.equal(cassettiPerRimbalzo("").reduce((n, c) => n + c.conto, 0), 65, "la tendina non nasconde mai una voce");
+  for (const scena of SCENE_PARADOSSO) {
+    assert.ok(Array.isArray(scena.consigliate) && scena.consigliate.length >= 7, `${scena.id}: consigliate`);
+    for (const id of scena.consigliate) assert.ok(voceById(id), `${scena.id}: consigliata ${id} che non c'è`);
+  }
+  // Le voci della scena in corso e le facce, come nella lista per famiglie.
+  assert.ok(cassetti.flatMap((c) => c.voci).find((v) => v.id === "combattimento-stop").inCorso);
+  assert.ok(cassetti.flatMap((c) => c.voci).find((v) => v.id === "ritorno").faccia.testo);
+  // La cerca tiene solo i cassetti con qualcosa dentro, e cerca anche nella riga breve e nel nome della scena.
+  const cerca = cassettiPerRimbalzo("rituale", { cerca: "ospite" });
+  assert.ok(cerca.length >= 1 && cerca.every((c) => c.conto > 0));
+  assert.ok(cerca.some((c) => c.voci.some((v) => v.id === "rituale-ospite")));
+  assert.ok(cassettiPerRimbalzo("", { cerca: "−2 dadi" }).some((c) => c.voci.some((v) => v.id === "tremore")));
+  assert.deepEqual(cassettiPerRimbalzo("", { cerca: "xyzxyz" }), []);
+  // Le righe nuove (27/9): l'orologio dell'Ancora, e gli orologi senza la parola «orologio» davanti.
+  assert.equal(voceById("ancora").nome, "L'orologio dell'Ancora");
+  assert.equal(voceById("carica").breve, "a ogni Volgare → il rimbalzo che hai scelto");
+  assert.equal(voceById("nascosto").breve, "a ogni Volgare, invisibile → il rimbalzo");
+  assert.equal(voceById("scadenza").breve, "a ogni turno → l'effetto cade");
+  assert.equal(voceById("arrivo").breve, "a ogni turno → entra una Presenza");
+  assert.equal(voceById("ciclo").breve, "a ogni giro, col timer → una Conseguenza gratis");
+  assert.equal(voceById("ancora").breve, "a ogni scena → il guaio dell'Ancora");
+  for (const id of ["carica", "nascosto", "scadenza", "arrivo", "ciclo", "ancora"]) assert.ok(!/^orologio/i.test(voceById(id).breve), `${id}: la riga non ripete «orologio»`);
 }
 
 // La lista (25/9): tutte le voci in vista, in ordine alfabetico, senza sottotitoli di scena; ogni voce di scena sa la sua scena; le facce della scena in corso.
@@ -324,7 +375,7 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.equal((testa.match(/data-action="modo"/g) ?? []).length, 1, "i modi in un {{#each}}");
   const menu = readFileSync(new URL("../templates/quadro/menu.hbs", import.meta.url), "utf8");
   assert.ok(menu.includes('data-action="voce"') && menu.includes('data-action="spendi"') && menu.includes('data-testo="{{voce.testoCerca}}"'));
-  for (const marker of ['<span class="breve">{{voce.breve}}</span>', 'data-role="titolo"', 'wod5e-mage-menu-segmenti', 'data-role="scatta"', 'data-nome="{{r.nome}}"', "{{#each voce.bersagli as |m|}}", 'data-action="testo"', 'class="wod5e-mage-menu-info"', 'data-action="famiglia"', 'data-role="vede" value="tutti"', "wod5e-mage-menu-famiglia-titolo", "{{voce.scenaNome}}"]) {
+  for (const marker of ['<span class="breve">{{voce.breve}}</span>', 'data-role="titolo"', 'wod5e-mage-menu-segmenti', 'data-role="scatta"', 'data-nome="{{r.nome}}"', "{{#each voce.bersagli as |m|}}", 'data-action="testo"', 'class="wod5e-mage-menu-info"', 'data-action="cassetto"', 'data-cassetto="{{cassetto.cassetto}}"', 'wod5e-mage-menu-cassetto-titolo', '<span class="sotto">{{cassetto.sotto}}</span>', '<small class="conto">{{cassetto.conto}}</small>', ' consigliata{{/if}}', ' staccato{{/if}}', 'data-role="vede" value="tutti"', "{{voce.scenaNome}}"]) {
     assert.ok(menu.includes(marker), `menu.hbs: manca ${marker}`);
   }
   assert.ok(!menu.includes("wod5e-mage-menu-gruppo") && !menu.includes("data-gruppo"), "niente sottotitoli di scena (Blue, 25/9 sera)");
@@ -353,7 +404,7 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
     assert.ok(leggi(it, chiave) !== undefined, `it.json: manca WOD5E_MAGE.${chiave}`);
     assert.ok(leggi(en, chiave) !== undefined, `en.json: manca WOD5E_MAGE.${chiave}`);
   }
-  for (const gruppo of ["Modi", "Posti", "Famiglie", "Modo", "Forme", "Colori", "Durata"]) {
+  for (const gruppo of ["Modi", "Posti", "Famiglie", "Cassetti", "Modo", "Forme", "Colori", "Durata"]) {
     assert.deepEqual(Object.keys(en.Menu[gruppo]), Object.keys(it.Menu[gruppo]), `Menu.${gruppo}: le stesse chiavi nelle due lingue`);
   }
   assert.deepEqual(Object.keys(en.Menu), Object.keys(it.Menu), "Menu: le stesse chiavi nelle due lingue");

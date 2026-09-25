@@ -1665,6 +1665,17 @@
       "RegistroVuoto": "The log is empty.",
       "Scena": "Scene",
       "Cerca": "Search an entry…",
+      "Cassetti": {
+        "mago": { "nome": "On the mage", "sotto": "whoever cast: fewer dice, an 8 to succeed, a wound" },
+        "incantesimo": { "nome": "On the spell", "sotto": "the effect already cast: it ends, spreads, turns back" },
+        "dormienti": { "nome": "The Sleepers", "sotto": "ordinary people: who watches, who asks, who passes by" },
+        "presenze": { "nome": "The Presences", "sotto": "Paradox entities: Shadow, Collector, Guest" },
+        "posto": { "nome": "The place", "sotto": "the place reacts: an area, the system, a door" },
+        "scontro": { "nome": "Clash and scene", "sotto": "the scene changes course: it stops, they flee, it ends" },
+        "orologi": { "nome": "The clocks", "sotto": "the rebound can be seen coming: by Vulgar casts, by turns, by rounds" },
+        "ancore": { "nome": "The Anchors", "sotto": "the mage's loved ones: they call, cross paths, end up inside" },
+        "scoppio": { "nome": "At the burst", "sotto": "only when a red die bursts: never bought beforehand" }
+      },
       "Famiglie": {
         "tocchi": "Magick Consequences",
         "comuni": "Common options",

@@ -193,6 +193,17 @@ chosen lens, or every lens with its name).
 
 ## Narrator's Board
 
+Since 27 September 2026 the Paradox menu on the Board lists its 65 entries in
+nine drawers, grouped by what the Paradox bounces on: on the mage, on the
+spell, the Sleepers, the Presences, the place, clash and scene, the clocks,
+the Anchors, and at the burst (last, set apart by a dashed line). Each drawer
+has a coloured square with its icon, its name, a "what you find here" line
+and its count, and opens or closes with a click that the client remembers.
+With a scene chosen in the dropdown, the entries the rulebook recommends for
+that scene carry a gold bar on the left and a gold name; the dropdown never
+hides an entry and the search works as before. The families of the data stay
+and still drive spending, chat cards, effects worn and clocks.
+
 "New session" on the Narrator's Board opens no dialog: since 27 September
 2026 it turns the Board into a session page that takes the place of the mode
 in use, with the mages on the Board in short (portrait, name, who plays

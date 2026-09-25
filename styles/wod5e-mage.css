@@ -13838,12 +13838,33 @@
   --quadro-tenue: #cdc2a9;
   /* I numeri e i nomi in risalto: il colore delle intestazioni della finestra (come nella guidata). */
   --quadro-titolo: var(--mortal-color-3);
+  /* I nove cassetti del menù (Blue, 27/9): un colore l'uno, e l'oro delle voci consigliate. */
+  --cassetto-mago: #c79af2;
+  --cassetto-incantesimo: #93a3f7;
+  --cassetto-dormienti: #5fc9ad;
+  --cassetto-presenze: #bccbd9;
+  --cassetto-posto: #e6ab5c;
+  --cassetto-scontro: #ee8272;
+  --cassetto-orologi: #72b8ec;
+  --cassetto-ancore: #f194bd;
+  --cassetto-scoppio: #ff6b5e;
+  --menu-oro: #e8b52c;
 }
 
 .application.wod5e-mage-quadro.wod5e-mage-chiara {
   --quadro-fondo: #FBF8F0;
   --quadro-riga: 1px solid #D9C28A;
   --quadro-scelta: #ECE7F4;
+  --cassetto-mago: #7a3fb0;
+  --cassetto-incantesimo: #3f4fb3;
+  --cassetto-dormienti: #1d7a64;
+  --cassetto-presenze: #4b5f73;
+  --cassetto-posto: #95590d;
+  --cassetto-scontro: #ad3526;
+  --cassetto-orologi: #1d66a3;
+  --cassetto-ancore: #a33268;
+  --cassetto-scoppio: #bf2419;
+  --menu-oro: #a87400;
   --quadro-verde: #2E7D4F;
   --quadro-spento: #B9B3A6;
   --quadro-tenue: #5C5C68;
@@ -14303,66 +14324,112 @@
   opacity: 0.8;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia {
+/* I nove cassetti (Blue, 27/9): ognuno col suo colore, nella variabile --cassetto. */
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto {
+  --cassetto: var(--quadro-tenue);
   display: flex;
   flex-direction: column;
   gap: 0;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia.nascosta,
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-mago { --cassetto: var(--cassetto-mago); }
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-incantesimo { --cassetto: var(--cassetto-incantesimo); }
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-dormienti { --cassetto: var(--cassetto-dormienti); }
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-presenze { --cassetto: var(--cassetto-presenze); }
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-posto { --cassetto: var(--cassetto-posto); }
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-scontro { --cassetto: var(--cassetto-scontro); }
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-orologi { --cassetto: var(--cassetto-orologi); }
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-ancore { --cassetto: var(--cassetto-ancore); }
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-scoppio { --cassetto: var(--cassetto-scoppio); }
+
+/* Lo scoppio sta in fondo, staccato dagli altri da una riga tratteggiata. */
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.staccato {
+  border-top: 1px dashed color-mix(in srgb, var(--quadro-tenue) 55%, transparent);
+  margin-top: 12px;
+  padding-top: 4px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.nascosta,
 .application.wod5e-mage-quadro .wod5e-mage-menu-voce.nascosta,
-.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia.chiusa .wod5e-mage-menu-voce {
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.chiusa .wod5e-mage-menu-voce {
   display: none;
 }
 
-/* Il titolo della famiglia è un tasto: la chiude e la riapre (Blue, 25/9 sera). */
-.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia-titolo {
+/* Il titolo del cassetto è un tasto: lo chiude e lo riapre (Blue, 25/9 sera). Dal 27/9 il
+   quadratino colorato, il nome in minuscolo, la riga «cosa ci trovi», il conto e la freccetta. */
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo {
   border: 0;
   margin: 6px 0 2px;
   padding: 0;
   text-shadow: none;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia-titolo button {
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo button {
   align-items: center;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid var(--mage-oro-scuro);
+  border-bottom: 1px solid color-mix(in srgb, var(--cassetto) 45%, transparent);
   border-radius: 0;
-  color: var(--mage-oro);
-  display: flex;
-  font: 700 13px/1 sans-serif;
-  gap: 8px;
-  letter-spacing: 0.16em;
-  padding: 6px 4px 8px;
+  color: var(--quadro-titolo);
+  display: grid;
+  font: 400 15px/1.2 "Signika", sans-serif;
+  gap: 10px;
+  grid-template-columns: 34px minmax(0, 1fr) auto auto;
+  letter-spacing: 0;
+  padding: 4px 4px 8px 2px;
   text-align: left;
-  text-transform: uppercase;
+  text-transform: none;
   width: 100%;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia-titolo button:hover {
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo button:hover {
   background: var(--mage-riga-sorvolo);
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia-titolo button > i:first-child {
-  text-align: center;
-  width: 18px;
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .quadratino {
+  align-items: center;
+  background: color-mix(in srgb, var(--cassetto) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cassetto) 55%, transparent);
+  border-radius: 7px;
+  color: var(--cassetto);
+  display: inline-flex;
+  font-size: 15px;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia-titolo small {
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .testi {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .nome {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .sotto {
   color: var(--quadro-tenue);
-  font: 600 13px "Signika", sans-serif;
-  letter-spacing: 0.02em;
-  margin-left: auto;
-  text-transform: none;
+  font-size: 13.5px;
+  line-height: 1.2;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia-titolo .freccia {
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .conto {
+  color: var(--quadro-tenue);
+  font: 600 14px "Signika", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .freccia {
   color: var(--quadro-tenue);
   font-size: 12px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-famiglia.chiusa .wod5e-mage-menu-famiglia-titolo button {
+.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.chiusa .wod5e-mage-menu-cassetto-titolo .nome {
   color: var(--quadro-tenue);
 }
 
@@ -14375,6 +14442,15 @@
   border-bottom-color: var(--mage-viola-chiaro);
   border-radius: 6px;
   margin: 2px 0;
+}
+
+/* Le voci che il PDF consiglia per la scena scelta (27/9): la barretta d'oro a sinistra e il nome in oro. */
+.application.wod5e-mage-quadro .wod5e-mage-menu-voce.consigliata {
+  box-shadow: inset 3px 0 0 var(--menu-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-menu-voce.consigliata button.wod5e-mage-menu-scegli .nome {
+  color: var(--menu-oro);
 }
 
 .application.wod5e-mage-quadro .wod5e-mage-menu-riga {

@@ -103,7 +103,7 @@ globalThis.game = {
 
 const { registerParadossoNarratore, getPool, POOL_SETTING, attoriScheda } = await import(new URL("scripts/paradosso-narratore.js", ROOT).href);
 const { registerQuadroNarratore, QuadroNarratore, nuovaSessione, iniziaSessione, cambioScena, getScena, getOrologi, attoriDelQuadro, statusMago, OROLOGI_SETTING } = await import(new URL("scripts/quadro-narratore.js", ROOT).href);
-const { ADDOSSO_FLAG, MAGHI_SETTING, QUADRO_SETTING, SCENA_SETTING } = await import(new URL("scripts/menu-paradosso.js", ROOT).href);
+const { ADDOSSO_FLAG, CASSETTI_PARADOSSO, MAGHI_SETTING, QUADRO_SETTING, SCENA_SETTING } = await import(new URL("scripts/menu-paradosso.js", ROOT).href);
 registerParadossoNarratore();
 // Il pannello dei giocatori vuole il DOM: al ready passano solo i ganci del Quadro.
 const readyPrima = (hooks.ready ?? []).length;
@@ -230,36 +230,48 @@ for (const fn of hooks.createChatMessage) await fn(cartaAbilita);
 assert.equal(getPool().points, 2, "un tiro di Abilità non porta punti");
 await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
 
-// 4. Il menù (25/9): tutte le famiglie in vista e apribili, le voci in ordine alfabetico senza sottotitoli di scena; il Volgare in tendina; la voce aperta coi comandi.
+// 4. Il menù (25/9; 27/9, nove cassetti per «su cosa rimbalza il Paradosso»): tutti i cassetti in vista e apribili, le voci in ordine alfabetico senza sottotitoli di scena, le consigliate della scena segnate; il Volgare in tendina; la voce aperta coi comandi.
 {
   const { ctx, html } = await contesto("menu");
-  assert.equal(ctx.cassetti.length, 8);
+  assert.equal(ctx.cassetti.length, 9);
+  assert.deepEqual(ctx.cassetti.map((c) => c.cassetto), [...CASSETTI_PARADOSSO], "i nove cassetti nell'ordine del menù");
   assert.equal(ctx.cassetti.reduce((n, c) => n + c.conto, 0), 65, "tutte le 65 voci in vista");
-  assert.ok(ctx.cassetti.every((c) => !c.chiusa), "le famiglie partono aperte");
-  const scettro = ctx.cassetti.find((c) => c.famiglia === "scettro");
-  assert.equal(scettro.conto, 21);
-  assert.deepEqual(scettro.voci.slice(0, 5).map((v) => v.nome), ["Anticipo", "Chiusura", "Concorrenza", "Controllo", "Domande"], "in ordine alfabetico, senza gruppi");
-  assert.deepEqual(ctx.cassetti.find((c) => c.famiglia === "tocchi").voci.map((v) => v.nome), ["Condizione", "Fiacco", "Fragile", "Rigidità", "Scottatura", "Tremore"]);
+  assert.deepEqual(ctx.cassetti.map((c) => c.conto), [10, 13, 9, 5, 6, 6, 5, 7, 4]);
+  assert.ok(ctx.cassetti.every((c) => !c.chiusa), "i cassetti partono aperti");
+  assert.deepEqual(ctx.cassetti.map((c) => c.label), ["Sul mago", "Sull'incantesimo", "I Dormienti", "Le Presenze", "Il posto", "Scontro e scena", "Gli orologi", "Le Ancore", "Allo scoppio"]);
+  assert.equal(ctx.cassetti[0].sotto, "chi ha lanciato: meno dadi, l'8 per riuscire, un danno");
+  assert.deepEqual(ctx.cassetti.map((c) => c.staccato), [false, false, false, false, false, false, false, false, true], "lo scoppio in fondo, staccato");
+  const mago = ctx.cassetti.find((c) => c.cassetto === "mago");
+  assert.deepEqual(mago.voci.map((v) => v.nome), [...mago.voci.map((v) => v.nome)].sort((a, b) => a.localeCompare(b, "it")), "in ordine alfabetico, senza gruppi");
+  assert.deepEqual(ctx.cassetti.find((c) => c.cassetto === "orologi").voci.map((v) => v.nome), ["Arrivo", "Carica", "Ciclo", "Nascosto", "Scadenza"]);
+  // Le 15 consigliate di Combattimento: la classe sulla riga, e il conto sul cassetto.
+  assert.equal(ctx.cassetti.flatMap((c) => c.voci).filter((v) => v.consigliata).length, 15);
+  assert.equal(mago.consigliate, 5);
+  assert.match(html, /wod5e-mage-menu-voce consigliata" data-voce="tremore"/);
+  assert.match(html, /wod5e-mage-menu-voce" data-voce="fragile"/, "Fragile non è consigliata in Combattimento");
   assert.match(html, /<option value="combattimento" selected>/);
   assert.ok(!html.includes("wod5e-mage-menu-spesa") && !html.includes('class="wod5e-mage-menu-info"'), "nessuna voce aperta, nessun testo");
-  assert.match(html, /wod5e-mage-menu-famiglia" data-famiglia="tocchi"/);
-  assert.ok(!html.includes("data-gruppo"), "niente sottotitoli di scena");
-  assert.match(html, /data-action="famiglia" data-famiglia="tocchi" aria-expanded="true"/);
+  assert.match(html, /wod5e-mage-menu-cassetto wod5e-mage-menu-cassetto-mago" data-cassetto="mago"/);
+  assert.match(html, /wod5e-mage-menu-cassetto wod5e-mage-menu-cassetto-scoppio staccato" data-cassetto="scoppio"/);
+  assert.ok(!html.includes("data-gruppo") && !html.includes("data-famiglia"), "niente sottotitoli di scena, niente famiglie in vista");
+  assert.match(html, /data-action="cassetto" data-cassetto="mago" aria-expanded="true"/);
+  assert.match(html, /<span class="quadratino"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"><\/i><\/span>\s*<span class="testi"><span class="nome">Sul mago<\/span><span class="sotto">chi ha lanciato/);
+  assert.match(html, /<small class="conto">10<\/small>/);
   assert.match(html, /data-action="testo" data-voce="tremore"/);
   assert.equal((html.match(/data-action="voce"/g) ?? []).length, 65);
-  // Il Narratore chiude le Conseguenze: la famiglia resta col titolo, senza righe; la scelta resta nell'impostazione del client.
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.famiglia.call(app, { preventDefault() {} }, { dataset: { famiglia: "tocchi" } });
+  // Il Narratore chiude «Sul mago»: il cassetto resta col titolo, senza righe; la scelta resta nell'impostazione del client, per id di cassetto.
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.cassetto.call(app, { preventDefault() {} }, { dataset: { cassetto: "mago" } });
   const chiusa = await contesto("menu");
-  assert.ok(chiusa.ctx.cassetti.find((c) => c.famiglia === "tocchi").chiusa);
-  assert.match(chiusa.html, /wod5e-mage-menu-famiglia chiusa" data-famiglia="tocchi"/);
-  assert.match(chiusa.html, /data-action="famiglia" data-famiglia="tocchi" aria-expanded="false"/);
-  assert.deepEqual(game.settings.get(MODULE, QUADRO_SETTING).chiuse, ["tocchi"]);
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.famiglia.call(app, { preventDefault() {} }, { dataset: { famiglia: "tocchi" } });
+  assert.ok(chiusa.ctx.cassetti.find((c) => c.cassetto === "mago").chiusa);
+  assert.match(chiusa.html, /wod5e-mage-menu-cassetto wod5e-mage-menu-cassetto-mago chiusa" data-cassetto="mago"/);
+  assert.match(chiusa.html, /data-action="cassetto" data-cassetto="mago" aria-expanded="false"/);
+  assert.deepEqual(game.settings.get(MODULE, QUADRO_SETTING).chiuse, ["mago"]);
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.cassetto.call(app, { preventDefault() {} }, { dataset: { cassetto: "mago" } });
   assert.deepEqual(game.settings.get(MODULE, QUADRO_SETTING).chiuse, []);
   // Il Narratore apre la voce Ritorno: la scheda e la spesa col Volgare di Guendalina.
   await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
   const aperto = await contesto("menu");
-  const ritorno = aperto.ctx.cassetti.find((c) => c.famiglia === "comuni").voci.find((v) => v.id === "ritorno");
+  const ritorno = aperto.ctx.cassetti.find((c) => c.cassetto === "incantesimo").voci.find((v) => v.id === "ritorno");
   assert.ok(ritorno.aperta);
   assert.equal(ritorno.volgari.length, 1);
   assert.match(ritorno.volgari[0].label, /Guendalina · Fulmine · Volgare con testimoni · soglia 5/);
@@ -268,8 +280,8 @@ await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
   assert.equal(ritorno.breve, "l'effetto svanisce, l'ostacolo torna");
   assert.equal(ritorno.prezzoLabel, "la soglia");
   assert.match(aperto.html, /<span class="breve">l&#x27;effetto svanisce, l&#x27;ostacolo torna<\/span>/);
-  assert.match(aperto.html, /Conseguenze Magick/);
-  assert.ok(!aperto.html.includes("I Tocchi"));
+  assert.match(aperto.html, /Sull&#x27;incantesimo/);
+  assert.ok(!aperto.html.includes("I Tocchi") && !aperto.html.includes("Conseguenze Magick"), "le famiglie non si vedono più nel menù");
   assert.ok(!aperto.html.includes('class="wod5e-mage-menu-info"'), "il testo resta chiuso finché non si chiede");
   // La «i» apre il testo della voce, e resta aperto anche se la voce si chiude.
   await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
@@ -295,7 +307,7 @@ await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
   const fuori = { id: "v0", timestamp: inizioSessione + 12, speaker: { actor: "a3", alias: "" }, flavor: "<div>\n<b>Nebbia</b></div>", flags: { [MODULE]: { rollCard: { vulgar: true, advancedDifficulty: false, threshold: 4 } } }, update: async () => fuori };
   sim.messages.push(fuori);
   const { ctx, html } = await contesto("menu");
-  const ritorno = ctx.cassetti.find((c) => c.famiglia === "comuni").voci.find((v) => v.id === "ritorno");
+  const ritorno = ctx.cassetti.find((c) => c.cassetto === "incantesimo").voci.find((v) => v.id === "ritorno");
   assert.equal(ritorno.volgari[0].label, "Nebbia · Volgare · soglia 4", "niente «· ·» quando manca il nome");
   const ianira = ritorno.bersagli.find((b) => b.id === "a3");
   assert.ok(ianira?.fuori && ianira.selected, "chi ha lanciato entra fra i bersagli anche da fuori");
@@ -309,7 +321,7 @@ await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
 {
   await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "carica" } });
   const { ctx, html } = await contesto("menu");
-  const carica = ctx.cassetti.find((c) => c.famiglia === "orologi").voci.find((v) => v.id === "carica");
+  const carica = ctx.cassetti.find((c) => c.cassetto === "orologi").voci.find((v) => v.id === "carica");
   assert.ok(carica.aperta && carica.campi.orologio && carica.campi.rimbalzo);
   assert.equal(carica.titoloDefault, "Carica");
   assert.equal(carica.segmentiDefault, 4);
@@ -488,8 +500,8 @@ assert.equal(getScena().numero, 2);
 assert.equal(getPool().log.at(-1).kind, "scena");
 {
   const { ctx } = await contesto("menu");
-  assert.ok(ctx.cassetti.find((c) => c.famiglia === "scena").voci.some((v) => v.id === "rituale-ospite"), "il menù segue la scena");
-  assert.equal(ctx.cassetti.find((c) => c.famiglia === "comuni").voci[0].faccia.testo.length > 0, true, "la faccia di Rituale");
+  assert.ok(ctx.cassetti.find((c) => c.cassetto === "presenze").voci.some((v) => v.id === "rituale-ospite" && v.consigliata), "il menù segue la scena: l'Ospite del rito è consigliato in Rituale");
+  assert.equal(ctx.cassetti.find((c) => c.cassetto === "incantesimo").voci.find((v) => v.id === "ritorno").faccia.testo.length > 0, true, "la faccia di Rituale");
 }
 
 // 9. Togli un mago dal Quadro, e Nuova sessione annullata non cambia niente.

@@ -1665,6 +1665,17 @@
       "RegistroVuoto": "Il registro è vuoto.",
       "Scena": "Scena",
       "Cerca": "Cerca una voce…",
+      "Cassetti": {
+        "mago": { "nome": "Sul mago", "sotto": "chi ha lanciato: meno dadi, l'8 per riuscire, un danno" },
+        "incantesimo": { "nome": "Sull'incantesimo", "sotto": "l'effetto già lanciato: finisce, dilaga, si ritorce" },
+        "dormienti": { "nome": "I Dormienti", "sotto": "persone comuni: chi guarda, chi chiede, chi passa" },
+        "presenze": { "nome": "Le Presenze", "sotto": "entità del Paradosso: Ombra, Esattore, Ospite" },
+        "posto": { "nome": "Il posto", "sotto": "il luogo reagisce: una zona, l'impianto, una porta" },
+        "scontro": { "nome": "Scontro e scena", "sotto": "la scena cambia corso: si ferma, scappano, finisce" },
+        "orologi": { "nome": "Gli orologi", "sotto": "il rimbalzo si vede arrivare: a Volgari, a turni, a giri" },
+        "ancore": { "nome": "Le Ancore", "sotto": "le persone care del mago: chiamano, si incrociano, ci finiscono dentro" },
+        "scoppio": { "nome": "Allo scoppio", "sotto": "solo quando un dado rosso scoppia: non si comprano prima" }
+      },
       "Famiglie": {
         "tocchi": "Conseguenze Magick",
         "comuni": "Le opzioni comuni",

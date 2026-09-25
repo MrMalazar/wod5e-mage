@@ -1,4 +1,4 @@
-{{!-- Il menù (25/9): le famiglie come titoli che si aprono e si chiudono, le voci in ordine alfabetico, una riga per voce (nome, effetto in breve, prezzo), senza sottotitoli di scena. Il clic sulla riga apre i comandi della spesa, la «i» apre il testo della voce. --}}
+{{!-- Il menù (25/9; 27/9, nove cassetti per «su cosa rimbalza il Paradosso»): i cassetti come titoli che si aprono e si chiudono (quadratino colorato, nome, riga «cosa ci trovi», conto), le voci in ordine alfabetico, una riga per voce (nome, effetto in breve, prezzo), senza sottotitoli di scena; le voci che il PDF consiglia per la scena scelta portano la barretta d'oro. Il clic sulla riga apre i comandi della spesa, la «i» apre il testo della voce. --}}
 <div class="wod5e-mage-quadro-corpo wod5e-mage-quadro-menu">
     <div class="wod5e-mage-menu-testa">
         <select data-role="scena" aria-label="{{localize 'WOD5E_MAGE.Menu.Scena'}}">
@@ -8,15 +8,17 @@
         <input type="search" data-role="cerca" value="{{cerca}}" placeholder="{{localize 'WOD5E_MAGE.Menu.Cerca'}}" aria-label="{{localize 'WOD5E_MAGE.Menu.Cerca'}}">
     </div>
     {{#each cassetti as |cassetto|}}
-        <section class="wod5e-mage-menu-famiglia{{#if cassetto.chiusa}} chiusa{{/if}}" data-famiglia="{{cassetto.famiglia}}">
-            <h3 class="wod5e-mage-menu-famiglia-titolo">
-                <button type="button" data-action="famiglia" data-famiglia="{{cassetto.famiglia}}" aria-expanded="{{#if cassetto.chiusa}}false{{else}}true{{/if}}">
-                    <i class="{{cassetto.icona}}" aria-hidden="true"></i> <span>{{cassetto.label}}</span> <small>{{cassetto.conto}}</small>
+        <section class="wod5e-mage-menu-cassetto wod5e-mage-menu-cassetto-{{cassetto.cassetto}}{{#if cassetto.chiusa}} chiusa{{/if}}{{#if cassetto.staccato}} staccato{{/if}}" data-cassetto="{{cassetto.cassetto}}">
+            <h3 class="wod5e-mage-menu-cassetto-titolo">
+                <button type="button" data-action="cassetto" data-cassetto="{{cassetto.cassetto}}" aria-expanded="{{#if cassetto.chiusa}}false{{else}}true{{/if}}">
+                    <span class="quadratino"><i class="{{cassetto.icona}}" aria-hidden="true"></i></span>
+                    <span class="testi"><span class="nome">{{cassetto.label}}</span><span class="sotto">{{cassetto.sotto}}</span></span>
+                    <small class="conto">{{cassetto.conto}}</small>
                     <i class="fa-solid {{#if cassetto.chiusa}}fa-chevron-down{{else}}fa-chevron-up{{/if}} freccia" aria-hidden="true"></i>
                 </button>
             </h3>
             {{#each cassetto.voci as |voce|}}
-                    <div class="wod5e-mage-menu-voce{{#if voce.aperta}} aperta{{/if}}{{#if voce.scoppio}} scoppio{{/if}}" data-voce="{{voce.id}}" data-testo="{{voce.testoCerca}}">
+                    <div class="wod5e-mage-menu-voce{{#if voce.aperta}} aperta{{/if}}{{#if voce.scoppio}} scoppio{{/if}}{{#if voce.consigliata}} consigliata{{/if}}" data-voce="{{voce.id}}" data-testo="{{voce.testoCerca}}">
                         <div class="wod5e-mage-menu-riga">
                             <button type="button" class="wod5e-mage-menu-scegli" data-action="voce" data-voce="{{voce.id}}" aria-expanded="{{voce.aperta}}">
                                 <i class="{{voce.iconaModo}}" title="{{voce.modoLabel}}" aria-hidden="true"></i>
