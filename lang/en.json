@@ -1084,7 +1084,7 @@
       "AnchorDescription": "Notes",
       "AnchorAdd": "Add an Anchor",
       "AnchorRemove": "Remove the Anchor",
-      "AnchorsEmpty": "No Touchstone yet: the die rolls one, the + adds an empty one.",
+      "AnchorsEmpty": "No Anchor yet: the die rolls one, the + adds an empty one.",
       "ConvictionsLabel": "Convictions",
       "ConvictionsHint": "Usually three, each tied to a catalogue group.",
       "ConvictionGroup": "Group",
@@ -1118,8 +1118,8 @@
       "AnchorUnknown": "What they don't know",
       "AnchorBites": "Where it bites",
       "AnchorGenerate": "Roll",
-      "AnchorGenerateHint": "Rolls the empty fields of this Touchstone: name, role, job, age, what they give you, what they don't know, where it bites. To reroll one, clear it and press again.",
-      "AnchorGenerateNew": "Roll a new Touchstone, every field"
+      "AnchorGenerateHint": "Rolls the empty fields of this Anchor: name, role, job, age, what they give you, what they don't know, where it bites. To reroll one, clear it and press again.",
+      "AnchorGenerateNew": "Roll a new Anchor, every field"
     },
     "Riepilogo": {
       "Label": "Creation memo",
@@ -1787,6 +1787,7 @@
       "Tutti": "All",
       "TrattiEquipaggiamento": "Equipment",
       "TrattiAltri": "Other",
+      "TrattiDifetti": "Flaws",
       "IlTiro": "The Roll",
       "Schede": {
         "background": "Backgrounds",
