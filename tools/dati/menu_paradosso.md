@@ -1,6 +1,6 @@
 ## Come funziona
 
-Il Paradosso è la risposta del mondo a un mago che lo forza. I giocatori lo conoscono dalla loro parte: ogni lancio Volgare fa salire il Paradosso sulla Ruota, e ogni punto sulla Ruota è un dado rosso in più che può far scoppiare un Contraccolpo. Questo menù racconta l'altra parte, la tua. Nel ramo C di M6 il Narratore ha una riserva di **punti Paradosso**, e li spende per far rimbalzare sui maghi quello che i maghi hanno fatto.
+Il Paradosso è la risposta del mondo a un mago che lo forza. I giocatori lo conoscono dalla loro parte: ogni lancio di Magick si paga, con la Quintessenza o col Paradosso, e ogni Volgare fa salire il Paradosso sulla Ruota. Nei Volgari ogni punto sulla Ruota è un dado rosso, tirato a parte, che può far scoppiare un Contraccolpo. Questo menù racconta l'altra parte, la tua. Nel ramo C di M6 il Narratore ha una riserva di **punti Paradosso**, e li spende per far rimbalzare sui maghi quello che i maghi hanno fatto.
 
 La parola giusta è rimbalzo. Il Paradosso non inventa niente: prende un Volgare già lanciato e lo fa tornare indietro, sul mago, sulla sua Magick, sulla sua gente o sul posto che ha toccato. Cambiare la scena è un'altra cosa, ed è tua: una ronda che passa, il traffico, un cattivo che scappa, un terzo che si mette in mezzo li fai gratis, con l'autorità che hai sempre avuto. Il menù non te la compra: la potenzia, quando vuoi che una di quelle cose diventi soprannaturale e la Magick non basti più a rimediarla.
 
@@ -14,15 +14,17 @@ Il menù è diviso per tipo di scena. Apri la pagina della scena che stai giocan
 
 Ogni volta che un mago prende punti Paradosso, ne prendi altrettanti tu. È una copia, non un passaggio: il mago tiene i suoi sulla Ruota, tu aggiungi i tuoi alla riserva.
 
-| Tipo di lancio | Il mago prende | Tu prendi |
-| :--- | :---: | :---: |
-| Accidentale | 0 | 0 |
-| Volgare | 1 | 1 |
-| Volgare con testimoni | 2 | 2 |
+A ogni lancio il giocatore sceglie come pagare: 1 Quintessenza, oppure il Paradosso del tipo. Chi paga con la Quintessenza prende lo stesso il Paradosso del Volgare.
 
-La riserva la riempiono quindi i giocatori. Se lanciano sempre Accidentale avrai pochi punti, ed è giusto così: stanno giocando sul sicuro, e la realtà non ha motivo di reagire. I punti si accumulano per tutta la sessione, senza scadere a fine scena, e a fine sessione la riserva si azzera. Il totale puoi mostrarlo al tavolo o tenerlo coperto, come preferisci.
+| Tipo di lancio | Il mago paga | Tu prendi |
+| :--- | :--- | :--- |
+| Accidentale | 1 Quintessenza, o 1 Paradosso | 0, o 1 |
+| Volgare | 1 Quintessenza e 1 Paradosso, o 2 Paradosso | 1, o 2 |
+| Volgare con testimoni | 1 Quintessenza e 2 Paradosso, o 3 Paradosso | 2, o 3 |
 
-Un tavolo che lancia più di dieci Volgari a sessione ti porta intorno ai 15-20 punti. I prezzi del menù sono pensati su quella cifra, e sono tutti da tarare al tavolo: quelli scritti qui sono il punto di partenza.
+La riserva la riempiono quindi i giocatori. Se lanciano sempre Accidentale e pagano con la Quintessenza avrai pochi punti, ed è giusto così: stanno giocando sul sicuro, e la realtà non ha motivo di reagire. I punti si accumulano per tutta la sessione, senza scadere a fine scena, e a fine sessione la riserva si azzera. Il totale puoi mostrarlo al tavolo o tenerlo coperto, come preferisci.
+
+I prezzi del menù sono pensati sulle entrate di prima del 29/9 (Accidentale 0, Volgare 1, con testimoni 2), che con più di dieci Volgari a sessione portavano la riserva intorno ai 15-20 punti. Col costo del lancio le entrate restano le stesse quando il mago paga con la Quintessenza, e salgono di un punto quando paga in Paradosso. I prezzi restano questi, tutti da tarare al tavolo: quelli scritti qui sono il punto di partenza, e la cifra nuova la dicono le prime sessioni.
 
 | Prezzo | Cosa compri | Quante volte a sessione |
 | :--- | :--- | :--- |
@@ -34,7 +36,7 @@ Un tavolo che lancia più di dieci Volgari a sessione ti porta intorno ai 15-20 
 
 La soglia è la somma degli Ambiti dell'incantesimo, la stessa che i giocatori pagano in dadi. Quando il prezzo è «la soglia», paghi la soglia dell'effetto dei maghi su cui rimbalzi; quando è «la sua soglia», paghi la soglia di chi entra in scena, cioè i dadi che toglie a chi lo affronta.
 
-In Foundry il pannello del Paradosso sta nella barra a sinistra e mostra la riserva, i tasti meno e più, e il registro delle spese. Per ora la copia dei punti la fai tu col tasto più. La finestra di spesa manda in chat la carta «Il Paradosso agisce», così il tavolo vede ogni spesa.
+In Foundry la copia la fa il modulo: quando un lancio si chiude in chat, aggiunge alla riserva il Paradosso che il mago ha preso, con la riga nel registro, e il meno corregge. La riserva, i tasti meno e più e il registro stanno nel Quadro del Narratore, che si apre dal tasto nella barra a sinistra. La finestra di spesa manda in chat la carta «Il Paradosso agisce», così il tavolo vede ogni spesa.
 
 ## Le regole di spesa
 
@@ -155,7 +157,7 @@ esempio: lo scudo che la maga aveva alzato contro i proiettili si chiude intorno
 ::: voce Testimone | 2 punti | annunciato
 quando: un mago lancia Volgare in un posto dove c'è gente.
 segno: qualcuno guarda nella direzione sbagliata: una finestra che si accende, una testa che si gira.
-effetto: al turno dopo ha visto. Finché resta in scena, i Volgari successivi contano con testimoni: riescono con l'8 e costano due punti Paradosso invece di uno.
+effetto: al turno dopo ha visto. Finché resta in scena, i Volgari successivi contano con testimoni: riescono con l'8 e costano un punto Paradosso in più.
 mosse: convincerlo, nascondersi, passare all'Accidentale.
 poi: se fanno Magick su di lui per farlo dimenticare, è Volgare con testimoni e paga. Se lo lasciano andare, quello che ha visto è tuo: ne fai quello che vuoi nelle scene dopo, senza pagare.
 esempio: al primo piano si accende una finestra, e una signora esce sul balcone col telefono in mano.

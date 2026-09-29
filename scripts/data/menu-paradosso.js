@@ -609,7 +609,7 @@ export const MENU_PARADOSSO = Object.freeze([
     },
     "quando": "un mago lancia Volgare in un posto dove c'è gente.",
     "segno": "qualcuno guarda nella direzione sbagliata: una finestra che si accende, una testa che si gira.",
-    "effetto": "al turno dopo ha visto. Finché resta in scena, i Volgari successivi contano con testimoni: riescono con l'8 e costano due punti Paradosso invece di uno.",
+    "effetto": "al turno dopo ha visto. Finché resta in scena, i Volgari successivi contano con testimoni: riescono con l'8 e costano un punto Paradosso in più.",
     "mosse": [
       "convincerlo",
       "nascondersi",
