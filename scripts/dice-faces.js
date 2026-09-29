@@ -13,12 +13,17 @@ export const PARADOX_DICE_FACES = Object.freeze({
   paradoxTen: `${DICE_CHAT_ROOT}paradosso-occhio-completo.svg`
 });
 
-export function getParadoxDieResult(result, { successFrom = SUCCESS_FROM } = {}) {
+/**
+ * La faccia di un rosso. Dal 29/9 (Blue) i rossi si tirano a parte e decidono
+ * solo lo scoppio: contano l'1 e il 10, l'occhio; le altre facce sono vuote,
+ * anche sopra la riuscita, perché un rosso non fa mai successo. Le carte di
+ * prima (`rossiAParte: false`) mostrano ancora la scintilla dalla riuscita in su.
+ */
+export function getParadoxDieResult(result, { successFrom = SUCCESS_FROM, rossiAParte = true } = {}) {
   const value = Number(result);
   if (value === 1) return "bestial";
   if (value === 10) return "paradoxTen";
-  // Il ramo C (11/9): la riuscita è l'8, il 6 e il 7 sono facce vuote.
-  if (value >= successFrom) return "success";
+  if (!rossiAParte && value >= successFrom) return "success";
   return "failure";
 }
 

@@ -1,0 +1,24 @@
+{{!-- Il Sacrificio (Blue, 29/9): danni a scelta del giocatore, fisici o mentali,
+     superficiali o aggravati, in cambio di Quintessenza (1 a superficiale, 3 ad
+     aggravato). Ogni segno porta il suo massimo: le caselle libere della Salute
+     e il posto sulla Ruota. Niente <form>: DialogV2 mette il contenuto dentro il suo. --}}
+<div class="wod5e-mage-danni wod5e-mage-sacrificio">
+    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Sacrificio.Intro"}}</p>
+    <p class="wod5e-mage-sacrificio-limiti">{{localize "WOD5E_MAGE.Sacrificio.Limiti" boxes=boxes cells=cells}}</p>
+    <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Sacrificio.Sign"}}</span>
+    <input type="hidden" name="state" value="{{chosen}}">
+    <div class="wod5e-mage-danni-grid" role="group" aria-label="{{localize 'WOD5E_MAGE.Sacrificio.Sign'}}">
+        {{#each signs as |sign|}}
+            <button type="button" class="wod5e-mage-danni-sign{{#unless sign.max}} vuoto{{/unless}}" data-role="danniSign" data-state="{{sign.state}}" data-max="{{sign.max}}" aria-label="{{localize sign.label}}">
+                <i class="wod5e-mage-salute-glyph" data-state="{{sign.state}}" aria-hidden="true"></i>
+                <span>{{localize sign.label}}</span>
+                <b class="wod5e-mage-sacrificio-resa">+{{sign.resa}}</b>
+            </button>
+        {{/each}}
+    </div>
+    <label class="wod5e-mage-item-field wod5e-mage-danni-amount">
+        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Sacrificio.Amount"}}</span>
+        <input type="number" name="amount" min="1" max="9" step="1" value="1">
+    </label>
+    <p class="wod5e-mage-sacrificio-out" data-role="sacrificioResa" aria-live="polite"></p>
+</div>

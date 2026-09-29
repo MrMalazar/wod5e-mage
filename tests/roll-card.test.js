@@ -98,7 +98,7 @@ assert.doesNotMatch(content, /wod5e-mage-roll-symbols/);
 
 // Il tiro scrive la bandiera (coi tratti per la testata e l'Areté per la vittoria a un prezzo) e la chat la legge.
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-assert.match(arete, /card: \{ symbols, traits: selectedTraits\.map\(\(trait\) => \(\{ id: trait\.id, type: trait\.type, label: trait\.label, value: trait\.value \}\)\), vulgar: effect\.vulgar \}/);
+assert.match(arete, /card: \{ symbols, traits: selectedTraits\.map\(\(trait\) => \(\{ id: trait\.id, type: trait\.type, label: trait\.label, value: trait\.value \}\)\), vulgar: effect\.vulgar, kind, costo, paradossoPreso: paradoxGain \}/);
 assert.match(arete, /spheres: sphereEntries\.map\(\(entry\) => \(\{ id: entry\.id, label:/);
 // Nel ramo C la riuscita senza dadi (comprata) la scrive paradox-dice.js con la stessa scritta grande.
 assert.doesNotMatch(arete, /renderAutoVictoryContent/);

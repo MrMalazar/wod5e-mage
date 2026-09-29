@@ -186,9 +186,7 @@
         "mental": "Mentale (astratto)",
         "variable": "Variabile"
       },
-      "Quintessence": "Quintessenza",
       "QuintessenceShort": "un dado per punto (hai {available})",
-      "QuintessenceHint": "Ogni punto speso è un dado in più e scende dalla Ruota. Se l'effetto fa danni, sono aggravati.",
       "QuintessenceFlavor": "Quintessenza {points} (+{points} dadi; i danni sono aggravati)",
       "QuintessenceSpent": "Quintessenza spesa: {points}.",
       "SkillSpecialty": "Specializzazione",
@@ -1237,19 +1235,19 @@
       "Superficial": "superficiale",
       "Aggravated": "aggravato",
       "NewSession": "Nuova sessione",
-      "NewSessionHint": "Guariscono tutti i superficiali mentali, un superficiale fisico se ne va, il Contraccolpo si può negare di nuovo; la Quintessenza riparte da quella generata; il personaggio entra nella lobby del Narratore.",
-      "NewSessionDone": "Nuova sessione: superficiali mentali guariti, un superficiale fisico in meno, Contraccolpo riarmato, Quintessenza ripartita, in lobby.",
+      "NewSessionHint": "Guariscono tutti i superficiali mentali, un superficiale fisico se ne va, il Contraccolpo si può negare di nuovo; la Quintessenza resta, e si aggiungono quella generata e il punto della scena nuova; il debito del Sacrificio si chiude; il personaggio entra nella lobby del Narratore.",
+      "NewSessionDone": "Nuova sessione: superficiali mentali guariti, un superficiale fisico in meno, Contraccolpo riarmato, Quintessenza ricaricata, debito del Sacrificio chiuso, in lobby.",
       "Reset": "Reset",
       "ResetHint": "Il tracciato torna vuoto.",
       "SessionXp": "Esperienza della sessione",
       "SessionXpHint": "I punti che il Narratore assegna: finiscono fra le Prese della pagina Esperienza. Zero se non ce ne sono.",
       "SessionOf": "sessione del {date}",
-      "NewSessionDoneXp": "Nuova sessione: {points} punti esperienza segnati, superficiali mentali guariti, un superficiale fisico in meno, Contraccolpo riarmato, Quintessenza ripartita, in lobby.",
+      "NewSessionDoneXp": "Nuova sessione: {points} punti esperienza segnati, superficiali mentali guariti, un superficiale fisico in meno, Contraccolpo riarmato, Quintessenza ricaricata, debito del Sacrificio chiuso, in lobby.",
       "Riposo": "Riposo",
-      "RiposoHint": "Guariscono i superficiali mentali, e un superficiale fisico",
+      "RiposoHint": "Guariscono i superficiali mentali e un superficiale fisico; le caselle del Sacrificio restano",
       "RiposoDone": "Riposo: la mente è sgombra, un superficiale fisico se n'è andato.",
       "Relax": "Relax",
-      "RelaxHint": "Fermezza + Autocontrollo: ogni successo cura un superficiale mentale, ogni due un aggravato; almeno una casella",
+      "RelaxHint": "Fermezza + Autocontrollo: ogni successo cura un superficiale mentale, ogni due un aggravato; almeno una casella; le caselle del Sacrificio restano",
       "RelaxRolling": "Relax: Fermezza + Autocontrollo",
       "RelaxDone": "Relax: {successes} successi, curati {superficial} superficiali e {aggravated} aggravati mentali.",
       "Danni": "Danni subiti",
@@ -1260,10 +1258,12 @@
       "DanniDone": "Segnati {amount} danni: {sign}.",
       "DanniConverted": "Il tracciato era pieno: {converted} superficiali sono diventati aggravati.",
       "CambioScena": "Cambio Scena",
-      "CambioScenaHint": "La scena cambia: una casella bloccata dall'Ustione si sblocca, e la Convinzione può rigenerare di nuovo.",
+      "CambioScenaHint": "La scena cambia: una casella bloccata dall'Ustione si sblocca, la Convinzione può rigenerare di nuovo e arriva +1 Quintessenza. Le caselle del Sacrificio restano bloccate.",
       "CambioScenaDone": "Cambio Scena: una casella dell'Ustione sbloccata.",
       "CambioScenaNone": "Cambio Scena: nessuna casella bloccata dall'Ustione.",
-      "LockedHint": "Ustione del Paradosso: resta almeno per la scena. Cambio Scena la sblocca."
+      "LockedHint": "Ustione del Paradosso: resta almeno per la scena. Cambio Scena la sblocca.",
+      "CambioScenaQuintessenza": "Cambio Scena: +{points} Quintessenza.",
+      "CambioScenaRuotaPiena": "Cambio Scena: la Ruota è piena, la Quintessenza non entra."
     },
     "Contraccolpo": {
       "Label": "Negare il Contraccolpo",
@@ -1610,15 +1610,13 @@
       "Threshold": "Soglia",
       "Dice": "Dadi",
       "DiceLine": "Riserva {pool} − soglia {threshold} = {dice} dadi",
-      "Reds": "{reds} rossi",
-      "RedsEyeOnly": "{reds} rossi, {eyeOnly} solo per l'occhio",
+      "Reds": "{reds} rossi a parte",
       "DiceNote": "Dadi: {note}",
-      "EyeOnlyNote": "{eyeOnly} rossi oltre i dadi rimasti: contano solo per l'occhio.",
       "NoDice": "Nessun dado da tirare: l'incantesimo fallisce.",
       "BoughtBanner": "Riuscita comprata",
-      "VulgarFailedQuintessence": "Volgare fallito: un punto di Quintessenza torna sulla Ruota.",
       "MarginHint": "Margine: i successi oltre il primo (il danno: arma più margine).",
-      "SkillRoll": "Tiro di Abilità"
+      "SkillRoll": "Tiro di Abilità",
+      "RossiAParte": "Rossi a parte: {reds}. Decidono solo se il Paradosso scoppia; la riuscita la fanno i dadi della riserva."
     },
     "Ustione": {
       "Label": "Ustione",
@@ -1873,7 +1871,8 @@
       "InQuestaScena": "In questa scena.",
       "NessunMagoSessione": "Nessun mago nel Quadro: trascina qui un mago dagli Attori, poi premi Inizia.",
       "SessioneSpiega": "Giocano i maghi del Quadro. Trascina qui dagli Attori chi manca, scegli la prima scena e il posto, poi Inizia: gli effetti della sessione prima se ne vanno e la riserva torna a zero.",
-      "SessioneAnnulla": "Annulla"
+      "SessioneAnnulla": "Annulla",
+      "CopiatoAccidentale": "{points} al Narratore: {name} ha pagato un Accidentale in Paradosso."
     },
     "Stat": {
       "Identita": "Identità",
@@ -1925,8 +1924,8 @@
       },
       "KindHints": {
         "accidentale": "Non si percepisce: niente rossi, si riesce col 6.",
-        "volgare": "La realtà lo percepisce: +1 Paradosso, i rossi si tirano, si riesce col 6.",
-        "testimoni": "Qualcuno ti ha visto farlo: +2 Paradosso, i rossi si tirano, si riesce con l'8."
+        "volgare": "La realtà lo percepisce: i rossi si tirano a parte, si riesce col 6.",
+        "testimoni": "Qualcuno ti ha visto farlo: i rossi si tirano a parte, si riesce con l'8."
       },
       "KindWarning": "Scegli come la fai: Accidentale, Volgare o Volgare con testimoni.",
       "SforzaNote": "Sforza la realtà: dichiarato prima del tiro.",
@@ -1955,7 +1954,7 @@
       "DifficultyWarning": "Inserisci la Difficoltà prima di tirare.",
       "DifficultyMissing": "Inserisci la Difficoltà: senza, il tiro non parte.",
       "DifficultyReset": "Torna al conto",
-      "QuintessenceHint": "Un dado per punto, fino a 2 + Areté per lancio. Scende dalla Ruota a tiro fatto.",
+      "QuintessenceHint": "Solo col potere che lo dice: un dado per punto, fino a 2 + Areté per tiro. Scende dalla Ruota a tiro fatto.",
       "Sforza": "Sforza la realtà",
       "SforzaHint": "Dichiari che, se fallisce, vuoi ribaltarlo pagando un prezzo: lo tratti col Narratore a tiro fatto.",
       "HowLabel": "Come la fai",
@@ -1982,7 +1981,7 @@
         "threshold": "{name}: soglia {value}",
         "successFrom": "{name}: riuscita dal {value}",
         "freeScope": "{name}: {scope} non conta fino a {value}",
-        "quintessenceOnSkills": "{name}: la Quintessenza dà dadi anche qui",
+        "quintessenceOnSkills": "{name}: qui la Quintessenza dà dadi",
         "prizeDouble": "{name}: il premio dell'Areté vale doppio ({value})",
         "autoSuccess": "{name}: riesce senza tirare"
       },
@@ -2623,6 +2622,52 @@
     },
     "NomiScheda": {
       "SenzaScheda": "senza scheda"
+    },
+    "Costo": {
+      "PagaCon": "Paga con",
+      "Hint": "Ogni lancio si paga, e si può sempre lanciare: 1 Quintessenza, oppure il Paradosso del tipo (Accidentale 1, Volgare 2, Volgare con testimoni 3). Chi paga in Quintessenza prende lo stesso il Paradosso del Volgare. Il Narratore riceve la copia del Paradosso preso.",
+      "Quintessenza": "Quintessenza",
+      "Paradosso": "Paradosso",
+      "QuintessenzaHint": "Paghi 1 Quintessenza; il Volgare aggiunge lo stesso il suo Paradosso (1, o 2 coi testimoni). Spento se sulla Ruota non ce n'è.",
+      "ParadossoHint": "Paghi in Paradosso: 1 se Accidentale, 2 se Volgare, 3 se Volgare con testimoni.",
+      "PuntiQuintessenza": "{points} Quintessenza",
+      "PuntiParadosso": "{points} Paradosso",
+      "E": "e",
+      "Nota": "Costo del lancio: {prezzo}.",
+      "Pagato": "Pagato: {prezzo}.",
+      "Tasto": "Costa {prezzo}."
+    },
+    "Sacrificio": {
+      "Label": "Sacrificio",
+      "Title": "Sacrificio",
+      "Hint": "Sacrificio: prendi danni a tua scelta e ricavi Quintessenza, 1 a superficiale e 3 ad aggravato. È un'azione veloce, come una reazione. Le caselle restano bloccate finché non ripaghi o finisce la sessione.",
+      "Intro": "Scegli il danno che prendi. Ogni superficiale rende 1 Quintessenza, ogni aggravato 3. Il danno è paradossale: non si cura, nemmeno con la Magick, finché non ripaghi la stessa Quintessenza o finisce la sessione.",
+      "Limiti": "Caselle libere nella Salute: {boxes}. Posto sulla Ruota: {cells}.",
+      "Sign": "Che danno",
+      "Amount": "Quanti",
+      "Resa": "Rende {points} Quintessenza.",
+      "Nessuno": "Con questo segno non c'è posto: mancano caselle libere nella Salute o sulla Ruota.",
+      "Ok": "Sacrifica",
+      "NoBoxes": "Sacrificio: la Salute non ha caselle libere.",
+      "NoRoom": "Sacrificio: sulla Ruota non c'è posto per tutta questa Quintessenza.",
+      "Chat": "Sacrificio: {amount} danni ({sign}) per {points} Quintessenza. Le caselle restano bloccate fino al saldo o a fine sessione.",
+      "Done": "Sacrificio: {amount} danni ({sign}), +{points} Quintessenza."
+    },
+    "Debito": {
+      "Title": "Salda il debito",
+      "Hint": "Debito del Sacrificio: {points} Quintessenza per sbloccare tutte le caselle. Clic per saldare; a fine sessione si sblocca da solo.",
+      "Intro": "Ripaghi la Quintessenza che il Sacrificio ti ha dato, 1 a superficiale e 3 ad aggravato, e quelle caselle tornano curabili.",
+      "Disponibile": "Quintessenza sulla Ruota: {points}. Debito: {owed}.",
+      "Sign": "Quale danno",
+      "Amount": "Quante caselle",
+      "Costo": "Costa {points} Quintessenza.",
+      "NoQuintessenza": "Non c'è abbastanza Quintessenza sulla Ruota per saldarlo.",
+      "Ok": "Salda",
+      "Nessuno": "Nessun debito da saldare.",
+      "Chat": "Debito saldato: {amount} caselle ({sign}) sbloccate per {points} Quintessenza.",
+      "Done": "Debito saldato: {amount} caselle ({sign}) sbloccate, {points} Quintessenza pagata.",
+      "Cella": "Sacrificio: casella bloccata. Si cura dopo il saldo del debito, o a fine sessione.",
+      "CellaBloccata": "Casella del Sacrificio: prima si salda il debito, col lucchetto accanto alla Quintessenza."
     }
   },
   "WOD5E": {

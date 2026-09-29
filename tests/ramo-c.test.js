@@ -6,6 +6,10 @@ import {
   diceNote,
   isSuccess,
   ORIGINAL_SUCCESS_FROM,
+  costoLancio,
+  PAGAMENTI,
+  pagamentoDelLancio,
+  paradossoDelTipo,
   prezzoAllowed,
   quintessenceSpend,
   RAMO,
@@ -15,6 +19,9 @@ import {
   splitRamoCDice,
   successModifier,
   successThreshold,
+  testoCosto,
+  TIPI_LANCIO,
+  tipoDaOpzioni,
   usesAdvancedDifficulty,
   SUCCESS_FROM,
   ustioneAmount
@@ -74,13 +81,40 @@ assert.deepEqual(ramoCDice(6, 7), { pool: 6, threshold: 7, dice: 0 });
 assert.deepEqual(ramoCDice("x", -2), { pool: 0, threshold: 0, dice: 0 });
 assert.equal(diceNote({ pool: 6, threshold: 3, dice: 3 }), "6 − 3 = 3");
 
-// I rossi si tirano sempre e si convertono dai dadi rimasti; quelli in più si
-// aggiungono e contano anche loro (verdetto di Blue dell'11/9 pomeriggio: «3 10 10 8,
-// su 4 dadi dovrebbe essere 3 successi»; la PROPOSTA «solo per l'occhio» è caduta).
-assert.deepEqual(splitRamoCDice(3, 2), { basicDice: 1, paradoxDice: 2, countedParadox: 2, eyeOnly: 0, totalDice: 3 });
-assert.deepEqual(splitRamoCDice(1, 3), { basicDice: 0, paradoxDice: 3, countedParadox: 3, eyeOnly: 0, totalDice: 3 });
-assert.deepEqual(splitRamoCDice(0, 4), { basicDice: 0, paradoxDice: 4, countedParadox: 4, eyeOnly: 0, totalDice: 4 });
+// I rossi a parte (verdetto di Blue del 29/9: «il paradosso non si sostituisce più ai
+// dadi che fai per tirare, ma viene tirato a parte»): la riserva tira tutti i suoi dadi,
+// i rossi si tirano accanto, tanti quanto il Paradosso, e non contano per la riuscita.
+assert.deepEqual(splitRamoCDice(3, 2), { basicDice: 3, paradoxDice: 2, countedParadox: 0, eyeOnly: 2, totalDice: 5 });
+assert.deepEqual(splitRamoCDice(1, 3), { basicDice: 1, paradoxDice: 3, countedParadox: 0, eyeOnly: 3, totalDice: 4 });
+assert.deepEqual(splitRamoCDice(0, 4), { basicDice: 0, paradoxDice: 4, countedParadox: 0, eyeOnly: 4, totalDice: 4 });
 assert.deepEqual(splitRamoCDice(5, 0), { basicDice: 5, paradoxDice: 0, countedParadox: 0, eyeOnly: 0, totalDice: 5 });
+
+// Il costo del lancio (29/9): 1 Quintessenza, oppure il Paradosso del tipo
+// (Accidentale 1, Volgare 2, con testimoni 3); chi paga in Quintessenza prende
+// lo stesso il Paradosso del Volgare.
+assert.deepEqual(TIPI_LANCIO, ["accidentale", "volgare", "testimoni"]);
+assert.deepEqual(PAGAMENTI, ["quintessenza", "paradosso"]);
+assert.equal(tipoDaOpzioni(), "accidentale");
+assert.equal(tipoDaOpzioni({ vulgar: true }), "volgare");
+assert.equal(tipoDaOpzioni({ vulgar: true, witnesses: true }), "testimoni");
+assert.deepEqual(TIPI_LANCIO.map((kind) => paradossoDelTipo(kind)), [0, 1, 2]);
+assert.deepEqual(costoLancio("accidentale", "quintessenza"), { pay: "quintessenza", quintessenza: 1, paradosso: 0 });
+assert.deepEqual(costoLancio("accidentale", "paradosso"), { pay: "paradosso", quintessenza: 0, paradosso: 1 });
+assert.deepEqual(costoLancio("volgare", "quintessenza"), { pay: "quintessenza", quintessenza: 1, paradosso: 1 });
+assert.deepEqual(costoLancio("volgare", "paradosso"), { pay: "paradosso", quintessenza: 0, paradosso: 2 });
+assert.deepEqual(costoLancio("testimoni", "quintessenza"), { pay: "quintessenza", quintessenza: 1, paradosso: 2 });
+assert.deepEqual(costoLancio("testimoni", "paradosso"), { pay: "paradosso", quintessenza: 0, paradosso: 3 });
+assert.deepEqual(costoLancio("volgare", null), { pay: "paradosso", quintessenza: 0, paradosso: 2 }, "senza scelta valida si paga in Paradosso");
+// Chi paga: la scelta, se si può; senza Quintessenza libera si paga in Paradosso, sempre possibile.
+assert.equal(pagamentoDelLancio(null, 2), "quintessenza", "senza scelta: la Quintessenza quando c'è");
+assert.equal(pagamentoDelLancio(null, 0), "paradosso");
+assert.equal(pagamentoDelLancio("quintessenza", 0), "paradosso", "la Quintessenza che non c'è non si paga");
+assert.equal(pagamentoDelLancio("paradosso", 5), "paradosso");
+// In parole: chiavi fuori da Foundry, i numeri dentro format.
+const formatta = (key, data) => `${key.split(".").pop()}:${data?.points ?? ""}`;
+assert.equal(testoCosto(costoLancio("volgare", "quintessenza"), (key) => key.split(".").pop(), formatta), "PuntiQuintessenza:1 E PuntiParadosso:1");
+assert.equal(testoCosto(costoLancio("testimoni", "paradosso"), (key) => key, formatta), "PuntiParadosso:3");
+assert.equal(testoCosto({}, (key) => key, formatta), "");
 
 // I successi: 8 o più, i rossi fino a quelli che contano, niente coppie di dieci.
 assert.equal(calculateRamoCSuccesses([{ result: 8 }, { result: 7 }, { result: 10 }]), 2);
@@ -116,11 +150,12 @@ assert.match(getMageDieImage(10), /magick-stellina\.svg$/);
 assert.match(getMageDieImage(7), /dado-vuoto\.svg$/);
 assert.match(getMageDieImage(6), /dado-vuoto\.svg$/);
 assert.equal(getParadoxDieResult(7), "failure");
-assert.equal(getParadoxDieResult(8), "success");
+// Dal 29/9 i rossi decidono solo lo scoppio: l'8 è una faccia vuota.
+assert.equal(getParadoxDieResult(8), "failure");
 assert.equal(getParadoxDieResult(1), "bestial");
 assert.equal(getParadoxDieResult(10), "paradoxTen");
 assert.match(getMageDieImage(6, { successFrom: 6 }), /magick-scintilla\.svg$/);
-assert.equal(getParadoxDieResult(6, { successFrom: 6 }), "success");
+assert.equal(getParadoxDieResult(6, { successFrom: 6 }), "failure", "un rosso non fa mai successo");
 
 // La fascia: un successo basta; le carte vecchie con la riuscita comprata tengono la loro parola.
 assert.equal(rollOutcome(1, 1, (k) => k).text, "WOD5E_MAGE.RollCard.Success");
@@ -141,6 +176,8 @@ assert.deepEqual(rerollableDice([{ result: 7 }, { result: 8 }, { result: 2 }], [
   { kind: "basic", index: 0 }, { kind: "basic", index: 2 }, { kind: "paradox", index: 0 }, { kind: "paradox", index: 1 }
 ]);
 assert.deepEqual(rerollableDice([{ result: 7 }, { result: 5 }], [], { successFrom: 6 }), [{ kind: "basic", index: 1 }], "i messaggi del ramo A leggono il 6");
+// I rossi a parte (29/9): la Volontà ritira solo i bianchi.
+assert.deepEqual(rerollableDice([{ result: 7 }, { result: 8 }], [{ result: 1 }, { result: 6 }], { rossi: false }), [{ kind: "basic", index: 0 }]);
 assert.equal(recountCard({ ramo: "C", countedParadox: 1 }, [{ result: 8 }, { result: 7 }], [{ result: 9 }, { result: 8 }]), 2);
 assert.equal(recountCard({ ramo: "C", advancedDifficulty: false }, [{ result: 6 }], []), 1);
 assert.equal(recountCard({ ramo: "C", advancedDifficulty: true }, [{ result: 6 }], []), 0);
@@ -185,7 +222,7 @@ const salute = readFileSync(new URL("../scripts/salute.js", import.meta.url), "u
 assert.match(salute, /pool: resolve \+ composure,[\s\S]*skill: true,/);
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
-  for (const key of ["Pool", "Threshold", "Dice", "DiceLine", "Reds", "RedsEyeOnly", "DiceNote", "EyeOnlyNote", "NoDice", "BoughtBanner", "VulgarFailedQuintessence", "MarginHint", "SkillRoll"]) {
+  for (const key of ["Pool", "Threshold", "Dice", "DiceLine", "Reds", "RossiAParte", "DiceNote", "NoDice", "BoughtBanner", "MarginHint", "SkillRoll"]) {
     assert.equal(typeof strings.WOD5E_MAGE.RamoC[key], "string", `${lang} RamoC.${key}`);
   }
   assert.equal(strings.WOD5E_MAGE.RamoC.AdvancedDifficulty, undefined, `${lang}: la casella della difficoltà avanzata è caduta (16/9)`);

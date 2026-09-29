@@ -31,13 +31,15 @@ function cardSuccessFrom(card) {
  * I dadi che si possono ritirare: i falliti fra i bianchi (sotto la
  * riuscita: nel ramo C l'8, quindi 1-7) e i falliti fra i rossi, compreso
  * l'1 dell'occhio (11/9: si ritira per il successo, lo Scoppio resta; il 10
- * è già un successo e non si ritira). Torna {kind, index} per ognuno.
+ * è già un successo e non si ritira). Dal 29/9 i rossi si tirano a parte e
+ * non fanno successo (`rossi: false`): si ritirano solo i bianchi. Torna
+ * {kind, index} per ognuno.
  */
-export function rerollableDice(basicResults = [], paradoxResults = [], { successFrom = SUCCESS_FROM } = {}) {
+export function rerollableDice(basicResults = [], paradoxResults = [], { successFrom = SUCCESS_FROM, rossi = true } = {}) {
   const basic = basicResults
     .map((result, index) => ({ kind: "basic", index, value: Number(result?.result) || 0, ok: isActive(result) }))
     .filter((entry) => entry.ok && entry.value < successFrom);
-  const paradox = paradoxResults
+  const paradox = (rossi ? paradoxResults : [])
     .map((result, index) => ({ kind: "paradox", index, value: Number(result?.result) || 0, ok: isActive(result) }))
     .filter((entry) => entry.ok && entry.value < successFrom);
   return [...basic, ...paradox].map(({ kind, index }) => ({ kind, index }));
@@ -137,7 +139,7 @@ export function decorateVolonta(message, html) {
   if (!basic) return false;
   const total = Number.isFinite(Number(card.total)) ? Number(card.total) : systemTotal(basic.results, advanced?.results ?? []);
   const difficulty = Number.isFinite(Number(card.difficulty)) ? Number(card.difficulty) : Number(roll.options?.difficulty) || 0;
-  const candidates = rerollableDice(basic.results, advanced?.results ?? [], { successFrom: cardSuccessFrom(card) });
+  const candidates = rerollableDice(basic.results, advanced?.results ?? [], { successFrom: cardSuccessFrom(card), rossi: !card.rossiAParte });
   const state = volontaState({ total, difficulty, failedCount: candidates.length, used });
   if (!state.show) return false;
 

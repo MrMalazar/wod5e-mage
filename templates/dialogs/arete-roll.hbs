@@ -197,12 +197,16 @@
                 <input type="number" name="harmony" id="wod5e-mage-arete-harmony" class="wod5e-mage-arete-harmony" min="0" max="9" step="1" value="0" data-value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Harmony'}}">
                 <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Harmony"}}</span>
             </label>
-            {{!-- La Quintessenza: ogni punto speso è un successo automatico e scende
-                 dalla Ruota; se l'effetto fa danni, sono aggravati. --}}
-            <label class="wod5e-mage-arete-conto-row wod5e-mage-arete-harmony-row wod5e-mage-arete-quintessence-row" title="{{localize 'WOD5E_MAGE.Arete.QuintessenceHint'}}">
-                <input type="number" name="quintessence" id="wod5e-mage-arete-quintessence" class="wod5e-mage-arete-harmony" min="0" max="{{quintessence}}" step="1" value="0" aria-label="{{localize 'WOD5E_MAGE.Arete.Quintessence'}}" {{#unless quintessence}}disabled{{/unless}}>
-                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Quintessence"}}</span>
-            </label>
+            {{!-- Il costo del lancio (Blue, 29/9): ogni lancio si paga, 1 Quintessenza oppure
+                 il Paradosso del tipo. La Quintessenza non dà più dadi. Il prezzo lo scrive arete.js. --}}
+            <div class="wod5e-mage-arete-paga-row" role="radiogroup" aria-label="{{localize 'WOD5E_MAGE.Costo.PagaCon'}}" title="{{localize 'WOD5E_MAGE.Costo.Hint'}}">
+                <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Costo.PagaCon"}}</span>
+                <span class="wod5e-mage-arete-paga">
+                    <label class="wod5e-mage-arete-paga-scelta"><input type="radio" name="pagaCon" value="quintessenza" {{#if quintessence}}checked{{else}}disabled{{/if}}><i class="fas fa-circle-dot" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Costo.Quintessenza"}}</span></label>
+                    <label class="wod5e-mage-arete-paga-scelta"><input type="radio" name="pagaCon" value="paradosso" {{#unless quintessence}}checked{{/unless}}><i class="fas fa-eye" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Costo.Paradosso"}}</span></label>
+                </span>
+                <output class="wod5e-mage-arete-paga-prezzo" data-role="costo"></output>
+            </div>
             </div>
             <hr class="wod5e-mage-arete-rule">
             {{else}}

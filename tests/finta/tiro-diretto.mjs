@@ -19,17 +19,18 @@ const { rollRamoCDirect, contoDice } = await import(new URL("../../scripts/parad
 const { ROLL_CARD_FLAG } = await import(new URL("../../scripts/roll-card.js", import.meta.url).href);
 const actor = { name: "Ianira", system: {}, isOwner: true, getFlag: () => undefined, setFlag: async () => {} };
 
-// 1. Magick, Volgare con testimoni: riserva 9, soglia 5 → 4 dadi; 2 rossi convertiti; riuscita dall'8.
-globalThis.__sim.faces = [8, 3, 9, 10];
+// 1. Magick, Volgare con testimoni: riserva 9, soglia 5 → 4 dadi; 2 rossi a parte (29/9); riuscita dall'8.
+globalThis.__sim.faces = [8, 3, 9, 7, 10, 9];
 let message = await rollRamoCDirect({ actor, data: actor.system, pool: 9, threshold: 5, successFrom: 8, paradoxRating: 2, burn: 5, sphereLevel: 0, arete: 3, title: "Destrezza + Velo", flavor: "<carta>", card: { symbols: [], traits: [] } });
 let roll = globalThis.__sim.rolls.at(-1);
-assert.equal(roll.formula, "2dmcs>7 + 2dpcs>7");
+assert.equal(roll.formula, "4dmcs>7 + 2dpcs>7", "i rossi non tolgono dadi alla riserva");
 assert.equal(roll.options.mageSuccessFrom, 8);
 let card = message.getFlag("wod5e-mage", ROLL_CARD_FLAG);
-assert.deepEqual([card.pool, card.threshold, card.dice, card.successFrom, card.advancedDifficulty, card.total], [9, 5, 4, 8, true, 3], "8, 9 e 10 riescono; il 3 no");
+assert.deepEqual([card.pool, card.threshold, card.dice, card.successFrom, card.advancedDifficulty, card.total, card.countedParadox, card.rossiAParte], [9, 5, 4, 8, true, 2, 0, true], "8 e 9 dei bianchi riescono; i rossi (10 e 9) non contano");
 assert.equal(card.ustione.threshold, 5, "il 10 sui rossi apre l'Ustione pari alla soglia");
 assert.equal(card.ustione.eyes, 1);
 assert.match(message.flavor, /Dadi: 9 − 5 = 4/);
+assert.match(message.flavor, /WOD5E_MAGE\.RamoC\.RossiAParte/, "la carta dice che i rossi sono a parte");
 
 // 2. Tiro di Abilità: niente rossi, riuscita dal 6, il margine oltre il primo successo.
 globalThis.__sim.faces = [6, 7, 2];
@@ -45,17 +46,17 @@ card = message.getFlag("wod5e-mage", ROLL_CARD_FLAG);
 assert.deepEqual([card.total, card.dice], [0, 0]);
 assert.match(message.content, /Nessun dado: fallito/);
 
-// 4. Zero dadi ma rossi sulla Ruota: i rossi si tirano lo stesso e possono riuscire.
+// 4. Zero dadi ma rossi sulla Ruota: i rossi si tirano lo stesso, ma solo per lo scoppio (29/9).
 globalThis.__sim.faces = [7, 1];
 message = await rollRamoCDirect({ actor, data: actor.system, pool: 4, threshold: 9, successFrom: 6, paradoxRating: 2, burn: 9, title: "Solo rossi", flavor: "<carta>", card: {} });
 roll = globalThis.__sim.rolls.at(-1);
 assert.equal(roll.formula, "0dmcs>5 + 2dpcs>5");
 card = message.getFlag("wod5e-mage", ROLL_CARD_FLAG);
-assert.deepEqual([card.total, card.dice, card.countedParadox], [1, 0, 2]);
+assert.deepEqual([card.total, card.dice, card.countedParadox], [0, 0, 0], "il 7 rosso non riesce: i rossi non fanno successo");
 assert.equal(card.ustione.eyes, 1, "l'1 sul rosso apre il Contraccolpo");
 
 // 5. contoDice: i numeri della finestra e del tiro diretto coincidono.
-assert.deepEqual(contoDice({ pool: 9, threshold: 5, paradoxRating: 2 }), { pool: 9, threshold: 5, dice: 4, basicDice: 2, paradoxDice: 2, countedParadox: 2, eyeOnly: 0, totalDice: 4 });
+assert.deepEqual(contoDice({ pool: 9, threshold: 5, paradoxRating: 2 }), { pool: 9, threshold: 5, dice: 4, basicDice: 4, paradoxDice: 2, countedParadox: 0, eyeOnly: 2, totalDice: 6 });
 assert.deepEqual(contoDice({ pool: 9, threshold: 5, paradoxRating: 2, bought: true }), { pool: 9, threshold: 5, dice: 0, basicDice: 0, paradoxDice: 2, countedParadox: 0, eyeOnly: 2, totalDice: 2 });
 
 console.log("finta Foundry: 5 scenari ok, messaggi:", globalThis.__sim.messages.length);

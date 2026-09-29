@@ -23,6 +23,7 @@ import {
   setDifficulty,
   setExtra,
   setKind,
+  setPay,
   setQuintessence,
   setScope,
   TIRO_KINDS,
@@ -225,12 +226,19 @@ assert.equal(hasDifficulty(setScope(setScope(setScope(magick, "potency", 0), "ra
 conto = contoTiro(setDifficulty(magick, 12), { arete: 2, attributeValue: 4, skillValue: 5 });
 assert.deepEqual([conto.computed, conto.difficulty, conto.dice, conto.impossible], [8, 12, 0, true]);
 
-// La Quintessenza, la Bussola, i dadi extra col tetto +3 e i Tratti per intero entrano nella riserva.
+// La Bussola, i dadi extra col tetto +3 e i Tratti per intero entrano nella riserva.
+// La Quintessenza no (Blue, 29/9): paga il costo del lancio, i dadi li danno i poteri.
 conto = contoTiro(setQuintessence(magick, 9), { arete: 2, attributeValue: 4, skillValue: 5, quintessenceAvailable: 9, bussola: 1, harmony: 5, traitDice: 4 });
-assert.equal(conto.quintessence, 4, "tetto 2 + Areté");
+assert.equal(conto.quintessence, 0, "la Quintessenza non dà dadi nella Magick");
+assert.equal(conto.quintessenceAllowed, false);
 assert.equal(conto.bussolaDice, 1);
 assert.equal(conto.extra, 3, "l'Armonia data dal programma si ferma a tre");
-assert.equal(conto.pool, 9 + 4 + 1 + 3 + 4 + 2, "e il premio dell'Areté (2) è nella riserva (27/9)");
+assert.equal(conto.pool, 9 + 1 + 3 + 4 + 2, "e il premio dell'Areté (2) è nella riserva (27/9)");
+// Come si paga il lancio (29/9): la scelta resta nel tiro, una parola sbagliata torna alla scelta di base.
+assert.equal(emptyTiro().pay, null);
+assert.equal(setPay(magick, "paradosso").pay, "paradosso");
+assert.equal(setPay(magick, "quintessenza").pay, "quintessenza");
+assert.equal(setPay(setPay(magick, "paradosso"), "boh").pay, null);
 conto = contoTiro(setExtra(magick, 2), { arete: 2, attributeValue: 4, skillValue: 5 });
 assert.deepEqual([conto.extra, conto.pool], [2, 13], "i dadi extra della scheda entrano nella riserva, col premio 2");
 conto = contoTiro(setExtra(magick, 3), { arete: 2, attributeValue: 4, skillValue: 5, harmony: 2 });

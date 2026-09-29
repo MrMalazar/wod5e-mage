@@ -14,7 +14,8 @@ import {
   THRESHOLD_CAP
 } from "./arete.js";
 import { FOCUS_FORMS } from "./focus.js";
-import { addParadoxToBalance, getMagickBalance, paradoxGainForMagickType } from "./magick-balance.js";
+import { addParadoxToBalance, getMagickBalance } from "./magick-balance.js";
+import { costoLancio, pagamentoDelLancio, testoCosto } from "./ramo-c.js";
 import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
 import { FORMULE_M6 } from "./data/formule.js";
 import { scopesInParole } from "./ongoing-magick.js";
@@ -39,7 +40,7 @@ import { getSalute } from "./salute.js";
 import { condizioniDelTiro, testoCondizioniDelTiro, tipoDelTiro } from "./condizioni.js";
 
 export { poteriOfSphere };
-import { renderRollCard, ROLL_CARD_FLAG, rollSymbols } from "./roll-card.js";
+import { renderRollCard, rollSymbols } from "./roll-card.js";
 import { canRaiseScope, nextScopeMode, SCOPE_ICONS, SCOPES, scopeModeOf, scopeModes, SCOPES_PER_CAST, zeroReading } from "./scopes.js";
 import { prepareSpheres } from "./spheres.js";
 import {
@@ -60,6 +61,7 @@ import {
   setDifficulty,
   setExtra,
   setKind,
+  setPay,
   setQuintessence,
   setScope,
   TIRO_KINDS,
@@ -285,6 +287,9 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   const pillsDadi = pills.filter((pill) => !KINDS_SOGLIA.includes(pill.kind));
   // Le Condizioni sul tiro (29/9): una pillola ciascuna col peso; un clic la toglie o la rimette.
   const cond = inputs.condizioni;
+  // Chi paga il lancio (29/9): la Quintessenza libera è quella che resta dopo il costo del potere attivo.
+  const quintessenzaLibera = conto.powerActive ? inputs.quintessenceAvailable : getMagickBalance(actor).quintessence;
+  const pay = pagamentoDelLancio(tiro.pay, quintessenzaLibera);
   return {
     magick,
     size: tiroSize(tiro),
@@ -332,7 +337,24 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
       on: dalNarratore(),
       hint: dalNarratore() ? format("WOD5E_MAGE.Verdetto.DalNarratoreHint", { seconds: VERDETTO_SECONDI }) : localize("WOD5E_MAGE.Verdetto.SenzaNarratoreHint")
     },
-    kinds: TIRO_KINDS.map((kind) => ({ kind, label: localize(`WOD5E_MAGE.Tiro.Kinds.${kind}`), hint: localize(`WOD5E_MAGE.Tiro.KindHints.${kind}`) })),
+    // Il costo del lancio (Blue, 29/9): ogni lancio si paga, e si può sempre lanciare.
+    // La scelta sta nelle opzioni; ogni tasto del tipo dice quanto costa.
+    costo: magick ? {
+      pay,
+      quintessenza: pay === "quintessenza",
+      canQuintessenza: quintessenzaLibera >= 1,
+      libera: quintessenzaLibera
+    } : null,
+    kinds: TIRO_KINDS.map((kind) => {
+      const costo = costoLancio(kind, pay);
+      const prezzo = testoCosto(costo, localize, format);
+      return {
+        kind,
+        label: localize(`WOD5E_MAGE.Tiro.Kinds.${kind}`),
+        hint: `${localize(`WOD5E_MAGE.Tiro.KindHints.${kind}`)} ${format("WOD5E_MAGE.Costo.Tasto", { prezzo })}`,
+        costo
+      };
+    }),
     // Il tiro parte con almeno un tratto (Attributo o Abilità) e con la
     // Difficoltà inserita (Blue, 16/9 sera).
     ready: Boolean(attribute || skill) && conto.difficultySet,
@@ -601,7 +623,14 @@ export async function onTiroPill(event, target) {
 
 export async function onTiroClear(event) {
   event.preventDefault();
-  return repaint(this, clearTiro());
+  // Come si paga (29/9) è una scelta di chi tira: resta anche dopo Azzera.
+  return repaint(this, setPay(clearTiro(), tiroOf(this).pay));
+}
+
+/** Come si paga il lancio (Blue, 29/9): Quintessenza o Paradosso; la scelta resta finché non si cambia. */
+export async function onTiroPaga(event, target) {
+  event.preventDefault();
+  return repaint(this, setPay(tiroOf(this), target.dataset.pay));
 }
 
 /** Il più e il meno della Difficoltà partono dal conto; la matita azzera il numero scritto. */
@@ -675,7 +704,7 @@ export async function onTiroRoll(event, target) {
   event.preventDefault();
   const tiro = setKind(tiroOf(this), target.dataset.kind);
   const outcome = await launchTiro(this.actor, tiro);
-  if (outcome) await repaint(this, clearTiro());
+  if (outcome) await repaint(this, setPay(clearTiro(), tiro.pay));
 }
 
 /* ---------------------------------------------------------------- */
@@ -874,11 +903,18 @@ export async function launchTiro(actor, tiro) {
   const sphereMax = Math.max(0, ...sphereEntries.map((entry) => entry.level));
   if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: conto.difficulty });
 
-  // La Ruota paga subito: la Quintessenza spesa (in dadi, e il costo del
-  // potere attivo) scende, il Volgare sale verso il Paradosso.
-  const paradoxGain = paradoxGainForMagickType(options);
+  // Il costo del lancio (Blue, 29/9): ogni lancio si paga, 1 Quintessenza oppure
+  // il Paradosso del tipo (Accidentale 1, Volgare 2, con testimoni 3); chi paga
+  // in Quintessenza prende lo stesso il Paradosso del Volgare.
   const balanceBefore = getMagickBalance(actor);
-  const spesa = conto.quintessence + (conto.powerActive ? count(inputs.powerCost) : 0);
+  const powerSpesa = conto.powerActive ? count(inputs.powerCost) : 0;
+  const pay = pagamentoDelLancio(tiro.pay, balanceBefore.quintessence - powerSpesa - count(conto.quintessence));
+  const costo = costoLancio(tiro.kind, pay);
+  const paradoxGain = costo.paradosso;
+  notes.unshift(format("WOD5E_MAGE.Costo.Nota", { prezzo: testoCosto(costo, localize, format) }));
+  // La Ruota paga subito: il costo del lancio, quello del potere attivo e la
+  // Quintessenza in dadi di un potere scendono; il Paradosso del costo sale.
+  const spesa = costo.quintessenza + conto.quintessence + powerSpesa;
   let balanceMoved = false;
   if ((spesa > 0 || paradoxGain > 0) && actor.isOwner) {
     const spent = { quintessence: Math.max(balanceBefore.quintessence - spesa, 0), paradox: balanceBefore.paradox };
@@ -886,10 +922,10 @@ export async function launchTiro(actor, tiro) {
     if (balanceAfter.paradox !== balanceBefore.paradox || balanceAfter.quintessence !== balanceBefore.quintessence) {
       await actor.setFlag(MODULE_ID, "magickBalance", balanceAfter);
       balanceMoved = true;
-      if (spesa > 0) ui.notifications.info(format("WOD5E_MAGE.Arete.QuintessenceSpent", { points: spesa }));
-      if (paradoxGain > 0) ui.notifications.info(format("WOD5E_MAGE.MagickBalance.ParadoxGained", { amount: paradoxGain }));
+      ui.notifications.info(format("WOD5E_MAGE.Costo.Pagato", { prezzo: testoCosto({ quintessenza: spesa, paradosso: paradoxGain }, localize, format) }));
     }
   }
+  // I rossi a parte (29/9): solo nei Volgari, uno per punto sulla Ruota dopo il pagamento.
   const paradoxRating = options.coincidental ? 0 : getMagickBalance(actor).paradox;
 
   let outcome = null;
@@ -913,6 +949,10 @@ export async function launchTiro(actor, tiro) {
         symbols,
         traits: traitRows,
         vulgar: effect.vulgar,
+        // Il costo del lancio (29/9): il Narratore copia il Paradosso preso, qualunque sia il tipo.
+        kind: tiro.kind,
+        costo,
+        paradossoPreso: paradoxGain,
         tiro: { power: tiro.power ?? "", traits: chosenTraits.map((item) => item.id), specialty: tiro.specialty ?? "", sforza: Boolean(tiro.sforza) }
       },
       activeModifiers: chosenTraits.map((item) => ({ label: item.name, value: `${traitDiceOf(actor, [item.id]) >= 0 ? "+" : ""}${traitDiceOf(actor, [item.id])}` })),
@@ -930,17 +970,8 @@ export async function launchTiro(actor, tiro) {
   }
   // A tiro fatto: l'uso del potere attivo si conta (la Ruota ha già pagato).
   await pagaPotere(actor, conto, inputs, { pagato: true });
+  // Il Volgare fallito non rende più Quintessenza (rifondazione del 14/9, ribadito il 29/9).
   // La Durata dichiarata scrive il lancio fra le Magick in atto.
-  const total = Number(outcome?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG)?.total);
-  if (effect.vulgar && Number.isFinite(total) && total < 1 && actor.isOwner) {
-    const { quintessenceAfterFailedVulgar } = await import("./arete.js");
-    const balance = getMagickBalance(actor);
-    const next = quintessenceAfterFailedVulgar(balance);
-    if (next.gained) {
-      await actor.setFlag(MODULE_ID, "magickBalance", { quintessence: next.quintessence, paradox: next.paradox });
-      ui.notifications.info(localize("WOD5E_MAGE.RamoC.VulgarFailedQuintessence"));
-    }
-  }
   await recordEffect(actor, { maintained: false, maintainedName: "" }, effect);
   return outcome;
 }

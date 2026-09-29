@@ -10,7 +10,6 @@ import {
   getArete,
   normalizeMagickRollOptions,
   prepareAreteTraits,
-  quintessenceAfterFailedVulgar,
   ramoCPool
 } from "../scripts/arete.js";
 
@@ -134,10 +133,7 @@ assert.equal(paid.spend.bought, false);
 assert.equal(paid.dice, 6, "tre punti, tre dadi in più");
 assert.equal(ramoCPool({ traits: 2, specialtyDice: 2, threshold: 3 }).dice, 1, "i dadi della Specialità");
 
-// Il Volgare fallito (11/9): un punto di Quintessenza sale sulla Ruota, come col +.
-assert.deepEqual(quintessenceAfterFailedVulgar({ quintessence: 2, paradox: 3, floor: 0 }), { quintessence: 3, paradox: 3, gained: true });
-assert.deepEqual(quintessenceAfterFailedVulgar({ quintessence: 4, paradox: 5, floor: 0 }), { quintessence: 4, paradox: 4, gained: true }, "Ruota piena: prima si libera una cella dal Paradosso");
-assert.deepEqual(quintessenceAfterFailedVulgar({ quintessence: 4, paradox: 5, floor: 5 }), { quintessence: 4, paradox: 5, gained: false }, "mai sotto il pavimento");
+// Il Volgare fallito non rende più Quintessenza (14/9, ribadito il 29/9): la funzione non c'è più.
 
 // Il premio e l'Armonia entrano solo se il giocatore li dichiara.
 assert.deepEqual(normalizeMagickRollOptions(), {
@@ -266,8 +262,8 @@ assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
   // Le Specializzazioni sulle opzioni della tendina dell'Abilità.
   assert.deepEqual(skillSpecialtyNames({ system: { skills: { brawl: { bonuses: [{ source: "Lame" }, { source: " Lotta " }] }, occult: { bonuses: [] } } } }), { brawl: ["Lame", "Lotta"] });
   const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
-    // Dal 10/9 notte: Armonia e Quintessenza coi numeri, poi Altro con la Convinzione.
-  assert.match(dialog, /name="harmony"[\s\S]*name="quintessence"[\s\S]*Arete\.Other"[\s\S]*\{\{\{bussolaHtml\}\}\}[\s\S]*\{\{\/unless\}\}/);
+    // Dal 10/9 notte: Armonia coi numeri e (29/9) «Paga con», poi Altro con la Convinzione.
+  assert.match(dialog, /name="harmony"[\s\S]*name="pagaCon"[\s\S]*Arete\.Other"[\s\S]*\{\{\{bussolaHtml\}\}\}[\s\S]*\{\{\/unless\}\}/);
   // La seconda Abilità non c'è più: al suo posto la Specializzazione come casella (+1).
   assert.match(dialog, /name="primaryTrait"[\s\S]*data-specialties="\{\{trait\.specialties\}\}"[\s\S]*<input type="checkbox" name="skillSpecialty">[\s\S]*data-role="specialtyNames"/);
   assert.doesNotMatch(dialog, /<select id="wod5e-mage-arete-secondary"/);
@@ -278,9 +274,13 @@ assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
   const confirm = readFileSync(new URL("../templates/dialogs/arete-roll-confirm.hbs", import.meta.url), "utf8");
   assert.match(confirm, /\{\{\{bussolaHtml\}\}\}/);
   assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /getCustomModifierTotal\(form\) \+ bussolaDice\(form\)/);
-  // Il ramo C in arete.js: la riserva meno la soglia, il Volgare fallito; niente riuscita comprata (16/9).
+  // Il ramo C in arete.js: la riserva meno la soglia; niente riuscita comprata (16/9).
   assert.match(arete, /rollAreteWithParadox\(\{\s*pool: conto\.pool,\s*threshold,/);
-  assert.match(arete, /effect\.vulgar && Number\.isFinite\(total\) && total < 1/);
+  // Il costo del lancio (29/9): si paga prima del tiro, il Volgare fallito non rende più.
+  assert.match(arete, /const costo = costoLancio\(kind, pay\);/);
+  assert.doesNotMatch(arete, /effect\.vulgar && Number\.isFinite\(total\) && total < 1/);
+  assert.doesNotMatch(arete, /name="quintessence"|result\.quintessence/);
+  assert.match(dialog, /name="pagaCon" value="quintessenza"[\s\S]*name="pagaCon" value="paradosso"[\s\S]*data-role="costo"/);
   assert.doesNotMatch(arete, /isAutomaticVictory|isOneStepShort|postAutomaticVictory/);
   const dialog2 = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
   assert.match(dialog2, /data-role="pool">0<\/strong> − <\/span>[\s\S]*data-role="threshold">0<\/strong>[\s\S]*data-role="dice">0<\/strong>/);

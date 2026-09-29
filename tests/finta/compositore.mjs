@@ -126,20 +126,29 @@ assert.deepEqual([durataScelta.modeChosen, durataScelta.modeShown], [true, durat
   assert.equal(sheetTre._tiro.scopes.targets, 2, "tolto uno, il posto si libera");
 }
 
-// Il lancio: Volgare con testimoni, riuscita dall'8, la Ruota sale di 2, la Quintessenza chiesta scende.
+// Il costo del lancio (29/9): ogni tasto del tipo dice il suo prezzo; senza scelta paga la Quintessenza, se c'è.
+assert.deepEqual([ctx.costo.pay, ctx.costo.canQuintessenza, ctx.costo.libera], ["quintessenza", true, 4]);
+assert.deepEqual(ctx.kinds.map((k) => [k.kind, k.costo.quintessenza, k.costo.paradosso]), [["accidentale", 1, 0], ["volgare", 1, 1], ["testimoni", 1, 2]]);
+const aParadosso = S.prepareTiroContext(actor, T.setPay(tiro, "paradosso"));
+assert.deepEqual(aParadosso.kinds.map((k) => [k.kind, k.costo.quintessenza, k.costo.paradosso]), [["accidentale", 0, 1], ["volgare", 0, 2], ["testimoni", 0, 3]]);
+
+// Il lancio: Volgare con testimoni, riuscita dall'8. Paga 1 Quintessenza e prende lo
+// stesso i 2 Paradosso del tipo; la Quintessenza chiesta in dadi non dà dadi (29/9).
 tiro = T.setQuintessence(tiro, 2);
 tiro = T.setKind(tiro, "testimoni");
-globalThis.__sim.faces = [8, 8, 3, 3, 5, 6, 7, 10, 2];
+globalThis.__sim.faces = [8, 8, 3, 3, 5, 6, 7, 10, 2, 4];
 const message = await S.launchTiro(actor, tiro);
 assert.ok(message, "il tiro parte");
 const card = message.getFlag("wod5e-mage", ROLL_CARD_FLAG);
 const roll = globalThis.__sim.rolls.at(-1);
-assert.equal(roll.formula, "6dmcs>7 + 3dpcs>7", "riserva 16 (11 + 2 di Quintessenza + 3 del premio) meno 7 = 9 dadi; la Ruota paga prima del tiro (+2): 3 rossi convertiti");
-assert.deepEqual([card.pool, card.threshold, card.dice, card.successFrom, card.total], [16, 7, 9, 8, 3], "il premio (27/9) è nella riserva, la soglia resta 7");
+assert.equal(roll.formula, "7dmcs>7 + 3dpcs>7", "riserva 14 (11 + 3 del premio) meno 7 = 7 dadi; la Ruota paga prima del tiro (+2 Paradosso): 3 rossi a parte");
+assert.deepEqual([card.pool, card.threshold, card.dice, card.successFrom, card.total], [14, 7, 7, 8, 2], "il premio (27/9) è nella riserva, la soglia resta 7; i rossi non contano");
+assert.deepEqual([card.kind, card.costo, card.paradossoPreso], ["testimoni", { pay: "quintessenza", quintessenza: 1, paradosso: 2 }, 2], "la carta porta il costo, il Narratore copia il Paradosso preso");
 assert.equal(card.tiro.power, "");
 assert.deepEqual(card.tiro.traits, ["i1"]);
-assert.equal(flags["wod5e-mage"].magickBalance.paradox, 1 + 2, "Volgare con testimoni: +2 Paradosso");
-assert.equal(flags["wod5e-mage"].magickBalance.quintessence, 4 - 2, "la Quintessenza spesa scende");
+assert.equal(flags["wod5e-mage"].magickBalance.paradox, 1 + 2, "Volgare con testimoni pagato in Quintessenza: +2 Paradosso");
+assert.equal(flags["wod5e-mage"].magickBalance.quintessence, 4 - 1, "scende solo il punto del costo");
+assert.match(message.flavor, /WOD5E_MAGE\.Costo\.Nota/, "la carta dice il costo");
 assert.equal(flags["wod5e-mage"].lastThreshold, 7, "la soglia salvata è quella piena: il premio non la tocca (27/9)");
 assert.match(message.flavor, /Occhio di lince \+1/);
 
@@ -293,11 +302,12 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   // Con la Quintessenza: il lancio paga il costo del potere oltre ai dadi, e conta niente (nessun limite d'uso).
   flags["wod5e-mage"].magickBalance = { quintessence: 6, paradox: 0 };
   const ctxCasa = S.prepareTiroContext(actor, T.setQuintessence(tiroCasa, 1));
-  assert.deepEqual([ctxCasa.quintessence.available, ctxCasa.quintessence.dice, ctxCasa.potere.cost], [2, 1, 4], "in dadi resta quello che avanza dal costo");
+  assert.deepEqual([ctxCasa.quintessence.available, ctxCasa.quintessence.dice, ctxCasa.potere.cost, ctxCasa.costo.libera], [2, 0, 4, 2], "nella Magick la Quintessenza non dà dadi (29/9); per il costo del lancio resta quella che avanza dal potere");
   globalThis.__sim.faces = [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8];
   const mCasa = await S.launchTiro(actor, T.setQuintessence(tiroCasa, 1));
   assert.ok(mCasa);
-  assert.equal(flags["wod5e-mage"].magickBalance.quintessence, 6 - 4 - 1, "4 del potere e 1 in dadi");
+  assert.equal(flags["wod5e-mage"].magickBalance.quintessence, 6 - 4 - 1, "4 del potere e 1 del costo del lancio");
+  assert.equal(flags["wod5e-mage"].magickBalance.paradox, 0, "Accidentale pagato in Quintessenza: niente Paradosso");
   assert.equal(flags["wod5e-mage"].poteriUsi.pcasa, undefined);
 }
 

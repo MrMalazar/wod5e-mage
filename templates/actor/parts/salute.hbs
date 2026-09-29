@@ -22,7 +22,8 @@
     </div>
     <div class="wod5e-mage-salute-track" role="group" aria-label="{{localize 'WOD5E_MAGE.Salute.Label'}}" title="{{localize 'WOD5E_MAGE.Salute.ClickHint'}}">
         {{#each salute.cells as |cell|}}
-            <button type="button" class="wod5e-mage-salute-cell{{#if cell.locked}} wod5e-mage-salute-locked{{/if}}" data-state="{{cell.state}}" {{#if cell.locked}}data-locked="true" title="{{localize 'WOD5E_MAGE.Salute.LockedHint'}}"{{/if}} data-action="saluteCellChange" data-index="{{cell.index}}" aria-label="{{localize cell.label}}"></button>
+            {{!-- Le caselle del Sacrificio (29/9): bloccate finché non si salda il debito o finisce la sessione. --}}
+            <button type="button" class="wod5e-mage-salute-cell{{#if cell.locked}} wod5e-mage-salute-locked{{/if}}{{#if cell.debt}} wod5e-mage-salute-debito{{/if}}" data-state="{{cell.state}}" {{#if cell.debt}}data-debt="true" title="{{localize 'WOD5E_MAGE.Debito.Cella'}}"{{else}}{{#if cell.locked}}data-locked="true" title="{{localize 'WOD5E_MAGE.Salute.LockedHint'}}"{{/if}}{{/if}} data-action="saluteCellChange" data-index="{{cell.index}}" aria-label="{{localize cell.label}}"></button>
         {{/each}}
     </div>
     {{!-- Niente legenda: il menù di ogni casella dice il nome accanto al segno. --}}

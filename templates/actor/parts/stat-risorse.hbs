@@ -66,10 +66,17 @@
             {{!-- I due conti della Ruota, ognuno sulla sua riga col meno e il più
                  ai lati del numero (Blue, 20/9); la Ruota sotto non porta più
                  tasti. Il nome PARADOSSO resta il tasto dello Scoppio. --}}
+            {{!-- Il Sacrificio (Blue, 29/9): il tastino accanto al nome apre la finestra dei danni
+                 in cambio di Quintessenza; col debito aperto compare il lucchetto col conto da
+                 ripagare, e un clic lo salda. --}}
             <div class="wod5e-mage-riga wod5e-mage-riga-risorsa wod5e-mage-riga-conto quintessence">
                 <div class="wod5e-mage-riga-testa">
                     <i class="fa-solid fa-circle-dot wod5e-mage-riga-icona" aria-hidden="true"></i>
                     <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo"><span>{{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</span></span>
+                    <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-sacrificio-tasto" data-action="saluteSacrificio" title="{{localize 'WOD5E_MAGE.Sacrificio.Hint'}}" aria-label="{{localize 'WOD5E_MAGE.Sacrificio.Label'}}"><i class="fa-solid fa-hand-holding-droplet" aria-hidden="true"></i></button>
+                    {{#if salute.debitoQuintessenza}}
+                        <button type="button" class="wod5e-mage-debito-tasto" data-action="saluteSalda" title="{{localize 'WOD5E_MAGE.Debito.Hint' points=salute.debitoQuintessenza}}" aria-label="{{localize 'WOD5E_MAGE.Debito.Title'}}"><i class="fa-solid fa-lock" aria-hidden="true"></i> {{salute.debitoQuintessenza}}</button>
+                    {{/if}}
                     <div class="wod5e-mage-riga-conto-tasti">
                         <button type="button" class="wod5e-mage-ruota-tasto quintessence meno" data-action="magickBalanceChange" data-resource="quintessence" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}" title="{{localize 'WOD5E_MAGE.MagickBalance.RemoveQuintessence'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
                         <b class="wod5e-mage-riga-valore">{{magickTrack.quintessence}}</b>

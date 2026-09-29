@@ -216,12 +216,18 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.equal(etichettaVolgare({ actorName: "", titolo: "", testimoni: false, soglia: 7 }, (k) => k.split(".").pop()), "Volgare · Soglia 7");
   assert.equal(volgariRecenti([carta("a"), carta("b"), carta("c")], { massimo: 2 }).length, 2);
   assert.equal(volgariRecenti([carta("a"), carta("b")])[0].messageId, "b", "dal più recente");
-  // La copia automatica: 1 punto per un Volgare, 2 con testimoni, niente se già copiato o non Volgare.
-  assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: true } }), { points: 1, testimoni: false });
-  assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: true, advancedDifficulty: true } }), { points: 2, testimoni: true });
+  // La copia automatica delle carte di prima: 1 punto per un Volgare, 2 con testimoni, niente se già copiato o non Volgare.
+  assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: true } }), { points: 1, testimoni: false, volgare: true });
+  assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: true, advancedDifficulty: true } }), { points: 2, testimoni: true, volgare: true });
   assert.equal(copiaDaCarta({ rollCard: { vulgar: true }, paradossoCopiato: true }), null);
   assert.equal(copiaDaCarta({ rollCard: { vulgar: false } }), null);
   assert.equal(copiaDaCarta({}), null);
+  // Dal 29/9 la carta porta il costo del lancio: il Narratore copia il Paradosso preso, qualunque sia il tipo.
+  assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: false, paradossoPreso: 1 } }), { points: 1, testimoni: false, volgare: false }, "Accidentale pagato in Paradosso");
+  assert.equal(copiaDaCarta({ rollCard: { vulgar: false, paradossoPreso: 0 } }), null, "Accidentale pagato in Quintessenza: niente da copiare");
+  assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: true, paradossoPreso: 2 } }), { points: 2, testimoni: false, volgare: true }, "Volgare pagato in Paradosso");
+  assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: true, advancedDifficulty: true, paradossoPreso: 3 } }), { points: 3, testimoni: true, volgare: true });
+  assert.equal(copiaDaCarta({ rollCard: { vulgar: true, paradossoPreso: 2 }, paradossoCopiato: true }), null);
 }
 
 // Gli effetti addosso al mago: la riga, quando scade, l'ordine.

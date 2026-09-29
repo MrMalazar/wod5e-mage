@@ -1,0 +1,24 @@
+{{!-- Salda il debito del Sacrificio (Blue, 29/9): si ripaga la stessa Quintessenza
+     che il danno ha dato (1 a superficiale, 3 ad aggravato), e quelle caselle
+     tornano curabili. Solo i segni in debito; il massimo di ognuno dice anche
+     quanta Quintessenza c'è sulla Ruota. --}}
+<div class="wod5e-mage-danni wod5e-mage-sacrificio">
+    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Debito.Intro"}}</p>
+    <p class="wod5e-mage-sacrificio-limiti">{{localize "WOD5E_MAGE.Debito.Disponibile" points=quintessence owed=owed}}</p>
+    <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Debito.Sign"}}</span>
+    <input type="hidden" name="state" value="{{chosen}}">
+    <div class="wod5e-mage-danni-grid" role="group" aria-label="{{localize 'WOD5E_MAGE.Debito.Sign'}}">
+        {{#each signs as |sign|}}
+            <button type="button" class="wod5e-mage-danni-sign{{#unless sign.max}} vuoto{{/unless}}" data-role="danniSign" data-state="{{sign.state}}" data-max="{{sign.max}}" aria-label="{{localize sign.label}}">
+                <i class="wod5e-mage-salute-glyph" data-state="{{sign.state}}" aria-hidden="true"></i>
+                <span>{{localize sign.label}}</span>
+                <b class="wod5e-mage-sacrificio-resa">{{sign.resa}}</b>
+            </button>
+        {{/each}}
+    </div>
+    <label class="wod5e-mage-item-field wod5e-mage-danni-amount">
+        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Debito.Amount"}}</span>
+        <input type="number" name="amount" min="1" max="9" step="1" value="1">
+    </label>
+    <p class="wod5e-mage-sacrificio-out" data-role="saldaCosto" aria-live="polite"></p>
+</div>

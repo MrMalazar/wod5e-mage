@@ -59,12 +59,15 @@ assert.deepEqual(salute.paradosso, { p: 1, m: 1 });
 assert.equal(salute.locked, 2);
 assert.deepEqual(salute.cells.map((cell) => cell.locked), [true, false, false, false, false, true]);
 
-// Nuova sessione (11/9): la Quintessenza si azzera e riparte dalla generata.
+// Nuova sessione (25/9 e 29/9): la Quintessenza resta; si aggiungono la generata e il
+// punto della scena nuova, nelle celle libere della Ruota.
 assert.equal(quintessenceGained(""), 0);
 assert.equal(quintessenceGained("2"), 2);
-assert.deepEqual(balanceAfterSession({ quintessence: 5, paradox: 3, floor: 1 }, "2"), { quintessence: 2, paradox: 3 });
-assert.deepEqual(balanceAfterSession({ quintessence: 5, paradox: 8, floor: 0 }, "4"), { quintessence: 1, paradox: 8 }, "dentro le celle libere");
-assert.deepEqual(balanceAfterSession({ quintessence: 5, paradox: 0, floor: 0 }, ""), { quintessence: 0, paradox: 0 });
+assert.deepEqual(balanceAfterSession({ quintessence: 2, paradox: 3, floor: 1 }, "2"), { quintessence: 5, paradox: 3 });
+assert.deepEqual(balanceAfterSession({ quintessence: 5, paradox: 3, floor: 1 }, "2"), { quintessence: 6, paradox: 3 }, "dentro le celle libere");
+assert.deepEqual(balanceAfterSession({ quintessence: 0, paradox: 8, floor: 0 }, "4"), { quintessence: 1, paradox: 8 }, "dentro le celle libere");
+assert.deepEqual(balanceAfterSession({ quintessence: 5, paradox: 0, floor: 0 }, ""), { quintessence: 6, paradox: 0 }, "senza Background resta il punto della scena");
+assert.deepEqual(balanceAfterSession({ quintessence: 2, paradox: 1, floor: 4 }, "", { scena: 0 }), { quintessence: 2, paradox: 1 }, "il pavimento tiene le sue celle");
 
 // La macchina: i tasti registrati, il Cambio Scena in testata, le caselle bloccate nel template e nel CSS.
 assert.match(readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"), /registerUstione\(\);\s*registerParadossoNarratore\(\);/);

@@ -3,7 +3,17 @@ import { readFileSync } from "node:fs";
 import {
   applySaluteStateChange,
   clampSalute,
+  debitoDopoSaldo,
+  debitoQuintessenza,
   getSalute,
+  normalizeDebito,
+  paintDebito,
+  paintSalute,
+  RICARICA_SCENA,
+  SACRIFICIO_RESA,
+  sacrificioMassimo,
+  sacrificioResa,
+  saluteDopoSacrificio,
   saluteAfterSession,
   quintessenceGained,
   saluteMax,
@@ -31,6 +41,41 @@ assert.equal(saluteMax(actor(), -9), 1);
 // Nuova sessione: i superficiali mentali guariscono, un fisico se ne va.
 assert.deepEqual(saluteAfterSession({ pa: 1, ps: 3, ma: 2, ms: 2 }), { pa: 1, ps: 2, ma: 2, ms: 0 });
 assert.deepEqual(saluteAfterSession({ pa: 0, ps: 0, ma: 0, ms: 4 }), { pa: 0, ps: 0, ma: 0, ms: 0 });
+// Il Riposo (29/9): le caselle in debito del Sacrificio restano, il resto guarisce come sempre.
+assert.deepEqual(saluteAfterSession({ pa: 1, ps: 3, ma: 2, ms: 2 }, { ps: 3, ms: 1 }), { pa: 1, ps: 3, ma: 2, ms: 1 });
+assert.deepEqual(saluteAfterSession({ pa: 1, ps: 3, ma: 2, ms: 2 }, { ps: 1 }), { pa: 1, ps: 2, ma: 2, ms: 0 }, "il debito su una casella sola non ferma la guarigione delle altre");
+
+// Il Sacrificio (Blue, 29/9): 1 Quintessenza a superficiale, 3 ad aggravato; il danno resta in debito.
+assert.deepEqual(SACRIFICIO_RESA, { ps: 1, ms: 1, pa: 3, ma: 3 });
+assert.equal(sacrificioResa("ps", 2), 2);
+assert.equal(sacrificioResa("ma", 2), 6);
+assert.equal(sacrificioResa("", 3), 0);
+assert.deepEqual(normalizeDebito({ pa: 5, ps: 1, ma: 1, ms: 9 }, { pa: 1, ps: 2, ma: 0, ms: 3 }), { pa: 1, ps: 1, ma: 0, ms: 3 }, "il debito non supera i danni dello stesso segno");
+assert.equal(debitoQuintessenza({ pa: 1, ps: 2, ma: 0, ms: 1 }), 3 + 2 + 1);
+// Le caselle in debito: le ultime segnate di ogni segno (i fisici da destra del loro blocco, i mentali da sinistra).
+const dipinte = paintSalute({ pa: 1, ps: 2, ma: 1, ms: 2 }, 8);
+assert.deepEqual(dipinte, ["pa", "ps", "ps", "", "", "ms", "ms", "ma"]);
+assert.deepEqual(paintDebito(dipinte, { ps: 1, ms: 1 }), [false, false, true, false, false, true, false, false]);
+assert.deepEqual(paintDebito(dipinte, { pa: 1, ma: 1 }), [true, false, false, false, false, false, false, true]);
+// Quanti se ne possono sacrificare: le caselle libere della Salute e il posto sulla Ruota.
+assert.equal(sacrificioMassimo({ max: 7, total: 3 }, { quintessence: 2, paradox: 3 }, "ps"), 4);
+assert.equal(sacrificioMassimo({ max: 7, total: 3 }, { quintessence: 2, paradox: 3 }, "pa"), 1, "3 Quintessenza per aggravato: sulla Ruota ce ne stanno 4");
+assert.equal(sacrificioMassimo({ max: 7, total: 3 }, { quintessence: 4, paradox: 4 }, "ma"), 0);
+assert.equal(sacrificioMassimo({ max: 7, total: 7 }, { quintessence: 0, paradox: 0 }, "ps"), 0, "la Salute piena non converte");
+// Il danno entra nelle caselle libere e il debito cresce; il saldo lo scala.
+assert.deepEqual(saluteDopoSacrificio({ pa: 0, ps: 1, ma: 0, ms: 0 }, 7, { pa: 0, ps: 0, ma: 0, ms: 0 }, "pa", 1), { counts: { pa: 1, ps: 1, ma: 0, ms: 0 }, debito: { pa: 1, ps: 0, ma: 0, ms: 0 } });
+assert.deepEqual(saluteDopoSacrificio({ pa: 0, ps: 0, ma: 0, ms: 1 }, 7, { ms: 1 }, "ms", 2), { counts: { pa: 0, ps: 0, ma: 0, ms: 3 }, debito: { pa: 0, ps: 0, ma: 0, ms: 3 } });
+assert.deepEqual(debitoDopoSaldo({ pa: 1, ps: 2, ma: 0, ms: 0 }, "ps", 1), { pa: 1, ps: 1, ma: 0, ms: 0 });
+assert.deepEqual(debitoDopoSaldo({ pa: 1, ps: 2, ma: 0, ms: 0 }, "boh", 1), { pa: 1, ps: 2, ma: 0, ms: 0 });
+assert.deepEqual(debitoDopoSaldo({ pa: 1 }, "pa", 5), { pa: 0, ps: 0, ma: 0, ms: 0 });
+// La scheda legge il debito: le caselle, il conto da ripagare.
+{
+  const conDebito = getSalute(actor({ salute: { ps: 2, ms: 1, debito: { ps: 1, ms: 1, pa: 4 } } }));
+  assert.deepEqual([conDebito.debito, conDebito.debt, conDebito.debitoQuintessenza], [{ pa: 0, ps: 1, ma: 0, ms: 1 }, 2, 2]);
+  assert.deepEqual(conDebito.cells.map((cell) => cell.debt), [false, true, false, false, false, false, true]);
+}
+assert.equal(RICARICA_SCENA, 1, "a ogni cambio scena +1 Quintessenza");
+
 // Nuova sessione (ramo C, 11/9): la Ruota si azzera e riparte dalla Quintessenza generata; senza, da zero.
 assert.equal(quintessenceGained(""), 0);
 assert.equal(quintessenceGained("0"), 0);
@@ -115,6 +160,9 @@ assert.deepEqual(saluteAfterRelax({ pa: 1, ps: 2, ma: 2, ms: 3 }, 5), { pa: 1, p
 assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 0, ma: 2, ms: 0 }, 0), { pa: 0, ps: 0, ma: 1, ms: 0 });
 assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 0, ma: 2, ms: 0 }, 3), { pa: 0, ps: 0, ma: 1, ms: 0 });
 assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 1, ma: 0, ms: 0 }, 4), { pa: 0, ps: 1, ma: 0, ms: 0 });
+// Il Relax non cura le caselle del Sacrificio (29/9): lavora sulle altre.
+assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 0, ma: 2, ms: 3 }, 5, { ma: 1, ms: 2 }), { pa: 0, ps: 0, ma: 1, ms: 2 });
+assert.deepEqual(saluteAfterRelax({ pa: 0, ps: 0, ma: 1, ms: 1 }, 0, { ma: 1, ms: 1 }), { pa: 0, ps: 0, ma: 1, ms: 1 }, "tutto in debito: niente si cura, nemmeno il minimo");
 assert.match(track, /data-action="saluteRiposo"[\s\S]*data-action="saluteRelax"[\s\S]*data-action="saluteReset"/);
 
 // Danni subiti (9/9): il tasto a destra di Reset, la finestra coi quattro segni.
@@ -141,4 +189,23 @@ assert.deepEqual(saluteDamageOutcome({ pa: 0, ps: 1, ma: 0, ms: 5 }, 6, { pa: 2 
 // Tutto aggravato: non c'è più niente da convertire.
 assert.deepEqual(saluteDamageOutcome({ pa: 6, ps: 0, ma: 0, ms: 0 }, 6, { ps: 2 }), { counts: { pa: 6, ps: 0, ma: 0, ms: 0 }, converted: 0 });
 assert.deepEqual(saluteWithDamage({ pa: 0, ps: 6, ma: 0, ms: 0 }, 6, { ma: 1 }), { pa: 1, ps: 5, ma: 0, ms: 0 });
+// Il tasto del Sacrificio accanto alla Quintessenza, il lucchetto del debito, le caselle in viola e le finestre.
+{
+  const risorse = readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8");
+  assert.match(risorse, /riga-conto quintessence[\s\S]*data-action="saluteSacrificio"[\s\S]*\{\{#if salute\.debitoQuintessenza\}\}[\s\S]*data-action="saluteSalda"/);
+  assert.match(readFileSync(new URL("../templates/actor/parts/salute.hbs", import.meta.url), "utf8"), /wod5e-mage-salute-debito/);
+  const sheet = readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8");
+  assert.match(sheet, /saluteSacrificio: onSaluteSacrificio,\s*saluteSalda: onSaluteSalda,/);
+  assert.match(readFileSync(new URL("../templates/dialogs/sacrificio.hbs", import.meta.url), "utf8"), /data-role="danniSign"[\s\S]*name="amount"[\s\S]*data-role="sacrificioResa"/);
+  assert.match(readFileSync(new URL("../templates/dialogs/salda.hbs", import.meta.url), "utf8"), /data-role="danniSign"[\s\S]*name="amount"[\s\S]*data-role="saldaCosto"/);
+  const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+  assert.match(css, /\.wod5e-mage-salute-cell\.wod5e-mage-salute-debito\s*\{/);
+  for (const lang of ["it", "en"]) {
+    const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8")).WOD5E_MAGE;
+    for (const key of ["Label", "Title", "Hint", "Intro", "Limiti", "Sign", "Amount", "Resa", "Nessuno", "Ok", "NoBoxes", "NoRoom", "Chat", "Done"]) assert.equal(typeof strings.Sacrificio[key], "string", `${lang} Sacrificio.${key}`);
+    for (const key of ["Title", "Hint", "Intro", "Disponibile", "Sign", "Amount", "Costo", "NoQuintessenza", "Ok", "Nessuno", "Chat", "Done", "Cella", "CellaBloccata"]) assert.equal(typeof strings.Debito[key], "string", `${lang} Debito.${key}`);
+    for (const key of ["CambioScenaQuintessenza", "CambioScenaRuotaPiena"]) assert.equal(typeof strings.Salute[key], "string", `${lang} Salute.${key}`);
+  }
+}
+
 console.log("Salute tests passed.");

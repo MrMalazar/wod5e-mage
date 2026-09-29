@@ -954,7 +954,7 @@ function testoRegistro(entry, localize) {
   switch (entry.kind) {
     case "given": return format("WOD5E_MAGE.Paradosso.LogGiven", { name: entry.from ?? "" });
     case "sforzo": return format("WOD5E_MAGE.Paradosso.LogSforzo", { name: entry.from ?? "" });
-    case "copia": return format("WOD5E_MAGE.Menu.LogCopia", { name: entry.from ?? "", kind: localize(entry.testimoni ? "WOD5E_MAGE.Menu.ConTestimoni" : "WOD5E_MAGE.Menu.Volgare") });
+    case "copia": return format("WOD5E_MAGE.Menu.LogCopia", { name: entry.from ?? "", kind: localize(entry.testimoni ? "WOD5E_MAGE.Menu.ConTestimoni" : (entry.volgare === false ? "WOD5E_MAGE.Menu.Accidentale" : "WOD5E_MAGE.Menu.Volgare")) });
     case "menu": return entry.actorName ? `${entry.text} · ${entry.actorName}` : String(entry.text ?? "");
     case "spend": return entry.text ? entry.text : localize("WOD5E_MAGE.Paradosso.LogSpend");
     case "manual": return localize("WOD5E_MAGE.Paradosso.LogManual");
@@ -1137,7 +1137,7 @@ export async function cambioScena() {
 
 const copiando = new Set();
 
-/** Un Volgare chiuso in chat: la copia nella riserva, l'orologio di Carica che avanza, i Tocchi «al lancio dopo» che si spengono. */
+/** Un lancio chiuso in chat: la copia del Paradosso preso nella riserva (dal 29/9 anche dell'Accidentale pagato in Paradosso), l'orologio di Carica che avanza sui Volgari, i Tocchi «al lancio dopo» che si spengono. */
 async function suLancio(message) {
   if (!isActiveGM()) return;
   const flags = message?.flags?.[MODULE_ID] ?? {};
@@ -1155,10 +1155,10 @@ async function suLancio(message) {
   copiando.add(message.id);
   try {
     const pool = getPool();
-    await game.settings.set(MODULE_ID, POOL_SETTING, addPoints(pool, copia.points, { kind: "copia", from: actor?.name ?? message?.speaker?.alias ?? "", testimoni: copia.testimoni, messageId: message.id }));
+    await game.settings.set(MODULE_ID, POOL_SETTING, addPoints(pool, copia.points, { kind: "copia", from: actor?.name ?? message?.speaker?.alias ?? "", testimoni: copia.testimoni, volgare: copia.volgare, messageId: message.id }));
     await message.update({ flags: { [MODULE_ID]: { [COPIA_FLAG]: true } } });
-    await avanzaOrologiPer("volgare");
-    ui.notifications.info(game.i18n.format("WOD5E_MAGE.Menu.Copiato", { points: copia.points, name: actor?.name ?? "" }));
+    if (copia.volgare) await avanzaOrologiPer("volgare");
+    ui.notifications.info(game.i18n.format(copia.volgare ? "WOD5E_MAGE.Menu.Copiato" : "WOD5E_MAGE.Menu.CopiatoAccidentale", { points: copia.points, name: actor?.name ?? "" }));
   } finally {
     copiando.delete(message.id);
   }

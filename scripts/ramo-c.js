@@ -4,12 +4,12 @@
  * Vampiri portato sulla Magick e sulle Abilità. La soglia si toglie dalla
  * riserva e restano i dadi che tiri; un dado sopra la difficoltà è la
  * riuscita, ne basta uno; la difficoltà la fa il tipo di tiro (Accidentale
- * e Volgare 6, Volgare con testimoni 8, tiri di Abilità 6). I rossi sono
- * pari al Paradosso sulla Ruota e si tirano sempre, anche a riserva
- * azzerata: si convertono dai dadi rimasti e, se sono di più, quelli in
- * più si aggiungono e contano anche loro. Dalla 0.87.0 il modulo è in ramo
- * C di default, senza interruttore. Tutto qui è puro: si prova fuori da
- * Foundry.
+ * e Volgare 6, Volgare con testimoni 8, tiri di Abilità 6). Dal 29/9 (verdetti
+ * di Blue) i rossi si tirano a parte: tanti quanto il Paradosso sulla Ruota
+ * dopo aver pagato il lancio, solo nei Volgari; non tolgono dadi alla
+ * riserva e decidono solo lo scoppio. E ogni lancio si paga (costoLancio).
+ * Dalla 0.87.0 il modulo è in ramo C di default, senza interruttore. Tutto
+ * qui è puro: si prova fuori da Foundry.
  */
 
 export const RAMO = "C";
@@ -75,28 +75,86 @@ export function ramoCDice(pool, threshold) {
 }
 
 /**
- * Come si dividono i dadi: i rossi sono tanti quanto il Paradosso e si
- * tirano sempre; si convertono dai dadi rimasti dopo la soglia, e quelli
- * oltre i dadi rimasti si aggiungono. Contano tutti (11/9 pomeriggio).
+ * Come si dividono i dadi (verdetto di Blue del 29/9/2026: «il paradosso non
+ * si sostituisce più ai dadi che fai per tirare, ma viene tirato a parte»):
+ * la riserva tira tutti i suoi dadi e decide se l'effetto riesce; i rossi,
+ * tanti quanto il Paradosso, si tirano accanto e decidono solo lo scoppio
+ * (1 o 10). Non contano per la riuscita. Fino alla 1.27.0 i rossi si
+ * convertivano dai dadi rimasti e contavano anche loro.
  */
 export function splitRamoCDice(dice, paradox) {
   const rolled = count(dice);
   const reds = count(paradox);
-  const converted = Math.min(reds, rolled);
-  // Tutti i rossi contano (Blue, 11/9 pomeriggio: «3 10 10 8, su 4 dadi
-  // dovrebbe essere 3 successi»): la PROPOSTA «solo per l'occhio» è caduta.
   return {
-    basicDice: rolled - converted,
+    basicDice: rolled,
     paradoxDice: reds,
-    countedParadox: reds,
-    eyeOnly: 0,
-    totalDice: rolled - converted + reds
+    countedParadox: 0,
+    eyeOnly: reds,
+    totalDice: rolled + reds
   };
+}
+
+/** Come si paga il lancio (verdetto di Blue del 29/9/2026): in Quintessenza o in Paradosso. */
+export const PAGAMENTI = Object.freeze(["quintessenza", "paradosso"]);
+
+/** I tre tipi di lancio dei tre tasti, dal più sicuro al più caro. */
+export const TIPI_LANCIO = Object.freeze(["accidentale", "volgare", "testimoni"]);
+
+/** Il tipo di lancio dalle caselle della finestra: con testimoni, Volgare, oppure Accidentale. */
+export function tipoDaOpzioni({ vulgar = false, witnesses = false } = {}) {
+  if (witnesses) return "testimoni";
+  if (vulgar) return "volgare";
+  return "accidentale";
+}
+
+/** Il Paradosso che il tipo porta da sé: Accidentale 0, Volgare 1, Volgare con testimoni 2. */
+export function paradossoDelTipo(kind) {
+  if (kind === "testimoni") return 2;
+  if (kind === "volgare") return 1;
+  return 0;
+}
+
+/**
+ * Il costo del lancio (verdetti di Blue del 29/9/2026): ogni lancio di
+ * Magick si paga, e si può sempre lanciare. Il giocatore sceglie: 1
+ * Quintessenza, oppure il Paradosso del tipo (Accidentale 1, Volgare 2,
+ * Volgare con testimoni 3). La Quintessenza copre solo il costo: chi la
+ * paga prende lo stesso il Paradosso del Volgare (1, o 2 coi testimoni).
+ * Il Narratore riceve la copia di ogni punto Paradosso preso.
+ */
+export function costoLancio(kind, pay) {
+  const base = paradossoDelTipo(kind);
+  if (pay === "quintessenza") return { pay: "quintessenza", quintessenza: 1, paradosso: base };
+  return { pay: "paradosso", quintessenza: 0, paradosso: base + 1 };
+}
+
+/**
+ * Il costo del lancio in parole (29/9), per il tasto, la carta e l'avviso:
+ * «1 Quintessenza e 1 Paradosso», «2 Paradosso». `localize` e `format` sono
+ * quelli di Foundry; fuori da Foundry tornano le chiavi.
+ */
+export function testoCosto(costo, localize = (key) => key, format = (key) => key) {
+  const parti = [];
+  if (count(costo?.quintessenza) > 0) parti.push(format("WOD5E_MAGE.Costo.PuntiQuintessenza", { points: count(costo.quintessenza) }));
+  if (count(costo?.paradosso) > 0) parti.push(format("WOD5E_MAGE.Costo.PuntiParadosso", { points: count(costo.paradosso) }));
+  return parti.join(` ${localize("WOD5E_MAGE.Costo.E")} `);
+}
+
+/**
+ * Chi paga il lancio: la scelta del giocatore, se si può fare. La
+ * Quintessenza vuole almeno un punto libero sulla Ruota (dopo il costo di un
+ * potere attivo); senza, si paga in Paradosso, che si può sempre prendere.
+ * Senza scelta: la Quintessenza quando c'è.
+ */
+export function pagamentoDelLancio(scelta, quintessenzaLibera = 0) {
+  if (scelta === "paradosso") return "paradosso";
+  return count(quintessenzaLibera) >= 1 ? "quintessenza" : "paradosso";
 }
 
 /**
  * I successi del ramo C: dalla riuscita in su sui bianchi, lo stesso sui
- * rossi ma solo fino ai rossi che contano (gli altri sono per l'occhio).
+ * rossi ma solo fino ai rossi che contano (gli altri sono per l'occhio;
+ * dal 29/9 i rossi tirati a parte non contano mai: `countedParadox` 0).
  * Niente coppie di dieci: nel ramo C i critici non esistono.
  */
 export function calculateRamoCSuccesses(basicResults = [], paradoxResults = [], countedParadox = Infinity, { successFrom = SUCCESS_FROM } = {}) {

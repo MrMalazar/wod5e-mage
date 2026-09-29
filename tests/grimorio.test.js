@@ -57,13 +57,13 @@ const card = renderRollCard({ goal: "Invisibilità", effectKind: "WOD5E_MAGE.Are
 assert.match(card, /WOD5E_MAGE\.RollCard\.Goal<\/b><span class="wod5e-mage-roll-value">Invisibilità<\/span>[\s\S]*WOD5E_MAGE\.RollCard\.Effect<\/b><span class="wod5e-mage-roll-value">WOD5E_MAGE\.Arete\.EffectKinds\.physical<\/span>/);
 const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
 // L'Obiettivo sta in cima, con l'Effetto sotto, poi Sfere Effetto e Ambiti (10/9 notte).
-assert.match(dialog, /name="goal"[\s\S]*data-role="grimorioOpen"[\s\S]*name="effectKind"[\s\S]*Arete\.Spheres[\s\S]*Scopes\.Label[\s\S]*name="harmony"[\s\S]*name="quintessence"/);
+assert.match(dialog, /name="goal"[\s\S]*data-role="grimorioOpen"[\s\S]*name="effectKind"[\s\S]*Arete\.Spheres[\s\S]*Scopes\.Label[\s\S]*name="harmony"[\s\S]*name="pagaCon"/);
 const grimorioTemplate = readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8");
 assert.match(grimorioTemplate, /data-role="grimorioSearch"[\s\S]*data-effetto="\{\{entry\.id\}\}"/);
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-// Ramo C: la Quintessenza è dadi (16/9: solo dadi); scende dalla Ruota al tiro.
-assert.match(arete, /const conto = ramoCPool\(\{\s*traits: basePool,\s*bonus: bonusDice \+ extraDice,\s*specialtyDice: specialty\.successes,\s*quintessence,\s*sphereMax,\s*threshold,\s*prize: prizeDice\s*\}\);/);
-assert.match(arete, /quintessence: Math\.max\(balanceBefore\.quintessence - quintessence, 0\)/);
+// Ramo C: dal 29/9 la Quintessenza non dà dadi; paga il costo del lancio, che scende dalla Ruota al tiro.
+assert.match(arete, /const conto = ramoCPool\(\{\s*traits: basePool,\s*bonus: bonusDice \+ extraDice,\s*specialtyDice: specialty\.successes,\s*sphereMax,\s*threshold,\s*prize: prizeDice\s*\}\);/);
+assert.match(arete, /quintessence: Math\.max\(balanceBefore\.quintessence - costo\.quintessenza, 0\)/);
 assert.match(arete, /effectKind,\r?\n\s+arete: arete\.value/);
 // L'Ustione non si segna più da sola: la scelta sta nei tasti sotto la carta (ustione.js).
 const ustione = readFileSync(new URL("../scripts/ustione.js", import.meta.url), "utf8");

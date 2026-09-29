@@ -84,7 +84,8 @@ function registerDiceSoNicePreset(dice3d) {
     font: "Arial Black"
   }, "default");
 
-  // Nel ramo C la riuscita è l'8: le facce 6 e 7 sono fallimenti anche in 3D.
+  // Dal 29/9 i rossi decidono solo lo scoppio: contano l'1 e il 10 (l'occhio),
+  // le altre facce sono vuote anche in 3D.
   dice3d.addDicePreset({
     type: "dp",
     labels: [
@@ -95,8 +96,8 @@ function registerDiceSoNicePreset(dice3d) {
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
-      "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
-      "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
+      "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
+      "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-crit-dsn.png"
     ],
     colorset: "mage-paradox",
@@ -163,7 +164,7 @@ function getCustomModifierTotal(form) {
 
 /**
  * La riga viva della finestra (ramo C): riserva meno soglia uguale dadi,
- * e quanti rossi. Si riscrive a ogni tocco di riserva, soglia e
+ * e quanti rossi a parte. Si riscrive a ogni tocco di riserva, soglia e
  * modificatori. Torna il conto, per chi lo chiama al tiro.
  */
 export function readDialogDice(form, { paradoxRating = 0, bought = false, onlyParadox = false } = {}) {
@@ -175,8 +176,8 @@ export function readDialogDice(form, { paradoxRating = 0, bought = false, onlyPa
 
 /**
  * Il conto dei dadi dai numeri (16/9): riserva meno soglia, i rossi pari
- * al Paradosso. Lo usano la finestra (readDialogDice) e il tiro diretto
- * dalla scheda, che non ha finestra.
+ * al Paradosso, tirati a parte (29/9). Lo usano la finestra (readDialogDice)
+ * e il tiro diretto dalla scheda, che non ha finestra.
  */
 export function contoDice({ pool = 0, threshold = 0, paradoxRating = 0, bought = false, onlyParadox = false } = {}) {
   const conto = ramoCDice(pool, threshold);
@@ -198,11 +199,8 @@ function paintDialogDice(form, options) {
   const conto = readDialogDice(form, options);
   const format = game.i18n.format.bind(game.i18n);
   const parts = [format("WOD5E_MAGE.RamoC.DiceLine", { pool: conto.pool, threshold: conto.threshold, dice: conto.dice })];
-  if (conto.paradoxDice > 0) {
-    parts.push(conto.eyeOnly > 0
-      ? format("WOD5E_MAGE.RamoC.RedsEyeOnly", { reds: conto.paradoxDice, eyeOnly: conto.eyeOnly })
-      : format("WOD5E_MAGE.RamoC.Reds", { reds: conto.paradoxDice }));
-  }
+  // I rossi a parte (29/9): accanto alla riserva, solo per lo scoppio.
+  if (conto.paradoxDice > 0) parts.push(format("WOD5E_MAGE.RamoC.Reds", { reds: conto.paradoxDice }));
   out.textContent = parts.join(" · ");
   const paradoxInput = form.querySelector("#inputParadoxDice");
   if (paradoxInput) paradoxInput.value = String(conto.paradoxDice);
@@ -256,14 +254,15 @@ async function postDicelessMessage(actor, title, { flavor, cardData, banner = ""
 /**
  * La finestra di conferma e il tiro del ramo C. La usano il tiro di Areté,
  * lo Scoppio e (dalla 0.87.0) i tiri di Abilità della scheda: la riserva
- * meno la soglia dà i dadi, un 8 riesce, i rossi si tirano sempre. Torna il
- * messaggio in chat, oppure null se la finestra è stata chiusa.
+ * meno la soglia dà i dadi; i rossi, quando ci sono, si tirano a parte e
+ * decidono solo lo scoppio (29/9). Torna il messaggio in chat, oppure null
+ * se la finestra è stata chiusa.
  *
  * @param pool          la riserva prima della soglia
  * @param threshold     la soglia (modificabile nella finestra)
  * @param witnesses     Volgare con testimoni: successi dall'8 invece che dal 6
  * @param bonusDice     i dadi in più (Armonia) già dentro `pool`, per il tetto +3
- * @param paradoxRating i rossi: il Paradosso sulla Ruota
+ * @param paradoxRating i rossi a parte: il Paradosso sulla Ruota dopo il costo del lancio (solo Volgari)
  * @param onlyParadox   lo Scoppio: solo rossi
  * @param bought        la riuscita comprata con la Quintessenza: non si tira, salvo i rossi
  * @param burn          l'Ustione se scatta il Contraccolpo: la soglia (i danni)
@@ -449,8 +448,9 @@ export async function executeRamoCRoll({
   if (excess > 0) {
     rollFlavor += renderRollNote(format("WOD5E_MAGE.Arete.BonusCap", { excess }));
   }
-  if (conto.eyeOnly > 0 && !bought && !onlyParadox) {
-    rollFlavor += renderRollNote(format("WOD5E_MAGE.RamoC.EyeOnlyNote", { eyeOnly: conto.eyeOnly }));
+  // I rossi a parte (Blue, 29/9): la carta lo dice, perché nessuno li conti fra i successi.
+  if (conto.paradoxDice > 0 && !bought && !onlyParadox) {
+    rollFlavor += renderRollNote(format("WOD5E_MAGE.RamoC.RossiAParte", { reds: conto.paradoxDice }));
   }
   for (const note of notes) {
     if (note) rollFlavor += renderRollNote(String(note));
@@ -467,6 +467,8 @@ export async function executeRamoCRoll({
     dice: conto.dice,
     countedParadox: conto.countedParadox,
     eyeOnly: conto.eyeOnly,
+    // Dal 29/9 i rossi si tirano a parte e non contano per la riuscita: la Volontà non li ritira.
+    rossiAParte: true,
     sphereMax: Math.max(Math.trunc(Number(sphereLevel) || 0), 0),
     // Un successo basta: la fascia legge questo contro il totale.
     difficulty: 1,
@@ -510,8 +512,9 @@ export async function executeRamoCRoll({
     paradoxRating: reds
   }).roll();
 
-  // Il conto del ramo C: la riuscita dal 6 o dall'8, i rossi contano fino a
-  // quelli convertiti, niente coppie di dieci. La riuscita comprata è 1.
+  // Il conto del ramo C: la riuscita dal 6 o dall'8 sui soli dadi della
+  // riserva (i rossi a parte non contano, 29/9), niente coppie di dieci. La
+  // riuscita senza tirare è 1.
   const basicResults = roll.basicDice?.results ?? [];
   const redResults = roll.advancedDice?.results ?? [];
   roll._total = bought

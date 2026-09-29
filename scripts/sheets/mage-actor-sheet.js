@@ -79,6 +79,7 @@ import {
   onGrimorioClose,
   onTiroPill,
   onTiroPower,
+  onTiroPaga,
   onTiroPrize,
   onTiroQuintessence,
   onTiroRoll,
@@ -113,7 +114,9 @@ import {
   onSaluteCambioScena,
   onSaluteRelax,
   onSaluteReset,
-  onSaluteRiposo
+  onSaluteRiposo,
+  onSaluteSacrificio,
+  onSaluteSalda
 } from "../salute.js";
 
 const MODULE = "modules/wod5e-mage/templates/actor";
@@ -489,6 +492,8 @@ export class MageActorSheet extends MortalActorSheet {
       saluteCambioScena: onSaluteCambioScena,
       saluteReset: onSaluteReset,
       saluteDanni: onSaluteDanni,
+      saluteSacrificio: onSaluteSacrificio,
+      saluteSalda: onSaluteSalda,
       saluteRiposo: onSaluteRiposo,
       saluteRelax: onSaluteRelax,
       magickBalanceChange: onMagickBalanceChange,
@@ -561,6 +566,7 @@ export class MageActorSheet extends MortalActorSheet {
       tiroClear: onTiroClear,
       tiroDifficulty: onTiroDifficulty,
       tiroQuintessence: onTiroQuintessence,
+      tiroPaga: onTiroPaga,
       tiroExtra: onTiroExtra,
       tiroDadi: onTiroDadi,
       tiroSforza: onTiroSforza,

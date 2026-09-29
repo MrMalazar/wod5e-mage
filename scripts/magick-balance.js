@@ -128,10 +128,34 @@ export function applyMagickBalanceDelta(balance, resource, delta, floor = 0) {
   return next;
 }
 
+/** Le caselle libere della Ruota: nove, meno la Quintessenza e il Paradosso. */
+export function caselleLibere(balance) {
+  const quintessence = Math.max(Math.trunc(Number(balance?.quintessence) || 0), 0);
+  const paradox = Math.max(Math.trunc(Number(balance?.paradox) || 0), 0);
+  return Math.max(MAGICK_TRACK_MAX - quintessence - paradox, 0);
+}
+
+/**
+ * La Quintessenza che entra da sola (Blue, 29/9: il Sacrificio, il cambio
+ * scena, la sessione nuova): riempie le caselle libere della Ruota e si
+ * ferma lì. Non scarica il Paradosso come fa il tasto +, e quella che non ci
+ * sta resta fuori. Torna la Ruota nuova e quanta ne è entrata.
+ */
+export function addQuintessenceToBalance(balance, amount) {
+  const wanted = Math.max(Math.trunc(Number(amount) || 0), 0);
+  const gained = Math.min(wanted, caselleLibere(balance));
+  return {
+    quintessence: Math.max(Math.trunc(Number(balance?.quintessence) || 0), 0) + gained,
+    paradox: Math.max(Math.trunc(Number(balance?.paradox) || 0), 0),
+    gained
+  };
+}
+
 /**
  * Quanto Paradosso porta il tipo di Magick dichiarato nel tiro di Areté.
  * Volgare vale 1, volgare con testimoni vale 2; i due non si sommano perché
- * la finestra li tratta come una scelta sola.
+ * la finestra li tratta come una scelta sola. Dal 29/9 il lancio si paga
+ * (ramo-c.js, costoLancio): questo è il Paradosso che il tipo porta da sé.
  */
 export function paradoxGainForMagickType({ vulgar = false, witnesses = false } = {}) {
   if (witnesses) return 2;

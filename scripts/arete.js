@@ -1,12 +1,10 @@
 import { MODULE_ID } from "./constants.js";
 import {
   addParadoxToBalance,
-  applyMagickBalanceDelta,
   getMagickBalance,
-  MAGICK_TRACK_MAX,
-  paradoxGainForMagickType
+  MAGICK_TRACK_MAX
 } from "./magick-balance.js";
-import { quintessenceSpend, ramoCDice } from "./ramo-c.js";
+import { costoLancio, pagamentoDelLancio, quintessenceSpend, ramoCDice, testoCosto, tipoDaOpzioni } from "./ramo-c.js";
 import { BUSSOLA_DICE, BUSSOLA_SCENE_FLAG, bussolaChoice, grantBussolaQuintessence, prepareBussolaChoice, renderBussolaBlock, wireBussola } from "./bussola.js";
 import {
   findMageRollTrait,
@@ -16,8 +14,8 @@ import {
 import { INFLUENCE_LABELS, prepareSpheres } from "./spheres.js";
 import { prepareScopeTable, scopeReadings, SCOPE_ICONS, SCOPES, zeroReading } from "./scopes.js";
 import {
-  ROLL_CARD_FLAG,
   renderRollCard,
+  renderRollNote,
   rollSymbols
 } from "./roll-card.js";
 import { FOCUS_FORMS, PERCEIVE_TOOL_ID } from "./focus.js";
@@ -190,6 +188,19 @@ export function ramoCPool({ traits = 0, bonus = 0, specialtyDice = 0, quintessen
 
 function isChecked(value) {
   return value === true || value === "true" || value === "on";
+}
+
+/**
+ * Il tipo scelto nella finestra (29/9): le caselle al primo passo, i campi
+ * nascosti al terzo. Serve al prezzo sotto «Paga con».
+ */
+export function tipoDallaFinestra(root) {
+  const on = (name) => {
+    const input = root?.querySelector?.(`input[name="${name}"]`);
+    if (!input) return false;
+    return input.type === "checkbox" ? input.checked : isChecked(input.value);
+  };
+  return tipoDaOpzioni(normalizeMagickRollOptions({ vulgar: on("vulgar"), witnesses: on("witnesses") }));
 }
 
 export function normalizeMagickRollOptions({
@@ -395,7 +406,10 @@ function wireDifficulty(dialog) {
   const secondary = root.querySelector("#wod5e-mage-arete-secondary");
   const prizeBox = root.querySelector("input[name=prize]");
   const harmony = root.querySelector("#wod5e-mage-arete-harmony");
-  const quintessence = root.querySelector("#wod5e-mage-arete-quintessence");
+  // Il costo del lancio (29/9): chi paga e il tipo, per il prezzo sotto «Paga con».
+  const payRadios = [...root.querySelectorAll("input[name=pagaCon]")];
+  const typeBoxes = [...root.querySelectorAll("input.wod5e-mage-magick-type")];
+  const costoOut = root.querySelector("[data-role=costo]");
   // La Specializzazione dell'Abilità (11/9: al posto della seconda Abilità)
   // e la Bussola rispettata: un dado l'una, fuori dal tetto +3.
   const specialtyBox = root.querySelector("input[name=skillSpecialty]");
@@ -411,8 +425,6 @@ function wireDifficulty(dialog) {
     // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, fuori dal tetto; la soglia non cambia.
     const prizeDice = prizeBox?.checked && !prizeBox.disabled ? calculateAretePrize(prizeBox.dataset.value) : 0;
     const threshold = calculateMagickThreshold({ scopeLevels });
-    const quintessenceMax = Math.max(Math.trunc(Number(quintessence?.max) || 0), 0);
-    const quintessenceSpent = Math.min(Math.max(Math.trunc(Number(quintessence?.value) || 0), 0), quintessenceMax);
     const specialtyDice = calculateAutomaticSuccesses({
       sphereLevels,
       scopeLevels,
@@ -421,7 +433,7 @@ function wireDifficulty(dialog) {
     }).successes;
 
     const sphereMax = Math.max(0, ...sphereLevels.map((entry) => entry.level));
-    // Il ramo C: riserva meno soglia uguale dadi; la Quintessenza è un dado per punto.
+    // Il ramo C: riserva meno soglia uguale dadi. La Quintessenza non dà dadi (29/9).
     if (specialtyNames) {
       const names = primary?.selectedOptions?.[0]?.dataset?.specialties ?? "";
       specialtyNames.textContent = names ? `(${names})` : "";
@@ -431,7 +443,6 @@ function wireDifficulty(dialog) {
       traits: calculateAreteTraitPool(optionValue(attribute), optionValue(primary), optionValue(secondary)),
       bonus: normalizeHarmony(harmony?.value) + extraDice,
       specialtyDice,
-      quintessence: quintessenceSpent,
       sphereMax,
       threshold,
       prize: prizeDice
@@ -446,9 +457,14 @@ function wireDifficulty(dialog) {
       autoSuccessOut.textContent = parts.length ? `· ${parts.join(" · ")}` : "";
     }
     autoOut?.classList.add("hidden");
+    if (costoOut) {
+      const kind = tipoDallaFinestra(root);
+      const scelta = payRadios.find((radio) => radio.checked)?.value ?? "paradosso";
+      costoOut.textContent = testoCosto(costoLancio(kind, scelta), game.i18n.localize.bind(game.i18n), game.i18n.format.bind(game.i18n));
+    }
   };
 
-  [attribute, primary, secondary, prizeBox, harmony, quintessence, specialtyBox, bussolaBox].forEach((control) => {
+  [attribute, primary, secondary, prizeBox, harmony, specialtyBox, bussolaBox, ...payRadios, ...typeBoxes].forEach((control) => {
     control?.addEventListener("change", update);
     control?.addEventListener("input", update);
   });
@@ -657,7 +673,7 @@ const TRAIT_FIELDS = Object.freeze([
 const STEP_OWNS = Object.freeze({
   1: (key) => key === "goal" || key.startsWith("sphere-") || key.startsWith("scope-"),
   2: (key) => ["effectKind", "attributeTrait", "primaryTrait", "secondaryTrait", "skillSpecialty", "coincidental", "vulgar", "witnesses"].includes(key),
-  3: (key) => ["prize", "harmony", "quintessence", "maintained", "maintainedName", "bussola", "bussolaId"].includes(key)
+  3: (key) => ["prize", "harmony", "pagaCon", "maintained", "maintainedName", "bussola", "bussolaId"].includes(key)
 });
 
 function clampLevel(value, max) {
@@ -912,9 +928,6 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     specialties,
     arete: arete.value
   });
-  // La Quintessenza spesa (16/9): un punto vale un dado, e basta. Scende
-  // dalla Ruota; se l'effetto fa danni, sono aggravati.
-  const quintessence = Math.min(Math.max(Math.trunc(Number(result.quintessence) || 0), 0), quintessenceAvailable);
   const sphereMax = Math.max(0, ...sphereEntries.map((entry) => entry.level));
   // La Bussola rispettata (11/9): un dado in più ora, +1 Quintessenza a tiro fatto, una volta per scena.
   const bussolaKept = bussolaChoice(result, bussola);
@@ -930,7 +943,6 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     traits: basePool,
     bonus: bonusDice + extraDice,
     specialtyDice: specialty.successes,
-    quintessence,
     sphereMax,
     threshold,
     prize: prizeDice
@@ -960,9 +972,6 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   const bonusParts = [];
   if (options.harmony > 0) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.HarmonyFlavor", { dice: options.harmony }));
-  }
-  if (quintessence > 0) {
-    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: quintessence }));
   }
   if (specialtyDie > 0) {
     bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.SkillSpecialtyFlavor", { dice: specialtyDie }));
@@ -1009,33 +1018,35 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   };
   // L'ultima soglia lanciata: la usa lo Scoppio del Paradosso come proposta.
   if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: threshold });
-  const flavor = card;
 
-  const paradoxGain = paradoxGainForMagickType(options);
-
-  // La Ruota paga subito: la Quintessenza spesa scende, la Magick volgare
-  // sale verso il Paradosso, così i rossi di questo tiro contano già il
-  // rincaro. Se il tiro non parte, la Ruota torna com'era.
+  // Il costo del lancio (Blue, 29/9): 1 Quintessenza oppure il Paradosso del
+  // tipo (Accidentale 1, Volgare 2, con testimoni 3); chi paga in Quintessenza
+  // prende lo stesso il Paradosso del Volgare. La carta lo dice.
   const balanceBefore = getMagickBalance(actor);
+  const kind = tipoDaOpzioni(options);
+  const pay = pagamentoDelLancio(result.pagaCon === "paradosso" ? "paradosso" : "quintessenza", balanceBefore.quintessence);
+  const costo = costoLancio(kind, pay);
+  const paradoxGain = costo.paradosso;
+  const prezzo = testoCosto(costo, localize, game.i18n.format.bind(game.i18n));
+  const flavor = card + renderRollNote(game.i18n.format("WOD5E_MAGE.Costo.Nota", { prezzo }));
+
+  // La Ruota paga subito: il costo scende dalla Quintessenza e sale sul
+  // Paradosso, così i rossi di questo tiro contano già il rincaro. Se il
+  // tiro non parte, la Ruota torna com'era.
   let balanceMoved = false;
-  if ((quintessence > 0 || paradoxGain > 0) && actor.isOwner) {
-    const spent = { quintessence: Math.max(balanceBefore.quintessence - quintessence, 0), paradox: balanceBefore.paradox };
+  if ((costo.quintessenza > 0 || paradoxGain > 0) && actor.isOwner) {
+    const spent = { quintessence: Math.max(balanceBefore.quintessence - costo.quintessenza, 0), paradox: balanceBefore.paradox };
     const balanceAfter = addParadoxToBalance(spent, paradoxGain);
     if (balanceAfter.paradox !== balanceBefore.paradox || balanceAfter.quintessence !== balanceBefore.quintessence) {
       await actor.setFlag(MODULE_ID, "magickBalance", balanceAfter);
       balanceMoved = true;
-      if (quintessence > 0) {
-        ui.notifications.info(game.i18n.format("WOD5E_MAGE.Arete.QuintessenceSpent", { points: quintessence }));
-      }
-      if (paradoxGain > 0) {
-        ui.notifications.info(game.i18n.format("WOD5E_MAGE.MagickBalance.ParadoxGained", { amount: paradoxGain }));
-      }
+      ui.notifications.info(game.i18n.format("WOD5E_MAGE.Costo.Pagato", { prezzo }));
     }
   }
 
-  // L'Accidentale non tira i rossi: solo dadi normali. Il Volgare li tira
-  // sempre: decidono se scoppia.
-  const paradoxRating = options.coincidental ? 0 : getMagickBalance(actor).paradox;
+  // I rossi a parte (29/9): l'Accidentale non li tira; il Volgare sì, uno per
+  // punto sulla Ruota dopo il pagamento, e decidono solo se scoppia.
+  const paradoxRating = kind === "accidentale" ? 0 : getMagickBalance(actor).paradox;
 
   // Load the Foundry-specific dice implementation only when an Areté roll is
   // actually requested. Keeping it out of the data helpers also lets their
@@ -1056,7 +1067,7 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
       arete: arete.value,
       title: rollLabel,
       flavor,
-      card: { symbols, traits: selectedTraits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value })), vulgar: effect.vulgar },
+      card: { symbols, traits: selectedTraits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value })), vulgar: effect.vulgar, kind, costo, paradossoPreso: paradoxGain },
       selectors: uniqueSelectors,
       actor,
       data: actor.system
@@ -1076,34 +1087,10 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
   }
 
   if (rolled) {
-    // Il Volgare fallito genera un punto di Quintessenza (verdetto dell'11/9):
-    // l'energia non spesa torna in casa.
-    const total = Number(outcome?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG)?.total);
-    if (effect.vulgar && Number.isFinite(total) && total < 1 && actor.isOwner) {
-      await grantFailedVulgarQuintessence(actor);
-    }
+    // Il Volgare fallito non rende più Quintessenza (rifondazione del 14/9, ribadito il 29/9).
     await grantBussolaQuintessence(actor, bussolaKept);
     await recordEffect(actor, result, effect);
   }
-}
-
-/**
- * Il Volgare fallito (ramo C, verdetto dell'11/9): un punto di Quintessenza
- * sale sulla Ruota, come col tasto +; se le nove celle sono piene, prima
- * se ne libera una dal Paradosso (mai sotto il pavimento).
- */
-export function quintessenceAfterFailedVulgar(balance) {
-  const next = applyMagickBalanceDelta(balance, "quintessence", 1, balance?.floor ?? 0);
-  return { ...next, gained: next.quintessence !== balance.quintessence || next.paradox !== balance.paradox };
-}
-
-async function grantFailedVulgarQuintessence(actor) {
-  const balance = getMagickBalance(actor);
-  const next = quintessenceAfterFailedVulgar(balance);
-  if (!next.gained) return false;
-  await actor.setFlag(MODULE_ID, "magickBalance", { quintessence: next.quintessence, paradox: next.paradox });
-  ui.notifications.info(game.i18n.localize("WOD5E_MAGE.RamoC.VulgarFailedQuintessence"));
-  return true;
 }
 
 /**

@@ -223,13 +223,24 @@ export function etichettaVolgare(volgare, localize = (key) => key) {
 
 /**
  * La copia automatica (verdetto del 24/9: i punti te li danno i giocatori):
- * un lancio Volgare chiuso in chat porta 1 punto al Narratore, 2 se era con
- * testimoni. Torna null se il messaggio non è un Volgare o è già copiato.
+ * il Narratore riceve la copia del Paradosso che il mago ha preso lanciando.
+ * Dal 29/9 la carta porta il costo del lancio (`paradossoPreso`): la copia è
+ * quella, anche su un Accidentale pagato in Paradosso. Le carte di prima: un
+ * Volgare porta 1 punto, 2 con testimoni. `volgare` dice se il lancio era
+ * Volgare (fa avanzare gli orologi dei Volgari). Torna null se non c'è niente
+ * da copiare o la copia è già fatta.
  */
 export function copiaDaCarta(flags = {}) {
   const card = flags?.[ROLL_CARD_FLAG];
-  if (!card || !card.vulgar || flags?.[COPIA_FLAG]) return null;
-  return { points: card.advancedDifficulty ? 2 : 1, testimoni: Boolean(card.advancedDifficulty) };
+  if (!card || flags?.[COPIA_FLAG]) return null;
+  const testimoni = Boolean(card.advancedDifficulty);
+  if (card.paradossoPreso !== undefined && card.paradossoPreso !== null) {
+    const points = count(card.paradossoPreso);
+    if (points <= 0) return null;
+    return { points, testimoni, volgare: Boolean(card.vulgar) };
+  }
+  if (!card.vulgar) return null;
+  return { points: testimoni ? 2 : 1, testimoni, volgare: true };
 }
 
 /* ------------------------------------------------------------------ */

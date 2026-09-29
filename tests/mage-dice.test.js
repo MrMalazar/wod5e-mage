@@ -66,20 +66,26 @@ assert.equal(getParadoxDieImage(2).endsWith("dado-vuoto.svg"), true);
 assert.equal(getParadoxDieImage(5).endsWith("dado-vuoto.svg"), true);
 assert.equal(getParadoxDieImage(6).endsWith("dado-vuoto.svg"), true);
 assert.equal(getParadoxDieImage(7).endsWith("dado-vuoto.svg"), true);
-assert.equal(getParadoxDieImage(8).endsWith("paradosso-scintilla.svg"), true);
-assert.equal(getParadoxDieImage(9).endsWith("paradosso-scintilla.svg"), true);
+// I rossi a parte (29/9): un rosso non fa mai successo, contano l'1 e il 10.
+assert.equal(getParadoxDieImage(8).endsWith("dado-vuoto.svg"), true);
+assert.equal(getParadoxDieImage(9).endsWith("dado-vuoto.svg"), true);
 assert.equal(getParadoxDieImage(10).endsWith("paradosso-occhio-completo.svg"), true);
 assert.equal(getParadoxDieResult(1), "bestial");
 assert.equal(getParadoxDieResult(5), "failure");
 assert.equal(getParadoxDieResult(7), "failure");
-assert.equal(getParadoxDieResult(9), "success");
+assert.equal(getParadoxDieResult(9), "failure");
 assert.equal(getParadoxDieResult(10), "paradoxTen");
+// Le carte di prima (senza rossi a parte) tengono la scintilla dalla riuscita in su.
+assert.equal(getParadoxDieImage(8, { rossiAParte: false }).endsWith("paradosso-scintilla.svg"), true);
+assert.equal(getParadoxDieImage(9, { rossiAParte: false }).endsWith("paradosso-scintilla.svg"), true);
+assert.equal(getParadoxDieResult(9, { rossiAParte: false }), "success");
 
 // La scelta nel dialog cambia sia il conteggio sia le facce mostrate in chat.
 assert.equal(getMageDieImage(6, { successFrom: 6 }).endsWith("magick-scintilla.svg"), true);
 assert.equal(getMageDieImage(7, { successFrom: 6 }).endsWith("magick-scintilla.svg"), true);
-assert.equal(getParadoxDieImage(6, { successFrom: 6 }).endsWith("paradosso-scintilla.svg"), true);
-assert.equal(getParadoxDieResult(6, { successFrom: 6 }), "success");
+assert.equal(getParadoxDieImage(6, { successFrom: 6, rossiAParte: false }).endsWith("paradosso-scintilla.svg"), true);
+assert.equal(getParadoxDieResult(6, { successFrom: 6, rossiAParte: false }), "success");
+assert.equal(getParadoxDieResult(6, { successFrom: 6 }), "failure", "sulle carte nuove il rosso resta vuoto");
 
 const emptyMageClasses = new Set(["roll-img", "mortal-dice"]);
 let emptyMageSourceRemoved = false;

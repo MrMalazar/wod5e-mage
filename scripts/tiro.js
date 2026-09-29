@@ -15,7 +15,11 @@
  *   quando si clicca l'Areté, e si spegne se il Narratore dice di no;
  * - la difficoltà la fa il tipo di tiro: Accidentale e Volgare riescono
  *   col 6, Volgare con testimoni con l'8; i tiri di Abilità col 6;
- * - la Quintessenza dà dadi e basta, col tetto 2 + Areté per lancio;
+ * - la Quintessenza non dà più dadi (Blue, 29/9): paga il costo del lancio
+ *   (1 Quintessenza, oppure il Paradosso del tipo: Accidentale 1, Volgare 2,
+ *   con testimoni 3; ramo-c.js, costoLancio) e gli attivi dei poteri; i dadi
+ *   li danno i poteri, e Anche a mani nude la fa ancora spendere in dadi nei
+ *   tiri di Abilità, col tetto 2 + Areté;
  * - i dadi extra (l'Armonia, i dadi dati al tavolo) entrano fino a +3;
  *   i Tratti scelti entrano per intero;
  * - un potere solo per lancio: i suoi effetti li applica poteri.js, e il
@@ -36,13 +40,13 @@
 import { calculateAretePrize, calculateMagickThreshold, capBonusDice, SKILL_SPECIALTY_DICE, THRESHOLD_CAP } from "./arete.js";
 import { BUSSOLA_DICE } from "./bussola.js";
 import { applyPotere, riuscitaSenzaTirare, spezzaIdPotere } from "./poteri.js";
-import { ramoCDice, successThreshold, usesAdvancedDifficulty } from "./ramo-c.js";
+import { PAGAMENTI, ramoCDice, successThreshold, usesAdvancedDifficulty } from "./ramo-c.js";
 import { normalizeScopeLevels, SCOPE_ALIASES } from "./scopes.js";
 
 /** I tre tasti del tiro di Magick, nell'ordine della scheda. */
 export const TIRO_KINDS = Object.freeze(["accidentale", "volgare", "testimoni"]);
 
-/** La Quintessenza per lancio: fino a 2 + Areté (raccolta del 14/9). */
+/** La Quintessenza in dadi, solo coi poteri che lo dicono (Anche a mani nude): fino a 2 + Areté (raccolta del 14/9). */
 export const QUINTESSENCE_BASE_CAP = 2;
 
 /** I dadi extra per lancio: l'Armonia e i dadi dati al tavolo, fino a +3 (il tetto del tronco). */
@@ -70,6 +74,8 @@ export function emptyTiro() {
     powerAny: false,
     difficulty: null,
     quintessence: 0,
+    // Come si paga il lancio (29/9): «quintessenza», «paradosso», o null (la Quintessenza quando c'è).
+    pay: null,
     extra: 0,
     dadi: 0,
     sforza: false,
@@ -316,6 +322,13 @@ export function setQuintessence(tiro, value) {
   return next;
 }
 
+/** Come si paga il lancio (29/9): la Quintessenza o il Paradosso; un'altra parola torna alla scelta di base. */
+export function setPay(tiro, pay) {
+  const next = clone(tiro);
+  next.pay = PAGAMENTI.includes(pay) ? pay : null;
+  return next;
+}
+
 /** I dadi extra: da zero a EXTRA_DICE_CAP. */
 export function setExtra(tiro, value) {
   const next = clone(tiro);
@@ -507,8 +520,9 @@ export function contoTiro(tiro, {
   // non la tocca più. Il premio doppio (Voce dell'Avatar) raddoppia i dadi.
   const prize = magick ? count(powered.prize) : 0;
 
-  // La Quintessenza dà dadi nella Magick; nei tiri di Abilità solo se un potere lo dice.
-  const quintessenceAllowed = magick || powered.quintessenceOnSkills;
+  // La Quintessenza non dà dadi (Blue, 29/9): li danno i poteri. Resta il potere
+  // che la fa spendere in dadi nei tiri di Abilità (Anche a mani nude).
+  const quintessenceAllowed = Boolean(powered.quintessenceOnSkills);
   const quintessence = quintessenceAllowed ? quintessenceDice(tiro?.quintessence, { available: quintessenceAvailable, arete: areteValue }) : 0;
   const extra = capBonusDice(count(harmony) + count(tiro?.extra));
   const traits = count(attributeValue) + count(skillValue);

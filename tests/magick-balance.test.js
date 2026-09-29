@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import {
   addParadoxToBalance,
+  addQuintessenceToBalance,
   applyMagickBalanceDelta,
+  caselleLibere,
   getPersistentMagickResources,
   paradoxGainForMagickType,
   prepareMagickTrack
@@ -60,6 +62,16 @@ assert.deepEqual(persistentResources, {
 
 // Il tipo di Magick dichiarato nel tiro di Areté: accidentale non muove nulla,
 // volgare vale 1, con testimoni vale 2 e i due non si sommano.
+// La Quintessenza che entra da sola (29/9: Sacrificio, cambio scena, sessione nuova):
+// riempie le caselle libere e si ferma, senza scaricare il Paradosso.
+assert.equal(caselleLibere({ quintessence: 3, paradox: 4 }), 2);
+assert.equal(caselleLibere({ quintessence: 9, paradox: 3 }), 0);
+assert.equal(caselleLibere({}), 9);
+assert.deepEqual(addQuintessenceToBalance({ quintessence: 3, paradox: 4 }, 5), { quintessence: 5, paradox: 4, gained: 2 });
+assert.deepEqual(addQuintessenceToBalance({ quintessence: 3, paradox: 4 }, 1), { quintessence: 4, paradox: 4, gained: 1 });
+assert.deepEqual(addQuintessenceToBalance({ quintessence: 4, paradox: 5 }, 1), { quintessence: 4, paradox: 5, gained: 0 }, "Ruota piena: resta fuori");
+assert.deepEqual(addQuintessenceToBalance({ quintessence: 3, paradox: 4 }, -2), { quintessence: 3, paradox: 4, gained: 0 });
+
 assert.equal(paradoxGainForMagickType(), 0);
 assert.equal(paradoxGainForMagickType({ coincidental: true }), 0);
 assert.equal(paradoxGainForMagickType({ vulgar: true }), 1);

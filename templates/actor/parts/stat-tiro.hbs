@@ -2,7 +2,8 @@
      tre colonne dentro). A sinistra il tipo riconosciuto con Azzera, la
      catena di chi dà dadi (Areté col premio, Attributo, Abilità,
      Specializzazione, potere, Tratti), ognuno con la × per toglierlo, e
-     sotto le opzioni: premio dell'Areté, Quintessenza, Sforza la realtà. In
+     sotto le opzioni: premio dell'Areté, come si paga il lancio (29/9),
+     la Quintessenza in dadi di un potere, Sforza la realtà. In
      mezzo la catena di chi dà la soglia (l'incantesimo in testa, le Sfere,
      gli Ambiti col livello). A destra i tre numeri, ognuno col meno e il più
      (Blue, 23/9): Riserva (i dadi extra che entrano nella riserva, tetto
@@ -75,7 +76,19 @@
                         </span>
                     </label>
                 {{/if}}
-                {{!-- La Quintessenza: nella Magick, e nei tiri di Abilità se il potere lo dice (Anche a mani nude). --}}
+                {{!-- Il costo del lancio (Blue, 29/9): ogni lancio si paga, e si può sempre lanciare.
+                     Due tasti: la Quintessenza (1 punto; se manca è spento) o il Paradosso del tipo.
+                     Il prezzo di ogni tipo sta sotto il suo tasto; la scelta resta dopo il tiro. --}}
+                {{#if tiro.costo}}
+                    <div class="wod5e-mage-tiro-riga wod5e-mage-tiro-costo" title="{{localize 'WOD5E_MAGE.Costo.Hint'}}">
+                        <span class="wod5e-mage-tiro-etichetta"><i class="fa-solid fa-scale-unbalanced" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Costo.PagaCon"}}</span>
+                        <span class="wod5e-mage-tiro-paga" role="group" aria-label="{{localize 'WOD5E_MAGE.Costo.PagaCon'}}">
+                            <button type="button" class="wod5e-mage-tiro-paga-tasto quintessenza{{#if tiro.costo.quintessenza}} acceso{{/if}}" data-action="tiroPaga" data-pay="quintessenza" aria-pressed="{{tiro.costo.quintessenza}}" title="{{localize 'WOD5E_MAGE.Costo.QuintessenzaHint'}}" {{#unless tiro.costo.canQuintessenza}}disabled{{/unless}}><i class="fa-solid fa-circle-dot" aria-hidden="true"></i> {{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</button>
+                            <button type="button" class="wod5e-mage-tiro-paga-tasto paradosso{{#unless tiro.costo.quintessenza}} acceso{{/unless}}" data-action="tiroPaga" data-pay="paradosso" aria-pressed="{{#if tiro.costo.quintessenza}}false{{else}}true{{/if}}" title="{{localize 'WOD5E_MAGE.Costo.ParadossoHint'}}"><i class="fa-solid fa-eye" aria-hidden="true"></i> {{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</button>
+                        </span>
+                    </div>
+                {{/if}}
+                {{!-- La Quintessenza in dadi: solo coi poteri che lo dicono (Anche a mani nude, nei tiri di Abilità). --}}
                 {{#if tiro.quintessence.allowed}}
                     <div class="wod5e-mage-tiro-riga wod5e-mage-tiro-quintessenza">
                         <span class="wod5e-mage-tiro-etichetta" title="{{localize 'WOD5E_MAGE.Tiro.QuintessenceHint'}}"><i class="fa-solid fa-droplet" aria-hidden="true"></i> {{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</span>
@@ -150,7 +163,11 @@
             {{#if tiro.magick}}
                 <div class="wod5e-mage-tiro-tasti">
                     {{#each tiro.kinds as |kind|}}
-                        <button type="button" class="wod5e-mage-tiro-tasto wod5e-mage-tiro-tasto-{{kind.kind}}" data-action="tiroRoll" data-kind="{{kind.kind}}" title="{{kind.hint}}" {{#unless ../tiro.ready}}disabled{{/unless}}>{{kind.label}}</button>
+                        <button type="button" class="wod5e-mage-tiro-tasto wod5e-mage-tiro-tasto-{{kind.kind}}" data-action="tiroRoll" data-kind="{{kind.kind}}" title="{{kind.hint}}" {{#unless ../tiro.ready}}disabled{{/unless}}>
+                            <span>{{kind.label}}</span>
+                            {{!-- Il prezzo del tipo (29/9): i simboli della Ruota col numero. --}}
+                            <span class="wod5e-mage-tiro-prezzo">{{#if kind.costo.quintessenza}}<span class="quintessenza"><i class="fa-solid fa-circle-dot" aria-hidden="true"></i>{{kind.costo.quintessenza}}</span>{{/if}}{{#if kind.costo.paradosso}}<span class="paradosso"><i class="fa-solid fa-eye" aria-hidden="true"></i>{{kind.costo.paradosso}}</span>{{/if}}</span>
+                        </button>
                     {{/each}}
                 </div>
             {{else}}
