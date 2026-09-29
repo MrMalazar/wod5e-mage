@@ -36,6 +36,7 @@ import {
   variantiDelPotere
 } from "./poteri.js";
 import { getSalute } from "./salute.js";
+import { condizioniDelTiro, testoCondizioniDelTiro, tipoDelTiro } from "./condizioni.js";
 
 export { poteriOfSphere };
 import { renderRollCard, ROLL_CARD_FLAG, rollSymbols } from "./roll-card.js";
@@ -64,6 +65,7 @@ import {
   TIRO_KINDS,
   tiroSize,
   toggleArete,
+  toggleCondizioneTiro,
   togglePrize,
   toggleSforza,
   toggleSphere,
@@ -171,11 +173,15 @@ export function contoInputs(actor, tiro, { traits = null } = {}) {
   const { id: powerId, variant } = spezzaIdPotere(tiro.power);
   const power = tiro.power ? findPotere(powerId, rows) : null;
   const powerCost = power && attivaEffetti(power, variant) ? count(power.costValue) : 0;
+  // Le Condizioni (29/9): quelle che pesano sul tipo del tiro, meno quelle tolte a mano.
+  const tipo = tipoDelTiro({ attribute, skill });
   return {
     known,
     attribute,
     skill,
+    tipo,
     inputs: {
+      condizioni: condizioniDelTiro(actor.items ?? [], tipo, tiro.condizioni),
       arete: getArete(actor).value,
       attributeValue: attribute?.value ?? 0,
       skillValue: skill?.value ?? 0,
@@ -277,6 +283,8 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   // testa, le Sfere, gli Ambiti col livello).
   const pillsSoglia = pills.filter((pill) => KINDS_SOGLIA.includes(pill.kind));
   const pillsDadi = pills.filter((pill) => !KINDS_SOGLIA.includes(pill.kind));
+  // Le Condizioni sul tiro (29/9): una pillola ciascuna col peso; un clic la toglie o la rimette.
+  const cond = inputs.condizioni;
   return {
     magick,
     size: tiroSize(tiro),
@@ -294,6 +302,15 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     dadi: { value: conto.adjust, label: `${conto.adjust > 0 ? "+" : ""}${conto.adjust}` },
     impossible: conto.impossible && tiroSize(tiro) > 0,
     successFrom: conto.successFrom,
+    condizioni: cond.righe.length ? {
+      tipo: cond.tipo ? localize(`WOD5E_MAGE.Condizioni.Tipi.${cond.tipo}`) : "",
+      righe: cond.righe.map((riga) => ({
+        ...riga,
+        title: format(riga.on ? "WOD5E_MAGE.Condizioni.TiroTogli" : "WOD5E_MAGE.Condizioni.TiroRimetti", { name: riga.name })
+      })),
+      fallisce: conto.fallisce,
+      fallisceTesto: conto.fallisce ? format("WOD5E_MAGE.Condizioni.TiroFallisce", { names: cond.perche.join(", ") }) : ""
+    } : null,
     prize: { on: Boolean(tiro.prize) && magick, value: conto.prize, arete: arete.value },
     // La Quintessenza: nella Magick, o nei tiri di Abilità se il potere lo dice (Anche a mani nude).
     quintessence: { value: tiro.quintessence, dice: conto.quintessence, available: inputs.quintessenceAvailable, allowed: conto.quintessenceAllowed },
@@ -625,6 +642,12 @@ export async function onTiroSforza(event) {
   return repaint(this, toggleSforza(tiroOf(this)));
 }
 
+/** Una Condizione sul tiro (29/9): un clic la toglie perché non c'entra, un altro la rimette. */
+export async function onTiroCondizione(event, target) {
+  event.preventDefault();
+  return repaint(this, toggleCondizioneTiro(tiroOf(this), target.dataset.condizione));
+}
+
 /** «Dal Narratore» (27/9): acceso, il tiro passa dai Narratori; spento, parte subito. Vale per questo client. */
 export async function onTiroNarratore(event) {
   event.preventDefault();
@@ -723,7 +746,8 @@ export async function launchTiro(actor, tiro) {
     ui.notifications.warn(localize("WOD5E_MAGE.Verdetto.Pending"));
     return null;
   }
-  const verdetto = await chiediVerdetto({ actor, title: rollLabel, magick, kind: tiro.kind ?? "", conto });
+  const condizioniTesto = testoCondizioniDelTiro(inputs.condizioni);
+  const verdetto = await chiediVerdetto({ actor, title: rollLabel, magick, kind: tiro.kind ?? "", conto, condizioni: { testo: condizioniTesto, fuori: inputs.condizioni.fuori, fallisce: conto.fallisce, dadi: conto.condizioni.dadi, successFromSenza: conto.condizioni.successFromSenza } });
   conto = applicaVerdetto(conto, verdetto);
   const selectors = [...new Set(selectedTraits.flatMap((trait) => selectorsForMageRollTrait(trait)))];
   const traitRows = selectedTraits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value }));
@@ -738,6 +762,13 @@ export async function launchTiro(actor, tiro) {
   }
   const notes = [];
   if (tiro.sforza) notes.push(localize("WOD5E_MAGE.Tiro.SforzaNote"));
+  // Le Condizioni (29/9): in carta quelle che hanno pesato, quelle tolte a mano, e il tiro che fallisce;
+  // se il Narratore ha detto che non contano, lo dice la sua nota.
+  if (!conto.condizioniVia) {
+    if (condizioniTesto) notes.push(format("WOD5E_MAGE.Condizioni.CartaPesano", { list: condizioniTesto }));
+    if (conto.fallisce) notes.push(format("WOD5E_MAGE.Condizioni.TiroFallisce", { names: conto.condizioni.perche.join(", ") }));
+  }
+  if (inputs.condizioni.fuori.length) notes.push(format("WOD5E_MAGE.Condizioni.CartaFuori", { list: inputs.condizioni.fuori.join(", ") }));
   const notaNarratore = notaVerdetto(conto, format);
   if (notaNarratore) notes.push(notaNarratore);
   // Il potere scelto: il nome, le sue note, gli effetti rimasti fuori col perché (tappa 3).
@@ -765,7 +796,8 @@ export async function launchTiro(actor, tiro) {
       esito = await rollRamoCDirect({
         actor,
         data: actor.system,
-        pool: conto.pool,
+        // Una Condizione che fa fallire (29/9): niente dadi, la carta dice il perché.
+        pool: conto.fallisce ? 0 : conto.pool,
         threshold: conto.difficulty,
         successFrom: conto.successFrom,
         paradoxRating: 0,
@@ -865,10 +897,11 @@ export async function launchTiro(actor, tiro) {
     outcome = await rollRamoCDirect({
       actor,
       data: actor.system,
-      pool: conto.pool,
+      pool: conto.fallisce ? 0 : conto.pool,
       threshold: conto.difficulty,
       successFrom: conto.successFrom,
-      paradoxRating,
+      // Il tiro che fallisce per una Condizione non tira nemmeno i rossi: non può riuscire.
+      paradoxRating: conto.fallisce ? 0 : paradoxRating,
       bought: senzaTirare,
       banner,
       burn: conto.difficulty,

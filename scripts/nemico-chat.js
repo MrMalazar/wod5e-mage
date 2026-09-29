@@ -12,10 +12,10 @@
  * l'attore non è un Mago. Quello che serve al tasto «Applica» sta nella
  * bandiera della carta, sotto `nemico`.
  */
-import { activeCondizioni, findCondizioneByName, toggleCondizione } from "./condizioni.js";
+import { applicaCondizione, findCondizioneByName } from "./condizioni.js";
 import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
-import { armaturaDi, contoDelTiro, RIESCE_DAL, segnoDi } from "./nemico.js";
+import { armaturaDi, contoDelTiro, pesiCondizioni, riesceDal, segnoDi } from "./nemico.js";
 import { renderRollCard, ROLL_CARD_FLAG, rollActionsBox } from "./roll-card.js";
 import { addSaluteDamage } from "./salute.js";
 
@@ -31,19 +31,28 @@ export function bersaglioPreso(user = globalThis.game?.user) {
 
 /**
  * Il tiro del nemico: la riserva già scalata dalle Condizioni meno la soglia
- * del bersaglio, riesce dal 6; a zero dadi non si tira. Torna il messaggio.
+ * del bersaglio, riesce dal 6 (dall'8 con una Condizione di grado 2 sul suo
+ * campo); a zero dadi non si tira, e nemmeno con una Condizione che fa
+ * fallire (29/9: il Narratore la toglie, se non c'entra). Torna il messaggio.
  */
 export async function tiraNemico(actor, { nome = "", riserva, soglia = 0, danno = 0, aggravato = false, condizione = "" } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
   const format = game.i18n.format.bind(game.i18n);
   const bersaglio = bersaglioPreso();
-  const conto = contoDelTiro({ nome, riserva, soglia, bersaglio, danno, aggravato, condizione, localize, format });
+  const pesi = pesiCondizioni(actor.items?.contents ?? [...(actor.items ?? [])])[riserva?.campo] ?? { otto: [], fallisce: [] };
+  if (pesi.fallisce.length) {
+    ui.notifications.warn(format("WOD5E_MAGE.Nemico.Fallisce", { names: pesi.fallisce.join(", ") }));
+    return null;
+  }
+  const dal = riesceDal(pesi);
+  const conto = contoDelTiro({ nome, riserva, soglia, bersaglio, danno, aggravato, condizione, dal, localize, format });
   if (conto.dadi <= 0) {
     ui.notifications.warn(localize("WOD5E_MAGE.Nemico.ZeroDadi"));
     return null;
   }
   const armatura = bersaglio?.actor ? armaturaDi(bersaglio.actor.items?.contents ?? [...(bersaglio.actor.items ?? [])]) : null;
   const notes = armatura?.totale ? [format("WOD5E_MAGE.Nemico.ArmaturaBersaglio", { bersaglio: bersaglio.name, punti: armatura.totale })] : [];
+  if (pesi.otto.length) notes.push(format("WOD5E_MAGE.Nemico.Otto", { names: pesi.otto.join(", ") }));
   const flavor = renderRollCard({
     traits: [{ label: riserva.label ?? "", value: riserva.base }],
     bonusParts: (riserva.voci ?? []).map((voce) => `${segnoDi(voce.value)} ${voce.nome}`),
@@ -55,7 +64,7 @@ export async function tiraNemico(actor, { nome = "", riserva, soglia = 0, danno 
     data: actor.system,
     pool: riserva.totale,
     threshold: soglia,
-    successFrom: RIESCE_DAL,
+    successFrom: dal,
     paradoxRating: 0,
     skill: true,
     title: conto.titolo,
@@ -140,7 +149,12 @@ async function decoraCartaTiro(message, html) {
   return true;
 }
 
-/** Il danno sulla Salute del bersaglio coi conti di salute.js, o la Condizione accesa. */
+/**
+ * Il danno sulla Salute del bersaglio coi conti di salute.js, o la
+ * Condizione: fuori dalle scale si accende se manca; su una scala sale di
+ * un gradino se il bersaglio ce l'ha già (29/9: «un altro colpo dello stesso
+ * tipo fa salire la Condizione di un gradino»), e l'avviso dice dove arriva.
+ */
 export async function applicaAlBersaglio(target, nemico, { localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
   const danno = Math.max(Math.trunc(Number(nemico?.danno) || 0), 0);
   if (danno) {
@@ -150,8 +164,8 @@ export async function applicaAlBersaglio(target, nemico, { localize = (k) => k, 
   const nome = String(nemico?.condizione ?? "").trim();
   if (nome) {
     const entry = findCondizioneByName(nome);
-    if (entry && !activeCondizioni(target.items).get(entry.id)) await toggleCondizione(target, entry);
-    ui.notifications.info(format("WOD5E_MAGE.Nemico.CondizioneMessa", { bersaglio: target.name, condizione: nome }));
+    const dopo = entry ? await applicaCondizione(target, entry) : null;
+    ui.notifications.info(format("WOD5E_MAGE.Nemico.CondizioneMessa", { bersaglio: target.name, condizione: dopo?.name ?? nome }));
   }
 }
 

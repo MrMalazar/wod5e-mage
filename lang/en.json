@@ -1514,7 +1514,7 @@
       "AddHint": "Add a Condition",
       "SearchHint": "Search outside the list",
       "OffHint": "Click: the Condition goes off",
-      "OpenHint": "Click: show or hide what it is and what it does",
+      "OpenHint": "Click: show or hide the scale, what it is and what it does",
       "MasterTitle": "Conditions (Storyteller)",
       "MasterTargets": "Selected characters:",
       "MasterNoTargets": "Select the characters on the scene, then click a Condition.",
@@ -1522,7 +1522,18 @@
       "MasterClose": "Close",
       "MasterOn": "{name} applied to: {targets}",
       "MasterOff": "{name} removed from: {targets}",
-      "Empty": "No Condition on you: + opens the archive, by category."
+      "Empty": "No Condition on you: + opens the choice, by family and by scale.",
+      "Tipi": {
+        "physical": "physical roll",
+        "social": "social roll",
+        "mental": "mental roll"
+      },
+      "TiroTogli": "{name} weighs on this roll. Click: it doesn't apply, remove it",
+      "TiroRimetti": "{name} is off this roll. Click: put it back",
+      "TiroFallisce": "The roll fails: {names}",
+      "CartaPesano": "Conditions: {list}",
+      "CartaFuori": "Removed from this roll: {list}",
+      "Riallineate": "Conditions aligned to the 29/9 rule: {count}"
     },
     "Header": {
       "Player": "Player"
@@ -2016,7 +2027,10 @@
       "NoteChi": "Storyteller {name}: {changes}.",
       "DalNarratore": "Via the Storyteller",
       "DalNarratoreHint": "The roll goes to the Storyteller first: {seconds} seconds to adjust it or say OK. Click to roll at once.",
-      "SenzaNarratoreHint": "The roll starts at once, without the Storyteller. Click to send it to them."
+      "SenzaNarratoreHint": "The roll starts at once, without the Storyteller. Click to send it to them.",
+      "SenzaCondizioni": "Conditions don't count on this roll",
+      "CondizioniFuori": "The player removed: {list}",
+      "NoteCondizioni": "Conditions removed"
     },
     "Tema": {
       "Chiaro": "Light mode",
@@ -2603,7 +2617,9 @@
       "ResistiSu": "Resist · {bersaglio}",
       "ResistiAperto": "{bersaglio}'s Roll box with threshold {soglia} inside.",
       "ResistiSenzaScheda": "{bersaglio} does not use the Mage sheet.",
-      "Bersaglio": "on {bersaglio}"
+      "Bersaglio": "on {bersaglio}",
+      "Fallisce": "The roll fails: {names}. If it doesn't apply, remove the Condition.",
+      "Otto": "Succeeds on 8: {names}"
     },
     "NomiScheda": {
       "SenzaScheda": "no sheet"

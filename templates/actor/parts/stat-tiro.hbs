@@ -34,6 +34,25 @@
                 {{/each}}
             </div>
 
+            {{!-- Le Condizioni sul tiro (29/9): quelle accese che pesano sul tipo del tiro, ognuna col
+                 suo peso (−2, −2 e 8, fallisce, −1). Un clic la toglie da questo tiro perché non c'entra
+                 con quello che il personaggio fa, un altro la rimette; il tiro che fallisce lo dice. --}}
+            {{#if tiro.condizioni}}
+                <div class="wod5e-mage-tiro-condizioni{{#if tiro.condizioni.fallisce}} fallisce{{/if}}">
+                    <div class="wod5e-mage-tiro-colonna-testa">{{localize "WOD5E.ItemsList.Conditions"}}{{#if tiro.condizioni.tipo}} · {{tiro.condizioni.tipo}}{{/if}}</div>
+                    <div class="wod5e-mage-tiro-condizioni-fila">
+                        {{#each tiro.condizioni.righe as |riga|}}
+                            <button type="button" class="wod5e-mage-tiro-condizione peso-{{riga.weight}}{{#unless riga.on}} fuori{{/unless}}" data-action="tiroCondizione" data-condizione="{{riga.id}}" aria-pressed="{{riga.on}}" title="{{riga.title}}">
+                                <span class="wod5e-mage-cond-icona"><i style="-webkit-mask-image: url({{riga.icon}}); mask-image: url({{riga.icon}})"></i>{{#if riga.numeral}}<b>{{riga.numeral}}</b>{{/if}}</span>
+                                <span class="wod5e-mage-tiro-condizione-nome">{{riga.name}}</span>
+                                <b class="wod5e-mage-tiro-condizione-peso">{{riga.peso}}</b>
+                            </button>
+                        {{/each}}
+                    </div>
+                    {{#if tiro.condizioni.fallisce}}<p class="wod5e-mage-tiro-condizioni-fallisce"><i class="fa-solid fa-ban" aria-hidden="true"></i> {{tiro.condizioni.fallisceTesto}}</p>{{/if}}
+                </div>
+            {{/if}}
+
             {{!-- Il potere scelto (tappa 3, 24/9): le sue note (il numero e la frase del
                  libretto), gli effetti rimasti fuori col perché, la riuscita senza tirare. --}}
             {{#if tiro.potere}}

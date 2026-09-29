@@ -84,8 +84,12 @@ export async function scriviDalNarratore(value) {
   return dalNarratore();
 }
 
-/** La richiesta che il giocatore manda ai Narratori (`to`: tutti i loro id). */
-export function richiestaTiro({ id, from, to, actorId = "", actorName = "", title = "", magick = false, kind = "", pool = 0, difficulty = 0, successFrom = 6 } = {}) {
+/**
+ * La richiesta che il giocatore manda ai Narratori (`to`: tutti i loro id).
+ * `condizioni` (29/9): quelle che pesano sul tiro in una riga, quelle che
+ * il giocatore ha tolto, e se il tiro fallisce per una di loro.
+ */
+export function richiestaTiro({ id, from, to, actorId = "", actorName = "", title = "", magick = false, kind = "", pool = 0, difficulty = 0, successFrom = 6, condizioni = null } = {}) {
   return {
     type: TIPO_RICHIESTA,
     id: String(id ?? ""),
@@ -98,7 +102,14 @@ export function richiestaTiro({ id, from, to, actorId = "", actorName = "", titl
     kind: String(kind ?? ""),
     pool: count(pool),
     difficulty: count(difficulty),
-    successFrom: count(successFrom) || 6
+    successFrom: count(successFrom) || 6,
+    condizioni: {
+      testo: String(condizioni?.testo ?? ""),
+      fuori: [].concat(condizioni?.fuori ?? []).map(String).filter(Boolean),
+      fallisce: Boolean(condizioni?.fallisce),
+      dadi: Math.min(delta(condizioni?.dadi), 0),
+      successFromSenza: count(condizioni?.successFromSenza) || count(successFrom) || 6
+    }
   };
 }
 
@@ -106,9 +117,11 @@ export function richiestaTiro({ id, from, to, actorId = "", actorName = "", titl
  * Il verdetto che il Narratore rimanda: la Difficoltà com'è adesso e i dadi
  * in più o in meno; `from` e `fromName` dicono quale Narratore ha risposto.
  */
-export function verdettoTiro(richiesta, { difficulty, dice } = {}, { from = "", fromName = "" } = {}) {
+export function verdettoTiro(richiesta, { difficulty, dice, senzaCondizioni = false } = {}, { from = "", fromName = "" } = {}) {
   const nuova = difficulty === null || difficulty === undefined || difficulty === "" ? count(richiesta?.difficulty) : count(difficulty);
   const dadi = delta(dice);
+  // Le Condizioni non contano (29/9): il Narratore decide che su questo tiro non c'entrano.
+  const via = Boolean(senzaCondizioni) && Boolean(richiesta?.condizioni?.testo);
   return {
     type: TIPO_VERDETTO,
     id: String(richiesta?.id ?? ""),
@@ -117,7 +130,8 @@ export function verdettoTiro(richiesta, { difficulty, dice } = {}, { from = "", 
     to: String(richiesta?.from ?? ""),
     difficulty: nuova,
     dice: dadi,
-    touched: nuova !== count(richiesta?.difficulty) || dadi !== 0
+    senzaCondizioni: via,
+    touched: nuova !== count(richiesta?.difficulty) || dadi !== 0 || via
   };
 }
 
@@ -133,14 +147,22 @@ export function dadiVerdetto({ pool = 0, difficulty = 0, dice = 0 } = {}) {
  */
 export function applicaVerdetto(conto, verdetto) {
   if (!verdetto?.touched) return conto;
-  const pool = Math.max(count(conto?.pool) + delta(verdetto.dice), 0);
+  // Senza le Condizioni (29/9): tornano i dadi che toglievano, la riuscita di prima, e il tiro non fallisce più.
+  const via = Boolean(verdetto.senzaCondizioni) && Boolean(conto?.condizioni);
+  const ridati = via ? Math.abs(Math.min(Math.trunc(Number(conto.condizioni.dadi) || 0), 0)) : 0;
+  const pool = Math.max(count(conto?.pool) + ridati + delta(verdetto.dice), 0);
   const difficulty = count(verdetto.difficulty);
+  const fallisce = via ? false : Boolean(conto?.fallisce);
+  const dice = fallisce ? 0 : Math.max(pool - difficulty, 0);
   return {
     ...conto,
     pool,
     difficulty,
-    dice: Math.max(pool - difficulty, 0),
-    impossible: Math.max(pool - difficulty, 0) === 0,
+    dice,
+    impossible: dice === 0,
+    fallisce,
+    successFrom: via ? count(conto.condizioni.successFromSenza) || conto.successFrom : conto.successFrom,
+    condizioniVia: via,
     narratore: { difficultyBefore: count(conto?.difficulty), difficulty, dice: delta(verdetto.dice), name: String(verdetto.fromName ?? "") }
   };
 }
@@ -150,6 +172,7 @@ export function notaVerdetto(conto, format = (key, data) => `${key} ${JSON.strin
   const n = conto?.narratore;
   if (!n) return "";
   const parti = [];
+  if (conto?.condizioniVia) parti.push(format("WOD5E_MAGE.Verdetto.NoteCondizioni", {}));
   if (n.difficulty !== n.difficultyBefore) parti.push(format("WOD5E_MAGE.Verdetto.NoteDifficulty", { before: n.difficultyBefore, after: n.difficulty }));
   if (n.dice) parti.push(format("WOD5E_MAGE.Verdetto.NoteDice", { dice: `${n.dice > 0 ? "+" : ""}${n.dice}` }));
   if (!parti.length) return "";
@@ -184,7 +207,7 @@ export function tiroInAttesa(actorId) {
  * non serve (nessun Narratore, è un Narratore a tirare, «Dal Narratore»
  * spento) o se nessuno risponde in tempo.
  */
-export function chiediVerdetto({ actor, title = "", magick = false, kind = "", conto = {} } = {}) {
+export function chiediVerdetto({ actor, title = "", magick = false, kind = "", conto = {}, condizioni = null } = {}) {
   const user = globalThis.game?.user;
   const narratori = narratoriAttivi(globalThis.game?.users, user);
   const socket = globalThis.game?.socket;
@@ -201,7 +224,8 @@ export function chiediVerdetto({ actor, title = "", magick = false, kind = "", c
     kind,
     pool: conto.pool,
     difficulty: conto.difficulty,
-    successFrom: conto.successFrom
+    successFrom: conto.successFrom,
+    condizioni
   });
   const actorKey = String(actor?.id ?? "");
   attoriInAttesa.add(actorKey);
@@ -286,8 +310,14 @@ export function contestoVerdetto(richiesta, localize = (key) => key, format = (k
       : localize("WOD5E_MAGE.Tiro.KindSkill"),
     pool: richiesta.pool,
     difficulty: richiesta.difficulty,
-    dice: dadiVerdetto(richiesta),
+    dice: richiesta.condizioni?.fallisce ? 0 : dadiVerdetto(richiesta),
     successFrom: richiesta.successFrom,
+    // Le Condizioni (29/9): quelle che pesano, quelle tolte dal giocatore, e la casella per dire che non contano.
+    condizioni: richiesta.condizioni?.testo ? {
+      testo: richiesta.condizioni.testo,
+      fallisce: Boolean(richiesta.condizioni.fallisce)
+    } : null,
+    fuori: (richiesta.condizioni?.fuori ?? []).length ? format("WOD5E_MAGE.Verdetto.CondizioniFuori", { list: richiesta.condizioni.fuori.join(", ") }) : "",
     seconds: VERDETTO_SECONDI
   };
 }
@@ -296,7 +326,8 @@ export function contestoVerdetto(richiesta, localize = (key) => key, format = (k
 export function leggiVerdetto(root) {
   return {
     difficulty: root?.querySelector?.("[name=difficulty]")?.value,
-    dice: root?.querySelector?.("[name=dice]")?.value
+    dice: root?.querySelector?.("[name=dice]")?.value,
+    senzaCondizioni: Boolean(root?.querySelector?.("[name=senzaCondizioni]")?.checked)
   };
 }
 
@@ -311,8 +342,15 @@ export function cablaVerdetto(root, richiesta, submit, { now = () => Date.now(),
   const dadi = root.querySelector("[name=dice]");
   const uscita = root.querySelector("[data-role=dadi]");
   const secondi = root.querySelector("[data-role=secondi]");
+  const senza = root.querySelector("[name=senzaCondizioni]");
+  const riuscita = root.querySelector("[data-role=riuscita]");
   const ricalcola = () => {
-    if (uscita) uscita.textContent = String(dadiVerdetto({ pool: richiesta.pool, difficulty: difficolta?.value, dice: dadi?.value }));
+    // Le Condizioni (29/9): se fanno fallire il tiro i dadi sono zero; se il Narratore dice che non contano, tornano i loro.
+    const via = Boolean(senza?.checked);
+    const fallisce = Boolean(richiesta.condizioni?.fallisce) && !via;
+    const ridati = via ? Math.abs(Math.min(delta(richiesta.condizioni?.dadi), 0)) : 0;
+    if (uscita) uscita.textContent = String(fallisce ? 0 : dadiVerdetto({ pool: count(richiesta.pool) + ridati, difficulty: difficolta?.value, dice: dadi?.value }));
+    if (riuscita) riuscita.textContent = String(via ? richiesta.condizioni?.successFromSenza || richiesta.successFrom : richiesta.successFrom);
   };
   root.addEventListener("click", (event) => {
     const button = event.target?.closest?.("[data-campo]");
@@ -325,6 +363,7 @@ export function cablaVerdetto(root, richiesta, submit, { now = () => Date.now(),
     ricalcola();
   });
   root.addEventListener("input", ricalcola);
+  root.addEventListener("change", ricalcola);
   ricalcola();
   const start = now();
   let done = false;

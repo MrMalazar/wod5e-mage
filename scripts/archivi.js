@@ -1,4 +1,4 @@
-import { condizioneItemData, findCondizioneByName } from "./condizioni.js";
+import { activeCondizioni, findCondizioneByName, toggleCondizione } from "./condizioni.js";
 import { MODULE_ID } from "./constants.js";
 
 /**
@@ -276,10 +276,11 @@ export async function addFromArchivio(actor, kind, entry, { table = "", level = 
   }
 
   if (config.add === "item" && kind === "condizione") {
-    // La Condizione nasce dai dati del modulo, sempre aggiornati, non dal compendio.
+    // La Condizione nasce dai dati del modulo, sempre aggiornati, non dal compendio;
+    // già addosso non si raddoppia, e su una scala prende il posto dell'altro grado (29/9).
     const definition = findCondizioneByName(entry.name);
     if (!definition) return false;
-    await actor.createEmbeddedDocuments("Item", [condizioneItemData(definition)]);
+    if (!activeCondizioni(actor.items).has(definition.id)) await toggleCondizione(actor, definition);
     return true;
   }
   if (config.add === "item") {

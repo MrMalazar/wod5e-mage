@@ -2,7 +2,7 @@
      su ogni pagina. A sinistra chi è: il ritratto (il + lo cambia, e il token
      lo segue), il nome, il concetto, Natura · Fazione. A destra lo stato:
      Salute (il tracciato del mago, il conto, il cuore che apre la ruota),
-     Armatura (solo se porta una protezione), Condizioni (col malus in viola,
+     Armatura (solo se porta una protezione), Condizioni (col peso in viola,
      la × che toglie, il + che apre la scelta). In cima l'etichetta della
      disposizione del token, col suo colore. Sotto, le linguette delle pagine
      e «+ Magick» se la pagina Magick non c'è. --}}
@@ -64,7 +64,7 @@
             <div class="wod5e-mage-nemico-conds">
                 {{#each condizioni as |cond|}}
                     <span class="wod5e-mage-nemico-cond{{#if cond.suppressed}} spenta{{/if}}" title="{{cond.title}}">
-                        {{#if cond.img}}<img src="{{cond.img}}" alt="">{{/if}}
+                        {{#if cond.list}}<span class="wod5e-mage-cond-icona"><i style="-webkit-mask-image: url({{cond.img}}); mask-image: url({{cond.img}})"></i>{{#if cond.numeral}}<b>{{cond.numeral}}</b>{{/if}}</span>{{else if cond.img}}<img src="{{cond.img}}" alt="">{{/if}}
                         <span>{{cond.nome}}</span>
                         {{#if cond.malus}}<b class="wod5e-mage-nemico-meno">{{cond.malus}}</b>{{/if}}
                         <button type="button" class="wod5e-mage-nemico-togli" data-action="condizioneToggle" data-condizione="{{cond.condizione}}" data-item-id="{{cond.id}}" title="{{localize 'WOD5E_MAGE.Nemico.CondizioneTogli'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.CondizioneTogli'}}: {{cond.nome}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
@@ -74,18 +74,24 @@
                 {{/each}}
             </div>
             <span></span>
-            {{!-- Il + apre la scelta delle Condizioni come sulla scheda del mago: le venticinque per gruppo, un clic accende. --}}
+            {{!-- Il + apre la scelta delle Condizioni come sulla scheda del mago (29/9): le famiglie con le
+                 loro scale, ogni grado col numero romano, poi i lievi e lo scontro; un clic accende. --}}
             <details class="wod5e-mage-nemico-condizioni-tendina">
                 <summary class="wod5e-mage-nemico-mini" title="{{localize 'WOD5E_MAGE.Nemico.CondizioneAggiungi'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.CondizioneAggiungi'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></summary>
                 <div class="wod5e-mage-nemico-condizioni-scelta">
-                    {{#each condizioniScelta as |group|}}
-                        <div class="wod5e-mage-nemico-condizioni-gruppo">
-                            <span class="wod5e-mage-nemico-k">{{group.group}}</span>
-                            <div class="wod5e-mage-nemico-condizioni-fila">
-                                {{#each group.entries as |entry|}}
-                                    <button type="button" class="wod5e-mage-nemico-condizione{{#if entry.active}} lit{{/if}}" data-action="condizioneToggle" data-condizione="{{entry.id}}" title="{{entry.title}}" aria-label="{{entry.name}}"><img src="{{entry.icon}}" alt=""><span>{{entry.name}}</span>{{#if entry.dice}}<small>{{entry.dice}}</small>{{/if}}</button>
-                                {{/each}}
-                            </div>
+                    {{#each condizioniScelta as |sezione|}}
+                        <div class="wod5e-mage-cond-sezione sezione-{{sezione.id}}">
+                            <span class="wod5e-mage-cond-sezione-nome">{{#if sezione.icon}}<span class="wod5e-mage-cond-icona"><i style="-webkit-mask-image: url({{sezione.icon}}); mask-image: url({{sezione.icon}})"></i></span>{{/if}}{{sezione.label}}</span>
+                            {{#each sezione.scale as |scala|}}
+                                <div class="wod5e-mage-cond-scala">
+                                    {{#if scala.label}}<span class="wod5e-mage-cond-scala-nome">{{scala.label}}</span>{{/if}}
+                                    <span class="wod5e-mage-cond-voci">
+                                        {{#each scala.voci as |entry|}}
+                                            <button type="button" class="wod5e-mage-cond-voce{{#if entry.active}} lit{{/if}}" data-action="condizioneToggle" data-condizione="{{entry.id}}" title="{{entry.title}}" aria-pressed="{{entry.active}}">{{#if entry.numeral}}<b class="wod5e-mage-cond-grado">{{entry.numeral}}</b>{{/if}}<span>{{entry.name}}</span></button>
+                                        {{/each}}
+                                    </span>
+                                </div>
+                            {{/each}}
                         </div>
                     {{/each}}
                 </div>

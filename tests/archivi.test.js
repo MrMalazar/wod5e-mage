@@ -80,7 +80,7 @@ assert.equal(entry.content, "<p>c</p>");
 
 // I nove compendi esistono, sono JSON riga per riga e portano la bandiera.
 const manifest = JSON.parse(readFileSync(new URL("../module.json", import.meta.url), "utf8"));
-const expected = { "mage-pregi": 70, "mage-difetti": 65, "mage-background": 17, "mage-credi": 13, "mage-concetti": 24, "mage-ambizioni": 120, "mage-desideri": 120, "mage-ancore": 12, "mage-convinzioni": 110, "mage-condizioni": 25, "mage-strumenti": 22 };
+const expected = { "mage-pregi": 70, "mage-difetti": 65, "mage-background": 17, "mage-credi": 13, "mage-concetti": 24, "mage-ambizioni": 120, "mage-desideri": 120, "mage-ancore": 12, "mage-convinzioni": 110, "mage-condizioni": 46, "mage-strumenti": 22 };
 for (const [name, minimum] of Object.entries(expected)) {
   const pack = manifest.packs.find((candidate) => candidate.name === name);
   assert.ok(pack, name);
@@ -98,10 +98,12 @@ for (const [name, minimum] of Object.entries(expected)) {
     ids.add(doc._id);
     assert.equal(typeof doc.flags["wod5e-mage"].archivio.kind, "string");
     if (name === "mage-condizioni") {
-      // Le Condizioni: Item «condition» del sistema, col simbolo della bozza e i dadi tolti nei modificatori.
+      // Le Condizioni (29/9): Item «condition» del sistema, con l'icona della famiglia (col grado,
+      // se ce l'ha), la bandiera della voce di lista e i dadi tolti nei modificatori.
       assert.equal(doc.type, "condition");
       const icon = doc.img.replace("modules/wod5e-mage/", "");
-      assert.match(icon, /icons\/condizioni\/cond_[a-z_]+\.svg$/);
+      assert.match(icon, /icons\/condizioni\/(corpo|sensi|mente|soprannaturale)(-[123])?\.svg$/);
+      assert.match(doc.flags["wod5e-mage"].condizione, /^[a-z-]+$/);
       assert.ok(existsSync(new URL(`../${icon}`, import.meta.url)), icon);
       assert.equal(doc.system.suppressed, false);
       assert.ok(Array.isArray(doc.system.bonuses));
@@ -146,14 +148,21 @@ assert.ok(convinzioni.some((doc) => doc.flags["wod5e-mage"].archivio.credo === "
 const catalogo = convinzioni.filter((doc) => !doc.flags["wod5e-mage"].archivio.credo);
 assert.equal(catalogo.length, 50);
 assert.ok(catalogo.every((doc) => doc.flags["wod5e-mage"].archivio.gloss && doc.flags["wod5e-mage"].archivio.cross));
-// Le Condizioni: Abbagliato toglie un dado a ogni tiro, Atterrato due alle fisiche, Cieco non tocca i dadi.
+// Le Condizioni (la regola di base del 29/9): Abbagliato (Vista I) toglie due dadi ai fisici e ai
+// mentali, Offuscato (Vista II) anche, e il suo 8 lo mette il modulo; Cieco fallisce e non ha dadi da
+// togliere; Contuso (lieve) ne toglie uno ai fisici, Atterrato (scontro) pure; il Controllo niente.
 const condizioni = readFileSync(new URL("../packs/mage-condizioni.db", import.meta.url), "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
 const byName = Object.fromEntries(condizioni.map((doc) => [doc.name, doc]));
-assert.deepEqual(byName.Abbagliato.system.bonuses.map((b) => [b.value, b.paths]), [["-1", ["all"]]]);
-assert.deepEqual(byName.Atterrato.system.bonuses.map((b) => [b.value, b.paths]), [["-2", ["physical"]]]);
+assert.deepEqual(byName.Abbagliato.system.bonuses.map((b) => [b.value, b.paths]), [["-2", ["physical", "mental"]]]);
+assert.deepEqual(byName.Offuscato.system.bonuses.map((b) => [b.value, b.paths]), [["-2", ["physical", "mental"]]]);
 assert.deepEqual(byName.Cieco.system.bonuses, []);
-assert.equal(byName["A secco"].flags["wod5e-mage"].archivio.group, "Strumenti tagliati");
-assert.deepEqual([...new Set(condizioni.map((doc) => doc.flags["wod5e-mage"].archivio.group))], ["Corpo", "Strumenti tagliati", "Vista", "Udito", "Testa", "Maledizione", "Ambiente"]);
+assert.deepEqual(byName.Contuso.system.bonuses.map((b) => [b.value, b.paths]), [["-1", ["physical"]]]);
+assert.deepEqual(byName.Atterrato.system.bonuses.map((b) => [b.value, b.paths]), [["-1", ["physical"]]]);
+assert.deepEqual(byName.Ammaliato.system.bonuses, []);
+assert.equal(byName.Offuscato.img, "modules/wod5e-mage/assets/icons/condizioni/sensi-2.svg");
+assert.equal(byName.Scosso.img, "modules/wod5e-mage/assets/icons/condizioni/mente.svg");
+assert.ok(!byName.Bloccato && !byName["A secco"] && !byName.Rallentato, "le Condizioni uscite dalla lista non ci sono più");
+assert.deepEqual([...new Set(condizioni.map((doc) => doc.flags["wod5e-mage"].archivio.group))], ["Sensi", "Corpo", "Mente", "Soprannaturale", "Lievi", "Scontro"]);
 
 
 // La scheda: il libro accanto a ogni voce, distinto dal +.

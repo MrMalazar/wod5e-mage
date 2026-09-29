@@ -215,8 +215,12 @@ export function statusMago(actor, { localize = (key) => key, aperto = false, sce
   const salute = getSalute(actor);
   const balance = getMagickBalance(actor);
   const vol = volonta(actor);
+  // Le Condizioni accese col grado in numeri romani (29/9): «Offuscato II», «Contuso».
   const condizioni = [...activeCondizioni(actor.items ?? []).entries()]
-    .map(([id, item]) => findCondizione(id)?.name ?? item?.name ?? id);
+    .map(([id, item]) => {
+      const entry = findCondizione(id);
+      return entry ? `${item?.name ?? entry.name}${entry.numeral ? ` ${entry.numeral}` : ""}` : item?.name ?? id;
+    });
   const attivi = righeAddosso(actor.getFlag(MODULE_ID, ADDOSSO_FLAG) ?? {}).map((riga) => ({
     ...riga,
     durataLabel: localize(`WOD5E_MAGE.Menu.Durata.${riga.durata}`),

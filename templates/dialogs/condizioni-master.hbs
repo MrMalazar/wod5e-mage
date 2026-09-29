@@ -1,23 +1,28 @@
-{{!-- La finestra del Master: i personaggi scelti in testa, poi le
-     Condizioni per gruppo. Un clic accende a tutti, un altro spegne. --}}
+{{!-- La finestra del Master: i personaggi scelti in testa, poi le Condizioni
+     per famiglia (con la sua icona) e per scala, ogni grado col numero romano,
+     il nome e il peso; poi i lievi e lo scontro. Un clic accende a tutti, un
+     altro spegne; su una scala il grado nuovo prende il posto del vecchio.
+     Il numero in oro dice quanti dei scelti la portano. --}}
 <div class="wod5e-mage-master-condizioni">
     <p class="wod5e-mage-master-targets">
         <strong>{{localize "WOD5E_MAGE.Condizioni.MasterTargets"}}</strong>
         <span data-role="targets">{{targets}}</span>
     </p>
-    {{#each groups as |group|}}
-        <section class="wod5e-mage-master-group">
-            <h3>{{group.group}}</h3>
-            <div class="wod5e-mage-master-row">
-                {{#each group.entries as |entry|}}
-                    <button type="button" class="wod5e-mage-master-cond{{#if entry.all}} lit{{/if}}{{#if entry.some}} partial{{/if}}" data-condizione="{{entry.id}}" title="{{entry.title}}">
-                        <img src="{{entry.icon}}" alt="">
-                        <span class="wod5e-mage-master-name">{{entry.name}}{{#if entry.dice}} <em>{{entry.dice}}</em>{{/if}}</span>
-                        <small>{{entry.what}}</small>
-                        <b data-role="count">{{entry.badge}}</b>
-                    </button>
-                {{/each}}
-            </div>
+    {{#each groups as |sezione|}}
+        <section class="wod5e-mage-master-group wod5e-mage-cond-sezione sezione-{{sezione.id}}">
+            <h3>{{#if sezione.icon}}<span class="wod5e-mage-cond-icona"><i style="-webkit-mask-image: url({{sezione.icon}}); mask-image: url({{sezione.icon}})"></i></span>{{/if}}{{sezione.label}}</h3>
+            {{#each sezione.scale as |scala|}}
+                <div class="wod5e-mage-cond-scala">
+                    {{#if scala.label}}<span class="wod5e-mage-cond-scala-nome">{{scala.label}}</span>{{/if}}
+                    <span class="wod5e-mage-cond-voci">
+                        {{#each scala.voci as |entry|}}
+                            <button type="button" class="wod5e-mage-cond-voce{{#if entry.all}} lit{{/if}}{{#if entry.some}} partial{{/if}}" data-condizione="{{entry.id}}" title="{{entry.title}}">
+                                {{#if entry.numeral}}<b class="wod5e-mage-cond-grado">{{entry.numeral}}</b>{{/if}}<span>{{entry.name}}</span>{{#if entry.dice}}<em>{{entry.dice}}</em>{{/if}}<b class="wod5e-mage-master-conto" data-role="count">{{entry.badge}}</b>
+                            </button>
+                        {{/each}}
+                    </span>
+                </div>
+            {{/each}}
         </section>
     {{/each}}
 </div>

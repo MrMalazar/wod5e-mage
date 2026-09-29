@@ -29,7 +29,8 @@
  */
 import { CHIAVI_VIVE, RINOMINATE } from "./abilita-essenziali.js";
 import { MODULE_ID } from "./constants.js";
-import { CONDIZIONI } from "./data/condizioni.js";
+import { CONDIZIONI, FAMIGLIE_CONDIZIONI } from "./data/condizioni.js";
+import { condizioneTitle, dadiDelPeso, definizioneDi, findCondizioneByName, GRUPPI_ABILITA, nomeColGrado, pesoBreve } from "./condizioni.js";
 import { ATTRIBUTE_KEYS } from "./tratti-icone.js";
 import { formulaThresholds, prepareGrimorioFormule } from "./grimorio.js";
 import { IMPOSSIBLE_SURCHARGE, SCOPES, SCOPES_PER_CAST, SCOPE_ICONS, SCOPE_MAX_LEVEL, scopeModes } from "./scopes.js";
@@ -42,12 +43,8 @@ export const CAMPI = Object.freeze(["physical", "social", "mental"]);
 
 export const CAMPO_ICONE = Object.freeze({ physical: "fa-solid fa-hand-fist", social: "fa-solid fa-comments", mental: "fa-solid fa-brain" });
 
-/** Il gruppo di ogni Abilità del sistema (i tre percorsi di wod5e). */
-export const GRUPPI_ABILITA = Object.freeze({
-  athletics: "physical", brawl: "physical", craft: "physical", drive: "physical", firearms: "physical", larceny: "physical", melee: "physical", stealth: "physical", survival: "physical",
-  animalken: "social", etiquette: "social", insight: "social", intimidation: "social", leadership: "social", performance: "social", persuasion: "social", streetwise: "social", subterfuge: "social",
-  academics: "mental", awareness: "mental", finance: "mental", investigation: "mental", medicine: "mental", occult: "mental", politics: "mental", science: "mental", technology: "mental"
-});
+/** Il gruppo di ogni Abilità del sistema (i tre percorsi di wod5e): sta con le Condizioni, che ne leggono il tipo del tiro. */
+export { GRUPPI_ABILITA };
 
 /**
  * Le Nature: le cinque del sistema (lo `spcType`) con la parola di M6, più
@@ -243,15 +240,23 @@ export function nomeAbilita(key, { nomi = {}, localize = (k) => k } = {}) {
 }
 
 /**
- * I malus delle Condizioni addosso, per campo: dagli oggetti `condition`
- * (i `bonuses` con `paths` physical, social, mental o all), solo i negativi,
- * mai quelli spenti (`suppressed`). Torna { physical, social, mental } con
- * le voci { nome, value }.
+ * I malus delle Condizioni addosso, per campo, mai quelli spenti
+ * (`suppressed`). Le Condizioni di lista (la regola di base del 29/9)
+ * leggono il peso dai dati del modulo: −2 ai gradi 1 e 2, −1 ai lievi, sui
+ * loro tipi di tiro; le altre dai `bonuses` scritti sull'oggetto (paths
+ * physical, social, mental o all), solo i negativi. Torna { physical,
+ * social, mental } con le voci { nome, value }.
  */
 export function malusCondizioni(items = []) {
   const per = Object.fromEntries(CAMPI.map((campo) => [campo, []]));
   for (const item of items ?? []) {
     if (item?.type !== "condition" || item.system?.suppressed) continue;
+    const entry = definizioneDi(item);
+    if (entry) {
+      const value = dadiDelPeso(entry.weight);
+      if (value) for (const campo of CAMPI.filter((c) => entry.tipi.includes(c))) per[campo].push({ nome: String(item.name || entry.name), value });
+      continue;
+    }
     for (const bonus of item.system?.bonuses ?? []) {
       const value = Math.trunc(Number(bonus?.value) || 0);
       if (value >= 0) continue;
@@ -264,13 +269,53 @@ export function malusCondizioni(items = []) {
 }
 
 /**
- * Le Condizioni in testa: simbolo, nome, il malus in viola («−2 fisico», «−1 a
- * tutto»), la × che le toglie, l'effetto nel sorvolo.
+ * L'8 e il fallimento delle Condizioni addosso, per campo (29/9): chi porta
+ * il grado 2 riesce dall'8, chi porta un grado 3 fallisce. Torna {
+ * physical, social, mental } con { otto: [nomi], fallisce: [nomi] }.
+ */
+export function pesiCondizioni(items = []) {
+  const per = Object.fromEntries(CAMPI.map((campo) => [campo, { otto: [], fallisce: [] }]));
+  for (const item of items ?? []) {
+    if (item?.type !== "condition" || item.system?.suppressed) continue;
+    const entry = definizioneDi(item);
+    if (!entry || (entry.weight !== "otto" && entry.weight !== "fallisce")) continue;
+    for (const campo of CAMPI.filter((c) => entry.tipi.includes(c))) per[campo][entry.weight].push(String(item.name || entry.name));
+  }
+  return per;
+}
+
+/** La riuscita di un campo: dall'8 se una Condizione di grado 2 ci pesa, altrimenti dal 6. */
+export function riesceDal(pesi = { otto: [] }) {
+  return (pesi?.otto?.length ?? 0) > 0 ? 8 : RIESCE_DAL;
+}
+
+/**
+ * Le Condizioni in testa: l'icona della famiglia col grado, il nome, il peso
+ * in viola («−2 fisico», «−2 e 8 a tutto», «fallisce sociale»), la × che le
+ * toglie, la spiegazione nel sorvolo.
  */
 export function condizioniTestata(items = [], { localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
   const righe = [];
   for (const item of items ?? []) {
     if (item?.type !== "condition") continue;
+    const entry = definizioneDi(item);
+    if (entry) {
+      const campi = CAMPI.filter((c) => entry.tipi.includes(c));
+      const campo = campi.length === CAMPI.length ? localize("WOD5E_MAGE.Nemico.MalusTutto") : campi.map((c) => String(localize(`WOD5E_MAGE.Nemico.Campi.${c}`)).toLowerCase()).join(", ");
+      const peso = pesoBreve(entry);
+      righe.push({
+        id: String(item.id ?? item._id ?? ""),
+        nome: String(item.name ?? entry.name),
+        img: entry.familyIcon,
+        numeral: entry.numeral,
+        list: true,
+        condizione: entry.id,
+        malus: peso && campi.length ? format("WOD5E_MAGE.Nemico.Malus", { value: peso, campo }) : "",
+        title: condizioneTitle({ ...entry, name: String(item.name ?? entry.name) }),
+        suppressed: Boolean(item.system?.suppressed)
+      });
+      continue;
+    }
     const malus = [];
     for (const bonus of item.system?.bonuses ?? []) {
       const value = Math.trunc(Number(bonus?.value) || 0);
@@ -284,6 +329,8 @@ export function condizioniTestata(items = [], { localize = (k) => k, format = (k
       id: String(item.id ?? item._id ?? ""),
       nome: String(item.name ?? ""),
       img: String(item.img ?? ""),
+      numeral: "",
+      list: false,
       condizione: String(item.flags?.[MODULE_ID]?.condizione ?? ""),
       malus: malus.join(" · "),
       title: descrizione,
@@ -291,6 +338,16 @@ export function condizioniTestata(items = [], { localize = (k) => k, format = (k
     });
   }
   return righe;
+}
+
+/** Le Condizioni per la tendina delle azioni: le famiglie, poi i lievi e lo scontro; ogni voce col grado nel nome. */
+export function gruppiDelleCondizioni() {
+  const voce = (entry) => ({ name: entry.name, label: nomeColGrado(entry) });
+  return [
+    ...FAMIGLIE_CONDIZIONI.map((famiglia) => ({ label: famiglia.label, voci: CONDIZIONI.filter((entry) => entry.family === famiglia.id && (entry.section === "scala" || entry.section === "sola" || entry.section === "da-riscrivere")).map(voce) })),
+    { label: "Lievi", voci: CONDIZIONI.filter((entry) => entry.section === "lievi").map(voce) },
+    { label: "Scontro", voci: CONDIZIONI.filter((entry) => entry.section === "scontro").map(voce) }
+  ].filter((gruppo) => gruppo.voci.length);
 }
 
 /**
@@ -451,6 +508,8 @@ export function azioniDelNemico(dati = datiNemico(), items = [], { system = {}, 
     const portata = testo(azione.portata);
     return {
       ...azione,
+      // Una Condizione scritta che non è più in lista (Bloccato, Rallentato…): la tendina la mostra lo stesso.
+      condizioneFuori: Boolean(condizione) && !findCondizioneByName(condizione),
       senzaTiro,
       danno,
       aggravato,
@@ -763,6 +822,8 @@ export function prepareNemicoContext({ actor = {}, items = [], salute = null, st
     abilitaScelta,
     secondoTratto,
     condizioniNomi: CONDIZIONI.map((entry) => entry.name),
+    // La tendina della Condizione di un'azione (29/9): per famiglia, poi i lievi e lo scontro, col grado.
+    condizioniGruppi: gruppiDelleCondizioni(),
     condizioniScelta,
     bersagliBonus: [
       ...CAMPI.map((campo) => ({ id: campo, label: localize(`WOD5E_MAGE.Nemico.Campi.${campo}`) })),
@@ -787,15 +848,15 @@ export function gruppiOggetti(oggetti, localize = (k) => k) {
  * («Spara · su Guendalina»), il conto («Pistola 7 −2 Atterrato = 5 dadi ·
  * riesce dal 6»), e cosa applicare se riesce.
  */
-export function contoDelTiro({ nome = "", riserva = null, soglia = 0, bersaglio = null, danno = 0, aggravato = false, condizione = "", localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
+export function contoDelTiro({ nome = "", riserva = null, soglia = 0, bersaglio = null, danno = 0, aggravato = false, condizione = "", dal = RIESCE_DAL, localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
   const scalata = riserva ?? riservaScalata(0, []);
   const dadi = dadiDelTiro(scalata.totale, soglia);
   const titolo = bersaglio?.name ? format("WOD5E_MAGE.Nemico.TiroSu", { azione: nome, bersaglio: bersaglio.name }) : format("WOD5E_MAGE.Nemico.TiroTitolo", { azione: nome });
   const parti = [`${scalata.label ?? ""} ${scalata.base}`.trim(), ...scalata.voci.map((v) => `${segnoDi(v.value)} ${v.nome}`)];
   if (intero(soglia)) parti.push(`− ${intero(soglia)} ${localize("WOD5E_MAGE.Nemico.Soglia")}`);
   const conto = scalata.cambiata || intero(soglia)
-    ? format("WOD5E_MAGE.Nemico.Conto", { conto: parti.join(" "), dadi, dal: RIESCE_DAL })
-    : format("WOD5E_MAGE.Nemico.ContoSemplice", { nome: scalata.label ?? "", dadi, dal: RIESCE_DAL });
+    ? format("WOD5E_MAGE.Nemico.Conto", { conto: parti.join(" "), dadi, dal })
+    : format("WOD5E_MAGE.Nemico.ContoSemplice", { nome: scalata.label ?? "", dadi, dal });
   const esito = [];
   if (intero(danno)) esito.push(format("WOD5E_MAGE.Nemico.DannoEsito", { danno: intero(danno), tipo: localize(aggravato ? "WOD5E_MAGE.Nemico.Aggravati" : "WOD5E_MAGE.Nemico.Superficiali") }));
   if (testo(condizione)) esito.push(testo(condizione));

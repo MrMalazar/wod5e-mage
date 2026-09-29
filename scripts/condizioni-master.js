@@ -1,13 +1,15 @@
 import { MODULE_ID } from "./constants.js";
 import { CONDIZIONI } from "./data/condizioni.js";
-import { activeCondizioni, condizioneDice, findCondizione, prepareCondizioni, toggleCondizione } from "./condizioni.js";
+import { activeCondizioni, condizioneDice, findCondizione, nomeColGrado, prepareCondizioni, toggleCondizione } from "./condizioni.js";
 
 /**
- * La finestra del Master (richiesta di Blue, 4/9 notte): coi personaggi
- * selezionati sulla scena, un clic su un simbolo accende la Condizione a
- * tutti (o la spegne, se l'hanno già tutti). Ogni simbolo porta il nome, i
- * dadi tolti e il cos'è; l'effetto intero al passaggio del mouse. Si apre
- * dalla macro «Condizioni (Master)» del compendio o da
+ * La finestra del Master (richiesta di Blue, 4/9 notte; la regola di base
+ * del 29/9): coi personaggi selezionati sulla scena, un clic su una
+ * Condizione la accende a tutti (o la spegne, se l'hanno già tutti); su una
+ * scala prende il posto dell'altro grado. Le Condizioni stanno per famiglia
+ * e per scala, col grado in numeri romani e il peso; la scala, com'è e
+ * cosa fa al passaggio del mouse. Si apre dalla macro «Condizioni
+ * (Master)» del compendio o da
  * game.modules.get("wod5e-mage").api.condizioni.assign().
  */
 
@@ -33,21 +35,29 @@ export function prepareMasterCondizioni(actors) {
     for (const id of activeCondizioni(actor.items).keys()) counts.set(id, (counts.get(id) ?? 0) + 1);
   }
   const total = (actors ?? []).length;
-  return prepareCondizioni([]).map((group) => ({
-    group: group.group,
-    entries: group.entries.map((entry) => {
-      const count = counts.get(entry.id) ?? 0;
-      const definition = findCondizione(entry.id);
-      return {
-        ...entry,
-        what: definition?.what ?? "",
-        count,
-        badge: count > 0 && total > 1 ? String(count) : "",
-        all: total > 0 && count === total,
-        some: count > 0 && count < total
-      };
-    })
+  return prepareCondizioni([]).map((sezione) => ({
+    ...sezione,
+    scale: sezione.scale.map((scala) => ({
+      ...scala,
+      voci: scala.voci.map((entry) => {
+        const count = counts.get(entry.id) ?? 0;
+        const definition = findCondizione(entry.id);
+        return {
+          ...entry,
+          what: definition?.what ?? "",
+          count,
+          badge: count > 0 && total > 1 ? String(count) : "",
+          all: total > 0 && count === total,
+          some: count > 0 && count < total
+        };
+      })
+    }))
   }));
+}
+
+/** Tutte le voci della finestra in fila, per chi le cerca per id. */
+function vociDelMaster(actors) {
+  return prepareMasterCondizioni(actors).flatMap((sezione) => sezione.scale.flatMap((scala) => scala.voci));
 }
 
 /**
@@ -115,7 +125,7 @@ function bindMaster(root) {
     refreshMaster(element, actors);
     const dice = condizioneDice(entry);
     ui.notifications.info(game.i18n.format(carriers ? "WOD5E_MAGE.Condizioni.MasterOn" : "WOD5E_MAGE.Condizioni.MasterOff", {
-      name: `${entry.name}${dice ? ` (${dice})` : ""}`,
+      name: `${nomeColGrado(entry)}${dice ? ` (${dice})` : ""}`,
       targets: targetNames(actors)
     }));
   });
@@ -125,19 +135,26 @@ function bindMaster(root) {
 function refreshMaster(element, actors) {
   const targets = element.querySelector("[data-role=targets]");
   if (targets) targets.textContent = targetNames(actors);
-  for (const group of prepareMasterCondizioni(actors)) {
-    for (const entry of group.entries) {
-      const button = element.querySelector(`[data-condizione="${entry.id}"]`);
-      if (!button) continue;
-      button.classList.toggle("lit", entry.all);
-      button.classList.toggle("partial", entry.some);
-      const badge = button.querySelector("[data-role=count]");
-      if (badge) badge.textContent = entry.badge;
-    }
+  for (const entry of vociDelMaster(actors)) {
+    const button = element.querySelector(`[data-condizione="${entry.id}"]`);
+    if (!button) continue;
+    button.classList.toggle("lit", entry.all);
+    button.classList.toggle("partial", entry.some);
+    const badge = button.querySelector("[data-role=count]");
+    if (badge) badge.textContent = entry.badge;
   }
 }
 
-/** Le venticinque, per chi vuole costruire qualcosa sopra. */
+/** Le Condizioni di lista, per chi vuole costruire qualcosa sopra: famiglia, scala, grado, peso, tipi di tiro. */
 export function listCondizioni() {
-  return CONDIZIONI.map((entry) => ({ id: entry.id, name: entry.name, group: entry.group, dice: condizioneDice(entry) }));
+  return CONDIZIONI.map((entry) => ({
+    id: entry.id,
+    name: entry.name,
+    family: entry.family,
+    scale: entry.scale,
+    grade: entry.grade,
+    weight: entry.weight,
+    tipi: [...entry.tipi],
+    dice: condizioneDice(entry)
+  }));
 }

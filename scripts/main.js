@@ -5,7 +5,7 @@ import { registerParadoxDice } from "./paradox-dice.js";
 import { registerLineageSpheres } from "./famiglie.js";
 import { registerRollCardRendering } from "./roll-card.js";
 import { assignCondizione, listCondizioni, openCondizioniMaster, selectedActors } from "./condizioni-master.js";
-import { findCondizione } from "./condizioni.js";
+import { CONDIZIONI_VERSIONE, CONDIZIONI_VERSIONE_SETTING, findCondizione, riallineaCondizioni } from "./condizioni.js";
 import { registerVolonta } from "./volonta.js";
 import { registerSforzo } from "./sforzo.js";
 import { registerPrezzo } from "./prezzo.js";
@@ -161,6 +161,8 @@ Hooks.once("init", () => {
       }
     }
   });
+  // Le Condizioni riallineate alla regola di base del 29/9 (una volta per mondo, dal Narratore).
+  game.settings.register(MODULE_ID, CONDIZIONI_VERSIONE_SETTING, { scope: "world", config: false, type: String, default: "" });
   game.settings.register(MODULE_ID, "skillsFlat", {
     scope: "client",
     config: false,
@@ -247,6 +249,17 @@ Hooks.once("ready", () => {
 
   // Il verdetto del Narratore sui tiri dei giocatori (16/9 sera): il canale del modulo.
   registraSocketVerdetto();
+
+  // Le Condizioni del 29/9: quelle già accese prendono simbolo, dadi e testo di oggi (una volta, dal primo Narratore).
+  if (game.user?.isGM && game.users?.activeGM?.id === game.user.id && game.settings.get(MODULE_ID, CONDIZIONI_VERSIONE_SETTING) !== CONDIZIONI_VERSIONE) {
+    const tokens = (game.scenes?.contents ?? []).flatMap((scene) => (scene.tokens?.contents ?? []).filter((token) => !token.actorLink));
+    riallineaCondizioni({ actors: game.actors?.contents ?? [], tokens })
+      .then(async (toccate) => {
+        await game.settings.set(MODULE_ID, CONDIZIONI_VERSIONE_SETTING, CONDIZIONI_VERSIONE);
+        if (toccate) ui.notifications.info(game.i18n.format("WOD5E_MAGE.Condizioni.Riallineate", { count: toccate }));
+      })
+      .catch((error) => console.warn("wod5e-mage | Riallineamento delle Condizioni interrotto.", error));
+  }
 
   debug("Ready", {
     foundryVersion: game.version,

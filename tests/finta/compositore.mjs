@@ -343,4 +343,43 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   delete flags["wod5e-mage"].poteri.ppratica;
 }
 
+// Le Condizioni sul tiro (la regola di base del 29/9): Offuscato (Vista II) e Contuso sul tiro fisico
+// tolgono tre dadi e portano la riuscita all'8; un clic toglie Offuscato; Cieco fa fallire il tiro
+// senza tirare, e la carta dice perché. Gli oggetti stanno in una raccolta come quelle di Foundry.
+{
+  const C = await import(new URL("../../scripts/condizioni.js", import.meta.url).href);
+  class Raccolta extends Map { [Symbol.iterator]() { return this.values(); } }
+  const conCondizioni = { ...actor, items: new Raccolta([["c1", { id: "c1", ...C.condizioneItemData(C.findCondizione("offuscato")) }], ["c2", { id: "c2", ...C.condizioneItemData(C.findCondizione("contuso")) }], ["c3", { id: "c3", ...C.condizioneItemData(C.findCondizione("nervoso")) }]]) };
+  strings["WOD5E_MAGE.Condizioni.TiroFallisce"] = "Il tiro fallisce: {names}";
+  strings["WOD5E_MAGE.Condizioni.CartaPesano"] = "Condizioni: {list}";
+  strings["WOD5E_MAGE.Condizioni.CartaFuori"] = "Tolte da questo tiro: {list}";
+  delete globalThis.game.socket;
+  let fisico = T.setDifficulty(T.pickSkill(T.pickAttribute(T.emptyTiro(), "dexterity"), "skill:athletics"), 1);
+  const ctxCond = S.prepareTiroContext(conCondizioni, fisico);
+  assert.deepEqual(ctxCond.condizioni.righe.map((r) => [r.name, r.peso, r.on]), [["Offuscato", "−2 e 8", true], ["Contuso", "−1", true]], "Nervoso pesa sui sociali, non qui");
+  assert.deepEqual([ctxCond.riserva, ctxCond.pool, ctxCond.dice, ctxCond.successFrom, ctxCond.condizioni.fallisce], [6, 3, 2, 8, false]);
+  // Il clic sulla riga: Offuscato non c'entra (tira a tentoni), e resta Contuso.
+  const sheetCond = { actor: conCondizioni, _tiro: fisico, render: async () => {} };
+  await S.onTiroCondizione.call(sheetCond, { preventDefault() {} }, { dataset: { condizione: "offuscato" } });
+  fisico = sheetCond._tiro;
+  const ctxTolta = S.prepareTiroContext(conCondizioni, fisico);
+  assert.deepEqual([ctxTolta.dice, ctxTolta.successFrom, ctxTolta.condizioni.righe.find((r) => r.id === "offuscato").on], [4, 6, false]);
+  globalThis.__sim.faces = [6, 2, 2, 2];
+  const mCond = await S.launchTiro(conCondizioni, fisico);
+  assert.equal(globalThis.__sim.rolls.at(-1).formula, "4dmcs>5 + 0dpcs>5");
+  assert.match(mCond.flavor, /Condizioni: Contuso −1/);
+  assert.match(mCond.flavor, /Tolte da questo tiro: Offuscato/);
+  // Cieco: il tiro fisico fallisce senza dadi, anche di Magick coi rossi sulla Ruota.
+  const cieco = { ...actor, items: new Raccolta([["c9", { id: "c9", ...C.condizioneItemData(C.findCondizione("cieco")) }]]) };
+  const ctxCieco = S.prepareTiroContext(cieco, T.setDifficulty(T.pickSkill(T.pickAttribute(T.emptyTiro(), "dexterity"), "skill:athletics"), 1));
+  assert.deepEqual([ctxCieco.dice, ctxCieco.impossible, ctxCieco.condizioni.fallisce, ctxCieco.condizioni.fallisceTesto], [0, true, true, "Il tiro fallisce: Cieco"]);
+  flags["wod5e-mage"].magickBalance = { quintessence: 0, paradox: 3 };
+  const prima = globalThis.__sim.rolls.length;
+  const lancioCieco = T.setKind(T.setScope(T.toggleSphere(T.pickSkill(T.pickAttribute(T.toggleArete(T.emptyTiro()), "dexterity"), "skill:athletics"), "forces"), "potency", 1), "volgare");
+  const mCieco = await S.launchTiro(cieco, lancioCieco);
+  assert.equal(globalThis.__sim.rolls.length, prima, "niente dadi, nemmeno i rossi");
+  assert.equal(mCieco.getFlag("wod5e-mage", ROLL_CARD_FLAG).total, 0);
+  assert.match(mCieco.content, /Il tiro fallisce: Cieco/);
+}
+
 console.log("compositore: ok,", globalThis.__sim.messages.length, "messaggi");

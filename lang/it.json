@@ -1514,7 +1514,7 @@
       "AddHint": "Aggiungi una Condizione",
       "SearchHint": "Cerca fuori lista",
       "OffHint": "Clic: la Condizione si spegne",
-      "OpenHint": "Clic: mostra o nasconde cos'è e cosa fa",
+      "OpenHint": "Clic: mostra o nasconde la scala, com'è e cosa fa",
       "MasterTitle": "Condizioni (Master)",
       "MasterTargets": "Personaggi scelti:",
       "MasterNoTargets": "Seleziona i personaggi sulla scena, poi clicca una Condizione.",
@@ -1522,7 +1522,18 @@
       "MasterClose": "Chiudi",
       "MasterOn": "{name} accesa a: {targets}",
       "MasterOff": "{name} spenta a: {targets}",
-      "Empty": "Nessuna Condizione addosso: il + apre l'archivio, per categoria."
+      "Empty": "Nessuna Condizione addosso: il + apre la scelta, per famiglia e per scala.",
+      "Tipi": {
+        "physical": "tiro fisico",
+        "social": "tiro sociale",
+        "mental": "tiro mentale"
+      },
+      "TiroTogli": "{name} pesa su questo tiro. Clic: non c'entra, toglila",
+      "TiroRimetti": "{name} è tolta da questo tiro. Clic: rimettila",
+      "TiroFallisce": "Il tiro fallisce: {names}",
+      "CartaPesano": "Condizioni: {list}",
+      "CartaFuori": "Tolte da questo tiro: {list}",
+      "Riallineate": "Condizioni riallineate alla regola del 29/9: {count}"
     },
     "Header": {
       "Player": "Giocatore"
@@ -2016,7 +2027,10 @@
       "NoteChi": "Narratore {name}: {changes}.",
       "DalNarratore": "Dal Narratore",
       "DalNarratoreHint": "Il tiro passa dal Narratore: ha {seconds} secondi per ritoccarlo o dire OK. Clic per farlo partire subito.",
-      "SenzaNarratoreHint": "Il tiro parte subito, senza passare dal Narratore. Clic per mandarglielo."
+      "SenzaNarratoreHint": "Il tiro parte subito, senza passare dal Narratore. Clic per mandarglielo.",
+      "SenzaCondizioni": "Le Condizioni non contano su questo tiro",
+      "CondizioniFuori": "Il giocatore ha tolto: {list}",
+      "NoteCondizioni": "Condizioni tolte"
     },
     "Tema": {
       "Chiaro": "Modalità chiara",
@@ -2603,7 +2617,9 @@
       "ResistiSu": "Resisti · {bersaglio}",
       "ResistiAperto": "Il Tiro di {bersaglio} con la soglia {soglia} dentro.",
       "ResistiSenzaScheda": "{bersaglio} non usa la scheda del Mago.",
-      "Bersaglio": "su {bersaglio}"
+      "Bersaglio": "su {bersaglio}",
+      "Fallisce": "Il tiro fallisce: {names}. Se non c'entra, togli la Condizione.",
+      "Otto": "Riesce dall'8: {names}"
     },
     "NomiScheda": {
       "SenzaScheda": "senza scheda"

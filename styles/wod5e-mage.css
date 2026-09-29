@@ -18009,3 +18009,364 @@
   font-weight: 700;
   margin: 4px 0;
 }
+
+/* ==========================================================================
+   LE CONDIZIONI (la regola di base del 29/9/2026, Blue): l'icona della
+   famiglia (Corpo, Sensi, Mente, Soprannaturale) col grado in numeri romani
+   su una targhetta; la scelta per famiglia e per scala; le righe accese; le
+   Condizioni sul Tiro, che si tolgono con un clic; il Master e il nemico.
+   Il segno è una maschera: prende il colore del tema.
+   ========================================================================== */
+.wod5e-mage.wod5e.actor.sheet,
+.application.wod5e-mage {
+  --mage-cond-segno: #f5e7b2;       /* il segno della famiglia sul fondo scuro */
+  --mage-cond-targa: #d9a827;       /* la targhetta del grado */
+  --mage-cond-targa-testo: #1a140a; /* il numero romano sulla targhetta */
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara,
+.application.wod5e-mage-guidata.wod5e-mage-chiara,
+.application.wod5e-mage-quadro.wod5e-mage-chiara {
+  --mage-cond-segno: #3B336B;
+  --mage-cond-targa: #282051;
+  --mage-cond-targa-testo: #F6F2E6;
+}
+
+/* L'icona: il segno della famiglia e, in basso a destra, il grado. */
+.wod5e-mage .wod5e-mage-cond-icona {
+  display: inline-block;
+  flex: 0 0 auto;
+  height: 20px;
+  position: relative;
+  width: 20px;
+}
+
+.wod5e-mage .wod5e-mage-cond-icona > i {
+  background: var(--mage-cond-segno, #f5e7b2);
+  inset: 0;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  position: absolute;
+}
+
+.wod5e-mage .wod5e-mage-cond-icona > b {
+  background: var(--mage-cond-targa, #d9a827);
+  border-radius: 3px;
+  bottom: -4px;
+  color: var(--mage-cond-targa-testo, #1a140a);
+  font-family: "Modesto Condensed", Georgia, serif;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  padding: 1px 2px 0;
+  position: absolute;
+  right: -6px;
+}
+
+/* La scelta: una sezione per famiglia col suo segno, una riga per scala coi gradi. */
+.wod5e-mage .wod5e-mage-cond-sezione {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.wod5e-mage .wod5e-mage-cond-sezione + .wod5e-mage-cond-sezione {
+  margin-top: 5px;
+}
+
+.wod5e-mage .wod5e-mage-cond-sezione-nome {
+  align-items: center;
+  border-bottom: 1px solid rgb(152 119 43 / 35%);
+  color: var(--mage-oro, #d9a827);
+  display: flex;
+  font-size: 0.64rem;
+  font-weight: 700;
+  gap: 6px;
+  letter-spacing: 0.08em;
+  padding-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.wod5e-mage .wod5e-mage-cond-sezione-nome .wod5e-mage-cond-icona {
+  height: 16px;
+  width: 16px;
+}
+
+.wod5e-mage .wod5e-mage-cond-scala {
+  align-items: baseline;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 5.4rem minmax(0, 1fr);
+}
+
+.wod5e-mage .wod5e-mage-cond-scala:not(:has(.wod5e-mage-cond-scala-nome)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.wod5e-mage .wod5e-mage-cond-scala-nome {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+.wod5e-mage .wod5e-mage-cond-voci {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-cond-voce,
+.wod5e-mage .wod5e-mage-master-condizioni button.wod5e-mage-cond-voce {
+  align-items: center;
+  background: var(--mage-velluto, #282723);
+  border: 1px solid var(--mage-oro-tenue, #6b4f12);
+  border-radius: 10px;
+  box-shadow: none;
+  color: var(--mage-testo, #e6dcc2);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  gap: 4px;
+  height: auto;
+  line-height: 1.15;
+  margin: 0;
+  min-height: 0;
+  padding: 1px 7px 1px 2px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-cond-voce:not(:has(.wod5e-mage-cond-grado)),
+.wod5e-mage .wod5e-mage-master-condizioni button.wod5e-mage-cond-voce:not(:has(.wod5e-mage-cond-grado)) {
+  padding-left: 7px;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-cond-voce:hover,
+.wod5e-mage .wod5e-mage-master-condizioni button.wod5e-mage-cond-voce:hover {
+  border-color: var(--mage-oro, #d9a827);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-cond-voce.lit,
+.wod5e-mage .wod5e-mage-master-condizioni button.wod5e-mage-cond-voce.lit {
+  background: var(--mage-viola, #5a2b82);
+  border-color: var(--mage-viola-chiaro, #b58ade);
+  color: var(--mage-scelta-testo, #fff);
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-cond-voce.suppressed {
+  border-style: dashed;
+  opacity: 0.7;
+}
+
+.wod5e-mage .wod5e-mage-cond-grado {
+  background: var(--mage-cond-targa, #d9a827);
+  border-radius: 8px;
+  color: var(--mage-cond-targa-testo, #1a140a);
+  font-family: "Modesto Condensed", Georgia, serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 1.35rem;
+  padding: 2px 4px 1px;
+  text-align: center;
+}
+
+/* Le righe accese: l'icona col grado nel tondo che spegne; aperta, la scala sopra com'è e cosa fa. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-spegni > .wod5e-mage-cond-icona {
+  height: 100%;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-spegni > .wod5e-mage-cond-icona > b {
+  bottom: -5px;
+  right: -8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-spiega > small {
+  color: var(--mage-oro, #d9a827);
+  display: block;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-condizione-riga.peso-fallisce .wod5e-mage-condizione-dadi {
+  font-size: 0.72rem;
+  font-style: italic;
+}
+
+/* Le Condizioni sul Tiro: una per riga come la catena, il peso in fondo; tolta, barrata e spenta. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizioni {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizioni-fila {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-tiro-condizione {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--mage-oro-tenue);
+  border-left: 3px solid var(--mage-rosso-chiaro);
+  border-radius: 6px;
+  box-shadow: none;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.74rem;
+  font-weight: 600;
+  gap: 8px;
+  height: auto;
+  line-height: 1.15;
+  margin: 0;
+  min-height: 24px;
+  padding: 2px 8px 2px 5px;
+  text-align: left;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-tiro-condizione:hover {
+  border-color: var(--mage-oro);
+  border-left-color: var(--mage-rosso-chiaro);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizione .wod5e-mage-cond-icona {
+  height: 17px;
+  margin-right: 4px;
+  width: 17px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizione-nome {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizione-peso {
+  color: var(--mage-rosso-chiaro);
+  flex: 0 0 auto;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-tiro-condizione.fuori {
+  border-left-color: var(--mage-oro-tenue);
+  opacity: 0.55;
+}
+
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-tiro-condizione.fuori .wod5e-mage-tiro-condizione-nome,
+.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-tiro-condizione.fuori .wod5e-mage-tiro-condizione-peso {
+  text-decoration: line-through;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizioni-fallisce {
+  color: var(--mage-rosso-chiaro);
+  font-size: 0.76rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Il Master: le stesse righe per scala, più larghe, col numero di chi la porta. */
+.wod5e-mage .wod5e-mage-master-condizioni .wod5e-mage-master-group > h3 {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+
+.wod5e-mage .wod5e-mage-master-condizioni .wod5e-mage-cond-scala {
+  grid-template-columns: 7rem minmax(0, 1fr);
+}
+
+.wod5e-mage .wod5e-mage-master-condizioni .wod5e-mage-cond-scala:not(:has(.wod5e-mage-cond-scala-nome)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.wod5e-mage .wod5e-mage-master-condizioni button.wod5e-mage-cond-voce {
+  font-size: 0.8rem;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.wod5e-mage .wod5e-mage-master-condizioni button.wod5e-mage-cond-voce > em {
+  color: var(--mage-rosso-chiaro, #e2a79e);
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.wod5e-mage .wod5e-mage-master-condizioni button.wod5e-mage-cond-voce.partial {
+  border-color: var(--mage-oro, #d9a827);
+  border-style: dashed;
+}
+
+.wod5e-mage .wod5e-mage-master-condizioni .wod5e-mage-master-conto:empty {
+  display: none;
+}
+
+.wod5e-mage .wod5e-mage-master-condizioni .wod5e-mage-master-conto {
+  background: var(--mage-oro, #d9a827);
+  border-radius: 8px;
+  color: var(--mage-su-oro, #1a140a);
+  font-size: 0.66rem;
+  line-height: 1;
+  margin-left: 2px;
+  padding: 2px 5px 1px;
+}
+
+/* Il nemico: l'icona in testa col grado, la scelta come sulla scheda del mago. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cond > .wod5e-mage-cond-icona {
+  height: 19px;
+  margin-right: 5px;
+  width: 19px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-condizioni-scelta {
+  gap: 4px;
+  width: 520px;
+}
+
+/* Il verdetto del Narratore: le Condizioni del tiro, e la casella per dire che non contano. */
+.wod5e-mage-verdetto-condizioni {
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  border-left: 3px solid var(--mage-rosso-chiaro, #e2a79e);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 8px;
+}
+
+.wod5e-mage-verdetto-condizioni > p {
+  margin: 0;
+}
+
+.wod5e-mage-verdetto-condizioni.fallisce > p {
+  color: var(--mage-rosso-chiaro, #e2a79e);
+}
+
+.wod5e-mage-verdetto-condizioni > label {
+  align-items: center;
+  display: flex;
+  font-size: 0.82rem;
+  gap: 6px;
+}
+
+.wod5e-mage-verdetto-fuori {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 0.8rem;
+  font-style: italic;
+  margin: 0;
+}

@@ -6,7 +6,7 @@ Uso: python3 tools/build-archivi.py "<cartella della casa MAGHI M6>"
 Legge i Cataloghi (capitolo 08), i Concetti (05_011) e gli studi dei Credi
 e scrive in packs/ un file .db (NeDB, una riga per documento) per archivio:
 Credi, Concetti, Ambizioni, Desideri, Ancore, Convinzioni (JournalEntry),
-Condizioni, Strumenti per la Magick (Item equipment, dalla tavola di
+Strumenti per la Magick (Item equipment, dalla tavola di
 ramo_a_regole.md). Solo italiano.
 
 Dal 24/9 i Pregi, i Difetti e i Background NON vengono più da qui: li scrive
@@ -17,6 +17,9 @@ LIBRO: si lanciano solo con `--vecchi-vantaggi`.
 Dal 25/9 nemmeno le Ambizioni, i Desideri e le Ancore: li scrive
 tools/build-bussola.py dalla Bussola rifatta tools/dati/bussola.md. Le
 funzioni restano per il confronto: si lanciano solo con `--vecchia-bussola`.
+
+Dal 29/9 nemmeno le Condizioni: le scrive tools/build-condizioni.py dalla
+guida del Narratore tools/dati/condizioni.md (la regola di base di M6).
 """
 import hashlib
 import html
@@ -465,57 +468,8 @@ def build_convinzioni():
 
 BOZZE = CASA / "04_BOZZE"
 
-# I dadi che una Condizione toglie, nei «modificatori» del sistema: «attributes»
-# vale su ogni tiro (ogni riserva parte da un Attributo), «physical» sulle fisiche.
-# I dadi che una Condizione toglie, nei «modificatori» del sistema: «all» vale
-# su ogni tiro, Areté compreso; «physical» sulle riserve fisiche.
-CONDITION_BONUSES = {
-    "Atterrato": ("-2", ["physical"]),
-    "Abbagliato": ("-1", ["all"]), "Offuscato": ("-2", ["all"]),
-    "Ovattato": ("-1", ["all"]), "Assordato": ("-2", ["all"]),
-    "Scosso": ("-1", ["all"]), "Spaventato": ("-2", ["all"]),
-}
-DATA_OUT = Path(__file__).resolve().parent.parent / "scripts" / "data" / "condizioni.js"
-
-
-def build_condizioni():
-    """Le Condizioni di M6 (bozza 04_BOZZE/condizioni_M6.md, verdetti del 4/9): Item «condition»."""
-    raw = strip_comments(read(BOZZE / "condizioni_M6.md"))
-    docs, sort, data = [], 0, []
-    for m in re.finditer(r"^## (.+?)\n(.*?)(?=^## |\Z)", raw, flags=re.S | re.M):
-        group, body = m.group(1).strip(), m.group(2)
-        for row in table_rows(body):
-            if len(row) < 3 or not row[0] or row[0].lower() == "nome":
-                continue
-            name, what, effect = row[0], row[1], row[2]
-            content = f"<p><em>{inline(what)}</em></p><p>{inline(effect)}</p>"
-            bonuses = []
-            if name in CONDITION_BONUSES:
-                value, paths = CONDITION_BONUSES[name]
-                bonuses.append({"source": name, "value": value, "paths": paths, "displayWhenInactive": False,
-                                "activeWhen": {"check": "always", "path": "", "value": ""}})
-            icon = f"modules/{MODULE}/assets/icons/condizioni/cond_{slug(name).replace('-', '_')}.svg"
-            data.append({"id": slug(name), "name": name, "group": group, "what": what, "effect": effect, "icon": icon,
-                         "description": content, "bonuses": bonuses})
-            docs.append({
-                "_id": doc_id("condizione", group, name),
-                "name": name,
-                "type": "condition",
-                "img": icon,
-                "system": {"description": content, "bonuses": bonuses, "source": {"book": "M6 · Le Condizioni", "page": ""},
-                           "effects": {}, "suppressed": False},
-                "effects": [], "folder": None, "sort": sort, "ownership": {"default": 0},
-                "flags": {MODULE: {"archivio": {"kind": "condizione", "group": group, "name": name, "text": what, "description": effect}}}
-            })
-            sort += 10
-    write_pack("mage-condizioni", docs)
-    # Le stesse venticinque come modulo dati: i quadratini della scheda non aspettano il compendio.
-    DATA_OUT.write_text(
-        "// Generato da tools/build-archivi.py dalla bozza 04_BOZZE/condizioni_M6.md: non toccare a mano.\n"
-        "// Le venticinque Condizioni di M6, nell'ordine della bozza, coi dadi tolti nei modificatori.\n\n"
-        f"export const CONDIZIONI = Object.freeze({json.dumps(data, ensure_ascii=False, indent=2)});\n",
-        encoding="utf-8", newline="\n")
-    print(f"condizioni.js: {len(data)} voci")
+# Le Condizioni (29/9/2026): le scrive tools/build-condizioni.py dalla guida del
+# Narratore (tools/dati/condizioni.md); la bozza del 4/9 non vale più.
 
 
 def build_ancore():
@@ -608,5 +562,4 @@ if __name__ == "__main__":
         spunti("desiderio", "08_096_*.md", "Desideri", "desideri")
         build_ancore()
     build_convinzioni()
-    build_condizioni()
     build_strumenti()

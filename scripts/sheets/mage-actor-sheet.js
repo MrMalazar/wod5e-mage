@@ -83,7 +83,7 @@ import {
   onTiroQuintessence,
   onTiroRoll,
   onTiroScope,
-  onTiroSforza, onTiroNarratore,
+  onTiroSforza, onTiroNarratore, onTiroCondizione,
   onTiroSkill,
   onTiroSpecialty,
   onTiroSphere,
@@ -564,6 +564,8 @@ export class MageActorSheet extends MortalActorSheet {
       tiroExtra: onTiroExtra,
       tiroDadi: onTiroDadi,
       tiroSforza: onTiroSforza,
+      // Le Condizioni sul tiro (29/9): un clic toglie o rimette quella che non c'entra.
+      tiroCondizione: onTiroCondizione,
       tiroNarratore: onTiroNarratore,
       tiroGrimorio: onTiroGrimorio,
       tiroIncantesimo: onTiroIncantesimo,

@@ -28,6 +28,7 @@ import {
   TIRO_KINDS,
   tiroSize,
   toggleArete,
+  toggleCondizioneTiro,
   togglePrize,
   toggleSforza,
   toggleSphere,
@@ -320,6 +321,28 @@ assert.deepEqual([setDadi(magick, 2).dadi, setDadi(magick, -3).dadi, setDadi(mag
   const conCasaAttiva = contoTiro(tiroCasaAttiva, { ...numeri, power: casa, powerCtx: { poteriConti: { forces: 2 } } });
   assert.deepEqual([conCasaAttiva.computed, conCasaAttiva.powerActive], [0, true]);
   assert.equal(pillsOf(tiroCasaAttiva, names).find((pill) => pill.kind === "power").id, "r-casa#attivo", "la pillola porta l'id con la variante");
+}
+
+// Le Condizioni sul tiro (la regola di base del 29/9): i dadi sul totale, fuori dal tetto; il grado 2
+// porta la riuscita all'8; il grado 3 fa fallire, anche la riuscita senza tirare; un clic le toglie.
+{
+  const abilita = setDifficulty(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:firearms"), 1);
+  const senza = contoTiro(abilita, { attributeValue: 3, skillValue: 3 });
+  assert.deepEqual([senza.pool, senza.dice, senza.successFrom, senza.fallisce], [6, 5, 6, false]);
+  const pesano = { dadi: -3, otto: true, fallisce: false, perche: [] };
+  const con = contoTiro(abilita, { attributeValue: 3, skillValue: 3, condizioni: pesano });
+  assert.deepEqual([con.riserva, con.pool, con.dice, con.successFrom, con.impossible], [6, 3, 2, 8, false], "Offuscato e un lieve: tre dadi in meno e l'8");
+  assert.deepEqual(con.condizioni, { dadi: -3, otto: true, fallisce: false, perche: [], successFromSenza: 6 });
+  const cieco = contoTiro(abilita, { attributeValue: 3, skillValue: 3, condizioni: { dadi: 0, otto: false, fallisce: true, perche: ["Cieco"] } });
+  assert.deepEqual([cieco.dice, cieco.impossible, cieco.fallisce, cieco.autoSuccess], [0, true, true, false]);
+  assert.deepEqual(cieco.condizioni.perche, ["Cieco"]);
+  // Il clic: tolta, rimessa; lo stato vuoto non ne ha, e Azzera le rimette tutte.
+  const tolta = toggleCondizioneTiro(abilita, "offuscato");
+  assert.deepEqual(tolta.condizioni, { offuscato: false });
+  assert.deepEqual(toggleCondizioneTiro(tolta, "offuscato").condizioni, {});
+  assert.deepEqual(emptyTiro().condizioni, {});
+  assert.deepEqual(clearTiro().condizioni, {});
+  assert.deepEqual(pickSkill(tolta, "skill:melee").condizioni, { offuscato: false }, "cambiare tratto non rimette le Condizioni tolte");
 }
 
 console.log("tiro: ok");

@@ -51,8 +51,8 @@ const N = await import("../../scripts/nemico.js");
 const { prepareCondizioni, condizioneItemData, findCondizione } = await import("../../scripts/condizioni.js");
 const { getSalute } = await import("../../scripts/salute.js");
 
-// L'Agente Grigi del mock: Uomo in Nero, Risvegliato, Atterrato, una pistola, un tessuto balistico, la Magick con Mente e Forze.
-const atterrato = { id: "c1", ...condizioneItemData(findCondizione("atterrato")) };
+// L'Agente Grigi del mock: Uomo in Nero, Risvegliato, Sanguinante (il −2 fisico di Emorragia I, dal 29/9; nel mock era Atterrato), una pistola, un tessuto balistico, la Magick con Mente e Forze.
+const atterrato = { id: "c1", ...condizioneItemData(findCondizione("sanguinante")) };
 const items = [
   { id: "w1", uuid: "Actor.g1.Item.w1", type: "weapon", name: "Pistola", system: { weaponvalue: 4, weaponType: "ranged", description: "<p>Si nasconde</p>" }, flags: { [MODULE]: { aggravato: false, dettagli: "Un tiro di pistola" } } },
   { id: "a1", uuid: "Actor.g1.Item.a1", type: "armor", name: "Tessuto balistico", system: { armorvalue: 2, description: "<p>Non si vede</p>" }, flags: { [MODULE]: { armaturaPiena: 3, armatura: "fisica" } } },
@@ -126,7 +126,7 @@ const ctx = (stato) => ({
 const c = ctx({ aperte: new Set(["arma:w1", "m2"]), cassetto: "mano", mano: { nome: "Scarica del guanto", cosa: "Una scarica dal guanto colpisce un bersaglio nella stanza.", attribute: "dexterity", skill: "skill:athletics", dominio: "forces", come: "volgare", livelli: { potency: 3, range: 2 }, lenti: {} } });
 assert.equal(c.appartenenza, "Risvegliato · Unione Tecnocratica");
 assert.equal(c.disposizione.id, "ostile");
-assert.deepEqual(c.carte.map((carta) => [carta.id, carta.soglia.value, carta.riserva.totale, carta.riserva.cambiata]), [["physical", 3, 3, true], ["social", 3, 5, false], ["mental", 4, 6, false]], "Atterrato toglie 2 al Fisico");
+assert.deepEqual(c.carte.map((carta) => [carta.id, carta.soglia.value, carta.riserva.totale, carta.riserva.cambiata]), [["physical", 3, 3, true], ["social", 3, 5, false], ["mental", 4, 6, false]], "Sanguinante toglie 2 al Fisico");
 const fisico = c.carte[0];
 assert.deepEqual(fisico.casi.map((k) => [k.nome, k.aSoglia, k.value, k.mod]), [["Mira", false, 5, true], ["Da lontano", true, 6, true]], "la Pistola scalata in viola; Al riparo alza Da lontano a 6");
 assert.equal(fisico.soglia.hint, "Contro una riserva da 6 restano 3 dadi: riesce 88 volte su 100");
@@ -134,7 +134,7 @@ assert.deepEqual(c.carte[1].casi.map((k) => [k.nome, k.value]), [["Intimidire", 
 assert.deepEqual(c.azioni.map((a) => [a.id, a.nome, a.riserva.label, a.riserva.dadi, a.senzaTiro, a.attiva, a.daArma]), [["arma:w1", "Spara", "Mira", 5, false, false, true], ["z1", "Afferra", "Fisico", 3, false, false, false], ["z2", "Minaccia", "Sociale", 5, false, false, false], ["z3", "Al riparo", "Fisico", 3, true, true, false]]);
 assert.deepEqual(c.azioni[0].breve, { pezzi: ["danno 4"], condizione: "", portata: "Un tiro di pistola" }, "l'azione nata dalla Pistola legge danno e portata dall'arma");
 assert.equal(c.azioni[0].aperta, true);
-assert.deepEqual(c.condizioni.map((r) => [r.nome, r.malus]), [["Atterrato", "−2 fisico"]]);
+assert.deepEqual(c.condizioni.map((r) => [r.nome, r.malus]), [["Sanguinante", "−2 fisico"]]);
 assert.deepEqual(c.armature.map((a) => [a.conto, a.pips.filter((p) => p.pieno).length]), [["2/3", 2]]);
 assert.deepEqual(c.pagine.map((p) => p.id), ["gioco", "magick", "oggetti", "note"]);
 assert.equal(c.pagine[1].conto, 3);
@@ -147,11 +147,14 @@ assert.deepEqual(c.oggettiGruppi.map((g) => [g.id, g.righe.map((r) => r.name)]),
 assert.equal(c.oggetti.weapon[0].nota, "crea Spara");
 assert.equal(c.saluteMax, 7);
 assert.ok(c.abilitaScelta.some((s) => s.label === "Mira") && c.attributiScelta.some((a) => a.label === "Fermezza"));
-assert.ok(c.condizioniNomi.includes("Bloccato") && c.condizioniScelta.length >= 5);
+assert.ok(c.condizioniNomi.includes("Sanguinante") && !c.condizioniNomi.includes("Bloccato") && c.condizioniScelta.length === 6);
+// La Condizione di un'azione che non è più in lista (Bloccato, dal 29/9) resta scritta e la tendina la mostra.
+assert.deepEqual(c.azioni.map((a) => [a.id, a.condizioneFuori]), [["arma:w1", false], ["z1", true], ["z2", false], ["z3", false]]);
+assert.deepEqual(c.condizioniGruppi.map((g) => g.label), ["Sensi", "Corpo", "Mente", "Soprannaturale", "Lievi", "Scontro"]);
 
 // --- i template
 const testa = T.testa(c);
-for (const marker of ['data-disposizione="ostile"', "Ostile", 'name="name" value="Agente Grigi"', 'name="system.headers.concept" value="Uomo in Nero del Nuovo Ordine Mondiale"', 'name="flags.wod5e-mage.nemico.natura"', '<option value="risvegliato" selected>Risvegliato</option>', 'name="flags.wod5e-mage.nemico.fazione" value="Unione Tecnocratica"', 'data-action="saluteCellChange" data-index="0"', 'name="system.health.max" value="7"', 'data-action="ventaglioToggle"', 'data-action="saluteDanni"', 'data-action="saluteReset"', 'data-action="armaturaColpo" data-item-id="a1"', "2/3", "Tessuto balistico", 'data-action="condizioneToggle" data-condizione="atterrato" data-item-id="c1"', "−2 fisico", 'class="wod5e-mage-nemico-pagine tabs" data-group="primary"', 'data-action="tab" data-group="primary" data-tab="gioco"', 'data-tab="magick"', '<span class="wod5e-mage-nemico-conto">3</span>', 'data-action="ritrattoCambia"', "wod5e-mage-nemico-condizioni-tendina", 'data-action="condizioneToggle" data-condizione="bloccato"', 'name="flags.wod5e-mage.nemico.manoNarratore" value="0"', "nessun ritocco"]) {
+for (const marker of ['data-disposizione="ostile"', "Ostile", 'name="name" value="Agente Grigi"', 'name="system.headers.concept" value="Uomo in Nero del Nuovo Ordine Mondiale"', 'name="flags.wod5e-mage.nemico.natura"', '<option value="risvegliato" selected>Risvegliato</option>', 'name="flags.wod5e-mage.nemico.fazione" value="Unione Tecnocratica"', 'data-action="saluteCellChange" data-index="0"', 'name="system.health.max" value="7"', 'data-action="ventaglioToggle"', 'data-action="saluteDanni"', 'data-action="saluteReset"', 'data-action="armaturaColpo" data-item-id="a1"', "2/3", "Tessuto balistico", 'data-action="condizioneToggle" data-condizione="sanguinante" data-item-id="c1"', "−2 fisico", 'class="wod5e-mage-nemico-pagine tabs" data-group="primary"', 'data-action="tab" data-group="primary" data-tab="gioco"', 'data-tab="magick"', '<span class="wod5e-mage-nemico-conto">3</span>', 'data-action="ritrattoCambia"', "wod5e-mage-nemico-condizioni-tendina", 'data-action="condizioneToggle" data-condizione="offuscato"', '<b class="wod5e-mage-cond-grado">II</b><span>Offuscato</span>', 'wod5e-mage-cond-voce lit" data-action="condizioneToggle" data-condizione="sanguinante"', 'name="flags.wod5e-mage.nemico.manoNarratore" value="0"', "nessun ritocco"]) {
   assert.ok(testa.includes(marker), `testa: manca ${marker}`);
 }
 assert.ok(!testa.includes('data-action="magickAccendi"'), "con la Magick accesa niente «+ Magick»");
@@ -162,6 +165,11 @@ for (const marker of ['data-campo="physical"', 'name="flags.wod5e-mage.nemico.so
   assert.ok(gioco.includes(marker), `gioco: manca ${marker}`);
 }
 assert.ok(!gioco.includes('name="flags.wod5e-mage.nemico.azioni.arma:w1.danno"'), "il danno dell'azione nata dall'arma non si scrive: è dell'arma");
+// Afferra aperta: la tendina della Condizione tiene Bloccato (fuori lista dal 29/9) e le Condizioni per famiglia col grado.
+const giocoAfferra = T.gioco({ ...ctx({ aperte: new Set(["z1"]) }), tab: { id: "gioco", group: "primary", cssClass: "active" } });
+for (const marker of ['<option value="Bloccato" selected>Bloccato</option><optgroup label="Sensi">', '<option value="Offuscato" >Offuscato II</option>', '<optgroup label="Scontro">']) {
+  assert.ok(giocoAfferra.includes(marker), `gioco, Afferra: manca ${marker}`);
+}
 
 const magick = T.magick({ ...c, tab: { id: "magick", group: "primary", cssClass: "active" } });
 for (const marker of ['data-action="nemicoArete" data-level="2"', 'wod5e-mage-nemico-d on" data-action="nemicoArete" data-level="2"', 'wod5e-mage-nemico-dominio on" data-action="nemicoDominio" data-sfera="forces"', 'wod5e-mage-nemico-pastiglia on" data-action="nemicoTipoMagick" data-tipo="tecnomagick"', 'data-action="nemicoCassetto" data-cassetto="grimorio"', 'class="attivo" data-action="nemicoCassetto" data-cassetto="mano"', 'data-action="nemicoMagickApri" data-effetto="m2"', "toglie un ricordo", "· resiste con Fermezza + Autocontrollo", "soglia<b class=\"chiaro\">5</b>", 'data-action="nemicoLancia" data-effetto="m2"', "Impatto 4 · ", "Precisione 1", 'name="flags.wod5e-mage.nemico.magick.effetti.m2.resiste.attribute"', '<option value="resolve" selected>Fermezza</option>', 'data-cassetto="mano"', 'data-mano="nome" value="Scarica del guanto"', 'wod5e-mage-nemico-pastiglia on" data-action="nemicoManoScelta" data-campo="dominio" data-value="forces"', 'data-action="nemicoLente" data-scope="potency"', 'wod5e-mage-nemico-ambito alto" data-scope="potency"', 'class="on" data-action="nemicoAmbito" data-scope="potency" data-level="3"', 'class=" zero" data-action="nemicoAmbito" data-scope="potency" data-level="0"', '<div class="wod5e-mage-nemico-grande">5</div>', "Portata 2 + Potenza 3 · danni 5 (Areté 2 + Potenza 3)", 'data-mano="impossibile"', "impresa impossibile, +5", 'data-action="nemicoManoAggiungi"']) {
@@ -198,19 +206,19 @@ const carta = T.carta({ nemico: { name: actor.name, img: actor.img }, effetto, t
 for (const marker of ["lancia Cancellare su Guendalina", "<b>5</b><span>soglia · Impatto 4, Precisione 1</span>", "Toglie a Guendalina il ricordo", "Resiste con Fermezza + Autocontrollo", "Accidentale · Mente"]) {
   assert.ok(carta.includes(marker), `carta: manca ${marker}`);
 }
-// Il conto del tiro di Spara su Guendalina: Mira 7, −2 Atterrato, 5 dadi, riesce dal 6.
+// Il conto del tiro di Spara su Guendalina: Mira 7, −2 Sanguinante, 5 dadi, riesce dal 6.
 const conto = N.contoDelTiro({ nome: "Spara", riserva: c.azioni[0].riserva, soglia: 0, bersaglio: { uuid: "Actor.pg", name: "Guendalina" }, danno: 4, aggravato: false, localize, format });
-assert.deepEqual([conto.titolo, conto.conto, conto.dadi, conto.esito], ["Spara · su Guendalina", "Mira 7 -2 Atterrato = 5 dadi · riesce dal 6", 5, "danno 4 Superficiali"]);
+assert.deepEqual([conto.titolo, conto.conto, conto.dadi, conto.esito], ["Spara · su Guendalina", "Mira 7 -2 Sanguinante = 5 dadi · riesce dal 6", 5, "danno 4 Superficiali"]);
 
 // La mano del Narratore (Blue, 27/9): +2 sulla scheda entra in ogni riserva, nei casi a dadi, nelle azioni e nel conto della carta.
 const attoreConMano = { ...actor, getFlag: (scope, key) => (scope === MODULE && key === "nemico" ? { ...flags[MODULE].nemico, manoNarratore: 2 } : flags[scope]?.[key]) };
 const conMano = N.prepareNemicoContext({ actor: attoreConMano, items, salute, stato: {}, nomi, condizioniScelta: prepareCondizioni(items), localize, format, lang: "it" });
 assert.deepEqual(conMano.carte.map((carta) => [carta.id, carta.riserva.totale, carta.riserva.cambiata]), [["physical", 5, true], ["social", 7, true], ["mental", 8, true]], "la mano entra nelle tre riserve");
 assert.deepEqual(conMano.carte[0].casi.map((k) => [k.nome, k.value]), [["Mira", 7], ["Da lontano", 6]], "nei casi a dadi sì, nelle soglie no");
-assert.equal(conMano.carte[0].riserva.hint, "Tira Fisico: 5 -2 Atterrato +2 Mano del Narratore = 5 dadi");
+assert.equal(conMano.carte[0].riserva.hint, "Tira Fisico: 5 -2 Sanguinante +2 Mano del Narratore = 5 dadi");
 assert.deepEqual([conMano.manoNarratore.value, conMano.manoNarratore.segno, conMano.manoNarratore.on, conMano.manoNarratore.meno, conMano.manoNarratore.dadiTesto], [2, "+2", true, false, "+2 dadi a ogni tiro"]);
 const contoMano = N.contoDelTiro({ nome: "Spara", riserva: conMano.azioni[0].riserva, soglia: 0, localize, format });
-assert.deepEqual([contoMano.conto, contoMano.dadi], ["Mira 7 -2 Atterrato +2 Mano del Narratore = 7 dadi · riesce dal 6", 7]);
+assert.deepEqual([contoMano.conto, contoMano.dadi], ["Mira 7 -2 Sanguinante +2 Mano del Narratore = 7 dadi · riesce dal 6", 7]);
 const testaConMano = T.testa({ ...conMano, locked: false, isGM: true, tabAttiva: "gioco", tabs: {}, tab: { id: "gioco", group: "primary", cssClass: "active" } });
 for (const marker of ['name="flags.wod5e-mage.nemico.manoNarratore" value="2"', 'wod5e-mage-nemico-mano-segno piu">+2 dadi a ogni tiro</b>']) {
   assert.ok(testaConMano.includes(marker), `testa con la mano: manca ${marker}`);

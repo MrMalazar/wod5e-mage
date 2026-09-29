@@ -27,7 +27,11 @@
  *   scritti; poi si tira coi tre tasti;
  * - la Difficoltà scritta a mano sovrascrive quella calcolata;
  * - senza Difficoltà (a mano, o dagli Ambiti nella Magick) il tiro non
- *   parte (Blue, 16/9 sera).
+ *   parte (Blue, 16/9 sera);
+ * - le Condizioni (la regola di base del 29/9): quelle accese che pesano
+ *   sul tipo del tiro tolgono i loro dadi sul totale (−2 ai gradi 1 e 2,
+ *   −1 ai lievi), il grado 2 porta la riuscita all'8, il grado 3 fa
+ *   fallire il tiro; ognuna si toglie con un clic quando non c'entra.
  */
 import { calculateAretePrize, calculateMagickThreshold, capBonusDice, SKILL_SPECIALTY_DICE, THRESHOLD_CAP } from "./arete.js";
 import { BUSSOLA_DICE } from "./bussola.js";
@@ -46,6 +50,9 @@ export const EXTRA_DICE_CAP = 3;
 
 /** Il ritocco dei Dadi (23/9): dadi in più o in meno sul totale, fuori dalla riserva e dal tetto, entro ±10. */
 export const DADI_ADJUST_CAP = 10;
+
+/** Il grado 2 di una Condizione (29/9): la riuscita dall'8. */
+export const CONDIZIONE_OTTO = 8;
 
 /** Lo stato vuoto: niente cliccato, niente scritto a mano. */
 export function emptyTiro() {
@@ -69,7 +76,9 @@ export function emptyTiro() {
     kind: null,
     spell: null,
     // L'effetto caricato che non sta nel Grimorio (una Formula dalla pagina, 26/9): viaggia qui.
-    spellData: null
+    spellData: null,
+    // Le Condizioni tolte a mano da questo tiro (29/9): { id: false }; le altre pesano.
+    condizioni: {}
   };
 }
 
@@ -80,7 +89,8 @@ function clone(tiro) {
     spheres: [...(tiro?.spheres ?? [])],
     // Gli Ambiti coi nomi di oggi: l'Area di ieri è il livello dei Bersagli (23/9).
     scopes: normalizeScopeLevels(tiro?.scopes ?? {}),
-    traits: [...(tiro?.traits ?? [])]
+    traits: [...(tiro?.traits ?? [])],
+    condizioni: { ...(tiro?.condizioni ?? {}) }
   };
 }
 
@@ -320,6 +330,19 @@ export function toggleSforza(tiro) {
 }
 
 /**
+ * Una Condizione sul tiro (29/9): un clic la toglie da questo tiro, perché
+ * non c'entra con quello che il personaggio fa; un altro la rimette.
+ */
+export function toggleCondizioneTiro(tiro, id) {
+  const next = clone(tiro);
+  const key = String(id ?? "");
+  if (!key) return next;
+  if (next.condizioni[key] === false) delete next.condizioni[key];
+  else next.condizioni[key] = false;
+  return next;
+}
+
+/**
  * Il ritocco dei Dadi (Blue, 23/9: «più e meno modificabili manualmente a
  * ognuno degli elementi»): dadi in più o in meno sul totale, fuori dalla
  * riserva e dal tetto +3, come i dadi che il Narratore dà col verdetto.
@@ -447,7 +470,8 @@ export function livelloContato(level, free) {
  * effettiva (scritta a mano o calcolata), dadi, riuscita da (6 o 8),
  * Quintessenza spesa, le note del potere, gli effetti esclusi col motivo,
  * la riuscita senza tirare e se il potere è entrato «attivo» (si paga il
- * suo costo e si conta l'uso).
+ * suo costo e si conta l'uso). `condizioni` è il conto delle Condizioni sul
+ * tiro (condizioniDelTiro): i dadi che tolgono, l'8, il tiro che fallisce.
  */
 export function contoTiro(tiro, {
   arete = 0,
@@ -459,7 +483,8 @@ export function contoTiro(tiro, {
   quintessenceAvailable = 0,
   form = "",
   power = null,
-  powerCtx = {}
+  powerCtx = {},
+  condizioni = null
 } = {}) {
   const magick = isMagick(tiro);
   const areteValue = count(arete);
@@ -500,10 +525,17 @@ export function contoTiro(tiro, {
   const difficulty = manual ? count(tiro.difficulty) : computed;
   // Il ritocco dei Dadi (23/9): sul totale, fuori dal tetto, anche in meno.
   const adjust = Math.max(Math.min(Math.trunc(Number(tiro?.dadi) || 0), DADI_ADJUST_CAP), -DADI_ADJUST_CAP);
-  const conto = ramoCDice(Math.max(pool + count(powered.dice) + adjust, 0), difficulty);
-  const successFrom = powered.difficulty ?? successThreshold(magick && usesAdvancedDifficulty({ witnesses: tiro?.kind === "testimoni" }));
+  // Le Condizioni (29/9): i dadi sul totale, fuori dal tetto come il ritocco; l'8; il fallimento.
+  const condDadi = Math.min(Math.trunc(Number(condizioni?.dadi) || 0), 0);
+  const condOtto = Boolean(condizioni?.otto);
+  const fallisce = Boolean(condizioni?.fallisce);
+  const conto = ramoCDice(Math.max(pool + count(powered.dice) + adjust + condDadi, 0), difficulty);
+  const successBase = powered.difficulty ?? successThreshold(magick && usesAdvancedDifficulty({ witnesses: tiro?.kind === "testimoni" }));
+  const successFrom = condOtto ? Math.max(successBase, CONDIZIONE_OTTO) : successBase;
   // La riuscita senza tirare, a conto fatto (le condizioni sui dadi si giudicano qui).
-  const riuscita = riuscitaSenzaTirare(powered.autoSuccess, conto.dice);
+  const riuscitaConto = riuscitaSenzaTirare(powered.autoSuccess, conto.dice);
+  // Una Condizione che fa fallire vince anche sulla riuscita senza tirare.
+  const riuscita = fallisce ? { ok: false, nota: "", motivo: "" } : riuscitaConto;
 
   return {
     magick,
@@ -523,10 +555,14 @@ export function contoTiro(tiro, {
     manual,
     difficultySet: hasDifficulty(tiro),
     difficulty,
-    dice: conto.dice,
+    dice: fallisce ? 0 : conto.dice,
     adjust,
-    impossible: conto.dice === 0 && !riuscita.ok,
+    impossible: fallisce || (conto.dice === 0 && !riuscita.ok),
     successFrom,
+    // Le Condizioni sul tiro (29/9): i dadi tolti, l'8, chi fa fallire, e la
+    // riuscita di prima, per il Narratore che decide che non contano.
+    condizioni: { dadi: condDadi, otto: condOtto, fallisce, perche: [...(condizioni?.perche ?? [])], successFromSenza: successBase },
+    fallisce,
     powerNotes: powered.notes ?? [],
     powerSkipped: (powered.esclusi ?? []).filter((entry) => entry.motivo !== "attivo").map((entry) => ({ motivo: entry.motivo, nota: entry.effect?.nota ?? "" })),
     powerActive: Boolean(powered.attivo),

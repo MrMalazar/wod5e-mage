@@ -33,10 +33,19 @@
         <div class="wod5e-mage-verdetto-riga wod5e-mage-verdetto-uscita">
             <span class="wod5e-mage-verdetto-etichetta">{{localize "WOD5E_MAGE.Tiro.Dice"}}</span>
             <b data-role="dadi">{{dice}}</b>
-            <small>{{localize "WOD5E_MAGE.Tiro.SuccessFrom"}} {{successFrom}}+</small>
+            <small>{{localize "WOD5E_MAGE.Tiro.SuccessFrom"}} <span data-role="riuscita">{{successFrom}}</span>+</small>
         </div>
     </div>
 
+    {{!-- Le Condizioni (29/9): quelle che pesano sul tiro, quelle che il giocatore ha tolto, e la
+         casella per dire che su questo tiro non contano (tornano i dadi, la riuscita, niente fallimento). --}}
+    {{#if condizioni}}
+        <div class="wod5e-mage-verdetto-condizioni{{#if condizioni.fallisce}} fallisce{{/if}}">
+            <p><b>{{localize "WOD5E.ItemsList.Conditions"}}:</b> {{condizioni.testo}}</p>
+            <label><input type="checkbox" name="senzaCondizioni"> {{localize "WOD5E_MAGE.Verdetto.SenzaCondizioni"}}</label>
+        </div>
+    {{/if}}
+    {{#if fuori}}<p class="wod5e-mage-verdetto-fuori">{{fuori}}</p>{{/if}}
     {{#if altriTesto}}<p class="wod5e-mage-verdetto-altri">{{altriTesto}}</p>{{/if}}
     <p class="wod5e-mage-verdetto-timer">
         <i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>
