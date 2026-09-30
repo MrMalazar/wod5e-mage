@@ -165,6 +165,21 @@ export function calculateRamoCSuccesses(basicResults = [], paradoxResults = [], 
   return basic + Math.min(paradox, cap);
 }
 
+/**
+ * Il successo paradossale (Blue, 30/9: «lo teniamo ed anzi rimane il
+ * principio»). La riuscita la fanno i dadi della riserva (29/9); se il lancio
+ * riesce e almeno un rosso mostra un successo, il successo è paradossale e
+ * l'effetto lo racconta il Narratore. Vale per le carte coi rossi a parte,
+ * non per i tiri di Abilità né per lo Scoppio. Torna quanti rossi hanno fatto
+ * successo, o 0.
+ */
+export function successoParadossale(card = {}, redResults = []) {
+  if (card?.ramo !== RAMO || card.rossiAParte !== true || card.skill || card.burst || card.burstResult) return 0;
+  if (count(card.total) < 1) return 0;
+  const successFrom = resolveSuccessFrom({ successFrom: card.successFrom, advancedDifficulty: card.advancedDifficulty }, ORIGINAL_SUCCESS_FROM);
+  return (Array.isArray(redResults) ? redResults : []).filter(isActive).filter((result) => isSuccess(result, { successFrom })).length;
+}
+
 /** Il margine dei tiri di Abilità: i successi oltre il primo (il danno: arma più margine). */
 export function ramoCMargin(total) {
   return Math.max(count(total) - 1, 0);

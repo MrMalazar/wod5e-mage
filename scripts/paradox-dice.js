@@ -84,8 +84,9 @@ function registerDiceSoNicePreset(dice3d) {
     font: "Arial Black"
   }, "default");
 
-  // Dal 29/9 i rossi decidono solo lo scoppio: contano l'1 e il 10 (l'occhio),
-  // le altre facce sono vuote anche in 3D.
+  // I rossi a parte (29/9): l'1 e il 10 sono l'occhio, lo scoppio; dal 30/9 la
+  // scintilla torna sull'8 e sul 9, il successo paradossale (il 6 e il 7 restano
+  // vuoti anche coi Volgari senza testimoni: in 3D la faccia non sa la riuscita).
   dice3d.addDicePreset({
     type: "dp",
     labels: [
@@ -96,8 +97,8 @@ function registerDiceSoNicePreset(dice3d) {
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
-      "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
-      "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
+      "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
+      "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-crit-dsn.png"
     ],
     colorset: "mage-paradox",
@@ -448,7 +449,8 @@ export async function executeRamoCRoll({
   if (excess > 0) {
     rollFlavor += renderRollNote(format("WOD5E_MAGE.Arete.BonusCap", { excess }));
   }
-  // I rossi a parte (Blue, 29/9): la carta lo dice, perché nessuno li conti fra i successi.
+  // I rossi a parte (Blue, 29/9): la carta lo dice, perché nessuno li conti fra i successi
+  // (il successo paradossale del 30/9 lo segna la carta, roll-card.js).
   if (conto.paradoxDice > 0 && !bought && !onlyParadox) {
     rollFlavor += renderRollNote(format("WOD5E_MAGE.RamoC.RossiAParte", { reds: conto.paradoxDice }));
   }

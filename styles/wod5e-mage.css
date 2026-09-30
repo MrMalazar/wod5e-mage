@@ -18550,3 +18550,15 @@
   letter-spacing: 0;
   text-transform: none;
 }
+
+/* ----------------------------------------------------------------------
+   Il successo paradossale (Blue, 30/9: «lo teniamo ed anzi rimane il
+   principio»). Il lancio riesce coi dadi della riserva e almeno un rosso fa
+   successo: la carta lo dice, e l'effetto lo racconta il Narratore.
+   ---------------------------------------------------------------------- */
+.wod5e-mage-roll-note-paradossale {
+  border-left: 2px solid var(--mage-rosso, #b5433c);
+  color: var(--mage-rosso-chiaro, #e2a79e);
+  font-style: normal;
+  padding-left: 0.45rem;
+}

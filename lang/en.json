@@ -1258,12 +1258,13 @@
       "DanniDone": "Marked {amount} damage: {sign}.",
       "DanniConverted": "The track was full: {converted} superficial became aggravated.",
       "CambioScena": "Scene change",
-      "CambioScenaHint": "The scene changes: one box locked by the Burn unlocks, the Conviction can regenerate again and +1 Quintessence arrives. Sacrifice boxes stay locked.",
+      "CambioScenaHint": "The scene changes: one box locked by the Burn unlocks, the Conviction can regenerate again and +1 Quintessence arrives (for mages on the Board, the Storyteller's scene change gives it). Sacrifice boxes stay locked.",
       "CambioScenaDone": "Scene change: one Burn box unlocked.",
       "CambioScenaNone": "Scene change: no box locked by the Burn.",
       "LockedHint": "Paradox Burn: it stays at least for the scene. Scene change unlocks it.",
       "CambioScenaQuintessenza": "Scene change: +{points} Quintessence.",
-      "CambioScenaRuotaPiena": "Scene change: the Wheel is full, no Quintessence gets in."
+      "CambioScenaRuotaPiena": "Scene change: the Wheel is full, no Quintessence gets in.",
+      "CambioScenaQuadro": "Scene change: you are on the Board, the scene's Quintessence comes from the Storyteller's scene change."
     },
     "Contraccolpo": {
       "Label": "Deny the Backlash",
@@ -1616,7 +1617,8 @@
       "BoughtBanner": "Success bought",
       "MarginHint": "Margin: successes beyond the first (damage: weapon plus margin).",
       "SkillRoll": "Skill roll",
-      "RossiAParte": "Red dice apart: {reds}. They only decide whether Paradox bursts; success comes from the pool dice."
+      "RossiAParte": "Red dice apart: {reds}. Success comes from the pool dice; the red dice decide the burst (1 or 10) and, if the roll succeeds, the paradoxical success.",
+      "SuccessoParadossale": "Paradoxical success: the roll succeeds and at least one red die succeeded. The Storyteller narrates the effect."
     },
     "Ustione": {
       "Label": "Burn",
@@ -1811,6 +1813,8 @@
       "Finisce": "Ends:",
       "FinisceNiente": "No effect on the mages ends with the scene change.",
       "PostoHint": "A dissonant or assonant place counts in the roll's verdict, not in the menu prices.",
+      "RicaricaHint": "Every mage on the Board gets +1 Quintessence, in the free cells of the Wheel.",
+      "Ricarica": "Scene change: +1 Quintessence to {n} mages on the Board.",
       "Trascina": {
         "nonMago": "{name} is not a mage: only mages enter the Board.",
         "giaDentro": "{name} is already on the Board.",
@@ -2640,8 +2644,8 @@
     "Sacrificio": {
       "Label": "Sacrifice",
       "Title": "Sacrifice",
-      "Hint": "Sacrifice: take damage of your choice and gain Quintessence, 1 per superficial and 3 per aggravated. It is a quick action, like a reaction. The boxes stay locked until you repay or the session ends.",
-      "Intro": "Choose the damage you take. Each superficial gives 1 Quintessence, each aggravated 3. The damage is paradoxical: it does not heal, not even with Magick, until you repay the same Quintessence or the session ends.",
+      "Hint": "Sacrifice: take damage of your choice and gain Quintessence, 1 per superficial and 3 per aggravated. It is a quick action and uses the turn's reaction. The boxes stay locked until you repay or the session ends.",
+      "Intro": "Choose the damage you take. Each superficial gives 1 Quintessence, each aggravated 3. The Sacrifice uses the turn's reaction. The damage is paradoxical: it does not heal, not even with Magick, until you repay the same Quintessence or the session ends.",
       "Limiti": "Free Health boxes: {boxes}. Room on the Wheel: {cells}.",
       "Sign": "Which damage",
       "Amount": "How many",
@@ -2650,7 +2654,7 @@
       "Ok": "Sacrifice",
       "NoBoxes": "Sacrifice: Health has no free boxes.",
       "NoRoom": "Sacrifice: the Wheel has no room for all this Quintessence.",
-      "Chat": "Sacrifice: {amount} damage ({sign}) for {points} Quintessence. The boxes stay locked until repaid or the session ends.",
+      "Chat": "Sacrifice, with the turn's reaction: {amount} damage ({sign}) for {points} Quintessence. The boxes stay locked until repaid or the session ends.",
       "Done": "Sacrifice: {amount} damage ({sign}), +{points} Quintessence."
     },
     "Debito": {

@@ -14,16 +14,17 @@ export const PARADOX_DICE_FACES = Object.freeze({
 });
 
 /**
- * La faccia di un rosso. Dal 29/9 (Blue) i rossi si tirano a parte e decidono
- * solo lo scoppio: contano l'1 e il 10, l'occhio; le altre facce sono vuote,
- * anche sopra la riuscita, perché un rosso non fa mai successo. Le carte di
- * prima (`rossiAParte: false`) mostrano ancora la scintilla dalla riuscita in su.
+ * La faccia di un rosso. Dal 29/9 (Blue) i rossi si tirano a parte e non
+ * contano per la riuscita, che fanno i dadi della riserva. L'1 e il 10 sono
+ * l'occhio, lo scoppio. Dal 30/9 (Blue: il successo paradossale «lo teniamo
+ * ed anzi rimane il principio») la scintilla torna dalla riuscita in su: un
+ * rosso che fa successo, col lancio riuscito, rende il successo paradossale.
  */
-export function getParadoxDieResult(result, { successFrom = SUCCESS_FROM, rossiAParte = true } = {}) {
+export function getParadoxDieResult(result, { successFrom = SUCCESS_FROM } = {}) {
   const value = Number(result);
   if (value === 1) return "bestial";
   if (value === 10) return "paradoxTen";
-  if (!rossiAParte && value >= successFrom) return "success";
+  if (value >= successFrom) return "success";
   return "failure";
 }
 

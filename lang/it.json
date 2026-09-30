@@ -1258,12 +1258,13 @@
       "DanniDone": "Segnati {amount} danni: {sign}.",
       "DanniConverted": "Il tracciato era pieno: {converted} superficiali sono diventati aggravati.",
       "CambioScena": "Cambio Scena",
-      "CambioScenaHint": "La scena cambia: una casella bloccata dall'Ustione si sblocca, la Convinzione può rigenerare di nuovo e arriva +1 Quintessenza. Le caselle del Sacrificio restano bloccate.",
+      "CambioScenaHint": "La scena cambia: una casella bloccata dall'Ustione si sblocca, la Convinzione può rigenerare di nuovo e arriva +1 Quintessenza (ai maghi del Quadro la dà il Cambio scena del Narratore). Le caselle del Sacrificio restano bloccate.",
       "CambioScenaDone": "Cambio Scena: una casella dell'Ustione sbloccata.",
       "CambioScenaNone": "Cambio Scena: nessuna casella bloccata dall'Ustione.",
       "LockedHint": "Ustione del Paradosso: resta almeno per la scena. Cambio Scena la sblocca.",
       "CambioScenaQuintessenza": "Cambio Scena: +{points} Quintessenza.",
-      "CambioScenaRuotaPiena": "Cambio Scena: la Ruota è piena, la Quintessenza non entra."
+      "CambioScenaRuotaPiena": "Cambio Scena: la Ruota è piena, la Quintessenza non entra.",
+      "CambioScenaQuadro": "Cambio Scena: sei nel Quadro, la Quintessenza della scena la dà il Cambio scena del Narratore."
     },
     "Contraccolpo": {
       "Label": "Negare il Contraccolpo",
@@ -1616,7 +1617,8 @@
       "BoughtBanner": "Riuscita comprata",
       "MarginHint": "Margine: i successi oltre il primo (il danno: arma più margine).",
       "SkillRoll": "Tiro di Abilità",
-      "RossiAParte": "Rossi a parte: {reds}. Decidono solo se il Paradosso scoppia; la riuscita la fanno i dadi della riserva."
+      "RossiAParte": "Rossi a parte: {reds}. La riuscita la fanno i dadi della riserva; i rossi decidono lo scoppio (1 o 10) e, se il lancio riesce, il successo paradossale.",
+      "SuccessoParadossale": "Successo paradossale: il lancio riesce e almeno un rosso ha fatto successo. L'effetto lo racconta il Narratore."
     },
     "Ustione": {
       "Label": "Ustione",
@@ -1811,6 +1813,8 @@
       "Finisce": "Finisce:",
       "FinisceNiente": "Nessun effetto addosso finisce col cambio di scena.",
       "PostoHint": "Il posto dissonante o assonante conta nel verdetto del lancio, non nei prezzi del menù.",
+      "RicaricaHint": "Ogni mago del Quadro prende +1 Quintessenza, nelle caselle libere della Ruota.",
+      "Ricarica": "Cambio scena: +1 Quintessenza a {n} maghi del Quadro.",
       "Trascina": {
         "nonMago": "{name} non è un mago: nel Quadro entrano solo i maghi.",
         "giaDentro": "{name} è già nel Quadro.",
@@ -2640,8 +2644,8 @@
     "Sacrificio": {
       "Label": "Sacrificio",
       "Title": "Sacrificio",
-      "Hint": "Sacrificio: prendi danni a tua scelta e ricavi Quintessenza, 1 a superficiale e 3 ad aggravato. È un'azione veloce, come una reazione. Le caselle restano bloccate finché non ripaghi o finisce la sessione.",
-      "Intro": "Scegli il danno che prendi. Ogni superficiale rende 1 Quintessenza, ogni aggravato 3. Il danno è paradossale: non si cura, nemmeno con la Magick, finché non ripaghi la stessa Quintessenza o finisce la sessione.",
+      "Hint": "Sacrificio: prendi danni a tua scelta e ricavi Quintessenza, 1 a superficiale e 3 ad aggravato. È un'azione veloce, e usa la reazione del turno. Le caselle restano bloccate finché non ripaghi o finisce la sessione.",
+      "Intro": "Scegli il danno che prendi. Ogni superficiale rende 1 Quintessenza, ogni aggravato 3. Il Sacrificio usa la reazione del turno. Il danno è paradossale: non si cura, nemmeno con la Magick, finché non ripaghi la stessa Quintessenza o finisce la sessione.",
       "Limiti": "Caselle libere nella Salute: {boxes}. Posto sulla Ruota: {cells}.",
       "Sign": "Che danno",
       "Amount": "Quanti",
@@ -2650,7 +2654,7 @@
       "Ok": "Sacrifica",
       "NoBoxes": "Sacrificio: la Salute non ha caselle libere.",
       "NoRoom": "Sacrificio: sulla Ruota non c'è posto per tutta questa Quintessenza.",
-      "Chat": "Sacrificio: {amount} danni ({sign}) per {points} Quintessenza. Le caselle restano bloccate fino al saldo o a fine sessione.",
+      "Chat": "Sacrificio, con la reazione del turno: {amount} danni ({sign}) per {points} Quintessenza. Le caselle restano bloccate fino al saldo o a fine sessione.",
       "Done": "Sacrificio: {amount} danni ({sign}), +{points} Quintessenza."
     },
     "Debito": {

@@ -61,12 +61,11 @@ export function applyMageDiceClass(message, html) {
   const paradoxDice = html.querySelectorAll(".roll-img.paradox-dice");
   const paradoxResults = message?.rolls?.[0]?.advancedDice?.results ?? [];
 
-  // I rossi a parte (29/9): sulle carte nuove un rosso non fa mai successo; le carte di prima tengono le loro facce.
-  const rossiAParte = card.rossiAParte === true;
+  // I rossi a parte (29/9) non contano per la riuscita, ma la scintilla resta (30/9): segna il successo paradossale.
   paradoxDice.forEach((die, index) => {
     const result = paradoxResults[index]?.result;
     if (result !== undefined) {
-      applyDieFace(die, getParadoxDieImage(result, { successFrom, rossiAParte }), "paradox-dice-empty");
+      applyDieFace(die, getParadoxDieImage(result, { successFrom }), "paradox-dice-empty");
     }
   });
 

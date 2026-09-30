@@ -1,5 +1,6 @@
 import { MODULE_ID } from "./constants.js";
 import { addParadoxToBalance, addQuintessenceToBalance, caselleLibere, getMagickBalance, getPersistentMagickResources, MAGICK_TRACK_MAX } from "./magick-balance.js";
+import { MAGHI_SETTING } from "./menu-paradosso.js";
 import { joinLobby } from "./paradosso-narratore.js";
 import { POTERI_USI_FLAG, riarmaUsi } from "./poteri.js";
 
@@ -729,10 +730,26 @@ export async function onSaluteCellChange(event, target) {
 export const RICARICA_SCENA = 1;
 
 /**
+ * Il mago sta nel Quadro del Narratore? Dal 30/9 (Blue) il Cambio scena del
+ * Quadro dà il +1 ai suoi maghi: il tasto della scheda non lo ridà, così la
+ * Quintessenza della scena arriva una volta sola.
+ */
+export function nelQuadro(actor) {
+  if (!actor?.id) return false;
+  try {
+    const ids = game.settings?.get?.(MODULE_ID, MAGHI_SETTING)?.ids ?? [];
+    return ids.map(String).includes(String(actor.id));
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Cambio Scena (verdetto di Blue, 11/9): sotto Nuova sessione, il tasto
  * sblocca una casella bloccata dall'Ustione e riarma la Convinzione; dal
  * 29/9 dà anche +1 Quintessenza, nelle caselle libere della Ruota. Il
- * debito del Sacrificio non si sblocca.
+ * debito del Sacrificio non si sblocca. Dal 30/9 ai maghi del Quadro il +1
+ * lo dà il Cambio scena del Narratore (`nelQuadro`), e qui non si ridà.
  */
 export async function onSaluteCambioScena(event) {
   event.preventDefault();
@@ -740,18 +757,24 @@ export async function onSaluteCambioScena(event) {
   if (!canEdit(actor)) return;
   const salute = getSalute(actor);
   const paradosso = locksAfterScene(salute.paradosso);
-  const ricarica = addQuintessenceToBalance(getMagickBalance(actor), RICARICA_SCENA);
-  await actor.update({
+  const dalQuadro = nelQuadro(actor);
+  const ricarica = dalQuadro ? null : addQuintessenceToBalance(getMagickBalance(actor), RICARICA_SCENA);
+  const update = {
     [`flags.${MODULE_ID}.salute.paradosso`]: paradosso,
     [`flags.${MODULE_ID}.-=convinzioneScena`]: null,
     // I poteri «una volta per scena» tornano disponibili (24/9).
-    [`flags.${MODULE_ID}.${POTERI_USI_FLAG}`]: riarmaUsi(actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {}, "scena"),
-    [`flags.${MODULE_ID}.magickBalance`]: { quintessence: ricarica.quintessence, paradox: ricarica.paradox }
-  });
+    [`flags.${MODULE_ID}.${POTERI_USI_FLAG}`]: riarmaUsi(actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {}, "scena")
+  };
+  if (ricarica) update[`flags.${MODULE_ID}.magickBalance`] = { quintessence: ricarica.quintessence, paradox: ricarica.paradox };
+  await actor.update(update);
   const unlocked = salute.locked - (paradosso.p + paradosso.m);
   ui.notifications.info(unlocked > 0
     ? game.i18n.localize("WOD5E_MAGE.Salute.CambioScenaDone")
     : game.i18n.localize("WOD5E_MAGE.Salute.CambioScenaNone"));
+  if (!ricarica) {
+    ui.notifications.info(game.i18n.localize("WOD5E_MAGE.Salute.CambioScenaQuadro"));
+    return;
+  }
   ui.notifications.info(ricarica.gained > 0
     ? game.i18n.format("WOD5E_MAGE.Salute.CambioScenaQuintessenza", { points: ricarica.gained })
     : game.i18n.localize("WOD5E_MAGE.Salute.CambioScenaRuotaPiena"));

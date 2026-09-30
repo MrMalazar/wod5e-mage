@@ -16,6 +16,7 @@ import {
   ramoCDice,
   ramoCMargin,
   sforzoCost,
+  successoParadossale,
   splitRamoCDice,
   successModifier,
   successThreshold,
@@ -150,12 +151,27 @@ assert.match(getMageDieImage(10), /magick-stellina\.svg$/);
 assert.match(getMageDieImage(7), /dado-vuoto\.svg$/);
 assert.match(getMageDieImage(6), /dado-vuoto\.svg$/);
 assert.equal(getParadoxDieResult(7), "failure");
-// Dal 29/9 i rossi decidono solo lo scoppio: l'8 è una faccia vuota.
-assert.equal(getParadoxDieResult(8), "failure");
+// I rossi a parte (29/9) non contano per la riuscita, ma l'8 mostra la scintilla (30/9, il successo paradossale).
+assert.equal(getParadoxDieResult(8), "success");
 assert.equal(getParadoxDieResult(1), "bestial");
 assert.equal(getParadoxDieResult(10), "paradoxTen");
 assert.match(getMageDieImage(6, { successFrom: 6 }), /magick-scintilla\.svg$/);
-assert.equal(getParadoxDieResult(6, { successFrom: 6 }), "failure", "un rosso non fa mai successo");
+assert.equal(getParadoxDieResult(6, { successFrom: 6 }), "success", "coi Volgari senza testimoni il rosso fa successo dal 6");
+
+// Il successo paradossale (Blue, 30/9): la riserva riesce e almeno un rosso fa successo.
+{
+  const carta = { ramo: "C", rossiAParte: true, total: 1, successFrom: 6 };
+  const rossi = [{ result: 7, active: true }, { result: 3, active: true }];
+  assert.equal(successoParadossale(carta, rossi), 1, "riesce e un rosso fa 7 col 6");
+  assert.equal(successoParadossale({ ...carta, total: 0 }, rossi), 0, "col lancio fallito non c'è");
+  assert.equal(successoParadossale({ ...carta, successFrom: 8 }, rossi), 0, "con testimoni il 7 non è un successo");
+  assert.equal(successoParadossale({ ...carta, successFrom: 8 }, [{ result: 10, active: true }]), 1, "il 10 fa successo, e scoppia");
+  assert.equal(successoParadossale(carta, [{ result: 9, active: false, discarded: true }]), 0, "un rosso scartato non conta");
+  assert.equal(successoParadossale({ ...carta, rossiAParte: false }, rossi), 0, "le carte di prima no");
+  assert.equal(successoParadossale({ ...carta, skill: true }, rossi), 0, "i tiri di Abilità no");
+  assert.equal(successoParadossale({ ...carta, burst: true }, rossi), 0, "lo Scoppio no");
+  assert.equal(successoParadossale(carta, []), 0, "senza rossi no");
+}
 
 // La fascia: un successo basta; le carte vecchie con la riuscita comprata tengono la loro parola.
 assert.equal(rollOutcome(1, 1, (k) => k).text, "WOD5E_MAGE.RollCard.Success");

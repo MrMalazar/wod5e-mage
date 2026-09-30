@@ -103,6 +103,7 @@ globalThis.game = {
 
 const { registerParadossoNarratore, getPool, POOL_SETTING, attoriScheda } = await import(new URL("scripts/paradosso-narratore.js", ROOT).href);
 const { registerQuadroNarratore, QuadroNarratore, nuovaSessione, iniziaSessione, cambioScena, getScena, getOrologi, attoriDelQuadro, statusMago, OROLOGI_SETTING } = await import(new URL("scripts/quadro-narratore.js", ROOT).href);
+const { getMagickBalance } = await import(new URL("scripts/magick-balance.js", ROOT).href);
 const { ADDOSSO_FLAG, CASSETTI_PARADOSSO, MAGHI_SETTING, QUADRO_SETTING, SCENA_SETTING } = await import(new URL("scripts/menu-paradosso.js", ROOT).href);
 registerParadossoNarratore();
 // Il pannello dei giocatori vuole il DOM: al ready passano solo i ganci del Quadro.
@@ -489,10 +490,15 @@ assert.equal(getOrologi()[0].pieni, 1, "la Carica avanza col Volgare");
   delete globalThis.fromUuid;
 }
 
-// 8. Il Cambio scena: Ritorno (fino al giro dopo) finisce, la scena diventa la 2, Rituale.
+// 8. Il Cambio scena: Ritorno (fino al giro dopo) finisce, la scena diventa la 2, Rituale;
+// dal 30/9 (Blue) ogni mago del Quadro prende +1 Quintessenza.
+const primaDelCambio = attoriDelQuadro().map((a) => ({ id: a.id, q: getMagickBalance(a).quintessence }));
 rispondi("cambia", elementoDialogo({ scena: "rituale", posto: "normale" }));
 assert.equal(await cambioScena(), true);
 assert.match(sim.dialoghi.at(-1).content, /Scena 2: dove andate\?/);
+assert.match(sim.dialoghi.at(-1).content, /Ogni mago del Quadro prende \+1 Quintessenza/);
+for (const { id, q } of primaDelCambio) assert.equal(getMagickBalance(game.actors.get(id)).quintessence, q + 1, `+1 Quintessenza a ${id} col Cambio scena del Quadro`);
+assert.ok(sim.notifiche.includes(`Cambio scena: +1 Quintessenza a ${primaDelCambio.length} maghi del Quadro.`), "l'avviso della ricarica");
 assert.match(sim.dialoghi.at(-1).content, /Ritorno · Guendalina/);
 assert.deepEqual(Object.keys(guendalina.getFlag(MODULE, ADDOSSO_FLAG) ?? {}), [], "il Ritorno finisce con la scena");
 assert.equal(getScena().tipo, "rituale");

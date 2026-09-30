@@ -9,7 +9,8 @@ import {
   renderRollSymbols,
   renderRollTitle,
   rollSymbols,
-  rollOutcome
+  rollOutcome,
+  applySuccessoParadossale
 } from "../scripts/roll-card.js";
 import { SCOPE_ICONS, SCOPES } from "../scripts/scopes.js";
 
@@ -173,5 +174,27 @@ assert.match(rollCard, /data\.traits \? "" : renderRollSymbols\(data\.symbols \?
 assert.match(rollCard, /export function rollActionsBox\(target\)/);
 assert.match(rollCard, /export function markRollOpen\(html\)/);
 assert.match(paradox, /cardData\.total = roll\._total;/);
+
+// Il successo paradossale sulla carta (Blue, 30/9): la nota compare se il lancio riesce e un rosso fa successo.
+{
+  const prima = globalThis.game;
+  globalThis.game = { i18n: { localize: (k) => k } };
+  const finto = () => {
+    const target = { html: "", querySelector: (sel) => (sel === ".wod5e-mage-roll-note-paradossale" && target.html.includes("wod5e-mage-roll-note-paradossale") ? {} : null), insertAdjacentHTML: (_pos, h) => { target.html += h; } };
+    return { target, html: { querySelector: (sel) => (sel === ".dice-result" ? target : null) } };
+  };
+  const messaggio = (rossi) => ({ rolls: [{ advancedDice: { results: rossi.map((result) => ({ result, active: true })) } }] });
+  const carta = { ramo: "C", rossiAParte: true, total: 1, successFrom: 6 };
+  let f = finto();
+  assert.equal(applySuccessoParadossale(messaggio([7, 2]), f.html, carta), true);
+  assert.match(f.target.html, /wod5e-mage-roll-note-paradossale/);
+  assert.match(f.target.html, /WOD5E_MAGE\.RamoC\.SuccessoParadossale/);
+  assert.equal(applySuccessoParadossale(messaggio([7, 2]), f.html, carta), false, "una nota sola per render");
+  f = finto();
+  assert.equal(applySuccessoParadossale(messaggio([7]), f.html, { ...carta, total: 0 }), false, "col lancio fallito niente nota");
+  f = finto();
+  assert.equal(applySuccessoParadossale(messaggio([5, 4]), f.html, carta), false, "senza rossi a successo niente nota");
+  globalThis.game = prima;
+}
 
 console.log("Roll outcome tests passed.");

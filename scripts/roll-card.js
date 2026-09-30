@@ -1,7 +1,7 @@
 import { MODULE_ID } from "./constants.js";
 import { SCOPE_ICONS } from "./scopes.js";
 import { traitIcon } from "./tratti-icone.js";
-import { RAMO, ramoCMargin } from "./ramo-c.js";
+import { RAMO, ramoCMargin, successoParadossale } from "./ramo-c.js";
 
 /**
  * La carta del tiro in chat, riletta con Blue (10/9 notte): in testa «Tiro
@@ -281,12 +281,28 @@ export function wireRollDetails(html, messageId) {
   return true;
 }
 
+/**
+ * Il successo paradossale sulla carta (Blue, 30/9): il lancio riesce coi dadi
+ * della riserva e almeno un rosso fa successo; l'effetto lo racconta il
+ * Narratore. Si legge a ogni render, così vale anche dopo il ritiro con la
+ * Volontà.
+ */
+export function applySuccessoParadossale(message, html, data) {
+  const target = html?.querySelector?.(".dice-result");
+  if (!target || target.querySelector(".wod5e-mage-roll-note-paradossale")) return false;
+  const reds = message?.rolls?.[0]?.advancedDice?.results ?? [];
+  if (!successoParadossale(data, reds)) return false;
+  target.insertAdjacentHTML("beforeend", renderRollNote(game.i18n.localize("WOD5E_MAGE.RamoC.SuccessoParadossale"), "paradossale"));
+  return true;
+}
+
 export function decorateRollCard(message, html) {
   const data = message?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG);
   if (!data || !html?.querySelector) return false;
   applyMageTotal(html, data);
   applyMageTitle(html, data);
   wireRollDetails(html, message.id);
+  applySuccessoParadossale(message, html, data);
   const icons = html.querySelector(".dice-result .dice-icons");
   if (!icons || icons.parentElement.querySelector(".wod5e-mage-roll-top")) return false;
 

@@ -12,7 +12,7 @@
  */
 import { MODULE_ID } from "./constants.js";
 import { activeCondizioni, findCondizione } from "./condizioni.js";
-import { getMagickBalance } from "./magick-balance.js";
+import { addQuintessenceToBalance, getMagickBalance } from "./magick-balance.js";
 import { isMageActor } from "./mage-dice.js";
 import {
   ADDOSSO_FLAG,
@@ -49,7 +49,7 @@ import { addPoints, getPool, LOBBY_FLAG, openSpendDialog, POOL_SETTING, resetPoo
 import { prepareAnchors } from "./personaggio-extra.js";
 import { poteriDelPersonaggio } from "./poteri.js";
 import { ROLL_CARD_FLAG } from "./roll-card.js";
-import { getSalute } from "./salute.js";
+import { getSalute, RICARICA_SCENA } from "./salute.js";
 import { isChiaro, TEMA_CLASSE, TEMA_SETTING } from "./tema.js";
 
 const RADICE = `modules/${MODULE_ID}/templates/quadro`;
@@ -1076,7 +1076,23 @@ export async function iniziaSessione({ tipo = "", posto = "normale" } = {}) {
   return true;
 }
 
-/** Il Cambio scena: la scena dopo e il posto; finisce quello che dura una scena; l'orologio dell'Ancora avanza. */
+/**
+ * La ricarica della scena dal Quadro (Blue, 30/9): +1 Quintessenza a ogni
+ * mago del Quadro, nelle caselle libere della Ruota. Torna quanti l'hanno
+ * presa. Il Cambio Scena della scheda, per i maghi del Quadro, non la ridà.
+ */
+export async function ricaricaDelQuadro(maghi = attoriDelQuadro()) {
+  let presi = 0;
+  for (const actor of maghi) {
+    const ricarica = addQuintessenceToBalance(getMagickBalance(actor), RICARICA_SCENA);
+    if (ricarica.gained <= 0) continue;
+    await actor.setFlag(MODULE_ID, "magickBalance", { quintessence: ricarica.quintessence, paradox: ricarica.paradox });
+    presi += 1;
+  }
+  return presi;
+}
+
+/** Il Cambio scena: la scena dopo e il posto; finisce quello che dura una scena; l'orologio dell'Ancora avanza; +1 Quintessenza ai maghi del Quadro. */
 export async function cambioScena() {
   if (!game.user?.isGM) return false;
   const localize = localizer();
@@ -1124,6 +1140,8 @@ export async function cambioScena() {
     if (Object.keys(dopo).length !== Object.keys(addosso).length) await actor.setFlag(MODULE_ID, ADDOSSO_FLAG, dopo);
   }
   await avanzaOrologiPer("scena");
+  const ricaricati = await ricaricaDelQuadro();
+  if (ricaricati > 0) ui.notifications.info(game.i18n.format("WOD5E_MAGE.Menu.Ricarica", { n: ricaricati }));
   const pool = getPool();
   await game.settings.set(MODULE_ID, POOL_SETTING, { ...pool, log: [...pool.log, { kind: "scena", amount: 0, when: Date.now(), scena: scena.numero + 1 }] });
   await setScena({ tipo: scelta.tipo, posto: scelta.posto, numero: scena.numero + 1 });

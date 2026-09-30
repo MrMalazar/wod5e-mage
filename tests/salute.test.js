@@ -22,7 +22,8 @@ import {
   saluteDamageOutcome,
   saluteWithDamage,
   saluteWithMentalAggravated,
-  normalizeDamageChoice
+  normalizeDamageChoice,
+  nelQuadro
 } from "../scripts/salute.js";
 
 function actor({ stamina = 2, resolve = 3, salute } = {}) {
@@ -209,3 +210,14 @@ assert.deepEqual(saluteWithDamage({ pa: 0, ps: 6, ma: 0, ms: 0 }, 6, { ma: 1 }),
 }
 
 console.log("Salute tests passed.");
+
+// La ricarica dal Quadro (Blue, 30/9): ai maghi del Quadro il +1 lo dà il Cambio scena del Narratore.
+{
+  const prima = globalThis.game;
+  globalThis.game = { settings: { get: (scope, key) => (scope === "wod5e-mage" && key === "quadroMaghi" ? { ids: ["a1"] } : undefined) } };
+  assert.equal(nelQuadro({ id: "a1" }), true, "nel Quadro: la Quintessenza della scena la dà il Narratore");
+  assert.equal(nelQuadro({ id: "a2" }), false, "fuori dal Quadro: la dà il Cambio Scena della scheda");
+  globalThis.game = { settings: { get: () => { throw new Error("impostazione non registrata"); } } };
+  assert.equal(nelQuadro({ id: "a1" }), false, "senza il Quadro registrato la scheda dà la sua");
+  globalThis.game = prima;
+}
