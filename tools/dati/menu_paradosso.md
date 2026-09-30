@@ -950,7 +950,7 @@ Il menù non sostituisce il tuo lavoro di sempre, lo affianca. Le leve qui sotto
 
 **I nemici.** La Magick dei nemici è tua: la soglia la regoli come vuoi e non c'è bisogno di pagarla. Si paga solo chi entra in scena per il Paradosso: le Presenze.
 
-**Il successo paradossale.** Quando i dadi rossi fanno successi l'effetto riesce, e lo racconti tu: gli dai forma e ci fai accadere dentro qualcosa.
+**Il successo paradossale.** Quando il lancio riesce e anche i dadi rossi fanno successi, l'effetto lo racconti tu: gli dai forma e ci fai accadere dentro qualcosa.
 
 **Il prezzo.** A tiro fallito tratti col giocatore il prezzo per ribaltarlo, come sempre.
 
