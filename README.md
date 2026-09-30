@@ -61,12 +61,14 @@ cap, never for Hybrid Magick; since 27 September 2026 the prize adds dice
 and no longer lowers the threshold), Harmony is a plain number of dice the
 other Mages grant (counted at the table), and Harmony and every positive
 modifier share a +3 cap that the confirmation dialog enforces. Every unlocked Sphere shows its dots and
-the player clicks the level used; the seven Scopes (Targets, Conditions,
-Duration, Impact, Range, Potency, Precision) each show seven dots for their
+the player clicks the level used; the six Scopes (Targets, Conditions,
+Duration, Range, Potency, Precision) each show seven dots for their
 level, and an icon beside the Scopes header opens the Scopes table for
-reference. Since the table of 23 September 2026 every Scope reads through
-two lenses (Effect or Area, Malus or Complexity, game or world time, Epicness
-or Information, fight or narrative, Damage or Weight) on a scale from 0 to
+reference. Since the table of 23 September 2026, reworked on 29 September
+(Impact removed; Information moved to Precision; Influence and Benefit added),
+every Scope reads through two or three lenses (Effect or Area; Malus,
+Complexity or Benefit; game or world time; fight or narrative Range; Damage,
+Weight or Influence; fight, narrative or Information Precision) on a scale from 0 to
 7: 0 is the free base, each level is worth its number, the threshold is the
 sum of the levels used, at most three Scopes rise above 0 in one casting,
 and an impossible feat takes +5 after the count. A Scope covered by a Sphere
@@ -83,7 +85,7 @@ dot rating. Each listed Sphere displays its Influence description for ratings on
 through five, and the leftmost empty marker returns a Sphere to zero. Scopes
 are free for everyone (no Sphere unlocks or forbids one): the Traits page shows
 no Scope counters at all — the Magick tab ends with "The Scopes" table
-(seven Scopes, two lenses each, over the levels 0 to 7 with the 0 column
+(six Scopes, two or three lenses each, over the levels 0 to 7 with the 0 column
 shaded; Damage reads as Areté plus a number per level, drawn as the Areté
 sigil and the number; game Duration carries the time symbols, world Duration
 and Area a symbol per cell, Targets the person icon; every cell explains

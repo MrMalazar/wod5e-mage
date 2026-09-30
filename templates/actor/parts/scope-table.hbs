@@ -1,5 +1,5 @@
-{{!-- La tavola degli Ambiti (23/9): sette Ambiti, due lenti l'uno, otto
-     livelli dallo 0 al 7. Lo 0 è la base e non costa; ogni livello vale il
+{{!-- La tavola degli Ambiti (23/9, rifatta il 29/9): sei Ambiti, due o tre
+     lenti l'uno, otto livelli dallo 0 al 7. Lo 0 è la base e non costa; ogni livello vale il
      suo numero e la soglia è la somma. --}}
 <section class="wod5e-mage-scope-table">
     {{!-- Il titolo lo porta la tendina della pagina Magick (21/9). La lettura della tavola, dalla guida degli Ambiti (23/9). --}}
@@ -18,7 +18,7 @@
             <tbody>
                 {{!-- Gli Ambiti in ordine alfabetico (6/9). Due colonne di testa
                      (verdetto di Blue, 7/9): il nome dell'Ambito, che occupa le
-                     sue due righe e nel sorvolo dice cosa misura, e la lente. --}}
+                     sue righe e nel sorvolo dice cosa misura, e la lente. --}}
                 {{#each scopeTable.groups as |group|}}
                     {{#each group.rows as |row|}}
                     <tr class="scope-{{row.id}}{{#if row.small}} wod5e-mage-scope-row-small{{/if}}{{#if group.header}} wod5e-mage-scope-sub{{/if}}">

@@ -23,7 +23,7 @@ const prerequisiti = leggi("prerequisiti_poteri.json");
 const rifacimento = leggi("rifacimento.json");
 
 const SFERE = ["correspondence", "entropy", "forces", "life", "matter", "mind", "prime", "spirit", "time"];
-const AMBITI = ["targets", "conditions", "duration", "impact", "range", "potency", "precision"];
+const AMBITI = ["targets", "conditions", "duration", "range", "potency", "precision"];
 const GANCI = ["dice", "threshold", "successFrom", "autoSuccess", "freeScope", "quintessenceOnSkills", "prizeDouble", "nota"];
 const TIRI = ["magick", "abilita", "any"];
 const MODI = ["passivo", "attivo"];

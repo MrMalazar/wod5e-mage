@@ -595,7 +595,7 @@ export function formuleDeiDomini(domini = {}, { effetti = {}, localize = (k) => 
     }));
 }
 
-/** Le lenti degli Ambiti per il cassetto a mano: la scelta per Ambito (0 la prima, 1 la seconda). */
+/** Le lenti degli Ambiti per il cassetto a mano: la scelta per Ambito (0 la prima, 1 la seconda, 2 la terza). */
 export function ambitiAMano(mano = {}, { arete = 1, localize = (k) => k } = {}) {
   const tavola = scopeModes(localize, { arete });
   const livelli = oggetto(mano.livelli);
@@ -603,7 +603,7 @@ export function ambitiAMano(mano = {}, { arete = 1, localize = (k) => k } = {}) 
   const conto = sogliaDagliAmbiti(livelli, { impossibile: Boolean(mano.impossibile) });
   const righe = SCOPES.map((id) => {
     const opzioni = tavola[id] ?? [];
-    const indice = opzioni.length > 1 && intero(lenti[id]) === 1 ? 1 : 0;
+    const indice = Math.min(intero(lenti[id]), Math.max(opzioni.length - 1, 0));
     const lente = opzioni[indice] ?? { readings: [], hints: [], short: "", label: "" };
     const level = Math.min(intero(livelli[id]), SCOPE_MAX_LEVEL);
     return {
@@ -651,12 +651,16 @@ export function magickDelNemico(dati = datiNemico(), { aperte = new Set(), attri
     const come = COME_MAGICK.includes(row.come) ? row.come : "accidentale";
     const da = row.da === "grimorio" ? "grimorio" : "mano";
     const dominio = testo(row.dominio);
+    // Un effetto scritto prima del 29/9 può portare l'Impatto fra gli Ambiti:
+    // l'Impatto è uscito, e la soglia si rifà sugli Ambiti che restano.
+    const conImpatto = intero(oggetto(row.ambiti).impact) > 0;
+    const soglia = conImpatto ? sogliaDagliAmbiti(oggetto(row.ambiti), { impossibile: Boolean(row.impossibile) }).soglia : intero(row.soglia);
     return {
       id: row.id,
       nome: testo(row.nome) || localize("WOD5E_MAGE.Nemico.EffettoNuovo"),
       breve: testo(row.breve),
       testo: testo(row.testo),
-      soglia: intero(row.soglia),
+      soglia,
       ambiti,
       ambitiTesto: ambiti.map((a) => `${a.label} ${a.level}`).join(", "),
       resiste: oggetto(row.resiste),
@@ -670,7 +674,8 @@ export function magickDelNemico(dati = datiNemico(), { aperte = new Set(), attri
       dominioLabel: dominio ? (SPHERES.includes(dominio) ? localize(`WOD5E_MAGE.Spheres.${dominio}`) : dominio) : "",
       formula: testo(row.formula),
       impossibile: Boolean(row.impossibile),
-      danni: Object.hasOwn(oggetto(row.ambiti), "potency") && intero(oggetto(row.ambiti).potency) > 0 && row.lentePotenza !== "peso" ? danniMagick(magick.arete, oggetto(row.ambiti).potency) : null,
+      // I danni solo con la lente Danni: il Peso e l'Influenza (29/9) non feriscono.
+      danni: Object.hasOwn(oggetto(row.ambiti), "potency") && intero(oggetto(row.ambiti).potency) > 0 && !["peso", "influenza"].includes(row.lentePotenza) ? danniMagick(magick.arete, oggetto(row.ambiti).potency) : null,
       aperta: aperte.has(row.id)
     };
   });

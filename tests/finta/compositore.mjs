@@ -52,7 +52,7 @@ const conExtra = S.prepareTiroContext(actor, T.setExtra(tiro, 2));
 assert.deepEqual([conExtra.extra.value, conExtra.extra.dice, conExtra.pool], [2, 2, 16], "i dadi extra entrano nella riserva");
 assert.deepEqual([ctx.prize.on, ctx.prize.arete, ctx.quintessence.available], [true, 3, 4]);
 const rows = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3 });
-assert.equal(rows.length, 7);
+assert.equal(rows.length, 6, "sei Ambiti: l'Impatto è uscito il 29/9");
 assert.equal(rows.find((r) => r.id === "potency").steps[3].active, true);
 const poteri = S.preparePoteriRows(actor, tiro, (k) => strings[k] ?? k);
 assert.equal(poteri.length, 3 + 1, "i poteri inseriti: tre su Forze e uno su Mente (21/9: non gli slot)");
@@ -72,9 +72,9 @@ assert.deepEqual([rows.find((r) => r.id === "potency").reading, rows.find((r) =>
 const potenzaZero = rows.find((r) => r.id === "potency").zero;
 assert.match(potenzaZero.reading, /Scopes\.DamageReading|Areté/, "la base dei Danni, la prima lente");
 assert.equal(potenzaZero.tip, potenzaZero.reading, "sul pallino solo la voce");
-// La lettura («lente») dell'Ambito (16/9 sera; tavola del 23/9: due lenti l'uno): la prima della tavola, o quella scelta col tastino.
+// La lettura («lente») dell'Ambito (16/9 sera; tavola del 23/9, rifatta il 29/9: due o tre lenti l'uno): la prima della tavola, o quella scelta col tastino.
 const potenza = rows.find((r) => r.id === "potency");
-assert.deepEqual([potenza.mode, potenza.modeCount, potenza.modeLabel, potenza.nextModeLabel], ["potencyDamage", 2, "WOD5E_MAGE.Scopes.Sub.potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight"]);
+assert.deepEqual([potenza.mode, potenza.modeCount, potenza.modeLabel, potenza.nextModeLabel], ["potencyDamage", 3, "WOD5E_MAGE.Scopes.Sub.potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight"]);
 assert.equal(potenza.reading, "", "nessuna lettura scelta: niente testo");
 const potenzaPeso = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyWeight" } }).find((r) => r.id === "potency");
 assert.match(potenzaPeso.reading, /Table\.potencyWeight\.4/);
@@ -85,7 +85,7 @@ const portataRiposo = S.prepareScopeRows(T.emptyTiro(), (k) => strings[k] ?? k, 
 assert.deepEqual([portataRiposo.level, portataRiposo.reading, portataRiposo.steps.length, portataRiposo.steps[0].value], [0, "WOD5E_MAGE.Scopes.Table.range.0", 7, 1]);
 // Lo 0 è il primo pallino (Blue, 26/9): fisso, con la lettura della base nel sorvolo; i sette dopo restano quelli.
 assert.deepEqual([portataRiposo.zero.value, portataRiposo.zero.reading, portataRiposo.zero.tip], [0, "WOD5E_MAGE.Scopes.Table.range.0", "WOD5E_MAGE.Scopes.Table.range.0"]);
-assert.equal(rows.every((r) => r.modeCount === 2), true, "ogni Ambito ha due lenti (23/9)");
+assert.deepEqual(Object.fromEntries(rows.map((r) => [r.id, r.modeCount])), { targets: 2, conditions: 3, duration: 2, range: 2, potency: 3, precision: 3 }, "due o tre lenti per Ambito (29/9)");
 const conDanni = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyDamage", targets: "boh" } }).find((r) => r.id === "potency");
 assert.deepEqual([conDanni.mode, conDanni.nextModeLabel], ["potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight"], "dai Danni si passa al Peso");
 assert.equal(conDanni.reading, "Areté WOD5E_MAGE.Scopes.Table.potencyDamage.4", "i Danni: l'Areté più il numero del quarto pallino (la finta traduce solo Areté)");
@@ -94,7 +94,9 @@ const sheetModi = { actor, _tiro: T.emptyTiro(), render: async () => {} };
 await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "potency" } });
 assert.equal(flags["wod5e-mage"].scopeModes.potency, "potencyWeight");
 await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "potency" } });
-assert.equal(flags["wod5e-mage"].scopeModes.potency, "potencyDamage");
+assert.equal(flags["wod5e-mage"].scopeModes.potency, "potencyInfluence", "la terza lente della Potenza (29/9)");
+await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "potency" } });
+assert.equal(flags["wod5e-mage"].scopeModes.potency, "potencyDamage", "e si torna ai Danni");
 assert.deepEqual(S.scopeModesOf(sheetModi), { potency: "potencyDamage" });
 await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "boh" } });
 assert.equal(flags["wod5e-mage"].scopeModes.boh, undefined, "un Ambito che non c'è non scrive niente");
@@ -105,7 +107,7 @@ await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope:
 assert.equal(flags["wod5e-mage"].scopeModes.potency, "potencyWeight", "una lettura che non esiste non cambia niente");
 const righeTendina = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyWeight" } });
 const potenzaTendina = righeTendina.find((r) => r.id === "potency");
-assert.deepEqual([potenzaTendina.multi, potenzaTendina.modeChosen, potenzaTendina.modes.map((m) => m.id), potenzaTendina.modes.find((m) => m.selected).id], [true, true, ["potencyDamage", "potencyWeight"], "potencyWeight"]);
+assert.deepEqual([potenzaTendina.multi, potenzaTendina.modeChosen, potenzaTendina.modes.map((m) => m.id), potenzaTendina.modes.find((m) => m.selected).id], [true, true, ["potencyDamage", "potencyWeight", "potencyInfluence"], "potencyWeight"]);
 const durataTendina = righeTendina.find((r) => r.id === "duration");
 assert.deepEqual([durataTendina.multi, durataTendina.modeChosen, durataTendina.modeShown, durataTendina.steps.length, durataTendina.steps[2].tip, durataTendina.steps[2].reading, durataTendina.modes.some((m) => m.selected)], [true, false, false, 7, "3", "", false], "più letture, nessuna scelta (21/9): i pallini ci sono lo stesso, col solo numero, e nessuna pastiglia accesa");
 assert.equal(potenzaTendina.steps[3].tip, potenzaTendina.steps[3].reading, "con la lettura il tooltip dice solo la voce (27/9)");

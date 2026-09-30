@@ -174,7 +174,11 @@ export function formulaSphereRows(formula, sphereLevels = {}, localize = (key) =
   });
 }
 
-/** La soglia base letta: «4 (Durata 1, Impatto 3)», gli Ambiti nell'ordine in cui Blue li scrive, con le etichette nella lingua in uso. */
+/**
+ * La soglia base letta: «4 (Potenza 3, Durata 1)», gli Ambiti nell'ordine in
+ * cui Blue li scrive, con le etichette nella lingua in uso. Una soglia senza
+ * Ambiti (dal 29/9, tolto l'Impatto, ne restano) si legge «0».
+ */
 export function formulaThresholds(formula, localize = (key) => key) {
   return (formula.thresholds ?? []).map((threshold) => {
     const scopes = Object.keys(threshold.scopes ?? {})
@@ -183,7 +187,7 @@ export function formulaThresholds(formula, localize = (key) => key) {
     return {
       base: threshold.base,
       scopes,
-      text: `${threshold.base} (${scopes.map((scope) => `${scope.label} ${scope.level}`).join(", ")})`
+      text: scopes.length ? `${threshold.base} (${scopes.map((scope) => `${scope.label} ${scope.level}`).join(", ")})` : String(threshold.base)
     };
   });
 }

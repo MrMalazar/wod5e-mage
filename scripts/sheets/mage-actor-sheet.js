@@ -296,7 +296,7 @@ export function onVentaglioChiudi(event) {
  * una tendina aperta alla volta per riquadro. Niente sorvolo (Blue: «voglio
  * solo che quando clicca mi mostra le scelte»). Solo classi: niente render.
  * Sugli Ambiti (20/9, seconda passata) è il clic sul nome: apre la tendina
- * delle letture (Peso, Epicità, Danni…). La Salute e la Saggezza hanno la
+ * delle letture (Peso, Influenza, Danni…). La Salute e la Saggezza hanno la
  * ruota dei comandi, con la sua azione.
  */
 function onCassettoToggle(event, target) {

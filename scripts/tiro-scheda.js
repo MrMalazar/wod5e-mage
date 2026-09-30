@@ -367,7 +367,7 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
 /**
  * Le righe degli Ambiti per il riquadro della Magick: otto pallini, il
  * primo è lo 0 (la base che non costa, acceso sempre, non si clicca: Blue,
- * 26/9) e poi i sette livelli, quello dichiarato acceso. Ogni Ambito ha due lenti (la tavola del 23/9): la
+ * 26/9) e poi i sette livelli, quello dichiarato acceso. Ogni Ambito ha due o tre lenti (la tavola del 23/9, rifatta il 29/9): la
  * riga legge con quella scelta dalla tendina, o con la prima.
  */
 export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, modes = {} } = {}) {
@@ -434,7 +434,7 @@ export function scopeModesOf(sheet) {
 }
 
 /**
- * La lettura dell'Ambito (Peso, Epicità, Danni…). Dalla tendina delle
+ * La lettura dell'Ambito (Peso, Influenza, Danni…). Dalla tendina delle
  * letture (20/9, seconda passata) arriva quella scelta, `data-mode`; senza,
  * gira alla successiva (il tastino del 16/9 sera). Si scrive sul
  * personaggio, così resta; chi non può scriverlo la tiene nella scheda

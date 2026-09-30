@@ -20,14 +20,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "non infligge danni.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 1,
         "scopes": {
-          "duration": 1,
-          "impact": 3
+          "duration": 1
         }
       }
     ],
-    "thresholdText": "4 (Durata 1, Impatto 3)",
+    "thresholdText": "1 (Durata 1)",
     "use": "In genere è pensato per rallentare quel momento della scena, pochi turni in combattimento.",
     "powers": [
       "prestito-dal-futuro",
@@ -76,21 +75,19 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "non infligge danni.",
     "thresholds": [
       {
-        "base": 8,
+        "base": 4,
         "scopes": {
-          "impact": 4,
           "duration": 4
         }
       },
       {
-        "base": 11,
+        "base": 7,
         "scopes": {
-          "impact": 4,
           "duration": 7
         }
       }
     ],
-    "thresholdText": "8 (Impatto 4, Durata 4) o 11 (Impatto 4, Durata 7)",
+    "thresholdText": "4 (Durata 4) o 7 (Durata 7)",
     "use": "In genere è pensato per rimuovere il bersaglio dal capitolo attuale; se si vuole «esagerare» anche dall'intera campagna, soglia permettendo.",
     "powers": [
       "senza-residuo"
@@ -129,14 +126,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "trattiene e non danneggia; il soggetto resta intatto e si libera quando lo lasci.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 2,
         "scopes": {
-          "duration": 2,
-          "impact": 2
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "4 (Durata 2, Impatto 2)",
+    "thresholdText": "2 (Durata 2)",
     "use": "In genere è pensato per aprire un varco o fermare un bersaglio per la scena; un blocco di pochi turni in combattimento costa meno (Durata 1).",
     "powers": [
       "uscita-d-emergenza",
@@ -175,15 +171,14 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "ferma ciò che entra, non ciò che è già dentro; protegge un luogo, non una persona.",
     "thresholds": [
       {
-        "base": 5,
+        "base": 3,
         "scopes": {
           "targets": 1,
-          "duration": 2,
-          "impact": 2
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "5 (Bersagli 1, Durata 2, Impatto 2)",
+    "thresholdText": "3 (Bersagli 1, Durata 2)",
     "use": "In genere è pensato per sigillare una stanza per la scena; un edificio intero chiede Bersagli 2, una notte intera Durata 4.",
     "powers": [
       "tasca-di-mary"
@@ -217,14 +212,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "orienta gli esiti e non dà dadi adesso; tre fortune o tre sfortune di fila nella stessa scena sono una firma, e il Narratore può dichiararla Volgare.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 2,
         "scopes": {
-          "duration": 2,
-          "impact": 2
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "4 (Durata 2, Impatto 2)",
+    "thresholdText": "2 (Durata 2)",
     "use": "In genere è pensato per una coincidenza a favore o contro che sposta un momento della scena; la maledizione che dura settimane sale con la Durata.",
     "powers": [
       "non-tutto-il-male",
@@ -269,14 +263,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "disfa il fatto e non distrugge la cosa; il fatto alla radice chiede la cima di Tempo.",
     "thresholds": [
       {
-        "base": 5,
+        "base": 1,
         "scopes": {
-          "impact": 4,
           "precision": 1
         }
       }
     ],
-    "thresholdText": "5 (Impatto 4, Precisione 1)",
+    "thresholdText": "1 (Precisione 1)",
     "use": "In genere è pensato per togliere una cosa precisa (quel ricordo, quella maledizione, quell'incantesimo), e le scene dopo ne risentono.",
     "powers": [
       "flashback"
@@ -314,14 +307,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "nasconde il vero e non mostra il falso, che è Ingannare; chi cerca con mezzi in più (telecamere, cani, sensi mistici) chiede più successi.",
     "thresholds": [
       {
-        "base": 3,
+        "base": 2,
         "scopes": {
-          "duration": 2,
-          "impact": 1
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "3 (Durata 2, Impatto 1)",
+    "thresholdText": "2 (Durata 2)",
     "use": "In genere è pensato per nascondere te, un compagno o una cosa per la scena; un gruppo intero sale con i Bersagli.",
     "powers": [
       "di-la-non-contano",
@@ -356,14 +348,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "comunichi e non comandi; l'altro resta libero di non rispondere.",
     "thresholds": [
       {
-        "base": 3,
+        "base": 2,
         "scopes": {
-          "duration": 2,
-          "impact": 1
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "3 (Durata 2, Impatto 1)",
+    "thresholdText": "2 (Durata 2)",
     "use": "In genere è pensato per una conversazione che dura la scena; una parola sola, subito, costa meno (Durata 0).",
     "powers": [
       "armonia-a-distanza",
@@ -396,14 +387,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "indirizza e non ordina; lascia crepe che un altro esperto sa leggere.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 1,
         "scopes": {
-          "impact": 3,
           "duration": 1
         }
       }
     ],
-    "thresholdText": "4 (Impatto 3, Durata 1)",
+    "thresholdText": "1 (Durata 1)",
     "use": "In genere è pensato per decidere l'esito di una scena senza lasciare tracce; tenere qualcuno sul filo per giorni sale con la Durata.",
     "powers": [
       "si-trova-tutto",
@@ -485,13 +475,11 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "vale su un effetto in corso, non su un colpo e non su un effetto già compiuto; serve la Sfera del suo effetto.",
     "thresholds": [
       {
-        "base": 3,
-        "scopes": {
-          "impact": 3
-        }
+        "base": 0,
+        "scopes": {}
       }
     ],
-    "thresholdText": "3 (Impatto 3)",
+    "thresholdText": "0",
     "use": "In genere è pensato per il duello: un lancio contro un lancio, nello stesso turno.",
     "powers": [
       "difendersi-dalla-sfera"
@@ -525,15 +513,14 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "ciò che il mondo conosce; il mai visto chiede Inventare.",
     "thresholds": [
       {
-        "base": 6,
+        "base": 5,
         "scopes": {
           "potency": 2,
-          "duration": 3,
-          "impact": 1
+          "duration": 3
         }
       }
     ],
-    "thresholdText": "6 (Potenza 2, Durata 3, Impatto 1)",
+    "thresholdText": "5 (Potenza 2, Durata 3)",
     "use": "In genere costruisce una cosa fino a 100 kg che regge per un mese; un edificio o un veicolo salgono con la Potenza (Peso).",
     "powers": [],
     "newPowers": [],
@@ -565,15 +552,14 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "una cosa sola, che si tiene in una mano; cose, non esseri; ciò che non deve tornare mai più chiede Annientare.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 2,
         "scopes": {
           "potency": 1,
-          "impact": 2,
           "duration": 1
         }
       }
     ],
-    "thresholdText": "4 (Potenza 1, Impatto 2, Durata 1)",
+    "thresholdText": "2 (Potenza 1, Durata 1)",
     "use": "In genere fa comparire un oggetto fino a 10 kg per pochi turni, o rompere per sempre un oggetto della stessa taglia; una cosa creata che resta sale con la Durata.",
     "powers": [
       "ce-l-ho",
@@ -617,14 +603,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "esseri, vivi o che lo sono stati, oppure ciò che sta sulla traiettoria di una forza; le Condizioni (Stordito, Atterrato, Accecato) si comprano con l'Ambito Condizioni dentro lo stesso lancio.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 3,
         "scopes": {
-          "potency": 3,
-          "impact": 1
+          "potency": 3
         }
       }
     ],
-    "thresholdText": "4 (Potenza 3, Impatto 1)",
+    "thresholdText": "3 (Potenza 3)",
     "use": "In genere fa 4 danni superficiali a un bersaglio avendo Areté 1.",
     "powers": [
       "a-stordire",
@@ -662,14 +647,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "il conto si sbilancia e presenta il resto quando vuole lui.",
     "thresholds": [
       {
-        "base": 8,
+        "base": 3,
         "scopes": {
-          "impact": 5,
           "duration": 3
         }
       }
     ],
-    "thresholdText": "8 (Impatto 5, Durata 3)",
+    "thresholdText": "3 (Durata 3)",
     "use": "In genere è pensato per cambiare la direzione di un capitolo; un destino che dura una storia sale con la Durata.",
     "powers": [
       "scommessa",
@@ -708,15 +692,14 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "l'ordine finisce con la scena; ogni ordine dato a una mente lascia crepe, e un altro esperto le legge.",
     "thresholds": [
       {
-        "base": 6,
+        "base": 5,
         "scopes": {
           "conditions": 3,
-          "duration": 2,
-          "impact": 1
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "6 (Condizioni 3, Durata 2, Impatto 1)",
+    "thresholdText": "5 (Condizioni 3, Durata 2)",
     "use": "In genere è pensato per un ordine che blocca un'azione o ne impone una, per la scena; comandare chi decide per sé sale sulle Condizioni.",
     "powers": [
       "niente-al-caso",
@@ -748,14 +731,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "chi viene drenato resta vuoto e se ne accorge; sui viventi lascia Macchie.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 3,
         "scopes": {
-          "potency": 3,
-          "impact": 1
+          "potency": 3
         }
       }
     ],
-    "thresholdText": "4 (Potenza 3, Impatto 1)",
+    "thresholdText": "3 (Potenza 3)",
     "use": "In genere prende 3 punti (Quintessenza, energia, fortuna) a un bersaglio che tocchi.",
     "powers": [
       "il-banco-vince",
@@ -792,14 +774,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "fa venire e non comanda; per comandare serve Dominare, per trattenere Vincolare.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 2,
         "scopes": {
-          "impact": 2,
           "duration": 2
         }
       }
     ],
-    "thresholdText": "4 (Impatto 2, Durata 2)",
+    "thresholdText": "2 (Durata 2)",
     "use": "In genere è pensato per far arrivare uno spirito o un'energia per la scena.",
     "powers": [
       "lascio-fare-a-lui",
@@ -831,14 +812,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "fissa ciò che c'è, non aggiunge e non ferma il mondo; lo rende definitivo.",
     "thresholds": [
       {
-        "base": 9,
+        "base": 7,
         "scopes": {
-          "duration": 7,
-          "impact": 2
+          "duration": 7
         }
       }
     ],
-    "thresholdText": "9 (Durata 7, Impatto 2)",
+    "thresholdText": "7 (Durata 7)",
     "use": "In genere è pensato per rendere permanente un effetto tuo; sospenderlo fino a un segnale costa meno, con le Condizioni al posto della Durata.",
     "powers": [
       "tenuta",
@@ -869,14 +849,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "Guarire non è Riparare.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 3,
         "scopes": {
-          "potency": 3,
-          "impact": 1
+          "potency": 3
         }
       }
     ],
-    "thresholdText": "4 (Potenza 3, Impatto 1)",
+    "thresholdText": "3 (Potenza 3)",
     "use": "In genere guarisce 4 danni superficiali avendo Areté 1.",
     "powers": [
       "al-posto-tuo",
@@ -923,14 +902,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "mostra il falso e non nasconde il vero, che è Celare; a tutti i presenti insieme, senza Forza, l'illusione mentale nasce Volgare.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 2,
         "scopes": {
-          "duration": 2,
-          "impact": 2
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "4 (Durata 2, Impatto 2)",
+    "thresholdText": "2 (Durata 2)",
     "use": "In genere è pensato per un'illusione che regge la scena davanti a uno o pochi; a tutti i presenti sale con i Bersagli.",
     "powers": [
       "miraggio"
@@ -966,14 +944,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "ciò che nasce ha regole sue; la coscienza, l'entità e l'organismo chiedono Primordio accanto.",
     "thresholds": [
       {
-        "base": 8,
+        "base": 3,
         "scopes": {
-          "impact": 5,
           "potency": 3
         }
       }
     ],
-    "thresholdText": "8 (Impatto 5, Potenza 3)",
+    "thresholdText": "3 (Potenza 3)",
     "use": "In genere è pensato per far nascere una cosa che cambia il capitolo; il mondo con leggi nuove lo fa Rivoluzionare.",
     "powers": [
       "terra-sacra"
@@ -1005,15 +982,14 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "tu e non un luogo; dura una scena e poi finisce.",
     "thresholds": [
       {
-        "base": 7,
+        "base": 5,
         "scopes": {
           "potency": 3,
-          "duration": 2,
-          "impact": 2
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "7 (Potenza 3, Durata 2, Impatto 2)",
+    "thresholdText": "5 (Potenza 3, Durata 2)",
     "use": "In genere è pensato per una scena intera senza subire il dominio della tua Sfera; pochi turni costano meno (Durata 1).",
     "powers": [
       "doppio-cuore",
@@ -1044,14 +1020,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "un dettaglio, non la forma intera, che è Trasformare.",
     "thresholds": [
       {
-        "base": 3,
+        "base": 2,
         "scopes": {
-          "duration": 2,
-          "impact": 1
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "3 (Durata 2, Impatto 1)",
+    "thresholdText": "2 (Durata 2)",
     "use": "In genere è pensato per un ritocco che dura la scena: la chiave che entra, il volto che non corrisponde alla foto.",
     "powers": [
       "dettaglio"
@@ -1093,14 +1068,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "presenza o assenza, nella scena; cosa c'è dentro lo dice Sapere.",
     "thresholds": [
       {
-        "base": 2,
+        "base": 1,
         "scopes": {
-          "impact": 1,
           "duration": 1
         }
       }
     ],
-    "thresholdText": "2 (Impatto 1, Durata 1)",
+    "thresholdText": "1 (Durata 1)",
     "use": "In genere dice se c'è o non c'è, qui e adesso, e tiene il senso acceso per qualche turno.",
     "powers": [
       "quadrante",
@@ -1133,15 +1107,14 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "non è un patto: il soggetto non lo sa e non ha acconsentito.",
     "thresholds": [
       {
-        "base": 7,
+        "base": 3,
         "scopes": {
-          "impact": 4,
           "duration": 2,
           "conditions": 1
         }
       }
     ],
-    "thresholdText": "7 (Impatto 4, Durata 2, Condizioni 1)",
+    "thresholdText": "3 (Durata 2, Condizioni 1)",
     "use": "In genere è pensato per una possessione o un ordine dormiente che dura la scena; un'abitazione lunga sale con la Durata.",
     "powers": [
       "l-avatar-reagisce"
@@ -1233,12 +1206,12 @@ export const FORMULE_M6 = Object.freeze([
       {
         "base": 2,
         "scopes": {
-          "impact": 2
+          "precision": 2
         }
       }
     ],
-    "thresholdText": "2 (Impatto 2)",
-    "use": "In genere dice cosa succederà nei prossimi istanti a una cosa che hai davanti; il domani di una persona sale con l'Impatto.",
+    "thresholdText": "2 (Precisione 2)",
+    "use": "In genere dice cosa succederà nei prossimi istanti a una cosa che hai davanti; il domani di una persona sale con l'Informazione.",
     "powers": [
       "mai-colto-di-sorpresa",
       "due-mosse-avanti",
@@ -1331,14 +1304,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "passiva e su di te; non para il colpo (Proteggere) e non ferma l'effetto altrui in corso (Contrastare).",
     "thresholds": [
       {
-        "base": 3,
+        "base": 2,
         "scopes": {
-          "duration": 2,
-          "impact": 1
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "3 (Durata 2, Impatto 1)",
+    "thresholdText": "2 (Durata 2)",
     "use": "In genere è pensato per una cosa sola (un veleno, il fuoco, le suggestioni) per la scena; l'immunità intera è Invulnerabilità.",
     "powers": [
       "valvola-di-sfogo",
@@ -1369,14 +1341,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "servono Vita, Spirito e Primordio insieme; è sempre Volgare, ovunque; il morto da tempo non torna.",
     "thresholds": [
       {
-        "base": 8,
+        "base": 3,
         "scopes": {
-          "impact": 5,
           "potency": 3
         }
       }
     ],
-    "thresholdText": "8 (Impatto 5, Potenza 3)",
+    "thresholdText": "3 (Potenza 3)",
     "use": "In genere è pensato per riportare un compagno morto in questa sessione, e cambia la direzione del capitolo; il Narratore può dichiararla impresa impossibile (+5).",
     "powers": [
       "il-ritorno"
@@ -1408,14 +1379,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "poco fa e non il fatto intero; per ricordare la scena riavvolta serve Mente.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 1,
         "scopes": {
-          "duration": 1,
-          "impact": 3
+          "duration": 1
         }
       }
     ],
-    "thresholdText": "4 (Durata 1, Impatto 3)",
+    "thresholdText": "1 (Durata 1)",
     "use": "In genere è pensato per riavvolgere pochi turni e decidere l'esito della scena; una scena intera sale con la Durata.",
     "powers": [
       "c-ho-ripensato",
@@ -1446,14 +1416,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "cose, non corpi: un corpo o una mente chiedono Guarire; torna com'era, esattamente com'era.",
     "thresholds": [
       {
-        "base": 3,
+        "base": 2,
         "scopes": {
-          "potency": 2,
-          "impact": 1
+          "potency": 2
         }
       }
     ],
-    "thresholdText": "3 (Potenza 2, Impatto 1)",
+    "thresholdText": "2 (Potenza 2)",
     "use": "In genere rimette a posto un oggetto fino a 100 kg che tocchi; un edificio sale con la Potenza (Peso).",
     "powers": [
       "bottino",
@@ -1487,14 +1456,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "finisce quando decidi tu.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 2,
         "scopes": {
-          "duration": 2,
-          "impact": 2
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "4 (Durata 2, Impatto 2)",
+    "thresholdText": "2 (Durata 2)",
     "use": "In genere è pensato per chiudere una stanza in un anello per la scena: la guardia rifà la sua ronda e non arriva mai in fondo.",
     "powers": [
       "ciak-si-gira",
@@ -1528,14 +1496,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "il perduto, non il morto; la prova dell'anima si apre una volta sola per cronaca, a testa.",
     "thresholds": [
       {
-        "base": 7,
+        "base": 3,
         "scopes": {
-          "potency": 3,
-          "impact": 4
+          "potency": 3
         }
       }
     ],
-    "thresholdText": "7 (Potenza 3, Impatto 4)",
+    "thresholdText": "3 (Potenza 3)",
     "use": "In genere è pensato per una cosa che la scena non può dare per scontata, e le scene dopo ne risentono.",
     "powers": [
       "convalescenza"
@@ -1577,13 +1544,11 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "dopo, nessuno ricorda che sia successo qualcosa, e nemmeno tu.",
     "thresholds": [
       {
-        "base": 1,
-        "scopes": {
-          "impact": 1
-        }
+        "base": 0,
+        "scopes": {}
       }
     ],
-    "thresholdText": "1 (Impatto 1)",
+    "thresholdText": "0",
     "use": "In genere è pensato per il colore della scena: un dettaglio, e basta.",
     "powers": [
       "colpo-di-fortuna",
@@ -1626,15 +1591,14 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "sul dominio della Sfera e non su tutto.",
     "thresholds": [
       {
-        "base": 5,
+        "base": 4,
         "scopes": {
-          "impact": 4,
-          "precision": 1
+          "precision": 4
         }
       }
     ],
-    "thresholdText": "5 (Impatto 4, Precisione 1)",
-    "use": "In genere è pensato per una domanda precisa la cui risposta apre una pista per le scene dopo; un segreto della storia sale con l'Impatto.",
+    "thresholdText": "4 (Precisione 4)",
+    "use": "In genere è pensato per una domanda precisa la cui risposta apre una pista per le scene dopo; un segreto della storia sale con l'Informazione.",
     "powers": [
       "conto-degli-indizi",
       "tre-ipotesi"
@@ -1668,14 +1632,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "cambia le leggi di ciò che c'è e non fa nascere il nuovo, che è Inventare.",
     "thresholds": [
       {
-        "base": 10,
+        "base": 4,
         "scopes": {
-          "impact": 6,
           "duration": 4
         }
       }
     ],
-    "thresholdText": "10 (Impatto 6, Durata 4)",
+    "thresholdText": "4 (Durata 4)",
     "use": "In genere è pensato per piegare il corso della storia in un luogo per una sessione; la valle in cui il tempo va all'indietro per sempre è un'impresa impossibile.",
     "powers": [
       "il-narratore-ti-ascolta",
@@ -1716,15 +1679,14 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "le menti si difendono con la Volontà e raramente si arrendono al primo tiro.",
     "thresholds": [
       {
-        "base": 3,
+        "base": 2,
         "scopes": {
-          "impact": 2,
-          "precision": 1
+          "precision": 2
         }
       }
     ],
-    "thresholdText": "3 (Impatto 2, Precisione 1)",
-    "use": "In genere è pensato per una lettura precisa che dà un vantaggio nella scena; un segreto che decide la scena sale con l'Impatto.",
+    "thresholdText": "2 (Precisione 2)",
+    "use": "In genere è pensato per una lettura precisa che dà un vantaggio nella scena; un segreto che decide la scena sale con l'Informazione.",
     "powers": [
       "conosco-un-posto",
       "ho-letto-qualcosa",
@@ -1764,15 +1726,14 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "è falso e resta falso, e chi lo abita lo sa; regge finché lo tieni.",
     "thresholds": [
       {
-        "base": 5,
+        "base": 3,
         "scopes": {
           "duration": 2,
-          "impact": 2,
           "precision": 1
         }
       }
     ],
-    "thresholdText": "5 (Durata 2, Impatto 2, Precisione 1)",
+    "thresholdText": "3 (Durata 2, Precisione 1)",
     "use": "In genere è pensato per un falso preciso che regge la scena; un'identità che dura una sessione sale con la Durata.",
     "powers": [
       "copertura"
@@ -1804,14 +1765,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "non distrugge, che è Creare e Distruggere; non rallenta, che è Accelerare e Rallentare.",
     "thresholds": [
       {
-        "base": 3,
+        "base": 2,
         "scopes": {
-          "duration": 2,
-          "impact": 1
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "3 (Durata 2, Impatto 1)",
+    "thresholdText": "2 (Durata 2)",
     "use": "In genere è pensato per spegnere una cosa sola per la scena.",
     "powers": [
       "interruttore"
@@ -1890,14 +1850,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "inclina e non decide; la scelta imposta è Condizionare, l'ordine è Dominare.",
     "thresholds": [
       {
-        "base": 3,
+        "base": 1,
         "scopes": {
-          "impact": 2,
           "duration": 1
         }
       }
     ],
-    "thresholdText": "3 (Impatto 2, Durata 1)",
+    "thresholdText": "1 (Durata 1)",
     "use": "In genere è pensato per spostare una scelta nella scena: la guardia che decide di non controllare, il testimone che preferisce tacere.",
     "powers": [
       "parole-che-pesano"
@@ -1930,15 +1889,14 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "la forma intera, non la sostanza, che è Trasmutare; resta trasformato finché qualcuno lo disfa.",
     "thresholds": [
       {
-        "base": 5,
+        "base": 4,
         "scopes": {
           "potency": 2,
-          "duration": 2,
-          "impact": 1
+          "duration": 2
         }
       }
     ],
-    "thresholdText": "5 (Potenza 2, Durata 2, Impatto 1)",
+    "thresholdText": "4 (Potenza 2, Durata 2)",
     "use": "In genere trasforma una cosa fino a 100 kg per la scena; per sempre chiede Fissare.",
     "powers": [
       "planimetria"
@@ -1972,14 +1930,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "cambia la natura e non le leggi, che restano quelle del mondo; il piombo in oro costa successi per i preziosi.",
     "thresholds": [
       {
-        "base": 5,
+        "base": 2,
         "scopes": {
-          "potency": 2,
-          "impact": 3
+          "potency": 2
         }
       }
     ],
-    "thresholdText": "5 (Potenza 2, Impatto 3)",
+    "thresholdText": "2 (Potenza 2)",
     "use": "In genere cambia la sostanza di una cosa fino a 100 kg, per sempre.",
     "powers": [
       "baratto"
@@ -2017,14 +1974,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "devi sapere cosa cerchi, una cosa precisa, una categoria, una persona, altrimenti la Formula non parte; trovi, non vedi.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 2,
         "scopes": {
-          "impact": 2,
           "range": 2
         }
       }
     ],
-    "thresholdText": "4 (Impatto 2, Portata 2)",
+    "thresholdText": "2 (Portata 2)",
     "use": "In genere è pensato per trovare una cosa precisa nei dintorni, fuori dallo scontro; un'altra città sale con la Portata.",
     "powers": [
       "il-pezzo-mancante",
@@ -2062,14 +2018,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "passi tu e non gli altri; il Velo fa pagare l'attrito del luogo; da sola la Corrispondenza strappa.",
     "thresholds": [
       {
-        "base": 4,
+        "base": 2,
         "scopes": {
-          "range": 2,
-          "impact": 2
+          "range": 2
         }
       }
     ],
-    "thresholdText": "4 (Portata 2, Impatto 2)",
+    "thresholdText": "2 (Portata 2)",
     "use": "In genere è pensato per passare nella stanza accanto senza aprire la porta, o dall'altra parte del Velo; una città lontana sale con la Portata.",
     "powers": [
       "da-qualche-parte",
@@ -2106,14 +2061,13 @@ export const FORMULE_M6 = Object.freeze([
     "limit": "è un legame e non un ordine; il giuramento che punisce chiede la cima di Entropia.",
     "thresholds": [
       {
-        "base": 5,
+        "base": 3,
         "scopes": {
-          "duration": 3,
-          "impact": 2
+          "duration": 3
         }
       }
     ],
-    "thresholdText": "5 (Durata 3, Impatto 2)",
+    "thresholdText": "3 (Durata 3)",
     "use": "In genere è pensato per un marchio o un legame che regge due scene; per sempre chiede Fissare.",
     "powers": [
       "inseparabili",

@@ -204,7 +204,7 @@ assert.match(readFileSync(new URL("../scripts/grimorio.js", import.meta.url), "u
 // come Obiettivo, la Sfera d'Accesso e le Amalgame, gli Ambiti della soglia base.
 const guarire = FORMULE_M6.find((formula) => formula.id === "guarire");
 const fromFormula = spellFromFormula(actor, formulaPick(guarire, { access: "life", amalgams: ["spirit"], sphereLevels: { life: 2, spirit: 1 } }), (key) => key.split(".").pop());
-assert.deepEqual([fromFormula.name, fromFormula.goal, fromFormula.spheres, fromFormula.scopes, fromFormula.formula, fromFormula.access, fromFormula.amalgams, fromFormula.credo, fromFormula.effetto], ["Guarire", testoDellaFormula(guarire, { access: "life", amalgams: ["spirit"] }), { life: 2, spirit: 1 }, { potency: 3, impact: 1 }, "guarire", "life", ["spirit"], "dati", ""]);
+assert.deepEqual([fromFormula.name, fromFormula.goal, fromFormula.spheres, fromFormula.scopes, fromFormula.formula, fromFormula.access, fromFormula.amalgams, fromFormula.credo, fromFormula.effetto], ["Guarire", testoDellaFormula(guarire, { access: "life", amalgams: ["spirit"] }), { life: 2, spirit: 1 }, { potency: 3 }, "guarire", "life", ["spirit"], "dati", ""]);
 // Dal lancio nel Grimorio arriva la lettura della Sfera di accesso, non la glossa generica (Blue, 25/9).
 assert.notEqual(fromFormula.goal, guarire.use);
 assert.match(fromFormula.goal, /^il corpo di una persona/);

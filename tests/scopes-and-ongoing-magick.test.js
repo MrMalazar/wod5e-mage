@@ -34,9 +34,9 @@ function mageActor(flags = {}) {
   };
 }
 
-// I sette Ambiti della tavola del 23/9: l'Area è una lente dei Bersagli,
-// l'Impatto è nato staccato dalla Potenza.
-assert.deepEqual([...SCOPES], ["targets", "conditions", "duration", "impact", "range", "potency", "precision"]);
+// I sei Ambiti (la tavola del 23/9 rifatta il 29/9): l'Area è una lente dei
+// Bersagli; l'Impatto è uscito, e l'Informazione è tornata nella Precisione.
+assert.deepEqual([...SCOPES], ["targets", "conditions", "duration", "range", "potency", "precision"]);
 assert.equal(SCOPE_MAX_LEVEL, 7);
 assert.equal(SCOPES_PER_CAST, 3);
 assert.equal(IMPOSSIBLE_SURCHARGE, 5);
@@ -50,9 +50,10 @@ const scopeTableTemplate = readFileSync(
 const table = prepareScopeTable();
 assert.equal(table.steps.length, SCOPE_TABLE_STEPS + 1);
 assert.deepEqual(table.steps, [0, 1, 2, 3, 4, 5, 6, 7]);
-// Quattordici righe: due lenti per Ambito, nell'ordine della tavola.
-assert.equal(table.rows.length, 14);
-assert.deepEqual(table.rows.map((row) => row.id), ["targets", "targetsArea", "conditionsMalus", "conditionsComplexity", "duration", "durationWorld", "impactEpic", "impactInfo", "range", "rangeNarrative", "potencyDamage", "potencyWeight", "precision", "precisionNarrative"]);
+// Quindici righe: due o tre lenti per Ambito, nell'ordine della tavola.
+assert.equal(table.rows.length, 15);
+assert.deepEqual(table.rows.map((row) => row.id), ["targets", "targetsArea", "conditionsMalus", "conditionsComplexity", "conditionsBenefit", "duration", "durationWorld", "range", "rangeNarrative", "potencyDamage", "potencyWeight", "potencyInfluence", "precision", "precisionNarrative", "precisionInfo"]);
+const riga = (id) => table.rows.find((row) => row.id === id);
 assert.equal(table.rows[0].label, "WOD5E_MAGE.Scopes.targets");
 assert.equal(table.rows.every((row) => row.cells.length === 8), true);
 // La tavola per gruppi (6/9): Ambiti in ordine alfabetico della lingua,
@@ -63,17 +64,30 @@ const localizeIt = (key) => key.startsWith("WOD5E_MAGE.Scopes.")
   ? (key.slice("WOD5E_MAGE.Scopes.".length).split(".").reduce((node, part) => node?.[part], itScopes) ?? key)
   : key;
 const tableIt = prepareScopeTable(localizeIt);
-assert.deepEqual(tableIt.groups.map((group) => group.name), ["Bersagli", "Condizioni", "Durata", "Impatto", "Portata", "Potenza", "Precisione"]);
-assert.equal(tableIt.groups.every((group) => group.header && group.span === 2), true);
+assert.deepEqual(tableIt.groups.map((group) => group.name), ["Bersagli", "Condizioni", "Durata", "Portata", "Potenza", "Precisione"]);
+assert.equal(tableIt.groups.every((group) => group.header), true);
+assert.deepEqual(Object.fromEntries(tableIt.groups.map((group) => [group.scope, group.span])), { targets: 2, conditions: 3, duration: 2, range: 2, potency: 3, precision: 3 });
 assert.deepEqual(tableIt.groups.map((group) => group.desc), SCOPES.map((id) => `WOD5E_MAGE.Scopes.Desc.${id}`).sort((a, b) => localizeIt(a.replace(".Desc.", ".")).localeCompare(localizeIt(b.replace(".Desc.", ".")))));
 // Le lenti nell'ordine della tavola: la prima vale se il giocatore non sceglie.
-assert.deepEqual(tableIt.groups.find((group) => group.scope === "potency").rows.map((row) => row.title), ["WOD5E_MAGE.Scopes.Sub.potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight"]);
-assert.deepEqual(tableIt.groups.find((group) => group.scope === "conditions").rows.map((row) => row.id), ["conditionsMalus", "conditionsComplexity"]);
+assert.deepEqual(tableIt.groups.find((group) => group.scope === "potency").rows.map((row) => row.title), ["WOD5E_MAGE.Scopes.Sub.potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight", "WOD5E_MAGE.Scopes.Sub.potencyInfluence"]);
+assert.deepEqual(tableIt.groups.find((group) => group.scope === "conditions").rows.map((row) => row.id), ["conditionsMalus", "conditionsComplexity", "conditionsBenefit"]);
+assert.deepEqual(tableIt.groups.find((group) => group.scope === "precision").rows.map((row) => row.id), ["precision", "precisionNarrative", "precisionInfo"]);
 assert.deepEqual(tableIt.groups.find((group) => group.scope === "duration").rows.map((row) => row.id), ["duration", "durationWorld"]);
 assert.deepEqual(tableIt.groups.find((group) => group.scope === "targets").rows.map((row) => row.id), ["targets", "targetsArea"]);
-assert.deepEqual(tableIt.groups.find((group) => group.scope === "impact").rows.map((row) => row.id), ["impactEpic", "impactInfo"]);
-assert.deepEqual(Object.values(itScopes.Sub), ["Effetto", "Area", "Malus", "Complessità", "Gioco", "Mondo", "Epicità", "Informazione", "Scontro", "Narrativa", "Danni", "Peso", "Scontro", "Narrativa"]);
-assert.equal(itScopes.Table.conditionsMalus["7"], "Stravolge il personaggio");
+assert.equal(tableIt.groups.some((group) => group.scope === "impact"), false);
+assert.deepEqual(Object.values(itScopes.Sub), ["Effetto", "Area", "Malus", "Complessità", "Beneficio", "Gioco", "Mondo", "Scontro", "Narrativa", "Danni", "Peso", "Influenza", "Scontro", "Narrativa", "Informazione"]);
+// Il Malus parla con le Condizioni del 29/9 (lievi, scontro, gradi), il
+// Beneficio è il Malus girato; l'Influenza va dalle emozioni a pilotare la
+// persona; l'Informazione misura la rarità (chi sa la cosa).
+assert.deepEqual(Object.values(itScopes.Table.conditionsMalus), ["Nessuna Condizione", "Un lieve: −1", "Una dello scontro", "Grado 1: −2", "Grado 2: −2 e 8", "Grado 3 su una cosa", "Grado 3 su un tipo", "Grado 3 su tutto"]);
+assert.deepEqual(Object.values(itScopes.Table.conditionsBenefit), ["Nessun bonus", "Un lieve: +1", "Un mezzo", "Grado 1: +2", "Grado 2: +2, niente 8", "Grado 3 su una cosa", "Grado 2 su un tipo", "Grado 2 su tutto"]);
+assert.equal(itScopes.Table.potencyInfluence["1"], "Le emozioni");
+assert.equal(itScopes.Table.potencyInfluence["7"], "La piloti");
+assert.equal(itScopes.Table.precisionInfo["1"], "Lo sanno tutti");
+assert.equal(itScopes.Table.precisionInfo["7"], "Non l'ha mai saputo nessuno");
+assert.match(itScopes.Desc.potency, /non è una Condizione/);
+assert.match(itScopes.Desc.conditions, /Il Beneficio non entra nei lanci di Magick/);
+assert.doesNotMatch(JSON.stringify(itScopes), /Impatto|Epicità/);
 assert.equal(itScopes.Table.conditionsComplexity["7"], "Livello contratto");
 // Le scritte pulite (Blue, 23/9: «La mano che impugna» fa cagare): la
 // Precisione nello scontro parla per cose, gli esempi stanno nel sorvolo.
@@ -85,52 +99,56 @@ assert.doesNotMatch(scopeTableTemplate, /wod5e-mage-scope-table-note|Scopes\.Tab
 assert.match(scopeTableTemplate, /Scopes\.TableReading[\s\S]*scopeTable\.groups[\s\S]*group\.rows[\s\S]*@first[\s\S]*wod5e-mage-scope-group" rowspan="\{\{group\.span\}\}" title="\{\{localize group\.desc\}\}"[\s\S]*wod5e-mage-scope-reading[\s\S]*row\.title/);
 assert.match(scopeTableTemplate, /<th scope="col"\{\{#unless step\}\} class="wod5e-mage-scope-zero"\{\{\/unless\}\}>/);
 assert.match(scopeTableTemplate, /<td\{\{#unless cell\.step\}\} class="wod5e-mage-scope-zero"\{\{\/unless\}\}\{\{#if cell\.tip\}\} title="\{\{cell\.tip\}\}"\{\{\/if\}\}>/);
-assert.equal(table.rows[10].scope, "potency");
-assert.equal(table.rows[11].scope, "potency");
-assert.equal(table.rows[5].scope, "duration");
+assert.equal(riga("potencyDamage").scope, "potency");
+assert.equal(riga("potencyInfluence").scope, "potency");
+assert.equal(riga("durationWorld").scope, "duration");
 // I Danni sono l'Areté più il numero (allo 0 l'Areté e basta), senza
 // casella; i Bersagli portano la persona e allo 0 dicono «Un bersaglio» a
 // parole; l'Area e la Durata del mondo un simbolo per cella.
-assert.equal(table.rows[10].cells[0].arete, true);
-assert.equal(table.rows[10].cells[0].hideLabel, true);
-assert.equal(table.rows[10].cells[0].number, false);
-assert.equal(table.rows[10].cells[1].hideLabel, false);
-assert.equal(table.rows[10].cells[1].number, true);
-assert.equal(table.rows[11].cells[0].arete, false);
+assert.equal(riga("potencyDamage").cells[0].arete, true);
+assert.equal(riga("potencyDamage").cells[0].hideLabel, true);
+assert.equal(riga("potencyDamage").cells[0].number, false);
+assert.equal(riga("potencyDamage").cells[1].hideLabel, false);
+assert.equal(riga("potencyDamage").cells[1].number, true);
+assert.equal(riga("potencyWeight").cells[0].arete, false);
+assert.equal(riga("potencyInfluence").cells[0].arete, false);
 assert.equal(table.rows[0].cells[0].faIcon, "fa-solid fa-user");
 assert.deepEqual([table.rows[0].cells[0].number, table.rows[0].cells[0].text, table.rows[0].cells[1].number, table.rows[0].cells[1].text], [false, true, true, false]);
 assert.equal(table.rows[1].cells[0].faIcon, "fa-solid fa-location-dot");
 assert.equal(table.rows[1].cells[1].faIcon, "fa-solid fa-door-open");
 assert.equal(table.rows[1].cells[7].faIcon, "fa-solid fa-globe");
-assert.equal(table.rows[5].cells[7].faIcon, "fa-solid fa-infinity");
+assert.equal(riga("durationWorld").cells[7].faIcon, "fa-solid fa-infinity");
 assert.equal(table.rows[0].cells[0].label, "WOD5E_MAGE.Scopes.Table.targets.0");
-assert.equal(table.rows[10].cells[1].label, "WOD5E_MAGE.Scopes.Table.potencyDamage.1");
-assert.equal(table.rows[8].cells[7].label, "WOD5E_MAGE.Scopes.Table.range.7");
-assert.equal(table.rows[8].cells[7].hint, "WOD5E_MAGE.Scopes.Hint.range.7");
+assert.equal(riga("potencyDamage").cells[1].label, "WOD5E_MAGE.Scopes.Table.potencyDamage.1");
+assert.equal(riga("range").cells[7].label, "WOD5E_MAGE.Scopes.Table.range.7");
+assert.equal(riga("range").cells[7].hint, "WOD5E_MAGE.Scopes.Hint.range.7");
 // Il sorvolo della cella: la spiegazione della lingua, se c'è; senza, niente.
-assert.equal(table.rows[8].cells[7].tip, "");
-assert.equal(tableIt.rows[8].cells[7].tip, itScopes.Hint.range["7"]);
-assert.equal(tableIt.rows[5].cells[0].tip, "", "la Durata del mondo si spiega da sé");
-assert.equal(tableIt.rows[5].cells[7].tip, itScopes.Hint.durationWorld["7"]);
+const rigaIt = (id) => tableIt.rows.find((row) => row.id === id);
+assert.equal(riga("range").cells[7].tip, "");
+assert.equal(rigaIt("range").cells[7].tip, itScopes.Hint.range["7"]);
+assert.equal(rigaIt("durationWorld").cells[0].tip, "", "la Durata del mondo si spiega da sé");
+assert.equal(rigaIt("durationWorld").cells[7].tip, itScopes.Hint.durationWorld["7"]);
+assert.equal(rigaIt("potencyInfluence").cells[7].tip, itScopes.Hint.potencyInfluence["7"]);
+assert.equal(rigaIt("precisionInfo").cells[5].tip, itScopes.Hint.precisionInfo["5"]);
 // La Durata in gioco porta il simbolo del tempo: 0 = un turno, 1 = tre
 // turni, 2 = una scena, 3 = due scene, 4 = una sessione, 5 = due sessioni,
 // 6 = la storia, 7 = la cronaca.
-assert.match(table.rows[4].cells[0].icon, /tempo_turno\.svg$/);
-assert.match(table.rows[4].cells[1].icon, /tempo_turno\.svg$/);
-assert.match(table.rows[4].cells[2].icon, /tempo_scena\.svg$/);
-assert.match(table.rows[4].cells[4].icon, /tempo_sessione\.svg$/);
-assert.match(table.rows[4].cells[6].icon, /tempo_storia\.svg$/);
-assert.match(table.rows[4].cells[7].icon, /tempo_cronaca\.svg$/);
+assert.match(riga("duration").cells[0].icon, /tempo_turno\.svg$/);
+assert.match(riga("duration").cells[1].icon, /tempo_turno\.svg$/);
+assert.match(riga("duration").cells[2].icon, /tempo_scena\.svg$/);
+assert.match(riga("duration").cells[4].icon, /tempo_sessione\.svg$/);
+assert.match(riga("duration").cells[6].icon, /tempo_storia\.svg$/);
+assert.match(riga("duration").cells[7].icon, /tempo_cronaca\.svg$/);
 const itLang = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8"));
 assert.deepEqual([0, 1, 2, 3, 4, 5, 6, 7].map((n) => itLang.WOD5E_MAGE.Scopes.Table.duration[String(n)]), ["1", "3", "1", "2", "1", "2", "1", "1"]);
 assert.deepEqual(Object.values(itLang.WOD5E_MAGE.Scopes.DurationUnits), ["turno", "turni", "scena", "scene", "sessione", "sessioni", "storia", "cronaca"]);
 assert.equal(table.rows[0].cells[0].icon, "");
-assert.equal(table.rows[5].cells[0].icon, "");
+assert.equal(riga("durationWorld").cells[0].icon, "");
 // La colonna delle Sfere non esiste più: solo Ambito, lente e otto gradini.
 assert.equal(table.rows[0].spheres, undefined);
 assert.equal(table.rows.every((row) => row.gift === undefined), true);
 
-// Le 112 celle della tavola hanno una voce in tutte e due le lingue (i
+// Le 120 celle della tavola hanno una voce in tutte e due le lingue (i
 // Danni allo 0 sono l'Areté e basta: la voce è vuota). Il Peso parla in
 // chili e tonnellate, la Portata narrativa arriva «Ovunque sia».
 for (const lang of ["it", "en"]) {
@@ -141,7 +159,8 @@ for (const lang of ["it", "en"]) {
   assert.match(cells.potencyWeight["2"], /100 kg/);
   assert.match(cells.potencyWeight["6"], /500[.,]000 t/);
   assert.equal(cells.potencyDamage["0"], "");
-  assert.equal(typeof strings.WOD5E_MAGE.Scopes.impact, "string");
+  assert.equal(strings.WOD5E_MAGE.Scopes.impact, undefined, "l'Impatto è uscito (29/9)");
+  assert.equal(strings.WOD5E_MAGE.Scopes.Desc.impact, undefined);
   assert.equal(strings.WOD5E_MAGE.Scopes.PotencyWeight, undefined);
   assert.equal(strings.WOD5E_MAGE.Scopes.PotencyEpic, undefined);
   for (const scope of SCOPES) {
@@ -163,9 +182,10 @@ for (const lang of ["it", "en"]) {
 assert.match(scopeTableTemplate, /scopeTable\.steps[\s\S]*scopeTable\.groups[\s\S]*row\.cells/);
 assert.doesNotMatch(scopeTableTemplate, /gift/);
 // Le colonne invisibili: ogni riga dice le sue, e la cella le rispetta.
-assert.deepEqual(table.rows.map((row) => row.layout), ["symbol-number", "symbol-text", "text", "text", "symbol-number", "symbol-text", "text", "text", "text", "text", "symbol-number", "text", "text", "text"]);
-assert.equal(table.rows[12].small, true);
-assert.equal(table.rows[12].cells[0].text, true);
+assert.deepEqual(table.rows.map((row) => row.layout), ["symbol-number", "symbol-text", "text", "text", "text", "symbol-number", "symbol-text", "text", "text", "symbol-number", "text", "text", "text", "text", "text"]);
+assert.equal(riga("precision").small, true);
+assert.equal(riga("precision").cells[0].text, true);
+assert.equal(riga("precisionInfo").small, true);
 assert.match(scopeTableTemplate, /wod5e-mage-scope-cell" data-layout="\{\{cell\.layout\}\}"/);
 assert.match(scopeTableTemplate, /wod5e-mage-scope-row-small/);
 assert.doesNotMatch(scopeTableTemplate, /row\.spheres|TableSpheres/);
@@ -303,9 +323,13 @@ assert.deepEqual(editableActor.lastUpdate, {
   assert.equal(mine.duration[5][1].text, "Un anno");
   // La Durata in gioco: numero e unità («3 turni», «1 scena»).
   assert.deepEqual([0, 1, 2, 3, 7].map((level) => mine.duration[level][0].text), ["1 turno", "3 turni", "1 scena", "2 scene", "1 cronaca"]);
-  // Le lenti per la scheda: due per Ambito, otto letture e otto spiegazioni.
+  // Le lenti per la scheda: due o tre per Ambito, otto letture e otto spiegazioni.
   const modes = scopeModes(localize, { arete: 2 });
-  assert.deepEqual(modes.precision.map((mode) => mode.label), ["Scontro", "Narrativa"]);
+  assert.deepEqual(modes.precision.map((mode) => mode.label), ["Scontro", "Narrativa", "Informazione"]);
+  assert.deepEqual(modes.potency.map((mode) => mode.label), ["Danni", "Peso", "Influenza"]);
+  assert.deepEqual(modes.conditions.map((mode) => mode.label), ["Malus", "Complessità", "Beneficio"]);
+  assert.deepEqual(modes.potency.map((mode) => mode.short), ["Danni", "Peso", "Infl."]);
+  assert.equal(modes.impact, undefined);
   assert.equal(modes.precision[0].readings[3], "L'oggetto impegnato");
   assert.match(modes.precision[0].hints[3], /la mano che impugna/);
   assert.equal(modes.potency[0].readings[2], "4 danni");

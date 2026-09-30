@@ -1,22 +1,22 @@
 /**
- * I sette Ambiti della Magick (la tavola del 23/9/2026, «due modi, livello
- * 0»): Bersagli, Condizioni, Durata, Impatto, Portata, Potenza, Precisione.
- * Ogni Ambito si legge con due sottoambiti (le «lenti»), misure alternative
- * della stessa cosa, su una scala da 0 a 7: lo 0 è la base e non costa
+ * I sei Ambiti della Magick (la tavola del 23/9/2026, «due modi, livello
+ * 0», rifatta coi verdetti di Blue del 29/9): Bersagli, Condizioni, Durata,
+ * Portata, Potenza, Precisione. Ogni Ambito si legge con due o tre
+ * sottoambiti (le «lenti»), misure alternative della stessa cosa: in un
+ * lancio se ne usa una. La scala va da 0 a 7: lo 0 è la base e non costa
  * niente, ogni livello vale il suo numero, la soglia è la somma dei livelli
  * degli Ambiti usati. In Portata e Precisione la prima riga vale nello
- * scontro e la seconda fuori; nella Potenza i Danni servono nello scontro,
- * il Peso in tutti e due; nella Durata la prima riga conta il tempo di
- * gioco, la seconda quello del mondo; Bersagli, Condizioni e Impatto hanno
- * due lenti libere. L'Area non è più un Ambito a sé: è la seconda lente dei
- * Bersagli. L'Impatto (Epicità e Informazione) è nato staccato dalla
- * Potenza il 23/9 sera.
+ * scontro e la seconda fuori; nella Potenza i Danni servono nello scontro;
+ * nella Durata la prima riga conta il tempo di gioco, la seconda quello del
+ * mondo; le altre lenti sono libere. L'Area non è più un Ambito a sé: è la
+ * seconda lente dei Bersagli. L'Impatto (Epicità e Informazione), nato il
+ * 23/9 sera, esce il 29/9: l'Informazione torna lente della Precisione, e
+ * arrivano l'Influenza nella Potenza e il Beneficio nelle Condizioni.
  */
 export const SCOPES = Object.freeze([
   "targets",
   "conditions",
   "duration",
-  "impact",
   "range",
   "potency",
   "precision"
@@ -39,18 +39,20 @@ export const SCOPE_ICONS = Object.freeze({
   targets: "fa-solid fa-user",
   conditions: "fa-solid fa-list-check",
   duration: "fa-solid fa-hourglass-half",
-  impact: "fa-solid fa-stamp",
   range: "fa-solid fa-location-crosshairs",
   potency: "fa-solid fa-burst",
   precision: "fa-solid fa-bullseye"
 });
 
-/** Gli Ambiti di ieri che oggi sono una lente: l'Area sta nei Bersagli. */
+/**
+ * Gli Ambiti di ieri che oggi sono una lente: l'Area sta nei Bersagli.
+ * L'Impatto (tolto il 29/9) non ha un erede: i suoi livelli cadono.
+ */
 export const SCOPE_ALIASES = Object.freeze({ area: "targets" });
 
 /**
- * Le righe della tavola: due lenti per Ambito, nell'ordine della tavola (la
- * prima è quella che vale se il giocatore non sceglie). Ogni riga dichiara
+ * Le righe della tavola: due o tre lenti per Ambito, nell'ordine della
+ * tavola (la prima è quella che vale se il giocatore non sceglie). Ogni riga dichiara
  * le sue colonne invisibili (layout): simbolo, numero, testo. Dentro una
  * colonna della tavola le celle si allineano.
  */
@@ -65,10 +67,12 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
     faIcons: ["fa-solid fa-location-dot", "fa-solid fa-door-open", "fa-solid fa-building", "fa-solid fa-house-chimney", "fa-solid fa-city", "fa-solid fa-map", "fa-solid fa-earth-europe", "fa-solid fa-globe"],
     layout: "symbol-text"
   },
-  // Condizioni: il Malus è la Condizione che l'effetto mette addosso, la
-  // Complessità sono le clausole che lo regolano.
+  // Condizioni: il Malus è la Condizione che l'effetto mette addosso (lievi,
+  // scontro, gradi, come nelle Condizioni del 29/9), la Complessità sono le
+  // clausole che lo regolano, il Beneficio è il Malus girato: l'aiuto che dà.
   { id: "conditionsMalus", scope: "conditions", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsMalus", layout: "text", small: true },
   { id: "conditionsComplexity", scope: "conditions", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsComplexity", layout: "text" },
+  { id: "conditionsBenefit", scope: "conditions", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsBenefit", layout: "text", small: true },
   // Durata: in gioco (turni, scene, sessioni, storia, cronaca, col simbolo
   // del tempo dal manuale) e nel mondo (dall'ora al permanente).
   { id: "duration", scope: "duration", sublabel: "WOD5E_MAGE.Scopes.Sub.duration", icons: true, layout: "symbol-number" },
@@ -79,22 +83,27 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
     faIcons: ["fa-solid fa-clock", "fa-solid fa-sun", "fa-solid fa-calendar-week", "fa-solid fa-calendar-days", "fa-solid fa-leaf", "fa-solid fa-calendar-check", "fa-solid fa-hourglass-half", "fa-solid fa-infinity"],
     layout: "symbol-text"
   },
-  // Impatto: quanto pesa sulla storia quello che l'effetto cambia
-  // (Epicità) o fa sapere (Informazione).
-  { id: "impactEpic", scope: "impact", sublabel: "WOD5E_MAGE.Scopes.Sub.impactEpic", layout: "text", small: true },
-  { id: "impactInfo", scope: "impact", sublabel: "WOD5E_MAGE.Scopes.Sub.impactInfo", layout: "text", small: true },
   // Portata: nello scontro e fuori.
   { id: "range", scope: "range", sublabel: "WOD5E_MAGE.Scopes.Sub.range", layout: "text" },
   { id: "rangeNarrative", scope: "range", sublabel: "WOD5E_MAGE.Scopes.Sub.rangeNarrative", layout: "text" },
   // Potenza: i Danni sono l'Areté (allo 0) più il numero; il Peso dice
-  // quanto pesa quello che l'effetto muove.
+  // quanto pesa quello che l'effetto muove; l'Influenza quanto cambia una
+  // persona, dalle emozioni (1) fino a pilotarla (7). Non è una Condizione.
   { id: "potencyDamage", scope: "potency", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyDamage", arete: true, layout: "symbol-number" },
   { id: "potencyWeight", scope: "potency", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyWeight", layout: "text" },
+  { id: "potencyInfluence", scope: "potency", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyInfluence", layout: "text", small: true },
   // Precisione: nello scontro il punto da colpire, fuori il particolare da
-  // trovare o da toccare.
+  // trovare o da toccare; l'Informazione dice quanto è rara la cosa che
+  // scopri (chi la sa: tutti, pochi, nessuno).
   { id: "precision", scope: "precision", sublabel: "WOD5E_MAGE.Scopes.Sub.precision", layout: "text", small: true },
-  { id: "precisionNarrative", scope: "precision", sublabel: "WOD5E_MAGE.Scopes.Sub.precisionNarrative", layout: "text", small: true }
+  { id: "precisionNarrative", scope: "precision", sublabel: "WOD5E_MAGE.Scopes.Sub.precisionNarrative", layout: "text", small: true },
+  { id: "precisionInfo", scope: "precision", sublabel: "WOD5E_MAGE.Scopes.Sub.precisionInfo", layout: "text", small: true }
 ]);
+
+/** Le lenti di un Ambito, nell'ordine della tavola: due o tre. */
+export function scopeLensIds(scope) {
+  return SCOPE_TABLE_ROWS.filter((row) => row.scope === scope).map((row) => row.id);
+}
 
 /** Le colonne della tavola: i livelli da 0 a 7. */
 export const SCOPE_TABLE_STEPS = SCOPE_MAX_LEVEL;
@@ -148,8 +157,8 @@ function tableRows() {
 
 /**
  * La tavola degli Ambiti: gli Ambiti in ordine alfabetico (nella lingua del
- * giocatore: `localize`), ognuno con la riga di titolo e sotto le sue due
- * lenti, nell'ordine della tavola (la prima è quella che vale se non si
+ * giocatore: `localize`), ognuno con la riga di titolo e sotto le sue due o
+ * tre lenti, nell'ordine della tavola (la prima è quella che vale se non si
  * sceglie: in Portata e Precisione lo scontro). `groups` è quel che il
  * template stampa; `rows` resta la lista piatta delle righe coi loro
  * gradini, da 0 a 7.
@@ -190,7 +199,7 @@ export function prepareScopeTable(localize = (key) => key) {
 /**
  * Le letture di ogni livello, per il dialogo del tiro: a destra dei pallini
  * di un Ambito compare la voce della tavola del livello scelto («Città» al
- * quarto pallino dell'Area). Ogni Ambito porta le due lenti, nell'ordine
+ * quarto pallino dell'Area). Ogni Ambito porta le sue lenti, nell'ordine
  * della tavola, col nome della lente davanti. I Danni sono l'Areté più il
  * numero: con l'Areté del personaggio (`arete`) il conto è già fatto.
  * Torna { [ambito]: otto liste (dal livello 0 al 7) di { sub, text, hint } }.
@@ -209,7 +218,7 @@ export function scopeReadings(localize = (key) => key, { arete = null } = {}) {
 
 /**
  * Le lenti di ogni Ambito una per una (la «lettura» dell'Ambito): per ogni
- * Ambito le sue due righe della tavola nell'ordine in cui sono scritte,
+ * Ambito le sue righe della tavola (due o tre) nell'ordine in cui sono scritte,
  * ognuna col suo nome e le otto letture (dal livello 0 al 7) e le otto
  * spiegazioni. La prima è quella che la scheda mostra finché il giocatore
  * non ne sceglie un'altra.

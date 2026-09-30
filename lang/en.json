@@ -407,41 +407,40 @@
       "targets": "Targets",
       "conditions": "Conditions",
       "duration": "Duration",
-      "impact": "Impact",
       "range": "Range",
       "potency": "Potency",
       "precision": "Precision",
       "area": "Area",
       "TableTitle": "The Scopes",
-      "TableHint": "Scopes give a Magick effect its measure, each on a scale from 0 to 7. First decide what the effect must do, then look for the Scopes needed to say it: those the effect does not touch stay at 0. Each Scope is read through two sub-scopes, alternative measures of the same thing. 0 is the base and costs nothing; each level is worth its number. The threshold is the sum of the levels of the Scopes used, and each point of threshold takes one die from the pool. An effect touching both Potency and Impact pays both. In one casting at most three Scopes rise above 0; an impossible feat takes +5 after the count.",
-      "TableModes": "In Range and Precision the Fight lens applies in combat and Narrative outside it; in Potency, Damage is for the fight and Weight for both: the Storyteller declares when a combat reading applies. In Duration the first row counts game time, the second world time. Targets, Conditions and Impact have two free lenses, good in any scene.",
+      "TableHint": "Scopes give a Magick effect its measure, each on a scale from 0 to 7. First decide what the effect must do, then look for the Scopes needed to say it: those the effect does not touch stay at 0. Each Scope is read through two or three sub-scopes, alternative measures of the same thing: a casting uses one. 0 is the base and costs nothing; each level is worth its number. The threshold is the sum of the levels of the Scopes used, and each point of threshold takes one die from the pool. In one casting at most three Scopes rise above 0; an impossible feat takes +5 after the count.",
+      "TableModes": "In Range and Precision the Fight lens applies in combat and Narrative outside it; in Potency, Damage is for the fight: the Storyteller declares when a combat reading applies. In Duration the first row counts game time, the second world time. The other lenses (Effect, Area, Malus, Complexity, Benefit, Weight, Influence, Information) are free, good in any scene.",
       "TableSuccesses": "Scope",
       "TableReading": "Lens",
       "TableNote": "Scopes channel the generality and variability of Magick effects: think an effect in as few Scopes as possible, by need and goal.",
       "Desc": {
         "targets": "Who or what takes the effect. Effect counts targets one by one, Area takes everything inside a space.",
-        "conditions": "What the effect leaves on someone and under which terms it works. The Malus is the Condition the effect puts on a target, the Complexity is the clauses that rule it.",
+        "conditions": "What the effect leaves on someone, what it grants and under which terms it works. The Malus is the Condition it puts on a target, the Benefit is the help it grants, the Complexity is the clauses that rule it. The Benefit never enters Magick castings.",
         "duration": "How long the effect stands. The first row counts game time, the second world time.",
-        "impact": "How much the effect weighs on the story: what it changes or what it reveals. It stands apart from Potency, because an effect can be weak and weigh a lot, or strong and change nothing.",
         "range": "How far the effect reaches from the caster. To act on what you cannot see you need Correspondence, or a bond with the target (the Bridge Rule).",
-        "potency": "How strong the effect is: Damage in a fight, Weight in both. How much it weighs on the story is measured by Impact.",
-        "precision": "How fine the effect's choice is: in a fight the spot to hit, outside the detail to find or touch. How much what you find matters is told by Information."
+        "potency": "How strong the effect is: Damage in a fight, Weight in both, Influence on a person. Influence says how much it changes them, from their emotions up to steering them, and it is not a Condition.",
+        "precision": "How fine the effect's choice or finding is: in a fight the spot to hit, outside the detail to find or touch. Information says how rare the thing you learn is: the player asks the question, the Storyteller sets the level before the roll."
       },
       "Sub": {
         "targets": "Effect",
         "targetsArea": "Area",
         "conditionsMalus": "Malus",
         "conditionsComplexity": "Complexity",
+        "conditionsBenefit": "Benefit",
         "duration": "Game",
         "durationWorld": "World",
-        "impactEpic": "Epicness",
-        "impactInfo": "Information",
         "range": "Fight",
         "rangeNarrative": "Narrative",
         "potencyDamage": "Damage",
         "potencyWeight": "Weight",
+        "potencyInfluence": "Influence",
         "precision": "Fight",
-        "precisionNarrative": "Narrative"
+        "precisionNarrative": "Narrative",
+        "precisionInfo": "Information"
       },
       "Table": {
         "targets": {
@@ -465,14 +464,14 @@
           "7": "Planet"
         },
         "conditionsMalus": {
-          "0": "No impairment",
-          "1": "Disturbs: −1 dice",
-          "2": "Removes a means",
-          "3": "Blocks an action",
-          "4": "Hinders: −2 dice",
-          "5": "Shuts a sense",
-          "6": "Alters every roll",
-          "7": "Upends the character"
+          "0": "No Condition",
+          "1": "A minor one: −1",
+          "2": "A fight Condition",
+          "3": "Grade 1: −2",
+          "4": "Grade 2: −2 and 8",
+          "5": "Grade 3 on one thing",
+          "6": "Grade 3 on one type",
+          "7": "Grade 3 on everything"
         },
         "conditionsComplexity": {
           "0": "None",
@@ -483,6 +482,16 @@
           "5": "Complex",
           "6": "Very complex",
           "7": "Contract level"
+        },
+        "conditionsBenefit": {
+          "0": "No bonus",
+          "1": "A minor one: +1",
+          "2": "A means",
+          "3": "Grade 1: +2",
+          "4": "Grade 2: +2, no 8",
+          "5": "Grade 3 on one thing",
+          "6": "Grade 2 on one type",
+          "7": "Grade 2 on everything"
         },
         "duration": {
           "0": "1",
@@ -503,26 +512,6 @@
           "5": "A year",
           "6": "A decade",
           "7": "Permanent"
-        },
-        "impactEpic": {
-          "0": "No weight on the story",
-          "1": "Changes a detail of the scene",
-          "2": "Shifts a moment of the scene",
-          "3": "Decides the outcome of the scene",
-          "4": "Has consequences in later scenes",
-          "5": "Changes the direction of the chapter",
-          "6": "Bends the course of the story",
-          "7": "Changes the world for everyone"
-        },
-        "impactInfo": {
-          "0": "Nothing you did not know",
-          "1": "A curiosity of the scene",
-          "2": "An edge in the scene",
-          "3": "What decides the scene",
-          "4": "A lead for later scenes",
-          "5": "What changes the chapter",
-          "6": "A secret of the story",
-          "7": "A secret of the world"
         },
         "range": {
           "0": "Touch",
@@ -564,6 +553,16 @@
           "6": "500,000 t",
           "7": "A mountain"
         },
+        "potencyInfluence": {
+          "0": "A hesitation",
+          "1": "The emotions",
+          "2": "An opinion",
+          "3": "A choice",
+          "4": "A behaviour",
+          "5": "What they believe",
+          "6": "A loyalty",
+          "7": "You steer them"
+        },
         "precision": {
           "0": "Wherever it lands",
           "1": "The body",
@@ -583,6 +582,16 @@
           "5": "A grain",
           "6": "A molecule",
           "7": "An atom"
+        },
+        "precisionInfo": {
+          "0": "Nothing you did not know",
+          "1": "Everyone knows it",
+          "2": "Whoever was there knows it",
+          "3": "A circle knows it",
+          "4": "A few guard it",
+          "5": "Only one knows it",
+          "6": "Nobody knows it any more",
+          "7": "Nobody ever knew it"
         }
       },
       "Hint": {
@@ -608,13 +617,13 @@
         },
         "conditionsMalus": {
           "0": "No Condition: the effect leaves nothing on the target.",
-          "1": "Dazzled, Muffled, Shaken, Unlucky: −1 dice, or the critical that does not trigger.",
-          "2": "Slowed, Disarmed, Broken, Dry. The Slowed acts last and does one thing; the others lose a family of Instruments, and the Disarmed also the equipment dice.",
-          "3": "Mute, Immobilised, Stuck, Stunned: no voice, no movement, no defence or no action. Mute and Immobilised also lose Word and Body; the Stunned may mark 1 mental Health instead of losing the action.",
-          "4": "Blurred, Deafened, Frightened, Knocked down: −2 dice. Knocked down applies to physical pools only, and getting up costs half a guard.",
-          "5": "Blind, Deaf, Terrified: rolls based on sight or hearing are not rolled, and the Terrified does not approach the source.",
-          "6": "Sick, Unfit: the Sick never exceeds 6 dice, the Unfit halves every pool.",
-          "7": "Charmed, Cursed: the Charmed does not decide, the Cursed does not heal while the cause remains."
+          "1": "A minor one: −1 to rolls of its type. Bruised, Shaken, Knocked down.",
+          "2": "A fight Condition: takes away the weapon, the movement or the turn's action. Disarmed, Tied, Stunned.",
+          "3": "Grade 1: −2 on the rolls the Condition touches. Dazzled, Intimidated, Bleeding.",
+          "4": "Grade 2: −2 and difficulty 8 on the rolls it touches. Blurred, Frightened, Poisoned.",
+          "5": "Grade 3 on one thing: whatever that thing requires fails. Blind, Mute, Broken.",
+          "6": "Grade 3 on one type of roll: physical, social or mental rolls fail. Paralysed, Dying, Furious.",
+          "7": "Grade 3 on everything: every roll fails, or the target leaves the scene. Unconscious, Asleep, Terrified."
         },
         "conditionsComplexity": {
           "0": "The effect fires at once and applies to everything it touches. No clause.",
@@ -625,6 +634,16 @@
           "5": "Clauses that depend on one another, and one changes the meaning of another. If a stranger enters the alarm fires, but only if the door was shut.",
           "6": "A rulebook: different cases with different answers. A friend passes, a foe stays out, a Sleeper gets lost in the corridor.",
           "7": "A pact among several parties, with duties, exceptions and penalties for who breaks it. Who betrays the pact stays Mute until they make amends."
+        },
+        "conditionsBenefit": {
+          "0": "No bonus: the effect helps in the scene but does not touch the rolls.",
+          "1": "+1 to rolls of one type: physical, social or mental. Shooting, lying, remembering.",
+          "2": "A weapon, a tool or a hold the target did not have. A blade of fire, a key that opens, a rope that holds.",
+          "3": "+2 on the rolls the Benefit touches. Aiming, listening, running.",
+          "4": "+2, and those rolls never go to 8. Seeing in the dark, hearing through the din, running on ice.",
+          "5": "That thing succeeds without rolling. A pistol shot, a leap between roofs, a lock.",
+          "6": "+2 and no 8 on every roll of one type: physical, social or mental.",
+          "7": "+2 and no 8 on every roll, of all three types."
         },
         "duration": {
           "0": "The effect happens and ends within the casting turn.",
@@ -638,26 +657,6 @@
         },
         "durationWorld": {
           "7": "The effect stays until someone breaks it."
-        },
-        "impactEpic": {
-          "0": "Lighting a candle, spinning a coin, scenting a room.",
-          "1": "Opening a lock, draining a phone, breaking a glass.",
-          "2": "Distracting a guard, tripping a pursuer, cutting the power.",
-          "3": "Bringing down a bridge, turning the crowd, blocking the exit with fire.",
-          "4": "Making the news, emptying a building, alerting the police.",
-          "5": "Taking a boss's lair away, breaking an alliance, closing a district.",
-          "6": "Toppling a faction, extinguishing a Node, starting a war between Traditions.",
-          "7": "Cracking the Veil, wiping a city off the maps, shifting the Consensus."
-        },
-        "impactInfo": {
-          "0": "The time, the weather, who is in the room.",
-          "1": "Who slept in this bed, whose pen this is, what the dog ate.",
-          "2": "Where the guard is, which door is open, who lies at the table.",
-          "3": "Who the traitor is, where the weapon is hidden, the password.",
-          "4": "Where the van goes, who paid the hitman, which journalist knows too much.",
-          "5": "Where the boss sleeps, who funds the faction, the Technocrat's real name.",
-          "6": "Who betrayed the Tradition, why the Node went out, what a faction hides.",
-          "7": "How the Veil was born, what came before the Consensus, where an Archmage sleeps."
         },
         "range": {
           "0": "You must touch the target: a hand on the shoulder, a punch.",
@@ -699,6 +698,16 @@
           "6": "A skyscraper.",
           "7": "A mountain."
         },
+        "potencyInfluence": {
+          "0": "They stop for an instant, lose the thread, look away; then they are as before.",
+          "1": "You change what they feel: you calm them, scare them, move them.",
+          "2": "They change their mind about you, about an offer, about a fact.",
+          "3": "They change a decision: they open the door, do not call the police, sign the contract.",
+          "4": "They change how they behave while the effect lasts: they follow you, cover for you, avoid the area.",
+          "5": "They change what they believe: they stop believing their boss, grow convinced they owe you, abandon their faith.",
+          "6": "They change who they are loyal to: they betray their own, work for you, risk their life for you.",
+          "7": "You steer them how and when you want: they speak, move and fight as you decide."
+        },
         "precision": {
           "0": "You hit the target, but you do not choose where.",
           "1": "A large, easy part: the torso, the bonnet.",
@@ -718,6 +727,16 @@
           "5": "Something you can barely see: a speck of dust, a drop of blood, a thread.",
           "6": "What the eye cannot see: the poison in the glass, a chemical trace, a virus.",
           "7": "The smallest part of a thing: an atom, a single cell."
+        },
+        "precisionInfo": {
+          "0": "The time, the weather, who is in the room.",
+          "1": "Who owns the bar, when it closes, what the papers say.",
+          "2": "Who came in, what they said to each other, where the van went.",
+          "3": "The guards' shifts, the password, who sleeps with whom.",
+          "4": "The offshore account, where the boss sleeps, who funds the faction.",
+          "5": "Where they hid the weapon, what they saw that night, why they betrayed.",
+          "6": "What lay under the building, who founded the lodge, where the founder is buried.",
+          "7": "How the Veil was born, what came before the Consensus, where Awakening comes from."
         }
       },
       "DurationUnits": {
@@ -737,16 +756,17 @@
         "targetsArea": "Area",
         "conditionsMalus": "Malus",
         "conditionsComplexity": "Compl.",
+        "conditionsBenefit": "Benef.",
         "duration": "Game",
         "durationWorld": "World",
-        "impactEpic": "Epic",
-        "impactInfo": "Info",
         "range": "Fight",
         "rangeNarrative": "Narr.",
         "potencyDamage": "Damage",
         "potencyWeight": "Weight",
+        "potencyInfluence": "Infl.",
         "precision": "Fight",
-        "precisionNarrative": "Narr."
+        "precisionNarrative": "Narr.",
+        "precisionInfo": "Info"
       },
       "Zero": "Level 0 is the base effect: always there, never removed, free. The seven dots after it raise it."
     },
@@ -2577,7 +2597,7 @@
       "ManoResiste": "Resisted with",
       "ManoResisteTesto": "or a text",
       "ManoDominio": "Domain, how",
-      "Lente": "Click: the other lens",
+      "Lente": "Click: the next lens",
       "SogliaGrande": "Threshold",
       "TuttiZero": "all at 0",
       "Impossibile": "impossible feat, +{extra}",

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import {
+  ambitiAMano,
   CAMPI,
   dadiDelTiro,
   danniMagick,
@@ -14,9 +15,10 @@ import {
   segnoDi,
   sogliaDagliAmbiti,
   vociTesto,
-  datiNemico
+  datiNemico,
+  magickDelNemico
 } from "../scripts/nemico.js";
-import { IMPOSSIBLE_SURCHARGE, SCOPES_PER_CAST } from "../scripts/scopes.js";
+import { IMPOSSIBLE_SURCHARGE, SCOPES_PER_CAST, scopeLensIds } from "../scripts/scopes.js";
 
 // La scheda del nemico (Blue, 25/9): i conti in funzioni pure.
 
@@ -60,10 +62,11 @@ assert.deepEqual(sogliaDagliAmbiti({ potency: 3, range: 2 }), { soglia: 5, ambit
 assert.equal(sogliaDagliAmbiti({ potency: 3, range: 2 }, { impossibile: true }).soglia, 5 + IMPOSSIBLE_SURCHARGE);
 assert.deepEqual(sogliaDagliAmbiti({}).ambiti, []);
 assert.equal(sogliaDagliAmbiti({}).soglia, 0);
-const quattro = sogliaDagliAmbiti({ targets: 1, duration: 2, impact: 1, potency: 3 });
+const quattro = sogliaDagliAmbiti({ targets: 1, duration: 2, range: 1, potency: 3 });
 assert.equal(quattro.ambiti.length, SCOPES_PER_CAST, "oltre il tetto non si conta");
 assert.deepEqual(quattro.fuoriTetto, ["potency"]);
 assert.equal(sogliaDagliAmbiti({ potency: 9 }).soglia, 7, "un livello fuori scala si riporta a 7");
+assert.equal(sogliaDagliAmbiti({ impact: 4, potency: 2 }).soglia, 2, "l'Impatto (tolto il 29/9) non conta più");
 assert.equal(sogliaDagliAmbiti({ potency: -2, range: 0 }).soglia, 0);
 
 // I danni della Magick: l'Areté più la Potenza.
@@ -85,5 +88,22 @@ assert.deepEqual([disposizioneDi(-1).id, disposizioneDi(0).id, disposizioneDi(1)
 let n = 0;
 assert.equal(idNuovo({ a: 1, b: 1 }, () => ["a", "b", "c"][n++]), "c");
 assert.deepEqual(righeOrdinate({ x: { nome: "Zeta", sort: 0 }, y: { nome: "Alfa", sort: 0 }, z: { nome: "Beta", sort: -1 }, w: null }).map((row) => row.id), ["z", "y", "x"]);
+
+// Le lenti a mano (29/9): Potenza, Condizioni e Precisione ne hanno tre; la
+// terza della Potenza è l'Influenza, che non fa danni.
+assert.deepEqual(scopeLensIds("potency"), ["potencyDamage", "potencyWeight", "potencyInfluence"]);
+assert.deepEqual(scopeLensIds("conditions"), ["conditionsMalus", "conditionsComplexity", "conditionsBenefit"]);
+assert.deepEqual(scopeLensIds("precision"), ["precision", "precisionNarrative", "precisionInfo"]);
+assert.deepEqual(scopeLensIds("range"), ["range", "rangeNarrative"]);
+const aMano = (lenti) => ambitiAMano({ livelli: { potency: 3 }, lenti }, { arete: 2 });
+assert.deepEqual([aMano({}).righe.find((r) => r.id === "potency").lente.id, aMano({}).danni], ["potencyDamage", 5]);
+assert.deepEqual([aMano({ potency: 2 }).righe.find((r) => r.id === "potency").lente.id, aMano({ potency: 2 }).danni], ["potencyInfluence", null]);
+assert.equal(aMano({ potency: 9 }).righe.find((r) => r.id === "potency").lente.id, "potencyInfluence", "un indice oltre le lenti si ferma all'ultima");
+assert.equal(aMano({ range: 2 }).righe.find((r) => r.id === "range").lente.id, "rangeNarrative", "la Portata ne ha due");
+// Un effetto scritto prima del 29/9 con l'Impatto: la soglia si rifà sugli Ambiti che restano.
+const vecchio = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Vecchio", soglia: 6, ambiti: { impact: 3, duration: 1, potency: 2 }, lentePotenza: "danni" } } } }));
+assert.deepEqual([vecchio.effetti[0].soglia, vecchio.effetti[0].ambiti.map((a) => a.id), vecchio.effetti[0].danni], [3, ["duration", "potency"], 4]);
+const influenza = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Pilota", soglia: 7, ambiti: { potency: 7 }, lentePotenza: "influenza" } } } }));
+assert.deepEqual([influenza.effetti[0].soglia, influenza.effetti[0].danni], [7, null], "l'Influenza non fa danni");
 
 console.log("nemico, conti: ok");

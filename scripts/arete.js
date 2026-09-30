@@ -293,7 +293,7 @@ function paintReading(out, parts = [], index = 0) {
   if (part) {
     const piece = document.createElement("span");
     piece.className = "wod5e-mage-arete-reading-part";
-    // Il nome della lettura (Dettaglio, Epicità…) non si scrive più (Blue,
+    // Il nome della lettura (Dettaglio, Influenza…) non si scrive più (Blue,
     // 10/9 notte: «da Dettaglio Un atomo a Un atomo»): sta nella nota al
     // passaggio del mouse, col conto dei Danni («Danni: Areté 3 +3»).
     piece.append(part.text ?? "");
@@ -346,7 +346,7 @@ function wireDotRows(dialog, readingFor = () => []) {
       row.classList.toggle("chosen", level > 0);
       if (reading) paintReading(reading, readingFor(row.dataset.kind, row.dataset.id, level), Number(row.dataset.reading) || 0);
     };
-    // Il tasto accanto alla voce: la lettura dopo (Peso, Epicità, Danni…).
+    // Il tasto accanto alla voce: la lettura dopo (Peso, Influenza, Danni…).
     reading?.querySelector("[data-role=readingSwitch]")?.addEventListener("click", (event) => {
       event.preventDefault();
       row.dataset.reading = String((Number(row.dataset.reading) || 0) + 1);

@@ -23,6 +23,7 @@ import { CAMPI, effettoDaFormula, idNuovo, malusCondizioni, manoDelNarratore, NE
 import { lanciaNemico, tiraNemico } from "../nemico-chat.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
 import { getSalute, onSaluteCellChange, onSaluteDanni, onSaluteReset, onSaluteRiposo } from "../salute.js";
+import { scopeLensIds } from "../scopes.js";
 import { SPHERES } from "../spheres.js";
 import { altraScala, altroTema, applicaScala, applicaTema, misuraFinestra, SCALA_AZIONE, SCALA_SETTING, SCALA_TASTO_CLASSE, scalaFattore, TEMA_AZIONE, TEMA_SETTING, TEMA_TASTO_CLASSE } from "../tema.js";
 import { chiudiRuote, onVentaglioChiudi, onVentaglioToggle, wireCassetti } from "./mage-actor-sheet.js";
@@ -298,7 +299,10 @@ async function onNemicoLente(event, target) {
   event.preventDefault();
   const scope = String(target.dataset.scope ?? "");
   this._stato.mano.lenti ??= {};
-  this._stato.mano.lenti[scope] = this._stato.mano.lenti[scope] ? 0 : 1;
+  // La lente dopo, in giro fra le due o tre dell'Ambito (29/9: Potenza,
+  // Condizioni e Precisione ne hanno tre).
+  const quante = Math.max(scopeLensIds(scope).length, 1);
+  this._stato.mano.lenti[scope] = ((Math.trunc(Number(this._stato.mano.lenti[scope]) || 0)) + 1) % quante;
   await this.render({ parts: ["magick"] });
 }
 
@@ -345,7 +349,7 @@ async function onNemicoManoAggiungi(event) {
     ambiti,
     soglia: conto.soglia,
     impossibile: Boolean(mano.impossibile),
-    lentePotenza: (mano.lenti ?? {}).potency ? "peso" : "danni",
+    lentePotenza: ["danni", "peso", "influenza"][Math.min(Math.trunc(Number((mano.lenti ?? {}).potency) || 0), 2)],
     sort: Date.now()
   });
   this._stato.mano = {};

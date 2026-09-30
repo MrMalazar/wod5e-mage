@@ -388,7 +388,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per quanto spazio: 1 la stanza, 2 il palazzo. Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Potenza (epicità) per quanto cambia: 1 un dettaglio, 3 stravolge una scena.",
+    "scopes": "Area per quanto spazio: 1 la stanza, 2 il palazzo. Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre.",
     "formule": [
       "trasformare"
     ]
@@ -562,7 +562,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
+    "scopes": "Potenza nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
     "formule": [
       "contrastare"
     ]
@@ -626,7 +626,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto regge. Potenza (epicità) nel braccio di ferro. Bersagli per più persone.",
+    "scopes": "Durata per quanto regge. Potenza nel braccio di ferro. Bersagli per più persone.",
     "formule": [
       "bloccare"
     ]
@@ -768,7 +768,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area, Potenza (peso ed epicità), Durata: tutti alti.",
+    "scopes": "Area, Potenza (peso), Durata: tutti alti.",
     "formule": [
       "rivoluzionare"
     ]
@@ -806,7 +806,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per quanto cancelli: 2 l'edificio, 3 il quartiere. Durata per quanto resta cancellato (7 per sempre). Potenza (epicità) per quanto pesa nella storia.",
+    "scopes": "Area per quanto cancelli: 2 l'edificio, 3 il quartiere. Durata per quanto resta cancellato (7 per sempre).",
     "formule": [
       "rivoluzionare"
     ]
@@ -1109,7 +1109,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Condizioni 1 per legarla a un momento: quando glielo chiederanno. Bersagli per più teste. Potenza (epicità) per quanto pesa la scelta: 1 il tavolo al ristorante, 4 il voto in consiglio.",
+    "scopes": "Condizioni 1 per legarla a un momento: quando glielo chiederanno. Bersagli per più teste.",
     "formule": [
       "suggestionare"
     ]
@@ -1490,7 +1490,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto è lontano quel domani (fuori gioco: 1 il giorno, 3 il mese, 5 l'anno). Potenza (epicità) per quanto pesa il domani che scegli: 2 tocca la scena, 5 stravolge il capitolo. Precisione (dettaglio) per un esito preciso e non «meglio».",
+    "scopes": "Durata per quanto è lontano quel domani (fuori gioco: 1 il giorno, 3 il mese, 5 l'anno). Precisione (dettaglio) per un esito preciso e non «meglio».",
     "formule": [
       "dominare"
     ]
@@ -1528,7 +1528,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro: contro una maledizione più forte vince l'Epicità più alta. Bersagli per più persone maledette. Precisione (dettaglio) per il nodo giusto fra molti.",
+    "scopes": "Potenza nel braccio di ferro: contro una maledizione più forte vince la Potenza più alta. Bersagli per più persone maledette. Precisione (dettaglio) per il nodo giusto fra molti.",
     "formule": [
       "cancellare"
     ]
@@ -1586,7 +1586,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 2 per la scena, 3 per più scene. Bersagli per rubare a più persone. Potenza (epicità) per quanta fortuna passa.",
+    "scopes": "Durata 2 per la scena, 3 per più scene. Bersagli per rubare a più persone. Condizioni (beneficio) per quanta fortuna passa.",
     "formule": [
       "drenare"
     ]
@@ -1618,7 +1618,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
+    "scopes": "Potenza nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
     "formule": [
       "contrastare"
     ]
@@ -1726,7 +1726,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto dura (fuori gioco: 3 il mese, 7 per sempre). Condizioni 1 per legarla: solo quando impugna un'arma, solo la sua famiglia etc.. Potenza (epicità) per il peso: 2 tocca la scena, 6 impatta sulla storia. Bersagli per una famiglia intera.",
+    "scopes": "Durata per quanto dura (fuori gioco: 3 il mese, 7 per sempre). Condizioni 1 per legarla: solo quando impugna un'arma, solo la sua famiglia etc.. Bersagli per una famiglia intera.",
     "formule": [
       "benedire",
       "maledire"
@@ -1771,7 +1771,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanta fortuna: 1 un dettaglio, 4 impatta sul capitolo. Durata per quanto dura. Bersagli per chi la riceve.",
+    "scopes": "Condizioni (beneficio) per quanta fortuna dà. Durata per quanto dura. Bersagli per chi la riceve.",
     "formule": [
       "creare"
     ]
@@ -1891,7 +1891,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanto pesa la storia: 2 tocca la scena, 4 impatta sul capitolo. Durata per quanto regge (7 per sempre). Condizioni 1 per ogni pezzo della storia.",
+    "scopes": "Durata per quanto regge (7 per sempre). Condizioni 1 per ogni pezzo della storia.",
     "formule": [
       "simulare"
     ]
@@ -1935,7 +1935,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata (7 per sempre). Bersagli 2, o di più per una Cabala intera. Condizioni 1 per una regola: finché vivono nella stessa città, finché uno non tradisce etc.. Potenza (epicità) per quanto pesa il legame.",
+    "scopes": "Durata (7 per sempre). Bersagli 2, o di più per una Cabala intera. Condizioni 1 per una regola: finché vivono nella stessa città, finché uno non tradisce etc..",
     "formule": [
       "destinare",
       "vincolare"
@@ -1980,7 +1980,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanto è grande il destino: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione. Durata 7. Bersagli per una stirpe.",
+    "scopes": "Durata 7. Bersagli per una stirpe.",
     "formule": [
       "destinare"
     ]
@@ -2024,7 +2024,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Condizioni 1 per ogni clausola, e Complessità per quanto è lungo il contratto (7 livello contratto). Durata 7 per sempre. Bersagli per quanti giurano. Potenza (epicità) per quanto pesa la punizione.",
+    "scopes": "Condizioni 1 per ogni clausola, e Complessità per quanto è lungo il contratto (7 livello contratto). Durata 7 per sempre. Bersagli per quanti giurano.",
     "formule": [
       "vincolare"
     ]
@@ -2983,7 +2983,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
+    "scopes": "Potenza nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
     "formule": [
       "contrastare"
     ]
@@ -3426,7 +3426,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanto pesa l'invenzione: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione. Durata per quanto il mondo la tiene (7 per sempre). Area per dove vale.",
+    "scopes": "Durata per quanto il mondo la tiene (7 per sempre). Area per dove vale.",
     "formule": [
       "inventare",
       "rivoluzionare"
@@ -3477,7 +3477,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Precisione (dettaglio) per andare a fondo: 1 l'auto, 3 la vite, 5 la lega. Precisione (informazione) per quanto pesa saperlo. Bersagli per più oggetti in un colpo.",
+    "scopes": "Precisione (dettaglio) per andare a fondo: 1 l'auto, 3 la vite, 5 la lega. Precisione (informazione) per quanto è rara la cosa da sapere. Bersagli per più oggetti in un colpo.",
     "formule": [
       "sapere"
     ]
@@ -3533,7 +3533,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Precisione (informazione) per quanto pesa nella trama quel che cerchi. Precisione (dettaglio) per una traccia sola fra tante. Durata 2 per leggere tutta la scena.",
+    "scopes": "Precisione (informazione) per quanto è raro quel che cerchi. Precisione (dettaglio) per una traccia sola fra tante. Durata 2 per leggere tutta la scena.",
     "formule": [
       "sapere"
     ]
@@ -4292,7 +4292,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
+    "scopes": "Potenza nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
     "formule": [
       "contrastare"
     ]
@@ -4341,7 +4341,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 7: l'innesto resta. Potenza (epicità) per quanto pesa: 2 una placca, 5 un braccio nuovo. Precisione (dettaglio) per quanto è fine l'innesto.",
+    "scopes": "Durata 7: l'innesto resta. Potenza per quanto pesa: 2 una placca, 5 un braccio nuovo. Precisione (dettaglio) per quanto è fine l'innesto.",
     "formule": [
       "costruire"
     ]
@@ -4373,7 +4373,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Precisione (dettaglio) per quanto è fine: 3 il documento, 5 il quadro. Potenza (epicità) per quanto pesa il falso nella storia. Durata 7.",
+    "scopes": "Precisione (dettaglio) per quanto è fine: 3 il documento, 5 il quadro. Durata 7.",
     "formule": [
       "simulare"
     ]
@@ -4543,7 +4543,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 7. Potenza (epicità) nel braccio di ferro con chi vuole aprire. Area per quanto sigilli: 1 la stanza, 2 l'edificio. Condizioni 1 se si apre per qualcuno: solo per te.",
+    "scopes": "Durata 7. Potenza nel braccio di ferro con chi vuole aprire. Area per quanto sigilli: 1 la stanza, 2 l'edificio. Condizioni 1 se si apre per qualcuno: solo per te.",
     "formule": [
       "barriera"
     ]
@@ -4619,7 +4619,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanto pesa l'invenzione: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione. Potenza (peso) per quanta ne fai. Durata per quanto resta al mondo (7 per sempre).",
+    "scopes": "Potenza (peso) per quanta ne fai. Durata per quanto resta al mondo (7 per sempre).",
     "formule": [
       "inventare",
       "rivoluzionare"
@@ -4708,7 +4708,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Precisione (dettaglio) per il pensiero esatto e non il rumore: 1 a cosa pensa, 3 il numero, 5 il ricordo sepolto. Precisione (informazione) per quanto pesa quel che cerchi. Bersagli per più teste. Durata 2 per restare in ascolto tutta la scena.",
+    "scopes": "Precisione (dettaglio) per il pensiero esatto e non il rumore: 1 a cosa pensa, 3 il numero, 5 il ricordo sepolto. Precisione (informazione) per quanto è raro quel che cerchi. Bersagli per più teste. Durata 2 per restare in ascolto tutta la scena.",
     "formule": [
       "sapere"
     ]
@@ -4969,7 +4969,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Area per una folla intera. Durata 1 per un attimo, 2 per la scena. Condizioni (malus 1, distrarre) se l'umore serve a distrarlo. Potenza (epicità) per quanto pesa: 1 un dettaglio, 3 stravolge la scena.",
+    "scopes": "Bersagli per più persone. Area per una folla intera. Durata 1 per un attimo, 2 per la scena. Condizioni (malus 1, distrarre) se l'umore serve a distrarlo. Potenza (influenza) per quanto cambia la persona.",
     "formule": [
       "suggestionare",
       "spegnere"
@@ -5046,7 +5046,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 2 per la scena, 4 per la sessione, 7 per sempre. Bersagli per la Cabala. Potenza (epicità) nel braccio di ferro con chi legge.",
+    "scopes": "Durata 2 per la scena, 4 per la sessione, 7 per sempre. Bersagli per la Cabala. Potenza nel braccio di ferro con chi legge.",
     "formule": [
       "proteggere"
     ]
@@ -5377,7 +5377,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più bocche. Durata 1 per una domanda, 2 per l'interrogatorio. Precisione (informazione) per quanto pesa quel che deve dire. Condizioni 1 se parla solo con te.",
+    "scopes": "Bersagli per più bocche. Durata 1 per una domanda, 2 per l'interrogatorio. Precisione (informazione) per quanto è raro quel che deve dire. Condizioni 1 se parla solo con te.",
     "formule": [
       "condizionare"
     ]
@@ -5447,7 +5447,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena. Bersagli per proteggere più teste.",
+    "scopes": "Potenza nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena. Bersagli per proteggere più teste.",
     "formule": [
       "contrastare"
     ]
@@ -5561,7 +5561,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più teste. Durata per quanto regge la riscrittura (7 per sempre). Precisione (dettaglio) per un ricordo solo e preciso: 1 la serata, 3 un volto, 5 una frase. Potenza (epicità) per quanto pesa: 1 una frase, 3 una serata.",
+    "scopes": "Bersagli per più teste. Durata per quanto regge la riscrittura (7 per sempre). Precisione (dettaglio) per un ricordo solo e preciso: 1 la serata, 3 un volto, 5 una frase. Potenza per quanto pesa: 1 una frase, 3 una serata.",
     "formule": [
       "cancellare"
     ]
@@ -5651,7 +5651,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Durata 1 per un ordine, 2 per la scena, 4 per la sessione. Condizioni 1 per ogni clausola dell'ordine. Potenza (epicità) per quanto pesa l'ordine: 1 un dettaglio, 4 impatta sul capitolo.",
+    "scopes": "Bersagli per più persone. Durata 1 per un ordine, 2 per la scena, 4 per la sessione. Condizioni 1 per ogni clausola dell'ordine. Potenza (influenza) per quanto cambia la persona.",
     "formule": [
       "dominare"
     ]
@@ -5689,7 +5689,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto resta (7 per sempre). Bersagli per più persone. Potenza (epicità) per quanto pesa la facoltà: 2 un talento, 5 un genio.",
+    "scopes": "Durata per quanto resta (7 per sempre). Bersagli per più persone. Potenza per quanto pesa la facoltà: 2 un talento, 5 un genio.",
     "formule": [
       "potenziare"
     ]
@@ -5840,7 +5840,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per quante teste la ricordano. Potenza (epicità) per quanto pesa. Durata per quanto regge (7 per sempre).",
+    "scopes": "Bersagli per quante teste la ricordano. Durata per quanto regge (7 per sempre).",
     "formule": [
       "simulare"
     ]
@@ -5878,7 +5878,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più teste. Durata 7 per sempre. Potenza (epicità) per quanto pesa: 3 un anno, 5 una vita.",
+    "scopes": "Bersagli per più teste. Durata 7 per sempre. Potenza per quanto pesa: 3 un anno, 5 una vita.",
     "formule": [
       "cancellare",
       "costruire"
@@ -5929,7 +5929,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto resta sveglia (7 per sempre). Potenza (epicità) per quanto pesa: 4 impatta sul capitolo, 7 sull'intera ambientazione. Precisione (dettaglio) per quanto è fine l'intelletto: 1 un cane, 3 un bambino, 5 un genio.",
+    "scopes": "Durata per quanto resta sveglia (7 per sempre). Precisione (dettaglio) per quanto è fine l'intelletto: 1 un cane, 3 un bambino, 5 un genio.",
     "formule": [
       "inventare"
     ]
@@ -5973,7 +5973,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 7. Potenza (epicità) per quanto pesa: 5 stravolge il capitolo, 7 sull'intera ambientazione. Bersagli per più persone. Precisione (dettaglio) per un tratto solo o la persona intera.",
+    "scopes": "Durata 7. Potenza (influenza) per quanto cambia la persona. Bersagli per più persone. Precisione (dettaglio) per un tratto solo o la persona intera.",
     "formule": [
       "trasmutare"
     ]
@@ -6011,7 +6011,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per setacciare un luogo intero: 1 la stanza, 2 il palazzo. Precisione (dettaglio) per un incantesimo solo fra tanti. Precisione (informazione) per quanto pesa saperlo. Durata 2 per tenere i sensi accesi tutta la scena.",
+    "scopes": "Area per setacciare un luogo intero: 1 la stanza, 2 il palazzo. Precisione (dettaglio) per un incantesimo solo fra tanti. Precisione (informazione) per quanto è rara la cosa da sapere. Durata 2 per tenere i sensi accesi tutta la scena.",
     "formule": [
       "percepire"
     ]
@@ -6563,7 +6563,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
+    "scopes": "Potenza nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
     "formule": [
       "contrastare"
     ]
@@ -6625,7 +6625,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (peso o epicità) per quanto crei: 1 lo zaino, 3 l'auto, 5 la casa. Durata per quanto resta al mondo (7 per sempre). Precisione (dettaglio) per quanto è fine.",
+    "scopes": "Potenza (peso) per quanto crei: 1 lo zaino, 3 l'auto, 5 la casa. Durata per quanto resta al mondo (7 per sempre). Precisione (dettaglio) per quanto è fine.",
     "formule": [
       "creare"
     ]
@@ -6663,7 +6663,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanti dadi: 1 un dado, 3 tre. Area per un luogo. Bersagli per più maghi. Durata 2 per la scena, 4 per la sessione.",
+    "scopes": "Potenza per quanti dadi: 1 un dado, 3 tre. Area per un luogo. Bersagli per più maghi. Durata 2 per la scena, 4 per la sessione.",
     "formule": [
       "benedire",
       "maledire"
@@ -6784,7 +6784,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per il perimetro: 1 la stanza, 2 l'edificio, 3 il quartiere. Durata per quanto regge. Condizioni 1 per chi è esente: i tuoi. Potenza (epicità) per quanti successi toglie o dà.",
+    "scopes": "Area per il perimetro: 1 la stanza, 2 l'edificio, 3 il quartiere. Durata per quanto regge. Condizioni 1 per chi è esente: i tuoi. Potenza per quanti successi toglie o dà.",
     "formule": [
       "barriera",
       "contrastare"
@@ -6811,7 +6811,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro con chi l'ha tessuta. Bersagli per più Meraviglie. Durata per quanto resta spenta (7 per sempre).",
+    "scopes": "Potenza nel braccio di ferro con chi l'ha tessuta. Bersagli per più Meraviglie. Durata per quanto resta spenta (7 per sempre).",
     "formule": [
       "cancellare"
     ]
@@ -6861,7 +6861,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanto pesa: 3 la macchina, 5 la casa. Durata per quanto resta al mondo (7 per sempre). Precisione (dettaglio) per quante parti tengono.",
+    "scopes": "Potenza (peso) per quanto pesa: 3 la macchina, 5 la casa. Durata per quanto resta al mondo (7 per sempre). Precisione (dettaglio) per quante parti tengono.",
     "formule": [
       "costruire",
       "creare"
@@ -6894,7 +6894,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanto è forte il Nodo: 4 impatta sul capitolo, 6 impatta sulla storia. Durata 7. Area per quanto è largo.",
+    "scopes": "Potenza per quanto è forte il Nodo. Durata 7. Area per quanto è largo.",
     "formule": [
       "inventare"
     ]
@@ -6958,7 +6958,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 7, e basta. Potenza (epicità) per quanto pesa l'effetto radicato.",
+    "scopes": "Durata 7, e basta.",
     "formule": [
       "fissare"
     ]
@@ -7066,7 +7066,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per un luogo intero: 1 la stanza, 2 il palazzo, 3 il quartiere. Precisione (informazione) per quanto pesa saperlo. Precisione (dettaglio) per una morte sola fra tante.",
+    "scopes": "Area per un luogo intero: 1 la stanza, 2 il palazzo, 3 il quartiere. Precisione (informazione) per quanto è rara la cosa da sapere. Precisione (dettaglio) per una morte sola fra tante.",
     "formule": [
       "sapere"
     ]
@@ -7562,7 +7562,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto resta chiuso (7 per sempre). Potenza (epicità) nel braccio di ferro con chi vuole riaprirlo. Bersagli per più varchi.",
+    "scopes": "Durata per quanto resta chiuso (7 per sempre). Potenza nel braccio di ferro con chi vuole riaprirlo. Bersagli per più varchi.",
     "formule": [
       "aprire"
     ]
@@ -7733,7 +7733,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 2 per la scena della prova. Potenza (epicità) per quanto pesa: 4 impatta sul capitolo, 6 impatta sulla storia.",
+    "scopes": "Durata 2 per la scena della prova.",
     "formule": [
       "risanare"
     ]
@@ -7803,7 +7803,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
+    "scopes": "Potenza nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
     "formule": [
       "contrastare"
     ]
@@ -7841,7 +7841,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Portata per quanto in fondo lo mandi, in Veli. Bersagli per più esiliati. Potenza (epicità) nel braccio di ferro con chi resiste. Durata per quanto resta chiuso fuori.",
+    "scopes": "Portata per quanto in fondo lo mandi, in Veli. Bersagli per più esiliati. Potenza nel braccio di ferro con chi resiste. Durata per quanto resta chiuso fuori.",
     "formule": [
       "cancellare"
     ]
@@ -7879,7 +7879,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro con l'ospite. Bersagli per più posseduti. Durata 2 per la scena, 7 perché non torni.",
+    "scopes": "Potenza nel braccio di ferro con l'ospite. Bersagli per più posseduti. Durata 2 per la scena, 7 perché non torni.",
     "formule": [
       "cancellare"
     ]
@@ -7911,7 +7911,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanto è forte l'entità. Durata per quanto resta vincolata: 2 la scena, 4 la sessione. Condizioni 1 per ogni clausola del vincolo, e Complessità per quanto è lungo.",
+    "scopes": "Potenza per quanto è forte l'entità. Durata per quanto resta vincolata: 2 la scena, 4 la sessione. Condizioni 1 per ogni clausola del vincolo, e Complessità per quanto è lungo.",
     "formule": [
       "evocare",
       "dominare"
@@ -7944,7 +7944,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto reggi: 2 la scena, 4 la sessione. Potenza (epicità) nel braccio di ferro con l'Avatar. Condizioni 1 se la prigione si apre a una condizione.",
+    "scopes": "Durata per quanto reggi: 2 la scena, 4 la sessione. Potenza nel braccio di ferro con l'Avatar. Condizioni 1 se la prigione si apre a una condizione.",
     "formule": [
       "vincolare"
     ]
@@ -7976,7 +7976,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto reggi: 2 la scena, 4 la sessione, 7 per sempre. Potenza (epicità) nel braccio di ferro con l'entità. Bersagli per più entità.",
+    "scopes": "Durata per quanto reggi: 2 la scena, 4 la sessione, 7 per sempre. Potenza nel braccio di ferro con l'entità. Bersagli per più entità.",
     "formule": [
       "bloccare"
     ]
@@ -8025,7 +8025,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanto pesa il ritorno: 4 impatta sul capitolo, 6 impatta sulla storia. Durata 7. Condizioni 1 per ogni clausola del ritorno.",
+    "scopes": "Durata 7. Condizioni 1 per ogni clausola del ritorno.",
     "formule": [
       "resuscitare"
     ]
@@ -8101,7 +8101,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) per quanto è forte: 3 stravolge una scena, 6 impatta sulla storia. Durata per quanto vive (7 per sempre). Condizioni 1 per la fame che le dai.",
+    "scopes": "Potenza per quanto è forte. Durata per quanto vive (7 per sempre). Condizioni 1 per la fame che le dai.",
     "formule": [
       "inventare"
     ]
@@ -8133,7 +8133,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 2 per la scena, 4 per la sessione, 7 per sempre. Potenza (epicità) nel braccio di ferro con chi c'è dentro.",
+    "scopes": "Durata 2 per la scena, 4 per la sessione, 7 per sempre. Potenza nel braccio di ferro con chi c'è dentro.",
     "formule": [
       "possedere"
     ]
@@ -8183,7 +8183,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per quanto è grande: 2 il palazzo, 4 la città, 6 il continente. Durata 7. Potenza (epicità) per quanto pesa: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione.",
+    "scopes": "Area per quanto è grande: 2 il palazzo, 4 la città, 6 il continente. Durata 7.",
     "formule": [
       "inventare",
       "rivoluzionare"
@@ -8222,7 +8222,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità): 6 impatta sulla storia. Durata 7, e basta.",
+    "scopes": "Durata 7, e basta.",
     "formule": [
       "annientare"
     ]
@@ -8266,7 +8266,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità): 5 stravolge il capitolo, 6 impatta sulla storia. Durata 7. Bersagli per più Dormienti.",
+    "scopes": "Durata 7. Bersagli per più Dormienti.",
     "formule": [
       "trasmutare"
     ]
@@ -8337,7 +8337,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto indietro o avanti (fuori gioco: 3 il mese, 5 l'anno, 6 il decennio). Precisione (informazione) per quanto pesa quel che cerchi. Bersagli per più linee.",
+    "scopes": "Durata per quanto indietro o avanti (fuori gioco: 3 il mese, 5 l'anno, 6 il decennio). Precisione (informazione) per quanto è raro quel che cerchi. Bersagli per più linee.",
     "formule": [
       "sapere"
     ]
@@ -8477,7 +8477,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 1 per lo scontro, 2 per la scena. Bersagli per più persone. Potenza (epicità) per quanto cambia il ritmo: 2 il doppio, 4 dieci volte.",
+    "scopes": "Durata 1 per lo scontro, 2 per la scena. Bersagli per più persone. Potenza per quanto cambia il ritmo: 2 il doppio, 4 dieci volte.",
     "formule": [
       "accelerare",
       "rallentare"
@@ -8778,7 +8778,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
+    "scopes": "Potenza nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena.",
     "formule": [
       "contrastare"
     ]
@@ -9000,7 +9000,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto indietro (fuori gioco: 3 il mese, 5 l'anno, 6 il decennio). Potenza (epicità) per quanto pesa l'evento: 5 stravolge il capitolo, 7 impatta sull'intera ambientazione.",
+    "scopes": "Durata per quanto indietro (fuori gioco: 3 il mese, 5 l'anno, 6 il decennio).",
     "formule": [
       "cancellare"
     ]
@@ -9076,7 +9076,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per il luogo: 3 il quartiere, 5 la regione. Durata 7. Potenza (epicità): 7 impatta sull'intera ambientazione.",
+    "scopes": "Area per il luogo: 3 il quartiere, 5 la regione. Durata 7.",
     "formule": [
       "rivoluzionare"
     ]
@@ -9158,7 +9158,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Precisione (informazione) per quanto pesa quel che cerchi. Precisione (dettaglio) per un segno solo fra tanti. Durata 2 per la scena.",
+    "scopes": "Precisione (informazione) per quanto è raro quel che cerchi. Precisione (dettaglio) per un segno solo fra tanti. Durata 2 per la scena.",
     "formule": [
       "sapere"
     ]
@@ -9602,7 +9602,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto regge: 1 lo scontro, 2 la scena, 4 la sessione. Potenza (epicità) per quanto pesa il potenziamento: 1 un dettaglio, 3 stravolge la scena. Bersagli per potenziare i compagni.",
+    "scopes": "Durata per quanto regge: 1 lo scontro, 2 la scena, 4 la sessione. Condizioni (beneficio) per quanto aiuta. Bersagli per potenziare i compagni.",
     "formule": [
       "potenziare"
     ]
@@ -9634,7 +9634,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (epicità) nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena. Bersagli per proteggere più corpi.",
+    "scopes": "Potenza nel braccio di ferro. Durata 1 per un lancio, 2 per tutta la scena. Bersagli per proteggere più corpi.",
     "formule": [
       "contrastare"
     ]
@@ -9844,7 +9844,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 2 per la scena, 4 per la sessione. Potenza (epicità) nel braccio di ferro con chi c'è dentro.",
+    "scopes": "Durata 2 per la scena, 4 per la sessione. Potenza nel braccio di ferro con chi c'è dentro.",
     "formule": [
       "possedere"
     ]
@@ -9970,7 +9970,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto regge: 4 la sessione, 7 per sempre. Potenza (epicità) per quanti anni: 2 dieci anni, 5 una vita. Bersagli per più corpi.",
+    "scopes": "Durata per quanto regge: 4 la sessione, 7 per sempre. Potenza per quanti anni: 2 dieci anni, 5 una vita. Bersagli per più corpi.",
     "formule": [
       "risanare"
     ]
@@ -10008,7 +10008,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Potenza (epicità) per quanto cambia: 1 un dettaglio, 4 impatta sul capitolo. Bersagli per più corpi.",
+    "scopes": "Durata per quanto regge: 2 la scena, 4 la sessione, 7 per sempre. Bersagli per più corpi.",
     "formule": [
       "trasformare"
     ]
@@ -10190,7 +10190,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (peso) per quanto è grande: 1 il topo, 2 l'uomo, 3 il cavallo. Potenza (epicità) per quanto pesa: 3 stravolge una scena, 6 impatta sulla storia. Durata per quanto vive (7 per sempre).",
+    "scopes": "Potenza (peso) per quanto è grande: 1 il topo, 2 l'uomo, 3 il cavallo. Durata per quanto vive (7 per sempre).",
     "formule": [
       "inventare"
     ]

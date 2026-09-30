@@ -7459,7 +7459,7 @@
   border-color: var(--mage-dot-border);
 }
 
-/* La pastiglia della lettura scelta (Peso, Epicità…) sta sulla stessa linea,
+/* La pastiglia della lettura scelta (Peso, Influenza…) sta sulla stessa linea,
    subito dopo il nome (Blue, 23/9: via la seconda linea, «crea spazio tra i
    pallini»); il testo del livello sta nel tooltip del pallino. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-nome-ambito > .wod5e-mage-ambito-tag {

@@ -18,7 +18,9 @@ for (const formula of FORMULE_M6) {
   assert.ok(formula.thresholds.length >= 1, formula.id);
   for (const threshold of formula.thresholds) {
     const scopes = Object.entries(threshold.scopes);
-    assert.ok(scopes.length >= 1 && scopes.length <= 3, formula.id);
+    // Dal 29/9, tolto l'Impatto, una soglia può restare senza Ambiti: è
+    // l'effetto di base (Ritoccare, Contrastare), e si legge «0».
+    assert.ok(scopes.length <= 3, formula.id);
     assert.ok(scopes.every(([scope, level]) => SCOPES.includes(scope) && level >= 1 && level <= 7), formula.id);
     assert.equal(scopes.reduce((sum, [, level]) => sum + level, 0), threshold.base, formula.id);
   }
@@ -30,7 +32,9 @@ for (const formula of FORMULE_M6) {
 assert.deepEqual(FORMULE_M6.filter((formula) => formula.byBlue).map((formula) => formula.name).sort(), ["Accelerare e Rallentare", "Annientare", "Guarire"]);
 assert.deepEqual(FORMULE_M6.filter((formula) => formula.name.includes(" e ")).map((formula) => formula.name).sort(), ["Accelerare e Rallentare", "Aprire e Bloccare", "Benedire e Maledire", "Creare e Distruggere"]);
 assert.equal(FORMULE_ALIAS.accelerare, "accelerare-e-rallentare");
-assert.deepEqual(FORMULE_M6.find((formula) => formula.id === "guarire").thresholds, [{ base: 4, scopes: { potency: 3, impact: 1 } }]);
+assert.deepEqual(FORMULE_M6.find((formula) => formula.id === "guarire").thresholds, [{ base: 3, scopes: { potency: 3 } }]);
+assert.deepEqual(FORMULE_M6.filter((formula) => formula.thresholds.some((threshold) => !Object.keys(threshold.scopes).length)).map((formula) => formula.id).sort(), ["contrastare", "ritoccare"]);
+assert.equal(FORMULE_M6.some((formula) => formula.thresholds.some((threshold) => "impact" in threshold.scopes) || /Impatto/.test(`${formula.thresholdText} ${formula.use}`)), false);
 // I poteri: ognuno sta sotto la sua matrice, e la matrice lo elenca. I poteri nuovi del rifacimento
 // (30/9, gli aggiunti) una matrice non ce l'hanno ancora: la decide Blue.
 const rifacimento = JSON.parse(readFileSync(new URL("../tools/dati/rifacimento.json", import.meta.url), "utf8"));

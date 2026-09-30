@@ -186,9 +186,14 @@ assert.deepEqual(perFormula.map((formula) => formula.name), [...perFormula.map((
 const danneggiare = perFormula.find((formula) => formula.id === "danneggiare");
 assert.equal(danneggiare.open, true);
 assert.deepEqual(danneggiare.accessOwned.map((sphere) => sphere.id), ["forces", "mind", "life"]);
-assert.equal(danneggiare.thresholds[0].base, 4);
-assert.deepEqual(danneggiare.thresholds[0].scopes.map((scope) => [scope.id, scope.level]), [["potency", 3], ["impact", 1]]);
-assert.equal(danneggiare.thresholds[0].text, "4 (WOD5E_MAGE.Scopes.potency 3, WOD5E_MAGE.Scopes.impact 1)");
+// Dal 29/9 l'Impatto è fuori dalle soglie: Danneggiare resta con la Potenza.
+assert.equal(danneggiare.thresholds[0].base, 3);
+assert.deepEqual(danneggiare.thresholds[0].scopes.map((scope) => [scope.id, scope.level]), [["potency", 3]]);
+assert.equal(danneggiare.thresholds[0].text, "3 (WOD5E_MAGE.Scopes.potency 3)");
+// Una soglia senza Ambiti si legge «0»; l'Informazione di Rivelare sta nella Precisione.
+assert.equal(perFormula.find((formula) => formula.id === "contrastare").thresholds[0].text, "0");
+assert.deepEqual(perFormula.find((formula) => formula.id === "rivelare").thresholds[0].scopes.map((scope) => [scope.id, scope.level]), [["precision", 4]]);
+assert.equal(perFormula.every((formula) => formula.thresholds.every((threshold) => threshold.scopes.every((scope) => scope.id !== "impact"))), true);
 assert.equal(danneggiare.rows.find((row) => row.key === "forces").owned, true);
 assert.equal(danneggiare.rows.find((row) => row.key === "spirit").owned, false);
 assert.ok(danneggiare.powers.some((power) => power.name === "Onda d'urto"));
@@ -203,8 +208,8 @@ assert.deepEqual(percepire.amalgamChoices, []);
 const riavvolgere = perFormula.find((formula) => formula.id === "riavvolgere");
 assert.equal(riavvolgere.open, false);
 assert.deepEqual(riavvolgere.amalgamChoices.map((sphere) => sphere.id), ["mind", "life"]);
-// Annientare ha due soglie: 8 o 11.
-assert.deepEqual(perFormula.find((formula) => formula.id === "annientare").thresholds.map((threshold) => threshold.base), [8, 11]);
+// Annientare ha due soglie: 4 o 7 (senza l'Impatto, dal 29/9).
+assert.deepEqual(perFormula.find((formula) => formula.id === "annientare").thresholds.map((threshold) => threshold.base), [4, 7]);
 // Senza Sfere le matrici si leggono, ma nessuna si apre.
 assert.equal(prepareGrimorioFormule({}).length, 48);
 assert.equal(prepareGrimorioFormule({}).every((formula) => !formula.open), true);
@@ -212,15 +217,15 @@ assert.equal(prepareGrimorioFormule({}).every((formula) => !formula.open), true)
 const pick = formulaPick(FORMULE_M6.find((formula) => formula.id === "guarire"), { access: "life", amalgams: ["matter", "forces", "life"], sphereLevels: { life: 2, matter: 1, forces: 3 } });
 assert.deepEqual(pick.spheres, { life: 2, matter: 1 });
 assert.deepEqual(pick.amalgams, ["matter"]);
-assert.deepEqual(pick.scopes, { potency: 3, impact: 1 });
-assert.equal(pick.threshold, 4);
+assert.deepEqual(pick.scopes, { potency: 3 });
+assert.equal(pick.threshold, 3);
 assert.equal(formulaPick(FORMULE_M6.find((formula) => formula.id === "guarire"), { access: "forces", sphereLevels: { forces: 3 } }), null);
 assert.equal(formulaPick(FORMULE_M6.find((formula) => formula.id === "guarire"), { access: "life", sphereLevels: { forces: 3 } }), null);
 // L'accesso al Dominio (25/9): la Sfera fra le proprie apre la matrice anche a livello 0; il livello è un promemoria.
 const aZero = prepareGrimorioFormule({ life: 0 }, (k) => k).find((formula) => formula.id === "guarire");
 assert.deepEqual([aZero.open, aZero.accessOwned.map((sphere) => [sphere.id, sphere.level])], [true, [["life", 0]]]);
 assert.deepEqual(formulaPick(FORMULE_M6.find((formula) => formula.id === "guarire"), { access: "life", amalgams: ["matter"], sphereLevels: { life: 0, matter: 0 } }).spheres, { life: 1, matter: 1 }, "senza livello la Sfera vale 1 nel lancio");
-assert.equal(formulaPick(FORMULE_M6.find((formula) => formula.id === "annientare"), { access: "matter", threshold: 1, sphereLevels: { matter: 1 } }).threshold, 11);
+assert.equal(formulaPick(FORMULE_M6.find((formula) => formula.id === "annientare"), { access: "matter", threshold: 1, sphereLevels: { matter: 1 } }).threshold, 7);
 assert.deepEqual(prepareGrimorio({ forces: 3 }, (k) => k)[0].levels[2].entries.find((entry) => entry.id === "forces-3-onda-d-urto").formule, ["Danneggiare"]);
 assert.match(grimorioTemplate, /data-view-panel="sphere"[\s\S]*wod5e-mage-grimorio-formula[\s\S]*data-view-panel="formula"[\s\S]*data-formula="\{\{formula\.id\}\}"[\s\S]*data-role="formulaAccess"[\s\S]*data-role="formulaAmalgam"[\s\S]*data-role="formulaSave"[\s\S]*data-role="formulaRoll"[\s\S]*data-role="formulaPick"/);
 console.log("Formule: test passati.");
