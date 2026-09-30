@@ -1,185 +1,155 @@
-{{!-- Il Tiro (16/9; 23/9, largo due colonne al posto del Grimorio; 27/9,
-     tre colonne dentro). A sinistra il tipo riconosciuto con Azzera, la
-     catena di chi dà dadi (Areté col premio, Attributo, Abilità,
-     Specializzazione, potere, Tratti), ognuno con la × per toglierlo, e
-     sotto le opzioni: premio dell'Areté, come si paga il lancio (29/9),
-     la Quintessenza in dadi di un potere, Sforza la realtà. In
-     mezzo la catena di chi dà la soglia (l'incantesimo in testa, le Sfere,
-     gli Ambiti col livello). A destra i tre numeri, ognuno col meno e il più
-     (Blue, 23/9): Riserva (i dadi extra che entrano nella riserva, tetto
-     3), Soglia (la Difficoltà, dagli Ambiti o a mano) e Dadi (il ritocco
-     sul totale, fuori dal tetto); in fondo i tasti. Senza Areté c'è TIRA;
-     con l'Areté i tre tasti del tipo, e ognuno tira. Niente finestra di
-     conferma. Senza la Difficoltà inserita (a mano, o dagli Ambiti) i
-     tasti restano spenti (Blue, 16/9 sera). --}}
+{{!-- Il Tiro (16/9; 23/9 largo due colonne; 30/9 rifatto sul mock di Blue:
+     «troppo bombardamento informativo», i simboli di quello che si mette,
+     solo «Soglia», il ritocco anche al giocatore). In testa il tipo di tiro
+     col suo simbolo e, nella Magick, l'Areté e le Sfere coi sigilli (non
+     pesano su niente). Due colonne che finiscono col loro «a mano»: la
+     Riserva (chi dà dadi) e la Soglia (chi toglie dadi); ogni riga ha il
+     simbolo del pezzo com'è nella scheda, il nome, il valore e la × che
+     compare al sorvolo. Poi il conto in una riga (riserva − soglia +
+     ritocco = dadi, riesce dal 6 o dall'8), le opzioni (Paghi con, Sforza
+     la realtà, Dal Narratore) e i tasti: TIRA, o i tre tasti del tipo col
+     prezzo; spento, il tasto dice cosa manca. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-tiro{{#if tiro.magick}} magick{{/if}}">
-    <header class="wod5e-mage-riq-title"><span>{{localize "WOD5E_MAGE.Stat.IlTiro"}}</span></header>
+    <header class="wod5e-mage-riq-title wod5e-mage-tiro-testa">
+        <span>{{localize "WOD5E_MAGE.Stat.IlTiro"}}</span>
+        {{#if tiro.testa.tipo}}
+            <span class="wod5e-mage-tiro-tipo tipo-{{tiro.testa.tipo}}" title="{{tiro.testa.hint}}"><i class="fa-solid {{#if tiro.magick}}fa-wand-sparkles{{else}}fa-dice-d10{{/if}}" aria-hidden="true"></i><span>{{tiro.testa.label}}</span></span>
+            {{#if tiro.testa.spell}}
+                <span class="wod5e-mage-tiro-chip tipo-spell" title="{{tiro.testa.spell.hint}}"><i class="fa-solid fa-book" aria-hidden="true"></i><span>{{tiro.testa.spell.name}}</span><button type="button" class="wod5e-mage-tiro-via" data-action="tiroPill" data-kind="spell" data-id="{{tiro.testa.spell.id}}" title="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}: {{tiro.testa.spell.name}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
+            {{/if}}
+            {{#if tiro.testa.arete}}
+                <span class="wod5e-mage-tiro-chip tipo-arete" title="{{tiro.testa.arete.hint}}"><img class="wod5e-mage-arete-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt="{{tiro.testa.arete.label}}"><button type="button" class="wod5e-mage-tiro-via" data-action="tiroPill" data-kind="arete" data-id="arete" title="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}: {{tiro.testa.arete.label}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
+            {{/if}}
+            {{#each tiro.testa.spheres as |sphere|}}
+                <span class="wod5e-mage-tiro-chip tipo-sphere" title="{{sphere.hint}}">{{#if sphere.icon}}<img class="wod5e-mage-sfera-sigillo" src="{{sphere.icon}}" alt="">{{/if}}<span>{{sphere.label}}</span><button type="button" class="wod5e-mage-tiro-via" data-action="tiroPill" data-kind="sphere" data-id="{{sphere.id}}" title="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}: {{sphere.label}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
+            {{/each}}
+        {{/if}}
+        {{#unless tiro.empty}}
+            <button type="button" class="wod5e-mage-tiro-azzera" data-action="tiroClear" title="{{localize 'WOD5E_MAGE.Tiro.Clear'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.Clear'}}"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+        {{/unless}}
+    </header>
     <div class="wod5e-mage-riq-body wod5e-mage-tiro-corpo">
-        <div class="wod5e-mage-tiro-sinistra">
-            <div class="wod5e-mage-tiro-tipo">
-                <i class="fa-solid {{#if tiro.magick}}fa-wand-sparkles{{else}}fa-dice-d10{{/if}}" aria-hidden="true"></i>
-                <span>{{tiro.kindLabel}}</span>
-                {{#unless tiro.empty}}
-                    <button type="button" class="wod5e-mage-tiro-azzera" data-action="tiroClear" title="{{localize 'WOD5E_MAGE.Tiro.Clear'}}"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.Clear"}}</button>
-                {{/unless}}
-            </div>
-
-            {{!-- La catena di chi dà dadi (Blue, 27/9): una pillola per pezzo, la × lo toglie. --}}
-            <div class="wod5e-mage-tiro-colonna-testa">{{localize "WOD5E_MAGE.Tiro.CatenaDadi"}}</div>
-            <div class="wod5e-mage-tiro-catena wod5e-mage-tiro-catena-dadi" role="group" aria-label="{{localize 'WOD5E_MAGE.Tiro.CatenaDadi'}}" title="{{localize 'WOD5E_MAGE.Tiro.CatenaHint'}}">
-                {{#each tiro.pillsDadi as |pill|}}
-                    <span class="wod5e-mage-pillola tipo-{{pill.kind}}">
-                        <span class="wod5e-mage-pillola-testo">{{pill.text}}</span>
-                        <button type="button" class="wod5e-mage-pillola-via" data-action="tiroPill" data-kind="{{pill.kind}}" data-id="{{pill.id}}" {{#if pill.skill}}data-skill="{{pill.skill}}"{{/if}} title="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}: {{pill.text}}">×</button>
+        <div class="wod5e-mage-tiro-colonne">
+            {{!-- La Riserva: chi dà dadi. --}}
+            <section class="wod5e-mage-tiro-colonna riserva" aria-label="{{localize 'WOD5E_MAGE.Tiro.Riserva'}}">
+                <div class="wod5e-mage-tiro-colonna-testa" title="{{tiro.riserva.hint}}"><i class="fa-solid fa-dice" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Tiro.Riserva"}}</span></div>
+                <div class="wod5e-mage-tiro-voci">
+                    {{#each tiro.riserva.righe as |voce|}}
+                        <div class="wod5e-mage-tiro-voce tipo-{{voce.kind}}{{#if voce.indent}} rientro{{/if}}{{#if voce.off}} fuori{{/if}}" title="{{voce.hint}}">
+                            {{#if voce.check}}<input type="checkbox" class="wod5e-mage-tiro-spunta" data-action="{{voce.check.action}}" data-condizione="{{voce.id}}" {{#if voce.check.on}}checked{{/if}} aria-label="{{voce.name}}">{{/if}}
+                            {{#if voce.img}}<img class="wod5e-mage-tiro-voce-icona{{#if voce.disc}} wod5e-mage-sfera-sigillo{{/if}}" src="{{voce.img}}" alt="">{{else if voce.fa}}<i class="{{voce.fa}} wod5e-mage-tiro-voce-icona" aria-hidden="true"></i>{{else if voce.mask}}<span class="wod5e-mage-cond-icona wod5e-mage-tiro-voce-icona"><i style="-webkit-mask-image: url({{voce.mask}}); mask-image: url({{voce.mask}})"></i>{{#if voce.numeral}}<b>{{voce.numeral}}</b>{{/if}}</span>{{else}}<span class="wod5e-mage-tiro-voce-icona vuota" aria-hidden="true"></span>{{/if}}
+                            <span class="wod5e-mage-tiro-voce-nome">{{voce.name}}</span>
+                            {{#if voce.stepper}}
+                                <span class="wod5e-mage-tiro-passo">
+                                    <button type="button" data-action="{{voce.stepper.action}}" data-delta="-1" aria-label="{{voce.name}} −1" {{#if voce.stepper.min}}disabled{{/if}}><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                                    <b class="wod5e-mage-tiro-campo">{{voce.stepper.value}}</b>
+                                    <button type="button" data-action="{{voce.stepper.action}}" data-delta="1" aria-label="{{voce.name}} +1" {{#if voce.stepper.max}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                                    {{#if voce.stepper.extra}}<small>{{voce.stepper.extra}}</small>{{/if}}
+                                </span>
+                            {{else}}
+                                <b class="wod5e-mage-tiro-voce-valore{{#if voce.meno}} meno{{/if}}">{{voce.value}}</b>
+                            {{/if}}
+                            {{#if voce.via}}<button type="button" class="wod5e-mage-tiro-via" data-action="tiroPill" data-kind="{{voce.kind}}" data-id="{{voce.id}}" {{#if voce.skill}}data-skill="{{voce.skill}}"{{/if}} title="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}: {{voce.name}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>{{/if}}
+                        </div>
+                    {{/each}}
+                    {{#if tiro.riserva.vuote.attributo}}<div class="wod5e-mage-tiro-voce vuota" title="{{localize 'WOD5E_MAGE.Tiro.AttributeHint'}}"><span class="wod5e-mage-tiro-voce-nome">{{localize "WOD5E_MAGE.Tiro.VuotoAttributo"}}</span></div>{{/if}}
+                    {{#if tiro.riserva.vuote.abilita}}<div class="wod5e-mage-tiro-voce vuota" title="{{localize 'WOD5E_MAGE.Tiro.SkillHint'}}"><span class="wod5e-mage-tiro-voce-nome">{{localize "WOD5E_MAGE.Tiro.VuotoAbilita"}}</span></div>{{/if}}
+                </div>
+                {{!-- A mano: i dadi dal tavolo, fino a tre. --}}
+                <div class="wod5e-mage-tiro-mano" title="{{tiro.riserva.mano.hint}}">
+                    <i class="fa-solid fa-pen" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Tiro.AMano"}}</span>
+                    <span class="wod5e-mage-tiro-passo">
+                        <button type="button" data-action="tiroExtra" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.Tiro.Riserva'}} −1" {{#if tiro.riserva.mano.min}}disabled{{/if}}><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                        <b class="wod5e-mage-tiro-campo">{{tiro.riserva.mano.label}}</b>
+                        <button type="button" data-action="tiroExtra" data-delta="1" aria-label="{{localize 'WOD5E_MAGE.Tiro.Riserva'}} +1" {{#if tiro.riserva.mano.max}}disabled{{/if}}><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
                     </span>
-                {{/each}}
-            </div>
-
-            {{!-- Le Condizioni sul tiro (29/9): quelle accese che pesano sul tipo del tiro, ognuna col
-                 suo peso (−2, −2 e 8, fallisce, −1). Un clic la toglie da questo tiro perché non c'entra
-                 con quello che il personaggio fa, un altro la rimette; il tiro che fallisce lo dice. --}}
-            {{#if tiro.condizioni}}
-                <div class="wod5e-mage-tiro-condizioni{{#if tiro.condizioni.fallisce}} fallisce{{/if}}">
-                    <div class="wod5e-mage-tiro-colonna-testa">{{localize "WOD5E.ItemsList.Conditions"}}{{#if tiro.condizioni.tipo}} · {{tiro.condizioni.tipo}}{{/if}}</div>
-                    <div class="wod5e-mage-tiro-condizioni-fila">
-                        {{#each tiro.condizioni.righe as |riga|}}
-                            <button type="button" class="wod5e-mage-tiro-condizione peso-{{riga.weight}}{{#unless riga.on}} fuori{{/unless}}" data-action="tiroCondizione" data-condizione="{{riga.id}}" aria-pressed="{{riga.on}}" title="{{riga.title}}">
-                                <span class="wod5e-mage-cond-icona"><i style="-webkit-mask-image: url({{riga.icon}}); mask-image: url({{riga.icon}})"></i>{{#if riga.numeral}}<b>{{riga.numeral}}</b>{{/if}}</span>
-                                <span class="wod5e-mage-tiro-condizione-nome">{{riga.name}}</span>
-                                <b class="wod5e-mage-tiro-condizione-peso">{{riga.peso}}</b>
-                            </button>
-                        {{/each}}
-                    </div>
-                    {{#if tiro.condizioni.fallisce}}<p class="wod5e-mage-tiro-condizioni-fallisce"><i class="fa-solid fa-ban" aria-hidden="true"></i> {{tiro.condizioni.fallisceTesto}}</p>{{/if}}
                 </div>
-            {{/if}}
+            </section>
 
-            {{!-- Il potere scelto (tappa 3, 24/9): le sue note (il numero e la frase del
-                 libretto), gli effetti rimasti fuori col perché, la riuscita senza tirare. --}}
-            {{#if tiro.potere}}
-                <div class="wod5e-mage-tiro-potere{{#if tiro.potere.autoSuccess}} riesce{{/if}}">
-                    {{#if tiro.potere.autoSuccess}}<p class="wod5e-mage-tiro-potere-riesce"><i class="fa-solid fa-check" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.RiesceSenzaTirare" name=tiro.potere.name}}</p>{{/if}}
-                    {{#if tiro.potere.autoSuccessMotivo}}<p class="wod5e-mage-tiro-potere-fuori">{{tiro.potere.name}}: {{tiro.potere.autoSuccessMotivo}}</p>{{/if}}
-                    {{#each tiro.potere.note as |nota|}}<p class="wod5e-mage-tiro-potere-nota">{{nota}}</p>{{/each}}
-                    {{#each tiro.potere.esclusi as |nota|}}<p class="wod5e-mage-tiro-potere-fuori">{{nota}}</p>{{/each}}
-                    {{#if tiro.potere.cost}}<p class="wod5e-mage-tiro-potere-nota"><i class="fa-solid fa-droplet" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.PotereCosto" points=tiro.potere.cost}}</p>{{/if}}
+            {{!-- La Soglia: chi toglie dadi. --}}
+            <section class="wod5e-mage-tiro-colonna soglia" aria-label="{{localize 'WOD5E_MAGE.Tiro.Soglia'}}">
+                <div class="wod5e-mage-tiro-colonna-testa" title="{{tiro.soglia.hint}}"><i class="fa-solid fa-signal" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Tiro.Soglia"}}</span></div>
+                <div class="wod5e-mage-tiro-voci">
+                    {{#each tiro.soglia.righe as |voce|}}
+                        <div class="wod5e-mage-tiro-voce tipo-{{voce.kind}}" title="{{voce.hint}}">
+                            {{#if voce.img}}<img class="wod5e-mage-tiro-voce-icona{{#if voce.disc}} wod5e-mage-sfera-sigillo{{/if}}" src="{{voce.img}}" alt="">{{else if voce.fa}}<i class="{{voce.fa}} wod5e-mage-tiro-voce-icona" aria-hidden="true"></i>{{else}}<span class="wod5e-mage-tiro-voce-icona vuota" aria-hidden="true"></span>{{/if}}
+                            <span class="wod5e-mage-tiro-voce-nome">{{voce.name}}</span>
+                            <b class="wod5e-mage-tiro-voce-valore">{{voce.value}}</b>
+                            {{#if voce.via}}<button type="button" class="wod5e-mage-tiro-via" data-action="tiroPill" data-kind="{{voce.kind}}" data-id="{{voce.id}}" title="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}: {{voce.name}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>{{/if}}
+                        </div>
+                    {{/each}}
+                    {{#if tiro.soglia.vuota}}<div class="wod5e-mage-tiro-voce vuota" title="{{localize 'WOD5E_MAGE.Tiro.ScopeHint'}}"><span class="wod5e-mage-tiro-voce-nome">{{localize "WOD5E_MAGE.Tiro.VuotoAmbiti"}}</span></div>{{/if}}
                 </div>
-            {{/if}}
-
-            <div class="wod5e-mage-tiro-opzioni">
-                {{#if tiro.magick}}
-                    <label class="wod5e-mage-tiro-riga wod5e-mage-tiro-premio{{#if tiro.prize.on}} acceso{{/if}}" title="{{localize 'WOD5E_MAGE.Arete.PrizeHint' arete=tiro.prize.arete}}">
-                        <span class="wod5e-mage-tiro-etichetta"><img class="wod5e-mage-arete-sigillo" src="modules/wod5e-mage/assets/icons/ui/arete.svg" alt="" aria-hidden="true"> {{localize "WOD5E_MAGE.Arete.Prize"}}</span>
-                        <span class="wod5e-mage-tiro-comandi">
-                            <input type="checkbox" data-action="tiroPrize" {{#if tiro.prize.on}}checked{{/if}}>
-                            <b>+{{#if tiro.prize.on}}{{tiro.prize.value}}{{else}}{{tiro.prize.arete}}{{/if}}</b>
-                        </span>
-                    </label>
-                {{/if}}
-                {{!-- Il costo del lancio (Blue, 29/9): ogni lancio si paga, e si può sempre lanciare.
-                     Due tasti: la Quintessenza (1 punto; se manca è spento) o il Paradosso del tipo.
-                     Il prezzo di ogni tipo sta sotto il suo tasto; la scelta resta dopo il tiro. --}}
-                {{#if tiro.costo}}
-                    <div class="wod5e-mage-tiro-riga wod5e-mage-tiro-costo" title="{{localize 'WOD5E_MAGE.Costo.Hint'}}">
-                        <span class="wod5e-mage-tiro-etichetta"><i class="fa-solid fa-scale-unbalanced" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Costo.PagaCon"}}</span>
-                        <span class="wod5e-mage-tiro-paga" role="group" aria-label="{{localize 'WOD5E_MAGE.Costo.PagaCon'}}">
-                            <button type="button" class="wod5e-mage-tiro-paga-tasto quintessenza{{#if tiro.costo.quintessenza}} acceso{{/if}}" data-action="tiroPaga" data-pay="quintessenza" aria-pressed="{{tiro.costo.quintessenza}}" title="{{localize 'WOD5E_MAGE.Costo.QuintessenzaHint'}}" {{#unless tiro.costo.canQuintessenza}}disabled{{/unless}}><i class="fa-solid fa-circle-dot" aria-hidden="true"></i> {{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</button>
-                            <button type="button" class="wod5e-mage-tiro-paga-tasto paradosso{{#unless tiro.costo.quintessenza}} acceso{{/unless}}" data-action="tiroPaga" data-pay="paradosso" aria-pressed="{{#if tiro.costo.quintessenza}}false{{else}}true{{/if}}" title="{{localize 'WOD5E_MAGE.Costo.ParadossoHint'}}"><i class="fa-solid fa-eye" aria-hidden="true"></i> {{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</button>
-                        </span>
-                    </div>
-                {{/if}}
-                {{!-- La Quintessenza in dadi: solo coi poteri che lo dicono (Anche a mani nude, nei tiri di Abilità). --}}
-                {{#if tiro.quintessence.allowed}}
-                    <div class="wod5e-mage-tiro-riga wod5e-mage-tiro-quintessenza">
-                        <span class="wod5e-mage-tiro-etichetta" title="{{localize 'WOD5E_MAGE.Tiro.QuintessenceHint'}}"><i class="fa-solid fa-droplet" aria-hidden="true"></i> {{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</span>
-                        <span class="wod5e-mage-tiro-comandi">
-                            <button type="button" data-action="tiroQuintessence" data-delta="-1" aria-label="−1" {{#unless tiro.quintessence.value}}disabled{{/unless}}><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-                            <b>{{tiro.quintessence.value}}</b>
-                            <button type="button" data-action="tiroQuintessence" data-delta="1" aria-label="+1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
-                            <small>/ {{tiro.quintessence.available}}</small>
-                        </span>
-                    </div>
-                {{/if}}
-                <button type="button" class="wod5e-mage-tiro-sforza{{#if tiro.sforza}} acceso{{/if}}" data-action="tiroSforza" aria-pressed="{{tiro.sforza}}" title="{{localize 'WOD5E_MAGE.Tiro.SforzaHint'}}">
-                    <i class="fa-solid fa-hand-fist" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.Sforza"}}
-                </button>
-            </div>
+                {{!-- A mano: quanto si alza o si abbassa sopra il conto; nell'Abilità la soglia intera. --}}
+                <div class="wod5e-mage-tiro-mano{{#unless tiro.soglia.mano.set}} vuota{{/unless}}" title="{{tiro.soglia.mano.hint}}">
+                    <i class="fa-solid fa-pen" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Tiro.AMano"}}</span>
+                    <span class="wod5e-mage-tiro-passo">
+                        <button type="button" data-action="tiroSoglia" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.Tiro.Soglia'}} −1" {{#if tiro.soglia.mano.min}}disabled{{/if}}><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                        <b class="wod5e-mage-tiro-campo">{{tiro.soglia.mano.label}}</b>
+                        <button type="button" data-action="tiroSoglia" data-delta="1" aria-label="{{localize 'WOD5E_MAGE.Tiro.Soglia'}} +1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                    </span>
+                </div>
+            </section>
         </div>
 
-        {{!-- In mezzo la catena di chi dà la soglia: l'incantesimo, le Sfere, gli Ambiti col livello. --}}
-        <div class="wod5e-mage-tiro-centro">
-            <div class="wod5e-mage-tiro-colonna-testa">{{localize "WOD5E_MAGE.Tiro.CatenaSoglia"}}</div>
-            <div class="wod5e-mage-tiro-catena wod5e-mage-tiro-catena-soglia" role="group" aria-label="{{localize 'WOD5E_MAGE.Tiro.CatenaSoglia'}}" title="{{localize 'WOD5E_MAGE.Tiro.CatenaHint'}}">
-                {{#each tiro.pillsSoglia as |pill|}}
-                    <span class="wod5e-mage-pillola tipo-{{pill.kind}}">
-                        <span class="wod5e-mage-pillola-testo">{{pill.text}}</span>
-                        <button type="button" class="wod5e-mage-pillola-via" data-action="tiroPill" data-kind="{{pill.kind}}" data-id="{{pill.id}}" {{#if pill.skill}}data-skill="{{pill.skill}}"{{/if}} title="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.PillolaVia'}}: {{pill.text}}">×</button>
-                    </span>
-                {{/each}}
-            </div>
+        {{!-- Il conto in una riga: riserva − soglia + ritocco = dadi, riesce dal 6 o dall'8. --}}
+        <div class="wod5e-mage-tiro-conto{{#if tiro.conto.vuoto}} vuoto{{/if}}{{#if tiro.conto.impossibile}} impossibile{{/if}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.Conto'}}">
+            <span class="wod5e-mage-tiro-conto-numero riserva" title="{{localize 'WOD5E_MAGE.Tiro.Riserva'}}"><i class="fa-solid fa-dice" aria-hidden="true"></i><b>{{tiro.conto.riserva}}</b></span>
+            <span class="wod5e-mage-tiro-conto-segno" aria-hidden="true">−</span>
+            <span class="wod5e-mage-tiro-conto-numero soglia" title="{{localize 'WOD5E_MAGE.Tiro.Soglia'}}"><i class="fa-solid fa-signal" aria-hidden="true"></i><b>{{tiro.conto.soglia}}</b></span>
+            <span class="wod5e-mage-tiro-conto-segno" aria-hidden="true">+</span>
+            <span class="wod5e-mage-tiro-conto-ritocco" title="{{tiro.conto.ritocco.hint}}">
+                <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                <span class="wod5e-mage-tiro-passo">
+                    <button type="button" data-action="tiroDadi" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.Tiro.Ritocco'}} −1"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                    <b class="wod5e-mage-tiro-campo">{{tiro.conto.ritocco.label}}</b>
+                    <button type="button" data-action="tiroDadi" data-delta="1" aria-label="{{localize 'WOD5E_MAGE.Tiro.Ritocco'}} +1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                </span>
+            </span>
+            <span class="wod5e-mage-tiro-conto-segno" aria-hidden="true">=</span>
+            <span class="wod5e-mage-tiro-conto-dadi"><b>{{tiro.conto.dadi}}</b><span>{{localize "WOD5E_MAGE.Tiro.DadiParola"}}</span></span>
+            {{#if tiro.conto.riesce}}
+                <span class="wod5e-mage-tiro-conto-riesce"><i class="fa-solid fa-check" aria-hidden="true"></i>{{tiro.conto.riesce}}</span>
+            {{else if tiro.conto.fallisce}}
+                <span class="wod5e-mage-tiro-conto-fallisce"><i class="fa-solid fa-ban" aria-hidden="true"></i>{{tiro.conto.fallisceTesto}}</span>
+            {{else}}
+                <span class="wod5e-mage-tiro-conto-dal" title="{{localize 'WOD5E_MAGE.Tiro.DalHint'}}"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Tiro.Dal" n=tiro.conto.dal}}</span>
+            {{/if}}
         </div>
-        <div class="wod5e-mage-tiro-destra">
-            <div class="wod5e-mage-tiro-numeri">
-                {{!-- Riserva: il meno e il più sono i dadi extra dentro la riserva (tetto 3). --}}
-                <div class="wod5e-mage-tiro-numero riserva" title="{{localize 'WOD5E_MAGE.Tiro.RiservaHint'}}">
-                    <span class="wod5e-mage-tiro-etichetta"><i class="fa-solid fa-dice" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.Riserva"}}</span>
-                    <span class="wod5e-mage-tiro-comandi">
-                        <button type="button" data-action="tiroExtra" data-delta="-1" aria-label="−1" {{#unless tiro.extra.value}}disabled{{/unless}}><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-                        <b>{{tiro.riserva}}</b>
-                        <button type="button" data-action="tiroExtra" data-delta="1" aria-label="+1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
-                    </span>
-                    <small class="wod5e-mage-tiro-nota">{{localize "WOD5E_MAGE.Tiro.Extra"}} {{tiro.extra.value}} / {{tiro.extra.cap}}</small>
-                </div>
-                {{!-- Soglia: la Difficoltà, calcolata dagli Ambiti o scritta a mano; la calcolatrice torna al conto. --}}
-                <div class="wod5e-mage-tiro-numero soglia wod5e-mage-tiro-difficolta{{#if tiro.manual}} a-mano{{/if}}{{#if tiro.needsDifficulty}} manca{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.SogliaHint'}}">
-                    <span class="wod5e-mage-tiro-etichetta"><i class="fa-solid fa-signal" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.Soglia"}}</span>
-                    <span class="wod5e-mage-tiro-comandi">
-                        <button type="button" data-action="tiroDifficulty" data-delta="-1" aria-label="−1"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-                        <b>{{#if tiro.needsDifficulty}}?{{else}}{{tiro.difficulty}}{{/if}}</b>
-                        <button type="button" data-action="tiroDifficulty" data-delta="1" aria-label="+1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
-                    </span>
-                    {{#if tiro.manual}}
-                        <button type="button" class="wod5e-mage-tiro-ricalcola" data-action="tiroDifficulty" data-reset title="{{localize 'WOD5E_MAGE.Tiro.DifficultyReset'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.DifficultyReset'}}"><i class="fa-solid fa-calculator" aria-hidden="true"></i> {{tiro.computed}}</button>
-                    {{else}}
-                        <small class="wod5e-mage-tiro-nota">{{#if tiro.needsDifficulty}}{{localize "WOD5E_MAGE.Tiro.DifficultyMissing"}}{{else}}{{localize "WOD5E_MAGE.Tiro.Difficulty"}}{{/if}}</small>
-                    {{/if}}
-                </div>
-                {{!-- Dadi: la riserva meno la soglia; il meno e il più ritoccano il totale, fuori dal tetto. --}}
-                <div class="wod5e-mage-tiro-numero dadi{{#if tiro.impossible}} impossibile{{/if}}{{#if tiro.dadi.value}} ritoccati{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.DadiHint'}}">
-                    <span class="wod5e-mage-tiro-etichetta"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.Dice"}}</span>
-                    <span class="wod5e-mage-tiro-comandi">
-                        <button type="button" data-action="tiroDadi" data-delta="-1" aria-label="−1"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-                        <b>{{tiro.dice}}</b>
-                        <button type="button" data-action="tiroDadi" data-delta="1" aria-label="+1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
-                    </span>
-                    {{#if tiro.dadi.value}}
-                        <button type="button" class="wod5e-mage-tiro-ricalcola" data-action="tiroDadi" data-reset title="{{localize 'WOD5E_MAGE.Tiro.DadiReset'}}" aria-label="{{localize 'WOD5E_MAGE.Tiro.DadiReset'}}"><i class="fa-solid fa-calculator" aria-hidden="true"></i> {{tiro.dadi.label}}</button>
-                    {{else}}
-                        <small class="wod5e-mage-tiro-nota">{{localize "WOD5E_MAGE.Tiro.SuccessFrom"}} {{tiro.successFrom}}+</small>
-                    {{/if}}
-                </div>
-            </div>
 
+        {{!-- Le opzioni: come si paga il lancio (29/9), Sforza la realtà, Dal Narratore (27/9). --}}
+        <div class="wod5e-mage-tiro-opzioni">
+            {{#if tiro.costo}}
+                <span class="wod5e-mage-tiro-paga-etichetta" title="{{localize 'WOD5E_MAGE.Costo.Hint'}}">{{localize "WOD5E_MAGE.Costo.PagaCon"}}</span>
+                <span class="wod5e-mage-tiro-paga" role="group" aria-label="{{localize 'WOD5E_MAGE.Costo.PagaCon'}}">
+                    <button type="button" class="wod5e-mage-tiro-paga-tasto quintessenza{{#if tiro.costo.quintessenza}} acceso{{/if}}" data-action="tiroPaga" data-pay="quintessenza" aria-pressed="{{tiro.costo.quintessenza}}" title="{{localize 'WOD5E_MAGE.Costo.QuintessenzaHint'}}" {{#unless tiro.costo.canQuintessenza}}disabled{{/unless}}><i class="fa-solid fa-circle-dot" aria-hidden="true"></i> {{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</button>
+                    <button type="button" class="wod5e-mage-tiro-paga-tasto paradosso{{#unless tiro.costo.quintessenza}} acceso{{/unless}}" data-action="tiroPaga" data-pay="paradosso" aria-pressed="{{#if tiro.costo.quintessenza}}false{{else}}true{{/if}}" title="{{localize 'WOD5E_MAGE.Costo.ParadossoHint'}}"><i class="fa-solid fa-eye" aria-hidden="true"></i> {{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</button>
+                </span>
+            {{/if}}
+            <span class="wod5e-mage-tiro-interruttori">
+                <button type="button" class="wod5e-mage-tiro-sforza{{#if tiro.sforza}} acceso{{/if}}" data-action="tiroSforza" aria-pressed="{{tiro.sforza}}" title="{{localize 'WOD5E_MAGE.Tiro.SforzaHint'}}"><i class="fa-solid fa-hand-fist" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Tiro.Sforza"}}</button>
+                {{#if tiro.narratore}}
+                    <button type="button" class="wod5e-mage-tiro-narratore{{#if tiro.narratore.on}} acceso{{/if}}" data-action="tiroNarratore" aria-pressed="{{tiro.narratore.on}}" title="{{tiro.narratore.hint}}"><i class="fa-solid {{#if tiro.narratore.on}}fa-user-check{{else}}fa-user-slash{{/if}}" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Verdetto.DalNarratore"}}</button>
+                {{/if}}
+            </span>
+        </div>
+
+        {{!-- I tasti: TIRA, o i tre tasti del tipo col prezzo; spento, dice cosa manca. --}}
+        {{#if tiro.ready}}
             {{#if tiro.magick}}
                 <div class="wod5e-mage-tiro-tasti">
                     {{#each tiro.kinds as |kind|}}
-                        <button type="button" class="wod5e-mage-tiro-tasto wod5e-mage-tiro-tasto-{{kind.kind}}" data-action="tiroRoll" data-kind="{{kind.kind}}" title="{{kind.hint}}" {{#unless ../tiro.ready}}disabled{{/unless}}>
+                        <button type="button" class="wod5e-mage-tiro-tasto wod5e-mage-tiro-tasto-{{kind.kind}}" data-action="tiroRoll" data-kind="{{kind.kind}}" title="{{kind.hint}}">
                             <span>{{kind.label}}</span>
-                            {{!-- Il prezzo del tipo (29/9): i simboli della Ruota col numero. --}}
-                            <span class="wod5e-mage-tiro-prezzo">{{#if kind.costo.quintessenza}}<span class="quintessenza"><i class="fa-solid fa-circle-dot" aria-hidden="true"></i>{{kind.costo.quintessenza}}</span>{{/if}}{{#if kind.costo.paradosso}}<span class="paradosso"><i class="fa-solid fa-eye" aria-hidden="true"></i>{{kind.costo.paradosso}}</span>{{/if}}</span>
+                            <span class="wod5e-mage-tiro-prezzo">{{#if kind.costo.quintessenza}}<span class="quintessenza"><i class="fa-solid fa-circle-dot" aria-hidden="true"></i>{{kind.costo.quintessenza}}</span>{{/if}}{{#if kind.costo.paradosso}}<span class="paradosso"><i class="fa-solid fa-eye" aria-hidden="true"></i>{{kind.costo.paradosso}}</span>{{/if}}{{#if kind.otto}}<span class="otto"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i>8</span>{{/if}}</span>
                         </button>
                     {{/each}}
                 </div>
             {{else}}
-                <button type="button" class="wod5e-mage-tiro-tira" data-action="tiroRoll" {{#unless tiro.ready}}disabled{{/unless}} title="{{localize 'WOD5E_MAGE.Tiro.RollHint'}}">{{localize "WOD5E_MAGE.Tiro.Roll"}}</button>
+                <button type="button" class="wod5e-mage-tiro-tira" data-action="tiroRoll" title="{{localize 'WOD5E_MAGE.Tiro.RollHint'}}">{{localize "WOD5E_MAGE.Tiro.Roll"}}</button>
             {{/if}}
-            {{!-- «Dal Narratore» (Blue, 27/9): il tiro passa dai Narratori collegati, cinque secondi per
-                 ritoccarlo, oppure parte subito. È la scelta di chi tira; il Narratore non lo vede. --}}
-            {{#if tiro.narratore}}
-                <button type="button" class="wod5e-mage-tiro-narratore{{#if tiro.narratore.on}} acceso{{/if}}" data-action="tiroNarratore" aria-pressed="{{tiro.narratore.on}}" title="{{tiro.narratore.hint}}">
-                    <i class="fa-solid {{#if tiro.narratore.on}}fa-user-check{{else}}fa-user-slash{{/if}}" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Verdetto.DalNarratore"}}
-                </button>
-            {{/if}}
-        </div>
+        {{else}}
+            <button type="button" class="wod5e-mage-tiro-tira spento" disabled title="{{tiro.blocco}}"><span>{{localize "WOD5E_MAGE.Tiro.Roll"}}</span><small><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> {{tiro.blocco}}</small></button>
+        {{/if}}
     </div>
 </section>

@@ -225,37 +225,6 @@
   color: #1E1B2E;
 }
 
-/* Il Tiro: i numeri grandi in viola, i dadi in viola medio, l'impossibile in rosso mattone. */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-comandi > b {
-  color: #282051;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-numero.dadi > .wod5e-mage-tiro-comandi > b {
-  color: #3B336B;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-numero.dadi.impossibile > .wod5e-mage-tiro-comandi > b {
-  color: #A4444A;
-}
-
-/* Le pillole della catena: crema con la cornice d'oro, Areté e incantesimo in viola. */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pillola {
-  background: #FBF8F0;
-  border-color: #B3924A;
-  color: #1E1B2E;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pillola.tipo-arete,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-pillola.tipo-spell {
-  background: #282051;
-  border-color: #7A6FA0;
-  color: #F6F2E6;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-etichetta {
-  color: #3B336B;
-}
-
 /* I cassetti: i livelli accesi in oro chiaro con testo inchiostro, il
    livello scelto in viola; i tasti della Ruota in crema con l'oro (e il
    rosso mattone per il Paradosso). */
@@ -274,11 +243,6 @@
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-ruota-tasto.paradox {
   border-color: #A4444A;
   color: #A4444A;
-}
-
-/* Azzera, posato sulla fascia viola del tipo: la crema velata vuole il viola sopra. */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-azzera {
-  color: #282051;
 }
 
 /* I tasti di casa (Nuova sessione, Cambio Scena, i quattro della Salute, i
@@ -9140,425 +9104,6 @@
   position: static;
 }
 
-/* Il Tiro. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tipo {
-  align-items: center;
-  background: var(--mage-viola);
-  border: 1px solid var(--mage-viola-chiaro);
-  border-radius: 6px;
-  color: var(--mage-scelta-testo);
-  display: flex;
-  font-size: 0.88rem;
-  font-weight: 700;
-  gap: 8px;
-  min-height: 28px;
-  padding: 2px 8px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tipo > span {
-  flex: 1 1 auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riq-tiro:not(.magick) .wod5e-mage-tiro-tipo {
-  background: var(--mage-riga-fondo);
-  border-color: var(--mage-oro-tenue);
-  color: var(--mage-testo);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-azzera {
-  background: var(--mage-velo);
-  border: 1px solid rgb(128 128 128 / 45%);
-  border-radius: 10px;
-  color: inherit;
-  cursor: pointer;
-  flex: 0 0 auto;
-  font-size: 0.66rem;
-  line-height: 1;
-  min-height: 0;
-  padding: 3px 7px;
-  width: auto;
-}
-
-/* Il Tiro largo due colonne (Blue, 23/9): a sinistra il tipo, la catena e
-   le opzioni; a destra i tre numeri col meno e il più, e i tasti. Dal 27/9
-   (Blue) tre colonne: chi dà dadi, chi dà la soglia, i numeri. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-corpo {
-  display: grid;
-  gap: 6px 10px;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.7fr) minmax(0, 1.2fr);
-}
-
-/* La testa delle due catene: in che colonna sei. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-colonna-testa {
-  color: var(--mage-oro);
-  font-size: 0.72em;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sinistra,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-centro,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-destra {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  min-height: 0;
-  min-width: 0;
-}
-
-/* La catena: le pillole di quello che è in tiro, la × toglie il pezzo. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-catena {
-  align-content: flex-start;
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 6px;
-  display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  gap: 4px;
-  min-height: 56px;
-  overflow-y: auto;
-  padding: 5px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-vuoto {
-  margin: 0;
-  padding: 4px 2px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola {
-  align-items: center;
-  background: var(--mage-riga-fondo);
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 12px;
-  color: var(--mage-testo);
-  display: inline-flex;
-  font-size: 0.74rem;
-  font-weight: 600;
-  gap: 4px;
-  height: 22px;
-  line-height: 1;
-  max-width: 100%;
-  padding: 0 3px 0 8px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-testo {
-  max-width: 180px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-arete,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-spell {
-  background: var(--mage-viola);
-  border-color: var(--mage-viola-chiaro);
-  color: var(--mage-scelta-testo);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-sphere,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-power,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-scope {
-  border-color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-via {
-  background: transparent;
-  border: 0;
-  border-radius: 50%;
-  color: var(--mage-tenue);
-  cursor: pointer;
-  font-size: 0.85rem;
-  height: 16px;
-  line-height: 1;
-  min-height: 0;
-  padding: 0;
-  width: 16px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-via:hover {
-  box-shadow: none;
-  color: var(--mage-rosso-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-arete .wod5e-mage-pillola-via,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola.tipo-spell .wod5e-mage-pillola-via {
-  color: var(--mage-scelta-testo);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-opzioni {
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* I tre numeri: etichetta, meno, numero grande, più, e la nota a destra. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numeri {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero {
-  align-items: center;
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 6px;
-  display: grid;
-  gap: 6px;
-  grid-template-columns: 74px auto minmax(0, 1fr);
-  min-height: 34px;
-  padding: 2px 8px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero > .wod5e-mage-tiro-comandi > b {
-  font-family: "Modesto Condensed", serif;
-  font-size: 1.6rem;
-  line-height: 1;
-  min-width: 34px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero.dadi > .wod5e-mage-tiro-comandi > b {
-  color: var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero.dadi.impossibile > .wod5e-mage-tiro-comandi > b {
-  color: var(--mage-rosso-vivo);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero.soglia.a-mano,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero.dadi.ritoccati {
-  border-color: var(--mage-oro-scuro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-nota {
-  color: var(--mage-tenue);
-  font-size: 0.64rem;
-  justify-self: end;
-  line-height: 1.15;
-  text-align: right;
-}
-
-/* Torna al conto (la calcolatrice): sulla Soglia scritta a mano e sui Dadi ritoccati. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero > .wod5e-mage-tiro-ricalcola {
-  align-items: center;
-  background: var(--mage-riga-fondo);
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 10px;
-  color: var(--mage-oro);
-  cursor: pointer;
-  display: inline-flex;
-  font-size: 0.66rem;
-  font-weight: 700;
-  gap: 4px;
-  height: 20px;
-  justify-self: end;
-  line-height: 1;
-  min-height: 0;
-  padding: 0 8px;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-numero > .wod5e-mage-tiro-ricalcola:hover {
-  border-color: var(--mage-oro);
-  box-shadow: none;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-riga {
-  align-items: center;
-  background: var(--mage-riga-fondo);
-  border: 1px solid transparent;
-  border-radius: 6px;
-  display: flex;
-  gap: 6px;
-  justify-content: space-between;
-  min-height: 26px;
-  padding: 1px 6px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-difficolta.a-mano {
-  border-color: var(--mage-oro-scuro);
-}
-
-/* Senza Difficoltà il tiro non parte (Blue, 16/9 sera): la riga lo dice in viola. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-difficolta.manca {
-  border-color: var(--mage-viola-chiaro);
-  box-shadow: 0 0 6px var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-difficolta.manca b {
-  color: var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-manca {
-  color: var(--mage-viola-chiaro);
-  font-size: 0.72rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-premio.acceso {
-  background: var(--mage-scelta-tenue);
-  border-color: var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-etichetta {
-  align-items: center;
-  color: var(--mage-testo);
-  display: flex;
-  font-size: 0.7rem;
-  font-weight: 700;
-  gap: 6px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-etichetta .wod5e-mage-arete-sigillo {
-  height: 16px;
-  width: 16px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-comandi {
-  align-items: center;
-  display: flex;
-  gap: 4px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-comandi > b {
-  color: var(--mage-oro);
-  font-size: 1rem;
-  min-width: 22px;
-  text-align: center;
-}
-
-/* Il «/ 3» in fondo ha la sua larghezza fissa su ogni riga (sulla Difficoltà
-   uno slot vuoto), così il meno, il numero e il più stanno in colonna
-   (Blue, 20/9 sera: «sfasato di simmetria, da fastidio»). */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-comandi > small {
-  color: var(--mage-tenue);
-  flex: 0 0 26px;
-  font-size: 0.66rem;
-  text-align: left;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-comandi > button {
-  align-items: center;
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 4px;
-  color: var(--mage-testo);
-  cursor: pointer;
-  display: inline-flex;
-  font-size: 0.7rem;
-  gap: 4px;
-  height: 20px;
-  justify-content: center;
-  line-height: 1;
-  min-height: 0;
-  padding: 0 6px;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-comandi > button:disabled {
-  opacity: 0.4;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-comandi > input[type="checkbox"] {
-  margin: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza {
-  background: var(--mage-riga-fondo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 6px;
-  color: var(--mage-testo);
-  cursor: pointer;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  min-height: 26px;
-  text-transform: uppercase;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza.acceso {
-  background: var(--mage-scelta-tenue);
-  border-color: var(--mage-viola-chiaro);
-  color: var(--mage-scelta-tenue-testo);
-}
-
-/* «Dal Narratore» (27/9): sotto il tasto del tiro; acceso è oro, spento resta smorzato. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore {
-  background: var(--mage-riga-fondo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 6px;
-  color: var(--mage-tenue);
-  cursor: pointer;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  min-height: 26px;
-  text-transform: uppercase;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore.acceso {
-  border-color: var(--mage-oro);
-  color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasti {
-  display: grid;
-  gap: 5px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: auto;
-}
-
-/* Nella terza colonna (27/9) i tre tasti stanno su due righe: «Volgare con
-   testimoni» da solo, largo, così non si spezza in tre. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasti .wod5e-mage-tiro-tasto-testimoni {
-  grid-column: 1 / -1;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasto,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tira {
-  background: var(--mage-viola);
-  border: 1px solid var(--mage-viola-chiaro);
-  border-radius: 6px;
-  color: var(--mage-scelta-testo);
-  cursor: pointer;
-  font-size: 0.76rem;
-  font-weight: 700;
-  line-height: 1.15;
-  min-height: 38px;
-  padding: 4px 6px;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tira {
-  font-family: "Modesto Condensed", serif;
-  font-size: 1.5rem;
-  letter-spacing: 0.14em;
-  margin-top: auto;
-  min-height: 40px;
-  text-transform: uppercase;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasto:hover,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tira:hover {
-  box-shadow: 0 0 8px var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasto:disabled,
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tira:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
-
 /* Il Grimorio aperto dalla prima pagina: la × in alto a destra lo chiude. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-grimorio-chiudi {
   background: transparent;
@@ -13393,39 +12938,6 @@
   color: var(--mage-rosso-chiaro);
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere {
-  border-left: 2px solid var(--mage-oro-tenue);
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin: 2px 0 6px;
-  padding: 2px 0 2px 8px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere.riesce {
-  border-left-color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere > p {
-  font-size: 0.68rem;
-  line-height: 1.25;
-  margin: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere > .wod5e-mage-tiro-potere-nota {
-  color: var(--mage-testo);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere > .wod5e-mage-tiro-potere-fuori {
-  color: var(--mage-tenue);
-  font-style: italic;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-potere > .wod5e-mage-tiro-potere-riesce {
-  color: var(--mage-oro);
-  font-weight: 700;
-}
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-scelta {
   align-items: center;
   display: flex;
@@ -15612,36 +15124,6 @@
    1.22.0 (Blue, 26/9): la prima pagina, l'Appartenenza, le pagine Tratti e
    Magick, «Accesso con» col sigillo.
    ========================================================================== */
-
-/* Il Tiro: la catena in colonna (Blue, 26/9: «devono apparire a elenco
-   verticale e non si devono affiancare»): una pillola per riga, larga
-   quanto la catena, il testo a sinistra e la × in fondo. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-catena {
-  align-items: stretch;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  gap: 3px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola {
-  border-radius: 6px;
-  height: auto;
-  min-height: 22px;
-  padding: 2px 3px 2px 8px;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-testo {
-  flex: 1 1 auto;
-  max-width: none;
-  overflow: visible;
-  text-overflow: clip;
-  white-space: normal;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pillola-via {
-  flex: 0 0 16px;
-}
 
 /* Le schede Attivi e Passivi (Blue, 26/9: «si sovrappongono e non si
    compattano»): il tasto-riga cresce col testo dell'effetto invece di
@@ -18203,82 +17685,6 @@
   font-style: italic;
 }
 
-/* Le Condizioni sul Tiro: una per riga come la catena, il peso in fondo; tolta, barrata e spenta. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizioni {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizioni-fila {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-tiro-condizione {
-  align-items: center;
-  background: var(--mage-riga-fondo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-left: 3px solid var(--mage-rosso-chiaro);
-  border-radius: 6px;
-  box-shadow: none;
-  color: var(--mage-testo);
-  cursor: pointer;
-  display: flex;
-  font-size: 0.74rem;
-  font-weight: 600;
-  gap: 8px;
-  height: auto;
-  line-height: 1.15;
-  margin: 0;
-  min-height: 24px;
-  padding: 2px 8px 2px 5px;
-  text-align: left;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-tiro-condizione:hover {
-  border-color: var(--mage-oro);
-  border-left-color: var(--mage-rosso-chiaro);
-  box-shadow: none;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizione .wod5e-mage-cond-icona {
-  height: 17px;
-  margin-right: 4px;
-  width: 17px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizione-nome {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizione-peso {
-  color: var(--mage-rosso-chiaro);
-  flex: 0 0 auto;
-  font-size: 0.76rem;
-  font-weight: 700;
-}
-
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-tiro-condizione.fuori {
-  border-left-color: var(--mage-oro-tenue);
-  opacity: 0.55;
-}
-
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-tiro-condizione.fuori .wod5e-mage-tiro-condizione-nome,
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-tiro-condizione.fuori .wod5e-mage-tiro-condizione-peso {
-  text-decoration: line-through;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-condizioni-fallisce {
-  color: var(--mage-rosso-chiaro);
-  font-size: 0.76rem;
-  font-weight: 700;
-  margin: 0;
-}
-
 /* Il Master: le stesse righe per scala, più larghe, col numero di chi la porta. */
 .wod5e-mage .wod5e-mage-master-condizioni .wod5e-mage-master-group > h3 {
   align-items: center;
@@ -18378,74 +17784,6 @@
    tastino del Sacrificio e, col debito aperto, il lucchetto che lo salda;
    le caselle del Sacrificio stanno in viola finché il debito resta.
    ========================================================================== */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-costo {
-  flex-wrap: wrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga {
-  display: inline-flex;
-  gap: 4px;
-  margin-left: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto {
-  align-items: center;
-  background: transparent;
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 5px;
-  box-shadow: none;
-  color: var(--mage-tenue);
-  cursor: pointer;
-  display: inline-flex;
-  font-size: 0.66rem;
-  font-weight: 700;
-  gap: 4px;
-  line-height: 1;
-  margin: 0;
-  min-height: 20px;
-  padding: 2px 6px;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto.quintessenza.acceso {
-  border-color: var(--mage-oro);
-  box-shadow: 0 0 4px var(--mage-oro-scuro);
-  color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto.paradosso.acceso {
-  border-color: var(--mage-rosso-vivo);
-  box-shadow: 0 0 4px var(--mage-rosso);
-  color: var(--mage-rosso-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-/* Il prezzo sotto il nome del tipo: il cerchio della Quintessenza e l'occhio del Paradosso, col numero. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasti .wod5e-mage-tiro-tasto {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  justify-content: center;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-prezzo {
-  display: inline-flex;
-  font-size: 0.66rem;
-  gap: 8px;
-  opacity: 0.85;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-prezzo > span {
-  align-items: center;
-  display: inline-flex;
-  gap: 3px;
-}
-
 /* Il tastino del Sacrificio accanto al nome, e il lucchetto del debito col suo conto. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-sacrificio-tasto {
   margin-left: 4px;
@@ -18633,4 +17971,691 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ==========================================================================
+   1.31.0 (Blue, 30/9): il riquadro del Tiro rifatto sul mock («troppo
+   bombardamento informativo», i simboli di quello che si mette nel tiro,
+   solo «Soglia», il ritocco anche al giocatore). In testa il tipo di tiro
+   e, nella Magick, l'Areté e le Sfere coi sigilli; due colonne, Riserva e
+   Soglia, con le righe di quello che è in tiro (simbolo, nome, valore, la ×
+   al sorvolo) e in fondo l'«a mano»; il conto in una riga; le opzioni; i
+   tasti, che spenti dicono cosa manca.
+   ========================================================================== */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-testa {
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  row-gap: 4px;
+}
+
+/* Il titolo spinge a destra tutto il resto: il tipo, l'Areté, le Sfere, Azzera. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-testa > span {
+  flex: 0 0 auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-testa > span:first-child {
+  flex: 1 1 auto;
+}
+
+/* Il tipo di tiro: il d10 per l'Abilità, la bacchetta per la Magick; nessuna cornice, non è un tasto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tipo {
+  align-items: center;
+  color: var(--mage-testo);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.82rem;
+  font-weight: 600;
+  gap: 6px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tipo > i {
+  color: var(--mage-oro);
+  font-size: 0.85rem;
+}
+
+/* L'Areté e le Sfere in testa (30/9): non pesano su niente, si tolgono con la ×. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-chip {
+  align-items: center;
+  color: var(--mage-testo);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  font-weight: 600;
+  gap: 5px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-chip > .wod5e-mage-arete-sigillo {
+  height: 20px;
+  width: 20px;
+}
+
+/* Il sigillo della Sfera sul disco d'oro, come nel riquadro della Magick: il segno scuro ha contrasto. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-chip > .wod5e-mage-sfera-sigillo {
+  height: 20px;
+  width: 20px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-chip.tipo-spell {
+  color: var(--mage-viola-chiaro);
+}
+
+/* La × di ogni pezzo: c'è sempre, si vede al sorvolo o col fuoco. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-via {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  height: 16px;
+  justify-content: center;
+  line-height: 1;
+  min-height: 0;
+  opacity: 0.35;
+  padding: 0;
+  width: 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-chip:hover > .wod5e-mage-tiro-via,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce:hover > .wod5e-mage-tiro-via,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-via:focus-visible {
+  opacity: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-via:hover {
+  box-shadow: none;
+  color: var(--mage-rosso-chiaro);
+}
+
+/* Azzera: un tastino a icona in fondo alla testata. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-azzera {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 50%;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  height: 22px;
+  justify-content: center;
+  line-height: 1;
+  min-height: 0;
+  padding: 0;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-azzera:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-corpo {
+  gap: 8px;
+  overflow: hidden;
+}
+
+/* Le due colonne, divise da un filo: chi dà dadi, chi toglie dadi. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-colonne {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-colonna {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  min-width: 0;
+  padding-right: 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-colonna.soglia {
+  border-left: 1px solid var(--mage-oro-tenue);
+  padding-left: 10px;
+  padding-right: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-colonna-testa {
+  align-items: center;
+  color: var(--mage-oro);
+  display: flex;
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  gap: 6px;
+  letter-spacing: 0.14em;
+  min-height: 18px;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voci {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Una riga: la spunta se c'è, il simbolo del pezzo com'è nella scheda, il nome, il valore in oro, la ×. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 7px;
+  min-height: 26px;
+  padding: 0 4px 0 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce.rientro {
+  margin-left: 20px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce.vuota {
+  background: transparent;
+  border: 1px dashed var(--mage-oro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce.vuota > .wod5e-mage-tiro-voce-nome {
+  color: var(--mage-tenue);
+  font-weight: 400;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce > .wod5e-mage-tiro-spunta {
+  accent-color: var(--mage-oro);
+  cursor: pointer;
+  flex: 0 0 auto;
+  height: 14px;
+  margin: 0;
+  width: 14px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce-icona {
+  flex: 0 0 20px;
+  height: 20px;
+  object-fit: contain;
+  width: 20px;
+}
+
+.wod5e-mage.wod5e.actor.sheet i.wod5e-mage-tiro-voce-icona {
+  align-items: center;
+  color: var(--mage-oro);
+  display: inline-flex;
+  font-size: 0.9rem;
+  justify-content: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce.rientro > .wod5e-mage-tiro-voce-icona {
+  flex-basis: 16px;
+  height: 16px;
+  opacity: 0.7;
+  width: 16px;
+}
+
+/* Il sigillo della Sfera sul potere, sul disco d'oro. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce > .wod5e-mage-sfera-sigillo {
+  box-sizing: border-box;
+}
+
+/* L'icona della Condizione: la famiglia col grado, come nelle Risorse. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce > .wod5e-mage-cond-icona {
+  flex: 0 0 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce-nome {
+  color: var(--mage-testo);
+  flex: 1 1 auto;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce-valore {
+  color: var(--mage-oro);
+  flex: 0 0 auto;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  min-width: 18px;
+  text-align: right;
+}
+
+/* Le Condizioni in meno: il numero resta in oro, il segno lo dice. Tolta, la riga si spegne. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce.fuori > .wod5e-mage-tiro-voce-nome,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce.fuori > .wod5e-mage-tiro-voce-valore {
+  opacity: 0.45;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce.tipo-condizione.fuori > .wod5e-mage-tiro-voce-nome {
+  text-decoration: line-through;
+}
+
+/* Il meno, il campo crema e il più: lo stesso passo per l'«a mano», la Quintessenza e il ritocco. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-passo {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-passo > button {
+  align-items: center;
+  background: var(--mage-velluto);
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 4px;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.62rem;
+  height: 22px;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  min-height: 0;
+  padding: 0;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-passo > button:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-passo > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-passo > small {
+  color: var(--mage-tenue);
+  font-size: 0.66rem;
+  margin-left: 2px;
+}
+
+/* Il campo crema: quello che si scrive a mano. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-campo {
+  background: var(--mage-carta);
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--mage-inchiostro);
+  display: inline-flex;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  height: 22px;
+  justify-content: center;
+  line-height: 22px;
+  min-width: 34px;
+  padding: 0 5px;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-mano.vuota .wod5e-mage-tiro-campo {
+  color: var(--mage-inchiostro-tenue);
+}
+
+/* L'«a mano» in fondo alla colonna: la matita, la parola, il passo a destra. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-mano {
+  align-items: center;
+  color: var(--mage-tenue);
+  display: flex;
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  gap: 6px;
+  margin-top: auto;
+  min-height: 26px;
+  padding: 2px 0 0 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-mano > i {
+  font-size: 0.7rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-mano > .wod5e-mage-tiro-passo {
+  margin-left: auto;
+}
+
+/* Il conto in una riga: riserva − soglia + ritocco = dadi, e da quale faccia riesce. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto {
+  align-items: center;
+  background: var(--mage-velluto);
+  border-radius: 6px;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  justify-content: center;
+  min-height: 42px;
+  padding: 4px 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-numero {
+  align-items: center;
+  display: inline-flex;
+  gap: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-numero > i {
+  color: var(--mage-tenue);
+  font-size: 0.78rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-numero > b,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-dadi > b {
+  color: var(--mage-oro);
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-segno {
+  color: var(--mage-tenue);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-ritocco {
+  align-items: center;
+  color: var(--mage-tenue);
+  display: inline-flex;
+  gap: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-ritocco > i {
+  font-size: 0.7rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-dadi {
+  align-items: baseline;
+  display: inline-flex;
+  gap: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-dadi > b {
+  color: var(--mage-viola-chiaro);
+  font-size: 1.65rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-dadi > span {
+  color: var(--mage-testo);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+/* Riesce dal 6 o dall'8, col d10; la riuscita senza tirare in oro; il tiro che fallisce in rosso. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-dal,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-riesce,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-fallisce {
+  align-items: center;
+  color: var(--mage-testo);
+  display: inline-flex;
+  font-size: 0.86rem;
+  font-weight: 600;
+  gap: 5px;
+  margin-left: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-dal > i {
+  color: var(--mage-viola-chiaro);
+  font-size: 0.95rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-riesce {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto-fallisce {
+  color: var(--mage-rosso-chiaro);
+}
+
+/* Senza tratti i numeri sono spenti; con zero dadi il conto è rosso. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto.vuoto .wod5e-mage-tiro-conto-numero > b,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto.vuoto .wod5e-mage-tiro-conto-dadi > b {
+  color: var(--mage-tenue);
+  opacity: 0.6;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-conto.impossibile .wod5e-mage-tiro-conto-dadi > b {
+  color: var(--mage-rosso-vivo);
+}
+
+/* Le opzioni: Paghi con a sinistra, gli interruttori a destra. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-opzioni {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-etichetta {
+  color: var(--mage-tenue);
+  font-size: 0.74rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga {
+  display: inline-flex;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 0 12px 12px 0;
+  box-shadow: none;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.74rem;
+  font-weight: 600;
+  gap: 5px;
+  height: 24px;
+  line-height: 1;
+  margin: 0;
+  min-height: 0;
+  padding: 0 9px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto.quintessenza {
+  border-radius: 12px 0 0 12px;
+  border-right-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto.quintessenza > i {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto.paradosso > i {
+  color: var(--mage-rosso-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto.acceso {
+  background: var(--mage-riga-sorvolo);
+  border-color: var(--mage-oro);
+  color: var(--mage-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto.quintessenza.acceso + .wod5e-mage-tiro-paga-tasto {
+  border-left-color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-interruttori {
+  display: inline-flex;
+  gap: 5px;
+  margin-left: auto;
+}
+
+/* Sforza la realtà e Dal Narratore: interruttori a pillola, accesi in oro. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 12px;
+  box-shadow: none;
+  color: var(--mage-tenue);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.74rem;
+  font-weight: 600;
+  gap: 5px;
+  height: 24px;
+  line-height: 1;
+  margin: 0;
+  min-height: 0;
+  padding: 0 9px;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore:hover {
+  border-color: var(--mage-oro);
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza.acceso,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore.acceso {
+  background: var(--mage-riga-sorvolo);
+  border-color: var(--mage-oro);
+  color: var(--mage-testo);
+}
+
+/* I tasti: TIRA, o i tre del tipo col prezzo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasti {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 6px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasto,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tira {
+  align-items: center;
+  background: var(--mage-viola);
+  border: 1px solid var(--mage-viola-chiaro);
+  border-radius: 6px;
+  box-shadow: none;
+  color: var(--mage-scelta-testo);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.82rem;
+  font-weight: 700;
+  gap: 2px;
+  justify-content: center;
+  line-height: 1.15;
+  margin: 0;
+  min-height: 40px;
+  padding: 3px 6px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasto > span:first-child {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tira {
+  flex: 0 0 auto;
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tasto:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tira:hover {
+  box-shadow: 0 0 8px var(--mage-viola-chiaro);
+}
+
+/* Spento: dice cosa manca, in piccolo sotto TIRA. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tira.spento,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tira.spento:hover {
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-tira.spento > small {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Il prezzo sotto il nome del tipo: la Quintessenza, il Paradosso, e il d10 con l'8 sui testimoni. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-prezzo {
+  display: inline-flex;
+  font-size: 0.7rem;
+  gap: 8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-prezzo > span {
+  align-items: center;
+  display: inline-flex;
+  gap: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-prezzo > .quintessenza {
+  color: var(--mage-oro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-prezzo > .paradosso {
+  color: var(--mage-rosso-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-prezzo > .otto {
+  color: var(--mage-scelta-testo);
+}
+
+/* Il tema chiaro: sui tasti viola i prezzi restano chiari; il resto parla con le variabili. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-prezzo > .quintessenza {
+  color: #E9C46A;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-prezzo > .paradosso {
+  color: #F2B8B5;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-conto-dadi > b {
+  color: #3B336B;
+}
+
+/* Nel tema chiaro il campo crema sta su un fondo crema: un filo d'oro lo stacca. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-tiro-campo {
+  border: 1px solid #D9C28A;
+  line-height: 20px;
 }

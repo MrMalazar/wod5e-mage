@@ -209,9 +209,12 @@ assert.match(sheetJs, /condizioneApri: onCondizioneApri/);
 assert.match(sheetJs, /tiroCondizione: onTiroCondizione/);
 assert.match(sheetJs, /function onCondizioneApri[\s\S]*classList\.toggle\("aperta", open\)/);
 
-// Il Tiro: le Condizioni del suo tipo, una per riga, un clic le toglie e le rimette.
+// Il Tiro (30/9): le Condizioni del suo tipo sono righe della Riserva con la spunta, l'icona della famiglia
+// col grado e il peso; la spunta le toglie e le rimette; il tiro che fallisce lo dice la riga del conto.
 const tiroHbs = readFileSync(new URL("../templates/actor/parts/stat-tiro.hbs", import.meta.url), "utf8");
-assert.match(tiroHbs, /\{\{#if tiro\.condizioni\}\}[\s\S]*wod5e-mage-tiro-condizione peso-\{\{riga\.weight\}\}\{\{#unless riga\.on\}\} fuori\{\{\/unless\}\}" data-action="tiroCondizione" data-condizione="\{\{riga\.id\}\}"[\s\S]*riga\.peso[\s\S]*tiro\.condizioni\.fallisceTesto/);
+assert.match(tiroHbs, /wod5e-mage-tiro-voce tipo-\{\{voce\.kind\}\}\{\{#if voce\.indent\}\} rientro\{\{\/if\}\}\{\{#if voce\.off\}\} fuori\{\{\/if\}\}"[\s\S]*data-action="\{\{voce\.check\.action\}\}" data-condizione="\{\{voce\.id\}\}"[\s\S]*wod5e-mage-cond-icona wod5e-mage-tiro-voce-icona[\s\S]*voce\.numeral[\s\S]*wod5e-mage-tiro-voce-valore\{\{#if voce\.meno\}\} meno\{\{\/if\}\}[\s\S]*tiro\.conto\.fallisceTesto/);
+const schedaTiro = readFileSync(new URL("../scripts/tiro-scheda.js", import.meta.url), "utf8");
+assert.match(schedaTiro, /kind: "condizione", id: riga\.id, mask: riga\.icon, numeral: riga\.numeral, name: riga\.name, value: riga\.peso, meno: true, check: \{ action: "tiroCondizione", on: riga\.on \}/);
 
 // Il Master: coi personaggi scelti, un clic accende a tutti, se l'hanno tutti spegne.
 const a = fakeActor("A", ["offuscato"]);

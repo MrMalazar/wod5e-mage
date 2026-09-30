@@ -96,17 +96,18 @@ assert.match(sheetSource, /_initializeApplicationOptions\(options\) \{[\s\S]*mis
 assert.match(sheetSource, /static adattaAlloSchermo\(\)[\s\S]*sporgeDalloSchermo\(app\.position, window\)[\s\S]*app\.setPosition\(misuraFinestra\(scala, window\)\)/);
 assert.match(sheetSource, /window\.addEventListener\("resize"/);
 assert.match(sheetSource, /viewport: window \}\);\n\s+MageActorSheet\.agganciaSchermo\(\);/);
-// La pagina si vede solo quando è la linguetta accesa; senza Areté niente
-// tre tasti. Il Tiro largo due colonne (23/9): a sinistra la catena a
-// pillole con la × (torna), a destra Riserva, Soglia e Dadi col meno e il più.
+// La pagina si vede solo quando è la linguetta accesa. Il Tiro (30/9, sul
+// mock di Blue): la testa col tipo, l'Areté e le Sfere; due colonne, Riserva
+// e Soglia, con le righe di quello che è in tiro e l'«a mano» in fondo; il
+// conto in una riga; le opzioni; TIRA o i tre tasti del tipo.
 assert.match(css, /\.wod5e-mage-stat:not\(\.active\)\s*\{\s*display: none;/);
 assert.match(css, /\.wod5e-mage-stat\.active\s*\{[^}]*display: flex;/s);
 const tiroTemplate = stat("stat-tiro.hbs");
-// Tre colonne (Blue, 27/9): chi dà dadi con le opzioni, chi dà la soglia, i numeri.
-assert.match(tiroTemplate, /wod5e-mage-tiro-corpo[\s\S]*wod5e-mage-tiro-sinistra[\s\S]*wod5e-mage-tiro-colonna-testa">\{\{localize "WOD5E_MAGE\.Tiro\.CatenaDadi"\}\}[\s\S]*wod5e-mage-tiro-catena wod5e-mage-tiro-catena-dadi[\s\S]*\{\{#each tiro\.pillsDadi as \|pill\|\}\}[\s\S]*wod5e-mage-pillola tipo-\{\{pill\.kind\}\}[\s\S]*data-action="tiroPill" data-kind="\{\{pill\.kind\}\}" data-id="\{\{pill\.id\}\}"[\s\S]*wod5e-mage-tiro-opzioni[\s\S]*data-action="tiroPrize"[\s\S]*data-action="tiroQuintessence"[\s\S]*data-action="tiroSforza"[\s\S]*wod5e-mage-tiro-centro[\s\S]*wod5e-mage-tiro-colonna-testa">\{\{localize "WOD5E_MAGE\.Tiro\.CatenaSoglia"\}\}[\s\S]*wod5e-mage-tiro-catena wod5e-mage-tiro-catena-soglia[\s\S]*\{\{#each tiro\.pillsSoglia as \|pill\|\}\}[\s\S]*wod5e-mage-tiro-destra[\s\S]*wod5e-mage-tiro-numero riserva[\s\S]*data-action="tiroExtra" data-delta="-1"[\s\S]*\{\{tiro\.riserva\}\}[\s\S]*data-action="tiroExtra" data-delta="1"[\s\S]*wod5e-mage-tiro-numero soglia[\s\S]*data-action="tiroDifficulty" data-delta="-1"[\s\S]*data-action="tiroDifficulty" data-delta="1"[\s\S]*wod5e-mage-tiro-numero dadi[\s\S]*data-action="tiroDadi" data-delta="-1"[\s\S]*\{\{tiro\.dice\}\}[\s\S]*data-action="tiroDadi" data-delta="1"[\s\S]*data-action="tiroRoll" data-kind="\{\{kind\.kind\}\}"/);
-assert.doesNotMatch(tiroTemplate, /wod5e-mage-tiro-conto|wod5e-mage-tiro-slot|wod5e-mage-tiro-extra"/);
-assert.match(css, /\.wod5e-mage-tiro-corpo\s*\{[^}]*grid-template-columns: minmax\(0, 1\.1fr\) minmax\(0, 0\.7fr\) minmax\(0, 1\.2fr\);/s);
-assert.match(css, /\.wod5e-mage-tiro-tasti \.wod5e-mage-tiro-tasto-testimoni\s*\{[^}]*grid-column: 1 \/ -1;/s, "il tasto dei testimoni largo, sotto gli altri due");
+assert.match(tiroTemplate, /wod5e-mage-riq-title wod5e-mage-tiro-testa[\s\S]*wod5e-mage-tiro-tipo tipo-\{\{tiro\.testa\.tipo\}\}[\s\S]*wod5e-mage-tiro-chip tipo-arete[\s\S]*\{\{#each tiro\.testa\.spheres as \|sphere\|\}\}[\s\S]*wod5e-mage-sfera-sigillo[\s\S]*data-action="tiroClear"[\s\S]*wod5e-mage-tiro-colonne[\s\S]*wod5e-mage-tiro-colonna riserva[\s\S]*WOD5E_MAGE\.Tiro\.Riserva[\s\S]*\{\{#each tiro\.riserva\.righe as \|voce\|\}\}[\s\S]*data-action="tiroPill" data-kind="\{\{voce\.kind\}\}" data-id="\{\{voce\.id\}\}"[\s\S]*wod5e-mage-tiro-mano[\s\S]*data-action="tiroExtra" data-delta="-1"[\s\S]*\{\{tiro\.riserva\.mano\.label\}\}[\s\S]*data-action="tiroExtra" data-delta="1"[\s\S]*wod5e-mage-tiro-colonna soglia[\s\S]*WOD5E_MAGE\.Tiro\.Soglia[\s\S]*\{\{#each tiro\.soglia\.righe as \|voce\|\}\}[\s\S]*data-action="tiroSoglia" data-delta="-1"[\s\S]*\{\{tiro\.soglia\.mano\.label\}\}[\s\S]*data-action="tiroSoglia" data-delta="1"[\s\S]*wod5e-mage-tiro-conto[\s\S]*\{\{tiro\.conto\.riserva\}\}[\s\S]*\{\{tiro\.conto\.soglia\}\}[\s\S]*data-action="tiroDadi" data-delta="-1"[\s\S]*\{\{tiro\.conto\.ritocco\.label\}\}[\s\S]*data-action="tiroDadi" data-delta="1"[\s\S]*\{\{tiro\.conto\.dadi\}\}[\s\S]*wod5e-mage-tiro-opzioni[\s\S]*data-action="tiroPaga"[\s\S]*data-action="tiroSforza"[\s\S]*data-action="tiroNarratore"[\s\S]*data-action="tiroRoll" data-kind="\{\{kind\.kind\}\}"[\s\S]*wod5e-mage-tiro-tira" data-action="tiroRoll"[\s\S]*wod5e-mage-tiro-tira spento" disabled/);
+assert.doesNotMatch(tiroTemplate, /wod5e-mage-pillola|wod5e-mage-tiro-catena|wod5e-mage-tiro-numero|WOD5E_MAGE\.Tiro\.Difficulty\b|tiroDifficulty/);
+assert.match(css, /\.wod5e-mage-tiro-colonne\s*\{[^}]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/s, "due colonne, Riserva e Soglia");
+assert.match(css, /\.wod5e-mage-tiro-tasti\s*\{[^}]*grid-template-columns: repeat\(3, minmax\(0, 1fr\)\);/s, "i tre tasti del tipo in fila");
+assert.match(css, /\.wod5e-mage-tiro-chip > \.wod5e-mage-sfera-sigillo\s*\{/, "il sigillo della Sfera in testa sta sul disco d'oro, come nel riquadro della Magick");
 assert.match(sheetSource, /tiroDadi: onTiroDadi/);
 assert.match(stat("grimorio.hbs"), /data-action="grimorioClose"/);
 // Le Risorse a righe (Blue, 20/9): Salute e Saggezza col tastino che apre il

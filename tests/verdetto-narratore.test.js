@@ -260,13 +260,14 @@ assert.match(mainSource, /game\.settings\.register\(MODULE_ID, TIRO_NARRATORE_SE
 assert.match(scheda, /narratore: game\.user\?\.isGM \? null : \{/);
 assert.match(scheda, /export async function onTiroNarratore\(event\) \{\n\s+event\.preventDefault\(\);\n\s+await scriviDalNarratore\(!dalNarratore\(\)\);/);
 assert.match(readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8"), /tiroNarratore: onTiroNarratore,/);
-// Senza Difficoltà il tiro non parte: il conto lo dice e il riquadro spegne i tasti.
+// Senza soglia il tiro non parte: il conto lo dice, il riquadro spegne il tasto e scrive cosa manca (30/9).
 const tiroHbs = readFileSync(new URL("../templates/actor/parts/stat-tiro.hbs", import.meta.url), "utf8");
-assert.match(tiroHbs, /wod5e-mage-tiro-difficolta\{\{#if tiro\.manual\}\} a-mano\{\{\/if\}\}\{\{#if tiro\.needsDifficulty\}\} manca\{\{\/if\}\}/);
-assert.match(tiroHbs, /\{\{#if tiro\.needsDifficulty\}\}\?\{\{else\}\}\{\{tiro\.difficulty\}\}\{\{\/if\}\}/);
-assert.match(tiroHbs, /WOD5E_MAGE\.Tiro\.DifficultyMissing/);
+assert.match(tiroHbs, /wod5e-mage-tiro-mano\{\{#unless tiro\.soglia\.mano\.set\}\} vuota\{\{\/unless\}\}/);
+assert.match(tiroHbs, /data-action="tiroSoglia" data-delta="-1"[\s\S]*\{\{tiro\.soglia\.mano\.label\}\}[\s\S]*data-action="tiroSoglia" data-delta="1"/);
+assert.match(tiroHbs, /wod5e-mage-tiro-tira spento" disabled title="\{\{tiro\.blocco\}\}"/);
 assert.match(tiroHbs, /\{\{#if tiro\.narratore\}\}[\s\S]*class="wod5e-mage-tiro-narratore\{\{#if tiro\.narratore\.on\}\} acceso\{\{\/if\}\}" data-action="tiroNarratore"[\s\S]*WOD5E_MAGE\.Verdetto\.DalNarratore/);
-assert.match(scheda, /ready: Boolean\(attribute \|\| skill\) && conto\.difficultySet,\n\s+needsDifficulty: Boolean\(attribute \|\| skill\) && !conto\.difficultySet/);
+assert.match(scheda, /const blocco = !haTratto \? localize\("WOD5E_MAGE\.Tiro\.MancaTratto"\) : \(!sogliaSet \? localize\("WOD5E_MAGE\.Tiro\.MancaSoglia"\) : ""\);/);
+assert.match(scheda, /ready: !blocco,\n\s+blocco,\n\s+needsDifficulty: haTratto && !sogliaSet/);
 assert.match(scheda, /if \(!conto\.difficultySet\) \{\n\s+ui\.notifications\.warn\(localize\("WOD5E_MAGE\.Tiro\.DifficultyWarning"\)\);/);
 
 // Le Condizioni sul tiro (29/9): la richiesta le porta in una riga, coi dadi che tolgono, l'8 e il

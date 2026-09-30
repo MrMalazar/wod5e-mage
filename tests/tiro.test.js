@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import {
-  bumpDifficulty,
+  bumpSoglia,
   clearTiro,
   contoTiro,
   DADI_ADJUST_CAP,
   emptyTiro,
   EXTRA_DICE_CAP,
-  hasDifficulty,
+  hasSoglia,
   isMagick,
   livelloContato,
   loadSpell,
@@ -20,7 +20,7 @@ import {
   quintessenceDice,
   removePill,
   setDadi,
-  setDifficulty,
+  setSoglia,
   setExtra,
   setKind,
   setPay,
@@ -40,7 +40,7 @@ import {
 const vuoto = emptyTiro();
 assert.equal(tiroSize(vuoto), 0);
 assert.equal(isMagick(vuoto), false);
-assert.equal(vuoto.difficulty, null);
+assert.equal(vuoto.soglia, null);
 assert.deepEqual(TIRO_KINDS, ["accidentale", "volgare", "testimoni"]);
 
 // L'Areté cliccato fa la Magick e accende il premio; un secondo clic spegne tutto.
@@ -115,11 +115,14 @@ assert.equal(toggleSphere(tiro, "mind").spell, "s1");
 assert.equal(clearTiro().spell, null);
 
 // La Difficoltà a mano: un numero la fissa, il più e il meno partono dal conto.
-assert.equal(setDifficulty(vuoto, 4).difficulty, 4);
-assert.equal(setDifficulty(setDifficulty(vuoto, 4), null).difficulty, null);
-assert.equal(bumpDifficulty(vuoto, 1, 5).difficulty, 6, "senza numero scritto si parte dal conto");
-assert.equal(bumpDifficulty(setDifficulty(vuoto, 2), -1).difficulty, 1);
-assert.equal(bumpDifficulty(setDifficulty(vuoto, 0), -1).difficulty, 0, "mai sotto zero");
+// La soglia a mano (30/9): un addendo sopra il conto degli Ambiti; nell'Abilità la soglia intera, mai sotto zero.
+assert.equal(setSoglia(vuoto, 4).soglia, 4);
+assert.equal(setSoglia(setSoglia(vuoto, 4), null).soglia, null);
+assert.equal(bumpSoglia(vuoto, 1).soglia, 1, "da zero, se non è ancora stata toccata");
+assert.equal(bumpSoglia(setSoglia(vuoto, 2), -1).soglia, 1);
+assert.equal(bumpSoglia(setSoglia(vuoto, 0), -1).soglia, 0, "nell'Abilità mai sotto zero");
+assert.equal(bumpSoglia(toggleArete(vuoto), -1).soglia, -1, "nella Magick abbassa il conto degli Ambiti");
+assert.equal(setSoglia(toggleArete(vuoto), 99).soglia, 20, "entro ±20");
 assert.equal(setQuintessence(vuoto, 3).quintessence, 3);
 assert.equal(EXTRA_DICE_CAP, 3);
 assert.equal(setExtra(vuoto, 2).extra, 2);
@@ -207,24 +210,26 @@ assert.equal(contoTiro(pickSkill(pickAttribute(vuoto, "wits"), "skill:awareness"
 const abilita = pickSpecialty(pickAttribute(vuoto, "dexterity"), "skill:athletics", "parkour");
 conto = contoTiro(abilita, { attributeValue: 3, skillValue: 2, arete: 4, quintessenceAvailable: 5 });
 assert.deepEqual([conto.magick, conto.pool, conto.difficulty, conto.dice, conto.specialtyDice, conto.quintessence], [false, 6, 0, 6, 1, 0]);
-conto = contoTiro(setDifficulty(abilita, 4), { attributeValue: 3, skillValue: 2 });
+conto = contoTiro(setSoglia(abilita, 4), { attributeValue: 3, skillValue: 2 });
 assert.deepEqual([conto.manual, conto.difficulty, conto.dice], [true, 4, 2]);
 
 // Senza Difficoltà il tiro non parte (16/9 sera): l'Abilità la vuole a mano,
 // la Magick la prende dagli Ambiti dichiarati (anche a 1) o a mano.
-assert.equal(hasDifficulty(abilita), false);
+assert.equal(hasSoglia(abilita), false);
 assert.equal(contoTiro(abilita, { attributeValue: 3, skillValue: 2 }).difficultySet, false);
-assert.equal(hasDifficulty(setDifficulty(abilita, 0)), true, "uno zero scritto a mano è una Difficoltà");
-assert.equal(hasDifficulty(setDifficulty(abilita, null)), false);
-assert.equal(hasDifficulty(toggleArete(vuoto)), false);
-assert.equal(hasDifficulty(setScope(toggleArete(vuoto), "targets", 1)), true);
-assert.equal(hasDifficulty(magick), true);
+assert.equal(hasSoglia(setSoglia(abilita, 0)), true, "uno zero scritto a mano è una soglia");
+assert.equal(hasSoglia(setSoglia(abilita, null)), false);
+assert.equal(hasSoglia(toggleArete(vuoto)), false);
+assert.equal(hasSoglia(setScope(toggleArete(vuoto), "targets", 1)), true);
+assert.equal(hasSoglia(magick), true);
 assert.equal(contoTiro(magick, { arete: 2 }).difficultySet, true);
-assert.equal(hasDifficulty(setScope(setScope(setScope(magick, "potency", 0), "range", 0), "targets", 0)), false);
+assert.equal(hasSoglia(setScope(setScope(setScope(magick, "potency", 0), "range", 0), "targets", 0)), false);
 
-// La Difficoltà scritta a mano sovrascrive il conto, anche nella Magick.
-conto = contoTiro(setDifficulty(magick, 12), { arete: 2, attributeValue: 4, skillValue: 5 });
-assert.deepEqual([conto.computed, conto.difficulty, conto.dice, conto.impossible], [8, 12, 0, true]);
+// La soglia a mano si somma al conto degli Ambiti (30/9): +4 sopra 8 fa 12, e −8 la porta a zero, mai sotto.
+conto = contoTiro(setSoglia(magick, 4), { arete: 2, attributeValue: 4, skillValue: 5 });
+assert.deepEqual([conto.computed, conto.sogliaMano, conto.difficulty, conto.dice, conto.impossible], [8, 4, 12, 0, true]);
+assert.deepEqual([contoTiro(setSoglia(magick, -8), { arete: 2 }).difficulty, contoTiro(setSoglia(magick, -20), { arete: 2 }).difficulty], [0, 0]);
+assert.equal(contoTiro(magick, { arete: 2 }).sogliaMano, 0, "senza a mano, l'addendo è zero");
 
 // La Bussola, i dadi extra col tetto +3 e i Tratti per intero entrano nella riserva.
 // La Quintessenza no (Blue, 29/9): paga il costo del lancio, i dadi li danno i poteri.
@@ -301,24 +306,24 @@ assert.deepEqual([setDadi(magick, 2).dadi, setDadi(magick, -3).dadi, setDadi(mag
 
   // Anche a mani nude: la Quintessenza dà dadi anche nel tiro di Abilità, dentro il tetto 2 + Areté.
   const mani = { id: "r-mani", sphere: "prime", name: "Mani nude", effects: [{ on: "quintessenceOnSkills", roll: "abilita", nota: "punti" }] };
-  const conMani = contoTiro(setQuintessence(setDifficulty(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-mani", "prime", { any: true }), 2), 9), { ...numeri, quintessenceAvailable: 9, power: mani });
+  const conMani = contoTiro(setQuintessence(setSoglia(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-mani", "prime", { any: true }), 2), 9), { ...numeri, quintessenceAvailable: 9, power: mani });
   assert.deepEqual([conMani.magick, conMani.quintessenceAllowed, conMani.quintessence, conMani.pool], [false, true, 4, 9 + 4]);
-  assert.equal(contoTiro(setQuintessence(setDifficulty(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), 2), 9), { ...numeri, quintessenceAvailable: 9 }).quintessence, 0, "senza il potere, niente Quintessenza fuori dalla Magick");
+  assert.equal(contoTiro(setQuintessence(setSoglia(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), 2), 9), { ...numeri, quintessenceAvailable: 9 }).quintessence, 0, "senza il potere, niente Quintessenza fuori dalla Magick");
 
   // Niente al caso: riesce senza tirare con almeno due dadi dopo la soglia; con uno no, e il riquadro dice perché.
   const niente = { id: "r-niente", sphere: "entropy", name: "Niente al caso", effects: [{ mode: "attivo", on: "autoSuccess", roll: "abilita", when: "dadi2", nota: "due dadi" }] };
   const tiroNiente = pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-niente", "entropy", { any: true });
-  const nienteOk = contoTiro(setDifficulty(tiroNiente, 7), { ...numeri, power: niente });
+  const nienteOk = contoTiro(setSoglia(tiroNiente, 7), { ...numeri, power: niente });
   assert.deepEqual([nienteOk.dice, nienteOk.autoSuccess, nienteOk.powerActive], [2, true, true]);
-  const nienteNo = contoTiro(setDifficulty(tiroNiente, 8), { ...numeri, power: niente });
+  const nienteNo = contoTiro(setSoglia(tiroNiente, 8), { ...numeri, power: niente });
   assert.deepEqual([nienteNo.dice, nienteNo.autoSuccess, nienteNo.autoSuccessMotivo], [1, false, "dadi2"]);
   // A zero dadi il tiro è impossibile, salvo che riesca senza tirare.
   const fucile = { id: "r-fucile", sphere: "matter", name: "Fucile", effects: [{ mode: "attivo", on: "autoSuccess", roll: "any", nota: "riesce" }] };
-  const conFucile = contoTiro(setDifficulty(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-fucile", "matter", { any: true }), 12), { ...numeri, power: fucile });
+  const conFucile = contoTiro(setSoglia(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-fucile", "matter", { any: true }), 12), { ...numeri, power: fucile });
   assert.deepEqual([conFucile.dice, conFucile.autoSuccess, conFucile.impossible], [0, true, false]);
 
   // Un effetto della Magick scelto in un tiro di Abilità resta fuori, col perché.
-  const conFuori = contoTiro(setDifficulty(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-appoggio", "forces", { any: true }), 3), { ...numeri, power: appoggio });
+  const conFuori = contoTiro(setSoglia(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-appoggio", "forces", { any: true }), 3), { ...numeri, power: appoggio });
   assert.deepEqual([conFuori.powerNotes, conFuori.powerSkipped], [[], [{ motivo: "tiro:magick", nota: "leva" }]]);
 
   // La variante «attivo» arriva nell'id: la riga la spezza, il conto la passa agli effetti.
@@ -334,7 +339,7 @@ assert.deepEqual([setDadi(magick, 2).dadi, setDadi(magick, -3).dadi, setDadi(mag
 // Le Condizioni sul tiro (la regola di base del 29/9): i dadi sul totale, fuori dal tetto; il grado 2
 // porta la riuscita all'8; il grado 3 fa fallire, anche la riuscita senza tirare; un clic le toglie.
 {
-  const abilita = setDifficulty(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:firearms"), 1);
+  const abilita = setSoglia(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:firearms"), 1);
   const senza = contoTiro(abilita, { attributeValue: 3, skillValue: 3 });
   assert.deepEqual([senza.pool, senza.dice, senza.successFrom, senza.fallisce], [6, 5, 6, false]);
   const pesano = { dadi: -3, otto: true, fallisce: false, perche: [] };
