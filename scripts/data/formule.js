@@ -535,9 +535,7 @@ export const FORMULE_M6 = Object.freeze([
     ],
     "thresholdText": "6 (Potenza 2, Durata 3, Impatto 1)",
     "use": "In genere costruisce una cosa fino a 100 kg che regge per un mese; un edificio o un veicolo salgono con la Potenza (Peso).",
-    "powers": [
-      "fai-da-te"
-    ],
+    "powers": [],
     "newPowers": [],
     "byBlue": false
   },
@@ -1591,7 +1589,6 @@ export const FORMULE_M6 = Object.freeze([
       "colpo-di-fortuna",
       "il-dado-e-tratto",
       "testa-o-croce",
-      "lascia-o-raddoppia",
       "ambito-di-casa"
     ],
     "newPowers": [],
@@ -2120,7 +2117,6 @@ export const FORMULE_M6 = Object.freeze([
     "use": "In genere è pensato per un marchio o un legame che regge due scene; per sempre chiede Fissare.",
     "powers": [
       "inseparabili",
-      "pane-e-sale",
       "volonta-prestata",
       "strumento-di-fortuna",
       "tabu",

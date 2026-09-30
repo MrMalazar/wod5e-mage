@@ -31,8 +31,11 @@ assert.deepEqual(FORMULE_M6.filter((formula) => formula.byBlue).map((formula) =>
 assert.deepEqual(FORMULE_M6.filter((formula) => formula.name.includes(" e ")).map((formula) => formula.name).sort(), ["Accelerare e Rallentare", "Aprire e Bloccare", "Benedire e Maledire", "Creare e Distruggere"]);
 assert.equal(FORMULE_ALIAS.accelerare, "accelerare-e-rallentare");
 assert.deepEqual(FORMULE_M6.find((formula) => formula.id === "guarire").thresholds, [{ base: 4, scopes: { potency: 3, impact: 1 } }]);
-// I poteri: ognuno sta sotto la sua matrice, e la matrice lo elenca.
-for (const power of POTERI) {
+// I poteri: ognuno sta sotto la sua matrice, e la matrice lo elenca. I poteri nuovi del rifacimento
+// (30/9, gli aggiunti) una matrice non ce l'hanno ancora: la decide Blue.
+const rifacimento = JSON.parse(readFileSync(new URL("../tools/dati/rifacimento.json", import.meta.url), "utf8"));
+assert.deepEqual(POTERI.filter((power) => !power.formula).map((power) => power.id).sort(), Object.keys(rifacimento.aggiunti).sort());
+for (const power of POTERI.filter((entry) => entry.formula)) {
   const formula = FORMULE_M6.find((entry) => entry.id === power.formula);
   assert.ok(formula, `${power.id}: matrice ${power.formula}`);
   assert.ok(formula.powers.includes(power.id), `${power.id} non sta in ${formula.id}`);

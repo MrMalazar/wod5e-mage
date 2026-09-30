@@ -848,7 +848,8 @@
       "Carta": {
         "Pagato": "Paid",
         "Usi": "Uses left",
-        "Paradosso": "Paradox"
+        "Paradosso": "Paradox",
+        "Costo": "Cost"
       },
       "Scelta": {
         "ambito": "Chosen Scope",
@@ -878,7 +879,8 @@
       "DominioEsterno": "Outside Domain (powers are free at creation)",
       "Prerequisito": {
         "Label": "Needs",
-        "numero": "{n} {sphere} powers",
+        "numero": "{n} {sphere} powers known",
+        "numeroUno": "1 {sphere} power known",
         "poteri": "requires {names}"
       },
       "PrerequisitiMancano": "This power's prerequisites are missing: see its row in the Add window.",
@@ -909,7 +911,17 @@
         "turno": "per turn",
         "bersaglio": "per target"
       },
-      "ConSfera": "With"
+      "ConSfera": "With",
+      "Allineati": "Powers realigned to the catalog: {righe} rows on {schede} sheets.",
+      "ToltiSulleSchede": "Powers removed from the catalog but still on some sheet: {nomi}. They keep their text and the «Removed» mark: remove or replace them by hand.",
+      "Tolto": "Removed",
+      "ToltoHint": "Removed from the catalog on {data}. {motivo}",
+      "CostoVariabile": {
+        "Titolo": "How much Quintessence do you pay?",
+        "Quanta": "Quintessence to pay",
+        "Hai": "You have {n} on the Wheel.",
+        "Paga": "Pay"
+      }
     },
     "Tratti": {
       "Vantaggi": "Advantages",

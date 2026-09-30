@@ -4,7 +4,8 @@
     "Gli effetti dei poteri sul tiro (tappa 3, 24/9). Scritti a mano dal testo del libretto: ogni riga cita, in `nota`, la frase del potere da cui viene, e l'attrezzo genera-dati.mjs rifiuta una nota che non stia nel testo.",
     "Campi: `on` (dice, threshold, successFrom, autoSuccess, freeScope, quintessenceOnSkills, prizeDouble, nota); `value` (numero, oppure {from: poteri, sphere?} = poteri conosciuti nella Sfera del potere o in `sphere`, oppure {from: sfere, max} = Sfere conosciute fino a max); `scope` (l'Ambito di freeScope, o `scelta` = quello scelto nella riga); `roll` (magick, abilita, any; senza: magick); `mode` (passivo, attivo; senza: passivo); `requires` (Sfere che il personaggio deve avere: le Amalgame); `when` (saluteMeta, abilita1, dadi1, dadi2, incantesimoScelto, abilitaScelta, potenza3).",
     "Un effetto `attivo` si applica quando il giocatore sceglie la variante «attivo» del potere nel lancio (o il potere solo, se non ha effetti passivi sul tiro): costa la Quintessenza del potere e conta un uso.",
-    "`scelta` dice cosa il giocatore sceglie all'acquisto (kind: ambito, abilita, incantesimo); per `ambito`, le opzioni per Sfera."
+    "`scelta` dice cosa il giocatore sceglie all'acquisto (kind: ambito, abilita, incantesimo); per `ambito`, le opzioni per Sfera.",
+    "30/9: col rifacimento deciso (tools/dati/rifacimento.json) nove poteri hanno il testo nuovo, e i loro effetti sono riscritti da lì: Armonia a distanza, Colpo di fortuna, Fortuna del principiante, Ho letto qualcosa, Il fucile di Čechov, Il giusto attrezzo, Ladro di fortuna, Semplice violenza, Testa o croce. Dove il testo nuovo non tocca il tiro (un ritiro dopo il tiro, il Prezzo, una scelta fra due strade) l'effetto non c'è: si usa il tasto «Usa». Parole che pesano ha la nota col ritocco delle Condizioni del 29/9."
   ],
   "letture": {
     "freeScope": "«non conta sino al 4° pallino» e «fino a un livello pari a N»: i livelli fino a N non contano; sopra N conta l'eccedenza (Potenza 5 con N 4 vale 1). Da confermare con Blue: l'altra lettura è che sopra N l'Ambito conti per intero."
@@ -50,21 +51,25 @@
       { "on": "dice", "value": 2, "roll": "abilita", "nota": "Se il gruppo segue un piano che hai spiegato prima della scena, per quella scena ognuno ha 2 dadi in più nei tiri di Abilità." }
     ],
     "ho-letto-qualcosa": [
-      { "mode": "attivo", "on": "dice", "value": 3, "roll": "abilita", "nota": "Una volta per sessione, in un tiro di conoscenza, hai 3 dadi in più." }
+      { "on": "dice", "value": 1, "roll": "abilita", "nota": "Davanti a un compito o a un lavoro sai sempre che tipo di conoscenza ti servirebbe; se è fra le tue, hai 1 dado in più al tiro." },
+      { "mode": "attivo", "on": "nota", "roll": "abilita", "nota": "Anche senza la conoscenza o l'Abilità adatta, per un tiro hai tanti pallini quanti sono i poteri che conosci in Mente, fino a 5, al posto di quelli dell'Abilità." }
     ],
     "fortuna-del-principiante": [
-      { "mode": "attivo", "on": "autoSuccess", "roll": "abilita", "when": "abilita1", "nota": "Una volta per sessione un tiro di un'Abilità in cui hai un solo pallino riesce." }
+      { "on": "dice", "value": 2, "roll": "abilita", "nota": "Quando provi per la prima volta una cosa che non hai mai fatto (guidare un camion, scassinare una cassaforte, parlare in tribunale etc..), hai 2 dadi in più." },
+      { "on": "dice", "value": 2, "roll": "magick", "requires": "prime", "nota": "vale anche la prima volta che lanci un effetto di Magick nuovo per te." },
+      { "mode": "attivo", "on": "autoSuccess", "roll": "abilita", "when": "abilita1", "nota": "Un tuo tiro di un'Abilità in cui hai un solo pallino riesce, senza tirare." }
     ],
     "niente-al-caso": [
       { "mode": "attivo", "on": "autoSuccess", "roll": "abilita", "when": "dadi2", "nota": "in un tiro di Abilità non tiri: se hai almeno 2 dadi, riesci" },
       { "mode": "attivo", "on": "autoSuccess", "roll": "magick", "when": "dadi2", "requires": "prime", "nota": "Accesso con Primordio: vale anche nei lanci di Magick, se dopo la soglia ti restano almeno 2 dadi." }
     ],
     "il-fucile-di-echov": [
-      { "mode": "attivo", "on": "autoSuccess", "roll": "any", "nota": "Una volta per sessione indichi un oggetto in scena: quando lo usi, entro la sessione, il tiro riesce." }
+      { "on": "dice", "value": 2, "roll": "any", "nota": "Quando lo usi per quello a cui serve, e non per altro (un coltello per tagliare, una corda per legare o per arrampicarti), hai 2 dadi in più." },
+      { "mode": "attivo", "on": "autoSuccess", "roll": "any", "nota": "Quando usi l'oggetto che hai dichiarato, per quello a cui serve, paghi da 1 a 3 Quintessenza e il tiro riesce senza tirare." }
     ],
     "ladro-di-fortuna": [
-      { "mode": "attivo", "on": "dice", "value": 1, "roll": "abilita", "nota": "Una volta per scena togli un dado riuscito a un tiro di Abilità appena fatto, e lo aggiungi al tuo prossimo tiro." },
-      { "mode": "attivo", "on": "dice", "value": 1, "roll": "magick", "requires": "prime", "nota": "Accesso con Primordio: vale anche coi lanci di Magick, sia per togliere il dado sia per metterlo." }
+      { "on": "dice", "value": 1, "roll": "abilita", "nota": "Togli un dado riuscito a un tiro appena fatto da qualcuno che non ti è nemico (un compagno, un alleato, un passante etc..), e lo aggiungi al tuo prossimo tiro." },
+      { "on": "dice", "value": 1, "roll": "magick", "requires": "prime", "nota": "vale anche coi lanci di Magick, sia per togliere il dado sia per metterlo, nell'attivo e nel passivo." }
     ],
     "strumento-di-fortuna": [
       { "mode": "attivo", "on": "nota", "roll": "magick", "nota": "Paga 1 Quintessenza: per un lancio usi uno Strumento che non è il tuo come se fosse tuo. Il premio dell'Areté lo decide sempre il Narratore." }
@@ -89,18 +94,18 @@
       { "on": "autoSuccess", "roll": "abilita", "nota": "Un tiro fisico che ti è già riuscito nella scena, se lo rifai, riesce senza tirare." }
     ],
     "semplice-violenza": [
-      { "on": "nota", "roll": "magick", "when": "potenza3", "nota": "I danni dei tuoi lanci di Forza con Potenza 3 o più sono aggravati." }
+      { "on": "nota", "roll": "any", "nota": "Quando il Narratore decide se un tuo danno è Superficiale o Aggravato, propende per l'Aggravato, anche quando colpisci con effetti che non sono di Forza." },
+      { "mode": "attivo", "on": "nota", "roll": "any", "nota": "Paghi 2 Quintessenza: i danni di un tuo colpo (un lancio, un'arma, un pugno etc..) sono tutti Aggravati, anche quelli che sarebbero Superficiali." }
     ],
     "colpo-di-fortuna": [
-      { "on": "nota", "roll": "any", "nota": "Quando in un tuo tiro riuscito escono due 10, aggiungi un effetto a scelta: 1 danno in più, una Condizione al bersaglio o un'informazione dal Narratore." }
+      { "on": "nota", "roll": "any", "nota": "Quando in un tuo tiro escono due 10, il Narratore aggiunge un effetto che descrive lui, come vuole, purché dia qualcosa in più alla scena (un danno in più, una Condizione al bersaglio, un'informazione etc..)." }
     ],
     "il-giusto-attrezzo": [
-      { "mode": "attivo", "on": "nota", "roll": "abilita", "nota": "Una volta per scena, se l'attrezzo che usi c'entra col tiro (un piede di porco, un grimaldello, un bisturi), non paghi il Prezzo della riuscita." }
+      { "on": "nota", "roll": "abilita", "nota": "Quello che hai in mano fa da attrezzo giusto per il lavoro (un cacciavite fa da grimaldello, un coltellino da bisturi, una graffetta da chiave etc..): il tiro va come se avessi l'attrezzo vero." }
     ],
     "testa-o-croce": [
-      { "mode": "attivo", "on": "nota", "roll": "abilita", "nota": "Una volta per scena, prima di un tiro di Abilità, dichiari pari o dispari: se il primo dado ti dà ragione hai 2 dadi in più al tuo prossimo tiro, se no 2 in meno." },
-      { "mode": "attivo", "on": "nota", "roll": "magick", "requires": "prime", "nota": "Accesso con Primordio: l'effetto attivo vale anche per i lanci di Magick." },
-      { "on": "nota", "roll": "any", "nota": "Negli scontri di dadi (iniziativa, contese) vinci i pareggi." }
+      { "mode": "attivo", "on": "nota", "roll": "abilita", "nota": "Prima di un tuo tiro di Abilità dichiari pari o dispari: se il primo dado ti dà ragione hai 2 dadi in più al tuo prossimo tiro, se no 2 in meno." },
+      { "mode": "attivo", "on": "nota", "roll": "magick", "requires": "prime", "nota": "l'attivo vale anche per i lanci di Magick." }
     ],
     "bussola-doppia": [
       { "on": "nota", "roll": "magick", "nota": "Quando rispetti la Bussola in un lancio della tua Sfera, i dadi in più diventano due." }
@@ -109,14 +114,13 @@
       { "on": "nota", "roll": "magick", "nota": "I dadi di Armonia che ricevi in un lancio valgono 1 più il numero di chi partecipa." }
     ],
     "armonia-a-distanza": [
-      { "on": "nota", "roll": "abilita", "nota": "Dai e ricevi dadi di Armonia con compagni che non sono in scena, nei tiri di Abilità. Il tetto di 3 resta." },
-      { "on": "nota", "roll": "magick", "requires": "prime", "nota": "Accesso con Primordio: i dadi di Armonia a distanza valgono anche nei lanci di Magick." }
+      { "on": "nota", "roll": "any", "nota": "Dai e ricevi dadi di Armonia anche con un compagno che non è in scena, se hai un legame con lui, lo stai guardando o ci stai parlando (un marchio, una chiaroveggenza, una telefonata etc..)." }
     ],
     "vedo-il-bluff": [
       { "on": "nota", "roll": "abilita", "nota": "Nelle contese sociali tiri dopo l'avversario, sapendo il suo risultato, e puoi ritirarti senza perdere." }
     ],
     "parole-che-pesano": [
-      { "on": "nota", "roll": "abilita", "nota": "Un tuo tiro sociale riuscito può infliggere una Condizione mentale (spaventato, confuso, ossessionato), senza Magick." }
+      { "on": "nota", "roll": "abilita", "nota": "Un tuo tiro sociale riuscito può infliggere una Condizione mentale (si aggiornerà a catena col rifacimento delle Condizioni), senza Magick." }
     ],
     "distrazione": [
       { "mode": "attivo", "on": "nota", "roll": "abilita", "nota": "Una volta per scena, quando qualcuno sta per tirare, un tuo tiro sociale riuscito gli fa perdere il tiro." }

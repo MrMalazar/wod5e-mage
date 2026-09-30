@@ -137,7 +137,7 @@ let catalogoPerNome = null;
 export function testoCondizione(riga, entry, localize = (key) => key, nomi = null) {
   if (riga?.kind === "numero") {
     const sphere = Array.isArray(entry?.spheres) && entry.spheres[0] && entry.spheres[0] !== "any" ? localize(`WOD5E_MAGE.Spheres.${entry.spheres[0]}`) : localize("WOD5E_MAGE.Poteri.CatalogoQualsiasi");
-    return localize("WOD5E_MAGE.Poteri.Prerequisito.numero").replace("{n}", String(riga.n)).replace("{sphere}", sphere);
+    return localize(`WOD5E_MAGE.Poteri.Prerequisito.${riga.n === 1 ? "numeroUno" : "numero"}`).replace("{n}", String(riga.n)).replace("{sphere}", sphere);
   }
   if (riga?.kind === "potere") return localize("WOD5E_MAGE.Poteri.Prerequisito.poteri").replace("{names}", nomi?.get?.(riga.id) ?? riga.id);
   return String(riga?.testo ?? "");

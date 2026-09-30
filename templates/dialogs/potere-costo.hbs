@@ -1,0 +1,10 @@
+{{!-- Il costo variabile di un potere rifatto (30/9: «da 1 a 3 Quintessenza», «1 Quintessenza a
+     bersaglio»): quanta Quintessenza si paga per l'attivo, fra il minimo e il tetto del costo. --}}
+<div class="wod5e-mage-potere-costo-corpo">
+    <p class="wod5e-mage-potere-costo-scritto"><b>{{name}}</b> · {{costo}}</p>
+    <label class="wod5e-mage-potere-costo-campo">
+        <span>{{localize "WOD5E_MAGE.Poteri.CostoVariabile.Quanta"}}</span>
+        <input type="number" name="spesa" value="{{valore}}" min="{{min}}"{{#if max}} max="{{max}}"{{/if}} step="1" autofocus>
+    </label>
+    <p class="wod5e-mage-potere-costo-ruota">{{localize "WOD5E_MAGE.Poteri.CostoVariabile.Hai" n=quintessence}}</p>
+</div>

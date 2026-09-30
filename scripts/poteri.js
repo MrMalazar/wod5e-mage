@@ -332,12 +332,14 @@ function normalizzaEffetto(effect) {
 
 /**
  * Gli effetti sul tiro di una riga: quelli del catalogo, se la riga viene
- * da lì (il catalogo è il sorgente: si aggiorna coi dati), altrimenti
- * quelli scritti nella riga. Puliti: ganci, tiri e condizioni conosciuti.
+ * da lì (il catalogo è il sorgente: si aggiorna coi dati; dal 30/9 anche
+ * quando il potere rifatto non ne ha più: la copia vecchia nella riga non
+ * vale), altrimenti quelli scritti nella riga. Puliti: ganci, tiri e
+ * condizioni conosciuti.
  */
 export function effettiDelPotere(power, catalog = POTERI) {
   const voce = voceDelCatalogo(power, catalog);
-  const lista = Array.isArray(voce?.effects) && voce.effects.length ? voce.effects : (power?.effects ?? []);
+  const lista = voce ? (Array.isArray(voce.effects) ? voce.effects : []) : (power?.effects ?? []);
   return lista.map(normalizzaEffetto).filter(Boolean);
 }
 
@@ -572,13 +574,41 @@ export function usiDelPotere(power, usi = {}) {
 
 /**
  * Si può usare adesso? Serve un uso nel periodo, e la Quintessenza che il
- * potere costa. Torna il motivo del no: «usi» o «quintessenza».
+ * potere costa (o quella scelta, `spesa`, quando il costo è variabile).
+ * Torna il motivo del no: «usi» o «quintessenza».
  */
-export function puoUsare(power, { usi = {}, quintessence = 0 } = {}) {
+export function puoUsare(power, { usi = {}, quintessence = 0, spesa = null } = {}) {
   const conto = usiDelPotere(power, usi);
   if (conto && conto.restanti <= 0) return { ok: false, motivo: "usi", usi: conto };
-  if (count(power?.costValue) > count(quintessence)) return { ok: false, motivo: "quintessenza", usi: conto };
+  const costo = spesa === null || spesa === undefined ? count(power?.costValue) : count(spesa);
+  if (costo > count(quintessence)) return { ok: false, motivo: "quintessenza", usi: conto };
   return { ok: true, motivo: "", usi: conto };
+}
+
+/**
+ * Il costo dell'attivo per il tasto «Usa» (il rifacimento, 30/9): `fisso` è la
+ * Quintessenza che si scala da sola; `variabile` ({ min, max }, max 0 = senza
+ * tetto) quando la Quintessenza la sceglie chi usa il potere («da 1 a 3
+ * Quintessenza», «1 Quintessenza a bersaglio»); `testo` è il costo scritto per
+ * esteso. Il variabile viene dal catalogo, il fisso dalla riga.
+ */
+export function costoDelPotere(power, entry = null) {
+  const variabile = entry?.costoVariabile && typeof entry.costoVariabile === "object"
+    ? { min: count(entry.costoVariabile.min), max: count(entry.costoVariabile.max) }
+    : null;
+  return {
+    fisso: variabile ? 0 : count(power?.costValue),
+    variabile,
+    testo: testo(entry?.costoAttivo) || testo(power?.cost)
+  };
+}
+
+/** La Quintessenza scelta per un costo variabile, stretta fra il minimo e il tetto (0 = senza tetto). */
+export function spesaNeiLimiti(valore, variabile) {
+  const min = count(variabile?.min);
+  const max = count(variabile?.max);
+  const n = Math.max(count(valore), min);
+  return max > 0 ? Math.min(n, max) : n;
 }
 
 /** Un uso in più del potere nel suo periodo; senza periodo contato la bandiera non cambia. */
@@ -604,10 +634,11 @@ export function riarmaUsi(usi, per) {
   return next;
 }
 
-/** La Ruota dopo l'uso: la Quintessenza scende del costo, mai sotto zero. */
-export function ruotaDopoUso(balance, power) {
+/** La Ruota dopo l'uso: la Quintessenza scende del costo (o della `spesa` scelta), mai sotto zero. */
+export function ruotaDopoUso(balance, power, spesa = null) {
+  const costo = spesa === null || spesa === undefined ? count(power?.costValue) : count(spesa);
   return {
-    quintessence: Math.max(count(balance?.quintessence) - count(power?.costValue), 0),
+    quintessence: Math.max(count(balance?.quintessence) - costo, 0),
     paradox: count(balance?.paradox)
   };
 }
@@ -667,10 +698,11 @@ export function blocchiDelTesto(text) {
     .map((blocco) => blocco.trim())
     .filter(Boolean)
     .map((blocco) => {
-      const m = blocco.match(/^(Effetto (attivo|passivo|Amalgama)):\s*([\s\S]*)$/i);
-      const corpo = m ? m[3] : blocco;
+      // Nei poteri rifatti (30/9) il titolo porta fra parentesi il costo dell'attivo o la cadenza del passivo.
+      const m = blocco.match(/^(Effetto (attivo|passivo|Amalgama))(?:\s*\(([^()\n]*)\))?:\s*([\s\S]*)$/i);
+      const corpo = m ? m[4] : blocco;
       const righe = corpo.split("\n").map((riga) => riga.trim()).filter(Boolean);
-      return { titolo: m ? m[1] : "", kind: m ? GENERI_BLOCCO[m[2].toLowerCase()] : "", righe, voci: righe.map(voceDellaRiga) };
+      return { titolo: m ? m[1] : "", kind: m ? GENERI_BLOCCO[m[2].toLowerCase()] : "", misura: m ? testo(m[3]) : "", righe, voci: righe.map(voceDellaRiga) };
     });
 }
 
@@ -712,7 +744,8 @@ export function righePrerequisiti(entry, { sphere = "", localize = (key) => key,
   const righe = Array.isArray(entry?.prerequisiti) ? entry.prerequisiti : [];
   const sfera = sphere || (Array.isArray(entry?.spheres) ? entry.spheres.find((id) => id !== "any") : "") || "";
   return righe.map((riga) => {
-    if (count(riga?.numero)) return localize("WOD5E_MAGE.Poteri.Prerequisito.numero").replace("{n}", String(count(riga.numero))).replace("{sphere}", sfera ? localize(`WOD5E_MAGE.Spheres.${sfera}`) : "");
+    // «1 potere conosciuto in X», «2 poteri conosciuti in X» (30/9: come nella pagina, anche al singolare).
+    if (count(riga?.numero)) return localize(`WOD5E_MAGE.Poteri.Prerequisito.${count(riga.numero) === 1 ? "numeroUno" : "numero"}`).replace("{n}", String(count(riga.numero))).replace("{sphere}", sfera ? localize(`WOD5E_MAGE.Spheres.${sfera}`) : "");
     if (testo(riga?.potere)) return localize("WOD5E_MAGE.Poteri.Prerequisito.poteri").replace("{names}", testo((catalog ?? []).find((voce) => voce.id === riga.potere)?.name) || riga.potere);
     return testo(riga?.testo);
   }).filter(Boolean);
@@ -755,12 +788,13 @@ export function quattroParti(power, { entry = null, mod = null, localize = (key)
   const doveAmalgama = kind === "attivo" ? attivo : passivo;
   if (amalgama.length && doveAmalgama.fonte === "base") doveAmalgama.testo = [doveAmalgama.testo, ...amalgama].filter(Boolean).join("\n");
   const prerequisiti = scelta("prerequisiti", righePrerequisiti(entry, { sphere: sfera(power?.sphere), localize, catalog }).join("\n"));
-  const parte = (p) => ({ ...p, righe: righeDelTesto(p.testo), voci: righeDelTesto(p.testo).map(voceDellaRiga), vuota: !righeDelTesto(p.testo).length });
+  const parte = (p, misura = "") => ({ ...p, misura, righe: righeDelTesto(p.testo), voci: righeDelTesto(p.testo).map(voceDellaRiga), vuota: !righeDelTesto(p.testo).length });
   return {
     grado: Math.min(count(power?.dot) || count(entry?.dot), POTERE_DOTS),
     prerequisiti: parte(prerequisiti),
-    attivo: parte(attivo),
-    passivo: parte(passivo),
+    // Il rifacimento (30/9): accanto al titolo il costo dell'attivo e la cadenza del passivo, scritti come nella pagina.
+    attivo: parte(attivo, testo(entry?.costoAttivo)),
+    passivo: parte(passivo, testo(entry?.cadenzaPassivo)),
     modificato: {
       scheda: [prerequisiti, attivo, passivo].some((p) => p.fonte === "scheda"),
       mondo: [prerequisiti, attivo, passivo].some((p) => p.fonte === "mondo")
@@ -772,12 +806,15 @@ export function quattroParti(power, { entry = null, mod = null, localize = (key)
  * La carta in chat: nome, Sfera, matrice, tipo, il costo pagato, gli usi
  * che restano, i blocchi del testo, Paradosso e Flavor.
  */
-export function cartaPotere(power, { sphereLabel = "", usi = null, spent = 0, localize = (key) => key } = {}) {
+export function cartaPotere(power, { sphereLabel = "", usi = null, spent = 0, costo = "", localize = (key) => key } = {}) {
+  // Il costo per esteso (rifacimento, 30/9) quando dice più della Quintessenza pagata: «Azione», «da 1 a 3 Quintessenza».
+  const scritto = testo(costo) || testo(power?.cost);
   return {
     name: potereLabel(power, localize),
     sphere: sphereLabel,
     formula: testo(power?.formulaName),
     kind: power?.type ? localize(`WOD5E_MAGE.Poteri.Tipo.${power.type}`) : "",
+    costo: scritto && scritto !== `${count(spent)} Quintessenza` ? scritto : "",
     spent: count(spent),
     usi: usi ? { ...usi, label: localize(`WOD5E_MAGE.Poteri.Usi.${usi.per}`) } : null,
     blocchi: blocchiDelTesto(power?.text),

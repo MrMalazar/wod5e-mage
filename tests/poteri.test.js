@@ -42,18 +42,22 @@ import {
   voceDellaRiga
 } from "../scripts/poteri.js";
 
-// Il catalogo (24/9): i 187 poteri del libretto e dei nuovi, generati dai dati;
-// ogni voce dice le Sfere che la aprono («any» per Qualsiasi) e la matrice.
+// Il catalogo (24/9): i 187 poteri del libretto e dei nuovi, generati dai dati; dal 30/9 col
+// rifacimento deciso sopra (3 tolti, 28 aggiunti: 212). Ogni voce dice le Sfere che la aprono
+// («any» per Qualsiasi) e la matrice; i poteri nuovi del rifacimento una matrice non ce l'hanno ancora.
 assert.equal(POTERE_DOTS, 5);
 assert.deepEqual([...POTERE_TIPI], ["attivo", "passivo"]);
-assert.equal(POTERI.length, 187);
+assert.equal(POTERI.length, 212);
 assert.equal(new Set(POTERI.map((power) => power.id)).size, POTERI.length);
-assert.ok(POTERI.every((power) => power.name && power.spheres.length && power.formula && Array.isArray(power.effects)));
+assert.ok(POTERI.every((power) => power.name && power.spheres.length && Array.isArray(power.effects)));
+assert.ok(POTERI.every((power) => power.formula || (power.rifatto && !power.formulaName)));
 assert.deepEqual(sfereDellaVoce(POTERI.find((power) => power.id === "velocista")), ["forces", "time"]);
 assert.equal(sfereDellaVoce(POTERI.find((power) => power.id === "la-pratica-rende-perfetti")).length, 9);
 assert.deepEqual(sfereDellaVoce({ sphere: "life" }), ["life"]);
 assert.deepEqual(POTERI.find((power) => power.id === "velocista").uses, null);
-assert.deepEqual(POTERI.find((power) => power.id === "conosco-un-posto").uses, { per: "sessione", n: 1 });
+assert.deepEqual(POTERI.find((power) => power.id === "tre-ipotesi").uses, { per: "sessione", n: 1 });
+// Conosco un posto è rifatto (30/9): l'attivo costa Quintessenza e non ha più il limite per sessione.
+assert.deepEqual([POTERI.find((power) => power.id === "conosco-un-posto").uses, POTERI.find((power) => power.id === "conosco-un-posto").rifatto], [null, true]);
 assert.equal(POTERI.find((power) => power.id === "pronto-soccorso").costValue, 2);
 assert.equal(POTERI_FLAG, "poteri");
 
@@ -196,7 +200,7 @@ console.log("poteri: ok");
 // Il tasto «Usa» (tappa 2, 24/9): gli usi per scena e per sessione si
 // contano e si riarmano da soli, il costo scende dalla Ruota, la carta porta
 // i blocchi del testo.
-const conosco = POTERI.find((power) => power.id === "conosco-un-posto");
+const conosco = POTERI.find((power) => power.id === "tre-ipotesi");
 const pronto = { ...normalizzaPotere("r1", nuovoPotere("life", POTERI.find((power) => power.id === "pronto-soccorso"))), id: "r1" };
 const conoscoRiga = { ...normalizzaPotere("r2", nuovoPotere("mind", conosco)), id: "r2" };
 assert.deepEqual(usiDelPotere(conoscoRiga, {}), { per: "sessione", max: 1, usati: 0, restanti: 1 });
@@ -220,9 +224,12 @@ assert.deepEqual(ruotaDopoUso({ quintessence: 3, paradox: 2 }, pronto), { quinte
 assert.deepEqual(ruotaDopoUso({ quintessence: 1, paradox: 2 }, pronto), { quintessence: 0, paradox: 2 });
 const blocchi = blocchiDelTesto("Effetto attivo: Paga 2 Quintessenza: cura.\nAccesso con Vita: ferite.\n\nEffetto passivo: In una scena di cure, un danno in più.");
 assert.deepEqual(blocchi, [
-  { titolo: "Effetto attivo", kind: "attivo", righe: ["Paga 2 Quintessenza: cura.", "Accesso con Vita: ferite."], voci: [{ chiave: "Paga 2 Quintessenza", testo: "cura.", sfere: [], accesso: false, con: false }, { chiave: "Accesso con Vita", testo: "ferite.", sfere: ["life"], accesso: true, con: false }] },
-  { titolo: "Effetto passivo", kind: "passivo", righe: ["In una scena di cure, un danno in più."], voci: [{ chiave: "", testo: "In una scena di cure, un danno in più.", sfere: [], accesso: false, con: false }] }
+  { titolo: "Effetto attivo", kind: "attivo", misura: "", righe: ["Paga 2 Quintessenza: cura.", "Accesso con Vita: ferite."], voci: [{ chiave: "Paga 2 Quintessenza", testo: "cura.", sfere: [], accesso: false, con: false }, { chiave: "Accesso con Vita", testo: "ferite.", sfere: ["life"], accesso: true, con: false }] },
+  { titolo: "Effetto passivo", kind: "passivo", misura: "", righe: ["In una scena di cure, un danno in più."], voci: [{ chiave: "", testo: "In una scena di cure, un danno in più.", sfere: [], accesso: false, con: false }] }
 ]);
+// I poteri rifatti (30/9): il titolo porta fra parentesi il costo o la cadenza, anche coi due punti dentro; le righe «Con X».
+assert.deepEqual(blocchiDelTesto("Effetto attivo (1 Quintessenza): Fai.\nCon Tempo: di più.\n\nEffetto passivo (Il rischio: Paradosso doppio): Resti.").map((b) => [b.titolo, b.kind, b.misura, b.voci.map((v) => [v.chiave, v.con])]),
+  [["Effetto attivo", "attivo", "1 Quintessenza", [["", false], ["Con Tempo", true]]], ["Effetto passivo", "passivo", "Il rischio: Paradosso doppio", [["", false]]]]);
 // «Accesso con X» porta la Sfera come id (Blue, 26/9: sulla scheda sta il sigillo, non la parola):
 // i nomi come li scrive il generatore («Forza»), anche in coppia; un nome che non è una Sfera resta testo.
 assert.deepEqual([sfereDellaChiave("Accesso con Forza"), sfereDellaChiave("Accesso con Entropia + Primordio"), sfereDellaChiave("Accesso con Qualsiasi"), sfereDellaChiave("Paga 2 Quintessenza"), sfereDellaChiave("")], [["forces"], ["entropy", "prime"], [], [], []]);
@@ -231,7 +238,7 @@ for (const tpl of ["templates/actor/parts/spheres.hbs", "templates/actor/parts/s
   assert.match(readFileSync(new URL(`../${tpl}`, import.meta.url), "utf8"), /\{\{#if v\.accesso\}\}<(?:b|strong) class="wod5e-mage-accesso">(?:\{\{#if v\.con\}\}\{\{localize "WOD5E_MAGE\.Poteri\.ConSfera"\}\}\{\{else\}\})?\{\{localize "WOD5E_MAGE\.Grimorio\.Access"\}\}(?:\{\{\/if\}\})? \{\{#each v\.sfere as \|sfera\|\}\}<img class="wod5e-mage-sfera-inline" src="modules\/wod5e-mage\/assets\/icons\/sheet\/\{\{sfera\}\}\.png"/, tpl);
 }
 // Il testo scritto a mano: un blocco senza titolo né genere; l'Amalgama ha il suo genere; le chiavi «Con N poteri».
-assert.deepEqual(blocchiDelTesto("Fa una cosa.\nCon 2 poteri: due cose."), [{ titolo: "", kind: "", righe: ["Fa una cosa.", "Con 2 poteri: due cose."], voci: [{ chiave: "", testo: "Fa una cosa.", sfere: [], accesso: false, con: false }, { chiave: "Con 2 poteri", testo: "due cose.", sfere: [], accesso: false, con: false }] }]);
+assert.deepEqual(blocchiDelTesto("Fa una cosa.\nCon 2 poteri: due cose."), [{ titolo: "", kind: "", misura: "", righe: ["Fa una cosa.", "Con 2 poteri: due cose."], voci: [{ chiave: "", testo: "Fa una cosa.", sfere: [], accesso: false, con: false }, { chiave: "Con 2 poteri", testo: "due cose.", sfere: [], accesso: false, con: false }] }]);
 assert.deepEqual(blocchiDelTesto("Effetto Amalgama: Con più Sfere.\nAccesso con Primordio + Tempo: anche il resto.").map((b) => [b.kind, b.voci.map((v) => v.chiave)]), [["amalgama", ["", "Accesso con Primordio + Tempo"]]]);
 assert.deepEqual(blocchiDelGenere("Effetto attivo: A.\n\nEffetto passivo: P.", "passivo").map((b) => b.righe), [["P."]]);
 assert.deepEqual(voceDellaRiga("Accesso con Mente: danni mentali."), { chiave: "Accesso con Mente", testo: "danni mentali.", sfere: ["mind"], accesso: true, con: false });
@@ -306,13 +313,17 @@ console.log("poteri, tasto Usa: ok");
   const mestiereMagick = applyPotere({}, mestiere, { ...ctxMestiere, magick: true, variant: "attivo" });
   assert.deepEqual([mestiereMagick.dice, mestiereMagick.attivo], [3, true]);
 
-  // Fortuna del principiante: solo attivo, quindi sceglierlo è attivarlo; vale con un'Abilità a un pallino.
+  // Fortuna del principiante, rifatta (30/9): il passivo dà 2 dadi (con Primordio anche nella Magick), l'attivo
+  // fa riuscire senza tirare un'Abilità a un pallino; le due varianti nel lancio.
   const fortuna = riga("fortuna-del-principiante", "entropy");
-  assert.deepEqual(variantiDelPotere(fortuna), { passivo: false, attivo: true });
-  assert.equal(tiroDelPotere(fortuna), "abilita");
-  const fortunaOk = applyPotere({}, fortuna, { magick: false, skillValue: 1 });
+  assert.deepEqual(variantiDelPotere(fortuna), { passivo: true, attivo: true });
+  assert.deepEqual([tiroDelPotere(fortuna), tiroDelPotere(fortuna, "attivo")], ["any", "abilita"]);
+  const fortunaPassiva = applyPotere({}, fortuna, { magick: false, skillValue: 1 });
+  assert.deepEqual([fortunaPassiva.attivo, fortunaPassiva.dice, fortunaPassiva.autoSuccess.length], [false, 2, 0]);
+  const fortunaOk = applyPotere({}, fortuna, { magick: false, skillValue: 1, variant: "attivo" });
   assert.deepEqual([fortunaOk.attivo, fortunaOk.autoSuccess.length, fortunaOk.autoSuccess[0].when], [true, 1, []]);
-  assert.deepEqual(applyPotere({}, fortuna, { magick: false, skillValue: 3 }).esclusi.map((e) => e.motivo), ["abilita1"]);
+  assert.deepEqual(applyPotere({}, fortuna, { magick: false, skillValue: 3, variant: "attivo" }).esclusi.map((e) => e.motivo), ["tiro:magick", "abilita1"]);
+  assert.deepEqual(applyPotere({}, fortuna, { magick: true, spheresOwned: ["entropy"] }).esclusi.map((e) => e.motivo), ["tiro:abilita", "sfera:prime", "tiro:abilita"]);
 
   // Niente al caso: la riuscita senza tirare vuole due dadi; nella Magick serve Primordio.
   const niente = riga("niente-al-caso", "entropy");
@@ -335,19 +346,21 @@ console.log("poteri, tasto Usa: ok");
   assert.equal(applyPotere({}, riga("terra-sacra", "prime"), { magick: true, spheresOwned: ["prime", "spirit"], poteriConti: { spirit: 2 } }).dice, 2);
   assert.deepEqual(applyPotere({}, riga("terra-sacra", "prime"), { magick: true, spheresOwned: ["prime"] }).esclusi.map((e) => e.motivo), ["sfera:spirit"]);
 
-  // Semplice violenza: la nota solo con Potenza 3 o più. La Pratica: -2 sull'incantesimo scelto.
-  assert.equal(applyPotere({}, riga("semplice-violenza", "forces"), { magick: true, scopes: { potency: 3 } }).notes.length, 1);
-  assert.equal(applyPotere({}, riga("semplice-violenza", "forces"), { magick: true, scopes: { potency: 2 } }).notes.length, 0);
+  // Semplice violenza, rifatta (30/9): la nota del passivo in ogni tiro, quella dell'attivo con la variante. La Pratica: -2 sull'incantesimo scelto.
+  assert.equal(applyPotere({}, riga("semplice-violenza", "forces"), { magick: true, scopes: { potency: 2 } }).notes.length, 1);
+  assert.equal(applyPotere({}, riga("semplice-violenza", "forces"), { magick: false, variant: "attivo" }).notes.length, 2);
   const pratica = riga("la-pratica-rende-perfetti", "mind", "s1");
   assert.equal(applyPotere({ threshold: 3 }, pratica, { magick: true, spell: "s1" }).threshold, 1);
   assert.deepEqual(applyPotere({ threshold: 3 }, pratica, { magick: true, spell: "s2" }).esclusi.map((e) => e.motivo), ["incantesimoScelto", "attivo"]);
   const praticaAttiva = applyPotere({ threshold: 3 }, pratica, { magick: true, spell: "s1", variant: "attivo" });
   assert.deepEqual([praticaAttiva.threshold, praticaAttiva.autoSuccess.map((a) => a.when), praticaAttiva.attivo], [1, [["dadi1"]], true]);
 
-  // Un potere scritto a mano con effetti suoi li tiene; una riga del catalogo legge il catalogo, non la copia.
+  // Un potere scritto a mano con effetti suoi li tiene; una riga del catalogo legge il catalogo, non la copia
+  // (dal 30/9 anche quando il potere rifatto non ha più effetti: la copia vecchia non vale).
   assert.equal(effettiDelPotere({ catalogId: "", effects: [{ on: "dice", value: 2, nota: "x" }] }).length, 1);
   assert.equal(effettiDelPotere({ catalogId: "appoggio", effects: [] }).length, 1);
   assert.equal(effettiDelPotere({ catalogId: "da-qualche-parte", effects: [] }).length, 0);
+  assert.equal(effettiDelPotere({ catalogId: "da-qualche-parte", effects: [{ on: "dice", value: 3, nota: "vecchia copia" }] }).length, 0);
   console.log("poteri, effetti sul tiro: ok");
 }
 
@@ -355,22 +368,28 @@ console.log("poteri, tasto Usa: ok");
 {
   const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8")).WOD5E_MAGE;
   const localize = (key) => key.split(".").slice(1).reduce((nodo, parte) => nodo?.[parte], it) ?? key;
-  const banco = POTERI.find((power) => power.id === "il-banco-vince");
-  assert.equal(banco.name, "Il banco vince");
+  // Tenuta (non rifatta): solo passivo, con l'Amalgama di Mente.
+  const banco = POTERI.find((power) => power.id === "tenuta");
   assert.equal(banco.kind, "passivo");
-  assert.match(banco.passivo, /^Quando a qualcun altro in scena va male un tiro di Abilità, al tuo prossimo tiro di Abilità hai \+2 dadi/);
-  assert.match(banco.amalgama, /^Con Primordio: quando a qualcun altro in scena scoppia il Paradosso su un tiro di Magick, recuperi 1 Quintessenza, ma prendi anche tu 1 punto di Paradosso\./);
+  assert.match(banco.amalgama, /^Con Mente: /);
   assert.equal(banco.attivo, "");
   // Dal catalogo: il passivo porta anche l'Amalgama, con la Sfera in chiave.
-  const riga = nuovoPotere("entropy", banco);
+  const riga = nuovoPotere("prime", banco);
   const parti = quattroParti(riga, { entry: banco, localize });
   assert.equal(parti.grado, 2);
   assert.deepEqual([parti.attivo.vuota, parti.passivo.vuota, parti.prerequisiti.vuota], [true, false, true]);
-  assert.equal(parti.passivo.righe.length, 2);
-  assert.deepEqual(parti.passivo.voci[1].sfere, ["prime"]);
-  assert.equal(parti.passivo.voci[1].chiave, "Con Primordio");
+  assert.equal(parti.passivo.righe.length, banco.passivo.split("\n").length + banco.amalgama.split("\n").length);
+  assert.deepEqual(parti.passivo.voci.at(-1).sfere, ["mind"]);
+  assert.equal(parti.passivo.voci.at(-1).chiave, "Con Mente");
   assert.deepEqual([parti.attivo.fonte, parti.passivo.fonte, parti.prerequisiti.fonte], ["base", "base", "base"]);
+  assert.deepEqual([parti.attivo.misura, parti.passivo.misura], ["", ""], "un potere non rifatto non ha costo né cadenza scritti");
   assert.deepEqual(parti.modificato, { scheda: false, mondo: false });
+  // Il banco vince, rifatto (30/9): accanto ai titoli il costo dell'attivo e la cadenza del passivo; i prerequisiti in parole.
+  const bancoRifatto = POTERI.find((power) => power.id === "il-banco-vince");
+  const partiRifatte = quattroParti(nuovoPotere("entropy", bancoRifatto), { entry: bancoRifatto, localize });
+  assert.deepEqual([partiRifatte.attivo.misura, partiRifatte.passivo.misura, partiRifatte.attivo.vuota, partiRifatte.passivo.vuota], [bancoRifatto.costoAttivo, bancoRifatto.cadenzaPassivo, false, false]);
+  const n = bancoRifatto.prerequisiti?.[0]?.numero ?? 0;
+  assert.deepEqual(partiRifatte.prerequisiti.righe, n ? [n === 1 ? "1 potere conosciuto in Entropia" : `${n} poteri conosciuti in Entropia`] : []);
   // Un potere solo attivo con l'Amalgama: l'Amalgama sta nell'attivo.
   const copertura = POTERI.find((power) => power.id === "copertura");
   const attivo = quattroParti(nuovoPotere("mind", copertura), { entry: copertura, localize });
@@ -388,7 +407,8 @@ console.log("poteri, tasto Usa: ok");
   assert.deepEqual([mano.grado, mano.attivo.vuota, mano.passivo.righe], [1, true, ["Fa una cosa.", "Con Mente: anche la mente."]]);
   assert.deepEqual(mano.passivo.voci[1].sfere, ["mind"]);
   // I prerequisiti scritti nei dati, in parole.
-  assert.deepEqual(righePrerequisiti({ prerequisiti: [{ numero: 2 }, { potere: "bottino" }, { testo: "Aver venduto qualcosa" }], spheres: ["matter"] }, { localize }), ["2 poteri di Materia", "richiede Bottino", "Aver venduto qualcosa"]);
+  assert.deepEqual(righePrerequisiti({ prerequisiti: [{ numero: 2 }, { potere: "bottino" }, { testo: "Aver venduto qualcosa" }], spheres: ["matter"] }, { localize }), ["2 poteri conosciuti in Materia", "richiede Bottino", "Aver venduto qualcosa"]);
+  assert.deepEqual(righePrerequisiti({ prerequisiti: [{ numero: 1 }], spheres: ["mind", "spirit"] }, { sphere: "spirit", localize }), ["1 potere conosciuto in Spirito"], "al singolare, nella Sfera da cui lo si guarda");
   assert.deepEqual(generiDelTesto("Effetto attivo: A.\n\nEffetto passivo: P.\n\nEffetto Amalgama: Accesso con Vita: V."), { attivo: "A.", passivo: "P.", amalgama: "Accesso con Vita: V." });
   assert.deepEqual(generiDelTesto("Libero.", "passivo"), { attivo: "", passivo: "Libero.", amalgama: "" });
   console.log("poteri, quattro parti: ok");

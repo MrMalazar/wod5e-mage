@@ -19,6 +19,7 @@ import { registraCreazioneGuidata } from "./creazione-guidata-finestra.js";
 import { MageActorSheet } from "./sheets/mage-actor-sheet.js";
 import { NemicoSheet } from "./sheets/nemico-sheet.js";
 import { POTERI_MOD_SETTING } from "./poteri-mod.js";
+import { POTERI_ALLINEATI_SETTING, riallineaPoteriDelMondo } from "./poteri-allinea.js";
 import { registraNemicoChat } from "./nemico-chat.js";
 import { registraHelperIcone } from "./icone-oggetti.js";
 import { apriVathra, mandaVathra, registraVathra } from "./vathra/traduttore.js";
@@ -163,6 +164,8 @@ Hooks.once("init", () => {
   });
   // Le Condizioni riallineate alla regola di base del 29/9 (una volta per mondo, dal Narratore).
   game.settings.register(MODULE_ID, CONDIZIONI_VERSIONE_SETTING, { scope: "world", config: false, type: String, default: "" });
+  // Il catalogo dei poteri a cui le schede sono allineate (30/9): quando il catalogo cambia, al primo avvio si riallineano.
+  game.settings.register(MODULE_ID, POTERI_ALLINEATI_SETTING, { scope: "world", config: false, type: String, default: "" });
   game.settings.register(MODULE_ID, "skillsFlat", {
     scope: "client",
     config: false,
@@ -260,6 +263,10 @@ Hooks.once("ready", () => {
       })
       .catch((error) => console.warn("wod5e-mage | Riallineamento delle Condizioni interrotto.", error));
   }
+
+  // Il rifacimento dei poteri (30/9): le righe prese dal catalogo prendono il testo, il nome, il grado e il costo di oggi,
+  // se non sono state cambiate a mano (una volta per catalogo, dal primo Narratore).
+  riallineaPoteriDelMondo().catch((error) => console.warn("wod5e-mage | Riallineamento dei poteri interrotto.", error));
 
   debug("Ready", {
     foundryVersion: game.version,

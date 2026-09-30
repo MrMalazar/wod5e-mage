@@ -1,0 +1,1596 @@
+{
+  "generato": "30/9/2026",
+  "fonte": "la pagina «Poteri delle Sfere» (rifatti.json del rifacimento), solo lo stato «deciso»",
+  "leggimi": [
+    "Il rifacimento dei poteri (Blue, 28/9: ogni potere ha un effetto attivo con un costo e un effetto passivo con una cadenza), la parte decisa.",
+    "Blue, 30/9: «carica tutte quelle che abbiamo approvato e deciso su Foundry, così intanto cominciamo ad aggiornare una parte».",
+    "tools/genera-dati.mjs lo unisce al catalogo (tools/dati/poteri.json): i «poteri» prendono il posto della voce del catalogo con lo stesso id, gli «aggiunti» entrano nuovi, i «tolti» escono, i «ritocchi» cambiano una riga del catalogo (parte, s = Sfere della riga, da = il testo di prima, a = il testo nuovo).",
+    "Campi: grado; prerequisiti («nessuno», o «N poteri conosciuti in …»); accesso e amalgama in parole; attivo = { costo, testo, con }; passivo = { cadenza, testo, con }; con = le righe d'Amalgama sotto l'effetto che toccano (s = Sfere, t = testo); paradosso; nome, pagina e flavour quando cambiano.",
+    "Non si scrive a mano: si rifà dalla pagina con estrai_rifacimento.py (ricetta nel documento di progetto claude/poteri_estrazione_28_9.md)."
+  ],
+  "poteri": {
+    "da-qualche-parte": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Ti chiudi in una piega dello spazio nel punto in cui sei (la piega è spazio compresso: resti lì, avvolto come in una tasca). Finché ci resti nessuno ti percepisce senza la Magick o un potere soprannaturale: né a vista, né a orecchio, né con una telecamera. Tu vedi e senti la scena, ma non ti muovi. Esci con la tua prossima azione, che parte dal punto in cui eri, e al cambio di scena la piega si apre da sola. Se qualcuno grande quanto una persona passa per il punto esatto in cui sei (un passante, una guardia, un cane grosso etc..), lui ti percepisce, mentre per gli altri resti nascosto."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Sei sempre un po' altrove: gli effetti di Magick che ti cercano o ti seguono (un marchio, una localizzazione, un occhio che ti segue da lontano etc..) su di te durano un gradino di Durata in meno, per esempio una sessione diventa due scene e una scena diventa tre turni. Sotto un turno non si scende."
+      },
+      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno ti guarda sparire), nessuno effetto passivo."
+    },
+    "tasca-di-mary": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Tocchi un oggetto grande al massimo quanto una persona (una bicicletta, una valigia, una sedia etc..), purché nessuno lo tenga in mano, e lo fai entrare nella tasca. Un insieme di cose conta come un oggetto solo (una pila di scatole, una cassa di bottiglie, una rastrelliera etc..). In tutto, nella tasca ci sta al massimo mezza tonnellata. Quando ti serve lo tiri fuori con la tua azione, e ti compare in mano o accanto a te."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Le tue tasche sono più grandi dentro che fuori. Quello che passa dall'apertura ci sta tutto, senza peso (un coltello, un telefono, un mazzo di chiavi etc..), e sulla scheda resta Addosso. Lo spazio è uno solo, anche se cambi giacca. Quello che tieni in tasca non lo trova nessun tiro comune (una perquisizione, un metal detector, un cane etc..): lo trova solo la Magick."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo."
+    },
+    "torna-sempre": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Richiami un oggetto tuo abbastanza piccolo da tenerlo con una mano: dovunque sia (a casa, nella tasca di un ladro, nel deposito della polizia etc..), ti compare in mano, purché nessuno lo stia impugnando."
+      },
+      "passivo": {
+        "cadenza": "A sessione nuova",
+        "testo": "Quello che è tuo e hai perso, o che ti hanno rubato o sequestrato, torna da te, se non è stato distrutto. Tuo vuol dire che con l'oggetto hai almeno un legame superficiale, il filo più sottile che ti lega a una cosa (l'hai comprato, te l'hanno regalato, l'hai costruito etc..). Come torna lo decide il Narratore (te lo riporta qualcuno, lo ritrovi dove non l'avevi lasciato, arriva per posta)."
+      },
+      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno lo vede comparire), basso rischio effetto passivo."
+    },
+    "armonia-a-distanza": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Corrispondenza",
+      "accesso": "Corrispondenza e Primordio",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Per la scena fai da ponte: i compagni in scena con te possono dare e ricevere dadi di Armonia con un compagno lontano, purché tu abbia un legame con lui, lo stia guardando o ci stia parlando. Anche così il tetto è 3."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Dai e ricevi dadi di Armonia anche con un compagno che non è in scena, se hai un legame con lui, lo stai guardando o ci stai parlando (un marchio, una chiaroveggenza, una telefonata etc..). Vale nei tiri di Abilità e nei lanci di Magick, e il tetto di 3 resta."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; quando i dadi vanno in un lancio di Magick, segue il lancio."
+    },
+    "conosco-un-posto": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Corrispondenza",
+      "accesso": "Corrispondenza ed Entropia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Dichiari che conosci un posto che serve al gruppo (un rifugio, un'uscita sul retro, un passaggio etc..), anche in una città dove non sei mai stato: c'è per caso, e il Narratore lo fa esistere dove ha senso."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Ogni posto in cui sei stato almeno una volta conta per te come un legame forte (il filo che ti unisce a un posto anche quando sei lontano), in ogni effetto che chiede un legame."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "planimetria": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Corrispondenza",
+      "amalgama": "Materia",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Cambi la pianta dell'edificio in cui sei, e la disegni tu (una stanza più grande, un corridoio più lungo, una scala dall'altra parte etc..). Paghi 1 Quintessenza per una stanza, 2 per un piano, 3 per l'edificio intero. Cambiano le misure e i collegamenti, non le cose di cui è fatto: il muro resta muro e la porta resta porta. La pianta nuova dura fino al cambio di scena.",
+        "con": [
+          {
+            "s": [
+              "matter"
+            ],
+            "t": "cambi anche le cose di cui è fatto (la porta diventa una finestra, il muro diventa vetro, il pavimento diventa una grata etc..), e la casa resta ridisegnata anche dopo la scena."
+          }
+        ]
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando entri in un edificio la pianta ti si stampa in testa d'istinto, come se ci avessi sempre vissuto: sai dove muoverti, dove passare e dove trovare quello che ti serve (la cucina, il quadro elettrico, l'uscita di servizio etc..). Le cose nascoste le devi cercare lo stesso, ma quando le cerchi hai dadi in più pari ai poteri che conosci in Corrispondenza."
+      },
+      "paradosso": "Basso rischio effetto attivo se la pianta nuova sembra normale, Volgare anche senza testimoni se non torna (una stanza più grande della casa, due stanze lontane che si toccano, un corridoio che gira su se stesso etc..); nessuno effetto passivo."
+    },
+    "rifornimento": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Corrispondenza",
+      "accesso": "Corrispondenza",
+      "amalgama": "Forza, Materia, Primordio, Vita",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Una cosa che hai finito o consumato torna (le cariche del kit medico, le fascette, il nastro adesivo etc..). Con la sola Corrispondenza la cosa arriva da dove si trova (un negozio, un magazzino, un'ambulanza etc..), e lì manca.",
+        "con": [
+          {
+            "s": [
+              "forces"
+            ],
+            "t": "l'energia torna da sola (la batteria, il serbatoio, la bombola etc..), senza toglierla a nessuno."
+          },
+          {
+            "s": [
+              "matter"
+            ],
+            "t": "gli oggetti si rigenerano sul posto, senza toglierli a nessuno."
+          },
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "quello che manca nasce sul posto, nuovo, senza toglierlo a nessuno; e una Meraviglia o una reliquia la ricarichi o la richiami, pagando a parte la Quintessenza che la ricarica."
+          },
+          {
+            "s": [
+              "life"
+            ],
+            "t": "quello che viene dal vivo si rigenera sul posto (il cibo, le erbe, il sangue per una trasfusione etc..), senza toglierlo a nessuno."
+          }
+        ]
+      },
+      "passivo": {
+        "cadenza": "Una volta per sessione",
+        "testo": "Il gruppo si rifornisce come se passasse dal Santuario (munizioni, medicine, vestiti etc..), nel momento che scegli tu."
+      },
+      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno vede le cose comparire), nessuno effetto passivo."
+    },
+    "schieramento": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Corrispondenza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Sposti un compagno dove vuoi, in un punto che percepisci, purché sia un posto sicuro, dove può stare senza farsi male (non a mezz'aria, non nel fuoco, non in mezzo al traffico etc..). Se il compagno non vuole, fai il lancio come per spostare chiunque, con la soglia normale della Magick, e con questo potere hai 2 dadi in più."
+      },
+      "passivo": {
+        "cadenza": "Una volta per combattimento",
+        "testo": "All'inizio di uno scontro, prima del primo turno, metti ogni compagno dove vuoi, entro pochi metri da dov'era."
+      },
+      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno lo vede sparire), nessuno effetto passivo."
+    },
+    "pedina": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Corrispondenza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Sposti un nemico dove vuoi, in un punto che percepisci dove non muore sul colpo, anche se è pericolosissimo: non dentro un vulcano attivo, ma sul bordo sì, dove poi basta una spinta. Puoi anche scambiarti di posto con lui. Il nemico non è mai d'accordo: fai sempre il lancio come per spostare chiunque, con la soglia normale della Magick, e con questo potere hai 2 dadi in più."
+      },
+      "passivo": {
+        "cadenza": "Una volta per combattimento",
+        "testo": "All'inizio di uno scontro metti un nemico dove vuoi, purché ci sia potuto arrivare."
+      },
+      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno lo vede sparire), nessuno effetto passivo."
+    },
+    "strada-facendo": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Corrispondenza o in Tempo",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Dichiari un'azione che di solito prende tempo (fare benzina, comprare un ricambio, passare in farmacia etc..) e la consideri fatta: è successa sullo sfondo, mentre la scena andava avanti. Il costo va da 1 a 3 Quintessenza secondo l'azione, e lo decide il Narratore. Se l'azione chiede un tiro, il tiro si fa lo stesso: risparmi il tempo, non il tiro."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "I viaggi del gruppo non fanno avanzare gli orologi del Narratore."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "uscita-d-emergenza": {
+      "grado": 5,
+      "prerequisiti": "4 poteri conosciuti in Corrispondenza",
+      "amalgama": "Entropia, Primordio, Spirito",
+      "attivo": {
+        "costo": "1 Quintessenza a testa",
+        "testo": "Porti in salvo chi vuoi (i compagni, un ostaggio, un passante etc..) per l'uscita che conosci, anche da un Regno del Paradosso: la strada si accorcia, e con due passi siete fuori, al sicuro (in strada, nel cortile, sul tetto accanto etc..). Tu esci gratis, ogni altro che porti con te costa 1 Quintessenza, e chi non vuole venire resta dov'è."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Sai sempre come si esce da qualunque posto, anche da uno in cui non sei mai stato (la porta di servizio, la finestra del bagno, il condotto dell'aria etc..). In un Regno del Paradosso e nei reami degli spiriti serve l'Amalgama.",
+        "con": [
+          {
+            "s": [
+              "entropy"
+            ],
+            "t": "sai anche qual è l'uscita migliore (quella dove non ti aspetta nessuno, quella che non crolla, quella che porta più lontano etc..)."
+          },
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "vale anche in un Regno del Paradosso (la bolla fuori dal mondo in cui il Paradosso chiude un mago): sai come uscirne, e il Narratore ti facilita la strada."
+          },
+          {
+            "s": [
+              "spirit"
+            ],
+            "t": "vale anche nell'Umbra e negli altri reami degli spiriti."
+          }
+        ]
+      },
+      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno vi vede sparire), nessuno effetto passivo."
+    },
+    "colpo-di-fortuna": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza, poi 2, poi 3",
+        "testo": "Subito dopo un tuo tiro di Abilità, ritiri tutti i dadi che hai appena tirato, per 1 Quintessenza. Se il tiro ritirato fallisce puoi ritirare ancora, e ogni volta il costo sale di 1: il secondo ritiro costa 2, il terzo 3, e così via."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando in un tuo tiro escono due 10, il Narratore aggiunge un effetto che descrive lui, come vuole, purché dia qualcosa in più alla scena (un danno in più, una Condizione al bersaglio, un'informazione etc..)."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "il-dado-e-tratto": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "Primordio",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Quando qualcuno prova a manomettere un tuo tiro che deve ancora avvenire (una Magick che ti ostacola, un potere che ti cambia i dadi, una contesa truccata etc..), paghi 1 Quintessenza e i suoi bonus non contano.",
+        "con": [
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "l'attivo e il passivo valgono anche nei lanci di Magick."
+          }
+        ]
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando un tuo tiro riesce, quello che hai fatto resta fatto: chi prova ad andarci contro (a riaprire la porta che hai chiuso, a far cambiare idea a chi hai convinto, a riparare quello che hai rotto etc..) ha 1 dado in meno oppure soglia +1."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+    },
+    "inseparabili": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Per la scena il tuo destino e quello del compagno che hai scelto vanno insieme: quando uno dei due prende un vantaggio (dadi in più, un'occasione, un'informazione etc..), lo prende anche l'altro."
+      },
+      "passivo": {
+        "cadenza": "A sessione nuova",
+        "testo": "Alla fine di ogni sessione dichiari chi è il tuo compagno per la sessione dopo, così il Narratore può prepararsi; se il Narratore preferisce, lo dichiari all'inizio. Per quella sessione il Narratore non vi divide in scene diverse se voi non volete."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "non-tutto-il-male": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza e 2 Paradosso",
+        "testo": "Su un tuo tiro fallito paghi 2 Quintessenza e prendi 2 punti Paradosso. Il tiro resta fallito e le cose non vanno come ti immaginavi, ma alla fine ti portano dove volevi arrivare, o dove dovevi, e lo decide il Narratore."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando paghi un Prezzo, il Narratore ti dà anche un vantaggio (un'informazione, un'occasione, un oggetto etc..)."
+      },
+      "paradosso": "Nessuno effetto attivo oltre ai 2 punti che paghi, nessuno effetto passivo.",
+      "nome": "Non tutto il male..."
+    },
+    "testa-o-croce": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "Primordio",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Prima di un tuo tiro di Abilità dichiari pari o dispari: se il primo dado ti dà ragione hai 2 dadi in più al tuo prossimo tiro, se no 2 in meno.",
+        "con": [
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "l'attivo vale anche per i lanci di Magick."
+          }
+        ]
+      },
+      "passivo": {
+        "cadenza": "Una volta per scena",
+        "testo": "Davanti a una scelta fra due strade (due porte, due sospetti, due fili da tagliare etc..), lanci una moneta: il Narratore ti dice quale delle due, in quel momento, è la migliore per te, dal suo punto di vista."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+    },
+    "angolo-morto": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Entropia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Quando qualcuno ti prende di mira (ti spara, ti lancia qualcosa, ti punta contro un'arma etc..), fra voi due si mette in mezzo qualcosa (una colonna, un'auto, un bancone etc..): l'attacco non parte, e per colpirti deve prima spendere un'azione a spostarsi."
+      },
+      "passivo": {
+        "cadenza": "Una volta per combattimento",
+        "testo": "All'inizio di ogni scontro parti riparato dal caso: c'è sempre qualcosa che ti copre (un muretto, un'auto parcheggiata, una colonna etc..), e chi ti attacca ha 1 dado in meno oppure soglia +1. La copertura dura poco: sparisce appena un nemico si sposta."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "chi-la-fa-l-aspetti": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Entropia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Chi ti ha fatto del male subisce la stessa cosa che ha fatto a te, entro la fine della sessione: se ti ha sparato, un colpo di pistola arriva anche a lui. Il costo va da 1 a 3 Quintessenza secondo quello che hai subito, e lo decide il Narratore, che decide anche come e quando il caso lo raggiunge."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando qualcuno ti fa del male, in qualunque modo (una ferita, un torto, un danno ai tuoi affari etc..), la prima volta che agisci contro di lui hai 2 dadi in più."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "fortuna-del-principiante": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Entropia",
+      "amalgama": "Primordio",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Un tuo tiro di un'Abilità in cui hai un solo pallino riesce, senza tirare."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando provi per la prima volta una cosa che non hai mai fatto (guidare un camion, scassinare una cassaforte, parlare in tribunale etc..), hai 2 dadi in più.",
+        "con": [
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "vale anche la prima volta che lanci un effetto di Magick nuovo per te."
+          }
+        ]
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+    },
+    "il-banco-vince": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Entropia",
+      "amalgama": "Primordio",
+      "attivo": {
+        "costo": "Azione, senza Quintessenza",
+        "testo": "Quando agisci, dichiari che la tua azione è lucrare sulla sfortuna: se in quell'azione prendi 2 punti Paradosso o più, guadagni 1 Quintessenza. Non costa Quintessenza: è l'eccezione di questo potere."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando a qualcun altro in scena va male un tiro di Abilità, al tuo prossimo tiro di Abilità hai 2 dadi in più, qualunque sia: non lo scegli tu.",
+        "con": [
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "quando a qualcun altro in scena fallisce un lancio di Magick, recuperi 1 Quintessenza."
+          }
+        ]
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo.",
+      "nome": "Il banco vince...",
+      "flavour": "«...sempre.»"
+    },
+    "si-trova-tutto": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Entropia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Sai subito dove trovare quello che ti serve, nel punto più vicino, e il caso ti ci porta; se ti serve una persona, può essere lei a venire da te. Devi sapere cosa ti serve: non puoi chiedere cose a caso."
+      },
+      "passivo": {
+        "cadenza": "A sessione nuova",
+        "testo": "Fra una sessione e l'altra trovi l'oggetto che cerchi, a un prezzo che di solito decide il Narratore (in soldi o in un favore)."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "tiri-gemelli": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Entropia",
+      "amalgama": "Primordio",
+      "attivo": {
+        "costo": "Azione, una volta per scena",
+        "testo": "In un tiro in cui tu e un compagno vi aiutate, oltre all'Attributo e all'Abilità migliori avete anche 2 dadi in più."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando tu e un compagno fate lo stesso tiro di Abilità e uno dei due aiuta l'altro, il tiro si fa con l'Attributo migliore e con l'Abilità migliore fra i vostri.",
+        "con": [
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "vale anche quando il tiro è un lancio di Magick, e con lui l'attivo."
+          }
+        ]
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+    },
+    "fuori-dai-piedi": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Entropia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 4 Quintessenza",
+        "testo": "Qualcuno in scena che non vuoi lì viene spinto via, subito, da una ragione qualunque (una telefonata, un ordine, un imprevisto etc..). Il costo va da 1 a 4 Quintessenza e lo decide il Narratore, che decide anche come esce di scena."
+      },
+      "passivo": {
+        "cadenza": "A sessione nuova",
+        "testo": "Nomini qualcuno che non vuoi vedere (un creditore, un rivale, un ex etc..): per la sessione il caso fa in modo che le vostre strade non si incrocino, finché non vai a cercarlo tu."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "il-fucile-di-echov": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Entropia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Quando usi l'oggetto che hai dichiarato, per quello a cui serve, paghi da 1 a 3 Quintessenza e il tiro riesce senza tirare. Quanto paghi lo decide il Narratore, secondo il tiro."
+      },
+      "passivo": {
+        "cadenza": "A sessione nuova",
+        "testo": "A inizio sessione dichiari un oggetto per la sessione (il tuo coltello, la corda nello zaino, l'accendino di tuo padre etc..). Quando lo usi per quello a cui serve, e non per altro (un coltello per tagliare, una corda per legare o per arrampicarti), hai 2 dadi in più."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "ladro-di-fortuna": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Entropia",
+      "amalgama": "Primordio",
+      "attivo": {
+        "costo": "1 Quintessenza ogni 2 dadi",
+        "testo": "Paghi Quintessenza su un tiro appena fatto da un nemico: per ogni Quintessenza gli togli 2 dadi riusciti, e li aggiungi al tuo prossimo tiro.",
+        "con": [
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "vale anche coi lanci di Magick, sia per togliere il dado sia per metterlo, nell'attivo e nel passivo."
+          }
+        ]
+      },
+      "passivo": {
+        "cadenza": "Una volta per scena",
+        "testo": "Togli un dado riuscito a un tiro appena fatto da qualcuno che non ti è nemico (un compagno, un alleato, un passante etc..), e lo aggiungi al tuo prossimo tiro."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+    },
+    "porto-sfortuna-io": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Entropia",
+      "amalgama": "Primordio",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Quando qualcuno fallisce un tiro in tua presenza, paghi Quintessenza: la Condizione la scegli tu, purché plausibile (si aggiornerà a catena col rifacimento delle Condizioni), e per ogni Quintessenza che paghi prende anche 2 danni Superficiali, fino a 3 Quintessenza."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando qualcuno fallisce un tiro in tua presenza, compagni compresi, il Narratore gli dà anche una Condizione o dei danni, a sua scelta.",
+        "con": [
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "il passivo e l'attivo valgono anche quando qualcuno fallisce un lancio di Magick."
+          }
+        ]
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "roulette": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Entropia",
+      "accesso": "Entropia e Primordio",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "Il rischio: Paradosso doppio e 1 Aggravato",
+        "testo": "Quando prendi Paradosso puoi tirare un dado. Pari non lo prendi tu: va da qualche parte, e il Narratore dice dove. Dispari lo prendi doppio, e in più subisci 1 danno Aggravato paradossale, che resta bloccato fino a fine scena come quelli dell'Ustione: nessuna Magick lo chiude."
+      },
+      "passivo": {
+        "cadenza": "Una volta per scena",
+        "testo": "Quando un tuo dado rosso del Paradosso fa 1 o 10, puoi ritirarlo, e vale il secondo risultato."
+      },
+      "paradosso": "Lavora sul Paradosso, non ne fa di suo."
+    },
+    "scommessa": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Entropia",
+      "accesso": "Entropia e Primordio",
+      "amalgama": "una a scelta, secondo la scommessa",
+      "attivo": {
+        "costo": "La posta, una volta per sessione",
+        "testo": "A inizio scena scommetti su come finisce (chi vince, chi scappa, cosa si rompe, chi sbaglia un lancio di Magick etc..) e dici quanta Quintessenza vuoi vincere. Se ci prendi la guadagni; se sbagli prendi 2 punti Paradosso per ogni Quintessenza che volevi vincere: 3 Quintessenza in palio sono 6 punti Paradosso. Puoi darti da fare perché vada come hai detto, ma la scommessa deve essere incerta: una scommessa già vinta il Narratore non la accetta. Con un'Amalgama scommetti anche su una parte della scena che tocca quella Sfera.",
+        "con": [
+          {
+            "s": [
+              "correspondence"
+            ],
+            "t": "chi arriva, chi se ne va, dove va a finire una cosa."
+          },
+          {
+            "s": [
+              "forces"
+            ],
+            "t": "cosa esplode, cosa prende fuoco, cosa resta al buio."
+          },
+          {
+            "s": [
+              "matter"
+            ],
+            "t": "cosa si rompe, cosa salta fuori, in mano a chi finisce un oggetto."
+          },
+          {
+            "s": [
+              "mind"
+            ],
+            "t": "chi cambia idea, chi crolla, chi dice la verità."
+          },
+          {
+            "s": [
+              "spirit"
+            ],
+            "t": "cosa fanno gli spiriti e i morti della scena."
+          },
+          {
+            "s": [
+              "time"
+            ],
+            "t": "quando succede una cosa: chi arriva prima, quanto dura, entro quando."
+          },
+          {
+            "s": [
+              "life"
+            ],
+            "t": "chi resta ferito, chi cade, chi si salva."
+          }
+        ]
+      },
+      "passivo": {
+        "cadenza": "Una volta per scena",
+        "testo": "Chiedi al Narratore le quote di una cosa che sta per succedere (uno scontro, una corsa, una trattativa etc..): ti dice chi è favorito, e di quanto (di poco, di molto, senza storia)."
+      },
+      "paradosso": "Il Paradosso è la posta, non ne fa altro di suo."
+    },
+    "il-pezzo-mancante": {
+      "grado": 4,
+      "prerequisiti": "3 poteri conosciuti in Entropia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Quando al gruppo manca una cosa per andare avanti (una chiave, un documento, un pezzo etc..), ce l'hai tu. Il Narratore dice come l'hai avuta e quanto ti è costata: da 1 a 3 Quintessenza, secondo quanto conta la cosa."
+      },
+      "passivo": {
+        "cadenza": "Una volta per scena",
+        "testo": "Capisci sempre cosa manca per andare avanti: chiedi al Narratore cosa serve alla scena per procedere, e lui te lo dice (un nome, una prova, un permesso etc..)."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "nerf": {
+      "grado": 4,
+      "prerequisiti": "3 poteri conosciuti in Entropia",
+      "amalgama": "Primordio",
+      "attivo": {
+        "costo": "1, 2 o 3 Quintessenza",
+        "testo": "Quando un nemico prova di nuovo un'azione che ha già fatto nella sessione (lo stesso colpo, lo stesso trucco, la stessa minaccia etc..), gli fallisce senza tiro. Paghi 1 Quintessenza se è un tiro di Abilità, 2 se è un tiro di combattimento (un attacco, una parata etc..).",
+        "con": [
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "vale anche su un lancio di Magick, per 3 Quintessenza."
+          }
+        ]
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Un nemico a pochi passi da te non prende bonus ai suoi tiri: niente dadi in più né soglia più bassa, da nessuna fonte (un'arma migliore, l'aiuto di un compagno, un potere etc..).",
+        "con": [
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "vale anche nei suoi lanci di Magick."
+          }
+        ]
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "tarocchi": {
+      "grado": 4,
+      "prerequisiti": "3 poteri conosciuti in Entropia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Durante la sessione rifai la lettura, se hai il tempo di farla: ti prende una scena intera. Hai nuovi indizi e altre tre domande, e le carte ti danno qualcosa in cambio, scelto dal Narratore, fino a fine sessione: un alleato, un Background, un Pregio, qualcosa che ti serve."
+      },
+      "passivo": {
+        "cadenza": "A sessione nuova",
+        "testo": "A inizio sessione il Narratore ti fa una lettura dei tarocchi: ti dà degli indizi in forma di carte (una persona, un luogo, un evento etc..), cose che nella sessione dovrebbero manifestarsi. Poi puoi fargli tre domande sulla trama."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "il-narratore-ti-ascolta": {
+      "grado": 5,
+      "prerequisiti": "4 poteri conosciuti in Entropia",
+      "amalgama": "secondo la svolta",
+      "attivo": {
+        "costo": "da 1 a 5 Quintessenza",
+        "testo": "Proponi una svolta nella scena, e il Narratore la mette in gioco: è un imprevisto (un incidente, un colpo di fortuna, un guasto etc..). Paghi da 1 a 5 Quintessenza, secondo quanto chiedi, e decide il Narratore. Con un'Amalgama la svolta può essere d'altro tipo.",
+        "con": [
+          {
+            "s": [
+              "correspondence"
+            ],
+            "t": "un arrivo o una partenza."
+          },
+          {
+            "s": [
+              "forces"
+            ],
+            "t": "un'esplosione, un blackout, un incendio."
+          },
+          {
+            "s": [
+              "matter"
+            ],
+            "t": "un oggetto che salta fuori o che si rompe."
+          },
+          {
+            "s": [
+              "mind"
+            ],
+            "t": "una notizia, una confessione, un'idea."
+          },
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "un'ondata di Quintessenza o di Paradosso."
+          },
+          {
+            "s": [
+              "spirit"
+            ],
+            "t": "una presenza, un segno, un morto che parla."
+          },
+          {
+            "s": [
+              "time"
+            ],
+            "t": "un ritardo, un anticipo, una scadenza."
+          },
+          {
+            "s": [
+              "life"
+            ],
+            "t": "una malattia, una nascita, una ferita."
+          }
+        ]
+      },
+      "passivo": {
+        "cadenza": "Una volta per scena",
+        "testo": "Quando il Narratore fissa un Prezzo (quello che costa ribaltare un tiro fallito), o sceglie dal menù del Paradosso cosa succede a un tuo compagno, puoi proporlo tu: il Narratore ti ascolta, e se la proposta regge la usa."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "scambio-di-sorte": {
+      "grado": 4,
+      "prerequisiti": "3 poteri conosciuti in Entropia",
+      "amalgama": "Primordio",
+      "attivo": {
+        "costo": "1 Quintessenza, 2 sulla Magick",
+        "testo": "Prima di un tuo tiro di Abilità, scambi il suo esito con quello di un tiro che farà un altro bersaglio in scena, anche un nemico (la sua riuscita diventa tua, il tuo fallimento suo, o viceversa). Il Narratore tira in segreto per entrambi e rivela gli esiti.",
+        "con": [
+          {
+            "s": [
+              "prime"
+            ],
+            "t": "l'attivo e il passivo valgono anche per i lanci di Magick, e lì l'attivo costa 2 Quintessenza."
+          }
+        ]
+      },
+      "passivo": {
+        "cadenza": "Una volta per scena",
+        "testo": "In una contesa (tu contro qualcuno, tiro contro tiro), dopo i tiri scambi un tuo dado con uno dell'altro, per esempio il suo migliore col tuo peggiore."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+    },
+    "a-stordire": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Per un turno, quando fai danni, infliggi anche una Condizione, purché plausibile col colpo (si aggiornerà a catena col rifacimento delle Condizioni)."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando conti gli Ambiti di un tuo lancio di Forza, puoi sempre barattare la Potenza con le Condizioni, purché lo dichiari prima del tiro: il livello che metti in una vale per l'altra (Potenza 3 può diventare Condizioni 3, e il contrario)."
+      },
+      "paradosso": "Segue il lancio in tutte e due le forme; con un'arma o a mani nude, nessuno.",
+      "nome": "Lascia il segno"
+    },
+    "mi-metto-in-mezzo": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "La Quintessenza del potere, o 1 per la Magick",
+        "testo": "Quando un attacco fisico sta per colpire te o un compagno vicino, agisci subito, anche fuori dal tuo momento: attivi un tuo potere che difende, pagandone la Quintessenza, oppure paghi 1 Quintessenza e lanci subito una Magick per difendere te o lui (uno scudo, una barriera, una spinta etc..). Vale contro quello che un effetto fisico può fermare (un proiettile, un pugno, una frana etc..), non contro un effetto astratto (una maledizione, un'influenza sulla mente etc..)."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Con la tua reazione (ne hai una per turno), quando qualcuno attacca un compagno vicino a te, ti metti in mezzo: il colpo prende te al posto suo, e da lì in poi è un attacco contro di te (ti difendi tu, coi tuoi tiri e le tue difese)."
+      },
+      "paradosso": "L'attivo segue la Magick o il potere che usi; nessuno effetto passivo."
+    },
+    "bruciature": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza a gradino",
+        "testo": "Per ogni Quintessenza che paghi, il blocco dei danni di un tuo lancio di Forza dura un gradino di Durata in più."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "I danni dei tuoi lanci di Forza non si curano per un tempo pari alla Durata dello stesso livello della Potenza: se hai usato Potenza 3, non si curano finché non passa il tempo di Durata 3. Li chiude prima solo un effetto contrario di Vita e Forza insieme, o un potere fatto apposta."
+      },
+      "paradosso": "Nessuno effetto attivo; il passivo segue il lancio."
+    },
+    "brucia-ancora": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "I danni da fuoco o da elettricità di un tuo lancio di Forza continuano per tutta la sua Durata: il bersaglio subisce di nuovo i danni della Potenza a ogni turno, se si gioca col metro del combattimento, o a ogni scena, se si gioca col metro narrativo. Il metro lo sceglie il Narratore."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "I danni da fuoco o da elettricità che fai si ripetono una volta da soli, nel turno dopo."
+      },
+      "paradosso": "Nessuno effetto attivo; il passivo segue il lancio che ha fatto il danno."
+    },
+    "nessuno-scappa": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Forza o in Corrispondenza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Quando un nemico prova a lasciare la scena, paghi 1 Quintessenza e un tuo colpo riuscito lo tiene in scena: con Forza lo butti giù o gli sbarri la strada, con Corrispondenza la via di fuga non porta fuori."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Chi colpisci con un tuo lancio di Forza o di Corrispondenza resta dov'è: nel suo prossimo momento può agire, ma non spostarsi."
+      },
+      "paradosso": "Basso rischio effetto attivo con Corrispondenza, nessuno con Forza; il passivo segue il lancio."
+    },
+    "onda-d-urto": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Un tuo lancio di Forza colpisce altri bersagli, tanti quanto il suo livello di Potenza, senza pagare l'Ambito Bersagli: con Potenza 3, tre bersagli in più."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando un tuo lancio di Forza infligge una Condizione che un'onda porta con sé (si aggiornerà a catena col rifacimento delle Condizioni), la puoi infliggere anche agli altri bersagli nell'area dell'effetto. E quando colpisci ad area, l'area conta un gradino più grande, senza pagarlo."
+      },
+      "paradosso": "Segue il lancio effetto attivo, segue il lancio effetto passivo."
+    },
+    "perforante": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Forza o in Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "Tanta Quintessenza quanto vale l'armatura",
+        "testo": "Paghi tanta Quintessenza quanto vale l'armatura del bersaglio, e un tuo lancio di Forza o di Materia la ignora."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Contro i tuoi lanci di Forza o di Materia, l'armatura di chi colpisci vale meno, di tanti punti quanti sono i poteri che conosci in Forza (o in Materia, se lanci con Materia)."
+      },
+      "paradosso": "Segue il lancio effetto attivo, segue il lancio effetto passivo."
+    },
+    "semplice-violenza": {
+      "grado": 4,
+      "prerequisiti": "3 poteri conosciuti in Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Paghi 2 Quintessenza: i danni di un tuo colpo (un lancio, un'arma, un pugno etc..) sono tutti Aggravati, anche quelli che sarebbero Superficiali."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando il Narratore decide se un tuo danno è Superficiale o Aggravato, propende per l'Aggravato, anche quando colpisci con effetti che non sono di Forza."
+      },
+      "paradosso": "Nessuno effetto attivo; il passivo segue il lancio."
+    },
+    "il-giusto-attrezzo": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "Quintessenza secondo la soglia del tiro",
+        "testo": "Quando ribalti un tiro fallito fatto con l'attrezzo giusto (un piede di porco, un grimaldello, un bisturi etc..), al posto del Prezzo paghi Quintessenza secondo il tiro: di solito tanta quanta è la sua soglia, e almeno 1."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quello che hai in mano fa da attrezzo giusto per il lavoro (un cacciavite fa da grimaldello, un coltellino da bisturi, una graffetta da chiave etc..): il tiro va come se avessi l'attrezzo vero."
+      },
+      "paradosso": "Nessuno effetto attivo, basso rischio effetto passivo."
+    },
+    "tutto-e-un-arma": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Per la scena anche gli oggetti che lanci colpiscono come un'arma da fuoco, anche da lontano (una chiave inglese, una sedia, un bullone etc..), con lo stesso danno base del passivo."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Un oggetto che impugni (una bottiglia, una sedia, un ombrello etc..) diventa un'arma vera: il suo danno base è pari ai poteri che conosci in Materia, e con tre poteri una bottiglia fa 3 danni."
+      },
+      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
+    },
+    "fatto-da-me": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Costruisci o ripari in pochi minuti quello che di solito chiede giorni di lavoro, purché tu abbia i pezzi (un'auto rimessa in strada, una radio da campo, una trappola per la porta etc..). Se il lavoro chiede un tiro, il tiro si fa lo stesso: risparmi il tempo, non il tiro."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Un compagno che usa un oggetto fatto da te tira con la tua Abilità al posto della sua."
+      },
+      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
+    },
+    "opera": {
+      "grado": 4,
+      "prerequisiti": "3 poteri conosciuti in Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Per la scena un oggetto fatto da te fa quello che farebbe un oggetto di due Gradi più alto (la tua pistola colpisce come un'arma militare, la tua auto regge come una blindata, il tuo kit medico cura come un ospedale da campo etc..)."
+      },
+      "passivo": {
+        "cadenza": "A sessione nuova",
+        "testo": "Fra una sessione e l'altra un oggetto fatto da te prende una qualità: non si inceppa, non si trova o non si rompe."
+      },
+      "paradosso": "Basso rischio in tutte e due le forme."
+    },
+    "oggetto-sacrificale": {
+      "grado": 5,
+      "prerequisiti": "4 poteri conosciuti in Materia",
+      "accesso": "Materia e Primordio",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "L'oggetto, una volta per sessione",
+        "testo": "Quando scoppia un Contraccolpo, l'Ustione va su un oggetto importante per te (un ricordo, un'arma di famiglia, il tuo Strumento etc..) invece che su di te. L'oggetto si distrugge, e non si potrà mai più ricreare."
+      },
+      "passivo": {
+        "cadenza": "Una volta per scena",
+        "testo": "Quando prendi Paradosso, puoi farne passare 1 punto su un oggetto che porti: l'oggetto si incrina (il vetro si crepa, il metallo si scurisce, la carta ingiallisce etc..), e al terzo punto si rompe."
+      },
+      "paradosso": "Lavora sul Contraccolpo e sul Paradosso, non ne fa di suo."
+    },
+    "ho-letto-qualcosa": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Anche senza la conoscenza o l'Abilità adatta, per un tiro hai tanti pallini quanti sono i poteri che conosci in Mente, fino a 5, al posto di quelli dell'Abilità."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Davanti a un compito o a un lavoro sai sempre che tipo di conoscenza ti servirebbe; se è fra le tue, hai 1 dado in più al tiro."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "il-mondo-e-piccolo": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "Quintessenza pari al grado di conoscenza",
+        "testo": "Forzi una persona a un imprinting immediato: ti conosce, come se ci fosse sempre stato un rapporto fra voi, e può fidarsi subito di te. Più Quintessenza spendi, più ti conosce (1 ti ha già visto, 2 sa chi sei, 3 ti conosce bene). Quello che sa di te è vero, con quello che ne consegue."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Se vuoi, resti impresso: la gente non si scorda di te, e chi prova a cancellarti dalla memoria di qualcuno (con la Magick, con una droga etc..) ha 2 dadi in meno oppure soglia +2."
+      },
+      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "nome": "Non ti ricordi di me?"
+    },
+    "l-ho-sentito-dire": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "accesso": "Spirito",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Usi il passivo un'altra volta: l'Avatar ti suggerisce un'altra cosa che sai tu."
+      },
+      "passivo": {
+        "cadenza": "Una volta per sessione",
+        "testo": "Il tuo personaggio sa una cosa che sai tu, giocatore: in scena è il tuo Avatar a suggerirtela, e ti rivela una verità."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo.",
+      "nome": "Rompere la quarta parete",
+      "pagina": "Spirito"
+    },
+    "mai-colto-di-sorpresa": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Anticipi i pensieri di chi ti sta intorno: sai cosa vuole fare nei prossimi turni, e a cosa punta (colpirti, scappare, prendere un oggetto etc..)."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Negli agguati tesi da una creatura (una persona, una bestia, uno spirito) non sei mai sorpreso: nel primo turno agisci come tutti."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "al-posto-tuo": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Mente, in Vita o in Spirito",
+      "amalgama": "le altre due",
+      "attivo": {
+        "costo": "La Condizione che prendi",
+        "testo": "Quando un compagno che vedi prende una Condizione del tipo della tua Sfera (mentale con Mente, fisica con Vita, soprannaturale con Spirito), la prendi tu al posto suo (si aggiornerà a catena col rifacimento delle Condizioni). Con l'Amalgama delle altre due Sfere prendi le Condizioni di tutti i tipi."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando stai entro Portata 1 da un compagno e subisci una Condizione del tipo della tua Sfera, chi te la infligge ha 2 dadi in meno oppure soglia +2 (si aggiornerà a catena col rifacimento delle Condizioni)."
+      },
+      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
+    },
+    "conto-degli-indizi": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Mente",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Fai una domanda al Narratore su quello che il tuo personaggio sa (i suoi studi, il suo mestiere, quello che ha visto etc..): se il personaggio lo può sapere, il Narratore ti risponde."
+      },
+      "passivo": {
+        "cadenza": "Al cambio di scena",
+        "testo": "A fine scena d'indagine il Narratore ti dice quanti indizi hai trovato e quanti ce n'erano, e te ne dà uno di quelli che ti sono sfuggiti."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo.",
+      "nome": "Momento da Sherlock"
+    },
+    "pace": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Mente o in Spirito",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Con la tua reazione (ne hai una per turno), quando qualcuno sta per fare un'azione offensiva, la neghi: per quel turno non fa niente per ferire, ma può difendersi e fare il resto."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Chi vuole cominciare uno scontro in tua presenza, o fare un'azione offensiva per ferire, deve prima superare una soglia pari ai poteri che conosci nella Sfera. Chi mangia alla tua tavola non ti attacca finché non è uscito di casa tua."
+      },
+      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "nome": "Pace forzata"
+    },
+    "pensiero-laterale": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Mente",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Chiedi al Narratore una soluzione in più: un'idea che prima non avevi avuto."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando spieghi al tavolo il ragionamento che risolve il problema per un'altra strada, e regge, tiri con l'Abilità di quella strada al posto di quella chiesta, e hai 2 dadi in più."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    },
+    "valvola-di-sfogo": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Mente",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Quando prendi una Condizione mentale, paghi e non la prendi (si aggiornerà a catena col rifacimento delle Condizioni)."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Quando prendi danni mentali, puoi prendere una Condizione mentale al posto dei danni (si aggiornerà a catena col rifacimento delle Condizioni)."
+      },
+      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+    }
+  },
+  "aggiunti": {
+    "baricentro": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "accesso": "Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "Azione per il primo bersaglio, 1 Quintessenza per ogni altro",
+        "testo": "Scegli un bersaglio o un oggetto che vedi e lo fissi come un punto fermo nello spazio. Nessuna forza lo sposta, lo spinge o lo fa cadere, a meno che non sia Magick con una soglia più alta dei poteri che conosci in Forza, e lui non prende le Condizioni che ne verrebbero (si aggiornerà a catena col rifacimento delle Condizioni). Intanto non si muove neanche lui da quel punto. Dura finché non lo lasci andare, al massimo fino a fine scena. Non ferma le cose in movimento: fissa solo un punto."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Chi prova a spingerti, farti cadere o sbalzarti ha 2 dadi in meno oppure soglia +2, e il terreno (ghiaccio, olio, un tetto bagnato) non ti fa cadere."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "nome": "Baricentro",
+      "pagina": "Forza"
+    },
+    "deviare": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Forza",
+      "accesso": "Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza ogni 2 dadi",
+        "testo": "Quando rimandi un colpo col passivo, paghi Quintessenza per dare dadi in più a quel tiro, 2 per ogni Quintessenza, così prende proprio chi vuoi tu."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Con la tua reazione (ne hai una per turno), quando un effetto fisico arriva verso di te (un pugno, un proiettile, un oggetto lanciato etc..), lo mandi in un'altra direzione che scegli tu. Se lo mandi contro qualcuno, vale il tiro di chi ti ha attaccato, contro la soglia del nuovo bersaglio: se basta, prende lui i danni che avrebbe fatto a te. Funziona solo se sai dove mandarlo, e se i poteri che conosci in Forza non sono meno della soglia del colpo."
+      },
+      "paradosso": "Nessuno effetto attivo, Volgare effetto passivo se qualcuno guarda (un colpo che cambia strada da solo).",
+      "nome": "Deviare",
+      "pagina": "Forza"
+    },
+    "calamita": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Forza",
+      "accesso": "Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 5 Quintessenza",
+        "testo": "Muovi il metallo col magnetismo: lo sposti, lo spingi, lo schiacci a terra, e con lui chi lo tocca o lo porta (una pistola, un'auto, una guardia in armatura etc..). Il costo va da 1 a 5 Quintessenza, secondo l'impresa, e lo decide il Narratore."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Nessuno ti disarma: il metallo che hai addosso resta con te. Senti sempre il metallo intorno a te, e quanto ce n'è; se hai l'Abilità che serve a riconoscerlo (le armi, gli attrezzi, le serrature etc..) ne riconosci spesso le forme più comuni, se no ne senti solo la presenza."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "nome": "Calamita",
+      "pagina": "Forza"
+    },
+    "zona-franca": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Forza",
+      "accesso": "Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza a bersaglio",
+        "testo": "In un effetto ad area (un'esplosione, un'onda, un incendio etc..), tuo o di altri, ogni bersaglio che vuoi lasciare fuori ti costa 1 Quintessenza: per lui è come se fosse al riparo con te, e l'area non lo tocca."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Intorno a te c'è un guscio: i colpi d'energia (il fuoco, una scarica, un'onda d'urto etc..) non ti arrivano, a meno che non siano Magick con una soglia più alta dei poteri che conosci in Forza."
+      },
+      "paradosso": "Volgare se qualcuno guarda, in tutte e due le forme.",
+      "nome": "Zona franca",
+      "pagina": "Forza"
+    },
+    "peso-piuma": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "accesso": "Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "Quintessenza pari al Peso",
+        "testo": "Cambi il peso di un oggetto che tocchi, per la scena: leggero come una piuma o pesante come un'auto (sollevi una cassaforte, blocchi una porta, porti via un ferito etc..). Paghi tanta Quintessenza quanto il livello di Peso che serve, sulla tabella della Potenza."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Nei tiri per sollevare, spingere o trascinare conti come se il tuo Attributo Forza avesse tanti pallini in più quanti sono i poteri che conosci nella Sfera Forza. In combattimento non vale in modo diretto: lanciare un'auto si può, tirare un pugno più forte no."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "nome": "Peso piuma",
+      "pagina": "Forza"
+    },
+    "interferenza": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Forza",
+      "accesso": "Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Per la scena manipoli i congegni che vedi e gli fai percepire o fare quello che ti serve (una telecamera che guarda altrove, un sensore che non scatta, un microfono che sente un'altra voce etc..)."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Dove passi tu, i congegni (sensori, microfoni, telecamere etc..) sono sempre disturbati."
+      },
+      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "nome": "Interferenza",
+      "pagina": "Forza"
+    },
+    "centralina": {
+      "grado": 4,
+      "prerequisiti": "3 poteri conosciuti in Forza",
+      "accesso": "Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Per la scena un congegno, o l'impianto dell'edificio in cui sei, fa da solo quello che vuoi tu, senza che tu debba dargli ordini."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Comandi a distanza qualunque tecnologia che accetta un comando (una porta automatica, un ascensore, una radio, un'auto etc..), come se fossi tu il telecomando. Contro la Tecnomagia, o contro un bersaglio legato a lei, funziona solo se i poteri che conosci in Forza non sono meno della sua soglia."
+      },
+      "paradosso": "Basso rischio in tutte e due le forme.",
+      "nome": "Centralina",
+      "pagina": "Forza"
+    },
+    "luci-e-ombre": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "accesso": "Forza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "Azione, una volta per sessione",
+        "testo": "Con la luce infliggi una Condizione a chi vuoi fra quelli che vedi (si aggiornerà a catena col rifacimento delle Condizioni), oppure togli tutta la luce da un ambiente e lo lasci al buio completo, per la scena."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Muovi come vuoi la luce e le ombre della stanza in cui sei: illumini quello che vuoi far vedere e metti in ombra quello che vuoi nascondere (un volto, un'uscita, un'arma etc..)."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo.",
+      "nome": "Luci e ombre",
+      "pagina": "Forza"
+    },
+    "giocattoli": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Materia",
+      "accesso": "Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza ad arma",
+        "testo": "Per la scena le armi che vedi diventano innocue: la pistola di plastica, il coltello di gomma, il fucile di cartone etc.. Paghi 1 Quintessenza per ogni arma."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Sai chi è armato in scena e con cosa (una pistola sotto la giacca, un coltello nello stivale, una lama di ceramica etc..)."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "nome": "Giocattoli",
+      "pagina": "Materia"
+    },
+    "vetro": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "accesso": "Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Per la scena i muri di una stanza diventano vetro da un lato solo: voi vedete dentro, chi è dentro non vede fuori."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Vedi attraverso muri, porte e casse fino a Portata 1."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "nome": "Vetro",
+      "pagina": "Materia"
+    },
+    "nascondiglio": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Materia",
+      "accesso": "Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Apri uno spazio nascosto in un muro, in un pavimento o in un'auto, che si richiude senza lasciare segni e resta finché non lo riapri tu: una nicchia per un oggetto (1 Quintessenza), un posto per una persona (2), una stanza per il gruppo (3)."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Toccando un muro o un mobile trovi quello che nasconde (un doppio fondo, una stanza segreta, una cassaforte a muro etc..)."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "nome": "Nascondiglio",
+      "pagina": "Materia"
+    },
+    "passe-partout": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Materia",
+      "accesso": "Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza a testa",
+        "testo": "Tu e chi ti tiene per mano attraversate un muro, una porta o un pavimento, come se fosse acqua. Paghi 1 Quintessenza per ognuno che passa, te compreso."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Le serrature meccaniche (una chiave, un lucchetto, una combinazione etc..) si aprono al tuo tocco."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo.",
+      "nome": "Passe-partout",
+      "pagina": "Materia"
+    },
+    "presa": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "accesso": "Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Incolli due cose, e fino a fine scena non si possono separare (una porta al telaio, l'arma alla fondina del nemico, l'auto all'asfalto etc..), a meno che non sia Magick con una soglia più alta dei poteri che conosci in Materia."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Mani e scarpe fanno presa su ogni superficie: cammini sui muri e sui soffitti come per terra."
+      },
+      "paradosso": "Volgare se qualcuno guarda, in tutte e due le forme.",
+      "nome": "Presa",
+      "pagina": "Materia"
+    },
+    "passerella": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Materia",
+      "accesso": "Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Trasformi in un ponte anche quello che non dovrebbe reggere (l'aria, una tenda, un getto d'acqua etc..) e ci cammini sopra per raggiungere un punto, anche in salita fino a 45 gradi, come su un sentiero di montagna. Il ponte regge fino a fine scena: te (1 Quintessenza), il gruppo (2), un'auto (3)."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Cammini sull'acqua, sul fango e sulla neve fresca come sulla pietra."
+      },
+      "paradosso": "Volgare se qualcuno guarda, in tutte e due le forme.",
+      "nome": "Passerella",
+      "pagina": "Materia"
+    },
+    "passaggio-di-stato": {
+      "grado": 4,
+      "prerequisiti": "3 poteri conosciuti in Materia",
+      "accesso": "Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Per la scena cambi lo stato di una cosa che vedi (la porta diventa acqua, il pavimento diventa fango sotto i nemici, il fumo diventa sabbia che cade etc..). Paghi secondo la grandezza: 1 un oggetto, 2 una porta o un tratto di pavimento, 3 una stanza."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Niente ti trattiene: manette, catene e sbarre in mano tua si ammorbidiscono, e con un'azione te ne liberi."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo.",
+      "nome": "Passaggio di stato",
+      "pagina": "Materia"
+    },
+    "alchimia": {
+      "grado": 5,
+      "prerequisiti": "4 poteri conosciuti in Materia",
+      "accesso": "Materia",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "3 Quintessenza",
+        "testo": "Trasformi per sempre quello che tocchi, grande fino a una stanza, in un'altra materia (il muro in vetro, il pavimento in sabbia, l'acciaio della cassaforte in cera etc..)."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Le tue Magick di Materia che cambiano una materia in un'altra durano per sempre, senza pagare la Durata."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda; il passivo segue il lancio.",
+      "nome": "Alchimia",
+      "pagina": "Materia"
+    },
+    "filo-rosso": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "accesso": "Corrispondenza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Raggiungi all'istante quello con cui hai un legame forte (una persona, un posto, una cosa): gli mandi un messaggio, ci arrivi tu, o gli mandi un oggetto piccolo che tieni in mano. Oppure richiami a te un oggetto piccolo con cui hai un legame forte, e ti compare in mano."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Sai sempre dov'è quello con cui hai un legame forte: in che direzione e quanto lontano. Nei lanci di Magick che spostano te, o una cosa, verso un tuo legame forte hai 2 dadi in più."
+      },
+      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno vede sparire o comparire te o l'oggetto); il passivo segue il lancio.",
+      "nome": "Filo rosso",
+      "pagina": "Corrispondenza"
+    },
+    "traccia": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Corrispondenza",
+      "accesso": "Corrispondenza",
+      "amalgama": "Tempo",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Segui la traccia di chi è sparito da un posto passando per lo spazio (un teletrasporto, un portale, una piega etc..): passi dallo stesso varco e arrivi dove è arrivato lui, tu e chi tocchi."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "In ogni posto in cui entri sai chi ci è arrivato o se n'è andato passando per lo spazio, di recente, nella giornata, e da che parte. Quando indaghi su chi è passato così, hai 2 dadi in più.",
+        "con": [
+          {
+            "s": [
+              "time"
+            ],
+            "t": "sai anche quanto tempo fa, e con più dettagli."
+          }
+        ]
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "nome": "Traccia",
+      "pagina": "Corrispondenza"
+    },
+    "fuori-tiro": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Corrispondenza",
+      "accesso": "Corrispondenza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Per la scena i colpi e gli effetti che partono da oltre Portata 2 hanno la soglia più alta: in più, tanto quanti sono i poteri che conosci in Corrispondenza."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Chi ti attacca da oltre Portata 2 (un cecchino, una granata, un lancio di Magick da lontano etc..) fallisce."
+      },
+      "paradosso": "Basso rischio in tutte e due le forme.",
+      "nome": "Fuori tiro",
+      "pagina": "Corrispondenza"
+    },
+    "recinto": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Corrispondenza",
+      "accesso": "Corrispondenza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "2 Quintessenza",
+        "testo": "Sigilli un posto con cui hai un legame: per la scena nessuno ci arriva o ne parte passando per lo spazio (un teletrasporto, un portale, una piega etc..), nemmeno tu, a meno che non sia Magick con una soglia più alta dei poteri che conosci in Corrispondenza. Da lì si entra e si esce solo a piedi, come tutti."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Chi prova a spostarti nello spazio contro la tua volontà (un teletrasporto, uno scambio di posto, un portale etc..) deve superare una soglia: la più alta fra i poteri che conosci in Corrispondenza e quella del suo effetto."
+      },
+      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "nome": "Recinto",
+      "pagina": "Corrispondenza"
+    },
+    "labirinto": {
+      "grado": 4,
+      "prerequisiti": "3 poteri conosciuti in Corrispondenza",
+      "accesso": "Corrispondenza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "3 Quintessenza",
+        "testo": "Crei un labirinto dimensionale vero e proprio, che chiude in un posto le creature che scegli: per la scena non ne escono, a meno che non sia Magick con una soglia più alta dei poteri che conosci in Corrispondenza."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "In un inseguimento chi ti segue perde il tiro senza tirare, a meno che non usi la Magick. Non perde le tue tracce: in quel momento non ti trova, ma può restarti dietro, e prima o poi capire che qualcosa non va."
+      },
+      "paradosso": "Volgare effetto attivo, basso rischio effetto passivo.",
+      "nome": "Labirinto",
+      "pagina": "Corrispondenza"
+    },
+    "braccio-lungo": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "accesso": "Corrispondenza",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Per la scena muovi gli oggetti che vedi come se li toccassi con le tue mani: li prendi, li apri, li sposti (la pistola sul tavolo in fondo alla sala, l'interruttore oltre il vetro, il cassetto dall'altra parte della stanza etc..)."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Con la tua azione prendi un oggetto piccolo che vedi, fino all'altro capo della stanza, come se fosse sul tavolo davanti a te."
+      },
+      "paradosso": "Volgare se qualcuno guarda, in tutte e due le forme.",
+      "nome": "Braccio lungo",
+      "pagina": "Corrispondenza"
+    },
+    "ubiquita": {
+      "grado": 5,
+      "prerequisiti": "4 poteri conosciuti in Corrispondenza",
+      "accesso": "Corrispondenza",
+      "amalgama": "Vita e Mente",
+      "attivo": {
+        "costo": "3 Quintessenza",
+        "testo": "Per la scena ti sdoppi e fai due cose insieme, anche in due posti diversi: dividi i dadi fra le due.",
+        "con": [
+          {
+            "s": [
+              "life",
+              "mind"
+            ],
+            "t": "le due versioni di te sono due corpi, collegati fra loro, e non dividi i dadi."
+          }
+        ]
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Coi tuoi legami la Portata non conta: nei tuoi lanci verso una persona, un posto o una cosa con cui hai un legame, la Portata non si paga."
+      },
+      "paradosso": "Volgare effetto attivo; il passivo segue il lancio.",
+      "nome": "Ubiquità",
+      "pagina": "Corrispondenza"
+    },
+    "passo-di-la": {
+      "grado": 1,
+      "prerequisiti": "nessuno",
+      "accesso": "Spirito",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza, di più per andare lontano",
+        "testo": "Passi di là, nell'Umbra, in carne e ossa, con tutti quelli che tieni per mano, e vi porti subito dove vuoi, di là. Paghi 1 Quintessenza per tutti; per andare più lontano il costo può salire, e lo dice il Narratore. Tornate di qua con la tua azione."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Attraversare il Velo, per te, non ha i rischi che ha per gli altri (le ferite che non guariscono, l'attrito del luogo etc..)."
+      },
+      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "nome": "Passo di là",
+      "pagina": "Spirito"
+    },
+    "anima-delle-cose": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Spirito",
+      "accesso": "Spirito",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Svegli lo spirito di un oggetto che tocchi: per la scena fa quello che può, per quello che è, e ti aiuta (la corda lega, la porta non si apre, il cane di pietra fa la guardia). Paghi secondo la grandezza: 1 un oggetto, 2 un mobile o una porta, 3 una statua o un cancello."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Toccando un oggetto gli puoi parlare, e se vuole ti risponde. Dipende da quanto è vecchio: un oggetto vecchio ha più facilmente uno spirito, uno nuovo è fresco, e l'effimera non vi si è ancora saldata."
+      },
+      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno vede la cosa muoversi da sola), nessuno effetto passivo.",
+      "nome": "Anima delle cose",
+      "pagina": "Spirito"
+    },
+    "invocazione": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Spirito",
+      "accesso": "Spirito",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "da 1 a 3 Quintessenza",
+        "testo": "Invochi uno spirito offrendogli Quintessenza: arriva, e per la scena fa una cosa per te (va a vedere, porta un messaggio, spaventa, combatte etc..). Paghi secondo quello che gli chiedi, e decide il Narratore."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Gli spiriti sanno che paghi: nelle trattative con loro hai 2 dadi in più."
+      },
+      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "nome": "Invocazione",
+      "pagina": "Spirito"
+    },
+    "esorcista": {
+      "grado": 3,
+      "prerequisiti": "2 poteri conosciuti in Spirito",
+      "accesso": "Spirito",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "Quintessenza secondo lo spirito",
+        "testo": "Butti fuori dalla realtà uno spirito che sta in un corpo, in un oggetto o in un posto: torna oltre il Velo. Paghi Quintessenza secondo la difficoltà dello spirito, che dice il Narratore."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Riconosci sempre chi ha uno spirito nel corpo, o chi è stato toccato dagli spiriti."
+      },
+      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "nome": "Esorcista",
+      "pagina": "Spirito"
+    },
+    "caccia-agli-spiriti": {
+      "grado": 2,
+      "prerequisiti": "1 potere conosciuto in Spirito",
+      "accesso": "Spirito",
+      "amalgama": "nessuna",
+      "attivo": {
+        "costo": "1 Quintessenza",
+        "testo": "Per la scena i tuoi colpi (un'arma, un pugno, un lancio etc..) feriscono gli spiriti e i fantasmi come se fossero carne, anche attraverso il Velo."
+      },
+      "passivo": {
+        "cadenza": "Sempre",
+        "testo": "Gli spiriti ostili ti temono: quelli che ti attaccano hanno 2 dadi in meno oppure soglia +2."
+      },
+      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "nome": "Caccia agli spiriti",
+      "pagina": "Spirito"
+    }
+  },
+  "tolti": {
+    "lascia-o-raddoppia": {
+      "data": "29/9/2026",
+      "motivo": "Blue, 29/9: «lascia o raddoppia lo rimuoviamo»."
+    },
+    "fai-da-te": {
+      "data": "29/9/2026",
+      "motivo": "Blue, 29/9: si toglie, perché lo fa già Ce l'ho."
+    },
+    "pane-e-sale": {
+      "data": "30/9/2026",
+      "motivo": "Blue, 30/9: «Lo possiamo fondere dentro a pace. L'effetto passivo lo spostiamo di là.»"
+    }
+  },
+  "ritocchi": {
+    "data": "29/9/2026",
+    "motivo": "Le Condizioni si stanno rifacendo: il testo dice solo che il potere infligge o toglie una Condizione, e si aggiornerà a catena col rifacimento.",
+    "poteri": {
+      "parole-che-pesano": [
+        {
+          "parte": "passivo",
+          "s": [],
+          "da": "Un tuo tiro sociale riuscito può infliggere una Condizione mentale (spaventato, confuso, ossessionato), senza Magick.",
+          "a": "Un tuo tiro sociale riuscito può infliggere una Condizione mentale (si aggiornerà a catena col rifacimento delle Condizioni), senza Magick."
+        }
+      ],
+      "reliquia": [
+        {
+          "parte": "passivo",
+          "s": [],
+          "da": "Un oggetto che porti da almeno una sessione diventa una reliquia: finché lo porti, ti protegge da una Condizione che scegli tu. Se lo perdi, perdi 1 Volontà.",
+          "a": "Un oggetto che porti da almeno una sessione diventa una reliquia: finché lo porti, ti protegge da una Condizione che scegli tu (si aggiornerà a catena col rifacimento delle Condizioni). Se lo perdi, perdi 1 Volontà."
+        }
+      ],
+      "vaccino": [
+        {
+          "parte": "passivo",
+          "s": [],
+          "da": "Una Condizione fisica che hai già preso nella sessione non la prendi più fino a fine sessione.",
+          "a": "Una Condizione fisica che hai già preso nella sessione non la prendi più fino a fine sessione (si aggiornerà a catena col rifacimento delle Condizioni)."
+        }
+      ],
+      "adrenalina": [
+        {
+          "parte": "passivo",
+          "s": [
+            "mind"
+          ],
+          "da": "quando sei sotto metà Salute, i lanci di Mente su te stesso hanno soglia meno 2 e le Condizioni mentali pregresse vengono ignorate per la scena.",
+          "a": "quando sei sotto metà Salute, i lanci di Mente su te stesso hanno soglia meno 2 e le Condizioni mentali pregresse vengono ignorate per la scena (si aggiornerà a catena col rifacimento delle Condizioni)."
+        }
+      ],
+      "convalescenza": [
+        {
+          "parte": "attivo",
+          "s": [
+            "mind"
+          ],
+          "da": "una fobia, un vuoto di memoria, una Condizione mentale che non passa.",
+          "a": "una fobia, un vuoto di memoria, una Condizione mentale che non passa (si aggiornerà a catena col rifacimento delle Condizioni)."
+        }
+      ],
+      "pronto-soccorso": [
+        {
+          "parte": "attivo",
+          "s": [
+            "mind"
+          ],
+          "da": "la Volontà, e una Condizione mentale (Spaventato, Confuso).",
+          "a": "la Volontà, e una Condizione mentale (si aggiornerà a catena col rifacimento delle Condizioni)."
+        }
+      ]
+    }
+  }
+}

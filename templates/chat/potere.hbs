@@ -1,14 +1,17 @@
 {{!-- La carta di un potere usato (24/9): nome, Sfera e matrice, il costo pagato,
-     gli usi che restano, il testo a blocchi. Quello che dice lo applica il Narratore. --}}
+     gli usi che restano, il testo a blocchi. Quello che dice lo applica il Narratore.
+     Dal rifacimento (30/9): il costo scritto per esteso quando dice più della Quintessenza
+     pagata, e accanto al titolo di ogni blocco il costo dell'attivo o la cadenza del passivo. --}}
 <div class="wod5e-mage-roll-card wod5e-mage-potere-chat">
     <p class="wod5e-mage-incantesimo-chat-name">{{carta.name}}</p>
     <p class="wod5e-mage-potere-chat-riga">{{#if carta.sphere}}<b>{{carta.sphere}}</b>{{/if}}{{#if carta.formula}} · {{carta.formula}}{{/if}}{{#if carta.kind}} · {{carta.kind}}{{/if}}</p>
+    {{#if carta.costo}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Costo"}}</b> {{carta.costo}}</p>{{/if}}
     {{#if carta.spent}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Pagato"}}</b> {{carta.spent}} {{localize "WOD5E_MAGE.Poteri.QuintessenzaBreve"}}</p>{{/if}}
     {{#if carta.usi}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Usi"}}</b> {{carta.usi.restanti}}/{{carta.usi.max}} ({{carta.usi.label}})</p>{{/if}}
     {{#each carta.blocchi as |blocco|}}
         <div class="wod5e-mage-potere-chat-blocco{{#if blocco.kind}} {{blocco.kind}}{{/if}}">
-            {{#if blocco.titolo}}<b>{{blocco.titolo}}</b>{{/if}}
-            {{#each blocco.voci as |v|}}<p>{{#if v.accesso}}<strong class="wod5e-mage-accesso">{{localize "WOD5E_MAGE.Grimorio.Access"}} {{#each v.sfere as |sfera|}}<img class="wod5e-mage-sfera-inline" src="modules/wod5e-mage/assets/icons/sheet/{{sfera}}.png" alt="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}" title="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}">{{/each}}:</strong> {{else if v.chiave}}<strong>{{v.chiave}}:</strong> {{/if}}{{v.testo}}</p>{{/each}}
+            {{#if blocco.titolo}}<b>{{blocco.titolo}}</b>{{#if blocco.misura}} <small class="wod5e-mage-potere-misura">{{blocco.misura}}</small>{{/if}}{{/if}}
+            {{#each blocco.voci as |v|}}<p>{{#if v.accesso}}<strong class="wod5e-mage-accesso">{{#if v.con}}{{localize "WOD5E_MAGE.Poteri.ConSfera"}}{{else}}{{localize "WOD5E_MAGE.Grimorio.Access"}}{{/if}} {{#each v.sfere as |sfera|}}<img class="wod5e-mage-sfera-inline" src="modules/wod5e-mage/assets/icons/sheet/{{sfera}}.png" alt="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}" title="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}">{{/each}}:</strong> {{else if v.chiave}}<strong>{{v.chiave}}:</strong> {{/if}}{{v.testo}}</p>{{/each}}
         </div>
     {{/each}}
     {{#if carta.paradox}}<p class="wod5e-mage-potere-chat-riga wod5e-mage-potere-chat-paradosso"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Paradosso"}}</b> {{carta.paradox}}</p>{{/if}}

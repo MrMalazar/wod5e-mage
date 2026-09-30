@@ -18,7 +18,11 @@ assert.ok(materia.propri.every((riga) => !riga.any) && materia.qualsiasi.every((
 const gradi = materia.propri.map((riga) => riga.dot || 99);
 assert.deepEqual(gradi, [...gradi].sort((a, b) => a - b), "in ordine di grado, quelli da assegnare in coda");
 assert.ok(materia.propri[0].dot > 0 && materia.propri.at(-1).dot === 0);
-assert.equal(materia.chiusi, 0, "senza prerequisiti scritti niente lucchetti");
+// I prerequisiti del rifacimento (30/9: il grado N chiede N-1 poteri della Sfera): con un potere di Materia
+// conosciuto (Guasto) restano chiusi solo quelli che ne chiedono di più; gli altri poteri non ne hanno.
+const chiedePiuDiUno = (riga) => (POTERI.find((p) => p.id === riga.id).prerequisiti ?? []).some((c) => c.numero > 1);
+assert.equal(materia.chiusi, [...materia.propri, ...materia.qualsiasi].filter(chiedePiuDiUno).length, "chiusi solo i poteri che chiedono più poteri di quelli conosciuti");
+assert.ok(materia.chiusi > 0 && [...materia.propri, ...materia.qualsiasi].filter((riga) => riga.locked).every(chiedePiuDiUno));
 assert.deepEqual(materia.gruppi.map((g) => [g.id, g.righe.length]), [["propri", materia.propri.length], ["qualsiasi", materia.qualsiasi.length]]);
 const guasto = materia.propri.find((riga) => riga.id === "guasto");
 assert.deepEqual([guasto.known, guasto.locked, guasto.cost, guasto.tipi, guasto.formulaName], [true, false, "1 WOD5E_MAGE.Poteri.QuintessenzaBreve", { attivo: true, passivo: false }, "Creare e Distruggere"]);
@@ -38,7 +42,7 @@ assert.equal(materia.conosciuti, 1);
 const catalogo = POTERI.map((p) => (p.id === "baratto" ? { ...p, prerequisiti: [{ numero: 2 }, { potere: "guasto" }, { potere: "bottino" }, { testo: "Aver venduto qualcosa a un Risvegliato" }] } : p));
 const conChiusi = prepareCatalogoPoteri("matter", { catalog: catalogo, owned, tutti: owned, localize });
 const baratto = conChiusi.propri.find((riga) => riga.id === "baratto");
-assert.deepEqual([conChiusi.chiusi, baratto.locked, baratto.chiuso.map((riga) => riga.id || riga.n)], [1, true, [2, "bottino"]]);
+assert.deepEqual([conChiusi.chiusi, baratto.locked, baratto.chiuso.map((riga) => riga.id || riga.n)], [materia.chiusi + 1, true, [2, "bottino"]]);
 assert.deepEqual(baratto.condizioni.map((riga) => [riga.stato, riga.icona]), [["manca", "fa-lock"], ["ok", "fa-check"], ["manca", "fa-lock"], ["tavolo", "fa-circle-dot"]], "ogni riga col suo stato");
 assert.equal(baratto.serveConto, "2/4");
 assert.equal(baratto.lockedHint, "WOD5E_MAGE.Poteri.Prerequisito.numero · WOD5E_MAGE.Poteri.Prerequisito.poteri".replace("{n}", "2"));
@@ -65,7 +69,8 @@ const barattoFamiglia = famiglia.propri.find((riga) => riga.id === "baratto");
 assert.deepEqual([barattoFamiglia.serve.split(" · ").length, barattoFamiglia.serveOk, barattoFamiglia.locked], [4, false, true]);
 const conTutto = prepareCatalogoPoteri("matter", { catalog: catalogo, owned: [{ catalogId: "guasto" }, { catalogId: "bottino" }], tutti: [{ catalogId: "guasto" }, { catalogId: "bottino" }], localize, family: true });
 const barattoAperto = conTutto.propri.find((riga) => riga.id === "baratto");
-assert.deepEqual([barattoAperto.serveOk, barattoAperto.locked, barattoAperto.lockedHint, conTutto.conPrerequisiti, barattoAperto.serveConto], [true, false, "", 1, "4/4"], "la condizione del tavolo non chiude");
+const conScritti = [...conTutto.propri, ...conTutto.qualsiasi].filter((riga) => riga.id === "baratto" || POTERI.find((p) => p.id === riga.id).prerequisiti).length;
+assert.deepEqual([barattoAperto.serveOk, barattoAperto.locked, barattoAperto.lockedHint, conTutto.conPrerequisiti, barattoAperto.serveConto], [true, false, "", conScritti, "4/4"], "la condizione del tavolo non chiude");
 // Alla creazione (25/9 sera): solo i poteri di base (grado 1) o di qualsiasi Sfera, senza prerequisiti.
 const creazione = prepareCatalogoPoteri("matter", { catalog: catalogo, owned: [], tutti: [], localize, family: true, creazione: true });
 assert.equal(creazione.creazione, true);
@@ -76,8 +81,13 @@ const barattoCreazione = creazione.propri.find((riga) => riga.id === "baratto");
 assert.deepEqual([barattoCreazione.locked, barattoCreazione.creazioneChiuso, barattoCreazione.lockedHint], [true, "prerequisiti", "WOD5E_MAGE.Poteri.CreazionePrerequisiti"], "Baratto è di grado 1 ma ha prerequisiti");
 const opera = creazione.propri.find((riga) => riga.id === "opera");
 assert.deepEqual([opera.locked, opera.creazioneChiuso, opera.lockedHint], [true, "grado", "WOD5E_MAGE.Poteri.CreazioneGrado"]);
+const ceLho = creazione.propri.find((riga) => riga.id === "ce-l-ho");
+assert.deepEqual([ceLho.locked, ceLho.creazioneChiuso], [true, "grado"], "un potere di grado 2 senza prerequisiti si chiude per il grado");
 assert.deepEqual([chiusoAllaCreazione({ dot: 1, spheres: ["matter"] }, []), chiusoAllaCreazione({ dot: 3, spheres: ["any"] }, []), chiusoAllaCreazione({ dot: 2, spheres: ["matter"] }, []), chiusoAllaCreazione({ dot: 1, spheres: ["matter"] }, [{ kind: "numero" }])], ["", "", "grado", "prerequisiti"]);
-assert.equal(prepareCatalogoPoteri("matter", { catalog: catalogo, owned: [], localize }).propri.find((riga) => riga.id === "opera").locked, false, "fuori dalla creazione Opera si prende");
+assert.equal(prepareCatalogoPoteri("matter", { catalog: catalogo, owned: [], localize }).propri.find((riga) => riga.id === "ce-l-ho").locked, false, "fuori dalla creazione Ce l'ho si prende");
+// Opera rifatta (30/9) è di grado 4: chiede 3 poteri di Materia, e senza si chiude anche fuori dalla creazione.
+const operaFuori = prepareCatalogoPoteri("matter", { catalog: catalogo, owned: [], localize }).propri.find((riga) => riga.id === "opera");
+assert.deepEqual([operaFuori.locked, operaFuori.chiuso.map((riga) => riga.n)], [true, [3]]);
 // I tipi: attivo, passivo, tutti e due.
 assert.deepEqual(tipiDelPotere("attivo e passivo"), { attivo: true, passivo: true });
 assert.deepEqual(tipiDelPotere("passivo"), { attivo: false, passivo: true });
@@ -122,13 +132,16 @@ const htmlNarratore = template({ ...materia, gm: true, pastiglie, icon: "m.png" 
 assert.equal((htmlNarratore.match(/data-role="catalogoModifica"/g) ?? []).length, materia.totale, "il Narratore ha la matita «Per tutti» su ogni potere");
 assert.equal((html.match(/data-role="catalogoAggiungi"/g) ?? []).length, materia.totale, "un tasto per potere");
 assert.equal((html.match(/<details /g) ?? []).length, materia.totale, "tutti i poteri della Sfera in lista");
-assert.ok(!html.includes("CatalogoChiusi") && !html.includes("catalogo-row chiusa") && !html.includes("CatalogoPosti") && !html.includes("CatalogoPieno"), "niente avvisi di quota");
+assert.ok(!html.includes("CatalogoPosti") && !html.includes("CatalogoPieno"), "niente avvisi di quota");
+// Chiusi solo per i prerequisiti (30/9: quelli del rifacimento): il conto in testa e una riga chiusa per ognuno.
+assert.ok(html.includes(`WOD5E_MAGE.Poteri.CatalogoChiusi(n&#x3D;${materia.chiusi})`) && (html.match(/wod5e-mage-catalogo-row chiusa"/g) ?? []).length === materia.chiusi, "i chiusi sono quelli dei prerequisiti");
 const htmlChiusi = template({ ...conChiusi, pastiglie, icon: "m.png" });
-assert.ok(htmlChiusi.includes("WOD5E_MAGE.Poteri.CatalogoChiusi(n&#x3D;1)") && htmlChiusi.includes('wod5e-mage-catalogo-row chiusa"') && htmlChiusi.includes("wod5e-mage-catalogo-lucchetto") && htmlChiusi.includes("WOD5E_MAGE.Poteri.Prerequisiti</b>"), "la riga chiusa col lucchetto e cosa serve");
+assert.ok(htmlChiusi.includes(`WOD5E_MAGE.Poteri.CatalogoChiusi(n&#x3D;${materia.chiusi + 1})`) && htmlChiusi.includes('wod5e-mage-catalogo-row chiusa"') && htmlChiusi.includes("wod5e-mage-catalogo-lucchetto") && htmlChiusi.includes("WOD5E_MAGE.Poteri.Prerequisiti</b>"), "la riga chiusa col lucchetto e cosa serve");
 assert.ok(/data-role="catalogoAggiungi" data-catalogo="baratto" disabled title="/.test(htmlChiusi), "il tasto spento dice cosa serve");
-assert.ok(htmlChiusi.includes('wod5e-mage-catalogo-lucchetto') && !htmlChiusi.includes('<small class="serve') && (htmlChiusi.match(/<li class="manca">/g) ?? []).length === 2 && htmlChiusi.includes('<li class="ok">') && htmlChiusi.includes('<li class="tavolo">'), "la pastiglia dei prerequisiti che mancano, e una riga per condizione");
+assert.ok(htmlChiusi.includes('wod5e-mage-catalogo-lucchetto') && !htmlChiusi.includes('<small class="serve') && (htmlChiusi.match(/<li class="manca">/g) ?? []).length === 2 + materia.chiusi && htmlChiusi.includes('<li class="ok">') && htmlChiusi.includes('<li class="tavolo">'), "la pastiglia dei prerequisiti che mancano, e una riga per condizione");
 const htmlAperto = template({ ...conTutto, pastiglie, icon: "m.png" });
-assert.ok(htmlAperto.includes('<li class="ok">') && htmlAperto.includes("wod5e-mage-catalogo-serve ok") && !htmlAperto.includes("catalogo-row chiusa"), "i prerequisiti soddisfatti con la spunta");
+assert.ok(htmlAperto.includes('<li class="ok">') && htmlAperto.includes("wod5e-mage-catalogo-serve ok") && (htmlAperto.match(/wod5e-mage-catalogo-row chiusa"/g) ?? []).length === conTutto.chiusi, "i prerequisiti soddisfatti con la spunta");
+assert.ok([...conTutto.propri, ...conTutto.qualsiasi].filter((riga) => riga.locked).every((riga) => (POTERI.find((p) => p.id === riga.id).prerequisiti ?? []).some((c) => c.numero > 2)), "con due poteri conosciuti resta chiuso solo chi ne chiede di più");
 const htmlCreazione = template({ ...creazione, pastiglie, icon: "m.png" });
 assert.ok(htmlCreazione.includes("WOD5E_MAGE.Poteri.CreazioneRegola") && htmlCreazione.includes('data-role="catalogoAggiungi" data-catalogo="opera" disabled title="WOD5E_MAGE.Poteri.CreazioneGrado"'), "la regola in testa e il tasto spento che dice perché");
 const htmlCompleto = template({ ...completo });

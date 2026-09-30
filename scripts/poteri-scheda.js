@@ -16,6 +16,7 @@ import {
   blocchiDelTesto,
   cartaPotere,
   contoPoteri,
+  costoDelPotere,
   findPotere,
   idVarianteAttiva,
   nuovoPotere,
@@ -33,11 +34,13 @@ import {
   registraUso,
   ruotaDopoUso,
   sceltaDelPotere,
+  spesaNeiLimiti,
   usiDelPotere,
   voceDelCatalogo,
   quattroParti
 } from "./poteri.js";
 import { modDelMondo, modificaBaseDelPotere } from "./poteri-mod.js";
+import { POTERI_TOLTI } from "./data/poteri.js";
 import { chiusoAllaCreazione, openCatalogoCompleto, openCatalogoPoteri, tipiDelPotere } from "./catalogo-poteri.js";
 import { getMagickBalance } from "./magick-balance.js";
 import { prepareIncantesimi } from "./incantesimi.js";
@@ -137,6 +140,10 @@ export function preparePoteriPagina(actor, sheet, { localize = (key) => key, loc
       // Gli usi e il costo in due colonne loro (27/9), non dentro il tasto Usa.
       usiTesto: usa.conto ? `${usa.conto.restanti}/${usa.conto.max} ${localize(`WOD5E_MAGE.Poteri.PerBreve.${usa.conto.per}`)}` : "",
       costoTesto: usa.costo ? `${usa.costo} ${localize("WOD5E_MAGE.Poteri.QuintessenzaBreve")}` : String(power.cost ?? "").trim(),
+      // Il costo per esteso (rifacimento, 30/9: «da 1 a 3 Quintessenza», «Azione, una volta per scena») al sorvolo della colonna.
+      costoTitolo: String(power.cost ?? "").trim(),
+      // Un potere uscito dal catalogo (il rifacimento, 30/9) resta sulla scheda col suo testo, e col segno «Tolto».
+      tolto: !entry && power.catalogId ? (POTERI_TOLTI[power.catalogId] ?? null) : null,
       conAmalgama: Boolean(power.amalgam) && !blocchi.some((blocco) => blocco.kind === "amalgama"),
       label: potereLabel(power, localize),
       sphereIcon: SPHERE_ICON(power.sphere),
@@ -367,6 +374,35 @@ export function riapriPoteri(sheet) {
 }
 
 /**
+ * Il costo variabile (rifacimento, 30/9: «da 1 a 3 Quintessenza», «1
+ * Quintessenza a bersaglio»): una finestra piccola chiede quanta Quintessenza
+ * si paga, fra il minimo e il tetto del costo, col costo scritto per esteso.
+ * Torna il numero, o null se si chiude.
+ */
+async function chiediSpesa(power, costo, quintessence, localize) {
+  const min = costo.variabile?.min ?? 0;
+  const max = costo.variabile?.max ?? 0;
+  const content = await foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/potere-costo.hbs`, {
+    name: potereLabel(power, localize),
+    costo: costo.testo,
+    valore: Math.max(min, 1),
+    min,
+    max,
+    quintessence
+  });
+  const result = await foundry.applications.api.DialogV2.input({
+    window: { title: localize("WOD5E_MAGE.Poteri.CostoVariabile.Titolo"), icon: "fa-solid fa-hand-sparkles" },
+    position: { width: 380, height: "auto" },
+    content,
+    ok: { icon: "fa-solid fa-check", label: localize("WOD5E_MAGE.Poteri.CostoVariabile.Paga") },
+    classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog", "wod5e-mage-potere-costo-finestra"],
+    rejectClose: false
+  }).catch(() => null);
+  if (!result || result === "cancel") return null;
+  return spesaNeiLimiti(result.spesa, costo.variabile);
+}
+
+/**
  * «Usa» (tappa 2, 24/9): il potere si usa senza tirare. Si controlla il
  * limite d'uso e la Quintessenza, si scala il costo dalla Ruota, si conta
  * l'uso e la carta va in chat; quello che dice lo applica il Narratore.
@@ -383,19 +419,27 @@ export async function onPotereUsa(event, target) {
   if (!power) return;
   const usi = actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {};
   const balance = getMagickBalance(actor);
-  const verdetto = puoUsare(power, { usi, quintessence: balance.quintessence });
+  // Il costo dell'attivo (rifacimento, 30/9): fisso si scala da solo, variabile lo sceglie chi usa il potere.
+  const costo = costoDelPotere(power, voceDelCatalogo(power));
+  let spesa = costo.fisso;
+  if (costo.variabile) {
+    spesa = await chiediSpesa(power, costo, balance.quintessence, localize);
+    if (spesa === null) return;
+  }
+  const verdetto = puoUsare(power, { usi, quintessence: balance.quintessence, spesa });
   if (!verdetto.ok) {
     ui.notifications.warn(localize(verdetto.motivo === "usi" ? "WOD5E_MAGE.Poteri.UsiFiniti" : "WOD5E_MAGE.Poteri.QuintessenzaManca"));
     return;
   }
   const dopo = registraUso(usi, power);
   const update = { [`flags.${MODULE_ID}.${POTERI_USI_FLAG}`]: dopo };
-  if (power.costValue > 0) update[`flags.${MODULE_ID}.magickBalance`] = ruotaDopoUso(balance, power);
+  if (spesa > 0) update[`flags.${MODULE_ID}.magickBalance`] = ruotaDopoUso(balance, power, spesa);
   await actor.update(update);
   const carta = cartaPotere(power, {
     sphereLabel: power.sphere ? localize(`WOD5E_MAGE.Spheres.${power.sphere}`) : "",
     usi: usiDelPotere(power, dopo),
-    spent: power.costValue,
+    spent: spesa,
+    costo: costo.testo,
     localize
   });
   const content = await foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/chat/potere.hbs`, { carta });

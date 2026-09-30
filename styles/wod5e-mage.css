@@ -18562,3 +18562,75 @@
   font-style: normal;
   padding-left: 0.45rem;
 }
+
+/* ----------------------------------------------------------------------
+   Il rifacimento dei poteri in Foundry (Blue, 30/9: «carica tutte quelle
+   che abbiamo approvato e deciso»). Accanto al titolo dell'effetto il costo
+   dell'attivo e la cadenza del passivo, scritti come nella pagina «Poteri
+   delle Sfere», in minuscolo e senza maiuscoletto; il segno «Tolto» sulla
+   riga di un potere uscito dal catalogo; la finestra del costo variabile.
+   ---------------------------------------------------------------------- */
+.wod5e-mage .wod5e-mage-potere-misura,
+.wod5e-mage-potere-chat-blocco .wod5e-mage-potere-misura {
+  color: var(--mage-testo, #e8dfc9);
+  font-size: 0.95em;
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-left: 0.3em;
+  text-transform: none;
+}
+
+.wod5e-mage-potere-chat-blocco > b + .wod5e-mage-potere-misura {
+  display: block;
+  font-size: 0.78rem;
+  margin: 0 0 0.1rem;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-tipo.tolto {
+  border-color: var(--mage-rosso, #b5433c);
+  border-style: dashed;
+  color: var(--mage-rosso-chiaro, #e2a79e);
+}
+
+.wod5e-mage-potere-costo-corpo {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.wod5e-mage-potere-costo-corpo > p {
+  margin: 0;
+}
+
+.wod5e-mage-potere-costo-campo {
+  align-items: center;
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: minmax(0, 1fr) 5rem;
+}
+
+.wod5e-mage-potere-costo-campo > input {
+  text-align: center;
+}
+
+.wod5e-mage-potere-costo-ruota {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 0.9em;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-potere-blocco-titolo > .wod5e-mage-potere-misura {
+  font-size: 0.72rem;
+}
+
+.wod5e-mage-catalogo-blocco > b > .wod5e-mage-potere-misura {
+  font-size: 0.78rem;
+}
+
+/* Il costo per esteso dei poteri rifatti (30/9) nella coda delle schede Poteri attivi e passivi della prima pagina:
+   non spinge il nome fuori dalla riga. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-potere-filtro > .wod5e-mage-riga-coda {
+  max-width: 9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

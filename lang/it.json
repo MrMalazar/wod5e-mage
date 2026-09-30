@@ -848,7 +848,8 @@
       "Carta": {
         "Pagato": "Pagato",
         "Usi": "Usi rimasti",
-        "Paradosso": "Paradosso"
+        "Paradosso": "Paradosso",
+        "Costo": "Costo"
       },
       "Scelta": {
         "ambito": "Ambito scelto",
@@ -878,7 +879,8 @@
       "DominioEsterno": "Dominio esterno (alla creazione i poteri sono gratis)",
       "Prerequisito": {
         "Label": "Serve",
-        "numero": "{n} poteri di {sphere}",
+        "numero": "{n} poteri conosciuti in {sphere}",
+        "numeroUno": "1 potere conosciuto in {sphere}",
         "poteri": "richiede {names}"
       },
       "PrerequisitiMancano": "Mancano i prerequisiti di questo potere: guarda la riga nella finestra Aggiungi.",
@@ -909,7 +911,17 @@
         "turno": "a turno",
         "bersaglio": "a bersaglio"
       },
-      "ConSfera": "Con"
+      "ConSfera": "Con",
+      "Allineati": "Poteri riallineati al catalogo: {righe} righe in {schede} schede.",
+      "ToltiSulleSchede": "Poteri tolti dal catalogo ma ancora su qualche scheda: {nomi}. Restano col loro testo e il segno «Tolto»: si tolgono o si sostituiscono a mano.",
+      "Tolto": "Tolto",
+      "ToltoHint": "Tolto dal catalogo il {data}. {motivo}",
+      "CostoVariabile": {
+        "Titolo": "Quanta Quintessenza paghi?",
+        "Quanta": "Quintessenza da pagare",
+        "Hai": "Sulla Ruota ne hai {n}.",
+        "Paga": "Paga"
+      }
     },
     "Tratti": {
       "Vantaggi": "Vantaggi",
