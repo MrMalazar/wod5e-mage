@@ -49,9 +49,10 @@ assert.match(perId.get("traccia").passivo, /\nCon Tempo: sai anche quanto tempo 
 // Il titolo del blocco porta il costo e la cadenza fra parentesi.
 assert.match(perId.get("traccia").text, /^Effetto attivo \(1 Quintessenza\): Segui la traccia/);
 assert.match(perId.get("traccia").text, /\n\nEffetto passivo \(Sempre\): In ogni posto/);
-// I ritocchi delle Condizioni (29/9) sui poteri non ancora rifatti.
-assert.match(perId.get("parole-che-pesano").text, /si aggiornerà a catena col rifacimento delle Condizioni/);
-assert.equal(perId.get("parole-che-pesano").rifatto, false);
+// I ritocchi delle Condizioni (29/9) sui poteri non ancora rifatti (dal 1/10 Parole che pesano è rifatto:
+// restano Pronto soccorso e Convalescenza).
+assert.match(perId.get("pronto-soccorso").text, /si aggiornerà a catena col rifacimento delle Condizioni/);
+assert.equal(perId.get("pronto-soccorso").rifatto, false);
 // Un potere non toccato resta com'era.
 assert.equal(perId.get("velocista").rifatto, false);
 assert.equal(POTERI_ALLINEATI_SETTING, "poteriAllineati");
@@ -73,6 +74,8 @@ assert.match(POTERI_VERSIONE, /^[0-9a-f]{8}$/);
   // «2 Quintessenza e 2 Paradosso»: la Quintessenza si scala da sola, il Paradosso lo segna il tavolo.
   const conParadosso = POTERI.find((entry) => entry.costoAttivo === "2 Quintessenza e 2 Paradosso");
   assert.deepEqual([conParadosso.costValue, conParadosso.costoVariabile], [2, null]);
+  // «Una volta per cronaca» (Il ritorno): niente Quintessenza, un uso per campagna.
+  assert.deepEqual([perId.get("il-ritorno").costValue, perId.get("il-ritorno").uses], [0, { per: "campagna", n: 1 }]);
   // «1 Quintessenza a bersaglio»: variabile, senza tetto.
   assert.deepEqual(POTERI.find((entry) => entry.costoAttivo === "1 Quintessenza a bersaglio").costoVariabile, { min: 1, max: 0 });
 }

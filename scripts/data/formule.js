@@ -29,19 +29,15 @@ export const FORMULE_M6 = Object.freeze([
     "thresholdText": "1 (Durata 1)",
     "use": "In genere è pensato per rallentare quel momento della scena, pochi turni in combattimento.",
     "powers": [
-      "prestito-dal-futuro",
       "pronto-all-uso",
       "puntuale",
-      "sotto-tiro",
       "straordinari",
       "adesso-e-non-dopo",
       "allo-scadere",
       "ci-penso-domani",
-      "contrattempo",
       "primo-istante",
       "salto",
       "slancio",
-      "minute-man",
       "velocista",
       "rallentare"
     ],
@@ -229,9 +225,7 @@ export const FORMULE_M6 = Object.freeze([
       "contagio",
       "il-fucile-di-echov",
       "nerf",
-      "bussola-comune",
-      "scuola",
-      "bussola-doppia"
+      "bussola-comune"
     ],
     "newPowers": [],
     "byBlue": false
@@ -358,8 +352,7 @@ export const FORMULE_M6 = Object.freeze([
     "use": "In genere è pensato per una conversazione che dura la scena; una parola sola, subito, costa meno (Durata 0).",
     "powers": [
       "armonia-a-distanza",
-      "interprete",
-      "l-avevo-preparata"
+      "interprete"
     ],
     "newPowers": [],
     "byBlue": false
@@ -865,11 +858,8 @@ export const FORMULE_M6 = Object.freeze([
       "pisolino",
       "tempra",
       "buona-forchetta",
-      "infermeria",
       "sangue-per-sangue",
       "bisturi",
-      "in-piedi",
-      "non-sotto-il-mio-turno",
       "rigenerazione",
       "pronto-soccorso"
     ],
@@ -952,9 +942,7 @@ export const FORMULE_M6 = Object.freeze([
     ],
     "thresholdText": "3 (Potenza 3)",
     "use": "In genere è pensato per far nascere una cosa che cambia il capitolo; il mondo con leggi nuove lo fa Rivoluzionare.",
-    "powers": [
-      "terra-sacra"
-    ],
+    "powers": [],
     "newPowers": [],
     "byBlue": false
   },
@@ -992,8 +980,7 @@ export const FORMULE_M6 = Object.freeze([
     "thresholdText": "5 (Potenza 3, Durata 2)",
     "use": "In genere è pensato per una scena intera senza subire il dominio della tua Sfera; pochi turni costano meno (Durata 1).",
     "powers": [
-      "doppio-cuore",
-      "duro-a-morire"
+      "doppio-cuore"
     ],
     "newPowers": [],
     "byBlue": false
@@ -1078,7 +1065,6 @@ export const FORMULE_M6 = Object.freeze([
     "use": "In genere dice se c'è o non c'è, qui e adesso, e tiene il senso acceso per qualche turno.",
     "powers": [
       "quadrante",
-      "sentinella",
       "sesto-senso"
     ],
     "newPowers": [],
@@ -1214,7 +1200,6 @@ export const FORMULE_M6 = Object.freeze([
     "use": "In genere dice cosa succederà nei prossimi istanti a una cosa che hai davanti; il domani di una persona sale con l'Informazione.",
     "powers": [
       "mai-colto-di-sorpresa",
-      "due-mosse-avanti",
       "segni",
       "il-prezzo-prima",
       "l-avevo-previsto",
@@ -1272,8 +1257,7 @@ export const FORMULE_M6 = Object.freeze([
       "il-mio-disastro",
       "prendo-io",
       "parafulmine",
-      "reliquia",
-      "incassare"
+      "reliquia"
     ],
     "newPowers": [],
     "byBlue": false
@@ -1315,7 +1299,6 @@ export const FORMULE_M6 = Object.freeze([
     "powers": [
       "valvola-di-sfogo",
       "vaccino",
-      "canto-del-cigno",
       "ferro-nel-sangue"
     ],
     "newPowers": [],
@@ -1427,7 +1410,6 @@ export const FORMULE_M6 = Object.freeze([
     "powers": [
       "bottino",
       "pulito",
-      "casa-dolce-casa",
       "pila"
     ],
     "newPowers": [],
@@ -1693,7 +1675,6 @@ export const FORMULE_M6 = Object.freeze([
       "l-ho-sentito-dire",
       "pensiero-laterale",
       "vedo-il-bluff",
-      "voce-dell-avatar",
       "mestiere",
       "modello"
     ],
@@ -1822,7 +1803,6 @@ export const FORMULE_M6 = Object.freeze([
       "niente-di-perso",
       "travaso",
       "cambiavalute",
-      "recupero",
       "pagare-in-paradosso",
       "il-dolore-sveglia"
     ],
@@ -2029,8 +2009,7 @@ export const FORMULE_M6 = Object.freeze([
     "powers": [
       "da-qualche-parte",
       "strada-facendo",
-      "giochiamo-in-casa",
-      "ero-gia-li"
+      "giochiamo-in-casa"
     ],
     "newPowers": [],
     "byBlue": false
@@ -2073,9 +2052,7 @@ export const FORMULE_M6 = Object.freeze([
       "inseparabili",
       "volonta-prestata",
       "strumento-di-fortuna",
-      "tabu",
       "favori",
-      "stesso-sangue",
       "folla",
       "legame"
     ],

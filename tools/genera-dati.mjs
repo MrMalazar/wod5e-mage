@@ -90,7 +90,8 @@ function costoDelTesto(t) {
     else if (base) variabile = { min: Number(base[1]), max: 0 };
     else variabile = { min: 0, max: 0 };
   }
-  const per = /una volta per scena/i.test(s) ? "scena" : /una volta per sessione/i.test(s) ? "sessione" : "";
+  // «Una volta per cronaca» (Il ritorno, 1/10) si conta come «campagna», il periodo che il modulo riarma solo a mano.
+  const per = /una volta per scena/i.test(s) ? "scena" : /una volta per sessione/i.test(s) ? "sessione" : /una volta per cronaca/i.test(s) ? "campagna" : "";
   return { fisso, variabile, uses: per ? { per, n: 1 } : null };
 }
 

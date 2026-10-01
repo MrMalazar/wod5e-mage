@@ -5,50 +5,47 @@
     "Campi: `on` (dice, threshold, successFrom, autoSuccess, freeScope, quintessenceOnSkills, prizeDouble, nota); `value` (numero, oppure {from: poteri, sphere?} = poteri conosciuti nella Sfera del potere o in `sphere`, oppure {from: sfere, max} = Sfere conosciute fino a max); `scope` (l'Ambito di freeScope, o `scelta` = quello scelto nella riga); `roll` (magick, abilita, any; senza: magick); `mode` (passivo, attivo; senza: passivo); `requires` (Sfere che il personaggio deve avere: le Amalgame); `when` (saluteMeta, abilita1, dadi1, dadi2, incantesimoScelto, abilitaScelta, potenza3).",
     "Un effetto `attivo` si applica quando il giocatore sceglie la variante «attivo» del potere nel lancio (o il potere solo, se non ha effetti passivi sul tiro): costa la Quintessenza del potere e conta un uso.",
     "`scelta` dice cosa il giocatore sceglie all'acquisto (kind: ambito, abilita, incantesimo); per `ambito`, le opzioni per Sfera.",
-    "30/9: col rifacimento deciso (tools/dati/rifacimento.json) nove poteri hanno il testo nuovo, e i loro effetti sono riscritti da lì: Armonia a distanza, Colpo di fortuna, Fortuna del principiante, Ho letto qualcosa, Il fucile di Čechov, Il giusto attrezzo, Ladro di fortuna, Semplice violenza, Testa o croce. Dove il testo nuovo non tocca il tiro (un ritiro dopo il tiro, il Prezzo, una scelta fra due strade) l'effetto non c'è: si usa il tasto «Usa». Parole che pesano ha la nota col ritocco delle Condizioni del 29/9."
+    "30/9: col rifacimento deciso (tools/dati/rifacimento.json) nove poteri hanno il testo nuovo, e i loro effetti sono riscritti da lì: Armonia a distanza, Colpo di fortuna, Fortuna del principiante, Ho letto qualcosa, Il fucile di Čechov, Il giusto attrezzo, Ladro di fortuna, Semplice violenza, Testa o croce. Dove il testo nuovo non tocca il tiro (un ritiro dopo il tiro, il Prezzo, una scelta fra due strade) l'effetto non c'è: si usa il tasto «Usa». Parole che pesano ha la nota col ritocco delle Condizioni del 29/9.",
+    "1/10: col rifacimento deciso del ventiseiesimo giro gli effetti di diciassette poteri sono riscritti dal testo nuovo (Appoggio, Folla, Legame, Segnale, Fatto per durare, Ambito di Casa con la scelta di un Ambito qualsiasi, La Pratica rende Perfetti, Mestiere, Adrenalina, Sesto senso, Come da piano, Niente al caso, Coro, Parole che pesano, Distrazione, Goccia a goccia, Il mio disastro); escono gli effetti dei tolti (Sentinella, Terra sacra, Voce dell'Avatar, Prestito dal futuro, Bussola doppia) e quello di Anche a mani nude, perché la Quintessenza non dà più dadi."
   ],
   "letture": {
     "freeScope": "«non conta sino al 4° pallino» e «fino a un livello pari a N»: i livelli fino a N non contano; sopra N conta l'eccedenza (Potenza 5 con N 4 vale 1). Da confermare con Blue: l'altra lettura è che sopra N l'Ambito conti per intero."
   },
   "effetti": {
     "appoggio": [
-      { "on": "freeScope", "scope": "potency", "value": 4, "nota": "Il punteggio dell'Ambito di Potenza non conta sino al 4° pallino quando la tua Sfera trova la sua leva già in scena" }
+      { "on": "freeScope", "scope": "potency", "value": 4, "nota": "L'Ambito di Potenza di un tuo lancio non conta fino al livello 4, se in scena c'è una leva" }
     ],
     "folla": [
-      { "on": "freeScope", "scope": "targets", "value": 4, "nota": "Il punteggio dell'Ambito di Bersagli non conta sino al 4° pallino quando per la tua Sfera la folla è una cosa sola" }
+      { "on": "freeScope", "scope": "targets", "value": 4, "nota": "L'Ambito di Bersagli di un tuo lancio non conta fino al livello 4, se i bersagli hanno un legame che conta" }
     ],
     "legame": [
-      { "on": "freeScope", "scope": "range", "value": 4, "nota": "Il punteggio dell'Ambito di Portata non conta sino al 4° pallino verso ciò con cui hai un legame" }
+      { "on": "freeScope", "scope": "range", "value": 4, "nota": "L'Ambito di Portata di un tuo lancio non conta fino al livello 4 verso ciò con cui hai un legame" }
     ],
     "segnale": [
-      { "on": "freeScope", "scope": "conditions", "value": 4, "nota": "Il punteggio dell'Ambito di Condizioni non conta sino al 4° pallino quando il segnale è preciso" }
+      { "on": "freeScope", "scope": "conditions", "value": 4, "nota": "L'Ambito di Condizioni di un tuo lancio non conta fino al livello 4, se il segnale è preciso" }
     ],
     "fatto-per-durare": [
-      { "on": "freeScope", "scope": "duration", "value": 4, "nota": "Il punteggio dell'Ambito di Durata non conta sino al 4° pallino, ma l'effetto dura solo finché regge l'appoggio della tua Sfera" }
+      { "on": "freeScope", "scope": "duration", "value": 4, "nota": "L'Ambito di Durata di un tuo effetto non conta fino al livello 4, se lo leghi a qualcosa" }
     ],
     "ambito-di-casa": [
-      { "on": "freeScope", "scope": "scelta", "value": { "from": "poteri" }, "nota": "Nei lanci in cui usi la Sfera d'accesso, l'Ambito scelto non conta nella soglia fino a un livello pari al numero di poteri che conosci in quella Sfera." },
-      { "mode": "attivo", "on": "freeScope", "scope": "scelta", "value": 7, "nota": "Paga 4 Quintessenza: per un lancio l'Ambito scelto non conta nella soglia, a qualunque livello." }
+      { "on": "freeScope", "scope": "scelta", "value": { "from": "poteri" }, "nota": "Nei tuoi lanci non lo paghi fino al livello pari ai poteri che conosci nella Sfera che stai lanciando, al massimo fino al 7" },
+      { "mode": "attivo", "on": "nota", "roll": "magick", "nota": "per ogni Quintessenza che paghi, l'Ambito scelto non lo paghi per un livello in più" }
     ],
     "la-pratica-rende-perfetti": [
-      { "on": "threshold", "value": -2, "when": "incantesimoScelto", "nota": "quell'effetto ottiene permanentemente -2 alla soglia, senza scendere sotto zero" },
-      { "mode": "attivo", "on": "autoSuccess", "when": ["incantesimoScelto", "dadi1"], "nota": "l'effetto scelto riesce senza tirare, purché il tiro sia possibile (dopo la soglia ti resta almeno un dado)" }
+      { "on": "threshold", "value": -2, "when": "incantesimoScelto", "nota": "quando lo lanci ha soglia -2, senza scendere sotto zero" },
+      { "mode": "attivo", "on": "autoSuccess", "when": ["incantesimoScelto", "dadi1"], "nota": "L'effetto scelto riesce senza tirare: paghi tanta Quintessenza quanta è la sua soglia" }
     ],
     "mestiere": [
-      { "on": "dice", "value": { "from": "sfere", "max": 3 }, "roll": "abilita", "when": "abilitaScelta", "nota": "Quando tiri quell'Abilità non a scopo di Magick ottieni un dado in più per ogni tua Sfera di cui riesci a giustificare l'utilizzo, fino a 3." },
-      { "mode": "attivo", "on": "dice", "value": { "from": "sfere", "max": 3 }, "roll": "magick", "when": "abilitaScelta", "nota": "Paga 1 Quintessenza: si attiva anche per l'effetto di Magick." }
+      { "on": "dice", "value": { "from": "sfere", "max": 3 }, "roll": "abilita", "when": "abilitaScelta", "nota": "Quando la tiri fuori dalla Magick hai 1 dado in più per ogni tua Sfera che c'entra, fino a 3" }
     ],
     "adrenalina": [
-      { "on": "threshold", "value": -2, "when": "saluteMeta", "nota": "quando sei sotto metà Salute" }
-    ],
-    "sentinella": [
-      { "on": "threshold", "value": -2, "nota": "hai diritto a una reazione istintiva a soglia -2" }
+      { "on": "dice", "value": 2, "roll": "abilita", "when": "saluteMeta", "nota": "Quando sei sotto metà Salute, nei tiri fisici hai 2 dadi in più" }
     ],
     "sesto-senso": [
-      { "on": "dice", "value": 2, "roll": "abilita", "nota": "Quando un tiro di Abilità è coerente con quello che percepisci nella scena, il Narratore può concederti soglia -2 oppure 2 dadi in più." }
+      { "on": "dice", "value": 2, "roll": "abilita", "nota": "Quando un tiro di Abilità si appoggia a quello che percepisci, il Narratore può darti 2 dadi in più oppure soglia -2" }
     ],
     "come-da-piano": [
-      { "on": "dice", "value": 2, "roll": "abilita", "nota": "Se il gruppo segue un piano che hai spiegato prima della scena, per quella scena ognuno ha 2 dadi in più nei tiri di Abilità." }
+      { "on": "dice", "value": 2, "roll": "abilita", "nota": "per quella scena ognuno ha 2 dadi in più nei tiri di Abilità" }
     ],
     "ho-letto-qualcosa": [
       { "on": "dice", "value": 1, "roll": "abilita", "nota": "Davanti a un compito o a un lavoro sai sempre che tipo di conoscenza ti servirebbe; se è fra le tue, hai 1 dado in più al tiro." },
@@ -60,8 +57,8 @@
       { "mode": "attivo", "on": "autoSuccess", "roll": "abilita", "when": "abilita1", "nota": "Un tuo tiro di un'Abilità in cui hai un solo pallino riesce, senza tirare." }
     ],
     "niente-al-caso": [
-      { "mode": "attivo", "on": "autoSuccess", "roll": "abilita", "when": "dadi2", "nota": "in un tiro di Abilità non tiri: se hai almeno 2 dadi, riesci" },
-      { "mode": "attivo", "on": "autoSuccess", "roll": "magick", "when": "dadi2", "requires": "prime", "nota": "Accesso con Primordio: vale anche nei lanci di Magick, se dopo la soglia ti restano almeno 2 dadi." }
+      { "on": "dice", "value": 2, "roll": "any", "nota": "Quando ti prepari a un'azione (prendi la mira, studi la serratura, conti le guardie etc..), al tiro che la fa hai 2 dadi in più" },
+      { "mode": "attivo", "on": "nota", "roll": "magick", "requires": "prime", "nota": "se ti sei preparato, nel lancio di Magick non puoi subire ostacoli" }
     ],
     "il-fucile-di-echov": [
       { "on": "dice", "value": 2, "roll": "any", "nota": "Quando lo usi per quello a cui serve, e non per altro (un coltello per tagliare, una corda per legare o per arrampicarti), hai 2 dadi in più." },
@@ -74,21 +71,8 @@
     "strumento-di-fortuna": [
       { "mode": "attivo", "on": "nota", "roll": "magick", "nota": "Paga 1 Quintessenza: per un lancio usi uno Strumento che non è il tuo come se fosse tuo. Il premio dell'Areté lo decide sempre il Narratore." }
     ],
-    "anche-a-mani-nude": [
-      { "on": "quintessenceOnSkills", "roll": "abilita", "nota": "Spendi Quintessenza anche nei tiri di Abilità: ogni punto è un dado, dentro il tetto." }
-    ],
-    "terra-sacra": [
-      { "on": "dice", "value": { "from": "poteri", "sphere": "spirit" }, "roll": "magick", "requires": "spirit", "nota": "Accesso con Spirito: lì i tuoi lanci verso l'effimera hanno dadi in più pari ai poteri che conosci in Spirito." }
-    ],
-    "voce-dell-avatar": [
-      { "mode": "attivo", "on": "prizeDouble", "roll": "magick", "nota": "Una volta per sessione il Narratore ti dice la cosa giusta da fare nella scena; se la fai, il premio dell'Areté vale doppio." }
-    ],
     "lascio-fare-a-lui": [
       { "mode": "attivo", "on": "autoSuccess", "roll": "any", "nota": "Una volta per scena lasci il comando al tuo totem: il Narratore sceglie la tua azione, e l'azione riesce." }
-    ],
-    "prestito-dal-futuro": [
-      { "mode": "attivo", "on": "dice", "value": 2, "roll": "abilita", "requires": "entropy", "nota": "Accesso con Entropia: una volta per scena sposti 2 dadi dal tuo prossimo tiro di Abilità a questo." },
-      { "mode": "attivo", "on": "dice", "value": 2, "roll": "magick", "requires": ["entropy", "prime"], "nota": "Accesso con Entropia + Primordio: vale anche fra lanci di Magick." }
     ],
     "memoria-muscolare": [
       { "on": "autoSuccess", "roll": "abilita", "nota": "Un tiro fisico che ti è già riuscito nella scena, se lo rifai, riesce senza tirare." }
@@ -107,11 +91,8 @@
       { "mode": "attivo", "on": "nota", "roll": "abilita", "nota": "Prima di un tuo tiro di Abilità dichiari pari o dispari: se il primo dado ti dà ragione hai 2 dadi in più al tuo prossimo tiro, se no 2 in meno." },
       { "mode": "attivo", "on": "nota", "roll": "magick", "requires": "prime", "nota": "l'attivo vale anche per i lanci di Magick." }
     ],
-    "bussola-doppia": [
-      { "on": "nota", "roll": "magick", "nota": "Quando rispetti la Bussola in un lancio della tua Sfera, i dadi in più diventano due." }
-    ],
     "coro": [
-      { "on": "nota", "roll": "magick", "nota": "I dadi di Armonia che ricevi in un lancio valgono 1 più il numero di chi partecipa." }
+      { "on": "nota", "roll": "magick", "nota": "Quando i compagni ti danno l'Armonia, hai 1 dado in più per ognuno di loro, dentro il tetto di 3" }
     ],
     "armonia-a-distanza": [
       { "on": "nota", "roll": "any", "nota": "Dai e ricevi dadi di Armonia anche con un compagno che non è in scena, se hai un legame con lui, lo stai guardando o ci stai parlando (un marchio, una chiaroveggenza, una telefonata etc..)." }
@@ -120,29 +101,30 @@
       { "on": "nota", "roll": "abilita", "nota": "Nelle contese sociali tiri dopo l'avversario, sapendo il suo risultato, e puoi ritirarti senza perdere." }
     ],
     "parole-che-pesano": [
-      { "on": "nota", "roll": "abilita", "nota": "Un tuo tiro sociale riuscito può infliggere una Condizione mentale (si aggiornerà a catena col rifacimento delle Condizioni), senza Magick." }
+      { "on": "nota", "roll": "abilita", "nota": "Un tuo tiro sociale riuscito, senza Magick, può infliggere una Condizione mentale con un grado in più" }
     ],
     "distrazione": [
-      { "mode": "attivo", "on": "nota", "roll": "abilita", "nota": "Una volta per scena, quando qualcuno sta per tirare, un tuo tiro sociale riuscito gli fa perdere il tiro." }
+      { "mode": "attivo", "on": "nota", "roll": "abilita", "nota": "Quando qualcuno sta per tirare, gli fai perdere il tiro, se i poteri che conosci in Mente sono più della sua soglia sociale o mentale" }
     ],
     "goccia-a-goccia": [
-      { "on": "nota", "roll": "abilita", "nota": "Con un PNG che hai incontrato in tre scene diverse, un tiro sociale riuscito lo cambia per sempre: diventa amico, alleato o debitore." }
+      { "on": "nota", "roll": "abilita", "nota": "ti dà 1 dado in più nei tiri sociali verso di lei e verso chi c'era" },
+      { "mode": "attivo", "on": "nota", "roll": "abilita", "nota": "In un tiro sociale hai 1 dado in più per ogni Quintessenza che paghi" }
     ],
     "il-mio-disastro": [
-      { "mode": "attivo", "on": "nota", "roll": "magick", "nota": "Una volta per sessione descrivi tu come scoppia un tuo dado rosso, e il racconto non deve farti comodo." }
+      { "on": "nota", "roll": "magick", "nota": "Quando il Paradosso ti scoppia, puoi chiedere al Narratore di raccontarlo tu" }
     ]
   },
   "scelte": {
     "ambito-di-casa": {
       "kind": "ambito",
       "options": {
-        "correspondence": ["range", "targets"],
-        "entropy": ["conditions", "precision"],
-        "forces": ["potency", "range"],
-        "matter": ["duration", "targets"],
-        "mind": ["targets", "precision"],
-        "time": ["duration", "conditions"],
-        "life": ["potency", "targets"]
+        "correspondence": ["targets", "conditions", "duration", "range", "potency", "precision"],
+        "entropy": ["targets", "conditions", "duration", "range", "potency", "precision"],
+        "forces": ["targets", "conditions", "duration", "range", "potency", "precision"],
+        "matter": ["targets", "conditions", "duration", "range", "potency", "precision"],
+        "mind": ["targets", "conditions", "duration", "range", "potency", "precision"],
+        "time": ["targets", "conditions", "duration", "range", "potency", "precision"],
+        "life": ["targets", "conditions", "duration", "range", "potency", "precision"]
       }
     },
     "mestiere": { "kind": "abilita" },

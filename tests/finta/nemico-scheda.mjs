@@ -176,11 +176,12 @@ for (const nuova of ["nemicoModo", "nemicoMano", "nemicoArmatura", "nemicoEffett
   assert.equal(dialogo.window.title, "I poteri del manuale per Rade");
   assert.ok(dialogo.classes.includes("wod5e-mage-catalogo-nemico"));
   const html = dialogo.content.replaceAll("&#x27;", "'");
-  for (const marker of ['data-role="catalogoAggiungi" data-catalogo="duro-a-morire" >', 'data-role="catalogoAggiungi" data-catalogo="tempra" disabled>', "Già suo", "poteri, 1 suoi", 'data-role="catalogoSearch"']) assert.ok(html.includes(marker), `catalogo: manca ${marker}`);
+  for (const marker of ['data-role="catalogoAggiungi" data-catalogo="doppio-cuore" >', 'data-role="catalogoAggiungi" data-catalogo="tempra" disabled>', "Già suo", "poteri, 1 suoi", 'data-role="catalogoSearch"']) assert.ok(html.includes(marker), `catalogo: manca ${marker}`);
   for (const frase of ["Lo conosci già", "poteri, ne conosci"]) assert.ok(!html.includes(frase), `il catalogo del PNG non parla al giocatore: «${frase}»`);
-  // La finestra, finta: si prendono i suoi ascolti e si clicca «Aggiungi» su Duro a morire.
+  // La finestra, finta: si prendono i suoi ascolti e si clicca «Aggiungi» su Doppio cuore (Duro a morire, che c'era
+  // prima, è tolto dal 1/10: è il passivo di Doppio cuore).
   const ascolti = {};
-  const bottone = { disabled: false, dataset: { catalogo: "duro-a-morire" }, innerHTML: "", closest: () => ({ classList: { add() {} } }) };
+  const bottone = { disabled: false, dataset: { catalogo: "doppio-cuore" }, innerHTML: "", closest: () => ({ classList: { add() {} } }) };
   const conto = { textContent: "" };
   const radice = {
     addEventListener: (tipo, fn) => { ascolti[tipo] = fn; },
@@ -191,10 +192,10 @@ for (const nuova of ["nemicoModo", "nemicoMano", "nemicoArmatura", "nemicoEffett
   const clic = { ...evento, target: { closest: (sel) => (sel === "[data-role=catalogoAggiungi]" ? bottone : null) } };
   await ascolti.click(clic);
   const presi = Object.values(bandiera(actor).effetti).map((row) => [row.nome, row.tipo, row.catalogo]);
-  assert.deepEqual(presi, [["Tempra", "passivo", "tempra"], ["Duro a morire", "attivo", "duro-a-morire"]]);
-  assert.deepEqual([bottone.disabled, bottone.innerHTML.includes("Già suo"), conto.textContent], [true, true, "212 poteri, 2 suoi"]);
+  assert.deepEqual(presi, [["Tempra", "passivo", "tempra"], ["Doppio cuore", "attivo", "doppio-cuore"]]);
+  assert.deepEqual([bottone.disabled, bottone.innerHTML.includes("Già suo"), conto.textContent], [true, true, "226 poteri, 2 suoi"]);
   // Nel blocco dei Poteri, col testo letto dal catalogo.
-  assert.deepEqual(sheet.contesto().poteri.map((p) => [p.nome, p.potere.grado]), [["Tempra", 1], ["Duro a morire", 4]]);
+  assert.deepEqual(sheet.contesto().poteri.map((p) => [p.nome, p.potere.grado]), [["Tempra", 1], ["Doppio cuore", 4]]);
   // Un secondo clic sullo stesso potere non lo raddoppia.
   bottone.disabled = false;
   await ascolti.click(clic);

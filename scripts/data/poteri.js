@@ -439,24 +439,19 @@ export const POTERI = Object.freeze([
     "name": "Giochiamo in casa",
     "dot": 4,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione scegli il luogo della scena dopo, fra quelli dove la storia può andare.\n\nEffetto Amalgama: Accesso con Entropia: l'arrivo è accidentale: ci finite per caso, anche se nessuno ci voleva andare.",
-    "attivo": "Una volta per sessione scegli il luogo della scena dopo, fra quelli dove la storia può andare.",
-    "passivo": "",
-    "amalgama": "Con Entropia: l'arrivo è accidentale: ci finite per caso, anche se nessuno ci voleva andare.",
-    "amalgam": "entropy",
-    "amalgams": [
-      "entropy"
-    ],
-    "amalgamText": "Accesso con Entropia: l'arrivo è accidentale: ci finite per caso, anche se nessuno ci voleva andare.",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (3 Quintessenza): Scambi due spazi grandi al massimo quanto una stanza: quello in cui sei e uno in un posto dove sei già stato. Finché resti dentro, la stanza è quell'altro posto (la sua aria, la sua luce, quello che c'è), e chi ci entra da una parte esce dall'altra. Quando esci tu, finisce.\n\nEffetto passivo (Sempre): In un posto dove passi del tempo impari, poco a poco, distanze e spazi, fino a conoscerlo a fondo: sai dove muoverti senza guardare, e senti chi entra e chi esce. Vale per un posto grande fino a un'Area pari ai poteri che conosci in Corrispondenza (con 4 poteri, una città).",
+    "attivo": "Scambi due spazi grandi al massimo quanto una stanza: quello in cui sei e uno in un posto dove sei già stato. Finché resti dentro, la stanza è quell'altro posto (la sua aria, la sua luce, quello che c'è), e chi ci entra da una parte esce dall'altra. Quando esci tu, finisce.",
+    "passivo": "In un posto dove passi del tempo impari, poco a poco, distanze e spazi, fino a conoscerlo a fondo: sai dove muoverti senza guardare, e senti chi entra e chi esce. Vale per un posto grande fino a un'Area pari ai poteri che conosci in Corrispondenza (con 4 poteri, una città).",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Ci vediamo da me.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "cost": "3 Quintessenza",
+    "costValue": 3,
+    "uses": null,
+    "paradox": "Volgare effetto attivo, nessuno effetto passivo.",
     "formula": "varcare",
     "formulaName": "Varcare",
     "link": "tavolo",
@@ -466,10 +461,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "3 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -672,6 +671,46 @@ export const POTERI = Object.freeze([
     "costoVariabile": null
   },
   {
+    "id": "finestra",
+    "spheres": [
+      "correspondence"
+    ],
+    "name": "Finestra",
+    "dot": 3,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Per la scena apri una finestra su un posto, come una videocamera: vedi e senti come se fossi lì. Il posto deve stare entro una Portata pari ai poteri che conosci in Corrispondenza (con 3 poteri lontano, con 5 nel continente, con 7 ovunque sia), e ci devi avere almeno un legame superficiale (ci sei passato, ne hai una foto, ci vive qualcuno che conosci etc..).\n\nEffetto passivo (Sempre): Quando una Magick o un potere soprannaturale ti cerca o ti guarda da lontano (una chiaroveggenza, una localizzazione, un occhio che ti segue etc..), deve superare una soglia pari ai poteri che conosci in Corrispondenza. Se la supera ti vede, ma tu senti che qualcuno ti guarda. Se non la supera decidi tu: gli neghi la visione, o la lasci andare avanti sapendolo.\nCon Mente: gli fai vedere quello che vuoi tu.",
+    "attivo": "Per la scena apri una finestra su un posto, come una videocamera: vedi e senti come se fossi lì. Il posto deve stare entro una Portata pari ai poteri che conosci in Corrispondenza (con 3 poteri lontano, con 5 nel continente, con 7 ovunque sia), e ci devi avere almeno un legame superficiale (ci sei passato, ne hai una foto, ci vive qualcuno che conosci etc..).",
+    "passivo": "Quando una Magick o un potere soprannaturale ti cerca o ti guarda da lontano (una chiaroveggenza, una localizzazione, un occhio che ti segue etc..), deve superare una soglia pari ai poteri che conosci in Corrispondenza. Se la supera ti vede, ma tu senti che qualcuno ti guarda. Se non la supera decidi tu: gli neghi la visione, o la lasci andare avanti sapendolo.\nCon Mente: gli fai vedere quello che vuoi tu.",
+    "amalgama": "",
+    "amalgam": "mind",
+    "amalgams": [
+      "mind"
+    ],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza",
+    "costValue": 1,
+    "uses": null,
+    "paradox": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Corrispondenza",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": null
+  },
+  {
     "id": "labirinto",
     "spheres": [
       "correspondence"
@@ -742,6 +781,85 @@ export const POTERI = Object.freeze([
     "costoAttivo": "1 Quintessenza",
     "cadenzaPassivo": "Sempre",
     "costoVariabile": null
+  },
+  {
+    "id": "scatto",
+    "spheres": [
+      "correspondence",
+      "spirit"
+    ],
+    "name": "Scatto",
+    "dot": 1,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza, più 1 a persona che porti): Ricompari dove vedi, anche lontano (in fondo alla strada, sul tetto di fronte, sull'altra sponda del fiume etc..), e porti con te chi tocchi: 1 Quintessenza in più a persona. Chi non vuole venire lo porti solo se lo tieni stretto, o se è legato.\n\nEffetto passivo (Una volta per scena): Fai un passo piccolo nello spazio, o nel Velo, ed esci poco più in là: al posto del tuo movimento sparisci e ricompari fino a Portata 2 (la stanza), in un punto che vedi, anche oltre un ostacolo (un bancone, una ringhiera, una porta a vetri etc..).",
+    "attivo": "Ricompari dove vedi, anche lontano (in fondo alla strada, sul tetto di fronte, sull'altra sponda del fiume etc..), e porti con te chi tocchi: 1 Quintessenza in più a persona. Chi non vuole venire lo porti solo se lo tieni stretto, o se è legato.",
+    "passivo": "Fai un passo piccolo nello spazio, o nel Velo, ed esci poco più in là: al posto del tuo movimento sparisci e ricompari fino a Portata 2 (la stanza), in un punto che vedi, anche oltre un ostacolo (un bancone, una ringhiera, una porta a vetri etc..).",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza, più 1 a persona che porti",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Volgare se qualcuno guarda, in tutte e due le forme.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Corrispondenza",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": null,
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza, più 1 a persona che porti",
+    "cadenzaPassivo": "Una volta per scena",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "adunata",
+    "spheres": [
+      "correspondence"
+    ],
+    "name": "Adunata",
+    "dot": 4,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza a testa): Porti accanto a te i compagni che vuoi, con quello che hanno addosso, purché stiano entro una Portata pari ai poteri che conosci in Corrispondenza (con 4 poteri molto lontano, con 7 ovunque siano). Chi non vuole venire resta dov'è.\n\nEffetto passivo (Sempre): Le persone e le creature con cui hai almeno un legame superficiale sentono quando le chiami, dovunque siano: sanno che le cerchi e da che parte, e vengono coi loro mezzi, se vogliono.",
+    "attivo": "Porti accanto a te i compagni che vuoi, con quello che hanno addosso, purché stiano entro una Portata pari ai poteri che conosci in Corrispondenza (con 4 poteri molto lontano, con 7 ovunque siano). Chi non vuole venire resta dov'è.",
+    "passivo": "Le persone e le creature con cui hai almeno un legame superficiale sentono quando le chiami, dovunque siano: sanno che le cerchi e da che parte, e vengono coi loro mezzi, se vogliono.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza a testa",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio in tutte e due le forme; Volgare se qualcuno vede comparire i compagni.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Corrispondenza",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza a testa",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "ubiquita",
@@ -1251,23 +1369,20 @@ export const POTERI = Object.freeze([
     "name": "Niente al caso",
     "dot": 2,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per scena, se nella scena prima ti sei preparato (uno studio, un sopralluogo, una prova), in un tiro di Abilità non tiri: se hai almeno 2 dadi, riesci.\n\nEffetto Amalgama: Accesso con Primordio: vale anche nei lanci di Magick, se dopo la soglia ti restano almeno 2 dadi.",
-    "attivo": "Una volta per scena, se nella scena prima ti sei preparato (uno studio, un sopralluogo, una prova), in un tiro di Abilità non tiri: se hai almeno 2 dadi, riesci.",
-    "passivo": "",
-    "amalgama": "Con Primordio: vale anche nei lanci di Magick, se dopo la soglia ti restano almeno 2 dadi.",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza): Quando qualcosa si mette fra te e l'azione per cui ti sei preparato (una porta che si chiude, una guardia in più, la pioggia sulla miccia etc..), il caso lo toglie di mezzo, o almeno ti viene incontro: la porta si riapre, la guardia si gira, la miccia era asciutta. Il tiro dell'azione lo fai come sempre.\nCon Primordio: se ti sei preparato, nel lancio di Magick non puoi subire ostacoli (dadi tolti, soglia alzata, un contrasto etc..).\n\nEffetto passivo (Sempre): Quando ti prepari a un'azione (prendi la mira, studi la serratura, conti le guardie etc..), al tiro che la fa hai 2 dadi in più.",
+    "attivo": "Quando qualcosa si mette fra te e l'azione per cui ti sei preparato (una porta che si chiude, una guardia in più, la pioggia sulla miccia etc..), il caso lo toglie di mezzo, o almeno ti viene incontro: la porta si riapre, la guardia si gira, la miccia era asciutta. Il tiro dell'azione lo fai come sempre.\nCon Primordio: se ti sei preparato, nel lancio di Magick non puoi subire ostacoli (dadi tolti, soglia alzata, un contrasto etc..).",
+    "passivo": "Quando ti prepari a un'azione (prendi la mira, studi la serratura, conti le guardie etc..), al tiro che la fa hai 2 dadi in più.",
+    "amalgama": "",
     "amalgam": "prime",
     "amalgams": [
       "prime"
     ],
-    "amalgamText": "Accesso con Primordio: vale anche nei lanci di Magick, se dopo la soglia ti restano almeno 2 dadi.",
+    "amalgamText": "",
     "flavor": "«L'avevo provato cento volte.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
+    "cost": "2 Quintessenza",
+    "costValue": 2,
+    "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
     "formula": "dominare",
     "formulaName": "Dominare",
@@ -1279,26 +1394,28 @@ export const POTERI = Object.freeze([
     ],
     "effects": [
       {
-        "mode": "attivo",
-        "on": "autoSuccess",
-        "roll": "abilita",
-        "when": "dadi2",
-        "nota": "in un tiro di Abilità non tiri: se hai almeno 2 dadi, riesci"
+        "on": "dice",
+        "value": 2,
+        "roll": "any",
+        "nota": "Quando ti prepari a un'azione (prendi la mira, studi la serratura, conti le guardie etc..), al tiro che la fa hai 2 dadi in più"
       },
       {
         "mode": "attivo",
-        "on": "autoSuccess",
+        "on": "nota",
         "roll": "magick",
-        "when": "dadi2",
         "requires": "prime",
-        "nota": "Accesso con Primordio: vale anche nei lanci di Magick, se dopo la soglia ti restano almeno 2 dadi."
+        "nota": "se ti sei preparato, nel lancio di Magick non puoi subire ostacoli"
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -1960,6 +2077,85 @@ export const POTERI = Object.freeze([
     }
   },
   {
+    "id": "malocchio",
+    "spheres": [
+      "entropy"
+    ],
+    "name": "Malocchio",
+    "dot": 5,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (3 Quintessenza): Maledici chi vedi: gli infliggi una Condizione a tua scelta (Sfortunato, Muto, Rotto etc..), e non passa da sola. Resta finché non fa la cosa che hai scelto per scioglierla (chiederti scusa, restituire quello che ha preso, mantenere un giuramento etc..), o finché non la sciogli tu. La cosa la dici al Narratore, e deve essere plausibile: una cosa che può fare davvero. Se la sua soglia (fisica, mentale o sociale, secondo la Condizione) è più alta dei poteri che conosci in Entropia, paghi 1 Quintessenza in più per ogni punto di differenza.\n\nEffetto passivo (Sempre): Quando qualcuno ti infligge una Condizione (una maledizione, una paura, un veleno etc..), la prende anche lui, se la sua soglia (fisica, mentale o sociale, secondo la Condizione) è pari o più bassa dei poteri che conosci in Entropia.",
+    "attivo": "Maledici chi vedi: gli infliggi una Condizione a tua scelta (Sfortunato, Muto, Rotto etc..), e non passa da sola. Resta finché non fa la cosa che hai scelto per scioglierla (chiederti scusa, restituire quello che ha preso, mantenere un giuramento etc..), o finché non la sciogli tu. La cosa la dici al Narratore, e deve essere plausibile: una cosa che può fare davvero. Se la sua soglia (fisica, mentale o sociale, secondo la Condizione) è più alta dei poteri che conosci in Entropia, paghi 1 Quintessenza in più per ogni punto di differenza.",
+    "passivo": "Quando qualcuno ti infligge una Condizione (una maledizione, una paura, un veleno etc..), la prende anche lui, se la sua soglia (fisica, mentale o sociale, secondo la Condizione) è pari o più bassa dei poteri che conosci in Entropia.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "3 Quintessenza",
+    "costValue": 3,
+    "uses": null,
+    "paradox": "Basso rischio in tutte e due le forme.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Entropia",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 4
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "3 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": null
+  },
+  {
+    "id": "era-scritto",
+    "spheres": [
+      "entropy"
+    ],
+    "name": "Era scritto",
+    "dot": 5,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (da 1 a 7 Quintessenza): Scegli una cosa che deve succedere entro la sessione (un incontro, una lettera che arriva, un crollo etc..). Il Narratore ti dice quanto pesa sulla trama e sull'ambientazione, da 1 a 7 come un Ambito: se paghi tanta Quintessenza, succede.\n\nEffetto passivo (Sempre): Senti i nodi del destino: le cose che devono succedere, e che nessuno può togliere. Quando ne incontri uno (una persona, un luogo, un evento etc..), il Narratore te lo dice.",
+    "attivo": "Scegli una cosa che deve succedere entro la sessione (un incontro, una lettera che arriva, un crollo etc..). Il Narratore ti dice quanto pesa sulla trama e sull'ambientazione, da 1 a 7 come un Ambito: se paghi tanta Quintessenza, succede.",
+    "passivo": "Senti i nodi del destino: le cose che devono succedere, e che nessuno può togliere. Quando ne incontri uno (una persona, un luogo, un evento etc..), il Narratore te lo dice.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "da 1 a 7 Quintessenza",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Entropia",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 4
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "da 1 a 7 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 7
+    }
+  },
+  {
     "id": "a-stordire",
     "spheres": [
       "forces"
@@ -2310,27 +2506,25 @@ export const POTERI = Object.freeze([
   {
     "id": "colpo-decisivo",
     "spheres": [
-      "forces"
+      "forces",
+      "entropy"
     ],
     "name": "Colpo decisivo",
     "dot": 5,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione dichiari il colpo decisivo: se va a segno, i nemici rimasti si arrendono o fuggono.",
-    "attivo": "Una volta per sessione dichiari il colpo decisivo: se va a segno, i nemici rimasti si arrendono o fuggono.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Quintessenza pari alla distanza dalla sua soglia fisica, almeno 1): Dichiari il colpo prima di colpire, e paghi tanta Quintessenza quanta è la distanza fra la sua soglia fisica e i poteri che conosci in Forza o in Entropia, almeno 1. Il colpo va a segno da solo: non si schiva e non si para. Conta solo la sua armatura, se ce l'ha.\n\nEffetto passivo (Sempre): Le tue Specialità di Mira e di Mischia valgono doppio: nei tiri in cui contano, ti danno il doppio dei dadi.",
+    "attivo": "Dichiari il colpo prima di colpire, e paghi tanta Quintessenza quanta è la distanza fra la sua soglia fisica e i poteri che conosci in Forza o in Entropia, almeno 1. Il colpo va a segno da solo: non si schiva e non si para. Conta solo la sua armatura, se ce l'ha.",
+    "passivo": "Le tue Specialità di Mira e di Mischia valgono doppio: nei tiri in cui contano, ti danno il doppio dei dadi.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Finisce qui.»",
-    "cost": "",
+    "cost": "Quintessenza pari alla distanza dalla sua soglia fisica, almeno 1",
     "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
     "formula": "danneggiare",
     "formulaName": "Danneggiare",
     "link": "tavolo",
@@ -2342,11 +2536,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 4
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Quintessenza pari alla distanza dalla sua soglia fisica, almeno 1",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
   },
   {
     "id": "baricentro",
@@ -2420,6 +2621,47 @@ export const POTERI = Object.freeze([
     ],
     "rifatto": true,
     "costoAttivo": "1 Quintessenza ogni 2 dadi",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "carica",
+    "spheres": [
+      "forces"
+    ],
+    "name": "Carica",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza, più 1 a gradino): Il colpo va tirato come sempre, e se va a segno paghi: lo scagli lontano, fino a Portata 2 (l'altro capo della stanza), e per ogni Quintessenza in più un gradino di Portata in più (un tiro di pistola, la strada). Se sbatte contro un muro, un'auto o una colonna prende tanti danni in più quanti sono i poteri che conosci in Forza; se finisce addosso a qualcuno, li prende anche lui.\n\nEffetto passivo (Sempre): Quando ti muovi e colpisci nello stesso turno, chi colpisci finisce Atterrato (1 dado in meno nei tiri fisici, finché non si rialza). E travolgi chi ti sta sulla strada: finiscono Atterrati anche loro.",
+    "attivo": "Il colpo va tirato come sempre, e se va a segno paghi: lo scagli lontano, fino a Portata 2 (l'altro capo della stanza), e per ogni Quintessenza in più un gradino di Portata in più (un tiro di pistola, la strada). Se sbatte contro un muro, un'auto o una colonna prende tanti danni in più quanti sono i poteri che conosci in Forza; se finisce addosso a qualcuno, li prende anche lui.",
+    "passivo": "Quando ti muovi e colpisci nello stesso turno, chi colpisci finisce Atterrato (1 dado in meno nei tiri fisici, finché non si rialza). E travolgi chi ti sta sulla strada: finiscono Atterrati anche loro.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza, più 1 a gradino",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Volgare effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Forza",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza, più 1 a gradino",
     "cadenzaPassivo": "Sempre",
     "costoVariabile": {
       "min": 1,
@@ -2622,6 +2864,81 @@ export const POTERI = Object.freeze([
     "costoVariabile": null
   },
   {
+    "id": "a-grandi-balzi",
+    "spheres": [
+      "forces"
+    ],
+    "name": "A grandi balzi",
+    "dot": 1,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Quintessenza pari alla Portata): Copri una grande distanza in pochi minuti, di corsa e a balzi. Paghi tanta Quintessenza quanto il livello di Portata, nella lettura narrativa: 2 nei dintorni (in fondo al quartiere), 3 lontano (l'altra parte della città), 4 molto lontano (il paese vicino) etc..\n\nEffetto passivo (Sempre): Ti muovi come se il peso contasse poco: salti lunghi, scatti larghi, ti stacchi appena da terra (levitare di poco, non volare). Nei tiri fisici di movimento (correre, saltare, arrampicarti, schivare etc..) hai tanti dadi in più quanti sono i poteri che conosci in Forza.",
+    "attivo": "Copri una grande distanza in pochi minuti, di corsa e a balzi. Paghi tanta Quintessenza quanto il livello di Portata, nella lettura narrativa: 2 nei dintorni (in fondo al quartiere), 3 lontano (l'altra parte della città), 4 molto lontano (il paese vicino) etc..",
+    "passivo": "Ti muovi come se il peso contasse poco: salti lunghi, scatti larghi, ti stacchi appena da terra (levitare di poco, non volare). Nei tiri fisici di movimento (correre, saltare, arrampicarti, schivare etc..) hai tanti dadi in più quanti sono i poteri che conosci in Forza.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "Quintessenza pari alla Portata",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Volgare se qualcuno guarda, in tutte e due le forme.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Forza",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": null,
+    "rifatto": true,
+    "costoAttivo": "Quintessenza pari alla Portata",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
+  },
+  {
+    "id": "come-una-foglia",
+    "spheres": [
+      "forces"
+    ],
+    "name": "Come una foglia",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza): Con la tua reazione (ne hai una per turno) annulli i danni di un urto che stai per prendere (un pugno, una caduta, un'auto che ti investe etc..). Vale solo per l'urto: elettricità, fuoco e simili passano.\n\nEffetto passivo (Sempre): Riduci i danni d'urto (un pugno, una caduta, un'auto che ti investe etc..) di tanti punti quanti sono i poteri che conosci in Forza.",
+    "attivo": "Con la tua reazione (ne hai una per turno) annulli i danni di un urto che stai per prendere (un pugno, una caduta, un'auto che ti investe etc..). Vale solo per l'urto: elettricità, fuoco e simili passano.",
+    "passivo": "Riduci i danni d'urto (un pugno, una caduta, un'auto che ti investe etc..) di tanti punti quanti sono i poteri che conosci in Forza.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "2 Quintessenza",
+    "costValue": 2,
+    "uses": null,
+    "paradox": "Volgare effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Forza",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": null
+  },
+  {
     "id": "luci-e-ombre",
     "spheres": [
       "forces"
@@ -2630,9 +2947,9 @@ export const POTERI = Object.freeze([
     "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo (Azione, una volta per sessione): Con la luce infliggi una Condizione a chi vuoi fra quelli che vedi (si aggiornerà a catena col rifacimento delle Condizioni), oppure togli tutta la luce da un ambiente e lo lasci al buio completo, per la scena.\n\nEffetto passivo (Sempre): Muovi come vuoi la luce e le ombre della stanza in cui sei: illumini quello che vuoi far vedere e metti in ombra quello che vuoi nascondere (un volto, un'uscita, un'arma etc..).",
-    "attivo": "Con la luce infliggi una Condizione a chi vuoi fra quelli che vedi (si aggiornerà a catena col rifacimento delle Condizioni), oppure togli tutta la luce da un ambiente e lo lasci al buio completo, per la scena.",
-    "passivo": "Muovi come vuoi la luce e le ombre della stanza in cui sei: illumini quello che vuoi far vedere e metti in ombra quello che vuoi nascondere (un volto, un'uscita, un'arma etc..).",
+    "text": "Effetto attivo (Azione, una volta per sessione): Crei zone di buio nella stanza in cui sei (un angolo, una porta, metà della sala, tutta la stanza), e restano fino a fine scena. Chi sta dentro è come Cieco: non vede, i tiri che passano dagli occhi (mirare, cercare, leggere, riconoscere) falliscono, e si muove toccando o guidato. Non è una Condizione che gli infliggi: finisce appena esce dal buio. Oppure, con la luce, abbagli chi vuoi fra quelli che vedi: è Abbagliato fino a fine scena.\n\nEffetto passivo (Sempre): Muovi come vuoi la luce e le ombre della stanza in cui sei: illumini quello che vuoi far vedere e metti in ombra quello che vuoi nascondere (un volto, un'uscita, un'arma etc..). Quando le ombre ti aiutano in un tiro (il volto in ombra mentre minacci, la luce bassa dove stai per farti notare di meno etc..), il Narratore può darti un vantaggio, di solito 2 dadi in più.",
+    "attivo": "Crei zone di buio nella stanza in cui sei (un angolo, una porta, metà della sala, tutta la stanza), e restano fino a fine scena. Chi sta dentro è come Cieco: non vede, i tiri che passano dagli occhi (mirare, cercare, leggere, riconoscere) falliscono, e si muove toccando o guidato. Non è una Condizione che gli infliggi: finisce appena esce dal buio. Oppure, con la luce, abbagli chi vuoi fra quelli che vedi: è Abbagliato fino a fine scena.",
+    "passivo": "Muovi come vuoi la luce e le ombre della stanza in cui sei: illumini quello che vuoi far vedere e metti in ombra quello che vuoi nascondere (un volto, un'uscita, un'arma etc..). Quando le ombre ti aiutano in un tiro (il volto in ombra mentre minacci, la luce bassa dove stai per farti notare di meno etc..), il Narratore può darti un vantaggio, di solito 2 dadi in più.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
@@ -2657,6 +2974,126 @@ export const POTERI = Object.freeze([
     "costoAttivo": "Azione, una volta per sessione",
     "cadenzaPassivo": "Sempre",
     "costoVariabile": null
+  },
+  {
+    "id": "suoni-e-silenzi",
+    "spheres": [
+      "forces"
+    ],
+    "name": "Suoni e silenzi",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Per la scena manipoli il suono e ottieni quello che vuoi (un silenzio che non lascia uscire niente, una voce che non c'è, un rumore lontano etc..), e finché dura lo cambi: imiti voci, sposti rumori, spegni e riaccendi. Fin dove arrivi lo dicono i poteri che conosci in Forza: Area, Portata e Precisione fino a quel numero (con 3 poteri un quartiere, un tiro di pistola, una voce sola in mezzo alla folla).\n\nEffetto passivo (Sempre): Controlli sempre i suoni che fai: passi che non si sentono, la voce che arriva in fondo alla sala o solo all'orecchio di chi vuoi. Nei tiri dove conta (muoverti di nascosto con Criminalità, farti sentire da una folla, sussurrare a uno solo etc..) hai 2 dadi in più.",
+    "attivo": "Per la scena manipoli il suono e ottieni quello che vuoi (un silenzio che non lascia uscire niente, una voce che non c'è, un rumore lontano etc..), e finché dura lo cambi: imiti voci, sposti rumori, spegni e riaccendi. Fin dove arrivi lo dicono i poteri che conosci in Forza: Area, Portata e Precisione fino a quel numero (con 3 poteri un quartiere, un tiro di pistola, una voce sola in mezzo alla folla).",
+    "passivo": "Controlli sempre i suoni che fai: passi che non si sentono, la voce che arriva in fondo alla sala o solo all'orecchio di chi vuoi. Nei tiri dove conta (muoverti di nascosto con Criminalità, farti sentire da una folla, sussurrare a uno solo etc..) hai 2 dadi in più.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza",
+    "costValue": 1,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Forza",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": null
+  },
+  {
+    "id": "meteorologo",
+    "spheres": [
+      "forces"
+    ],
+    "name": "Meteorologo",
+    "dot": 3,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Quintessenza secondo l'Area): Decidi il tempo intorno a te, e come si svolge. Paghi Quintessenza pari al livello d'Area che copri.\n\nEffetto passivo (Sempre): Sai sempre come va il tempo. Una volta per scena lo cambi di un passo intorno a te, secondo quello che c'è: dal nuvolo alla pioggia, o a un po' di sole; dalla pioggia al nuvolo etc..",
+    "attivo": "Decidi il tempo intorno a te, e come si svolge. Paghi Quintessenza pari al livello d'Area che copri.",
+    "passivo": "Sai sempre come va il tempo. Una volta per scena lo cambi di un passo intorno a te, secondo quello che c'è: dal nuvolo alla pioggia, o a un po' di sole; dalla pioggia al nuvolo etc..",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "Quintessenza secondo l'Area",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo (Volgare se il tempo è impossibile per la stagione, come la neve d'estate), basso rischio effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Forza",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Quintessenza secondo l'Area",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
+  },
+  {
+    "id": "amico-della-gravita",
+    "spheres": [
+      "forces"
+    ],
+    "name": "Amico della gravità",
+    "dot": 4,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza per livello d'Area o di Bersagli): Decidi tu la gravità in un'area, o su dei bersagli, e tutto si comporta di conseguenza. Paghi 1 Quintessenza per ogni livello d'Area, o di Bersagli.\n\nEffetto passivo (Sempre): La gravità su di te vale solo se vuoi, e decidi tu verso dove tira: così cammini e ti muovi dove di solito non potresti (una parete, un soffitto etc..). Non la rallenti, ne cambi il verso: a seconda di come la usi, puoi andare molto veloce.",
+    "attivo": "Decidi tu la gravità in un'area, o su dei bersagli, e tutto si comporta di conseguenza. Paghi 1 Quintessenza per ogni livello d'Area, o di Bersagli.",
+    "passivo": "La gravità su di te vale solo se vuoi, e decidi tu verso dove tira: così cammini e ti muovi dove di solito non potresti (una parete, un soffitto etc..). Non la rallenti, ne cambi il verso: a seconda di come la usi, puoi andare molto veloce.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza per livello d'Area o di Bersagli",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Volgare effetto attivo, Volgare effetto passivo se qualcuno guarda.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Forza",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza per livello d'Area o di Bersagli",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "baratto",
@@ -3046,6 +3483,42 @@ export const POTERI = Object.freeze([
     "costValue": 1,
     "uses": null,
     "paradox": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Materia",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": null,
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": null
+  },
+  {
+    "id": "dentro-la-macchina",
+    "spheres": [
+      "matter"
+    ],
+    "name": "Dentro la macchina",
+    "dot": 1,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Finché tocchi un oggetto che contiene qualcosa (un libro, un fascicolo, un registro, una cassaforte etc..) ne sfogli il contenuto, come se lo leggessi in fretta, anche se è chiuso. Se lo lasci, quello che non ti sei segnato lo perdi. Con 1 Quintessenza in più lo leggi da cima a fondo, anche quello che è cifrato o nascosto. Un contenuto chiuso dalla Magick lo apri solo se la sua soglia non è più alta dei poteri che conosci in Materia.\nCon Forza: anche i congegni (un telefono, un computer, un'auto etc..): file, messaggi, l'ultima chiamata, l'ultima strada fatta, anche dietro una password.\n\nEffetto passivo (Sempre): Toccando un oggetto sai cos'è e a cosa serve, e se è chiuso o protetto: una serratura, un codice, un sigillo di Magick.",
+    "attivo": "Finché tocchi un oggetto che contiene qualcosa (un libro, un fascicolo, un registro, una cassaforte etc..) ne sfogli il contenuto, come se lo leggessi in fretta, anche se è chiuso. Se lo lasci, quello che non ti sei segnato lo perdi. Con 1 Quintessenza in più lo leggi da cima a fondo, anche quello che è cifrato o nascosto. Un contenuto chiuso dalla Magick lo apri solo se la sua soglia non è più alta dei poteri che conosci in Materia.\nCon Forza: anche i congegni (un telefono, un computer, un'auto etc..): file, messaggi, l'ultima chiamata, l'ultima strada fatta, anche dietro una password.",
+    "passivo": "Toccando un oggetto sai cos'è e a cosa serve, e se è chiuso o protetto: una serratura, un codice, un sigillo di Magick.",
+    "amalgama": "",
+    "amalgam": "forces",
+    "amalgams": [
+      "forces"
+    ],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza",
+    "costValue": 1,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
     "formula": null,
     "formulaName": "",
     "link": "",
@@ -3549,17 +4022,17 @@ export const POTERI = Object.freeze([
     ],
     "name": "Morale",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Finché sei in scena, a fine scena ogni compagno recupera 1 Volontà superficiale.",
-    "attivo": "",
-    "passivo": "Finché sei in scena, a fine scena ogni compagno recupera 1 Volontà superficiale.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (da 1 a 3 Quintessenza): Dai la carica: i compagni in scena, alla loro prossima azione, hanno 1 dado in più per ogni Quintessenza che paghi. Se non agiscono entro la fine della scena, il bonus si perde.\n\nEffetto passivo (Sempre): Finché i compagni sono in scena con te, ogni volta che prendono danni mentali ne prendono 1 in meno.",
+    "attivo": "Dai la carica: i compagni in scena, alla loro prossima azione, hanno 1 dado in più per ogni Quintessenza che paghi. Se non agiscono entro la fine della scena, il bonus si perde.",
+    "passivo": "Finché i compagni sono in scena con te, ogni volta che prendono danni mentali ne prendono 1 in meno.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Forza, ragazzi.»",
-    "cost": "",
+    "cost": "da 1 a 3 Quintessenza",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -3574,11 +4047,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "da 1 a 3 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 3
+    }
   },
   {
     "id": "pace",
@@ -3711,16 +4191,16 @@ export const POTERI = Object.freeze([
     "name": "Volontà prestata",
     "dot": 2,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Spendi 1 Volontà tua: un compagno ritira come se l'avesse spesa lui.",
-    "attivo": "Spendi 1 Volontà tua: un compagno ritira come se l'avesse spesa lui.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza per Volontà): Spendi Quintessenza al posto della Volontà, tua o di un compagno entro Portata 1, 1 per 1.\n\nEffetto passivo (Sempre): Quando un compagno entro Portata 1 da te spende Volontà, puoi spenderla tu al posto suo.",
+    "attivo": "Spendi Quintessenza al posto della Volontà, tua o di un compagno entro Portata 1, 1 per 1.",
+    "passivo": "Quando un compagno entro Portata 1 da te spende Volontà, puoi spenderla tu al posto suo.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Dai, riprova. Ci penso io.»",
-    "cost": "",
+    "cost": "1 Quintessenza per Volontà",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -3735,11 +4215,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza per Volontà",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "chiodo-fisso",
@@ -3748,18 +4235,18 @@ export const POTERI = Object.freeze([
     ],
     "name": "Chiodo fisso",
     "dot": 3,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: A inizio sessione scegli un obiettivo: la Volontà che spendi per lui ti torna a fine scena.",
-    "attivo": "",
-    "passivo": "A inizio sessione scegli un obiettivo: la Volontà che spendi per lui ti torna a fine scena.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Ignori una Condizione mentale (si aggiornerà a catena col rifacimento delle Condizioni) finché il Desiderio in più non è soddisfatto.\n\nEffetto passivo (A sessione nuova): A inizio sessione scegli un Desiderio in più e lo dichiari al Narratore: vale per recuperare Volontà, ma non per perderla. Se a fine sessione non l'hai soddisfatto, prendi 1 danno mentale aggravato, che non guarisce fino alla sessione dopo.",
+    "attivo": "Ignori una Condizione mentale (si aggiornerà a catena col rifacimento delle Condizioni) finché il Desiderio in più non è soddisfatto.",
+    "passivo": "A inizio sessione scegli un Desiderio in più e lo dichiari al Narratore: vale per recuperare Volontà, ma non per perderla. Se a fine sessione non l'hai soddisfatto, prendi 1 danno mentale aggravato, che non guarisce fino alla sessione dopo.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Non mollo finché non ce l'ho.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "guarire",
@@ -3772,10 +4259,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "A sessione nuova",
     "costoVariabile": null
   },
   {
@@ -3785,20 +4276,22 @@ export const POTERI = Object.freeze([
     ],
     "name": "Come da piano",
     "dot": 3,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Se il gruppo segue un piano che hai spiegato prima della scena, per quella scena ognuno ha 2 dadi in più nei tiri di Abilità.",
-    "attivo": "",
-    "passivo": "Se il gruppo segue un piano che hai spiegato prima della scena, per quella scena ognuno ha 2 dadi in più nei tiri di Abilità.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Quando qualcosa ostacola il piano, il Narratore ti dice come superarlo: ci avevi già pensato, e il modo ce l'hai pronto.\n\nEffetto passivo (Sempre): Se il gruppo accetta un piano che hai spiegato prima della scena, e lo segue, per quella scena ognuno ha 2 dadi in più nei tiri di Abilità.\nCon Primordio: quando un compagno lancia seguendo il piano, o le indicazioni che gli hai dato (il gesto, lo Strumento, le parole), prende il premio dell'Areté.",
+    "attivo": "Quando qualcosa ostacola il piano, il Narratore ti dice come superarlo: ci avevi già pensato, e il modo ce l'hai pronto.",
+    "passivo": "Se il gruppo accetta un piano che hai spiegato prima della scena, e lo segue, per quella scena ognuno ha 2 dadi in più nei tiri di Abilità.\nCon Primordio: quando un compagno lancia seguendo il piano, o le indicazioni che gli hai dato (il gesto, lo Strumento, le parole), prende il premio dell'Areté.",
     "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
+    "amalgam": "prime",
+    "amalgams": [
+      "prime"
+    ],
     "amalgamText": "",
     "flavor": "«Tutto come previsto.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
     "formula": "potenziare",
     "formulaName": "Potenziare",
     "link": "regola",
@@ -3811,54 +4304,18 @@ export const POTERI = Object.freeze([
         "on": "dice",
         "value": 2,
         "roll": "abilita",
-        "nota": "Se il gruppo segue un piano che hai spiegato prima della scena, per quella scena ognuno ha 2 dadi in più nei tiri di Abilità."
+        "nota": "per quella scena ognuno ha 2 dadi in più nei tiri di Abilità"
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "due-mosse-avanti",
-    "spheres": [
-      "mind"
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
     ],
-    "name": "Due mosse avanti",
-    "dot": 3,
-    "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per scena, prima che qualcuno agisca, il Narratore ti dice cosa farà, e agisci tu prima di lui.",
-    "attivo": "Una volta per scena, prima che qualcuno agisca, il Narratore ti dice cosa farà, e agisci tu prima di lui.",
-    "passivo": "",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Sapevo che l'avresti fatto.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "prevedere",
-    "formulaName": "Prevedere",
-    "link": "effetto",
-    "page": "Mente",
-    "hooks": [
-      "uso",
-      "narratore"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -3908,18 +4365,18 @@ export const POTERI = Object.freeze([
     ],
     "name": "Vedo il bluff",
     "dot": 3,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Nelle contese sociali tiri dopo l'avversario, sapendo il suo risultato, e puoi ritirarti senza perdere.",
-    "attivo": "",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Quando vinci una contesa sociale, l'avversario prende il doppio del danno sociale.\n\nEffetto passivo (Sempre): Nelle contese sociali tiri dopo l'avversario, sapendo il suo risultato, e puoi ritirarti senza perdere.",
+    "attivo": "Quando vinci una contesa sociale, l'avversario prende il doppio del danno sociale.",
     "passivo": "Nelle contese sociali tiri dopo l'avversario, sapendo il suo risultato, e puoi ritirarti senza perdere.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Stai bluffando.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "sapere",
@@ -3937,10 +4394,14 @@ export const POTERI = Object.freeze([
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -3951,21 +4412,18 @@ export const POTERI = Object.freeze([
     "name": "Alle strette",
     "dot": 4,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per scena, quando sai che un PNG ti mente e la sua Fermezza è più bassa dei poteri che conosci in Mente, senza tiro confessa o se ne va.",
-    "attivo": "Una volta per scena, quando sai che un PNG ti mente e la sua Fermezza è più bassa dei poteri che conosci in Mente, senza tiro confessa o se ne va.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): In un tiro mentale contro un nemico vinci in automatico, se la sua soglia è pari o più bassa dei poteri che conosci in Mente.\n\nEffetto passivo (Sempre): Percepisci quanto vale la soglia di un nemico nei tiri mentali, e le difese o le resistenze che ci ha.",
+    "attivo": "In un tiro mentale contro un nemico vinci in automatico, se la sua soglia è pari o più bassa dei poteri che conosci in Mente.",
+    "passivo": "Percepisci quanto vale la soglia di un nemico nei tiri mentali, e le difese o le resistenze che ci ha.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Adesso dimmi la verità.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
+    "cost": "1 Quintessenza",
+    "costValue": 1,
+    "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "condizionare",
     "formulaName": "Condizionare",
@@ -3977,10 +4435,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -3991,21 +4453,18 @@ export const POTERI = Object.freeze([
     "name": "Distrazione",
     "dot": 4,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per scena, quando qualcuno sta per tirare, un tuo tiro sociale riuscito gli fa perdere il tiro.",
-    "attivo": "Una volta per scena, quando qualcuno sta per tirare, un tuo tiro sociale riuscito gli fa perdere il tiro.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Quando qualcuno sta per tirare, gli fai perdere il tiro, se i poteri che conosci in Mente sono più della sua soglia sociale o mentale.\n\nEffetto passivo (Sempre): Disturbi di continuo quello che hai intorno, con gesti, parole o come scegli tu, e la confusione distrae gli altri: chi ti sta intorno ha 1 dado in meno nei tiri che chiedono attenzione.",
+    "attivo": "Quando qualcuno sta per tirare, gli fai perdere il tiro, se i poteri che conosci in Mente sono più della sua soglia sociale o mentale.",
+    "passivo": "Disturbi di continuo quello che hai intorno, con gesti, parole o come scegli tu, e la confusione distrae gli altri: chi ti sta intorno ha 1 dado in meno nei tiri che chiedono attenzione.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Ehi, guarda là!»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
+    "cost": "1 Quintessenza",
+    "costValue": 1,
+    "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "confondere",
     "formulaName": "Confondere",
@@ -4020,14 +4479,18 @@ export const POTERI = Object.freeze([
         "mode": "attivo",
         "on": "nota",
         "roll": "abilita",
-        "nota": "Una volta per scena, quando qualcuno sta per tirare, un tuo tiro sociale riuscito gli fa perdere il tiro."
+        "nota": "Quando qualcuno sta per tirare, gli fai perdere il tiro, se i poteri che conosci in Mente sono più della sua soglia sociale o mentale"
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -4037,20 +4500,20 @@ export const POTERI = Object.freeze([
     ],
     "name": "Parole che pesano",
     "dot": 4,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Un tuo tiro sociale riuscito può infliggere una Condizione mentale (si aggiornerà a catena col rifacimento delle Condizioni), senza Magick.",
-    "attivo": "",
-    "passivo": "Un tuo tiro sociale riuscito può infliggere una Condizione mentale (si aggiornerà a catena col rifacimento delle Condizioni), senza Magick.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (da 1 a 3 Quintessenza): Quando lanci un effetto di Magick, gli aggiungi una Condizione mentale che abbia senso con l'effetto (si aggiornerà a catena col rifacimento delle Condizioni). Quanto paghi lo dice il Narratore, secondo la Condizione.\n\nEffetto passivo (Sempre): Un tuo tiro sociale riuscito, senza Magick, può infliggere una Condizione mentale con un grado in più (si aggiornerà a catena col rifacimento delle Condizioni).",
+    "attivo": "Quando lanci un effetto di Magick, gli aggiungi una Condizione mentale che abbia senso con l'effetto (si aggiornerà a catena col rifacimento delle Condizioni). Quanto paghi lo dice il Narratore, secondo la Condizione.",
+    "passivo": "Un tuo tiro sociale riuscito, senza Magick, può infliggere una Condizione mentale con un grado in più (si aggiornerà a catena col rifacimento delle Condizioni).",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Le parole fanno male.»",
-    "cost": "",
+    "cost": "da 1 a 3 Quintessenza",
     "costValue": 0,
     "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
     "formula": "suggestionare",
     "formulaName": "Suggestionare",
     "link": "effetto",
@@ -4063,15 +4526,22 @@ export const POTERI = Object.freeze([
       {
         "on": "nota",
         "roll": "abilita",
-        "nota": "Un tuo tiro sociale riuscito può infliggere una Condizione mentale (si aggiornerà a catena col rifacimento delle Condizioni), senza Magick."
+        "nota": "Un tuo tiro sociale riuscito, senza Magick, può infliggere una Condizione mentale con un grado in più"
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "da 1 a 3 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 3
+    }
   },
   {
     "id": "goccia-a-goccia",
@@ -4081,16 +4551,16 @@ export const POTERI = Object.freeze([
     "name": "Goccia a goccia",
     "dot": 5,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Con un PNG che hai incontrato in tre scene diverse, un tiro sociale riuscito lo cambia per sempre: diventa amico, alleato o debitore.",
-    "attivo": "Con un PNG che hai incontrato in tre scene diverse, un tiro sociale riuscito lo cambia per sempre: diventa amico, alleato o debitore.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (da 1 a 3 Quintessenza): In un tiro sociale hai 1 dado in più per ogni Quintessenza che paghi.\n\nEffetto passivo (Sempre): Ogni scena in cui parli con una persona senza farle danni, perché non sta perdendo un conflitto con te, ti dà 1 dado in più nei tiri sociali verso di lei e verso chi c'era. I dadi si sommano scena dopo scena.",
+    "attivo": "In un tiro sociale hai 1 dado in più per ogni Quintessenza che paghi.",
+    "passivo": "Ogni scena in cui parli con una persona senza farle danni, perché non sta perdendo un conflitto con te, ti dà 1 dado in più nei tiri sociali verso di lei e verso chi c'era. I dadi si sommano scena dopo scena.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Piano piano, ti convinco.»",
-    "cost": "",
+    "cost": "da 1 a 3 Quintessenza",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -4106,15 +4576,28 @@ export const POTERI = Object.freeze([
       {
         "on": "nota",
         "roll": "abilita",
-        "nota": "Con un PNG che hai incontrato in tre scene diverse, un tiro sociale riuscito lo cambia per sempre: diventa amico, alleato o debitore."
+        "nota": "ti dà 1 dado in più nei tiri sociali verso di lei e verso chi c'era"
+      },
+      {
+        "mode": "attivo",
+        "on": "nota",
+        "roll": "abilita",
+        "nota": "In un tiro sociale hai 1 dado in più per ogni Quintessenza che paghi"
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 4
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "da 1 a 3 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 3
+    }
   },
   {
     "id": "il-mio-disastro",
@@ -4124,22 +4607,19 @@ export const POTERI = Object.freeze([
     "name": "Il mio disastro",
     "dot": 1,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione descrivi tu come scoppia un tuo dado rosso, e il racconto non deve farti comodo.",
-    "attivo": "Una volta per sessione descrivi tu come scoppia un tuo dado rosso, e il racconto non deve farti comodo.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Il Paradosso in più che prendi): Peggiori lo scoppio prendendo Paradosso in più, e in cambio scegli tu, dal menù del Paradosso, come va.\n\nEffetto passivo (Sempre): Quando il Paradosso ti scoppia, puoi chiedere al Narratore di raccontarlo tu: decidi cosa ti succede, o almeno proponi quello che puoi subire.",
+    "attivo": "Peggiori lo scoppio prendendo Paradosso in più, e in cambio scegli tu, dal menù del Paradosso, come va.",
+    "passivo": "Quando il Paradosso ti scoppia, puoi chiedere al Narratore di raccontarlo tu: decidi cosa ti succede, o almeno proponi quello che puoi subire.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Almeno il disastro lo scelgo io.»",
-    "cost": "",
+    "cost": "Il Paradosso in più che prendi",
     "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Lavora sul Contraccolpo, non ne fa di suo.",
+    "uses": null,
+    "paradox": "Lavora sul Paradosso, non ne fa di suo; nell'attivo il Paradosso in più è il prezzo.",
     "formula": "proteggere",
     "formulaName": "Proteggere",
     "link": "tavolo",
@@ -4151,17 +4631,16 @@ export const POTERI = Object.freeze([
     ],
     "effects": [
       {
-        "mode": "attivo",
         "on": "nota",
         "roll": "magick",
-        "nota": "Una volta per sessione descrivi tu come scoppia un tuo dado rosso, e il racconto non deve farti comodo."
+        "nota": "Quando il Paradosso ti scoppia, puoi chiedere al Narratore di raccontarlo tu"
       }
     ],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "Il Paradosso in più che prendi",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -4171,19 +4650,22 @@ export const POTERI = Object.freeze([
     ],
     "name": "Niente di perso",
     "dot": 1,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando il lancio con l'Armonia dei compagni fallisce, i dadi tornano a chi te li ha dati, per un suo tiro nella scena.",
-    "attivo": "",
-    "passivo": "Quando il lancio con l'Armonia dei compagni fallisce, i dadi tornano a chi te li ha dati, per un suo tiro nella scena.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza in più, una volta per scena): Quando paghi un lancio in Quintessenza, puoi pagarne 1 in più: se il lancio va male, ti torna tutta la Quintessenza che hai speso, come se non l'avessi mai usata.\n\nEffetto passivo (Sempre): Quando lanci con l'Armonia dei compagni, o dai la tua Armonia a un compagno, e il lancio fallisce, i dadi non vanno persi: i compagni li hanno per il loro prossimo lancio di Magick.",
+    "attivo": "Quando paghi un lancio in Quintessenza, puoi pagarne 1 in più: se il lancio va male, ti torna tutta la Quintessenza che hai speso, come se non l'avessi mai usata.",
+    "passivo": "Quando lanci con l'Armonia dei compagni, o dai la tua Armonia a un compagno, e il lancio fallisce, i dadi non vanno persi: i compagni li hanno per il loro prossimo lancio di Magick.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Non l'avete sprecata.»",
-    "cost": "",
+    "cost": "1 Quintessenza in più, una volta per scena",
     "costValue": 0,
-    "uses": null,
+    "uses": {
+      "per": "scena",
+      "n": 1
+    },
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "spostare",
     "formulaName": "Spostare",
@@ -4196,10 +4678,13 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza in più, una volta per scena",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "pulito",
@@ -4208,20 +4693,20 @@ export const POTERI = Object.freeze([
     ],
     "name": "Pulito",
     "dot": 1,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Se chiudi la sessione a Paradosso zero, la sessione dopo cominci con 2 Quintessenza in più.",
-    "attivo": "",
-    "passivo": "Se chiudi la sessione a Paradosso zero, la sessione dopo cominci con 2 Quintessenza in più.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza per Paradosso): Ti togli Paradosso: 1 punto per ogni Quintessenza che spendi.\n\nEffetto passivo (A sessione nuova): Se chiudi la sessione senza Paradosso, la sessione dopo cominci con 5 Quintessenza.",
+    "attivo": "Ti togli Paradosso: 1 punto per ogni Quintessenza che spendi.",
+    "passivo": "Se chiudi la sessione senza Paradosso, la sessione dopo cominci con 5 Quintessenza.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Neanche una macchia.»",
-    "cost": "",
+    "cost": "1 Quintessenza per Paradosso",
     "costValue": 0,
     "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "paradox": "Lavora sul Paradosso, non ne fa di suo.",
     "formula": "riparare",
     "formulaName": "Riparare",
     "link": "regola",
@@ -4234,10 +4719,13 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza per Paradosso",
+    "cadenzaPassivo": "A sessione nuova",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "risarcimento",
@@ -4246,20 +4734,20 @@ export const POTERI = Object.freeze([
     ],
     "name": "Risarcimento",
     "dot": 1,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando il Narratore spende la Scheda del Paradosso contro di te, prendi 1 Quintessenza.",
-    "attivo": "",
-    "passivo": "Quando il Narratore spende la Scheda del Paradosso contro di te, prendi 1 Quintessenza.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza per punto): Quando il Narratore spende punti Paradosso contro di te, ogni Quintessenza che paghi gliene annulla uno: la sua mossa gli costa di più.\n\nEffetto passivo (Sempre): Quando il Narratore spende contro di te più di 5 punti Paradosso in una volta, prendi 1 Quintessenza.",
+    "attivo": "Quando il Narratore spende punti Paradosso contro di te, ogni Quintessenza che paghi gliene annulla uno: la sua mossa gli costa di più.",
+    "passivo": "Quando il Narratore spende contro di te più di 5 punti Paradosso in una volta, prendi 1 Quintessenza.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Almeno pagami.»",
-    "cost": "",
+    "cost": "1 Quintessenza per punto",
     "costValue": 0,
     "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "paradox": "Lavora sul Paradosso, non ne fa di suo.",
     "formula": "drenare",
     "formulaName": "Drenare",
     "link": "regola",
@@ -4272,10 +4760,13 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza per punto",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "strumento-di-fortuna",
@@ -4331,17 +4822,20 @@ export const POTERI = Object.freeze([
     "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Passi 1 Quintessenza a un compagno in vista come azione libera; se conosci 3 poteri di Primordio ne passi quanti vuoi, ma è un'azione.\n\nEffetto passivo: Puoi spendere la tua Quintessenza nei lanci di un compagno che tocchi, dentro il suo tetto.",
-    "attivo": "Passi 1 Quintessenza a un compagno in vista come azione libera; se conosci 3 poteri di Primordio ne passi quanti vuoi, ma è un'azione.",
-    "passivo": "Puoi spendere la tua Quintessenza nei lanci di un compagno che tocchi, dentro il suo tetto.",
+    "text": "Effetto attivo (Il costo del potere, una volta per scena): Paghi tu il costo del potere di un compagno.\n\nEffetto passivo (Sempre): Puoi passare la tua Quintessenza a un compagno.",
+    "attivo": "Paghi tu il costo del potere di un compagno.",
+    "passivo": "Puoi passare la tua Quintessenza a un compagno.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Tieni, ti serve più che a me.»",
-    "cost": "",
+    "cost": "Il costo del potere, una volta per scena",
     "costValue": 0,
-    "uses": null,
+    "uses": {
+      "per": "scena",
+      "n": 1
+    },
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "spostare",
     "formulaName": "Spostare",
@@ -4356,9 +4850,9 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "Il costo del potere, una volta per scena",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -4368,20 +4862,20 @@ export const POTERI = Object.freeze([
     ],
     "name": "Anche a mani nude",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Spendi Quintessenza anche nei tiri di Abilità: ogni punto è un dado, dentro il tetto.",
-    "attivo": "",
-    "passivo": "Spendi Quintessenza anche nei tiri di Abilità: ogni punto è un dado, dentro il tetto.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Un tuo colpo senza armi fa solo danni aggravati.\n\nEffetto passivo (Sempre): Finché hai almeno 3 Quintessenza, i tuoi colpi senza armi fanno danni pari ai poteri che conosci in Primordio.",
+    "attivo": "Un tuo colpo senza armi fa solo danni aggravati.",
+    "passivo": "Finché hai almeno 3 Quintessenza, i tuoi colpi senza armi fanno danni pari ai poteri che conosci in Primordio.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«La Quintessenza non serve solo alla Magick.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "paradox": "Volgare effetto attivo, nessuno effetto passivo.",
     "formula": "potenziare",
     "formulaName": "Potenziare",
     "link": "regola",
@@ -4390,40 +4884,42 @@ export const POTERI = Object.freeze([
       "tiro",
       "quintessenza"
     ],
-    "effects": [
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
       {
-        "on": "quintessenceOnSkills",
-        "roll": "abilita",
-        "nota": "Spendi Quintessenza anche nei tiri di Abilità: ogni punto è un dado, dentro il tetto."
+        "numero": 1
       }
     ],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
     "id": "bussola-comune",
     "spheres": [
-      "prime"
+      "prime",
+      "mind"
     ],
     "name": "Bussola comune",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando un compagno rispetta la sua Bussola, la tua si riarma. Se avete una credenza in comune, prendi anche tu 1 Quintessenza.",
-    "attivo": "",
-    "passivo": "Quando un compagno rispetta la sua Bussola, la tua si riarma. Se avete una credenza in comune, prendi anche tu 1 Quintessenza.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Una volta per sessione): Scegli una Convinzione, tua o di un compagno: per la scena l'avete tutti e due, nel bene e nel male, e rispettarla vi dà dadi e Quintessenza come sempre. Più di tre Convinzioni non se ne hanno: chi ne ha già tre condivide una delle sue.\n\nEffetto passivo (Sempre): Quando un compagno rispetta una sua Convinzione, ne condividi il bonus di dadi e prendi anche tu 1 Quintessenza. Quando ne rispetti una tu, vale lo stesso per lui.",
+    "attivo": "Scegli una Convinzione, tua o di un compagno: per la scena l'avete tutti e due, nel bene e nel male, e rispettarla vi dà dadi e Quintessenza come sempre. Più di tre Convinzioni non se ne hanno: chi ne ha già tre condivide una delle sue.",
+    "passivo": "Quando un compagno rispetta una sua Convinzione, ne condividi il bonus di dadi e prendi anche tu 1 Quintessenza. Quando ne rispetti una tu, vale lo stesso per lui.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Andiamo nella stessa direzione.»",
-    "cost": "",
+    "cost": "Una volta per sessione",
     "costValue": 0,
-    "uses": null,
+    "uses": {
+      "per": "sessione",
+      "n": 1
+    },
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "benedire-e-maledire",
     "formulaName": "Benedire e Maledire",
@@ -4435,10 +4931,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Una volta per sessione",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -4448,23 +4948,20 @@ export const POTERI = Object.freeze([
     ],
     "name": "Cambiavalute",
     "dot": 2,
-    "type": "",
-    "kind": "",
-    "text": "Effetto Amalgama: Accesso con Mente: una volta per scena cambi 1 Volontà in 1 Quintessenza, o il contrario.\nAccesso con Vita: una volta per scena cambi 1 livello di Salute in 1 Quintessenza, e la casella resta bloccata dal Paradosso.",
-    "attivo": "",
-    "passivo": "",
-    "amalgama": "Con Mente: una volta per scena cambi 1 Volontà in 1 Quintessenza, o il contrario.\nCon Vita: una volta per scena cambi 1 livello di Salute in 1 Quintessenza, e la casella resta bloccata dal Paradosso.",
-    "amalgam": "mind",
-    "amalgams": [
-      "mind",
-      "life"
-    ],
-    "amalgamText": "Accesso con Mente: una volta per scena cambi 1 Volontà in 1 Quintessenza, o il contrario.\nAccesso con Vita: una volta per scena cambi 1 livello di Salute in 1 Quintessenza, e la casella resta bloccata dal Paradosso.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Il Sacrificio, una volta per sessione): Il danno aggravato che dai col Sacrificio non è paradossale: non resta bloccato.\n\nEffetto passivo (Sempre): Col Sacrificio, un danno aggravato ti dà 4 Quintessenza invece di 3.",
+    "attivo": "Il danno aggravato che dai col Sacrificio non è paradossale: non resta bloccato.",
+    "passivo": "Col Sacrificio, un danno aggravato ti dà 4 Quintessenza invece di 3.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Tutto ha il suo cambio.»",
-    "cost": "",
+    "cost": "Il Sacrificio, una volta per sessione",
     "costValue": 0,
     "uses": {
-      "per": "scena",
+      "per": "sessione",
       "n": 1
     },
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -4480,50 +4977,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "casa-dolce-casa",
-    "spheres": [
-      "mind",
-      "prime",
-      "spirit"
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
     ],
-    "name": "Casa dolce casa",
-    "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando torni al Santuario dopo una sessione passata fuori:\nAccesso con Primordio: recuperi la Quintessenza fino a 3.\nAccesso con Mente: recuperi tutta la Volontà.\nAccesso con Spirito: cancelli una Macchia.",
-    "attivo": "",
-    "passivo": "Quando torni al Santuario dopo una sessione passata fuori:\nAccesso con Primordio: recuperi la Quintessenza fino a 3.\nAccesso con Mente: recuperi tutta la Volontà.\nAccesso con Spirito: cancelli una Macchia.",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Casa, finalmente.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "riparare",
-    "formulaName": "Riparare",
-    "link": "regola",
-    "page": "Primordio",
-    "hooks": [
-      "quintessenza",
-      "salute",
-      "scena"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "Il Sacrificio, una volta per sessione",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -4533,20 +4994,20 @@ export const POTERI = Object.freeze([
     ],
     "name": "Coro",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: I dadi di Armonia che ricevi in un lancio valgono 1 più il numero di chi partecipa.",
-    "attivo": "",
-    "passivo": "I dadi di Armonia che ricevi in un lancio valgono 1 più il numero di chi partecipa.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Quando dai la tua Armonia a un compagno, conti come una persona in più.\n\nEffetto passivo (Sempre): Quando i compagni ti danno l'Armonia, hai 1 dado in più per ognuno di loro, dentro il tetto di 3.",
+    "attivo": "Quando dai la tua Armonia a un compagno, conti come una persona in più.",
+    "passivo": "Quando i compagni ti danno l'Armonia, hai 1 dado in più per ognuno di loro, dentro il tetto di 3.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Tutti insieme.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
-    "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "potenziare",
     "formulaName": "Potenziare",
     "link": "regola",
@@ -4558,14 +5019,18 @@ export const POTERI = Object.freeze([
       {
         "on": "nota",
         "roll": "magick",
-        "nota": "I dadi di Armonia che ricevi in un lancio valgono 1 più il numero di chi partecipa."
+        "nota": "Quando i compagni ti danno l'Armonia, hai 1 dado in più per ognuno di loro, dentro il tetto di 3"
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -4576,16 +5041,16 @@ export const POTERI = Object.freeze([
     "name": "Pila",
     "dot": 2,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Metti in un oggetto (una batteria, una pietra, un anello) Quintessenza fino ai poteri che conosci in Primordio, e la riprendi in un'altra scena.",
-    "attivo": "Metti in un oggetto (una batteria, una pietra, un anello) Quintessenza fino ai poteri che conosci in Primordio, e la riprendi in un'altra scena.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (La Quintessenza della pila): Paghi un costo in Quintessenza con quella della pila, invece che con la tua riserva.\n\nEffetto passivo (Sempre): Hai una scorta di Quintessenza in un oggetto (una batteria, una pietra, un anello etc..), che porti con te da una sessione all'altra: ci metti la tua Quintessenza, fino ai poteri che conosci in Primordio.",
+    "attivo": "Paghi un costo in Quintessenza con quella della pila, invece che con la tua riserva.",
+    "passivo": "Hai una scorta di Quintessenza in un oggetto (una batteria, una pietra, un anello etc..), che porti con te da una sessione all'altra: ci metti la tua Quintessenza, fino ai poteri che conosci in Primordio.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Tengo una scorta.»",
-    "cost": "",
+    "cost": "La Quintessenza della pila",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -4598,11 +5063,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "La Quintessenza della pila",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
   },
   {
     "id": "prendo-io",
@@ -4612,19 +5084,19 @@ export const POTERI = Object.freeze([
     "name": "Prendo io",
     "dot": 2,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Quando a un compagno scoppia un dado rosso, puoi prendere tu l'Ustione.",
-    "attivo": "Quando a un compagno scoppia un dado rosso, puoi prendere tu l'Ustione.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (L'Ustione che prendi): Quando il Paradosso scoppia a un alleato o a un compagno, prendi tu l'Ustione al posto suo, e i danni non sono paradossali.\n\nEffetto passivo (Sempre): Sai sempre quando il Paradosso scoppia, e cosa sta per fare a chi l'ha fatto scoppiare: l'idea che ha il Narratore.",
+    "attivo": "Quando il Paradosso scoppia a un alleato o a un compagno, prendi tu l'Ustione al posto suo, e i danni non sono paradossali.",
+    "passivo": "Sai sempre quando il Paradosso scoppia, e cosa sta per fare a chi l'ha fatto scoppiare: l'idea che ha il Narratore.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Lascia, prendo io.»",
-    "cost": "",
+    "cost": "L'Ustione che prendi",
     "costValue": 0,
     "uses": null,
-    "paradox": "Lavora sul Contraccolpo, non ne fa di suo.",
+    "paradox": "Lavora sul Paradosso, non ne fa di suo.",
     "formula": "proteggere",
     "formulaName": "Proteggere",
     "link": "effetto",
@@ -4636,77 +5108,38 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "tabu",
-    "spheres": [
-      "prime"
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
     ],
-    "name": "Tabù",
-    "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: A inizio sessione scegli un tabù: se lo rispetti fino a fine sessione prendi 3 Quintessenza, se lo rompi perdi 2 Volontà.\n\nEffetto Amalgama: Accesso con Mente: un tabù di condotta (non mentire, non alzare la voce, non chiedere aiuto).\nAccesso con Spirito: un tabù rituale (non toccare ferro, non mangiare carne, non varcare una soglia senza invito).",
-    "attivo": "",
-    "passivo": "A inizio sessione scegli un tabù: se lo rispetti fino a fine sessione prendi 3 Quintessenza, se lo rompi perdi 2 Volontà.",
-    "amalgama": "Con Mente: un tabù di condotta (non mentire, non alzare la voce, non chiedere aiuto).\nCon Spirito: un tabù rituale (non toccare ferro, non mangiare carne, non varcare una soglia senza invito).",
-    "amalgam": "mind",
-    "amalgams": [
-      "mind",
-      "spirit"
-    ],
-    "amalgamText": "Accesso con Mente: un tabù di condotta (non mentire, non alzare la voce, non chiedere aiuto).\nAccesso con Spirito: un tabù rituale (non toccare ferro, non mangiare carne, non varcare una soglia senza invito).",
-    "flavor": "«Quello non lo faccio. Mai.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "vincolare",
-    "formulaName": "Vincolare",
-    "link": "verbo",
-    "page": "Primordio",
-    "hooks": [
-      "tiro",
-      "quintessenza",
-      "salute",
-      "scena"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "L'Ustione che prendi",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
     "id": "tenuta",
     "spheres": [
-      "prime"
+      "prime",
+      "mind"
     ],
     "name": "Tenuta",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: I tuoi effetti mantenuti restano quando prendi danni o perdi i sensi.\n\nEffetto Amalgama: Accesso con Mente: restano anche quando ti distraggono o ti influenzano.",
-    "attivo": "",
-    "passivo": "I tuoi effetti mantenuti restano quando prendi danni o perdi i sensi.",
-    "amalgama": "Con Mente: restano anche quando ti distraggono o ti influenzano.",
-    "amalgam": "mind",
-    "amalgams": [
-      "mind"
-    ],
-    "amalgamText": "Accesso con Mente: restano anche quando ti distraggono o ti influenzano.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Vinci in automatico il tiro per resistere e tenere un effetto che mantieni.\n\nEffetto passivo (Sempre): Quando un colpo, un trauma o una Condizione (si aggiornerà a catena col rifacimento delle Condizioni) ti farebbe perdere un effetto che mantieni, hai 2 dadi in più nel tiro per resistere e tenerlo.",
+    "attivo": "Vinci in automatico il tiro per resistere e tenere un effetto che mantieni.",
+    "passivo": "Quando un colpo, un trauma o una Condizione (si aggiornerà a catena col rifacimento delle Condizioni) ti farebbe perdere un effetto che mantieni, hai 2 dadi in più nel tiro per resistere e tenerlo.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Non mollo la presa.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
-    "paradox": "Nessuno effetto attivo; il passivo segue l'effetto mantenuto.",
+    "paradox": "Segue l'effetto mantenuto, in tutte e due le forme.",
     "formula": "fissare",
     "formulaName": "Fissare",
     "link": "regola",
@@ -4716,10 +5149,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -4730,21 +5167,18 @@ export const POTERI = Object.freeze([
     "name": "A credito",
     "dot": 3,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione spendi fino a 3 Quintessenza che non hai, e la ripaghi doppia appena la guadagni. Se a fine sessione non l'hai ripagata, prendi danni aggravati pari a quella che manca.",
-    "attivo": "Una volta per sessione spendi fino a 3 Quintessenza che non hai, e la ripaghi doppia appena la guadagni. Se a fine sessione non l'hai ripagata, prendi danni aggravati pari a quella che manca.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Fino a 2 Quintessenza che non hai): Spendi Quintessenza che non hai, fino a 2. Se a fine sessione non l'hai ripagata, prendi danni aggravati paradossali pari a quella che manca.\n\nEffetto passivo (Sempre): Per te la Ruota della Quintessenza è più larga di 2: 2 caselle in più verso la Quintessenza, e 2 verso il Paradosso.",
+    "attivo": "Spendi Quintessenza che non hai, fino a 2. Se a fine sessione non l'hai ripagata, prendi danni aggravati paradossali pari a quella che manca.",
+    "passivo": "Per te la Ruota della Quintessenza è più larga di 2: 2 caselle in più verso la Quintessenza, e 2 verso il Paradosso.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Segna, pago dopo.»",
-    "cost": "",
+    "cost": "Fino a 2 Quintessenza che non hai",
     "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
+    "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "creare-e-distruggere",
     "formulaName": "Creare e Distruggere",
@@ -4758,95 +5192,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "recupero",
-    "spheres": [
-      "prime"
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
     ],
-    "name": "Recupero",
-    "dot": 3,
-    "type": "attivo",
-    "kind": "attivo e passivo",
-    "text": "Effetto attivo: Una volta per sessione, invece di 1 Quintessenza ne recuperi 3.\n\nEffetto passivo: Accesso con Primordio: recuperi 1 Quintessenza quando un lancio Volgare riesce senza scoppio.\n\nEffetto Amalgama: Accesso con Corrispondenza: recuperi 1 punto in più se correggi anomalie spaziali.\nAccesso con Entropia: ottieni un punto in più quando rubi la fortuna altrui.\nAccesso con Forza: ottieni un punto in più quando dreni un'energia.\nAccesso con Materia: ottieni un punto in più se dissolvi l'oggetto bersaglio.\nAccesso con Mente: recuperi 1 punto in più se ferisci o cancelli parti della psiche del bersaglio.\nAccesso con Spirito: se ferisci una creatura dell'Umbra infliggendole danni, recuperi 1 punto in più.\nAccesso con Tempo: recuperi 1 punto in più se correggi un'anomalia temporale.\nAccesso con Vita: se ferisci una creatura vivente infliggendole danni, recuperi 1 punto in più.",
-    "attivo": "Una volta per sessione, invece di 1 Quintessenza ne recuperi 3.",
-    "passivo": "Accesso con Primordio: recuperi 1 Quintessenza quando un lancio Volgare riesce senza scoppio.",
-    "amalgama": "Con Corrispondenza: recuperi 1 punto in più se correggi anomalie spaziali.\nCon Entropia: ottieni un punto in più quando rubi la fortuna altrui.\nCon Forza: ottieni un punto in più quando dreni un'energia.\nCon Materia: ottieni un punto in più se dissolvi l'oggetto bersaglio.\nCon Mente: recuperi 1 punto in più se ferisci o cancelli parti della psiche del bersaglio.\nCon Spirito: se ferisci una creatura dell'Umbra infliggendole danni, recuperi 1 punto in più.\nCon Tempo: recuperi 1 punto in più se correggi un'anomalia temporale.\nCon Vita: se ferisci una creatura vivente infliggendole danni, recuperi 1 punto in più.",
-    "amalgam": "any",
-    "amalgams": [
-      "any"
-    ],
-    "amalgamText": "Accesso con Corrispondenza: recuperi 1 punto in più se correggi anomalie spaziali.\nAccesso con Entropia: ottieni un punto in più quando rubi la fortuna altrui.\nAccesso con Forza: ottieni un punto in più quando dreni un'energia.\nAccesso con Materia: ottieni un punto in più se dissolvi l'oggetto bersaglio.\nAccesso con Mente: recuperi 1 punto in più se ferisci o cancelli parti della psiche del bersaglio.\nAccesso con Spirito: se ferisci una creatura dell'Umbra infliggendole danni, recuperi 1 punto in più.\nAccesso con Tempo: recuperi 1 punto in più se correggi un'anomalia temporale.\nAccesso con Vita: se ferisci una creatura vivente infliggendole danni, recuperi 1 punto in più.",
-    "flavor": "«Ogni goccia torna al fiume.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "spostare",
-    "formulaName": "Spostare",
-    "link": "effetto",
-    "page": "Primordio",
-    "hooks": [
-      "uso",
-      "tiro",
-      "quintessenza",
-      "paradosso",
-      "salute",
-      "altri"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "scuola",
-    "spheres": [
-      "prime"
-    ],
-    "name": "Scuola",
-    "dot": 3,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando un compagno lancia seguendo le indicazioni che gli hai dato (il gesto, lo Strumento, le parole), prende il premio dell'Areté.",
-    "attivo": "",
-    "passivo": "Quando un compagno lancia seguendo le indicazioni che gli hai dato (il gesto, lo Strumento, le parole), prende il premio dell'Areté.",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Fai come ti ho insegnato.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": null,
-    "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
-    "formula": "benedire-e-maledire",
-    "formulaName": "Benedire e Maledire",
-    "link": "regola",
-    "page": "Primordio",
-    "hooks": [
-      "tiro",
-      "combattimento",
-      "altri"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "Fino a 2 Quintessenza che non hai",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
   },
   {
     "id": "sifone",
@@ -4855,20 +5212,20 @@ export const POTERI = Object.freeze([
     ],
     "name": "Sifone",
     "dot": 3,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando un nemico spende Quintessenza in tua vista, ne prendi 1. Ogni 2 che prendi così, prendi 1 Paradosso.",
-    "attivo": "",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Paradosso per Quintessenza drenata): Quando dreni Quintessenza, ogni 2 che prendi ne hai 1 in più, e prendi 1 Paradosso per ogni Quintessenza che dreni.\n\nEffetto passivo (Sempre): Quando un nemico spende Quintessenza in tua vista, ne prendi 1. Ogni 2 che prendi così, prendi 1 Paradosso.",
+    "attivo": "Quando dreni Quintessenza, ogni 2 che prendi ne hai 1 in più, e prendi 1 Paradosso per ogni Quintessenza che dreni.",
     "passivo": "Quando un nemico spende Quintessenza in tua vista, ne prendi 1. Ogni 2 che prendi così, prendi 1 Paradosso.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Quella la prendo io.»",
-    "cost": "",
+    "cost": "1 Paradosso per Quintessenza drenata",
     "costValue": 0,
     "uses": null,
-    "paradox": "Nessuno effetto attivo; nel passivo il Paradosso è già il prezzo.",
+    "paradox": "Il Paradosso è già il prezzo, in tutte e due le forme; non ne fanno altro di loro.",
     "formula": "drenare",
     "formulaName": "Drenare",
     "link": "effetto",
@@ -4880,63 +5237,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "terra-sacra",
-    "spheres": [
-      "prime"
-    ],
-    "name": "Terra sacra",
-    "dot": 3,
-    "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Paga 1 Quintessenza: per la sessione un luogo vale come un tuo Santuario. Con 3 Quintessenza resta per sempre.\n\nEffetto Amalgama: Accesso con Spirito: lì i tuoi lanci verso l'effimera hanno dadi in più pari ai poteri che conosci in Spirito.",
-    "attivo": "Paga 1 Quintessenza: per la sessione un luogo vale come un tuo Santuario. Con 3 Quintessenza resta per sempre.",
-    "passivo": "",
-    "amalgama": "Con Spirito: lì i tuoi lanci verso l'effimera hanno dadi in più pari ai poteri che conosci in Spirito.",
-    "amalgam": "spirit",
-    "amalgams": [
-      "spirit"
-    ],
-    "amalgamText": "Accesso con Spirito: lì i tuoi lanci verso l'effimera hanno dadi in più pari ai poteri che conosci in Spirito.",
-    "flavor": "«Questo posto adesso è mio.»",
-    "cost": "1 Quintessenza",
-    "costValue": 1,
-    "uses": null,
-    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
-    "formula": "inventare",
-    "formulaName": "Inventare",
-    "link": "effetto",
-    "page": "Primordio",
-    "hooks": [
-      "uso",
-      "tiro",
-      "quintessenza",
-      "scena"
-    ],
-    "effects": [
+    "prerequisiti": [
       {
-        "on": "dice",
-        "value": {
-          "from": "poteri",
-          "sphere": "spirit"
-        },
-        "roll": "magick",
-        "requires": "spirit",
-        "nota": "Accesso con Spirito: lì i tuoi lanci verso l'effimera hanno dadi in più pari ai poteri che conosci in Spirito."
+        "numero": 2
       }
     ],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "1 Paradosso per Quintessenza drenata",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
   },
   {
     "id": "pagare-in-paradosso",
@@ -5053,6 +5365,47 @@ export const POTERI = Object.freeze([
     "costoVariabile": null
   },
   {
+    "id": "forgia",
+    "spheres": [
+      "prime"
+    ],
+    "name": "Forgia",
+    "dot": 5,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Metà della Quintessenza della Meraviglia): Quando crei una Meraviglia (un oggetto che porta un tuo effetto di Magick), paghi metà della Quintessenza che costa, e hai 2 dadi in più.\n\nEffetto passivo (Sempre): I tuoi oggetti incantati si ricaricano da soli: 1 Quintessenza a ogni cambio scena.",
+    "attivo": "Quando crei una Meraviglia (un oggetto che porta un tuo effetto di Magick), paghi metà della Quintessenza che costa, e hai 2 dadi in più.",
+    "passivo": "I tuoi oggetti incantati si ricaricano da soli: 1 Quintessenza a ogni cambio scena.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "Metà della Quintessenza della Meraviglia",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Primordio",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 4
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Metà della Quintessenza della Meraviglia",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
+  },
+  {
     "id": "di-la-non-contano",
     "spheres": [
       "spirit"
@@ -5060,22 +5413,19 @@ export const POTERI = Object.freeze([
     "name": "Di là non contano",
     "dot": 1,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per scena un tuo lancio Volgare fatto per intero nell'Umbra non conta come Volgare.",
-    "attivo": "Una volta per scena un tuo lancio Volgare fatto per intero nell'Umbra non conta come Volgare.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Quando lanci un effetto di qua verso il di là del Velo, hai 2 dadi in più.\n\nEffetto passivo (Sempre): Puoi lanciare effetti di qua verso il di là del Velo senza le penalità che il Velo dà di solito.",
+    "attivo": "Quando lanci un effetto di qua verso il di là del Velo, hai 2 dadi in più.",
+    "passivo": "Puoi lanciare effetti di qua verso il di là del Velo senza le penalità che il Velo dà di solito.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Di là nessuno ci fa caso.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
-    "paradox": "Segue il lancio effetto attivo, che conta come Accidentale; nessuno effetto passivo.",
+    "cost": "1 Quintessenza",
+    "costValue": 1,
+    "uses": null,
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "celare",
     "formulaName": "Celare",
     "link": "regola",
@@ -5086,9 +5436,9 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -5098,18 +5448,18 @@ export const POTERI = Object.freeze([
     ],
     "name": "Interprete",
     "dot": 1,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando un compagno tratta con uno spirito, tirate tutti e due il tiro sociale e vale il più alto; il favore resta a lui.",
-    "attivo": "",
-    "passivo": "Quando un compagno tratta con uno spirito, tirate tutti e due il tiro sociale e vale il più alto; il favore resta a lui.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Per la scena fai da interprete fra i compagni e uno spirito: nei tiri sociali con lui vale il più alto fra i vostri.\n\nEffetto passivo (Sempre): Capisci sempre la lingua degli spiriti.",
+    "attivo": "Per la scena fai da interprete fra i compagni e uno spirito: nei tiri sociali con lui vale il più alto fra i vostri.",
+    "passivo": "Capisci sempre la lingua degli spiriti.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Lascia parlare me.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "comunicare",
@@ -5122,31 +5472,30 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
     "id": "pellegrino",
     "spheres": [
-      "spirit"
+      "spirit",
+      "prime"
     ],
     "name": "Pellegrino",
     "dot": 1,
-    "type": "",
-    "kind": "",
-    "text": "Effetto Amalgama: Accesso con Primordio: la prima volta che entri in un luogo sacro nuovo (una chiesa, un Nodo, una tomba), prendi 1 Quintessenza.",
-    "attivo": "",
-    "passivo": "",
-    "amalgama": "Con Primordio: la prima volta che entri in un luogo sacro nuovo (una chiesa, un Nodo, una tomba), prendi 1 Quintessenza.",
-    "amalgam": "prime",
-    "amalgams": [
-      "prime"
-    ],
-    "amalgamText": "Accesso con Primordio: la prima volta che entri in un luogo sacro nuovo (una chiesa, un Nodo, una tomba), prendi 1 Quintessenza.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Quintessenza secondo la risonanza): Prendi gli effetti della risonanza del luogo in cui sei, come se il luogo ti accogliesse. Paghi secondo il tipo di risonanza.\n\nEffetto passivo (Sempre): La prima volta che entri in un luogo sacro (una chiesa, un Nodo, una tomba etc..), prendi 1 Quintessenza.",
+    "attivo": "Prendi gli effetti della risonanza del luogo in cui sei, come se il luogo ti accogliesse. Paghi secondo il tipo di risonanza.",
+    "passivo": "La prima volta che entri in un luogo sacro (una chiesa, un Nodo, una tomba etc..), prendi 1 Quintessenza.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Ogni luogo sacro ha qualcosa da darti.»",
-    "cost": "",
+    "cost": "Quintessenza secondo la risonanza",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -5160,10 +5509,13 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "Quintessenza secondo la risonanza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
   },
   {
     "id": "reliquia",
@@ -5172,18 +5524,18 @@ export const POTERI = Object.freeze([
     ],
     "name": "Reliquia",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Un oggetto che porti da almeno una sessione diventa una reliquia: finché lo porti, ti protegge da una Condizione che scegli tu (si aggiornerà a catena col rifacimento delle Condizioni). Se lo perdi, perdi 1 Volontà.",
-    "attivo": "",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Togli la Condizione da cui la reliquia ti protegge (si aggiornerà a catena col rifacimento delle Condizioni).\n\nEffetto passivo (Sempre): Un oggetto che porti da almeno una sessione diventa una reliquia: finché lo porti, ti protegge da una Condizione che scegli tu (si aggiornerà a catena col rifacimento delle Condizioni). Se lo perdi, perdi 1 Volontà.",
+    "attivo": "Togli la Condizione da cui la reliquia ti protegge (si aggiornerà a catena col rifacimento delle Condizioni).",
     "passivo": "Un oggetto che porti da almeno una sessione diventa una reliquia: finché lo porti, ti protegge da una Condizione che scegli tu (si aggiornerà a catena col rifacimento delle Condizioni). Se lo perdi, perdi 1 Volontà.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Me l'ha data mia nonna.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
     "paradox": "Nessuno effetto attivo, basso rischio effetto passivo.",
     "formula": "proteggere",
@@ -5196,10 +5548,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -5249,20 +5605,20 @@ export const POTERI = Object.freeze([
     ],
     "name": "Favori",
     "dot": 3,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Ogni spirito che aiuti ti deve un favore: il Narratore lo segna, e tu lo riscuoti quando vuoi.",
-    "attivo": "",
-    "passivo": "Ogni spirito che aiuti ti deve un favore: il Narratore lo segna, e tu lo riscuoti quando vuoi.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza per livello del favore): Chiedi un favore a uno spirito, e lo fa per te. Paghi 2 Quintessenza per ogni livello del favore che chiedi.\n\nEffetto passivo (Sempre): I tuoi Background valgono anche con gli spiriti: sanno che paghi, e sono ben disposti a farti favori.",
+    "attivo": "Chiedi un favore a uno spirito, e lo fa per te. Paghi 2 Quintessenza per ogni livello del favore che chiedi.",
+    "passivo": "I tuoi Background valgono anche con gli spiriti: sanno che paghi, e sono ben disposti a farti favori.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Me ne devi uno.»",
-    "cost": "",
+    "cost": "2 Quintessenza per livello del favore",
     "costValue": 0,
     "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
     "formula": "vincolare",
     "formulaName": "Vincolare",
     "link": "verbo",
@@ -5273,11 +5629,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza per livello del favore",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 2,
+      "max": 0
+    }
   },
   {
     "id": "lascio-fare-a-lui",
@@ -5409,77 +5772,29 @@ export const POTERI = Object.freeze([
     "costoVariabile": null
   },
   {
-    "id": "voce-dell-avatar",
-    "spheres": [
-      "spirit"
-    ],
-    "name": "Voce dell'Avatar",
-    "dot": 4,
-    "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione il Narratore ti dice la cosa giusta da fare nella scena; se la fai, il premio dell'Areté vale doppio.",
-    "attivo": "Una volta per sessione il Narratore ti dice la cosa giusta da fare nella scena; se la fai, il premio dell'Areté vale doppio.",
-    "passivo": "",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Ascolta.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
-    "formula": "sapere",
-    "formulaName": "Sapere",
-    "link": "tavolo",
-    "page": "Spirito",
-    "hooks": [
-      "uso",
-      "tiro",
-      "narratore"
-    ],
-    "effects": [
-      {
-        "mode": "attivo",
-        "on": "prizeDouble",
-        "roll": "magick",
-        "nota": "Una volta per sessione il Narratore ti dice la cosa giusta da fare nella scena; se la fai, il premio dell'Areté vale doppio."
-      }
-    ],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
     "id": "il-ritorno",
     "spheres": [
       "spirit"
     ],
     "name": "Il ritorno",
     "dot": 5,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Una volta per campagna, se il personaggio muore, torna nella sessione dopo, cambiato; il Narratore sceglie come.",
-    "attivo": "",
-    "passivo": "Una volta per campagna, se il personaggio muore, torna nella sessione dopo, cambiato; il Narratore sceglie come.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Una volta per cronaca): Quando muori, il tuo corpo non conta più (distrutto, dilaniato etc..): la tua anima prende forma fisica e continui ad agire. Entro la fine della scena scegli un corpo nuovo.\n\nEffetto passivo (Sempre): Quando sei staccato dal tuo corpo resti te stesso, e allora la tua Salute la possono ferire solo gli spiriti o gli effetti mentali. Persino nel sonno resti tutt'uno.",
+    "attivo": "Quando muori, il tuo corpo non conta più (distrutto, dilaniato etc..): la tua anima prende forma fisica e continui ad agire. Entro la fine della scena scegli un corpo nuovo.",
+    "passivo": "Quando sei staccato dal tuo corpo resti te stesso, e allora la tua Salute la possono ferire solo gli spiriti o gli effetti mentali. Persino nel sonno resti tutt'uno.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Mi avete dato per morto troppo presto.»",
-    "cost": "",
+    "cost": "Una volta per cronaca",
     "costValue": 0,
     "uses": {
       "per": "campagna",
       "n": 1
     },
-    "paradox": "Nessuno effetto attivo, basso rischio effetto passivo.",
+    "paradox": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
     "formula": "resuscitare",
     "formulaName": "Resuscitare",
     "link": "verbo",
@@ -5491,10 +5806,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 4
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Una volta per cronaca",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -5505,22 +5824,19 @@ export const POTERI = Object.freeze([
     "name": "Patto col diavolo",
     "dot": 5,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per campagna un'entità potente ti dà subito quello che chiedi (una vita salvata, un'impresa, un segreto). Il Narratore segna il debito, e prima o poi viene a riscuoterlo.",
-    "attivo": "Una volta per campagna un'entità potente ti dà subito quello che chiedi (una vita salvata, un'impresa, un segreto). Il Narratore segna il debito, e prima o poi viene a riscuoterlo.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Il patto): Chiedi qualcosa a un'entità, e te la dà subito: in cambio stringi un patto con lei.\n\nEffetto passivo (Sempre): Non puoi subire Pregi, Difetti o altro che ti darebbe un marchio, o un effetto simile.",
+    "attivo": "Chiedi qualcosa a un'entità, e te la dà subito: in cambio stringi un patto con lei.",
+    "passivo": "Non puoi subire Pregi, Difetti o altro che ti darebbe un marchio, o un effetto simile.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Firma qui.»",
-    "cost": "",
+    "cost": "Il patto",
     "costValue": 0,
-    "uses": {
-      "per": "campagna",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo: il prezzo è il debito.",
+    "uses": null,
+    "paradox": "Nessuno effetto attivo, nessuno effetto passivo: il prezzo è il patto.",
     "formula": "evocare",
     "formulaName": "Evocare",
     "link": "verbo",
@@ -5531,10 +5847,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 4
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Il patto",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -5736,6 +6056,87 @@ export const POTERI = Object.freeze([
     "costoVariabile": null
   },
   {
+    "id": "catene",
+    "spheres": [
+      "spirit",
+      "mind",
+      "entropy"
+    ],
+    "name": "Catene",
+    "dot": 4,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (3 Quintessenza): Se la soglia mentale di uno spirito con cui hai un patto è pari o più bassa dei poteri che conosci in Spirito, in Mente o in Entropia, non deve solo mantenere la parola: a seguito del patto obbedisce anche ai tuoi ordini più semplici.\n\nEffetto passivo (Sempre): Una promessa fra te e uno spirito lega tutti e due: lui la deve mantenere, come la devi mantenere tu.",
+    "attivo": "Se la soglia mentale di uno spirito con cui hai un patto è pari o più bassa dei poteri che conosci in Spirito, in Mente o in Entropia, non deve solo mantenere la parola: a seguito del patto obbedisce anche ai tuoi ordini più semplici.",
+    "passivo": "Una promessa fra te e uno spirito lega tutti e due: lui la deve mantenere, come la devi mantenere tu.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "3 Quintessenza",
+    "costValue": 3,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Spirito",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "3 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": null
+  },
+  {
+    "id": "cavalcare",
+    "spheres": [
+      "spirit"
+    ],
+    "name": "Cavalcare",
+    "dot": 4,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Quintessenza pari alla soglia mentale dello spirito): Prendi tu il controllo di uno spirito che hai nel corpo: sei tu che cavalchi lui, e per la scena hai qualcuno dei suoi tratti o delle sue caratteristiche.\n\nEffetto passivo (Sempre): Nessuno ti possiede: chi prova a entrare nel tuo corpo o nella tua mente ha 2 dadi in meno oppure soglia +2.",
+    "attivo": "Prendi tu il controllo di uno spirito che hai nel corpo: sei tu che cavalchi lui, e per la scena hai qualcuno dei suoi tratti o delle sue caratteristiche.",
+    "passivo": "Nessuno ti possiede: chi prova a entrare nel tuo corpo o nella tua mente ha 2 dadi in meno oppure soglia +2.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "Quintessenza pari alla soglia mentale dello spirito",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Spirito",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Quintessenza pari alla soglia mentale dello spirito",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
+  },
+  {
     "id": "il-prezzo-prima",
     "spheres": [
       "time"
@@ -5743,21 +6144,18 @@ export const POTERI = Object.freeze([
     "name": "Il prezzo prima",
     "dot": 1,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per scena, prima di tirare, il Narratore ti dice il Prezzo che rischi.",
-    "attivo": "Una volta per scena, prima di tirare, il Narratore ti dice il Prezzo che rischi.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza per variante): Addolcisci il Prezzo: per ogni Quintessenza il Narratore te ne propone una variante, dello stesso peso, e scegli tu quale pagare.\n\nEffetto passivo (Sempre): Prima di tirare sai che tipo di Prezzo ti chiede il Narratore per vincere la prova; e quando una cosa è fuori portata, sai quale Prezzo ti manca per arrivarci.",
+    "attivo": "Addolcisci il Prezzo: per ogni Quintessenza il Narratore te ne propone una variante, dello stesso peso, e scegli tu quale pagare.",
+    "passivo": "Prima di tirare sai che tipo di Prezzo ti chiede il Narratore per vincere la prova; e quando una cosa è fuori portata, sai quale Prezzo ti manca per arrivarci.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Prima dimmi quanto costa.»",
-    "cost": "",
+    "cost": "1 Quintessenza per variante",
     "costValue": 0,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
+    "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "prevedere",
     "formulaName": "Prevedere",
@@ -5770,97 +6168,36 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "prestito-dal-futuro",
-    "spheres": [
-      "time"
-    ],
-    "name": "Prestito dal futuro",
-    "dot": 1,
-    "type": "",
-    "kind": "",
-    "text": "Effetto Amalgama: Accesso con Entropia: una volta per scena sposti 2 dadi dal tuo prossimo tiro di Abilità a questo.\nAccesso con Entropia + Primordio: vale anche fra lanci di Magick.",
-    "attivo": "",
-    "passivo": "",
-    "amalgama": "Con Entropia: una volta per scena sposti 2 dadi dal tuo prossimo tiro di Abilità a questo.\nCon Entropia + Primordio: vale anche fra lanci di Magick.",
-    "amalgam": "entropy",
-    "amalgams": [
-      "entropy",
-      "prime"
-    ],
-    "amalgamText": "Accesso con Entropia: una volta per scena sposti 2 dadi dal tuo prossimo tiro di Abilità a questo.\nAccesso con Entropia + Primordio: vale anche fra lanci di Magick.",
-    "flavor": "«Me li ridò dopo.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
-    "formula": "accelerare-e-rallentare",
-    "formulaName": "Accelerare e Rallentare",
-    "link": "regola",
-    "page": "Tempo",
-    "hooks": [
-      "uso",
-      "tiro"
-    ],
-    "effects": [
-      {
-        "mode": "attivo",
-        "on": "dice",
-        "value": 2,
-        "roll": "abilita",
-        "requires": "entropy",
-        "nota": "Accesso con Entropia: una volta per scena sposti 2 dadi dal tuo prossimo tiro di Abilità a questo."
-      },
-      {
-        "mode": "attivo",
-        "on": "dice",
-        "value": 2,
-        "roll": "magick",
-        "requires": [
-          "entropy",
-          "prime"
-        ],
-        "nota": "Accesso con Entropia + Primordio: vale anche fra lanci di Magick."
-      }
-    ],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza per variante",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "pronto-all-uso",
     "spheres": [
-      "time"
+      "time",
+      "matter"
     ],
     "name": "Pronto all'uso",
     "dot": 1,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Estrarre, ricaricare o cambiare arma non ti costa azioni.\n\nEffetto Amalgama: Accesso con Materia: vale anche per gli attrezzi (un grimaldello, un kit medico, una torcia).",
-    "attivo": "",
-    "passivo": "Estrarre, ricaricare o cambiare arma non ti costa azioni.",
-    "amalgama": "Con Materia: vale anche per gli attrezzi (un grimaldello, un kit medico, una torcia).",
-    "amalgam": "matter",
-    "amalgams": [
-      "matter"
-    ],
-    "amalgamText": "Accesso con Materia: vale anche per gli attrezzi (un grimaldello, un kit medico, una torcia).",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza): Nel turno fai un'azione in più per usare l'oggetto che hai a portata di mano. L'azione in più non può essere Magick.\n\nEffetto passivo (Sempre): Estrarre, ricaricare o cambiare arma non ti costa mai azioni. E l'oggetto che ti serve ce l'hai sempre a portata di mano, come se l'avessi preparato la scena prima, purché sia nel tuo inventario.",
+    "attivo": "Nel turno fai un'azione in più per usare l'oggetto che hai a portata di mano. L'azione in più non può essere Magick.",
+    "passivo": "Estrarre, ricaricare o cambiare arma non ti costa mai azioni. E l'oggetto che ti serve ce l'hai sempre a portata di mano, come se l'avessi preparato la scena prima, purché sia nel tuo inventario.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Sempre carica.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "2 Quintessenza",
+    "costValue": 2,
     "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
     "formula": "accelerare-e-rallentare",
     "formulaName": "Accelerare e Rallentare",
     "link": "verbo",
@@ -5871,9 +6208,9 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -5883,18 +6220,18 @@ export const POTERI = Object.freeze([
     ],
     "name": "Puntuale",
     "dot": 1,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando stai andando verso una scena, scegli tu in che momento entri, anche a metà.",
-    "attivo": "",
-    "passivo": "Quando stai andando verso una scena, scegli tu in che momento entri, anche a metà.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Scegli tu quando entri in scena e quando ne esci: compari o te ne vai quando vuoi, se puoi muoverti (non sei legato, bloccato, immobilizzato etc..). Oppure chi sta per arrivare in scena arriva due turni dopo.\n\nEffetto passivo (Sempre): Sai quando qualcuno arriverà in scena, o se non arriverà, purché abbia un legame con te, anche superficiale.",
+    "attivo": "Scegli tu quando entri in scena e quando ne esci: compari o te ne vai quando vuoi, se puoi muoverti (non sei legato, bloccato, immobilizzato etc..). Oppure chi sta per arrivare in scena arriva due turni dopo.",
+    "passivo": "Sai quando qualcuno arriverà in scena, o se non arriverà, purché abbia un legame con te, anche superficiale.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Arrivo sempre al momento giusto.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "accelerare-e-rallentare",
@@ -5905,9 +6242,9 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -5917,17 +6254,17 @@ export const POTERI = Object.freeze([
     ],
     "name": "Quadrante",
     "dot": 1,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Vedi sempre gli orologi del Narratore, anche quelli nascosti.",
-    "attivo": "",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza per segmento): Fai avanzare o tornare indietro un orologio del Narratore, di un segmento per ogni Quintessenza che paghi.\n\nEffetto passivo (Sempre): Vedi sempre gli orologi del Narratore, anche quelli nascosti.",
+    "attivo": "Fai avanzare o tornare indietro un orologio del Narratore, di un segmento per ogni Quintessenza che paghi.",
     "passivo": "Vedi sempre gli orologi del Narratore, anche quelli nascosti.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«So quanto manca.»",
-    "cost": "",
+    "cost": "1 Quintessenza per segmento",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -5942,44 +6279,13 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "sotto-tiro",
-    "spheres": [
-      "time"
-    ],
-    "name": "Sotto tiro",
-    "dot": 1,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Finché tieni un'arma puntata su qualcuno, se lui agisce spari tu per primo.",
-    "attivo": "",
-    "passivo": "Finché tieni un'arma puntata su qualcuno, se lui agisce spari tu per primo.",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Muoviti e sparo.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "accelerare-e-rallentare",
-    "formulaName": "Accelerare e Rallentare",
-    "link": "verbo",
-    "page": "Tempo",
-    "hooks": [],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza per segmento",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "straordinari",
@@ -5989,17 +6295,17 @@ export const POTERI = Object.freeze([
     "name": "Straordinari",
     "dot": 1,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Fra una sessione e l'altra fai una cosa in più.\n\nEffetto Amalgama: la cosa in più si fa con lei (Materia per costruire, Mente per studiare, Vita per curarti).",
-    "attivo": "Fra una sessione e l'altra fai una cosa in più.",
-    "passivo": "",
-    "amalgama": "la cosa in più si fa con lei (Materia per costruire, Mente per studiare, Vita per curarti).",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Durante la sessione rifai la cosa in più del passivo, come se l'avessi fatta nel frattempo: il risultato ce l'hai adesso.\n\nEffetto passivo (A sessione nuova): Fra una sessione e l'altra fai una cosa in più, che si risolve dietro le quinte: tenere vivi i tuoi Background, usarli, oppure un'azione da concordare col Narratore.",
+    "attivo": "Durante la sessione rifai la cosa in più del passivo, come se l'avessi fatta nel frattempo: il risultato ce l'hai adesso.",
+    "passivo": "Fra una sessione e l'altra fai una cosa in più, che si risolve dietro le quinte: tenere vivi i tuoi Background, usarli, oppure un'azione da concordare col Narratore.",
+    "amalgama": "",
     "amalgam": "",
     "amalgams": [],
-    "amalgamText": "la cosa in più si fa con lei (Materia per costruire, Mente per studiare, Vita per curarti).",
+    "amalgamText": "",
     "flavor": "«Stanotte non dormo.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "accelerare-e-rallentare",
@@ -6012,9 +6318,9 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "A sessione nuova",
     "costoVariabile": null
   },
   {
@@ -6025,21 +6331,18 @@ export const POTERI = Object.freeze([
     "name": "Adesso e non dopo",
     "dot": 2,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per scena agisci due volte di fila, e salti il turno dopo.",
-    "attivo": "Una volta per scena agisci due volte di fila, e salti il turno dopo.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Agisci due volte di fila, e il turno dopo salti il tuo momento.\n\nEffetto passivo (Sempre): Chi prova a ritardare il tuo momento, o a usare altri effetti di Tempo sulle tue azioni, ha 2 dadi in meno oppure soglia +2.",
+    "attivo": "Agisci due volte di fila, e il turno dopo salti il tuo momento.",
+    "passivo": "Chi prova a ritardare il tuo momento, o a usare altri effetti di Tempo sulle tue azioni, ha 2 dadi in meno oppure soglia +2.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Il dopo lo spendo adesso.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
+    "cost": "1 Quintessenza",
+    "costValue": 1,
+    "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "accelerare-e-rallentare",
     "formulaName": "Accelerare e Rallentare",
@@ -6051,10 +6354,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -6064,18 +6371,18 @@ export const POTERI = Object.freeze([
     ],
     "name": "Allo scadere",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando un orologio del Narratore sta per riempirsi, fai un'ultima azione prima che scatti.",
-    "attivo": "",
-    "passivo": "Quando un orologio del Narratore sta per riempirsi, fai un'ultima azione prima che scatti.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Quando un orologio scatta, anche ognuno dei tuoi compagni ha l'azione del passivo.\n\nEffetto passivo (Sempre): Quando un orologio del Narratore scatta, hai subito un'azione per prepararti, anche di combattimento.",
+    "attivo": "Quando un orologio scatta, anche ognuno dei tuoi compagni ha l'azione del passivo.",
+    "passivo": "Quando un orologio del Narratore scatta, hai subito un'azione per prepararti, anche di combattimento.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Un secondo, ancora uno.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "accelerare-e-rallentare",
@@ -6089,10 +6396,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -6103,16 +6414,16 @@ export const POTERI = Object.freeze([
     "name": "Ci penso domani",
     "dot": 2,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione una conseguenza (una ferita, un debito, un arresto) la paghi nella scena dopo. Se la rimandi alla sessione dopo, arriva più grave.",
-    "attivo": "Una volta per sessione una conseguenza (una ferita, un debito, un arresto) la paghi nella scena dopo. Se la rimandi alla sessione dopo, arriva più grave.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Una volta per sessione): Una conseguenza (una ferita, un debito, un arresto) la paghi nella scena dopo. Se la rimandi alla sessione dopo, arriva più grave.\n\nEffetto passivo (Sempre): Quando una cosa che ti riguarda va chiusa entro la fine della scena o della sessione (saldare un debito etc..), la puoi chiudere nella scena dopo, o nella sessione dopo. Chiuderla devi comunque, e più in là non la rimandi, a meno di pagarne il doppio in Quintessenza, che raddoppia di nuovo a ogni rinvio.",
+    "attivo": "Una conseguenza (una ferita, un debito, un arresto) la paghi nella scena dopo. Se la rimandi alla sessione dopo, arriva più grave.",
+    "passivo": "Quando una cosa che ti riguarda va chiusa entro la fine della scena o della sessione (saldare un debito etc..), la puoi chiudere nella scena dopo, o nella sessione dopo. Chiuderla devi comunque, e più in là non la rimandi, a meno di pagarne il doppio in Quintessenza, che raddoppia di nuovo a ogni rinvio.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Adesso no, dopo.»",
-    "cost": "",
+    "cost": "Una volta per sessione",
     "costValue": 0,
     "uses": {
       "per": "sessione",
@@ -6129,10 +6440,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Una volta per sessione",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -6173,106 +6488,24 @@ export const POTERI = Object.freeze([
     "costoVariabile": null
   },
   {
-    "id": "contrattempo",
-    "spheres": [
-      "time"
-    ],
-    "name": "Contrattempo",
-    "dot": 2,
-    "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per scena, chi sta per arrivare in scena arriva due turni dopo.",
-    "attivo": "Una volta per scena, chi sta per arrivare in scena arriva due turni dopo.",
-    "passivo": "",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Si è fermato al semaforo.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "accelerare-e-rallentare",
-    "formulaName": "Accelerare e Rallentare",
-    "link": "effetto",
-    "page": "Tempo",
-    "hooks": [
-      "uso"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "l-avevo-preparata",
-    "spheres": [
-      "time"
-    ],
-    "name": "L'avevo preparata",
-    "dot": 2,
-    "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione, in un luogo dove sei stato, dichiari la trappola che avevi lasciato. Il tipo di trappola dipende dall'Amalgama.\n\nEffetto Amalgama: Accesso con Materia: una trappola meccanica (un filo, una porta bloccata, un barattolo di chiodi).\nAccesso con Forza: una carica, un corto circuito.\nAccesso con Entropia: un guasto pronto a scattare.",
-    "attivo": "Una volta per sessione, in un luogo dove sei stato, dichiari la trappola che avevi lasciato. Il tipo di trappola dipende dall'Amalgama.",
-    "passivo": "",
-    "amalgama": "Con Materia: una trappola meccanica (un filo, una porta bloccata, un barattolo di chiodi).\nCon Forza: una carica, un corto circuito.\nCon Entropia: un guasto pronto a scattare.",
-    "amalgam": "matter",
-    "amalgams": [
-      "matter"
-    ],
-    "amalgamText": "Accesso con Materia: una trappola meccanica (un filo, una porta bloccata, un barattolo di chiodi).\nAccesso con Forza: una carica, un corto circuito.\nAccesso con Entropia: un guasto pronto a scattare.",
-    "flavor": "«Attento a dove metti i piedi.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "comunicare",
-    "formulaName": "Comunicare",
-    "link": "tavolo",
-    "page": "Tempo",
-    "hooks": [
-      "uso"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
     "id": "montaggio-alternato",
     "spheres": [
       "time"
     ],
     "name": "Montaggio alternato",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Col gruppo diviso, decidi tu quando il Narratore stacca da una scena all'altra.\n\nEffetto Amalgama: Accesso con Entropia: allo stacco aggiungi un dettaglio alla scena che lasci (un rumore, un arrivo, un guasto).",
-    "attivo": "",
-    "passivo": "Col gruppo diviso, decidi tu quando il Narratore stacca da una scena all'altra.",
-    "amalgama": "Con Entropia: allo stacco aggiungi un dettaglio alla scena che lasci (un rumore, un arrivo, un guasto).",
-    "amalgam": "entropy",
-    "amalgams": [
-      "entropy"
-    ],
-    "amalgamText": "Accesso con Entropia: allo stacco aggiungi un dettaglio alla scena che lasci (un rumore, un arrivo, un guasto).",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Fra le scene che il Narratore ti propone, scegli tu quale si gioca per prima, anche se dovrebbe venire dopo.\n\nEffetto passivo (Sempre): Conosci l'ordine delle scene, e hai un vago sentore di quello che succede.",
+    "attivo": "Fra le scene che il Narratore ti propone, scegli tu quale si gioca per prima, anche se dovrebbe venire dopo.",
+    "passivo": "Conosci l'ordine delle scene, e hai un vago sentore di quello che succede.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Stacco. Intanto, dall'altra parte...»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "aprire-e-bloccare",
@@ -6284,10 +6517,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -6299,16 +6536,16 @@ export const POTERI = Object.freeze([
     "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: nel primo turno della scena agisci prima di tutti, anche di chi ha questo potere, e la tua prima azione non può essere interrotta.\n\nEffetto passivo: Accesso con Tempo: agisci sempre per primo nel turno, senza tirare iniziativa. Se altri hanno questo potere, agite insieme (Riflessi Inumani).",
-    "attivo": "Paga 2 Quintessenza: nel primo turno della scena agisci prima di tutti, anche di chi ha questo potere, e la tua prima azione non può essere interrotta.",
-    "passivo": "Accesso con Tempo: agisci sempre per primo nel turno, senza tirare iniziativa. Se altri hanno questo potere, agite insieme (Riflessi Inumani).",
+    "text": "Effetto attivo (2 Quintessenza, o 5 per un turno in più): Decidi tu in che ordine agiscono gli altri, anche prima di te. Con 5 Quintessenza, invece, hai un turno in più.\n\nEffetto passivo (Sempre): Agisci sempre per primo nel turno, senza tirare iniziativa. Se altri hanno questo potere, agite insieme.",
+    "attivo": "Decidi tu in che ordine agiscono gli altri, anche prima di te. Con 5 Quintessenza, invece, hai un turno in più.",
+    "passivo": "Agisci sempre per primo nel turno, senza tirare iniziativa. Se altri hanno questo potere, agite insieme.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Prima di tutti, sempre.»",
-    "cost": "2 Quintessenza",
-    "costValue": 2,
+    "cost": "2 Quintessenza, o 5 per un turno in più",
+    "costValue": 0,
     "uses": null,
     "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
     "formula": "accelerare-e-rallentare",
@@ -6322,11 +6559,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza, o 5 per un turno in più",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 2,
+      "max": 0
+    }
   },
   {
     "id": "ciak-si-gira",
@@ -6416,19 +6660,19 @@ export const POTERI = Object.freeze([
     "name": "Preparato a casa",
     "dot": 3,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: I Passi di Rituale che fai nel tuo Santuario li porti con te, e li spendi in un lancio fuori, entro la sessione.",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (I Passi che hai preparato): I Passi di Rituale che fai nel tuo Santuario li porti con te, e li spendi in un lancio fuori, entro la sessione.\n\nEffetto passivo (Sempre): Accumuli un Rituale senza che ti dia penalità.",
     "attivo": "I Passi di Rituale che fai nel tuo Santuario li porti con te, e li spendi in un lancio fuori, entro la sessione.",
-    "passivo": "",
+    "passivo": "Accumuli un Rituale senza che ti dia penalità.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Il rito l'ho cominciato a casa.»",
-    "cost": "",
+    "cost": "I Passi che hai preparato",
     "costValue": 0,
     "uses": null,
-    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "fissare",
     "formulaName": "Fissare",
     "link": "regola",
@@ -6438,10 +6682,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "I Passi che hai preparato",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -6450,24 +6698,24 @@ export const POTERI = Object.freeze([
       "time"
     ],
     "name": "Salto",
-    "dot": 3,
+    "dot": 4,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione salti una scena di attesa o di ricerca, e ne hai il risultato come se fosse riuscita.",
-    "attivo": "Una volta per sessione salti una scena di attesa o di ricerca, e ne hai il risultato come se fosse riuscita.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza per gradino di Portata): Dichiari finita la tua scena e passi subito in quella di un altro giocatore, senza l'aggancio fra l'una e l'altra. Oppure salti avanti nel tempo: sparisci dalla scena e ricompari in quella dopo, senza sapere cosa è successo nel frattempo. Paghi 1 Quintessenza per ogni gradino di Portata fra dove sei e dove compari.\nCon Mente: quando salti avanti hai un'idea di dove devi andare, o di come è previsto che vada.\nCon Entropia: quando salti avanti hai un'idea di dove devi andare, o di come è previsto che vada.\n\nEffetto passivo (Sempre): Sai l'ordine delle scene.",
+    "attivo": "Dichiari finita la tua scena e passi subito in quella di un altro giocatore, senza l'aggancio fra l'una e l'altra. Oppure salti avanti nel tempo: sparisci dalla scena e ricompari in quella dopo, senza sapere cosa è successo nel frattempo. Paghi 1 Quintessenza per ogni gradino di Portata fra dove sei e dove compari.\nCon Mente: quando salti avanti hai un'idea di dove devi andare, o di come è previsto che vada.\nCon Entropia: quando salti avanti hai un'idea di dove devi andare, o di come è previsto che vada.",
+    "passivo": "Sai l'ordine delle scene.",
     "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
+    "amalgam": "mind",
+    "amalgams": [
+      "mind",
+      "entropy"
+    ],
     "amalgamText": "",
     "flavor": "«Saltiamo la parte noiosa.»",
-    "cost": "",
+    "cost": "1 Quintessenza per gradino di Portata",
     "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "uses": null,
+    "paradox": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
     "formula": "accelerare-e-rallentare",
     "formulaName": "Accelerare e Rallentare",
     "link": "verbo",
@@ -6478,11 +6726,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza per gradino di Portata",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "slancio",
@@ -6491,22 +6746,19 @@ export const POTERI = Object.freeze([
     ],
     "name": "Slancio",
     "dot": 3,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando metti a terra un nemico, fai subito un'altra azione, una volta per turno.",
-    "attivo": "",
-    "passivo": "Quando metti a terra un nemico, fai subito un'altra azione, una volta per turno.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza, una volta per turno): Quando metti a terra o sconfiggi un nemico, fai subito un'altra azione.\n\nEffetto passivo (Sempre): Quando metti a terra o sconfiggi un nemico, hai 2 dadi in più nel tiro dopo, non di Magick.",
+    "attivo": "Quando metti a terra o sconfiggi un nemico, fai subito un'altra azione.",
+    "passivo": "Quando metti a terra o sconfiggi un nemico, hai 2 dadi in più nel tiro dopo, non di Magick.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Il prossimo.»",
-    "cost": "",
+    "cost": "1 Quintessenza, una volta per turno",
     "costValue": 0,
-    "uses": {
-      "per": "turno",
-      "n": 1
-    },
+    "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "accelerare-e-rallentare",
     "formulaName": "Accelerare e Rallentare",
@@ -6519,51 +6771,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "ero-gia-li",
-    "spheres": [
-      "time"
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
     ],
-    "name": "Ero già lì",
-    "dot": 4,
-    "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione eri già, dall'inizio della scena, in un luogo dove sei stato: paghi 1 Quintessenza per ogni gradino di Portata fra dove sei e dove eri.",
-    "attivo": "Una volta per sessione eri già, dall'inizio della scena, in un luogo dove sei stato: paghi 1 Quintessenza per ogni gradino di Portata fra dove sei e dove eri.",
-    "passivo": "",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Ero qui da un pezzo.»",
-    "cost": "1 Quintessenza",
-    "costValue": 1,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "varcare",
-    "formulaName": "Varcare",
-    "link": "verbo",
-    "page": "Tempo",
-    "hooks": [
-      "uso",
-      "quintessenza"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza, una volta per turno",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "flash-forward",
@@ -6573,21 +6792,18 @@ export const POTERI = Object.freeze([
     "name": "Flash forward",
     "dot": 4,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione si gioca una breve scena del futuro: quello che succede lì dovrà succedere, e il gruppo ci deve arrivare.",
-    "attivo": "Una volta per sessione si gioca una breve scena del futuro: quello che succede lì dovrà succedere, e il gruppo ci deve arrivare.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Quintessenza secondo la Durata): Si gioca una breve scena del futuro: quello che succede lì dovrà succedere, e il gruppo ci deve arrivare. Paghi Quintessenza pari al livello di Durata fra adesso e quella scena.\n\nEffetto passivo (Sempre): Sai quante sessioni, o quante scene, mancano alla scena del futuro che hai giocato. Il Narratore può spendere punti Paradosso per allungare l'attesa.",
+    "attivo": "Si gioca una breve scena del futuro: quello che succede lì dovrà succedere, e il gruppo ci deve arrivare. Paghi Quintessenza pari al livello di Durata fra adesso e quella scena.",
+    "passivo": "Sai quante sessioni, o quante scene, mancano alla scena del futuro che hai giocato. Il Narratore può spendere punti Paradosso per allungare l'attesa.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Lo vedo già.»",
-    "cost": "",
+    "cost": "Quintessenza secondo la Durata",
     "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
+    "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "prevedere",
     "formulaName": "Prevedere",
@@ -6598,11 +6814,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Quintessenza secondo la Durata",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
   },
   {
     "id": "flashback",
@@ -6646,48 +6869,6 @@ export const POTERI = Object.freeze([
     "costoVariabile": null
   },
   {
-    "id": "minute-man",
-    "spheres": [
-      "time"
-    ],
-    "name": "Minute Man",
-    "dot": 4,
-    "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione fai avanzare o tornare indietro un orologio del Narratore: 1 Quintessenza per segmento.",
-    "attivo": "Una volta per sessione fai avanzare o tornare indietro un orologio del Narratore: 1 Quintessenza per segmento.",
-    "passivo": "",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Ancora un minuto.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "accelerare-e-rallentare",
-    "formulaName": "Accelerare e Rallentare",
-    "link": "tavolo",
-    "page": "Tempo",
-    "hooks": [
-      "uso",
-      "quintessenza",
-      "narratore",
-      "orologi"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
     "id": "c-ho-ripensato",
     "spheres": [
       "time"
@@ -6695,16 +6876,16 @@ export const POTERI = Object.freeze([
     "name": "C'ho ripensato",
     "dot": 5,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Un'azione degli ultimi 3 turni non è mai accaduta. La scena va avanti di conseguenza, a discrezione del Narratore.",
-    "attivo": "Un'azione degli ultimi 3 turni non è mai accaduta. La scena va avanti di conseguenza, a discrezione del Narratore.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza più la Durata): Un'azione non è mai accaduta, e la scena va avanti di conseguenza, a discrezione del Narratore. Paghi 2 Quintessenza più il livello di Durata che serve per tornare indietro fino a quell'azione.\n\nEffetto passivo (Sempre): Le anomalie del tempo che questo potere può causare non ti toccano: sei protetto tu, il gruppo no.",
+    "attivo": "Un'azione non è mai accaduta, e la scena va avanti di conseguenza, a discrezione del Narratore. Paghi 2 Quintessenza più il livello di Durata che serve per tornare indietro fino a quell'azione.",
+    "passivo": "Le anomalie del tempo che questo potere può causare non ti toccano: sei protetto tu, il gruppo no.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«No, aspetta: ci ho ripensato.»",
-    "cost": "",
+    "cost": "2 Quintessenza più la Durata",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -6718,30 +6899,120 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 4
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza più la Durata",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 2,
+      "max": 0
+    }
+  },
+  {
+    "id": "presagio",
+    "spheres": [
+      "time"
+    ],
+    "name": "Presagio",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Quintessenza pari alla Precisione): Vai più a fondo nel presagio: chiedi una visione di quello che sta arrivando, e più paghi più è precisa (chi è, cosa vuole, quando arriva, da dove, cosa porta con sé). Il Narratore fissa il livello di Precisione, da 1 a 7, e paghi tanta Quintessenza quanto quel livello.\n\nEffetto passivo (Al cambio di scena): Il Narratore ti dice da dove arriva il pericolo più vicino, se ce n'è uno: una direzione, una persona o un'ora (dalla porta sul retro, dall'uomo col cappotto, prima di mezzanotte etc..). Può essere vago, ma non falso.",
+    "attivo": "Vai più a fondo nel presagio: chiedi una visione di quello che sta arrivando, e più paghi più è precisa (chi è, cosa vuole, quando arriva, da dove, cosa porta con sé). Il Narratore fissa il livello di Precisione, da 1 a 7, e paghi tanta Quintessenza quanto quel livello.",
+    "passivo": "Il Narratore ti dice da dove arriva il pericolo più vicino, se ce n'è uno: una direzione, una persona o un'ora (dalla porta sul retro, dall'uomo col cappotto, prima di mezzanotte etc..). Può essere vago, ma non falso.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "Quintessenza pari alla Precisione",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Tempo",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Quintessenza pari alla Precisione",
+    "cadenzaPassivo": "Al cambio di scena",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
+  },
+  {
+    "id": "psicometria",
+    "spheres": [
+      "time"
+    ],
+    "name": "Psicometria",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza a domanda): Tieni l'oggetto e fai al Narratore una domanda chiusa e precisa sul suo passato, che chiede un fatto (chi l'ha impugnato per ultimo? era in quella casa martedì notte?), non una domanda aperta (cosa gli è successo?). Ogni domanda costa 1 Quintessenza, e il Narratore risponde con quello che l'oggetto ha vissuto, non con quello che sa lui.\n\nEffetto passivo (Sempre): Toccando un oggetto senti l'ultima emozione forte di chi l'ha tenuto (paura, rabbia, amore, colpa etc..), senza sapere di chi è.",
+    "attivo": "Tieni l'oggetto e fai al Narratore una domanda chiusa e precisa sul suo passato, che chiede un fatto (chi l'ha impugnato per ultimo? era in quella casa martedì notte?), non una domanda aperta (cosa gli è successo?). Ogni domanda costa 1 Quintessenza, e il Narratore risponde con quello che l'oggetto ha vissuto, non con quello che sa lui.",
+    "passivo": "Toccando un oggetto senti l'ultima emozione forte di chi l'ha tenuto (paura, rabbia, amore, colpa etc..), senza sapere di chi è.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza a domanda",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Tempo",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza a domanda",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "pisolino",
     "spheres": [
-      "life"
+      "life",
+      "mind"
     ],
     "name": "Pisolino",
     "dot": 1,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Un'ora di sonno vale per te come una notte intera.",
-    "attivo": "",
-    "passivo": "Un'ora di sonno vale per te come una notte intera.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza per compagno): Il riposo del passivo vale anche per i compagni che riposano con te.\n\nEffetto passivo (Una volta per sessione): Una scena di riposo vale per te come un riposo completo.",
+    "attivo": "Il riposo del passivo vale anche per i compagni che riposano con te.",
+    "passivo": "Una scena di riposo vale per te come un riposo completo.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Cinque minuti e sono come nuovo.»",
-    "cost": "",
+    "cost": "1 Quintessenza per compagno",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -6753,10 +7024,13 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza per compagno",
+    "cadenzaPassivo": "Una volta per sessione",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "piu-forte-di-prima",
@@ -6840,18 +7114,16 @@ export const POTERI = Object.freeze([
     "name": "Allenamento",
     "dot": 2,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Fra una sessione e l'altra sposti 1 punto fra i tuoi Attributi fisici.\n\nEffetto Amalgama: Accesso con Primordio: hai anche un pallino di Attributo in più, per la sessione.",
-    "attivo": "Fra una sessione e l'altra sposti 1 punto fra i tuoi Attributi fisici.",
-    "passivo": "",
-    "amalgama": "Con Primordio: hai anche un pallino di Attributo in più, per la sessione.",
-    "amalgam": "prime",
-    "amalgams": [
-      "prime"
-    ],
-    "amalgamText": "Accesso con Primordio: hai anche un pallino di Attributo in più, per la sessione.",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza per punto): Per ogni 2 Quintessenza che spendi hai 1 punto in più in un Attributo fisico, fino a fine scena.\n\nEffetto passivo (A sessione nuova): A ogni sessione sposti come preferisci i punti dei tuoi Attributi fisici, senza scendere sotto 1 né salire sopra 5.",
+    "attivo": "Per ogni 2 Quintessenza che spendi hai 1 punto in più in un Attributo fisico, fino a fine scena.",
+    "passivo": "A ogni sessione sposti come preferisci i punti dei tuoi Attributi fisici, senza scendere sotto 1 né salire sopra 5.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Ho lavorato sulle gambe.»",
-    "cost": "",
+    "cost": "2 Quintessenza per punto",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -6865,11 +7137,18 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza per punto",
+    "cadenzaPassivo": "A sessione nuova",
+    "costoVariabile": {
+      "min": 2,
+      "max": 0
+    }
   },
   {
     "id": "buona-forchetta",
@@ -6878,19 +7157,22 @@ export const POTERI = Object.freeze([
     ],
     "name": "Buona forchetta",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Un pasto vero in scena vale per il tuo corpo come un cambio scena: scattano le cure e le rigenerazioni del cambio scena.",
-    "attivo": "",
-    "passivo": "Un pasto vero in scena vale per il tuo corpo come un cambio scena: scattano le cure e le rigenerazioni del cambio scena.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza, una volta per sessione): Un buon pasto ti dà gli effetti di un riposo.\n\nEffetto passivo (Sempre): Quello che mangi non ti dà mai stati alterati né altri effetti. Mangi anche cose che non si mangiano, e ne ricavi nutrimento: sopravvivi e sei sazio.",
+    "attivo": "Un buon pasto ti dà gli effetti di un riposo.",
+    "passivo": "Quello che mangi non ti dà mai stati alterati né altri effetti. Mangi anche cose che non si mangiano, e ne ricavi nutrimento: sopravvivi e sei sazio.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«A stomaco pieno si ragiona meglio.»",
-    "cost": "",
+    "cost": "1 Quintessenza, una volta per sessione",
     "costValue": 0,
-    "uses": null,
+    "uses": {
+      "per": "sessione",
+      "n": 1
+    },
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "guarire",
     "formulaName": "Guarire",
@@ -6903,33 +7185,39 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza, una volta per sessione",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "il-dolore-sveglia",
     "spheres": [
-      "life"
+      "life",
+      "mind"
     ],
     "name": "Il dolore sveglia",
     "dot": 2,
-    "type": "",
-    "kind": "",
-    "text": "Effetto Amalgama: Accesso con Mente: ogni livello di Salute che perdi in scena ti dà 1 Volontà, fino a 3.",
-    "attivo": "",
-    "passivo": "",
-    "amalgama": "Con Mente: ogni livello di Salute che perdi in scena ti dà 1 Volontà, fino a 3.",
-    "amalgam": "mind",
-    "amalgams": [
-      "mind"
-    ],
-    "amalgamText": "Accesso con Mente: ogni livello di Salute che perdi in scena ti dà 1 Volontà, fino a 3.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Quando prendi danni, paghi e diventa uno scambio: per ogni danno fisico che prendi ne guarisci uno mentale superficiale, o il contrario.\n\nEffetto passivo (Sempre): Quando prendi danni fisici, guarisci 1 danno mentale superficiale; quando prendi danni mentali, guarisci 1 danno fisico superficiale.",
+    "attivo": "Quando prendi danni, paghi e diventa uno scambio: per ogni danno fisico che prendi ne guarisci uno mentale superficiale, o il contrario.",
+    "passivo": "Quando prendi danni fisici, guarisci 1 danno mentale superficiale; quando prendi danni mentali, guarisci 1 danno fisico superficiale.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Il dolore mi tiene sveglio.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "spostare",
@@ -6941,52 +7229,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "infermeria",
-    "spheres": [
-      "life"
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
     ],
-    "name": "Infermeria",
-    "dot": 2,
-    "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione, un compagno che passa 2 scene nel tuo Santuario torna con tutta la Salute.",
-    "attivo": "Una volta per sessione, un compagno che passa 2 scene nel tuo Santuario torna con tutta la Salute.",
-    "passivo": "",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Stai giù e lasciati curare.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "guarire",
-    "formulaName": "Guarire",
-    "link": "effetto",
-    "page": "Vita",
-    "hooks": [
-      "uso",
-      "salute",
-      "altri",
-      "scena"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -6997,19 +7247,19 @@ export const POTERI = Object.freeze([
     "name": "Sangue per sangue",
     "dot": 2,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Quando curi un altro con Vita, puoi prendere tu 1 danno superficiale per curargliene 2 in più.",
-    "attivo": "Quando curi un altro con Vita, puoi prendere tu 1 danno superficiale per curargliene 2 in più.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 danno superficiale): Quando curi qualcuno, puoi prendere tu 1 danno superficiale: la cura su di lui raddoppia, ma il passivo su di te non vale.\n\nEffetto passivo (Sempre): Quando curi un'altra persona, guarisci anche tu della stessa quantità.",
+    "attivo": "Quando curi qualcuno, puoi prendere tu 1 danno superficiale: la cura su di lui raddoppia, ma il passivo su di te non vale.",
+    "passivo": "Quando curi un'altra persona, guarisci anche tu della stessa quantità.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Prendi un po' del mio.»",
-    "cost": "",
+    "cost": "1 danno superficiale",
     "costValue": 0,
     "uses": null,
-    "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
+    "paradox": "Segue il lancio in tutte e due le forme; fuori dalla Magick, basso rischio.",
     "formula": "guarire",
     "formulaName": "Guarire",
     "link": "regola",
@@ -7020,47 +7270,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "stesso-sangue",
-    "spheres": [
-      "life"
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
     ],
-    "name": "Stesso sangue",
-    "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Scegli un compagno: quando uno dei due viene curato, l'altro cura 1 danno superficiale.",
-    "attivo": "",
-    "passivo": "Scegli un compagno: quando uno dei due viene curato, l'altro cura 1 danno superficiale.",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Quello che fa bene a te fa bene a me.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "vincolare",
-    "formulaName": "Vincolare",
-    "link": "verbo",
-    "page": "Vita",
-    "hooks": [
-      "salute",
-      "altri"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 danno superficiale",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7070,18 +7287,18 @@ export const POTERI = Object.freeze([
     ],
     "name": "Vaccino",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Una Condizione fisica che hai già preso nella sessione non la prendi più fino a fine sessione (si aggiornerà a catena col rifacimento delle Condizioni).",
-    "attivo": "",
-    "passivo": "Una Condizione fisica che hai già preso nella sessione non la prendi più fino a fine sessione (si aggiornerà a catena col rifacimento delle Condizioni).",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza): Ne scegli un'altra, sempre fra quelle che hai già preso, e vale lo stesso anche per lei.\n\nEffetto passivo (Una volta per sessione): Scegli una Condizione fisica che hai già preso (si aggiornerà a catena col rifacimento delle Condizioni): fino a fine sessione non te la possono più infliggere.",
+    "attivo": "Ne scegli un'altra, sempre fra quelle che hai già preso, e vale lo stesso anche per lei.",
+    "passivo": "Scegli una Condizione fisica che hai già preso (si aggiornerà a catena col rifacimento delle Condizioni): fino a fine sessione non te la possono più infliggere.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Questa l'ho già avuta.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "2 Quintessenza",
+    "costValue": 2,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "resistere",
@@ -7094,10 +7311,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Una volta per sessione",
     "costoVariabile": null
   },
   {
@@ -7108,17 +7329,17 @@ export const POTERI = Object.freeze([
     "name": "Bisturi",
     "dot": 3,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Fuori dalla Magick, con Medicina curi anche 1 aggravato per scena.",
-    "attivo": "Fuori dalla Magick, con Medicina curi anche 1 aggravato per scena.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Per un tiro di Medicina i poteri che conosci in Vita prendono il posto dell'Abilità; così non hai Specialità.\n\nEffetto passivo (Sempre): Anche con pochi materiali fai il pronto soccorso, e tiri Medicina per tutto quello che serve a trattare le ferite.",
+    "attivo": "Per un tiro di Medicina i poteri che conosci in Vita prendono il posto dell'Abilità; così non hai Specialità.",
+    "passivo": "Anche con pochi materiali fai il pronto soccorso, e tiri Medicina per tutto quello che serve a trattare le ferite.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Tienilo fermo.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "guarire",
@@ -7130,48 +7351,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "canto-del-cigno",
-    "spheres": [
-      "mind",
-      "life"
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
     ],
-    "name": "Canto del cigno",
-    "dot": 3,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando vai a terra, fai ancora un'azione prima di cadere.\nAccesso con Vita: quando vai a terra per danni fisici.\nAccesso con Mente: quando crolli per danni mentali.",
-    "attivo": "",
-    "passivo": "Quando vai a terra, fai ancora un'azione prima di cadere.\nAccesso con Vita: quando vai a terra per danni fisici.\nAccesso con Mente: quando crolli per danni mentali.",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«Non ancora.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "resistere",
-    "formulaName": "Resistere",
-    "link": "verbo",
-    "page": "Vita",
-    "hooks": [
-      "salute",
-      "combattimento"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7213,65 +7400,23 @@ export const POTERI = Object.freeze([
     "costoVariabile": null
   },
   {
-    "id": "in-piedi",
-    "spheres": [
-      "life"
-    ],
-    "name": "In piedi!",
-    "dot": 3,
-    "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per scena, con un'azione, rimetti in piedi un compagno a terra con 1 livello di Salute, anche se sta morendo.",
-    "attivo": "Una volta per scena, con un'azione, rimetti in piedi un compagno a terra con 1 livello di Salute, anche se sta morendo.",
-    "passivo": "",
-    "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
-    "amalgamText": "",
-    "flavor": "«In piedi, non è finita.»",
-    "cost": "",
-    "costValue": 0,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "guarire",
-    "formulaName": "Guarire",
-    "link": "effetto",
-    "page": "Vita",
-    "hooks": [
-      "uso",
-      "salute",
-      "combattimento",
-      "altri"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
     "id": "memoria-muscolare",
     "spheres": [
       "life"
     ],
     "name": "Memoria muscolare",
-    "dot": 3,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Un tiro fisico che ti è già riuscito nella scena, se lo rifai, riesce senza tirare.",
-    "attivo": "",
+    "dot": 1,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (da 1 a 3 Quintessenza): In un tiro d'Abilità fisico che il personaggio sa già fare, con l'Abilità che serve, hai 1 dado in più per ogni Quintessenza che paghi.\n\nEffetto passivo (Sempre): Un tiro fisico che ti è già riuscito nella scena, se lo rifai, riesce senza tirare.",
+    "attivo": "In un tiro d'Abilità fisico che il personaggio sa già fare, con l'Abilità che serve, hai 1 dado in più per ogni Quintessenza che paghi.",
     "passivo": "Un tiro fisico che ti è già riuscito nella scena, se lo rifai, riesce senza tirare.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Il corpo se lo ricorda.»",
-    "cost": "",
+    "cost": "da 1 a 3 Quintessenza",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
@@ -7291,10 +7436,13 @@ export const POTERI = Object.freeze([
     ],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "da 1 a 3 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 3
+    }
   },
   {
     "id": "parassita",
@@ -7303,20 +7451,20 @@ export const POTERI = Object.freeze([
     ],
     "name": "Parassita",
     "dot": 3,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Quando ferisci con Vita, ogni 2 danni che fai te ne curano 1 superficiale.",
-    "attivo": "",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Per un colpo il rapporto diventa 1 a 1: ogni danno che fai te ne cura uno superficiale.\n\nEffetto passivo (Sempre): Quando ferisci con Vita, ogni 2 danni che fai te ne curano 1 superficiale.",
+    "attivo": "Per un colpo il rapporto diventa 1 a 1: ogni danno che fai te ne cura uno superficiale.",
     "passivo": "Quando ferisci con Vita, ogni 2 danni che fai te ne curano 1 superficiale.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Il tuo sangue, la mia salute.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
-    "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "drenare",
     "formulaName": "Drenare",
     "link": "regola",
@@ -7326,10 +7474,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7340,22 +7492,19 @@ export const POTERI = Object.freeze([
     "name": "Doppio cuore",
     "dot": 4,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per sessione, quando muori, muori davvero solo a fine scena: fino ad allora agisci.",
-    "attivo": "Una volta per sessione, quando muori, muori davvero solo a fine scena: fino ad allora agisci.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza per livello): Quando scatta il passivo, risani subito 1 livello di Salute per ogni Quintessenza che paghi.\n\nEffetto passivo (Una volta per sessione): Quando un colpo ti ucciderebbe, invece ti lascia con 1 livello di Salute.",
+    "attivo": "Quando scatta il passivo, risani subito 1 livello di Salute per ogni Quintessenza che paghi.",
+    "passivo": "Quando un colpo ti ucciderebbe, invece ti lascia con 1 livello di Salute.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Il cuore batte ancora.»",
-    "cost": "",
+    "cost": "1 Quintessenza per livello",
     "costValue": 0,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "uses": null,
+    "paradox": "Basso rischio in tutte e due le forme.",
     "formula": "invulnerabilita",
     "formulaName": "Invulnerabilità",
     "link": "verbo",
@@ -7366,88 +7515,293 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza per livello",
+    "cadenzaPassivo": "Una volta per sessione",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
-    "id": "duro-a-morire",
+    "id": "mutaforma",
     "spheres": [
       "life"
     ],
-    "name": "Duro a morire",
-    "dot": 4,
+    "name": "Mutaforma",
+    "dot": 5,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Una volta per scena, paga 3 Quintessenza: un danno fisico che ti ucciderebbe ti lascia a 1 livello di Salute.",
-    "attivo": "Una volta per scena, paga 3 Quintessenza: un danno fisico che ti ucciderebbe ti lascia a 1 livello di Salute.",
-    "passivo": "",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (3 Quintessenza): Per la scena prendi la forma di una creatura che hai toccato, e ne hai i benefici: finché dura usi la sua scheda, e non la tua, con tutto quello che ne consegue. I suoi poteri e le sue doti speciali li prendi solo se hai una Sfera che li copre.\nCon Spirito: puoi prendere anche la forma di una creatura di fuori (uno spirito, un'entità etc..).\nCon Primordio: prendi anche i suoi poteri e le sue doti speciali, quali che siano.\nCon Forza: puoi prendere anche la forma pura di un elemento (vento, fuoco, acqua etc..): per la scheda sei uno spirito di quell'elemento, i colpi fisici ti passano attraverso, e l'elemento intorno a te lo comandi tutto, anche quando è grande (un incendio, un fiume in piena, una bufera etc..).\n\nEffetto passivo (Sempre): Di scena in scena cambi a piacere il tuo volto e il tuo aspetto in quelli di un'altra persona. I vestiti li cambi a mano.\nCon Materia: cambiano anche i vestiti.",
+    "attivo": "Per la scena prendi la forma di una creatura che hai toccato, e ne hai i benefici: finché dura usi la sua scheda, e non la tua, con tutto quello che ne consegue. I suoi poteri e le sue doti speciali li prendi solo se hai una Sfera che li copre.\nCon Spirito: puoi prendere anche la forma di una creatura di fuori (uno spirito, un'entità etc..).\nCon Primordio: prendi anche i suoi poteri e le sue doti speciali, quali che siano.\nCon Forza: puoi prendere anche la forma pura di un elemento (vento, fuoco, acqua etc..): per la scheda sei uno spirito di quell'elemento, i colpi fisici ti passano attraverso, e l'elemento intorno a te lo comandi tutto, anche quando è grande (un incendio, un fiume in piena, una bufera etc..).",
+    "passivo": "Di scena in scena cambi a piacere il tuo volto e il tuo aspetto in quelli di un'altra persona. I vestiti li cambi a mano.\nCon Materia: cambiano anche i vestiti.",
     "amalgama": "",
-    "amalgam": "",
-    "amalgams": [],
+    "amalgam": "matter",
+    "amalgams": [
+      "matter",
+      "spirit",
+      "prime",
+      "forces"
+    ],
     "amalgamText": "",
-    "flavor": "«Non oggi.»",
+    "flavor": "",
     "cost": "3 Quintessenza",
     "costValue": 3,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
-    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
-    "formula": "invulnerabilita",
-    "formulaName": "Invulnerabilità",
-    "link": "verbo",
+    "uses": null,
+    "paradox": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
     "page": "Vita",
-    "hooks": [
-      "uso",
-      "quintessenza",
-      "salute"
-    ],
+    "hooks": [],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 4
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "3 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
-    "id": "non-sotto-il-mio-turno",
+    "id": "sensi-animali",
     "spheres": [
       "life"
     ],
-    "name": "Non sotto il mio turno",
-    "dot": 5,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Finché sei in scena, un compagno che hai curato nella sessione non muore: resta a 1 livello di Salute.",
-    "attivo": "",
-    "passivo": "Finché sei in scena, un compagno che hai curato nella sessione non muore: resta a 1 livello di Salute.",
+    "name": "Sensi animali",
+    "dot": 1,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza a senso): Per la scena un tuo senso diventa quello di un animale, e fa quello che fa il suo: col fiuto del cane senti gli odori da lontano e segui una traccia; con gli occhi del gatto vedi al buio; con l'eco del pipistrello senti la forma delle cose intorno a te, anche di quelle che non vedi (dietro un angolo, nel fumo, al buio). Nei tiri che usano quel senso hai 2 dadi in più, e fai quello che coi sensi di sempre non potresti. Paghi 1 Quintessenza per ogni senso.\n\nEffetto passivo (Sempre): Scegli un senso: quando lo usi hai 2 dadi in più nel tiro che ci va, di solito Allerta.",
+    "attivo": "Per la scena un tuo senso diventa quello di un animale, e fa quello che fa il suo: col fiuto del cane senti gli odori da lontano e segui una traccia; con gli occhi del gatto vedi al buio; con l'eco del pipistrello senti la forma delle cose intorno a te, anche di quelle che non vedi (dietro un angolo, nel fumo, al buio). Nei tiri che usano quel senso hai 2 dadi in più, e fai quello che coi sensi di sempre non potresti. Paghi 1 Quintessenza per ogni senso.",
+    "passivo": "Scegli un senso: quando lo usi hai 2 dadi in più nel tiro che ci va, di solito Allerta.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
-    "flavor": "«Qui non muore nessuno.»",
-    "cost": "",
+    "flavor": "",
+    "cost": "1 Quintessenza a senso",
     "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "guarire",
-    "formulaName": "Guarire",
-    "link": "verbo",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
     "page": "Vita",
-    "hooks": [
-      "salute",
-      "altri"
-    ],
+    "hooks": [],
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza a senso",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "parola-alle-bestie",
+    "spheres": [
+      "life"
+    ],
+    "name": "Parola alle bestie",
+    "dot": 1,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza ad animale, o pari all'Area): Un animale che vedi esegue un tuo ordine di una frase, alla lettera e senza capire i sottintesi (fai la guardia alla porta, segui quell'uomo, porta via le chiavi etc..), fino a fine scena o finché non l'ha fatto. Per ogni Quintessenza in più l'ordine lo prende un altro animale; oppure paghi l'Area (1 la stanza, 2 l'edificio, 3 il quartiere) e lo prendono tutti quelli di un tipo che ci stanno. L'ordine non manda un animale a morire. Con 1 Quintessenza in più l'ordine può essere un messaggio: l'animale va da una persona che conosci, o di cui hai un oggetto, e le ripete il messaggio con la tua voce (al massimo un minuto di parole); se non la trova entro la notte, il messaggio si perde. Un animale legato a qualcuno (un famiglio, il cane di un mago, una bestia di uno spirito) può resistere. Se la sua soglia mentale è più alta dei poteri che conosci in Vita, paghi 1 Quintessenza in più per ogni punto di differenza.\n\nEffetto passivo (Sempre): Capisci gli animali e loro capiscono te, a grandi linee: un cane ti dice che qui è passato qualcuno, un gatto che in casa c'è un estraneo, un piccione che sta per piovere. Non ti obbediscono: si fanno capire. Quello che sanno dipende dall'animale (un cane ricorda un odore per giorni, un piccione dimentica tutto in un'ora).",
+    "attivo": "Un animale che vedi esegue un tuo ordine di una frase, alla lettera e senza capire i sottintesi (fai la guardia alla porta, segui quell'uomo, porta via le chiavi etc..), fino a fine scena o finché non l'ha fatto. Per ogni Quintessenza in più l'ordine lo prende un altro animale; oppure paghi l'Area (1 la stanza, 2 l'edificio, 3 il quartiere) e lo prendono tutti quelli di un tipo che ci stanno. L'ordine non manda un animale a morire. Con 1 Quintessenza in più l'ordine può essere un messaggio: l'animale va da una persona che conosci, o di cui hai un oggetto, e le ripete il messaggio con la tua voce (al massimo un minuto di parole); se non la trova entro la notte, il messaggio si perde. Un animale legato a qualcuno (un famiglio, il cane di un mago, una bestia di uno spirito) può resistere. Se la sua soglia mentale è più alta dei poteri che conosci in Vita, paghi 1 Quintessenza in più per ogni punto di differenza.",
+    "passivo": "Capisci gli animali e loro capiscono te, a grandi linee: un cane ti dice che qui è passato qualcuno, un gatto che in casa c'è un estraneo, un piccione che sta per piovere. Non ti obbediscono: si fanno capire. Quello che sanno dipende dall'animale (un cane ricorda un odore per giorni, un piccione dimentica tutto in un'ora).",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza ad animale, o pari all'Area",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Vita",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": null,
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza ad animale, o pari all'Area",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "richiamo",
+    "spheres": [
+      "life"
+    ],
+    "name": "Richiamo",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Quintessenza pari all'Area, più 1 a tipo): Chiami in tuo soccorso gli animali di un tipo (cani, corvi, ratti, gatti etc..) che stanno nell'area che paghi: 1 la stanza o il cortile, 2 l'edificio o l'isolato, 3 il quartiere etc.. Arrivano appena possono, e per la scena ti aiutano come sanno: attaccano chi ti minaccia, ti fanno strada, si mettono in mezzo, distraggono. Ne arrivano quanti ce ne sono: in un parco i piccioni sono centinaia, in un ufficio i ratti sono tre. Con 1 Quintessenza in più per tipo ne chiami anche un altro.\n\nEffetto passivo (Sempre): Gli animali ti sono amici: non ti attaccano mai, a meno che qualcuno non li costringa (un padrone che li aizza, un potere, una gabbia in cui li chiudono con te).",
+    "attivo": "Chiami in tuo soccorso gli animali di un tipo (cani, corvi, ratti, gatti etc..) che stanno nell'area che paghi: 1 la stanza o il cortile, 2 l'edificio o l'isolato, 3 il quartiere etc.. Arrivano appena possono, e per la scena ti aiutano come sanno: attaccano chi ti minaccia, ti fanno strada, si mettono in mezzo, distraggono. Ne arrivano quanti ce ne sono: in un parco i piccioni sono centinaia, in un ufficio i ratti sono tre. Con 1 Quintessenza in più per tipo ne chiami anche un altro.",
+    "passivo": "Gli animali ti sono amici: non ti attaccano mai, a meno che qualcuno non li costringa (un padrone che li aizza, un potere, una gabbia in cui li chiudono con te).",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "Quintessenza pari all'Area, più 1 a tipo",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo (Volgare se qualcuno vede le bestie obbedirti), nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Vita",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Quintessenza pari all'Area, più 1 a tipo",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
+  },
+  {
+    "id": "parti-di-bestia",
+    "spheres": [
+      "life"
+    ],
+    "name": "Parti di bestia",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza a parte): Una parte del tuo corpo diventa di un animale fino a fine scena, e ti dà la sua capacità vera: ali di pipistrello per planare, branchie per respirare sott'acqua, il naso di un cane per seguire una traccia, la coda di un gatto per l'equilibrio etc.. Dove la capacità da sola non basta, nei tiri in cui quella parte ti aiuta hai 2 dadi in più. Con artigli o fauci il danno del passivo è aggravato. Si vede: chi ti guarda vede una zampa, non una mano.\n\nEffetto passivo (Sempre): I tuoi colpi senza armi fanno danno pari ai poteri che conosci in Vita, più 1: unghie dure, nocche come sassi, denti che stringono. Non si vede.",
+    "attivo": "Una parte del tuo corpo diventa di un animale fino a fine scena, e ti dà la sua capacità vera: ali di pipistrello per planare, branchie per respirare sott'acqua, il naso di un cane per seguire una traccia, la coda di un gatto per l'equilibrio etc.. Dove la capacità da sola non basta, nei tiri in cui quella parte ti aiuta hai 2 dadi in più. Con artigli o fauci il danno del passivo è aggravato. Si vede: chi ti guarda vede una zampa, non una mano.",
+    "passivo": "I tuoi colpi senza armi fanno danno pari ai poteri che conosci in Vita, più 1: unghie dure, nocche come sassi, denti che stringono. Non si vede.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza a parte",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Volgare effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Vita",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza a parte",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "spezzaossa",
+    "spheres": [
+      "life",
+      "forces"
+    ],
+    "name": "Spezzaossa",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza): Se il tuo colpo mirato va a segno, paghi, e la parte che miravi prende la Condizione che cercavi, senza altri tiri: la mano Rotta, la caviglia Slogata, il fianco Sanguinante etc.. Vale se la sua soglia fisica è pari o più bassa dei poteri che conosci in Vita o in Forza; se è più alta, la Condizione non scatta da sola, e resta solo il colpo.\n\nEffetto passivo (Sempre): Quando miri una parte del corpo (il ginocchio, la mano, la gola etc..), sai dove fa più male: nel tiro hai 2 dadi in più, e se colpisci fai 1 danno in più. Quei dadi ti aiutano anche quando col colpo vuoi dargli una Condizione.",
+    "attivo": "Se il tuo colpo mirato va a segno, paghi, e la parte che miravi prende la Condizione che cercavi, senza altri tiri: la mano Rotta, la caviglia Slogata, il fianco Sanguinante etc.. Vale se la sua soglia fisica è pari o più bassa dei poteri che conosci in Vita o in Forza; se è più alta, la Condizione non scatta da sola, e resta solo il colpo.",
+    "passivo": "Quando miri una parte del corpo (il ginocchio, la mano, la gola etc..), sai dove fa più male: nel tiro hai 2 dadi in più, e se colpisci fai 1 danno in più. Quei dadi ti aiutano anche quando col colpo vuoi dargli una Condizione.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "2 Quintessenza",
+    "costValue": 2,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Vita",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": null
+  },
+  {
+    "id": "aculei-corporei",
+    "spheres": [
+      "life"
+    ],
+    "name": "Aculei corporei",
+    "dot": 3,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza): Fino a fine scena sei coperto di aculei. Chi ti ferisce in mischia prende metà del danno che fa a te, per difetto e dopo le tue riduzioni, e l'arma che ti colpisce si rovina: da lì in poi fa 1 danno in meno, finché non la riparano. Puoi pagarlo anche quando ti colpiscono: vale da quel colpo. Con 2 Quintessenza in più il danno gli torna tutto, non la metà.\n\nEffetto passivo (Sempre): Quando qualcuno ti colpisce a mani nude (un pugno, un morso, una presa), dalla pelle escono aculei: prende 1 danno superficiale.",
+    "attivo": "Fino a fine scena sei coperto di aculei. Chi ti ferisce in mischia prende metà del danno che fa a te, per difetto e dopo le tue riduzioni, e l'arma che ti colpisce si rovina: da lì in poi fa 1 danno in meno, finché non la riparano. Puoi pagarlo anche quando ti colpiscono: vale da quel colpo. Con 2 Quintessenza in più il danno gli torna tutto, non la metà.",
+    "passivo": "Quando qualcuno ti colpisce a mani nude (un pugno, un morso, una presa), dalla pelle escono aculei: prende 1 danno superficiale.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "2 Quintessenza",
+    "costValue": 2,
+    "uses": null,
+    "paradox": "Volgare effetto attivo, Volgare effetto passivo se qualcuno guarda.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Vita",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7459,9 +7813,9 @@ export const POTERI = Object.freeze([
     "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: vale come leva anche qualcosa che hai creato tu in questa scena.\n\nEffetto passivo: Il punteggio dell'Ambito di Potenza non conta sino al 4° pallino quando la tua Sfera trova la sua leva già in scena (qualcosa che fa già una parte del lavoro: tu lo spingi, non lo crei).\nAccesso con Corrispondenza: un punto d'arrivo che aspetta ciò che sposti (la mano di un compagno, un contenitore aperto, la tua tasca).\nAccesso con Entropia: una crepa che c'è già (il pilastro stanco, il matrimonio finito, il socio che aspettava un pretesto).\nAccesso con Forza: un'energia già in scena da cavalcare (un temporale, un quadro elettrico, un incendio).\nAccesso con Materia: muovi o sollevi qualcosa con un appoggio già in scena (una leva, una carrucola, un piano inclinato).\nAccesso con Mente: un'emozione che il bersaglio prova già (rabbia, paura, desiderio).\nAccesso con Primordio: plasmi Quintessenza pura dentro un Nodo o con del Tass in mano.\nAccesso con Spirito: un punto dove il Velo è sottile (un cimitero, una corsia d'ospedale di notte, una casa dove è morto qualcuno).\nAccesso con Tempo: invecchi o ringiovanisci qualcosa avendo davanti com'era o come sarà (una foto, un oggetto di quell'epoca, il padre o il figlio).\nAccesso con Vita: la direzione che il corpo sta già prendendo (una ferita che si chiude, una febbre che sale, una gravidanza).",
-    "attivo": "Paga 2 Quintessenza: vale come leva anche qualcosa che hai creato tu in questa scena.",
-    "passivo": "Il punteggio dell'Ambito di Potenza non conta sino al 4° pallino quando la tua Sfera trova la sua leva già in scena (qualcosa che fa già una parte del lavoro: tu lo spingi, non lo crei).\nAccesso con Corrispondenza: un punto d'arrivo che aspetta ciò che sposti (la mano di un compagno, un contenitore aperto, la tua tasca).\nAccesso con Entropia: una crepa che c'è già (il pilastro stanco, il matrimonio finito, il socio che aspettava un pretesto).\nAccesso con Forza: un'energia già in scena da cavalcare (un temporale, un quadro elettrico, un incendio).\nAccesso con Materia: muovi o sollevi qualcosa con un appoggio già in scena (una leva, una carrucola, un piano inclinato).\nAccesso con Mente: un'emozione che il bersaglio prova già (rabbia, paura, desiderio).\nAccesso con Primordio: plasmi Quintessenza pura dentro un Nodo o con del Tass in mano.\nAccesso con Spirito: un punto dove il Velo è sottile (un cimitero, una corsia d'ospedale di notte, una casa dove è morto qualcuno).\nAccesso con Tempo: invecchi o ringiovanisci qualcosa avendo davanti com'era o come sarà (una foto, un oggetto di quell'epoca, il padre o il figlio).\nAccesso con Vita: la direzione che il corpo sta già prendendo (una ferita che si chiude, una febbre che sale, una gravidanza).",
+    "text": "Effetto attivo (2 Quintessenza): Vale come leva anche una cosa che hai messo tu in scena, prima: la benzina che hai versato, se vuoi un incendio; la voce che hai fatto girare, se vuoi che la folla si agiti; il cavo che hai scoperto, se vuoi una scarica.\n\nEffetto passivo (Sempre): L'Ambito di Potenza di un tuo lancio non conta fino al livello 4, se in scena c'è una leva: qualcosa che fa già una parte del lavoro, e tu lo spingi, non lo crei. Un temporale in arrivo, se vuoi un fulmine; un pilastro già incrinato, se vuoi che crolli il soffitto; la rabbia che la guardia prova già, se vuoi che attacchi il suo capo.",
+    "attivo": "Vale come leva anche una cosa che hai messo tu in scena, prima: la benzina che hai versato, se vuoi un incendio; la voce che hai fatto girare, se vuoi che la folla si agiti; il cavo che hai scoperto, se vuoi una scarica.",
+    "passivo": "L'Ambito di Potenza di un tuo lancio non conta fino al livello 4, se in scena c'è una leva: qualcosa che fa già una parte del lavoro, e tu lo spingi, non lo crei. Un temporale in arrivo, se vuoi un fulmine; un pilastro già incrinato, se vuoi che crolli il soffitto; la rabbia che la guardia prova già, se vuoi che attacchi il suo capo.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
@@ -7470,7 +7824,7 @@ export const POTERI = Object.freeze([
     "cost": "2 Quintessenza",
     "costValue": 2,
     "uses": null,
-    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "potenziare",
     "formulaName": "Potenziare",
     "link": "regola",
@@ -7485,14 +7839,18 @@ export const POTERI = Object.freeze([
         "on": "freeScope",
         "scope": "potency",
         "value": 4,
-        "nota": "Il punteggio dell'Ambito di Potenza non conta sino al 4° pallino quando la tua Sfera trova la sua leva già in scena"
+        "nota": "L'Ambito di Potenza di un tuo lancio non conta fino al livello 4, se in scena c'è una leva"
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7504,9 +7862,9 @@ export const POTERI = Object.freeze([
     "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 4 Quintessenza: con un aggancio in scena il lancio è Accidentale anche se va oltre il normale (un incidente grave e strano, un fulmine che cade proprio su di lui).\n\nEffetto passivo: Quando la tua Sfera ha un aggancio in scena (qualcosa che c'era già e che può spiegare l'effetto a un Dormiente), il Narratore può contare il lancio come Accidentale anche se va oltre il normale.\nAccesso con Corrispondenza: dove ci si perde di vista (una stazione affollata, un labirinto di corridoi, un palazzo pieno di fumo).\nAccesso con Entropia: il lancio può passare per un incidente (un cavo che cede, una tegola che cade, un motore che si inceppa).\nAccesso con Forza: un luogo già pieno di energia (una centrale, un concerto, un temporale).\nAccesso con Materia: dove la materia si lavora già (un laboratorio chimico, una fonderia, un'officina).\nAccesso con Mente: chi è già fuori di sé (un ubriaco, uno che non dorme da giorni, due che stanno litigando).\nAccesso con Primordio: dentro un Nodo (una chiesa antica, una sorgente, un bosco sacro).\nAccesso con Spirito: dove la gente crede già agli spiriti (una seduta spiritica, una casa che dicono infestata, una veglia funebre).\nAccesso con Tempo: dove si perde il senso del tempo (una festa, una sala d'attesa, un turno di notte).\nAccesso con Vita: curi o alteri un corpo con le mani addosso e la pelle coperta (una benda, un lenzuolo, un camice).",
-    "attivo": "Paga 4 Quintessenza: con un aggancio in scena il lancio è Accidentale anche se va oltre il normale (un incidente grave e strano, un fulmine che cade proprio su di lui).",
-    "passivo": "Quando la tua Sfera ha un aggancio in scena (qualcosa che c'era già e che può spiegare l'effetto a un Dormiente), il Narratore può contare il lancio come Accidentale anche se va oltre il normale.\nAccesso con Corrispondenza: dove ci si perde di vista (una stazione affollata, un labirinto di corridoi, un palazzo pieno di fumo).\nAccesso con Entropia: il lancio può passare per un incidente (un cavo che cede, una tegola che cade, un motore che si inceppa).\nAccesso con Forza: un luogo già pieno di energia (una centrale, un concerto, un temporale).\nAccesso con Materia: dove la materia si lavora già (un laboratorio chimico, una fonderia, un'officina).\nAccesso con Mente: chi è già fuori di sé (un ubriaco, uno che non dorme da giorni, due che stanno litigando).\nAccesso con Primordio: dentro un Nodo (una chiesa antica, una sorgente, un bosco sacro).\nAccesso con Spirito: dove la gente crede già agli spiriti (una seduta spiritica, una casa che dicono infestata, una veglia funebre).\nAccesso con Tempo: dove si perde il senso del tempo (una festa, una sala d'attesa, un turno di notte).\nAccesso con Vita: curi o alteri un corpo con le mani addosso e la pelle coperta (una benda, un lenzuolo, un camice).",
+    "text": "Effetto attivo (4 Quintessenza): Il Narratore fa diventare Accidentale il tuo lancio, anche se va oltre il normale. In un posto Dissonante non vale: lì ogni lancio è Volgare.\n\nEffetto passivo (Sempre): La tua Magick si nasconde in quello che c'è già. Se in scena qualcosa può spiegare il tuo effetto a un Dormiente (un temporale, una folla, un cavo scoperto etc..), il Narratore può contare Accidentale il lancio anche se va oltre il normale: cosa basta, lo decide lui.",
+    "attivo": "Il Narratore fa diventare Accidentale il tuo lancio, anche se va oltre il normale. In un posto Dissonante non vale: lì ogni lancio è Volgare.",
+    "passivo": "La tua Magick si nasconde in quello che c'è già. Se in scena qualcosa può spiegare il tuo effetto a un Dormiente (un temporale, una folla, un cavo scoperto etc..), il Narratore può contare Accidentale il lancio anche se va oltre il normale: cosa basta, lo decide lui.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
@@ -7515,7 +7873,7 @@ export const POTERI = Object.freeze([
     "cost": "4 Quintessenza",
     "costValue": 4,
     "uses": null,
-    "paradox": "Accidentale effetto attivo, Accidentale se il Narratore lo concede effetto passivo.",
+    "paradox": "Accidentale effetto attivo, Accidentale se il Narratore lo concede effetto passivo; in un posto Dissonante, Volgare tutti e due.",
     "formula": "celare",
     "formulaName": "Celare",
     "link": "regola",
@@ -7529,9 +7887,9 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "4 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7543,18 +7901,16 @@ export const POTERI = Object.freeze([
     "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 1 Quintessenza: chi lancia quella Sfera su di te ha i dadi dimezzati per difetto oppure lancia a soglia +3, a seconda del tiro.\nPaga 3 Quintessenza: la protezione dura una scena.\n\nEffetto passivo: Chi lancia effetti di quella Sfera su di te contro la tua volontà ha 2 dadi in meno oppure soglia +2.\n\nEffetto Amalgama: Avere questo potere in più Sfere copre anche dalle altre Sfere.",
-    "attivo": "Paga 1 Quintessenza: chi lancia quella Sfera su di te ha i dadi dimezzati per difetto oppure lancia a soglia +3, a seconda del tiro.\nPaga 3 Quintessenza: la protezione dura una scena.",
-    "passivo": "Chi lancia effetti di quella Sfera su di te contro la tua volontà ha 2 dadi in meno oppure soglia +2.",
-    "amalgama": "Avere questo potere in più Sfere copre anche dalle altre Sfere.",
-    "amalgam": "any",
-    "amalgams": [
-      "any"
-    ],
-    "amalgamText": "Avere questo potere in più Sfere copre anche dalle altre Sfere.",
+    "text": "Effetto attivo (1 Quintessenza, 3 per la scena): Quando reagisci a un lancio col passivo, su di te o su un compagno vicino a te, la difesa conta di più: chi lancia ha i dadi dimezzati per difetto oppure soglia +3. Con 3 Quintessenza vale fino a fine scena, contro tutti i suoi lanci.\n\nEffetto passivo (Sempre): Quando qualcuno lancia una Sfera che conosci su di te o intorno a te, lo percepisci subito, e puoi scegliere di reagire a quell'effetto (con la tua reazione: ne hai una per turno).",
+    "attivo": "Quando reagisci a un lancio col passivo, su di te o su un compagno vicino a te, la difesa conta di più: chi lancia ha i dadi dimezzati per difetto oppure soglia +3. Con 3 Quintessenza vale fino a fine scena, contro tutti i suoi lanci.",
+    "passivo": "Quando qualcuno lancia una Sfera che conosci su di te o intorno a te, lo percepisci subito, e puoi scegliere di reagire a quell'effetto (con la tua reazione: ne hai una per turno).",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Conosci la tua Sfera e non fai entrare gli estranei.»",
-    "cost": "1 Quintessenza",
-    "costValue": 1,
+    "cost": "1 Quintessenza, 3 per la scena",
+    "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "contrastare",
@@ -7569,10 +7925,13 @@ export const POTERI = Object.freeze([
     "effects": [],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza, 3 per la scena",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "fatto-per-durare",
@@ -7583,9 +7942,9 @@ export const POTERI = Object.freeze([
     "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: quando l'appoggio sta per cedere, sposti l'effetto su un nuovo appoggio della tua Sfera.\n\nEffetto passivo: Il punteggio dell'Ambito di Durata non conta sino al 4° pallino, ma l'effetto dura solo finché regge l'appoggio della tua Sfera (la cosa a cui leghi l'effetto, che lo tiene in piedi al posto tuo). Se l'appoggio cede, l'effetto finisce in anticipo.\nAccesso con Corrispondenza: finché esiste il varco o il luogo su cui l'hai appoggiato, che deve esserci già (una porta, un arco, una stanza).\nAccesso con Entropia: finché resta vera una condizione che fissi col Narratore quando lanci (finché lei non torna, finché la candela brucia, finché nessuno dice il suo nome).\nAccesso con Forza: finché non si interrompe il flusso di energia che lo alimenta (un cavo sotto tensione, un fuoco acceso, il vento).\nAccesso con Materia: finché dura l'oggetto catalizzatore che crei per lui (un anello, una statuetta, un chiodo).\nAccesso con Mente: finché chi lo subisce non se ne accorge (una prova, uno specchio, una voce che conosce).\nAccesso con Primordio: finché riceve energia da una fonte (un Nodo, del Tass, un Talismano carico).\nAccesso con Spirito: finché uno spirito lo tiene per te e tu rispetti il patto (un'offerta, un divieto, un favore).\nAccesso con Tempo: finché non si ferma l'orologio a cui lo leghi (una pendola, una clessidra da girare, un metronomo).\nAccesso con Vita: finché vive l'essere a cui lo leghi (una pianta, un animale, una persona).",
-    "attivo": "Paga 2 Quintessenza: quando l'appoggio sta per cedere, sposti l'effetto su un nuovo appoggio della tua Sfera.",
-    "passivo": "Il punteggio dell'Ambito di Durata non conta sino al 4° pallino, ma l'effetto dura solo finché regge l'appoggio della tua Sfera (la cosa a cui leghi l'effetto, che lo tiene in piedi al posto tuo). Se l'appoggio cede, l'effetto finisce in anticipo.\nAccesso con Corrispondenza: finché esiste il varco o il luogo su cui l'hai appoggiato, che deve esserci già (una porta, un arco, una stanza).\nAccesso con Entropia: finché resta vera una condizione che fissi col Narratore quando lanci (finché lei non torna, finché la candela brucia, finché nessuno dice il suo nome).\nAccesso con Forza: finché non si interrompe il flusso di energia che lo alimenta (un cavo sotto tensione, un fuoco acceso, il vento).\nAccesso con Materia: finché dura l'oggetto catalizzatore che crei per lui (un anello, una statuetta, un chiodo).\nAccesso con Mente: finché chi lo subisce non se ne accorge (una prova, uno specchio, una voce che conosce).\nAccesso con Primordio: finché riceve energia da una fonte (un Nodo, del Tass, un Talismano carico).\nAccesso con Spirito: finché uno spirito lo tiene per te e tu rispetti il patto (un'offerta, un divieto, un favore).\nAccesso con Tempo: finché non si ferma l'orologio a cui lo leghi (una pendola, una clessidra da girare, un metronomo).\nAccesso con Vita: finché vive l'essere a cui lo leghi (una pianta, un animale, una persona).",
+    "text": "Effetto attivo (2 Quintessenza): Quando quello a cui hai legato l'effetto sta per venire meno, lo sposti su un'altra cosa o un'altra condizione.\n\nEffetto passivo (Sempre): L'Ambito di Durata di un tuo effetto non conta fino al livello 4, se lo leghi a qualcosa: una cosa o una condizione precisa (finché la candela brucia, finché lei non torna, finché porti l'anello etc..). Quando quello a cui l'hai legato viene meno, l'effetto finisce. In pratica baratti la Durata con una condizione.",
+    "attivo": "Quando quello a cui hai legato l'effetto sta per venire meno, lo sposti su un'altra cosa o un'altra condizione.",
+    "passivo": "L'Ambito di Durata di un tuo effetto non conta fino al livello 4, se lo leghi a qualcosa: una cosa o una condizione precisa (finché la candela brucia, finché lei non torna, finché porti l'anello etc..). Quando quello a cui l'hai legato viene meno, l'effetto finisce. In pratica baratti la Durata con una condizione.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
@@ -7594,7 +7953,7 @@ export const POTERI = Object.freeze([
     "cost": "2 Quintessenza",
     "costValue": 2,
     "uses": null,
-    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "fissare",
     "formulaName": "Fissare",
     "link": "regola",
@@ -7611,14 +7970,14 @@ export const POTERI = Object.freeze([
         "on": "freeScope",
         "scope": "duration",
         "value": 4,
-        "nota": "Il punteggio dell'Ambito di Durata non conta sino al 4° pallino, ma l'effetto dura solo finché regge l'appoggio della tua Sfera"
+        "nota": "L'Ambito di Durata di un tuo effetto non conta fino al livello 4, se lo leghi a qualcosa"
       }
     ],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7630,9 +7989,9 @@ export const POTERI = Object.freeze([
     "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: vale come tratto comune anche qualcosa che hai creato tu in questa scena.\n\nEffetto passivo: Il punteggio dell'Ambito di Bersagli non conta sino al 4° pallino quando per la tua Sfera la folla è una cosa sola (hanno già un tratto comune: qualcosa che li lega tutti, e da lì la tua Sfera li raggiunge insieme).\nAccesso con Corrispondenza: i Bersagli sparsi in luoghi diversi hanno qualcosa in comune che tieni in mano (lo stesso sangue, un oggetto di ciascuno, una lista coi nomi): paghi la Portata del più lontano.\nAccesso con Entropia: lanci su una folla o su un'area senza scegliere uno per uno (un mercato, una tribuna, un ingorgo): paghi solo l'Area.\nAccesso con Forza: la stessa energia li tocca tutti (un pavimento sotto tensione, la musica di un concerto, la luce dei riflettori).\nAccesso con Materia: hanno addosso lo stesso tipo di oggetto (le pistole d'ordinanza, le divise, i telefoni).\nAccesso con Mente: li tiene insieme la stessa emozione (il panico di una fuga, il tifo di uno stadio, la devozione di una setta).\nAccesso con Primordio: portano la stessa Risonanza (chi ha bevuto allo stesso Nodo, i Talismani caricati dalla stessa mano, i presenti a uno stesso rito).\nAccesso con Spirito: veglia su di loro lo stesso spirito (il protettore di una famiglia, lo spirito di una nave, il patrono di un paese).\nAccesso con Tempo: hanno vissuto lo stesso momento (gli invitati di una festa, i testimoni di un incidente, i nati nello stesso giorno).\nAccesso con Vita: guarisci più feriti nella stessa stanza, anche senza toccarli.",
-    "attivo": "Paga 2 Quintessenza: vale come tratto comune anche qualcosa che hai creato tu in questa scena.",
-    "passivo": "Il punteggio dell'Ambito di Bersagli non conta sino al 4° pallino quando per la tua Sfera la folla è una cosa sola (hanno già un tratto comune: qualcosa che li lega tutti, e da lì la tua Sfera li raggiunge insieme).\nAccesso con Corrispondenza: i Bersagli sparsi in luoghi diversi hanno qualcosa in comune che tieni in mano (lo stesso sangue, un oggetto di ciascuno, una lista coi nomi): paghi la Portata del più lontano.\nAccesso con Entropia: lanci su una folla o su un'area senza scegliere uno per uno (un mercato, una tribuna, un ingorgo): paghi solo l'Area.\nAccesso con Forza: la stessa energia li tocca tutti (un pavimento sotto tensione, la musica di un concerto, la luce dei riflettori).\nAccesso con Materia: hanno addosso lo stesso tipo di oggetto (le pistole d'ordinanza, le divise, i telefoni).\nAccesso con Mente: li tiene insieme la stessa emozione (il panico di una fuga, il tifo di uno stadio, la devozione di una setta).\nAccesso con Primordio: portano la stessa Risonanza (chi ha bevuto allo stesso Nodo, i Talismani caricati dalla stessa mano, i presenti a uno stesso rito).\nAccesso con Spirito: veglia su di loro lo stesso spirito (il protettore di una famiglia, lo spirito di una nave, il patrono di un paese).\nAccesso con Tempo: hanno vissuto lo stesso momento (gli invitati di una festa, i testimoni di un incidente, i nati nello stesso giorno).\nAccesso con Vita: guarisci più feriti nella stessa stanza, anche senza toccarli.",
+    "text": "Effetto attivo (2 Quintessenza): Il tratto comune lo scegli tu, anche da poco, purché ci sia davvero (chi porta una giacca rossa, chi è sceso dallo stesso treno, chi ha bevuto dalla stessa bottiglia etc..).\n\nEffetto passivo (Sempre): L'Ambito di Bersagli di un tuo lancio non conta fino al livello 4, se i bersagli hanno un legame che conta: qualcosa che li unisce davvero, con sostanza e peso nella loro vita (i credenti di una chiesa, i soldati di un reparto, i membri di una famiglia etc..). Un tratto da poco non basta: tutti quelli che portano le scarpe, no.",
+    "attivo": "Il tratto comune lo scegli tu, anche da poco, purché ci sia davvero (chi porta una giacca rossa, chi è sceso dallo stesso treno, chi ha bevuto dalla stessa bottiglia etc..).",
+    "passivo": "L'Ambito di Bersagli di un tuo lancio non conta fino al livello 4, se i bersagli hanno un legame che conta: qualcosa che li unisce davvero, con sostanza e peso nella loro vita (i credenti di una chiesa, i soldati di un reparto, i membri di una famiglia etc..). Un tratto da poco non basta: tutti quelli che portano le scarpe, no.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
@@ -7641,7 +8000,7 @@ export const POTERI = Object.freeze([
     "cost": "2 Quintessenza",
     "costValue": 2,
     "uses": null,
-    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "vincolare",
     "formulaName": "Vincolare",
     "link": "regola",
@@ -7657,14 +8016,14 @@ export const POTERI = Object.freeze([
         "on": "freeScope",
         "scope": "targets",
         "value": 4,
-        "nota": "Il punteggio dell'Ambito di Bersagli non conta sino al 4° pallino quando per la tua Sfera la folla è una cosa sola"
+        "nota": "L'Ambito di Bersagli di un tuo lancio non conta fino al livello 4, se i bersagli hanno un legame che conta"
       }
     ],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7718,21 +8077,18 @@ export const POTERI = Object.freeze([
     "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Una volta per sessione, paga 2 Quintessenza: l'effetto scelto riesce senza tirare, purché il tiro sia possibile (dopo la soglia ti resta almeno un dado).\n\nEffetto passivo: Scegli un effetto di Magick nel tuo Grimorio (già pronto o che tu abbia creato): quell'effetto ottiene permanentemente -2 alla soglia, senza scendere sotto zero. Devi comunque possedere le Sfere.",
-    "attivo": "Una volta per sessione, paga 2 Quintessenza: l'effetto scelto riesce senza tirare, purché il tiro sia possibile (dopo la soglia ti resta almeno un dado).",
-    "passivo": "Scegli un effetto di Magick nel tuo Grimorio (già pronto o che tu abbia creato): quell'effetto ottiene permanentemente -2 alla soglia, senza scendere sotto zero. Devi comunque possedere le Sfere.",
+    "text": "Effetto attivo (Quintessenza pari alla soglia): L'effetto scelto riesce senza tirare: paghi tanta Quintessenza quanta è la sua soglia. Il tiro deve essere possibile: dopo la soglia ti resta almeno un dado.\n\nEffetto passivo (Sempre): All'acquisto scegli un effetto di Magick del tuo Grimorio, uno già pronto o uno tuo: quando lo lanci ha soglia -2, senza scendere sotto zero. Le Sfere che chiede ti servono lo stesso.",
+    "attivo": "L'effetto scelto riesce senza tirare: paghi tanta Quintessenza quanta è la sua soglia. Il tiro deve essere possibile: dopo la soglia ti resta almeno un dado.",
+    "passivo": "All'acquisto scegli un effetto di Magick del tuo Grimorio, uno già pronto o uno tuo: quando lo lanci ha soglia -2, senza scendere sotto zero. Le Sfere che chiede ti servono lo stesso.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "«Nel tuo campo non c'è gara.»",
-    "cost": "2 Quintessenza",
-    "costValue": 2,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
-    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+    "cost": "Quintessenza pari alla soglia",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "ripetere",
     "formulaName": "Ripetere",
     "link": "regola",
@@ -7747,7 +8103,7 @@ export const POTERI = Object.freeze([
         "on": "threshold",
         "value": -2,
         "when": "incantesimoScelto",
-        "nota": "quell'effetto ottiene permanentemente -2 alla soglia, senza scendere sotto zero"
+        "nota": "quando lo lanci ha soglia -2, senza scendere sotto zero"
       },
       {
         "mode": "attivo",
@@ -7756,17 +8112,24 @@ export const POTERI = Object.freeze([
           "incantesimoScelto",
           "dadi1"
         ],
-        "nota": "l'effetto scelto riesce senza tirare, purché il tiro sia possibile (dopo la soglia ti resta almeno un dado)"
+        "nota": "L'effetto scelto riesce senza tirare: paghi tanta Quintessenza quanta è la sua soglia"
       }
     ],
     "scelta": {
       "kind": "incantesimo"
     },
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Quintessenza pari alla soglia",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
   },
   {
     "id": "legame",
@@ -7777,9 +8140,9 @@ export const POTERI = Object.freeze([
     "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: crei sul momento un legame con un bersaglio con cui hai un legame superficiale (una foto, averlo incontrato una volta, il suo nome), e vale per la sessione.\n\nEffetto passivo: Il punteggio dell'Ambito di Portata non conta sino al 4° pallino verso ciò con cui hai un legame (quello che ti unisce al bersaglio anche quando è lontano). Il legame fa anche da ponte: salti la Regola del Ponte per lo spazio (quella che chiede Corrispondenza per agire su ciò che non vedi).\nAccesso con Corrispondenza: un luogo dove sei già stato, un punto che vedi se ti teletrasporti lì, chi hai marcato toccandolo in questa sessione.\nAccesso con Entropia: un conto aperto fra voi (un debito da saldare, una scommessa persa, una maledizione che gli hai lanciato).\nAccesso con Forza: un oggetto che porta l'energia scelta (un cavo, una tubatura, una ringhiera di ferro) fino al bersaglio, se è un conduttore naturale.\nAccesso con Materia: un pezzo dell'oggetto che tieni con te (una scheggia della statua, un bullone della macchina, l'altra metà di una banconota).\nAccesso con Mente: una mente legata alla tua (chi hai letto nel pensiero, chi ti ha fatto una promessa, chi ti sta pensando in questo momento).\nAccesso con Primordio: un compagno con cui hai condiviso Quintessenza in questa sessione, una volta a scena.\nAccesso con Spirito: uno spirito che hai già incontrato, anche senza avere niente di suo.\nAccesso con Tempo: qualcuno con cui hai un appuntamento (una cena fissata, una partenza insieme, un duello all'alba).\nAccesso con Vita: un pezzo del suo corpo che tieni con te (una goccia di sangue, una ciocca di capelli, un'unghia).",
-    "attivo": "Paga 2 Quintessenza: crei sul momento un legame con un bersaglio con cui hai un legame superficiale (una foto, averlo incontrato una volta, il suo nome), e vale per la sessione.",
-    "passivo": "Il punteggio dell'Ambito di Portata non conta sino al 4° pallino verso ciò con cui hai un legame (quello che ti unisce al bersaglio anche quando è lontano). Il legame fa anche da ponte: salti la Regola del Ponte per lo spazio (quella che chiede Corrispondenza per agire su ciò che non vedi).\nAccesso con Corrispondenza: un luogo dove sei già stato, un punto che vedi se ti teletrasporti lì, chi hai marcato toccandolo in questa sessione.\nAccesso con Entropia: un conto aperto fra voi (un debito da saldare, una scommessa persa, una maledizione che gli hai lanciato).\nAccesso con Forza: un oggetto che porta l'energia scelta (un cavo, una tubatura, una ringhiera di ferro) fino al bersaglio, se è un conduttore naturale.\nAccesso con Materia: un pezzo dell'oggetto che tieni con te (una scheggia della statua, un bullone della macchina, l'altra metà di una banconota).\nAccesso con Mente: una mente legata alla tua (chi hai letto nel pensiero, chi ti ha fatto una promessa, chi ti sta pensando in questo momento).\nAccesso con Primordio: un compagno con cui hai condiviso Quintessenza in questa sessione, una volta a scena.\nAccesso con Spirito: uno spirito che hai già incontrato, anche senza avere niente di suo.\nAccesso con Tempo: qualcuno con cui hai un appuntamento (una cena fissata, una partenza insieme, un duello all'alba).\nAccesso con Vita: un pezzo del suo corpo che tieni con te (una goccia di sangue, una ciocca di capelli, un'unghia).",
+    "text": "Effetto attivo (2 Quintessenza): Con un legame da poco (una foto, il suo nome, averlo visto una volta) ne fai uno vero, che vale fino a fine sessione.\n\nEffetto passivo (Sempre): L'Ambito di Portata di un tuo lancio non conta fino al livello 4 verso ciò con cui hai un legame: qualcosa che ti unisce al bersaglio anche da lontano (un pezzo di lui che tieni con te, un conto aperto fra voi, un posto dove sei già stato etc..). Il legame fa anche da ponte: salti la Regola del Ponte, quella che chiede Corrispondenza per agire su ciò che non vedi.",
+    "attivo": "Con un legame da poco (una foto, il suo nome, averlo visto una volta) ne fai uno vero, che vale fino a fine sessione.",
+    "passivo": "L'Ambito di Portata di un tuo lancio non conta fino al livello 4 verso ciò con cui hai un legame: qualcosa che ti unisce al bersaglio anche da lontano (un pezzo di lui che tieni con te, un conto aperto fra voi, un posto dove sei già stato etc..). Il legame fa anche da ponte: salti la Regola del Ponte, quella che chiede Corrispondenza per agire su ciò che non vedi.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
@@ -7787,10 +8150,7 @@ export const POTERI = Object.freeze([
     "flavor": "«Per te la distanza è un dettaglio.»",
     "cost": "2 Quintessenza",
     "costValue": 2,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
+    "uses": null,
     "paradox": "Basso rischio effetto attivo, segue il lancio effetto passivo.",
     "formula": "vincolare",
     "formulaName": "Vincolare",
@@ -7808,14 +8168,18 @@ export const POTERI = Object.freeze([
         "on": "freeScope",
         "scope": "range",
         "value": 4,
-        "nota": "Il punteggio dell'Ambito di Portata non conta sino al 4° pallino verso ciò con cui hai un legame"
+        "nota": "L'Ambito di Portata di un tuo lancio non conta fino al livello 4 verso ciò con cui hai un legame"
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7827,9 +8191,9 @@ export const POTERI = Object.freeze([
     "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 1 Quintessenza: si attiva anche per l'effetto di Magick.\n\nEffetto passivo: All'acquisto scegli un'Abilità. Quando tiri quell'Abilità non a scopo di Magick ottieni un dado in più per ogni tua Sfera di cui riesci a giustificare l'utilizzo, fino a 3. Se ad esempio scegli Convincere e hai Tempo e Mente, è facile prevedere che cosa dirà e che cosa penserà: per questo hai due dadi in più. Se sullo stesso tiro vale anche Sesto senso, prendi il più alto dei due.",
-    "attivo": "Paga 1 Quintessenza: si attiva anche per l'effetto di Magick.",
-    "passivo": "All'acquisto scegli un'Abilità. Quando tiri quell'Abilità non a scopo di Magick ottieni un dado in più per ogni tua Sfera di cui riesci a giustificare l'utilizzo, fino a 3. Se ad esempio scegli Convincere e hai Tempo e Mente, è facile prevedere che cosa dirà e che cosa penserà: per questo hai due dadi in più. Se sullo stesso tiro vale anche Sesto senso, prendi il più alto dei due.",
+    "text": "Effetto attivo (1 Quintessenza): Sposti il passivo su un'altra Abilità, che prende il posto di quella di prima.\n\nEffetto passivo (Sempre): All'acquisto scegli un'Abilità. Quando la tiri fuori dalla Magick hai 1 dado in più per ogni tua Sfera che c'entra, fino a 3: con Convincere, Tempo e Mente ti dicono cosa dirà e cosa penserà l'altro, e i dadi in più sono 2. Se sullo stesso tiro vale anche Sesto senso, prendi il più alto dei due.",
+    "attivo": "Sposti il passivo su un'altra Abilità, che prende il posto di quella di prima.",
+    "passivo": "All'acquisto scegli un'Abilità. Quando la tiri fuori dalla Magick hai 1 dado in più per ogni tua Sfera che c'entra, fino a 3: con Convincere, Tempo e Mente ti dicono cosa dirà e cosa penserà l'altro, e i dadi in più sono 2. Se sullo stesso tiro vale anche Sesto senso, prendi il più alto dei due.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
@@ -7856,27 +8220,20 @@ export const POTERI = Object.freeze([
         },
         "roll": "abilita",
         "when": "abilitaScelta",
-        "nota": "Quando tiri quell'Abilità non a scopo di Magick ottieni un dado in più per ogni tua Sfera di cui riesci a giustificare l'utilizzo, fino a 3."
-      },
-      {
-        "mode": "attivo",
-        "on": "dice",
-        "value": {
-          "from": "sfere",
-          "max": 3
-        },
-        "roll": "magick",
-        "when": "abilitaScelta",
-        "nota": "Paga 1 Quintessenza: si attiva anche per l'effetto di Magick."
+        "nota": "Quando la tiri fuori dalla Magick hai 1 dado in più per ogni tua Sfera che c'entra, fino a 3"
       }
     ],
     "scelta": {
       "kind": "abilita"
     },
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7888,9 +8245,9 @@ export const POTERI = Object.freeze([
     "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: per un lancio vale anche su un altro tipo di bersaglio della tua Sfera, fra quelli che di solito chiedono una Sfera compagna.\n\nEffetto passivo: All'acquisto scegli un tipo di bersaglio che di solito chiede una Sfera compagna (la seconda Sfera, quella che tocca il bersaglio per ciò che è: per colpire con Vita un vampiro, che è carne morta, serve Materia). Su quel bersaglio lavori come se avessi anche la compagna, perché ne conosci il Modello (la trama che fa di una cosa quello che è). L'incantesimo può comunque essere Volgare, ma per bersagliare il soggetto salti la Regola del Bersaglio (quella che chiede tutte e due le Sfere quando l'effetto tocca due domini).",
-    "attivo": "Paga 2 Quintessenza: per un lancio vale anche su un altro tipo di bersaglio della tua Sfera, fra quelli che di solito chiedono una Sfera compagna.",
-    "passivo": "All'acquisto scegli un tipo di bersaglio che di solito chiede una Sfera compagna (la seconda Sfera, quella che tocca il bersaglio per ciò che è: per colpire con Vita un vampiro, che è carne morta, serve Materia). Su quel bersaglio lavori come se avessi anche la compagna, perché ne conosci il Modello (la trama che fa di una cosa quello che è). L'incantesimo può comunque essere Volgare, ma per bersagliare il soggetto salti la Regola del Bersaglio (quella che chiede tutte e due le Sfere quando l'effetto tocca due domini).",
+    "text": "Effetto attivo (2 Quintessenza): Per un lancio vale anche su un altro tipo di bersaglio, fra quelli che chiedono una Sfera compagna.\n\nEffetto passivo (Sempre): All'acquisto scegli un tipo di bersaglio che di solito chiede una Sfera compagna (la seconda Sfera, quella che tocca il bersaglio per ciò che è: per colpire con Vita un vampiro, che è carne morta, serve Materia). Su quel bersaglio lavori come se l'avessi, perché ne conosci il Modello, la trama che fa di una cosa quello che è. Salti la Regola del Bersaglio; il lancio può essere Volgare lo stesso.",
+    "attivo": "Per un lancio vale anche su un altro tipo di bersaglio, fra quelli che chiedono una Sfera compagna.",
+    "passivo": "All'acquisto scegli un tipo di bersaglio che di solito chiede una Sfera compagna (la seconda Sfera, quella che tocca il bersaglio per ciò che è: per colpire con Vita un vampiro, che è carne morta, serve Materia). Su quel bersaglio lavori come se l'avessi, perché ne conosci il Modello, la trama che fa di una cosa quello che è. Salti la Regola del Bersaglio; il lancio può essere Volgare lo stesso.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
@@ -7899,7 +8256,7 @@ export const POTERI = Object.freeze([
     "cost": "2 Quintessenza",
     "costValue": 2,
     "uses": null,
-    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "sapere",
     "formulaName": "Sapere",
     "link": "regola",
@@ -7910,10 +8267,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -7925,9 +8286,9 @@ export const POTERI = Object.freeze([
     "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: fai scattare subito un tuo effetto che aspetta il suo segnale.\n\nEffetto passivo: Il punteggio dell'Ambito di Condizioni non conta sino al 4° pallino quando il segnale è preciso (il segnale è una condizione che dice all'effetto quando scattare, su chi o fino a quando: è preciso se la tua Sfera lo riconosce da sola). Le condizioni che la tua Sfera non riconosce contano come sempre.\nAccesso con Corrispondenza: il segnale è qualcosa che entra, esce o arriva in un posto (qualcuno varca la porta, un'auto lascia il parcheggio, un pacco arriva a destinazione).\nAccesso con Entropia: il segnale lo dà il caso (un bicchiere che si rompe, la moneta che cade su testa, il primo passo falso).\nAccesso con Forza: il segnale è un'energia che cambia (si accende una luce, parte uno sparo, scatta un allarme).\nAccesso con Materia: prepari un oggetto che scatta a comando (esplode, si scioglie, crolla) e il comando è una tua parola o un tuo gesto.\nAccesso con Mente: il segnale è quello che pensa o prova chi lo subisce (pensa a te, sa di mentire, ha paura).\nAccesso con Primordio: il segnale è la Quintessenza che si muove (qualcuno la spende, qualcuno beve dal Nodo, si accende una Meraviglia).\nAccesso con Spirito: il segnale viene da oltre il Velo (uno spirito entra nella stanza, qualcuno passa nell'Umbra, un fantasma si mostra).\nAccesso con Tempo: la Condizione è un momento preciso (l'alba, mezzanotte, il rintocco di una campana).\nAccesso con Vita: il segnale viene dal corpo (il cuore accelera, cade la prima goccia di sangue, il bersaglio si addormenta).",
-    "attivo": "Paga 2 Quintessenza: fai scattare subito un tuo effetto che aspetta il suo segnale.",
-    "passivo": "Il punteggio dell'Ambito di Condizioni non conta sino al 4° pallino quando il segnale è preciso (il segnale è una condizione che dice all'effetto quando scattare, su chi o fino a quando: è preciso se la tua Sfera lo riconosce da sola). Le condizioni che la tua Sfera non riconosce contano come sempre.\nAccesso con Corrispondenza: il segnale è qualcosa che entra, esce o arriva in un posto (qualcuno varca la porta, un'auto lascia il parcheggio, un pacco arriva a destinazione).\nAccesso con Entropia: il segnale lo dà il caso (un bicchiere che si rompe, la moneta che cade su testa, il primo passo falso).\nAccesso con Forza: il segnale è un'energia che cambia (si accende una luce, parte uno sparo, scatta un allarme).\nAccesso con Materia: prepari un oggetto che scatta a comando (esplode, si scioglie, crolla) e il comando è una tua parola o un tuo gesto.\nAccesso con Mente: il segnale è quello che pensa o prova chi lo subisce (pensa a te, sa di mentire, ha paura).\nAccesso con Primordio: il segnale è la Quintessenza che si muove (qualcuno la spende, qualcuno beve dal Nodo, si accende una Meraviglia).\nAccesso con Spirito: il segnale viene da oltre il Velo (uno spirito entra nella stanza, qualcuno passa nell'Umbra, un fantasma si mostra).\nAccesso con Tempo: la Condizione è un momento preciso (l'alba, mezzanotte, il rintocco di una campana).\nAccesso con Vita: il segnale viene dal corpo (il cuore accelera, cade la prima goccia di sangue, il bersaglio si addormenta).",
+    "text": "Effetto attivo (2 Quintessenza): Fai scattare subito un tuo effetto che aspetta il suo segnale.\n\nEffetto passivo (Sempre): L'Ambito di Condizioni di un tuo lancio non conta fino al livello 4, se il segnale è preciso. Il segnale è la condizione che dice all'effetto quando scattare, su chi o fino a quando; è preciso se le tue Sfere lo riconoscono da sole (qualcuno varca la porta, scatta un allarme, il bersaglio pensa a te etc..). Gli altri segnali contano come sempre.",
+    "attivo": "Fai scattare subito un tuo effetto che aspetta il suo segnale.",
+    "passivo": "L'Ambito di Condizioni di un tuo lancio non conta fino al livello 4, se il segnale è preciso. Il segnale è la condizione che dice all'effetto quando scattare, su chi o fino a quando; è preciso se le tue Sfere lo riconoscono da sole (qualcuno varca la porta, scatta un allarme, il bersaglio pensa a te etc..). Gli altri segnali contano come sempre.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
@@ -7936,7 +8297,7 @@ export const POTERI = Object.freeze([
     "cost": "2 Quintessenza",
     "costValue": 2,
     "uses": null,
-    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "condizionare",
     "formulaName": "Condizionare",
     "link": "regola",
@@ -7953,61 +8314,18 @@ export const POTERI = Object.freeze([
         "on": "freeScope",
         "scope": "conditions",
         "value": 4,
-        "nota": "Il punteggio dell'Ambito di Condizioni non conta sino al 4° pallino quando il segnale è preciso"
+        "nota": "L'Ambito di Condizioni di un tuo lancio non conta fino al livello 4, se il segnale è preciso"
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "sentinella",
-    "spheres": [
-      "any"
-    ],
-    "name": "Sentinella",
-    "dot": 1,
-    "type": "attivo",
-    "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 1 Quintessenza: per una scena la Sentinella copre anche un altro bersaglio. È possibile coprire più bersagli pagando più Quintessenza.\n\nEffetto passivo: Quando qualcuno usa una Sfera che conosci su di te o intorno a te, te ne accorgi prima che il lancio sia completo e hai diritto a una reazione istintiva a soglia -2.\n\nEffetto Amalgama: Avere altre Sfere consente una protezione attiva anche per quelle Sfere.",
-    "attivo": "Paga 1 Quintessenza: per una scena la Sentinella copre anche un altro bersaglio. È possibile coprire più bersagli pagando più Quintessenza.",
-    "passivo": "Quando qualcuno usa una Sfera che conosci su di te o intorno a te, te ne accorgi prima che il lancio sia completo e hai diritto a una reazione istintiva a soglia -2.",
-    "amalgama": "Avere altre Sfere consente una protezione attiva anche per quelle Sfere.",
-    "amalgam": "any",
-    "amalgams": [
-      "any"
-    ],
-    "amalgamText": "Avere altre Sfere consente una protezione attiva anche per quelle Sfere.",
-    "flavor": "«Non ti serve vedere: lo senti arrivare.»",
-    "cost": "1 Quintessenza",
-    "costValue": 1,
-    "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "percepire",
-    "formulaName": "Percepire",
-    "link": "effetto",
-    "page": "Generali",
-    "hooks": [
-      "tiro",
-      "quintessenza",
-      "combattimento",
-      "altri"
-    ],
-    "effects": [
+    "prerequisiti": [
       {
-        "on": "threshold",
-        "value": -2,
-        "nota": "hai diritto a una reazione istintiva a soglia -2"
+        "numero": 1
       }
     ],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -8019,18 +8337,16 @@ export const POTERI = Object.freeze([
     "dot": 1,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: fai una domanda precisa al Narratore su quello che il senso coglie (cosa, quanto, da dove) e hai la risposta senza tirare.\n\nEffetto passivo: Percepisci senza tirare quello che la tua Sfera sa vedere. Quando un tiro di Abilità è coerente con quello che percepisci nella scena, il Narratore può concederti soglia -2 oppure 2 dadi in più. Se ad esempio con Vita vedi che la guardia è avvelenata, può concederlo al tiro di Medicina per salvarla e anche a quello di Convincere per farti dire chi è stato.\nAccesso con Corrispondenza: sai sempre dove sei, con le coordinate X, Y, Z; percepisci le aree più vicine a te, quanto sono vicine e all'incirca cosa sono (una zona industriale, un rifugio montano, un lago).\nAccesso con Entropia: senti dove il caso pende (la serratura che cederà, la trave marcia, il tavolo truccato) e gli eventi fortunati o sfortunati in arrivo.\nAccesso con Forza: pensi a un tipo di energia (elettricità, calore, suono) e sai se c'è e a che intensità.\nAccesso con Materia: guardando un oggetto sai di cosa è fatto e a che cosa serve (una lega, una polvere, un congegno).\nAccesso con Mente: senti le emozioni di chi hai intorno (paura, rabbia, desiderio) e i residui psichici rimasti nei luoghi, e hai una memoria spiccata per quello che hai visto e sentito.\nAccesso con Primordio: percepisci i Risvegliati intorno a te dalla loro Risonanza, e dove c'è o non c'è Quintessenza in eccesso (un Nodo, del Tass, un Talismano).\nAccesso con Spirito: senti se in scena ci sono spiriti, effimera o presenze oltre il Velo, e dove il Velo è sottile.\nAccesso con Tempo: sai sempre che ore sono e che ore NON sono, e senti a pelle le anomalie temporali (un déjà-vu, un ciclo, un rallentamento).\nAccesso con Vita: guardando un corpo sai cosa ha (ferite, veleni, gravidanza).\n\nEffetto Amalgama: Combinando le sensazioni puoi avere una dinamica più precisa: ad esempio combinando Mente e Vita puoi distinguere le tipologie di persone, oppure con Materia e Corrispondenza sai che cosa potrebbero essere quegli edifici in lontananza. Ciononostante non hai un livello di precisione tale da sapere che 2 persone nella stessa stanza sono fratelli, oppure che c'è una bomba nel 3° edificio sulla strada: quella è Magick.",
-    "attivo": "Paga 2 Quintessenza: fai una domanda precisa al Narratore su quello che il senso coglie (cosa, quanto, da dove) e hai la risposta senza tirare.",
-    "passivo": "Percepisci senza tirare quello che la tua Sfera sa vedere. Quando un tiro di Abilità è coerente con quello che percepisci nella scena, il Narratore può concederti soglia -2 oppure 2 dadi in più. Se ad esempio con Vita vedi che la guardia è avvelenata, può concederlo al tiro di Medicina per salvarla e anche a quello di Convincere per farti dire chi è stato.\nAccesso con Corrispondenza: sai sempre dove sei, con le coordinate X, Y, Z; percepisci le aree più vicine a te, quanto sono vicine e all'incirca cosa sono (una zona industriale, un rifugio montano, un lago).\nAccesso con Entropia: senti dove il caso pende (la serratura che cederà, la trave marcia, il tavolo truccato) e gli eventi fortunati o sfortunati in arrivo.\nAccesso con Forza: pensi a un tipo di energia (elettricità, calore, suono) e sai se c'è e a che intensità.\nAccesso con Materia: guardando un oggetto sai di cosa è fatto e a che cosa serve (una lega, una polvere, un congegno).\nAccesso con Mente: senti le emozioni di chi hai intorno (paura, rabbia, desiderio) e i residui psichici rimasti nei luoghi, e hai una memoria spiccata per quello che hai visto e sentito.\nAccesso con Primordio: percepisci i Risvegliati intorno a te dalla loro Risonanza, e dove c'è o non c'è Quintessenza in eccesso (un Nodo, del Tass, un Talismano).\nAccesso con Spirito: senti se in scena ci sono spiriti, effimera o presenze oltre il Velo, e dove il Velo è sottile.\nAccesso con Tempo: sai sempre che ore sono e che ore NON sono, e senti a pelle le anomalie temporali (un déjà-vu, un ciclo, un rallentamento).\nAccesso con Vita: guardando un corpo sai cosa ha (ferite, veleni, gravidanza).",
-    "amalgama": "Combinando le sensazioni puoi avere una dinamica più precisa: ad esempio combinando Mente e Vita puoi distinguere le tipologie di persone, oppure con Materia e Corrispondenza sai che cosa potrebbero essere quegli edifici in lontananza. Ciononostante non hai un livello di precisione tale da sapere che 2 persone nella stessa stanza sono fratelli, oppure che c'è una bomba nel 3° edificio sulla strada: quella è Magick.",
-    "amalgam": "any",
-    "amalgams": [
-      "any"
-    ],
-    "amalgamText": "Combinando le sensazioni puoi avere una dinamica più precisa: ad esempio combinando Mente e Vita puoi distinguere le tipologie di persone, oppure con Materia e Corrispondenza sai che cosa potrebbero essere quegli edifici in lontananza. Ciononostante non hai un livello di precisione tale da sapere che 2 persone nella stessa stanza sono fratelli, oppure che c'è una bomba nel 3° edificio sulla strada: quella è Magick.",
+    "text": "Effetto attivo (Quintessenza pari alla Precisione): Fai al Narratore una domanda su quello che senti, e hai la risposta senza tirare. Il prezzo segue la precisione della risposta, come se pagassi l'Ambito: il Narratore fissa il livello di Precisione, da 1 a 7, e paghi tanta Quintessenza quanto quel livello.\n\nEffetto passivo (Sempre): Percepisci senza tirare quello che le tue Sfere sanno vedere (con Forza l'energia che c'è, con Vita come sta un corpo, con Spirito le presenze oltre il Velo etc..). Quando un tiro di Abilità si appoggia a quello che percepisci, il Narratore può darti 2 dadi in più oppure soglia -2.",
+    "attivo": "Fai al Narratore una domanda su quello che senti, e hai la risposta senza tirare. Il prezzo segue la precisione della risposta, come se pagassi l'Ambito: il Narratore fissa il livello di Precisione, da 1 a 7, e paghi tanta Quintessenza quanto quel livello.",
+    "passivo": "Percepisci senza tirare quello che le tue Sfere sanno vedere (con Forza l'energia che c'è, con Vita come sta un corpo, con Spirito le presenze oltre il Velo etc..). Quando un tiro di Abilità si appoggia a quello che percepisci, il Narratore può darti 2 dadi in più oppure soglia -2.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Non guardi: sai.»",
-    "cost": "2 Quintessenza",
-    "costValue": 2,
+    "cost": "Quintessenza pari alla Precisione",
+    "costValue": 0,
     "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "percepire",
@@ -8048,15 +8364,18 @@ export const POTERI = Object.freeze([
         "on": "dice",
         "value": 2,
         "roll": "abilita",
-        "nota": "Quando un tiro di Abilità è coerente con quello che percepisci nella scena, il Narratore può concederti soglia -2 oppure 2 dadi in più."
+        "nota": "Quando un tiro di Abilità si appoggia a quello che percepisci, il Narratore può darti 2 dadi in più oppure soglia -2"
       }
     ],
     "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "Quintessenza pari alla Precisione",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
   },
   {
     "id": "adrenalina",
@@ -8067,25 +8386,24 @@ export const POTERI = Object.freeze([
     ],
     "name": "Adrenalina",
     "dot": 2,
-    "type": "passivo",
-    "kind": "passivo",
-    "text": "Effetto passivo: Accesso con Mente: quando sei sotto metà Salute, i lanci di Mente su te stesso hanno soglia meno 2 e le Condizioni mentali pregresse vengono ignorate per la scena (si aggiornerà a catena col rifacimento delle Condizioni).\nAccesso con Spirito: quando sei sotto metà Salute, i lanci di Spirito su te stesso hanno soglia meno 2 e le Condizioni soprannaturali pregresse vengono ignorate per la scena.\nAccesso con Vita: quando sei sotto metà Salute, i lanci di Vita su te stesso hanno soglia meno 2 e le Condizioni fisiche pregresse vengono ignorate per la scena.\n\nEffetto Amalgama: Per ognuna delle Sfere aggiunte ottieni la protezione dalle Condizioni di quel tipo.\nAccesso con Primordio: se le Condizioni derivano da anomalie paradossali, sono messe in pausa per la scena.",
-    "attivo": "",
-    "passivo": "Accesso con Mente: quando sei sotto metà Salute, i lanci di Mente su te stesso hanno soglia meno 2 e le Condizioni mentali pregresse vengono ignorate per la scena (si aggiornerà a catena col rifacimento delle Condizioni).\nAccesso con Spirito: quando sei sotto metà Salute, i lanci di Spirito su te stesso hanno soglia meno 2 e le Condizioni soprannaturali pregresse vengono ignorate per la scena.\nAccesso con Vita: quando sei sotto metà Salute, i lanci di Vita su te stesso hanno soglia meno 2 e le Condizioni fisiche pregresse vengono ignorate per la scena.",
-    "amalgama": "Per ognuna delle Sfere aggiunte ottieni la protezione dalle Condizioni di quel tipo.\nCon Primordio: se le Condizioni derivano da anomalie paradossali, sono messe in pausa per la scena.",
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Per la scena ignori una Condizione fisica (si aggiornerà a catena col rifacimento delle Condizioni), oppure le penalità del dolore quando sei Menomato.\nCon Mente: la Condizione può essere anche mentale.\nCon Spirito: la Condizione può essere anche soprannaturale.\nCon Primordio: la Condizione può essere anche una che viene dal Paradosso.\n\nEffetto passivo (Sempre): Quando sei sotto metà Salute, nei tiri fisici hai 2 dadi in più.",
+    "attivo": "Per la scena ignori una Condizione fisica (si aggiornerà a catena col rifacimento delle Condizioni), oppure le penalità del dolore quando sei Menomato.\nCon Mente: la Condizione può essere anche mentale.\nCon Spirito: la Condizione può essere anche soprannaturale.\nCon Primordio: la Condizione può essere anche una che viene dal Paradosso.",
+    "passivo": "Quando sei sotto metà Salute, nei tiri fisici hai 2 dadi in più.",
+    "amalgama": "",
     "amalgam": "mind",
     "amalgams": [
       "mind",
-      "prime",
       "spirit",
-      "life"
+      "prime"
     ],
-    "amalgamText": "Per ognuna delle Sfere aggiunte ottieni la protezione dalle Condizioni di quel tipo.\nAccesso con Primordio: se le Condizioni derivano da anomalie paradossali, sono messe in pausa per la scena.",
+    "amalgamText": "",
     "flavor": "«Quando fa davvero male, funzioni meglio.»",
-    "cost": "",
-    "costValue": 0,
+    "cost": "1 Quintessenza",
+    "costValue": 1,
     "uses": null,
-    "paradox": "Nessuno effetto attivo, segue il lancio effetto passivo.",
+    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "potenziare",
     "formulaName": "Potenziare",
     "link": "regola",
@@ -8097,17 +8415,22 @@ export const POTERI = Object.freeze([
     ],
     "effects": [
       {
-        "on": "threshold",
-        "value": -2,
+        "on": "dice",
+        "value": 2,
+        "roll": "abilita",
         "when": "saluteMeta",
-        "nota": "quando sei sotto metà Salute"
+        "nota": "Quando sei sotto metà Salute, nei tiri fisici hai 2 dadi in più"
       }
     ],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
   },
   {
@@ -8125,18 +8448,18 @@ export const POTERI = Object.freeze([
     "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 4 Quintessenza: per un lancio l'Ambito scelto non conta nella soglia, a qualunque livello.\n\nEffetto passivo: Scegli l'Ambito all'acquisto, si prende una volta sola. Nei lanci in cui usi la Sfera d'accesso, l'Ambito scelto non conta nella soglia fino a un livello pari al numero di poteri che conosci in quella Sfera. Se ad esempio conosci 3 poteri di Forza e hai scelto Potenza, hai sino a Potenza 3 gratis, da 4 si paga.\nAccesso con Corrispondenza: Portata o Area.\nAccesso con Entropia: Condizioni o Precisione.\nAccesso con Forza: Potenza o Portata.\nAccesso con Materia: Durata o Area.\nAccesso con Mente: Bersagli o Precisione.\nAccesso con Tempo: Durata o Condizioni.\nAccesso con Vita: Potenza o Bersagli.",
-    "attivo": "Paga 4 Quintessenza: per un lancio l'Ambito scelto non conta nella soglia, a qualunque livello.",
-    "passivo": "Scegli l'Ambito all'acquisto, si prende una volta sola. Nei lanci in cui usi la Sfera d'accesso, l'Ambito scelto non conta nella soglia fino a un livello pari al numero di poteri che conosci in quella Sfera. Se ad esempio conosci 3 poteri di Forza e hai scelto Potenza, hai sino a Potenza 3 gratis, da 4 si paga.\nAccesso con Corrispondenza: Portata o Area.\nAccesso con Entropia: Condizioni o Precisione.\nAccesso con Forza: Potenza o Portata.\nAccesso con Materia: Durata o Area.\nAccesso con Mente: Bersagli o Precisione.\nAccesso con Tempo: Durata o Condizioni.\nAccesso con Vita: Potenza o Bersagli.",
+    "text": "Effetto attivo (1 Quintessenza per livello in più): Per un lancio vai oltre: per ogni Quintessenza che paghi, l'Ambito scelto non lo paghi per un livello in più.\n\nEffetto passivo (Sempre): All'acquisto scegli un Ambito, uno solo. Nei tuoi lanci non lo paghi fino al livello pari ai poteri che conosci nella Sfera che stai lanciando, al massimo fino al 7: con 3 poteri di Forza, in un lancio di Forza lo paghi dal livello 4; con 5 di Tempo, in un lancio di Tempo dal 6.",
+    "attivo": "Per un lancio vai oltre: per ogni Quintessenza che paghi, l'Ambito scelto non lo paghi per un livello in più.",
+    "passivo": "All'acquisto scegli un Ambito, uno solo. Nei tuoi lanci non lo paghi fino al livello pari ai poteri che conosci nella Sfera che stai lanciando, al massimo fino al 7: con 3 poteri di Forza, in un lancio di Forza lo paghi dal livello 4; con 5 di Tempo, in un lancio di Tempo dal 6.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
     "amalgamText": "",
     "flavor": "(da scrivere)",
-    "cost": "4 Quintessenza",
-    "costValue": 4,
+    "cost": "1 Quintessenza per livello in più",
+    "costValue": 0,
     "uses": null,
-    "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+    "paradox": "Segue il lancio in tutte e due le forme.",
     "formula": "ritoccare",
     "formulaName": "Ritoccare",
     "link": "regola",
@@ -8154,183 +8477,113 @@ export const POTERI = Object.freeze([
         "value": {
           "from": "poteri"
         },
-        "nota": "Nei lanci in cui usi la Sfera d'accesso, l'Ambito scelto non conta nella soglia fino a un livello pari al numero di poteri che conosci in quella Sfera."
+        "nota": "Nei tuoi lanci non lo paghi fino al livello pari ai poteri che conosci nella Sfera che stai lanciando, al massimo fino al 7"
       },
       {
         "mode": "attivo",
-        "on": "freeScope",
-        "scope": "scelta",
-        "value": 7,
-        "nota": "Paga 4 Quintessenza: per un lancio l'Ambito scelto non conta nella soglia, a qualunque livello."
+        "on": "nota",
+        "roll": "magick",
+        "nota": "per ogni Quintessenza che paghi, l'Ambito scelto non lo paghi per un livello in più"
       }
     ],
     "scelta": {
       "kind": "ambito",
       "options": {
         "correspondence": [
+          "targets",
+          "conditions",
+          "duration",
           "range",
-          "targets"
+          "potency",
+          "precision"
         ],
         "entropy": [
+          "targets",
           "conditions",
+          "duration",
+          "range",
+          "potency",
           "precision"
         ],
         "forces": [
+          "targets",
+          "conditions",
+          "duration",
+          "range",
           "potency",
-          "range"
+          "precision"
         ],
         "matter": [
+          "targets",
+          "conditions",
           "duration",
-          "targets"
+          "range",
+          "potency",
+          "precision"
         ],
         "mind": [
           "targets",
+          "conditions",
+          "duration",
+          "range",
+          "potency",
           "precision"
         ],
         "time": [
+          "targets",
+          "conditions",
           "duration",
-          "conditions"
+          "range",
+          "potency",
+          "precision"
         ],
         "life": [
+          "targets",
+          "conditions",
+          "duration",
+          "range",
           "potency",
-          "targets"
+          "precision"
         ]
       }
     },
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "bussola-doppia",
-    "spheres": [
-      "entropy",
-      "mind"
-    ],
-    "name": "Bussola doppia",
-    "dot": 2,
-    "type": "attivo",
-    "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 1 Quintessenza: per un lancio fuori dalla Bussola prendi lo stesso il dado in più.\n\nEffetto passivo: Quando rispetti la Bussola in un lancio della tua Sfera, i dadi in più diventano due.\n\nEffetto Amalgama: Accesso con Primordio: se il lancio riesce, la Quintessenza guadagnata è 2 invece di 1.",
-    "attivo": "Paga 1 Quintessenza: per un lancio fuori dalla Bussola prendi lo stesso il dado in più.",
-    "passivo": "Quando rispetti la Bussola in un lancio della tua Sfera, i dadi in più diventano due.",
-    "amalgama": "Con Primordio: se il lancio riesce, la Quintessenza guadagnata è 2 invece di 1.",
-    "amalgam": "prime",
-    "amalgams": [
-      "prime"
-    ],
-    "amalgamText": "Accesso con Primordio: se il lancio riesce, la Quintessenza guadagnata è 2 invece di 1.",
-    "flavor": "«Quando segui la tua stella, il mondo ti paga il doppio.»",
-    "cost": "1 Quintessenza",
-    "costValue": 1,
-    "uses": null,
-    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
-    "formula": "benedire-e-maledire",
-    "formulaName": "Benedire e Maledire",
-    "link": "regola",
-    "page": "Generali",
-    "hooks": [
-      "tiro",
-      "quintessenza"
-    ],
-    "effects": [
+    "prerequisiti": [
       {
-        "on": "nota",
-        "roll": "magick",
-        "nota": "Quando rispetti la Bussola in un lancio della tua Sfera, i dadi in più diventano due."
+        "numero": 2
       }
     ],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
-  },
-  {
-    "id": "incassare",
-    "spheres": [
-      "forces",
-      "matter",
-      "mind",
-      "spirit",
-      "life"
-    ],
-    "name": "Incassare",
-    "dot": 2,
-    "type": "attivo",
-    "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: per un colpo la riduzione raddoppia.\n\nEffetto passivo: Quando subisci danni li riduci del numero di poteri che conosci nella Sfera; se il danno scende sotto 2 è nullo.\nAccesso con Forza + Vita: danni fisici.\nAccesso con Materia: dichiara un oggetto che porti e ottieni Dadi armatura invece di ridurre il normale danno finché l'hai con te; si rinnova ogni cambio scena.\nAccesso con Mente: danni mentali.\nAccesso con Spirito: danni fisici o mentali causati da creature dell'effimera.\n\nEffetto Amalgama: Avendo più Sfere, ottieni la riduzione anche per quel tipo di danno.\nAccesso con Primordio: riduci anche i danni paradossali, fisici o mentali.",
-    "attivo": "Paga 2 Quintessenza: per un colpo la riduzione raddoppia.",
-    "passivo": "Quando subisci danni li riduci del numero di poteri che conosci nella Sfera; se il danno scende sotto 2 è nullo.\nAccesso con Forza + Vita: danni fisici.\nAccesso con Materia: dichiara un oggetto che porti e ottieni Dadi armatura invece di ridurre il normale danno finché l'hai con te; si rinnova ogni cambio scena.\nAccesso con Mente: danni mentali.\nAccesso con Spirito: danni fisici o mentali causati da creature dell'effimera.",
-    "amalgama": "Avendo più Sfere, ottieni la riduzione anche per quel tipo di danno.\nCon Primordio: riduci anche i danni paradossali, fisici o mentali.",
-    "amalgam": "forces",
-    "amalgams": [
-      "forces",
-      "matter",
-      "mind",
-      "prime",
-      "spirit",
-      "life"
-    ],
-    "amalgamText": "Avendo più Sfere, ottieni la riduzione anche per quel tipo di danno.\nAccesso con Primordio: riduci anche i danni paradossali, fisici o mentali.",
-    "flavor": "«Fa male, sì. Meno di quanto speravi tu.»",
-    "cost": "2 Quintessenza",
-    "costValue": 2,
-    "uses": null,
-    "paradox": "Basso rischio effetto attivo, basso rischio effetto passivo se non osservato.",
-    "formula": "proteggere",
-    "formulaName": "Proteggere",
-    "link": "effetto",
-    "page": "Generali",
-    "hooks": [
-      "tiro",
-      "quintessenza",
-      "salute",
-      "combattimento",
-      "scena"
-    ],
-    "effects": [],
-    "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza per livello in più",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
   },
   {
     "id": "rigenerazione",
     "spheres": [
-      "matter",
       "mind",
-      "spirit",
       "life"
     ],
     "name": "Rigenerazione",
     "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza, ottieni immediatamente l'effetto passivo.\n\nEffetto passivo: Accesso con Materia: se parte del tuo equipaggiamento si è rovinata o consumata, al cambio scena torna come nuova, purché ce l'abbia ancora tu (la lama scheggiata, le munizioni sparate, la batteria scarica). Quello che ti hanno preso non torna.\nAccesso con Mente: ogni cambio scena rigeneri livelli di Salute superficiale mentale pari al numero di poteri che conosci in Mente.\nAccesso con Spirito: una volta per sessione cancelli una Macchia dalla Saggezza.\nAccesso con Vita: ogni cambio scena rigeneri livelli di Salute superficiale fisica pari al numero di poteri che conosci in Vita.\nCon Mente o con Vita puoi scambiare 2 livelli di Salute superficiale per curare 1 aggravato.\n\nEffetto Amalgama: Accesso con Mente + Vita: al cambio scena rigeneri livelli pari al più alto fra Vita e Mente. Guarisci livelli fisici o mentali a tua scelta, anche spartendoli.\nAccesso con Primordio: guarisci anche le caselle bloccate dal Paradosso.\nAccesso con Tempo: guarisci il doppio dei livelli al cambio scena.",
-    "attivo": "Paga 2 Quintessenza, ottieni immediatamente l'effetto passivo.",
-    "passivo": "Accesso con Materia: se parte del tuo equipaggiamento si è rovinata o consumata, al cambio scena torna come nuova, purché ce l'abbia ancora tu (la lama scheggiata, le munizioni sparate, la batteria scarica). Quello che ti hanno preso non torna.\nAccesso con Mente: ogni cambio scena rigeneri livelli di Salute superficiale mentale pari al numero di poteri che conosci in Mente.\nAccesso con Spirito: una volta per sessione cancelli una Macchia dalla Saggezza.\nAccesso con Vita: ogni cambio scena rigeneri livelli di Salute superficiale fisica pari al numero di poteri che conosci in Vita.\nCon Mente o con Vita puoi scambiare 2 livelli di Salute superficiale per curare 1 aggravato.",
-    "amalgama": "Con Mente + Vita: al cambio scena rigeneri livelli pari al più alto fra Vita e Mente. Guarisci livelli fisici o mentali a tua scelta, anche spartendoli.\nCon Primordio: guarisci anche le caselle bloccate dal Paradosso.\nCon Tempo: guarisci il doppio dei livelli al cambio scena.",
-    "amalgam": "mind",
+    "text": "Effetto attivo (2 Quintessenza): Il passivo scatta subito, senza aspettare il cambio di scena.\n\nEffetto passivo (Al cambio di scena): Guarisci tanti danni superficiali quanti sono i poteri che conosci in Vita, se sono fisici, o in Mente, se sono mentali. Puoi spenderne 2 per guarire 1 danno aggravato.\nCon Primordio: guarisci anche le caselle bloccate dal Paradosso.\nCon Tempo: guarisci il doppio.",
+    "attivo": "Il passivo scatta subito, senza aspettare il cambio di scena.",
+    "passivo": "Guarisci tanti danni superficiali quanti sono i poteri che conosci in Vita, se sono fisici, o in Mente, se sono mentali. Puoi spenderne 2 per guarire 1 danno aggravato.\nCon Primordio: guarisci anche le caselle bloccate dal Paradosso.\nCon Tempo: guarisci il doppio.",
+    "amalgama": "",
+    "amalgam": "prime",
     "amalgams": [
-      "mind",
       "prime",
-      "time",
-      "life"
+      "time"
     ],
-    "amalgamText": "Accesso con Mente + Vita: al cambio scena rigeneri livelli pari al più alto fra Vita e Mente. Guarisci livelli fisici o mentali a tua scelta, anche spartendoli.\nAccesso con Primordio: guarisci anche le caselle bloccate dal Paradosso.\nAccesso con Tempo: guarisci il doppio dei livelli al cambio scena.",
+    "amalgamText": "",
     "flavor": "«Sai che ti farai male, almeno, sei già pronto!»",
     "cost": "2 Quintessenza",
     "costValue": 2,
-    "uses": {
-      "per": "sessione",
-      "n": 1
-    },
+    "uses": null,
     "paradox": "Volgare effetto attivo, basso rischio effetto passivo.",
     "formula": "guarire",
     "formulaName": "Guarire",
@@ -8345,10 +8598,14 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza",
+    "cadenzaPassivo": "Al cambio di scena",
     "costoVariabile": null
   },
   {
@@ -8362,24 +8619,17 @@ export const POTERI = Object.freeze([
     "dot": 3,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo: Un tiro andato male si rifà, secondo la tua Sfera.\nAccesso con Entropia: in tutta la sessione ritiri fino a 5 dadi, spartiti come vuoi, mai i rossi (Buona stella); una volta per scena, a tiro fatto, cambi un dado normale tuo o di un compagno in un 8 pagando 2 Quintessenza (Dado fortunato).\nAccesso con Mente: quando ritiri con la Volontà, ritiri 2 dadi in più, normali (Volontà Plus).\nAccesso con Tempo: dopo un tiro fallito, tuo o di un compagno, lo fai ritirare spendendo 2 Quintessenza; non più di una volta per bersaglio (Un'altra chance).\n\nEffetto passivo: Una volta per sessione ritiri un dado gratis, senza dichiararlo prima.\n\nEffetto Amalgama: Accesso con Entropia + Primordio: il dado cambiato in 8 vale anche in un tiro di Magick.\nAccesso con Primordio + Tempo: una volta per scena dichiari un tiro, lo fai e vedi l'esito: se ti piace prosegui, altrimenti annulli e torni a prima del tiro (Prevedere il tiro).",
-    "attivo": "Un tiro andato male si rifà, secondo la tua Sfera.\nAccesso con Entropia: in tutta la sessione ritiri fino a 5 dadi, spartiti come vuoi, mai i rossi (Buona stella); una volta per scena, a tiro fatto, cambi un dado normale tuo o di un compagno in un 8 pagando 2 Quintessenza (Dado fortunato).\nAccesso con Mente: quando ritiri con la Volontà, ritiri 2 dadi in più, normali (Volontà Plus).\nAccesso con Tempo: dopo un tiro fallito, tuo o di un compagno, lo fai ritirare spendendo 2 Quintessenza; non più di una volta per bersaglio (Un'altra chance).",
-    "passivo": "Una volta per sessione ritiri un dado gratis, senza dichiararlo prima.",
-    "amalgama": "Con Entropia + Primordio: il dado cambiato in 8 vale anche in un tiro di Magick.\nCon Primordio + Tempo: una volta per scena dichiari un tiro, lo fai e vedi l'esito: se ti piace prosegui, altrimenti annulli e torni a prima del tiro (Prevedere il tiro).",
-    "amalgam": "entropy",
-    "amalgams": [
-      "entropy",
-      "prime",
-      "time"
-    ],
-    "amalgamText": "Accesso con Entropia + Primordio: il dado cambiato in 8 vale anche in un tiro di Magick.\nAccesso con Primordio + Tempo: una volta per scena dichiari un tiro, lo fai e vedi l'esito: se ti piace prosegui, altrimenti annulli e torni a prima del tiro (Prevedere il tiro).",
+    "text": "Effetto attivo (2 Quintessenza, poi 3, poi 4): Fai ritirare un tiro a un compagno, o lo ritiri tu. Nella stessa sessione, ogni volta che lo usi il costo sale di 1: la prima volta 2 Quintessenza, la seconda 3, la terza 4, e così via.\n\nEffetto passivo (Una volta per sessione): Ritiri un dado gratis, senza dichiararlo prima.",
+    "attivo": "Fai ritirare un tiro a un compagno, o lo ritiri tu. Nella stessa sessione, ogni volta che lo usi il costo sale di 1: la prima volta 2 Quintessenza, la seconda 3, la terza 4, e così via.",
+    "passivo": "Ritiri un dado gratis, senza dichiararlo prima.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
     "flavor": "«Il primo tiro era una prova.»",
-    "cost": "2 Quintessenza",
-    "costValue": 2,
-    "uses": {
-      "per": "scena",
-      "n": 1
-    },
+    "cost": "2 Quintessenza, poi 3, poi 4",
+    "costValue": 0,
+    "uses": null,
     "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
     "formula": "riavvolgere",
     "formulaName": "Riavvolgere",
@@ -8395,11 +8645,100 @@ export const POTERI = Object.freeze([
     ],
     "effects": [],
     "scelta": null,
-    "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
-    "costoVariabile": null
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza, poi 3, poi 4",
+    "cadenzaPassivo": "Una volta per sessione",
+    "costoVariabile": {
+      "min": 2,
+      "max": 0
+    }
+  },
+  {
+    "id": "disfare",
+    "spheres": [
+      "any"
+    ],
+    "name": "Disfare",
+    "dot": 4,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Quintessenza pari alla distanza): Disfi un effetto di Magick, se conosci più della metà delle Sfere che usa (su tre, almeno due). Paghi 1 Quintessenza per ogni punto fra la sua soglia e i poteri che conosci nella più alta delle sue Sfere che hai; se ci arrivi già, 1 Quintessenza.\n\nEffetto passivo (Sempre): Senti gli effetti di Magick in atto intorno a te, e a grandi linee che soglia hanno.",
+    "attivo": "Disfi un effetto di Magick, se conosci più della metà delle Sfere che usa (su tre, almeno due). Paghi 1 Quintessenza per ogni punto fra la sua soglia e i poteri che conosci nella più alta delle sue Sfere che hai; se ci arrivi già, 1 Quintessenza.",
+    "passivo": "Senti gli effetti di Magick in atto intorno a te, e a grandi linee che soglia hanno.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "Quintessenza pari alla distanza",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Generali",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Quintessenza pari alla distanza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
+  },
+  {
+    "id": "anonimo",
+    "spheres": [
+      "any"
+    ],
+    "name": "Anonimo",
+    "dot": 4,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza a effetto, o pari all'Area): Cancelli le tracce che hai lasciato: 2 Quintessenza per ogni tuo effetto di cui le cancelli, oppure Quintessenza pari al livello d'Area del posto in cui sei, e le cancelli tutte lì.\n\nEffetto passivo (Sempre): Chi cerca le tracce della tua Magick (la Risonanza, i residui, un'indagine etc..) non arriva a te, a meno che non sia Magick con una soglia più alta dei poteri che conosci nella Sfera.",
+    "attivo": "Cancelli le tracce che hai lasciato: 2 Quintessenza per ogni tuo effetto di cui le cancelli, oppure Quintessenza pari al livello d'Area del posto in cui sei, e le cancelli tutte lì.",
+    "passivo": "Chi cerca le tracce della tua Magick (la Risonanza, i residui, un'indagine etc..) non arriva a te, a meno che non sia Magick con una soglia più alta dei poteri che conosci nella Sfera.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "2 Quintessenza a effetto, o pari all'Area",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Generali",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 3
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza a effetto, o pari all'Area",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 2,
+      "max": 0
+    }
   },
   {
     "id": "senza-residuo",
@@ -8486,43 +8825,447 @@ export const POTERI = Object.freeze([
   {
     "id": "miraggio",
     "spheres": [
-      "forces",
-      "mind",
-      "time"
+      "mind"
     ],
     "name": "Miraggio",
     "dot": 3,
     "type": "attivo",
-    "kind": "attivo",
-    "text": "Effetto attivo: Paga 2 Quintessenza: per la scena crei un'illusione tangibile, una cosa che non c'è e che si vede, si sente e si tocca (un'ombra dietro la finestra, una voce oltre la porta, una porta dove c'era il muro). Chi la guarda ha diritto a una prova di Fermezza + Allerta, o Fermezza + Sotterfugio, contro una soglia pari al tuo Areté più i poteri che conosci nella Sfera: se la supera, scopre l'inganno.\nAccesso con Forza: è luce o suono, e la vedono tutti.\nAccesso con Mente: la vede solo chi scegli tu, e la crede.\nAccesso con Tempo: è una scena di ieri che non è andata così, per chi guarda nel passato.\n\nEffetto Amalgama: Accesso con Corrispondenza: la metti in un luogo che vedi da lontano.",
-    "attivo": "Paga 2 Quintessenza: per la scena crei un'illusione tangibile, una cosa che non c'è e che si vede, si sente e si tocca (un'ombra dietro la finestra, una voce oltre la porta, una porta dove c'era il muro). Chi la guarda ha diritto a una prova di Fermezza + Allerta, o Fermezza + Sotterfugio, contro una soglia pari al tuo Areté più i poteri che conosci nella Sfera: se la supera, scopre l'inganno.\nAccesso con Forza: è luce o suono, e la vedono tutti.\nAccesso con Mente: la vede solo chi scegli tu, e la crede.\nAccesso con Tempo: è una scena di ieri che non è andata così, per chi guarda nel passato.",
-    "passivo": "",
-    "amalgama": "Con Corrispondenza: la metti in un luogo che vedi da lontano.",
-    "amalgam": "correspondence",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (Quintessenza pari alla Precisione, o ai Bersagli): Crei un'illusione che si vede, si sente e si tocca, e dura la scena: una cosa che non c'è (un'ombra dietro la finestra, una voce oltre la porta, una porta dove c'era il muro etc..). Più poteri conosci in Mente, più può essere complessa: con 2 o 3 una cosa ferma (un muro, una cassa, un cartello), con 4 o 5 una cosa che si muove o fa rumore (un cane che abbaia, un'auto che passa), da 6 una persona che parla e risponde, o una scena intera. Se è su un oggetto o una cosa semplice paghi la Precisione, cioè quanto è fedele, e il livello lo fissa il Narratore; se copre un'area paghi i Bersagli, cioè quante persone la vedono. Invece di una cosa sola puoi spargere piccole allucinazioni ai margini dei sensi (un sussurro, un movimento con la coda dell'occhio, un odore che passa): chi le subisce è Confuso per la scena, e paghi 1 Quintessenza a persona. Chi ha un motivo per dubitarne (la tocca a lungo, ci passa attraverso, la mette alla prova) può scoprire l'inganno: il tiro lo sceglie il Narratore (per esempio Fermezza + Allerta, contro una soglia pari al tuo Areté più i poteri che conosci in Mente).\nCon Forza: è luce e suono veri: la vedono tutti, anche le telecamere.\nCon Tempo: è una scena di ieri che non è andata così, per chi guarda nel passato.\nCon Corrispondenza: la metti in un posto che vedi da lontano.\n\nEffetto passivo (Sempre): Un oggetto che tieni con te (un tesserino, una valigetta, la pistola che hai in mano etc..) sembra un altro a chi lo guarda: il biglietto del tram è un pass, la pistola un ombrello. Uno alla volta, e non per forza piccolo. Chi lo prende in mano e lo guarda bene vede quello che è.",
+    "attivo": "Crei un'illusione che si vede, si sente e si tocca, e dura la scena: una cosa che non c'è (un'ombra dietro la finestra, una voce oltre la porta, una porta dove c'era il muro etc..). Più poteri conosci in Mente, più può essere complessa: con 2 o 3 una cosa ferma (un muro, una cassa, un cartello), con 4 o 5 una cosa che si muove o fa rumore (un cane che abbaia, un'auto che passa), da 6 una persona che parla e risponde, o una scena intera. Se è su un oggetto o una cosa semplice paghi la Precisione, cioè quanto è fedele, e il livello lo fissa il Narratore; se copre un'area paghi i Bersagli, cioè quante persone la vedono. Invece di una cosa sola puoi spargere piccole allucinazioni ai margini dei sensi (un sussurro, un movimento con la coda dell'occhio, un odore che passa): chi le subisce è Confuso per la scena, e paghi 1 Quintessenza a persona. Chi ha un motivo per dubitarne (la tocca a lungo, ci passa attraverso, la mette alla prova) può scoprire l'inganno: il tiro lo sceglie il Narratore (per esempio Fermezza + Allerta, contro una soglia pari al tuo Areté più i poteri che conosci in Mente).\nCon Forza: è luce e suono veri: la vedono tutti, anche le telecamere.\nCon Tempo: è una scena di ieri che non è andata così, per chi guarda nel passato.\nCon Corrispondenza: la metti in un posto che vedi da lontano.",
+    "passivo": "Un oggetto che tieni con te (un tesserino, una valigetta, la pistola che hai in mano etc..) sembra un altro a chi lo guarda: il biglietto del tram è un pass, la pistola un ombrello. Uno alla volta, e non per forza piccolo. Chi lo prende in mano e lo guarda bene vede quello che è.",
+    "amalgama": "",
+    "amalgam": "forces",
     "amalgams": [
+      "forces",
+      "time",
       "correspondence"
     ],
-    "amalgamText": "Accesso con Corrispondenza: la metti in un luogo che vedi da lontano.",
+    "amalgamText": "",
     "flavor": "«Guarda meglio. No, ancora meglio.»",
-    "cost": "2 Quintessenza",
-    "costValue": 2,
+    "cost": "Quintessenza pari alla Precisione, o ai Bersagli",
+    "costValue": 0,
     "uses": null,
-    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "paradox": "Basso rischio effetto attivo (Volgare con Forza, se qualcuno guarda), nessuno effetto passivo.",
     "formula": "ingannare",
     "formulaName": "Ingannare",
     "link": "proposta",
-    "page": "Nuovi",
+    "page": "Mente",
     "hooks": [
       "tiro",
       "quintessenza"
     ],
     "effects": [],
     "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "Quintessenza pari alla Precisione, o ai Bersagli",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 0,
+      "max": 0
+    }
+  },
+  {
+    "id": "dimenticato",
+    "spheres": [
+      "mind"
+    ],
+    "name": "Dimenticato",
+    "dot": 5,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza, più 1 per ogni punto di soglia che ti manca): Scegli come ti dimentica una persona (non ricorda il tuo volto, ti ricorda come un altro, scorda quello che hai fatto etc..). Se la sua soglia mentale è più alta dei poteri che conosci in Mente, paghi 1 Quintessenza in più per ogni punto di differenza.\n\nEffetto passivo (Sempre): Chi non ti conosce già, finita la scena, si scorda il tuo volto e il tuo nome, a meno che tu non voglia.",
+    "attivo": "Scegli come ti dimentica una persona (non ricorda il tuo volto, ti ricorda come un altro, scorda quello che hai fatto etc..). Se la sua soglia mentale è più alta dei poteri che conosci in Mente, paghi 1 Quintessenza in più per ogni punto di differenza.",
+    "passivo": "Chi non ti conosce già, finita la scena, si scorda il tuo volto e il tuo nome, a meno che tu non voglia.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza, più 1 per ogni punto di soglia che ti manca",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Mente",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 4
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza, più 1 per ogni punto di soglia che ti manca",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "lettore-d-aure",
+    "spheres": [
+      "mind",
+      "spirit"
+    ],
+    "name": "Lettore d'aure",
+    "dot": 1,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Leggi l'aura fino in fondo: il Narratore ti dice che creatura è (un vampiro, uno spirito, un mutaforma etc..).\nCon Mente: distingui anche cosa prova in quel momento (paura, rabbia, fame, desiderio etc..).\n\nEffetto passivo (Sempre): Quando hai davanti una creatura, ne vedi l'aura: hai un'idea di cosa sia, e se non è una persona lo sai di sicuro.",
+    "attivo": "Leggi l'aura fino in fondo: il Narratore ti dice che creatura è (un vampiro, uno spirito, un mutaforma etc..).\nCon Mente: distingui anche cosa prova in quel momento (paura, rabbia, fame, desiderio etc..).",
+    "passivo": "Quando hai davanti una creatura, ne vedi l'aura: hai un'idea di cosa sia, e se non è una persona lo sai di sicuro.",
+    "amalgama": "",
+    "amalgam": "mind",
+    "amalgams": [
+      "mind"
+    ],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza",
+    "costValue": 1,
+    "uses": null,
+    "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Mente",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
     "prerequisiti": null,
-    "rifatto": false,
-    "costoAttivo": "",
-    "cadenzaPassivo": "",
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
     "costoVariabile": null
+  },
+  {
+    "id": "doppio-senso",
+    "spheres": [
+      "mind"
+    ],
+    "name": "Doppio senso",
+    "dot": 1,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza a persona): Per la scena, quando parli, le persone che scegli sentono un'altra frase, quella che vuoi tu, mentre gli altri sentono il discorso di sempre. Paghi 1 Quintessenza per ogni persona che deve capire. Chi non è dei tuoi e sospetta qualcosa può accorgersi che c'è un secondo messaggio, ma non di cosa dice: il tiro lo sceglie il Narratore, secondo il caso (per esempio Prontezza + Allerta, contro una soglia pari ai poteri che conosci in Mente).\n\nEffetto passivo (Sempre): Capisci quando una frase ha un secondo senso, e quale: una minaccia velata, un messaggio in codice, un invito che non è un invito. Quando lo usi (rispondi a tono, smascheri il messaggio, parli in codice), nei tiri di Abilità hai 2 dadi in più.",
+    "attivo": "Per la scena, quando parli, le persone che scegli sentono un'altra frase, quella che vuoi tu, mentre gli altri sentono il discorso di sempre. Paghi 1 Quintessenza per ogni persona che deve capire. Chi non è dei tuoi e sospetta qualcosa può accorgersi che c'è un secondo messaggio, ma non di cosa dice: il tiro lo sceglie il Narratore, secondo il caso (per esempio Prontezza + Allerta, contro una soglia pari ai poteri che conosci in Mente).",
+    "passivo": "Capisci quando una frase ha un secondo senso, e quale: una minaccia velata, un messaggio in codice, un invito che non è un invito. Quando lo usi (rispondi a tono, smascheri il messaggio, parli in codice), nei tiri di Abilità hai 2 dadi in più.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza a persona",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Mente",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": null,
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza a persona",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "ammaliare",
+    "spheres": [
+      "mind"
+    ],
+    "name": "Ammaliare",
+    "dot": 1,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza): Per la scena, nei tiri sociali hai 2 dadi in più anche con chi ti è ostile: chi ti odia, chi ti teme, chi ha già deciso di dirti di no.\n\nEffetto passivo (Sempre): Quando tiri per convincere qualcuno (persuadere, sedurre, trattare etc..), le tue Specialità valgono doppio: ti danno il doppio dei dadi.",
+    "attivo": "Per la scena, nei tiri sociali hai 2 dadi in più anche con chi ti è ostile: chi ti odia, chi ti teme, chi ha già deciso di dirti di no.",
+    "passivo": "Quando tiri per convincere qualcuno (persuadere, sedurre, trattare etc..), le tue Specialità valgono doppio: ti danno il doppio dei dadi.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza",
+    "costValue": 1,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Mente",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": null,
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": null
+  },
+  {
+    "id": "telepatia",
+    "spheres": [
+      "mind"
+    ],
+    "name": "Telepatia",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza, più la soglia che ti manca, più la Precisione): Senti per la scena i pensieri di superficie di una persona che vedi: quello che pensa in quel momento, a parole o a immagini (ha paura, mente sul nome, pensa alla pistola nel cassetto etc..). Se la sua soglia mentale è più alta dei poteri che conosci in Mente, paghi 1 Quintessenza in più per ogni punto di differenza. Per andare più a fondo (un nome, un posto, un ricordo, quello che sa e non sta pensando) paghi anche la Precisione: il Narratore fissa il livello, da 1 a 7. Non se ne accorge, a meno che non conosca anche lui Mente.\n\nEffetto passivo (Sempre): Parli mente a mente coi compagni che vedi: frasi brevi, immagini, sensazioni. Loro ti rispondono allo stesso modo, se vogliono, e nessun altro vi sente.",
+    "attivo": "Senti per la scena i pensieri di superficie di una persona che vedi: quello che pensa in quel momento, a parole o a immagini (ha paura, mente sul nome, pensa alla pistola nel cassetto etc..). Se la sua soglia mentale è più alta dei poteri che conosci in Mente, paghi 1 Quintessenza in più per ogni punto di differenza. Per andare più a fondo (un nome, un posto, un ricordo, quello che sa e non sta pensando) paghi anche la Precisione: il Narratore fissa il livello, da 1 a 7. Non se ne accorge, a meno che non conosca anche lui Mente.",
+    "passivo": "Parli mente a mente coi compagni che vedi: frasi brevi, immagini, sensazioni. Loro ti rispondono allo stesso modo, se vogliono, e nessun altro vi sente.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza, più la soglia che ti manca, più la Precisione",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Mente",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza, più la soglia che ti manca, più la Precisione",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "ordine",
+    "spheres": [
+      "mind"
+    ],
+    "name": "Ordine",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza, più 1 per ogni punto di soglia che ti manca): Dai un ordine di una frase a una persona che può capirti (fermati, lascia la pistola, aprimi, vattene etc..): lo deve eseguire, alla lettera, nel suo prossimo momento, se la sua soglia mentale è pari o più bassa dei poteri che conosci in Mente; se è più alta, paghi 1 Quintessenza in più per ogni punto di differenza. Non gli fai dire quello che nasconde, e non lo mandi a farsi male. L'ordine può anche essere «fai il contrario»: dice o fa l'opposto di quello che voleva. Con 1 Quintessenza in più l'ordine aspetta un segnale (una parola, un'ora, una persona che entra) e scatta quando arriva, entro la sessione; con 1 in più a persona lo prendono altri che ti sentono.\n\nEffetto passivo (Sempre): Chi sta eseguendo un tuo ordine, o ti deve obbedienza (un tuo dipendente, un soldato del tuo reparto, il tuo autista etc..), resta tuo: chi prova a fargli fare altro (con un ordine, un potere, la Magick) deve superare la tua soglia, pari ai poteri che conosci in Mente, e non la sua.",
+    "attivo": "Dai un ordine di una frase a una persona che può capirti (fermati, lascia la pistola, aprimi, vattene etc..): lo deve eseguire, alla lettera, nel suo prossimo momento, se la sua soglia mentale è pari o più bassa dei poteri che conosci in Mente; se è più alta, paghi 1 Quintessenza in più per ogni punto di differenza. Non gli fai dire quello che nasconde, e non lo mandi a farsi male. L'ordine può anche essere «fai il contrario»: dice o fa l'opposto di quello che voleva. Con 1 Quintessenza in più l'ordine aspetta un segnale (una parola, un'ora, una persona che entra) e scatta quando arriva, entro la sessione; con 1 in più a persona lo prendono altri che ti sentono.",
+    "passivo": "Chi sta eseguendo un tuo ordine, o ti deve obbedienza (un tuo dipendente, un soldato del tuo reparto, il tuo autista etc..), resta tuo: chi prova a fargli fare altro (con un ordine, un potere, la Magick) deve superare la tua soglia, pari ai poteri che conosci in Mente, e non la sua.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza, più 1 per ogni punto di soglia che ti manca",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Mente",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza, più 1 per ogni punto di soglia che ti manca",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "faccia-qualunque",
+    "spheres": [
+      "mind"
+    ],
+    "name": "Faccia qualunque",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza, più 1 a compagno): Per la scena, agli occhi e alle orecchie di chi ti incontra sei un'altra persona, quella che scegli tu: un volto che hai visto, una divisa, un'età diversa, e anche la voce è la sua. Con 1 Quintessenza in più a compagno copri anche chi ti sta vicino, ognuno con la faccia che sceglie. Chi ti conosce bene e ti parla da vicino può accorgersene: il tiro lo sceglie il Narratore (per esempio Prontezza + Allerta, contro una soglia pari ai poteri che conosci in Mente). Le telecamere vedono te: l'inganno sta nella testa di chi guarda.\n\nEffetto passivo (Sempre): Dove c'è gente sembri uno che ci sta (il cameriere a una festa, l'impiegato in ufficio, l'operaio in cantiere etc..): finché fai quello che farebbe lui, nessuno ti chiede chi sei. Non ti dà un tesserino: a un controllo dei documenti sei quello che sei.",
+    "attivo": "Per la scena, agli occhi e alle orecchie di chi ti incontra sei un'altra persona, quella che scegli tu: un volto che hai visto, una divisa, un'età diversa, e anche la voce è la sua. Con 1 Quintessenza in più a compagno copri anche chi ti sta vicino, ognuno con la faccia che sceglie. Chi ti conosce bene e ti parla da vicino può accorgersene: il tiro lo sceglie il Narratore (per esempio Prontezza + Allerta, contro una soglia pari ai poteri che conosci in Mente). Le telecamere vedono te: l'inganno sta nella testa di chi guarda.",
+    "passivo": "Dove c'è gente sembri uno che ci sta (il cameriere a una festa, l'impiegato in ufficio, l'operaio in cantiere etc..): finché fai quello che farebbe lui, nessuno ti chiede chi sei. Non ti dà un tesserino: a un controllo dei documenti sei quello che sei.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza, più 1 a compagno",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Mente",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza, più 1 a compagno",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "sguardo-paralizzante",
+    "spheres": [
+      "mind"
+    ],
+    "name": "Sguardo paralizzante",
+    "dot": 2,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (1 Quintessenza, più 1 per ogni punto di soglia che ti manca): Agganci lo sguardo di una persona che ti guarda e le infliggi una Condizione mentale che uno sguardo può dare (Intimorita, Confusa, Emotiva etc..), fino a fine scena. Se la sua soglia mentale è più alta dei poteri che conosci in Mente, paghi 1 Quintessenza in più per ogni punto di differenza.\n\nEffetto passivo (Sempre): Quando vuoi l'attenzione delle persone, ce l'hai: ti guardano e ti ascoltano, anche in mezzo al rumore, e finché parli non riescono a guardare altrove.",
+    "attivo": "Agganci lo sguardo di una persona che ti guarda e le infliggi una Condizione mentale che uno sguardo può dare (Intimorita, Confusa, Emotiva etc..), fino a fine scena. Se la sua soglia mentale è più alta dei poteri che conosci in Mente, paghi 1 Quintessenza in più per ogni punto di differenza.",
+    "passivo": "Quando vuoi l'attenzione delle persone, ce l'hai: ti guardano e ti ascoltano, anche in mezzo al rumore, e finché parli non riescono a guardare altrove.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "1 Quintessenza, più 1 per ogni punto di soglia che ti manca",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Mente",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 1
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "1 Quintessenza, più 1 per ogni punto di soglia che ti manca",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 1,
+      "max": 0
+    }
+  },
+  {
+    "id": "occhi-altrui",
+    "spheres": [
+      "mind"
+    ],
+    "name": "Occhi altrui",
+    "dot": 3,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza, più 1 per ogni punto di soglia che ti manca): Tocchi una persona: per la scena vedi e senti coi suoi sensi, ovunque vada, e lei non se ne accorge. Se hai un legame forte con lei non serve toccarla. Se la sua soglia mentale è più alta dei poteri che conosci in Mente, paghi 1 Quintessenza in più per ogni punto di differenza. Finché senti da due punti insieme hai 1 dado in meno in tutti i tiri. Con 1 Quintessenza in più dura fino a fine sessione.\n\nEffetto passivo (Sempre): Senti quello che sente un compagno con cui hai un legame forte, se lui vuole: vedi coi suoi occhi e senti con le sue orecchie, anche lontano, e i tuoi sensi restano tuoi.",
+    "attivo": "Tocchi una persona: per la scena vedi e senti coi suoi sensi, ovunque vada, e lei non se ne accorge. Se hai un legame forte con lei non serve toccarla. Se la sua soglia mentale è più alta dei poteri che conosci in Mente, paghi 1 Quintessenza in più per ogni punto di differenza. Finché senti da due punti insieme hai 1 dado in meno in tutti i tiri. Con 1 Quintessenza in più dura fino a fine sessione.",
+    "passivo": "Senti quello che sente un compagno con cui hai un legame forte, se lui vuole: vedi coi suoi occhi e senti con le sue orecchie, anche lontano, e i tuoi sensi restano tuoi.",
+    "amalgama": "",
+    "amalgam": "",
+    "amalgams": [],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "2 Quintessenza, più 1 per ogni punto di soglia che ti manca",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Mente",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza, più 1 per ogni punto di soglia che ti manca",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 2,
+      "max": 0
+    }
+  },
+  {
+    "id": "fili",
+    "spheres": [
+      "mind"
+    ],
+    "name": "Fili",
+    "dot": 3,
+    "type": "attivo",
+    "kind": "attivo e passivo",
+    "text": "Effetto attivo (2 Quintessenza a coppia, più 1 per ogni punto di soglia che ti manca): Per la scena rinsaldi o tagli il legame fra due persone che vedi. Rinsaldato: si trattano da alleati, e quando si aiutano o si proteggono hanno 2 dadi in più. Tagliato: non si danno aiuto né dadi di Armonia, e quando provano a proteggersi hanno 2 dadi in meno. Se la soglia sociale più alta fra le due è più alta dei poteri che conosci in Mente, paghi 1 Quintessenza in più per ogni punto di differenza. Con 3 Quintessenza invece di 2 tagli una persona da tutti i suoi: per la scena non dà e non riceve aiuto, e i suoi legami forti non valgono.\nCon Entropia: il legame che rinsaldi o tagli resta così per sempre, anche quando il tempo passa.\n\nEffetto passivo (Sempre): In scena senti i legami fra le persone: chi tiene a chi, chi odia chi, chi deve qualcosa a chi. Il Narratore te lo dice a grandi linee.",
+    "attivo": "Per la scena rinsaldi o tagli il legame fra due persone che vedi. Rinsaldato: si trattano da alleati, e quando si aiutano o si proteggono hanno 2 dadi in più. Tagliato: non si danno aiuto né dadi di Armonia, e quando provano a proteggersi hanno 2 dadi in meno. Se la soglia sociale più alta fra le due è più alta dei poteri che conosci in Mente, paghi 1 Quintessenza in più per ogni punto di differenza. Con 3 Quintessenza invece di 2 tagli una persona da tutti i suoi: per la scena non dà e non riceve aiuto, e i suoi legami forti non valgono.\nCon Entropia: il legame che rinsaldi o tagli resta così per sempre, anche quando il tempo passa.",
+    "passivo": "In scena senti i legami fra le persone: chi tiene a chi, chi odia chi, chi deve qualcosa a chi. Il Narratore te lo dice a grandi linee.",
+    "amalgama": "",
+    "amalgam": "entropy",
+    "amalgams": [
+      "entropy"
+    ],
+    "amalgamText": "",
+    "flavor": "",
+    "cost": "2 Quintessenza a coppia, più 1 per ogni punto di soglia che ti manca",
+    "costValue": 0,
+    "uses": null,
+    "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+    "formula": null,
+    "formulaName": "",
+    "link": "",
+    "page": "Mente",
+    "hooks": [],
+    "effects": [],
+    "scelta": null,
+    "prerequisiti": [
+      {
+        "numero": 2
+      }
+    ],
+    "rifatto": true,
+    "costoAttivo": "2 Quintessenza a coppia, più 1 per ogni punto di soglia che ti manca",
+    "cadenzaPassivo": "Sempre",
+    "costoVariabile": {
+      "min": 2,
+      "max": 0
+    }
   },
   {
     "id": "dettaglio",
@@ -8942,8 +9685,118 @@ export const POTERI_TOLTI = Object.freeze({
     "name": "Pane e sale",
     "data": "30/9/2026",
     "motivo": "Blue, 30/9: «Lo possiamo fondere dentro a pace. L'effetto passivo lo spostiamo di là.»"
+  },
+  "due-mosse-avanti": {
+    "name": "Due mosse avanti",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «due mosse avanti lo possiamo fondere a come da piano, perché effettivamente sono simili tra di loro»."
+  },
+  "casa-dolce-casa": {
+    "name": "Casa dolce casa",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «con casa dolce casa, rimuovilo»."
+  },
+  "tabu": {
+    "name": "Tabù",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «il tabù, cancellalo»."
+  },
+  "recupero": {
+    "name": "Recupero",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «Recupero, cancellalo»."
+  },
+  "scuola": {
+    "name": "Scuola",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «lo possiamo fondere là, con il fatto di seguire il piano. Facciamo un amalgama primordio»: entra in Come da piano, come riga di Primordio."
+  },
+  "terra-sacra": {
+    "name": "Terra sacra",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «terra sacra, cancellalo»."
+  },
+  "voce-dell-avatar": {
+    "name": "Voce dell'Avatar",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «Voce dell'avatar rimuovi»."
+  },
+  "prestito-dal-futuro": {
+    "name": "Prestito dal futuro",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «Non si è preso l'effetto. Se era quello che potevi prendere o spostare una cosa da avanti o indietro, non si capisce. Cancellalo.»"
+  },
+  "sotto-tiro": {
+    "name": "Sotto tiro",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «sai che non è un effetto di tempo? Di là l'abbiamo però già fatto in materia, cancella sottotiro»."
+  },
+  "contrattempo": {
+    "name": "Contrattempo",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «Contrattempo come potere invece lo possiamo fondere a livello di puntuale»: entra in Puntuale, come opzione in più dell'attivo."
+  },
+  "l-avevo-preparata": {
+    "name": "L'avevo preparata",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «l'avevo preparata. Esatto, togliela»."
+  },
+  "ero-gia-li": {
+    "name": "Ero già lì",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «si può fondere in realtà all'altra scena che abbiamo fatto, che potevi spostarti e decidere delle scene. Possiamo già metterlo di là»: entra in Salto."
+  },
+  "minute-man": {
+    "name": "Minute Man",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «abbiamo già fatto il potere che fa avanzare gli orologi, glielo fondiamo dietro»: entra in Quadrante."
+  },
+  "infermeria": {
+    "name": "Infermeria",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «infermeria, toglilo, è un effetto di background»."
+  },
+  "stesso-sangue": {
+    "name": "Stesso sangue",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «Stesso sangue cancellalo, che l'abbiamo messo prima»: lo fa il passivo di Sangue per sangue."
+  },
+  "canto-del-cigno": {
+    "name": "Canto del cigno",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «Per quanto riguarda invece canto del cigno, rimuovilo»."
+  },
+  "in-piedi": {
+    "name": "In piedi!",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «per invece il potere in piedi, in cancellalo»."
+  },
+  "duro-a-morire": {
+    "name": "Duro a morire",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «Dura morire l'abbiamo fuso prima»: è il passivo di Doppio cuore."
+  },
+  "non-sotto-il-mio-turno": {
+    "name": "Non sotto il mio turno",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «Non sotto il mio turno cancellalo»."
+  },
+  "incassare": {
+    "name": "Incassare",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «ferro nel sangue e incassare. Vanno fusi e modellati perché così non funziona»: è dentro Ferro nel sangue."
+  },
+  "sentinella": {
+    "name": "Sentinella",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «Sentinella in realtà lo possiamo fondersi a difendersi nella sfera»: il passivo era già in Difendersi dalla Sfera, e il compagno coperto entra nel suo attivo."
+  },
+  "bussola-doppia": {
+    "name": "Bussola doppia",
+    "data": "1/10/2026",
+    "motivo": "Blue, 1/10: «Per la bussola doppia, l'effetto passivo, ok, ma l'effetto attivo... Non mi piace, perché vai a condizionare le convinzioni. Quindi, bussola doppia, cancellalo»."
   }
 });
 
 /** L'impronta del catalogo: cambia quando cambia un potere, e allora le schede si riallineano (poteri-allinea.js). */
-export const POTERI_VERSIONE = "fe7b9f55";
+export const POTERI_VERSIONE = "b0b0d4a3";
