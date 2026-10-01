@@ -12,7 +12,40 @@ import { NEMICO_FLAG, vociCreazione } from "./nemico.js";
  *
  * The native system's Actor types and data models remain untouched. The chosen
  * sheet is persisted through Foundry's standard flags.core.sheetClass field.
+ *
+ * UN SOLO CAMPO PER NOME (1.33.1). Foundry legge la finestra con
+ * FormDataExtended, e quando due campi hanno lo stesso nome ne fa una lista
+ * coi valori di tutti e due, anche se uno è spento. Nella 1.33.0 la scelta
+ * Mortale/Mago e il PNG di M6 portavano ognuno il suo `flags.core.sheetClass`:
+ * la scheda arrivava come lista, Foundry non la riconosceva e apriva quella di
+ * serie, per il PNG di M6 come per il Mago. Per questo quel che si vede (la
+ * tendina Mortale/Mago, le voci del PNG di M6) qui non ha nome: i dati partono
+ * da tre campi nascosti, uno per nome, riempiti da `datiDiCreazione`.
  */
+
+/** I campi che la finestra può aggiungere ai dati di Actor.create, col nome che hanno per Foundry. */
+export const CAMPI_CREAZIONE = Object.freeze({
+  scheda: "flags.core.sheetClass",
+  natura: `flags.${MODULE_ID}.${NEMICO_FLAG}.natura`,
+  spcType: "system.spcType"
+});
+
+/**
+ * Cosa parte verso Actor.create, oltre a nome, tipo e cartella, per la scelta
+ * fatta nella finestra. Un PNG di M6 porta la scheda del nemico, la sua Natura
+ * e, se la Natura ne ha uno, lo spcType del sistema; un mortale porta la scheda
+ * del Mago solo se è stata scelta; ogni altro tipo non porta niente.
+ */
+export function datiDiCreazione({ tipo = "", schedaMortale = "", natura = "", spcType = "" } = {}) {
+  if (natura) {
+    const dati = { [CAMPI_CREAZIONE.scheda]: NEMICO_SHEET_ID, [CAMPI_CREAZIONE.natura]: String(natura) };
+    if (spcType) dati[CAMPI_CREAZIONE.spcType] = String(spcType);
+    return dati;
+  }
+  if (tipo === "mortal" && schedaMortale) return { [CAMPI_CREAZIONE.scheda]: String(schedaMortale) };
+  return {};
+}
+
 export function registerActorCreationChoice() {
   Hooks.on("renderDialogV2", (_dialog, element) => {
     if (element.querySelector(`[data-module="${MODULE_ID}"]`)) return;
@@ -21,14 +54,65 @@ export function registerActorCreationChoice() {
     const typeGroup = typeSelect?.closest(".form-group");
     if (!typeSelect || !typeGroup) return;
 
-    aggiungiSceltaScheda(typeSelect, typeGroup);
-    aggiungiPngDiM6(typeSelect, typeGroup);
+    const scelta = aggiungiSceltaScheda(typeSelect, typeGroup);
+    const png = aggiungiPngDiM6(typeSelect, typeGroup);
+    if (!scelta && !png) return;
+
+    const campi = campiNascosti(typeGroup);
+
+    const aggiorna = () => {
+      const voce = typeSelect.selectedOptions?.[0];
+      const natura = voce?.dataset?.m6Natura ?? "";
+      const mortale = !natura && typeSelect.value === "mortal";
+
+      if (scelta) {
+        scelta.group.hidden = !mortale;
+        scelta.select.disabled = !mortale;
+        if (!mortale) scelta.select.value = "";
+      }
+      if (png) png.hint.hidden = !natura;
+
+      const dati = datiDiCreazione({
+        tipo: typeSelect.value,
+        schedaMortale: scelta?.select.value ?? "",
+        natura,
+        spcType: voce?.dataset?.m6SpcType ?? ""
+      });
+      for (const [chiave, nome] of Object.entries(CAMPI_CREAZIONE)) {
+        campi[chiave].disabled = !(nome in dati);
+        campi[chiave].value = dati[nome] ?? "";
+      }
+    };
+
+    typeSelect.addEventListener("change", aggiorna);
+    scelta?.select.addEventListener("change", aggiorna);
+    aggiorna();
   });
 }
 
-/** The Mortal/Mage sheet choice, shown only while the type is `mortal`. */
+/** I tre campi nascosti, uno per nome: spenti finché la scelta non li riempie. */
+function campiNascosti(typeGroup) {
+  const campi = {};
+  for (const [chiave, nome] of Object.entries(CAMPI_CREAZIONE)) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = nome;
+    input.value = "";
+    input.disabled = true;
+    input.dataset.module = MODULE_ID;
+    typeGroup.append(input);
+    campi[chiave] = input;
+  }
+  return campi;
+}
+
+/**
+ * The Mortal/Mage sheet choice, shown only while the type is `mortal`. La
+ * tendina non ha nome: è solo quel che si vede, il dato lo porta il campo
+ * nascosto della scheda.
+ */
 function aggiungiSceltaScheda(typeSelect, typeGroup) {
-  if (!typeSelect.querySelector('option[value="mortal"]')) return;
+  if (!typeSelect.querySelector('option[value="mortal"]')) return null;
 
   const sheetGroup = document.createElement("div");
   sheetGroup.classList.add("form-group");
@@ -41,7 +125,7 @@ function aggiungiSceltaScheda(typeSelect, typeGroup) {
   fields.classList.add("form-fields");
 
   const sheetSelect = document.createElement("select");
-  sheetSelect.name = "flags.core.sheetClass";
+  sheetSelect.setAttribute("aria-label", game.i18n.localize("WOD5E_MAGE.Creation.SheetType.Name"));
 
   const mortal = document.createElement("option");
   mortal.value = "";
@@ -61,26 +145,17 @@ function aggiungiSceltaScheda(typeSelect, typeGroup) {
   sheetGroup.append(label, fields, hint);
   typeGroup.insertAdjacentElement("afterend", sheetGroup);
 
-  const updateVisibility = () => {
-    const isMortal = typeSelect.value === "mortal";
-    sheetGroup.hidden = !isMortal;
-    sheetSelect.disabled = !isMortal;
-    if (!isMortal) sheetSelect.value = "";
-  };
-
-  typeSelect.addEventListener("change", updateVisibility);
-  updateVisibility();
+  return { group: sheetGroup, select: sheetSelect };
 }
 
 /**
  * Il PNG di M6 nella lista dei tipi: un gruppo in fondo, una voce per Natura.
- * Ogni voce vale `spc` per Foundry; la differenza la fanno tre campi nascosti,
- * accesi solo quando la voce scelta è una di queste: la scheda del nemico, la
- * Natura nella bandiera del modulo e, se la Natura ne ha uno, lo spcType del
- * sistema. Con un altro tipo scelto i campi sono spenti e non entrano nei dati.
+ * Ogni voce vale `spc` per Foundry; la Natura e lo spcType stanno sulla voce
+ * (`data-m6-natura`, `data-m6-spc-type`) e da lì passano ai campi nascosti.
+ * Sotto il tipo, una riga dice con che scheda nasce.
  */
 function aggiungiPngDiM6(typeSelect, typeGroup) {
-  if (!typeSelect.querySelector('option[value="spc"]')) return;
+  if (!typeSelect.querySelector('option[value="spc"]')) return null;
 
   const localize = game.i18n.localize.bind(game.i18n);
   const format = game.i18n.format.bind(game.i18n);
@@ -98,19 +173,14 @@ function aggiungiPngDiM6(typeSelect, typeGroup) {
   }
   typeSelect.append(gruppo);
 
-  const campo = (name, value = "") => {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = name;
-    input.value = value;
-    input.disabled = true;
-    input.dataset.module = MODULE_ID;
-    typeGroup.append(input);
-    return input;
-  };
-  const scheda = campo("flags.core.sheetClass", NEMICO_SHEET_ID);
-  const natura = campo(`flags.${MODULE_ID}.${NEMICO_FLAG}.natura`);
-  const spcType = campo("system.spcType");
+  // Al cambio del tipo Foundry riscrive la PRIMA nota del gruppo (la sua, quella
+  // del tipo scelto): se non c'è ancora gliela si lascia pronta, vuota, così la
+  // nota del PNG di M6 resta la seconda e nessuno gliela cancella.
+  if (!typeGroup.querySelector(".hint")) {
+    const delTipo = document.createElement("p");
+    delTipo.classList.add("hint");
+    typeGroup.append(delTipo);
+  }
 
   const hint = document.createElement("p");
   hint.classList.add("hint");
@@ -119,17 +189,5 @@ function aggiungiPngDiM6(typeSelect, typeGroup) {
   hint.hidden = true;
   typeGroup.append(hint);
 
-  const aggiorna = () => {
-    const scelta = typeSelect.selectedOptions?.[0];
-    const m6 = Boolean(scelta?.dataset?.m6Natura);
-    scheda.disabled = !m6;
-    natura.disabled = !m6;
-    natura.value = m6 ? scelta.dataset.m6Natura : "";
-    spcType.disabled = !m6 || !scelta.dataset.m6SpcType;
-    spcType.value = m6 ? scelta.dataset.m6SpcType : "";
-    hint.hidden = !m6;
-  };
-
-  typeSelect.addEventListener("change", aggiorna);
-  aggiorna();
+  return { hint };
 }

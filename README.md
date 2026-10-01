@@ -277,6 +277,11 @@ under the system's types, one entry per Nature ("PNG M6 · Vampiro"): the
 actor is born as an `spc` with the enemy sheet and its Nature already set, so
 there is no trip through the sheet configuration. An existing `spc` actor
 still takes the sheet from its sheet configuration (the cog on the window).
+It works from 1.33.1: in 1.33.0 two fields of the dialog were both named
+`flags.core.sheetClass`, Foundry read them as a list and opened the default
+sheet, for the M6 NPC and for a new Mage alike. The dialog now sends its data
+through three hidden fields, one per name; what you see (the Mortal/Mage
+choice, the M6 entries) carries no name.
 
 The sheet was redrawn on 1 October 2026 from the approved mock
 (`docs/mock_scheda_nemico_1-10.html`). It has two modes, switched by the

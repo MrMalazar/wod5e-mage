@@ -381,6 +381,30 @@ const contoMano = N.contoDelTiro({ nome: "Spara", riserva: conMano.azioni[0].ris
 assert.deepEqual([contoMano.conto, contoMano.dadi], ["Mira 7 -2 Sanguinante +2 Mano del Narratore = 7 dadi · riesce dal 6", 7]);
 conTutti(T.gioco(conMano), ["<b>+2</b>", '<i class="fa-solid fa-arrow-up" aria-hidden="true"></i><b>7</b>'], "gioco con la mano");
 
+// --- un solo campo per nome in tutta la finestra (1.33.1). Testata e pagine stanno nello stesso form, e Foundry, di due
+// campi con lo stesso nome, fa una lista coi valori di tutti e due: al primo cambio la scheda salverebbe una lista.
+const linguetta = (id) => ({ id, group: "primary", cssClass: "" });
+const tuttaLaFinestra = (ctx) => T.testa(ctx) + T.gioco(ctx) + T.oggetti({ ...ctx, tab: linguetta("oggetti") }) + T.note({ ...ctx, tab: linguetta("note") });
+const nomiDeiCampi = (html) => [...leggibile(html).matchAll(/<(?:input|select|textarea|prose-mirror)\b[^>]*?\bname="([^"]+)"/g)].map((m) => m[1]);
+const tutteAperte = new Set(["arma:w1", "z1", "z2", "z3", "m1", "m2", "m3", "effetto:e1", "effetto:e2", "effetto:e3", "effetto:e4"]);
+const finestre = [
+  ["Gioca", c],
+  ["Gioca, tutto aperto", contesto(actor, items, { aperte: tutteAperte })],
+  ["Scrivi", cs],
+  ["Scrivi, tutto aperto", contesto(scrivi, items, { aperte: tutteAperte })],
+  ["Scrivi, tutto aperto, col Grimorio", contesto(scrivi, items, { aperte: tutteAperte, cassetto: "grimorio", cerca: "" })],
+  ["Scrivi, tutto aperto, a mano", contesto(scrivi, items, { aperte: tutteAperte, cassetto: "mano" })],
+  ["vampiro, Scrivi", contesto(breve({ modo: "scrivi", punteggio: { nome: "Generazione", valore: 9 } }, { spcType: "vampire" }), items, { aperte: new Set(["effetto:p1", "effetto:h1"]) })],
+  ["Magick ereditata, Scrivi", ereditata],
+  ["nemico nuovo", nuovo]
+];
+for (const [dove, ctx] of finestre) {
+  const nomiCampi = nomiDeiCampi(tuttaLaFinestra(ctx));
+  assert.deepEqual(nomiCampi.filter((nome, i) => nomiCampi.indexOf(nome) !== i), [], `${dove}: campi con lo stesso nome`);
+}
+assert.equal(nomiDeiCampi(tuttaLaFinestra(c)).length, 0, "in Gioca la scheda non ha campi: lo stato si cambia coi tasti");
+assert.ok(nomiDeiCampi(tuttaLaFinestra(contesto(scrivi, items, { aperte: tutteAperte }))).length > 40, "in Scrivi, a righe aperte, i campi ci sono e la prova li conta");
+
 // --- i dialoghi
 assert.ok(T.caso({ abilita: c.abilitaScelta }).includes('<option value="firearms">Mira</option>'));
 assert.ok(T.dai({ personaggi: [{ id: "a", name: "Guendalina" }] }).includes('<option value="a">Guendalina</option>'));
