@@ -775,7 +775,8 @@ export class MageActorSheet extends MortalActorSheet {
   static applicaScalaOvunque(scala = game.settings.get(MODULE_ID, SCALA_SETTING)) {
     const i18n = { localize: (key) => game.i18n.localize(key), format: (key, data) => game.i18n.format(key, data), viewport: window };
     for (const app of foundry.applications?.instances?.values?.() ?? []) {
-      if (app instanceof MageActorSheet || app.constructor?.SCHEDA_DEL_MODULO) applicaScala(app.element, scala, i18n);
+      // Una scheda del modulo con la sua misura (la scheda del nemico) si scala su quella.
+      if (app instanceof MageActorSheet || app.constructor?.SCHEDA_DEL_MODULO) applicaScala(app.element, scala, { ...i18n, naturale: app.constructor?.MISURA_NATURALE });
     }
   }
 

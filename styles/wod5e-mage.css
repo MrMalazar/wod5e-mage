@@ -15931,54 +15931,92 @@
 }
 
 /* ==========================================================================
-   La scheda del nemico (Blue, 25/9, dal mock docs/mock_scheda_nemico_25-9.html;
-   fatta il 27/9). Una finestra da 940 × 820, la testata sempre in vista, le
-   linguette a parole, righe a colonne come nel menù del Paradosso: poche
-   cornici, un filo sottile fra le righe, oro per i numeri che si cliccano,
-   viola per quello che è cambiato o scelto. Le variabili sono quelle del
-   modulo: il tema chiaro cambia da sé.
+   La scheda del nemico (Blue, 25/9; rifatta l'1/10 sul mock approvato,
+   docs/mock_scheda_nemico_1-10.html). Una finestra da 960 × 770. In testa chi
+   è e come sta; sotto tre pagine. Due modi: in Gioca cambia lo stato e il
+   testo sta fermo, in Scrivi cambia la scheda e quello che si scrive è carta
+   (un crema scuro: il bianco sul tema scuro abbaglia). Una riga per voce, il
+   testo si apre al clic. I numeri fermi sono oro; quello che tira è viola
+   pieno; quello che è scelto ha il fondo scuro e il filo d'oro. Le variabili
+   sono quelle del modulo: il tema chiaro cambia da sé, con le sue qui sotto.
    ========================================================================== */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico {
-  --nemico-disp: var(--mage-rosso-vivo);
-  --nemico-linea: color-mix(in srgb, var(--mage-oro-scuro) 40%, transparent);
-  --nemico-titolo: "Modesto Condensed", Georgia, serif;
-  --nemico-verde: #8fd19a;
-  --nemico-chiaro: #f5e7b2; /* nome, soglie e numeri grandi: l'oro chiaro delle intestazioni */
+  --nemico-disp: #d0524a;
+  --nemico-disp-testo: #e2a79e;
+  --nemico-titolo: "Modesto Condensed", "Marcellus SC", Georgia, serif;
+  --nemico-chiaro: #f5e7b2;      /* nome, linguetta accesa, testo di quello che è scelto */
+  --nemico-numero: var(--mage-oro); /* i numeri fermi e i titoli dei riquadri */
+  --nemico-tenue: var(--mage-tenue); /* didascalie e parole di contorno */
+  --nemico-su-numero: var(--mage-su-oro); /* il testo su un pallino pieno */
+  --nemico-filo: #8a7e61;        /* il bordo dei comandi: almeno 3:1 su ogni fondo, anche su quello scelto */
+  --nemico-scelto: #3a352c;      /* il fondo di quello che è scelto */
+  --nemico-scelto-filo: var(--mage-oro);
+  --nemico-su-viola: #f5e7b2;    /* il numero sul tasto che tira */
+  --nemico-carta: #b8ac8d;       /* il fondo dei campi: crema scuro */
+  --nemico-carta-bordo: #8c8166;
+  --nemico-inchiostro: #14110c;
+  --nemico-segnaposto: #463f31;
+  --nemico-fuoco: #f5e7b2;       /* l'anello del fuoco da tastiera */
 }
 
-/* Nel tema chiaro l'oro chiaro parla nel viola medio, come sul mago. */
+/* Nel tema chiaro i numeri e i titoli parlano in viola (l'oro lì è solo linea), e la carta è la crema del manuale. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-chiara {
+  --nemico-disp: #a4444a;
+  --nemico-disp-testo: #7a3540;
   --nemico-chiaro: #3B336B;
+  --nemico-numero: #282051;
+  --nemico-tenue: #5c5c68;
+  --nemico-su-numero: #F6F2E6;
+  --nemico-filo: #7d7359;
+  --nemico-scelto: #DCD6EC;
+  --nemico-scelto-filo: #282051;
+  --nemico-su-viola: #F6F2E6;
+  --nemico-carta: #FBF8F0;
+  --nemico-carta-bordo: #7d7359;
+  --nemico-inchiostro: #1E1B2E;
+  --nemico-segnaposto: #6E6E7A;
+  --nemico-fuoco: #282051;
 }
 
-/* La scheda del nemico nasce a 940 px (MISURA_NEMICO): la larghezza minima
+/* La disposizione del token: il filo in cima alla finestra e l'etichetta in testa. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-nemico-neutrale { --nemico-disp: #d9c26b; --nemico-disp-testo: #e6d58f; }
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-nemico-amichevole { --nemico-disp: #7fb7d6; --nemico-disp-testo: #a9d0e6; }
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-nemico-segreto { --nemico-disp: #b58ade; --nemico-disp-testo: #c9b0ea; }
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-chiara.wod5e-mage-nemico-neutrale { --nemico-disp: #8a6d1f; --nemico-disp-testo: #5e4a12; }
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-chiara.wod5e-mage-nemico-amichevole { --nemico-disp: #2f6f93; --nemico-disp-testo: #1f5674; }
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-chiara.wod5e-mage-nemico-segreto { --nemico-disp: #5a4a8c; --nemico-disp-testo: #3B336B; }
+
+/* La scheda del nemico nasce a 960 px (MISURA_NEMICO): la larghezza minima
    delle quattro colonne del mago (1280 px) qui la sfonderebbe a destra. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico:not(.minimized) {
-  min-width: calc(940px * var(--mage-scala, 1));
+  min-width: calc(960px * var(--mage-scala, 1));
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-nemico-neutrale { --nemico-disp: #d9c26b; }
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-nemico-amichevole { --nemico-disp: #7fb7d6; }
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-nemico-segreto { --nemico-disp: var(--mage-viola-chiaro); }
-
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content {
+  background: var(--mage-cassetto-fondo);
   border-top: 3px solid var(--nemico-disp);
+  color: var(--mage-testo);
   display: flex;
   flex-direction: column;
+  font-family: var(--font-primary, "Signika", sans-serif);
+  font-size: 15px;
+  line-height: 1.3;
   padding: 0;
 }
 
 /* Il sistema (display/wod5e-styling.css) rientra ogni .tab di 45 px per la sua barra
-   delle linguette e mette le sezioni con align-items: flex-start e height: 100%:
-   qui le carte restavano strette e le righe rientrate (Blue, 27/9, screenshot).
+   delle linguette e mette le sezioni con align-items: flex-start e height: 100%.
    La scheda del nemico non ha quella barra: i figli si stirano a tutta larghezza. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .tab,
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .actor-header {
   margin-left: 0;
 }
 
+/* Il sistema colora il testo di ogni .tab e di ogni .actor-header col suo tema: qui parla il tema del modulo. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content section.tab {
+  --input-text-color: var(--nemico-inchiostro);
   align-items: stretch;
+  color: var(--mage-testo);
   height: auto;
   overflow-y: auto;
 }
@@ -15987,410 +16025,544 @@
   width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content > form {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  min-height: 0;
-}
-
-/* Niente barra delle icone a sinistra: le pagine stanno sotto la testata. */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .tab {
-  margin-left: 0;
-}
-
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content section.tab.wod5e-mage-nemico-corpo.active {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: 18px 22px 24px;
+  padding: 14px 16px 16px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-k {
-  color: var(--mage-tenue);
-  font: 700 10px/1.2 sans-serif;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+/* ---- i tasti: tutti partono nudi, ognuno prende poi il suo vestito ----
+   :where() non pesa: le regole di Foundry e del sistema sui button cadono, e
+   i tasti che la scheda del nemico prende dal mago (le caselle della Salute,
+   la ruota, la scelta delle Condizioni) restano i loro. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :where(.wod5e-mage-nemico-testa, .wod5e-mage-nemico-corpo) :where(button):where(:not(.wod5e-mage-salute-cell, .wod5e-mage-ventaglio-voce, .wod5e-mage-cond-voce)) {
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  font: inherit;
+  height: auto;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  min-height: 0;
+  padding: 0;
+  text-shadow: none;
+  width: auto;
 }
 
-/* I campi della scheda: trasparenti, la riga d'oro sotto solo al fuoco. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :where(.wod5e-mage-nemico-testa, .wod5e-mage-nemico-corpo) :where(button):where(:not(.wod5e-mage-salute-cell, .wod5e-mage-ventaglio-voce, .wod5e-mage-cond-voce)):is(:hover, :focus) {
+  box-shadow: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :is(.wod5e-mage-nemico-testa, .wod5e-mage-nemico-corpo) :is(button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--nemico-fuoco);
+  outline-offset: 2px;
+}
+
+/* ---- la carta: tutto quello in cui si scrive ---- */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="text"],
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="number"],
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="search"],
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content select,
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content textarea {
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 6px;
+  background: var(--nemico-carta);
+  border: 1px solid var(--nemico-carta-bordo);
+  border-radius: 5px;
   box-shadow: none;
   box-sizing: border-box;
-  color: var(--mage-testo);
+  color: var(--nemico-inchiostro);
   font-family: inherit;
-  font-size: 13.5px;
-  height: 26px;
+  font-size: 14px;
+  height: 28px;
+  line-height: 1.2;
+  margin: 0;
+  max-width: none; /* il sistema stringe ogni numero a 35 px */
   min-height: 0;
-  padding: 2px 8px;
-  width: auto;
+  min-width: 0;
+  padding: 0 9px;
+  width: 100%;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input:focus,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content select:focus,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content textarea:focus {
-  border-color: var(--mage-oro);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :is(input, textarea)::placeholder {
+  color: var(--nemico-segnaposto);
+  opacity: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :is(input, select, textarea):focus {
+  border-color: var(--nemico-inchiostro);
   box-shadow: none;
-  outline: none;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="number"] {
-  width: 4.2rem;
+/* La tendina tiene la sua freccia, quella del browser. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content select {
+  appearance: auto;
+  padding: 0 6px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="checkbox"] {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content select option,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content select optgroup {
+  background: var(--nemico-carta);
+  color: var(--nemico-inchiostro);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content textarea {
+  field-sizing: content;
   height: auto;
+  line-height: 1.4;
+  min-height: 44px;
+  padding: 6px 9px;
+  resize: vertical;
+}
+
+/* Un numero che si scrive: una casella di carta sola, senza le freccette. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-num {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  flex: none;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  height: 30px;
+  padding: 0;
+  text-align: center;
+  width: 44px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-num::-webkit-inner-spin-button,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-num::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* La spunta resta quella di Foundry: qui solo il posto che prende nella riga. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="checkbox"] {
+  flex: none;
+  height: auto;
+  margin: 0;
   width: auto;
 }
 
-/* ---- la testata ---- */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-testa {
-  flex: 0 0 auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-filo {
-  display: flex;
-  padding: 8px 18px 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-disp {
-  align-items: center;
-  color: var(--nemico-disp);
-  display: inline-flex;
-  font: 700 10.5px/1 sans-serif;
-  gap: 7px;
-  letter-spacing: 0.14em;
+/* ---- le parole piccole ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-k {
+  color: var(--nemico-tenue);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1;
   text-transform: uppercase;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-disp > i {
-  background: var(--nemico-disp);
-  border-radius: 50%;
-  height: 8px;
-  width: 8px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-tenue {
+  color: var(--nemico-tenue);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-testata {
-  display: grid;
-  gap: 26px;
-  grid-template-columns: minmax(0, 1fr) 400px;
-  padding: 10px 22px 16px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-nessuna {
+  color: var(--nemico-tenue);
+  font-size: 14px;
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cn {
+  color: var(--nemico-chiaro);
+  font-weight: 700;
+}
+
+/* ---- la testata: chi è ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-testa {
+  color: var(--mage-testo);
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-chi {
-  align-items: center;
+  align-items: flex-start;
   display: flex;
-  gap: 18px;
-  min-width: 0;
+  gap: 14px;
+  padding: 14px 16px 12px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ritratto {
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 12px;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 8px;
+  box-sizing: border-box;
   flex: none;
-  height: 96px;
+  height: 76px;
   overflow: hidden;
   position: relative;
-  width: 96px;
+  width: 76px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ritratto > img {
   border: 0;
-  cursor: pointer;
   display: block;
   height: 100%;
   object-fit: cover;
   width: 100%;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-cambia {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-cambia {
   align-items: center;
-  background: rgb(0 0 0 / 65%);
-  border: 1px solid var(--mage-oro-scuro);
-  border-radius: 6px;
-  bottom: 5px;
-  color: var(--mage-oro);
-  cursor: pointer;
+  background: var(--mage-velluto);
+  border: 1px solid var(--nemico-filo);
+  border-radius: 5px;
+  bottom: 4px;
+  color: var(--mage-testo);
   display: flex;
-  font-size: 10px;
-  height: 22px;
+  font-size: 11px;
+  height: 26px;
   justify-content: center;
-  min-height: 0;
-  padding: 0;
   position: absolute;
-  right: 5px;
-  width: 22px;
+  right: 4px;
+  width: 26px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-nomi {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   gap: 3px;
   min-width: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-nome,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-concetto,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-appartenenza > input,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-appartenenza > select {
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  height: auto;
-  padding: 1px 4px;
-  width: 100%;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-nome:hover,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-concetto:hover,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-appartenenza > :is(input, select):hover {
-  border-color: var(--mage-oro-tenue);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-nome {
-  color: var(--nemico-chiaro, #f5e7b2);
-  font: 600 29px/1.05 var(--nemico-titolo);
-  margin-left: -4px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-concetto {
-  font-size: 14.5px;
-  margin-left: -4px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-appartenenza {
-  align-items: center;
-  color: var(--mage-tenue);
-  display: flex;
-  gap: 4px;
-  margin-left: -4px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-appartenenza > :is(input, select) {
-  color: var(--mage-tenue);
-  flex: 0 1 auto;
-  font-size: 13.5px;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-appartenenza > input {
-  flex: 1 1 8rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-stato {
-  align-content: center;
-  align-items: center;
-  display: grid;
-  gap: 9px 10px;
-  grid-template-columns: 82px minmax(0, 1fr) 42px 26px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-v {
-  align-items: baseline;
-  color: var(--mage-oro);
-  display: inline-flex;
-  font-size: 14px;
-  font-weight: 700;
-  gap: 1px;
-  justify-content: flex-end;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-nomi > h1.wod5e-mage-nemico-nome {
+  border: 0;
+  color: var(--nemico-chiaro);
+  font: 400 28px/1.1 var(--nemico-titolo);
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  text-overflow: ellipsis;
+  text-shadow: none;
   white-space: nowrap;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-max {
-  -moz-appearance: textfield;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px dashed var(--mage-oro-tenue);
-  border-radius: 0;
-  color: var(--mage-oro);
-  font-size: 14px;
-  font-weight: 700;
-  height: auto;
-  padding: 0;
-  text-align: left;
-  width: 1.5rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-max::-webkit-inner-spin-button,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-max::-webkit-outer-spin-button {
-  -webkit-appearance: none;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-concetto {
+  color: var(--mage-testo);
+  font-size: 15px;
   margin: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-track {
-  gap: 4px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-meta {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin: 6px 0 0;
 }
 
-/* La riga della ruota: solo il tastino, senza fondo; la ruota si appende alla finestra come sul mago. */
+/* La disposizione: l'icona e la parola, col colore del filo in cima. Il colore non parla da solo. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-disp {
+  align-items: center;
+  background: color-mix(in srgb, var(--nemico-disp) 15%, transparent);
+  border: 1px solid var(--nemico-disp);
+  border-radius: 12px;
+  box-sizing: border-box;
+  color: var(--nemico-disp-testo);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 700;
+  gap: 6px;
+  height: 24px;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  padding: 0 10px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-disp > i {
+  color: var(--nemico-disp);
+  font-size: 11px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-appartenenza {
+  color: var(--nemico-tenue);
+  font-size: 14px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* In Scrivi: i campi di carta con l'etichetta sopra, piccola e in minuscolo. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campi {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campi-riga {
+  display: flex;
+  gap: 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico label.wod5e-mage-nemico-campo {
+  display: flex;
+  flex: 0 0 150px;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico label.wod5e-mage-nemico-campo.largo {
+  flex: 1 1 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico label.wod5e-mage-nemico-campo > span {
+  color: var(--nemico-tenue);
+  font-size: 12.5px;
+  line-height: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content label.wod5e-mage-nemico-campo > :is(input, select) {
+  font-size: 15px;
+  height: 32px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content label.wod5e-mage-nemico-campo > input.wod5e-mage-nemico-nome {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Il tasto dei due modi: due metà, quella scelta col filo d'oro. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-modi {
+  display: flex;
+  flex: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-modo {
+  border: 1px solid var(--nemico-filo);
+  border-radius: 6px 0 0 6px;
+  color: var(--nemico-tenue);
+  font-size: 13.5px;
+  font-weight: 700;
+  height: 30px;
+  position: relative;
+  width: 72px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-modo + button.wod5e-mage-nemico-modo {
+  border-radius: 0 6px 6px 0;
+  margin-left: -1px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-modo:hover {
+  color: var(--mage-testo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-modo.on {
+  background: var(--nemico-scelto);
+  border-color: var(--nemico-scelto-filo);
+  color: var(--nemico-chiaro);
+  z-index: 1;
+}
+
+/* ---- lo stato: come sta ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-stato {
+  align-items: stretch;
+  background: var(--mage-riq-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 8px;
+  box-sizing: border-box;
+  display: flex;
+  margin: 0 16px;
+  padding: 11px 0 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cella {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 0 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cella + .wod5e-mage-nemico-cella {
+  border-left: 1px solid var(--mage-oro-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cella.larga {
+  flex: 1 1 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cella-riga {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  min-height: 28px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-track {
+  flex: none;
+  gap: 3px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-conto {
+  color: var(--nemico-numero);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-cella input.wod5e-mage-nemico-num {
+  height: 28px;
+  width: 40px;
+}
+
+/* La riga della ruota: solo il tastino; la ruota si appende alla finestra come sul mago. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ventaglio-riga {
   background: transparent;
   border: 0;
+  flex: none;
   justify-content: center;
   min-height: 0;
   padding: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mini,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico summary.wod5e-mage-nemico-mini {
+/* I tasti piccoli a sola icona: il cuore della Salute, il più delle Condizioni. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-mini,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content summary.wod5e-mage-nemico-mini {
   align-items: center;
-  background: transparent;
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 6px;
-  color: var(--mage-oro);
+  background: var(--mage-velluto);
+  border: 1px solid var(--nemico-filo);
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: var(--nemico-tenue);
   cursor: pointer;
   display: inline-flex;
-  font-size: 10.5px;
-  height: 24px;
+  flex: none;
+  font-size: 11px;
+  height: 28px;
   justify-content: center;
   line-height: 1;
   list-style: none;
   min-height: 0;
   padding: 0;
-  width: 24px;
+  width: 28px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mini:hover {
-  border-color: var(--mage-oro);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-mini:hover {
+  border-color: var(--nemico-scelto-filo);
   box-shadow: none;
+  color: var(--mage-testo);
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico summary.wod5e-mage-nemico-mini::-webkit-details-marker {
   display: none;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pips {
+/* I punti dell'armatura: ognuno si clicca, e il conto va lì. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-punti {
+  display: flex;
+  margin-left: -5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-punto {
   align-items: center;
   display: flex;
-  gap: 4px;
-  min-width: 0;
+  height: 24px;
+  justify-content: center;
+  width: 24px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pip {
-  background: var(--mage-oro);
-  border: 1px solid var(--mage-oro);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-punto > i {
+  background: var(--mage-incavo);
+  border: 1.5px solid var(--mage-oro-scuro);
   border-radius: 3px;
-  flex: none;
-  height: 13px;
-  width: 13px;
+  box-sizing: border-box;
+  display: block;
+  height: 14px;
+  width: 14px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pip.vuoto {
-  background: transparent;
-  border-color: var(--mage-oro-scuro);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-punto.on > i {
+  background: var(--nemico-numero);
+  border-color: var(--nemico-numero);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pips > small {
-  color: var(--mage-tenue);
-  font-size: 12.5px;
-  margin-left: 8px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-punto:hover > i {
+  border-color: var(--nemico-chiaro);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-tastini {
-  display: flex;
-  gap: 3px;
-}
-
+/* Le Condizioni addosso: una pastiglia per Condizione, l'icona della famiglia, il nome, il peso, la × che la toglie. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-conds {
   align-items: center;
   display: flex;
+  flex: 1 1 auto;
   flex-wrap: wrap;
-  gap: 6px 12px;
-  min-height: 24px;
+  gap: 6px;
+  min-width: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cond {
   align-items: center;
-  color: var(--mage-testo);
+  background: var(--mage-riga-fondo);
+  border: 1px solid var(--nemico-filo);
+  border-radius: 14px;
+  box-sizing: border-box;
   display: inline-flex;
-  font-size: 14px;
-  gap: 6px;
+  gap: 7px;
+  height: 28px;
+  padding: 0 2px 0 10px;
+  white-space: nowrap;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cond.spenta {
-  opacity: 0.5;
+  opacity: 0.55;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cond > img,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-condizione > img {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cond > img {
   border: 0;
   filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
-  height: 21px;
-  width: 21px;
+  height: 16px;
+  width: 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cond-nome {
+  color: var(--mage-testo);
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-meno {
-  color: var(--mage-viola-chiaro);
-  font-size: 12.5px;
-  font-weight: 600;
-}
-
-/* La mano del Narratore (27/9): il ritocco ± in testa, oro se dà dadi, viola se li toglie. */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mano-riga {
-  align-items: center;
-  display: flex;
-  gap: 8px;
-  min-height: 24px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mano-segno {
-  font-size: 12.5px;
-  font-weight: 600;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mano-segno.piu {
-  color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mano-segno.meno {
-  color: var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-mano-scrivi {
-  text-align: right;
-  width: 42px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-togli {
-  background: transparent;
-  border: 0;
-  color: var(--mage-tenue);
-  cursor: pointer;
-  font-size: 11px;
-  line-height: 1;
-  min-height: 0;
-  padding: 0 2px;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-togli:hover {
-  box-shadow: none;
-  color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-nessuna,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-vuoto {
-  color: var(--mage-tenue);
+  color: var(--nemico-tenue);
   font-size: 13.5px;
-  font-style: italic;
-  margin: 0;
 }
 
-/* La scelta delle Condizioni: la tendina si apre sotto il +, sopra la pagina. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-togli {
+  align-items: center;
+  color: var(--nemico-tenue);
+  display: inline-flex;
+  font-size: 10px;
+  height: 24px;
+  justify-content: center;
+  width: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-togli:hover {
+  color: var(--mage-testo);
+}
+
+/* La scelta delle Condizioni: la tendina si apre sotto il più, sopra la pagina. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-condizioni-tendina {
+  flex: none;
   position: relative;
 }
 
@@ -16401,840 +16573,1091 @@
   box-shadow: 0 10px 30px rgb(0 0 0 / 45%);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   max-height: 380px;
   overflow: auto;
   padding: 10px;
   position: absolute;
   right: 0;
-  top: 28px;
-  width: 460px;
+  top: 32px;
+  width: 520px;
   z-index: 6;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-condizioni-fila {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 3px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-condizione {
-  align-items: center;
+/* ---- le linguette: parole, senza icone né conti ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content nav.wod5e-mage-nemico-pagine {
+  align-items: stretch;
   background: transparent;
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 11px;
+  border: 0;
+  border-bottom: 1px solid var(--mage-oro-tenue);
+  display: flex;
+  flex: none;
+  gap: 4px;
+  justify-content: flex-start;
+  margin: 6px 0 0;
+  padding: 0 16px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-pagina {
+  border-bottom: 2px solid transparent;
+  color: var(--nemico-tenue);
+  font-size: 13px;
+  font-weight: 700;
+  height: 36px;
+  letter-spacing: 0.12em;
+  padding: 0 14px;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-pagina:hover {
   color: var(--mage-testo);
-  cursor: pointer;
-  display: inline-flex;
-  font-size: 12.5px;
-  gap: 5px;
-  line-height: 1.2;
-  min-height: 0;
-  padding: 2px 8px 2px 4px;
-  width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-condizione > img {
-  height: 18px;
-  width: 18px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-pagina.active {
+  border-bottom-color: var(--nemico-scelto-filo);
+  color: var(--nemico-chiaro);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-condizione > small {
-  color: var(--mage-viola-chiaro);
+/* ---- la pagina: due colonne di riquadri ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-due {
+  align-items: start;
+  display: grid;
+  flex: 0 0 auto;
+  gap: 14px;
+  grid-template-columns: 336px minmax(0, 1fr);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riq {
+  background: var(--mage-riq-fondo);
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 8px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  padding: 12px 14px 14px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riq > h3.wod5e-mage-nemico-titolo,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-titolo-riga > h3.wod5e-mage-nemico-titolo {
+  border: 0;
+  color: var(--nemico-numero);
+  font: 700 12.5px/1 var(--font-primary, "Signika", sans-serif);
+  letter-spacing: 0.14em;
+  margin: 0;
+  padding: 0;
+  text-shadow: none;
+  text-transform: uppercase;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riq > h3.wod5e-mage-nemico-titolo {
+  align-items: center;
+  display: flex;
+  margin-bottom: 8px;
+  min-height: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-titolo-riga {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  min-height: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-titolo-dx {
+  align-items: center;
+  display: flex;
+  font-size: 14px;
+  gap: 8px;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-titolo-dx > b {
+  color: var(--mage-testo);
   font-weight: 700;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-condizione.lit {
-  background: var(--mage-viola);
-  border-color: var(--mage-viola-chiaro);
-  color: var(--mage-scelta-testo);
-}
-
-/* ---- le linguette ---- */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pagine {
-  border-bottom: 1px solid var(--nemico-linea);
-  border-top: 1px solid var(--nemico-linea);
-  display: flex;
-  gap: 28px;
-  padding: 0 22px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pagina {
-  align-items: center;
-  background: transparent;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico h4.wod5e-mage-nemico-sottotitolo {
   border: 0;
-  border-bottom: 2px solid transparent;
-  border-radius: 0;
-  color: var(--mage-tenue);
-  cursor: pointer;
-  display: flex;
-  font: 700 11.5px/1 var(--font-primary, "Signika", sans-serif);
-  gap: 7px;
-  letter-spacing: 0.16em;
-  min-height: 0;
-  padding: 13px 0 11px;
+  border-top: 1px solid var(--mage-oro-tenue);
+  color: var(--nemico-tenue);
+  font: 700 12px/1 var(--font-primary, "Signika", sans-serif);
+  letter-spacing: 0.12em;
+  margin: 12px 0 8px;
+  padding: 10px 0 0;
+  text-shadow: none;
   text-transform: uppercase;
-  width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pagina:hover {
-  box-shadow: none;
-  color: var(--nemico-chiaro, #f5e7b2);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pagina.active {
-  border-bottom-color: var(--mage-oro);
-  color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-conto {
-  color: var(--mage-tenue);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-aggiungi {
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  margin-left: auto;
-  opacity: 0.8;
-}
-
-/* ---- le tre carte ---- */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-tre {
-  display: grid;
-  flex: 0 0 auto;
-  gap: 14px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campo {
-  background: var(--mage-riga-fondo);
-  border-radius: 10px;
-  padding: 13px 15px 10px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campo-t {
+/* Un campo con la sua parola accanto, in riga: l'Areté, il Tipo, la soglia di un effetto. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico label.wod5e-mage-nemico-inline {
   align-items: center;
-  color: var(--mage-oro);
-  display: flex;
-  font: 700 11px/1 sans-serif;
+  color: var(--nemico-tenue);
+  display: inline-flex;
+  flex: none;
+  font-size: 14px;
   gap: 8px;
-  letter-spacing: 0.16em;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content label.wod5e-mage-nemico-inline > input.wod5e-mage-nemico-num {
+  height: 28px;
+  width: 40px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content label.wod5e-mage-nemico-inline > select {
+  width: 150px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-punteggio-nome {
+  width: 170px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-titolo-dx > input.wod5e-mage-nemico-num {
+  height: 28px;
+  width: 40px;
+}
+
+/* ---- soglie e riserve: due colonne di numeri allineate ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-numeri {
+  padding: 12px 14px 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-numeri-riga {
+  align-items: center;
+  column-gap: 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 60px 68px;
+  min-height: 40px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-numeri.scrivi .wod5e-mage-nemico-numeri-riga {
+  grid-template-columns: minmax(0, 1fr) 60px 68px 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-numeri-riga > * {
+  justify-self: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-numeri-riga > :first-child {
+  justify-self: stretch;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-numeri-riga.testa {
+  color: var(--nemico-numero);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  min-height: 0;
+  padding-bottom: 4px;
   text-transform: uppercase;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campo-t > i {
-  font-size: 13px;
-  opacity: 0.75;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-numeri-riga.caso {
+  min-height: 30px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-piu-caso {
-  background: transparent;
-  border: 0;
-  color: var(--mage-tenue);
-  cursor: pointer;
-  font-size: 10px;
-  margin-left: auto;
-  min-height: 0;
-  padding: 0;
-  width: auto;
+/* Un caso a dadi non ha soglia: il suo nome prende anche quella colonna. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-numeri-riga > .larga {
+  grid-column: span 2;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-piu-caso:hover {
-  box-shadow: none;
-  color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-coppia {
-  display: grid;
-  gap: 0 4px;
-  grid-template-columns: 1fr 1fr;
-  margin: 12px 0 10px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  border-radius: 8px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campo-blocco {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-height: 0;
-  padding: 4px 0 5px;
-  width: auto;
+  padding: 6px 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num > b,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi {
-  font: 600 38px/1 var(--nemico-titolo);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campo-blocco + .wod5e-mage-nemico-campo-blocco {
+  border-top: 1px solid var(--mage-oro-tenue);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num.soglia > b,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi {
-  color: var(--nemico-chiaro, #f5e7b2);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi {
-  -moz-appearance: textfield;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  height: auto;
-  padding: 0;
-  text-align: center;
-  width: 2.1em;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi::-webkit-inner-spin-button,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi::-webkit-outer-spin-button,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-riserva-scrivi::-webkit-inner-spin-button,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-riserva-scrivi::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-soglia-scrivi:hover {
-  border-color: var(--mage-oro-tenue);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num.soglia.mod > b.wod5e-mage-nemico-alza {
-  color: var(--mage-viola-chiaro);
-  font-size: 22px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num.riserva > b {
-  color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num.riserva.mod > b {
-  color: var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-num {
-  cursor: pointer;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-num:hover {
-  background: rgb(217 168 39 / 10%);
-  box-shadow: none;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-num > small {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campo-nome {
   align-items: center;
-  color: var(--mage-tenue);
+  color: var(--mage-testo);
   display: flex;
-  font: 700 9.5px/1 sans-serif;
-  gap: 5px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 700;
+  gap: 9px;
+  min-width: 0;
 }
 
-/* La riserva scritta: un numerino sotto la riserva d'oro, che è quella già scalata. */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-riserva-scrivi {
-  -moz-appearance: textfield;
-  background: transparent;
-  border: 1px solid transparent;
-  color: var(--mage-tenue);
-  font-size: 11px;
-  grid-column: 2;
-  height: 18px;
-  justify-self: center;
-  padding: 0;
-  text-align: center;
-  width: 2.6rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-riserva-scrivi:hover {
-  border-color: var(--mage-oro-tenue);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-casi {
-  border-top: 1px solid var(--nemico-linea);
-  list-style: none;
-  margin: 0;
-  padding: 7px 0 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-casi > li {
-  align-items: center;
-  display: flex;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campo-nome > i {
+  color: var(--nemico-numero);
+  flex: none;
   font-size: 14px;
-  gap: 6px;
-  justify-content: space-between;
-  min-height: 28px;
+  text-align: center;
+  width: 18px;
+}
+
+/* La soglia è un numero fermo: non si clicca, e si legge in oro. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-soglia {
+  color: var(--nemico-numero);
+  cursor: help;
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-soglia.piccola {
+  font-size: 16px;
+}
+
+/* Una soglia alzata da un'azione accesa: lo dice il filo sotto, non solo il colore. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-soglia.mod {
+  border-bottom: 2px solid var(--mage-viola-chiaro);
+  padding-bottom: 1px;
+}
+
+/* La riserva è il tasto che tira: viola pieno, col numero già scalato; la freccia dice che qualcosa l'ha cambiato. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-tira {
+  align-items: center;
+  background: var(--mage-viola);
+  border: 1px solid var(--mage-viola-chiaro);
+  border-radius: 5px;
+  color: var(--nemico-su-viola);
+  display: flex;
+  gap: 5px;
+  height: 32px;
+  justify-content: center;
+  width: 68px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-tira > b {
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-tira > i {
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-tira.piccolo {
+  height: 26px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-tira.piccolo > b {
+  font-size: 15px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-tira.stretto {
+  width: 56px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-tira:hover,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-lancia:hover {
+  border-color: var(--nemico-su-viola);
+  filter: brightness(1.15);
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-caso-nome {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-caso-s {
-  color: var(--mage-tenue);
-  font-size: 13px;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-caso-s > b {
-  color: var(--nemico-chiaro, #f5e7b2);
-  font-size: 15px;
-  margin-left: 3px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-caso-s.mod > b {
-  color: var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-caso-tira {
-  background: transparent;
-  border: 0;
-  border-radius: 6px;
-  color: var(--mage-tenue);
-  cursor: pointer;
-  font-size: 13px;
-  min-height: 0;
-  padding: 2px 6px;
-  white-space: nowrap;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-caso-tira > b {
-  color: var(--mage-oro);
-  font-size: 15px;
-  margin-right: 3px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-caso-tira.mod > b {
-  color: var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-caso-tira:hover {
-  background: rgb(217 168 39 / 10%);
-  box-shadow: none;
-}
-
-/* ---- le sezioni e le righe a colonne ---- */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-sez {
-  align-items: center;
-  color: var(--mage-oro);
-  display: flex;
-  flex: 0 0 auto;
-  font: 700 11px/1 sans-serif;
-  gap: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-sez::after {
-  border-top: 1px solid var(--nemico-linea);
-  content: "";
-  flex: 1;
-  order: 1;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-agg {
-  display: flex;
-  gap: 14px;
-  order: 2;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-agg > button {
-  background: transparent;
-  border: 0;
-  color: var(--mage-tenue);
-  cursor: pointer;
-  font: 600 12.5px var(--font-primary, "Signika", sans-serif);
-  letter-spacing: 0;
-  min-height: 0;
-  padding: 0;
-  text-transform: none;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-agg > button:hover,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-agg > button.attivo {
-  box-shadow: none;
-  color: var(--mage-oro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-lista {
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  margin-top: -8px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga {
-  align-items: center;
-  border-bottom: 1px solid var(--nemico-linea);
-  display: grid;
-  gap: 14px;
-  grid-template-columns: 200px minmax(0, 1fr) 128px 34px;
-  min-height: 42px;
-  padding: 0 2px 0 4px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga.stretta {
-  gap: 10px;
-  grid-template-columns: 190px minmax(0, 1fr) 54px 72px;
-  min-height: 36px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga:last-child {
-  border-bottom: 0;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga.aperta {
-  background: color-mix(in srgb, var(--mage-riga-fondo) 60%, transparent);
-  border-radius: 8px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga.attiva > .wod5e-mage-nemico-r-nome {
-  color: var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-nome {
-  align-items: center;
-  background: transparent;
-  border: 0;
   color: var(--mage-testo);
-  display: flex;
-  font-size: 15px;
-  font-weight: 600;
-  gap: 6px;
-  min-height: 0;
+  font-size: 14px;
   min-width: 0;
   overflow: hidden;
-  padding: 0;
-  text-align: left;
+  padding-left: 27px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-r-nome {
-  cursor: pointer;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-caso-campo {
+  margin-left: 27px;
+  width: calc(100% - 27px);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-r-nome:hover {
-  box-shadow: none;
-  color: var(--nemico-chiaro, #f5e7b2);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-numeri-riga.caso input.wod5e-mage-nemico-num {
+  height: 28px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-nome > i {
-  color: var(--mage-tenue);
-  font-size: 10px;
+/* Un «più» leggero, senza riquadro: un caso in più sotto il suo campo. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-piu {
+  align-items: center;
+  align-self: flex-start;
+  color: var(--nemico-tenue);
+  display: inline-flex;
+  font-size: 13px;
+  gap: 6px;
+  height: 26px;
+  margin-left: 21px;
+  padding: 0 6px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-libro {
-  color: var(--mage-tenue);
-  font-size: 10px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-piu > i {
+  color: var(--nemico-numero);
+  font-size: 9px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-piu > small {
+  font-size: 13px;
   margin-left: 4px;
 }
 
-/* Il testo della riga va a capo e la riga cresce (Blue, 27/9: «si legge solo "Conta anche contro la M"»). */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-eff {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-piu:hover {
+  color: var(--mage-testo);
+}
+
+/* La mano del Narratore: meno, numero, più. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-mano {
+  align-items: center;
+  border-top: 1px solid var(--mage-oro-tenue);
+  color: var(--mage-testo);
+  display: flex;
+  font-size: 14px;
+  gap: 8px;
+  padding: 9px 0 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-passi {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-passi > button {
+  align-items: center;
+  background: var(--mage-velluto);
+  border: 1px solid var(--nemico-filo);
+  border-radius: 4px;
+  color: var(--mage-testo);
+  display: flex;
+  font-size: 9px;
+  height: 24px;
+  justify-content: center;
+  width: 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-passi > button:hover {
+  border-color: var(--nemico-scelto-filo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-passi > b {
+  color: var(--nemico-numero);
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 28px;
+  text-align: center;
+}
+
+/* ---- le pastiglie: un nome solo, il testo si apre al clic ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-pastiglie {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-pastiglia {
+  align-items: center;
+  border: 1px solid var(--nemico-filo);
+  border-radius: 14px;
+  color: var(--mage-testo);
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-pastiglia > i {
+  color: var(--nemico-numero);
+  font-size: 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-pastiglia:hover {
+  border-color: var(--nemico-scelto-filo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-pastiglia.on {
+  background: var(--nemico-scelto);
+  border-color: var(--nemico-scelto-filo);
+  color: var(--nemico-chiaro);
+}
+
+/* Il posto vuoto che si riempie: tratteggio, come nel riquadro del Tiro. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-pastiglia.vuota {
+  border-style: dashed;
+  color: var(--nemico-tenue);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cassettino {
+  background: var(--mage-incavo);
+  border-radius: 6px;
   color: var(--mage-testo);
   font-size: 14px;
-  line-height: 1.35;
-  min-width: 0;
-  opacity: 0.88;
-  overflow-wrap: anywhere;
-  white-space: normal;
+  line-height: 1.4;
+  margin-top: 8px;
+  padding: 8px 12px;
+  text-wrap: pretty;
 }
 
-/* Il testo dell'effetto (e «Cosa fa» dell'azione) si scrive in un'area che cresce col contenuto. */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-eff > textarea,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico label.larga > textarea {
-  box-sizing: border-box;
-  field-sizing: content;
-  flex: 1 1 auto;
-  font: inherit;
-  font-size: 14px;
-  line-height: 1.35;
-  min-height: 1.9em;
-  min-width: 0;
-  resize: vertical;
-  width: 100%;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cassettino > p {
+  margin: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico label.larga > .wod5e-mage-nemico-k {
-  white-space: nowrap;
-}
-
-/* La soglia del bersaglio: un numero, largo abbastanza da leggersi. */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico input[type="number"][name$=".soglia"],
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico input[type="number"][name$=".bonusSoglia"] {
-  min-width: 54px;
-  text-align: center;
-  width: 54px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cn {
-  color: var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-res,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-tenue {
-  color: var(--mage-tenue);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-costo {
-  color: var(--mage-tenue);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cassettino > p.wod5e-mage-nemico-tenue {
   font-size: 13.5px;
-  text-align: right;
+  margin-bottom: 2px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cassettino > .wod5e-mage-nemico-dettagli {
+  padding: 0;
+}
+
+/* Le parti di un potere del manuale: il titolo con la sua misura, poi le righe. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-parte {
+  margin-top: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-parte > b {
+  color: var(--nemico-chiaro);
+  display: block;
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-parte > b > small {
+  color: var(--nemico-tenue);
+  font-size: 13.5px;
+  font-weight: 400;
+  margin-left: 8px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-parte > p {
+  margin: 2px 0 0;
+}
+
+/* ---- le righe: una linea per voce ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-righe {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga {
+  background: var(--mage-riga-fondo);
+  border-radius: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga-testa {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  gap: 10px;
+  min-height: 38px;
+  padding: 0 6px 0 12px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga-nome {
+  align-items: center;
+  color: var(--mage-testo);
+  display: flex;
+  flex: 1 1 auto;
+  gap: 10px;
+  min-width: 0;
+  text-align: left;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-riga-nome {
+  align-self: stretch;
+  color: var(--mage-testo);
+  flex: 1 1 auto;
+  justify-content: flex-start;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga-testa:has(> .wod5e-mage-nemico-manca) > button.wod5e-mage-nemico-riga-nome {
+  flex: 0 1 auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga-nome > b {
+  flex: none;
+  font-size: 15px;
+  font-weight: 700;
   white-space: nowrap;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-costo > b {
-  color: var(--mage-oro);
-  font-size: 16px;
-  margin-left: 5px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga-nome > span:not(.wod5e-mage-nemico-disco) {
+  color: var(--nemico-tenue);
+  font-size: 13.5px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-costo > b.chiaro {
-  color: var(--nemico-chiaro, #f5e7b2);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-riga-nome:hover > b,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga.attiva .wod5e-mage-nemico-riga-nome > b {
+  color: var(--nemico-chiaro);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-costo > b.mod {
-  color: var(--mage-viola-chiaro);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga-dx {
+  align-items: center;
+  display: flex;
+  flex: none;
+  gap: 12px;
+  margin-left: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-nome > input,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-eff > input,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-costo > select {
-  background: transparent;
-  border-color: transparent;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dato {
+  color: var(--nemico-tenue);
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dato > b {
+  color: var(--mage-testo);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dato > b.oro {
+  color: var(--nemico-numero);
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga-corpo {
+  color: var(--mage-testo);
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 0 12px 10px;
+  text-wrap: pretty;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga-corpo > p {
+  margin: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-riga-corpo > p.wod5e-mage-nemico-tenue {
+  font-size: 13.5px;
+  margin-top: 2px;
+}
+
+/* La matita: apre la riga e la riscrive. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-matita {
+  align-items: center;
+  border-radius: 5px;
+  color: var(--nemico-tenue);
+  display: flex;
+  font-size: 11px;
+  height: 28px;
+  justify-content: center;
+  width: 28px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-matita:hover {
+  color: var(--mage-testo);
+}
+
+/* I tasti a parola: «Usa», «Dai». */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-usa,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-tasto {
+  background: var(--mage-velluto);
+  border: 1px solid var(--nemico-filo);
+  border-radius: 5px;
+  color: var(--mage-testo);
+  font-size: 13.5px;
+  font-weight: 600;
+  height: 28px;
+  padding: 0 12px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-usa:hover,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-tasto:hover {
+  border-color: var(--nemico-scelto-filo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-usa.on {
+  background: var(--nemico-scelto);
+  border-color: var(--nemico-scelto-filo);
+  color: var(--nemico-chiaro);
+}
+
+/* «Lancia»: viola pieno come i tiri, ma a parola: il Narratore non tira, manda la carta. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-lancia {
+  align-items: center;
+  background: var(--mage-viola);
+  border: 1px solid var(--mage-viola-chiaro);
+  border-radius: 5px;
+  color: var(--nemico-su-viola);
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 700;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-lancia > i {
+  font-size: 10px;
+}
+
+/* Il posto vuoto in fondo a una lista: uno per lista. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :is(button, div).wod5e-mage-nemico-aggiungi {
+  align-items: center;
+  border: 1px dashed var(--nemico-filo);
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: var(--nemico-tenue);
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+  min-height: 34px;
+  padding: 0 12px;
+  text-align: left;
   width: 100%;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-nome > input {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-aggiungi i {
+  color: var(--nemico-numero);
+  font-size: 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-aggiungi b {
+  font-size: 14px;
   font-weight: 600;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-costo > select {
-  color: var(--mage-tenue);
-  text-align: right;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-aggiungi small {
+  font-size: 13px;
+  margin-left: 6px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-nome > input:hover,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-eff > input:hover,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-r-costo > select:hover {
-  border-color: var(--mage-oro-tenue);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-aggiungi:hover,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-aggiungi.on {
+  border-color: var(--nemico-scelto-filo);
+  color: var(--mage-testo);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-r-tasti {
-  display: flex;
-  gap: 2px;
-  justify-content: flex-end;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  border-radius: 8px;
-  color: var(--mage-oro);
-  cursor: pointer;
-  display: inline-flex;
-  font-size: 14px;
-  height: 32px;
-  justify-content: center;
-  line-height: 1;
-  min-height: 0;
+/* Due strade nello stesso posto vuoto: dal compendio (tutta la riga) o a mano. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content div.wod5e-mage-nemico-aggiungi.doppio {
   padding: 0;
-  width: 32px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt:hover {
-  background: rgb(217 168 39 / 12%);
-  box-shadow: none;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt.viola {
-  color: var(--mage-viola-chiaro);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt.tenue {
-  color: var(--mage-tenue);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt.parola {
-  border: 1px solid var(--mage-oro-tenue);
-  font: 600 12.5px var(--font-primary, "Signika", sans-serif);
-  gap: 5px;
-  height: 28px;
-  padding: 0 10px;
-  width: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt.parola.attivo,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-bt.parola.viola {
-  background: var(--mage-viola);
-  border-color: var(--mage-viola-chiaro);
-  color: var(--mage-scelta-testo);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content div.wod5e-mage-nemico-aggiungi.doppio > button {
   align-items: center;
+  color: var(--nemico-tenue);
   display: flex;
-  flex-wrap: wrap;
-  font-size: 13.5px;
-  gap: 6px 18px;
-  grid-column: 1 / -1;
-  padding: 2px 4px 12px;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 12px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > label,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > span {
-  align-items: center;
-  display: inline-flex;
-  gap: 6px;
-  white-space: nowrap;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content div.wod5e-mage-nemico-aggiungi.doppio > button:first-child {
+  flex: 1 1 auto;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content div.wod5e-mage-nemico-aggiungi.doppio > button + button {
+  border-left: 1px dashed var(--nemico-filo);
+  font-size: 13px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content div.wod5e-mage-nemico-aggiungi.doppio > button:hover {
+  color: var(--mage-testo);
+}
+
+/* ---- i campi di una riga aperta in Scrivi ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli {
+  align-items: end;
+  display: grid;
+  gap: 8px 10px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  padding: 2px 12px 12px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > :is(label, span) {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  grid-column: span 2;
+  min-width: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > p {
+  font-size: 13.5px;
+  grid-column: 1 / -1;
+  margin: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > .larga {
-  flex: 1 1 100%;
-  white-space: normal;
+  grid-column: span 4;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > .larga > input[type="text"] {
-  flex: 1 1 auto;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > .intera {
+  grid-column: 1 / -1;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-via {
-  background: transparent;
-  border: 0;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > :is(label, span) > span:first-child {
+  color: var(--nemico-tenue);
+  font-size: 12.5px;
+  line-height: 1;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > .fermo > b {
+  align-items: center;
+  color: var(--mage-testo);
+  display: flex;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 28px;
+}
+
+/* Una spunta con la sua parola accanto. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > label.spunta,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-somma > label.spunta {
+  align-items: center;
+  color: var(--mage-testo);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-dettagli input.wod5e-mage-nemico-num {
+  height: 28px;
+  width: 100%;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-via {
+  align-items: center;
   color: var(--mage-rosso-chiaro);
-  cursor: pointer;
-  font-size: 12.5px;
+  display: inline-flex;
+  font-size: 13px;
+  gap: 6px;
+  grid-column: 1 / -1;
+  height: 26px;
+  justify-self: end;
+  margin-top: 4px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-via > i {
+  font-size: 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-via:hover {
+  text-decoration: underline;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :is(.wod5e-mage-nemico-blocco, .wod5e-mage-nemico-cassettino) > button.wod5e-mage-nemico-via {
+  display: flex;
   margin-left: auto;
-  min-height: 0;
-  padding: 0;
-  width: auto;
+  margin-top: 8px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-via:hover {
-  box-shadow: none;
-  color: var(--mage-rosso-vivo);
-}
-
-/* ---- Magick ---- */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-magick-testa {
-  align-items: center;
-  background: var(--mage-riga-fondo);
-  border-radius: 10px;
-  display: flex;
-  flex: 0 0 auto;
-  flex-wrap: wrap;
-  gap: 12px 30px;
-  padding: 12px 16px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-magick-testa > span {
+/* Il tiro con cui il PG resiste: Attributo più secondo tratto, o un testo. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-resiste-campi {
   align-items: center;
   display: flex;
-  font-size: 14.5px;
-  gap: 9px;
+  gap: 6px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-magick-testa > span > b {
-  color: var(--mage-oro);
-  font-size: 16px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-resiste-campi > select {
+  flex: 0 0 130px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-magick-testa > span > small {
-  color: var(--mage-tenue);
-  font-size: 12.5px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-resiste-campi > span {
+  color: var(--nemico-tenue);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dots {
-  display: flex;
-  gap: 4px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-resiste-campi > input {
+  flex: 1 1 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-d {
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 50%;
-  cursor: pointer;
-  height: 13px;
-  min-height: 0;
-  padding: 0;
-  width: 13px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-d.on {
+/* ---- il blocco della Natura ---- */
+/* Il sigillo di una Sfera: scuro sul disco d'oro; spento, sul disco scuro col filo. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-disco {
+  align-items: center;
   background: var(--mage-oro);
-  border-color: var(--mage-oro);
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: none;
+  height: 22px;
+  justify-content: center;
+  width: 22px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-dominio {
-  background: transparent;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-disco > img {
   border: 0;
-  cursor: pointer;
-  min-height: 0;
-  opacity: 0.4;
-  padding: 0;
-  width: auto;
+  display: block;
+  height: 16px;
+  width: 16px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-dominio:hover {
-  box-shadow: none;
-  opacity: 0.8;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-disco {
+  background: var(--nemico-scelto);
+  border: 1px solid var(--nemico-filo);
+  border-radius: 50%;
+  height: 28px;
+  width: 28px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-dominio.on {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-disco > img {
+  filter: invert(1);
+  height: 22px;
+  opacity: 0.6;
+  width: 22px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-disco.on {
+  background: var(--mage-oro);
+  border-color: var(--nemico-scelto-filo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-disco.on > img {
+  filter: none;
   opacity: 1;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pastiglia {
-  background: transparent;
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 13px;
-  color: var(--mage-testo);
-  cursor: pointer;
-  font-size: 12.5px;
-  line-height: 1.2;
-  min-height: 0;
-  padding: 3px 11px;
-  width: auto;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-disco:hover {
+  border-color: var(--nemico-chiaro);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pastiglia:hover {
-  border-color: var(--mage-oro);
-  box-shadow: none;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-pastiglia.on {
-  background: var(--mage-viola);
-  border-color: var(--mage-viola-chiaro);
-  color: var(--mage-scelta-testo);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-magick-via {
-  margin-left: auto;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cassetto {
-  background: var(--mage-riga-fondo);
-  border-radius: 10px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-domini {
+  align-items: center;
   display: flex;
-  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-bottom: 10px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-domini.scrivi {
+  gap: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-domini.scrivi > .wod5e-mage-nemico-tenue {
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dominio {
+  align-items: center;
+  display: inline-flex;
+  font-size: 14px;
+  gap: 7px;
+}
+
+/* La resistenza che manca a un effetto di Magick: il posto vuoto, piccolo, accanto al nome. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-manca {
+  align-items: center;
+  border: 1px dashed var(--nemico-filo);
+  border-radius: 12px;
+  color: var(--nemico-tenue);
+  display: inline-flex;
+  font-size: 12.5px;
+  gap: 5px;
+  height: 24px;
+  padding: 0 9px;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-manca > i {
+  color: var(--nemico-numero);
+  font-size: 8px;
+}
+
+/* Il cassetto che aggiunge un effetto di Magick: dal Grimorio o a mano. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cassetto {
+  background: var(--mage-incavo);
+  border-radius: 6px;
+  display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 14px 16px;
+  margin-top: 8px;
+  padding: 10px 12px 12px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cassetto-vie {
+  display: flex;
+  gap: 6px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cassetto > .wod5e-mage-nemico-dettagli {
+  padding: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cerca {
   align-items: center;
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 8px;
-  color: var(--mage-tenue);
   display: flex;
-  font-size: 13.5px;
   gap: 8px;
-  padding: 4px 10px;
+  position: relative;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cerca > i {
+  color: var(--nemico-segnaposto);
+  font-size: 12px;
+  left: 10px;
+  pointer-events: none;
+  position: absolute;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-cerca > input {
-  background: transparent;
-  border: 0;
-  flex: 1;
-  height: auto;
-  padding: 2px 0;
+  padding-left: 30px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-grimorio {
   display: flex;
   flex-direction: column;
-  max-height: 260px;
+  gap: 4px;
+  max-height: 264px;
   overflow: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-formula {
+  align-items: center;
+  background: var(--mage-riga-fondo);
+  border-radius: 5px;
+  display: grid;
+  flex: none;
+  gap: 4px 10px;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  min-height: 36px;
+  padding: 3px 6px 3px 12px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-formula[hidden] {
+  display: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-formula-nome {
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-formula-ambiti {
+  font-size: 13px;
+  grid-column: 1 / 3;
+  grid-row: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-formula-tasti {
+  display: flex;
+  gap: 4px;
+  grid-column: 3;
+  grid-row: 1 / 3;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-accessi {
   display: inline-flex;
-  gap: 4px;
-  margin-right: 8px;
-  vertical-align: -3px;
+  gap: 3px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-accessi > img {
+  background: var(--mage-oro);
   border: 0;
-  filter: brightness(0) invert(93%) sepia(24%) saturate(680%) hue-rotate(357deg);
-  height: 16px;
-  opacity: 0.45;
-  width: 16px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  height: 18px;
+  opacity: 0.35;
+  padding: 2px;
+  width: 18px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-accessi > img.lit {
   opacity: 1;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-campi-mano {
+/* «Prendi» una Formula a quella soglia: il numero e il più; presa, la spunta. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-prendi {
   align-items: center;
-  display: grid;
-  font-size: 14px;
-  gap: 8px 12px;
-  grid-template-columns: 120px minmax(0, 1fr);
+  background: var(--mage-velluto);
+  border: 1px solid var(--nemico-filo);
+  border-radius: 5px;
+  color: var(--mage-testo);
+  display: inline-flex;
+  gap: 6px;
+  height: 28px;
+  justify-content: center;
+  min-width: 48px;
+  padding: 0 8px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-campi-mano > input {
-  width: 100%;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-prendi > b {
+  color: var(--nemico-numero);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-resiste {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-prendi > i {
+  font-size: 9px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-prendi:hover,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-prendi.presa {
+  border-color: var(--nemico-scelto-filo);
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-prendi.presa {
+  background: var(--nemico-scelto);
+}
+
+/* A mano: la Sfera e il modo, poi i sei Ambiti coi pallini. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > .wod5e-mage-nemico-scelte {
   align-items: center;
-  display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: 6px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-resiste > input {
-  flex: 1 1 8rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-scelte {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dettagli > .wod5e-mage-nemico-scelte > .wod5e-mage-nemico-tenue {
+  margin-right: 4px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-spazio {
-  width: 6px;
+  width: 8px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ambiti {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ambito {
   align-items: center;
-  border-radius: 7px;
+  border-radius: 5px;
   display: grid;
-  gap: 10px;
-  grid-template-columns: 18px 92px 84px auto minmax(0, 1fr);
-  min-height: 32px;
+  gap: 8px;
+  grid-template-columns: 16px 76px 70px auto minmax(0, 1fr);
+  min-height: 30px;
   padding: 0 6px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ambito.alto {
-  background: color-mix(in srgb, var(--mage-viola) 45%, transparent);
+  background: var(--nemico-scelto);
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ambito > i {
-  color: var(--mage-oro);
-  font-size: 12.5px;
+  color: var(--nemico-numero);
+  font-size: 12px;
   text-align: center;
 }
 
@@ -17244,67 +17667,53 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-lente {
-  background: transparent;
-  border: 0;
-  color: var(--mage-oro);
-  cursor: pointer;
-  font: 700 9.5px/1 sans-serif;
-  letter-spacing: 0.1em;
-  min-height: 0;
-  padding: 0;
+  color: var(--nemico-tenue);
+  font-size: 12.5px;
   text-align: left;
-  text-transform: uppercase;
-  width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-lente.ferma {
-  color: var(--mage-tenue);
-  cursor: default;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico button.wod5e-mage-nemico-lente:hover {
-  box-shadow: none;
-  color: var(--nemico-chiaro, #f5e7b2);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content button.wod5e-mage-nemico-lente {
+  color: var(--nemico-chiaro);
+  justify-content: flex-start;
+  min-height: 24px;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-liv {
   display: flex;
-  gap: 4px;
+  gap: 2px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-liv > button {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-liv > button {
   background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
+  border: 1px solid var(--nemico-filo);
   border-radius: 50%;
-  color: color-mix(in srgb, var(--nemico-chiaro, #f5e7b2) 45%, transparent);
-  cursor: pointer;
-  font: 700 9px/1 sans-serif;
-  height: 18px;
-  line-height: 1;
-  min-height: 0;
-  padding: 0;
-  width: 18px;
+  color: var(--nemico-tenue);
+  font-size: 12px;
+  font-weight: 700;
+  height: 24px;
+  width: 24px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-liv > button.zero {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-liv > button.zero {
   border-style: dashed;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-liv > button.on {
-  background: var(--mage-oro);
-  border-color: var(--mage-oro);
-  color: var(--mage-su-oro);
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-liv > button.on {
+  background: var(--nemico-numero);
+  border-color: var(--nemico-numero);
+  color: var(--nemico-su-numero);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-liv > button:hover {
-  border-color: var(--mage-oro);
-  box-shadow: none;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-liv > button:hover {
+  border-color: var(--nemico-chiaro);
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-let {
+  color: var(--mage-testo);
   font-size: 13px;
   min-width: 0;
-  opacity: 0.85;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -17321,57 +17730,67 @@
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-somma {
   align-items: center;
-  border-top: 1px solid var(--nemico-linea);
+  border-top: 1px solid var(--mage-oro-tenue);
   display: flex;
   flex-wrap: wrap;
-  gap: 12px 18px;
-  padding-top: 12px;
+  gap: 8px 14px;
+  padding-top: 10px;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-grande {
-  color: var(--nemico-chiaro, #f5e7b2);
-  font: 600 36px/1 var(--nemico-titolo);
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-conto-ambiti {
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-somma > .wod5e-mage-nemico-tenue {
+  flex: 1 1 140px;
   font-size: 13px;
-  opacity: 0.85;
+  min-width: 0;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-impossibile {
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  font-size: 13.5px;
-  gap: 7px;
-  margin-left: auto;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-dato > b.wod5e-mage-nemico-grande {
+  color: var(--nemico-numero);
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  margin-left: 4px;
 }
 
 /* ---- Note e vista limitata ---- */
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-nota-campo {
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 7px;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-testo {
+  color: var(--mage-testo);
+  font-size: 15px;
+  line-height: 1.45;
+  margin: 0;
+  text-wrap: pretty;
+  white-space: pre-line;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-nota-campo > textarea {
-  background: var(--mage-riga-fondo);
-  border: 1px solid transparent;
-  border-radius: 8px;
-  font-size: 14.5px;
-  height: auto;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico div.wod5e-mage-nemico-testo {
+  white-space: normal;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico div.wod5e-mage-nemico-testo > :first-child {
+  margin-top: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico div.wod5e-mage-nemico-testo > :last-child {
+  margin-bottom: 0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content textarea.wod5e-mage-nemico-nota {
+  font-size: 15px;
   line-height: 1.45;
-  min-height: 44px;
-  padding: 10px 14px;
-  resize: vertical;
-  width: 100%;
+  min-height: 72px;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-biografia prose-mirror {
+  color: var(--mage-testo);
+  font-size: 15px;
+  line-height: 1.45;
+  min-height: 120px;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-solo {
-  color: var(--mage-tenue);
-  font-size: 13px;
+  color: var(--nemico-tenue);
+  flex: 0 0 auto;
+  font-size: 13.5px;
   margin: 0;
+  text-align: right;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-limitata {
@@ -17383,8 +17802,8 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-limitata > img {
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 14px;
+  border: 1px solid var(--mage-oro-scuro);
+  border-radius: 8px;
   height: 160px;
   object-fit: cover;
   width: 160px;
@@ -17392,15 +17811,33 @@
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-limitata > h2 {
   border: 0;
-  color: var(--nemico-chiaro, #f5e7b2);
-  font: 600 28px/1.1 var(--nemico-titolo);
+  color: var(--nemico-chiaro);
+  font: 400 28px/1.1 var(--nemico-titolo);
   margin: 0;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-limitata > p {
-  color: var(--mage-tenue);
-  font-size: 13.5px;
+  color: var(--nemico-tenue);
+  font-size: 14px;
   margin: 0;
+}
+
+/* ---- il tema chiaro: quello che le variabili da sole non fanno ---- */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-chiara .window-content button.wod5e-mage-nemico-disco:not(.on) {
+  background: #FBF8F0;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-chiara .window-content button.wod5e-mage-nemico-disco:not(.on) > img {
+  filter: none;
+  opacity: 0.45;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-chiara .wod5e-mage-nemico-cond > img {
+  filter: none;
+}
+
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico.wod5e-mage-chiara .wod5e-mage-nemico-condizioni-scelta {
+  box-shadow: 0 10px 30px rgb(40 32 81 / 25%);
 }
 
 /* ---- le carte in chat ---- */
@@ -17732,16 +18169,11 @@
   padding: 2px 5px 1px;
 }
 
-/* Il nemico: l'icona in testa col grado, la scelta come sulla scheda del mago. */
+/* Il nemico: l'icona in testa col grado, nella pastiglia della Condizione; la scelta come sulla scheda del mago. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-cond > .wod5e-mage-cond-icona {
-  height: 19px;
-  margin-right: 5px;
-  width: 19px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-condizioni-scelta {
-  gap: 4px;
-  width: 520px;
+  flex: none;
+  height: 18px;
+  width: 18px;
 }
 
 /* Il verdetto del Narratore: le Condizioni del tiro, e la casella per dire che non contano. */

@@ -272,47 +272,75 @@ empty Board and warns. The old dialog that ticked characters is gone.
 ## Enemy sheet (M6)
 
 The module registers a second sheet for the system's `spc` actors, "Scheda
-del nemico (M6)": pick it from the actor's sheet configuration (the cog on
-the window), or make it the default for the type from there. It is not the
-default on its own. The header stays on every page: portrait (the + changes
-it, and the same file goes on the map), name, concept, Nature and Faction;
-on the right the Health track of the mage sheet with its wheel (damage, rest,
-reset), the armour points of the protection worn, and the Conditions with
-their malus (the × removes one, the drawer adds any of the list), and under
-them the Narrator's hand: the one adjustment besides Conditions, dice added
-to or taken from every roll of this enemy (a ± number in the header, gold
-when it gives, purple when it takes), counted in every pool, dice case and
-action and written in the chat card's count. A coloured
-line on top follows the disposition of the prototype token: hostile, neutral,
-friendly, secret. Below, four pages. "In gioco" has three cards, Physical,
-Social and Mental: on the left the threshold, the dice the enemy takes from a
-character acting against them; on the right the pool the enemy rolls, taken
-from the system's standard pools and already scaled by the active Conditions;
-under them the cases (a threshold or a pool for one specific thing, the
-system's exceptional pools included). Then the Actions, one row each: name,
-what it does, the pool it starts from and the die that rolls it, with the
-inline editor opened by the name; a weapon in the inventory brings its own
-action (damage, range, aggravated), and an action without a roll has "Usa".
-Then the Effects, what the enemy has without rolling, written by hand or
-taken from the mages' powers catalogue. "Magick" appears only when switched
-on: Areté, Domains and Type in the strip; every effect is a threshold the
-character resists or beats, with the trait pair it resists with; effects
-come from the Grimoire drawer (the Formulas the Domains open, with the base
-threshold of each) or from the hand drawer (name, what it does, resistance,
-Domain and type, the eight dots of every Scope with their lens, the threshold
-summed as on the mage sheet, the damage of Potency). "Oggetti" lists weapons,
-protections and gear, with the compendium, the create button and "Give to a
-character", which moves the item to a character's sheet. "Note" holds "what
-they want now", "when they give up" and the biography, for the Narrator
-only. Rolls go to chat as the mage's dice with the pool, the threshold and
-the outcome, and a button applies damage and Condition to the targeted
-character; a Magick cast puts its threshold in chat with "Resisti", which
-opens the target's sheet with the roll box loaded (attribute, skill and
-difficulty). Active actions with a limit switch off at the end of the
-enemy's combat turn. The pure logic is in `scripts/nemico.js`, with tests
-in `tests/nemico.test.js` and a fake-Foundry scenario in
-`tests/finta/nemico.mjs`; `NEMICO_PAGINA=<dir>` writes the pages as HTML for
-screenshots.
+del nemico (M6)". Since 1.33.0 the "Create Actor" dialog lists the M6 NPC
+under the system's types, one entry per Nature ("PNG M6 · Vampiro"): the
+actor is born as an `spc` with the enemy sheet and its Nature already set, so
+there is no trip through the sheet configuration. An existing `spc` actor
+still takes the sheet from its sheet configuration (the cog on the window).
+
+The sheet was redrawn on 1 October 2026 from the approved mock
+(`docs/mock_scheda_nemico_1-10.html`). It has two modes, switched by the
+button in the header. In "Gioca" the state changes (Health, armour,
+Conditions, the Narrator's hand, rolls) and the text stays still; in "Scrivi"
+the sheet itself changes, and everything that can be written is a paper
+field. The mode is a module flag (`flags.wod5e-mage.nemico.modo`), not the
+system's lock; an enemy with nothing written opens in "Scrivi", a written one
+in "Gioca", and whoever does not own the actor always sees "Gioca".
+
+The header stays on every page: portrait, name, concept, the disposition of
+the token as an icon and a word (hostile, neutral, friendly, secret; a line
+of the same colour runs on top of the window), Nature and Faction. Under it
+a band with the Health track of the mage sheet and its wheel (damage, rest,
+reset), the armour points of each protection worn (click a point to set the
+count, click the last full one to remove it), and the Conditions with their
+malus (the × removes one, the + opens the list).
+
+Below, three pages. "In gioco" has two columns. On the left, thresholds and
+pools in two aligned columns for Physical, Social and Mental: the threshold
+is a still number (the dice the enemy takes from a character acting against
+them), the pool is the purple button that rolls, already scaled by the
+active Conditions, with an arrow when something changed it; the cases sit
+under their field (a threshold or a pool for one specific thing, the
+system's exceptional pools included). Under them the Narrator's hand, a
+minus and a plus for dice added to or taken from every roll of this enemy,
+and the Effects as pills: what the enemy has without rolling, the text opens
+on click. On the right the Actions, one row each (name, weapon, damage, the
+roll button; an action without a roll has "Usa"), with the rest of the row
+opening on click; a weapon in the inventory brings its own action.
+
+Under the Actions sits the block of the Nature, the standard that lets NPCs
+of the other lines in without new rules to learn. A plain NPC (Dormiente)
+has no block. The Awakened (Risvegliato) has Magick: Areté, Type, Spheres,
+and every effect as a threshold the character resists, added from the
+Grimoire (the Formulas the Spheres open) or by hand (the six Scopes with
+their dots, the threshold summed as on the mage sheet); the Narrator never
+rolls, "Lancia" sends the card to chat. Every other supernatural (Sonnambulo,
+Vampiro, Licantropo, Cacciatore, Spirito, Fatato) has Powers: the score of
+its Nature, with its own name (Gnosi for a werewolf, Potenza del Sangue for
+a vampire, Potere for a spirit, a name the Narrator writes for the others),
+and the powers of the book, the same the mages take, picked from the full
+catalogue with "Aggiungi" on every row. The sheet stores the catalogue key
+and reads the text from the catalogue of the moment, with the Narrator's
+world edits. The table of Natures is `NATURE` in `scripts/nemico.js`: a new
+Nature is one row there and its word in the language files. A Magick block
+switched on by the old button stays on an enemy of another Nature until the
+Narrator removes it in "Scrivi".
+
+"Oggetti" lists weapons, protections and gear, with "Dai" to move an item to
+a character's sheet; in "Scrivi" each row has the pencil and the bin, and
+each list ends with its empty slot (from the compendium, or by hand). "Note"
+holds "what they want now", "when they give up" and the biography, for the
+Narrator only. Rolls go to chat as the mage's dice with the pool, the
+threshold and the outcome, and a button applies damage and Condition to the
+targeted character; a Magick cast puts its threshold in chat with "Resisti",
+which opens the target's sheet with the roll box loaded. Active actions with
+a limit switch off at the end of the enemy's combat turn.
+
+The pure logic is in `scripts/nemico.js`, with tests in
+`tests/nemico.test.js`; `tests/finta/nemico.mjs` renders the templates in
+both modes (`NEMICO_PAGINA=<dir>` writes the pages as HTML for screenshots),
+and `tests/finta/nemico-scheda.mjs` drives the buttons of the real sheet
+class on a fake Foundry.
 
 ## Planned implementation layers
 

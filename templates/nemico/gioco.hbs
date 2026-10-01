@@ -1,113 +1,347 @@
-{{!-- In gioco (Blue, 25/9, dal mock): le tre carte Fisico, Sociale, Mentale,
-     ognuna con la soglia (chiara, non si clicca: il sorvolo dice i dadi che
-     restano) e la riserva (oro: il clic tira), e sotto i casi, una soglia o
-     una riserva per una cosa precisa (le riserve tirano). Poi le Azioni, una
-     riga a colonne: nome, cosa fa, la riserva già scalata, il dado (o «senza
-     tiro» e il tasto Usa); il clic sul nome apre i campi. Poi gli Effetti,
-     quello che ha di suo senza tirare. --}}
+{{!-- In gioco, rifatta l'1/10 sul mock approvato (docs/mock_scheda_nemico_1-10.html):
+     due colonne. A sinistra com'è: soglie e riserve in due colonne allineate
+     (la soglia è un numero fermo, la riserva è il tasto viola che tira), i
+     casi sotto il loro campo, la Mano del Narratore, e gli Effetti a pastiglie.
+     A destra cosa fa: le Azioni, una riga per voce, e sotto il blocco della
+     Natura (Magick per il Risvegliato; Poteri, col punteggio della Natura, per
+     gli altri soprannaturali; niente per un PNG qualunque). Il testo di una
+     riga o di una pastiglia si apre al clic. In Scrivi i tiri lasciano il posto
+     ai campi di carta, e ogni lista finisce col suo posto vuoto a tratteggio. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-nemico-corpo" data-tab="{{tab.id}}" data-group="{{tab.group}}">
-    <div class="wod5e-mage-nemico-tre">
-        {{#each carte as |carta|}}
-            <div class="wod5e-mage-nemico-campo" data-campo="{{carta.id}}">
-                <div class="wod5e-mage-nemico-campo-t">
-                    <i class="{{carta.icona}}" aria-hidden="true"></i>{{carta.label}}
-                    {{#unless @root.locked}}<button type="button" class="wod5e-mage-nemico-piu-caso" data-action="nemicoCasoNuovo" data-campo="{{carta.id}}" title="{{localize 'WOD5E_MAGE.Nemico.CasoAggiungi'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.CasoAggiungi'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>{{/unless}}
-                </div>
-                <div class="wod5e-mage-nemico-coppia">
-                    <div class="wod5e-mage-nemico-num soglia{{#if carta.soglia.mod}} mod{{/if}}" title="{{carta.soglia.hint}}">
-                        {{#if @root.locked}}<b>{{carta.soglia.value}}</b>{{else}}<input type="number" class="wod5e-mage-nemico-soglia-scrivi" name="flags.wod5e-mage.nemico.soglie.{{carta.id}}" value="{{carta.soglia.base}}" min="0" max="20" title="{{localize 'WOD5E_MAGE.Nemico.SogliaScrivi'}}" aria-label="{{carta.label}}: {{localize 'WOD5E_MAGE.Nemico.Soglia'}}">{{#if carta.soglia.mod}}<b class="wod5e-mage-nemico-alza">{{carta.soglia.value}}</b>{{/if}}{{/if}}
-                        <small>{{localize "WOD5E_MAGE.Nemico.Soglia"}}</small>
-                    </div>
-                    <button type="button" class="wod5e-mage-nemico-num riserva{{#if carta.riserva.cambiata}} mod{{/if}}" data-action="nemicoTira" data-riserva="{{carta.id}}" title="{{carta.riserva.hint}}">
-                        <b>{{carta.riserva.totale}}</b>
-                        <small>{{localize "WOD5E_MAGE.Nemico.Riserva"}} <i class="fa-solid fa-dice-d10" aria-hidden="true"></i></small>
-                    </button>
-                    {{#unless @root.locked}}<input type="number" class="wod5e-mage-nemico-riserva-scrivi" name="system.standarddicepools.{{carta.id}}.value" value="{{carta.riserva.base}}" min="0" max="30" title="{{localize 'WOD5E_MAGE.Nemico.RiservaScrivi'}}" aria-label="{{carta.label}}: {{localize 'WOD5E_MAGE.Nemico.Riserva'}}">{{/unless}}
-                </div>
-                {{#if carta.casi.length}}
-                    <ul class="wod5e-mage-nemico-casi">
-                        {{#each carta.casi as |caso|}}
-                            <li data-caso="{{caso.id}}">
-                                <span class="wod5e-mage-nemico-caso-nome" title="{{#if caso.dalSistema}}{{localize 'WOD5E_MAGE.Nemico.CasoDalSistema'}}{{/if}}">{{caso.nome}}</span>
-                                {{#if caso.aSoglia}}
-                                    <span class="wod5e-mage-nemico-caso-s{{#if caso.mod}} mod{{/if}}" title="{{caso.hint}}">{{localize "WOD5E_MAGE.Nemico.Soglia"}}<b>{{caso.value}}</b></span>
-                                {{else}}
-                                    <button type="button" class="wod5e-mage-nemico-caso-tira{{#if caso.mod}} mod{{/if}}" data-action="nemicoTira" data-riserva="{{#if caso.dalSistema}}{{caso.id}}{{else}}caso:{{caso.id}}{{/if}}" title="{{caso.hint}}"><b>{{caso.value}}</b>{{localize "WOD5E_MAGE.Nemico.Dadi"}}</button>
-                                {{/if}}
-                                {{#unless caso.dalSistema}}{{#unless @root.locked}}<button type="button" class="wod5e-mage-nemico-togli" data-action="nemicoCasoTogli" data-caso="{{caso.id}}" title="{{localize 'WOD5E_MAGE.Nemico.CasoTogli'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.CasoTogli'}}: {{caso.nome}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>{{/unless}}{{/unless}}
-                            </li>
-                        {{/each}}
-                    </ul>
-                {{/if}}
-            </div>
-        {{/each}}
-    </div>
+    <div class="wod5e-mage-nemico-due">
+        <div class="wod5e-mage-nemico-col">
 
-    <div class="wod5e-mage-nemico-sez">
-        <span>{{localize "WOD5E_MAGE.Nemico.Azioni"}}</span>
-        {{#unless locked}}<span class="wod5e-mage-nemico-agg"><button type="button" data-action="nemicoAzioneNuova"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.AzioneScrivi"}}</button></span>{{/unless}}
-    </div>
-    <div class="wod5e-mage-nemico-lista wod5e-mage-nemico-azioni">
-        {{#each azioni as |azione|}}
-            <div class="wod5e-mage-nemico-riga{{#if azione.aperta}} aperta{{/if}}{{#if azione.attiva}} attiva{{/if}}" data-azione="{{azione.id}}">
-                <button type="button" class="wod5e-mage-nemico-r-nome" data-action="nemicoAzioneApri" data-azione="{{azione.id}}" aria-expanded="{{azione.aperta}}" title="{{localize 'WOD5E_MAGE.Nemico.AzioneApri'}}">{{azione.nome}}{{#if azione.daArma}} <i class="fa-solid fa-link" aria-hidden="true" title="{{localize 'WOD5E_MAGE.Nemico.AzioneDaArma' arma=azione.armaNome}}"></i>{{/if}}</button>
-                <span class="wod5e-mage-nemico-r-eff">{{#if azione.testo}}{{azione.testo}}{{else}}{{#each azione.breve.pezzi as |pezzo|}}{{#if @index}} · {{/if}}{{pezzo}}{{/each}}{{#if azione.breve.condizione}}{{#if azione.breve.pezzi.length}} · {{/if}}<span class="wod5e-mage-nemico-cn">{{azione.breve.condizione}}</span>{{/if}}{{#if azione.breve.portata}}{{#if azione.breve.pezzi.length}} · {{else}}{{#if azione.breve.condizione}} · {{/if}}{{/if}}{{azione.breve.portata}}{{/if}}{{/if}}</span>
-                {{#if azione.senzaTiro}}
-                    <span class="wod5e-mage-nemico-r-costo">{{localize "WOD5E_MAGE.Nemico.SenzaTiro"}}</span>
-                    <button type="button" class="wod5e-mage-nemico-bt parola{{#if azione.attiva}} attivo{{/if}}" data-action="nemicoAzioneUsa" data-azione="{{azione.id}}" title="{{localize 'WOD5E_MAGE.Nemico.UsaHint'}}" aria-pressed="{{azione.attiva}}">{{#if azione.attiva}}{{localize "WOD5E_MAGE.Nemico.Attivo"}}{{else}}{{localize "WOD5E_MAGE.Nemico.Usa"}}{{/if}}</button>
-                {{else}}
-                    <span class="wod5e-mage-nemico-r-costo">{{azione.riserva.label}}<b{{#if azione.riserva.cambiata}} class="mod"{{/if}}>{{azione.riserva.dadi}}</b></span>
-                    <button type="button" class="wod5e-mage-nemico-bt" data-action="nemicoAzioneTira" data-azione="{{azione.id}}" title="{{azione.riserva.hint}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Tira'}}: {{azione.nome}}"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i></button>
-                {{/if}}
-                {{#if azione.aperta}}
-                    {{!-- I campi dell'azione, in linea: quelli con `name` si salvano da soli al cambio. Per un'azione nata da un'arma, danno, Aggravato e portata restano dell'arma. --}}
-                    <div class="wod5e-mage-nemico-dettagli">
-                        <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.AzioneNome"}}</span><input type="text" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.nome" value="{{azione.nome}}" {{#if @root.locked}}disabled{{/if}}></label>
-                        <label class="larga"><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.AzioneTesto"}}</span><textarea name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.testo" rows="1" placeholder="{{localize 'WOD5E_MAGE.Nemico.AzioneTestoHint'}}" {{#if @root.locked}}disabled{{/if}}>{{azione.testo}}</textarea></label>
-                        <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.SenzaTiro"}}</span><input type="checkbox" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.senzaTiro" {{#if azione.senzaTiro}}checked{{/if}} {{#if @root.locked}}disabled{{/if}}></label>
-                        {{#unless azione.senzaTiro}}
-                            <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.RiservaCampo"}}</span><select name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.riserva" {{#if @root.locked}}disabled{{/if}}>{{#each @root.riserve as |r|}}<option value="{{r.id}}" {{#if (eq r.id azione.riserva.id)}}selected{{/if}}>{{r.label}}</option>{{/each}}</select></label>
-                            {{#if azione.daArma}}
-                                <span><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Danno"}}</span>{{azione.danno}}{{#if azione.aggravato}} {{localize "WOD5E_MAGE.Nemico.Aggravato"}}{{/if}}</span>
-                                <span><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Portata"}}</span>{{#if azione.portata}}{{azione.portata}}{{else}}{{localize "WOD5E_MAGE.Nemico.PortataNessuna"}}{{/if}}</span>
+            {{!-- Soglie e riserve --}}
+            <div class="wod5e-mage-nemico-riq wod5e-mage-nemico-numeri{{#if scrivi}} scrivi{{/if}}">
+                <div class="wod5e-mage-nemico-numeri-riga testa" aria-hidden="true">
+                    <span></span><span>{{localize "WOD5E_MAGE.Nemico.SogliaGrande"}}</span><span>{{localize "WOD5E_MAGE.Nemico.Riserva"}}</span>{{#if scrivi}}<span></span>{{/if}}
+                </div>
+                {{#each carte as |carta|}}
+                    <div class="wod5e-mage-nemico-campo-blocco" data-campo="{{carta.id}}">
+                        <div class="wod5e-mage-nemico-numeri-riga">
+                            <span class="wod5e-mage-nemico-campo-nome"><i class="{{carta.icona}}" aria-hidden="true"></i>{{carta.label}}</span>
+                            {{#if @root.scrivi}}
+                                <input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.soglie.{{carta.id}}" value="{{carta.soglia.base}}" min="0" max="20" title="{{localize 'WOD5E_MAGE.Nemico.SogliaScrivi'}}" aria-label="{{carta.label}}: {{localize 'WOD5E_MAGE.Nemico.Soglia'}}">
+                                <input type="number" class="wod5e-mage-nemico-num" name="system.standarddicepools.{{carta.id}}.value" value="{{carta.riserva.base}}" min="0" max="30" title="{{localize 'WOD5E_MAGE.Nemico.RiservaScrivi'}}" aria-label="{{carta.label}}: {{localize 'WOD5E_MAGE.Nemico.Riserva'}}">
+                                <span></span>
                             {{else}}
-                                <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Danno"}}</span><input type="number" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.danno" value="{{azione.danno}}" min="0" max="20" {{#if @root.locked}}disabled{{/if}}></label>
-                                <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Aggravato"}}</span><input type="checkbox" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.aggravato" {{#if azione.aggravato}}checked{{/if}} {{#if @root.locked}}disabled{{/if}}></label>
-                                <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Portata"}}</span><select name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.portata" {{#if @root.locked}}disabled{{/if}}><option value="">{{localize "WOD5E_MAGE.Nemico.PortataNessuna"}}</option>{{#each @root.portate as |p|}}<option value="{{p}}" {{#if (eq p azione.portata)}}selected{{/if}}>{{p}}</option>{{/each}}</select></label>
+                                <span class="wod5e-mage-nemico-soglia{{#if carta.soglia.mod}} mod{{/if}}" title="{{carta.soglia.hint}}">{{carta.soglia.value}}</span>
+                                <button type="button" class="wod5e-mage-nemico-tira" data-action="nemicoTira" data-riserva="{{carta.id}}" title="{{carta.riserva.hint}}" aria-label="{{carta.riserva.hint}}">{{#if carta.riserva.verso}}<i class="fa-solid fa-arrow-{{#if (eq carta.riserva.verso 'giu')}}down{{else}}up{{/if}}" aria-hidden="true"></i>{{/if}}<b>{{carta.riserva.totale}}</b></button>
                             {{/if}}
-                            <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Condizione"}}</span><select name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.condizione" {{#if @root.locked}}disabled{{/if}}><option value="">{{localize "WOD5E_MAGE.Nemico.CondizioneNessuna"}}</option>{{#if azione.condizioneFuori}}<option value="{{azione.condizione}}" selected>{{azione.condizione}}</option>{{/if}}{{#each @root.condizioniGruppi as |g|}}<optgroup label="{{g.label}}">{{#each g.voci as |c|}}<option value="{{c.name}}" {{#if (eq c.name azione.condizione)}}selected{{/if}}>{{c.label}}</option>{{/each}}</optgroup>{{/each}}</select></label>
-                            <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.SogliaBersaglio"}}</span><input type="number" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.soglia" value="{{azione.soglia}}" min="0" max="20" title="{{localize 'WOD5E_MAGE.Nemico.SogliaBersaglioHint'}}" {{#if @root.locked}}disabled{{/if}}></label>
-                        {{else}}
-                            {{!-- Senza tiro: cosa accende «Usa», per esempio +2 alla soglia «Da lontano» fino al suo turno. --}}
-                            <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.BonusSoglia"}}</span><input type="number" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.bonusSoglia" value="{{azione.bonusSoglia}}" min="-10" max="10" {{#if @root.locked}}disabled{{/if}}></label>
-                            <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.BonusA"}}</span><select name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.bonusA" {{#if @root.locked}}disabled{{/if}}><option value="">{{localize "WOD5E_MAGE.Nemico.Nessuna"}}</option>{{#each @root.bersagliBonus as |b|}}<option value="{{b.id}}" {{#if (eq b.id azione.bonusA)}}selected{{/if}}>{{b.label}}</option>{{/each}}</select></label>
-                        {{/unless}}
-                        <label><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.Limite"}}</span><input type="text" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.limite" value="{{azione.limite}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.LimiteNessuno'}}" {{#if @root.locked}}disabled{{/if}}></label>
-                        <label class="larga"><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.NoteAzione"}}</span><input type="text" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.note" value="{{azione.note}}" {{#if @root.locked}}disabled{{/if}}></label>
-                        {{#if azione.daArma}}<span class="wod5e-mage-nemico-tenue"><span class="wod5e-mage-nemico-k">{{localize "WOD5E_MAGE.Nemico.NasceDa"}}</span>{{azione.armaNome}}</span>{{/if}}
-                        {{#unless @root.locked}}{{#unless azione.daArma}}<button type="button" class="wod5e-mage-nemico-via" data-action="nemicoAzioneTogli" data-azione="{{azione.id}}"><i class="fa-solid fa-trash" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.AzioneTogli"}}</button>{{/unless}}{{/unless}}
+                        </div>
+                        {{#each carta.casi as |caso|}}
+                            <div class="wod5e-mage-nemico-numeri-riga caso" data-caso="{{caso.id}}">
+                                {{#if @root.scrivi}}
+                                    {{#if caso.dalSistema}}
+                                        <span class="wod5e-mage-nemico-caso-nome larga" title="{{localize 'WOD5E_MAGE.Nemico.CasoDalSistema'}}">{{caso.nome}}</span>
+                                        <input type="number" class="wod5e-mage-nemico-num" name="system.exceptionaldicepools.{{caso.skill}}.value" value="{{caso.dadi}}" min="0" max="30" aria-label="{{caso.nome}}: {{localize 'WOD5E_MAGE.Nemico.Riserva'}}">
+                                        <button type="button" class="wod5e-mage-nemico-togli" data-action="nemicoCasoTogli" data-caso="{{caso.id}}" title="{{localize 'WOD5E_MAGE.Nemico.CasoTogli'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.CasoTogli'}}: {{caso.nome}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                                    {{else}}
+                                        <input type="text" class="wod5e-mage-nemico-caso-campo{{#unless caso.aSoglia}} larga{{/unless}}" name="flags.wod5e-mage.nemico.casi.{{caso.id}}.nome" value="{{caso.nome}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.CasoNomeHint'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.CasoNome'}}">
+                                        {{#if caso.aSoglia}}
+                                            <input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.casi.{{caso.id}}.soglia" value="{{caso.soglia}}" min="0" max="20" aria-label="{{caso.nome}}: {{localize 'WOD5E_MAGE.Nemico.Soglia'}}">
+                                            <span></span>
+                                        {{else}}
+                                            <input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.casi.{{caso.id}}.dadi" value="{{caso.dadi}}" min="0" max="30" aria-label="{{caso.nome}}: {{localize 'WOD5E_MAGE.Nemico.Riserva'}}">
+                                        {{/if}}
+                                        <button type="button" class="wod5e-mage-nemico-togli" data-action="nemicoCasoTogli" data-caso="{{caso.id}}" title="{{localize 'WOD5E_MAGE.Nemico.CasoTogli'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.CasoTogli'}}: {{caso.nome}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                                    {{/if}}
+                                {{else}}
+                                    <span class="wod5e-mage-nemico-caso-nome{{#unless caso.aSoglia}} larga{{/unless}}">{{caso.nome}}</span>
+                                    {{#if caso.aSoglia}}
+                                        <span class="wod5e-mage-nemico-soglia piccola{{#if caso.mod}} mod{{/if}}" title="{{caso.hint}}">{{caso.value}}</span>
+                                        <span></span>
+                                    {{else}}
+                                        <button type="button" class="wod5e-mage-nemico-tira piccolo" data-action="nemicoTira" data-riserva="{{#if caso.dalSistema}}{{caso.id}}{{else}}caso:{{caso.id}}{{/if}}" title="{{caso.hint}}" aria-label="{{caso.hint}}">{{#if caso.verso}}<i class="fa-solid fa-arrow-{{#if (eq caso.verso 'giu')}}down{{else}}up{{/if}}" aria-hidden="true"></i>{{/if}}<b>{{caso.value}}</b></button>
+                                    {{/if}}
+                                {{/if}}
+                            </div>
+                        {{/each}}
+                        {{#if @root.scrivi}}<button type="button" class="wod5e-mage-nemico-piu" data-action="nemicoCasoNuovo" data-campo="{{carta.id}}" title="{{localize 'WOD5E_MAGE.Nemico.CasoAggiungi'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.CasoPiu"}}{{#if @root.vuoto}}<small>{{localize (concat "WOD5E_MAGE.Nemico.CasoEsempi." carta.id)}}</small>{{/if}}</button>{{/if}}
                     </div>
-                {{/if}}
+                {{/each}}
+                {{!-- La mano del Narratore (27/9): l'unico ritocco ai dadi oltre alle Condizioni, ± su ogni tiro di questo nemico. Sta sotto le riserve, col meno e il più. --}}
+                {{#unless scrivi}}
+                    <div class="wod5e-mage-nemico-mano" title="{{localize 'WOD5E_MAGE.Nemico.ManoNarratoreScrivi'}}">
+                        <span>{{localize "WOD5E_MAGE.Nemico.ManoNarratore"}}</span>
+                        <span class="wod5e-mage-nemico-passi">
+                            <button type="button" data-action="nemicoMano" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.Nemico.ManoMeno'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                            <b>{{manoNarratore.segno}}</b>
+                            <button type="button" data-action="nemicoMano" data-delta="1" aria-label="{{localize 'WOD5E_MAGE.Nemico.ManoPiu'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                        </span>
+                    </div>
+                {{/unless}}
             </div>
-        {{else}}
-            <p class="wod5e-mage-nemico-vuoto">{{localize "WOD5E_MAGE.Nemico.AzioniVuote"}}</p>
-        {{/each}}
-    </div>
 
-    <div class="wod5e-mage-nemico-sez">
-        <span>{{localize "WOD5E_MAGE.Nemico.Effetti"}}</span>
-        {{#unless locked}}<span class="wod5e-mage-nemico-agg"><button type="button" data-action="nemicoEffettoCatalogo"><i class="fa-solid fa-book-open" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.EffettoCatalogo"}}</button><button type="button" data-action="nemicoEffettoNuovo"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.EffettoMano"}}</button></span>{{/unless}}
-    </div>
-    <div class="wod5e-mage-nemico-lista wod5e-mage-nemico-effetti">
-        {{#each effetti as |effetto|}}
-            <div class="wod5e-mage-nemico-riga" data-effetto="{{effetto.id}}">
-                <span class="wod5e-mage-nemico-r-nome">{{#if @root.locked}}{{effetto.nome}}{{else}}<input type="text" name="flags.wod5e-mage.nemico.effetti.{{effetto.id}}.nome" value="{{effetto.nome}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.EffettoNome'}}">{{/if}}{{#if effetto.catalogo}} <i class="fa-solid fa-book-open wod5e-mage-nemico-libro" aria-hidden="true" title="{{localize 'WOD5E_MAGE.Nemico.DalCatalogo'}}"></i>{{/if}}</span>
-                <span class="wod5e-mage-nemico-r-eff">{{#if @root.locked}}{{effetto.testo}}{{else}}<textarea name="flags.wod5e-mage.nemico.effetti.{{effetto.id}}.testo" rows="1" aria-label="{{localize 'WOD5E_MAGE.Nemico.EffettoTesto'}}">{{effetto.testo}}</textarea>{{/if}}</span>
-                <span class="wod5e-mage-nemico-r-costo">{{#if @root.locked}}{{effetto.tipoLabel}}{{else}}<select name="flags.wod5e-mage.nemico.effetti.{{effetto.id}}.tipo" aria-label="{{localize 'WOD5E_MAGE.Nemico.EffettoTipo'}}">{{#each @root.tipiEffetto as |t|}}<option value="{{t.id}}" {{#if (eq t.id effetto.tipo)}}selected{{/if}}>{{t.label}}</option>{{/each}}</select>{{/if}}</span>
-                {{#if @root.locked}}<span></span>{{else}}<button type="button" class="wod5e-mage-nemico-bt tenue" data-action="nemicoEffettoTogli" data-effetto="{{effetto.id}}" title="{{localize 'WOD5E_MAGE.Nemico.EffettoTogli'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.EffettoTogli'}}: {{effetto.nome}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>{{/if}}
+            {{!-- Effetti: quello che ha di suo senza tirare. Una pastiglia per effetto, il testo si apre al clic. --}}
+            <div class="wod5e-mage-nemico-riq">
+                <h3 class="wod5e-mage-nemico-titolo">{{localize "WOD5E_MAGE.Nemico.Effetti"}}</h3>
+                <div class="wod5e-mage-nemico-pastiglie">
+                    {{#each effetti as |effetto|}}<button type="button" class="wod5e-mage-nemico-pastiglia{{#if effetto.aperta}} on{{/if}}" data-action="nemicoEffettoApri" data-effetto="{{effetto.id}}" aria-expanded="{{effetto.aperta}}" title="{{effetto.tipoLabel}}">{{#if effetto.icona}}<i class="{{effetto.icona}}" aria-hidden="true"></i>{{/if}}{{effetto.nome}}</button>{{/each}}
+                    {{#if scrivi}}<button type="button" class="wod5e-mage-nemico-pastiglia vuota" data-action="nemicoEffettoNuovo"><i class="fa-solid fa-plus" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.EffettoAggiungi"}}</button>{{else}}{{#unless effetti.length}}<span class="wod5e-mage-nemico-nessuna">{{localize "WOD5E_MAGE.Nemico.EffettiNessuno"}}</span>{{/unless}}{{/if}}
+                </div>
+                {{#each effetti as |effetto|}}{{#if effetto.aperta}}
+                    <div class="wod5e-mage-nemico-cassettino" data-effetto="{{effetto.id}}">
+                        {{#if @root.scrivi}}
+                            <div class="wod5e-mage-nemico-dettagli">
+                                <label class="larga"><span>{{localize "WOD5E_MAGE.Nemico.EffettoNome"}}</span><input type="text" name="flags.wod5e-mage.nemico.effetti.{{effetto.id}}.nome" value="{{effetto.nome}}"></label>
+                                <label><span>{{localize "WOD5E_MAGE.Nemico.EffettoTipo"}}</span><select name="flags.wod5e-mage.nemico.effetti.{{effetto.id}}.tipo">{{#each @root.tipiEffetto as |t|}}<option value="{{t.id}}" {{#if (eq t.id effetto.tipo)}}selected{{/if}}>{{t.label}}</option>{{/each}}</select></label>
+                                <label class="intera"><span>{{localize "WOD5E_MAGE.Nemico.EffettoTesto"}}</span><textarea name="flags.wod5e-mage.nemico.effetti.{{effetto.id}}.testo" rows="2">{{effetto.testo}}</textarea></label>
+                                <button type="button" class="wod5e-mage-nemico-via" data-action="nemicoEffettoTogli" data-effetto="{{effetto.id}}"><i class="fa-solid fa-trash" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.EffettoTogli"}}</button>
+                            </div>
+                        {{else}}
+                            <p class="wod5e-mage-nemico-tenue">{{effetto.tipoLabel}}</p>
+                            {{#if effetto.testo}}<p>{{effetto.testo}}</p>{{/if}}
+                        {{/if}}
+                    </div>
+                {{/if}}{{/each}}
             </div>
-        {{else}}
-            <p class="wod5e-mage-nemico-vuoto">{{localize "WOD5E_MAGE.Nemico.EffettiVuoti"}}</p>
-        {{/each}}
+        </div>
+
+        <div class="wod5e-mage-nemico-col">
+
+            {{!-- Azioni: nome, arma, danno e il tasto viola coi dadi; il resto nella riga aperta. --}}
+            <div class="wod5e-mage-nemico-riq">
+                <h3 class="wod5e-mage-nemico-titolo">{{localize "WOD5E_MAGE.Nemico.Azioni"}}</h3>
+                <div class="wod5e-mage-nemico-righe">
+                    {{#each azioni as |azione|}}
+                        <div class="wod5e-mage-nemico-riga{{#if azione.aperta}} aperta{{/if}}{{#if azione.attiva}} attiva{{/if}}" data-azione="{{azione.id}}">
+                            <div class="wod5e-mage-nemico-riga-testa">
+                                <button type="button" class="wod5e-mage-nemico-riga-nome" data-action="nemicoAzioneApri" data-azione="{{azione.id}}" aria-expanded="{{azione.aperta}}" title="{{localize 'WOD5E_MAGE.Nemico.AzioneApri'}}"><b>{{azione.nome}}</b>{{#if azione.armaNome}}<span title="{{localize 'WOD5E_MAGE.Nemico.AzioneDaArma' arma=azione.armaNome}}">{{azione.armaNome}}</span>{{/if}}</button>
+                                <span class="wod5e-mage-nemico-riga-dx">
+                                    {{#if azione.danno}}<span class="wod5e-mage-nemico-dato">{{localize "WOD5E_MAGE.Nemico.DannoParola"}} <b>{{azione.danno}}</b>{{#if azione.aggravato}} {{localize "WOD5E_MAGE.Nemico.Aggravato"}}{{/if}}</span>{{/if}}
+                                    {{#if azione.senzaTiro}}
+                                        {{#if @root.scrivi}}
+                                            <span class="wod5e-mage-nemico-dato">{{localize "WOD5E_MAGE.Nemico.SenzaTiro"}}</span>
+                                        {{else}}
+                                            <button type="button" class="wod5e-mage-nemico-usa{{#if azione.attiva}} on{{/if}}" data-action="nemicoAzioneUsa" data-azione="{{azione.id}}" title="{{localize 'WOD5E_MAGE.Nemico.UsaHint'}}" aria-pressed="{{azione.attiva}}">{{#if azione.attiva}}{{localize "WOD5E_MAGE.Nemico.Attivo"}}{{else}}{{localize "WOD5E_MAGE.Nemico.Usa"}}{{/if}}</button>
+                                        {{/if}}
+                                    {{else}}
+                                        {{#if @root.scrivi}}
+                                            <span class="wod5e-mage-nemico-dato">{{localize "WOD5E_MAGE.Nemico.Dadi"}} <b>{{azione.riserva.base}}</b></span>
+                                        {{else}}
+                                            <button type="button" class="wod5e-mage-nemico-tira stretto" data-action="nemicoAzioneTira" data-azione="{{azione.id}}" title="{{azione.riserva.hint}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Tira'}}: {{azione.nome}}. {{azione.riserva.hint}}">{{#if azione.riserva.verso}}<i class="fa-solid fa-arrow-{{#if (eq azione.riserva.verso 'giu')}}down{{else}}up{{/if}}" aria-hidden="true"></i>{{/if}}<b>{{azione.riserva.dadi}}</b></button>
+                                        {{/if}}
+                                    {{/if}}
+                                    {{#if @root.scrivi}}<button type="button" class="wod5e-mage-nemico-matita" data-action="nemicoAzioneApri" data-azione="{{azione.id}}" title="{{localize 'WOD5E_MAGE.Nemico.Matita'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Matita'}}: {{azione.nome}}"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>{{/if}}
+                                </span>
+                            </div>
+                            {{#if azione.aperta}}
+                                {{#if @root.scrivi}}
+                                    {{!-- I campi dell'azione: quelli con `name` si salvano da soli al cambio. Per un'azione nata da un'arma, danno, Aggravato e portata restano dell'arma. --}}
+                                    <div class="wod5e-mage-nemico-dettagli">
+                                        <label><span>{{localize "WOD5E_MAGE.Nemico.AzioneNome"}}</span><input type="text" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.nome" value="{{azione.nome}}"></label>
+                                        <label class="spunta"><input type="checkbox" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.senzaTiro" {{#if azione.senzaTiro}}checked{{/if}}><span>{{localize "WOD5E_MAGE.Nemico.SenzaTiro"}}</span></label>
+                                        <label class="intera"><span>{{localize "WOD5E_MAGE.Nemico.AzioneTesto"}}</span><textarea name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.testo" rows="1" placeholder="{{localize 'WOD5E_MAGE.Nemico.AzioneTestoHint'}}">{{azione.testo}}</textarea></label>
+                                        {{#unless azione.senzaTiro}}
+                                            <label><span>{{localize "WOD5E_MAGE.Nemico.RiservaCampo"}}</span><select name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.riserva">{{#each @root.riserve as |r|}}<option value="{{r.id}}" {{#if (eq r.id azione.riserva.id)}}selected{{/if}}>{{r.label}}</option>{{/each}}</select></label>
+                                            {{#if azione.daArma}}
+                                                <span class="fermo"><span>{{localize "WOD5E_MAGE.Nemico.Danno"}}</span><b>{{azione.danno}}{{#if azione.aggravato}} {{localize "WOD5E_MAGE.Nemico.Aggravato"}}{{/if}}</b></span>
+                                                <span class="fermo"><span>{{localize "WOD5E_MAGE.Nemico.Portata"}}</span><b>{{#if azione.portata}}{{azione.portata}}{{else}}{{localize "WOD5E_MAGE.Nemico.PortataNessuna"}}{{/if}}</b></span>
+                                            {{else}}
+                                                <label><span>{{localize "WOD5E_MAGE.Nemico.Danno"}}</span><input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.danno" value="{{azione.danno}}" min="0" max="20"></label>
+                                                <label class="spunta"><input type="checkbox" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.aggravato" {{#if azione.aggravato}}checked{{/if}}><span>{{localize "WOD5E_MAGE.Nemico.Aggravato"}}</span></label>
+                                                <label><span>{{localize "WOD5E_MAGE.Nemico.Portata"}}</span><select name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.portata"><option value="">{{localize "WOD5E_MAGE.Nemico.PortataNessuna"}}</option>{{#each @root.portate as |p|}}<option value="{{p}}" {{#if (eq p azione.portata)}}selected{{/if}}>{{p}}</option>{{/each}}</select></label>
+                                            {{/if}}
+                                            <label><span>{{localize "WOD5E_MAGE.Nemico.Condizione"}}</span><select name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.condizione"><option value="">{{localize "WOD5E_MAGE.Nemico.CondizioneNessuna"}}</option>{{#if azione.condizioneFuori}}<option value="{{azione.condizione}}" selected>{{azione.condizione}}</option>{{/if}}{{#each @root.condizioniGruppi as |g|}}<optgroup label="{{g.label}}">{{#each g.voci as |c|}}<option value="{{c.name}}" {{#if (eq c.name azione.condizione)}}selected{{/if}}>{{c.label}}</option>{{/each}}</optgroup>{{/each}}</select></label>
+                                            <label><span>{{localize "WOD5E_MAGE.Nemico.SogliaBersaglio"}}</span><input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.soglia" value="{{azione.soglia}}" min="0" max="20" title="{{localize 'WOD5E_MAGE.Nemico.SogliaBersaglioHint'}}"></label>
+                                        {{else}}
+                                            {{!-- Senza tiro: cosa accende «Usa», per esempio +2 alla soglia «Da lontano» fino al suo turno. --}}
+                                            <label><span>{{localize "WOD5E_MAGE.Nemico.BonusSoglia"}}</span><input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.bonusSoglia" value="{{azione.bonusSoglia}}" min="-10" max="10"></label>
+                                            <label><span>{{localize "WOD5E_MAGE.Nemico.BonusA"}}</span><select name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.bonusA"><option value="">{{localize "WOD5E_MAGE.Nemico.Nessuna"}}</option>{{#each @root.bersagliBonus as |b|}}<option value="{{b.id}}" {{#if (eq b.id azione.bonusA)}}selected{{/if}}>{{b.label}}</option>{{/each}}</select></label>
+                                        {{/unless}}
+                                        <label><span>{{localize "WOD5E_MAGE.Nemico.Limite"}}</span><input type="text" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.limite" value="{{azione.limite}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.LimiteNessuno'}}"></label>
+                                        <label class="intera"><span>{{localize "WOD5E_MAGE.Nemico.NoteAzione"}}</span><input type="text" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.note" value="{{azione.note}}"></label>
+                                        {{#if azione.daArma}}
+                                            <span class="fermo intera"><span>{{localize "WOD5E_MAGE.Nemico.NasceDa"}}</span><b>{{azione.armaNome}}</b></span>
+                                        {{else}}
+                                            <button type="button" class="wod5e-mage-nemico-via" data-action="nemicoAzioneTogli" data-azione="{{azione.id}}"><i class="fa-solid fa-trash" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.AzioneTogli"}}</button>
+                                        {{/if}}
+                                    </div>
+                                {{else}}
+                                    <div class="wod5e-mage-nemico-riga-corpo">
+                                        <p>{{#if azione.testo}}{{azione.testo}}{{else}}{{#each azione.breve.pezzi as |pezzo|}}{{#if @index}} · {{/if}}{{pezzo}}{{/each}}{{#if azione.breve.condizione}}{{#if azione.breve.pezzi.length}} · {{/if}}<span class="wod5e-mage-nemico-cn">{{azione.breve.condizione}}</span>{{/if}}{{#if azione.breve.portata}}{{#if azione.breve.pezzi.length}} · {{else}}{{#if azione.breve.condizione}} · {{/if}}{{/if}}{{azione.breve.portata}}{{/if}}{{/if}}</p>
+                                        <p class="wod5e-mage-nemico-tenue">{{#if azione.senzaTiro}}{{localize "WOD5E_MAGE.Nemico.SenzaTiro"}}{{else}}{{localize "WOD5E_MAGE.Nemico.TiraCon" riserva=azione.riserva.label}}{{/if}}{{#if azione.limite}} · {{azione.limite}}{{/if}}{{#if azione.note}} · {{azione.note}}{{/if}}</p>
+                                    </div>
+                                {{/if}}
+                            {{/if}}
+                        </div>
+                    {{else}}
+                        {{#unless scrivi}}<p class="wod5e-mage-nemico-nessuna">{{localize "WOD5E_MAGE.Nemico.AzioniVuote"}}</p>{{/unless}}
+                    {{/each}}
+                    {{#if scrivi}}<button type="button" class="wod5e-mage-nemico-aggiungi" data-action="nemicoAzioneNuova"><i class="fa-solid fa-plus" aria-hidden="true"></i><b>{{localize "WOD5E_MAGE.Nemico.AzioneAggiungi"}}</b>{{#if vuoto}}<small>{{localize "WOD5E_MAGE.Nemico.AzioneAggiungiHint"}}</small>{{/if}}</button>{{/if}}
+                </div>
+            </div>
+
+            {{!-- Il blocco della Natura: lo accende la Natura scelta in testata. --}}
+            {{#if blocco.tipo}}
+                <div class="wod5e-mage-nemico-riq wod5e-mage-nemico-blocco" data-blocco="{{blocco.tipo}}">
+                    <div class="wod5e-mage-nemico-titolo-riga">
+                        <h3 class="wod5e-mage-nemico-titolo">{{blocco.titolo}}</h3>
+                        <span class="wod5e-mage-nemico-titolo-dx">
+                            {{#if scrivi}}
+                                {{#if blocco.punteggio.arete}}
+                                    <label class="wod5e-mage-nemico-inline"><span>{{blocco.punteggio.nome}}</span><input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.magick.arete" value="{{blocco.punteggio.valore}}" min="1" max="5"></label>
+                                    <label class="wod5e-mage-nemico-inline"><span>{{localize "WOD5E_MAGE.Nemico.Tipo"}}</span><select name="flags.wod5e-mage.nemico.magick.tipo">{{#each magick.tipi as |t|}}<option value="{{t.id}}" {{#if t.on}}selected{{/if}}>{{t.label}}</option>{{/each}}</select></label>
+                                {{else}}
+                                    <input type="text" class="wod5e-mage-nemico-punteggio-nome" name="flags.wod5e-mage.nemico.punteggio.nome" value="{{blocco.punteggio.nomeScritto}}" placeholder="{{#if blocco.punteggio.nomeBase}}{{blocco.punteggio.nomeBase}}{{else}}{{localize 'WOD5E_MAGE.Nemico.PunteggioNomeHint'}}{{/if}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.PunteggioNome'}}" title="{{localize 'WOD5E_MAGE.Nemico.PunteggioNome'}}">
+                                    <input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.punteggio.valore" value="{{blocco.punteggio.valore}}" min="0" max="{{blocco.punteggio.max}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.PunteggioValore'}}" title="{{localize 'WOD5E_MAGE.Nemico.PunteggioValore'}}">
+                                {{/if}}
+                            {{else}}
+                                {{#if blocco.punteggio.on}}<span class="wod5e-mage-nemico-tenue">{{blocco.punteggio.nome}}</span><b>{{blocco.punteggio.valore}}</b>{{/if}}
+                                {{#if blocco.magick}}<span class="wod5e-mage-nemico-tenue">·</span><span>{{magick.tipoLabel}}</span>{{/if}}
+                            {{/if}}
+                        </span>
+                    </div>
+
+                    {{#if blocco.magick}}
+                        {{!-- Le Sfere del Risvegliato: in Gioca quelle che ha, col sigillo sul disco d'oro; in Scrivi tutte e nove, un clic accende o spegne. --}}
+                        {{#if scrivi}}
+                            <div class="wod5e-mage-nemico-domini scrivi" title="{{localize 'WOD5E_MAGE.Nemico.DominiHint'}}">
+                                <span class="wod5e-mage-nemico-tenue">{{localize "WOD5E_MAGE.Nemico.Domini"}}</span>
+                                {{#each magick.domini as |d|}}<button type="button" class="wod5e-mage-nemico-disco{{#if d.on}} on{{/if}}" data-action="nemicoDominio" data-sfera="{{d.id}}" title="{{d.label}}" aria-label="{{d.label}}" aria-pressed="{{d.on}}"><img src="{{d.icon}}" alt=""></button>{{/each}}
+                            </div>
+                        {{else}}
+                            <div class="wod5e-mage-nemico-domini">
+                                {{#each magick.dominiScelti as |d|}}<span class="wod5e-mage-nemico-dominio"><span class="wod5e-mage-nemico-disco on"><img src="{{d.icon}}" alt=""></span>{{d.label}}</span>{{else}}<span class="wod5e-mage-nemico-nessuna">{{localize "WOD5E_MAGE.Nemico.DominiNessuno"}}</span>{{/each}}
+                            </div>
+                        {{/if}}
+
+                        {{!-- Gli effetti di Magick: ognuno è una soglia che il PG resiste. Il Narratore non tira mai: Lancia manda la carta in chat. --}}
+                        <div class="wod5e-mage-nemico-righe">
+                            {{#each magick.effetti as |e|}}
+                                <div class="wod5e-mage-nemico-riga{{#if e.aperta}} aperta{{/if}}" data-effetto-magick="{{e.id}}">
+                                    <div class="wod5e-mage-nemico-riga-testa">
+                                        <button type="button" class="wod5e-mage-nemico-riga-nome" data-action="nemicoMagickApri" data-effetto="{{e.id}}" aria-expanded="{{e.aperta}}" title="{{localize 'WOD5E_MAGE.Nemico.EffettoMagickApri'}}">{{#if e.sfera}}<span class="wod5e-mage-nemico-disco on" title="{{e.sfera.label}}"><img src="{{e.sfera.icon}}" alt="{{e.sfera.label}}"></span>{{/if}}<b>{{e.nome}}</b></button>
+                                        {{#if @root.scrivi}}{{#unless e.resisteTesto}}<button type="button" class="wod5e-mage-nemico-manca" data-action="nemicoMagickApri" data-effetto="{{e.id}}" title="{{localize 'WOD5E_MAGE.Nemico.ResistenzaMancaHint'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.ResistenzaManca"}}</button>{{/unless}}{{/if}}
+                                        <span class="wod5e-mage-nemico-riga-dx">
+                                            {{#if @root.scrivi}}
+                                                <label class="wod5e-mage-nemico-inline"><span>{{localize "WOD5E_MAGE.Nemico.Soglia"}}</span><input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.soglia" value="{{e.soglia}}" min="0" max="30"></label>
+                                                <button type="button" class="wod5e-mage-nemico-matita" data-action="nemicoMagickApri" data-effetto="{{e.id}}" title="{{localize 'WOD5E_MAGE.Nemico.Matita'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Matita'}}: {{e.nome}}"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
+                                            {{else}}
+                                                <span class="wod5e-mage-nemico-dato">{{localize "WOD5E_MAGE.Nemico.Soglia"}} <b class="oro">{{e.soglia}}</b></span>
+                                                <button type="button" class="wod5e-mage-nemico-lancia" data-action="nemicoLancia" data-effetto="{{e.id}}" title="{{localize 'WOD5E_MAGE.Nemico.LanciaHint' nome=e.nome}}">{{localize "WOD5E_MAGE.Nemico.Lancia"}}</button>
+                                            {{/if}}
+                                        </span>
+                                    </div>
+                                    {{#if e.aperta}}
+                                        {{#if @root.scrivi}}
+                                            {{!-- I campi dell'effetto: il nome, cosa fa, il tiro con cui il PG resiste. Gli Ambiti e la soglia base vengono da come è nato. --}}
+                                            <div class="wod5e-mage-nemico-dettagli">
+                                                <label><span>{{localize "WOD5E_MAGE.Nemico.ManoNome"}}</span><input type="text" name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.nome" value="{{e.nome}}"></label>
+                                                <label class="larga"><span>{{localize "WOD5E_MAGE.Nemico.ManoCosa"}}</span><input type="text" name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.breve" value="{{e.breve}}"></label>
+                                                <label class="intera wod5e-mage-nemico-resiste"><span>{{localize "WOD5E_MAGE.Nemico.ManoResiste"}}</span><span class="wod5e-mage-nemico-resiste-campi"><select name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.resiste.attribute"><option value="">–</option>{{#each @root.attributiScelta as |a|}}<option value="{{a.id}}" {{#if (eq a.id e.resiste.attribute)}}selected{{/if}}>{{a.label}}</option>{{/each}}</select><span>+</span><select name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.resiste.skill"><option value="">–</option>{{#each @root.secondoTratto as |s|}}<option value="{{s.id}}" {{#if (eq s.id e.resiste.skill)}}selected{{/if}}>{{s.label}}</option>{{/each}}</select><input type="text" name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.resiste.testo" value="{{e.resiste.testo}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.ManoResisteTesto'}}"></span></label>
+                                                <p class="wod5e-mage-nemico-tenue">{{e.comeLabel}} · {{localize "WOD5E_MAGE.Nemico.Ambiti"}}: {{#each e.ambiti as |a|}}{{#if @index}} · {{/if}}{{a.label}} {{a.level}}{{else}}{{localize "WOD5E_MAGE.Nemico.TuttiZero"}}{{/each}}{{#if e.impossibile}} · +{{@root.extraImpossibile}}{{/if}} · {{#if (eq e.da "grimorio")}}{{localize "WOD5E_MAGE.Nemico.DalGrimorio"}}{{else}}{{localize "WOD5E_MAGE.Nemico.AMano"}}{{/if}}{{#if e.danni}} · {{localize "WOD5E_MAGE.Nemico.DannoBreve" danno=e.danni}}{{/if}}</p>
+                                                <button type="button" class="wod5e-mage-nemico-via" data-action="nemicoMagickTogli" data-effetto="{{e.id}}"><i class="fa-solid fa-trash" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.EffettoMagickTogli"}}</button>
+                                            </div>
+                                        {{else}}
+                                            <div class="wod5e-mage-nemico-riga-corpo">
+                                                {{#if e.breve}}<p>{{e.breve}}</p>{{/if}}
+                                                {{#if e.testo}}<p>{{e.testo}}</p>{{/if}}
+                                                <p class="wod5e-mage-nemico-tenue">{{e.comeLabel}} · {{e.resisteLabel}}{{#if e.danni}} · {{localize "WOD5E_MAGE.Nemico.DannoBreve" danno=e.danni}}{{/if}}</p>
+                                            </div>
+                                        {{/if}}
+                                    {{/if}}
+                                </div>
+                            {{else}}
+                                {{#unless scrivi}}<p class="wod5e-mage-nemico-nessuna">{{localize "WOD5E_MAGE.Nemico.MagickVuota"}}</p>{{/unless}}
+                            {{/each}}
+                            {{#if scrivi}}<button type="button" class="wod5e-mage-nemico-aggiungi{{#if cassetto}} on{{/if}}" data-action="nemicoCassetto" data-cassetto="{{#if cassetto}}{{cassetto}}{{else}}grimorio{{/if}}" aria-expanded="{{#if cassetto}}true{{else}}false{{/if}}"><i class="fa-solid fa-plus" aria-hidden="true"></i><b>{{localize "WOD5E_MAGE.Nemico.EffettoMagickAggiungi"}}</b><small>{{localize "WOD5E_MAGE.Nemico.EffettoMagickAggiungiHint"}}</small></button>{{/if}}
+                        </div>
+
+                        {{#if scrivi}}{{#if cassetto}}
+                            {{!-- Il cassetto che aggiunge un effetto: dal Grimorio (le Formule che le Sfere aprono) o a mano (i sei Ambiti coi pallini). Una strada per volta. --}}
+                            <div class="wod5e-mage-nemico-cassetto" data-cassetto="{{cassetto}}">
+                                <div class="wod5e-mage-nemico-cassetto-vie" role="group" aria-label="{{localize 'WOD5E_MAGE.Nemico.EffettoMagickAggiungi'}}">
+                                    <button type="button" class="wod5e-mage-nemico-pastiglia{{#if (eq cassetto 'grimorio')}} on{{/if}}" data-action="nemicoCassettoVia" data-cassetto="grimorio" aria-pressed="{{#if (eq cassetto 'grimorio')}}true{{else}}false{{/if}}"><i class="fa-solid fa-book-open" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.DalGrimorio"}}</button>
+                                    <button type="button" class="wod5e-mage-nemico-pastiglia{{#if (eq cassetto 'mano')}} on{{/if}}" data-action="nemicoCassettoVia" data-cassetto="mano" aria-pressed="{{#if (eq cassetto 'mano')}}true{{else}}false{{/if}}">{{localize "WOD5E_MAGE.Nemico.AMano"}}</button>
+                                </div>
+                                {{#if grimorio}}
+                                    {{#if grimorio.senzaDomini}}
+                                        <p class="wod5e-mage-nemico-nessuna">{{localize "WOD5E_MAGE.Nemico.GrimorioSenzaDomini"}}</p>
+                                    {{else}}
+                                        <label class="wod5e-mage-nemico-cerca"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input type="search" data-nemico-cerca="grimorio" value="{{grimorio.cerca}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.GrimorioCerca' domini=grimorio.dominiTesto}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.DalGrimorio'}}"></label>
+                                        <div class="wod5e-mage-nemico-grimorio" data-nemico-lista="grimorio">
+                                            {{#each grimorio.formule as |f|}}
+                                                <div class="wod5e-mage-nemico-formula" data-search="{{f.name}} {{f.use}}">
+                                                    <span class="wod5e-mage-nemico-formula-nome" title="{{f.use}}">{{f.name}}</span>
+                                                    <span class="wod5e-mage-nemico-accessi">{{#each f.access as |s|}}<img src="{{s.icon}}" alt="{{s.label}}" title="{{s.label}}" class="{{#if s.owned}}lit{{/if}}">{{/each}}</span>
+                                                    <span class="wod5e-mage-nemico-tenue wod5e-mage-nemico-formula-ambiti">{{#each f.soglie as |t|}}{{#if @index}} · {{/if}}{{t.ambiti}}{{/each}}</span>
+                                                    <span class="wod5e-mage-nemico-formula-tasti">{{#each f.soglie as |t|}}<button type="button" class="wod5e-mage-nemico-prendi{{#if f.presa}} presa{{/if}}" data-action="nemicoFormula" data-formula="{{f.id}}" data-indice="{{t.index}}" title="{{#if f.presa}}{{localize 'WOD5E_MAGE.Nemico.GrimorioPresa'}}{{else}}{{localize 'WOD5E_MAGE.Nemico.GrimorioAggiungi'}}{{/if}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Aggiungi'}}: {{f.name}}, {{localize 'WOD5E_MAGE.Nemico.Soglia'}} {{t.base}}"><b>{{t.base}}</b><i class="fa-solid {{#if f.presa}}fa-check{{else}}fa-plus{{/if}}" aria-hidden="true"></i></button>{{/each}}</span>
+                                                </div>
+                                            {{else}}
+                                                <p class="wod5e-mage-nemico-nessuna">{{localize "WOD5E_MAGE.Nemico.GrimorioVuoto"}}</p>
+                                            {{/each}}
+                                            <p class="wod5e-mage-nemico-nessuna" data-nemico-nessuna hidden>{{localize "WOD5E_MAGE.Nemico.GrimorioVuoto"}}</p>
+                                        </div>
+                                    {{/if}}
+                                {{/if}}
+                                {{#if mano}}
+                                    {{!-- A mano: nome, cosa fa, il tiro di resistenza, la Sfera e come; i sei Ambiti con la
+                                         lente (il clic la cambia) e i pallini da 0 a 7 con la lettura; la soglia in grande, i
+                                         danni se la lente della Potenza è Danni, «impresa impossibile, +5», Aggiungi. --}}
+                                    <div class="wod5e-mage-nemico-dettagli">
+                                        <label><span>{{localize "WOD5E_MAGE.Nemico.ManoNome"}}</span><input type="text" data-mano="nome" value="{{mano.nome}}"></label>
+                                        <label class="larga"><span>{{localize "WOD5E_MAGE.Nemico.ManoCosa"}}</span><input type="text" data-mano="cosa" value="{{mano.cosa}}"></label>
+                                        <label class="intera wod5e-mage-nemico-resiste"><span>{{localize "WOD5E_MAGE.Nemico.ManoResiste"}}</span><span class="wod5e-mage-nemico-resiste-campi"><select data-mano="attribute" aria-label="{{localize 'WOD5E_MAGE.Nemico.ManoResiste'}}"><option value="">–</option>{{#each attributiScelta as |a|}}<option value="{{a.id}}" {{#if (eq a.id @root.mano.attribute)}}selected{{/if}}>{{a.label}}</option>{{/each}}</select><span>+</span><select data-mano="skill" aria-label="{{localize 'WOD5E_MAGE.Nemico.CasoSkill'}}"><option value="">–</option>{{#each secondoTratto as |s|}}<option value="{{s.id}}" {{#if (eq s.id @root.mano.skill)}}selected{{/if}}>{{s.label}}</option>{{/each}}</select><input type="text" data-mano="resisteTesto" value="{{mano.resisteTesto}}" placeholder="{{localize 'WOD5E_MAGE.Nemico.ManoResisteTesto'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.ManoResisteTesto'}}"></span></label>
+                                        <span class="intera wod5e-mage-nemico-scelte">
+                                            <span class="wod5e-mage-nemico-tenue">{{localize "WOD5E_MAGE.Nemico.ManoDominio"}}</span>
+                                            {{#each mano.domini as |d|}}<button type="button" class="wod5e-mage-nemico-pastiglia{{#if d.on}} on{{/if}}" data-action="nemicoManoScelta" data-campo="dominio" data-value="{{d.id}}" aria-pressed="{{d.on}}">{{d.label}}</button>{{/each}}
+                                            <span class="wod5e-mage-nemico-spazio" aria-hidden="true"></span>
+                                            {{#each mano.come as |c|}}<button type="button" class="wod5e-mage-nemico-pastiglia{{#if c.on}} on{{/if}}" data-action="nemicoManoScelta" data-campo="come" data-value="{{c.id}}" aria-pressed="{{c.on}}">{{c.label}}</button>{{/each}}
+                                        </span>
+                                    </div>
+                                    <div class="wod5e-mage-nemico-ambiti">
+                                        {{#each mano.ambiti.righe as |a|}}
+                                            <div class="wod5e-mage-nemico-ambito{{#if a.alto}} alto{{/if}}" data-scope="{{a.id}}">
+                                                <i class="{{a.faIcon}}" aria-hidden="true"></i>
+                                                <span class="wod5e-mage-nemico-anm">{{a.label}}</span>
+                                                {{#if a.lente.altra}}<button type="button" class="wod5e-mage-nemico-lente" data-action="nemicoLente" data-scope="{{a.id}}" title="{{localize 'WOD5E_MAGE.Nemico.Lente'}}">{{a.lente.label}}</button>{{else}}<span class="wod5e-mage-nemico-lente ferma">{{a.lente.label}}</span>{{/if}}
+                                                <span class="wod5e-mage-nemico-liv">{{#each a.pallini as |p|}}<button type="button" class="{{#if p.on}}on{{/if}}{{#if p.zero}} zero{{/if}}" data-action="nemicoAmbito" data-scope="{{a.id}}" data-level="{{p.value}}" title="{{p.title}}" aria-label="{{a.label}} {{p.value}}">{{p.value}}</button>{{/each}}</span>
+                                                <span class="wod5e-mage-nemico-let">{{a.lettura}}</span>
+                                            </div>
+                                        {{/each}}
+                                    </div>
+                                    <div class="wod5e-mage-nemico-avviso" data-nemico-avviso>{{#if mano.ambiti.fuoriTetto.length}}{{localize "WOD5E_MAGE.Nemico.TettoAmbiti"}}{{/if}}</div>
+                                    <div class="wod5e-mage-nemico-somma">
+                                        <span class="wod5e-mage-nemico-dato">{{localize "WOD5E_MAGE.Nemico.Soglia"}} <b class="wod5e-mage-nemico-grande">{{mano.ambiti.soglia}}</b></span>
+                                        <span class="wod5e-mage-nemico-tenue">{{mano.ambiti.conto}}{{#if mano.ambiti.danni}} · {{localize "WOD5E_MAGE.Nemico.DanniMagick" danni=mano.ambiti.danni arete=magick.arete potenza=mano.ambiti.potenza}}{{/if}}</span>
+                                        <label class="spunta wod5e-mage-nemico-impossibile"><input type="checkbox" data-mano="impossibile" {{#if mano.ambiti.impossibile}}checked{{/if}}><span>{{localize "WOD5E_MAGE.Nemico.Impossibile" extra=mano.ambiti.extra}}</span></label>
+                                        <button type="button" class="wod5e-mage-nemico-lancia" data-action="nemicoManoAggiungi"><i class="fa-solid fa-plus" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.Aggiungi"}}</button>
+                                    </div>
+                                {{/if}}
+                            </div>
+                        {{/if}}{{/if}}
+                    {{/if}}
+
+                    {{!-- I poteri del manuale: gli stessi dei maghi, presi dal catalogo; il testo si apre al clic.
+                         Sotto la Magick stanno solo se ce ne sono, o in Scrivi per aggiungerne. --}}
+                    {{#if mostraPoteri}}
+                    {{#if blocco.magick}}<h4 class="wod5e-mage-nemico-sottotitolo">{{localize "WOD5E_MAGE.Nemico.Poteri"}}</h4>{{/if}}
+                    <div class="wod5e-mage-nemico-pastiglie">
+                        {{#each poteri as |p|}}<button type="button" class="wod5e-mage-nemico-pastiglia{{#if p.aperta}} on{{/if}}" data-action="nemicoEffettoApri" data-effetto="{{p.id}}" aria-expanded="{{p.aperta}}">{{p.nome}}</button>{{/each}}
+                        {{#if scrivi}}<button type="button" class="wod5e-mage-nemico-pastiglia vuota" data-action="nemicoEffettoCatalogo" title="{{localize 'WOD5E_MAGE.Nemico.PotereAggiungiHint'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.PotereAggiungi"}}</button>{{else}}{{#unless poteri.length}}<span class="wod5e-mage-nemico-nessuna">{{localize "WOD5E_MAGE.Nemico.PoteriNessuno"}}</span>{{/unless}}{{/if}}
+                    </div>
+                    {{#each poteri as |p|}}{{#if p.aperta}}
+                        <div class="wod5e-mage-nemico-cassettino" data-effetto="{{p.id}}">
+                            {{#if p.potere}}
+                                <p class="wod5e-mage-nemico-tenue">{{localize "WOD5E_MAGE.Poteri.GradoN" n=p.potere.grado}}{{#if p.potere.sfereTesto}} · {{p.potere.sfereTesto}}{{/if}}</p>
+                                {{!-- Le parti del potere come sulla scheda del mago: il costo dell'attivo e la cadenza del passivo accanto al titolo, il sigillo al posto di «Accesso con». --}}
+                                {{#unless p.potere.attivo.vuota}}<div class="wod5e-mage-nemico-parte"><b>{{localize "WOD5E_MAGE.Poteri.EffettoAttivo"}}{{#if p.potere.attivo.misura}}<small>{{p.potere.attivo.misura}}</small>{{/if}}</b>{{#each p.potere.attivo.voci as |v|}}<p>{{#if v.accesso}}<strong class="wod5e-mage-accesso">{{#if v.con}}{{localize "WOD5E_MAGE.Poteri.ConSfera"}}{{else}}{{localize "WOD5E_MAGE.Grimorio.Access"}}{{/if}} {{#each v.sfere as |sfera|}}<img class="wod5e-mage-sfera-inline" src="modules/wod5e-mage/assets/icons/sheet/{{sfera}}.png" alt="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}" title="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}">{{/each}}:</strong> {{else if v.chiave}}<strong>{{v.chiave}}:</strong> {{/if}}{{v.testo}}</p>{{/each}}</div>{{/unless}}
+                                {{#unless p.potere.passivo.vuota}}<div class="wod5e-mage-nemico-parte"><b>{{localize "WOD5E_MAGE.Poteri.EffettoPassivo"}}{{#if p.potere.passivo.misura}}<small>{{p.potere.passivo.misura}}</small>{{/if}}</b>{{#each p.potere.passivo.voci as |v|}}<p>{{#if v.accesso}}<strong class="wod5e-mage-accesso">{{#if v.con}}{{localize "WOD5E_MAGE.Poteri.ConSfera"}}{{else}}{{localize "WOD5E_MAGE.Grimorio.Access"}}{{/if}} {{#each v.sfere as |sfera|}}<img class="wod5e-mage-sfera-inline" src="modules/wod5e-mage/assets/icons/sheet/{{sfera}}.png" alt="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}" title="{{localize (concat 'WOD5E_MAGE.Spheres.' sfera)}}">{{/each}}:</strong> {{else if v.chiave}}<strong>{{v.chiave}}:</strong> {{/if}}{{v.testo}}</p>{{/each}}</div>{{/unless}}
+                            {{else}}
+                                <p class="wod5e-mage-nemico-tenue">{{localize "WOD5E_MAGE.Nemico.PotereTolto"}}</p>
+                                {{#if p.testo}}<p>{{p.testo}}</p>{{/if}}
+                            {{/if}}
+                            {{#if @root.scrivi}}<button type="button" class="wod5e-mage-nemico-via" data-action="nemicoEffettoTogli" data-effetto="{{p.id}}"><i class="fa-solid fa-trash" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.PotereTogli"}}</button>{{/if}}
+                        </div>
+                    {{/if}}{{/each}}
+                    {{/if}}
+
+                    {{!-- Un nemico che aveva la Magick accesa col vecchio tasto la tiene anche con un'altra Natura: qui si toglie. --}}
+                    {{#if scrivi}}{{#if blocco.eredita}}<button type="button" class="wod5e-mage-nemico-via" data-action="magickSpegni" title="{{localize 'WOD5E_MAGE.Nemico.MagickTogli'}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.MagickTogliBreve"}}</button>{{/if}}{{/if}}
+                </div>
+            {{/if}}
+        </div>
     </div>
 </section>

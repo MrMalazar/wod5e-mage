@@ -166,15 +166,19 @@ export function scalaTasto(scala) {
 /**
  * Veste la finestra con la misura: la variabile `--mage-scala` sul frame
  * (il CSS la usa come zoom del contenuto) e, se c'è, il tasto in testata.
- * Col `viewport` (la window) la scala tiene conto dello schermo.
+ * Col `viewport` (la window) la scala tiene conto dello schermo; `naturale`
+ * è la misura a scala 1 di quella finestra (quella del Mago se non si dice;
+ * la scheda del nemico passa la sua, 1/10: il suo contenuto entra in uno
+ * schermo che alle quattro colonne del mago va stretto).
  */
-export function applicaScala(element, scala, { localize = (key) => key, format = (key, data) => `${key} ${JSON.stringify(data)}`, viewport = null } = {}) {
+export function applicaScala(element, scala, { localize = (key) => key, format = (key, data) => `${key} ${JSON.stringify(data)}`, viewport = null, naturale = MISURA_NATURALE } = {}) {
   if (!element) return;
   const current = normalizeScala(scala);
+  const misura = naturale ?? MISURA_NATURALE;
   // Con lo schermo in mano la scala è quella totale (misura per fattore dello schermo).
-  element.style?.setProperty?.("--mage-scala", String(viewport ? scalaTotale(current, viewport) : scalaFattore(current)));
+  element.style?.setProperty?.("--mage-scala", String(viewport ? scalaTotale(current, viewport, misura) : scalaFattore(current)));
   element.dataset && (element.dataset.scala = current);
-  if (element.dataset && viewport) element.dataset.scalaSchermo = String(fattoreSchermo(viewport));
+  if (element.dataset && viewport) element.dataset.scalaSchermo = String(fattoreSchermo(viewport, misura));
   const button = element.querySelector?.(`.${SCALA_TASTO_CLASSE}`);
   if (!button) return;
   const { label, nextLabel } = scalaTasto(current);

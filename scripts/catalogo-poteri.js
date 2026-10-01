@@ -382,3 +382,84 @@ export async function openCatalogoCompleto({ owned = [] } = {}) {
     }
   });
 }
+
+/**
+ * Il catalogo per un PNG (Blue, 1/10: «darò direttamente agli NPC i poteri
+ * che ci sono nel manuale»): tutti i poteri, Sfera per Sfera e in ordine di
+ * grado come nel Catalogo completo, con «Aggiungi» su ogni riga. Niente
+ * prerequisiti né prezzo: lo decide il Narratore. `owned` sono i poteri che
+ * il PNG ha già ([{ catalogId }]); `onAdd(id)` lo mette sulla scheda (torna
+ * true se l'ha messo). La finestra resta aperta, e la riga prende la spunta
+ * sul posto, senza perdere la cerca né il punto della lista.
+ */
+export async function openCatalogoPerNemico({ owned = [], onAdd = null, titolo = "" } = {}) {
+  const localize = game.i18n.localize.bind(game.i18n);
+  const presi = [...(owned ?? [])];
+  const dati = () => ({
+    ...prepareCatalogoCompleto({ owned: presi, localize, mods: game.settings.get(MODULE_ID, POTERI_MOD_SETTING) ?? {}, gm: Boolean(game.user?.isGM) }),
+    aggiungi: true
+  });
+  const corpo = () => foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/catalogo-poteri.hbs`, dati());
+  await foundry.applications.api.DialogV2.wait({
+    window: { title: titolo || localize("WOD5E_MAGE.Poteri.CatalogoCompletoTitolo") },
+    classes: [...CLASSI, "wod5e-mage-catalogo-completo", "wod5e-mage-catalogo-nemico"],
+    position: { width: 720 },
+    content: `<div data-role="catalogoCorpo">${await corpo()}</div>`,
+    buttons: [{ action: "close", icon: "fas fa-times", label: localize("WOD5E.Close"), default: true }],
+    rejectClose: false,
+    render: (_event, dialog) => {
+      const root = dialog.element;
+      const filtra = () => {
+        const wanted = String(root.querySelector("[data-role=catalogoSearch]")?.value ?? "").trim().toLowerCase();
+        root.querySelectorAll(".wod5e-mage-catalogo-row").forEach((row) => {
+          row.hidden = Boolean(wanted) && !String(row.dataset.search ?? "").includes(wanted);
+        });
+        root.querySelectorAll("[data-catalogo-gruppo]").forEach((gruppo) => {
+          gruppo.hidden = !gruppo.querySelector(".wod5e-mage-catalogo-row:not([hidden])");
+        });
+      };
+      root.addEventListener("input", (event) => {
+        if (event.target.closest?.("[data-role=catalogoSearch]")) filtra();
+      });
+      root.addEventListener("click", async (event) => {
+        // La matita del Narratore: il testo di base, per tutti; la lista si ridisegna e tiene la cerca.
+        const matita = event.target.closest?.("[data-role=catalogoModifica]");
+        if (matita) {
+          event.preventDefault();
+          event.stopPropagation();
+          const entry = POTERI.find((voce) => voce.id === matita.dataset.catalogo);
+          if (!entry || !(await modificaBaseDelPotere(entry))) return;
+          const cerca = String(root.querySelector("[data-role=catalogoSearch]")?.value ?? "");
+          const box = root.querySelector("[data-role=catalogoCorpo]");
+          if (box) box.innerHTML = await corpo();
+          const search = root.querySelector("[data-role=catalogoSearch]");
+          if (search) search.value = cerca;
+          filtra();
+          return;
+        }
+        // «Aggiungi»: il potere va sul PNG; ogni riga di quel potere (una per Sfera che lo apre) prende la spunta.
+        const button = event.target.closest?.("[data-role=catalogoAggiungi]");
+        if (!button) return;
+        event.preventDefault();
+        event.stopPropagation();
+        if (button.disabled || !onAdd) return;
+        const id = String(button.dataset.catalogo ?? "");
+        button.disabled = true;
+        const ok = await onAdd(id);
+        if (!ok) {
+          button.disabled = false;
+          return;
+        }
+        presi.push({ catalogId: id, sphere: "" });
+        root.querySelectorAll(`[data-role=catalogoAggiungi][data-catalogo="${CSS.escape(id)}"]`).forEach((tasto) => {
+          tasto.disabled = true;
+          tasto.innerHTML = `<i class="fa-solid fa-check" aria-hidden="true"></i> ${foundry.utils.escapeHTML(localize("WOD5E_MAGE.Nemico.PotereGia"))}`;
+          tasto.closest(".wod5e-mage-catalogo-row")?.classList.add("known");
+        });
+        const conto = root.querySelector("[data-role=catalogoConto]");
+        if (conto) conto.textContent = game.i18n.format("WOD5E_MAGE.Nemico.CatalogoConto", { total: POTERI.length, known: new Set(presi.map((riga) => riga.catalogId)).size });
+      });
+      root.querySelector("[data-role=catalogoSearch]")?.focus();
+    }
+  });
+}

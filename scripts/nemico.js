@@ -26,13 +26,22 @@
  * dominio, come, da, formula, ambiti: { ambito: livello }, soglia, impossibile, sort }.
  * La soglia è quella scritta (dalla Formula, o dagli Ambiti a mano): il PG la
  * resiste col tiro scritto sull'effetto. Il Narratore non tira mai.
+ *
+ * Dal rifacimento dell'1/10 (mock docs/mock_scheda_nemico_1-10.html) la bandiera porta anche:
+ *
+ *   modo       «gioca» o «scrivi»: in Gioca cambia lo stato, in Scrivi cambia la scheda
+ *   punteggio  { nome, valore }: il punteggio della Natura per chi non è un Risvegliato
+ *              (la Gnosi di un licantropo…); il Risvegliato tiene l'Areté in magick.arete
+ *
+ * e la Natura decide il blocco sotto le Azioni (lo standard delle NATURE, qui sotto).
  */
 import { CHIAVI_VIVE, RINOMINATE } from "./abilita-essenziali.js";
 import { MODULE_ID } from "./constants.js";
 import { CONDIZIONI, FAMIGLIE_CONDIZIONI } from "./data/condizioni.js";
 import { condizioneTitle, dadiDelPeso, definizioneDi, findCondizioneByName, GRUPPI_ABILITA, nomeColGrado, pesoBreve } from "./condizioni.js";
 import { ATTRIBUTE_KEYS } from "./tratti-icone.js";
-import { formulaThresholds, prepareGrimorioFormule } from "./grimorio.js";
+import { findFormula, formulaThresholds, prepareGrimorioFormule } from "./grimorio.js";
+import { POTERI, quattroParti } from "./poteri.js";
 import { IMPOSSIBLE_SURCHARGE, SCOPES, SCOPES_PER_CAST, SCOPE_ICONS, SCOPE_MAX_LEVEL, scopeModes } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
 
@@ -48,23 +57,49 @@ export { GRUPPI_ABILITA };
 
 /**
  * Le Nature: le cinque del sistema (lo `spcType`) con la parola di M6, più
- * Risvegliato e Fatato, che il sistema non ha. La chiave è quella che si salva.
+ * Sonnambulo, Risvegliato e Fatato, che il sistema non ha. La chiave è quella
+ * che si salva.
+ *
+ * Lo standard del blocco (Blue, 1/10: «un metro da far usare al master», che
+ * porti dentro i PNG delle altre linee senza regole nuove da imparare). Ogni
+ * Natura dice quale blocco accende sotto le Azioni e come si chiama il suo
+ * punteggio; i poteri sono sempre quelli del manuale, presi dal catalogo:
+ *
+ *   blocco      «» nessuno (un PNG qualunque); «poteri» il punteggio e i poteri
+ *               del manuale; «magick» anche le Sfere e gli effetti di Magick
+ *   punteggio   la chiave del nome di partenza del punteggio («» = lo scrive il
+ *               Narratore sulla scheda): l'Areté del Risvegliato, la Gnosi del
+ *               licantropo. Il nome si può sempre riscrivere, tranne l'Areté.
+ *
+ * Per una Natura nuova basta una riga qui e la sua parola nei file di lingua.
  */
 export const NATURE = Object.freeze([
-  { id: "mortal", spcType: "mortal", label: "WOD5E_MAGE.Nemico.Nature.mortal" },
-  { id: "vampire", spcType: "vampire", label: "WOD5E_MAGE.Nemico.Nature.vampire" },
-  { id: "werewolf", spcType: "werewolf", label: "WOD5E_MAGE.Nemico.Nature.werewolf" },
-  { id: "hunter", spcType: "hunter", label: "WOD5E_MAGE.Nemico.Nature.hunter" },
-  { id: "spirit", spcType: "spirit", label: "WOD5E_MAGE.Nemico.Nature.spirit" },
-  { id: "risvegliato", spcType: "", label: "WOD5E_MAGE.Nemico.Nature.risvegliato" },
-  { id: "fatato", spcType: "", label: "WOD5E_MAGE.Nemico.Nature.fatato" }
+  { id: "mortal", spcType: "mortal", label: "WOD5E_MAGE.Nemico.Nature.mortal", blocco: "", punteggio: "" },
+  { id: "sonnambulo", spcType: "", label: "WOD5E_MAGE.Nemico.Nature.sonnambulo", blocco: "poteri", punteggio: "" },
+  { id: "risvegliato", spcType: "", label: "WOD5E_MAGE.Nemico.Nature.risvegliato", blocco: "magick", punteggio: "arete" },
+  { id: "vampire", spcType: "vampire", label: "WOD5E_MAGE.Nemico.Nature.vampire", blocco: "poteri", punteggio: "potenzaSangue" },
+  { id: "werewolf", spcType: "werewolf", label: "WOD5E_MAGE.Nemico.Nature.werewolf", blocco: "poteri", punteggio: "gnosi" },
+  { id: "hunter", spcType: "hunter", label: "WOD5E_MAGE.Nemico.Nature.hunter", blocco: "poteri", punteggio: "" },
+  { id: "spirit", spcType: "spirit", label: "WOD5E_MAGE.Nemico.Nature.spirit", blocco: "poteri", punteggio: "potere" },
+  { id: "fatato", spcType: "", label: "WOD5E_MAGE.Nemico.Nature.fatato", blocco: "poteri", punteggio: "" }
 ]);
+
+/** Il punteggio di una Natura che non è l'Areté va da 0 a 10; l'Areté da 1 a 5. */
+export const PUNTEGGIO_MAX = 10;
+
+/** I due modi della scheda: in Gioca cambia lo stato, in Scrivi cambia la scheda. */
+export const MODI = Object.freeze(["gioca", "scrivi"]);
 
 /** La Natura del nemico: quella scritta nella bandiera, altrimenti quella dello spcType del sistema. */
 export function naturaDi(flag = {}, spcType = "mortal") {
   const scritta = String(flag?.natura ?? "");
   if (NATURE.some((natura) => natura.id === scritta)) return scritta;
   return NATURE.find((natura) => natura.spcType && natura.spcType === String(spcType ?? ""))?.id ?? "mortal";
+}
+
+/** La riga dello standard di una Natura (quella del Dormiente se la chiave non c'è). */
+export function profiloNatura(id) {
+  return NATURE.find((natura) => natura.id === String(id ?? "")) ?? NATURE[0];
 }
 
 /** I tipi di Magick del nemico, come sulla scheda del mago. */
@@ -82,14 +117,24 @@ export const COME_MAGICK = Object.freeze(["accidentale", "volgare"]);
  * l'etichetta in testa prendono il suo colore.
  */
 export const DISPOSIZIONI = Object.freeze({
-  "-2": { id: "segreto", label: "WOD5E_MAGE.Nemico.Disposizioni.segreto" },
-  "-1": { id: "ostile", label: "WOD5E_MAGE.Nemico.Disposizioni.ostile" },
-  0: { id: "neutrale", label: "WOD5E_MAGE.Nemico.Disposizioni.neutrale" },
-  1: { id: "amichevole", label: "WOD5E_MAGE.Nemico.Disposizioni.amichevole" }
+  "-2": { id: "segreto", value: -2, label: "WOD5E_MAGE.Nemico.Disposizioni.segreto", icona: "fa-solid fa-mask" },
+  "-1": { id: "ostile", value: -1, label: "WOD5E_MAGE.Nemico.Disposizioni.ostile", icona: "fa-solid fa-skull" },
+  0: { id: "neutrale", value: 0, label: "WOD5E_MAGE.Nemico.Disposizioni.neutrale", icona: "fa-solid fa-scale-balanced" },
+  1: { id: "amichevole", value: 1, label: "WOD5E_MAGE.Nemico.Disposizioni.amichevole", icona: "fa-solid fa-handshake" }
 });
+
+/** L'ordine della tendina in Scrivi: dall'ostile al segreto. */
+export const DISPOSIZIONI_ORDINE = Object.freeze(["-1", "0", "1", "-2"]);
 
 export function disposizioneDi(value) {
   return DISPOSIZIONI[String(Math.trunc(Number(value) || 0))] ?? DISPOSIZIONI["-1"];
+}
+
+/** Il verso di un numero già ritoccato: «giu» se è sceso sotto quello scritto, «su» se è salito. */
+export function versoDi(totale, base) {
+  const t = Math.trunc(Number(totale) || 0);
+  const b = Math.trunc(Number(base) || 0);
+  return t < b ? "giu" : t > b ? "su" : "";
 }
 
 const intero = (value, min = 0) => Math.max(Math.trunc(Number(value) || 0), min);
@@ -211,7 +256,65 @@ export function datiNemico(flag = {}) {
     note: { vuole: testo(oggetto(f.note).vuole), molla: testo(oggetto(f.note).molla) },
     // La mano del Narratore (Blue, 27/9: «solo la mano del master che modifica il tiro»):
     // i dadi in più o in meno su ogni tiro di questo nemico, fra −10 e +10.
-    manoNarratore: Math.max(Math.min(Math.trunc(Number(f.manoNarratore) || 0), 10), -10)
+    manoNarratore: Math.max(Math.min(Math.trunc(Number(f.manoNarratore) || 0), 10), -10),
+    // Il modo scritto sulla scheda (1/10): vuoto finché nessuno lo sceglie, e allora decide modoDelNemico.
+    modo: MODI.includes(f.modo) ? f.modo : "",
+    // Il punteggio della Natura per chi non è un Risvegliato (1/10): il nome scritto a mano vince su quello di partenza.
+    punteggio: { nome: testo(oggetto(f.punteggio).nome), valore: Math.min(intero(oggetto(f.punteggio).valore), PUNTEGGIO_MAX) }
+  };
+}
+
+/** Un nemico su cui non è ancora scritto niente: nessuna soglia, nessun caso, azione, effetto, effetto di Magick. */
+export function nemicoVuoto(dati = datiNemico()) {
+  return !CAMPI.some((campo) => dati.soglie[campo] > 0)
+    && !Object.keys(dati.casi).length
+    && !Object.keys(dati.azioni).length
+    && !Object.keys(dati.effetti).length
+    && !Object.keys(dati.magick.effetti).length;
+}
+
+/**
+ * Il modo in cui si apre la scheda: quello scelto col tasto in testata; se
+ * nessuno l'ha ancora scelto, Scrivi su un nemico vuoto e Gioca su uno già
+ * scritto. Chi non può scrivere sulla scheda la vede sempre in Gioca.
+ */
+export function modoDelNemico(dati = datiNemico(), { puoScrivere = true } = {}) {
+  if (!puoScrivere) return "gioca";
+  return dati.modo || (nemicoVuoto(dati) ? "scrivi" : "gioca");
+}
+
+/**
+ * Il blocco della Natura, sotto le Azioni: niente per un PNG qualunque;
+ * «Poteri» col punteggio della Natura e i poteri del manuale; «Magick» per il
+ * Risvegliato, con l'Areté, le Sfere, gli effetti di Magick e i poteri. Un
+ * nemico che aveva la Magick accesa col vecchio tasto la tiene anche con
+ * un'altra Natura (`eredita`), finché il Narratore non la toglie.
+ */
+export function bloccoDellaNatura(natura, dati = datiNemico(), { localize = (k) => k } = {}) {
+  const profilo = profiloNatura(natura);
+  const eredita = profilo.blocco !== "magick" && dati.magick.on;
+  const tipo = eredita ? "magick" : profilo.blocco;
+  if (!tipo) return { tipo: "", titolo: "", magick: false, eredita: false, punteggio: { on: false, arete: false, nome: "", nomeScritto: "", nomeBase: "", valore: 0, campo: "", min: 0, max: 0 } };
+  const magick = tipo === "magick";
+  const nomeBase = magick ? localize("WOD5E_MAGE.Nemico.Punteggi.arete") : (profilo.punteggio ? localize(`WOD5E_MAGE.Nemico.Punteggi.${profilo.punteggio}`) : "");
+  const nome = magick ? nomeBase : dati.punteggio.nome || nomeBase;
+  return {
+    tipo,
+    titolo: localize(magick ? "WOD5E_MAGE.Nemico.Blocco.magick" : "WOD5E_MAGE.Nemico.Blocco.poteri"),
+    magick,
+    eredita,
+    punteggio: {
+      // Senza un nome il punteggio non si mostra: il Narratore lo scrive in Scrivi.
+      on: Boolean(nome),
+      arete: magick,
+      nome,
+      nomeScritto: magick ? "" : dati.punteggio.nome,
+      nomeBase,
+      valore: magick ? dati.magick.arete : dati.punteggio.valore,
+      campo: magick ? "magick.arete" : "punteggio.valore",
+      min: magick ? 1 : 0,
+      max: magick ? 5 : PUNTEGGIO_MAX
+    }
   };
 }
 
@@ -404,6 +507,7 @@ export function carteCampi(system = {}, dati = datiNemico(), { casi = [], malus 
       soglia: { value: soglia, base: sogliaBase, bonus: alza, mod: alza !== 0, hint: format("WOD5E_MAGE.Nemico.SogliaHint", { riserva: lettura.riserva, dadi: lettura.dadi, percento: lettura.percento }) },
       riserva: {
         ...riserva,
+        verso: versoDi(riserva.totale, riserva.base),
         hint: riserva.cambiata
           ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: localize(`WOD5E_MAGE.Nemico.Campi.${campo}`), base: riserva.base, voci: vociTesto(riserva.voci), dadi: riserva.totale })
           : format("WOD5E_MAGE.Nemico.TiraHint", { nome: localize(`WOD5E_MAGE.Nemico.Campi.${campo}`), conto: riserva.totale })
@@ -416,7 +520,7 @@ export function carteCampi(system = {}, dati = datiNemico(), { casi = [], malus 
           return { ...caso, aSoglia: true, value, mod: alzaCaso !== 0, hint: format("WOD5E_MAGE.Nemico.SogliaHint", { riserva: letturaCaso.riserva, dadi: letturaCaso.dadi, percento: letturaCaso.percento }) };
         }
         const scalata = riservaScalata(caso.dadi, malus[campo], mano);
-        return { ...caso, aSoglia: false, value: scalata.totale, mod: scalata.cambiata, riserva: scalata, hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: caso.nome, base: scalata.base, voci: vociTesto(scalata.voci), dadi: scalata.totale }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: caso.nome, conto: scalata.totale }) };
+        return { ...caso, aSoglia: false, value: scalata.totale, mod: scalata.cambiata, verso: versoDi(scalata.totale, scalata.base), riserva: scalata, hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: caso.nome, base: scalata.base, voci: vociTesto(scalata.voci), dadi: scalata.totale }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: caso.nome, conto: scalata.totale }) };
       })
     };
   });
@@ -526,16 +630,88 @@ export function azioniDelNemico(dati = datiNemico(), items = [], { system = {}, 
       testo: testo(azione.testo),
       // Il testo in breve, quando non è scritto a mano: danno · Condizione · portata.
       breve: { pezzi, condizione, portata },
-      riserva: { ...riserva, ...scalata, dadi: dadiDelTiro(scalata.totale, azione.soglia), hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: riserva.label, base: scalata.base, voci: vociTesto(scalata.voci), dadi: dadiDelTiro(scalata.totale, azione.soglia) }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: riserva.label, conto: dadiDelTiro(scalata.totale, azione.soglia) }) }
+      riserva: { ...riserva, ...scalata, dadi: dadiDelTiro(scalata.totale, azione.soglia), verso: versoDi(dadiDelTiro(scalata.totale, azione.soglia), scalata.base), hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: riserva.label, base: scalata.base, voci: vociTesto(scalata.voci), dadi: dadiDelTiro(scalata.totale, azione.soglia) }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: riserva.label, conto: dadiDelTiro(scalata.totale, azione.soglia) }) }
     };
   });
 }
 
-/** Gli effetti senza tiro: nome, testo, tipo. */
-export function effettiDelNemico(dati = datiNemico(), { localize = (k) => k, lang = "it" } = {}) {
+/** Il segno di un effetto che si accende o che risponde: il passivo è il nome solo. */
+export const TIPO_ICONE = Object.freeze({ attivo: "fa-solid fa-bolt", reazione: "fa-solid fa-reply" });
+
+/**
+ * Le parti di un potere del manuale, dal catalogo: il grado, le Sfere che lo
+ * aprono, l'effetto attivo col suo costo e il passivo con la sua cadenza. `mod`
+ * è la modifica del Narratore che vale per tutti (poteri-mod.js), se c'è.
+ * Torna null se il potere non è nel catalogo (tolto, o scritto prima).
+ */
+export function partiDelPotere(id, { mod = null, localize = (k) => k, catalog = POTERI } = {}) {
+  const entry = catalog.find((power) => power.id === String(id ?? ""));
+  if (!entry) return null;
+  const parti = quattroParti({}, { entry, mod, localize, catalog });
+  const sfere = (entry.spheres ?? []).filter((sfera) => SPHERES.includes(sfera)).map((sfera) => String(localize(`WOD5E_MAGE.Spheres.${sfera}`)));
+  // Le righe di una parte come sulla scheda del mago: la chiave («Accesso con Forze») a parte, coi sigilli delle Sfere.
+  const parte = (p) => ({ misura: p.misura, testo: p.testo, vuota: p.vuota, voci: p.voci.map((voce) => ({ chiave: voce.chiave, testo: voce.testo, accesso: voce.accesso, con: voce.con, sfere: voce.sfere })) });
+  return {
+    nome: String(entry.name ?? ""),
+    grado: parti.grado,
+    sfereTesto: sfere.join(", "),
+    attivo: parte(parti.attivo),
+    passivo: parte(parti.passivo)
+  };
+}
+
+/** Il tipo di un effetto preso dal catalogo: «attivo» se il potere ha un effetto attivo, altrimenti «passivo». */
+export function tipoDelPotere(entry) {
+  return /attiv/i.test(String(entry?.kind ?? entry?.type ?? "")) ? "attivo" : "passivo";
+}
+
+/**
+ * La riga che un potere del manuale lascia fra gli effetti del nemico: il
+ * nome, il tipo, la chiave del catalogo (il testo lo legge la scheda dal
+ * catalogo di adesso) e il primo blocco del testo, che resta se un giorno il
+ * potere esce dal catalogo.
+ */
+export function effettoDaPotere(entry, { sort = 0 } = {}) {
+  if (!entry) return null;
+  const pulito = String(entry.text ?? "").replace(/<[^>]+>/g, " ").replace(/[ \t]+/g, " ").trim();
+  const primo = pulito.split(/\n\s*\n/).map((blocco) => blocco.replace(/\s+/g, " ").trim()).filter(Boolean)[0] ?? "";
+  return { nome: String(entry.name ?? ""), testo: primo, tipo: tipoDelPotere(entry), catalogo: String(entry.id ?? ""), sort };
+}
+
+/**
+ * Le voci del PNG di M6 nella finestra «Crea attore» (Blue, 1/10): una per
+ * Natura. Ognuna crea un attore `spc` che nasce con la scheda del nemico e con
+ * la sua Natura (e lo spcType del sistema, quando la Natura ne ha uno), senza
+ * passare dalla scelta della scheda.
+ */
+export function vociCreazione({ localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
+  return NATURE.map((natura) => ({
+    natura: natura.id,
+    spcType: natura.spcType,
+    label: format("WOD5E_MAGE.Creation.Nemico.Voce", { natura: localize(natura.label) })
+  }));
+}
+
+/**
+ * Gli effetti senza tiro: nome, testo, tipo, se la pastiglia è aperta. Una riga
+ * presa dal catalogo è un potere del manuale: porta le sue parti (`potere`),
+ * lette dal catalogo di adesso; se il potere non c'è più resta il testo copiato.
+ */
+export function effettiDelNemico(dati = datiNemico(), { aperte = new Set(), potere = (id) => partiDelPotere(id), localize = (k) => k, lang = "it" } = {}) {
   return righeOrdinate(dati.effetti, lang).map((row) => {
     const tipo = TIPI_EFFETTO.includes(row.tipo) ? row.tipo : "passivo";
-    return { id: row.id, nome: testo(row.nome) || localize("WOD5E_MAGE.Nemico.EffettoNuovo"), testo: testo(row.testo), tipo, tipoLabel: localize(`WOD5E_MAGE.Nemico.Tipi.${tipo}`), catalogo: testo(row.catalogo) };
+    const catalogo = testo(row.catalogo);
+    return {
+      id: row.id,
+      nome: testo(row.nome) || localize("WOD5E_MAGE.Nemico.EffettoNuovo"),
+      testo: testo(row.testo),
+      tipo,
+      tipoLabel: localize(`WOD5E_MAGE.Nemico.Tipi.${tipo}`),
+      icona: TIPO_ICONE[tipo] ?? "",
+      catalogo,
+      potere: catalogo ? potere(catalogo) : null,
+      aperta: aperte.has(`effetto:${row.id}`)
+    };
   });
 }
 
@@ -655,8 +831,12 @@ export function magickDelNemico(dati = datiNemico(), { aperte = new Set(), attri
     // l'Impatto è uscito, e la soglia si rifà sugli Ambiti che restano.
     const conImpatto = intero(oggetto(row.ambiti).impact) > 0;
     const soglia = conImpatto ? sogliaDagliAmbiti(oggetto(row.ambiti), { impossibile: Boolean(row.impossibile) }).soglia : intero(row.soglia);
+    // Il sigillo della riga (1/10): il Dominio scritto; per una Formula, la prima Sfera d'Accesso che il nemico ha, o la prima che la apre.
+    const accessi = row.formula ? (findFormula(testo(row.formula))?.access ?? []).filter((id) => SPHERES.includes(id)) : [];
+    const sferaId = SPHERES.includes(dominio) ? dominio : accessi.find((id) => magick.domini[id]) ?? accessi[0] ?? "";
     return {
       id: row.id,
+      sfera: sferaId ? { id: sferaId, label: localize(`WOD5E_MAGE.Spheres.${sferaId}`), icon: `modules/${MODULE_ID}/assets/icons/sheet/${sferaId}.png` } : null,
       nome: testo(row.nome) || localize("WOD5E_MAGE.Nemico.EffettoNuovo"),
       breve: testo(row.breve),
       testo: testo(row.testo),
@@ -687,6 +867,7 @@ export function magickDelNemico(dati = datiNemico(), { aperte = new Set(), attri
     dominiScelti: domini.filter((d) => d.on),
     dominiTesto: domini.filter((d) => d.on).map((d) => d.label).join(", "),
     tipo: magick.tipo,
+    tipoLabel: localize(`WOD5E_MAGE.Nemico.TipiMagick.${magick.tipo}`),
     tipi: TIPI_MAGICK.map((id) => ({ id, label: localize(`WOD5E_MAGE.Nemico.TipiMagick.${id}`), on: id === magick.tipo })),
     effetti
   };
@@ -708,7 +889,7 @@ export function oggettiDelNemico(items = [], { azioni = [], localize = (k) => k,
     } else if (item.type === "armor") {
       const punti = intero(item.system?.armorvalue);
       const pieno = Math.max(intero(flags.armaturaPiena), punti);
-      righe.armor.push({ id, uuid, name: String(item.name ?? ""), punti, pieno, mentale: flags.armatura === "mentale", testo: [format("WOD5E_MAGE.Nemico.PuntiArmatura", { punti: pieno }), localize(flags.armatura === "mentale" ? "WOD5E_MAGE.Nemico.Mentale" : "WOD5E_MAGE.Nemico.Fisica"), pulisci(item.system?.description)].filter(Boolean).join(" · "), nota: localize("WOD5E_MAGE.Nemico.ArmaturaNota") });
+      righe.armor.push({ id, uuid, name: String(item.name ?? ""), punti, pieno, mentale: flags.armatura === "mentale", testo: [format("WOD5E_MAGE.Nemico.PuntiArmatura", { punti: pieno }), localize(flags.armatura === "mentale" ? "WOD5E_MAGE.Nemico.Mentale" : "WOD5E_MAGE.Nemico.Fisica"), pulisci(item.system?.description)].filter(Boolean).join(" · "), nota: format("WOD5E_MAGE.Nemico.ArmaturaNota", { restano: punti, pieno }) });
     } else {
       righe.gear.push({ id, uuid, name: String(item.name ?? ""), testo: pulisci(item.system?.description) || testo(flags.dettagli), nota: "" });
     }
@@ -717,7 +898,28 @@ export function oggettiDelNemico(items = [], { azioni = [], localize = (k) => k,
   return righe;
 }
 
-/** Le protezioni in testa: i punti pieni e vuoti, il nome, il conto, i tasti. */
+/**
+ * Un numero scritto in un campo: vuoto vale il minimo del campo (o 0), e resta
+ * fra il minimo e il massimo. Il form del sistema legge i numeri con parseInt:
+ * un campo svuotato scriverebbe NaN nei dati, e la soglia di un caso tornata
+ * vuota lo farebbe passare fra i casi a dadi.
+ */
+export function numeroDelCampo(raw, { min = "", max = "" } = {}) {
+  const basso = String(min ?? "") === "" ? -Infinity : Number(min);
+  const alto = String(max ?? "") === "" ? Infinity : Number(max);
+  const scritto = Number.parseInt(String(raw ?? "").trim(), 10);
+  const valore = Number.isFinite(scritto) ? scritto : (Number.isFinite(basso) ? Math.max(basso, 0) : 0);
+  return Math.min(Math.max(valore, Number.isFinite(basso) ? basso : valore), Number.isFinite(alto) ? alto : valore);
+}
+
+/** Il clic su un punto dell'armatura: il conto va lì; sull'ultimo punto pieno scende di uno (così si arriva a zero). */
+export function puntiAlClic(restano, n) {
+  const attuali = intero(restano);
+  const punto = intero(n);
+  return punto === attuali ? Math.max(attuali - 1, 0) : punto;
+}
+
+/** Le protezioni in testa: i punti pieni e vuoti (ognuno si clicca), il nome, il conto. */
 export function armatureTestata(items = [], { format = (k, d) => `${k} ${JSON.stringify(d)}`, localize = (k) => k } = {}) {
   return (items ?? []).filter((item) => item?.type === "armor").map((item) => {
     const flags = oggetto(item.flags?.[MODULE_ID]);
@@ -731,7 +933,8 @@ export function armatureTestata(items = [], { format = (k, d) => `${k} ${JSON.st
       mentale: flags.armatura === "mentale",
       kindLabel: localize(flags.armatura === "mentale" ? "WOD5E_MAGE.Nemico.Mentale" : "WOD5E_MAGE.Nemico.Fisica"),
       conto: format("WOD5E_MAGE.Nemico.ArmaturaConto", { restano, pieno }),
-      pips: Array.from({ length: pieno }, (_, index) => ({ pieno: index < restano }))
+      // I punti si cliccano uno per uno (1/10): il clic su un punto porta lì il conto, e sull'ultimo pieno lo toglie.
+      pips: Array.from({ length: pieno }, (_, index) => ({ n: index + 1, pieno: index < restano, punti: puntiAlClic(restano, index + 1) }))
     };
   });
 }
@@ -755,7 +958,7 @@ export function armaturaDi(items = []) {
  * gli Item dell'attore); `stato` è la memoria della scheda (le righe aperte,
  * il cassetto, il modulo a mano).
  */
-export function prepareNemicoContext({ actor = {}, items = [], salute = null, stato = {}, nomi = {}, attributi = null, abilita = null, condizioniScelta = [], localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}`, lang = "it" } = {}) {
+export function prepareNemicoContext({ actor = {}, items = [], salute = null, stato = {}, nomi = {}, attributi = null, abilita = null, condizioniScelta = [], puoScrivere = true, disposizione = null, potere = null, localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}`, lang = "it" } = {}) {
   const system = oggetto(actor.system);
   // I nomi degli Attributi e delle Abilità, per il tiro di resistenza e i casi.
   const nomiAttributi = attributi ?? Object.fromEntries(ATTRIBUTE_KEYS.map((id) => [id, String(localize(`WOD5E_MAGE.Nemico.Attributi.${id}`))]));
@@ -775,9 +978,28 @@ export function prepareNemicoContext({ actor = {}, items = [], salute = null, st
   const azioni = azioniDelNemico(dati, items, { system, casi, malus, aperte, localize, format, lang });
   const magick = magickDelNemico(dati, { aperte, attributi: nomiAttributi, abilita: nomiAbilita, localize, format, lang });
   const natura = naturaDi(dati, system.spcType);
-  const disposizione = disposizioneDi(actor.prototypeToken?.disposition);
+  // La disposizione: quella del token se la scheda è di un token, altrimenti quella del prototipo.
+  const disp = disposizioneDi(disposizione ?? actor.prototypeToken?.disposition);
   const effettiMagick = magick.effetti.length;
+  // Il modo (1/10): Gioca o Scrivi; chi non può scrivere vede sempre Gioca.
+  const modo = modoDelNemico(dati, { puoScrivere });
+  const scrivi = modo === "scrivi";
+  // Il blocco della Natura e i poteri del manuale: le righe prese dal catalogo stanno nel blocco, le altre negli Effetti.
+  const blocco = bloccoDellaNatura(natura, dati, { localize });
+  const tuttiGliEffetti = effettiDelNemico(dati, { aperte, potere: potere ?? ((id) => partiDelPotere(id, { localize })), localize, lang });
+  const poteri = blocco.tipo ? tuttiGliEffetti.filter((effetto) => effetto.catalogo) : [];
+  const effetti = blocco.tipo ? tuttiGliEffetti.filter((effetto) => !effetto.catalogo) : tuttiGliEffetti;
   return {
+    modo,
+    scrivi,
+    // Su un nemico ancora vuoto i posti vuoti dicono cosa ci va (gli esempi dei casi, l'arma che crea la sua azione).
+    vuoto: nemicoVuoto(dati),
+    puoScrivere: Boolean(puoScrivere),
+    modi: MODI.map((id) => ({ id, label: localize(`WOD5E_MAGE.Nemico.Modi.${id}`), hint: localize(`WOD5E_MAGE.Nemico.Modi.${id}Hint`), on: id === modo })),
+    blocco,
+    poteri,
+    // I poteri sotto la Magick si mostrano se ce ne sono, o in Scrivi per aggiungerne; nel blocco dei Poteri sempre.
+    mostraPoteri: Boolean(blocco.tipo) && (!blocco.magick || scrivi || poteri.length > 0),
     nome: String(actor.name ?? ""),
     img: String(actor.img ?? ""),
     concetto: testo(oggetto(system.headers).concept),
@@ -786,7 +1008,8 @@ export function prepareNemicoContext({ actor = {}, items = [], salute = null, st
     naturaLabel: localize(NATURE.find((n) => n.id === natura)?.label ?? NATURE[0].label),
     fazione: dati.fazione,
     appartenenza: [localize(NATURE.find((n) => n.id === natura)?.label ?? NATURE[0].label), dati.fazione].filter(Boolean).join(" · "),
-    disposizione: { ...disposizione, label: localize(disposizione.label) },
+    disposizione: { ...disp, label: localize(disp.label) },
+    disposizioni: DISPOSIZIONI_ORDINE.map((key) => ({ ...DISPOSIZIONI[key], label: localize(DISPOSIZIONI[key].label), on: DISPOSIZIONI[key].id === disp.id })),
     salute,
     saluteMax: intero(oggetto(system.health).max, 1) || 1,
     armature: armatureTestata(items, { format, localize }),
@@ -804,12 +1027,12 @@ export function prepareNemicoContext({ actor = {}, items = [], salute = null, st
     casi,
     riserve: sceltaRiserve(casi, localize),
     azioni,
-    effetti: effettiDelNemico(dati, { localize, lang }),
+    effetti,
     magick,
     magickEffetti: effettiMagick,
+    // Le pagine (1/10): la Magick non ha più una linguetta sua, sta nel blocco della Natura dentro In gioco.
     pagine: [
       { id: "gioco", label: localize("WOD5E_MAGE.Nemico.Pagine.gioco") },
-      ...(magick.on ? [{ id: "magick", label: localize("WOD5E_MAGE.Nemico.Pagine.magick"), conto: effettiMagick }] : []),
       { id: "oggetti", label: localize("WOD5E_MAGE.Nemico.Pagine.oggetti") },
       { id: "note", label: localize("WOD5E_MAGE.Nemico.Pagine.note") }
     ],

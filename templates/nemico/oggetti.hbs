@@ -1,31 +1,38 @@
-{{!-- Oggetti (Blue, 25/9, dal mock): tre gruppi, Armi, Protezioni, Oggetti,
-     gli stessi tipi e lo stesso compendio della scheda del mago. Riga: nome,
-     cosa fa, una nota breve («crea Spara», «armatura»), la mano che lo dà a un
-     PG, la matita e il cestino. In fondo «dal compendio» e «crea»; il
-     trascinamento dal compendio funziona come sul mago. --}}
+{{!-- Oggetti, rifatta l'1/10 sul mock approvato: tre riquadri, Armi, Protezioni,
+     Oggetti, gli stessi tipi e lo stesso compendio della scheda del mago. Una
+     riga per oggetto: il nome, cosa fa, una nota breve («crea Spara»,
+     «armatura») e «Dai», che lo passa a un PG. In Scrivi la matita e il
+     cestino, e in fondo a ogni lista il posto vuoto: dal compendio, o a mano.
+     Il trascinamento dal compendio funziona come sul mago. --}}
 <section class="tab {{tab.cssClass}} wod5e-mage-nemico-corpo" data-tab="{{tab.id}}" data-group="{{tab.group}}">
     {{#each oggettiGruppi as |gruppo|}}
-        <div class="wod5e-mage-nemico-sez">
-            <span>{{gruppo.label}}</span>
-            {{#unless @root.locked}}<span class="wod5e-mage-nemico-agg"><button type="button" data-action="archivioOpen" data-kind="equip-{{gruppo.id}}" data-kinds="equip-weapon,equip-armor,equip-gear"><i class="fa-solid fa-book-open" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.DalCompendio"}}</button><button type="button" data-action="createItem" data-type="{{gruppo.id}}"><i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.Crea"}}</button></span>{{/unless}}
-        </div>
-        <div class="wod5e-mage-nemico-lista">
-            {{#each gruppo.righe as |o|}}
-                <div class="wod5e-mage-nemico-riga" data-item-id="{{o.id}}" data-drag="true" data-document-uuid="{{o.uuid}}" data-type="Item">
-                    <span class="wod5e-mage-nemico-r-nome">{{o.name}}</span>
-                    <span class="wod5e-mage-nemico-r-eff">{{o.testo}}</span>
-                    <span class="wod5e-mage-nemico-r-costo">{{o.nota}}</span>
-                    <span class="wod5e-mage-nemico-r-tasti">
-                        <button type="button" class="wod5e-mage-nemico-bt" data-action="nemicoDai" data-item-id="{{o.id}}" title="{{localize 'WOD5E_MAGE.Nemico.Dai'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Dai'}}: {{o.name}}"><i class="fa-solid fa-hand-holding" aria-hidden="true"></i></button>
-                        {{#unless @root.locked}}
-                            <button type="button" class="wod5e-mage-nemico-bt tenue" data-action="itemEdit" data-item-id="{{o.id}}" title="{{localize 'WOD5E.Edit'}}" aria-label="{{localize 'WOD5E.Edit'}}: {{o.name}}"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
-                            <button type="button" class="wod5e-mage-nemico-bt tenue" data-action="itemDelete" data-item-id="{{o.id}}" title="{{localize 'WOD5E_MAGE.Nemico.OggettoTogli'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.OggettoTogli'}}: {{o.name}}"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
-                        {{/unless}}
-                    </span>
-                </div>
-            {{else}}
-                <p class="wod5e-mage-nemico-vuoto">{{localize "WOD5E_MAGE.Nemico.OggettoVuoto"}}</p>
-            {{/each}}
+        <div class="wod5e-mage-nemico-riq" data-gruppo="{{gruppo.id}}">
+            <h3 class="wod5e-mage-nemico-titolo">{{gruppo.label}}</h3>
+            <div class="wod5e-mage-nemico-righe">
+                {{#each gruppo.righe as |o|}}
+                    <div class="wod5e-mage-nemico-riga" data-item-id="{{o.id}}" data-drag="true" data-document-uuid="{{o.uuid}}" data-type="Item">
+                        <div class="wod5e-mage-nemico-riga-testa">
+                            <span class="wod5e-mage-nemico-riga-nome"><b>{{o.name}}</b>{{#if o.testo}}<span title="{{o.testo}}">{{o.testo}}</span>{{/if}}</span>
+                            <span class="wod5e-mage-nemico-riga-dx">
+                                {{#if o.nota}}<span class="wod5e-mage-nemico-dato">{{o.nota}}</span>{{/if}}
+                                {{#if @root.puoScrivere}}<button type="button" class="wod5e-mage-nemico-tasto" data-action="nemicoDai" data-item-id="{{o.id}}" title="{{localize 'WOD5E_MAGE.Nemico.Dai'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Dai'}}: {{o.name}}">{{localize "WOD5E_MAGE.Nemico.DaiBreve"}}</button>{{/if}}
+                                {{#if @root.scrivi}}
+                                    <button type="button" class="wod5e-mage-nemico-matita" data-action="itemEdit" data-item-id="{{o.id}}" title="{{localize 'WOD5E.Edit'}}" aria-label="{{localize 'WOD5E.Edit'}}: {{o.name}}"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
+                                    <button type="button" class="wod5e-mage-nemico-matita" data-action="itemDelete" data-item-id="{{o.id}}" title="{{localize 'WOD5E_MAGE.Nemico.OggettoTogli'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.OggettoTogli'}}: {{o.name}}"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+                                {{/if}}
+                            </span>
+                        </div>
+                    </div>
+                {{else}}
+                    {{#unless @root.scrivi}}<p class="wod5e-mage-nemico-nessuna">{{localize "WOD5E_MAGE.Nemico.OggettoVuoto"}}</p>{{/unless}}
+                {{/each}}
+                {{#if @root.scrivi}}
+                    <div class="wod5e-mage-nemico-aggiungi doppio">
+                        <button type="button" data-action="archivioOpen" data-kind="equip-{{gruppo.id}}" data-kinds="equip-weapon,equip-armor,equip-gear"><i class="fa-solid fa-plus" aria-hidden="true"></i><b>{{localize (concat "WOD5E_MAGE.Nemico.OggettoAggiungi." gruppo.id)}}</b><small>{{localize "WOD5E_MAGE.Nemico.DalCompendio"}}</small></button>
+                        <button type="button" data-action="createItem" data-type="{{gruppo.id}}">{{localize "WOD5E_MAGE.Nemico.CreaMano"}}</button>
+                    </div>
+                {{/if}}
+            </div>
         </div>
     {{/each}}
 </section>

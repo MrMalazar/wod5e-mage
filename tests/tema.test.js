@@ -92,6 +92,16 @@ frame = fakeFrame(false);
 applicaScala(frame, "piccolo");
 assert.equal(frame.vars["--mage-scala"], "0.88");
 applicaScala(null, "piccolo");
+// Una finestra con la sua misura a scala 1 (la scheda del nemico, 960 × 770) si scala su quella: nel portatile ci sta quasi intera.
+frame = fakeFrame(false);
+applicaScala(frame, "medio", { viewport: { innerWidth: 1366, innerHeight: 768 } });
+assert.deepEqual([frame.vars["--mage-scala"], frame.dataset.scalaSchermo], ["0.67", "0.67"]);
+applicaScala(frame, "medio", { viewport: { innerWidth: 1366, innerHeight: 768 }, naturale: { width: 960, height: 770 } });
+assert.deepEqual([frame.vars["--mage-scala"], frame.dataset.scalaSchermo], ["0.95", "0.95"]);
+applicaScala(frame, "medio", { viewport: { innerWidth: 1920, innerHeight: 1080 }, naturale: { width: 960, height: 770 } });
+assert.equal(frame.vars["--mage-scala"], "1");
+applicaScala(frame, "medio", { viewport: { innerWidth: 1366, innerHeight: 768 }, naturale: undefined });
+assert.equal(frame.vars["--mage-scala"], "0.67", "senza una misura sua vale quella del mago");
 
 // La scheda: i due tasti entrano nella cornice a sinistra dei tre pallini
 // (prima la misura, poi il tema), le azioni sono registrate, tema e misura

@@ -19,7 +19,7 @@
     <div class="wod5e-mage-grimorio-top wod5e-mage-catalogo-top">
         {{#if icon}}<img class="wod5e-mage-catalogo-sigillo" src="{{icon}}" alt="">{{/if}}
         <input type="search" class="wod5e-mage-grimorio-search" data-role="catalogoSearch" placeholder="{{localize 'WOD5E_MAGE.Poteri.CatalogoCerca'}}" aria-label="{{localize 'WOD5E_MAGE.Poteri.CatalogoCerca'}}">
-        <span class="wod5e-mage-catalogo-conto" data-role="catalogoConto">{{localize "WOD5E_MAGE.Poteri.CatalogoConto" total=totale known=conosciuti}}</span>
+        <span class="wod5e-mage-catalogo-conto" data-role="catalogoConto">{{#if aggiungi}}{{localize "WOD5E_MAGE.Nemico.CatalogoConto" total=totale known=conosciuti}}{{else}}{{localize "WOD5E_MAGE.Poteri.CatalogoConto" total=totale known=conosciuti}}{{/if}}</span>
     </div>
     {{#unless tutto}}
         {{!-- Il Dominio è di famiglia o esterno, e quanto costa ogni grado (25/9 sera: «nell'elenco non è capibile»). --}}
@@ -40,7 +40,10 @@
                     <em class="wod5e-mage-grimorio-formula">{{voce.formulaName}}</em>
                     <span class="wod5e-mage-catalogo-tipi">{{#if voce.tipi.attivo}}<small class="attivo">{{localize "WOD5E_MAGE.Poteri.Tipo.attivo"}}</small>{{/if}}{{#if voce.tipi.passivo}}<small class="passivo">{{localize "WOD5E_MAGE.Poteri.Tipo.passivo"}}</small>{{/if}}</span>
                     <span class="wod5e-mage-catalogo-azione">
-                        {{#if @root.tutto}}
+                        {{#if @root.aggiungi}}
+                            {{!-- Il catalogo per un PNG (1/10): «Aggiungi» su ogni riga, senza prerequisiti; lo decide il Narratore. --}}
+                            <button type="button" class="wod5e-mage-catalogo-aggiungi" data-role="catalogoAggiungi" data-catalogo="{{voce.id}}" {{#if voce.known}}disabled{{/if}}>{{#if voce.known}}<i class="fa-solid fa-check" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Nemico.PotereGia"}}{{else}}<i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Aggiungi"}}{{/if}}</button>
+                        {{else if @root.tutto}}
                             {{#if voce.known}}<span class="wod5e-mage-catalogo-spunta" title="{{localize 'WOD5E_MAGE.Poteri.Conosciuto'}}"><i class="fa-solid fa-check" aria-hidden="true"></i></span>{{/if}}
                         {{else}}
                             <button type="button" class="wod5e-mage-catalogo-aggiungi" data-role="catalogoAggiungi" data-catalogo="{{voce.id}}" {{#if voce.known}}disabled title="{{voce.knownHint}}"{{else if voce.locked}}disabled title="{{voce.lockedHint}}"{{/if}}>{{#if voce.known}}<i class="fa-solid fa-check" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Conosciuto"}}{{else}}<i class="fa-solid fa-plus" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Poteri.Aggiungi"}}{{/if}}</button>

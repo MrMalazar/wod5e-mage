@@ -1,27 +1,33 @@
 /**
- * La scheda del nemico (Blue, 25/9, dal mock docs/mock_scheda_nemico_25-9.html):
- * una scheda in più per gli attori `spc` del sistema, «Scheda del nemico
- * (M6)». La testata resta sempre (chi è, Salute, Armatura, Condizioni); sotto
- * quattro pagine: In gioco, Magick (solo se ce l'ha), Oggetti, Note. I conti
- * e i contesti stanno in nemico.js (funzioni pure), le carte in chat in
- * nemico-chat.js; qui la finestra, le azioni e la memoria della scheda (le
- * righe aperte, il cassetto, il modulo a mano).
+ * La scheda del nemico (Blue, 25/9; rifatta l'1/10 sul mock
+ * docs/mock_scheda_nemico_1-10.html): una scheda in più per gli attori `spc`
+ * del sistema, «Scheda del nemico (M6)». La testata resta sempre (chi è,
+ * Salute, Armatura, Condizioni); sotto tre pagine: In gioco, Oggetti, Note.
+ * La Magick non ha più una pagina sua: sta nel blocco della Natura, dentro In
+ * gioco. I conti e i contesti stanno in nemico.js (funzioni pure), le carte in
+ * chat in nemico-chat.js; qui la finestra, le azioni e la memoria della scheda
+ * (le righe aperte, il cassetto, il modulo a mano).
+ *
+ * Due modi, col tasto in testata: in Gioca cambia lo stato (Salute, armatura,
+ * Condizioni, mano del Narratore, tiri) e la scheda resta com'è; in Scrivi
+ * cambia la scheda. Il modo è una bandiera del modulo (flags.wod5e-mage.
+ * nemico.modo), non il lucchetto del sistema, che fermerebbe anche l'armatura.
  *
  * I dati nuovi stanno in flags.wod5e-mage.nemico; i campi col `name` si
  * salvano da soli al cambio, col form del sistema. Estende la scheda spc del
- * sistema: da lì arrivano il trascinamento degli oggetti, il ritratto, il
- * lucchetto, la vista limitata.
+ * sistema: da lì arrivano il trascinamento degli oggetti e la vista limitata.
  */
 import { SPCActorSheet } from "/systems/wod5e/system/actor/spc-actor-sheet.js";
 import { onArchivioOpen } from "../archivi.js";
 import { onCondizioneToggle, prepareCondizioni } from "../condizioni.js";
 import { MODULE_ID } from "../constants.js";
+import { openCatalogoPerNemico } from "../catalogo-poteri.js";
 import { POTERI } from "../data/poteri.js";
-import { onArmaturaColpo, onArmaturaPunto } from "../dotazione-extra.js";
 import { findFormula } from "../grimorio.js";
-import { CAMPI, effettoDaFormula, idNuovo, malusCondizioni, manoDelNarratore, NEMICO_FLAG, prepareNemicoContext, puoAlzare, riservaDellAzione, riservaScalata, sogliaDagliAmbiti, TIPI_MAGICK } from "../nemico.js";
+import { CAMPI, datiNemico, effettoDaFormula, effettoDaPotere, idNuovo, malusCondizioni, manoDelNarratore, MODI, modoDelNemico, NEMICO_FLAG, numeroDelCampo, partiDelPotere, prepareNemicoContext, puoAlzare, riservaDellAzione, riservaScalata, sogliaDagliAmbiti } from "../nemico.js";
 import { lanciaNemico, tiraNemico } from "../nemico-chat.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
+import { modDelMondo, POTERI_MOD_SETTING } from "../poteri-mod.js";
 import { getSalute, onSaluteCellChange, onSaluteDanni, onSaluteReset, onSaluteRiposo } from "../salute.js";
 import { scopeLensIds } from "../scopes.js";
 import { SPHERES } from "../spheres.js";
@@ -30,8 +36,8 @@ import { chiudiRuote, onVentaglioChiudi, onVentaglioToggle, wireCassetti } from 
 
 const NEMICO = `modules/${MODULE_ID}/templates/nemico`;
 
-/** La misura naturale della finestra (il mock): si adatta allo schermo come la scheda del mago. */
-export const MISURA_NEMICO = Object.freeze({ width: 940, height: 820 });
+/** La misura naturale della finestra (il mock dell'1/10): si adatta allo schermo come la scheda del mago. */
+export const MISURA_NEMICO = Object.freeze({ width: 960, height: 770 });
 
 const DISPOSIZIONI = ["ostile", "neutrale", "amichevole", "segreto"];
 
@@ -57,9 +63,10 @@ function togli(sheet, path, key) {
   return sheet.actor.update({ [`${radice(path)}.-=${key}`]: null });
 }
 
+/** Chi può cambiare la scheda: chi la possiede. Il lucchetto del sistema qui non conta (1/10): c'è il modo, Gioca o Scrivi. */
 function puoScrivere(sheet) {
   const actor = sheet.actor;
-  if (actor.isOwner && !actor.system?.locked) return true;
+  if (actor.isOwner) return true;
   ui.notifications.warn(format("WOD5E.Notifications.NoSufficientPermission", { string: actor.name }));
   return false;
 }
@@ -70,12 +77,6 @@ function bandiera(sheet) {
 
 function nuovoId(sheet, tavola) {
   return idNuovo(tavola ?? {}, () => foundry.utils.randomID());
-}
-
-/** Il primo blocco del testo di un potere, per l'effetto copiato dal catalogo. */
-function primoBlocco(text) {
-  const pulito = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-  return pulito.split(/(?=Effetto (?:attivo|passivo):)/i).map((parte) => parte.trim()).filter(Boolean)[0] ?? pulito;
 }
 
 /* ------------------------------------------------------------- le azioni */
@@ -95,18 +96,53 @@ async function onRitrattoCambia(event) {
   await picker.browse();
 }
 
-async function onMagickAccendi(event) {
-  event.preventDefault();
-  if (!puoScrivere(this)) return;
-  this.tabGroups.primary = "magick";
-  await scrivi(this, "magick.on", true);
-}
-
+/** «Togli la Magick» a un nemico che l'aveva accesa col vecchio tasto e ha un'altra Natura: gli effetti restano scritti. */
 async function onMagickSpegni(event) {
   event.preventDefault();
   if (!puoScrivere(this)) return;
-  this.tabGroups.primary = "gioco";
+  this._stato.cassetto = "";
   await scrivi(this, "magick.on", false);
+}
+
+/** Il tasto dei due modi: Gioca o Scrivi. Toglie anche il lucchetto del sistema, che qui non serve e fermerebbe l'armatura. */
+async function onNemicoModo(event, target) {
+  event.preventDefault();
+  if (!puoScrivere(this)) return;
+  const modo = String(target.dataset.modo ?? "");
+  // Il modo di adesso non si riscrive: niente cambia, e le righe aperte restano aperte.
+  if (!MODI.includes(modo) || modo === modoDelNemico(datiNemico(bandiera(this)))) return;
+  // Uscendo da Scrivi le righe aperte per riscriverle si richiudono, e il cassetto pure.
+  this._stato.aperte.clear();
+  this._stato.cassetto = "";
+  const update = { [radice("modo")]: modo };
+  if (this.actor.system?.locked) update["system.locked"] = false;
+  await this.actor.update(update);
+}
+
+/** La mano del Narratore: meno e più, fra −10 e +10. */
+async function onNemicoMano(event, target) {
+  event.preventDefault();
+  if (!puoScrivere(this)) return;
+  const delta = Math.trunc(Number(target.dataset.delta) || 0);
+  const attuale = datiNemico(bandiera(this)).manoNarratore;
+  const nuovo = Math.max(Math.min(attuale + delta, 10), -10);
+  if (nuovo !== attuale) await scrivi(this, "manoNarratore", nuovo);
+}
+
+/** Un punto dell'armatura: il conto va dove dice il punto cliccato (nemico.js, puntiAlClic). */
+async function onNemicoArmatura(event, target) {
+  event.preventDefault();
+  if (!puoScrivere(this)) return;
+  const item = this.actor.items.get(String(target.dataset.itemId ?? ""));
+  if (!item || item.type !== "armor") return;
+  const attuali = Math.max(Math.trunc(Number(item.system?.armorvalue)) || 0, 0);
+  const punti = Math.max(Math.trunc(Number(target.dataset.punti) || 0), 0);
+  if (punti === attuali) return;
+  const update = { "system.armorvalue": punti };
+  // Un'armatura che non ricorda il suo pieno lo prende dal punteggio di prima.
+  const pieno = Math.trunc(Number(item.flags?.[MODULE_ID]?.armaturaPiena) || 0);
+  if (pieno <= 0) update[`flags.${MODULE_ID}.armaturaPiena`] = Math.max(attuali, punti);
+  await item.update(update);
 }
 
 /** La riserva d'oro di una carta, o un caso a dadi: tira. */
@@ -186,79 +222,60 @@ async function onNemicoCasoNuovo(event, target) {
 async function onNemicoCasoTogli(event, target) {
   event.preventDefault();
   if (!puoScrivere(this)) return;
-  await togli(this, "casi", String(target.dataset.caso ?? ""));
+  const id = String(target.dataset.caso ?? "");
+  // Un caso a dadi del sistema (una riserva eccezionale accesa) non si cancella: si spegne.
+  if (id.startsWith("skill:")) await this.actor.update({ [`system.exceptionaldicepools.${id.slice(6)}.active`]: false });
+  else await togli(this, "casi", id);
+}
+
+/** La pastiglia di un effetto o di un potere: il clic apre il testo sotto (in Scrivi, i campi), un altro lo richiude. */
+async function onNemicoEffettoApri(event, target) {
+  event.preventDefault();
+  const chiave = `effetto:${String(target.dataset.effetto ?? "")}`;
+  if (this._stato.aperte.has(chiave)) this._stato.aperte.delete(chiave); else this._stato.aperte.add(chiave);
+  await this.render({ parts: ["gioco"] });
 }
 
 async function onNemicoEffettoNuovo(event) {
   event.preventDefault();
   if (!puoScrivere(this)) return;
   const id = nuovoId(this, bandiera(this).effetti);
+  this._stato.aperte.add(`effetto:${id}`);
   await scrivi(this, `effetti.${id}`, { nome: localize("WOD5E_MAGE.Nemico.EffettoNuovo"), testo: "", tipo: "passivo", catalogo: "", sort: Date.now() });
 }
 
 async function onNemicoEffettoTogli(event, target) {
   event.preventDefault();
   if (!puoScrivere(this)) return;
-  await togli(this, "effetti", String(target.dataset.effetto ?? ""));
+  const id = String(target.dataset.effetto ?? "");
+  this._stato.aperte.delete(`effetto:${id}`);
+  await togli(this, "effetti", id);
 }
 
-/** «Dal catalogo»: la finestra coi poteri dei maghi; il + copia nome e testo, e la riga porta il libro. */
+/**
+ * «Potere»: il catalogo dei poteri del manuale, lo stesso della scheda del mago,
+ * Sfera per Sfera e in ordine di grado; «Aggiungi» mette il potere sul nemico
+ * (senza prerequisiti né prezzo: lo decide il Narratore) e la finestra resta
+ * aperta. Sulla scheda la riga porta la chiave del catalogo: il testo si legge
+ * dal catalogo di adesso.
+ */
 async function onNemicoEffettoCatalogo(event) {
   event.preventDefault();
   if (!puoScrivere(this)) return;
-  const poteri = POTERI.map((power) => ({
-    id: power.id,
-    name: power.name,
-    breve: primoBlocco(power.text).slice(0, 110),
-    testo: primoBlocco(power.text),
-    sfere: (power.spheres ?? []).filter((id) => SPHERES.includes(id)).map((id) => ({ id, icon: `modules/${MODULE_ID}/assets/icons/sheet/${id}.png`, label: localize(`WOD5E_MAGE.Spheres.${id}`) })),
-    tipoLabel: String(power.kind ?? ""),
-    search: `${power.name} ${power.text}`.toLowerCase()
-  })).sort((a, b) => a.name.localeCompare(b.name, game.i18n.lang));
-  const content = await foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/nemico-catalogo.hbs`, { poteri });
   const sheet = this;
-  await foundry.applications.api.DialogV2.wait({
-    window: { title: localize("WOD5E_MAGE.Nemico.CatalogoTitolo") },
-    position: { width: 640, height: 640 },
-    content,
-    classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-archivio-dialog", "wod5e-mage-nemico-catalogo-dialog"],
-    buttons: [{ action: "close", icon: "fas fa-times", label: localize("WOD5E.Close"), default: true }],
-    render: (_event, dialog) => {
-      const root = dialog.element;
-      const search = root.querySelector("[data-role=nemicoCatalogoCerca]");
-      const righe = [...root.querySelectorAll("[data-role=nemicoCatalogoVoce]")];
-      const vuoto = root.querySelector("[data-role=nemicoCatalogoVuoto]");
-      const filtra = () => {
-        const needle = String(search?.value ?? "").trim().toLowerCase();
-        let viste = 0;
-        for (const riga of righe) {
-          const ok = !needle || String(riga.dataset.search ?? "").includes(needle);
-          riga.hidden = !ok;
-          if (ok) viste += 1;
-        }
-        if (vuoto) vuoto.hidden = viste > 0;
-      };
-      search?.addEventListener("input", filtra);
-      for (const button of root.querySelectorAll("[data-role=nemicoCatalogoAggiungi]")) {
-        button.addEventListener("click", async (clic) => {
-          clic.preventDefault();
-          const power = poteri.find((p) => p.id === button.dataset.potere);
-          if (!power) return;
-          const id = nuovoId(sheet, bandiera(sheet).effetti);
-          const tipo = /passiv/i.test(power.tipoLabel) ? "passivo" : "attivo";
-          await scrivi(sheet, `effetti.${id}`, { nome: power.name, testo: power.testo, tipo, catalogo: power.id, sort: Date.now() });
-          button.classList.add("viola");
-          button.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i>';
-        });
-      }
+  const presi = Object.values(bandiera(this).effetti ?? {}).map((row) => String(row?.catalogo ?? "")).filter(Boolean).map((catalogId) => ({ catalogId, sphere: "" }));
+  await openCatalogoPerNemico({
+    owned: presi,
+    titolo: format("WOD5E_MAGE.Nemico.CatalogoTitoloDi", { nome: this.actor.name }),
+    onAdd: async (catalogId) => {
+      const entry = POTERI.find((power) => power.id === catalogId);
+      const effetti = bandiera(sheet).effetti ?? {};
+      if (!entry || Object.values(effetti).some((row) => row?.catalogo === catalogId)) return false;
+      const id = nuovoId(sheet, effetti);
+      await scrivi(sheet, `effetti.${id}`, effettoDaPotere(entry, { sort: Date.now() }));
+      return true;
     }
   });
-}
-
-async function onNemicoArete(event, target) {
-  event.preventDefault();
-  if (!puoScrivere(this)) return;
-  await scrivi(this, "magick.arete", Math.min(Math.max(Math.trunc(Number(target.dataset.level) || 1), 1), 5));
 }
 
 async function onNemicoDominio(event, target) {
@@ -271,18 +288,21 @@ async function onNemicoDominio(event, target) {
   else await scrivi(this, `magick.domini.${sfera}`, true);
 }
 
-async function onNemicoTipoMagick(event, target) {
-  event.preventDefault();
-  if (!puoScrivere(this)) return;
-  const tipo = String(target.dataset.tipo ?? "");
-  if (TIPI_MAGICK.includes(tipo)) await scrivi(this, "magick.tipo", tipo);
-}
-
+/** «Effetto di Magick»: apre il cassetto (dal Grimorio, la prima volta) e un altro clic lo richiude. */
 async function onNemicoCassetto(event, target) {
   event.preventDefault();
   const id = String(target.dataset.cassetto ?? "");
   this._stato.cassetto = this._stato.cassetto === id ? "" : id;
-  await this.render({ parts: ["magick"] });
+  await this.render({ parts: ["gioco"] });
+}
+
+/** Le due strade del cassetto: dal Grimorio o a mano. */
+async function onNemicoCassettoVia(event, target) {
+  event.preventDefault();
+  const id = String(target.dataset.cassetto ?? "");
+  if (!["grimorio", "mano"].includes(id) || this._stato.cassetto === id) return;
+  this._stato.cassetto = id;
+  await this.render({ parts: ["gioco"] });
 }
 
 /** Dal Grimorio: la Formula com'è, con la soglia base e i suoi Ambiti; la resistenza resta da scrivere. */
@@ -303,7 +323,7 @@ async function onNemicoLente(event, target) {
   // Condizioni e Precisione ne hanno tre).
   const quante = Math.max(scopeLensIds(scope).length, 1);
   this._stato.mano.lenti[scope] = ((Math.trunc(Number(this._stato.mano.lenti[scope]) || 0)) + 1) % quante;
-  await this.render({ parts: ["magick"] });
+  await this.render({ parts: ["gioco"] });
 }
 
 async function onNemicoAmbito(event, target) {
@@ -318,7 +338,7 @@ async function onNemicoAmbito(event, target) {
     return;
   }
   this._stato.mano.livelli[scope] = nuovo;
-  await this.render({ parts: ["magick"] });
+  await this.render({ parts: ["gioco"] });
 }
 
 async function onNemicoManoScelta(event, target) {
@@ -326,7 +346,7 @@ async function onNemicoManoScelta(event, target) {
   const campo = String(target.dataset.campo ?? "");
   if (!["dominio", "come"].includes(campo)) return;
   this._stato.mano[campo] = String(target.dataset.value ?? "");
-  await this.render({ parts: ["magick"] });
+  await this.render({ parts: ["gioco"] });
 }
 
 /** «Aggiungi» del cassetto a mano: l'effetto coi suoi Ambiti e la soglia sommata. */
@@ -360,7 +380,7 @@ async function onNemicoMagickApri(event, target) {
   event.preventDefault();
   const id = String(target.dataset.effetto ?? "");
   if (this._stato.aperte.has(id)) this._stato.aperte.delete(id); else this._stato.aperte.add(id);
-  await this.render({ parts: ["magick"] });
+  await this.render({ parts: ["gioco"] });
 }
 
 async function onNemicoMagickTogli(event, target) {
@@ -378,7 +398,19 @@ async function onNemicoLancia(event, target) {
   await lanciaNemico(this.actor, effetto);
 }
 
-/** «Dai a un PG»: l'oggetto si crea sul personaggio scelto e si toglie dal nemico. */
+/**
+ * «Dal compendio»: l'archivio dell'equipaggiamento, come sul mago. L'archivio
+ * non aggiunge niente a un attore chiuso col lucchetto del sistema, e la scheda
+ * del nemico quel lucchetto non lo mostra: se c'è, si toglie prima di aprire.
+ */
+async function onNemicoArchivio(event, target) {
+  event.preventDefault();
+  if (!puoScrivere(this)) return;
+  if (this.actor.system?.locked) await this.actor.update({ "system.locked": false });
+  await onArchivioOpen.call(this, event, target);
+}
+
+/** «Dai a un PG»: l'oggetto si crea sul personaggio scelto e si toglie dal nemico. Si fa in tutti e due i modi. */
 async function onNemicoDai(event, target) {
   event.preventDefault();
   if (!puoScrivere(this)) return;
@@ -433,9 +465,13 @@ export class NemicoSheet extends SPCActorSheet {
   /** Le schede del modulo cambiano vestito e misura insieme (tema.js): questo segno le riconosce. */
   static SCHEDA_DEL_MODULO = true;
 
+  /** La sua misura a scala 1: chi riscala tutte le schede aperte (tema.js, la scheda del mago) usa questa. */
+  static MISURA_NATURALE = MISURA_NEMICO;
+
   static DEFAULT_OPTIONS = {
     classes: ["wod5e-mage", "wod5e-mage-nemico"],
     position: { width: MISURA_NEMICO.width, height: MISURA_NEMICO.height },
+    form: { handler: NemicoSheet.onSubmitNemicoForm },
     actions: {
       ritrattoCambia: onRitrattoCambia,
       saluteCellChange: { handler: onSaluteCellChange, buttons: [0, 2] },
@@ -444,14 +480,14 @@ export class NemicoSheet extends SPCActorSheet {
       saluteReset: onSaluteReset,
       ventaglioToggle: onVentaglioToggle,
       ventaglioChiudi: onVentaglioChiudi,
-      armaturaColpo: onArmaturaColpo,
-      armaturaPunto: onArmaturaPunto,
       condizioneToggle: onCondizioneToggle,
-      archivioOpen: onArchivioOpen,
+      archivioOpen: onNemicoArchivio,
       createItem: onGuidedItemCreate,
       itemEdit: onGuidedItemEdit,
-      magickAccendi: onMagickAccendi,
       magickSpegni: onMagickSpegni,
+      nemicoModo: onNemicoModo,
+      nemicoMano: onNemicoMano,
+      nemicoArmatura: onNemicoArmatura,
       nemicoTira: onNemicoTira,
       nemicoAzioneTira: onNemicoAzioneTira,
       nemicoAzioneUsa: onNemicoAzioneUsa,
@@ -460,13 +496,13 @@ export class NemicoSheet extends SPCActorSheet {
       nemicoAzioneTogli: onNemicoAzioneTogli,
       nemicoCasoNuovo: onNemicoCasoNuovo,
       nemicoCasoTogli: onNemicoCasoTogli,
+      nemicoEffettoApri: onNemicoEffettoApri,
       nemicoEffettoNuovo: onNemicoEffettoNuovo,
       nemicoEffettoCatalogo: onNemicoEffettoCatalogo,
       nemicoEffettoTogli: onNemicoEffettoTogli,
-      nemicoArete: onNemicoArete,
       nemicoDominio: onNemicoDominio,
-      nemicoTipoMagick: onNemicoTipoMagick,
       nemicoCassetto: onNemicoCassetto,
+      nemicoCassettoVia: onNemicoCassettoVia,
       nemicoFormula: onNemicoFormula,
       nemicoLente: onNemicoLente,
       nemicoAmbito: onNemicoAmbito,
@@ -484,11 +520,17 @@ export class NemicoSheet extends SPCActorSheet {
   static PARTS = {
     testa: { template: `${NEMICO}/testa.hbs` },
     gioco: { template: `${NEMICO}/gioco.hbs` },
-    magick: { template: `${NEMICO}/magick.hbs` },
     oggetti: { template: `${NEMICO}/oggetti.hbs` },
     note: { template: `${NEMICO}/note.hbs` },
     limited: { template: `${NEMICO}/limitata.hbs` }
   };
+
+  /** Le pagine: In gioco, Oggetti, Note. La Magick sta nel blocco della Natura, dentro In gioco. */
+  static LINGUETTE = Object.freeze({
+    gioco: { id: "gioco", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.gioco" },
+    oggetti: { id: "oggetti", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.oggetti" },
+    note: { id: "note", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.note" }
+  });
 
   tabGroups = { primary: "gioco" };
 
@@ -496,22 +538,24 @@ export class NemicoSheet extends SPCActorSheet {
     super(options);
     // La memoria della scheda: le righe aperte, il cassetto della Magick, il modulo a mano, la tendina delle Condizioni.
     this._stato = { aperte: new Set(), cassetto: "", cerca: "", mano: {}, tendina: false };
-    this.tabs = NemicoSheet.linguette(false);
-  }
-
-  /** Le pagine: In gioco, Magick (nascosta senza Magick), Oggetti, Note. */
-  static linguette(magick) {
-    return {
-      gioco: { id: "gioco", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.gioco" },
-      magick: { id: "magick", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.magick", hidden: !magick },
-      oggetti: { id: "oggetti", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.oggetti" },
-      note: { id: "note", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.note" }
-    };
+    this.tabs = { ...NemicoSheet.LINGUETTE };
   }
 
   get title() {
     const tokenPrefix = this.actor.isToken ? "[Token] " : "";
     return `${tokenPrefix}${localize("WOD5E_MAGE.Nemico.Sheet")}: ${this.actor.name}`;
+  }
+
+  /**
+   * Il form del sistema, con un riguardo per i numeri: il campo svuotato o
+   * fuori misura si riporta al suo minimo e al suo massimo prima di salvare.
+   */
+  static async onSubmitNemicoForm(event, form, formData) {
+    const target = event?.target;
+    if (target?.tagName === "INPUT" && target.type === "number") {
+      target.value = String(numeroDelCampo(target.value, { min: target.min, max: target.max }));
+    }
+    return SPCActorSheet.onSubmitActorForm.call(this, event, form, formData);
   }
 
   /** La finestra parte della misura che sta nello schermo, dalla sua misura naturale. */
@@ -545,6 +589,11 @@ export class NemicoSheet extends SPCActorSheet {
     return frame;
   }
 
+  /** Il token di questa scheda, se la scheda è di un token (anche di un attore non collegato). */
+  get tokenDellaScheda() {
+    return this.token ?? this.actor?.token ?? null;
+  }
+
   /** Il contesto puro della scheda (nemico.js), dai dati dell'attore e dalla memoria della scheda. */
   contesto() {
     let nomi = {};
@@ -552,6 +601,12 @@ export class NemicoSheet extends SPCActorSheet {
       nomi = globalThis.WOD5E?.Skills?.getList?.({}) ?? {};
     } catch (_error) {
       nomi = {};
+    }
+    let mods = {};
+    try {
+      mods = game.settings.get(MODULE_ID, POTERI_MOD_SETTING) ?? {};
+    } catch (_error) {
+      mods = {};
     }
     const items = this.actor.items.contents;
     return prepareNemicoContext({
@@ -561,6 +616,12 @@ export class NemicoSheet extends SPCActorSheet {
       stato: this._stato,
       nomi,
       condizioniScelta: prepareCondizioni(this.actor.items),
+      // Scrive chi possiede la scheda; gli altri la vedono sempre in Gioca.
+      puoScrivere: this.actor.isOwner,
+      // La disposizione del token della scheda; senza token, quella del prototipo.
+      disposizione: this.tokenDellaScheda?.disposition ?? null,
+      // I poteri del manuale si leggono dal catalogo, con la modifica del Narratore che vale per tutti.
+      potere: (id) => partiDelPotere(id, { mod: modDelMondo(id, mods), localize }),
       localize,
       format,
       lang: game.i18n.lang
@@ -568,9 +629,8 @@ export class NemicoSheet extends SPCActorSheet {
   }
 
   async _prepareContext(options) {
-    const magickOn = Boolean(bandiera(this).magick?.on);
-    this.tabs = NemicoSheet.linguette(magickOn);
-    if (!magickOn && this.tabGroups.primary === "magick") this.tabGroups.primary = "gioco";
+    this.tabs = { ...NemicoSheet.LINGUETTE };
+    if (!Object.hasOwn(this.tabs, this.tabGroups.primary)) this.tabGroups.primary = "gioco";
     const context = await super._prepareContext(options);
     const ctx = this.contesto();
     // La biografia è HTML del sistema: arricchita per l'editor con la matita (come le note del Credo).
@@ -585,27 +645,56 @@ export class NemicoSheet extends SPCActorSheet {
     return context;
   }
 
+  /** La disposizione scelta in Scrivi va sul token della scheda e sul prototipo: i token messi dopo nascono così. */
+  async cambiaDisposizione(value) {
+    if (!puoScrivere(this)) return;
+    const disposizione = Math.trunc(Number(value));
+    if (![-2, -1, 0, 1].includes(disposizione)) return;
+    const token = this.tokenDellaScheda;
+    if (token && token.disposition !== disposizione) await token.update({ disposition: disposizione });
+    // Un attore non collegato vive nel suo token: il prototipo è dell'attore di partenza, e resta com'è.
+    if (!this.actor.isToken && this.actor.prototypeToken?.disposition !== disposizione) await this.actor.update({ "prototypeToken.disposition": disposizione });
+    else if (token) await this.render({ parts: ["testa"] });
+  }
+
   _onRender(context, options) {
     super._onRender(context, options);
     const element = this.element;
     if (!element) return;
+    const scala = game.settings.get(MODULE_ID, SCALA_SETTING);
     applicaTema(element, game.settings.get(MODULE_ID, TEMA_SETTING), { localize });
-    applicaScala(element, game.settings.get(MODULE_ID, SCALA_SETTING), { localize, format, viewport: window });
+    // La scala del contenuto è quella della misura di questa finestra (960 × 770), non delle quattro colonne del mago.
+    applicaScala(element, scala, { localize, format, viewport: window, naturale: MISURA_NEMICO });
     for (const id of DISPOSIZIONI) element.classList.toggle(`wod5e-mage-nemico-${id}`, context.disposizione?.id === id);
+    // Il modo sulla finestra: in Scrivi i campi sono carta.
+    element.classList.toggle("wod5e-mage-nemico-scrivi", context.modo === "scrivi");
     // La ruota della Salute: si chiude com'è sul mago, con un clic fuori o con Esc.
     chiudiRuote(this);
     wireCassetti(this);
+    // Un render parziale lascia al loro posto i pezzi delle altre pagine: ogni ascolto si mette una volta sola.
+    const nuovi = (selettore) => [...element.querySelectorAll(selettore)].filter((nodo) => {
+      if (nodo.dataset.nemicoPronto) return false;
+      nodo.dataset.nemicoPronto = "1";
+      return true;
+    });
+    // La disposizione non è un campo dell'attore: sta sul token.
+    for (const select of nuovi("[data-nemico-disposizione]")) {
+      select.addEventListener("change", (event) => {
+        event.stopPropagation();
+        this.cambiaDisposizione(select.value);
+      });
+    }
     // Il modulo a mano: i campi senza `name` restano nella memoria della scheda.
-    for (const input of element.querySelectorAll("[data-mano]")) {
-      input.addEventListener("change", () => {
+    for (const input of nuovi("[data-mano]")) {
+      input.addEventListener("change", (event) => {
+        event.stopPropagation();
         const key = input.dataset.mano;
         this._stato.mano[key] = input.type === "checkbox" ? input.checked : input.value;
-        if (key === "impossibile") this.render({ parts: ["magick"] });
+        if (key === "impossibile") this.render({ parts: ["gioco"] });
       });
     }
     // La cerca del Grimorio filtra sul posto, e sopravvive ai render.
-    const cerca = element.querySelector("[data-nemico-cerca]");
-    if (cerca) {
+    for (const cerca of nuovi("[data-nemico-cerca]")) {
       const lista = element.querySelector("[data-nemico-lista=grimorio]");
       const filtra = () => {
         const needle = String(cerca.value ?? "").trim().toLowerCase();
@@ -622,11 +711,11 @@ export class NemicoSheet extends SPCActorSheet {
         this._stato.cerca = cerca.value;
         filtra();
       });
+      cerca.addEventListener("change", (event) => event.stopPropagation());
       filtra();
     }
     // La tendina delle Condizioni ricorda com'era.
-    const tendina = element.querySelector(".wod5e-mage-nemico-condizioni-tendina");
-    if (tendina) {
+    for (const tendina of nuovi(".wod5e-mage-nemico-condizioni-tendina")) {
       tendina.open = Boolean(this._stato.tendina);
       tendina.addEventListener("toggle", () => { this._stato.tendina = tendina.open; });
     }
