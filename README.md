@@ -302,6 +302,18 @@ own). The frame of the window is the same for every Nature, the one of the
 mortal sheets, whatever `spcType` the actor carries; and each open enemy keeps
 its own page when several are redrawn together.
 
+Since 1.33.3 the sheet holds against Foundry's own form styles. They sit in a
+cascade layer below the modules' one, so they win on every property the
+module leaves unnamed. The buttons of the sheet now drop Foundry's outline (it
+drew an orange line around every `button.active` and every focused button:
+the lit tab always carried one, and so did any button after a click; the
+keyboard focus keeps the sheet's own ring), a dropdown takes the same ring as
+the text fields next to it, and the checkbox is a paper square in both themes
+(on the light sheet under a dark Foundry it was a dark square even when
+empty, with a border below 3:1). Found by rendering the installed sheet with
+Foundry's real stylesheet and layers; the earlier checks used an imitation of
+it.
+
 The header stays on every page: portrait, name, concept, the disposition of
 the token as an icon and a word (hostile, neutral, friendly, secret; a line
 of the same colour runs on top of the window), Nature and Faction. Under it

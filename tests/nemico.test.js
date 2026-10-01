@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   ambitiAMano,
   bloccoDellaNatura,
@@ -210,5 +211,14 @@ assert.deepEqual(voci.map((v) => [v.natura, v.label]), [
   ["fatato", "Voce:fatato"]
 ]);
 assert.ok(voci.every((v) => !("spcType" in v)));
+
+// Il CSS contro le regole dei moduli di Foundry (1.33.3), che stanno in un layer sotto quello dei moduli: vincono
+// solo sulle proprietà che il modulo non nomina. I tasti nudi tolgono anche l'outline (Foundry lo mette a ogni
+// button.active e a ogni button:focus: la linguetta accesa portava sempre un filo arancio); la tendina ha l'anello
+// della scheda anche col clic; il quadretto della spunta è carta nei due temi, col suo bordo.
+const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
+assert.match(css, /\.wod5e-mage-nemico \.window-content :where\(\.wod5e-mage-nemico-testa, \.wod5e-mage-nemico-corpo\) :where\(button\):where\(:not\([^)]*\)\) \{[^}]*\boutline: none;/s, "i tasti nudi della scheda del nemico tolgono l'outline di Foundry");
+assert.match(css, /:is\(button, input, select, textarea, summary\):focus-visible,\s*[^{}]*\bselect:focus \{\s*outline: 2px solid var\(--nemico-fuoco\);/s, "la tendina col fuoco ha l'anello della scheda");
+assert.match(css, /\.wod5e-mage-nemico \.window-content input\[type="checkbox"\] \{[^}]*--checkbox-background-color: transparent;[^}]*background: var\(--nemico-carta\);[^}]*border: 1px solid var\(--nemico-carta-bordo\);/s, "il quadretto della spunta è carta, col bordo della carta");
 
 console.log("nemico, conti: ok");

@@ -16039,7 +16039,11 @@
 /* ---- i tasti: tutti partono nudi, ognuno prende poi il suo vestito ----
    :where() non pesa: le regole di Foundry e del sistema sui button cadono, e
    i tasti che la scheda del nemico prende dal mago (le caselle della Salute,
-   la ruota, la scelta delle Condizioni) restano i loro. */
+   la ruota, la scelta delle Condizioni) restano i loro.
+   `outline` (1.33.3): Foundry mette un filo arancio a ogni button.active e a
+   ogni button:focus (css/foundry2.css, elements.forms). Senza questa riga la
+   linguetta accesa lo portava sempre, e ogni tasto dopo un clic. Il fuoco da
+   tastiera tiene il suo anello, qui sotto. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :where(.wod5e-mage-nemico-testa, .wod5e-mage-nemico-corpo) :where(button):where(:not(.wod5e-mage-salute-cell, .wod5e-mage-ventaglio-voce, .wod5e-mage-cond-voce)) {
   align-items: center;
   appearance: none;
@@ -16057,6 +16061,7 @@
   line-height: 1;
   margin: 0;
   min-height: 0;
+  outline: none;
   padding: 0;
   text-shadow: none;
   width: auto;
@@ -16066,7 +16071,10 @@
   box-shadow: none;
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :is(.wod5e-mage-nemico-testa, .wod5e-mage-nemico-corpo) :is(button, input, select, textarea, summary):focus-visible {
+/* L'anello del fuoco: da tastiera su ogni comando; su una tendina anche col clic, come sui campi di testo accanto
+   (Foundry le darebbe il suo, di un altro colore e dentro il bordo). */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :is(.wod5e-mage-nemico-testa, .wod5e-mage-nemico-corpo) :is(button, input, select, textarea, summary):focus-visible,
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content :is(.wod5e-mage-nemico-testa, .wod5e-mage-nemico-corpo) select:focus {
   outline: 2px solid var(--nemico-fuoco);
   outline-offset: 2px;
 }
@@ -16146,8 +16154,15 @@
   margin: 0;
 }
 
-/* La spunta resta quella di Foundry: qui solo il posto che prende nella riga. */
+/* La spunta: il segno resta quello di Foundry, il quadretto è carta come ogni campo, nei due temi (1.33.3).
+   Prima il fondo veniva dal tema del sistema e il bordo dall'oro del modulo: sulla scheda chiara, col Foundry
+   scuro, restava un quadretto scuro anche da vuoto, col bordo sotto il 3:1. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input[type="checkbox"] {
+  --checkbox-background-color: transparent;
+  --checkbox-checked-color: var(--nemico-inchiostro);
+  background: var(--nemico-carta);
+  border: 1px solid var(--nemico-carta-bordo);
+  border-radius: 4px;
   flex: none;
   height: auto;
   margin: 0;
