@@ -274,13 +274,21 @@ export function nemicoVuoto(dati = datiNemico()) {
 }
 
 /**
- * Il modo in cui si apre la scheda: quello scelto col tasto in testata; se
- * nessuno l'ha ancora scelto, Scrivi su un nemico vuoto e Gioca su uno già
- * scritto. Chi non può scrivere sulla scheda la vede sempre in Gioca.
+ * Il modo in cui la scheda si mostra: quello scelto col tasto in testata; se
+ * nessuno l'ha ancora scelto, quello con cui la finestra si è aperta
+ * (`aperto`, la memoria della scheda), e alla prima apertura Scrivi su un
+ * nemico vuoto e Gioca su uno già scritto. Chi non può scrivere sulla scheda
+ * la vede sempre in Gioca.
+ *
+ * `aperto` c'è dalla 1.33.2: senza, un nemico appena creato passava a Gioca da
+ * solo alla prima soglia scritta (non era più vuoto), coi campi che sparivano
+ * sotto le mani di chi stava scrivendo.
  */
-export function modoDelNemico(dati = datiNemico(), { puoScrivere = true } = {}) {
+export function modoDelNemico(dati = datiNemico(), { puoScrivere = true, aperto = "" } = {}) {
   if (!puoScrivere) return "gioca";
-  return dati.modo || (nemicoVuoto(dati) ? "scrivi" : "gioca");
+  if (dati.modo) return dati.modo;
+  if (MODI.includes(aperto)) return aperto;
+  return nemicoVuoto(dati) ? "scrivi" : "gioca";
 }
 
 /**
@@ -681,13 +689,16 @@ export function effettoDaPotere(entry, { sort = 0 } = {}) {
 /**
  * Le voci del PNG di M6 nella finestra «Crea attore» (Blue, 1/10): una per
  * Natura. Ognuna crea un attore `spc` che nasce con la scheda del nemico e con
- * la sua Natura (e lo spcType del sistema, quando la Natura ne ha uno), senza
- * passare dalla scelta della scheda.
+ * la sua Natura, senza passare dalla scelta della scheda.
+ *
+ * La Natura sta nella bandiera del modulo e basta (1.33.2): lo spcType del
+ * sistema resta quello di ogni PNG. Scritto alla nascita, vestiva la finestra
+ * e i dialoghi coi colori della linea del sistema, e restava indietro quando
+ * la Natura si cambiava dalla scheda, che scrive solo la bandiera.
  */
 export function vociCreazione({ localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
   return NATURE.map((natura) => ({
     natura: natura.id,
-    spcType: natura.spcType,
     label: format("WOD5E_MAGE.Creation.Nemico.Voce", { natura: localize(natura.label) })
   }));
 }
@@ -982,7 +993,7 @@ export function prepareNemicoContext({ actor = {}, items = [], salute = null, st
   const disp = disposizioneDi(disposizione ?? actor.prototypeToken?.disposition);
   const effettiMagick = magick.effetti.length;
   // Il modo (1/10): Gioca o Scrivi; chi non può scrivere vede sempre Gioca.
-  const modo = modoDelNemico(dati, { puoScrivere });
+  const modo = modoDelNemico(dati, { puoScrivere, aperto: testo(stato.modo) });
   const scrivi = modo === "scrivi";
   // Il blocco della Natura e i poteri del manuale: le righe prese dal catalogo stanno nel blocco, le altre negli Effetti.
   const blocco = bloccoDellaNatura(natura, dati, { localize });

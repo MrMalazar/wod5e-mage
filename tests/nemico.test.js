@@ -162,6 +162,15 @@ assert.equal(nemicoVuoto(datiNemico({ natura: "vampire", fazione: "Anarchici", n
 for (const flag of [{ soglie: { social: 2 } }, { casi: { a: {} } }, { azioni: { a: {} } }, { effetti: { a: {} } }, { magick: { effetti: { a: {} } } }]) assert.equal(nemicoVuoto(datiNemico(flag)), false);
 assert.deepEqual([modoDelNemico(datiNemico({})), modoDelNemico(datiNemico({ soglie: { physical: 3 } })), modoDelNemico(datiNemico({ modo: "gioca" })), modoDelNemico(datiNemico({ soglie: { physical: 3 }, modo: "scrivi" })), modoDelNemico(datiNemico({ modo: "boh" }))], ["scrivi", "gioca", "gioca", "scrivi", "scrivi"]);
 assert.equal(modoDelNemico(datiNemico({ modo: "scrivi" }), { puoScrivere: false }), "gioca");
+// Il modo con cui la finestra si è aperta (1.33.2) vale finché nessuno ne sceglie uno: un nemico che si sta scrivendo
+// resta in Scrivi anche quando non è più vuoto. Il modo scritto sulla scheda vince; chi non può scrivere vede Gioca.
+assert.deepEqual([
+  modoDelNemico(datiNemico({ soglie: { physical: 3 } }), { aperto: "scrivi" }),
+  modoDelNemico(datiNemico({}), { aperto: "gioca" }),
+  modoDelNemico(datiNemico({ soglie: { physical: 3 }, modo: "gioca" }), { aperto: "scrivi" }),
+  modoDelNemico(datiNemico({ soglie: { physical: 3 } }), { aperto: "boh" }),
+  modoDelNemico(datiNemico({}), { aperto: "scrivi", puoScrivere: false })
+], ["scrivi", "gioca", "gioca", "gioca", "gioca"]);
 
 // La freccia sul tasto: giù se il numero è sceso sotto quello scritto, su se è salito.
 assert.deepEqual([versoDi(3, 5), versoDi(7, 5), versoDi(5, 5), versoDi("x", 0)], ["giu", "su", "", ""]);
@@ -188,17 +197,18 @@ assert.equal(partiDelPotere("non-c-e", { catalog: catalogo }), null, "un potere 
 assert.deepEqual(effettoDaPotere(catalogo[0], { sort: 7 }), { nome: "Occhio di lince", testo: "Effetto attivo (1 Quintessenza): Vedi nel buio. Accesso con Forze: anche nella nebbia.", tipo: "attivo", catalogo: "occhio", sort: 7 });
 assert.deepEqual([tipoDelPotere(catalogo[1]), effettoDaPotere(catalogo[1]).tipo, effettoDaPotere(null)], ["passivo", "passivo", null]);
 
-// Il PNG di M6 nella finestra «Crea attore»: una voce per Natura, con lo spcType del sistema quando la Natura ne ha uno.
+// Il PNG di M6 nella finestra «Crea attore»: una voce per Natura. Lo spcType del sistema non c'entra (1.33.2).
 const voci = vociCreazione({ localize: parola, format: (key, data) => `${parola(key)}:${data.natura}` });
-assert.deepEqual(voci.map((v) => [v.natura, v.spcType, v.label]), [
-  ["mortal", "mortal", "Voce:mortal"],
-  ["sonnambulo", "", "Voce:sonnambulo"],
-  ["risvegliato", "", "Voce:risvegliato"],
-  ["vampire", "vampire", "Voce:vampire"],
-  ["werewolf", "werewolf", "Voce:werewolf"],
-  ["hunter", "hunter", "Voce:hunter"],
-  ["spirit", "spirit", "Voce:spirit"],
-  ["fatato", "", "Voce:fatato"]
+assert.deepEqual(voci.map((v) => [v.natura, v.label]), [
+  ["mortal", "Voce:mortal"],
+  ["sonnambulo", "Voce:sonnambulo"],
+  ["risvegliato", "Voce:risvegliato"],
+  ["vampire", "Voce:vampire"],
+  ["werewolf", "Voce:werewolf"],
+  ["hunter", "Voce:hunter"],
+  ["spirit", "Voce:spirit"],
+  ["fatato", "Voce:fatato"]
 ]);
+assert.ok(voci.every((v) => !("spcType" in v)));
 
 console.log("nemico, conti: ok");

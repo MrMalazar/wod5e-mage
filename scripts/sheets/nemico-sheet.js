@@ -41,6 +41,26 @@ export const MISURA_NEMICO = Object.freeze({ width: 960, height: 770 });
 
 const DISPOSIZIONI = ["ostile", "neutrale", "amichevole", "segreto"];
 
+/**
+ * Le classi con cui il sistema veste la finestra secondo la linea dell'attore
+ * (spc-actor-sheet.js, _onRender: da `system.gamesystem`, cioè dallo spcType).
+ * Ognuna porta i suoi colori: l'alone intorno alla finestra e le barre di
+ * scorrimento, rosse per il vampiro, arancioni per il cacciatore, marroni per
+ * il licantropo.
+ */
+const LINEE_DEL_SISTEMA = Object.freeze(["vampire", "werewolf", "hunter"]);
+
+/**
+ * La cornice del nemico è una per tutte le Nature (1.33.2): quella dei mortali,
+ * che la scheda ha sempre avuto. Da quando un PNG di M6 nasce col suo spcType
+ * il sistema la colorerebbe con la linea; qui la differenza fra le Nature la fa
+ * il blocco sotto le Azioni, non il vestito della finestra.
+ */
+export function corniceDelNemico(classList) {
+  classList.remove(...LINEE_DEL_SISTEMA);
+  classList.add("mortal");
+}
+
 /* ------------------------------------------------------------- gli aiuti */
 
 function localize(key) {
@@ -110,7 +130,7 @@ async function onNemicoModo(event, target) {
   if (!puoScrivere(this)) return;
   const modo = String(target.dataset.modo ?? "");
   // Il modo di adesso non si riscrive: niente cambia, e le righe aperte restano aperte.
-  if (!MODI.includes(modo) || modo === modoDelNemico(datiNemico(bandiera(this)))) return;
+  if (!MODI.includes(modo) || modo === this.modoAttuale()) return;
   // Uscendo da Scrivi le righe aperte per riscriverle si richiudono, e il cassetto pure.
   this._stato.aperte.clear();
   this._stato.cassetto = "";
@@ -357,6 +377,9 @@ async function onNemicoManoAggiungi(event) {
   const conto = sogliaDagliAmbiti(mano.livelli ?? {}, { impossibile: Boolean(mano.impossibile) });
   const ambiti = Object.fromEntries(conto.ambiti.map((entry) => [entry.id, entry.level]));
   const id = nuovoId(this, bandiera(this).magick?.effetti);
+  // Il cassetto si chiude e si svuota prima di scrivere: il ridisegno che segue lo trova già chiuso.
+  this._stato.mano = {};
+  this._stato.cassetto = "";
   await scrivi(this, `magick.effetti.${id}`, {
     nome: String(mano.nome ?? "").trim() || localize("WOD5E_MAGE.Nemico.EffettoNuovo"),
     breve: String(mano.cosa ?? "").trim(),
@@ -372,8 +395,6 @@ async function onNemicoManoAggiungi(event) {
     lentePotenza: ["danni", "peso", "influenza"][Math.min(Math.trunc(Number((mano.lenti ?? {}).potency) || 0), 2)],
     sort: Date.now()
   });
-  this._stato.mano = {};
-  this._stato.cassetto = "";
 }
 
 async function onNemicoMagickApri(event, target) {
@@ -527,18 +548,28 @@ export class NemicoSheet extends SPCActorSheet {
 
   /** Le pagine: In gioco, Oggetti, Note. La Magick sta nel blocco della Natura, dentro In gioco. */
   static LINGUETTE = Object.freeze({
-    gioco: { id: "gioco", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.gioco" },
-    oggetti: { id: "oggetti", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.oggetti" },
-    note: { id: "note", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.note" }
+    gioco: Object.freeze({ id: "gioco", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.gioco" }),
+    oggetti: Object.freeze({ id: "oggetti", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.oggetti" }),
+    note: Object.freeze({ id: "note", group: "primary", title: "WOD5E_MAGE.Nemico.Pagine.note" })
   });
+
+  /**
+   * Le linguette di una finestra, ogni volta oggetti nuovi (1.33.2): il sistema
+   * ci scrive sopra quale è accesa (getTabs), e con gli stessi oggetti per
+   * tutte le schede due nemici aperti insieme si scambiavano la pagina.
+   */
+  static linguette() {
+    return Object.fromEntries(Object.entries(NemicoSheet.LINGUETTE).map(([id, linguetta]) => [id, { ...linguetta }]));
+  }
 
   tabGroups = { primary: "gioco" };
 
   constructor(options = {}) {
     super(options);
     // La memoria della scheda: le righe aperte, il cassetto della Magick, il modulo a mano, la tendina delle Condizioni.
-    this._stato = { aperte: new Set(), cassetto: "", cerca: "", mano: {}, tendina: false };
-    this.tabs = { ...NemicoSheet.LINGUETTE };
+    // `modo` è quello con cui la finestra si è aperta, finché nessuno ne sceglie uno col tasto (modoAttuale).
+    this._stato = { aperte: new Set(), cassetto: "", cerca: "", mano: {}, tendina: false, modo: "" };
+    this.tabs = NemicoSheet.linguette();
   }
 
   get title() {
@@ -594,8 +625,29 @@ export class NemicoSheet extends SPCActorSheet {
     return this.token ?? this.actor?.token ?? null;
   }
 
+  /**
+   * Il modo che la finestra mostra adesso. Finché nessuno l'ha scelto col
+   * tasto, la finestra tiene quello con cui si è aperta: un nemico appena
+   * creato resta in Scrivi anche quando la prima soglia lo rende «scritto»
+   * (1.33.2). Alla chiusura la memoria si svuota: riaperto, un nemico scritto
+   * si apre in Gioca.
+   */
+  modoAttuale() {
+    const dati = datiNemico(bandiera(this));
+    const puo = Boolean(this.actor.isOwner);
+    if (puo && !dati.modo && !this._stato.modo) this._stato.modo = modoDelNemico(dati);
+    return modoDelNemico(dati, { puoScrivere: puo, aperto: this._stato.modo });
+  }
+
+  _onClose(options) {
+    super._onClose?.(options);
+    this._stato.modo = "";
+  }
+
   /** Il contesto puro della scheda (nemico.js), dai dati dell'attore e dalla memoria della scheda. */
   contesto() {
+    // Fissa il modo di questa apertura prima di preparare il contesto, che lo legge dalla memoria.
+    this.modoAttuale();
     let nomi = {};
     try {
       nomi = globalThis.WOD5E?.Skills?.getList?.({}) ?? {};
@@ -629,7 +681,7 @@ export class NemicoSheet extends SPCActorSheet {
   }
 
   async _prepareContext(options) {
-    this.tabs = { ...NemicoSheet.LINGUETTE };
+    this.tabs = NemicoSheet.linguette();
     if (!Object.hasOwn(this.tabs, this.tabGroups.primary)) this.tabGroups.primary = "gioco";
     const context = await super._prepareContext(options);
     const ctx = this.contesto();
@@ -661,6 +713,8 @@ export class NemicoSheet extends SPCActorSheet {
     super._onRender(context, options);
     const element = this.element;
     if (!element) return;
+    // Il sistema ha appena messo sulla finestra la classe della linea: la cornice torna quella di sempre.
+    corniceDelNemico(element.classList);
     const scala = game.settings.get(MODULE_ID, SCALA_SETTING);
     applicaTema(element, game.settings.get(MODULE_ID, TEMA_SETTING), { localize });
     // La scala del contenuto è quella della misura di questa finestra (960 × 770), non delle quattro colonne del mago.

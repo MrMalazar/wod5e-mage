@@ -77,7 +77,7 @@ function attore({ nemico = {}, system = {}, items = [], isOwner = true, isToken 
   return actor;
 }
 
-const { NemicoSheet, MISURA_NEMICO } = await import("../../scripts/sheets/nemico-sheet.js");
+const { NemicoSheet, MISURA_NEMICO, corniceDelNemico } = await import("../../scripts/sheets/nemico-sheet.js");
 const azioni = NemicoSheet.DEFAULT_OPTIONS.actions;
 const evento = { preventDefault() {}, stopPropagation() {} };
 const tasto = (dataset = {}) => ({ dataset });
@@ -322,6 +322,86 @@ for (const nuova of ["nemicoModo", "nemicoMano", "nemicoArmatura", "nemicoEffett
   const context = await sheet._prepareContext({});
   assert.deepEqual([sheet.tabGroups.primary, context.tabAttiva, Object.keys(sheet.tabs), context.pagine.map((p) => p.id), context.modo, context.isGM], ["gioco", "gioco", ["gioco", "oggetti", "note"], ["gioco", "oggetti", "note"], "gioca", true]);
   assert.equal(sheet.title, "Scheda del nemico (M6): Rade");
+}
+
+// --- un nemico appena creato resta in Scrivi mentre lo si scrive (1.33.2). Senza un modo scelto col tasto la finestra
+// tiene quello con cui si è aperta: nella 1.33.1 la prima soglia lo rendeva «scritto» e la scheda passava a Gioca da sola.
+{
+  const actor = attore();
+  const sheet = scheda(actor);
+  assert.equal(sheet.contesto().modo, "scrivi");
+  await NemicoSheet.onSubmitNemicoForm.call(sheet, { target: { tagName: "INPUT", type: "number", name: "flags.wod5e-mage.nemico.soglie.physical", value: "4", min: "0", max: "20" } }, null, null);
+  assert.deepEqual([bandiera(actor).soglie.physical, bandiera(actor).modo, sheet.contesto().modo, sheet.contesto().scrivi], [4, undefined, "scrivi", true], "dopo la prima soglia è ancora Scrivi, e nessuno ha scritto il modo");
+  await azioni.nemicoEffettoNuovo.call(sheet, evento, tasto());
+  assert.equal(sheet.contesto().modo, "scrivi");
+  // «Scrivi» è già il modo di adesso: il tasto non scrive niente. «Gioca» sì.
+  const prima = actor.aggiornamenti.length;
+  await azioni.nemicoModo.call(sheet, evento, tasto({ modo: "scrivi" }));
+  assert.equal(actor.aggiornamenti.length, prima);
+  await azioni.nemicoModo.call(sheet, evento, tasto({ modo: "gioca" }));
+  assert.deepEqual([bandiera(actor).modo, sheet.contesto().modo], ["gioca", "gioca"]);
+
+  // Chiusa senza aver scelto un modo e riaperta: è un nemico scritto, e si apre in Gioca.
+  const altro = attore();
+  const finestra = scheda(altro);
+  finestra.contesto();
+  await altro.update({ "flags.wod5e-mage.nemico.soglie.physical": 3 });
+  assert.equal(finestra.contesto().modo, "scrivi");
+  finestra._onClose({});
+  assert.equal(finestra.contesto().modo, "gioca");
+  // Un nemico già scritto aperto in Gioca non passa a Scrivi da solo se lo si svuota.
+  const scritto = attore({ nemico: { soglie: { physical: 3 } } });
+  const aperta = scheda(scritto);
+  assert.equal(aperta.contesto().modo, "gioca");
+  await scritto.update({ "flags.wod5e-mage.nemico.soglie.physical": 0 });
+  assert.equal(aperta.contesto().modo, "gioca");
+  // Chi non possiede la scheda non ha memoria da tenere: sempre Gioca.
+  const altrui = scheda(attore({ isOwner: false }));
+  assert.deepEqual([altrui.contesto().modo, altrui._stato.modo], ["gioca", ""]);
+}
+
+// --- due nemici aperti insieme, su pagine diverse (1.33.2): ognuno rende accesa la sua. Il sistema scrive sulle
+// linguette quale è accesa (getTabs): con gli stessi oggetti per tutte le schede, la seconda cambiava la pagina alla prima.
+{
+  const primo = scheda(attore({ nemico: { soglie: { physical: 3 } } }));
+  const secondo = scheda(attore({ nemico: { soglie: { physical: 3 } } }));
+  primo.tabGroups.primary = "note";
+  secondo.tabGroups.primary = "oggetti";
+  const [contestoPrimo, contestoSecondo] = await Promise.all([primo._prepareContext({}), secondo._prepareContext({})]);
+  const accesa = async (sheet, context) => {
+    const accese = [];
+    for (const parte of ["gioco", "oggetti", "note"]) if ((await sheet._preparePartContext(parte, context, {})).tab.cssClass === "active") accese.push(parte);
+    return accese;
+  };
+  assert.deepEqual([await accesa(primo, contestoPrimo), await accesa(secondo, contestoSecondo)], [["note"], ["oggetti"]]);
+  assert.notEqual(primo.tabs.gioco, secondo.tabs.gioco, "le linguette sono oggetti di ogni finestra");
+  assert.ok(Object.values(NemicoSheet.LINGUETTE).every((linguetta) => Object.isFrozen(linguetta)), "il modello delle linguette non si scrive");
+  assert.deepEqual(Object.keys(NemicoSheet.linguette()), ["gioco", "oggetti", "note"]);
+}
+
+// --- la cornice (1.33.2): il sistema veste la finestra con la linea dell'attore (lo spcType che il PNG di M6 porta dalla
+// nascita), la scheda del nemico la riporta a quella dei mortali, uguale per ogni Natura.
+{
+  const classi = (...iniziali) => {
+    const insieme = new Set(iniziali);
+    return { insieme, classList: { add: (...c) => c.forEach((x) => insieme.add(x)), remove: (...c) => c.forEach((x) => insieme.delete(x)), toggle: (c, on) => (on ? insieme.add(c) : insieme.delete(c)), contains: (c) => insieme.has(c) } };
+  };
+  for (const linea of ["vampire", "werewolf", "hunter", "mortal"]) {
+    const finestra = classi("application", "sheet", "wod5e", "actor", "spc", "wod5e-mage", "wod5e-mage-nemico", linea);
+    corniceDelNemico(finestra.classList);
+    assert.deepEqual([...finestra.insieme].filter((c) => ["vampire", "werewolf", "hunter", "mortal"].includes(c)), ["mortal"], linea);
+    assert.ok(finestra.insieme.has("wod5e-mage-nemico") && finestra.insieme.has("spc"), "le altre classi restano");
+  }
+  // La finta scheda del sistema fa come quella vera: un attore con spcType vampire mette `vampire` sulla finestra.
+  const { SPCActorSheet, lineaDelSistema } = await import("./stubs/spc-actor-sheet.mjs");
+  assert.deepEqual(["mortal", "vampire", "ghoul", "werewolf", "spirit", "hunter", ""].map((spcType) => lineaDelSistema({ system: { spcType } })), ["mortal", "vampire", "vampire", "werewolf", "werewolf", "hunter", "mortal"]);
+  const finestra = classi("sheet", "mortal");
+  const delSistema = new SPCActorSheet({ document: attore({ system: { spcType: "vampire" } }) });
+  delSistema.element = { classList: finestra.classList };
+  delSistema._onRender();
+  assert.deepEqual([finestra.insieme.has("vampire"), finestra.insieme.has("mortal")], [true, false]);
+  corniceDelNemico(finestra.classList);
+  assert.deepEqual([finestra.insieme.has("vampire"), finestra.insieme.has("mortal")], [false, true]);
 }
 
 console.log(`finta Foundry, i tasti della scheda del nemico: ok, ${sim.dialoghi.length} finestre`);

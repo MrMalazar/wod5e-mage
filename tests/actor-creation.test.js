@@ -10,13 +10,14 @@ import { CAMPI_CREAZIONE, datiDiCreazione, registerActorCreationChoice } from ".
 
 const SCHEDA = "flags.core.sheetClass";
 const NATURA = `flags.${MODULE_ID}.nemico.natura`;
-const SPC = "system.spcType";
-assert.deepEqual(CAMPI_CREAZIONE, { scheda: SCHEDA, natura: NATURA, spcType: SPC });
-assert.equal(new Set(Object.values(CAMPI_CREAZIONE)).size, 3, "tre campi, tre nomi diversi");
+assert.deepEqual(CAMPI_CREAZIONE, { scheda: SCHEDA, natura: NATURA });
+assert.equal(new Set(Object.values(CAMPI_CREAZIONE)).size, 2, "due campi, due nomi diversi");
 
-// Un PNG di M6 nasce con la scheda del nemico e la sua Natura; lo spcType solo se la Natura ne ha uno.
-assert.deepEqual(datiDiCreazione({ tipo: "spc", natura: "vampire", spcType: "vampire" }), { [SCHEDA]: NEMICO_SHEET_ID, [NATURA]: "vampire", [SPC]: "vampire" });
-assert.deepEqual(datiDiCreazione({ tipo: "spc", natura: "risvegliato", spcType: "" }), { [SCHEDA]: NEMICO_SHEET_ID, [NATURA]: "risvegliato" });
+// Un PNG di M6 nasce con la scheda del nemico e la sua Natura, nella bandiera del modulo. Lo spcType del sistema non si
+// tocca (1.33.2): resta quello di ogni PNG, qualunque sia la Natura.
+assert.deepEqual(datiDiCreazione({ tipo: "spc", natura: "vampire" }), { [SCHEDA]: NEMICO_SHEET_ID, [NATURA]: "vampire" });
+assert.deepEqual(datiDiCreazione({ tipo: "spc", natura: "risvegliato" }), { [SCHEDA]: NEMICO_SHEET_ID, [NATURA]: "risvegliato" });
+assert.ok(!Object.keys(datiDiCreazione({ tipo: "spc", natura: "werewolf", spcType: "werewolf" })).some((nome) => nome.startsWith("system.")), "niente va nei dati del sistema");
 // Un mortale porta la scheda del Mago solo se è stata scelta.
 assert.deepEqual(datiDiCreazione({ tipo: "mortal", schedaMortale: MAGE_SHEET_ID }), { [SCHEDA]: MAGE_SHEET_ID });
 assert.deepEqual(datiDiCreazione({ tipo: "mortal", schedaMortale: "" }), {});
@@ -158,7 +159,7 @@ assert.equal(f.gruppoTipo.querySelector(".hint"), note[0], "la prima nota resta 
 // Il gruppo «PNG di M6»: una voce per Natura, tutte `spc`.
 const gruppoM6 = f.tipo.children.find((n) => n.tagName === "OPTGROUP");
 assert.equal(gruppoM6.label, "WOD5E_MAGE.Creation.Nemico.Gruppo");
-assert.deepEqual(gruppoM6.children.map((o) => [o.value, o.dataset.m6Natura, o.dataset.m6SpcType]), NATURE.map((n) => ["spc", n.id, n.spcType]));
+assert.deepEqual(gruppoM6.children.map((o) => [o.value, o.dataset.m6Natura]), NATURE.map((n) => ["spc", n.id]));
 
 // Alla prima apertura: mortale, scheda di serie, niente in più nei dati.
 assert.deepEqual(lettaDaFoundry(f.form), { name: "", type: "mortal", folder: "" });
@@ -169,11 +170,10 @@ assert.equal(note[1].hidden, true);
 tendinaScheda.scegli(tendinaScheda.options[1]);
 assert.deepEqual(lettaDaFoundry(f.form), { name: "", type: "mortal", [SCHEDA]: MAGE_SHEET_ID, folder: "" });
 
-// Ogni PNG di M6: tipo spc, scheda del nemico, Natura, e lo spcType quando c'è.
+// Ogni PNG di M6: tipo spc, scheda del nemico, Natura. Nient'altro.
 for (const natura of NATURE) {
   f.tipo.scegli(gruppoM6.children.find((o) => o.dataset.m6Natura === natura.id));
   const attesi = { name: "", type: "spc", [SCHEDA]: NEMICO_SHEET_ID, [NATURA]: natura.id, folder: "" };
-  if (natura.spcType) attesi[SPC] = natura.spcType;
   assert.deepEqual(lettaDaFoundry(f.form), attesi, `PNG M6, ${natura.id}`);
   assert.equal(gruppoScheda.hidden, true, "la scelta Mortale/Mago sparisce");
   assert.equal(note[1].hidden, false, "la nota del PNG di M6 compare");
@@ -215,6 +215,6 @@ ganci.renderDialogV2({}, soloPng.radice);
 assert.equal(soloPng.form.children.some((n) => n.dataset.module === MODULE_ID && n.tagName === "DIV"), false);
 const m6 = soloPng.tipo.children.find((n) => n.tagName === "OPTGROUP");
 soloPng.tipo.scegli(m6.children.find((o) => o.dataset.m6Natura === "werewolf"));
-assert.deepEqual(lettaDaFoundry(soloPng.form), { name: "", type: "spc", [SCHEDA]: NEMICO_SHEET_ID, [NATURA]: "werewolf", [SPC]: "werewolf", folder: "" });
+assert.deepEqual(lettaDaFoundry(soloPng.form), { name: "", type: "spc", [SCHEDA]: NEMICO_SHEET_ID, [NATURA]: "werewolf", folder: "" });
 
 console.log("crea attore: ok");

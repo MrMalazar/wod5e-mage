@@ -280,8 +280,12 @@ still takes the sheet from its sheet configuration (the cog on the window).
 It works from 1.33.1: in 1.33.0 two fields of the dialog were both named
 `flags.core.sheetClass`, Foundry read them as a list and opened the default
 sheet, for the M6 NPC and for a new Mage alike. The dialog now sends its data
-through three hidden fields, one per name; what you see (the Mortal/Mage
-choice, the M6 entries) carries no name.
+through hidden fields, one per name; what you see (the Mortal/Mage choice, the
+M6 entries) carries no name. The Nature of an M6 NPC lives in the module flag
+only (`flags.wod5e-mage.nemico.natura`): since 1.33.2 the dialog no longer
+writes the system's `spcType`, which dressed the window and the dialogs in the
+colours of the system's line and went stale when the Nature was changed on
+the sheet.
 
 The sheet was redrawn on 1 October 2026 from the approved mock
 (`docs/mock_scheda_nemico_1-10.html`). It has two modes, switched by the
@@ -290,7 +294,13 @@ Conditions, the Narrator's hand, rolls) and the text stays still; in "Scrivi"
 the sheet itself changes, and everything that can be written is a paper
 field. The mode is a module flag (`flags.wod5e-mage.nemico.modo`), not the
 system's lock; an enemy with nothing written opens in "Scrivi", a written one
-in "Gioca", and whoever does not own the actor always sees "Gioca".
+in "Gioca", and whoever does not own the actor always sees "Gioca". Until
+someone picks a mode with the button, the window keeps the one it opened
+with: a new enemy stays in "Scrivi" while it is being written (before 1.33.2
+the first threshold made it "written" and the sheet jumped to "Gioca" on its
+own). The frame of the window is the same for every Nature, the one of the
+mortal sheets, whatever `spcType` the actor carries; and each open enemy keeps
+its own page when several are redrawn together.
 
 The header stays on every page: portrait, name, concept, the disposition of
 the token as an icon and a word (hostile, neutral, friendly, secret; a line
