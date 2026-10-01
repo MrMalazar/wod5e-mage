@@ -49,6 +49,7 @@ import {
   bumpSoglia,
   clearTiro,
   contoTiro,
+  DADI_ADJUST_CAP,
   emptyTiro,
   EXTRA_DICE_CAP,
   isMagick,
@@ -60,12 +61,12 @@ import {
   pillsOf,
   removePill,
   setDadi,
-  setExtra,
   setKind,
   setPay,
   setQuintessence,
   setScope,
   setSoglia,
+  SOGLIA_MANO_CAP,
   sogliaAMano,
   TIRO_KINDS,
   tiroSize,
@@ -282,21 +283,61 @@ function skillIconOf(key) {
 }
 
 /**
+ * Le sei righe degli Ambiti nella Soglia della Magick (Blue, 1/10: «nella
+ * soglia deve comparire solo il simbolo dell'ambito e la descrizione del
+ * livello dell'ambito nella quale è stato scelto»). In ordine alfabetico,
+ * ognuna col simbolo dell'Ambito, la lettura del livello dichiarato nella
+ * lente che vale (quella scelta sulla scheda, o la prima della tavola) e il
+ * livello; a zero la riga è spenta e legge la base. Il nome dell'Ambito, la
+ * lente e la spiegazione lunga stanno nel sorvolo; la × solo sugli alzati.
+ */
+export function righeAmbiti(tiro, localize = (key) => key, { tavola = null, modi = {}, arete = null } = {}) {
+  const table = tavola ?? scopeModes(localize, { arete });
+  return SCOPES.map((id) => {
+    const label = String(localize(`WOD5E_MAGE.Scopes.${id}`));
+    const level = count(tiro?.scopes?.[id]);
+    const mode = scopeModeOf(table, id, modi?.[id]);
+    const reading = String(mode?.readings?.[level] ?? "");
+    const spiegazione = String(mode?.hints?.[level] ?? "");
+    const lente = mode?.short || mode?.label || "";
+    const titolo = lente ? `${label} · ${lente} ${level}` : `${label} ${level}`;
+    return {
+      kind: "scope",
+      id,
+      fa: SCOPE_ICONS[id] ?? "",
+      label,
+      name: reading || String(level),
+      value: numero(level),
+      spenta: level === 0,
+      hint: spiegazione ? `${titolo}: ${spiegazione}` : titolo,
+      via: level > 0
+    };
+  }).sort((a, b) => a.label.localeCompare(b.label, globalThis.game?.i18n?.lang ?? "it"));
+}
+
+/**
  * Il contesto del riquadro del Tiro, rifatto sul mock del 30/9 (Blue: «troppo
  * bombardamento informativo», «voglio anche i simboli correlati a quello che
- * viene messo», solo «Soglia», il ritocco resta anche al giocatore).
+ * viene messo», solo «Soglia», il ritocco resta anche al giocatore) e sulla
+ * quarta passata dell'1/10 («meno parole ci sono, meglio è»).
  *
- * In testa il tipo di tiro col suo simbolo e, nella Magick, l'Areté e le
- * Sfere coi loro sigilli (non pesano su niente: stanno in testa). Sotto,
- * due colonne che finiscono col loro «a mano»: la Riserva (chi dà dadi:
- * Attributo, Abilità, Specializzazione, premio dell'Areté, potere, Tratti,
- * Condizioni in meno; a mano i dadi dal tavolo, tetto 3) e la Soglia (chi
- * toglie dadi: gli Ambiti col livello, il potere che la tocca; a mano
- * quanto il Narratore alza o abbassa, e nell'Abilità la soglia intera).
- * Ogni riga porta il simbolo del pezzo com'è nella scheda, il nome, il
- * valore e la × per toglierlo. Poi il conto in una riga (riserva − soglia +
- * ritocco = dadi, riesce dal 6 o dall'8), le opzioni e i tasti; il tasto
- * spento dice cosa manca.
+ * In testa il tipo di tiro a parole e, nella Magick, la Sfera col sigillo e
+ * l'incantesimo (l'Areté resta fra le pillole, ma non si stampa: il tipo lo
+ * dice già). Sotto, due colonne: la Riserva (chi dà dadi: Attributo,
+ * Abilità, Specializzazione, premio dell'Areté, potere, Tratti, Condizioni
+ * in meno) e la Soglia (chi toglie dadi). Nella Magick la Soglia mostra
+ * sempre i sei Ambiti, in ordine alfabetico: il simbolo, la lettura del
+ * livello scelto nella lente che vale (quella scelta, o la prima) e il
+ * livello; a zero la riga è spenta. Il nome dell'Ambito, la lente e la
+ * spiegazione lunga stanno nel sorvolo. Ogni riga porta il simbolo del
+ * pezzo com'è nella scheda, il nome, il valore e la × per toglierlo. In
+ * fondo a ogni colonna un numero solo, il totale, col meno e il più: nella
+ * Riserva il ritocco (dentro il totale, la matita dice di quanto), nella
+ * Soglia quanto si alza o si abbassa sopra il conto degli Ambiti, e
+ * nell'Abilità la soglia intera. Poi, in una riga, l'esito (i dadi che si
+ * tirano, dal 6 o dall'8), la coppia Quintessenza | Paradosso, Sforza la
+ * realtà e Dal Narratore; infine i tasti col solo nome, che spenti dicono
+ * cosa manca.
  */
 export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
@@ -309,8 +350,7 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   const nomi = pillNames(actor, tiro, { known, inputs });
   const pills = pillsOf(tiro, nomi);
   const sfere = Object.fromEntries(prepareSpheres(actor).all.map((sphere) => [sphere.id, { label: localize(sphere.label), icon: sphere.icon }]));
-  const via = localize("WOD5E_MAGE.Tiro.PillolaVia");
-  // La lettura dell'Ambito dichiarato, nel sorvolo della riga.
+  // La lente di ogni Ambito: quella scelta sulla scheda, o la prima della tavola.
   const modiAmbiti = actor.getFlag?.(MODULE_ID, SCOPE_MODES_FLAG) ?? {};
   const tavolaAmbiti = scopeModes(localize, { arete: arete.value });
 
@@ -318,7 +358,9 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   testa.label = localize(magick ? "WOD5E_MAGE.Tiro.KindMagick" : "WOD5E_MAGE.Tiro.KindSkill");
   if (!magick && tipo) testa.hint = localize(`WOD5E_MAGE.Condizioni.Tipi.${tipo}`);
   const riserva = [];
-  const soglia = [];
+  // La Soglia della Magick (1/10): i sei Ambiti, sempre, in ordine alfabetico. La riga legge il livello
+  // dichiarato con la lente che vale; la × c'è solo su quelli alzati (riporta a zero).
+  const soglia = magick ? righeAmbiti(tiro, localize, { tavola: tavolaAmbiti, modi: modiAmbiti }) : [];
   for (const pill of pills) {
     switch (pill.kind) {
       case "spell":
@@ -330,11 +372,9 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
       case "sphere":
         testa.spheres.push({ id: pill.id, label: sfere[pill.id]?.label ?? pill.label, icon: sfere[pill.id]?.icon ?? "", hint: localize("WOD5E_MAGE.Tiro.SphereHint") });
         break;
-      case "scope": {
-        const reading = scopeModeOf(tavolaAmbiti, pill.id, modiAmbiti[pill.id])?.readings?.[pill.level] ?? "";
-        soglia.push({ kind: "scope", id: pill.id, fa: SCOPE_ICONS[pill.id] ?? "", name: pill.label, value: numero(pill.level), hint: reading ? `${pill.label} ${pill.level} · ${reading}` : `${pill.label} ${pill.level}`, via: true });
+      case "scope":
+        // Gli Ambiti stanno già nella Soglia, tutti e sei.
         break;
-      }
       case "attribute":
         riserva.push({ kind: "attribute", id: pill.id, img: traitIcon(pill.id), name: pill.label, value: numero(pill.value), hint: localize("WOD5E_MAGE.Tiro.AttributeHint"), via: true });
         break;
@@ -404,29 +444,43 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     riserva: {
       righe: riserva,
       vuote: { attributo: !tiro.attribute, abilita: !tiro.skill },
-      // A mano (30/9): i dadi dal tavolo, l'Armonia e i dadi che il Narratore dà, fino a tre.
-      mano: { value: tiro.extra, label: conSegno(tiro.extra), min: !tiro.extra, max: tiro.extra >= EXTRA_DICE_CAP, cap: EXTRA_DICE_CAP, hint: localize("WOD5E_MAGE.Tiro.ExtraHint") },
-      totale: conto.riservaTotale,
+      // Il totale (1/10): la riserva col ritocco dentro (riserva − Condizioni + ritocco, mai sotto zero). Il meno
+      // e il più sono il ritocco, libero anche in meno; la matita dice di quanto. Senza tratti il numero è spento.
+      totale: {
+        value: conto.pool,
+        label: numero(conto.pool),
+        vuoto: !haTratto,
+        ritocco: conto.adjust ? conSegno(conto.adjust) : "",
+        meno: conto.pool <= 0 || conto.adjust <= -DADI_ADJUST_CAP,
+        piu: conto.adjust >= DADI_ADJUST_CAP,
+        hint: localize("WOD5E_MAGE.Tiro.RitoccoHint")
+      },
       hint: localize("WOD5E_MAGE.Tiro.RiservaHint")
     },
     soglia: {
       righe: soglia,
-      // A riquadro vuoto e nella Magick senza Ambiti, il posto degli Ambiti resta segnato.
-      vuota: (magick || size === 0) && !soglia.length,
-      // A mano (30/9): quanto si alza o si abbassa sopra il conto degli Ambiti; nell'Abilità la soglia intera.
-      // Il campo: l'addendo col segno nella Magick, la soglia intera nell'Abilità; «?» finché la soglia manca del tutto.
-      mano: { set: sogliaSet, value: conto.sogliaMano, label: sogliaSet ? (magick ? conSegno(conto.sogliaMano) : numero(conto.sogliaMano)) : "?", min: !magick && !conto.sogliaMano, hint: localize(magick ? "WOD5E_MAGE.Tiro.SogliaManoHint" : "WOD5E_MAGE.Tiro.SogliaManoAbilitaHint") },
-      totale: sogliaSet ? conto.difficulty : null,
+      // A riquadro vuoto il posto degli Ambiti resta segnato; nella Magick le sei righe ci sono sempre.
+      vuota: size === 0 && !soglia.length,
+      // Il totale (1/10): la soglia, «?» finché manca del tutto. Il meno e il più la alzano o abbassano sopra il
+      // conto degli Ambiti (nell'Abilità la fanno); la matita dice di quanto, nella Magick.
+      totale: {
+        value: sogliaSet ? conto.difficulty : null,
+        label: sogliaSet ? numero(conto.difficulty) : "?",
+        vuoto: !sogliaSet,
+        ritocco: magick && conto.sogliaMano ? conSegno(conto.sogliaMano) : "",
+        meno: sogliaSet && conto.difficulty <= 0,
+        piu: conto.sogliaMano >= SOGLIA_MANO_CAP,
+        hint: localize(magick ? "WOD5E_MAGE.Tiro.SogliaManoHint" : "WOD5E_MAGE.Tiro.SogliaManoAbilitaHint")
+      },
       hint: localize("WOD5E_MAGE.Tiro.SogliaHint")
     },
-    conto: {
-      riserva: conto.riservaTotale,
-      soglia: sogliaSet ? numero(conto.difficulty) : "?",
-      ritocco: { value: conto.adjust, label: conSegno(conto.adjust), hint: localize("WOD5E_MAGE.Tiro.RitoccoHint") },
-      // Senza soglia i dadi non si sanno: «?» finché non la scrive.
+    // L'esito (1/10), nella riga delle opzioni: i dadi che si tirano e da che faccia riescono; senza soglia
+    // i dadi non si sanno («?»); la riuscita senza tirare e il tiro che fallisce prendono il suo posto.
+    esito: {
       dadi: sogliaSet ? conto.dice : (haTratto ? "?" : 0),
+      parola: localize(sogliaSet && conto.dice === 1 ? "WOD5E_MAGE.Tiro.DadoParola" : "WOD5E_MAGE.Tiro.DadiParola"),
       dal: conto.successFrom,
-      vuoto: !haTratto,
+      spento: !haTratto || !sogliaSet,
       impossibile: conto.impossible && size > 0 && !senzaTirare,
       fallisce: conto.fallisce,
       fallisceTesto: conto.fallisce ? format("WOD5E_MAGE.Condizioni.TiroFallisce", { names: cond.perche.join(", ") }) : "",
@@ -462,7 +516,7 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
       hint: dalNarratore() ? format("WOD5E_MAGE.Verdetto.DalNarratoreHint", { seconds: VERDETTO_SECONDI }) : localize("WOD5E_MAGE.Verdetto.SenzaNarratoreHint")
     },
     // Il costo del lancio (Blue, 29/9): ogni lancio si paga, e si può sempre lanciare.
-    // La scelta sta nelle opzioni; ogni tasto del tipo dice quanto costa.
+    // La scelta sta nelle opzioni; il prezzo di ogni tipo sta nel sorvolo del tasto (1/10: sul tasto solo il nome).
     costo: magick ? {
       pay,
       quintessenza: pay === "quintessenza",
@@ -476,9 +530,7 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
         kind,
         label: localize(`WOD5E_MAGE.Tiro.Kinds.${kind}`),
         hint: `${localize(`WOD5E_MAGE.Tiro.KindHints.${kind}`)} ${format("WOD5E_MAGE.Costo.Tasto", { prezzo })}`,
-        costo,
-        // Coi testimoni si riesce dall'8: il d10 con l'8 sul tasto.
-        otto: kind === "testimoni"
+        costo
       };
     }),
     // Il tiro parte con almeno un tratto (Attributo o Abilità) e con la
@@ -774,13 +826,6 @@ export async function onTiroQuintessence(event, target) {
   const available = getMagickBalance(this.actor).quintessence;
   const next = Math.min(Math.max(tiro.quintessence + (Number(target.dataset.delta) || 0), 0), available);
   return repaint(this, setQuintessence(tiro, next));
-}
-
-/** I dadi extra: l'Armonia e i dadi dati al tavolo, col più e il meno, fino a tre. */
-export async function onTiroExtra(event, target) {
-  event.preventDefault();
-  const tiro = tiroOf(this);
-  return repaint(this, setExtra(tiro, tiro.extra + (Number(target.dataset.delta) || 0)));
 }
 
 /** Il ritocco dei Dadi (23/9): più o meno sul totale, fuori dal tetto. */

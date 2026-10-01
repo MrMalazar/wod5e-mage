@@ -262,8 +262,8 @@ assert.match(scheda, /export async function onTiroNarratore\(event\) \{\n\s+even
 assert.match(readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", import.meta.url), "utf8"), /tiroNarratore: onTiroNarratore,/);
 // Senza soglia il tiro non parte: il conto lo dice, il riquadro spegne il tasto e scrive cosa manca (30/9).
 const tiroHbs = readFileSync(new URL("../templates/actor/parts/stat-tiro.hbs", import.meta.url), "utf8");
-assert.match(tiroHbs, /wod5e-mage-tiro-mano\{\{#unless tiro\.soglia\.mano\.set\}\} vuota\{\{\/unless\}\}/);
-assert.match(tiroHbs, /data-action="tiroSoglia" data-delta="-1"[\s\S]*\{\{tiro\.soglia\.mano\.label\}\}[\s\S]*data-action="tiroSoglia" data-delta="1"/);
+assert.match(tiroHbs, /wod5e-mage-tiro-totale-numero\{\{#if tiro\.soglia\.totale\.vuoto\}\} vuoto\{\{\/if\}\}"/);
+assert.match(tiroHbs, /data-action="tiroSoglia" data-delta="-1"[\s\S]*\{\{tiro\.soglia\.totale\.label\}\}[\s\S]*data-action="tiroSoglia" data-delta="1"/);
 assert.match(tiroHbs, /wod5e-mage-tiro-tira spento" disabled title="\{\{tiro\.blocco\}\}"/);
 assert.match(tiroHbs, /\{\{#if tiro\.narratore\}\}[\s\S]*class="wod5e-mage-tiro-narratore\{\{#if tiro\.narratore\.on\}\} acceso\{\{\/if\}\}" data-action="tiroNarratore"[\s\S]*WOD5E_MAGE\.Verdetto\.DalNarratore/);
 assert.match(scheda, /const blocco = !haTratto \? localize\("WOD5E_MAGE\.Tiro\.MancaTratto"\) : \(!sogliaSet \? localize\("WOD5E_MAGE\.Tiro\.MancaSoglia"\) : ""\);/);

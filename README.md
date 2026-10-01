@@ -195,26 +195,35 @@ chosen lens, or every lens with its name).
 
 ## The Roll box
 
-Since 30 September 2026 (1.31.0, from Blue's approved mock in
+Since 1 October 2026 (1.32.0, from Blue's approved mock in
+`docs/mock_tiro_1-10.html`; the 1.31.0 box of 30 September is in
 `docs/mock_tiro_30-9.html`) the Roll box on the first page reads in two
-columns that each end with a "by hand" field. The header names the kind of
-roll with its symbol (a d10 for a Skill roll, a wand for Magick) and, for
-Magick, shows the Areté sigil and the Spheres in play on their gold discs:
+columns that each end with a single number, the total, with minus and plus.
+The header names the kind of roll in words and, for Magick, shows the Sphere
+in play with its sigil on a gold disc (and the Grimoire spell, if any):
 they weigh on nothing and are removed with their ×. The Pool column lists
 what gives dice, each row with the symbol it has on the sheet (the Attribute
 and Skill sigils, the Specialty indented under its Skill, the Areté prize
 with its checkbox, the power with its Sphere sigil, Traits with their icon,
-Conditions with the family icon and grade, subtracting), the name and the
-value; by hand, dice from the table, up to three. The Threshold column lists
-what removes dice (the Scopes with their icons, the power that touches the
-threshold); by hand, how much the Storyteller raises or lowers the count of
-the Scopes, and in a Skill roll the whole threshold. One line does the count
-(pool − threshold + adjust = dice, from 6 or from 8), then the payment
-choice, "Sforza la realtà" and "Dal Narratore" as toggles, and the roll
-button: ROLL, or the three Magick kinds with their price (the d10 with the 8
-on witnesses); disabled, it says what is missing. The word "Difficulty" is
-gone from the box: the number is the threshold. State in `scripts/tiro.js`
-(`soglia` is the by-hand addend), context in `scripts/tiro-scheda.js`.
+Conditions with the family icon and grade, subtracting); its total includes
+the adjustment, which the minus and plus change freely, and a small pen says
+by how much. In a Magick roll the Threshold column always lists the six
+Scopes, in alphabetical order: the Scope's icon, the reading of the declared
+level in the lens that applies (the one chosen on the sheet, or the first)
+and the level; at zero the row is dimmed and reads the base. The Scope's
+name, lens and long explanation sit in the tooltip. The minus and plus on
+the threshold total raise or lower it above the count of the Scopes, and in
+a Skill roll set the whole threshold ("?" until set). One line below gives
+the outcome (the dice to roll and the face that succeeds, from 6 or from 8;
+"succeeds without rolling" and "the roll fails" take its place), the
+Quintessence | Paradox payment pair in the centre (lit gold or red when
+chosen), and the "Sforza la realtà" and "Dal Narratore" toggles, all in
+words. Then the roll button: ROLL, or the three Magick kinds with their name
+only (the price is in the tooltip and on the chat card); disabled, it says
+what is missing. Blue's rule for the box: the fewer words, the better. State
+in `scripts/tiro.js` (`soglia` is the by-hand addend, `dadi` the pool
+adjustment), context in `scripts/tiro-scheda.js` (`righeAmbiti` builds the
+six Scope rows).
 
 ## Storyteller's verdict on rolls
 
