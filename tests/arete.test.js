@@ -33,11 +33,13 @@ assert.equal(calculateAreteTraitPool(3, 2, 2), 7);
 assert.equal(calculateAreteTraitPool(3), 3);
 assert.equal(calculateAreteTraitPool(), 0);
 
-// Il premio vale l'Areté intera, anche oltre 3 (dal 27/9 sono dadi, non soglia); mai all'Ibrida.
-assert.equal(calculateAretePrize(2, "magick"), 2);
-assert.equal(calculateAretePrize(5, "tecnomagick"), 5);
-assert.equal(calculateAretePrize(4, ""), 4);
-assert.equal(calculateAretePrize(5, "ibrida"), 0);
+// Il premio vale l'Areté intera, anche oltre 3 (dal 27/9 sono dadi, non soglia);
+// non guarda il Tipo di Magick: dal 2/10 lo prende anche l'Ibrida.
+assert.equal(calculateAretePrize(2), 2);
+assert.equal(calculateAretePrize(5), 5);
+assert.equal(calculateAretePrize(0), 0);
+assert.equal(calculateAretePrize(-1), 0);
+assert.equal(calculateAretePrize.length, 1, "il premio non ha più il Tipo fra gli argomenti");
 assert.equal(capBonusDice(5), 3);
 assert.equal(capBonusDice(-1), 0);
 

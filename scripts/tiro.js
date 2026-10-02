@@ -493,9 +493,8 @@ export function livelloContato(level, free) {
 /**
  * Il conto del tiro composto. Prende lo stato e i numeri della scheda:
  * arete, attributeValue, skillValue, traitDice (la somma dei Tratti scelti),
- * harmony, bussola (1 se rispettata), quintessenceAvailable, form (il Tipo
- * di Magick del Credo: l'Ibrida non prende il premio), power (il potere
- * scelto, per i suoi effetti) e powerCtx (quello che le sue condizioni
+ * harmony, bussola (1 se rispettata), quintessenceAvailable, power (il
+ * potere scelto, per i suoi effetti) e powerCtx (quello che le sue condizioni
  * chiedono: Sfere conosciute, poteri per Sfera, Salute sotto metà).
  * Torna riserva, soglia dagli Ambiti, premio, soglia calcolata, soglia
  * effettiva (il conto più quella a mano), dadi, riuscita da (6 o 8),
@@ -512,7 +511,6 @@ export function contoTiro(tiro, {
   harmony = 0,
   bussola = 0,
   quintessenceAvailable = 0,
-  form = "",
   power = null,
   powerCtx = {},
   condizioni = null
@@ -532,7 +530,8 @@ export function contoTiro(tiro, {
     spell: tiro?.spell ?? "",
     scopes: tiro?.scopes ?? {}
   };
-  const prizeBase = magick && tiro?.prize ? calculateAretePrize(areteValue, form) : 0;
+  // Il premio vale per ogni Tipo di Magick, l'Ibrida compresa (Blue, 2/10).
+  const prizeBase = magick && tiro?.prize ? calculateAretePrize(areteValue) : 0;
   const powered = applyPotere({ threshold: 0, dice: 0, difficulty: null, prize: prizeBase }, power, ctx);
   // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, fuori dal tetto +3; la soglia
   // non la tocca più. Il premio doppio (Voce dell'Avatar) raddoppia i dadi.

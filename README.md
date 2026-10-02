@@ -57,8 +57,8 @@ opens with its M6 sigil, gold on the sheet's dark ground. Clicking Areté opens 
 Skill, any one of them is enough and the chosen ones add up; Areté never
 rolls. Areté enters as the prize of the
 description (a checkbox worth as many extra dice as Areté, outside the +3
-cap, never for Hybrid Magick; since 27 September 2026 the prize adds dice
-and no longer lowers the threshold), Harmony is a plain number of dice the
+cap; since 27 September 2026 the prize adds dice and no longer lowers the
+threshold, and since 1.35.0 Hybrid Magick takes it like the other two Types), Harmony is a plain number of dice the
 other Mages grant (counted at the table), and Harmony and every positive
 modifier share a +3 cap that the confirmation dialog enforces. Every unlocked Sphere shows its dots and
 the player clicks the level used; the six Scopes (Targets, Conditions,
@@ -403,5 +403,9 @@ numbers that change on the sheet). Every click writes on the actor at once, the
 sheet behind stays live, and the window reopens at the step it was on
 (`flags.wod5e-mage.creazione.guidata.passo`). Family images are read from
 `assets/immagini/famiglie/` when present (see the LEGGIMI there); until then the
-cards show a placeholder.
+cards show a placeholder. Since 1.35.0 the window takes its size (1060 by 800,
+within the screen, centred) as soon as it is on the page: under Foundry 14 the
+position is applied only at the very end of a render, and a window that missed
+it opened as wide as the screen. An error while the window is drawn now shows up
+as a notification instead of stopping it.
 

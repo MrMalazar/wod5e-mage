@@ -236,20 +236,16 @@
             </div>
 
             {{!-- Il premio dà dadi pari all'Areté della scheda (Blue, 27/9): la soglia
-                 non cambia. L'Ibrida non lo prende. La casella mostra i dadi +N. --}}
+                 non cambia. Lo prendono tutti i Tipi, l'Ibrida compresa (2/10).
+                 La casella mostra i dadi +N. --}}
             <div class="wod5e-mage-arete-prize" title="{{localize 'WOD5E_MAGE.Arete.PrizeHint' arete=arete.value}}">
-                {{#if prize.allowed}}
-                    <label class="wod5e-mage-arete-toggle wod5e-mage-arete-conto-row">
-                        <span class="wod5e-mage-arete-conto-control">
-                            <input type="checkbox" name="prize" data-value="{{prize.dice}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Prize'}}">
-                            <span class="wod5e-mage-arete-toggle-value">+{{prize.dice}}</span>
-                        </span>
-                        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Prize"}}</span>
-                    </label>
-                {{else}}
+                <label class="wod5e-mage-arete-toggle wod5e-mage-arete-conto-row">
+                    <span class="wod5e-mage-arete-conto-control">
+                        <input type="checkbox" name="prize" data-value="{{prize.dice}}" aria-label="{{localize 'WOD5E_MAGE.Arete.Prize'}}">
+                        <span class="wod5e-mage-arete-toggle-value">+{{prize.dice}}</span>
+                    </span>
                     <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Arete.Prize"}}</span>
-                    <em>{{localize "WOD5E_MAGE.Arete.PrizeHybrid"}}</em>
-                {{/if}}
+                </label>
             </div>
             </div>
             </div>

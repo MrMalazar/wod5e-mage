@@ -314,12 +314,13 @@ assert.doesNotMatch(areteDialog, /wod5e-mage-arete-dotrow wod5e-mage-arete-spher
 assert.match(areteDialog, /data-specialty="\{\{sphere\.specialtyScope\}\}"/);
 assert.doesNotMatch(areteDialog, /scopeRowTemplate|data-role="scopeAdd"|wod5e-mage-arete-sphere-box|ScopeSuccesses/);
 // La riserva (11/9): Attributo, Abilità e la Specializzazione come casella (+1);
-// la seconda Abilità non c'è più; l'Areté non tira, entra come premio (mai per l'Ibrida).
+// la seconda Abilità non c'è più; l'Areté non tira, entra come premio (anche per l'Ibrida, 2/10).
 assert.match(areteDialog, /RollSelection\.Attribute"[\s\S]*name="attributeTrait"[\s\S]*RollSelection\.Ability"[\s\S]*name="primaryTrait"[\s\S]*Arete\.SkillSpecialty"[\s\S]*name="skillSpecialty"/);
 assert.match(areteDialog, /data-role="scopeTableOpen"/);
 assert.doesNotMatch(areteDialog, /name="primarySkill"|name="arete"|Arete\.Include/);
 // Il conto (10/9 notte): i numeri (Armonia, Quintessenza), poi Altro (Bussola, Effetto Mantenuto, Premio).
-assert.match(areteDialog, /data-role="pool"[\s\S]*data-role="threshold"[\s\S]*wod5e-mage-arete-conto wod5e-mage-arete-conto-numbers"[\s\S]*name="harmony"[\s\S]*name="pagaCon"[\s\S]*wod5e-mage-arete-altro"[\s\S]*\{\{\{bussolaHtml\}\}\}[\s\S]*name="maintained"[\s\S]*name="prize"[\s\S]*Arete\.Prize"[\s\S]*Arete\.PrizeHybrid/);
+assert.match(areteDialog, /data-role="pool"[\s\S]*data-role="threshold"[\s\S]*wod5e-mage-arete-conto wod5e-mage-arete-conto-numbers"[\s\S]*name="harmony"[\s\S]*name="pagaCon"[\s\S]*wod5e-mage-arete-altro"[\s\S]*\{\{\{bussolaHtml\}\}\}[\s\S]*name="maintained"[\s\S]*name="prize"[\s\S]*Arete\.Prize"/);
+assert.doesNotMatch(areteDialog, /PrizeHybrid|prize\.allowed/);
 // L'Armonia è un numero: i dadi degli altri Maghi, contati al tavolo.
 assert.match(areteDialog, /name="harmony"[^>]*type="number"|type="number"[^>]*name="harmony"/);
 // Le spiegazioni della Tipologia stanno nei titoli delle caselle (10/9): niente testo a destra.

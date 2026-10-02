@@ -184,7 +184,9 @@ assert.equal(prepareGuidata(attore({ flags: { convinzioni: { r1: { text: "x" } }
 
 // Il passo 5: tre Tipi; la pratica di macchina consiglia la Tecnomagick.
 const g4 = prepareGuidata(attore({ flags: { focus: { practiceForm: "magick" }, lineage: { famiglia: "adepti", sottofamiglia: "elite" } } }), { passo: 5, localize });
-assert.deepEqual(g4.corpo.tipi.map((t) => [t.id, t.selected, t.consigliato, t.premio]), [["magick", true, false, true], ["tecnomagick", false, true, true], ["ibrida", false, false, false]]);
+assert.deepEqual(g4.corpo.tipi.map((t) => [t.id, t.selected, t.consigliato]), [["magick", true, false], ["tecnomagick", false, true], ["ibrida", false, false]]);
+// Il premio dell'Areté non dipende dal Tipo (2/10): le carte non lo dicono più.
+assert.ok(g4.corpo.tipi.every((t) => !("premio" in t)));
 assert.deepEqual([g4.corpo.pratica, g4.corpo.praticaTipo], ["Cibernetica", "Tecnomagick"]);
 assert.deepEqual(g4.corpo.tipi[0].famiglie, ["Oggetto", "Sostanza", "Parola", "Corpo"]);
 assert.equal(g4.nota, "Sulla scheda: Tipo di Magick Magick");

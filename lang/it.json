@@ -158,7 +158,6 @@
       "NoSpheres": "Nessuna Sfera con pallini: sblocca le Sfere in Magick per usarle qui.",
       "Prize": "Premio dell'Areté",
       "PrizeHint": "Se la descrizione rispetta lo Strumento, o il Credo, o inventa un effetto fuori dalle tavole: tanti dadi in più quanto l'Areté ({arete}), fuori dal tetto +3. La soglia non cambia.",
-      "PrizeHybrid": "La Magick Ibrida non prende il premio.",
       "PrizeFlavor": "premio: +{dice} dadi",
       "Harmony": "Armonia",
       "HarmonyHint": "I dadi che gli altri Maghi ti danno: uno per chi ha il tuo Credo o il tuo Tipo, due per chi ha entrambi, sempre con una Sfera in comune. Li contate al tavolo. Magick e Tecnomagick non fanno Armonia fra loro; l'Ibrida con entrambi.",
@@ -2083,6 +2082,7 @@
     "Guidata": {
       "Title": "Creazione guidata",
       "WindowTitle": "Creazione guidata · {name}",
+      "Errore": "Creazione guidata: {message}",
       "Apri": "Creazione guidata: la scheda passo passo",
       "PassoDi": "Passo {n} di {totale}",
       "Cosa": "Cosa",
@@ -2161,7 +2161,7 @@
           "Domanda": "Per quale via passa la tua Volontà?",
           "Sotto": "tre Tipi di Magick · uno solo",
           "Perche": "Con la Magick la Volontà passa attraverso cose che l'uomo usa da quando esiste: il corpo e la voce, l'oggetto impugnato, quello che si consuma. Con la Tecnomagick passa attraverso un apparato, e l'apparato è il punto. Nell'Ibrida l'apparato c'è e non comanda.",
-          "PercheDue": "Il Tipo decide le famiglie di Strumenti che puoi usare, e conta nel premio dell'Areté: l'Ibrida non lo prende. Le pratiche di macchina (Cibernetica, Hacking della Realtà, Scienza Bizzarra) passano per la Tecnomagick; per le altre la scelta è tua."
+          "PercheDue": "Il Tipo decide le famiglie di Strumenti che puoi usare. Le pratiche di macchina (Cibernetica, Hacking della Realtà, Scienza Bizzarra) passano per la Tecnomagick; per le altre la scelta è tua."
         },
         "concetto": {
           "Label": "Concetto",
@@ -2278,9 +2278,6 @@
       },
       "Tipo": {
         "Famiglie": "Strumenti che apre",
-        "Premio": "Il premio dell'Areté",
-        "PremioSi": "sì",
-        "PremioNo": "no, mai",
         "Consigliato": "consigliato dalla via",
         "Pratica": "La pratica della tua via",
         "Nessuna": "la via non dice un Tipo: scegli tu"

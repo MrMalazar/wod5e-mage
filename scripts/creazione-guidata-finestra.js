@@ -162,8 +162,34 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
     }
   }
 
+  /**
+   * La misura alla prima apertura (Blue, 2/10: la finestra nasceva larga
+   * quanto lo schermo e senza altezza). In Foundry 14 la posizione si mette
+   * solo in fondo al render, dopo i ganci: qualunque intoppo prima la
+   * lasciava senza misura. Qui la finestra è già nella pagina, e la misura
+   * entra subito, dentro lo schermo e al centro.
+   */
+  async _onFirstRender(context, options) {
+    await super._onFirstRender?.(context, options);
+    const { width, height } = CreazioneGuidata.DEFAULT_OPTIONS.position;
+    this.setPosition({
+      width: Math.min(width, Math.max(window.innerWidth - 40, 600)),
+      height: Math.min(height, Math.max(window.innerHeight - 40, 400))
+    });
+  }
+
   _onRender(context, options) {
     super._onRender?.(context, options);
+    try {
+      this.#dopoIlRender();
+    } catch (err) {
+      // Un errore qui non deve fermare la finestra: si vede, e si va avanti.
+      console.error(`${MODULE_ID} | Creazione guidata`, err);
+      ui.notifications?.error?.(game.i18n.format("WOD5E_MAGE.Guidata.Errore", { message: err?.message ?? String(err) }));
+    }
+  }
+
+  #dopoIlRender() {
     // La finestra segue il personaggio: ogni scrittura la ridisegna.
     if (this.actor?.apps && !this.actor.apps[this.id]) this.actor.apps[this.id] = this;
     CreazioneGuidata.aperte.set(this.actor?.id, this);

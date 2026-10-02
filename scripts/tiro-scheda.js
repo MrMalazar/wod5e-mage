@@ -14,7 +14,6 @@ import {
   recordEffect,
   THRESHOLD_CAP
 } from "./arete.js";
-import { FOCUS_FORMS } from "./focus.js";
 import { addParadoxToBalance, getMagickBalance } from "./magick-balance.js";
 import { costoLancio, pagamentoDelLancio, testoCosto } from "./ramo-c.js";
 import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
@@ -96,12 +95,6 @@ function count(value) {
 export function tiroOf(sheet) {
   sheet._tiro ??= emptyTiro();
   return sheet._tiro;
-}
-
-/** Il Tipo di Magick del Credo: l'Ibrida non prende il premio. */
-function practiceForm(actor) {
-  const stored = actor.getFlag(MODULE_ID, "focus")?.practiceForm;
-  return FOCUS_FORMS.includes(stored) ? stored : "";
 }
 
 /**
@@ -194,7 +187,6 @@ export function contoInputs(actor, tiro, { traits = null } = {}) {
       skillValue: skill?.value ?? 0,
       traitDice: traitDiceOf(actor, tiro.traits),
       quintessenceAvailable: Math.max(getMagickBalance(actor).quintessence - powerCost, 0),
-      form: practiceForm(actor),
       power,
       powerCost,
       powerCtx: power ? {
@@ -413,7 +405,7 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, con la spunta; spento mostra quanto darebbe.
   if (magick) {
     const on = Boolean(tiro.prize);
-    riserva.push({ kind: "prize", id: "prize", img: `modules/${MODULE_ID}/assets/icons/ui/arete.svg`, name: localize("WOD5E_MAGE.Arete.Prize"), value: numero(on ? conto.prize : calculateAretePrize(arete.value, inputs.form)), check: { action: "tiroPrize", on }, off: !on, hint: format("WOD5E_MAGE.Arete.PrizeHint", { arete: arete.value }) });
+    riserva.push({ kind: "prize", id: "prize", img: `modules/${MODULE_ID}/assets/icons/ui/arete.svg`, name: localize("WOD5E_MAGE.Arete.Prize"), value: numero(on ? conto.prize : calculateAretePrize(arete.value)), check: { action: "tiroPrize", on }, off: !on, hint: format("WOD5E_MAGE.Arete.PrizeHint", { arete: arete.value }) });
   }
   // Le Condizioni sul tiro (29/9): la spunta le tiene; tolte, restano spente sulla riga.
   const cond = inputs.condizioni;

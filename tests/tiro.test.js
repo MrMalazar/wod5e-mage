@@ -192,10 +192,11 @@ assert.equal(conto.successFrom, 6, "Accidentale e Volgare riescono col 6");
 assert.equal(conto.manual, false);
 assert.equal(conto.impossible, false);
 
-// Il premio spento: i dadi del premio se ne vanno, la soglia è la stessa. L'Ibrida non lo prende mai.
+// Il premio spento: i dadi del premio se ne vanno, la soglia è la stessa.
 const senzaPremio = contoTiro(togglePrize(magick), { arete: 2, attributeValue: 4, skillValue: 5 });
 assert.deepEqual([senzaPremio.difficulty, senzaPremio.pool, senzaPremio.dice], [8, 9, 1]);
-assert.equal(contoTiro(magick, { arete: 2, attributeValue: 4, skillValue: 5, form: "ibrida" }).prize, 0);
+// Il premio acceso vale l'Areté per ogni Tipo di Magick, l'Ibrida compresa (Blue, 2/10).
+assert.equal(contoTiro(magick, { arete: 2, attributeValue: 4, skillValue: 5 }).prize, 2);
 // Il premio non tocca la soglia (27/9): con Bersagli 1 resta 1, e l'Areté 5 sono cinque dadi in più.
 const oltre = contoTiro(setScope(setScope(magick, "potency", 0), "range", 0), { arete: 5, attributeValue: 4, skillValue: 5 });
 assert.deepEqual([oltre.difficulty, oltre.pool, oltre.dice], [1, 14, 13]);

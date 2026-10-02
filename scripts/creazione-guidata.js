@@ -375,7 +375,11 @@ export function passoBussola(actor, { localize = (key) => key, cataloghi = {} } 
   };
 }
 
-/** Passo 4: il Tipo di Magick, tre carte; le famiglie di Strumenti che ognuno apre, e il consiglio della pratica. */
+/**
+ * Passo 4: il Tipo di Magick, tre carte; le famiglie di Strumenti che ognuno
+ * apre, e il consiglio della pratica. Il premio dell'Areté non dipende dal
+ * Tipo: dal 2/10 lo prende anche l'Ibrida.
+ */
 export function passoTipo(actor, { localize = (key) => key } = {}) {
   const focus = focusOf(actor);
   const lineage = getLineage(actor);
@@ -386,9 +390,7 @@ export function passoTipo(actor, { localize = (key) => key } = {}) {
     icon: TIPO_ICONE[id],
     selected: focus.practiceForm === id,
     consigliato: pratica.tipo === id,
-    famiglie: familiesForForm(id).map((family) => localize(`WOD5E_MAGE.Focus.Families.${family}`)),
-    // L'Ibrida non prende il premio dell'Areté (arete.js).
-    premio: id !== "ibrida"
+    famiglie: familiesForForm(id).map((family) => localize(`WOD5E_MAGE.Focus.Families.${family}`))
   }));
   return { tipi, chosen: tipi.find((tipo) => tipo.selected) ?? null, pratica: pratica.forma, praticaTipo: pratica.tipo ? localize(`WOD5E_MAGE.Focus.Forms.${pratica.tipo}`) : "" };
 }

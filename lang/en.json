@@ -158,7 +158,6 @@
       "NoSpheres": "No Sphere with dots: unlock Spheres in Magick to use them here.",
       "Prize": "Arete prize",
       "PrizeHint": "If the description honours the Instrument, or the Creed, or invents an effect beyond the tables: as many extra dice as Arete ({arete}), outside the +3 cap. The threshold does not change.",
-      "PrizeHybrid": "Hybrid Magick never takes the prize.",
       "PrizeFlavor": "prize: +{dice} dice",
       "Harmony": "Harmony",
       "HarmonyHint": "The dice other Mages give you: one from anyone sharing your Creed or your Type, two from anyone sharing both, always with a Sphere in common. Count them at the table. Magick and Technomagick do not harmonise with each other; Hybrid does with both.",
@@ -2083,6 +2082,7 @@
     "Guidata": {
       "Title": "Guided creation",
       "WindowTitle": "Guided creation · {name}",
+      "Errore": "Guided creation: {message}",
       "Apri": "Guided creation: the sheet step by step",
       "PassoDi": "Step {n} of {totale}",
       "Cosa": "What",
@@ -2161,7 +2161,7 @@
           "Domanda": "Which way does your Will pass through?",
           "Sotto": "three Magick Types · one only",
           "Perche": "With Magick the Will passes through things humans have used since they exist: the body and the voice, the object in hand, what gets consumed. With Technomagick it passes through an apparatus, and the apparatus is the point. In Hybrid the apparatus is there and does not command.",
-          "PercheDue": "The Type decides the Instrument families you can use, and counts in the Arete prize: Hybrid never gets it. Machine practices (Cybernetics, Reality Hacking, Weird Science) go through Technomagick; for the others the choice is yours."
+          "PercheDue": "The Type decides the Instrument families you can use. Machine practices (Cybernetics, Reality Hacking, Weird Science) go through Technomagick; for the others the choice is yours."
         },
         "concetto": {
           "Label": "Concept",
@@ -2278,9 +2278,6 @@
       },
       "Tipo": {
         "Famiglie": "Instruments it opens",
-        "Premio": "The Arete prize",
-        "PremioSi": "yes",
-        "PremioNo": "no, never",
         "Consigliato": "suggested by the path",
         "Pratica": "Your path's practice",
         "Nessuna": "the path names no Type: your choice"

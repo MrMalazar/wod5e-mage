@@ -81,14 +81,14 @@ export function skillSpecialtyNames(actor) {
 export const THRESHOLD_CAP = 7;
 
 /**
- * Il premio dell'Areté (Blue, 16/9): l'Areté si sottrae alla soglia, per
- * intero, fino a zero, quando la narrazione lo merita (rispetta lo
- * Strumento, o il Credo, o inventa un effetto fuori dalle tavole) e il
- * Narratore dà l'ok: la casella resta per questo. Non è un dado in più: il
- * tetto +3 non lo riguarda. La Magick Ibrida non lo prende mai.
+ * Il premio dell'Areté (Blue, 16/9; dadi dal 27/9): tanti dadi in più quanta
+ * l'Areté, quando la narrazione lo merita (rispetta lo Strumento, o il
+ * Credo, o inventa un effetto fuori dalle tavole) e il Narratore dà l'ok:
+ * la casella resta per questo. Fuori dal tetto +3. Lo prendono tutti e tre
+ * i Tipi di Magick: dal 2/10 anche l'Ibrida (Blue: «magick ibrida ora dà
+ * il bonus di Areté, dev'essere selezionabile»).
  */
-export function calculateAretePrize(arete, form = "") {
-  if (form === "ibrida") return 0;
+export function calculateAretePrize(arete) {
   return Math.min(Math.max(Math.trunc(Number(arete) || 0), 0), ARETE_MAX);
 }
 
@@ -795,13 +795,8 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     localize: game.i18n.localize.bind(game.i18n),
     lang: game.i18n.lang
   });
-  // Il Tipo di Magick della pagina del Credo: l'Ibrida non prende il premio.
-  const storedForm = actor.getFlag(MODULE_ID, "focus")?.practiceForm;
-  const form = FOCUS_FORMS.includes(storedForm) ? storedForm : "";
-  const prize = {
-    dice: calculateAretePrize(arete.value, form),
-    allowed: form !== "ibrida"
-  };
+  // Il premio vale per ogni Tipo di Magick, l'Ibrida compresa (2/10).
+  const prize = { dice: calculateAretePrize(arete.value) };
   // Solo le Sfere sbloccate, con almeno un pallino: sono quelle combinabili.
   // Il livello parla a pallini nel dialogo, come sulla scheda.
   // Ogni Sfera porta i suoi pallini: il giocatore sceglie il livello che
