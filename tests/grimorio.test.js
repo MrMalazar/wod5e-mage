@@ -28,7 +28,11 @@ assert.deepEqual(effectSphereLevels(proiettare), { forces: 2, prime: 1 });
 assert.deepEqual(effectSphereLevels(curvare), { forces: 2 });
 // L'Epicità di un effetto parte dal suo livello (Blue, 2/10); una scritta a parte vince; mai sotto 1 né sopra 7.
 assert.equal(effectEpic(curvare), 2);
-assert.equal(effectEpic(findEffetto("time-5-viaggiare-nel-tempo") ?? { level: 5 }), 5);
+// Le imprese impossibili che il libro scrive (2/10): Viaggiare nel tempo 7, Rianimare un morto recente 6.
+assert.deepEqual([findEffetto("time-5-viaggiare-nel-tempo")?.epic, effectEpic(findEffetto("time-5-viaggiare-nel-tempo"))], [7, 7]);
+assert.deepEqual([findEffetto("spirit-4-rianimare-un-morto-recente")?.epic, effectEpic(findEffetto("spirit-4-rianimare-un-morto-recente"))], [6, 6]);
+assert.equal(EFFETTI.filter((entry) => entry.epic).length, 2, "solo le due scritte nel libro; gli altri partono dal loro livello");
+assert.ok(EFFETTI.every((entry) => !/\(beneficio\)|\(malus \d/.test(entry.scopes)), "Malus e bonus (2/10): il Beneficio è il bonus, i livelli del malus li dà la colonna");
 assert.deepEqual([effectEpic({ level: 5, epic: 7 }), effectEpic({}), effectEpic({ level: 9 })], [7, 1, 7]);
 
 const grimorio = prepareGrimorio({ forces: 2, mind: 1 });

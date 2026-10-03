@@ -1586,7 +1586,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 2 per la scena, 3 per più scene. Bersagli per rubare a più persone. Condizioni (beneficio) per quanta fortuna passa.",
+    "scopes": "Durata 2 per la scena, 3 per più scene. Bersagli per rubare a più persone. Condizioni (bonus) per quanta fortuna passa.",
     "formule": [
       "drenare"
     ]
@@ -1771,7 +1771,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Condizioni (beneficio) per quanta fortuna dà. Durata per quanto dura. Bersagli per chi la riceve.",
+    "scopes": "Condizioni (bonus) per quanta fortuna dà. Durata per quanto dura. Bersagli per chi la riceve.",
     "formule": [
       "creare"
     ]
@@ -2302,7 +2302,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per la stanza o la sala. Durata 1 per un attimo, 2 per la scena. Bersagli per zittire più bocche. Condizioni (malus 1) se il suono serve a distrarre.",
+    "scopes": "Area per la stanza o la sala. Durata 1 per un attimo, 2 per la scena. Bersagli per zittire più bocche. Condizioni (malus) se il suono serve a distrarre.",
     "formule": [
       "spegnere",
       "potenziare"
@@ -2456,7 +2456,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per la superficie: 1 la stanza, 2 il palazzo. Durata 1 per un turno, 2 per la scena. Condizioni (malus 2, ostacolare) per chi ci cade. Bersagli per far scivolare solo loro.",
+    "scopes": "Area per la superficie: 1 la stanza, 2 il palazzo. Durata 1 per un turno, 2 per la scena. Condizioni (malus, ostacolare) per chi ci cade. Bersagli per far scivolare solo loro.",
     "formule": [
       "confondere"
     ]
@@ -2500,7 +2500,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per quanto è grande: 1 la stanza. Durata 1 per un attimo, 2 per la scena. Precisione (dettaglio) per i particolari: 1 una sagoma, 3 un volto che si riconosce. Condizioni (malus 1, distrarre) se serve a ingannare.",
+    "scopes": "Area per quanto è grande: 1 la stanza. Durata 1 per un attimo, 2 per la scena. Precisione (dettaglio) per i particolari: 1 una sagoma, 3 un volto che si riconosce. Condizioni (malus, distrarre) se serve a ingannare.",
     "formule": [
       "ingannare",
       "creare"
@@ -2869,7 +2869,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (danni) per quanto colpisce. Area per il raggio: 1 la stanza, 2 il palazzo. Bersagli per chi risparmiare. Condizioni (malus 4, stordire) per chi ci finisce dentro.",
+    "scopes": "Potenza (danni) per quanto colpisce. Area per il raggio: 1 la stanza, 2 il palazzo. Bersagli per chi risparmiare. Condizioni (malus, stordire) per chi ci finisce dentro.",
     "formule": [
       "danneggiare"
     ]
@@ -3855,7 +3855,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Area per la stanza o il palazzo. Bersagli per chi respira aria buona. Condizioni (malus 3, addormentare) per quanto pesa. Durata 1 per un attimo di gas, 2 per la scena.",
+    "scopes": "Area per la stanza o il palazzo. Bersagli per chi respira aria buona. Condizioni (malus, addormentare) per quanto pesa. Durata 1 per un attimo di gas, 2 per la scena.",
     "formule": [
       "confondere"
     ]
@@ -4405,7 +4405,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Durata 1 per un turno, 2 per la scena, 4 per la sessione. Condizioni (malus 4, inabilitare) per quanto lo tiene.",
+    "scopes": "Bersagli per più persone. Durata 1 per un turno, 2 per la scena, 4 per la sessione. Condizioni (malus, inabilitare) per quanto lo tiene.",
     "formule": [
       "bloccare"
     ]
@@ -4969,7 +4969,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Area per una folla intera. Durata 1 per un attimo, 2 per la scena. Condizioni (malus 1, distrarre) se l'umore serve a distrarlo. Potenza (influenza) per quanto cambia la persona.",
+    "scopes": "Bersagli per più persone. Area per una folla intera. Durata 1 per un attimo, 2 per la scena. Condizioni (malus, distrarre) se l'umore serve a distrarlo. Potenza (influenza) per quanto cambia la persona.",
     "formule": [
       "suggestionare",
       "spegnere"
@@ -5111,7 +5111,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Durata 1 per un turno, 2 per la scena. Condizioni (malus 1, distrarre) per quanto pesa.",
+    "scopes": "Bersagli per più persone. Durata 1 per un turno, 2 per la scena. Condizioni (malus, distrarre) per quanto pesa.",
     "formule": [
       "confondere"
     ]
@@ -5181,7 +5181,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Area per una sala intera. Durata 1 per un turno, 2 per la scena. Condizioni (malus 3, addormentare) per quanto è profondo il sonno.",
+    "scopes": "Bersagli per più persone. Area per una sala intera. Durata 1 per un turno, 2 per la scena. Condizioni (malus, addormentare) per quanto è profondo il sonno.",
     "formule": [
       "bloccare"
     ]
@@ -5587,7 +5587,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Durata 1 per un turno, 2 per la scena. Condizioni (malus 4, inabilitare) per quanto pesa: 4 non agisce, 7 non gioca.",
+    "scopes": "Bersagli per più persone. Durata 1 per un turno, 2 per la scena. Condizioni (malus, inabilitare) per quanto pesa: 6 non agisce, 7 non gioca.",
     "formule": [
       "bloccare"
     ]
@@ -5625,7 +5625,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più menti. Condizioni (malus 4, stordire) per lasciarlo stordito.",
+    "scopes": "Potenza (danni) per quanto ferisce. Bersagli per più menti. Condizioni (malus, stordire) per lasciarlo stordito.",
     "formule": [
       "danneggiare"
     ]
@@ -8025,10 +8025,11 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata 7. Condizioni 1 per ogni clausola del ritorno.",
+    "scopes": "Epicità 6. Durata 7. Condizioni 1 per ogni clausola del ritorno.",
     "formule": [
       "resuscitare"
-    ]
+    ],
+    "epic": 6
   },
   {
     "id": "spirit-4-sbarrare-un-luogo-agli-spiriti",
@@ -9044,10 +9045,11 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto lontano (fuori gioco: 5 l'anno, 6 il decennio, 7 oltre). Bersagli per chi viaggia con te. Potenza (peso) per il carico.",
+    "scopes": "Epicità 7. Durata per quanto lontano (fuori gioco: 5 l'anno, 6 il decennio, 7 oltre). Bersagli per chi viaggia con te. Potenza (peso) per il carico.",
     "formule": [
       "varcare"
-    ]
+    ],
+    "epic": 7
   },
   {
     "id": "time-5-invertire-il-verso-del-tempo-in-una-valle",
@@ -9304,7 +9306,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Durata 1 per un turno, 2 per la scena. Condizioni (malus 2, ostacolare) per quanto pesa.",
+    "scopes": "Bersagli per più persone. Durata 1 per un turno, 2 per la scena. Condizioni (malus, ostacolare) per quanto pesa.",
     "formule": [
       "confondere"
     ]
@@ -9368,7 +9370,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più corpi. Durata 1 per un turno, 2 per la scena. Condizioni (malus 2, ostacolare) per quanto pesa.",
+    "scopes": "Bersagli per più corpi. Durata 1 per un turno, 2 per la scena. Condizioni (malus, ostacolare) per quanto pesa.",
     "formule": [
       "rallentare"
     ]
@@ -9470,7 +9472,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Area per una sala intera. Durata 1 per un turno, 2 per la scena. Condizioni (malus 3, addormentare) per quanto è profondo il sonno.",
+    "scopes": "Bersagli per più persone. Area per una sala intera. Durata 1 per un turno, 2 per la scena. Condizioni (malus, addormentare) per quanto è profondo il sonno.",
     "formule": [
       "bloccare"
     ]
@@ -9564,7 +9566,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Bersagli per più persone. Area per un campo, un giardino, un raccolto. Durata per quanto dura. Potenza (danni) se la malattia ferisce. Condizioni (malus 2, ostacolare) per quanto pesa.",
+    "scopes": "Bersagli per più persone. Area per un campo, un giardino, un raccolto. Durata per quanto dura. Potenza (danni) se la malattia ferisce. Condizioni (malus, ostacolare) per quanto pesa.",
     "formule": [
       "maledire"
     ]
@@ -9602,7 +9604,7 @@ export const EFFETTI = Object.freeze([
         "level": 1
       }
     ],
-    "scopes": "Durata per quanto regge: 1 lo scontro, 2 la scena, 4 la sessione. Condizioni (beneficio) per quanto aiuta. Bersagli per potenziare i compagni.",
+    "scopes": "Durata per quanto regge: 1 lo scontro, 2 la scena, 4 la sessione. Condizioni (bonus) per quanto aiuta. Bersagli per potenziare i compagni.",
     "formule": [
       "potenziare"
     ]

@@ -52,6 +52,10 @@ def plain(text):
 SPHERE_NAMES = {**SPHERES, "Forze": "forces"}
 PAIRING = re.compile(r"^- \*\*\+ (" + "|".join(SPHERE_NAMES) + r")( ●+)?( \((?:obbligata|diretta)\))?:\*\*\s*(.*)$")
 SCOPES_LINE = re.compile(r"^\*Ambiti consigliati:\*\s*(.*)$")
+# L'Epicità scritta negli Ambiti consigliati (2/10): «Epicità 7.» per le
+# imprese che non stanno al livello dell'effetto (Viaggiare nel tempo).
+# Senza, l'effetto parte dall'Epicità del suo livello.
+EPIC_IN_SCOPES = re.compile(r"\bEpicità (\d)\b")
 # La Formula (6/9, dal lavoro del ramo B): la parola universale che l'effetto
 # incarna nella sua Sfera. Una riga sotto il nome, anche più Formule a virgola.
 FORMULA_LINE = re.compile(r"^\*Formula:\*\s*(.*)$")
@@ -152,6 +156,9 @@ def parse(path, sphere):
             elif scopes:
                 # Gli Ambiti consigliati chiudono il blocco.
                 block["scopes"] = plain(scopes.group(1))
+                epic = EPIC_IN_SCOPES.search(block["scopes"])
+                if epic:
+                    block["epic"] = int(epic.group(1))
                 close()
             elif line.startswith("|") or line.startswith("<!--"):
                 close()
