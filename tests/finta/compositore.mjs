@@ -103,7 +103,7 @@ assert.ok(!potenzaPeso.steps[3].tip.startsWith("4 · "), "niente numero davanti 
 // I pallini partono dall'1: lo 0 è la base (23/9), e la riga a riposo la legge.
 const portataRiposo = S.prepareScopeRows(T.emptyTiro(), (k) => strings[k] ?? k, { arete: 3, modes: { range: "range" } }).find((r) => r.id === "range");
 assert.deepEqual([portataRiposo.level, portataRiposo.reading, portataRiposo.steps.length, portataRiposo.steps[0].value], [0, "WOD5E_MAGE.Scopes.Table.range.0", 7, 1]);
-assert.deepEqual(Object.fromEntries(rows.map((r) => [r.id, r.modeCount])), { epic: 1, targets: 2, conditions: 2, duration: 2, range: 2, potency: 3, precision: 2 }, "una, due o tre lenti per Ambito (29/9, 2/10)");
+assert.deepEqual(Object.fromEntries(rows.map((r) => [r.id, r.modeCount])), { epic: 1, targets: 2, conditions: 2, duration: 2, range: 3, potency: 3, precision: 2 }, "una, due o tre lenti per Ambito (29/9, 2/10; il Legame nella Portata il 3/10)");
 const conDanni = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyDamage", targets: "boh" } }).find((r) => r.id === "potency");
 assert.deepEqual([conDanni.mode, conDanni.nextModeLabel], ["potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight"], "dai Danni si passa al Peso");
 assert.equal(conDanni.reading, "Areté WOD5E_MAGE.Scopes.Table.potencyDamage.4", "i Danni: l'Areté più il numero del quarto pallino (la finta traduce solo Areté)");

@@ -413,7 +413,7 @@
       "area": "Area",
       "TableTitle": "The Scopes",
       "TableHint": "Scopes give a Magick effect its measure. On top, Epicness, from 1 to 7, says how deep the gesture goes; below, six Scopes on a scale from 0 to 7 say how much: those the effect does not touch stay at 0. Each Scope is read through one, two or three lenses, alternative measures of the same thing: a casting uses one. 0 is the base and costs nothing; each level is worth its number. The threshold is Epicness plus the sum of the Scopes, and each point of threshold takes one die from the pool. In one casting at most three Scopes rise above 0; Epicness does not count.",
-      "TableModes": "In Range the Fight lens applies in combat and Narrative outside it; in Potency, Damage is for the fight: the Storyteller declares when a combat reading applies. In Duration the first row counts game time, the second world time. The other lenses (Effect, Area, Malus and bonus, Complexity, Weight, Influence, Detail, Information) are free, good in any scene.",
+      "TableModes": "In Range the Fight lens applies in combat, Narrative outside it and Bond when you reach the target through what ties you; in Potency, Damage is for the fight: the Storyteller declares when a combat reading applies. In Duration the first row counts game time, the second world time. The other lenses (Effect, Area, Malus and bonus, Complexity, Weight, Influence, Detail, Information) are free, good in any scene.",
       "TableSuccesses": "Scope",
       "TableReading": "Lens",
       "TableNote": "Scopes channel the generality and variability of Magick effects: think an effect in as few Scopes as possible, by need and goal.",
@@ -422,7 +422,7 @@
         "targets": "Who or what takes the effect. Effect counts targets one by one, Area takes everything inside a space.",
         "conditions": "What the effect leaves on someone and under which terms it works. Malus and bonus says how much it weighs: the bonus is the malus turned around, and it never enters Magick castings. Complexity is the clauses that rule it.",
         "duration": "How long the effect stands. The first row counts game time, the second world time.",
-        "range": "How far the effect reaches from the caster. To act on what you cannot see you need Correspondence, or a bond with the target (the Bridge Rule).",
+        "range": "How far the effect reaches. Fight and Narrative measure distance: to act on what you cannot perceive you need Correspondence. Bond measures how close the target is to you, from blood (1) to the faintest thread (7): with a bond you reach them wherever they are, even without Correspondence. The closer of who they are to you and what you hold of theirs counts.",
         "potency": "How strong the effect is: Damage in a fight, Weight in both, Influence on a person. Influence says how much it changes them, from their emotions up to steering them, and it is not a Condition.",
         "precision": "How fine the effect's choice or finding is: Detail, from the whole body down to an atom, in a fight and outside. Information says how rare the thing you learn is: the player asks the question, the Storyteller sets the level before the roll."
       },
@@ -435,6 +435,7 @@
         "durationWorld": "World",
         "range": "Fight",
         "rangeNarrative": "Narrative",
+        "rangeBond": "Bond",
         "potencyDamage": "Damage",
         "potencyWeight": "Weight",
         "potencyInfluence": "Influence",
@@ -530,6 +531,16 @@
           "5": "On the continent",
           "6": "On another continent",
           "7": "Wherever it is"
+        },
+        "rangeBond": {
+          "0": "You touch it",
+          "1": "Blood",
+          "2": "Intimate",
+          "3": "Friend",
+          "4": "Acquaintance",
+          "5": "Met once",
+          "6": "Name",
+          "7": "Thread"
         },
         "potencyDamage": {
           "0": "",
@@ -665,6 +676,16 @@
           "6": "On the other side of the world.",
           "7": "Even without knowing where it is."
         },
+        "rangeBond": {
+          "0": "Hands on the target: no bond needed.",
+          "1": "Blood of your blood (your father, your daughter, your brother), or a part of their body (blood, hair, nails).",
+          "2": "Whoever lives with you or is dearest to you (your partner, your wife, a lifelong friend), or what they wear every day (the wedding ring, the glasses, the rosary).",
+          "3": "A friend, a cabal mate, your mentor, or something they care about (the diary, their father's watch, the guitar).",
+          "4": "You know their name and face (the colleague, the neighbour, the barman), or any item of theirs (the keys, the pen, the jacket).",
+          "5": "You saw them once (at the party, at the pawnshop, on the underground), or you have their photo, their recorded voice, their signature.",
+          "6": "You have never seen them but you know who they are (the name, the role, a description), or something they used (the phone they called from, the car they drove, the room they slept in).",
+          "7": "You only know something they did (they paid the sniper, wrote the anonymous letter, stole your car), or a trace they left in passing (the shell casing, the envelope of money, the ticket they threw away). Without even that, you need Correspondence."
+        },
         "potencyDamage": {
           "0": "As much damage as your Arete, on the target's Health.",
           "1": "Arete plus one, on the target's Health.",
@@ -737,6 +758,7 @@
         "durationWorld": "World",
         "range": "Fight",
         "rangeNarrative": "Narr.",
+        "rangeBond": "Bond",
         "potencyDamage": "Damage",
         "potencyWeight": "Weight",
         "potencyInfluence": "Infl.",

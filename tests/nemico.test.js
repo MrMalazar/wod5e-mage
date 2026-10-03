@@ -116,13 +116,15 @@ assert.deepEqual(righeOrdinate({ x: { nome: "Zeta", sort: 0 }, y: { nome: "Alfa"
 assert.deepEqual(scopeLensIds("potency"), ["potencyDamage", "potencyWeight", "potencyInfluence"]);
 assert.deepEqual(scopeLensIds("conditions"), ["conditionsMalus", "conditionsComplexity"]);
 assert.deepEqual(scopeLensIds("precision"), ["precision", "precisionInfo"]);
-assert.deepEqual(scopeLensIds("range"), ["range", "rangeNarrative"]);
+assert.deepEqual(scopeLensIds("range"), ["range", "rangeNarrative", "rangeBond"]);
 assert.deepEqual(scopeLensIds("epic"), ["epic"]);
 const aMano = (lenti) => ambitiAMano({ livelli: { potency: 3 }, lenti }, { arete: 2 });
 assert.deepEqual([aMano({}).righe.find((r) => r.id === "potency").lente.id, aMano({}).danni], ["potencyDamage", 5]);
 assert.deepEqual([aMano({ potency: 2 }).righe.find((r) => r.id === "potency").lente.id, aMano({ potency: 2 }).danni], ["potencyInfluence", null]);
 assert.equal(aMano({ potency: 9 }).righe.find((r) => r.id === "potency").lente.id, "potencyInfluence", "un indice oltre le lenti si ferma all'ultima");
-assert.equal(aMano({ range: 2 }).righe.find((r) => r.id === "range").lente.id, "rangeNarrative", "la Portata ne ha due");
+assert.equal(aMano({ range: 1 }).righe.find((r) => r.id === "range").lente.id, "rangeNarrative");
+assert.equal(aMano({ range: 2 }).righe.find((r) => r.id === "range").lente.id, "rangeBond", "la Portata ne ha tre: la terza è il Legame (3/10)");
+assert.equal(aMano({ range: 9 }).righe.find((r) => r.id === "range").lente.id, "rangeBond", "un indice oltre le lenti si ferma all'ultima");
 // La mano (2/10): l'Epicità in cima, staccata, a 1 da sola; sette numeri per riga, niente 0.
 {
   const mano = ambitiAMano({ livelli: { potency: 3 } }, { arete: 2, localize: (k) => k.split(".").pop() });

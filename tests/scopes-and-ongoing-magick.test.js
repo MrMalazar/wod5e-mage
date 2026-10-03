@@ -60,10 +60,11 @@ const scopeTableTemplate = readFileSync(
 const table = prepareScopeTable();
 assert.equal(table.steps.length, SCOPE_TABLE_STEPS + 1);
 assert.deepEqual(table.steps, [0, 1, 2, 3, 4, 5, 6, 7]);
-// Quattordici righe: l'Epicità, poi una, due o tre lenti per Ambito,
-// nell'ordine della tavola (2/10: Malus e bonus in una, il Dettaglio in una).
-assert.equal(table.rows.length, 14);
-assert.deepEqual(table.rows.map((row) => row.id), ["epic", "targets", "targetsArea", "conditionsMalus", "conditionsComplexity", "duration", "durationWorld", "range", "rangeNarrative", "potencyDamage", "potencyWeight", "potencyInfluence", "precision", "precisionInfo"]);
+// Quindici righe: l'Epicità, poi una, due o tre lenti per Ambito,
+// nell'ordine della tavola (2/10: Malus e bonus in una, il Dettaglio in una;
+// 3/10: il Legame, terza lente della Portata).
+assert.equal(table.rows.length, 15);
+assert.deepEqual(table.rows.map((row) => row.id), ["epic", "targets", "targetsArea", "conditionsMalus", "conditionsComplexity", "duration", "durationWorld", "range", "rangeNarrative", "rangeBond", "potencyDamage", "potencyWeight", "potencyInfluence", "precision", "precisionInfo"]);
 const riga = (id) => table.rows.find((row) => row.id === id);
 assert.equal(riga("targets").label, "WOD5E_MAGE.Scopes.targets");
 assert.equal(table.rows.every((row) => row.cells.length === 8), true);
@@ -86,7 +87,7 @@ const tableIt = prepareScopeTable(localizeIt);
 assert.deepEqual(tableIt.groups.map((group) => group.name), ["Epicità", "Bersagli", "Condizioni", "Durata", "Portata", "Potenza", "Precisione"]);
 assert.deepEqual(tableIt.groups.map((group) => group.base), [true, false, false, false, false, false, false]);
 assert.equal(tableIt.groups.every((group) => group.header), true);
-assert.deepEqual(Object.fromEntries(tableIt.groups.map((group) => [group.scope, group.span])), { epic: 1, targets: 2, conditions: 2, duration: 2, range: 2, potency: 3, precision: 2 });
+assert.deepEqual(Object.fromEntries(tableIt.groups.map((group) => [group.scope, group.span])), { epic: 1, targets: 2, conditions: 2, duration: 2, range: 3, potency: 3, precision: 2 });
 assert.deepEqual(tableIt.groups.map((group) => group.desc), ["WOD5E_MAGE.Scopes.Desc.epic", ...SCOPES.filter((id) => id !== "epic").map((id) => `WOD5E_MAGE.Scopes.Desc.${id}`).sort((a, b) => localizeIt(a.replace(".Desc.", ".")).localeCompare(localizeIt(b.replace(".Desc.", "."))))]);
 assert.match(scopeTableTemplate, /\{\{#if group\.base\}\}<tr class="wod5e-mage-scope-stacco" aria-hidden="true"><td colspan="\{\{@root\.scopeTable\.span\}\}"><\/td><\/tr>\{\{\/if\}\}/, "lo stacco sotto l'Epicità");
 // Le lenti nell'ordine della tavola: la prima vale se il giocatore non sceglie.
@@ -96,8 +97,9 @@ assert.deepEqual(tableIt.groups.find((group) => group.scope === "precision").row
 assert.deepEqual(tableIt.groups.find((group) => group.scope === "epic").rows.map((row) => row.id), ["epic"]);
 assert.deepEqual(tableIt.groups.find((group) => group.scope === "duration").rows.map((row) => row.id), ["duration", "durationWorld"]);
 assert.deepEqual(tableIt.groups.find((group) => group.scope === "targets").rows.map((row) => row.id), ["targets", "targetsArea"]);
+assert.deepEqual(tableIt.groups.find((group) => group.scope === "range").rows.map((row) => row.id), ["range", "rangeNarrative", "rangeBond"]);
 assert.equal(tableIt.groups.some((group) => group.scope === "impact"), false);
-assert.deepEqual(Object.values(itScopes.Sub), ["Effetto", "Area", "Malus e bonus", "Complessità", "Gioco", "Mondo", "Scontro", "Narrativa", "Danni", "Peso", "Influenza", "Dettaglio", "Informazione"]);
+assert.deepEqual(Object.values(itScopes.Sub), ["Effetto", "Area", "Malus e bonus", "Complessità", "Gioco", "Mondo", "Scontro", "Narrativa", "Legame", "Danni", "Peso", "Influenza", "Dettaglio", "Informazione"]);
 // L'Epicità (2/10): sette gesti, dal trucco all'impossibile, con gli esempi nel sorvolo.
 assert.equal(itScopes.epic, "Epicità");
 assert.deepEqual(Object.entries(itScopes.Table.epic), [["1", "Trucco"], ["2", "Spinta"], ["3", "Mutamento"], ["4", "Prodigio"], ["5", "Creazione"], ["6", "Miracolo"], ["7", "Impossibile"]]);
@@ -118,6 +120,14 @@ assert.match(itScopes.Desc.conditions, /il bonus è il malus girato, e non entra
 assert.doesNotMatch(JSON.stringify(itScopes), /Impatto|Beneficio|impresa impossibile|\+5 dopo il conto/);
 assert.equal(itScopes.Zero, undefined, "il pallino dello 0 non c'è più (2/10)");
 assert.equal(itScopes.Table.conditionsComplexity["7"], "Livello contratto");
+// Il Legame (3/10): la terza lente della Portata, dal sangue al filo più
+// esile; lo 0 è lo stesso delle altre lenti, il 7 è ancora un legame e senza
+// nemmeno quello serve la Corrispondenza.
+assert.deepEqual(Object.values(itScopes.Table.rangeBond), ["Lo tocchi", "Sangue", "Intimo", "Amico", "Conoscente", "Incontro", "Nome", "Filo"]);
+assert.match(itScopes.Hint.rangeBond["1"], /sangue del tuo sangue/i);
+assert.match(itScopes.Hint.rangeBond["7"], /serve la Corrispondenza/);
+assert.match(itScopes.Desc.range, /Legame/);
+assert.doesNotMatch(itScopes.Desc.range, /Regola del Ponte/);
 // Il Dettaglio (2/10: Scontro e Narrativa in una lente, una parola per
 // casella); gli esempi di tutti e due stanno nel sorvolo.
 assert.deepEqual(Object.values(itScopes.Table.precision), ["Nessuno", "Corpo", "Parte", "Particolare", "Punto", "Granello", "Molecola", "Atomo"]);
@@ -179,7 +189,7 @@ assert.equal(riga("durationWorld").cells[0].icon, "");
 assert.equal(riga("targets").spheres, undefined);
 assert.equal(table.rows.every((row) => row.gift === undefined), true);
 
-// Le 120 celle della tavola hanno una voce in tutte e due le lingue (i
+// Le 128 celle della tavola hanno una voce in tutte e due le lingue (i
 // Danni allo 0 sono l'Areté e basta: la voce è vuota). Il Peso parla in
 // chili e tonnellate, la Portata narrativa arriva «Ovunque sia».
 for (const lang of ["it", "en"]) {
@@ -217,7 +227,7 @@ for (const lang of ["it", "en"]) {
 assert.match(scopeTableTemplate, /scopeTable\.steps[\s\S]*scopeTable\.groups[\s\S]*row\.cells/);
 assert.doesNotMatch(scopeTableTemplate, /gift/);
 // Le colonne invisibili: ogni riga dice le sue, e la cella le rispetta.
-assert.deepEqual(table.rows.map((row) => row.layout), ["text", "symbol-number", "symbol-text", "text", "text", "symbol-number", "symbol-text", "text", "text", "symbol-number", "text", "text", "text", "text"]);
+assert.deepEqual(table.rows.map((row) => row.layout), ["text", "symbol-number", "symbol-text", "text", "text", "symbol-number", "symbol-text", "text", "text", "text", "symbol-number", "text", "text", "text", "text"]);
 // Una parola per casella (2/10): il Dettaglio e Malus e bonus tornano al carattere pieno.
 assert.equal(riga("precision").small, false);
 assert.equal(riga("conditionsMalus").small, false);

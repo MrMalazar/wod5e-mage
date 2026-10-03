@@ -10,7 +10,9 @@
  * lenti (misure alternative della stessa cosa: in un lancio se ne usa una).
  * Lo 0 è la base e non costa niente, ogni livello vale il suo numero; la
  * soglia è l'Epicità più la somma degli Ambiti. Nella Portata la prima
- * riga vale nello scontro e la seconda fuori; nella Potenza i Danni servono
+ * riga vale nello scontro e la seconda fuori; la terza, il Legame (Blue,
+ * 3/10), quando arrivi al bersaglio attraverso quello che vi lega, e non
+ * misura la distanza ma quanto ti è vicino; nella Potenza i Danni servono
  * nello scontro; nella Durata la prima riga conta il tempo di gioco, la
  * seconda quello del mondo; le altre lenti sono libere. Dal 2/10 Malus e
  * Beneficio sono una lente sola (Malus e bonus), e Scontro e Narrativa
@@ -94,9 +96,14 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
     faIcons: ["fa-solid fa-clock", "fa-solid fa-sun", "fa-solid fa-calendar-week", "fa-solid fa-calendar-days", "fa-solid fa-leaf", "fa-solid fa-calendar-check", "fa-solid fa-hourglass-half", "fa-solid fa-infinity"],
     layout: "symbol-text"
   },
-  // Portata: nello scontro e fuori.
+  // Portata: nello scontro e fuori; poi il Legame (Blue, 3/10), la terza
+  // lente, che non misura la distanza ma quanto ti è vicino il bersaglio:
+  // dal sangue (1) al filo più esile (7). Con un legame arrivi al bersaglio
+  // ovunque sia, anche senza Corrispondenza; senza nemmeno il filo del 7 serve
+  // la Corrispondenza. Lo 0 è lo stesso delle altre lenti: lo tocchi.
   { id: "range", scope: "range", sublabel: "WOD5E_MAGE.Scopes.Sub.range", layout: "text" },
   { id: "rangeNarrative", scope: "range", sublabel: "WOD5E_MAGE.Scopes.Sub.rangeNarrative", layout: "text" },
+  { id: "rangeBond", scope: "range", sublabel: "WOD5E_MAGE.Scopes.Sub.rangeBond", layout: "text" },
   // Potenza: i Danni sono l'Areté (allo 0) più il numero; il Peso dice
   // quanto pesa quello che l'effetto muove; l'Influenza quanto cambia una
   // persona, dalle emozioni (1) fino a pilotarla (7). Non è una Condizione.

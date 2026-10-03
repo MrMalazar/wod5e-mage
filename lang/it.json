@@ -413,7 +413,7 @@
       "area": "Area",
       "TableTitle": "Gli Ambiti",
       "TableHint": "Gli Ambiti danno la misura a un effetto di Magick. In cima l'Epicità, da 1 a 7, dice quanto in fondo arriva il gesto; sotto, sei Ambiti con una scala da 0 a 7 dicono quanto: quelli che l'effetto non tocca restano a 0. Ogni Ambito si legge con una, due o tre lenti, misure alternative della stessa cosa: in un lancio se ne usa una. Lo 0 è la base e non costa niente; ogni livello vale il suo numero. La soglia è l'Epicità più la somma degli Ambiti, e ogni punto di soglia toglie un dado alla riserva. In un lancio si alzano sopra lo 0 al massimo tre Ambiti; l'Epicità non conta.",
-      "TableModes": "Nella Portata la lente Scontro vale nel combattimento e la Narrativa fuori; nella Potenza i Danni servono nello scontro: è il Narratore a dichiarare quando si legge in combattimento. Nella Durata la prima riga conta il tempo di gioco, la seconda quello del mondo. Le altre lenti (Effetto, Area, Malus e bonus, Complessità, Peso, Influenza, Dettaglio, Informazione) sono libere, buone in ogni scena.",
+      "TableModes": "Nella Portata la lente Scontro vale nel combattimento, la Narrativa fuori e il Legame quando arrivi al bersaglio attraverso quello che vi lega; nella Potenza i Danni servono nello scontro: è il Narratore a dichiarare quando si legge in combattimento. Nella Durata la prima riga conta il tempo di gioco, la seconda quello del mondo. Le altre lenti (Effetto, Area, Malus e bonus, Complessità, Peso, Influenza, Dettaglio, Informazione) sono libere, buone in ogni scena.",
       "TableSuccesses": "Ambito",
       "TableReading": "Lente",
       "TableNote": "Gli Ambiti servono a canalizzare la generalità e la variabilità degli effetti di Magick: è consigliato pensare un effetto nel minor numero di Ambiti possibile, ragionando per necessità e obiettivo.",
@@ -422,7 +422,7 @@
         "targets": "Chi o cosa prende l'effetto. L'Effetto conta i bersagli uno per uno, l'Area prende tutto quello che sta dentro uno spazio.",
         "conditions": "Cosa l'effetto lascia addosso e a quali patti funziona. Malus e bonus dice quanto pesa: il bonus è il malus girato, e non entra nei lanci di Magick. La Complessità sono le clausole che lo regolano.",
         "duration": "Quanto resta in piedi l'effetto. La prima riga conta in tempo di gioco, la seconda in tempo del mondo.",
-        "range": "Fin dove arriva l'effetto da chi lo lancia. Per agire su quello che non vedi serve la Corrispondenza, oppure un legame col bersaglio (la Regola del Ponte).",
+        "range": "Fin dove arriva l'effetto. Scontro e Narrativa misurano la distanza: per agire su quello che non percepisci serve la Corrispondenza. Il Legame misura quanto ti è vicino il bersaglio, dal sangue (1) al filo più esile (7): con un legame lo raggiungi ovunque sia, anche senza Corrispondenza. Conta il più stretto fra chi è per te e cosa hai di suo.",
         "potency": "Quanto è forte l'effetto: i Danni nello scontro, il Peso in tutti e due, l'Influenza su una persona. L'Influenza dice quanto la cambia, dalle emozioni fino a pilotarla, e non è una Condizione.",
         "precision": "Quanto è fine quello che l'effetto sceglie o trova: il Dettaglio, dal corpo intero a un atomo, nello scontro e fuori. L'Informazione dice quanto è rara la cosa che scopri: il giocatore fa la domanda, il Narratore fissa il livello prima del tiro."
       },
@@ -435,6 +435,7 @@
         "durationWorld": "Mondo",
         "range": "Scontro",
         "rangeNarrative": "Narrativa",
+        "rangeBond": "Legame",
         "potencyDamage": "Danni",
         "potencyWeight": "Peso",
         "potencyInfluence": "Influenza",
@@ -530,6 +531,16 @@
           "5": "Nel continente",
           "6": "In un altro continente",
           "7": "Ovunque sia"
+        },
+        "rangeBond": {
+          "0": "Lo tocchi",
+          "1": "Sangue",
+          "2": "Intimo",
+          "3": "Amico",
+          "4": "Conoscente",
+          "5": "Incontro",
+          "6": "Nome",
+          "7": "Filo"
         },
         "potencyDamage": {
           "0": "",
@@ -665,6 +676,16 @@
           "6": "Dall'altra parte del mondo.",
           "7": "Anche senza sapere dove si trova."
         },
+        "rangeBond": {
+          "0": "Le mani sul bersaglio: il legame non serve.",
+          "1": "Sangue del tuo sangue (tuo padre, tua figlia, tuo fratello), o una parte del suo corpo (sangue, capelli, unghie).",
+          "2": "Chi vive con te o ti è più caro (il compagno, la moglie, l'amico di una vita), o quello che porta addosso ogni giorno (la fede, gli occhiali, il rosario).",
+          "3": "Un amico, un compagno di cabala, il tuo maestro, o una cosa a cui tiene (il diario, l'orologio del padre, la chitarra).",
+          "4": "Lo conosci di nome e di faccia (il collega, il vicino, il barista), o una cosa sua qualunque (le chiavi, la penna, la giacca).",
+          "5": "L'hai visto una volta (alla festa, al banco dei pegni, in metropolitana), o hai la sua foto, la sua voce registrata, la sua firma.",
+          "6": "Non l'hai mai visto ma sai chi è (il nome, il ruolo, una descrizione), o una cosa che ha usato (il telefono da cui ha chiamato, l'auto che ha guidato, la stanza dove ha dormito).",
+          "7": "Sai solo una cosa che ha fatto (ha pagato il cecchino, ha scritto la lettera anonima, ti ha rubato l'auto), o una traccia lasciata passando (il bossolo, la busta dei soldi, il biglietto che ha buttato). Senza nemmeno questo serve la Corrispondenza."
+        },
         "potencyDamage": {
           "0": "Tanti danni quanta la tua Areté, sulla Salute del bersaglio.",
           "1": "L'Areté più uno, sulla Salute del bersaglio.",
@@ -737,6 +758,7 @@
         "durationWorld": "Mondo",
         "range": "Scontro",
         "rangeNarrative": "Narr.",
+        "rangeBond": "Legame",
         "potencyDamage": "Danni",
         "potencyWeight": "Peso",
         "potencyInfluence": "Infl.",
