@@ -374,7 +374,7 @@ async function onNemicoManoAggiungi(event) {
   event.preventDefault();
   if (!puoScrivere(this)) return;
   const mano = this._stato.mano;
-  const conto = sogliaDagliAmbiti(mano.livelli ?? {}, { impossibile: Boolean(mano.impossibile) });
+  const conto = sogliaDagliAmbiti(mano.livelli ?? {});
   const ambiti = Object.fromEntries(conto.ambiti.map((entry) => [entry.id, entry.level]));
   const id = nuovoId(this, bandiera(this).magick?.effetti);
   // Il cassetto si chiude e si svuota prima di scrivere: il ridisegno che segue lo trova già chiuso.
@@ -391,7 +391,6 @@ async function onNemicoManoAggiungi(event) {
     formula: "",
     ambiti,
     soglia: conto.soglia,
-    impossibile: Boolean(mano.impossibile),
     lentePotenza: ["danni", "peso", "influenza"][Math.min(Math.trunc(Number((mano.lenti ?? {}).potency) || 0), 2)],
     sort: Date.now()
   });
@@ -744,7 +743,6 @@ export class NemicoSheet extends SPCActorSheet {
         event.stopPropagation();
         const key = input.dataset.mano;
         this._stato.mano[key] = input.type === "checkbox" ? input.checked : input.value;
-        if (key === "impossibile") this.render({ parts: ["gioco"] });
       });
     }
     // La cerca del Grimorio filtra sul posto, e sopravvive ai render.

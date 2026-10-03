@@ -164,13 +164,13 @@
       "HarmonyFlavor": "Harmony {dice}",
       "Pool": "Pool",
       "Threshold": "Threshold",
-      "ThresholdHint": "The threshold is the sum of Scope levels: a Scope at 1 counts as 0, while a Scope above 1 counts as its level. Spheres do not contribute and the sum has no cap. The Arete prize does not touch it: it adds dice to the pool. The threshold is subtracted from the pool: what is left is what you roll. Success starts at 6; Vulgar with witnesses automatically raises it to 8.",
+      "ThresholdHint": "The threshold is Epicness, at least 1, plus the sum of Scope levels: each level is worth its number, 0 is free. Spheres do not contribute and the sum has no cap. The Arete prize does not touch it: it adds dice to the pool. The threshold is subtracted from the pool: what is left is what you roll. Success starts at 6; Vulgar with witnesses automatically raises it to 8.",
       "AutoVictoryBanner": "Automatic victory",
       "BonusCap": "+3 cap: {excess} fewer dice.",
       "SpherePlan": "Spheres: {plans}.",
       "SpecialtyHint": "Specialty: if you declare this Scope, extra dice equal to Arete. The threshold does not change.",
       "HarmonyShort": "dice from other Mages",
-      "ThresholdShort": "Threshold: sum of Scopes above 1; the Arete prize does not touch it. Scopes at 1 count as 0. Subtracted from the pool: what is left is what you roll.",
+      "ThresholdShort": "Threshold: Epicness, at least 1, plus the sum of the Scopes; the Arete prize does not touch it. Subtracted from the pool: what is left is what you roll.",
       "ScopeTable": "The Scopes table",
       "BacklashLabel": "Backlash",
       "BacklashEyesOne": "one eye on the red dice",
@@ -403,6 +403,7 @@
     },
     "Scopes": {
       "Label": "Scopes",
+      "epic": "Epicness",
       "targets": "Targets",
       "conditions": "Conditions",
       "duration": "Duration",
@@ -411,25 +412,25 @@
       "precision": "Precision",
       "area": "Area",
       "TableTitle": "The Scopes",
-      "TableHint": "Scopes give a Magick effect its measure, each on a scale from 0 to 7. First decide what the effect must do, then look for the Scopes needed to say it: those the effect does not touch stay at 0. Each Scope is read through two or three sub-scopes, alternative measures of the same thing: a casting uses one. 0 is the base and costs nothing; each level is worth its number. The threshold is the sum of the levels of the Scopes used, and each point of threshold takes one die from the pool. In one casting at most three Scopes rise above 0; an impossible feat takes +5 after the count.",
-      "TableModes": "In Range and Precision the Fight lens applies in combat and Narrative outside it; in Potency, Damage is for the fight: the Storyteller declares when a combat reading applies. In Duration the first row counts game time, the second world time. The other lenses (Effect, Area, Malus, Complexity, Benefit, Weight, Influence, Information) are free, good in any scene.",
+      "TableHint": "Scopes give a Magick effect its measure. On top, Epicness, from 1 to 7, says how deep the gesture goes; below, six Scopes on a scale from 0 to 7 say how much: those the effect does not touch stay at 0. Each Scope is read through one, two or three lenses, alternative measures of the same thing: a casting uses one. 0 is the base and costs nothing; each level is worth its number. The threshold is Epicness plus the sum of the Scopes, and each point of threshold takes one die from the pool. In one casting at most three Scopes rise above 0; Epicness does not count.",
+      "TableModes": "In Range the Fight lens applies in combat and Narrative outside it; in Potency, Damage is for the fight: the Storyteller declares when a combat reading applies. In Duration the first row counts game time, the second world time. The other lenses (Effect, Area, Malus and bonus, Complexity, Weight, Influence, Detail, Information) are free, good in any scene.",
       "TableSuccesses": "Scope",
       "TableReading": "Lens",
       "TableNote": "Scopes channel the generality and variability of Magick effects: think an effect in as few Scopes as possible, by need and goal.",
       "Desc": {
+        "epic": "How deep the gesture goes: from 1, a trick, to 7, the impossible. The player picks it from the examples and the Storyteller corrects it. Every casting has it, at least 1, and it does not count among the three Scopes. It is read apart from the Consensus: a fate rewritten through coincidences is Coincidental and worth 6.",
         "targets": "Who or what takes the effect. Effect counts targets one by one, Area takes everything inside a space.",
-        "conditions": "What the effect leaves on someone, what it grants and under which terms it works. The Malus is the Condition it puts on a target, the Benefit is the help it grants, the Complexity is the clauses that rule it. The Benefit never enters Magick castings.",
+        "conditions": "What the effect leaves on someone and under which terms it works. Malus and bonus says how much it weighs: the bonus is the malus turned around, and it never enters Magick castings. Complexity is the clauses that rule it.",
         "duration": "How long the effect stands. The first row counts game time, the second world time.",
         "range": "How far the effect reaches from the caster. To act on what you cannot see you need Correspondence, or a bond with the target (the Bridge Rule).",
         "potency": "How strong the effect is: Damage in a fight, Weight in both, Influence on a person. Influence says how much it changes them, from their emotions up to steering them, and it is not a Condition.",
-        "precision": "How fine the effect's choice or finding is: in a fight the spot to hit, outside the detail to find or touch. Information says how rare the thing you learn is: the player asks the question, the Storyteller sets the level before the roll."
+        "precision": "How fine the effect's choice or finding is: Detail, from the whole body down to an atom, in a fight and outside. Information says how rare the thing you learn is: the player asks the question, the Storyteller sets the level before the roll."
       },
       "Sub": {
         "targets": "Effect",
         "targetsArea": "Area",
-        "conditionsMalus": "Malus",
+        "conditionsMalus": "Malus and bonus",
         "conditionsComplexity": "Complexity",
-        "conditionsBenefit": "Benefit",
         "duration": "Game",
         "durationWorld": "World",
         "range": "Fight",
@@ -437,11 +438,19 @@
         "potencyDamage": "Damage",
         "potencyWeight": "Weight",
         "potencyInfluence": "Influence",
-        "precision": "Fight",
-        "precisionNarrative": "Narrative",
+        "precision": "Detail",
         "precisionInfo": "Information"
       },
       "Table": {
+        "epic": {
+          "1": "Trick",
+          "2": "Push",
+          "3": "Change",
+          "4": "Wonder",
+          "5": "Creation",
+          "6": "Miracle",
+          "7": "Impossible"
+        },
         "targets": {
           "0": "One target",
           "1": "+1",
@@ -463,14 +472,14 @@
           "7": "Planet"
         },
         "conditionsMalus": {
-          "0": "No Condition",
-          "1": "A minor one: −1",
-          "2": "A fight Condition",
-          "3": "Grade 1: −2",
-          "4": "Grade 2: −2 and 8",
-          "5": "Grade 3 on one thing",
-          "6": "Grade 3 on one type",
-          "7": "Grade 3 on everything"
+          "0": "None",
+          "1": "Minor",
+          "2": "Means",
+          "3": "Grade 1",
+          "4": "Grade 2",
+          "5": "Grade 3",
+          "6": "Type",
+          "7": "All"
         },
         "conditionsComplexity": {
           "0": "None",
@@ -481,16 +490,6 @@
           "5": "Complex",
           "6": "Very complex",
           "7": "Contract level"
-        },
-        "conditionsBenefit": {
-          "0": "No bonus",
-          "1": "A minor one: +1",
-          "2": "A means",
-          "3": "Grade 1: +2",
-          "4": "Grade 2: +2, no 8",
-          "5": "Grade 3 on one thing",
-          "6": "Grade 2 on one type",
-          "7": "Grade 2 on everything"
         },
         "duration": {
           "0": "1",
@@ -563,24 +562,14 @@
           "7": "You steer them"
         },
         "precision": {
-          "0": "Wherever it lands",
-          "1": "The body",
-          "2": "A limb",
-          "3": "The object in use",
-          "4": "The weak spot",
-          "5": "A tiny spot",
-          "6": "The inner part",
-          "7": "A point of the Pattern"
-        },
-        "precisionNarrative": {
-          "0": "Broadly",
-          "1": "That object",
-          "2": "A part",
-          "3": "A detail",
-          "4": "The needle in the haystack",
-          "5": "A grain",
-          "6": "A molecule",
-          "7": "An atom"
+          "0": "None",
+          "1": "Body",
+          "2": "Part",
+          "3": "Feature",
+          "4": "Point",
+          "5": "Grain",
+          "6": "Molecule",
+          "7": "Atom"
         },
         "precisionInfo": {
           "0": "Nothing you did not know",
@@ -594,6 +583,15 @@
         }
       },
       "Hint": {
+        "epic": {
+          "1": "You barely touch the world: lighting a candle, knowing where you are, hearing a lie.",
+          "2": "You push what is there: deflecting a bullet, steering a mood, loading a die.",
+          "3": "You change what is there: healing a wound, teleporting, animating a corpse.",
+          "4": "You take it beyond its nature: turning into an animal, controlling the weather, opening a portal.",
+          "5": "You make what was not there: creating an organism, creating a Node, opening a Realm.",
+          "6": "You go against death, the soul, fate: bringing back the dead, creating a soul, breaking a written fate.",
+          "7": "You bend time and the laws of the world: travelling in time, creating a black hole, creating a new space."
+        },
         "targets": {
           "0": "A single target.",
           "1": "One more target, picked one by one: friends and foes sort themselves out.",
@@ -615,14 +613,14 @@
           "7": "The world. Area takes everything inside, friends included: to leave them out you need a Complexity clause."
         },
         "conditionsMalus": {
-          "0": "No Condition: the effect leaves nothing on the target.",
-          "1": "A minor one: −1 to rolls of its type. Bruised, Shaken, Knocked down.",
-          "2": "A fight Condition: takes away the weapon, the movement or the turn's action. Disarmed, Tied, Stunned.",
-          "3": "Grade 1: −2 on the rolls the Condition touches. Dazzled, Intimidated, Bleeding.",
-          "4": "Grade 2: −2 and difficulty 8 on the rolls it touches. Blurred, Frightened, Poisoned.",
-          "5": "Grade 3 on one thing: whatever that thing requires fails. Blind, Mute, Broken.",
-          "6": "Grade 3 on one type of roll: physical, social or mental rolls fail. Paralysed, Dying, Furious.",
-          "7": "Grade 3 on everything: every roll fails, or the target leaves the scene. Unconscious, Asleep, Terrified."
+          "0": "Told in the story, it does not touch the rolls.",
+          "1": "−1 or +1 to rolls of one type: Bruised, Shaken, Knocked down.",
+          "2": "Takes away or grants a weapon, a tool, a hold: Disarmed; a blade of fire, a rope.",
+          "3": "−2 or +2: Dazzled, Bleeding, Intimidated.",
+          "4": "−2 and difficulty 8, or +2 and never 8: Blurred, Poisoned, Frightened.",
+          "5": "One thing fails, or succeeds without rolling: Blind, Mute, Tied.",
+          "6": "Rolls of one type fail, or succeed: Paralysed, Furious.",
+          "7": "Out of play, or every roll succeeds: Unconscious, Asleep, Terrified."
         },
         "conditionsComplexity": {
           "0": "The effect fires at once and applies to everything it touches. No clause.",
@@ -633,16 +631,6 @@
           "5": "Clauses that depend on one another, and one changes the meaning of another. If a stranger enters the alarm fires, but only if the door was shut.",
           "6": "A rulebook: different cases with different answers. A friend passes, a foe stays out, a Sleeper gets lost in the corridor.",
           "7": "A pact among several parties, with duties, exceptions and penalties for who breaks it. Who betrays the pact stays Mute until they make amends."
-        },
-        "conditionsBenefit": {
-          "0": "No bonus: the effect helps in the scene but does not touch the rolls.",
-          "1": "+1 to rolls of one type: physical, social or mental. Shooting, lying, remembering.",
-          "2": "A weapon, a tool or a hold the target did not have. A blade of fire, a key that opens, a rope that holds.",
-          "3": "+2 on the rolls the Benefit touches. Aiming, listening, running.",
-          "4": "+2, and those rolls never go to 8. Seeing in the dark, hearing through the din, running on ice.",
-          "5": "That thing succeeds without rolling. A pistol shot, a leap between roofs, a lock.",
-          "6": "+2 and no 8 on every roll of one type: physical, social or mental.",
-          "7": "+2 and no 8 on every roll, of all three types."
         },
         "duration": {
           "0": "The effect happens and ends within the casting turn.",
@@ -708,24 +696,14 @@
           "7": "You steer them how and when you want: they speak, move and fight as you decide."
         },
         "precision": {
-          "0": "You hit the target, but you do not choose where.",
-          "1": "A large, easy part: the torso, the bonnet.",
-          "2": "A large part: an arm, a leg, a car wheel.",
-          "3": "A small part that serves the action: the gripping hand, the steering wheel.",
-          "4": "An object held in hand, or a gap in the protection: the weapon, an armour joint.",
-          "5": "A tiny spot, often moving: an eye, the trigger.",
-          "6": "Something inside, unseen: an organ, the running engine.",
-          "7": "The point of the Pattern that makes that thing what it is."
-        },
-        "precisionNarrative": {
-          "0": "The thing in general: any car, a building, a crowd.",
-          "1": "One precise thing among many: that car, that person, that door.",
-          "2": "A part of that thing: the engine, the pocket, the lock.",
-          "3": "A small detail: the key in the lock, a screw, a button.",
-          "4": "A tiny thing hidden among many: a hair on the carpet, a coin in the sand, a page in a library.",
-          "5": "Something you can barely see: a speck of dust, a drop of blood, a thread.",
-          "6": "What the eye cannot see: the poison in the glass, a chemical trace, a virus.",
-          "7": "The smallest part of a thing: an atom, a single cell."
+          "0": "Wherever it lands, broadly: the target without choosing where, any car, a crowd.",
+          "1": "The body, that object: the torso, that car, that door.",
+          "2": "A limb, a part: an arm, a car wheel, the lock.",
+          "3": "The object in use, a feature: the gripping hand, the key in the lock, a screw.",
+          "4": "The weak spot, the needle in the haystack: an armour joint, a hair on the carpet, a page in a library.",
+          "5": "A tiny spot, a grain: an eye, the trigger, a drop of blood.",
+          "6": "What lies inside, unseen by the eye: an organ, the poison in the glass, a virus.",
+          "7": "A point of the Pattern, an atom: what makes a thing what it is, a single cell."
         },
         "precisionInfo": {
           "0": "The time, the weather, who is in the room.",
@@ -749,13 +727,12 @@
         "7": "chronicle"
       },
       "DamageReading": "{n} damage",
-      "PerCastCap": "In one casting at most three Scopes rise above 0: lower one before raising another.",
+      "PerCastCap": "In one casting at most three Scopes rise above 0, Epicness aside: lower one before raising another.",
       "SubShort": {
         "targets": "Effect",
         "targetsArea": "Area",
         "conditionsMalus": "Malus",
         "conditionsComplexity": "Compl.",
-        "conditionsBenefit": "Benef.",
         "duration": "Game",
         "durationWorld": "World",
         "range": "Fight",
@@ -763,11 +740,9 @@
         "potencyDamage": "Damage",
         "potencyWeight": "Weight",
         "potencyInfluence": "Infl.",
-        "precision": "Fight",
-        "precisionNarrative": "Narr.",
+        "precision": "Detail",
         "precisionInfo": "Info"
-      },
-      "Zero": "Level 0 is the base effect: always there, never removed, free. The seven dots after it raise it."
+      }
     },
     "OngoingMagick": {
       "Label": "Ongoing Magick",
@@ -1998,10 +1973,10 @@
       "Riserva": "Pool",
       "RiservaHint": "What gives dice: Attribute, Skill, Specialty, Arete prize, power, Traits; Conditions subtract. At the bottom the total: minus and plus adjust it.",
       "Soglia": "Threshold",
-      "SogliaHint": "What removes dice: the sum of the Scope levels, and the power that touches it. At the bottom the total: minus and plus raise or lower it.",
+      "SogliaHint": "What removes dice: Epicness, at least 1, the raised Scopes and the power that touches it. At the bottom the total: minus and plus raise or lower it.",
       "DadiNote": "Dice adjusted by hand: {dice}.",
       "PillolaVia": "Remove from the roll",
-      "ScopeCapWarning": "In one casting at most {n} Scopes rise above 0: lower one before raising another.",
+      "ScopeCapWarning": "In one casting at most {n} Scopes rise above 0, Epicness aside: lower one before raising another.",
       "PotereNote": {
         "dice": "{name}: {value} dice",
         "threshold": "{name}: threshold {value}",
@@ -2029,7 +2004,7 @@
       "RiesceSenzaTirare": "Succeeds without rolling: {name}",
       "PotereCosto": "The power costs {points} Quintessence.",
       "PotereDadiFlavor": "{name} +{dice}",
-      "SogliaManoHint": "The threshold: the sum of the Scopes. Minus and plus raise or lower it above the count (the impossible feat: +5); the pen says by how much.",
+      "SogliaManoHint": "The threshold: Epicness plus the sum of the Scopes. Minus and plus raise or lower it above the count; the pen says by how much.",
       "SogliaManoAbilitaHint": "The threshold the Storyteller sets, with minus and plus: without it, the roll does not start.",
       "RitoccoHint": "The pool: what gives dice, minus Conditions. Minus and plus adjust it, even downwards, outside the cap; the pen says by how much.",
       "Dal": "from {n}",
@@ -2582,9 +2557,8 @@
       "Lente": "Click: the next lens",
       "SogliaGrande": "Threshold",
       "TuttiZero": "all at 0",
-      "Impossibile": "impossible feat, +{extra}",
       "Aggiungi": "Add",
-      "TettoAmbiti": "In one casting at most three Scopes rise above 0: lower one before raising another.",
+      "TettoAmbiti": "In one casting at most three Scopes rise above 0, Epicness aside: lower one before raising another.",
       "DanniMagick": "damage {danni} (Areté {arete} + Potency {potenza})",
       "EffettoMagickTogli": "Remove the Magick effect",
       "EffettoMagickApri": "Open the details",

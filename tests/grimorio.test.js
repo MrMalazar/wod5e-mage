@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { EFFETTI, FORMULE } from "../scripts/data/effetti.js";
 import { FORMULE_M6 } from "../scripts/data/formule.js";
-import { effectAvailable, effectSphereLevels, findEffetto, findFormula, formulaPick, formuleLabels, prepareGrimorio, prepareGrimorioFormule, prepareGrimorioSpheres, splitScopes } from "../scripts/grimorio.js";
+import { effectAvailable, effectEpic, effectSphereLevels, findEffetto, findFormula, formulaPick, formuleLabels, prepareGrimorio, prepareGrimorioFormule, prepareGrimorioSpheres, splitScopes } from "../scripts/grimorio.js";
 import { ustioneSplit, normalizeEffectKind } from "../scripts/paradox-burst.js";
 import { paintSalute } from "../scripts/salute.js";
 import { renderRollCard } from "../scripts/roll-card.js";
@@ -26,6 +26,10 @@ assert.equal(effectAvailable(curvare, { forces: 2 }), true);
 assert.equal(effectAvailable(curvare, { forces: 1 }), false);
 assert.deepEqual(effectSphereLevels(proiettare), { forces: 2, prime: 1 });
 assert.deepEqual(effectSphereLevels(curvare), { forces: 2 });
+// L'Epicità di un effetto parte dal suo livello (Blue, 2/10); una scritta a parte vince; mai sotto 1 né sopra 7.
+assert.equal(effectEpic(curvare), 2);
+assert.equal(effectEpic(findEffetto("time-5-viaggiare-nel-tempo") ?? { level: 5 }), 5);
+assert.deepEqual([effectEpic({ level: 5, epic: 7 }), effectEpic({}), effectEpic({ level: 9 })], [7, 1, 7]);
 
 const grimorio = prepareGrimorio({ forces: 2, mind: 1 });
 assert.deepEqual(grimorio.map((g) => g.sphere), ["forces", "mind"]);

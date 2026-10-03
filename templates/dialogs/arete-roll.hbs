@@ -93,13 +93,14 @@
                 <button type="button" class="wod5e-mage-arete-scope-table" data-role="scopeTableOpen" title="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}" aria-label="{{localize 'WOD5E_MAGE.Arete.ScopeTable'}}"><i class="fa-solid fa-table-list"></i></button>
                 {{localize "WOD5E_MAGE.Scopes.Label"}}
             </span>
+            {{!-- Sette pallini per Ambito, i livelli da 1 a 7 (2/10: via lo 0). In cima
+                 l'Epicità, staccata, che parte da 1: ogni lancio vale almeno 1. --}}
             {{#each scopes as |scope|}}
-                <div class="wod5e-mage-arete-dotrow" data-role="dotRow" data-kind="scope" data-id="{{scope.id}}">
+                <div class="wod5e-mage-arete-dotrow{{#if scope.base}} base{{/if}}" data-role="dotRow" data-kind="scope" data-id="{{scope.id}}">
                     <i class="wod5e-mage-arete-row-icon {{scope.faIcon}}" aria-hidden="true"></i>
                     <span class="wod5e-mage-arete-dot-label">{{localize scope.label}}</span>
-                    <input type="hidden" name="scope-{{scope.id}}" value="0">
+                    <input type="hidden" name="scope-{{scope.id}}" value="{{scope.min}}">
                     <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
-                        <span class="wod5e-mage-arete-sphere-dot zero" data-level="0" role="img" aria-label="0{{#if scope.zero.reading}} · {{scope.zero.reading}}{{/if}}" title="{{#if scope.zero.reading}}0 · {{scope.zero.reading}}&#10;{{/if}}{{localize 'WOD5E_MAGE.Scopes.Zero'}}"></span>
                         {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
                     </span>
                     {{!-- La voce della tavola per il livello scelto («Città»), a destra dei pallini (9/9):

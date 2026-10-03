@@ -70,15 +70,19 @@ assert.deepEqual(schedaParadosso([]), []);
 assert.equal(spendPrice({ sphereLevels: [{ id: "forces", level: 3 }], scopeLevels: [{ id: "potency", level: 3 }, { id: "duration", level: 4 }] }), 7);
 const choice = readSpendChoice({ "sphere-forces": "9", "sphere-life": "2", "scope-potency": "3", text: " Il lampione esplode ", whisper: "on" }, scheda);
 assert.deepEqual(choice.spheres, [{ id: "forces", level: 5 }, { id: "life", level: 2 }], "dentro il tetto della Scheda");
-assert.deepEqual(choice.scopes, [{ id: "potency", level: 3 }]);
-assert.equal(choice.price, 3);
+// L'Epicità (2/10): c'è in ogni spesa, almeno 1, e va per prima.
+assert.deepEqual(choice.scopes, [{ id: "epic", level: 1 }, { id: "potency", level: 3 }]);
+assert.equal(choice.price, 4);
+const epica = readSpendChoice({ "scope-epic": "5", "scope-potency": "2" }, scheda);
+assert.deepEqual(epica.scopes, [{ id: "epic", level: 5 }, { id: "potency", level: 2 }]);
+assert.equal(epica.price, 7, "l'Epicità entra nel prezzo");
 assert.equal(choice.text, "Il lampione esplode");
 assert.equal(choice.whisper, true);
 assert.equal(readSpendChoice({ "sphere-time": "3" }, scheda).spheres.length, 0, "una Sfera fuori dalla Scheda non entra");
 const card = renderSpendCard(choice, (key) => key);
 assert.match(card, /wod5e-mage-paradosso-banner">WOD5E_MAGE\.Paradosso\.CardTitle</);
 assert.match(card, /forces\.png" alt=""><b>5<\/b>/);
-assert.match(card, /WOD5E_MAGE\.Paradosso\.Price<\/b><span class="wod5e-mage-roll-value">3</);
+assert.match(card, /WOD5E_MAGE\.Paradosso\.Price<\/b><span class="wod5e-mage-roll-value">4</);
 assert.match(card, /Il lampione esplode/);
 
 // La macchina: impostazione di mondo, icona nella barra, raccolta dal messaggio, pannello, lingue, CSS.
@@ -102,6 +106,10 @@ assert.match(pannello, /data-role="points"/);
 for (const azione of ["visibile", "chiudi", "meno", "piu", "spendi", "nuovaSessione", "azzera", "scheda"]) assert.match(pannello, new RegExp(`data-azione="${azione}"`));
 const spesa = readFileSync(new URL("../templates/dialogs/paradosso-spesa.hbs", import.meta.url), "utf8");
 assert.match(spesa, /data-role="spendRow" data-kind="sphere"/);
+// La finestra di spesa (2/10): niente pallino dello 0, l'Epicità parte da 1 e ha lo stacco.
+assert.doesNotMatch(spesa, /sphere-dot zero|Scopes\.Zero|scope\.zero/);
+assert.match(spesa, /wod5e-mage-arete-dotrow\{\{#if scope\.base\}\} base\{\{\/if\}\}" data-role="spendRow" data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}" value="\{\{scope\.min\}\}"/);
+assert.match(source, /input\.value = String\(Number\(input\.value\) === level \? min : level\);/);
 assert.match(spesa, /data-role="price"/);
 assert.doesNotMatch(spesa, /Paradosso\.InterventionsTodo|wod5e-mage-paradosso-interventi/, "niente segnaposto in corsivo (Blue, 25/9)");
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");

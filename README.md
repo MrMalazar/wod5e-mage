@@ -61,17 +61,23 @@ cap; since 27 September 2026 the prize adds dice and no longer lowers the
 threshold, and since 1.35.0 Hybrid Magick takes it like the other two Types), Harmony is a plain number of dice the
 other Mages grant (counted at the table), and Harmony and every positive
 modifier share a +3 cap that the confirmation dialog enforces. Every unlocked Sphere shows its dots and
-the player clicks the level used; the six Scopes (Targets, Conditions,
+the player clicks the level used; Epicness and the six Scopes (Targets, Conditions,
 Duration, Range, Potency, Precision) each show seven dots for their
 level, and an icon beside the Scopes header opens the Scopes table for
 reference. Since the table of 23 September 2026, reworked on 29 September
-(Impact removed; Information moved to Precision; Influence and Benefit added),
-every Scope reads through two or three lenses (Effect or Area; Malus,
-Complexity or Benefit; game or world time; fight or narrative Range; Damage,
-Weight or Influence; fight, narrative or Information Precision) on a scale from 0 to
-7: 0 is the free base, each level is worth its number, the threshold is the
-sum of the levels used, at most three Scopes rise above 0 in one casting,
-and an impossible feat takes +5 after the count. A Scope covered by a Sphere
+(Impact removed; Information moved to Precision; Influence added) and on
+2 October (Epicness added; Malus and Benefit merged into Malus and bonus;
+fight and narrative Precision merged into Detail, one word per cell),
+every Scope reads through one, two or three lenses (Effect or Area; Malus and
+bonus or Complexity; game or world time; fight or narrative Range; Damage,
+Weight or Influence; Detail or Information) on a scale from 0 to
+7: 0 is the free base, each level is worth its number, and at most three
+Scopes rise above 0 in one casting. On top of them, set slightly apart,
+Epicness says how deep the gesture goes, from 1 (Trick) to 7 (Impossible):
+every casting has it, at least 1, it stays outside the cap of three, and the
+threshold is Epicness plus the sum of the Scopes. The old +5 of the
+impossible feat is gone: impossible feats are Epicness 6 and 7. A Grimoire
+effect starts at its own level of Epicness. A Scope covered by a Sphere
 Speciality counts as the lower of the Sphere and the Scope. When the pool
 is at least twice the threshold the victory is automatic: coincidental
 Magick posts a chat card with no dice, vulgar Magick rolls only the Paradox
@@ -189,9 +195,10 @@ collapsible card each, grouped by Sphere and in name order: closed, the card
 keeps the name and the Goal; the die loads the effect into the Roll box the
 same way. Both columns filter on the spot by text and by Sphere (the row of
 sigils shows the Spheres that appear in the list; "All" clears it). Scope
-selectors show eight dots everywhere: the first is level 0, the base effect,
-always lit and never clickable; hovering it reads the base of the Scope (the
-chosen lens, or every lens with its name).
+selectors show seven dots everywhere, levels 1 to 7 (since 2 October 2026
+the level-0 dot is gone: the base is free and needs no dot); the same dot
+again lowers the Scope back to 0, and Epicness back to 1, its floor, with
+its first dot always lit.
 
 ## The Roll box
 
@@ -207,8 +214,9 @@ and Skill sigils, the Specialty indented under its Skill, the Areté prize
 with its checkbox, the power with its Sphere sigil, Traits with their icon,
 Conditions with the family icon and grade, subtracting); its total includes
 the adjustment, which the minus and plus change freely, and a small pen says
-by how much. In a Magick roll the Threshold column always lists the six
-Scopes, in alphabetical order: the Scope's icon, the reading of the declared
+by how much. In a Magick roll the Threshold column always lists Epicness on
+top, slightly apart and at least 1, then the six Scopes, in alphabetical
+order: the Scope's icon, the reading of the declared
 level in the lens that applies (the one chosen on the sheet, or the first)
 and the level; at zero the row is dimmed and reads the base. The Scope's
 name, lens and long explanation sit in the tooltip. The minus and plus on
@@ -223,7 +231,7 @@ only (the price is in the tooltip and on the chat card); disabled, it says
 what is missing. Blue's rule for the box: the fewer words, the better. State
 in `scripts/tiro.js` (`soglia` is the by-hand addend, `dadi` the pool
 adjustment), context in `scripts/tiro-scheda.js` (`righeAmbiti` builds the
-six Scope rows).
+Epicness row and the six Scope rows).
 
 ## Storyteller's verdict on rolls
 
@@ -339,8 +347,10 @@ Under the Actions sits the block of the Nature, the standard that lets NPCs
 of the other lines in without new rules to learn. A plain NPC (Dormiente)
 has no block. The Awakened (Risvegliato) has Magick: Areté, Type, Spheres,
 and every effect as a threshold the character resists, added from the
-Grimoire (the Formulas the Spheres open) or by hand (the six Scopes with
-their dots, the threshold summed as on the mage sheet); the Narrator never
+Grimoire (the Formulas the Spheres open, starting from Epicness 1 until the
+Formulas carry their own) or by hand (Epicness and the six Scopes with
+their numbers from 1 to 7, the threshold summed as on the mage sheet; the
+impossible-feat checkbox is gone with the +5); the Narrator never
 rolls, "Lancia" sends the card to chat. Every other supernatural (Sonnambulo,
 Vampiro, Licantropo, Cacciatore, Spirito, Fatato) has Powers: the score of
 its Nature, with its own name (Gnosi for a werewolf, Potenza del Sangue for

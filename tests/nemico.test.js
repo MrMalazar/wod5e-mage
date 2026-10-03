@@ -8,6 +8,7 @@ import {
   danniMagick,
   DISPOSIZIONI_ORDINE,
   disposizioneDi,
+  effettoDaFormula,
   effettoDaPotere,
   idNuovo,
   letturaSoglia,
@@ -19,6 +20,7 @@ import {
   partiDelPotere,
   probabilitaSuccesso,
   profiloNatura,
+  puoAlzare,
   PUNTEGGIO_MAX,
   puntiAlClic,
   righeOrdinate,
@@ -32,7 +34,7 @@ import {
   datiNemico,
   magickDelNemico
 } from "../scripts/nemico.js";
-import { IMPOSSIBLE_SURCHARGE, SCOPES_PER_CAST, scopeLensIds } from "../scripts/scopes.js";
+import { SCOPES_PER_CAST, scopeLensIds } from "../scripts/scopes.js";
 
 // La scheda del nemico (Blue, 25/9): i conti in funzioni pure.
 
@@ -71,17 +73,23 @@ assert.equal(vociTesto([{ nome: "A", value: -1 }, { nome: "B", value: 3 }]), "-1
 // Nella bandiera: un intero fra −10 e +10, 0 se manca.
 assert.deepEqual([datiNemico({ manoNarratore: "2" }).manoNarratore, datiNemico({ manoNarratore: -30 }).manoNarratore, datiNemico({}).manoNarratore, datiNemico({ manoNarratore: 2.7 }).manoNarratore], [2, -10, 0, 2]);
 
-// La soglia a mano: la somma degli Ambiti alzati, al massimo tre, più 5 per l'impresa impossibile.
-assert.deepEqual(sogliaDagliAmbiti({ potency: 3, range: 2 }), { soglia: 5, ambiti: [{ id: "range", level: 2 }, { id: "potency", level: 3 }], fuoriTetto: [], impossibile: false, extra: 0 });
-assert.equal(sogliaDagliAmbiti({ potency: 3, range: 2 }, { impossibile: true }).soglia, 5 + IMPOSSIBLE_SURCHARGE);
-assert.deepEqual(sogliaDagliAmbiti({}).ambiti, []);
-assert.equal(sogliaDagliAmbiti({}).soglia, 0);
-const quattro = sogliaDagliAmbiti({ targets: 1, duration: 2, range: 1, potency: 3 });
-assert.equal(quattro.ambiti.length, SCOPES_PER_CAST, "oltre il tetto non si conta");
+// La soglia a mano (2/10): l'Epicità, almeno 1, più la somma degli Ambiti alzati, al massimo tre.
+// Il +5 dell'impresa impossibile non c'è più: è l'Epicità 6 o 7.
+assert.deepEqual(sogliaDagliAmbiti({ potency: 3, range: 2 }), { soglia: 6, epicita: 1, ambiti: [{ id: "epic", level: 1 }, { id: "range", level: 2 }, { id: "potency", level: 3 }], fuoriTetto: [] });
+assert.equal(sogliaDagliAmbiti({ potency: 3, range: 2, epic: 7 }).soglia, 12, "un viaggio nel tempo");
+assert.deepEqual(sogliaDagliAmbiti({}).ambiti, [{ id: "epic", level: 1 }]);
+assert.equal(sogliaDagliAmbiti({}).soglia, 1);
+const quattro = sogliaDagliAmbiti({ targets: 1, duration: 2, range: 1, potency: 3, epic: 2 });
+assert.equal(quattro.ambiti.length, SCOPES_PER_CAST + 1, "oltre il tetto non si conta; l'Epicità sta fuori dal tetto");
 assert.deepEqual(quattro.fuoriTetto, ["potency"]);
-assert.equal(sogliaDagliAmbiti({ potency: 9 }).soglia, 7, "un livello fuori scala si riporta a 7");
-assert.equal(sogliaDagliAmbiti({ impact: 4, potency: 2 }).soglia, 2, "l'Impatto (tolto il 29/9) non conta più");
-assert.equal(sogliaDagliAmbiti({ potency: -2, range: 0 }).soglia, 0);
+assert.equal(quattro.soglia, 2 + 1 + 2 + 1);
+assert.equal(sogliaDagliAmbiti({ potency: 9 }).soglia, 8, "un livello fuori scala si riporta a 7");
+assert.equal(sogliaDagliAmbiti({ impact: 4, potency: 2 }).soglia, 3, "l'Impatto (tolto il 29/9) non conta più");
+assert.equal(sogliaDagliAmbiti({ potency: -2, range: 0 }).soglia, 1);
+// L'Epicità si alza sempre; gli altri dentro il tetto dei tre, l'Epicità a parte.
+assert.equal(puoAlzare({ targets: 1, range: 2, potency: 3 }, "epic", 5), true);
+assert.equal(puoAlzare({ epic: 4, targets: 1, range: 2 }, "potency", 3), true);
+assert.equal(puoAlzare({ targets: 1, range: 2, potency: 3 }, "duration", 1), false);
 
 // I danni della Magick: l'Areté più la Potenza.
 assert.equal(danniMagick(2, 3), 5);
@@ -103,20 +111,48 @@ let n = 0;
 assert.equal(idNuovo({ a: 1, b: 1 }, () => ["a", "b", "c"][n++]), "c");
 assert.deepEqual(righeOrdinate({ x: { nome: "Zeta", sort: 0 }, y: { nome: "Alfa", sort: 0 }, z: { nome: "Beta", sort: -1 }, w: null }).map((row) => row.id), ["z", "y", "x"]);
 
-// Le lenti a mano (29/9): Potenza, Condizioni e Precisione ne hanno tre; la
-// terza della Potenza è l'Influenza, che non fa danni.
+// Le lenti a mano (29/9, 2/10): la Potenza ne ha tre, la terza è l'Influenza,
+// che non fa danni; Condizioni e Precisione due; l'Epicità una.
 assert.deepEqual(scopeLensIds("potency"), ["potencyDamage", "potencyWeight", "potencyInfluence"]);
-assert.deepEqual(scopeLensIds("conditions"), ["conditionsMalus", "conditionsComplexity", "conditionsBenefit"]);
-assert.deepEqual(scopeLensIds("precision"), ["precision", "precisionNarrative", "precisionInfo"]);
+assert.deepEqual(scopeLensIds("conditions"), ["conditionsMalus", "conditionsComplexity"]);
+assert.deepEqual(scopeLensIds("precision"), ["precision", "precisionInfo"]);
 assert.deepEqual(scopeLensIds("range"), ["range", "rangeNarrative"]);
+assert.deepEqual(scopeLensIds("epic"), ["epic"]);
 const aMano = (lenti) => ambitiAMano({ livelli: { potency: 3 }, lenti }, { arete: 2 });
 assert.deepEqual([aMano({}).righe.find((r) => r.id === "potency").lente.id, aMano({}).danni], ["potencyDamage", 5]);
 assert.deepEqual([aMano({ potency: 2 }).righe.find((r) => r.id === "potency").lente.id, aMano({ potency: 2 }).danni], ["potencyInfluence", null]);
 assert.equal(aMano({ potency: 9 }).righe.find((r) => r.id === "potency").lente.id, "potencyInfluence", "un indice oltre le lenti si ferma all'ultima");
 assert.equal(aMano({ range: 2 }).righe.find((r) => r.id === "range").lente.id, "rangeNarrative", "la Portata ne ha due");
+// La mano (2/10): l'Epicità in cima, staccata, a 1 da sola; sette numeri per riga, niente 0.
+{
+  const mano = ambitiAMano({ livelli: { potency: 3 } }, { arete: 2, localize: (k) => k.split(".").pop() });
+  assert.deepEqual(mano.righe.map((r) => r.id), ["epic", "targets", "conditions", "duration", "range", "potency", "precision"]);
+  const epica = mano.righe[0];
+  assert.deepEqual([epica.base, epica.level, epica.alto, epica.lente.label, epica.lente.altra], [true, 1, false, "", false]);
+  assert.deepEqual(epica.pallini.map((p) => [p.value, p.on]), [[1, true], [2, false], [3, false], [4, false], [5, false], [6, false], [7, false]]);
+  assert.equal(mano.righe.every((r) => r.pallini.length === 7 && r.pallini[0].value === 1), true, "niente pallino dello 0");
+  assert.deepEqual([mano.soglia, mano.conto], [4, "epic 1 + potency 3"]);
+  assert.equal(Object.hasOwn(mano, "impossibile"), false);
+  const prodigio = ambitiAMano({ livelli: { epic: 4, potency: 3 } }, { arete: 2 });
+  assert.deepEqual([prodigio.righe[0].level, prodigio.righe[0].alto, prodigio.soglia], [4, true, 7]);
+}
 // Un effetto scritto prima del 29/9 con l'Impatto: la soglia si rifà sugli Ambiti che restano.
 const vecchio = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Vecchio", soglia: 6, ambiti: { impact: 3, duration: 1, potency: 2 }, lentePotenza: "danni" } } } }));
-assert.deepEqual([vecchio.effetti[0].soglia, vecchio.effetti[0].ambiti.map((a) => a.id), vecchio.effetti[0].danni], [3, ["duration", "potency"], 4]);
+assert.deepEqual([vecchio.effetti[0].soglia, vecchio.effetti[0].ambiti.map((a) => a.id), vecchio.effetti[0].danni], [4, ["epic", "duration", "potency"], 4], "rifatta con l'Epicità 1, che si vede fra gli Ambiti");
+// Un vecchio effetto impossibile con l'Impatto: il +5 di allora diventa l'Epicità 6.
+const vecchioImpossibile = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Vecchio", soglia: 8, impossibile: true, ambiti: { impact: 3, potency: 2 } } } } }));
+assert.deepEqual([vecchioImpossibile.effetti[0].soglia, vecchioImpossibile.effetti[0].ambiti.map((a) => [a.id, a.level])], [8, [["epic", 6], ["potency", 2]]]);
+// Un effetto di prima del 2/10 senza Impatto tiene la soglia scritta; uno nuovo mostra l'Epicità per prima.
+const scritto = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Scritto", soglia: 9, impossibile: true, ambiti: { potency: 4 } } } } }));
+assert.deepEqual([scritto.effetti[0].soglia, Object.hasOwn(scritto.effetti[0], "impossibile")], [9, false]);
+const nuovo = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Nuovo", soglia: 6, ambiti: { potency: 2, epic: 3, range: 1 } } } } }));
+assert.deepEqual(nuovo.effetti[0].ambiti.map((a) => [a.id, a.level]), [["epic", 3], ["range", 1], ["potency", 2]]);
+// Dal Grimorio (2/10): la Formula non ha ancora un'Epicità sua, e parte dall'1 di ogni lancio.
+{
+  const formula = { id: "danneggiare", name: "Danneggiare", use: "In genere", intro: "", thresholds: [{ base: 3, scopes: { potency: 3 } }] };
+  const effetto = effettoDaFormula(formula);
+  assert.deepEqual([effetto.soglia, effetto.ambiti, Object.hasOwn(effetto, "impossibile")], [4, { epic: 1, potency: 3 }, false]);
+}
 const influenza = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Pilota", soglia: 7, ambiti: { potency: 7 }, lentePotenza: "influenza" } } } }));
 assert.deepEqual([influenza.effetti[0].soglia, influenza.effetti[0].danni], [7, null], "l'Influenza non fa danni");
 

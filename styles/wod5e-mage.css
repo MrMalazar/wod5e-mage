@@ -15296,42 +15296,32 @@
   width: 24px;
 }
 
-/* Gli Ambiti a otto pallini (Blue, 26/9): il primo è lo 0, l'effetto di base,
-   acceso sempre e non cliccabile (il sorvolo lo legge), staccato da un filo
-   dai sette livelli che si dichiarano; nella prima pagina e nelle finestre. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito.zero {
-  background: var(--mage-oro-scuro);
-  border-color: var(--mage-oro);
-  cursor: help;
-  margin-right: 4px;
-  position: relative;
+/* L'Epicità in cima agli Ambiti (Blue, 2/10: «come impatto sopra con gli
+   altri, però leggermente distaccato di spazio»): un po' d'aria sotto la sua
+   riga, nella prima pagina, nel Tiro, nelle finestre e nel nemico. Il
+   pallino dello 0 non c'è più (stesso giorno). */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-riga-ambito.base {
+  margin-bottom: 6px;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-pallino-ambito.zero::after {
-  border-right: 1px solid var(--mage-oro-tenue);
-  content: "";
-  height: 14px;
-  position: absolute;
-  right: -5px;
-  top: 0;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-voce.base {
+  margin-bottom: 4px;
 }
 
-.wod5e-mage-arete-sphere-dot.zero,
-.wod5e-mage-arete-sphere-dot.zero.active {
-  background: var(--mage-oro-scuro, #7a5d1e);
-  border-color: var(--mage-oro, #d9a827);
-  cursor: help;
-  margin-right: 5px;
-  position: relative;
+.wod5e-mage-arete-dotrow.base > * {
+  margin-bottom: 0.4rem;
 }
 
-.wod5e-mage-arete-sphere-dot.zero::after {
-  border-right: 1px solid rgb(152 119 43 / 55%);
-  content: "";
-  height: 13px;
-  position: absolute;
-  right: -4px;
-  top: 0;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-ambito.base {
+  margin-bottom: 6px;
+}
+
+.wod5e-mage-scope-table tbody tr.wod5e-mage-scope-stacco > td,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-scope-table tbody tr.wod5e-mage-scope-stacco > td {
+  background: transparent;
+  border: 0;
+  height: 2px;
+  padding: 0;
 }
 
 /* Lo stato della Saggezza (Blue, 26/9): la casella a destra del nome, che il
@@ -17709,10 +17699,6 @@
   font-weight: 700;
   height: 24px;
   width: 24px;
-}
-
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-liv > button.zero {
-  border-style: dashed;
 }
 
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content .wod5e-mage-nemico-liv > button.on {

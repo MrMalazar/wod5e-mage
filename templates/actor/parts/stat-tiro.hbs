@@ -70,7 +70,7 @@
                 <div class="wod5e-mage-tiro-colonna-testa" title="{{tiro.soglia.hint}}">{{localize "WOD5E_MAGE.Tiro.Soglia"}}</div>
                 <div class="wod5e-mage-tiro-voci">
                     {{#each tiro.soglia.righe as |voce|}}
-                        <div class="wod5e-mage-tiro-voce tipo-{{voce.kind}}{{#if voce.spenta}} spenta{{/if}}" title="{{voce.hint}}">
+                        <div class="wod5e-mage-tiro-voce tipo-{{voce.kind}}{{#if voce.base}} base{{/if}}{{#if voce.spenta}} spenta{{/if}}" title="{{voce.hint}}">
                             {{#if voce.img}}<img class="wod5e-mage-tiro-voce-icona{{#if voce.disc}} wod5e-mage-sfera-sigillo{{/if}}" src="{{voce.img}}" alt="">{{else if voce.fa}}<i class="{{voce.fa}} wod5e-mage-tiro-voce-icona" aria-hidden="true"></i>{{else}}<span class="wod5e-mage-tiro-voce-icona vuota" aria-hidden="true"></span>{{/if}}
                             <span class="wod5e-mage-tiro-voce-nome">{{voce.name}}</span>
                             <b class="wod5e-mage-tiro-voce-valore">{{voce.value}}</b>

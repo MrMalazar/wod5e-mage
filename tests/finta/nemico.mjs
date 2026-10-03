@@ -168,8 +168,9 @@ const daQualcheParte = c.poteri[0].potere;
 assert.deepEqual([daQualcheParte.nome, daQualcheParte.grado, daQualcheParte.sfereTesto, daQualcheParte.attivo.misura, daQualcheParte.passivo.misura], ["Da qualche parte", 1, "Corrispondenza", "1 Quintessenza", "Sempre"]);
 assert.ok(daQualcheParte.attivo.voci[0].testo.startsWith("Ti chiudi in una piega dello spazio") && daQualcheParte.passivo.voci[0].testo.startsWith("Sei sempre un po' altrove"));
 assert.equal(c.magick.dominiTesto, "Forze, Mente");
-// Suggestionare e Cancellare sono scritti prima del 29/9, con l'Impatto: la soglia si rifà sugli Ambiti che restano.
-assert.deepEqual(c.magick.effetti.map((e) => [e.nome, e.soglia, e.resisteTesto, e.daLabel, e.comeLabel, e.sfera?.id]), [["Suggestionare", 1, "Fermezza + Autocontrollo", "Grimorio", "Accidentale", "mind"], ["Cancellare", 1, "Fermezza + Autocontrollo", "Grimorio", "Accidentale", "mind"], ["Scarica del guanto", 5, "", "a mano", "Volgare", "forces"]]);
+// Suggestionare e Cancellare sono scritti prima del 29/9, con l'Impatto: la soglia si rifà sugli Ambiti che restano,
+// più l'Epicità 1 (2/10). La Scarica, senza Impatto, tiene la soglia scritta.
+assert.deepEqual(c.magick.effetti.map((e) => [e.nome, e.soglia, e.resisteTesto, e.daLabel, e.comeLabel, e.sfera?.id]), [["Suggestionare", 2, "Fermezza + Autocontrollo", "Grimorio", "Accidentale", "mind"], ["Cancellare", 2, "Fermezza + Autocontrollo", "Grimorio", "Accidentale", "mind"], ["Scarica del guanto", 5, "", "a mano", "Volgare", "forces"]]);
 assert.equal(c.magick.effetti[2].danni, 5, "Areté 2 + Potenza 3");
 assert.equal(N.resistenzaTesto({ attribute: "resolve", skill: "composure" }, { attributi: { resolve: "Fermezza", composure: "Autocontrollo" } }), "Fermezza + Autocontrollo", "un secondo Attributo senza prefisso si legge fra gli Attributi");
 assert.deepEqual(c.oggettiGruppi.map((g) => [g.id, g.righe.map((r) => r.name)]), [["weapon", ["Pistola"]], ["armor", ["Tessuto balistico"]], ["gear", ["Manette"]]]);
@@ -233,7 +234,7 @@ conTutti(gioco, [
   'modules/wod5e-mage/assets/icons/sheet/forces.png" alt=""></span>Forze</span>',
   'data-action="nemicoMagickApri" data-effetto="m2" aria-expanded="true"',
   '<span class="wod5e-mage-nemico-disco on" title="Mente"><img src="modules/wod5e-mage/assets/icons/sheet/mind.png" alt="Mente"></span><b>Cancellare</b>',
-  '<span class="wod5e-mage-nemico-dato">soglia <b class="oro">1</b></span>',
+  '<span class="wod5e-mage-nemico-dato">soglia <b class="oro">2</b></span>',
   'data-action="nemicoLancia" data-effetto="m2" title="Lancia Cancellare: la carta in chat con la soglia e il tiro di resistenza">Lancia</button>',
   "<p>toglie un ricordo</p>", "Accidentale · resiste con Fermezza + Autocontrollo",
   '<h4 class="wod5e-mage-nemico-sottotitolo">Poteri</h4>',
@@ -250,7 +251,7 @@ conTutti(T.gioco(contesto(actor, items, { aperte: new Set(["effetto:e4"]) })), [
 const scrivi = grigi({ modo: "scrivi" });
 const cs = contesto(scrivi, items, { aperte: new Set(["arma:w1", "z3", "m3", "effetto:e1", "effetto:e2"]), cassetto: "mano", mano: { nome: "Scarica del guanto", cosa: "Una scarica dal guanto colpisce un bersaglio nella stanza.", attribute: "dexterity", skill: "skill:athletics", dominio: "forces", come: "volgare", livelli: { potency: 3, range: 2 }, lenti: {} } });
 assert.deepEqual([cs.modo, cs.scrivi], ["scrivi", true]);
-assert.deepEqual([cs.mano.ambiti.soglia, cs.mano.ambiti.conto, cs.mano.ambiti.danni], [5, "Portata 2 + Potenza 3", 5]);
+assert.deepEqual([cs.mano.ambiti.soglia, cs.mano.ambiti.conto, cs.mano.ambiti.danni], [6, "Epicità 1 + Portata 2 + Potenza 3", 5], "l'Epicità 1 di ogni lancio (2/10)");
 const testaScrivi = T.testa(cs);
 conTutti(testaScrivi, [
   'data-modo="scrivi"', 'data-action="ritrattoCambia"',
@@ -284,18 +285,21 @@ conTutti(giocoScrivi, [
   'name="flags.wod5e-mage.nemico.magick.effetti.m3.soglia" value="5"',
   'wod5e-mage-nemico-manca" data-action="nemicoMagickApri" data-effetto="m3"', "resistenza</button>",
   'name="flags.wod5e-mage.nemico.magick.effetti.m3.nome" value="Scarica del guanto"', 'name="flags.wod5e-mage.nemico.magick.effetti.m3.breve" value="5 danni nella stanza"',
-  'name="flags.wod5e-mage.nemico.magick.effetti.m3.resiste.attribute"', 'data-action="nemicoMagickTogli" data-effetto="m3"', "Volgare · Ambiti: Potenza 3 · Portata 2 · a mano · danno 5",
+  'name="flags.wod5e-mage.nemico.magick.effetti.m3.resiste.attribute"', 'data-action="nemicoMagickTogli" data-effetto="m3"', "Volgare · Ambiti: Portata 2 · Potenza 3 · a mano · danno 5",
   'wod5e-mage-nemico-aggiungi on" data-action="nemicoCassetto" data-cassetto="mano" aria-expanded="true"',
   'wod5e-mage-nemico-pastiglia on" data-action="nemicoCassettoVia" data-cassetto="mano" aria-pressed="true"', 'data-action="nemicoCassettoVia" data-cassetto="grimorio" aria-pressed="false"',
   'data-mano="nome" value="Scarica del guanto"',
   'wod5e-mage-nemico-pastiglia on" data-action="nemicoManoScelta" data-campo="dominio" data-value="forces"',
   'data-action="nemicoLente" data-scope="potency"', 'wod5e-mage-nemico-ambito alto" data-scope="potency"',
-  'class="on" data-action="nemicoAmbito" data-scope="potency" data-level="3"', 'class=" zero" data-action="nemicoAmbito" data-scope="potency" data-level="0"',
-  '<b class="wod5e-mage-nemico-grande">5</b>', "Portata 2 + Potenza 3 · danni 5 (Areté 2 + Potenza 3)",
-  'data-mano="impossibile"', "impresa impossibile, +5", 'data-action="nemicoManoAggiungi"',
+  'class="on" data-action="nemicoAmbito" data-scope="potency" data-level="3"', 'class="" data-action="nemicoAmbito" data-scope="potency" data-level="4"',
+  'wod5e-mage-nemico-ambito base" data-scope="epic"', 'class="on" data-action="nemicoAmbito" data-scope="epic" data-level="1"',
+  '<b class="wod5e-mage-nemico-grande">6</b>', "Epicità 1 + Portata 2 + Potenza 3 · danni 5 (Areté 2 + Potenza 3)",
+  'data-action="nemicoManoAggiungi"',
   'data-action="nemicoEffettoCatalogo"', 'data-action="nemicoEffettoTogli" data-effetto="e2"', "Togli il potere"
 ], "gioco, Scrivi");
 // In Scrivi non si tira e non si lancia; il danno dell'azione nata dall'arma non si scrive (è dell'arma); la mano del Narratore è di Gioca.
+// Via lo 0 e il +5 (2/10): la mano ha sette numeri per riga, e niente casella dell'impresa impossibile.
+senza(giocoScrivi, ['data-level="0"', 'data-mano="impossibile"', "impresa impossibile"], "gioco, Scrivi, la mano");
 senza(giocoScrivi, ['data-action="nemicoTira"', 'data-action="nemicoAzioneTira"', 'data-action="nemicoLancia"', 'data-action="nemicoMano"', 'name="flags.wod5e-mage.nemico.azioni.arma:w1.danno"', 'data-nemico-cerca="grimorio"', 'data-action="magickSpegni"'], "gioco, Scrivi");
 // Suggestionare ha già il suo tiro di resistenza: il posto vuoto «resistenza» c'è solo sulla Scarica.
 assert.equal((giocoScrivi.match(/wod5e-mage-nemico-manca"/g) ?? []).length, 1);
@@ -366,7 +370,7 @@ conTutti(T.gioco(nuovo), ["<small>Da lontano, Pistola, Atletica</small>", "<smal
 // --- la carta del lancio
 const effetto = c.magick.effetti[1];
 const carta = T.carta({ nemico: { name: actor.name, img: actor.img }, effetto, titolo: format("WOD5E_MAGE.Nemico.LanciaSu", { effetto: effetto.nome, bersaglio: "Guendalina" }), sogliaTesto: format("WOD5E_MAGE.Nemico.SogliaCarta", { ambiti: effetto.ambitiTesto }), danniTesto: "", resisteLabel: format("WOD5E_MAGE.Nemico.ResistiCon", { tiro: effetto.resisteTesto }) });
-conTutti(carta, ["lancia Cancellare su Guendalina", "<b>1</b><span>soglia · Precisione 1</span>", "Toglie a Guendalina il ricordo", "Resiste con Fermezza + Autocontrollo", "Accidentale · Mente"], "carta");
+conTutti(carta, ["lancia Cancellare su Guendalina", "<b>2</b><span>soglia · Epicità 1, Precisione 1</span>", "Toglie a Guendalina il ricordo", "Resiste con Fermezza + Autocontrollo", "Accidentale · Mente"], "carta");
 // Il conto del tiro di Spara su Guendalina: Mira 7, −2 Sanguinante, 5 dadi, riesce dal 6.
 const conto = N.contoDelTiro({ nome: "Spara", riserva: c.azioni[0].riserva, soglia: 0, bersaglio: { uuid: "Actor.pg", name: "Guendalina" }, danno: 4, aggravato: false, localize, format });
 assert.deepEqual([conto.titolo, conto.conto, conto.dadi, conto.esito], ["Spara · su Guendalina", "Mira 7 -2 Sanguinante = 5 dadi · riesce dal 6", 5, "danno 4 Superficiali"]);

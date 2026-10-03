@@ -42,7 +42,7 @@ import { traitIcon } from "./tratti-icone.js";
 
 export { poteriOfSphere };
 import { renderRollCard, rollSymbols } from "./roll-card.js";
-import { canRaiseScope, nextScopeMode, SCOPE_ICONS, SCOPES, scopeModeOf, scopeModes, SCOPES_PER_CAST, zeroReading } from "./scopes.js";
+import { ambitiDelLancio, canRaiseScope, EPIC_SCOPE, epicita, nextScopeMode, ordinaAmbiti, SCOPE_ICONS, SCOPES, scopeMin, scopeModeOf, scopeModes, SCOPES_PER_CAST } from "./scopes.js";
 import { prepareSpheres } from "./spheres.js";
 import {
   bumpSoglia,
@@ -275,36 +275,40 @@ function skillIconOf(key) {
 }
 
 /**
- * Le sei righe degli Ambiti nella Soglia della Magick (Blue, 1/10: «nella
+ * Le righe degli Ambiti nella Soglia della Magick (Blue, 1/10: «nella
  * soglia deve comparire solo il simbolo dell'ambito e la descrizione del
- * livello dell'ambito nella quale è stato scelto»). In ordine alfabetico,
- * ognuna col simbolo dell'Ambito, la lettura del livello dichiarato nella
+ * livello dell'ambito nella quale è stato scelto»). In cima l'Epicità
+ * (2/10), staccata, che vale almeno 1; sotto i sei Ambiti in ordine
+ * alfabetico. Ognuna col simbolo, la lettura del livello dichiarato nella
  * lente che vale (quella scelta sulla scheda, o la prima della tavola) e il
  * livello; a zero la riga è spenta e legge la base. Il nome dell'Ambito, la
- * lente e la spiegazione lunga stanno nel sorvolo; la × solo sugli alzati.
+ * lente (se ce n'è più d'una) e la spiegazione lunga stanno nel sorvolo; la
+ * × solo sugli alzati (sull'Epicità, sopra l'1: la riporta a 1).
  */
 export function righeAmbiti(tiro, localize = (key) => key, { tavola = null, modi = {}, arete = null } = {}) {
   const table = tavola ?? scopeModes(localize, { arete });
   return SCOPES.map((id) => {
     const label = String(localize(`WOD5E_MAGE.Scopes.${id}`));
-    const level = count(tiro?.scopes?.[id]);
+    const base = id === EPIC_SCOPE;
+    const level = base ? epicita(tiro?.scopes) : count(tiro?.scopes?.[id]);
     const mode = scopeModeOf(table, id, modi?.[id]);
     const reading = String(mode?.readings?.[level] ?? "");
     const spiegazione = String(mode?.hints?.[level] ?? "");
-    const lente = mode?.short || mode?.label || "";
+    const lente = (table[id]?.length ?? 0) > 1 ? (mode?.short || mode?.label || "") : "";
     const titolo = lente ? `${label} · ${lente} ${level}` : `${label} ${level}`;
     return {
       kind: "scope",
       id,
+      base,
       fa: SCOPE_ICONS[id] ?? "",
       label,
       name: reading || String(level),
       value: numero(level),
       spenta: level === 0,
       hint: spiegazione ? `${titolo}: ${spiegazione}` : titolo,
-      via: level > 0
+      via: level > scopeMin(id)
     };
-  }).sort((a, b) => a.label.localeCompare(b.label, globalThis.game?.i18n?.lang ?? "it"));
+  }).sort((a, b) => ordinaAmbiti(a, b, globalThis.game?.i18n?.lang ?? "it"));
 }
 
 /**
@@ -536,15 +540,18 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
 }
 
 /**
- * Le righe degli Ambiti per il riquadro della Magick: otto pallini, il
- * primo è lo 0 (la base che non costa, acceso sempre, non si clicca: Blue,
- * 26/9) e poi i sette livelli, quello dichiarato acceso. Ogni Ambito ha due o tre lenti (la tavola del 23/9, rifatta il 29/9): la
- * riga legge con quella scelta dalla tendina, o con la prima.
+ * Le righe degli Ambiti per il riquadro della Magick: sette pallini, i
+ * livelli da 1 a 7, quello dichiarato acceso (Blue, 2/10: via il pallino
+ * dello 0, la base non si mostra). In cima l'Epicità, staccata dagli altri,
+ * col primo pallino sempre acceso: ogni lancio vale almeno 1. Ogni Ambito
+ * ha una, due o tre lenti (la tavola del 23/9, rifatta il 29/9 e il 2/10):
+ * la riga legge con quella scelta dalla tendina, o con la prima.
  */
 export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, modes = {} } = {}) {
   const table = scopeModes(localize, { arete });
   return SCOPES.map((id) => {
-    const level = count(tiro?.scopes?.[id]);
+    const base = id === EPIC_SCOPE;
+    const level = base ? epicita(tiro?.scopes) : count(tiro?.scopes?.[id]);
     // La lettura («lente») dell'Ambito (16/9 sera): quella scelta col
     // tastino, o la prima; la riga e la tendina parlano solo con lei.
     const options = table[id] ?? [];
@@ -563,15 +570,14 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
     // Sul pallino solo la voce del livello (Blue, 27/9: «la scritta è eccessiva,
     // massimo tre parole»): la lettura della lente scelta, o il numero.
     const tipOf = (step) => readingOf(step) || String(step);
-    // Lo 0 legge sempre (Blue, 26/9 sera: «Bersagli 0 dirà 1 Bersaglio»): con
-    // la lente scelta la sua base, senza, la base della prima lente.
-    const zeroReadingOf = () => (modeChosen ? readingOf(0) : String(options[0]?.readings?.[0] ?? zeroReading(id, localize, { arete })));
-    const zeroTip = () => zeroReadingOf() || "0";
     return {
       id,
+      base,
       label: localize(`WOD5E_MAGE.Scopes.${id}`),
       faIcon: SCOPE_ICONS[id] ?? "",
       level,
+      // Dichiarato: alzato a mano. L'Epicità a 1 da sola è il minimo, non una scelta.
+      declared: count(tiro?.scopes?.[id]) > 0,
       // La lettura del livello dichiarato; a riposo quella dello 0, la base.
       reading: readingOf(level),
       hint: hintOf(level),
@@ -584,9 +590,6 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
       modeChosen,
       modeShown: multi && modeChosen && !level,
       modes: options.map((option) => ({ id: option.id, label: option.label, selected: modeChosen && option.id === mode?.id })),
-      // Il primo pallino è lo 0 (Blue, 26/9): l'effetto di base, acceso sempre e
-      // non cliccabile, col suo testo nel sorvolo; i sette dopo si dichiarano.
-      zero: { value: 0, reading: zeroReadingOf(), hint: hintOf(0), tip: zeroTip() },
       steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({
         value: index + 1,
         active: index + 1 === level,
@@ -596,7 +599,7 @@ export function prepareScopeRows(tiro, localize = (key) => key, { arete = null, 
         tip: tipOf(index + 1)
       }))
     };
-  }).sort((a, b) => a.label.localeCompare(b.label, game.i18n?.lang ?? "it"));
+  }).sort((a, b) => ordinaAmbiti(a, b, globalThis.game?.i18n?.lang ?? "it"));
 }
 
 /** Le letture scelte per Ambito: la bandiera del personaggio, e sopra quel che la scheda ricorda se non può scrivere. */
@@ -1017,7 +1020,8 @@ export async function launchTiro(actor, tiro) {
     .map((id) => owned.find((sphere) => sphere.id === id))
     .filter(Boolean)
     .map((sphere) => ({ id: sphere.id, level: sphere.value }));
-  const scopeLevels = Object.entries(tiro.scopes ?? {}).map(([id, level]) => ({ id, level: count(level) }));
+  // Gli Ambiti del lancio: l'Epicità per prima, almeno 1 (2/10), poi quelli alzati.
+  const scopeLevels = ambitiDelLancio(tiro.scopes);
   const magickType = localize(`WOD5E_MAGE.Tiro.Kinds.${tiro.kind}`);
   if (options.coincidental) selectors.push("magick.coincidental");
   if (options.vulgar) selectors.push("magick.vulgar");

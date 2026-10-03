@@ -198,6 +198,9 @@ assert.deepEqual(bySphere.map((g) => [g.sphere, g.spells.map((s) => s.name)]), [
 // Un effetto del manuale diventa un incantesimo da ritoccare.
 const fromEffetto = spellFromEffetto(actor, { id: "forces-2-x", name: "Curvare", text: "scompari", extras: [] }, { forces: 2 }, (key) => key.split(".").pop());
 assert.deepEqual([fromEffetto.name, fromEffetto.goal, fromEffetto.spheres, fromEffetto.credo, fromEffetto.instruments, fromEffetto.effetto], ["Curvare", "scompari", { forces: 2 }, "dati", ["devices"], "forces-2-x"]);
+// L'Epicità parte dal livello dell'effetto (2/10): Curvare è un effetto di livello 2, una Spinta.
+assert.deepEqual(spellFromEffetto(actor, { id: "forces-2-x", name: "Curvare", text: "scompari", level: 2, extras: [] }, { forces: 2 }, (key) => key).scopes, { epic: 2 });
+assert.deepEqual(fromEffetto.scopes, {}, "senza livello niente Epicità scritta: il lancio parte da 1");
 assert.match(page, /data-action="incantesimoFromEffetti"[\s\S]*incantesimiGroups[\s\S]*incantesimo-card\.hbs" spell=spell/);
 assert.match(readFileSync(new URL("../scripts/grimorio.js", import.meta.url), "utf8"), /onPick = null, onFormula = null, onFormulaRoll = null/);
 // Una matrice scelta nel Grimorio (24/9): il nome della Formula, «In genere»

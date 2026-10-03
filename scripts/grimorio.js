@@ -2,7 +2,7 @@ import { MODULE_ID } from "./constants.js";
 import { EFFETTI, FORMULE } from "./data/effetti.js";
 import { FORMULE_ALIAS, FORMULE_M6 } from "./data/formule.js";
 import { POTERI } from "./data/poteri.js";
-import { SCOPES } from "./scopes.js";
+import { EPIC_MIN, SCOPE_MAX_LEVEL, SCOPES } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
 
 /**
@@ -55,6 +55,16 @@ export function effectSphereLevels(entry) {
     if (extra.required) levels[extra.sphere] = Math.max(levels[extra.sphere] ?? 0, extra.level);
   }
   return levels;
+}
+
+/**
+ * L'Epicità di un effetto del Grimorio (Blue, 2/10: «gli effetti del
+ * Grimorio partono dal loro livello»): il livello dell'effetto, da 1 a 5.
+ * Le imprese impossibili salgono al 6 o al 7 quando il libro lo scrive.
+ */
+export function effectEpic(entry) {
+  const value = Math.trunc(Number(entry?.epic ?? entry?.level) || 0);
+  return Math.min(Math.max(value, EPIC_MIN), SCOPE_MAX_LEVEL);
 }
 
 /** Gli Ambiti consigliati, una frase per riga: si spezza dopo il punto, davanti a una maiuscola. */

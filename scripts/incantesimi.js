@@ -1,7 +1,7 @@
 import { MODULE_ID } from "./constants.js";
-import { testoDellaFormula } from "./grimorio.js";
+import { effectEpic, testoDellaFormula } from "./grimorio.js";
 import { FORMULE_M6 } from "./data/formule.js";
-import { normalizeScopeLevels, SCOPES, SCOPE_ICONS } from "./scopes.js";
+import { EPIC_SCOPE, normalizeScopeLevels, SCOPES, SCOPE_ICONS } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
 
 /**
@@ -129,7 +129,8 @@ export function spellFromEffetto(actor, entry, sphereLevels, localize = (key) =>
     maintained: false,
     traits: [],
     spheres: { ...sphereLevels },
-    scopes: {},
+    // L'Epicità parte dal livello dell'effetto (2/10); una matrice non ce l'ha.
+    scopes: entry.level ? { [EPIC_SCOPE]: effectEpic(entry) } : {},
     credo: String(focus.credo ?? ""),
     practiceForm: String(focus.practiceForm ?? ""),
     instruments,

@@ -1,19 +1,25 @@
 /**
- * I sei Ambiti della Magick (la tavola del 23/9/2026, «due modi, livello
- * 0», rifatta coi verdetti di Blue del 29/9): Bersagli, Condizioni, Durata,
- * Portata, Potenza, Precisione. Ogni Ambito si legge con due o tre
- * sottoambiti (le «lenti»), misure alternative della stessa cosa: in un
- * lancio se ne usa una. La scala va da 0 a 7: lo 0 è la base e non costa
- * niente, ogni livello vale il suo numero, la soglia è la somma dei livelli
- * degli Ambiti usati. In Portata e Precisione la prima riga vale nello
- * scontro e la seconda fuori; nella Potenza i Danni servono nello scontro;
- * nella Durata la prima riga conta il tempo di gioco, la seconda quello del
- * mondo; le altre lenti sono libere. L'Area non è più un Ambito a sé: è la
- * seconda lente dei Bersagli. L'Impatto (Epicità e Informazione), nato il
- * 23/9 sera, esce il 29/9: l'Informazione torna lente della Precisione, e
- * arrivano l'Influenza nella Potenza e il Beneficio nelle Condizioni.
+ * Gli Ambiti della Magick (la tavola del 23/9/2026, «due modi, livello 0»,
+ * rifatta coi verdetti di Blue del 29/9 e del 2/10). In cima l'Epicità
+ * (Blue, 2/10: «come impatto sopra con gli altri, però leggermente
+ * distaccato»): dice cosa fa l'effetto, quanto in fondo arriva il gesto, da
+ * 1 a 7, e c'è in ogni lancio (almeno 1); sta fuori dal tetto dei tre e
+ * prende il posto del +5 delle imprese impossibili, che diventano il 6 e il
+ * 7. Sotto, i sei Ambiti che dicono quanto: Bersagli, Condizioni, Durata,
+ * Portata, Potenza, Precisione, ognuno da 0 a 7, letto con una, due o tre
+ * lenti (misure alternative della stessa cosa: in un lancio se ne usa una).
+ * Lo 0 è la base e non costa niente, ogni livello vale il suo numero; la
+ * soglia è l'Epicità più la somma degli Ambiti. Nella Portata la prima
+ * riga vale nello scontro e la seconda fuori; nella Potenza i Danni servono
+ * nello scontro; nella Durata la prima riga conta il tempo di gioco, la
+ * seconda quello del mondo; le altre lenti sono libere. Dal 2/10 Malus e
+ * Beneficio sono una lente sola (Malus e bonus), e Scontro e Narrativa
+ * della Precisione anche (Dettaglio, come la chiama il libro).
  */
+export const EPIC_SCOPE = "epic";
+
 export const SCOPES = Object.freeze([
+  EPIC_SCOPE,
   "targets",
   "conditions",
   "duration",
@@ -25,17 +31,18 @@ export const SCOPES = Object.freeze([
 /** Il livello più alto di un Ambito. */
 export const SCOPE_MAX_LEVEL = 7;
 
-/** Quanti Ambiti si alzano sopra lo 0 in un lancio (la tavola del 23/9: al massimo tre). */
+/** Quanti Ambiti si alzano sopra lo 0 in un lancio (la tavola del 23/9: al massimo tre). L'Epicità non conta. */
 export const SCOPES_PER_CAST = 3;
 
-/** Il sovrapprezzo dell'impresa impossibile, dopo il conto (a mano, dal Narratore). */
-export const IMPOSSIBLE_SURCHARGE = 5;
+/** L'Epicità più bassa: ogni lancio ne ha almeno 1 (Blue, 2/10). */
+export const EPIC_MIN = 1;
 
 /**
  * Il simbolo di ogni Ambito: sta a sinistra del nome nel dialogo del tiro e
  * sopra i dadi in chat, col livello dichiarato.
  */
 export const SCOPE_ICONS = Object.freeze({
+  epic: "fa-solid fa-wand-magic-sparkles",
   targets: "fa-solid fa-user",
   conditions: "fa-solid fa-list-check",
   duration: "fa-solid fa-hourglass-half",
@@ -47,6 +54,8 @@ export const SCOPE_ICONS = Object.freeze({
 /**
  * Gli Ambiti di ieri che oggi sono una lente: l'Area sta nei Bersagli.
  * L'Impatto (tolto il 29/9) non ha un erede: i suoi livelli cadono.
+ * Le lenti tolte il 2/10 (Beneficio, la Narrativa della Precisione) non
+ * hanno bisogno di nomi nuovi: una lente che non c'è più torna la prima.
  */
 export const SCOPE_ALIASES = Object.freeze({ area: "targets" });
 
@@ -57,6 +66,9 @@ export const SCOPE_ALIASES = Object.freeze({ area: "targets" });
  * colonna della tavola le celle si allineano.
  */
 export const SCOPE_TABLE_ROWS = Object.freeze([
+  // L'Epicità (2/10): una lente sola, il gesto, da 1 a 7 (niente 0); in
+  // cima alla tavola, staccata dagli altri.
+  { id: "epic", scope: "epic", sublabel: "", layout: "text", base: true },
   // Bersagli: l'Effetto conta i bersagli uno per uno (allo 0 uno, poi +N);
   // l'Area prende tutto quello che sta dentro uno spazio.
   { id: "targets", scope: "targets", sublabel: "WOD5E_MAGE.Scopes.Sub.targets", faIcon: "fa-solid fa-user", layout: "symbol-number", zeroText: true },
@@ -67,12 +79,11 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
     faIcons: ["fa-solid fa-location-dot", "fa-solid fa-door-open", "fa-solid fa-building", "fa-solid fa-house-chimney", "fa-solid fa-city", "fa-solid fa-map", "fa-solid fa-earth-europe", "fa-solid fa-globe"],
     layout: "symbol-text"
   },
-  // Condizioni: il Malus è la Condizione che l'effetto mette addosso (lievi,
-  // scontro, gradi, come nelle Condizioni del 29/9), la Complessità sono le
-  // clausole che lo regolano, il Beneficio è il Malus girato: l'aiuto che dà.
-  { id: "conditionsMalus", scope: "conditions", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsMalus", layout: "text", small: true },
+  // Condizioni: Malus e bonus (2/10, una lente sola: il bonus è il malus
+  // girato) dice quanto pesa quello che l'effetto lascia addosso, coi gradi
+  // delle Condizioni del 29/9; la Complessità sono le clausole che lo regolano.
+  { id: "conditionsMalus", scope: "conditions", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsMalus", layout: "text" },
   { id: "conditionsComplexity", scope: "conditions", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsComplexity", layout: "text" },
-  { id: "conditionsBenefit", scope: "conditions", sublabel: "WOD5E_MAGE.Scopes.Sub.conditionsBenefit", layout: "text", small: true },
   // Durata: in gioco (turni, scene, sessioni, storia, cronaca, col simbolo
   // del tempo dal manuale) e nel mondo (dall'ora al permanente).
   { id: "duration", scope: "duration", sublabel: "WOD5E_MAGE.Scopes.Sub.duration", icons: true, layout: "symbol-number" },
@@ -92,15 +103,14 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
   { id: "potencyDamage", scope: "potency", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyDamage", arete: true, layout: "symbol-number" },
   { id: "potencyWeight", scope: "potency", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyWeight", layout: "text" },
   { id: "potencyInfluence", scope: "potency", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyInfluence", layout: "text", small: true },
-  // Precisione: nello scontro il punto da colpire, fuori il particolare da
-  // trovare o da toccare; l'Informazione dice quanto è rara la cosa che
-  // scopri (chi la sa: tutti, pochi, nessuno).
-  { id: "precision", scope: "precision", sublabel: "WOD5E_MAGE.Scopes.Sub.precision", layout: "text", small: true },
-  { id: "precisionNarrative", scope: "precision", sublabel: "WOD5E_MAGE.Scopes.Sub.precisionNarrative", layout: "text", small: true },
+  // Precisione: il Dettaglio (2/10, una lente sola, una parola per casella)
+  // dice quanto è fine quello che l'effetto sceglie o trova, nello scontro e
+  // fuori; l'Informazione quanto è rara la cosa che scopri (chi la sa).
+  { id: "precision", scope: "precision", sublabel: "WOD5E_MAGE.Scopes.Sub.precision", layout: "text" },
   { id: "precisionInfo", scope: "precision", sublabel: "WOD5E_MAGE.Scopes.Sub.precisionInfo", layout: "text", small: true }
 ]);
 
-/** Le lenti di un Ambito, nell'ordine della tavola: due o tre. */
+/** Le lenti di un Ambito, nell'ordine della tavola: una, due o tre. */
 export function scopeLensIds(scope) {
   return SCOPE_TABLE_ROWS.filter((row) => row.scope === scope).map((row) => row.id);
 }
@@ -130,9 +140,14 @@ function tableRows() {
     sublabel: row.sublabel ?? "",
     layout: row.layout,
     small: Boolean(row.small),
+    base: Boolean(row.base),
     cells: SCOPE_LEVELS.map((step) => {
       const label = `WOD5E_MAGE.Scopes.Table.${row.id}.${step}`;
       const zeroText = Boolean(row.zeroText) && step === 0;
+      // L'Epicità non ha lo 0: la casella resta vuota.
+      if (row.base && step < EPIC_MIN) {
+        return { step, label: "", hint: "", empty: true, layout: row.layout, number: false, text: false, arete: false, hideLabel: false, faIcon: "", icon: "" };
+      }
       return {
         step,
         label,
@@ -156,12 +171,12 @@ function tableRows() {
 }
 
 /**
- * La tavola degli Ambiti: gli Ambiti in ordine alfabetico (nella lingua del
- * giocatore: `localize`), ognuno con la riga di titolo e sotto le sue due o
- * tre lenti, nell'ordine della tavola (la prima è quella che vale se non si
- * sceglie: in Portata e Precisione lo scontro). `groups` è quel che il
- * template stampa; `rows` resta la lista piatta delle righe coi loro
- * gradini, da 0 a 7.
+ * La tavola degli Ambiti: in cima l'Epicità (2/10), poi gli Ambiti in
+ * ordine alfabetico (nella lingua del giocatore: `localize`), ognuno con la
+ * riga di titolo e sotto le sue lenti, nell'ordine della tavola (la prima è
+ * quella che vale se non si sceglie: nella Portata lo scontro). `groups` è
+ * quel che il template stampa; `rows` resta la lista piatta delle righe coi
+ * loro gradini, da 0 a 7 (l'Epicità senza lo 0).
  */
 export function prepareScopeTable(localize = (key) => key) {
   // La spiegazione della cella («Cosa vuol dire», «Esempi»), se la lingua
@@ -169,6 +184,7 @@ export function prepareScopeTable(localize = (key) => key) {
   const rows = tableRows().map((row) => ({
     ...row,
     cells: row.cells.map((cell) => {
+      if (cell.empty) return { ...cell, tip: "" };
       const hinted = String(localize(cell.hint));
       return { ...cell, tip: hinted === cell.hint ? "" : hinted };
     })
@@ -187,13 +203,16 @@ export function prepareScopeTable(localize = (key) => key) {
         desc: `WOD5E_MAGE.Scopes.Desc.${scope}`,
         name: String(localize(label)),
         header: true,
+        // L'Epicità sta in cima, staccata dagli Ambiti (2/10).
+        base: scopeRows.some((row) => row.base),
         span: scopeRows.length,
         rows: scopeRows.map((row) => ({ ...row, title: row.sublabel }))
       };
     })
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort((a, b) => Number(b.base) - Number(a.base) || a.name.localeCompare(b.name));
 
-  return { steps: [...SCOPE_LEVELS], rows, groups };
+  // `span`: quante colonne ha la tavola (il nome, la lente, gli otto livelli), per lo stacco sotto l'Epicità.
+  return { steps: [...SCOPE_LEVELS], rows, groups, span: SCOPE_LEVELS.length + 2 };
 }
 
 /**
@@ -209,7 +228,7 @@ export function scopeReadings(localize = (key) => key, { arete = null } = {}) {
   const out = {};
   for (const group of groups) {
     out[group.scope] = SCOPE_LEVELS.map((level) => group.rows.map((row) => ({
-      sub: String(localize(row.title)),
+      sub: row.title ? String(localize(row.title)) : "",
       ...scopeReadingText(row, level, localize, arete)
     })));
   }
@@ -271,6 +290,14 @@ export function nextScopeMode(modes, scope, chosen) {
   return options[(index + 1) % options.length];
 }
 
+/**
+ * L'ordine delle righe degli Ambiti nelle liste (scheda, Tiro, finestre,
+ * nemico): l'Epicità in cima, gli altri per nome nella lingua in uso.
+ */
+export function ordinaAmbiti(a, b, lang = "it") {
+  return Number(b.id === EPIC_SCOPE) - Number(a.id === EPIC_SCOPE) || String(a.label ?? "").localeCompare(String(b.label ?? ""), lang);
+}
+
 /** «+3» → 3; «+0» → 0; un testo qualunque → null. */
 export function damageBonus(label) {
   const match = /^\s*([+-]?\s*\d+)\s*$/.exec(String(label ?? ""));
@@ -293,23 +320,53 @@ export function normalizeScopeLevels(scopes = {}) {
   return out;
 }
 
-/** Quanti Ambiti stanno sopra lo 0. */
+/** Quanti Ambiti stanno sopra lo 0 (l'Epicità non conta: c'è sempre). */
 export function raisedScopes(scopes = {}) {
-  return Object.values(normalizeScopeLevels(scopes)).filter((level) => level > 0).length;
+  return Object.entries(normalizeScopeLevels(scopes)).filter(([id, level]) => id !== EPIC_SCOPE && level > 0).length;
 }
 
 /**
  * Si può alzare questo Ambito? Sì se è già sopra lo 0, o se gli Ambiti
- * alzati sono meno del tetto (tre per lancio).
+ * alzati sono meno del tetto (tre per lancio). L'Epicità si alza sempre.
  */
 export function canRaiseScope(scopes = {}, id, limit = SCOPES_PER_CAST) {
+  if (id === EPIC_SCOPE) return true;
   const levels = normalizeScopeLevels(scopes);
   if ((levels[id] ?? 0) > 0) return true;
   return raisedScopes(levels) < limit;
 }
 
+/** L'Epicità di un lancio: quella dichiarata, mai sotto 1 (Blue, 2/10: ogni lancio parte almeno da 1). */
+export function epicita(scopes = {}) {
+  const level = Math.trunc(Number(scopes?.[EPIC_SCOPE]) || 0);
+  return Math.min(Math.max(level, EPIC_MIN), SCOPE_MAX_LEVEL);
+}
+
+/** I livelli di un lancio di Magick coi nomi di oggi e l'Epicità messa, almeno 1. */
+export function livelliDelLancio(scopes = {}) {
+  const levels = normalizeScopeLevels(scopes);
+  return { ...levels, [EPIC_SCOPE]: epicita(levels) };
+}
+
+/**
+ * Gli Ambiti di un lancio di Magick in fila, come li contano la soglia, la
+ * carta in chat e le Magick in atto: l'Epicità per prima (almeno 1), poi
+ * quelli sopra lo 0, nell'ordine della tavola. Torna [{ id, level }].
+ */
+export function ambitiDelLancio(scopes = {}) {
+  const levels = livelliDelLancio(scopes);
+  return SCOPES.map((id) => ({ id, level: levels[id] ?? 0 })).filter((entry) => entry.level > 0);
+}
+
+/** Il pallino più basso di un Ambito: 1 per l'Epicità, 0 per gli altri. */
+export function scopeMin(id) {
+  return id === EPIC_SCOPE ? EPIC_MIN : 0;
+}
+
 function scopeReadingText(row, level, localize, arete = null) {
   const cell = row.cells[level] ?? {};
+  // L'Epicità non ha lo 0: niente da leggere.
+  if (cell.empty) return { text: "", hint: "" };
   const label = String(localize(cell.label ?? `WOD5E_MAGE.Scopes.Table.${row.id}.${level}`));
   const hintKey = cell.hint ?? `WOD5E_MAGE.Scopes.Hint.${row.id}.${level}`;
   const hinted = String(localize(hintKey));

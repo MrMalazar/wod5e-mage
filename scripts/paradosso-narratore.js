@@ -3,7 +3,7 @@ import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
 import { ROLL_CARD_FLAG } from "./roll-card.js";
 import { MAGHI_SETTING } from "./menu-paradosso.js";
-import { SCOPE_ICONS, SCOPES, zeroReading } from "./scopes.js";
+import { ambitiDelLancio, EPIC_SCOPE, SCOPE_ICONS, SCOPES, scopeMin } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
 
 /**
@@ -141,11 +141,8 @@ export function readSpendChoice(result = {}, scheda = []) {
     const level = Math.min(count(result[`sphere-${row.id}`]), row.level);
     if (level > 0) spheres.push({ id: row.id, level });
   }
-  const scopes = [];
-  for (const id of SCOPES) {
-    const level = Math.min(count(result[`scope-${id}`]), THRESHOLD_CAP);
-    if (level > 0) scopes.push({ id, level });
-  }
+  // Gli Ambiti come in un lancio (2/10): l'Epicità per prima, almeno 1, poi quelli alzati.
+  const scopes = ambitiDelLancio(Object.fromEntries(SCOPES.map((id) => [id, Math.min(count(result[`scope-${id}`]), THRESHOLD_CAP)])));
   return {
     spheres,
     scopes,
@@ -447,8 +444,10 @@ function wireSpendDots(root, onChange) {
   root.querySelectorAll("[data-role=spendRow]").forEach((row) => {
     const input = row.querySelector("input[type=hidden]");
     const dots = [...row.querySelectorAll(".wod5e-mage-arete-sphere-dot")];
+    // L'Epicità non scende sotto 1 (2/10): il clic sul livello scelto la riporta lì.
+    const min = row.dataset.kind === "scope" ? scopeMin(row.dataset.id) : 0;
     const paint = () => {
-      const level = count(input.value);
+      const level = Math.max(count(input.value), min);
       dots.forEach((dot) => dot.classList.toggle("active", Number(dot.dataset.level) <= level));
       row.classList.toggle("chosen", level > 0);
     };
@@ -456,7 +455,7 @@ function wireSpendDots(root, onChange) {
       dot.addEventListener("click", (event) => {
         event.preventDefault();
         const level = count(dot.dataset.level);
-        input.value = String(Number(input.value) === level ? 0 : level);
+        input.value = String(Number(input.value) === level ? min : level);
         paint();
         onChange();
       });
@@ -484,7 +483,7 @@ export async function openSpendDialog() {
     {
       points: pool.points,
       spheres: scheda.map((row) => ({ ...row, steps: Array.from({ length: row.level }, (_, index) => ({ value: index + 1 })) })),
-      scopes: SCOPES.map((id) => ({ id, label: `WOD5E_MAGE.Scopes.${id}`, faIcon: SCOPE_ICONS[id] ?? "", zero: { value: 0, reading: zeroReading(id, localize) }, steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 })) }))
+      scopes: SCOPES.map((id) => ({ id, label: `WOD5E_MAGE.Scopes.${id}`, faIcon: SCOPE_ICONS[id] ?? "", base: id === EPIC_SCOPE, min: scopeMin(id), steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 })) }))
     }
   );
   let choice = null;

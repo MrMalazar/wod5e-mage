@@ -1,6 +1,7 @@
-{{!-- La tavola degli Ambiti (23/9, rifatta il 29/9): sei Ambiti, due o tre
-     lenti l'uno, otto livelli dallo 0 al 7. Lo 0 è la base e non costa; ogni livello vale il
-     suo numero e la soglia è la somma. --}}
+{{!-- La tavola degli Ambiti (23/9, rifatta il 29/9 e il 2/10): in cima
+     l'Epicità, da 1 a 7, staccata da un filo; sotto sei Ambiti, una, due o
+     tre lenti l'uno, otto livelli dallo 0 al 7. Lo 0 è la base e non costa;
+     ogni livello vale il suo numero e la soglia è la somma. --}}
 <section class="wod5e-mage-scope-table">
     {{!-- Il titolo lo porta la tendina della pagina Magick (21/9). La lettura della tavola, dalla guida degli Ambiti (23/9). --}}
 
@@ -21,11 +22,11 @@
                      sue righe e nel sorvolo dice cosa misura, e la lente. --}}
                 {{#each scopeTable.groups as |group|}}
                     {{#each group.rows as |row|}}
-                    <tr class="scope-{{row.id}}{{#if row.small}} wod5e-mage-scope-row-small{{/if}}{{#if group.header}} wod5e-mage-scope-sub{{/if}}">
+                    <tr class="scope-{{row.id}}{{#if row.small}} wod5e-mage-scope-row-small{{/if}}{{#if group.header}} wod5e-mage-scope-sub{{/if}}{{#if group.base}} wod5e-mage-scope-base{{/if}}">
                         {{#if @first}}
                             <th scope="rowgroup" class="wod5e-mage-scope-group" rowspan="{{group.span}}" title="{{localize group.desc}}">{{localize group.label}}</th>
                         {{/if}}
-                        <th scope="row" class="wod5e-mage-scope-reading">{{#if group.header}}{{localize row.title}}{{/if}}</th>
+                        <th scope="row" class="wod5e-mage-scope-reading">{{#if row.title}}{{localize row.title}}{{/if}}</th>
                         {{!-- Ogni cella ha le stesse colonne invisibili della sua riga:
                              simbolo | numero | testo (o casella). Così, dentro una colonna
                              della tavola, simboli, numeri e testi stanno in fila. La
@@ -53,6 +54,8 @@
                         {{/each}}
                     </tr>
                     {{/each}}
+                    {{!-- Lo stacco sotto l'Epicità (2/10): «sopra con gli altri, però leggermente distaccato». --}}
+                    {{#if group.base}}<tr class="wod5e-mage-scope-stacco" aria-hidden="true"><td colspan="{{@root.scopeTable.span}}"></td></tr>{{/if}}
                 {{/each}}
             </tbody>
         </table>

@@ -1,7 +1,7 @@
 {{!-- La spesa dei punti Paradosso (ramo C, 11/9): un effetto di Magick dalla
      Scheda del Paradosso, al prezzo della soglia. Le Sfere hanno i pallini
      che i giocatori hanno «regalato» alla realtà; gli Ambiti i sette della
-     tavola. Gli interventi di scena (il menù del Paradosso) sono in progetto:
+     tavola, con l'Epicità in cima che parte da 1 (2/10). Gli interventi di scena (il menù del Paradosso) sono in progetto:
      niente segnaposto in corsivo intanto (Blue, 25/9). --}}
 <div class="wod5e-mage-arete-body wod5e-mage-paradosso-spesa">
     <div class="wod5e-mage-arete-layout">
@@ -23,12 +23,11 @@
             <hr class="wod5e-mage-arete-rule">
             <span class="wod5e-mage-arete-row-label wod5e-mage-arete-dots-head">{{localize "WOD5E_MAGE.Scopes.Label"}}</span>
             {{#each scopes as |scope|}}
-                <div class="wod5e-mage-arete-dotrow" data-role="spendRow" data-kind="scope" data-id="{{scope.id}}">
+                <div class="wod5e-mage-arete-dotrow{{#if scope.base}} base{{/if}}" data-role="spendRow" data-kind="scope" data-id="{{scope.id}}">
                     <i class="wod5e-mage-arete-row-icon {{scope.faIcon}}" aria-hidden="true"></i>
                     <span class="wod5e-mage-arete-dot-label">{{localize scope.label}}</span>
-                    <input type="hidden" name="scope-{{scope.id}}" value="0">
+                    <input type="hidden" name="scope-{{scope.id}}" value="{{scope.min}}">
                     <span class="wod5e-mage-arete-sphere-dots" role="group" aria-label="{{localize scope.label}}">
-                        <span class="wod5e-mage-arete-sphere-dot zero" data-level="0" role="img" aria-label="0{{#if scope.zero.reading}} · {{scope.zero.reading}}{{/if}}" title="{{#if scope.zero.reading}}0 · {{scope.zero.reading}}&#10;{{/if}}{{localize 'WOD5E_MAGE.Scopes.Zero'}}"></span>
                         {{#each scope.steps as |step|}}<button type="button" class="wod5e-mage-arete-sphere-dot" data-level="{{step.value}}" aria-label="{{step.value}}" title="{{step.value}}"></button>{{/each}}
                     </span>
                     <span class="wod5e-mage-arete-dot-reading"></span>

@@ -250,14 +250,21 @@ for (const nuova of ["nemicoModo", "nemicoMano", "nemicoArmatura", "nemicoEffett
   await azioni.nemicoFormula.call(sheet, evento, tasto({ formula: "suggestionare", indice: "0" }));
   const [formula] = Object.values(bandiera(actor).magick.effetti);
   assert.deepEqual([formula.nome, formula.da, formula.formula, formula.resiste], ["Suggestionare", "grimorio", "suggestionare", { attribute: "", skill: "", testo: "" }]);
-  // Un effetto a mano: i livelli nella memoria della scheda, la soglia sommata, e il cassetto si richiude.
+  assert.equal(formula.ambiti.epic, 1, "la Formula parte dall'Epicità 1 di ogni lancio (2/10)");
+  assert.equal(Object.hasOwn(formula, "impossibile"), false);
+  // Un effetto a mano: i livelli nella memoria della scheda, la soglia sommata con l'Epicità, e il cassetto si richiude.
   await azioni.nemicoAmbito.call(sheet, evento, tasto({ scope: "potency", level: "3" }));
   await azioni.nemicoAmbito.call(sheet, evento, tasto({ scope: "range", level: "2" }));
+  // L'Epicità: 2 e poi di nuovo 2 la riporta a 1, il minimo; poi Spinta 2.
+  await azioni.nemicoAmbito.call(sheet, evento, tasto({ scope: "epic", level: "2" }));
+  await azioni.nemicoAmbito.call(sheet, evento, tasto({ scope: "epic", level: "2" }));
+  assert.equal(sheet._stato.mano.livelli.epic, 0, "tolta, l'Epicità torna all'1 di ogni lancio");
+  await azioni.nemicoAmbito.call(sheet, evento, tasto({ scope: "epic", level: "2" }));
   await azioni.nemicoManoScelta.call(sheet, evento, tasto({ campo: "come", value: "volgare" }));
   sheet._stato.mano.nome = "Scarica";
   await azioni.nemicoManoAggiungi.call(sheet, evento, tasto());
   const mano = Object.values(bandiera(actor).magick.effetti).find((row) => row.da === "mano");
-  assert.deepEqual([mano.nome, mano.soglia, mano.ambiti, mano.come, mano.lentePotenza, sheet._stato.cassetto], ["Scarica", 5, { range: 2, potency: 3 }, "volgare", "danni", ""]);
+  assert.deepEqual([mano.nome, mano.soglia, mano.ambiti, mano.come, mano.lentePotenza, sheet._stato.cassetto, Object.hasOwn(mano, "impossibile")], ["Scarica", 7, { epic: 2, range: 2, potency: 3 }, "volgare", "danni", "", false]);
   assert.equal(sheet.contesto().magick.effetti.find((e) => e.nome === "Scarica").danni, 5, "Areté 2 più Potenza 3");
   // Un effetto si apre e si toglie.
   const idMano = Object.entries(bandiera(actor).magick.effetti).find(([, row]) => row.da === "mano")[0];

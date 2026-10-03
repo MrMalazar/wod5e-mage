@@ -12,7 +12,7 @@ import {
   selectorsForMageRollTrait
 } from "./mage-roll-selection.js";
 import { INFLUENCE_LABELS, prepareSpheres } from "./spheres.js";
-import { prepareScopeTable, scopeReadings, SCOPE_ICONS, SCOPES, zeroReading } from "./scopes.js";
+import { ambitiDelLancio, EPIC_SCOPE, prepareScopeTable, scopeMin, scopeReadings, SCOPE_ICONS, SCOPES } from "./scopes.js";
 import {
   renderRollCard,
   renderRollNote,
@@ -20,7 +20,7 @@ import {
 } from "./roll-card.js";
 import { FOCUS_FORMS, PERCEIVE_TOOL_ID } from "./focus.js";
 import { maintainedEffectRow, scopesInParole, shouldRecordEffect } from "./ongoing-magick.js";
-import { effectSphereLevels, openGrimorio } from "./grimorio.js";
+import { effectEpic, effectSphereLevels, openGrimorio } from "./grimorio.js";
 import { normalizeEffectKind } from "./paradox-burst.js";
 
 export const ARETE_MIN = 1;
@@ -132,8 +132,10 @@ function levelEntries(entries, max) {
  * La soglia (Blue, 16/9): la SOMMA dei livelli degli Ambiti dichiarati,
  * Potenza 4 e Portata 3 fanno 7. Con la tavola del 23/9 lo 0 è la base e
  * non costa niente, e ogni livello dal primo in su vale il suo numero (il
- * primo pallino non è più gratis). Le Sfere non contano più. Niente tetto
- * sulla somma. Il premio dell'Areté si sottrae una volta sola, fino a zero.
+ * primo pallino non è più gratis). Dal 2/10 l'Epicità entra nella somma
+ * come gli altri, e vale almeno 1 (chi la mette è ambitiDelLancio). Le
+ * Sfere non contano più. Niente tetto sulla somma. Il premio dell'Areté non
+ * la tocca.
  */
 export const SCOPE_COUNTS_FROM = 1;
 
@@ -325,10 +327,15 @@ export function dotReadings(localize = (key) => key, { arete = null } = {}) {
   };
 }
 
+/** Il livello più basso di una fila: 1 per l'Epicità (2/10), 0 per tutte le altre. */
+function rowMin(row) {
+  return row?.dataset?.kind === "scope" ? scopeMin(row.dataset.id) : 0;
+}
+
 /**
  * Le file a pallini di Sfere e Ambiti: il clic su un pallino fissa il
- * livello (di nuovo sullo stesso: zero), lo scrive nel campo nascosto e
- * scrive la voce del livello a destra.
+ * livello (di nuovo sullo stesso: zero, o l'1 dell'Epicità), lo scrive nel
+ * campo nascosto e scrive la voce del livello a destra.
  */
 function wireDotRows(dialog, readingFor = () => []) {
   const root = dialog?.element;
@@ -337,9 +344,10 @@ function wireDotRows(dialog, readingFor = () => []) {
     const dots = [...row.querySelectorAll(".wod5e-mage-arete-sphere-dot")];
     const reading = row.querySelector("[data-role=dotReading]");
     if (!input) return;
+    const min = rowMin(row);
 
     const paint = () => {
-      const level = Math.max(Math.trunc(Number(input.value) || 0), 0);
+      const level = Math.max(Math.trunc(Number(input.value) || 0), min);
       dots.forEach((dot) => {
         dot.classList.toggle("active", Number(dot.dataset.level) <= level);
       });
@@ -357,7 +365,7 @@ function wireDotRows(dialog, readingFor = () => []) {
       dot.addEventListener("click", (event) => {
         event.preventDefault();
         const level = Math.max(Math.trunc(Number(dot.dataset.level) || 0), 0);
-        input.value = String(Number(input.value) === level ? 0 : level);
+        input.value = String(Number(input.value) === level ? min : level);
         paint();
         input.dispatchEvent(new Event("change", { bubbles: true }));
       });
@@ -371,7 +379,7 @@ function wireDotRows(dialog, readingFor = () => []) {
 function readDotRows(root, kind) {
   const entries = [];
   root?.querySelectorAll(`[data-role=dotRow][data-kind=${kind}]`).forEach((row) => {
-    const level = Math.max(Math.trunc(Number(row.querySelector("input[type=hidden]")?.value) || 0), 0);
+    const level = Math.max(Math.trunc(Number(row.querySelector("input[type=hidden]")?.value) || 0), rowMin(row));
     if (level > 0) entries.push({ id: row.dataset.id, level });
   });
   return entries;
@@ -593,7 +601,7 @@ function applyAretePreset(dialog, preset) {
       const input = row?.querySelector("input[type=hidden]");
       if (!input) continue;
       const max = kind === "sphere" ? row.querySelectorAll(".wod5e-mage-arete-sphere-dot").length : THRESHOLD_CAP;
-      input.value = String(Math.min(Math.max(Math.trunc(Number(level) || 0), 0), max));
+      input.value = String(Math.min(Math.max(Math.trunc(Number(level) || 0), rowMin(row)), max));
       row._paint?.();
       input.dispatchEvent(new Event("change", { bubbles: true }));
     }
@@ -613,7 +621,7 @@ function wireGrimorio(dialog, sphereLevels) {
     const row = root.querySelector(`[data-role=dotRow][data-kind=${kind}][data-id="${id}"]`);
     const input = row?.querySelector("input[type=hidden]");
     if (!input) return;
-    input.value = String(cap === null ? level : Math.min(level, cap));
+    input.value = String(Math.max(cap === null ? level : Math.min(level, cap), rowMin(row)));
     row._paint?.();
     input.dispatchEvent(new Event("change", { bubbles: true }));
   };
@@ -637,6 +645,8 @@ function wireGrimorio(dialog, sphereLevels) {
     for (const [sphere, level] of Object.entries(effectSphereLevels(entry))) {
       setDots("sphere", sphere, level, Math.max(Math.trunc(Number(sphereLevels[sphere]) || 0), 0));
     }
+    // L'Epicità parte dal livello dell'effetto (Blue, 2/10).
+    setDots("scope", EPIC_SCOPE, effectEpic(entry));
   });
 }
 
@@ -814,13 +824,14 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     }));
   const localize = game.i18n.localize.bind(game.i18n);
   const readingFor = dotReadings(localize, { arete: arete.value });
-  // I sette Ambiti, a otto pallini l'uno: lo 0 davanti, fisso (Blue, 26/9), poi
-  // i sette livelli; sullo 0 la lettura della base (26/9 sera).
+  // Gli Ambiti a sette pallini l'uno, i livelli da 1 a 7 (Blue, 2/10: via il
+  // pallino dello 0). In cima l'Epicità, staccata, che parte da 1.
   const scopeOptions = SCOPES.map((id) => ({
     id,
     label: `WOD5E_MAGE.Scopes.${id}`,
+    base: id === EPIC_SCOPE,
+    min: scopeMin(id),
     faIcon: SCOPE_ICONS[id] ?? "",
-    zero: { value: 0, reading: zeroReading(id, localize, { arete: arete.value }) },
     steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 }))
   }));
   const quintessenceAvailable = getMagickBalance(actor).quintessence;
@@ -902,14 +913,10 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     }))
     .filter((entry) => entry.level > 0);
 
-  // Gli Ambiti dichiarati a pallini, col livello da 1 a 7: fanno soglia, e
-  // il piano finisce nel testo del tiro in chat.
-  const scopeEntries = SCOPES
-    .map((scopeId) => ({
-      scopeId,
-      level: Math.min(Math.max(Math.trunc(Number(result[`scope-${scopeId}`]) || 0), 0), THRESHOLD_CAP)
-    }))
-    .filter((entry) => entry.level > 0);
+  // Gli Ambiti dichiarati a pallini, col livello da 1 a 7, e l'Epicità
+  // (almeno 1) in testa: fanno soglia, e il piano finisce nel testo del tiro in chat.
+  const scopeEntries = ambitiDelLancio(Object.fromEntries(SCOPES.map((scopeId) => [scopeId, result[`scope-${scopeId}`]])))
+    .map((entry) => ({ scopeId: entry.id, level: entry.level }));
 
   // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, fuori dal tetto; la soglia resta la somma degli Ambiti.
   const prizeDice = options.usePrize ? prize.dice : 0;

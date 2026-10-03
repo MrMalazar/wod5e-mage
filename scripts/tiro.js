@@ -43,7 +43,7 @@ import { calculateAretePrize, calculateMagickThreshold, capBonusDice, SKILL_SPEC
 import { BUSSOLA_DICE } from "./bussola.js";
 import { applyPotere, riuscitaSenzaTirare, spezzaIdPotere } from "./poteri.js";
 import { PAGAMENTI, ramoCDice, successThreshold, usesAdvancedDifficulty } from "./ramo-c.js";
-import { normalizeScopeLevels, SCOPE_ALIASES } from "./scopes.js";
+import { ambitiDelLancio, normalizeScopeLevels, SCOPE_ALIASES } from "./scopes.js";
 
 /** I tre tasti del tiro di Magick, nell'ordine della scheda. */
 export const TIRO_KINDS = Object.freeze(["accidentale", "volgare", "testimoni"]);
@@ -169,6 +169,8 @@ export function toggleSphere(tiro, id) {
 /**
  * Il livello di un Ambito si dichiara cliccando il numero: lo stesso numero
  * una seconda volta lo toglie. Un Ambito in catena accende l'Areté.
+ * L'Epicità tolta torna a 1, il minimo di ogni lancio (2/10): il conto la
+ * mette da sé.
  */
 export function setScope(tiro, id, level) {
   const next = clone(tiro);
@@ -303,13 +305,12 @@ export function sogliaAMano(tiro) {
 
 /**
  * La soglia c'è (Blue, 16/9 sera: senza, il tiro non parte): scritta a mano
- * col meno e il più, oppure, nella Magick, almeno un Ambito dichiarato (la
- * soglia la fanno gli Ambiti). Un tiro di Abilità la vuole sempre a mano.
+ * col meno e il più, oppure, nella Magick, sempre: l'Epicità (2/10) vale
+ * almeno 1 in ogni lancio. Un tiro di Abilità la vuole sempre a mano.
  */
 export function hasSoglia(tiro) {
   if (sogliaAMano(tiro)) return true;
-  if (!isMagick(tiro)) return false;
-  return Object.values(tiro?.scopes ?? {}).some((level) => count(level) >= 1);
+  return isMagick(tiro);
 }
 
 /**
@@ -496,7 +497,7 @@ export function livelloContato(level, free) {
  * harmony, bussola (1 se rispettata), quintessenceAvailable, power (il
  * potere scelto, per i suoi effetti) e powerCtx (quello che le sue condizioni
  * chiedono: Sfere conosciute, poteri per Sfera, Salute sotto metà).
- * Torna riserva, soglia dagli Ambiti, premio, soglia calcolata, soglia
+ * Torna riserva, soglia dall'Epicità e dagli Ambiti, premio, soglia calcolata, soglia
  * effettiva (il conto più quella a mano), dadi, riuscita da (6 o 8),
  * Quintessenza spesa, le note del potere, gli effetti esclusi col motivo,
  * la riuscita senza tirare e se il potere è entrato «attivo» (si paga il
@@ -546,7 +547,8 @@ export function contoTiro(tiro, {
   const bonus = extra + Math.trunc(Number(traitDice) || 0) + specialtyDice + bussolaDice + quintessence + prize;
   const pool = Math.max(traits + bonus, 0);
 
-  const scopeLevels = Object.entries(tiro?.scopes ?? {}).map(([id, level]) => ({ id, level: count(level) }));
+  // La soglia della Magick (2/10): l'Epicità, almeno 1, più gli Ambiti.
+  const scopeLevels = magick ? ambitiDelLancio(tiro?.scopes) : [];
   const scopeThreshold = magick ? calculateMagickThreshold({ scopeLevels }) : 0;
   // Gli Ambiti che il potere fa saltare fino a un livello: conta l'eccedenza.
   const countedLevels = scopeLevels.map(({ id, level }) => ({ id, level: livelloContato(level, powered.freeScopes[id]) }));

@@ -172,35 +172,40 @@ assert.equal(quintessenceDice(5, { available: 9, arete: 2 }), 4);
 assert.equal(quintessenceDice(5, { available: 3, arete: 5 }), 3);
 assert.equal(quintessenceDice(1, { available: 0, arete: 5 }), 0);
 
-// Il conto: la soglia è la SOMMA degli Ambiti (Potenza 4, Portata 3 e
-// Bersagli 1 fanno 8: dalla tavola del 23/9 anche il primo livello vale il
-// suo numero), le Sfere non contano, l'Areté col premio dà dadi (Blue, 27/9)
-// e la soglia non la tocca.
+// Il conto: la soglia è l'Epicità (2/10: almeno 1) più la SOMMA degli
+// Ambiti (Potenza 4, Portata 3 e Bersagli 1 fanno 8, e l'Epicità 1 fa 9:
+// dalla tavola del 23/9 anche il primo livello vale il suo numero), le Sfere
+// non contano, l'Areté col premio dà dadi (Blue, 27/9) e la soglia non la tocca.
 let magick = toggleArete(vuoto);
 magick = toggleSphere(magick, "forces");
 magick = setScope(setScope(setScope(magick, "potency", 4), "range", 3), "targets", 1);
 magick = pickSkill(pickAttribute(magick, "dexterity"), "skill:occult");
 let conto = contoTiro(magick, { arete: 2, attributeValue: 4, skillValue: 5 });
 assert.equal(conto.magick, true);
-assert.equal(conto.scopeThreshold, 8);
+assert.equal(conto.scopeThreshold, 9);
 assert.equal(conto.prize, 2);
-assert.equal(conto.computed, 8);
-assert.equal(conto.difficulty, 8);
+assert.equal(conto.computed, 9);
+assert.equal(conto.difficulty, 9);
 assert.equal(conto.pool, 11, "Destrezza 4 + Occulto 5 + il premio 2");
-assert.equal(conto.dice, 3);
+assert.equal(conto.dice, 2);
+// L'Epicità dichiarata sale al posto dell'1: Prodigio 4 fa 12.
+assert.equal(contoTiro(setScope(magick, "epic", 4), { arete: 2, attributeValue: 4, skillValue: 5 }).difficulty, 12);
+// Tolta, torna all'1; da sola fa la soglia di un trucco.
+assert.deepEqual(setScope(setScope(magick, "epic", 4), "epic", 4).scopes, magick.scopes);
+assert.equal(contoTiro(setScope(toggleArete(vuoto), "epic", 1), { arete: 1 }).difficulty, 1);
 assert.equal(conto.successFrom, 6, "Accidentale e Volgare riescono col 6");
 assert.equal(conto.manual, false);
 assert.equal(conto.impossible, false);
 
 // Il premio spento: i dadi del premio se ne vanno, la soglia è la stessa.
 const senzaPremio = contoTiro(togglePrize(magick), { arete: 2, attributeValue: 4, skillValue: 5 });
-assert.deepEqual([senzaPremio.difficulty, senzaPremio.pool, senzaPremio.dice], [8, 9, 1]);
+assert.deepEqual([senzaPremio.difficulty, senzaPremio.pool, senzaPremio.dice], [9, 9, 0]);
 // Il premio acceso vale l'Areté per ogni Tipo di Magick, l'Ibrida compresa (Blue, 2/10).
 assert.equal(contoTiro(magick, { arete: 2, attributeValue: 4, skillValue: 5 }).prize, 2);
-// Il premio non tocca la soglia (27/9): con Bersagli 1 resta 1, e l'Areté 5 sono cinque dadi in più.
+// Il premio non tocca la soglia (27/9): con Bersagli 1 e l'Epicità 1 resta 2, e l'Areté 5 sono cinque dadi in più.
 const oltre = contoTiro(setScope(setScope(magick, "potency", 0), "range", 0), { arete: 5, attributeValue: 4, skillValue: 5 });
-assert.deepEqual([oltre.difficulty, oltre.pool, oltre.dice], [1, 14, 13]);
-assert.equal(contoTiro(setScope(setScope(magick, "potency", 0), "range", 0), { arete: 0, attributeValue: 4, skillValue: 5 }).difficulty, 1, "Bersagli 1 vale uno");
+assert.deepEqual([oltre.difficulty, oltre.pool, oltre.dice], [2, 14, 12]);
+assert.equal(contoTiro(setScope(setScope(magick, "potency", 0), "range", 0), { arete: 0, attributeValue: 4, skillValue: 5 }).difficulty, 2, "Bersagli 1 vale uno, più l'Epicità");
 
 // Volgare con testimoni: si riesce con l'8. I tiri di Abilità restano al 6.
 assert.equal(contoTiro(setKind(magick, "testimoni"), { arete: 2 }).successFrom, 8);
@@ -220,16 +225,18 @@ assert.equal(hasSoglia(abilita), false);
 assert.equal(contoTiro(abilita, { attributeValue: 3, skillValue: 2 }).difficultySet, false);
 assert.equal(hasSoglia(setSoglia(abilita, 0)), true, "uno zero scritto a mano è una soglia");
 assert.equal(hasSoglia(setSoglia(abilita, null)), false);
-assert.equal(hasSoglia(toggleArete(vuoto)), false);
+// Nella Magick la soglia c'è sempre (2/10): l'Epicità vale almeno 1.
+assert.equal(hasSoglia(toggleArete(vuoto)), true);
 assert.equal(hasSoglia(setScope(toggleArete(vuoto), "targets", 1)), true);
 assert.equal(hasSoglia(magick), true);
 assert.equal(contoTiro(magick, { arete: 2 }).difficultySet, true);
-assert.equal(hasSoglia(setScope(setScope(setScope(magick, "potency", 0), "range", 0), "targets", 0)), false);
+assert.equal(hasSoglia(setScope(setScope(setScope(magick, "potency", 0), "range", 0), "targets", 0)), true);
+assert.equal(contoTiro(setScope(setScope(setScope(magick, "potency", 0), "range", 0), "targets", 0), { arete: 2 }).difficulty, 1, "a Ambiti tutti a 0 resta l'Epicità");
 
-// La soglia a mano si somma al conto degli Ambiti (30/9): +4 sopra 8 fa 12, e −8 la porta a zero, mai sotto.
+// La soglia a mano si somma al conto degli Ambiti (30/9): +4 sopra 9 fa 13, e −9 la porta a zero, mai sotto.
 conto = contoTiro(setSoglia(magick, 4), { arete: 2, attributeValue: 4, skillValue: 5 });
-assert.deepEqual([conto.computed, conto.sogliaMano, conto.difficulty, conto.dice, conto.impossible], [8, 4, 12, 0, true]);
-assert.deepEqual([contoTiro(setSoglia(magick, -8), { arete: 2 }).difficulty, contoTiro(setSoglia(magick, -20), { arete: 2 }).difficulty], [0, 0]);
+assert.deepEqual([conto.computed, conto.sogliaMano, conto.difficulty, conto.dice, conto.impossible], [9, 4, 13, 0, true]);
+assert.deepEqual([contoTiro(setSoglia(magick, -9), { arete: 2 }).difficulty, contoTiro(setSoglia(magick, -20), { arete: 2 }).difficulty], [0, 0]);
 assert.equal(contoTiro(magick, { arete: 2 }).sogliaMano, 0, "senza a mano, l'addendo è zero");
 
 // La Bussola, i dadi extra col tetto +3 e i Tratti per intero entrano nella riserva.
@@ -253,11 +260,11 @@ assert.equal(conto.extra, 3, "scheda e Armonia insieme non passano il tetto");
 // Un potere con effetti tocca il conto; un segnaposto non fa niente.
 const sconto = { id: "forces-2-1", sphere: "forces", dot: 2, slot: 1, name: "Dono della forza", text: "", effects: [{ on: "threshold", value: -1 }] };
 conto = contoTiro(pickPower(magick, "forces-2-1"), { arete: 2, attributeValue: 4, skillValue: 5, power: sconto });
-assert.deepEqual([conto.computed, conto.difficulty, conto.dice], [7, 7, 4], "soglia 8 − 1 del potere; i dadi: 11 − 7");
+assert.deepEqual([conto.computed, conto.difficulty, conto.dice], [8, 8, 3], "soglia 9 − 1 del potere; i dadi: 11 − 8");
 assert.deepEqual(conto.powerNotes, [{ on: "threshold", value: -1, nota: "" }]);
 const segnaposto = { id: "forces-1-1", sphere: "forces", dot: 1, slot: 1, name: "", text: "", effects: [] };
 conto = contoTiro(pickPower(magick, "forces-1-1"), { arete: 2, attributeValue: 4, skillValue: 5, power: segnaposto });
-assert.deepEqual([conto.computed, conto.dice, conto.powerNotes], [8, 3, []]);
+assert.deepEqual([conto.computed, conto.dice, conto.powerNotes], [9, 2, []]);
 
 // Il ritocco dei Dadi (23/9): sul totale, fuori dal tetto, anche in meno, entro ±10; azzerato da Azzera.
 assert.equal(emptyTiro().dadi, 0);
@@ -295,15 +302,15 @@ assert.deepEqual([setDadi(magick, 2).dadi, setDadi(magick, -3).dadi, setDadi(mag
   assert.equal(livelloContato(5, 4), 1);
   assert.equal(livelloContato(3, 4), 0);
 
-  // Appoggio: Potenza 5 e Portata 2, la Potenza conta 1 sopra il 4: soglia 3; il premio 2 va nei dadi.
+  // Appoggio: Potenza 5 e Portata 2, la Potenza conta 1 sopra il 4, più l'Epicità 1: soglia 4; il premio 2 va nei dadi.
   const appoggio = { id: "r-appoggio", sphere: "forces", name: "Appoggio", effects: [{ on: "freeScope", scope: "potency", value: 4, nota: "leva" }] };
   const conAppoggio = contoTiro(setScope(setScope(pickPower(pulita, "r-appoggio", "forces"), "potency", 5), "range", 2), { ...numeri, power: appoggio });
-  assert.deepEqual([conAppoggio.scopeThreshold, conAppoggio.computed, conAppoggio.prize, conAppoggio.powerNotes[0].scope], [7, 3, 2, "potency"]);
+  assert.deepEqual([conAppoggio.scopeThreshold, conAppoggio.computed, conAppoggio.prize, conAppoggio.powerNotes[0].scope], [8, 4, 2, "potency"]);
 
-  // Voce dell'Avatar: il premio doppio raddoppia i dadi del premio; la soglia resta 6.
+  // Voce dell'Avatar: il premio doppio raddoppia i dadi del premio; la soglia resta 7 (Potenza 6 e l'Epicità 1).
   const voce = { id: "r-voce", sphere: "spirit", name: "Voce", effects: [{ mode: "attivo", on: "prizeDouble", nota: "doppio" }] };
   const conVoce = contoTiro(setScope(pickPower(pulita, "r-voce", "spirit"), "potency", 6), { ...numeri, power: voce });
-  assert.deepEqual([conVoce.prize, conVoce.computed, conVoce.powerActive], [4, 6, true]);
+  assert.deepEqual([conVoce.prize, conVoce.computed, conVoce.powerActive], [4, 7, true]);
 
   // Anche a mani nude: la Quintessenza dà dadi anche nel tiro di Abilità, dentro il tetto 2 + Areté.
   const mani = { id: "r-mani", sphere: "prime", name: "Mani nude", effects: [{ on: "quintessenceOnSkills", roll: "abilita", nota: "punti" }] };
@@ -330,10 +337,10 @@ assert.deepEqual([setDadi(magick, 2).dadi, setDadi(magick, -3).dadi, setDadi(mag
   // La variante «attivo» arriva nell'id: la riga la spezza, il conto la passa agli effetti.
   const casa = { id: "r-casa", sphere: "forces", name: "Casa", scelta: "potency", effects: [{ on: "freeScope", scope: "scelta", value: { from: "poteri" }, nota: "fino ai poteri" }, { mode: "attivo", on: "freeScope", scope: "scelta", value: 7, nota: "tutto" }] };
   const tiroCasa = setScope(pickPower(pulita, "r-casa", "forces"), "potency", 6);
-  assert.equal(contoTiro(tiroCasa, { ...numeri, power: casa, powerCtx: { poteriConti: { forces: 2 } } }).computed, 6 - 2, "Potenza 6 conta dal 2 in su; il premio non tocca la soglia");
+  assert.equal(contoTiro(tiroCasa, { ...numeri, power: casa, powerCtx: { poteriConti: { forces: 2 } } }).computed, 1 + 6 - 2, "Potenza 6 conta dal 2 in su, più l'Epicità; il premio non tocca la soglia");
   const tiroCasaAttiva = setScope(pickPower(pulita, "r-casa#attivo", "forces"), "potency", 6);
   const conCasaAttiva = contoTiro(tiroCasaAttiva, { ...numeri, power: casa, powerCtx: { poteriConti: { forces: 2 } } });
-  assert.deepEqual([conCasaAttiva.computed, conCasaAttiva.powerActive], [0, true]);
+  assert.deepEqual([conCasaAttiva.computed, conCasaAttiva.powerActive], [1, true], "la Potenza non conta, l'Epicità sì");
   assert.equal(pillsOf(tiroCasaAttiva, names).find((pill) => pill.kind === "power").id, "r-casa#attivo", "la pillola porta l'id con la variante");
 }
 

@@ -157,7 +157,7 @@ assert.doesNotMatch(magickRiq, /resource-value-step|dotCounterChange|wod5e-mage-
 // sotto la lettura del livello scelto, centrata, con la lettura dell'Ambito in piccolo.
 // La riga dell'Ambito (21/9): il nome (tendina delle letture se ne ha più d'una), i sette pallini SEMPRE
 // (col tooltip del livello e, se la lettura è scelta, della lettura), la lettura sotto solo se c'è.
-assert.match(magickRiq, /wod5e-mage-riga-ambito\{\{#if scope\.multi\}\} con-tendina\{\{\/if\}\}\{\{#if scope\.level\}\} scelta[\s\S]*wod5e-mage-riga-testa[\s\S]*\{\{#if scope\.multi\}\}[\s\S]*wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito\{\{#if scope\.modeChosen\}\} con-lente\{\{\/if\}\}" data-action="cassettoToggle"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*\{\{\/if\}\}\s*<span class="wod5e-mage-ambito-pallini"[\s\S]*wod5e-mage-pallino-ambito\{\{#if step\.lit\}\} lit\{\{\/if\}\}" data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}" data-tooltip="\{\{step\.tip\}\}" data-tooltip-class="wod5e-mage-tooltip-righe"[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-modi[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-modo\{\{#if mode\.selected\}\} scelta\{\{\/if\}\}" data-action="scopeMode" data-scope="\{\{scope\.id\}\}" data-mode="\{\{mode\.id\}\}"/);
+assert.match(magickRiq, /wod5e-mage-riga-ambito\{\{#if scope\.base\}\} base\{\{\/if\}\}\{\{#if scope\.multi\}\} con-tendina\{\{\/if\}\}\{\{#if scope\.declared\}\} scelta[\s\S]*wod5e-mage-riga-testa[\s\S]*\{\{#if scope\.multi\}\}[\s\S]*wod5e-mage-riga-nome wod5e-mage-riga-nome-ambito\{\{#if scope\.modeChosen\}\} con-lente\{\{\/if\}\}" data-action="cassettoToggle"[\s\S]*\{\{else\}\}[\s\S]*wod5e-mage-riga-nome-fermo[\s\S]*\{\{\/if\}\}\s*<span class="wod5e-mage-ambito-pallini"[\s\S]*wod5e-mage-pallino-ambito\{\{#if step\.lit\}\} lit\{\{\/if\}\}" data-action="tiroScope" data-scope="\{\{scope\.id\}\}" data-level="\{\{step\.value\}\}" data-tooltip="\{\{step\.tip\}\}" data-tooltip-class="wod5e-mage-tooltip-righe"[\s\S]*wod5e-mage-cassetto wod5e-mage-cassetto-modi[\s\S]*wod5e-mage-pastiglia wod5e-mage-pastiglia-modo\{\{#if mode\.selected\}\} scelta\{\{\/if\}\}" data-action="scopeMode" data-scope="\{\{scope\.id\}\}" data-mode="\{\{mode\.id\}\}"/);
 assert.doesNotMatch(magickRiq, /wod5e-mage-ambito-scegli|ScopeModeChoose/);
 // La pastiglia della lente dentro il nome (23/9), col nome corto, al posto
 // del chevron quando la lente è scelta; niente seconda linea.
@@ -170,6 +170,14 @@ assert.match(sheetJs, /scopeMode: onScopeMode,\n\s+cassettoToggle: onCassettoTog
 assert.match(sheetJs, /addEventListener\("pointerdown"[\s\S]*classList\.remove\("aperto"\)/);
 assert.match(sheetJs, /modes: scopeModesOf\(this\)/);
 assert.doesNotMatch(magickRiq, /wod5e-mage-ambito-livello/);
+// Via il pallino dello 0 (Blue, 2/10): sette pallini, i livelli; l'Epicità in cima, staccata.
+assert.doesNotMatch(magickRiq, /wod5e-mage-pallino-ambito zero|scope\.zero|Scopes\.Zero/);
+assert.doesNotMatch(css, /\.wod5e-mage-pallino-ambito\.zero|\.wod5e-mage-arete-sphere-dot\.zero|nemico-liv > button\.zero/);
+assert.match(css, /\.wod5e-mage-riga-ambito\.base \{\s*margin-bottom: 6px;/);
+assert.match(css, /\.wod5e-mage-tiro-voce\.base \{\s*margin-bottom: 4px;/);
+assert.match(css, /\.wod5e-mage-arete-dotrow\.base > \* \{\s*margin-bottom: 0\.4rem;/);
+assert.match(css, /\.wod5e-mage-nemico-ambito\.base \{\s*margin-bottom: 6px;/);
+assert.match(css, /tr\.wod5e-mage-scope-stacco > td \{[^}]*background: transparent;[^}]*height: 2px;/s);
 // Il Grimorio dentro i Tratti a schede (23/9): le schede sono i filtri di specie in testa,
 // gli incantesimi sono righe della stessa lista con data-kind="grimorio", il libro apre la pagina.
 const trattiRiq = stat("stat-tratti.hbs");

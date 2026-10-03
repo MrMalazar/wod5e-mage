@@ -164,13 +164,13 @@
       "HarmonyFlavor": "Armonia {dice}",
       "Pool": "Riserva",
       "Threshold": "Soglia",
-      "ThresholdHint": "La soglia è la somma dei livelli degli Ambiti: quelli a 1 valgono 0, quelli sopra 1 valgono il loro livello. Le Sfere non contribuiscono e la somma non ha tetto. Il premio dell'Areté non la tocca: aggiunge dadi alla riserva. La soglia si toglie dalla riserva: restano i dadi che tiri. Il successo parte dal 6; con Volgare con testimoni parte automaticamente dall'8.",
+      "ThresholdHint": "La soglia è l'Epicità, almeno 1, più la somma dei livelli degli Ambiti: ogni livello vale il suo numero, lo 0 non costa. Le Sfere non contribuiscono e la somma non ha tetto. Il premio dell'Areté non la tocca: aggiunge dadi alla riserva. La soglia si toglie dalla riserva: restano i dadi che tiri. Il successo parte dal 6; con Volgare con testimoni parte automaticamente dall'8.",
       "AutoVictoryBanner": "Vittoria automatica",
       "BonusCap": "Tetto +3: {excess} dadi in meno.",
       "SpherePlan": "Sfere: {plans}.",
       "SpecialtyHint": "Specialità: se dichiari questo Ambito, tanti dadi in più quanto l'Areté. La soglia non cambia.",
       "HarmonyShort": "dadi dagli altri Maghi",
-      "ThresholdShort": "Soglia: somma degli Ambiti sopra 1; il premio dell'Areté non la tocca. Gli Ambiti a 1 valgono 0. Si toglie dalla riserva: restano i dadi che tiri.",
+      "ThresholdShort": "Soglia: l'Epicità, almeno 1, più la somma degli Ambiti; il premio dell'Areté non la tocca. Si toglie dalla riserva: restano i dadi che tiri.",
       "ScopeTable": "La tavola degli Ambiti",
       "BacklashLabel": "Contraccolpo",
       "BacklashEyesOne": "un occhio sui rossi",
@@ -403,6 +403,7 @@
     },
     "Scopes": {
       "Label": "Ambiti",
+      "epic": "Epicità",
       "targets": "Bersagli",
       "conditions": "Condizioni",
       "duration": "Durata",
@@ -411,25 +412,25 @@
       "precision": "Precisione",
       "area": "Area",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Gli Ambiti danno la misura a un effetto di Magick, ognuno con una scala da 0 a 7. Prima si decide cosa deve fare l'effetto, poi si cercano gli Ambiti che servono a dirlo: quelli che l'effetto non tocca restano a 0. Ogni Ambito si legge con due o tre sottoambiti, misure alternative della stessa cosa: in un lancio se ne usa uno. Lo 0 è la base e non costa niente; ogni livello vale il suo numero. La soglia è la somma dei livelli degli Ambiti usati, e ogni punto di soglia toglie un dado alla riserva. In un lancio si alzano sopra lo 0 al massimo tre Ambiti; un'impresa impossibile prende +5 dopo il conto.",
-      "TableModes": "In Portata e Precisione la lente Scontro vale nel combattimento e la Narrativa fuori; nella Potenza i Danni servono nello scontro: è il Narratore a dichiarare quando si legge in combattimento. Nella Durata la prima riga conta il tempo di gioco, la seconda quello del mondo. Le altre lenti (Effetto, Area, Malus, Complessità, Beneficio, Peso, Influenza, Informazione) sono libere, buone in ogni scena.",
+      "TableHint": "Gli Ambiti danno la misura a un effetto di Magick. In cima l'Epicità, da 1 a 7, dice quanto in fondo arriva il gesto; sotto, sei Ambiti con una scala da 0 a 7 dicono quanto: quelli che l'effetto non tocca restano a 0. Ogni Ambito si legge con una, due o tre lenti, misure alternative della stessa cosa: in un lancio se ne usa una. Lo 0 è la base e non costa niente; ogni livello vale il suo numero. La soglia è l'Epicità più la somma degli Ambiti, e ogni punto di soglia toglie un dado alla riserva. In un lancio si alzano sopra lo 0 al massimo tre Ambiti; l'Epicità non conta.",
+      "TableModes": "Nella Portata la lente Scontro vale nel combattimento e la Narrativa fuori; nella Potenza i Danni servono nello scontro: è il Narratore a dichiarare quando si legge in combattimento. Nella Durata la prima riga conta il tempo di gioco, la seconda quello del mondo. Le altre lenti (Effetto, Area, Malus e bonus, Complessità, Peso, Influenza, Dettaglio, Informazione) sono libere, buone in ogni scena.",
       "TableSuccesses": "Ambito",
       "TableReading": "Lente",
       "TableNote": "Gli Ambiti servono a canalizzare la generalità e la variabilità degli effetti di Magick: è consigliato pensare un effetto nel minor numero di Ambiti possibile, ragionando per necessità e obiettivo.",
       "Desc": {
+        "epic": "Quanto in fondo arriva il gesto: da 1, un trucco, a 7, l'impossibile. Il giocatore la sceglie sugli esempi e il Narratore la corregge. C'è in ogni lancio, almeno 1, e non conta fra i tre Ambiti. Si legge a parte dal Consenso: un destino riscritto a colpi di coincidenze è Accidentale e vale 6.",
         "targets": "Chi o cosa prende l'effetto. L'Effetto conta i bersagli uno per uno, l'Area prende tutto quello che sta dentro uno spazio.",
-        "conditions": "Cosa l'effetto lascia addosso, cosa dà e a quali patti funziona. Il Malus è la Condizione che mette su un bersaglio, il Beneficio l'aiuto che gli dà, la Complessità le clausole che lo regolano. Il Beneficio non entra nei lanci di Magick.",
+        "conditions": "Cosa l'effetto lascia addosso e a quali patti funziona. Malus e bonus dice quanto pesa: il bonus è il malus girato, e non entra nei lanci di Magick. La Complessità sono le clausole che lo regolano.",
         "duration": "Quanto resta in piedi l'effetto. La prima riga conta in tempo di gioco, la seconda in tempo del mondo.",
         "range": "Fin dove arriva l'effetto da chi lo lancia. Per agire su quello che non vedi serve la Corrispondenza, oppure un legame col bersaglio (la Regola del Ponte).",
         "potency": "Quanto è forte l'effetto: i Danni nello scontro, il Peso in tutti e due, l'Influenza su una persona. L'Influenza dice quanto la cambia, dalle emozioni fino a pilotarla, e non è una Condizione.",
-        "precision": "Quanto è fine quello che l'effetto sceglie o trova: nello scontro il punto da colpire, fuori il particolare da trovare o da toccare. L'Informazione dice quanto è rara la cosa che scopri: il giocatore fa la domanda, il Narratore fissa il livello prima del tiro."
+        "precision": "Quanto è fine quello che l'effetto sceglie o trova: il Dettaglio, dal corpo intero a un atomo, nello scontro e fuori. L'Informazione dice quanto è rara la cosa che scopri: il giocatore fa la domanda, il Narratore fissa il livello prima del tiro."
       },
       "Sub": {
         "targets": "Effetto",
         "targetsArea": "Area",
-        "conditionsMalus": "Malus",
+        "conditionsMalus": "Malus e bonus",
         "conditionsComplexity": "Complessità",
-        "conditionsBenefit": "Beneficio",
         "duration": "Gioco",
         "durationWorld": "Mondo",
         "range": "Scontro",
@@ -437,11 +438,19 @@
         "potencyDamage": "Danni",
         "potencyWeight": "Peso",
         "potencyInfluence": "Influenza",
-        "precision": "Scontro",
-        "precisionNarrative": "Narrativa",
+        "precision": "Dettaglio",
         "precisionInfo": "Informazione"
       },
       "Table": {
+        "epic": {
+          "1": "Trucco",
+          "2": "Spinta",
+          "3": "Mutamento",
+          "4": "Prodigio",
+          "5": "Creazione",
+          "6": "Miracolo",
+          "7": "Impossibile"
+        },
         "targets": {
           "0": "Un bersaglio",
           "1": "+1",
@@ -463,14 +472,14 @@
           "7": "Pianeta"
         },
         "conditionsMalus": {
-          "0": "Nessuna Condizione",
-          "1": "Un lieve: −1",
-          "2": "Una dello scontro",
-          "3": "Grado 1: −2",
-          "4": "Grado 2: −2 e 8",
-          "5": "Grado 3 su una cosa",
-          "6": "Grado 3 su un tipo",
-          "7": "Grado 3 su tutto"
+          "0": "Niente",
+          "1": "Lieve",
+          "2": "Mezzo",
+          "3": "Grado 1",
+          "4": "Grado 2",
+          "5": "Grado 3",
+          "6": "Tipo",
+          "7": "Tutto"
         },
         "conditionsComplexity": {
           "0": "Assente",
@@ -481,16 +490,6 @@
           "5": "Complessa",
           "6": "Molto complessa",
           "7": "Livello contratto"
-        },
-        "conditionsBenefit": {
-          "0": "Nessun bonus",
-          "1": "Un lieve: +1",
-          "2": "Un mezzo",
-          "3": "Grado 1: +2",
-          "4": "Grado 2: +2, niente 8",
-          "5": "Grado 3 su una cosa",
-          "6": "Grado 2 su un tipo",
-          "7": "Grado 2 su tutto"
         },
         "duration": {
           "0": "1",
@@ -563,24 +562,14 @@
           "7": "La piloti"
         },
         "precision": {
-          "0": "Dove capita",
-          "1": "Il corpo",
-          "2": "Un arto",
-          "3": "L'oggetto impegnato",
-          "4": "Il punto debole",
-          "5": "Un punto minuscolo",
-          "6": "La parte interna",
-          "7": "Un punto del Modello"
-        },
-        "precisionNarrative": {
-          "0": "A grandi linee",
-          "1": "Quell'oggetto",
-          "2": "Una parte",
-          "3": "Un particolare",
-          "4": "L'ago nel pagliaio",
-          "5": "Un granello",
-          "6": "Una molecola",
-          "7": "Un atomo"
+          "0": "Nessuno",
+          "1": "Corpo",
+          "2": "Parte",
+          "3": "Particolare",
+          "4": "Punto",
+          "5": "Granello",
+          "6": "Molecola",
+          "7": "Atomo"
         },
         "precisionInfo": {
           "0": "Niente che non sapessi già",
@@ -594,6 +583,15 @@
         }
       },
       "Hint": {
+        "epic": {
+          "1": "Tocchi appena il mondo: accendere una candela, sapere dove sei, sentire una bugia.",
+          "2": "Spingi quello che c'è: deviare un proiettile, pilotare l'umore, truccare un dado.",
+          "3": "Cambi quello che c'è: guarire una ferita, teletrasportarti, animare un cadavere.",
+          "4": "Lo porti oltre la sua natura: trasformare in animale, controllare il meteo, aprire un portale.",
+          "5": "Fai quello che non c'era: creare un organismo, creare un Nodo, aprire un Regno.",
+          "6": "Vai contro la morte, l'anima, il destino: riportare in vita un morto, creare un'anima, spezzare un destino scritto.",
+          "7": "Pieghi il tempo e le leggi del mondo: viaggiare nel tempo, creare un buco nero, creare uno spazio nuovo."
+        },
         "targets": {
           "0": "Un bersaglio solo.",
           "1": "Un bersaglio in più, scelto uno per uno: amici e nemici si separano da soli.",
@@ -615,14 +613,14 @@
           "7": "Il mondo. L'Area prende tutto quello che sta dentro, amici compresi: per lasciarli fuori serve una clausola di Complessità."
         },
         "conditionsMalus": {
-          "0": "Nessuna Condizione: l'effetto non lascia niente addosso.",
-          "1": "Un lieve: −1 ai tiri del suo tipo. Contuso, Scosso, Atterrato.",
-          "2": "Una Condizione dello scontro: toglie l'arma, il movimento o l'azione del turno. Disarmato, Legato, Stordito.",
-          "3": "Grado 1: −2 sui tiri che la Condizione tocca. Abbagliato, Intimorito, Sanguinante.",
-          "4": "Grado 2: −2 e difficoltà 8 sui tiri che tocca. Offuscato, Spaventato, Avvelenato.",
-          "5": "Grado 3 su una cosa: fallisce quello che chiede quella cosa. Cieco, Muto, Rotto.",
-          "6": "Grado 3 su un tipo di tiri: falliscono i fisici, i sociali o i mentali. Paralizzato, Morente, Furioso.",
-          "7": "Grado 3 su tutto: falliscono tutti i tiri, o il bersaglio esce di scena. Svenuto, Addormentato, Terrorizzato."
+          "0": "Si racconta, non tocca i tiri.",
+          "1": "−1 o +1 ai tiri di un tipo: Contuso, Scosso, Atterrato.",
+          "2": "Toglie o dà un'arma, un attrezzo, un appiglio: Disarmato; una lama di fuoco, una corda.",
+          "3": "−2 o +2: Abbagliato, Sanguinante, Intimorito.",
+          "4": "−2 e difficoltà 8, o +2 e mai 8: Offuscato, Avvelenato, Spaventato.",
+          "5": "Una cosa fallisce, o riesce senza tirare: Cieco, Muto, Legato.",
+          "6": "I tiri di un tipo falliscono, o riescono: Paralizzato, Furioso.",
+          "7": "Fuori gioco, o riesce ogni tiro: Svenuto, Addormentato, Terrorizzato."
         },
         "conditionsComplexity": {
           "0": "L'effetto scatta subito e vale per tutto quello che tocca. Nessuna clausola.",
@@ -633,16 +631,6 @@
           "5": "Clausole che dipendono l'una dall'altra, e una cambia il senso dell'altra. Se entra un estraneo scatta l'allarme, ma solo se la porta era chiusa.",
           "6": "Un regolamento: casi diversi con risposte diverse. Un amico passa, un nemico resta fuori, un Dormiente si perde nel corridoio.",
           "7": "Un patto fra più parti, con obblighi, eccezioni e penali per chi lo rompe. Chi tradisce il patto resta Muto finché non ripara."
-        },
-        "conditionsBenefit": {
-          "0": "Nessun bonus: l'effetto aiuta nella scena, ma non tocca i tiri.",
-          "1": "+1 ai tiri di un tipo: fisici, sociali o mentali. Sparare, mentire, ricordare.",
-          "2": "Un'arma, un attrezzo o un appiglio che il bersaglio non aveva. Una lama di fuoco, una chiave che apre, una corda che regge.",
-          "3": "+2 sui tiri che il Beneficio tocca. Mirare, ascoltare, correre.",
-          "4": "+2, e quei tiri non vanno mai a 8. Vedere al buio, sentire nel frastuono, correre sul ghiaccio.",
-          "5": "Quella cosa riesce senza tirare. Un colpo di pistola, un salto fra i tetti, una serratura.",
-          "6": "+2 e niente 8 su tutti i tiri di un tipo: i fisici, i sociali o i mentali.",
-          "7": "+2 e niente 8 su ogni tiro, di tutti e tre i tipi."
         },
         "duration": {
           "0": "L'effetto accade e si chiude nel turno del lancio.",
@@ -708,24 +696,14 @@
           "7": "La piloti come e quando vuoi: parla, si muove, combatte come decidi tu."
         },
         "precision": {
-          "0": "Colpisci il bersaglio, ma non scegli dove.",
-          "1": "Una parte grande e facile da prendere: il busto, il cofano.",
-          "2": "Una parte grande: un braccio, una gamba, la ruota di un'auto.",
-          "3": "Una parte piccola che serve all'azione: la mano che impugna, il volante.",
-          "4": "Un oggetto tenuto in mano, o una fessura nella protezione: l'arma, una giuntura dell'armatura.",
-          "5": "Un punto minuscolo, spesso in movimento: un occhio, il grilletto.",
-          "6": "Qualcosa che sta dentro e non si vede: un organo, il motore acceso.",
-          "7": "Il punto della trama che fa di quella cosa quello che è."
-        },
-        "precisionNarrative": {
-          "0": "La cosa in generale: un'auto qualunque, un palazzo, una folla.",
-          "1": "Una cosa precisa fra tante: quell'auto, quella persona, quella porta.",
-          "2": "Una parte di quella cosa: il motore, la tasca, la serratura.",
-          "3": "Un dettaglio piccolo: la chiave nella toppa, una vite, un bottone.",
-          "4": "Una cosa minuscola nascosta fra molte: un capello sul tappeto, una moneta nella sabbia, una pagina in una biblioteca.",
-          "5": "Qualcosa che quasi non si vede: un granello di polvere, una goccia di sangue, un filo.",
-          "6": "Quello che l'occhio non vede: il veleno nel bicchiere, una traccia chimica, un virus.",
-          "7": "La parte più piccola di una cosa: un atomo, una sola cellula."
+          "0": "Dove capita, a grandi linee: il bersaglio senza scegliere dove, un'auto qualunque, una folla.",
+          "1": "Il corpo, quell'oggetto: il busto, quell'auto, quella porta.",
+          "2": "Un arto, una parte: un braccio, la ruota di un'auto, la serratura.",
+          "3": "L'oggetto impegnato, un particolare: la mano che impugna, la chiave nella toppa, una vite.",
+          "4": "Il punto debole, l'ago nel pagliaio: una giuntura dell'armatura, un capello sul tappeto, una pagina in una biblioteca.",
+          "5": "Un punto minuscolo, un granello: un occhio, il grilletto, una goccia di sangue.",
+          "6": "Quello che sta dentro e l'occhio non vede: un organo, il veleno nel bicchiere, un virus.",
+          "7": "Un punto del Modello, un atomo: quello che fa di una cosa quello che è, una sola cellula."
         },
         "precisionInfo": {
           "0": "L'ora, il tempo che fa, chi c'è nella stanza.",
@@ -749,13 +727,12 @@
         "7": "cronaca"
       },
       "DamageReading": "{n} danni",
-      "PerCastCap": "In un lancio si alzano sopra lo 0 al massimo tre Ambiti: togline uno prima di alzarne un altro.",
+      "PerCastCap": "In un lancio si alzano sopra lo 0 al massimo tre Ambiti, l'Epicità a parte: togline uno prima di alzarne un altro.",
       "SubShort": {
         "targets": "Effetto",
         "targetsArea": "Area",
         "conditionsMalus": "Malus",
         "conditionsComplexity": "Compl.",
-        "conditionsBenefit": "Benef.",
         "duration": "Gioco",
         "durationWorld": "Mondo",
         "range": "Scontro",
@@ -763,11 +740,9 @@
         "potencyDamage": "Danni",
         "potencyWeight": "Peso",
         "potencyInfluence": "Infl.",
-        "precision": "Scontro",
-        "precisionNarrative": "Narr.",
+        "precision": "Dettaglio",
         "precisionInfo": "Info"
-      },
-      "Zero": "Lo 0 è l'effetto di base: c'è sempre, non si toglie e non costa. I sette pallini dopo lo alzano."
+      }
     },
     "OngoingMagick": {
       "Label": "Magick in atto",
@@ -1998,10 +1973,10 @@
       "Riserva": "Riserva",
       "RiservaHint": "Chi dà dadi: Attributo, Abilità, Specializzazione, premio dell'Areté, potere, Tratti; le Condizioni in meno. In fondo il totale: il meno e il più lo ritoccano.",
       "Soglia": "Soglia",
-      "SogliaHint": "Chi toglie dadi: la somma dei livelli degli Ambiti, e il potere che la tocca. In fondo il totale: il meno e il più lo alzano o abbassano.",
+      "SogliaHint": "Chi toglie dadi: l'Epicità, almeno 1, gli Ambiti alzati e il potere che la tocca. In fondo il totale: il meno e il più lo alzano o abbassano.",
       "DadiNote": "Dadi ritoccati a mano: {dice}.",
       "PillolaVia": "Togli dal tiro",
-      "ScopeCapWarning": "In un lancio si alzano sopra lo 0 al massimo {n} Ambiti: abbassane uno prima di alzarne un altro.",
+      "ScopeCapWarning": "In un lancio si alzano sopra lo 0 al massimo {n} Ambiti, l'Epicità a parte: abbassane uno prima di alzarne un altro.",
       "PotereNote": {
         "dice": "{name}: {value} dadi",
         "threshold": "{name}: soglia {value}",
@@ -2029,7 +2004,7 @@
       "RiesceSenzaTirare": "Riesce senza tirare: {name}",
       "PotereCosto": "Il potere costa {points} Quintessenza.",
       "PotereDadiFlavor": "{name} +{dice}",
-      "SogliaManoHint": "La soglia: la somma degli Ambiti. Il meno e il più la alzano o abbassano sopra il conto (l'impresa impossibile: +5); la matita dice di quanto.",
+      "SogliaManoHint": "La soglia: l'Epicità più la somma degli Ambiti. Il meno e il più la alzano o abbassano sopra il conto; la matita dice di quanto.",
       "SogliaManoAbilitaHint": "La soglia che dice il Narratore, col meno e il più: senza, il tiro non parte.",
       "RitoccoHint": "La riserva: quello che dà dadi, meno le Condizioni. Il meno e il più la ritoccano, anche in meno, fuori dal tetto; la matita dice di quanto.",
       "Dal": "dal {n}",
@@ -2582,9 +2557,8 @@
       "Lente": "Clic: la lente dopo",
       "SogliaGrande": "Soglia",
       "TuttiZero": "tutti a 0",
-      "Impossibile": "impresa impossibile, +{extra}",
       "Aggiungi": "Aggiungi",
-      "TettoAmbiti": "In un lancio si alzano sopra lo 0 al massimo tre Ambiti: abbassane uno prima di alzarne un altro.",
+      "TettoAmbiti": "In un lancio si alzano sopra lo 0 al massimo tre Ambiti, l'Epicità a parte: abbassane uno prima di alzarne un altro.",
       "DanniMagick": "danni {danni} (Areté {arete} + Potenza {potenza})",
       "EffettoMagickTogli": "Togli l'effetto di Magick",
       "EffettoMagickApri": "Apri i dettagli",

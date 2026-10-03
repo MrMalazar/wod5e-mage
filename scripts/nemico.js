@@ -23,9 +23,11 @@
  *   note       { vuole, molla }
  *
  * Un EFFETTO di Magick: { nome, breve, testo, resiste: { attribute, skill, testo },
- * dominio, come, da, formula, ambiti: { ambito: livello }, soglia, impossibile, sort }.
- * La soglia è quella scritta (dalla Formula, o dagli Ambiti a mano): il PG la
- * resiste col tiro scritto sull'effetto. Il Narratore non tira mai.
+ * dominio, come, da, formula, ambiti: { ambito: livello }, soglia, sort }.
+ * La soglia è quella scritta (dalla Formula, o dall'Epicità e dagli Ambiti a
+ * mano): il PG la resiste col tiro scritto sull'effetto. Il Narratore non
+ * tira mai. Gli effetti scritti prima del 2/10 possono portare «impossibile»
+ * (il +5 di allora, già dentro la loro soglia) e niente Epicità.
  *
  * Dal rifacimento dell'1/10 (mock docs/mock_scheda_nemico_1-10.html) la bandiera porta anche:
  *
@@ -42,7 +44,7 @@ import { condizioneTitle, dadiDelPeso, definizioneDi, findCondizioneByName, GRUP
 import { ATTRIBUTE_KEYS } from "./tratti-icone.js";
 import { findFormula, formulaThresholds, prepareGrimorioFormule } from "./grimorio.js";
 import { POTERI, quattroParti } from "./poteri.js";
-import { IMPOSSIBLE_SURCHARGE, SCOPES, SCOPES_PER_CAST, SCOPE_ICONS, SCOPE_MAX_LEVEL, scopeModes } from "./scopes.js";
+import { EPIC_MIN, EPIC_SCOPE, epicita, SCOPES, SCOPES_PER_CAST, SCOPE_ICONS, SCOPE_MAX_LEVEL, scopeMin, scopeModes } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
 
 export const NEMICO_FLAG = "nemico";
@@ -191,23 +193,25 @@ export function riservaScalata(base, voci = [], mano = null) {
 }
 
 /**
- * La soglia di un effetto di Magick scritto a mano: la somma dei livelli degli
- * Ambiti sopra lo 0 (al massimo SCOPES_PER_CAST Ambiti alzati: gli altri non
- * contano e si segnalano), più IMPOSSIBLE_SURCHARGE per l'impresa impossibile.
+ * La soglia di un effetto di Magick scritto a mano (2/10): l'Epicità, almeno
+ * 1, più la somma dei livelli degli Ambiti sopra lo 0 (al massimo
+ * SCOPES_PER_CAST Ambiti alzati: gli altri non contano e si segnalano).
+ * L'Epicità non conta nel tetto. Il +5 dell'impresa impossibile non c'è
+ * più: un'impresa impossibile è un'Epicità di 6 o 7.
  */
-export function sogliaDagliAmbiti(livelli = {}, { impossibile = false } = {}) {
+export function sogliaDagliAmbiti(livelli = {}) {
+  const epic = { id: EPIC_SCOPE, level: epicita(oggetto(livelli)) };
   const alzati = SCOPES
+    .filter((id) => id !== EPIC_SCOPE)
     .map((id) => ({ id, level: Math.min(intero(livelli?.[id]), SCOPE_MAX_LEVEL) }))
     .filter((entry) => entry.level > 0);
   const contati = alzati.slice(0, SCOPES_PER_CAST);
-  const somma = contati.reduce((sum, entry) => sum + entry.level, 0);
-  const extra = impossibile ? IMPOSSIBLE_SURCHARGE : 0;
+  const somma = contati.reduce((sum, entry) => sum + entry.level, epic.level);
   return {
-    soglia: somma + extra,
-    ambiti: contati,
-    fuoriTetto: alzati.slice(SCOPES_PER_CAST).map((entry) => entry.id),
-    impossibile: Boolean(impossibile),
-    extra
+    soglia: somma,
+    epicita: epic.level,
+    ambiti: [epic, ...contati],
+    fuoriTetto: alzati.slice(SCOPES_PER_CAST).map((entry) => entry.id)
   };
 }
 
@@ -744,6 +748,7 @@ export function resistenzaTesto(resiste = {}, { attributi = {}, abilita = {}, lo
 export function effettoDaFormula(formula, { indice = 0 } = {}) {
   if (!formula) return null;
   const soglia = formula.thresholds?.[Math.min(Math.max(intero(indice), 0), (formula.thresholds?.length ?? 1) - 1)] ?? { base: 0, scopes: {} };
+  // Le Formule non hanno ancora un'Epicità loro (2/10): partono dall'1 di ogni lancio, come quelle dei maghi.
   return {
     nome: String(formula.name ?? ""),
     breve: String(formula.use ?? ""),
@@ -753,9 +758,8 @@ export function effettoDaFormula(formula, { indice = 0 } = {}) {
     come: "accidentale",
     da: "grimorio",
     formula: String(formula.id ?? ""),
-    ambiti: Object.fromEntries(Object.entries(soglia.scopes ?? {}).map(([id, level]) => [id, intero(level)])),
-    soglia: intero(soglia.base),
-    impossibile: false
+    ambiti: { [EPIC_SCOPE]: EPIC_MIN, ...Object.fromEntries(Object.entries(soglia.scopes ?? {}).map(([id, level]) => [id, intero(level)])) },
+    soglia: intero(soglia.base) + EPIC_MIN
   };
 }
 
@@ -777,31 +781,40 @@ export function formuleDeiDomini(domini = {}, { effetti = {}, localize = (k) => 
       name: formula.name,
       use: formula.use,
       access: formula.access,
-      soglie: formula.thresholds.map((t, index) => ({ index, base: t.base, text: t.text, ambiti: t.scopes.map((s) => `${s.label} ${s.level}`).join(" · ") })),
+      // La soglia del bottone è quella che l'effetto prende: la base della Formula più l'Epicità 1 (2/10).
+      soglie: formula.thresholds.map((t, index) => ({ index, base: t.base, soglia: intero(t.base) + EPIC_MIN, text: t.text, ambiti: t.scopes.map((s) => `${s.label} ${s.level}`).join(" · ") })),
       presa: prese.has(formula.id)
     }));
 }
 
-/** Le lenti degli Ambiti per il cassetto a mano: la scelta per Ambito (0 la prima, 1 la seconda, 2 la terza). */
+/**
+ * Le righe degli Ambiti per il cassetto a mano, con la lente scelta per
+ * Ambito (0 la prima, 1 la seconda, 2 la terza). Sette numeri per riga, da
+ * 1 a 7 (Blue, 2/10: via lo 0; lo stesso numero di nuovo lo toglie). In
+ * cima l'Epicità, staccata, che vale almeno 1.
+ */
 export function ambitiAMano(mano = {}, { arete = 1, localize = (k) => k } = {}) {
   const tavola = scopeModes(localize, { arete });
   const livelli = oggetto(mano.livelli);
   const lenti = oggetto(mano.lenti);
-  const conto = sogliaDagliAmbiti(livelli, { impossibile: Boolean(mano.impossibile) });
+  const conto = sogliaDagliAmbiti(livelli);
   const righe = SCOPES.map((id) => {
     const opzioni = tavola[id] ?? [];
     const indice = Math.min(intero(lenti[id]), Math.max(opzioni.length - 1, 0));
     const lente = opzioni[indice] ?? { readings: [], hints: [], short: "", label: "" };
-    const level = Math.min(intero(livelli[id]), SCOPE_MAX_LEVEL);
+    const base = id === EPIC_SCOPE;
+    const level = base ? epicita(livelli) : Math.min(intero(livelli[id]), SCOPE_MAX_LEVEL);
     return {
       id,
+      base,
       label: localize(`WOD5E_MAGE.Scopes.${id}`),
       faIcon: SCOPE_ICONS[id] ?? "",
-      lente: { indice, id: lente.id ?? "", label: lente.short || lente.label || "", altra: opzioni.length > 1 },
+      // Un Ambito a lente sola (l'Epicità) non la scrive.
+      lente: { indice, id: lente.id ?? "", label: opzioni.length > 1 ? (lente.short || lente.label || "") : "", altra: opzioni.length > 1 },
       level,
-      alto: level > 0,
+      alto: level > scopeMin(id),
       lettura: lente.readings?.[level] ?? "",
-      pallini: Array.from({ length: SCOPE_MAX_LEVEL + 1 }, (_, value) => ({ value, on: value > 0 && value <= level, zero: value === 0, title: lente.readings?.[value] ?? "" }))
+      pallini: Array.from({ length: SCOPE_MAX_LEVEL }, (_, index) => ({ value: index + 1, on: index + 1 <= level, title: lente.readings?.[index + 1] ?? "" }))
     };
   });
   const potenza = righe.find((riga) => riga.id === "potency");
@@ -811,19 +824,18 @@ export function ambitiAMano(mano = {}, { arete = 1, localize = (k) => k } = {}) 
     potenza: potenza?.level ?? 0,
     soglia: conto.soglia,
     ambiti: conto.ambiti,
-    conto: conto.ambiti.length ? conto.ambiti.map((entry) => `${localize(`WOD5E_MAGE.Scopes.${entry.id}`)} ${entry.level}`).join(" + ") + (conto.extra ? ` + ${conto.extra}` : "") : localize("WOD5E_MAGE.Nemico.TuttiZero"),
-    impossibile: Boolean(mano.impossibile),
-    extra: IMPOSSIBLE_SURCHARGE,
+    conto: conto.ambiti.map((entry) => `${localize(`WOD5E_MAGE.Scopes.${entry.id}`)} ${entry.level}`).join(" + "),
     danni,
     fuoriTetto: conto.fuoriTetto
   };
 }
 
-/** Un livello che sale sopra lo 0 su un Ambito nuovo: solo se gli alzati sono meno di tre. */
+/** Un livello che sale sopra lo 0 su un Ambito nuovo: solo se gli alzati sono meno di tre. L'Epicità sale sempre. */
 export function puoAlzare(livelli = {}, id, level) {
+  if (id === EPIC_SCOPE) return true;
   const attuale = intero(oggetto(livelli)[id]);
   if (intero(level) === 0 || attuale > 0) return true;
-  const alzati = SCOPES.filter((scope) => scope !== id && intero(oggetto(livelli)[scope]) > 0).length;
+  const alzati = SCOPES.filter((scope) => scope !== id && scope !== EPIC_SCOPE && intero(oggetto(livelli)[scope]) > 0).length;
   return alzati < SCOPES_PER_CAST;
 }
 
@@ -833,15 +845,21 @@ export function magickDelNemico(dati = datiNemico(), { aperte = new Set(), attri
   const domini = SPHERES.map((id) => ({ id, label: localize(`WOD5E_MAGE.Spheres.${id}`), icon: `modules/${MODULE_ID}/assets/icons/sheet/${id}.png`, on: Boolean(magick.domini[id]) }))
     .sort((a, b) => a.label.localeCompare(b.label, lang));
   const effetti = righeOrdinate(magick.effetti, lang).map((row) => {
-    const ambiti = Object.entries(oggetto(row.ambiti)).filter(([id, level]) => SCOPES.includes(id) && intero(level) > 0).map(([id, level]) => ({ id, level: intero(level), label: localize(`WOD5E_MAGE.Scopes.${id}`), faIcon: SCOPE_ICONS[id] ?? "" }));
+    // Un effetto scritto prima del 29/9 può portare l'Impatto fra gli Ambiti:
+    // l'Impatto è uscito, e la soglia si rifà sugli Ambiti che restano, con
+    // l'Epicità (2/10). Se era un'impresa impossibile (il +5 di prima), l'Epicità è 6.
+    const scritti = oggetto(row.ambiti);
+    const rifatta = intero(scritti.impact) > 0
+      ? sogliaDagliAmbiti({ ...scritti, ...(row.impossibile && !intero(scritti[EPIC_SCOPE]) ? { [EPIC_SCOPE]: 6 } : {}) })
+      : null;
+    const livelli = rifatta ? Object.fromEntries(rifatta.ambiti.map((entry) => [entry.id, entry.level])) : scritti;
+    // Gli Ambiti dell'effetto nell'ordine della tavola, l'Epicità per prima (2/10).
+    const ambiti = SCOPES.filter((id) => intero(livelli[id]) > 0).map((id) => ({ id, level: intero(livelli[id]), label: localize(`WOD5E_MAGE.Scopes.${id}`), faIcon: SCOPE_ICONS[id] ?? "" }));
     const resiste = resistenzaTesto(row.resiste, { attributi, abilita, localize });
     const come = COME_MAGICK.includes(row.come) ? row.come : "accidentale";
     const da = row.da === "grimorio" ? "grimorio" : "mano";
     const dominio = testo(row.dominio);
-    // Un effetto scritto prima del 29/9 può portare l'Impatto fra gli Ambiti:
-    // l'Impatto è uscito, e la soglia si rifà sugli Ambiti che restano.
-    const conImpatto = intero(oggetto(row.ambiti).impact) > 0;
-    const soglia = conImpatto ? sogliaDagliAmbiti(oggetto(row.ambiti), { impossibile: Boolean(row.impossibile) }).soglia : intero(row.soglia);
+    const soglia = rifatta ? rifatta.soglia : intero(row.soglia);
     // Il sigillo della riga (1/10): il Dominio scritto; per una Formula, la prima Sfera d'Accesso che il nemico ha, o la prima che la apre.
     const accessi = row.formula ? (findFormula(testo(row.formula))?.access ?? []).filter((id) => SPHERES.includes(id)) : [];
     const sferaId = SPHERES.includes(dominio) ? dominio : accessi.find((id) => magick.domini[id]) ?? accessi[0] ?? "";
@@ -864,7 +882,6 @@ export function magickDelNemico(dati = datiNemico(), { aperte = new Set(), attri
       dominio,
       dominioLabel: dominio ? (SPHERES.includes(dominio) ? localize(`WOD5E_MAGE.Spheres.${dominio}`) : dominio) : "",
       formula: testo(row.formula),
-      impossibile: Boolean(row.impossibile),
       // I danni solo con la lente Danni: il Peso e l'Influenza (29/9) non feriscono.
       danni: Object.hasOwn(oggetto(row.ambiti), "potency") && intero(oggetto(row.ambiti).potency) > 0 && !["peso", "influenza"].includes(row.lentePotenza) ? danniMagick(magick.arete, oggetto(row.ambiti).potency) : null,
       aperta: aperte.has(row.id)
@@ -1068,7 +1085,6 @@ export function prepareNemicoContext({ actor = {}, items = [], salute = null, st
       ...CAMPI.map((campo) => ({ id: campo, label: localize(`WOD5E_MAGE.Nemico.Campi.${campo}`) })),
       ...casi.filter((caso) => caso.soglia !== null).map((caso) => ({ id: `caso:${caso.id}`, label: caso.nome }))
     ],
-    extraImpossibile: IMPOSSIBLE_SURCHARGE,
     dati
   };
 }
