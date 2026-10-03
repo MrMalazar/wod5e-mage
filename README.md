@@ -419,3 +419,11 @@ position is applied only at the very end of a render, and a window that missed
 it opened as wide as the screen. An error while the window is drawn now shows up
 as a notification instead of stopping it.
 
+Since 1.37.0 the Concepts archive (`mage-concetti`) is built from
+`tools/dati/concetti.md` by `tools/build-concetti.py`, no longer from the book's
+character chapter: 65 concepts in ten groups, each the job held before the
+Awakening (taken as written from the Anchor generator's list) and what the
+Awakening made of it, tied together ("Infermiera, medico dell'occulto",
+"Tassista, in realtà messaggero"). The twelve proposals of the Concept step
+take one concept per group in turn.
+

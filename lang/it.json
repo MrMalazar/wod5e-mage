@@ -2140,10 +2140,10 @@
         },
         "concetto": {
           "Label": "Concetto",
-          "Domanda": "Chi eri prima del Risveglio, in una riga sola?",
+          "Domanda": "Chi eri prima del Risveglio, e cosa sei diventato?",
           "Sotto": "il Concetto · la Sfida, facoltativa, con tre premi",
-          "Perche": "Chi eri prima del Risveglio, e cosa sei diventato dopo, in una riga sola. È il filtro di tutto il resto: ogni pallino che segni dopo deve tornare con questa frase.",
-          "PercheDue": "Serve una persona vera, con un mestiere anonimo e una tensione dentro, non un archetipo. La Sfida del Concetto sono ventuno domande in tre gruppi da sette: è facoltativa, e il gioco te la paga in proporzione a quanto scendi."
+          "Perche": "Chi eri prima del Risveglio e cosa sei diventato dopo, in poche parole. È il filtro di tutto il resto: ogni pallino che segni dopo deve tornare col tuo Concetto.",
+          "PercheDue": "Il prima e il dopo sono parole semplici, legate fra loro: il mestiere che facevi e quello che il Risveglio ne ha fatto, come l'infermiera che diventa medico dell'occulto. La Sfida del Concetto sono ventuno domande in tre gruppi da sette: è facoltativa, e il gioco te la paga in proporzione a quanto scendi."
         },
         "sfere": {
           "Label": "Domini",
@@ -2259,7 +2259,7 @@
       },
       "Concetto": {
         "Concetto": "Il Concetto",
-        "Hint": "Una riga: chi eri prima del Risveglio, e cosa sei diventato dopo.",
+        "Hint": "Il mestiere di prima e cosa sei diventato dopo, legati fra loro.",
         "Sfida": "La Sfida del Concetto",
         "SfidaHint": "Tre gruppi da sette domande, sulla scheda (la pagina Sfida). Facoltativa: i premi si sommano.",
         "ApriSfida": "Apri la Sfida sulla scheda",

@@ -11,6 +11,7 @@ import {
   passoSalvato,
   praticaDi,
   prepareGuidata,
+  sparsiPerGruppo,
   testoPerche,
   tettoSfera
 } from "../scripts/creazione-guidata.js";
@@ -197,6 +198,13 @@ assert.equal(g5.corpo.concept, "Infermiera");
 assert.deepEqual(g5.corpo.gruppi.map((g) => [g.done, g.complete]), [[7, true], [0, false], [0, false]]);
 assert.deepEqual(g5.corpo.premi.map((p) => p.earned), [true, false, false]);
 assert.equal(g5.corpo.proposte[0].name, "Infermiera di corsia");
+// Le proposte dei Concetti (3/10): una per gruppo, a giro, fino a dodici.
+const catalogoConcetti = [["Cura", "A1"], ["Cura", "A2"], ["Cura", "A3"], ["Strada", "B1"], ["Strada", "B2"], ["Notte", "C1"]].map(([group, name]) => ({ uuid: name, name, text: name, group }));
+assert.deepEqual(sparsiPerGruppo(catalogoConcetti, 12).map((e) => e.name), ["A1", "B1", "C1", "A2", "B2", "A3"]);
+assert.deepEqual(sparsiPerGruppo(catalogoConcetti, 4).map((e) => e.name), ["A1", "B1", "C1", "A2"]);
+assert.deepEqual(sparsiPerGruppo(null, 12), []);
+const g5b = prepareGuidata(attore({}), { passo: 6, localize, cataloghi: { concetto: catalogoConcetti } });
+assert.deepEqual(g5b.corpo.proposte.map((p) => p.name), ["A1", "B1", "C1", "A2", "B2", "A3"]);
 assert.equal(g5.passi[5].fatto, true);
 
 // Il passo 7, i Domini (25/9 sera): tre alla creazione, la Sfera della Famiglia (Verbena: Vita), quella della

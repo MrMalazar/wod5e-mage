@@ -20,6 +20,11 @@ funzioni restano per il confronto: si lanciano solo con `--vecchia-bussola`.
 
 Dal 29/9 nemmeno le Condizioni: le scrive tools/build-condizioni.py dalla
 guida del Narratore tools/dati/condizioni.md (la regola di base di M6).
+
+Dal 3/10 nemmeno i Concetti: li scrive tools/build-concetti.py dal dato unico
+tools/dati/concetti.md (i verdetti di Blue: due parole legate, il mestiere di
+prima e cosa sei diventato). La funzione resta per il confronto col LIBRO: si
+lancia solo con `--vecchi-concetti`.
 """
 import hashlib
 import html
@@ -556,7 +561,8 @@ if __name__ == "__main__":
         build_traits()
         build_backgrounds()
     build_credi()
-    build_concetti()
+    if "--vecchi-concetti" in sys.argv:
+        build_concetti()
     if "--vecchia-bussola" in sys.argv:
         spunti("ambizione", "08_095_*.md", "Ambizioni", "ambizioni")
         spunti("desiderio", "08_096_*.md", "Desideri", "desideri")

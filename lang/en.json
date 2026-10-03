@@ -2140,10 +2140,10 @@
         },
         "concetto": {
           "Label": "Concept",
-          "Domanda": "Who were you before the Awakening, in a single line?",
+          "Domanda": "Who were you before the Awakening, and what have you become?",
           "Sotto": "the Concept · the Challenge, optional, with three prizes",
-          "Perche": "Who you were before the Awakening, and what you became after, in a single line. It is the filter for everything else: every dot you mark later must match this sentence.",
-          "PercheDue": "It takes a real person, with an anonymous job and a tension inside, not an archetype. The Concept Challenge is twenty-one questions in three groups of seven: optional, and the game pays you back in proportion to how deep you go."
+          "Perche": "Who you were before the Awakening and what you became after, in a few words. It is the filter for everything else: every dot you mark later must fit your Concept.",
+          "PercheDue": "The before and the after are simple words that hold together: the job you had and what the Awakening made of it, like the nurse who becomes a doctor of the occult. The Concept Challenge is twenty-one questions in three groups of seven: optional, and the game pays you back in proportion to how deep you go."
         },
         "sfere": {
           "Label": "Domains",
@@ -2259,7 +2259,7 @@
       },
       "Concetto": {
         "Concetto": "The Concept",
-        "Hint": "One line: who you were before the Awakening, and what you became after.",
+        "Hint": "The job you had and what you became after, tied together.",
         "Sfida": "The Concept Challenge",
         "SfidaHint": "Three groups of seven questions, on the sheet (the Challenge page). Optional: prizes add up.",
         "ApriSfida": "Open the Challenge on the sheet",

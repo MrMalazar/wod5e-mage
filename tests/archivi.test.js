@@ -17,6 +17,7 @@ import {
   matchesSearch,
   rowFromEntry
 } from "../scripts/archivi.js";
+import { MESTIERI } from "../scripts/data/generatore-ancore.js";
 
 // Nove archivi, e il sottotipo del sistema porta al suo.
 assert.deepEqual(Object.keys(ARCHIVI), ["pregio", "difetto", "background", "credo", "concetto", "ambizione", "desiderio", "ancora", "convinzione", "condizione", "equip-weapon", "equip-armor", "equip-gear"]);
@@ -80,7 +81,7 @@ assert.equal(entry.content, "<p>c</p>");
 
 // I nove compendi esistono, sono JSON riga per riga e portano la bandiera.
 const manifest = JSON.parse(readFileSync(new URL("../module.json", import.meta.url), "utf8"));
-const expected = { "mage-pregi": 70, "mage-difetti": 65, "mage-background": 17, "mage-credi": 13, "mage-concetti": 24, "mage-ambizioni": 120, "mage-desideri": 120, "mage-ancore": 12, "mage-convinzioni": 110, "mage-condizioni": 46, "mage-strumenti": 22 };
+const expected = { "mage-pregi": 70, "mage-difetti": 65, "mage-background": 17, "mage-credi": 13, "mage-concetti": 65, "mage-ambizioni": 120, "mage-desideri": 120, "mage-ancore": 12, "mage-convinzioni": 110, "mage-condizioni": 46, "mage-strumenti": 22 };
 for (const [name, minimum] of Object.entries(expected)) {
   const pack = manifest.packs.find((candidate) => candidate.name === name);
   assert.ok(pack, name);
@@ -140,6 +141,25 @@ for (const [name, minimum] of Object.entries(expected)) {
 // Le voci dei Credi: tredici, con l'id della tendina.
 const credi = readFileSync(new URL("../packs/mage-credi.db", import.meta.url), "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
 assert.deepEqual(credi.map((doc) => doc.flags["wod5e-mage"].archivio.credo).sort(), ["arte", "caos", "dati", "fede", "illusione", "legge", "macchina", "polvere", "potere", "sacro", "scienza", "suono", "vivo"]);
+
+// I Concetti (Blue, 2-3/10): due parole legate, il mestiere di prima dal generatore delle Ancore e cosa
+// sei diventato; dieci gruppi; niente frasi a effetto; «in realtà» poche volte, la virgola da sola spesso.
+const concetti = readFileSync(new URL("../packs/mage-concetti.db", import.meta.url), "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));
+const flagConcetto = (doc) => doc.flags["wod5e-mage"].archivio;
+assert.equal(concetti.length, 65);
+assert.deepEqual([...new Set(concetti.map((doc) => flagConcetto(doc).group))], ["Cura", "Strada", "Bottega", "Mani", "Notte", "Divisa", "Ufficio", "Sapere", "Quartiere", "Scena"]);
+assert.ok(concetti.every((doc) => MESTIERI.includes(flagConcetto(doc).prima)), "il prima viene dal generatore");
+assert.ok(concetti.every((doc) => doc.name === flagConcetto(doc).text && doc.name.startsWith(flagConcetto(doc).prima.charAt(0).toUpperCase())));
+assert.ok(concetti.every((doc) => !/\bche\b|—/.test(doc.name)), "niente relative a effetto, niente trattino lungo");
+assert.equal(new Set(concetti.map((doc) => doc.name)).size, 65);
+assert.equal(new Set(concetti.map((doc) => flagConcetto(doc).dopo)).size, 65, "ogni dopo una volta sola");
+const legami = concetti.map((doc) => (/, in realtà /.test(doc.name) ? "in realtà" : /, ora /.test(doc.name) ? "ora" : /, già /.test(doc.name) ? "già" : /,/.test(doc.name) ? "virgola" : "e"));
+assert.ok(legami.filter((l) => l === "in realtà").length <= 8, "in realtà non troppe volte");
+assert.ok(legami.filter((l) => l === "ora").length < legami.length / 2, "ora non sempre");
+assert.ok(concetti.some((doc) => doc.name === "Infermiera, medico dell'occulto"));
+assert.ok(concetti.some((doc) => doc.name === "Tassista, in realtà messaggero"));
+assert.ok(concetti.some((doc) => doc.name === "Parroco, in realtà paladino"));
+assert.ok(concetti.some((doc) => doc.name === "Fioraia ed erborista"), "«ed» davanti a una e");
 
 // Le Convinzioni dei Credi hanno le due glosse.
 const convinzioni = readFileSync(new URL("../packs/mage-convinzioni.db", import.meta.url), "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));

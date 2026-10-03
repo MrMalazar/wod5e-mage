@@ -349,6 +349,29 @@ function proposte(entries, credo, limit = 8) {
   }));
 }
 
+/**
+ * Le voci di un catalogo a gruppi prese una per gruppo, a giro, fino al
+ * limite (i Concetti, 3/10: dieci gruppi, e le dodici proposte non devono
+ * venire tutte dal primo).
+ */
+export function sparsiPerGruppo(entries, limit = 12) {
+  const code = new Map();
+  for (const entry of Array.isArray(entries) ? entries : []) {
+    const gruppo = String(entry?.group ?? "");
+    if (!code.has(gruppo)) code.set(gruppo, []);
+    code.get(gruppo).push(entry);
+  }
+  const gruppi = [...code.values()];
+  const out = [];
+  for (let giro = 0; out.length < limit && gruppi.some((coda) => giro < coda.length); giro++) {
+    for (const coda of gruppi) {
+      if (out.length >= limit) break;
+      if (giro < coda.length) out.push(coda[giro]);
+    }
+  }
+  return out;
+}
+
 /** Passo 3: la Bussola, Ambizione, Desiderio e Convinzioni, con le proposte del Credo. */
 export function passoBussola(actor, { localize = (key) => key, cataloghi = {} } = {}) {
   const focus = focusOf(actor);
@@ -404,7 +427,7 @@ export function passoConcetto(actor, summary, { localize = (key) => key, catalog
   });
   return {
     concept: String(actor?.system?.headers?.concept ?? ""),
-    proposte: proposte(cataloghi.concetto, "", 12),
+    proposte: proposte(sparsiPerGruppo(cataloghi.concetto, 12), "", 12),
     gruppi,
     sfida: summary?.sfida ?? { done: 0, total: 3, complete: false, prizes: [] },
     premi: (summary?.sfida?.prizes ?? []).map((premio) => ({ ...premio, text: localize(premio.label) }))
