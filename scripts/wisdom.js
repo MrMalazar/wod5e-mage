@@ -1,213 +1,242 @@
 import { MODULE_ID } from "./constants.js";
-import { dressNextRollDialogAsMage, isMageActor } from "./mage-dice.js";
+import { anchorLabel, PERSONAGGIO_TABLES } from "./personaggio-extra.js";
+import { renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
 import { askSegno } from "./salute.js";
 
 /**
- * La fila della Saggezza (LIBRO 04_92: «Saggezza = 3 + il più alto fra
- * Carisma e Fermezza», e la fila si allunga e si accorcia mentre giochi;
- * 04_102: le sbarre se ne vanno una alla volta scegliendo quando costa, le
- * croci le toglie solo lo Spirito). Dal 23/9 (Blue: «una possibilità
- * equivalente alla Salute») la fila ha la formula come la Salute, le caselle
- * in più col meno e il più, il clic sulla casella apre il menù delle macchie
- * (superficiale, aggravata, vuota: dal 24/9 sera si chiamano come i danni
- * della Salute, Blue) e la ruota a sei: Tira, Segna, Cura, Reset, meno, più.
- * Le macchie sono d'inchiostro: la superficiale è una goccia che macchia
- * mezza casella, l'aggravata la casella tutta d'inchiostro (CSS).
+ * La Saggezza come bilancia (Blue, 3/10/2026, i cinque giri dello studio
+ * `claude/saggezza_bilancia_3_10.md`): nove caselle, Caduto a sinistra e
+ * Folle a destra, e due SEGNI indipendenti che partono dal centro: quello
+ * dell'Hubris scende a sinistra con gli atti d'Hubris, quello del Silenzio a
+ * destra con gli atti di Silenzio. Il quarto passo è la fine del personaggio.
  *
- * Nella bandiera `wisdom`: `superficial` (le macchie superficiali),
- * `aggravated` (le aggravate), `extra` (le caselle in più, anche negative). Il vecchio `max`
- * scritto a mano (fino alla 1.1.0) si converte in `extra` al primo
- * passaggio, così nessuna fila cambia lunghezza da sola.
+ * L'atto: il Narratore dice il gradino (da 1 a 7, la tavola del LIBRO) e il
+ * lato. Il segno scende solo se il gradino supera il passo dove sta (il
+ * cancello). Se una Convinzione attiva copre l'atto si tira Fermezza +
+ * Autocontrollo meno il gradino, e un 8 riesce: riuscito il segno resta,
+ * fallito scende di un passo; senza dadi non si para. Se nessuna Convinzione
+ * copre, il segno scende in automatico. Tradire una Convinzione la spegne:
+ * non copre più finché non torna attiva.
+ *
+ * Il ritorno: l'atto che fa risplendere una Convinzione (lo chiama il
+ * Narratore, una volta per sessione per giocatore) la riaccende e fa tornare
+ * indietro di un passo il segno del lato che contraddice; la scena con
+ * un'Ancora (una per storia per ogni Ancora) fa ritirare Fermezza +
+ * Autocontrollo meno il passo, e un 8 riporta il segno indietro di uno; in
+ * casi eccezionali il Narratore lo concede senza tirare. Gli effetti dei
+ * passi (±1, ±2, ±3) sono una leva del solo Narratore e non stanno in codice.
+ *
+ * Nella bandiera `wisdom`: `hubris` e `silenzio` (il passo di ogni segno, da
+ * 0 a 4), `risplende` (già usato in questa sessione), `ancore` (le Ancore già
+ * usate in questa storia, per id). Le macchie della fila vecchia (fino alla
+ * 1.38.0) si ignorano: tutti ripartono coi segni al centro.
  */
 
-export const WISDOM_BASE = 3;
+export const LATI = Object.freeze(["hubris", "silenzio"]);
+/** I passi prima della fine: 1, 2, 3; il quarto è Caduto o Folle. */
+export const PASSI = 3;
+export const FINE = 4;
+/** La tavola della gravità degli atti: sette gradini. */
+export const GRADINI = 7;
+/** Il tiro di Saggezza riesce dall'8 (Blue, 3/10). */
+export const SAGGEZZA_SUCCESS_FROM = 8;
+/** Le nove caselle: quattro per lato e il centro. */
+export const CELLE = 2 * FINE + 1;
+const CENTRO = FINE;
 
-/** Le macchie della fila: vuota, superficiale («s»), aggravata («a»). */
-export const WISDOM_STATES = Object.freeze(["", "s", "a"]);
-
-const DEFAULT_WISDOM = Object.freeze({ superficial: 0, aggravated: 0, extra: 0 });
+const DEFAULT_SAGGEZZA = Object.freeze({ hubris: 0, silenzio: 0, risplende: false, ancore: {} });
 
 function count(value) {
   return Math.max(Math.trunc(Number(value) || 0), 0);
+}
+
+/** Un passo sta fra il centro (0) e la fine (4). */
+export function clampPasso(value) {
+  return Math.min(count(value), FINE);
+}
+
+/** Il lato, se è uno dei due; altrimenti vuoto. */
+export function normalizeLato(value) {
+  return LATI.includes(value) ? value : "";
+}
+
+/** La bandiera letta: i due segni, il Risplende della sessione, le Ancore usate. */
+export function normalizeSaggezza(stored) {
+  const ancore = stored?.ancore && typeof stored.ancore === "object" ? stored.ancore : {};
+  return {
+    hubris: clampPasso(stored?.hubris),
+    silenzio: clampPasso(stored?.silenzio),
+    risplende: Boolean(stored?.risplende),
+    ancore: Object.fromEntries(Object.entries(ancore).filter(([, used]) => used).map(([id]) => [id, true]))
+  };
 }
 
 function attributeValue(actor, id) {
   return count(actor?.system?.attributes?.[id]?.value);
 }
 
-/** I due Attributi fra cui si sceglie (Blue, 23/9: «sia il giocatore a sceglierlo»). */
-export const WISDOM_ATTRIBUTES = Object.freeze(["charisma", "resolve"]);
+/** La riserva del tiro: Fermezza + Autocontrollo, senza niente in più. */
+export function riservaSaggezza(actor) {
+  return attributeValue(actor, "resolve") + attributeValue(actor, "composure");
+}
+
+/** I dadi che si tirano: la riserva meno la soglia, mai sotto zero. Zero: non si para. */
+export function dadiSaggezza(riserva, soglia) {
+  return Math.max(count(riserva) - count(soglia), 0);
+}
+
+/** Il cancello: l'atto sposta il segno solo se il suo gradino supera il passo dove sta. */
+export function cancello(gradino, passo) {
+  return count(gradino) > clampPasso(passo);
+}
+
+/** Il segno di un lato spostato di `delta` passi, fra il centro e la fine. */
+export function spostaSegno(stato, lato, delta) {
+  const side = normalizeLato(lato);
+  if (!side) return { ...stato };
+  return { ...stato, [side]: clampPasso(clampPasso(stato?.[side]) + Math.trunc(Number(delta) || 0)) };
+}
+
+/** Il segno di un lato messo a un passo preciso (il clic sulla casella). */
+export function mettiSegno(stato, lato, passo) {
+  const side = normalizeLato(lato);
+  if (!side) return { ...stato };
+  return { ...stato, [side]: clampPasso(passo) };
+}
+
+/** Il lato che è alla fine, se c'è: Caduto (Hubris) o Folle (Silenzio). */
+export function fineDi(stato) {
+  if (clampPasso(stato?.hubris) >= FINE) return "hubris";
+  if (clampPasso(stato?.silenzio) >= FINE) return "silenzio";
+  return "";
+}
 
 /**
- * L'Attributo della formula: quello scelto dal giocatore se c'è, altrimenti
- * il più alto fra Carisma e Fermezza (a parità, il Carisma).
+ * L'esito di un atto, senza dadi di mezzo: `copre` dice se una Convinzione
+ * attiva copre l'atto, `successi` i successi del tiro (solo se copre).
+ * - cancello: il gradino non supera il passo, il segno resta;
+ * - scoperto: nessuna Convinzione copre, il segno scende;
+ * - coperto: il tiro è riuscito, il segno resta;
+ * - fallito: il tiro è fallito (o senza dadi), il segno scende.
  */
-export function wisdomAttribute(actor, chosen = "") {
-  if (WISDOM_ATTRIBUTES.includes(chosen)) return chosen;
-  return attributeValue(actor, "resolve") > attributeValue(actor, "charisma") ? "resolve" : "charisma";
-}
-
-/** La formula del LIBRO: 3 + il più alto fra Carisma e Fermezza (o quello scelto). */
-export function wisdomBase(actor, chosen = "") {
-  return WISDOM_BASE + attributeValue(actor, wisdomAttribute(actor, chosen));
-}
-
-/** Le caselle: base più le caselle in più, mai sotto uno. */
-export function wisdomMax(base, extra = 0) {
-  return Math.max(count(base) + Math.trunc(Number(extra) || 0), 1);
+export function esitoAtto(stato, { lato, gradino, copre = false, successi = 0 } = {}) {
+  const side = normalizeLato(lato);
+  const passo = clampPasso(stato?.[side]);
+  if (!side || !cancello(gradino, passo)) return { esito: "cancello", sposta: false, lato: side, passo, next: { ...stato } };
+  if (!copre) return { esito: "scoperto", sposta: true, lato: side, passo: clampPasso(passo + 1), next: spostaSegno(stato, side, 1) };
+  if (count(successi) >= 1) return { esito: "coperto", sposta: false, lato: side, passo, next: { ...stato } };
+  return { esito: "fallito", sposta: true, lato: side, passo: clampPasso(passo + 1), next: spostaSegno(stato, side, 1) };
 }
 
 /**
- * Le caselle in più dalla bandiera: `extra` se c'è; altrimenti il vecchio
- * `max` scritto a mano meno la formula (la fila resta lunga com'era).
+ * L'Indulgere (Blue, 3/10): dichiarato prima del lancio, l'incantesimo
+ * riesce e poi si tira Saggezza con la soglia dell'incantesimo. Fallito, il
+ * segno del lato scelto scende di un passo anche dove il cancello lo
+ * fermerebbe: indulgere è sempre un passo verso quel lato.
  */
-export function wisdomExtra(stored, base) {
-  const extra = Number(stored?.extra);
-  if (Number.isFinite(extra)) return Math.trunc(extra);
-  const max = Number(stored?.max);
-  if (Number.isFinite(max) && max > 0) return Math.trunc(max) - count(base);
-  return DEFAULT_WISDOM.extra;
+export function esitoIndulgere(stato, { lato, successi = 0 } = {}) {
+  const side = normalizeLato(lato);
+  if (!side) return { esito: "cancello", sposta: false, lato: side, passo: 0, next: { ...stato } };
+  if (count(successi) >= 1) return { esito: "coperto", sposta: false, lato: side, passo: clampPasso(stato?.[side]), next: { ...stato } };
+  const next = spostaSegno(stato, side, 1);
+  return { esito: "fallito", sposta: true, lato: side, passo: next[side], next };
 }
 
-/** I conti dentro la fila: prima le croci, poi le sbarre; il resto è vuoto. */
-export function clampWisdom(counts, max) {
-  const aggravated = Math.min(count(counts?.aggravated), count(max));
-  const superficial = Math.min(count(counts?.superficial), Math.max(count(max) - aggravated, 0));
-  return { superficial, aggravated };
+/** L'atto che fa risplendere: la Convinzione si riaccende, il segno del lato torna indietro di uno. */
+export function applicaRisplende(stato, lato) {
+  const side = normalizeLato(lato);
+  const next = side ? spostaSegno(stato, side, -1) : { ...stato };
+  return { ...next, risplende: true, tornato: side ? clampPasso(stato?.[side]) > 0 : false };
 }
 
-/** Le caselle da disegnare: croci, poi sbarre, poi vuote. */
-export function paintWisdom(counts, max) {
-  const { superficial, aggravated } = clampWisdom(counts, max);
+/** La scena con l'Ancora: riuscito il tiro (o concesso), il segno torna indietro di uno; l'Ancora è usata. */
+export function applicaAncora(stato, lato, ancoraId, { riuscito = false } = {}) {
+  const side = normalizeLato(lato);
+  const next = side && riuscito ? spostaSegno(stato, side, -1) : { ...stato };
+  const ancore = { ...(stato?.ancore ?? {}) };
+  if (ancoraId) ancore[ancoraId] = true;
+  return { ...next, ancore, tornato: Boolean(side && riuscito && clampPasso(stato?.[side]) > 0) };
+}
+
+/** La chiave di lingua del passo di un lato: al centro, passo n, Caduto o Folle. */
+export function passoLabel(lato, passo) {
+  const p = clampPasso(passo);
+  if (p === 0) return { key: "WOD5E_MAGE.Wisdom.Passi.centro", n: 0 };
+  if (p >= FINE) return { key: lato === "hubris" ? "WOD5E_MAGE.Wisdom.Passi.fineHubris" : "WOD5E_MAGE.Wisdom.Passi.fineSilenzio", n: p };
+  return { key: "WOD5E_MAGE.Wisdom.Passi.passo", n: p };
+}
+
+/**
+ * Le nove caselle da disegnare, da Caduto (indice 0) a Folle (indice 8): per
+ * ognuna il lato, il passo e i segni che ci stanno sopra.
+ */
+export function celleSaggezza(stato) {
+  const hubris = clampPasso(stato?.hubris);
+  const silenzio = clampPasso(stato?.silenzio);
   const cells = [];
-  for (let index = 0; index < count(max); index += 1) {
-    const state = index < aggravated ? "a" : (index < aggravated + superficial ? "s" : "");
-    cells.push({ index, state, label: `WOD5E_MAGE.Wisdom.States.${state || "empty"}` });
+  for (let index = 0; index < CELLE; index += 1) {
+    const lato = index < CENTRO ? "hubris" : (index > CENTRO ? "silenzio" : "centro");
+    const passo = Math.abs(index - CENTRO);
+    cells.push({
+      index,
+      lato,
+      passo,
+      fine: passo >= FINE,
+      hubris: index === CENTRO - hubris,
+      silenzio: index === CENTRO + silenzio
+    });
   }
   return cells;
 }
 
-/**
- * Lo stato della Saggezza (Blue, 26/9: «uno status di saggezza in base ai
- * livelli posseduti», non modificabile dal giocatore): i livelli sono le
- * caselle pulite, senza macchie. A zero la fila è piena e il nome è quello
- * del LIBRO (04_95, «Segnato»); sopra, cinque gradini. I nomi stanno nella
- * lingua (Wisdom.Stati), da allineare al canone quando il capitolo li fissa.
- */
-export const WISDOM_STATE_STEPS = Object.freeze([
-  { min: 9, id: "sereno" },
-  { min: 7, id: "lucido" },
-  { min: 5, id: "saldo" },
-  { min: 3, id: "incrinato" },
-  { min: 1, id: "inBilico" },
-  { min: 0, id: "segnato" }
-]);
-
-/** Le caselle pulite: la fila meno le macchie, mai sotto zero. */
-export function wisdomClean(wisdom) {
-  return Math.max(count(wisdom?.max) - count(wisdom?.superficial) - count(wisdom?.aggravated), 0);
+/** Le Convinzioni della scheda, con lo stato: attiva o spenta. */
+export function convinzioniRighe(actor) {
+  const stored = actor?.getFlag?.(MODULE_ID, PERSONAGGIO_TABLES.convictions) ?? {};
+  return Object.entries(stored)
+    .map(([id, row]) => ({ id, text: String(row?.text ?? "").trim(), spenta: Boolean(row?.spenta) }))
+    .filter((row) => row.text);
 }
 
-/** L'id dello stato dalle caselle pulite. */
-export function wisdomStateId(wisdom) {
-  const puliti = wisdomClean(wisdom);
-  return WISDOM_STATE_STEPS.find((step) => puliti >= step.min)?.id ?? "segnato";
+/** Le Ancore della scheda, con la spunta di chi è già stata usata in questa storia. */
+export function ancoreRighe(actor, stato) {
+  const stored = actor?.getFlag?.(MODULE_ID, PERSONAGGIO_TABLES.anchors) ?? {};
+  return Object.entries(stored)
+    .map(([id, row]) => ({ id, text: anchorLabel(row), usata: Boolean(stato?.ancore?.[id]) }))
+    .filter((row) => row.text);
 }
 
 export function getWisdom(actor) {
-  const stored = actor.getFlag(MODULE_ID, "wisdom") ?? {};
-  const chosen = WISDOM_ATTRIBUTES.includes(stored.attribute) ? stored.attribute : "";
-  const attribute = wisdomAttribute(actor, chosen);
-  const base = wisdomBase(actor, chosen);
-  const extra = wisdomExtra(stored, base);
-  const max = wisdomMax(base, extra);
-  const { superficial, aggravated } = clampWisdom(stored, max);
-
-  // La fila piena ha un nome (04_95): da lì scattano i quattro effetti.
-  const segnato = max > 0 && superficial + aggravated >= max;
-  const puliti = wisdomClean({ max, superficial, aggravated });
-  const stato = segnato ? "segnato" : wisdomStateId({ max, superficial, aggravated });
-
-  return {
-    max,
-    // Lo stato dai livelli (26/9): l'id e la chiave di lingua, per la casella accanto al nome.
-    puliti,
-    stato,
-    statoLabel: `WOD5E_MAGE.Wisdom.Stati.${stato}`,
-    base,
-    extra,
-    attribute,
-    // La chiave di lingua del sistema: WOD5E.AttributesList.Charisma / Resolve.
-    attributeLabel: `${attribute[0].toUpperCase()}${attribute.slice(1)}`,
-    chosen,
-    attributeValue: attributeValue(actor, attribute),
-    choices: WISDOM_ATTRIBUTES.map((id) => ({ id, value: attributeValue(actor, id), selected: id === attribute })),
-    superficial,
-    aggravated,
-    segnato,
-    cells: paintWisdom({ superficial, aggravated }, max)
+  const localize = globalThis.game?.i18n?.localize?.bind(globalThis.game.i18n) ?? ((key) => key);
+  const format = globalThis.game?.i18n?.format?.bind(globalThis.game.i18n) ?? ((key) => key);
+  const stato = normalizeSaggezza(actor.getFlag(MODULE_ID, "wisdom"));
+  const resolve = attributeValue(actor, "resolve");
+  const composure = attributeValue(actor, "composure");
+  const fine = fineDi(stato);
+  const statoLato = (lato) => {
+    const passo = clampPasso(stato[lato]);
+    const label = passoLabel(lato, passo);
+    const text = label.n > 0 && passo < FINE ? format(label.key, { n: label.n }) : localize(label.key);
+    return { passo, fine: passo >= FINE, text, riga: format("WOD5E_MAGE.Wisdom.StatoRiga", { lato: localize(`WOD5E_MAGE.Wisdom.Lati.${lato}`), passo: text }) };
   };
-}
-
-/** Il cambio di una casella: da un segno a un altro, senza uscire dalla fila. */
-export function applyWisdomStateChange(counts, max, fromState, toState) {
-  const next = { superficial: count(counts?.superficial), aggravated: count(counts?.aggravated) };
-  const key = (state) => (state === "s" ? "superficial" : state === "a" ? "aggravated" : null);
-  const from = key(fromState);
-  const to = key(toState);
-  if (from && next[from] > 0) next[from] -= 1;
-  if (to) next[to] += 1;
-  return clampWisdom(next, max);
-}
-
-/**
- * Segna macchie (23/9, come i Danni subiti della Salute): quante e di che
- * segno. Se la fila è piena, ogni sbarra in più fa diventare croce una
- * sbarra che c'era (il tracciato non si allunga da solo); torna quante ne
- * ha convertite.
- */
-export function wisdomWithStains(counts, max, { state = "s", amount = 0 } = {}) {
-  const next = { superficial: count(counts?.superficial), aggravated: count(counts?.aggravated) };
-  let hit = count(amount);
-  let converted = 0;
-  const room = () => Math.max(count(max) - next.superficial - next.aggravated, 0);
-  if (state === "a") {
-    const taken = Math.min(hit, room());
-    next.aggravated += taken;
-    hit -= taken;
-    // Le croci oltre la fila prendono il posto delle sbarre.
-    while (hit > 0 && next.superficial > 0) {
-      next.superficial -= 1;
-      next.aggravated += 1;
-      hit -= 1;
-      converted += 1;
-    }
-  } else {
-    const taken = Math.min(hit, room());
-    next.superficial += taken;
-    hit -= taken;
-    while (hit > 0 && next.superficial > 0) {
-      next.superficial -= 1;
-      next.aggravated += 1;
-      hit -= 1;
-      converted += 1;
-    }
-  }
-  return { counts: clampWisdom(next, max), converted };
-}
-
-/** Cura (04_102): una sbarra alla volta se ne va; le croci restano allo Spirito. */
-export function wisdomAfterCure(counts, max) {
-  const next = { superficial: count(counts?.superficial), aggravated: count(counts?.aggravated) };
-  if (next.superficial > 0) next.superficial -= 1;
-  return clampWisdom(next, max);
-}
-
-/** Il segno scelto nella finestra delle macchie: sbarra o croce, e quante. */
-export function normalizeStainChoice(result = {}) {
-  const state = result.state === "a" ? "a" : (result.state === "s" ? "s" : "");
-  const amount = Math.max(Math.trunc(Number(result.amount) || 0), 0);
-  return { state, amount };
+  const cells = celleSaggezza(stato).map((cell) => {
+    let title;
+    if (cell.lato === "centro") title = localize("WOD5E_MAGE.Wisdom.Cella.centro");
+    else if (cell.fine) title = format("WOD5E_MAGE.Wisdom.Cella.fine", { lato: localize(`WOD5E_MAGE.Wisdom.Lati.${cell.lato}`), nome: localize(cell.lato === "hubris" ? "WOD5E_MAGE.Wisdom.Passi.fineHubris" : "WOD5E_MAGE.Wisdom.Passi.fineSilenzio") });
+    else title = format("WOD5E_MAGE.Wisdom.Cella.passo", { lato: localize(`WOD5E_MAGE.Wisdom.Lati.${cell.lato}`), n: cell.passo });
+    return { ...cell, title };
+  });
+  return {
+    ...stato,
+    resolve,
+    composure,
+    riserva: resolve + composure,
+    fine,
+    fineLabel: fine ? localize(fine === "hubris" ? "WOD5E_MAGE.Wisdom.Passi.fineHubris" : "WOD5E_MAGE.Wisdom.Passi.fineSilenzio") : "",
+    stato: { hubris: statoLato("hubris"), silenzio: statoLato("silenzio") },
+    cells,
+    convinzioni: convinzioniRighe(actor),
+    ancore: ancoreRighe(actor, stato)
+  };
 }
 
 function canEdit(actor) {
@@ -226,190 +255,455 @@ function canEdit(actor) {
   return true;
 }
 
-async function saveWisdom(actor, wisdom, counts) {
-  await actor.setFlag(MODULE_ID, "wisdom", { superficial: counts.superficial, aggravated: counts.aggravated, extra: wisdom.extra, attribute: wisdom.chosen, "-=max": null });
+/** Scrive i due segni e il resto, e toglie le macchie della fila vecchia. */
+export async function saveSaggezza(actor, stato) {
+  const next = normalizeSaggezza(stato);
+  await actor.setFlag(MODULE_ID, "wisdom", {
+    hubris: next.hubris,
+    silenzio: next.silenzio,
+    risplende: next.risplende,
+    ancore: next.ancore,
+    "-=superficial": null,
+    "-=aggravated": null,
+    "-=extra": null,
+    "-=attribute": null,
+    "-=max": null
+  });
+}
+
+function latoNome(lato, localize) {
+  return localize(`WOD5E_MAGE.Wisdom.Lati.${normalizeLato(lato) || "hubris"}`);
+}
+
+/** Il nome del passo in parole: «al centro», «passo 2», «Caduto». */
+export function passoTesto(lato, passo, localize, format) {
+  const label = passoLabel(lato, passo);
+  return label.key.endsWith(".passo") ? format(label.key, { n: label.n }) : localize(label.key);
+}
+
+/** Il messaggio in chat di un atto senza dadi (il cancello, o nessuna Convinzione). */
+async function raccontaAtto(actor, testo) {
+  return ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    flavor: game.i18n.localize("WOD5E_MAGE.Wisdom.Label"),
+    content: `<div class="wod5e-mage-saggezza-carta">${renderRollNote(testo, "saggezza")}</div>`
+  });
+}
+
+/** La frase dell'esito, per la chat e l'avviso. */
+export function testoEsito(esito, { lato, passo, gradino, convinzione = "" } = {}, localize, format) {
+  const nomeLato = latoNome(lato, localize);
+  const dove = passoTesto(lato, passo, localize, format);
+  switch (esito) {
+    case "cancello": return format("WOD5E_MAGE.Wisdom.Esiti.cancello", { gradino, lato: nomeLato, passo: dove });
+    case "scoperto": return format("WOD5E_MAGE.Wisdom.Esiti.scoperto", { gradino, lato: nomeLato, passo: dove });
+    case "coperto": return format("WOD5E_MAGE.Wisdom.Esiti.coperto", { convinzione, lato: nomeLato, passo: dove });
+    case "fallito": return format("WOD5E_MAGE.Wisdom.Esiti.fallito", { convinzione, lato: nomeLato, passo: dove });
+    default: return "";
+  }
+}
+
+/** La fine del personaggio, se un segno è arrivato al quarto passo. */
+function avvisoFine(stato, localize) {
+  const fine = fineDi(stato);
+  if (!fine) return "";
+  return localize(`WOD5E_MAGE.Wisdom.Fine.${fine}`);
 }
 
 /**
- * La scelta fra Carisma e Fermezza (23/9): il clic sul numero delle caselle
- * apre un menù coi due Attributi e il loro valore; quello scelto resta
- * scritto (`wisdom.attribute`) finché non lo si cambia.
+ * Il tiro di Saggezza: Fermezza + Autocontrollo meno la soglia, un 8 riesce,
+ * niente rossi. Passa dalla finestra del modulo come il Relax. Torna il
+ * messaggio e i successi, oppure null se la finestra è stata chiusa.
  */
-export async function onWisdomAttributePick(event, _target) {
-  event.preventDefault();
-  const actor = this.actor;
-  if (!canEdit(actor)) return;
-  const wisdom = getWisdom(actor);
-  const localize = game.i18n.localize.bind(game.i18n);
-  const options = wisdom.choices.map((choice) => ({
-    state: choice.id,
-    text: `${localize(`WOD5E.AttributesList.${choice.id[0].toUpperCase()}${choice.id.slice(1)}`)} ${choice.value}`,
-    glyph: null
-  }));
-  const picked = await askSegno(event, wisdom.attribute, options);
-  if (picked === null || picked === wisdom.chosen) return;
-  const base = wisdomBase(actor, picked);
-  const max = wisdomMax(base, wisdom.extra);
-  await actor.setFlag(MODULE_ID, "wisdom", { ...clampWisdom(wisdom, max), extra: wisdom.extra, attribute: picked, "-=max": null });
+export async function rollSaggezza(actor, { soglia = 0, title = "", card = null, selectors = [] } = {}) {
+  const { rollAreteWithParadox } = await import("./paradox-dice.js");
+  let message = null;
+  try {
+    message = await rollAreteWithParadox({
+      actor,
+      data: actor.system,
+      pool: riservaSaggezza(actor),
+      threshold: count(soglia),
+      paradoxRating: 0,
+      skill: true,
+      successFrom: SAGGEZZA_SUCCESS_FROM,
+      title: title || game.i18n.localize("WOD5E_MAGE.Wisdom.Rolling"),
+      card: { saggezza: { ...(card ?? {}) } },
+      selectors: ["attributes", "attributes.resolve", "attributes.composure", "mental", ...selectors]
+    });
+  } catch (_error) {
+    return null;
+  }
+  if (!message || message === "cancel") return null;
+  const successi = count(message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG)?.total);
+  return { message, successi };
 }
 
-/** Il meno e il più della ruota: le caselle in più, oltre la formula. */
-export async function onWisdomResourceChange(event, target) {
-  event.preventDefault();
-  const actor = this.actor;
-  if (!canEdit(actor)) return;
-
-  const wisdom = getWisdom(actor);
-  const delta = target.dataset.resourceAction === "plus" ? 1 : (target.dataset.resourceAction === "minus" ? -1 : 0);
-  const extra = wisdom.extra + delta;
-  const max = wisdomMax(wisdom.base, extra);
-  await actor.setFlag(MODULE_ID, "wisdom", { ...clampWisdom(wisdom, max), extra, attribute: wisdom.chosen, "-=max": null });
+/** Scrive sulla carta del tiro come è andata, per la nota sotto i dadi. */
+async function segnaEsitoSullaCarta(message, esito) {
+  const card = message?.getFlag?.(MODULE_ID, ROLL_CARD_FLAG) ?? {};
+  await message.update({ flags: { [MODULE_ID]: { [ROLL_CARD_FLAG]: { ...card, saggezza: { ...(card.saggezza ?? {}), ...esito } } } } });
 }
 
 /**
- * Il clic sulla casella apre il menù dei segni (sbarra, croce, vuota), come
- * la Salute; il clic destro svuota. La casella che cambia riceve la goccia
- * (`sheet._inchiostroCade`): il render la fa cadere.
+ * Il clic sulla casella: il segno di quel lato va lì; il clic destro lo
+ * riporta al centro. Sul centro un menù chiede quale segno riportare.
  */
 export async function onWisdomCellChange(event, target) {
   event.preventDefault();
   const actor = this.actor;
   if (!canEdit(actor)) return;
-
-  const wisdom = getWisdom(actor);
-  const index = Math.trunc(Number(target.dataset.index));
-  const cell = wisdom.cells[index];
+  const stato = normalizeSaggezza(actor.getFlag(MODULE_ID, "wisdom"));
+  const cell = celleSaggezza(stato)[Math.trunc(Number(target.dataset.index))];
   if (!cell) return;
-
-  const options = WISDOM_STATES.filter((state) => state).map((state) => ({ state, label: `WOD5E_MAGE.Wisdom.States.${state}`, glyph: "wod5e-mage-inchiostro-glyph" }));
-  options.push({ state: "", label: "WOD5E_MAGE.Wisdom.States.empty", glyph: "wod5e-mage-inchiostro-glyph" });
-  const toState = event.button === 2 ? "" : await askSegno(event, cell.state, options);
-  if (toState === null || toState === cell.state) return;
-  if (toState) this._inchiostroCade = { index, state: toState };
-  await saveWisdom(actor, wisdom, applyWisdomStateChange(wisdom, wisdom.max, cell.state, toState));
+  if (cell.lato === "centro") {
+    const picked = await askSegno(event, "", [
+      { state: "hubris", label: "WOD5E_MAGE.Wisdom.CentroMenu.hubris", glyph: null },
+      { state: "silenzio", label: "WOD5E_MAGE.Wisdom.CentroMenu.silenzio", glyph: null },
+      { state: "entrambi", label: "WOD5E_MAGE.Wisdom.CentroMenu.entrambi", glyph: null }
+    ]);
+    if (!picked) return;
+    const next = picked === "entrambi" ? { ...stato, hubris: 0, silenzio: 0 } : mettiSegno(stato, picked, 0);
+    await saveSaggezza(actor, next);
+    return;
+  }
+  const passo = event.button === 2 ? 0 : cell.passo;
+  await saveSaggezza(actor, mettiSegno(stato, cell.lato, passo));
 }
 
-/** Segna le macchie: la finestra chiede quante e di che segno. */
-export async function onWisdomSegna(event) {
+/** La tavola dei sette gradini per la finestra dell'atto. */
+export function tavolaGradini(localize) {
+  const rows = [];
+  for (let gradino = 1; gradino <= GRADINI; gradino += 1) {
+    rows.push({
+      gradino,
+      hubris: localize(`WOD5E_MAGE.Wisdom.Tavola.${gradino}.hubris`),
+      generico: localize(`WOD5E_MAGE.Wisdom.Tavola.${gradino}.generico`),
+      silenzio: localize(`WOD5E_MAGE.Wisdom.Tavola.${gradino}.silenzio`)
+    });
+  }
+  return rows;
+}
+
+/** I campi della finestra dell'atto, letti e puliti. */
+export function normalizeAtto(result = {}) {
+  const gradino = Math.min(Math.max(Math.trunc(Number(result.gradino) || 0), 1), GRADINI);
+  return {
+    gradino,
+    lato: normalizeLato(result.lato),
+    copre: String(result.copre ?? ""),
+    tradisce: String(result.tradisce ?? "")
+  };
+}
+
+/**
+ * L'atto (Tira): la finestra chiede gradino, lato, la Convinzione che
+ * copre e quella tradita; poi il cancello, il tiro se una Convinzione
+ * copre, il passo se non copre o se il tiro fallisce. Tradire spegne la
+ * Convinzione, e l'atto non è coperto nemmeno da un'altra.
+ */
+export async function onWisdomAtto(event) {
   event.preventDefault();
   const actor = this.actor;
   if (!canEdit(actor)) return;
-
   const localize = game.i18n.localize.bind(game.i18n);
-  const signs = WISDOM_STATES.filter((state) => state).map((state) => ({ state, label: `WOD5E_MAGE.Wisdom.States.${state}` }));
+  const format = game.i18n.format.bind(game.i18n);
+  const wisdom = getWisdom(actor);
+  const convinzioni = wisdom.convinzioni;
   const content = await foundry.applications.handlebars.renderTemplate(
-    "modules/wod5e-mage/templates/dialogs/saggezza-macchie.hbs",
-    { signs, chosen: "s" }
+    "modules/wod5e-mage/templates/dialogs/saggezza-atto.hbs",
+    {
+      tavola: tavolaGradini(localize),
+      lati: LATI.map((id) => ({ id, label: localize(`WOD5E_MAGE.Wisdom.Lati.${id}`), passo: wisdom.stato[id].text })),
+      attive: convinzioni.filter((row) => !row.spenta),
+      spente: convinzioni.filter((row) => row.spenta),
+      riserva: wisdom.riserva
+    }
   );
   let result = null;
   try {
     result = await foundry.applications.api.DialogV2.input({
-      window: { title: localize("WOD5E_MAGE.Wisdom.Segna") },
+      window: { title: localize("WOD5E_MAGE.Wisdom.Atto.Title") },
       content,
-      ok: { icon: "fa-solid fa-droplet", label: localize("WOD5E_MAGE.Wisdom.SegnaOk") },
+      ok: { icon: "fa-solid fa-scale-balanced", label: localize("WOD5E_MAGE.Wisdom.Atto.Ok") },
       buttons: [{ action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") }],
-      classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog"],
-      position: { width: 380, height: "auto" },
-      render: (_event, dialog) => wireStainSigns(dialog)
+      classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog", "wod5e-mage-saggezza-dialog"],
+      position: { width: 560, height: "auto" }
     });
   } catch (_error) {
     return;
   }
   if (!result || result === "cancel") return;
+  const atto = normalizeAtto(result);
+  if (!atto.lato) {
+    ui.notifications.warn(localize("WOD5E_MAGE.Wisdom.Atto.LatoManca"));
+    return;
+  }
 
-  const { state, amount } = normalizeStainChoice(result);
-  if (!state || amount <= 0) return;
-  const wisdom = getWisdom(actor);
-  const { counts, converted } = wisdomWithStains(wisdom, wisdom.max, { state, amount });
-  // La goccia cade sull'ultima casella segnata.
-  const marked = counts.superficial + counts.aggravated;
-  if (marked > 0) this._inchiostroCade = { index: marked - 1, state: wisdom.cells[marked - 1]?.state ? state : state };
-  await saveWisdom(actor, wisdom, counts);
-  const parts = [game.i18n.format("WOD5E_MAGE.Wisdom.SegnaDone", { amount, sign: localize(`WOD5E_MAGE.Wisdom.States.${state}`) })];
-  if (converted > 0) parts.push(game.i18n.format("WOD5E_MAGE.Wisdom.SegnaConverted", { converted }));
-  if (getWisdom(actor).segnato) parts.push(`${localize("WOD5E_MAGE.Wisdom.Segnato")}: ${localize("WOD5E_MAGE.Wisdom.SegnatoEffects")}`);
-  ui.notifications.info(parts.join(" "));
-}
+  const stato = normalizeSaggezza(actor.getFlag(MODULE_ID, "wisdom"));
+  const righe = { ...(actor.getFlag(MODULE_ID, PERSONAGGIO_TABLES.convictions) ?? {}) };
+  const tradita = atto.tradisce && righe[atto.tradisce] ? righe[atto.tradisce] : null;
+  const copre = !tradita && atto.copre && righe[atto.copre] && !righe[atto.copre].spenta ? righe[atto.copre] : null;
+  const parts = [];
 
-/** I due segni nella finestra delle macchie: un clic sceglie, il campo nascosto lo porta. */
-function wireStainSigns(dialog) {
-  const root = dialog?.element;
-  const input = root?.querySelector("input[name=state]");
-  const buttons = [...(root?.querySelectorAll("[data-role=macchiaSign]") ?? [])];
-  if (!input || !buttons.length) return;
-  const paint = () => buttons.forEach((button) => button.classList.toggle("current", button.dataset.state === input.value));
-  buttons.forEach((button) => {
-    button.addEventListener("click", (click) => {
-      click.preventDefault();
-      input.value = button.dataset.state ?? "";
-      paint();
-    });
+  // Tradire spegne la Convinzione, qualunque cosa faccia il segno.
+  if (tradita) {
+    await actor.setFlag(MODULE_ID, PERSONAGGIO_TABLES.convictions, { ...righe, [atto.tradisce]: { ...tradita, spenta: true } });
+    parts.push(format("WOD5E_MAGE.Wisdom.Esiti.tradita", { convinzione: String(tradita.text ?? "") }));
+  }
+
+  if (!copre || !cancello(atto.gradino, stato[atto.lato])) {
+    const esito = esitoAtto(stato, { lato: atto.lato, gradino: atto.gradino, copre: false });
+    if (esito.sposta) await saveSaggezza(actor, esito.next);
+    parts.push(testoEsito(esito.esito, { lato: esito.lato, passo: esito.passo, gradino: atto.gradino }, localize, format));
+    const fine = avvisoFine(esito.next, localize);
+    if (fine) parts.push(fine);
+    await raccontaAtto(actor, parts.join(" "));
+    ui.notifications.info(parts.join(" "));
+    return;
+  }
+
+  // Una Convinzione copre: si tira, con la soglia del gradino.
+  const nome = String(copre.text ?? "");
+  const tiro = await rollSaggezza(actor, {
+    soglia: atto.gradino,
+    title: format("WOD5E_MAGE.Wisdom.Atto.Rolling", { convinzione: nome }),
+    card: { lato: atto.lato, gradino: atto.gradino, convinzione: nome, tradita: tradita ? String(tradita.text ?? "") : "" }
   });
-  paint();
-  root.querySelector("input[name=amount]")?.focus();
+  if (!tiro) return;
+  const esito = esitoAtto(stato, { lato: atto.lato, gradino: atto.gradino, copre: true, successi: tiro.successi });
+  if (esito.sposta) await saveSaggezza(actor, esito.next);
+  const testo = testoEsito(esito.esito, { lato: esito.lato, passo: esito.passo, gradino: atto.gradino, convinzione: nome }, localize, format);
+  const fine = avvisoFine(esito.next, localize);
+  await segnaEsitoSullaCarta(tiro.message, { esito: esito.esito, passo: esito.passo, testo: [testo, fine].filter(Boolean).join(" ") });
+  ui.notifications.info([...parts, testo, fine].filter(Boolean).join(" "));
 }
 
-/** Cura: una sbarra se ne va (le croci le toglie lo Spirito). */
-export async function onWisdomCura(event) {
+/** I campi della finestra del Risplende, letti e puliti. */
+export function normalizeRisplende(result = {}) {
+  return {
+    convinzione: String(result.convinzione ?? ""),
+    lato: normalizeLato(result.lato),
+    concesso: Boolean(result.concesso)
+  };
+}
+
+/**
+ * Risplende: l'atto che fa risplendere una Convinzione (lo chiama il
+ * Narratore a fine scena, una volta per sessione per giocatore). La
+ * Convinzione torna attiva e il segno del lato scelto torna indietro di un
+ * passo; se quel segno è già al centro, riaccende e basta.
+ */
+export async function onWisdomRisplende(event) {
   event.preventDefault();
   const actor = this.actor;
   if (!canEdit(actor)) return;
+  const localize = game.i18n.localize.bind(game.i18n);
+  const format = game.i18n.format.bind(game.i18n);
   const wisdom = getWisdom(actor);
-  if (wisdom.superficial <= 0) {
-    ui.notifications.info(game.i18n.localize("WOD5E_MAGE.Wisdom.CuraNiente"));
+  const content = await foundry.applications.handlebars.renderTemplate(
+    "modules/wod5e-mage/templates/dialogs/saggezza-risplende.hbs",
+    {
+      convinzioni: wisdom.convinzioni,
+      lati: LATI.map((id) => ({ id, label: localize(`WOD5E_MAGE.Wisdom.Lati.${id}`), passo: wisdom.stato[id].text, fermo: wisdom.stato[id].passo === 0 })),
+      usato: wisdom.risplende
+    }
+  );
+  let result = null;
+  try {
+    result = await foundry.applications.api.DialogV2.input({
+      window: { title: localize("WOD5E_MAGE.Wisdom.RisplendeDialog.Title") },
+      content,
+      ok: { icon: "fa-solid fa-sun", label: localize("WOD5E_MAGE.Wisdom.RisplendeDialog.Ok") },
+      buttons: [{ action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") }],
+      classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog", "wod5e-mage-saggezza-dialog"],
+      position: { width: 460, height: "auto" }
+    });
+  } catch (_error) {
     return;
   }
-  await saveWisdom(actor, wisdom, wisdomAfterCure(wisdom, wisdom.max));
-  ui.notifications.info(game.i18n.localize("WOD5E_MAGE.Wisdom.CuraDone"));
+  if (!result || result === "cancel") return;
+  const scelta = normalizeRisplende(result);
+  if (!scelta.lato) {
+    ui.notifications.warn(localize("WOD5E_MAGE.Wisdom.Atto.LatoManca"));
+    return;
+  }
+  const stato = normalizeSaggezza(actor.getFlag(MODULE_ID, "wisdom"));
+  if (stato.risplende && !scelta.concesso) {
+    ui.notifications.warn(localize("WOD5E_MAGE.Wisdom.RisplendeDialog.GiaUsato"));
+    return;
+  }
+  const righe = { ...(actor.getFlag(MODULE_ID, PERSONAGGIO_TABLES.convictions) ?? {}) };
+  const riga = scelta.convinzione && righe[scelta.convinzione] ? righe[scelta.convinzione] : null;
+  const parts = [];
+  if (riga) {
+    if (riga.spenta) {
+      await actor.setFlag(MODULE_ID, PERSONAGGIO_TABLES.convictions, { ...righe, [scelta.convinzione]: { ...riga, spenta: false } });
+      parts.push(format("WOD5E_MAGE.Wisdom.RisplendeDialog.Riaccesa", { convinzione: String(riga.text ?? "") }));
+    } else {
+      parts.push(format("WOD5E_MAGE.Wisdom.RisplendeDialog.Tenuta", { convinzione: String(riga.text ?? "") }));
+    }
+  }
+  const dopo = applicaRisplende(stato, scelta.lato);
+  await saveSaggezza(actor, dopo);
+  parts.push(dopo.tornato
+    ? format("WOD5E_MAGE.Wisdom.RisplendeDialog.Tornato", { lato: latoNome(scelta.lato, localize), passo: passoTesto(scelta.lato, dopo[scelta.lato], localize, format) })
+    : format("WOD5E_MAGE.Wisdom.RisplendeDialog.GiaAlCentro", { lato: latoNome(scelta.lato, localize) }));
+  await raccontaAtto(actor, parts.join(" "));
+  ui.notifications.info(parts.join(" "));
 }
 
-/** Reset: la fila torna pulita. */
+/** I campi della finestra dell'Ancora, letti e puliti. */
+export function normalizeAncora(result = {}) {
+  return {
+    ancora: String(result.ancora ?? ""),
+    lato: normalizeLato(result.lato),
+    concesso: Boolean(result.concesso)
+  };
+}
+
+/**
+ * Ancora: la scena con un'Ancora, una volta per storia per ogni Ancora, fa
+ * ritirare per recuperare un passo: Fermezza + Autocontrollo meno il passo
+ * dove sta il segno, un 8 riesce, e il segno torna indietro di uno. In casi
+ * eccezionali il Narratore lo concede senza tirare. Il tasto «Nuova storia»
+ * riarma tutte le Ancore.
+ */
+export async function onWisdomAncora(event) {
+  event.preventDefault();
+  const actor = this.actor;
+  if (!canEdit(actor)) return;
+  const localize = game.i18n.localize.bind(game.i18n);
+  const format = game.i18n.format.bind(game.i18n);
+  const wisdom = getWisdom(actor);
+  if (!wisdom.ancore.length) {
+    ui.notifications.warn(localize("WOD5E_MAGE.Wisdom.AncoraDialog.Nessuna"));
+    return;
+  }
+  const content = await foundry.applications.handlebars.renderTemplate(
+    "modules/wod5e-mage/templates/dialogs/saggezza-ancora.hbs",
+    {
+      ancore: wisdom.ancore,
+      lati: LATI.map((id) => ({ id, label: localize(`WOD5E_MAGE.Wisdom.Lati.${id}`), passo: wisdom.stato[id].text, fermo: wisdom.stato[id].passo === 0 })),
+      riserva: wisdom.riserva,
+      narratore: Boolean(game.user?.isGM)
+    }
+  );
+  let result = null;
+  try {
+    result = await foundry.applications.api.DialogV2.input({
+      window: { title: localize("WOD5E_MAGE.Wisdom.AncoraDialog.Title") },
+      content,
+      ok: { icon: "fa-solid fa-anchor", label: localize("WOD5E_MAGE.Wisdom.AncoraDialog.Ok") },
+      buttons: [
+        { action: "riarma", icon: "fa-solid fa-book", label: localize("WOD5E_MAGE.Wisdom.AncoraDialog.Riarma") },
+        { action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") }
+      ],
+      classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog", "wod5e-mage-saggezza-dialog"],
+      position: { width: 460, height: "auto" }
+    });
+  } catch (_error) {
+    return;
+  }
+  if (!result || result === "cancel") return;
+  const stato = normalizeSaggezza(actor.getFlag(MODULE_ID, "wisdom"));
+  if (result === "riarma") {
+    await saveSaggezza(actor, { ...stato, ancore: {} });
+    ui.notifications.info(localize("WOD5E_MAGE.Wisdom.AncoraDialog.Riarmate"));
+    return;
+  }
+  const scelta = normalizeAncora(result);
+  const ancora = wisdom.ancore.find((row) => row.id === scelta.ancora);
+  if (!ancora) {
+    ui.notifications.warn(localize("WOD5E_MAGE.Wisdom.AncoraDialog.Nessuna"));
+    return;
+  }
+  if (!scelta.lato) {
+    ui.notifications.warn(localize("WOD5E_MAGE.Wisdom.Atto.LatoManca"));
+    return;
+  }
+  if (ancora.usata && !game.user?.isGM) {
+    ui.notifications.warn(format("WOD5E_MAGE.Wisdom.AncoraDialog.GiaUsata", { ancora: ancora.text }));
+    return;
+  }
+  const passo = clampPasso(stato[scelta.lato]);
+  if (passo === 0) {
+    ui.notifications.info(format("WOD5E_MAGE.Wisdom.RisplendeDialog.GiaAlCentro", { lato: latoNome(scelta.lato, localize) }));
+    return;
+  }
+
+  // Il Narratore concede senza tirare: il segno torna indietro.
+  if (scelta.concesso && game.user?.isGM) {
+    const dopo = applicaAncora(stato, scelta.lato, ancora.id, { riuscito: true });
+    await saveSaggezza(actor, dopo);
+    const testo = format("WOD5E_MAGE.Wisdom.AncoraDialog.Concesso", { ancora: ancora.text, lato: latoNome(scelta.lato, localize), passo: passoTesto(scelta.lato, dopo[scelta.lato], localize, format) });
+    await raccontaAtto(actor, testo);
+    ui.notifications.info(testo);
+    return;
+  }
+
+  const tiro = await rollSaggezza(actor, {
+    soglia: passo,
+    title: format("WOD5E_MAGE.Wisdom.AncoraDialog.Rolling", { ancora: ancora.text }),
+    card: { ancora: ancora.text, lato: scelta.lato, passo }
+  });
+  if (!tiro) return;
+  const riuscito = tiro.successi >= 1;
+  const dopo = applicaAncora(stato, scelta.lato, ancora.id, { riuscito });
+  await saveSaggezza(actor, dopo);
+  const testo = riuscito
+    ? format("WOD5E_MAGE.Wisdom.AncoraDialog.Riuscito", { ancora: ancora.text, lato: latoNome(scelta.lato, localize), passo: passoTesto(scelta.lato, dopo[scelta.lato], localize, format) })
+    : format("WOD5E_MAGE.Wisdom.AncoraDialog.Fallito", { ancora: ancora.text, lato: latoNome(scelta.lato, localize) });
+  await segnaEsitoSullaCarta(tiro.message, { esito: riuscito ? "coperto" : "fallito", passo: dopo[scelta.lato], testo });
+  ui.notifications.info(testo);
+}
+
+/** Reset: i due segni tornano al centro; le Convinzioni restano come sono. */
 export async function onWisdomReset(event) {
   event.preventDefault();
   const actor = this.actor;
   if (!canEdit(actor)) return;
-  const wisdom = getWisdom(actor);
-  await saveWisdom(actor, wisdom, { superficial: 0, aggravated: 0 });
+  const stato = normalizeSaggezza(actor.getFlag(MODULE_ID, "wisdom"));
+  await saveSaggezza(actor, { ...stato, hubris: 0, silenzio: 0 });
 }
 
-/** Il tiro di Saggezza: le caselle pulite, almeno un dado. */
-export function wisdomDicePool(wisdom) {
-  return Math.max(count(wisdom?.max) - count(wisdom?.aggravated) - count(wisdom?.superficial), 1);
-}
-
-export async function onWisdomRoll(event) {
+/** L'interruttore della Convinzione nella pagina Personaggio: attiva o spenta. */
+export async function onConvinzioneToggle(event, target) {
   event.preventDefault();
-
   const actor = this.actor;
-  const wisdom = getWisdom(actor);
-  const dicePool = wisdomDicePool(wisdom);
-
-  if (isMageActor(actor)) dressNextRollDialogAsMage();
-
-  await WOD5E.api.Roll({
-    basicDice: dicePool,
-    title: game.i18n.localize("WOD5E_MAGE.Wisdom.Rolling"),
-    selectors: ["wisdom"],
-    actor,
-    data: actor.system,
-    quickRoll: false,
-    disableAdvancedDice: true
-  });
+  if (!canEdit(actor)) return;
+  const rowId = String(target?.dataset?.row ?? "");
+  const righe = actor.getFlag(MODULE_ID, PERSONAGGIO_TABLES.convictions) ?? {};
+  if (!rowId || !Object.hasOwn(righe, rowId)) return;
+  await actor.setFlag(MODULE_ID, PERSONAGGIO_TABLES.convictions, { ...righe, [rowId]: { ...righe[rowId], spenta: !righe[rowId].spenta } });
 }
 
 /**
- * La goccia che cade (23/9): dopo il render, la casella appena segnata porta
- * la classe `cade` e il CSS fa cadere la goccia e allargare la macchia. Il
- * ricordo si consuma: al render dopo non cade più niente.
+ * Nuova sessione: il Risplende torna disponibile (una volta per sessione).
+ * Le Ancore si riarmano a parte, con la storia.
  */
-export function faiCadereInchiostro(sheet) {
-  const goccia = sheet?._inchiostroCade;
-  if (!goccia) return;
-  sheet._inchiostroCade = null;
-  for (const cell of sheet.element?.querySelectorAll?.(`.wod5e-mage-inchiostro-cella[data-index="${goccia.index}"]`) ?? []) {
-    cell.classList.remove("cade");
-    // Un riflusso fra togliere e rimettere: l'animazione riparte anche se la classe c'era.
-    void cell.offsetWidth;
-    cell.classList.add("cade");
-  }
+export function wisdomAfterSession(stored) {
+  return { ...normalizeSaggezza(stored), risplende: false };
+}
+
+/** La nota sotto i dadi di un tiro di Saggezza: com'è andata, e il passo. */
+export function renderEsitoSaggezza(saggezza, localize) {
+  if (!saggezza?.testo) return "";
+  const label = localize("WOD5E_MAGE.Wisdom.Label");
+  return `<p class="wod5e-mage-roll-note wod5e-mage-roll-note-saggezza ${saggezza.esito === "fallito" ? "scende" : "resta"}"><b class="wod5e-mage-saggezza-label">${label}</b> <span>${String(saggezza.testo).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span></p>`;
+}
+
+/** Sotto i dadi del tiro di Saggezza, la riga dell'esito, a ogni render. */
+export function decorateSaggezza(message, html) {
+  if (!html?.querySelector) return false;
+  const card = message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG) ?? {};
+  if (!card.saggezza?.testo) return false;
+  const target = html.querySelector(".dice-result") ?? html.querySelector(".message-content");
+  if (!target || target.querySelector(".wod5e-mage-roll-note-saggezza")) return false;
+  target.insertAdjacentHTML("beforeend", renderEsitoSaggezza(card.saggezza, game.i18n.localize.bind(game.i18n)));
+  return true;
+}
+
+export function registerSaggezza() {
+  Hooks.on("renderChatMessageHTML", decorateSaggezza);
 }

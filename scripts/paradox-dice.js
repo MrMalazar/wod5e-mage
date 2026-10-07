@@ -270,6 +270,7 @@ async function postDicelessMessage(actor, title, { flavor, cardData, banner = ""
  * @param sphereLevel   il livello della Sfera usata (la più alta): i punti Paradosso al Narratore
  * @param skill         un tiro di Abilità: niente rossi, e il margine oltre il primo successo
  * @param bussola       (tiri di Abilità) le voci della Bussola: la finestra chiede «Rispetta la Bussola?»
+ * @param successFrom   la faccia da cui si riesce, imposta da chi chiama (il tiro di Saggezza: 8)
  */
 export async function rollAreteWithParadox({
   actor,
@@ -287,14 +288,17 @@ export async function rollAreteWithParadox({
   skill = false,
   witnesses = false,
   bussola = null,
+  successFrom = null,
   title,
   flavor = "",
   card = null,
   selectors = []
 }) {
   // La difficoltà avanzata dipende dal tipo di Magick scelto prima della
-  // conferma. Tiri di abilità e scoppi mantengono la difficoltà originale.
-  const advancedDifficulty = usesAdvancedDifficulty({ witnesses, skill, onlyParadox });
+  // conferma. Tiri di abilità e scoppi mantengono la difficoltà originale;
+  // chi chiama può imporre la faccia (il tiro di Saggezza, 3/10: un 8 riesce).
+  const forcedSuccessFrom = Number.isFinite(Number(successFrom)) && Number(successFrom) > 0 ? Math.trunc(Number(successFrom)) : null;
+  const advancedDifficulty = forcedSuccessFrom !== null ? forcedSuccessFrom === ADVANCED_SUCCESS_FROM : usesAdvancedDifficulty({ witnesses, skill, onlyParadox });
   const situationalModifiers = onlyParadox
     ? []
     : await getSituationalModifiers({ actor, selectors });
@@ -362,7 +366,7 @@ export async function rollAreteWithParadox({
             || game.settings.get("core", "rollMode");
           // Solo Volgare con testimoni usa 8+; il valore viene salvato sulla
           // carta anche per le immagini dei dadi e i ritiri di Volontà.
-          const successFrom = successThreshold(advancedDifficulty);
+          const successFrom = forcedSuccessFrom ?? successThreshold(advancedDifficulty);
           // La Bussola rispettata nel tiro di Abilità: un dado ora (già nel conto), +1 Quintessenza a tiro fatto.
           const bussolaKept = skill && bussola ? readBussola(form, bussola) : null;
           return executeRamoCRoll({

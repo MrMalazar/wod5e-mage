@@ -90,13 +90,13 @@ const source = readFileSync(new URL("../scripts/paradosso-narratore.js", import.
 assert.match(source, /game\.settings\.register\(MODULE_ID, POOL_SETTING, \{\s*scope: "world"/);
 assert.match(source, /Hooks\.on\("getSceneControlButtons"/);
 assert.match(source, /ui\.controls\.activate\(\{ control: name \}\)/);
-// Cosa si raccoglie (11/9): l'Ustione data e la realtà sforzata, una volta l'una.
+// Cosa si raccoglie (11/9): l'Ustione data, una volta sola. La realtà sforzata non porta più niente (3/10: è l'Indulgere, e si paga in Saggezza).
 assert.deepEqual(pendingGifts({}), []);
 assert.deepEqual(pendingGifts({ rollCard: { ustione: { choice: "narratore", given: 3, actorName: "Al" } }, sforzo: { given: 4, actorName: "Al" } }), [
-  { kind: "given", points: 3, from: "Al" }, { kind: "sforzo", points: 4, from: "Al" }
-]);
-assert.deepEqual(pendingGifts({ rollCard: { ustione: { choice: "narratore", given: 3, collected: true } }, sforzo: { given: 4, collected: true } }), []);
-assert.deepEqual(pendingGifts({ rollCard: { ustione: { choice: "brucia", given: 3 } }, sforzo: { given: 0 } }), []);
+  { kind: "given", points: 3, from: "Al" }
+], "la bandiera vecchia dello Sforzo si ignora");
+assert.deepEqual(pendingGifts({ rollCard: { ustione: { choice: "narratore", given: 3, collected: true } } }), []);
+assert.deepEqual(pendingGifts({ rollCard: { ustione: { choice: "brucia", given: 3 } } }), []);
 assert.match(source, /const gifts = pendingGifts\(flags\)/);
 assert.match(source, /out\.classList\.add\(points > from \? "rising" : "falling"\)/);
 assert.match(source, /InteractionLayer/);

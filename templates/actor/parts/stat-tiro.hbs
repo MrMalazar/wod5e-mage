@@ -8,7 +8,7 @@
      livello scelto e il livello, spenti a zero. In fondo a ogni colonna un
      numero solo, il totale, col meno e il più: è lui che si cambia a mano, e
      la matita dice di quanto. Sotto, in una riga, i dadi che si tirano e da
-     che faccia riescono, la coppia Quintessenza | Paradosso al centro, Sforza
+     che faccia riescono, la coppia Quintessenza | Paradosso al centro, Indulgi
      la realtà e Dal Narratore; poi i tasti: TIRA, o i tre tipi col solo
      nome; spento, il tasto dice cosa manca. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-tiro{{#if tiro.magick}} magick{{/if}}">
@@ -92,7 +92,7 @@
         </div>
 
         {{!-- Le opzioni (1/10): i dadi che si tirano e da che faccia riescono; la coppia Quintessenza | Paradosso
-             al centro (29/9: ogni lancio si paga); Sforza la realtà e Dal Narratore (27/9). Parole, non simboli. --}}
+             al centro (29/9: ogni lancio si paga); Indulgi (3/10, il lato che dice il Narratore) e Dal Narratore (27/9). Parole, non simboli. --}}
         <div class="wod5e-mage-tiro-opzioni">
             {{#if tiro.esito.riesce}}
                 <span class="wod5e-mage-tiro-esito riesce"><i class="fa-solid fa-check" aria-hidden="true"></i><span>{{tiro.esito.riesce}}</span></span>
@@ -110,7 +110,7 @@
                 <span class="wod5e-mage-tiro-paga vuota" aria-hidden="true"></span>
             {{/if}}
             <span class="wod5e-mage-tiro-interruttori">
-                <button type="button" class="wod5e-mage-tiro-sforza{{#if tiro.sforza}} acceso{{/if}}" data-action="tiroSforza" aria-pressed="{{tiro.sforza}}" title="{{localize 'WOD5E_MAGE.Tiro.SforzaHint'}}">{{localize "WOD5E_MAGE.Tiro.Sforza"}}</button>
+                <button type="button" class="wod5e-mage-tiro-indulgi{{#if tiro.indulgi}} acceso{{/if}}" data-action="tiroIndulgi" aria-pressed="{{#if tiro.indulgi}}true{{else}}false{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.IndulgiHint'}}">{{#if tiro.indulgi}}{{tiro.indulgi.label}}{{else}}{{localize "WOD5E_MAGE.Tiro.Indulgi"}}{{/if}}</button>
                 {{#if tiro.narratore}}
                     <button type="button" class="wod5e-mage-tiro-narratore{{#if tiro.narratore.on}} acceso{{/if}}" data-action="tiroNarratore" aria-pressed="{{tiro.narratore.on}}" title="{{tiro.narratore.hint}}">{{localize "WOD5E_MAGE.Verdetto.DalNarratore"}}</button>
                 {{/if}}

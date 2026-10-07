@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { PREZZO_FLAG, prezzoState, renderPrezzoButton, renderPriced } from "../scripts/prezzo.js";
-import { sforzoState } from "../scripts/sforzo.js";
+import { indulgereState } from "../scripts/indulgere.js";
 import { volontaState } from "../scripts/volonta.js";
 
 // La vittoria a un prezzo (10/9 notte): il terzo tasto sotto il tiro fallito,
@@ -17,8 +17,8 @@ assert.deepEqual(prezzoState({ total: 0, difficulty: 1, dice: 3, burst: true }),
 assert.deepEqual(prezzoState({ total: 0, difficulty: 1, dice: 3, automatic: true }), { show: false, enabled: false, missing: 0 });
 assert.deepEqual(prezzoState({ total: 0, difficulty: 0, dice: 3 }), { show: false, enabled: false, missing: 0 }, "senza soglia niente");
 
-// Con la vittoria a un prezzo gli altri due tasti tacciono.
-assert.deepEqual(sforzoState({ total: 3, difficulty: 5, priced: true }), { show: false, missing: 0 });
+// Con la vittoria a un prezzo la Volontà tace; il Tira Saggezza dell'Indulgere (3/10) non c'entra col fallimento: compare solo sul lancio indulto.
+assert.deepEqual(indulgereState({ total: 3, difficulty: 5, priced: true }), { show: false, lato: "", soglia: 0 });
 assert.deepEqual(volontaState({ total: 3, difficulty: 5, failedCount: 2, priced: true }), { show: false, max: 0 });
 
 // Il tasto e la riga.
@@ -35,9 +35,9 @@ assert.equal(
   '<p class="wod5e-mage-roll-note wod5e-mage-roll-note-prezzo"><b class="wod5e-mage-prezzo-label">Vittoria a un prezzo</b> <span>dadi tirati 2: il prezzo lo decide il Narratore.</span></p>'
 );
 
-// Il resto della macchina: registrata in main dopo la Volontà e lo Sforzo (l'ordine dei tasti), la carta porta i dadi tirati.
+// Il resto della macchina: registrata in main dopo la Volontà e l'Indulgere (l'ordine dei tasti), la carta porta i dadi tirati.
 const main = readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8");
-assert.match(main, /registerVolonta\(\);[\s\S]*registerSforzo\(\);\r?\n\s*registerPrezzo\(\);/);
+assert.match(main, /registerVolonta\(\);[\s\S]*registerIndulgere\(\);\r?\n\s*registerSaggezza\(\);\r?\n\s*registerPrezzo\(\);/);
 assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /dice: conto\.dice,/);
 const source = readFileSync(new URL("../scripts/prezzo.js", import.meta.url), "utf8");
 assert.match(source, /if \(state\.enabled\) \{\s*markRollOpen\(html\);/);

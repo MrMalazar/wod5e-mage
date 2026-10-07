@@ -608,8 +608,8 @@ export function posizioneMenuSalute(click, finestra, menu) {
  * chiude scegliendo, o cliccando fuori, o con Esc. Il clic destro svuota
  * subito. Il menù si appende alla finestra della scheda (vedi
  * posizioneMenuSalute), non al corpo della pagina. Lo usa anche la
- * Saggezza (23/9) coi suoi segni d'inchiostro: `options` è la lista
- * `{state, label, glyph}` dei segni, la casella vuota compresa.
+ * Saggezza (3/10) sul centro della bilancia, per scegliere quale segno
+ * riportare: `options` è la lista `{state, label, glyph}` delle voci.
  */
 export function askSegno(event, current, options) {
   return new Promise((resolve) => {
@@ -857,7 +857,9 @@ export async function onSaluteNewSession(event) {
     [`flags.${MODULE_ID}.contraccolpoNegato`]: false,
     // Nuova sessione, nuova scena: la Convinzione può rigenerare di nuovo (9/9).
     [`flags.${MODULE_ID}.-=convinzioneScena`]: null,
-    // Sforzare la realtà (10/9 sera): la prima volta della sessione torna gratis.
+    // La Saggezza (3/10): l'atto che fa risplendere torna disponibile, una volta per sessione.
+    [`flags.${MODULE_ID}.wisdom.risplende`]: false,
+    // Lo Sforzare la realtà non c'è più (3/10): la sua bandiera della sessione se ne va.
     [`flags.${MODULE_ID}.-=sforziSessione`]: null,
     // I poteri «una volta per scena» e «per sessione» tornano disponibili (24/9).
     [`flags.${MODULE_ID}.${POTERI_USI_FLAG}`]: riarmaUsi(actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {}, "sessione")

@@ -156,7 +156,7 @@ assert.deepEqual(rollOutcome(5, 3, localize), { total: 5, cssClass: "success", t
 assert.deepEqual(rollOutcome(5, 5, localize), { total: 5, cssClass: "success", text: "Successo", missing: 0 });
 assert.deepEqual(rollOutcome(2, 3, localize), { total: 2, cssClass: "failure", text: "Fallimento", missing: 1 });
 assert.deepEqual(rollOutcome(3, 6, localize), { total: 3, cssClass: "failure", text: "Fallimento", missing: 3 });
-assert.deepEqual(rollOutcome(3, 6, localize, { forced: true }), { total: 3, cssClass: "success", text: "Successo sforzando la realtà", missing: 0 });
+assert.deepEqual(rollOutcome(3, 6, localize, { forced: true }), { total: 3, cssClass: "success", text: "Successo indulgendo", missing: 0 });
 assert.deepEqual(rollOutcome(3, 4, localize, { priced: true }), { total: 3, cssClass: "success", text: "Successo a un prezzo", missing: 0 });
 assert.deepEqual(rollOutcome(4, 0, localize), { total: 4, cssClass: "", text: "", missing: 0 });
 for (const lang of ["it", "en"]) {

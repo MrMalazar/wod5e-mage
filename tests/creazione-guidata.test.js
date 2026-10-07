@@ -255,7 +255,7 @@ const g9 = prepareGuidata(vuoto, { passo: 10, localize });
 assert.deepEqual(g9.corpo.gruppi.map((g) => [g.id, g.attributi.length]), [["physical", 3], ["social", 3], ["mental", 3]]);
 assert.equal(g9.corpo.gruppi[0].attributi[0].label, "Forza");
 assert.equal(g9.corpo.forma.ok, true);
-assert.deepEqual(g9.corpo.statistiche, { salute: 5, volonta: 4, saggezza: 7 });
+assert.deepEqual(g9.corpo.statistiche, { salute: 5, volonta: 4, saggezza: 4 }, "la Saggezza (3/10) tira Fermezza + Autocontrollo, come la Volontà");
 assert.deepEqual([g9.corpo.conto.value, g9.corpo.conto.state], [22, "exact"]);
 assert.equal(g9.passi[9].fatto, true);
 

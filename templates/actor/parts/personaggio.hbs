@@ -60,7 +60,9 @@
             </section>
 
             {{!-- Ogni Convinzione è una carta (9/9): il gruppo (o il Credo) e il testo con il
-                 cestino; sotto «La servi quando» e «La attraversi quando», con la descrizione. --}}
+                 cestino; sotto «La servi quando» e «La attraversi quando», con la descrizione.
+                 Dal 3/10 la carta porta l'interruttore: attiva, e allora copre gli atti della
+                 Saggezza; spenta, perché tradita, finché un atto non la fa risplendere. --}}
             <section class="wod5e-mage-riq wod5e-mage-riq-pagina wod5e-mage-riq-convinzioni">
                 <header class="wod5e-mage-riq-title wod5e-mage-riq-title-tasti">
                     <span>{{localize "WOD5E_MAGE.Personaggio.ConvictionsLabel"}}</span>
@@ -71,8 +73,9 @@
                 </header>
                 <div class="wod5e-mage-riq-body">
                     {{#each convictions as |row|}}
-                        <div class="wod5e-mage-bussola-carta wod5e-mage-conviction">
+                        <div class="wod5e-mage-bussola-carta wod5e-mage-conviction{{#if row.spenta}} spenta{{/if}}">
                             <div class="wod5e-mage-conviction-testa">
+                                <button type="button" class="wod5e-mage-conviction-stato" data-action="convinzioneToggle" data-row="{{row.id}}" aria-pressed="{{#if row.spenta}}false{{else}}true{{/if}}" title="{{#if row.spenta}}{{localize 'WOD5E_MAGE.Wisdom.Convinzione.SpentaHint'}}{{else}}{{localize 'WOD5E_MAGE.Wisdom.Convinzione.AttivaHint'}}{{/if}}" {{#if ../locked}}disabled{{/if}}><i class="fa-solid {{#if row.spenta}}fa-shield-halved{{else}}fa-shield{{/if}}" aria-hidden="true"></i><span>{{#if row.spenta}}{{localize "WOD5E_MAGE.Wisdom.Convinzione.Spenta"}}{{else}}{{localize "WOD5E_MAGE.Wisdom.Convinzione.Attiva"}}{{/if}}</span></button>
                                 <select name="flags.wod5e-mage.convinzioni.{{row.id}}.group" aria-label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroup'}}" {{#if ../locked}}disabled{{/if}}>
                                     <option value="">{{localize "WOD5E_MAGE.Personaggio.ConvictionGroupNone"}}</option>
                                     <optgroup label="{{localize 'WOD5E_MAGE.Personaggio.ConvictionGroupsCatalog'}}">

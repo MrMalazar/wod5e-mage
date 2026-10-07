@@ -84,7 +84,8 @@ export function emptyTiro() {
     pay: null,
     extra: 0,
     dadi: 0,
-    sforza: false,
+    // L'Indulgere (3/10): "", oppure il lato dichiarato, "hubris" o "silenzio".
+    indulgi: "",
     kind: null,
     spell: null,
     // L'effetto caricato che non sta nel Grimorio (una Formula dalla pagina, 26/9): viaggia qui.
@@ -355,9 +356,10 @@ export function setExtra(tiro, value) {
   return next;
 }
 
-export function toggleSforza(tiro) {
+/** L'Indulgere (3/10): il lato dichiarato prima del lancio, o niente. */
+export function setIndulgi(tiro, lato) {
   const next = clone(tiro);
-  next.sforza = !next.sforza;
+  next.indulgi = lato === "hubris" || lato === "silenzio" ? lato : "";
   return next;
 }
 

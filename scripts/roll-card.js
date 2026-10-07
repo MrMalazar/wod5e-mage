@@ -10,7 +10,7 @@ import { RAMO, ramoCMargin, successoParadossale } from "./ramo-c.js";
  * col glifo e il livello, Ambiti col simbolo e il livello, Soglia, Tipo,
  * Effetto, Riserva), dall'11/9 dentro una tendina chiusa «Dettagli»; la
  * fascia dice Successo o Fallimento; sotto i tre
- * tasti (Ritira con Volontà, Sforzare la realtà, Vittoria a un prezzo). La
+ * tasti (Ritira con Volontà, Tira Saggezza dell'Indulgere, Vittoria a un prezzo). La
  * vittoria automatica si dichiara a caratteri grandi. Le funzioni di testo
  * sono pure: si provano fuori da Foundry.
  */
@@ -181,9 +181,16 @@ export function renderAutoVictoryContent({ card, notes = [] }, localize = (key) 
  * suo; il tiro di Areté conta le coppie di dieci solo fra i dadi Mage e
  * aggiunge i successi automatici delle Specialità. La carta porta il totale
  * vero e la soglia, e qui si riscrivono numero ed esito. La fascia dice una
- * parola (10/9 notte): Successo o Fallimento; con la realtà sforzata o la
+ * parola (10/9 notte): Successo o Fallimento; indulgendo (3/10) o con la
  * vittoria a un prezzo, Successo con la sua ragione.
  */
+/** I successi che mancano: zero se il tiro è riuscito o senza soglia. */
+export function missingSuccesses(total, difficulty) {
+  const successes = Math.max(Math.trunc(Number(total) || 0), 0);
+  const goal = Math.max(Math.trunc(Number(difficulty) || 0), 0);
+  return goal > 0 ? Math.max(goal - successes, 0) : 0;
+}
+
 export function rollOutcome(total, difficulty, localize = (key) => key, { forced = false, priced = false, bought = false, boughtText = "" } = {}) {
   const successes = Math.max(Math.trunc(Number(total) || 0), 0);
   const goal = Math.max(Math.trunc(Number(difficulty) || 0), 0);
@@ -235,7 +242,7 @@ function applyMageTitle(html, data) {
 
 /**
  * Il posto dei tasti sotto la fascia (10/9 notte): Ritira con Volontà,
- * Sforzare la realtà, Vittoria a un prezzo, nell'ordine in cui i moduli si
+ * Tira Saggezza (l'Indulgere), Vittoria a un prezzo, nell'ordine in cui i moduli si
  * registrano. Lo crea il primo che ne ha bisogno.
  */
 export function rollActionsBox(target) {

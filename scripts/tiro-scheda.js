@@ -72,7 +72,7 @@ import {
   toggleArete,
   toggleCondizioneTiro,
   togglePrize,
-  toggleSforza,
+  setIndulgi,
   toggleSphere,
   toggleTrait
 } from "./tiro.js";
@@ -331,7 +331,7 @@ export function righeAmbiti(tiro, localize = (key) => key, { tavola = null, modi
  * Riserva il ritocco (dentro il totale, la matita dice di quanto), nella
  * Soglia quanto si alza o si abbassa sopra il conto degli Ambiti, e
  * nell'Abilità la soglia intera. Poi, in una riga, l'esito (i dadi che si
- * tirano, dal 6 o dall'8), la coppia Quintessenza | Paradosso, Sforza la
+ * tirano, dal 6 o dall'8), la coppia Quintessenza | Paradosso, Indulgi (il lato) e
  * realtà e Dal Narratore; infine i tasti col solo nome, che spenti dicono
  * cosa manca.
  */
@@ -504,7 +504,8 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
       cost: inputs.powerCost
     } : null,
     extra: { value: tiro.extra, dice: conto.extra, cap: EXTRA_DICE_CAP },
-    sforza: Boolean(tiro.sforza),
+    // L'Indulgere (3/10): il lato dichiarato, con la sua parola sul tasto.
+    indulgi: tiro.indulgi ? { lato: tiro.indulgi, label: localize(`WOD5E_MAGE.Indulgere.Nel.${tiro.indulgi}`) } : null,
     // «Dal Narratore» (Blue, 27/9): il tiro passa dai Narratori collegati (cinque secondi per
     // ritoccarlo) o parte subito; è una scelta di chi tira, e il Narratore non la vede.
     narratore: game.user?.isGM ? null : {
@@ -831,9 +832,18 @@ export async function onTiroDadi(event, target) {
   return repaint(this, setDadi(tiro, (Number(tiro.dadi) || 0) + (Number(target.dataset.delta) || 0)));
 }
 
-export async function onTiroSforza(event) {
+/**
+ * L'Indulgere (3/10): il clic apre un menù con i due lati, come dice il
+ * Narratore (nell'Hubris, nel Silenzio), e la voce per non indulgere.
+ */
+export async function onTiroIndulgi(event) {
   event.preventDefault();
-  return repaint(this, toggleSforza(tiroOf(this)));
+  const { askSegno } = await import("./salute.js");
+  const { indulgereOptions } = await import("./indulgere.js");
+  const tiro = tiroOf(this);
+  const picked = await askSegno(event, tiro.indulgi ?? "", indulgereOptions(game.i18n.localize.bind(game.i18n)));
+  if (picked === null) return;
+  return repaint(this, setIndulgi(tiro, picked));
 }
 
 /** Una Condizione sul tiro (29/9): un clic la toglie perché non c'entra, un altro la rimette. */
@@ -955,7 +965,7 @@ export async function launchTiro(actor, tiro) {
     bonusParts.push(dice ? `${item.name} ${dice > 0 ? "+" : ""}${dice}` : item.name);
   }
   const notes = [];
-  if (tiro.sforza) notes.push(localize("WOD5E_MAGE.Tiro.SforzaNote"));
+  if (tiro.indulgi) notes.push(format("WOD5E_MAGE.Indulgere.Nota", { lato: localize(`WOD5E_MAGE.Wisdom.Lati.${tiro.indulgi}`) }));
   // Le Condizioni (29/9): in carta quelle che hanno pesato, quelle tolte a mano, e il tiro che fallisce;
   // se il Narratore ha detto che non contano, lo dice la sua nota.
   if (!conto.condizioniVia) {
@@ -1119,7 +1129,11 @@ export async function launchTiro(actor, tiro) {
         kind: tiro.kind,
         costo,
         paradossoPreso: paradoxGain,
-        tiro: { power: tiro.power ?? "", traits: chosenTraits.map((item) => item.id), specialty: tiro.specialty ?? "", sforza: Boolean(tiro.sforza) }
+        tiro: { power: tiro.power ?? "", traits: chosenTraits.map((item) => item.id), specialty: tiro.specialty ?? "", indulgi: tiro.indulgi ?? "" },
+        // L'Indulgere (3/10): l'incantesimo riesce (la fascia dice Successo indulgendo) e sotto
+        // la carta compare il tasto Tira Saggezza, con la soglia del lancio e il lato dichiarato.
+        indulgi: tiro.indulgi ?? "",
+        forced: Boolean(tiro.indulgi)
       },
       activeModifiers: chosenTraits.map((item) => ({ label: item.name, value: `${traitDiceOf(actor, [item.id]) >= 0 ? "+" : ""}${traitDiceOf(actor, [item.id])}` })),
       notes

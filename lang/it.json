@@ -1000,48 +1000,142 @@
     "Wisdom": {
       "Label": "Saggezza",
       "Status": "Stato",
-      "Roll": "Tira Saggezza",
-      "VentaglioHint": "I comandi della Saggezza: Tira, Segna, Cura, Reset, caselle in più",
-      "Tira": "Tira",
-      "MaxMeno": "Una casella in meno",
-      "MaxPiu": "Una casella in più",
-      "MaxMenoBreve": "casella",
-      "MaxPiuBreve": "casella",
+      "Hint": "La bilancia fra Hubris e Silenzio: due segni partono dal centro. Uno scende a sinistra con gli atti d'Hubris, uno a destra con quelli di Silenzio. Al quarto passo il personaggio è finito: Caduto, o Folle.",
+      "RiservaHint": "La riserva del tiro di Saggezza: Fermezza {resolve} + Autocontrollo {composure}. La soglia è il gradino dell'atto e toglie dadi; un 8 riesce.",
+      "VentaglioHint": "I comandi della Saggezza: Atto, Risplende, Ancora, Reset",
+      "Tira": "Atto",
+      "Roll": "L'atto: il gradino, il lato, la Convinzione che copre",
       "Rolling": "Tiro di Saggezza",
-      "Segnato": "Segnato",
-      "SegnatoEffects": "due dadi in meno sui tiri mortali, la scena mondana costa, niente ricucitura del Consenso, l'aura si vede.",
-      "Hint": "3 + il più alto fra Carisma e Fermezza",
-      "Extra": "Caselle in più, oltre il conto",
-      "ClickHint": "Clic: scegli la macchia, superficiale o aggravata. Clic destro: la casella si svuota.",
-      "States": {
-        "empty": "Vuota",
-        "s": "Superficiale",
-        "a": "Aggravata"
-      },
-      "Segna": "Segna le macchie",
-      "SegnaBreve": "Segna",
-      "SegnaHint": "Quante macchie hai preso, e di che tipo: superficiale, o aggravata, che resta finché lo Spirito non la toglie.",
-      "SegnaAmount": "Quante",
-      "SegnaSign": "Di che tipo",
-      "SegnaOk": "Segna",
-      "SegnaDone": "Segnate {amount} macchie: {sign}.",
-      "SegnaConverted": "La fila era piena: {converted} macchie superficiali sono diventate aggravate.",
-      "Cura": "Cura",
-      "CuraHint": "Una macchia superficiale se ne va: hai rispettato una Convinzione quando costava. Le aggravate le toglie solo lo Spirito.",
-      "CuraDone": "Cura: una macchia superficiale se n'è andata.",
-      "CuraNiente": "Nessuna macchia superficiale da togliere: le aggravate le toglie lo Spirito.",
+      "Risplende": "Risplende",
+      "RisplendeHint": "L'atto che fa risplendere una Convinzione: la riaccende e fa tornare indietro il segno di un passo. Lo chiama il Narratore, una volta per sessione.",
+      "Ancora": "Ancora",
+      "AncoraHint": "La scena con un'Ancora, una volta per storia per ogni Ancora: ritiri Fermezza + Autocontrollo meno il passo, e un 8 riporta il segno indietro di uno.",
       "Reset": "Reset",
-      "ResetHint": "La fila torna pulita.",
-      "AttributeHint": "3 + {attribute} {value}, caselle in più {extra}. Clic: scegli fra Carisma e Fermezza.",
-      "AttributePick": "Scegli l'Attributo della Saggezza: Carisma o Fermezza",
-      "StatoHint": "Lo stato della Saggezza, dalle caselle pulite: {clean} su {max}. Non si scrive: cambia con le macchie.",
-      "Stati": {
-        "segnato": "Segnato",
-        "inBilico": "In bilico",
-        "incrinato": "Incrinato",
-        "saldo": "Saldo",
-        "lucido": "Lucido",
-        "sereno": "Sereno"
+      "ResetHint": "I due segni tornano al centro.",
+      "ClickHint": "Clic su una casella: il segno di quel lato va lì. Clic destro: torna al centro. Sul centro, un menù chiede quale segno riportare.",
+      "Lati": {
+        "hubris": "Hubris",
+        "silenzio": "Silenzio"
+      },
+      "Passi": {
+        "centro": "al centro",
+        "passo": "passo {n}",
+        "fineHubris": "Caduto",
+        "fineSilenzio": "Folle"
+      },
+      "StatoRiga": "{lato}: {passo}",
+      "Cella": {
+        "centro": "Il centro: l'equilibrio",
+        "passo": "{lato}, passo {n}",
+        "fine": "{lato}: {nome}, la fine del personaggio"
+      },
+      "CentroMenu": {
+        "hubris": "Riporta al centro il segno dell'Hubris",
+        "silenzio": "Riporta al centro il segno del Silenzio",
+        "entrambi": "Riporta al centro tutti e due"
+      },
+      "Fine": {
+        "hubris": "Caduto: il personaggio passa al Narratore.",
+        "silenzio": "Folle: il personaggio passa al Narratore."
+      },
+      "Convinzione": {
+        "Attiva": "Attiva",
+        "Spenta": "Spenta",
+        "AttivaHint": "Convinzione attiva: copre gli atti che la servono. Clic: la spegni a mano.",
+        "SpentaHint": "Convinzione spenta: l'hai tradita, e non ti copre finché un atto non la fa risplendere. Clic: la riaccendi a mano."
+      },
+      "Atto": {
+        "Title": "L'atto",
+        "Hint": "Il Narratore dice il gradino e il lato. Il segno scende solo se il gradino supera il passo dove sta. Se una Convinzione attiva copre l'atto tiri Fermezza + Autocontrollo ({riserva}) meno il gradino, e un 8 riesce; senza dadi non si para. Se nessuna copre, il segno scende.",
+        "Gradino": "Gradino",
+        "Generici": "Atti generici",
+        "Lato": "Il lato",
+        "Copre": "La Convinzione che copre l'atto",
+        "CopreNone": "Nessuna: il segno scende",
+        "CopreHint": "L'atto la serviva, e il Narratore dice sì: tiri per vedere se basta a coprirti.",
+        "Tradisce": "L'atto tradisce una Convinzione",
+        "TradisceNone": "Nessuna",
+        "TradisceHint": "Si spegne, e non ti copre finché non risplende. L'atto tradito non lo copre nessuna Convinzione.",
+        "Spente": "Spente:",
+        "LatoManca": "Dì il lato dell'atto: Hubris o Silenzio.",
+        "Ok": "Giudica",
+        "Rolling": "Tiro di Saggezza · {convinzione}"
+      },
+      "Tavola": {
+        "1": {
+          "hubris": "risolvere con un gesto quello che si risolveva con le mani",
+          "generico": "la bugia piccola a chi si fida di te",
+          "silenzio": "tacere quando una parola sarebbe bastata"
+        },
+        "2": {
+          "hubris": "piegare la volontà di un Dormiente per un tuo vantaggio",
+          "generico": "rubare, truffare, rompere una promessa data",
+          "silenzio": "non intervenire su un torto che fermavi senza rischio"
+        },
+        "3": {
+          "hubris": "la Magick che fa male a chi non c'entrava niente",
+          "generico": "ferire, minacciare, rovinare la vita di qualcuno",
+          "silenzio": "lasciare che paghi un altro al posto tuo"
+        },
+        "4": {
+          "hubris": "riscrivere un ricordo, una personalità, un corpo senza consenso",
+          "generico": "violenza deliberata su chi non poteva difendersi",
+          "silenzio": "abbandonare chi dipendeva da te nel momento in cui contavi"
+        },
+        "5": {
+          "hubris": "uccidere con la Magick chi non poteva capire né difendersi",
+          "generico": "omicidio a sangue freddo",
+          "silenzio": "lasciare morire qualcuno che potevi salvare"
+        },
+        "6": {
+          "hubris": "spegnere un Dormiente per sempre: il coma, la mente rifatta da capo",
+          "generico": "una strage, o la morte di un'Ancora per causa tua",
+          "silenzio": "consegnare chi si fidava di te, e voltarti"
+        },
+        "7": {
+          "hubris": "distruggere un Avatar, sacrificare un'Ancora per potere",
+          "generico": "uccidere un compagno di Cabala",
+          "silenzio": "rinnegare tutto ciò che eri per non doverlo più difendere"
+        }
+      },
+      "Esiti": {
+        "cancello": "Atto del gradino {gradino}, {lato}: il cancello tiene, il segno resta {passo}.",
+        "scoperto": "Atto del gradino {gradino}, {lato}: nessuna Convinzione copre, il segno scende: {passo}.",
+        "coperto": "«{convinzione}» ti copre: il segno dell'{lato} resta {passo}.",
+        "fallito": "«{convinzione}» non basta: il segno dell'{lato} scende: {passo}.",
+        "tradita": "Tradita «{convinzione}»: si spegne."
+      },
+      "RisplendeDialog": {
+        "Title": "Risplende",
+        "Hint": "Hai tenuto una Convinzione quando costava, e il Narratore lo chiama: la Convinzione torna attiva, e il segno del lato che l'atto contraddice torna indietro di un passo. Una volta per sessione.",
+        "Convinzione": "La Convinzione che risplende",
+        "ConvinzioneNone": "Nessuna in particolare",
+        "Lato": "Il segno che torna indietro",
+        "UsatoHint": "In questa sessione il Risplende è già stato usato.",
+        "Concedi": "Il Narratore lo concede comunque",
+        "GiaUsato": "Il Risplende è già stato usato in questa sessione: lo decide il Narratore.",
+        "Ok": "Risplende",
+        "Riaccesa": "«{convinzione}» risplende e torna attiva.",
+        "Tenuta": "«{convinzione}» risplende.",
+        "Tornato": "Il segno dell'{lato} torna indietro: {passo}.",
+        "GiaAlCentro": "Il segno dell'{lato} è già al centro: sei in equilibrio."
+      },
+      "AncoraDialog": {
+        "Title": "La scena con l'Ancora",
+        "Hint": "Una scena con un'Ancora, una volta per storia per ogni Ancora: ritiri Fermezza + Autocontrollo ({riserva}) meno il passo dove sta il segno, e un 8 lo riporta indietro di uno. In casi eccezionali il Narratore lo concede senza tirare.",
+        "Ancora": "L'Ancora",
+        "Usata": "già usata in questa storia",
+        "Lato": "Il segno da recuperare",
+        "Concedi": "Il Narratore concede senza tirare",
+        "Ok": "Tira",
+        "Riarma": "Nuova storia",
+        "Riarmate": "Nuova storia: le Ancore tornano disponibili.",
+        "Nessuna": "Nessuna Ancora sulla scheda: scrivila nella pagina Personaggio.",
+        "GiaUsata": "«{ancora}» è già stata usata in questa storia: lo decide il Narratore.",
+        "Rolling": "Tiro di Saggezza · {ancora}",
+        "Riuscito": "La scena con {ancora}: il segno dell'{lato} torna indietro, {passo}.",
+        "Fallito": "La scena con {ancora} non basta: il segno dell'{lato} resta dov'è.",
+        "Concesso": "La scena con {ancora}, concessa dal Narratore: il segno dell'{lato} torna indietro, {passo}."
       }
     },
     "MagickBalance": {
@@ -1180,9 +1274,9 @@
       "ConvictionGroupsCatalog": "Dal catalogo",
       "ConvictionGroupsCredi": "Dai Credi",
       "ConvictionServe": "La servi quando",
-      "ConvictionServeHint": "L'atto entra nella parata delle Macchie",
+      "ConvictionServeHint": "Ti copre: tiri Saggezza con la soglia dell'atto",
       "ConvictionCross": "La attraversi quando",
-      "ConvictionCrossHint": "Costa un Aggravato",
+      "ConvictionCrossHint": "Si spegne finché non risplende",
       "AnchorNotes": "Note",
       "AnchorRole": "Ruolo",
       "AnchorJob": "Mestiere",
@@ -1449,24 +1543,6 @@
       "Move": "Sposta il riquadro",
       "Resize": "Ridimensiona il riquadro"
     },
-    "Sforzo": {
-      "Label": "Sforzare la realtà",
-      "Title": "Sforzare la realtà",
-      "Button": "Sforzare la realtà",
-      "Hint": "Soglia: {missing}. L'incantesimo riesce, la Ruota sale di {missing} in Paradosso.",
-      "HintAgain": "Soglia: {missing}. L'incantesimo riesce, la Ruota sale di {missing} in Paradosso, e questa volta costa anche un aggravato {damage}.",
-      "Ask": "Soglia: {missing}. Sforzando la realtà l'incantesimo riesce, e la Ruota sale di {missing} in Paradosso, oltre a quello che il tiro ha già portato.",
-      "AskAgain": "È la volta numero {times} in questa sessione: costa anche un aggravato {damage}.",
-      "AskNote": "Il Contraccolpo dei rossi, se è scattato, resta.",
-      "Yes": "Sforza la realtà",
-      "No": "Lascia stare",
-      "Done": "soglia {missing}, la Ruota sale di {paradox} in Paradosso.",
-      "DoneDamage": "Segnato un aggravato {damage}.",
-      "DoneWasted": "La Ruota era piena: {wasted} punti non sono entrati.",
-      "DoneGiven": "Il Narratore riceve {points} punti Paradosso.",
-      "DamagePhysical": "fisico",
-      "DamageMental": "mentale"
-    },
     "Bussola": {
       "Ask": "Rispetta la Bussola?",
       "Short": "+1 dado, +1 Quintessenza a tiro fatto",
@@ -1508,7 +1584,7 @@
       "Pool": "Riserva",
       "Success": "Successo",
       "Failure": "Fallimento",
-      "Forced": "Successo sforzando la realtà",
+      "Forced": "Successo indulgendo",
       "Priced": "Successo a un prezzo",
       "Bought": "Riuscita comprata"
     },
@@ -1704,7 +1780,7 @@
       "LobbyEmpty": "nessuno",
       "Collected": "{points} punti Paradosso da {name}.",
       "LogGiven": "Ustione data da {name}",
-      "LogSforzo": "Realtà sforzata da {name}",
+      "LogSforzo": "Realtà sforzata da {name} (regola vecchia)",
       "LogSpend": "Effetto dalla Scheda",
       "LogManual": "A mano",
       "LogReset": "Azzerata",
@@ -1965,7 +2041,6 @@
         "testimoni": "Qualcuno ti ha visto farlo: i rossi si tirano a parte, si riesce con l'8."
       },
       "KindWarning": "Scegli come la fai: Accidentale, Volgare o Volgare con testimoni.",
-      "SforzaNote": "Sforza la realtà: dichiarato prima del tiro.",
       "PowerNote": "Potere: {name}.",
       "ManualDifficultyNote": "Soglia a mano {mano}: {difficulty} (il conto degli Ambiti diceva {computed}).",
       "AreteHint": "L'Areté fa il tiro di Magick: compaiono i tre tasti del tipo e il premio.",
@@ -1987,8 +2062,6 @@
       "Difficulty": "Soglia",
       "DifficultyWarning": "Inserisci la soglia prima di tirare.",
       "QuintessenceHint": "Solo col potere che lo dice: un dado per punto, fino a 2 + Areté per tiro. Scende dalla Ruota a tiro fatto.",
-      "Sforza": "Sforza la realtà",
-      "SforzaHint": "Dichiari che, se fallisce, vuoi ribaltarlo pagando un prezzo: lo tratti col Narratore a tiro fatto.",
       "Roll": "Tira",
       "RollHint": "Tira l'Attributo e l'Abilità scelti, meno la soglia; riesce dal 6.",
       "ExtraFlavor": "dadi extra +{dice}",
@@ -2037,7 +2110,9 @@
       "VuotoAbilita": "Abilità",
       "VuotoAmbiti": "Ambiti",
       "DadiParola": "dadi",
-      "DadoParola": "dado"
+      "DadoParola": "dado",
+      "Indulgi": "Indulgi",
+      "IndulgiHint": "Dichiari prima del lancio che indulgi: il Narratore dice se lo scopo è l'Hubris o il Silenzio, l'incantesimo riesce, e dopo tiri Saggezza (Fermezza + Autocontrollo meno la soglia, un 8 riesce)."
     },
     "Ritratti": {
       "NextHint": "Gira i ritratti: quello che vedi è anche l'immagine sulla mappa e in chat",
@@ -2269,7 +2344,7 @@
         "Cross": "quando la attraversi",
         "GuadagniAmbizione": "L'Ambizione dà forma alla cronaca",
         "GuadagniDesiderio": "Il Desiderio, raggiunto, frutta Esperienza",
-        "GuadagniConvinzioni": "Le Convinzioni reggono le Macchie",
+        "GuadagniConvinzioni": "Le Convinzioni coprono gli atti della Saggezza",
         "GuadagniAncore": "Le Ancore, chi ti tiene umano",
         "ConvinzioneSenzaTesto": "riga senza testo: scrivila nella pagina Personaggio, o toglila"
       },
@@ -2344,10 +2419,11 @@
         "Segnati": "segnati",
         "Salute": "Salute = Costituzione + 3",
         "Volonta": "Volontà = Autocontrollo + Fermezza",
-        "Saggezza": "Saggezza = 3 + il più alto fra Carisma e Fermezza",
+        "Saggezza": "Saggezza: i due segni partono dal centro; il tiro è Fermezza + Autocontrollo",
         "Caselle": "{n} caselle",
         "Tiro": "Ogni tiro parte da un Attributo",
-        "TiroPiu": "+ Abilità"
+        "TiroPiu": "+ Abilità",
+        "Dadi": "{n} dadi"
       },
       "Abilita": {
         "Pallini": "Pallini delle Abilità",
@@ -2742,6 +2818,20 @@
       "Done": "Debito saldato: {amount} caselle ({sign}) sbloccate, {points} Quintessenza pagata.",
       "Cella": "Sacrificio: casella bloccata. Si cura dopo il saldo del debito, o a fine sessione.",
       "CellaBloccata": "Casella del Sacrificio: prima si salda il debito, col lucchetto accanto alla Quintessenza."
+    },
+    "Indulgere": {
+      "Label": "Indulgere",
+      "Button": "Tira Saggezza",
+      "Hint": "Hai indulto nell'{lato}: l'incantesimo è riuscito. Ora tiri Saggezza, Fermezza + Autocontrollo meno la soglia ({soglia}), e un 8 riesce. Fallito, il segno dell'{lato} scende di un passo.",
+      "Nel": {
+        "hubris": "Indulgi nell'Hubris",
+        "silenzio": "Indulgi nel Silenzio"
+      },
+      "No": "Non indulgere",
+      "Nota": "Indulge nell'{lato}: l'incantesimo riesce, poi tira Saggezza.",
+      "Rolling": "Tiro di Saggezza · Indulgere nell'{lato}",
+      "Riuscito": "Indulgere nell'{lato}: la Saggezza tiene, il segno resta.",
+      "Fallito": "Indulgere nell'{lato}: la Saggezza non tiene, il segno scende: {passo}."
     }
   },
   "WOD5E": {

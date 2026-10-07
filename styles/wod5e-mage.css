@@ -903,10 +903,6 @@
   font-size: 0.68rem;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom .wisdom-roll {
-  cursor: pointer;
-}
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-spheres-content {
   padding: 1rem;
 }
@@ -3284,26 +3280,6 @@
   width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom .resource-counter .resource-counter-step {
-  height: 22px;
-  width: 22px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-segnato {
-  border-top: 1px solid rgb(152 119 43 / 45%);
-  color: var(--mage-rosso-chiaro);
-  font-size: 0.75rem;
-  line-height: 1.35;
-  margin: 0.6rem 0 0;
-  padding-top: 0.5rem;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-segnato > strong {
-  color: var(--mage-rosso-vivo);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
 /* ============================================================
    L'APPARTENENZA — Fazione, Famiglia · Sottofamiglia.
    Sotto il nome sta la coppia; la fazione completa vive nel
@@ -4786,25 +4762,6 @@
 .wod5e-mage-burst-dice {
   margin: 0;
   opacity: 0.85;
-}
-
-/* Sforzare la realtà (10/9 sera): la riga di quel che si è fatto, e la finestra del prezzo. */
-.wod5e-mage-sforzo-label {
-  color: #e05a5a;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  margin-right: 0.2rem;
-  text-transform: uppercase;
-}
-
-.wod5e-mage-roll-note-sforzo {
-  color: #f1dcd8;
-  font-style: normal;
-}
-
-.wod5e-mage-sforzo-ask p {
-  margin: 0 0 0.5rem;
 }
 
 /* I dadi che si possono ritirare: cliccabili; scelti, in oro. */
@@ -6344,7 +6301,7 @@
    tratti, le righe allineate (nome a sinistra, valore a destra, i glifi di
    Sfere e Ambiti col livello), la fascia che dice Successo o Fallimento (in
    giallo se il fallimento è ancora aperto) e sotto la fila dei tre tasti:
-   Ritira con Volontà, Sforzare la realtà, Vittoria a un prezzo.
+   Ritira con Volontà, Tira Saggezza (l'Indulgere, 3/10), Vittoria a un prezzo.
    ========================================================================== */
 .wod5e-mage-arete-body {
   --mage-arete-voce: #f3e4c8;
@@ -6542,15 +6499,16 @@
   opacity: 0.8;
 }
 
-.wod5e-mage-roll-actions > .wod5e-mage-sforzo-button {
-  background: rgb(224 90 90 / 12%);
-  border-color: var(--mage-rosso);
-  color: #f1dcd8;
+/* L'Indulgere (3/10): il tasto Tira Saggezza sotto il lancio indulto, in oro. */
+.wod5e-mage-roll-actions > .wod5e-mage-indulgere-button {
+  background: rgb(217 168 39 / 12%);
+  border-color: var(--mage-oro, #d9a827);
+  color: #f5e7b2;
 }
 
-.wod5e-mage-roll-actions > .wod5e-mage-sforzo-button:hover:not(:disabled) {
-  border-color: #e05a5a;
-  box-shadow: 0 0 4px #e05a5a;
+.wod5e-mage-roll-actions > .wod5e-mage-indulgere-button:hover:not(:disabled) {
+  border-color: #f5e7b2;
+  box-shadow: 0 0 4px var(--mage-oro, #d9a827);
 }
 
 .wod5e-mage-roll-actions > .wod5e-mage-prezzo-button {
@@ -8454,190 +8412,284 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-track {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 3px;
   margin: 0 0 0 24px;
   padding: 0 0 2px;
 }
 
 /* ==========================================================================
-   LA FILA D'INCHIOSTRO DELLA SAGGEZZA (Blue, 23/9): «delle macchie, degli
-   effetti gocce di inchiostro che ci cadono dentro a colorare la casella
-   fino a riempirla, in modo da far capire che è una cosa differente». La
-   sbarra è una goccia che macchia mezza casella, la croce la casella tutta
-   d'inchiostro. L'inchiostro è viola: lavanda sul fondo scuro, viola
-   profondo sulla carta. Quando una casella si segna, la goccia cade
-   dall'alto (classe `cade`, messa dal render) e la macchia si allarga.
-   Le regole valgono anche fuori dalla scheda (il menù dei segni, la
-   finestra delle macchie): per questo hanno i ripieghi nei colori.
+   LA BILANCIA DELLA SAGGEZZA (Blue, 3/10): nove caselle, Caduto a sinistra e
+   Folle a destra, due segni che partono dal centro. Il segno dell'Hubris è
+   un pallino viola, quello del Silenzio un pallino oro; quando stanno nella
+   stessa casella si dividono lo spazio. Le due caselle di fondo portano il
+   loro simbolo e virano al rosso quando un segno ci arriva.
    ========================================================================== */
-.wod5e-mage-inchiostro-fila {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
+.wod5e-mage-bilancia {
+  --segno-hubris: var(--mage-viola-chiaro, #b58ade);
+  --segno-silenzio: var(--mage-oro, #d9a827);
 }
 
-.wod5e-mage-inchiostro-cella,
-.wod5e-mage-inchiostro-glyph {
-  --inchiostro: var(--mage-viola-chiaro, #b58ade);
-  --inchiostro-ombra: rgb(0 0 0 / 30%);
-  background: var(--mage-incavo, #15130f);
-  border: 1px solid var(--mage-oro-scuro, #98772b);
-  border-radius: 2px;
-  box-sizing: border-box;
-  display: inline-block;
-  position: relative;
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-bilancia {
+  --segno-hubris: var(--mage-viola, #282051);
 }
 
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-inchiostro-cella,
-.wod5e-mage.wod5e.actor.sheet.wod5e-mage-chiara .wod5e-mage-inchiostro-glyph {
-  --inchiostro: var(--mage-viola, #282051);
-  --inchiostro-ombra: rgb(40 32 81 / 25%);
-  background: #FBF8F0;
-  border-color: #B3924A;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-inchiostro-cella {
-  box-shadow: none;
-  cursor: pointer;
-  flex: 0 0 20px;
-  height: 20px;
-  line-height: 1;
-  margin: 0;
-  min-height: 20px;
-  padding: 0;
-  width: 20px;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-inchiostro-cella:hover {
-  border-color: var(--mage-oro);
-  box-shadow: none;
-}
-
-.wod5e-mage-inchiostro-glyph {
-  height: 22px;
-  margin: 0;
-  vertical-align: -3px;
-  width: 22px;
-}
-
-.wod5e-mage-inchiostro-cella::after,
-.wod5e-mage-inchiostro-glyph::after {
-  background-repeat: no-repeat;
-  content: "";
-  inset: 0;
-  pointer-events: none;
-  position: absolute;
-  transform-origin: 45% 50%;
-}
-
-/* La sbarra: una goccia caduta, mezza casella, coi suoi schizzi. */
-.wod5e-mage-inchiostro-cella[data-state="s"]::after,
-.wod5e-mage-inchiostro-glyph[data-state="s"]::after {
-  background:
-    radial-gradient(ellipse 36% 32% at 42% 50%, var(--inchiostro) 96%, transparent 100%),
-    radial-gradient(ellipse 13% 13% at 70% 66%, var(--inchiostro) 96%, transparent 100%),
-    radial-gradient(ellipse 9% 9% at 28% 80%, var(--inchiostro) 96%, transparent 100%),
-    radial-gradient(ellipse 7% 7% at 64% 26%, var(--inchiostro) 96%, transparent 100%),
-    radial-gradient(ellipse 5% 5% at 82% 40%, var(--inchiostro) 96%, transparent 100%);
-}
-
-/* La croce: la casella tutta d'inchiostro, col riflesso bagnato. */
-.wod5e-mage-inchiostro-cella[data-state="a"]::after,
-.wod5e-mage-inchiostro-glyph[data-state="a"]::after {
-  background:
-    radial-gradient(circle at 32% 28%, rgb(255 255 255 / 22%), transparent 42%),
-    var(--inchiostro);
-  box-shadow: inset 0 0 0 1px var(--inchiostro-ombra);
-}
-
-/* La goccia che cade (dal render, classe `cade`): parte sopra la casella,
-   scende dentro, e la macchia si allarga da zero. */
-.wod5e-mage-inchiostro-cella.cade::before {
-  animation: wod5e-mage-goccia-cade 0.38s ease-in forwards;
-  background: var(--inchiostro);
-  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
-  content: "";
-  height: 10px;
-  left: 50%;
-  margin-left: -3px;
-  pointer-events: none;
-  position: absolute;
-  top: -16px;
-  width: 6px;
-  z-index: 2;
-}
-
-.wod5e-mage-inchiostro-cella.cade::after {
-  animation: wod5e-mage-macchia-allarga 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2) 0.3s backwards;
-}
-
-@keyframes wod5e-mage-goccia-cade {
-  0% { opacity: 1; transform: translateY(0) scaleY(1); }
-  85% { opacity: 1; transform: translateY(20px) scaleY(1.2); }
-  100% { opacity: 0; transform: translateY(24px) scaleY(0.4); }
-}
-
-@keyframes wod5e-mage-macchia-allarga {
-  0% { transform: scale(0); }
-  70% { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wod5e-mage-inchiostro-cella.cade::before,
-  .wod5e-mage-inchiostro-cella.cade::after {
-    animation: none;
-  }
-}
-
-/* Il menù dei segni della Saggezza: i glifi d'inchiostro al posto di quelli della Salute. */
-.wod5e-mage-salute-menu-item .wod5e-mage-inchiostro-glyph {
-  flex: 0 0 auto;
-  height: 22px;
-  width: 22px;
-}
-
-.wod5e-mage-salute-menu-item.current .wod5e-mage-inchiostro-glyph {
-  border-color: var(--mage-viola-chiaro, #b58ade);
-}
-
-.wod5e-mage-danni-sign > .wod5e-mage-inchiostro-glyph {
-  flex: none;
-  height: 18px;
-  width: 18px;
-}
-
-/* Il numero delle caselle come tasto (23/9): sceglie fra Carisma e Fermezza. */
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-valore-tasto {
-  background: transparent;
-  border: 1px solid transparent;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella {
+  align-items: center;
+  background: var(--mage-incavo);
+  border: 1px solid var(--mage-oro-tenue);
   border-radius: 4px;
   cursor: pointer;
+  display: flex;
+  flex: 0 0 22px;
+  gap: 2px;
+  height: 22px;
+  justify-content: center;
   line-height: 1;
   min-height: 0;
-  padding: 1px 4px;
-  width: auto;
+  padding: 0;
+  position: relative;
+  width: 22px;
 }
 
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-valore-tasto:hover,
-.wod5e-mage.wod5e.actor.sheet button.wod5e-mage-valore-tasto:focus-visible {
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella.lato-centro {
   border-color: var(--mage-oro);
-  box-shadow: none;
+  border-radius: 50%;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella.fine {
+  border-style: dashed;
+  color: var(--mage-inchiostro-tenue, #746c5e);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella.fine > i {
+  font-size: 0.7rem;
+  position: absolute;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella.fine.segno-hubris,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella.fine.segno-silenzio {
+  border-color: var(--mage-rosso);
+  border-style: solid;
+  color: var(--mage-rosso-chiaro);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella:focus-visible {
+  border-color: var(--mage-oro);
+  box-shadow: 0 0 4px var(--mage-oro);
   outline: none;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom-max {
-  color: var(--mage-oro);
-  font-size: 1em;
-  font-weight: 700;
-  margin-left: 0.4rem;
+/* I due segni: nascosti, finché la casella non li porta. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-segno {
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 45%);
+  display: none;
+  height: 12px;
+  width: 12px;
 }
 
-/* La pagina del Personaggio: la fila centrata, come stava. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-wisdom .wod5e-mage-inchiostro-fila {
-  justify-content: center;
-  padding: 4px 0;
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-segno.hubris {
+  background: var(--segno-hubris);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-segno.silenzio {
+  background: var(--segno-silenzio);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella.segno-hubris > .wod5e-mage-bilancia-segno.hubris,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella.segno-silenzio > .wod5e-mage-bilancia-segno.silenzio {
+  display: block;
+}
+
+/* Tutti e due nella stessa casella (il centro, in partenza): due mezzi segni. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella.segno-hubris.segno-silenzio > .wod5e-mage-bilancia-segno {
+  height: 9px;
+  width: 9px;
+}
+
+/* Il segno sulla casella di fondo copre il simbolo: la fine si legge dal rosso. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella.fine.segno-hubris > i,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-cella.fine.segno-silenzio > i {
+  opacity: 0.35;
+}
+
+/* Lo stato dei due segni in parole, sotto la fila: fuori dal centro il lato si accende. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-stato {
+  color: var(--mage-inchiostro-tenue, #746c5e);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.72rem;
+  gap: 2px 12px;
+  letter-spacing: 0.03em;
+  margin: 1px 0 0 24px;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-stato > .fuori.lato-hubris {
+  color: var(--segno-hubris, var(--mage-viola-chiaro));
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-bilancia-stato > .fuori.lato-silenzio {
+  color: var(--segno-silenzio, var(--mage-oro));
+}
+
+/* La fine del personaggio accanto al nome: Caduto, o Folle, in rosso. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-fine {
+  border: 1px solid var(--mage-rosso);
+  border-radius: 4px;
+  color: var(--mage-rosso-chiaro);
+  cursor: help;
+  font-family: "Modesto Condensed", serif;
+  font-size: 0.98rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin-left: 2px;
+  padding: 3px 7px 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* L'interruttore della Convinzione (3/10): attiva in oro, spenta smorzata. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-stato {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--mage-oro-tenue);
+  border-radius: 4px;
+  color: var(--mage-oro);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  gap: 4px;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  min-height: 0;
+  padding: 3px 6px;
+  text-transform: uppercase;
+  width: auto;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction.spenta .wod5e-mage-conviction-stato {
+  border-style: dashed;
+  color: var(--mage-inchiostro-tenue, #746c5e);
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction.spenta input[type="text"],
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction.spenta textarea {
+  opacity: 0.6;
+}
+
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-stato:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-conviction-stato:focus-visible {
+  border-color: var(--mage-oro);
+  box-shadow: 0 0 4px var(--mage-oro);
+  outline: none;
+}
+
+/* Le finestre della Saggezza (l'atto, Risplende, l'Ancora): la tavola dei sette
+   gradini con la scelta sul numero, i due lati come due tasti, i campi sotto. */
+.wod5e-mage-saggezza-tavola {
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  margin: 0 0 0.6rem;
+  width: 100%;
+}
+
+.wod5e-mage-saggezza-tavola th,
+.wod5e-mage-saggezza-tavola td {
+  border-bottom: 1px solid rgb(217 168 39 / 25%);
+  padding: 3px 5px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.wod5e-mage-saggezza-tavola th {
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-saggezza-gradino {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 4px;
+}
+
+.wod5e-mage-saggezza-lati {
+  border: 1px solid rgb(217 168 39 / 35%);
+  border-radius: 4px;
+  display: flex;
+  gap: 8px;
+  margin: 0 0 0.5rem;
+  padding: 4px 8px 6px;
+}
+
+.wod5e-mage-saggezza-lati > legend {
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  padding: 0 4px;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-saggezza-lato {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 0;
+  gap: 6px;
+}
+
+.wod5e-mage-saggezza-lato > small {
+  opacity: 0.75;
+}
+
+.wod5e-mage-saggezza-nota,
+.wod5e-mage-saggezza-spente,
+.wod5e-mage-saggezza-avviso {
+  display: block;
+  font-size: 0.74rem;
+  margin: 2px 0 0;
+  opacity: 0.85;
+}
+
+.wod5e-mage-saggezza-avviso {
+  color: #e2a79e;
+}
+
+.wod5e-mage-saggezza-spunta {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+  margin: 0.3rem 0 0;
+}
+
+/* La riga dell'esito sotto il tiro di Saggezza, e quella dell'Indulgere sotto il lancio. */
+.wod5e-mage-saggezza-label,
+.wod5e-mage-indulgere-label {
+  color: var(--mage-oro, #d9a827);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-right: 0.2rem;
+  text-transform: uppercase;
+}
+
+.wod5e-mage-roll-note-saggezza,
+.wod5e-mage-roll-note-indulgere {
+  font-style: normal;
+}
+
+.wod5e-mage-roll-note-saggezza.scende,
+.wod5e-mage-roll-note-indulgere.scende {
+  color: #f1dcd8;
+}
+
+.wod5e-mage-saggezza-carta .wod5e-mage-roll-note-saggezza {
+  font-size: 0.86rem;
+  margin: 0;
 }
 
 /* I conti: il meno e il più ai lati del numero, in fondo alla riga. */
@@ -8726,6 +8778,11 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-comandi.tre > .wod5e-mage-ventaglio-voce {
   --passo: 120deg;
+}
+
+/* La Saggezza (3/10): quattro comandi, uno ogni 90°. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-comandi.quattro > .wod5e-mage-ventaglio-voce {
+  --passo: 90deg;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-ruota-comandi > .wod5e-mage-ventaglio-voce > i {
@@ -15324,34 +15381,6 @@
   padding: 0;
 }
 
-/* Lo stato della Saggezza (Blue, 26/9): la casella a destra del nome, che il
-   giocatore non scrive; il carattere dei titoli, in oro; con la fila piena
-   («Segnato») vira al rosso. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-stato {
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 4px;
-  color: var(--mage-oro);
-  cursor: help;
-  flex: 0 1 auto;
-  font-family: "Modesto Condensed", serif;
-  font-size: 0.98rem;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  margin-left: 2px;
-  min-width: 0;
-  overflow: hidden;
-  padding: 3px 7px 2px;
-  text-overflow: ellipsis;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-saggezza-stato.stato-segnato {
-  border-color: var(--mage-rosso-chiaro);
-  color: var(--mage-rosso-chiaro);
-}
-
 /* La Bussola (Blue, 26/9): via lo Stato; a sinistra l'Identità e le
    Convinzioni, a destra le Ancore. Le note dell'Ancora sono un campo come
    gli altri, dello stesso colore; chiuse mostrano tre righe, la freccia le
@@ -18415,7 +18444,7 @@
    fondo a ogni colonna il totale col meno e il più, e la matita che dice
    quanto si è cambiato a mano. Poi, in una riga, l'esito (i dadi e la
    faccia che riesce), la coppia Quintessenza | Paradosso al centro (accesa
-   in oro o in rosso), Sforza la realtà e Dal Narratore; i tasti col solo
+   in oro o in rosso), Indulgi (3/10) e Dal Narratore; i tasti col solo
    nome, che spenti dicono cosa manca. Niente simboli oltre quelli dei pezzi.
    ========================================================================== */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-testa {
@@ -18924,8 +18953,8 @@
   justify-self: end;
 }
 
-/* Sforza la realtà e Dal Narratore: interruttori a pillola, a parole, accesi in oro. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza,
+/* Indulgi (3/10, al posto di Sforza la realtà) e Dal Narratore: interruttori a pillola, a parole, accesi in oro. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-indulgi,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore {
   align-items: center;
   background: transparent;
@@ -18946,13 +18975,13 @@
   width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-indulgi:hover,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore:hover {
   border-color: var(--mage-oro);
   box-shadow: none;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-sforza.acceso,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-indulgi.acceso,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore.acceso {
   background: var(--mage-riga-sorvolo);
   border-color: var(--mage-oro);

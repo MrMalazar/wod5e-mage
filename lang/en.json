@@ -1000,48 +1000,142 @@
     "Wisdom": {
       "Label": "Wisdom",
       "Status": "Status",
-      "Roll": "Roll Wisdom",
-      "VentaglioHint": "Wisdom commands: Roll, Mark, Heal, Reset, extra boxes",
-      "Tira": "Roll",
-      "MaxMeno": "One box less",
-      "MaxPiu": "One box more",
-      "MaxMenoBreve": "box",
-      "MaxPiuBreve": "box",
-      "Rolling": "Rolling Wisdom",
-      "Segnato": "Marked",
-      "SegnatoEffects": "two fewer dice on mortal rolls, mundane scenes cost, no Consensus mending, your aura shows.",
-      "Hint": "3 + the higher of Charisma and Resolve",
-      "Extra": "Extra boxes, beyond the formula",
-      "ClickHint": "Click: pick the stain, superficial or aggravated. Right click: the box clears.",
-      "States": {
-        "empty": "Empty",
-        "s": "Superficial",
-        "a": "Aggravated"
-      },
-      "Segna": "Mark stains",
-      "SegnaBreve": "Mark",
-      "SegnaHint": "How many stains you took, and which kind: superficial, or aggravated, which stays until Spirit removes it.",
-      "SegnaAmount": "How many",
-      "SegnaSign": "Which kind",
-      "SegnaOk": "Mark",
-      "SegnaDone": "Marked {amount} stains: {sign}.",
-      "SegnaConverted": "The track was full: {converted} superficial stains became aggravated.",
-      "Cura": "Heal",
-      "CuraHint": "One superficial stain goes away: you honoured a Conviction when it cost. Aggravated stains are removed by Spirit only.",
-      "CuraDone": "Heal: one superficial stain is gone.",
-      "CuraNiente": "No superficial stain to remove: aggravated stains are removed by Spirit.",
+      "Hint": "The balance between Hubris and Quiet: two markers start at the centre. One slides left with acts of Hubris, one right with acts of Quiet. At the fourth step the character is finished: Fallen, or Mad.",
+      "RiservaHint": "The Wisdom roll's pool: Resolve {resolve} + Composure {composure}. The threshold is the act's rung and removes dice; an 8 succeeds.",
+      "VentaglioHint": "Wisdom commands: Act, Shine, Anchor, Reset",
+      "Tira": "Act",
+      "Roll": "The act: the rung, the side, the covering Conviction",
+      "Rolling": "Wisdom roll",
+      "Risplende": "Shine",
+      "RisplendeHint": "The act that makes a Conviction shine: it comes back on and the marker steps back by one. The Storyteller calls it, once per session.",
+      "Ancora": "Anchor",
+      "AncoraHint": "A scene with an Anchor, once per story per Anchor: reroll Resolve + Composure minus the step, and an 8 brings the marker back by one.",
       "Reset": "Reset",
-      "ResetHint": "The track goes clean.",
-      "AttributeHint": "3 + {attribute} {value}, extra boxes {extra}. Click: choose between Charisma and Resolve.",
-      "AttributePick": "Choose the Wisdom attribute: Charisma or Resolve",
-      "StatoHint": "The Wisdom state, from the clean boxes: {clean} of {max}. Not written by hand: it moves with the stains.",
-      "Stati": {
-        "segnato": "Marked",
-        "inBilico": "On the edge",
-        "incrinato": "Cracked",
-        "saldo": "Steady",
-        "lucido": "Clear",
-        "sereno": "Serene"
+      "ResetHint": "Both markers return to the centre.",
+      "ClickHint": "Click a box: that side's marker goes there. Right-click: back to the centre. On the centre, a menu asks which marker to bring back.",
+      "Lati": {
+        "hubris": "Hubris",
+        "silenzio": "Quiet"
+      },
+      "Passi": {
+        "centro": "at the centre",
+        "passo": "step {n}",
+        "fineHubris": "Fallen",
+        "fineSilenzio": "Mad"
+      },
+      "StatoRiga": "{lato}: {passo}",
+      "Cella": {
+        "centro": "The centre: balance",
+        "passo": "{lato}, step {n}",
+        "fine": "{lato}: {nome}, the end of the character"
+      },
+      "CentroMenu": {
+        "hubris": "Bring the Hubris marker back to the centre",
+        "silenzio": "Bring the Quiet marker back to the centre",
+        "entrambi": "Bring both back to the centre"
+      },
+      "Fine": {
+        "hubris": "Fallen: the character passes to the Storyteller.",
+        "silenzio": "Mad: the character passes to the Storyteller."
+      },
+      "Convinzione": {
+        "Attiva": "Active",
+        "Spenta": "Off",
+        "AttivaHint": "Active Conviction: it covers the acts that serve it. Click: switch it off by hand.",
+        "SpentaHint": "Conviction off: you betrayed it, and it does not cover you until an act makes it shine. Click: switch it back on by hand."
+      },
+      "Atto": {
+        "Title": "The act",
+        "Hint": "The Storyteller names the rung and the side. The marker slides only if the rung is higher than the step it stands on. If an active Conviction covers the act you roll Resolve + Composure ({riserva}) minus the rung, and an 8 succeeds; with no dice there is no parry. If none covers, the marker slides.",
+        "Gradino": "Rung",
+        "Generici": "Generic acts",
+        "Lato": "The side",
+        "Copre": "The Conviction covering the act",
+        "CopreNone": "None: the marker slides",
+        "CopreHint": "The act served it, and the Storyteller agrees: roll to see whether it is enough to cover you.",
+        "Tradisce": "The act betrays a Conviction",
+        "TradisceNone": "None",
+        "TradisceHint": "It switches off, and does not cover you until it shines. No Conviction covers the betraying act.",
+        "Spente": "Off:",
+        "LatoManca": "Name the side of the act: Hubris or Quiet.",
+        "Ok": "Judge",
+        "Rolling": "Wisdom roll · {convinzione}"
+      },
+      "Tavola": {
+        "1": {
+          "hubris": "solving with a gesture what hands could solve",
+          "generico": "a small lie to someone who trusts you",
+          "silenzio": "keeping silent when a word would have been enough"
+        },
+        "2": {
+          "hubris": "bending a Sleeper's will for your own gain",
+          "generico": "stealing, cheating, breaking a given promise",
+          "silenzio": "not stepping in on a wrong you could stop at no risk"
+        },
+        "3": {
+          "hubris": "Magick that hurts someone who had nothing to do with it",
+          "generico": "hurting, threatening, ruining someone's life",
+          "silenzio": "letting someone else pay in your place"
+        },
+        "4": {
+          "hubris": "rewriting a memory, a personality, a body without consent",
+          "generico": "deliberate violence on someone who could not defend themselves",
+          "silenzio": "abandoning someone who depended on you when it counted"
+        },
+        "5": {
+          "hubris": "killing with Magick someone who could neither understand nor defend themselves",
+          "generico": "cold-blooded murder",
+          "silenzio": "letting someone die whom you could save"
+        },
+        "6": {
+          "hubris": "switching a Sleeper off for good: the coma, the mind remade",
+          "generico": "a massacre, or the death of an Anchor by your doing",
+          "silenzio": "handing over someone who trusted you, and turning away"
+        },
+        "7": {
+          "hubris": "destroying an Avatar, sacrificing an Anchor for power",
+          "generico": "killing a Cabal companion",
+          "silenzio": "disowning all you were so as not to defend it any more"
+        }
+      },
+      "Esiti": {
+        "cancello": "Act of rung {gradino}, {lato}: the gate holds, the marker stays {passo}.",
+        "scoperto": "Act of rung {gradino}, {lato}: no Conviction covers it, the marker slides: {passo}.",
+        "coperto": "“{convinzione}” covers you: the {lato} marker stays {passo}.",
+        "fallito": "“{convinzione}” is not enough: the {lato} marker slides: {passo}.",
+        "tradita": "Betrayed “{convinzione}”: it switches off."
+      },
+      "RisplendeDialog": {
+        "Title": "Shine",
+        "Hint": "You kept a Conviction when it cost you, and the Storyteller calls it: the Conviction comes back on, and the marker of the side the act contradicts steps back by one. Once per session.",
+        "Convinzione": "The shining Conviction",
+        "ConvinzioneNone": "None in particular",
+        "Lato": "The marker that steps back",
+        "UsatoHint": "Shine has already been used this session.",
+        "Concedi": "The Storyteller grants it anyway",
+        "GiaUsato": "Shine has already been used this session: the Storyteller decides.",
+        "Ok": "Shine",
+        "Riaccesa": "“{convinzione}” shines and comes back on.",
+        "Tenuta": "“{convinzione}” shines.",
+        "Tornato": "The {lato} marker steps back: {passo}.",
+        "GiaAlCentro": "The {lato} marker is already at the centre: you are in balance."
+      },
+      "AncoraDialog": {
+        "Title": "The scene with the Anchor",
+        "Hint": "A scene with an Anchor, once per story per Anchor: reroll Resolve + Composure ({riserva}) minus the step the marker stands on, and an 8 brings it back by one. In exceptional cases the Storyteller grants it without rolling.",
+        "Ancora": "The Anchor",
+        "Usata": "already used this story",
+        "Lato": "The marker to recover",
+        "Concedi": "The Storyteller grants it without rolling",
+        "Ok": "Roll",
+        "Riarma": "New story",
+        "Riarmate": "New story: the Anchors are available again.",
+        "Nessuna": "No Anchor on the sheet: write one on the Character page.",
+        "GiaUsata": "“{ancora}” has already been used this story: the Storyteller decides.",
+        "Rolling": "Wisdom roll · {ancora}",
+        "Riuscito": "The scene with {ancora}: the {lato} marker steps back, {passo}.",
+        "Fallito": "The scene with {ancora} is not enough: the {lato} marker stays where it is.",
+        "Concesso": "The scene with {ancora}, granted by the Storyteller: the {lato} marker steps back, {passo}."
       }
     },
     "MagickBalance": {
@@ -1180,9 +1274,9 @@
       "ConvictionGroupsCatalog": "From the catalogue",
       "ConvictionGroupsCredi": "From the Creeds",
       "ConvictionServe": "You serve it when",
-      "ConvictionServeHint": "The act joins the Stains parade",
+      "ConvictionServeHint": "It covers you: roll Wisdom with the act's threshold",
       "ConvictionCross": "You cross it when",
-      "ConvictionCrossHint": "It costs an Aggravated",
+      "ConvictionCrossHint": "It switches off until it shines",
       "AnchorNotes": "Notes",
       "AnchorRole": "Role",
       "AnchorJob": "Job",
@@ -1449,24 +1543,6 @@
       "Move": "Move the box",
       "Resize": "Resize the box"
     },
-    "Sforzo": {
-      "Label": "Force reality",
-      "Title": "Force reality",
-      "Button": "Force reality",
-      "Hint": "Threshold: {missing}. The spell succeeds, the Wheel gains {missing} Paradox.",
-      "HintAgain": "Threshold: {missing}. The spell succeeds, the Wheel gains {missing} Paradox, and this time it also costs one aggravated {damage}.",
-      "Ask": "Threshold: {missing}. Forcing reality, the spell succeeds and the Wheel gains {missing} Paradox, on top of what the roll already brought.",
-      "AskAgain": "This is time number {times} this session: it also costs one {damage} aggravated.",
-      "AskNote": "The Backlash of the red dice, if it struck, stays.",
-      "Yes": "Force reality",
-      "No": "Let it be",
-      "Done": "threshold {missing}, the Wheel gains {paradox} Paradox.",
-      "DoneDamage": "One {damage} aggravated marked.",
-      "DoneWasted": "The Wheel was full: {wasted} points did not enter.",
-      "DoneGiven": "The Storyteller gets {points} Paradox points.",
-      "DamagePhysical": "physical",
-      "DamageMental": "mental"
-    },
     "Bussola": {
       "Ask": "Follows the Compass?",
       "Short": "+1 die, +1 Quintessence after the roll",
@@ -1508,7 +1584,7 @@
       "Pool": "Pool",
       "Success": "Success",
       "Failure": "Failure",
-      "Forced": "Success by forcing reality",
+      "Forced": "Success by indulging",
       "Priced": "Success at a price",
       "Bought": "Success bought"
     },
@@ -1704,7 +1780,7 @@
       "LobbyEmpty": "nobody",
       "Collected": "{points} Paradox points from {name}.",
       "LogGiven": "Burn given by {name}",
-      "LogSforzo": "Reality forced by {name}",
+      "LogSforzo": "Reality forced by {name} (old rule)",
       "LogSpend": "Effect from the Sheet",
       "LogManual": "By hand",
       "LogReset": "Reset",
@@ -1965,7 +2041,6 @@
         "testimoni": "Someone saw you: red dice are rolled apart, success from 8."
       },
       "KindWarning": "Choose how you do it: Coincidental, Vulgar or Vulgar with witnesses.",
-      "SforzaNote": "Force reality: declared before the roll.",
       "PowerNote": "Power: {name}.",
       "ManualDifficultyNote": "Threshold by hand {mano}: {difficulty} (the Scopes said {computed}).",
       "AreteHint": "Arete makes it a Magick roll: the three type buttons and the prize appear.",
@@ -1987,8 +2062,6 @@
       "Difficulty": "Threshold",
       "DifficultyWarning": "Enter the threshold before rolling.",
       "QuintessenceHint": "Only with the power that says so: one die per point, up to 2 + Arete per roll. It leaves the Wheel once rolled.",
-      "Sforza": "Force reality",
-      "SforzaHint": "You declare that, on a failure, you want to flip it by paying a price: settle it with the Storyteller after the roll.",
       "Roll": "Roll",
       "RollHint": "Roll the chosen Attribute and Skill, minus the threshold; succeeds from 6.",
       "ExtraFlavor": "extra dice +{dice}",
@@ -2037,7 +2110,9 @@
       "VuotoAbilita": "Skill",
       "VuotoAmbiti": "Scopes",
       "DadiParola": "dice",
-      "DadoParola": "die"
+      "DadoParola": "die",
+      "Indulgi": "Indulge",
+      "IndulgiHint": "Declare before the cast that you indulge: the Storyteller says whether the aim is Hubris or Quiet, the spell succeeds, and afterwards you roll Wisdom (Resolve + Composure minus the threshold, an 8 succeeds)."
     },
     "Ritratti": {
       "NextHint": "Cycle the portraits: the one you see is also the image on the map and in chat",
@@ -2269,7 +2344,7 @@
         "Cross": "when you cross it",
         "GuadagniAmbizione": "The Ambition shapes the chronicle",
         "GuadagniDesiderio": "The Desire, once reached, earns Experience",
-        "GuadagniConvinzioni": "Convictions hold the Stains",
+        "GuadagniConvinzioni": "Convictions cover Wisdom acts",
         "GuadagniAncore": "Touchstones, who keeps you human",
         "ConvinzioneSenzaTesto": "empty row: write it on the Character page, or remove it"
       },
@@ -2344,10 +2419,11 @@
         "Segnati": "marked",
         "Salute": "Health = Stamina + 3",
         "Volonta": "Willpower = Composure + Resolve",
-        "Saggezza": "Wisdom = 3 + the higher of Charisma and Resolve",
+        "Saggezza": "Wisdom: both markers start at the centre; the roll is Resolve + Composure",
         "Caselle": "{n} boxes",
         "Tiro": "Every roll starts from an Attribute",
-        "TiroPiu": "+ Skill"
+        "TiroPiu": "+ Skill",
+        "Dadi": "{n} dice"
       },
       "Abilita": {
         "Pallini": "Skill dots",
@@ -2742,6 +2818,20 @@
       "Done": "Debt repaid: {amount} boxes ({sign}) unlocked, {points} Quintessence paid.",
       "Cella": "Sacrifice: locked box. It heals after the debt is repaid, or at the end of the session.",
       "CellaBloccata": "Sacrifice box: repay the debt first, with the lock next to Quintessence."
+    },
+    "Indulgere": {
+      "Label": "Indulge",
+      "Button": "Roll Wisdom",
+      "Hint": "You indulged in {lato}: the spell succeeded. Now roll Wisdom, Resolve + Composure minus the threshold ({soglia}), and an 8 succeeds. On a failure the {lato} marker slides one step.",
+      "Nel": {
+        "hubris": "Indulge in Hubris",
+        "silenzio": "Indulge in Quiet"
+      },
+      "No": "Do not indulge",
+      "Nota": "Indulges in {lato}: the spell succeeds, then rolls Wisdom.",
+      "Rolling": "Wisdom roll · Indulging in {lato}",
+      "Riuscito": "Indulging in {lato}: Wisdom holds, the marker stays.",
+      "Fallito": "Indulging in {lato}: Wisdom does not hold, the marker slides: {passo}."
     }
   }
 }

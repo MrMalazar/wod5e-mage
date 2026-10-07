@@ -86,6 +86,8 @@ export function prepareConvictions(actor) {
       // I due momenti (verdetto di Blue, 4/9 notte): quando la servi, quando la attraversi.
       serve: String(row?.serve ?? ""),
       cross: String(row?.cross ?? ""),
+      // Attiva o spenta (3/10): spenta perché tradita, non copre gli atti della Saggezza.
+      spenta: Boolean(row?.spenta),
       groups: CONVICTION_GROUPS.map((groupId) => ({
         id: groupId,
         label: localize(`WOD5E_MAGE.Personaggio.ConvictionGroups.${groupId}`),
@@ -141,7 +143,7 @@ export async function onPersonaggioRowAdd(event, target) {
 
   rows[rowId] = flagKey === PERSONAGGIO_TABLES.anchors
     ? ancoraVuota()
-    : { group: "", text: "", serve: "", cross: "" };
+    : { group: "", text: "", serve: "", cross: "", spenta: false };
 
   await actor.setFlag(MODULE_ID, flagKey, rows);
 }

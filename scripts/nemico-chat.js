@@ -8,7 +8,7 @@
  *
  * Il tiro passa da rollRamoCDirect (paradox-dice.js), come i tiri di Abilità
  * del mago: la carta è quella del modulo, i dadi hanno le sue facce, e i
- * tasti del mago (Volontà, Sforzo, Prezzo, Ustione) non compaiono perché
+ * tasti del mago (Volontà, Indulgere, Prezzo, Ustione) non compaiono perché
  * l'attore non è un Mago. Quello che serve al tasto «Applica» sta nella
  * bandiera della carta, sotto `nemico`.
  */

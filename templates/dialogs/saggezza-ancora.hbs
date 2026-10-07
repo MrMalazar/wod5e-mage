@@ -1,0 +1,27 @@
+{{!-- L'Ancora (Blue, 3/10): la scena con un'Ancora, una volta per storia per
+     ogni Ancora, fa ritirare per recuperare un passo: Fermezza + Autocontrollo
+     meno il passo dove sta il segno, un 8 riesce. Il Narratore può concedere
+     senza tirare; «Nuova storia» riarma tutte le Ancore. --}}
+<div class="wod5e-mage-saggezza-ancora">
+    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Wisdom.AncoraDialog.Hint" riserva=riserva}}</p>
+
+    <label class="wod5e-mage-item-field">
+        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Wisdom.AncoraDialog.Ancora"}}</span>
+        <select name="ancora">
+            {{#each ancore as |row|}}
+                <option value="{{row.id}}" {{#if row.usata}}{{#unless ../narratore}}disabled{{/unless}}{{/if}}>{{row.text}}{{#if row.usata}} · {{localize "WOD5E_MAGE.Wisdom.AncoraDialog.Usata"}}{{/if}}</option>
+            {{/each}}
+        </select>
+    </label>
+
+    <fieldset class="wod5e-mage-saggezza-lati">
+        <legend>{{localize "WOD5E_MAGE.Wisdom.AncoraDialog.Lato"}}</legend>
+        {{#each lati as |lato|}}
+            <label class="wod5e-mage-saggezza-lato lato-{{lato.id}}"><input type="radio" name="lato" value="{{lato.id}}" {{#if lato.fermo}}disabled{{/if}}><span>{{lato.label}}</span><small>{{lato.passo}}</small></label>
+        {{/each}}
+    </fieldset>
+
+    {{#if narratore}}
+        <label class="wod5e-mage-saggezza-spunta"><input type="checkbox" name="concesso"><span>{{localize "WOD5E_MAGE.Wisdom.AncoraDialog.Concedi"}}</span></label>
+    {{/if}}
+</div>

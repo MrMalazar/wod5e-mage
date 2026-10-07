@@ -1,14 +1,13 @@
 import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
 import { prezzoAllowed } from "./ramo-c.js";
-import { markRollOpen, ROLL_CARD_FLAG, rollActionsBox, rollOutcome } from "./roll-card.js";
-import { missingSuccesses } from "./sforzo.js";
+import { markRollOpen, missingSuccesses, ROLL_CARD_FLAG, rollActionsBox, rollOutcome } from "./roll-card.js";
 
 /**
  * La vittoria a un prezzo (ramo C, verdetto di Blue dell'11/9): il Narratore
  * la offre su un fallimento con almeno un dado tirato, e il prezzo lo
  * decide lui. Dalla 0.86.0 (Blue, 10/9 notte) è il terzo tasto sotto la
- * fascia del tiro fallito, con Ritira con Volontà e Sforzare la realtà: a
+ * fascia del tiro fallito, con Ritira con Volontà (e, dal 3/10, il Tira Saggezza dell'Indulgere): a
  * zero dadi il tasto c'è ma è spento, e dice perché.
  */
 

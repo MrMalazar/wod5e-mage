@@ -198,23 +198,17 @@ function isActiveGM() {
  * il messaggio nasce, cambia, o al suo arrivo al tavolo.
  */
 const collecting = new Set();
-/** Il nome del flag di Sforzare la realtà (lo stesso di sforzo.js, ripetuto per non importare il modulo). */
-const SFORZO_FLAG = "sforzo";
 
 /**
  * Cosa c'è da raccogliere su un messaggio: l'Ustione data al Narratore
- * (`rollCard.ustione`) e, dall'11/9, la realtà sforzata (`sforzo.given`:
- * il Narratore riceve quanto ha pagato il giocatore). Puro.
+ * (`rollCard.ustione`). La realtà sforzata non porta più niente: dal 3/10
+ * lo Sforzare è l'Indulgere, e il suo prezzo è un tiro di Saggezza. Puro.
  */
 export function pendingGifts(flags = {}) {
   const gifts = [];
   const ustione = flags?.[ROLL_CARD_FLAG]?.ustione;
   if (ustione && ustione.choice === "narratore" && !ustione.collected && count(ustione.given) > 0) {
     gifts.push({ kind: "given", points: count(ustione.given), from: ustione.actorName ?? "" });
-  }
-  const sforzo = flags?.[SFORZO_FLAG];
-  if (sforzo && !sforzo.collected && count(sforzo.given) > 0) {
-    gifts.push({ kind: "sforzo", points: count(sforzo.given), from: sforzo.actorName ?? "" });
   }
   return gifts;
 }
@@ -234,7 +228,6 @@ export async function collectGivenParadox(message) {
     for (const gift of gifts) {
       pool = addPoints(pool, gift.points, { kind: gift.kind, from: gift.from, messageId: message.id });
       if (gift.kind === "given") update[ROLL_CARD_FLAG] = { symbols: [], ...flags[ROLL_CARD_FLAG], ustione: { ...flags[ROLL_CARD_FLAG].ustione, collected: true } };
-      if (gift.kind === "sforzo") update[SFORZO_FLAG] = { ...flags[SFORZO_FLAG], collected: true };
       ui.notifications.info(game.i18n.format("WOD5E_MAGE.Paradosso.Collected", { points: gift.points, name: gift.from }));
     }
     await setPool(pool);
@@ -405,6 +398,7 @@ function logText(entry, localize) {
   const format = game.i18n.format.bind(game.i18n);
   switch (entry.kind) {
     case "given": return format("WOD5E_MAGE.Paradosso.LogGiven", { name: entry.from ?? "" });
+    // Le voci vecchie del registro (fino alla 1.38.0): la realtà sforzata non dà più punti.
     case "sforzo": return format("WOD5E_MAGE.Paradosso.LogSforzo", { name: entry.from ?? "" });
     case "spend": return entry.text ? entry.text : localize("WOD5E_MAGE.Paradosso.LogSpend");
     case "manual": return localize("WOD5E_MAGE.Paradosso.LogManual");

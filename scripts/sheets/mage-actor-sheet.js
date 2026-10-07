@@ -83,7 +83,7 @@ import {
   onTiroQuintessence,
   onTiroRoll,
   onTiroScope,
-  onTiroSforza, onTiroNarratore, onTiroCondizione,
+  onTiroIndulgi, onTiroNarratore, onTiroCondizione,
   onTiroSkill,
   onTiroSpecialty,
   onTiroSphere,
@@ -100,8 +100,8 @@ import { onRitrattoAdd, onRitrattoNext, onRitrattoRemove, prepareRitratti, RITRA
 import { altraScala, altroTema, applicaScala, applicaTema, misuraFinestra, normalizeScala, SCALA_AZIONE, SCALA_SETTING, SCALA_TASTO_CLASSE, scalaFattore, sporgeDalloSchermo, TEMA_AZIONE, TEMA_SETTING, TEMA_TASTO_CLASSE } from "../tema.js";
 import { CreazioneGuidata, onGuidataApri } from "../creazione-guidata-finestra.js";
 import { onGuidedItemCreate, onGuidedItemEdit } from "../oggetti-guidati.js";
-import { faiCadereInchiostro, getWisdom, onWisdomAttributePick, onWisdomCellChange, onWisdomCura, onWisdomReset, onWisdomResourceChange, onWisdomRoll, onWisdomSegna } from "../wisdom.js";
-import { classeRuota, posizioneRuota } from "../ventaglio.js";
+import { getWisdom, onConvinzioneToggle, onWisdomAncora, onWisdomAtto, onWisdomCellChange, onWisdomReset, onWisdomRisplende } from "../wisdom.js";
+import { classeRuota, passoRuota, posizioneRuota } from "../ventaglio.js";
 import {
   getContraccolpo,
   getSalute,
@@ -261,6 +261,8 @@ export function onVentaglioToggle(event, target) {
   const voci = source.querySelectorAll(".wod5e-mage-ventaglio-voce").length;
   const ruota = document.createElement("div");
   ruota.className = `wod5e-mage-ruota-comandi ${classeRuota(voci)}`;
+  // Il passo fra i comandi dal loro numero (3/10: la Saggezza ne ha quattro).
+  ruota.style.setProperty("--passo", `${passoRuota(voci)}deg`);
   ruota.setAttribute("role", "group");
   ruota.setAttribute("aria-label", source.getAttribute("aria-label") ?? "");
   ruota.innerHTML = source.innerHTML;
@@ -542,15 +544,15 @@ export class MageActorSheet extends MortalActorSheet {
       ventaglioChiudi: onVentaglioChiudi,
       condizioneToggle: onCondizioneToggle,
       condizioneApri: onCondizioneApri,
-      wisdomResourceChange: onWisdomResourceChange,
-      wisdomRoll: onWisdomRoll,
-      // La Saggezza come la Salute (23/9): il menù dei segni sulla casella,
-      // Segna, Cura e Reset nella ruota.
+      // La Saggezza come bilancia (3/10): il clic sulla casella porta lì il segno
+      // di quel lato, il clic destro lo riporta al centro; la ruota a quattro
+      // (Atto, Risplende, Ancora, Reset); l'interruttore delle Convinzioni.
       wisdomCellChange: { handler: onWisdomCellChange, buttons: [0, 2] },
-      wisdomSegna: onWisdomSegna,
-      wisdomCura: onWisdomCura,
+      wisdomAtto: onWisdomAtto,
+      wisdomRisplende: onWisdomRisplende,
+      wisdomAncora: onWisdomAncora,
       wisdomReset: onWisdomReset,
-      wisdomAttributePick: onWisdomAttributePick,
+      convinzioneToggle: onConvinzioneToggle,
       // Il tiro composto (16/9): i clic dei nove riquadri della prima pagina.
       tiroArete: onTiroArete,
       tiroPrize: onTiroPrize,
@@ -567,7 +569,7 @@ export class MageActorSheet extends MortalActorSheet {
       tiroQuintessence: onTiroQuintessence,
       tiroPaga: onTiroPaga,
       tiroDadi: onTiroDadi,
-      tiroSforza: onTiroSforza,
+      tiroIndulgi: onTiroIndulgi,
       // Le Condizioni sul tiro (29/9): un clic toglie o rimette quella che non c'entra.
       tiroCondizione: onTiroCondizione,
       tiroNarratore: onTiroNarratore,
@@ -825,8 +827,6 @@ export class MageActorSheet extends MortalActorSheet {
   _onRender(context, options) {
     super._onRender?.(context, options);
     chiudiRuote(this);
-    // La goccia d'inchiostro sulla casella della Saggezza appena segnata (23/9).
-    faiCadereInchiostro(this);
     // La modalità chiara (16/9) e la misura del testo (16/9 sera): la classe
     // e la scala sulla finestra, i due tasti in testata.
     applicaTema(this.element, game.settings.get(MODULE_ID, TEMA_SETTING), { localize: (key) => game.i18n.localize(key) });

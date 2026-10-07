@@ -201,10 +201,6 @@ export function ustioneAmount(threshold) {
   return count(threshold);
 }
 
-/** Il prezzo di Sforzare la realtà nel ramo C: la soglia in Paradosso. */
-export function sforzoCost(threshold) {
-  return count(threshold);
-}
 
 /** La vittoria a un prezzo nel ramo C: su ogni fallimento con almeno un dado tirato. */
 export function prezzoAllowed({ total = 0, dice = 0 } = {}) {

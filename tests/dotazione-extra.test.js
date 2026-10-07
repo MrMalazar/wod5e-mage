@@ -177,7 +177,7 @@ await onPersonaggioRowAdd.call({ actor }, { preventDefault() {} }, { dataset: { 
 assert.deepEqual(actor.lastFlag, { key: "ancore", value: { row1: { name: "", role: "", job: "", age: "", gives: "", conviction: "", unknown: "", bites: "", description: "" } } });
 actor = mageActor();
 await onPersonaggioRowAdd.call({ actor }, { preventDefault() {} }, { dataset: { table: PERSONAGGIO_TABLES.convictions } });
-assert.deepEqual(actor.lastFlag, { key: "convinzioni", value: { row1: { group: "", text: "", serve: "", cross: "" } } });
+assert.deepEqual(actor.lastFlag, { key: "convinzioni", value: { row1: { group: "", text: "", serve: "", cross: "", spenta: false } } }, "la Convinzione nasce attiva (3/10)");
 actor = mageActor({ convinzioni: { c: { group: "", text: "" } } });
 await onPersonaggioRowDelete.call({ actor }, { preventDefault() {} }, { dataset: { table: "convinzioni", row: "c" } });
 assert.deepEqual(actor.lastUpdate, { "flags.wod5e-mage.convinzioni.-=c": null });
@@ -281,12 +281,12 @@ summaryActor.getFlag = ((original) => (m, key) => key === "focus"
   : original(m, key))(summaryActor.getFlag);
 assert.equal(prepareCreationSummary(summaryActor).checks.find((check) => check.id === "instruments").ok, true);
 
-// L'inventario in un riquadro solo; lo stato della Saggezza (26/9) sta nelle
-// Risorse della prima pagina, calcolato, non nella Bussola; nome del PG e del
-// giocatore in una colonna sola.
+// L'inventario in un riquadro solo; la Saggezza (la bilancia, 3/10) sta nelle
+// Risorse della prima pagina, con lo stato dei due segni sotto le caselle, non
+// nella Bussola; nome del PG e del giocatore in una colonna sola.
 const dotazioneTemplate = readFileSync(new URL("../templates/actor/parts/dotazione.hbs", import.meta.url), "utf8");
 assert.match(dotazioneTemplate, /wod5e-mage-inventario[\s\S]*Dotazione\.Inventory[\s\S]*equipment-list\.hbs/);
-assert.match(readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8"), /<output class="wod5e-mage-saggezza-stato stato-\{\{wisdom\.stato\}\}"[^>]*>\{\{localize wisdom\.statoLabel\}\}<\/output>/);
+assert.match(readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8"), /<small class="wod5e-mage-bilancia-stato">[\s\S]*\{\{wisdom\.stato\.hubris\.riga\}\}[\s\S]*\{\{wisdom\.stato\.silenzio\.riga\}\}[\s\S]*<\/small>/);
 assert.doesNotMatch(personaggioSource(), /wisdom\.hbs/, "la Saggezza non sta più nella Bussola");
 const identitaTemplate = readFileSync(new URL("../templates/actor/parts/stat-identita.hbs", import.meta.url), "utf8");
 assert.match(identitaTemplate, /wod5e-mage-names[\s\S]*name-field[\s\S]*wod5e-mage-player-field/);

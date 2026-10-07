@@ -13,7 +13,8 @@ import { addSaluteDamage } from "./salute.js";
  * Scoppio con lui, «se un dado lo fa uscire si attiva»), poi «Ritira con
  * Volontà» costa un superficiale mentale. L'aggravato che comprava due successi è
  * cancellato (Blue, 10/9 notte). Il tasto sta nella fila dei tre sotto la
- * fascia, con Sforzare la realtà e Vittoria a un prezzo.
+ * fascia, con Tira Saggezza (l'Indulgere, dal 3/10) e Vittoria a un prezzo;
+ * sui tiri di Saggezza il tasto non compare.
  */
 
 export const VOLONTA_FLAG = "volonta";
@@ -132,7 +133,9 @@ export function decorateVolonta(message, html) {
   const actor = speakerActor(message);
   if (!isMageActor(actor) || !actor.isOwner) return false;
   const card = message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG) ?? {};
-  // Vittoria automatica, Scoppio, realtà già sforzata o vittoria a un prezzo: niente da ritirare.
+  // Vittoria automatica, Scoppio, lancio indulto o vittoria a un prezzo: niente da ritirare.
+  // E i tiri di Saggezza (3/10): l'esito è già scritto sul segno, non si ritirano.
+  if (card.saggezza) return false;
   if (card.automatic || card.burst || card.burstResult || card.forced || card.priced) return false;
 
   const { basic, advanced } = diceTerms(roll);

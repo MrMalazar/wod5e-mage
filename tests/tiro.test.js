@@ -31,7 +31,7 @@ import {
   toggleArete,
   toggleCondizioneTiro,
   togglePrize,
-  toggleSforza,
+  setIndulgi,
   toggleSphere,
   toggleTrait
 } from "../scripts/tiro.js";
@@ -128,7 +128,9 @@ assert.equal(EXTRA_DICE_CAP, 3);
 assert.equal(setExtra(vuoto, 2).extra, 2);
 assert.equal(setExtra(vuoto, 9).extra, 3, "i dadi extra si fermano a tre");
 assert.equal(setExtra(vuoto, -1).extra, 0);
-assert.equal(toggleSforza(vuoto).sforza, true);
+assert.equal(setIndulgi(vuoto, "hubris").indulgi, "hubris", "l'Indulgere (3/10): il lato dichiarato prima del lancio");
+assert.equal(setIndulgi(setIndulgi(vuoto, "silenzio"), "").indulgi, "");
+assert.equal(vuoto.indulgi, "");
 assert.equal(setKind(vuoto, "testimoni").kind, "testimoni");
 assert.equal(setKind(vuoto, "altro").kind, null);
 

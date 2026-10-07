@@ -7,6 +7,8 @@ assert.equal(passoRuota(6), 60);
 assert.equal(passoRuota(3), 120);
 assert.equal(classeRuota(6), "sei");
 assert.equal(classeRuota(3), "tre");
+assert.equal(classeRuota(4), "quattro", "la Saggezza (3/10): Atto, Risplende, Ancora, Reset");
+assert.equal(passoRuota(4), 90);
 
 // Il centro del tastino nello spazio del contenuto, senza zoom.
 const senza = posizioneRuota({ left: 300, top: 400, width: 20, height: 20 }, { left: 100, top: 50, width: 1340 }, 1340);
@@ -30,9 +32,9 @@ const salute = readFileSync(new URL("../templates/actor/parts/salute.hbs", impor
 assert.match(salute, /wod5e-mage-ventaglio-tasto" data-action="ventaglioToggle"/);
 assert.match(salute, /wod5e-mage-ventaglio wod5e-mage-ventaglio-sei[\s\S]*Salute\.DanniBreve[\s\S]*Salute\.ExtraMenoBreve[\s\S]*Salute\.ExtraPiuBreve/);
 const risorse = readFileSync(new URL("../templates/actor/parts/stat-risorse.hbs", import.meta.url), "utf8");
-// Dal 23/9 anche la Saggezza ha la ruota a sei (Tira, Segna, Cura, Reset, meno, più).
-assert.match(risorse, /wod5e-mage-riga-saggezza con-ventaglio[\s\S]*data-action="ventaglioToggle"[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-sei[\s\S]*Wisdom\.SegnaBreve[\s\S]*Wisdom\.Cura[\s\S]*Wisdom\.Reset[\s\S]*Wisdom\.MaxMenoBreve[\s\S]*Wisdom\.MaxPiuBreve/);
-assert.doesNotMatch(risorse, /wod5e-mage-ventaglio-tre/);
+// Dal 3/10 la Saggezza ha la ruota a quattro (Atto, Risplende, Ancora, Reset): la bilancia non ha più caselle da aggiungere né macchie da curare.
+assert.match(risorse, /wod5e-mage-riga-saggezza con-ventaglio[\s\S]*data-action="ventaglioToggle"[\s\S]*wod5e-mage-ventaglio wod5e-mage-ventaglio-quattro[\s\S]*Wisdom\.Tira[\s\S]*Wisdom\.Risplende[\s\S]*Wisdom\.Ancora[\s\S]*Wisdom\.Reset/);
+assert.doesNotMatch(risorse, /wod5e-mage-ventaglio-tre|wod5e-mage-ventaglio-sei|Wisdom\.Segna|Wisdom\.Cura|Wisdom\.Max/);
 // Il CSS: la sorgente nella riga non si vede mai; la ruota ha il disco di
 // fondo, i comandi da 48 px in cerchio, il tasto al centro.
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
@@ -40,6 +42,7 @@ assert.match(css, /\.wod5e-mage-ventaglio \{\s*display: none;/);
 assert.match(css, /\.wod5e-mage-ruota-comandi::before \{[^}]*border-radius: 50%;/s);
 assert.match(css, /\.wod5e-mage-ruota-comandi > \.wod5e-mage-ventaglio-voce \{[^}]*height: 48px;[^}]*transform: rotate\(var\(--angolo\)\) translate\(var\(--raggio\)\) rotate\(calc\(-1 \* var\(--angolo\)\)\);[^}]*width: 48px;/s);
 assert.match(css, /\.wod5e-mage-ruota-comandi\.tre > \.wod5e-mage-ventaglio-voce \{\s*--passo: 120deg;/);
+assert.match(css, /\.wod5e-mage-ruota-comandi\.quattro > \.wod5e-mage-ventaglio-voce \{\s*--passo: 90deg;/);
 assert.match(css, /\.wod5e-mage-ruota-chiudi \{/);
 assert.match(css, /\.window-content \{[^}]*position: relative;/s);
 

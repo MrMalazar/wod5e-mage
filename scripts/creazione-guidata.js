@@ -570,17 +570,18 @@ export function passoAttributi(actor, summary, { localize = (key) => key } = {})
   const stamina = values.stamina;
   const composure = values.composure;
   const resolve = values.resolve;
-  const charisma = values.charisma;
   return {
     gruppi,
     forma: formaAttributi(values),
     conto: { ...conto, text: `${conto.value}/${conto.target}` },
     // Le statistiche di base (LIBRO 05_100): Salute = Costituzione + 3,
-    // Volontà = Autocontrollo + Fermezza, Saggezza = 3 + il più alto fra Carisma e Fermezza.
+    // Volontà = Autocontrollo + Fermezza. La Saggezza (3/10) non ha più un
+    // numero: i due segni partono dal centro, e il suo tiro è Fermezza +
+    // Autocontrollo, la stessa somma della Volontà.
     statistiche: {
       salute: stamina + 3,
       volonta: composure + resolve,
-      saggezza: 3 + Math.max(charisma, resolve)
+      saggezza: composure + resolve
     }
   };
 }

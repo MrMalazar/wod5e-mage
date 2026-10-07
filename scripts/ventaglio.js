@@ -28,7 +28,10 @@ export function posizioneRuota(tastino, contenuto, larghezzaLayout) {
   };
 }
 
-/** Il nome della classe della ruota: sei comandi o tre. */
+/** Il nome della classe della ruota: sei comandi, tre, o quattro (la Saggezza, 3/10). */
 export function classeRuota(voci) {
-  return Number(voci) === 3 ? "tre" : "sei";
+  const n = Number(voci);
+  if (n === 3) return "tre";
+  if (n === 4) return "quattro";
+  return "sei";
 }

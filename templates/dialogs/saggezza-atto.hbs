@@ -1,0 +1,63 @@
+{{!-- L'atto (Blue, 3/10): il Narratore dice il gradino e il lato; una Convinzione
+     attiva può coprire l'atto, e allora si tira Fermezza + Autocontrollo meno il
+     gradino, un 8 riesce. Tradire una Convinzione la spegne. Niente <form>:
+     DialogV2 mette il contenuto dentro il suo. --}}
+<div class="wod5e-mage-saggezza-atto">
+    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Wisdom.Atto.Hint" riserva=riserva}}</p>
+
+    <table class="wod5e-mage-saggezza-tavola">
+        <thead>
+            <tr>
+                <th>{{localize "WOD5E_MAGE.Wisdom.Atto.Gradino"}}</th>
+                <th>{{localize "WOD5E_MAGE.Wisdom.Lati.hubris"}}</th>
+                <th>{{localize "WOD5E_MAGE.Wisdom.Atto.Generici"}}</th>
+                <th>{{localize "WOD5E_MAGE.Wisdom.Lati.silenzio"}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each tavola as |riga|}}
+                <tr>
+                    <td><label class="wod5e-mage-saggezza-gradino"><input type="radio" name="gradino" value="{{riga.gradino}}" {{#if (eq riga.gradino 1)}}checked{{/if}}><b>{{riga.gradino}}</b></label></td>
+                    <td>{{riga.hubris}}</td>
+                    <td>{{riga.generico}}</td>
+                    <td>{{riga.silenzio}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div class="wod5e-mage-saggezza-campi">
+        <fieldset class="wod5e-mage-saggezza-lati">
+            <legend>{{localize "WOD5E_MAGE.Wisdom.Atto.Lato"}}</legend>
+            {{#each lati as |lato|}}
+                <label class="wod5e-mage-saggezza-lato lato-{{lato.id}}"><input type="radio" name="lato" value="{{lato.id}}"><span>{{lato.label}}</span><small>{{lato.passo}}</small></label>
+            {{/each}}
+        </fieldset>
+
+        <label class="wod5e-mage-item-field">
+            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Wisdom.Atto.Copre"}}</span>
+            <select name="copre">
+                <option value="">{{localize "WOD5E_MAGE.Wisdom.Atto.CopreNone"}}</option>
+                {{#each attive as |row|}}
+                    <option value="{{row.id}}">{{row.text}}</option>
+                {{/each}}
+            </select>
+            <small class="wod5e-mage-saggezza-nota">{{localize "WOD5E_MAGE.Wisdom.Atto.CopreHint"}}</small>
+        </label>
+
+        <label class="wod5e-mage-item-field">
+            <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Wisdom.Atto.Tradisce"}}</span>
+            <select name="tradisce">
+                <option value="">{{localize "WOD5E_MAGE.Wisdom.Atto.TradisceNone"}}</option>
+                {{#each attive as |row|}}
+                    <option value="{{row.id}}">{{row.text}}</option>
+                {{/each}}
+            </select>
+            <small class="wod5e-mage-saggezza-nota">{{localize "WOD5E_MAGE.Wisdom.Atto.TradisceHint"}}</small>
+        </label>
+
+        {{#if spente.length}}
+            <p class="wod5e-mage-saggezza-spente">{{localize "WOD5E_MAGE.Wisdom.Atto.Spente"}} {{#each spente as |row|}}<em>{{row.text}}</em>{{#unless @last}}, {{/unless}}{{/each}}</p>
+        {{/if}}
+    </div>
+</div>

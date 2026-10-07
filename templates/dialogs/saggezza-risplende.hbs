@@ -1,0 +1,29 @@
+{{!-- Risplende (Blue, 3/10): l'atto che fa risplendere una Convinzione, chiamato
+     dal Narratore a fine scena, una volta per sessione per giocatore. La
+     Convinzione torna attiva e il segno del lato scelto torna indietro di un
+     passo; se è già al centro, riaccende e basta. --}}
+<div class="wod5e-mage-saggezza-risplende">
+    <p class="wod5e-mage-arete-hint">{{localize "WOD5E_MAGE.Wisdom.RisplendeDialog.Hint"}}</p>
+
+    <label class="wod5e-mage-item-field">
+        <span class="wod5e-mage-arete-row-label">{{localize "WOD5E_MAGE.Wisdom.RisplendeDialog.Convinzione"}}</span>
+        <select name="convinzione">
+            <option value="">{{localize "WOD5E_MAGE.Wisdom.RisplendeDialog.ConvinzioneNone"}}</option>
+            {{#each convinzioni as |row|}}
+                <option value="{{row.id}}">{{row.text}}{{#if row.spenta}} · {{localize "WOD5E_MAGE.Wisdom.Convinzione.Spenta"}}{{/if}}</option>
+            {{/each}}
+        </select>
+    </label>
+
+    <fieldset class="wod5e-mage-saggezza-lati">
+        <legend>{{localize "WOD5E_MAGE.Wisdom.RisplendeDialog.Lato"}}</legend>
+        {{#each lati as |lato|}}
+            <label class="wod5e-mage-saggezza-lato lato-{{lato.id}}"><input type="radio" name="lato" value="{{lato.id}}"><span>{{lato.label}}</span><small>{{lato.passo}}</small></label>
+        {{/each}}
+    </fieldset>
+
+    {{#if usato}}
+        <p class="wod5e-mage-saggezza-avviso">{{localize "WOD5E_MAGE.Wisdom.RisplendeDialog.UsatoHint"}}</p>
+        <label class="wod5e-mage-saggezza-spunta"><input type="checkbox" name="concesso"><span>{{localize "WOD5E_MAGE.Wisdom.RisplendeDialog.Concedi"}}</span></label>
+    {{/if}}
+</div>

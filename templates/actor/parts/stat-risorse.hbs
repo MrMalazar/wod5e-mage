@@ -1,6 +1,6 @@
 {{!-- Risorse (Blue, 20/9): un riquadro solo, a righe come le altre colonne.
-     In quest'ordine: la Salute e la Saggezza (ognuna col suo tastino che
-     apre la ruota dei sei comandi, dal 23/9 uguali), la Quintessenza e il
+     In quest'ordine: la Salute (col suo tastino che apre la ruota dei sei
+     comandi) e la Saggezza (la bilancia, dal 3/10, con la ruota a quattro), la Quintessenza e il
      Paradosso col meno e il più ai lati del numero, la Ruota da sola, e in
      fondo le Condizioni, ognuna apribile col clic sul nome. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-risorse">
@@ -9,56 +9,54 @@
         <div class="wod5e-mage-risorse-righe">
             {{> "modules/wod5e-mage/templates/actor/parts/salute.hbs"}}
 
-            {{!-- La Saggezza (Blue, 20/9; 23/9: «una possibilità equivalente alla
-                 Salute»): stessa riga della Salute. In testa la bilancia, il
-                 nome, lo stato se la fila è piena, il conto delle caselle (3 +
-                 il più alto fra Carisma e Fermezza, più le caselle in più) e il
-                 tastino col d10 che apre la ruota dei sei comandi: Tira, Segna
-                 (quante macchie e di che tipo), Cura (una macchia superficiale se
-                 ne va), Reset, e il meno e il più delle caselle. Sotto, la fila:
-                 le caselle sono d'inchiostro (la macchia superficiale è una goccia
-                 che macchia mezza casella, l'aggravata la casella tutta piena);
-                 il clic apre il menù delle macchie, il clic destro svuota. --}}
-            <div class="wod5e-mage-riga wod5e-mage-riga-risorsa wod5e-mage-riga-saggezza con-ventaglio">
+            {{!-- La Saggezza come bilancia (Blue, 3/10): nove caselle, Caduto a sinistra e
+                 Folle a destra, e due segni indipendenti che partono dal centro, uno per
+                 l'Hubris e uno per il Silenzio; al quarto passo il personaggio è finito. In
+                 testa la bilancia, il nome, la riserva del tiro (Fermezza + Autocontrollo) e
+                 il tastino che apre la ruota dei quattro comandi: Atto (gradino, lato,
+                 Convinzione), Risplende, Ancora, Reset. Il clic su una casella porta lì il
+                 segno di quel lato, il clic destro lo riporta al centro; sotto la fila, lo
+                 stato dei due segni in parole. --}}
+            <div class="wod5e-mage-riga wod5e-mage-riga-risorsa wod5e-mage-riga-saggezza con-ventaglio{{#if wisdom.fine}} finita{{/if}}">
                 <div class="wod5e-mage-riga-testa">
                     <i class="fa-solid fa-scale-balanced wod5e-mage-riga-icona" aria-hidden="true"></i>
                     <span class="wod5e-mage-riga-nome wod5e-mage-riga-nome-fermo" title="{{localize 'WOD5E_MAGE.Wisdom.Hint'}}"><span>{{localize "WOD5E_MAGE.Wisdom.Label"}}</span></span>
-                    {{!-- Lo stato (Blue, 26/9): una casella a destra del nome, calcolata dalle caselle
-                         pulite, che il giocatore non scrive; con un carattere suo. Piena, la fila ha il
-                         nome del LIBRO (04_95) e i suoi quattro effetti nel sorvolo. --}}
-                    <output class="wod5e-mage-saggezza-stato stato-{{wisdom.stato}}" title="{{localize 'WOD5E_MAGE.Wisdom.StatoHint' clean=wisdom.puliti max=wisdom.max}}{{#if wisdom.segnato}} · {{localize 'WOD5E_MAGE.Wisdom.SegnatoEffects'}}{{/if}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Status'}}">{{localize wisdom.statoLabel}}</output>
-                    {{!-- Il numero delle caselle è un tasto (23/9): sceglie fra Carisma e Fermezza. --}}
-                    <button type="button" class="wod5e-mage-riga-valore wod5e-mage-valore-tasto" data-action="wisdomAttributePick" title="{{localize 'WOD5E_MAGE.Wisdom.AttributeHint' attribute=(localize (concat 'WOD5E.AttributesList.' wisdom.attributeLabel)) value=wisdom.attributeValue extra=wisdom.extra}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.AttributePick'}}">{{wisdom.max}}</button>
+                    {{#if wisdom.fine}}
+                        <output class="wod5e-mage-saggezza-fine lato-{{wisdom.fine}}" title="{{localize (concat 'WOD5E_MAGE.Wisdom.Fine.' wisdom.fine)}}">{{wisdom.fineLabel}}</output>
+                    {{/if}}
+                    {{!-- La riserva del tiro: Fermezza + Autocontrollo, letta dagli Attributi. --}}
+                    <b class="wod5e-mage-riga-valore" title="{{localize 'WOD5E_MAGE.Wisdom.RiservaHint' resolve=wisdom.resolve composure=wisdom.composure}}">{{wisdom.riserva}}</b>
                     <div class="wod5e-mage-riga-tastini">
                         <button type="button" class="wod5e-mage-riga-tastino wod5e-mage-ventaglio-tasto" data-action="ventaglioToggle" title="{{localize 'WOD5E_MAGE.Wisdom.VentaglioHint'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.VentaglioHint'}}"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i></button>
                     </div>
                 </div>
-                <div class="wod5e-mage-saggezza-track wod5e-mage-inchiostro-fila" role="group" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Label'}}" title="{{localize 'WOD5E_MAGE.Wisdom.ClickHint'}}">
+                <div class="wod5e-mage-saggezza-track wod5e-mage-bilancia" role="group" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Label'}}" title="{{localize 'WOD5E_MAGE.Wisdom.ClickHint'}}">
                     {{#each wisdom.cells as |cell|}}
-                        <button type="button" class="wod5e-mage-inchiostro-cella" data-state="{{cell.state}}" data-action="wisdomCellChange" data-index="{{cell.index}}" aria-label="{{localize cell.label}}"></button>
+                        <button type="button" class="wod5e-mage-bilancia-cella lato-{{cell.lato}}{{#if cell.fine}} fine{{/if}}{{#if cell.hubris}} segno-hubris{{/if}}{{#if cell.silenzio}} segno-silenzio{{/if}}" data-action="wisdomCellChange" data-index="{{cell.index}}" data-lato="{{cell.lato}}" data-passo="{{cell.passo}}" title="{{cell.title}}" aria-label="{{cell.title}}">
+                            {{#if cell.fine}}<i class="fa-solid {{#if (eq cell.lato 'hubris')}}fa-skull{{else}}fa-hurricane{{/if}}" aria-hidden="true"></i>{{/if}}
+                            <span class="wod5e-mage-bilancia-segno hubris" aria-hidden="true"></span>
+                            <span class="wod5e-mage-bilancia-segno silenzio" aria-hidden="true"></span>
+                        </button>
                     {{/each}}
                 </div>
-                {{!-- La sorgente della ruota: sei comandi come la Salute; i posti
-                     (--voce): 0 sinistra il meno, 3 destra il più, 5 e 4 sopra
-                     (Tira, Segna), 1 e 2 sotto (Cura, Reset). --}}
-                <div class="wod5e-mage-ventaglio wod5e-mage-ventaglio-sei" role="group" aria-label="{{localize 'WOD5E_MAGE.Wisdom.VentaglioHint'}}">
-                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 5" data-action="wisdomRoll" title="{{localize 'WOD5E_MAGE.Wisdom.Roll'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Roll'}}">
+                <small class="wod5e-mage-bilancia-stato">
+                    <span class="lato-hubris{{#if wisdom.stato.hubris.passo}} fuori{{/if}}">{{wisdom.stato.hubris.riga}}</span>
+                    <span class="lato-silenzio{{#if wisdom.stato.silenzio.passo}} fuori{{/if}}">{{wisdom.stato.silenzio.riga}}</span>
+                </small>
+                {{!-- La sorgente della ruota: quattro comandi (--voce): 0 sinistra l'Ancora,
+                     1 sotto il Reset, 2 destra Risplende, 3 sopra l'Atto. --}}
+                <div class="wod5e-mage-ventaglio wod5e-mage-ventaglio-quattro" role="group" aria-label="{{localize 'WOD5E_MAGE.Wisdom.VentaglioHint'}}">
+                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 3" data-action="wisdomAtto" title="{{localize 'WOD5E_MAGE.Wisdom.Roll'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Roll'}}">
                         <i class="fa-solid fa-dice-d10" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.Tira"}}</span>
                     </button>
-                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 4" data-action="wisdomSegna" title="{{localize 'WOD5E_MAGE.Wisdom.SegnaHint'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Segna'}}">
-                        <i class="fa-solid fa-droplet" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.SegnaBreve"}}</span>
+                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 2" data-action="wisdomRisplende" title="{{localize 'WOD5E_MAGE.Wisdom.RisplendeHint'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Risplende'}}">
+                        <i class="fa-solid fa-sun" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.Risplende"}}</span>
                     </button>
-                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 1" data-action="wisdomCura" title="{{localize 'WOD5E_MAGE.Wisdom.CuraHint'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Cura'}}">
-                        <i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.Cura"}}</span>
+                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 0" data-action="wisdomAncora" title="{{localize 'WOD5E_MAGE.Wisdom.AncoraHint'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Ancora'}}">
+                        <i class="fa-solid fa-anchor" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.Ancora"}}</span>
                     </button>
-                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 2" data-action="wisdomReset" title="{{localize 'WOD5E_MAGE.Wisdom.ResetHint'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Reset'}}">
+                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 1" data-action="wisdomReset" title="{{localize 'WOD5E_MAGE.Wisdom.ResetHint'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.Reset'}}">
                         <i class="fa-solid fa-eraser" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.Reset"}}</span>
-                    </button>
-                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 0" data-action="wisdomResourceChange" data-resource-action="minus" title="{{localize 'WOD5E_MAGE.Wisdom.MaxMeno'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.MaxMeno'}}">
-                        <i class="fa-solid fa-minus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.MaxMenoBreve"}}</span>
-                    </button>
-                    <button type="button" class="wod5e-mage-ventaglio-voce" style="--voce: 3" data-action="wisdomResourceChange" data-resource-action="plus" title="{{localize 'WOD5E_MAGE.Wisdom.MaxPiu'}}" aria-label="{{localize 'WOD5E_MAGE.Wisdom.MaxPiu'}}">
-                        <i class="fa-solid fa-plus" aria-hidden="true"></i><span>{{localize "WOD5E_MAGE.Wisdom.MaxPiuBreve"}}</span>
                     </button>
                 </div>
             </div>

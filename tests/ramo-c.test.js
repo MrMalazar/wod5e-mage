@@ -15,7 +15,6 @@ import {
   RAMO,
   ramoCDice,
   ramoCMargin,
-  sforzoCost,
   successoParadossale,
   splitRamoCDice,
   successModifier,
@@ -29,7 +28,7 @@ import {
 } from "../scripts/ramo-c.js";
 import { getMageDieImage, getParadoxDieResult } from "../scripts/dice-faces.js";
 import { rollOutcome } from "../scripts/roll-card.js";
-import { sforzoState } from "../scripts/sforzo.js";
+import { indulgereState } from "../scripts/indulgere.js";
 import { prezzoState } from "../scripts/prezzo.js";
 import { recountCard, rerollableDice, volontaState } from "../scripts/volonta.js";
 import { datasetPool, skillRollCard } from "../scripts/mage-roll-selection.js";
@@ -138,9 +137,8 @@ assert.deepEqual(quintessenceSpend(3, 3), { spent: 3, price: 0, bought: false, d
 assert.deepEqual(quintessenceSpend(4), { spent: 4, price: 0, bought: false, dice: 4 });
 assert.deepEqual(quintessenceSpend(-1), { spent: 0, price: 0, bought: false, dice: 0 });
 
-// L'Ustione pari alla soglia senza tetto; Sforzare costa la soglia; Vittoria a un prezzo con almeno un dado.
+// L'Ustione pari alla soglia senza tetto; Vittoria a un prezzo con almeno un dado. Lo Sforzare (e il suo prezzo) non c'è più dal 3/10: è l'Indulgere.
 assert.equal(ustioneAmount(9), 9);
-assert.equal(sforzoCost(4), 4);
 assert.equal(prezzoAllowed({ total: 0, dice: 1 }), true);
 assert.equal(prezzoAllowed({ total: 0, dice: 0 }), false);
 assert.equal(prezzoAllowed({ total: 1, dice: 3 }), false);
@@ -178,12 +176,12 @@ assert.equal(rollOutcome(1, 1, (k) => k).text, "WOD5E_MAGE.RollCard.Success");
 assert.equal(rollOutcome(0, 1, (k) => k).text, "WOD5E_MAGE.RollCard.Failure");
 assert.equal(rollOutcome(1, 1, (k) => k, { bought: true }).text, "WOD5E_MAGE.RollCard.Bought");
 
-// I tasti sotto la carta nel ramo C: Sforzare paga la soglia; Vittoria a un
-// prezzo con almeno un dado; la Volontà ritira i dadi sotto l'8.
-assert.deepEqual(sforzoState({ total: 0, difficulty: 1, threshold: 4, ramo: "C" }), { show: true, missing: 4 });
-assert.deepEqual(sforzoState({ total: 1, difficulty: 1, threshold: 4, ramo: "C" }), { show: false, missing: 0 });
-assert.deepEqual(sforzoState({ total: 0, difficulty: 1, threshold: 4, ramo: "C", skill: true }), { show: false, missing: 0 }, "non sui tiri di Abilità");
-assert.deepEqual(sforzoState({ total: 0, difficulty: 1, threshold: 0, ramo: "C" }), { show: false, missing: 0 }, "senza soglia niente da pagare");
+// I tasti sotto la carta nel ramo C: Tira Saggezza sul lancio indulto (3/10),
+// con la soglia dell'incantesimo; Vittoria a un prezzo con almeno un dado;
+// la Volontà ritira i dadi sotto l'8.
+assert.deepEqual(indulgereState({ total: 0, difficulty: 1, threshold: 4, ramo: "C", indulgi: "hubris" }), { show: true, lato: "hubris", soglia: 4 });
+assert.deepEqual(indulgereState({ total: 1, difficulty: 1, threshold: 4, ramo: "C", indulgi: "silenzio" }), { show: true, lato: "silenzio", soglia: 4 }, "anche riuscito: indulgere si paga sempre");
+assert.deepEqual(indulgereState({ total: 0, difficulty: 1, threshold: 4, ramo: "C" }), { show: false, lato: "", soglia: 0 }, "senza dichiararlo prima, niente");
 assert.deepEqual(prezzoState({ total: 0, difficulty: 1, dice: 2 }), { show: true, enabled: true, missing: 1, dice: 2 });
 assert.deepEqual(prezzoState({ total: 0, difficulty: 1, dice: 0 }), { show: true, enabled: false, missing: 1, dice: 0 }, "a zero dadi il tasto c'è ma è spento");
 assert.deepEqual(prezzoState({ total: 0, difficulty: 1, dice: 2, skill: true }), { show: false, enabled: false, missing: 0 });
@@ -213,8 +211,9 @@ assert.doesNotMatch(skillCard, /RollCard\.Threshold|RollCard\.Type/, "senza sogl
 
 // La macchina: la formula cs>7, l'Ustione in attesa sulla carta, niente Ustione automatica.
 const dice = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8");
-assert.match(dice, /const advancedDifficulty = usesAdvancedDifficulty\(\{ witnesses, skill, onlyParadox \}\)/);
-assert.match(dice, /const successFrom = successThreshold\(advancedDifficulty\)/);
+// Dal 3/10 il tiro di Saggezza forza l'8 (`successFrom`); senza forzatura la regola è quella di sempre.
+assert.match(dice, /const advancedDifficulty = forcedSuccessFrom !== null \? forcedSuccessFrom === ADVANCED_SUCCESS_FROM : usesAdvancedDifficulty\(\{ witnesses, skill, onlyParadox \}\)/);
+assert.match(dice, /const successFrom = forcedSuccessFrom \?\? successThreshold\(advancedDifficulty\)/);
 assert.doesNotMatch(dice, /#inputAdvancedDifficulty/);
 // Il tiro diretto dalla scheda (16/9) passa dallo stesso esecutore della finestra.
 assert.match(dice, /export async function executeRamoCRoll\(/);
