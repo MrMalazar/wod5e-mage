@@ -270,7 +270,7 @@ assert.equal(g10.passi[10].fatto, true);
   conSpec.system.skills.occult.bonuses = [{ source: "Rituali", value: 1 }];
   const g = prepareGuidata(conSpec, { passo: 11, localize });
   const occult = g.corpo.gruppi.flatMap((gruppo) => gruppo.abilita).find((s) => s.id === "occult");
-  assert.deepEqual([occult.spec.slots, occult.spec.free, occult.spec.scritte.map((s) => s.name), occult.spec.suggestions.length], [2, 1, ["Rituali"], 6]);
+  assert.deepEqual([occult.spec.slots, occult.spec.free, occult.spec.scritte.map((s) => s.name), occult.spec.suggestions.length], [2, 1, ["Rituali"], 10]);
   const posti = g.corpo.gruppi.flatMap((gruppo) => gruppo.abilita).reduce((sum, s) => sum + s.spec.slots, 0);
   assert.deepEqual(g.corpo.specializzazioni, { scritte: 1, posti });
   assert.ok(posti >= 2);

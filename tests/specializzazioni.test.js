@@ -93,7 +93,7 @@ assert.deepEqual([0, 1, 2, 3, 4, 5, 9].map(specialtySlots), [0, 1, 1, 2, 2, 3, 3
   const riga = rigaSpecializzazioni("occult", 3, ["Rituali", "Spiriti"], { chosen: "Spiriti" });
   assert.deepEqual([riga.slots, riga.free, riga.chosen], [2, 0, "Spiriti"]);
   assert.deepEqual(riga.scritte, [{ index: 0, name: "Rituali", chosen: false }, { index: 1, name: "Spiriti", chosen: true }]);
-  assert.deepEqual(riga.suggestions, ["Cosmologia", "Esterni", "Fatati", "Licantropi", "Risvegliati", "Vampiri"]);
+  assert.deepEqual(riga.suggestions, ["Cacciatori", "Cosmologia", "Demoni", "Esterni", "Fatati", "Licantropi", "Non morti", "Occultismo", "Risvegliati", "Spiriti"]);
   assert.deepEqual([rigaSpecializzazioni("brawl", 0).slots, rigaSpecializzazioni("brawl", 0).free, rigaSpecializzazioni("brawl", 1).free, rigaSpecializzazioni("brawl", 5, ["Lame"]).free], [0, 0, 1, 2]);
   assert.deepEqual(rigaSpecializzazioni("streetwise", 2).suggestions, []);
   // Con l'Abilità scesa sotto le Specializzazioni scritte, restano tutte e i posti liberi sono zero.
@@ -113,16 +113,24 @@ assert.deepEqual([0, 1, 2, 3, 4, 5, 9].map(specialtySlots), [0, 1, 1, 2, 2, 3, 3
   assert.deepEqual(senzaSpecializzazione(actor.system.skills.occult.bonuses, "x").length, 2);
 }
 
-// Il catalogo dei suggerimenti copre tutte le chiavi vive, sei per voce (16/9), una parola l'una, senza doppioni.
+// Il catalogo dei suggerimenti copre tutte le chiavi vive, dieci per voce (12/11), senza doppioni dentro la voce;
+// ogni nome entra nella casella della scheda (30 caratteri), e i nomi di più parole sono ammessi.
 assert.deepEqual(Object.keys(SPECIALIZZAZIONI).sort(), [...CHIAVI_VIVE].sort());
-assert.equal(SPECIALIZZAZIONI_PER_VOCE, 6);
+assert.equal(SPECIALIZZAZIONI_PER_VOCE, 10);
 for (const [key, names] of Object.entries(SPECIALIZZAZIONI)) {
   assert.equal(names.length, SPECIALIZZAZIONI_PER_VOCE, `${key}: ${names.length}`);
   assert.equal(new Set(names).size, names.length, `${key}: doppioni`);
-  for (const name of names) assert.doesNotMatch(name, /\s/, `${key}: ${name}`);
+  for (const name of names) assert.ok(name.length <= 30 && name === name.trim(), `${key}: ${name}`);
 }
-// Le fette uscite il 16/9 non tornano.
-for (const morta of ["Deduzione", "Selva", "Fondo", "Lancio", "Aure", "Disarmo", "Veleni", "Raffica"]) {
+assert.ok(SPECIALIZZAZIONI.firearms.includes("Armi da fuoco leggere") && SPECIALIZZAZIONI.larceny.includes("Scassinare"));
+// Le fette uscite il 16/9 e il 12/11 non tornano.
+for (const morta of ["Deduzione", "Selva", "Fondo", "Lancio", "Aure", "Disarmo", "Veleni", "Raffica",
+  "Pedinamenti", "Dettagli", "Ascolto", "Pistole", "Fucili", "Cecchino", "Automatiche", "Archi", "Pesanti",
+  "Corsa", "Nuoto", "Scalata", "Guida", "Finanza", "Scienze", "Trattativa", "Comando", "Minaccia", "Parlantina",
+  "Seduzione", "Scasso", "Borseggio", "Falsificazione", "Rapina", "Demolizioni", "Intrusione", "Forense",
+  "Interrogatori", "Appostamenti", "Strada", "Impianti", "Elettronica", "Soccorso", "Lame", "Mazze",
+  "Improvvisate", "Difesa", "Caccia", "Orientamento", "Rovine", "Truffa", "Travestimenti", "Infiltrazione",
+  "Bluff", "Depistaggi", "Vampiri"]) {
   assert.ok(!Object.values(SPECIALIZZAZIONI).some((names) => names.includes(morta)), morta);
 }
 

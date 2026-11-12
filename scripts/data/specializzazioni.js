@@ -1,30 +1,33 @@
 /**
- * Le Specializzazioni di catalogo (canone «Le Abilità Essenziali», 11/9/2026,
- * le sei fisse del 16/9/2026): per ogni chiave viva, le sei proposte dal LIBRO,
- * tutte della stessa specie (rami di un mestiere, classi d'arma, leve). Sono
- * suggerimenti per la finestra «Aggiungi una Specializzazione», non un recinto:
- * il giocatore può scriverne una sua. Una parola l'una, come vuole il canone.
- * Difesa porta l'asterisco di Blue: le dinamiche del combattimento sono da rivalutare.
+ * Le Specializzazioni di catalogo (canone «Le Abilità Essenziali»): le dieci per
+ * chiave viva del 12/11/2026, con base l'Alpha 2.0 di Vampiri V6. Ognuna ha un
+ * argomento suo, che le altre della stessa voce non toccano. Le azioni stanno
+ * all'infinito (Scassinare, Pedinare); i campi, le cose che si usano, i sensi e
+ * le creature restano nomi (Chimica, Armi da fuoco leggere, Vista, Non morti).
+ * Sport e Design portano fra parentesi il tipo a scelta. Sono suggerimenti per
+ * la finestra «Aggiungi una Specializzazione», non un recinto: il giocatore può
+ * scriverne una sua. Bloccare eredita l'asterisco di Difesa: come si schiva si
+ * decide quando si rivedono le dinamiche del combattimento.
  */
 export const SPECIALIZZAZIONI = Object.freeze({
-  awareness: Object.freeze(["Agguati", "Pedinamenti", "Dettagli", "Ascolto", "Menzogne", "Intenzioni"]),
-  firearms: Object.freeze(["Pistole", "Fucili", "Cecchino", "Automatiche", "Archi", "Pesanti"]),
-  performance: Object.freeze(["Musica", "Scrittura", "Pittura", "Fotografia", "Scena", "Oratoria"]),
-  athletics: Object.freeze(["Corsa", "Acrobazia", "Nuoto", "Scalata", "Resistenza", "Guida"]),
-  academics: Object.freeze(["Storia", "Legge", "Finanza", "Politica", "Scienze", "Lingue"]),
-  persuasion: Object.freeze(["Trattativa", "Comando", "Minaccia", "Galateo", "Parlantina", "Seduzione"]),
-  larceny: Object.freeze(["Scasso", "Borseggio", "Falsificazione", "Rapina", "Demolizioni", "Intrusione"]),
-  investigation: Object.freeze(["Forense", "Archivi", "Interrogatori", "Appostamenti", "Strada", "Dati"]),
-  craft: Object.freeze(["Officina", "Impianti", "Carpenteria", "Elettronica", "Cucina", "Agricoltura"]),
-  medicine: Object.freeze(["Soccorso", "Chirurgia", "Diagnosi", "Farmaci", "Autopsie", "Psicologia"]),
-  brawl: Object.freeze(["Pugilato", "Lotta", "Lame", "Mazze", "Improvvisate", "Difesa"]),
-  survival: Object.freeze(["Tracce", "Caccia", "Orientamento", "Rifugi", "Animali", "Rovine"]),
-  subterfuge: Object.freeze(["Truffa", "Travestimenti", "Infiltrazione", "Bluff", "Depistaggi", "Furtività"]),
-  occult: Object.freeze(["Cosmologia", "Vampiri", "Licantropi", "Risvegliati", "Fatati", "Esterni"])
+  awareness: Object.freeze(["Empatia", "Menzogne", "Intenzioni", "Agguati", "Pericolo", "Vista", "Udito", "Olfatto", "Tatto", "Soprannaturale"]),
+  firearms: Object.freeze(["Armi da fuoco leggere", "Armi da fuoco medie", "Armi da fuoco pesanti", "Armi improvvisate", "Armi medievali", "Artiglieria", "Armi non letali", "Armi sperimentali", "Armi hi-tech", "Armi subacquee"]),
+  performance: Object.freeze(["Recitazione", "Scena", "Danza", "Musica", "Scrittura", "Oratoria", "Disegno", "Pittura", "Scultura", "Fotografia"]),
+  athletics: Object.freeze(["Correre", "Parkour", "Scalare", "Acrobazia", "Liberarsi", "Nuotare", "Sollevare", "Resistenza", "Guidare", "Sport (a scelta)"]),
+  academics: Object.freeze(["Storia", "Legge", "Politica", "Affari", "Religione", "Lingue", "Informatica", "Chimica", "Biologia", "Ingegneria"]),
+  persuasion: Object.freeze(["Galateo", "Fraternizzare", "Diplomazia", "Negoziare", "Comandare", "Sedurre", "Distrarre", "Minacciare", "Ricattare", "Corrompere"]),
+  larceny: Object.freeze(["Scassinare", "Infiltrarsi", "Allarmi", "Hackerare", "Demolire", "Manomettere", "Rapinare", "Rapire", "Occultare", "Riciclare"]),
+  investigation: Object.freeze(["Scena del crimine", "Dati", "Archivi", "Informatori", "Pettegolezzi", "Mercato nero", "Interrogare", "Appostarsi", "Intercettare", "Codici"]),
+  craft: Object.freeze(["Carpenteria", "Muratura", "Officina", "Tecnologia", "Fai da te", "Trappole", "Falsificare", "Design (a scelta)", "Cucina", "Agricoltura"]),
+  medicine: Object.freeze(["Primo soccorso", "Chirurgia", "Diagnosi", "Autopsie", "Psicologia", "Farmaci", "Tossicologia", "Medicina naturale", "Veterinaria", "Riabilitazione"]),
+  brawl: Object.freeze(["Pugilato", "Lotta", "Colpi bassi", "Armi leggere", "Armi medie", "Armi pesanti", "Armi improvvisate", "Armi naturali", "Disarmare", "Bloccare"]),
+  survival: Object.freeze(["Orientarsi", "Tracce", "Cacciare", "Pescare", "Animali", "Provviste", "Rifugi", "Intemperie", "Sottosuolo", "Nodi"]),
+  subterfuge: Object.freeze(["Furtività", "Pedinare", "Origliare", "Borseggiare", "Barare", "Travestirsi", "Imitare", "Truffare", "Bluffare", "Depistare"]),
+  occult: Object.freeze(["Occultismo", "Cosmologia", "Risvegliati", "Non morti", "Licantropi", "Fatati", "Spiriti", "Demoni", "Cacciatori", "Esterni"])
 });
 
-/** Sei per voce, come vuole il canone del 16/9. */
-export const SPECIALIZZAZIONI_PER_VOCE = 6;
+/** Dieci per voce, come vuole il canone del 12/11. */
+export const SPECIALIZZAZIONI_PER_VOCE = 10;
 
 /** I suggerimenti per una chiave, o niente. */
 export function specialtySuggestions(skillId) {

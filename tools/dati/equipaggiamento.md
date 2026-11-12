@@ -101,18 +101,18 @@ La Rarità dice quanto si trova, il Grado quanto serve per arrivarci, e le due c
 | Stimolante | Droga | +1 dado ai tiri fisici per la scena; a fine scena sei Scosso | 1 | Riservata | Grado 1 |
 | Allucinogeno | Droga | Offuscato per la scena; chi lo prende senza saperlo è anche Scosso | 1 | Riservata | Grado 1 |
 | Veleno | Droga | chi lo ingerisce è Malato per la storia, finché un medico non lo trova | 1 | Riservata | Grado 2 |
-| Grimaldelli, piede di porco | Attrezzo | di base per Criminalità (Scasso) | | Da specialista | Grado 1 |
-| Kit da scasso, grimaldello elettrico | Attrezzo | da professionista per Criminalità (Scasso) | | Da specialista | Grado 2 |
-| Fiamma ossidrica, flessibile | Attrezzo | di base per Criminalità (Demolizioni) | | Comune | Grado 1 |
-| Cariche da taglio | Attrezzo | da professionista per Criminalità (Demolizioni) | 3 | Militare | Grado 3 |
+| Grimaldelli, piede di porco | Attrezzo | di base per Criminalità (Scassinare) | | Da specialista | Grado 1 |
+| Kit da scasso, grimaldello elettrico | Attrezzo | da professionista per Criminalità (Scassinare) | | Da specialista | Grado 2 |
+| Fiamma ossidrica, flessibile | Attrezzo | di base per Criminalità (Demolire) | | Comune | Grado 1 |
+| Cariche da taglio | Attrezzo | da professionista per Criminalità (Demolire) | 3 | Militare | Grado 3 |
 | Cassetta degli attrezzi | Attrezzo | di base per Manualità (Officina) | | Comune | Grado 1 |
 | Officina mobile nel furgone | Attrezzo | da professionista per Manualità (Officina) | | Riservata | Grado 3 |
-| Kit elettronico | Attrezzo | di base per Manualità (Elettronica) | | Comune | Grado 1 |
-| Banco con saldatore e oscilloscopio | Attrezzo | da professionista per Manualità (Elettronica) | | Da specialista | Grado 2 |
+| Kit elettronico | Attrezzo | di base per Manualità (Tecnologia) | | Comune | Grado 1 |
+| Banco con saldatore e oscilloscopio | Attrezzo | da professionista per Manualità (Tecnologia) | | Da specialista | Grado 2 |
 | Portatile con gli strumenti giusti | Attrezzo | di base per Investigare (Dati) | | Comune | Grado 1 |
 | Attrezzatura da intrusione e antenne | Attrezzo | da professionista per Investigare (Dati) | | Riservata | Grado 2 |
-| Kit da campo per le analisi | Attrezzo | di base per Conoscenze (Scienze) | | Da specialista | Grado 2 |
-| Laboratorio portatile | Attrezzo | da professionista per Conoscenze (Scienze) | | Riservata | Grado 3 |
+| Kit da campo per le analisi | Attrezzo | di base per Conoscenze (Chimica) | | Da specialista | Grado 2 |
+| Laboratorio portatile | Attrezzo | da professionista per Conoscenze (Chimica) | | Riservata | Grado 3 |
 | Torcia | Sensi | vedi al buio, e ti vedono | | Comune | nessuno |
 | Binocolo | Sensi | +1 dado ad Allerta oltre La stanza | | Comune | Grado 1 |
 | Visore notturno | Sensi | al buio vedi come di giorno, senza luce | | Da specialista | Grado 2 |
@@ -121,9 +121,9 @@ La Rarità dice quanto si trova, il Grado quanto serve per arrivarci, e le due c
 | Rilevatore di Risonanza | Sensi | avverte se nella scena c'è stata Magick Volgare di recente; è ipertecnologia | | Introvabile | Grado 5 |
 | Telecamera nascosta | Sorveglianza | la scena resta registrata e diventa una prova | | Comune | Grado 1 |
 | Scanner radio | Sorveglianza | ascolti la polizia | | Comune | Grado 1 |
-| Microspia | Sorveglianza | ascolti la stanza da lontano; si piazza con Manualità e si trova con Allerta (Dettagli) | | Da specialista | Grado 2 |
+| Microspia | Sorveglianza | ascolti la stanza da lontano; si piazza con Manualità e si trova con Allerta (Vista) | | Da specialista | Grado 2 |
 | Tracciante GPS | Sorveglianza | sai dov'è il bersaglio finché lo porta | | Da specialista | Grado 2 |
-| Drone | Sorveglianza | occhi a distanza per una scena, portata La strada; si pilota con Manualità (Elettronica) | | Da specialista | Grado 2 |
+| Drone | Sorveglianza | occhi a distanza per una scena, portata La strada; si pilota con Manualità (Tecnologia) | | Da specialista | Grado 2 |
 | Telefono | Comunicazione | il gruppo diviso resta una scena sola: chi è lontano parla, avvisa, tira un sociale a distanza | | Comune | nessuno |
 | Usa e getta | Comunicazione | come il telefono, senza lasciare un nome | | Comune | nessuno |
 | Radio | Comunicazione | come il telefono, anche senza campo | | Comune | Grado 1 |
@@ -132,7 +132,7 @@ La Rarità dice quanto si trova, il Grado quanto serve per arrivarci, e le due c
 | Telefono satellitare | Comunicazione | come il telefono, ovunque | | Riservata | Grado 3 |
 | Corda e imbrago | Movimento | scalare e calarsi diventa possibile | | Comune | nessuno |
 | Moto | Movimento | porta due; +1 dado negli inseguimenti | | Comune | Grado 2 |
-| Auto | Movimento | porta cinque e le cose; negli inseguimenti tiri Atletica (Guida); 3 punti armatura a chi sta dentro | | Comune | Grado 2 |
+| Auto | Movimento | porta cinque e le cose; negli inseguimenti tiri Atletica (Guidare); 3 punti armatura a chi sta dentro | | Comune | Grado 2 |
 | Furgone | Movimento | porta otto e le cose; da fuori non si vede cosa c'è dentro | | Comune | Grado 2 |
 | Barca | Movimento | porta dove la strada non arriva | | Da specialista | Grado 3 |
 | Auto blindata | Movimento | come l'auto, con 6 punti armatura a chi sta dentro, che contro gli esplosivi non contano | | Riservata | Grado 4 |
@@ -142,9 +142,9 @@ La Rarità dice quanto si trova, il Grado quanto serve per arrivarci, e le due c
 | Manette | Contenimento | Immobilizzato a chi non può opporsi; per spezzarle, Forza + Atletica a soglia +2 | | Comune | Grado 1 |
 | Taser | Contenimento | Stordito, portata Due passi | 3 | Da specialista | Grado 2 |
 | Contanti | Documenti | paghi senza lasciare traccia; una mazzetta a un PNG comune passa senza tiro | | Comune | Grado 1 |
-| Divisa | Documenti | con Sotterfugio (Travestimenti) passi per chi la porta | | Comune | Grado 1 |
+| Divisa | Documenti | con Sotterfugio (Travestirsi) passi per chi la porta | | Comune | Grado 1 |
 | Badge, tesserino | Documenti | entri dove apre, finché nessuno lo controlla | | Riservata | Grado 1 |
-| Documenti falsi | Documenti | un controllo di routine passa senza tiro; sotto esame tiri Sotterfugio (Bluff) | | Riservata | Grado 2 |
+| Documenti falsi | Documenti | un controllo di routine passa senza tiro; sotto esame tiri Sotterfugio (Bluffare) | | Riservata | Grado 2 |
 | Identità completa | Documenti | un nome con storia e conti, che regge anche a un'indagine | | Introvabile | Grado 4 |
 | Corriere | Servizio | un oggetto che hai A casa arriva in scena entro la sessione | | Comune | Grado 1 |
 | Avvocato | Servizio | quello che ti hanno sequestrato torna, e la denuncia si ferma | | Da specialista | Grado 2 |
