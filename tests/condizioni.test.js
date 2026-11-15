@@ -95,7 +95,7 @@ const rows = prepareConditionRows([
   { id: "c", type: "feature", name: "no" }
 ]);
 assert.equal(rows.length, 3);
-assert.deepEqual([rows[0].name, rows[0].dice, rows[0].numeral, rows[0].img, rows[0].scale, rows[0].list], ["Offuscato", "−2 e 8", "II", "modules/wod5e-mage/assets/icons/condizioni/sensi.svg", "Vista", true]);
+assert.deepEqual([rows[0].name, rows[0].dice, rows[0].numeral, rows[0].img, rows[0].scale, rows[0].list], ["Offuscato", "½", "II", "modules/wod5e-mage/assets/icons/condizioni/sensi.svg", "Vista", true]);
 assert.equal(rows[0].effect, "−2 dadi e difficoltà 8 sui tiri fisici quando miri, mentali quando cerchi o leggi.");
 assert.deepEqual([rows[1].name, rows[1].dice, rows[1].what, rows[1].suppressed, rows[1].list, rows[1].img], ["Mia", "−1", "Una cosa mia", true, false, "y.svg"]);
 assert.deepEqual([rows[2].name, rows[2].dice, rows[2].numeral, rows[2].condizione], ["Rotto (braccio sinistro)", "fallisce", "III", "rotto"]);
@@ -108,7 +108,7 @@ assert.deepEqual(scelta.map((s) => s.id), ["sensi", "corpo", "mente", "soprannat
 assert.deepEqual(scelta[0].scale.map((s) => [s.label, s.voci.map((v) => `${v.numeral} ${v.name}`)]), [["Vista", ["I Abbagliato", "II Offuscato", "III Cieco"]], ["Udito", ["I Ovattato", "II Assordato", "III Sordo"]]]);
 assert.deepEqual(scelta[4].scale.map((s) => [s.label, s.voci.length]), [["Corpo", 3], ["Mente", 5]]);
 const offuscato = scelta.flatMap((s) => s.scale.flatMap((sc) => sc.voci)).find((e) => e.id === "offuscato");
-assert.deepEqual([offuscato.active, offuscato.suppressed, offuscato.dice], [true, true, "−2 e 8"]);
+assert.deepEqual([offuscato.active, offuscato.suppressed, offuscato.dice], [true, true, "½"]);
 assert.match(offuscato.title, /^Offuscato II · Vista · Vedi solo forme/);
 assert.equal(scelta.flatMap((s) => s.scale.flatMap((sc) => sc.voci)).filter((e) => e.active).length, 1);
 
@@ -154,19 +154,19 @@ assert.equal(tipoDelTiro({ skill: { id: "firearms" } }), "physical");
 assert.equal(tipoDelTiro({ skill: { id: "k1", type: "custom" } }), "");
 assert.equal(tipoDelTiro({}), "");
 
-// Le Condizioni sul tiro: quelle del suo tipo, coi pesi; si sommano, l'8 non si somma, una fa fallire.
+// Le Condizioni sul tiro (il Sistema): quelle del suo tipo, coi pesi; i dadi si sommano, il secondo grado dimezza la riserva, una fa fallire.
 {
   const items = fakeActor("T", ["offuscato", "contuso", "slogato", "ammaliato", "nervoso"]).items;
   const fisico = condizioniDelTiro(items, "physical");
-  assert.deepEqual(fisico.righe.map((r) => [r.name, r.peso, r.dadi, r.on]), [["Offuscato", "−2 e 8", -2, true], ["Contuso", "−1", -1, true], ["Slogato", "−1", -1, true]]);
-  assert.deepEqual([fisico.dadi, fisico.otto, fisico.fallisce], [-4, true, false]);
-  assert.equal(testoCondizioniDelTiro(fisico), "Offuscato −2 e 8, Contuso −1, Slogato −1");
+  assert.deepEqual(fisico.righe.map((r) => [r.name, r.peso, r.dadi, r.on]), [["Offuscato", "½", 0, true], ["Contuso", "−1", -1, true], ["Slogato", "−1", -1, true]]);
+  assert.deepEqual([fisico.dadi, fisico.dimezza, fisico.fallisce], [-2, true, false]);
+  assert.equal(testoCondizioniDelTiro(fisico), "Offuscato ½, Contuso −1, Slogato −1");
   const sociale = condizioniDelTiro(items, "social");
   assert.deepEqual(sociale.righe.map((r) => r.name), ["Nervoso"], "l'Ammaliato non toglie dadi");
   // Tolte a mano: non pesano, e si sa chi è stata tolta.
   const tolte = condizioniDelTiro(items, "physical", { offuscato: false });
-  assert.deepEqual([tolte.dadi, tolte.otto, tolte.fuori], [-2, false, ["Offuscato"]]);
-  assert.deepEqual(condizioniDelTiro(items, ""), { tipo: "", righe: [], dadi: 0, otto: false, fallisce: false, perche: [], fuori: [] });
+  assert.deepEqual([tolte.dadi, tolte.dimezza, tolte.fuori], [-2, false, ["Offuscato"]]);
+  assert.deepEqual(condizioniDelTiro(items, ""), { tipo: "", righe: [], dadi: 0, dimezza: false, fallisce: false, perche: [], fuori: [] });
   const cieco = condizioniDelTiro(fakeActor("C", ["cieco", "stordito"]).items, "mental");
   assert.deepEqual([cieco.fallisce, cieco.perche, cieco.dadi], [true, ["Cieco"], 0]);
   const spenta = condizioniDelTiro([{ ...fakeActor("S", ["sanguinante"]).items[0], system: { suppressed: true } }], "physical");
@@ -227,7 +227,7 @@ assert.equal(vociMaster([a, b]).find((e) => e.id === "offuscato").all, true);
 assert.equal(await assignCondizione([a, b], findCondizione("offuscato")), 0);
 assert.equal(a.items.length + b.items.length, 0);
 assert.equal(selectedActors([{ actor: a }, { actor: a }, { actor: b }, {}]).length, 2);
-assert.deepEqual(listCondizioni().find((e) => e.id === "offuscato"), { id: "offuscato", name: "Offuscato", family: "sensi", scale: "vista", grade: 2, weight: "otto", tipi: ["physical", "mental"], dice: "−2 e 8" });
+assert.deepEqual(listCondizioni().find((e) => e.id === "offuscato"), { id: "offuscato", name: "Offuscato", family: "sensi", scale: "vista", grade: 2, weight: "otto", tipi: ["physical", "mental"], dice: "½" });
 const masterTemplate = readFileSync(new URL("../templates/dialogs/condizioni-master.hbs", import.meta.url), "utf8");
 assert.match(masterTemplate, /data-role="targets"[\s\S]*sezione\.scale[\s\S]*data-condizione="\{\{entry\.id\}\}"[\s\S]*entry\.numeral[\s\S]*entry\.dice[\s\S]*data-role="count"/);
 const macros = readFileSync(new URL("../packs/mage-macros.db", import.meta.url), "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));

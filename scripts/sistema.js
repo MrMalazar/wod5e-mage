@@ -155,7 +155,8 @@ export function contoAmbiti(ambiti = [], arete = ARETE_MIN) {
  */
 export function sogliaMagick({ ambiti = [], arete = ARETE_MIN, premio = false, sconto = 0, aggravio = 0 } = {}) {
   const conto = contoAmbiti(ambiti, arete);
-  const tolto = premio ? stringi(arete, 0, ARETE_MAX) : 0;
+  // Il premio vale l'Areté; un numero lo dice chi lo cambia (un potere che lo raddoppia).
+  const tolto = premio === true ? stringi(arete, 0, ARETE_MAX) : (premio === false ? 0 : conta(premio));
   const sconti = Math.min(conta(sconto), BONUS_MAX);
   const aggravi = Math.min(conta(aggravio), MALUS_DIFFICOLTA_MAX);
   const soglia = conto.soglia ? stringi(conto.soglia + aggravi - tolto - sconti, SOGLIA_MIN, SOGLIA_MAGICK_MAX) : 0;
@@ -191,7 +192,7 @@ export function condizioniSulTiro(gradi = []) {
 /**
  * I dadi che si prendono in mano. La riserva è Attributo più Abilità, col
  * dado della Specializzazione quando c'entra. I bonus (circostanze, oggetti,
- * Supporto e Armonia, la Quintessenza spesa) si fermano in tutto a +3; fuori
+ * Supporto e Armonia, la Quintessenza spesa: Blue, 15/11) si fermano in tutto a +3; fuori
  * dal tetto stanno il dado della Bussola e i dadi dei Vantaggi, fino a 5. I
  * dadi in meno non hanno tetto: si tolgono tutti. La riserva dimezzata si
  * conta per ultima, per difetto.
@@ -352,4 +353,13 @@ export function cerchiaAperta(arete) {
 /** Il Sacrificio: un danno superficiale vale 1 punto di Quintessenza, un aggravato ne vale 3. */
 export function quintessenzaDelSacrificio(danno) {
   return danno === "aggravato" ? 3 : 1;
+}
+
+/**
+ * Il tiro di Saggezza (verdetto di Blue del 15/11/2026): Fermezza più
+ * Autocontrollo, tutta la riserva, e servono successi pari al gradino
+ * dell'atto, da 1 a 7 come la tavola della gravità.
+ */
+export function sogliaSaggezza(gradino) {
+  return stringi(gradino, SOGLIA_MIN, SOGLIA_ABILITA_MAX);
 }

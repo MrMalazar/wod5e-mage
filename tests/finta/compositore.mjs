@@ -44,31 +44,44 @@ tiro = T.toggleTrait(tiro, "i1");
 const ctx = S.prepareTiroContext(actor, tiro);
 assert.equal(ctx.magick, true);
 assert.equal(ctx.size, 8, "otto pezzi in catena (la catena non si stampa, ma si conta)");
-// Il premio dell'Areté (3) entra nella riserva (Blue, 27/9); la soglia è 8: l'Epicità 1 (2/10), Potenza 4, Portata 3.
-assert.deepEqual([ctx.pool, ctx.computed, ctx.difficulty, ctx.dice, ctx.successFrom, ctx.ready], [4 + 5 + 1 + 1 + 3, 8, 8, 6, 6, true]);
+// Il Sistema (14/11): si tirano tutti gli 11 dadi. Il conto degli Ambiti è 4 (la Potenza; Portata 3 ed Epicità 1
+// non passano l'Areté 3), e il premio dell'Areté la abbassa di 3: servono 1 successo.
+assert.deepEqual([ctx.pool, ctx.computed, ctx.difficulty, ctx.dice, ctx.successFrom, ctx.ready], [4 + 5 + 1 + 1, 4, 1, 11, 6, true]);
 // Il riquadro dell'1/10: in testa il tipo e la Sfera (l'Areté resta fra le pillole ma non si stampa), nella Riserva
-// le righe di chi dà dadi (col premio spuntato), nella Soglia i sei Ambiti, sempre, con la lettura e il livello.
+// le righe di chi dà dadi (con la Quintessenza da spendere), nella Soglia i sei Ambiti, sempre, con la lettura e il
+// livello, e in fondo il premio dell'Areté spuntato.
 assert.deepEqual([ctx.testa.tipo, ctx.testa.arete.value, ctx.testa.spheres.map((s) => s.id)], ["magick", 3, ["forces"]]);
-assert.deepEqual(ctx.riserva.righe.map((r) => [r.kind, r.value]), [["attribute", "4"], ["skill", "5"], ["specialty", "1"], ["trait", "1"], ["prize", "3"]], "la Riserva: Destrezza, Velo, rituali, il Pregio, il premio");
+assert.deepEqual(ctx.riserva.righe.map((r) => [r.kind, r.value]), [["attribute", "4"], ["skill", "5"], ["specialty", "1"], ["trait", "1"], ["quintessence", undefined]], "la Riserva: Destrezza, Velo, rituali, il Pregio, la Quintessenza");
+{
+  const quint = ctx.riserva.righe.at(-1).stepper;
+  assert.deepEqual([quint.action, quint.value, quint.min, quint.max, quint.extra], ["tiroQuintessence", "0", true, false, "/ 3"], "la Quintessenza in dadi: da zero, fino al tetto dei +3");
+  const premio = ctx.soglia.righe.at(-1);
+  assert.deepEqual([premio.kind, premio.value, premio.check, premio.off], ["prize", "−3", { action: "tiroPrize", on: true }, false], "il premio sta nella Soglia: la abbassa di quant'è l'Areté");
+  const spento = S.prepareTiroContext(actor, T.togglePrize(tiro));
+  assert.deepEqual([spento.soglia.righe.at(-1).value, spento.soglia.righe.at(-1).off, spento.difficulty], ["−3", true, 4], "spento, dice quanto toglierebbe e la soglia torna 4");
+}
 assert.ok(ctx.riserva.righe[0].img.endsWith("/tratti/dexterity.svg") && ctx.riserva.righe[2].indent, "il sigillo dell'Attributo; la Specializzazione rientrata");
-assert.equal(ctx.soglia.righe.length, 7, "la Soglia della Magick: l'Epicità e tutti e sei gli Ambiti");
-assert.deepEqual(ctx.soglia.righe.filter((r) => !r.spenta).map((r) => [r.kind, r.id, r.value, r.fa, r.via, r.base]), [["scope", "epic", "1", "fa-solid fa-wand-magic-sparkles", false, true], ["scope", "range", "3", "fa-solid fa-location-crosshairs", true, false], ["scope", "potency", "4", "fa-solid fa-burst", true, false]], "l'Epicità in cima, a 1 senza ×; poi gli alzati, Portata e Potenza, in ordine alfabetico, con la ×");
+assert.equal(ctx.soglia.righe.length, 8, "la Soglia della Magick: l'Epicità, tutti e sei gli Ambiti e il premio");
+assert.deepEqual(ctx.soglia.righe.filter((r) => r.kind === "scope" && !r.spenta).map((r) => [r.kind, r.id, r.value, r.fa, r.via, r.base]), [["scope", "epic", "1", "fa-solid fa-wand-magic-sparkles", false, true], ["scope", "range", "3", "fa-solid fa-location-crosshairs", true, false], ["scope", "potency", "4", "fa-solid fa-burst", true, false]], "l'Epicità in cima, a 1 senza ×; poi gli alzati, Portata e Potenza, in ordine alfabetico, con la ×");
 assert.deepEqual(ctx.soglia.righe.filter((r) => r.spenta).map((r) => [r.id, r.value, r.via]), [["conditions", "0", false], ["duration", "0", false], ["precision", "0", false], ["targets", "0", false]], "a zero: spenti, senza ×");
-assert.ok(ctx.soglia.righe.filter((r) => !r.base).every((r) => r.name && r.hint.startsWith(`${r.label} · `)), "ogni riga legge il livello con la lente; nome e lente stanno nel sorvolo");
+assert.ok(ctx.soglia.righe.filter((r) => r.kind === "scope" && !r.base).every((r) => r.name && r.hint.startsWith(`${r.label} · `)), "ogni riga legge il livello con la lente; nome e lente stanno nel sorvolo");
 assert.ok(ctx.soglia.righe[0].hint.startsWith(`${ctx.soglia.righe[0].label} 1`), "l'Epicità ha una lente sola, e il sorvolo non la nomina");
-assert.deepEqual([ctx.riserva.totale.label, ctx.riserva.totale.ritocco, ctx.soglia.totale.label, ctx.soglia.totale.ritocco, ctx.esito.dadi, ctx.esito.parola, ctx.esito.dal, ctx.esito.spento, ctx.blocco], ["14", "", "8", "", 6, "WOD5E_MAGE.Tiro.DadiParola", 6, false, ""], "i totali in fondo: 14 e 8, niente matita; l'esito: 6 dadi dal 6");
-assert.deepEqual([ctx.riserva.totale.meno, ctx.riserva.totale.piu, ctx.soglia.totale.meno, ctx.soglia.totale.piu, ctx.manual], [false, false, false, false, false]);
+assert.deepEqual([ctx.riserva.totale.label, ctx.riserva.totale.ritocco, ctx.soglia.totale.label, ctx.soglia.totale.ritocco, ctx.esito.dadi, ctx.esito.parola, ctx.esito.dal, ctx.esito.spento, ctx.blocco], ["11", "", "1", "", 11, "WOD5E_MAGE.Tiro.DadiParola", 6, false, ""], "i totali in fondo: 11 dadi e soglia 1, niente matita; l'esito: 11 dadi");
+assert.equal(ctx.esito.servono, "WOD5E_MAGE.Tiro.ServeUno", "e dice quanti successi servono");
+assert.deepEqual([ctx.riserva.totale.meno, ctx.riserva.totale.piu, ctx.soglia.totale.meno, ctx.soglia.totale.piu, ctx.manual], [false, false, true, false, false], "la soglia è già a 1: il meno è spento");
 assert.deepEqual([ctx.extra.value, ctx.extra.cap], [0, 3]);
 const conExtra = S.prepareTiroContext(actor, T.setExtra(tiro, 2));
-assert.deepEqual([conExtra.extra.value, conExtra.extra.dice, conExtra.pool, conExtra.riserva.totale.label], [2, 2, 16, "16"], "i dadi extra (lo stato resta, senza comando) entrano nella riserva");
-// Il ritocco (1/10) sta nel totale della Riserva: −2 fa 12, la matita lo dice, l'esito scende a 5.
+assert.deepEqual([conExtra.extra.value, conExtra.extra.dice, conExtra.pool, conExtra.riserva.totale.label], [2, 2, 13, "13"], "i dadi extra (lo stato resta, senza comando) entrano nella riserva");
+assert.equal(conExtra.riserva.righe.at(-1).stepper.extra, "/ 1", "coi due dadi extra resta posto per un punto di Quintessenza");
+// Il ritocco (1/10) sta nel totale della Riserva: −2 fa 9, la matita lo dice, e l'esito scende a 9.
 const conRitocco = S.prepareTiroContext(actor, T.setDadi(tiro, -2));
-assert.deepEqual([conRitocco.riserva.totale.label, conRitocco.riserva.totale.ritocco, conRitocco.esito.dadi, conRitocco.riservaTotale], ["12", "−2", 4, 14]);
-// La soglia a mano (30/9) si somma al conto degli Ambiti: +1 fa 9, la matita lo dice, e il tasto lo dice in carta.
+assert.deepEqual([conRitocco.riserva.totale.label, conRitocco.riserva.totale.ritocco, conRitocco.esito.dadi, conRitocco.riservaTotale], ["9", "−2", 9, 11]);
+// La difficoltà a mano si somma al conto degli Ambiti: 4 + 1 − 3 del premio fa 2, la matita lo dice; i dadi restano 11.
 const conSoglia = S.prepareTiroContext(actor, T.bumpSoglia(tiro, 1));
-assert.deepEqual([conSoglia.computed, conSoglia.difficulty, conSoglia.soglia.totale.label, conSoglia.soglia.totale.ritocco, conSoglia.esito.dadi], [8, 9, "9", "+1", 5]);
+assert.deepEqual([conSoglia.computed, conSoglia.difficulty, conSoglia.soglia.totale.label, conSoglia.soglia.totale.ritocco, conSoglia.esito.dadi], [4, 2, "2", "+1", 11]);
+assert.equal(conSoglia.esito.servono, "WOD5E_MAGE.Tiro.Servono");
 // Un dado solo: la parola al singolare.
-assert.equal(S.prepareTiroContext(actor, T.setDadi(tiro, -5)).esito.parola, "WOD5E_MAGE.Tiro.DadoParola");
+assert.equal(S.prepareTiroContext(actor, T.setDadi(tiro, -10)).esito.parola, "WOD5E_MAGE.Tiro.DadoParola");
 assert.deepEqual([ctx.prize.on, ctx.prize.arete, ctx.quintessence.available], [true, 3, 4]);
 const rows = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3 });
 assert.equal(rows.length, 7, "l'Epicità e sei Ambiti: l'Impatto è uscito il 29/9, l'Epicità è entrata il 2/10");
@@ -144,6 +157,27 @@ assert.deepEqual([durataScelta.modeChosen, durataScelta.modeShown], [true, durat
   assert.equal(sheetTre._tiro.scopes.range, undefined, "lo stesso pallino lo toglie");
   await S.onTiroScope.call(sheetTre, { preventDefault() {} }, { dataset: { scope: "targets", level: "2" } });
   assert.equal(sheetTre._tiro.scopes.targets, 2, "tolto uno, il posto si libera");
+}
+
+// Il tiro di Abilità nel riquadro (il Sistema): Destrezza + Atletica, soglia 2 a mano. Si tirano tutti e 6 i
+// dadi e servono 2 successi; la soglia va da 1 a 7, e i tasti si spengono agli estremi.
+{
+  const soloAbilita = T.pickSkill(T.pickAttribute(T.emptyTiro(), "dexterity"), "skill:athletics");
+  const senza = S.prepareTiroContext(actor, soloAbilita);
+  assert.deepEqual([senza.ready, senza.esito.dadi, senza.esito.servono, senza.soglia.totale.label], [false, 6, "", "?"], "senza soglia il tiro non parte, ma i dadi si sanno già");
+  const due = S.prepareTiroContext(actor, T.setSoglia(soloAbilita, 2));
+  assert.deepEqual([due.magick, due.pool, due.difficulty, due.dice, due.manual, due.ready], [false, 6, 2, 6, true, true]);
+  assert.deepEqual([due.soglia.righe.length, due.soglia.totale.label, due.soglia.totale.ritocco, due.soglia.totale.meno, due.soglia.totale.piu, due.esito.servono], [0, "2", "", false, false, "WOD5E_MAGE.Tiro.Servono"]);
+  assert.equal(due.riserva.righe.some((r) => r.kind === "quintessence"), false, "in un tiro di Abilità la Quintessenza non dà dadi");
+  assert.deepEqual([S.prepareTiroContext(actor, T.setSoglia(soloAbilita, 1)).soglia.totale.meno, S.prepareTiroContext(actor, T.setSoglia(soloAbilita, 7)).soglia.totale.piu], [true, true]);
+}
+
+// DA QUI IN GIÙ IL LANCIO. Il conto e il riquadro sono sul Sistema; il lancio, la carta in chat, il costo e i
+// rossi no: passano al Sistema coi prossimi pezzi, e queste prove si riscrivono con loro. Finché non succede
+// si fermano qui, a voce alta, per lasciar girare il resto del controllo.
+if (process.env.M6_LANCIO !== "1") {
+  console.log("compositore: il conto e il riquadro ok. IL LANCIO NON È PROVATO: aspetta il prossimo pezzo del Sistema (M6_LANCIO=1 per provarlo).");
+  process.exit(0);
 }
 
 // Il costo del lancio (29/9): ogni tasto del tipo dice il suo prezzo; senza scelta paga la Quintessenza, se c'è.

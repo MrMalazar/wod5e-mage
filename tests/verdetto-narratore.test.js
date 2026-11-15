@@ -63,7 +63,7 @@ delete globalThis.game;
 
 // La richiesta porta i numeri del conto, puliti, e va a tutti i Narratori.
 const richiesta = richiestaTiro({ id: "r1", from: "p1", to: ["gm1", "gm2"], actorId: "a1", actorName: "Ianira", title: "Destrezza + Velo", magick: true, kind: "volgare", pool: 9, difficulty: 5, successFrom: 6 });
-assert.deepEqual(richiesta, { type: TIPO_RICHIESTA, id: "r1", from: "p1", to: ["gm1", "gm2"], actorId: "a1", actorName: "Ianira", title: "Destrezza + Velo", magick: true, kind: "volgare", pool: 9, difficulty: 5, successFrom: 6, condizioni: { testo: "", fuori: [], fallisce: false, dadi: 0, successFromSenza: 6 } });
+assert.deepEqual(richiesta, { type: TIPO_RICHIESTA, id: "r1", from: "p1", to: ["gm1", "gm2"], actorId: "a1", actorName: "Ianira", title: "Destrezza + Velo", magick: true, kind: "volgare", pool: 9, difficulty: 5, successFrom: 6, condizioni: { testo: "", fuori: [], fallisce: false, dadi: 0, dadiSenza: 9 } });
 assert.deepEqual([richiestaTiro({ pool: -3, difficulty: "x" }).pool, richiestaTiro({ pool: -3, difficulty: "x" }).difficulty, richiestaTiro({}).successFrom, richiestaTiro({ to: "gm" }).to], [0, 0, 6, ["gm"]]);
 
 // Il verdetto: com'era, o ritoccato; torna a chi ha chiesto, e dice quale Narratore ha risposto.
@@ -77,20 +77,23 @@ assert.deepEqual([verdetto.difficulty, verdetto.dice, verdetto.touched], [7, -1,
 assert.equal(verdettoTiro(richiesta, { difficulty: "", dice: "" }).touched, false);
 assert.equal(verdettoTiro(richiesta, { difficulty: 5, dice: 2 }).touched, true);
 
-// I dadi che si tirano: riserva più i dadi del Narratore meno la Difficoltà, mai sotto zero.
-assert.equal(dadiVerdetto({ pool: 9, difficulty: 5 }), 4);
-assert.equal(dadiVerdetto({ pool: 9, difficulty: 5, dice: 2 }), 6);
-assert.equal(dadiVerdetto({ pool: 3, difficulty: 5, dice: 1 }), 0);
+// I dadi che si tirano (il Sistema): tutta la riserva più i dadi del Narratore, mai sotto zero; la soglia non ne toglie.
+assert.equal(dadiVerdetto({ pool: 9, difficulty: 5 }), 9);
+assert.equal(dadiVerdetto({ pool: 9, difficulty: 5, dice: 2 }), 11);
+assert.equal(dadiVerdetto({ pool: 3, difficulty: 5, dice: -5 }), 0);
 
 // Il conto col verdetto sopra: senza ritocchi resta lo stesso oggetto.
-const conto = { pool: 9, difficulty: 5, dice: 4, impossible: false, successFrom: 6 };
+const conto = { pool: 9, difficulty: 5, dice: 9, impossible: false, successFrom: 6 };
 assert.equal(applicaVerdetto(conto, null), conto);
 assert.equal(applicaVerdetto(conto, verdettoTiro(richiesta, {})), conto);
 const ritoccato = applicaVerdetto(conto, verdettoTiro(richiesta, { difficulty: 7, dice: -1 }));
-assert.deepEqual([ritoccato.pool, ritoccato.difficulty, ritoccato.dice, ritoccato.impossible, ritoccato.successFrom], [8, 7, 1, false, 6]);
+assert.deepEqual([ritoccato.pool, ritoccato.difficulty, ritoccato.dice, ritoccato.impossible, ritoccato.successFrom], [8, 7, 8, false, 6]);
 assert.deepEqual(ritoccato.narratore, { difficultyBefore: 5, difficulty: 7, dice: -1, name: "" });
 assert.equal(applicaVerdetto(conto, verdettoTiro(richiesta, { dice: 1 }, { from: "gm2", fromName: "Blue" })).narratore.name, "Blue");
-assert.equal(applicaVerdetto(conto, verdettoTiro(richiesta, { difficulty: 12 })).impossible, true);
+// Una soglia alta non toglie dadi: il tiro resta possibile. Senza dadi no; e la soglia del Narratore non scende sotto 1.
+assert.equal(applicaVerdetto(conto, verdettoTiro(richiesta, { difficulty: 12 })).impossible, false);
+assert.equal(applicaVerdetto(conto, verdettoTiro(richiesta, { dice: -9 })).impossible, true);
+assert.equal(applicaVerdetto(conto, verdettoTiro(richiesta, { difficulty: 0 })).difficulty, 1);
 
 // La nota in carta dice cosa ha toccato.
 const format = (key, data) => `${key.split(".").at(-1)}(${Object.values(data).join(",")})`;
@@ -108,7 +111,7 @@ assert.equal(secondiRimasti(1000, 99000), 0);
 
 // Il contesto della finestra.
 const ctx = contestoVerdetto(richiesta, (key) => key.split(".").at(-1), format);
-assert.deepEqual(ctx, { altri: 1, altriTesto: "Altri(1)", actorName: "Ianira", title: "Destrezza + Velo", kindLabel: "KindMagick · volgare", pool: 9, difficulty: 5, dice: 4, successFrom: 6, condizioni: null, fuori: "", seconds: 5 });
+assert.deepEqual(ctx, { altri: 1, altriTesto: "Altri(1)", actorName: "Ianira", title: "Destrezza + Velo", kindLabel: "KindMagick · volgare", pool: 9, difficulty: 5, dice: 9, successFrom: 6, condizioni: null, fuori: "", seconds: 5 });
 assert.deepEqual([contestoVerdetto(richiestaTiro({ magick: false }), (key) => key).kindLabel, contestoVerdetto(richiestaTiro({ to: "gm" })).altriTesto], ["WOD5E_MAGE.Tiro.KindSkill", ""]);
 
 // La finestra: il meno e il più, i dadi ricalcolati, il conto che allo scadere preme OK.
@@ -131,14 +134,14 @@ function finestra(richiesta) {
   let ticker = null;
   let submitted = 0;
   const ferma = cablaVerdetto(f.root, richiesta, () => { submitted += 1; }, { now: () => now, tick: (fn) => { ticker = fn; return 1; }, stop: () => { ticker = null; } });
-  assert.equal(f.dadi.textContent, "4");
+  assert.equal(f.dadi.textContent, "9", "si tira tutta la riserva");
   f.click("difficulty", 1); f.click("difficulty", 1);
-  assert.deepEqual([f.inputs.difficulty.value, f.dadi.textContent], ["7", "2"]);
+  assert.deepEqual([f.inputs.difficulty.value, f.dadi.textContent], ["7", "9"], "la soglia sale e i dadi restano gli stessi");
   f.click("dice", -1);
-  assert.deepEqual([f.inputs.dice.value, f.dadi.textContent], ["-1", "1"]);
+  assert.deepEqual([f.inputs.dice.value, f.dadi.textContent], ["-1", "8"]);
   f.click("difficulty", -20);
-  assert.equal(f.inputs.difficulty.value, "0", "la Difficoltà non va sotto zero");
-  assert.deepEqual(leggiVerdetto(f.root), { difficulty: "0", dice: "-1", senzaCondizioni: false });
+  assert.equal(f.inputs.difficulty.value, "1", "la soglia non va sotto 1");
+  assert.deepEqual(leggiVerdetto(f.root), { difficulty: "1", dice: "-1", senzaCondizioni: false });
   now = 4000; ticker();
   assert.deepEqual([f.secondi.textContent, submitted], ["2", 0]);
   now = 6000; ticker();
@@ -250,7 +253,7 @@ assert.match(hbs, /data-campo="difficulty" data-delta="-1"[\s\S]*data-campo="dic
 assert.match(hbs, /\{\{#if altriTesto\}\}/, "la finestra dice quanti altri Narratori la vedono");
 // Il lancio chiede il verdetto dopo il conto e prima di tirare, e mette la nota in carta.
 const scheda = readFileSync(new URL("../scripts/tiro-scheda.js", import.meta.url), "utf8");
-assert.match(scheda, /const verdetto = await chiediVerdetto\(\{ actor, title: rollLabel, magick, kind: tiro\.kind \?\? "", conto, condizioni: \{ testo: condizioniTesto, fuori: inputs\.condizioni\.fuori, fallisce: conto\.fallisce, dadi: conto\.condizioni\.dadi, successFromSenza: conto\.condizioni\.successFromSenza \} \}\);\n\s+conto = applicaVerdetto\(conto, verdetto\);/);
+assert.match(scheda, /const verdetto = await chiediVerdetto\(\{ actor, title: rollLabel, magick, kind: tiro\.kind \?\? "", conto, condizioni: \{ testo: condizioniTesto, fuori: inputs\.condizioni\.fuori, fallisce: conto\.fallisce, dadi: conto\.condizioni\.dadi, dadiSenza: conto\.condizioni\.dadiSenza \} \}\);\n\s+conto = applicaVerdetto\(conto, verdetto\);/);
 assert.match(scheda, /if \(tiroInAttesa\(actor\.id\)\)/);
 assert.match(scheda, /notaVerdetto\(conto, format\)/);
 const mainSource = readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8");
@@ -270,27 +273,29 @@ assert.match(scheda, /const blocco = !haTratto \? localize\("WOD5E_MAGE\.Tiro\.M
 assert.match(scheda, /ready: !blocco,\n\s+blocco,\n\s+needsDifficulty: haTratto && !sogliaSet/);
 assert.match(scheda, /if \(!conto\.difficultySet\) \{\n\s+ui\.notifications\.warn\(localize\("WOD5E_MAGE\.Tiro\.DifficultyWarning"\)\);/);
 
-// Le Condizioni sul tiro (29/9): la richiesta le porta in una riga, coi dadi che tolgono, l'8 e il
-// fallimento; il Narratore può dire che su questo tiro non contano, e tornano dadi e riuscita.
+// Le Condizioni sul tiro (il Sistema): la richiesta le porta in una riga, coi dadi che tolgono, la riserva
+// dimezzata e il fallimento; il Narratore può dire che su questo tiro non contano, e torna la riserva intera.
 {
-  const conCond = richiestaTiro({ id: "r2", from: "p1", to: ["gm1"], pool: 6, difficulty: 2, successFrom: 8, condizioni: { testo: "Offuscato −2 e 8, Contuso −1", fuori: ["Slogato"], fallisce: false, dadi: -3, successFromSenza: 6 } });
-  assert.deepEqual(conCond.condizioni, { testo: "Offuscato −2 e 8, Contuso −1", fuori: ["Slogato"], fallisce: false, dadi: -3, successFromSenza: 6 });
+  // Sei dadi: uno in meno per il Contuso, poi la metà per l'Offuscato: se ne tirano due.
+  const conCond = richiestaTiro({ id: "r2", from: "p1", to: ["gm1"], pool: 2, difficulty: 2, successFrom: 6, condizioni: { testo: "Offuscato ½, Contuso −1", fuori: ["Slogato"], fallisce: false, dadi: -1, dadiSenza: 6 } });
+  assert.deepEqual(conCond.condizioni, { testo: "Offuscato ½, Contuso −1", fuori: ["Slogato"], fallisce: false, dadi: -1, dadiSenza: 6 });
   const cx = contestoVerdetto(conCond, (key) => key.split(".").at(-1), format);
-  assert.deepEqual([cx.condizioni, cx.fuori, cx.dice, cx.successFrom], [{ testo: "Offuscato −2 e 8, Contuso −1", fallisce: false }, "CondizioniFuori(Slogato)", 4, 8]);
+  assert.deepEqual([cx.condizioni, cx.fuori, cx.dice, cx.successFrom], [{ testo: "Offuscato ½, Contuso −1", fallisce: false }, "CondizioniFuori(Slogato)", 2, 6]);
   const v = verdettoTiro(conCond, { senzaCondizioni: true });
   assert.deepEqual([v.senzaCondizioni, v.touched], [true, true]);
-  const contoCond = { pool: 6, difficulty: 2, dice: 4, impossible: false, successFrom: 8, fallisce: false, condizioni: { dadi: -3, otto: true, fallisce: false, perche: [], successFromSenza: 6 } };
+  const contoCond = { pool: 2, difficulty: 2, dice: 2, impossible: false, successFrom: 6, fallisce: false, condizioni: { dadi: -1, dimezza: true, fallisce: false, perche: [], dadiSenza: 6 } };
   const via = applicaVerdetto(contoCond, v);
-  assert.deepEqual([via.pool, via.dice, via.successFrom, via.fallisce, via.condizioniVia], [9, 7, 6, false, true], "tornano i tre dadi e la riuscita dal 6");
+  assert.deepEqual([via.pool, via.dice, via.successFrom, via.fallisce, via.condizioniVia], [6, 6, 6, false, true], "torna la riserva intera: sei dadi");
+  assert.equal(applicaVerdetto(contoCond, verdettoTiro(conCond, { senzaCondizioni: true, dice: 1 })).dice, 7, "e i dadi del Narratore si sommano dopo");
   assert.equal(notaVerdetto(via, format), "Note(NoteCondizioni())");
   // Un tiro che fallisce per una Condizione resta a zero dadi se il Narratore ritocca solo i numeri.
-  const cieco = { pool: 6, difficulty: 2, dice: 0, impossible: true, successFrom: 6, fallisce: true, condizioni: { dadi: 0, otto: false, fallisce: true, perche: ["Cieco"], successFromSenza: 6 } };
+  const cieco = { pool: 6, difficulty: 2, dice: 0, impossible: true, successFrom: 6, fallisce: true, condizioni: { dadi: 0, dimezza: false, fallisce: true, perche: ["Cieco"], dadiSenza: 6 } };
   const richiestaCieco = richiestaTiro({ pool: 6, difficulty: 2, condizioni: { testo: "Cieco fallisce", fallisce: true } });
   assert.equal(contestoVerdetto(richiestaCieco, (key) => key, format).dice, 0);
   assert.deepEqual([applicaVerdetto(cieco, verdettoTiro(richiestaCieco, { dice: 2 })).dice, applicaVerdetto(cieco, verdettoTiro(richiestaCieco, { dice: 2 })).fallisce], [0, true]);
   const liberato = applicaVerdetto(cieco, verdettoTiro(richiestaCieco, { senzaCondizioni: true }));
-  assert.deepEqual([liberato.dice, liberato.fallisce, liberato.impossible], [4, false, false], "il Narratore dice che la cecità non c'entra: si tira");
-  // La finestra: la casella rimette i dadi tolti e la riuscita di prima.
+  assert.deepEqual([liberato.dice, liberato.fallisce, liberato.impossible], [6, false, false], "il Narratore dice che la cecità non c'entra: si tira");
+  // La finestra: la casella rimette la riserva intera; un dado riesce sempre dal 6.
   const inputs = { difficulty: { value: "2" }, dice: { value: "0" }, senza: { checked: false } };
   const dadi = { textContent: "" };
   const riuscita = { textContent: "" };
@@ -301,10 +306,10 @@ assert.match(scheda, /if \(!conto\.difficultySet\) \{\n\s+ui\.notifications\.war
     addEventListener: (type, fn) => { listeners[type] = fn; }
   };
   cablaVerdetto(root, conCond, () => {}, { now: () => 0, tick: () => 1, stop: () => {} });
-  assert.deepEqual([dadi.textContent, riuscita.textContent], ["4", "8"]);
+  assert.deepEqual([dadi.textContent, riuscita.textContent], ["2", "6"]);
   inputs.senza.checked = true;
   listeners.change();
-  assert.deepEqual([dadi.textContent, riuscita.textContent], ["7", "6"]);
+  assert.deepEqual([dadi.textContent, riuscita.textContent], ["6", "6"]);
   assert.equal(leggiVerdetto(root).senzaCondizioni, true);
 }
 

@@ -6,62 +6,65 @@
  * conto e tira. Qui stanno lo stato e il conto, puri: la scheda li disegna
  * (tiro-scheda.js) e il lancio passa da paradox-dice.js.
  *
- * Le regole del conto:
- * - la soglia è la SOMMA dei livelli degli Ambiti dichiarati (Potenza 4 e
- *   Portata 3 fanno 7); ogni livello vale il suo numero, lo 0 è gratis
- *   (la tavola del 23/9); le Sfere non contano;
- * - l'Areté si sottrae alla soglia, fino a zero, quando la narrazione lo
- *   merita e il Narratore dà l'ok: la casella del premio resta, accesa
- *   quando si clicca l'Areté, e si spegne se il Narratore dice di no;
- * - la difficoltà la fa il tipo di tiro: Accidentale e Volgare riescono
- *   col 6, Volgare con testimoni con l'8; i tiri di Abilità col 6;
- * - la Quintessenza non dà più dadi (Blue, 29/9): paga il costo del lancio
- *   (1 Quintessenza, oppure il Paradosso del tipo: Accidentale 1, Volgare 2,
- *   con testimoni 3; ramo-c.js, costoLancio) e gli attivi dei poteri; i dadi
- *   li danno i poteri, e Anche a mani nude la fa ancora spendere in dadi nei
- *   tiri di Abilità, col tetto 2 + Areté;
- * - i dadi extra (l'Armonia, i dadi dati al tavolo) entrano fino a +3;
- *   i Tratti scelti entrano per intero;
+ * Le regole del conto sono quelle del Sistema (14/11/2026; sistema.js):
+ * - si tira TUTTA la riserva: Attributo più Abilità, il dado della
+ *   Specializzazione, i bonus e i malus; la soglia non toglie più dadi, è
+ *   il numero di successi che servono;
+ * - i bonus stanno dentro un tetto di +3 dadi: l'Armonia, i dadi dati al
+ *   tavolo e la Quintessenza spesa nei lanci (un dado per punto; Blue,
+ *   15/11: dentro il tetto). Fuori dal tetto il dado della Bussola e i dadi
+ *   dei Vantaggi, fino a 5;
+ * - nei tiri di Abilità la soglia la dice il Narratore, da 1 a 7, e si
+ *   scrive a mano: senza, il tiro non parte (Blue, 16/9 sera);
+ * - nella Magick la soglia è il conto degli Ambiti: il più alto, Epicità
+ *   compresa, più 1 per ogni altro Ambito sopra il livello dell'Areté, e
+ *   si ferma a 10; la soglia a mano è la difficoltà che il Narratore alza o
+ *   abbassa, entro ±3;
+ * - il premio dell'Areté abbassa la soglia di quant'è l'Areté, quando la
+ *   narrazione lo merita e il Narratore dà l'ok: la casella resta, accesa
+ *   quando si clicca l'Areté; la soglia di un lancio non scende sotto 1;
+ * - un dado riesce sempre dal 6: il dado che riusciva dall'8 è uscito dal
+ *   gioco, coi testimoni e con le Condizioni;
  * - un potere solo per lancio: i suoi effetti li applica poteri.js, e il
- *   potere porta con sé la sua Sfera; un potere che vale nei tiri di
- *   Abilità (tappa 3, 24/9) entra senza accendere l'Areté e resta in
- *   catena quando l'Areté si spegne;
+ *   potere porta con sé la sua Sfera. Finché il catalogo non passa al
+ *   Sistema, la soglia che un potere spostava si gira in dadi (uno sconto
+ *   di 2 sono 2 dadi in più), e la riuscita dall'8 che dava non c'è più;
  * - un incantesimo del Grimorio entra tutto insieme (Blue, 16/9 sera):
  *   Areté, Sfere, Ambiti, Attributo, Abilità, premio e tipo com'erano
- *   scritti; poi si tira coi tre tasti;
- * - la soglia a mano (30/9, il riquadro rifatto sul mock) è un addendo:
- *   quanto il Narratore alza o abbassa la soglia sopra il conto degli
- *   Ambiti; in un tiro di Abilità, che non ha Ambiti, è la soglia intera;
- * - senza soglia (a mano, o dagli Ambiti nella Magick) il tiro non parte
- *   (Blue, 16/9 sera);
- * - le Condizioni (la regola di base del 29/9): quelle accese che pesano
- *   sul tipo del tiro tolgono i loro dadi sul totale (−2 ai gradi 1 e 2,
- *   −1 ai lievi), il grado 2 porta la riuscita all'8, il grado 3 fa
- *   fallire il tiro; ognuna si toglie con un clic quando non c'entra.
+ *   scritti;
+ * - le Condizioni che pesano sul tipo del tiro: al primo grado tolgono 2
+ *   dadi (1 le lievi), al secondo dimezzano la riserva, per difetto e per
+ *   ultima, al terzo il tiro fallisce; ognuna si toglie con un clic quando
+ *   non c'entra.
  */
-import { calculateAretePrize, calculateMagickThreshold, capBonusDice, SKILL_SPECIALTY_DICE, THRESHOLD_CAP } from "./arete.js";
+import { calculateAretePrize, capBonusDice, SKILL_SPECIALTY_DICE, THRESHOLD_CAP } from "./arete.js";
 import { BUSSOLA_DICE } from "./bussola.js";
 import { applyPotere, riuscitaSenzaTirare, spezzaIdPotere } from "./poteri.js";
-import { PAGAMENTI, ramoCDice, successThreshold, usesAdvancedDifficulty } from "./ramo-c.js";
+import { PAGAMENTI } from "./ramo-c.js";
 import { ambitiDelLancio, normalizeScopeLevels, SCOPE_ALIASES } from "./scopes.js";
+import {
+  BONUS_MAX,
+  contoAmbiti,
+  MALUS_DIFFICOLTA_MAX,
+  RIUSCITA_DA,
+  SOGLIA_ABILITA_MAX,
+  SOGLIA_MAGICK_MAX,
+  SOGLIA_MIN,
+  sogliaMagick,
+  VANTAGGI_MAX
+} from "./sistema.js";
 
 /** I tre tasti del tiro di Magick, nell'ordine della scheda. */
 export const TIRO_KINDS = Object.freeze(["accidentale", "volgare", "testimoni"]);
 
-/** La Quintessenza in dadi, solo coi poteri che lo dicono (Anche a mani nude): fino a 2 + Areté (raccolta del 14/9). */
-export const QUINTESSENCE_BASE_CAP = 2;
-
-/** I dadi extra per lancio: l'Armonia e i dadi dati al tavolo, fino a +3 (il tetto del tronco). */
-export const EXTRA_DICE_CAP = 3;
+/** I dadi extra per lancio: l'Armonia e i dadi dati al tavolo. Stanno nel tetto dei +3, con la Quintessenza. */
+export const EXTRA_DICE_CAP = BONUS_MAX;
 
 /** Il ritocco dei Dadi (23/9): dadi in più o in meno sul totale, fuori dalla riserva e dal tetto, entro ±10. */
 export const DADI_ADJUST_CAP = 10;
 
-/** La soglia a mano (30/9): quanto si alza o si abbassa sopra il conto degli Ambiti, entro ±20. */
-export const SOGLIA_MANO_CAP = 20;
-
-/** Il grado 2 di una Condizione (29/9): la riuscita dall'8. */
-export const CONDIZIONE_OTTO = 8;
+/** La soglia a mano nella Magick: la difficoltà che il Narratore alza o abbassa sopra il conto degli Ambiti, entro ±3. */
+export const SOGLIA_MANO_CAP = MALUS_DIFFICOLTA_MAX;
 
 /** Lo stato vuoto: niente cliccato, niente scritto a mano. */
 export function emptyTiro() {
@@ -315,9 +318,10 @@ export function hasSoglia(tiro) {
 }
 
 /**
- * La soglia a mano (30/9): un addendo sopra il conto degli Ambiti, in più o
- * in meno, entro ±20; null la toglie. In un tiro di Abilità non c'è conto
- * sotto, quindi è la soglia intera e non scende sotto zero.
+ * La soglia a mano; null la toglie. In un tiro di Abilità è la soglia
+ * intera, quella che dice il Narratore: da 1 a 7, mai sotto e mai sopra.
+ * Nella Magick è la difficoltà in più o in meno sopra il conto degli
+ * Ambiti, entro ±3.
  */
 export function setSoglia(tiro, value) {
   const next = clone(tiro);
@@ -325,8 +329,10 @@ export function setSoglia(tiro, value) {
     next.soglia = null;
     return next;
   }
-  const wanted = Math.max(Math.min(Math.trunc(Number(value) || 0), SOGLIA_MANO_CAP), -SOGLIA_MANO_CAP);
-  next.soglia = isMagick(next) ? wanted : Math.max(wanted, 0);
+  const wanted = Math.trunc(Number(value) || 0);
+  next.soglia = isMagick(next)
+    ? Math.max(Math.min(wanted, SOGLIA_MANO_CAP), -SOGLIA_MANO_CAP)
+    : Math.max(Math.min(wanted, SOGLIA_ABILITA_MAX), SOGLIA_MIN);
   return next;
 }
 
@@ -477,10 +483,13 @@ export function pillsOf(tiro, names = {}) {
   return pills;
 }
 
-/** La Quintessenza che entra davvero: quanta se ne chiede, quanta c'è sulla Ruota, il tetto 2 + Areté. */
-export function quintessenceDice(requested, { available = 0, arete = 0 } = {}) {
-  const cap = QUINTESSENCE_BASE_CAP + count(arete);
-  return Math.min(count(requested), count(available), cap);
+/**
+ * La Quintessenza che entra davvero in dadi: quanta se ne chiede, quanta ce
+ * n'è sulla Ruota, e il posto che resta nel tetto dei +3 dopo i dadi extra.
+ * Sono anche i punti che si spendono: oltre il tetto non serve pagarla.
+ */
+export function quintessenceDice(requested, { available = 0, extra = 0 } = {}) {
+  return Math.min(count(requested), count(available), Math.max(BONUS_MAX - count(extra), 0));
 }
 
 /**
@@ -499,12 +508,13 @@ export function livelloContato(level, free) {
  * harmony, bussola (1 se rispettata), quintessenceAvailable, power (il
  * potere scelto, per i suoi effetti) e powerCtx (quello che le sue condizioni
  * chiedono: Sfere conosciute, poteri per Sfera, Salute sotto metà).
- * Torna riserva, soglia dall'Epicità e dagli Ambiti, premio, soglia calcolata, soglia
- * effettiva (il conto più quella a mano), dadi, riuscita da (6 o 8),
- * Quintessenza spesa, le note del potere, gli effetti esclusi col motivo,
- * la riuscita senza tirare e se il potere è entrato «attivo» (si paga il
- * suo costo e si conta l'uso). `condizioni` è il conto delle Condizioni sul
- * tiro (condizioniDelTiro): i dadi che tolgono, l'8, il tiro che fallisce.
+ * Torna la riserva, i dadi che si tirano (`pool` e `dice`: tutta la riserva),
+ * la soglia (`difficulty`: i successi che servono), il conto degli Ambiti,
+ * il premio, la Quintessenza spesa in dadi, le note del potere, gli effetti
+ * esclusi col motivo, la riuscita senza tirare e se il potere è entrato
+ * «attivo» (si paga il suo costo e si conta l'uso). `condizioni` è il conto
+ * delle Condizioni sul tiro (condizioniDelTiro): i dadi che tolgono, la
+ * riserva dimezzata, il tiro che fallisce.
  */
 export function contoTiro(tiro, {
   arete = 0,
@@ -533,47 +543,56 @@ export function contoTiro(tiro, {
     spell: tiro?.spell ?? "",
     scopes: tiro?.scopes ?? {}
   };
-  // Il premio vale per ogni Tipo di Magick, l'Ibrida compresa (Blue, 2/10).
+  // Il premio dell'Areté (il Sistema): abbassa la soglia di quant'è l'Areté. Vale per ogni
+  // Tipo di Magick, l'Ibrida compresa (Blue, 2/10); il premio doppio (Voce dell'Avatar) la abbassa del doppio.
   const prizeBase = magick && tiro?.prize ? calculateAretePrize(areteValue) : 0;
   const powered = applyPotere({ threshold: 0, dice: 0, difficulty: null, prize: prizeBase }, power, ctx);
-  // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, fuori dal tetto +3; la soglia
-  // non la tocca più. Il premio doppio (Voce dell'Avatar) raddoppia i dadi.
   const prize = magick ? count(powered.prize) : 0;
 
-  // La Quintessenza non dà dadi (Blue, 29/9): li danno i poteri. Resta il potere
-  // che la fa spendere in dadi nei tiri di Abilità (Anche a mani nude).
-  const quintessenceAllowed = Boolean(powered.quintessenceOnSkills);
-  const quintessence = quintessenceAllowed ? quintessenceDice(tiro?.quintessence, { available: quintessenceAvailable, arete: areteValue }) : 0;
+  // Dentro il tetto dei +3: l'Armonia e i dadi dati al tavolo, poi la Quintessenza (Blue, 15/11).
+  // La Quintessenza dà dadi nei lanci di Magick; in un tiro di Abilità solo col potere che lo dice.
   const extra = capBonusDice(count(harmony) + count(tiro?.extra));
+  const quintessenceAllowed = magick || Boolean(powered.quintessenceOnSkills);
+  const quintessence = quintessenceAllowed ? quintessenceDice(tiro?.quintessence, { available: quintessenceAvailable, extra }) : 0;
+  // Fuori dal tetto: la Specializzazione, la Bussola e i Vantaggi, che arrivano a 5 (in meno non hanno tetto).
+  const vantaggi = Math.min(Math.trunc(Number(traitDice) || 0), VANTAGGI_MAX);
   const traits = count(attributeValue) + count(skillValue);
-  const bonus = extra + Math.trunc(Number(traitDice) || 0) + specialtyDice + bussolaDice + quintessence + prize;
-  const pool = Math.max(traits + bonus, 0);
+  const bonus = extra + quintessence + vantaggi + specialtyDice + bussolaDice;
+  const riserva = Math.max(traits + bonus, 0);
+  // Il potere, finché il catalogo non passa al Sistema: i suoi dadi, e la soglia che spostava girata in dadi.
+  const powerDice = count(powered.dice) - Math.trunc(Number(powered.thresholdDelta) || 0);
 
-  // La soglia della Magick (2/10): l'Epicità, almeno 1, più gli Ambiti.
-  const scopeLevels = magick ? ambitiDelLancio(tiro?.scopes) : [];
-  const scopeThreshold = magick ? calculateMagickThreshold({ scopeLevels }) : 0;
-  // Gli Ambiti che il potere fa saltare fino a un livello: conta l'eccedenza.
-  const countedLevels = scopeLevels.map(({ id, level }) => ({ id, level: livelloContato(level, powered.freeScopes[id]) }));
-  const base = magick ? Math.max(calculateMagickThreshold({ scopeLevels: countedLevels }), 0) : 0;
-  const computed = magick ? Math.max(base + powered.thresholdDelta, 0) : 0;
-  // La soglia a mano (30/9) si somma al conto; senza conto sotto (l'Abilità) è la soglia.
-  const manual = sogliaAMano(tiro);
-  const sogliaMano = manual ? Math.trunc(Number(tiro.soglia) || 0) : 0;
-  const difficulty = Math.max(computed + sogliaMano, 0);
   // Il ritocco dei Dadi (23/9): sul totale, fuori dal tetto, anche in meno.
   const adjust = Math.max(Math.min(Math.trunc(Number(tiro?.dadi) || 0), DADI_ADJUST_CAP), -DADI_ADJUST_CAP);
-  // Le Condizioni (29/9): i dadi sul totale, fuori dal tetto come il ritocco; l'8; il fallimento.
+  // Le Condizioni: i dadi in meno, la riserva dimezzata (per ultima, per difetto), il tiro che fallisce.
   const condDadi = Math.min(Math.trunc(Number(condizioni?.dadi) || 0), 0);
-  const condOtto = Boolean(condizioni?.otto);
+  const dimezza = Boolean(condizioni?.dimezza);
   const fallisce = Boolean(condizioni?.fallisce);
-  // La riserva com'è nella colonna del riquadro (30/9): i tratti, i bonus, i dadi del potere
-  // e le Condizioni in meno; il ritocco sta a parte, nella riga del conto.
-  const riservaTotale = Math.max(pool + count(powered.dice) + condDadi, 0);
-  const conto = ramoCDice(Math.max(pool + count(powered.dice) + adjust + condDadi, 0), difficulty);
-  const successBase = powered.difficulty ?? successThreshold(magick && usesAdvancedDifficulty({ witnesses: tiro?.kind === "testimoni" }));
-  const successFrom = condOtto ? Math.max(successBase, CONDIZIONE_OTTO) : successBase;
+  // La riserva com'è nella colonna del riquadro: i tratti, i bonus, i dadi del potere e le Condizioni
+  // in meno; il ritocco sta a parte, nella riga del totale.
+  const riservaTotale = Math.max(riserva + powerDice + condDadi, 0);
+  const senzaCondizioni = Math.max(riserva + powerDice + adjust, 0);
+  const prima = Math.max(riserva + powerDice + condDadi + adjust, 0);
+  const dadi = dimezza ? Math.floor(prima / 2) : prima;
+
+  // La soglia. Nella Magick il conto degli Ambiti (gli Ambiti che il potere fa saltare fino a un
+  // livello contano per l'eccedenza), la difficoltà a mano e il premio; nell'Abilità quella a mano.
+  const scopeLevels = magick ? ambitiDelLancio(tiro?.scopes) : [];
+  const countedLevels = scopeLevels.map(({ id, level }) => ({ id, level: livelloContato(level, powered.freeScopes[id]) }));
+  const manual = sogliaAMano(tiro);
+  const sogliaMano = manual ? Math.trunc(Number(tiro.soglia) || 0) : 0;
+  const scopeThreshold = magick ? contoAmbiti(scopeLevels, areteValue).soglia : 0;
+  const lancio = magick
+    ? sogliaMagick({ ambiti: countedLevels, arete: areteValue, premio: prize, aggravio: Math.max(sogliaMano, 0), sconto: Math.max(-sogliaMano, 0) })
+    : null;
+  // Il conto degli Ambiti col potere dentro, prima della difficoltà a mano e del premio.
+  const computed = lancio ? Math.min(lancio.grezzo, SOGLIA_MAGICK_MAX) : 0;
+  const difficulty = magick
+    ? Math.max(lancio.soglia, SOGLIA_MIN)
+    : (manual ? Math.max(Math.min(sogliaMano, SOGLIA_ABILITA_MAX), SOGLIA_MIN) : 0);
+
   // La riuscita senza tirare, a conto fatto (le condizioni sui dadi si giudicano qui).
-  const riuscitaConto = riuscitaSenzaTirare(powered.autoSuccess, conto.dice);
+  const riuscitaConto = riuscitaSenzaTirare(powered.autoSuccess, dadi);
   // Una Condizione che fa fallire vince anche sulla riuscita senza tirare.
   const riuscita = fallisce ? { ok: false, nota: "", motivo: "" } : riuscitaConto;
 
@@ -583,13 +602,15 @@ export function contoTiro(tiro, {
     bonus,
     specialtyDice,
     bussolaDice,
+    vantaggi,
     quintessence,
     quintessenceAllowed,
     extra,
-    // La riserva com'è (Attributo + Abilità + bonus), prima del ritocco dei Dadi.
-    riserva: pool,
+    // La riserva com'è (Attributo + Abilità + bonus), prima del potere, delle Condizioni e del ritocco.
+    riserva,
     riservaTotale,
-    pool: conto.pool,
+    // I dadi che si tirano: tutta la riserva. La soglia non ne toglie.
+    pool: dadi,
     scopeThreshold,
     prize,
     computed,
@@ -597,18 +618,18 @@ export function contoTiro(tiro, {
     sogliaMano,
     difficultySet: hasSoglia(tiro),
     difficulty,
-    dice: fallisce ? 0 : conto.dice,
+    dice: fallisce ? 0 : dadi,
     adjust,
-    impossible: fallisce || (conto.dice === 0 && !riuscita.ok),
-    successFrom,
-    // Le Condizioni sul tiro (29/9): i dadi tolti, l'8, chi fa fallire, e la
-    // riuscita di prima, per il Narratore che decide che non contano.
-    condizioni: { dadi: condDadi, otto: condOtto, fallisce, perche: [...(condizioni?.perche ?? [])], successFromSenza: successBase },
+    impossible: fallisce || (dadi === 0 && !riuscita.ok),
+    successFrom: RIUSCITA_DA,
+    // Le Condizioni sul tiro: i dadi tolti, la riserva dimezzata, chi fa fallire, e i dadi
+    // che tornerebbero, per il Narratore che decide che non contano.
+    condizioni: { dadi: condDadi, dimezza, fallisce, perche: [...(condizioni?.perche ?? [])], dadiSenza: senzaCondizioni },
     fallisce,
     powerNotes: powered.notes ?? [],
     powerSkipped: (powered.esclusi ?? []).filter((entry) => entry.motivo !== "attivo").map((entry) => ({ motivo: entry.motivo, nota: entry.effect?.nota ?? "" })),
     powerActive: Boolean(powered.attivo),
-    powerDice: count(powered.dice),
+    powerDice,
     autoSuccess: riuscita.ok,
     autoSuccessNota: riuscita.nota,
     autoSuccessMotivo: riuscita.motivo

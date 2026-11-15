@@ -2,13 +2,15 @@
      1/10 la quarta passata, approvata: «meno parole ci sono, meglio è»).
      In testa il tipo di tiro a parole e, nella Magick, la Sfera col sigillo
      (e l'incantesimo del Grimorio). Due colonne: la Riserva (chi dà dadi) e
-     la Soglia (chi toglie dadi); ogni riga ha il simbolo del pezzo com'è
+     la Soglia (quanti successi servono); ogni riga ha il simbolo del pezzo com'è
      nella scheda, il nome, il valore e la × che compare al sorvolo. Nella
      Magick la Soglia mostra sempre i sei Ambiti: il simbolo, la lettura del
-     livello scelto e il livello, spenti a zero. In fondo a ogni colonna un
-     numero solo, il totale, col meno e il più: è lui che si cambia a mano, e
-     la matita dice di quanto. Sotto, in una riga, i dadi che si tirano e da
-     che faccia riescono, la coppia Quintessenza | Paradosso al centro, Indulgi
+     livello scelto e il livello, spenti a zero; sotto, il premio dell'Areté
+     con la sua spunta. In fondo a ogni colonna un numero solo, il totale,
+     col meno e il più: è lui che si cambia a mano, e la matita dice di
+     quanto. Dal Sistema (14/11) la Riserva sono i dadi che si tirano, tutti,
+     e la Soglia i successi che servono. Sotto, in una riga, i dadi che si
+     tirano e i successi che servono, la coppia Quintessenza | Paradosso al centro, Indulgi
      la realtà e Dal Narratore; poi i tasti: TIRA, o i tre tipi col solo
      nome; spento, il tasto dice cosa manca. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-tiro{{#if tiro.magick}} magick{{/if}}">
@@ -65,12 +67,13 @@
                 </div>
             </section>
 
-            {{!-- La Soglia: chi toglie dadi. Nella Magick i sei Ambiti, sempre: il simbolo, la lettura del livello, il livello. --}}
+            {{!-- La Soglia: i successi che servono. Nella Magick i sei Ambiti, sempre: il simbolo, la lettura del livello, il livello; poi il premio dell'Areté, con la spunta. --}}
             <section class="wod5e-mage-tiro-colonna soglia" aria-label="{{localize 'WOD5E_MAGE.Tiro.Soglia'}}">
                 <div class="wod5e-mage-tiro-colonna-testa" title="{{tiro.soglia.hint}}">{{localize "WOD5E_MAGE.Tiro.Soglia"}}</div>
                 <div class="wod5e-mage-tiro-voci">
                     {{#each tiro.soglia.righe as |voce|}}
-                        <div class="wod5e-mage-tiro-voce tipo-{{voce.kind}}{{#if voce.base}} base{{/if}}{{#if voce.spenta}} spenta{{/if}}" title="{{voce.hint}}">
+                        <div class="wod5e-mage-tiro-voce tipo-{{voce.kind}}{{#if voce.base}} base{{/if}}{{#if voce.spenta}} spenta{{/if}}{{#if voce.off}} fuori{{/if}}" title="{{voce.hint}}">
+                            {{#if voce.check}}<input type="checkbox" class="wod5e-mage-tiro-spunta" data-action="{{voce.check.action}}" data-condizione="{{voce.id}}" {{#if voce.check.on}}checked{{/if}} aria-label="{{voce.name}}">{{/if}}
                             {{#if voce.img}}<img class="wod5e-mage-tiro-voce-icona{{#if voce.disc}} wod5e-mage-sfera-sigillo{{/if}}" src="{{voce.img}}" alt="">{{else if voce.fa}}<i class="{{voce.fa}} wod5e-mage-tiro-voce-icona" aria-hidden="true"></i>{{else}}<span class="wod5e-mage-tiro-voce-icona vuota" aria-hidden="true"></span>{{/if}}
                             <span class="wod5e-mage-tiro-voce-nome">{{voce.name}}</span>
                             <b class="wod5e-mage-tiro-voce-valore">{{voce.value}}</b>
@@ -91,7 +94,7 @@
             </section>
         </div>
 
-        {{!-- Le opzioni (1/10): i dadi che si tirano e da che faccia riescono; la coppia Quintessenza | Paradosso
+        {{!-- Le opzioni (1/10): i dadi che si tirano e i successi che servono; la coppia Quintessenza | Paradosso
              al centro (29/9: ogni lancio si paga); Indulgi (3/10, il lato che dice il Narratore) e Dal Narratore (27/9). Parole, non simboli. --}}
         <div class="wod5e-mage-tiro-opzioni">
             {{#if tiro.esito.riesce}}
@@ -99,7 +102,7 @@
             {{else if tiro.esito.fallisce}}
                 <span class="wod5e-mage-tiro-esito fallisce"><i class="fa-solid fa-ban" aria-hidden="true"></i><span>{{tiro.esito.fallisceTesto}}</span></span>
             {{else}}
-                <span class="wod5e-mage-tiro-esito{{#if tiro.esito.spento}} spento{{/if}}{{#if tiro.esito.impossibile}} impossibile{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.DalHint'}}"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i><b>{{tiro.esito.dadi}}</b><span>{{tiro.esito.parola}} · {{localize "WOD5E_MAGE.Tiro.Dal" n=tiro.esito.dal}}</span></span>
+                <span class="wod5e-mage-tiro-esito{{#if tiro.esito.spento}} spento{{/if}}{{#if tiro.esito.impossibile}} impossibile{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.ServonoHint'}}"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i><b>{{tiro.esito.dadi}}</b><span>{{tiro.esito.parola}}{{#if tiro.esito.servono}} · {{tiro.esito.servono}}{{/if}}</span></span>
             {{/if}}
             {{#if tiro.costo}}
                 <span class="wod5e-mage-tiro-paga" role="group" aria-label="{{localize 'WOD5E_MAGE.Costo.PagaCon'}}">

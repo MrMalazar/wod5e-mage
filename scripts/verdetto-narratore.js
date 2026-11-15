@@ -108,7 +108,8 @@ export function richiestaTiro({ id, from, to, actorId = "", actorName = "", titl
       fuori: [].concat(condizioni?.fuori ?? []).map(String).filter(Boolean),
       fallisce: Boolean(condizioni?.fallisce),
       dadi: Math.min(delta(condizioni?.dadi), 0),
-      successFromSenza: count(condizioni?.successFromSenza) || count(successFrom) || 6
+      // I dadi che si tirerebbero se le Condizioni non contassero (tornano quelli tolti, e la riserva non è dimezzata).
+      dadiSenza: count(condizioni?.dadiSenza ?? pool)
     }
   };
 }
@@ -135,9 +136,9 @@ export function verdettoTiro(richiesta, { difficulty, dice, senzaCondizioni = fa
   };
 }
 
-/** I dadi che si tirano con questi numeri (la riserva meno la Difficoltà, mai sotto zero). */
-export function dadiVerdetto({ pool = 0, difficulty = 0, dice = 0 } = {}) {
-  return Math.max(count(pool) + delta(dice) - count(difficulty), 0);
+/** I dadi che si tirano con questi numeri: tutta la riserva, coi dadi del Narratore (il Sistema: la soglia non ne toglie). */
+export function dadiVerdetto({ pool = 0, dice = 0 } = {}) {
+  return Math.max(count(pool) + delta(dice), 0);
 }
 
 /**
@@ -147,13 +148,14 @@ export function dadiVerdetto({ pool = 0, difficulty = 0, dice = 0 } = {}) {
  */
 export function applicaVerdetto(conto, verdetto) {
   if (!verdetto?.touched) return conto;
-  // Senza le Condizioni (29/9): tornano i dadi che toglievano, la riuscita di prima, e il tiro non fallisce più.
+  // Senza le Condizioni: tornano i dadi che toglievano, la riserva non è più dimezzata, e il tiro non fallisce più.
   const via = Boolean(verdetto.senzaCondizioni) && Boolean(conto?.condizioni);
-  const ridati = via ? Math.abs(Math.min(Math.trunc(Number(conto.condizioni.dadi) || 0), 0)) : 0;
-  const pool = Math.max(count(conto?.pool) + ridati + delta(verdetto.dice), 0);
-  const difficulty = count(verdetto.difficulty);
+  const base = via ? count(conto.condizioni.dadiSenza ?? conto?.pool) : count(conto?.pool);
+  const pool = Math.max(base + delta(verdetto.dice), 0);
+  // La soglia del Narratore: i successi che servono, almeno uno.
+  const difficulty = Math.max(count(verdetto.difficulty), 1);
   const fallisce = via ? false : Boolean(conto?.fallisce);
-  const dice = fallisce ? 0 : Math.max(pool - difficulty, 0);
+  const dice = fallisce ? 0 : pool;
   return {
     ...conto,
     pool,
@@ -161,7 +163,6 @@ export function applicaVerdetto(conto, verdetto) {
     dice,
     impossible: dice === 0,
     fallisce,
-    successFrom: via ? count(conto.condizioni.successFromSenza) || conto.successFrom : conto.successFrom,
     condizioniVia: via,
     narratore: { difficultyBefore: count(conto?.difficulty), difficulty, dice: delta(verdetto.dice), name: String(verdetto.fromName ?? "") }
   };
@@ -348,9 +349,9 @@ export function cablaVerdetto(root, richiesta, submit, { now = () => Date.now(),
     // Le Condizioni (29/9): se fanno fallire il tiro i dadi sono zero; se il Narratore dice che non contano, tornano i loro.
     const via = Boolean(senza?.checked);
     const fallisce = Boolean(richiesta.condizioni?.fallisce) && !via;
-    const ridati = via ? Math.abs(Math.min(delta(richiesta.condizioni?.dadi), 0)) : 0;
-    if (uscita) uscita.textContent = String(fallisce ? 0 : dadiVerdetto({ pool: count(richiesta.pool) + ridati, difficulty: difficolta?.value, dice: dadi?.value }));
-    if (riuscita) riuscita.textContent = String(via ? richiesta.condizioni?.successFromSenza || richiesta.successFrom : richiesta.successFrom);
+    const base = via ? count(richiesta.condizioni?.dadiSenza ?? richiesta.pool) : count(richiesta.pool);
+    if (uscita) uscita.textContent = String(fallisce ? 0 : dadiVerdetto({ pool: base, dice: dadi?.value }));
+    if (riuscita) riuscita.textContent = String(richiesta.successFrom);
   };
   root.addEventListener("click", (event) => {
     const button = event.target?.closest?.("[data-campo]");
@@ -358,7 +359,7 @@ export function cablaVerdetto(root, richiesta, submit, { now = () => Date.now(),
     event.preventDefault();
     const input = button.dataset.campo === "dice" ? dadi : difficolta;
     if (!input) return;
-    const min = button.dataset.campo === "dice" ? -Infinity : 0;
+    const min = button.dataset.campo === "dice" ? -Infinity : 1;
     input.value = String(Math.max(delta(input.value) + delta(button.dataset.delta), min));
     ricalcola();
   });

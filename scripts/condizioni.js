@@ -47,14 +47,15 @@ export function tipoDelTiro({ attribute = null, skill = null } = {}) {
 }
 
 /** Il peso in breve, per le righe, le pillole e le carte. */
-export const PESO_BREVE = Object.freeze({ meno2: "−2", otto: "−2 e 8", fallisce: "fallisce", lieve: "−1", scelte: "", azione: "", nessuno: "" });
+// Il peso «otto» è il secondo grado: dal Sistema (14/11) dimezza la riserva; il nome resta finché non si rifanno i dati.
+export const PESO_BREVE = Object.freeze({ meno2: "−2", otto: "½", fallisce: "fallisce", lieve: "−1", scelte: "", azione: "", nessuno: "" });
 
 /** I pesi che il Tiro conta da solo. */
 export const PESI_DEL_TIRO = Object.freeze(["meno2", "otto", "fallisce", "lieve"]);
 
-/** I dadi tolti da un peso: −2 ai gradi 1 e 2, −1 ai lievi. */
+/** I dadi tolti da un peso: −2 al primo grado, −1 ai lievi; il secondo grado non toglie dadi, dimezza. */
 export function dadiDelPeso(weight) {
-  if (weight === "meno2" || weight === "otto") return -2;
+  if (weight === "meno2") return -2;
   if (weight === "lieve") return -1;
   return 0;
 }
@@ -331,11 +332,12 @@ export async function applicaCondizione(actor, entry) {
  * pesano sul tipo del tiro (fisico, sociale, mentale, dall'Attributo della
  * riserva), ognuna col suo peso. `scelte` dice quali sono state tolte a
  * mano ({ id: false }): la Condizione pesa solo se c'entra con quello che
- * il personaggio fa, e lo decide il tavolo. I dadi tolti si sommano, l'8
- * non si somma, una che fa fallire fa fallire il tiro.
+ * il personaggio fa, e lo decide il tavolo. I dadi tolti si sommano, il
+ * secondo grado dimezza la riserva (una volta sola, anche con più
+ * Condizioni), una che fa fallire fa fallire il tiro.
  */
 export function condizioniDelTiro(items, tipo, scelte = {}) {
-  const vuoto = { tipo: TIPI_TIRO.includes(tipo) ? tipo : "", righe: [], dadi: 0, otto: false, fallisce: false, perche: [], fuori: [] };
+  const vuoto = { tipo: TIPI_TIRO.includes(tipo) ? tipo : "", righe: [], dadi: 0, dimezza: false, fallisce: false, perche: [], fuori: [] };
   if (!TIPI_TIRO.includes(tipo)) return vuoto;
   const viste = new Set();
   const righe = [];
@@ -361,14 +363,14 @@ export function condizioniDelTiro(items, tipo, scelte = {}) {
     ...vuoto,
     righe,
     dadi: accese.reduce((total, riga) => total + riga.dadi, 0),
-    otto: accese.some((riga) => riga.weight === "otto"),
+    dimezza: accese.some((riga) => riga.weight === "otto"),
     fallisce: accese.some((riga) => riga.weight === "fallisce"),
     perche: accese.filter((riga) => riga.weight === "fallisce").map((riga) => riga.name),
     fuori: righe.filter((riga) => !riga.on).map((riga) => riga.name)
   };
 }
 
-/** Le Condizioni del tiro in una riga, per la carta e per il Narratore: «Offuscato −2 e 8, Contuso −1». */
+/** Le Condizioni del tiro in una riga, per la carta e per il Narratore: «Offuscato ½, Contuso −1». */
 export function testoCondizioniDelTiro(conto) {
   return (conto?.righe ?? []).filter((riga) => riga.on).map((riga) => `${riga.name} ${riga.peso}`.trim()).join(", ");
 }

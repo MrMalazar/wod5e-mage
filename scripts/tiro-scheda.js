@@ -58,6 +58,7 @@ import {
   pickSkill,
   pickSpecialty,
   pillsOf,
+  quintessenceDice,
   removePill,
   setDadi,
   setKind,
@@ -76,6 +77,7 @@ import {
   toggleSphere,
   toggleTrait
 } from "./tiro.js";
+import { SOGLIA_ABILITA_MAX, SOGLIA_MAGICK_MAX, SOGLIA_MIN } from "./sistema.js";
 
 /** La bandiera con la lettura scelta di ogni Ambito (16/9 sera). */
 export const SCOPE_MODES_FLAG = "scopeModes";
@@ -386,18 +388,20 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
         break;
       }
       case "power": {
-        // Il potere (tappa 3): una riga dove pesa, coi dadi nella Riserva e la soglia nella Soglia;
-        // se non tocca i numeri sta nella Riserva col solo nome. Le sue note nel sorvolo.
+        // Il potere (tappa 3): una riga dove pesa, coi dadi nella Riserva (anche la soglia che spostava,
+        // girata in dadi finché il catalogo non passa al Sistema) e, nella Soglia, il conto degli Ambiti
+        // che cambia; se non tocca i numeri sta nella Riserva col solo nome. Le sue note nel sorvolo.
         const power = inputs.power;
         const icon = power?.sphere ? sfere[power.sphere]?.icon ?? "" : "";
         const hint = [...potere.note, ...potere.esclusi].join("\n");
         const sogliaPotere = conto.computed - conto.scopeThreshold;
         const righe = [];
-        if (conto.powerDice > 0) righe.push(riserva);
+        if (conto.powerDice !== 0) righe.push(riserva);
         if (sogliaPotere !== 0) righe.push(soglia);
         if (!righe.length) righe.push(riserva);
         for (const colonna of righe) {
-          const value = colonna === soglia ? conSegno(sogliaPotere) : (conto.powerDice > 0 ? numero(conto.powerDice) : "");
+          const dadiPotere = conto.powerDice > 0 ? numero(conto.powerDice) : (conto.powerDice < 0 ? conSegno(conto.powerDice) : "");
+          const value = colonna === soglia ? conSegno(sogliaPotere) : dadiPotere;
           colonna.push({ kind: "power", id: pill.id, img: icon, disc: Boolean(icon), name: pill.label, value, hint, via: true });
         }
         break;
@@ -406,19 +410,21 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
         break;
     }
   }
-  // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, con la spunta; spento mostra quanto darebbe.
+  // Il premio dell'Areté (il Sistema): abbassa la soglia, con la spunta; spento mostra quanto toglierebbe.
   if (magick) {
     const on = Boolean(tiro.prize);
-    riserva.push({ kind: "prize", id: "prize", img: `modules/${MODULE_ID}/assets/icons/ui/arete.svg`, name: localize("WOD5E_MAGE.Arete.Prize"), value: numero(on ? conto.prize : calculateAretePrize(arete.value)), check: { action: "tiroPrize", on }, off: !on, hint: format("WOD5E_MAGE.Arete.PrizeHint", { arete: arete.value }) });
+    soglia.push({ kind: "prize", id: "prize", img: `modules/${MODULE_ID}/assets/icons/ui/arete.svg`, name: localize("WOD5E_MAGE.Arete.Prize"), value: conSegno(-(on ? conto.prize : calculateAretePrize(arete.value))), check: { action: "tiroPrize", on }, off: !on, hint: format("WOD5E_MAGE.Arete.PrizeHint", { arete: arete.value }) });
   }
   // Le Condizioni sul tiro (29/9): la spunta le tiene; tolte, restano spente sulla riga.
   const cond = inputs.condizioni;
   for (const riga of cond.righe) {
     riserva.push({ kind: "condizione", id: riga.id, mask: riga.icon, numeral: riga.numeral, name: riga.name, value: riga.peso, meno: true, check: { action: "tiroCondizione", on: riga.on }, off: !riga.on, hint: format(riga.on ? "WOD5E_MAGE.Condizioni.TiroTogli" : "WOD5E_MAGE.Condizioni.TiroRimetti", { name: riga.name }) });
   }
-  // La Quintessenza in dadi: solo coi poteri che lo dicono (Anche a mani nude).
+  // La Quintessenza in dadi (il Sistema): nei lanci di Magick un dado per punto, dentro il tetto dei +3
+  // coi dadi extra; nei tiri di Abilità solo col potere che lo dice (Anche a mani nude).
   if (conto.quintessenceAllowed) {
-    riserva.push({ kind: "quintessence", id: "quintessence", fa: "fa-solid fa-droplet", name: localize("WOD5E_MAGE.MagickBalance.Quintessence"), stepper: { action: "tiroQuintessence", value: numero(tiro.quintessence), min: !tiro.quintessence, max: tiro.quintessence >= inputs.quintessenceAvailable, extra: `/ ${inputs.quintessenceAvailable}` }, hint: localize("WOD5E_MAGE.Tiro.QuintessenceHint") });
+    const tetto = quintessenceDice(Infinity, { available: inputs.quintessenceAvailable, extra: conto.extra });
+    riserva.push({ kind: "quintessence", id: "quintessence", fa: "fa-solid fa-droplet", name: localize("WOD5E_MAGE.MagickBalance.Quintessence"), stepper: { action: "tiroQuintessence", value: numero(conto.quintessence), min: !conto.quintessence, max: conto.quintessence >= tetto, extra: `/ ${tetto}` }, hint: localize("WOD5E_MAGE.Tiro.QuintessenceHint") });
   }
 
   // Chi paga il lancio (29/9): la Quintessenza libera è quella che resta dopo il costo del potere attivo.
@@ -464,17 +470,19 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
         label: sogliaSet ? numero(conto.difficulty) : "?",
         vuoto: !sogliaSet,
         ritocco: magick && conto.sogliaMano ? conSegno(conto.sogliaMano) : "",
-        meno: sogliaSet && conto.difficulty <= 0,
-        piu: conto.sogliaMano >= SOGLIA_MANO_CAP,
+        meno: sogliaSet && (conto.difficulty <= SOGLIA_MIN || (magick && conto.sogliaMano <= -SOGLIA_MANO_CAP)),
+        piu: magick ? (conto.sogliaMano >= SOGLIA_MANO_CAP || conto.difficulty >= SOGLIA_MAGICK_MAX) : conto.difficulty >= SOGLIA_ABILITA_MAX,
         hint: localize(magick ? "WOD5E_MAGE.Tiro.SogliaManoHint" : "WOD5E_MAGE.Tiro.SogliaManoAbilitaHint")
       },
       hint: localize("WOD5E_MAGE.Tiro.SogliaHint")
     },
-    // L'esito (1/10), nella riga delle opzioni: i dadi che si tirano e da che faccia riescono; senza soglia
-    // i dadi non si sanno («?»); la riuscita senza tirare e il tiro che fallisce prendono il suo posto.
+    // L'esito, nella riga delle opzioni: i dadi che si tirano (tutta la riserva) e i successi che
+    // servono; senza soglia i successi non si sanno; la riuscita senza tirare e il tiro che fallisce
+    // prendono il suo posto.
     esito: {
-      dadi: sogliaSet ? conto.dice : (haTratto ? "?" : 0),
-      parola: localize(sogliaSet && conto.dice === 1 ? "WOD5E_MAGE.Tiro.DadoParola" : "WOD5E_MAGE.Tiro.DadiParola"),
+      dadi: haTratto ? conto.dice : 0,
+      parola: localize(conto.dice === 1 ? "WOD5E_MAGE.Tiro.DadoParola" : "WOD5E_MAGE.Tiro.DadiParola"),
+      servono: sogliaSet ? format(conto.difficulty === 1 ? "WOD5E_MAGE.Tiro.ServeUno" : "WOD5E_MAGE.Tiro.Servono", { n: conto.difficulty }) : "",
       dal: conto.successFrom,
       spento: !haTratto || !sogliaSet,
       impossibile: conto.impossible && size > 0 && !senzaTirare,
@@ -819,8 +827,11 @@ export async function onTiroSoglia(event, target) {
 export async function onTiroQuintessence(event, target) {
   event.preventDefault();
   const tiro = tiroOf(this);
-  const available = getMagickBalance(this.actor).quintessence;
-  const next = Math.min(Math.max(tiro.quintessence + (Number(target.dataset.delta) || 0), 0), available);
+  // Si parte dalla Quintessenza che conta davvero (il tetto dei +3 la ferma) e si resta dentro il tetto.
+  const { inputs } = contoInputs(this.actor, tiro);
+  const conto = contoTiro(tiro, inputs);
+  const tetto = quintessenceDice(Infinity, { available: inputs.quintessenceAvailable, extra: conto.extra });
+  const next = Math.min(Math.max(conto.quintessence + (Number(target.dataset.delta) || 0), 0), tetto);
   return repaint(this, setQuintessence(tiro, next));
 }
 
@@ -951,7 +962,7 @@ export async function launchTiro(actor, tiro) {
     return null;
   }
   const condizioniTesto = testoCondizioniDelTiro(inputs.condizioni);
-  const verdetto = await chiediVerdetto({ actor, title: rollLabel, magick, kind: tiro.kind ?? "", conto, condizioni: { testo: condizioniTesto, fuori: inputs.condizioni.fuori, fallisce: conto.fallisce, dadi: conto.condizioni.dadi, successFromSenza: conto.condizioni.successFromSenza } });
+  const verdetto = await chiediVerdetto({ actor, title: rollLabel, magick, kind: tiro.kind ?? "", conto, condizioni: { testo: condizioniTesto, fuori: inputs.condizioni.fuori, fallisce: conto.fallisce, dadi: conto.condizioni.dadi, dadiSenza: conto.condizioni.dadiSenza } });
   conto = applicaVerdetto(conto, verdetto);
   const selectors = [...new Set(selectedTraits.flatMap((trait) => selectorsForMageRollTrait(trait)))];
   const traitRows = selectedTraits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value }));

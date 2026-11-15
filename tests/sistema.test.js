@@ -22,10 +22,11 @@ import {
   quintessenzaDelSacrificio,
   RITIRO_MAX,
   SCALA_DIFFICOLTA,
+  SOGLIA_MAGICK_MAX,
   sogliaAbilita,
   sogliaFissa,
   sogliaMagick,
-  SOGLIA_MAGICK_MAX,
+  sogliaSaggezza,
   successiDelLancio,
   ustione
 } from "../scripts/sistema.js";
@@ -194,5 +195,20 @@ assert.deepEqual([1, 2, 3, 4, 5].map(cerchiaAperta), [2, 3, 4, 5, 5]);
 // Il Sacrificio: un superficiale vale 1 punto di Quintessenza, un aggravato 3.
 assert.equal(quintessenzaDelSacrificio("superficiale"), 1);
 assert.equal(quintessenzaDelSacrificio("aggravato"), 3);
+
+// Il premio come numero: un potere che lo raddoppia dice lui di quanto scende la soglia.
+{
+  const grande = [{ id: "potency", level: 4 }, { id: "epic", level: 3 }, { id: "targets", level: 2 }];
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, premio: true }).soglia, 3);
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, premio: 2 }).soglia, 3);
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, premio: 4 }).soglia, 1, "il premio doppio, e mai sotto 1");
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, premio: 0 }).soglia, 5);
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, premio: false }).soglia, 5);
+}
+
+// Il tiro di Saggezza (Blue, 15/11): successi pari al gradino dell'atto, da 1 a 7.
+assert.deepEqual([0, 1, 4, 7, 9].map(sogliaSaggezza), [1, 1, 4, 7, 7]);
+assert.equal(esito({ successi: 3, soglia: sogliaSaggezza(3) }).riuscito, true);
+assert.equal(esito({ successi: 2, soglia: sogliaSaggezza(3) }).mancano, 1);
 
 console.log("Sistema: test passati.");
