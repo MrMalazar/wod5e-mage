@@ -23,6 +23,7 @@ import {
   cassettiPerScena,
   contoRitmo,
   copiaDaCarta,
+  copiaDaPotere,
   COPIA_FLAG,
   coppiaLibera,
   etichettaVolgare,
@@ -1160,15 +1161,18 @@ async function suLancio(message) {
   if (!isActiveGM()) return;
   const flags = message?.flags?.[MODULE_ID] ?? {};
   const card = flags?.[ROLL_CARD_FLAG];
-  if (!card || card.skill) return;
+  // Anche un potere pagato in Paradosso porta la sua copia (il Sistema): dalla carta di un tiro
+  // di Abilità, o dalla carta del potere usato dalla scheda, che non è un lancio.
+  const potere = copiaDaPotere(flags);
+  if (!card && !potere) return;
   const actor = game.actors?.get(message?.speaker?.actor);
   // I Tocchi che duravano fino al lancio dopo se ne vanno con questo lancio.
-  if (actor && actor.getFlag(MODULE_ID, ADDOSSO_FLAG)) {
+  if (card && !card.skill && actor && actor.getFlag(MODULE_ID, ADDOSSO_FLAG)) {
     const addosso = actor.getFlag(MODULE_ID, ADDOSSO_FLAG);
     const dopo = addossoDopo(addosso, "lancio");
     if (Object.keys(dopo).length !== Object.keys(addosso).length) await actor.setFlag(MODULE_ID, ADDOSSO_FLAG, dopo);
   }
-  const copia = copiaDaCarta(flags);
+  const copia = card ? copiaDaCarta(flags) : potere;
   if (!copia || copiando.has(message.id)) return;
   copiando.add(message.id);
   try {

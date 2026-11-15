@@ -41,7 +41,6 @@
 import { calculateAretePrize, capBonusDice, SKILL_SPECIALTY_DICE, THRESHOLD_CAP } from "./arete.js";
 import { BUSSOLA_DICE } from "./bussola.js";
 import { applyPotere, riuscitaSenzaTirare, spezzaIdPotere } from "./poteri.js";
-import { PAGAMENTI } from "./ramo-c.js";
 import { ambitiDelLancio, normalizeScopeLevels, SCOPE_ALIASES } from "./scopes.js";
 import {
   BONUS_MAX,
@@ -88,8 +87,8 @@ export function emptyTiro() {
     // La soglia a mano (30/9): null finché non si tocca; poi l'addendo sopra il conto degli Ambiti.
     soglia: null,
     quintessence: 0,
-    // Come si paga il lancio (29/9): «quintessenza», «paradosso», o null (la Quintessenza quando c'è).
-    pay: null,
+    // La dissonanza (il Sistema): il lancio stride con la realtà intorno, e un Volgare dà 1 Paradosso in più.
+    dissonanza: false,
     extra: 0,
     dadi: 0,
     // L'Indulgere (3/10): "", oppure il lato dichiarato, "hubris" o "silenzio".
@@ -353,10 +352,14 @@ export function setQuintessence(tiro, value) {
   return next;
 }
 
-/** Come si paga il lancio (29/9): la Quintessenza o il Paradosso; un'altra parola torna alla scelta di base. */
-export function setPay(tiro, pay) {
+/**
+ * La dissonanza con la realtà intorno (il Sistema: «evocare acqua in un
+ * vulcano»): aggrava un lancio Volgare di 1 punto di Paradosso. Senza
+ * valore si gira; l'Accidentale non la sente.
+ */
+export function setDissonanza(tiro, on) {
   const next = clone(tiro);
-  next.pay = PAGAMENTI.includes(pay) ? pay : null;
+  next.dissonanza = on === undefined ? !next.dissonanza : Boolean(on);
   return next;
 }
 

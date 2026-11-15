@@ -18,6 +18,8 @@ export { CASSETTI_PARADOSSO, FAMIGLIE_PARADOSSO, MENU_PARADOSSO, SCENE_PARADOSSO
 export const ADDOSSO_FLAG = "paradossoAddosso";
 /** Sul messaggio del tiro: la copia dei punti è già stata fatta. */
 export const COPIA_FLAG = "paradossoCopiato";
+/** Un potere usato dalla scheda e pagato in Paradosso (il Sistema): la sua carta porta i punti presi. */
+export const POTERE_PARADOSSO_FLAG = "paradossoPotere";
 /** Nel mondo: la scena in corso (tipo, posto, numero). */
 export const SCENA_SETTING = "scenaParadosso";
 /** Nel mondo: i maghi che il Narratore ha messo nel Quadro. */
@@ -195,7 +197,7 @@ export function volgariRecenti(messages = [], { dal = 0, massimo = 12 } = {}) {
       actorName: String(message?.speaker?.alias ?? ""),
       titolo: testo(card.title) || primaRiga(message?.flavor),
       soglia: count(card.threshold),
-      testimoni: Boolean(card.advancedDifficulty),
+      testimoni: (Boolean(card.advancedDifficulty) || card.kind === "testimoni"),
       quando,
       round: count(card.round)
     });
@@ -233,7 +235,7 @@ export function etichettaVolgare(volgare, localize = (key) => key) {
 export function copiaDaCarta(flags = {}) {
   const card = flags?.[ROLL_CARD_FLAG];
   if (!card || flags?.[COPIA_FLAG]) return null;
-  const testimoni = Boolean(card.advancedDifficulty);
+  const testimoni = (Boolean(card.advancedDifficulty) || card.kind === "testimoni");
   if (card.paradossoPreso !== undefined && card.paradossoPreso !== null) {
     const points = count(card.paradossoPreso);
     if (points <= 0) return null;
@@ -241,6 +243,17 @@ export function copiaDaCarta(flags = {}) {
   }
   if (!card.vulgar) return null;
   return { points: testimoni ? 2 : 1, testimoni, volgare: true };
+}
+
+/**
+ * La copia di un potere pagato in Paradosso fuori dal tiro (il Sistema: chi
+ * non ha la Quintessenza paga in Paradosso, e ogni punto preso va in copia
+ * al Narratore). Torna null se non c'è niente da copiare o la copia è fatta.
+ */
+export function copiaDaPotere(flags = {}) {
+  const points = count(flags?.[POTERE_PARADOSSO_FLAG]?.points);
+  if (points <= 0 || flags?.[COPIA_FLAG]) return null;
+  return { points, testimoni: false, volgare: false };
 }
 
 /* ------------------------------------------------------------------ */

@@ -573,16 +573,29 @@ export function usiDelPotere(power, usi = {}) {
 }
 
 /**
- * Si può usare adesso? Serve un uso nel periodo, e la Quintessenza che il
- * potere costa (o quella scelta, `spesa`, quando il costo è variabile).
- * Torna il motivo del no: «usi» o «quintessenza».
+ * Si può usare adesso? Serve un uso nel periodo. Il costo (quello del
+ * potere, o quello scelto, `spesa`, quando è variabile) si paga in
+ * Quintessenza; chi non ce l'ha lo paga in Paradosso, punto per punto (il
+ * Sistema): `paga` dice con cosa. Il solo no rimasto è «usi».
  */
 export function puoUsare(power, { usi = {}, quintessence = 0, spesa = null } = {}) {
   const conto = usiDelPotere(power, usi);
-  if (conto && conto.restanti <= 0) return { ok: false, motivo: "usi", usi: conto };
   const costo = spesa === null || spesa === undefined ? count(power?.costValue) : count(spesa);
-  if (costo > count(quintessence)) return { ok: false, motivo: "quintessenza", usi: conto };
-  return { ok: true, motivo: "", usi: conto };
+  const paga = pagamentoDelPotere(costo, quintessence).inParadosso ? "paradosso" : "quintessenza";
+  if (conto && conto.restanti <= 0) return { ok: false, motivo: "usi", usi: conto, costo, paga };
+  return { ok: true, motivo: "", usi: conto, costo, paga };
+}
+
+/**
+ * Come si paga il costo di un potere (il Sistema): in Quintessenza, oppure
+ * tutto in Paradosso quando sulla Ruota non ce n'è abbastanza («al posto di
+ * spendere Quintessenza, il Paradosso sale di altrettanti punti»). Il costo
+ * non si spezza fra le due.
+ */
+export function pagamentoDelPotere(costo, quintessenza) {
+  const prezzo = count(costo);
+  const inParadosso = prezzo > 0 && prezzo > count(quintessenza);
+  return { costo: prezzo, inParadosso, quintessenza: inParadosso ? 0 : prezzo, paradosso: inParadosso ? prezzo : 0 };
 }
 
 /**
@@ -806,7 +819,7 @@ export function quattroParti(power, { entry = null, mod = null, localize = (key)
  * La carta in chat: nome, Sfera, matrice, tipo, il costo pagato, gli usi
  * che restano, i blocchi del testo, Paradosso e Flavor.
  */
-export function cartaPotere(power, { sphereLabel = "", usi = null, spent = 0, costo = "", localize = (key) => key } = {}) {
+export function cartaPotere(power, { sphereLabel = "", usi = null, spent = 0, costo = "", inParadosso = false, localize = (key) => key } = {}) {
   // Il costo per esteso (rifacimento, 30/9) quando dice più della Quintessenza pagata: «Azione», «da 1 a 3 Quintessenza».
   const scritto = testo(costo) || testo(power?.cost);
   return {
@@ -816,6 +829,8 @@ export function cartaPotere(power, { sphereLabel = "", usi = null, spent = 0, co
     kind: power?.type ? localize(`WOD5E_MAGE.Poteri.Tipo.${power.type}`) : "",
     costo: scritto && scritto !== `${count(spent)} Quintessenza` ? scritto : "",
     spent: count(spent),
+    // Il costo pagato in Paradosso, quando la Quintessenza mancava (il Sistema).
+    inParadosso: Boolean(inParadosso) && count(spent) > 0,
     usi: usi ? { ...usi, label: localize(`WOD5E_MAGE.Poteri.Usi.${usi.per}`) } : null,
     blocchi: blocchiDelTesto(power?.text),
     amalgamText: testo(power?.amalgamText),

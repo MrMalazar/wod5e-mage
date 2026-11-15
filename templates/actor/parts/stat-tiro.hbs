@@ -10,7 +10,7 @@
      col meno e il più: è lui che si cambia a mano, e la matita dice di
      quanto. Dal Sistema (14/11) la Riserva sono i dadi che si tirano, tutti,
      e la Soglia i successi che servono. Sotto, in una riga, i dadi che si
-     tirano e i successi che servono, la coppia Quintessenza | Paradosso al centro, Indulgi
+     tirano e i successi che servono, la Dissonanza al centro (solo nella Magick), Indulgi
      la realtà e Dal Narratore; poi i tasti: TIRA, o i tre tipi col solo
      nome; spento, il tasto dice cosa manca. --}}
 <section class="wod5e-mage-riq wod5e-mage-riq-tiro{{#if tiro.magick}} magick{{/if}}">
@@ -104,10 +104,10 @@
             {{else}}
                 <span class="wod5e-mage-tiro-esito{{#if tiro.esito.spento}} spento{{/if}}{{#if tiro.esito.impossibile}} impossibile{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.ServonoHint'}}"><i class="fa-solid fa-dice-d10" aria-hidden="true"></i><b>{{tiro.esito.dadi}}</b><span>{{tiro.esito.parola}}{{#if tiro.esito.servono}} · {{tiro.esito.servono}}{{/if}}</span></span>
             {{/if}}
-            {{#if tiro.costo}}
-                <span class="wod5e-mage-tiro-paga" role="group" aria-label="{{localize 'WOD5E_MAGE.Costo.PagaCon'}}">
-                    <button type="button" class="wod5e-mage-tiro-paga-tasto quintessenza{{#if tiro.costo.quintessenza}} acceso{{/if}}" data-action="tiroPaga" data-pay="quintessenza" aria-pressed="{{tiro.costo.quintessenza}}" title="{{localize 'WOD5E_MAGE.Costo.QuintessenzaHint'}}" {{#unless tiro.costo.canQuintessenza}}disabled{{/unless}}>{{localize "WOD5E_MAGE.MagickBalance.Quintessence"}}</button>
-                    <button type="button" class="wod5e-mage-tiro-paga-tasto paradosso{{#unless tiro.costo.quintessenza}} acceso{{/unless}}" data-action="tiroPaga" data-pay="paradosso" aria-pressed="{{#if tiro.costo.quintessenza}}false{{else}}true{{/if}}" title="{{localize 'WOD5E_MAGE.Costo.ParadossoHint'}}">{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}</button>
+            {{#if tiro.dissonanza}}
+                {{!-- La dissonanza (il Sistema): lanciare non costa; qui si dice solo se il lancio stride con la realtà intorno. --}}
+                <span class="wod5e-mage-tiro-paga">
+                    <button type="button" class="wod5e-mage-tiro-paga-tasto paradosso{{#if tiro.dissonanza.on}} acceso{{/if}}" data-action="tiroDissonanza" aria-pressed="{{#if tiro.dissonanza.on}}true{{else}}false{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.DissonanzaHint'}}">{{localize "WOD5E_MAGE.Tiro.Dissonanza"}}</button>
                 </span>
             {{else}}
                 <span class="wod5e-mage-tiro-paga vuota" aria-hidden="true"></span>

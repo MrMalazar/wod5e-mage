@@ -18905,7 +18905,7 @@
   font-size: 0.8rem;
 }
 
-/* La coppia Quintessenza | Paradosso, al centro: parole, accese del loro colore. Fuori dalla Magick il posto resta vuoto. */
+/* La Dissonanza, al centro: una parola sola, accesa del rosso del Paradosso (il lancio non costa più, 16/11). Fuori dalla Magick il posto resta vuoto. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga {
   display: inline-flex;
   justify-self: center;
@@ -18915,7 +18915,7 @@
   align-items: center;
   background: transparent;
   border: 1px solid var(--mage-oro-tenue);
-  border-radius: 0 12px 12px 0;
+  border-radius: 12px;
   box-shadow: none;
   color: var(--mage-tenue);
   cursor: pointer;
@@ -18931,23 +18931,12 @@
   width: auto;
 }
 
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto.quintessenza {
-  border-radius: 12px 0 0 12px;
-  border-right-width: 0;
-}
-
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto:hover {
   border-color: var(--mage-oro);
   box-shadow: none;
 }
 
-/* Accesa, la Quintessenza è dell'oro della Ruota, il Paradosso del suo rosso. */
-.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto.quintessenza.acceso {
-  background: var(--mage-oro);
-  border-color: var(--mage-oro);
-  color: var(--mage-su-oro);
-}
-
+/* Accesa, la Dissonanza è del rosso del Paradosso. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-paga-tasto.paradosso.acceso {
   background: var(--mage-rosso);
   border-color: var(--mage-rosso-vivo);

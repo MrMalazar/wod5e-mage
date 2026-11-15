@@ -42,7 +42,8 @@ import {
 import { modDelMondo, modificaBaseDelPotere } from "./poteri-mod.js";
 import { POTERI_TOLTI } from "./data/poteri.js";
 import { chiusoAllaCreazione, openCatalogoCompleto, openCatalogoPoteri, tipiDelPotere } from "./catalogo-poteri.js";
-import { getMagickBalance } from "./magick-balance.js";
+import { addParadoxToBalance, getMagickBalance } from "./magick-balance.js";
+import { POTERE_PARADOSSO_FLAG } from "./menu-paradosso.js";
 import { prepareIncantesimi } from "./incantesimi.js";
 import { prepareMageRollTraits } from "./mage-roll-selection.js";
 import { prepareSpheres, SPHERES } from "./spheres.js";
@@ -198,9 +199,11 @@ export function usaContesto(power, usi = {}, quintessence = 0, localize = (key) 
     conto,
     costo,
     label: parti.join(" · "),
+    // Senza la Quintessenza il costo sale in Paradosso (il Sistema): il sorvolo lo dice prima del clic.
+    paga: verdetto.paga,
     hint: verdetto.ok
-      ? localize("WOD5E_MAGE.Poteri.UsaHint")
-      : localize(verdetto.motivo === "usi" ? "WOD5E_MAGE.Poteri.UsiFiniti" : "WOD5E_MAGE.Poteri.QuintessenzaManca")
+      ? [localize("WOD5E_MAGE.Poteri.UsaHint"), verdetto.paga === "paradosso" ? localize("WOD5E_MAGE.Poteri.PagaInParadosso") : ""].filter(Boolean).join(" ")
+      : localize("WOD5E_MAGE.Poteri.UsiFiniti")
   };
 }
 
@@ -428,22 +431,27 @@ export async function onPotereUsa(event, target) {
   }
   const verdetto = puoUsare(power, { usi, quintessence: balance.quintessence, spesa });
   if (!verdetto.ok) {
-    ui.notifications.warn(localize(verdetto.motivo === "usi" ? "WOD5E_MAGE.Poteri.UsiFiniti" : "WOD5E_MAGE.Poteri.QuintessenzaManca"));
+    ui.notifications.warn(localize("WOD5E_MAGE.Poteri.UsiFiniti"));
     return;
   }
+  // Il costo si paga in Quintessenza; chi non ce l'ha lo paga in Paradosso, punto per punto (il Sistema).
+  const inParadosso = verdetto.paga === "paradosso" && spesa > 0;
   const dopo = registraUso(usi, power);
   const update = { [`flags.${MODULE_ID}.${POTERI_USI_FLAG}`]: dopo };
-  if (spesa > 0) update[`flags.${MODULE_ID}.magickBalance`] = ruotaDopoUso(balance, power, spesa);
+  if (spesa > 0) update[`flags.${MODULE_ID}.magickBalance`] = inParadosso ? addParadoxToBalance(balance, spesa) : ruotaDopoUso(balance, power, spesa);
   await actor.update(update);
   const carta = cartaPotere(power, {
     sphereLabel: power.sphere ? localize(`WOD5E_MAGE.Spheres.${power.sphere}`) : "",
     usi: usiDelPotere(power, dopo),
     spent: spesa,
     costo: costo.testo,
+    inParadosso,
     localize
   });
   const content = await foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/chat/potere.hbs`, { carta });
-  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content });
+  // Il Paradosso preso pagando il potere va in copia al Narratore: la carta porta i punti.
+  const flags = inParadosso ? { [MODULE_ID]: { [POTERE_PARADOSSO_FLAG]: { points: spesa } } } : {};
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content, flags });
 }
 
 /**

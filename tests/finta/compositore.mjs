@@ -180,18 +180,18 @@ assert.deepEqual([durataScelta.modeChosen, durataScelta.modeShown], [true, durat
   assert.deepEqual([S.prepareTiroContext(actor, T.setSoglia(soloAbilita, 1)).soglia.totale.meno, S.prepareTiroContext(actor, T.setSoglia(soloAbilita, 7)).soglia.totale.piu], [true, true]);
 }
 
-// IL LANCIO. I dadi, il conto dei successi, la soglia e il margine sono sul Sistema (14/11). Il costo del
-// lancio e il Paradosso del tipo sono ancora quelli del 29/9: passano al Sistema col prossimo pezzo, e le
-// righe che li provano qui sotto cambiano con loro.
+// IL LANCIO. I dadi, il conto dei successi, la soglia, il margine e il Paradosso del lancio sono sul Sistema
+// (14/11, 16/11): lanciare un incantesimo non costa niente, e «paga con» non c'è più.
 
-// Il costo del lancio (29/9): ogni tasto del tipo dice il suo prezzo; senza scelta paga la Quintessenza, se c'è.
-assert.deepEqual([ctx.costo.pay, ctx.costo.canQuintessenza, ctx.costo.libera], ["quintessenza", true, 4]);
-assert.deepEqual(ctx.kinds.map((k) => [k.kind, k.costo.quintessenza, k.costo.paradosso]), [["accidentale", 1, 0], ["volgare", 1, 1], ["testimoni", 1, 2]]);
-const aParadosso = S.prepareTiroContext(actor, T.setPay(tiro, "paradosso"));
-assert.deepEqual(aParadosso.kinds.map((k) => [k.kind, k.costo.quintessenza, k.costo.paradosso]), [["accidentale", 0, 1], ["volgare", 0, 2], ["testimoni", 0, 3]]);
+// Il Paradosso del lancio: ogni tasto del tipo dice quanto ne dà; la Dissonanza ne aggiunge uno ai soli Volgari.
+assert.deepEqual([ctx.costo, ctx.dissonanza], [undefined, { on: false }]);
+assert.deepEqual(ctx.kinds.map((k) => [k.kind, k.paradosso]), [["accidentale", 0], ["volgare", 1], ["testimoni", 2]]);
+assert.match(ctx.kinds[0].hint, /WOD5E_MAGE\.Costo\.TastoNiente$/, "l'Accidentale lo dice: non dà Paradosso");
+const dissonante = S.prepareTiroContext(actor, T.setDissonanza(tiro, true));
+assert.deepEqual([dissonante.dissonanza, dissonante.kinds.map((k) => [k.kind, k.paradosso])], [{ on: true }, [["accidentale", 0], ["volgare", 2], ["testimoni", 3]]]);
 
 // Il lancio: Volgare con testimoni. Due punti di Quintessenza danno due dadi (dentro il tetto dei +3): si
-// tirano tutti e 13, e a soglia 1 ne basta uno. Paga 1 Quintessenza di costo e prende i 2 Paradosso del tipo.
+// tirano tutti e 13, e a soglia 1 ne basta uno. Non paga niente e prende i 2 Paradosso del tipo.
 tiro = T.setQuintessence(tiro, 2);
 tiro = T.setKind(tiro, "testimoni");
 globalThis.__sim.faces = [8, 8, 3, 3, 5, 6, 7, 10, 2, 4, 2, 3, 4, 5, 4, 3];
@@ -202,12 +202,12 @@ const roll = globalThis.__sim.rolls.at(-1);
 assert.equal(roll.formula, "13dmcs>5 + 3dpcs>5", "riserva 11 più i 2 dadi della Quintessenza: si tira tutta; la Ruota paga prima del tiro (+2 Paradosso): 3 rossi a parte");
 assert.deepEqual([card.pool, card.threshold, card.dice, card.difficulty, card.successFrom, card.total, card.margin, card.sistema], [13, 1, 13, 1, 6, 5, 4, true], "quattro scintille e una stellina spaiata: 5 successi a soglia 1, margine 4; i rossi non contano");
 assert.equal(card.ustione, undefined, "nessun occhio sui rossi (5, 4, 3): niente Contraccolpo");
-assert.deepEqual([card.kind, card.costo, card.paradossoPreso], ["testimoni", { pay: "quintessenza", quintessenza: 1, paradosso: 2 }, 2], "la carta porta il costo, il Narratore copia il Paradosso preso");
+assert.deepEqual([card.kind, card.dissonanza, card.costo, card.paradossoPreso], ["testimoni", false, { quintessenza: 0, paradosso: 2 }, 2], "la carta porta il Paradosso del tipo, il Narratore copia il Paradosso preso");
 assert.equal(card.tiro.power, "");
 assert.deepEqual(card.tiro.traits, ["i1"]);
-assert.equal(flags["wod5e-mage"].magickBalance.paradox, 1 + 2, "Volgare con testimoni pagato in Quintessenza: +2 Paradosso");
-assert.equal(flags["wod5e-mage"].magickBalance.quintessence, 4 - 1 - 2, "scendono il punto del costo e i due spesi in dadi");
-assert.match(message.flavor, /WOD5E_MAGE\.Costo\.Nota/, "la carta dice il costo");
+assert.equal(flags["wod5e-mage"].magickBalance.paradox, 1 + 2, "Volgare con testimoni: +2 Paradosso");
+assert.equal(flags["wod5e-mage"].magickBalance.quintessence, 4 - 2, "scendono solo i due punti spesi in dadi: il lancio non costa");
+assert.match(message.flavor, /WOD5E_MAGE\.Costo\.Nota/, "la carta dice il Paradosso che il lancio dà");
 assert.equal(flags["wod5e-mage"].lastThreshold, 1, "la soglia salvata è quella del lancio, col premio già tolto");
 assert.match(message.flavor, /Occhio di lince \+1/);
 
@@ -373,8 +373,8 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   globalThis.__sim.faces = [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8];
   const mCasa = await S.launchTiro(actor, T.setQuintessence(tiroCasa, 1));
   assert.ok(mCasa);
-  assert.equal(flags["wod5e-mage"].magickBalance.quintessence, 6 - 1 - 1, "il costo del lancio e il punto speso in dadi: il potere a costo variabile si paga col tasto «Usa»");
-  assert.equal(flags["wod5e-mage"].magickBalance.paradox, 0, "Accidentale pagato in Quintessenza: niente Paradosso");
+  assert.equal(flags["wod5e-mage"].magickBalance.quintessence, 6 - 1, "solo il punto speso in dadi: il lancio non costa, e il potere a costo variabile si paga col tasto «Usa»");
+  assert.equal(flags["wod5e-mage"].magickBalance.paradox, 0, "Accidentale: niente Paradosso");
   assert.equal(flags["wod5e-mage"].poteriUsi.pcasa, undefined);
 }
 

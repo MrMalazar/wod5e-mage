@@ -22,7 +22,7 @@ import {
   setSoglia,
   setExtra,
   setKind,
-  setPay,
+  setDissonanza,
   setQuintessence,
   setScope,
   TIRO_KINDS,
@@ -275,11 +275,14 @@ conto = contoTiro(magick, { arete: 2, attributeValue: 4, skillValue: 5, traitDic
 assert.deepEqual([conto.vantaggi, conto.pool], [5, 14], "i dadi dei Vantaggi arrivano a 5");
 conto = contoTiro(magick, { arete: 2, attributeValue: 4, skillValue: 5, traitDice: -6 });
 assert.deepEqual([conto.vantaggi, conto.pool], [-6, 3], "in meno non hanno tetto");
-// Come si paga il lancio (29/9): la scelta resta nel tiro, una parola sbagliata torna alla scelta di base.
-assert.equal(emptyTiro().pay, null);
-assert.equal(setPay(magick, "paradosso").pay, "paradosso");
-assert.equal(setPay(magick, "quintessenza").pay, "quintessenza");
-assert.equal(setPay(setPay(magick, "paradosso"), "boh").pay, null);
+// La dissonanza (il Sistema): lanciare non costa più, e nel riquadro resta da dire solo se il
+// lancio stride con la realtà intorno. Spenta di partenza; senza valore si gira.
+assert.equal(emptyTiro().dissonanza, false);
+assert.equal("pay" in emptyTiro(), false, "«paga con» è uscito dal riquadro");
+assert.equal(setDissonanza(magick).dissonanza, true);
+assert.equal(setDissonanza(setDissonanza(magick)).dissonanza, false);
+assert.equal(setDissonanza(setDissonanza(magick), false).dissonanza, false);
+assert.equal(setDissonanza(magick, true).dissonanza, true);
 conto = contoTiro(setExtra(magick, 2), { arete: 2, attributeValue: 4, skillValue: 5 });
 assert.deepEqual([conto.extra, conto.pool], [2, 11], "i dadi extra della scheda entrano nella riserva");
 conto = contoTiro(setExtra(magick, 3), { arete: 2, attributeValue: 4, skillValue: 5, harmony: 2 });

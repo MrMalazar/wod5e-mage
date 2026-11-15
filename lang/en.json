@@ -859,7 +859,7 @@
       "Usa": "Use",
       "UsaHint": "Use the power without rolling: counts the use, pays the Quintessence, sends the card to chat",
       "UsiFiniti": "No uses left for this period: it rearms at Scene Change or New Session.",
-      "QuintessenzaManca": "Not enough Quintessence on the Wheel.",
+      "PagaInParadosso": "The Wheel does not hold enough Quintessence: you pay it in Paradox, point for point.",
       "QuintessenzaBreve": "Quint.",
       "Carta": {
         "Pagato": "Paid",
@@ -2035,8 +2035,8 @@
         "testimoni": "Vulgar with witnesses"
       },
       "KindHints": {
-        "accidentale": "Nobody notices: no red dice.",
-        "volgare": "Reality notices: red dice are rolled apart.",
+        "accidentale": "It can pass for chance: no red dice.",
+        "volgare": "It openly breaks reality: red dice are rolled apart.",
         "testimoni": "Someone saw you: red dice are rolled apart."
       },
       "KindWarning": "Choose how you do it: Coincidental, Vulgar or Vulgar with witnesses.",
@@ -2097,6 +2097,9 @@
       },
       "RiesceSenzaTirare": "Succeeds without rolling: {name}",
       "PotereCosto": "The power costs {points} Quintessence.",
+      "PotereCostoParadosso": "The power costs {points} Paradox: the Wheel does not hold enough Quintessence.",
+      "Dissonanza": "Dissonance",
+      "DissonanzaHint": "The casting clashes with the reality around it, like calling water inside a volcano: a Vulgar gives 1 more point of Paradox. It does not count on a Coincidental.",
       "PotereDadiFlavor": "{name} +{dice}",
       "SogliaManoHint": "The threshold: the highest Scope, Epicness included, plus 1 for every other Scope above Arete; 10 at most. Minus and plus are the difficulty the Storyteller gives: it is free, and beyond +3 or −3 the number turns red; the pen says by how much.",
       "SogliaManoAbilitaHint": "The threshold the Storyteller sets, from 1 to 7, with minus and plus: without it, the roll does not start.",
@@ -2778,7 +2781,7 @@
     },
     "Costo": {
       "PagaCon": "Pay with",
-      "Hint": "Every casting is paid, and you can always cast: 1 Quintessence, or the Paradox of the type (Coincidental 1, Vulgar 2, Vulgar with witnesses 3). Paying with Quintessence still takes the Vulgar's Paradox. The Storyteller gets a copy of the Paradox taken.",
+      "Hint": "Casting a spell costs nothing. A Coincidental gives no Paradox; a Vulgar gives 1 point, plus 1 with witnesses and plus 1 with dissonance. The Storyteller gets a copy of the Paradox taken.",
       "Quintessenza": "Quintessence",
       "Paradosso": "Paradox",
       "QuintessenzaHint": "Pay 1 Quintessence; a Vulgar still adds its Paradox (1, or 2 with witnesses). Off when the Wheel has none.",
@@ -2786,9 +2789,10 @@
       "PuntiQuintessenza": "{points} Quintessence",
       "PuntiParadosso": "{points} Paradox",
       "E": "and",
-      "Nota": "Casting cost: {prezzo}.",
+      "Nota": "The casting gives {prezzo}.",
       "Pagato": "Paid: {prezzo}.",
-      "Tasto": "Costs {prezzo}."
+      "Tasto": "Gives {prezzo}.",
+      "TastoNiente": "Gives no Paradox."
     },
     "Sacrificio": {
       "Label": "Sacrifice",

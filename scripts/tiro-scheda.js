@@ -15,7 +15,7 @@ import {
   THRESHOLD_CAP
 } from "./arete.js";
 import { addParadoxToBalance, getMagickBalance } from "./magick-balance.js";
-import { costoLancio, pagamentoDelLancio, testoCosto } from "./ramo-c.js";
+import { testoCosto } from "./ramo-c.js";
 import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
 import { FORMULE_M6 } from "./data/formule.js";
 import { scopesInParole } from "./ongoing-magick.js";
@@ -29,6 +29,7 @@ import {
   potereLabel,
   poteriDelPersonaggio,
   poteriOfSphere,
+  pagamentoDelPotere,
   puoUsare,
   registraUso,
   spezzaIdPotere,
@@ -62,7 +63,7 @@ import {
   removePill,
   setDadi,
   setKind,
-  setPay,
+  setDissonanza,
   setQuintessence,
   setScope,
   setSoglia,
@@ -77,7 +78,7 @@ import {
   toggleSphere,
   toggleTrait
 } from "./tiro.js";
-import { SOGLIA_ABILITA_MAX, SOGLIA_MAGICK_MAX, SOGLIA_MIN } from "./sistema.js";
+import { paradossoDelLancio, SOGLIA_ABILITA_MAX, SOGLIA_MAGICK_MAX, SOGLIA_MIN } from "./sistema.js";
 
 /** La bandiera con la lettura scelta di ogni Ambito (16/9 sera). */
 export const SCOPE_MODES_FLAG = "scopeModes";
@@ -188,7 +189,8 @@ export function contoInputs(actor, tiro, { traits = null } = {}) {
       attributeValue: attribute?.value ?? 0,
       skillValue: skill?.value ?? 0,
       traitDice: traitDiceOf(actor, tiro.traits),
-      quintessenceAvailable: Math.max(getMagickBalance(actor).quintessence - powerCost, 0),
+      // Il potere attivo impegna la sua Quintessenza; se non basta lo si paga in Paradosso (il Sistema), e resta tutta per i dadi.
+      quintessenceAvailable: getMagickBalance(actor).quintessence - pagamentoDelPotere(powerCost, getMagickBalance(actor).quintessence).quintessenza,
       power,
       powerCost,
       powerCtx: power ? {
@@ -427,9 +429,6 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     riserva.push({ kind: "quintessence", id: "quintessence", fa: "fa-solid fa-droplet", name: localize("WOD5E_MAGE.MagickBalance.Quintessence"), stepper: { action: "tiroQuintessence", value: numero(conto.quintessence), min: !conto.quintessence, max: conto.quintessence >= tetto, extra: `/ ${tetto}` }, hint: localize("WOD5E_MAGE.Tiro.QuintessenceHint") });
   }
 
-  // Chi paga il lancio (29/9): la Quintessenza libera è quella che resta dopo il costo del potere attivo.
-  const quintessenzaLibera = conto.powerActive ? inputs.quintessenceAvailable : getMagickBalance(actor).quintessence;
-  const pay = pagamentoDelLancio(tiro.pay, quintessenzaLibera);
   const haTratto = Boolean(attribute || skill);
   const sogliaSet = conto.difficultySet;
   const size = tiroSize(tiro);
@@ -523,22 +522,17 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
       on: dalNarratore(),
       hint: dalNarratore() ? format("WOD5E_MAGE.Verdetto.DalNarratoreHint", { seconds: VERDETTO_SECONDI }) : localize("WOD5E_MAGE.Verdetto.SenzaNarratoreHint")
     },
-    // Il costo del lancio (Blue, 29/9): ogni lancio si paga, e si può sempre lanciare.
-    // La scelta sta nelle opzioni; il prezzo di ogni tipo sta nel sorvolo del tasto (1/10: sul tasto solo il nome).
-    costo: magick ? {
-      pay,
-      quintessenza: pay === "quintessenza",
-      canQuintessenza: quintessenzaLibera >= 1,
-      libera: quintessenzaLibera
-    } : null,
+    // La dissonanza (il Sistema): lanciare un incantesimo non costa; un Volgare dà 1 punto di
+    // Paradosso, più 1 coi testimoni e più 1 con la dissonanza, che si accende qui.
+    dissonanza: magick ? { on: Boolean(tiro.dissonanza) } : null,
+    // Sul tasto solo il nome (1/10); il Paradosso che il tipo dà sta nel sorvolo e nella carta.
     kinds: TIRO_KINDS.map((kind) => {
-      const costo = costoLancio(kind, pay);
-      const prezzo = testoCosto(costo, localize, format);
+      const paradosso = paradossoDelLancio({ volgare: kind !== "accidentale", testimoni: kind === "testimoni", dissonanza: Boolean(tiro.dissonanza) });
       return {
         kind,
         label: localize(`WOD5E_MAGE.Tiro.Kinds.${kind}`),
-        hint: `${localize(`WOD5E_MAGE.Tiro.KindHints.${kind}`)} ${format("WOD5E_MAGE.Costo.Tasto", { prezzo })}`,
-        costo
+        hint: `${localize(`WOD5E_MAGE.Tiro.KindHints.${kind}`)} ${paradosso > 0 ? format("WOD5E_MAGE.Costo.Tasto", { prezzo: testoCosto({ paradosso }, localize, format) }) : localize("WOD5E_MAGE.Costo.TastoNiente")}`,
+        paradosso
       };
     }),
     // Il tiro parte con almeno un tratto (Attributo o Abilità) e con la
@@ -686,7 +680,7 @@ export function preparePoteriRows(actor, tiro, localize = (key) => key) {
         ok: verdetto.ok,
         // In piccolo sulla riga: gli usi e il costo; nel sorvolo anche il perché non si può.
         nota: parti.join(" · "),
-        hint: [parti.join(" · "), verdetto.ok ? "" : localize(verdetto.motivo === "usi" ? "WOD5E_MAGE.Poteri.UsiFiniti" : "WOD5E_MAGE.Poteri.QuintessenzaManca")].filter(Boolean).join("\n")
+        hint: [parti.join(" · "), verdetto.ok ? (attivo && verdetto.paga === "paradosso" ? localize("WOD5E_MAGE.Poteri.PagaInParadosso") : "") : localize("WOD5E_MAGE.Poteri.UsiFiniti")].filter(Boolean).join("\n")
       };
     };
     rows.push(riga(power.id, ""));
@@ -809,14 +803,13 @@ export async function onTiroPill(event, target) {
 
 export async function onTiroClear(event) {
   event.preventDefault();
-  // Come si paga (29/9) è una scelta di chi tira: resta anche dopo Azzera.
-  return repaint(this, setPay(clearTiro(), tiroOf(this).pay));
+  return repaint(this, clearTiro());
 }
 
-/** Come si paga il lancio (Blue, 29/9): Quintessenza o Paradosso; la scelta resta finché non si cambia. */
-export async function onTiroPaga(event, target) {
+/** La dissonanza (il Sistema): il lancio stride con la realtà intorno; si accende e si spegne, e vale sui Volgari. */
+export async function onTiroDissonanza(event) {
   event.preventDefault();
-  return repaint(this, setPay(tiroOf(this), target.dataset.pay));
+  return repaint(this, setDissonanza(tiroOf(this)));
 }
 
 /** La soglia a mano (30/9): il meno e il più la alzano o abbassano sopra il conto degli Ambiti; `data-reset` la toglie. */
@@ -893,7 +886,7 @@ export async function onTiroRoll(event, target) {
   event.preventDefault();
   const tiro = setKind(tiroOf(this), target.dataset.kind);
   const outcome = await launchTiro(this.actor, tiro);
-  if (outcome) await repaint(this, setPay(clearTiro(), tiro.pay));
+  if (outcome) await repaint(this, clearTiro());
 }
 
 /* ---------------------------------------------------------------- */
@@ -904,19 +897,24 @@ export async function onTiroRoll(event, target) {
  * Il potere a tiro fatto (tappa 3): l'uso dell'attivo si conta nella
  * bandiera; la Quintessenza (i dadi, e il costo dell'attivo) scende, salvo
  * che la Ruota abbia già pagato (`pagato`: il lancio di Magick paga prima).
+ * Il costo dell'attivo che la Quintessenza non copre sale in Paradosso (il
+ * Sistema): `piano` è il conto fatto prima del tiro, quando la Ruota era
+ * ancora quella.
  */
-export async function pagaPotere(actor, conto, inputs, { pagato = false } = {}) {
+export async function pagaPotere(actor, conto, inputs, { pagato = false, piano = null } = {}) {
   if (!actor.isOwner) return;
   const update = {};
   const power = inputs?.power;
   if (power && conto.powerActive) {
     update[`flags.${MODULE_ID}.${POTERI_USI_FLAG}`] = registraUso(actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {}, power);
   }
-  const spesa = pagato ? 0 : count(conto.quintessence) + (power && conto.powerActive ? count(inputs.powerCost) : 0);
-  if (spesa > 0) {
-    const balance = getMagickBalance(actor);
-    update[`flags.${MODULE_ID}.magickBalance`] = { quintessence: Math.max(balance.quintessence - spesa, 0), paradox: balance.paradox };
-    ui.notifications.info(game.i18n.format("WOD5E_MAGE.Arete.QuintessenceSpent", { points: spesa }));
+  const balance = getMagickBalance(actor);
+  const potere = piano ?? pagamentoDelPotere(power && conto.powerActive ? inputs.powerCost : 0, balance.quintessence);
+  const spesa = pagato ? 0 : count(conto.quintessence) + potere.quintessenza;
+  const paradosso = pagato ? 0 : potere.paradosso;
+  if (spesa > 0 || paradosso > 0) {
+    update[`flags.${MODULE_ID}.magickBalance`] = addParadoxToBalance({ quintessence: Math.max(balance.quintessence - spesa, 0), paradox: balance.paradox }, paradosso);
+    ui.notifications.info(game.i18n.format("WOD5E_MAGE.Costo.Pagato", { prezzo: testoCosto({ quintessenza: spesa, paradosso }, game.i18n.localize.bind(game.i18n), game.i18n.format.bind(game.i18n)) }));
   }
   if (Object.keys(update).length) await actor.update(update);
 }
@@ -940,15 +938,18 @@ export async function launchTiro(actor, tiro) {
     ui.notifications.warn(localize("WOD5E_MAGE.Tiro.DifficultyWarning"));
     return null;
   }
-  // Il potere entrato «attivo» (tappa 3): serve un uso nel periodo e la sua Quintessenza.
+  // Il potere entrato «attivo» (tappa 3): serve un uso nel periodo. Il costo si paga in
+  // Quintessenza, o in Paradosso se sulla Ruota non ce n'è abbastanza (il Sistema).
   const power = inputs.power;
   if (power && conto.powerActive) {
     const verdetto = puoUsare(power, { usi: actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {}, quintessence: getMagickBalance(actor).quintessence });
     if (!verdetto.ok) {
-      ui.notifications.warn(localize(verdetto.motivo === "usi" ? "WOD5E_MAGE.Poteri.UsiFiniti" : "WOD5E_MAGE.Poteri.QuintessenzaManca"));
+      ui.notifications.warn(localize("WOD5E_MAGE.Poteri.UsiFiniti"));
       return null;
     }
   }
+  // Come si paga il potere attivo: lo dice la Ruota di adesso, prima che il tiro la muova.
+  const pianoPotere = pagamentoDelPotere(power && conto.powerActive ? inputs.powerCost : 0, getMagickBalance(actor).quintessence);
   const arete = getArete(actor);
   // L'incantesimo caricato dal Grimorio (o la Formula di passaggio) dà il nome e l'Obiettivo al lancio.
   const spell = spellOf(actor, tiro);
@@ -994,7 +995,7 @@ export async function launchTiro(actor, tiro) {
     notes.push(format("WOD5E_MAGE.Tiro.PowerNote", { name: potereLabel(power, localize) }));
     const potereNote = notePotere(conto, power, localize, format);
     notes.push(...potereNote.note, ...potereNote.esclusi);
-    if (conto.powerActive && inputs.powerCost > 0) notes.push(format("WOD5E_MAGE.Tiro.PotereCosto", { points: inputs.powerCost }));
+    if (conto.powerActive && inputs.powerCost > 0) notes.push(format(pianoPotere.inParadosso ? "WOD5E_MAGE.Tiro.PotereCostoParadosso" : "WOD5E_MAGE.Tiro.PotereCosto", { points: inputs.powerCost }));
   }
   // La riuscita senza tirare: la fascia della carta lo dice col nome del potere.
   const senzaTirare = Boolean(power) && conto.autoSuccess;
@@ -1023,7 +1024,8 @@ export async function launchTiro(actor, tiro) {
         banner,
         title: rollLabel,
         flavor: card,
-        card: { symbols: [], traits: traitRows, tiro: { power: tiro.power ?? "", traits: chosenTraits.map((item) => item.id), specialty: tiro.specialty ?? "" } },
+        // Il potere pagato in Paradosso (il Sistema): la carta porta i punti presi, e il Narratore li copia.
+        card: { symbols: [], traits: traitRows, ...(pianoPotere.paradosso > 0 ? { paradossoPreso: pianoPotere.paradosso } : {}), tiro: { power: tiro.power ?? "", traits: chosenTraits.map((item) => item.id), specialty: tiro.specialty ?? "" } },
         activeModifiers: chosenTraits.map((item) => ({ label: item.name, value: `${traitDiceOf(actor, [item.id]) >= 0 ? "+" : ""}${traitDiceOf(actor, [item.id])}` })),
         notes
       });
@@ -1032,7 +1034,7 @@ export async function launchTiro(actor, tiro) {
       return null;
     }
     // A tiro fatto: la Quintessenza spesa (in dadi, o per il potere attivo) scende, l'uso si conta.
-    if (esito) await pagaPotere(actor, conto, inputs);
+    if (esito) await pagaPotere(actor, conto, inputs, { piano: pianoPotere });
     return esito;
   }
 
@@ -1093,18 +1095,17 @@ export async function launchTiro(actor, tiro) {
   const sphereMax = Math.max(0, ...sphereEntries.map((entry) => entry.level));
   if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: conto.difficulty });
 
-  // Il costo del lancio (Blue, 29/9): ogni lancio si paga, 1 Quintessenza oppure
-  // il Paradosso del tipo (Accidentale 1, Volgare 2, con testimoni 3); chi paga
-  // in Quintessenza prende lo stesso il Paradosso del Volgare.
+  // Il Paradosso del lancio (il Sistema): lanciare un incantesimo non costa. L'Accidentale non
+  // dà Paradosso; il Volgare 1 punto, più 1 coi testimoni e più 1 con la dissonanza. Il potere
+  // attivo costa la sua Quintessenza, o altrettanto Paradosso se sulla Ruota non ce n'è.
   const balanceBefore = getMagickBalance(actor);
-  const powerSpesa = conto.powerActive ? count(inputs.powerCost) : 0;
-  const pay = pagamentoDelLancio(tiro.pay, balanceBefore.quintessence - powerSpesa - count(conto.quintessence));
-  const costo = costoLancio(tiro.kind, pay);
-  const paradoxGain = costo.paradosso;
-  notes.unshift(format("WOD5E_MAGE.Costo.Nota", { prezzo: testoCosto(costo, localize, format) }));
-  // La Ruota paga subito: il costo del lancio, quello del potere attivo e la
-  // Quintessenza in dadi di un potere scendono; il Paradosso del costo sale.
-  const spesa = costo.quintessenza + conto.quintessence + powerSpesa;
+  const paradossoTipo = paradossoDelLancio({ volgare: Boolean(options.vulgar || options.witnesses), testimoni: Boolean(options.witnesses), dissonanza: Boolean(tiro.dissonanza) });
+  const paradoxGain = paradossoTipo + pianoPotere.paradosso;
+  const costo = { quintessenza: 0, paradosso: paradossoTipo };
+  if (paradossoTipo > 0) notes.unshift(format("WOD5E_MAGE.Costo.Nota", { prezzo: testoCosto(costo, localize, format) }));
+  // La Ruota paga subito: la Quintessenza spesa in dadi e quella del potere attivo
+  // scendono; il Paradosso del tipo sale, con quello del potere pagato in Paradosso.
+  const spesa = count(conto.quintessence) + pianoPotere.quintessenza;
   let balanceMoved = false;
   if ((spesa > 0 || paradoxGain > 0) && actor.isOwner) {
     const spent = { quintessence: Math.max(balanceBefore.quintessence - spesa, 0), paradox: balanceBefore.paradox };
@@ -1115,7 +1116,7 @@ export async function launchTiro(actor, tiro) {
       ui.notifications.info(format("WOD5E_MAGE.Costo.Pagato", { prezzo: testoCosto({ quintessenza: spesa, paradosso: paradoxGain }, localize, format) }));
     }
   }
-  // I rossi a parte (29/9): solo nei Volgari, uno per punto sulla Ruota dopo il pagamento.
+  // I rossi a parte: solo nei Volgari, uno per cella di Paradosso sulla Ruota, contate dopo il Paradosso che il lancio ha dato.
   const paradoxRating = options.coincidental ? 0 : getMagickBalance(actor).paradox;
 
   let outcome = null;
@@ -1138,8 +1139,9 @@ export async function launchTiro(actor, tiro) {
         symbols,
         traits: traitRows,
         vulgar: effect.vulgar,
-        // Il costo del lancio (29/9): il Narratore copia il Paradosso preso, qualunque sia il tipo.
+        // Il Paradosso preso col lancio (il tipo, la dissonanza, il potere pagato in Paradosso): il Narratore lo copia.
         kind: tiro.kind,
+        dissonanza: Boolean(tiro.dissonanza),
         costo,
         paradossoPreso: paradoxGain,
         tiro: { power: tiro.power ?? "", traits: chosenTraits.map((item) => item.id), specialty: tiro.specialty ?? "", indulgi: tiro.indulgi ?? "" },

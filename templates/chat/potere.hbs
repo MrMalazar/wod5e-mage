@@ -6,7 +6,7 @@
     <p class="wod5e-mage-incantesimo-chat-name">{{carta.name}}</p>
     <p class="wod5e-mage-potere-chat-riga">{{#if carta.sphere}}<b>{{carta.sphere}}</b>{{/if}}{{#if carta.formula}} · {{carta.formula}}{{/if}}{{#if carta.kind}} · {{carta.kind}}{{/if}}</p>
     {{#if carta.costo}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Costo"}}</b> {{carta.costo}}</p>{{/if}}
-    {{#if carta.spent}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Pagato"}}</b> {{carta.spent}} {{localize "WOD5E_MAGE.Poteri.QuintessenzaBreve"}}</p>{{/if}}
+    {{#if carta.spent}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Pagato"}}</b> {{carta.spent}} {{#if carta.inParadosso}}{{localize "WOD5E_MAGE.MagickBalance.Paradox"}}{{else}}{{localize "WOD5E_MAGE.Poteri.QuintessenzaBreve"}}{{/if}}</p>{{/if}}
     {{#if carta.usi}}<p class="wod5e-mage-potere-chat-riga"><b>{{localize "WOD5E_MAGE.Poteri.Carta.Usi"}}</b> {{carta.usi.restanti}}/{{carta.usi.max}} ({{carta.usi.label}})</p>{{/if}}
     {{#each carta.blocchi as |blocco|}}
         <div class="wod5e-mage-potere-chat-blocco{{#if blocco.kind}} {{blocco.kind}}{{/if}}">

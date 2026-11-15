@@ -29,6 +29,7 @@ import {
   POTERI_USI_FLAG,
   poteriDelPersonaggio,
   poteriOfSphere,
+  pagamentoDelPotere,
   puoUsare,
   registraUso,
   riarmaUsi,
@@ -210,12 +211,17 @@ const conoscoRiga = { ...normalizzaPotere("r2", nuovoPotere("mind", conosco)), i
 assert.deepEqual(usiDelPotere(conoscoRiga, {}), { per: "sessione", max: 1, usati: 0, restanti: 1 });
 assert.equal(usiDelPotere(pronto, {}), null);
 assert.equal(usiDelPotere({ id: "x", uses: { per: "turno", n: 1 } }, {}), null);
-assert.deepEqual(puoUsare(conoscoRiga, { usi: {}, quintessence: 0 }), { ok: true, motivo: "", usi: { per: "sessione", max: 1, usati: 0, restanti: 1 } });
+assert.deepEqual(puoUsare(conoscoRiga, { usi: {}, quintessence: 0 }), { ok: true, motivo: "", usi: { per: "sessione", max: 1, usati: 0, restanti: 1 }, costo: 0, paga: "quintessenza" });
 const dopo = registraUso({}, conoscoRiga);
 assert.deepEqual(dopo, { r2: { sessione: 1 } });
 assert.deepEqual(puoUsare(conoscoRiga, { usi: dopo, quintessence: 5 }).motivo, "usi");
-assert.deepEqual(puoUsare(pronto, { usi: {}, quintessence: 1 }).motivo, "quintessenza");
-assert.equal(puoUsare(pronto, { usi: {}, quintessence: 2 }).ok, true);
+// Il Sistema: chi non ha la Quintessenza paga il potere in Paradosso, punto per punto; il costo non si spezza.
+assert.deepEqual([puoUsare(pronto, { usi: {}, quintessence: 1 }).ok, puoUsare(pronto, { usi: {}, quintessence: 1 }).paga], [true, "paradosso"]);
+assert.deepEqual([puoUsare(pronto, { usi: {}, quintessence: 2 }).ok, puoUsare(pronto, { usi: {}, quintessence: 2 }).paga], [true, "quintessenza"]);
+assert.deepEqual(pagamentoDelPotere(2, 1), { costo: 2, inParadosso: true, quintessenza: 0, paradosso: 2 });
+assert.deepEqual(pagamentoDelPotere(2, 2), { costo: 2, inParadosso: false, quintessenza: 2, paradosso: 0 });
+assert.deepEqual(pagamentoDelPotere(0, 0), { costo: 0, inParadosso: false, quintessenza: 0, paradosso: 0 }, "senza costo niente da pagare");
+assert.deepEqual([cartaPotere(pronto, { spent: 2, inParadosso: true }).inParadosso, cartaPotere(pronto, { spent: 2 }).inParadosso, cartaPotere(pronto, { spent: 0, inParadosso: true }).inParadosso], [true, false, false]);
 // Senza periodo contato la bandiera non cambia.
 assert.deepEqual(registraUso(dopo, pronto), dopo);
 // Cambio Scena riarma la scena, Nuova sessione anche la sessione; «campagna» resta.

@@ -859,7 +859,7 @@
       "Usa": "Usa",
       "UsaHint": "Usa il potere senza tirare: conta l'uso, paga la Quintessenza, manda la carta in chat",
       "UsiFiniti": "Usi finiti per questo periodo: si riarma al Cambio Scena o a Nuova sessione.",
-      "QuintessenzaManca": "Non hai abbastanza Quintessenza sulla Ruota.",
+      "PagaInParadosso": "Sulla Ruota la Quintessenza non basta: lo paghi in Paradosso, punto per punto.",
       "QuintessenzaBreve": "Quint.",
       "Carta": {
         "Pagato": "Pagato",
@@ -2035,8 +2035,8 @@
         "testimoni": "Volgare con testimoni"
       },
       "KindHints": {
-        "accidentale": "Non si percepisce: niente rossi.",
-        "volgare": "La realtà lo percepisce: i rossi si tirano a parte.",
+        "accidentale": "Può passare per un caso: niente rossi.",
+        "volgare": "Rompe la realtà apertamente: i rossi si tirano a parte.",
         "testimoni": "Qualcuno ti ha visto farlo: i rossi si tirano a parte."
       },
       "KindWarning": "Scegli come la fai: Accidentale, Volgare o Volgare con testimoni.",
@@ -2097,6 +2097,9 @@
       },
       "RiesceSenzaTirare": "Riesce senza tirare: {name}",
       "PotereCosto": "Il potere costa {points} Quintessenza.",
+      "PotereCostoParadosso": "Il potere costa {points} Paradosso: sulla Ruota la Quintessenza non basta.",
+      "Dissonanza": "Dissonanza",
+      "DissonanzaHint": "Il lancio stride con la realtà intorno, come evocare acqua in un vulcano: un Volgare dà 1 punto di Paradosso in più. Sull'Accidentale non conta.",
       "PotereDadiFlavor": "{name} +{dice}",
       "SogliaManoHint": "La soglia: l'Ambito più alto, Epicità compresa, più 1 per ogni altro Ambito sopra l'Areté; al massimo 10. Il meno e il più sono la difficoltà che dà il Narratore: è libera, e oltre +3 o −3 il numero diventa rosso; la matita dice di quanto.",
       "SogliaManoAbilitaHint": "La soglia che dice il Narratore, da 1 a 7, col meno e il più: senza, il tiro non parte.",
@@ -2778,7 +2781,7 @@
     },
     "Costo": {
       "PagaCon": "Paga con",
-      "Hint": "Ogni lancio si paga, e si può sempre lanciare: 1 Quintessenza, oppure il Paradosso del tipo (Accidentale 1, Volgare 2, Volgare con testimoni 3). Chi paga in Quintessenza prende lo stesso il Paradosso del Volgare. Il Narratore riceve la copia del Paradosso preso.",
+      "Hint": "Lanciare un incantesimo non costa. Un Accidentale non dà Paradosso; un Volgare dà 1 punto, più 1 coi testimoni e più 1 con la dissonanza. Il Narratore riceve la copia del Paradosso preso.",
       "Quintessenza": "Quintessenza",
       "Paradosso": "Paradosso",
       "QuintessenzaHint": "Paghi 1 Quintessenza; il Volgare aggiunge lo stesso il suo Paradosso (1, o 2 coi testimoni). Spento se sulla Ruota non ce n'è.",
@@ -2786,9 +2789,10 @@
       "PuntiQuintessenza": "{points} Quintessenza",
       "PuntiParadosso": "{points} Paradosso",
       "E": "e",
-      "Nota": "Costo del lancio: {prezzo}.",
+      "Nota": "Il lancio dà {prezzo}.",
       "Pagato": "Pagato: {prezzo}.",
-      "Tasto": "Costa {prezzo}."
+      "Tasto": "Dà {prezzo}.",
+      "TastoNiente": "Non dà Paradosso."
     },
     "Sacrificio": {
       "Label": "Sacrificio",

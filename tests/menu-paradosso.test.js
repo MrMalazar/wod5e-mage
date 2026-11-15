@@ -11,6 +11,7 @@ import {
   contoRitmo,
   COPIA_FLAG,
   copiaDaCarta,
+  copiaDaPotere,
   COPPIE_OROLOGIO,
   coppiaLibera,
   etichettaVolgare,
@@ -228,6 +229,16 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: true, paradossoPreso: 2 } }), { points: 2, testimoni: false, volgare: true }, "Volgare pagato in Paradosso");
   assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: true, advancedDifficulty: true, paradossoPreso: 3 } }), { points: 3, testimoni: true, volgare: true });
   assert.equal(copiaDaCarta({ rollCard: { vulgar: true, paradossoPreso: 2 }, paradossoCopiato: true }), null);
+  // Il Sistema: i testimoni si leggono dal tipo del lancio (la riuscita dall'8 non c'è più).
+  assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: true, kind: "testimoni", paradossoPreso: 2 } }), { points: 2, testimoni: true, volgare: true });
+  assert.deepEqual(copiaDaCarta({ rollCard: { vulgar: true, kind: "volgare", paradossoPreso: 1 } }), { points: 1, testimoni: false, volgare: true });
+  // Un potere pagato in Paradosso su un tiro di Abilità porta la sua copia sulla carta del tiro.
+  assert.deepEqual(copiaDaCarta({ rollCard: { skill: true, paradossoPreso: 2 } }), { points: 2, testimoni: false, volgare: false });
+  // E usato dalla scheda, fuori dal tiro, la porta sulla carta del potere.
+  assert.deepEqual(copiaDaPotere({ paradossoPotere: { points: 3 } }), { points: 3, testimoni: false, volgare: false });
+  assert.equal(copiaDaPotere({ paradossoPotere: { points: 3 }, paradossoCopiato: true }), null);
+  assert.equal(copiaDaPotere({ paradossoPotere: { points: 0 } }), null);
+  assert.equal(copiaDaPotere({}), null);
 }
 
 // Gli effetti addosso al mago: la riga, quando scade, l'ordine.
