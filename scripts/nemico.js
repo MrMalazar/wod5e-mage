@@ -386,22 +386,22 @@ export function malusCondizioni(items = []) {
 /**
  * L'8 e il fallimento delle Condizioni addosso, per campo (29/9): chi porta
  * il grado 2 riesce dall'8, chi porta un grado 3 fallisce. Torna {
- * physical, social, mental } con { otto: [nomi], fallisce: [nomi] }.
+ * physical, social, mental } con { meta: [nomi], fallisce: [nomi] }.
  */
 export function pesiCondizioni(items = []) {
-  const per = Object.fromEntries(CAMPI.map((campo) => [campo, { otto: [], fallisce: [] }]));
+  const per = Object.fromEntries(CAMPI.map((campo) => [campo, { meta: [], fallisce: [] }]));
   for (const item of items ?? []) {
     if (item?.type !== "condition" || item.system?.suppressed) continue;
     const entry = definizioneDi(item);
-    if (!entry || (entry.weight !== "otto" && entry.weight !== "fallisce")) continue;
+    if (!entry || (entry.weight !== "meta" && entry.weight !== "fallisce")) continue;
     for (const campo of CAMPI.filter((c) => entry.tipi.includes(c))) per[campo][entry.weight].push(String(item.name || entry.name));
   }
   return per;
 }
 
 /** La riuscita di un campo: dall'8 se una Condizione di grado 2 ci pesa, altrimenti dal 6. */
-export function riesceDal(pesi = { otto: [] }) {
-  return (pesi?.otto?.length ?? 0) > 0 ? 8 : RIESCE_DAL;
+export function riesceDal(pesi = { meta: [] }) {
+  return (pesi?.meta?.length ?? 0) > 0 ? 8 : RIESCE_DAL;
 }
 
 /**

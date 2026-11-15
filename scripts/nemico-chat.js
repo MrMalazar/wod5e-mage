@@ -39,7 +39,7 @@ export async function tiraNemico(actor, { nome = "", riserva, soglia = 0, danno 
   const localize = game.i18n.localize.bind(game.i18n);
   const format = game.i18n.format.bind(game.i18n);
   const bersaglio = bersaglioPreso();
-  const pesi = pesiCondizioni(actor.items?.contents ?? [...(actor.items ?? [])])[riserva?.campo] ?? { otto: [], fallisce: [] };
+  const pesi = pesiCondizioni(actor.items?.contents ?? [...(actor.items ?? [])])[riserva?.campo] ?? { meta: [], fallisce: [] };
   if (pesi.fallisce.length) {
     ui.notifications.warn(format("WOD5E_MAGE.Nemico.Fallisce", { names: pesi.fallisce.join(", ") }));
     return null;
@@ -52,7 +52,7 @@ export async function tiraNemico(actor, { nome = "", riserva, soglia = 0, danno 
   }
   const armatura = bersaglio?.actor ? armaturaDi(bersaglio.actor.items?.contents ?? [...(bersaglio.actor.items ?? [])]) : null;
   const notes = armatura?.totale ? [format("WOD5E_MAGE.Nemico.ArmaturaBersaglio", { bersaglio: bersaglio.name, punti: armatura.totale })] : [];
-  if (pesi.otto.length) notes.push(format("WOD5E_MAGE.Nemico.Otto", { names: pesi.otto.join(", ") }));
+  if (pesi.meta.length) notes.push(format("WOD5E_MAGE.Nemico.Otto", { names: pesi.meta.join(", ") }));
   const flavor = renderRollCard({
     traits: [{ label: riserva.label ?? "", value: riserva.base }],
     bonusParts: (riserva.voci ?? []).map((voce) => `${segnoDi(voce.value)} ${voce.nome}`),

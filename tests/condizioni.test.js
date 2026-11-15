@@ -29,9 +29,9 @@ assert.ok(CONDIZIONI.every((entry) => !entry.name.includes("*")));
 for (const scala of ["vista", "udito", "voce", "respiro", "emorragia", "avvelenamento", "paura", "rabbia", "sonno", "controllo"]) {
   assert.deepEqual(CONDIZIONI.filter((e) => e.scale === scala).map((e) => [e.grade, e.numeral]), [[1, "I"], [2, "II"], [3, "III"]], scala);
 }
-// I gradi: −2, poi −2 e 8, poi il tiro fallisce; il Controllo non tocca i dadi.
+// I gradi (il Sistema): −2 dadi, poi la riserva dimezzata, poi il tiro fallisce; il Controllo non tocca i dadi.
 const vista = CONDIZIONI.filter((e) => e.scale === "vista");
-assert.deepEqual(vista.map((e) => [e.name, e.weight, e.tipi]), [["Abbagliato", "meno2", ["physical", "mental"]], ["Offuscato", "otto", ["physical", "mental"]], ["Cieco", "fallisce", ["physical", "mental"]]]);
+assert.deepEqual(vista.map((e) => [e.name, e.weight, e.tipi]), [["Abbagliato", "meno2", ["physical", "mental"]], ["Offuscato", "meta", ["physical", "mental"]], ["Cieco", "fallisce", ["physical", "mental"]]]);
 assert.deepEqual(CONDIZIONI.filter((e) => e.scale === "controllo").map((e) => [e.name, e.weight, e.tipi]), [["Suggestionato", "scelte", []], ["Ammaliato", "scelte", []], ["Posseduto", "scelte", []]]);
 // I sinonimi del grado 3 falliscono sui tiri loro (la tavola dei Sinonimi).
 assert.deepEqual(["svenuto", "paralizzato", "rotto", "muto", "morente", "addormentato"].map((id) => [id, findCondizione(id).weight, findCondizione(id).tipi]), [
@@ -96,7 +96,7 @@ const rows = prepareConditionRows([
 ]);
 assert.equal(rows.length, 3);
 assert.deepEqual([rows[0].name, rows[0].dice, rows[0].numeral, rows[0].img, rows[0].scale, rows[0].list], ["Offuscato", "½", "II", "modules/wod5e-mage/assets/icons/condizioni/sensi.svg", "Vista", true]);
-assert.equal(rows[0].effect, "−2 dadi e difficoltà 8 sui tiri fisici quando miri, mentali quando cerchi o leggi.");
+assert.equal(rows[0].effect, "Riserva dimezzata sui tiri fisici quando miri, mentali quando cerchi o leggi.");
 assert.deepEqual([rows[1].name, rows[1].dice, rows[1].what, rows[1].suppressed, rows[1].list, rows[1].img], ["Mia", "−1", "Una cosa mia", true, false, "y.svg"]);
 assert.deepEqual([rows[2].name, rows[2].dice, rows[2].numeral, rows[2].condizione], ["Rotto (braccio sinistro)", "fallisce", "III", "rotto"]);
 assert.equal(rows[0].condizione, "offuscato");
@@ -227,7 +227,7 @@ assert.equal(vociMaster([a, b]).find((e) => e.id === "offuscato").all, true);
 assert.equal(await assignCondizione([a, b], findCondizione("offuscato")), 0);
 assert.equal(a.items.length + b.items.length, 0);
 assert.equal(selectedActors([{ actor: a }, { actor: a }, { actor: b }, {}]).length, 2);
-assert.deepEqual(listCondizioni().find((e) => e.id === "offuscato"), { id: "offuscato", name: "Offuscato", family: "sensi", scale: "vista", grade: 2, weight: "otto", tipi: ["physical", "mental"], dice: "½" });
+assert.deepEqual(listCondizioni().find((e) => e.id === "offuscato"), { id: "offuscato", name: "Offuscato", family: "sensi", scale: "vista", grade: 2, weight: "meta", tipi: ["physical", "mental"], dice: "½" });
 const masterTemplate = readFileSync(new URL("../templates/dialogs/condizioni-master.hbs", import.meta.url), "utf8");
 assert.match(masterTemplate, /data-role="targets"[\s\S]*sezione\.scale[\s\S]*data-condizione="\{\{entry\.id\}\}"[\s\S]*entry\.numeral[\s\S]*entry\.dice[\s\S]*data-role="count"/);
 const macros = readFileSync(new URL("../packs/mage-macros.db", import.meta.url), "utf8").split("\n").filter(Boolean).map((line) => JSON.parse(line));

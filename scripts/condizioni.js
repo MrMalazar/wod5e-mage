@@ -47,11 +47,11 @@ export function tipoDelTiro({ attribute = null, skill = null } = {}) {
 }
 
 /** Il peso in breve, per le righe, le pillole e le carte. */
-// Il peso «otto» è il secondo grado: dal Sistema (14/11) dimezza la riserva; il nome resta finché non si rifanno i dati.
-export const PESO_BREVE = Object.freeze({ meno2: "−2", otto: "½", fallisce: "fallisce", lieve: "−1", scelte: "", azione: "", nessuno: "" });
+// Il peso «meta» è il secondo grado: dimezza la riserva (il Sistema, 14/11; fino alla 1.40.0 era «otto», −2 dadi e difficoltà 8).
+export const PESO_BREVE = Object.freeze({ meno2: "−2", meta: "½", fallisce: "fallisce", lieve: "−1", scelte: "", azione: "", nessuno: "" });
 
 /** I pesi che il Tiro conta da solo. */
-export const PESI_DEL_TIRO = Object.freeze(["meno2", "otto", "fallisce", "lieve"]);
+export const PESI_DEL_TIRO = Object.freeze(["meno2", "meta", "fallisce", "lieve"]);
 
 /** I dadi tolti da un peso: −2 al primo grado, −1 ai lievi; il secondo grado non toglie dadi, dimezza. */
 export function dadiDelPeso(weight) {
@@ -363,7 +363,7 @@ export function condizioniDelTiro(items, tipo, scelte = {}) {
     ...vuoto,
     righe,
     dadi: accese.reduce((total, riga) => total + riga.dadi, 0),
-    dimezza: accese.some((riga) => riga.weight === "otto"),
+    dimezza: accese.some((riga) => riga.weight === "meta"),
     fallisce: accese.some((riga) => riga.weight === "fallisce"),
     perche: accese.filter((riga) => riga.weight === "fallisce").map((riga) => riga.name),
     fuori: righe.filter((riga) => !riga.on).map((riga) => riga.name)

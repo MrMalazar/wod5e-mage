@@ -1,6 +1,6 @@
 ---
 titolo: Le Condizioni, guida per il Narratore
-stato: 29/9/2026, IN VIGORE come regola di base delle Condizioni per tutto M6 (verdetto di Blue del 29/9). Scritta dai verdetti dei sei giri del rifacimento (il registro sta nel doc di progetto claude/condizioni_rework_29_9.md). I nomi con l'asterisco sono proposti e non ancora confermati. Sorgente del PDF «Le Condizioni» in Claude outputs. Nel libro il capitolo 31 si scrive da qui; il modulo di Foundry va allineato.
+stato: 29/9/2026, IN VIGORE come regola di base delle Condizioni per tutto M6 (verdetto di Blue del 29/9). Riallineata al Sistema del 14/11/2026: il secondo grado dimezza la riserva al posto del −2 con difficoltà 8. Scritta dai verdetti dei sei giri del rifacimento (il registro sta nel doc di progetto claude/condizioni_rework_29_9.md). I nomi con l'asterisco sono proposti e non ancora confermati. Sorgente del PDF «Le Condizioni» in Claude outputs. Nel libro il capitolo 31 si scrive da qui; il modulo di Foundry va allineato.
 ---
 
 # Come funzionano
@@ -23,24 +23,25 @@ Il Narratore non la ricorda: la descrive. Chi ha una gamba contusa zoppica, chi 
 
 ## Gradi
 
-Quasi tutte le Condizioni stanno su una scala di tre gradi. Ogni grado si porta dietro quello prima: chi sale al 2 tiene il −2 e ci aggiunge l'8.
+Quasi tutte le Condizioni stanno su una scala di tre gradi, e ogni grado pesa più di quello prima.
 
 | Grado | Sui tiri che la Condizione tocca |
 | :-: | :-- |
 | 1 | **−2 dadi** |
-| 2 | **−2 dadi** e **difficoltà 8** |
+| 2 | **riserva dimezzata**, per difetto |
 | 3 | il tiro **fallisce** |
 
-Il grado vale solo nella sua dimensione. Un Offuscato tira a −2 e difficoltà 8 quando mira, legge o cerca, e tira normale quando discute, ascolta o ricorda.
+Il grado vale solo nella sua dimensione. Un Offuscato tira con la riserva dimezzata quando mira, legge o cerca, e tira normale quando discute, ascolta o ricorda.
 
-Quanto pesa, contando che un successo basta a riuscire:
+Quanto pesa, su un tiro a soglia 2:
 
 | Dadi | Senza | Grado 1 | Grado 2 |
 | :-: | :-: | :-: | :-: |
-| 3 | 88% | 50% | 30% |
-| 4 | 94% | 75% | 51% |
-| 5 | 97% | 88% | 66% |
-| 6 | 98% | 94% | 76% |
+| 4 | 69% | 25% | 25% |
+| 5 | 81% | 50% | 25% |
+| 6 | 89% | 69% | 50% |
+| 7 | 94% | 81% | 50% |
+| 8 | 96% | 89% | 69% |
 
 Un altro colpo dello stesso tipo fa salire la Condizione di un gradino.
 
@@ -87,7 +88,7 @@ Anche una scala può finire in più modi. Il veleno al grado 3 paralizza o stend
 
 ## Speciali
 
-Alcune Condizioni non si fermano al −2, all'8 e al fallimento: ci aggiungono qualcosa, o lo cambiano. La voce lo scrive, e il Narratore lo gioca com'è scritto.
+Alcune Condizioni non si fermano ai dadi tolti e al fallimento: ci aggiungono qualcosa, o lo cambiano. La voce lo scrive, e il Narratore lo gioca com'è scritto.
 
 | Scala | Cosa aggiunge |
 | :-- | :-- |
@@ -108,9 +109,9 @@ I lievi sono gli acciacchi e i turbamenti piccoli: una botta, una storta, l'ansi
 1. I lievi si sommano fra loro: Contuso e Slogato fanno **−2** ai tiri fisici.
 2. I lievi si sommano al −2 di una scala sullo stesso tiro: Contuso e Sanguinante fanno **−3** ai tiri fisici.
 3. Due scale diverse sullo stesso tiro sommano i dadi tolti: un personaggio Abbagliato e Sanguinante che spara tira a **−4**.
-4. L'8 non si somma: se una delle Condizioni lo dà, il tiro è a difficoltà 8. Se una fa fallire, il tiro fallisce.
+4. La riserva si dimezza una volta sola, anche se lo chiedono più Condizioni, e per ultima: prima si tolgono i dadi, poi si fa la metà. Se una fa fallire, il tiro fallisce.
 5. Su una scala si sta a un gradino solo: una nuova ferita dello stesso tipo sale di un gradino, non ne aggiunge un'altra.
-6. Se i dadi vanno a zero il tiro non si fa, come sempre.
+6. Se i dadi vanno a zero il tiro fallisce senza tirare.
 
 ## Scontro
 
@@ -147,26 +148,26 @@ Una Condizione messa con la Magick dura quanto l'effetto che l'ha messa.
 
 ## Esempi
 
-**La sabbia e il pugno.** In una rissa un teppista tira una manciata di sabbia negli occhi al mago: Offuscato. Finché non si sciacqua, quando mira o legge tira a −2 e difficoltà 8. Al turno dopo spende l'azione per sciacquarsi con la bottiglietta che ha in tasca, e il Narratore accetta: Offuscato se ne va. Con un pugno sull'occhio sarebbe stato lo stesso Offuscato, ma un occhio gonfio non si sciacqua: resta finché qualcuno non lo medica.
+**La sabbia e il pugno.** In una rissa un teppista tira una manciata di sabbia negli occhi al mago: Offuscato. Finché non si sciacqua, quando mira o legge tira con la riserva dimezzata. Al turno dopo spende l'azione per sciacquarsi con la bottiglietta che ha in tasca, e il Narratore accetta: Offuscato se ne va. Con un pugno sull'occhio sarebbe stato lo stesso Offuscato, ma un occhio gonfio non si sciacqua: resta finché qualcuno non lo medica.
 
 **Il braccio rotto.** Il mago cade dalla scala antincendio: Rotto (braccio sinistro). Al pronto soccorso il medico vuole sapere come se l'è fatto e scrive un referto; col gesso ne esce in qualche settimana. Un mago di Vita glielo salda in una notte, ma bisogna trovarlo, e vuole un favore in cambio. La cura è una scena, e la scelta fra le due strade è già storia.
 
 **Il dardo.** Un dardo avvelenato colpisce il mago: Paralizzato. Non si muove e non parla: falliscono i tiri fisici, e i sociali che passano da parole o movimenti. Vede, sente e pensa lucido: i tiri mentali restano come sono, e può accorgersi di chi entra o ricordare dove ha già visto quel simbolo.
 
-**La rissa.** Il mago finisce a terra (Atterrato, −1) e si storce il polso (Slogato, −1): ai tiri fisici ha −2. Si rialza, e Atterrato se ne va: resta −1. Poi un coltello gli apre il braccio: Sanguinante, −2 ai tiri fisici, e adesso tira a −3. Una seconda coltellata porta Sanguinante a Dissanguato: col polso slogato tira a −3 e difficoltà 8, e a fine scena segna 1 Superficiale finché nessuno lo fascia.
+**La rissa.** Il mago finisce a terra (Atterrato, −1) e si storce il polso (Slogato, −1): ai tiri fisici ha −2. Si rialza, e Atterrato se ne va: resta −1. Poi un coltello gli apre il braccio: Sanguinante, −2 ai tiri fisici, e adesso tira a −3. Una seconda coltellata porta Sanguinante a Dissanguato: col polso slogato tira a −1 e poi con la riserva dimezzata, e a fine scena segna 1 Superficiale finché nessuno lo fascia.
 
-**La Presenza.** Una Presenza entra nella stanza, e il Narratore dà Intimorito a chi la guarda: −2 su tutto finché resta in scena. Quando colpisce un compagno, la Condizione sale a Spaventato: −2 e difficoltà 8 in sua presenza, e il personaggio vuole andarsene il prima possibile. Se la Presenza lo tocca, Terrorizzato: esce di scena, o crolla dove si trova.
+**La Presenza.** Una Presenza entra nella stanza, e il Narratore dà Intimorito a chi la guarda: −2 su tutto finché resta in scena. Quando colpisce un compagno, la Condizione sale a Spaventato: riserva dimezzata in sua presenza, e il personaggio vuole andarsene il prima possibile. Se la Presenza lo tocca, Terrorizzato: esce di scena, o crolla dove si trova.
 
 **La guardia.** Un mago di Mente convince la guardia che lasciar passare il gruppo sia un'idea sua: Ammaliato. Nessun dado cambia: la guardia non ha diritto di reazione, e difende la scelta come fosse sua. Quando l'Ammaliato è un personaggio giocante, il giocatore lo recita così finché dura l'effetto.
 
-**Il vino.** Il vino era avvelenato: Avvelenato, −2 e difficoltà 8 ai tiri fisici e mentali. Parte l'orologio del veleno, e il gruppo ha quattro scene per trovare chi ha l'antidoto prima che il mago resti Paralizzato.
+**Il vino.** Il vino era avvelenato: Avvelenato, riserva dimezzata ai tiri fisici e mentali. Parte l'orologio del veleno, e il gruppo ha quattro scene per trovare chi ha l'antidoto prima che il mago resti Paralizzato.
 
 # Elenco
 ### Le Condizioni una per una
 
 ## Lettura
 
-Ogni scala ha la stessa forma: da cosa nasce, cosa tocca, su quali tiri pesa, e le sue tre Condizioni col grado. Il grado pesa come dice la prima parte: −2 al primo, −2 e 8 al secondo, il tiro che fallisce al terzo. Dove il grado 3 è un sinonimo, falliscono i tiri della tavola dei Sinonimi. L'asterisco segna i nomi proposti e non ancora confermati.
+Ogni scala ha la stessa forma: da cosa nasce, cosa tocca, su quali tiri pesa, e le sue tre Condizioni col grado. Il grado pesa come dice la prima parte: −2 dadi al primo, la riserva dimezzata al secondo, il tiro che fallisce al terzo. Dove il grado 3 è un sinonimo, falliscono i tiri della tavola dei Sinonimi. L'asterisco segna i nomi proposti e non ancora confermati.
 
 ## Sensi
 
@@ -180,7 +181,7 @@ Nasce da luce forte, sabbia o spray negli occhi, un colpo al viso. Tocca quello 
 | :-: | :-- | :-- |
 | 1 | Abbagliato | Vedi macchie e aloni, come dopo un flash: da lontano non distingui volti né scritte. |
 | 2 | Offuscato | Vedi solo forme, e le persone le riconosci dalla voce. La sabbia si sciacqua; un occhio gonfio va medicato. |
-| 3 | Cieco | Non vedi. Ti muovi toccando o guidato, e in mischia colpisci chi ti tocca o chi senti, a −2 e 8. |
+| 3 | Cieco | Non vedi. Ti muovi toccando o guidato, e in mischia colpisci chi ti tocca o chi senti, con la riserva dimezzata. |
 
 ### Udito
 

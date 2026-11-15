@@ -10,8 +10,9 @@ Scrive:
 - packs/mage-condizioni.db    le stesse come oggetti «condition» del sistema
 
 Le regole che il modulo applica da qui:
-- grado 1: −2 dadi; grado 2: −2 dadi e difficoltà 8; grado 3: il tiro
-  fallisce; solo sui tipi di tiro della scala (la riga «Tiri» della guida);
+- grado 1: −2 dadi; grado 2: la riserva dimezzata, per difetto (il Sistema
+  del 14/11; prima −2 dadi e difficoltà 8); grado 3: il tiro fallisce; solo
+  sui tipi di tiro della scala (la riga «Tiri» della guida);
 - i sinonimi del grado 3 (la tavola dei Sinonimi) falliscono sui tiri loro;
 - i lievi tolgono un dado ciascuno sui tiri del loro tipo;
 - il Controllo non tocca i dadi: toglie le scelte;
@@ -39,7 +40,7 @@ FAMIGLIA_ID = {label: fid for fid, label in FAMIGLIE}
 TUTTI = ["physical", "social", "mental"]
 RADICI = (("fisic", "physical"), ("social", "social"), ("mental", "mental"))
 ROMANI = {1: "I", 2: "II", 3: "III"}
-PESO_DEL_GRADO = {1: "meno2", 2: "otto", 3: "fallisce"}
+PESO_DEL_GRADO = {1: "meno2", 2: "meta", 3: "fallisce"}
 
 # La Sventura aspetta di essere riscritta (lo dice la guida): intanto restano
 # le due voci della bozza del 4/9, senza dadi.
@@ -116,8 +117,11 @@ def html_voce(entry):
 
 
 def bonus_di(entry):
-    """I dadi tolti nei «modificatori» del sistema: −2 ai gradi 1 e 2, −1 ai lievi."""
-    value = {"meno2": "-2", "otto": "-2", "lieve": "-1"}.get(entry["weight"])
+    """I dadi tolti nei «modificatori» del sistema: −2 ai gradi 1 e 2, −1 ai lievi.
+
+    Il sistema sa solo togliere dadi: al grado 2 resta il −2, che è il minimo di
+    una penalità; la riserva dimezzata la conta il modulo nel riquadro del tiro."""
+    value = {"meno2": "-2", "meta": "-2", "lieve": "-1"}.get(entry["weight"])
     if not value or not entry["tipi"]:
         return []
     return [{"source": entry["name"], "value": value, "paths": list(entry["tipi"]), "displayWhenInactive": False,
@@ -158,8 +162,8 @@ def voce(name, proposed, *, family, scale, scale_label, grade, weight, tipi, tir
 def effetto_grado(weight, tiri_text):
     if weight == "meno2":
         return f"−2 dadi sui tiri {tiri_text}"
-    if weight == "otto":
-        return f"−2 dadi e difficoltà 8 sui tiri {tiri_text}"
+    if weight == "meta":
+        return f"riserva dimezzata sui tiri {tiri_text}"
     if weight == "fallisce":
         return f"falliscono i tiri {tiri_text}"
     return tiri_text
@@ -266,9 +270,9 @@ def main():
     famiglie = [{"id": fid, "label": label, "icon": icona(fid, 0)} for fid, label in FAMIGLIE]
     testa = (
         "// Generato da tools/build-condizioni.py dalla guida del Narratore (tools/dati/condizioni.md,\n"
-        "// la regola di base del 29/9/2026): non toccare a mano.\n"
+        "// la regola di base del 29/9/2026, coi gradi del Sistema del 14/11): non toccare a mano.\n"
         "// Ogni Condizione ha famiglia, scala, grado (1, 2, 3; 0 per lievi, scontro e Sventura), i tipi di\n"
-        "// tiro su cui pesa (physical, social, mental) e il peso: meno2 (−2 dadi), otto (−2 dadi e difficoltà 8),\n"
+        "// tiro su cui pesa (physical, social, mental) e il peso: meno2 (−2 dadi), meta (la riserva dimezzata),\n"
         "// fallisce (il tiro fallisce), lieve (−1 dado), scelte (il Controllo: nessun dado), azione, nessuno.\n\n"
     )
     DATI_JS.write_text(

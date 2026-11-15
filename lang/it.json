@@ -1735,9 +1735,9 @@
       "Burn": "Brucia",
       "Give": "Prende per sé",
       "BurnHint": "Brucia: {burn} danni superficiali sulla Salute del mago, bloccati per la scena; ogni due 10 sui rossi uno diventa aggravato. La sua Ruota si scarica di {burn}.",
-      "GiveHint": "Prende per sé: {points} punti di Paradosso nella tua riserva, da spendere col menù. La Ruota del mago si scarica di {points}.",
+      "GiveHint": "Prende per sé: {points} punti Paradosso (pari alla soglia del lancio) vanno alla riserva del Narratore, e la realtà colpirà dove vuole lei. La Ruota si scarica di {points}.",
       "BurnedShort": "{burn} danni segnati sulla Salute.",
-      "Given": "{points} punti di Paradosso al Narratore (pari alla soglia del lancio). La Ruota scarica {discharged}.",
+      "Given": "{points} punti Paradosso al Narratore (pari alla soglia del lancio). La Ruota scarica {discharged}.",
       "BurnDone": "Brucia: Ustione {burn} segnata sulla Salute, bloccata per la scena.",
       "GiveDone": "Prende per sé: {points} punti di Paradosso nella riserva del Narratore."
     },

@@ -1,7 +1,7 @@
 // Generato da tools/build-condizioni.py dalla guida del Narratore (tools/dati/condizioni.md,
-// la regola di base del 29/9/2026): non toccare a mano.
+// la regola di base del 29/9/2026, coi gradi del Sistema del 14/11): non toccare a mano.
 // Ogni Condizione ha famiglia, scala, grado (1, 2, 3; 0 per lievi, scontro e Sventura), i tipi di
-// tiro su cui pesa (physical, social, mental) e il peso: meno2 (−2 dadi), otto (−2 dadi e difficoltà 8),
+// tiro su cui pesa (physical, social, mental) e il peso: meno2 (−2 dadi), meta (la riserva dimezzata),
 // fallisce (il tiro fallisce), lieve (−1 dado), scelte (il Controllo: nessun dado), azione, nessuno.
 
 export const FAMIGLIE_CONDIZIONI = Object.freeze([
@@ -180,18 +180,18 @@ export const CONDIZIONI = Object.freeze([
     "section": "scala",
     "grade": 2,
     "numeral": "II",
-    "weight": "otto",
+    "weight": "meta",
     "tipi": [
       "physical",
       "mental"
     ],
     "tiriText": "fisici quando miri, mentali quando cerchi o leggi",
     "what": "Vedi solo forme, e le persone le riconosci dalla voce. La sabbia si sciacqua; un occhio gonfio va medicato.",
-    "effect": "−2 dadi e difficoltà 8 sui tiri fisici quando miri, mentali quando cerchi o leggi",
+    "effect": "riserva dimezzata sui tiri fisici quando miri, mentali quando cerchi o leggi",
     "intro": "Nasce da luce forte, sabbia o spray negli occhi, un colpo al viso. Tocca quello che passa dagli occhi: mirare, cercare, leggere, riconoscere.",
     "icon": "modules/wod5e-mage/assets/icons/condizioni/sensi-2.svg",
     "familyIcon": "modules/wod5e-mage/assets/icons/condizioni/sensi.svg",
-    "description": "<p><strong>Vista II</strong> · Sensi</p><p><em>Vedi solo forme, e le persone le riconosci dalla voce. La sabbia si sciacqua; un occhio gonfio va medicato.</em></p><p>−2 dadi e difficoltà 8 sui tiri fisici quando miri, mentali quando cerchi o leggi.</p><p>Nasce da luce forte, sabbia o spray negli occhi, un colpo al viso. Tocca quello che passa dagli occhi: mirare, cercare, leggere, riconoscere.</p>",
+    "description": "<p><strong>Vista II</strong> · Sensi</p><p><em>Vedi solo forme, e le persone le riconosci dalla voce. La sabbia si sciacqua; un occhio gonfio va medicato.</em></p><p>Riserva dimezzata sui tiri fisici quando miri, mentali quando cerchi o leggi.</p><p>Nasce da luce forte, sabbia o spray negli occhi, un colpo al viso. Tocca quello che passa dagli occhi: mirare, cercare, leggere, riconoscere.</p>",
     "bonuses": [
       {
         "source": "Offuscato",
@@ -226,12 +226,12 @@ export const CONDIZIONI = Object.freeze([
       "mental"
     ],
     "tiriText": "fisici quando miri, mentali quando cerchi o leggi",
-    "what": "Non vedi. Ti muovi toccando o guidato, e in mischia colpisci chi ti tocca o chi senti, a −2 e 8.",
+    "what": "Non vedi. Ti muovi toccando o guidato, e in mischia colpisci chi ti tocca o chi senti, con la riserva dimezzata.",
     "effect": "falliscono i tiri fisici quando miri, mentali quando cerchi o leggi",
     "intro": "Nasce da luce forte, sabbia o spray negli occhi, un colpo al viso. Tocca quello che passa dagli occhi: mirare, cercare, leggere, riconoscere.",
     "icon": "modules/wod5e-mage/assets/icons/condizioni/sensi-3.svg",
     "familyIcon": "modules/wod5e-mage/assets/icons/condizioni/sensi.svg",
-    "description": "<p><strong>Vista III</strong> · Sensi</p><p><em>Non vedi. Ti muovi toccando o guidato, e in mischia colpisci chi ti tocca o chi senti, a −2 e 8.</em></p><p>Falliscono i tiri fisici quando miri, mentali quando cerchi o leggi.</p><p>Nasce da luce forte, sabbia o spray negli occhi, un colpo al viso. Tocca quello che passa dagli occhi: mirare, cercare, leggere, riconoscere.</p>",
+    "description": "<p><strong>Vista III</strong> · Sensi</p><p><em>Non vedi. Ti muovi toccando o guidato, e in mischia colpisci chi ti tocca o chi senti, con la riserva dimezzata.</em></p><p>Falliscono i tiri fisici quando miri, mentali quando cerchi o leggi.</p><p>Nasce da luce forte, sabbia o spray negli occhi, un colpo al viso. Tocca quello che passa dagli occhi: mirare, cercare, leggere, riconoscere.</p>",
     "bonuses": []
   },
   {
@@ -285,18 +285,18 @@ export const CONDIZIONI = Object.freeze([
     "section": "scala",
     "grade": 2,
     "numeral": "II",
-    "weight": "otto",
+    "weight": "meta",
     "tipi": [
       "social",
       "mental"
     ],
     "tiriText": "sociali quando segui chi parla, mentali quando ascolti",
     "what": "Senti solo un fischio: capisci chi ti parla solo se ti guarda in faccia e scandisce.",
-    "effect": "−2 dadi e difficoltà 8 sui tiri sociali quando segui chi parla, mentali quando ascolti",
+    "effect": "riserva dimezzata sui tiri sociali quando segui chi parla, mentali quando ascolti",
     "intro": "Nasce da esplosioni, spari al chiuso, colpi alla testa. Tocca quello che passa dalle orecchie: ascoltare, accorgerti di un rumore, seguire chi parla.",
     "icon": "modules/wod5e-mage/assets/icons/condizioni/sensi-2.svg",
     "familyIcon": "modules/wod5e-mage/assets/icons/condizioni/sensi.svg",
-    "description": "<p><strong>Udito II</strong> · Sensi</p><p><em>Senti solo un fischio: capisci chi ti parla solo se ti guarda in faccia e scandisce.</em></p><p>−2 dadi e difficoltà 8 sui tiri sociali quando segui chi parla, mentali quando ascolti.</p><p>Nasce da esplosioni, spari al chiuso, colpi alla testa. Tocca quello che passa dalle orecchie: ascoltare, accorgerti di un rumore, seguire chi parla.</p>",
+    "description": "<p><strong>Udito II</strong> · Sensi</p><p><em>Senti solo un fischio: capisci chi ti parla solo se ti guarda in faccia e scandisce.</em></p><p>Riserva dimezzata sui tiri sociali quando segui chi parla, mentali quando ascolti.</p><p>Nasce da esplosioni, spari al chiuso, colpi alla testa. Tocca quello che passa dalle orecchie: ascoltare, accorgerti di un rumore, seguire chi parla.</p>",
     "bonuses": [
       {
         "source": "Assordato",
@@ -388,17 +388,17 @@ export const CONDIZIONI = Object.freeze([
     "section": "scala",
     "grade": 2,
     "numeral": "II",
-    "weight": "otto",
+    "weight": "meta",
     "tipi": [
       "social"
     ],
     "tiriText": "sociali",
     "what": "Parli solo sussurrando.",
-    "effect": "−2 dadi e difficoltà 8 sui tiri sociali",
+    "effect": "riserva dimezzata sui tiri sociali",
     "intro": "Nasce da un colpo alla gola, dal gas, da uno strangolamento, dalla Magick. Tocca quello che passa dalla voce: convincere, dare ordini, mentire, cantare.",
     "icon": "modules/wod5e-mage/assets/icons/condizioni/corpo-2.svg",
     "familyIcon": "modules/wod5e-mage/assets/icons/condizioni/corpo.svg",
-    "description": "<p><strong>Voce II</strong> · Corpo</p><p><em>Parli solo sussurrando.</em></p><p>−2 dadi e difficoltà 8 sui tiri sociali.</p><p>Nasce da un colpo alla gola, dal gas, da uno strangolamento, dalla Magick. Tocca quello che passa dalla voce: convincere, dare ordini, mentire, cantare.</p>",
+    "description": "<p><strong>Voce II</strong> · Corpo</p><p><em>Parli solo sussurrando.</em></p><p>Riserva dimezzata sui tiri sociali.</p><p>Nasce da un colpo alla gola, dal gas, da uno strangolamento, dalla Magick. Tocca quello che passa dalla voce: convincere, dare ordini, mentire, cantare.</p>",
     "bonuses": [
       {
         "source": "Afono",
@@ -488,17 +488,17 @@ export const CONDIZIONI = Object.freeze([
     "section": "scala",
     "grade": 2,
     "numeral": "II",
-    "weight": "otto",
+    "weight": "meta",
     "tipi": [
       "physical"
     ],
     "tiriText": "fisici",
     "what": "L'aria non basta, e parli a fatica.",
-    "effect": "−2 dadi e difficoltà 8 sui tiri fisici",
+    "effect": "riserva dimezzata sui tiri fisici",
     "intro": "Nasce dallo sforzo, dal fumo, dal gas, dall'acqua. Tocca il fiato: correre, arrampicarti, lottare, ogni sforzo.",
     "icon": "modules/wod5e-mage/assets/icons/condizioni/corpo-2.svg",
     "familyIcon": "modules/wod5e-mage/assets/icons/condizioni/corpo.svg",
-    "description": "<p><strong>Respiro II</strong> · Corpo</p><p><em>L'aria non basta, e parli a fatica.</em></p><p>−2 dadi e difficoltà 8 sui tiri fisici.</p><p>Nasce dallo sforzo, dal fumo, dal gas, dall'acqua. Tocca il fiato: correre, arrampicarti, lottare, ogni sforzo.</p>",
+    "description": "<p><strong>Respiro II</strong> · Corpo</p><p><em>L'aria non basta, e parli a fatica.</em></p><p>Riserva dimezzata sui tiri fisici.</p><p>Nasce dallo sforzo, dal fumo, dal gas, dall'acqua. Tocca il fiato: correre, arrampicarti, lottare, ogni sforzo.</p>",
     "bonuses": [
       {
         "source": "Soffocato",
@@ -590,17 +590,17 @@ export const CONDIZIONI = Object.freeze([
     "section": "scala",
     "grade": 2,
     "numeral": "II",
-    "weight": "otto",
+    "weight": "meta",
     "tipi": [
       "physical"
     ],
     "tiriText": "fisici",
     "what": "Sei pallido e ti gira la testa. A fine scena segni 1 Superficiale, finché nessuno ti fascia.",
-    "effect": "−2 dadi e difficoltà 8 sui tiri fisici",
+    "effect": "riserva dimezzata sui tiri fisici",
     "intro": "Nasce da tagli, proiettili, morsi. Tocca il corpo intero.",
     "icon": "modules/wod5e-mage/assets/icons/condizioni/corpo-2.svg",
     "familyIcon": "modules/wod5e-mage/assets/icons/condizioni/corpo.svg",
-    "description": "<p><strong>Emorragia II</strong> · Corpo</p><p><em>Sei pallido e ti gira la testa. A fine scena segni 1 Superficiale, finché nessuno ti fascia.</em></p><p>−2 dadi e difficoltà 8 sui tiri fisici.</p><p>Nasce da tagli, proiettili, morsi. Tocca il corpo intero.</p>",
+    "description": "<p><strong>Emorragia II</strong> · Corpo</p><p><em>Sei pallido e ti gira la testa. A fine scena segni 1 Superficiale, finché nessuno ti fascia.</em></p><p>Riserva dimezzata sui tiri fisici.</p><p>Nasce da tagli, proiettili, morsi. Tocca il corpo intero.</p>",
     "bonuses": [
       {
         "source": "Dissanguato",
@@ -692,18 +692,18 @@ export const CONDIZIONI = Object.freeze([
     "section": "scala",
     "grade": 2,
     "numeral": "II",
-    "weight": "otto",
+    "weight": "meta",
     "tipi": [
       "physical",
       "mental"
     ],
     "tiriText": "fisici e mentali",
     "what": "Il veleno lavora: un orologio da quattro spicchi, uno a ogni scena senza antidoto; pieno, sali al grado 3.",
-    "effect": "−2 dadi e difficoltà 8 sui tiri fisici e mentali",
+    "effect": "riserva dimezzata sui tiri fisici e mentali",
     "intro": "Nasce da veleni, droghe, infezioni. Tocca il corpo e la testa.",
     "icon": "modules/wod5e-mage/assets/icons/condizioni/corpo-2.svg",
     "familyIcon": "modules/wod5e-mage/assets/icons/condizioni/corpo.svg",
-    "description": "<p><strong>Avvelenamento II</strong> · Corpo</p><p><em>Il veleno lavora: un orologio da quattro spicchi, uno a ogni scena senza antidoto; pieno, sali al grado 3.</em></p><p>−2 dadi e difficoltà 8 sui tiri fisici e mentali.</p><p>Nasce da veleni, droghe, infezioni. Tocca il corpo e la testa.</p>",
+    "description": "<p><strong>Avvelenamento II</strong> · Corpo</p><p><em>Il veleno lavora: un orologio da quattro spicchi, uno a ogni scena senza antidoto; pieno, sali al grado 3.</em></p><p>Riserva dimezzata sui tiri fisici e mentali.</p><p>Nasce da veleni, droghe, infezioni. Tocca il corpo e la testa.</p>",
     "bonuses": [
       {
         "source": "Avvelenato",
@@ -823,7 +823,7 @@ export const CONDIZIONI = Object.freeze([
     "section": "scala",
     "grade": 2,
     "numeral": "II",
-    "weight": "otto",
+    "weight": "meta",
     "tipi": [
       "physical",
       "social",
@@ -831,11 +831,11 @@ export const CONDIZIONI = Object.freeze([
     ],
     "tiriText": "fisici, sociali e mentali, finché la fonte è in scena",
     "what": "Hai paura e si vede, e vuoi andartene: appena puoi, ti allontani.",
-    "effect": "−2 dadi e difficoltà 8 sui tiri fisici, sociali e mentali, finché la fonte è in scena",
+    "effect": "riserva dimezzata sui tiri fisici, sociali e mentali, finché la fonte è in scena",
     "intro": "Nasce da minacce, orrori, Presenze, e si scrive con la fonte: Spaventato dal Revisore. Tocca tutto quello che fai in presenza della fonte.",
     "icon": "modules/wod5e-mage/assets/icons/condizioni/mente-2.svg",
     "familyIcon": "modules/wod5e-mage/assets/icons/condizioni/mente.svg",
-    "description": "<p><strong>Paura II</strong> · Mente</p><p><em>Hai paura e si vede, e vuoi andartene: appena puoi, ti allontani.</em></p><p>−2 dadi e difficoltà 8 sui tiri fisici, sociali e mentali, finché la fonte è in scena.</p><p>Nasce da minacce, orrori, Presenze, e si scrive con la fonte: Spaventato dal Revisore. Tocca tutto quello che fai in presenza della fonte.</p>",
+    "description": "<p><strong>Paura II</strong> · Mente</p><p><em>Hai paura e si vede, e vuoi andartene: appena puoi, ti allontani.</em></p><p>Riserva dimezzata sui tiri fisici, sociali e mentali, finché la fonte è in scena.</p><p>Nasce da minacce, orrori, Presenze, e si scrive con la fonte: Spaventato dal Revisore. Tocca tutto quello che fai in presenza della fonte.</p>",
     "bonuses": [
       {
         "source": "Spaventato",
@@ -929,17 +929,17 @@ export const CONDIZIONI = Object.freeze([
     "section": "scala",
     "grade": 2,
     "numeral": "II",
-    "weight": "otto",
+    "weight": "meta",
     "tipi": [
       "social"
     ],
     "tiriText": "sociali",
     "what": "A ogni provocazione rispondi, e ragioni peggio.",
-    "effect": "−2 dadi e difficoltà 8 sui tiri sociali",
+    "effect": "riserva dimezzata sui tiri sociali",
     "intro": "Nasce da insulti, umiliazioni, provocazioni. Tocca il controllo di te.",
     "icon": "modules/wod5e-mage/assets/icons/condizioni/mente-2.svg",
     "familyIcon": "modules/wod5e-mage/assets/icons/condizioni/mente.svg",
-    "description": "<p><strong>Rabbia II</strong> · Mente</p><p><em>A ogni provocazione rispondi, e ragioni peggio.</em></p><p>−2 dadi e difficoltà 8 sui tiri sociali.</p><p>Nasce da insulti, umiliazioni, provocazioni. Tocca il controllo di te.</p>",
+    "description": "<p><strong>Rabbia II</strong> · Mente</p><p><em>A ogni provocazione rispondi, e ragioni peggio.</em></p><p>Riserva dimezzata sui tiri sociali.</p><p>Nasce da insulti, umiliazioni, provocazioni. Tocca il controllo di te.</p>",
     "bonuses": [
       {
         "source": "Arrabbiato",
@@ -1031,18 +1031,18 @@ export const CONDIZIONI = Object.freeze([
     "section": "scala",
     "grade": 2,
     "numeral": "II",
-    "weight": "otto",
+    "weight": "meta",
     "tipi": [
       "physical",
       "mental"
     ],
     "tiriText": "fisici e mentali",
     "what": "Sei lento, e la lingua si impasta.",
-    "effect": "−2 dadi e difficoltà 8 sui tiri fisici e mentali",
+    "effect": "riserva dimezzata sui tiri fisici e mentali",
     "intro": "Nasce da sedativi, notti in bianco, Magick di Mente o di Vita. Tocca la veglia.",
     "icon": "modules/wod5e-mage/assets/icons/condizioni/mente-2.svg",
     "familyIcon": "modules/wod5e-mage/assets/icons/condizioni/mente.svg",
-    "description": "<p><strong>Sonno II</strong> · Mente</p><p><em>Sei lento, e la lingua si impasta.</em></p><p>−2 dadi e difficoltà 8 sui tiri fisici e mentali.</p><p>Nasce da sedativi, notti in bianco, Magick di Mente o di Vita. Tocca la veglia.</p>",
+    "description": "<p><strong>Sonno II</strong> · Mente</p><p><em>Sei lento, e la lingua si impasta.</em></p><p>Riserva dimezzata sui tiri fisici e mentali.</p><p>Nasce da sedativi, notti in bianco, Magick di Mente o di Vita. Tocca la veglia.</p>",
     "bonuses": [
       {
         "source": "Sedato",

@@ -28,9 +28,9 @@ const buttons = renderUstioneButtons({ show: true, threshold: 6, points: 3 }, lo
 assert.match(buttons, /data-ustione="brucia"[^>]*>Brucia <b>6<\/b><\/button>/);
 assert.match(buttons, /data-ustione="narratore"[^>]*>Prende per sé <b>3<\/b><\/button>/);
 assert.match(buttons, /title="Brucia: 6 danni superficiali sulla Salute del mago[^"]*ogni due 10 sui rossi uno diventa aggravato[^"]*"/);
-assert.match(buttons, /title="Prende per sé: 3 punti di Paradosso nella tua riserva[^"]*"/);
+assert.match(buttons, /title="Prende per sé: 3 punti Paradosso \(pari alla soglia del lancio\) vanno alla riserva del Narratore[^"]*"/);
 assert.doesNotMatch(buttons, /Cedi|gettone|token/i);
-assert.match(renderUstioneDone({ choice: "narratore", threshold: 6, sphere: 3, given: 3, discharged: 2 }, format, localize), /3 punti di Paradosso al Narratore \(pari alla soglia del lancio\)\. La Ruota scarica 2\./);
+assert.match(renderUstioneDone({ choice: "narratore", threshold: 6, sphere: 3, given: 3, discharged: 2 }, format, localize), /3 punti Paradosso al Narratore \(pari alla soglia del lancio\)\. La Ruota scarica 2\./);
 assert.match(renderUstioneDone({ choice: "brucia", threshold: 3 }, format, localize), /3 danni segnati sulla Salute\./);
 assert.match(renderUstioneDone({ choice: "brucia", threshold: 3, applied: { applied: 3, pa: 1, ps: 2, ma: 0, ms: 0, discharged: 3 } }, format, localize), /Ustione 3 segnata sulla Salute: 3 fisici \(1 aggravato\)\. La Ruota scarica 3\./);
 assert.equal(renderUstioneDone({ choice: "" }, format, localize), "");

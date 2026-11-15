@@ -1735,7 +1735,7 @@
       "Burn": "Burn",
       "Give": "Takes it",
       "BurnHint": "Burns: {burn} superficial damage on the mage's Health, locked for the scene; every two 10s on the red dice one becomes aggravated. Their Wheel discharges {burn}.",
-      "GiveHint": "Takes it: {points} Paradox points into your pool, to spend from the menu. The mage's Wheel discharges {points}.",
+      "GiveHint": "Takes it: {points} Paradox points (equal to the cast threshold) go to the Storyteller's pool, and reality will strike where it pleases. The Wheel discharges {points}.",
       "BurnedShort": "{burn} damage marked on Health.",
       "Given": "{points} Paradox points to the Storyteller (equal to the cast threshold). The Wheel discharges {discharged}.",
       "BurnDone": "Burn: {burn} marked on Health, locked for the scene.",
