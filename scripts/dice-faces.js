@@ -14,11 +14,11 @@ export const PARADOX_DICE_FACES = Object.freeze({
 });
 
 /**
- * La faccia di un rosso. Dal 29/9 (Blue) i rossi si tirano a parte e non
- * contano per la riuscita, che fanno i dadi della riserva. L'1 e il 10 sono
- * l'occhio, lo scoppio. Dal 30/9 (Blue: il successo paradossale «lo teniamo
- * ed anzi rimane il principio») la scintilla torna dalla riuscita in su: un
- * rosso che fa successo, col lancio riuscito, rende il successo paradossale.
+ * La faccia di un rosso (il Sistema): quelle dei dadi normali, con l'occhio
+ * sull'1 e l'occhio con la stellina sul 10. I rossi si tirano a parte: un
+ * occhio chiama il Contraccolpo, e i loro successi (la scintilla dal 6, il
+ * 10) il giocatore li può prendere, facendo paradossale il tiro. Le carte di
+ * prima passano la loro riuscita (6 o 8) in `successFrom`.
  */
 export function getParadoxDieResult(result, { successFrom = SUCCESS_FROM } = {}) {
   const value = Number(result);

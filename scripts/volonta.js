@@ -4,7 +4,8 @@ import { isMageActor } from "./mage-dice.js";
 import { calculateRamoCSuccesses, RAMO, resolveSuccessFrom, successModifier, SUCCESS_FROM } from "./ramo-c.js";
 import { markRollOpen, ROLL_CARD_FLAG, rollActionsBox } from "./roll-card.js";
 import { addSaluteDamage } from "./salute.js";
-import { contaSuccessi, esito, RIUSCITA_DA } from "./sistema.js";
+import { successiDellaCarta } from "./rossi.js";
+import { esito, RIUSCITA_DA } from "./sistema.js";
 
 /**
  * Il ritiro di Volontà sotto il tiro (Sistema, 14/11): quando un tiro
@@ -190,11 +191,12 @@ export function decorateVolonta(message, html) {
 
 /**
  * Il totale nuovo della carta del Mago, dopo il ritiro. Col Sistema contano
- * i dadi della riserva, le stelline a coppie; sulle carte del ramo C di prima
- * la riuscita scritta (6 o 8), senza coppie.
+ * i dadi della riserva, le stelline a coppie, e i rossi solo se il tiro li
+ * ha presi; sulle carte del ramo C di prima la riuscita scritta (6 o 8),
+ * senza coppie.
  */
 export function recountCard(card, basicResults, advancedResults) {
-  if (card?.sistema) return contaSuccessi(basicResults).successi;
+  if (card?.sistema) return successiDellaCarta(card, basicResults, advancedResults);
   if (card?.ramo === RAMO) {
     return calculateRamoCSuccesses(basicResults, advancedResults, card.countedParadox ?? Infinity, {
       successFrom: cardSuccessFrom(card)

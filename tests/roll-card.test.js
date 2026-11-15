@@ -194,6 +194,15 @@ assert.match(paradox, /cardData\.total = roll\._total;/);
   assert.equal(applySuccessoParadossale(messaggio([7]), f.html, { ...carta, total: 0 }), false, "col lancio fallito niente nota");
   f = finto();
   assert.equal(applySuccessoParadossale(messaggio([5, 4]), f.html, carta), false, "senza rossi a successo niente nota");
+  // Col Sistema la nota la chiama il segno della carta: il tiro ha preso i rossi, per scelta o per forza.
+  const nuova = { ...carta, sistema: true, difficulty: 3, total: 3 };
+  f = finto();
+  assert.equal(applySuccessoParadossale(messaggio([7, 2]), f.html, nuova), false, "un rosso a successo non basta: va preso");
+  assert.equal(applySuccessoParadossale(messaggio([7, 2]), f.html, { ...nuova, paradossale: true, rossiPresi: "scelta" }), true);
+  assert.match(f.target.html, /WOD5E_MAGE\.RamoC\.Paradossale</);
+  f = finto();
+  assert.equal(applySuccessoParadossale(messaggio([10]), f.html, { ...nuova, total: 0, paradossale: true, rossiPresi: "obbligo" }), true, "anche a tiro fallito");
+  assert.match(f.target.html, /WOD5E_MAGE\.RamoC\.ParadossaleObbligo</);
   globalThis.game = prima;
 }
 

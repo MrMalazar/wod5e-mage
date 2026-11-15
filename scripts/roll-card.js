@@ -292,17 +292,28 @@ export function wireRollDetails(html, messageId) {
 }
 
 /**
- * Il successo paradossale sulla carta (Blue, 30/9): il lancio riesce coi dadi
- * della riserva e almeno un rosso fa successo; l'effetto lo racconta il
- * Narratore. Si legge a ogni render, così vale anche dopo il ritiro con la
- * Volontà.
+ * Il tiro paradossale sulla carta. Col Sistema lo è il tiro che ha preso i
+ * successi dei rossi, per scelta del giocatore o per forza col 10, che
+ * riesca o che fallisca: lo dice il segno `paradossale` della carta, e il
+ * Narratore distorce l'effetto col suo menù. Sulle carte di prima (Blue,
+ * 30/9) lo era il lancio riuscito con almeno un rosso a successo. Si legge
+ * a ogni render, così vale anche dopo il ritiro con la Volontà.
  */
+export function notaParadossale(data = {}, reds = []) {
+  if (data?.sistema) {
+    if (!data.paradossale) return "";
+    return data.rossiPresi === "obbligo" ? "WOD5E_MAGE.RamoC.ParadossaleObbligo" : "WOD5E_MAGE.RamoC.Paradossale";
+  }
+  return successoParadossale(data, reds) ? "WOD5E_MAGE.RamoC.SuccessoParadossale" : "";
+}
+
 export function applySuccessoParadossale(message, html, data) {
   const target = html?.querySelector?.(".dice-result");
   if (!target || target.querySelector(".wod5e-mage-roll-note-paradossale")) return false;
   const reds = message?.rolls?.[0]?.advancedDice?.results ?? [];
-  if (!successoParadossale(data, reds)) return false;
-  target.insertAdjacentHTML("beforeend", renderRollNote(game.i18n.localize("WOD5E_MAGE.RamoC.SuccessoParadossale"), "paradossale"));
+  const nota = notaParadossale(data, reds);
+  if (!nota) return false;
+  target.insertAdjacentHTML("beforeend", renderRollNote(game.i18n.localize(nota), "paradossale"));
   return true;
 }
 

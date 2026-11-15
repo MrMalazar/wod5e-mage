@@ -7,11 +7,12 @@ export class WOD5eRoll {
     const take = (n) => Array.from({ length: n }, () => ({ result: faces[cursor++] ?? 1, active: true }));
     this.basicDice = { results: take(basic) };
     this.advancedDice = { results: take(reds) };
-    globalThis.__sim.rolls.push({ formula: this.formula, options: this.options });
+    // I dadi usciti stanno accanto alla formula, per le prove che li rileggono (i rossi presi).
+    globalThis.__sim.rolls.push({ formula: this.formula, options: this.options, basicDice: this.basicDice, advancedDice: this.advancedDice });
     return this;
   }
   async toMessage(data, opts) {
-    const message = { ...data, rollMode: opts.rollMode, total: this._total, flavor: this.options.flavor, getFlag: (scope, key) => data.flags?.[scope]?.[key] };
+    const message = { ...data, rollMode: opts.rollMode, total: this._total, flavor: this.options.flavor, rolls: [this], getFlag: (scope, key) => data.flags?.[scope]?.[key] };
     globalThis.__sim.messages.push(message);
     return message;
   }

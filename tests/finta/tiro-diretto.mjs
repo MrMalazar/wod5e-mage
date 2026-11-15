@@ -17,21 +17,34 @@ globalThis.ui = { notifications: { info() {}, warn() {} } };
 
 const { rollRamoCDirect, contoDice } = await import(new URL("../../scripts/paradox-dice.js", import.meta.url).href);
 const { ROLL_CARD_FLAG } = await import(new URL("../../scripts/roll-card.js", import.meta.url).href);
+const { rossiState } = await import(new URL("../../scripts/rossi.js", import.meta.url).href);
 const actor = { name: "Ianira", system: {}, isOwner: true, getFlag: () => undefined, setFlag: async () => {} };
 
 // Il tiro del Sistema (Blue, 14/11): si tira tutta la riserva, si riesce dal 6, le stelline
 // contano a coppie, e servono successi pari alla soglia; quelli in più sono il margine.
 
 // 1. Magick, Volgare: riserva 9, soglia 5 → nove dadi, e 2 rossi a parte. Quattro scintille
-//    e una stellina spaiata fanno 5 successi: riesce giusto, senza margine.
-globalThis.__sim.faces = [8, 3, 9, 7, 10, 2, 4, 5, 6, 10, 9];
+//    e una stellina spaiata fanno 5 successi: riesce giusto, senza margine. I rossi (un 9 e
+//    un 4) restano a parte finché il giocatore non li prende.
+globalThis.__sim.faces = [8, 3, 9, 7, 10, 2, 4, 5, 6, 9, 4];
 let message = await rollRamoCDirect({ actor, data: actor.system, pool: 9, threshold: 5, paradoxRating: 2, burn: 5, sphereLevel: 0, arete: 3, title: "Destrezza + Velo", flavor: "<carta>", card: { symbols: [], traits: [] } });
+let card = message.getFlag("wod5e-mage", ROLL_CARD_FLAG);
+assert.deepEqual([card.total, card.margin, card.paradossale, card.ustione], [5, 0, undefined, undefined], "il 9 rosso non entra da solo, e senza occhi niente Contraccolpo");
+assert.deepEqual(rossiState(card, globalThis.__sim.rolls.at(-1).basicDice.results, globalThis.__sim.rolls.at(-1).advancedDice.results), { show: true, presi: "", guadagno: 1, successi: 6 }, "sotto la carta il tasto: i rossi darebbero un successo");
+
+//    Gli stessi dadi con un 10 sui rossi: la scelta non c'è. I successi dei rossi si prendono
+//    (il 10 rosso fa coppia con quello della riserva: 4 scintille, una coppia e il 9), il tiro
+//    è paradossale e l'occhio apre l'Ustione.
+globalThis.__sim.faces = [8, 3, 9, 7, 10, 2, 4, 5, 6, 10, 9];
+message = await rollRamoCDirect({ actor, data: actor.system, pool: 9, threshold: 5, paradoxRating: 2, burn: 5, sphereLevel: 0, arete: 3, title: "Destrezza + Velo", flavor: "<carta>", card: { symbols: [], traits: [] } });
 let roll = globalThis.__sim.rolls.at(-1);
 assert.equal(roll.formula, "9dmcs>5 + 2dpcs>5", "la soglia non toglie dadi, e i rossi nemmeno");
 assert.equal(roll.options.mageSuccessFrom, 6);
 assert.equal(roll.options.difficulty, 5, "la fascia legge i successi contro la soglia");
-let card = message.getFlag("wod5e-mage", ROLL_CARD_FLAG);
-assert.deepEqual([card.pool, card.threshold, card.dice, card.difficulty, card.successFrom, card.advancedDifficulty, card.total, card.margin, card.countedParadox, card.rossiAParte, card.sistema], [9, 5, 9, 5, 6, false, 5, 0, 0, true, true], "i rossi (10 e 9) non contano fra i successi");
+card = message.getFlag("wod5e-mage", ROLL_CARD_FLAG);
+assert.deepEqual([card.pool, card.threshold, card.dice, card.difficulty, card.successFrom, card.advancedDifficulty, card.total, card.margin, card.countedParadox, card.rossiAParte, card.sistema], [9, 5, 9, 5, 6, false, 9, 4, 0, true, true], "col 10 rosso i successi dei rossi entrano: 5 scintille e una coppia di stelline");
+assert.deepEqual([card.paradossale, card.rossiPresi], [true, "obbligo"], "il tiro è paradossale, e non per scelta");
+assert.equal(rossiState(card, roll.basicDice.results, roll.advancedDice.results).show, false, "presi per forza: niente tasto");
 assert.equal(card.ustione.threshold, 5, "il 10 sui rossi apre l'Ustione pari alla soglia");
 assert.equal(card.ustione.eyes, 1);
 assert.doesNotMatch(message.flavor, /−/, "niente più «riserva meno soglia» sulla carta");
@@ -76,7 +89,7 @@ message = await rollRamoCDirect({ actor, data: actor.system, pool: 0, threshold:
 roll = globalThis.__sim.rolls.at(-1);
 assert.equal(roll.formula, "0dmcs>5 + 2dpcs>5");
 card = message.getFlag("wod5e-mage", ROLL_CARD_FLAG);
-assert.deepEqual([card.total, card.dice, card.countedParadox], [0, 0, 0], "il 7 rosso non entra fra i successi: i rossi stanno a parte");
+assert.deepEqual([card.total, card.dice, card.countedParadox, card.paradossale], [0, 0, 0, undefined], "il 7 rosso non entra fra i successi: i rossi stanno a parte finché non si prendono");
 assert.equal(card.ustione.eyes, 1, "l'1 sul rosso apre il Contraccolpo");
 assert.equal(card.ustione.threshold, 9, "l'Ustione vale la soglia dell'incantesimo");
 

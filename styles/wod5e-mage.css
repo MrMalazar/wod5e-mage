@@ -6609,7 +6609,19 @@
   vertical-align: super;
 }
 
-/* I due tasti dell'Ustione: Brucia (rosso), Dai al Narratore (viola). */
+/* Il tasto dei rossi presi (il Sistema): i successi dei rossi entrano nel tiro, che diventa paradossale. */
+.wod5e-mage-roll-actions > .wod5e-mage-rossi-button {
+  background: rgb(181 67 60 / 20%);
+  border-color: var(--mage-rosso, #b5433c);
+  color: #f1dcd8;
+}
+
+.wod5e-mage-roll-actions > .wod5e-mage-rossi-button:hover:not(:disabled) {
+  border-color: var(--mage-rosso-chiaro, #e2a79e);
+  box-shadow: 0 0 5px var(--mage-rosso, #b5433c);
+}
+
+/* I due tasti dell'Ustione, del solo Narratore: Brucia (rosso), Prende per sé (viola). */
 .wod5e-mage-roll-actions > .wod5e-mage-ustione-brucia {
   background: rgb(224 90 90 / 18%);
   border-color: #e05a5a;
@@ -18358,9 +18370,9 @@
 }
 
 /* ----------------------------------------------------------------------
-   Il successo paradossale (Blue, 30/9: «lo teniamo ed anzi rimane il
-   principio»). Il lancio riesce coi dadi della riserva e almeno un rosso fa
-   successo: la carta lo dice, e l'effetto lo racconta il Narratore.
+   Il tiro paradossale (il Sistema): il tiro ha preso i successi dei rossi,
+   per scelta o per forza col 10; la carta lo dice, e il Narratore distorce
+   l'effetto. Sulle carte di prima era il successo paradossale del 30/9.
    ---------------------------------------------------------------------- */
 .wod5e-mage-roll-note-paradossale {
   border-left: 2px solid var(--mage-rosso, #b5433c);

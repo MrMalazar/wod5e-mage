@@ -154,10 +154,12 @@ export function calculateRamoCSuccesses(basicResults = [], paradoxResults = [], 
  * l'effetto lo racconta il Narratore. Vale per le carte coi rossi a parte,
  * non per i tiri di Abilità né per lo Scoppio. Torna quanti rossi hanno fatto
  * successo, o 0. Il lancio riesce quando i successi arrivano alla soglia
- * scritta sulla carta (1 sulle carte di prima). La scelta di prendere i
- * successi dei rossi, che il Sistema dà al giocatore, arriva coi rossi.
+ * scritta sulla carta (1 sulle carte di prima). Vale solo per le carte di
+ * prima del Sistema: col Sistema il tiro è paradossale quando il giocatore
+ * prende i successi dei rossi, e lo dice la carta (rossi.js).
  */
 export function successoParadossale(card = {}, redResults = []) {
+  if (card?.sistema) return 0;
   if (card?.ramo !== RAMO || card.rossiAParte !== true || card.skill || card.burst || card.burstResult) return 0;
   if (count(card.total) < Math.max(count(card.difficulty), 1)) return 0;
   const successFrom = resolveSuccessFrom({ successFrom: card.successFrom, advancedDifficulty: card.advancedDifficulty }, ORIGINAL_SUCCESS_FROM);

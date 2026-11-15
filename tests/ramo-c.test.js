@@ -134,10 +134,10 @@ assert.equal(getParadoxDieResult(6, { successFrom: 6 }), "success", "coi Volgari
   assert.equal(successoParadossale({ ...carta, skill: true }, rossi), 0, "i tiri di Abilità no");
   assert.equal(successoParadossale({ ...carta, burst: true }, rossi), 0, "lo Scoppio no");
   assert.equal(successoParadossale(carta, []), 0, "senza rossi no");
-  // Col Sistema il lancio riesce quando i successi arrivano alla soglia scritta sulla carta.
+  // Col Sistema il tiro è paradossale quando prende i successi dei rossi: lo dice la carta, non i dadi (rossi.js).
   const nuova = { ...carta, sistema: true, difficulty: 3 };
-  assert.equal(successoParadossale({ ...nuova, total: 2 }, rossi), 0, "due successi a soglia 3: fallito, niente successo paradossale");
-  assert.equal(successoParadossale({ ...nuova, total: 3 }, rossi), 1, "tre successi a soglia 3: riesce, e un rosso ha fatto successo");
+  assert.equal(successoParadossale({ ...nuova, total: 2 }, rossi), 0);
+  assert.equal(successoParadossale({ ...nuova, total: 3 }, rossi), 0, "riesce e un rosso ha fatto successo, ma nessuno l'ha preso");
 }
 
 // La fascia: servono successi pari alla soglia (sulle carte di prima la soglia scritta è 1); le

@@ -207,7 +207,12 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
   });
   const volgari = volgariRecenti([carta("m1", { timestamp: 500 }), carta("m2", { title: "Fulmine", threshold: 3, testimoni: true, round: 2 }), { id: "m3", flags: {} }, carta("m4", { vulgar: false })], { dal: 800 });
   assert.equal(volgari.length, 1, "i lanci di prima della sessione e i non Volgari non contano");
-  assert.deepEqual(volgari[0], { messageId: "m2", actorId: "a1", actorName: "Guendalina", titolo: "Fulmine", soglia: 3, testimoni: true, quando: 1000, round: 2 });
+  assert.deepEqual(volgari[0], { messageId: "m2", actorId: "a1", actorName: "Guendalina", titolo: "Fulmine", soglia: 3, testimoni: true, paradossale: false, quando: 1000, round: 2 });
+  // Il tiro paradossale (ha preso i rossi): il menù lo segna, perché è quello che il Narratore distorce.
+  const preso = carta("m6");
+  preso.flags["wod5e-mage"].rollCard.paradossale = true;
+  assert.equal(volgariRecenti([preso])[0].paradossale, true);
+  assert.equal(etichettaVolgare({ actorName: "Guendalina", titolo: "Fulmine", testimoni: false, soglia: 5, paradossale: true }, (k) => k.split(".").pop()), "Guendalina · Fulmine · Volgare · Soglia 5 · Paradossale");
   const senzaTitolo = volgariRecenti([carta("m5")]);
   assert.equal(senzaTitolo[0].titolo, "Muro di ghiaccio", "senza titolo vale la prima riga del flavor, senza tag");
   const flavorACapo = { ...carta("m6"), flavor: "<div class=\"x\">\n  <b>Lama</b> di fuoco<br>altro</div>" };

@@ -9,7 +9,7 @@ import {
 } from "../scripts/ustione.js";
 import { getSalute, locksAfterScene, normalizeParadoxLocks, paintParadoxLocks, balanceAfterSession, quintessenceGained } from "../scripts/salute.js";
 
-// L'Ustione a scelta (Blue, 11/9): i due tasti finché il giocatore non sceglie, poi la riga.
+// L'Ustione a scelta (il Sistema): i due tasti finché il Narratore non sceglie, poi la riga.
 assert.deepEqual(USTIONE_CHOICES, ["brucia", "narratore"]);
 // I danni sono la soglia; i punti al Narratore la Sfera usata (Blue, 11/9 sera); senza Sfera, la soglia.
 assert.deepEqual(ustioneState({ threshold: 5, sphere: 3, choice: "" }), { show: true, chosen: "", threshold: 5, points: 5 });
@@ -26,16 +26,20 @@ const localize = (key) => key.split(".").reduce((o, k) => (o && typeof o === "ob
 const format = (key, data = {}) => String(localize(key)).replace(/\{(\w+)\}/g, (_, k) => String(data[k]));
 const buttons = renderUstioneButtons({ show: true, threshold: 6, points: 3 }, localize, format);
 assert.match(buttons, /data-ustione="brucia"[^>]*>Brucia <b>6<\/b><\/button>/);
-assert.match(buttons, /data-ustione="narratore"[^>]*>Dai al Narratore <b>3<\/b><\/button>/);
+assert.match(buttons, /data-ustione="narratore"[^>]*>Prende per sé <b>3<\/b><\/button>/);
+assert.match(buttons, /title="Brucia: 6 danni superficiali sulla Salute del mago[^"]*ogni due 10 sui rossi uno diventa aggravato[^"]*"/);
+assert.match(buttons, /title="Prende per sé: 3 punti di Paradosso nella tua riserva[^"]*"/);
 assert.doesNotMatch(buttons, /Cedi|gettone|token/i);
-assert.match(renderUstioneDone({ choice: "narratore", threshold: 6, sphere: 3, given: 3, discharged: 2 }, format, localize), /3 punti Paradosso al Narratore \(pari alla soglia del lancio\)\. La Ruota scarica 2\./);
+assert.match(renderUstioneDone({ choice: "narratore", threshold: 6, sphere: 3, given: 3, discharged: 2 }, format, localize), /3 punti di Paradosso al Narratore \(pari alla soglia del lancio\)\. La Ruota scarica 2\./);
 assert.match(renderUstioneDone({ choice: "brucia", threshold: 3 }, format, localize), /3 danni segnati sulla Salute\./);
 assert.match(renderUstioneDone({ choice: "brucia", threshold: 3, applied: { applied: 3, pa: 1, ps: 2, ma: 0, ms: 0, discharged: 3 } }, format, localize), /Ustione 3 segnata sulla Salute: 3 fisici \(1 aggravato\)\. La Ruota scarica 3\./);
 assert.equal(renderUstioneDone({ choice: "" }, format, localize), "");
 // Coi tasti non c'è testo, né per chi tira né per chi guarda (Blue: «vede solo i bottoni»).
+// Sceglie il Narratore (il Sistema): i tasti li vede lui solo.
 const ustioneSource = readFileSync(new URL("../scripts/ustione.js", import.meta.url), "utf8");
 assert.doesNotMatch(ustioneSource, /renderUstioneWaiting|Ustione\.Pending|Ustione\.Waiting/);
-assert.match(ustioneSource, /if \(!isMageActor\(actor\) \|\| !actor\.isOwner\) return false;/);
+assert.match(ustioneSource, /if \(!isMageActor\(actor\) \|\| !game\.user\?\.isGM\) return false;/);
+assert.doesNotMatch(ustioneSource, /actor\.isOwner/, "la scelta non è più di chi ha il mago");
 const diceSource = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8");
 assert.doesNotMatch(diceSource, /Ustione\.Pending/);
 assert.match(diceSource, /cardData\.ustione = \{ threshold: burnNow, sphere: /);

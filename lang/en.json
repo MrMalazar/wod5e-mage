@@ -1725,19 +1725,21 @@
       "BoughtBanner": "Success bought",
       "MarginHint": "Margin: successes beyond the threshold. In a fight, damage is the weapon's plus the margin.",
       "SkillRoll": "Skill roll",
-      "RossiAParte": "Red dice apart: {reds}. Success comes from the pool dice; the red dice decide the burst (1 or 10) and, if the roll succeeds, the paradoxical success.",
-      "SuccessoParadossale": "Paradoxical success: the roll succeeds and at least one red die succeeded. The Storyteller narrates the effect."
+      "RossiAParte": "Red dice apart: {reds}. An eye (1 or 10) calls the Backlash. Their successes can be taken: the roll becomes paradoxical.",
+      "SuccessoParadossale": "Paradoxical success: the roll succeeds and at least one red die succeeded. The Storyteller narrates the effect.",
+      "Paradossale": "Paradoxical roll: the red dice successes were taken. The Storyteller twists the effect with their menu.",
+      "ParadossaleObbligo": "Paradoxical roll: with a 10 on the red dice their successes are taken. The Storyteller twists the effect with their menu."
     },
     "Ustione": {
       "Label": "Burn",
       "Burn": "Burn",
-      "Give": "Give to the Storyteller",
-      "BurnHint": "Burn: {burn} damage on you, marked on Health and locked for the scene. The Wheel discharges {burn}.",
-      "GiveHint": "Give to the Storyteller: {points} Paradox points (equal to the cast's threshold) into the Storyteller's pool, and reality strikes where it wants. The Wheel discharges {points}.",
+      "Give": "Takes it",
+      "BurnHint": "Burns: {burn} superficial damage on the mage's Health, locked for the scene; every two 10s on the red dice one becomes aggravated. Their Wheel discharges {burn}.",
+      "GiveHint": "Takes it: {points} Paradox points into your pool, to spend from the menu. The mage's Wheel discharges {points}.",
       "BurnedShort": "{burn} damage marked on Health.",
-      "Given": "{points} Paradox points to the Storyteller (equal to the cast's threshold). The Wheel discharges {discharged}.",
+      "Given": "{points} Paradox points to the Storyteller (equal to the cast threshold). The Wheel discharges {discharged}.",
       "BurnDone": "Burn: {burn} marked on Health, locked for the scene.",
-      "GiveDone": "Give to the Storyteller: {points} Paradox points handed over."
+      "GiveDone": "Takes it: {points} Paradox points into the Storyteller's pool."
     },
     "Paradosso": {
       "Title": "Paradox points",
@@ -1960,6 +1962,7 @@
         "avorio": "ivory"
       },
       "ConTestimoni": "Vulgar with witnesses",
+      "Paradossale": "paradoxical",
       "Volgare": "Vulgar",
       "Accidentale": "accidental",
       "Soglia": "threshold",
@@ -2839,6 +2842,15 @@
       "Rolling": "Wisdom roll · Indulging in {lato}",
       "Riuscito": "Indulging in {lato}: Wisdom holds, the marker stays.",
       "Fallito": "Indulging in {lato}: Wisdom does not hold, the marker slides: {passo}."
+    },
+    "Rossi": {
+      "Prendi": "Take the red dice",
+      "Hint": "Red dice successes: +{successi}. If you take them the roll becomes paradoxical, whether it succeeds or fails, and the Storyteller twists the effect with their menu.",
+      "Title": "Take the red dice",
+      "Ask": "Red dice successes: +{successi}. If you take them the roll becomes paradoxical, whether it succeeds or fails: the Storyteller twists the effect with their menu.",
+      "Yes": "Take the red dice",
+      "No": "Leave it",
+      "Done": "Red dice taken: +{successi}. Roll successes: {total}. The roll is paradoxical."
     }
   }
 }

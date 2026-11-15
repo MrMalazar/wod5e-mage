@@ -9,8 +9,9 @@ import { bonusDiceExcess } from "./arete.js";
 import { bussolaDice, grantBussolaQuintessence, readBussola, renderBussolaBlock, wireBussola } from "./bussola.js";
 import { MODULE_ID } from "./constants.js";
 import { RAMO, splitRamoCDice, successModifier } from "./ramo-c.js";
-import { contaSuccessi, esito, RIUSCITA_DA, SOGLIA_ABILITA_MAX, SOGLIA_MAGICK_MAX, SOGLIA_MIN } from "./sistema.js";
+import { contaSuccessi, esito, leggiRossi, RIUSCITA_DA, SOGLIA_ABILITA_MAX, SOGLIA_MAGICK_MAX, SOGLIA_MIN } from "./sistema.js";
 import { renderAutoVictoryBanner, renderBacklashNote, renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
+import { cartaCoiRossi } from "./rossi.js";
 import {
   getParadoxDieResult,
   getParadoxDieImage,
@@ -75,9 +76,8 @@ function registerDiceSoNicePreset(dice3d) {
     font: "Arial Black"
   }, "default");
 
-  // I rossi a parte (29/9): l'1 e il 10 sono l'occhio, lo scoppio; dal 30/9 la
-  // scintilla torna sull'8 e sul 9, il successo paradossale (il 6 e il 7 restano
-  // vuoti anche coi Volgari senza testimoni: in 3D la faccia non sa la riuscita).
+  // I rossi (il Sistema): le facce dei dadi normali, vuota da 2 a 5 e scintilla
+  // da 6 a 9, con l'occhio sull'1 e l'occhio con la stellina sul 10.
   dice3d.addDicePreset({
     type: "dp",
     labels: [
@@ -86,8 +86,8 @@ function registerDiceSoNicePreset(dice3d) {
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
-      "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
-      "systems/wod5e/assets/icons/dsn/red-fail-dsn.png",
+      "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
+      "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-success-dsn.png",
       "systems/wod5e/assets/icons/dsn/red-crit-dsn.png"
@@ -435,8 +435,8 @@ export async function executeRamoCRoll({
   if (excess > 0) {
     rollFlavor += renderRollNote(format("WOD5E_MAGE.Arete.BonusCap", { excess }));
   }
-  // I rossi a parte (Blue, 29/9): la carta lo dice, perché nessuno li conti fra i successi
-  // (il successo paradossale del 30/9 lo segna la carta, roll-card.js).
+  // I rossi a parte: la carta lo dice, perché nessuno li conti fra i successi finché
+  // il giocatore non li prende (il tiro paradossale lo segna la carta, roll-card.js).
   if (conto.paradoxDice > 0 && !bought && !onlyParadox) {
     rollFlavor += renderRollNote(format("WOD5E_MAGE.RamoC.RossiAParte", { reds: conto.paradoxDice }));
   }
@@ -514,6 +514,13 @@ export async function executeRamoCRoll({
   cardData.total = roll._total;
   // Il margine: i successi oltre la soglia (nello scontro, il danno dell'arma più il margine).
   if (!onlyParadox) cardData.margin = esito({ successi: roll._total, soglia }).margine;
+  // I rossi presi (il Sistema): i loro successi il giocatore li può prendere dal tasto
+  // sotto la carta (rossi.js); con un 10 sui rossi la scelta non c'è, e si prendono qui.
+  // Il tiro diventa paradossale, che riesca o che fallisca.
+  if (!skill && !onlyParadox && !bought && leggiRossi(redResults).obbligo) {
+    Object.assign(cardData, cartaCoiRossi(cardData, basicResults, redResults, "obbligo"));
+    roll._total = cardData.total;
+  }
 
   let finalFlavor = rollFlavor;
 

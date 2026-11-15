@@ -181,8 +181,9 @@ export function campiSpesa(voce) {
 
 /**
  * I Volgari lanciati in chat, dal più recente: chi, il titolo del lancio,
- * la soglia, se era con testimoni. `dal` è il momento della Nuova sessione:
- * i lanci di prima non contano.
+ * la soglia, se era con testimoni, se il tiro è paradossale (ha preso i
+ * successi dei rossi: è quello che il Narratore distorce col menù). `dal` è
+ * il momento della Nuova sessione: i lanci di prima non contano.
  */
 export function volgariRecenti(messages = [], { dal = 0, massimo = 12 } = {}) {
   const out = [];
@@ -198,6 +199,7 @@ export function volgariRecenti(messages = [], { dal = 0, massimo = 12 } = {}) {
       titolo: testo(card.title) || primaRiga(message?.flavor),
       soglia: count(card.threshold),
       testimoni: (Boolean(card.advancedDifficulty) || card.kind === "testimoni"),
+      paradossale: Boolean(card.paradossale),
       quando,
       round: count(card.round)
     });
@@ -213,13 +215,14 @@ function primaRiga(html) {
     .find(Boolean) ?? "";
 }
 
-/** L'etichetta di un Volgare nella tendina «risponde a»: mago, titolo, tipo, soglia, senza i pezzi vuoti. */
+/** L'etichetta di un Volgare nella tendina «risponde a»: mago, titolo, tipo, soglia, e «paradossale» se ha preso i rossi; senza i pezzi vuoti. */
 export function etichettaVolgare(volgare, localize = (key) => key) {
   return [
     volgare?.actorName,
     volgare?.titolo,
     localize(volgare?.testimoni ? "WOD5E_MAGE.Menu.ConTestimoni" : "WOD5E_MAGE.Menu.Volgare"),
-    `${localize("WOD5E_MAGE.Menu.Soglia")} ${count(volgare?.soglia)}`
+    `${localize("WOD5E_MAGE.Menu.Soglia")} ${count(volgare?.soglia)}`,
+    volgare?.paradossale ? localize("WOD5E_MAGE.Menu.Paradossale") : ""
   ].map((parte) => testo(parte)).filter(Boolean).join(" · ");
 }
 

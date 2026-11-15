@@ -5,24 +5,23 @@ import { applyUstione, paradoxAfterBurst, ustioneText } from "./paradox-burst.js
 import { ROLL_CARD_FLAG, rollActionsBox } from "./roll-card.js";
 
 /**
- * L'Ustione del ramo C (verdetti di Blue, 11/9/2026): a Contraccolpo
- * scattato l'Ustione è pari alla soglia, e SCEGLIE IL GIOCATORE. «Brucia»:
- * i danni li prende lui, segnati sulla Salute (fisici, mentali o metà e
- * metà secondo l'Effetto; ogni due 10 un aggravato) e bloccati in rosso
- * per la scena. «Dai al Narratore»: altrettanti punti Paradosso passano
- * nella riserva del Narratore, e la realtà colpirà dove vuole lei. In
- * tutti e due i casi la Ruota si scarica di altrettanto (PROPOSTA dello
- * studio). I due tasti stanno sotto la carta del tiro; premuto uno,
- * l'altro sparisce. Non è una trattativa: la scelta è del giocatore.
- * I punti dati al Narratore sono pari al livello della Sfera usata, non
- * alla soglia (Blue, 11/9 sera: «va ridotto al pari del livello sfera»);
- * i danni restano pari alla soglia. Coi tasti non c'è testo: «vede solo i
- * bottoni e tanto basta».
+ * L'Ustione (il Sistema, voce Contraccolpo): a Contraccolpo scattato
+ * l'Ustione vale quanto la soglia dell'incantesimo, e come colpisce lo
+ * SCEGLIE IL NARRATORE, fra due modi. «Brucia»: il mago segna altrettanti
+ * danni superficiali sulla Salute, bloccati in rosso per la scena, e ogni
+ * due 10 sui rossi uno di quei danni diventa aggravato. «Prende per sé»:
+ * il Narratore riceve altrettanti punti di Paradosso nella sua riserva, da
+ * spendere col suo menù. In tutti e due i modi la Ruota del mago si scarica
+ * di altrettanti punti, fin dove ne ha; il permanente resta. I due tasti
+ * stanno sotto la carta del tiro e li vede solo il Narratore; premuto uno,
+ * resta la riga di quel che è stato scelto. Fino alla 1.40.0 sceglieva il
+ * giocatore. Coi tasti non c'è testo (Blue, 11/9: «vede solo i bottoni e
+ * tanto basta»): chi tira l'occhio lo vede sul dado.
  */
 
 export const USTIONE_CHOICES = Object.freeze(["brucia", "narratore"]);
 
-/** Cosa mostrare: i tasti finché il giocatore non ha scelto, poi la riga. */
+/** Cosa mostrare: i tasti finché il Narratore non ha scelto, poi la riga. */
 export function ustioneState(ustione) {
   const threshold = Math.max(Math.trunc(Number(ustione?.threshold) || 0), 0);
   if (!ustione || threshold <= 0) return { show: false, chosen: "", threshold: 0, points: 0 };
@@ -35,7 +34,7 @@ export function givenPoints(ustione) {
   return Math.max(Math.trunc(Number(ustione?.threshold) || 0), 0);
 }
 
-/** I due tasti: Brucia (rosso) e Dai al Narratore (viola), con l'Ustione nel numero. */
+/** I due tasti del Narratore: Brucia (rosso) e Prende per sé (viola), con l'Ustione nel numero. */
 export function renderUstioneButtons(state, localize, format) {
   const burn = format("WOD5E_MAGE.Ustione.BurnHint", { burn: state.threshold });
   const give = format("WOD5E_MAGE.Ustione.GiveHint", { points: state.points });
@@ -82,9 +81,10 @@ export function decorateUstione(message, html) {
     return Boolean(note);
   }
 
-  // Chi guarda non vede niente finché il giocatore non sceglie (Blue: «vede solo i bottoni»).
+  // Sceglie il Narratore (il Sistema): i tasti li vede lui solo. Chi guarda non vede
+  // niente finché non sceglie (Blue: «vede solo i bottoni»).
   const actor = speakerActor(message);
-  if (!isMageActor(actor) || !actor.isOwner) return false;
+  if (!isMageActor(actor) || !game.user?.isGM) return false;
 
   const box = rollActionsBox(target);
   box.insertAdjacentHTML("beforeend", renderUstioneButtons(state, localize, format));
@@ -123,7 +123,7 @@ export async function chooseBurn(message, actor) {
   return ustione;
 }
 
-/** Dai al Narratore: punti Paradosso pari alla Sfera usata alla riserva del Narratore; la Ruota si scarica di altrettanto. */
+/** Prende per sé: punti di Paradosso pari all'Ustione nella riserva del Narratore; la Ruota del mago si scarica di altrettanto. */
 export async function chooseGive(message, actor) {
   const card = message.getFlag(MODULE_ID, ROLL_CARD_FLAG) ?? {};
   const state = ustioneState(card.ustione);

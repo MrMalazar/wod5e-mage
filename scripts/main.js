@@ -7,6 +7,7 @@ import { registerRollCardRendering } from "./roll-card.js";
 import { assignCondizione, listCondizioni, openCondizioniMaster, selectedActors } from "./condizioni-master.js";
 import { CONDIZIONI_VERSIONE, CONDIZIONI_VERSIONE_SETTING, findCondizione, riallineaCondizioni } from "./condizioni.js";
 import { registerVolonta } from "./volonta.js";
+import { registerRossi } from "./rossi.js";
 import { registerIndulgere } from "./indulgere.js";
 import { registerSaggezza } from "./wisdom.js";
 import { registerPrezzo } from "./prezzo.js";
@@ -215,6 +216,8 @@ Hooks.once("init", () => {
   registerMageDiceRendering();
   registerRollCardRendering();
   registerVolonta();
+  // I rossi presi (il Sistema): il tasto che aggiunge al tiro i successi dei rossi, e lo fa paradossale.
+  registerRossi();
   // L'Indulgere (3/10, al posto dello Sforzare la realtà): il tasto Tira Saggezza
   // sotto il lancio indulto, dopo la Volontà; e la riga dell'esito sotto i tiri di Saggezza.
   registerIndulgere();

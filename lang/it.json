@@ -1725,19 +1725,21 @@
       "BoughtBanner": "Riuscita comprata",
       "MarginHint": "Margine: i successi oltre la soglia. Nello scontro il danno è quello dell'arma più il margine.",
       "SkillRoll": "Tiro di Abilità",
-      "RossiAParte": "Rossi a parte: {reds}. La riuscita la fanno i dadi della riserva; i rossi decidono lo scoppio (1 o 10) e, se il lancio riesce, il successo paradossale.",
-      "SuccessoParadossale": "Successo paradossale: il lancio riesce e almeno un rosso ha fatto successo. L'effetto lo racconta il Narratore."
+      "RossiAParte": "Rossi a parte: {reds}. L'occhio (1 o 10) chiama il Contraccolpo. I loro successi si possono prendere: il tiro diventa paradossale.",
+      "SuccessoParadossale": "Successo paradossale: il lancio riesce e almeno un rosso ha fatto successo. L'effetto lo racconta il Narratore.",
+      "Paradossale": "Tiro paradossale: presi i successi dei rossi. Il Narratore distorce l'effetto col suo menù.",
+      "ParadossaleObbligo": "Tiro paradossale: col 10 sui rossi i loro successi si prendono. Il Narratore distorce l'effetto col suo menù."
     },
     "Ustione": {
       "Label": "Ustione",
       "Burn": "Brucia",
-      "Give": "Dai al Narratore",
-      "BurnHint": "Brucia: {burn} danni su di te, segnati sulla Salute e bloccati per la scena. La Ruota si scarica di {burn}.",
-      "GiveHint": "Dai al Narratore: {points} punti Paradosso (pari alla soglia del lancio) alla riserva del Narratore, e la realtà colpirà dove vuole lei. La Ruota si scarica di {points}.",
+      "Give": "Prende per sé",
+      "BurnHint": "Brucia: {burn} danni superficiali sulla Salute del mago, bloccati per la scena; ogni due 10 sui rossi uno diventa aggravato. La sua Ruota si scarica di {burn}.",
+      "GiveHint": "Prende per sé: {points} punti di Paradosso nella tua riserva, da spendere col menù. La Ruota del mago si scarica di {points}.",
       "BurnedShort": "{burn} danni segnati sulla Salute.",
-      "Given": "{points} punti Paradosso al Narratore (pari alla soglia del lancio). La Ruota scarica {discharged}.",
+      "Given": "{points} punti di Paradosso al Narratore (pari alla soglia del lancio). La Ruota scarica {discharged}.",
       "BurnDone": "Brucia: Ustione {burn} segnata sulla Salute, bloccata per la scena.",
-      "GiveDone": "Dai al Narratore: {points} punti Paradosso consegnati."
+      "GiveDone": "Prende per sé: {points} punti di Paradosso nella riserva del Narratore."
     },
     "Paradosso": {
       "Title": "Punti Paradosso",
@@ -1960,6 +1962,7 @@
         "avorio": "avorio"
       },
       "ConTestimoni": "Volgare con testimoni",
+      "Paradossale": "paradossale",
       "Volgare": "Volgare",
       "Accidentale": "accidentale",
       "Soglia": "soglia",
@@ -2839,6 +2842,15 @@
       "Rolling": "Tiro di Saggezza · Indulgere nell'{lato}",
       "Riuscito": "Indulgere nell'{lato}: la Saggezza tiene, il segno resta.",
       "Fallito": "Indulgere nell'{lato}: la Saggezza non tiene, il segno scende: {passo}."
+    },
+    "Rossi": {
+      "Prendi": "Prendi i rossi",
+      "Hint": "Successi dei rossi: +{successi}. Se li prendi il tiro diventa paradossale, che riesca o che fallisca, e il Narratore distorce l'effetto col suo menù.",
+      "Title": "Prendi i rossi",
+      "Ask": "Successi dei rossi: +{successi}. Se li prendi il tiro diventa paradossale, che riesca o che fallisca: il Narratore distorce l'effetto col suo menù.",
+      "Yes": "Prendi i rossi",
+      "No": "Lascia stare",
+      "Done": "Rossi presi: +{successi}. Successi del tiro: {total}. Il tiro è paradossale."
     }
   },
   "WOD5E": {
