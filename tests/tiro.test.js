@@ -114,14 +114,14 @@ assert.equal(toggleSphere(tiro, "mind").spell, "s1");
 assert.equal(clearTiro().spell, null);
 
 // La soglia a mano: un numero la fissa, il più e il meno partono da zero.
-// Nell'Abilità è la soglia intera, da 1 a 7; nella Magick è la difficoltà sopra il conto degli Ambiti, entro ±3.
+// Nell'Abilità è la soglia intera, da 1 a 7; nella Magick è la difficoltà sopra il conto degli Ambiti, e il Narratore la sposta liberamente.
 assert.equal(setSoglia(vuoto, 4).soglia, 4);
 assert.equal(setSoglia(setSoglia(vuoto, 4), null).soglia, null);
 assert.equal(bumpSoglia(vuoto, 1).soglia, 1, "da zero, se non è ancora stata toccata");
 assert.equal(bumpSoglia(setSoglia(vuoto, 2), -1).soglia, 1);
 assert.equal(bumpSoglia(setSoglia(vuoto, 0), -1).soglia, 1, "nell'Abilità mai sotto 1");
 assert.equal(bumpSoglia(toggleArete(vuoto), -1).soglia, -1, "nella Magick abbassa la difficoltà sopra il conto degli Ambiti");
-assert.deepEqual([setSoglia(toggleArete(vuoto), 99).soglia, setSoglia(toggleArete(vuoto), -99).soglia], [3, -3], "entro ±3");
+assert.deepEqual([setSoglia(toggleArete(vuoto), 99).soglia, setSoglia(toggleArete(vuoto), -99).soglia], [20, -20], "libera: ±20 è solo il fondo corsa del tasto");
 assert.equal(setQuintessence(vuoto, 3).quintessence, 3);
 assert.equal(EXTRA_DICE_CAP, 3);
 assert.equal(setExtra(vuoto, 2).extra, 2);
@@ -249,11 +249,14 @@ assert.equal(contoTiro(magick, { arete: 2 }).difficultySet, true);
 assert.equal(hasSoglia(setScope(setScope(setScope(magick, "potency", 0), "range", 0), "targets", 0)), true);
 assert.equal(contoTiro(setScope(setScope(setScope(magick, "potency", 0), "range", 0), "targets", 0), { arete: 2 }).difficulty, 1, "a Ambiti tutti a 0 resta l'Epicità");
 
-// La soglia a mano nella Magick è la difficoltà che dà il Narratore, entro ±3: +4 si ferma a +3
-// (5 + 3 − 2 del premio = 6), e in meno non porta la soglia sotto 1.
+// La soglia a mano nella Magick è la difficoltà che dà il Narratore, e la sposta liberamente (Blue, 15/11):
+// +4 fa 5 + 4 − 2 del premio = 7; in meno non porta la soglia sotto 1, in più non passa il 10.
+// Oltre +3 o −3 il conto lo segna (`sogliaManoOltre`), e il riquadro mette il numero in rosso.
 conto = contoTiro(setSoglia(magick, 4), { arete: 2, attributeValue: 4, skillValue: 5 });
-assert.deepEqual([conto.computed, conto.sogliaMano, conto.difficulty, conto.dice, conto.impossible], [5, 3, 6, 9, false]);
-assert.deepEqual([setSoglia(magick, -9).soglia, contoTiro(setSoglia(magick, -9), { arete: 2 }).difficulty, contoTiro(setSoglia(magick, -1), { arete: 2 }).difficulty], [-3, 1, 2]);
+assert.deepEqual([conto.computed, conto.sogliaMano, conto.difficulty, conto.dice, conto.impossible, conto.sogliaManoOltre, conto.sogliaSenzaMano], [5, 4, 7, 9, false, true, 3]);
+assert.deepEqual([3, -3, 4, -4, 0].map((mano) => contoTiro(setSoglia(magick, mano), { arete: 2 }).sogliaManoOltre), [false, false, true, true, false], "il rosso scatta oltre +3 e oltre −3");
+assert.deepEqual([setSoglia(magick, -9).soglia, contoTiro(setSoglia(magick, -9), { arete: 2 }).difficulty, contoTiro(setSoglia(magick, -1), { arete: 2 }).difficulty, contoTiro(setSoglia(magick, 15), { arete: 2 }).difficulty], [-9, 1, 2, 10]);
+assert.equal(contoTiro(setSoglia(abilita, 7), { attributeValue: 3, skillValue: 2 }).sogliaManoOltre, false, "nei tiri di Abilità non c'è metro: la soglia la dice il Narratore");
 assert.equal(contoTiro(magick, { arete: 2 }).sogliaMano, 0, "senza a mano, l'addendo è zero");
 
 // Il tetto dei +3 tiene insieme l'Armonia, i dadi dati al tavolo e la Quintessenza (Blue, 15/11).

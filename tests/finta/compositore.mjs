@@ -80,6 +80,14 @@ assert.deepEqual([conRitocco.riserva.totale.label, conRitocco.riserva.totale.rit
 const conSoglia = S.prepareTiroContext(actor, T.bumpSoglia(tiro, 1));
 assert.deepEqual([conSoglia.computed, conSoglia.difficulty, conSoglia.soglia.totale.label, conSoglia.soglia.totale.ritocco, conSoglia.esito.dadi], [4, 2, "2", "+1", 11]);
 assert.equal(conSoglia.esito.servono, "WOD5E_MAGE.Tiro.Servono");
+// La mano del Narratore è libera (Blue, 15/11): +4 fa 4 + 4 − 3 = 5, e oltre +3 o −3 la matita va in rosso.
+{
+  const piu3 = S.prepareTiroContext(actor, T.setSoglia(tiro, 3));
+  const piu4 = S.prepareTiroContext(actor, T.setSoglia(tiro, 4));
+  assert.deepEqual([piu3.difficulty, piu3.soglia.totale.ritocco, piu3.soglia.totale.oltre, piu3.soglia.totale.oltreHint], [4, "+3", false, ""]);
+  assert.deepEqual([piu4.difficulty, piu4.soglia.totale.ritocco, piu4.soglia.totale.oltre, piu4.soglia.totale.oltreHint, piu4.soglia.totale.piu], [5, "+4", true, "WOD5E_MAGE.Tiro.SogliaOltre", false]);
+  assert.deepEqual([conSoglia.soglia.totale.oltre, ctx.soglia.totale.oltre], [false, false]);
+}
 // Un dado solo: la parola al singolare.
 assert.equal(S.prepareTiroContext(actor, T.setDadi(tiro, -10)).esito.parola, "WOD5E_MAGE.Tiro.DadoParola");
 assert.deepEqual([ctx.prize.on, ctx.prize.arete, ctx.quintessence.available], [true, 3, 4]);

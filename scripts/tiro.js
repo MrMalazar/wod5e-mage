@@ -19,7 +19,8 @@
  * - nella Magick la soglia è il conto degli Ambiti: il più alto, Epicità
  *   compresa, più 1 per ogni altro Ambito sopra il livello dell'Areté, e
  *   si ferma a 10; la soglia a mano è la difficoltà che il Narratore alza o
- *   abbassa, entro ±3;
+ *   abbassa, liberamente (Blue, 15/11): oltre +3 o −3 il numero diventa
+ *   rosso, a ricordare che si è fuori dal metro delle penalità;
  * - il premio dell'Areté abbassa la soglia di quant'è l'Areté, quando la
  *   narrazione lo merita e il Narratore dà l'ok: la casella resta, accesa
  *   quando si clicca l'Areté; la soglia di un lancio non scende sotto 1;
@@ -46,6 +47,7 @@ import {
   BONUS_MAX,
   contoAmbiti,
   MALUS_DIFFICOLTA_MAX,
+  oltreIlMetro,
   RIUSCITA_DA,
   SOGLIA_ABILITA_MAX,
   SOGLIA_MAGICK_MAX,
@@ -63,8 +65,11 @@ export const EXTRA_DICE_CAP = BONUS_MAX;
 /** Il ritocco dei Dadi (23/9): dadi in più o in meno sul totale, fuori dalla riserva e dal tetto, entro ±10. */
 export const DADI_ADJUST_CAP = 10;
 
-/** La soglia a mano nella Magick: la difficoltà che il Narratore alza o abbassa sopra il conto degli Ambiti, entro ±3. */
-export const SOGLIA_MANO_CAP = MALUS_DIFFICOLTA_MAX;
+/** La soglia a mano nella Magick: la difficoltà che il Narratore alza o abbassa sopra il conto degli Ambiti. È libera (Blue, 15/11): ±20 è solo il fondo corsa del tasto. */
+export const SOGLIA_MANO_CAP = 20;
+
+/** Il metro delle penalità sulla difficoltà: oltre ±3 la soglia a mano si segna in rosso. */
+export const SOGLIA_MANO_METRO = MALUS_DIFFICOLTA_MAX;
 
 /** Lo stato vuoto: niente cliccato, niente scritto a mano. */
 export function emptyTiro() {
@@ -321,7 +326,7 @@ export function hasSoglia(tiro) {
  * La soglia a mano; null la toglie. In un tiro di Abilità è la soglia
  * intera, quella che dice il Narratore: da 1 a 7, mai sotto e mai sopra.
  * Nella Magick è la difficoltà in più o in meno sopra il conto degli
- * Ambiti, entro ±3.
+ * Ambiti: il Narratore la sposta liberamente (il tasto arriva a ±20).
  */
 export function setSoglia(tiro, value) {
   const next = clone(tiro);
@@ -583,8 +588,10 @@ export function contoTiro(tiro, {
   const sogliaMano = manual ? Math.trunc(Number(tiro.soglia) || 0) : 0;
   const scopeThreshold = magick ? contoAmbiti(scopeLevels, areteValue).soglia : 0;
   const lancio = magick
-    ? sogliaMagick({ ambiti: countedLevels, arete: areteValue, premio: prize, aggravio: Math.max(sogliaMano, 0), sconto: Math.max(-sogliaMano, 0) })
+    ? sogliaMagick({ ambiti: countedLevels, arete: areteValue, premio: prize, mano: sogliaMano })
     : null;
+  // La soglia senza la mano del Narratore: serve a chi deve dire di quanto la si è spostata.
+  const sogliaSenzaMano = magick ? Math.max(sogliaMagick({ ambiti: countedLevels, arete: areteValue, premio: prize }).soglia, SOGLIA_MIN) : 0;
   // Il conto degli Ambiti col potere dentro, prima della difficoltà a mano e del premio.
   const computed = lancio ? Math.min(lancio.grezzo, SOGLIA_MAGICK_MAX) : 0;
   const difficulty = magick
@@ -616,6 +623,9 @@ export function contoTiro(tiro, {
     computed,
     manual,
     sogliaMano,
+    // La mano del Narratore oltre il metro delle penalità (±3): il numero va in rosso.
+    sogliaManoOltre: magick && oltreIlMetro(sogliaMano),
+    sogliaSenzaMano,
     difficultySet: hasSoglia(tiro),
     difficulty,
     dice: fallisce ? 0 : dadi,

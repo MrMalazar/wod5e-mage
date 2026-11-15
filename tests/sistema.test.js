@@ -16,6 +16,7 @@ import {
   esito,
   faccia,
   leggiRossi,
+  oltreIlMetro,
   paradossoDelLancio,
   prezzoAmmesso,
   PX_ARETE,
@@ -204,6 +205,16 @@ assert.equal(quintessenzaDelSacrificio("aggravato"), 3);
   assert.equal(sogliaMagick({ ambiti: grande, arete: 2, premio: 4 }).soglia, 1, "il premio doppio, e mai sotto 1");
   assert.equal(sogliaMagick({ ambiti: grande, arete: 2, premio: 0 }).soglia, 5);
   assert.equal(sogliaMagick({ ambiti: grande, arete: 2, premio: false }).soglia, 5);
+}
+
+// La mano del Narratore sulla soglia di un lancio (Blue, 15/11): libera, senza il tetto dei ±3; resta fra 1 e 10.
+{
+  const grande = [{ id: "potency", level: 4 }, { id: "epic", level: 3 }, { id: "targets", level: 2 }];
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, mano: 4 }).soglia, 9);
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, mano: 9 }).soglia, 10);
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, mano: -9 }).soglia, 1);
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, premio: true, mano: 4 }).soglia, 7);
+  assert.deepEqual([0, 3, -3, 4, -4, 12].map(oltreIlMetro), [false, false, false, true, true, true]);
 }
 
 // Il tiro di Saggezza (Blue, 15/11): successi pari al gradino dell'atto, da 1 a 7.

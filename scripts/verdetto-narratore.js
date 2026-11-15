@@ -89,7 +89,7 @@ export async function scriviDalNarratore(value) {
  * `condizioni` (29/9): quelle che pesano sul tiro in una riga, quelle che
  * il giocatore ha tolto, e se il tiro fallisce per una di loro.
  */
-export function richiestaTiro({ id, from, to, actorId = "", actorName = "", title = "", magick = false, kind = "", pool = 0, difficulty = 0, successFrom = 6, condizioni = null } = {}) {
+export function richiestaTiro({ id, from, to, actorId = "", actorName = "", title = "", magick = false, kind = "", pool = 0, difficulty = 0, successFrom = 6, condizioni = null, sogliaBase = 0 } = {}) {
   return {
     type: TIPO_RICHIESTA,
     id: String(id ?? ""),
@@ -103,6 +103,8 @@ export function richiestaTiro({ id, from, to, actorId = "", actorName = "", titl
     pool: count(pool),
     difficulty: count(difficulty),
     successFrom: count(successFrom) || 6,
+    // La soglia di un lancio prima che qualcuno la ritocchi a mano (0 nei tiri di Abilità, che non hanno conto).
+    sogliaBase: magick ? count(sogliaBase) : 0,
     condizioni: {
       testo: String(condizioni?.testo ?? ""),
       fuori: [].concat(condizioni?.fuori ?? []).map(String).filter(Boolean),
@@ -136,6 +138,26 @@ export function verdettoTiro(richiesta, { difficulty, dice, senzaCondizioni = fa
   };
 }
 
+/** Il tetto della soglia: 7 in un tiro di Abilità, 10 in un lancio di Magick. Il fondo è 1. */
+export const SOGLIA_VERDETTO_MAX = Object.freeze({ abilita: 7, magick: 10 });
+
+/** La soglia che il Narratore scrive, dentro la scala del tiro. */
+export function sogliaVerdetto(value, magick = false) {
+  return Math.min(Math.max(count(value), 1), magick ? SOGLIA_VERDETTO_MAX.magick : SOGLIA_VERDETTO_MAX.abilita);
+}
+
+/**
+ * La mano sulla soglia di un lancio va oltre il metro delle penalità (Blue,
+ * 15/11): il Narratore la sposta liberamente, ma oltre +3 o −3 dal conto il
+ * numero diventa rosso, a ricordarlo. Nei tiri di Abilità non c'è conto, e
+ * il rosso non serve.
+ */
+export function sogliaOltre(richiesta, value) {
+  const base = count(richiesta?.sogliaBase);
+  if (!richiesta?.magick || !base) return false;
+  return Math.abs(count(value) - base) > 3;
+}
+
 /** I dadi che si tirano con questi numeri: tutta la riserva, coi dadi del Narratore (il Sistema: la soglia non ne toglie). */
 export function dadiVerdetto({ pool = 0, dice = 0 } = {}) {
   return Math.max(count(pool) + delta(dice), 0);
@@ -152,8 +174,8 @@ export function applicaVerdetto(conto, verdetto) {
   const via = Boolean(verdetto.senzaCondizioni) && Boolean(conto?.condizioni);
   const base = via ? count(conto.condizioni.dadiSenza ?? conto?.pool) : count(conto?.pool);
   const pool = Math.max(base + delta(verdetto.dice), 0);
-  // La soglia del Narratore: i successi che servono, almeno uno.
-  const difficulty = Math.max(count(verdetto.difficulty), 1);
+  // La soglia del Narratore: i successi che servono, dentro la scala del tiro (1-7 l'Abilità, 1-10 la Magick).
+  const difficulty = sogliaVerdetto(verdetto.difficulty, Boolean(conto?.magick));
   const fallisce = via ? false : Boolean(conto?.fallisce);
   const dice = fallisce ? 0 : pool;
   return {
@@ -226,7 +248,9 @@ export function chiediVerdetto({ actor, title = "", magick = false, kind = "", c
     pool: conto.pool,
     difficulty: conto.difficulty,
     successFrom: conto.successFrom,
-    condizioni
+    condizioni,
+    // La soglia del lancio senza ritocchi a mano: il Narratore vede in rosso quando se ne allontana di più di 3.
+    sogliaBase: conto.sogliaSenzaMano
   });
   const actorKey = String(actor?.id ?? "");
   attoriInAttesa.add(actorKey);
@@ -311,6 +335,9 @@ export function contestoVerdetto(richiesta, localize = (key) => key, format = (k
       : localize("WOD5E_MAGE.Tiro.KindSkill"),
     pool: richiesta.pool,
     difficulty: richiesta.difficulty,
+    difficultyMax: richiesta.magick ? SOGLIA_VERDETTO_MAX.magick : SOGLIA_VERDETTO_MAX.abilita,
+    // La soglia arriva già ritoccata dal giocatore oltre ±3: parte in rosso.
+    oltre: sogliaOltre(richiesta, richiesta.difficulty),
     dice: richiesta.condizioni?.fallisce ? 0 : dadiVerdetto(richiesta),
     successFrom: richiesta.successFrom,
     // Le Condizioni (29/9): quelle che pesano, quelle tolte dal giocatore, e la casella per dire che non contano.
@@ -352,6 +379,8 @@ export function cablaVerdetto(root, richiesta, submit, { now = () => Date.now(),
     const base = via ? count(richiesta.condizioni?.dadiSenza ?? richiesta.pool) : count(richiesta.pool);
     if (uscita) uscita.textContent = String(fallisce ? 0 : dadiVerdetto({ pool: base, dice: dadi?.value }));
     if (riuscita) riuscita.textContent = String(richiesta.successFrom);
+    // Oltre +3 o −3 dal conto del lancio la soglia si segna in rosso.
+    difficolta?.classList?.toggle?.("oltre", sogliaOltre(richiesta, difficolta.value));
   };
   root.addEventListener("click", (event) => {
     const button = event.target?.closest?.("[data-campo]");
@@ -359,8 +388,8 @@ export function cablaVerdetto(root, richiesta, submit, { now = () => Date.now(),
     event.preventDefault();
     const input = button.dataset.campo === "dice" ? dadi : difficolta;
     if (!input) return;
-    const min = button.dataset.campo === "dice" ? -Infinity : 1;
-    input.value = String(Math.max(delta(input.value) + delta(button.dataset.delta), min));
+    if (button.dataset.campo === "dice") input.value = String(delta(input.value) + delta(button.dataset.delta));
+    else input.value = String(sogliaVerdetto(delta(input.value) + delta(button.dataset.delta), Boolean(richiesta.magick)));
     ricalcola();
   });
   root.addEventListener("input", ricalcola);

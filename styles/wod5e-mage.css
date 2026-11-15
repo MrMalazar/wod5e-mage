@@ -4555,6 +4555,12 @@
   width: 3.4rem;
 }
 
+/* La soglia del Narratore oltre +3 o −3 dal conto (Blue, 15/11): il numero in rosso. */
+.wod5e-mage-verdetto-comandi input[type="number"].oltre {
+  color: var(--mage-rosso-vivo, #d0524a);
+  font-weight: 700;
+}
+
 .wod5e-mage-verdetto-comandi button {
   height: 26px;
   line-height: 1;
@@ -18803,6 +18809,12 @@
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-penna > i {
   font-size: 0.66rem;
+}
+
+/* La mano del Narratore oltre +3 o −3 (Blue, 15/11): il numero in rosso, a ricordarlo. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-penna.oltre {
+  color: var(--mage-rosso-vivo);
+  font-weight: 700;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-totale > .wod5e-mage-tiro-passo {

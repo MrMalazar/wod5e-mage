@@ -26,7 +26,9 @@ import {
   tiroInAttesa,
   VERDETTO_ATTESA_MS,
   VERDETTO_SECONDI,
-  verdettoTiro
+  verdettoTiro,
+  sogliaOltre,
+  sogliaVerdetto
 } from "../scripts/verdetto-narratore.js";
 
 // Cinque secondi al Narratore (Blue, 27/9: erano dieci), il giocatore aspetta qualcosa in più; il canale è quello del modulo.
@@ -63,7 +65,7 @@ delete globalThis.game;
 
 // La richiesta porta i numeri del conto, puliti, e va a tutti i Narratori.
 const richiesta = richiestaTiro({ id: "r1", from: "p1", to: ["gm1", "gm2"], actorId: "a1", actorName: "Ianira", title: "Destrezza + Velo", magick: true, kind: "volgare", pool: 9, difficulty: 5, successFrom: 6 });
-assert.deepEqual(richiesta, { type: TIPO_RICHIESTA, id: "r1", from: "p1", to: ["gm1", "gm2"], actorId: "a1", actorName: "Ianira", title: "Destrezza + Velo", magick: true, kind: "volgare", pool: 9, difficulty: 5, successFrom: 6, condizioni: { testo: "", fuori: [], fallisce: false, dadi: 0, dadiSenza: 9 } });
+assert.deepEqual(richiesta, { type: TIPO_RICHIESTA, id: "r1", from: "p1", to: ["gm1", "gm2"], actorId: "a1", actorName: "Ianira", title: "Destrezza + Velo", magick: true, kind: "volgare", pool: 9, difficulty: 5, successFrom: 6, sogliaBase: 0, condizioni: { testo: "", fuori: [], fallisce: false, dadi: 0, dadiSenza: 9 } });
 assert.deepEqual([richiestaTiro({ pool: -3, difficulty: "x" }).pool, richiestaTiro({ pool: -3, difficulty: "x" }).difficulty, richiestaTiro({}).successFrom, richiestaTiro({ to: "gm" }).to], [0, 0, 6, ["gm"]]);
 
 // Il verdetto: com'era, o ritoccato; torna a chi ha chiesto, e dice quale Narratore ha risposto.
@@ -111,7 +113,7 @@ assert.equal(secondiRimasti(1000, 99000), 0);
 
 // Il contesto della finestra.
 const ctx = contestoVerdetto(richiesta, (key) => key.split(".").at(-1), format);
-assert.deepEqual(ctx, { altri: 1, altriTesto: "Altri(1)", actorName: "Ianira", title: "Destrezza + Velo", kindLabel: "KindMagick · volgare", pool: 9, difficulty: 5, dice: 9, successFrom: 6, condizioni: null, fuori: "", seconds: 5 });
+assert.deepEqual(ctx, { altri: 1, altriTesto: "Altri(1)", actorName: "Ianira", title: "Destrezza + Velo", kindLabel: "KindMagick · volgare", pool: 9, difficulty: 5, difficultyMax: 10, oltre: false, dice: 9, successFrom: 6, condizioni: null, fuori: "", seconds: 5 });
 assert.deepEqual([contestoVerdetto(richiestaTiro({ magick: false }), (key) => key).kindLabel, contestoVerdetto(richiestaTiro({ to: "gm" })).altriTesto], ["WOD5E_MAGE.Tiro.KindSkill", ""]);
 
 // La finestra: il meno e il più, i dadi ricalcolati, il conto che allo scadere preme OK.
@@ -311,6 +313,43 @@ assert.match(scheda, /if \(!conto\.difficultySet\) \{\n\s+ui\.notifications\.war
   listeners.change();
   assert.deepEqual([dadi.textContent, riuscita.textContent], ["6", "6"]);
   assert.equal(leggiVerdetto(root).senzaCondizioni, true);
+}
+
+// La mano del Narratore sulla soglia (Blue, 15/11): in un lancio la sposta liberamente, e oltre +3 o −3 dal
+// conto il numero diventa rosso; la soglia resta nella scala del tiro, 1-10 la Magick e 1-7 l'Abilità.
+{
+  const lancio = richiestaTiro({ id: "r3", from: "p1", to: ["gm1"], magick: true, pool: 8, difficulty: 4, sogliaBase: 4 });
+  assert.equal(lancio.sogliaBase, 4);
+  assert.deepEqual([4, 7, 8, 1, 0].map((x) => sogliaOltre(lancio, x)), [false, false, true, false, true]);
+  assert.equal(richiestaTiro({ magick: false, difficulty: 3, sogliaBase: 3 }).sogliaBase, 0, "un tiro di Abilità non ha conto");
+  assert.equal(sogliaOltre(richiestaTiro({ magick: false, difficulty: 3 }), 7), false);
+  assert.deepEqual([sogliaVerdetto(0), sogliaVerdetto(9), sogliaVerdetto(9, true), sogliaVerdetto(14, true)], [1, 7, 9, 10]);
+  // Il giocatore ha già scritto +4 a mano: la finestra si apre col numero in rosso.
+  const giaOltre = richiestaTiro({ id: "r4", from: "p1", to: ["gm1"], magick: true, pool: 8, difficulty: 8, sogliaBase: 4 });
+  assert.deepEqual([contestoVerdetto(giaOltre).oltre, contestoVerdetto(giaOltre).difficultyMax, contestoVerdetto(richiestaTiro({ difficulty: 3 })).difficultyMax], [true, 10, 7]);
+  // La finestra: il rosso si accende e si spegne mentre il Narratore tocca la soglia.
+  const classi = new Set();
+  const campo = { value: "4", classList: { toggle: (nome, acceso) => { if (acceso) classi.add(nome); else classi.delete(nome); } } };
+  const ascolti = {};
+  const radice = {
+    isConnected: true,
+    querySelector: (selector) => ({ "[name=difficulty]": campo, "[name=dice]": { value: "0" }, "[data-role=dadi]": { textContent: "" } })[selector] ?? null,
+    addEventListener: (type, fn) => { ascolti[type] = fn; }
+  };
+  cablaVerdetto(radice, lancio, () => {}, { now: () => 0, tick: () => 1, stop: () => {} });
+  const tocca = (delta) => ascolti.click({ target: { closest: () => ({ dataset: { campo: "difficulty", delta: String(delta) } }) }, preventDefault() {} });
+  assert.equal(classi.has("oltre"), false);
+  tocca(3);
+  assert.deepEqual([campo.value, classi.has("oltre")], ["7", false], "+3: ancora dentro il metro");
+  tocca(1);
+  assert.deepEqual([campo.value, classi.has("oltre")], ["8", true], "+4: il numero diventa rosso");
+  tocca(5);
+  assert.equal(campo.value, "10", "la soglia di un lancio non passa il 10");
+  tocca(-9);
+  assert.deepEqual([campo.value, classi.has("oltre")], ["1", false], "da 4 a 1 sono −3: dentro il metro");
+  // Il verdetto applicato resta nella scala: 7 in un tiro di Abilità, 10 in un lancio.
+  assert.equal(applicaVerdetto({ pool: 6, difficulty: 3, dice: 6, magick: false }, verdettoTiro(richiestaTiro({ difficulty: 3 }), { difficulty: 12 })).difficulty, 7);
+  assert.equal(applicaVerdetto({ pool: 6, difficulty: 4, dice: 6, magick: true }, verdettoTiro(lancio, { difficulty: 12 })).difficulty, 10);
 }
 
 console.log("Verdetto del Narratore tests passed.");

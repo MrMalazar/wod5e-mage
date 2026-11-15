@@ -153,14 +153,25 @@ export function contoAmbiti(ambiti = [], arete = ARETE_MIN) {
  * dal tetto dei bonus); gli altri sconti si fermano a −3; un Volgare
  * aggravato la alza fino a +3. Resta fra 1 e 10.
  */
-export function sogliaMagick({ ambiti = [], arete = ARETE_MIN, premio = false, sconto = 0, aggravio = 0 } = {}) {
+export function sogliaMagick({ ambiti = [], arete = ARETE_MIN, premio = false, sconto = 0, aggravio = 0, mano = 0 } = {}) {
   const conto = contoAmbiti(ambiti, arete);
   // Il premio vale l'Areté; un numero lo dice chi lo cambia (un potere che lo raddoppia).
   const tolto = premio === true ? stringi(arete, 0, ARETE_MAX) : (premio === false ? 0 : conta(premio));
   const sconti = Math.min(conta(sconto), BONUS_MAX);
   const aggravi = Math.min(conta(aggravio), MALUS_DIFFICOLTA_MAX);
-  const soglia = conto.soglia ? stringi(conto.soglia + aggravi - tolto - sconti, SOGLIA_MIN, SOGLIA_MAGICK_MAX) : 0;
-  return { ...conto, premio: tolto, sconto: sconti, aggravio: aggravi, soglia };
+  // La mano del Narratore (Blue, 15/11): la difficoltà che alza o abbassa lui è libera, senza il tetto dei ±3.
+  const aMano = intero(mano);
+  const soglia = conto.soglia ? stringi(conto.soglia + aggravi - tolto - sconti + aMano, SOGLIA_MIN, SOGLIA_MAGICK_MAX) : 0;
+  return { ...conto, premio: tolto, sconto: sconti, aggravio: aggravi, mano: aMano, soglia };
+}
+
+/**
+ * La mano del Narratore sulla soglia va oltre il metro delle penalità
+ * (Blue, 15/11): può farlo, ma oltre +3 o −3 il numero si segna in rosso,
+ * a ricordarglielo.
+ */
+export function oltreIlMetro(mano) {
+  return Math.abs(intero(mano)) > MALUS_DIFFICOLTA_MAX;
 }
 
 /**

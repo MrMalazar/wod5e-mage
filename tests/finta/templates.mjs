@@ -129,6 +129,10 @@ for (const marker of ['data-power="forces-1-1" data-sphere="forces" data-any="tr
   // Un dado solo: la parola al singolare; con zero dadi l'esito è rosso.
   const uno = stat({ ...context, tiro: { ...context.tiro, esito: { ...context.tiro.esito, dadi: 1, parola: "dado" } } });
   assert.ok(uno.includes("<b>1</b><span>dado · servono 4 successi</span>"), "un dado solo");
+  // La mano del Narratore sulla soglia (Blue, 15/11): oltre +3 o −3 la matita col numero diventa rossa, col suo perché nel sorvolo.
+  const conMano = (totale) => stat({ ...context, tiro: { ...context.tiro, soglia: { ...context.tiro.soglia, totale: { ...context.tiro.soglia.totale, ...totale } } } });
+  assert.ok(conMano({ ritocco: "+3", oltre: false, oltreHint: "" }).includes('<span class="wod5e-mage-tiro-penna"><i class="fa-solid fa-pen" aria-hidden="true"></i>+3</span>'), "dentro il metro: la matita com'è");
+  assert.ok(conMano({ ritocco: "+4", oltre: true, oltreHint: "Oltre il metro" }).includes('<span class="wod5e-mage-tiro-penna oltre" title="Oltre il metro"><i class="fa-solid fa-pen" aria-hidden="true"></i>+4</span>'), "oltre il metro: la matita in rosso");
   const zero = stat({ ...context, tiro: { ...context.tiro, esito: { ...context.tiro.esito, dadi: 0, impossibile: true } } });
   assert.ok(zero.includes('wod5e-mage-tiro-esito impossibile"'), "zero dadi: l'esito è rosso");
   const senzaQ = stat({ ...context, tiro: { ...context.tiro, magick: false, riserva: { ...context.tiro.riserva, righe: context.tiro.riserva.righe.filter((r) => r.kind !== "quintessence") } } });

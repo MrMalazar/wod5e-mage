@@ -18,7 +18,7 @@
             <span class="wod5e-mage-verdetto-etichetta">{{localize "WOD5E_MAGE.Tiro.Difficulty"}}</span>
             <span class="wod5e-mage-verdetto-comandi">
                 <button type="button" data-campo="difficulty" data-delta="-1" aria-label="−1"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
-                <input type="number" name="difficulty" value="{{difficulty}}" min="1" step="1">
+                <input type="number" name="difficulty"{{#if oltre}} class="oltre"{{/if}} value="{{difficulty}}" min="1" max="{{difficultyMax}}" step="1">
                 <button type="button" data-campo="difficulty" data-delta="1" aria-label="+1"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
             </span>
         </div>

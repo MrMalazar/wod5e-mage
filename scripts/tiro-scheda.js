@@ -470,6 +470,9 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
         label: sogliaSet ? numero(conto.difficulty) : "?",
         vuoto: !sogliaSet,
         ritocco: magick && conto.sogliaMano ? conSegno(conto.sogliaMano) : "",
+        // Oltre +3 o −3 la mano del Narratore si segna in rosso (Blue, 15/11): può, ma è fuori dal metro.
+        oltre: conto.sogliaManoOltre,
+        oltreHint: conto.sogliaManoOltre ? localize("WOD5E_MAGE.Tiro.SogliaOltre") : "",
         meno: sogliaSet && (conto.difficulty <= SOGLIA_MIN || (magick && conto.sogliaMano <= -SOGLIA_MANO_CAP)),
         piu: magick ? (conto.sogliaMano >= SOGLIA_MANO_CAP || conto.difficulty >= SOGLIA_MAGICK_MAX) : conto.difficulty >= SOGLIA_ABILITA_MAX,
         hint: localize(magick ? "WOD5E_MAGE.Tiro.SogliaManoHint" : "WOD5E_MAGE.Tiro.SogliaManoAbilitaHint")

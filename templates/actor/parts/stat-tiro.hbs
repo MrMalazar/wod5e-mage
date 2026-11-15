@@ -84,7 +84,7 @@
                 </div>
                 {{!-- Il totale (1/10): la soglia; il meno e il più la alzano o abbassano sopra il conto degli Ambiti (nell'Abilità la fanno), la matita dice di quanto. --}}
                 <div class="wod5e-mage-tiro-totale" title="{{tiro.soglia.totale.hint}}">
-                    {{#if tiro.soglia.totale.ritocco}}<span class="wod5e-mage-tiro-penna"><i class="fa-solid fa-pen" aria-hidden="true"></i>{{tiro.soglia.totale.ritocco}}</span>{{/if}}
+                    {{#if tiro.soglia.totale.ritocco}}<span class="wod5e-mage-tiro-penna{{#if tiro.soglia.totale.oltre}} oltre{{/if}}"{{#if tiro.soglia.totale.oltre}} title="{{tiro.soglia.totale.oltreHint}}"{{/if}}><i class="fa-solid fa-pen" aria-hidden="true"></i>{{tiro.soglia.totale.ritocco}}</span>{{/if}}
                     <span class="wod5e-mage-tiro-passo">
                         <button type="button" data-action="tiroSoglia" data-delta="-1" aria-label="{{localize 'WOD5E_MAGE.Tiro.Soglia'}} −1" {{#if tiro.soglia.totale.meno}}disabled{{/if}}><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
                         <b class="wod5e-mage-tiro-totale-numero{{#if tiro.soglia.totale.vuoto}} vuoto{{/if}}">{{tiro.soglia.totale.label}}</b>
