@@ -12,7 +12,8 @@
  *
  *   natura     una delle NATURE (parte dallo spcType del sistema)
  *   fazione    testo libero
- *   soglie     { physical, social, mental }: i dadi che toglie a chi agisce contro di lui
+ *   soglie     { physical, social, mental }: i successi che servono a chi agisce contro di lui (il Sistema, 14/11);
+ *              non scritta, vale la soglia fissa: metà della riserva del campo, per eccesso
  *   casi       { id: { nome, campo, soglia | dadi, skill, sort } }: una soglia o una riserva per una cosa precisa
  *   azioni     { id: { nome, testo, riserva, senzaTiro, danno, aggravato, portata, condizione, limite, soglia,
  *                      note, bonusSoglia, bonusA, sort } }; le azioni nate da un'arma hanno l'id «arma:<idOggetto>»
@@ -24,10 +25,11 @@
  *
  * Un EFFETTO di Magick: { nome, breve, testo, resiste: { attribute, skill, testo },
  * dominio, come, da, formula, ambiti: { ambito: livello }, soglia, sort }.
- * La soglia è quella scritta (dalla Formula, o dall'Epicità e dagli Ambiti a
- * mano): il PG la resiste col tiro scritto sull'effetto. Il Narratore non
- * tira mai. Gli effetti scritti prima del 2/10 possono portare «impossibile»
- * (il +5 di allora, già dentro la loro soglia) e niente Epicità.
+ * La soglia è il conto dei suoi Ambiti con l'Areté del nemico (il Sistema:
+ * l'Ambito più alto, Epicità compresa, più 1 per ogni altro sopra l'Areté;
+ * quella scritta vale solo per un effetto senza Ambiti): il PG la resiste
+ * col tiro scritto sull'effetto. Il Narratore non tira mai. Gli effetti
+ * scritti prima del 2/10 possono portare «impossibile» e niente Epicità.
  *
  * Dal rifacimento dell'1/10 (mock docs/mock_scheda_nemico_1-10.html) la bandiera porta anche:
  *
@@ -45,6 +47,7 @@ import { ATTRIBUTE_KEYS } from "./tratti-icone.js";
 import { findFormula, formulaThresholds, prepareGrimorioFormule } from "./grimorio.js";
 import { POTERI, quattroParti } from "./poteri.js";
 import { EPIC_MIN, EPIC_SCOPE, epicita, SCOPES, SCOPES_PER_CAST, SCOPE_ICONS, SCOPE_MAX_LEVEL, scopeMin, scopeModes } from "./scopes.js";
+import { contaSuccessi, contoAmbiti, sogliaFissa, SOGLIA_MIN } from "./sistema.js";
 import { SPHERES } from "./spheres.js";
 
 export const NEMICO_FLAG = "nemico";
@@ -143,74 +146,116 @@ const intero = (value, min = 0) => Math.max(Math.trunc(Number(value) || 0), min)
 const testo = (value) => String(value ?? "").trim();
 const oggetto = (value) => (value && typeof value === "object" && !Array.isArray(value) ? value : {});
 
-/** Il tiro: riserva meno soglia uguale dadi; basta un successo, dal 6; a zero dadi non si tira. */
+/**
+ * Il tiro (il Sistema, 14/11): si tira tutta la riserva, un dado riesce dal 6,
+ * e servono successi pari alla soglia; a zero dadi il tiro fallisce senza
+ * tirare. La soglia non toglie più dadi.
+ */
 export const RIESCE_DAL = 6;
 
-export function dadiDelTiro(riserva, soglia = 0) {
-  return Math.max(intero(riserva) - intero(soglia), 0);
+/** I dadi che si tirano: la riserva com'è, dimezzata per difetto se una Condizione di grado 2 pesa sul tiro. */
+export function dadiDelTiro(riserva, { meta = false } = {}) {
+  const dadi = intero(riserva);
+  return meta ? Math.floor(dadi / 2) : dadi;
 }
 
-/** Con N dadi che riescono dal 6, la probabilità di almeno un successo: 1 − 0,5^N. */
-export function probabilitaSuccesso(dadi) {
+const binomiale = (n, k) => {
+  let out = 1;
+  for (let i = 1; i <= k; i += 1) out = (out * (n - k + i)) / i;
+  return out;
+};
+
+/**
+ * Con N dadi, la probabilità di fare almeno i successi della soglia: la
+ * scintilla (dal 6 al 9) vale un successo, le stelline (il 10) quattro a
+ * coppia e uno la spaiata. Si conta per esteso: nessuna stima.
+ */
+export function probabilitaSuccesso(dadi, soglia = SOGLIA_MIN) {
   const n = intero(dadi);
-  return n <= 0 ? 0 : 1 - Math.pow(0.5, n);
+  const servono = Math.max(intero(soglia), SOGLIA_MIN);
+  if (n <= 0) return 0;
+  let totale = 0;
+  for (let scintille = 0; scintille <= n; scintille += 1) {
+    for (let stelline = 0; stelline <= n - scintille; stelline += 1) {
+      const successi = contaSuccessi([...Array(scintille).fill(6), ...Array(stelline).fill(10)]).successi;
+      if (successi < servono) continue;
+      totale += binomiale(n, scintille) * binomiale(n - scintille, stelline) * Math.pow(0.4, scintille) * Math.pow(0.1, stelline) * Math.pow(0.5, n - scintille - stelline);
+    }
+  }
+  return Math.min(totale, 1);
 }
 
 /**
- * La lettura di una soglia (il sorvolo sul numero chiaro): contro una riserva
- * da 6 restano N dadi, e riesce X volte su 100.
+ * La lettura di una soglia (il sorvolo sul numero chiaro): con una riserva da
+ * 6 dadi, chi agisce contro di lui riesce X volte su 100.
  */
 export function letturaSoglia(soglia, riserva = 6) {
-  const dadi = dadiDelTiro(riserva, soglia);
-  return { soglia: intero(soglia), riserva: intero(riserva), dadi, percento: Math.round(probabilitaSuccesso(dadi) * 100) };
+  const servono = Math.max(intero(soglia), SOGLIA_MIN);
+  return { soglia: servono, riserva: intero(riserva), percento: Math.round(probabilitaSuccesso(riserva, servono) * 100) };
+}
+
+/**
+ * La soglia di un campo: quella scritta sulla scheda; se non è scritta, la
+ * soglia fissa del Sistema, metà della riserva con cui si difende, per eccesso.
+ */
+export function sogliaDelCampo(scritta, riserva) {
+  const numero = intero(scritta);
+  return numero > 0 ? { value: numero, fissa: false } : { value: sogliaFissa(riserva), fissa: true };
 }
 
 /**
  * Una riserva scalata dai malus delle Condizioni: il numero che si stampa (già
  * scalato, in viola se è cambiato) e le voci che lo spiegano («5, −2 Atterrato»).
- * `voci` sono { nome, value } col value negativo. `mano` è la mano del
- * Narratore, { nome, value } con segno (Blue, 27/9): l'unico ritocco in più o
+ * `voci` sono { nome, value } col value negativo, e { nome, meta: true } per le
+ * Condizioni di grado 2, che dimezzano la riserva: la metà si fa una volta
+ * sola e per ultima, per difetto, dopo i dadi tolti e la mano. `mano` è la mano
+ * del Narratore, { nome, value } con segno (Blue, 27/9): l'unico ritocco in più o
  * in meno oltre alle Condizioni, che entra nel conto e si legge fra le voci.
  */
 export function riservaScalata(base, voci = [], mano = null) {
   const partenza = intero(base);
-  const negative = (voci ?? []).filter((voce) => Math.trunc(Number(voce?.value) || 0) < 0).map((voce) => ({ nome: String(voce.nome ?? ""), value: Math.trunc(Number(voce.value) || 0) }));
+  const negative = (voci ?? []).filter((voce) => !voce?.meta && Math.trunc(Number(voce?.value) || 0) < 0).map((voce) => ({ nome: String(voce.nome ?? ""), value: Math.trunc(Number(voce.value) || 0) }));
+  const mezze = (voci ?? []).filter((voce) => voce?.meta).map((voce) => ({ nome: String(voce.nome ?? ""), value: 0, meta: true }));
   const malus = negative.reduce((sum, voce) => sum + voce.value, 0);
   const ritocco = Math.trunc(Number(mano?.value) || 0);
-  const tutte = ritocco ? [...negative, { nome: String(mano?.nome ?? ""), value: ritocco }] : negative;
-  const totale = Math.max(partenza + malus + ritocco, 0);
-  const cambiata = malus !== 0 || ritocco !== 0;
+  const tutte = [...negative, ...(ritocco ? [{ nome: String(mano?.nome ?? ""), value: ritocco }] : []), ...mezze];
+  const totale = dadiDelTiro(Math.max(partenza + malus + ritocco, 0), { meta: mezze.length > 0 });
+  const cambiata = malus !== 0 || ritocco !== 0 || mezze.length > 0;
   return {
     base: partenza,
     malus,
     mano: ritocco,
+    dimezzata: mezze.length > 0,
     totale,
     cambiata,
     voci: tutte,
-    // «7 -2 Atterrato +2 Mano del Narratore»: il conto come si legge sulla carta.
+    // «7 -2 Atterrato +2 Mano del Narratore ½ Offuscato»: il conto come si legge sulla carta.
     testo: cambiata ? `${partenza} ${vociTesto(tutte)}`.trim() : String(partenza)
   };
 }
 
 /**
- * La soglia di un effetto di Magick scritto a mano (2/10): l'Epicità, almeno
- * 1, più la somma dei livelli degli Ambiti sopra lo 0 (al massimo
- * SCOPES_PER_CAST Ambiti alzati: gli altri non contano e si segnalano).
- * L'Epicità non conta nel tetto. Il +5 dell'impresa impossibile non c'è
- * più: un'impresa impossibile è un'Epicità di 6 o 7.
+ * La soglia di un effetto di Magick dai suoi Ambiti (il Sistema, 14/11): fa
+ * da base l'Ambito più alto, Epicità compresa (almeno 1), e ogni altro Ambito
+ * aggiunge 1 se sta sopra l'Areté di chi lancia; il conto si ferma a 10. Si
+ * alzano al massimo SCOPES_PER_CAST Ambiti: gli altri non contano e si
+ * segnalano. L'Epicità non conta in quel tetto. `base` è l'Ambito che fa da
+ * base, `aggiunte` quelli che aggiungono 1.
  */
-export function sogliaDagliAmbiti(livelli = {}) {
+export function sogliaDagliAmbiti(livelli = {}, arete = 1) {
   const epic = { id: EPIC_SCOPE, level: epicita(oggetto(livelli)) };
   const alzati = SCOPES
     .filter((id) => id !== EPIC_SCOPE)
     .map((id) => ({ id, level: Math.min(intero(livelli?.[id]), SCOPE_MAX_LEVEL) }))
     .filter((entry) => entry.level > 0);
   const contati = alzati.slice(0, SCOPES_PER_CAST);
-  const somma = contati.reduce((sum, entry) => sum + entry.level, epic.level);
+  const conto = contoAmbiti([epic, ...contati], Math.max(intero(arete), 1));
   return {
-    soglia: somma,
+    soglia: conto.soglia,
     epicita: epic.level,
     ambiti: [epic, ...contati],
+    base: conto.baseId,
+    aggiunte: conto.aggiunte,
     fuoriTetto: alzati.slice(SCOPES_PER_CAST).map((entry) => entry.id)
   };
 }
@@ -336,9 +381,14 @@ export function segnoDi(value) {
   return n > 0 ? `+${n}` : String(n);
 }
 
-/** Le voci di una riserva scalata in una riga: «-2 Atterrato +2 Mano del Narratore». */
+/** Il valore di una voce come si legge: «-2», «+2», o «½» per la Condizione che dimezza la riserva. */
+export function valoreVoce(voce) {
+  return voce?.meta ? "½" : segnoDi(voce?.value);
+}
+
+/** Le voci di una riserva scalata in una riga: «-2 Atterrato +2 Mano del Narratore ½ Offuscato». */
 export function vociTesto(voci = []) {
-  return (voci ?? []).map((voce) => `${segnoDi(voce.value)} ${voce.nome}`).join(" ");
+  return (voci ?? []).map((voce) => `${valoreVoce(voce)} ${voce.nome}`).join(" ");
 }
 
 /** La mano del Narratore come voce della riserva: il nome e il ritocco (0 se non c'è). */
@@ -356,11 +406,12 @@ export function nomeAbilita(key, { nomi = {}, localize = (k) => k } = {}) {
 
 /**
  * I malus delle Condizioni addosso, per campo, mai quelli spenti
- * (`suppressed`). Le Condizioni di lista (la regola di base del 29/9)
- * leggono il peso dai dati del modulo: −2 ai gradi 1 e 2, −1 ai lievi, sui
- * loro tipi di tiro; le altre dai `bonuses` scritti sull'oggetto (paths
- * physical, social, mental o all), solo i negativi. Torna { physical,
- * social, mental } con le voci { nome, value }.
+ * (`suppressed`). Le Condizioni di lista (la regola di base del 29/9, coi
+ * gradi del Sistema) leggono il peso dai dati del modulo: −2 al grado 1, la
+ * riserva dimezzata al grado 2, −1 ai lievi, sui loro tipi di tiro; le altre
+ * dai `bonuses` scritti sull'oggetto (paths physical, social, mental o all),
+ * solo i negativi. Torna { physical, social, mental } con le voci
+ * { nome, value }, e { nome, value: 0, meta: true } per quelle che dimezzano.
  */
 export function malusCondizioni(items = []) {
   const per = Object.fromEntries(CAMPI.map((campo) => [campo, []]));
@@ -369,7 +420,9 @@ export function malusCondizioni(items = []) {
     const entry = definizioneDi(item);
     if (entry) {
       const value = dadiDelPeso(entry.weight);
-      if (value) for (const campo of CAMPI.filter((c) => entry.tipi.includes(c))) per[campo].push({ nome: String(item.name || entry.name), value });
+      const nome = String(item.name || entry.name);
+      if (value) for (const campo of CAMPI.filter((c) => entry.tipi.includes(c))) per[campo].push({ nome, value });
+      else if (entry.weight === "meta") for (const campo of CAMPI.filter((c) => entry.tipi.includes(c))) per[campo].push({ nome, value: 0, meta: true });
       continue;
     }
     for (const bonus of item.system?.bonuses ?? []) {
@@ -384,9 +437,9 @@ export function malusCondizioni(items = []) {
 }
 
 /**
- * L'8 e il fallimento delle Condizioni addosso, per campo (29/9): chi porta
- * il grado 2 riesce dall'8, chi porta un grado 3 fallisce. Torna {
- * physical, social, mental } con { meta: [nomi], fallisce: [nomi] }.
+ * La metà e il fallimento delle Condizioni addosso, per campo: chi porta il
+ * grado 2 tira con la riserva dimezzata, chi porta un grado 3 fallisce.
+ * Torna { physical, social, mental } con { meta: [nomi], fallisce: [nomi] }.
  */
 export function pesiCondizioni(items = []) {
   const per = Object.fromEntries(CAMPI.map((campo) => [campo, { meta: [], fallisce: [] }]));
@@ -399,14 +452,9 @@ export function pesiCondizioni(items = []) {
   return per;
 }
 
-/** La riuscita di un campo: dall'8 se una Condizione di grado 2 ci pesa, altrimenti dal 6. */
-export function riesceDal(pesi = { meta: [] }) {
-  return (pesi?.meta?.length ?? 0) > 0 ? 8 : RIESCE_DAL;
-}
-
 /**
  * Le Condizioni in testa: l'icona della famiglia col grado, il nome, il peso
- * in viola («−2 fisico», «−2 e 8 a tutto», «fallisce sociale»), la × che le
+ * in viola («−2 fisico», «½ a tutto», «fallisce sociale»), la × che le
  * toglie, la spiegazione nel sorvolo.
  */
 export function condizioniTestata(items = [], { localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
@@ -499,8 +547,10 @@ export function bonusAttivi(dati = datiNemico()) {
 }
 
 /**
- * Le tre carte: soglia (col sorvolo dei dadi che restano), riserva scalata dai
- * malus, e sotto i casi (una soglia con l'eventuale bonus, o i dadi già scalati).
+ * Le tre carte: soglia (col sorvolo di quante volte riesce chi lo affronta),
+ * riserva scalata dai malus, e sotto i casi (una soglia con l'eventuale bonus,
+ * o i dadi già scalati). La soglia non scritta è quella fissa del Sistema:
+ * metà della riserva del campo, per eccesso.
  */
 export function carteCampi(system = {}, dati = datiNemico(), { casi = [], malus = malusCondizioni([]), localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
   const bonus = bonusAttivi(dati);
@@ -509,14 +559,23 @@ export function carteCampi(system = {}, dati = datiNemico(), { casi = [], malus 
   return CAMPI.map((campo) => {
     const sogliaBase = dati.soglie[campo];
     const alza = bonus[campo] ?? 0;
-    const soglia = Math.max(sogliaBase + alza, 0);
-    const lettura = letturaSoglia(soglia);
     const riserva = riservaScalata(pools[campo]?.value, malus[campo], mano);
+    // La soglia fissa segue la riserva scritta, non quella scalata dalle Condizioni del momento.
+    const partenza = sogliaDelCampo(sogliaBase, riserva.base);
+    const soglia = Math.max(partenza.value + alza, SOGLIA_MIN);
+    const lettura = letturaSoglia(soglia);
     return {
       id: campo,
       label: localize(`WOD5E_MAGE.Nemico.Campi.${campo}`),
       icona: CAMPO_ICONE[campo],
-      soglia: { value: soglia, base: sogliaBase, bonus: alza, mod: alza !== 0, hint: format("WOD5E_MAGE.Nemico.SogliaHint", { riserva: lettura.riserva, dadi: lettura.dadi, percento: lettura.percento }) },
+      soglia: {
+        value: soglia,
+        base: sogliaBase,
+        fissa: partenza.fissa,
+        bonus: alza,
+        mod: alza !== 0,
+        hint: [format("WOD5E_MAGE.Nemico.SogliaHint", { riserva: lettura.riserva, percento: lettura.percento }), partenza.fissa ? localize("WOD5E_MAGE.Nemico.SogliaFissa") : ""].filter(Boolean).join(" ")
+      },
       riserva: {
         ...riserva,
         verso: versoDi(riserva.totale, riserva.base),
@@ -527,9 +586,9 @@ export function carteCampi(system = {}, dati = datiNemico(), { casi = [], malus 
       casi: casi.filter((caso) => caso.campo === campo).map((caso) => {
         if (caso.soglia !== null) {
           const alzaCaso = bonus[`caso:${caso.id}`] ?? 0;
-          const value = Math.max(caso.soglia + alzaCaso, 0);
+          const value = Math.max(caso.soglia + alzaCaso, SOGLIA_MIN);
           const letturaCaso = letturaSoglia(value);
-          return { ...caso, aSoglia: true, value, mod: alzaCaso !== 0, hint: format("WOD5E_MAGE.Nemico.SogliaHint", { riserva: letturaCaso.riserva, dadi: letturaCaso.dadi, percento: letturaCaso.percento }) };
+          return { ...caso, aSoglia: true, value, mod: alzaCaso !== 0, hint: format("WOD5E_MAGE.Nemico.SogliaHint", { riserva: letturaCaso.riserva, percento: letturaCaso.percento }) };
         }
         const scalata = riservaScalata(caso.dadi, malus[campo], mano);
         return { ...caso, aSoglia: false, value: scalata.totale, mod: scalata.cambiata, verso: versoDi(scalata.totale, scalata.base), riserva: scalata, hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: caso.nome, base: scalata.base, voci: vociTesto(scalata.voci), dadi: scalata.totale }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: caso.nome, conto: scalata.totale }) };
@@ -632,7 +691,9 @@ export function azioniDelNemico(dati = datiNemico(), items = [], { system = {}, 
       condizione,
       portata,
       limite: testo(azione.limite),
+      // La soglia del bersaglio: i successi che servono al nemico. Non scritta, ne serve uno.
       soglia: intero(azione.soglia),
+      servono: Math.max(intero(azione.soglia), SOGLIA_MIN),
       note: testo(azione.note),
       bonusSoglia: Math.trunc(Number(azione.bonusSoglia) || 0),
       bonusA: testo(azione.bonusA),
@@ -642,7 +703,8 @@ export function azioniDelNemico(dati = datiNemico(), items = [], { system = {}, 
       testo: testo(azione.testo),
       // Il testo in breve, quando non è scritto a mano: danno · Condizione · portata.
       breve: { pezzi, condizione, portata },
-      riserva: { ...riserva, ...scalata, dadi: dadiDelTiro(scalata.totale, azione.soglia), verso: versoDi(dadiDelTiro(scalata.totale, azione.soglia), scalata.base), hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: riserva.label, base: scalata.base, voci: vociTesto(scalata.voci), dadi: dadiDelTiro(scalata.totale, azione.soglia) }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: riserva.label, conto: dadiDelTiro(scalata.totale, azione.soglia) }) }
+      // I dadi sono la riserva scalata, tutta: la soglia del bersaglio non ne toglie.
+      riserva: { ...riserva, ...scalata, dadi: scalata.totale, verso: versoDi(scalata.totale, scalata.base), hint: scalata.cambiata ? format("WOD5E_MAGE.Nemico.TiraScalataHint", { nome: riserva.label, base: scalata.base, voci: vociTesto(scalata.voci), dadi: scalata.totale }) : format("WOD5E_MAGE.Nemico.TiraHint", { nome: riserva.label, conto: scalata.totale }) }
     };
   });
 }
@@ -744,11 +806,12 @@ export function resistenzaTesto(resiste = {}, { attributi = {}, abilita = {}, lo
   return [nomeTratto(r.attribute), nomeTratto(r.skill)].filter(Boolean).join(" + ");
 }
 
-/** L'effetto di Magick che nasce da una Formula del Grimorio: la soglia base e i suoi Ambiti, il tiro di resistenza da scrivere. */
-export function effettoDaFormula(formula, { indice = 0 } = {}) {
+/** L'effetto di Magick che nasce da una Formula del Grimorio: i suoi Ambiti, la soglia contata con l'Areté del nemico, il tiro di resistenza da scrivere. */
+export function effettoDaFormula(formula, { indice = 0, arete = 1 } = {}) {
   if (!formula) return null;
   const soglia = formula.thresholds?.[Math.min(Math.max(intero(indice), 0), (formula.thresholds?.length ?? 1) - 1)] ?? { base: 0, scopes: {} };
   // Le Formule non hanno ancora un'Epicità loro (2/10): partono dall'1 di ogni lancio, come quelle dei maghi.
+  const ambiti = { [EPIC_SCOPE]: EPIC_MIN, ...Object.fromEntries(Object.entries(soglia.scopes ?? {}).map(([id, level]) => [id, intero(level)])) };
   return {
     nome: String(formula.name ?? ""),
     breve: String(formula.use ?? ""),
@@ -758,8 +821,9 @@ export function effettoDaFormula(formula, { indice = 0 } = {}) {
     come: "accidentale",
     da: "grimorio",
     formula: String(formula.id ?? ""),
-    ambiti: { [EPIC_SCOPE]: EPIC_MIN, ...Object.fromEntries(Object.entries(soglia.scopes ?? {}).map(([id, level]) => [id, intero(level)])) },
-    soglia: intero(soglia.base) + EPIC_MIN
+    ambiti,
+    soglia: sogliaDagliAmbiti(ambiti, arete).soglia,
+    conto: sogliaDagliAmbiti(ambiti, arete).soglia
   };
 }
 
@@ -768,7 +832,7 @@ export function effettoDaFormula(formula, { indice = 0 } = {}) {
  * nome, Sfere d'Accesso, gli Ambiti della soglia base, la soglia, e se è già
  * nella scheda.
  */
-export function formuleDeiDomini(domini = {}, { effetti = {}, localize = (k) => k, cerca = "" } = {}) {
+export function formuleDeiDomini(domini = {}, { effetti = {}, arete = 1, localize = (k) => k, cerca = "" } = {}) {
   const livelli = Object.fromEntries(Object.keys(oggetto(domini)).map((id) => [id, 1]));
   if (!Object.keys(livelli).length) return [];
   const prese = new Set(Object.values(oggetto(effetti)).map((effetto) => String(effetto?.formula ?? "")).filter(Boolean));
@@ -781,8 +845,8 @@ export function formuleDeiDomini(domini = {}, { effetti = {}, localize = (k) => 
       name: formula.name,
       use: formula.use,
       access: formula.access,
-      // La soglia del bottone è quella che l'effetto prende: la base della Formula più l'Epicità 1 (2/10).
-      soglie: formula.thresholds.map((t, index) => ({ index, base: t.base, soglia: intero(t.base) + EPIC_MIN, text: t.text, ambiti: t.scopes.map((s) => `${s.label} ${s.level}`).join(" · ") })),
+      // La soglia del bottone è quella che l'effetto prende: il conto degli Ambiti della Formula, con l'Epicità 1 e l'Areté del nemico.
+      soglie: formula.thresholds.map((t, index) => ({ index, base: t.base, soglia: sogliaDagliAmbiti({ [EPIC_SCOPE]: EPIC_MIN, ...Object.fromEntries(t.scopes.map((s) => [s.id, s.level])) }, arete).soglia, text: t.text, ambiti: t.scopes.map((s) => `${s.label} ${s.level}`).join(" · ") })),
       presa: prese.has(formula.id)
     }));
 }
@@ -797,7 +861,9 @@ export function ambitiAMano(mano = {}, { arete = 1, localize = (k) => k } = {}) 
   const tavola = scopeModes(localize, { arete });
   const livelli = oggetto(mano.livelli);
   const lenti = oggetto(mano.lenti);
-  const conto = sogliaDagliAmbiti(livelli);
+  const conto = sogliaDagliAmbiti(livelli, arete);
+  const nomeAmbito = (id) => localize(`WOD5E_MAGE.Scopes.${id}`);
+  const base = conto.ambiti.find((entry) => entry.id === conto.base);
   const righe = SCOPES.map((id) => {
     const opzioni = tavola[id] ?? [];
     const indice = Math.min(intero(lenti[id]), Math.max(opzioni.length - 1, 0));
@@ -824,7 +890,8 @@ export function ambitiAMano(mano = {}, { arete = 1, localize = (k) => k } = {}) 
     potenza: potenza?.level ?? 0,
     soglia: conto.soglia,
     ambiti: conto.ambiti,
-    conto: conto.ambiti.map((entry) => `${localize(`WOD5E_MAGE.Scopes.${entry.id}`)} ${entry.level}`).join(" + "),
+    // «Potenza 4 +1 Epicità»: l'Ambito che fa da base, e un +1 per ogni altro sopra l'Areté.
+    conto: [base ? `${nomeAmbito(base.id)} ${base.level}` : "", ...conto.aggiunte.map((id) => `+1 ${nomeAmbito(id)}`)].filter(Boolean).join(" "),
     danni,
     fuoriTetto: conto.fuoriTetto
   };
@@ -845,21 +912,28 @@ export function magickDelNemico(dati = datiNemico(), { aperte = new Set(), attri
   const domini = SPHERES.map((id) => ({ id, label: localize(`WOD5E_MAGE.Spheres.${id}`), icon: `modules/${MODULE_ID}/assets/icons/sheet/${id}.png`, on: Boolean(magick.domini[id]) }))
     .sort((a, b) => a.label.localeCompare(b.label, lang));
   const effetti = righeOrdinate(magick.effetti, lang).map((row) => {
-    // Un effetto scritto prima del 29/9 può portare l'Impatto fra gli Ambiti:
-    // l'Impatto è uscito, e la soglia si rifà sugli Ambiti che restano, con
-    // l'Epicità (2/10). Se era un'impresa impossibile (il +5 di prima), l'Epicità è 6.
+    // La soglia si conta sugli Ambiti dell'effetto con l'Areté del nemico (il
+    // Sistema): quella scritta resta solo per un effetto senza Ambiti. Un
+    // effetto scritto prima del 29/9 può portare l'Impatto: è uscito, e non
+    // conta. Se era un'impresa impossibile (il +5 di prima), l'Epicità è 6.
     const scritti = oggetto(row.ambiti);
-    const rifatta = intero(scritti.impact) > 0
-      ? sogliaDagliAmbiti({ ...scritti, ...(row.impossibile && !intero(scritti[EPIC_SCOPE]) ? { [EPIC_SCOPE]: 6 } : {}) })
-      : null;
-    const livelli = rifatta ? Object.fromEntries(rifatta.ambiti.map((entry) => [entry.id, entry.level])) : scritti;
+    const conImpatto = intero(scritti.impact) > 0;
+    const letti = { ...scritti, ...(row.impossibile && !intero(scritti[EPIC_SCOPE]) ? { [EPIC_SCOPE]: 6 } : {}) };
+    const haAmbiti = SCOPES.some((id) => intero(letti[id]) > 0);
+    const rifatta = haAmbiti || conImpatto ? sogliaDagliAmbiti(letti, magick.arete) : null;
+    const livelli = conImpatto ? Object.fromEntries(rifatta.ambiti.map((entry) => [entry.id, entry.level])) : letti;
     // Gli Ambiti dell'effetto nell'ordine della tavola, l'Epicità per prima (2/10).
     const ambiti = SCOPES.filter((id) => intero(livelli[id]) > 0).map((id) => ({ id, level: intero(livelli[id]), label: localize(`WOD5E_MAGE.Scopes.${id}`), faIcon: SCOPE_ICONS[id] ?? "" }));
     const resiste = resistenzaTesto(row.resiste, { attributi, abilita, localize });
     const come = COME_MAGICK.includes(row.come) ? row.come : "accidentale";
     const da = row.da === "grimorio" ? "grimorio" : "mano";
     const dominio = testo(row.dominio);
-    const soglia = rifatta ? rifatta.soglia : intero(row.soglia);
+    const contoOra = rifatta ? rifatta.soglia : 0;
+    const scritta = intero(row.soglia);
+    // La soglia a mano del Narratore: vale quando la scheda l'ha salvata diversa dal conto di allora
+    // (`conto`, che la scheda scrive accanto). Gli effetti di prima del Sistema non lo portano, e si ricontano.
+    const aMano = contoOra > 0 && Object.hasOwn(row, "conto") && scritta > 0 && scritta !== intero(row.conto);
+    const soglia = contoOra > 0 && !aMano ? contoOra : Math.max(scritta, SOGLIA_MIN);
     // Il sigillo della riga (1/10): il Dominio scritto; per una Formula, la prima Sfera d'Accesso che il nemico ha, o la prima che la apre.
     const accessi = row.formula ? (findFormula(testo(row.formula))?.access ?? []).filter((id) => SPHERES.includes(id)) : [];
     const sferaId = SPHERES.includes(dominio) ? dominio : accessi.find((id) => magick.domini[id]) ?? accessi[0] ?? "";
@@ -870,6 +944,9 @@ export function magickDelNemico(dati = datiNemico(), { aperte = new Set(), attri
       breve: testo(row.breve),
       testo: testo(row.testo),
       soglia,
+      conto: contoOra,
+      aMano,
+      sogliaHint: contoOra > 0 ? format(aMano ? "WOD5E_MAGE.Nemico.SogliaEffettoMano" : "WOD5E_MAGE.Nemico.SogliaEffettoConto", { conto: contoOra, arete: magick.arete }) : "",
       ambiti,
       ambitiTesto: ambiti.map((a) => `${a.label} ${a.level}`).join(", "),
       resiste: oggetto(row.resiste),
@@ -1065,7 +1142,7 @@ export function prepareNemicoContext({ actor = {}, items = [], salute = null, st
       { id: "note", label: localize("WOD5E_MAGE.Nemico.Pagine.note") }
     ],
     cassetto: testo(stato.cassetto),
-    grimorio: stato.cassetto === "grimorio" ? { cerca: testo(stato.cerca), formule: formuleDeiDomini(dati.magick.domini, { effetti: dati.magick.effetti, localize, cerca: stato.cerca }), dominiTesto: magick.dominiTesto, senzaDomini: !magick.dominiScelti.length } : null,
+    grimorio: stato.cassetto === "grimorio" ? { cerca: testo(stato.cerca), formule: formuleDeiDomini(dati.magick.domini, { effetti: dati.magick.effetti, arete: dati.magick.arete, localize, cerca: stato.cerca }), dominiTesto: magick.dominiTesto, senzaDomini: !magick.dominiScelti.length } : null,
     mano: stato.cassetto === "mano" ? { ...oggetto(stato.mano), ambiti: ambitiAMano(stato.mano, { arete: dati.magick.arete, localize }), domini: magick.dominiScelti.map((d) => ({ ...d, on: d.id === testo(oggetto(stato.mano).dominio) })), come: COME_MAGICK.map((id) => ({ id, label: localize(id === "volgare" ? "WOD5E_MAGE.Nemico.Volgare" : "WOD5E_MAGE.Nemico.Accidentale"), on: id === (testo(oggetto(stato.mano).come) || "accidentale") })) } : null,
     oggetti: oggettiDelNemico(items, { azioni, localize, format, lang }),
     oggettiGruppi: gruppiOggetti(oggettiDelNemico(items, { azioni, localize, format, lang }), localize),
@@ -1101,19 +1178,21 @@ export function gruppiOggetti(oggetti, localize = (k) => k) {
 /**
  * Il contesto della carta del tiro di un'azione o di una riserva: il titolo
  * («Spara · su Guendalina»), il conto («Pistola 7 −2 Atterrato = 5 dadi ·
- * riesce dal 6»), e cosa applicare se riesce.
+ * soglia 3»), e cosa applicare se riesce. Si tira tutta la riserva scalata e
+ * servono successi pari alla soglia del bersaglio (almeno uno); il danno di
+ * un colpo è quello dell'arma più il margine, e lo conta la carta a tiro fatto.
  */
-export function contoDelTiro({ nome = "", riserva = null, soglia = 0, bersaglio = null, danno = 0, aggravato = false, condizione = "", dal = RIESCE_DAL, localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
+export function contoDelTiro({ nome = "", riserva = null, soglia = 0, bersaglio = null, danno = 0, aggravato = false, condizione = "", localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
   const scalata = riserva ?? riservaScalata(0, []);
-  const dadi = dadiDelTiro(scalata.totale, soglia);
+  const dadi = intero(scalata.totale);
+  const servono = Math.max(intero(soglia), SOGLIA_MIN);
   const titolo = bersaglio?.name ? format("WOD5E_MAGE.Nemico.TiroSu", { azione: nome, bersaglio: bersaglio.name }) : format("WOD5E_MAGE.Nemico.TiroTitolo", { azione: nome });
-  const parti = [`${scalata.label ?? ""} ${scalata.base}`.trim(), ...scalata.voci.map((v) => `${segnoDi(v.value)} ${v.nome}`)];
-  if (intero(soglia)) parti.push(`− ${intero(soglia)} ${localize("WOD5E_MAGE.Nemico.Soglia")}`);
-  const conto = scalata.cambiata || intero(soglia)
-    ? format("WOD5E_MAGE.Nemico.Conto", { conto: parti.join(" "), dadi, dal })
-    : format("WOD5E_MAGE.Nemico.ContoSemplice", { nome: scalata.label ?? "", dadi, dal });
+  const parti = [`${scalata.label ?? ""} ${scalata.base}`.trim(), ...scalata.voci.map((v) => `${valoreVoce(v)} ${v.nome}`)];
+  const conto = scalata.cambiata
+    ? format("WOD5E_MAGE.Nemico.Conto", { conto: parti.join(" "), dadi, soglia: servono })
+    : format("WOD5E_MAGE.Nemico.ContoSemplice", { nome: scalata.label ?? "", dadi, soglia: servono });
   const esito = [];
   if (intero(danno)) esito.push(format("WOD5E_MAGE.Nemico.DannoEsito", { danno: intero(danno), tipo: localize(aggravato ? "WOD5E_MAGE.Nemico.Aggravati" : "WOD5E_MAGE.Nemico.Superficiali") }));
   if (testo(condizione)) esito.push(testo(condizione));
-  return { titolo, conto, dadi, esito: esito.join(" · "), danno: intero(danno), aggravato: Boolean(aggravato), condizione: testo(condizione), bersaglio: bersaglio ? { uuid: String(bersaglio.uuid ?? ""), name: String(bersaglio.name ?? "") } : null };
+  return { titolo, conto, dadi, soglia: servono, esito: esito.join(" · "), danno: intero(danno), aggravato: Boolean(aggravato), condizione: testo(condizione), bersaglio: bersaglio ? { uuid: String(bersaglio.uuid ?? ""), name: String(bersaglio.name ?? "") } : null };
 }

@@ -329,7 +329,7 @@ async function onNemicoCassettoVia(event, target) {
 async function onNemicoFormula(event, target) {
   event.preventDefault();
   if (!puoScrivere(this)) return;
-  const effetto = effettoDaFormula(findFormula(String(target.dataset.formula ?? "")), { indice: Number(target.dataset.indice) || 0 });
+  const effetto = effettoDaFormula(findFormula(String(target.dataset.formula ?? "")), { indice: Number(target.dataset.indice) || 0, arete: datiNemico(bandiera(this)).magick.arete });
   if (!effetto) return;
   const id = nuovoId(this, bandiera(this).magick?.effetti);
   await scrivi(this, `magick.effetti.${id}`, { ...effetto, sort: Date.now() });
@@ -369,12 +369,12 @@ async function onNemicoManoScelta(event, target) {
   await this.render({ parts: ["gioco"] });
 }
 
-/** «Aggiungi» del cassetto a mano: l'effetto coi suoi Ambiti e la soglia sommata. */
+/** «Aggiungi» del cassetto a mano: l'effetto coi suoi Ambiti e la soglia contata con l'Areté del nemico. */
 async function onNemicoManoAggiungi(event) {
   event.preventDefault();
   if (!puoScrivere(this)) return;
   const mano = this._stato.mano;
-  const conto = sogliaDagliAmbiti(mano.livelli ?? {});
+  const conto = sogliaDagliAmbiti(mano.livelli ?? {}, datiNemico(bandiera(this)).magick.arete);
   const ambiti = Object.fromEntries(conto.ambiti.map((entry) => [entry.id, entry.level]));
   const id = nuovoId(this, bandiera(this).magick?.effetti);
   // Il cassetto si chiude e si svuota prima di scrivere: il ridisegno che segue lo trova già chiuso.
@@ -391,6 +391,7 @@ async function onNemicoManoAggiungi(event) {
     formula: "",
     ambiti,
     soglia: conto.soglia,
+    conto: conto.soglia,
     lentePotenza: ["danni", "peso", "influenza"][Math.min(Math.trunc(Number((mano.lenti ?? {}).potency) || 0), 2)],
     sort: Date.now()
   });

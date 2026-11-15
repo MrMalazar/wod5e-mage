@@ -15,9 +15,10 @@
 import { applicaCondizione, findCondizioneByName } from "./condizioni.js";
 import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
-import { armaturaDi, contoDelTiro, pesiCondizioni, riesceDal, segnoDi } from "./nemico.js";
+import { armaturaDi, contoDelTiro, pesiCondizioni, valoreVoce } from "./nemico.js";
 import { renderRollCard, ROLL_CARD_FLAG, rollActionsBox } from "./roll-card.js";
 import { addSaluteDamage } from "./salute.js";
+import { dannoDelColpo, esito as esitoDelTiro } from "./sistema.js";
 
 export const NEMICO_MAGICK_FLAG = "nemicoMagick";
 
@@ -30,10 +31,12 @@ export function bersaglioPreso(user = globalThis.game?.user) {
 }
 
 /**
- * Il tiro del nemico: la riserva già scalata dalle Condizioni meno la soglia
- * del bersaglio, riesce dal 6 (dall'8 con una Condizione di grado 2 sul suo
- * campo); a zero dadi non si tira, e nemmeno con una Condizione che fa
- * fallire (29/9: il Narratore la toglie, se non c'entra). Torna il messaggio.
+ * Il tiro del nemico (il Sistema, 14/11): tutta la riserva, già scalata dalle
+ * Condizioni (−2 al grado 1, la metà al grado 2), contro la soglia del
+ * bersaglio, cioè i successi che gli servono; un tiro senza soglia scritta ne
+ * chiede uno, e conta i successi per il confronto. A zero dadi non si tira, e
+ * nemmeno con una Condizione che fa fallire (29/9: il Narratore la toglie, se
+ * non c'entra). Torna il messaggio.
  */
 export async function tiraNemico(actor, { nome = "", riserva, soglia = 0, danno = 0, aggravato = false, condizione = "" } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
@@ -44,27 +47,24 @@ export async function tiraNemico(actor, { nome = "", riserva, soglia = 0, danno 
     ui.notifications.warn(format("WOD5E_MAGE.Nemico.Fallisce", { names: pesi.fallisce.join(", ") }));
     return null;
   }
-  const dal = riesceDal(pesi);
-  const conto = contoDelTiro({ nome, riserva, soglia, bersaglio, danno, aggravato, condizione, dal, localize, format });
+  const conto = contoDelTiro({ nome, riserva, soglia, bersaglio, danno, aggravato, condizione, localize, format });
   if (conto.dadi <= 0) {
     ui.notifications.warn(localize("WOD5E_MAGE.Nemico.ZeroDadi"));
     return null;
   }
   const armatura = bersaglio?.actor ? armaturaDi(bersaglio.actor.items?.contents ?? [...(bersaglio.actor.items ?? [])]) : null;
   const notes = armatura?.totale ? [format("WOD5E_MAGE.Nemico.ArmaturaBersaglio", { bersaglio: bersaglio.name, punti: armatura.totale })] : [];
-  if (pesi.meta.length) notes.push(format("WOD5E_MAGE.Nemico.Otto", { names: pesi.meta.join(", ") }));
   const flavor = renderRollCard({
     traits: [{ label: riserva.label ?? "", value: riserva.base }],
-    bonusParts: (riserva.voci ?? []).map((voce) => `${segnoDi(voce.value)} ${voce.nome}`),
-    threshold: Math.max(Math.trunc(Number(soglia) || 0), 0)
+    bonusParts: (riserva.voci ?? []).map((voce) => `${valoreVoce(voce)} ${voce.nome}`),
+    threshold: conto.soglia
   }, localize);
   const { rollRamoCDirect } = await import("./paradox-dice.js");
   return rollRamoCDirect({
     actor,
     data: actor.system,
-    pool: riserva.totale,
-    threshold: soglia,
-    successFrom: dal,
+    pool: conto.dadi,
+    threshold: conto.soglia,
     paradoxRating: 0,
     skill: true,
     title: conto.titolo,
@@ -74,7 +74,7 @@ export async function tiraNemico(actor, { nome = "", riserva, soglia = 0, danno 
       traits: [{ id: String(riserva.id ?? ""), type: "nemico", label: riserva.label ?? "", value: riserva.totale }],
       nemico: { ...conto, bersaglio: conto.bersaglio, armatura: armatura?.totale ?? 0, applicato: false }
     },
-    activeModifiers: (riserva.voci ?? []).map((voce) => ({ label: voce.nome, value: segnoDi(voce.value) })),
+    activeModifiers: (riserva.voci ?? []).map((voce) => ({ label: voce.nome, value: valoreVoce(voce) })),
     notes
   });
 }
@@ -119,11 +119,14 @@ async function decoraCartaTiro(message, html) {
   riga.textContent = nemico.conto ?? "";
   const icons = result.querySelector(".dice-icons");
   if (icons) icons.before(riga); else result.prepend(riga);
-  const riuscito = Number(card.total) >= 1;
+  // Riesce coi successi pari alla soglia; il danno di un colpo è quello dell'arma più il margine.
+  const fatto = esitoDelTiro({ successi: card.total, soglia: card.difficulty });
+  const riuscito = fatto.riuscito;
+  const colpo = dannoDelNemico(nemico, fatto.margine);
   if (riuscito && nemico.esito) {
     const esito = document.createElement("div");
     esito.className = "wod5e-mage-nemico-esito";
-    esito.textContent = `${localize("WOD5E_MAGE.Nemico.Riesce")} · ${nemico.esito}`;
+    esito.textContent = `${localize("WOD5E_MAGE.Nemico.Riesce")} · ${testoEsito(nemico, fatto.margine, { localize, format })}`;
     result.querySelector(".wod5e-mage-roll-actions")?.before(esito) ?? result.append(esito);
   }
   const bersaglio = nemico.bersaglio;
@@ -141,12 +144,31 @@ async function decoraCartaTiro(message, html) {
   button.addEventListener("click", async (event) => {
     event.preventDefault();
     button.disabled = true;
-    await applicaAlBersaglio(target, nemico, { localize, format });
+    await applicaAlBersaglio(target, { ...nemico, danno: colpo }, { localize, format });
     if (message.isOwner || game.user.isGM) await message.update({ [`flags.${MODULE_ID}.${ROLL_CARD_FLAG}.nemico.applicato`]: true }).catch(() => null);
     button.remove();
   });
   box.append(button);
   return true;
+}
+
+/** Il danno di un colpo riuscito: quello dell'arma più il margine (il Sistema); senza danno scritto, niente. */
+export function dannoDelNemico(nemico = {}, margine = 0) {
+  const arma = Math.max(Math.trunc(Number(nemico?.danno) || 0), 0);
+  return arma > 0 ? dannoDelColpo(arma, margine) : 0;
+}
+
+/** L'esito in parole: «6 danni superficiali (4 più 2 di margine) · Atterrato». */
+export function testoEsito(nemico = {}, margine = 0, { localize = (k) => k, format = (k, d) => `${k} ${JSON.stringify(d)}` } = {}) {
+  const parti = [];
+  const arma = Math.max(Math.trunc(Number(nemico?.danno) || 0), 0);
+  const colpo = dannoDelNemico(nemico, margine);
+  const tipo = localize(nemico?.aggravato ? "WOD5E_MAGE.Nemico.Aggravati" : "WOD5E_MAGE.Nemico.Superficiali");
+  if (colpo > arma) parti.push(format("WOD5E_MAGE.Nemico.DannoMargine", { danno: colpo, tipo, arma, margine: colpo - arma }));
+  else if (colpo) parti.push(format("WOD5E_MAGE.Nemico.DannoEsito", { danno: colpo, tipo }));
+  const condizione = String(nemico?.condizione ?? "").trim();
+  if (condizione) parti.push(condizione);
+  return parti.join(" · ");
 }
 
 /**

@@ -27,6 +27,8 @@ import {
   riservaScalata,
   segnoDi,
   sogliaDagliAmbiti,
+  sogliaDelCampo,
+  valoreVoce,
   tipoDelPotere,
   versoDi,
   vociCreazione,
@@ -34,22 +36,32 @@ import {
   datiNemico,
   magickDelNemico
 } from "../scripts/nemico.js";
+import { dannoDelNemico, testoEsito } from "../scripts/nemico-chat.js";
 import { SCOPES_PER_CAST, scopeLensIds } from "../scripts/scopes.js";
 
 // La scheda del nemico (Blue, 25/9): i conti in funzioni pure.
 
-// Il tiro: riserva meno soglia uguale dadi, mai sotto zero.
-assert.equal(dadiDelTiro(7, 2), 5);
-assert.equal(dadiDelTiro(3, 5), 0);
-assert.equal(dadiDelTiro("6", "0"), 6);
+// Il tiro (il Sistema): si tira tutta la riserva, la soglia non toglie dadi; una Condizione di grado 2 la dimezza, per difetto.
+assert.equal(dadiDelTiro(7), 7);
+assert.equal(dadiDelTiro("6"), 6);
+assert.equal(dadiDelTiro(7, { meta: true }), 3);
+assert.equal(dadiDelTiro(-2), 0);
 
-// La lettura della soglia: contro una riserva da 6, i dadi che restano e quante volte su 100 riesce (1 − 0,5^N).
-assert.deepEqual(letturaSoglia(3), { soglia: 3, riserva: 6, dadi: 3, percento: 88 });
-assert.deepEqual(letturaSoglia(0), { soglia: 0, riserva: 6, dadi: 6, percento: 98 });
-assert.deepEqual(letturaSoglia(6), { soglia: 6, riserva: 6, dadi: 0, percento: 0 });
-assert.deepEqual(letturaSoglia(4, 8), { soglia: 4, riserva: 8, dadi: 4, percento: 94 });
+// La lettura della soglia: con una riserva da 6 dadi, quante volte su 100 si fanno i successi che servono
+// (la scintilla vale uno, le stelline quattro a coppia). Sono i numeri della pagina «Prima e dopo del tiro».
+assert.deepEqual(letturaSoglia(3), { soglia: 3, riserva: 6, percento: 67 });
+assert.deepEqual([4, 5, 6].map((soglia) => letturaSoglia(soglia).percento), [39, 18, 8]);
+assert.deepEqual(letturaSoglia(0), { soglia: 1, riserva: 6, percento: 98 }, "una soglia non scende sotto 1");
+assert.deepEqual(letturaSoglia(2, 4), { soglia: 2, riserva: 4, percento: 69 });
 assert.equal(probabilitaSuccesso(1), 0.5);
 assert.equal(probabilitaSuccesso(0), 0);
+assert.equal(Math.round(probabilitaSuccesso(2, 3) * 100), 1, "due dadi a soglia 3: solo la coppia di stelline");
+assert.equal(Math.round(probabilitaSuccesso(8, 2) * 100), 96);
+
+// La soglia di un campo: quella scritta; non scritta, la soglia fissa (metà della riserva, per eccesso).
+assert.deepEqual(sogliaDelCampo(4, 9), { value: 4, fissa: false });
+assert.deepEqual(sogliaDelCampo(0, 5), { value: 3, fissa: true }, "con 5 dadi la soglia è 3");
+assert.deepEqual(sogliaDelCampo("", 0), { value: 1, fissa: true }, "mai sotto 1");
 
 // La riserva scalata dalle Condizioni: il numero già scalato e le voci che lo spiegano.
 const pistola = riservaScalata(7, [{ nome: "Atterrato", value: -2 }]);
@@ -60,6 +72,11 @@ const ferma = riservaScalata(5, []);
 assert.deepEqual([ferma.totale, ferma.cambiata, ferma.testo], [5, false, "5"]);
 assert.equal(riservaScalata(1, [{ nome: "Atterrato", value: -2 }]).totale, 0, "mai sotto zero");
 assert.equal(riservaScalata(4, [{ nome: "Bonus", value: 2 }]).totale, 4, "i bonus non contano: la riserva resta quella scritta");
+// Una Condizione di grado 2 dimezza la riserva: una volta sola, per ultima, per difetto.
+const offuscato = riservaScalata(7, [{ nome: "Atterrato", value: -2 }, { nome: "Offuscato", value: 0, meta: true }, { nome: "Avvelenato", value: 0, meta: true }]);
+assert.deepEqual([offuscato.totale, offuscato.dimezzata, offuscato.cambiata, offuscato.testo], [2, true, true, "7 -2 Atterrato ½ Offuscato ½ Avvelenato"], "7 meno 2 fa 5, la metà è 2");
+assert.deepEqual([riservaScalata(6, []).dimezzata, riservaScalata(6, [{ nome: "Offuscato", meta: true }]).totale], [false, 3]);
+assert.equal(valoreVoce({ nome: "Offuscato", value: 0, meta: true }), "½");
 
 // La mano del Narratore (Blue, 27/9): l'unico ritocco in più o in meno oltre alle Condizioni; entra nel conto e fra le voci, col segno.
 const mano = riservaScalata(5, [{ nome: "Atterrato", value: -2 }], { nome: "Mano del Narratore", value: 2 });
@@ -73,18 +90,20 @@ assert.equal(vociTesto([{ nome: "A", value: -1 }, { nome: "B", value: 3 }]), "-1
 // Nella bandiera: un intero fra −10 e +10, 0 se manca.
 assert.deepEqual([datiNemico({ manoNarratore: "2" }).manoNarratore, datiNemico({ manoNarratore: -30 }).manoNarratore, datiNemico({}).manoNarratore, datiNemico({ manoNarratore: 2.7 }).manoNarratore], [2, -10, 0, 2]);
 
-// La soglia a mano (2/10): l'Epicità, almeno 1, più la somma degli Ambiti alzati, al massimo tre.
-// Il +5 dell'impresa impossibile non c'è più: è l'Epicità 6 o 7.
-assert.deepEqual(sogliaDagliAmbiti({ potency: 3, range: 2 }), { soglia: 6, epicita: 1, ambiti: [{ id: "epic", level: 1 }, { id: "range", level: 2 }, { id: "potency", level: 3 }], fuoriTetto: [] });
-assert.equal(sogliaDagliAmbiti({ potency: 3, range: 2, epic: 7 }).soglia, 12, "un viaggio nel tempo");
+// La soglia dagli Ambiti (il Sistema): fa da base il più alto, Epicità compresa (almeno 1), e ogni altro
+// Ambito aggiunge 1 se sta sopra l'Areté; al massimo tre Ambiti alzati; il conto si ferma a 10.
+assert.deepEqual(sogliaDagliAmbiti({ potency: 3, range: 2 }), { soglia: 4, epicita: 1, ambiti: [{ id: "epic", level: 1 }, { id: "range", level: 2 }, { id: "potency", level: 3 }], base: "potency", aggiunte: ["range"], fuoriTetto: [] });
+assert.equal(sogliaDagliAmbiti({ potency: 3, range: 2 }, 2).soglia, 3, "con Areté 2 la Portata 2 non aggiunge niente");
+assert.deepEqual([sogliaDagliAmbiti({ potency: 4, epic: 3, targets: 2 }, 2).soglia, sogliaDagliAmbiti({ potency: 4, epic: 3, targets: 2 }, 2).aggiunte], [5, ["epic"]], "l'esempio del Sistema: Potenza 4, Epicità 3, Bersagli 2 con Areté 2 fanno 5");
+assert.equal(sogliaDagliAmbiti({ potency: 3, range: 2, epic: 7 }).soglia, 9, "un viaggio nel tempo: l'Epicità fa da base, gli altri due aggiungono 1");
 assert.deepEqual(sogliaDagliAmbiti({}).ambiti, [{ id: "epic", level: 1 }]);
 assert.equal(sogliaDagliAmbiti({}).soglia, 1);
 const quattro = sogliaDagliAmbiti({ targets: 1, duration: 2, range: 1, potency: 3, epic: 2 });
 assert.equal(quattro.ambiti.length, SCOPES_PER_CAST + 1, "oltre il tetto non si conta; l'Epicità sta fuori dal tetto");
 assert.deepEqual(quattro.fuoriTetto, ["potency"]);
-assert.equal(quattro.soglia, 2 + 1 + 2 + 1);
-assert.equal(sogliaDagliAmbiti({ potency: 9 }).soglia, 8, "un livello fuori scala si riporta a 7");
-assert.equal(sogliaDagliAmbiti({ impact: 4, potency: 2 }).soglia, 3, "l'Impatto (tolto il 29/9) non conta più");
+assert.equal(quattro.soglia, 3, "l'Epicità 2 fa da base, la Durata 2 sta sopra l'Areté e aggiunge 1; i due Ambiti a 1 no");
+assert.equal(sogliaDagliAmbiti({ potency: 9 }).soglia, 7, "un livello fuori scala si riporta a 7");
+assert.equal(sogliaDagliAmbiti({ impact: 4, potency: 2 }).soglia, 2, "l'Impatto (tolto il 29/9) non conta più");
 assert.equal(sogliaDagliAmbiti({ potency: -2, range: 0 }).soglia, 1);
 // L'Epicità si alza sempre; gli altri dentro il tetto dei tre, l'Epicità a parte.
 assert.equal(puoAlzare({ targets: 1, range: 2, potency: 3 }, "epic", 5), true);
@@ -133,27 +152,50 @@ assert.equal(aMano({ range: 9 }).righe.find((r) => r.id === "range").lente.id, "
   assert.deepEqual([epica.base, epica.level, epica.alto, epica.lente.label, epica.lente.altra], [true, 1, false, "", false]);
   assert.deepEqual(epica.pallini.map((p) => [p.value, p.on]), [[1, true], [2, false], [3, false], [4, false], [5, false], [6, false], [7, false]]);
   assert.equal(mano.righe.every((r) => r.pallini.length === 7 && r.pallini[0].value === 1), true, "niente pallino dello 0");
-  assert.deepEqual([mano.soglia, mano.conto], [4, "epic 1 + potency 3"]);
+  assert.deepEqual([mano.soglia, mano.conto], [3, "potency 3"], "la Potenza 3 fa da base; l'Epicità 1 non aggiunge niente");
   assert.equal(Object.hasOwn(mano, "impossibile"), false);
-  const prodigio = ambitiAMano({ livelli: { epic: 4, potency: 3 } }, { arete: 2 });
-  assert.deepEqual([prodigio.righe[0].level, prodigio.righe[0].alto, prodigio.soglia], [4, true, 7]);
+  const prodigio = ambitiAMano({ livelli: { epic: 4, potency: 3 } }, { arete: 2, localize: (k) => k.split(".").pop() });
+  assert.deepEqual([prodigio.righe[0].level, prodigio.righe[0].alto, prodigio.soglia, prodigio.conto], [4, true, 5, "epic 4 +1 potency"], "l'Epicità 4 fa da base, la Potenza 3 sta sopra l'Areté 2");
 }
-// Un effetto scritto prima del 29/9 con l'Impatto: la soglia si rifà sugli Ambiti che restano.
+// La soglia di un effetto si conta sui suoi Ambiti con l'Areté del nemico: quella scritta alla vecchia non vale più.
+// Un effetto scritto prima del 29/9 con l'Impatto: l'Impatto non conta, e l'Epicità 1 si vede fra gli Ambiti.
 const vecchio = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Vecchio", soglia: 6, ambiti: { impact: 3, duration: 1, potency: 2 }, lentePotenza: "danni" } } } }));
-assert.deepEqual([vecchio.effetti[0].soglia, vecchio.effetti[0].ambiti.map((a) => a.id), vecchio.effetti[0].danni], [4, ["epic", "duration", "potency"], 4], "rifatta con l'Epicità 1, che si vede fra gli Ambiti");
-// Un vecchio effetto impossibile con l'Impatto: il +5 di allora diventa l'Epicità 6.
+assert.deepEqual([vecchio.effetti[0].soglia, vecchio.effetti[0].ambiti.map((a) => a.id), vecchio.effetti[0].danni], [2, ["epic", "duration", "potency"], 4], "la Potenza 2 fa da base, la Durata 1 non aggiunge");
+// Un vecchio effetto impossibile: il +5 di allora è l'Epicità 6, che fa da base.
 const vecchioImpossibile = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Vecchio", soglia: 8, impossibile: true, ambiti: { impact: 3, potency: 2 } } } } }));
-assert.deepEqual([vecchioImpossibile.effetti[0].soglia, vecchioImpossibile.effetti[0].ambiti.map((a) => [a.id, a.level])], [8, [["epic", 6], ["potency", 2]]]);
-// Un effetto di prima del 2/10 senza Impatto tiene la soglia scritta; uno nuovo mostra l'Epicità per prima.
+assert.deepEqual([vecchioImpossibile.effetti[0].soglia, vecchioImpossibile.effetti[0].ambiti.map((a) => [a.id, a.level])], [6, [["epic", 6], ["potency", 2]]]);
 const scritto = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Scritto", soglia: 9, impossibile: true, ambiti: { potency: 4 } } } } }));
-assert.deepEqual([scritto.effetti[0].soglia, Object.hasOwn(scritto.effetti[0], "impossibile")], [9, false]);
+assert.deepEqual([scritto.effetti[0].soglia, scritto.effetti[0].ambiti.map((a) => [a.id, a.level]), Object.hasOwn(scritto.effetti[0], "impossibile")], [7, [["epic", 6], ["potency", 4]], false], "l'Epicità 6 fa da base, la Potenza 4 sta sopra l'Areté");
+// Un effetto senza Ambiti tiene la soglia scritta, mai sotto 1.
+const senzaAmbiti = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { a: { nome: "A mano", soglia: 4, ambiti: {} }, b: { nome: "Vuoto", soglia: 0, ambiti: {} } } } }));
+assert.deepEqual(senzaAmbiti.effetti.map((e) => e.soglia).sort(), [1, 4]);
+// La soglia a mano del Narratore: vale quando la scheda l'ha salvata diversa dal conto di allora (`conto`).
+// Uguale al conto di allora, segue il conto di oggi (qui l'Areté è scesa a 2, e la Portata 3 aggiunge 1).
+{
+  const due = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { a: { nome: "A mano", soglia: 5, conto: 3, ambiti: { potency: 3 }, sort: 1 }, b: { nome: "Col conto", soglia: 3, conto: 3, ambiti: { potency: 3, range: 3 }, sort: 2 } } } }));
+  assert.deepEqual(due.effetti.map((e) => [e.nome, e.soglia, e.conto, e.aMano]), [["A mano", 5, 3, true], ["Col conto", 4, 4, false]]);
+  assert.match(due.effetti[0].sogliaHint, /SogliaEffettoMano/);
+  assert.match(due.effetti[1].sogliaHint, /SogliaEffettoConto/);
+}
+// Il danno di un colpo riuscito del nemico: quello dell'arma più il margine; senza danno scritto, niente.
+assert.deepEqual([dannoDelNemico({ danno: 4 }, 2), dannoDelNemico({ danno: 4 }, 0), dannoDelNemico({ danno: 0 }, 3), dannoDelNemico({}, 1)], [6, 4, 0, 0]);
+{
+  const parole = (k) => k.split(".").pop();
+  const conDati = (k, d) => `${parole(k)} ${JSON.stringify(d)}`;
+  assert.equal(testoEsito({ danno: 4, condizione: "Atterrato" }, 2, { localize: parole, format: conDati }), 'DannoMargine {"danno":6,"tipo":"Superficiali","arma":4,"margine":2} · Atterrato');
+  assert.equal(testoEsito({ danno: 4, aggravato: true }, 0, { localize: parole, format: conDati }), 'DannoEsito {"danno":4,"tipo":"Aggravati"}');
+  assert.equal(testoEsito({ condizione: "Offuscato" }, 3, { localize: parole, format: conDati }), "Offuscato");
+}
 const nuovo = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Nuovo", soglia: 6, ambiti: { potency: 2, epic: 3, range: 1 } } } } }));
-assert.deepEqual(nuovo.effetti[0].ambiti.map((a) => [a.id, a.level]), [["epic", 3], ["range", 1], ["potency", 2]]);
+assert.deepEqual([nuovo.effetti[0].soglia, nuovo.effetti[0].ambiti.map((a) => [a.id, a.level])], [3, [["epic", 3], ["range", 1], ["potency", 2]]]);
 // Dal Grimorio (2/10): la Formula non ha ancora un'Epicità sua, e parte dall'1 di ogni lancio.
 {
   const formula = { id: "danneggiare", name: "Danneggiare", use: "In genere", intro: "", thresholds: [{ base: 3, scopes: { potency: 3 } }] };
   const effetto = effettoDaFormula(formula);
-  assert.deepEqual([effetto.soglia, effetto.ambiti, Object.hasOwn(effetto, "impossibile")], [4, { epic: 1, potency: 3 }, false]);
+  assert.deepEqual([effetto.soglia, effetto.ambiti, Object.hasOwn(effetto, "impossibile")], [3, { epic: 1, potency: 3 }, false]);
+  // Costruire (Potenza 2, Durata 3): 4 con Areté 1, 3 con Areté 2, come nella pagina «Prima e dopo del tiro».
+  const costruire = { id: "costruire", name: "Costruire", thresholds: [{ base: 5, scopes: { potency: 2, duration: 3 } }] };
+  assert.deepEqual([effettoDaFormula(costruire).soglia, effettoDaFormula(costruire, { arete: 2 }).soglia], [4, 3]);
 }
 const influenza = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Pilota", soglia: 7, ambiti: { potency: 7 }, lentePotenza: "influenza" } } } }));
 assert.deepEqual([influenza.effetti[0].soglia, influenza.effetti[0].danni], [7, null], "l'Influenza non fa danni");

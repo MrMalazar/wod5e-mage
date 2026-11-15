@@ -150,7 +150,7 @@ assert.deepEqual(c.disposizioni.map((d) => [d.value, d.label, d.on]), [[-1, "Ost
 assert.deepEqual(c.carte.map((carta) => [carta.id, carta.soglia.value, carta.riserva.totale, carta.riserva.cambiata, carta.riserva.verso]), [["physical", 3, 3, true, "giu"], ["social", 3, 5, false, ""], ["mental", 4, 6, false, ""]], "Sanguinante toglie 2 al Fisico, e la freccia lo dice");
 const fisico = c.carte[0];
 assert.deepEqual(fisico.casi.map((k) => [k.nome, k.aSoglia, k.value, k.mod, k.verso ?? ""]), [["Mira", false, 5, true, "giu"], ["Da lontano", true, 6, true, ""]], "la Mira scalata; Al riparo alza Da lontano a 6");
-assert.equal(fisico.soglia.hint, "Contro una riserva da 6 restano 3 dadi: riesce 88 volte su 100");
+assert.equal(fisico.soglia.hint, "Con una riserva da 6 dadi, chi agisce contro di lui riesce 67 volte su 100.");
 assert.deepEqual(c.carte[1].casi.map((k) => [k.nome, k.value]), [["Intimidire", 7], ["Mentirgli", 5]], "il nome dal sistema quando il modulo non lo rinomina");
 assert.deepEqual(c.azioni.map((a) => [a.id, a.nome, a.riserva.label, a.riserva.dadi, a.riserva.verso, a.senzaTiro, a.attiva, a.daArma]), [["arma:w1", "Spara", "Mira", 5, "giu", false, false, true], ["z1", "Afferra", "Fisico", 3, "giu", false, false, false], ["z2", "Minaccia", "Sociale", 5, "", false, false, false], ["z3", "Al riparo", "Fisico", 3, "giu", true, true, false]]);
 assert.deepEqual(c.azioni[0].breve, { pezzi: ["danno 4"], condizione: "", portata: "Un tiro di pistola" }, "l'azione nata dalla Pistola legge danno e portata dall'arma");
@@ -168,9 +168,10 @@ const daQualcheParte = c.poteri[0].potere;
 assert.deepEqual([daQualcheParte.nome, daQualcheParte.grado, daQualcheParte.sfereTesto, daQualcheParte.attivo.misura, daQualcheParte.passivo.misura], ["Da qualche parte", 1, "Corrispondenza", "1 Quintessenza", "Sempre"]);
 assert.ok(daQualcheParte.attivo.voci[0].testo.startsWith("Ti chiudi in una piega dello spazio") && daQualcheParte.passivo.voci[0].testo.startsWith("Sei sempre un po' altrove"));
 assert.equal(c.magick.dominiTesto, "Forze, Mente");
-// Suggestionare e Cancellare sono scritti prima del 29/9, con l'Impatto: la soglia si rifà sugli Ambiti che restano,
-// più l'Epicità 1 (2/10). La Scarica, senza Impatto, tiene la soglia scritta.
-assert.deepEqual(c.magick.effetti.map((e) => [e.nome, e.soglia, e.resisteTesto, e.daLabel, e.comeLabel, e.sfera?.id]), [["Suggestionare", 2, "Fermezza + Autocontrollo", "Grimorio", "Accidentale", "mind"], ["Cancellare", 2, "Fermezza + Autocontrollo", "Grimorio", "Accidentale", "mind"], ["Scarica del guanto", 5, "", "a mano", "Volgare", "forces"]]);
+// La soglia si conta sugli Ambiti con l'Areté del nemico (il Sistema). Suggestionare e Cancellare sono scritti prima
+// del 29/9, con l'Impatto, che non conta: resta l'Epicità 1 con un Ambito a 1. La Scarica: la Potenza 3 fa da base, e
+// la Portata 2 con Areté 2 non aggiunge niente.
+assert.deepEqual(c.magick.effetti.map((e) => [e.nome, e.soglia, e.resisteTesto, e.daLabel, e.comeLabel, e.sfera?.id]), [["Suggestionare", 1, "Fermezza + Autocontrollo", "Grimorio", "Accidentale", "mind"], ["Cancellare", 1, "Fermezza + Autocontrollo", "Grimorio", "Accidentale", "mind"], ["Scarica del guanto", 3, "", "a mano", "Volgare", "forces"]]);
 assert.equal(c.magick.effetti[2].danni, 5, "Areté 2 + Potenza 3");
 assert.equal(N.resistenzaTesto({ attribute: "resolve", skill: "composure" }, { attributi: { resolve: "Fermezza", composure: "Autocontrollo" } }), "Fermezza + Autocontrollo", "un secondo Attributo senza prefisso si legge fra gli Attributi");
 assert.deepEqual(c.oggettiGruppi.map((g) => [g.id, g.righe.map((r) => r.name)]), [["weapon", ["Pistola"]], ["armor", ["Tessuto balistico"]], ["gear", ["Manette"]]]);
@@ -215,11 +216,11 @@ senza(T.testa(contesto(actor, items, {}, { puoScrivere: false })), ['data-action
 const gioco = T.gioco(c);
 conTutti(gioco, [
   'data-campo="physical"',
-  '<span class="wod5e-mage-nemico-soglia" title="Contro una riserva da 6 restano 3 dadi: riesce 88 volte su 100">3</span>',
+  '<span class="wod5e-mage-nemico-soglia" title="Con una riserva da 6 dadi, chi agisce contro di lui riesce 67 volte su 100.">3</span>',
   'data-action="nemicoTira" data-riserva="physical" title="Tira Fisico: 5 -2 Sanguinante = 3 dadi" aria-label="Tira Fisico: 5 -2 Sanguinante = 3 dadi"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i><b>3</b></button>',
   'data-action="nemicoTira" data-riserva="social" title="Tira Sociale: 5 dadi" aria-label="Tira Sociale: 5 dadi"><b>5</b></button>',
   'wod5e-mage-nemico-tira piccolo" data-action="nemicoTira" data-riserva="skill:firearms"',
-  '<span class="wod5e-mage-nemico-soglia piccola mod" title="Contro una riserva da 6 restano 0 dadi: riesce 0 volte su 100">6</span>',
+  '<span class="wod5e-mage-nemico-soglia piccola mod" title="Con una riserva da 6 dadi, chi agisce contro di lui riesce 8 volte su 100.">6</span>',
   'data-action="nemicoMano" data-delta="-1" aria-label="Mano del Narratore: un dado in meno"', "<b>0</b>", 'data-action="nemicoMano" data-delta="1"',
   'wod5e-mage-nemico-pastiglia" data-action="nemicoEffettoApri" data-effetto="e1" aria-expanded="false" title="passivo">Occhiali schermati</button>',
   'wod5e-mage-nemico-pastiglia on" data-action="nemicoEffettoApri" data-effetto="e3" aria-expanded="true" title="reazione"><i class="fa-solid fa-reply" aria-hidden="true"></i>Ultimo ordine</button>',
@@ -234,7 +235,7 @@ conTutti(gioco, [
   'modules/wod5e-mage/assets/icons/sheet/forces.png" alt=""></span>Forze</span>',
   'data-action="nemicoMagickApri" data-effetto="m2" aria-expanded="true"',
   '<span class="wod5e-mage-nemico-disco on" title="Mente"><img src="modules/wod5e-mage/assets/icons/sheet/mind.png" alt="Mente"></span><b>Cancellare</b>',
-  '<span class="wod5e-mage-nemico-dato">soglia <b class="oro">2</b></span>',
+  '<span class="wod5e-mage-nemico-dato">soglia <b class="oro">1</b></span>',
   'data-action="nemicoLancia" data-effetto="m2" title="Lancia Cancellare: la carta in chat con la soglia e il tiro di resistenza">Lancia</button>',
   "<p>toglie un ricordo</p>", "Accidentale · resiste con Fermezza + Autocontrollo",
   '<h4 class="wod5e-mage-nemico-sottotitolo">Poteri</h4>',
@@ -251,7 +252,7 @@ conTutti(T.gioco(contesto(actor, items, { aperte: new Set(["effetto:e4"]) })), [
 const scrivi = grigi({ modo: "scrivi" });
 const cs = contesto(scrivi, items, { aperte: new Set(["arma:w1", "z3", "m3", "effetto:e1", "effetto:e2"]), cassetto: "mano", mano: { nome: "Scarica del guanto", cosa: "Una scarica dal guanto colpisce un bersaglio nella stanza.", attribute: "dexterity", skill: "skill:athletics", dominio: "forces", come: "volgare", livelli: { potency: 3, range: 2 }, lenti: {} } });
 assert.deepEqual([cs.modo, cs.scrivi], ["scrivi", true]);
-assert.deepEqual([cs.mano.ambiti.soglia, cs.mano.ambiti.conto, cs.mano.ambiti.danni], [6, "Epicità 1 + Portata 2 + Potenza 3", 5], "l'Epicità 1 di ogni lancio (2/10)");
+assert.deepEqual([cs.mano.ambiti.soglia, cs.mano.ambiti.conto, cs.mano.ambiti.danni], [3, "Potenza 3", 5], "la Potenza 3 fa da base; l'Epicità 1 e la Portata 2, con Areté 2, non aggiungono niente");
 const testaScrivi = T.testa(cs);
 conTutti(testaScrivi, [
   'data-modo="scrivi"', 'data-action="ritrattoCambia"',
@@ -282,7 +283,7 @@ conTutti(giocoScrivi, [
   'name="flags.wod5e-mage.nemico.magick.arete" value="2" min="1" max="5"', 'name="flags.wod5e-mage.nemico.magick.tipo"', '<option value="tecnomagick" selected>Tecnomagick</option>',
   'wod5e-mage-nemico-disco on" data-action="nemicoDominio" data-sfera="forces" title="Forze" aria-label="Forze" aria-pressed="true"',
   'wod5e-mage-nemico-disco" data-action="nemicoDominio" data-sfera="time" title="Tempo" aria-label="Tempo" aria-pressed="false"',
-  'name="flags.wod5e-mage.nemico.magick.effetti.m3.soglia" value="5"',
+  'name="flags.wod5e-mage.nemico.magick.effetti.m3.soglia" value="3" min="0" max="10" title="Il conto degli Ambiti con Areté 2: 3. Un altro numero resta scritto a mano."><input type="hidden" name="flags.wod5e-mage.nemico.magick.effetti.m3.conto" value="3">',
   'wod5e-mage-nemico-manca" data-action="nemicoMagickApri" data-effetto="m3"', "resistenza</button>",
   'name="flags.wod5e-mage.nemico.magick.effetti.m3.nome" value="Scarica del guanto"', 'name="flags.wod5e-mage.nemico.magick.effetti.m3.breve" value="5 danni nella stanza"',
   'name="flags.wod5e-mage.nemico.magick.effetti.m3.resiste.attribute"', 'data-action="nemicoMagickTogli" data-effetto="m3"', "Volgare · Ambiti: Portata 2 · Potenza 3 · a mano · danno 5",
@@ -293,7 +294,7 @@ conTutti(giocoScrivi, [
   'data-action="nemicoLente" data-scope="potency"', 'wod5e-mage-nemico-ambito alto" data-scope="potency"',
   'class="on" data-action="nemicoAmbito" data-scope="potency" data-level="3"', 'class="" data-action="nemicoAmbito" data-scope="potency" data-level="4"',
   'wod5e-mage-nemico-ambito base" data-scope="epic"', 'class="on" data-action="nemicoAmbito" data-scope="epic" data-level="1"',
-  '<b class="wod5e-mage-nemico-grande">6</b>', "Epicità 1 + Portata 2 + Potenza 3 · danni 5 (Areté 2 + Potenza 3)",
+  '<b class="wod5e-mage-nemico-grande">3</b>', "Potenza 3 · danni 5 (Areté 2 + Potenza 3)",
   'data-action="nemicoManoAggiungi"',
   'data-action="nemicoEffettoCatalogo"', 'data-action="nemicoEffettoTogli" data-effetto="e2"', "Togli il potere"
 ], "gioco, Scrivi");
@@ -370,10 +371,10 @@ conTutti(T.gioco(nuovo), ["<small>Da lontano, Pistola, Atletica</small>", "<smal
 // --- la carta del lancio
 const effetto = c.magick.effetti[1];
 const carta = T.carta({ nemico: { name: actor.name, img: actor.img }, effetto, titolo: format("WOD5E_MAGE.Nemico.LanciaSu", { effetto: effetto.nome, bersaglio: "Guendalina" }), sogliaTesto: format("WOD5E_MAGE.Nemico.SogliaCarta", { ambiti: effetto.ambitiTesto }), danniTesto: "", resisteLabel: format("WOD5E_MAGE.Nemico.ResistiCon", { tiro: effetto.resisteTesto }) });
-conTutti(carta, ["lancia Cancellare su Guendalina", "<b>2</b><span>soglia · Epicità 1, Precisione 1</span>", "Toglie a Guendalina il ricordo", "Resiste con Fermezza + Autocontrollo", "Accidentale · Mente"], "carta");
-// Il conto del tiro di Spara su Guendalina: Mira 7, −2 Sanguinante, 5 dadi, riesce dal 6.
+conTutti(carta, ["lancia Cancellare su Guendalina", "<b>1</b><span>soglia · Epicità 1, Precisione 1</span>", "Toglie a Guendalina il ricordo", "Resiste con Fermezza + Autocontrollo", "Accidentale · Mente"], "carta");
+// Il conto del tiro di Spara su Guendalina: Mira 7, −2 Sanguinante, 5 dadi; senza soglia scritta ne serve uno.
 const conto = N.contoDelTiro({ nome: "Spara", riserva: c.azioni[0].riserva, soglia: 0, bersaglio: { uuid: "Actor.pg", name: "Guendalina" }, danno: 4, aggravato: false, localize, format });
-assert.deepEqual([conto.titolo, conto.conto, conto.dadi, conto.esito], ["Spara · su Guendalina", "Mira 7 -2 Sanguinante = 5 dadi · riesce dal 6", 5, "danno 4 Superficiali"]);
+assert.deepEqual([conto.titolo, conto.conto, conto.dadi, conto.esito], ["Spara · su Guendalina", "Mira 7 -2 Sanguinante = 5 dadi · soglia 1", 5, "danno 4 Superficiali"]);
 
 // La mano del Narratore (Blue, 27/9): +2 sulla scheda entra in ogni riserva, nei casi a dadi, nelle azioni e nel conto della carta.
 const conMano = contesto(grigi({ manoNarratore: 2 }), items, {});
@@ -382,7 +383,7 @@ assert.deepEqual(conMano.carte[0].casi.map((k) => [k.nome, k.value]), [["Mira", 
 assert.equal(conMano.carte[0].riserva.hint, "Tira Fisico: 5 -2 Sanguinante +2 Mano del Narratore = 5 dadi");
 assert.deepEqual([conMano.manoNarratore.value, conMano.manoNarratore.segno, conMano.manoNarratore.on, conMano.manoNarratore.meno, conMano.manoNarratore.dadiTesto], [2, "+2", true, false, "+2 dadi a ogni tiro"]);
 const contoMano = N.contoDelTiro({ nome: "Spara", riserva: conMano.azioni[0].riserva, soglia: 0, localize, format });
-assert.deepEqual([contoMano.conto, contoMano.dadi], ["Mira 7 -2 Sanguinante +2 Mano del Narratore = 7 dadi · riesce dal 6", 7]);
+assert.deepEqual([contoMano.conto, contoMano.dadi], ["Mira 7 -2 Sanguinante +2 Mano del Narratore = 7 dadi · soglia 1", 7]);
 conTutti(T.gioco(conMano), ["<b>+2</b>", '<i class="fa-solid fa-arrow-up" aria-hidden="true"></i><b>7</b>'], "gioco con la mano");
 
 // --- un solo campo per nome in tutta la finestra (1.33.1). Testata e pagine stanno nello stesso form, e Foundry, di due

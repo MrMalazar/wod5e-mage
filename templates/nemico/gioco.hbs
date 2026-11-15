@@ -21,11 +21,11 @@
                         <div class="wod5e-mage-nemico-numeri-riga">
                             <span class="wod5e-mage-nemico-campo-nome"><i class="{{carta.icona}}" aria-hidden="true"></i>{{carta.label}}</span>
                             {{#if @root.scrivi}}
-                                <input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.soglie.{{carta.id}}" value="{{carta.soglia.base}}" min="0" max="20" title="{{localize 'WOD5E_MAGE.Nemico.SogliaScrivi'}}" aria-label="{{carta.label}}: {{localize 'WOD5E_MAGE.Nemico.Soglia'}}">
+                                <input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.soglie.{{carta.id}}" value="{{#if carta.soglia.base}}{{carta.soglia.base}}{{/if}}" placeholder="{{carta.soglia.value}}" min="0" max="20" title="{{localize 'WOD5E_MAGE.Nemico.SogliaScrivi'}}. {{localize 'WOD5E_MAGE.Nemico.SogliaFissa'}}" aria-label="{{carta.label}}: {{localize 'WOD5E_MAGE.Nemico.Soglia'}}">
                                 <input type="number" class="wod5e-mage-nemico-num" name="system.standarddicepools.{{carta.id}}.value" value="{{carta.riserva.base}}" min="0" max="30" title="{{localize 'WOD5E_MAGE.Nemico.RiservaScrivi'}}" aria-label="{{carta.label}}: {{localize 'WOD5E_MAGE.Nemico.Riserva'}}">
                                 <span></span>
                             {{else}}
-                                <span class="wod5e-mage-nemico-soglia{{#if carta.soglia.mod}} mod{{/if}}" title="{{carta.soglia.hint}}">{{carta.soglia.value}}</span>
+                                <span class="wod5e-mage-nemico-soglia{{#if carta.soglia.mod}} mod{{/if}}{{#if carta.soglia.fissa}} fissa{{/if}}" title="{{carta.soglia.hint}}">{{carta.soglia.value}}</span>
                                 <button type="button" class="wod5e-mage-nemico-tira" data-action="nemicoTira" data-riserva="{{carta.id}}" title="{{carta.riserva.hint}}" aria-label="{{carta.riserva.hint}}">{{#if carta.riserva.verso}}<i class="fa-solid fa-arrow-{{#if (eq carta.riserva.verso 'giu')}}down{{else}}up{{/if}}" aria-hidden="true"></i>{{/if}}<b>{{carta.riserva.totale}}</b></button>
                             {{/if}}
                         </div>
@@ -144,7 +144,7 @@
                                                 <label><span>{{localize "WOD5E_MAGE.Nemico.Portata"}}</span><select name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.portata"><option value="">{{localize "WOD5E_MAGE.Nemico.PortataNessuna"}}</option>{{#each @root.portate as |p|}}<option value="{{p}}" {{#if (eq p azione.portata)}}selected{{/if}}>{{p}}</option>{{/each}}</select></label>
                                             {{/if}}
                                             <label><span>{{localize "WOD5E_MAGE.Nemico.Condizione"}}</span><select name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.condizione"><option value="">{{localize "WOD5E_MAGE.Nemico.CondizioneNessuna"}}</option>{{#if azione.condizioneFuori}}<option value="{{azione.condizione}}" selected>{{azione.condizione}}</option>{{/if}}{{#each @root.condizioniGruppi as |g|}}<optgroup label="{{g.label}}">{{#each g.voci as |c|}}<option value="{{c.name}}" {{#if (eq c.name azione.condizione)}}selected{{/if}}>{{c.label}}</option>{{/each}}</optgroup>{{/each}}</select></label>
-                                            <label><span>{{localize "WOD5E_MAGE.Nemico.SogliaBersaglio"}}</span><input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.soglia" value="{{azione.soglia}}" min="0" max="20" title="{{localize 'WOD5E_MAGE.Nemico.SogliaBersaglioHint'}}"></label>
+                                            <label><span>{{localize "WOD5E_MAGE.Nemico.SogliaBersaglio"}}</span><input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.soglia" value="{{#if azione.soglia}}{{azione.soglia}}{{/if}}" placeholder="{{azione.servono}}" min="0" max="20" title="{{localize 'WOD5E_MAGE.Nemico.SogliaBersaglioHint'}}"></label>
                                         {{else}}
                                             {{!-- Senza tiro: cosa accende «Usa», per esempio +2 alla soglia «Da lontano» fino al suo turno. --}}
                                             <label><span>{{localize "WOD5E_MAGE.Nemico.BonusSoglia"}}</span><input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.azioni.{{azione.id}}.bonusSoglia" value="{{azione.bonusSoglia}}" min="-10" max="10"></label>
@@ -216,10 +216,10 @@
                                         {{#if @root.scrivi}}{{#unless e.resisteTesto}}<button type="button" class="wod5e-mage-nemico-manca" data-action="nemicoMagickApri" data-effetto="{{e.id}}" title="{{localize 'WOD5E_MAGE.Nemico.ResistenzaMancaHint'}}"><i class="fa-solid fa-plus" aria-hidden="true"></i>{{localize "WOD5E_MAGE.Nemico.ResistenzaManca"}}</button>{{/unless}}{{/if}}
                                         <span class="wod5e-mage-nemico-riga-dx">
                                             {{#if @root.scrivi}}
-                                                <label class="wod5e-mage-nemico-inline"><span>{{localize "WOD5E_MAGE.Nemico.Soglia"}}</span><input type="number" class="wod5e-mage-nemico-num" name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.soglia" value="{{e.soglia}}" min="0" max="30"></label>
+                                                <label class="wod5e-mage-nemico-inline"><span>{{localize "WOD5E_MAGE.Nemico.Soglia"}}</span><input type="number" class="wod5e-mage-nemico-num{{#if e.aMano}} a-mano{{/if}}" name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.soglia" value="{{e.soglia}}" min="0" max="10" title="{{e.sogliaHint}}">{{#if e.conto}}<input type="hidden" name="flags.wod5e-mage.nemico.magick.effetti.{{e.id}}.conto" value="{{e.conto}}">{{/if}}</label>
                                                 <button type="button" class="wod5e-mage-nemico-matita" data-action="nemicoMagickApri" data-effetto="{{e.id}}" title="{{localize 'WOD5E_MAGE.Nemico.Matita'}}" aria-label="{{localize 'WOD5E_MAGE.Nemico.Matita'}}: {{e.nome}}"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
                                             {{else}}
-                                                <span class="wod5e-mage-nemico-dato">{{localize "WOD5E_MAGE.Nemico.Soglia"}} <b class="oro">{{e.soglia}}</b></span>
+                                                <span class="wod5e-mage-nemico-dato"{{#if e.aMano}} title="{{localize 'WOD5E_MAGE.Nemico.SogliaEffettoManoBreve' conto=e.conto}}"{{/if}}>{{localize "WOD5E_MAGE.Nemico.Soglia"}} <b class="oro">{{e.soglia}}</b></span>
                                                 <button type="button" class="wod5e-mage-nemico-lancia" data-action="nemicoLancia" data-effetto="{{e.id}}" title="{{localize 'WOD5E_MAGE.Nemico.LanciaHint' nome=e.nome}}">{{localize "WOD5E_MAGE.Nemico.Lancia"}}</button>
                                             {{/if}}
                                         </span>

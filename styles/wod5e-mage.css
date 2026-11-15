@@ -16864,6 +16864,16 @@
   font-size: 16px;
 }
 
+/* La soglia di un effetto scritta a mano dal Narratore, diversa dal conto degli Ambiti: il filo viola. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .window-content input.wod5e-mage-nemico-num.a-mano {
+  border-color: var(--mage-viola-chiaro);
+}
+
+/* La soglia non scritta è quella fissa del Sistema (metà della riserva, per eccesso): si legge in corsivo. */
+.wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-soglia.fissa {
+  font-style: italic;
+}
+
 /* Una soglia alzata da un'azione accesa: lo dice il filo sotto, non solo il colore. */
 .wod5e-mage.wod5e.actor.sheet.wod5e-mage-nemico .wod5e-mage-nemico-soglia.mod {
   border-bottom: 2px solid var(--mage-viola-chiaro);
