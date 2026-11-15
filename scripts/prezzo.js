@@ -1,27 +1,35 @@
 import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
-import { prezzoAllowed } from "./ramo-c.js";
 import { markRollOpen, missingSuccesses, ROLL_CARD_FLAG, rollActionsBox, rollOutcome } from "./roll-card.js";
+import { prezzoAmmesso } from "./sistema.js";
 
 /**
- * La vittoria a un prezzo (ramo C, verdetto di Blue dell'11/9): il Narratore
- * la offre su un fallimento con almeno un dado tirato, e il prezzo lo
- * decide lui. Dalla 0.86.0 (Blue, 10/9 notte) è il terzo tasto sotto la
- * fascia del tiro fallito, con Ritira con Volontà (e, dal 3/10, il Tira Saggezza dell'Indulgere): a
- * zero dadi il tasto c'è ma è spento, e dice perché.
+ * La Vittoria a un prezzo (Sistema, 14/11): l'offerta del Narratore su un
+ * fallimento. L'azione riesce ma costa qualcosa; il prezzo lo decide lui, ed
+ * è più alto quanti più successi mancano. Vale per ogni tiro fallito, di
+ * Abilità o di Magick, ma solo per chi ha tirato almeno un dado. È il terzo
+ * tasto sotto la fascia del tiro fallito, con Ritira con Volontà e il Tira
+ * Saggezza dell'Indulgere: a zero dadi il tasto c'è ma è spento, e dice
+ * perché.
  */
 
 export const PREZZO_FLAG = "prezzo";
 
-/** Il tasto compare sotto un tiro fallito e vergine; è acceso solo con almeno un dado tirato. */
-export function prezzoState({ total = 0, difficulty = 0, dice = 0, forced = false, priced = false, burst = false, automatic = false, skill = false } = {}) {
+/**
+ * Il tasto compare sotto un tiro fallito e vergine; è acceso solo con almeno
+ * un dado tirato. `missing` sono i successi che mancano alla soglia: più
+ * sono, più alto il prezzo. Sui tiri di Saggezza non compare (l'esito è già
+ * scritto sul segno), e nemmeno sui tiri che contano i successi e basta,
+ * come il Relax.
+ */
+export function prezzoState({ total = 0, difficulty = 0, dice = 0, forced = false, priced = false, burst = false, automatic = false, saggezza = false, soloConto = false } = {}) {
   const missing = missingSuccesses(total, difficulty);
-  if (forced || priced || burst || automatic || skill || missing <= 0) return { show: false, enabled: false, missing: 0 };
-  return { show: true, enabled: prezzoAllowed({ total, dice }), missing, dice: Math.max(Math.trunc(Number(dice) || 0), 0) };
+  if (forced || priced || burst || automatic || saggezza || soloConto || missing <= 0) return { show: false, enabled: false, missing: 0 };
+  return { show: true, enabled: prezzoAmmesso({ dadi: dice, riuscito: false }), missing, dice: Math.max(Math.trunc(Number(dice) || 0), 0) };
 }
 
 function stateInput(card) {
-  return { total: card.total, difficulty: card.difficulty, dice: card.dice, forced: card.forced, priced: card.priced, burst: card.burst || card.burstResult, automatic: card.automatic, skill: card.skill };
+  return { total: card.total, difficulty: card.difficulty, dice: card.dice, forced: card.forced, priced: card.priced, burst: card.burst || card.burstResult, automatic: card.automatic, saggezza: Boolean(card.saggezza), soloConto: Boolean(card.soloConto) };
 }
 
 function speakerActor(message) {
@@ -29,17 +37,17 @@ function speakerActor(message) {
   return actor ?? null;
 }
 
-/** Il tasto: «Vittoria a un prezzo», coi dadi tirati nel titolo. */
+/** Il tasto: «Vittoria a un prezzo», coi successi che mancano nel titolo. */
 export function renderPrezzoButton(state, dice, localize, format) {
   const hint = state.enabled
-    ? format("WOD5E_MAGE.Prezzo.Hint", { dice })
+    ? format("WOD5E_MAGE.Prezzo.Hint", { dice, missing: state.missing })
     : format("WOD5E_MAGE.Prezzo.HintFar", { dice });
   return `<button type="button" class="wod5e-mage-roll-action wod5e-mage-prezzo-button" data-prezzo="go"${state.enabled ? "" : " disabled"} title="${hint}">${localize("WOD5E_MAGE.Prezzo.Button")}</button>`;
 }
 
 /** La riga di quel che è stato fatto, al posto del tasto. */
 export function renderPriced(used, format, localize) {
-  return `<p class="wod5e-mage-roll-note wod5e-mage-roll-note-prezzo"><b class="wod5e-mage-prezzo-label">${localize("WOD5E_MAGE.Prezzo.Label")}</b> <span>${format("WOD5E_MAGE.Prezzo.Done", { dice: used.dice ?? 0 })}</span></p>`;
+  return `<p class="wod5e-mage-roll-note wod5e-mage-roll-note-prezzo"><b class="wod5e-mage-prezzo-label">${localize("WOD5E_MAGE.Prezzo.Label")}</b> <span>${format("WOD5E_MAGE.Prezzo.Done", { dice: used.dice ?? 0, missing: used.missing ?? 0 })}</span></p>`;
 }
 
 /** Sotto i dadi di un tiro fallito del Mago: il tasto, o la riga di quel che si è fatto. */
@@ -82,7 +90,7 @@ export function decoratePrezzo(message, html) {
 async function confirmPrezzo(state, dice, localize, format) {
   return foundry.applications.api.DialogV2.confirm({
     window: { title: localize("WOD5E_MAGE.Prezzo.Title") },
-    content: `<div class="wod5e-mage-prezzo-ask"><p>${format("WOD5E_MAGE.Prezzo.Ask", { dice })}</p><p><em>${localize("WOD5E_MAGE.Prezzo.AskNote")}</em></p></div>`,
+    content: `<div class="wod5e-mage-prezzo-ask"><p>${format("WOD5E_MAGE.Prezzo.Ask", { dice, missing: state.missing })}</p><p><em>${localize("WOD5E_MAGE.Prezzo.AskNote")}</em></p></div>`,
     classes: ["wod5e", "wod5e-mage", "mage", "wod5e-mage-prezzo-dialog"],
     yes: { icon: "fas fa-handshake", label: localize("WOD5E_MAGE.Prezzo.Yes"), default: true },
     no: { icon: "fas fa-times", label: localize("WOD5E_MAGE.Prezzo.No") },
@@ -105,7 +113,7 @@ export async function winAtAPrice(message, actor) {
   const flags = { [MODULE_ID]: { [PREZZO_FLAG]: used, [ROLL_CARD_FLAG]: { symbols: [], ...card, priced: true } } };
   await message.update({ flags });
   const outcome = rollOutcome(card.total, card.difficulty, localize, { priced: true });
-  ui.notifications.info(`${outcome.text}. ${format("WOD5E_MAGE.Prezzo.Done", { dice: state.dice })}`);
+  ui.notifications.info(`${outcome.text}. ${format("WOD5E_MAGE.Prezzo.Done", { dice: state.dice, missing: state.missing })}`);
   return used;
 }
 

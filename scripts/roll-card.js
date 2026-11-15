@@ -1,7 +1,7 @@
 import { MODULE_ID } from "./constants.js";
 import { SCOPE_ICONS } from "./scopes.js";
 import { traitIcon } from "./tratti-icone.js";
-import { RAMO, ramoCMargin, successoParadossale } from "./ramo-c.js";
+import { RAMO, successoParadossale } from "./ramo-c.js";
 
 /**
  * La carta del tiro in chat, riletta con Blue (10/9 notte): in testa «Tiro
@@ -209,13 +209,16 @@ function applyMageTotal(html, data) {
   const totalOut = html.querySelector(".total-contents");
   if (totalOut) {
     totalOut.textContent = String(outcome.total);
-    // Il margine dei tiri di Abilità (ramo C): i successi oltre il primo, per il danno.
-    const margin = ramoCMargin(outcome.total);
-    if (data.ramo === RAMO && data.skill && margin > 0) {
+    // Il margine: i successi oltre la soglia (nello scontro il danno è quello dell'arma più
+    // il margine). Col Sistema lo porta ogni tiro; le carte di prima solo quelli di Abilità,
+    // dove la soglia scritta è 1 e il margine sono i successi oltre il primo.
+    const margin = Math.max(outcome.total - Math.max(Math.trunc(Number(data.difficulty) || 0), 1), 0);
+    const conMargine = data.sistema ? !data.burst && !data.burstResult : data.ramo === RAMO && data.skill;
+    if (conMargine && margin > 0) {
       totalOut.insertAdjacentHTML("beforeend", `<small class="wod5e-mage-roll-margin" title="${escapeHtml(game.i18n.localize("WOD5E_MAGE.RamoC.MarginHint"))}">+${margin}</small>`);
     }
   }
-  // Nel ramo C la fascia legge «un successo basta»; il numero sotto Soglia è la soglia vera.
+  // Il numero sotto Soglia è la soglia del tiro (sulle carte di prima la fascia leggeva «un successo basta»).
   const difficultyOut = html.querySelector(".difficulty-contents");
   if (difficultyOut && data.ramo === RAMO && Number.isFinite(Number(data.threshold))) difficultyOut.textContent = String(data.threshold);
   // I titoli del conto in parole del Mago: Successi e Soglia, non Totale e Difficoltà.

@@ -412,7 +412,7 @@
       "precision": "Precision",
       "area": "Area",
       "TableTitle": "The Scopes",
-      "TableHint": "Scopes give a Magick effect its measure. On top, Epicness, from 1 to 7, says how deep the gesture goes; below, six Scopes on a scale from 0 to 7 say how much: those the effect does not touch stay at 0. Each Scope is read through one, two or three lenses, alternative measures of the same thing: a casting uses one. 0 is the base and costs nothing; each level is worth its number. The threshold is Epicness plus the sum of the Scopes, and each point of threshold takes one die from the pool. In one casting at most three Scopes rise above 0; Epicness does not count.",
+      "TableHint": "Scopes give a Magick effect its measure. On top, Epicness, from 1 to 7, says how deep the gesture goes; below, six Scopes on a scale from 0 to 7 say how much: those the effect does not touch stay at 0. Each Scope is read through one, two or three lenses, alternative measures of the same thing: a casting uses one. 0 is the base and does not count. The threshold is the count of the Scopes: the highest Scope, Epicness included, is the base, and every other Scope in use adds 1 if it sits above your Arete; the count stops at 10. In one casting at most three Scopes rise above 0; Epicness does not count.",
       "TableModes": "In Range the Fight lens applies in combat, Narrative outside it and Bond when you reach the target through what ties you; in Potency, Damage is for the fight: the Storyteller declares when a combat reading applies. In Duration the first row counts game time, the second world time. The other lenses (Effect, Area, Malus and bonus, Complexity, Weight, Influence, Detail, Information) are free, good in any scene.",
       "TableSuccesses": "Scope",
       "TableReading": "Lens",
@@ -1001,7 +1001,7 @@
       "Label": "Wisdom",
       "Status": "Status",
       "Hint": "The balance between Hubris and Quiet: two markers start at the centre. One slides left with acts of Hubris, one right with acts of Quiet. At the fourth step the character is finished: Fallen, or Mad.",
-      "RiservaHint": "The Wisdom roll's pool: Resolve {resolve} + Composure {composure}. The threshold is the act's rung and removes dice; an 8 succeeds.",
+      "RiservaHint": "The Wisdom roll's pool: Resolve {resolve} + Composure {composure}. You roll all of it, and you need successes equal to the act's rung.",
       "VentaglioHint": "Wisdom commands: Act, Shine, Anchor, Reset",
       "Tira": "Act",
       "Roll": "The act: the rung, the side, the covering Conviction",
@@ -1009,7 +1009,7 @@
       "Risplende": "Shine",
       "RisplendeHint": "The act that makes a Conviction shine: it comes back on and the marker steps back by one. The Storyteller calls it, once per session.",
       "Ancora": "Anchor",
-      "AncoraHint": "A scene with an Anchor, once per story per Anchor: reroll Resolve + Composure minus the step, and an 8 brings the marker back by one.",
+      "AncoraHint": "A scene with an Anchor, once per story per Anchor: roll Resolve + Composure, and with successes equal to the step the marker comes back by one.",
       "Reset": "Reset",
       "ResetHint": "Both markers return to the centre.",
       "ClickHint": "Click a box: that side's marker goes there. Right-click: back to the centre. On the centre, a menu asks which marker to bring back.",
@@ -1046,7 +1046,7 @@
       },
       "Atto": {
         "Title": "The act",
-        "Hint": "The Storyteller names the rung and the side. The marker slides only if the rung is higher than the step it stands on. If an active Conviction covers the act you roll Resolve + Composure ({riserva}) minus the rung, and an 8 succeeds; with no dice there is no parry. If none covers, the marker slides.",
+        "Hint": "The Storyteller names the rung and the side. The marker slides only if the rung is higher than the step it stands on. If an active Conviction covers the act you roll Resolve + Composure ({riserva}): you need successes equal to the rung. If none covers, the marker slides.",
         "Gradino": "Rung",
         "Generici": "Generic acts",
         "Lato": "The side",
@@ -1122,7 +1122,7 @@
       },
       "AncoraDialog": {
         "Title": "The scene with the Anchor",
-        "Hint": "A scene with an Anchor, once per story per Anchor: reroll Resolve + Composure ({riserva}) minus the step the marker stands on, and an 8 brings it back by one. In exceptional cases the Storyteller grants it without rolling.",
+        "Hint": "A scene with an Anchor, once per story per Anchor: roll Resolve + Composure ({riserva}), and with successes equal to the step the marker stands on you bring it back by one. In exceptional cases the Storyteller grants it without rolling.",
         "Ancora": "The Anchor",
         "Usata": "already used this story",
         "Lato": "The marker to recover",
@@ -1563,13 +1563,13 @@
       "Label": "Victory at a price",
       "Title": "Victory at a price",
       "Button": "Victory at a price",
-      "Hint": "Dice rolled: {dice}. The spell may still succeed: the Storyteller sets the price.",
-      "HintFar": "No dice rolled: without dice there is no victory at a price.",
-      "Ask": "Dice rolled: {dice}. The spell succeeds, and the Storyteller sets the price.",
+      "Hint": "Missing successes: {missing}. Dice rolled: {dice}. The action can still succeed: the Storyteller sets the price, and it grows with the missing successes.",
+      "HintFar": "No dice rolled: without dice there is no Win at a Cost.",
+      "Ask": "Missing successes: {missing}. Dice rolled: {dice}. The action succeeds, and the Storyteller sets the price: the more successes are missing, the higher it is.",
       "AskNote": "The Backlash of the red dice, if it struck, stays.",
       "Yes": "Succeed at a price",
       "No": "Let it be",
-      "Done": "dice rolled {dice}: the Storyteller sets the price."
+      "Done": "missing successes: {missing}. The Storyteller sets the price."
     },
     "RollCard": {
       "Details": "Details",
@@ -1609,7 +1609,7 @@
     "Volonta": {
       "Label": "Willpower",
       "Reroll": "Reroll with Willpower",
-      "RerollHint": "Pick up to three failed dice on the card (a red showing 1 too: the eye stays), then reroll: one superficial mental",
+      "RerollHint": "Pick up to three failed dice on the card, then reroll: one superficial mental damage. The spend must be justified by your Compass, and the Storyteller may deny it.",
       "NoDice": "No die to reroll: the dice succeeded",
       "PickFirst": "First pick the dice to reroll on the card: one click on a failed die lights it up.",
       "UsedReroll": "Willpower: rerolled {dice} chosen dice (one superficial mental).",
@@ -1719,12 +1719,11 @@
       "Pool": "Pool",
       "Threshold": "Threshold",
       "Dice": "Dice",
-      "DiceLine": "Pool {pool} − threshold {threshold} = {dice} dice",
+      "DiceLine": "Dice {dice} · Threshold {threshold}",
       "Reds": "{reds} red dice apart",
-      "DiceNote": "Dice: {note}",
-      "NoDice": "No dice to roll: the spell fails.",
+      "NoDice": "No dice to roll: the roll fails.",
       "BoughtBanner": "Success bought",
-      "MarginHint": "Margin: successes beyond the first (damage: weapon plus margin).",
+      "MarginHint": "Margin: successes beyond the threshold. In a fight, damage is the weapon's plus the margin.",
       "SkillRoll": "Skill roll",
       "RossiAParte": "Red dice apart: {reds}. Success comes from the pool dice; the red dice decide the burst (1 or 10) and, if the roll succeeds, the paradoxical success.",
       "SuccessoParadossale": "Paradoxical success: the roll succeeds and at least one red die succeeded. The Storyteller narrates the effect."
@@ -2036,13 +2035,13 @@
         "testimoni": "Vulgar with witnesses"
       },
       "KindHints": {
-        "accidentale": "Nobody notices: no red dice, success from 6.",
-        "volgare": "Reality notices: red dice are rolled apart, success from 6.",
-        "testimoni": "Someone saw you: red dice are rolled apart, success from 8."
+        "accidentale": "Nobody notices: no red dice.",
+        "volgare": "Reality notices: red dice are rolled apart.",
+        "testimoni": "Someone saw you: red dice are rolled apart."
       },
       "KindWarning": "Choose how you do it: Coincidental, Vulgar or Vulgar with witnesses.",
       "PowerNote": "Power: {name}.",
-      "ManualDifficultyNote": "Threshold by hand {mano}: {difficulty} (the Scopes said {computed}).",
+      "ManualDifficultyNote": "Manual Threshold: {difficulty}, Original Threshold: {computed}",
       "AreteHint": "Arete makes it a Magick roll: the three type buttons and the prize appear.",
       "SphereHint": "Puts the Sphere in the casting. Spheres do not weigh on the threshold.",
       "ScopeHint": "Hover for the seven levels: the number declares the Scope, the same number removes it. On the right, the reading of the chosen level.",
@@ -2063,7 +2062,7 @@
       "DifficultyWarning": "Enter the threshold before rolling.",
       "QuintessenceHint": "One die per point spent, inside the +3 dice cap together with the extra dice. On Skill rolls only with the power that says so. It leaves the Wheel once rolled.",
       "Roll": "Roll",
-      "RollHint": "Roll the chosen Attribute and Skill, minus the threshold; succeeds from 6.",
+      "RollHint": "Roll the chosen Attribute and Skill: the whole pool, and you need successes equal to the threshold.",
       "ExtraFlavor": "extra dice +{dice}",
       "Riserva": "Pool",
       "RiservaHint": "The dice you roll, all of them: Attribute, Skill, Specialty, Quintessence, power, Traits; Conditions subtract. At the bottom the total: minus and plus adjust it.",
@@ -2116,7 +2115,7 @@
       "DadiParola": "dice",
       "DadoParola": "die",
       "Indulgi": "Indulge",
-      "IndulgiHint": "Declare before the cast that you indulge: the Storyteller says whether the aim is Hubris or Quiet, the spell succeeds, and afterwards you roll Wisdom (Resolve + Composure minus the threshold, an 8 succeeds)."
+      "IndulgiHint": "Declare before the cast that you indulge: the Storyteller says whether the aim is Hubris or Quiet, the spell succeeds, and afterwards you roll Wisdom (Resolve + Composure, with successes equal to the spell's threshold, up to 7)."
     },
     "Ritratti": {
       "NextHint": "Cycle the portraits: the one you see is also the image on the map and in chat",
@@ -2826,7 +2825,7 @@
     "Indulgere": {
       "Label": "Indulge",
       "Button": "Roll Wisdom",
-      "Hint": "You indulged in {lato}: the spell succeeded. Now roll Wisdom, Resolve + Composure minus the threshold ({soglia}), and an 8 succeeds. On a failure the {lato} marker slides one step.",
+      "Hint": "You indulged in {lato}: the spell succeeded. Now roll Wisdom, Resolve + Composure: you need successes equal to the threshold ({soglia}). On a failure the {lato} marker slides one step.",
       "Nel": {
         "hubris": "Indulge in Hubris",
         "silenzio": "Indulge in Quiet"

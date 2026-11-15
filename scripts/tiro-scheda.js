@@ -1004,7 +1004,7 @@ export async function launchTiro(actor, tiro) {
   // Il ritocco dei Dadi (23/9): in carta, perché si sappia.
   if (conto.adjust) notes.push(format("WOD5E_MAGE.Tiro.DadiNote", { dice: `${conto.adjust > 0 ? "+" : ""}${conto.adjust}` }));
 
-  // Il tiro di Abilità: niente rossi, riuscita dal 6, la Difficoltà solo a mano.
+  // Il tiro di Abilità: niente rossi, la soglia la dice il Narratore (da 1 a 7).
   if (!magick) {
     if (conto.quintessence > 0) bonusParts.push(format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: conto.quintessence }));
     // I dadi del potere stanno nel numero in carta, con gli altri bonus.
@@ -1017,7 +1017,6 @@ export async function launchTiro(actor, tiro) {
         // Una Condizione che fa fallire (29/9): niente dadi, la carta dice il perché.
         pool: conto.fallisce ? 0 : conto.pool,
         threshold: conto.difficulty,
-        successFrom: conto.successFrom,
         paradoxRating: 0,
         skill: true,
         bought: senzaTirare,
@@ -1053,7 +1052,8 @@ export async function launchTiro(actor, tiro) {
   if (conto.quintessence > 0) bonusParts.push(format("WOD5E_MAGE.Arete.QuintessenceFlavor", { points: conto.quintessence }));
   // I dadi del potere (tappa 3) fra i bonus della carta.
   if (conto.powerDice > 0) bonusParts.push(format("WOD5E_MAGE.Tiro.PotereDadiFlavor", { name: potereLabel(power, localize), dice: conto.powerDice }));
-  if (conto.manual && conto.sogliaMano) notes.push(format("WOD5E_MAGE.Tiro.ManualDifficultyNote", { computed: conto.computed, difficulty: conto.difficulty, mano: `${conto.sogliaMano > 0 ? "+" : "−"}${Math.abs(conto.sogliaMano)}` }));
+  // L'avviso della soglia ritoccata a mano, come lo vuole Blue: «Soglia Manuale: X, Soglia Originale: Y».
+  if (conto.manual && conto.sogliaMano) notes.push(format("WOD5E_MAGE.Tiro.ManualDifficultyNote", { computed: conto.sogliaSenzaMano, difficulty: conto.difficulty, mano: `${conto.sogliaMano > 0 ? "+" : "−"}${Math.abs(conto.sogliaMano)}` }));
 
   const card = renderRollCard({
     traits: traitRows,
@@ -1125,7 +1125,6 @@ export async function launchTiro(actor, tiro) {
       data: actor.system,
       pool: conto.fallisce ? 0 : conto.pool,
       threshold: conto.difficulty,
-      successFrom: conto.successFrom,
       // Il tiro che fallisce per una Condizione non tira nemmeno i rossi: non può riuscire.
       paradoxRating: conto.fallisce ? 0 : paradoxRating,
       bought: senzaTirare,

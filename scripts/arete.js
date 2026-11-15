@@ -4,7 +4,7 @@ import {
   getMagickBalance,
   MAGICK_TRACK_MAX
 } from "./magick-balance.js";
-import { costoLancio, pagamentoDelLancio, quintessenceSpend, ramoCDice, testoCosto, tipoDaOpzioni } from "./ramo-c.js";
+import { costoLancio, pagamentoDelLancio, quintessenceSpend, testoCosto, tipoDaOpzioni } from "./ramo-c.js";
 import { BUSSOLA_DICE, BUSSOLA_SCENE_FLAG, bussolaChoice, grantBussolaQuintessence, prepareBussolaChoice, renderBussolaBlock, wireBussola } from "./bussola.js";
 import {
   findMageRollTrait,
@@ -173,10 +173,12 @@ export function calculateAutomaticSuccesses({ sphereLevels = [], scopeLevels = [
 }
 
 /**
- * La riserva del ramo C prima della soglia: tratti, dadi in più (Armonia e
- * Bonus dentro il tetto), i dadi delle Specialità, il premio dell'Areté
- * (fuori dal tetto, Blue 27/9) e la Quintessenza spesa sotto il prezzo
- * della riuscita. Torna i pezzi e il conto dei dadi.
+ * La riserva della finestra del Grimorio: tratti, dadi in più (Armonia e
+ * Bonus dentro il tetto), i dadi delle Specialità, il premio dell'Areté e
+ * la Quintessenza. Col Sistema (14/11) si tira tutta: la soglia dice i
+ * successi che servono e non toglie dadi. Il conto di questa finestra (il
+ * premio in dadi, la soglia degli Ambiti) è ancora quello di prima: il
+ * lancio sul Sistema passa dal riquadro del Tiro. Torna i pezzi e i dadi.
  */
 export function ramoCPool({ traits = 0, bonus = 0, specialtyDice = 0, quintessence = 0, sphereMax = 0, threshold = 0, prize = 0 } = {}) {
   const spend = quintessenceSpend(quintessence, sphereMax);
@@ -185,7 +187,8 @@ export function ramoCPool({ traits = 0, bonus = 0, specialtyDice = 0, quintessen
     + Math.max(Math.trunc(Number(specialtyDice) || 0), 0)
     + Math.max(Math.trunc(Number(prize) || 0), 0)
     + spend.dice;
-  return { ...ramoCDice(pool, threshold), spend };
+  const soglia = Math.max(Math.trunc(Number(threshold) || 0), 0);
+  return { pool, threshold: soglia, dice: pool, spend };
 }
 
 function isChecked(value) {
@@ -441,7 +444,7 @@ function wireDifficulty(dialog) {
     }).successes;
 
     const sphereMax = Math.max(0, ...sphereLevels.map((entry) => entry.level));
-    // Il ramo C: riserva meno soglia uguale dadi. La Quintessenza non dà dadi (29/9).
+    // Si tira tutta la riserva: la soglia non toglie dadi (Sistema, 14/11).
     if (specialtyNames) {
       const names = primary?.selectedOptions?.[0]?.dataset?.specialties ?? "";
       specialtyNames.textContent = names ? `(${names})` : "";
@@ -1060,7 +1063,6 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     outcome = await rollAreteWithParadox({
       pool: conto.pool,
       threshold,
-      witnesses: options.witnesses,
       bonusDice,
       paradoxRating,
       burn: threshold,

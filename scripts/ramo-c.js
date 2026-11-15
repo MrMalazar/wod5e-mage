@@ -1,15 +1,12 @@
 /**
- * Il ramo C (verdetti di Blue, 11/9/2026, dallo studio ramo-c-regole; la
- * rifondazione del 14/9 e i verdetti del 16/9): il tiro dell'alpha di
- * Vampiri portato sulla Magick e sulle Abilità. La soglia si toglie dalla
- * riserva e restano i dadi che tiri; un dado sopra la difficoltà è la
- * riuscita, ne basta uno; la difficoltà la fa il tipo di tiro (Accidentale
- * e Volgare 6, Volgare con testimoni 8, tiri di Abilità 6). Dal 29/9 (verdetti
- * di Blue) i rossi si tirano a parte: tanti quanto il Paradosso sulla Ruota
- * dopo aver pagato il lancio, solo nei Volgari; non tolgono dadi alla
- * riserva e decidono solo lo scoppio. E ogni lancio si paga (costoLancio).
- * Dalla 0.87.0 il modulo è in ramo C di default, senza interruttore. Tutto
- * qui è puro: si prova fuori da Foundry.
+ * Quel che resta del ramo C (11/9/2026) dopo il Sistema del 14/11: il tiro
+ * non toglie più la soglia dalla riserva e non riesce più con un successo
+ * solo, e le sue regole stanno in sistema.js (tutta la riserva, successi
+ * pari alla soglia, stelline a coppie, margine oltre la soglia). Qui restano
+ * tre cose: i tipi di lancio e il loro costo (del 29/9, ancora da portare sul
+ * Sistema), i rossi a parte, e le letture che servono alle carte di prima,
+ * che in chat si rileggono con le regole di allora (riuscita dal 6 o
+ * dall'8, niente coppie). Tutto qui è puro: si prova fuori da Foundry.
  */
 
 export const RAMO = "C";
@@ -24,18 +21,9 @@ export const ADVANCED_SUCCESS_FROM = 8;
  */
 export const SUCCESS_FROM = ADVANCED_SUCCESS_FROM;
 
-/** Da che numero si riesce: 6, oppure 8 con la difficoltà avanzata. */
+/** Da che numero riusciva una carta di prima: 6, oppure 8 con la difficoltà avanzata. */
 export function successThreshold(advancedDifficulty = false) {
   return advancedDifficulty ? ADVANCED_SUCCESS_FROM : ORIGINAL_SUCCESS_FROM;
-}
-
-/**
- * La difficoltà avanzata (l'8) scatta da sola e solo col Volgare con
- * testimoni (Blue, 14/9 e 16/9): «un messaggio al giocatore: non farlo
- * così». I tiri di Abilità e lo Scoppio restano al 6.
- */
-export function usesAdvancedDifficulty({ witnesses = false, skill = false, onlyParadox = false } = {}) {
-  return witnesses === true && !skill && !onlyParadox;
 }
 
 /** Il modificatore di Foundry che conta i successi da quel numero in su: `cs>5` per il 6, `cs>7` per l'8. */
@@ -65,13 +53,6 @@ const isActive = (result) => result?.active !== false && !result?.discarded;
 
 export function isSuccess(result, { successFrom = SUCCESS_FROM } = {}) {
   return Number(result?.result ?? result) >= successFrom;
-}
-
-/** I dadi che tiri: la riserva meno la soglia, mai sotto zero. */
-export function ramoCDice(pool, threshold) {
-  const reserve = count(pool);
-  const goal = count(threshold);
-  return { pool: reserve, threshold: goal, dice: Math.max(reserve - goal, 0) };
 }
 
 /**
@@ -152,10 +133,11 @@ export function pagamentoDelLancio(scelta, quintessenzaLibera = 0) {
 }
 
 /**
- * I successi del ramo C: dalla riuscita in su sui bianchi, lo stesso sui
- * rossi ma solo fino ai rossi che contano (gli altri sono per l'occhio;
- * dal 29/9 i rossi tirati a parte non contano mai: `countedParadox` 0).
- * Niente coppie di dieci: nel ramo C i critici non esistono.
+ * I successi di una carta di prima del Sistema: dalla riuscita in su sui
+ * bianchi, lo stesso sui rossi ma solo fino ai rossi che contano (gli altri
+ * sono per l'occhio; dal 29/9 i rossi tirati a parte non contano mai:
+ * `countedParadox` 0). Niente coppie di dieci. Le carte del Sistema si
+ * contano con contaSuccessi (sistema.js).
  */
 export function calculateRamoCSuccesses(basicResults = [], paradoxResults = [], countedParadox = Infinity, { successFrom = SUCCESS_FROM } = {}) {
   const succeeds = (result) => isSuccess(result, { successFrom });
@@ -171,18 +153,15 @@ export function calculateRamoCSuccesses(basicResults = [], paradoxResults = [], 
  * riesce e almeno un rosso mostra un successo, il successo è paradossale e
  * l'effetto lo racconta il Narratore. Vale per le carte coi rossi a parte,
  * non per i tiri di Abilità né per lo Scoppio. Torna quanti rossi hanno fatto
- * successo, o 0.
+ * successo, o 0. Il lancio riesce quando i successi arrivano alla soglia
+ * scritta sulla carta (1 sulle carte di prima). La scelta di prendere i
+ * successi dei rossi, che il Sistema dà al giocatore, arriva coi rossi.
  */
 export function successoParadossale(card = {}, redResults = []) {
   if (card?.ramo !== RAMO || card.rossiAParte !== true || card.skill || card.burst || card.burstResult) return 0;
-  if (count(card.total) < 1) return 0;
+  if (count(card.total) < Math.max(count(card.difficulty), 1)) return 0;
   const successFrom = resolveSuccessFrom({ successFrom: card.successFrom, advancedDifficulty: card.advancedDifficulty }, ORIGINAL_SUCCESS_FROM);
   return (Array.isArray(redResults) ? redResults : []).filter(isActive).filter((result) => isSuccess(result, { successFrom })).length;
-}
-
-/** Il margine dei tiri di Abilità: i successi oltre il primo (il danno: arma più margine). */
-export function ramoCMargin(total) {
-  return Math.max(count(total) - 1, 0);
 }
 
 /**
@@ -194,23 +173,4 @@ export function ramoCMargin(total) {
 export function quintessenceSpend(points) {
   const spent = count(points);
   return { spent, price: 0, bought: false, dice: spent };
-}
-
-/** L'Ustione del ramo C: pari alla soglia, senza tetto (il tetto Areté più tre è cancellato). */
-export function ustioneAmount(threshold) {
-  return count(threshold);
-}
-
-
-/** La vittoria a un prezzo nel ramo C: su ogni fallimento con almeno un dado tirato. */
-export function prezzoAllowed({ total = 0, dice = 0 } = {}) {
-  return count(total) < 1 && count(dice) >= 1;
-}
-
-/**
- * La nota dei dadi sulla carta: «6 − 3 = 3». Con la riuscita comprata
- * dalla Quintessenza non si tira, e la nota lo dice.
- */
-export function diceNote({ pool = 0, threshold = 0, dice = 0 } = {}) {
-  return `${count(pool)} − ${count(threshold)} = ${count(dice)}`;
 }

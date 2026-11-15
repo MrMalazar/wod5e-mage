@@ -122,10 +122,10 @@ export function skillRollCard({ traits = [], flatMod = 0 } = {}, localize = (key
 }
 
 /**
- * Il tiro di Abilità del ramo C (verdetto dell'11/9: «soglia sottratta
- * anche ai dadi abilità»): passa dalla finestra del modulo, senza rossi
- * né Quintessenza; la soglia la dice il Narratore e si scrive lì. Un 8
- * riesce; i successi oltre il primo sono il margine (il danno).
+ * Il tiro di Abilità fuori dal riquadro: passa dalla finestra del modulo,
+ * senza rossi né Quintessenza; la soglia (da 1 a 7) la dice il Narratore e
+ * si scrive lì. Si tira tutta la riserva, e i successi oltre la soglia sono
+ * il margine (Sistema, 14/11).
  */
 async function rollSkillRamoC(actor, dataset, { traits = [] } = {}) {
   const conto = datasetPool(actor.system, dataset);

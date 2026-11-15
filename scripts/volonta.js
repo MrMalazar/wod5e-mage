@@ -4,17 +4,19 @@ import { isMageActor } from "./mage-dice.js";
 import { calculateRamoCSuccesses, RAMO, resolveSuccessFrom, successModifier, SUCCESS_FROM } from "./ramo-c.js";
 import { markRollOpen, ROLL_CARD_FLAG, rollActionsBox } from "./roll-card.js";
 import { addSaluteDamage } from "./salute.js";
+import { contaSuccessi, esito, RIUSCITA_DA } from "./sistema.js";
 
 /**
- * Il ritiro di Volontà sotto il tiro (verdetti di Blue, 6/9/2026): quando
- * un tiro fallisce, il giocatore SCEGLIE sulla carta i dadi da ritirare
- * (fino a tre, fra i falliti: anche i rossi, e dall'11/9 anche il rosso che
- * ha fatto 1: si ritira per cercare il successo, ma l'occhio resta e lo
- * Scoppio con lui, «se un dado lo fa uscire si attiva»), poi «Ritira con
- * Volontà» costa un superficiale mentale. L'aggravato che comprava due successi è
- * cancellato (Blue, 10/9 notte). Il tasto sta nella fila dei tre sotto la
- * fascia, con Tira Saggezza (l'Indulgere, dal 3/10) e Vittoria a un prezzo;
- * sui tiri di Saggezza il tasto non compare.
+ * Il ritiro di Volontà sotto il tiro (Sistema, 14/11): quando un tiro
+ * fallisce, cioè i successi non arrivano alla soglia, il giocatore SCEGLIE
+ * sulla carta fino a tre dadi falliti e li tira di nuovo. Si ritirano solo i
+ * dadi normali, mai i rossi. Costa un danno mentale superficiale sulla
+ * Salute, e la spesa va giustificata con la Bussola del personaggio: se non
+ * sta nella sua linea, il Narratore la può negare (lo dice il tasto; il
+ * verdetto resta al tavolo). Il tasto sta nella fila dei tre sotto la fascia,
+ * con Tira Saggezza (l'Indulgere) e Vittoria a un prezzo; sui tiri di
+ * Saggezza non compare. Le carte di prima del Sistema si ritirano e si
+ * ricontano con le regole di allora (anche i rossi contati nella riserva).
  */
 
 export const VOLONTA_FLAG = "volonta";
@@ -23,8 +25,9 @@ export const REROLL_MAX = 3;
 const isActive = (result) => result?.active !== false && !result?.discarded;
 const count = (value) => Math.max(Math.trunc(Number(value) || 0), 0);
 
-/** Le carte nuove salvano la scelta 6+/8+; quelle precedenti restano a 8+. */
+/** Col Sistema si riesce dal 6; le carte di prima salvano la scelta 6+/8+, e le più vecchie restano a 8+. */
 function cardSuccessFrom(card) {
+  if (card?.sistema) return RIUSCITA_DA;
   return card?.ramo === RAMO ? resolveSuccessFrom(card, SUCCESS_FROM) : 6;
 }
 
@@ -185,8 +188,13 @@ export function decorateVolonta(message, html) {
   return true;
 }
 
-/** Il totale nuovo della carta del Mago, dopo il ritiro: nel ramo C 8 o più, senza coppie. */
+/**
+ * Il totale nuovo della carta del Mago, dopo il ritiro. Col Sistema contano
+ * i dadi della riserva, le stelline a coppie; sulle carte del ramo C di prima
+ * la riuscita scritta (6 o 8), senza coppie.
+ */
 export function recountCard(card, basicResults, advancedResults) {
+  if (card?.sistema) return contaSuccessi(basicResults).successi;
   if (card?.ramo === RAMO) {
     return calculateRamoCSuccesses(basicResults, advancedResults, card.countedParadox ?? Infinity, {
       successFrom: cardSuccessFrom(card)
@@ -228,7 +236,9 @@ async function rerollDice(message, actor, picks) {
   if (card && Number.isFinite(Number(card.total))) {
     const total = recountCard(card, basic.results, advanced?.results ?? []);
     flags[MODULE_ID][ROLL_CARD_FLAG] = { ...card, total };
-    if (card.skill) flags[MODULE_ID][ROLL_CARD_FLAG].margin = Math.max(total - 1, 0);
+    // Il margine: col Sistema i successi oltre la soglia, su ogni tiro; prima, oltre il primo nei tiri di Abilità.
+    if (card.sistema) flags[MODULE_ID][ROLL_CARD_FLAG].margin = esito({ successi: total, soglia: card.difficulty }).margine;
+    else if (card.skill) flags[MODULE_ID][ROLL_CARD_FLAG].margin = Math.max(total - 1, 0);
     // Un rosso ritirato che mostra l'occhio chiama il Contraccolpo (ramo C):
     // l'Ustione, pari alla soglia, aspetta la scelta del giocatore sotto la carta.
     // Un occhio già uscito resta (11/9: «lo scoppio rimane»): i 10 e gli

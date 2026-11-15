@@ -1,5 +1,5 @@
-{{!-- La finestra di conferma del ramo C (11/9): la riserva, la soglia che
-     si toglie, la riga viva «6 − 3 = 3» e i rossi della Ruota, che non si
+{{!-- La finestra di conferma: la riserva, che si tira tutta, la soglia (i
+     successi che servono), la riga viva e i rossi della Ruota, che non si
      toccano. Nei tiri di Abilità i rossi non ci sono. --}}
 <div class="dice-group-header flex-group-center wod5e-mage-ramoc-head">
     <label>{{#if onlyParadox}}{{localize "WOD5E_MAGE.Dice.ParadoxDice"}}{{else}}{{localize "WOD5E_MAGE.RamoC.Pool"}}{{/if}}</label>
@@ -43,14 +43,14 @@
     {{/if}}
 </div>
 
-{{!-- La riga viva: riserva meno soglia uguale dadi, e i rossi. --}}
+{{!-- La riga viva: i dadi, i successi che servono, e i rossi. --}}
 <p class="wod5e-mage-ramoc-dice" data-role="diceOut"></p>
 
 {{> "systems/wod5e/display/ui/parts/situational-modifiers.hbs"}}
 {{#unless onlyParadox}}
 <div class="form-group wod5e-mage-ramoc-threshold">
     <label>{{localize "WOD5E_MAGE.RamoC.Threshold"}}</label>
-    <input type="number" min="0" id="inputDifficulty" value="{{difficulty}}" style="max-width: 100%; text-align: left;">
+    <input type="number" min="1"{{#if skill}} max="7"{{/if}} id="inputDifficulty" value="{{difficulty}}" style="max-width: 100%; text-align: left;">
 </div>
 {{else}}
 <input type="hidden" id="inputDifficulty" value="0">

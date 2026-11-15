@@ -197,4 +197,17 @@ assert.match(paradox, /cardData\.total = roll\._total;/);
   globalThis.game = prima;
 }
 
+// Il margine col Sistema (14/11): i successi oltre la soglia, su ogni tiro; sulle carte di prima
+// restava ai tiri di Abilità, oltre il primo successo (la loro soglia scritta è 1).
+{
+  const fonte = readFileSync(new URL("../scripts/roll-card.js", import.meta.url), "utf8");
+  assert.match(fonte, /const margin = Math\.max\(outcome\.total - Math\.max\(Math\.trunc\(Number\(data\.difficulty\) \|\| 0\), 1\), 0\);/);
+  assert.match(fonte, /const conMargine = data\.sistema \? !data\.burst && !data\.burstResult : data\.ramo === RAMO && data\.skill;/);
+  assert.doesNotMatch(fonte, /ramoCMargin/);
+  for (const lang of ["it", "en"]) {
+    const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8"));
+    assert.doesNotMatch(strings.WOD5E_MAGE.RamoC.MarginHint, /oltre il primo|beyond the first/, `${lang}: il margine è oltre la soglia`);
+  }
+}
+
 console.log("Roll outcome tests passed.");

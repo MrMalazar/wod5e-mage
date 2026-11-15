@@ -106,34 +106,33 @@ assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "forces", level:
 assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "mind", level: 3 }], scopeLevels: [{ id: "power", level: 2 }], specialties: { forces: "power" }, arete: 2 }).successes, 0);
 assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "forces", level: 3 }], scopeLevels: [{ id: "power", level: 2 }], specialties: { forces: "power" }, arete: 0 }).successes, 0);
 
-// La riserva del ramo C (11/9): tratti, dadi in più col tetto, dadi delle
-// Specialità, Quintessenza sotto il prezzo; meno la soglia, restano i dadi.
-// L'esempio dello studio: Intelligenza 3 e Occulto 3, Forze 3 con Potenza 3.
-assert.deepEqual(ramoCPool({ traits: 6, threshold: 3 }), { pool: 6, threshold: 3, dice: 3, spend: { spent: 0, price: 0, bought: false, dice: 0 } });
-// Soglia 5: un dado. Soglia 7: zero dadi, si lancia solo col premio.
-assert.equal(ramoCPool({ traits: 6, threshold: 5 }).dice, 1);
-assert.equal(ramoCPool({ traits: 6, threshold: 7 }).dice, 0);
-assert.equal(ramoCPool({ traits: 6, bonus: 2, threshold: 7 }).dice, 1, "l'Armonia aggiunge dadi");
-// Il premio (27/9) dà dadi alla riserva, fuori dal tetto dei bonus, e la
-// soglia resta piena; i dadi che restano sono gli stessi di quando la tagliava.
+// La riserva della finestra del Grimorio: tratti, dadi in più col tetto, dadi
+// delle Specialità, Quintessenza. Col Sistema (14/11) si tira tutta: la soglia
+// dice i successi che servono e non toglie dadi.
+assert.deepEqual(ramoCPool({ traits: 6, threshold: 3 }), { pool: 6, threshold: 3, dice: 6, spend: { spent: 0, price: 0, bought: false, dice: 0 } });
+assert.equal(ramoCPool({ traits: 6, threshold: 5 }).dice, 6);
+assert.equal(ramoCPool({ traits: 6, threshold: 7 }).dice, 6, "anche a soglia 7 i sei dadi si tirano");
+assert.equal(ramoCPool({ traits: 6, bonus: 2, threshold: 7 }).dice, 8, "l'Armonia aggiunge dadi");
+// Il conto di questa finestra è ancora quello di prima (il premio in dadi, la
+// soglia somma degli Ambiti): il lancio sul Sistema passa dal riquadro del Tiro.
 const rewarded = ramoCPool({
   traits: 6, bonus: 3, prize: 3,
   threshold: calculateMagickThreshold({ scopeLevels: [1, 2, 4] })
 });
-assert.deepEqual([rewarded.pool, rewarded.threshold, rewarded.dice], [12, 7, 5]);
+assert.deepEqual([rewarded.pool, rewarded.threshold, rewarded.dice], [12, 7, 12]);
 const oltreLaSoglia = ramoCPool({
   traits: 6, prize: 5,
   threshold: calculateMagickThreshold({ scopeLevels: [1] })
 });
-assert.deepEqual([oltreLaSoglia.pool, oltreLaSoglia.threshold, oltreLaSoglia.dice], [11, 1, 10], "l'Areté oltre la soglia resta tutto dadi");
+assert.deepEqual([oltreLaSoglia.pool, oltreLaSoglia.threshold, oltreLaSoglia.dice], [11, 1, 11], "l'Areté oltre la soglia resta tutto dadi");
 assert.equal(ramoCPool({ traits: 6, bonus: 5, threshold: 0 }).pool, 9, "tetto +3 sui dadi in più");
 // La Quintessenza (16/9): un dado per punto, e basta; il livello della Sfera non compra più niente.
 assert.deepEqual(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).spend, { spent: 2, price: 0, bought: false, dice: 2 });
-assert.equal(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).dice, 5);
+assert.equal(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).dice, 8);
 const paid = ramoCPool({ traits: 6, quintessence: 3, sphereMax: 3, threshold: 3 });
 assert.equal(paid.spend.bought, false);
-assert.equal(paid.dice, 6, "tre punti, tre dadi in più");
-assert.equal(ramoCPool({ traits: 2, specialtyDice: 2, threshold: 3 }).dice, 1, "i dadi della Specialità");
+assert.equal(paid.dice, 9, "tre punti, tre dadi in più");
+assert.equal(ramoCPool({ traits: 2, specialtyDice: 2, threshold: 3 }).dice, 4, "i dadi della Specialità");
 
 // Il Volgare fallito non rende più Quintessenza (14/9, ribadito il 29/9): la funzione non c'è più.
 

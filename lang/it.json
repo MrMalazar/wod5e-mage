@@ -412,7 +412,7 @@
       "precision": "Precisione",
       "area": "Area",
       "TableTitle": "Gli Ambiti",
-      "TableHint": "Gli Ambiti danno la misura a un effetto di Magick. In cima l'Epicità, da 1 a 7, dice quanto in fondo arriva il gesto; sotto, sei Ambiti con una scala da 0 a 7 dicono quanto: quelli che l'effetto non tocca restano a 0. Ogni Ambito si legge con una, due o tre lenti, misure alternative della stessa cosa: in un lancio se ne usa una. Lo 0 è la base e non costa niente; ogni livello vale il suo numero. La soglia è l'Epicità più la somma degli Ambiti, e ogni punto di soglia toglie un dado alla riserva. In un lancio si alzano sopra lo 0 al massimo tre Ambiti; l'Epicità non conta.",
+      "TableHint": "Gli Ambiti danno la misura a un effetto di Magick. In cima l'Epicità, da 1 a 7, dice quanto in fondo arriva il gesto; sotto, sei Ambiti con una scala da 0 a 7 dicono quanto: quelli che l'effetto non tocca restano a 0. Ogni Ambito si legge con una, due o tre lenti, misure alternative della stessa cosa: in un lancio se ne usa una. Lo 0 è la base e non conta. La soglia è il conto degli Ambiti: fa da base l'Ambito più alto, Epicità compresa, e ogni altro Ambito usato aggiunge 1 se sta sopra l'Areté; il conto si ferma a 10. In un lancio si alzano sopra lo 0 al massimo tre Ambiti; l'Epicità non conta.",
       "TableModes": "Nella Portata la lente Scontro vale nel combattimento, la Narrativa fuori e il Legame quando arrivi al bersaglio attraverso quello che vi lega; nella Potenza i Danni servono nello scontro: è il Narratore a dichiarare quando si legge in combattimento. Nella Durata la prima riga conta il tempo di gioco, la seconda quello del mondo. Le altre lenti (Effetto, Area, Malus e bonus, Complessità, Peso, Influenza, Dettaglio, Informazione) sono libere, buone in ogni scena.",
       "TableSuccesses": "Ambito",
       "TableReading": "Lente",
@@ -1001,7 +1001,7 @@
       "Label": "Saggezza",
       "Status": "Stato",
       "Hint": "La bilancia fra Hubris e Silenzio: due segni partono dal centro. Uno scende a sinistra con gli atti d'Hubris, uno a destra con quelli di Silenzio. Al quarto passo il personaggio è finito: Caduto, o Folle.",
-      "RiservaHint": "La riserva del tiro di Saggezza: Fermezza {resolve} + Autocontrollo {composure}. La soglia è il gradino dell'atto e toglie dadi; un 8 riesce.",
+      "RiservaHint": "La riserva del tiro di Saggezza: Fermezza {resolve} + Autocontrollo {composure}. Si tira tutta, e servono successi pari al gradino dell'atto.",
       "VentaglioHint": "I comandi della Saggezza: Atto, Risplende, Ancora, Reset",
       "Tira": "Atto",
       "Roll": "L'atto: il gradino, il lato, la Convinzione che copre",
@@ -1009,7 +1009,7 @@
       "Risplende": "Risplende",
       "RisplendeHint": "L'atto che fa risplendere una Convinzione: la riaccende e fa tornare indietro il segno di un passo. Lo chiama il Narratore, una volta per sessione.",
       "Ancora": "Ancora",
-      "AncoraHint": "La scena con un'Ancora, una volta per storia per ogni Ancora: ritiri Fermezza + Autocontrollo meno il passo, e un 8 riporta il segno indietro di uno.",
+      "AncoraHint": "La scena con un'Ancora, una volta per storia per ogni Ancora: tiri Fermezza + Autocontrollo, e coi successi pari al passo il segno torna indietro di uno.",
       "Reset": "Reset",
       "ResetHint": "I due segni tornano al centro.",
       "ClickHint": "Clic su una casella: il segno di quel lato va lì. Clic destro: torna al centro. Sul centro, un menù chiede quale segno riportare.",
@@ -1046,7 +1046,7 @@
       },
       "Atto": {
         "Title": "L'atto",
-        "Hint": "Il Narratore dice il gradino e il lato. Il segno scende solo se il gradino supera il passo dove sta. Se una Convinzione attiva copre l'atto tiri Fermezza + Autocontrollo ({riserva}) meno il gradino, e un 8 riesce; senza dadi non si para. Se nessuna copre, il segno scende.",
+        "Hint": "Il Narratore dice il gradino e il lato. Il segno scende solo se il gradino supera il passo dove sta. Se una Convinzione attiva copre l'atto tiri Fermezza + Autocontrollo ({riserva}): servono successi pari al gradino. Se nessuna copre, il segno scende.",
         "Gradino": "Gradino",
         "Generici": "Atti generici",
         "Lato": "Il lato",
@@ -1122,7 +1122,7 @@
       },
       "AncoraDialog": {
         "Title": "La scena con l'Ancora",
-        "Hint": "Una scena con un'Ancora, una volta per storia per ogni Ancora: ritiri Fermezza + Autocontrollo ({riserva}) meno il passo dove sta il segno, e un 8 lo riporta indietro di uno. In casi eccezionali il Narratore lo concede senza tirare.",
+        "Hint": "Una scena con un'Ancora, una volta per storia per ogni Ancora: tiri Fermezza + Autocontrollo ({riserva}), e coi successi pari al passo dove sta il segno lo riporti indietro di uno. In casi eccezionali il Narratore lo concede senza tirare.",
         "Ancora": "L'Ancora",
         "Usata": "già usata in questa storia",
         "Lato": "Il segno da recuperare",
@@ -1563,13 +1563,13 @@
       "Label": "Vittoria a un prezzo",
       "Title": "Vittoria a un prezzo",
       "Button": "Vittoria a un prezzo",
-      "Hint": "Dadi tirati: {dice}. L'incantesimo può riuscire lo stesso: il prezzo lo decide il Narratore.",
-      "HintFar": "Nessun dado tirato: senza dadi non c'è vittoria a un prezzo.",
-      "Ask": "Dadi tirati: {dice}. L'incantesimo riesce, e il prezzo lo decide il Narratore.",
+      "Hint": "Successi che mancano: {missing}. Dadi tirati: {dice}. L'azione può riuscire lo stesso: il prezzo lo decide il Narratore, ed è più alto quanti più successi mancano.",
+      "HintFar": "Nessun dado tirato: senza dadi non c'è Vittoria a un prezzo.",
+      "Ask": "Successi che mancano: {missing}. Dadi tirati: {dice}. L'azione riesce, e il prezzo lo decide il Narratore: più successi mancano, più è alto.",
       "AskNote": "Il Contraccolpo dei rossi, se è scattato, resta.",
       "Yes": "Riesce a un prezzo",
       "No": "Lascia stare",
-      "Done": "dadi tirati {dice}: il prezzo lo decide il Narratore."
+      "Done": "successi che mancavano: {missing}. Il prezzo lo decide il Narratore."
     },
     "RollCard": {
       "Details": "Dettagli",
@@ -1609,7 +1609,7 @@
     "Volonta": {
       "Label": "Volontà",
       "Reroll": "Ritira con Volontà",
-      "RerollHint": "Scegli sulla carta fino a tre dadi falliti (anche un rosso con l'1: l'occhio resta), poi ritira: un superficiale mentale",
+      "RerollHint": "Scegli sulla carta fino a tre dadi falliti, poi ritira: un danno mentale superficiale. La spesa va giustificata con la Bussola, e il Narratore la può negare.",
       "NoDice": "Nessun dado da ritirare: i dadi hanno fatto successo",
       "PickFirst": "Scegli prima sulla carta i dadi da ritirare: un clic su un dado fallito lo accende.",
       "UsedReroll": "Volontà: ritirati {dice} dadi scelti (un superficiale mentale).",
@@ -1719,12 +1719,11 @@
       "Pool": "Riserva",
       "Threshold": "Soglia",
       "Dice": "Dadi",
-      "DiceLine": "Riserva {pool} − soglia {threshold} = {dice} dadi",
+      "DiceLine": "Dadi {dice} · Soglia {threshold}",
       "Reds": "{reds} rossi a parte",
-      "DiceNote": "Dadi: {note}",
-      "NoDice": "Nessun dado da tirare: l'incantesimo fallisce.",
+      "NoDice": "Nessun dado da tirare: il tiro fallisce.",
       "BoughtBanner": "Riuscita comprata",
-      "MarginHint": "Margine: i successi oltre il primo (il danno: arma più margine).",
+      "MarginHint": "Margine: i successi oltre la soglia. Nello scontro il danno è quello dell'arma più il margine.",
       "SkillRoll": "Tiro di Abilità",
       "RossiAParte": "Rossi a parte: {reds}. La riuscita la fanno i dadi della riserva; i rossi decidono lo scoppio (1 o 10) e, se il lancio riesce, il successo paradossale.",
       "SuccessoParadossale": "Successo paradossale: il lancio riesce e almeno un rosso ha fatto successo. L'effetto lo racconta il Narratore."
@@ -2036,13 +2035,13 @@
         "testimoni": "Volgare con testimoni"
       },
       "KindHints": {
-        "accidentale": "Non si percepisce: niente rossi, si riesce col 6.",
-        "volgare": "La realtà lo percepisce: i rossi si tirano a parte, si riesce col 6.",
-        "testimoni": "Qualcuno ti ha visto farlo: i rossi si tirano a parte, si riesce con l'8."
+        "accidentale": "Non si percepisce: niente rossi.",
+        "volgare": "La realtà lo percepisce: i rossi si tirano a parte.",
+        "testimoni": "Qualcuno ti ha visto farlo: i rossi si tirano a parte."
       },
       "KindWarning": "Scegli come la fai: Accidentale, Volgare o Volgare con testimoni.",
       "PowerNote": "Potere: {name}.",
-      "ManualDifficultyNote": "Soglia a mano {mano}: {difficulty} (il conto degli Ambiti diceva {computed}).",
+      "ManualDifficultyNote": "Soglia Manuale: {difficulty}, Soglia Originale: {computed}",
       "AreteHint": "L'Areté fa il tiro di Magick: compaiono i tre tasti del tipo e il premio.",
       "SphereHint": "Mette la Sfera nel lancio. Le Sfere non pesano sulla soglia.",
       "ScopeHint": "Al sorvolo i sette livelli: il numero dichiara l'Ambito, lo stesso numero lo toglie. A destra, la lettura del livello scelto.",
@@ -2063,7 +2062,7 @@
       "DifficultyWarning": "Inserisci la soglia prima di tirare.",
       "QuintessenceHint": "Un dado per punto speso, dentro il tetto di +3 dadi coi dadi extra. Nei tiri di Abilità solo col potere che lo dice. Scende dalla Ruota a tiro fatto.",
       "Roll": "Tira",
-      "RollHint": "Tira l'Attributo e l'Abilità scelti, meno la soglia; riesce dal 6.",
+      "RollHint": "Tira l'Attributo e l'Abilità scelti: tutta la riserva, e servono successi pari alla soglia.",
       "ExtraFlavor": "dadi extra +{dice}",
       "Riserva": "Riserva",
       "RiservaHint": "I dadi che si tirano, tutti: Attributo, Abilità, Specializzazione, Quintessenza, potere, Tratti; le Condizioni in meno. In fondo il totale: il meno e il più lo ritoccano.",
@@ -2116,7 +2115,7 @@
       "DadiParola": "dadi",
       "DadoParola": "dado",
       "Indulgi": "Indulgi",
-      "IndulgiHint": "Dichiari prima del lancio che indulgi: il Narratore dice se lo scopo è l'Hubris o il Silenzio, l'incantesimo riesce, e dopo tiri Saggezza (Fermezza + Autocontrollo meno la soglia, un 8 riesce)."
+      "IndulgiHint": "Dichiari prima del lancio che indulgi: il Narratore dice se lo scopo è l'Hubris o il Silenzio, l'incantesimo riesce, e dopo tiri Saggezza (Fermezza + Autocontrollo, con successi pari alla soglia dell'incantesimo, fino a 7)."
     },
     "Ritratti": {
       "NextHint": "Gira i ritratti: quello che vedi è anche l'immagine sulla mappa e in chat",
@@ -2826,7 +2825,7 @@
     "Indulgere": {
       "Label": "Indulgere",
       "Button": "Tira Saggezza",
-      "Hint": "Hai indulto nell'{lato}: l'incantesimo è riuscito. Ora tiri Saggezza, Fermezza + Autocontrollo meno la soglia ({soglia}), e un 8 riesce. Fallito, il segno dell'{lato} scende di un passo.",
+      "Hint": "Hai indulto nell'{lato}: l'incantesimo è riuscito. Ora tiri Saggezza, Fermezza + Autocontrollo: servono successi pari alla soglia ({soglia}). Fallito, il segno dell'{lato} scende di un passo.",
       "Nel": {
         "hubris": "Indulgi nell'Hubris",
         "silenzio": "Indulgi nel Silenzio"

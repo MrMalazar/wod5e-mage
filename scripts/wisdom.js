@@ -2,6 +2,7 @@ import { MODULE_ID } from "./constants.js";
 import { anchorLabel, PERSONAGGIO_TABLES } from "./personaggio-extra.js";
 import { renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
 import { askSegno } from "./salute.js";
+import { sogliaSaggezza } from "./sistema.js";
 
 /**
  * La Saggezza come bilancia (Blue, 3/10/2026, i cinque giri dello studio
@@ -38,8 +39,6 @@ export const PASSI = 3;
 export const FINE = 4;
 /** La tavola della gravità degli atti: sette gradini. */
 export const GRADINI = 7;
-/** Il tiro di Saggezza riesce dall'8 (Blue, 3/10). */
-export const SAGGEZZA_SUCCESS_FROM = 8;
 /** Le nove caselle: quattro per lato e il centro. */
 export const CELLE = 2 * FINE + 1;
 const CENTRO = FINE;
@@ -80,11 +79,6 @@ export function riservaSaggezza(actor) {
   return attributeValue(actor, "resolve") + attributeValue(actor, "composure");
 }
 
-/** I dadi che si tirano: la riserva meno la soglia, mai sotto zero. Zero: non si para. */
-export function dadiSaggezza(riserva, soglia) {
-  return Math.max(count(riserva) - count(soglia), 0);
-}
-
 /** Il cancello: l'atto sposta il segno solo se il suo gradino supera il passo dove sta. */
 export function cancello(gradino, passo) {
   return count(gradino) > clampPasso(passo);
@@ -118,26 +112,30 @@ export function fineDi(stato) {
  * - scoperto: nessuna Convinzione copre, il segno scende;
  * - coperto: il tiro è riuscito, il segno resta;
  * - fallito: il tiro è fallito (o senza dadi), il segno scende.
+ * Il tiro riesce coi successi pari al gradino dell'atto (Blue, 15/11);
+ * `riuscito`, se c'è, è l'esito già letto sulla carta del tiro, dove il
+ * Narratore può aver ritoccato la soglia.
  */
-export function esitoAtto(stato, { lato, gradino, copre = false, successi = 0 } = {}) {
+export function esitoAtto(stato, { lato, gradino, copre = false, successi = 0, riuscito = null } = {}) {
   const side = normalizeLato(lato);
   const passo = clampPasso(stato?.[side]);
   if (!side || !cancello(gradino, passo)) return { esito: "cancello", sposta: false, lato: side, passo, next: { ...stato } };
   if (!copre) return { esito: "scoperto", sposta: true, lato: side, passo: clampPasso(passo + 1), next: spostaSegno(stato, side, 1) };
-  if (count(successi) >= 1) return { esito: "coperto", sposta: false, lato: side, passo, next: { ...stato } };
+  if (riuscito ?? count(successi) >= sogliaSaggezza(gradino)) return { esito: "coperto", sposta: false, lato: side, passo, next: { ...stato } };
   return { esito: "fallito", sposta: true, lato: side, passo: clampPasso(passo + 1), next: spostaSegno(stato, side, 1) };
 }
 
 /**
  * L'Indulgere (Blue, 3/10): dichiarato prima del lancio, l'incantesimo
- * riesce e poi si tira Saggezza con la soglia dell'incantesimo. Fallito, il
- * segno del lato scelto scende di un passo anche dove il cancello lo
- * fermerebbe: indulgere è sempre un passo verso quel lato.
+ * riesce e poi si tira Saggezza con la soglia dell'incantesimo, che qui fa
+ * da gradino e si ferma a 7 come la tavola della gravità: servono successi
+ * pari a lei. Fallito, il segno del lato scelto scende di un passo anche
+ * dove il cancello lo fermerebbe: indulgere è sempre un passo verso quel lato.
  */
-export function esitoIndulgere(stato, { lato, successi = 0 } = {}) {
+export function esitoIndulgere(stato, { lato, successi = 0, soglia = 1, riuscito = null } = {}) {
   const side = normalizeLato(lato);
   if (!side) return { esito: "cancello", sposta: false, lato: side, passo: 0, next: { ...stato } };
-  if (count(successi) >= 1) return { esito: "coperto", sposta: false, lato: side, passo: clampPasso(stato?.[side]), next: { ...stato } };
+  if (riuscito ?? count(successi) >= sogliaSaggezza(soglia)) return { esito: "coperto", sposta: false, lato: side, passo: clampPasso(stato?.[side]), next: { ...stato } };
   const next = spostaSegno(stato, side, 1);
   return { esito: "fallito", sposta: true, lato: side, passo: next[side], next };
 }
@@ -311,9 +309,12 @@ function avvisoFine(stato, localize) {
 }
 
 /**
- * Il tiro di Saggezza: Fermezza + Autocontrollo meno la soglia, un 8 riesce,
- * niente rossi. Passa dalla finestra del modulo come il Relax. Torna il
- * messaggio e i successi, oppure null se la finestra è stata chiusa.
+ * Il tiro di Saggezza (Blue, 15/11): Fermezza + Autocontrollo, tutta la
+ * riserva, e servono successi pari alla soglia, che va da 1 a 7 (il gradino
+ * dell'atto, il passo dell'Ancora, la soglia dell'incantesimo indulto).
+ * Niente rossi. Passa dalla finestra del modulo come il Relax. Torna il
+ * messaggio, i successi e se sono bastati, oppure null se la finestra è
+ * stata chiusa.
  */
 export async function rollSaggezza(actor, { soglia = 0, title = "", card = null, selectors = [] } = {}) {
   const { rollAreteWithParadox } = await import("./paradox-dice.js");
@@ -323,10 +324,9 @@ export async function rollSaggezza(actor, { soglia = 0, title = "", card = null,
       actor,
       data: actor.system,
       pool: riservaSaggezza(actor),
-      threshold: count(soglia),
+      threshold: sogliaSaggezza(soglia),
       paradoxRating: 0,
       skill: true,
-      successFrom: SAGGEZZA_SUCCESS_FROM,
       title: title || game.i18n.localize("WOD5E_MAGE.Wisdom.Rolling"),
       card: { saggezza: { ...(card ?? {}) } },
       selectors: ["attributes", "attributes.resolve", "attributes.composure", "mental", ...selectors]
@@ -335,8 +335,10 @@ export async function rollSaggezza(actor, { soglia = 0, title = "", card = null,
     return null;
   }
   if (!message || message === "cancel") return null;
-  const successi = count(message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG)?.total);
-  return { message, successi };
+  const carta = message.getFlag?.(MODULE_ID, ROLL_CARD_FLAG) ?? {};
+  const successi = count(carta.total);
+  // La soglia è quella della carta: nella finestra il Narratore la può ritoccare.
+  return { message, successi, riuscito: successi >= sogliaSaggezza(carta.threshold ?? soglia) };
 }
 
 /** Scrive sulla carta del tiro come è andata, per la nota sotto i dadi. */
@@ -471,7 +473,7 @@ export async function onWisdomAtto(event) {
     card: { lato: atto.lato, gradino: atto.gradino, convinzione: nome, tradita: tradita ? String(tradita.text ?? "") : "" }
   });
   if (!tiro) return;
-  const esito = esitoAtto(stato, { lato: atto.lato, gradino: atto.gradino, copre: true, successi: tiro.successi });
+  const esito = esitoAtto(stato, { lato: atto.lato, gradino: atto.gradino, copre: true, successi: tiro.successi, riuscito: tiro.riuscito });
   if (esito.sposta) await saveSaggezza(actor, esito.next);
   const testo = testoEsito(esito.esito, { lato: esito.lato, passo: esito.passo, gradino: atto.gradino, convinzione: nome }, localize, format);
   const fine = avvisoFine(esito.next, localize);
@@ -648,7 +650,7 @@ export async function onWisdomAncora(event) {
     card: { ancora: ancora.text, lato: scelta.lato, passo }
   });
   if (!tiro) return;
-  const riuscito = tiro.successi >= 1;
+  const riuscito = tiro.riuscito;
   const dopo = applicaAncora(stato, scelta.lato, ancora.id, { riuscito });
   await saveSaggezza(actor, dopo);
   const testo = riuscito

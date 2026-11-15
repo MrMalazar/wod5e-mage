@@ -35,7 +35,7 @@ assert.deepEqual(indulgereOptions().map((o) => o.text), ["WOD5E_MAGE.Indulgere.N
 // Il tasto e la riga sotto la carta.
 assert.equal(
   renderIndulgereButton({ show: true, lato: "hubris", soglia: 4 }, localize, format),
-  '<button type="button" class="wod5e-mage-roll-action wod5e-mage-indulgere-button" data-indulgere="go" title="Hai indulto nell\'Hubris: l\'incantesimo è riuscito. Ora tiri Saggezza, Fermezza + Autocontrollo meno la soglia (4), e un 8 riesce. Fallito, il segno dell\'Hubris scende di un passo.">Tira Saggezza</button>'
+  '<button type="button" class="wod5e-mage-roll-action wod5e-mage-indulgere-button" data-indulgere="go" title="Hai indulto nell\'Hubris: l\'incantesimo è riuscito. Ora tiri Saggezza, Fermezza + Autocontrollo: servono successi pari alla soglia (4). Fallito, il segno dell\'Hubris scende di un passo.">Tira Saggezza</button>'
 );
 assert.equal(
   renderIndulto({ esito: "fallito", testo: "Indulgere nell'Hubris: la Saggezza non tiene, il segno scende: passo 1." }, localize),
@@ -57,7 +57,7 @@ assert.deepEqual(rollOutcome(1, 5, localize, { forced: true }), { total: 1, cssC
 const read = (name) => readFileSync(new URL(`../${name}`, import.meta.url), "utf8");
 const source = read("scripts/indulgere.js");
 assert.match(source, /soglia: state\.soglia,/, "il tiro di Saggezza con la soglia dell'incantesimo");
-assert.match(source, /esitoIndulgere\(stato, \{ lato: state\.lato, successi: tiro\.successi \}\)/, "fallito il segno scende, senza cancello");
+assert.match(source, /esitoIndulgere\(stato, \{ lato: state\.lato, successi: tiro\.successi, soglia: state\.soglia, riuscito: tiro\.riuscito \}\)/, "fallito il segno scende, senza cancello");
 assert.match(source, /if \(esito\.sposta\) await saveSaggezza\(actor, esito\.next\)/);
 assert.match(source, /\[INDULGERE_FLAG\]: used/, "sul messaggio resta com'è andata");
 assert.match(source, /if \(!isMageActor\(actor\) \|\| !actor\.isOwner\) return false;/, "il tasto solo a chi possiede il personaggio");
@@ -72,8 +72,8 @@ const main = read("scripts/main.js");
 assert.match(main, /registerVolonta\(\);[\s\S]{0,400}registerIndulgere\(\);\s*registerSaggezza\(\);\s*registerPrezzo\(\);/, "i tasti sotto la carta: Volontà, Tira Saggezza, Vittoria a un prezzo");
 assert.ok(!main.includes("registerSforzo") && !main.includes("sforzo.js"), "lo Sforzare non si registra più");
 assert.match(read("scripts/volonta.js"), /if \(card\.saggezza\) return false;/, "sul tiro di Saggezza niente ritiro con la Volontà");
-assert.match(read("scripts/paradox-dice.js"), /successFrom = null/, "la finestra del tiro accetta l'8 forzato");
-assert.match(read("scripts/paradox-dice.js"), /const successFrom = forcedSuccessFrom \?\? successThreshold\(advancedDifficulty\)/);
+assert.doesNotMatch(read("scripts/paradox-dice.js"), /forcedSuccessFrom|successFrom = null/, "la finestra del tiro non forza più l'8: si riesce dal 6");
+assert.match(read("scripts/wisdom.js"), /threshold: sogliaSaggezza\(soglia\),/, "il tiro di Saggezza chiede successi pari alla soglia, fino a 7");
 assert.ok(!read("scripts/ramo-c.js").includes("sforzoCost"), "il prezzo dello Sforzare non c'è più");
 const css = read("styles/wod5e-mage.css");
 for (const rule of [".wod5e-mage-indulgere-button", ".wod5e-mage-roll-note-indulgere", ".wod5e-mage-indulgere-label", ".wod5e-mage-tiro-indulgi"]) assert.ok(css.includes(rule), rule);

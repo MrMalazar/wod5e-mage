@@ -90,4 +90,21 @@ const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf
 assert.match(arete, /export async function recordEffect[\s\S]*shouldRecordEffect\(\{ maintained, duration: effect\.duration \}\)/);
 assert.match(arete, /lastThreshold/);
 
+// La Volontà col Sistema (14/11): fino a tre dadi falliti, solo normali; a ritiro fatto si ricontano i
+// dadi della riserva con le stelline a coppie, e il margine è quello oltre la soglia. Il tasto ricorda
+// che la spesa va giustificata con la Bussola.
+{
+  const dopo = [{ result: 3, active: false, discarded: true }, { result: 10 }, { result: 10 }, { result: 8 }];
+  assert.equal(recountCard({ ramo: "C", sistema: true, difficulty: 3 }, dopo, [{ result: 10 }]), 5, "la coppia di stelline vale 4, più la scintilla; il 10 rosso sta a parte");
+  assert.deepEqual(rerollableDice([{ result: 5 }, { result: 6 }, { result: 1 }], [{ result: 1 }, { result: 4 }], { successFrom: 6, rossi: false }), [{ kind: "basic", index: 0 }, { kind: "basic", index: 2 }], "mai i rossi");
+  assert.deepEqual(volontaState({ total: 2, difficulty: 3, failedCount: 5 }), { show: true, max: 3 }, "due successi a soglia 3: fallito, e si ritirano fino a tre dadi");
+  assert.deepEqual(volontaState({ total: 3, difficulty: 3, failedCount: 5 }), { show: false, max: 0 });
+  const fonte = readFileSync(new URL("../scripts/volonta.js", import.meta.url), "utf8");
+  assert.match(fonte, /if \(card\?\.sistema\) return RIUSCITA_DA;/);
+  assert.match(fonte, /if \(card\.sistema\) flags\[MODULE_ID\]\[ROLL_CARD_FLAG\]\.margin = esito\(\{ successi: total, soglia: card\.difficulty \}\)\.margine;/);
+  const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8"));
+  assert.match(it.WOD5E_MAGE.Volonta.RerollHint, /fino a tre dadi falliti.*Bussola/);
+  assert.doesNotMatch(it.WOD5E_MAGE.Volonta.RerollHint, /rosso/);
+}
+
 console.log("Volontà e Scoppio: test passati.");

@@ -22,6 +22,8 @@ import { esitoIndulgere, fineDi, LATI, normalizeLato, normalizeSaggezza, passoTe
  */
 
 export const INDULGERE_FLAG = "indulgere";
+/** Il tiro di Saggezza dell'Indulgere non chiede più di sette successi. */
+export const SOGLIA_INDULGERE_MAX = 7;
 
 /** Il lato dichiarato è uno dei due; altrimenti non si indulge. */
 export function normalizeIndulgi(value) {
@@ -32,7 +34,8 @@ export function normalizeIndulgi(value) {
 export function indulgereState(card = {}, used = null) {
   const lato = normalizeIndulgi(card?.indulgi);
   if (!lato || used) return { show: false, lato: "", soglia: 0 };
-  return { show: true, lato, soglia: Math.max(Math.trunc(Number(card.threshold) || 0), 0) };
+  // La soglia dell'incantesimo fa da gradino, e si ferma a 7 come la tavola della gravità.
+  return { show: true, lato, soglia: Math.min(Math.max(Math.trunc(Number(card.threshold) || 0), 0), SOGLIA_INDULGERE_MAX) };
 }
 
 /** Le voci del menù sul tasto del Tiro: nell'Hubris, nel Silenzio, niente. */
@@ -92,9 +95,10 @@ export function decorateIndulgere(message, html) {
 }
 
 /**
- * Il tiro di Saggezza dell'Indulgere: la soglia è quella dell'incantesimo,
- * il lato quello dichiarato. Fallito, il segno scende di un passo senza
- * cancello; la carta del lancio prende la riga di com'è andata.
+ * Il tiro di Saggezza dell'Indulgere: la soglia è quella dell'incantesimo
+ * (fino a 7), il lato quello dichiarato, e servono successi pari a lei.
+ * Fallito, il segno scende di un passo senza cancello; la carta del lancio
+ * prende la riga di com'è andata.
  */
 export async function indulgi(message, actor) {
   if (message.getFlag(MODULE_ID, INDULGERE_FLAG)) return null;
@@ -113,7 +117,7 @@ export async function indulgi(message, actor) {
   if (!tiro) return null;
 
   const stato = normalizeSaggezza(actor.getFlag(MODULE_ID, "wisdom"));
-  const esito = esitoIndulgere(stato, { lato: state.lato, successi: tiro.successi });
+  const esito = esitoIndulgere(stato, { lato: state.lato, successi: tiro.successi, soglia: state.soglia, riuscito: tiro.riuscito });
   if (esito.sposta) await saveSaggezza(actor, esito.next);
   const testo = esito.esito === "fallito"
     ? format("WOD5E_MAGE.Indulgere.Fallito", { lato: latoNome, passo: passoTesto(state.lato, esito.passo, localize, format) })

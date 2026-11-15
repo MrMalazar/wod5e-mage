@@ -930,7 +930,7 @@ export async function onSaluteRelax(event) {
   if (!canEdit(actor)) return;
   const resolve = Math.max(Number(actor.system?.attributes?.resolve?.value) || 0, 0);
   const composure = Math.max(Number(actor.system?.attributes?.composure?.value) || 0, 0);
-  // Il ramo C (11/9): anche il Relax passa dalla finestra del modulo, un 8 riesce.
+  // Il Relax passa dalla finestra del modulo e conta i successi: non ha una soglia da battere.
   const { rollAreteWithParadox } = await import("./paradox-dice.js");
   const { ROLL_CARD_FLAG } = await import("./roll-card.js");
   let message = null;
@@ -939,9 +939,10 @@ export async function onSaluteRelax(event) {
       actor,
       data: actor.system,
       pool: resolve + composure,
-      threshold: 0,
+      threshold: 1,
       paradoxRating: 0,
       skill: true,
+      card: { symbols: [], soloConto: true },
       title: game.i18n.localize("WOD5E_MAGE.Salute.RelaxRolling"),
       selectors: ["attributes", "attributes.resolve", "attributes.composure", "mental"]
     });

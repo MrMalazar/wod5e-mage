@@ -8,19 +8,8 @@ import { WOD5eRoll } from "/systems/wod5e/system/scripts/system-rolls.js";
 import { bonusDiceExcess } from "./arete.js";
 import { bussolaDice, grantBussolaQuintessence, readBussola, renderBussolaBlock, wireBussola } from "./bussola.js";
 import { MODULE_ID } from "./constants.js";
-import {
-  ADVANCED_SUCCESS_FROM,
-  calculateRamoCSuccesses,
-  diceNote,
-  ORIGINAL_SUCCESS_FROM,
-  RAMO,
-  ramoCDice,
-  ramoCMargin,
-  successModifier,
-  successThreshold,
-  usesAdvancedDifficulty,
-  splitRamoCDice
-} from "./ramo-c.js";
+import { RAMO, splitRamoCDice, successModifier } from "./ramo-c.js";
+import { contaSuccessi, esito, RIUSCITA_DA, SOGLIA_ABILITA_MAX, SOGLIA_MAGICK_MAX, SOGLIA_MIN } from "./sistema.js";
 import { renderAutoVictoryBanner, renderBacklashNote, renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
 import {
   getParadoxDieResult,
@@ -29,6 +18,8 @@ import {
 } from "./dice-faces.js";
 
 const PARADOX_DENOMINATION = "p";
+
+const count = (value) => Math.max(Math.trunc(Number(value) || 0), 0);
 
 /**
  * Paradox remains part of the Mortal roll family, but its 10 has a dedicated
@@ -164,25 +155,29 @@ function getCustomModifierTotal(form) {
 }
 
 /**
- * La riga viva della finestra (ramo C): riserva meno soglia uguale dadi,
- * e quanti rossi a parte. Si riscrive a ogni tocco di riserva, soglia e
- * modificatori. Torna il conto, per chi lo chiama al tiro.
+ * La riga viva della finestra: i dadi che si tirano, la soglia (i successi
+ * che servono) e quanti rossi a parte. Si riscrive a ogni tocco di riserva,
+ * soglia e modificatori. Torna il conto, per chi lo chiama al tiro.
  */
-export function readDialogDice(form, { paradoxRating = 0, bought = false, onlyParadox = false } = {}) {
+export function readDialogDice(form, { paradoxRating = 0, bought = false, onlyParadox = false, skill = false } = {}) {
   // La Bussola rispettata (11/9) vale un dado, fuori dal tetto.
   const pool = Math.max((form.querySelector("#inputBasicDice")?.valueAsNumber || 0) + getCustomModifierTotal(form) + bussolaDice(form), 0);
-  const threshold = Math.max(Number(form.querySelector("#inputDifficulty")?.value) || 0, 0);
+  // La soglia scritta nella finestra: fino a 7 nei tiri di Abilità, fino a 10 nei lanci.
+  const written = Math.max(Number(form.querySelector("#inputDifficulty")?.value) || 0, 0);
+  const threshold = Math.min(written, skill ? SOGLIA_ABILITA_MAX : SOGLIA_MAGICK_MAX);
   return contoDice({ pool, threshold, paradoxRating, bought, onlyParadox });
 }
 
 /**
- * Il conto dei dadi dai numeri (16/9): riserva meno soglia, i rossi pari
- * al Paradosso, tirati a parte (29/9). Lo usano la finestra (readDialogDice)
- * e il tiro diretto dalla scheda, che non ha finestra.
+ * Il conto dei dadi dai numeri, sulle regole del Sistema (Blue, 14/11): si
+ * tira tutta la riserva, e la soglia dice quanti successi servono (almeno
+ * uno; lo Scoppio non ne ha). I rossi, pari al Paradosso, si tirano a parte.
+ * Lo usano la finestra (readDialogDice) e il tiro diretto dalla scheda, che
+ * non ha finestra.
  */
 export function contoDice({ pool = 0, threshold = 0, paradoxRating = 0, bought = false, onlyParadox = false } = {}) {
-  const conto = ramoCDice(pool, threshold);
-  const dice = bought || onlyParadox ? 0 : conto.dice;
+  const conto = { pool: count(pool), threshold: onlyParadox ? 0 : Math.max(count(threshold), SOGLIA_MIN) };
+  const dice = bought || onlyParadox ? 0 : conto.pool;
   const split = splitRamoCDice(dice, paradoxRating);
   if (bought || onlyParadox) {
     // La riuscita comprata (o lo Scoppio): i rossi si tirano solo per l'occhio.
@@ -199,7 +194,7 @@ function paintDialogDice(form, options) {
   if (!out) return;
   const conto = readDialogDice(form, options);
   const format = game.i18n.format.bind(game.i18n);
-  const parts = [format("WOD5E_MAGE.RamoC.DiceLine", { pool: conto.pool, threshold: conto.threshold, dice: conto.dice })];
+  const parts = [format("WOD5E_MAGE.RamoC.DiceLine", { threshold: conto.threshold, dice: conto.dice })];
   // I rossi a parte (29/9): accanto alla riserva, solo per lo scoppio.
   if (conto.paradoxDice > 0) parts.push(format("WOD5E_MAGE.RamoC.Reds", { reds: conto.paradoxDice }));
   out.textContent = parts.join(" · ");
@@ -253,24 +248,23 @@ async function postDicelessMessage(actor, title, { flavor, cardData, banner = ""
 }
 
 /**
- * La finestra di conferma e il tiro del ramo C. La usano il tiro di Areté,
- * lo Scoppio e (dalla 0.87.0) i tiri di Abilità della scheda: la riserva
- * meno la soglia dà i dadi; i rossi, quando ci sono, si tirano a parte e
- * decidono solo lo scoppio (29/9). Torna il messaggio in chat, oppure null
- * se la finestra è stata chiusa.
+ * La finestra di conferma e il tiro. La usano il lancio dalla finestra del
+ * Grimorio, lo Scoppio e i tiri di Abilità fuori dal riquadro: si tira tutta
+ * la riserva e servono successi pari alla soglia (Sistema, 14/11); i rossi,
+ * quando ci sono, si tirano a parte. Si riesce sempre dal 6: il dado che
+ * riusciva dall'8 è uscito dal gioco. Torna il messaggio in chat, oppure
+ * null se la finestra è stata chiusa.
  *
- * @param pool          la riserva prima della soglia
- * @param threshold     la soglia (modificabile nella finestra)
- * @param witnesses     Volgare con testimoni: successi dall'8 invece che dal 6
+ * @param pool          la riserva, che si tira tutta
+ * @param threshold     la soglia: i successi che servono (modificabile nella finestra)
  * @param bonusDice     i dadi in più (Armonia) già dentro `pool`, per il tetto +3
  * @param paradoxRating i rossi a parte: il Paradosso sulla Ruota dopo il costo del lancio (solo Volgari)
  * @param onlyParadox   lo Scoppio: solo rossi
  * @param bought        la riuscita comprata con la Quintessenza: non si tira, salvo i rossi
  * @param burn          l'Ustione se scatta il Contraccolpo: la soglia (i danni)
  * @param sphereLevel   il livello della Sfera usata (la più alta): i punti Paradosso al Narratore
- * @param skill         un tiro di Abilità: niente rossi, e il margine oltre il primo successo
+ * @param skill         un tiro di Abilità: niente rossi
  * @param bussola       (tiri di Abilità) le voci della Bussola: la finestra chiede «Rispetta la Bussola?»
- * @param successFrom   la faccia da cui si riesce, imposta da chi chiama (il tiro di Saggezza: 8)
  */
 export async function rollAreteWithParadox({
   actor,
@@ -286,19 +280,12 @@ export async function rollAreteWithParadox({
   effectKind = "",
   arete = 0,
   skill = false,
-  witnesses = false,
   bussola = null,
-  successFrom = null,
   title,
   flavor = "",
   card = null,
   selectors = []
 }) {
-  // La difficoltà avanzata dipende dal tipo di Magick scelto prima della
-  // conferma. Tiri di abilità e scoppi mantengono la difficoltà originale;
-  // chi chiama può imporre la faccia (il tiro di Saggezza, 3/10: un 8 riesce).
-  const forcedSuccessFrom = Number.isFinite(Number(successFrom)) && Number(successFrom) > 0 ? Math.trunc(Number(successFrom)) : null;
-  const advancedDifficulty = forcedSuccessFrom !== null ? forcedSuccessFrom === ADVANCED_SUCCESS_FROM : usesAdvancedDifficulty({ witnesses, skill, onlyParadox });
   const situationalModifiers = onlyParadox
     ? []
     : await getSituationalModifiers({ actor, selectors });
@@ -307,17 +294,17 @@ export async function rollAreteWithParadox({
   const activeTotal = activeModifiersNow
     .reduce((total, modifier) => total + (Number(modifier.value) || 0), 0);
   // La riserva mostrata: tratti, dadi in più e modificatori attivi, col
-  // tetto +3 già applicato (tronco). La soglia si toglie dopo, nella finestra.
+  // tetto +3 già applicato (tronco). La soglia, nella finestra, non toglie dadi.
   const startingExcess = skill ? 0 : bonusDiceExcess(bonusDice, activeModifiersNow);
   const reds = skill ? 0 : Math.max(Math.trunc(Number(paradoxRating) || 0), 0);
-  const options = { paradoxRating: reds, bought, onlyParadox, actor };
+  const options = { paradoxRating: reds, bought, onlyParadox, skill, actor };
   const bussolaHtml = skill && bussola ? renderBussolaBlock(bussola, game.i18n.localize.bind(game.i18n)) : "";
   const content = await foundry.applications.handlebars.renderTemplate(
     "modules/wod5e-mage/templates/dialogs/arete-roll-confirm.hbs",
     {
       basicDice: onlyParadox ? 0 : Math.max(Math.trunc(Number(pool) || 0) + activeTotal - startingExcess, 0),
       paradoxDice: reds,
-      difficulty: Math.max(Math.trunc(Number(threshold) || 0), 0),
+      difficulty: Math.max(count(threshold), SOGLIA_MIN),
       skill,
       onlyParadox,
       bought,
@@ -364,9 +351,6 @@ export async function rollAreteWithParadox({
           const conto = readDialogDice(form, options);
           const rollMode = form.querySelector('[name="rollMode"]')?.value
             || game.settings.get("core", "rollMode");
-          // Solo Volgare con testimoni usa 8+; il valore viene salvato sulla
-          // carta anche per le immagini dei dadi e i ritiri di Volontà.
-          const successFrom = forcedSuccessFrom ?? successThreshold(advancedDifficulty);
           // La Bussola rispettata nel tiro di Abilità: un dado ora (già nel conto), +1 Quintessenza a tiro fatto.
           const bussolaKept = skill && bussola ? readBussola(form, bussola) : null;
           return executeRamoCRoll({
@@ -378,8 +362,6 @@ export async function rollAreteWithParadox({
             conto,
             activeModifiers,
             rollMode,
-            successFrom,
-            advancedDifficulty,
             paradoxRating: reds,
             bought,
             onlyParadox,
@@ -406,11 +388,12 @@ export async function rollAreteWithParadox({
 }
 
 /**
- * Il tiro del ramo C, a conto fatto (16/9): posta la carta senza dadi
- * (riuscita comprata, o lancio a zero dadi) oppure tira bianchi e rossi,
- * conta i successi, segna il Contraccolpo e scrive la bandiera della carta
- * per i tasti sotto. Lo chiamano la finestra di conferma e il tiro diretto
- * dalla scheda. Torna il messaggio in chat.
+ * Il tiro, a conto fatto: posta la carta senza dadi (riuscita senza tirare,
+ * o tiro a zero dadi) oppure tira bianchi e rossi, conta i successi come
+ * vuole il Sistema (la scintilla uno, le stelline a coppie quattro), dice se
+ * bastano alla soglia e quanto margine resta, segna il Contraccolpo e scrive
+ * la bandiera della carta per i tasti sotto. Lo chiamano la finestra di
+ * conferma e il tiro diretto dalla scheda. Torna il messaggio in chat.
  */
 export async function executeRamoCRoll({
   actor,
@@ -421,8 +404,6 @@ export async function executeRamoCRoll({
   conto,
   activeModifiers = [],
   rollMode = null,
-  successFrom = ORIGINAL_SUCCESS_FROM,
-  advancedDifficulty = null,
   paradoxRating = 0,
   bought = false,
   onlyParadox = false,
@@ -440,15 +421,16 @@ export async function executeRamoCRoll({
   const format = game.i18n.format.bind(game.i18n);
   const localize = game.i18n.localize.bind(game.i18n);
   const mode = rollMode || game.settings.get("core", "rollMode");
+  // Si riesce dal 6, sempre: sulla carta resta scritto per le facce dei dadi e per il ritiro.
+  const successFrom = RIUSCITA_DA;
   const modifier = successModifier(successFrom);
+  // La soglia che la fascia legge: i successi che servono. Lo Scoppio non ne ha, e resta a 1.
+  const soglia = onlyParadox ? SOGLIA_MIN : Math.max(count(conto.threshold), SOGLIA_MIN);
   const reds = Math.max(Math.trunc(Number(paradoxRating) || 0), 0);
 
   let rollFlavor = flavor;
   if (bussolaKept) {
     rollFlavor += renderRollNote(format("WOD5E_MAGE.Bussola.Flavor", { label: bussolaKept.label }), "bussola");
-  }
-  if (!onlyParadox) {
-    rollFlavor += renderRollNote(format("WOD5E_MAGE.RamoC.DiceNote", { note: diceNote(conto) }), "dice");
   }
   if (excess > 0) {
     rollFlavor += renderRollNote(format("WOD5E_MAGE.Arete.BonusCap", { excess }));
@@ -466,7 +448,10 @@ export async function executeRamoCRoll({
   const cardData = {
     ...(card ?? {}),
     ramo: RAMO,
-    advancedDifficulty: advancedDifficulty ?? successFrom === ADVANCED_SUCCESS_FROM,
+    // Il Sistema (14/11): tutta la riserva, successi pari alla soglia, stelline a coppie.
+    // Le carte senza questo segno sono di prima, e si rileggono con le regole di allora.
+    sistema: true,
+    advancedDifficulty: false,
     successFrom,
     pool: conto.pool,
     threshold: conto.threshold,
@@ -476,8 +461,8 @@ export async function executeRamoCRoll({
     // Dal 29/9 i rossi si tirano a parte e non contano per la riuscita: la Volontà non li ritira.
     rossiAParte: true,
     sphereMax: Math.max(Math.trunc(Number(sphereLevel) || 0), 0),
-    // Un successo basta: la fascia legge questo contro il totale.
-    difficulty: 1,
+    // La fascia legge i successi contro la soglia.
+    difficulty: soglia,
     autoSuccesses: 0,
     effectKind: effectKind ?? "",
     arete,
@@ -490,10 +475,12 @@ export async function executeRamoCRoll({
     round: Math.max(Math.trunc(Number(globalThis.game?.combat?.round) || 0), 0)
   };
 
-  // Nessun dado da tirare: la riuscita comprata senza rossi, oppure
-  // il lancio a zero dadi, che fallisce senza tirare.
+  // Nessun dado da tirare: la riuscita senza tirare e senza rossi, oppure
+  // il tiro a zero dadi, che fallisce senza tirare. Chi riesce senza tirare
+  // fa giusto i successi della soglia, senza margine.
   if (conto.basicDice + conto.paradoxDice === 0) {
-    cardData.total = bought ? 1 : 0;
+    cardData.total = bought ? soglia : 0;
+    if (!onlyParadox) cardData.margin = 0;
     const flavorOut = rollFlavor + (bought
       ? ""
       : renderRollNote(localize("WOD5E_MAGE.RamoC.NoDice"), "nodice"));
@@ -510,7 +497,7 @@ export async function executeRamoCRoll({
     system: "mortal",
     title,
     flavor: rollFlavor,
-    difficulty: 1,
+    difficulty: soglia,
     rollMode: mode,
     activeModifiers,
     mageArete: true,
@@ -518,16 +505,15 @@ export async function executeRamoCRoll({
     paradoxRating: reds
   }).roll();
 
-  // Il conto del ramo C: la riuscita dal 6 o dall'8 sui soli dadi della
-  // riserva (i rossi a parte non contano, 29/9), niente coppie di dieci. La
-  // riuscita senza tirare è 1.
+  // Il conto del Sistema: sui soli dadi della riserva (i rossi stanno a
+  // parte), la scintilla vale un successo, le stelline quattro a coppia e
+  // una la spaiata. La riuscita senza tirare vale la soglia.
   const basicResults = roll.basicDice?.results ?? [];
   const redResults = roll.advancedDice?.results ?? [];
-  roll._total = bought
-    ? 1
-    : calculateRamoCSuccesses(basicResults, redResults, conto.countedParadox, { successFrom });
+  roll._total = bought ? soglia : contaSuccessi(basicResults).successi;
   cardData.total = roll._total;
-  if (skill) cardData.margin = ramoCMargin(roll._total);
+  // Il margine: i successi oltre la soglia (nello scontro, il danno dell'arma più il margine).
+  if (!onlyParadox) cardData.margin = esito({ successi: roll._total, soglia }).margine;
 
   let finalFlavor = rollFlavor;
 
@@ -564,16 +550,15 @@ export async function executeRamoCRoll({
 
 /**
  * Il tiro diretto dalla scheda (16/9): niente finestra di conferma, il
- * conto lo ha già fatto il riquadro del Tiro. Prende riserva, soglia e
- * riuscita da (6 o 8) come sono, i modificatori scelti sulla scheda già
- * dentro la riserva (`activeModifiers` è solo per la carta), e tira.
+ * conto lo ha già fatto il riquadro del Tiro. Prende i dadi e la soglia come
+ * sono, i modificatori scelti sulla scheda già dentro la riserva
+ * (`activeModifiers` è solo per la carta), e tira.
  */
 export async function rollRamoCDirect({
   actor,
   data,
   pool = 0,
   threshold = 0,
-  successFrom = ORIGINAL_SUCCESS_FROM,
   paradoxRating = 0,
   skill = false,
   bought = false,
@@ -601,7 +586,6 @@ export async function rollRamoCDirect({
     conto,
     activeModifiers,
     rollMode,
-    successFrom,
     paradoxRating: reds,
     bought,
     onlyParadox: false,

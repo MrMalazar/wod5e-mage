@@ -6,13 +6,11 @@ import {
   GRADINI,
   LATI,
   PASSI,
-  SAGGEZZA_SUCCESS_FROM,
   applicaAncora,
   applicaRisplende,
   cancello,
   celleSaggezza,
   clampPasso,
-  dadiSaggezza,
   esitoAtto,
   esitoIndulgere,
   fineDi,
@@ -35,9 +33,10 @@ import {
 
 // La Saggezza come bilancia (Blue, 3/10): nove caselle, Caduto a sinistra e
 // Folle a destra, due segni indipendenti che partono dal centro; il quarto
-// passo è la fine. La riserva è Fermezza + Autocontrollo, un 8 riesce.
+// passo è la fine. La riserva è Fermezza + Autocontrollo, e dal 15/11 si tira tutta:
+// servono successi pari al gradino dell'atto.
 assert.deepEqual([...LATI], ["hubris", "silenzio"]);
-assert.deepEqual([PASSI, FINE, GRADINI, SAGGEZZA_SUCCESS_FROM, CELLE], [3, 4, 7, 8, 9]);
+assert.deepEqual([PASSI, FINE, GRADINI, CELLE], [3, 4, 7, 9]);
 assert.deepEqual([clampPasso(-2), clampPasso("2"), clampPasso(9), clampPasso(undefined)], [0, 2, 4, 0]);
 assert.deepEqual([normalizeLato("hubris"), normalizeLato("silenzio"), normalizeLato("x"), normalizeLato()], ["hubris", "silenzio", "", ""]);
 
@@ -52,8 +51,6 @@ const actor = (attributes, wisdom, extra = {}) => ({
 });
 assert.equal(riservaSaggezza(actor({ resolve: { value: 3 }, composure: { value: 2 } })), 5);
 assert.equal(riservaSaggezza(actor({})), 0);
-// I dadi: la riserva meno la soglia; con 10 e un atto del 7 restano 3; sotto zero non si para.
-assert.deepEqual([dadiSaggezza(10, 7), dadiSaggezza(5, 5), dadiSaggezza(3, 6), dadiSaggezza(4, 0)], [3, 0, 0, 4]);
 
 // Il cancello: il segno scende solo se il gradino supera il passo dove sta.
 assert.equal(cancello(1, 0), true);
@@ -74,8 +71,13 @@ assert.deepEqual([fineDi(centro), fineDi({ hubris: 4 }), fineDi({ silenzio: 4 })
 // L'atto: il cancello tiene, nessuna Convinzione copre, la Convinzione copre e il tiro va o no.
 assert.deepEqual(esitoAtto({ ...centro, hubris: 2 }, { lato: "hubris", gradino: 2 }), { esito: "cancello", sposta: false, lato: "hubris", passo: 2, next: { ...centro, hubris: 2 } });
 assert.deepEqual(esitoAtto(centro, { lato: "silenzio", gradino: 1 }), { esito: "scoperto", sposta: true, lato: "silenzio", passo: 1, next: { ...centro, silenzio: 1 } });
-assert.deepEqual(esitoAtto(centro, { lato: "hubris", gradino: 3, copre: true, successi: 1 }), { esito: "coperto", sposta: false, lato: "hubris", passo: 0, next: centro });
+// Servono successi pari al gradino (Blue, 15/11): a gradino 3, tre coprono e due no.
+assert.deepEqual(esitoAtto(centro, { lato: "hubris", gradino: 3, copre: true, successi: 3 }), { esito: "coperto", sposta: false, lato: "hubris", passo: 0, next: centro });
+assert.deepEqual(esitoAtto(centro, { lato: "hubris", gradino: 3, copre: true, successi: 2 }), { esito: "fallito", sposta: true, lato: "hubris", passo: 1, next: { ...centro, hubris: 1 } });
 assert.deepEqual(esitoAtto(centro, { lato: "hubris", gradino: 3, copre: true, successi: 0 }), { esito: "fallito", sposta: true, lato: "hubris", passo: 1, next: { ...centro, hubris: 1 } });
+// L'esito già letto sulla carta (il Narratore può aver ritoccato la soglia nella finestra) vince sul conto.
+assert.equal(esitoAtto(centro, { lato: "hubris", gradino: 3, copre: true, successi: 2, riuscito: true }).esito, "coperto");
+assert.equal(esitoAtto(centro, { lato: "hubris", gradino: 3, copre: true, successi: 3, riuscito: false }).esito, "fallito");
 assert.equal(esitoAtto({ ...centro, hubris: 3 }, { lato: "hubris", gradino: 7 }).next.hubris, 4, "dal terzo passo l'atto grave porta alla fine: Caduto");
 assert.equal(esitoAtto(centro, { gradino: 5 }).esito, "cancello", "senza lato niente si muove");
 // Il segno dell'altro lato non c'entra: i due sono indipendenti.
@@ -83,7 +85,11 @@ assert.deepEqual(esitoAtto({ ...centro, silenzio: 3 }, { lato: "hubris", gradino
 
 // L'Indulgere: niente cancello, il tiro fallito è sempre un passo verso quel lato.
 assert.deepEqual(esitoIndulgere({ ...centro, hubris: 3 }, { lato: "hubris", successi: 0 }), { esito: "fallito", sposta: true, lato: "hubris", passo: 4, next: { ...centro, hubris: 4 } });
-assert.deepEqual(esitoIndulgere({ ...centro, hubris: 3 }, { lato: "hubris", successi: 2 }), { esito: "coperto", sposta: false, lato: "hubris", passo: 3, next: { ...centro, hubris: 3 } });
+assert.deepEqual(esitoIndulgere({ ...centro, hubris: 3 }, { lato: "hubris", successi: 2, soglia: 2 }), { esito: "coperto", sposta: false, lato: "hubris", passo: 3, next: { ...centro, hubris: 3 } });
+// La soglia dell'incantesimo fa da gradino, fino a 7: due successi a soglia 4 non bastano, sette a soglia 9 sì.
+assert.equal(esitoIndulgere(centro, { lato: "hubris", successi: 2, soglia: 4 }).esito, "fallito");
+assert.equal(esitoIndulgere(centro, { lato: "hubris", successi: 7, soglia: 9 }).esito, "coperto");
+assert.equal(esitoIndulgere(centro, { lato: "hubris", successi: 1, soglia: 4, riuscito: true }).esito, "coperto", "l'esito letto sulla carta vince");
 assert.equal(esitoIndulgere(centro, { lato: "", successi: 0 }).sposta, false);
 
 // Risplende: un passo indietro e la bandiera della sessione; al centro riaccende e basta.
@@ -171,7 +177,9 @@ assert.equal(renderEsitoSaggezza({}, localize), "");
 // Il resto della macchina: la scheda, i template, le lingue, il CSS, la sessione.
 const read = (name) => readFileSync(new URL(`../${name}`, import.meta.url), "utf8");
 const source = read("scripts/wisdom.js");
-assert.match(source, /successFrom: SAGGEZZA_SUCCESS_FROM/, "il tiro di Saggezza riesce dall'8, qualunque sia la soglia");
+assert.match(source, /threshold: sogliaSaggezza\(soglia\),/, "il tiro di Saggezza chiede successi pari alla soglia, da 1 a 7");
+assert.doesNotMatch(source, /SAGGEZZA_SUCCESS_FROM|dadiSaggezza/, "la riuscita dall'8 e la soglia che toglie dadi sono cadute");
+assert.match(source, /const riuscito = tiro\.riuscito;/, "l'Ancora riesce coi successi pari al passo");
 assert.match(source, /paradoxRating: 0,\s*skill: true/, "niente rossi: è un tiro d'Abilità per la macchina");
 assert.match(source, /"-=superficial": null,\s*"-=aggravated": null,\s*"-=extra": null,\s*"-=attribute": null,\s*"-=max": null/, "la bandiera vecchia si pulisce");
 assert.match(source, /spenta: true \}/, "tradire spegne la Convinzione");
