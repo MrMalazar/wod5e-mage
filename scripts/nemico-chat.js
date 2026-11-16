@@ -13,6 +13,7 @@
  * bandiera della carta, sotto `nemico`.
  */
 import { applicaCondizione, findCondizioneByName } from "./condizioni.js";
+import { tiraDanni } from "./danni.js";
 import { MODULE_ID } from "./constants.js";
 import { isMageActor } from "./mage-dice.js";
 import { armaturaDi, contoDelTiro, pesiCondizioni, valoreVoce } from "./nemico.js";
@@ -90,13 +91,13 @@ export async function lanciaNemico(actor, effetto) {
     effetto,
     titolo,
     sogliaTesto: format("WOD5E_MAGE.Nemico.SogliaCarta", { ambiti: effetto.ambitiTesto || localize("WOD5E_MAGE.Nemico.TuttiZero") }),
-    danniTesto: effetto.danni ? format("WOD5E_MAGE.Nemico.DannoEsito", { danno: effetto.danni, tipo: localize("WOD5E_MAGE.Nemico.Superficiali") }) : "",
+    danniTesto: effetto.danni ? format("WOD5E_MAGE.Nemico.DadiDanniCarta", { dadi: effetto.danni }) : "",
     resisteLabel: effetto.resisteTesto ? format("WOD5E_MAGE.Nemico.ResistiCon", { tiro: effetto.resisteTesto }) : localize("WOD5E_MAGE.Nemico.ResistenzaDaScrivere")
   });
   return ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
-    flags: { [MODULE_ID]: { [NEMICO_MAGICK_FLAG]: { nome: effetto.nome, soglia: effetto.soglia, resiste: { ...(effetto.resiste ?? {}) }, resisteTesto: effetto.resisteTesto ?? "", bersaglio: bersaglio ? { uuid: bersaglio.uuid, name: bersaglio.name } : null } } }
+    flags: { [MODULE_ID]: { [NEMICO_MAGICK_FLAG]: { nome: effetto.nome, soglia: effetto.soglia, resiste: { ...(effetto.resiste ?? {}) }, resisteTesto: effetto.resisteTesto ?? "", danni: Math.max(Math.trunc(Number(effetto.danni) || 0), 0), bersaglio: bersaglio ? { uuid: bersaglio.uuid, name: bersaglio.name } : null } } }
   });
 }
 
@@ -191,13 +192,30 @@ export async function applicaAlBersaglio(target, nemico, { localize = (k) => k, 
   }
 }
 
-/** La carta del lancio: il tasto «Resisti · <bersaglio>» per chi possiede il bersaglio. */
+/**
+ * La carta del lancio: il tasto «Resisti · <bersaglio>» per chi possiede il
+ * bersaglio, e per il Narratore «Tira i danni» quando l'effetto ne porta
+ * (un dado dei danni per livello di Potenza).
+ */
 async function decoraCartaMagick(message, html) {
   const dati = message?.getFlag?.(MODULE_ID, NEMICO_MAGICK_FLAG);
   if (!dati || !html?.querySelector) return false;
   const carta = html.querySelector(".wod5e-mage-nemico-carta");
-  if (!carta || carta.querySelector("[data-nemico-resisti]")) return false;
+  if (!carta || carta.querySelector("[data-nemico-resisti], [data-nemico-danni]")) return false;
   const bersaglio = dati.bersaglio;
+  const dadi = Math.max(Math.trunc(Number(dati.danni) || 0), 0);
+  if (dadi && game.user?.isGM) {
+    const tira = document.createElement("button");
+    tira.type = "button";
+    tira.className = "wod5e-mage-nemico-applica";
+    tira.dataset.nemicoDanni = "1";
+    tira.textContent = game.i18n.format("WOD5E_MAGE.Nemico.TiraDanni", { dadi });
+    tira.addEventListener("click", async (event) => {
+      event.preventDefault();
+      await tiraDanni({ dadi, actor: ChatMessage.getSpeakerActor?.(message.speaker) ?? null, titolo: String(dati.nome ?? ""), bersaglio });
+    });
+    carta.append(tira);
+  }
   if (!bersaglio?.uuid) return true;
   const target = await fromUuid(bersaglio.uuid).catch(() => null);
   if (!target || !puoToccare(target)) return true;

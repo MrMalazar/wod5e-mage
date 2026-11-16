@@ -413,26 +413,26 @@
       "area": "Area",
       "TableTitle": "Gli Ambiti",
       "TableHint": "Gli Ambiti danno la misura a un effetto di Magick. In cima l'Epicità, da 1 a 7, dice quanto in fondo arriva il gesto; sotto, sei Ambiti con una scala da 0 a 7 dicono quanto: quelli che l'effetto non tocca restano a 0. Ogni Ambito si legge con una, due o tre lenti, misure alternative della stessa cosa: in un lancio se ne usa una. Lo 0 è la base e non conta. La soglia è il conto degli Ambiti: fa da base l'Ambito più alto, Epicità compresa, e ogni altro Ambito usato aggiunge 1 se sta sopra l'Areté; il conto si ferma a 10. In un lancio si alzano sopra lo 0 al massimo tre Ambiti; l'Epicità non conta.",
-      "TableModes": "Nella Portata la lente Scontro vale nel combattimento, la Narrativa fuori e il Legame quando arrivi al bersaglio attraverso quello che vi lega; nella Potenza i Danni servono nello scontro: è il Narratore a dichiarare quando si legge in combattimento. Nella Durata la prima riga conta il tempo di gioco, la seconda quello del mondo. Le altre lenti (Effetto, Area, Malus e bonus, Complessità, Peso, Influenza, Dettaglio, Informazione) sono libere, buone in ogni scena.",
+      "TableModes": "Nella Portata la lente Scontro vale nel combattimento, la Narrativa fuori e il Legame quando arrivi al bersaglio attraverso quello che vi lega; nella Potenza i Danni servono nello scontro: è il Narratore a dichiarare quando si legge in combattimento. Nella Durata la lente Combattimento conta il tempo di gioco, la Scenica quello del mondo. Le altre lenti (Soggetti, Area, Malus e bonus, Complessità, Peso, Influenza, Dettaglio, Informazione) sono libere, buone in ogni scena.",
       "TableSuccesses": "Ambito",
       "TableReading": "Lente",
       "TableNote": "Gli Ambiti servono a canalizzare la generalità e la variabilità degli effetti di Magick: è consigliato pensare un effetto nel minor numero di Ambiti possibile, ragionando per necessità e obiettivo.",
       "Desc": {
         "epic": "Quanto in fondo arriva il gesto: da 1, un trucco, a 7, l'impossibile. Il giocatore la sceglie sugli esempi e il Narratore la corregge. C'è in ogni lancio, almeno 1, e non conta fra i tre Ambiti. Si legge a parte dal Consenso: un destino riscritto a colpi di coincidenze è Accidentale e vale 6.",
-        "targets": "Chi o cosa prende l'effetto. L'Effetto conta i bersagli uno per uno, l'Area prende tutto quello che sta dentro uno spazio.",
+        "targets": "Chi o cosa prende l'effetto. I Soggetti si contano uno per uno; l'Area prende tutto quello che sta dentro uno spazio, i compagni e il mago compresi.",
         "conditions": "Cosa l'effetto lascia addosso e a quali patti funziona. Malus e bonus dice quanto pesa: il bonus è il malus girato, e non entra nei lanci di Magick. La Complessità sono le clausole che lo regolano.",
-        "duration": "Quanto resta in piedi l'effetto. La prima riga conta in tempo di gioco, la seconda in tempo del mondo.",
+        "duration": "Quanto resta in piedi l'effetto. Combattimento conta in tempo di gioco, nello scontro e nelle scene giocate; Scenica in tempo del mondo, per quello che deve durare fuori scena. Quale si legge lo dice il Narratore.",
         "range": "Fin dove arriva l'effetto. Scontro e Narrativa misurano la distanza: per agire su quello che non percepisci serve la Corrispondenza. Il Legame misura quanto ti è vicino il bersaglio, dal sangue (1) al filo più esile (7): con un legame lo raggiungi ovunque sia, anche senza Corrispondenza. Conta il più stretto fra chi è per te e cosa hai di suo.",
-        "potency": "Quanto è forte l'effetto: i Danni nello scontro, il Peso in tutti e due, l'Influenza su una persona. L'Influenza dice quanto la cambia, dalle emozioni fino a pilotarla, e non è una Condizione.",
+        "potency": "Quanto è forte l'effetto. I Danni valgono nello scontro: un dado dei danni per livello, dove la scintilla fa 2 danni e la stellina 4. Il Peso dice quanto l'effetto muove o regge. L'Influenza dice quanto cambia una persona, dalle emozioni fino a pilotarla, e non è una Condizione.",
         "precision": "Quanto è fine quello che l'effetto sceglie o trova: il Dettaglio, dal corpo intero a un atomo, nello scontro e fuori. L'Informazione dice quanto è rara la cosa che scopri: il giocatore fa la domanda, il Narratore fissa il livello prima del tiro."
       },
       "Sub": {
-        "targets": "Effetto",
+        "targets": "Soggetti",
         "targetsArea": "Area",
         "conditionsMalus": "Malus e bonus",
         "conditionsComplexity": "Complessità",
-        "duration": "Gioco",
-        "durationWorld": "Mondo",
+        "duration": "Combattimento",
+        "durationWorld": "Scenica",
         "range": "Scontro",
         "rangeNarrative": "Narrativa",
         "rangeBond": "Legame",
@@ -445,7 +445,7 @@
       "Table": {
         "epic": {
           "1": "Trucco",
-          "2": "Spinta",
+          "2": "Degno di nota",
           "3": "Mutamento",
           "4": "Prodigio",
           "5": "Creazione",
@@ -469,16 +469,16 @@
           "3": "Quartiere",
           "4": "Città",
           "5": "Regione",
-          "6": "Continente",
-          "7": "Pianeta"
+          "6": "Stato",
+          "7": "Continente"
         },
         "conditionsMalus": {
           "0": "Niente",
           "1": "Lieve",
           "2": "Mezzo",
-          "3": "Grado 1",
-          "4": "Grado 2",
-          "5": "Grado 3",
+          "3": "Azione",
+          "4": "Condizione",
+          "5": "Disabilita",
           "6": "Tipo",
           "7": "Tutto"
         },
@@ -543,14 +543,14 @@
           "7": "Filo"
         },
         "potencyDamage": {
-          "0": "",
-          "1": "+1",
-          "2": "+2",
-          "3": "+3",
-          "4": "+4",
-          "5": "+5",
-          "6": "+6",
-          "7": "+7"
+          "0": "Nessun dado",
+          "1": "1 dado",
+          "2": "2 dadi",
+          "3": "3 dadi",
+          "4": "4 dadi",
+          "5": "5 dadi",
+          "6": "6 dadi",
+          "7": "7 dadi"
         },
         "potencyWeight": {
           "0": "1 kg",
@@ -565,7 +565,7 @@
         "potencyInfluence": {
           "0": "Un'esitazione",
           "1": "Le emozioni",
-          "2": "Un'opinione",
+          "2": "Un'opinione o un'azione",
           "3": "Una scelta",
           "4": "Un comportamento",
           "5": "Quello in cui crede",
@@ -620,18 +620,18 @@
           "3": "Più isolati, con le strade in mezzo.",
           "4": "La città intera, periferia compresa.",
           "5": "Una regione con tutte le sue città.",
-          "6": "Un continente.",
-          "7": "Il mondo. L'Area prende tutto quello che sta dentro, amici compresi: per lasciarli fuori serve una clausola di Complessità."
+          "6": "Uno stato intero.",
+          "7": "Un continente. L'Area prende tutto quello che sta dentro, i compagni e te compresi: per lasciarne fuori uno serve una clausola di Complessità, un livello per compagno."
         },
         "conditionsMalus": {
           "0": "Si racconta, non tocca i tiri.",
-          "1": "−1 o +1 ai tiri di un tipo: Contuso, Scosso, Atterrato.",
-          "2": "Toglie o dà un'arma, un attrezzo, un appiglio: Disarmato; una lama di fuoco, una corda.",
-          "3": "−2 o +2: Abbagliato, Sanguinante, Intimorito.",
-          "4": "−2 e difficoltà 8, o +2 e mai 8: Offuscato, Avvelenato, Spaventato.",
-          "5": "Una cosa fallisce, o riesce senza tirare: Cieco, Muto, Legato.",
-          "6": "I tiri di un tipo falliscono, o riescono: Paralizzato, Furioso.",
-          "7": "Fuori gioco, o riesce ogni tiro: Svenuto, Addormentato, Terrorizzato."
+          "1": "Disturba: un dado in meno, o in più, ai tiri di un tipo. Contuso, Scosso, Atterrato.",
+          "2": "Toglie un mezzo, o lo dà: un'arma, un attrezzo, un appiglio. Disarmato; una lama di fuoco, una corda.",
+          "3": "Blocca un'azione.",
+          "4": "Infligge una Condizione.",
+          "5": "Disabilita qualcosa o qualcuno.",
+          "6": "Altera un tipo intero di tiri.",
+          "7": "Devia tutto."
         },
         "conditionsComplexity": {
           "0": "L'effetto scatta subito e vale per tutto quello che tocca. Nessuna clausola.",
@@ -687,14 +687,14 @@
           "7": "Sai solo una cosa che ha fatto (ha pagato il cecchino, ha scritto la lettera anonima, ti ha rubato l'auto), o una traccia lasciata passando (il bossolo, la busta dei soldi, il biglietto che ha buttato). Senza nemmeno questo serve la Corrispondenza."
         },
         "potencyDamage": {
-          "0": "Tanti danni quanta la tua Areté, sulla Salute del bersaglio.",
-          "1": "L'Areté più uno, sulla Salute del bersaglio.",
-          "2": "L'Areté più due, sulla Salute del bersaglio.",
-          "3": "L'Areté più tre, sulla Salute del bersaglio.",
-          "4": "L'Areté più quattro, sulla Salute del bersaglio.",
-          "5": "L'Areté più cinque, sulla Salute del bersaglio.",
-          "6": "L'Areté più sei, sulla Salute del bersaglio.",
-          "7": "L'Areté più sette, sulla Salute del bersaglio."
+          "0": "Nessun dado dei danni.",
+          "1": "Un dado dei danni: la vuota non fa danni, la scintilla ne fa 2, la stellina 4.",
+          "2": "Due dadi dei danni: la vuota non fa danni, la scintilla ne fa 2, la stellina 4.",
+          "3": "Tre dadi dei danni: la vuota non fa danni, la scintilla ne fa 2, la stellina 4.",
+          "4": "Quattro dadi dei danni: la vuota non fa danni, la scintilla ne fa 2, la stellina 4.",
+          "5": "Cinque dadi dei danni: la vuota non fa danni, la scintilla ne fa 2, la stellina 4.",
+          "6": "Sei dadi dei danni: la vuota non fa danni, la scintilla ne fa 2, la stellina 4.",
+          "7": "Sette dadi dei danni: la vuota non fa danni, la scintilla ne fa 2, la stellina 4."
         },
         "potencyWeight": {
           "0": "Un libro.",
@@ -747,15 +747,14 @@
         "6": "storia",
         "7": "cronaca"
       },
-      "DamageReading": "{n} danni",
       "PerCastCap": "In un lancio si alzano sopra lo 0 al massimo tre Ambiti, l'Epicità a parte: togline uno prima di alzarne un altro.",
       "SubShort": {
-        "targets": "Effetto",
+        "targets": "Soggetti",
         "targetsArea": "Area",
         "conditionsMalus": "Malus",
         "conditionsComplexity": "Compl.",
-        "duration": "Gioco",
-        "durationWorld": "Mondo",
+        "duration": "Comb.",
+        "durationWorld": "Scenica",
         "range": "Scontro",
         "rangeNarrative": "Narr.",
         "rangeBond": "Legame",
@@ -2626,6 +2625,9 @@
       "Aggravati": "Aggravati",
       "DannoEsito": "danno {danno} {tipo}",
       "DannoMargine": "danno {danno} {tipo} ({arma} più {margine} di margine)",
+      "DadiDanni": "dadi dei danni: {dadi}",
+      "DadiDanniCarta": "Dadi dei danni: {dadi}. La scintilla fa 2 danni, la stellina 4.",
+      "TiraDanni": "Tira i danni: {dadi} dadi",
       "Effetti": "Effetti",
       "EffettoNuovo": "Nuovo effetto",
       "EffettoNome": "Nome",
@@ -2671,7 +2673,6 @@
       "TuttiZero": "tutti a 0",
       "Aggiungi": "Aggiungi",
       "TettoAmbiti": "In un lancio si alzano sopra lo 0 al massimo tre Ambiti, l'Epicità a parte: abbassane uno prima di alzarne un altro.",
-      "DanniMagick": "danni {danni} (Areté {arete} + Potenza {potenza})",
       "EffettoMagickTogli": "Togli l'effetto di Magick",
       "EffettoMagickApri": "Apri i dettagli",
       "Armi": "Armi",
@@ -2855,6 +2856,14 @@
       "Yes": "Prendi i rossi",
       "No": "Lascia stare",
       "Done": "Rossi presi: +{successi}. Successi del tiro: {total}. Il tiro è paradossale."
+    },
+    "Danni": {
+      "Titolo": "Danni",
+      "Tira": "Tira i danni",
+      "Hint": "Dadi dei danni della Potenza: {dadi}. La vuota non fa danni, la scintilla ne fa 2, la stellina 4.",
+      "Conto": "danni · dadi {dadi}: scintille {scintille}, stelline {stelline}",
+      "Applica": "Applica {danni} danni a {bersaglio}",
+      "Applicati": "{bersaglio}: {danni} danni superficiali segnati."
     }
   },
   "WOD5E": {

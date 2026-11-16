@@ -172,7 +172,7 @@ assert.equal(c.magick.dominiTesto, "Forze, Mente");
 // del 29/9, con l'Impatto, che non conta: resta l'Epicità 1 con un Ambito a 1. La Scarica: la Potenza 3 fa da base, e
 // la Portata 2 con Areté 2 non aggiunge niente.
 assert.deepEqual(c.magick.effetti.map((e) => [e.nome, e.soglia, e.resisteTesto, e.daLabel, e.comeLabel, e.sfera?.id]), [["Suggestionare", 1, "Fermezza + Autocontrollo", "Grimorio", "Accidentale", "mind"], ["Cancellare", 1, "Fermezza + Autocontrollo", "Grimorio", "Accidentale", "mind"], ["Scarica del guanto", 3, "", "a mano", "Volgare", "forces"]]);
-assert.equal(c.magick.effetti[2].danni, 5, "Areté 2 + Potenza 3");
+assert.equal(c.magick.effetti[2].danni, 3, "tre dadi dei danni: la Potenza 3");
 assert.equal(N.resistenzaTesto({ attribute: "resolve", skill: "composure" }, { attributi: { resolve: "Fermezza", composure: "Autocontrollo" } }), "Fermezza + Autocontrollo", "un secondo Attributo senza prefisso si legge fra gli Attributi");
 assert.deepEqual(c.oggettiGruppi.map((g) => [g.id, g.righe.map((r) => r.name)]), [["weapon", ["Pistola"]], ["armor", ["Tessuto balistico"]], ["gear", ["Manette"]]]);
 assert.equal(c.oggetti.weapon[0].nota, "crea Spara");
@@ -252,7 +252,7 @@ conTutti(T.gioco(contesto(actor, items, { aperte: new Set(["effetto:e4"]) })), [
 const scrivi = grigi({ modo: "scrivi" });
 const cs = contesto(scrivi, items, { aperte: new Set(["arma:w1", "z3", "m3", "effetto:e1", "effetto:e2"]), cassetto: "mano", mano: { nome: "Scarica del guanto", cosa: "Una scarica dal guanto colpisce un bersaglio nella stanza.", attribute: "dexterity", skill: "skill:athletics", dominio: "forces", come: "volgare", livelli: { potency: 3, range: 2 }, lenti: {} } });
 assert.deepEqual([cs.modo, cs.scrivi], ["scrivi", true]);
-assert.deepEqual([cs.mano.ambiti.soglia, cs.mano.ambiti.conto, cs.mano.ambiti.danni], [3, "Potenza 3", 5], "la Potenza 3 fa da base; l'Epicità 1 e la Portata 2, con Areté 2, non aggiungono niente");
+assert.deepEqual([cs.mano.ambiti.soglia, cs.mano.ambiti.conto, cs.mano.ambiti.danni], [3, "Potenza 3", 3], "la Potenza 3 fa da base; l'Epicità 1 e la Portata 2, con Areté 2, non aggiungono niente; tre dadi dei danni");
 const testaScrivi = T.testa(cs);
 conTutti(testaScrivi, [
   'data-modo="scrivi"', 'data-action="ritrattoCambia"',
@@ -286,7 +286,7 @@ conTutti(giocoScrivi, [
   'name="flags.wod5e-mage.nemico.magick.effetti.m3.soglia" value="3" min="0" max="10" title="Il conto degli Ambiti con Areté 2: 3. Un altro numero resta scritto a mano."><input type="hidden" name="flags.wod5e-mage.nemico.magick.effetti.m3.conto" value="3">',
   'wod5e-mage-nemico-manca" data-action="nemicoMagickApri" data-effetto="m3"', "resistenza</button>",
   'name="flags.wod5e-mage.nemico.magick.effetti.m3.nome" value="Scarica del guanto"', 'name="flags.wod5e-mage.nemico.magick.effetti.m3.breve" value="5 danni nella stanza"',
-  'name="flags.wod5e-mage.nemico.magick.effetti.m3.resiste.attribute"', 'data-action="nemicoMagickTogli" data-effetto="m3"', "Volgare · Ambiti: Portata 2 · Potenza 3 · a mano · danno 5",
+  'name="flags.wod5e-mage.nemico.magick.effetti.m3.resiste.attribute"', 'data-action="nemicoMagickTogli" data-effetto="m3"', "Volgare · Ambiti: Portata 2 · Potenza 3 · a mano · dadi dei danni: 3",
   'wod5e-mage-nemico-aggiungi on" data-action="nemicoCassetto" data-cassetto="mano" aria-expanded="true"',
   'wod5e-mage-nemico-pastiglia on" data-action="nemicoCassettoVia" data-cassetto="mano" aria-pressed="true"', 'data-action="nemicoCassettoVia" data-cassetto="grimorio" aria-pressed="false"',
   'data-mano="nome" value="Scarica del guanto"',
@@ -294,7 +294,7 @@ conTutti(giocoScrivi, [
   'data-action="nemicoLente" data-scope="potency"', 'wod5e-mage-nemico-ambito alto" data-scope="potency"',
   'class="on" data-action="nemicoAmbito" data-scope="potency" data-level="3"', 'class="" data-action="nemicoAmbito" data-scope="potency" data-level="4"',
   'wod5e-mage-nemico-ambito base" data-scope="epic"', 'class="on" data-action="nemicoAmbito" data-scope="epic" data-level="1"',
-  '<b class="wod5e-mage-nemico-grande">3</b>', "Potenza 3 · danni 5 (Areté 2 + Potenza 3)",
+  '<b class="wod5e-mage-nemico-grande">3</b>', "Potenza 3 · dadi dei danni: 3",
   'data-action="nemicoManoAggiungi"',
   'data-action="nemicoEffettoCatalogo"', 'data-action="nemicoEffettoTogli" data-effetto="e2"', "Togli il potere"
 ], "gioco, Scrivi");

@@ -8,6 +8,7 @@ import { assignCondizione, listCondizioni, openCondizioniMaster, selectedActors 
 import { CONDIZIONI_VERSIONE, CONDIZIONI_VERSIONE_SETTING, findCondizione, riallineaCondizioni } from "./condizioni.js";
 import { registerVolonta } from "./volonta.js";
 import { registerRossi } from "./rossi.js";
+import { registerDanni } from "./danni.js";
 import { registerIndulgere } from "./indulgere.js";
 import { registerSaggezza } from "./wisdom.js";
 import { registerPrezzo } from "./prezzo.js";
@@ -223,6 +224,8 @@ Hooks.once("init", () => {
   registerIndulgere();
   registerSaggezza();
   registerPrezzo();
+  // Il dado dei danni (il Sistema): il tasto sotto i lanci riusciti con la Potenza in Danni, e la carta dei danni.
+  registerDanni();
   // Il ramo C (11/9): la scelta dell'Ustione sotto la carta, e i punti
   // Paradosso del Narratore col pannello e la lobby.
   registerUstione();

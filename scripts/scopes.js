@@ -104,10 +104,12 @@ export const SCOPE_TABLE_ROWS = Object.freeze([
   { id: "range", scope: "range", sublabel: "WOD5E_MAGE.Scopes.Sub.range", layout: "text" },
   { id: "rangeNarrative", scope: "range", sublabel: "WOD5E_MAGE.Scopes.Sub.rangeNarrative", layout: "text" },
   { id: "rangeBond", scope: "range", sublabel: "WOD5E_MAGE.Scopes.Sub.rangeBond", layout: "text" },
-  // Potenza: i Danni sono l'Areté (allo 0) più il numero; il Peso dice
-  // quanto pesa quello che l'effetto muove; l'Influenza quanto cambia una
-  // persona, dalle emozioni (1) fino a pilotarla (7). Non è una Condizione.
-  { id: "potencyDamage", scope: "potency", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyDamage", arete: true, layout: "symbol-number" },
+  // Potenza: i Danni sono dadi dei danni, uno per livello (il Sistema: la
+  // vuota non fa danni, la scintilla ne fa 2, la stellina 4; fino alla 1.40.0
+  // erano l'Areté più il numero); il Peso dice quanto pesa quello che
+  // l'effetto muove; l'Influenza quanto cambia una persona, dalle emozioni
+  // (1) fino a pilotarla (7). Non è una Condizione.
+  { id: "potencyDamage", scope: "potency", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyDamage", layout: "text" },
   { id: "potencyWeight", scope: "potency", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyWeight", layout: "text" },
   { id: "potencyInfluence", scope: "potency", sublabel: "WOD5E_MAGE.Scopes.Sub.potencyInfluence", layout: "text", small: true },
   // Precisione: il Dettaglio (2/10, una lente sola, una parola per casella)
@@ -226,8 +228,8 @@ export function prepareScopeTable(localize = (key) => key) {
  * Le letture di ogni livello, per il dialogo del tiro: a destra dei pallini
  * di un Ambito compare la voce della tavola del livello scelto («Città» al
  * quarto pallino dell'Area). Ogni Ambito porta le sue lenti, nell'ordine
- * della tavola, col nome della lente davanti. I Danni sono l'Areté più il
- * numero: con l'Areté del personaggio (`arete`) il conto è già fatto.
+ * della tavola, col nome della lente davanti. I Danni sono dadi dei danni,
+ * uno per livello; `arete` resta fra gli argomenti per chi lo passa ancora.
  * Torna { [ambito]: otto liste (dal livello 0 al 7) di { sub, text, hint } }.
  */
 export function scopeReadings(localize = (key) => key, { arete = null } = {}) {
@@ -305,12 +307,6 @@ export function ordinaAmbiti(a, b, lang = "it") {
   return Number(b.id === EPIC_SCOPE) - Number(a.id === EPIC_SCOPE) || String(a.label ?? "").localeCompare(String(b.label ?? ""), lang);
 }
 
-/** «+3» → 3; «+0» → 0; un testo qualunque → null. */
-export function damageBonus(label) {
-  const match = /^\s*([+-]?\s*\d+)\s*$/.exec(String(label ?? ""));
-  return match ? Number(match[1].replace(/\s+/g, "")) : null;
-}
-
 /**
  * I livelli degli Ambiti come li tiene il personaggio o l'incantesimo, coi
  * nomi di oggi: l'Area di ieri diventa il livello dei Bersagli (il più
@@ -370,7 +366,7 @@ export function scopeMin(id) {
   return id === EPIC_SCOPE ? EPIC_MIN : 0;
 }
 
-function scopeReadingText(row, level, localize, arete = null) {
+function scopeReadingText(row, level, localize) {
   const cell = row.cells[level] ?? {};
   // L'Epicità non ha lo 0: niente da leggere.
   if (cell.empty) return { text: "", hint: "" };
@@ -379,23 +375,6 @@ function scopeReadingText(row, level, localize, arete = null) {
   const hinted = String(localize(hintKey));
   // Un suggerimento che non c'è nella lingua torna com'è: allora è vuoto.
   const hint = hinted === hintKey ? "" : hinted;
-  const areteLabel = String(localize("WOD5E_MAGE.Arete.Label"));
-  // I Danni: l'Areté (allo 0) più il numero. Con l'Areté del personaggio il
-  // conto è già fatto («6 danni» per Areté 3 al terzo livello) e la formula
-  // sta nel suggerimento.
-  if (cell.arete) {
-    const bonus = level === 0 ? 0 : damageBonus(label);
-    const formula = level === 0 ? areteLabel : `${areteLabel} ${label}`;
-    const value = arete !== null && Number.isFinite(Number(arete)) ? Math.max(Math.trunc(Number(arete)), 0) : null;
-    // Senza il numero nella lingua (o senza l'Areté) resta la formula.
-    if (value !== null && bonus !== null) {
-      return {
-        text: String(localize("WOD5E_MAGE.Scopes.DamageReading")).replace("{n}", String(value + bonus)),
-        hint: [`${areteLabel} ${value}${bonus ? ` ${label}` : ""}`, hint].filter(Boolean).join(" · ")
-      };
-    }
-    return { text: formula, hint };
-  }
   // La Durata in gioco: numero e unità.
   if (cell.icon) return { text: `${label} ${localize(`WOD5E_MAGE.Scopes.DurationUnits.${level}`)}`, hint };
   return { text: label, hint };

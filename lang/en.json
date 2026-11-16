@@ -413,26 +413,26 @@
       "area": "Area",
       "TableTitle": "The Scopes",
       "TableHint": "Scopes give a Magick effect its measure. On top, Epicness, from 1 to 7, says how deep the gesture goes; below, six Scopes on a scale from 0 to 7 say how much: those the effect does not touch stay at 0. Each Scope is read through one, two or three lenses, alternative measures of the same thing: a casting uses one. 0 is the base and does not count. The threshold is the count of the Scopes: the highest Scope, Epicness included, is the base, and every other Scope in use adds 1 if it sits above your Arete; the count stops at 10. In one casting at most three Scopes rise above 0; Epicness does not count.",
-      "TableModes": "In Range the Fight lens applies in combat, Narrative outside it and Bond when you reach the target through what ties you; in Potency, Damage is for the fight: the Storyteller declares when a combat reading applies. In Duration the first row counts game time, the second world time. The other lenses (Effect, Area, Malus and bonus, Complexity, Weight, Influence, Detail, Information) are free, good in any scene.",
+      "TableModes": "In Range the Fight lens applies in combat, Narrative outside it and Bond when you reach the target through what ties you; in Potency, Damage is for the fight: the Storyteller declares when a combat reading applies. In Duration the Combat lens counts game time, Scene counts world time. The other lenses (Subjects, Area, Malus and bonus, Complexity, Weight, Influence, Detail, Information) are free, good in any scene.",
       "TableSuccesses": "Scope",
       "TableReading": "Lens",
       "TableNote": "Scopes channel the generality and variability of Magick effects: think an effect in as few Scopes as possible, by need and goal.",
       "Desc": {
         "epic": "How deep the gesture goes: from 1, a trick, to 7, the impossible. The player picks it from the examples and the Storyteller corrects it. Every casting has it, at least 1, and it does not count among the three Scopes. It is read apart from the Consensus: a fate rewritten through coincidences is Coincidental and worth 6.",
-        "targets": "Who or what takes the effect. Effect counts targets one by one, Area takes everything inside a space.",
+        "targets": "Who or what takes the effect. Subjects are counted one by one; Area takes everything inside a space, companions and the mage included.",
         "conditions": "What the effect leaves on someone and under which terms it works. Malus and bonus says how much it weighs: the bonus is the malus turned around, and it never enters Magick castings. Complexity is the clauses that rule it.",
-        "duration": "How long the effect stands. The first row counts game time, the second world time.",
+        "duration": "How long the effect stands. Combat counts game time, in a fight and in played scenes; Scene counts world time, for what must last off-scene. The Storyteller says which one applies.",
         "range": "How far the effect reaches. Fight and Narrative measure distance: to act on what you cannot perceive you need Correspondence. Bond measures how close the target is to you, from blood (1) to the faintest thread (7): with a bond you reach them wherever they are, even without Correspondence. The closer of who they are to you and what you hold of theirs counts.",
-        "potency": "How strong the effect is: Damage in a fight, Weight in both, Influence on a person. Influence says how much it changes them, from their emotions up to steering them, and it is not a Condition.",
+        "potency": "How strong the effect is. Damage applies in a fight: one damage die per level, where the spark deals 2 damage and the star 4. Weight says how much the effect moves or holds. Influence says how much it changes a person, from their emotions up to steering them, and it is not a Condition.",
         "precision": "How fine the effect's choice or finding is: Detail, from the whole body down to an atom, in a fight and outside. Information says how rare the thing you learn is: the player asks the question, the Storyteller sets the level before the roll."
       },
       "Sub": {
-        "targets": "Effect",
+        "targets": "Subjects",
         "targetsArea": "Area",
         "conditionsMalus": "Malus and bonus",
         "conditionsComplexity": "Complexity",
-        "duration": "Game",
-        "durationWorld": "World",
+        "duration": "Combat",
+        "durationWorld": "Scene",
         "range": "Fight",
         "rangeNarrative": "Narrative",
         "rangeBond": "Bond",
@@ -445,7 +445,7 @@
       "Table": {
         "epic": {
           "1": "Trick",
-          "2": "Push",
+          "2": "Noteworthy",
           "3": "Change",
           "4": "Wonder",
           "5": "Creation",
@@ -469,16 +469,16 @@
           "3": "Block",
           "4": "City",
           "5": "Region",
-          "6": "Continent",
-          "7": "Planet"
+          "6": "State",
+          "7": "Continent"
         },
         "conditionsMalus": {
           "0": "None",
           "1": "Minor",
           "2": "Means",
-          "3": "Grade 1",
-          "4": "Grade 2",
-          "5": "Grade 3",
+          "3": "Action",
+          "4": "Condition",
+          "5": "Disables",
           "6": "Type",
           "7": "All"
         },
@@ -543,14 +543,14 @@
           "7": "Thread"
         },
         "potencyDamage": {
-          "0": "",
-          "1": "+1",
-          "2": "+2",
-          "3": "+3",
-          "4": "+4",
-          "5": "+5",
-          "6": "+6",
-          "7": "+7"
+          "0": "No dice",
+          "1": "1 die",
+          "2": "2 dice",
+          "3": "3 dice",
+          "4": "4 dice",
+          "5": "5 dice",
+          "6": "6 dice",
+          "7": "7 dice"
         },
         "potencyWeight": {
           "0": "1 kg",
@@ -565,7 +565,7 @@
         "potencyInfluence": {
           "0": "A hesitation",
           "1": "The emotions",
-          "2": "An opinion",
+          "2": "An opinion or an action",
           "3": "A choice",
           "4": "A behaviour",
           "5": "What they believe",
@@ -620,18 +620,18 @@
           "3": "Several blocks, streets in between.",
           "4": "The whole city, suburbs included.",
           "5": "A region with all its cities.",
-          "6": "A continent.",
-          "7": "The world. Area takes everything inside, friends included: to leave them out you need a Complexity clause."
+          "6": "A whole state.",
+          "7": "A continent. Area takes everything inside, your companions and you included: to leave one out you need a Complexity clause, one level per companion."
         },
         "conditionsMalus": {
           "0": "Told in the story, it does not touch the rolls.",
-          "1": "−1 or +1 to rolls of one type: Bruised, Shaken, Knocked down.",
-          "2": "Takes away or grants a weapon, a tool, a hold: Disarmed; a blade of fire, a rope.",
-          "3": "−2 or +2: Dazzled, Bleeding, Intimidated.",
-          "4": "−2 and difficulty 8, or +2 and never 8: Blurred, Poisoned, Frightened.",
-          "5": "One thing fails, or succeeds without rolling: Blind, Mute, Tied.",
-          "6": "Rolls of one type fail, or succeed: Paralysed, Furious.",
-          "7": "Out of play, or every roll succeeds: Unconscious, Asleep, Terrified."
+          "1": "It disturbs: one die less, or more, on rolls of one type. Bruised, Shaken, Knocked down.",
+          "2": "Takes away a means, or grants one: a weapon, a tool, a hold. Disarmed; a blade of fire, a rope.",
+          "3": "Blocks an action.",
+          "4": "Inflicts a Condition.",
+          "5": "Disables something or someone.",
+          "6": "Alters a whole type of rolls.",
+          "7": "Diverts everything."
         },
         "conditionsComplexity": {
           "0": "The effect fires at once and applies to everything it touches. No clause.",
@@ -687,14 +687,14 @@
           "7": "You only know something they did (they paid the sniper, wrote the anonymous letter, stole your car), or a trace they left in passing (the shell casing, the envelope of money, the ticket they threw away). Without even that, you need Correspondence."
         },
         "potencyDamage": {
-          "0": "As much damage as your Arete, on the target's Health.",
-          "1": "Arete plus one, on the target's Health.",
-          "2": "Arete plus two, on the target's Health.",
-          "3": "Arete plus three, on the target's Health.",
-          "4": "Arete plus four, on the target's Health.",
-          "5": "Arete plus five, on the target's Health.",
-          "6": "Arete plus six, on the target's Health.",
-          "7": "Arete plus seven, on the target's Health."
+          "0": "No damage dice.",
+          "1": "One damage die: the empty face deals no damage, the spark deals 2, the star 4.",
+          "2": "Two damage dice: the empty face deals no damage, the spark deals 2, the star 4.",
+          "3": "Three damage dice: the empty face deals no damage, the spark deals 2, the star 4.",
+          "4": "Four damage dice: the empty face deals no damage, the spark deals 2, the star 4.",
+          "5": "Five damage dice: the empty face deals no damage, the spark deals 2, the star 4.",
+          "6": "Six damage dice: the empty face deals no damage, the spark deals 2, the star 4.",
+          "7": "Seven damage dice: the empty face deals no damage, the spark deals 2, the star 4."
         },
         "potencyWeight": {
           "0": "A book.",
@@ -747,15 +747,14 @@
         "6": "story",
         "7": "chronicle"
       },
-      "DamageReading": "{n} damage",
       "PerCastCap": "In one casting at most three Scopes rise above 0, Epicness aside: lower one before raising another.",
       "SubShort": {
-        "targets": "Effect",
+        "targets": "Subjects",
         "targetsArea": "Area",
         "conditionsMalus": "Malus",
         "conditionsComplexity": "Compl.",
-        "duration": "Game",
-        "durationWorld": "World",
+        "duration": "Combat",
+        "durationWorld": "Scene",
         "range": "Fight",
         "rangeNarrative": "Narr.",
         "rangeBond": "Bond",
@@ -2626,6 +2625,9 @@
       "Aggravati": "Aggravated",
       "DannoEsito": "damage {danno} {tipo}",
       "DannoMargine": "damage {danno} {tipo} ({arma} plus {margine} margin)",
+      "DadiDanni": "damage dice: {dadi}",
+      "DadiDanniCarta": "Damage dice: {dadi}. The spark deals 2 damage, the star 4.",
+      "TiraDanni": "Roll damage: {dadi} dice",
       "Effetti": "Effects",
       "EffettoNuovo": "New effect",
       "EffettoNome": "Name",
@@ -2671,7 +2673,6 @@
       "TuttiZero": "all at 0",
       "Aggiungi": "Add",
       "TettoAmbiti": "In one casting at most three Scopes rise above 0, Epicness aside: lower one before raising another.",
-      "DanniMagick": "damage {danni} (Areté {arete} + Potency {potenza})",
       "EffettoMagickTogli": "Remove the Magick effect",
       "EffettoMagickApri": "Open the details",
       "Armi": "Weapons",
@@ -2855,6 +2856,14 @@
       "Yes": "Take the red dice",
       "No": "Leave it",
       "Done": "Red dice taken: +{successi}. Roll successes: {total}. The roll is paradoxical."
+    },
+    "Danni": {
+      "Titolo": "Damage",
+      "Tira": "Roll damage",
+      "Hint": "Potency damage dice: {dadi}. The empty face deals no damage, the spark deals 2, the star 4.",
+      "Conto": "damage · dice {dadi}: sparks {scintille}, stars {stelline}",
+      "Applica": "Apply {danni} damage to {bersaglio}",
+      "Applicati": "{bersaglio}: {danni} superficial damage marked."
     }
   }
 }

@@ -18,6 +18,7 @@ import { addParadoxToBalance, getMagickBalance } from "./magick-balance.js";
 import { testoCosto } from "./ramo-c.js";
 import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
 import { FORMULE_M6 } from "./data/formule.js";
+import { dadiDeiDanni } from "./danni.js";
 import { scopesInParole } from "./ongoing-magick.js";
 import { findMageRollTrait, selectorsForMageRollTrait, skillRollCard } from "./mage-roll-selection.js";
 import {
@@ -1139,6 +1140,8 @@ export async function launchTiro(actor, tiro) {
         symbols,
         traits: traitRows,
         vulgar: effect.vulgar,
+        // I dadi dei danni (il Sistema): uno per livello di Potenza, quando la Potenza si legge con la lente Danni.
+        danni: dadiDeiDanni(tiro.scopes?.potency, scopeModeOf(tavolaAmbiti, "potency", modiAmbiti.potency)?.id),
         // Il Paradosso preso col lancio (il tipo, la dissonanza, il potere pagato in Paradosso): il Narratore lo copia.
         kind: tiro.kind,
         dissonanza: Boolean(tiro.dissonanza),

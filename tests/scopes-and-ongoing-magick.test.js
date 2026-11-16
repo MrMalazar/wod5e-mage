@@ -10,7 +10,6 @@ import {
   SCOPES_PER_CAST,
   ambitiDelLancio,
   canRaiseScope,
-  damageBonus,
   epicita,
   livelliDelLancio,
   normalizeScopeLevels,
@@ -99,17 +98,18 @@ assert.deepEqual(tableIt.groups.find((group) => group.scope === "duration").rows
 assert.deepEqual(tableIt.groups.find((group) => group.scope === "targets").rows.map((row) => row.id), ["targets", "targetsArea"]);
 assert.deepEqual(tableIt.groups.find((group) => group.scope === "range").rows.map((row) => row.id), ["range", "rangeNarrative", "rangeBond"]);
 assert.equal(tableIt.groups.some((group) => group.scope === "impact"), false);
-assert.deepEqual(Object.values(itScopes.Sub), ["Effetto", "Area", "Malus e bonus", "Complessità", "Gioco", "Mondo", "Scontro", "Narrativa", "Legame", "Danni", "Peso", "Influenza", "Dettaglio", "Informazione"]);
+assert.deepEqual(Object.values(itScopes.Sub), ["Soggetti", "Area", "Malus e bonus", "Complessità", "Combattimento", "Scenica", "Scontro", "Narrativa", "Legame", "Danni", "Peso", "Influenza", "Dettaglio", "Informazione"]);
 // L'Epicità (2/10): sette gesti, dal trucco all'impossibile, con gli esempi nel sorvolo.
 assert.equal(itScopes.epic, "Epicità");
-assert.deepEqual(Object.entries(itScopes.Table.epic), [["1", "Trucco"], ["2", "Spinta"], ["3", "Mutamento"], ["4", "Prodigio"], ["5", "Creazione"], ["6", "Miracolo"], ["7", "Impossibile"]]);
+assert.deepEqual(Object.entries(itScopes.Table.epic), [["1", "Trucco"], ["2", "Degno di nota"], ["3", "Mutamento"], ["4", "Prodigio"], ["5", "Creazione"], ["6", "Miracolo"], ["7", "Impossibile"]]);
 assert.match(itScopes.Hint.epic["7"], /viaggiare nel tempo/);
 assert.match(itScopes.Desc.epic, /almeno 1/);
-// Malus e bonus (2/10): il bonus è il malus girato, coi gradi delle
-// Condizioni; l'Influenza va dalle emozioni a pilotare la persona;
-// l'Informazione misura la rarità (chi sa la cosa).
-assert.deepEqual(Object.values(itScopes.Table.conditionsMalus), ["Niente", "Lieve", "Mezzo", "Grado 1", "Grado 2", "Grado 3", "Tipo", "Tutto"]);
-assert.match(itScopes.Hint.conditionsMalus["4"], /−2 e difficoltà 8, o \+2 e mai 8/);
+// Malus e bonus (il Sistema): il bonus è il malus girato a favore; dal
+// lieve che disturba al mezzo tolto, all'azione bloccata, alla Condizione,
+// fino a deviare tutto. L'Influenza va dalle emozioni a pilotare la
+// persona; l'Informazione misura la rarità (chi sa la cosa).
+assert.deepEqual(Object.values(itScopes.Table.conditionsMalus), ["Niente", "Lieve", "Mezzo", "Azione", "Condizione", "Disabilita", "Tipo", "Tutto"]);
+assert.deepEqual([3, 4, 5, 6, 7].map((n) => itScopes.Hint.conditionsMalus[n]), ["Blocca un'azione.", "Infligge una Condizione.", "Disabilita qualcosa o qualcuno.", "Altera un tipo intero di tiri.", "Devia tutto."]);
 assert.equal(itScopes.Table.conditionsBenefit, undefined, "il Beneficio sta in Malus e bonus");
 assert.equal(itScopes.Table.potencyInfluence["1"], "Le emozioni");
 assert.equal(itScopes.Table.potencyInfluence["7"], "La piloti");
@@ -143,14 +143,12 @@ assert.match(scopeTableTemplate, /<td\{\{#unless cell\.step\}\} class="wod5e-mag
 assert.equal(riga("potencyDamage").scope, "potency");
 assert.equal(riga("potencyInfluence").scope, "potency");
 assert.equal(riga("durationWorld").scope, "duration");
-// I Danni sono l'Areté più il numero (allo 0 l'Areté e basta), senza
-// casella; i Bersagli portano la persona e allo 0 dicono «Un bersaglio» a
-// parole; l'Area e la Durata del mondo un simbolo per cella.
-assert.equal(riga("potencyDamage").cells[0].arete, true);
-assert.equal(riga("potencyDamage").cells[0].hideLabel, true);
-assert.equal(riga("potencyDamage").cells[0].number, false);
-assert.equal(riga("potencyDamage").cells[1].hideLabel, false);
-assert.equal(riga("potencyDamage").cells[1].number, true);
+// I Danni sono dadi dei danni, uno per livello (il Sistema): una riga di
+// testo come le altre, senza più il sigillo dell'Areté; i Bersagli portano
+// la persona e allo 0 dicono «Un bersaglio» a parole; l'Area e la Durata del
+// mondo un simbolo per cella.
+assert.deepEqual([riga("potencyDamage").cells[0].arete, riga("potencyDamage").cells[0].hideLabel, riga("potencyDamage").cells[0].number, riga("potencyDamage").cells[0].text], [false, false, false, true]);
+assert.deepEqual([riga("potencyDamage").cells[3].arete, riga("potencyDamage").cells[3].number, riga("potencyDamage").cells[3].text], [false, false, true]);
 assert.equal(riga("potencyWeight").cells[0].arete, false);
 assert.equal(riga("potencyInfluence").cells[0].arete, false);
 assert.equal(riga("targets").cells[0].faIcon, "fa-solid fa-user");
@@ -199,7 +197,15 @@ for (const lang of ["it", "en"]) {
   assert.equal(cells.rangeNarrative["7"], lang === "it" ? "Ovunque sia" : "Wherever it is");
   assert.match(cells.potencyWeight["2"], /100 kg/);
   assert.match(cells.potencyWeight["6"], /500[.,]000 t/);
-  assert.equal(cells.potencyDamage["0"], "");
+  assert.equal(cells.potencyDamage["0"], lang === "it" ? "Nessun dado" : "No dice");
+  assert.deepEqual([cells.potencyDamage["1"], cells.potencyDamage["7"]], lang === "it" ? ["1 dado", "7 dadi"] : ["1 die", "7 dice"]);
+  assert.equal(strings.WOD5E_MAGE.Scopes.DamageReading, undefined, "i Danni non sono più l'Areté più il numero");
+  // Le tavole seguono il Sistema: le lenti Soggetti, Combattimento e Scenica; l'Area che arriva al continente;
+  // Malus e bonus che al 3 blocca un'azione, al 4 infligge una Condizione, al 5 disabilita.
+  assert.deepEqual([strings.WOD5E_MAGE.Scopes.Sub.targets, strings.WOD5E_MAGE.Scopes.Sub.duration, strings.WOD5E_MAGE.Scopes.Sub.durationWorld], lang === "it" ? ["Soggetti", "Combattimento", "Scenica"] : ["Subjects", "Combat", "Scene"]);
+  assert.deepEqual([cells.targetsArea["6"], cells.targetsArea["7"]], lang === "it" ? ["Stato", "Continente"] : ["State", "Continent"]);
+  assert.deepEqual([cells.conditionsMalus["3"], cells.conditionsMalus["4"], cells.conditionsMalus["5"]], lang === "it" ? ["Azione", "Condizione", "Disabilita"] : ["Action", "Condition", "Disables"]);
+  assert.doesNotMatch(JSON.stringify(strings.WOD5E_MAGE.Scopes.Hint.conditionsMalus), /difficoltà 8|difficulty 8|mai 8|never 8/);
   assert.equal(strings.WOD5E_MAGE.Scopes.impact, undefined, "l'Impatto è uscito (29/9)");
   assert.equal(strings.WOD5E_MAGE.Scopes.Desc.impact, undefined);
   assert.equal(strings.WOD5E_MAGE.Scopes.PotencyWeight, undefined);
@@ -227,7 +233,7 @@ for (const lang of ["it", "en"]) {
 assert.match(scopeTableTemplate, /scopeTable\.steps[\s\S]*scopeTable\.groups[\s\S]*row\.cells/);
 assert.doesNotMatch(scopeTableTemplate, /gift/);
 // Le colonne invisibili: ogni riga dice le sue, e la cella le rispetta.
-assert.deepEqual(table.rows.map((row) => row.layout), ["text", "symbol-number", "symbol-text", "text", "text", "symbol-number", "symbol-text", "text", "text", "text", "symbol-number", "text", "text", "text", "text"]);
+assert.deepEqual(table.rows.map((row) => row.layout), ["text", "symbol-number", "symbol-text", "text", "text", "symbol-number", "symbol-text", "text", "text", "text", "text", "text", "text", "text", "text"]);
 // Una parola per casella (2/10): il Dettaglio e Malus e bonus tornano al carattere pieno.
 assert.equal(riga("precision").small, false);
 assert.equal(riga("conditionsMalus").small, false);
@@ -361,25 +367,21 @@ assert.deepEqual(editableActor.lastUpdate, {
   "flags.wod5e-mage.ongoingMagick.-=newRow": null
 });
 
-// Le letture accanto ai pallini (9/9, 10/9): i Danni della Potenza sono l'Areté
-// più il numero; con l'Areté del personaggio il conto è già fatto, e la somma
-// sta nella nota. Il tasto che cambia lettura sta PRIMA della voce.
+// Le letture accanto ai pallini (9/9, 10/9): i Danni della Potenza sono dadi dei
+// danni, uno per livello, e l'Areté non c'entra più. Il tasto che cambia lettura
+// sta PRIMA della voce.
 {
   const it = JSON.parse(readFileSync(new URL("../lang/it.json", import.meta.url), "utf8"));
   const localize = (key) => key.split(".").reduce((o, k) => (o && typeof o === "object" ? o[k] : undefined), it) ?? key;
-  assert.equal(damageBonus("+3"), 3);
-  assert.equal(damageBonus("+0"), 0);
-  assert.equal(damageBonus("Città"), null);
   // Le letture sono indicizzate per livello, dallo 0 al 7 (la tavola del 23/9).
   const plain = scopeReadings(localize);
   assert.equal(plain.potency.length, 8);
-  assert.deepEqual(plain.potency[3][0], { sub: "Danni", text: "Areté +3", hint: it.WOD5E_MAGE.Scopes.Hint.potencyDamage["3"] }, "senza Areté resta la formula");
-  assert.deepEqual(plain.potency[0][0], { sub: "Danni", text: "Areté", hint: it.WOD5E_MAGE.Scopes.Hint.potencyDamage["0"] }, "allo 0 l'Areté e basta");
+  assert.deepEqual(plain.potency[3][0], { sub: "Danni", text: "3 dadi", hint: "Tre dadi dei danni: la vuota non fa danni, la scintilla ne fa 2, la stellina 4." });
+  assert.deepEqual(plain.potency[0][0], { sub: "Danni", text: "Nessun dado", hint: "Nessun dado dei danni." });
   const mine = scopeReadings(localize, { arete: 3 });
-  assert.deepEqual(mine.potency[3][0], { sub: "Danni", text: "6 danni", hint: `Areté 3 +3 · ${it.WOD5E_MAGE.Scopes.Hint.potencyDamage["3"]}` }, "Areté 3 al terzo pallino: 6 danni");
-  assert.deepEqual(mine.potency[0][0], { sub: "Danni", text: "3 danni", hint: `Areté 3 · ${it.WOD5E_MAGE.Scopes.Hint.potencyDamage["0"]}` });
+  assert.deepEqual(mine.potency[3][0], plain.potency[3][0], "l'Areté non cambia i dadi dei danni");
   assert.equal(mine.potency[3][1].text, plain.potency[3][1].text, "le altre letture non cambiano");
-  assert.deepEqual(mine.targets[4].map((part) => [part.sub, part.text]), [["Effetto", "+4"], ["Area", "Città"]]);
+  assert.deepEqual(mine.targets[4].map((part) => [part.sub, part.text]), [["Soggetti", "+4"], ["Area", "Città"]]);
   assert.deepEqual(mine.targets[0].map((part) => part.text), ["Un bersaglio", "Un punto"]);
   assert.equal(mine.range[0][0].text, "A contatto");
   assert.equal(mine.duration[5][1].text, "Un anno");
@@ -397,10 +399,10 @@ assert.deepEqual(editableActor.lastUpdate, {
   assert.match(modes.precision[0].hints[3], /la mano che impugna/);
   // L'Epicità: una lente sola, senza nome; lo 0 non si legge.
   assert.deepEqual(modes.epic.map((mode) => [mode.id, mode.label, mode.short]), [["epic", "", ""]]);
-  assert.deepEqual(modes.epic[0].readings, ["", "Trucco", "Spinta", "Mutamento", "Prodigio", "Creazione", "Miracolo", "Impossibile"]);
+  assert.deepEqual(modes.epic[0].readings, ["", "Trucco", "Degno di nota", "Mutamento", "Prodigio", "Creazione", "Miracolo", "Impossibile"]);
   assert.equal(modes.epic[0].hints[0], "");
-  assert.deepEqual(plain.epic[2], [{ sub: "", text: "Spinta", hint: it.WOD5E_MAGE.Scopes.Hint.epic["2"] }]);
-  assert.equal(modes.potency[0].readings[2], "4 danni");
+  assert.deepEqual(plain.epic[2], [{ sub: "", text: "Degno di nota", hint: it.WOD5E_MAGE.Scopes.Hint.epic["2"] }]);
+  assert.equal(modes.potency[0].readings[2], "2 dadi", "due dadi dei danni al secondo livello: l'Areté non c'entra");
   assert.equal(modes.durationWorld, undefined);
   assert.equal(modes.duration[1].hints[0], "", "senza spiegazione nella lingua, vuoto");
   const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");

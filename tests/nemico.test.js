@@ -110,9 +110,10 @@ assert.equal(puoAlzare({ targets: 1, range: 2, potency: 3 }, "epic", 5), true);
 assert.equal(puoAlzare({ epic: 4, targets: 1, range: 2 }, "potency", 3), true);
 assert.equal(puoAlzare({ targets: 1, range: 2, potency: 3 }, "duration", 1), false);
 
-// I danni della Magick: l'Areté più la Potenza.
-assert.equal(danniMagick(2, 3), 5);
-assert.equal(danniMagick("3", null), 3);
+// I danni della Magick (il Sistema): un dado dei danni per livello di Potenza; l'Areté non c'entra.
+assert.equal(danniMagick(3), 3);
+assert.equal(danniMagick("2"), 2);
+assert.equal(danniMagick(null), 0);
 
 // La Natura: quella scritta, o quella dello spcType del sistema; Sonnambulo, Risvegliato e Fatato sono in più.
 assert.equal(NATURE.length, 8);
@@ -138,7 +139,7 @@ assert.deepEqual(scopeLensIds("precision"), ["precision", "precisionInfo"]);
 assert.deepEqual(scopeLensIds("range"), ["range", "rangeNarrative", "rangeBond"]);
 assert.deepEqual(scopeLensIds("epic"), ["epic"]);
 const aMano = (lenti) => ambitiAMano({ livelli: { potency: 3 }, lenti }, { arete: 2 });
-assert.deepEqual([aMano({}).righe.find((r) => r.id === "potency").lente.id, aMano({}).danni], ["potencyDamage", 5]);
+assert.deepEqual([aMano({}).righe.find((r) => r.id === "potency").lente.id, aMano({}).danni], ["potencyDamage", 3], "tre dadi dei danni: la Potenza 3, senza l'Areté");
 assert.deepEqual([aMano({ potency: 2 }).righe.find((r) => r.id === "potency").lente.id, aMano({ potency: 2 }).danni], ["potencyInfluence", null]);
 assert.equal(aMano({ potency: 9 }).righe.find((r) => r.id === "potency").lente.id, "potencyInfluence", "un indice oltre le lenti si ferma all'ultima");
 assert.equal(aMano({ range: 1 }).righe.find((r) => r.id === "range").lente.id, "rangeNarrative");
@@ -160,7 +161,7 @@ assert.equal(aMano({ range: 9 }).righe.find((r) => r.id === "range").lente.id, "
 // La soglia di un effetto si conta sui suoi Ambiti con l'Areté del nemico: quella scritta alla vecchia non vale più.
 // Un effetto scritto prima del 29/9 con l'Impatto: l'Impatto non conta, e l'Epicità 1 si vede fra gli Ambiti.
 const vecchio = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Vecchio", soglia: 6, ambiti: { impact: 3, duration: 1, potency: 2 }, lentePotenza: "danni" } } } }));
-assert.deepEqual([vecchio.effetti[0].soglia, vecchio.effetti[0].ambiti.map((a) => a.id), vecchio.effetti[0].danni], [2, ["epic", "duration", "potency"], 4], "la Potenza 2 fa da base, la Durata 1 non aggiunge");
+assert.deepEqual([vecchio.effetti[0].soglia, vecchio.effetti[0].ambiti.map((a) => a.id), vecchio.effetti[0].danni], [2, ["epic", "duration", "potency"], 2], "la Potenza 2 fa da base, la Durata 1 non aggiunge; due dadi dei danni");
 // Un vecchio effetto impossibile: il +5 di allora è l'Epicità 6, che fa da base.
 const vecchioImpossibile = magickDelNemico(datiNemico({ magick: { on: true, arete: 2, effetti: { v: { nome: "Vecchio", soglia: 8, impossibile: true, ambiti: { impact: 3, potency: 2 } } } } }));
 assert.deepEqual([vecchioImpossibile.effetti[0].soglia, vecchioImpossibile.effetti[0].ambiti.map((a) => [a.id, a.level])], [6, [["epic", 6], ["potency", 2]]]);

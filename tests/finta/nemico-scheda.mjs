@@ -265,7 +265,7 @@ for (const nuova of ["nemicoModo", "nemicoMano", "nemicoArmatura", "nemicoEffett
   await azioni.nemicoManoAggiungi.call(sheet, evento, tasto());
   const mano = Object.values(bandiera(actor).magick.effetti).find((row) => row.da === "mano");
   assert.deepEqual([mano.nome, mano.soglia, mano.conto, mano.ambiti, mano.come, mano.lentePotenza, sheet._stato.cassetto, Object.hasOwn(mano, "impossibile")], ["Scarica", 3, 3, { epic: 2, range: 2, potency: 3 }, "volgare", "danni", "", false], "la Potenza 3 fa da base; con Areté 2 l'Epicità e la Portata a 2 non aggiungono niente. Il conto si scrive accanto alla soglia");
-  assert.equal(sheet.contesto().magick.effetti.find((e) => e.nome === "Scarica").danni, 5, "Areté 2 più Potenza 3");
+  assert.equal(sheet.contesto().magick.effetti.find((e) => e.nome === "Scarica").danni, 3, "tre dadi dei danni: la Potenza 3, l'Areté non c'entra");
   // Un effetto si apre e si toglie.
   const idMano = Object.entries(bandiera(actor).magick.effetti).find(([, row]) => row.da === "mano")[0];
   await azioni.nemicoMagickApri.call(sheet, evento, tasto({ effetto: idMano }));

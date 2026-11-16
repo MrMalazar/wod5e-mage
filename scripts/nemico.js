@@ -260,9 +260,14 @@ export function sogliaDagliAmbiti(livelli = {}, arete = 1) {
   };
 }
 
-/** I danni di un effetto di Magick con la lente Danni: l'Areté più il livello di Potenza. */
-export function danniMagick(arete, potenza) {
-  return intero(arete) + intero(potenza);
+/**
+ * I danni di un effetto di Magick con la lente Danni (il Sistema): un dado dei
+ * danni per livello di Potenza, dove la scintilla fa 2 danni e la stellina 4.
+ * Torna i dadi da tirare. Fino alla 1.40.0 era un numero fisso, l'Areté più
+ * la Potenza.
+ */
+export function danniMagick(potenza) {
+  return Math.min(intero(potenza), SCOPE_MAX_LEVEL);
 }
 
 /** Un id nuovo che non c'è ancora fra le chiavi (senza foundry.utils.randomID, per le prove). */
@@ -884,7 +889,7 @@ export function ambitiAMano(mano = {}, { arete = 1, localize = (k) => k } = {}) 
     };
   });
   const potenza = righe.find((riga) => riga.id === "potency");
-  const danni = potenza?.lente?.indice === 0 && potenza.level >= 0 ? danniMagick(arete, potenza.level) : null;
+  const danni = potenza?.lente?.indice === 0 && potenza.level > 0 ? danniMagick(potenza.level) : null;
   return {
     righe,
     potenza: potenza?.level ?? 0,
@@ -959,8 +964,8 @@ export function magickDelNemico(dati = datiNemico(), { aperte = new Set(), attri
       dominio,
       dominioLabel: dominio ? (SPHERES.includes(dominio) ? localize(`WOD5E_MAGE.Spheres.${dominio}`) : dominio) : "",
       formula: testo(row.formula),
-      // I danni solo con la lente Danni: il Peso e l'Influenza (29/9) non feriscono.
-      danni: Object.hasOwn(oggetto(row.ambiti), "potency") && intero(oggetto(row.ambiti).potency) > 0 && !["peso", "influenza"].includes(row.lentePotenza) ? danniMagick(magick.arete, oggetto(row.ambiti).potency) : null,
+      // I dadi dei danni solo con la lente Danni: il Peso e l'Influenza (29/9) non feriscono.
+      danni: Object.hasOwn(oggetto(row.ambiti), "potency") && intero(oggetto(row.ambiti).potency) > 0 && !["peso", "influenza"].includes(row.lentePotenza) ? danniMagick(oggetto(row.ambiti).potency) : null,
       aperta: aperte.has(row.id)
     };
   });

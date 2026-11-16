@@ -6621,6 +6621,73 @@
   box-shadow: 0 0 5px var(--mage-rosso, #b5433c);
 }
 
+/* Il tasto dei danni (il Sistema): i dadi dei danni della Potenza, sotto il lancio riuscito. */
+.wod5e-mage-roll-actions > .wod5e-mage-danni-button {
+  background: rgb(143 209 154 / 14%);
+  border-color: #6fbf66;
+  color: #d9efd3;
+}
+
+.wod5e-mage-roll-actions > .wod5e-mage-danni-button:hover:not(:disabled) {
+  border-color: #8fd19a;
+  box-shadow: 0 0 4px #6fbf66;
+}
+
+/* La carta dei danni in chat: le facce uscite in fila, i danni in grande. */
+.chat-message .wod5e-mage-danni-carta {
+  display: flex;
+  flex-direction: column;
+  font-size: 13.5px;
+  gap: 8px;
+}
+
+.chat-message .wod5e-mage-danni-testa > b {
+  color: var(--mage-oro, #d9a827);
+  font-size: 14px;
+}
+
+.chat-message .wod5e-mage-danni-testa > small {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 12.5px;
+  margin-left: 6px;
+}
+
+.chat-message .wod5e-mage-danni-dadi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.chat-message .wod5e-mage-danni-dado {
+  border: 0;
+  height: 26px;
+  width: 26px;
+}
+
+.chat-message .wod5e-mage-danni-dado.vuoto {
+  background: #2b2418;
+  border: 1px solid var(--mage-oro-scuro, #98772b);
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.chat-message .wod5e-mage-danni-totale {
+  align-items: baseline;
+  display: flex;
+  gap: 8px;
+}
+
+.chat-message .wod5e-mage-danni-totale > b {
+  color: #8fd19a;
+  font: 600 30px/1 "Modesto Condensed", Georgia, serif;
+}
+
+.chat-message .wod5e-mage-danni-totale > span {
+  color: var(--mage-tenue, #ab9f85);
+  font-size: 12.5px;
+}
+
 /* I due tasti dell'Ustione, del solo Narratore: Brucia (rosso), Prende per sé (viola). */
 .wod5e-mage-roll-actions > .wod5e-mage-ustione-brucia {
   background: rgb(224 90 90 / 18%);

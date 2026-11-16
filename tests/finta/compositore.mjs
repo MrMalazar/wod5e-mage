@@ -127,7 +127,7 @@ assert.deepEqual([portataRiposo.level, portataRiposo.reading, portataRiposo.step
 assert.deepEqual(Object.fromEntries(rows.map((r) => [r.id, r.modeCount])), { epic: 1, targets: 2, conditions: 2, duration: 2, range: 3, potency: 3, precision: 2 }, "una, due o tre lenti per Ambito (29/9, 2/10; il Legame nella Portata il 3/10)");
 const conDanni = S.prepareScopeRows(tiro, (k) => strings[k] ?? k, { arete: 3, modes: { potency: "potencyDamage", targets: "boh" } }).find((r) => r.id === "potency");
 assert.deepEqual([conDanni.mode, conDanni.nextModeLabel], ["potencyDamage", "WOD5E_MAGE.Scopes.Sub.potencyWeight"], "dai Danni si passa al Peso");
-assert.equal(conDanni.reading, "Areté WOD5E_MAGE.Scopes.Table.potencyDamage.4", "i Danni: l'Areté più il numero del quarto pallino (la finta traduce solo Areté)");
+assert.equal(conDanni.reading, "WOD5E_MAGE.Scopes.Table.potencyDamage.4", "i Danni: i dadi dei danni del quarto pallino, senza l'Areté (il Sistema)");
 // Il tastino: chi possiede scrive la bandiera; la scheda rilegge la bandiera.
 const sheetModi = { actor, _tiro: T.emptyTiro(), render: async () => {} };
 await S.onScopeMode.call(sheetModi, { preventDefault() {} }, { dataset: { scope: "potency" } });
