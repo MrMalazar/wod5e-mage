@@ -423,7 +423,9 @@ export function valoreEffetto(value, power, ctx = {}) {
 
 /**
  * Una condizione vale? `ctx` porta quello che serve: saluteMeta (sotto
- * metà Salute), skillValue, dice (a conto fatto), spell e skill del tiro,
+ * metà Salute), skillValue, dice (a conto fatto: i dadi con cui la riserva
+ * supera la soglia, così «dadi1» chiede di superarla di almeno un dado e
+ * «dadi2» di almeno due), spell e skill del tiro,
  * scopes, e la scelta della riga. Una condizione sui dadi senza i dadi
  * nel contesto non si giudica ancora (torna null).
  */

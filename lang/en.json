@@ -158,7 +158,6 @@
       "NoSpheres": "No Sphere with dots: unlock Spheres in Magick to use them here.",
       "Prize": "Arete prize",
       "PrizeHint": "If the description honours the Instrument, or the Creed, or impresses the table, and the Storyteller agrees: the threshold drops by Arete ({arete}). It sits outside the bonus cap; the threshold never drops below 1.",
-      "PrizeFlavor": "prize: +{dice} dice",
       "Harmony": "Harmony",
       "HarmonyHint": "The dice other Mages give you: one from anyone sharing your Creed or your Type, two from anyone sharing both, always with a Sphere in common. Count them at the table. Magick and Technomagick do not harmonise with each other; Hybrid does with both.",
       "HarmonyFlavor": "Harmony {dice}",
@@ -168,7 +167,6 @@
       "BonusCap": "+3 cap: {excess} fewer dice.",
       "SpherePlan": "Spheres: {plans}.",
       "HarmonyShort": "dice from other Mages",
-      "ThresholdShort": "Threshold: Epicness, at least 1, plus the sum of the Scopes; the Arete prize does not touch it. Subtracted from the pool: what is left is what you roll.",
       "ScopeTable": "The Scopes table",
       "BacklashLabel": "Backlash",
       "BacklashEyesOne": "one eye on the red dice",
@@ -1211,8 +1209,7 @@
         "success": "Success",
         "difficulty": "Difficulty"
       },
-      "KindNone": "Type…",
-      "Cap": "+3 cap: written Bonuses and Harmony share three dice at most. The Arete prize reduces the threshold and is outside this cap."
+      "KindNone": "Type…"
     },
     "Dotazione": {
       "Inventory": "Inventory"
@@ -2066,12 +2063,15 @@
       "SuccessFrom": "success from",
       "Difficulty": "Threshold",
       "DifficultyWarning": "Enter the threshold before rolling.",
-      "QuintessenceHint": "One die per point spent, inside the +3 dice cap together with the extra dice. On Skill rolls only with the power that says so. It leaves the Wheel once rolled.",
+      "QuintessenceHint": "One die per point spent, inside the +3 dice cap together with the bonus. On Skill rolls only with the power that says so. It leaves the Wheel once rolled.",
       "Roll": "Roll",
       "RollHint": "Roll the chosen Attribute and Skill: the whole pool, and you need successes equal to the threshold.",
-      "ExtraFlavor": "extra dice +{dice}",
+      "ExtraFlavor": "bonus +{dice}",
+      "Bonus": "Bonus",
+      "BonusHint": "The extra dice: circumstances the Storyteller grants, a fitting object, help from companions, 1 die for each one who helps and justifies it. They stop at +3.",
+      "BonusHintMagick": "The extra dice: circumstances the Storyteller grants, a fitting object, the companions' Harmony, 1 die for each one who helps and works your same kind of Magick. With Quintessence and advancements they stop at +3.",
       "Riserva": "Pool",
-      "RiservaHint": "The dice you roll, all of them: Attribute, Skill, Specialty, Quintessence, power, Traits; Conditions subtract. At the bottom the total: minus and plus adjust it.",
+      "RiservaHint": "The dice you roll, all of them: Attribute, Skill, Specialty, bonus, Quintessence, power, Traits; Conditions subtract. At the bottom the total: minus and plus adjust it.",
       "Soglia": "Threshold",
       "SogliaHint": "The successes you need: the count of the Scopes, the difficulty the Storyteller gives and the Arete prize. At the bottom the total: minus and plus raise or lower it.",
       "DadiNote": "Dice adjusted by hand: {dice}.",
@@ -2095,8 +2095,8 @@
         "scelta": "pick the Scope on the power's row (Magick page)",
         "saluteMeta": "applies below half Health",
         "abilita1": "applies with a one-dot Skill",
-        "dadi1": "needs at least one die after the threshold",
-        "dadi2": "needs at least two dice after the threshold",
+        "dadi1": "the pool must beat the threshold by at least one die",
+        "dadi2": "the pool must beat the threshold by at least two dice",
         "incantesimoScelto": "applies to the spell chosen on the power's row (Magick page)",
         "abilitaScelta": "applies to the Skill chosen on the power's row (Magick page)",
         "potenza3": "applies with Potency 3 or more"

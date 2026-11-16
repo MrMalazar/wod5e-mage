@@ -158,7 +158,6 @@
       "NoSpheres": "Nessuna Sfera con pallini: sblocca le Sfere in Magick per usarle qui.",
       "Prize": "Premio dell'Areté",
       "PrizeHint": "Se la descrizione rispetta lo Strumento, o il Credo, o impressiona il tavolo, e il Narratore è d'accordo: la soglia scende di quant'è l'Areté ({arete}). Sta fuori dal tetto dei bonus; la soglia non scende sotto 1.",
-      "PrizeFlavor": "premio: +{dice} dadi",
       "Harmony": "Armonia",
       "HarmonyHint": "I dadi che gli altri Maghi ti danno: uno per chi ha il tuo Credo o il tuo Tipo, due per chi ha entrambi, sempre con una Sfera in comune. Li contate al tavolo. Magick e Tecnomagick non fanno Armonia fra loro; l'Ibrida con entrambi.",
       "HarmonyFlavor": "Armonia {dice}",
@@ -168,7 +167,6 @@
       "BonusCap": "Tetto +3: {excess} dadi in meno.",
       "SpherePlan": "Sfere: {plans}.",
       "HarmonyShort": "dadi dagli altri Maghi",
-      "ThresholdShort": "Soglia: l'Epicità, almeno 1, più la somma degli Ambiti; il premio dell'Areté non la tocca. Si toglie dalla riserva: restano i dadi che tiri.",
       "ScopeTable": "La tavola degli Ambiti",
       "BacklashLabel": "Contraccolpo",
       "BacklashEyesOne": "un occhio sui rossi",
@@ -1211,8 +1209,7 @@
         "success": "Successo",
         "difficulty": "Difficoltà"
       },
-      "KindNone": "Tipo…",
-      "Cap": "Tetto +3: i Bonus scritti e l'Armonia stanno insieme dentro tre dadi. Il premio dell'Areté riduce la soglia ed è escluso da questo tetto."
+      "KindNone": "Tipo…"
     },
     "Dotazione": {
       "Inventory": "Inventario"
@@ -2066,12 +2063,15 @@
       "SuccessFrom": "riesce dal",
       "Difficulty": "Soglia",
       "DifficultyWarning": "Inserisci la soglia prima di tirare.",
-      "QuintessenceHint": "Un dado per punto speso, dentro il tetto di +3 dadi coi dadi extra. Nei tiri di Abilità solo col potere che lo dice. Scende dalla Ruota a tiro fatto.",
+      "QuintessenceHint": "Un dado per punto speso, dentro il tetto di +3 dadi coi bonus. Nei tiri di Abilità solo col potere che lo dice. Scende dalla Ruota a tiro fatto.",
       "Roll": "Tira",
       "RollHint": "Tira l'Attributo e l'Abilità scelti: tutta la riserva, e servono successi pari alla soglia.",
-      "ExtraFlavor": "dadi extra +{dice}",
+      "ExtraFlavor": "bonus +{dice}",
+      "Bonus": "Bonus",
+      "BonusHint": "I dadi in più: le circostanze che concede il Narratore, un oggetto adatto, l'aiuto dei compagni, 1 dado per chi aiuta e lo giustifica. Si fermano a +3.",
+      "BonusHintMagick": "I dadi in più: le circostanze che concede il Narratore, un oggetto adatto, l'Armonia dei compagni, 1 dado per chi aiuta e fa il tuo stesso tipo di Magick. Con la Quintessenza e gli avanzamenti si fermano a +3.",
       "Riserva": "Riserva",
-      "RiservaHint": "I dadi che si tirano, tutti: Attributo, Abilità, Specializzazione, Quintessenza, potere, Tratti; le Condizioni in meno. In fondo il totale: il meno e il più lo ritoccano.",
+      "RiservaHint": "I dadi che si tirano, tutti: Attributo, Abilità, Specializzazione, bonus, Quintessenza, potere, Tratti; le Condizioni in meno. In fondo il totale: il meno e il più lo ritoccano.",
       "Soglia": "Soglia",
       "SogliaHint": "I successi che servono: il conto degli Ambiti, la difficoltà che dà il Narratore e il premio dell'Areté. In fondo il totale: il meno e il più lo alzano o abbassano.",
       "DadiNote": "Dadi ritoccati a mano: {dice}.",
@@ -2095,8 +2095,8 @@
         "scelta": "scegli l'Ambito nella riga del potere (pagina Magick)",
         "saluteMeta": "vale sotto metà Salute",
         "abilita1": "vale con un'Abilità a un solo pallino",
-        "dadi1": "serve almeno un dado dopo la soglia",
-        "dadi2": "servono almeno due dadi dopo la soglia",
+        "dadi1": "la riserva deve superare la soglia di almeno un dado",
+        "dadi2": "la riserva deve superare la soglia di almeno due dadi",
         "incantesimoScelto": "vale sull'incantesimo scelto nella riga del potere (pagina Magick)",
         "abilitaScelta": "vale sull'Abilità scelta nella riga del potere (pagina Magick)",
         "potenza3": "vale con Potenza 3 o più"

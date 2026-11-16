@@ -617,8 +617,9 @@ export function contoTiro(tiro, {
     ? Math.max(lancio.soglia, SOGLIA_MIN)
     : (manual ? Math.max(Math.min(sogliaMano, SOGLIA_ABILITA_MAX), SOGLIA_MIN) : 0);
 
-  // La riuscita senza tirare, a conto fatto (le condizioni sui dadi si giudicano qui).
-  const riuscitaConto = riuscitaSenzaTirare(powered.autoSuccess, dadi);
+  // La riuscita senza tirare, a conto fatto. Le condizioni sui dadi guardano di quanto la
+  // riserva supera la soglia: «almeno un dado», «almeno due» (le decisioni del 14/11).
+  const riuscitaConto = riuscitaSenzaTirare(powered.autoSuccess, Math.max(dadi - difficulty, 0));
   // Una Condizione che fa fallire vince anche sulla riuscita senza tirare.
   const riuscita = fallisce ? { ok: false, nota: "", motivo: "" } : riuscitaConto;
 

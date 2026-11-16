@@ -51,7 +51,12 @@ assert.deepEqual([ctx.pool, ctx.computed, ctx.difficulty, ctx.dice, ctx.successF
 // le righe di chi dà dadi (con la Quintessenza da spendere), nella Soglia i sei Ambiti, sempre, con la lettura e il
 // livello, e in fondo il premio dell'Areté spuntato.
 assert.deepEqual([ctx.testa.tipo, ctx.testa.arete.value, ctx.testa.spheres.map((s) => s.id)], ["magick", 3, ["forces"]]);
-assert.deepEqual(ctx.riserva.righe.map((r) => [r.kind, r.value]), [["attribute", "4"], ["skill", "5"], ["specialty", "1"], ["trait", "1"], ["quintessence", undefined]], "la Riserva: Destrezza, Velo, rituali, il Pregio, la Quintessenza");
+assert.deepEqual(ctx.riserva.righe.map((r) => [r.kind, r.value]), [["attribute", "4"], ["skill", "5"], ["specialty", "1"], ["trait", "1"], ["extra", undefined], ["quintessence", undefined]], "la Riserva: Destrezza, Velo, rituali, il Pregio, i bonus, la Quintessenza");
+{
+  // I bonus dentro il tetto (il Sistema, voci Bonus e Supporto): il passo da 0 a 3, col sorvolo dell'Armonia nella Magick.
+  const bonus = ctx.riserva.righe.find((r) => r.kind === "extra");
+  assert.deepEqual([bonus.stepper.action, bonus.stepper.value, bonus.stepper.min, bonus.stepper.max, bonus.stepper.extra, bonus.hint], ["tiroExtra", "0", true, false, "/ 3", "WOD5E_MAGE.Tiro.BonusHintMagick"]);
+}
 {
   const quint = ctx.riserva.righe.at(-1).stepper;
   assert.deepEqual([quint.action, quint.value, quint.min, quint.max, quint.extra], ["tiroQuintessence", "0", true, false, "/ 3"], "la Quintessenza in dadi: da zero, fino al tetto dei +3");
@@ -71,7 +76,8 @@ assert.equal(ctx.esito.servono, "WOD5E_MAGE.Tiro.ServeUno", "e dice quanti succe
 assert.deepEqual([ctx.riserva.totale.meno, ctx.riserva.totale.piu, ctx.soglia.totale.meno, ctx.soglia.totale.piu, ctx.manual], [false, false, true, false, false], "la soglia è già a 1: il meno è spento");
 assert.deepEqual([ctx.extra.value, ctx.extra.cap], [0, 3]);
 const conExtra = S.prepareTiroContext(actor, T.setExtra(tiro, 2));
-assert.deepEqual([conExtra.extra.value, conExtra.extra.dice, conExtra.pool, conExtra.riserva.totale.label], [2, 2, 13, "13"], "i dadi extra (lo stato resta, senza comando) entrano nella riserva");
+assert.deepEqual([conExtra.extra.value, conExtra.extra.dice, conExtra.pool, conExtra.riserva.totale.label], [2, 2, 13, "13"], "i bonus entrano nella riserva");
+assert.deepEqual(conExtra.riserva.righe.find((r) => r.kind === "extra").stepper.value, "2", "e il passo dice quanti");
 assert.equal(conExtra.riserva.righe.at(-1).stepper.extra, "/ 1", "coi due dadi extra resta posto per un punto di Quintessenza");
 // Il ritocco (1/10) sta nel totale della Riserva: −2 fa 9, la matita lo dice, e l'esito scende a 9.
 const conRitocco = S.prepareTiroContext(actor, T.setDadi(tiro, -2));
@@ -165,6 +171,15 @@ assert.deepEqual([durataScelta.modeChosen, durataScelta.modeShown], [true, durat
   assert.equal(sheetTre._tiro.scopes.range, undefined, "lo stesso pallino lo toglie");
   await S.onTiroScope.call(sheetTre, { preventDefault() {} }, { dataset: { scope: "targets", level: "2" } });
   assert.equal(sheetTre._tiro.scopes.targets, 2, "tolto uno, il posto si libera");
+}
+
+// I bonus (il Sistema): il più sale fino a 3, il meno scende a 0, e non si va oltre.
+{
+  const sheetBonus = { actor, _tiro: T.emptyTiro(), render: async () => {} };
+  for (let i = 0; i < 5; i += 1) await S.onTiroExtra.call(sheetBonus, { preventDefault() {} }, { dataset: { delta: "1" } });
+  assert.equal(sheetBonus._tiro.extra, 3, "fermo al tetto");
+  for (let i = 0; i < 5; i += 1) await S.onTiroExtra.call(sheetBonus, { preventDefault() {} }, { dataset: { delta: "-1" } });
+  assert.equal(sheetBonus._tiro.extra, 0, "mai sotto zero");
 }
 
 // Il tiro di Abilità nel riquadro (il Sistema): Destrezza + Atletica, soglia 2 a mano. Si tirano tutti e 6 i

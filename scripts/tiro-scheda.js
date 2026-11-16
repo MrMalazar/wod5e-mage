@@ -65,6 +65,7 @@ import {
   quintessenceDice,
   removePill,
   setDadi,
+  setExtra,
   setKind,
   setBussola,
   setDissonanza,
@@ -437,8 +438,12 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   for (const riga of cond.righe) {
     riserva.push({ kind: "condizione", id: riga.id, mask: riga.icon, numeral: riga.numeral, name: riga.name, value: riga.peso, meno: true, check: { action: "tiroCondizione", on: riga.on }, off: !riga.on, hint: format(riga.on ? "WOD5E_MAGE.Condizioni.TiroTogli" : "WOD5E_MAGE.Condizioni.TiroRimetti", { name: riga.name }) });
   }
+  // I bonus dentro il tetto (il Sistema, voci Bonus e Supporto): le circostanze che concede il Narratore,
+  // un oggetto adatto, l'aiuto dei compagni (nella Magick l'Armonia). Con la Quintessenza e gli
+  // avanzamenti delle Formule si fermano a +3; il ritocco del totale resta fuori.
+  riserva.push({ kind: "extra", id: "extra", fa: "fa-solid fa-handshake-angle", name: localize("WOD5E_MAGE.Tiro.Bonus"), stepper: { action: "tiroExtra", value: numero(conto.extra), min: !conto.extra, max: conto.extra >= EXTRA_DICE_CAP, extra: `/ ${EXTRA_DICE_CAP}` }, hint: localize(magick ? "WOD5E_MAGE.Tiro.BonusHintMagick" : "WOD5E_MAGE.Tiro.BonusHint") });
   // La Quintessenza in dadi (il Sistema): nei lanci di Magick un dado per punto, dentro il tetto dei +3
-  // coi dadi extra; nei tiri di Abilità solo col potere che lo dice (Anche a mani nude).
+  // coi bonus; nei tiri di Abilità solo col potere che lo dice (Anche a mani nude).
   if (conto.quintessenceAllowed) {
     const tetto = quintessenceDice(Infinity, { available: inputs.quintessenceAvailable, extra: conto.extra });
     riserva.push({ kind: "quintessence", id: "quintessence", fa: "fa-solid fa-droplet", name: localize("WOD5E_MAGE.MagickBalance.Quintessence"), stepper: { action: "tiroQuintessence", value: numero(conto.quintessence), min: !conto.quintessence, max: conto.quintessence >= tetto, extra: `/ ${tetto}` }, hint: localize("WOD5E_MAGE.Tiro.QuintessenceHint") });
@@ -858,6 +863,13 @@ export async function onTiroQuintessence(event, target) {
   const tetto = quintessenceDice(Infinity, { available: inputs.quintessenceAvailable, extra: conto.extra });
   const next = Math.min(Math.max(conto.quintessence + (Number(target.dataset.delta) || 0), 0), tetto);
   return repaint(this, setQuintessence(tiro, next));
+}
+
+/** I bonus dentro il tetto (il Sistema): più o meno, da 0 a 3. */
+export async function onTiroExtra(event, target) {
+  event.preventDefault();
+  const tiro = tiroOf(this);
+  return repaint(this, setExtra(tiro, (Number(tiro.extra) || 0) + (Number(target.dataset.delta) || 0)));
 }
 
 /** Il ritocco dei Dadi (23/9): più o meno sul totale, fuori dal tetto. */

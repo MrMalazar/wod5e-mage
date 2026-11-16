@@ -352,13 +352,13 @@ assert.deepEqual([setDadi(magick, 2).dadi, setDadi(magick, -3).dadi, setDadi(mag
   assert.deepEqual([conMani.magick, conMani.quintessenceAllowed, conMani.quintessence, conMani.pool], [false, true, 3, 9 + 3]);
   assert.equal(contoTiro(setQuintessence(setSoglia(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), 2), 9), { ...numeri, quintessenceAvailable: 9 }).quintessence, 0, "senza il potere, niente Quintessenza fuori dalla Magick");
 
-  // Niente al caso: riesce senza tirare con almeno due dadi in mano; con uno no, e il riquadro dice perché.
+  // Niente al caso: riesce senza tirare se la riserva supera la soglia di almeno due dadi; di uno no, e il riquadro dice perché.
   const niente = { id: "r-niente", sphere: "entropy", name: "Niente al caso", effects: [{ mode: "attivo", on: "autoSuccess", roll: "abilita", when: "dadi2", nota: "due dadi" }] };
   const tiroNiente = setSoglia(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-niente", "entropy", { any: true }), 3);
-  const nienteOk = contoTiro(setDadi(tiroNiente, -7), { ...numeri, power: niente });
-  assert.deepEqual([nienteOk.dice, nienteOk.autoSuccess, nienteOk.powerActive], [2, true, true]);
-  const nienteNo = contoTiro(setDadi(tiroNiente, -8), { ...numeri, power: niente });
-  assert.deepEqual([nienteNo.dice, nienteNo.autoSuccess, nienteNo.autoSuccessMotivo], [1, false, "dadi2"]);
+  const nienteOk = contoTiro(setDadi(tiroNiente, -4), { ...numeri, power: niente });
+  assert.deepEqual([nienteOk.dice, nienteOk.difficulty, nienteOk.autoSuccess, nienteOk.powerActive], [5, 3, true, true]);
+  const nienteNo = contoTiro(setDadi(tiroNiente, -5), { ...numeri, power: niente });
+  assert.deepEqual([nienteNo.dice, nienteNo.autoSuccess, nienteNo.autoSuccessMotivo], [4, false, "dadi2"]);
   // A zero dadi il tiro è impossibile, salvo che riesca senza tirare.
   const fucile = { id: "r-fucile", sphere: "matter", name: "Fucile", effects: [{ mode: "attivo", on: "autoSuccess", roll: "any", nota: "riesce" }] };
   const conFucile = contoTiro(setDadi(setSoglia(pickPower(pickSkill(pickAttribute(emptyTiro(), "dexterity"), "skill:athletics"), "r-fucile", "matter", { any: true }), 3), -10), { ...numeri, power: fucile });
