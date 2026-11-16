@@ -14713,6 +14713,26 @@
   color: var(--mage-viola-chiaro);
 }
 
+/* Il Premio del Difetto (il Sistema): in fondo alla riga di stato; preso, la spunta e il tasto spento. */
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato > .wod5e-mage-quadro-premio {
+  align-items: center;
+  border: 1px dashed var(--mage-oro-tenue);
+  border-radius: 6px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 13px;
+  gap: 5px;
+  margin-left: auto;
+  padding: 3px 8px;
+  width: auto;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato > .wod5e-mage-quadro-premio.preso,
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mago .stato > .wod5e-mage-quadro-premio:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
 .application.wod5e-mage-quadro .wod5e-mage-quadro-mago .gruppo {
   align-items: start;
   display: grid;

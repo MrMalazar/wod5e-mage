@@ -55,7 +55,7 @@ globalThis.Hooks = {
   callAll(name, ...args) { for (const fn of hooks[name] ?? []) fn(...args); }
 };
 globalThis.ui = { notifications: { info: (m) => sim.notifiche.push(m), warn: (m) => sim.notifiche.push(`!${m}`), error: (m) => sim.notifiche.push(`!!${m}`) } };
-globalThis.ChatMessage = { create: async (data) => { const m = { id: `m${sim.messages.length + 1}`, timestamp: Date.now(), ...data }; sim.messages.push(m); return m; } };
+globalThis.ChatMessage = { getSpeaker: ({ actor } = {}) => ({ actor: actor?.id, alias: actor?.name }), create: async (data) => { const m = { id: `m${sim.messages.length + 1}`, timestamp: Date.now(), ...data }; sim.messages.push(m); return m; } };
 
 function attore(id, name, { isMage = true, owner = null, flags = {} } = {}) {
   const dati = { flags: { [MODULE]: { isMage, ...flags } } };
@@ -463,6 +463,26 @@ assert.equal(getOrologi()[0].pieni, 1, "la Carica avanza col Volgare");
   const stato = statusMago(ianira, { localize });
   assert.deepEqual(stato.utenti, []);
   assert.ok(stato.vuoto);
+}
+
+// 7a. Il Premio del Difetto (il Sistema): il tasto nella riga di stato toglie 1 punto alla riserva,
+// segna il mago per la sessione e manda la carta in chat; la seconda volta avvisa e non toglie.
+{
+  const prima = getPool().points;
+  assert.ok(prima > 0, "la riserva ha punti");
+  const { html } = await contesto("giocatori");
+  assert.match(html, /data-action="premioDifetto" data-id="a1"/);
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.premioDifetto.call(app, { preventDefault() {} }, { dataset: { id: "a1" } });
+  assert.equal(getPool().points, prima - 1, "1 punto in meno");
+  assert.equal(getPool().log.at(-1).kind, "difetto");
+  assert.ok(guendalina.getFlag(MODULE, "premioDifetto"), "il segno della sessione");
+  assert.match(String(sim.messages.at(-1).content), /wod5e-mage-premio-difetto/);
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.premioDifetto.call(app, { preventDefault() {} }, { dataset: { id: "a1" } });
+  assert.equal(getPool().points, prima - 1, "una volta per sessione");
+  const stato = statusMago(guendalina, { localize, riserva: getPool().points });
+  assert.ok(stato.premioDifetto.preso && stato.premioDifetto.spento);
+  assert.ok(statusMago(luca, { localize, riserva: 0 }).premioDifetto.spento, "a riserva vuota il tasto è spento");
+  await guendalina.setFlag(MODULE, "premioDifetto", undefined);
 }
 
 // 7b. Il trascinamento dagli Attori (25/9): un mago del mondo entra in coda; un PNG che non è mago, un mago già dentro

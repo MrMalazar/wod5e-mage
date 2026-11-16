@@ -46,7 +46,7 @@ import {
   volgariRecenti
 } from "./menu-paradosso.js";
 import { prepareOngoingMagick } from "./ongoing-magick.js";
-import { addPoints, getPool, LOBBY_FLAG, openSpendDialog, POOL_SETTING, resetPool, setApriQuadro, spendPoints } from "./paradosso-narratore.js";
+import { addPoints, getPool, LOBBY_FLAG, openSpendDialog, POOL_SETTING, premioDelDifetto, PREMIO_DIFETTO_FLAG, resetPool, setApriQuadro, spendPoints } from "./paradosso-narratore.js";
 import { prepareAnchors } from "./personaggio-extra.js";
 import { poteriDelPersonaggio } from "./poteri.js";
 import { ROLL_CARD_FLAG } from "./roll-card.js";
@@ -212,7 +212,7 @@ function volonta(actor) {
   return { max, resta: Math.max(max - danni, 0) };
 }
 
-export function statusMago(actor, { localize = (key) => key, aperto = false, scena = 0 } = {}) {
+export function statusMago(actor, { localize = (key) => key, aperto = false, scena = 0, riserva = null } = {}) {
   const salute = getSalute(actor);
   const balance = getMagickBalance(actor);
   const vol = volonta(actor);
@@ -236,6 +236,9 @@ export function statusMago(actor, { localize = (key) => key, aperto = false, sce
     tipo: localize(row.vulgar ? "WOD5E_MAGE.Menu.Volgare" : "WOD5E_MAGE.Menu.Accidentale")
   }));
   const utenti = utentiDi(actor);
+  // Il Premio del Difetto (il Sistema): una volta per sessione, finché la riserva ha punti.
+  const premioPreso = Boolean(actor.getFlag?.(MODULE_ID, PREMIO_DIFETTO_FLAG));
+  const riservaVuota = riserva !== null && count(riserva) <= 0;
   return {
     id: actor.id,
     name: actor.name,
@@ -251,6 +254,11 @@ export function statusMago(actor, { localize = (key) => key, aperto = false, sce
     passivi,
     magick,
     aperto,
+    premioDifetto: {
+      preso: premioPreso,
+      spento: premioPreso || riservaVuota,
+      hint: localize(premioPreso ? "WOD5E_MAGE.Menu.PremioDifettoPreso" : (riservaVuota ? "WOD5E_MAGE.Menu.PremioDifettoVuota" : "WOD5E_MAGE.Menu.PremioDifettoHint"))
+    },
     vuoto: !attivi.length && !passivi.length && !magick.length
   };
 }
@@ -307,7 +315,8 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       mago: QuadroNarratore.#onMago,
       magoTogli: QuadroNarratore.#onMagoTogli,
       attivoTogli: QuadroNarratore.#onAttivoTogli,
-      schedaApri: QuadroNarratore.#onSchedaApri
+      schedaApri: QuadroNarratore.#onSchedaApri,
+      premioDifetto: QuadroNarratore.#onPremioDifetto
     }
   };
 
@@ -520,7 +529,8 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   #contestoGiocatori(scena, localize) {
-    const maghi = attoriDelQuadro().map((actor) => statusMago(actor, { localize, aperto: this.#maghiAperti.has(actor.id), scena: scena.numero }));
+    const riserva = getPool().points;
+    const maghi = attoriDelQuadro().map((actor) => statusMago(actor, { localize, aperto: this.#maghiAperti.has(actor.id), scena: scena.numero, riserva }));
     return { maghi, nessunMago: !maghi.length };
   }
 
@@ -882,6 +892,29 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     await this.render();
   }
 
+  /** Il Premio del Difetto: 1 punto in meno nella riserva, il segno sul mago, e la carta in chat per il tavolo. */
+  static async #onPremioDifetto(event, target) {
+    event.preventDefault();
+    if (!game.user?.isGM) return;
+    const actor = game.actors?.get(target.dataset.id);
+    if (!actor) return;
+    const localize = game.i18n.localize.bind(game.i18n);
+    const preso = Boolean(actor.getFlag(MODULE_ID, PREMIO_DIFETTO_FLAG));
+    const nuovo = premioDelDifetto(getPool(), { preso, nome: actor.name });
+    if (!nuovo) {
+      ui.notifications.warn(localize(preso ? "WOD5E_MAGE.Menu.PremioDifettoPreso" : "WOD5E_MAGE.Menu.PremioDifettoVuota"));
+      return;
+    }
+    await game.settings.set(MODULE_ID, POOL_SETTING, nuovo);
+    await actor.setFlag(MODULE_ID, PREMIO_DIFETTO_FLAG, { quando: Date.now() });
+    const testo = game.i18n.format("WOD5E_MAGE.Menu.PremioDifettoCarta", { name: foundry.utils.escapeHTML(actor.name) });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<div class="wod5e-mage-roll-card wod5e-mage-premio-difetto"><b>${localize("WOD5E_MAGE.Menu.PremioDifetto")}</b><p>${testo}</p></div>`
+    });
+    await this.render();
+  }
+
   static async #onMagoTogli(event, target) {
     event.preventDefault();
     const ids = attoriDelQuadro().map((actor) => actor.id).filter((id) => id !== target.dataset.id);
@@ -959,6 +992,7 @@ function testoRegistro(entry, localize) {
     case "menu": return entry.actorName ? `${entry.text} · ${entry.actorName}` : String(entry.text ?? "");
     case "spend": return entry.text ? entry.text : localize("WOD5E_MAGE.Paradosso.LogSpend");
     case "manual": return localize("WOD5E_MAGE.Paradosso.LogManual");
+    case "difetto": return format("WOD5E_MAGE.Paradosso.LogDifetto", { name: entry.from ?? "" });
     case "reset": return localize("WOD5E_MAGE.Paradosso.LogReset");
     case "session": return localize("WOD5E_MAGE.Paradosso.LogSession");
     case "scena": return format("WOD5E_MAGE.Menu.LogScena", { n: entry.scena ?? "" });
@@ -1060,6 +1094,8 @@ export async function iniziaSessione({ tipo = "", posto = "normale" } = {}) {
     const update = {};
     if (actor.getFlag(MODULE_ID, ADDOSSO_FLAG)) update[`flags.${MODULE_ID}.-=${ADDOSSO_FLAG}`] = null;
     if (actor.getFlag(MODULE_ID, LOBBY_FLAG)) update[`flags.${MODULE_ID}.-=${LOBBY_FLAG}`] = null;
+    // Il Premio del Difetto torna disponibile: vale una volta per sessione.
+    if (actor.getFlag(MODULE_ID, PREMIO_DIFETTO_FLAG)) update[`flags.${MODULE_ID}.-=${PREMIO_DIFETTO_FLAG}`] = null;
     if (Object.keys(update).length) await actor.update(update);
   }
   for (const orologio of getOrologi()) await specchiaOrologio(orologio, { elimina: true });

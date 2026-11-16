@@ -1781,6 +1781,7 @@
       "LogSforzo": "Reality forced by {name} (old rule)",
       "LogSpend": "Effect from the Sheet",
       "LogManual": "By hand",
+      "LogDifetto": "Flaw Reward: {name}",
       "LogReset": "Reset",
       "LogSession": "New session"
     },
@@ -1984,7 +1985,12 @@
       "NessunMagoSessione": "No mage on the Board: drag a mage here from the Actors, then press Start.",
       "SessioneSpiega": "The mages on the Board play. Drag whoever is missing here from the Actors, pick the first scene and the place, then Start: last session's effects go away and the pool returns to zero.",
       "SessioneAnnulla": "Cancel",
-      "CopiatoAccidentale": "{points} to the Storyteller: {name} paid a Coincidental in Paradox."
+      "CopiatoAccidentale": "{points} to the Storyteller: {name} paid a Coincidental in Paradox.",
+      "PremioDifetto": "Flaw Reward",
+      "PremioDifettoHint": "The player faced the roll hampered by their Flaw, and the roll mattered: remove 1 point from your pool. Once per session.",
+      "PremioDifettoPreso": "The Flaw Reward has already been taken this session.",
+      "PremioDifettoVuota": "The pool is empty: there is nothing to remove.",
+      "PremioDifettoCarta": "{name} faced the roll of their Flaw: the Storyteller removes 1 point from the Paradox pool."
     },
     "Stat": {
       "Identita": "Identity",

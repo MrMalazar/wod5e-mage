@@ -72,6 +72,21 @@ export function spendPoints(pool, price, extra = {}) {
   };
 }
 
+/** Il segno sul personaggio: il Premio del Difetto preso in questa sessione. */
+export const PREMIO_DIFETTO_FLAG = "premioDifetto";
+
+/**
+ * Il Premio del Difetto (il Sistema, voce Premio): quando il giocatore
+ * affronta lui il tiro penalizzato dal suo Difetto, e il tiro conta, il
+ * Narratore toglie 1 punto dalla sua riserva di Paradosso. Vale una volta per
+ * sessione, per ogni personaggio. Torna la riserva nuova, o null se il premio
+ * è già preso o la riserva è vuota.
+ */
+export function premioDelDifetto(pool, { preso = false, nome = "" } = {}) {
+  if (preso) return null;
+  return spendPoints(pool, 1, { kind: "difetto", from: String(nome ?? "") });
+}
+
 /** A fine sessione: zero punti, il registro ricomincia. */
 export function resetPool(pool) {
   const base = normalizePool(pool);
@@ -402,13 +417,14 @@ function logText(entry, localize) {
     case "sforzo": return format("WOD5E_MAGE.Paradosso.LogSforzo", { name: entry.from ?? "" });
     case "spend": return entry.text ? entry.text : localize("WOD5E_MAGE.Paradosso.LogSpend");
     case "manual": return localize("WOD5E_MAGE.Paradosso.LogManual");
+    case "difetto": return format("WOD5E_MAGE.Paradosso.LogDifetto", { name: entry.from ?? "" });
     case "reset": return localize("WOD5E_MAGE.Paradosso.LogReset");
     case "session": return localize("WOD5E_MAGE.Paradosso.LogSession");
     default: return "";
   }
 }
 
-/** La Nuova sessione del Narratore: la lobby si svuota, la riserva si azzera. */
+/** La Nuova sessione del Narratore: la lobby si svuota, la riserva si azzera, il Premio del Difetto torna. */
 export async function newSession() {
   if (!game.user.isGM) return false;
   const localize = game.i18n.localize.bind(game.i18n);
@@ -421,6 +437,9 @@ export async function newSession() {
   if (!ok) return false;
   for (const actor of lobbyActors(game.actors?.contents ?? [])) {
     await actor.update({ [`flags.${MODULE_ID}.-=${LOBBY_FLAG}`]: null });
+  }
+  for (const actor of game.actors?.contents ?? []) {
+    if (isMageActor(actor) && actor.getFlag(MODULE_ID, PREMIO_DIFETTO_FLAG)) await actor.update({ [`flags.${MODULE_ID}.-=${PREMIO_DIFETTO_FLAG}`]: null });
   }
   await setPool(resetPool(getPool()));
   ui.notifications.info(localize("WOD5E_MAGE.Paradosso.NewSessionDone"));

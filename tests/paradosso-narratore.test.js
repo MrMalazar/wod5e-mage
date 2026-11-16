@@ -15,6 +15,8 @@ import {
   resetPool,
   schedaParadosso,
   spendPoints,
+  premioDelDifetto,
+  PREMIO_DIFETTO_FLAG,
   spendPrice
 } from "../scripts/paradosso-narratore.js";
 
@@ -123,3 +125,15 @@ for (const lang of ["it", "en"]) {
 }
 
 console.log("Punti Paradosso del Narratore: test passati.");
+
+// Il Premio del Difetto (il Sistema): 1 punto in meno, una volta per sessione, e solo se la riserva ne ha.
+{
+  const conPunti = { points: 3, visible: false, log: [] };
+  const dopo = premioDelDifetto(conPunti, { nome: "Ianira" });
+  assert.equal(dopo.points, 2, "il Narratore toglie 1 punto");
+  assert.deepEqual([dopo.log.at(-1).kind, dopo.log.at(-1).amount, dopo.log.at(-1).from], ["difetto", -1, "Ianira"], "il registro dice chi l'ha preso");
+  assert.equal(premioDelDifetto(conPunti, { preso: true }), null, "una volta per sessione");
+  assert.equal(premioDelDifetto({ points: 0 }), null, "a riserva vuota non c'è niente da togliere");
+  assert.equal(PREMIO_DIFETTO_FLAG, "premioDifetto");
+  console.log("premio del difetto: ok");
+}

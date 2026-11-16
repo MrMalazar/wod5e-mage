@@ -1781,6 +1781,7 @@
       "LogSforzo": "Realtà sforzata da {name} (regola vecchia)",
       "LogSpend": "Effetto dalla Scheda",
       "LogManual": "A mano",
+      "LogDifetto": "Premio del Difetto: {name}",
       "LogReset": "Azzerata",
       "LogSession": "Nuova sessione"
     },
@@ -1984,7 +1985,12 @@
       "NessunMagoSessione": "Nessun mago nel Quadro: trascina qui un mago dagli Attori, poi premi Inizia.",
       "SessioneSpiega": "Giocano i maghi del Quadro. Trascina qui dagli Attori chi manca, scegli la prima scena e il posto, poi Inizia: gli effetti della sessione prima se ne vanno e la riserva torna a zero.",
       "SessioneAnnulla": "Annulla",
-      "CopiatoAccidentale": "{points} al Narratore: {name} ha pagato un Accidentale in Paradosso."
+      "CopiatoAccidentale": "{points} al Narratore: {name} ha pagato un Accidentale in Paradosso.",
+      "PremioDifetto": "Premio del Difetto",
+      "PremioDifettoHint": "Il giocatore ha affrontato il tiro penalizzato dal suo Difetto, e il tiro contava: togli 1 punto dalla tua riserva. Una volta per sessione.",
+      "PremioDifettoPreso": "Il Premio del Difetto è già preso in questa sessione.",
+      "PremioDifettoVuota": "La riserva è vuota: non c'è niente da togliere.",
+      "PremioDifettoCarta": "{name} ha affrontato il tiro del suo Difetto: il Narratore toglie 1 punto dalla riserva del Paradosso."
     },
     "Stat": {
       "Identita": "Identità",

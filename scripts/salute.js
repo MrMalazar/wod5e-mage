@@ -863,6 +863,8 @@ export async function onSaluteNewSession(event) {
     [`flags.${MODULE_ID}.-=formuleScena`]: null,
     // La Saggezza (3/10): l'atto che fa risplendere torna disponibile, una volta per sessione.
     [`flags.${MODULE_ID}.wisdom.risplende`]: false,
+    // Il Premio del Difetto (il Sistema) torna disponibile: vale una volta per sessione.
+    [`flags.${MODULE_ID}.-=premioDifetto`]: null,
     // Lo Sforzare la realtà non c'è più (3/10): la sua bandiera della sessione se ne va.
     [`flags.${MODULE_ID}.-=sforziSessione`]: null,
     // I poteri «una volta per scena» e «per sessione» tornano disponibili (24/9).
