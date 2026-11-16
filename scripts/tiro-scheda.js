@@ -19,6 +19,8 @@ import { testoCosto } from "./ramo-c.js";
 import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
 import { FORMULE_M6 } from "./data/formule.js";
 import { dadiDeiDanni } from "./danni.js";
+import { BUSSOLA_SCENE_FLAG, grantBussolaQuintessence } from "./bussola.js";
+import { AVANZAMENTI_FLAG, avanzamentiDi, mancanoAlProssimo } from "./formule-avanzamenti.js";
 import { scopesInParole } from "./ongoing-magick.js";
 import { findMageRollTrait, selectorsForMageRollTrait, skillRollCard } from "./mage-roll-selection.js";
 import {
@@ -64,6 +66,7 @@ import {
   removePill,
   setDadi,
   setKind,
+  setBussola,
   setDissonanza,
   setQuintessence,
   setScope,
@@ -179,6 +182,9 @@ export function contoInputs(actor, tiro, { traits = null } = {}) {
   const powerCost = power && attivaEffetti(power, variant) ? count(power.costValue) : 0;
   // Le Condizioni (29/9): quelle che pesano sul tipo del tiro, meno quelle tolte a mano.
   const tipo = tipoDelTiro({ attribute, skill });
+  // La Formula (il Sistema): un incantesimo che porta una Formula conta i suoi avanzamenti, e il premio non si applica.
+  const formulaId = String(spellOf(actor, tiro)?.formula ?? "");
+  const avanzamenti = avanzamentiDi(actor.getFlag?.(MODULE_ID, AVANZAMENTI_FLAG) ?? {}, formulaId);
   return {
     known,
     attribute,
@@ -190,6 +196,9 @@ export function contoInputs(actor, tiro, { traits = null } = {}) {
       attributeValue: attribute?.value ?? 0,
       skillValue: skill?.value ?? 0,
       traitDice: traitDiceOf(actor, tiro.traits),
+      // La Bussola (il Sistema): vale una volta per scena; usata, il tasto si spegne fino al cambio di scena.
+      bussola: tiro.bussola && !bussolaUsata(actor) ? 1 : 0,
+      formula: { attiva: Boolean(formulaId), id: formulaId, avanzamenti: avanzamenti.punti, dadi: avanzamenti.dadi },
       // Il potere attivo impegna la sua Quintessenza; se non basta lo si paga in Paradosso (il Sistema), e resta tutta per i dadi.
       quintessenceAvailable: getMagickBalance(actor).quintessence - pagamentoDelPotere(powerCost, getMagickBalance(actor).quintessence).quintessenza,
       power,
@@ -414,7 +423,12 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     }
   }
   // Il premio dell'Areté (il Sistema): abbassa la soglia, con la spunta; spento mostra quanto toglierebbe.
-  if (magick) {
+  // Nelle Formule non si applica: al suo posto, nella Riserva, i dadi dei suoi avanzamenti.
+  if (magick && conto.formula) {
+    const f = inputs.formula;
+    soglia.push({ kind: "prize", id: "prize", img: `modules/${MODULE_ID}/assets/icons/ui/arete.svg`, name: localize("WOD5E_MAGE.Arete.Prize"), value: "", off: true, hint: localize("WOD5E_MAGE.Formule.SenzaPremio") });
+    riserva.push({ kind: "formula", id: "formula", fa: "fa-solid fa-scroll", name: localize("WOD5E_MAGE.Formule.Avanzamenti"), value: conto.formulaDice ? numero(conto.formulaDice) : "", off: !conto.formulaDice, hint: format(mancanoAlProssimo(f.avanzamenti) ? "WOD5E_MAGE.Formule.AvanzamentiHint" : "WOD5E_MAGE.Formule.AvanzamentiPieno", { punti: f.avanzamenti, dadi: f.dadi, mancano: mancanoAlProssimo(f.avanzamenti) }) });
+  } else if (magick) {
     const on = Boolean(tiro.prize);
     soglia.push({ kind: "prize", id: "prize", img: `modules/${MODULE_ID}/assets/icons/ui/arete.svg`, name: localize("WOD5E_MAGE.Arete.Prize"), value: conSegno(-(on ? conto.prize : calculateAretePrize(arete.value))), check: { action: "tiroPrize", on }, off: !on, hint: format("WOD5E_MAGE.Arete.PrizeHint", { arete: arete.value }) });
   }
@@ -526,6 +540,8 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     // La dissonanza (il Sistema): lanciare un incantesimo non costa; un Volgare dà 1 punto di
     // Paradosso, più 1 coi testimoni e più 1 con la dissonanza, che si accende qui.
     dissonanza: magick ? { on: Boolean(tiro.dissonanza) } : null,
+    // La Bussola (il Sistema): per ogni tiro, una volta per scena; usata, il tasto è spento e lo dice.
+    bussola: { on: Boolean(tiro.bussola) && !bussolaUsata(actor), usata: bussolaUsata(actor), hint: localize(bussolaUsata(actor) ? "WOD5E_MAGE.Tiro.BussolaUsata" : "WOD5E_MAGE.Tiro.BussolaHint") },
     // Sul tasto solo il nome (1/10); il Paradosso che il tipo dà sta nel sorvolo e nella carta.
     kinds: TIRO_KINDS.map((kind) => {
       const paradosso = paradossoDelLancio({ volgare: kind !== "accidentale", testimoni: kind === "testimoni", dissonanza: Boolean(tiro.dissonanza) });
@@ -813,6 +829,18 @@ export async function onTiroDissonanza(event) {
   return repaint(this, setDissonanza(tiroOf(this)));
 }
 
+/** La Bussola già servita in questa scena: il segno che il Cambio scena toglie (salute.js). */
+export function bussolaUsata(actor) {
+  return Boolean(actor?.getFlag?.(MODULE_ID, BUSSOLA_SCENE_FLAG));
+}
+
+/** Il tasto della Bussola: si accende e si spegne; usata in questa scena non fa niente. */
+export async function onTiroBussola(event) {
+  event.preventDefault();
+  if (bussolaUsata(this.actor)) return null;
+  return repaint(this, setBussola(tiroOf(this)));
+}
+
 /** La soglia a mano (30/9): il meno e il più la alzano o abbassano sopra il conto degli Ambiti; `data-reset` la toglie. */
 export async function onTiroSoglia(event, target) {
   event.preventDefault();
@@ -1003,6 +1031,10 @@ export async function launchTiro(actor, tiro) {
   const banner = senzaTirare ? format("WOD5E_MAGE.Tiro.RiesceSenzaTirare", { name: potereLabel(power, localize) }) : "";
 
   if (conto.extra > 0) bonusParts.push(format("WOD5E_MAGE.Tiro.ExtraFlavor", { dice: conto.extra }));
+  // La Bussola: un dado fuori dal tetto; a tiro fatto, 1 Quintessenza (una volta per scena).
+  if (conto.bussolaDice > 0) bonusParts.push(format("WOD5E_MAGE.Bussola.Flavor", { label: localize("WOD5E_MAGE.Tiro.Bussola") }));
+  // La Formula: i dadi dei suoi avanzamenti, dentro il tetto.
+  if (conto.formulaDice > 0) bonusParts.push(format("WOD5E_MAGE.Formule.AvanzamentiFlavor", { dadi: conto.formulaDice, punti: inputs.formula.avanzamenti }));
   // Il ritocco dei Dadi (23/9): in carta, perché si sappia.
   if (conto.adjust) notes.push(format("WOD5E_MAGE.Tiro.DadiNote", { dice: `${conto.adjust > 0 ? "+" : ""}${conto.adjust}` }));
 
@@ -1036,6 +1068,8 @@ export async function launchTiro(actor, tiro) {
     }
     // A tiro fatto: la Quintessenza spesa (in dadi, o per il potere attivo) scende, l'uso si conta.
     if (esito) await pagaPotere(actor, conto, inputs, { piano: pianoPotere });
+    // La Bussola rispettata: +1 Quintessenza a tiro fatto, una volta per scena.
+    if (esito && conto.bussolaDice > 0) await grantBussolaQuintessence(actor, { label: localize("WOD5E_MAGE.Tiro.Bussola") });
     return esito;
   }
 
@@ -1142,6 +1176,8 @@ export async function launchTiro(actor, tiro) {
         vulgar: effect.vulgar,
         // I dadi dei danni (il Sistema): uno per livello di Potenza, quando la Potenza si legge con la lente Danni.
         danni: dadiDeiDanni(tiro.scopes?.potency, scopeModeOf(tavolaAmbiti, "potency", modiAmbiti.potency)?.id),
+        // La Formula (il Sistema): sotto la carta di un lancio fallito compare il tasto dell'avanzamento.
+        ...(inputs.formula.attiva ? { formula: inputs.formula.id, formulaNome: spellName || inputs.formula.id } : {}),
         // Il Paradosso preso col lancio (il tipo, la dissonanza, il potere pagato in Paradosso): il Narratore lo copia.
         kind: tiro.kind,
         dissonanza: Boolean(tiro.dissonanza),
@@ -1168,6 +1204,8 @@ export async function launchTiro(actor, tiro) {
   }
   // A tiro fatto: l'uso del potere attivo si conta (la Ruota ha già pagato).
   await pagaPotere(actor, conto, inputs, { pagato: true });
+  // La Bussola rispettata: +1 Quintessenza a tiro fatto, una volta per scena.
+  if (conto.bussolaDice > 0) await grantBussolaQuintessence(actor, { label: localize("WOD5E_MAGE.Tiro.Bussola") });
   // Il Volgare fallito non rende più Quintessenza (rifondazione del 14/9, ribadito il 29/9).
   // La Durata dichiarata scrive il lancio fra le Magick in atto.
   await recordEffect(actor, { maintained: false, maintainedName: "" }, effect);

@@ -89,6 +89,8 @@ export function emptyTiro() {
     quintessence: 0,
     // La dissonanza (il Sistema): il lancio stride con la realtà intorno, e un Volgare dà 1 Paradosso in più.
     dissonanza: false,
+    // La Bussola (il Sistema): l'azione segue la Bussola, un dado fuori dal tetto e 1 Quintessenza a tiro fatto.
+    bussola: false,
     extra: 0,
     dadi: 0,
     // L'Indulgere (3/10): "", oppure il lato dichiarato, "hubris" o "silenzio".
@@ -357,6 +359,13 @@ export function setQuintessence(tiro, value) {
  * vulcano»): aggrava un lancio Volgare di 1 punto di Paradosso. Senza
  * valore si gira; l'Accidentale non la sente.
  */
+/** La Bussola rispettata: si accende e si spegne; vale per ogni tiro, una volta per scena. */
+export function setBussola(tiro, on) {
+  const next = clone(tiro);
+  next.bussola = on === undefined ? !next.bussola : Boolean(on);
+  return next;
+}
+
 export function setDissonanza(tiro, on) {
   const next = clone(tiro);
   next.dissonanza = on === undefined ? !next.dissonanza : Boolean(on);
@@ -516,6 +525,8 @@ export function livelloContato(level, free) {
  * harmony, bussola (1 se rispettata), quintessenceAvailable, power (il
  * potere scelto, per i suoi effetti) e powerCtx (quello che le sue condizioni
  * chiedono: Sfere conosciute, poteri per Sfera, Salute sotto metà).
+ * `formula` dice se l'incantesimo è una Formula e quanti dadi le danno i suoi
+ * avanzamenti: stanno nel tetto dei +3, e il premio dell'Areté non si applica.
  * Torna la riserva, i dadi che si tirano (`pool` e `dice`: tutta la riserva),
  * la soglia (`difficulty`: i successi che servono), il conto degli Ambiti,
  * il premio, la Quintessenza spesa in dadi, le note del potere, gli effetti
@@ -534,7 +545,8 @@ export function contoTiro(tiro, {
   quintessenceAvailable = 0,
   power = null,
   powerCtx = {},
-  condizioni = null
+  condizioni = null,
+  formula = null
 } = {}) {
   const magick = isMagick(tiro);
   const areteValue = count(arete);
@@ -553,19 +565,23 @@ export function contoTiro(tiro, {
   };
   // Il premio dell'Areté (il Sistema): abbassa la soglia di quant'è l'Areté. Vale per ogni
   // Tipo di Magick, l'Ibrida compresa (Blue, 2/10); il premio doppio (Voce dell'Avatar) la abbassa del doppio.
-  const prizeBase = magick && tiro?.prize ? calculateAretePrize(areteValue) : 0;
+  // Nelle Formule il premio non si applica: lo sostituiscono gli avanzamenti (il Sistema, voce Formule).
+  const formulaAttiva = magick && Boolean(formula?.attiva);
+  const prizeBase = magick && tiro?.prize && !formulaAttiva ? calculateAretePrize(areteValue) : 0;
   const powered = applyPotere({ threshold: 0, dice: 0, difficulty: null, prize: prizeBase }, power, ctx);
   const prize = magick ? count(powered.prize) : 0;
 
   // Dentro il tetto dei +3: l'Armonia e i dadi dati al tavolo, poi la Quintessenza (Blue, 15/11).
   // La Quintessenza dà dadi nei lanci di Magick; in un tiro di Abilità solo col potere che lo dice.
   const extra = capBonusDice(count(harmony) + count(tiro?.extra));
+  // I dadi degli avanzamenti della Formula: anche loro nel tetto, dopo i dadi extra.
+  const formulaDice = formulaAttiva ? Math.min(count(formula?.dadi), Math.max(BONUS_MAX - extra, 0)) : 0;
   const quintessenceAllowed = magick || Boolean(powered.quintessenceOnSkills);
-  const quintessence = quintessenceAllowed ? quintessenceDice(tiro?.quintessence, { available: quintessenceAvailable, extra }) : 0;
+  const quintessence = quintessenceAllowed ? quintessenceDice(tiro?.quintessence, { available: quintessenceAvailable, extra: extra + formulaDice }) : 0;
   // Fuori dal tetto: la Specializzazione, la Bussola e i Vantaggi, che arrivano a 5 (in meno non hanno tetto).
   const vantaggi = Math.min(Math.trunc(Number(traitDice) || 0), VANTAGGI_MAX);
   const traits = count(attributeValue) + count(skillValue);
-  const bonus = extra + quintessence + vantaggi + specialtyDice + bussolaDice;
+  const bonus = extra + formulaDice + quintessence + vantaggi + specialtyDice + bussolaDice;
   const riserva = Math.max(traits + bonus, 0);
   // Il potere, finché il catalogo non passa al Sistema: i suoi dadi, e la soglia che spostava girata in dadi.
   const powerDice = count(powered.dice) - Math.trunc(Number(powered.thresholdDelta) || 0);
@@ -616,6 +632,8 @@ export function contoTiro(tiro, {
     quintessence,
     quintessenceAllowed,
     extra,
+    formula: formulaAttiva,
+    formulaDice,
     // La riserva com'è (Attributo + Abilità + bonus), prima del potere, delle Condizioni e del ritocco.
     riserva,
     riservaTotale,

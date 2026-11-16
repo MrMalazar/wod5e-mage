@@ -79,6 +79,7 @@ import {
   onTiroPill,
   onTiroPower,
   onTiroDissonanza,
+  onTiroBussola,
   onTiroPrize,
   onTiroQuintessence,
   onTiroRoll,
@@ -568,6 +569,7 @@ export class MageActorSheet extends MortalActorSheet {
       tiroSoglia: onTiroSoglia,
       tiroQuintessence: onTiroQuintessence,
       tiroDissonanza: onTiroDissonanza,
+      tiroBussola: onTiroBussola,
       tiroDadi: onTiroDadi,
       tiroIndulgi: onTiroIndulgi,
       // Le Condizioni sul tiro (29/9): un clic toglie o rimette quella che non c'entra.

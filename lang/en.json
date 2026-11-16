@@ -2097,6 +2097,9 @@
       "PotereCostoParadosso": "The power costs {points} Paradox: the Wheel does not hold enough Quintessence.",
       "Dissonanza": "Dissonance",
       "DissonanzaHint": "The casting clashes with the reality around it, like calling water inside a volcano: a Vulgar gives 1 more point of Paradox. It does not count on a Coincidental.",
+      "Bussola": "Compass",
+      "BussolaHint": "The action follows the Compass: one more die, outside the cap, and 1 Quintessence point once rolled. Once per scene.",
+      "BussolaUsata": "The Compass has already served this scene: it comes back with the scene change.",
       "PotereDadiFlavor": "{name} +{dice}",
       "SogliaManoHint": "The threshold: the highest Scope, Epicness included, plus 1 for every other Scope above Arete; 10 at most. Minus and plus are the difficulty the Storyteller gives: it is free, and beyond +3 or −3 the number turns red; the pen says by how much.",
       "SogliaManoAbilitaHint": "The threshold the Storyteller sets, from 1 to 7, with minus and plus: without it, the roll does not start.",
@@ -2495,7 +2498,15 @@
       "FiltroSfere": "Filter by Sphere",
       "SfereTutte": "All Spheres",
       "SfereTutteBreve": "All",
-      "SferaFiltro": "Only {sphere}"
+      "SferaFiltro": "Only {sphere}",
+      "Avanzamenti": "Advancements",
+      "AvanzamentiHint": "Formula advancements: {punti}, dice: {dadi}. One comes when the cast fails, at most one per scene. At 2 it gives one die, at 4 two, at 7 three; {mancano} more to the next die.",
+      "AvanzamentiPieno": "Formula advancements: {punti}, dice: {dadi}. It is at the top: three dice.",
+      "AvanzamentiFlavor": "Formula advancements ({punti}): +{dadi} dice",
+      "SenzaPremio": "In Formulas the Arete prize does not apply: advancements replace it.",
+      "Avanzamento": "Advancement",
+      "AvanzamentoHint": "{nome} takes an advancement if you described it properly, or if you play out the failure. One per scene.",
+      "AvanzamentoPreso": "{nome}: advancements {punti}, dice {dadi}."
     },
     "Nemico": {
       "MalusTutto": "to all",

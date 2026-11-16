@@ -19045,6 +19045,7 @@
 
 /* Indulgi (3/10, al posto di Sforza la realtà) e Dal Narratore: interruttori a pillola, a parole, accesi in oro. */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-indulgi,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-bussola,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore {
   align-items: center;
   background: transparent;
@@ -19066,16 +19067,24 @@
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-indulgi:hover,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-bussola:hover:not(:disabled),
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore:hover {
   border-color: var(--mage-oro);
   box-shadow: none;
 }
 
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-indulgi.acceso,
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-bussola.acceso,
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-narratore.acceso {
   background: var(--mage-riga-sorvolo);
   border-color: var(--mage-oro);
   color: var(--mage-testo);
+}
+
+/* La Bussola già servita in questa scena: spenta finché non cambia la scena. */
+.wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-bussola:disabled {
+  cursor: default;
+  opacity: 0.45;
 }
 
 /* I tasti: TIRA, o i tre tipi col solo nome, pari. */

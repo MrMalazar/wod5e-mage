@@ -762,6 +762,8 @@ export async function onSaluteCambioScena(event) {
   const update = {
     [`flags.${MODULE_ID}.salute.paradosso`]: paradosso,
     [`flags.${MODULE_ID}.-=convinzioneScena`]: null,
+    // Le Formule possono prendere di nuovo il loro avanzamento (il Sistema: uno per scena).
+    [`flags.${MODULE_ID}.-=formuleScena`]: null,
     // I poteri «una volta per scena» tornano disponibili (24/9).
     [`flags.${MODULE_ID}.${POTERI_USI_FLAG}`]: riarmaUsi(actor.getFlag(MODULE_ID, POTERI_USI_FLAG) ?? {}, "scena")
   };
@@ -857,6 +859,8 @@ export async function onSaluteNewSession(event) {
     [`flags.${MODULE_ID}.contraccolpoNegato`]: false,
     // Nuova sessione, nuova scena: la Convinzione può rigenerare di nuovo (9/9).
     [`flags.${MODULE_ID}.-=convinzioneScena`]: null,
+    // E le Formule possono prendere di nuovo il loro avanzamento.
+    [`flags.${MODULE_ID}.-=formuleScena`]: null,
     // La Saggezza (3/10): l'atto che fa risplendere torna disponibile, una volta per sessione.
     [`flags.${MODULE_ID}.wisdom.risplende`]: false,
     // Lo Sforzare la realtà non c'è più (3/10): la sua bandiera della sessione se ne va.

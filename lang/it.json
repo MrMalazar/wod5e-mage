@@ -2097,6 +2097,9 @@
       "PotereCostoParadosso": "Il potere costa {points} Paradosso: sulla Ruota la Quintessenza non basta.",
       "Dissonanza": "Dissonanza",
       "DissonanzaHint": "Il lancio stride con la realtà intorno, come evocare acqua in un vulcano: un Volgare dà 1 punto di Paradosso in più. Sull'Accidentale non conta.",
+      "Bussola": "Bussola",
+      "BussolaHint": "L'azione segue la Bussola: un dado in più, fuori dal tetto, e a tiro fatto 1 punto di Quintessenza. Una volta per scena.",
+      "BussolaUsata": "La Bussola è già servita in questa scena: torna col cambio di scena.",
       "PotereDadiFlavor": "{name} +{dice}",
       "SogliaManoHint": "La soglia: l'Ambito più alto, Epicità compresa, più 1 per ogni altro Ambito sopra l'Areté; al massimo 10. Il meno e il più sono la difficoltà che dà il Narratore: è libera, e oltre +3 o −3 il numero diventa rosso; la matita dice di quanto.",
       "SogliaManoAbilitaHint": "La soglia che dice il Narratore, da 1 a 7, col meno e il più: senza, il tiro non parte.",
@@ -2495,7 +2498,15 @@
       "FiltroSfere": "Filtro per Sfera",
       "SfereTutte": "Tutte le Sfere",
       "SfereTutteBreve": "Tutte",
-      "SferaFiltro": "Solo {sphere}"
+      "SferaFiltro": "Solo {sphere}",
+      "Avanzamenti": "Avanzamenti",
+      "AvanzamentiHint": "Avanzamenti della Formula: {punti}, dadi: {dadi}. Ne arriva uno quando il lancio fallisce, al massimo uno per scena. A 2 dà un dado, a 4 due, a 7 tre; al prossimo dado ne mancano {mancano}.",
+      "AvanzamentiPieno": "Avanzamenti della Formula: {punti}, dadi: {dadi}. È al massimo: tre dadi.",
+      "AvanzamentiFlavor": "Avanzamenti della Formula ({punti}): +{dadi} dadi",
+      "SenzaPremio": "Nelle Formule il premio dell'Areté non si applica: lo sostituiscono gli avanzamenti.",
+      "Avanzamento": "Avanzamento",
+      "AvanzamentoHint": "{nome} prende un avanzamento se l'avevi descritta come si deve, o se interpreti il fallimento. Uno per scena.",
+      "AvanzamentoPreso": "{nome}: avanzamenti {punti}, dadi {dadi}."
     },
     "Nemico": {
       "MalusTutto": "a tutto",
