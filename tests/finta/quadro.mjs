@@ -240,7 +240,7 @@ await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
   assert.deepEqual(ctx.cassetti.map((c) => c.conto), [10, 13, 9, 5, 6, 6, 5, 7, 4]);
   assert.ok(ctx.cassetti.every((c) => !c.chiusa), "i cassetti partono aperti");
   assert.deepEqual(ctx.cassetti.map((c) => c.label), ["Sul mago", "Sull'incantesimo", "I Dormienti", "Le Presenze", "Il posto", "Scontro e scena", "Gli orologi", "Le Ancore", "Allo scoppio"]);
-  assert.equal(ctx.cassetti[0].sotto, "chi ha lanciato: meno dadi, l'8 per riuscire, un danno");
+  assert.equal(ctx.cassetti[0].sotto, "chi ha lanciato: meno dadi, la difficoltà più alta, un danno");
   assert.deepEqual(ctx.cassetti.map((c) => c.staccato), [false, false, false, false, false, false, false, false, true], "lo scoppio in fondo, staccato");
   const mago = ctx.cassetti.find((c) => c.cassetto === "mago");
   assert.deepEqual(mago.voci.map((v) => v.nome), [...mago.voci.map((v) => v.nome)].sort((a, b) => a.localeCompare(b, "it")), "in ordine alfabetico, senza gruppi");

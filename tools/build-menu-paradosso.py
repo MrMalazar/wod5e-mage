@@ -65,7 +65,7 @@ RINOMINE = [("un Tocco", "una Conseguenza"), ("i Tocchi", "le Conseguenze"), ("I
 # occhio»): l'effetto in poche parole, il numero per primo, al massimo una riga.
 BREVI = {
     "tremore": "−2 dadi al prossimo lancio",
-    "rigidita": "prossimo Volgare: riesce solo con l'8",
+    "rigidita": "prossimo Volgare: conta coi testimoni",
     "fragile": "prossimo Volgare: i rossi scoppiano col 2",
     "fiacco": "max 6 dadi per la scena",
     "scottatura": "1 danno superficiale",
@@ -119,7 +119,7 @@ BREVI = {
     "altrove-la-voce": "una voce chiama: −2 dadi a chi non va",
     "altrove-stranezza": "Abbagliato o Ovattato per la scena",
     "santuario-falla": "la protezione cede",
-    "santuario-il-nodo-storto": "Nodo senza Quintessenza, Volgari con l'8",
+    "santuario-il-nodo-storto": "Nodo senza Quintessenza, Volgari coi testimoni",
     "santuario-visita": "qualcuno entra oltre le protezioni e vede",
     "citta-intoppo": "la scorciatoia sbaglia posto, con gente",
     "citta-controllo": "il controllo vede attraverso la Magick",

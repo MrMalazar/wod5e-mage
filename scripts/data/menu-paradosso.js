@@ -266,7 +266,7 @@ export const MENU_PARADOSSO = Object.freeze([
     },
     "quando": "subito dopo un Volgare.",
     "segno": "",
-    "effetto": "il prossimo Volgare di quel mago riesce con l'8, anche senza testimoni.",
+    "effetto": "il prossimo Volgare di quel mago conta come fatto davanti a testimoni, anche se non ce ne sono.",
     "mosse": [
       "aspettare un turno",
       "lanciare Accidentale",
@@ -276,7 +276,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "«L'aria intorno a te si fa densa, come acqua.»",
     "durata": "lancio",
     "ordine": 2,
-    "breve": "prossimo Volgare: riesce solo con l'8",
+    "breve": "prossimo Volgare: conta coi testimoni",
     "facce": {}
   },
   {
@@ -609,7 +609,7 @@ export const MENU_PARADOSSO = Object.freeze([
     },
     "quando": "un mago lancia Volgare in un posto dove c'è gente.",
     "segno": "qualcuno guarda nella direzione sbagliata: una finestra che si accende, una testa che si gira.",
-    "effetto": "al turno dopo ha visto. Finché resta in scena, i Volgari successivi contano con testimoni: riescono con l'8 e costano un punto Paradosso in più.",
+    "effetto": "al turno dopo ha visto. Finché resta in scena, i Volgari successivi contano con testimoni: costano un punto Paradosso in più, e la difficoltà può salire.",
     "mosse": [
       "convincerlo",
       "nascondersi",
@@ -2053,7 +2053,7 @@ export const MENU_PARADOSSO = Object.freeze([
     },
     "quando": "un Volgare lanciato in casa, sopra il Nodo.",
     "segno": "la luce del Nodo cala, l'acqua della fonte si intorbidisce, le piante si girano dall'altra parte.",
-    "effetto": "dal turno dopo, e fino a fine scena, il Nodo non dà Quintessenza e la casa è rigida: ogni Volgare lanciato in casa riesce con l'8.",
+    "effetto": "dal turno dopo, e fino a fine scena, il Nodo non dà Quintessenza e la casa è rigida: ogni Volgare lanciato in casa conta come fatto davanti a testimoni.",
     "mosse": [
       "aspettare la scena dopo",
       "pulire il Nodo con un rito (che paga)",
@@ -2063,7 +2063,7 @@ export const MENU_PARADOSSO = Object.freeze([
     "esempio": "la vasca in cortile ha l'acqua ferma e grigia, e la maga sente che stasera non c'è niente da prendere.",
     "durata": "scena",
     "ordine": 56,
-    "breve": "Nodo senza Quintessenza, Volgari con l'8",
+    "breve": "Nodo senza Quintessenza, Volgari coi testimoni",
     "facce": {}
   },
   {

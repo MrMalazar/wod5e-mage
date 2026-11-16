@@ -86,7 +86,7 @@ esempio: «Le dita non chiudono il segno: meno due al prossimo.»
 
 ::: voce Rigidità | 1 punto | immediato
 quando: subito dopo un Volgare.
-effetto: il prossimo Volgare di quel mago riesce con l'8, anche senza testimoni.
+effetto: il prossimo Volgare di quel mago conta come fatto davanti a testimoni, anche se non ce ne sono.
 mosse: aspettare un turno, lanciare Accidentale, farlo lanciare a un altro.
 poi: finisce col lancio dopo.
 esempio: «L'aria intorno a te si fa densa, come acqua.»
@@ -157,7 +157,7 @@ esempio: lo scudo che la maga aveva alzato contro i proiettili si chiude intorno
 ::: voce Testimone | 2 punti | annunciato
 quando: un mago lancia Volgare in un posto dove c'è gente.
 segno: qualcuno guarda nella direzione sbagliata: una finestra che si accende, una testa che si gira.
-effetto: al turno dopo ha visto. Finché resta in scena, i Volgari successivi contano con testimoni: riescono con l'8 e costano un punto Paradosso in più.
+effetto: al turno dopo ha visto. Finché resta in scena, i Volgari successivi contano con testimoni: costano un punto Paradosso in più, e la difficoltà può salire.
 mosse: convincerlo, nascondersi, passare all'Accidentale.
 poi: se fanno Magick su di lui per farlo dimenticare, è Volgare con testimoni e paga. Se lo lasciano andare, quello che ha visto è tuo: ne fai quello che vuoi nelle scene dopo, senza pagare.
 esempio: al primo piano si accende una finestra, e una signora esce sul balcone col telefono in mano.
@@ -802,7 +802,7 @@ esempio: il sigillo sulla porta del Nodo si scrosta, e i cani del vicino smetton
 ::: voce Il Nodo storto | 2 punti | annunciato
 quando: un Volgare lanciato in casa, sopra il Nodo.
 segno: la luce del Nodo cala, l'acqua della fonte si intorbidisce, le piante si girano dall'altra parte.
-effetto: dal turno dopo, e fino a fine scena, il Nodo non dà Quintessenza e la casa è rigida: ogni Volgare lanciato in casa riesce con l'8.
+effetto: dal turno dopo, e fino a fine scena, il Nodo non dà Quintessenza e la casa è rigida: ogni Volgare lanciato in casa conta come fatto davanti a testimoni.
 mosse: aspettare la scena dopo, pulire il Nodo con un rito (che paga), uscire a lanciare.
 poi: alla scena dopo il Nodo torna come prima. Pulito col rito, torna subito.
 esempio: la vasca in cortile ha l'acqua ferma e grigia, e la maga sente che stasera non c'è niente da prendere.

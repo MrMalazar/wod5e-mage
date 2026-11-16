@@ -158,15 +158,11 @@
       "NoSpheres": "Nessuna Sfera con pallini: sblocca le Sfere in Magick per usarle qui.",
       "Prize": "Premio dell'Areté",
       "PrizeHint": "Se la descrizione rispetta lo Strumento, o il Credo, o impressiona il tavolo, e il Narratore è d'accordo: la soglia scende di quant'è l'Areté ({arete}). Sta fuori dal tetto dei bonus; la soglia non scende sotto 1.",
-      "Harmony": "Armonia",
-      "HarmonyHint": "I dadi che gli altri Maghi ti danno: uno per chi ha il tuo Credo o il tuo Tipo, due per chi ha entrambi, sempre con una Sfera in comune. Li contate al tavolo. Magick e Tecnomagick non fanno Armonia fra loro; l'Ibrida con entrambi.",
-      "HarmonyFlavor": "Armonia {dice}",
       "Pool": "Riserva",
       "Threshold": "Soglia",
       "AutoVictoryBanner": "Vittoria automatica",
       "BonusCap": "Tetto +3: {excess} dadi in meno.",
       "SpherePlan": "Sfere: {plans}.",
-      "HarmonyShort": "dadi dagli altri Maghi",
       "ScopeTable": "La tavola degli Ambiti",
       "BacklashLabel": "Contraccolpo",
       "BacklashEyesOne": "un occhio sui rossi",
@@ -1813,7 +1809,7 @@
       "Cassetti": {
         "mago": {
           "nome": "Sul mago",
-          "sotto": "chi ha lanciato: meno dadi, l'8 per riuscire, un danno"
+          "sotto": "chi ha lanciato: meno dadi, la difficoltà più alta, un danno"
         },
         "incantesimo": {
           "nome": "Sull'incantesimo",
@@ -2118,7 +2114,6 @@
       "ServeUno": "serve {n} successo",
       "ServonoHint": "I dadi che si tirano e i successi che servono. Un dado riesce dal 6; due 10 valgono 4 successi.",
       "SogliaOltre": "Oltre +3 o −3: più di quanto dice il metro delle penalità. Il Narratore può.",
-      "DalHint": "Da quale faccia il dado riesce: il 6, o l'8 coi testimoni e con certe Condizioni.",
       "MancaTratto": "manca l'Attributo o l'Abilità",
       "MancaSoglia": "manca la soglia",
       "VuotoAttributo": "Attributo",

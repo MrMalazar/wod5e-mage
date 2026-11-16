@@ -158,15 +158,11 @@
       "NoSpheres": "No Sphere with dots: unlock Spheres in Magick to use them here.",
       "Prize": "Arete prize",
       "PrizeHint": "If the description honours the Instrument, or the Creed, or impresses the table, and the Storyteller agrees: the threshold drops by Arete ({arete}). It sits outside the bonus cap; the threshold never drops below 1.",
-      "Harmony": "Harmony",
-      "HarmonyHint": "The dice other Mages give you: one from anyone sharing your Creed or your Type, two from anyone sharing both, always with a Sphere in common. Count them at the table. Magick and Technomagick do not harmonise with each other; Hybrid does with both.",
-      "HarmonyFlavor": "Harmony {dice}",
       "Pool": "Pool",
       "Threshold": "Threshold",
       "AutoVictoryBanner": "Automatic victory",
       "BonusCap": "+3 cap: {excess} fewer dice.",
       "SpherePlan": "Spheres: {plans}.",
-      "HarmonyShort": "dice from other Mages",
       "ScopeTable": "The Scopes table",
       "BacklashLabel": "Backlash",
       "BacklashEyesOne": "one eye on the red dice",
@@ -1813,7 +1809,7 @@
       "Cassetti": {
         "mago": {
           "nome": "On the mage",
-          "sotto": "whoever cast: fewer dice, an 8 to succeed, a wound"
+          "sotto": "whoever cast: fewer dice, a higher difficulty, a wound"
         },
         "incantesimo": {
           "nome": "On the spell",
@@ -2118,7 +2114,6 @@
       "ServeUno": "{n} success needed",
       "ServonoHint": "The dice you roll and the successes you need. A die succeeds from 6; two 10s are worth 4 successes.",
       "SogliaOltre": "Beyond +3 or −3: more than the penalty scale says. The Storyteller may.",
-      "DalHint": "Which face succeeds: 6, or 8 with witnesses and with some Conditions.",
       "MancaTratto": "Attribute or Skill missing",
       "MancaSoglia": "threshold missing",
       "VuotoAttributo": "Attribute",
