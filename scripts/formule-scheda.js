@@ -26,9 +26,9 @@ export function sfereAccessibili(actor) {
  * Il contesto della colonna delle Formule: le righe (le accessibili, o tutte
  * con `tutte`), quante si aprono e quante sono in tutto.
  */
-export function prepareFormulePagina(sphereLevels = {}, { tutte = false, localize = (key) => key, lang = "it" } = {}) {
-  // `kinds`: le Sfere d'Accesso della riga, per il filtro per Sfera (26/9 sera).
-  const righe = prepareGrimorioFormule(sphereLevels, localize).map((formula) => ({ ...formula, kinds: formula.access.map((sphere) => sphere.id).join(" ") }));
+export function prepareFormulePagina(sphereLevels = {}, { tutte = false, localize = (key) => key, lang = "it", arete = 1 } = {}) {
+  // `kinds`: le Sfere d'Accesso della riga, per il filtro per Sfera (26/9 sera). La soglia si conta con l'Areté del personaggio.
+  const righe = prepareGrimorioFormule(sphereLevels, localize, { arete }).map((formula) => ({ ...formula, kinds: formula.access.map((sphere) => sphere.id).join(" ") }));
   const aperte = righe.filter((formula) => formula.open);
   const mostrate = tutte ? righe : aperte;
   return {

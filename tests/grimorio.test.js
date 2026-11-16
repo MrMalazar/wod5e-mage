@@ -196,8 +196,14 @@ assert.deepEqual(danneggiare.accessOwned.map((sphere) => sphere.id), ["forces", 
 assert.equal(danneggiare.thresholds[0].base, 3);
 assert.deepEqual(danneggiare.thresholds[0].scopes.map((scope) => [scope.id, scope.level]), [["potency", 3]]);
 assert.equal(danneggiare.thresholds[0].text, "3 (WOD5E_MAGE.Scopes.potency 3)");
-// Una soglia senza Ambiti si legge «0»; l'Informazione di Rivelare sta nella Precisione.
-assert.equal(perFormula.find((formula) => formula.id === "contrastare").thresholds[0].text, "0");
+// La soglia è il conto del Sistema con l'Areté (la pagina «Prima e dopo del tiro»): Costruire, Potenza 2 e
+// Durata 3, fa 4 con Areté 1 e 3 con Areté 2; con l'Epicità 1 di ogni lancio, una Formula senza Ambiti fa 1.
+const costruire = perFormula.find((formula) => formula.id === "costruire");
+assert.equal(costruire.thresholds[0].base, 4);
+assert.equal(prepareGrimorioFormule({ matter: 1 }, (k) => k, { arete: 2 }).find((formula) => formula.id === "costruire").thresholds[0].base, 3);
+assert.equal(perFormula.find((formula) => formula.id === "barriera").thresholds[0].base, 2, "Durata 2 fa da base; Bersagli 1 non aggiunge niente");
+assert.equal(perFormula.find((formula) => formula.id === "contrastare").thresholds[0].text, "1");
+// L'Informazione di Rivelare sta nella Precisione.
 assert.deepEqual(perFormula.find((formula) => formula.id === "rivelare").thresholds[0].scopes.map((scope) => [scope.id, scope.level]), [["precision", 4]]);
 assert.equal(perFormula.every((formula) => formula.thresholds.every((threshold) => threshold.scopes.every((scope) => scope.id !== "impact"))), true);
 assert.equal(danneggiare.rows.find((row) => row.key === "forces").owned, true);

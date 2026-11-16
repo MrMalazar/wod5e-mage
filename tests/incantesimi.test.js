@@ -226,7 +226,8 @@ console.log("Grimorio del personaggio: test passati.");
   assert.doesNotMatch(roll, /launchArete/);
   assert.match(sheet, /grimorio: \{\s*template: `\$\{MODULE\}\/parts\/grimorio\.hbs`,\s*templates: \[`\$\{MODULE\}\/parts\/incantesimo-card\.hbs`, `\$\{MODULE\}\/parts\/formula-scheda\.hbs`, `\$\{MODULE\}\/parts\/filtro-sfere\.hbs`\]/);
   assert.match(sheet, /formuleTutte: onFormuleTutte,\s*formulaScrivi: onFormulaScrivi,\s*formulaLancia: onFormulaLancia/);
-  assert.match(sheet, /context\.formule = prepareFormulePagina\(sfereAccessibili\(actor\), \{ tutte: Boolean\(this\._formuleTutte\), localize, lang: game\.i18n\.lang \}\)/);
+  // La soglia delle Formule si conta con l'Areté del personaggio (il Sistema).
+  assert.match(sheet, /context\.formule = prepareFormulePagina\(sfereAccessibili\(actor\), \{ tutte: Boolean\(this\._formuleTutte\), localize, lang: game\.i18n\.lang, arete: getArete\(actor\)\.value \}\)/);
   assert.match(sheet, /wireFormule\(this\)/);
   assert.match(page, /wod5e-mage-formule-layout[\s\S]*wod5e-mage-riq-formule[\s\S]*formula-scheda\.hbs" formula=formula[\s\S]*wod5e-mage-riq-effetti[\s\S]*incantesimo-card\.hbs" spell=spell/);
 }

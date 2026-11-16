@@ -515,7 +515,7 @@ function wireGrimorio(dialog, sphereLevels) {
   };
   button.addEventListener("click", async (event) => {
     event.preventDefault();
-    const entry = await openGrimorio(sphereLevels);
+    const entry = await openGrimorio(sphereLevels, { arete: Math.max(Math.trunc(Number(root.querySelector("[data-arete]")?.dataset.arete) || 0), ARETE_MIN) });
     if (!entry) return;
     // Una matrice (24/9): l'Obiettivo è «In genere», le Sfere scelte si
     // accendono al loro livello, gli Ambiti vanno ai livelli della soglia base.

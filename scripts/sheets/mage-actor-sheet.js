@@ -1160,7 +1160,7 @@ export class MageActorSheet extends MortalActorSheet {
     if (partId === "grimorio") {
       context.tab = context.tabs.grimorio;
       const localize = game.i18n.localize.bind(game.i18n);
-      context.formule = prepareFormulePagina(sfereAccessibili(actor), { tutte: Boolean(this._formuleTutte), localize, lang: game.i18n.lang });
+      context.formule = prepareFormulePagina(sfereAccessibili(actor), { tutte: Boolean(this._formuleTutte), localize, lang: game.i18n.lang, arete: getArete(actor).value });
       context.incantesimi = [...prepareIncantesimi(actor, localize)].sort((a, b) => a.name.localeCompare(b.name, game.i18n.lang));
       context.incantesimiGroups = groupIncantesimiBySphere(context.incantesimi, localize);
       // Il filtro per Sfera degli effetti (26/9 sera): le Sfere che gli effetti usano.

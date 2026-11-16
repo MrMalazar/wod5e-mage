@@ -4,6 +4,7 @@ import { FORMULE_ALIAS, FORMULE_M6 } from "./data/formule.js";
 import { POTERI } from "./data/poteri.js";
 import { EPIC_MIN, SCOPE_MAX_LEVEL, SCOPES } from "./scopes.js";
 import { SPHERES } from "./spheres.js";
+import { contoAmbiti } from "./sistema.js";
 
 /**
  * Il Grimorio (richiesta di Blue, 6/9/2026): gli effetti del manuale,
@@ -185,19 +186,23 @@ export function formulaSphereRows(formula, sphereLevels = {}, localize = (key) =
 }
 
 /**
- * La soglia base letta: «4 (Potenza 3, Durata 1)», gli Ambiti nell'ordine in
- * cui Blue li scrive, con le etichette nella lingua in uso. Una soglia senza
- * Ambiti (dal 29/9, tolto l'Impatto, ne restano) si legge «0».
+ * La soglia della Formula letta: «4 (Potenza 2, Durata 3)», gli Ambiti
+ * nell'ordine in cui Blue li scrive, con le etichette nella lingua in uso.
+ * Il numero è il conto del Sistema con l'Areté di chi la lancia (1 se non
+ * si sa): l'Ambito più alto, Epicità compresa (le Formule partono dall'1 di
+ * ogni lancio), più 1 per ogni altro sopra l'Areté. Fino alla 1.40.0 era la
+ * somma dei livelli, quella scritta nei dati (`base`).
  */
-export function formulaThresholds(formula, localize = (key) => key) {
+export function formulaThresholds(formula, localize = (key) => key, { arete = 1 } = {}) {
   return (formula.thresholds ?? []).map((threshold) => {
     const scopes = Object.keys(threshold.scopes ?? {})
       .filter((scope) => SCOPES.includes(scope) && level(threshold.scopes[scope]) > 0)
       .map((scope) => ({ id: scope, label: localize(`WOD5E_MAGE.Scopes.${scope}`), level: level(threshold.scopes[scope]) }));
+    const soglia = contoAmbiti([{ id: "epic", level: EPIC_MIN }, ...scopes.map(({ id, level: value }) => ({ id, level: value }))], Math.max(level(arete), 1)).soglia;
     return {
-      base: threshold.base,
+      base: soglia,
       scopes,
-      text: scopes.length ? `${threshold.base} (${scopes.map((scope) => `${scope.label} ${scope.level}`).join(", ")})` : String(threshold.base)
+      text: scopes.length ? `${soglia} (${scopes.map((scope) => `${scope.label} ${scope.level}`).join(", ")})` : String(soglia)
     };
   });
 }
@@ -210,7 +215,7 @@ export function formulaPowers(formula) {
     .map((power) => ({ id: power.id, name: power.name, link: power.link, proposal: power.link === "proposta", spheres: power.spheres }));
 }
 
-export function prepareMatrice(formula, sphereLevels = {}, localize = (key) => key) {
+export function prepareMatrice(formula, sphereLevels = {}, localize = (key) => key, { arete = 1 } = {}) {
   const access = formula.access.map((sphere) => sphereRef(sphere, sphereLevels, localize));
   const amalgams = formula.amalgams.map((sphere) => sphereRef(sphere, sphereLevels, localize));
   // L'Amalgama si sceglie fra le Sfere che il personaggio ha: quelle scritte
@@ -231,7 +236,7 @@ export function prepareMatrice(formula, sphereLevels = {}, localize = (key) => k
     coda: formula.coda,
     limit: formula.limit,
     use: formula.use,
-    thresholds: formulaThresholds(formula, localize).map((threshold) => ({ ...threshold, formulaId: formula.id })),
+    thresholds: formulaThresholds(formula, localize, { arete }).map((threshold) => ({ ...threshold, formulaId: formula.id })),
     thresholdText: formula.thresholdText,
     access,
     accessOwned,
@@ -245,10 +250,10 @@ export function prepareMatrice(formula, sphereLevels = {}, localize = (key) => k
   };
 }
 
-export function prepareGrimorioFormule(sphereLevels = {}, localize = (key) => key) {
+export function prepareGrimorioFormule(sphereLevels = {}, localize = (key) => key, { arete = 1 } = {}) {
   return [...FORMULE_M6]
     .sort((a, b) => a.name.localeCompare(b.name, "it"))
-    .map((formula) => prepareMatrice(formula, sphereLevels, localize));
+    .map((formula) => prepareMatrice(formula, sphereLevels, localize, { arete }));
 }
 
 /**
@@ -334,13 +339,13 @@ function readFormulaChoice(row, formula, sphereLevels) {
  * torna `pick` ({ formula, access, amalgams, spheres, scopes }): chi ha
  * aperto il Grimorio la legge come una scelta.
  */
-export async function openGrimorio(sphereLevels, { onPick = null, onFormula = null, onFormulaRoll = null } = {}) {
+export async function openGrimorio(sphereLevels, { onPick = null, onFormula = null, onFormulaRoll = null, arete = 1 } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
   const content = await foundry.applications.handlebars.renderTemplate(
     `modules/${MODULE_ID}/templates/dialogs/grimorio.hbs`,
     {
       groups: prepareGrimorio(sphereLevels, localize),
-      formule: prepareGrimorioFormule(sphereLevels, localize),
+      formule: prepareGrimorioFormule(sphereLevels, localize, { arete }),
       spheres: prepareGrimorioSpheres(sphereLevels, localize, dimmedSpheres),
       view: lastView,
       inSheet: Boolean(onFormula || onFormulaRoll)

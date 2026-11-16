@@ -247,7 +247,10 @@ export async function onIncantesimoFromEffetti(event) {
     await saveSpell(actor, id, { ...spell, sort: Object.keys(stored).length });
     ui.notifications.info(game.i18n.format("WOD5E_MAGE.Incantesimi.Saved", { name: spell.name }));
   };
+  const { getArete } = await import("./arete.js");
   await openGrimorio(owned, {
+    // La soglia delle Formule si conta con l'Areté del personaggio (il Sistema).
+    arete: getArete(actor).value,
     onPick: async (entry) => salva(spellFromEffetto(actor, entry, effectSphereLevels(entry), localize)),
     // La matrice (24/9): «Scrivi nel Grimorio» la salva, «Lancia» apre il tiro già riempito.
     onFormula: async (pick) => salva(spellFromFormula(actor, pick, localize)),
