@@ -146,4 +146,11 @@ const htmlCreazione = template({ ...creazione, pastiglie, icon: "m.png" });
 assert.ok(htmlCreazione.includes("WOD5E_MAGE.Poteri.CreazioneRegola") && htmlCreazione.includes('data-role="catalogoAggiungi" data-catalogo="opera" disabled title="WOD5E_MAGE.Poteri.CreazioneGrado"'), "la regola in testa e il tasto spento che dice perché");
 const htmlCompleto = template({ ...completo });
 assert.ok(!htmlCompleto.includes('data-role="catalogoAggiungi"') && !htmlCompleto.includes("catalogoSfera") && htmlCompleto.includes("wod5e-mage-catalogo-spunta"), "il completo si legge e basta");
+// La cerchia (il Sistema): con Areté 1 i poteri dalla terza cerchia in su stanno col lucchetto e dicono l'Areté che serve.
+const aAreteUno = prepareCatalogoPoteri("matter", { catalog: POTERI, owned: [], tutti: [], localize, arete: 1 });
+const righeUno = [...aAreteUno.propri, ...aAreteUno.qualsiasi];
+assert.ok(righeUno.filter((riga) => riga.dot >= 3).every((riga) => riga.locked && riga.condizioni[0].kind === "cerchia" && riga.condizioni[0].testo === "WOD5E_MAGE.Poteri.Prerequisito.cerchia"), "dalla terza cerchia in su, chiusi");
+assert.ok(righeUno.filter((riga) => riga.dot && riga.dot <= 2).every((riga) => !riga.condizioni.some((c) => c.kind === "cerchia")), "la prima e la seconda aperte");
+assert.equal(testoCondizione({ kind: "cerchia", n: 3, arete: 2 }, {}, (key) => (key === "WOD5E_MAGE.Poteri.Prerequisito.cerchia" ? "cerchia {n}: serve Areté {arete}" : key)), "cerchia 3: serve Areté 2");
+assert.equal(chiusoAllaCreazione({ dot: 1, spheres: ["matter"] }, [{ kind: "cerchia", n: 1, ok: true }]), "", "la cerchia non è un prerequisito della creazione");
 console.log("catalogo dei poteri: ok");

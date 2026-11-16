@@ -11,6 +11,7 @@ import {
   sfereDellaChiave,
   cartaPotere,
   catalogoDellaSfera,
+  cerchiaDelPotere,
   contoPoteri,
   effettiDelPotere,
   findPotere,
@@ -266,6 +267,17 @@ assert.match(readFileSync(new URL("../templates/chat/potere.hbs", import.meta.ur
 const salute = readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8");
 assert.match(salute, /riarmaUsi\(actor\.getFlag\(MODULE_ID, POTERI_USI_FLAG\) \?\? \{\}, "scena"\)/);
 assert.match(salute, /riarmaUsi\(actor\.getFlag\(MODULE_ID, POTERI_USI_FLAG\) \?\? \{\}, "sessione"\)/);
+// La cerchia del potere (il Sistema): con Areté 1 si arriva alla seconda, ogni pallino apre la successiva.
+assert.equal(cerchiaDelPotere({ dot: 2 }, 1).ok, true, "Areté 1 apre la seconda cerchia");
+assert.deepEqual(cerchiaDelPotere({ dot: 3 }, 1), { kind: "cerchia", n: 3, id: "", testo: "", arete: 2, ok: false }, "la terza chiede Areté 2");
+assert.equal(cerchiaDelPotere({ dot: 3 }, 2).ok, true);
+assert.equal(cerchiaDelPotere({ dot: 5 }, 4).ok, true, "Areté 4 apre la quinta");
+assert.equal(cerchiaDelPotere({ dot: 1 }, 1).arete, 1, "la prima e la seconda chiedono Areté 1");
+assert.equal(cerchiaDelPotere({ dot: 0 }, 1), null, "senza grado niente cerchia");
+assert.equal(cerchiaDelPotere({ dot: 3 }), null, "senza Areté niente cerchia");
+const cerchie = catalogoDellaSfera("matter", { catalog: [{ id: "a", name: "A", dot: 2, spheres: ["matter"] }, { id: "b", name: "B", dot: 4, spheres: ["matter"] }], owned: [], arete: 1 });
+assert.deepEqual(cerchie.map((voce) => [voce.id, voce.locked, voce.condizioni.map((riga) => riga.kind)]), [["a", false, []], ["b", true, ["cerchia"]]], "la cerchia si scrive solo quando chiude");
+assert.ok(catalogoDellaSfera("matter", { catalog: [{ id: "b", name: "B", dot: 4, spheres: ["matter"] }], owned: [] }).every((voce) => !voce.locked), "senza Areté il catalogo non chiude per la cerchia");
 console.log("poteri, tasto Usa: ok");
 
 

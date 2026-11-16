@@ -15,6 +15,7 @@ import {
   ambitiDellaScelta,
   blocchiDelTesto,
   cartaPotere,
+  cerchiaDelPotere,
   contoPoteri,
   costoDelPotere,
   findPotere,
@@ -42,6 +43,7 @@ import {
 import { modDelMondo, modificaBaseDelPotere } from "./poteri-mod.js";
 import { POTERI_TOLTI } from "./data/poteri.js";
 import { chiusoAllaCreazione, openCatalogoCompleto, openCatalogoPoteri, tipiDelPotere } from "./catalogo-poteri.js";
+import { getArete } from "./arete.js";
 import { addParadoxToBalance, getMagickBalance } from "./magick-balance.js";
 import { POTERE_PARADOSSO_FLAG } from "./menu-paradosso.js";
 import { prepareIncantesimi } from "./incantesimi.js";
@@ -256,6 +258,12 @@ export async function aggiungiDalCatalogo(actor, sphere, catalogId, { creazione 
     ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Poteri.PrerequisitiMancano"));
     return false;
   }
+  // La cerchia (il Sistema): il grado del potere lo apre l'Areté.
+  const cerchia = cerchiaDelPotere(entry, getArete(actor).value);
+  if (cerchia && !cerchia.ok) {
+    ui.notifications.warn(game.i18n.format("WOD5E_MAGE.Poteri.CerchiaChiusa", { n: cerchia.n, arete: cerchia.arete }));
+    return false;
+  }
   // Alla creazione (25/9 sera): un potere di base o di qualsiasi Sfera, senza prerequisiti.
   const chiuso = creazione ? chiusoAllaCreazione(entry, condizioniDelPotere(entry, { owned, tutti: Object.values(rows) })) : "";
   if (chiuso) {
@@ -292,6 +300,7 @@ export async function onPotereCatalogo(event, target) {
   await openCatalogoPoteri({
     spheres,
     sphere: String(target.dataset.sphere ?? ""),
+    arete: getArete(actor).value,
     onAdd: (sphere, catalogId) => aggiungiDalCatalogo(actor, sphere, catalogId),
     onMano: (sphere) => onPotereNuovo.call(sheet, { preventDefault() {} }, { dataset: { sphere } })
   });

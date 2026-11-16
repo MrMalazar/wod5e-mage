@@ -104,7 +104,8 @@
       "Listino": "The price list",
       "ListinoHint": "what it costs to go up",
       "CalcHint": "The calculator: the trait, where you start, where you get to",
-      "Step": "{from} → {to} costs {cost}"
+      "Step": "{from} → {to} costs {cost}",
+      "EachDot": "each dot:"
     },
     "Dice": {
       "MageDice": "Mage Dice",
@@ -891,7 +892,8 @@
         "Label": "Needs",
         "numero": "{n} {sphere} powers known",
         "numeroUno": "1 {sphere} power known",
-        "poteri": "requires {names}"
+        "poteri": "requires {names}",
+        "cerchia": "circle {n}: needs Areté {arete}"
       },
       "PrerequisitiMancano": "This power's prerequisites are missing: see its row in the Add window.",
       "CreazioneRegola": "At creation: one base power (grade 1) of the Sphere, or one of any Sphere; no prerequisites.",
@@ -931,7 +933,8 @@
         "Quanta": "Quintessence to pay",
         "Hai": "You have {n} on the Wheel.",
         "Paga": "Pay"
-      }
+      },
+      "CerchiaChiusa": "This power is of circle {n}: it needs Areté {arete}."
     },
     "Tratti": {
       "Vantaggi": "Advantages",

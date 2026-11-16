@@ -36,11 +36,11 @@ function count(value) {
  */
 export const GRADO_BASE = 1;
 
-/** Perché un potere non si prende alla creazione: il grado, o i prerequisiti; "" se si prende. */
+/** Perché un potere non si prende alla creazione: il grado, o i prerequisiti; "" se si prende. La cerchia non è un prerequisito. */
 export function chiusoAllaCreazione(entry, condizioni = []) {
   const any = Array.isArray(entry?.spheres) && entry.spheres.includes("any");
   if (!any && count(entry?.dot) !== GRADO_BASE) return "grado";
-  if ((condizioni ?? []).length) return "prerequisiti";
+  if ((condizioni ?? []).some((riga) => riga?.kind !== "cerchia")) return "prerequisiti";
   return "";
 }
 
@@ -140,6 +140,7 @@ export function testoCondizione(riga, entry, localize = (key) => key, nomi = nul
     return localize(`WOD5E_MAGE.Poteri.Prerequisito.${riga.n === 1 ? "numeroUno" : "numero"}`).replace("{n}", String(riga.n)).replace("{sphere}", sphere);
   }
   if (riga?.kind === "potere") return localize("WOD5E_MAGE.Poteri.Prerequisito.poteri").replace("{names}", nomi?.get?.(riga.id) ?? riga.id);
+  if (riga?.kind === "cerchia") return localize("WOD5E_MAGE.Poteri.Prerequisito.cerchia").replace("{n}", String(riga.n)).replace("{arete}", String(riga.arete));
   return String(riga?.testo ?? "");
 }
 
@@ -156,8 +157,8 @@ export function testoPrerequisiti(mancano, entry, localize = (key) => key, nomi 
  * lucchetto e cosa serve). `owned` sono le righe del personaggio per quella
  * Sfera, `tutti` tutte le sue righe. `chiusi` conta le righe col lucchetto.
  */
-export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tutti = null, localize = (key) => key, family = false, creazione = false, mods = {}, gm = false } = {}) {
-  const voci = catalogoDellaSfera(sphere, { catalog, owned, tutti });
+export function prepareCatalogoPoteri(sphere, { catalog = POTERI, owned = [], tutti = null, localize = (key) => key, family = false, creazione = false, mods = {}, gm = false, arete = null } = {}) {
+  const voci = catalogoDellaSfera(sphere, { catalog, owned, tutti, arete });
   const perId = new Map((catalog ?? []).map((entry) => [entry.id, entry]));
   catalogoPerNome = new Map((catalog ?? []).map((entry) => [entry.id, testo(entry.name)]));
   const righe = voci.map((voce) => rigaDelCatalogo(voce, perId.get(voce.id), localize, Boolean(family), Boolean(creazione), sphere, mods));
@@ -250,14 +251,14 @@ const CLASSI = ["wod5e", "wod5e-mage", "mage", "wod5e-mage-roll-dialog", "wod5e-
  * la finestra. Le pastiglie in testa cambiano Sfera senza chiudere; la
  * finestra resta aperta dopo un'aggiunta.
  */
-export async function openCatalogoPoteri({ spheres = [], sphere = "", onAdd = null, onMano = null, creazione = false } = {}) {
+export async function openCatalogoPoteri({ spheres = [], sphere = "", onAdd = null, onMano = null, creazione = false, arete = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
   const stato = { sphere: spheres.some((entry) => entry.id === sphere) ? sphere : (spheres[0]?.id ?? ""), spheres: spheres.map((entry) => ({ ...entry, owned: [...(entry.owned ?? [])] })) };
   const corpo = async () => {
     const attuale = stato.spheres.find((entry) => entry.id === stato.sphere);
     const tutti = stato.spheres.flatMap((entry) => entry.owned);
     const mods = game.settings.get(MODULE_ID, POTERI_MOD_SETTING) ?? {};
-    const dati = attuale ? prepareCatalogoPoteri(attuale.id, { owned: attuale.owned, tutti, localize, family: Boolean(attuale.family), creazione: Boolean(creazione), mods, gm: Boolean(game.user?.isGM) }) : null;
+    const dati = attuale ? prepareCatalogoPoteri(attuale.id, { owned: attuale.owned, tutti, localize, family: Boolean(attuale.family), creazione: Boolean(creazione), mods, gm: Boolean(game.user?.isGM), arete }) : null;
     return foundry.applications.handlebars.renderTemplate(`modules/${MODULE_ID}/templates/dialogs/catalogo-poteri.hbs`, {
       ...(dati ?? { gruppi: [], totale: 0, conosciuti: 0 }),
       pastiglie: pastiglieDelleSfere(stato.spheres.map((entry) => ({ id: entry.id, conto: entry.owned.length })), { localize, attiva: stato.sphere }),

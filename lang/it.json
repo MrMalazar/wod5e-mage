@@ -104,7 +104,8 @@
       "Listino": "Il listino",
       "ListinoHint": "quanto costa salire",
       "CalcHint": "Il calcolatore: il tratto, da dove parti, dove arrivi",
-      "Step": "{from} → {to} costa {cost}"
+      "Step": "{from} → {to} costa {cost}",
+      "EachDot": "ogni pallino:"
     },
     "Dice": {
       "MageDice": "Dadi Mage",
@@ -891,7 +892,8 @@
         "Label": "Serve",
         "numero": "{n} poteri conosciuti in {sphere}",
         "numeroUno": "1 potere conosciuto in {sphere}",
-        "poteri": "richiede {names}"
+        "poteri": "richiede {names}",
+        "cerchia": "cerchia {n}: serve Areté {arete}"
       },
       "PrerequisitiMancano": "Mancano i prerequisiti di questo potere: guarda la riga nella finestra Aggiungi.",
       "CreazioneRegola": "Alla creazione: un potere di base (grado 1) della Sfera, oppure uno di qualsiasi Sfera; niente prerequisiti.",
@@ -931,7 +933,8 @@
         "Quanta": "Quintessenza da pagare",
         "Hai": "Sulla Ruota ne hai {n}.",
         "Paga": "Paga"
-      }
+      },
+      "CerchiaChiusa": "Questo potere è della cerchia {n}: serve Areté {arete}."
     },
     "Tratti": {
       "Vantaggi": "Vantaggi",

@@ -21,6 +21,7 @@
 import { MODULE_ID } from "./constants.js";
 import { SPHERES } from "./spheres.js";
 import { POTERI } from "./data/poteri.js";
+import { cerchiaAperta } from "./sistema.js";
 
 export { POTERI };
 
@@ -237,6 +238,19 @@ export function condizioniDelPotere(entry, { owned = [], tutti = null } = {}) {
   return righe;
 }
 
+/**
+ * La cerchia del potere (il Sistema, voce Poteri): ogni potere ha una
+ * cerchia, il suo grado, e le cerchie le apre l'Areté. Con Areté 1 si arriva
+ * alla seconda, e ogni pallino in più apre la successiva. Torna la riga della
+ * condizione, { kind: "cerchia", n, arete, ok }, o null quando il potere non
+ * ha grado o l'Areté non si sa.
+ */
+export function cerchiaDelPotere(entry, arete = null) {
+  const grado = Math.min(count(entry?.dot), POTERE_DOTS);
+  if (!grado || arete === null || arete === undefined || arete === "") return null;
+  return { kind: "cerchia", n: grado, id: "", testo: "", arete: Math.max(grado - 1, 1), ok: grado <= cerchiaAperta(arete) };
+}
+
 /** Cosa manca per prendere il potere: le condizioni non soddisfatte, o null se si può prendere. */
 export function prerequisitiMancanti(entry, { owned = [], tutti = null } = {}) {
   const mancano = condizioniDelPotere(entry, { owned, tutti }).filter((riga) => riga.ok === false);
@@ -255,7 +269,7 @@ export function gradoPerOrdine(dot) {
   return grado > 0 ? grado : 99;
 }
 
-export function catalogoDellaSfera(sphere, { catalog = POTERI, owned = [], tutti = null } = {}) {
+export function catalogoDellaSfera(sphere, { catalog = POTERI, owned = [], tutti = null, arete = null } = {}) {
   // La spunta guarda tutte le righe del personaggio (25/9 sera): un potere si prende una volta sola,
   // e resta segnato nella Sfera in cui lo si è preso (`knownSphere`), anche se è di qualsiasi Sfera.
   const dove = new Map();
@@ -265,8 +279,10 @@ export function catalogoDellaSfera(sphere, { catalog = POTERI, owned = [], tutti
   return (catalog ?? [])
     .filter((entry) => sfereDellaVoce(entry).includes(sphere))
     .map((entry) => {
-      // Le condizioni, una per riga (25/9 sera); chiuso se una manca.
-      const condizioni = condizioniDelPotere(entry, { owned, tutti });
+      // Le condizioni, una per riga (25/9 sera); chiuso se una manca. La cerchia
+      // (il Sistema) si scrive solo quando l'Areté non la apre ancora.
+      const cerchia = cerchiaDelPotere(entry, arete);
+      const condizioni = [...(cerchia && !cerchia.ok ? [cerchia] : []), ...condizioniDelPotere(entry, { owned, tutti })];
       const chiuso = condizioni.filter((riga) => riga.ok === false);
       return {
         id: entry.id,

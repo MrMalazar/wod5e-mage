@@ -381,7 +381,7 @@ export class CreazioneGuidata extends HandlebarsApplicationMixin(ApplicationV2) 
     const spheres = sferePerCatalogo(this.actor);
     if (!spheres.some((entry) => entry.id === sphere)) return;
     const actor = this.actor;
-    await openCatalogoPoteri({ spheres, sphere, creazione: true, onAdd: (dove, catalogId) => aggiungiDalCatalogo(actor, dove, catalogId, { creazione: true }) });
+    await openCatalogoPoteri({ spheres, sphere, creazione: true, arete: getArete(actor).value, onAdd: (dove, catalogId) => aggiungiDalCatalogo(actor, dove, catalogId, { creazione: true }) });
   }
 
   static async #onDominioPotereTogli(event, target) {

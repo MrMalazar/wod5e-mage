@@ -7,8 +7,9 @@ assert.equal(experienceCost("attribute", 2, 3).total, 12);
 // Abilità da 2 a 3 = 3 × 2; nuova fino a 3: 3 + 4 + 6.
 assert.equal(experienceCost("skill", 2, 3).total, 6);
 assert.equal(experienceCost("skill", 0, 3).total, 13);
-// Areté da 2 a 3 = 3 × 10.
-assert.equal(experienceCost("arete", 2, 3).total, 30);
+// Areté (il Sistema): ogni pallino costa 15, sempre gli stessi; da 1 a 5 = 60.
+assert.equal(experienceCost("arete", 2, 3).total, 15);
+assert.equal(experienceCost("arete", 1, 5).total, 60);
 // Il Dominio (l'accesso a una Sfera) costa 15, una volta: da 0 a 1 = 15, poi niente.
 assert.equal(experienceCost("dominio", 0, 1).total, 15);
 assert.deepEqual(experienceCost("dominio", 0, 3).steps, [{ dot: 1, cost: 15 }, { dot: 2, cost: 0 }, { dot: 3, cost: 0 }]);

@@ -10,11 +10,12 @@ import { prepareSpheres } from "./spheres.js";
  * al pallino richiesto dal potere per 5 (Dominio di famiglia) o per 7
  * (esterno): «avere un potere di 1 e Dominio nuovo costa 20». La casella di
  * Salute costa quante caselle hai già. Pregi e Background sono un Tratto.
+ * L'Areté segue il Sistema: ogni pallino costa 15, sempre gli stessi.
  */
 export const EXPERIENCE_COSTS = Object.freeze({
   attribute: { multiplier: 4 },
   skill: { multiplier: 2, firstDot: 3 },
-  arete: { multiplier: 10 },
+  arete: { perDot: 15 },
   dominio: { flat: 15 },
   // I poteri (Blue, 27/9): 3 per grado in famiglia, 5 per grado fuori.
   potereFamiglia: { multiplier: 3 },
@@ -43,6 +44,7 @@ export function experienceCost(kind, from, to) {
     let cost;
     if (rule.flat !== undefined) cost = dot === 1 ? rule.flat : 0;
     else if (rule.current) cost = dot - 1;
+    else if (rule.perDot !== undefined) cost = rule.perDot;
     else if (dot === 1 && rule.firstDot !== undefined) cost = rule.firstDot;
     else cost = dot * rule.multiplier;
     steps.push({ dot, cost });
@@ -80,6 +82,7 @@ function experienceRows() {
     let formula;
     if (rule.flat !== undefined) formula = `${localize("WOD5E_MAGE.Experience.Once")} ${rule.flat}`;
     else if (rule.current) formula = localize("WOD5E_MAGE.Experience.PerBox");
+    else if (rule.perDot !== undefined) formula = `${localize("WOD5E_MAGE.Experience.EachDot")} ${rule.perDot}`;
     else if (rule.firstDot !== undefined) formula = `${firstDot} ${rule.firstDot} · ${perDot} × ${rule.multiplier}`;
     else formula = `${perDot} × ${rule.multiplier}`;
     return { kind, label: localize(`WOD5E_MAGE.Experience.Kinds.${kind}`), formula, icon: EXPERIENCE_ICONS[kind] ?? "fa-solid fa-diamond" };
