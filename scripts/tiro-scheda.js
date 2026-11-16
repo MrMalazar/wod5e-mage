@@ -335,8 +335,9 @@ export function righeAmbiti(tiro, localize = (key) => key, { tavola = null, modi
  * In testa il tipo di tiro a parole e, nella Magick, la Sfera col sigillo e
  * l'incantesimo (l'Areté resta fra le pillole, ma non si stampa: il tipo lo
  * dice già). Sotto, due colonne: la Riserva (chi dà dadi: Attributo,
- * Abilità, Specializzazione, premio dell'Areté, potere, Tratti, Condizioni
- * in meno) e la Soglia (chi toglie dadi). Nella Magick la Soglia mostra
+ * Abilità, Specializzazione, bonus, Quintessenza, potere, Tratti, Condizioni
+ * in meno) e la Soglia (i successi che servono, col premio dell'Areté che la
+ * abbassa). Nella Magick la Soglia mostra
  * sempre i sei Ambiti, in ordine alfabetico: il simbolo, la lettura del
  * livello scelto nella lente che vale (quella scelta, o la prima) e il
  * livello; a zero la riga è spenta. Il nome dell'Ambito, la lente e la
@@ -346,7 +347,7 @@ export function righeAmbiti(tiro, localize = (key) => key, { tavola = null, modi
  * Riserva il ritocco (dentro il totale, la matita dice di quanto), nella
  * Soglia quanto si alza o si abbassa sopra il conto degli Ambiti, e
  * nell'Abilità la soglia intera. Poi, in una riga, l'esito (i dadi che si
- * tirano, dal 6 o dall'8), la coppia Quintessenza | Paradosso, Indulgi (il lato) e
+ * tirano, tutti, e i successi che servono), la coppia Quintessenza | Paradosso, Indulgi (il lato) e
  * realtà e Dal Narratore; infine i tasti col solo nome, che spenti dicono
  * cosa manca.
  */

@@ -22,7 +22,7 @@ Come si legge: nelle celle ogni livello di pallini va a capo; in grassetto ci so
 
 Si spendono al massimo 12 punti, 14 con la Sfida.
 
-Da riscrivere con la dotazione nuova: la pagina dei Vantaggi, la pagina dei Difetti, «Pregi e Difetti: come funzionano», la tavola dei passi, il Rifugio, la riga dei Vantaggi nel Sistema; nel modulo, il riepilogo, il memo e il passo dei Vantaggi della creazione guidata.
+Da riscrivere con la dotazione nuova: la pagina dei Vantaggi, la pagina dei Difetti, «Pregi e Difetti: come funzionano», la tavola dei passi, il Rifugio, la riga dei Vantaggi nel Sistema.
 
 ### Leve
 
@@ -291,7 +291,7 @@ Ottantuno: i cinquantatré della passata scorsa e ventotto nuovi, nati per le So
 | Difetto | Costo | Cosa fa | Cambio |
 | :-- | :-- | :-- | :-- |
 | **Amnesia** | •• | Un periodo preciso della tua vita, mesi o anni, è un buco nero: lo tiene il Narratore e lo restituisce quando vuole. Quando il vuoto entra in scena hai **2 dadi in meno** finché la scena non ti dà tregua; di norma sui tiri sociali, ma il Narratore li sposta dove l'amnesia morde. Devi sapere chi eri prima e chi sei dopo: manca solo il durante. | **verdetto**: va bene. |
-| **Analfabeta** | • | Non sai leggere né scrivere: **Conoscenze non supera il primo pallino**. | **verdetto**: va bene.<br>**buco**: nel modulo la voce dice ancora «Accademiche e Scienze». |
+| **Analfabeta** | • | Non sai leggere né scrivere: **Conoscenze non supera il primo pallino**. | **verdetto**: va bene. |
 | **Credulone** | •• | Vuoi credere alle persone, e si vede: **2 dadi in meno** per accorgerti che ti stanno mentendo. E il tuo volto gioca a carte scoperte: **2 dadi in meno** a mentire di persona. | **verdetto**: va bene; Ingenuo fuso qui. |
 | **Divorato dall'Ambizione** | •• | Ogni volta che potresti avanzare verso la tua Ambizione e scegli di non farlo (per prudenza, lealtà o pietà), **spendi 1 Volontà**. | **verdetto**: va bene. |
 | **Fobia** | ••• | Una paura irrazionale e specifica, che definisci col Narratore, fra le cose che nella cronaca capitano spesso. In presenza del suo oggetto hai **2 dadi in meno**, oppure devi superare un tiro di resistenza a una soglia decisa dalla scena, o **fuggi**. In alternativa **spendi Volontà** per restare e agire. | **verdetto**: costo 3, e tutto insieme: 2 dadi in meno, o il tiro di resistenza a soglia decisa dalla scena, o la Volontà.<br>**proposta**: l'oggetto della paura si sceglie col Narratore fra le cose comuni nella cronaca, come in Allergia.<br>**aperta**: la riserva del tiro di resistenza. |
@@ -569,5 +569,4 @@ Vuoti che restano, ramo C a parte.
 | **Pagine vuote**: «Da Dormiente o da Risvegliato» è da dettare; il catalogo dei pregi e difetti degli oggetti manca | Background, Congegni e Meraviglie |
 | **Capitolo del personaggio contro cataloghi**: le righe riassuntive dicono «qualcuno ti deve un favore, in alto» per Influenza e «il mondo ti tratta come se contassi» per Destino | Influenza, Destino |
 | **PX dei prezzi secchi**: «pallino d'arrivo × 3» non dice se Riflessi ••• costa 9 o la somma dei tre pallini | i Pregi a prezzo secco da •• in su |
-| **Modulo, voci**: Analfabeta dice ancora «Accademiche e Scienze»; gli abbinati stanno solo nel testo del Background, e sulla scheda non si trascinano | Analfabeta, gli abbinati |
-| **Modulo, creazione**: Pregi e Background contati insieme a 7, Difetti a 2 | il riepilogo, il memo, il passo dei Vantaggi della creazione guidata |
+| **Modulo, voci**: gli abbinati stanno solo nel testo del Background, e sulla scheda non si trascinano | gli abbinati |

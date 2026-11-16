@@ -22,7 +22,7 @@
                 <span title="{{localize 'WOD5E_MAGE.Menu.Quintessenza'}}"><i class="fa-solid fa-star" aria-hidden="true"></i> <b>{{m.quintessenza}}</b></span>
                 <span title="{{localize 'WOD5E_MAGE.Menu.Ruota'}}"><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.Ruota"}} <b>{{m.ruota}}</b></span>
                 {{#each m.condizioni as |c|}}<span class="cond"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> {{c}}</span>{{/each}}
-                <button type="button" class="ghost piccolo wod5e-mage-quadro-premio{{#if m.premioDifetto.preso}} preso{{/if}}" data-action="premioDifetto" data-id="{{m.id}}" title="{{m.premioDifetto.hint}}"{{#if m.premioDifetto.spento}} disabled{{/if}}><i class="fa-solid {{#if m.premioDifetto.preso}}fa-check{{else}}fa-scale-balanced{{/if}}" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.PremioDifetto"}}</button>
+                <button type="button" class="piccolo wod5e-mage-quadro-premio{{#if m.premioDifetto.preso}} preso{{/if}}" data-action="premioDifetto" data-id="{{m.id}}" title="{{m.premioDifetto.hint}}"{{#if m.premioDifetto.spento}} disabled{{/if}}><i class="fa-solid {{#if m.premioDifetto.preso}}fa-check{{else}}fa-scale-balanced{{/if}}" aria-hidden="true"></i> {{localize "WOD5E_MAGE.Menu.PremioDifetto"}}</button>
             </div>
             {{#if m.aperto}}
                 <div class="gruppo"><span class="k">{{localize "WOD5E_MAGE.Menu.Attivi"}} <b>{{m.attivi.length}}</b></span>
