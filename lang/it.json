@@ -2236,7 +2236,7 @@
           "Domanda": "Dove vuoi arrivare, cosa ti urge adesso, cosa non tradisci mai?",
           "Sotto": "Ambizione · Desiderio · da una a tre Convinzioni",
           "Perche": "Quattro tratti scritti in poche righe, che valgono più di qualsiasi punteggio: i primi due dicono dove sta andando il personaggio, gli altri due cosa lo tiene umano mentre ci va.",
-          "PercheDue": "L'Ambizione dice dove vuoi arrivare, e non ci arrivi stasera: le migliori sono puramente mortali. Il Desiderio è cosa ti urge adesso, e cambia appena l'ottieni. Le Convinzioni, da una a tre, sono la tua legge morale: assolute nella forma, costose nella pratica, a doppio taglio. Le Ancore arrivano al passo 13."
+          "PercheDue": "L'Ambizione dice dove vuoi arrivare, e non ci arrivi stasera: le migliori sono puramente mortali. Il Desiderio è cosa ti urge adesso, e cambia appena l'ottieni. Le Convinzioni, da una a tre, sono la tua legge morale: assolute nella forma, costose nella pratica, a doppio taglio. Quando ne servi una ti copre, e prendi il dado della Bussola e 1 Quintessenza; quando la attraversi si spegne, finché un atto non la fa risplendere. Le Ancore arrivano al passo 13."
         },
         "tipo": {
           "Label": "Tipo",
@@ -2354,7 +2354,7 @@
         "Cross": "quando la attraversi",
         "GuadagniAmbizione": "L'Ambizione dà forma alla cronaca",
         "GuadagniDesiderio": "Il Desiderio, raggiunto, frutta Esperienza",
-        "GuadagniConvinzioni": "Le Convinzioni coprono gli atti della Saggezza",
+        "GuadagniConvinzioni": "Le Convinzioni coprono gli atti della Saggezza e danno il dado della Bussola",
         "GuadagniAncore": "Le Ancore, chi ti tiene umano",
         "ConvinzioneSenzaTesto": "riga senza testo: scrivila nella pagina Personaggio, o toglila"
       },

@@ -2236,7 +2236,7 @@
           "Domanda": "Where do you want to get, what drives you now, what do you never betray?",
           "Sotto": "Ambition · Desire · one to three Convictions",
           "Perche": "Four traits written in a few lines, worth more than any score: the first two say where the character is going, the other two what keeps them human on the way.",
-          "PercheDue": "The Ambition says where you want to get, and you will not get there tonight: the best ones are purely mortal. The Desire is what drives you now, and it changes as soon as you get it. The Convictions, one to three, are your moral law: absolute in form, costly in practice, double-edged. Touchstones come at step 13."
+          "PercheDue": "The Ambition says where you want to get, and you will not get there tonight: the best ones are purely mortal. The Desire is what drives you now, and it changes as soon as you get it. The Convictions, one to three, are your moral law: absolute in form, costly in practice, double-edged. When you serve one it covers you, and you take the Compass die and 1 Quintessence; when you cross it, it switches off until an act makes it shine. Touchstones come at step 13."
         },
         "tipo": {
           "Label": "Type",
@@ -2354,7 +2354,7 @@
         "Cross": "when you cross it",
         "GuadagniAmbizione": "The Ambition shapes the chronicle",
         "GuadagniDesiderio": "The Desire, once reached, earns Experience",
-        "GuadagniConvinzioni": "Convictions cover Wisdom acts",
+        "GuadagniConvinzioni": "Convictions cover Wisdom acts and give the Compass die",
         "GuadagniAncore": "Touchstones, who keeps you human",
         "ConvinzioneSenzaTesto": "empty row: write it on the Character page, or remove it"
       },
