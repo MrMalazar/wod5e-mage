@@ -77,13 +77,13 @@ for (const action of ["incantesimoRoll", "incantesimoShare", "incantesimoChat", 
   assert.match(card, new RegExp(`data-action="${action}"`), action);
 }
 const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
-assert.match(dialog, /\{\{#if saveMode\}\}[\s\S]*name="spellName"[\s\S]*name="narrative"[\s\S]*\{\{#unless saveMode\}\}[\s\S]*name="harmony"/);
+assert.match(dialog, /\{\{#if saveMode\}\}[\s\S]*name="spellName"[\s\S]*name="narrative"/);
+assert.doesNotMatch(dialog, /name="harmony"/, "l'Armonia la conta il riquadro del Tiro");
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-assert.match(arete, /export async function launchArete\(actor, \{ mode = "roll", preset = null, simple = false \} = \{\}\)/);
-// L'Areté semplificata (8/9): il secondo sigillo con la S; tre finestre in fila,
-// una alla volta, e la prossima si apre solo quando la precedente è chiusa.
-assert.match(arete, /export async function onAreteSimple[\s\S]*simple: true/);
-assert.match(arete, /const result = simple \? await collectSimpleAnswers\(ask\) : await ask\(0, \{\}\);/);
+assert.match(arete, /export async function launchArete\(actor, \{ mode = "roll", preset = null \} = \{\}\)/);
+// L'Areté semplificata (8/9) tirava in tre finestre: col Sistema anche lei porta al riquadro del Tiro.
+assert.match(arete, /export async function onAreteSimple[\s\S]*return caricaDalGrimorio\(this\.actor\);/);
+assert.doesNotMatch(arete, /simple \? await collectSimpleAnswers/);
 assert.doesNotMatch(arete, /wireSteps/);
 // Il <form> del template lo butta via il browser (form dentro form, 0.79.0):
 // niente form nel template, e tutto si cerca da `root`.
@@ -95,7 +95,7 @@ assert.match(dialog, /<div class="wod5e-mage-arete-layout\{\{#if simple\}\} wod5
 assert.doesNotMatch(readFileSync(new URL("../templates/actor/mage-header.hbs", import.meta.url), "utf8"), /data-action="areteSimple"|data-action="areteRoll"/);
 // Il template mostra un passo e porta gli altri come campi nascosti.
 assert.match(dialog, /\{\{#if show\.goal\}\}[\s\S]*name="goal"[\s\S]*\{\{else\}\}\s*<input type="hidden" name="goal" value="\{\{carry\.goal\}\}">/);
-assert.match(dialog, /\{\{#each carry\.spheres as \|row\|\}\}\s*<span data-role="dotRow" data-kind="sphere" data-id="\{\{row\.id\}\}" data-specialty="\{\{row\.specialty\}\}" hidden><input type="hidden" name="sphere-\{\{row\.id\}\}" value="\{\{row\.level\}\}">/);
+assert.match(dialog, /\{\{#each carry\.spheres as \|row\|\}\}\s*<span data-role="dotRow" data-kind="sphere" data-id="\{\{row\.id\}\}" hidden><input type="hidden" name="sphere-\{\{row\.id\}\}" value="\{\{row\.level\}\}">/);
 assert.match(dialog, /\{\{#each carry\.traits as \|trait\|\}\}\s*<input type="hidden" name="\{\{trait\.field\}\}" id="\{\{trait\.id\}\}" value="\{\{trait\.key\}\}" data-value="\{\{trait\.value\}\}">/);
 assert.equal((dialog.match(/<li class="\{\{#if show\.\w+\}\}active\{\{\/if\}\}"><b>\d<\/b>/g) ?? []).length, 3);
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
@@ -117,7 +117,7 @@ const step2 = stepContext(2, answers1, { traits, rollSpheres });
 assert.deepEqual(step2.show, { goal: false, spheres: false, scopes: false, effect: true, traits: true, types: true, conto: false, pool: true, side: true });
 assert.equal(step2.carry.goal, "Riavvolgere il tempo");
 // I livelli portati stanno dentro i pallini posseduti e il tetto degli Ambiti.
-assert.deepEqual(step2.carry.spheres, [{ id: "time", level: 3, specialty: "" }, { id: "forces", level: 1, specialty: "" }]);
+assert.deepEqual(step2.carry.spheres, [{ id: "time", level: 3 }, { id: "forces", level: 1 }]);
 assert.equal(step2.carry.scopes.find((scope) => scope.id === "duration").level, 7);
 assert.equal(step2.carry.scopes.find((scope) => scope.id === "targets").level, 0);
 assert.equal(step2.carry.effect, false);
@@ -163,7 +163,7 @@ assert.deepEqual(mergeStepAnswers({ goal: "a", vulgar: true }, 2, { coincidental
   assert.equal(await collectSimpleAnswers(async () => null), null);
   assert.equal(await collectSimpleAnswers(async (step) => (step === 1 ? "back" : {})), null);
 }
-assert.match(arete, /if \(saveMode\) \{\s*return spellFromResult/);
+assert.match(arete, /if \(!result \|\| result === "cancel"\) return null;\s*\/\/ Il Grimorio: niente tiro, torna quel che si è scelto, da salvare\.\s*return spellFromResult/);
 assert.match(arete, /applyAretePreset\(dialog, preset\)/);
 
 // Il Grimorio comune (6/9): la voce del compendio porta il testo leggibile e i dati per il tiro.

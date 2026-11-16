@@ -88,7 +88,8 @@ const main = readFileSync(new URL("../scripts/main.js", import.meta.url), "utf8"
 assert.match(main, /registerVolonta\(\)/);
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
 assert.match(arete, /export async function recordEffect[\s\S]*shouldRecordEffect\(\{ maintained, duration: effect\.duration \}\)/);
-assert.match(arete, /lastThreshold/);
+// L'ultima soglia lanciata (la proposta dello Scoppio) la scrive il riquadro del Tiro, dove ora si lancia.
+assert.match(readFileSync(new URL("../scripts/tiro-scheda.js", import.meta.url), "utf8"), /lastThreshold/);
 
 // La Volontà col Sistema (14/11): fino a tre dadi falliti, solo normali; a ritiro fatto si ricontano i
 // dadi della riserva con le stelline a coppie, e il margine è quello oltre la soglia. Il tasto ricorda

@@ -3,14 +3,12 @@ import {
   bonusDiceExcess,
   calculateAretePrize,
   calculateAreteTraitPool,
-  calculateAutomaticSuccesses,
   calculateMagickThreshold,
   SCOPE_COUNTS_FROM,
   capBonusDice,
   getArete,
   normalizeMagickRollOptions,
-  prepareAreteTraits,
-  ramoCPool
+  prepareAreteTraits
 } from "../scripts/arete.js";
 
 function actorWithFlag(value) {
@@ -33,7 +31,7 @@ assert.equal(calculateAreteTraitPool(3, 2, 2), 7);
 assert.equal(calculateAreteTraitPool(3), 3);
 assert.equal(calculateAreteTraitPool(), 0);
 
-// Il premio vale l'Areté intera, anche oltre 3 (dal 27/9 sono dadi, non soglia);
+// Il premio vale l'Areté intera: la soglia scende di tanto (il Sistema);
 // non guarda il Tipo di Magick: dal 2/10 lo prende anche l'Ibrida.
 assert.equal(calculateAretePrize(2), 2);
 assert.equal(calculateAretePrize(5), 5);
@@ -50,9 +48,9 @@ assert.equal(bonusDiceExcess(2, [{ value: "+2" }, { value: "-1" }]), 1);
 assert.equal(bonusDiceExcess(0, [{ value: 1 }, { value: 1 }]), 0);
 assert.equal(bonusDiceExcess(3, [{ value: "+3" }]), 3);
 
-// La soglia somma i livelli degli Ambiti, senza contributo delle Sfere.
-// Dalla tavola del 23/9 lo 0 è la base gratis e ogni livello dal primo in
-// su vale il suo numero.
+// La somma dei livelli degli Ambiti: era la soglia dei lanci fino alla 1.40.0, e
+// resta per il prezzo degli effetti della Scheda del Paradosso del Narratore.
+// Lo 0 è la base gratis e ogni livello dal primo in su vale il suo numero.
 assert.equal(SCOPE_COUNTS_FROM, 1, "il primo pallino conta (tavola del 23/9)");
 assert.equal(calculateMagickThreshold(), 0);
 assert.equal(calculateMagickThreshold({ sphereLevels: [3] }), 0);
@@ -87,52 +85,16 @@ assert.equal(calculateMagickThreshold({ scopeLevels: [1, 2] }), 3);
 assert.equal(calculateMagickThreshold({ scopeLevels: [1, 1] }), 2);
 assert.equal(calculateMagickThreshold({ scopeLevels: ["1", "2", "4"] }), 7);
 assert.equal(calculateMagickThreshold({ scopeLevels: [] }), 0);
-// Nel ramo C danno DADI pari all'Areté (PROPOSTA dell'11/9) quando la
-// Sfera è nel lancio e l'Ambito è dichiarato; una volta sola; senza la
-// coppia, niente. Il conto torna col nome di prima.
-assert.deepEqual(calculateAutomaticSuccesses({
-  sphereLevels: [{ id: "forces", level: 3 }],
-  scopeLevels: [{ id: "power", level: 7 }],
-  specialties: { forces: "power" },
-  arete: 2
-}), { successes: 2, pairs: [{ sphere: "forces", scope: "power" }] });
-assert.deepEqual(calculateAutomaticSuccesses({
-  sphereLevels: [{ id: "forces", level: 3 }, { id: "mind", level: 2 }],
-  scopeLevels: [{ id: "power", level: 7 }, { id: "targets", level: 2 }],
-  specialties: { forces: "power", mind: "targets" },
-  arete: 3
-}).successes, 3);
-assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "forces", level: 3 }], scopeLevels: [{ id: "range", level: 2 }], specialties: { forces: "power" }, arete: 2 }).successes, 0);
-assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "mind", level: 3 }], scopeLevels: [{ id: "power", level: 2 }], specialties: { forces: "power" }, arete: 2 }).successes, 0);
-assert.equal(calculateAutomaticSuccesses({ sphereLevels: [{ id: "forces", level: 3 }], scopeLevels: [{ id: "power", level: 2 }], specialties: { forces: "power" }, arete: 0 }).successes, 0);
-
-// La riserva della finestra del Grimorio: tratti, dadi in più col tetto, dadi
-// delle Specialità, Quintessenza. Col Sistema (14/11) si tira tutta: la soglia
-// dice i successi che servono e non toglie dadi.
-assert.deepEqual(ramoCPool({ traits: 6, threshold: 3 }), { pool: 6, threshold: 3, dice: 6, spend: { spent: 0, price: 0, bought: false, dice: 0 } });
-assert.equal(ramoCPool({ traits: 6, threshold: 5 }).dice, 6);
-assert.equal(ramoCPool({ traits: 6, threshold: 7 }).dice, 6, "anche a soglia 7 i sei dadi si tirano");
-assert.equal(ramoCPool({ traits: 6, bonus: 2, threshold: 7 }).dice, 8, "l'Armonia aggiunge dadi");
-// Il conto di questa finestra è ancora quello di prima (il premio in dadi, la
-// soglia somma degli Ambiti): il lancio sul Sistema passa dal riquadro del Tiro.
-const rewarded = ramoCPool({
-  traits: 6, bonus: 3, prize: 3,
-  threshold: calculateMagickThreshold({ scopeLevels: [1, 2, 4] })
-});
-assert.deepEqual([rewarded.pool, rewarded.threshold, rewarded.dice], [12, 7, 12]);
-const oltreLaSoglia = ramoCPool({
-  traits: 6, prize: 5,
-  threshold: calculateMagickThreshold({ scopeLevels: [1] })
-});
-assert.deepEqual([oltreLaSoglia.pool, oltreLaSoglia.threshold, oltreLaSoglia.dice], [11, 1, 11], "l'Areté oltre la soglia resta tutto dadi");
-assert.equal(ramoCPool({ traits: 6, bonus: 5, threshold: 0 }).pool, 9, "tetto +3 sui dadi in più");
-// La Quintessenza (16/9): un dado per punto, e basta; il livello della Sfera non compra più niente.
-assert.deepEqual(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).spend, { spent: 2, price: 0, bought: false, dice: 2 });
-assert.equal(ramoCPool({ traits: 6, quintessence: 2, sphereMax: 3, threshold: 3 }).dice, 8);
-const paid = ramoCPool({ traits: 6, quintessence: 3, sphereMax: 3, threshold: 3 });
-assert.equal(paid.spend.bought, false);
-assert.equal(paid.dice, 9, "tre punti, tre dadi in più");
-assert.equal(ramoCPool({ traits: 2, specialtyDice: 2, threshold: 3 }).dice, 4, "i dadi della Specialità");
+// La Specialità dell'Ambito è uscita (il Sistema): dava dadi quanto l'Areté, e
+// l'Areté nella riserva non entra. La riserva della finestra è caduta col tiro
+// della finestra: col Sistema si lancia dal riquadro del Tiro.
+{
+  const mod = await import("../scripts/arete.js");
+  assert.equal(mod.calculateAutomaticSuccesses, undefined);
+  assert.equal(mod.ramoCPool, undefined);
+  assert.equal(mod.tipoDallaFinestra, undefined);
+  assert.equal(typeof mod.caricaDalGrimorio, "function");
+}
 
 // Il Volgare fallito non rende più Quintessenza (14/9, ribadito il 29/9): la funzione non c'è più.
 
@@ -263,28 +225,29 @@ assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
   // Le Specializzazioni sulle opzioni della tendina dell'Abilità.
   assert.deepEqual(skillSpecialtyNames({ system: { skills: { brawl: { bonuses: [{ source: "Lame" }, { source: " Lotta " }] }, occult: { bonuses: [] } } } }), { brawl: ["Lame", "Lotta"] });
   const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
-    // Dal 10/9 notte: Armonia coi numeri e (29/9) «Paga con», poi Altro con la Convinzione.
-  assert.match(dialog, /name="harmony"[\s\S]*name="pagaCon"[\s\S]*Arete\.Other"[\s\S]*\{\{\{bussolaHtml\}\}\}[\s\S]*\{\{\/unless\}\}/);
+  // La finestra scrive soltanto: Armonia, «Paga con» e Bussola li conta il riquadro del Tiro.
+  assert.doesNotMatch(dialog, /name="harmony"|name="pagaCon"|bussolaHtml/);
+  assert.match(dialog, /Arete\.Other"[\s\S]*name="maintained"[\s\S]*name="prize"/);
   // La seconda Abilità non c'è più: al suo posto la Specializzazione come casella (+1).
   assert.match(dialog, /name="primaryTrait"[\s\S]*data-specialties="\{\{trait\.specialties\}\}"[\s\S]*<input type="checkbox" name="skillSpecialty">[\s\S]*data-role="specialtyNames"/);
   assert.doesNotMatch(dialog, /<select id="wod5e-mage-arete-secondary"/);
   const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-  assert.equal((arete.match(/await grantBussolaQuintessence\(actor, bussolaKept\);/g) ?? []).length, 1, "a tiro fatto (ramo C: un'uscita sola)");
-  assert.match(arete, /const extraDice = specialtyDie \+ \(bussolaKept \? BUSSOLA_DICE : 0\);/);
+  assert.doesNotMatch(arete, /grantBussolaQuintessence|bussolaKept|rollAreteWithParadox|costoLancio|pagamentoDelLancio/, "la finestra non tira più");
   // La conferma dei tiri di Abilità porta lo stesso blocco.
   const confirm = readFileSync(new URL("../templates/dialogs/arete-roll-confirm.hbs", import.meta.url), "utf8");
   assert.match(confirm, /\{\{\{bussolaHtml\}\}\}/);
   assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /getCustomModifierTotal\(form\) \+ bussolaDice\(form\)/);
-  // Il ramo C in arete.js: la riserva meno la soglia; niente riuscita comprata (16/9).
-  assert.match(arete, /rollAreteWithParadox\(\{\s*pool: conto\.pool,\s*threshold,/);
-  // Il costo del lancio (29/9): si paga prima del tiro, il Volgare fallito non rende più.
-  assert.match(arete, /const costo = costoLancio\(kind, pay\);/);
-  assert.doesNotMatch(arete, /effect\.vulgar && Number\.isFinite\(total\) && total < 1/);
-  assert.doesNotMatch(arete, /name="quintessence"|result\.quintessence/);
-  assert.match(dialog, /name="pagaCon" value="quintessenza"[\s\S]*name="pagaCon" value="paradosso"[\s\S]*data-role="costo"/);
+  // Lanciare passa dal riquadro (il Sistema): il modo «roll» carica l'incantesimo nel Tiro della prima pagina.
+  assert.match(arete, /if \(mode !== "save"\) return caricaDalGrimorio\(actor, preset\);/);
+  assert.match(arete, /const id = spell\.formula \? `formula:\$\{spell\.formula\}` : `grimorio:\$\{spell\.sharedId \?\? spell\.name \?\? ""\}`;\s*await caricaNelTiro\(sheet, id, spell\);/);
+  assert.match(arete, /export async function onAreteRoll[\s\S]*return caricaDalGrimorio\(this\.actor\);/);
+  // Il conto vivo: la soglia degli Ambiti contata col Sistema, col premio che la abbassa; niente sottrazione.
+  assert.match(arete, /const soglia = sogliaMagick\(\{ ambiti: readDotRows\(root, "scope"\), arete: areteValue, premio \}\)\.soglia;/);
   assert.doesNotMatch(arete, /isAutomaticVictory|isOneStepShort|postAutomaticVictory/);
   const dialog2 = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
-  assert.match(dialog2, /data-role="pool">0<\/strong> − <\/span>[\s\S]*data-role="threshold">0<\/strong>[\s\S]*data-role="dice">0<\/strong>/);
+  assert.match(dialog2, /data-role="pool">0<\/strong> · <\/span>[\s\S]*data-role="threshold">0<\/strong>/);
+  assert.doesNotMatch(dialog2, /data-role="dice"|RamoC\.Dice/);
+  assert.match(dialog2, /wod5e-mage-arete-toggle-value">−\{\{prize\.dice\}\}<\/span>/, "il premio abbassa la soglia");
   assert.doesNotMatch(dialog2, /autoVictory|buySuccess|Compra\./);
   assert.doesNotMatch(arete, /buySuccess|spend\.bought|Compra\./);
   assert.match(readFileSync(new URL("../scripts/salute.js", import.meta.url), "utf8"), /-=convinzioneScena/);

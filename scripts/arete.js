@@ -1,27 +1,13 @@
 import { MODULE_ID } from "./constants.js";
-import {
-  addParadoxToBalance,
-  getMagickBalance,
-  MAGICK_TRACK_MAX
-} from "./magick-balance.js";
-import { costoLancio, pagamentoDelLancio, quintessenceSpend, testoCosto, tipoDaOpzioni } from "./ramo-c.js";
-import { BUSSOLA_DICE, BUSSOLA_SCENE_FLAG, bussolaChoice, grantBussolaQuintessence, prepareBussolaChoice, renderBussolaBlock, wireBussola } from "./bussola.js";
-import {
-  findMageRollTrait,
-  prepareMageRollTraits,
-  selectorsForMageRollTrait
-} from "./mage-roll-selection.js";
+import { BUSSOLA_SCENE_FLAG } from "./bussola.js";
+import { findMageRollTrait, prepareMageRollTraits } from "./mage-roll-selection.js";
 import { INFLUENCE_LABELS, prepareSpheres } from "./spheres.js";
-import { ambitiDelLancio, EPIC_SCOPE, prepareScopeTable, scopeMin, scopeReadings, SCOPE_ICONS, SCOPES } from "./scopes.js";
-import {
-  renderRollCard,
-  renderRollNote,
-  rollSymbols
-} from "./roll-card.js";
+import { EPIC_SCOPE, prepareScopeTable, scopeMin, scopeReadings, SCOPE_ICONS, SCOPES } from "./scopes.js";
 import { FOCUS_FORMS, PERCEIVE_TOOL_ID } from "./focus.js";
-import { maintainedEffectRow, scopesInParole, shouldRecordEffect } from "./ongoing-magick.js";
+import { maintainedEffectRow, shouldRecordEffect } from "./ongoing-magick.js";
 import { effectEpic, effectSphereLevels, openGrimorio } from "./grimorio.js";
 import { normalizeEffectKind } from "./paradox-burst.js";
+import { sogliaMagick } from "./sistema.js";
 
 export const ARETE_MIN = 1;
 export const ARETE_MAX = 5;
@@ -81,12 +67,11 @@ export function skillSpecialtyNames(actor) {
 export const THRESHOLD_CAP = 7;
 
 /**
- * Il premio dell'Areté (Blue, 16/9; dadi dal 27/9): tanti dadi in più quanta
- * l'Areté, quando la narrazione lo merita (rispetta lo Strumento, o il
- * Credo, o inventa un effetto fuori dalle tavole) e il Narratore dà l'ok:
- * la casella resta per questo. Fuori dal tetto +3. Lo prendono tutti e tre
- * i Tipi di Magick: dal 2/10 anche l'Ibrida (Blue: «magick ibrida ora dà
- * il bonus di Areté, dev'essere selezionabile»).
+ * Il premio dell'Areté (il Sistema, voce Premio): quando il lancio rispetta
+ * il Credo, o passa dallo Strumento, o impressiona il tavolo, e il Narratore
+ * è d'accordo, la soglia scende di quant'è l'Areté. Sta fuori dal tetto dei
+ * bonus. Lo prendono tutti e tre i Tipi di Magick, l'Ibrida compresa (Blue,
+ * 2/10). Dal 27/9 al 14/11 dava dadi. Torna di quanto scende la soglia.
  */
 export function calculateAretePrize(arete) {
   return Math.min(Math.max(Math.trunc(Number(arete) || 0), 0), ARETE_MAX);
@@ -129,13 +114,11 @@ function levelEntries(entries, max) {
 }
 
 /**
- * La soglia (Blue, 16/9): la SOMMA dei livelli degli Ambiti dichiarati,
- * Potenza 4 e Portata 3 fanno 7. Con la tavola del 23/9 lo 0 è la base e
- * non costa niente, e ogni livello dal primo in su vale il suo numero (il
- * primo pallino non è più gratis). Dal 2/10 l'Epicità entra nella somma
- * come gli altri, e vale almeno 1 (chi la mette è ambitiDelLancio). Le
- * Sfere non contano più. Niente tetto sulla somma. Il premio dell'Areté non
- * la tocca.
+ * La somma dei livelli degli Ambiti (Blue, 16/9): Potenza 4 e Portata 3 fanno
+ * 7, lo 0 non costa, niente tetto. Era la soglia dei lanci fino alla 1.40.0;
+ * col Sistema i lanci contano la soglia con sogliaMagick (sistema.js), e la
+ * somma resta soltanto per il prezzo degli effetti della Scheda del Paradosso
+ * del Narratore, finché Blue non riscrive il menù.
  */
 export const SCOPE_COUNTS_FROM = 1;
 
@@ -145,67 +128,13 @@ export function scopeThreshold(scopeLevels = []) {
     .reduce((sum, entry) => sum + entry.level, 0);
 }
 
-/** La soglia della Magick: la somma degli Ambiti. Il premio dell'Areté non la tocca (Blue, 27/9): dà dadi. */
+/** La somma degli Ambiti, per la Scheda del Paradosso (paradosso-narratore.js). */
 export function calculateMagickThreshold({ scopeLevels = [] } = {}) {
   return Math.max(scopeThreshold(scopeLevels), 0);
 }
 
-/**
- * Le Specialità delle Sfere (verdetto di Blue, 4/9 notte, ramo A): quando
- * una Sfera nel lancio ha la Specialità su un Ambito dichiarato, il tiro
- * partiva con tanti successi quanto l'Areté. Nel ramo C un successo è già
- * la riuscita, quindi la stessa coppia dà tanti DADI quanto l'Areté
- * (PROPOSTA del programma, 11/9: da confermare con Blue). Una volta sola,
- * anche con più Specialità in gioco. Torna il conto e le coppie che lo danno.
- */
-export function calculateAutomaticSuccesses({ sphereLevels = [], scopeLevels = [], specialties = {}, arete = 0 } = {}) {
-  const spheres = levelEntries(sphereLevels, 5);
-  const scopes = levelEntries(scopeLevels, THRESHOLD_CAP);
-  const pairs = [];
-  for (const [sphereId, scopeId] of Object.entries(specialties ?? {})) {
-    if (!scopeId) continue;
-    const sphere = spheres.find((entry) => entry.id === sphereId);
-    const scope = scopes.find((entry) => entry.id === String(scopeId));
-    if (sphere && scope) pairs.push({ sphere: sphereId, scope: String(scopeId) });
-  }
-  const value = Math.max(Math.trunc(Number(arete) || 0), 0);
-  return { successes: pairs.length ? value : 0, pairs };
-}
-
-/**
- * La riserva della finestra del Grimorio: tratti, dadi in più (Armonia e
- * Bonus dentro il tetto), i dadi delle Specialità, il premio dell'Areté e
- * la Quintessenza. Col Sistema (14/11) si tira tutta: la soglia dice i
- * successi che servono e non toglie dadi. Il conto di questa finestra (il
- * premio in dadi, la soglia degli Ambiti) è ancora quello di prima: il
- * lancio sul Sistema passa dal riquadro del Tiro. Torna i pezzi e i dadi.
- */
-export function ramoCPool({ traits = 0, bonus = 0, specialtyDice = 0, quintessence = 0, sphereMax = 0, threshold = 0, prize = 0 } = {}) {
-  const spend = quintessenceSpend(quintessence, sphereMax);
-  const pool = Math.max(Math.trunc(Number(traits) || 0), 0)
-    + capBonusDice(bonus)
-    + Math.max(Math.trunc(Number(specialtyDice) || 0), 0)
-    + Math.max(Math.trunc(Number(prize) || 0), 0)
-    + spend.dice;
-  const soglia = Math.max(Math.trunc(Number(threshold) || 0), 0);
-  return { pool, threshold: soglia, dice: pool, spend };
-}
-
 function isChecked(value) {
   return value === true || value === "true" || value === "on";
-}
-
-/**
- * Il tipo scelto nella finestra (29/9): le caselle al primo passo, i campi
- * nascosti al terzo. Serve al prezzo sotto «Paga con».
- */
-export function tipoDallaFinestra(root) {
-  const on = (name) => {
-    const input = root?.querySelector?.(`input[name="${name}"]`);
-    if (!input) return false;
-    return input.type === "checkbox" ? input.checked : isChecked(input.value);
-  };
-  return tipoDaOpzioni(normalizeMagickRollOptions({ vulgar: on("vulgar"), witnesses: on("witnesses") }));
 }
 
 export function normalizeMagickRollOptions({
@@ -216,7 +145,7 @@ export function normalizeMagickRollOptions({
   witnesses = false
 } = {}) {
   const options = {
-    // Il giocatore spunta il premio: l'Areté della scheda dà dadi (Blue, 27/9).
+    // Il giocatore spunta il premio: la soglia scende di quant'è l'Areté (il Sistema).
     usePrize: isChecked(prize),
     harmony: normalizeHarmony(harmony),
     coincidental: isChecked(coincidental),
@@ -388,14 +317,6 @@ function readDotRows(root, kind) {
   return entries;
 }
 
-function readSpecialties(root) {
-  const map = {};
-  root?.querySelectorAll("[data-role=dotRow][data-kind=sphere]").forEach((row) => {
-    if (row.dataset.specialty) map[row.dataset.id] = row.dataset.specialty;
-  });
-  return map;
-}
-
 function optionValue(select) {
   // Una select legge l'opzione scelta; un campo nascosto (i tratti che
   // viaggiano fra i passi dell'Areté semplificata) porta il valore da sé.
@@ -403,79 +324,43 @@ function optionValue(select) {
   return Math.max(Math.trunc(Number(option?.dataset?.value) || 0), 0);
 }
 
-/** Il conto vivo: riserva contro la somma degli Ambiti, ridotta dal premio. */
+/**
+ * Il conto vivo della finestra (il Sistema): la riserva, Attributo più
+ * Abilità più il dado della Specializzazione, e la soglia degli Ambiti
+ * contata con l'Areté (l'Ambito più alto, Epicità compresa, più 1 per ogni
+ * altro sopra l'Areté, fino a 10), che scende di quant'è l'Areté col premio.
+ * Quintessenza, Armonia, Bussola e Paradosso li conta il riquadro del Tiro,
+ * dove l'incantesimo si lancia.
+ */
 function wireDifficulty(dialog) {
   const root = dialog?.element;
   const thresholdOut = root?.querySelector("[data-role=threshold]");
   const poolOut = root?.querySelector("[data-role=pool]");
-  const autoOut = root?.querySelector("[data-role=autoVictory]");
-  const diceOut = root?.querySelector("[data-role=dice]");
   if (!thresholdOut || !poolOut) return;
 
   const attribute = root.querySelector("#wod5e-mage-arete-attribute");
   const primary = root.querySelector("#wod5e-mage-arete-primary");
   const secondary = root.querySelector("#wod5e-mage-arete-secondary");
   const prizeBox = root.querySelector("input[name=prize]");
-  const harmony = root.querySelector("#wod5e-mage-arete-harmony");
-  // Il costo del lancio (29/9): chi paga e il tipo, per il prezzo sotto «Paga con».
-  const payRadios = [...root.querySelectorAll("input[name=pagaCon]")];
-  const typeBoxes = [...root.querySelectorAll("input.wod5e-mage-magick-type")];
-  const costoOut = root.querySelector("[data-role=costo]");
-  // La Specializzazione dell'Abilità (11/9: al posto della seconda Abilità)
-  // e la Bussola rispettata: un dado l'una, fuori dal tetto +3.
+  // La Specializzazione dell'Abilità (11/9: al posto della seconda Abilità): un dado, fuori dal tetto.
   const specialtyBox = root.querySelector("input[name=skillSpecialty]");
   const specialtyNames = root.querySelector("[data-role=specialtyNames]");
-  const bussolaBox = root.querySelector("input[name=bussola]");
-
-  const autoSuccessOut = root.querySelector("[data-role=autoSuccesses]");
-  const areteValue = Math.max(Math.trunc(Number(root.querySelector("[data-arete]")?.dataset.arete) || 0), 0);
+  const areteValue = Math.max(Math.trunc(Number(root.querySelector("[data-arete]")?.dataset.arete) || 0), ARETE_MIN);
 
   const update = () => {
-    const sphereLevels = readDotRows(root, "sphere");
-    const scopeLevels = readDotRows(root, "scope");
-    // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, fuori dal tetto; la soglia non cambia.
-    const prizeDice = prizeBox?.checked && !prizeBox.disabled ? calculateAretePrize(prizeBox.dataset.value) : 0;
-    const threshold = calculateMagickThreshold({ scopeLevels });
-    const specialtyDice = calculateAutomaticSuccesses({
-      sphereLevels,
-      scopeLevels,
-      specialties: readSpecialties(root),
-      arete: areteValue
-    }).successes;
-
-    const sphereMax = Math.max(0, ...sphereLevels.map((entry) => entry.level));
-    // Si tira tutta la riserva: la soglia non toglie dadi (Sistema, 14/11).
+    const premio = Boolean(prizeBox?.checked && !prizeBox.disabled);
+    const soglia = sogliaMagick({ ambiti: readDotRows(root, "scope"), arete: areteValue, premio }).soglia;
     if (specialtyNames) {
       const names = primary?.selectedOptions?.[0]?.dataset?.specialties ?? "";
       specialtyNames.textContent = names ? `(${names})` : "";
     }
-    const extraDice = (specialtyBox?.checked ? SKILL_SPECIALTY_DICE : 0) + (bussolaBox?.checked ? BUSSOLA_DICE : 0);
-    const conto = ramoCPool({
-      traits: calculateAreteTraitPool(optionValue(attribute), optionValue(primary), optionValue(secondary)),
-      bonus: normalizeHarmony(harmony?.value) + extraDice,
-      specialtyDice,
-      sphereMax,
-      threshold,
-      prize: prizeDice
-    });
-
-    thresholdOut.textContent = String(conto.threshold);
-    poolOut.textContent = String(conto.pool);
-    if (diceOut) diceOut.textContent = String(conto.dice);
-    if (autoSuccessOut) {
-      const parts = [];
-      if (specialtyDice > 0) parts.push(game.i18n.format("WOD5E_MAGE.Arete.SpecialtyDice", { dice: specialtyDice }));
-      autoSuccessOut.textContent = parts.length ? `· ${parts.join(" · ")}` : "";
-    }
-    autoOut?.classList.add("hidden");
-    if (costoOut) {
-      const kind = tipoDallaFinestra(root);
-      const scelta = payRadios.find((radio) => radio.checked)?.value ?? "paradosso";
-      costoOut.textContent = testoCosto(costoLancio(kind, scelta), game.i18n.localize.bind(game.i18n), game.i18n.format.bind(game.i18n));
-    }
+    const pool = calculateAreteTraitPool(optionValue(attribute), optionValue(primary), optionValue(secondary))
+      + (specialtyBox?.checked ? SKILL_SPECIALTY_DICE : 0);
+    thresholdOut.textContent = String(soglia);
+    poolOut.textContent = String(pool);
   };
 
-  [attribute, primary, secondary, prizeBox, harmony, specialtyBox, bussolaBox, ...payRadios, ...typeBoxes].forEach((control) => {
+  [attribute, primary, secondary, prizeBox, specialtyBox].forEach((control) => {
     control?.addEventListener("change", update);
     control?.addEventListener("input", update);
   });
@@ -665,15 +550,16 @@ function wireMaintainedEffect(dialog) {
   });
 }
 
+/** I vecchi tasti del tiro di Areté (la testata è vuota dal 16/9): portano al riquadro del Tiro. */
 export async function onAreteRoll(event) {
-  event.preventDefault();
-  return launchArete(this.actor, { mode: "roll" });
+  event?.preventDefault?.();
+  return caricaDalGrimorio(this.actor);
 }
 
-/** L'Areté semplificata (8/9): lo stesso tiro, in tre finestre, una alla volta. */
+/** L'Areté semplificata (8/9) tirava in tre finestre; col Sistema si lancia dal riquadro del Tiro. */
 export async function onAreteSimple(event) {
-  event.preventDefault();
-  return launchArete(this.actor, { mode: "roll", simple: true });
+  event?.preventDefault?.();
+  return caricaDalGrimorio(this.actor);
 }
 
 const TRAIT_FIELDS = Object.freeze([
@@ -717,8 +603,7 @@ export function stepContext(step = 0, answers = {}, { traits = { attributes: [],
       goal: String(answers.goal ?? "").trim(),
       spheres: rollSpheres.map((sphere) => ({
         id: sphere.id,
-        level: clampLevel(answers[`sphere-${sphere.id}`], sphere.value),
-        specialty: sphere.specialtyScope ?? ""
+        level: clampLevel(answers[`sphere-${sphere.id}`], sphere.value)
       })),
       scopes: SCOPES.map((id) => ({ id, level: clampLevel(answers[`scope-${id}`], THRESHOLD_CAP) })),
       effect: step === 3,
@@ -764,67 +649,52 @@ export async function collectSimpleAnswers(ask, steps = 3) {
   return step < 1 ? null : answers;
 }
 
-/**
- * Le risposte già date riempiono la finestra: quando si torna indietro, il
- * giocatore ritrova quel che aveva scelto. I campi nascosti portano già il
- * loro valore dal template; qui si riempiono i comandi visibili.
- */
-function applyAreteAnswers(dialog, answers) {
-  const root = dialog?.element;
-  if (!root || !answers) return;
-  for (const [name, value] of Object.entries(answers)) {
-    const field = root.querySelector(`[name="${name}"]`);
-    if (!field) continue;
-    if (field.type === "checkbox") {
-      field.checked = isChecked(value);
-    } else if (field.closest?.("[data-role=dotRow]")) {
-      const row = field.closest("[data-role=dotRow]");
-      const dots = row.querySelectorAll(".wod5e-mage-arete-sphere-dot").length;
-      // Una fila nascosta (un passo dopo il primo) ha già il valore dal template.
-      if (!dots) continue;
-      field.value = String(clampLevel(value, dots));
-      row._paint?.();
-    } else if (field.type === "hidden") {
-      continue;
-    } else {
-      field.value = value ?? "";
-    }
-    field.dispatchEvent(new Event("change", { bubbles: true }));
-  }
-}
-
 /** Il flag «Convinzione già rigenerata in questa scena» (9/9). */
 export const CONVICTION_SCENE_FLAG = BUSSOLA_SCENE_FLAG;
 
 /**
- * La finestra del tiro di Areté, in due modi: «roll» tira; «save» (il
- * Grimorio del personaggio, 6/9) non tira e torna l'incantesimo da salvare.
- * Un `preset` (un incantesimo salvato) riempie la finestra prima di aprirla.
+ * Lanciare dal Grimorio (il Sistema, 16/11): l'incantesimo entra nel riquadro
+ * del Tiro della prima pagina, che conta la soglia, il premio, la
+ * Quintessenza e il Paradosso come vuole il Sistema; lì si tira coi tre
+ * tasti. Vale per il Grimorio comune, per le Formule della matrice e per i
+ * vecchi tasti del tiro di Areté. Senza incantesimo la scheda va al
+ * riquadro, vuoto. Fino alla 1.40.0 la finestra del Grimorio tirava da sé,
+ * col conto di prima.
  */
-export async function launchArete(actor, { mode = "roll", preset = null, simple = false } = {}) {
-  const saveMode = mode === "save";
+export async function caricaDalGrimorio(actor, spell = null) {
+  const sheet = actor?.sheet;
+  if (!sheet) return null;
+  if (!sheet.rendered) await sheet.render({ force: true });
+  const { caricaNelTiro } = await import("./tiro-scheda.js");
+  if (spell) {
+    // Le Formule viaggiano col nome della pagina Formule; gli altri col nome del Grimorio comune.
+    const id = spell.formula ? `formula:${spell.formula}` : `grimorio:${spell.sharedId ?? spell.name ?? ""}`;
+    await caricaNelTiro(sheet, id, spell);
+  } else {
+    sheet.changeTab?.("stats", "primary");
+    await sheet.render({ parts: ["stats"] });
+  }
+  return null;
+}
+
+/**
+ * La finestra del Grimorio del personaggio (6/9): scrive un incantesimo e
+ * torna quello da salvare. Un `preset` (un incantesimo salvato) la riempie
+ * prima di aprirla. Col modo «roll» non apre niente: l'incantesimo va nel
+ * riquadro del Tiro (caricaDalGrimorio).
+ */
+export async function launchArete(actor, { mode = "roll", preset = null } = {}) {
+  if (mode !== "save") return caricaDalGrimorio(actor, preset);
   const arete = getArete(actor);
   const traits = prepareAreteTraits(actor, {
     localize: game.i18n.localize.bind(game.i18n),
     lang: game.i18n.lang
   });
-  // Il premio vale per ogni Tipo di Magick, l'Ibrida compresa (2/10).
+  // Il premio vale per ogni Tipo di Magick, l'Ibrida compresa (2/10): la soglia scende di quant'è l'Areté.
   const prize = { dice: calculateAretePrize(arete.value) };
-  // Solo le Sfere sbloccate, con almeno un pallino: sono quelle combinabili.
-  // Il livello parla a pallini nel dialogo, come sulla scheda.
-  // Ogni Sfera porta i suoi pallini: il giocatore sceglie il livello che
-  // usa. Le Specialità delle Sfere non esistono più (Blue, 21/9): nessuna
-  // Sfera porta un Ambito di Specialità.
-  const specialties = {};
   // Le Sfere conosciute sono i Domini (Blue, 25/9 sera): niente livelli, la
   // Sfera si sceglie e basta, un segno solo per Sfera.
-  const rollSpheres = prepareSpheres(actor).selected
-    .map((sphere) => ({
-      ...sphere,
-      steps: [{ value: 1 }],
-      specialtyScope: specialties[sphere.id] ?? "",
-      specialtyLabel: specialties[sphere.id] ? `WOD5E_MAGE.Scopes.${specialties[sphere.id]}` : ""
-    }));
+  const rollSpheres = prepareSpheres(actor).selected.map((sphere) => ({ ...sphere, steps: [{ value: 1 }] }));
   const localize = game.i18n.localize.bind(game.i18n);
   const readingFor = dotReadings(localize, { arete: arete.value });
   // Gli Ambiti a sette pallini l'uno, i livelli da 1 a 7 (Blue, 2/10: via il
@@ -837,264 +707,35 @@ export async function launchArete(actor, { mode = "roll", preset = null, simple 
     faIcon: SCOPE_ICONS[id] ?? "",
     steps: Array.from({ length: THRESHOLD_CAP }, (_, index) => ({ value: index + 1 }))
   }));
-  const quintessenceAvailable = getMagickBalance(actor).quintessence;
   const sphereLevelsOwned = Object.fromEntries(rollSpheres.map((sphere) => [sphere.id, sphere.value]));
-  // La Bussola rispettata (11/9, al posto della Convinzione del 9/9): Ambizione,
-  // Desiderio e Convinzioni in tendina, un dado in più e +1 Quintessenza a tiro fatto.
-  const bussola = prepareBussolaChoice(actor);
-  const bussolaHtml = saveMode ? "" : renderBussolaBlock(bussola, localize);
   // Le Specializzazioni di ogni Abilità, sulle opzioni della tendina.
   const specialtyNames = skillSpecialtyNames(actor);
   const skillsWithSpecialties = traits.skills.map((trait) => ({ ...trait, specialties: (specialtyNames[trait.id] ?? []).join(", ") }));
-  const base = { arete, prize, spheres: rollSpheres, scopes: scopeOptions, quintessence: quintessenceAvailable, saveMode, preset, bussolaHtml, ...traits, skills: skillsWithSpecialties };
-
-  // Una finestra: tutta (step 0) o un passo dell'Areté semplificata (1, 2, 3).
-  const ask = async (step = 0, answers = {}) => {
-    const last = !step || step === 3;
-    const content = await foundry.applications.handlebars.renderTemplate(
-      "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
-      { ...base, ...stepContext(step, answers, { traits, rollSpheres }) }
-    );
-    const buttons = [];
-    if (step > 1) buttons.push({ action: "back", icon: "fas fa-chevron-left", label: localize("WOD5E_MAGE.Arete.Back") });
-    buttons.push({ action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") });
-    return foundry.applications.api.DialogV2.input({
-      window: {
-        title: localize(saveMode ? "WOD5E_MAGE.Incantesimi.DialogTitle" : (step ? "WOD5E_MAGE.Arete.Simple" : "WOD5E_MAGE.Arete.Roll"))
-      },
-      // Una finestra compatta: due colonne, niente muri di testo. Un passo: una colonna.
-      position: {
-        width: step ? 620 : 940,
-        height: "auto"
-      },
-      content,
-      ok: {
-        icon: saveMode ? "fas fa-floppy-disk" : (last ? "fas fa-dice" : "fas fa-chevron-right"),
-        label: localize(saveMode ? "WOD5E_MAGE.Incantesimi.Save" : (last ? "WOD5E_MAGE.Arete.Roll" : "WOD5E_MAGE.Arete.Next"))
-      },
-      buttons,
-      classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog", ...(step ? ["wod5e-mage-arete-simple-dialog"] : [])],
-      render: (_event, dialog) => {
-        makeMagickTypeExclusive(dialog);
-        wireDotRows(dialog, readingFor);
-        wireDifficulty(dialog);
-        wireScopeTable(dialog);
-        wireMaintainedEffect(dialog);
-        wireBussola(dialog.element, actor);
-        wireGrimorio(dialog, sphereLevelsOwned);
-        applyAretePreset(dialog, preset);
-        applyAreteAnswers(dialog, answers);
-      }
-    });
-  };
-
-  const result = simple ? await collectSimpleAnswers(ask) : await ask(0, {});
-
-  if (!result || result === "cancel") return null;
-
-  // Il Grimorio: niente tiro, torna quel che si è scelto, da salvare.
-  if (saveMode) {
-    return spellFromResult(actor, result, { traits, rollSpheres, localize });
-  }
-
-  // Attributo, Abilità, Abilità: ne basta uno, gli altri si sommano.
-  const selectedTraits = [
-    findMageRollTrait(traits, result.attributeTrait),
-    findMageRollTrait(traits, result.primaryTrait),
-    findMageRollTrait(traits, result.secondaryTrait)
-  ].filter(Boolean);
-  if (!selectedTraits.length) {
-    ui.notifications.warn(game.i18n.localize("WOD5E_MAGE.Arete.SelectTraitWarning"));
-    return;
-  }
-
-  const options = normalizeMagickRollOptions(result);
-  const sphereEntries = rollSpheres
-    .map((sphere) => ({
-      id: sphere.id,
-      level: Math.min(Math.max(Math.trunc(Number(result[`sphere-${sphere.id}`]) || 0), 0), sphere.value)
-    }))
-    .filter((entry) => entry.level > 0);
-
-  // Gli Ambiti dichiarati a pallini, col livello da 1 a 7, e l'Epicità
-  // (almeno 1) in testa: fanno soglia, e il piano finisce nel testo del tiro in chat.
-  const scopeEntries = ambitiDelLancio(Object.fromEntries(SCOPES.map((scopeId) => [scopeId, result[`scope-${scopeId}`]])))
-    .map((entry) => ({ scopeId: entry.id, level: entry.level }));
-
-  // Il premio dell'Areté (Blue, 27/9): dadi nella riserva, fuori dal tetto; la soglia resta la somma degli Ambiti.
-  const prizeDice = options.usePrize ? prize.dice : 0;
-  const threshold = calculateMagickThreshold({
-    scopeLevels: scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level }))
-  });
-  // Le Specialità (ramo C): dadi pari all'Areté, la soglia non si tocca.
-  const specialty = calculateAutomaticSuccesses({
-    sphereLevels: sphereEntries,
-    scopeLevels: scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level })),
-    specialties,
-    arete: arete.value
-  });
-  const sphereMax = Math.max(0, ...sphereEntries.map((entry) => entry.level));
-  // La Bussola rispettata (11/9): un dado in più ora, +1 Quintessenza a tiro fatto, una volta per scena.
-  const bussolaKept = bussolaChoice(result, bussola);
-  // La Specializzazione dell'Abilità (11/9): un dado in più, fuori dal tetto.
-  const specialtyDie = isChecked(result.skillSpecialty) ? SKILL_SPECIALTY_DICE : 0;
-  const goal = String(result.goal ?? "").trim();
-  const effectKind = normalizeEffectKind(result.effectKind);
-
-  const bonusDice = options.harmony;
-  const extraDice = specialtyDie + (bussolaKept ? BUSSOLA_DICE : 0);
-  const basePool = calculateAreteTraitPool(...selectedTraits.map((trait) => trait.value));
-  const conto = ramoCPool({
-    traits: basePool,
-    bonus: bonusDice + extraDice,
-    specialtyDice: specialty.successes,
-    sphereMax,
-    threshold,
-    prize: prizeDice
-  });
-  const rollLabel = selectedTraits.map((trait) => trait.label).join(" + ");
-  const selectedTypes = [];
-  if (options.coincidental) {
-    selectedTypes.push(game.i18n.localize("WOD5E_MAGE.Arete.Coincidental"));
-  }
-  if (options.vulgar) {
-    selectedTypes.push(game.i18n.localize("WOD5E_MAGE.Arete.Vulgar"));
-  }
-  if (options.witnesses) {
-    selectedTypes.push(game.i18n.localize("WOD5E_MAGE.Arete.VulgarWithWitnesses"));
-  }
-  const magickType = selectedTypes.length > 0
-    ? selectedTypes.join(", ")
-    : game.i18n.localize("WOD5E_MAGE.Arete.NoType");
-
-  const selectors = selectedTraits.flatMap((trait) => selectorsForMageRollTrait(trait));
-  if (options.coincidental) selectors.push("magick.coincidental");
-  if (options.vulgar) selectors.push("magick.vulgar");
-  if (options.witnesses) selectors.push("magick.vulgar-with-witnesses");
-  // Rimuove i duplicati generati quando si selezionano due abilità.
-  const uniqueSelectors = [...new Set(selectors)];
-
-  const bonusParts = [];
-  if (options.harmony > 0) {
-    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.HarmonyFlavor", { dice: options.harmony }));
-  }
-  if (specialtyDie > 0) {
-    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.SkillSpecialtyFlavor", { dice: specialtyDie }));
-  }
-  if (bussolaKept) {
-    bonusParts.push(game.i18n.format("WOD5E_MAGE.Bussola.Flavor", { label: bussolaKept.label }));
-  }
-  if (specialty.successes > 0) {
-    bonusParts.push(game.i18n.format("WOD5E_MAGE.Arete.SpecialtyDiceFlavor", {
-      dice: specialty.successes,
-      pairs: specialty.pairs.map((pair) => `${game.i18n.localize(`WOD5E_MAGE.Spheres.${pair.sphere}`)} ◆ ${game.i18n.localize(`WOD5E_MAGE.Scopes.${pair.scope}`)}`).join(", ")
-    }));
-  }
-  // La carta del tiro: una riga per voce sotto i dadi, i simboli sopra.
-  const scopeLevels = scopeEntries.map((entry) => ({ id: entry.scopeId, level: entry.level }));
-  const card = renderRollCard({
-    traits: selectedTraits.map((trait) => ({ label: trait.label, value: trait.value })),
-    bonusParts,
-    threshold,
-    prize: prizeDice,
-    magickType,
-    goal,
-    effectKind: effectKind ? `WOD5E_MAGE.Arete.EffectKinds.${effectKind}` : "",
-    spheres: sphereEntries.map((entry) => ({ id: entry.id, label: `WOD5E_MAGE.Spheres.${entry.id}`, level: entry.level })),
-    scopes: scopeLevels.map((entry) => ({ id: entry.id, label: `WOD5E_MAGE.Scopes.${entry.id}`, level: entry.level }))
-  }, localize);
-  const symbols = rollSymbols({ spheres: sphereEntries, scopes: scopeLevels, prize: prizeDice });
-  // Quel che resta del lancio dopo il tiro: nome, tipo, Durata e soglia.
-  const effect = {
-    vulgar: options.vulgar || options.witnesses,
-    duration: scopeEntries.find((entry) => entry.scopeId === "duration")?.level ?? 0,
-    threshold,
-    goal,
-    fallbackName: goal || sphereEntries
-      .map((entry) => localize(`WOD5E_MAGE.Spheres.${entry.id}`))
-      .join(", ") || rollLabel,
-    // La riga fra le Magick in atto (25/9 sera): chi lancia, la composizione, gli Ambiti in parole, i bonus.
-    caster: String(actor.name ?? ""),
-    spheres: sphereEntries.map((entry) => entry.id),
-    scopes: Object.fromEntries(scopeEntries.map((entry) => [entry.scopeId, entry.level])),
-    composition: [sphereEntries.map((entry) => localize(`WOD5E_MAGE.Spheres.${entry.id}`)).join(" + "), String(result.spellName ?? "").trim()].filter(Boolean).join(" · "),
-    scopesText: scopesInParole(Object.fromEntries(scopeEntries.map((entry) => [entry.scopeId, entry.level])), localize),
-    modifiers: bonusParts.join(" · ")
-  };
-  // L'ultima soglia lanciata: la usa lo Scoppio del Paradosso come proposta.
-  if (actor.isOwner) await actor.update({ [`flags.${MODULE_ID}.lastThreshold`]: threshold });
-
-  // Il costo del lancio (Blue, 29/9): 1 Quintessenza oppure il Paradosso del
-  // tipo (Accidentale 1, Volgare 2, con testimoni 3); chi paga in Quintessenza
-  // prende lo stesso il Paradosso del Volgare. La carta lo dice.
-  const balanceBefore = getMagickBalance(actor);
-  const kind = tipoDaOpzioni(options);
-  const pay = pagamentoDelLancio(result.pagaCon === "paradosso" ? "paradosso" : "quintessenza", balanceBefore.quintessence);
-  const costo = costoLancio(kind, pay);
-  const paradoxGain = costo.paradosso;
-  const prezzo = testoCosto(costo, localize, game.i18n.format.bind(game.i18n));
-  const flavor = card + renderRollNote(game.i18n.format("WOD5E_MAGE.Costo.Nota", { prezzo }));
-
-  // La Ruota paga subito: il costo scende dalla Quintessenza e sale sul
-  // Paradosso, così i rossi di questo tiro contano già il rincaro. Se il
-  // tiro non parte, la Ruota torna com'era.
-  let balanceMoved = false;
-  if ((costo.quintessenza > 0 || paradoxGain > 0) && actor.isOwner) {
-    const spent = { quintessence: Math.max(balanceBefore.quintessence - costo.quintessenza, 0), paradox: balanceBefore.paradox };
-    const balanceAfter = addParadoxToBalance(spent, paradoxGain);
-    if (balanceAfter.paradox !== balanceBefore.paradox || balanceAfter.quintessence !== balanceBefore.quintessence) {
-      await actor.setFlag(MODULE_ID, "magickBalance", balanceAfter);
-      balanceMoved = true;
-      ui.notifications.info(game.i18n.format("WOD5E_MAGE.Costo.Pagato", { prezzo }));
+  const content = await foundry.applications.handlebars.renderTemplate(
+    "modules/wod5e-mage/templates/dialogs/arete-roll.hbs",
+    { arete, prize, spheres: rollSpheres, scopes: scopeOptions, saveMode: true, preset, ...traits, skills: skillsWithSpecialties, ...stepContext(0, {}, { traits, rollSpheres }) }
+  );
+  const result = await foundry.applications.api.DialogV2.input({
+    window: { title: localize("WOD5E_MAGE.Incantesimi.DialogTitle") },
+    // Una finestra compatta: due colonne, niente muri di testo.
+    position: { width: 940, height: "auto" },
+    content,
+    ok: { icon: "fas fa-floppy-disk", label: localize("WOD5E_MAGE.Incantesimi.Save") },
+    buttons: [{ action: "cancel", icon: "fas fa-times", label: localize("WOD5E.Cancel") }],
+    classes: ["wod5e", "wod5e-mage", "mage", actor.system.gamesystem, "wod5e-mage-roll-dialog"],
+    render: (_event, dialog) => {
+      makeMagickTypeExclusive(dialog);
+      wireDotRows(dialog, readingFor);
+      wireDifficulty(dialog);
+      wireScopeTable(dialog);
+      wireMaintainedEffect(dialog);
+      wireGrimorio(dialog, sphereLevelsOwned);
+      applyAretePreset(dialog, preset);
     }
-  }
-
-  // I rossi a parte (29/9): l'Accidentale non li tira; il Volgare sì, uno per
-  // punto sulla Ruota dopo il pagamento, e decidono solo se scoppia.
-  const paradoxRating = kind === "accidentale" ? 0 : getMagickBalance(actor).paradox;
-
-  // Load the Foundry-specific dice implementation only when an Areté roll is
-  // actually requested. Keeping it out of the data helpers also lets their
-  // pure validation tests run outside Foundry.
-  const { rollAreteWithParadox } = await import("./paradox-dice.js");
-
-  let outcome = null;
-  try {
-    outcome = await rollAreteWithParadox({
-      pool: conto.pool,
-      threshold,
-      bonusDice,
-      paradoxRating,
-      burn: threshold,
-      sphereLevel: sphereMax,
-      effectKind,
-      arete: arete.value,
-      title: rollLabel,
-      flavor,
-      card: { symbols, traits: selectedTraits.map((trait) => ({ id: trait.id, type: trait.type, label: trait.label, value: trait.value })), vulgar: effect.vulgar, kind, costo, paradossoPreso: paradoxGain },
-      selectors: uniqueSelectors,
-      actor,
-      data: actor.system
-    });
-  } catch (error) {
-    // La finestra chiusa con la X fa rifiutare DialogV2.wait: qui vale come
-    // un annullamento, non come un errore da propagare.
-    console.warn("wod5e-mage | Tiro di Areté interrotto.", error);
-  }
-
-  const rolled = Boolean(outcome) && outcome !== "cancel";
-
-  // Se il tiro non è mai partito, la Ruota torna esattamente com'era.
-  if (balanceMoved && !rolled) {
-    await actor.setFlag(MODULE_ID, "magickBalance", balanceBefore);
-    ui.notifications.info(game.i18n.localize("WOD5E_MAGE.MagickBalance.ParadoxReverted"));
-  }
-
-  if (rolled) {
-    // Il Volgare fallito non rende più Quintessenza (rifondazione del 14/9, ribadito il 29/9).
-    await grantBussolaQuintessence(actor, bussolaKept);
-    await recordEffect(actor, result, effect);
-  }
+  });
+  if (!result || result === "cancel") return null;
+  // Il Grimorio: niente tiro, torna quel che si è scelto, da salvare.
+  return spellFromResult(actor, result, { traits, rollSpheres, localize });
 }
 
 /**

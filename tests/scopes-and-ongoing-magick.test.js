@@ -415,7 +415,7 @@ assert.deepEqual(editableActor.lastUpdate, {
   assert.match(arete, /input\.value = String\(Number\(input\.value\) === level \? min : level\);/);
   assert.match(arete, /rowMin\(row\)\);\n    if \(level > 0\) entries\.push/);
   assert.match(arete, /setDots\("scope", EPIC_SCOPE, effectEpic\(entry\)\);/);
-  assert.match(arete, /const scopeEntries = ambitiDelLancio\(/);
+  assert.match(readFileSync(new URL("../scripts/tiro-scheda.js", import.meta.url), "utf8"), /const scopeLevels = ambitiDelLancio\(/, "gli Ambiti del lancio li legge il riquadro del Tiro");
   assert.match(arete, /dotReadings\(localize, \{ arete: arete\.value \}\)/);
   // Il nome della lettura non si scrive più (10/9 notte): sta nella nota, col conto («Danni: Areté 3 +3»).
   assert.match(arete, /piece\.title = part\.sub \? `\$\{part\.sub\}: \$\{detail\}` : detail;/);

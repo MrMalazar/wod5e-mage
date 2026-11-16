@@ -202,8 +202,9 @@ assert.doesNotMatch(dice, /#inputAdvancedDifficulty/);
 assert.match(dice, /export async function executeRamoCRoll\(/);
 assert.match(dice, /export async function rollRamoCDirect\(/);
 assert.match(dice, /export function contoDice\(/);
+// La finestra del Grimorio non tira più: lancia dal riquadro del Tiro (il Sistema).
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-assert.match(arete, /rollAreteWithParadox\(\{\s*pool: conto\.pool,\s*threshold,\s*bonusDice,/);
+assert.doesNotMatch(arete, /rollAreteWithParadox/);
 assert.match(dice, /\$\{modifier\} \+ \$\{conto\.paradoxDice\}d\$\{ParadoxDie\.DENOMINATION\}\$\{modifier\}/);
 assert.match(dice, /cardData\.ustione = \{ threshold: burnNow, sphere: Math\.max\(Math\.trunc\(Number\(sphereLevel\) \|\| 0\), 0\), tens, kind: effectKind \?\? "", eyes, choice: "" \}/);
 assert.doesNotMatch(dice, /applyUstione/);
@@ -229,7 +230,8 @@ for (const lang of ["it", "en"]) {
   // La riuscita comprata è caduta (16/9): niente tasto in chat, niente nel dialogo.
   assert.equal(strings.WOD5E_MAGE.Compra, undefined, `${lang}: Compra`);
   assert.equal(strings.WOD5E_MAGE.RamoC.BuyPrice, undefined, `${lang}: BuyPrice`);
-  assert.equal(typeof strings.WOD5E_MAGE.Arete.SpecialtyDice, "string");
+  assert.equal(strings.WOD5E_MAGE.Arete.SpecialtyDice, undefined, `${lang}: la Specialità dell'Ambito è uscita`);
+  assert.equal(strings.WOD5E_MAGE.Costo.PagaCon, undefined, `${lang}: «paga con» è uscito, lanciare non costa`);
   assert.equal(strings.WOD5E_MAGE.Arete.AutoVictory, undefined, `${lang}: la vittoria automatica del ramo A è caduta`);
   // La parola «gettone» non entra (verdetto di Blue). Il token della mappa, quello di
   // Foundry, entra solo nell'impostazione dei nomi delle schede sui token (25/9).

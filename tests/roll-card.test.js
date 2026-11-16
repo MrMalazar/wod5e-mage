@@ -97,10 +97,10 @@ const content = renderAutoVictoryContent({ symbols, card, notes: [renderRollNote
 assert.match(content, /^<p class="wod5e-mage-roll-victory">Vittoria automatica<\/p><details class="wod5e-mage-roll-card-details">[\s\S]*<p class="wod5e-mage-roll-note">nota<\/p>$/);
 assert.doesNotMatch(content, /wod5e-mage-roll-symbols/);
 
-// Il tiro scrive la bandiera (coi tratti per la testata e l'Areté per la vittoria a un prezzo) e la chat la legge.
+// La finestra del Grimorio non tira più (il Sistema): la carta del lancio la scrive il riquadro del Tiro.
 const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
-assert.match(arete, /card: \{ symbols, traits: selectedTraits\.map\(\(trait\) => \(\{ id: trait\.id, type: trait\.type, label: trait\.label, value: trait\.value \}\)\), vulgar: effect\.vulgar, kind, costo, paradossoPreso: paradoxGain \}/);
-assert.match(arete, /spheres: sphereEntries\.map\(\(entry\) => \(\{ id: entry\.id, label:/);
+assert.doesNotMatch(arete, /renderRollCard|rollSymbols/);
+assert.match(readFileSync(new URL("../scripts/tiro-scheda.js", import.meta.url), "utf8"), /spheres: sphereEntries\.map\(\(entry\) => \(\{ id: entry\.id, label:/);
 // Nel ramo C la riuscita senza dadi (comprata) la scrive paradox-dice.js con la stessa scritta grande.
 assert.doesNotMatch(arete, /renderAutoVictoryContent/);
 assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /renderAutoVictoryBanner\(localize, banner\)/);
@@ -127,7 +127,7 @@ const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", impor
 assert.match(dialog, /data-kind="sphere"[^>]*>\s*<img class="wod5e-mage-arete-row-icon" src="\{\{sphere\.icon\}\}"/);
 assert.match(dialog, /data-kind="scope"[^>]*>\s*<i class="wod5e-mage-arete-row-icon \{\{scope\.faIcon\}\}"/);
 // Il conto (10/9): la casella col suo +N a sinistra, il nome a destra (dal 27/9 il premio sono dadi).
-assert.match(dialog, /name="prize"[^>]*>\s*<span class="wod5e-mage-arete-toggle-value">\+\{\{prize\.dice\}\}<\/span>\s*<\/span>\s*<span class="wod5e-mage-arete-row-label">\{\{localize "WOD5E_MAGE\.Arete\.Prize"\}\}/);
+assert.match(dialog, /name="prize"[^>]*>\s*<span class="wod5e-mage-arete-toggle-value">−\{\{prize\.dice\}\}<\/span>\s*<\/span>\s*<span class="wod5e-mage-arete-row-label">\{\{localize "WOD5E_MAGE\.Arete\.Prize"\}\}/);
 assert.doesNotMatch(dialog, /wod5e-mage-arete-row-label-full/);
 const css = readFileSync(new URL("../styles/wod5e-mage.css", import.meta.url), "utf8");
 assert.match(css, /\.wod5e-mage-arete-dots-column\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*18px max-content max-content minmax\(0, 1fr\);/s);

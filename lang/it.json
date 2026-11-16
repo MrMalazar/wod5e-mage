@@ -124,7 +124,6 @@
     "Arete": {
       "Label": "Areté",
       "Roll": "Tira",
-      "RollHint": "Tira con i tratti scelti; la soglia somma gli Ambiti sopra 1 e toglie dadi. Il premio dell'Areté aggiunge dadi. Successi dal 6; Volgare con testimoni attiva automaticamente la difficoltà avanzata, con successi dall'8.",
       "Trait": "Attributo o Abilità",
       "TraitShort": "Abilità",
       "SelectTrait": "Seleziona un tratto",
@@ -136,7 +135,7 @@
       "Other": "Altro",
       "CoincidentalHint": "Non si percepisce.",
       "VulgarHint": "La realtà lo percepisce, +1 Paradosso.",
-      "WitnessesHint": "Qualcuno ti ha visto farlo: +2 Paradosso e difficoltà avanzata automatica, con successi dall'8.",
+      "WitnessesHint": "Qualcuno ti ha visto farlo: il Volgare dà 1 punto di Paradosso in più.",
       "ScopePlan": "Ambiti: {plans}.",
       "Coincidental": "Accidentale",
       "Vulgar": "Volgare",
@@ -164,11 +163,9 @@
       "HarmonyFlavor": "Armonia {dice}",
       "Pool": "Riserva",
       "Threshold": "Soglia",
-      "ThresholdHint": "La soglia è l'Epicità, almeno 1, più la somma dei livelli degli Ambiti: ogni livello vale il suo numero, lo 0 non costa. Le Sfere non contribuiscono e la somma non ha tetto. Il premio dell'Areté non la tocca: aggiunge dadi alla riserva. La soglia si toglie dalla riserva: restano i dadi che tiri. Il successo parte dal 6; con Volgare con testimoni parte automaticamente dall'8.",
       "AutoVictoryBanner": "Vittoria automatica",
       "BonusCap": "Tetto +3: {excess} dadi in meno.",
       "SpherePlan": "Sfere: {plans}.",
-      "SpecialtyHint": "Specialità: se dichiari questo Ambito, tanti dadi in più quanto l'Areté. La soglia non cambia.",
       "HarmonyShort": "dadi dagli altri Maghi",
       "ThresholdShort": "Soglia: l'Epicità, almeno 1, più la somma degli Ambiti; il premio dell'Areté non la tocca. Si toglie dalla riserva: restano i dadi che tiri.",
       "ScopeTable": "La tavola degli Ambiti",
@@ -186,7 +183,7 @@
         "variable": "Variabile"
       },
       "QuintessenceShort": "un dado per punto (hai {available})",
-      "QuintessenceFlavor": "Quintessenza {points} (+{points} dadi; i danni sono aggravati)",
+      "QuintessenceFlavor": "Quintessenza {points} (+{points} dadi)",
       "QuintessenceSpent": "Quintessenza spesa: {points}.",
       "SkillSpecialty": "Specializzazione",
       "SkillSpecialtyHint": "L'Abilità ha una Specializzazione che c'entra col gesto: un dado in più (11/9), fuori dal tetto.",
@@ -202,9 +199,7 @@
       "ConvictionGained": "Convinzione rispettata ({conviction}): +1 Quintessenza.",
       "ConvictionFull": "Convinzione rispettata, ma la Ruota è piena: niente da rigenerare.",
       "ConvictionFlavor": "Convinzione rispettata: +1 Quintessenza",
-      "ReadingSwitch": "Un'altra lettura di questo Ambito",
-      "SpecialtyDice": "Specialità: +{dice} dadi",
-      "SpecialtyDiceFlavor": "{dice} dadi dalla Specialità (Areté: {pairs})"
+      "ReadingSwitch": "Un'altra lettura di questo Ambito"
     },
     "Focus": {
       "Credo": "Credo",
@@ -2788,12 +2783,7 @@
       "SenzaScheda": "senza scheda"
     },
     "Costo": {
-      "PagaCon": "Paga con",
       "Hint": "Lanciare un incantesimo non costa. Un Accidentale non dà Paradosso; un Volgare dà 1 punto, più 1 coi testimoni e più 1 con la dissonanza. Il Narratore riceve la copia del Paradosso preso.",
-      "Quintessenza": "Quintessenza",
-      "Paradosso": "Paradosso",
-      "QuintessenzaHint": "Paghi 1 Quintessenza; il Volgare aggiunge lo stesso il suo Paradosso (1, o 2 coi testimoni). Spento se sulla Ruota non ce n'è.",
-      "ParadossoHint": "Paghi in Paradosso: 1 se Accidentale, 2 se Volgare, 3 se Volgare con testimoni.",
       "PuntiQuintessenza": "{points} Quintessenza",
       "PuntiParadosso": "{points} Paradosso",
       "E": "e",

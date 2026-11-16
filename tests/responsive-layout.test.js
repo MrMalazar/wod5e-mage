@@ -312,8 +312,9 @@ const areteDialog = readFileSync(
 // Sfere e Ambiti (un campo nascosto per riga, la Specialità segnata sulla
 // Sfera che ce l'ha); a destra la riserva, la narrativa, il premio e la
 // Tipologia.
-// L'ordine di Blue (10/9 notte): Obiettivo, Effetto | Sfere | Ambiti; tratti | Tipologia Effetto | Armonia, Quintessenza | Altro.
-assert.match(areteDialog, /wod5e-mage-arete-layout[\s\S]*wod5e-mage-arete-dots-column[\s\S]*name="spellName"[\s\S]*name="goal"[\s\S]*name="effectKind"[\s\S]*<hr class="wod5e-mage-arete-rule">[\s\S]*data-kind="sphere"[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dot[\s\S]*<hr class="wod5e-mage-arete-rule">[\s\S]*data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}"[\s\S]*wod5e-mage-arete-side[\s\S]*name="attributeTrait"[\s\S]*name="narrative"[\s\S]*<hr class="wod5e-mage-arete-rule">[\s\S]*wod5e-mage-arete-types[\s\S]*Arete\.MagickTypeHead[\s\S]*<hr class="wod5e-mage-arete-rule">[\s\S]*name="harmony"[\s\S]*name="pagaCon"[\s\S]*<hr class="wod5e-mage-arete-rule">[\s\S]*Arete\.Other[\s\S]*name="maintained"[\s\S]*name="prize"/);
+// L'ordine di Blue (10/9 notte): Obiettivo, Effetto | Sfere | Ambiti; tratti | Tipologia Effetto | Altro.
+// Armonia e «Paga con» sono usciti col tiro della finestra: si lancia dal riquadro del Tiro (il Sistema).
+assert.match(areteDialog, /wod5e-mage-arete-layout[\s\S]*wod5e-mage-arete-dots-column[\s\S]*name="spellName"[\s\S]*name="goal"[\s\S]*name="effectKind"[\s\S]*<hr class="wod5e-mage-arete-rule">[\s\S]*data-kind="sphere"[\s\S]*name="sphere-\{\{sphere\.id\}\}"[\s\S]*wod5e-mage-arete-sphere-dot[\s\S]*<hr class="wod5e-mage-arete-rule">[\s\S]*data-kind="scope"[\s\S]*name="scope-\{\{scope\.id\}\}"[\s\S]*wod5e-mage-arete-side[\s\S]*name="attributeTrait"[\s\S]*name="narrative"[\s\S]*<hr class="wod5e-mage-arete-rule">[\s\S]*wod5e-mage-arete-types[\s\S]*Arete\.MagickTypeHead[\s\S]*<hr class="wod5e-mage-arete-rule">[\s\S]*Arete\.Other[\s\S]*name="maintained"[\s\S]*name="prize"/);
 assert.match(css, /\.wod5e-mage-arete-layout\s*\{[^}]*grid-template-columns: minmax\(250px, 1\.1fr\) minmax\(230px, 0\.9fr\);/s);
 // Nel Grimorio degli effetti la testata di ogni Sfera è il nome al centro,
 // senza simbolo: il simbolo sta nei tasti in cima (verdetto di Blue, 7/9).
@@ -321,18 +322,20 @@ assert.match(css, /\.wod5e-mage-grimorio-sphere > summary > h3\s*\{[^}]*text-ali
 assert.doesNotMatch(readFileSync(new URL("../templates/dialogs/grimorio.hbs", import.meta.url), "utf8"), /<h3><img src="\{\{group\.icon\}\}"/);
 // Le file a pallini non portano più la classe della vecchia riga flex.
 assert.doesNotMatch(areteDialog, /wod5e-mage-arete-dotrow wod5e-mage-arete-sphere"/);
-assert.match(areteDialog, /data-specialty="\{\{sphere\.specialtyScope\}\}"/);
+assert.doesNotMatch(areteDialog, /data-specialty|specialtyScope/, "la Specialità dell'Ambito è uscita (il Sistema)");
 assert.doesNotMatch(areteDialog, /scopeRowTemplate|data-role="scopeAdd"|wod5e-mage-arete-sphere-box|ScopeSuccesses/);
 // La riserva (11/9): Attributo, Abilità e la Specializzazione come casella (+1);
 // la seconda Abilità non c'è più; l'Areté non tira, entra come premio (anche per l'Ibrida, 2/10).
 assert.match(areteDialog, /RollSelection\.Attribute"[\s\S]*name="attributeTrait"[\s\S]*RollSelection\.Ability"[\s\S]*name="primaryTrait"[\s\S]*Arete\.SkillSpecialty"[\s\S]*name="skillSpecialty"/);
 assert.match(areteDialog, /data-role="scopeTableOpen"/);
 assert.doesNotMatch(areteDialog, /name="primarySkill"|name="arete"|Arete\.Include/);
-// Il conto (10/9 notte): i numeri (Armonia, Quintessenza), poi Altro (Bussola, Effetto Mantenuto, Premio).
-assert.match(areteDialog, /data-role="pool"[\s\S]*data-role="threshold"[\s\S]*wod5e-mage-arete-conto wod5e-mage-arete-conto-numbers"[\s\S]*name="harmony"[\s\S]*name="pagaCon"[\s\S]*wod5e-mage-arete-altro"[\s\S]*\{\{\{bussolaHtml\}\}\}[\s\S]*name="maintained"[\s\S]*name="prize"[\s\S]*Arete\.Prize"/);
+// Il conto: la riserva e la soglia, poi Altro (Effetto Mantenuto, Premio). Armonia, «Paga con» e Bussola
+// sono usciti col tiro della finestra: li conta il riquadro del Tiro (il Sistema).
+assert.match(areteDialog, /data-role="pool"[\s\S]*data-role="threshold"[\s\S]*wod5e-mage-arete-altro"[\s\S]*name="maintained"[\s\S]*name="prize"[\s\S]*Arete\.Prize"/);
+assert.doesNotMatch(areteDialog, /wod5e-mage-arete-conto-numbers|bussolaHtml|name="pagaCon"/);
 assert.doesNotMatch(areteDialog, /PrizeHybrid|prize\.allowed/);
-// L'Armonia è un numero: i dadi degli altri Maghi, contati al tavolo.
-assert.match(areteDialog, /name="harmony"[^>]*type="number"|type="number"[^>]*name="harmony"/);
+// L'Armonia (i dadi degli altri Maghi) sta nel riquadro del Tiro, fra i dadi extra.
+assert.doesNotMatch(areteDialog, /name="harmony"/);
 // Le spiegazioni della Tipologia stanno nei titoli delle caselle (10/9): niente testo a destra.
 assert.match(areteDialog, /wod5e-mage-arete-type-grid[\s\S]*title="\{\{localize 'WOD5E_MAGE\.Arete\.CoincidentalHint'\}\}"[\s\S]*Arete\.Coincidental"[\s\S]*title="\{\{localize 'WOD5E_MAGE\.Arete\.VulgarHint'\}\}"[\s\S]*title="\{\{localize 'WOD5E_MAGE\.Arete\.WitnessesHint'\}\}"/);
 assert.doesNotMatch(areteDialog, /<em>\{\{localize "WOD5E_MAGE\.Arete\.(Coincidental|Vulgar|Witnesses)Hint"\}\}<\/em>|Arete\.ThresholdShort|Arete\.HarmonyShort|Arete\.QuintessenceShort|carry\.traitLabels/);
