@@ -34,7 +34,7 @@ I prezzi del menù sono pensati sulle entrate di prima del 29/9 (Accidentale 0, 
 | la soglia | la Magick del Paradosso, e chi arriva | una o due |
 | 5 e 10 punti | i Grandi, solo sugli scoppi | di rado |
 
-La soglia è la somma degli Ambiti dell'incantesimo, la stessa che i giocatori pagano in dadi. Quando il prezzo è «la soglia», paghi la soglia dell'effetto dei maghi su cui rimbalzi; quando è «la sua soglia», paghi la soglia di chi entra in scena, cioè i dadi che toglie a chi lo affronta.
+La soglia è quella dell'incantesimo, l'Ambito più alto più 1 per ogni altro Ambito sopra l'Areté: la stessa che i giocatori devono raggiungere coi successi. Quando il prezzo è «la soglia», paghi la soglia dell'effetto dei maghi su cui rimbalzi; quando è «la sua soglia», paghi la soglia di chi entra in scena, cioè i successi che chiede a chi lo affronta.
 
 In Foundry la copia la fa il modulo: quando un lancio si chiude in chat, aggiunge alla riserva il Paradosso che il mago ha preso, con la riga nel registro, e il meno corregge. La riserva, i tasti meno e più e il registro stanno nel Quadro del Narratore, che si apre dal tasto nella barra a sinistra. La finestra di spesa manda in chat la carta «Il Paradosso agisce», così il tavolo vede ogni spesa.
 
@@ -148,7 +148,7 @@ esempio: il muro di ghiaccio che bloccava il corridoio si allarga, e chiude anch
 ::: voce Specchio | la soglia | annunciato
 quando: ti serve una minaccia di Magick e non l'hai preparata.
 segno: l'effetto del mago si piega verso di lui, e per un turno fa tutte e due le cose: la sua e la tua.
-effetto: al turno dopo un incantesimo del Grimorio dei maghi torna contro di loro, storpiato. Non tiri: pagata la soglia, l'effetto succede. Il mago preso di mira tira per evitarlo o resistere, e la soglia gli toglie dadi.
+effetto: al turno dopo un incantesimo del Grimorio dei maghi torna contro di loro, storpiato. Non tiri: pagata la soglia, l'effetto succede. Il mago preso di mira tira per evitarlo o resistere contro la soglia.
 mosse: resistere, ripararsi, spegnere l'incantesimo originale.
 poi: lo Specchio muore con l'originale: se il mago spegne il suo effetto, il riflesso sparisce. Finché l'originale dura, dura anche lui.
 esempio: lo scudo che la maga aveva alzato contro i proiettili si chiude intorno a lei, e non la lascia più uscire.
@@ -182,14 +182,14 @@ esempio: l'impianto del capannone va in corto, e l'angolo dei quadri elettrici s
 
 ## Le Presenze
 
-Quando il Paradosso porta qualcuno, paghi la sua soglia. In ramo C i nemici hanno una soglia che toglie dadi a chi li affronta: è il numero che i giocatori sentono, quindi è il prezzo. Un'entità forte costa tanto, e il costo la giustifica: se hai pagato 6 punti, il tavolo sa che quello che è entrato vale 6.
+Quando il Paradosso porta qualcuno, paghi la sua soglia. I nemici hanno una soglia fissa, i successi che servono a chi li affronta: è il numero che i giocatori sentono, quindi è il prezzo. Un'entità forte costa tanto, e il costo la giustifica: se hai pagato 6 punti, il tavolo sa che quello che è entrato vale 6.
 
 Tre regole valgono per tutte. Una Presenza vuole una cosa sola, e la dice o la fa capire. Se ne va quando l'ha avuta, o a fine scena. Arriva sempre annunciata, con un orologio di Arrivo da due a quattro segmenti: al primo segmento il segno, all'ultimo l'ingresso.
 
 ::: voce Ombra | la sua soglia, intorno a 2 | annunciato
 quando: il terzo Volgare della scena, o un Volgare che ha mosso luce e ombra.
 segno: le ombre del mago si muovono un attimo dopo di lui.
-effetto: entra un'Ombra: copia i movimenti del mago, rifà in piccolo quello che lui ha appena fatto con la Magick, e vuole una cosa piccola: essere guardata negli occhi, essere chiamata per nome, avere un oggetto del mago. Finché non l'ha avuta, la sua soglia toglie dadi a chi la ignora.
+effetto: entra un'Ombra: copia i movimenti del mago, rifà in piccolo quello che lui ha appena fatto con la Magick, e vuole una cosa piccola: essere guardata negli occhi, essere chiamata per nome, avere un oggetto del mago. Finché non l'ha avuta, la sua soglia si aggiunge alla difficoltà di chi la ignora.
 mosse: darle quello che vuole, tenerla lontana, uscire dalla scena.
 poi: avuta la sua cosa se ne va, e a fine scena se ne va comunque. Se la colpiscono con la Magick, il colpo passa attraverso e arriva a chi c'è dietro: un In mezzo senza pagarlo.
 esempio: l'ombra del mago sul muro alza la mano un secondo dopo di lui, poi si stacca e resta in piedi da sola.
@@ -198,7 +198,7 @@ esempio: l'ombra del mago sul muro alza la mano un secondo dopo di lui, poi si s
 ::: voce Esattore | la sua soglia, intorno a 4 | annunciato
 quando: un Volgare grosso ha cambiato qualcosa che non doveva cambiare: un morto che respira, una porta nel tempo, un ricordo riscritto.
 segno: qualcuno arriva dal punto esatto del Volgare, e sa il nome del mago.
-effetto: entra l'Esattore, una figura con la sua soglia. Vuole che l'effetto venga disfatto, oppure un prezzo al posto suo: un oggetto che conta, una Quintessenza, una promessa. Finché non l'ha avuto, la sua soglia toglie dadi ai maghi, e la Magick contro di lui è Volgare con testimoni.
+effetto: entra l'Esattore, una figura con la sua soglia. Vuole che l'effetto venga disfatto, oppure un prezzo al posto suo: un oggetto che conta, una Quintessenza, una promessa. Finché non l'ha avuto, la sua soglia si aggiunge alla difficoltà dei maghi, e la Magick contro di lui è Volgare con testimoni.
 mosse: disfare l'effetto, pagare il prezzo, tenerlo a bada fino a fine scena.
 poi: pagato, se ne va e non torna per quell'effetto. Non pagato, a fine scena se ne va lo stesso, e l'effetto ha un Ritorno addosso: alla scena dopo cade, senza pagarlo.
 esempio: il vecchio che avevano fatto respirare di nuovo si mette a sedere, e dietro di lui c'è un uomo in cappotto che chiede chi ha firmato.
@@ -659,7 +659,7 @@ esempio: la strada finisce nel mercato del sabato, e il ladro è in mezzo alle b
 
 ::: scena
 sotto: Un incantesimo grande: i Passi di Rituale, la Quintessenza, il gruppo che lancia insieme.
-testo: In un rituale ti serve che il grande incantesimo sia una scena e non un tiro: tempo che passa, disturbi, un prezzo, qualcosa che guarda. La Magick qui è lenta ma potente, perché i Passi di Rituale danno dadi dopo la sottrazione della soglia, e con tempo e Quintessenza i maghi arrivano a effetti che in un turno non potrebbero tentare. Il Paradosso risponde dentro il rito: un Passo salta, il rito chiede una cosa in più, arriva un ospite, e quello che resta acceso si muove da solo.
+testo: In un rituale ti serve che il grande incantesimo sia una scena e non un tiro: tempo che passa, disturbi, un prezzo, qualcosa che guarda. La Magick qui è lenta ma potente, perché i Passi di Rituale danno dadi in più, e con tempo e Quintessenza i maghi arrivano a effetti che in un turno non potrebbero tentare. Il Paradosso risponde dentro il rito: un Passo salta, il rito chiede una cosa in più, arriva un ospite, e quello che resta acceso si muove da solo.
 :::
 
 ::: momenti
@@ -929,7 +929,7 @@ esempio: un esattore in giacca grigia, un cane nero, un impiegato senza volto.
 :::
 
 ::: voce Regno del Paradosso | 10 punti | allo scoppio
-quando: scoppia un'impresa impossibile, quella col +5 alla soglia.
+quando: lo scoppio deve portare il mago fuori dal mondo.
 effetto: il mago, con chi gli sta accanto, finisce in una bolla fuori dal mondo dove le leggi violate non valgono. Uscirne è l'avventura della sessione dopo.
 mosse: capire le regole del posto, restare insieme, trovare la porta.
 poi: dentro, la pagina dell'Altrove vale tutta, e il posto è Dissonante finché non trovano la regola che lo apre.

@@ -267,7 +267,7 @@
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "Quando un tuo tiro riesce, quello che hai fatto resta fatto: chi prova ad andarci contro (a riaprire la porta che hai chiuso, a far cambiare idea a chi hai convinto, a riparare quello che hai rotto etc..) ha 1 dado in meno oppure soglia +1."
+        "testo": "Quando un tuo tiro riesce, quello che hai fatto resta fatto: chi prova ad andarci contro (a riaprire la porta che hai chiuso, a far cambiare idea a chi hai convinto, a riparare quello che hai rotto etc..) ha 2 dadi in meno."
       },
       "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
     },
@@ -332,7 +332,7 @@
       },
       "passivo": {
         "cadenza": "Una volta per combattimento",
-        "testo": "All'inizio di ogni scontro parti riparato dal caso: c'è sempre qualcosa che ti copre (un muretto, un'auto parcheggiata, una colonna etc..), e chi ti attacca ha 1 dado in meno oppure soglia +1. La copertura dura poco: sparisce appena un nemico si sposta."
+        "testo": "All'inizio di ogni scontro parti riparato dal caso: c'è sempre qualcosa che ti copre (un muretto, un'auto parcheggiata, una colonna etc..), e chi ti attacca ha 2 dadi in meno. La copertura dura poco: sparisce appena un nemico si sposta."
       },
       "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
     },
@@ -408,7 +408,7 @@
             "s": [
               "prime"
             ],
-            "t": "se ti sei preparato, nel lancio di Magick non puoi subire ostacoli (dadi tolti, soglia alzata, un contrasto etc..)."
+            "t": "se ti sei preparato, nel lancio di Magick non puoi subire ostacoli (dadi tolti, difficoltà alzata, un contrasto etc..)."
           }
         ]
       },
@@ -952,7 +952,7 @@
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "Se vuoi, resti impresso: la gente non si scorda di te, e chi prova a cancellarti dalla memoria di qualcuno (con la Magick, con una droga etc..) ha 2 dadi in meno oppure soglia +2."
+        "testo": "Se vuoi, resti impresso: la gente non si scorda di te, e chi prova a cancellarti dalla memoria di qualcuno (con la Magick, con una droga etc..) ha 3 dadi in meno."
       },
       "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
       "nome": "Non ti ricordi di me?"
@@ -998,7 +998,7 @@
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "Quando stai entro Portata 1 da un compagno e subisci una Condizione del tipo della tua Sfera, chi te la infligge ha 2 dadi in meno oppure soglia +2 (si aggiornerà a catena col rifacimento delle Condizioni)."
+        "testo": "Quando stai entro Portata 1 da un compagno e subisci una Condizione del tipo della tua Sfera, chi te la infligge ha 3 dadi in meno (si aggiornerà a catena col rifacimento delle Condizioni)."
       },
       "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
     },
@@ -1572,7 +1572,7 @@
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "Chi prova a ritardare il tuo momento, o a usare altri effetti di Tempo sulle tue azioni, ha 2 dadi in meno oppure soglia +2."
+        "testo": "Chi prova a ritardare il tuo momento, o a usare altri effetti di Tempo sulle tue azioni, ha 3 dadi in meno."
       },
       "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
     },
@@ -1878,7 +1878,7 @@
       "amalgama": "nessuna",
       "attivo": {
         "costo": "1 Quintessenza, 3 per la scena",
-        "testo": "Quando reagisci a un lancio col passivo, su di te o su un compagno vicino a te, la difesa conta di più: chi lancia ha i dadi dimezzati per difetto oppure soglia +3. Con 3 Quintessenza vale fino a fine scena, contro tutti i suoi lanci."
+        "testo": "Quando reagisci a un lancio col passivo, su di te o su un compagno vicino a te, la difesa conta di più: chi lancia ha la riserva dimezzata, per difetto. Con 3 Quintessenza vale fino a fine scena, contro tutti i suoi lanci."
       },
       "passivo": {
         "cadenza": "Sempre",
@@ -1924,7 +1924,7 @@
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "Percepisci senza tirare quello che le tue Sfere sanno vedere (con Forza l'energia che c'è, con Vita come sta un corpo, con Spirito le presenze oltre il Velo etc..). Quando un tiro di Abilità si appoggia a quello che percepisci, il Narratore può darti 2 dadi in più oppure soglia -2."
+        "testo": "Percepisci senza tirare quello che le tue Sfere sanno vedere (con Forza l'energia che c'è, con Vita come sta un corpo, con Spirito le presenze oltre il Velo etc..). Quando un tiro di Abilità si appoggia a quello che percepisci, il Narratore può darti 2 dadi in più."
       },
       "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
     },
@@ -2038,11 +2038,11 @@
       "amalgama": "nessuna",
       "attivo": {
         "costo": "Quintessenza pari alla soglia",
-        "testo": "L'effetto scelto riesce senza tirare: paghi tanta Quintessenza quanta è la sua soglia. Il tiro deve essere possibile: dopo la soglia ti resta almeno un dado."
+        "testo": "L'effetto scelto riesce senza tirare: paghi tanta Quintessenza quanta è la sua soglia. Il tiro deve essere possibile: la tua riserva supera la soglia di almeno un dado."
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "All'acquisto scegli un effetto di Magick del tuo Grimorio, uno già pronto o uno tuo: quando lo lanci ha soglia -2, senza scendere sotto zero. Le Sfere che chiede ti servono lo stesso."
+        "testo": "All'acquisto scegli un effetto di Magick del tuo Grimorio, uno già pronto o uno tuo: quando lo lanci hai 2 dadi in più. Le Sfere che chiede ti servono lo stesso."
       },
       "paradosso": "Segue il lancio in tutte e due le forme."
     },
@@ -2167,7 +2167,7 @@
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "Chi prova a spingerti, farti cadere o sbalzarti ha 2 dadi in meno oppure soglia +2, e il terreno (ghiaccio, olio, un tetto bagnato) non ti fa cadere."
+        "testo": "Chi prova a spingerti, farti cadere o sbalzarti ha 3 dadi in meno, e il terreno (ghiaccio, olio, un tetto bagnato) non ti fa cadere."
       },
       "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
       "nome": "Baricentro",
@@ -2604,7 +2604,7 @@
       "amalgama": "nessuna",
       "attivo": {
         "costo": "2 Quintessenza",
-        "testo": "Per la scena i colpi e gli effetti che partono da oltre Portata 2 hanno la soglia più alta: in più, tanto quanti sono i poteri che conosci in Corrispondenza."
+        "testo": "Per la scena i colpi e gli effetti che partono da oltre Portata 2 hanno la difficoltà più alta: in più, tanti punti quanti sono i poteri che conosci in Corrispondenza."
       },
       "passivo": {
         "cadenza": "Sempre",
@@ -2829,7 +2829,7 @@
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "Gli spiriti ostili ti temono: quelli che ti attaccano hanno 2 dadi in meno oppure soglia +2."
+        "testo": "Gli spiriti ostili ti temono: quelli che ti attaccano hanno 3 dadi in meno."
       },
       "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
       "nome": "Caccia agli spiriti",
@@ -2863,7 +2863,7 @@
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "Nessuno ti possiede: chi prova a entrare nel tuo corpo o nella tua mente ha 2 dadi in meno oppure soglia +2."
+        "testo": "Nessuno ti possiede: chi prova a entrare nel tuo corpo o nella tua mente ha 3 dadi in meno."
       },
       "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
       "nome": "Cavalcare",

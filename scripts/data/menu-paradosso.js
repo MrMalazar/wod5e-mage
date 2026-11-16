@@ -134,7 +134,7 @@ export const SCENE_PARADOSSO = Object.freeze([
     "id": "rituale",
     "nome": "Rituale",
     "sotto": "Un incantesimo grande: i Passi di Rituale, la Quintessenza, il gruppo che lancia insieme.",
-    "testo": "In un rituale ti serve che il grande incantesimo sia una scena e non un tiro: tempo che passa, disturbi, un prezzo, qualcosa che guarda. La Magick qui è lenta ma potente, perché i Passi di Rituale danno dadi dopo la sottrazione della soglia, e con tempo e Quintessenza i maghi arrivano a effetti che in un turno non potrebbero tentare. Il Paradosso risponde dentro il rito: un Passo salta, il rito chiede una cosa in più, arriva un ospite, e quello che resta acceso si muove da solo.",
+    "testo": "In un rituale ti serve che il grande incantesimo sia una scena e non un tiro: tempo che passa, disturbi, un prezzo, qualcosa che guarda. La Magick qui è lenta ma potente, perché i Passi di Rituale danno dadi in più, e con tempo e Quintessenza i maghi arrivano a effetti che in un turno non potrebbero tentare. Il Paradosso risponde dentro il rito: un Passo salta, il rito chiede una cosa in più, arriva un ospite, e quello che resta acceso si muove da solo.",
     "facce": {
       "tocchi": "Fiacco a chi ha guidato il rito",
       "presenze": "Ospite, o l'Esattore se hanno riportato qualcuno",
@@ -543,7 +543,7 @@ export const MENU_PARADOSSO = Object.freeze([
     },
     "quando": "ti serve una minaccia di Magick e non l'hai preparata.",
     "segno": "l'effetto del mago si piega verso di lui, e per un turno fa tutte e due le cose: la sua e la tua.",
-    "effetto": "al turno dopo un incantesimo del Grimorio dei maghi torna contro di loro, storpiato. Non tiri: pagata la soglia, l'effetto succede. Il mago preso di mira tira per evitarlo o resistere, e la soglia gli toglie dadi.",
+    "effetto": "al turno dopo un incantesimo del Grimorio dei maghi torna contro di loro, storpiato. Non tiri: pagata la soglia, l'effetto succede. Il mago preso di mira tira per evitarlo o resistere contro la soglia.",
     "mosse": [
       "resistere",
       "ripararsi",
@@ -807,7 +807,7 @@ export const MENU_PARADOSSO = Object.freeze([
     },
     "quando": "il terzo Volgare della scena, o un Volgare che ha mosso luce e ombra.",
     "segno": "le ombre del mago si muovono un attimo dopo di lui.",
-    "effetto": "entra un'Ombra: copia i movimenti del mago, rifà in piccolo quello che lui ha appena fatto con la Magick, e vuole una cosa piccola: essere guardata negli occhi, essere chiamata per nome, avere un oggetto del mago. Finché non l'ha avuta, la sua soglia toglie dadi a chi la ignora.",
+    "effetto": "entra un'Ombra: copia i movimenti del mago, rifà in piccolo quello che lui ha appena fatto con la Magick, e vuole una cosa piccola: essere guardata negli occhi, essere chiamata per nome, avere un oggetto del mago. Finché non l'ha avuta, la sua soglia si aggiunge alla difficoltà di chi la ignora.",
     "mosse": [
       "darle quello che vuole",
       "tenerla lontana",
@@ -836,7 +836,7 @@ export const MENU_PARADOSSO = Object.freeze([
     },
     "quando": "un Volgare grosso ha cambiato qualcosa che non doveva cambiare: un morto che respira, una porta nel tempo, un ricordo riscritto.",
     "segno": "qualcuno arriva dal punto esatto del Volgare, e sa il nome del mago.",
-    "effetto": "entra l'Esattore, una figura con la sua soglia. Vuole che l'effetto venga disfatto, oppure un prezzo al posto suo: un oggetto che conta, una Quintessenza, una promessa. Finché non l'ha avuto, la sua soglia toglie dadi ai maghi, e la Magick contro di lui è Volgare con testimoni.",
+    "effetto": "entra l'Esattore, una figura con la sua soglia. Vuole che l'effetto venga disfatto, oppure un prezzo al posto suo: un oggetto che conta, una Quintessenza, una promessa. Finché non l'ha avuto, la sua soglia si aggiunge alla difficoltà dei maghi, e la Magick contro di lui è Volgare con testimoni.",
     "mosse": [
       "disfare l'effetto",
       "pagare il prezzo",
@@ -2313,7 +2313,7 @@ export const MENU_PARADOSSO = Object.freeze([
       "tipo": "fisso",
       "valore": 10
     },
-    "quando": "scoppia un'impresa impossibile, quella col +5 alla soglia.",
+    "quando": "lo scoppio deve portare il mago fuori dal mondo.",
     "segno": "",
     "effetto": "il mago, con chi gli sta accanto, finisce in una bolla fuori dal mondo dove le leggi violate non valgono. Uscirne è l'avventura della sessione dopo.",
     "mosse": [

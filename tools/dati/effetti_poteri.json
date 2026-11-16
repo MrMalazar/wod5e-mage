@@ -32,7 +32,7 @@
       { "mode": "attivo", "on": "nota", "roll": "magick", "nota": "per ogni Quintessenza che paghi, l'Ambito scelto non lo paghi per un livello in più" }
     ],
     "la-pratica-rende-perfetti": [
-      { "on": "threshold", "value": -2, "when": "incantesimoScelto", "nota": "quando lo lanci ha soglia -2, senza scendere sotto zero" },
+      { "on": "dice", "value": 2, "when": "incantesimoScelto", "nota": "quando lo lanci hai 2 dadi in più" },
       { "mode": "attivo", "on": "autoSuccess", "when": ["incantesimoScelto", "dadi1"], "nota": "L'effetto scelto riesce senza tirare: paghi tanta Quintessenza quanta è la sua soglia" }
     ],
     "mestiere": [
@@ -42,7 +42,7 @@
       { "on": "dice", "value": 2, "roll": "abilita", "when": "saluteMeta", "nota": "Quando sei sotto metà Salute, nei tiri fisici hai 2 dadi in più" }
     ],
     "sesto-senso": [
-      { "on": "dice", "value": 2, "roll": "abilita", "nota": "Quando un tiro di Abilità si appoggia a quello che percepisci, il Narratore può darti 2 dadi in più oppure soglia -2" }
+      { "on": "dice", "value": 2, "roll": "abilita", "nota": "Quando un tiro di Abilità si appoggia a quello che percepisci, il Narratore può darti 2 dadi in più" }
     ],
     "come-da-piano": [
       { "on": "dice", "value": 2, "roll": "abilita", "nota": "per quella scena ognuno ha 2 dadi in più nei tiri di Abilità" }

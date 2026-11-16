@@ -13,7 +13,7 @@ Lista unica di armi, protezioni, oggetti e servizi per M6, stesura del 25/9/2026
 | Armatura | punti da 1 a 7: il punteggio si toglie al danno di ogni colpo, e ogni colpo che l'armatura assorbe le toglie 1 punto. Si porta una protezione alla volta; il casco e lo scudo si sommano |
 | Fisica e mentale | la fisica para il danno fisico, la mentale quello mentale. Tutte e due contano anche contro la Magick: è l'effetto a dire se le passa. Contro il fuoco e i gas la fisica non conta |
 | Ritorno | la fisica si ripara: una scena, e lo stesso Grado che serve per averla. La mentale si ricostruisce: un punto per ogni scena dedicata, e senza pratica perde un punto a sessione |
-| Attrezzi | l'attrezzo di base rende possibile il tiro: senza, non si tira. Quello da professionista fa di più: sui lavori di routine di quel mestiere non si tira, sugli altri dà +1 dado. Uno scadente o improvvisato costa soglia +1 |
+| Attrezzi | l'attrezzo di base rende possibile il tiro: senza, non si tira. Quello da professionista fa di più: sui lavori di routine di quel mestiere non si tira, sugli altri dà +1 dado. Uno scadente o improvvisato costa 2 dadi in meno |
 | Usi | solo per quello che si consuma. Le munizioni non si contano: le standard vengono con l'arma, le speciali si scelgono per la scena |
 | Accesso | ogni voce ha una Rarità, che dice quanto si trova oggi, e il Grado consigliato di un Background, da 1 a 5: vale il Background che in storia ti porta quella cosa. Il Grado è un consiglio: il Narratore può dare la cosa per un'altra strada, e con un grado sotto serve una scena |
 | Posti | sulla scheda un oggetto sta Addosso, A casa o fra i Temporanei; cambia posto quando lo dai o lo prendi |
@@ -42,9 +42,9 @@ La Rarità dice quanto si trova, il Grado quanto serve per arrivarci, e le due c
 | Machete, ascia | Mischia | danno 4, portata Due passi; si vede | | Comune | Grado 1 |
 | Spada | Mischia | danno 4, portata Due passi; si vede | | Da specialista | Grado 2 |
 | Martello da fabbro, mazza pesante | Mischia | danno 5, portata Due passi; a due mani | | Comune | Grado 1 |
-| Motosega | Mischia | danno 5 Aggravati, portata Due passi; a due mani, soglia +1, si sente da lontano | | Comune | Grado 1 |
+| Motosega | Mischia | danno 5 Aggravati, portata Due passi; a due mani, 2 dadi in meno, si sente da lontano | | Comune | Grado 1 |
 | Manganello elettrico | Mischia | danno 2 e Stordito, portata A contatto | 3 | Da specialista | Grado 2 |
-| Oggetto improvvisato: sedia, bottiglia, chiave inglese | Improvvisata | per colpire, danno 2, e l'oggetto resta; usato come l'arma che imita, il danno di quell'arma a soglia +1; lanciato o sfasciato, il danno dell'arma della sua misura, e poi è rotto o perso | | Comune | nessuno |
+| Oggetto improvvisato: sedia, bottiglia, chiave inglese | Improvvisata | per colpire, danno 2, e l'oggetto resta; usato come l'arma che imita, il danno di quell'arma con 2 dadi in meno; lanciato o sfasciato, il danno dell'arma della sua misura, e poi è rotto o perso | | Comune | nessuno |
 | Arco, balestra | Distanza | danno 3, portata Un tiro di pistola; silenziosi | | Comune | Grado 1 |
 | Sparachiodi | Distanza | danno 3, portata Due passi; passa per attrezzo | | Comune | Grado 1 |
 | Pistola | Distanza | danno 4, portata Un tiro di pistola; si nasconde | | Da specialista | Grado 2 |
@@ -94,9 +94,9 @@ La Rarità dice quanto si trova, il Grado quanto serve per arrivarci, e le due c
 | Autoiniettore d'adrenalina | Cura | chi è a tracciato pieno si rialza e agisce per un turno | 1 | Da specialista | Grado 2 |
 | Kit chirurgico da campo | Cura | con Medicina (Chirurgia) un Aggravato diventa Superficiale, una volta a persona per storia | | Da specialista | Grado 1 |
 | Nanomediche | Cura | un Aggravato diventa Superficiale, senza tiro; è ipertecnologia | 1 | Introvabile | Grado 5 |
-| Ansiolitico | Cura della mente | toglie Spaventato o Scosso; per la scena soglia +1 ai tiri mentali | 3 | Da specialista | Grado 1 |
+| Ansiolitico | Cura della mente | toglie Spaventato o Scosso; per la scena 2 dadi in meno ai tiri mentali | 3 | Da specialista | Grado 1 |
 | Notte in un rifugio | Cura della mente | i Superficiali mentali tornano come quelli fisici, a inizio sessione | | | Grado 1 |
-| Alcol | Droga | +1 dado a un tiro sociale; per la scena soglia +1 ai tiri mentali | | Comune | nessuno |
+| Alcol | Droga | +1 dado a un tiro sociale; per la scena 2 dadi in meno ai tiri mentali | | Comune | nessuno |
 | Sedativo | Droga | chi lo prende senza saperlo dorme entro la scena; chi lo prende sapendolo è Rallentato | 1 | Da specialista | Grado 1 |
 | Stimolante | Droga | +1 dado ai tiri fisici per la scena; a fine scena sei Scosso | 1 | Riservata | Grado 1 |
 | Allucinogeno | Droga | Offuscato per la scena; chi lo prende senza saperlo è anche Scosso | 1 | Riservata | Grado 1 |
@@ -139,7 +139,7 @@ La Rarità dice quanto si trova, il Grado quanto serve per arrivarci, e le due c
 | Elicottero | Movimento | porta il gruppo in un'altra città entro la sessione | | Riservata | Grado 4 |
 | Fascette | Contenimento | Immobilizzato a chi non può opporsi; si spezzano con Forza + Atletica | 1 | Comune | nessuno |
 | Catena e lucchetto | Contenimento | fermano una porta, o una persona | | Comune | nessuno |
-| Manette | Contenimento | Immobilizzato a chi non può opporsi; per spezzarle, Forza + Atletica a soglia +2 | | Comune | Grado 1 |
+| Manette | Contenimento | Immobilizzato a chi non può opporsi; per spezzarle, Forza + Atletica a difficoltà +1 | | Comune | Grado 1 |
 | Taser | Contenimento | Stordito, portata Due passi | 3 | Da specialista | Grado 2 |
 | Contanti | Documenti | paghi senza lasciare traccia; una mazzetta a un PNG comune passa senza tiro | | Comune | Grado 1 |
 | Divisa | Documenti | con Sotterfugio (Travestirsi) passi per chi la porta | | Comune | Grado 1 |

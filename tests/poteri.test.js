@@ -369,14 +369,15 @@ console.log("poteri, tasto Usa: ok");
   assert.deepEqual(applyPotere({}, riga("adrenalina", "life"), { magick: false, saluteMeta: false }).esclusi.map((e) => e.motivo), ["saluteMeta"]);
   assert.deepEqual(applyPotere({}, riga("adrenalina", "life"), { magick: true, saluteMeta: true }).esclusi.map((e) => e.motivo), ["tiro:abilita"]);
 
-  // Semplice violenza, rifatta (30/9): la nota del passivo in ogni tiro, quella dell'attivo con la variante. La Pratica: -2 sull'incantesimo scelto.
+  // Semplice violenza, rifatta (30/9): la nota del passivo in ogni tiro, quella dell'attivo con la variante.
+  // La Pratica (la pagina dei casi, 14/11): 2 dadi in più sull'incantesimo scelto, al posto della soglia −2.
   assert.equal(applyPotere({}, riga("semplice-violenza", "forces"), { magick: true, scopes: { potency: 2 } }).notes.length, 1);
   assert.equal(applyPotere({}, riga("semplice-violenza", "forces"), { magick: false, variant: "attivo" }).notes.length, 2);
   const pratica = riga("la-pratica-rende-perfetti", "mind", "s1");
-  assert.equal(applyPotere({ threshold: 3 }, pratica, { magick: true, spell: "s1" }).threshold, 1);
+  assert.deepEqual([applyPotere({ threshold: 3, dice: 0 }, pratica, { magick: true, spell: "s1" }).threshold, applyPotere({ threshold: 3, dice: 0 }, pratica, { magick: true, spell: "s1" }).dice], [3, 2]);
   assert.deepEqual(applyPotere({ threshold: 3 }, pratica, { magick: true, spell: "s2" }).esclusi.map((e) => e.motivo), ["incantesimoScelto", "attivo"]);
-  const praticaAttiva = applyPotere({ threshold: 3 }, pratica, { magick: true, spell: "s1", variant: "attivo" });
-  assert.deepEqual([praticaAttiva.threshold, praticaAttiva.autoSuccess.map((a) => a.when), praticaAttiva.attivo], [1, [["dadi1"]], true]);
+  const praticaAttiva = applyPotere({ threshold: 3, dice: 0 }, pratica, { magick: true, spell: "s1", variant: "attivo" });
+  assert.deepEqual([praticaAttiva.dice, praticaAttiva.autoSuccess.map((a) => a.when), praticaAttiva.attivo], [2, [["dadi1"]], true]);
 
   // Un potere scritto a mano con effetti suoi li tiene; una riga del catalogo legge il catalogo, non la copia
   // (dal 30/9 anche quando il potere rifatto non ha più effetti: la copia vecchia non vale).
