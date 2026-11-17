@@ -4906,9 +4906,9 @@ export const POTERI = Object.freeze([
     "dot": 2,
     "type": "attivo",
     "kind": "attivo e passivo",
-    "text": "Effetto attivo (Una volta per sessione): Scegli una Convinzione, tua o di un compagno: per la scena l'avete tutti e due, nel bene e nel male, e rispettarla vi dà dadi e Quintessenza come sempre. Più di tre Convinzioni non se ne hanno: chi ne ha già tre condivide una delle sue.\n\nEffetto passivo (Sempre): Quando un compagno rispetta una sua Convinzione, ne condividi il bonus di dadi e prendi anche tu 1 Quintessenza. Quando ne rispetti una tu, vale lo stesso per lui.",
-    "attivo": "Scegli una Convinzione, tua o di un compagno: per la scena l'avete tutti e due, nel bene e nel male, e rispettarla vi dà dadi e Quintessenza come sempre. Più di tre Convinzioni non se ne hanno: chi ne ha già tre condivide una delle sue.",
-    "passivo": "Quando un compagno rispetta una sua Convinzione, ne condividi il bonus di dadi e prendi anche tu 1 Quintessenza. Quando ne rispetti una tu, vale lo stesso per lui.",
+    "text": "Effetto attivo (Una volta per sessione): Scegli una Convinzione, tua o di un compagno: per la scena l'avete tutti e due, nel bene e nel male, e rispettarla vi dà tutto il premio, 2 dadi e 1 Quintessenza, senza scegliere. Più di tre Convinzioni non se ne hanno: chi ne ha già tre condivide una delle sue.\n\nEffetto passivo (Sempre): Quando rispetti una tua Convinzione, ne condividi il premio coi compagni: prendono anche loro i 2 dadi o la Quintessenza che hai scelto.",
+    "attivo": "Scegli una Convinzione, tua o di un compagno: per la scena l'avete tutti e due, nel bene e nel male, e rispettarla vi dà tutto il premio, 2 dadi e 1 Quintessenza, senza scegliere. Più di tre Convinzioni non se ne hanno: chi ne ha già tre condivide una delle sue.",
+    "passivo": "Quando rispetti una tua Convinzione, ne condividi il premio coi compagni: prendono anche loro i 2 dadi o la Quintessenza che hai scelto.",
     "amalgama": "",
     "amalgam": "",
     "amalgams": [],
@@ -9799,4 +9799,4 @@ export const POTERI_TOLTI = Object.freeze({
 });
 
 /** L'impronta del catalogo: cambia quando cambia un potere, e allora le schede si riallineano (poteri-allinea.js). */
-export const POTERI_VERSIONE = "b232b47a";
+export const POTERI_VERSIONE = "3839c93c";

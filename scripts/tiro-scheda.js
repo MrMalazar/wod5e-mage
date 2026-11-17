@@ -557,7 +557,7 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     // Paradosso, più 1 coi testimoni e più 1 con la dissonanza, che si accende qui.
     dissonanza: magick ? { on: Boolean(tiro.dissonanza) } : null,
     // La Bussola (la scala del 16/11): il tasto apre il menù delle voci; acceso dice cosa si è scelto.
-    // A favore vale una volta per scena; contro una Convinzione si dichiara sempre. Senza niente da
+    // A favore ogni voce vale una volta per scena; contro una Convinzione si dichiara sempre. Senza niente da
     // scegliere il tasto è spento.
     bussola: vistaBussola(inputs.bussola, bussola, parolaBussola, localize),
     // Sul tasto solo il nome (1/10); il Paradosso che il tipo dà sta nel sorvolo e nella carta.
@@ -857,7 +857,7 @@ export function vistaBussola(effetto, stato, parole, localize = (key) => key) {
   const voci = menuBussolaVoci(stato, localize, (key) => key);
   let hint = parole?.nota || localize("WOD5E_MAGE.Tiro.BussolaHint");
   if (!on && !voci.length) hint = localize(stato?.voci?.some((voce) => !voce.spenta) ? "WOD5E_MAGE.Tiro.BussolaUsata" : "WOD5E_MAGE.Bussola.None");
-  else if (!on && stato?.usata) hint = localize("WOD5E_MAGE.Tiro.BussolaUsataContro");
+  else if (!on && Object.values(stato?.usate ?? {}).some(Boolean)) hint = localize("WOD5E_MAGE.Tiro.BussolaUsataParte");
   return { on, contro: on && effetto.verso === "contro", label: parole?.tasto ?? localize("WOD5E_MAGE.Tiro.Bussola"), hint, spento: !on && !voci.length };
 }
 

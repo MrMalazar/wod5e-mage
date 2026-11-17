@@ -1285,11 +1285,11 @@
       "amalgama": "nessuna",
       "attivo": {
         "costo": "Una volta per sessione",
-        "testo": "Scegli una Convinzione, tua o di un compagno: per la scena l'avete tutti e due, nel bene e nel male, e rispettarla vi dà dadi e Quintessenza come sempre. Più di tre Convinzioni non se ne hanno: chi ne ha già tre condivide una delle sue."
+        "testo": "Scegli una Convinzione, tua o di un compagno: per la scena l'avete tutti e due, nel bene e nel male, e rispettarla vi dà tutto il premio, 2 dadi e 1 Quintessenza, senza scegliere. Più di tre Convinzioni non se ne hanno: chi ne ha già tre condivide una delle sue."
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "Quando un compagno rispetta una sua Convinzione, ne condividi il bonus di dadi e prendi anche tu 1 Quintessenza. Quando ne rispetti una tu, vale lo stesso per lui."
+        "testo": "Quando rispetti una tua Convinzione, ne condividi il premio coi compagni: prendono anche loro i 2 dadi o la Quintessenza che hai scelto."
       },
       "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
     },

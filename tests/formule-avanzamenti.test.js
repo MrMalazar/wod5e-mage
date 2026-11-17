@@ -60,7 +60,7 @@ assert.match(readFileSync(new URL("../scripts/sheets/mage-actor-sheet.js", impor
 for (const lang of ["it", "en"]) {
   const strings = JSON.parse(readFileSync(new URL(`../lang/${lang}.json`, import.meta.url), "utf8")).WOD5E_MAGE;
   for (const key of ["Avanzamenti", "AvanzamentiHint", "AvanzamentiPieno", "AvanzamentiFlavor", "SenzaPremio", "Avanzamento", "AvanzamentoHint", "AvanzamentoPreso"]) assert.equal(typeof strings.Formule[key], "string", `${lang} Formule.${key}`);
-  for (const key of ["Bussola", "BussolaHint", "BussolaUsata", "BussolaUsataContro", "BussolaContro", "BussolaControRiga"]) assert.equal(typeof strings.Tiro[key], "string", `${lang} Tiro.${key}`);
+  for (const key of ["Bussola", "BussolaHint", "BussolaUsata", "BussolaUsataParte", "BussolaContro", "BussolaControRiga"]) assert.equal(typeof strings.Tiro[key], "string", `${lang} Tiro.${key}`);
 }
 
 console.log("Avanzamenti delle Formule e Bussola: test passati.");

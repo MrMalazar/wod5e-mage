@@ -1,5 +1,5 @@
 // GENERATO da tools/storia-poteri.mjs: non si scrive a mano.
-// La storia del catalogo dei poteri (versioni 15f7a2c, 01539af, 2cb20fc, 80c526a, a8c6221, 4ec8359, fb33ef8, 98d0273 di scripts/data/poteri.js):
+// La storia del catalogo dei poteri (versioni 22e870e, fcf17d7, 15f7a2c, 01539af, 2cb20fc, 80c526a, a8c6221, 4ec8359, fb33ef8, 98d0273 di scripts/data/poteri.js):
 // per potere e per campo, le impronte dei valori che il catalogo aveva prima e che oggi non ha più.
 // scripts/poteri-allinea.js riscrive un campo di una riga solo se è ancora uno di questi (o se manca).
 export const STORIA_POTERI = Object.freeze({
@@ -226,6 +226,11 @@ export const STORIA_POTERI = Object.freeze({
    "08662abf"
   ]
  },
+ "fuori-tiro": {
+  "text": [
+   "1bc775c9"
+  ]
+ },
  "colpo-di-fortuna": {
   "type": [
    "01cb2e86"
@@ -243,6 +248,7 @@ export const STORIA_POTERI = Object.freeze({
  },
  "il-dado-e-tratto": {
   "text": [
+   "aa654e31",
    "b8fef372"
   ],
   "amalgamText": [
@@ -318,7 +324,8 @@ export const STORIA_POTERI = Object.freeze({
  },
  "angolo-morto": {
   "text": [
-   "33d93531"
+   "33d93531",
+   "7fa5672d"
   ],
   "cost": [
    "ffcaaa85"
@@ -393,6 +400,7 @@ export const STORIA_POTERI = Object.freeze({
  },
  "niente-al-caso": {
   "text": [
+   "4efdd737",
    "fb4f8182"
   ],
   "amalgamText": [
@@ -738,6 +746,11 @@ export const STORIA_POTERI = Object.freeze({
    "08662abf"
   ]
  },
+ "baricentro": {
+  "text": [
+   "f33a32d4"
+  ]
+ },
  "luci-e-ombre": {
   "text": [
    "31cd69e7"
@@ -855,7 +868,8 @@ export const STORIA_POTERI = Object.freeze({
    "1473700a"
   ],
   "text": [
-   "748f4d46"
+   "748f4d46",
+   "f619d479"
   ],
   "cost": [
    "ffcaaa85"
@@ -900,7 +914,8 @@ export const STORIA_POTERI = Object.freeze({
  },
  "al-posto-tuo": {
   "text": [
-   "73dbbead"
+   "73dbbead",
+   "8a197591"
   ],
   "amalgamText": [
    "b2a4992c"
@@ -1213,6 +1228,7 @@ export const STORIA_POTERI = Object.freeze({
    "01cb2e86"
   ],
   "text": [
+   "6a42cf7f",
    "9c36622c"
   ],
   "cost": [
@@ -1440,6 +1456,16 @@ export const STORIA_POTERI = Object.freeze({
    "16b76eb6"
   ]
  },
+ "caccia-agli-spiriti": {
+  "text": [
+   "26a4db87"
+  ]
+ },
+ "cavalcare": {
+  "text": [
+   "e812cdee"
+  ]
+ },
  "il-prezzo-prima": {
   "text": [
    "d960f695"
@@ -1515,6 +1541,7 @@ export const STORIA_POTERI = Object.freeze({
  },
  "adesso-e-non-dopo": {
   "text": [
+   "8cb53dff",
    "d6a55180"
   ],
   "cost": [
@@ -1819,6 +1846,7 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "text": [
+   "625ea58d",
    "dceefd7c"
   ],
   "amalgamText": [
@@ -1871,6 +1899,7 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "text": [
+   "79eef746",
    "cff19bfa"
   ],
   "cost": [
@@ -1887,6 +1916,7 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "effects": [
    "741638a5",
+   "7d015058",
    "8594463f"
   ]
  },
@@ -1948,6 +1978,7 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "text": [
+   "9786abaf",
    "ba4d8ea8"
   ],
   "amalgamText": [
@@ -1960,6 +1991,7 @@ export const STORIA_POTERI = Object.freeze({
    "370cabd5"
   ],
   "effects": [
+   "06731816",
    "4dbf3dc4",
    "741638a5"
   ]

@@ -493,7 +493,10 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
     "WOD5E_MAGE.Bussola.Spenta": "«{testo}» si spegne.",
     "WOD5E_MAGE.Bussola.Gained": "+1 Quintessenza da «{testo}».",
     "WOD5E_MAGE.Bussola.Nota.Modi.volonta": "1 Volontà a tiro fatto",
-    "WOD5E_MAGE.Bussola.VolontaGained": "+1 Volontà da «{testo}»."
+    "WOD5E_MAGE.Bussola.Volonta.ms": "+1 Volontà da «{testo}».",
+    "WOD5E_MAGE.Bussola.Volonta.ma": "+1 Volontà, un aggravato in meno, da «{testo}».",
+    "WOD5E_MAGE.Bussola.Nota.Modi.volontaAmbizione": "1 Volontà a tiro fatto, anche aggravato",
+    "WOD5E_MAGE.Bussola.Nota.Desiderio": "Segue il Desiderio, «{testo}»: {cosa}."
   });
   actor.system.headers = { ambition: "Aprire la scuola", desire: "" };
   flags["wod5e-mage"].convinzioni = { c1: { group: "", text: "Non lascio indietro nessuno", serve: "", cross: "" } };
@@ -514,11 +517,12 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   const mServe = await S.launchTiro(actor, serve);
   assert.equal(globalThis.__sim.rolls.at(-1).formula, "8dmcs>5 + 0dpcs>5");
   assert.match(mServe.flavor, /Serve «Non lascio indietro nessuno»: 2 dadi in più\./);
-  assert.deepEqual([flags["wod5e-mage"].convinzioneScena.used, flags["wod5e-mage"].bussolaScala.favore], [true, { c1: 1 }]);
-  // Già servita in questa scena: a favore non vale più, il tasto lo dice, contro si dichiara lo stesso.
+  assert.deepEqual([flags["wod5e-mage"].convinzioneScena.convinzione, flags["wod5e-mage"].bussolaScala.favore], [true, { c1: 1 }]);
+  // Le Convinzioni hanno dato in questa scena: a favore non valgono più, il tasto lo dice; restano
+  // l'Ambizione, che ha il suo premio, e il contro.
   ctxB = S.prepareTiroContext(actor, serve);
-  assert.deepEqual([righe(ctxB, "riserva"), ctxB.pool, ctxB.bussola.on, ctxB.bussola.hint, ctxB.bussola.spento], [[], 6, false, "WOD5E_MAGE.Tiro.BussolaUsataContro", false]);
-  assert.deepEqual(B.menuBussolaVoci(B.statoBussola(actor)).map((v) => v.state), ["contro|convinzione:c1", ""]);
+  assert.deepEqual([righe(ctxB, "riserva"), ctxB.pool, ctxB.bussola.on, ctxB.bussola.hint, ctxB.bussola.spento], [[], 6, false, "WOD5E_MAGE.Tiro.BussolaUsataParte", false]);
+  assert.deepEqual(B.menuBussolaVoci(B.statoBussola(actor)).map((v) => v.state), ["favore|ambizione", "contro|convinzione:c1", ""]);
 
   // Contro: la prima volta 2 dadi in meno; la seconda anche difficoltà +1; la terza si spegne.
   const contro = T.setBussola(fisico, { voce: "convinzione:c1", verso: "contro" });
@@ -538,7 +542,10 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   assert.match(mTerza.flavor, /Contro «Non lascio indietro nessuno», terza volta: si spegne\./);
   assert.deepEqual([flags["wod5e-mage"].convinzioni.c1.spenta, flags["wod5e-mage"].bussolaScala.contro], [true, {}], "spenta, e il conto riparte");
   assert.ok(infos.includes("«Non lascio indietro nessuno» si spegne."));
-  // Spenta, e la Bussola già servita: niente da scegliere, il tasto è spento.
+  // Spenta, e le Convinzioni già servite: resta l'Ambizione; servita anche lei, niente da scegliere.
+  ctxB = S.prepareTiroContext(actor, fisico);
+  assert.deepEqual([ctxB.bussola.spento, B.menuBussolaVoci(B.statoBussola(actor)).map((v) => v.state)], [false, ["favore|ambizione", ""]]);
+  flags["wod5e-mage"].convinzioneScena.ambizione = true;
   ctxB = S.prepareTiroContext(actor, fisico);
   assert.deepEqual([ctxB.bussola.spento, ctxB.bussola.hint], [true, "WOD5E_MAGE.Tiro.BussolaUsata"]);
 
@@ -563,12 +570,15 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   const mLancio = await S.launchTiro(actor, lancio);
   assert.equal(globalThis.__sim.rolls.at(-1).formula, "8dmcs>5 + 0dpcs>5");
   assert.match(mLancio.flavor, /Serve «Non lascio indietro nessuno»: 2 dadi in più\./);
-  assert.equal(flags["wod5e-mage"].convinzioneScena.used, true);
+  assert.equal(flags["wod5e-mage"].convinzioneScena.convinzione, true);
 
-  // L'Ambizione (Blue, 17/11): niente dadi; a tiro fatto 1 Volontà, cioè un danno mentale superficiale
-  // in meno (non quelli del Sacrificio), oppure 1 Quintessenza.
+  // L'Ambizione (Blue, 17/11): niente dadi; a tiro fatto 1 Volontà, cioè un danno mentale in meno,
+  // anche aggravato (mai quelli del Sacrificio), oppure 1 Quintessenza. Il Desiderio ha il suo premio
+  // a parte, con la Volontà che toglie solo un superficiale: nella stessa scena si prendono tutti e due,
+  // una volta ciascuno.
   delete flags["wod5e-mage"].convinzioneScena;
-  flags["wod5e-mage"].salute = { ms: 2, debito: { ms: 1 } };
+  flags["wod5e-mage"].salute = { ma: 1, ms: 2, debito: { ms: 1 } };
+  actor.system.headers.desire = "Una notte di sonno intera";
   const ambizione = T.setBussola(fisico, { voce: "ambizione", modo: "dadi" });
   assert.equal(ambizione.bussola.modo, "volonta", "i dadi non sono un premio dell'Ambizione");
   ctxB = S.prepareTiroContext(actor, ambizione);
@@ -576,15 +586,24 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   globalThis.__sim.faces = [6, 6, 1, 1, 1, 1];
   const mAmbizione = await S.launchTiro(actor, ambizione);
   assert.equal(globalThis.__sim.rolls.at(-1).formula, "6dmcs>5 + 0dpcs>5");
-  assert.match(mAmbizione.flavor, /Segue l'Ambizione, «Aprire la scuola»: 1 Volontà a tiro fatto\./);
-  assert.deepEqual([flags["wod5e-mage"].salute.ms, flags["wod5e-mage"].convinzioneScena.used], [1, true]);
-  assert.ok(infos.includes("+1 Volontà da «Aprire la scuola»."));
-  // A scena nuova, di nuovo: il superficiale che resta è del Sacrificio, e non si toglie.
+  assert.match(mAmbizione.flavor, /Segue l'Ambizione, «Aprire la scuola»: 1 Volontà a tiro fatto, anche aggravato\./);
+  assert.deepEqual([flags["wod5e-mage"].salute.ma, flags["wod5e-mage"].salute.ms, flags["wod5e-mage"].convinzioneScena.ambizione], [0, 2, true], "l'aggravato per primo");
+  assert.ok(infos.includes("+1 Volontà, un aggravato in meno, da «Aprire la scuola»."));
+  const desiderio = T.setBussola(fisico, { voce: "desiderio" });
+  assert.equal(S.prepareTiroContext(actor, desiderio).bussola.on, true, "il Desiderio ha il suo premio nella stessa scena");
+  globalThis.__sim.faces = [6, 6, 1, 1, 1, 1];
+  const mDesiderio = await S.launchTiro(actor, desiderio);
+  assert.match(mDesiderio.flavor, /Segue il Desiderio, «Una notte di sonno intera»: 1 Volontà a tiro fatto\./);
+  assert.deepEqual([flags["wod5e-mage"].salute.ms, flags["wod5e-mage"].convinzioneScena.desiderio], [1, true]);
+  assert.ok(infos.includes("+1 Volontà da «Una notte di sonno intera»."));
+  // Già servite tutte e due in questa scena: l'Ambizione non dà più niente.
+  assert.equal(S.prepareTiroContext(actor, ambizione).bussola.on, false);
+  // A scena nuova, di nuovo il Desiderio: il superficiale che resta è del Sacrificio, e non si toglie.
   delete flags["wod5e-mage"].convinzioneScena;
   globalThis.__sim.faces = [6, 6, 1, 1, 1, 1];
-  await S.launchTiro(actor, ambizione);
+  await S.launchTiro(actor, desiderio);
   assert.equal(flags["wod5e-mage"].salute.ms, 1);
-  assert.equal(infos.at(-1), "WOD5E_MAGE.Bussola.VolontaPiena");
+  assert.equal(infos.at(-1), "WOD5E_MAGE.Bussola.Volonta.Piena");
 }
 
 console.log("compositore: ok,", globalThis.__sim.messages.length, "messaggi");

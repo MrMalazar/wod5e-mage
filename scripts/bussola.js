@@ -8,11 +8,15 @@ import { PERSONAGGIO_TABLES, prepareConvictions } from "./personaggio-extra.js";
  * Abilità, il giocatore dichiara che il gesto segue la sua Bussola, e il
  * Narratore dà l'ok. Il premio lo sceglie lui: se serve una Convinzione,
  * 2 dadi in più, fuori dal tetto, oppure a tiro fatto 1 punto di
- * Quintessenza; se segue l'Ambizione o il Desiderio, a tiro fatto 1 punto
- * di Volontà (un danno mentale superficiale in meno: nel Sistema la Volontà
- * è il ritiro che costa quel danno) oppure 1 punto di Quintessenza. Il
- * premio vale una volta per scena, per tutta la Bussola: il Cambio scena
- * lo riarma (il flag di scena è quello di prima).
+ * Quintessenza; se segue il Desiderio, a tiro fatto 1 punto di Volontà (un
+ * danno mentale superficiale in meno: nel Sistema la Volontà è il ritiro
+ * che costa quel danno) oppure 1 punto di Quintessenza; l'Ambizione dà lo
+ * stesso, e la sua Volontà toglie anche un danno mentale aggravato. Ogni
+ * premio vale una volta per scena, ognuno per conto suo: uno dalle
+ * Convinzioni, uno dall'Ambizione, uno dal Desiderio. Il Cambio scena li
+ * riarma (il flag di scena è quello di prima, ora con le tre voci).
+ * Compiere il Desiderio o l'Ambizione dà Esperienza (2 e 5 punti): quella
+ * la assegna il Narratore, fuori dal riquadro.
  *
  * Le Convinzioni vanno a scala. A favore: dalla seconda volta che il
  * personaggio serve la stessa Convinzione nella sessione, con un gesto
@@ -55,6 +59,7 @@ const NESSUN_EFFETTO = Object.freeze({
   dadi: 0,
   difficolta: 0,
   volonta: 0,
+  aggravato: false,
   quintessenza: 0,
   volta: 0,
   gesto: false,
@@ -90,8 +95,18 @@ export function prepareBussolaChoice(actor) {
       label: `${localize("WOD5E_MAGE.Bussola.Conviction")}${group ? ` (${group.label})` : ""}: ${text}`
     });
   }
-  const used = actor.getFlag(MODULE_ID, BUSSOLA_SCENE_FLAG);
-  return { options, used: Boolean(used), usedLabel: clean(used?.label) };
+  const usate = usateDellaScena(actor.getFlag(MODULE_ID, BUSSOLA_SCENE_FLAG));
+  return { options, usate, used: Object.values(usate).some(Boolean) };
+}
+
+/**
+ * Le voci che hanno già dato il premio in questa scena (Blue, 17/11): le
+ * Convinzioni, l'Ambizione e il Desiderio, una volta per scena ciascuno. Il
+ * segno di prima della 1.44.0, `used`, vale per le Convinzioni.
+ */
+export function usateDellaScena(stored) {
+  const flag = stored && typeof stored === "object" ? stored : {};
+  return { convinzione: Boolean(flag.convinzione || flag.used), ambizione: Boolean(flag.ambizione), desiderio: Boolean(flag.desiderio) };
 }
 
 /** I conti di una bandiera: solo gli interi sopra zero. */
@@ -149,12 +164,13 @@ export function normalizeBussolaTiro(value) {
  * L'effetto della scelta sul tiro, dalla scala del personaggio. A favore:
  * il premio scelto (2 dadi, o a tiro fatto 1 Volontà o 1 Quintessenza) e,
  * dalla seconda volta nella sessione che si serve la stessa Convinzione,
- * col gesto diverso, difficoltà −1; se la Bussola ha già dato in questa
+ * col gesto diverso, difficoltà −1; se quella voce ha già dato in questa
  * scena non vale. Contro: 2 dadi in meno, dalla seconda volta
  * difficoltà +1, alla terza la Convinzione si spegne. Una voce che non c'è
- * più, o una Convinzione spenta, non vale. `volta` dice quale volta è.
+ * più, o una Convinzione spenta, non vale. `volta` dice quale volta è;
+ * `aggravato` che la Volontà, dell'Ambizione, toglie anche un aggravato.
  */
-export function effettoBussola(value, { voci = [], usata = false, scala = null } = {}) {
+export function effettoBussola(value, { voci = [], usate = {}, scala = null } = {}) {
   const scelta = normalizeBussolaTiro(value);
   if (!scelta) return { ...NESSUN_EFFETTO };
   const voce = voci.find((option) => option.id === scelta.voce);
@@ -166,7 +182,7 @@ export function effettoBussola(value, { voci = [], usata = false, scala = null }
     const volta = (stato.contro[riga] ?? 0) + 1;
     return { ...base, dadi: -BUSSOLA_MALUS_DADI, difficolta: volta >= 2 ? 1 : 0, volta, spegne: volta >= BUSSOLA_SPEGNE };
   }
-  if (usata) return { ...NESSUN_EFFETTO };
+  if (usate?.[voce.kind]) return { ...NESSUN_EFFETTO };
   const volta = riga ? (stato.favore[riga] ?? 0) + 1 : 1;
   const gesto = Boolean(riga) && volta >= 2 && scelta.gesto;
   return {
@@ -174,6 +190,7 @@ export function effettoBussola(value, { voci = [], usata = false, scala = null }
     modo: scelta.modo,
     dadi: scelta.modo === "dadi" ? BUSSOLA_DADI : 0,
     volonta: scelta.modo === "volonta" ? 1 : 0,
+    aggravato: scelta.modo === "volonta" && voce.kind === "ambizione",
     quintessenza: scelta.modo === "quintessenza" ? 1 : 0,
     difficolta: gesto ? -1 : 0,
     volta,
@@ -181,10 +198,10 @@ export function effettoBussola(value, { voci = [], usata = false, scala = null }
   };
 }
 
-/** Quello che effettoBussola e i menù chiedono, letto dalla scheda: le voci, la scena già servita, la scala. */
+/** Quello che effettoBussola e i menù chiedono, letto dalla scheda: le voci, quelle già servite nella scena, la scala. */
 export function statoBussola(actor) {
   const choice = prepareBussolaChoice(actor);
-  return { voci: choice.options, usata: choice.used, scala: normalizeScala(actor?.getFlag?.(MODULE_ID, BUSSOLA_SCALA_FLAG)) };
+  return { voci: choice.options, usate: choice.usate, scala: normalizeScala(actor?.getFlag?.(MODULE_ID, BUSSOLA_SCALA_FLAG)) };
 }
 
 /** Quale volta contro, a parole: la prima, la seconda, la terza. */
@@ -200,20 +217,19 @@ export function effettoContro(volta, localize = (key) => key) {
 
 /**
  * Il primo menù del tasto Bussola: per cosa vale il tiro. A favore
- * l'Ambizione, il Desiderio e le Convinzioni attive, se la Bussola non ha
- * già dato in questa scena; contro le Convinzioni attive, con quello che
- * costa la volta che sarebbe; in fondo «Nessuna». Lo stato di ogni voce è
- * «verso|voce». Senza niente da scegliere, il menù è vuoto.
+ * l'Ambizione, il Desiderio e le Convinzioni attive, ognuna finché la sua
+ * voce non ha già dato in questa scena; contro le Convinzioni attive, con
+ * quello che costa la volta che sarebbe; in fondo «Nessuna». Lo stato di
+ * ogni voce è «verso|voce». Senza niente da scegliere, il menù è vuoto.
  */
 export function menuBussolaVoci(stato, localize = (key) => key, format = (key) => key) {
   const attive = (stato?.voci ?? []).filter((voce) => !voce.spenta);
   const scala = normalizeScala(stato?.scala);
   const out = [];
-  if (!stato?.usata) {
-    for (const voce of attive) {
-      const chiave = voce.kind === "convinzione" ? "Serve" : (voce.kind === "ambizione" ? "Ambizione" : "Desiderio");
-      out.push({ state: `favore|${voce.id}`, text: format(`WOD5E_MAGE.Bussola.Menu.${chiave}`, { testo: voce.text }), glyph: null });
-    }
+  for (const voce of attive) {
+    if (stato?.usate?.[voce.kind]) continue;
+    const chiave = voce.kind === "convinzione" ? "Serve" : (voce.kind === "ambizione" ? "Ambizione" : "Desiderio");
+    out.push({ state: `favore|${voce.id}`, text: format(`WOD5E_MAGE.Bussola.Menu.${chiave}`, { testo: voce.text }), glyph: null });
   }
   for (const voce of attive) {
     if (voce.kind !== "convinzione") continue;
@@ -235,11 +251,16 @@ export function menuBussolaModi(voce, stato, localize = (key) => key) {
   const riga = rigaDellaVoce(voce);
   const scala = normalizeScala(stato?.scala);
   const modi = modiDellaVoce(voce);
-  const out = modi.map((modo) => ({ state: modo, text: localize(`WOD5E_MAGE.Bussola.Menu.Modi.${modo}`), glyph: null }));
+  const out = modi.map((modo) => ({ state: modo, text: localize(`WOD5E_MAGE.Bussola.Menu.Modi.${chiaveDelModo(voce, modo)}`), glyph: null }));
   if (riga && (scala.favore[riga] ?? 0) >= 1) {
     for (const modo of modi) out.push({ state: `${modo}|gesto`, text: localize(`WOD5E_MAGE.Bussola.Menu.Gesto.${modo}`), glyph: null });
   }
   return out;
+}
+
+/** La chiave delle parole di un premio: la Volontà dell'Ambizione toglie anche un aggravato, e lo dice. */
+function chiaveDelModo(voce, modo) {
+  return clean(voce) === "ambizione" && modo === "volonta" ? "volontaAmbizione" : modo;
 }
 
 /** La scelta dai due menù: «verso|voce», poi (a favore) «modo» o «modo|gesto». */
@@ -271,7 +292,7 @@ export function testoBussola(effetto, localize = (key) => key, format = (key) =>
     };
   }
   const chiave = effetto.riga ? "Serve" : (effetto.voce === "ambizione" ? "Ambizione" : "Desiderio");
-  const cosa = localize(`WOD5E_MAGE.Bussola.Nota.${effetto.gesto ? "ModiGesto" : "Modi"}.${effetto.modo}`);
+  const cosa = localize(`WOD5E_MAGE.Bussola.Nota.${effetto.gesto ? "ModiGesto" : "Modi"}.${chiaveDelModo(effetto.voce, effetto.modo)}`);
   return {
     tasto: localize("WOD5E_MAGE.Tiro.Bussola"),
     riga: localize("WOD5E_MAGE.Tiro.Bussola"),
@@ -292,15 +313,17 @@ export function quintessenceAfterBussola(balance) {
 }
 
 /**
- * Il punto di Volontà della Bussola: un danno mentale superficiale in meno
- * sulla Salute. Le caselle in debito del Sacrificio non si curano, come nel
- * Riposo. Torna i superficiali mentali che restano, o null se non ce n'è
- * uno da togliere.
+ * Il punto di Volontà della Bussola: un danno mentale in meno sulla Salute.
+ * Quella del Desiderio toglie un superficiale; quella dell'Ambizione anche
+ * un aggravato, e se ce n'è uno toglie quello. Le caselle in debito del
+ * Sacrificio non si curano, come nel Riposo. Torna il segno tolto (ms o
+ * ma) e quanti ne restano, o null se non c'è niente da togliere.
  */
-export function mentaliDopoVolonta(salute) {
-  const ms = count(salute?.ms);
-  const inDebito = Math.min(count(salute?.debito?.ms), ms);
-  return ms > inDebito ? ms - 1 : null;
+export function curaVolonta(salute, { aggravato = false } = {}) {
+  const liberi = (segno) => count(salute?.[segno]) - Math.min(count(salute?.debito?.[segno]), count(salute?.[segno]));
+  if (aggravato && liberi("ma") > 0) return { segno: "ma", resta: count(salute.ma) - 1 };
+  if (liberi("ms") > 0) return { segno: "ms", resta: count(salute.ms) - 1 };
+  return null;
 }
 
 /** Il percorso della Convinzione spenta nell'aggiornamento della scheda. */
@@ -322,7 +345,8 @@ export function aggiornamentoBussola(effetto, scala = null) {
   const radice = `flags.${MODULE_ID}.${BUSSOLA_SCALA_FLAG}`;
   const riga = clean(effetto.riga);
   if (effetto.verso !== "contro") {
-    update[`flags.${MODULE_ID}.${BUSSOLA_SCENE_FLAG}`] = { used: true, label: clean(effetto.label) };
+    // Il segno della scena per la voce che ha dato: le Convinzioni, l'Ambizione o il Desiderio.
+    update[`flags.${MODULE_ID}.${BUSSOLA_SCENE_FLAG}.${riga ? "convinzione" : clean(effetto.voce)}`] = true;
     if (riga) {
       update[`${radice}.favore.${riga}`] = (stato.favore[riga] ?? 0) + 1;
       if (stato.contro[riga]) update[`${radice}.contro.-=${riga}`] = null;
@@ -358,8 +382,9 @@ export function aggiornamentoTradimento(riga, scala = null) {
 
 /**
  * A tiro fatto: la scala si aggiorna e arriva il premio che il giocatore
- * ha scelto, 1 Quintessenza sulla Ruota o 1 Volontà (un danno mentale
- * superficiale in meno). La Convinzione che si spegne lo dice.
+ * ha scelto, 1 Quintessenza sulla Ruota o 1 Volontà (un danno mentale in
+ * meno, aggravato compreso per l'Ambizione). La Convinzione che si spegne
+ * lo dice.
  */
 export async function registraBussola(actor, effetto) {
   if (!effetto?.attiva || !actor?.isOwner) return null;
@@ -369,6 +394,7 @@ export async function registraBussola(actor, effetto) {
   const quintessenza = effetto.verso === "favore" && effetto.quintessenza > 0;
   const volonta = effetto.verso === "favore" && effetto.volonta > 0;
   let gained = false;
+  let cura = null;
   if (quintessenza) {
     const balance = getMagickBalance(actor);
     const next = quintessenceAfterBussola(balance);
@@ -378,13 +404,12 @@ export async function registraBussola(actor, effetto) {
   if (volonta) {
     // La Salute si legge da salute.js, che a sua volta legge questo file: l'import resta dentro la funzione.
     const { getSalute } = await import("./salute.js");
-    const ms = mentaliDopoVolonta(getSalute(actor));
-    gained = ms !== null;
-    if (gained) update[`flags.${MODULE_ID}.salute.ms`] = ms;
+    cura = curaVolonta(getSalute(actor), { aggravato: effetto.aggravato });
+    if (cura) update[`flags.${MODULE_ID}.salute.${cura.segno}`] = cura.resta;
   }
   if (Object.keys(update).length) await actor.update(update);
   if (quintessenza) ui.notifications.info(gained ? format("WOD5E_MAGE.Bussola.Gained", { testo: effetto.testo }) : localize("WOD5E_MAGE.Bussola.Full"));
-  if (volonta) ui.notifications.info(gained ? format("WOD5E_MAGE.Bussola.VolontaGained", { testo: effetto.testo }) : localize("WOD5E_MAGE.Bussola.VolontaPiena"));
+  if (volonta) ui.notifications.info(cura ? format(`WOD5E_MAGE.Bussola.Volonta.${cura.segno}`, { testo: effetto.testo }) : localize("WOD5E_MAGE.Bussola.Volonta.Piena"));
   if (update[spentaPath(effetto.riga)]) ui.notifications.info(format("WOD5E_MAGE.Bussola.Spenta", { testo: effetto.testo }));
   return update;
 }
