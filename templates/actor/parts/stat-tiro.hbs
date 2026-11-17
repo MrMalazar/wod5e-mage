@@ -113,8 +113,8 @@
                 <span class="wod5e-mage-tiro-paga vuota" aria-hidden="true"></span>
             {{/if}}
             <span class="wod5e-mage-tiro-interruttori">
-                {{!-- La Bussola (il Sistema): l'azione segue la Bussola; un dado fuori dal tetto e 1 Quintessenza a tiro fatto, una volta per scena. --}}
-                <button type="button" class="wod5e-mage-tiro-bussola{{#if tiro.bussola.on}} acceso{{/if}}" data-action="tiroBussola" aria-pressed="{{#if tiro.bussola.on}}true{{else}}false{{/if}}" title="{{tiro.bussola.hint}}"{{#if tiro.bussola.usata}} disabled{{/if}}>{{localize "WOD5E_MAGE.Tiro.Bussola"}}</button>
+                {{!-- La Bussola (la scala del 16/11): il menù chiede la voce, a favore o contro una Convinzione; a favore 2 dadi o 1 Quintessenza, una volta per scena. Acceso, il tasto dice cosa si è scelto. --}}
+                <button type="button" class="wod5e-mage-tiro-bussola{{#if tiro.bussola.on}} acceso{{/if}}{{#if tiro.bussola.contro}} contro{{/if}}" data-action="tiroBussola" aria-pressed="{{#if tiro.bussola.on}}true{{else}}false{{/if}}" title="{{tiro.bussola.hint}}"{{#if tiro.bussola.spento}} disabled{{/if}}>{{tiro.bussola.label}}</button>
                 <button type="button" class="wod5e-mage-tiro-indulgi{{#if tiro.indulgi}} acceso{{/if}}" data-action="tiroIndulgi" aria-pressed="{{#if tiro.indulgi}}true{{else}}false{{/if}}" title="{{localize 'WOD5E_MAGE.Tiro.IndulgiHint'}}">{{#if tiro.indulgi}}{{tiro.indulgi.label}}{{else}}{{localize "WOD5E_MAGE.Tiro.Indulgi"}}{{/if}}</button>
                 {{#if tiro.narratore}}
                     <button type="button" class="wod5e-mage-tiro-narratore{{#if tiro.narratore.on}} acceso{{/if}}" data-action="tiroNarratore" aria-pressed="{{tiro.narratore.on}}" title="{{tiro.narratore.hint}}">{{localize "WOD5E_MAGE.Verdetto.DalNarratore"}}</button>

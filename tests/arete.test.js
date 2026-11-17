@@ -180,12 +180,12 @@ assert.deepEqual(traits.skills[0], {
 assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
 
 
-// Rispetta la Bussola? (11/9, al posto della Convinzione del 9/9): Ambizione, Desiderio e
-// Convinzioni in tendina, la scelta, +1 dado e +1 Quintessenza una volta per scena.
+// Le voci della Bussola (11/9; la scala del 16/11 sta in tests/bussola.test.js): Ambizione,
+// Desiderio e Convinzioni scritte, il segno della scena, la Quintessenza che risale.
 {
   const { readFileSync } = await import("node:fs");
   const { CONVICTION_SCENE_FLAG, SKILL_SPECIALTY_DICE, skillSpecialtyNames } = await import("../scripts/arete.js");
-  const { BUSSOLA_DICE, BUSSOLA_SCENE_FLAG, bussolaChoice, prepareBussolaChoice, quintessenceAfterBussola, renderBussolaBlock, readBussola, bussolaDice } = await import("../scripts/bussola.js");
+  const { BUSSOLA_DADI, BUSSOLA_SCENE_FLAG, prepareBussolaChoice, quintessenceAfterBussola } = await import("../scripts/bussola.js");
   const flags = {
     convinzioni: {
       a1: { group: "verita", text: " Mai mentire a chi si fida di me. ", serve: "", cross: "" },
@@ -203,25 +203,15 @@ assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
   assert.equal(choice.used, false);
   assert.equal(BUSSOLA_SCENE_FLAG, "convinzioneScena");
   assert.equal(CONVICTION_SCENE_FLAG, BUSSOLA_SCENE_FLAG, "il Cambio Scena riarma lo stesso flag");
-  assert.equal(BUSSOLA_DICE, 1);
+  assert.equal(BUSSOLA_DADI, 2);
   assert.equal(SKILL_SPECIALTY_DICE, 1);
-  assert.deepEqual(bussolaChoice({ bussola: true, bussolaId: "convinzione:a2" }, choice).id, "convinzione:a2");
-  assert.equal(bussolaChoice({ bussola: false, bussolaId: "ambizione" }, choice), null);
-  assert.equal(bussolaChoice({ bussola: "on", bussolaId: "nope" }, choice), null);
+  assert.deepEqual(choice.options.map((option) => [option.rowId, option.text, option.spenta]), [["", "Salvare il faro", false], ["a1", "Mai mentire a chi si fida di me.", false], ["a2", "Da un sogno si esce.", false]]);
   flags.convinzioneScena = { used: true, label: "x" };
   const used = prepareBussolaChoice(actor);
-  assert.equal(used.used, true);
-  assert.equal(bussolaChoice({ bussola: true, bussolaId: "ambizione" }, used), null, "una volta per scena");
+  assert.equal(used.used, true, "una volta per scena");
   assert.deepEqual(quintessenceAfterBussola({ quintessence: 3, paradox: 2, floor: 2 }), { quintessence: 4, gained: true });
   assert.deepEqual(quintessenceAfterBussola({ quintessence: 7, paradox: 2, floor: 0 }), { quintessence: 7, gained: false }, "le celle sono in comune col Paradosso: la Ruota è piena");
   assert.deepEqual(quintessenceAfterBussola({ quintessence: 9, paradox: 0, floor: 0 }), { quintessence: 9, gained: false });
-  // Il blocco della finestra: casella, tendina nascosta, riga «già usata» col tasto.
-  const block = renderBussolaBlock(choice, (k) => k);
-  assert.match(block, /<input type="checkbox" name="bussola" id="wod5e-mage-bussola">[\s\S]*<select name="bussolaId" id="wod5e-mage-bussola-id" class="hidden"[\s\S]*<option value="convinzione:a1">[\s\S]*data-role="bussolaReset"/);
-  assert.match(renderBussolaBlock({ options: [], used: false }, (k) => k), /WOD5E_MAGE\.Bussola\.None/);
-  assert.equal(bussolaDice({ querySelector: () => ({ checked: true }) }), 1);
-  assert.equal(bussolaDice({ querySelector: () => ({ checked: false }) }), 0);
-  assert.equal(readBussola({ querySelector: (sel) => sel.includes("bussolaId") ? { value: "ambizione" } : { checked: true } }, choice).id, "ambizione");
   // Le Specializzazioni sulle opzioni della tendina dell'Abilità.
   assert.deepEqual(skillSpecialtyNames({ system: { skills: { brawl: { bonuses: [{ source: "Lame" }, { source: " Lotta " }] }, occult: { bonuses: [] } } } }), { brawl: ["Lame", "Lotta"] });
   const dialog = readFileSync(new URL("../templates/dialogs/arete-roll.hbs", import.meta.url), "utf8");
@@ -233,10 +223,13 @@ assert.equal(traits.skills.some((trait) => trait.id === "melee"), false);
   assert.doesNotMatch(dialog, /<select id="wod5e-mage-arete-secondary"/);
   const arete = readFileSync(new URL("../scripts/arete.js", import.meta.url), "utf8");
   assert.doesNotMatch(arete, /grantBussolaQuintessence|bussolaKept|rollAreteWithParadox|costoLancio|pagamentoDelLancio/, "la finestra non tira più");
-  // La conferma dei tiri di Abilità porta lo stesso blocco.
+  // La conferma dei tiri di Abilità non chiede più la Bussola: sta nel riquadro del Tiro (la scala del 16/11).
   const confirm = readFileSync(new URL("../templates/dialogs/arete-roll-confirm.hbs", import.meta.url), "utf8");
-  assert.match(confirm, /\{\{\{bussolaHtml\}\}\}/);
-  assert.match(readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8"), /getCustomModifierTotal\(form\) \+ bussolaDice\(form\)/);
+  assert.doesNotMatch(confirm, /bussolaHtml/);
+  const paradox = readFileSync(new URL("../scripts/paradox-dice.js", import.meta.url), "utf8");
+  assert.match(paradox, /\+ getCustomModifierTotal\(form\), 0\);/);
+  assert.doesNotMatch(paradox, /bussola/, "la finestra vecchia non porta più la Bussola (resta solo la nota che la manda al riquadro)");
+  assert.doesNotMatch(readFileSync(new URL("../scripts/mage-roll-selection.js", import.meta.url), "utf8"), /prepareBussolaChoice|bussola:/);
   // Lanciare passa dal riquadro (il Sistema): il modo «roll» carica l'incantesimo nel Tiro della prima pagina.
   assert.match(arete, /if \(mode !== "save"\) return caricaDalGrimorio\(actor, preset\);/);
   assert.match(arete, /const id = spell\.formula \? `formula:\$\{spell\.formula\}` : `grimorio:\$\{spell\.sharedId \?\? spell\.name \?\? ""\}`;\s*await caricaNelTiro\(sheet, id, spell\);/);

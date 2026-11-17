@@ -19,7 +19,7 @@ import { testoCosto } from "./ramo-c.js";
 import { INCANTESIMI_FLAG, prepareIncantesimi } from "./incantesimi.js";
 import { FORMULE_M6 } from "./data/formule.js";
 import { dadiDeiDanni } from "./danni.js";
-import { BUSSOLA_SCENE_FLAG, grantBussolaQuintessence } from "./bussola.js";
+import { effettoBussola, menuBussolaModi, menuBussolaVoci, registraBussola, sceltaDalMenu, statoBussola, statoDelMenu, testoBussola } from "./bussola.js";
 import { AVANZAMENTI_FLAG, avanzamentiDi, mancanoAlProssimo } from "./formule-avanzamenti.js";
 import { scopesInParole } from "./ongoing-magick.js";
 import { findMageRollTrait, selectorsForMageRollTrait, skillRollCard } from "./mage-roll-selection.js";
@@ -186,19 +186,22 @@ export function contoInputs(actor, tiro, { traits = null } = {}) {
   // La Formula (il Sistema): un incantesimo che porta una Formula conta i suoi avanzamenti, e il premio non si applica.
   const formulaId = String(spellOf(actor, tiro)?.formula ?? "");
   const avanzamenti = avanzamentiDi(actor.getFlag?.(MODULE_ID, AVANZAMENTI_FLAG) ?? {}, formulaId);
+  // La Bussola (la scala del 16/11): le voci, la scena già servita e la scala del personaggio.
+  const bussola = statoBussola(actor);
   return {
     known,
     attribute,
     skill,
     tipo,
+    bussola,
     inputs: {
       condizioni: condizioniDelTiro(actor.items ?? [], tipo, tiro.condizioni),
       arete: getArete(actor).value,
       attributeValue: attribute?.value ?? 0,
       skillValue: skill?.value ?? 0,
       traitDice: traitDiceOf(actor, tiro.traits),
-      // La Bussola (il Sistema): vale una volta per scena; usata, il tasto si spegne fino al cambio di scena.
-      bussola: tiro.bussola && !bussolaUsata(actor) ? 1 : 0,
+      // La Bussola: l'effetto della scelta sul tiro (i dadi, la difficoltà, la Quintessenza, la volta).
+      bussola: effettoBussola(tiro.bussola, bussola),
       formula: { attiva: Boolean(formulaId), id: formulaId, avanzamenti: avanzamenti.punti, dadi: avanzamenti.dadi },
       // Il potere attivo impegna la sua Quintessenza; se non basta lo si paga in Paradosso (il Sistema), e resta tutta per i dadi.
       quintessenceAvailable: getMagickBalance(actor).quintessence - pagamentoDelPotere(powerCost, getMagickBalance(actor).quintessence).quintessenza,
@@ -354,8 +357,9 @@ export function righeAmbiti(tiro, localize = (key) => key, { tavola = null, modi
 export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   const localize = game.i18n.localize.bind(game.i18n);
   const format = game.i18n.format.bind(game.i18n);
-  const { known, attribute, skill, inputs, tipo } = contoInputs(actor, tiro, { traits });
+  const { known, attribute, skill, inputs, tipo, bussola } = contoInputs(actor, tiro, { traits });
   const conto = contoTiro(tiro, inputs);
+  const parolaBussola = testoBussola(inputs.bussola, localize, format);
   const arete = getArete(actor);
   const magick = isMagick(tiro);
   const potere = notePotere(conto, inputs.power, localize, format);
@@ -439,6 +443,11 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
   for (const riga of cond.righe) {
     riserva.push({ kind: "condizione", id: riga.id, mask: riga.icon, numeral: riga.numeral, name: riga.name, value: riga.peso, meno: true, check: { action: "tiroCondizione", on: riga.on }, off: !riga.on, hint: format(riga.on ? "WOD5E_MAGE.Condizioni.TiroTogli" : "WOD5E_MAGE.Condizioni.TiroRimetti", { name: riga.name }) });
   }
+  // La Bussola (la scala del 16/11): la riga dove pesa, nella Riserva i dadi (+2 a favore, −2 contro),
+  // nella Soglia la difficoltà (−1 col gesto diverso, +1 contro dalla seconda volta). La × la toglie.
+  const bussolaDadi = conto.bussolaDice || conto.bussolaMalus;
+  if (bussolaDadi) riserva.push({ kind: "bussola", id: "bussola", fa: "fa-solid fa-compass", name: parolaBussola.riga, value: conSegno(bussolaDadi), meno: bussolaDadi < 0, hint: parolaBussola.nota, via: true });
+  if (conto.bussolaDifficolta) soglia.push({ kind: "bussola", id: "bussola", fa: "fa-solid fa-compass", name: parolaBussola.riga, value: conSegno(conto.bussolaDifficolta), hint: parolaBussola.nota, via: true });
   // I bonus dentro il tetto (il Sistema, voci Bonus e Supporto): le circostanze che concede il Narratore,
   // un oggetto adatto, l'aiuto dei compagni (nella Magick l'Armonia). Con la Quintessenza e gli
   // avanzamenti delle Formule si fermano a +3; il ritocco del totale resta fuori.
@@ -493,8 +502,9 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
         // Oltre +3 o −3 la mano del Narratore si segna in rosso (Blue, 15/11): può, ma è fuori dal metro.
         oltre: conto.sogliaManoOltre,
         oltreHint: conto.sogliaManoOltre ? localize("WOD5E_MAGE.Tiro.SogliaOltre") : "",
-        meno: sogliaSet && (conto.difficulty <= SOGLIA_MIN || (magick && conto.sogliaMano <= -SOGLIA_MANO_CAP)),
-        piu: magick ? (conto.sogliaMano >= SOGLIA_MANO_CAP || conto.difficulty >= SOGLIA_MAGICK_MAX) : conto.difficulty >= SOGLIA_ABILITA_MAX,
+        // Nell'Abilità il meno e il più guardano la soglia del Narratore, senza la difficoltà della Bussola.
+        meno: sogliaSet && (magick ? (conto.difficulty <= SOGLIA_MIN || conto.sogliaMano <= -SOGLIA_MANO_CAP) : conto.sogliaMano <= SOGLIA_MIN),
+        piu: magick ? (conto.sogliaMano >= SOGLIA_MANO_CAP || conto.difficulty >= SOGLIA_MAGICK_MAX) : conto.sogliaMano >= SOGLIA_ABILITA_MAX,
         hint: localize(magick ? "WOD5E_MAGE.Tiro.SogliaManoHint" : "WOD5E_MAGE.Tiro.SogliaManoAbilitaHint")
       },
       hint: localize("WOD5E_MAGE.Tiro.SogliaHint")
@@ -546,8 +556,10 @@ export function prepareTiroContext(actor, tiro, { traits = null } = {}) {
     // La dissonanza (il Sistema): lanciare un incantesimo non costa; un Volgare dà 1 punto di
     // Paradosso, più 1 coi testimoni e più 1 con la dissonanza, che si accende qui.
     dissonanza: magick ? { on: Boolean(tiro.dissonanza) } : null,
-    // La Bussola (il Sistema): per ogni tiro, una volta per scena; usata, il tasto è spento e lo dice.
-    bussola: { on: Boolean(tiro.bussola) && !bussolaUsata(actor), usata: bussolaUsata(actor), hint: localize(bussolaUsata(actor) ? "WOD5E_MAGE.Tiro.BussolaUsata" : "WOD5E_MAGE.Tiro.BussolaHint") },
+    // La Bussola (la scala del 16/11): il tasto apre il menù delle voci; acceso dice cosa si è scelto.
+    // A favore vale una volta per scena; contro una Convinzione si dichiara sempre. Senza niente da
+    // scegliere il tasto è spento.
+    bussola: vistaBussola(inputs.bussola, bussola, parolaBussola, localize),
     // Sul tasto solo il nome (1/10); il Paradosso che il tipo dà sta nel sorvolo e nella carta.
     kinds: TIRO_KINDS.map((kind) => {
       const paradosso = paradossoDelLancio({ volgare: kind !== "accidentale", testimoni: kind === "testimoni", dissonanza: Boolean(tiro.dissonanza) });
@@ -835,16 +847,43 @@ export async function onTiroDissonanza(event) {
   return repaint(this, setDissonanza(tiroOf(this)));
 }
 
-/** La Bussola già servita in questa scena: il segno che il Cambio scena toglie (salute.js). */
-export function bussolaUsata(actor) {
-  return Boolean(actor?.getFlag?.(MODULE_ID, BUSSOLA_SCENE_FLAG));
+/**
+ * Il tasto della Bussola nel riquadro: acceso o spento, il nome (cosa si è
+ * scelto), il sorvolo e se c'è qualcosa da scegliere. `stato` è quello di
+ * statoBussola, `parole` quelle di testoBussola.
+ */
+export function vistaBussola(effetto, stato, parole, localize = (key) => key) {
+  const on = Boolean(effetto?.attiva);
+  const voci = menuBussolaVoci(stato, localize, (key) => key);
+  let hint = parole?.nota || localize("WOD5E_MAGE.Tiro.BussolaHint");
+  if (!on && !voci.length) hint = localize(stato?.voci?.some((voce) => !voce.spenta) ? "WOD5E_MAGE.Tiro.BussolaUsata" : "WOD5E_MAGE.Bussola.None");
+  else if (!on && stato?.usata) hint = localize("WOD5E_MAGE.Tiro.BussolaUsataContro");
+  return { on, contro: on && effetto.verso === "contro", label: parole?.tasto ?? localize("WOD5E_MAGE.Tiro.Bussola"), hint, spento: !on && !voci.length };
 }
 
-/** Il tasto della Bussola: si accende e si spegne; usata in questa scena non fa niente. */
+/**
+ * Il tasto della Bussola: un menù dove si è cliccato, per cosa vale il tiro
+ * (una voce a favore, o una Convinzione contro, o Nessuna); a favore un
+ * secondo menù chiede 2 dadi o 1 Quintessenza, e dalla seconda volta nella
+ * sessione anche il gesto diverso. Esc o un clic fuori lasciano com'era.
+ */
 export async function onTiroBussola(event) {
   event.preventDefault();
-  if (bussolaUsata(this.actor)) return null;
-  return repaint(this, setBussola(tiroOf(this)));
+  const { askSegno } = await import("./salute.js");
+  const localize = game.i18n.localize.bind(game.i18n);
+  const format = game.i18n.format.bind(game.i18n);
+  const tiro = tiroOf(this);
+  const stato = statoBussola(this.actor);
+  const voci = menuBussolaVoci(stato, localize, format);
+  if (!voci.length) return null;
+  const voce = await askSegno(event, statoDelMenu(tiro.bussola), voci, { classe: "bussola" });
+  if (voce === null) return null;
+  if (!voce) return repaint(this, setBussola(tiro, null));
+  if (voce.startsWith("contro|")) return repaint(this, setBussola(tiro, sceltaDalMenu(voce)));
+  const corrente = tiro.bussola?.voce === voce.slice("favore|".length) ? `${tiro.bussola.modo}${tiro.bussola.gesto ? "|gesto" : ""}` : "";
+  const modo = await askSegno(event, corrente, menuBussolaModi(voce.slice("favore|".length), stato, localize), { classe: "bussola" });
+  if (modo === null) return null;
+  return repaint(this, setBussola(tiro, sceltaDalMenu(voce, modo)));
 }
 
 /** La soglia a mano (30/9): il meno e il più la alzano o abbassano sopra il conto degli Ambiti; `data-reset` la toglie. */
@@ -1044,8 +1083,8 @@ export async function launchTiro(actor, tiro) {
   const banner = senzaTirare ? format("WOD5E_MAGE.Tiro.RiesceSenzaTirare", { name: potereLabel(power, localize) }) : "";
 
   if (conto.extra > 0) bonusParts.push(format("WOD5E_MAGE.Tiro.ExtraFlavor", { dice: conto.extra }));
-  // La Bussola: un dado fuori dal tetto; a tiro fatto, 1 Quintessenza (una volta per scena).
-  if (conto.bussolaDice > 0) bonusParts.push(format("WOD5E_MAGE.Bussola.Flavor", { label: localize("WOD5E_MAGE.Tiro.Bussola") }));
+  // La Bussola (la scala del 16/11): sulla carta la voce, cosa si è preso o quanto costa, e quale volta è.
+  if (inputs.bussola.attiva) notes.push(testoBussola(inputs.bussola, localize, format).nota);
   // La Formula: i dadi dei suoi avanzamenti, dentro il tetto.
   if (conto.formulaDice > 0) bonusParts.push(format("WOD5E_MAGE.Formule.AvanzamentiFlavor", { dadi: conto.formulaDice, punti: inputs.formula.avanzamenti }));
   // Il ritocco dei Dadi (23/9): in carta, perché si sappia.
@@ -1081,8 +1120,8 @@ export async function launchTiro(actor, tiro) {
     }
     // A tiro fatto: la Quintessenza spesa (in dadi, o per il potere attivo) scende, l'uso si conta.
     if (esito) await pagaPotere(actor, conto, inputs, { piano: pianoPotere });
-    // La Bussola rispettata: +1 Quintessenza a tiro fatto, una volta per scena.
-    if (esito && conto.bussolaDice > 0) await grantBussolaQuintessence(actor, { label: localize("WOD5E_MAGE.Tiro.Bussola") });
+    // La Bussola a tiro fatto: la scala si aggiorna, e la Quintessenza se è stata scelta.
+    if (esito) await registraBussola(actor, inputs.bussola);
     return esito;
   }
 
@@ -1217,8 +1256,8 @@ export async function launchTiro(actor, tiro) {
   }
   // A tiro fatto: l'uso del potere attivo si conta (la Ruota ha già pagato).
   await pagaPotere(actor, conto, inputs, { pagato: true });
-  // La Bussola rispettata: +1 Quintessenza a tiro fatto, una volta per scena.
-  if (conto.bussolaDice > 0) await grantBussolaQuintessence(actor, { label: localize("WOD5E_MAGE.Tiro.Bussola") });
+  // La Bussola a tiro fatto: la scala si aggiorna, e la Quintessenza se è stata scelta.
+  await registraBussola(actor, inputs.bussola);
   // Il Volgare fallito non rende più Quintessenza (rifondazione del 14/9, ribadito il 29/9).
   // La Durata dichiarata scrive il lancio fra le Magick in atto.
   await recordEffect(actor, { maintained: false, maintainedName: "" }, effect);

@@ -801,6 +801,22 @@
   white-space: nowrap;
 }
 
+/* Il menù della Bussola (la scala del 16/11): le voci sono frasi, vanno a capo dentro una larghezza. */
+.wod5e-mage-salute-menu.bussola {
+  max-width: 340px;
+}
+
+.wod5e-mage-salute-menu.bussola .wod5e-mage-salute-menu-item {
+  height: auto;
+  padding-bottom: 6px;
+  padding-top: 6px;
+}
+
+.wod5e-mage-salute-menu.bussola .wod5e-mage-salute-menu-text {
+  line-height: 1.25;
+  white-space: normal;
+}
+
 .wod5e-mage-salute-menu-item:hover,
 .wod5e-mage-salute-menu-item:focus-visible {
   background: var(--mage-riga-sorvolo, #3a352c);
@@ -7049,14 +7065,6 @@
   min-width: 2.2rem;
 }
 
-/* Il blocco «Rispetta la Bussola?» nelle finestre del tiro (11/9). */
-.wod5e-mage-bussola { margin: 0.35em 0; }
-.wod5e-mage-bussola .wod5e-mage-bussola-toggle { display: flex; align-items: center; gap: 0.4em; }
-.wod5e-mage-bussola .wod5e-mage-bussola-toggle small { opacity: 0.75; font-weight: 400; margin-left: 0.3em; }
-.wod5e-mage-bussola select { width: 100%; margin-top: 0.25em; }
-.wod5e-mage-bussola .hidden { display: none; }
-.wod5e-mage-bussola-used { display: flex; align-items: center; gap: 0.5em; flex-wrap: wrap; }
-.wod5e-mage-bussola-used button { width: auto; padding: 0.1em 0.5em; font-size: 0.85em; }
 .wod5e-mage-arete-specialty-box { display: inline-flex; align-items: center; gap: 0.35em; }
 .wod5e-mage-arete-specialty-box small { opacity: 0.8; }
 
@@ -19108,7 +19116,7 @@
   color: var(--mage-testo);
 }
 
-/* La Bussola già servita in questa scena: spenta finché non cambia la scena. */
+/* Niente da scegliere (nessuna voce in scheda, o la Bussola già servita e nessuna Convinzione da attraversare). */
 .wod5e-mage.wod5e.actor.sheet .wod5e-mage-tiro-bussola:disabled {
   cursor: default;
   opacity: 0.45;

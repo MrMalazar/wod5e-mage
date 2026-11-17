@@ -11,6 +11,7 @@
  * I conti puri stanno in menu-paradosso.js.
  */
 import { MODULE_ID } from "./constants.js";
+import { BUSSOLA_SCALA_FLAG, BUSSOLA_SCENE_FLAG } from "./bussola.js";
 import { activeCondizioni, findCondizione } from "./condizioni.js";
 import { addQuintessenceToBalance, getMagickBalance } from "./magick-balance.js";
 import { isMageActor } from "./mage-dice.js";
@@ -1096,6 +1097,11 @@ export async function iniziaSessione({ tipo = "", posto = "normale" } = {}) {
     if (actor.getFlag(MODULE_ID, LOBBY_FLAG)) update[`flags.${MODULE_ID}.-=${LOBBY_FLAG}`] = null;
     // Il Premio del Difetto torna disponibile: vale una volta per sessione.
     if (actor.getFlag(MODULE_ID, PREMIO_DIFETTO_FLAG)) update[`flags.${MODULE_ID}.-=${PREMIO_DIFETTO_FLAG}`] = null;
+    // La Bussola (la scala del 16/11): la scena è nuova, e le Convinzioni servite ripartono dalla prima volta.
+    if (actor.getFlag(MODULE_ID, BUSSOLA_SCENE_FLAG)) update[`flags.${MODULE_ID}.-=${BUSSOLA_SCENE_FLAG}`] = null;
+    const scala = actor.getFlag(MODULE_ID, BUSSOLA_SCALA_FLAG);
+    if (scala?.favore) update[`flags.${MODULE_ID}.${BUSSOLA_SCALA_FLAG}.-=favore`] = null;
+    if (scala?.scena) update[`flags.${MODULE_ID}.${BUSSOLA_SCALA_FLAG}.-=scena`] = null;
     if (Object.keys(update).length) await actor.update(update);
   }
   for (const orologio of getOrologi()) await specchiaOrologio(orologio, { elimina: true });

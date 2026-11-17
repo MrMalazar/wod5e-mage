@@ -3,6 +3,7 @@ import { addParadoxToBalance, addQuintessenceToBalance, caselleLibere, getMagick
 import { MAGHI_SETTING } from "./menu-paradosso.js";
 import { joinLobby } from "./paradosso-narratore.js";
 import { POTERI_USI_FLAG, riarmaUsi } from "./poteri.js";
+import { BUSSOLA_SCALA_FLAG } from "./bussola.js";
 
 /**
  * La Salute del ramo A (tronco del 3/9/2026): un tracciato solo, lungo
@@ -610,13 +611,14 @@ export function posizioneMenuSalute(click, finestra, menu) {
  * posizioneMenuSalute), non al corpo della pagina. Lo usa anche la
  * Saggezza (3/10) sul centro della bilancia, per scegliere quale segno
  * riportare: `options` è la lista `{state, label, glyph}` delle voci.
+ * `classe` aggiunge una classe al menù (la Bussola: voci lunghe, a capo).
  */
-export function askSegno(event, current, options) {
+export function askSegno(event, current, options, { classe = "" } = {}) {
   return new Promise((resolve) => {
     document.querySelectorAll(".wod5e-mage-salute-menu").forEach((old) => old.remove());
     const localize = game.i18n.localize.bind(game.i18n);
     const menu = document.createElement("div");
-    menu.className = "wod5e-mage-salute-menu";
+    menu.className = ["wod5e-mage-salute-menu", classe].filter(Boolean).join(" ");
     menu.setAttribute("role", "menu");
 
     for (const option of options) {
@@ -746,7 +748,7 @@ export function nelQuadro(actor) {
 
 /**
  * Cambio Scena (verdetto di Blue, 11/9): sotto Nuova sessione, il tasto
- * sblocca una casella bloccata dall'Ustione e riarma la Convinzione; dal
+ * sblocca una casella bloccata dall'Ustione e riarma la Bussola; dal
  * 29/9 dà anche +1 Quintessenza, nelle caselle libere della Ruota. Il
  * debito del Sacrificio non si sblocca. Dal 30/9 ai maghi del Quadro il +1
  * lo dà il Cambio scena del Narratore (`nelQuadro`), e qui non si ridà.
@@ -762,6 +764,8 @@ export async function onSaluteCambioScena(event) {
   const update = {
     [`flags.${MODULE_ID}.salute.paradosso`]: paradosso,
     [`flags.${MODULE_ID}.-=convinzioneScena`]: null,
+    // La Bussola: le Convinzioni attraversate in questa scena tornano libere per l'atto della Saggezza.
+    [`flags.${MODULE_ID}.${BUSSOLA_SCALA_FLAG}.-=scena`]: null,
     // Le Formule possono prendere di nuovo il loro avanzamento (il Sistema: uno per scena).
     [`flags.${MODULE_ID}.-=formuleScena`]: null,
     // I poteri «una volta per scena» tornano disponibili (24/9).
@@ -857,8 +861,11 @@ export async function onSaluteNewSession(event) {
     // sbloccano e da qui si curano come le altre.
     [`flags.${MODULE_ID}.salute`]: { ...saluteAfterSession(salute), extra: salute.extra, paradosso: locksAfterScene(salute.paradosso), debito: { pa: 0, ps: 0, ma: 0, ms: 0 } },
     [`flags.${MODULE_ID}.contraccolpoNegato`]: false,
-    // Nuova sessione, nuova scena: la Convinzione può rigenerare di nuovo (9/9).
+    // Nuova sessione, nuova scena: la Bussola può dare di nuovo (9/9), e le Convinzioni servite
+    // ripartono dalla prima volta (la scala del 16/11).
     [`flags.${MODULE_ID}.-=convinzioneScena`]: null,
+    [`flags.${MODULE_ID}.${BUSSOLA_SCALA_FLAG}.-=favore`]: null,
+    [`flags.${MODULE_ID}.${BUSSOLA_SCALA_FLAG}.-=scena`]: null,
     // E le Formule possono prendere di nuovo il loro avanzamento.
     [`flags.${MODULE_ID}.-=formuleScena`]: null,
     // La Saggezza (3/10): l'atto che fa risplendere torna disponibile, una volta per sessione.

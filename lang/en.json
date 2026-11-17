@@ -1033,7 +1033,7 @@
         "Attiva": "Active",
         "Spenta": "Off",
         "AttivaHint": "Active Conviction: it covers the acts that serve it. Click: switch it off by hand.",
-        "SpentaHint": "Conviction off: you betrayed it, and it does not cover you until an act makes it shine. Click: switch it back on by hand."
+        "SpentaHint": "Conviction off: it does not cover you until an act makes it shine. It switches off the third time you cross it. Click: switch it back on by hand."
       },
       "Atto": {
         "Title": "The act",
@@ -1046,7 +1046,7 @@
         "CopreHint": "The act served it, and the Storyteller agrees: roll to see whether it is enough to cover you.",
         "Tradisce": "The act betrays a Conviction",
         "TradisceNone": "None",
-        "TradisceHint": "It switches off, and does not cover you until it shines. No Conviction covers the betraying act.",
+        "TradisceHint": "It counts as one time against. The third switches it off, and it does not cover you until it shines. If a roll in this scene already counted it, it does not count again. No Conviction covers the betraying act.",
         "Spente": "Off:",
         "LatoManca": "Name the side of the act: Hubris or Quiet.",
         "Ok": "Judge",
@@ -1094,7 +1094,12 @@
         "scoperto": "Act of rung {gradino}, {lato}: no Conviction covers it, the marker slides: {passo}.",
         "coperto": "“{convinzione}” covers you: the {lato} marker stays {passo}.",
         "fallito": "“{convinzione}” is not enough: the {lato} marker slides: {passo}.",
-        "tradita": "Betrayed “{convinzione}”: it switches off."
+        "tradita": {
+          "1": "Betrayed “{convinzione}”: first time against it.",
+          "2": "Betrayed “{convinzione}”: second time against it, the third switches it off.",
+          "3": "Betrayed “{convinzione}”: third time against it, and it switches off.",
+          "contata": "Betrayed “{convinzione}”: this scene's roll already counted it."
+        }
       },
       "RisplendeDialog": {
         "Title": "Shine",
@@ -1120,7 +1125,7 @@
         "Concedi": "The Storyteller grants it without rolling",
         "Ok": "Roll",
         "Riarma": "New story",
-        "Riarmate": "New story: the Anchors are available again.",
+        "Riarmate": "New story: the Anchors are available again, and the times against the Convictions start from zero.",
         "Nessuna": "No Anchor on the sheet: write one on the Character page.",
         "GiaUsata": "“{ancora}” has already been used this story: the Storyteller decides.",
         "Rolling": "Wisdom roll · {ancora}",
@@ -1534,20 +1539,52 @@
       "Resize": "Resize the box"
     },
     "Bussola": {
-      "Ask": "Follows the Compass?",
-      "Short": "+1 die, +1 Quintessence after the roll",
-      "Hint": "If this act serves your Compass (Ambition, Desire or a Conviction), take one extra die and, after the roll, one Quintessence point rises on the Wheel. Once per scene.",
-      "Pick": "Which Compass entry",
       "Ambition": "Ambition",
       "Desire": "Desire",
       "Conviction": "Conviction",
-      "None": "No Compass entry on the sheet.",
-      "Used": "Already followed in this scene.",
-      "NewScene": "New scene",
-      "NewSceneHint": "The scene changed: the Compass can give again.",
-      "Gained": "Compass followed ({label}): +1 Quintessence.",
-      "Full": "Compass followed, but the Wheel is full: nothing to regain.",
-      "Flavor": "Compass followed (+1 die): {label}"
+      "None": "No Compass entry on the sheet. Ambition, Desire and Convictions are written on the Character page.",
+      "Gained": "Compass, “{testo}”: +1 Quintessence.",
+      "Full": "The Wheel is full, and the Compass has no Quintessence to give.",
+      "Spenta": "“{testo}” switches off the third time against it, and does not cover you until an act makes it shine.",
+      "Volte": {
+        "1": "first time",
+        "2": "second time",
+        "3": "third time"
+      },
+      "Contro": {
+        "1": "2 fewer dice",
+        "2": "2 fewer dice and difficulty +1",
+        "3": "2 fewer dice, difficulty +1, and it switches off"
+      },
+      "Menu": {
+        "Ambizione": "Follows the Ambition: {testo}",
+        "Desiderio": "Follows the Desire: {testo}",
+        "Serve": "Serves “{testo}”",
+        "Contro": "Goes against “{testo}”: {effetto}",
+        "Nessuna": "None",
+        "Modi": {
+          "dadi": "2 more dice",
+          "quintessenza": "1 Quintessence after the roll"
+        },
+        "Gesto": {
+          "dadi": "Different gesture: 2 dice and difficulty −1",
+          "quintessenza": "Different gesture: 1 Quintessence and difficulty −1"
+        }
+      },
+      "Nota": {
+        "Ambizione": "Follows the Ambition, “{testo}”: {cosa}.",
+        "Desiderio": "Follows the Desire, “{testo}”: {cosa}.",
+        "Serve": "Serves “{testo}”: {cosa}.",
+        "Contro": "Against “{testo}”, {volta}: {effetto}.",
+        "Modi": {
+          "dadi": "2 more dice, outside the cap",
+          "quintessenza": "1 Quintessence after the roll"
+        },
+        "ModiGesto": {
+          "dadi": "2 more dice, outside the cap, and difficulty −1 for the different gesture",
+          "quintessenza": "1 Quintessence after the roll, and difficulty −1 for the different gesture"
+        }
+      }
     },
     "Prezzo": {
       "Label": "Victory at a price",
@@ -2103,8 +2140,11 @@
       "Dissonanza": "Dissonance",
       "DissonanzaHint": "The casting clashes with the reality around it, like calling water inside a volcano: a Vulgar gives 1 more point of Paradox. It does not count on a Coincidental.",
       "Bussola": "Compass",
-      "BussolaHint": "The action follows the Compass: one more die, outside the cap, and 1 Quintessence point once rolled. Once per scene.",
-      "BussolaUsata": "The Compass has already served this scene: it comes back with the scene change.",
+      "BussolaHint": "If the action follows the Compass, choose 2 more dice, outside the cap, or 1 Quintessence after the roll, once per scene. Serving the same Conviction again in the session, with a different gesture, also gives difficulty −1. Going against it takes 2 dice, then raises the difficulty, and the third time switches it off.",
+      "BussolaUsata": "The Compass has already given this scene, and comes back with the scene change.",
+      "BussolaUsataContro": "The Compass has already given this scene and comes back with the scene change. Going against a Conviction can still be declared.",
+      "BussolaContro": "Against",
+      "BussolaControRiga": "Against the Conviction",
       "PotereDadiFlavor": "{name} +{dice}",
       "SogliaManoHint": "The threshold: the highest Scope, Epicness included, plus 1 for every other Scope above Arete; 10 at most. Minus and plus are the difficulty the Storyteller gives: it is free, and beyond +3 or −3 the number turns red; the pen says by how much.",
       "SogliaManoAbilitaHint": "The threshold the Storyteller sets, from 1 to 7, with minus and plus: without it, the roll does not start.",
@@ -2236,7 +2276,7 @@
           "Domanda": "Where do you want to get, what drives you now, what do you never betray?",
           "Sotto": "Ambition · Desire · one to three Convictions",
           "Perche": "Four traits written in a few lines, worth more than any score: the first two say where the character is going, the other two what keeps them human on the way.",
-          "PercheDue": "The Ambition says where you want to get, and you will not get there tonight: the best ones are purely mortal. The Desire is what drives you now, and it changes as soon as you get it. The Convictions, one to three, are your moral law: absolute in form, costly in practice, double-edged. When you serve one it covers you, and you take the Compass die and 1 Quintessence; when you cross it, it switches off until an act makes it shine. Touchstones come at step 13."
+          "PercheDue": "The Ambition says where you want to get, and you will not get there tonight: the best ones are purely mortal. The Desire is what drives you now, and it changes as soon as you get it. The Convictions, one to three, are your moral law: absolute in form, costly in practice, double-edged. When you serve one you choose 2 dice or 1 Quintessence, and serving it again in the session also lowers the difficulty by 1; when you cross it you lose 2 dice, then the difficulty rises, and the third time it switches off. Touchstones come at step 13."
         },
         "tipo": {
           "Label": "Type",
@@ -2354,7 +2394,7 @@
         "Cross": "when you cross it",
         "GuadagniAmbizione": "The Ambition shapes the chronicle",
         "GuadagniDesiderio": "The Desire, once reached, earns Experience",
-        "GuadagniConvinzioni": "Convictions cover Wisdom acts and give the Compass die",
+        "GuadagniConvinzioni": "Convictions cover Wisdom acts and give the Compass bonus",
         "GuadagniAncore": "Touchstones, who keeps you human",
         "ConvinzioneSenzaTesto": "empty row: write it on the Character page, or remove it"
       },

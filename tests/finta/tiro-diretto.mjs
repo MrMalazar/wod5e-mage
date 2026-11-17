@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 globalThis.__sim = { rolls: [], messages: [], faces: [], situational: [] };
-const strings = { "WOD5E_MAGE.RamoC.NoDice": "Nessun dado: fallito", "WOD5E_MAGE.Arete.BacklashLabel": "Contraccolpo", "WOD5E_MAGE.Arete.BacklashEyesOne": "un occhio", "WOD5E_MAGE.Arete.BacklashEyes": "{eyes} occhi", "WOD5E_MAGE.Bussola.Flavor": "Bussola: {label}" };
+const strings = { "WOD5E_MAGE.RamoC.NoDice": "Nessun dado: fallito", "WOD5E_MAGE.Arete.BacklashLabel": "Contraccolpo", "WOD5E_MAGE.Arete.BacklashEyesOne": "un occhio", "WOD5E_MAGE.Arete.BacklashEyes": "{eyes} occhi" };
 globalThis.game = {
   i18n: { lang: "it", localize: (k) => strings[k] ?? k, format: (k, d = {}) => Object.entries(d).reduce((t, [a, b]) => t.replace(`{${a}}`, String(b)), strings[k] ?? k) },
   settings: { get: () => "publicroll" }

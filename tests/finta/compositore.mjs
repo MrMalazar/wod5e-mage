@@ -23,7 +23,7 @@ const actor = {
   },
   getFlag: (scope, key) => flags[scope]?.[key],
   setFlag: async (scope, key, value) => { flags[scope][key] = value; },
-  update: async (data) => { for (const [k, v] of Object.entries(data)) { const path = k.split("."); if (path[0] === "flags") { let node = flags; for (const p of path.slice(1, -1)) node[p] ??= {}, node = node[p]; node[path.at(-1)] = v; } } }
+  update: async (data) => { for (const [k, v] of Object.entries(data)) { const path = k.split("."); if (path[0] === "flags") { let node = flags; for (const p of path.slice(1, -1)) node[p] ??= {}, node = node[p]; const last = path.at(-1); if (last.startsWith("-=")) delete node[last.slice(2)]; else node[last] = v; } } }
 };
 const spheresMod = await import(new URL("../../scripts/spheres.js", import.meta.url).href);
 // prepareSpheres legge la selezione dalla bandiera: controlla che la finta la regga.
@@ -474,6 +474,94 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
   assert.equal(globalThis.__sim.rolls.length, prima, "niente dadi, nemmeno i rossi");
   assert.equal(mCieco.getFlag("wod5e-mage", ROLL_CARD_FLAG).total, 0);
   assert.match(mCieco.content, /Il tiro fallisce: Cieco/);
+}
+
+// La Bussola (la scala del 16/11): la scelta entra nel riquadro come riga della Riserva (i dadi) e
+// della Soglia (la difficoltà); il tasto dice cosa si è scelto; a tiro fatto la scala si aggiorna.
+// A favore una volta per scena; contro tre volte, e alla terza la Convinzione si spegne; servirla
+// di nuovo, col gesto diverso, dà anche difficoltà −1 e azzera le volte contro.
+{
+  const B = await import(new URL("../../scripts/bussola.js", import.meta.url).href);
+  Object.assign(strings, {
+    "WOD5E_MAGE.Bussola.Nota.Serve": "Serve «{testo}»: {cosa}.",
+    "WOD5E_MAGE.Bussola.Nota.Ambizione": "Segue l'Ambizione, «{testo}»: {cosa}.",
+    "WOD5E_MAGE.Bussola.Nota.Contro": "Contro «{testo}», {volta}: {effetto}.",
+    "WOD5E_MAGE.Bussola.Nota.Modi.dadi": "2 dadi in più",
+    "WOD5E_MAGE.Bussola.Nota.ModiGesto.quintessenza": "1 Quintessenza e difficoltà −1",
+    "WOD5E_MAGE.Bussola.Volte.3": "terza volta",
+    "WOD5E_MAGE.Bussola.Contro.3": "si spegne",
+    "WOD5E_MAGE.Bussola.Spenta": "«{testo}» si spegne.",
+    "WOD5E_MAGE.Bussola.Gained": "+1 Quintessenza da «{testo}»."
+  });
+  actor.system.headers = { ambition: "Aprire la scuola", desire: "" };
+  flags["wod5e-mage"].convinzioni = { c1: { group: "", text: "Non lascio indietro nessuno", serve: "", cross: "" } };
+  flags["wod5e-mage"].magickBalance = { quintessence: 2, paradox: 0 };
+  delete flags["wod5e-mage"].convinzioneScena;
+  delete flags["wod5e-mage"].bussolaScala;
+  const fisico = T.setSoglia(T.pickSkill(T.pickAttribute(T.emptyTiro(), "dexterity"), "skill:athletics"), 2);
+  const righe = (ctx, colonna) => ctx[colonna].righe.filter((r) => r.kind === "bussola").map((r) => r.value);
+
+  // A favore: 2 dadi fuori dal tetto, la riga nella Riserva, il tasto acceso col nome della scelta.
+  const serve = T.setBussola(fisico, { voce: "convinzione:c1", modo: "dadi" });
+  let ctxB = S.prepareTiroContext(actor, serve);
+  assert.deepEqual([righe(ctxB, "riserva"), righe(ctxB, "soglia"), ctxB.pool, ctxB.difficulty], [["+2"], [], 8, 2]);
+  assert.deepEqual([ctxB.bussola.on, ctxB.bussola.contro, ctxB.bussola.label, ctxB.bussola.spento, ctxB.bussola.hint], [true, false, "WOD5E_MAGE.Tiro.Bussola", false, "Serve «Non lascio indietro nessuno»: 2 dadi in più."]);
+  const spento = S.prepareTiroContext(actor, fisico).bussola;
+  assert.deepEqual([spento.on, spento.label, spento.hint, spento.spento], [false, "WOD5E_MAGE.Tiro.Bussola", "WOD5E_MAGE.Tiro.BussolaHint", false]);
+  globalThis.__sim.faces = [6, 6, 1, 1, 1, 1, 1, 1];
+  const mServe = await S.launchTiro(actor, serve);
+  assert.equal(globalThis.__sim.rolls.at(-1).formula, "8dmcs>5 + 0dpcs>5");
+  assert.match(mServe.flavor, /Serve «Non lascio indietro nessuno»: 2 dadi in più\./);
+  assert.deepEqual([flags["wod5e-mage"].convinzioneScena.used, flags["wod5e-mage"].bussolaScala.favore], [true, { c1: 1 }]);
+  // Già servita in questa scena: a favore non vale più, il tasto lo dice, contro si dichiara lo stesso.
+  ctxB = S.prepareTiroContext(actor, serve);
+  assert.deepEqual([righe(ctxB, "riserva"), ctxB.pool, ctxB.bussola.on, ctxB.bussola.hint, ctxB.bussola.spento], [[], 6, false, "WOD5E_MAGE.Tiro.BussolaUsataContro", false]);
+  assert.deepEqual(B.menuBussolaVoci(B.statoBussola(actor)).map((v) => v.state), ["contro|convinzione:c1", ""]);
+
+  // Contro: la prima volta 2 dadi in meno; la seconda anche difficoltà +1; la terza si spegne.
+  const contro = T.setBussola(fisico, { voce: "convinzione:c1", verso: "contro" });
+  ctxB = S.prepareTiroContext(actor, contro);
+  assert.deepEqual([righe(ctxB, "riserva"), righe(ctxB, "soglia"), ctxB.pool, ctxB.difficulty, ctxB.bussola.contro, ctxB.bussola.label], [["−2"], [], 4, 2, true, "WOD5E_MAGE.Tiro.BussolaContro"]);
+  globalThis.__sim.faces = [6, 6, 1, 1];
+  await S.launchTiro(actor, contro);
+  assert.equal(globalThis.__sim.rolls.at(-1).formula, "4dmcs>5 + 0dpcs>5");
+  assert.deepEqual([flags["wod5e-mage"].bussolaScala.contro, flags["wod5e-mage"].bussolaScala.scena], [{ c1: 1 }, { c1: true }]);
+  ctxB = S.prepareTiroContext(actor, contro);
+  assert.deepEqual([righe(ctxB, "riserva"), righe(ctxB, "soglia"), ctxB.pool, ctxB.difficulty, ctxB.soglia.totale.piu, ctxB.soglia.totale.meno], [["−2"], ["+1"], 4, 3, false, false], "la seconda volta: la soglia del Narratore, 2, sale a 3; i suoi tasti guardano il 2");
+  globalThis.__sim.faces = [6, 6, 6, 1];
+  await S.launchTiro(actor, contro);
+  assert.deepEqual(flags["wod5e-mage"].bussolaScala.contro, { c1: 2 });
+  globalThis.__sim.faces = [6, 6, 6, 1];
+  const mTerza = await S.launchTiro(actor, contro);
+  assert.match(mTerza.flavor, /Contro «Non lascio indietro nessuno», terza volta: si spegne\./);
+  assert.deepEqual([flags["wod5e-mage"].convinzioni.c1.spenta, flags["wod5e-mage"].bussolaScala.contro], [true, {}], "spenta, e il conto riparte");
+  assert.ok(infos.includes("«Non lascio indietro nessuno» si spegne."));
+  // Spenta, e la Bussola già servita: niente da scegliere, il tasto è spento.
+  ctxB = S.prepareTiroContext(actor, fisico);
+  assert.deepEqual([ctxB.bussola.spento, ctxB.bussola.hint], [true, "WOD5E_MAGE.Tiro.BussolaUsata"]);
+
+  // Nuova scena, la Convinzione riaccesa: servirla di nuovo col gesto diverso dà la Quintessenza e la
+  // difficoltà −1, e azzera le volte contro.
+  delete flags["wod5e-mage"].convinzioneScena;
+  flags["wod5e-mage"].convinzioni.c1.spenta = false;
+  flags["wod5e-mage"].bussolaScala.contro = { c1: 2 };
+  flags["wod5e-mage"].bussolaScala.scena = {};
+  const gesto = T.setBussola(fisico, { voce: "convinzione:c1", modo: "quintessenza", gesto: true });
+  ctxB = S.prepareTiroContext(actor, gesto);
+  assert.deepEqual([righe(ctxB, "riserva"), righe(ctxB, "soglia"), ctxB.pool, ctxB.difficulty], [[], ["−1"], 6, 1]);
+  globalThis.__sim.faces = [6, 1, 1, 1, 1, 1];
+  await S.launchTiro(actor, gesto);
+  assert.deepEqual([flags["wod5e-mage"].magickBalance.quintessence, flags["wod5e-mage"].bussolaScala.favore, flags["wod5e-mage"].bussolaScala.contro], [3, { c1: 2 }, {}]);
+  assert.ok(infos.includes("+1 Quintessenza da «Non lascio indietro nessuno»."));
+
+  // Nel lancio di Magick: i 2 dadi entrano nella riserva, e a tiro fatto la scena è servita.
+  delete flags["wod5e-mage"].convinzioneScena;
+  const lancio = T.setBussola(T.setKind(T.setScope(T.toggleSphere(T.pickSkill(T.pickAttribute(T.toggleArete(T.emptyTiro()), "dexterity"), "skill:athletics"), "forces"), "potency", 1), "accidentale"), { voce: "ambizione", modo: "dadi" });
+  globalThis.__sim.faces = [6, 6, 1, 1, 1, 1, 1, 1];
+  const mLancio = await S.launchTiro(actor, lancio);
+  assert.equal(globalThis.__sim.rolls.at(-1).formula, "8dmcs>5 + 0dpcs>5");
+  assert.match(mLancio.flavor, /Segue l'Ambizione, «Aprire la scuola»: 2 dadi in più\./);
+  assert.equal(flags["wod5e-mage"].convinzioneScena.used, true);
 }
 
 console.log("compositore: ok,", globalThis.__sim.messages.length, "messaggi");

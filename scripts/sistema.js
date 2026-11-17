@@ -153,7 +153,7 @@ export function contoAmbiti(ambiti = [], arete = ARETE_MIN) {
  * dal tetto dei bonus); gli altri sconti si fermano a −3; un Volgare
  * aggravato la alza fino a +3. Resta fra 1 e 10.
  */
-export function sogliaMagick({ ambiti = [], arete = ARETE_MIN, premio = false, sconto = 0, aggravio = 0, mano = 0 } = {}) {
+export function sogliaMagick({ ambiti = [], arete = ARETE_MIN, premio = false, sconto = 0, aggravio = 0, mano = 0, bussola = 0 } = {}) {
   const conto = contoAmbiti(ambiti, arete);
   // Il premio vale l'Areté; un numero lo dice chi lo cambia (un potere che lo raddoppia).
   const tolto = premio === true ? stringi(arete, 0, ARETE_MAX) : (premio === false ? 0 : conta(premio));
@@ -161,8 +161,10 @@ export function sogliaMagick({ ambiti = [], arete = ARETE_MIN, premio = false, s
   const aggravi = Math.min(conta(aggravio), MALUS_DIFFICOLTA_MAX);
   // La mano del Narratore (Blue, 15/11): la difficoltà che alza o abbassa lui è libera, senza il tetto dei ±3.
   const aMano = intero(mano);
-  const soglia = conto.soglia ? stringi(conto.soglia + aggravi - tolto - sconti + aMano, SOGLIA_MIN, SOGLIA_MAGICK_MAX) : 0;
-  return { ...conto, premio: tolto, sconto: sconti, aggravio: aggravi, mano: aMano, soglia };
+  // La Bussola (la scala del 16/11): −1 a favore col gesto diverso, +1 contro dalla seconda volta; fuori dal tetto.
+  const daBussola = intero(bussola);
+  const soglia = conto.soglia ? stringi(conto.soglia + aggravi - tolto - sconti + aMano + daBussola, SOGLIA_MIN, SOGLIA_MAGICK_MAX) : 0;
+  return { ...conto, premio: tolto, sconto: sconti, aggravio: aggravi, mano: aMano, bussola: daBussola, soglia };
 }
 
 /**
@@ -204,9 +206,10 @@ export function condizioniSulTiro(gradi = []) {
  * I dadi che si prendono in mano. La riserva è Attributo più Abilità, col
  * dado della Specializzazione quando c'entra. I bonus (circostanze, oggetti,
  * Supporto e Armonia, la Quintessenza spesa: Blue, 15/11) si fermano in tutto a +3; fuori
- * dal tetto stanno il dado della Bussola e i dadi dei Vantaggi, fino a 5. I
- * dadi in meno non hanno tetto: si tolgono tutti. La riserva dimezzata si
- * conta per ultima, per difetto.
+ * dal tetto stanno i dadi della Bussola (2 a favore; contro sono 2 in meno,
+ * la scala del 16/11) e i dadi dei Vantaggi, fino a 5. I dadi in meno non
+ * hanno tetto: si tolgono tutti. La riserva dimezzata si conta per ultima,
+ * per difetto.
  */
 export function dadiDelTiro({
   tratti = 0,
@@ -222,9 +225,10 @@ export function dadiDelTiro({
   const riserva = conta(tratti) + conta(specializzazione);
   const chiesti = conta(bonus) + conta(quintessenza);
   const dentro = Math.min(chiesti, BONUS_MAX);
-  const fuori = (conta(bussola) > 0 ? 1 : 0) + Math.min(conta(vantaggi), VANTAGGI_MAX);
-  // I dadi in meno si possono scrivere «2» o «−2»: si tolgono comunque.
-  const tolti = Math.abs(intero(malus));
+  const daBussola = intero(bussola);
+  const fuori = Math.max(daBussola, 0) + Math.min(conta(vantaggi), VANTAGGI_MAX);
+  // I dadi in meno si possono scrivere «2» o «−2»: si tolgono comunque. La Bussola contro toglie i suoi.
+  const tolti = Math.abs(intero(malus)) + Math.max(-daBussola, 0);
   const prima = Math.max(riserva + dentro + fuori - tolti + intero(ritocco), 0);
   return {
     riserva,

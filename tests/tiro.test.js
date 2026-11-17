@@ -260,13 +260,13 @@ assert.equal(contoTiro(setSoglia(abilita, 7), { attributeValue: 3, skillValue: 2
 assert.equal(contoTiro(magick, { arete: 2 }).sogliaMano, 0, "senza a mano, l'addendo è zero");
 
 // Il tetto dei +3 tiene insieme l'Armonia, i dadi dati al tavolo e la Quintessenza (Blue, 15/11).
-// Fuori dal tetto la Bussola e i Vantaggi, che arrivano a 5.
-conto = contoTiro(setQuintessence(magick, 9), { arete: 2, attributeValue: 4, skillValue: 5, quintessenceAvailable: 9, bussola: 1, harmony: 5, traitDice: 4 });
+// Fuori dal tetto la Bussola (2 dadi a favore, la scala del 16/11) e i Vantaggi, che arrivano a 5.
+conto = contoTiro(setQuintessence(magick, 9), { arete: 2, attributeValue: 4, skillValue: 5, quintessenceAvailable: 9, bussola: { dadi: 2, difficolta: 0 }, harmony: 5, traitDice: 4 });
 assert.equal(conto.quintessenceAllowed, true, "nei lanci di Magick la Quintessenza dà dadi");
 assert.equal(conto.extra, 3, "l'Armonia data dal programma si ferma a tre");
 assert.equal(conto.quintessence, 0, "il tetto è già pieno: la Quintessenza non entra e non si spende");
-assert.equal(conto.bussolaDice, 1);
-assert.equal(conto.pool, 9 + 3 + 1 + 4, "l'extra, la Bussola e i Tratti; il premio sta nella soglia");
+assert.equal(conto.bussolaDice, 2);
+assert.equal(conto.pool, 9 + 3 + 2 + 4, "l'extra, la Bussola e i Tratti; il premio sta nella soglia");
 conto = contoTiro(setQuintessence(magick, 9), { arete: 2, attributeValue: 4, skillValue: 5, quintessenceAvailable: 9, harmony: 1 });
 assert.deepEqual([conto.extra, conto.quintessence, conto.pool], [1, 2, 12], "un dado d'Armonia lascia posto a due di Quintessenza");
 conto = contoTiro(setQuintessence(magick, 2), { arete: 2, attributeValue: 4, skillValue: 5, quintessenceAvailable: 1 });

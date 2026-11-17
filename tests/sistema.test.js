@@ -87,7 +87,9 @@ assert.equal(BONUS_MAX, 3);
 assert.equal(dadiDelTiro({ tratti: 6, specializzazione: 1, bonus: 1 }).dadi, 8, "la corda col gancio di Marco");
 assert.equal(dadiDelTiro({ tratti: 6, bonus: 5 }).dadi, 9, "oltre +3 i bonus non contano");
 assert.equal(dadiDelTiro({ tratti: 6, bonus: 5 }).bonusPersi, 2);
-assert.equal(dadiDelTiro({ tratti: 6, bonus: 3, bussola: 1, vantaggi: 7 }).dadi, 15, "Bussola e Vantaggi stanno fuori dal tetto");
+assert.equal(dadiDelTiro({ tratti: 6, bonus: 3, bussola: 2, vantaggi: 7 }).dadi, 16, "Bussola e Vantaggi stanno fuori dal tetto");
+assert.equal(dadiDelTiro({ tratti: 6, bonus: 3, bussola: -2 }).dadi, 7, "contro la Convinzione: 2 dadi in meno, senza tetto");
+assert.equal(dadiDelTiro({ tratti: 6, bussola: -2, malus: 2 }).malus, 4);
 assert.equal(dadiDelTiro({ tratti: 6, bonus: 2, quintessenza: 3 }).dadi, 9, "la Quintessenza spesa sta nel tetto");
 
 // Malus: i dadi in meno non hanno tetto; la riserva dimezzata si conta per ultima, per difetto.
@@ -215,6 +217,11 @@ assert.equal(quintessenzaDelSacrificio("aggravato"), 3);
   assert.equal(sogliaMagick({ ambiti: grande, arete: 2, mano: -9 }).soglia, 1);
   assert.equal(sogliaMagick({ ambiti: grande, arete: 2, premio: true, mano: 4 }).soglia, 7);
   assert.deepEqual([0, 3, -3, 4, -4, 12].map(oltreIlMetro), [false, false, false, true, true, true]);
+  // La Bussola (la scala del 16/11): −1 col gesto diverso, +1 contro dalla seconda volta; fuori dal tetto, e la soglia resta fra 1 e 10.
+  assert.deepEqual([-1, 1].map((bussola) => sogliaMagick({ ambiti: grande, arete: 2, bussola }).soglia), [4, 6]);
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, sconto: 5, bussola: -1 }).soglia, 1, "lo sconto si ferma a 3, la Bussola sta fuori");
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, mano: 9, bussola: 1 }).soglia, 10);
+  assert.equal(sogliaMagick({ ambiti: grande, arete: 2, bussola: -1 }).bussola, -1);
 }
 
 // Il tiro di Saggezza (Blue, 15/11): successi pari al gradino dell'atto, da 1 a 7.

@@ -145,7 +145,6 @@ async function rollSkillRamoC(actor, dataset, { traits = [] } = {}) {
   const shownFlat = conto.flatMod - traits.filter((trait) => trait.type === "custom").reduce((total, trait) => total + numericValue(trait.value), 0);
   const selectors = String(dataset.selectors ?? "").split(/\s+/).filter(Boolean);
   const { rollAreteWithParadox } = await import("./paradox-dice.js");
-  const { prepareBussolaChoice } = await import("./bussola.js");
   try {
     return await rollAreteWithParadox({
       actor,
@@ -154,8 +153,6 @@ async function rollSkillRamoC(actor, dataset, { traits = [] } = {}) {
       threshold: 0,
       paradoxRating: 0,
       skill: true,
-      // Rispetta la Bussola? (11/9): su ogni tiro di Abilità.
-      bussola: prepareBussolaChoice(actor),
       title: label || rows.map((row) => row.label).join(" + ") || localize("WOD5E.RollList.Label"),
       flavor: skillRollCard({ traits: rows, flatMod: shownFlat }, localize),
       card: { symbols: [], traits: rows },

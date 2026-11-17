@@ -12,8 +12,13 @@
  *   il numero di successi che servono;
  * - i bonus stanno dentro un tetto di +3 dadi: l'Armonia, i dadi dati al
  *   tavolo e la Quintessenza spesa nei lanci (un dado per punto; Blue,
- *   15/11: dentro il tetto). Fuori dal tetto il dado della Bussola e i dadi
- *   dei Vantaggi, fino a 5;
+ *   15/11: dentro il tetto). Fuori dal tetto i dadi della Bussola e i
+ *   dadi dei Vantaggi, fino a 5;
+ * - la Bussola (la scala del 16/11, bussola.js): a favore 2 dadi fuori dal
+ *   tetto, o 1 Quintessenza a tiro fatto, e dalla seconda volta nella
+ *   sessione, col gesto diverso, difficoltà −1; contro 2 dadi in meno, e
+ *   dalla seconda volta difficoltà +1. Anche la difficoltà della Bussola
+ *   sta fuori dal tetto;
  * - nei tiri di Abilità la soglia la dice il Narratore, da 1 a 7, e si
  *   scrive a mano: senza, il tiro non parte (Blue, 16/9 sera);
  * - nella Magick la soglia è il conto degli Ambiti: il più alto, Epicità
@@ -39,7 +44,7 @@
  *   non c'entra.
  */
 import { calculateAretePrize, capBonusDice, SKILL_SPECIALTY_DICE, THRESHOLD_CAP } from "./arete.js";
-import { BUSSOLA_DICE } from "./bussola.js";
+import { normalizeBussolaTiro } from "./bussola.js";
 import { applyPotere, riuscitaSenzaTirare, spezzaIdPotere } from "./poteri.js";
 import { ambitiDelLancio, normalizeScopeLevels, SCOPE_ALIASES } from "./scopes.js";
 import {
@@ -89,8 +94,8 @@ export function emptyTiro() {
     quintessence: 0,
     // La dissonanza (il Sistema): il lancio stride con la realtà intorno, e un Volgare dà 1 Paradosso in più.
     dissonanza: false,
-    // La Bussola (il Sistema): l'azione segue la Bussola, un dado fuori dal tetto e 1 Quintessenza a tiro fatto.
-    bussola: false,
+    // La Bussola (la scala del 16/11): null, oppure la scelta del menù, { voce, verso, modo, gesto }.
+    bussola: null,
     extra: 0,
     dadi: 0,
     // L'Indulgere (3/10): "", oppure il lato dichiarato, "hubris" o "silenzio".
@@ -112,7 +117,8 @@ function clone(tiro) {
     // Gli Ambiti coi nomi di oggi: l'Area di ieri è il livello dei Bersagli (23/9).
     scopes: normalizeScopeLevels(tiro?.scopes ?? {}),
     traits: [...(tiro?.traits ?? [])],
-    condizioni: { ...(tiro?.condizioni ?? {}) }
+    condizioni: { ...(tiro?.condizioni ?? {}) },
+    bussola: normalizeBussolaTiro(tiro?.bussola)
   };
 }
 
@@ -355,17 +361,21 @@ export function setQuintessence(tiro, value) {
 }
 
 /**
+ * La Bussola sul tiro (la scala del 16/11): la scelta dei due menù del
+ * tasto, { voce, verso, modo, gesto }; null, o una scelta che non regge, la
+ * toglie. L'effetto lo conta bussola.js, con la scala del personaggio.
+ */
+export function setBussola(tiro, scelta) {
+  const next = clone(tiro);
+  next.bussola = normalizeBussolaTiro(scelta);
+  return next;
+}
+
+/**
  * La dissonanza con la realtà intorno (il Sistema: «evocare acqua in un
  * vulcano»): aggrava un lancio Volgare di 1 punto di Paradosso. Senza
  * valore si gira; l'Accidentale non la sente.
  */
-/** La Bussola rispettata: si accende e si spegne; vale per ogni tiro, una volta per scena. */
-export function setBussola(tiro, on) {
-  const next = clone(tiro);
-  next.bussola = on === undefined ? !next.bussola : Boolean(on);
-  return next;
-}
-
 export function setDissonanza(tiro, on) {
   const next = clone(tiro);
   next.dissonanza = on === undefined ? !next.dissonanza : Boolean(on);
@@ -429,6 +439,8 @@ export function removePill(tiro, pill) {
     case "specialty": return pickSpecialty(tiro, pill.skill, pill.id);
     case "trait": return toggleTrait(tiro, pill.id);
     case "power": return pickPower(tiro, pill.id);
+    // La Bussola: la × toglie la scelta.
+    case "bussola": return setBussola(tiro, null);
     // L'incantesimo ha caricato tutto: la sua × svuota il compositore.
     case "spell": return clearTiro();
     default: return clone(tiro);
@@ -522,7 +534,8 @@ export function livelloContato(level, free) {
 /**
  * Il conto del tiro composto. Prende lo stato e i numeri della scheda:
  * arete, attributeValue, skillValue, traitDice (la somma dei Tratti scelti),
- * harmony, bussola (1 se rispettata), quintessenceAvailable, power (il
+ * harmony, bussola (l'effetto di bussola.js: `dadi`, +2 a favore o −2
+ * contro, e `difficolta`, −1 o +1), quintessenceAvailable, power (il
  * potere scelto, per i suoi effetti) e powerCtx (quello che le sue condizioni
  * chiedono: Sfere conosciute, poteri per Sfera, Salute sotto metà).
  * `formula` dice se l'incantesimo è una Formula e quanti dadi le danno i suoi
@@ -541,7 +554,7 @@ export function contoTiro(tiro, {
   skillValue = 0,
   traitDice = 0,
   harmony = 0,
-  bussola = 0,
+  bussola = null,
   quintessenceAvailable = 0,
   power = null,
   powerCtx = {},
@@ -551,7 +564,12 @@ export function contoTiro(tiro, {
   const magick = isMagick(tiro);
   const areteValue = count(arete);
   const specialtyDice = tiro?.skill && tiro?.specialty ? SKILL_SPECIALTY_DICE : 0;
-  const bussolaDice = count(bussola) > 0 ? BUSSOLA_DICE : 0;
+  // La Bussola (la scala del 16/11): a favore i dadi stanno fuori dal tetto; contro si tolgono, senza
+  // tetto, come i dadi in meno. La sua difficoltà (−1 o +1) sta anche lei fuori dal tetto.
+  const bussolaDadi = Math.trunc(Number(bussola?.dadi) || 0);
+  const bussolaDice = Math.max(bussolaDadi, 0);
+  const bussolaMalus = Math.min(bussolaDadi, 0);
+  const bussolaDifficolta = Math.trunc(Number(bussola?.difficolta) || 0);
 
   // Il potere scelto (tappa 3): i suoi effetti, giudicati su questo tiro.
   const ctx = {
@@ -592,11 +610,11 @@ export function contoTiro(tiro, {
   const condDadi = Math.min(Math.trunc(Number(condizioni?.dadi) || 0), 0);
   const dimezza = Boolean(condizioni?.dimezza);
   const fallisce = Boolean(condizioni?.fallisce);
-  // La riserva com'è nella colonna del riquadro: i tratti, i bonus, i dadi del potere e le Condizioni
-  // in meno; il ritocco sta a parte, nella riga del totale.
-  const riservaTotale = Math.max(riserva + powerDice + condDadi, 0);
-  const senzaCondizioni = Math.max(riserva + powerDice + adjust, 0);
-  const prima = Math.max(riserva + powerDice + condDadi + adjust, 0);
+  // La riserva com'è nella colonna del riquadro: i tratti, i bonus, i dadi del potere, le Condizioni
+  // e la Bussola in meno; il ritocco sta a parte, nella riga del totale.
+  const riservaTotale = Math.max(riserva + powerDice + condDadi + bussolaMalus, 0);
+  const senzaCondizioni = Math.max(riserva + powerDice + bussolaMalus + adjust, 0);
+  const prima = Math.max(riserva + powerDice + condDadi + bussolaMalus + adjust, 0);
   const dadi = dimezza ? Math.floor(prima / 2) : prima;
 
   // La soglia. Nella Magick il conto degli Ambiti (gli Ambiti che il potere fa saltare fino a un
@@ -607,15 +625,15 @@ export function contoTiro(tiro, {
   const sogliaMano = manual ? Math.trunc(Number(tiro.soglia) || 0) : 0;
   const scopeThreshold = magick ? contoAmbiti(scopeLevels, areteValue).soglia : 0;
   const lancio = magick
-    ? sogliaMagick({ ambiti: countedLevels, arete: areteValue, premio: prize, mano: sogliaMano })
+    ? sogliaMagick({ ambiti: countedLevels, arete: areteValue, premio: prize, mano: sogliaMano, bussola: bussolaDifficolta })
     : null;
   // La soglia senza la mano del Narratore: serve a chi deve dire di quanto la si è spostata.
-  const sogliaSenzaMano = magick ? Math.max(sogliaMagick({ ambiti: countedLevels, arete: areteValue, premio: prize }).soglia, SOGLIA_MIN) : 0;
+  const sogliaSenzaMano = magick ? Math.max(sogliaMagick({ ambiti: countedLevels, arete: areteValue, premio: prize, bussola: bussolaDifficolta }).soglia, SOGLIA_MIN) : 0;
   // Il conto degli Ambiti col potere dentro, prima della difficoltà a mano e del premio.
   const computed = lancio ? Math.min(lancio.grezzo, SOGLIA_MAGICK_MAX) : 0;
   const difficulty = magick
     ? Math.max(lancio.soglia, SOGLIA_MIN)
-    : (manual ? Math.max(Math.min(sogliaMano, SOGLIA_ABILITA_MAX), SOGLIA_MIN) : 0);
+    : (manual ? Math.max(Math.min(sogliaMano, SOGLIA_ABILITA_MAX) + bussolaDifficolta, SOGLIA_MIN) : 0);
 
   // La riuscita senza tirare, a conto fatto. Le condizioni sui dadi guardano di quanto la
   // riserva supera la soglia: «almeno un dado», «almeno due» (le decisioni del 14/11).
@@ -629,6 +647,8 @@ export function contoTiro(tiro, {
     bonus,
     specialtyDice,
     bussolaDice,
+    bussolaMalus,
+    bussolaDifficolta,
     vantaggi,
     quintessence,
     quintessenceAllowed,

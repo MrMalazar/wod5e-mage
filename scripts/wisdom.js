@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.js";
+import { aggiornamentoTradimento, BUSSOLA_SCALA_FLAG } from "./bussola.js";
 import { anchorLabel, PERSONAGGIO_TABLES } from "./personaggio-extra.js";
 import { renderRollNote, ROLL_CARD_FLAG } from "./roll-card.js";
 import { askSegno } from "./salute.js";
@@ -16,8 +17,9 @@ import { sogliaSaggezza } from "./sistema.js";
  * cancello). Se una Convinzione attiva copre l'atto si tira Fermezza +
  * Autocontrollo meno il gradino, e un 8 riesce: riuscito il segno resta,
  * fallito scende di un passo; senza dadi non si para. Se nessuna Convinzione
- * copre, il segno scende in automatico. Tradire una Convinzione la spegne:
- * non copre più finché non torna attiva.
+ * copre, il segno scende in automatico. Tradire una Convinzione conta come
+ * una volta contro (la scala della Bussola, 16/11; bussola.js): alla terza
+ * si spegne, e non copre più finché non torna attiva.
  *
  * Il ritorno: l'atto che fa risplendere una Convinzione (lo chiama il
  * Narratore, una volta per sessione per giocatore) la riaccende e fa tornare
@@ -399,10 +401,21 @@ export function normalizeAtto(result = {}) {
 }
 
 /**
+ * La riga del tradimento: quale volta contro è (alla terza la Convinzione
+ * si spegne), o che il tiro di questa scena l'ha già contata.
+ */
+export function testoTradimento(passo, convinzione, format) {
+  if (!passo?.contata) return format("WOD5E_MAGE.Wisdom.Esiti.tradita.contata", { convinzione });
+  const volta = Math.min(Math.max(Math.trunc(Number(passo.volta) || 0), 1), 3);
+  return format(`WOD5E_MAGE.Wisdom.Esiti.tradita.${volta}`, { convinzione });
+}
+
+/**
  * L'atto (Tira): la finestra chiede gradino, lato, la Convinzione che
  * copre e quella tradita; poi il cancello, il tiro se una Convinzione
- * copre, il passo se non copre o se il tiro fallisce. Tradire spegne la
- * Convinzione, e l'atto non è coperto nemmeno da un'altra.
+ * copre, il passo se non copre o se il tiro fallisce. Tradire conta una
+ * volta contro la Convinzione (alla terza si spegne), e l'atto non è
+ * coperto nemmeno da un'altra.
  */
 export async function onWisdomAtto(event) {
   event.preventDefault();
@@ -448,10 +461,12 @@ export async function onWisdomAtto(event) {
   const copre = !tradita && atto.copre && righe[atto.copre] && !righe[atto.copre].spenta ? righe[atto.copre] : null;
   const parts = [];
 
-  // Tradire spegne la Convinzione, qualunque cosa faccia il segno.
+  // Tradire conta una volta contro la Convinzione, qualunque cosa faccia il segno: alla terza si spegne.
+  // Se un tiro di questa scena l'ha già contata (la Bussola contro), non conta di nuovo.
   if (tradita) {
-    await actor.setFlag(MODULE_ID, PERSONAGGIO_TABLES.convictions, { ...righe, [atto.tradisce]: { ...tradita, spenta: true } });
-    parts.push(format("WOD5E_MAGE.Wisdom.Esiti.tradita", { convinzione: String(tradita.text ?? "") }));
+    const passo = aggiornamentoTradimento(atto.tradisce, actor.getFlag(MODULE_ID, BUSSOLA_SCALA_FLAG));
+    if (passo.contata) await actor.update(passo.update);
+    parts.push(testoTradimento(passo, String(tradita.text ?? ""), format));
   }
 
   if (!copre || !cancello(atto.gradino, stato[atto.lato])) {
@@ -569,7 +584,7 @@ export function normalizeAncora(result = {}) {
  * ritirare per recuperare un passo: Fermezza + Autocontrollo meno il passo
  * dove sta il segno, un 8 riesce, e il segno torna indietro di uno. In casi
  * eccezionali il Narratore lo concede senza tirare. Il tasto «Nuova storia»
- * riarma tutte le Ancore.
+ * riarma tutte le Ancore, e azzera le volte contro le Convinzioni.
  */
 export async function onWisdomAncora(event) {
   event.preventDefault();
@@ -611,6 +626,8 @@ export async function onWisdomAncora(event) {
   const stato = normalizeSaggezza(actor.getFlag(MODULE_ID, "wisdom"));
   if (result === "riarma") {
     await saveSaggezza(actor, { ...stato, ancore: {} });
+    // La Nuova storia azzera anche le volte contro le Convinzioni (la scala della Bussola, 16/11).
+    if (actor.getFlag(MODULE_ID, BUSSOLA_SCALA_FLAG)?.contro) await actor.update({ [`flags.${MODULE_ID}.${BUSSOLA_SCALA_FLAG}.-=contro`]: null });
     ui.notifications.info(localize("WOD5E_MAGE.Wisdom.AncoraDialog.Riarmate"));
     return;
   }

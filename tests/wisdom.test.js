@@ -182,7 +182,9 @@ assert.doesNotMatch(source, /SAGGEZZA_SUCCESS_FROM|dadiSaggezza/, "la riuscita d
 assert.match(source, /const riuscito = tiro\.riuscito;/, "l'Ancora riesce coi successi pari al passo");
 assert.match(source, /paradoxRating: 0,\s*skill: true/, "niente rossi: è un tiro d'Abilità per la macchina");
 assert.match(source, /"-=superficial": null,\s*"-=aggravated": null,\s*"-=extra": null,\s*"-=attribute": null,\s*"-=max": null/, "la bandiera vecchia si pulisce");
-assert.match(source, /spenta: true \}/, "tradire spegne la Convinzione");
+assert.match(source, /const passo = aggiornamentoTradimento\(atto\.tradisce, actor\.getFlag\(MODULE_ID, BUSSOLA_SCALA_FLAG\)\);\s*if \(passo\.contata\) await actor\.update\(passo\.update\);/, "tradire conta una volta contro (la scala della Bussola)");
+assert.doesNotMatch(source, /\[atto\.tradisce\]: \{ \.\.\.tradita, spenta: true \}/, "tradire non spegne più subito");
+assert.match(source, /result === "riarma"[\s\S]*?BUSSOLA_SCALA_FLAG\}\.-=contro`\]: null/, "la Nuova storia azzera le volte contro");
 assert.match(source, /if \(stato\.risplende && !scelta\.concesso\)/, "il Risplende una volta per sessione, salvo concessione");
 assert.match(source, /if \(ancora\.usata && !game\.user\?\.isGM\)/, "l'Ancora una volta per storia, salvo il Narratore");
 assert.match(source, /if \(scelta\.concesso && game\.user\?\.isGM\)/, "il Narratore concede senza tirare");

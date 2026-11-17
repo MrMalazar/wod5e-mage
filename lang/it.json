@@ -1033,7 +1033,7 @@
         "Attiva": "Attiva",
         "Spenta": "Spenta",
         "AttivaHint": "Convinzione attiva: copre gli atti che la servono. Clic: la spegni a mano.",
-        "SpentaHint": "Convinzione spenta: l'hai tradita, e non ti copre finché un atto non la fa risplendere. Clic: la riaccendi a mano."
+        "SpentaHint": "Convinzione spenta: non ti copre finché un atto non la fa risplendere. Si spegne alla terza volta che la attraversi. Clic: la riaccendi a mano."
       },
       "Atto": {
         "Title": "L'atto",
@@ -1046,7 +1046,7 @@
         "CopreHint": "L'atto la serviva, e il Narratore dice sì: tiri per vedere se basta a coprirti.",
         "Tradisce": "L'atto tradisce una Convinzione",
         "TradisceNone": "Nessuna",
-        "TradisceHint": "Si spegne, e non ti copre finché non risplende. L'atto tradito non lo copre nessuna Convinzione.",
+        "TradisceHint": "Conta come una volta contro. Alla terza si spegne, e non ti copre finché non risplende. Se un tiro di questa scena l'ha già contata, non conta di nuovo. L'atto tradito non lo copre nessuna Convinzione.",
         "Spente": "Spente:",
         "LatoManca": "Dì il lato dell'atto: Hubris o Silenzio.",
         "Ok": "Giudica",
@@ -1094,7 +1094,12 @@
         "scoperto": "Atto del gradino {gradino}, {lato}: nessuna Convinzione copre, il segno scende: {passo}.",
         "coperto": "«{convinzione}» ti copre: il segno dell'{lato} resta {passo}.",
         "fallito": "«{convinzione}» non basta: il segno dell'{lato} scende: {passo}.",
-        "tradita": "Tradita «{convinzione}»: si spegne."
+        "tradita": {
+          "1": "Tradita «{convinzione}»: prima volta contro.",
+          "2": "Tradita «{convinzione}»: seconda volta contro, alla terza si spegne.",
+          "3": "Tradita «{convinzione}»: terza volta contro, e si spegne.",
+          "contata": "Tradita «{convinzione}»: il tiro di questa scena l'ha già contata."
+        }
       },
       "RisplendeDialog": {
         "Title": "Risplende",
@@ -1120,7 +1125,7 @@
         "Concedi": "Il Narratore concede senza tirare",
         "Ok": "Tira",
         "Riarma": "Nuova storia",
-        "Riarmate": "Nuova storia: le Ancore tornano disponibili.",
+        "Riarmate": "Nuova storia: le Ancore tornano disponibili, e le volte contro le Convinzioni ripartono da zero.",
         "Nessuna": "Nessuna Ancora sulla scheda: scrivila nella pagina Personaggio.",
         "GiaUsata": "«{ancora}» è già stata usata in questa storia: lo decide il Narratore.",
         "Rolling": "Tiro di Saggezza · {ancora}",
@@ -1534,20 +1539,52 @@
       "Resize": "Ridimensiona il riquadro"
     },
     "Bussola": {
-      "Ask": "Rispetta la Bussola?",
-      "Short": "+1 dado, +1 Quintessenza a tiro fatto",
-      "Hint": "Se con questo gesto servi la tua Bussola (l'Ambizione, il Desiderio o una Convinzione), prendi un dado in più e, a tiro fatto, un punto di Quintessenza risale sulla Ruota. Una volta per scena.",
-      "Pick": "Quale voce della Bussola",
       "Ambition": "Ambizione",
       "Desire": "Desiderio",
       "Conviction": "Convinzione",
-      "None": "Nessuna voce della Bussola in scheda.",
-      "Used": "Già rispettata in questa scena.",
-      "NewScene": "Nuova scena",
-      "NewSceneHint": "La scena è cambiata: la Bussola può dare di nuovo.",
-      "Gained": "Bussola rispettata ({label}): +1 Quintessenza.",
-      "Full": "Bussola rispettata, ma la Ruota è piena: niente da rigenerare.",
-      "Flavor": "Bussola rispettata (+1 dado): {label}"
+      "None": "Nessuna voce della Bussola in scheda. Ambizione, Desiderio e Convinzioni si scrivono nella pagina Personaggio.",
+      "Gained": "Bussola, «{testo}»: +1 Quintessenza.",
+      "Full": "La Ruota è piena, e la Bussola non ha Quintessenza da dare.",
+      "Spenta": "«{testo}» si spegne alla terza volta contro, e non ti copre finché un atto non la fa risplendere.",
+      "Volte": {
+        "1": "prima volta",
+        "2": "seconda volta",
+        "3": "terza volta"
+      },
+      "Contro": {
+        "1": "2 dadi in meno",
+        "2": "2 dadi in meno e difficoltà +1",
+        "3": "2 dadi in meno, difficoltà +1, e si spegne"
+      },
+      "Menu": {
+        "Ambizione": "Segue l'Ambizione: {testo}",
+        "Desiderio": "Segue il Desiderio: {testo}",
+        "Serve": "Serve «{testo}»",
+        "Contro": "Va contro «{testo}»: {effetto}",
+        "Nessuna": "Nessuna",
+        "Modi": {
+          "dadi": "2 dadi in più",
+          "quintessenza": "1 Quintessenza a tiro fatto"
+        },
+        "Gesto": {
+          "dadi": "Gesto diverso: 2 dadi e difficoltà −1",
+          "quintessenza": "Gesto diverso: 1 Quintessenza e difficoltà −1"
+        }
+      },
+      "Nota": {
+        "Ambizione": "Segue l'Ambizione, «{testo}»: {cosa}.",
+        "Desiderio": "Segue il Desiderio, «{testo}»: {cosa}.",
+        "Serve": "Serve «{testo}»: {cosa}.",
+        "Contro": "Contro «{testo}», {volta}: {effetto}.",
+        "Modi": {
+          "dadi": "2 dadi in più, fuori dal tetto",
+          "quintessenza": "1 Quintessenza a tiro fatto"
+        },
+        "ModiGesto": {
+          "dadi": "2 dadi in più, fuori dal tetto, e difficoltà −1 col gesto diverso",
+          "quintessenza": "1 Quintessenza a tiro fatto, e difficoltà −1 col gesto diverso"
+        }
+      }
     },
     "Prezzo": {
       "Label": "Vittoria a un prezzo",
@@ -2103,8 +2140,11 @@
       "Dissonanza": "Dissonanza",
       "DissonanzaHint": "Il lancio stride con la realtà intorno, come evocare acqua in un vulcano: un Volgare dà 1 punto di Paradosso in più. Sull'Accidentale non conta.",
       "Bussola": "Bussola",
-      "BussolaHint": "L'azione segue la Bussola: un dado in più, fuori dal tetto, e a tiro fatto 1 punto di Quintessenza. Una volta per scena.",
-      "BussolaUsata": "La Bussola è già servita in questa scena: torna col cambio di scena.",
+      "BussolaHint": "Se l'azione segue la Bussola scegli 2 dadi in più, fuori dal tetto, o 1 Quintessenza a tiro fatto, una volta per scena. Servire ancora la stessa Convinzione nella sessione, con un gesto diverso, dà anche difficoltà −1. Andarci contro toglie 2 dadi, poi alza la difficoltà, e alla terza la spegne.",
+      "BussolaUsata": "La Bussola ha già dato in questa scena, e torna col cambio di scena.",
+      "BussolaUsataContro": "La Bussola ha già dato in questa scena e torna col cambio di scena. Andare contro una Convinzione si dichiara lo stesso.",
+      "BussolaContro": "Contro",
+      "BussolaControRiga": "Contro la Convinzione",
       "PotereDadiFlavor": "{name} +{dice}",
       "SogliaManoHint": "La soglia: l'Ambito più alto, Epicità compresa, più 1 per ogni altro Ambito sopra l'Areté; al massimo 10. Il meno e il più sono la difficoltà che dà il Narratore: è libera, e oltre +3 o −3 il numero diventa rosso; la matita dice di quanto.",
       "SogliaManoAbilitaHint": "La soglia che dice il Narratore, da 1 a 7, col meno e il più: senza, il tiro non parte.",
@@ -2236,7 +2276,7 @@
           "Domanda": "Dove vuoi arrivare, cosa ti urge adesso, cosa non tradisci mai?",
           "Sotto": "Ambizione · Desiderio · da una a tre Convinzioni",
           "Perche": "Quattro tratti scritti in poche righe, che valgono più di qualsiasi punteggio: i primi due dicono dove sta andando il personaggio, gli altri due cosa lo tiene umano mentre ci va.",
-          "PercheDue": "L'Ambizione dice dove vuoi arrivare, e non ci arrivi stasera: le migliori sono puramente mortali. Il Desiderio è cosa ti urge adesso, e cambia appena l'ottieni. Le Convinzioni, da una a tre, sono la tua legge morale: assolute nella forma, costose nella pratica, a doppio taglio. Quando ne servi una ti copre, e prendi il dado della Bussola e 1 Quintessenza; quando la attraversi si spegne, finché un atto non la fa risplendere. Le Ancore arrivano al passo 13."
+          "PercheDue": "L'Ambizione dice dove vuoi arrivare, e non ci arrivi stasera: le migliori sono puramente mortali. Il Desiderio è cosa ti urge adesso, e cambia appena l'ottieni. Le Convinzioni, da una a tre, sono la tua legge morale: assolute nella forma, costose nella pratica, a doppio taglio. Quando ne servi una scegli 2 dadi o 1 Quintessenza, e se la servi ancora nella sessione la difficoltà scende di 1; quando la attraversi perdi 2 dadi, poi sale la difficoltà, e alla terza volta si spegne. Le Ancore arrivano al passo 13."
         },
         "tipo": {
           "Label": "Tipo",
@@ -2354,7 +2394,7 @@
         "Cross": "quando la attraversi",
         "GuadagniAmbizione": "L'Ambizione dà forma alla cronaca",
         "GuadagniDesiderio": "Il Desiderio, raggiunto, frutta Esperienza",
-        "GuadagniConvinzioni": "Le Convinzioni coprono gli atti della Saggezza e danno il dado della Bussola",
+        "GuadagniConvinzioni": "Le Convinzioni coprono gli atti della Saggezza e danno il bonus della Bussola",
         "GuadagniAncore": "Le Ancore, chi ti tiene umano",
         "ConvinzioneSenzaTesto": "riga senza testo: scrivila nella pagina Personaggio, o toglila"
       },
