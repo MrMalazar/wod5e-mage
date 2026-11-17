@@ -1545,6 +1545,8 @@
       "None": "No Compass entry on the sheet. Ambition, Desire and Convictions are written on the Character page.",
       "Gained": "Compass, “{testo}”: +1 Quintessence.",
       "Full": "The Wheel is full, and the Compass has no Quintessence to give.",
+      "VolontaGained": "Compass, “{testo}”: +1 Willpower, one less superficial mental damage.",
+      "VolontaPiena": "Compass: no superficial mental damage that can be removed.",
       "Spenta": "“{testo}” switches off the third time against it, and does not cover you until an act makes it shine.",
       "Volte": {
         "1": "first time",
@@ -1564,6 +1566,7 @@
         "Nessuna": "None",
         "Modi": {
           "dadi": "2 more dice",
+          "volonta": "1 Willpower after the roll",
           "quintessenza": "1 Quintessence after the roll"
         },
         "Gesto": {
@@ -1578,6 +1581,7 @@
         "Contro": "Against “{testo}”, {volta}: {effetto}.",
         "Modi": {
           "dadi": "2 more dice, outside the cap",
+          "volonta": "1 Willpower after the roll, one less superficial mental damage",
           "quintessenza": "1 Quintessence after the roll"
         },
         "ModiGesto": {
@@ -2140,7 +2144,7 @@
       "Dissonanza": "Dissonance",
       "DissonanzaHint": "The casting clashes with the reality around it, like calling water inside a volcano: a Vulgar gives 1 more point of Paradox. It does not count on a Coincidental.",
       "Bussola": "Compass",
-      "BussolaHint": "If the action follows the Compass, choose 2 more dice, outside the cap, or 1 Quintessence after the roll, once per scene. Serving the same Conviction again in the session, with a different gesture, also gives difficulty −1. Going against it takes 2 dice, then raises the difficulty, and the third time switches it off.",
+      "BussolaHint": "The Compass gives a reward once per scene, and the player chooses it. Serving a Conviction gives 2 more dice, outside the cap, or 1 Quintessence; following the Ambition or the Desire gives 1 Willpower or 1 Quintessence, after the roll. Serving the same Conviction again in the session, with a different gesture, also gives difficulty −1. Going against it takes 2 dice, then raises the difficulty, and the third time switches it off.",
       "BussolaUsata": "The Compass has already given this scene, and comes back with the scene change.",
       "BussolaUsataContro": "The Compass has already given this scene and comes back with the scene change. Going against a Conviction can still be declared.",
       "BussolaContro": "Against",
@@ -2276,7 +2280,7 @@
           "Domanda": "Where do you want to get, what drives you now, what do you never betray?",
           "Sotto": "Ambition · Desire · one to three Convictions",
           "Perche": "Four traits written in a few lines, worth more than any score: the first two say where the character is going, the other two what keeps them human on the way.",
-          "PercheDue": "The Ambition says where you want to get, and you will not get there tonight: the best ones are purely mortal. The Desire is what drives you now, and it changes as soon as you get it. The Convictions, one to three, are your moral law: absolute in form, costly in practice, double-edged. When you serve one you choose 2 dice or 1 Quintessence, and serving it again in the session also lowers the difficulty by 1; when you cross it you lose 2 dice, then the difficulty rises, and the third time it switches off. Touchstones come at step 13."
+          "PercheDue": "The Ambition says where you want to get, and you will not get there tonight: the best ones are purely mortal. The Desire is what drives you now, and it changes as soon as you get it. When you follow either one you choose 1 Willpower or 1 Quintessence. The Convictions, one to three, are your moral law: absolute in form, costly in practice, double-edged. When you serve one you choose 2 dice or 1 Quintessence, and serving it again in the session also lowers the difficulty by 1; when you cross it you lose 2 dice, then the difficulty rises, and the third time it switches off. Touchstones come at step 13."
         },
         "tipo": {
           "Label": "Type",
@@ -2392,8 +2396,8 @@
         "ConvinzioneVuota": "No Conviction yet: take one from the catalogue, or from the proposals.",
         "Serve": "when you serve it",
         "Cross": "when you cross it",
-        "GuadagniAmbizione": "The Ambition shapes the chronicle",
-        "GuadagniDesiderio": "The Desire, once reached, earns Experience",
+        "GuadagniAmbizione": "The Ambition shapes the chronicle, and following it gives 1 Willpower or 1 Quintessence",
+        "GuadagniDesiderio": "The Desire, once reached, earns Experience; following it gives 1 Willpower or 1 Quintessence",
         "GuadagniConvinzioni": "Convictions cover Wisdom acts and give the Compass bonus",
         "GuadagniAncore": "Touchstones, who keeps you human",
         "ConvinzioneSenzaTesto": "empty row: write it on the Character page, or remove it"

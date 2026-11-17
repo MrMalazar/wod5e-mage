@@ -12,6 +12,8 @@ import {
   effettoContro,
   menuBussolaModi,
   menuBussolaVoci,
+  mentaliDopoVolonta,
+  modiDellaVoce,
   normalizeBussolaTiro,
   normalizeScala,
   prepareBussolaChoice,
@@ -54,7 +56,12 @@ assert.equal(prepareBussolaChoice(actor).options.length, 4);
 assert.equal(rigaDellaVoce("convinzione:c1"), "c1");
 assert.equal(rigaDellaVoce("ambizione"), "");
 assert.deepEqual(normalizeBussolaTiro({ voce: "convinzione:c1", verso: "favore", modo: "quintessenza", gesto: true }), { voce: "convinzione:c1", verso: "favore", modo: "quintessenza", gesto: true });
-assert.deepEqual(normalizeBussolaTiro({ voce: "ambizione", gesto: true }), { voce: "ambizione", verso: "favore", modo: "dadi", gesto: false });
+assert.deepEqual(normalizeBussolaTiro({ voce: "ambizione", gesto: true }), { voce: "ambizione", verso: "favore", modo: "volonta", gesto: false });
+// I premi a scelta (Blue, 17/11): con una Convinzione 2 dadi o 1 Quintessenza; con l'Ambizione o il
+// Desiderio 1 Volontà o 1 Quintessenza. Un premio che la voce non ha prende il primo dei suoi.
+assert.deepEqual([modiDellaVoce("convinzione:c1"), modiDellaVoce("ambizione"), modiDellaVoce("desiderio")], [["dadi", "quintessenza"], ["volonta", "quintessenza"], ["volonta", "quintessenza"]]);
+assert.equal(normalizeBussolaTiro({ voce: "desiderio", modo: "dadi" }).modo, "volonta", "i dadi non sono un premio del Desiderio");
+assert.equal(normalizeBussolaTiro({ voce: "convinzione:c1", modo: "volonta" }).modo, "dadi", "la Volontà non è un premio delle Convinzioni");
 assert.deepEqual(normalizeBussolaTiro({ voce: "convinzione:c1", verso: "contro", modo: "dadi", gesto: true }), { voce: "convinzione:c1", verso: "contro", modo: "", gesto: false });
 for (const rotta of [null, true, "ambizione", {}, { voce: "ambizione", verso: "contro" }, { voce: "convinzione:" }, { voce: "nope" }]) assert.equal(normalizeBussolaTiro(rotta), null, JSON.stringify(rotta));
 assert.deepEqual(normalizeScala({ favore: { c1: 2, c2: 0, c3: "x" }, contro: { c1: 1.7 }, scena: { c1: true, c2: false } }), { favore: { c1: 2 }, contro: { c1: 1 }, scena: { c1: true } });
@@ -63,7 +70,11 @@ assert.deepEqual(normalizeScala({ favore: { c1: 2, c2: 0, c3: "x" }, contro: { c
 let effetto = effettoBussola({ voce: "convinzione:c1", modo: "dadi", gesto: true }, stato);
 assert.deepEqual([effetto.attiva, effetto.verso, effetto.riga, effetto.dadi, effetto.difficolta, effetto.quintessenza, effetto.volta, effetto.gesto], [true, "favore", "c1", 2, 0, 0, 1, false]);
 effetto = effettoBussola({ voce: "ambizione", modo: "quintessenza" }, stato);
-assert.deepEqual([effetto.dadi, effetto.quintessenza, effetto.difficolta, effetto.label], [0, 1, 0, "WOD5E_MAGE.Bussola.Ambition: Aprire la scuola"]);
+assert.deepEqual([effetto.dadi, effetto.volonta, effetto.quintessenza, effetto.difficolta, effetto.label], [0, 0, 1, 0, "WOD5E_MAGE.Bussola.Ambition: Aprire la scuola"]);
+effetto = effettoBussola({ voce: "ambizione", modo: "volonta" }, stato);
+assert.deepEqual([effetto.attiva, effetto.dadi, effetto.volonta, effetto.quintessenza, effetto.difficolta], [true, 0, 1, 0, 0], "l'Ambizione non dà dadi: 1 Volontà a tiro fatto");
+// La Volontà della Bussola toglie un danno mentale superficiale, non uno del Sacrificio.
+assert.deepEqual([{ ms: 3 }, { ms: 2, debito: { ms: 1 } }, { ms: 1, debito: { ms: 1 } }, { ms: 0 }, {}].map(mentaliDopoVolonta), [2, 1, null, null, null]);
 // La seconda volta nella sessione, col gesto diverso: anche difficoltà −1; senza gesto diverso, no.
 stato = { ...stato, scala: { favore: { c1: 1 }, contro: {}, scena: {} } };
 assert.deepEqual(["dadi", "quintessenza"].map((modo) => effettoBussola({ voce: "convinzione:c1", modo, gesto: true }, stato)).map((e) => [e.dadi, e.quintessenza, e.difficolta, e.volta, e.gesto]), [[2, 0, -1, 2, true], [0, 1, -1, 2, true]]);
@@ -119,7 +130,8 @@ assert.deepEqual(menuBussolaVoci({ voci: [], usata: false, scala: {} }, localize
 assert.deepEqual(menuBussolaVoci({ voci: stato.voci.filter((v) => v.kind === "ambizione"), usata: true, scala: {} }, localize, format), [], "solo l'Ambizione, già servita: niente da scegliere");
 assert.deepEqual(menuBussolaModi("convinzione:c1", stato, localize).map((v) => [v.state, v.text]), [["dadi", "2 dadi in più"], ["quintessenza", "1 Quintessenza a tiro fatto"], ["dadi|gesto", "Gesto diverso: 2 dadi e difficoltà −1"], ["quintessenza|gesto", "Gesto diverso: 1 Quintessenza e difficoltà −1"]]);
 assert.deepEqual(menuBussolaModi("convinzione:c2", stato, localize).map((v) => v.state), ["dadi", "quintessenza"], "la prima volta nella sessione: niente gesto");
-assert.deepEqual(menuBussolaModi("ambizione", stato, localize).map((v) => v.state), ["dadi", "quintessenza"]);
+assert.deepEqual(menuBussolaModi("ambizione", stato, localize).map((v) => [v.state, v.text]), [["volonta", "1 Volontà a tiro fatto"], ["quintessenza", "1 Quintessenza a tiro fatto"]], "l'Ambizione: Volontà o Quintessenza, e mai il gesto");
+assert.deepEqual(menuBussolaModi("desiderio", { ...stato, scala: { favore: { desiderio: 3 } } }, localize).map((v) => v.state), ["volonta", "quintessenza"]);
 assert.deepEqual(sceltaDalMenu("favore|convinzione:c1", "quintessenza|gesto"), { voce: "convinzione:c1", verso: "favore", modo: "quintessenza", gesto: true });
 assert.deepEqual(sceltaDalMenu("contro|convinzione:c2"), { voce: "convinzione:c2", verso: "contro", modo: "", gesto: false });
 assert.equal(sceltaDalMenu(""), null);
@@ -134,6 +146,7 @@ assert.deepEqual(testoBussola(effettoBussola({ voce: "convinzione:c1", modo: "da
   nota: "Serve «Non lascio indietro nessuno»: 2 dadi in più, fuori dal tetto, e difficoltà −1 col gesto diverso."
 });
 assert.deepEqual(testoBussola(effettoBussola({ voce: "ambizione", modo: "quintessenza" }, stato), localize, format), { tasto: "Bussola", riga: "Bussola", nota: "Segue l'Ambizione, «Aprire la scuola»: 1 Quintessenza a tiro fatto." });
+assert.equal(testoBussola(effettoBussola({ voce: "ambizione", modo: "volonta" }, stato), localize, format).nota, "Segue l'Ambizione, «Aprire la scuola»: 1 Volontà a tiro fatto, un danno mentale superficiale in meno.");
 assert.deepEqual(testoBussola(effettoBussola({ voce: "convinzione:c2", verso: "contro" }, stato), localize, format), {
   tasto: "Contro",
   riga: "Contro la Convinzione",
@@ -183,7 +196,8 @@ assert.match(read("styles/wod5e-mage.css"), /\.wod5e-mage-salute-menu\.bussola \
 const chiavi = (o, prefix = "") => Object.entries(o).flatMap(([k, v]) => (v && typeof v === "object" ? chiavi(v, `${prefix}${k}.`) : [`${prefix}${k}`]));
 assert.deepEqual(chiavi(en.WOD5E_MAGE.Bussola), chiavi(it.WOD5E_MAGE.Bussola), "Bussola: stesse chiavi in it e en");
 for (const key of ["Ask", "Short", "Hint", "Pick", "Used", "NewScene", "NewSceneHint", "Flavor"]) assert.equal(it.WOD5E_MAGE.Bussola[key], undefined, `Bussola.${key} tolta`);
-assert.match(it.WOD5E_MAGE.Guidata.Passi.bussola.PercheDue, /scegli 2 dadi o 1 Quintessenza[\s\S]*alla terza volta si spegne/);
+assert.match(it.WOD5E_MAGE.Guidata.Passi.bussola.PercheDue, /Quando segui l'uno o l'altro scegli 1 Volontà o 1 Quintessenza\.[\s\S]*scegli 2 dadi o 1 Quintessenza[\s\S]*alla terza volta si spegne/);
+for (const key of ["GuadagniAmbizione", "GuadagniDesiderio"]) assert.match(it.WOD5E_MAGE.Guidata.Bussola[key], /1 Volontà o 1 Quintessenza$/, key);
 assert.doesNotMatch(JSON.stringify(it), /dado della Bussola/);
 const credi = read("packs/mage-credi.db");
 assert.equal(credi.split("Vanno a scala: servirle dà 2 dadi o 1 Quintessenza, e servirle ancora nella sessione anche difficoltà −1; attraversarle toglie 2 dadi, poi alza la difficoltà, e alla terza le spegne.").length - 1, 13);

@@ -1545,6 +1545,8 @@
       "None": "Nessuna voce della Bussola in scheda. Ambizione, Desiderio e Convinzioni si scrivono nella pagina Personaggio.",
       "Gained": "Bussola, «{testo}»: +1 Quintessenza.",
       "Full": "La Ruota è piena, e la Bussola non ha Quintessenza da dare.",
+      "VolontaGained": "Bussola, «{testo}»: +1 Volontà, un danno mentale superficiale in meno.",
+      "VolontaPiena": "Bussola: nessun danno mentale superficiale che si possa togliere.",
       "Spenta": "«{testo}» si spegne alla terza volta contro, e non ti copre finché un atto non la fa risplendere.",
       "Volte": {
         "1": "prima volta",
@@ -1564,6 +1566,7 @@
         "Nessuna": "Nessuna",
         "Modi": {
           "dadi": "2 dadi in più",
+          "volonta": "1 Volontà a tiro fatto",
           "quintessenza": "1 Quintessenza a tiro fatto"
         },
         "Gesto": {
@@ -1578,6 +1581,7 @@
         "Contro": "Contro «{testo}», {volta}: {effetto}.",
         "Modi": {
           "dadi": "2 dadi in più, fuori dal tetto",
+          "volonta": "1 Volontà a tiro fatto, un danno mentale superficiale in meno",
           "quintessenza": "1 Quintessenza a tiro fatto"
         },
         "ModiGesto": {
@@ -2140,7 +2144,7 @@
       "Dissonanza": "Dissonanza",
       "DissonanzaHint": "Il lancio stride con la realtà intorno, come evocare acqua in un vulcano: un Volgare dà 1 punto di Paradosso in più. Sull'Accidentale non conta.",
       "Bussola": "Bussola",
-      "BussolaHint": "Se l'azione segue la Bussola scegli 2 dadi in più, fuori dal tetto, o 1 Quintessenza a tiro fatto, una volta per scena. Servire ancora la stessa Convinzione nella sessione, con un gesto diverso, dà anche difficoltà −1. Andarci contro toglie 2 dadi, poi alza la difficoltà, e alla terza la spegne.",
+      "BussolaHint": "La Bussola dà un premio una volta per scena, e lo sceglie il giocatore. Se serve una Convinzione, 2 dadi in più, fuori dal tetto, o 1 Quintessenza; se segue l'Ambizione o il Desiderio, 1 Volontà o 1 Quintessenza, a tiro fatto. Servire ancora la stessa Convinzione nella sessione, con un gesto diverso, dà anche difficoltà −1. Andarci contro toglie 2 dadi, poi alza la difficoltà, e alla terza la spegne.",
       "BussolaUsata": "La Bussola ha già dato in questa scena, e torna col cambio di scena.",
       "BussolaUsataContro": "La Bussola ha già dato in questa scena e torna col cambio di scena. Andare contro una Convinzione si dichiara lo stesso.",
       "BussolaContro": "Contro",
@@ -2276,7 +2280,7 @@
           "Domanda": "Dove vuoi arrivare, cosa ti urge adesso, cosa non tradisci mai?",
           "Sotto": "Ambizione · Desiderio · da una a tre Convinzioni",
           "Perche": "Quattro tratti scritti in poche righe, che valgono più di qualsiasi punteggio: i primi due dicono dove sta andando il personaggio, gli altri due cosa lo tiene umano mentre ci va.",
-          "PercheDue": "L'Ambizione dice dove vuoi arrivare, e non ci arrivi stasera: le migliori sono puramente mortali. Il Desiderio è cosa ti urge adesso, e cambia appena l'ottieni. Le Convinzioni, da una a tre, sono la tua legge morale: assolute nella forma, costose nella pratica, a doppio taglio. Quando ne servi una scegli 2 dadi o 1 Quintessenza, e se la servi ancora nella sessione la difficoltà scende di 1; quando la attraversi perdi 2 dadi, poi sale la difficoltà, e alla terza volta si spegne. Le Ancore arrivano al passo 13."
+          "PercheDue": "L'Ambizione dice dove vuoi arrivare, e non ci arrivi stasera: le migliori sono puramente mortali. Il Desiderio è cosa ti urge adesso, e cambia appena l'ottieni. Quando segui l'uno o l'altro scegli 1 Volontà o 1 Quintessenza. Le Convinzioni, da una a tre, sono la tua legge morale: assolute nella forma, costose nella pratica, a doppio taglio. Quando ne servi una scegli 2 dadi o 1 Quintessenza, e se la servi ancora nella sessione la difficoltà scende di 1; quando la attraversi perdi 2 dadi, poi sale la difficoltà, e alla terza volta si spegne. Le Ancore arrivano al passo 13."
         },
         "tipo": {
           "Label": "Tipo",
@@ -2392,8 +2396,8 @@
         "ConvinzioneVuota": "Nessuna Convinzione ancora: prendine una dal catalogo, o dalle proposte.",
         "Serve": "quando la servi",
         "Cross": "quando la attraversi",
-        "GuadagniAmbizione": "L'Ambizione dà forma alla cronaca",
-        "GuadagniDesiderio": "Il Desiderio, raggiunto, frutta Esperienza",
+        "GuadagniAmbizione": "L'Ambizione dà forma alla cronaca, e seguirla dà 1 Volontà o 1 Quintessenza",
+        "GuadagniDesiderio": "Il Desiderio, raggiunto, frutta Esperienza; seguirlo dà 1 Volontà o 1 Quintessenza",
         "GuadagniConvinzioni": "Le Convinzioni coprono gli atti della Saggezza e danno il bonus della Bussola",
         "GuadagniAncore": "Le Ancore, chi ti tiene umano",
         "ConvinzioneSenzaTesto": "riga senza testo: scrivila nella pagina Personaggio, o toglila"

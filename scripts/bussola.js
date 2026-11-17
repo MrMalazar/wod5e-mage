@@ -4,11 +4,15 @@ import { PERSONAGGIO_TABLES, prepareConvictions } from "./personaggio-extra.js";
 
 /**
  * La Bussola sul tiro (il Sistema; la scala delle Convinzioni, Blue,
- * 16/11/2026). Su qualunque tiro, Magick o Abilità, il giocatore dichiara
- * che il gesto segue la sua Bussola: l'Ambizione, il Desiderio o una
- * Convinzione. Sceglie lui cosa prende: 2 dadi in più, fuori dal tetto,
- * oppure a tiro fatto 1 punto di Quintessenza. Vale una volta per scena:
- * il Cambio scena la riarma (il flag di scena è quello di prima).
+ * 16/11/2026; i premi a scelta, 17/11). Su qualunque tiro, Magick o
+ * Abilità, il giocatore dichiara che il gesto segue la sua Bussola, e il
+ * Narratore dà l'ok. Il premio lo sceglie lui: se serve una Convinzione,
+ * 2 dadi in più, fuori dal tetto, oppure a tiro fatto 1 punto di
+ * Quintessenza; se segue l'Ambizione o il Desiderio, a tiro fatto 1 punto
+ * di Volontà (un danno mentale superficiale in meno: nel Sistema la Volontà
+ * è il ritiro che costa quel danno) oppure 1 punto di Quintessenza. Il
+ * premio vale una volta per scena, per tutta la Bussola: il Cambio scena
+ * lo riarma (il flag di scena è quello di prima).
  *
  * Le Convinzioni vanno a scala. A favore: dalla seconda volta che il
  * personaggio serve la stessa Convinzione nella sessione, con un gesto
@@ -36,7 +40,7 @@ export const BUSSOLA_MALUS_DADI = 2;
 /** Alla terza volta contro, la Convinzione si spegne. */
 export const BUSSOLA_SPEGNE = 3;
 export const BUSSOLA_VERSI = Object.freeze(["favore", "contro"]);
-export const BUSSOLA_MODI = Object.freeze(["dadi", "quintessenza"]);
+export const BUSSOLA_MODI = Object.freeze(["dadi", "volonta", "quintessenza"]);
 
 const VOCE_CONVINZIONE = "convinzione:";
 
@@ -50,6 +54,7 @@ const NESSUN_EFFETTO = Object.freeze({
   modo: "",
   dadi: 0,
   difficolta: 0,
+  volonta: 0,
   quintessenza: 0,
   volta: 0,
   gesto: false,
@@ -115,10 +120,18 @@ export function rigaDellaVoce(voce) {
 }
 
 /**
+ * I premi fra cui si sceglie (Blue, 17/11): con una Convinzione 2 dadi o
+ * 1 Quintessenza; con l'Ambizione o il Desiderio 1 Volontà o 1 Quintessenza.
+ */
+export function modiDellaVoce(voce) {
+  return rigaDellaVoce(voce) ? ["dadi", "quintessenza"] : ["volonta", "quintessenza"];
+}
+
+/**
  * La scelta sul tiro, pulita, o null: la voce, il verso (a favore o
- * contro; contro vale solo per una Convinzione), il modo (2 dadi o 1
- * Quintessenza, solo a favore) e il gesto diverso, che conta solo a favore
- * di una Convinzione.
+ * contro; contro vale solo per una Convinzione), il modo (il premio, solo
+ * a favore: quelli della voce, e il primo se manca) e il gesto diverso,
+ * che conta solo a favore di una Convinzione.
  */
 export function normalizeBussolaTiro(value) {
   if (!value || typeof value !== "object") return null;
@@ -127,15 +140,17 @@ export function normalizeBussolaTiro(value) {
   if (!riga && voce !== "ambizione" && voce !== "desiderio") return null;
   const verso = BUSSOLA_VERSI.includes(value.verso) ? value.verso : "favore";
   if (verso === "contro") return riga ? { voce, verso, modo: "", gesto: false } : null;
-  const modo = BUSSOLA_MODI.includes(value.modo) ? value.modo : "dadi";
+  const modi = modiDellaVoce(voce);
+  const modo = modi.includes(value.modo) ? value.modo : modi[0];
   return { voce, verso, modo, gesto: Boolean(riga) && Boolean(value.gesto) };
 }
 
 /**
  * L'effetto della scelta sul tiro, dalla scala del personaggio. A favore:
- * 2 dadi oppure 1 Quintessenza a tiro fatto, e dalla seconda volta nella
- * sessione, col gesto diverso, difficoltà −1; se la Bussola ha già dato in
- * questa scena non vale. Contro: 2 dadi in meno, dalla seconda volta
+ * il premio scelto (2 dadi, o a tiro fatto 1 Volontà o 1 Quintessenza) e,
+ * dalla seconda volta nella sessione che si serve la stessa Convinzione,
+ * col gesto diverso, difficoltà −1; se la Bussola ha già dato in questa
+ * scena non vale. Contro: 2 dadi in meno, dalla seconda volta
  * difficoltà +1, alla terza la Convinzione si spegne. Una voce che non c'è
  * più, o una Convinzione spenta, non vale. `volta` dice quale volta è.
  */
@@ -158,6 +173,7 @@ export function effettoBussola(value, { voci = [], usata = false, scala = null }
     ...base,
     modo: scelta.modo,
     dadi: scelta.modo === "dadi" ? BUSSOLA_DADI : 0,
+    volonta: scelta.modo === "volonta" ? 1 : 0,
     quintessenza: scelta.modo === "quintessenza" ? 1 : 0,
     difficolta: gesto ? -1 : 0,
     volta,
@@ -209,17 +225,19 @@ export function menuBussolaVoci(stato, localize = (key) => key, format = (key) =
 }
 
 /**
- * Il secondo menù, a favore: 2 dadi o 1 Quintessenza. Dalla seconda volta
- * che il personaggio serve la stessa Convinzione nella sessione, anche le
- * stesse due col gesto diverso, che aggiungono difficoltà −1. Lo stato è
- * «modo», o «modo|gesto».
+ * Il secondo menù, a favore: il premio. Con una Convinzione 2 dadi o 1
+ * Quintessenza, e dalla seconda volta che il personaggio la serve nella
+ * sessione anche le stesse due col gesto diverso, che aggiungono
+ * difficoltà −1; con l'Ambizione o il Desiderio 1 Volontà o 1
+ * Quintessenza. Lo stato è «modo», o «modo|gesto».
  */
 export function menuBussolaModi(voce, stato, localize = (key) => key) {
   const riga = rigaDellaVoce(voce);
   const scala = normalizeScala(stato?.scala);
-  const out = BUSSOLA_MODI.map((modo) => ({ state: modo, text: localize(`WOD5E_MAGE.Bussola.Menu.Modi.${modo}`), glyph: null }));
+  const modi = modiDellaVoce(voce);
+  const out = modi.map((modo) => ({ state: modo, text: localize(`WOD5E_MAGE.Bussola.Menu.Modi.${modo}`), glyph: null }));
   if (riga && (scala.favore[riga] ?? 0) >= 1) {
-    for (const modo of BUSSOLA_MODI) out.push({ state: `${modo}|gesto`, text: localize(`WOD5E_MAGE.Bussola.Menu.Gesto.${modo}`), glyph: null });
+    for (const modo of modi) out.push({ state: `${modo}|gesto`, text: localize(`WOD5E_MAGE.Bussola.Menu.Gesto.${modo}`), glyph: null });
   }
   return out;
 }
@@ -271,6 +289,18 @@ export function quintessenceAfterBussola(balance) {
   const current = Math.max(Math.trunc(Number(balance?.quintessence) || 0), 0);
   const next = Math.min(current + 1, room);
   return { quintessence: Math.max(next, Math.min(current, room)), gained: next > current };
+}
+
+/**
+ * Il punto di Volontà della Bussola: un danno mentale superficiale in meno
+ * sulla Salute. Le caselle in debito del Sacrificio non si curano, come nel
+ * Riposo. Torna i superficiali mentali che restano, o null se non ce n'è
+ * uno da togliere.
+ */
+export function mentaliDopoVolonta(salute) {
+  const ms = count(salute?.ms);
+  const inDebito = Math.min(count(salute?.debito?.ms), ms);
+  return ms > inDebito ? ms - 1 : null;
 }
 
 /** Il percorso della Convinzione spenta nell'aggiornamento della scheda. */
@@ -327,8 +357,9 @@ export function aggiornamentoTradimento(riga, scala = null) {
 }
 
 /**
- * A tiro fatto: la scala si aggiorna e, se il giocatore l'ha scelta, la
- * Quintessenza risale di un punto. La Convinzione che si spegne lo dice.
+ * A tiro fatto: la scala si aggiorna e arriva il premio che il giocatore
+ * ha scelto, 1 Quintessenza sulla Ruota o 1 Volontà (un danno mentale
+ * superficiale in meno). La Convinzione che si spegne lo dice.
  */
 export async function registraBussola(actor, effetto) {
   if (!effetto?.attiva || !actor?.isOwner) return null;
@@ -336,6 +367,7 @@ export async function registraBussola(actor, effetto) {
   const format = game.i18n.format.bind(game.i18n);
   const update = aggiornamentoBussola(effetto, actor.getFlag(MODULE_ID, BUSSOLA_SCALA_FLAG));
   const quintessenza = effetto.verso === "favore" && effetto.quintessenza > 0;
+  const volonta = effetto.verso === "favore" && effetto.volonta > 0;
   let gained = false;
   if (quintessenza) {
     const balance = getMagickBalance(actor);
@@ -343,8 +375,16 @@ export async function registraBussola(actor, effetto) {
     gained = next.gained;
     if (gained) update[`flags.${MODULE_ID}.magickBalance`] = { quintessence: next.quintessence, paradox: balance.paradox };
   }
+  if (volonta) {
+    // La Salute si legge da salute.js, che a sua volta legge questo file: l'import resta dentro la funzione.
+    const { getSalute } = await import("./salute.js");
+    const ms = mentaliDopoVolonta(getSalute(actor));
+    gained = ms !== null;
+    if (gained) update[`flags.${MODULE_ID}.salute.ms`] = ms;
+  }
   if (Object.keys(update).length) await actor.update(update);
   if (quintessenza) ui.notifications.info(gained ? format("WOD5E_MAGE.Bussola.Gained", { testo: effetto.testo }) : localize("WOD5E_MAGE.Bussola.Full"));
+  if (volonta) ui.notifications.info(gained ? format("WOD5E_MAGE.Bussola.VolontaGained", { testo: effetto.testo }) : localize("WOD5E_MAGE.Bussola.VolontaPiena"));
   if (update[spentaPath(effetto.riga)]) ui.notifications.info(format("WOD5E_MAGE.Bussola.Spenta", { testo: effetto.testo }));
   return update;
 }

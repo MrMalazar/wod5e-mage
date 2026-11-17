@@ -491,7 +491,9 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
     "WOD5E_MAGE.Bussola.Volte.3": "terza volta",
     "WOD5E_MAGE.Bussola.Contro.3": "si spegne",
     "WOD5E_MAGE.Bussola.Spenta": "«{testo}» si spegne.",
-    "WOD5E_MAGE.Bussola.Gained": "+1 Quintessenza da «{testo}»."
+    "WOD5E_MAGE.Bussola.Gained": "+1 Quintessenza da «{testo}».",
+    "WOD5E_MAGE.Bussola.Nota.Modi.volonta": "1 Volontà a tiro fatto",
+    "WOD5E_MAGE.Bussola.VolontaGained": "+1 Volontà da «{testo}»."
   });
   actor.system.headers = { ambition: "Aprire la scuola", desire: "" };
   flags["wod5e-mage"].convinzioni = { c1: { group: "", text: "Non lascio indietro nessuno", serve: "", cross: "" } };
@@ -556,12 +558,33 @@ assert.deepEqual(sheetFinta._tiro, T.emptyTiro());
 
   // Nel lancio di Magick: i 2 dadi entrano nella riserva, e a tiro fatto la scena è servita.
   delete flags["wod5e-mage"].convinzioneScena;
-  const lancio = T.setBussola(T.setKind(T.setScope(T.toggleSphere(T.pickSkill(T.pickAttribute(T.toggleArete(T.emptyTiro()), "dexterity"), "skill:athletics"), "forces"), "potency", 1), "accidentale"), { voce: "ambizione", modo: "dadi" });
+  const lancio = T.setBussola(T.setKind(T.setScope(T.toggleSphere(T.pickSkill(T.pickAttribute(T.toggleArete(T.emptyTiro()), "dexterity"), "skill:athletics"), "forces"), "potency", 1), "accidentale"), { voce: "convinzione:c1", modo: "dadi" });
   globalThis.__sim.faces = [6, 6, 1, 1, 1, 1, 1, 1];
   const mLancio = await S.launchTiro(actor, lancio);
   assert.equal(globalThis.__sim.rolls.at(-1).formula, "8dmcs>5 + 0dpcs>5");
-  assert.match(mLancio.flavor, /Segue l'Ambizione, «Aprire la scuola»: 2 dadi in più\./);
+  assert.match(mLancio.flavor, /Serve «Non lascio indietro nessuno»: 2 dadi in più\./);
   assert.equal(flags["wod5e-mage"].convinzioneScena.used, true);
+
+  // L'Ambizione (Blue, 17/11): niente dadi; a tiro fatto 1 Volontà, cioè un danno mentale superficiale
+  // in meno (non quelli del Sacrificio), oppure 1 Quintessenza.
+  delete flags["wod5e-mage"].convinzioneScena;
+  flags["wod5e-mage"].salute = { ms: 2, debito: { ms: 1 } };
+  const ambizione = T.setBussola(fisico, { voce: "ambizione", modo: "dadi" });
+  assert.equal(ambizione.bussola.modo, "volonta", "i dadi non sono un premio dell'Ambizione");
+  ctxB = S.prepareTiroContext(actor, ambizione);
+  assert.deepEqual([righe(ctxB, "riserva"), righe(ctxB, "soglia"), ctxB.pool, ctxB.bussola.on], [[], [], 6, true]);
+  globalThis.__sim.faces = [6, 6, 1, 1, 1, 1];
+  const mAmbizione = await S.launchTiro(actor, ambizione);
+  assert.equal(globalThis.__sim.rolls.at(-1).formula, "6dmcs>5 + 0dpcs>5");
+  assert.match(mAmbizione.flavor, /Segue l'Ambizione, «Aprire la scuola»: 1 Volontà a tiro fatto\./);
+  assert.deepEqual([flags["wod5e-mage"].salute.ms, flags["wod5e-mage"].convinzioneScena.used], [1, true]);
+  assert.ok(infos.includes("+1 Volontà da «Aprire la scuola»."));
+  // A scena nuova, di nuovo: il superficiale che resta è del Sacrificio, e non si toglie.
+  delete flags["wod5e-mage"].convinzioneScena;
+  globalThis.__sim.faces = [6, 6, 1, 1, 1, 1];
+  await S.launchTiro(actor, ambizione);
+  assert.equal(flags["wod5e-mage"].salute.ms, 1);
+  assert.equal(infos.at(-1), "WOD5E_MAGE.Bussola.VolontaPiena");
 }
 
 console.log("compositore: ok,", globalThis.__sim.messages.length, "messaggi");
