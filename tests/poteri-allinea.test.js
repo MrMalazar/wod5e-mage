@@ -116,7 +116,8 @@ assert.deepEqual([valorePulito("dot", "7"), valorePulito("name", "  X "), valore
   const ids = ["da-qualche-parte", "pensiero-laterale", "al-posto-tuo", "tutto-e-un-arma", "il-banco-vince", "testa-o-croce"];
   for (const id of ids) assert.ok(STORIA_POTERI[id]?.text?.length, `${id}: la storia ha il testo di ieri`);
   assert.equal(STORIA_POTERI["fai-da-te"], undefined, "un potere tolto non ha storia: la sua riga non si riallinea");
-  assert.equal(STORIA_POTERI["velocista"]?.text, undefined, "il testo di Velocista non è mai cambiato");
+  // Velocista ha cambiato testo il 18/11 (la revisione testo-ia): il potere fermo di riferimento è Filo rosso.
+  assert.equal(STORIA_POTERI["filo-rosso"]?.text, undefined, "il testo di Filo rosso non è mai cambiato");
 }
 
 // Le righe di una scheda: solo quelle del catalogo; i poteri tolti e le Sfere che il potere non apre più si contano e restano.

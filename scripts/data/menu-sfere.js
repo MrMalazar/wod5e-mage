@@ -23,7 +23,7 @@ export const MENU_SFERE = Object.freeze([
     "id": "correspondence-sbagliare-strada",
     "nome": "Sbagliare strada",
     "lato": "n",
-    "testo": "Quando ci si sposta per raggiungere un luogo, pagare X a seconda della distanza da raggiungere, più è vicino più costa paradosso mettere la strada sbagliata, i personaggi sbaglieranno strada e si ritroveranno in un'altro luogo dove vi è in corso un'altro evento.",
+    "testo": "Quando ci si sposta per raggiungere un luogo, pagare X a seconda della distanza da raggiungere, più è vicino più costa paradosso mettere la strada sbagliata, i personaggi sbaglieranno strada e si ritroveranno in un altro luogo dove vi è in corso un altro evento.",
     "prezzo": null,
     "fissa": false,
     "icona": "misdirection"
@@ -50,7 +50,7 @@ export const MENU_SFERE = Object.freeze([
     "id": "correspondence-spostare-pedina",
     "nome": "Spostare Pedina",
     "lato": "s",
-    "testo": "Come effetto di Magick Paradossale sposta un NPC in un'altro punto della mappa senza usare la sua azione di movimento.",
+    "testo": "Come effetto di Magick Paradossale sposta un NPC in un altro punto della mappa senza usare la sua azione di movimento.",
     "prezzo": null,
     "fissa": false,
     "icona": "chess-pawn"

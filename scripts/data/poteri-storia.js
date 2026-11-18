@@ -1,5 +1,5 @@
 // GENERATO da tools/storia-poteri.mjs: non si scrive a mano.
-// La storia del catalogo dei poteri (versioni 22e870e, fcf17d7, 15f7a2c, 01539af, 2cb20fc, 80c526a, a8c6221, 4ec8359, fb33ef8, 98d0273 di scripts/data/poteri.js):
+// La storia del catalogo dei poteri (versioni 26aaf72, 22e870e, fcf17d7, 15f7a2c, 01539af, 2cb20fc, 80c526a, a8c6221, 4ec8359, fb33ef8, 98d0273 di scripts/data/poteri.js):
 // per potere e per campo, le impronte dei valori che il catalogo aveva prima e che oggi non ha più.
 // scripts/poteri-allinea.js riscrive un campo di una riga solo se è ancora uno di questi (o se manca).
 export const STORIA_POTERI = Object.freeze({
@@ -10,6 +10,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "76480b4b"
   ],
+  "flavor": [
+   "d3ef1b18"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -17,7 +20,8 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "78a49d75"
   ]
  },
  "tasca-di-mary": {
@@ -30,6 +34,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "4a3a7f79"
   ],
+  "flavor": [
+   "538f0633"
+  ],
   "cost": [
    "6bd0f915"
   ],
@@ -38,6 +45,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "ebd039e4"
   ]
  },
  "torna-sempre": {
@@ -47,6 +57,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "94a80242"
   ],
+  "flavor": [
+   "1fae94e9"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -54,6 +67,7 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
+   "c5119a85",
    "f11835c3"
   ]
  },
@@ -70,6 +84,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "a135ba8a"
   ],
+  "flavor": [
+   "1ed2f858"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -77,6 +94,7 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
+   "14bcc0e2",
    "38fa1edb"
   ],
   "effects": [
@@ -94,6 +112,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "0e22ca7c"
   ],
+  "flavor": [
+   "dd6e1236"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -102,6 +123,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "planimetria": {
@@ -111,6 +135,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgam": [
    "ffcaaa85"
   ],
+  "flavor": [
+   "f6a27a60"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -118,15 +145,20 @@ export const STORIA_POTERI = Object.freeze({
    "f2761511"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "11a818a7"
   ]
  },
  "rifornimento": {
   "text": [
-   "a1854d58"
+   "a1854d58",
+   "ffff5fbb"
   ],
   "amalgam": [
    "ffcaaa85"
+  ],
+  "flavor": [
+   "b0f9e93e"
   ],
   "cost": [
    "ffcaaa85"
@@ -138,7 +170,8 @@ export const STORIA_POTERI = Object.freeze({
    "8a8ea160"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "95c95c0d"
   ]
  },
  "schieramento": {
@@ -148,6 +181,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "60fe04c1"
   ],
+  "flavor": [
+   "605e8458"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -155,7 +191,8 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "29d21a21"
   ]
  },
  "pedina": {
@@ -165,6 +202,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "2f782817"
   ],
+  "flavor": [
+   "069edee5"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -172,7 +212,8 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "29d21a21"
   ]
  },
  "strada-facendo": {
@@ -180,10 +221,17 @@ export const STORIA_POTERI = Object.freeze({
    "01cb2e86"
   ],
   "text": [
+   "49850a51",
    "afc43d1c"
+  ],
+  "flavor": [
+   "5b00f1ed"
   ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "giochiamo-in-casa": {
@@ -196,6 +244,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "65b43295"
   ],
+  "flavor": [
+   "a5bc2e9f"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -206,7 +257,8 @@ export const STORIA_POTERI = Object.freeze({
    "8a8ea160"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "5ae03a2a"
   ]
  },
  "uscita-d-emergenza": {
@@ -216,6 +268,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgam": [
    "ffcaaa85"
   ],
+  "flavor": [
+   "cd7fd5d7"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -223,12 +278,43 @@ export const STORIA_POTERI = Object.freeze({
    "8a8ea160"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "321c7a19"
+  ]
+ },
+ "filo-rosso": {
+  "paradox": [
+   "b69f45ed"
+  ]
+ },
+ "traccia": {
+  "paradox": [
+   "ed1cf5ec"
   ]
  },
  "fuori-tiro": {
   "text": [
    "1bc775c9"
+  ]
+ },
+ "recinto": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "finestra": {
+  "paradox": [
+   "ebd039e4"
+  ]
+ },
+ "labirinto": {
+  "paradox": [
+   "aa2d918e"
+  ]
+ },
+ "ubiquita": {
+  "paradox": [
+   "72e9bb20"
   ]
  },
  "colpo-di-fortuna": {
@@ -238,8 +324,14 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "9e3f6c8d"
   ],
+  "flavor": [
+   "9ee62b46"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ],
   "effects": [
    "741638a5",
@@ -254,6 +346,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "a350a3d6"
   ],
+  "flavor": [
+   "f72baf7d"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -262,6 +357,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "38fa1edb"
   ]
  },
  "inseparabili": {
@@ -271,11 +369,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "2d5c82b2"
   ],
+  "flavor": [
+   "aba7bed7"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "non-tutto-il-male": {
@@ -288,6 +392,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "8714ca5e"
   ],
+  "flavor": [
+   "ec9159b6"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -295,7 +402,8 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "e9b1b6f4"
   ]
  },
  "testa-o-croce": {
@@ -304,6 +412,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "amalgamText": [
    "914f957b"
+  ],
+  "flavor": [
+   "8a4bd935"
   ],
   "cost": [
    "ffcaaa85"
@@ -315,7 +426,8 @@ export const STORIA_POTERI = Object.freeze({
    "f2761511"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "38fa1edb"
   ],
   "effects": [
    "741638a5",
@@ -327,6 +439,9 @@ export const STORIA_POTERI = Object.freeze({
    "33d93531",
    "7fa5672d"
   ],
+  "flavor": [
+   "1ad3bc64"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -335,6 +450,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "chi-la-fa-l-aspetti": {
@@ -344,8 +462,14 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "eeb9ce41"
   ],
+  "flavor": [
+   "8a4096a6"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "fortuna-del-principiante": {
@@ -354,6 +478,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "amalgam": [
    "ffcaaa85"
+  ],
+  "flavor": [
+   "5e1ca80a"
   ],
   "cost": [
    "ffcaaa85"
@@ -365,7 +492,8 @@ export const STORIA_POTERI = Object.freeze({
    "8a8ea160"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "38fa1edb"
   ],
   "effects": [
    "741638a5",
@@ -395,7 +523,16 @@ export const STORIA_POTERI = Object.freeze({
    "ffcaaa85"
   ],
   "paradox": [
+   "08662abf",
    "22420787"
+  ]
+ },
+ "legge-di-murphy": {
+  "flavor": [
+   "1a8d7dc1"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "niente-al-caso": {
@@ -406,6 +543,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "61f4f61f"
   ],
+  "flavor": [
+   "add68089"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -415,6 +555,9 @@ export const STORIA_POTERI = Object.freeze({
   "uses": [
    "f2761511"
   ],
+  "paradox": [
+   "38fa1edb"
+  ],
   "effects": [
    "510f6132",
    "741638a5"
@@ -422,13 +565,20 @@ export const STORIA_POTERI = Object.freeze({
  },
  "si-trova-tutto": {
   "text": [
+   "6cb9160b",
    "fc1813e5"
+  ],
+  "flavor": [
+   "3f769824"
   ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "tiri-gemelli": {
@@ -438,30 +588,56 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "f9802e02"
   ],
+  "flavor": [
+   "71e91b50"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "38fa1edb"
+  ]
+ },
+ "contagio": {
+  "flavor": [
+   "21f05b08"
+  ],
+  "paradox": [
+   "33dbfb35"
   ]
  },
  "fuori-dai-piedi": {
   "text": [
    "11faaa66"
   ],
+  "flavor": [
+   "49acb9a2"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "il-fucile-di-echov": {
   "text": [
    "90cd2c18"
   ],
+  "flavor": [
+   "1e744f9e"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "08662abf"
   ],
   "effects": [
    "4e9dcf78",
@@ -475,11 +651,17 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "08071215"
   ],
+  "flavor": [
+   "0a835965"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "38fa1edb"
   ],
   "effects": [
    "1a6a14b0",
@@ -493,6 +675,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "6d9a443e"
   ],
+  "flavor": [
+   "c5132abb"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -500,6 +685,7 @@ export const STORIA_POTERI = Object.freeze({
    "f2761511"
   ],
   "paradox": [
+   "08662abf",
    "38fa1edb"
   ]
  },
@@ -516,6 +702,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "179f9bc1"
   ],
+  "flavor": [
+   "ad8c2973"
+  ],
   "cost": [
    "ffcaaa85"
   ]
@@ -526,6 +715,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "amalgamText": [
    "c50b819a"
+  ],
+  "flavor": [
+   "1d44a704"
   ],
   "cost": [
    "ffcaaa85"
@@ -538,11 +730,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "70bea70e"
   ],
+  "flavor": [
+   "ae3afb11"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "nerf": {
@@ -552,16 +750,25 @@ export const STORIA_POTERI = Object.freeze({
   "amalgam": [
    "ffcaaa85"
   ],
+  "flavor": [
+   "93eaa603"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "tarocchi": {
   "text": [
    "568b7594"
+  ],
+  "flavor": [
+   "e0b5a52c"
   ],
   "cost": [
    "ffcaaa85"
@@ -571,6 +778,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "il-narratore-ti-ascolta": {
@@ -580,11 +790,17 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "2a71e6d5"
   ],
+  "flavor": [
+   "2f03bfc4"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "scambio-di-sorte": {
@@ -597,11 +813,22 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "6d9a443e"
   ],
+  "flavor": [
+   "f54b4f1e"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "38fa1edb"
+  ]
+ },
+ "era-scritto": {
+  "paradox": [
+   "08662abf"
   ]
  },
  "a-stordire": {
@@ -613,6 +840,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "text": [
    "bc6224bb"
+  ],
+  "flavor": [
+   "3e34615d"
   ],
   "cost": [
    "ffcaaa85"
@@ -628,11 +858,15 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "61da6759"
   ],
+  "flavor": [
+   "86a5fd2f"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "403a7d21"
   ]
  },
  "brucia-ancora": {
@@ -642,11 +876,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "1994e15c"
   ],
+  "flavor": [
+   "caff7a97"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "fa4ce6cb"
   ]
  },
  "bruciature": {
@@ -662,8 +902,14 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "e4f5c835"
   ],
+  "flavor": [
+   "b410ca48"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "35fdbfe7"
   ]
  },
  "nessuno-scappa": {
@@ -673,6 +919,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "f0956330"
   ],
+  "flavor": [
+   "a740a3db"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -680,6 +929,7 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
+   "04083e45",
    "cc0ffe27"
   ]
  },
@@ -690,6 +940,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "54d91bef"
   ],
+  "flavor": [
+   "51d3e78e"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -697,7 +950,8 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "0d2afc07"
   ]
  },
  "perforante": {
@@ -707,10 +961,14 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "44bbb5aa"
   ],
+  "flavor": [
+   "97a5a2d0"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "paradox": [
+   "0d2afc07",
    "35fdbfe7"
   ]
  },
@@ -721,11 +979,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "cf338d89"
   ],
+  "flavor": [
+   "5b419f9d"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "35fdbfe7"
   ],
   "effects": [
    "741638a5",
@@ -736,6 +1000,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "ec298307"
   ],
+  "flavor": [
+   "eb1c31a5"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -743,17 +1010,93 @@ export const STORIA_POTERI = Object.freeze({
    "8a8ea160"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "15da4c0b"
   ]
  },
  "baricentro": {
   "text": [
    "f33a32d4"
+  ],
+  "paradox": [
+   "ed1cf5ec"
+  ]
+ },
+ "deviare": {
+  "paradox": [
+   "2a3b7ddf"
+  ]
+ },
+ "carica": {
+  "paradox": [
+   "5ae03a2a"
+  ]
+ },
+ "calamita": {
+  "paradox": [
+   "ed1cf5ec"
+  ]
+ },
+ "peso-piuma": {
+  "paradox": [
+   "ed1cf5ec"
+  ]
+ },
+ "interferenza": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "come-una-foglia": {
+  "paradox": [
+   "5ae03a2a"
   ]
  },
  "luci-e-ombre": {
   "text": [
    "31cd69e7"
+  ],
+  "paradox": [
+   "ebd039e4"
+  ]
+ },
+ "suoni-e-silenzi": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "meteorologo": {
+  "paradox": [
+   "669d2748"
+  ]
+ },
+ "amico-della-gravita": {
+  "paradox": [
+   "cadc31b9"
+  ]
+ },
+ "baratto": {
+  "flavor": [
+   "ba942697"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "bottino": {
+  "flavor": [
+   "61071d66"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "ce-l-ho": {
+  "flavor": [
+   "57da1c89"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "il-giusto-attrezzo": {
@@ -763,6 +1106,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "18f050b3"
   ],
+  "flavor": [
+   "39527059"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -770,7 +1116,8 @@ export const STORIA_POTERI = Object.freeze({
    "f2761511"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "f11835c3"
   ],
   "effects": [
    "0812938d",
@@ -784,6 +1131,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "346f3b0a"
   ],
+  "flavor": [
+   "9b690753"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -791,7 +1141,8 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "15da4c0b"
   ]
  },
  "fatto-da-me": {
@@ -799,7 +1150,11 @@ export const STORIA_POTERI = Object.freeze({
    "01cb2e86"
   ],
   "text": [
-   "c61021b6"
+   "c61021b6",
+   "f542d394"
+  ],
+  "flavor": [
+   "41daa838"
   ],
   "cost": [
    "ffcaaa85"
@@ -808,12 +1163,16 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "15da4c0b"
   ]
  },
  "opera": {
   "text": [
    "cbb13e70"
+  ],
+  "flavor": [
+   "380095f0"
   ],
   "cost": [
    "ffcaaa85"
@@ -838,6 +1197,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "d35bf00a"
   ],
+  "flavor": [
+   "b07a11ef"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -845,9 +1207,47 @@ export const STORIA_POTERI = Object.freeze({
    "c7fa2804"
   ]
  },
+ "giocattoli": {
+  "paradox": [
+   "ed1cf5ec"
+  ]
+ },
+ "vetro": {
+  "paradox": [
+   "ed1cf5ec"
+  ]
+ },
+ "dentro-la-macchina": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "nascondiglio": {
+  "paradox": [
+   "ed1cf5ec"
+  ]
+ },
+ "passe-partout": {
+  "paradox": [
+   "ebd039e4"
+  ]
+ },
+ "passaggio-di-stato": {
+  "paradox": [
+   "ebd039e4"
+  ]
+ },
+ "alchimia": {
+  "paradox": [
+   "fb5801e6"
+  ]
+ },
  "ho-letto-qualcosa": {
   "text": [
    "d8513de3"
+  ],
+  "flavor": [
+   "24db1ae5"
   ],
   "cost": [
    "ffcaaa85"
@@ -857,6 +1257,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "08662abf"
   ],
   "effects": [
    "741638a5",
@@ -871,6 +1274,9 @@ export const STORIA_POTERI = Object.freeze({
    "748f4d46",
    "f619d479"
   ],
+  "flavor": [
+   "d76db549"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -878,7 +1284,8 @@ export const STORIA_POTERI = Object.freeze({
    "8a8ea160"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "15da4c0b"
   ]
  },
  "l-ho-sentito-dire": {
@@ -888,6 +1295,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "b1d32cdd"
   ],
+  "flavor": [
+   "64ab93b8"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -896,6 +1306,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "mai-colto-di-sorpresa": {
@@ -905,11 +1318,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "82bdfcce"
   ],
+  "flavor": [
+   "4286a3fb"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "al-posto-tuo": {
@@ -920,8 +1339,14 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "b2a4992c"
   ],
+  "flavor": [
+   "bf7514fa"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "conto-degli-indizi": {
@@ -934,11 +1359,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "ba086cdc"
   ],
+  "flavor": [
+   "3e468e92"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "morale": {
@@ -948,8 +1379,14 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "75d3c6e4"
   ],
+  "flavor": [
+   "d6da5d5b"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "pace": {
@@ -962,6 +1399,50 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "becf32a0"
   ],
+  "flavor": [
+   "fc5b2d63"
+  ],
+  "cost": [
+   "ffcaaa85"
+  ],
+  "costValue": [
+   "350ca8af"
+  ],
+  "paradox": [
+   "08662abf",
+   "15da4c0b"
+  ]
+ },
+ "pensiero-laterale": {
+  "text": [
+   "f3540415"
+  ],
+  "flavor": [
+   "87c13dda"
+  ],
+  "cost": [
+   "ffcaaa85"
+  ],
+  "costValue": [
+   "350ca8af"
+  ],
+  "uses": [
+   "f2761511"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "valvola-di-sfogo": {
+  "type": [
+   "01cb2e86"
+  ],
+  "text": [
+   "9ce903bb"
+  ],
+  "flavor": [
+   "43d28ad6"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -972,40 +1453,18 @@ export const STORIA_POTERI = Object.freeze({
    "08662abf"
   ]
  },
- "pensiero-laterale": {
-  "text": [
-   "f3540415"
-  ],
-  "cost": [
-   "ffcaaa85"
-  ],
-  "costValue": [
-   "350ca8af"
-  ],
-  "uses": [
-   "f2761511"
-  ]
- },
- "valvola-di-sfogo": {
-  "type": [
-   "01cb2e86"
-  ],
-  "text": [
-   "9ce903bb"
-  ],
-  "cost": [
-   "ffcaaa85"
-  ],
-  "costValue": [
-   "350ca8af"
-  ]
- },
  "volonta-prestata": {
   "text": [
    "0f4b063b"
   ],
+  "flavor": [
+   "95eb57fd"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "chiodo-fisso": {
@@ -1015,11 +1474,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "5a86d851"
   ],
+  "flavor": [
+   "49ab6719"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "come-da-piano": {
@@ -1032,6 +1497,42 @@ export const STORIA_POTERI = Object.freeze({
   "amalgam": [
    "ffcaaa85"
   ],
+  "flavor": [
+   "daafa12d"
+  ],
+  "cost": [
+   "ffcaaa85"
+  ],
+  "costValue": [
+   "350ca8af"
+  ],
+  "paradox": [
+   "08662abf",
+   "38fa1edb"
+  ],
+  "effects": [
+   "576d784a",
+   "741638a5"
+  ]
+ },
+ "tre-ipotesi": {
+  "flavor": [
+   "8906bf36"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "vedo-il-bluff": {
+  "type": [
+   "01cb2e86"
+  ],
+  "text": [
+   "60161d5c"
+  ],
+  "flavor": [
+   "c3412303"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -1042,24 +1543,6 @@ export const STORIA_POTERI = Object.freeze({
    "08662abf"
   ],
   "effects": [
-   "576d784a",
-   "741638a5"
-  ]
- },
- "vedo-il-bluff": {
-  "type": [
-   "01cb2e86"
-  ],
-  "text": [
-   "60161d5c"
-  ],
-  "cost": [
-   "ffcaaa85"
-  ],
-  "costValue": [
-   "350ca8af"
-  ],
-  "effects": [
    "741638a5"
   ]
  },
@@ -1067,6 +1550,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "3c965c37"
   ],
+  "flavor": [
+   "5bbd4e3f"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -1075,12 +1561,18 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "distrazione": {
   "text": [
    "445baaec"
   ],
+  "flavor": [
+   "2b191564"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -1089,6 +1581,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "08662abf"
   ],
   "effects": [
    "104b8442",
@@ -1103,11 +1598,15 @@ export const STORIA_POTERI = Object.freeze({
    "128491d5",
    "52ae5107"
   ],
+  "flavor": [
+   "bfe4ef36"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "7e3291d2"
   ],
   "effects": [
    "741638a5",
@@ -1119,8 +1618,14 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "1e568357"
   ],
+  "flavor": [
+   "2da74d27"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ],
   "effects": [
    "741638a5",
@@ -1130,6 +1635,9 @@ export const STORIA_POTERI = Object.freeze({
  "il-mio-disastro": {
   "text": [
    "40d918ce"
+  ],
+  "flavor": [
+   "58d31a07"
   ],
   "cost": [
    "ffcaaa85"
@@ -1152,11 +1660,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "9b7caa46"
   ],
+  "flavor": [
+   "4ae4d0e3"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "77074ba4"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "pulito": {
@@ -1165,6 +1679,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "text": [
    "76ef8301"
+  ],
+  "flavor": [
+   "1639b485"
   ],
   "cost": [
    "ffcaaa85"
@@ -1180,6 +1697,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "09ddfdc7"
   ],
+  "flavor": [
+   "6eebdfc2"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -1188,6 +1708,12 @@ export const STORIA_POTERI = Object.freeze({
   ]
  },
  "strumento-di-fortuna": {
+  "flavor": [
+   "bc711820"
+  ],
+  "paradox": [
+   "7e3291d2"
+  ],
   "effects": [
    "741638a5"
   ]
@@ -1196,11 +1722,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "9e4aa9a7"
   ],
+  "flavor": [
+   "8b71a4c7"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "77074ba4"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "anche-a-mani-nude": {
@@ -1210,6 +1742,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "b670182a"
   ],
+  "flavor": [
+   "d2893a9d"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -1217,7 +1752,8 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "5ae03a2a"
   ],
   "effects": [
    "7934f648"
@@ -1231,11 +1767,17 @@ export const STORIA_POTERI = Object.freeze({
    "6a42cf7f",
    "9c36622c"
   ],
+  "flavor": [
+   "f6a723ec"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "77074ba4"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "cambiavalute": {
@@ -1251,11 +1793,17 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "8867e07b"
   ],
+  "flavor": [
+   "9e0f8421"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "coro": {
@@ -1264,6 +1812,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "text": [
    "5bc12e20"
+  ],
+  "flavor": [
+   "7332667b"
   ],
   "cost": [
    "ffcaaa85"
@@ -1283,13 +1834,22 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "980cc098"
   ],
+  "flavor": [
+   "1dce940e"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "prendo-io": {
   "text": [
    "0f23110a"
+  ],
+  "flavor": [
+   "747c3ad2"
   ],
   "cost": [
    "ffcaaa85"
@@ -1311,6 +1871,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "b1ef81ff"
   ],
+  "flavor": [
+   "b9960891"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -1325,11 +1888,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "a8bb5a7a"
   ],
+  "flavor": [
+   "a00edd7c"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "sifone": {
@@ -1339,6 +1908,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "a5caa859"
   ],
+  "flavor": [
+   "5e35af5c"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -1346,9 +1918,35 @@ export const STORIA_POTERI = Object.freeze({
    "c7f6f663"
   ]
  },
+ "pagare-in-paradosso": {
+  "flavor": [
+   "428d1042"
+  ]
+ },
+ "parafulmine": {
+  "flavor": [
+   "0b833105"
+  ]
+ },
+ "doppia-modifica": {
+  "flavor": [
+   "16302630"
+  ],
+  "paradox": [
+   "7e3291d2"
+  ]
+ },
+ "forgia": {
+  "paradox": [
+   "7e3291d2"
+  ]
+ },
  "di-la-non-contano": {
   "text": [
    "b3dd4d4c"
+  ],
+  "flavor": [
+   "e46a66a6"
   ],
   "cost": [
    "ffcaaa85"
@@ -1370,11 +1968,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "09effe3e"
   ],
+  "flavor": [
+   "62566f21"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "pellegrino": {
@@ -1390,8 +1994,14 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "330b787f"
   ],
+  "flavor": [
+   "60687a6f"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "reliquia": {
@@ -1402,11 +2012,25 @@ export const STORIA_POTERI = Object.freeze({
    "b6dbd931",
    "f545eaac"
   ],
+  "flavor": [
+   "e2c6f598"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "f11835c3"
+  ]
+ },
+ "segni": {
+  "flavor": [
+   "b0f2128a"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "favori": {
@@ -1416,16 +2040,42 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "5d10d20f"
   ],
+  "flavor": [
+   "bde901b4"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "paradox": [
-   "08662abf"
+   "08662abf",
+   "15da4c0b"
   ]
  },
  "lascio-fare-a-lui": {
+  "flavor": [
+   "867f4538"
+  ],
+  "paradox": [
+   "b9c596c6"
+  ],
   "effects": [
    "741638a5"
+  ]
+ },
+ "l-avatar-reagisce": {
+  "flavor": [
+   "7636659b"
+  ],
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "angelo-custode": {
+  "flavor": [
+   "37ae000d"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "il-ritorno": {
@@ -1435,16 +2085,23 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "e41ca630"
   ],
+  "flavor": [
+   "d31c6339"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "paradox": [
+   "ed1cf5ec",
    "f11835c3"
   ]
  },
  "patto-col-diavolo": {
   "text": [
    "6661f8c1"
+  ],
+  "flavor": [
+   "424d65af"
   ],
   "cost": [
    "ffcaaa85"
@@ -1453,28 +2110,66 @@ export const STORIA_POTERI = Object.freeze({
    "ee199693"
   ],
   "paradox": [
-   "16b76eb6"
+   "16b76eb6",
+   "1f5f221b"
+  ]
+ },
+ "passo-di-la": {
+  "paradox": [
+   "ed1cf5ec"
+  ]
+ },
+ "anima-delle-cose": {
+  "paradox": [
+   "4f925861"
+  ]
+ },
+ "invocazione": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "esorcista": {
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "caccia-agli-spiriti": {
   "text": [
    "26a4db87"
+  ],
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "catene": {
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "cavalcare": {
   "text": [
    "e812cdee"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "il-prezzo-prima": {
   "text": [
    "d960f695"
   ],
+  "flavor": [
+   "c5e74e56"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "pronto-all-uso": {
@@ -1490,6 +2185,30 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "dd8161fc"
   ],
+  "flavor": [
+   "3df2a74e"
+  ],
+  "cost": [
+   "ffcaaa85"
+  ],
+  "costValue": [
+   "350ca8af"
+  ],
+  "paradox": [
+   "08662abf",
+   "15da4c0b"
+  ]
+ },
+ "puntuale": {
+  "type": [
+   "01cb2e86"
+  ],
+  "text": [
+   "b3ddbd06"
+  ],
+  "flavor": [
+   "e8f6eedf"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -1500,20 +2219,6 @@ export const STORIA_POTERI = Object.freeze({
    "08662abf"
   ]
  },
- "puntuale": {
-  "type": [
-   "01cb2e86"
-  ],
-  "text": [
-   "b3ddbd06"
-  ],
-  "cost": [
-   "ffcaaa85"
-  ],
-  "costValue": [
-   "350ca8af"
-  ]
- },
  "quadrante": {
   "type": [
    "01cb2e86"
@@ -1521,8 +2226,14 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "e79d807e"
   ],
+  "flavor": [
+   "a3994db7"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "straordinari": {
@@ -1532,17 +2243,26 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "eaf31011"
   ],
+  "flavor": [
+   "ca586fbf"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "adesso-e-non-dopo": {
   "text": [
    "8cb53dff",
    "d6a55180"
+  ],
+  "flavor": [
+   "e89f7cfd"
   ],
   "cost": [
    "ffcaaa85"
@@ -1552,6 +2272,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "allo-scadere": {
@@ -1561,19 +2284,39 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "88c531ef"
   ],
+  "flavor": [
+   "076b923f"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "ci-penso-domani": {
   "text": [
    "86e3ec4e"
   ],
+  "flavor": [
+   "26817143"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "colpo-in-canna": {
+  "flavor": [
+   "6df129ee"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "montaggio-alternato": {
@@ -1589,27 +2332,58 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "1d32178c"
   ],
+  "flavor": [
+   "9d2d9719"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "primo-istante": {
   "text": [
    "a7879f6b"
   ],
+  "flavor": [
+   "0d5d5211"
+  ],
   "cost": [
    "6bd0f915"
   ],
   "costValue": [
    "370cabd5"
+  ],
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "ciak-si-gira": {
+  "flavor": [
+   "0b0f7256"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "l-avevo-previsto": {
+  "flavor": [
+   "c841f8b8"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "preparato-a-casa": {
   "text": [
    "db4af82e"
+  ],
+  "flavor": [
+   "69aea4d5"
   ],
   "cost": [
    "ffcaaa85"
@@ -1628,6 +2402,48 @@ export const STORIA_POTERI = Object.freeze({
   "amalgam": [
    "ffcaaa85"
   ],
+  "flavor": [
+   "0b8edbd1"
+  ],
+  "cost": [
+   "ffcaaa85"
+  ],
+  "uses": [
+   "8a8ea160"
+  ],
+  "paradox": [
+   "08662abf",
+   "ed1cf5ec"
+  ]
+ },
+ "slancio": {
+  "type": [
+   "01cb2e86"
+  ],
+  "text": [
+   "334f0318",
+   "4fb22add"
+  ],
+  "flavor": [
+   "f1ac5ad4"
+  ],
+  "cost": [
+   "ffcaaa85"
+  ],
+  "uses": [
+   "a0e6a0c9"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "flash-forward": {
+  "text": [
+   "7a5f92af"
+  ],
+  "flavor": [
+   "059848c0"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -1638,37 +2454,39 @@ export const STORIA_POTERI = Object.freeze({
    "08662abf"
   ]
  },
- "slancio": {
-  "type": [
-   "01cb2e86"
+ "flashback": {
+  "flavor": [
+   "5dd38185"
   ],
-  "text": [
-   "334f0318"
-  ],
-  "cost": [
-   "ffcaaa85"
-  ],
-  "uses": [
-   "a0e6a0c9"
-  ]
- },
- "flash-forward": {
-  "text": [
-   "7a5f92af"
-  ],
-  "cost": [
-   "ffcaaa85"
-  ],
-  "uses": [
-   "8a8ea160"
+  "paradox": [
+   "08662abf"
   ]
  },
  "c-ho-ripensato": {
   "text": [
    "ad71de98"
   ],
+  "flavor": [
+   "51ada630"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "presagio": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "psicometria": {
+  "text": [
+   "4b137d44"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "pisolino": {
@@ -1678,8 +2496,30 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "5a3f44be"
   ],
+  "flavor": [
+   "4602a105"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "piu-forte-di-prima": {
+  "flavor": [
+   "3bc12f39"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "tempra": {
+  "flavor": [
+   "108483b1"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "allenamento": {
@@ -1692,8 +2532,14 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "1ad71daf"
   ],
+  "flavor": [
+   "2be07283"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "buona-forchetta": {
@@ -1703,11 +2549,17 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "bbea3a66"
   ],
+  "flavor": [
+   "54115c3b"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "uses": [
    "77074ba4"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "il-dolore-sveglia": {
@@ -1723,16 +2575,25 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "79775dbb"
   ],
+  "flavor": [
+   "f52f3075"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "sangue-per-sangue": {
   "text": [
    "a70883fe"
+  ],
+  "flavor": [
+   "f6121872"
   ],
   "cost": [
    "ffcaaa85"
@@ -1749,22 +2610,42 @@ export const STORIA_POTERI = Object.freeze({
    "63333a49",
    "e5a2219c"
   ],
+  "flavor": [
+   "7e4530df"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "bisturi": {
   "text": [
    "867b0336"
   ],
+  "flavor": [
+   "1fe35400"
+  ],
   "cost": [
    "ffcaaa85"
   ],
   "costValue": [
    "350ca8af"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "ferro-nel-sangue": {
+  "flavor": [
+   "14cfd958"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "memoria-muscolare": {
@@ -1777,8 +2658,14 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "a29e32d5"
   ],
+  "flavor": [
+   "9e85b326"
+  ],
   "cost": [
    "ffcaaa85"
+  ],
+  "paradox": [
+   "08662abf"
   ],
   "effects": [
    "741638a5"
@@ -1790,6 +2677,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "text": [
    "010d233a"
+  ],
+  "flavor": [
+   "abfd6061"
   ],
   "cost": [
    "ffcaaa85"
@@ -1805,6 +2695,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "5a8722e4"
   ],
+  "flavor": [
+   "9880a91c"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -1815,12 +2708,56 @@ export const STORIA_POTERI = Object.freeze({
    "15da4c0b"
   ]
  },
+ "mutaforma": {
+  "paradox": [
+   "ed1cf5ec"
+  ]
+ },
+ "sensi-animali": {
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "parola-alle-bestie": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "richiamo": {
+  "paradox": [
+   "cf51e5a9"
+  ]
+ },
+ "parti-di-bestia": {
+  "text": [
+   "ff77257f"
+  ],
+  "paradox": [
+   "5ae03a2a"
+  ]
+ },
+ "spezzaossa": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "aculei-corporei": {
+  "text": [
+   "122bfd2d"
+  ],
+  "paradox": [
+   "cadc31b9"
+  ]
+ },
  "appoggio": {
   "dot": [
    "350ca8af"
   ],
   "text": [
    "c4c1e283"
+  ],
+  "flavor": [
+   "5f5eb893"
   ],
   "paradox": [
    "0d2afc07"
@@ -1837,8 +2774,12 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "d7e24669"
   ],
+  "flavor": [
+   "550e8d3d"
+  ],
   "paradox": [
-   "ad067538"
+   "ad067538",
+   "b0383af7"
   ]
  },
  "difendersi-dalla-sfera": {
@@ -1852,11 +2793,17 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "c0f7a073"
   ],
+  "flavor": [
+   "1253c519"
+  ],
   "cost": [
    "c6e6b288"
   ],
   "costValue": [
    "340ca71c"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "fatto-per-durare": {
@@ -1865,6 +2812,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "text": [
    "2cb96185"
+  ],
+  "flavor": [
+   "1ca03dd9"
   ],
   "paradox": [
    "0d2afc07"
@@ -1881,6 +2831,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "f982d63b"
   ],
+  "flavor": [
+   "3b9ae5ae"
+  ],
   "paradox": [
    "0d2afc07"
   ],
@@ -1892,6 +2845,12 @@ export const STORIA_POTERI = Object.freeze({
  "impresa-impossibile": {
   "dot": [
    "350ca8af"
+  ],
+  "flavor": [
+   "bb37c309"
+  ],
+  "paradox": [
+   "1840a970"
   ]
  },
  "la-pratica-rende-perfetti": {
@@ -1901,6 +2860,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "79eef746",
    "cff19bfa"
+  ],
+  "flavor": [
+   "53d069c2"
   ],
   "cost": [
    "6bd0f915"
@@ -1927,8 +2889,14 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "d2ff4555"
   ],
+  "flavor": [
+   "6dc5d15e"
+  ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "d3f429ea"
   ],
   "effects": [
    "72d865be",
@@ -1942,6 +2910,12 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "659a16e7"
   ],
+  "flavor": [
+   "dc40f1a3"
+  ],
+  "paradox": [
+   "3a44b0e1"
+  ],
   "effects": [
    "741638a5",
    "895342da"
@@ -1954,6 +2928,9 @@ export const STORIA_POTERI = Object.freeze({
   "text": [
    "58542647"
   ],
+  "flavor": [
+   "0b1bd101"
+  ],
   "paradox": [
    "0d2afc07"
   ]
@@ -1964,6 +2941,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "text": [
    "ca8e19ad"
+  ],
+  "flavor": [
+   "12e9bcac"
   ],
   "paradox": [
    "0d2afc07"
@@ -1984,11 +2964,17 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "bb6cedec"
   ],
+  "flavor": [
+   "f9d3b18b"
+  ],
   "cost": [
    "6bd0f915"
   ],
   "costValue": [
    "370cabd5"
+  ],
+  "paradox": [
+   "08662abf"
   ],
   "effects": [
    "06731816",
@@ -2010,6 +2996,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "3f3e576b"
   ],
+  "flavor": [
+   "fa4447f7"
+  ],
   "cost": [
    "ffcaaa85"
   ],
@@ -2017,6 +3006,7 @@ export const STORIA_POTERI = Object.freeze({
    "350ca8af"
   ],
   "paradox": [
+   "08662abf",
    "af144b26"
   ],
   "effects": [
@@ -2030,6 +3020,9 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "text": [
    "67e9c137"
+  ],
+  "flavor": [
+   "6de2cf78"
   ],
   "cost": [
    "f8632bdb"
@@ -2058,8 +3051,14 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "5d39865d"
   ],
+  "flavor": [
+   "65c2b6fd"
+  ],
   "uses": [
    "8a8ea160"
+  ],
+  "paradox": [
+   "aa2d918e"
   ]
  },
  "seconda-possibilita": {
@@ -2075,6 +3074,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "fa198781"
   ],
+  "flavor": [
+   "4c2a5e07"
+  ],
   "cost": [
    "6bd0f915"
   ],
@@ -2083,11 +3085,41 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "disfare": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "anonimo": {
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "senza-residuo": {
+  "text": [
+   "1c12aaed"
+  ],
+  "flavor": [
+   "ffc854f3"
+  ],
+  "paradox": [
+   "ed1cf5ec"
   ]
  },
  "guasto": {
   "dot": [
    "350ca8af"
+  ],
+  "flavor": [
+   "7c15dea7"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "miraggio": {
@@ -2104,6 +3136,9 @@ export const STORIA_POTERI = Object.freeze({
   "amalgamText": [
    "a9c0e9b9"
   ],
+  "flavor": [
+   "f97189fa"
+  ],
   "cost": [
    "6bd0f915"
   ],
@@ -2111,12 +3146,69 @@ export const STORIA_POTERI = Object.freeze({
    "370cabd5"
   ],
   "paradox": [
+   "15da4c0b",
+   "27367444"
+  ]
+ },
+ "dimenticato": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "lettore-d-aure": {
+  "paradox": [
+   "08662abf"
+  ]
+ },
+ "doppio-senso": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "ammaliare": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "telepatia": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "ordine": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "faccia-qualunque": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "sguardo-paralizzante": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "occhi-altrui": {
+  "paradox": [
+   "15da4c0b"
+  ]
+ },
+ "fili": {
+  "paradox": [
    "15da4c0b"
   ]
  },
  "dettaglio": {
   "dot": [
    "350ca8af"
+  ],
+  "flavor": [
+   "7a670b65"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  },
  "convalescenza": {
@@ -2125,26 +3217,59 @@ export const STORIA_POTERI = Object.freeze({
   ],
   "text": [
    "8e1b6972"
+  ],
+  "flavor": [
+   "6a348512"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "copertura": {
   "dot": [
    "350ca8af"
+  ],
+  "flavor": [
+   "1da2cd48"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "interruttore": {
   "dot": [
    "350ca8af"
+  ],
+  "flavor": [
+   "3bb5bc1b"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "velocista": {
   "dot": [
    "350ca8af"
+  ],
+  "text": [
+   "91ff24a9"
+  ],
+  "flavor": [
+   "d8c081ef"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "rallentare": {
   "dot": [
    "350ca8af"
+  ],
+  "flavor": [
+   "65656947"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "pronto-soccorso": {
@@ -2155,18 +3280,36 @@ export const STORIA_POTERI = Object.freeze({
    "3259c4a7",
    "7cc911d7"
   ],
+  "flavor": [
+   "3f87c256"
+  ],
   "uses": [
    "f2761511"
+  ],
+  "paradox": [
+   "15da4c0b"
   ]
  },
  "sferzata": {
   "dot": [
    "350ca8af"
+  ],
+  "flavor": [
+   "3d2f1a08"
+  ],
+  "paradox": [
+   "c0c08c20"
   ]
  },
  "bussola": {
   "dot": [
    "350ca8af"
+  ],
+  "flavor": [
+   "8768b773"
+  ],
+  "paradox": [
+   "08662abf"
   ]
  }
 });

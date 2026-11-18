@@ -39,7 +39,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -117,7 +117,7 @@
     ],
     "none": false
    },
-   "paradox": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo.",
+   "paradox": "Volgare per l'effetto attivo se qualcuno guarda, basso rischio per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": {
@@ -170,7 +170,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, basso rischio effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, basso rischio per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -226,7 +226,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -282,7 +282,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -332,7 +332,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -384,7 +384,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -434,7 +434,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -481,7 +481,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -529,7 +529,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -585,7 +585,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -634,7 +634,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -685,7 +685,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -745,7 +745,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -797,7 +797,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -845,7 +845,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -906,7 +906,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo e passivo",
    "uses": {
@@ -957,7 +957,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1007,7 +1007,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -1054,7 +1054,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1113,7 +1113,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessun rischio effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -1163,7 +1163,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1223,7 +1223,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1273,7 +1273,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -1329,7 +1329,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1403,7 +1403,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo; il passivo segue il lancio che ha dato la Condizione.",
+   "paradox": "Nessuno per l'effetto attivo; il passivo segue il lancio che ha dato la Condizione.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -1450,7 +1450,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1502,7 +1502,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1561,7 +1561,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1620,7 +1620,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1681,7 +1681,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1802,7 +1802,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1856,7 +1856,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1906,7 +1906,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -1957,7 +1957,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -2057,7 +2057,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -2119,7 +2119,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -2169,7 +2169,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -2218,7 +2218,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -2265,7 +2265,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo; il passivo segue il lancio che ha fatto il danno.",
+   "paradox": "Nessuno per l'effetto attivo; il passivo segue il lancio che ha fatto il danno.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -2329,7 +2329,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -2390,7 +2390,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo; con Corrispondenza basso rischio effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo; con Corrispondenza basso rischio per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -2438,7 +2438,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -2487,7 +2487,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -2533,7 +2533,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -2580,7 +2580,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -2631,7 +2631,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -2678,7 +2678,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -2725,7 +2725,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -2774,7 +2774,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 1,
    "kind": "attivo",
    "uses": {
@@ -2825,7 +2825,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -2875,7 +2875,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -2922,7 +2922,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -2968,7 +2968,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, basso rischio per l'oggetto che non si rompe.",
+   "paradox": "Nessuno per l'effetto attivo, basso rischio per l'effetto passivo (l'oggetto che non si rompe).",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -3069,7 +3069,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -3119,7 +3119,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -3170,7 +3170,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -3219,7 +3219,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -3290,7 +3290,7 @@
     ],
     "none": false
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -3337,7 +3337,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -3384,7 +3384,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -3445,7 +3445,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -3492,7 +3492,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -3538,7 +3538,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -3587,7 +3587,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -3634,7 +3634,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -3682,7 +3682,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -3729,7 +3729,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -3775,7 +3775,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -3825,7 +3825,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -3875,7 +3875,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -3921,7 +3921,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -3971,7 +3971,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -4021,7 +4021,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -4068,7 +4068,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -4166,7 +4166,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -4213,7 +4213,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -4261,7 +4261,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -4309,7 +4309,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Segue il lancio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 1,
    "kind": "attivo",
    "uses": null,
@@ -4362,7 +4362,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo e passivo",
    "uses": null,
@@ -4411,7 +4411,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -4458,7 +4458,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -4516,7 +4516,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "",
    "uses": {
@@ -4588,7 +4588,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -4636,7 +4636,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -4682,7 +4682,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -4792,7 +4792,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -4850,7 +4850,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo; il passivo segue l'effetto mantenuto.",
+   "paradox": "Nessuno per l'effetto attivo; il passivo segue l'effetto mantenuto.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -4896,7 +4896,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -5006,7 +5006,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo e passivo",
    "uses": {
@@ -5060,7 +5060,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -5108,7 +5108,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo; nel passivo il Paradosso è già il prezzo.",
+   "paradox": "Nessuno per l'effetto attivo; nel passivo il Paradosso è già il prezzo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -5165,7 +5165,7 @@
     ],
     "none": false
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 1,
    "kind": "attivo",
    "uses": null,
@@ -5316,7 +5316,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Segue il lancio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -5365,7 +5365,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, che conta come Accidentale; nessuno effetto passivo.",
+   "paradox": "Segue il lancio per l'effetto attivo, che conta come Accidentale; nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -5414,7 +5414,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -5464,7 +5464,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "",
    "uses": null,
@@ -5510,7 +5510,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, basso rischio effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, basso rischio per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -5570,7 +5570,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -5618,7 +5618,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -5665,7 +5665,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo; se l'azione è un lancio, segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; se l'azione è un lancio, segue il lancio.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -5717,7 +5717,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -5767,7 +5767,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -5817,7 +5817,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Segue il lancio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -5868,7 +5868,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, basso rischio effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, basso rischio per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": {
@@ -5919,7 +5919,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo: il prezzo è il debito.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo: il prezzo è il debito.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -5969,7 +5969,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -6031,7 +6031,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio.",
    "cost": 0,
    "kind": "",
    "uses": {
@@ -6090,7 +6090,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -6136,7 +6136,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -6180,7 +6180,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -6227,7 +6227,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -6276,7 +6276,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -6322,7 +6322,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -6372,7 +6372,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -6420,7 +6420,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -6475,7 +6475,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -6522,7 +6522,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -6592,7 +6592,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -6650,7 +6650,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -6703,7 +6703,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": null,
@@ -6751,7 +6751,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 3,
    "kind": "attivo",
    "uses": null,
@@ -6800,7 +6800,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -6851,7 +6851,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Segue il lancio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -6897,7 +6897,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -6947,7 +6947,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": {
@@ -6998,7 +6998,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 1,
    "kind": "attivo",
    "uses": {
@@ -7048,7 +7048,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -7097,7 +7097,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -7148,7 +7148,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -7200,7 +7200,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -7247,7 +7247,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -7291,7 +7291,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -7338,7 +7338,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -7394,7 +7394,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -7441,7 +7441,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -7493,7 +7493,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "",
    "uses": null,
@@ -7539,7 +7539,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -7591,7 +7591,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Segue il lancio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -7638,7 +7638,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -7685,7 +7685,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -7732,7 +7732,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": null,
@@ -7791,7 +7791,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -7838,7 +7838,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 1,
    "kind": "attivo",
    "uses": null,
@@ -7886,7 +7886,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -7938,7 +7938,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -7984,7 +7984,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo; il passivo segue il lancio.",
+   "paradox": "Nessuno per l'effetto attivo; il passivo segue il lancio.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -8030,7 +8030,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -8080,7 +8080,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 3,
    "kind": "attivo",
    "uses": {
@@ -8131,7 +8131,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -8237,7 +8237,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+   "paradox": "Segue il lancio in tutte e due le forme.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": null,
@@ -8344,7 +8344,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Accidentale effetto attivo, Accidentale se il Narratore lo concede effetto passivo.",
+   "paradox": "Accidentale per l'effetto attivo, Accidentale per l'effetto passivo se il Narratore lo concede.",
    "cost": 4,
    "kind": "attivo e passivo",
    "uses": null,
@@ -8409,7 +8409,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 1,
    "kind": "attivo e passivo",
    "uses": null,
@@ -8516,7 +8516,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+   "paradox": "Segue il lancio in tutte e due le forme.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": null,
@@ -8625,7 +8625,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+   "paradox": "Segue il lancio in tutte e due le forme.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": null,
@@ -8728,7 +8728,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Volgare effetto attivo (il lancio è l'impresa), nessuno effetto passivo.",
+   "paradox": "Volgare per l'effetto attivo (il lancio è l'impresa), nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "attivo",
    "uses": {
@@ -8785,7 +8785,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+   "paradox": "Segue il lancio in tutte e due le forme.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": {
@@ -8895,7 +8895,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Basso rischio effetto attivo, segue il lancio effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, segue il lancio per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": {
@@ -8953,7 +8953,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, nessuno effetto passivo: sono tiri di Abilità.",
+   "paradox": "Segue il lancio per l'effetto attivo, nessuno per l'effetto passivo: sono tiri di Abilità.",
    "cost": 1,
    "kind": "attivo e passivo",
    "uses": null,
@@ -9005,7 +9005,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+   "paradox": "Segue il lancio in tutte e due le forme.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": null,
@@ -9111,7 +9111,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+   "paradox": "Segue il lancio in tutte e due le forme.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": null,
@@ -9173,7 +9173,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 1,
    "kind": "attivo e passivo",
    "uses": null,
@@ -9283,12 +9283,12 @@
     "rows": [
      {
       "spheres": [],
-      "text": "Combinando le sensazioni puoi avere una dinamica più precisa: ad esempio combinando Mente e Vita puoi distinguere le tipologie di persone, oppure con Materia e Corrispondenza sai che cosa potrebbero essere quegli edifici in lontananza. Ciononostante non hai un livello di precisione tale da sapere che 2 persone nella stessa stanza sono fratelli, oppure che c'è una bomba nel 3° edificio sulla strada: quella è Magick."
+      "text": "Combinando le sensazioni puoi avere una dinamica più precisa: ad esempio combinando Mente e Vita puoi distinguere le tipologie di persone, oppure con Materia e Corrispondenza sai che cosa potrebbero essere quegli edifici in lontananza. Non arrivi però a una precisione tale da sapere che due persone nella stessa stanza sono fratelli, o che c'è una bomba nel terzo edificio della strada: quella è Magick."
      }
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": null,
@@ -9369,7 +9369,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, segue il lancio effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, segue il lancio per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": null,
@@ -9470,7 +9470,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Segue il lancio effetto attivo, segue il lancio effetto passivo.",
+   "paradox": "Segue il lancio in tutte e due le forme.",
    "cost": 4,
    "kind": "attivo e passivo",
    "uses": null,
@@ -9534,7 +9534,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 1,
    "kind": "attivo e passivo",
    "uses": null,
@@ -9633,7 +9633,7 @@
     ],
     "none": false
    },
-   "paradox": "Basso rischio effetto attivo, basso rischio effetto passivo se non osservato.",
+   "paradox": "Basso rischio per l'effetto attivo, basso rischio per l'effetto passivo se non osservato.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": null,
@@ -9740,7 +9740,7 @@
     ],
     "none": false
    },
-   "paradox": "Volgare effetto attivo, basso rischio effetto passivo.",
+   "paradox": "Volgare per l'effetto attivo, basso rischio per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": {
@@ -9837,7 +9837,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": {
@@ -9879,7 +9879,7 @@
     "rows": [
      {
       "spheres": [],
-      "text": "Paga 3 Quintessenza: una cosa che tocchi smette di esistere, senza tirare. Niente polvere, niente pezzi, niente da riparare."
+      "text": "Paga 3 Quintessenza: una cosa che tocchi smette di esistere, senza tirare. Non lascia polvere né pezzi, e non c'è niente da riparare."
      },
      {
       "spheres": [
@@ -9913,7 +9913,7 @@
     ],
     "none": false
    },
-   "paradox": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+   "paradox": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo.",
    "cost": 3,
    "kind": "attivo",
    "uses": null,
@@ -9989,7 +9989,7 @@
     ],
     "none": false
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 1,
    "kind": "attivo",
    "uses": null,
@@ -10066,7 +10066,7 @@
     ],
     "none": false
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo",
    "uses": null,
@@ -10142,7 +10142,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 0,
    "kind": "passivo",
    "uses": {
@@ -10230,7 +10230,7 @@
     ],
     "none": false
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 3,
    "kind": "attivo",
    "uses": {
@@ -10321,7 +10321,7 @@
     ],
     "none": false
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo",
    "uses": {
@@ -10402,7 +10402,7 @@
     ],
     "none": false
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 1,
    "kind": "attivo",
    "uses": null,
@@ -10453,7 +10453,7 @@
      },
      {
       "spheres": [],
-      "text": "Con 4 poteri: un'azione maggiore in più, non di Magick."
+      "text": "Con 4 poteri: un'azione maggiore in più, che non sia di Magick."
      },
      {
       "spheres": [],
@@ -10467,7 +10467,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": null,
@@ -10527,7 +10527,7 @@
     "rows": [],
     "none": true
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo",
    "uses": null,
@@ -10603,7 +10603,7 @@
     ],
     "none": false
    },
-   "paradox": "Basso rischio effetto attivo, nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": {
@@ -10691,7 +10691,7 @@
     ],
     "none": false
    },
-   "paradox": "Basso rischio effetto attivo (Volgare con Forza se qualcuno guarda), nessuno effetto passivo.",
+   "paradox": "Basso rischio per l'effetto attivo (Volgare con Forza se qualcuno guarda), nessuno per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": {
@@ -10786,7 +10786,7 @@
     ],
     "none": false
    },
-   "paradox": "Nessuno effetto attivo, nessuno effetto passivo.",
+   "paradox": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
    "cost": 2,
    "kind": "attivo e passivo",
    "uses": null,

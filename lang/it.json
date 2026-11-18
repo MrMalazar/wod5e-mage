@@ -300,9 +300,9 @@
       "Label": "La sfida del concetto",
       "Hint": "Rispondi per iscritto: bastano appunti ben pensati. Non c'è un ordine giusto, quindi parti dal gruppo che ti chiama di più.",
       "Groups": {
-        "portrait": "Gruppo 1 — Il ritratto",
-        "background": "Gruppo 2 — Il sottofondo",
-        "bonds": "Gruppo 3 — I legami e il riflesso"
+        "portrait": "Gruppo 1 · Il ritratto",
+        "background": "Gruppo 2 · Il sottofondo",
+        "bonds": "Gruppo 3 · I legami e il riflesso"
       },
       "Fields": {
         "description": {
@@ -2264,7 +2264,7 @@
           "Domanda": "Cosa credi che la realtà sia?",
           "Sotto": "tredici Credi · uno solo",
           "Perche": "Cosa credi che la realtà sia, e da quello discende tutto il resto: la Verità a cui ti sei votato, e la voce con cui la difendi al tavolo.",
-          "PercheDue": "Ogni setta respira i suoi Credi, di solito due o tre: quella rosa è la strada battuta verso il tuo, non un confine. Il Credo non assegna punti e non vieta niente: le due Sfere che consiglia si aprono, e gli Strumenti che propone arrivano al passo 8."
+          "PercheDue": "Ogni setta ha i suoi Credi, di solito due o tre: quella rosa è la strada più battuta per arrivare al tuo, e puoi uscirne. Il Credo non assegna punti e non vieta niente: le due Sfere che consiglia si aprono, e gli Strumenti che propone arrivano al passo 8."
         },
         "famiglia": {
           "Label": "Famiglia",
@@ -2306,7 +2306,7 @@
           "Domanda": "Quale Sfera del Credo apri, e quale potere prendi in ogni Dominio?",
           "Sotto": "tre Domini · un potere per Dominio",
           "Perche": "Le nove Sfere sono i Domini della Magick. Avere accesso a un Dominio vuol dire poter fare Magick su quello: non ci sono livelli di Sfera, conta quali Domini hai e quali poteri conosci.",
-          "PercheDue": "Alla creazione i Domini sono tre: quello della Famiglia, quello della via e uno a scelta fra i due del Credo. In ogni Dominio prendi un potere di base, o uno di qualsiasi Sfera se quelli di base non ti piacciono. Se hai completato tutta la Sfida del Concetto prendi un potere in più, senza prerequisiti. Il resto si compra con l'Esperienza, seguendo la gerarchia dei prerequisiti."
+          "PercheDue": "Alla creazione i Domini sono tre: quello della Famiglia, quello della via e uno a scelta fra i due del Credo. In ogni Dominio prendi un potere di base, o uno di qualsiasi Sfera se quelli di base non ti piacciono. Se hai completato tutta la Sfida del Concetto prendi un potere in più, senza prerequisiti. Il resto si compra con l'Esperienza, secondo la gerarchia dei prerequisiti."
         },
         "strumenti": {
           "Label": "Strumenti",

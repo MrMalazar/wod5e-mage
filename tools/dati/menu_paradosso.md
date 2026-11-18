@@ -751,7 +751,7 @@ esempio: il ponte si allunga a ogni passo, finché la maga non lascia cadere una
 ::: voce La voce | 1 punto | annunciato
 quando: un mago ha lanciato Volgare qui, e il posto ha sentito il suo nome.
 segno: qualcuno lo chiama, con la voce di un'Ancora.
-effetto: chi non risponde perde 2 dadi su tutti i tiri finché non lo fa, e rispondere vuol dire andare verso la voce, in scena, con tutti. Non è l'Ancora: è il posto che la imita, e i maghi lo capiscono quando arrivano.
+effetto: chi non risponde perde 2 dadi su tutti i tiri finché non lo fa, e rispondere vuol dire andare verso la voce, in scena, con tutti. Ad aspettarli c'è un posto che imita l'Ancora, e i maghi lo capiscono quando arrivano.
 mosse: andare tutti, tapparsi le orecchie e accettare i dadi in meno, finire in fretta e uscire.
 poi: arrivati alla voce, trovano quello che il posto voleva mostrare, e la scena è tua.
 esempio: dal fondo del corridoio la voce della madre di Luca dice il suo nome da bambino.

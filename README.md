@@ -90,7 +90,7 @@ selectors. Only selected Spheres are listed below; hiding a Sphere preserves its
 dot rating. Each listed Sphere displays its Influence description for ratings one
 through five, and the leftmost empty marker returns a Sphere to zero. Scopes
 are free for everyone (no Sphere unlocks or forbids one): the Traits page shows
-no Scope counters at all — the Magick tab ends with "The Scopes" table
+no Scope counters at all; the Magick tab ends with "The Scopes" table
 (six Scopes, two or three lenses each, over the levels 0 to 7 with the 0 column
 shaded; Damage reads as Areté plus a number per level, drawn as the Areté
 sigil and the number; game Duration carries the time symbols, world Duration
@@ -398,8 +398,8 @@ class on a fake Foundry.
 5. Add compendiums only for content that can legally be distributed.
 
 The Belongings page pairs the character's Backgrounds, Merits and Flaws with
-the inventory, and adds two free tables — Shared Elements (with other
-players) and Story Elements (gained in play, possibly temporary) — each row
+the inventory, and adds two free tables, Shared Elements (with other
+players) and Story Elements (gained in play, possibly temporary): each row
 a type, a name and a dot rating, stored in module flags. The Character page
 uses the same collapsible layout as the Concept Challenge: allegiance,
 Concept and Chronicle with described Ambition and Desire ("when it

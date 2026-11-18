@@ -22,7 +22,7 @@
         "cadenza": "Sempre",
         "testo": "Sei sempre un po' altrove: gli effetti di Magick che ti cercano o ti seguono (un marchio, una localizzazione, un occhio che ti segue da lontano etc..) su di te durano un gradino di Durata in meno, per esempio una sessione diventa due scene e una scena diventa tre turni. Sotto un turno non si scende."
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno ti guarda sparire), nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare se qualcuno ti guarda sparire), nessuno per l'effetto passivo."
     },
     "tasca-di-mary": {
       "grado": 1,
@@ -36,7 +36,7 @@
         "cadenza": "Sempre",
         "testo": "Le tue tasche sono più grandi dentro che fuori. Quello che passa dall'apertura ci sta tutto, senza peso (un coltello, un telefono, un mazzo di chiavi etc..), e sulla scheda resta Addosso. Lo spazio è uno solo, anche se cambi giacca. Quello che tieni in tasca non lo trova nessun tiro comune (una perquisizione, un metal detector, un cane etc..): lo trova solo la Magick."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo."
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, basso rischio per l'effetto passivo."
     },
     "torna-sempre": {
       "grado": 1,
@@ -50,7 +50,7 @@
         "cadenza": "A sessione nuova",
         "testo": "Quello che è tuo e hai perso, o che ti hanno rubato o sequestrato, torna da te, se non è stato distrutto. Tuo vuol dire che con l'oggetto hai almeno un legame superficiale, il filo più sottile che ti lega a una cosa (l'hai comprato, te l'hanno regalato, l'hai costruito etc..). Come torna lo decide il Narratore (te lo riporta qualcuno, lo ritrovi dove non l'avevi lasciato, arriva per posta)."
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno lo vede comparire), basso rischio effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare se qualcuno lo vede comparire), basso rischio per l'effetto passivo."
     },
     "armonia-a-distanza": {
       "grado": 2,
@@ -65,7 +65,7 @@
         "cadenza": "Sempre",
         "testo": "Dai e ricevi dadi di Armonia anche con un compagno che non è in scena, se hai un legame con lui, lo stai guardando o ci stai parlando (un marchio, una chiaroveggenza, una telefonata etc..). Vale nei tiri di Abilità e nei lanci di Magick, e il tetto di 3 resta."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; quando i dadi vanno in un lancio di Magick, segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; quando i dadi vanno in un lancio di Magick, segue il lancio."
     },
     "conosco-un-posto": {
       "grado": 2,
@@ -80,7 +80,7 @@
         "cadenza": "Sempre",
         "testo": "Ogni posto in cui sei stato almeno una volta conta per te come un legame forte (il filo che ti unisce a un posto anche quando sei lontano), in ogni effetto che chiede un legame."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "planimetria": {
       "grado": 2,
@@ -102,7 +102,7 @@
         "cadenza": "Sempre",
         "testo": "Quando entri in un edificio la pianta ti si stampa in testa d'istinto, come se ci avessi sempre vissuto: sai dove muoverti, dove passare e dove trovare quello che ti serve (la cucina, il quadro elettrico, l'uscita di servizio etc..). Le cose nascoste le devi cercare lo stesso, ma quando le cerchi hai dadi in più pari ai poteri che conosci in Corrispondenza."
       },
-      "paradosso": "Basso rischio effetto attivo se la pianta nuova sembra normale, Volgare anche senza testimoni se non torna (una stanza più grande della casa, due stanze lontane che si toccano, un corridoio che gira su se stesso etc..); nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo se la pianta nuova sembra normale, Volgare anche senza testimoni se non torna (una stanza più grande della casa, due stanze lontane che si toccano, un corridoio che gira su se stesso etc..); nessuno per l'effetto passivo."
     },
     "rifornimento": {
       "grado": 2,
@@ -129,7 +129,7 @@
             "s": [
               "prime"
             ],
-            "t": "quello che manca nasce sul posto, nuovo, senza toglierlo a nessuno; e una Meraviglia o una reliquia la ricarichi o la richiami, pagando a parte la Quintessenza che la ricarica."
+            "t": "quello che manca nasce sul posto, nuovo, senza toglierlo a nessuno; e una Meraviglia o una reliquia la ricarichi o la richiami, e la Quintessenza che la ricarica la paghi a parte."
           },
           {
             "s": [
@@ -143,7 +143,7 @@
         "cadenza": "Una volta per sessione",
         "testo": "Il gruppo si rifornisce come se passasse dal Santuario (munizioni, medicine, vestiti etc..), nel momento che scegli tu."
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno vede le cose comparire), nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare se qualcuno vede le cose comparire), nessuno per l'effetto passivo."
     },
     "schieramento": {
       "grado": 2,
@@ -157,7 +157,7 @@
         "cadenza": "Una volta per combattimento",
         "testo": "All'inizio di uno scontro, prima del primo turno, metti ogni compagno dove vuoi, entro pochi metri da dov'era."
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno lo vede sparire), nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare se qualcuno lo vede sparire), nessuno per l'effetto passivo."
     },
     "pedina": {
       "grado": 3,
@@ -171,7 +171,7 @@
         "cadenza": "Una volta per combattimento",
         "testo": "All'inizio di uno scontro metti un nemico dove vuoi, purché ci sia potuto arrivare."
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno lo vede sparire), nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare se qualcuno lo vede sparire), nessuno per l'effetto passivo."
     },
     "strada-facendo": {
       "grado": 3,
@@ -179,13 +179,13 @@
       "amalgama": "nessuna",
       "attivo": {
         "costo": "da 1 a 3 Quintessenza",
-        "testo": "Dichiari un'azione che di solito prende tempo (fare benzina, comprare un ricambio, passare in farmacia etc..) e la consideri fatta: è successa sullo sfondo, mentre la scena andava avanti. Il costo va da 1 a 3 Quintessenza secondo l'azione, e lo decide il Narratore. Se l'azione chiede un tiro, il tiro si fa lo stesso: risparmi il tempo, non il tiro."
+        "testo": "Dichiari un'azione che di solito prende tempo (fare benzina, comprare un ricambio, passare in farmacia etc..) e la consideri fatta: è successa sullo sfondo, mentre la scena andava avanti. Il costo va da 1 a 3 Quintessenza secondo l'azione, e lo decide il Narratore. Se l'azione chiede un tiro, il tiro si fa lo stesso: risparmi solo il tempo."
       },
       "passivo": {
         "cadenza": "Sempre",
         "testo": "I viaggi del gruppo non fanno avanzare gli orologi del Narratore."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "giochiamo-in-casa": {
       "grado": 4,
@@ -199,7 +199,7 @@
         "cadenza": "Sempre",
         "testo": "In un posto dove passi del tempo impari, poco a poco, distanze e spazi, fino a conoscerlo a fondo: sai dove muoverti senza guardare, e senti chi entra e chi esce. Vale per un posto grande fino a un'Area pari ai poteri che conosci in Corrispondenza (con 4 poteri, una città)."
       },
-      "paradosso": "Volgare effetto attivo, nessuno effetto passivo."
+      "paradosso": "Volgare per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "uscita-d-emergenza": {
       "grado": 5,
@@ -233,7 +233,7 @@
           }
         ]
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno vi vede sparire), nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare se qualcuno vi vede sparire), nessuno per l'effetto passivo."
     },
     "colpo-di-fortuna": {
       "grado": 1,
@@ -247,7 +247,7 @@
         "cadenza": "Sempre",
         "testo": "Quando in un tuo tiro escono due 10, il Narratore aggiunge un effetto che descrive lui, come vuole, purché dia qualcosa in più alla scena (un danno in più, una Condizione al bersaglio, un'informazione etc..)."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "il-dado-e-tratto": {
       "grado": 1,
@@ -269,7 +269,7 @@
         "cadenza": "Sempre",
         "testo": "Quando un tuo tiro riesce, quello che hai fatto resta fatto: chi prova ad andarci contro (a riaprire la porta che hai chiuso, a far cambiare idea a chi hai convinto, a riparare quello che hai rotto etc..) ha 2 dadi in meno."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio."
     },
     "inseparabili": {
       "grado": 1,
@@ -283,7 +283,7 @@
         "cadenza": "A sessione nuova",
         "testo": "Alla fine di ogni sessione dichiari chi è il tuo compagno per la sessione dopo, così il Narratore può prepararsi; se il Narratore preferisce, lo dichiari all'inizio. Per quella sessione il Narratore non vi divide in scene diverse se voi non volete."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "non-tutto-il-male": {
       "grado": 1,
@@ -297,7 +297,7 @@
         "cadenza": "Sempre",
         "testo": "Quando paghi un Prezzo, il Narratore ti dà anche un vantaggio (un'informazione, un'occasione, un oggetto etc..)."
       },
-      "paradosso": "Nessuno effetto attivo oltre ai 2 punti che paghi, nessuno effetto passivo.",
+      "paradosso": "Nessuno per l'effetto attivo oltre ai 2 punti che paghi, nessuno per l'effetto passivo.",
       "nome": "Non tutto il male..."
     },
     "testa-o-croce": {
@@ -320,7 +320,7 @@
         "cadenza": "Una volta per scena",
         "testo": "Davanti a una scelta fra due strade (due porte, due sospetti, due fili da tagliare etc..), lanci una moneta: il Narratore ti dice quale delle due, in quel momento, è la migliore per te, dal suo punto di vista."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio."
     },
     "angolo-morto": {
       "grado": 2,
@@ -334,7 +334,7 @@
         "cadenza": "Una volta per combattimento",
         "testo": "All'inizio di ogni scontro parti riparato dal caso: c'è sempre qualcosa che ti copre (un muretto, un'auto parcheggiata, una colonna etc..), e chi ti attacca ha 2 dadi in meno. La copertura dura poco: sparisce appena un nemico si sposta."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "chi-la-fa-l-aspetti": {
       "grado": 2,
@@ -348,7 +348,7 @@
         "cadenza": "Sempre",
         "testo": "Quando qualcuno ti fa del male, in qualunque modo (una ferita, un torto, un danno ai tuoi affari etc..), la prima volta che agisci contro di lui hai 2 dadi in più."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "fortuna-del-principiante": {
       "grado": 2,
@@ -370,7 +370,7 @@
           }
         ]
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio."
     },
     "il-banco-vince": {
       "grado": 2,
@@ -392,7 +392,7 @@
           }
         ]
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Il banco vince...",
       "flavour": "«...sempre.»"
     },
@@ -416,7 +416,7 @@
         "cadenza": "Sempre",
         "testo": "Quando ti prepari a un'azione (prendi la mira, studi la serratura, conti le guardie etc..), al tiro che la fa hai 2 dadi in più."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio."
     },
     "si-trova-tutto": {
       "grado": 2,
@@ -428,9 +428,9 @@
       },
       "passivo": {
         "cadenza": "A sessione nuova",
-        "testo": "Fra una sessione e l'altra trovi l'oggetto che cerchi, a un prezzo che di solito decide il Narratore (in soldi o in un favore)."
+        "testo": "Fra una sessione e l'altra trovi l'oggetto che cerchi, a un prezzo che decide il Narratore (in soldi o in un favore)."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "tiri-gemelli": {
       "grado": 2,
@@ -452,7 +452,7 @@
           }
         ]
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio."
     },
     "fuori-dai-piedi": {
       "grado": 3,
@@ -466,7 +466,7 @@
         "cadenza": "A sessione nuova",
         "testo": "Nomini qualcuno che non vuoi vedere (un creditore, un rivale, un ex etc..): per la sessione il caso fa in modo che le vostre strade non si incrocino, finché non vai a cercarlo tu."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "il-fucile-di-echov": {
       "grado": 3,
@@ -480,7 +480,7 @@
         "cadenza": "A sessione nuova",
         "testo": "A inizio sessione dichiari un oggetto per la sessione (il tuo coltello, la corda nello zaino, l'accendino di tuo padre etc..). Quando lo usi per quello a cui serve, e non per altro (un coltello per tagliare, una corda per legare o per arrampicarti), hai 2 dadi in più."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "ladro-di-fortuna": {
       "grado": 3,
@@ -502,7 +502,7 @@
         "cadenza": "Una volta per scena",
         "testo": "Togli un dado riuscito a un tiro appena fatto da qualcuno che non ti è nemico (un compagno, un alleato, un passante etc..), e lo aggiungi al tuo prossimo tiro."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio."
     },
     "porto-sfortuna-io": {
       "grado": 3,
@@ -524,7 +524,7 @@
           }
         ]
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "roulette": {
       "grado": 3,
@@ -612,7 +612,7 @@
         "cadenza": "Una volta per scena",
         "testo": "Capisci sempre cosa manca per andare avanti: chiedi al Narratore cosa serve alla scena per procedere, e lui te lo dice (un nome, una prova, un permesso etc..)."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "nerf": {
       "grado": 4,
@@ -642,7 +642,7 @@
           }
         ]
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "tarocchi": {
       "grado": 4,
@@ -656,7 +656,7 @@
         "cadenza": "A sessione nuova",
         "testo": "A inizio sessione il Narratore ti fa una lettura dei tarocchi: ti dà degli indizi in forma di carte (una persona, un luogo, un evento etc..), cose che nella sessione dovrebbero manifestarsi. Poi puoi fargli tre domande sulla trama."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "il-narratore-ti-ascolta": {
       "grado": 5,
@@ -720,7 +720,7 @@
         "cadenza": "Una volta per scena",
         "testo": "Quando il Narratore fissa un Prezzo (quello che costa ribaltare un tiro fallito), o sceglie dal menù del Paradosso cosa succede a un tuo compagno, puoi proporlo tu: il Narratore ti ascolta, e se la proposta regge la usa."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "scambio-di-sorte": {
       "grado": 4,
@@ -742,7 +742,7 @@
         "cadenza": "Una volta per scena",
         "testo": "In una contesa (tu contro qualcuno, tiro contro tiro), dopo i tiri scambi un tuo dado con uno dell'altro, per esempio il suo migliore col tuo peggiore."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio."
     },
     "a-stordire": {
       "grado": 1,
@@ -771,7 +771,7 @@
         "cadenza": "Sempre",
         "testo": "Con la tua reazione (ne hai una per turno), quando qualcuno attacca un compagno vicino a te, ti metti in mezzo: il colpo prende te al posto suo, e da lì in poi è un attacco contro di te (ti difendi tu, coi tuoi tiri e le tue difese)."
       },
-      "paradosso": "L'attivo segue la Magick o il potere che usi; nessuno effetto passivo."
+      "paradosso": "L'attivo segue la Magick o il potere che usi; nessuno per l'effetto passivo."
     },
     "bruciature": {
       "grado": 2,
@@ -785,7 +785,7 @@
         "cadenza": "Sempre",
         "testo": "I danni dei tuoi lanci di Forza non si curano per un tempo pari alla Durata dello stesso livello della Potenza: se hai usato Potenza 3, non si curano finché non passa il tempo di Durata 3. Li chiude prima solo un effetto contrario di Vita e Forza insieme, o un potere fatto apposta."
       },
-      "paradosso": "Nessuno effetto attivo; il passivo segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo; il passivo segue il lancio."
     },
     "brucia-ancora": {
       "grado": 2,
@@ -799,7 +799,7 @@
         "cadenza": "Sempre",
         "testo": "I danni da fuoco o da elettricità che fai si ripetono una volta da soli, nel turno dopo."
       },
-      "paradosso": "Nessuno effetto attivo; il passivo segue il lancio che ha fatto il danno."
+      "paradosso": "Nessuno per l'effetto attivo; il passivo segue il lancio che ha fatto il danno."
     },
     "nessuno-scappa": {
       "grado": 3,
@@ -813,7 +813,7 @@
         "cadenza": "Sempre",
         "testo": "Chi colpisci con un tuo lancio di Forza o di Corrispondenza resta dov'è: nel suo prossimo momento può agire, ma non spostarsi."
       },
-      "paradosso": "Basso rischio effetto attivo con Corrispondenza, nessuno con Forza; il passivo segue il lancio."
+      "paradosso": "Basso rischio per l'effetto attivo con Corrispondenza, nessuno con Forza; il passivo segue il lancio."
     },
     "onda-d-urto": {
       "grado": 3,
@@ -827,7 +827,7 @@
         "cadenza": "Sempre",
         "testo": "Quando un tuo lancio di Forza infligge una Condizione che un'onda porta con sé (si aggiornerà a catena col rifacimento delle Condizioni), la puoi infliggere anche agli altri bersagli nell'area dell'effetto. E quando colpisci ad area, l'area conta un gradino più grande, senza pagarlo."
       },
-      "paradosso": "Segue il lancio effetto attivo, segue il lancio effetto passivo."
+      "paradosso": "Segue il lancio in tutte e due le forme."
     },
     "perforante": {
       "grado": 3,
@@ -841,7 +841,7 @@
         "cadenza": "Sempre",
         "testo": "Contro i tuoi lanci di Forza o di Materia, l'armatura di chi colpisci vale meno, di tanti punti quanti sono i poteri che conosci in Forza (o in Materia, se lanci con Materia)."
       },
-      "paradosso": "Segue il lancio effetto attivo, segue il lancio effetto passivo."
+      "paradosso": "Segue il lancio in tutte e due le forme."
     },
     "semplice-violenza": {
       "grado": 4,
@@ -855,7 +855,7 @@
         "cadenza": "Sempre",
         "testo": "Quando il Narratore decide se un tuo danno è Superficiale o Aggravato, propende per l'Aggravato, anche quando colpisci con effetti che non sono di Forza."
       },
-      "paradosso": "Nessuno effetto attivo; il passivo segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo; il passivo segue il lancio."
     },
     "il-giusto-attrezzo": {
       "grado": 1,
@@ -869,7 +869,7 @@
         "cadenza": "Sempre",
         "testo": "Quello che hai in mano fa da attrezzo giusto per il lavoro (un cacciavite fa da grimaldello, un coltellino da bisturi, una graffetta da chiave etc..): il tiro va come se avessi l'attrezzo vero."
       },
-      "paradosso": "Nessuno effetto attivo, basso rischio effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, basso rischio per l'effetto passivo."
     },
     "tutto-e-un-arma": {
       "grado": 2,
@@ -883,7 +883,7 @@
         "cadenza": "Sempre",
         "testo": "Un oggetto che impugni (una bottiglia, una sedia, un ombrello etc..) diventa un'arma vera: il suo danno base è pari ai poteri che conosci in Materia, e con tre poteri una bottiglia fa 3 danni."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "fatto-da-me": {
       "grado": 3,
@@ -891,13 +891,13 @@
       "amalgama": "nessuna",
       "attivo": {
         "costo": "2 Quintessenza",
-        "testo": "Costruisci o ripari in pochi minuti quello che di solito chiede giorni di lavoro, purché tu abbia i pezzi (un'auto rimessa in strada, una radio da campo, una trappola per la porta etc..). Se il lavoro chiede un tiro, il tiro si fa lo stesso: risparmi il tempo, non il tiro."
+        "testo": "Costruisci o ripari in pochi minuti quello che di solito chiede giorni di lavoro, purché tu abbia i pezzi (un'auto rimessa in strada, una radio da campo, una trappola per la porta etc..). Se il lavoro chiede un tiro, il tiro si fa lo stesso: risparmi solo il tempo."
       },
       "passivo": {
         "cadenza": "Sempre",
         "testo": "Un compagno che usa un oggetto fatto da te tira con la tua Abilità al posto della sua."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "opera": {
       "grado": 4,
@@ -940,7 +940,7 @@
         "cadenza": "Sempre",
         "testo": "Davanti a un compito o a un lavoro sai sempre che tipo di conoscenza ti servirebbe; se è fra le tue, hai 1 dado in più al tiro."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "il-mondo-e-piccolo": {
       "grado": 1,
@@ -954,7 +954,7 @@
         "cadenza": "Sempre",
         "testo": "Se vuoi, resti impresso: la gente non si scorda di te, e chi prova a cancellarti dalla memoria di qualcuno (con la Magick, con una droga etc..) ha 3 dadi in meno."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Non ti ricordi di me?"
     },
     "l-ho-sentito-dire": {
@@ -970,7 +970,7 @@
         "cadenza": "Una volta per sessione",
         "testo": "Il tuo personaggio sa una cosa che sai tu, giocatore: in scena è il tuo Avatar a suggerirtela, e ti rivela una verità."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Rompere la quarta parete",
       "pagina": "Spirito"
     },
@@ -986,7 +986,7 @@
         "cadenza": "Sempre",
         "testo": "Negli agguati tesi da una creatura (una persona, una bestia, uno spirito) non sei mai sorpreso: nel primo turno agisci come tutti."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "al-posto-tuo": {
       "grado": 2,
@@ -1000,7 +1000,7 @@
         "cadenza": "Sempre",
         "testo": "Quando stai entro Portata 1 da un compagno e subisci una Condizione del tipo della tua Sfera, chi te la infligge ha 3 dadi in meno (si aggiornerà a catena col rifacimento delle Condizioni)."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "conto-degli-indizi": {
       "grado": 2,
@@ -1014,7 +1014,7 @@
         "cadenza": "Al cambio di scena",
         "testo": "A fine scena d'indagine il Narratore ti dice quanti indizi hai trovato e quanti ce n'erano, e te ne dà uno di quelli che ti sono sfuggiti."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Momento da Sherlock"
     },
     "pace": {
@@ -1029,7 +1029,7 @@
         "cadenza": "Sempre",
         "testo": "Chi vuole cominciare uno scontro in tua presenza, o fare un'azione offensiva per ferire, deve prima superare una soglia pari ai poteri che conosci nella Sfera. Chi mangia alla tua tavola non ti attacca finché non è uscito di casa tua."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Pace forzata"
     },
     "pensiero-laterale": {
@@ -1044,7 +1044,7 @@
         "cadenza": "Sempre",
         "testo": "Quando spieghi al tavolo il ragionamento che risolve il problema per un'altra strada, e regge, tiri con l'Abilità di quella strada al posto di quella chiesta, e hai 2 dadi in più."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "valvola-di-sfogo": {
       "grado": 2,
@@ -1058,7 +1058,7 @@
         "cadenza": "Sempre",
         "testo": "Quando prendi danni mentali, puoi prendere una Condizione mentale al posto dei danni (si aggiornerà a catena col rifacimento delle Condizioni)."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "morale": {
       "grado": 2,
@@ -1072,7 +1072,7 @@
         "cadenza": "Sempre",
         "testo": "Finché i compagni sono in scena con te, ogni volta che prendono danni mentali ne prendono 1 in meno."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "volonta-prestata": {
       "grado": 2,
@@ -1086,7 +1086,7 @@
         "cadenza": "Sempre",
         "testo": "Quando un compagno entro Portata 1 da te spende Volontà, puoi spenderla tu al posto suo."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "chiodo-fisso": {
       "grado": 3,
@@ -1100,7 +1100,7 @@
         "cadenza": "A sessione nuova",
         "testo": "A inizio sessione scegli un Desiderio in più e lo dichiari al Narratore: vale per recuperare Volontà, ma non per perderla. Se a fine sessione non l'hai soddisfatto, prendi 1 danno mentale aggravato, che non guarisce fino alla sessione dopo."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "come-da-piano": {
       "grado": 3,
@@ -1122,7 +1122,7 @@
           }
         ]
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo; con Primordio segue il lancio."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo; con Primordio segue il lancio."
     },
     "vedo-il-bluff": {
       "grado": 3,
@@ -1136,7 +1136,7 @@
         "cadenza": "Sempre",
         "testo": "Nelle contese sociali tiri dopo l'avversario, sapendo il suo risultato, e puoi ritirarti senza perdere."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "alle-strette": {
       "grado": 4,
@@ -1150,7 +1150,7 @@
         "cadenza": "Sempre",
         "testo": "Percepisci quanto vale la soglia di un nemico nei tiri mentali, e le difese o le resistenze che ci ha."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "distrazione": {
       "grado": 4,
@@ -1164,7 +1164,7 @@
         "cadenza": "Sempre",
         "testo": "Disturbi di continuo quello che hai intorno, con gesti, parole o come scegli tu, e la confusione distrae gli altri: chi ti sta intorno ha 1 dado in meno nei tiri che chiedono attenzione."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "parole-che-pesano": {
       "grado": 4,
@@ -1178,7 +1178,7 @@
         "cadenza": "Sempre",
         "testo": "Un tuo tiro sociale riuscito, senza Magick, può infliggere una Condizione mentale con un grado in più (si aggiornerà a catena col rifacimento delle Condizioni)."
       },
-      "paradosso": "Segue il lancio effetto attivo, nessuno effetto passivo."
+      "paradosso": "Segue il lancio per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "goccia-a-goccia": {
       "grado": 5,
@@ -1192,7 +1192,7 @@
         "cadenza": "Sempre",
         "testo": "Ogni scena in cui parli con una persona senza farle danni, perché non sta perdendo un conflitto con te, ti dà 1 dado in più nei tiri sociali verso di lei e verso chi c'era. I dadi si sommano scena dopo scena."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "il-mio-disastro": {
       "grado": 1,
@@ -1220,7 +1220,7 @@
         "cadenza": "Sempre",
         "testo": "Quando lanci con l'Armonia dei compagni, o dai la tua Armonia a un compagno, e il lancio fallisce, i dadi non vanno persi: i compagni li hanno per il loro prossimo lancio di Magick."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "pulito": {
       "grado": 1,
@@ -1262,7 +1262,7 @@
         "cadenza": "Sempre",
         "testo": "Puoi passare la tua Quintessenza a un compagno."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "anche-a-mani-nude": {
       "grado": 2,
@@ -1276,7 +1276,7 @@
         "cadenza": "Sempre",
         "testo": "Finché hai almeno 3 Quintessenza, i tuoi colpi senza armi fanno danni pari ai poteri che conosci in Primordio."
       },
-      "paradosso": "Volgare effetto attivo, nessuno effetto passivo."
+      "paradosso": "Volgare per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "bussola-comune": {
       "grado": 2,
@@ -1291,7 +1291,7 @@
         "cadenza": "Sempre",
         "testo": "Quando rispetti una tua Convinzione, ne condividi il premio coi compagni: prendono anche loro i 2 dadi o la Quintessenza che hai scelto."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "cambiavalute": {
       "grado": 2,
@@ -1305,7 +1305,7 @@
         "cadenza": "Sempre",
         "testo": "Col Sacrificio, un danno aggravato ti dà 4 Quintessenza invece di 3."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "coro": {
       "grado": 2,
@@ -1333,7 +1333,7 @@
         "cadenza": "Sempre",
         "testo": "Hai una scorta di Quintessenza in un oggetto (una batteria, una pietra, un anello etc..), che porti con te da una sessione all'altra: ci metti la tua Quintessenza, fino ai poteri che conosci in Primordio."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "prendo-io": {
       "grado": 2,
@@ -1376,7 +1376,7 @@
         "cadenza": "Sempre",
         "testo": "Per te la Ruota della Quintessenza è più larga di 2: 2 caselle in più verso la Quintessenza, e 2 verso il Paradosso."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "sifone": {
       "grado": 3,
@@ -1418,7 +1418,7 @@
         "cadenza": "Sempre",
         "testo": "Capisci sempre la lingua degli spiriti."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "pellegrino": {
       "grado": 1,
@@ -1433,7 +1433,7 @@
         "cadenza": "Sempre",
         "testo": "La prima volta che entri in un luogo sacro (una chiesa, un Nodo, una tomba etc..), prendi 1 Quintessenza."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "reliquia": {
       "grado": 2,
@@ -1447,7 +1447,7 @@
         "cadenza": "Sempre",
         "testo": "Un oggetto che porti da almeno una sessione diventa una reliquia: finché lo porti, ti protegge da una Condizione che scegli tu (si aggiornerà a catena col rifacimento delle Condizioni). Se lo perdi, perdi 1 Volontà."
       },
-      "paradosso": "Nessuno effetto attivo, basso rischio effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, basso rischio per l'effetto passivo."
     },
     "favori": {
       "grado": 3,
@@ -1461,7 +1461,7 @@
         "cadenza": "Sempre",
         "testo": "I tuoi Background valgono anche con gli spiriti: sanno che paghi, e sono ben disposti a farti favori."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "il-ritorno": {
       "grado": 5,
@@ -1475,7 +1475,7 @@
         "cadenza": "Sempre",
         "testo": "Quando sei staccato dal tuo corpo resti te stesso, e allora la tua Salute la possono ferire solo gli spiriti o gli effetti mentali. Persino nel sonno resti tutt'uno."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo."
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo."
     },
     "patto-col-diavolo": {
       "grado": 5,
@@ -1489,7 +1489,7 @@
         "cadenza": "Sempre",
         "testo": "Non puoi subire Pregi, Difetti o altro che ti darebbe un marchio, o un effetto simile."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo: il prezzo è il patto."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo: il prezzo è il patto."
     },
     "il-prezzo-prima": {
       "grado": 1,
@@ -1503,7 +1503,7 @@
         "cadenza": "Sempre",
         "testo": "Prima di tirare sai che tipo di Prezzo ti chiede il Narratore per vincere la prova; e quando una cosa è fuori portata, sai quale Prezzo ti manca per arrivarci."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "pronto-all-uso": {
       "grado": 1,
@@ -1518,7 +1518,7 @@
         "cadenza": "Sempre",
         "testo": "Estrarre, ricaricare o cambiare arma non ti costa mai azioni. E l'oggetto che ti serve ce l'hai sempre a portata di mano, come se l'avessi preparato la scena prima, purché sia nel tuo inventario."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "puntuale": {
       "grado": 1,
@@ -1532,7 +1532,7 @@
         "cadenza": "Sempre",
         "testo": "Sai quando qualcuno arriverà in scena, o se non arriverà, purché abbia un legame con te, anche superficiale."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "quadrante": {
       "grado": 1,
@@ -1546,7 +1546,7 @@
         "cadenza": "Sempre",
         "testo": "Vedi sempre gli orologi del Narratore, anche quelli nascosti."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "straordinari": {
       "grado": 1,
@@ -1560,7 +1560,7 @@
         "cadenza": "A sessione nuova",
         "testo": "Fra una sessione e l'altra fai una cosa in più, che si risolve dietro le quinte: tenere vivi i tuoi Background, usarli, oppure un'azione da concordare col Narratore."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "adesso-e-non-dopo": {
       "grado": 2,
@@ -1574,7 +1574,7 @@
         "cadenza": "Sempre",
         "testo": "Chi prova a ritardare il tuo momento, o a usare altri effetti di Tempo sulle tue azioni, ha 3 dadi in meno."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "allo-scadere": {
       "grado": 2,
@@ -1588,7 +1588,7 @@
         "cadenza": "Sempre",
         "testo": "Quando un orologio del Narratore scatta, hai subito un'azione per prepararti, anche di combattimento."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "ci-penso-domani": {
       "grado": 2,
@@ -1602,7 +1602,7 @@
         "cadenza": "Sempre",
         "testo": "Quando una cosa che ti riguarda va chiusa entro la fine della scena o della sessione (saldare un debito etc..), la puoi chiudere nella scena dopo, o nella sessione dopo. Chiuderla devi comunque, e più in là non la rimandi, a meno di pagarne il doppio in Quintessenza, che raddoppia di nuovo a ogni rinvio."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "montaggio-alternato": {
       "grado": 2,
@@ -1616,7 +1616,7 @@
         "cadenza": "Sempre",
         "testo": "Conosci l'ordine delle scene, e hai un vago sentore di quello che succede."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "primo-istante": {
       "grado": 2,
@@ -1630,7 +1630,7 @@
         "cadenza": "Sempre",
         "testo": "Agisci sempre per primo nel turno, senza tirare iniziativa. Se altri hanno questo potere, agite insieme."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "preparato-a-casa": {
       "grado": 3,
@@ -1672,7 +1672,7 @@
         "cadenza": "Sempre",
         "testo": "Sai l'ordine delle scene."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo."
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo."
     },
     "slancio": {
       "grado": 3,
@@ -1684,9 +1684,9 @@
       },
       "passivo": {
         "cadenza": "Sempre",
-        "testo": "Quando metti a terra o sconfiggi un nemico, hai 2 dadi in più nel tiro dopo, non di Magick."
+        "testo": "Quando metti a terra o sconfiggi un nemico, hai 2 dadi in più nel tuo prossimo tiro che non sia di Magick."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "flash-forward": {
       "grado": 4,
@@ -1700,7 +1700,7 @@
         "cadenza": "Sempre",
         "testo": "Sai quante sessioni, o quante scene, mancano alla scena del futuro che hai giocato. Il Narratore può spendere punti Paradosso per allungare l'attesa."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "c-ho-ripensato": {
       "grado": 5,
@@ -1714,7 +1714,7 @@
         "cadenza": "Sempre",
         "testo": "Le anomalie del tempo che questo potere può causare non ti toccano: sei protetto tu, il gruppo no."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "pisolino": {
       "grado": 1,
@@ -1729,7 +1729,7 @@
         "cadenza": "Una volta per sessione",
         "testo": "Una scena di riposo vale per te come un riposo completo."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "allenamento": {
       "grado": 2,
@@ -1743,7 +1743,7 @@
         "cadenza": "A sessione nuova",
         "testo": "A ogni sessione sposti come preferisci i punti dei tuoi Attributi fisici, senza scendere sotto 1 né salire sopra 5."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "buona-forchetta": {
       "grado": 2,
@@ -1757,7 +1757,7 @@
         "cadenza": "Sempre",
         "testo": "Quello che mangi non ti dà mai stati alterati né altri effetti. Mangi anche cose che non si mangiano, e ne ricavi nutrimento: sopravvivi e sei sazio."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "il-dolore-sveglia": {
       "grado": 2,
@@ -1772,7 +1772,7 @@
         "cadenza": "Sempre",
         "testo": "Quando prendi danni fisici, guarisci 1 danno mentale superficiale; quando prendi danni mentali, guarisci 1 danno fisico superficiale."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "sangue-per-sangue": {
       "grado": 2,
@@ -1800,7 +1800,7 @@
         "cadenza": "Una volta per sessione",
         "testo": "Scegli una Condizione fisica che hai già preso (si aggiornerà a catena col rifacimento delle Condizioni): fino a fine sessione non te la possono più infliggere."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "bisturi": {
       "grado": 3,
@@ -1814,7 +1814,7 @@
         "cadenza": "Sempre",
         "testo": "Anche con pochi materiali fai il pronto soccorso, e tiri Medicina per tutto quello che serve a trattare le ferite."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "parassita": {
       "grado": 3,
@@ -1856,7 +1856,7 @@
         "cadenza": "Sempre",
         "testo": "Un tiro fisico che ti è già riuscito nella scena, se lo rifai, riesce senza tirare."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "coperto": {
       "grado": 1,
@@ -1870,7 +1870,7 @@
         "cadenza": "Sempre",
         "testo": "La tua Magick si nasconde in quello che c'è già. Se in scena qualcosa può spiegare il tuo effetto a un Dormiente (un temporale, una folla, un cavo scoperto etc..), il Narratore può contare Accidentale il lancio anche se va oltre il normale: cosa basta, lo decide lui."
       },
-      "paradosso": "Accidentale effetto attivo, Accidentale se il Narratore lo concede effetto passivo; in un posto Dissonante, Volgare tutti e due."
+      "paradosso": "Accidentale per l'effetto attivo, Accidentale per l'effetto passivo se il Narratore lo concede; in un posto Dissonante, Volgare per tutti e due."
     },
     "difendersi-dalla-sfera": {
       "grado": 1,
@@ -1884,7 +1884,7 @@
         "cadenza": "Sempre",
         "testo": "Quando qualcuno lancia una Sfera che conosci su di te o intorno a te, lo percepisci subito, e puoi scegliere di reagire a quell'effetto (con la tua reazione: ne hai una per turno)."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "fatto-per-durare": {
       "grado": 1,
@@ -1926,7 +1926,7 @@
         "cadenza": "Sempre",
         "testo": "Percepisci senza tirare quello che le tue Sfere sanno vedere (con Forza l'energia che c'è, con Vita come sta un corpo, con Spirito le presenze oltre il Velo etc..). Quando un tiro di Abilità si appoggia a quello che percepisci, il Narratore può darti 2 dadi in più."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "adrenalina": {
       "grado": 2,
@@ -1960,7 +1960,7 @@
         "cadenza": "Sempre",
         "testo": "Quando sei sotto metà Salute, nei tiri fisici hai 2 dadi in più."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "appoggio": {
       "grado": 2,
@@ -1988,7 +1988,7 @@
         "cadenza": "Sempre",
         "testo": "L'Ambito di Portata di un tuo lancio non conta fino al livello 4 verso ciò con cui hai un legame: qualcosa che ti unisce al bersaglio anche da lontano (un pezzo di lui che tieni con te, un conto aperto fra voi, un posto dove sei già stato etc..). Il legame fa anche da ponte: salti la Regola del Ponte, quella che chiede Corrispondenza per agire su ciò che non vedi."
       },
-      "paradosso": "Basso rischio effetto attivo, segue il lancio effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo, segue il lancio per l'effetto passivo."
     },
     "modello": {
       "grado": 2,
@@ -2058,7 +2058,7 @@
         "cadenza": "Sempre",
         "testo": "All'acquisto scegli un'Abilità. Quando la tiri fuori dalla Magick hai 1 dado in più per ogni tua Sfera che c'entra, fino a 3: con Convincere, Tempo e Mente ti dicono cosa dirà e cosa penserà l'altro, e i dadi in più sono 2. Se sullo stesso tiro vale anche Sesto senso, prendi il più alto dei due."
       },
-      "paradosso": "Segue il lancio effetto attivo, nessuno effetto passivo: sono tiri di Abilità."
+      "paradosso": "Segue il lancio per l'effetto attivo, nessuno per l'effetto passivo: sono tiri di Abilità."
     },
     "rigenerazione": {
       "grado": 3,
@@ -2087,7 +2087,7 @@
           }
         ]
       },
-      "paradosso": "Volgare effetto attivo, basso rischio effetto passivo."
+      "paradosso": "Volgare per l'effetto attivo, basso rischio per l'effetto passivo."
     },
     "seconda-possibilita": {
       "grado": 3,
@@ -2101,7 +2101,7 @@
         "cadenza": "Una volta per sessione",
         "testo": "Ritiri un dado gratis, senza dichiararlo prima."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo."
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo."
     },
     "miraggio": {
       "grado": 3,
@@ -2136,7 +2136,7 @@
         "cadenza": "Sempre",
         "testo": "Un oggetto che tieni con te (un tesserino, una valigetta, la pistola che hai in mano etc..) sembra un altro a chi lo guarda: il biglietto del tram è un pass, la pistola un ombrello. Uno alla volta, e non per forza piccolo. Chi lo prende in mano e lo guarda bene vede quello che è."
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare con Forza, se qualcuno guarda), nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare con Forza, se qualcuno guarda), nessuno per l'effetto passivo.",
       "pagina": "Mente"
     },
     "colpo-decisivo": {
@@ -2152,7 +2152,7 @@
         "cadenza": "Sempre",
         "testo": "Le tue Specialità di Mira e di Mischia valgono doppio: nei tiri in cui contano, ti danno il doppio dei dadi."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo."
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo."
     }
   },
   "aggiunti": {
@@ -2169,7 +2169,7 @@
         "cadenza": "Sempre",
         "testo": "Chi prova a spingerti, farti cadere o sbalzarti ha 3 dadi in meno, e il terreno (ghiaccio, olio, un tetto bagnato) non ti fa cadere."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo.",
       "nome": "Baricentro",
       "pagina": "Forza"
     },
@@ -2186,7 +2186,7 @@
         "cadenza": "Sempre",
         "testo": "Con la tua reazione (ne hai una per turno), quando un effetto fisico arriva verso di te (un pugno, un proiettile, un oggetto lanciato etc..), lo mandi in un'altra direzione che scegli tu. Se lo mandi contro qualcuno, vale il tiro di chi ti ha attaccato, contro la soglia del nuovo bersaglio: se basta, prende lui i danni che avrebbe fatto a te. Funziona solo se sai dove mandarlo, e se i poteri che conosci in Forza non sono meno della soglia del colpo."
       },
-      "paradosso": "Nessuno effetto attivo, Volgare effetto passivo se qualcuno guarda (un colpo che cambia strada da solo).",
+      "paradosso": "Nessuno per l'effetto attivo, Volgare per l'effetto passivo se qualcuno guarda (un colpo che cambia strada da solo).",
       "nome": "Deviare",
       "pagina": "Forza"
     },
@@ -2203,7 +2203,7 @@
         "cadenza": "Sempre",
         "testo": "Quando ti muovi e colpisci nello stesso turno, chi colpisci finisce Atterrato (1 dado in meno nei tiri fisici, finché non si rialza). E travolgi chi ti sta sulla strada: finiscono Atterrati anche loro."
       },
-      "paradosso": "Volgare effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Carica",
       "pagina": "Forza"
     },
@@ -2220,7 +2220,7 @@
         "cadenza": "Sempre",
         "testo": "Nessuno ti disarma: il metallo che hai addosso resta con te. Senti sempre il metallo intorno a te, e quanto ce n'è; se hai l'Abilità che serve a riconoscerlo (le armi, gli attrezzi, le serrature etc..) ne riconosci spesso le forme più comuni, se no ne senti solo la presenza."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo.",
       "nome": "Calamita",
       "pagina": "Forza"
     },
@@ -2254,7 +2254,7 @@
         "cadenza": "Sempre",
         "testo": "Nei tiri per sollevare, spingere o trascinare conti come se il tuo Attributo Forza avesse tanti pallini in più quanti sono i poteri che conosci nella Sfera Forza. In combattimento non vale in modo diretto: lanciare un'auto si può, tirare un pugno più forte no."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo.",
       "nome": "Peso piuma",
       "pagina": "Forza"
     },
@@ -2271,7 +2271,7 @@
         "cadenza": "Sempre",
         "testo": "Dove passi tu, i congegni (sensori, microfoni, telecamere etc..) sono sempre disturbati."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Interferenza",
       "pagina": "Forza"
     },
@@ -2322,7 +2322,7 @@
         "cadenza": "Sempre",
         "testo": "Riduci i danni d'urto (un pugno, una caduta, un'auto che ti investe etc..) di tanti punti quanti sono i poteri che conosci in Forza."
       },
-      "paradosso": "Volgare effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Come una foglia",
       "pagina": "Forza"
     },
@@ -2339,7 +2339,7 @@
         "cadenza": "Sempre",
         "testo": "Muovi come vuoi la luce e le ombre della stanza in cui sei: illumini quello che vuoi far vedere e metti in ombra quello che vuoi nascondere (un volto, un'uscita, un'arma etc..). Quando le ombre ti aiutano in un tiro (il volto in ombra mentre minacci, la luce bassa dove stai per farti notare di meno etc..), il Narratore può darti un vantaggio, di solito 2 dadi in più."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, basso rischio per l'effetto passivo.",
       "nome": "Luci e ombre",
       "pagina": "Forza"
     },
@@ -2356,7 +2356,7 @@
         "cadenza": "Sempre",
         "testo": "Controlli sempre i suoni che fai: passi che non si sentono, la voce che arriva in fondo alla sala o solo all'orecchio di chi vuoi. Nei tiri dove conta (muoverti di nascosto con Criminalità, farti sentire da una folla, sussurrare a uno solo etc..) hai 2 dadi in più."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Suoni e silenzi",
       "pagina": "Forza"
     },
@@ -2373,7 +2373,7 @@
         "cadenza": "Sempre",
         "testo": "Sai sempre come va il tempo. Una volta per scena lo cambi di un passo intorno a te, secondo quello che c'è: dal nuvolo alla pioggia, o a un po' di sole; dalla pioggia al nuvolo etc.."
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare se il tempo è impossibile per la stagione, come la neve d'estate), basso rischio effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare se il tempo è impossibile per la stagione, come la neve d'estate), basso rischio per l'effetto passivo.",
       "nome": "Meteorologo",
       "pagina": "Forza"
     },
@@ -2390,7 +2390,7 @@
         "cadenza": "Sempre",
         "testo": "La gravità su di te vale solo se vuoi, e decidi tu verso dove tira: così cammini e ti muovi dove di solito non potresti (una parete, un soffitto etc..). Non la rallenti, ne cambi il verso: a seconda di come la usi, puoi andare molto veloce."
       },
-      "paradosso": "Volgare effetto attivo, Volgare effetto passivo se qualcuno guarda.",
+      "paradosso": "Volgare per l'effetto attivo, Volgare per l'effetto passivo se qualcuno guarda.",
       "nome": "Amico della gravità",
       "pagina": "Forza"
     },
@@ -2407,7 +2407,7 @@
         "cadenza": "Sempre",
         "testo": "Sai chi è armato in scena e con cosa (una pistola sotto la giacca, un coltello nello stivale, una lama di ceramica etc..)."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo.",
       "nome": "Giocattoli",
       "pagina": "Materia"
     },
@@ -2424,7 +2424,7 @@
         "cadenza": "Sempre",
         "testo": "Vedi attraverso muri, porte e casse fino a Portata 1."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo.",
       "nome": "Vetro",
       "pagina": "Materia"
     },
@@ -2449,7 +2449,7 @@
         "cadenza": "Sempre",
         "testo": "Toccando un oggetto sai cos'è e a cosa serve, e se è chiuso o protetto: una serratura, un codice, un sigillo di Magick."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Dentro la macchina",
       "pagina": "Materia"
     },
@@ -2466,7 +2466,7 @@
         "cadenza": "Sempre",
         "testo": "Toccando un muro o un mobile trovi quello che nasconde (un doppio fondo, una stanza segreta, una cassaforte a muro etc..)."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo.",
       "nome": "Nascondiglio",
       "pagina": "Materia"
     },
@@ -2483,7 +2483,7 @@
         "cadenza": "Sempre",
         "testo": "Le serrature meccaniche (una chiave, un lucchetto, una combinazione etc..) si aprono al tuo tocco."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, basso rischio per l'effetto passivo.",
       "nome": "Passe-partout",
       "pagina": "Materia"
     },
@@ -2534,7 +2534,7 @@
         "cadenza": "Sempre",
         "testo": "Niente ti trattiene: manette, catene e sbarre in mano tua si ammorbidiscono, e con un'azione te ne liberi."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, basso rischio per l'effetto passivo.",
       "nome": "Passaggio di stato",
       "pagina": "Materia"
     },
@@ -2551,7 +2551,7 @@
         "cadenza": "Sempre",
         "testo": "Le tue Magick di Materia che cambiano una materia in un'altra durano per sempre, senza pagare la Durata."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda; il passivo segue il lancio.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda; il passivo segue il lancio.",
       "nome": "Alchimia",
       "pagina": "Materia"
     },
@@ -2568,7 +2568,7 @@
         "cadenza": "Sempre",
         "testo": "Sai sempre dov'è quello con cui hai un legame forte: in che direzione e quanto lontano. Nei lanci di Magick che spostano te, o una cosa, verso un tuo legame forte hai 2 dadi in più."
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno vede sparire o comparire te o l'oggetto); il passivo segue il lancio.",
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare se qualcuno vede sparire o comparire te o l'oggetto); il passivo segue il lancio.",
       "nome": "Filo rosso",
       "pagina": "Corrispondenza"
     },
@@ -2593,7 +2593,7 @@
           }
         ]
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo.",
       "nome": "Traccia",
       "pagina": "Corrispondenza"
     },
@@ -2627,7 +2627,7 @@
         "cadenza": "Sempre",
         "testo": "Chi prova a spostarti nello spazio contro la tua volontà (un teletrasporto, uno scambio di posto, un portale etc..) deve superare una soglia: la più alta fra i poteri che conosci in Corrispondenza e quella del suo effetto."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Recinto",
       "pagina": "Corrispondenza"
     },
@@ -2652,7 +2652,7 @@
           }
         ]
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, basso rischio effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, basso rischio per l'effetto passivo.",
       "nome": "Finestra",
       "pagina": "Corrispondenza"
     },
@@ -2669,7 +2669,7 @@
         "cadenza": "Sempre",
         "testo": "In un inseguimento chi ti segue perde il tiro senza tirare, a meno che non usi la Magick. Non perde le tue tracce: in quel momento non ti trova, ma può restarti dietro, e prima o poi capire che qualcosa non va."
       },
-      "paradosso": "Volgare effetto attivo, basso rischio effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo, basso rischio per l'effetto passivo.",
       "nome": "Labirinto",
       "pagina": "Corrispondenza"
     },
@@ -2746,7 +2746,7 @@
         "cadenza": "Sempre",
         "testo": "Coi tuoi legami la Portata non conta: nei tuoi lanci verso una persona, un posto o una cosa con cui hai un legame, la Portata non si paga."
       },
-      "paradosso": "Volgare effetto attivo; il passivo segue il lancio.",
+      "paradosso": "Volgare per l'effetto attivo; il passivo segue il lancio.",
       "nome": "Ubiquità",
       "pagina": "Corrispondenza"
     },
@@ -2763,7 +2763,7 @@
         "cadenza": "Sempre",
         "testo": "Attraversare il Velo, per te, non ha i rischi che ha per gli altri (le ferite che non guariscono, l'attrito del luogo etc..)."
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo.",
       "nome": "Passo di là",
       "pagina": "Spirito"
     },
@@ -2780,7 +2780,7 @@
         "cadenza": "Sempre",
         "testo": "Toccando un oggetto gli puoi parlare, e se vuole ti risponde. Dipende da quanto è vecchio: un oggetto vecchio ha più facilmente uno spirito, uno nuovo è fresco, e l'effimera non vi si è ancora saldata."
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno vede la cosa muoversi da sola), nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare se qualcuno vede la cosa muoversi da sola), nessuno per l'effetto passivo.",
       "nome": "Anima delle cose",
       "pagina": "Spirito"
     },
@@ -2797,7 +2797,7 @@
         "cadenza": "Sempre",
         "testo": "Gli spiriti sanno che paghi: nelle trattative con loro hai 2 dadi in più."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Invocazione",
       "pagina": "Spirito"
     },
@@ -2814,7 +2814,7 @@
         "cadenza": "Sempre",
         "testo": "Riconosci sempre chi ha uno spirito nel corpo, o chi è stato toccato dagli spiriti."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Esorcista",
       "pagina": "Spirito"
     },
@@ -2831,7 +2831,7 @@
         "cadenza": "Sempre",
         "testo": "Gli spiriti ostili ti temono: quelli che ti attaccano hanno 3 dadi in meno."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Caccia agli spiriti",
       "pagina": "Spirito"
     },
@@ -2848,7 +2848,7 @@
         "cadenza": "Sempre",
         "testo": "Una promessa fra te e uno spirito lega tutti e due: lui la deve mantenere, come la devi mantenere tu."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Catene",
       "pagina": "Spirito"
     },
@@ -2865,7 +2865,7 @@
         "cadenza": "Sempre",
         "testo": "Nessuno ti possiede: chi prova a entrare nel tuo corpo o nella tua mente ha 3 dadi in meno."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Cavalcare",
       "pagina": "Spirito"
     },
@@ -2882,7 +2882,7 @@
         "cadenza": "Sempre",
         "testo": "Senti gli effetti di Magick in atto intorno a te, e a grandi linee che soglia hanno."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Disfare",
       "pagina": "Generali"
     },
@@ -2899,7 +2899,7 @@
         "cadenza": "Sempre",
         "testo": "Chi cerca le tracce della tua Magick (la Risonanza, i residui, un'indagine etc..) non arriva a te, a meno che non sia Magick con una soglia più alta dei poteri che conosci nella Sfera."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Anonimo",
       "pagina": "Generali"
     },
@@ -2933,7 +2933,7 @@
         "cadenza": "Sempre",
         "testo": "Senti i nodi del destino: le cose che devono succedere, e che nessuno può togliere. Quando ne incontri uno (una persona, un luogo, un evento etc..), il Narratore te lo dice."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Era scritto",
       "pagina": "Entropia"
     },
@@ -2950,7 +2950,7 @@
         "cadenza": "Sempre",
         "testo": "Chi non ti conosce già, finita la scena, si scorda il tuo volto e il tuo nome, a meno che tu non voglia."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Dimenticato",
       "pagina": "Mente"
     },
@@ -2975,7 +2975,7 @@
         "cadenza": "Sempre",
         "testo": "Quando hai davanti una creatura, ne vedi l'aura: hai un'idea di cosa sia, e se non è una persona lo sai di sicuro."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Lettore d'aure",
       "pagina": "Mente"
     },
@@ -2992,7 +2992,7 @@
         "cadenza": "Sempre",
         "testo": "Capisci quando una frase ha un secondo senso, e quale: una minaccia velata, un messaggio in codice, un invito che non è un invito. Quando lo usi (rispondi a tono, smascheri il messaggio, parli in codice), nei tiri di Abilità hai 2 dadi in più."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Doppio senso",
       "pagina": "Mente"
     },
@@ -3009,7 +3009,7 @@
         "cadenza": "Sempre",
         "testo": "Quando tiri per convincere qualcuno (persuadere, sedurre, trattare etc..), le tue Specialità valgono doppio: ti danno il doppio dei dadi."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Ammaliare",
       "pagina": "Mente"
     },
@@ -3026,7 +3026,7 @@
         "cadenza": "Sempre",
         "testo": "Parli mente a mente coi compagni che vedi: frasi brevi, immagini, sensazioni. Loro ti rispondono allo stesso modo, se vogliono, e nessun altro vi sente."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Telepatia",
       "pagina": "Mente"
     },
@@ -3043,7 +3043,7 @@
         "cadenza": "Sempre",
         "testo": "Chi sta eseguendo un tuo ordine, o ti deve obbedienza (un tuo dipendente, un soldato del tuo reparto, il tuo autista etc..), resta tuo: chi prova a fargli fare altro (con un ordine, un potere, la Magick) deve superare la tua soglia, pari ai poteri che conosci in Mente, e non la sua."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Ordine",
       "pagina": "Mente"
     },
@@ -3060,7 +3060,7 @@
         "cadenza": "Sempre",
         "testo": "Dove c'è gente sembri uno che ci sta (il cameriere a una festa, l'impiegato in ufficio, l'operaio in cantiere etc..): finché fai quello che farebbe lui, nessuno ti chiede chi sei. Non ti dà un tesserino: a un controllo dei documenti sei quello che sei."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Faccia qualunque",
       "pagina": "Mente"
     },
@@ -3077,7 +3077,7 @@
         "cadenza": "Sempre",
         "testo": "Quando vuoi l'attenzione delle persone, ce l'hai: ti guardano e ti ascoltano, anche in mezzo al rumore, e finché parli non riescono a guardare altrove."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Sguardo paralizzante",
       "pagina": "Mente"
     },
@@ -3094,7 +3094,7 @@
         "cadenza": "Sempre",
         "testo": "Senti quello che sente un compagno con cui hai un legame forte, se lui vuole: vedi coi suoi occhi e senti con le sue orecchie, anche lontano, e i tuoi sensi restano tuoi."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Occhi altrui",
       "pagina": "Mente"
     },
@@ -3119,7 +3119,7 @@
         "cadenza": "Sempre",
         "testo": "In scena senti i legami fra le persone: chi tiene a chi, chi odia chi, chi deve qualcosa a chi. Il Narratore te lo dice a grandi linee."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Fili",
       "pagina": "Mente"
     },
@@ -3136,7 +3136,7 @@
         "cadenza": "Sempre",
         "testo": "I tuoi oggetti incantati si ricaricano da soli: 1 Quintessenza a ogni cambio scena."
       },
-      "paradosso": "Segue il lancio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Segue il lancio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Forgia",
       "pagina": "Primordio"
     },
@@ -3181,7 +3181,7 @@
           }
         ]
       },
-      "paradosso": "Volgare effetto attivo se qualcuno guarda, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo se qualcuno guarda, nessuno per l'effetto passivo.",
       "nome": "Mutaforma",
       "pagina": "Vita"
     },
@@ -3198,7 +3198,7 @@
         "cadenza": "Sempre",
         "testo": "Scegli un senso: quando lo usi hai 2 dadi in più nel tiro che ci va, di solito Allerta."
       },
-      "paradosso": "Nessuno effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Nessuno per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Sensi animali",
       "pagina": "Vita"
     },
@@ -3215,7 +3215,7 @@
         "cadenza": "Sempre",
         "testo": "Capisci gli animali e loro capiscono te, a grandi linee: un cane ti dice che qui è passato qualcuno, un gatto che in casa c'è un estraneo, un piccione che sta per piovere. Non ti obbediscono: si fanno capire. Quello che sanno dipende dall'animale (un cane ricorda un odore per giorni, un piccione dimentica tutto in un'ora)."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Parola alle bestie",
       "pagina": "Vita"
     },
@@ -3232,7 +3232,7 @@
         "cadenza": "Sempre",
         "testo": "Gli animali ti sono amici: non ti attaccano mai, a meno che qualcuno non li costringa (un padrone che li aizza, un potere, una gabbia in cui li chiudono con te)."
       },
-      "paradosso": "Basso rischio effetto attivo (Volgare se qualcuno vede le bestie obbedirti), nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo (Volgare se qualcuno vede le bestie obbedirti), nessuno per l'effetto passivo.",
       "nome": "Richiamo",
       "pagina": "Vita"
     },
@@ -3243,13 +3243,13 @@
       "amalgama": "nessuna",
       "attivo": {
         "costo": "1 Quintessenza a parte",
-        "testo": "Una parte del tuo corpo diventa di un animale fino a fine scena, e ti dà la sua capacità vera: ali di pipistrello per planare, branchie per respirare sott'acqua, il naso di un cane per seguire una traccia, la coda di un gatto per l'equilibrio etc.. Dove la capacità da sola non basta, nei tiri in cui quella parte ti aiuta hai 2 dadi in più. Con artigli o fauci il danno del passivo è aggravato. Si vede: chi ti guarda vede una zampa, non una mano."
+        "testo": "Una parte del tuo corpo diventa di un animale fino a fine scena, e ti dà la sua capacità vera: ali di pipistrello per planare, branchie per respirare sott'acqua, il naso di un cane per seguire una traccia, la coda di un gatto per l'equilibrio etc.. Dove la capacità da sola non basta, nei tiri in cui quella parte ti aiuta hai 2 dadi in più. Con artigli o fauci il danno del passivo è aggravato. Si vede: chi ti guarda vede una zampa al posto della mano."
       },
       "passivo": {
         "cadenza": "Sempre",
         "testo": "I tuoi colpi senza armi fanno danno pari ai poteri che conosci in Vita, più 1: unghie dure, nocche come sassi, denti che stringono. Non si vede."
       },
-      "paradosso": "Volgare effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Volgare per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Parti di bestia",
       "pagina": "Vita"
     },
@@ -3266,7 +3266,7 @@
         "cadenza": "Sempre",
         "testo": "Quando miri una parte del corpo (il ginocchio, la mano, la gola etc..), sai dove fa più male: nel tiro hai 2 dadi in più, e se colpisci fai 1 danno in più. Quei dadi ti aiutano anche quando col colpo vuoi dargli una Condizione."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Spezzaossa",
       "pagina": "Vita"
     },
@@ -3277,13 +3277,13 @@
       "amalgama": "nessuna",
       "attivo": {
         "costo": "2 Quintessenza",
-        "testo": "Fino a fine scena sei coperto di aculei. Chi ti ferisce in mischia prende metà del danno che fa a te, per difetto e dopo le tue riduzioni, e l'arma che ti colpisce si rovina: da lì in poi fa 1 danno in meno, finché non la riparano. Puoi pagarlo anche quando ti colpiscono: vale da quel colpo. Con 2 Quintessenza in più il danno gli torna tutto, non la metà."
+        "testo": "Fino a fine scena sei coperto di aculei. Chi ti ferisce in mischia prende metà del danno che fa a te, per difetto e dopo le tue riduzioni, e l'arma che ti colpisce si rovina: da lì in poi fa 1 danno in meno, finché non la riparano. Puoi pagarlo anche quando ti colpiscono: vale da quel colpo. Con 2 Quintessenza in più il danno gli torna intero."
       },
       "passivo": {
         "cadenza": "Sempre",
         "testo": "Quando qualcuno ti colpisce a mani nude (un pugno, un morso, una presa), dalla pelle escono aculei: prende 1 danno superficiale."
       },
-      "paradosso": "Volgare effetto attivo, Volgare effetto passivo se qualcuno guarda.",
+      "paradosso": "Volgare per l'effetto attivo, Volgare per l'effetto passivo se qualcuno guarda.",
       "nome": "Aculei corporei",
       "pagina": "Vita"
     },
@@ -3300,7 +3300,7 @@
         "cadenza": "Al cambio di scena",
         "testo": "Il Narratore ti dice da dove arriva il pericolo più vicino, se ce n'è uno: una direzione, una persona o un'ora (dalla porta sul retro, dall'uomo col cappotto, prima di mezzanotte etc..). Può essere vago, ma non falso."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Presagio",
       "pagina": "Tempo"
     },
@@ -3311,13 +3311,13 @@
       "amalgama": "nessuna",
       "attivo": {
         "costo": "1 Quintessenza a domanda",
-        "testo": "Tieni l'oggetto e fai al Narratore una domanda chiusa e precisa sul suo passato, che chiede un fatto (chi l'ha impugnato per ultimo? era in quella casa martedì notte?), non una domanda aperta (cosa gli è successo?). Ogni domanda costa 1 Quintessenza, e il Narratore risponde con quello che l'oggetto ha vissuto, non con quello che sa lui."
+        "testo": "Tieni l'oggetto e fai al Narratore una domanda chiusa e precisa sul suo passato, che chiede un fatto (chi l'ha impugnato per ultimo? era in quella casa martedì notte?), non una domanda aperta (cosa gli è successo?). Ogni domanda costa 1 Quintessenza, e il Narratore risponde con quello che l'oggetto ha vissuto."
       },
       "passivo": {
         "cadenza": "Sempre",
         "testo": "Toccando un oggetto senti l'ultima emozione forte di chi l'ha tenuto (paura, rabbia, amore, colpa etc..), senza sapere di chi è."
       },
-      "paradosso": "Basso rischio effetto attivo, nessuno effetto passivo.",
+      "paradosso": "Basso rischio per l'effetto attivo, nessuno per l'effetto passivo.",
       "nome": "Psicometria",
       "pagina": "Tempo"
     }

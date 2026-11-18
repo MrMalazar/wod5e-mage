@@ -90,7 +90,7 @@ assert.deepEqual(famiglieDelCredo(""), []);
 const libro = testoPerche("credo", {}, localize);
 assert.equal(libro.proprio, false);
 assert.match(libro.html, /^<p class="wod5e-mage-guidata-lead">Cosa credi che la realtà sia/);
-assert.match(libro.html, /<p>Ogni setta respira/);
+assert.match(libro.html, /<p>Ogni setta ha i suoi Credi/);
 const mio = testoPerche("credo", { credo: { perche: "<p>Il mio testo</p>" } }, localize);
 assert.deepEqual(mio, { html: "<p>Il mio testo</p>", proprio: true });
 assert.equal(testoPerche("credo", { credo: { perche: "<p></p>" } }, localize).proprio, false, "un editor svuotato torna al LIBRO");

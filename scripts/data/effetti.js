@@ -573,7 +573,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "correspondence",
     "level": 3,
     "extras": [],
-    "text": "Stropicci lo spazio: lo pieghi addosso a una creatura e lo rimetti a posto come un foglio di carta stropicciato: non torna com'era, perché l'hai compresso e mutato. Non è la forza a colpire: è la posizione che si scardina, e il corpo fa i conti con dove si trova adesso.",
+    "text": "Stropicci lo spazio: lo pieghi addosso a una creatura e lo rimetti a posto come un foglio di carta stropicciato: non torna com'era, perché l'hai compresso e mutato. A colpire è la posizione che si scardina, e il corpo fa i conti con dove si trova adesso.",
     "pairings": [
       {
         "sphere": "life",
@@ -2842,7 +2842,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "Il suono si fa pugno: tutto attorno al punto d'impatto vola, i vetri esplodono, la gente cade. Un colpo solo, su un'area.",
+    "text": "Il suono si fa pugno: tutto attorno al punto d'impatto vola, i vetri esplodono, la gente cade. È un colpo solo, e prende tutta l'area.",
     "pairings": [
       {
         "sphere": "matter",
@@ -2994,7 +2994,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "forces",
     "level": 3,
     "extras": [],
-    "text": "Fuoco, fulmine, freddo, suono: l'energia che scegli ti arriva addosso e non fa presa. Non è uno scudo: è il tuo corpo che non la sente.",
+    "text": "Fuoco, fulmine, freddo, suono: l'energia che scegli ti arriva addosso e non fa presa. È il tuo corpo a non sentirla.",
     "pairings": [
       {
         "sphere": "life",
@@ -4763,7 +4763,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 1,
     "extras": [],
-    "text": "Sai cosa vuole fare chi hai davanti: se sta per sparare, per scappare, per mentire, per cedere. Le intenzioni, i desideri, la mossa che sta preparando.",
+    "text": "Sai cosa vuole fare chi hai davanti: se sta per sparare, per scappare, per mentire, per cedere. Leggi le sue intenzioni, i suoi desideri e la mossa che sta preparando.",
     "pairings": [
       {
         "sphere": "entropy",
@@ -4833,7 +4833,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 2,
     "extras": [],
-    "text": "Quel ricordo diventa una cassaforte: nessuna lettura lo apre, nessuna riscrittura lo tocca. Il tuo, o quello di un altro.",
+    "text": "Quel ricordo diventa una cassaforte: nessuna lettura lo apre, nessuna riscrittura lo tocca. Puoi blindare un ricordo tuo o quello di un altro.",
     "pairings": [
       {
         "sphere": "prime",
@@ -5268,7 +5268,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 3,
     "extras": [],
-    "text": "La Cabala pensa in coro: ognuno sente ciò che serve agli altri, dove sono, cosa vedono, cosa stanno per fare. Niente parole.",
+    "text": "La Cabala pensa in coro: ognuno sente ciò che serve agli altri, dove sono, cosa vedono, cosa stanno per fare, senza bisogno di parlare.",
     "pairings": [
       {
         "sphere": "spirit",
@@ -5940,7 +5940,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "mind",
     "level": 5,
     "extras": [],
-    "text": "La persona che esce è coerente, funzionante e diversa, e non lo sospetta: i gusti, le paure, i legami, la storia che si racconta. Nessuna crepa.",
+    "text": "La persona che esce è coerente, funzionante e diversa, e non lo sospetta: cambiano i gusti, le paure, i legami e la storia che si racconta, e non resta una crepa.",
     "pairings": [
       {
         "sphere": "time",
@@ -7998,7 +7998,7 @@ export const EFFETTI = Object.freeze([
         "required": true
       }
     ],
-    "text": "Richiami l'anima oltre il Velo e la rimetti nel corpo: il morto recente torna. Servono la Vita, che rimette in piedi il corpo, e il Primordio, che riaccende la scintilla. Volgare, sempre, ovunque.",
+    "text": "Richiami l'anima oltre il Velo e la rimetti nel corpo: il morto recente torna. Servono la Vita, che rimette in piedi il corpo, e il Primordio, che riaccende la scintilla. È sempre Volgare, ovunque.",
     "pairings": [
       {
         "sphere": "life",
@@ -8234,7 +8234,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "spirit",
     "level": 5,
     "extras": [],
-    "text": "Apri gli occhi a un Dormiente. Non è un dono e non si chiede permesso: è una porta spalancata addosso a qualcuno che dormiva.",
+    "text": "Apri gli occhi a un Dormiente. Senza chiedergli permesso, spalanchi una porta addosso a qualcuno che dormiva.",
     "pairings": [
       {
         "sphere": "prime",
@@ -9317,7 +9317,7 @@ export const EFFETTI = Object.freeze([
     "sphere": "life",
     "level": 2,
     "extras": [],
-    "text": "Il dolore, la febbre, l'adrenalina si spengono: il ferito cammina, il malato dorme, il corpo smette di urlare. La ferita resta.",
+    "text": "Il dolore, la febbre, l'adrenalina si spengono: il ferito cammina, il malato dorme, il corpo smette di urlare, ma la ferita resta.",
     "pairings": [
       {
         "sphere": "mind",

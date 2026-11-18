@@ -27,7 +27,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "1 (Durata 1)",
-    "use": "In genere è pensato per rallentare quel momento della scena, pochi turni in combattimento.",
+    "use": "In genere serve a rallentare quel momento della scena, pochi turni in combattimento.",
     "powers": [
       "pronto-all-uso",
       "puntuale",
@@ -84,7 +84,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "4 (Durata 4) o 7 (Durata 7)",
-    "use": "In genere è pensato per rimuovere il bersaglio dal capitolo attuale; se si vuole «esagerare» anche dall'intera campagna, soglia permettendo.",
+    "use": "In genere serve a rimuovere il bersaglio dal capitolo attuale; se si vuole «esagerare» anche dall'intera campagna, soglia permettendo.",
     "powers": [
       "senza-residuo"
     ],
@@ -129,7 +129,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Durata 2)",
-    "use": "In genere è pensato per aprire un varco o fermare un bersaglio per la scena; un blocco di pochi turni in combattimento costa meno (Durata 1).",
+    "use": "In genere serve ad aprire un varco o fermare un bersaglio per la scena; un blocco di pochi turni in combattimento costa meno (Durata 1).",
     "powers": [
       "uscita-d-emergenza",
       "nessuno-scappa",
@@ -175,7 +175,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "3 (Bersagli 1, Durata 2)",
-    "use": "In genere è pensato per sigillare una stanza per la scena; un edificio intero chiede Bersagli 2, una notte intera Durata 4.",
+    "use": "In genere serve a sigillare una stanza per la scena; un edificio intero chiede Bersagli 2, una notte intera Durata 4.",
     "powers": [
       "tasca-di-mary"
     ],
@@ -215,7 +215,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Durata 2)",
-    "use": "In genere è pensato per una coincidenza a favore o contro che sposta un momento della scena; la maledizione che dura settimane sale con la Durata.",
+    "use": "In genere serve per una coincidenza a favore o contro che sposta un momento della scena; la maledizione che dura settimane sale con la Durata.",
     "powers": [
       "non-tutto-il-male",
       "chi-la-fa-l-aspetti",
@@ -264,7 +264,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "1 (Precisione 1)",
-    "use": "In genere è pensato per togliere una cosa precisa (quel ricordo, quella maledizione, quell'incantesimo), e le scene dopo ne risentono.",
+    "use": "In genere serve a togliere una cosa precisa (quel ricordo, quella maledizione, quell'incantesimo), e le scene dopo ne risentono.",
     "powers": [
       "flashback"
     ],
@@ -308,7 +308,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Durata 2)",
-    "use": "In genere è pensato per nascondere te, un compagno o una cosa per la scena; un gruppo intero sale con i Bersagli.",
+    "use": "In genere serve a nascondere te, un compagno o una cosa per la scena; un gruppo intero sale con i Bersagli.",
     "powers": [
       "di-la-non-contano",
       "coperto"
@@ -349,7 +349,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Durata 2)",
-    "use": "In genere è pensato per una conversazione che dura la scena; una parola sola, subito, costa meno (Durata 0).",
+    "use": "In genere serve per una conversazione che dura la scena; una parola sola, subito, costa meno (Durata 0).",
     "powers": [
       "armonia-a-distanza",
       "interprete"
@@ -387,7 +387,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "1 (Durata 1)",
-    "use": "In genere è pensato per decidere l'esito di una scena senza lasciare tracce; tenere qualcuno sul filo per giorni sale con la Durata.",
+    "use": "In genere serve a decidere l'esito di una scena senza lasciare tracce; tenere qualcuno sul filo per giorni sale con la Durata.",
     "powers": [
       "si-trova-tutto",
       "fuori-dai-piedi",
@@ -429,7 +429,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "3 (Condizioni 2, Durata 1)",
-    "use": "In genere è pensato per togliere un mezzo a un avversario per pochi turni (l'arma, la corsa, la mira); un malus più pesante sale con le Condizioni.",
+    "use": "In genere serve a togliere un mezzo a un avversario per pochi turni (l'arma, la corsa, la mira); un malus più pesante sale con le Condizioni.",
     "powers": [
       "distrazione"
     ],
@@ -473,7 +473,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "0",
-    "use": "In genere è pensato per il duello: un lancio contro un lancio, nello stesso turno.",
+    "use": "In genere serve per il duello: un lancio contro un lancio, nello stesso turno.",
     "powers": [
       "difendersi-dalla-sfera"
     ],
@@ -647,7 +647,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "3 (Durata 3)",
-    "use": "In genere è pensato per cambiare la direzione di un capitolo; un destino che dura una storia sale con la Durata.",
+    "use": "In genere serve a cambiare la direzione di un capitolo; un destino che dura una storia sale con la Durata.",
     "powers": [
       "scommessa",
       "tarocchi"
@@ -693,7 +693,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "5 (Condizioni 3, Durata 2)",
-    "use": "In genere è pensato per un ordine che blocca un'azione o ne impone una, per la scena; comandare chi decide per sé sale sulle Condizioni.",
+    "use": "In genere serve per un ordine che blocca un'azione o ne impone una, per la scena; comandare chi decide per sé sale sulle Condizioni.",
     "powers": [
       "niente-al-caso",
       "goccia-a-goccia"
@@ -774,7 +774,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Durata 2)",
-    "use": "In genere è pensato per far arrivare uno spirito o un'energia per la scena.",
+    "use": "In genere serve per far arrivare uno spirito o un'energia per la scena.",
     "powers": [
       "lascio-fare-a-lui",
       "angelo-custode",
@@ -812,7 +812,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "7 (Durata 7)",
-    "use": "In genere è pensato per rendere permanente un effetto tuo; sospenderlo fino a un segnale costa meno, con le Condizioni al posto della Durata.",
+    "use": "In genere serve a rendere permanente un effetto tuo; sospenderlo fino a un segnale costa meno, con le Condizioni al posto della Durata.",
     "powers": [
       "tenuta",
       "preparato-a-casa",
@@ -838,7 +838,7 @@ export const FORMULE_M6 = Object.freeze([
       "life": "il corpo di una persona, di un animale, di una pianta: ferite, malattie, veleni.",
       "mind": "la Volontà."
     },
-    "coda": "Se si spende 1 punto Quintessenza nel lancio i danni guariti divengono aggravati invece che superficiali. Guarire toglie anche una Condizione al soggetto (Avvelenato, Stordito, Spaventato etc..). A seconda del tipo di creatura potrebbero essere richieste Sfere differenti per poterla guarire, come Materia e Vita per un vampiro, Vita e Spirito per un licantropo, Mente e Vita per una fata etc..",
+    "coda": "Se si spende 1 Quintessenza nel lancio i danni guariti sono aggravati invece che superficiali. Guarire toglie anche una Condizione al soggetto (Avvelenato, Stordito, Spaventato etc..). A seconda della creatura servono Sfere diverse per guarirla: Materia e Vita per un vampiro, Vita e Spirito per un licantropo, Mente e Vita per una fata etc..",
     "limit": "Guarire non è Riparare.",
     "thresholds": [
       {
@@ -899,7 +899,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Durata 2)",
-    "use": "In genere è pensato per un'illusione che regge la scena davanti a uno o pochi; a tutti i presenti sale con i Bersagli.",
+    "use": "In genere serve per un'illusione che regge la scena davanti a uno o pochi; a tutti i presenti sale con i Bersagli.",
     "powers": [
       "miraggio"
     ],
@@ -941,7 +941,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "3 (Potenza 3)",
-    "use": "In genere è pensato per far nascere una cosa che cambia il capitolo; il mondo con leggi nuove lo fa Rivoluzionare.",
+    "use": "In genere serve per far nascere una cosa che cambia il capitolo; il mondo con leggi nuove lo fa Rivoluzionare.",
     "powers": [],
     "newPowers": [],
     "byBlue": false
@@ -978,7 +978,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "5 (Potenza 3, Durata 2)",
-    "use": "In genere è pensato per una scena intera senza subire il dominio della tua Sfera; pochi turni costano meno (Durata 1).",
+    "use": "In genere serve per una scena intera senza subire il dominio della tua Sfera; pochi turni costano meno (Durata 1).",
     "powers": [
       "doppio-cuore"
     ],
@@ -1014,7 +1014,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Durata 2)",
-    "use": "In genere è pensato per un ritocco che dura la scena: la chiave che entra, il volto che non corrisponde alla foto.",
+    "use": "In genere serve per un ritocco che dura la scena: la chiave che entra, il volto che non corrisponde alla foto.",
     "powers": [
       "dettaglio"
     ],
@@ -1101,7 +1101,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "3 (Durata 2, Condizioni 1)",
-    "use": "In genere è pensato per una possessione o un ordine dormiente che dura la scena; un'abitazione lunga sale con la Durata.",
+    "use": "In genere serve per una possessione o un ordine dormiente che dura la scena; un'abitazione lunga sale con la Durata.",
     "powers": [
       "l-avatar-reagisce"
     ],
@@ -1146,7 +1146,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "4 (Potenza 2, Durata 2)",
-    "use": "In genere è pensato per due dadi in più, o due livelli, per la scena.",
+    "use": "In genere serve per due dadi in più, o due livelli, per la scena.",
     "powers": [
       "il-giusto-attrezzo",
       "tutto-e-un-arma",
@@ -1248,7 +1248,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "4 (Potenza 2, Durata 2)",
-    "use": "In genere è pensato per uno scudo che toglie 2 danni a ogni colpo per la scena.",
+    "use": "In genere serve per uno scudo che toglie 2 danni a ogni colpo per la scena.",
     "powers": [
       "angolo-morto",
       "roulette",
@@ -1295,7 +1295,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Durata 2)",
-    "use": "In genere è pensato per una cosa sola (un veleno, il fuoco, le suggestioni) per la scena; l'immunità intera è Invulnerabilità.",
+    "use": "In genere serve per una cosa sola (un veleno, il fuoco, le suggestioni) per la scena; l'immunità intera è Invulnerabilità.",
     "powers": [
       "valvola-di-sfogo",
       "vaccino",
@@ -1331,7 +1331,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "3 (Potenza 3)",
-    "use": "In genere è pensato per riportare un compagno morto in questa sessione, e cambia la direzione del capitolo; il Narratore può dichiararla impresa impossibile (+5).",
+    "use": "In genere serve a riportare un compagno morto in questa sessione, e cambia la direzione del capitolo; il Narratore può dichiararla impresa impossibile (+5).",
     "powers": [
       "il-ritorno"
     ],
@@ -1369,7 +1369,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "1 (Durata 1)",
-    "use": "In genere è pensato per riavvolgere pochi turni e decidere l'esito della scena; una scena intera sale con la Durata.",
+    "use": "In genere serve a riavvolgere pochi turni e decidere l'esito della scena; una scena intera sale con la Durata.",
     "powers": [
       "c-ho-ripensato",
       "seconda-possibilita"
@@ -1429,7 +1429,7 @@ export const FORMULE_M6 = Object.freeze([
     "amalgamsNote": "",
     "intro": "Chiudi in un anello: gli stessi minuti, ancora e ancora.",
     "bySphere": {
-      "time": "un'area, una scena, tre minuti che ricominciano ogni volta che finiscono, e chi sta dentro probabilmente non se ne accorge.",
+      "time": "un'area, una scena, tre minuti che ricominciano ogni volta che finiscono, e chi sta dentro non se ne accorge.",
       "mind": "accanto a Tempo, tu ricordi ogni giro.",
       "correspondence": "accanto a Tempo, l'anello si chiude su un luogo che guardi da lontano.",
       "entropy": "accanto a Tempo, si chiude sempre sullo stesso incidente."
@@ -1445,7 +1445,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Durata 2)",
-    "use": "In genere è pensato per chiudere una stanza in un anello per la scena: la guardia rifà la sua ronda e non arriva mai in fondo.",
+    "use": "In genere serve a chiudere una stanza in un anello per la scena: la guardia rifà la sua ronda e non arriva mai in fondo.",
     "powers": [
       "ciak-si-gira",
       "memoria-muscolare",
@@ -1485,7 +1485,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "3 (Potenza 3)",
-    "use": "In genere è pensato per una cosa che la scena non può dare per scontata, e le scene dopo ne risentono.",
+    "use": "In genere serve per una cosa che la scena non può dare per scontata, e le scene dopo ne risentono.",
     "powers": [
       "convalescenza"
     ],
@@ -1531,7 +1531,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "0",
-    "use": "In genere è pensato per il colore della scena: un dettaglio, e basta.",
+    "use": "In genere serve per il colore della scena: un dettaglio, e basta.",
     "powers": [
       "colpo-di-fortuna",
       "il-dado-e-tratto",
@@ -1580,7 +1580,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "4 (Precisione 4)",
-    "use": "In genere è pensato per una domanda precisa la cui risposta apre una pista per le scene dopo; un segreto della storia sale con l'Informazione.",
+    "use": "In genere serve per una domanda precisa la cui risposta apre una pista per le scene dopo; un segreto della storia sale con l'Informazione.",
     "powers": [
       "conto-degli-indizi",
       "tre-ipotesi"
@@ -1621,7 +1621,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "4 (Durata 4)",
-    "use": "In genere è pensato per piegare il corso della storia in un luogo per una sessione; la valle in cui il tempo va all'indietro per sempre è un'impresa impossibile.",
+    "use": "In genere serve a piegare il corso della storia in un luogo per una sessione; la valle in cui il tempo va all'indietro per sempre è un'impresa impossibile.",
     "powers": [
       "il-narratore-ti-ascolta",
       "impresa-impossibile"
@@ -1668,7 +1668,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Precisione 2)",
-    "use": "In genere è pensato per una lettura precisa che dà un vantaggio nella scena; un segreto che decide la scena sale con l'Informazione.",
+    "use": "In genere serve per una lettura precisa che dà un vantaggio nella scena; un segreto che decide la scena sale con l'Informazione.",
     "powers": [
       "conosco-un-posto",
       "ho-letto-qualcosa",
@@ -1715,7 +1715,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "3 (Durata 2, Precisione 1)",
-    "use": "In genere è pensato per un falso preciso che regge la scena; un'identità che dura una sessione sale con la Durata.",
+    "use": "In genere serve per un falso preciso che regge la scena; un'identità che dura una sessione sale con la Durata.",
     "powers": [
       "copertura"
     ],
@@ -1753,7 +1753,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Durata 2)",
-    "use": "In genere è pensato per spegnere una cosa sola per la scena.",
+    "use": "In genere serve a spegnere una cosa sola per la scena.",
     "powers": [
       "interruttore"
     ],
@@ -1837,7 +1837,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "1 (Durata 1)",
-    "use": "In genere è pensato per spostare una scelta nella scena: la guardia che decide di non controllare, il testimone che preferisce tacere.",
+    "use": "In genere serve a spostare una scelta nella scena: la guardia che decide di non controllare, il testimone che preferisce tacere.",
     "powers": [
       "parole-che-pesano"
     ],
@@ -1961,7 +1961,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Portata 2)",
-    "use": "In genere è pensato per trovare una cosa precisa nei dintorni, fuori dallo scontro; un'altra città sale con la Portata.",
+    "use": "In genere serve a trovare una cosa precisa nei dintorni, fuori dallo scontro; un'altra città sale con la Portata.",
     "powers": [
       "il-pezzo-mancante",
       "il-mondo-e-piccolo",
@@ -2005,7 +2005,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "2 (Portata 2)",
-    "use": "In genere è pensato per passare nella stanza accanto senza aprire la porta, o dall'altra parte del Velo; una città lontana sale con la Portata.",
+    "use": "In genere serve a passare nella stanza accanto senza aprire la porta, o dall'altra parte del Velo; una città lontana sale con la Portata.",
     "powers": [
       "da-qualche-parte",
       "strada-facendo",
@@ -2047,7 +2047,7 @@ export const FORMULE_M6 = Object.freeze([
       }
     ],
     "thresholdText": "3 (Durata 3)",
-    "use": "In genere è pensato per un marchio o un legame che regge due scene; per sempre chiede Fissare.",
+    "use": "In genere serve per un marchio o un legame che regge due scene; per sempre chiede Fissare.",
     "powers": [
       "inseparabili",
       "volonta-prestata",

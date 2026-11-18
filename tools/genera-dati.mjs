@@ -112,7 +112,8 @@ function vocedelRifacimento(id, r, base = null) {
     id,
     name: r.nome ?? base?.name,
     page: r.pagina ?? base?.page,
-    flavor: r.flavour ?? base?.flavor ?? "",
+    // Le frasi di colore del libretto non entrano più: Blue le ha tolte il 19/9 («facevano cacare»). Resta solo il flavour scritto nel rifacimento.
+    flavor: r.flavour ?? "",
     level: r.grado,
     access,
     accessText: accessoTesto,
@@ -372,7 +373,7 @@ const vociPoteri = catalogo.map((p) => ({
   amalgam: p.amalgams[0] ?? "",
   amalgams: p.amalgams,
   amalgamText: p.amalgam.none ? "" : [p.amalgam.text, ...p.amalgam.rows.map((r) => rigaDiSezione(r))].filter(Boolean).join("\n"),
-  flavor: p.flavor,
+  flavor: p.rifatto ? p.flavor : "",
   // Nei poteri rifatti il costo è quello scritto (anche «da 1 a 3 Quintessenza», «Azione»); `costValue` la Quintessenza che si scala da sola.
   cost: p.rifatto ? p.costoAttivo : (p.cost ? `${p.cost} Quintessenza` : ""),
   costValue: p.cost,

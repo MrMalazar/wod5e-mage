@@ -223,7 +223,7 @@ I Pregi dell'Avatar prendono il nome della Risonanza.
 | **Risonanza Difensiva** | •• | **+2 dadi** alle azioni difensive, **2 dadi in meno** alle offensive. | **verdetto**: era Avatar Difensivo.<br>**proposta**: +2 dadi e 2 dadi in meno, come le Sette. |
 | **Risonanza Offensiva** | •• | **+2 dadi** alle azioni offensive, **2 dadi in meno** alle difensive. | **verdetto**: era Avatar Offensivo.<br>**proposta**: +2 dadi e 2 dadi in meno, come le Sette. |
 | **Risonanza Sibillina** | ••• | L'Avatar ti suggerisce un'azione obliqua, sul filo grigio delle tue Convinzioni, che tu non capisci. Se la esegui hai **+2 dadi**, e con loro qualcosa che non ti aspettavi. | **verdetto**: era Avatar Sibillino. |
-| **Magick Emotiva** | •• | Scegli due emozioni, una che ti accende e una che ti spegne. Quando provi la prima, **+2 dadi** alla tua Magick; quando provi la seconda, **2 dadi in meno**. Conta il gioco, non la dichiarazione. Emozioni fra cui scegliere: rabbia, paura, gioia, dolore, desiderio, disgusto, vergogna, invidia, orgoglio, tenerezza, malinconia, sorpresa. | **verdetto**: va bene, con l'elenco delle emozioni.<br>**proposta**: l'elenco è mio; +2 dadi e 2 dadi in meno, come le Sette. |
+| **Magick Emotiva** | •• | Scegli due emozioni, una che ti accende e una che ti spegne. Quando provi la prima, **+2 dadi** alla tua Magick; quando provi la seconda, **2 dadi in meno**. Vale l'emozione che giochi in scena. Emozioni fra cui scegliere: rabbia, paura, gioia, dolore, desiderio, disgusto, vergogna, invidia, orgoglio, tenerezza, malinconia, sorpresa. | **verdetto**: va bene, con l'elenco delle emozioni.<br>**proposta**: l'elenco è mio; +2 dadi e 2 dadi in meno, come le Sette. |
 
 #### Percezioni
 
