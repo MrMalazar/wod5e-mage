@@ -391,22 +391,18 @@ assert.equal(QUADRO_SETTING, "quadroParadosso");
 {
   const quadro = readFileSync(new URL("../scripts/quadro-narratore.js", import.meta.url), "utf8");
   assert.ok(quadro.includes('modo: QuadroNarratore.#modo') || quadro.includes("modo:"), "l'azione del modo");
-  assert.ok(quadro.includes('options.parts = ["testa", this.#sessione ? "sessione" : this.modo]'), "una PART per modo, dietro la testa; la pagina della sessione al posto del modo (27/9)");
+  assert.ok(quadro.includes('options.parts = options.soloTesta ? ["testa"] : ["testa", this.#sessione ? "sessione" : this.modo]'), "una PART per modo, dietro la testa; la pagina della sessione al posto del modo (27/9); nel menù circolare i dati nuovi rifanno solo la testa (18/11)");
   assert.ok(quadro.includes("setApriQuadro("), "la barra apre il Quadro senza importarlo");
   const testa = readFileSync(new URL("../templates/quadro/testa.hbs", import.meta.url), "utf8");
   assert.equal((testa.match(/data-action="modo"/g) ?? []).length, 1, "i modi in un {{#each}}");
+  // Dal 18/11/2026 il modo del menù è il menù circolare per Sfere: il template è solo il suo riquadro (le prove stanno in menu-circolare.test.js).
   const menu = readFileSync(new URL("../templates/quadro/menu.hbs", import.meta.url), "utf8");
-  assert.ok(menu.includes('data-action="voce"') && menu.includes('data-action="spendi"') && menu.includes('data-testo="{{voce.testoCerca}}"'));
-  for (const marker of ['<span class="breve">{{voce.breve}}</span>', 'data-role="titolo"', 'wod5e-mage-menu-segmenti', 'data-role="scatta"', 'data-nome="{{r.nome}}"', "{{#each voce.bersagli as |m|}}", 'data-action="testo"', 'class="wod5e-mage-menu-info"', 'data-action="cassetto"', 'data-cassetto="{{cassetto.cassetto}}"', 'wod5e-mage-menu-cassetto-titolo', '<span class="sotto">{{cassetto.sotto}}</span>', '<small class="conto">{{cassetto.conto}}</small>', ' consigliata{{/if}}', ' staccato{{/if}}', 'data-role="vede" value="tutti"', "{{voce.scenaNome}}"]) {
-    assert.ok(menu.includes(marker), `menu.hbs: manca ${marker}`);
-  }
-  assert.ok(!menu.includes("wod5e-mage-menu-gruppo") && !menu.includes("data-gruppo"), "niente sottotitoli di scena (Blue, 25/9 sera)");
-  assert.ok(quadro.includes("#chiuse") && quadro.includes("chiuse: [...this.#chiuse]"), "le famiglie chiuse restano chiuse, sul client");
+  assert.ok(menu.includes('data-role="menu-circolare"') && !menu.includes('data-action="voce"') && !menu.includes("wod5e-mage-menu-cassetto"), "il menù a 65 voci è uscito dal Quadro");
+  assert.ok(!quadro.includes("#chiuse") && !quadro.includes("#testiAperti") && !quadro.includes("#voceAperta"), "via i cassetti chiusi, i testi aperti, la voce aperta");
   assert.ok(testa.includes("wod5e-mage-quadro-orologi-mini") && testa.includes("{{{c.svg}}}"), "gli orologi in miniatura in testa");
   const contatore = readFileSync(new URL("../templates/quadro/contatore.hbs", import.meta.url), "utf8");
   assert.ok(contatore.includes("{{{c.svg}}}") && !contatore.includes("c.tracciato"), "il contatore disegna gli orologi a spicchi");
   assert.ok(!menu.includes("{{lowercase"), "niente helper che Foundry non ha");
-  assert.ok(quadro.includes("#testiAperti") && !quadro.includes("#cassetti"), "il testo si apre a richiesta, i cassetti non ci sono più");
   const giocatori = readFileSync(new URL("../templates/quadro/giocatori.hbs", import.meta.url), "utf8");
   for (const marker of ['wod5e-mage-quadro-trascina', "WOD5E_MAGE.Menu.TrascinaQui", 'data-action="attivoTogli"', 'data-action="schedaApri"', "WOD5E_MAGE.Menu.Attivi", "WOD5E_MAGE.Menu.Passivi", "WOD5E_MAGE.Menu.MagickInAtto"]) {
     assert.ok(giocatori.includes(marker), `giocatori.hbs: manca ${marker}`);

@@ -2918,6 +2918,210 @@
       "Conto": "danni · dadi {dadi}: scintille {scintille}, stelline {stelline}",
       "Applica": "Applica {danni} danni a {bersaglio}",
       "Applicati": "{bersaglio}: {danni} danni superficiali segnati."
+    },
+    "MenuCircolare": {
+      "Dove": "Dove sei",
+      "Sfere": "Sfere",
+      "Lati": {
+        "n": "Narrativa",
+        "s": "Combattimento"
+      },
+      "Entrambi": "Narrativa e Combattimento",
+      "Mosse": "{n} mosse",
+      "Mossa": "1 mossa",
+      "Cerchi": {
+        "t": {
+          "chip": "al tavolo",
+          "titolo": "Al tavolo",
+          "testo": "Il Paradosso risponde con la Magick che l'ha nutrito. Prezzo X.",
+          "nota": "",
+          "breve": "al tavolo, prezzo X"
+        },
+        "n": {
+          "chip": "del nemico",
+          "titolo": "Del nemico in scena",
+          "testo": "La mossa la fa il nemico: la ragioni dalla sua parte, come PNG, non da Narratore. Prezzo X.",
+          "nota": "La mossa la fa il nemico: ragionala come PNG.",
+          "breve": "del nemico, prezzo X"
+        },
+        "f": {
+          "chip": "fuori dal tavolo",
+          "titolo": "Fuori dal tavolo",
+          "testo": "La usi quando la storia la chiede. Prezzo X e qualcosa in più, perché non è al tavolo.",
+          "nota": "Sfera fuori dal tavolo: costa qualcosa in più.",
+          "breve": "fuori dal tavolo, prezzo X e qualcosa in più"
+        }
+      },
+      "Regole": {
+        "n1": "Spendi prima di un tiro o fra un tiro e l'altro: un tiro già fatto non si cambia.",
+        "n2": "Ogni mossa dura la scena; farla durare di più costa di più.",
+        "s1": "Una spesa per turno, all'inizio del turno del nemico o prima del tiro del mago.",
+        "s2": "Le Condizioni dello scontro finiscono con un'azione: ti rialzi, riprendi l'arma."
+      },
+      "ScegliLato": "Scegli il lato",
+      "AutoreBlue": "Righe scritte da Blue.",
+      "AutoreProposta": "Righe proposte, da provare al tavolo.",
+      "AgisceSua": "Agisce {nome}: è una delle sue Sfere.",
+      "AgisceAltre": "Agisce {nome}, che ha {sfere}.",
+      "AgisceSenza": "Agisce {nome}, che non ha Sfere segnate.",
+      "Passa": "Passa sopra una mossa per leggerla, cliccala per spendere.",
+      "BadgeUno": "Costo 1 Fisso, parte da 1 e si può alzare",
+      "BadgeFissa": "Fissa qualcosa: la soglia è il pagato più 3",
+      "PrezzoX": "Prezzo X.",
+      "CostoUno": "Costo 1 Fisso.",
+      "SogliaAnteprima": "Soglia per scardinare: {r}.",
+      "SogliaPiuTre": "il pagato più 3",
+      "SogliaPari": "pari al pagato",
+      "Componi": {
+        "nome": "Componi",
+        "testo": "Apre la finestra del lancio, già sulla Sfera, per comporre un incantesimo; dal Grimorio si sceglie fra quelli scritti.",
+        "carta": "Si compone l'incantesimo nella finestra del lancio, già su questa Sfera, oppure lo si sceglie dal Grimorio fra quelli scritti.",
+        "apri": "Apri la finestra del lancio",
+        "grimorio": "Scegli dal Grimorio"
+      },
+      "Grimorio": {
+        "titolo": "Effetto di Magick",
+        "sfera": "Grimorio · {sfera}",
+        "conto": "{n} Formule si lanciano con {sfera}.",
+        "conto1": "1 Formula si lancia con {sfera}.",
+        "cerca": "Cerca una Formula o un effetto",
+        "vuoto": "Nessuna Formula con queste parole.",
+        "finestra": "Componi nella finestra del lancio",
+        "soglia": "soglia {s}",
+        "lista": "Lista degli incantesimi",
+        "con": "Con {sfera}: {per}",
+        "meta": "Soglia della Formula: {s}",
+        "limite": "Limite: {l}",
+        "apri": "Apri nella finestra del lancio"
+      },
+      "Lancio": {
+        "composto": "Incantesimo composto",
+        "riapri": "Riapri la finestra del lancio",
+        "titolo": "Lancio di Magick",
+        "nuovo": "Nuovo incantesimo",
+        "lancia": "lancia {nome}",
+        "chiudi": "Chiudi la finestra",
+        "obiettivo": "Obiettivo",
+        "obiettivoPh": "Cosa vuoi ottenere",
+        "grimorio": "Grimorio",
+        "effetto": "Effetto",
+        "effettoParola": "effetto {e}",
+        "effetti": {
+          "physical": "Fisico",
+          "mental": "Mentale (astratto)",
+          "variable": "Variabile"
+        },
+        "sfereEffetto": "Sfere Effetto",
+        "ambiti": "Ambiti",
+        "notaMax": "Tre Ambiti sopra lo 0: è il massimo.",
+        "notaBase": "L'Epicità va da 1 a 7; sopra lo 0 vanno al massimo tre Ambiti.",
+        "piede": "Versione ridotta della finestra del lancio dei maghi, già sulla Sfera scelta.",
+        "sogliaPng": "Soglia del lancio per {nome}: {s}",
+        "vai": "Lancia"
+      },
+      "Spesa": {
+        "aria": "Spesa del Paradosso",
+        "da": "Fatta da {nome}",
+        "daParadosso": "Fatta dal Paradosso",
+        "prezzoUno": "Costo 1 Fisso: parte da 1 e puoi alzarlo.",
+        "prezzoX": "Prezzo X: quanto paghi lo decidi tu.",
+        "paghi": "Paghi",
+        "meno": "Uno in meno",
+        "piu": "Uno in più",
+        "soglia": "Soglia per scardinare",
+        "sogliaFissa": "il pagato più 3, perché fissa qualcosa",
+        "sogliaPari": "pari al pagato",
+        "pallini": "Riserva: i vuoti sono quelli che spendi",
+        "suChi": "Su chi",
+        "nessuno": "Nessuno",
+        "durata": "Durata",
+        "durate": {
+          "scena": "La scena",
+          "lunga": "Più a lungo, costa di più"
+        },
+        "nota": "Nota",
+        "notaPh": "Una riga per te",
+        "turnoAvviso": "In combattimento si spende una volta per turno.",
+        "nuovoTurno": "Nuovo turno",
+        "spendi": "Spendi {p} · restano {r}",
+        "spendi1": "Spendi {p} · resta 1",
+        "vuota": "Riserva vuota",
+        "turnoFatto": "Spesa del turno già fatta",
+        "quandoN": "Spendi prima di un tiro o fra un tiro e l'altro.",
+        "quandoS": "Spendi all'inizio del turno del nemico o prima del tiro del mago."
+      },
+      "Durate": {
+        "scena": "dura la scena",
+        "lunga": "dura più a lungo",
+        "riga": "dura quanto dice la riga",
+        "incantesimo": "dura quanto dice l'incantesimo"
+      },
+      "Barra": {
+        "cerca": "Cerca una mossa",
+        "nessuna": "Nessuna mossa con questo nome.",
+        "turno": "Turno {n}",
+        "giro": "Giro {r}, turno {t}",
+        "spesaFatta": "spesa fatta",
+        "spesaLibera": "spesa libera"
+      },
+      "Attore": {
+        "fattaDa": "Fatta da",
+        "paradosso": "Il Paradosso",
+        "paradossoSotto": "Senza PNG selezionato: l'effetto lo butta il Narratore",
+        "narratore": "Narratore",
+        "png": "PNG in scena",
+        "sfere": "Sfere: {sfere}",
+        "senzaSfere": "Nessuna Sfera segnata",
+        "nessunPng": "Nessun PNG in questa scena.",
+        "nota": "Si sceglie anche selezionando il PNG sulla mappa: se non selezioni nessuno, agisce il Paradosso."
+      },
+      "Fissati": {
+        "titolo": "Fatti fissati",
+        "voce": "{nome} · {sfera} · soglia {s}",
+        "via": "Scardina {nome}",
+        "scardinato": "Scardinato: {nome}."
+      },
+      "Mozzo": {
+        "riserva": "Riserva",
+        "torna": "Torna alle nove Sfere",
+        "aria": "Riserva del Narratore: {n}"
+      },
+      "Legenda": {
+        "bottone": "Legenda",
+        "t": "Anello pieno: al tavolo, prezzo X",
+        "n": "Anello doppio col teschio: del nemico in scena, prezzo X, la mossa la fa lui",
+        "f": "Anello tratteggiato col +: fuori dal tavolo, X e qualcosa in più",
+        "tasti": "Tastiera: da 1 a 9 per scegliere, N e C per il lato, Esc per tornare indietro."
+      },
+      "Pop": {
+        "titolo": "Il Paradosso agisce",
+        "meta": "Soglia per scardinare {s} · {durata}",
+        "nota": "Nota: {nota}",
+        "nascondi": "Nascondi",
+        "nascosta": "Nascosta: resta a te.",
+        "dichiarata": "Dichiarata al tavolo.",
+        "parte": "parte fra {s} s"
+      },
+      "Carta": {
+        "sfera": "Sfera",
+        "suChi": "Su chi",
+        "da": "Fatta da",
+        "effetto": "Effetto",
+        "soglia": "Soglia per scardinare",
+        "durata": "Durata",
+        "nota": "Nota",
+        "fissato": "Resta fissato finché non lo scardinano."
+      },
+      "Aria": {
+        "sfera": "{nome}, {dominio}, {breve}",
+        "lato": "{lato}, {n}",
+        "uno": "costo 1 fisso",
+        "fissa": "fissa qualcosa"
+      },
+      "Avvisi": {
+        "turno": "Spesa del turno già fatta: in combattimento si spende una volta per turno.",
+        "troppo": "Prezzo {p}, punti {n}: la riserva non basta."
+      }
     }
   },
   "WOD5E": {

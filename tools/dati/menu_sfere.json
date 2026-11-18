@@ -1,0 +1,830 @@
+{
+ "stesura": "24/10/2026",
+ "fonte": "claude/menu_narratore_sfere_13_10.md",
+ "sfere": [
+  {
+   "id": "correspondence",
+   "nome": "Corrispondenza",
+   "dominio": "lo spazio e i legami",
+   "autore": "Blue",
+   "righe": [
+    {
+     "id": "correspondence-entrare-uscire-di-scena",
+     "nome": "Entrare / Uscire di Scena",
+     "lato": "n",
+     "testo": "Un pg o npc entra o esce dalla scena attuale. Se vi è un orologio per l'arrivo o l'uscita viene completato anzitempo e pagare il rimanente costo in punti paradosso.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "correspondence-sbagliare-strada",
+     "nome": "Sbagliare strada",
+     "lato": "n",
+     "testo": "Quando ci si sposta per raggiungere un luogo, pagare X a seconda della distanza da raggiungere, più è vicino più costa paradosso mettere la strada sbagliata, i personaggi sbaglieranno strada e si ritroveranno in un'altro luogo dove vi è in corso un'altro evento.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "correspondence-vicolo-cieco",
+     "nome": "Vicolo Cieco",
+     "lato": "n",
+     "testo": "Quando si vuole uscire da un luogo, le uscite divengono inaccessibili. il costo pagato in paradosso +3 è la soglia per sbloccare una nuova via di fuga. il luogo viene bloccato sia sotto l'aspetto della Magick che fisico.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "correspondence-sbarrare-la-via",
+     "nome": "Sbarrare la via",
+     "lato": "n",
+     "testo": "è l'inverso di vicolo cieco, un luogo specifico viene bloccato",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "correspondence-spostare-pedina",
+     "nome": "Spostare Pedina",
+     "lato": "s",
+     "testo": "Come effetto di Magick Paradossale sposta un NPC in un'altro punto della mappa senza usare la sua azione di movimento.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "correspondence-movimento-extra",
+     "nome": "Movimento Extra",
+     "lato": "s",
+     "testo": "Fa fare un azione di movimento extra ad un NPC. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "correspondence-rinforzi",
+     "nome": "Rinforzi",
+     "lato": "s",
+     "testo": "Chiama un numero di rinforzi pari al paradosso pagato. il costo da moltiplicare è la sfida dell'NPC da \"chiamare\" o inferiore. Vedi lista precompilati.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "correspondence-gabbia",
+     "nome": "Gabbia",
+     "lato": "s",
+     "testo": "Uscire di scena costa soglia in più oppure c'è un ostacolo fisico che impedisce l'uscita (Le porte si chiudono a chiave, un camion sbarra la strada)",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "correspondence-colpo-distante",
+     "nome": "Colpo Distante",
+     "lato": "s",
+     "testo": "L'attacco di un NPC ottiene una portata maggiore della norma",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "correspondence-effetto-di-magick",
+     "nome": "Effetto di Magick",
+     "lato": "ns",
+     "testo": "Lancia un incantesimo di corrispondenza bersagliando NPC o personaggi.",
+     "prezzo": null,
+     "fissa": false
+    }
+   ]
+  },
+  {
+   "id": "entropy",
+   "nome": "Entropia",
+   "dominio": "il caso e il destino",
+   "autore": "proposta",
+   "righe": [
+    {
+     "id": "entropy-andare-storto",
+     "nome": "Andare Storto",
+     "lato": "n",
+     "testo": "Quando i pg tentano qualcosa, va storto di proposito: la soglia del tiro si alza di tanti punti quanto il paradosso pagato.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "entropy-incrocio",
+     "nome": "Incrocio",
+     "lato": "n",
+     "testo": "Quando i pg seguono una pista, per caso si incrocia con un'altra linea della storia: li porta su quella, oppure l'inizio di una si confonde con l'altra. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "entropy-guasto",
+     "nome": "Guasto",
+     "lato": "n",
+     "testo": "Quando serve un oggetto o un impianto (auto, telefono, luci, serratura), si rompe adesso. Ripararlo è un tiro o un tempo. Costo X a seconda di quanto serve.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "entropy-destino-scritto",
+     "nome": "Destino Scritto",
+     "lato": "n",
+     "testo": "Un evento della storia viene fissato: succede comunque, oppure non può succedere finché non ne succede un altro che dichiari. Il costo pagato +3 è la soglia per scardinarlo.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "entropy-tiro-sfortunato",
+     "nome": "Tiro Sfortunato",
+     "lato": "s",
+     "testo": "Il prossimo tiro di un pg riesce solo con l'8. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "entropy-tiro-fortunato",
+     "nome": "Tiro Fortunato",
+     "lato": "s",
+     "testo": "Il prossimo tiro di un NPC riceve dadi in più pari al paradosso pagato.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "entropy-inceppamento",
+     "nome": "Inceppamento",
+     "lato": "s",
+     "testo": "L'arma di un pg si inceppa: Disarmato finché non spende un'azione. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "entropy-scivolone",
+     "nome": "Scivolone",
+     "lato": "s",
+     "testo": "Un pg subisce una Condizione che sembra naturale, dovuta al momento: scivola, inciampa, si distrae. Costo 1 Fisso se è naturale; se non lo è, costa più paradosso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "entropy-colpo-deviato",
+     "nome": "Colpo Deviato",
+     "lato": "s",
+     "testo": "Un colpo andato a segno finisce su un altro bersaglio nella linea di tiro: un alleato, un Dormiente, un oggetto. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "entropy-punto-fisso",
+     "nome": "Punto Fisso",
+     "lato": "s",
+     "testo": "Per questo scontro l'NPC ha un punto fisso: una condizione per batterlo, che dichiari (un oggetto da distruggere, un posto da raggiungere, una vulnerabilità da colpire). Finché non succede, non va giù. Il costo pagato +3 è la soglia per scardinarlo.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "entropy-effetto-di-magick",
+     "nome": "Effetto di Magick",
+     "lato": "ns",
+     "testo": "Lancia un incantesimo di Entropia bersagliando NPC o personaggi.",
+     "prezzo": null,
+     "fissa": false
+    }
+   ]
+  },
+  {
+   "id": "forces",
+   "nome": "Forza",
+   "dominio": "l'energia",
+   "autore": "proposta",
+   "righe": [
+    {
+     "id": "forces-blackout",
+     "nome": "Blackout",
+     "lato": "n",
+     "testo": "La corrente salta per la scena. Ostacola o facilita i Background e gli oggetti che dipendono dalla corrente (telecamere, allarmi, telefoni, ascensori): chi ci conta ha la soglia più alta, chi la evita più bassa. Costo X a seconda dell'area.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "forces-maltempo",
+     "nome": "Maltempo",
+     "lato": "n",
+     "testo": "Pioggia, nebbia, vento, gelo: ostacolano la vista e l'udito. Le soglie dei tiri di percezione si alzano di tanti punti quanto il paradosso pagato; condiziona anche il movimento e gli inseguimenti.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "forces-incendio",
+     "nome": "Incendio",
+     "lato": "n",
+     "testo": "Un incendio parte nel luogo: chi resta prende danni a ogni turno o scena pari al paradosso pagato, e il luogo diventa inagibile.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "forces-tremore",
+     "nome": "Tremore",
+     "lato": "n",
+     "testo": "Un tremore scuote il luogo: tutti fanno un tiro per restare in piedi o sono Atterrati, e qualcosa crolla: danni pari al paradosso pagato a chi sta sotto.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "forces-zona-pericolosa",
+     "nome": "Zona Pericolosa",
+     "lato": "s",
+     "testo": "Una zona della mappa fa 1 danno superficiale a turno a chi ci resta (corrente, fuoco, gelo). Costo X a seconda dell'ampiezza.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "forces-lampo",
+     "nome": "Lampo",
+     "lato": "s",
+     "testo": "Infligge una Condizione di Vista o di Udito ai pg nella zona: Abbagliato o Ovattato. Costo 1 Fisso per un turno; più alto il grado e più dura, più costa.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "forces-spinta",
+     "nome": "Spinta",
+     "lato": "s",
+     "testo": "Un'esplosione, una raffica o una scarica spinge un pg: Atterrato, o spostato di una zona. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "forces-colpo-potente",
+     "nome": "Colpo Potente",
+     "lato": "s",
+     "testo": "L'attacco di un NPC fa danni in più pari al paradosso pagato.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "forces-scarica",
+     "nome": "Scarica",
+     "lato": "s",
+     "testo": "Un NPC scarica energia su chi lo tocca o lo colpisce da vicino: danni pari al paradosso pagato.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "forces-effetto-di-magick",
+     "nome": "Effetto di Magick",
+     "lato": "ns",
+     "testo": "Lancia un incantesimo di Forza bersagliando NPC o personaggi.",
+     "prezzo": null,
+     "fissa": false
+    }
+   ]
+  },
+  {
+   "id": "matter",
+   "nome": "Materia",
+   "dominio": "gli oggetti",
+   "autore": "proposta",
+   "righe": [
+    {
+     "id": "matter-porta-chiusa",
+     "nome": "Porta Chiusa",
+     "lato": "n",
+     "testo": "Quando i pg vogliono entrare, la porta (serranda, cancello, cassaforte) è chiusa e resiste alla Magick: si apre da Dormienti, con una chiave, una persona, un orario. Il costo pagato +3 è la soglia per aprirla con la Magick.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "matter-prova-rovinata",
+     "nome": "Prova Rovinata",
+     "lato": "n",
+     "testo": "Quando i pg hanno in mano una prova fisica (una foto, un documento, un oggetto), si rovina o sparisce. Senza la prova, convincere chi doveva vederla ha la soglia più alta. Costo X a seconda di quanto conta.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "matter-oggetto-sbagliato",
+     "nome": "Oggetto Sbagliato",
+     "lato": "n",
+     "testo": "Quando i pg cercano un oggetto (la chiave, il libro, il corpo), trovano quello sbagliato: quello giusto è altrove, e cercarlo costa una scena o un tiro. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "matter-cedimento",
+     "nome": "Cedimento",
+     "lato": "n",
+     "testo": "Il luogo cede: un pavimento, una scala, un soffitto. Chi è sopra è Atterrato o prende danni pari al paradosso pagato; il posto non si usa più.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "matter-perduto",
+     "nome": "Perduto",
+     "lato": "n",
+     "testo": "Un oggetto è distrutto o irraggiungibile (murato, sul fondo, in mano a chi non si trova). Il costo pagato +3 è la soglia per ritrovarlo o rifarlo.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "matter-disarmo",
+     "nome": "Disarmo",
+     "lato": "s",
+     "testo": "L'arma di un pg vola via o si rompe: Disarmato finché non la riprende con un'azione; se è rotta, serve un'altra arma. Costo X a seconda dell'arma.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "matter-riparo",
+     "nome": "Riparo",
+     "lato": "s",
+     "testo": "Un oggetto della mappa (un'auto, un muro, un cassonetto) fa da riparo a un NPC: per colpirlo i pg devono spostarsi per avere la linea di tiro. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "matter-riparo-rotto",
+     "nome": "Riparo Rotto",
+     "lato": "s",
+     "testo": "Il riparo di un pg cede: resta allo scoperto. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "matter-arma-trovata",
+     "nome": "Arma Trovata",
+     "lato": "s",
+     "testo": "Un NPC trova un'arma sulla mappa (vedi lista equipaggiamento). Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "matter-terreno-che-cede",
+     "nome": "Terreno che Cede",
+     "lato": "s",
+     "testo": "Il pavimento o la scala cede sotto un pg: Atterrato finché non spende un'azione. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "matter-effetto-di-magick",
+     "nome": "Effetto di Magick",
+     "lato": "ns",
+     "testo": "Lancia un incantesimo di Materia bersagliando NPC o personaggi.",
+     "prezzo": null,
+     "fissa": false
+    }
+   ]
+  },
+  {
+   "id": "mind",
+   "nome": "Mente",
+   "dominio": "i pensieri",
+   "autore": "proposta",
+   "righe": [
+    {
+     "id": "mind-testimone",
+     "nome": "Testimone",
+     "lato": "n",
+     "testo": "Qualcuno ha visto: finché resta in scena, i Volgari contano con testimoni. Costo X a seconda di chi è: un passante, una telecamera, una guardia.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "mind-domande",
+     "nome": "Domande",
+     "lato": "n",
+     "testo": "Un NPC fa domande scomode e non se ne va. Mente non gliele toglie: cancellate a uno, le fa un altro. Rispondere è un tiro con la soglia pari al paradosso pagato; se se ne vanno, lui ha visto.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "mind-cambiare-idea",
+     "nome": "Cambiare Idea",
+     "lato": "n",
+     "testo": "Un NPC cambia idea: dice no, ci ripensa, chiama qualcuno. Riconvincerlo è un tiro con la soglia più alta di tanti punti quanto il paradosso pagato.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "mind-dimenticare",
+     "nome": "Dimenticare",
+     "lato": "n",
+     "testo": "Un NPC dimentica quello che i pg gli hanno detto o fatto fare. Rifare quello che era fatto costa una scena o un tiro. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "mind-sospetto",
+     "nome": "Sospetto",
+     "lato": "n",
+     "testo": "Un NPC inizia a sospettare dei pg: li segue, indaga, parla di loro. Apri un orologio: pieno, li trova o li denuncia. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "mind-idea-fissa",
+     "nome": "Idea Fissa",
+     "lato": "n",
+     "testo": "Un NPC è fissato su una convinzione. Il costo pagato +3 è la soglia per cambiargliela, con parole o con Mente.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "mind-paura",
+     "nome": "Paura",
+     "lato": "s",
+     "testo": "Un pg prende una Condizione di Paura davanti a un NPC: Intimorito, Spaventato o Terrorizzato. Costo X a seconda del grado.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "mind-esitazione",
+     "nome": "Esitazione",
+     "lato": "s",
+     "testo": "Un pg perde la prossima azione. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "mind-sangue-freddo",
+     "nome": "Sangue Freddo",
+     "lato": "s",
+     "testo": "Un NPC ignora una Condizione di Mente per la scena. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "mind-senza-resa",
+     "nome": "Senza Resa",
+     "lato": "s",
+     "testo": "Per questo scontro un NPC non tratta e non si arrende. Il costo pagato +3 è la soglia per fermarlo con parole o con Mente.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "mind-effetto-di-magick",
+     "nome": "Effetto di Magick",
+     "lato": "ns",
+     "testo": "Lancia un incantesimo di Mente bersagliando NPC o personaggi.",
+     "prezzo": null,
+     "fissa": false
+    }
+   ]
+  },
+  {
+   "id": "prime",
+   "nome": "Primordio",
+   "dominio": "la Magick",
+   "autore": "proposta",
+   "righe": [
+    {
+     "id": "prime-pedaggio",
+     "nome": "Pedaggio",
+     "lato": "n",
+     "testo": "Nel luogo della scena ogni Volgare costa 1 Quintessenza in più. Costo X a seconda del luogo.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "prime-dissonanza",
+     "nome": "Dissonanza",
+     "lato": "n",
+     "testo": "Nel luogo della scena ogni lancio è Volgare. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "prime-residuo",
+     "nome": "Residuo",
+     "lato": "n",
+     "testo": "Un effetto dei pg non si spegne: continua da solo per la scena, e a ogni turno fa 1 danno a chi ci sta o tocca un Dormiente. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "prime-nodo-prosciugato",
+     "nome": "Nodo Prosciugato",
+     "lato": "n",
+     "testo": "Il Nodo non dà Quintessenza per un numero di scene pari al paradosso pagato.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "prime-terra-morta",
+     "nome": "Terra Morta",
+     "lato": "n",
+     "testo": "Nel luogo la Magick non funziona, per nessuno. Il costo pagato +3 è la soglia per riaprirla.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "prime-inceppo",
+     "nome": "Inceppo",
+     "lato": "s",
+     "testo": "−2 dadi al prossimo lancio di Magick di un pg. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "prime-volgare-forzato",
+     "nome": "Volgare Forzato",
+     "lato": "s",
+     "testo": "Il prossimo lancio di un pg conta come Volgare. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "prime-spegnere",
+     "nome": "Spegnere",
+     "lato": "s",
+     "testo": "Un effetto attivo dei pg si spegne. Costo pari alla soglia dell'effetto.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "prime-specchio",
+     "nome": "Specchio",
+     "lato": "s",
+     "testo": "Un effetto dei pg si ritorce contro di loro. Costo pari alla soglia dell'effetto.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "prime-quintessenza-bruciata",
+     "nome": "Quintessenza Bruciata",
+     "lato": "s",
+     "testo": "Un pg perde Quintessenza pari al paradosso pagato.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "prime-effetto-di-magick",
+     "nome": "Effetto di Magick",
+     "lato": "ns",
+     "testo": "Lancia un incantesimo di Primordio bersagliando NPC o personaggi.",
+     "prezzo": null,
+     "fissa": false
+    }
+   ]
+  },
+  {
+   "id": "spirit",
+   "nome": "Spirito",
+   "dominio": "oltre il Velo",
+   "autore": "proposta",
+   "righe": [
+    {
+     "id": "spirit-presenza",
+     "nome": "Presenza",
+     "lato": "n",
+     "testo": "Entra una Presenza (Ombra, Esattore, Ospite): vuole una cosa, e finché non l'ha la sua soglia pesa sui pg. Costo pari alla sfida della Presenza (vedi lista precompilati).",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "spirit-velo-sottile",
+     "nome": "Velo Sottile",
+     "lato": "n",
+     "testo": "Nel luogo il Velo è sottile: gli spiriti passano e i Dormienti lo sentono. Gli effetti di Spirito hanno la soglia più bassa, tutti gli altri più alta, di tanti punti quanto il paradosso pagato.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "spirit-richiamo",
+     "nome": "Richiamo",
+     "lato": "n",
+     "testo": "Un pg riceve una visione o un sogno dal Velo che lo tira verso un evento della storia: finché non lo segue, perde 2 dadi su tutti i tiri. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "spirit-debito",
+     "nome": "Debito",
+     "lato": "n",
+     "testo": "Una Presenza resta finché non ha quello che vuole, e non si scaccia. Il costo pagato +3 è la soglia per scacciarla.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "spirit-spirito-ostile",
+     "nome": "Spirito Ostile",
+     "lato": "s",
+     "testo": "Entra uno spirito che attacca i pg, di sfida pari al paradosso pagato (vedi lista precompilati).",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "spirit-possessione",
+     "nome": "Possessione",
+     "lato": "s",
+     "testo": "Un NPC viene posseduto: agisce con la sfida dello spirito. Costo pari alla sfida dello spirito.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "spirit-esattore",
+     "nome": "Esattore",
+     "lato": "s",
+     "testo": "Entra l'Esattore e va dritto su chi ha lanciato l'ultimo Volgare. Costo pari alla sua sfida.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "spirit-attacco-invisibile",
+     "nome": "Attacco Invisibile",
+     "lato": "s",
+     "testo": "Un pg prende danni da qualcosa che non vede: per colpirlo serve Spirito. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "spirit-effetto-di-magick",
+     "nome": "Effetto di Magick",
+     "lato": "ns",
+     "testo": "Lancia un incantesimo di Spirito bersagliando NPC o personaggi.",
+     "prezzo": null,
+     "fissa": false
+    }
+   ]
+  },
+  {
+   "id": "time",
+   "nome": "Tempo",
+   "dominio": "il quando",
+   "autore": "proposta",
+   "righe": [
+    {
+     "id": "time-anticipare",
+     "nome": "Anticipare",
+     "lato": "n",
+     "testo": "Un evento previsto succede adesso: l'orologio si completa e paghi i segmenti rimanenti.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "time-ritardare",
+     "nome": "Ritardare",
+     "lato": "n",
+     "testo": "Un evento previsto slitta: l'orologio torna indietro di segmenti pari al paradosso pagato.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "time-scadenza",
+     "nome": "Scadenza",
+     "lato": "n",
+     "testo": "Una finestra si chiude a un'ora fissa (il treno, l'appuntamento, l'apertura), e la Magick sul tempo non la sposta. Pieno l'orologio, l'altra parte se ne va con quello che ha. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "time-fatto-compiuto",
+     "nome": "Fatto Compiuto",
+     "lato": "n",
+     "testo": "Un evento è successo e non si riavvolge. Il costo pagato +3 è la soglia per riavvolgerlo con Tempo.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "time-iniziativa",
+     "nome": "Iniziativa",
+     "lato": "s",
+     "testo": "Un NPC agisce prima dei pg in questo turno. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "time-ritardo",
+     "nome": "Ritardo",
+     "lato": "s",
+     "testo": "Il Volgare di un pg arriva a fine turno. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "time-azione-extra",
+     "nome": "Azione Extra",
+     "lato": "s",
+     "testo": "Un NPC fa un'azione in più in questo turno. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "time-rallentare",
+     "nome": "Rallentare",
+     "lato": "s",
+     "testo": "Un pg perde l'azione di movimento in questo turno. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "time-orologio",
+     "nome": "Orologio",
+     "lato": "ns",
+     "testo": "Apri un orologio, in vista o nascosto, su un evento: avanza a ogni scena, turno o Volgare; pieno, l'evento succede. Costo X a seconda dei segmenti: meno segmenti, più costa.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "time-effetto-di-magick",
+     "nome": "Effetto di Magick",
+     "lato": "ns",
+     "testo": "Lancia un incantesimo di Tempo bersagliando NPC o personaggi.",
+     "prezzo": null,
+     "fissa": false
+    }
+   ]
+  },
+  {
+   "id": "life",
+   "nome": "Vita",
+   "dominio": "i corpi",
+   "autore": "proposta",
+   "righe": [
+    {
+     "id": "life-malore",
+     "nome": "Malore",
+     "lato": "n",
+     "testo": "Un pg o un NPC si sente male: una Condizione di Corpo per la scena (Affannato, Intossicato, Sanguinante). Costo X a seconda del grado.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "life-dormiente-in-mezzo",
+     "nome": "Dormiente in Mezzo",
+     "lato": "n",
+     "testo": "Un Dormiente finisce dentro l'effetto o nella scena: salvarlo costa un'azione, lasciarlo va sulla Saggezza. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "life-contagio",
+     "nome": "Contagio",
+     "lato": "n",
+     "testo": "Nel luogo si diffonde qualcosa (una malattia, un veleno, un gas): chi resta prende una Condizione di Corpo. Costo X a seconda dell'area.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "life-animali",
+     "nome": "Animali",
+     "lato": "n",
+     "testo": "Gli animali del luogo reagiscono (cani, ratti, uccelli): attaccano, come NPC dalla lista precompilati, oppure fanno rumore e richiamano un Testimone. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "life-ferita-aperta",
+     "nome": "Ferita Aperta",
+     "lato": "n",
+     "testo": "Una ferita non si chiude con la Magick, o chi è morto resta morto. Il costo pagato +3 è la soglia per guarirla.",
+     "prezzo": null,
+     "fissa": true
+    },
+    {
+     "id": "life-sanguinare",
+     "nome": "Sanguinare",
+     "lato": "s",
+     "testo": "Un pg ferito prende Sanguinante. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "life-affanno",
+     "nome": "Affanno",
+     "lato": "s",
+     "testo": "Un pg prende Affannato. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "life-veleno",
+     "nome": "Veleno",
+     "lato": "s",
+     "testo": "L'attacco di un NPC infligge anche Intossicato. Costo X.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "life-rigenerare",
+     "nome": "Rigenerare",
+     "lato": "s",
+     "testo": "Un NPC recupera danni superficiali pari al paradosso pagato.",
+     "prezzo": null,
+     "fissa": false
+    },
+    {
+     "id": "life-tempra",
+     "nome": "Tempra",
+     "lato": "s",
+     "testo": "Un NPC ignora una Condizione di Corpo per la scena. Costo 1 Fisso.",
+     "prezzo": 1,
+     "fissa": false
+    },
+    {
+     "id": "life-effetto-di-magick",
+     "nome": "Effetto di Magick",
+     "lato": "ns",
+     "testo": "Lancia un incantesimo di Vita bersagliando NPC o personaggi.",
+     "prezzo": null,
+     "fissa": false
+    }
+   ]
+  }
+ ]
+}

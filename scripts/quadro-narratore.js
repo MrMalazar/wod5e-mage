@@ -1,57 +1,49 @@
 /**
  * Il Quadro del Narratore (Blue, 24/9/2026, terza proposta, «montalo su
  * Foundry»): una finestra sola che cambia in tre modi con un bottone. Il
- * contatore dei punti Paradosso (la riserva, il ritmo, gli orologi e le
- * Presenze in scena); il menù del Paradosso (le 65 voci a cassetti per
- * famiglia, chiusi, con la scena in tendina: si apre una voce, si legge la
- * scheda, si spende); il controllo dei giocatori (un riquadro per mago con
+ * contatore dei punti Paradosso (la riserva, il ritmo, gli orologi, le
+ * Presenze e i fatti fissati in scena); il menù del Narratore, dal 18/11/2026
+ * il menù circolare per Sfere (menu-circolare-ui.js, al posto delle 65 voci a
+ * cassetti); il controllo dei giocatori (un riquadro per mago con
  * lo status, gli effetti attivi del Paradosso, i passivi, la Magick in atto;
  * chi c'è lo decide il Narratore, nella Nuova sessione o trascinando un mago
  * dagli Attori sul Quadro, 25/9).
- * I conti puri stanno in menu-paradosso.js.
+ * I conti puri stanno in menu-paradosso.js e menu-circolare.js.
  */
 import { MODULE_ID } from "./constants.js";
 import { BUSSOLA_SCALA_FLAG, BUSSOLA_SCENE_FLAG } from "./bussola.js";
 import { activeCondizioni, findCondizione } from "./condizioni.js";
 import { addQuintessenceToBalance, getMagickBalance } from "./magick-balance.js";
-import { isMageActor } from "./mage-dice.js";
+import { isMageActor, isNemicoActor } from "./mage-dice.js";
+import { cartaMossa, chiaveTurno, FATTI_SETTING, fattoFissato, TURNO_SETTING, voceAddosso } from "./menu-circolare.js";
+import { MenuCircolare } from "./menu-circolare-ui.js";
 import {
   ADDOSSO_FLAG,
   addossoDopo,
   avanzaOrologio,
-  campiSpesa,
-  cassettiPerRimbalzo,
-  cassettiPerScena,
   contoRitmo,
   copiaDaCarta,
   copiaDaPotere,
   COPIA_FLAG,
-  coppiaLibera,
-  etichettaVolgare,
-  inizioSessione,
   MAGHI_SETTING,
   MODI_QUADRO,
-  nuovoOrologioParadosso,
   POSTI,
-  prezzoVoce,
   QUADRO_SETTING,
   recordAddosso,
-  renderCartaVoce,
   righeAddosso,
   SCENA_SETTING,
   SCENE_PARADOSSO,
-  scattaPredefinito,
   scenaById,
   svgOrologio,
-  voceById,
-  volgariRecenti
+  voceById
 } from "./menu-paradosso.js";
+import { datiNemico, NEMICO_FLAG, sogliaDagliAmbiti } from "./nemico.js";
 import { prepareOngoingMagick } from "./ongoing-magick.js";
 import { addPoints, getPool, LOBBY_FLAG, openSpendDialog, POOL_SETTING, premioDelDifetto, PREMIO_DIFETTO_FLAG, resetPool, setApriQuadro, spendPoints } from "./paradosso-narratore.js";
-import { prepareAnchors } from "./personaggio-extra.js";
 import { poteriDelPersonaggio } from "./poteri.js";
 import { ROLL_CARD_FLAG } from "./roll-card.js";
 import { getSalute, RICARICA_SCENA } from "./salute.js";
+import { getSphereSelection } from "./spheres.js";
 import { isChiaro, TEMA_CLASSE, TEMA_SETTING } from "./tema.js";
 
 const RADICE = `modules/${MODULE_ID}/templates/quadro`;
@@ -70,19 +62,6 @@ const ICONE_FAMIGLIE = {
   ancore: "fa-solid fa-anchor",
   grandi: "fa-solid fa-burst"
 };
-// I nove cassetti del menù (Blue, 27/9): su cosa rimbalza il Paradosso.
-const ICONE_CASSETTI = {
-  mago: "fa-solid fa-hand-sparkles",
-  incantesimo: "fa-solid fa-wand-magic-sparkles",
-  dormienti: "fa-solid fa-users",
-  presenze: "fa-solid fa-ghost",
-  posto: "fa-solid fa-house-crack",
-  scontro: "fa-solid fa-person-running",
-  orologi: "fa-solid fa-clock",
-  ancore: "fa-solid fa-anchor",
-  scoppio: "fa-solid fa-burst"
-};
-const ICONE_MODO_VOCE = { immediato: "fa-solid fa-bolt", annunciato: "fa-regular fa-eye", nascosto: "fa-solid fa-eye-slash", scoppio: "fa-solid fa-burst" };
 const ICONE_SCENE = {
   indagine: "fa-solid fa-magnifying-glass",
   trattativa: "fa-solid fa-handshake",
@@ -272,13 +251,12 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   /** La finestra aperta, una sola. */
   static aperto = null;
 
-  #voceAperta = "";
-  #testiAperti = new Set();
   #maghiAperti = new Set();
-  /** I cassetti chiusi dal Narratore (Blue, 25/9 sera: «voglio poter aprire e chiudere le etichette»; dal 27/9 per id di cassetto); restano chiusi, sul client. */
-  #chiuse = new Set(QuadroNarratore.stato.chiuse);
-  #cerca = "";
   #registro = false;
+  /** Il menù circolare (17-18/11/2026): lo stato resta col Quadro, il DOM si rifà quando si torna nel modo. */
+  #menu = null;
+  /** La grandezza della finestra prima del menù, che chiede più spazio: si rimette uscendo dal modo. */
+  #primaDelMenu = null;
   /** La pagina della Nuova sessione (Blue, 27/9): prende il posto del modo in uso finché si inizia o si annulla. */
   #sessione = false;
 
@@ -309,10 +287,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       cambioScena: QuadroNarratore.#onCambioScena,
       orologioAvanti: QuadroNarratore.#onOrologioAvanti,
       orologioChiudi: QuadroNarratore.#onOrologioChiudi,
-      voce: QuadroNarratore.#onVoce,
-      testo: QuadroNarratore.#onTesto,
-      cassetto: QuadroNarratore.#onCassetto,
-      spendi: QuadroNarratore.#onSpendi,
+      scardina: QuadroNarratore.#onScardina,
       mago: QuadroNarratore.#onMago,
       magoTogli: QuadroNarratore.#onMagoTogli,
       attivoTogli: QuadroNarratore.#onAttivoTogli,
@@ -324,17 +299,14 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
   static PARTS = {
     testa: { template: `${RADICE}/testa.hbs` },
     contatore: { template: `${RADICE}/contatore.hbs`, scrollable: [""] },
-    menu: { template: `${RADICE}/menu.hbs`, scrollable: [""] },
+    menu: { template: `${RADICE}/menu.hbs` },
     giocatori: { template: `${RADICE}/giocatori.hbs`, scrollable: [""] },
     sessione: { template: `${RADICE}/sessione.hbs`, scrollable: [""] }
   };
 
   static get stato() {
     const stored = game.settings.get(MODULE_ID, QUADRO_SETTING) ?? {};
-    return {
-      modo: MODI_QUADRO.includes(stored.modo) ? stored.modo : "contatore",
-      chiuse: Array.isArray(stored.chiuse) ? stored.chiuse.map(String) : []
-    };
+    return { modo: MODI_QUADRO.includes(stored.modo) ? stored.modo : "contatore" };
   }
 
   get modo() {
@@ -361,18 +333,50 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     return app;
   }
 
+  /**
+   * Ridisegna il Quadro coi dati nuovi. Nel menù circolare si rifà solo la
+   * testa, e il menù si aggiorna da sé: così l'anello non riparte e i campi
+   * tengono il fuoco mentre arrivano la riserva, la chat e i token.
+   */
   static aggiorna() {
-    if (QuadroNarratore.aperto?.rendered) QuadroNarratore.aperto.render();
+    const app = QuadroNarratore.aperto;
+    if (!app?.rendered) return;
+    if (app.menuVivo) {
+      app.render({ parts: ["testa"], soloTesta: true });
+      app.menuCircolare.disegna();
+      return;
+    }
+    app.render();
+  }
+
+  /** Solo il menù circolare, quando cambiano i token, il turno, i nemici in scena. */
+  static aggiornaMenu() {
+    const app = QuadroNarratore.aperto;
+    if (app?.rendered && app.menuVivo) app.menuCircolare.disegna();
+  }
+
+  /** Il menù circolare del Quadro, creato alla prima richiesta e tenuto finché la finestra vive. */
+  get menuCircolare() {
+    this.#menu ??= new MenuCircolare(fonteDelQuadro());
+    return this.#menu;
+  }
+
+  /** Vero quando il menù circolare è montato nella finestra. */
+  get menuVivo() {
+    return Boolean(this.#menu?.montato) && this.modo === "menu" && !this.#sessione;
   }
 
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
-    options.parts = ["testa", this.#sessione ? "sessione" : this.modo];
+    // Nel menù circolare i dati nuovi rifanno solo la testa (aggiorna): il menù resta montato.
+    options.soloTesta = Boolean(options.soloTesta) && this.menuVivo;
+    options.parts = options.soloTesta ? ["testa"] : ["testa", this.#sessione ? "sessione" : this.modo];
   }
 
   /** Un modo alla volta: la PART del modo di prima esce dalla finestra quando si cambia modo. */
   _replaceHTML(result, content, options) {
     super._replaceHTML(result, content, options);
+    if (options.soloTesta) return;
     for (const parte of content.querySelectorAll("[data-application-part]")) {
       if (!options.parts.includes(parte.dataset.applicationPart)) parte.remove();
     }
@@ -397,7 +401,6 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       orologiMini: getOrologi().map((c) => ({ id: c.id, titolo: c.titolo, pieni: count(c.pieni), segmenti: count(c.segmenti), svg: svgOrologio(c, { size: 26, ...this.#fondoOrologi() }) }))
     };
     if (modo === "contatore") Object.assign(base, this.#contestoContatore(pool, scena, localize));
-    if (modo === "menu") Object.assign(base, this.#contestoMenu(pool, scena, localize));
     if (modo === "giocatori") Object.assign(base, this.#contestoGiocatori(scena, localize));
     if (this.#sessione) Object.assign(base, this.#contestoSessione(scena, localize), { sessione: true });
     return Object.assign(context, base);
@@ -425,6 +428,7 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
         if (riga.famiglia === "ancore") ancore.push({ ...riga, actorName: actor.name });
       }
     }
+    const fissati = getFissati().map((f) => ({ ...f, testo: game.i18n.format("WOD5E_MAGE.MenuCircolare.Fissati.voce", { nome: f.nome, sfera: f.sferaNome || f.sfera, s: f.soglia }) }));
     const log = pool.log.slice(-12).reverse().map((entry) => ({
       ...entry,
       sign: entry.amount > 0 ? `+${entry.amount}` : String(entry.amount),
@@ -439,94 +443,11 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
       orologi,
       presenze,
       ancore,
-      inScena: orologi.length + presenze.length + ancore.length,
+      fissati,
+      inScena: orologi.length + presenze.length + ancore.length + fissati.length,
       registro: this.#registro,
       log
     };
-  }
-
-  #contestoMenu(pool, scena, localize) {
-    const volgari = volgariRecenti(game.messages?.contents ?? [], { dal: scena.inizio || inizioSessione(pool.log) });
-    const maghi = attoriDelQuadro().map((actor) => ({ id: actor.id, name: actor.name }));
-    // I nove cassetti (27/9): nome, riga «cosa ci trovi», icona, colore dal CSS; lo scoppio in fondo, staccato.
-    const cassetti = cassettiPerRimbalzo(scena.tipo, { cerca: this.#cerca }).map((cassetto) => ({
-      ...cassetto,
-      label: localize(`WOD5E_MAGE.Menu.Cassetti.${cassetto.cassetto}.nome`),
-      sotto: localize(`WOD5E_MAGE.Menu.Cassetti.${cassetto.cassetto}.sotto`),
-      icona: ICONE_CASSETTI[cassetto.cassetto],
-      staccato: cassetto.cassetto === "scoppio",
-      // Chiuso dal Narratore: il titolo resta, le righe no. La cerca lo riapre finché dura.
-      chiusa: this.#chiuse.has(cassetto.cassetto) && !this.#cerca,
-      voci: cassetto.voci.map((voce) => this.#rigaVoce(voce, { volgari, maghi, pool, localize }))
-    }));
-    return {
-      scene: SCENE_PARADOSSO.map((s) => ({ id: s.id, nome: s.nome, selected: s.id === scena.tipo })),
-      cerca: this.#cerca,
-      cassetti,
-      nessunaVoce: cassetti.every((cassetto) => cassetto.conto === 0)
-    };
-  }
-
-  #rigaVoce(voce, { volgari, maghi, pool, localize }) {
-    const aperta = this.#voceAperta === voce.id;
-    const campi = campiSpesa(voce);
-    const primo = volgari[0] ?? null;
-    const soglia = primo?.soglia ?? 0;
-    const stima = prezzoVoce(voce, { soglia, suaSoglia: voce.prezzo.valore || 2, pallini: 1, rimbalzo: 0 });
-    const scoppio = voce.modo === "scoppio";
-    // «Su chi»: i maghi del Quadro, più chi ha lanciato un Volgare recente anche se sta fuori dal Quadro.
-    const bersagli = maghi.map((m) => ({ ...m, fuori: false }));
-    for (const v of volgari) {
-      if (!v.actorId || bersagli.some((b) => b.id === v.actorId)) continue;
-      const actor = game.actors?.get(v.actorId);
-      if (actor && isMageActor(actor)) bersagli.push({ id: actor.id, name: actor.name, fuori: true });
-    }
-    const rimbalzi = aperta && campi.rimbalzo ? this.#rimbalziPossibili(soglia) : [];
-    const rispondeLabel = primo ? etichettaVolgare(primo, localize) : "";
-    return {
-      ...voce,
-      aperta,
-      testoAperto: this.#testiAperti.has(voce.id),
-      testoCerca: `${voce.nome} ${voce.breve} ${voce.effetto} ${voce.quando} ${voce.scenaNome ?? ""}`.toLowerCase(),
-      iconaModo: ICONE_MODO_VOCE[voce.modo] ?? "fa-solid fa-bolt",
-      modoLabel: localize(`WOD5E_MAGE.Menu.Modo.${voce.modo}`),
-      prezzoLabel: voce.prezzo.breve || voce.prezzo.testo,
-      scoppio,
-      scettro: voce.famiglia === "scettro",
-      campi,
-      volgari: volgari.map((v, index) => ({ ...v, selected: index === 0, label: etichettaVolgare(v, localize) })),
-      bersagli: bersagli.map((b) => ({ ...b, selected: b.id === primo?.actorId, label: b.fuori ? `${b.name} (${localize("WOD5E_MAGE.Menu.FuoriQuadro")})` : b.name })),
-      suChiVuoto: !bersagli.some((b) => b.id === primo?.actorId),
-      ancore: aperta && campi.ancora ? this.#ancoreDi(primo?.actorId ?? maghi[0]?.id) : [],
-      rimbalzi,
-      pallini: campi.pallini ? Array.from({ length: voce.prezzo.massimo || 1 }, (_, index) => ({ value: index + 1, label: String(index + 1) })) : [],
-      suaSogliaDefault: voce.prezzo.valore || 2,
-      // L'orologio precompilato: il titolo, i segmenti a scelta rapida, cosa scatta.
-      titoloDefault: voce.nome,
-      segmentiDefault: voce.presenza ? 3 : 4,
-      segmentiScelte: [3, 4, 6, 8].map((n) => ({ n, attivo: n === (voce.presenza ? 3 : 4) })),
-      scattaDefault: aperta && campi.orologio ? scattaPredefinito(voce, { rimbalzo: rimbalzi[0]?.nome ?? "", risponde: rispondeLabel }, localize, game.i18n.format.bind(game.i18n)) : "",
-      stima: stima ?? "",
-      troppo: stima !== null && stima > pool.points
-    };
-  }
-
-  #ancoreDi(actorId) {
-    const actor = game.actors?.get(actorId);
-    if (!actor) return [];
-    return prepareAnchors(actor)
-      .map((row) => ({ id: row.id, name: [row.name, row.role].map((v) => String(v ?? "").trim()).find(Boolean) ?? "" }))
-      .filter((row) => row.name);
-  }
-
-  #rimbalziPossibili(soglia) {
-    return cassettiPerScena(getScena().tipo)
-      .filter((cassetto) => ["comuni", "presenze", "scena", "tocchi"].includes(cassetto.famiglia))
-      .sort((a, b) => ["comuni", "presenze", "scena", "tocchi"].indexOf(a.famiglia) - ["comuni", "presenze", "scena", "tocchi"].indexOf(b.famiglia))
-      .flatMap((cassetto) => cassetto.voci)
-      .filter((voce) => voce.famiglia !== "orologi" && voce.modo !== "scoppio")
-      .map((voce) => ({ id: voce.id, nome: voce.nome, prezzo: prezzoVoce(voce, { soglia, suaSoglia: voce.prezzo.valore || 2 }) ?? 0 }))
-      .filter((riga) => riga.prezzo > 0);
   }
 
   #contestoGiocatori(scena, localize) {
@@ -552,220 +473,37 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     QuadroNarratore.aperto = this;
     this.#collegaTrascinamento();
     this.element.classList.toggle(TEMA_CLASSE, isChiaro(game.settings.get(MODULE_ID, TEMA_SETTING)));
-    const scena = this.element.querySelector("[data-role=scena]");
-    scena?.addEventListener("change", async (event) => {
-      await setScena({ tipo: event.target.value });
-    });
-    const cerca = this.element.querySelector("[data-role=cerca]");
-    cerca?.addEventListener("input", (event) => {
-      this.#cerca = String(event.target.value ?? "");
-      this.#filtra();
-    });
-    // La tendina «su chi» segue il Volgare scelto, e le Ancore seguono il mago.
-    for (const select of this.element.querySelectorAll("[data-role=rispondeA]")) {
-      select.addEventListener("change", (event) => {
-        const actorId = event.target.selectedOptions[0]?.dataset.actor ?? "";
-        const box = event.target.closest(".wod5e-mage-menu-spesa");
-        const suChi = box?.querySelector("[data-role=suChi]");
-        if (suChi && actorId && [...suChi.options].some((option) => option.value === actorId)) suChi.value = actorId;
-        this.#aggiornaPrezzo(box);
-      });
-    }
-    for (const input of this.element.querySelectorAll(".wod5e-mage-menu-spesa [data-prezzo]")) {
-      input.addEventListener("change", (event) => this.#aggiornaPrezzo(event.target.closest(".wod5e-mage-menu-spesa")));
-      input.addEventListener("input", (event) => this.#aggiornaPrezzo(event.target.closest(".wod5e-mage-menu-spesa")));
-    }
-    for (const box of this.element.querySelectorAll(".wod5e-mage-menu-spesa")) this.#aggiornaPrezzo(box);
-    // I segmenti a scelta rapida scrivono nel numero; il rimbalzo scelto riscrive cosa scatta.
-    for (const tasto of this.element.querySelectorAll(".wod5e-mage-menu-segmenti button")) {
-      tasto.addEventListener("click", (event) => {
-        event.preventDefault();
-        const box = tasto.closest(".wod5e-mage-menu-spesa");
-        const numero = box?.querySelector("[data-role=segmenti]");
-        if (numero) numero.value = tasto.dataset.n;
-        for (const altro of tasto.parentElement.querySelectorAll("button")) altro.classList.toggle("attivo", altro === tasto);
-      });
-    }
-    for (const numero of this.element.querySelectorAll(".wod5e-mage-menu-spesa [data-role=segmenti]")) {
-      numero.addEventListener("input", () => {
-        for (const tasto of numero.closest(".wod5e-mage-menu-spesa")?.querySelectorAll(".wod5e-mage-menu-segmenti button") ?? []) tasto.classList.toggle("attivo", tasto.dataset.n === String(numero.value));
-      });
-    }
-    for (const tasto of this.element.querySelectorAll(".wod5e-mage-menu-vede button")) {
-      tasto.addEventListener("click", (event) => {
-        event.preventDefault();
-        const campo = tasto.parentElement.querySelector("[data-role=vede]");
-        if (campo) campo.value = tasto.dataset.vede;
-        for (const altro of tasto.parentElement.querySelectorAll("button")) altro.classList.toggle("attivo", altro === tasto);
-      });
-    }
-    for (const select of this.element.querySelectorAll(".wod5e-mage-menu-spesa [data-role=rimbalzo]")) {
-      select.addEventListener("change", () => {
-        const scatta = select.closest(".wod5e-mage-menu-spesa")?.querySelector("[data-role=scatta]");
-        const nome = select.selectedOptions[0]?.dataset.nome ?? "";
-        if (scatta && nome) scatta.value = nome;
-      });
+    if (options?.soloTesta) return;
+    // Il menù circolare (17-18/11/2026): si monta nel suo riquadro, con lo stato che aveva.
+    const nelMenu = this.modo === "menu" && !this.#sessione;
+    this.#misuraPerIlMenu(nelMenu);
+    if (nelMenu) this.menuCircolare.monta(this.element.querySelector("[data-role=menu-circolare]"));
+    else this.#menu?.smonta();
+  }
+
+  /** Il menù circolare vuole spazio: la finestra si allarga entrando nel modo, e torna com'era uscendo. */
+  #misuraPerIlMenu(nelMenu) {
+    const pos = this.position ?? {};
+    if (nelMenu && !this.#primaDelMenu) {
+      this.#primaDelMenu = { width: pos.width, height: pos.height };
+      const larga = Math.min(1240, (globalThis.innerWidth ?? 1280) - 60);
+      const alta = Math.min(860, (globalThis.innerHeight ?? 900) - 40);
+      if (Number(pos.width) < larga || Number(pos.height) < alta) {
+        this.setPosition?.({ width: Math.max(Number(pos.width) || 0, larga), height: Math.max(Number(pos.height) || 0, alta) });
+      }
+    } else if (!nelMenu && this.#primaDelMenu) {
+      const prima = this.#primaDelMenu;
+      this.#primaDelMenu = null;
+      if (Number(prima.width) && Number(prima.height)) this.setPosition?.({ width: prima.width, height: prima.height });
     }
   }
 
   _onClose(options) {
     super._onClose?.(options);
+    // Una spesa ancora nei suoi cinque secondi parte adesso: chiudere non la perde.
+    this.#menu?.sfuggi();
+    this.#menu?.smonta();
     if (QuadroNarratore.aperto === this) QuadroNarratore.aperto = null;
-  }
-
-  /** La cerca filtra le righe senza ridisegnare, così il campo tiene il fuoco. */
-  #filtra() {
-    const filtro = this.#cerca.trim().toLowerCase();
-    for (const cassetto of this.element.querySelectorAll("[data-cassetto]")) {
-      let visibili = 0;
-      for (const riga of cassetto.querySelectorAll("[data-voce]")) {
-        const passa = !filtro || (riga.dataset.testo ?? "").includes(filtro);
-        riga.classList.toggle("nascosta", !passa);
-        if (passa) visibili += 1;
-      }
-      cassetto.classList.toggle("chiusa", !filtro && this.#chiuse.has(cassetto.dataset.cassetto));
-      cassetto.classList.toggle("nascosta", Boolean(filtro) && visibili === 0);
-    }
-  }
-
-  /** Il prezzo vivo dentro la voce aperta: legge i campi e lo riscrive. */
-  #aggiornaPrezzo(box) {
-    if (!box) return;
-    const voce = voceById(box.dataset.voce);
-    if (!voce) return;
-    const lettura = this.#leggiSpesa(box, voce);
-    const out = box.querySelector("[data-role=prezzoVivo]");
-    const dopo = box.querySelector("[data-role=riservaDopo]");
-    const points = getPool().points;
-    if (out) out.textContent = lettura.prezzo === null ? "?" : String(lettura.prezzo);
-    if (dopo) dopo.textContent = lettura.prezzo === null ? "" : String(points - lettura.prezzo);
-    box.classList.toggle("troppo", lettura.prezzo !== null && lettura.prezzo > points);
-    const tasto = box.querySelector("[data-action=spendi]");
-    if (tasto) tasto.disabled = lettura.prezzo === null || lettura.prezzo > points;
-  }
-
-  #leggiSpesa(box, voce) {
-    const q = (role) => box.querySelector(`[data-role=${role}]`);
-    const rispondeA = q("rispondeA");
-    const opzione = rispondeA?.selectedOptions?.[0];
-    const messageId = rispondeA?.value ?? "";
-    const soglia = count(opzione?.dataset.soglia);
-    const suChi = q("suChi")?.value ?? "";
-    const vede = q("vede")?.value ?? "tutti";
-    const suaSoglia = count(q("suaSoglia")?.value);
-    const pallini = count(q("pallini")?.value) || 1;
-    const segmenti = count(q("segmenti")?.value) || 4;
-    const rimbalzoId = q("rimbalzo")?.value ?? "";
-    const rimbalzoPrezzo = count(q("rimbalzo")?.selectedOptions?.[0]?.dataset.prezzo);
-    const ancoraId = q("ancora")?.value ?? "";
-    const ancoraNome = q("ancora")?.selectedOptions?.[0]?.textContent?.trim() ?? "";
-    const vuole = String(q("vuole")?.value ?? "").trim();
-    const nota = String(q("nota")?.value ?? "").trim();
-    const titolo = String(q("titolo")?.value ?? "").trim();
-    const scatta = String(q("scatta")?.value ?? "").trim();
-    const prezzo = prezzoVoce(voce, { soglia, suaSoglia, pallini, rimbalzo: rimbalzoPrezzo });
-    return {
-      messageId, soglia, suChi, vede, suaSoglia, pallini, segmenti, rimbalzoId, rimbalzoPrezzo, ancoraId, ancoraNome, vuole, nota, titolo, scatta, prezzo,
-      risponde: opzione && messageId ? opzione.textContent.trim() : "",
-      actorDelVolgare: opzione?.dataset.actor ?? ""
-    };
-  }
-
-  /* ---------------------------------------------------------------- */
-  /* La spesa                                                          */
-  /* ---------------------------------------------------------------- */
-
-  async #spendi(voceId) {
-    const voce = voceById(voceId);
-    const box = this.element.querySelector(`.wod5e-mage-menu-spesa[data-voce="${voceId}"]`);
-    if (!voce || !box) return;
-    const localize = localizer();
-    const format = game.i18n.format.bind(game.i18n);
-    if (voce.modo === "scoppio") {
-      ui.notifications.warn(localize("WOD5E_MAGE.Menu.SoloScoppio"));
-      return;
-    }
-    const lettura = this.#leggiSpesa(box, voce);
-    if (lettura.prezzo === null) {
-      ui.notifications.warn(localize("WOD5E_MAGE.Menu.PrezzoManca"));
-      return;
-    }
-    const pool = getPool();
-    if (lettura.prezzo > pool.points) {
-      ui.notifications.warn(format("WOD5E_MAGE.Paradosso.SpendTooMuch", { price: lettura.prezzo, points: pool.points }));
-      return;
-    }
-    const scena = getScena();
-    const round = count(game.combat?.round);
-    const target = lettura.suChi ? (game.actors?.get(lettura.suChi) ?? null) : null;
-    const campi = campiSpesa(voce);
-    const dettagli = [];
-    const quando = Date.now();
-    const idSpesa = `${voce.id}-${quando}`;
-
-    // Chi entra e cosa vuole; l'Ancora; i segmenti.
-    if (campi.suaSoglia && lettura.suaSoglia) dettagli.push({ chiave: localize("WOD5E_MAGE.Menu.SuaSoglia"), valore: String(lettura.suaSoglia) });
-    if (campi.vuole && lettura.vuole) dettagli.push({ chiave: localize("WOD5E_MAGE.Menu.Vuole"), valore: lettura.vuole });
-    if (campi.ancora && lettura.ancoraNome) dettagli.push({ chiave: localize("WOD5E_MAGE.Menu.Ancora"), valore: lettura.ancoraNome });
-    if (campi.pallini) dettagli.push({ chiave: localize("WOD5E_MAGE.Menu.Pallini"), valore: String(lettura.pallini) });
-
-    // L'orologio del Paradosso: aperto nel Quadro e specchiato nel modulo Orologio.
-    let orologio = null;
-    if (campi.orologio) {
-      const esistenti = [...getOrologi(), ...(orologioModuloAttivo() ? Object.values(game.settings.get(OROLOGIO_MODULO, "orologi") ?? {}) : [])];
-      const coppia = coppiaLibera(esistenti);
-      const rimbalzo = lettura.rimbalzoId ? voceById(lettura.rimbalzoId) : null;
-      const scatta = lettura.scatta || scattaPredefinito(voce, { rimbalzo: rimbalzo?.nome ?? "", risponde: lettura.risponde, chi: lettura.vuole }, localize, format);
-      const base = lettura.titolo || voce.nome;
-      orologio = nuovoOrologioParadosso({
-        id: idSpesa,
-        titolo: target && !base.includes(target.name) ? `${base} · ${target.name}` : base,
-        segmenti: lettura.segmenti,
-        visibile: voce.modo !== "nascosto" && lettura.vede !== "narratori",
-        colore: coppia.colore,
-        forma: coppia.forma,
-        scatta,
-        voce: voce.id,
-        actorId: target?.id ?? "",
-        ordine: quando
-      });
-      await setOrologi([...getOrologi(), orologio]);
-      await specchiaOrologio(orologio);
-      dettagli.push({ chiave: localize("WOD5E_MAGE.Menu.Orologio"), valore: `${orologio.segmenti} ${localize("WOD5E_MAGE.Menu.Segmenti")} · ${localize(`WOD5E_MAGE.Menu.Forme.${coppia.forma}`)} ${localize(`WOD5E_MAGE.Menu.Colori.${coppia.colore}`)}` });
-    }
-
-    // La riserva scende; il registro segna la voce, il mago, la scena e il giro.
-    const next = spendPoints(pool, lettura.prezzo, {
-      kind: "menu",
-      voce: voce.id,
-      text: voce.nome,
-      actorId: target?.id ?? "",
-      actorName: target?.name ?? "",
-      scena: scena.numero,
-      round
-    });
-    if (!next) return;
-    await game.settings.set(MODULE_ID, POOL_SETTING, next);
-
-    // L'effetto resta addosso al mago finché non scade.
-    if (target && voce.durata) {
-      const addosso = foundry.utils.deepClone(target.getFlag(MODULE_ID, ADDOSSO_FLAG) ?? {});
-      addosso[idSpesa] = recordAddosso(voce, { id: idSpesa, scena: scena.numero, round, risponde: lettura.risponde, testo: lettura.vuole || lettura.nota, quando });
-      await target.setFlag(MODULE_ID, ADDOSSO_FLAG, addosso);
-    }
-
-    // La carta in chat: a tutti, o solo ai Narratori.
-    const nascosta = voce.modo === "nascosto" || lettura.vede === "narratori";
-    await ChatMessage.create({
-      speaker: { alias: localize("WOD5E_MAGE.Paradosso.Speaker") },
-      content: renderCartaVoce(voce, { risponde: lettura.risponde, suChi: target?.name ?? "", dettagli, testo: lettura.nota }, localize),
-      whisper: nascosta ? game.users.filter((user) => user.isGM).map((user) => user.id) : [],
-      flags: { [MODULE_ID]: { paradossoMenu: { voce: voce.id, id: idSpesa, actorId: target?.id ?? "", prezzo: lettura.prezzo } } }
-    });
-    ui.notifications.info(format("WOD5E_MAGE.Menu.Speso", { nome: voce.nome, prezzo: lettura.prezzo, resto: next.points }));
-    if (orologio) ui.notifications.info(format("WOD5E_MAGE.Menu.OrologioAperto", { nome: orologio.titolo, forma: localize(`WOD5E_MAGE.Menu.Forme.${orologio.forma}`), colore: localize(`WOD5E_MAGE.Menu.Colori.${orologio.colore}`) }));
-    this.#voceAperta = "";
-    await this.render();
   }
 
   /* ---------------------------------------------------------------- */
@@ -854,35 +592,10 @@ export class QuadroNarratore extends HandlebarsApplicationMixin(ApplicationV2) {
     await chiudiOrologioParadosso(target.dataset.id);
   }
 
-  static async #onVoce(event, target) {
+  /** Un fatto fissato scardinato dai maghi: esce dal Quadro (dal contatore o dalla fascia del menù). */
+  static async #onScardina(event, target) {
     event.preventDefault();
-    const id = target.dataset.voce;
-    this.#voceAperta = this.#voceAperta === id ? "" : id;
-    await this.render();
-  }
-
-  /** Il titolo di un cassetto lo chiude o lo riapre; la scelta resta sul client, per id di cassetto (le chiavi vecchie delle famiglie si ignorano). */
-  static async #onCassetto(event, target) {
-    event.preventDefault();
-    const cassetto = target.dataset.cassetto;
-    if (this.#chiuse.has(cassetto)) this.#chiuse.delete(cassetto);
-    else this.#chiuse.add(cassetto);
-    await game.settings.set(MODULE_ID, QUADRO_SETTING, { ...QuadroNarratore.stato, chiuse: [...this.#chiuse] });
-    await this.render();
-  }
-
-  /** Il testo della voce (Quando, Effetto, Mosse, Poi, Esempio) si apre solo a richiesta: in sessione non c'è tempo di leggere (Blue, 25/9). */
-  static async #onTesto(event, target) {
-    event.preventDefault();
-    const id = target.dataset.voce;
-    if (this.#testiAperti.has(id)) this.#testiAperti.delete(id);
-    else this.#testiAperti.add(id);
-    await this.render();
-  }
-
-  static async #onSpendi(event, target) {
-    event.preventDefault();
-    await this.#spendi(target.dataset.voce);
+    await scardinaFatto(target.dataset.id);
   }
 
   static async #onMago(event, target) {
@@ -1239,11 +952,227 @@ async function suGiro() {
   await avanzaOrologiPer("giro");
 }
 
+/* ------------------------------------------------------------------ */
+/*  Il menù circolare (17-18/11/2026): quello che legge e scrive        */
+/* ------------------------------------------------------------------ */
+
+/** Le Sfere segnate di un mago (quelle che la scheda mostra). */
+function sfereDelMago(actor) {
+  return Object.entries(getSphereSelection(actor)).filter(([, on]) => on).map(([id]) => id);
+}
+
+/** L'Areté scritta sulla scheda di un mago, come la legge arete.js (un numero o { value }). */
+function areteDelMago(actor) {
+  const stored = actor?.getFlag?.(MODULE_ID, "arete");
+  return Math.max(count(typeof stored === "object" && stored !== null ? stored.value : stored), 1);
+}
+
+/**
+ * I PNG della scena in vista: i token senza giocatori. Del nemico contano le
+ * Sfere della sua Magick, se è accesa; di un PNG fatto con la scheda del Mago
+ * le Sfere segnate. Gli altri agiscono senza Sfere.
+ */
+export function pngInScena() {
+  const tokens = globalThis.canvas?.scene?.tokens;
+  const out = [];
+  for (const doc of tokens?.contents ?? tokens ?? []) {
+    const actor = doc?.actor;
+    if (!actor || actor.hasPlayerOwner) continue;
+    let sfere = [];
+    let magick = false;
+    let arete = 1;
+    if (isNemicoActor(actor)) {
+      const dati = datiNemico(actor.getFlag(MODULE_ID, NEMICO_FLAG) ?? {});
+      magick = dati.magick.on;
+      sfere = magick ? Object.keys(dati.magick.domini) : [];
+      arete = dati.magick.arete;
+    } else if (isMageActor(actor)) {
+      magick = true;
+      sfere = sfereDelMago(actor);
+      arete = areteDelMago(actor);
+    }
+    out.push({ id: doc.id, nome: doc.name || actor.name, actorId: actor.id, sfere, magick, arete });
+  }
+  return out;
+}
+
+/** Chi fa la mossa: il PNG del token selezionato; senza token (o col token di un giocatore) agisce il Paradosso. */
+export function attoreScelto() {
+  const doc = globalThis.canvas?.tokens?.controlled?.[0]?.document;
+  if (!doc) return null;
+  return pngInScena().find((p) => p.id === doc.id) ?? null;
+}
+
+/** Scegliere dal menù è come selezionare il token sulla mappa; il Paradosso li lascia tutti. */
+async function scegliToken(id) {
+  const layer = globalThis.canvas?.tokens;
+  if (!layer) return;
+  if (!id) {
+    layer.releaseAll?.();
+    return;
+  }
+  const token = layer.get?.(id) ?? layer.placeables?.find((t) => t.id === id);
+  token?.control?.({ releaseOthers: true });
+}
+
+/** I fatti fissati nel mondo, nell'ordine in cui sono entrati. */
+export function getFissati() {
+  const salvati = game.settings.get(MODULE_ID, FATTI_SETTING) ?? {};
+  return Object.values(salvati)
+    .filter((f) => f && typeof f === "object" && f.id)
+    .sort((a, b) => (a.quando ?? 0) - (b.quando ?? 0));
+}
+
+async function setFissati(fatti) {
+  await game.settings.set(MODULE_ID, FATTI_SETTING, Object.fromEntries(fatti.map((f) => [f.id, f])));
+}
+
+/** Un fatto scardinato esce dal mondo. */
+export async function scardinaFatto(id) {
+  const fatti = getFissati();
+  const fatto = fatti.find((f) => f.id === id);
+  if (!fatto) return false;
+  await setFissati(fatti.filter((f) => f.id !== id));
+  ui.notifications?.info(game.i18n.format("WOD5E_MAGE.MenuCircolare.Fissati.scardinato", { nome: fatto.nome }));
+  return true;
+}
+
+/**
+ * Il turno della spesa di Combattimento: con lo scontro avviato è il turno del
+ * tracker; senza, un turno a mano che il Narratore fa avanzare dal menù.
+ */
+export function statoTurno() {
+  const salvato = game.settings.get(MODULE_ID, TURNO_SETTING) ?? {};
+  const usato = String(salvato.usato ?? "");
+  const combat = game.combat;
+  if (combat?.started) return { combattimento: true, chiave: chiaveTurno(combat), r: count(combat.round), t: count(combat.turn) + 1, usato };
+  const n = Math.max(count(salvato.manuale), 1);
+  return { combattimento: false, chiave: `manuale:${n}`, n, usato };
+}
+
+async function nuovoTurnoMenu() {
+  const salvato = game.settings.get(MODULE_ID, TURNO_SETTING) ?? {};
+  await game.settings.set(MODULE_ID, TURNO_SETTING, { ...salvato, manuale: Math.max(count(salvato.manuale), 1) + 1 });
+}
+
+/**
+ * La spesa del menù circolare: la riserva scende subito e il registro segna la
+ * mossa, la Sfera, su chi e chi la fa; la mossa che fissa entra fra i fatti
+ * fissati con la sua soglia; su un mago del Quadro resta fra i suoi effetti
+ * attivi; sul lato Combattimento segna la spesa del turno.
+ */
+export async function spendiMossa(spesa = {}) {
+  const pool = getPool();
+  const prezzo = count(spesa.paga);
+  if (!prezzo) return { ok: false };
+  if (prezzo > pool.points) {
+    ui.notifications?.warn(game.i18n.format("WOD5E_MAGE.MenuCircolare.Avvisi.troppo", { p: prezzo, n: pool.points }));
+    return { ok: false, motivo: "troppo" };
+  }
+  const scena = getScena();
+  const round = count(game.combat?.round);
+  const mago = spesa.suChi?.id ? (game.actors?.get(spesa.suChi.id) ?? null) : null;
+  const next = spendPoints(pool, prezzo, {
+    kind: "menu",
+    voce: spesa.riga || spesa.nome || "",
+    text: [spesa.sferaNome, spesa.nome].filter(Boolean).join(" · "),
+    actorId: mago?.id ?? "",
+    actorName: mago?.name ?? "",
+    daName: spesa.da?.nome ?? "",
+    sfera: spesa.sfera ?? "",
+    lato: spesa.lato ?? "",
+    soglia: count(spesa.soglia),
+    nota: String(spesa.nota ?? ""),
+    scena: scena.numero,
+    round
+  });
+  if (!next) return { ok: false };
+  await game.settings.set(MODULE_ID, POOL_SETTING, next);
+  if (spesa.fissa) await setFissati([...getFissati(), fattoFissato(spesa, { scena: scena.numero })]);
+  if (mago) {
+    const quando = Number(spesa.quando) || Date.now();
+    const id = `${spesa.riga || "mossa"}-${quando}`;
+    const addosso = foundry.utils.deepClone(mago.getFlag(MODULE_ID, ADDOSSO_FLAG) ?? {});
+    addosso[id] = recordAddosso(voceAddosso(spesa), { id, scena: scena.numero, round, testo: spesa.nota ?? "", quando });
+    await mago.setFlag(MODULE_ID, ADDOSSO_FLAG, addosso);
+  }
+  if (spesa.lato === "s" && spesa.chiaveTurno) {
+    await game.settings.set(MODULE_ID, TURNO_SETTING, { ...(game.settings.get(MODULE_ID, TURNO_SETTING) ?? {}), usato: spesa.chiaveTurno });
+  }
+  return { ok: true, resto: next.points };
+}
+
+/** La carta «Il Paradosso agisce»: al tavolo dopo i cinque secondi, o solo ai Narratori se nascosta. */
+export async function dichiaraMossa(spesa = {}, { nascosta = false } = {}) {
+  const localize = (key) => game.i18n.localize(key);
+  return ChatMessage.create({
+    speaker: { alias: localize("WOD5E_MAGE.Paradosso.Speaker") },
+    content: cartaMossa(spesa, { nascosta, localize }),
+    whisper: nascosta ? game.users.filter((user) => user.isGM).map((user) => user.id) : [],
+    flags: {
+      [MODULE_ID]: {
+        paradossoMenu: {
+          mossa: spesa.riga || spesa.nome || "",
+          sfera: spesa.sfera ?? "",
+          lato: spesa.lato ?? "",
+          prezzo: count(spesa.paga),
+          soglia: count(spesa.soglia),
+          fissa: Boolean(spesa.fissa),
+          actorId: spesa.suChi?.id ?? "",
+          da: spesa.da?.nome ?? "",
+          nascosta: Boolean(nascosta)
+        }
+      }
+    }
+  });
+}
+
+/**
+ * Quello che il menù circolare legge e scrive nel mondo: menu-circolare-ui.js
+ * non tocca Foundry, passa tutto da qui.
+ */
+export function fonteDelQuadro() {
+  return {
+    localize: (key) => game.i18n.localize(key),
+    format: (key, data) => game.i18n.format(key, data),
+    nomeSfera: (id) => {
+      const chiave = `WOD5E_MAGE.Spheres.${id}`;
+      const nome = game.i18n.localize(chiave);
+      return nome === chiave ? "" : nome;
+    },
+    riserva: () => getPool().points,
+    maghi: () => attoriDelQuadro().map((actor) => ({ id: actor.id, nome: actor.name, sfere: sfereDelMago(actor) })),
+    png: () => pngInScena(),
+    attore: () => attoreScelto(),
+    seleziona: (id) => scegliToken(id),
+    fissati: () => getFissati(),
+    scardina: (id) => scardinaFatto(id),
+    turno: () => statoTurno(),
+    nuovoTurno: () => nuovoTurnoMenu(),
+    sogliaDagliAmbiti: (livelli, arete) => sogliaDagliAmbiti(livelli, arete).soglia,
+    avvisa: (testo) => ui.notifications?.warn(testo),
+    spendi: (spesa) => spendiMossa(spesa),
+    dichiara: (spesa, opzioni) => dichiaraMossa(spesa, opzioni)
+  };
+}
+
+/** Un ritardo breve: i ganci dei token arrivano a raffica (uno per token selezionato o lasciato). */
+function aRaffica(fn, ms = 60) {
+  let timer = null;
+  return () => {
+    clearTimeout(timer);
+    timer = setTimeout(fn, ms);
+  };
+}
+
 export function registerQuadroNarratore() {
   game.settings.register(MODULE_ID, SCENA_SETTING, { scope: "world", config: false, type: Object, default: { tipo: "", posto: "normale", numero: 1 }, onChange: () => QuadroNarratore.aggiorna() });
   game.settings.register(MODULE_ID, MAGHI_SETTING, { scope: "world", config: false, type: Object, default: { ids: [] }, onChange: () => QuadroNarratore.aggiorna() });
   game.settings.register(MODULE_ID, OROLOGI_SETTING, { scope: "world", config: false, type: Object, default: {}, onChange: () => QuadroNarratore.aggiorna() });
   game.settings.register(MODULE_ID, QUADRO_SETTING, { scope: "client", config: false, type: Object, default: { modo: "contatore" } });
+  // Il menù circolare: i fatti fissati (per id, finché non li scardinano) e la spesa del turno di Combattimento.
+  game.settings.register(MODULE_ID, FATTI_SETTING, { scope: "world", config: false, type: Object, default: {}, onChange: () => QuadroNarratore.aggiorna() });
+  game.settings.register(MODULE_ID, TURNO_SETTING, { scope: "world", config: false, type: Object, default: {}, onChange: () => QuadroNarratore.aggiornaMenu() });
 
   Hooks.once("ready", () => {
     if (!game.user?.isGM) return;
@@ -1258,6 +1187,16 @@ export function registerQuadroNarratore() {
     Hooks.on("createChatMessage", () => QuadroNarratore.aggiorna());
     Hooks.on("updateSetting", (setting) => {
       if (setting?.key === `${MODULE_ID}.${POOL_SETTING}`) QuadroNarratore.aggiorna();
+    });
+    // Il menù circolare segue il token scelto, i PNG della scena, il turno dello scontro e le Sfere dei nemici.
+    const menu = aRaffica(() => QuadroNarratore.aggiornaMenu());
+    for (const gancio of ["controlToken", "canvasReady", "createToken", "deleteToken", "updateCombat", "deleteCombat", "combatStart"]) Hooks.on(gancio, menu);
+    Hooks.on("updateToken", (_doc, changes) => {
+      if (changes && ("name" in changes || "actorId" in changes || "actorLink" in changes || "delta" in changes)) menu();
+    });
+    Hooks.on("updateActor", (_actor, changes) => {
+      const flags = changes?.flags?.[MODULE_ID];
+      if (flags && (NEMICO_FLAG in flags || "selectedSpheres" in flags || "spheres" in flags || "arete" in flags)) menu();
     });
   });
   setApriQuadro((modo) => QuadroNarratore.apri(modo));

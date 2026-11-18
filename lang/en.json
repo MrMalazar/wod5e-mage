@@ -2918,6 +2918,210 @@
       "Conto": "damage · dice {dadi}: sparks {scintille}, stars {stelline}",
       "Applica": "Apply {danni} damage to {bersaglio}",
       "Applicati": "{bersaglio}: {danni} superficial damage marked."
+    },
+    "MenuCircolare": {
+      "Dove": "Where you are",
+      "Sfere": "Spheres",
+      "Lati": {
+        "n": "Narrative",
+        "s": "Combat"
+      },
+      "Entrambi": "Narrative and Combat",
+      "Mosse": "{n} moves",
+      "Mossa": "1 move",
+      "Cerchi": {
+        "t": {
+          "chip": "at the table",
+          "titolo": "At the table",
+          "testo": "Paradox answers with the Magick that fed it. Price X.",
+          "nota": "",
+          "breve": "at the table, price X"
+        },
+        "n": {
+          "chip": "the enemy's",
+          "titolo": "An enemy in the scene",
+          "testo": "The enemy makes the move: reason it from their side, as an NPC, not as the Storyteller. Price X.",
+          "nota": "The enemy makes the move: reason it as an NPC.",
+          "breve": "the enemy's, price X"
+        },
+        "f": {
+          "chip": "off the table",
+          "titolo": "Off the table",
+          "testo": "Use it when the story calls for it. Price X and a little more, because it is not at the table.",
+          "nota": "Sphere off the table: it costs a little more.",
+          "breve": "off the table, price X and a little more"
+        }
+      },
+      "Regole": {
+        "n1": "Spend before a roll or between rolls: a roll already made does not change.",
+        "n2": "Every move lasts the scene; making it last longer costs more.",
+        "s1": "One spend per turn, at the start of the enemy's turn or before the mage's roll.",
+        "s2": "Combat Conditions end with an action: you stand up, you pick the weapon back up."
+      },
+      "ScegliLato": "Choose the side",
+      "AutoreBlue": "Rows written by Blue.",
+      "AutoreProposta": "Proposed rows, to be tried at the table.",
+      "AgisceSua": "{nome} acts: it is one of their Spheres.",
+      "AgisceAltre": "{nome} acts, and has {sfere}.",
+      "AgisceSenza": "{nome} acts, with no Spheres marked.",
+      "Passa": "Hover a move to read it, click it to spend.",
+      "BadgeUno": "Fixed Cost 1, starts at 1 and can be raised",
+      "BadgeFissa": "Fixes something: the threshold is the paid amount plus 3",
+      "PrezzoX": "Price X.",
+      "CostoUno": "Fixed Cost 1.",
+      "SogliaAnteprima": "Threshold to break it: {r}.",
+      "SogliaPiuTre": "the paid amount plus 3",
+      "SogliaPari": "equal to the paid amount",
+      "Componi": {
+        "nome": "Compose",
+        "testo": "Opens the casting window, already on the Sphere, to compose a spell; from the Grimoire you pick among the written ones.",
+        "carta": "Compose the spell in the casting window, already on this Sphere, or pick it from the Grimoire among the written ones.",
+        "apri": "Open the casting window",
+        "grimorio": "Pick from the Grimoire"
+      },
+      "Grimorio": {
+        "titolo": "Magick Effect",
+        "sfera": "Grimoire · {sfera}",
+        "conto": "{n} Formulas are cast with {sfera}.",
+        "conto1": "1 Formula is cast with {sfera}.",
+        "cerca": "Search a Formula or an effect",
+        "vuoto": "No Formula with these words.",
+        "finestra": "Compose in the casting window",
+        "soglia": "threshold {s}",
+        "lista": "Spell list",
+        "con": "With {sfera}: {per}",
+        "meta": "Formula threshold: {s}",
+        "limite": "Limit: {l}",
+        "apri": "Open in the casting window"
+      },
+      "Lancio": {
+        "composto": "Composed spell",
+        "riapri": "Reopen the casting window",
+        "titolo": "Magick casting",
+        "nuovo": "New spell",
+        "lancia": "cast by {nome}",
+        "chiudi": "Close the window",
+        "obiettivo": "Goal",
+        "obiettivoPh": "What you want to achieve",
+        "grimorio": "Grimoire",
+        "effetto": "Effect",
+        "effettoParola": "{e} effect",
+        "effetti": {
+          "physical": "Physical",
+          "mental": "Mental (abstract)",
+          "variable": "Variable"
+        },
+        "sfereEffetto": "Effect Spheres",
+        "ambiti": "Scopes",
+        "notaMax": "Three Scopes above 0: that is the maximum.",
+        "notaBase": "Epicness goes from 1 to 7; at most three Scopes go above 0.",
+        "piede": "Reduced version of the mages' casting window, already on the chosen Sphere.",
+        "sogliaPng": "Casting threshold for {nome}: {s}",
+        "vai": "Cast"
+      },
+      "Spesa": {
+        "aria": "Paradox spend",
+        "da": "Made by {nome}",
+        "daParadosso": "Made by Paradox",
+        "prezzoUno": "Fixed Cost 1: starts at 1 and you can raise it.",
+        "prezzoX": "Price X: you decide how much to pay.",
+        "paghi": "You pay",
+        "meno": "One less",
+        "piu": "One more",
+        "soglia": "Threshold to break it",
+        "sogliaFissa": "the paid amount plus 3, because it fixes something",
+        "sogliaPari": "equal to the paid amount",
+        "pallini": "Reserve: the empty ones are what you spend",
+        "suChi": "On whom",
+        "nessuno": "No one",
+        "durata": "Duration",
+        "durate": {
+          "scena": "The scene",
+          "lunga": "Longer, it costs more"
+        },
+        "nota": "Note",
+        "notaPh": "A line for you",
+        "turnoAvviso": "In combat you spend once per turn.",
+        "nuovoTurno": "New turn",
+        "spendi": "Spend {p} · {r} left",
+        "spendi1": "Spend {p} · 1 left",
+        "vuota": "Empty reserve",
+        "turnoFatto": "This turn's spend is done",
+        "quandoN": "Spend before a roll or between rolls.",
+        "quandoS": "Spend at the start of the enemy's turn or before the mage's roll."
+      },
+      "Durate": {
+        "scena": "lasts the scene",
+        "lunga": "lasts longer",
+        "riga": "lasts as long as the row says",
+        "incantesimo": "lasts as long as the spell says"
+      },
+      "Barra": {
+        "cerca": "Search a move",
+        "nessuna": "No move with this name.",
+        "turno": "Turn {n}",
+        "giro": "Round {r}, turn {t}",
+        "spesaFatta": "spend made",
+        "spesaLibera": "spend free"
+      },
+      "Attore": {
+        "fattaDa": "Made by",
+        "paradosso": "Paradox",
+        "paradossoSotto": "No NPC selected: the Storyteller throws the effect",
+        "narratore": "Storyteller",
+        "png": "NPCs in the scene",
+        "sfere": "Spheres: {sfere}",
+        "senzaSfere": "No Spheres marked",
+        "nessunPng": "No NPC in this scene.",
+        "nota": "You can also pick by selecting the NPC on the map: with no one selected, Paradox acts."
+      },
+      "Fissati": {
+        "titolo": "Fixed facts",
+        "voce": "{nome} · {sfera} · threshold {s}",
+        "via": "Break {nome}",
+        "scardinato": "Broken: {nome}."
+      },
+      "Mozzo": {
+        "riserva": "Reserve",
+        "torna": "Back to the nine Spheres",
+        "aria": "Storyteller's reserve: {n}"
+      },
+      "Legenda": {
+        "bottone": "Legend",
+        "t": "Full ring: at the table, price X",
+        "n": "Double ring with the skull: an enemy in the scene, price X, they make the move",
+        "f": "Dashed ring with the +: off the table, X and a little more",
+        "tasti": "Keyboard: 1 to 9 to choose, N and C for the side, Esc to go back."
+      },
+      "Pop": {
+        "titolo": "Paradox acts",
+        "meta": "Threshold to break it {s} · {durata}",
+        "nota": "Note: {nota}",
+        "nascondi": "Hide",
+        "nascosta": "Hidden: it stays with you.",
+        "dichiarata": "Declared at the table.",
+        "parte": "goes out in {s} s"
+      },
+      "Carta": {
+        "sfera": "Sphere",
+        "suChi": "On whom",
+        "da": "Made by",
+        "effetto": "Effect",
+        "soglia": "Threshold to break it",
+        "durata": "Duration",
+        "nota": "Note",
+        "fissato": "It stays fixed until someone breaks it."
+      },
+      "Aria": {
+        "sfera": "{nome}, {dominio}, {breve}",
+        "lato": "{lato}, {n}",
+        "uno": "fixed cost 1",
+        "fissa": "fixes something"
+      },
+      "Avvisi": {
+        "turno": "This turn's spend is done: in combat you spend once per turn.",
+        "troppo": "Price {p}, points {n}: the reserve is not enough."
+      }
     }
   }
 }

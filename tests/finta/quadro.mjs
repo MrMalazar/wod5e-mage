@@ -1,6 +1,7 @@
 // Il Quadro del Narratore nella finta Foundry (24/9): la Nuova sessione coi
 // maghi scelti dal Narratore, i tre modi (contatore, menù, giocatori) col
-// loro contesto e i loro template, una spesa dal menù con l'orologio, la
+// loro contesto e i loro template, le spese dal menù circolare (18/11/2026)
+// con la fonte vera del Quadro (i token, i fatti fissati, il turno), la
 // copia automatica di un Volgare in chat, il Cambio scena che spegne gli
 // effetti. Si usa con `node --import tests/finta/register.mjs tests/finta/quadro.mjs`.
 import assert from "node:assert/strict";
@@ -102,9 +103,12 @@ globalThis.game = {
 };
 
 const { registerParadossoNarratore, getPool, POOL_SETTING, attoriScheda } = await import(new URL("scripts/paradosso-narratore.js", ROOT).href);
-const { registerQuadroNarratore, QuadroNarratore, nuovaSessione, iniziaSessione, cambioScena, getScena, getOrologi, attoriDelQuadro, statusMago, OROLOGI_SETTING } = await import(new URL("scripts/quadro-narratore.js", ROOT).href);
+const { registerQuadroNarratore, QuadroNarratore, nuovaSessione, iniziaSessione, cambioScena, getScena, getOrologi, attoriDelQuadro, statusMago, OROLOGI_SETTING, fonteDelQuadro, pngInScena, attoreScelto, getFissati, statoTurno } = await import(new URL("scripts/quadro-narratore.js", ROOT).href);
 const { getMagickBalance } = await import(new URL("scripts/magick-balance.js", ROOT).href);
-const { ADDOSSO_FLAG, CASSETTI_PARADOSSO, MAGHI_SETTING, QUADRO_SETTING, SCENA_SETTING } = await import(new URL("scripts/menu-paradosso.js", ROOT).href);
+const { ADDOSSO_FLAG, MAGHI_SETTING, QUADRO_SETTING, SCENA_SETTING, nuovoOrologioParadosso } = await import(new URL("scripts/menu-paradosso.js", ROOT).href);
+const { MenuCircolare, foglioIcone } = await import(new URL("scripts/menu-circolare-ui.js", ROOT).href);
+const { righeDelLato, FATTI_SETTING, TURNO_SETTING } = await import(new URL("scripts/menu-circolare.js", ROOT).href);
+const { MENU_SFERE } = await import(new URL("scripts/data/menu-sfere.js", ROOT).href);
 registerParadossoNarratore();
 // Il pannello dei giocatori vuole il DOM: al ready passano solo i ganci del Quadro.
 const readyPrima = (hooks.ready ?? []).length;
@@ -231,178 +235,135 @@ for (const fn of hooks.createChatMessage) await fn(cartaAbilita);
 assert.equal(getPool().points, 2, "un tiro di Abilità non porta punti");
 await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 9 });
 
-// 4. Il menù (25/9; 27/9, nove cassetti per «su cosa rimbalza il Paradosso»): tutti i cassetti in vista e apribili, le voci in ordine alfabetico senza sottotitoli di scena, le consigliate della scena segnate; il Volgare in tendina; la voce aperta coi comandi.
+// 4. Il menù circolare (18/11/2026): il modo del menù porta solo il riquadro, che il menù riempie da sé;
+// la fonte del Quadro gli dà i maghi con le loro Sfere, i PNG della scena, il token scelto.
+const NEMICO_SHEET = `${MODULE}.NemicoSheet`;
+function nemico(id, name, magick) {
+  const dati = { [MODULE]: { nemico: { magick } }, core: { sheetClass: NEMICO_SHEET } };
+  return { id, name, hasPlayerOwner: false, getFlag: (scope, key) => dati[scope]?.[key] };
+}
+const sgherro = nemico("n2", "Sgherro", { on: true, arete: 2, domini: { entropy: true, spirit: true } });
+const tokens = [{ id: "t1", name: "Sgherro", actor: sgherro }, { id: "t2", name: "Guendalina", actor: guendalina }, { id: "t3", name: "Guardia", actor: png }];
+let controllati = [];
+globalThis.canvas = {
+  scene: { tokens: { contents: tokens } },
+  tokens: {
+    get controlled() { return controllati; },
+    releaseAll() { controllati = []; },
+    get: (id) => ({ id, control: () => { controllati = [{ document: tokens.find((t) => t.id === id) }]; } })
+  }
+};
+await guendalina.setFlag(MODULE, "selectedSpheres", { forces: true, mind: true });
 {
   const { ctx, html } = await contesto("menu");
-  assert.equal(ctx.cassetti.length, 9);
-  assert.deepEqual(ctx.cassetti.map((c) => c.cassetto), [...CASSETTI_PARADOSSO], "i nove cassetti nell'ordine del menù");
-  assert.equal(ctx.cassetti.reduce((n, c) => n + c.conto, 0), 65, "tutte le 65 voci in vista");
-  assert.deepEqual(ctx.cassetti.map((c) => c.conto), [10, 13, 9, 5, 6, 6, 5, 7, 4]);
-  assert.ok(ctx.cassetti.every((c) => !c.chiusa), "i cassetti partono aperti");
-  assert.deepEqual(ctx.cassetti.map((c) => c.label), ["Sul mago", "Sull'incantesimo", "I Dormienti", "Le Presenze", "Il posto", "Scontro e scena", "Gli orologi", "Le Ancore", "Allo scoppio"]);
-  assert.equal(ctx.cassetti[0].sotto, "chi ha lanciato: meno dadi, la difficoltà più alta, un danno");
-  assert.deepEqual(ctx.cassetti.map((c) => c.staccato), [false, false, false, false, false, false, false, false, true], "lo scoppio in fondo, staccato");
-  const mago = ctx.cassetti.find((c) => c.cassetto === "mago");
-  assert.deepEqual(mago.voci.map((v) => v.nome), [...mago.voci.map((v) => v.nome)].sort((a, b) => a.localeCompare(b, "it")), "in ordine alfabetico, senza gruppi");
-  assert.deepEqual(ctx.cassetti.find((c) => c.cassetto === "orologi").voci.map((v) => v.nome), ["Arrivo", "Carica", "Ciclo", "Nascosto", "Scadenza"]);
-  // Le 15 consigliate di Combattimento: la classe sulla riga, e il conto sul cassetto.
-  assert.equal(ctx.cassetti.flatMap((c) => c.voci).filter((v) => v.consigliata).length, 15);
-  assert.equal(mago.consigliate, 5);
-  assert.match(html, /wod5e-mage-menu-voce consigliata" data-voce="tremore"/);
-  assert.match(html, /wod5e-mage-menu-voce" data-voce="fragile"/, "Fragile non è consigliata in Combattimento");
-  assert.match(html, /<option value="combattimento" selected>/);
-  assert.ok(!html.includes("wod5e-mage-menu-spesa") && !html.includes('class="wod5e-mage-menu-info"'), "nessuna voce aperta, nessun testo");
-  assert.match(html, /wod5e-mage-menu-cassetto wod5e-mage-menu-cassetto-mago" data-cassetto="mago"/);
-  assert.match(html, /wod5e-mage-menu-cassetto wod5e-mage-menu-cassetto-scoppio staccato" data-cassetto="scoppio"/);
-  assert.ok(!html.includes("data-gruppo") && !html.includes("data-famiglia"), "niente sottotitoli di scena, niente famiglie in vista");
-  assert.match(html, /data-action="cassetto" data-cassetto="mago" aria-expanded="true"/);
-  assert.match(html, /<span class="quadratino"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"><\/i><\/span>\s*<span class="testi"><span class="nome">Sul mago<\/span><span class="sotto">chi ha lanciato/);
-  assert.match(html, /<small class="conto">10<\/small>/);
-  assert.match(html, /data-action="testo" data-voce="tremore"/);
-  assert.equal((html.match(/data-action="voce"/g) ?? []).length, 65);
-  // Il Narratore chiude «Sul mago»: il cassetto resta col titolo, senza righe; la scelta resta nell'impostazione del client, per id di cassetto.
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.cassetto.call(app, { preventDefault() {} }, { dataset: { cassetto: "mago" } });
-  const chiusa = await contesto("menu");
-  assert.ok(chiusa.ctx.cassetti.find((c) => c.cassetto === "mago").chiusa);
-  assert.match(chiusa.html, /wod5e-mage-menu-cassetto wod5e-mage-menu-cassetto-mago chiusa" data-cassetto="mago"/);
-  assert.match(chiusa.html, /data-action="cassetto" data-cassetto="mago" aria-expanded="false"/);
-  assert.deepEqual(game.settings.get(MODULE, QUADRO_SETTING).chiuse, ["mago"]);
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.cassetto.call(app, { preventDefault() {} }, { dataset: { cassetto: "mago" } });
-  assert.deepEqual(game.settings.get(MODULE, QUADRO_SETTING).chiuse, []);
-  // Il Narratore apre la voce Ritorno: la scheda e la spesa col Volgare di Guendalina.
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
-  const aperto = await contesto("menu");
-  const ritorno = aperto.ctx.cassetti.find((c) => c.cassetto === "incantesimo").voci.find((v) => v.id === "ritorno");
-  assert.ok(ritorno.aperta);
-  assert.equal(ritorno.volgari.length, 1);
-  assert.match(ritorno.volgari[0].label, /Guendalina · Fulmine · Volgare con testimoni · soglia 5/);
-  assert.ok(ritorno.bersagli.find((m) => m.id === "a1").selected, "su chi: il mago del Volgare");
-  assert.equal(ritorno.suChiVuoto, false);
-  assert.equal(ritorno.breve, "l'effetto svanisce, l'ostacolo torna");
-  assert.equal(ritorno.prezzoLabel, "la soglia");
-  assert.match(aperto.html, /<span class="breve">l&#x27;effetto svanisce, l&#x27;ostacolo torna<\/span>/);
-  assert.match(aperto.html, /Sull&#x27;incantesimo/);
-  assert.ok(!aperto.html.includes("I Tocchi") && !aperto.html.includes("Conseguenze Magick"), "le famiglie non si vedono più nel menù");
-  assert.ok(!aperto.html.includes('class="wod5e-mage-menu-info"'), "il testo resta chiuso finché non si chiede");
-  // La «i» apre il testo della voce, e resta aperto anche se la voce si chiude.
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
-  const conTesto = await contesto("menu");
-  assert.match(conTesto.html, /class="wod5e-mage-menu-info"/);
-  assert.match(conTesto.html, /In questa scena\./, "la faccia della scena sta nel testo");
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "combattimento-stop" } });
-  const testoScena = await contesto("menu");
-  assert.match(testoScena.html, /Scena\.<\/b> Combattimento \(scena in corso\)/, "il testo di una voce di scena dice la sua scena");
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "combattimento-stop" } });
-  assert.equal((conTesto.html.match(/wod5e-mage-menu-mossa/g) ?? []).length, 3);
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
-  assert.equal(ritorno.stima, 5, "la soglia del Volgare");
-  assert.match(aperto.html, /wod5e-mage-menu-spesa" data-voce="ritorno"/);
-  assert.match(aperto.html, /data-role="vede" value="tutti"/);
-  assert.match(aperto.html, /<option value="v1" data-actor="a1" data-soglia="5" selected>/);
-  assert.match(aperto.html, /Il prezzo è la soglia del Volgare/);
-  assert.match(aperto.html, /data-action="spendi" data-voce="ritorno"/);
+  assert.equal(ctx.modi.find((m) => m.attivo)?.id, "menu");
+  assert.match(html, /<div class="wod5e-mage-quadro-mc" data-role="menu-circolare"><\/div>/);
+  assert.ok(!html.includes("wod5e-mage-menu-cassetto") && !html.includes('data-action="voce"'), "il menù a 65 voci non c'è più");
+  const fonte = fonteDelQuadro();
+  assert.deepEqual(fonte.maghi().map((m) => [m.nome, m.sfere]), [["Guendalina", ["forces", "mind"]], ["Luca", []]], "le Sfere segnate dei maghi del Quadro");
+  assert.deepEqual(pngInScena().map((p) => [p.nome, p.sfere, p.magick, p.arete]), [["Sgherro", ["entropy", "spirit"], true, 2], ["Guardia", [], false, 1]], "i token dei giocatori non agiscono per il Paradosso");
+  assert.equal(attoreScelto(), null, "senza token agisce il Paradosso");
+  controllati = [{ document: tokens[1] }];
+  assert.equal(attoreScelto(), null, "col token di un giocatore agisce lo stesso il Paradosso");
+  await fonte.seleziona("t1");
+  assert.equal(attoreScelto()?.nome, "Sgherro", "il token scelto dal menù è quello selezionato sulla mappa");
+  assert.equal(fonte.nomeSfera("forces"), "Forze", "i nomi delle Sfere della scheda");
+  assert.equal(fonte.riserva(), 9);
+  assert.deepEqual(statoTurno(), { combattimento: false, chiave: "manuale:1", n: 1, usato: "" });
+  const vista = new MenuCircolare(fonte).vista();
+  assert.match(vista, /mc-sph c-t[^"]*" [^>]*data-a="2"/, "Forza è al tavolo, con Guendalina");
+  assert.match(vista, /mc-sph c-n[^"]*" [^>]*data-a="1"/, "Entropia è del nemico in scena");
+  assert.match(vista, /mc-sph c-f[^"]*" [^>]*data-a="7"/, "Tempo è fuori dal tavolo");
+  assert.match(vista, /<small>Fatta da<\/small><b>Sgherro<\/b>/);
 }
 
-// 4b. Un Volgare di Ianira (fuori dal Quadro), alias vuoto e flavor a capo: l'etichetta senza buchi, e lei fra i bersagli come «fuori dal Quadro».
+// 5. Le spese dal menù circolare, con la fonte vera: la riserva scende subito, la carta parte dopo i cinque secondi.
+const corrispondenza = MENU_SFERE[0];
+const entra = righeDelLato(corrispondenza, "n")[0];
+const reEsc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const menuQuadro = new MenuCircolare(fonteDelQuadro());
+const chiudiTimer = () => { clearInterval(menuQuadro.tick); clearTimeout(menuQuadro.via); };
 {
-  const fuori = { id: "v0", timestamp: inizioSessione + 12, speaker: { actor: "a3", alias: "" }, flavor: "<div>\n<b>Nebbia</b></div>", flags: { [MODULE]: { rollCard: { vulgar: true, advancedDifficulty: false, threshold: 4 } } }, update: async () => fuori };
-  sim.messages.push(fuori);
-  const { ctx, html } = await contesto("menu");
-  const ritorno = ctx.cassetti.find((c) => c.cassetto === "incantesimo").voci.find((v) => v.id === "ritorno");
-  assert.equal(ritorno.volgari[0].label, "Nebbia · Volgare · soglia 4", "niente «· ·» quando manca il nome");
-  const ianira = ritorno.bersagli.find((b) => b.id === "a3");
-  assert.ok(ianira?.fuori && ianira.selected, "chi ha lanciato entra fra i bersagli anche da fuori");
-  assert.equal(ianira.label, "Ianira (fuori dal Quadro)");
-  assert.equal(ritorno.suChiVuoto, false);
-  assert.ok(html.includes("Ianira (fuori dal Quadro)"));
-  sim.messages.pop();
-}
-
-// 4c. Una voce con l'orologio aperta: il riquadro precompilato (nome, segmenti a scelta rapida, cosa scatta dal rimbalzo).
-{
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "carica" } });
-  const { ctx, html } = await contesto("menu");
-  const carica = ctx.cassetti.find((c) => c.cassetto === "orologi").voci.find((v) => v.id === "carica");
-  assert.ok(carica.aperta && carica.campi.orologio && carica.campi.rimbalzo);
-  assert.equal(carica.titoloDefault, "Carica");
-  assert.equal(carica.segmentiDefault, 4);
-  assert.deepEqual(carica.segmentiScelte.map((s) => `${s.n}${s.attivo ? "*" : ""}`), ["3", "4*", "6", "8"]);
-  assert.ok(carica.rimbalzi.length > 0);
-  assert.equal(carica.scattaDefault, carica.rimbalzi[0].nome, "cosa scatta parte dal primo rimbalzo");
-  assert.match(html, /wod5e-mage-menu-orologio/);
-  assert.match(html, /data-role="titolo" value="Carica"/);
-  assert.match(html, /<button type="button" class="attivo" data-n="4">4<\/button>/);
-  assert.match(html, new RegExp(`data-role="scatta" value="${carica.rimbalzi[0].nome}"`));
-  assert.match(html, new RegExp(`data-nome="${carica.rimbalzi[0].nome}"`));
-  const ombra = cassettiApertiPer("ombra");
-  await ombra;
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "carica" } });
-}
-async function cassettiApertiPer(id) {
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: id } });
-  const { ctx } = await contesto("menu");
-  const voce = ctx.cassetti.flatMap((c) => c.voci).find((v) => v.id === id);
-  assert.equal(voce.segmentiDefault, 3, "una Presenza parte da tre segmenti");
-  assert.equal(voce.scattaDefault, "Ombra entra in scena");
-}
-
-// 5. La spesa: Ritorno su Guendalina, risponde a Fulmine; poi Carica con l'orologio.
-function scatolaSpesa(voceId, campi) {
-  const el = (spec) => (spec == null ? null : { value: spec.value ?? "", textContent: spec.text ?? "", selectedOptions: [{ dataset: { actor: spec.actor ?? "", soglia: spec.soglia ?? "0", prezzo: spec.prezzo ?? "0" }, textContent: spec.text ?? "" }] });
-  const box = {
-    dataset: { voce: voceId },
-    classList: { toggle() {} },
-    querySelector: (sel) => { const m = sel.match(/\[data-role=(\w+)\]/); if (m) return el(campi[m[1]]); if (sel.includes("data-action=spendi")) return { disabled: false }; return null; }
-  };
-  app.element = { querySelector: (sel) => (sel.includes(`data-voce="${voceId}"`) ? box : null), querySelectorAll: () => [], classList: { toggle() {} } };
-  return box;
-}
-scatolaSpesa("ritorno", { rispondeA: { value: "v1", actor: "a1", soglia: "5", text: "Guendalina · Fulmine · Volgare con testimoni · soglia 5" }, suChi: { value: "a1" }, vede: { value: "tutti" }, nota: { value: "il muro sfarfalla" } });
-const messaggiPrima = sim.messages.length;
-await QuadroNarratore.DEFAULT_OPTIONS.actions.spendi.call(app, { preventDefault() {} }, { dataset: { voce: "ritorno" } });
-assert.equal(getPool().points, 4, "9 − 5");
-assert.equal(getPool().log.at(-1).kind, "menu");
-assert.equal(getPool().log.at(-1).actorName, "Guendalina");
-assert.equal(getPool().log.at(-1).scena, 1);
-{
-  const addosso = guendalina.getFlag(MODULE, ADDOSSO_FLAG);
-  const righe = Object.values(addosso);
-  assert.equal(righe.length, 1);
-  assert.equal(righe[0].voce, "ritorno");
-  assert.equal(righe[0].durata, "turno");
-  assert.equal(righe[0].risponde, "Guendalina · Fulmine · Volgare con testimoni · soglia 5");
+  // Corrispondenza, Narrativa, la prima mossa: 5 punti su Guendalina, fatta dallo Sgherro.
+  await menuQuadro.esegui("sfera", "0");
+  await menuQuadro.esegui("lato", "n");
+  await menuQuadro.esegui("riga", entra.id);
+  for (let n = 0; n < 4; n++) await menuQuadro.esegui("paga", "1");
+  await menuQuadro.esegui("chi", "a1");
+  const messaggiPrima = sim.messages.length;
+  assert.equal(await menuQuadro.spendi(), true);
+  chiudiTimer();
+  assert.equal(getPool().points, 4, "9 − 5, subito");
+  const voce = getPool().log.at(-1);
+  assert.deepEqual([voce.kind, voce.amount, voce.actorName, voce.daName, voce.sfera, voce.lato, voce.soglia, voce.scena], ["menu", -5, "Guendalina", "Sgherro", "correspondence", "n", 5, 1]);
+  assert.equal(voce.text, `Corrispondenza · ${entra.nome}`);
+  const addosso = Object.values(guendalina.getFlag(MODULE, ADDOSSO_FLAG));
+  assert.equal(addosso.length, 1, "la mossa resta addosso al mago scelto");
+  assert.deepEqual([addosso[0].nome, addosso[0].durata, addosso[0].famiglia], [entra.nome, "scena", "correspondence"]);
+  assert.equal(sim.messages.length, messaggiPrima, "la carta aspetta i cinque secondi");
+  await menuQuadro.chiudiPop(false);
+  chiudiTimer();
   const carta = sim.messages.at(-1);
   assert.equal(sim.messages.length, messaggiPrima + 1);
-  assert.deepEqual(carta.whisper, [], "a tutti");
-  assert.match(carta.content, /Il Paradosso agisce · Ritorno <small>annunciato<\/small>/);
-  assert.match(carta.content, /Risponde a/);
-  assert.match(carta.content, /Segno\./);
-  assert.match(carta.content, /il muro sfarfalla/);
-  assert.equal((carta.content.match(/wod5e-mage-menu-mossa/g) ?? []).length, 3);
-  assert.ok(!carta.content.includes("Prezzo") && !carta.content.includes("wod5e-mage-menu-conto"), "il prezzo non va in chat");
-  assert.equal(carta.flags[MODULE].paradossoMenu.prezzo, 5);
+  assert.deepEqual(carta.whisper, [], "al tavolo");
+  assert.match(carta.content, new RegExp(`Il Paradosso agisce · ${reEsc(entra.nome)}`));
+  assert.match(carta.content, /Fatta da<\/b><span class="wod5e-mage-roll-value">Sgherro/);
+  assert.match(carta.content, /Soglia per scardinare<\/b><span class="wod5e-mage-roll-value">5/);
+  assert.deepEqual(carta.flags[MODULE].paradossoMenu, { mossa: entra.id, sfera: "correspondence", lato: "n", prezzo: 5, soglia: 5, fissa: false, actorId: "a1", da: "Sgherro", nascosta: false });
 }
-// Carica: 1 punto più il rimbalzo scelto (Residuo, 2), l'orologio nascosto ai giocatori.
-scatolaSpesa("carica", { rispondeA: { value: "v1", actor: "a1", soglia: "5", text: "Guendalina · Fulmine" }, suChi: { value: "a1" }, vede: { value: "narratori" }, segmenti: { value: "3" }, rimbalzo: { value: "residuo", prezzo: "2" }, nota: { value: "" } });
-await QuadroNarratore.DEFAULT_OPTIONS.actions.spendi.call(app, { preventDefault() {} }, { dataset: { voce: "carica" } });
-assert.equal(getPool().points, 1, "4 − 3");
 {
-  const orologi = getOrologi();
-  assert.equal(orologi.length, 1);
-  const [c] = orologi;
-  assert.equal(c.titolo, "Carica · Guendalina");
-  assert.equal(c.segmenti, 3);
-  assert.equal(c.pieni, 0);
-  assert.equal(c.visibile, false);
-  assert.deepEqual([c.colore, c.forma], ["viola", "cerchio"]);
-  assert.equal(c.paradosso.scatta, "Residuo");
-  assert.equal(c.paradosso.voce, "carica");
+  // Entropia, Destino Scritto: fissa un fatto (soglia 2 + 3), nascosta col pop-up, senza mago.
+  await fonteDelQuadro().seleziona(null);
+  assert.equal(attoreScelto(), null);
+  await menuQuadro.esegui("vai", "1", "n", "entropy-destino-scritto");
+  await menuQuadro.esegui("paga", "1");
+  menuQuadro.stato.nota = "per la Cabala di stasera";
+  assert.equal(await menuQuadro.spendi(), true);
+  await menuQuadro.nascondi();
+  chiudiTimer();
+  assert.equal(getPool().points, 2, "4 − 2");
+  const fatti = getFissati();
+  assert.equal(fatti.length, 1);
+  assert.deepEqual([fatti[0].nome, fatti[0].sfera, fatti[0].sferaNome, fatti[0].soglia, fatti[0].scena], ["Destino Scritto", "entropy", "Entropia", 5, 1]);
   const carta = sim.messages.at(-1);
-  assert.deepEqual(carta.whisper, ["gm"], "solo ai Narratori");
-  assert.match(carta.content, /3 segmenti · cerchio viola/);
-  // Il contatore lo mostra in scena, disegnato a segmenti (un cerchio viola, tre spicchi); la testa lo porta in miniatura in ogni modo.
+  assert.deepEqual(carta.whisper, ["gm"], "nascosta: solo ai Narratori");
+  assert.match(carta.content, /per la Cabala di stasera/, "la nota sta nella carta nascosta");
+  assert.match(carta.content, /Resta fissato finché non lo scardinano/);
+  assert.equal(Object.values(guendalina.getFlag(MODULE, ADDOSSO_FLAG)).length, 1, "senza mago non va addosso a nessuno");
+}
+{
+  // Lo scontro: una spesa del lato Combattimento per turno del tracker.
+  game.combat = { started: true, id: "c1", round: 2, turn: 0 };
+  await menuQuadro.esegui("sfera", "0");
+  await menuQuadro.esegui("lato", "s");
+  const colpo = righeDelLato(corrispondenza, "s")[0];
+  await menuQuadro.esegui("riga", colpo.id);
+  assert.equal(await menuQuadro.spendi(), true);
+  await menuQuadro.chiudiPop(false);
+  chiudiTimer();
+  assert.equal(getPool().points, 1, "2 − 1");
+  assert.equal(statoTurno().usato, "c1:2:0", "la spesa del turno è fatta");
+  await menuQuadro.esegui("riga", righeDelLato(corrispondenza, "s")[1].id);
+  assert.match(menuQuadro.vista(), /data-mc="spendi" disabled/);
+  assert.equal(await menuQuadro.spendi(), false);
+  assert.match(sim.notifiche.at(-1), /^!Spesa del turno già fatta/);
+  game.combat.turn = 1;
+  assert.match(menuQuadro.vista(), /data-mc="spendi"(?! disabled)/, "il turno dopo si spende di nuovo");
+  // Non bastano i punti: la spesa si ferma con l'avviso.
+  await menuQuadro.esegui("paga", "1");
+  menuQuadro.stato.paga = 2;
+  assert.equal(await menuQuadro.spendi(), false);
+  assert.match(sim.notifiche.at(-1), /^!Prezzo 2, punti 1/);
+  assert.equal(getPool().points, 1);
+  game.combat = null;
+  menuQuadro.allAnello();
+}
+// L'orologio di Carica (fino alla 1.44.0 lo apriva il menù a 65 voci; gli orologi aperti restano nel Quadro).
+await game.settings.set(MODULE, OROLOGI_SETTING, { "carica-1": nuovoOrologioParadosso({ id: "carica-1", titolo: "Carica · Guendalina", segmenti: 3, visibile: false, colore: "viola", forma: "cerchio", scatta: "Residuo", voce: "carica", actorId: "a1", ordine: 1 }) });
+{
+  // Il contatore li mostra in scena: l'orologio disegnato a segmenti e il fatto fissato col suo tasto per scardinarlo.
   const { ctx, html } = await contesto("contatore");
-  assert.equal(ctx.inScena, 1);
+  assert.equal(ctx.inScena, 2);
   assert.match(html, /<svg class="wod5e-mage-orologio" viewBox="0 0 100 100" width="48" height="48"/);
   assert.match(html, /<circle cx="50" cy="50" r="46"/);
   assert.equal((html.match(/clip-path="url\(#oro-/g) ?? []).length, 3 + 3, "tre spicchi grandi nel contatore e tre in miniatura in testa");
@@ -411,19 +372,12 @@ assert.equal(getPool().points, 1, "4 − 3");
   assert.match(html, /Scatta: Residuo/);
   assert.match(html, /data-action="orologioAvanti" data-id="/);
   assert.match(html, /wod5e-mage-quadro-orologi-mini/);
+  assert.match(html, /<li class="fissato">[\s\S]*Destino Scritto · Entropia · soglia 5[\s\S]*data-action="scardina" data-id="entropy-destino-scritto-/);
   const menu = await contesto("menu");
   assert.match(menu.html, /wod5e-mage-quadro-orologi-mini/, "anche nel menù");
   assert.match(menu.html, /width="26" height="26"/);
+  assert.match(menuQuadro.vista(), /mc-fissati[\s\S]*Destino Scritto · Entropia · soglia 5/, "e la fascia dei fatti fissati nel menù");
 }
-// Non bastano i punti: la spesa si ferma con l'avviso.
-scatolaSpesa("residuo", { rispondeA: { value: "", soglia: "0" }, suChi: { value: "a2" }, vede: { value: "tutti" } });
-await QuadroNarratore.DEFAULT_OPTIONS.actions.spendi.call(app, { preventDefault() {} }, { dataset: { voce: "residuo" } });
-assert.equal(getPool().points, 1);
-assert.match(sim.notifiche.at(-1), /^!Prezzo 2, punti 1/);
-// I Grandi non si comprano.
-scatolaSpesa("anomalia", { rispondeA: { value: "", soglia: "0" }, suChi: { value: "" }, vede: { value: "tutti" } });
-await QuadroNarratore.DEFAULT_OPTIONS.actions.spendi.call(app, { preventDefault() {} }, { dataset: { voce: "anomalia" } });
-assert.match(sim.notifiche.at(-1), /non si compra/);
 
 // 6. Un altro Volgare: l'orologio di Carica avanza da solo.
 const cartaVolgare2 = { id: "v2", timestamp: Date.now(), speaker: { actor: "a2", alias: "Luca" }, flags: { [MODULE]: { rollCard: { vulgar: true, advancedDifficulty: false, threshold: 3, title: "Scatto" } } }, update: async (changes) => { Object.assign(cartaVolgare2.flags[MODULE], changes.flags[MODULE]); return cartaVolgare2; } };
@@ -444,8 +398,8 @@ assert.equal(getOrologi()[0].pieni, 1, "la Carica avanza col Volgare");
   assert.deepEqual(g.volonta, { resta: 5, max: 6 });
   assert.equal(g.quintessenza, 3);
   assert.equal(g.ruota, 4);
-  assert.deepEqual(g.attivi.map((a) => a.nome), ["Ritorno"]);
-  assert.equal(g.attivi[0].durataLabel, "fino al giro dopo");
+  assert.deepEqual(g.attivi.map((a) => a.nome), [entra.nome], "la mossa del menù circolare fra gli effetti attivi");
+  assert.equal(g.attivi[0].durataLabel, "per la scena");
   assert.deepEqual(g.passivi.map((p) => p.nome), ["Quadrante"]);
   assert.deepEqual(g.magick.map((m) => m.nome), ["Muro di ghiaccio"], "solo la Magick accesa");
   assert.equal(g.magick[0].tipo, "Volgare");
@@ -454,7 +408,7 @@ assert.equal(getOrologi()[0].pieni, 1, "la Carica avanza col Volgare");
   assert.ok(l.vuoto);
   assert.match(html, /In gioco: 2/);
   assert.match(html, /wod5e-mage-quadro-mago aperto/);
-  assert.match(html, /data-action="attivoTogli" data-actor="a1" data-id="ritorno-/);
+  assert.match(html, new RegExp(`data-action="attivoTogli" data-actor="a1" data-id="${entra.id}-`));
   assert.match(html, /Quadrante/);
   assert.match(html, /Muro di ghiaccio <small>Volgare · soglia 5<\/small>/);
   assert.match(html, /niente addosso/);
@@ -510,7 +464,7 @@ assert.equal(getOrologi()[0].pieni, 1, "la Carica avanza col Volgare");
   delete globalThis.fromUuid;
 }
 
-// 8. Il Cambio scena: Ritorno (fino al giro dopo) finisce, la scena diventa la 2, Rituale;
+// 8. Il Cambio scena: la mossa del menù (per la scena) finisce, la scena diventa la 2, Rituale;
 // dal 30/9 (Blue) ogni mago del Quadro prende +1 Quintessenza.
 const primaDelCambio = attoriDelQuadro().map((a) => ({ id: a.id, q: getMagickBalance(a).quintessence }));
 rispondi("cambia", elementoDialogo({ scena: "rituale", posto: "normale" }));
@@ -519,15 +473,19 @@ assert.match(sim.dialoghi.at(-1).content, /Scena 2: dove andate\?/);
 assert.match(sim.dialoghi.at(-1).content, /Ogni mago del Quadro prende \+1 Quintessenza/);
 for (const { id, q } of primaDelCambio) assert.equal(getMagickBalance(game.actors.get(id)).quintessence, q + 1, `+1 Quintessenza a ${id} col Cambio scena del Quadro`);
 assert.ok(sim.notifiche.includes(`Cambio scena: +1 Quintessenza a ${primaDelCambio.length} maghi del Quadro.`), "l'avviso della ricarica");
-assert.match(sim.dialoghi.at(-1).content, /Ritorno · Guendalina/);
-assert.deepEqual(Object.keys(guendalina.getFlag(MODULE, ADDOSSO_FLAG) ?? {}), [], "il Ritorno finisce con la scena");
+assert.match(sim.dialoghi.at(-1).content, new RegExp(`${reEsc(entra.nome)} · Guendalina`));
+assert.deepEqual(Object.keys(guendalina.getFlag(MODULE, ADDOSSO_FLAG) ?? {}), [], "la mossa finisce con la scena");
 assert.equal(getScena().tipo, "rituale");
 assert.equal(getScena().numero, 2);
 assert.equal(getPool().log.at(-1).kind, "scena");
+// Il fatto fissato resta col Cambio scena: se ne va solo quando lo scardinano.
+assert.equal(getFissati().length, 1);
 {
-  const { ctx } = await contesto("menu");
-  assert.ok(ctx.cassetti.find((c) => c.cassetto === "presenze").voci.some((v) => v.id === "rituale-ospite" && v.consigliata), "il menù segue la scena: l'Ospite del rito è consigliato in Rituale");
-  assert.equal(ctx.cassetti.find((c) => c.cassetto === "incantesimo").voci.find((v) => v.id === "ritorno").faccia.testo.length > 0, true, "la faccia di Rituale");
+  const fatto = getFissati()[0];
+  await QuadroNarratore.DEFAULT_OPTIONS.actions.scardina.call(app, { preventDefault() {} }, { dataset: { id: fatto.id } });
+  assert.deepEqual(getFissati(), []);
+  assert.equal(sim.notifiche.at(-1), "Scardinato: Destino Scritto.");
+  assert.deepEqual(game.settings.get(MODULE, FATTI_SETTING), {});
 }
 
 // 9. Togli un mago dal Quadro, e Nuova sessione annullata non cambia niente.
@@ -548,8 +506,16 @@ if (process.env.QUADRO_PAGINA) {
   const dir = process.env.QUADRO_PAGINA;
   mkdirSync(dir, { recursive: true });
   await game.settings.set(MODULE, POOL_SETTING, { ...getPool(), points: 7 });
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.voce.call(app, { preventDefault() {} }, { dataset: { voce: "carica" } });
-  await QuadroNarratore.DEFAULT_OPTIONS.actions.testo.call(app, { preventDefault() {} }, { dataset: { voce: "tremore" } });
+  // Il menù circolare com'è dopo una Sfera, un lato e una mossa: il disegno dentro il suo riquadro.
+  const pagina = new MenuCircolare(fonteDelQuadro());
+  pagina.imposta({ W: Number(process.env.QUADRO_W ?? 1180), H: Number(process.env.QUADRO_H ?? 640) });
+  writeFileSync(`${dir}/menu-anello.html`, `<div class="wod5e-mage-mc">${foglioIcone()}<div class="mc-vivo">${pagina.vista()}</div></div>`);
+  await pagina.esegui("sfera", "1");
+  await pagina.esegui("lato", "n");
+  await pagina.esegui("riga", "entropy-destino-scritto");
+  writeFileSync(`${dir}/menu-mossa.html`, `<div class="wod5e-mage-mc">${foglioIcone()}<div class="mc-vivo">${pagina.vista()}</div></div>`);
+  await pagina.esegui("riga", "_componi");
+  writeFileSync(`${dir}/menu-lancio.html`, `<div class="wod5e-mage-mc">${foglioIcone()}<div class="mc-vivo">${pagina.vista()}</div></div>`);
   for (const modo of ["contatore", "menu", "giocatori"]) {
     const { html } = await contesto(modo);
     writeFileSync(`${dir}/${modo}.html`, html);

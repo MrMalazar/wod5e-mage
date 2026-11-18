@@ -13700,33 +13700,12 @@
   --quadro-tenue: #cdc2a9;
   /* I numeri e i nomi in risalto: il colore delle intestazioni della finestra (come nella guidata). */
   --quadro-titolo: var(--mortal-color-3);
-  /* I nove cassetti del menù (Blue, 27/9): un colore l'uno, e l'oro delle voci consigliate. */
-  --cassetto-mago: #c79af2;
-  --cassetto-incantesimo: #93a3f7;
-  --cassetto-dormienti: #5fc9ad;
-  --cassetto-presenze: #bccbd9;
-  --cassetto-posto: #e6ab5c;
-  --cassetto-scontro: #ee8272;
-  --cassetto-orologi: #72b8ec;
-  --cassetto-ancore: #f194bd;
-  --cassetto-scoppio: #ff6b5e;
-  --menu-oro: #e8b52c;
 }
 
 .application.wod5e-mage-quadro.wod5e-mage-chiara {
   --quadro-fondo: #FBF8F0;
   --quadro-riga: 1px solid #D9C28A;
   --quadro-scelta: #ECE7F4;
-  --cassetto-mago: #7a3fb0;
-  --cassetto-incantesimo: #3f4fb3;
-  --cassetto-dormienti: #1d7a64;
-  --cassetto-presenze: #4b5f73;
-  --cassetto-posto: #95590d;
-  --cassetto-scontro: #ad3526;
-  --cassetto-orologi: #1d66a3;
-  --cassetto-ancore: #a33268;
-  --cassetto-scoppio: #bf2419;
-  --menu-oro: #a87400;
   --quadro-verde: #2E7D4F;
   --quadro-spento: #B9B3A6;
   --quadro-tenue: #5C5C68;
@@ -14148,448 +14127,1962 @@
   color: var(--mage-rosso-chiaro);
 }
 
-/* 2 · Il menù (25/9): tutte le famiglie in vista, una riga per voce (nome, effetto in
-   breve, prezzo, in tre colonne), le voci di scena a gruppi per scena; i comandi
-   della spesa si aprono sotto la riga, il testo della voce solo dalla «i». */
-.application.wod5e-mage-quadro .wod5e-mage-menu-testa {
+/* 2 · Il menù circolare (Blue, 17-18/11/2026), dal mock approvato: le nove Sfere
+   in cerchio coi sigilli e il nome sotto, i due lati collegati come in uno schema,
+   il ventaglio delle mosse, la spesa nel pannello (a destra, o dal basso se la
+   finestra è stretta). I tre cerchi delle Sfere si leggono dalla forma oltre che
+   dal colore (anello pieno, doppio col teschio, tratteggiato col +), per chi non
+   distingue i colori. Tema scuro e chiaro dalle variabili. */
+.application.wod5e-mage-quadro .wod5e-mage-quadro-mc {
   display: flex;
-  gap: 8px;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-testa select,
-.application.wod5e-mage-quadro .wod5e-mage-menu-testa input,
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa select,
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa input,
-.application.wod5e-mage-quadro .wod5e-mage-quadro-form select {
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 6px;
-  color: var(--mage-testo);
-  font-family: "Signika", sans-serif;
-  font-size: 14px;
-  height: 32px;
-  min-width: 0;
-  padding: 4px 9px;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-testa select {
   flex: 1;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-testa input {
-  flex: 0 1 200px;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-testa input::placeholder,
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa input::placeholder {
-  color: var(--quadro-tenue);
-  opacity: 0.8;
-}
-
-/* I nove cassetti (Blue, 27/9): ognuno col suo colore, nella variabile --cassetto. */
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto {
-  --cassetto: var(--quadro-tenue);
-  display: flex;
   flex-direction: column;
-  gap: 0;
+  min-height: 0;
+  position: relative;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-mago { --cassetto: var(--cassetto-mago); }
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-incantesimo { --cassetto: var(--cassetto-incantesimo); }
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-dormienti { --cassetto: var(--cassetto-dormienti); }
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-presenze { --cassetto: var(--cassetto-presenze); }
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-posto { --cassetto: var(--cassetto-posto); }
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-scontro { --cassetto: var(--cassetto-scontro); }
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-orologi { --cassetto: var(--cassetto-orologi); }
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-ancore { --cassetto: var(--cassetto-ancore); }
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-scoppio { --cassetto: var(--cassetto-scoppio); }
-
-/* Lo scoppio sta in fondo, staccato dagli altri da una riga tratteggiata. */
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.staccato {
-  border-top: 1px dashed color-mix(in srgb, var(--quadro-tenue) 55%, transparent);
-  margin-top: 12px;
-  padding-top: 4px;
+.application.wod5e-mage-quadro .wod5e-mage-mc {
+  --mc-fondo: #141311;
+  --mc-barra: #171614;
+  --mc-pannello: #191714;
+  --mc-campo: #1c1a17;
+  --mc-campo-2: #24211d;
+  --mc-campo-3: #2a2621;
+  --mc-riga: #2b2722;
+  --mc-riga-2: #3a352e;
+  --mc-riga-3: #4a443b;
+  --mc-riga-4: #5b544a;
+  --mc-neutro: #7d7466;
+  --mc-testo: #efe8db;
+  --mc-testo-2: #d8d0c2;
+  --mc-tenue: #b0a696;
+  --mc-tenue-2: #8f877a;
+  --mc-oro: #dcb45e;
+  --mc-oro-chiaro: #f3cf7a;
+  --mc-oro-tenue: #8f7c52;
+  --mc-oro-fondo: #221e17;
+  --mc-oro-riga: #5a4a2a;
+  --mc-scelta: #2a2419;
+  --mc-rosso: #d0524a;
+  --mc-rosso-chiaro: #ec7b72;
+  --mc-rosso-fondo: #2a1715;
+  --mc-rosso-riga: #6b2c27;
+  --mc-rosso-testo: #f0c4bf;
+  --mc-ombra: rgb(0 0 0 / 40%);
+  --mc-velo: rgb(10 9 8 / 72%);
+  --mc-su-oro: #1a1408;
+  --mc-badge: #efe8db;
+  --mc-badge-testo: #141311;
+  --mc-alone: rgb(220 180 94 / 16%);
+  --mc-titolo: "Nemeya", "Modesto Condensed", Georgia, serif;
+  --mc-curva: cubic-bezier(0.65, 0, 0.35, 1);
+  background: var(--mc-fondo);
+  color: var(--mc-testo);
+  container-type: inline-size;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  font-family: "Signika", sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+  min-height: 0;
+  outline: none;
+  overflow: hidden;
+  position: relative;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.nascosta,
-.application.wod5e-mage-quadro .wod5e-mage-menu-voce.nascosta,
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.chiusa .wod5e-mage-menu-voce {
-  display: none;
+.application.wod5e-mage-quadro.wod5e-mage-chiara .wod5e-mage-mc {
+  --mc-fondo: #fbf8f0;
+  --mc-barra: #f3eee2;
+  --mc-pannello: #fffdf8;
+  --mc-campo: #ffffff;
+  --mc-campo-2: #f1ebdd;
+  --mc-campo-3: #e9e1cf;
+  --mc-riga: #e2d8c4;
+  --mc-riga-2: #d3c6ac;
+  --mc-riga-3: #bfb091;
+  --mc-riga-4: #a89a7e;
+  --mc-neutro: #8e8578;
+  --mc-testo: #2a2622;
+  --mc-testo-2: #3d3730;
+  --mc-tenue: #5c5c68;
+  --mc-tenue-2: #6e675f;
+  --mc-oro: #a87400;
+  --mc-oro-chiaro: #7f5700;
+  --mc-oro-tenue: #c9a45a;
+  --mc-oro-fondo: #f8f0dc;
+  --mc-oro-riga: #d9c28a;
+  --mc-scelta: #f5ead0;
+  --mc-rosso: #b3362d;
+  --mc-rosso-chiaro: #9e2f27;
+  --mc-rosso-fondo: #f8e4e1;
+  --mc-rosso-riga: #d9a39c;
+  --mc-rosso-testo: #7a231c;
+  --mc-ombra: rgb(60 50 30 / 18%);
+  --mc-velo: rgb(40 34 28 / 45%);
+  --mc-su-oro: #ffffff;
+  --mc-badge: #2a2622;
+  --mc-badge-testo: #ffffff;
+  --mc-alone: rgb(168 116 0 / 16%);
 }
 
-/* Il titolo del cassetto è un tasto: lo chiude e lo riapre (Blue, 25/9 sera). Dal 27/9 il
-   quadratino colorato, il nome in minuscolo, la riga «cosa ci trovi», il conto e la freccetta. */
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo {
+.application.wod5e-mage-quadro .wod5e-mage-mc *,
+.application.wod5e-mage-quadro .wod5e-mage-mc *::before,
+.application.wod5e-mage-quadro .wod5e-mage-mc *::after {
+  box-sizing: border-box;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-foglio {
+  height: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-vivo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc button {
+  background: none;
   border: 0;
-  margin: 6px 0 2px;
+  border-radius: 0;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  height: auto;
+  letter-spacing: normal;
+  line-height: inherit;
+  margin: 0;
+  min-height: 0;
   padding: 0;
   text-shadow: none;
+  text-transform: none;
+  width: auto;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo button {
+.application.wod5e-mage-quadro .wod5e-mage-mc button:focus-visible,
+.application.wod5e-mage-quadro .wod5e-mage-mc input:focus-visible,
+.application.wod5e-mage-quadro .wod5e-mage-mc textarea:focus-visible {
+  outline: 2px solid var(--mc-oro-chiaro);
+  outline-offset: 2px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-ico {
+  fill: currentColor;
+  flex: none;
+}
+
+/* La barra: dove sei, chi fa la mossa, la cerca, il turno. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-bar {
   align-items: center;
-  background: transparent;
+  background: var(--mc-barra);
+  border-bottom: 1px solid var(--mc-riga);
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  padding: 8px 18px;
+  position: relative;
+  z-index: 9;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-crumbs {
+  align-items: center;
+  display: flex;
+  flex: 1 1 240px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-crumb {
+  border-radius: 6px;
+  color: var(--mc-tenue);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 6px;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-crumb:hover {
+  background: var(--mc-campo-2);
+  color: var(--mc-testo);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-crumb.cur {
+  background: none;
+  color: var(--mc-testo);
+  cursor: default;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-crumb + .mc-crumb::before {
+  color: var(--mc-tenue-2);
+  content: "›";
+  margin-right: 8px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-bar-c {
+  flex: 1 1 220px;
+  max-width: 340px;
+  position: relative;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-cerca {
+  align-items: center;
+  background: var(--mc-campo);
+  border: 1px solid var(--mc-riga-2);
+  border-radius: 10px;
+  cursor: text;
+  display: flex;
+  gap: 8px;
+  height: 44px;
+  padding: 0 12px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-cerca:focus-within {
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-cerca > i {
+  color: var(--mc-tenue);
+  flex: none;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-cerca input {
+  background: none;
   border: 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--cassetto) 45%, transparent);
-  border-radius: 0;
-  color: var(--quadro-titolo);
+  box-shadow: none;
+  color: var(--mc-testo);
+  flex: 1;
+  font: inherit;
+  font-size: 16px;
+  height: 100%;
+  min-width: 0;
+  outline: none;
+  padding: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-cerca input::placeholder,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-inp::placeholder {
+  color: var(--mc-tenue-2);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-res {
+  background: var(--mc-campo-2);
+  border: 1px solid var(--mc-riga-2);
+  border-radius: 12px;
+  box-shadow: 0 10px 24px var(--mc-ombra);
+  left: 0;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  z-index: 20;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-res-i {
+  align-items: center;
+  border-radius: 8px;
+  column-gap: 10px;
+  cursor: pointer;
   display: grid;
-  font: 400 15px/1.2 "Signika", sans-serif;
-  gap: 10px;
-  grid-template-columns: 34px minmax(0, 1fr) auto auto;
-  letter-spacing: 0;
-  padding: 4px 4px 8px 2px;
+  grid-template-columns: 30px minmax(0, 1fr);
+  min-height: 48px;
+  padding: 6px 10px;
   text-align: left;
-  text-transform: none;
   width: 100%;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo button:hover {
-  background: var(--mage-riga-sorvolo);
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-res-i:hover,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-res-i:focus-visible {
+  background: var(--mc-campo-3);
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .quadratino {
-  align-items: center;
-  background: color-mix(in srgb, var(--cassetto) 18%, transparent);
-  border: 1px solid color-mix(in srgb, var(--cassetto) 55%, transparent);
-  border-radius: 7px;
-  color: var(--cassetto);
-  display: inline-flex;
-  font-size: 15px;
-  height: 34px;
-  justify-content: center;
-  width: 34px;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-res-i .mc-ico {
+  grid-row: 1 / 3;
+  height: 28px;
+  width: 28px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .testi {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .nome {
-  font-size: 17px;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-res-n {
+  font-family: var(--mc-titolo);
+  font-size: 16px;
   font-weight: 700;
-  line-height: 1.15;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .sotto {
-  color: var(--quadro-tenue);
-  font-size: 13.5px;
   line-height: 1.2;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .conto {
-  color: var(--quadro-tenue);
-  font: 600 14px "Signika", sans-serif;
-  font-variant-numeric: tabular-nums;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-res-m {
+  color: var(--mc-tenue);
+  font-size: 13px;
+  line-height: 1.2;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto-titolo .freccia {
-  color: var(--quadro-tenue);
-  font-size: 12px;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-res-vuoto {
+  color: var(--mc-tenue);
+  font-size: 13px;
+  padding: 12px 14px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-cassetto.chiusa .wod5e-mage-menu-cassetto-titolo .nome {
-  color: var(--quadro-tenue);
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-voce {
-  border-bottom: 1px solid rgb(107 79 18 / 35%);
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-voce.aperta {
-  background: var(--quadro-scelta);
-  border-bottom-color: var(--mage-viola-chiaro);
-  border-radius: 6px;
-  margin: 2px 0;
-}
-
-/* Le voci che il PDF consiglia per la scena scelta (27/9): la barretta d'oro a sinistra e il nome in oro. */
-.application.wod5e-mage-quadro .wod5e-mage-menu-voce.consigliata {
-  box-shadow: inset 3px 0 0 var(--menu-oro);
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-voce.consigliata button.wod5e-mage-menu-scegli .nome {
-  color: var(--menu-oro);
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-riga {
-  align-items: stretch;
-  display: flex;
-}
-
-/* La riga: icona del modo, nome, effetto in breve, prezzo; le tre colonne allineate in tutta la lista. */
-.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli {
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-bar-r {
   align-items: center;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  color: var(--mage-testo);
-  display: grid;
-  flex: 1;
-  font-size: 15px;
-  gap: 14px;
-  grid-template-columns: 18px minmax(120px, 0.55fr) 1.6fr max-content;
-  min-width: 0;
-  padding: 8px 6px 8px 8px;
+  display: flex;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-turno {
+  align-items: center;
+  color: var(--mc-tenue);
+  display: flex;
+  font-size: 13px;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-turno b {
+  color: var(--mc-testo);
+  font-weight: 600;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-btn-s {
+  align-items: center;
+  background: var(--mc-campo);
+  border: 1px solid var(--mc-riga-3);
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 13px;
+  gap: 8px;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-btn-s:hover {
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-btn-w {
+  display: flex;
+  margin-top: 12px;
+  width: 100%;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-ris {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-ris .mc-occhio {
+  height: 28px;
+  width: 28px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-ris-n {
+  font-family: var(--mc-titolo);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-ris-l {
+  color: var(--mc-tenue);
+  font-size: 13px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-occhio path,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-occhio circle {
+  fill: none;
+  stroke: var(--mc-rosso);
+  stroke-linejoin: round;
+  stroke-width: 7;
+}
+
+/* «Fatta da»: il Paradosso o il PNG del token selezionato. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act {
+  flex: none;
+  position: relative;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-b {
+  align-items: center;
+  background: var(--mc-campo);
+  border: 1px solid var(--mc-riga-2);
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  min-height: 44px;
+  padding: 4px 10px 4px 6px;
   text-align: left;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli:hover {
-  background: var(--mage-riga-sorvolo);
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-b:hover {
+  border-color: var(--mc-oro);
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-voce.aperta button.wod5e-mage-menu-scegli:hover {
-  background: transparent;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-b.npc {
+  border-color: var(--mc-rosso);
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli > i {
-  color: var(--mage-oro);
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-ic,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-oi {
+  background: var(--mc-campo-2);
+  border-radius: 50%;
+  display: grid;
+  flex: none;
+  height: 32px;
+  place-items: center;
+  width: 32px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-oi {
+  height: 30px;
+  width: 30px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-t small,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-ot small {
+  color: var(--mc-tenue);
+  display: block;
   font-size: 13px;
-  text-align: center;
+  line-height: 1.25;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli .nome {
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-t b,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-ot b {
+  display: block;
+  font-family: var(--mc-titolo);
+  font-size: 16px;
   font-weight: 700;
-  min-width: 0;
+  line-height: 1.2;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli .breve {
-  color: var(--mage-testo);
-  font-size: 14.5px;
-  line-height: 1.3;
-  min-width: 0;
-  opacity: 0.85;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-dn {
+  color: var(--mc-tenue);
+  font-size: 12px;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-scegli .prezzo {
-  color: var(--mage-oro);
-  font-size: 15px;
-  font-weight: 700;
-  min-width: 96px;
-  text-align: right;
-  white-space: nowrap;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-m {
+  background: var(--mc-campo-2);
+  border: 1px solid var(--mc-riga-2);
+  border-radius: 12px;
+  box-shadow: 0 10px 24px var(--mc-ombra);
+  left: 0;
+  max-height: 60vh;
+  max-width: calc(100cqw - 32px);
+  overflow-y: auto;
+  padding: 8px;
+  position: absolute;
+  top: 52px;
+  width: 320px;
+  z-index: 21;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-info-tasto {
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  color: var(--quadro-tenue);
-  flex: 0 0 38px;
-  font-size: 15px;
-  padding: 0;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-g + .mc-act-g {
+  border-top: 1px solid var(--mc-riga);
+  margin-top: 6px;
+  padding-top: 6px;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-info-tasto:hover,
-.application.wod5e-mage-quadro button.wod5e-mage-menu-info-tasto.attivo {
-  color: var(--mage-viola-chiaro);
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-gl {
+  color: var(--mc-tenue);
+  display: block;
+  font-size: 13px;
+  padding: 2px 8px 4px;
 }
 
-/* Il testo della voce, solo a richiesta. */
-.application.wod5e-mage-quadro .wod5e-mage-menu-info {
-  border-top: 1px dashed rgb(181 138 222 / 40%);
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-o {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
   display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  gap: 5px;
-  padding: 8px 12px 10px 40px;
+  gap: 10px;
+  min-height: 48px;
+  padding: 6px 8px;
+  text-align: left;
+  width: 100%;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-info p {
-  margin: 0;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-o:hover {
+  background: var(--mc-campo-3);
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-info p > b {
-  color: var(--mage-oro);
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-o.on {
+  background: var(--mc-scelta);
+  border-color: var(--mc-oro);
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-info .esempio,
-.application.wod5e-mage-quadro .wod5e-mage-menu-info .faccia {
-  color: var(--quadro-tenue);
-  font-style: italic;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-act-n {
+  color: var(--mc-tenue);
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 8px 8px 4px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-mossa,
-.wod5e-mage-menu-card .wod5e-mage-menu-mossa {
-  background: var(--mage-scelta-tenue, #3b2a55);
-  border: 1px solid var(--mage-viola-chiaro, #b58ade);
-  border-radius: 6px;
-  color: var(--mage-scelta-tenue-testo, #fff);
-  display: inline-block;
-  font-size: 13.5px;
-  font-style: normal;
-  margin: 2px 4px 2px 0;
-  padding: 2px 8px;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-avviso {
-  color: var(--quadro-tenue);
-  font-size: 14px;
-  margin: 0;
-  padding: 6px 12px 10px 40px;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-avviso i {
-  color: var(--mage-rosso-chiaro);
-}
-
-/* I comandi della spesa sotto la riga: file di controlli, niente testo da leggere. */
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa {
-  border-top: 1px solid rgb(181 138 222 / 35%);
+/* I fatti fissati, sotto la barra. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fissati {
+  align-items: center;
+  background: var(--mc-barra);
+  border-bottom: 1px solid var(--mc-riga);
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px 12px 10px 40px;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .fila {
-  align-items: flex-end;
-  display: flex;
+  flex: none;
   flex-wrap: wrap;
-  gap: 8px 12px;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo {
-  color: var(--quadro-tenue);
-  display: flex;
-  flex: 1 1 180px;
-  flex-direction: column;
   font-size: 13px;
-  gap: 3px;
-  min-width: 0;
+  gap: 8px;
+  padding: 6px 18px;
+  position: relative;
+  z-index: 8;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo.corto {
-  flex: 0 0 auto;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo.corto input[type="number"] {
-  width: 80px;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .campo.cresce {
-  flex: 2 1 220px;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .nota {
-  color: var(--quadro-tenue);
-  font-size: 13px;
-  margin: 0;
-}
-
-/* L'orologio che si apre: la sua fila, precompilata (nome, segmenti a scelta rapida, cosa scatta). */
-.application.wod5e-mage-quadro .wod5e-mage-menu-orologio {
-  background: rgb(0 0 0 / 18%);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 6px;
-  padding: 8px 10px 10px;
-}
-
-.application.wod5e-mage-quadro.wod5e-mage-chiara .wod5e-mage-menu-orologio {
-  background: var(--mage-velluto);
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-orologio .titolo {
-  color: var(--mage-oro);
-  flex: 1 0 100%;
-  font: 700 12px/1 sans-serif;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-orologio .titolo i {
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fx-l {
+  color: var(--mc-tenue);
   margin-right: 4px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti {
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fx {
+  align-items: center;
+  background: var(--mc-oro-fondo);
+  border: 1px solid var(--mc-oro-riga);
+  border-radius: 20px;
+  color: var(--mc-testo-2);
+  display: inline-flex;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 2px 0 12px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fx > i {
+  color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fx-x {
+  border-radius: 50%;
+  color: var(--mc-tenue);
+  cursor: pointer;
+  display: grid;
+  height: 36px;
+  place-items: center;
+  width: 36px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fx-x:hover {
+  background: var(--mc-campo-3);
+}
+
+/* Il palco: l'anello, il mozzo con la riserva, i lati, il ventaglio. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-stage {
+  background: var(--mc-fondo);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-ring,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-anchor,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fan {
+  height: 0;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-ring {
+  transition: transform 0.65s var(--mc-curva);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-ring:hover {
+  z-index: 4;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-orbit {
+  border: 1px solid var(--mc-riga);
+  border-radius: 50%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform: translate(-50%, -50%);
+  transition: width 0.65s var(--mc-curva), height 0.65s var(--mc-curva), opacity 0.4s;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-spoke {
+  background: var(--mc-riga-2);
+  border-radius: 1px;
+  height: 2px;
+  left: 0;
+  position: absolute;
+  top: -1px;
+  transform-origin: 0 50%;
+  transition: transform 0.65s var(--mc-curva), width 0.65s var(--mc-curva), opacity 0.4s, background-color 0.3s;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-spoke.on {
+  background: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-rn {
+  height: 0;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transition: transform 0.65s var(--mc-curva), opacity 0.4s;
+  width: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-rn:hover {
+  z-index: 5;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sph {
+  background: var(--mc-campo);
+  border: 3px solid var(--mc-neutro);
+  border-radius: 50%;
+  color: var(--mc-testo);
+  cursor: pointer;
+  display: grid;
+  height: 86px;
+  left: -43px;
+  place-items: center;
+  position: absolute;
+  top: -43px;
+  transition: transform 0.65s var(--mc-curva), background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.3s;
+  width: 86px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sph.c-t {
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sph.c-n {
+  border-color: var(--mc-rosso);
+  border-style: double;
+  border-width: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sph.c-f {
+  border-color: var(--mc-neutro);
+  border-style: dashed;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sph:hover {
+  background: var(--mc-campo-2);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sph.on {
+  background: var(--mc-scelta);
+  box-shadow: 0 0 0 7px var(--mc-alone);
+  color: var(--mc-oro-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-rn.dim .mc-sph {
+  color: var(--mc-testo-2);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-piu {
+  background: var(--mc-campo-3);
+  border: 1px solid var(--mc-neutro);
+  border-radius: 50%;
+  color: var(--mc-testo);
+  font-size: 18px;
+  font-weight: 700;
+  height: 26px;
+  line-height: 23px;
+  position: absolute;
+  right: -5px;
+  text-align: center;
+  top: -5px;
+  width: 26px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-skl {
+  background: var(--mc-rosso-fondo);
+  border: 1px solid var(--mc-rosso);
+  border-radius: 50%;
+  color: var(--mc-rosso-testo);
+  display: grid;
+  font-size: 14px;
+  height: 28px;
+  left: -6px;
+  place-items: center;
+  position: absolute;
+  top: -6px;
+  width: 28px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sg {
+  background-color: currentColor;
+  display: block;
+  height: 54%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  width: 54%;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sg-correspondence { mask-image: url("../assets/icons/sheet/correspondence.png"); -webkit-mask-image: url("../assets/icons/sheet/correspondence.png"); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sg-entropy { mask-image: url("../assets/icons/sheet/entropy.png"); -webkit-mask-image: url("../assets/icons/sheet/entropy.png"); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sg-forces { mask-image: url("../assets/icons/sheet/forces.png"); -webkit-mask-image: url("../assets/icons/sheet/forces.png"); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sg-life { mask-image: url("../assets/icons/sheet/life.png"); -webkit-mask-image: url("../assets/icons/sheet/life.png"); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sg-matter { mask-image: url("../assets/icons/sheet/matter.png"); -webkit-mask-image: url("../assets/icons/sheet/matter.png"); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sg-mind { mask-image: url("../assets/icons/sheet/mind.png"); -webkit-mask-image: url("../assets/icons/sheet/mind.png"); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sg-prime { mask-image: url("../assets/icons/sheet/prime.png"); -webkit-mask-image: url("../assets/icons/sheet/prime.png"); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sg-spirit { mask-image: url("../assets/icons/sheet/spirit.png"); -webkit-mask-image: url("../assets/icons/sheet/spirit.png"); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sg-time { mask-image: url("../assets/icons/sheet/time.png"); -webkit-mask-image: url("../assets/icons/sheet/time.png"); }
+
+/* Il nome sotto ogni Sfera, sfumato: chi non conosce i sigilli le riconosce lo stesso. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-snm {
+  background: var(--mc-fondo);
+  border-radius: 6px;
+  color: var(--mc-tenue-2);
+  font-size: 13px;
+  left: 0;
+  line-height: 1.2;
+  padding: 1px 6px;
+  pointer-events: none;
+  position: absolute;
+  transform: translateX(-50%);
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-snm.off {
+  opacity: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-tip {
+  background: var(--mc-campo-2);
+  border: 1px solid var(--mc-riga-2);
+  border-radius: 8px;
+  color: var(--mc-tenue);
+  font-size: 13px;
+  line-height: 1.25;
+  opacity: 0;
+  padding: 6px 10px;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-tip b {
+  color: var(--mc-testo);
+  display: block;
+  font-family: var(--mc-titolo);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-tip-r { transform: translateY(-50%); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-tip-l { transform: translate(-100%, -50%); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-tip-t { transform: translate(-50%, -100%); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-tip-b { transform: translate(-50%, 0); }
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-rn:hover .mc-tip,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sph:focus-visible ~ .mc-tip {
+  opacity: 1;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-tip.off {
+  display: none;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-hub {
+  align-items: center;
+  background: var(--mc-barra);
+  border: 1px solid var(--mc-riga-2);
+  border-radius: 50%;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 160px;
+  justify-content: center;
+  left: -80px;
+  position: absolute;
+  top: -80px;
+  transition: transform 0.65s var(--mc-curva), opacity 0.4s, border-color 0.2s;
+  width: 160px;
+  z-index: 2;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-hub.back {
+  cursor: pointer;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-hub.back:hover {
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-hub .mc-occhio {
+  height: 44px;
+  width: 44px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-hub-n {
+  font-family: var(--mc-titolo);
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-hub-l {
+  color: var(--mc-tenue);
+  font-size: 13px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mpos {
+  height: 0;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode {
+  background: var(--mc-campo);
+  border: 2px solid var(--mc-riga-4);
+  border-radius: 50%;
+  color: var(--mc-testo);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s, opacity 0.3s, width 0.35s, height 0.35s, left 0.35s, top 0.35s;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode .mc-ico {
+  height: 54%;
+  width: 54%;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode:hover {
+  background: var(--mc-campo-2);
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode.on {
+  background: var(--mc-scelta);
+  border-color: var(--mc-oro);
+  color: var(--mc-oro-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode.off {
+  opacity: 0.5;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode.off:hover {
+  opacity: 1;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode-l {
+  color: var(--mc-tenue);
+  font-size: 13px;
+  line-height: 1.25;
+  pointer-events: none;
+  position: absolute;
+  text-align: right;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode-l b {
+  color: var(--mc-testo);
+  display: block;
+  font-family: var(--mc-titolo);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode-l-t { transform: translate(-100%, -100%); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode-l-b { transform: translate(-100%, 0); }
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode-l.mute {
+  opacity: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-conn {
+  height: 2px;
+  left: 0;
+  position: absolute;
+  top: -1px;
+  transform-origin: 0 50%;
+  width: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-conn-l {
+  background: var(--mc-riga-2);
+  border-radius: 1px;
+  height: 2px;
+  transform-origin: 0 50%;
+  transition: background-color 0.2s;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-conn-l.on {
+  background: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-conn-l.hov {
+  background: var(--mc-oro-tenue);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fi {
+  height: 0;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fbt {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  text-align: left;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fc {
+  background: var(--mc-campo);
+  border: 2px solid var(--mc-riga-3);
+  border-radius: 50%;
+  color: var(--mc-testo);
+  display: grid;
+  flex: none;
+  place-items: center;
+  position: relative;
+  transition: border-color 0.15s, background-color 0.15s, color 0.15s, box-shadow 0.2s;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fc .mc-ico {
+  height: 58%;
+  width: 58%;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fbt:hover .mc-fc,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fbt.hov .mc-fc {
+  background: var(--mc-campo-2);
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fbt.on .mc-fc {
+  background: var(--mc-scelta);
+  border-color: var(--mc-oro);
+  box-shadow: 0 0 0 5px var(--mc-alone);
+  color: var(--mc-oro-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fbt.comp .mc-fc {
+  border-color: var(--mc-neutro);
+  border-style: dashed;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fl {
+  color: var(--mc-testo-2);
+  font-family: var(--mc-titolo);
+  font-weight: 700;
+  line-height: 1.15;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fbt:hover .mc-fl,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fbt.hov .mc-fl {
+  color: var(--mc-testo);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fbt.on .mc-fl {
+  color: var(--mc-oro-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-bdg {
+  background: var(--mc-badge);
+  border-radius: 11px;
+  color: var(--mc-badge-testo);
+  display: grid;
+  font-size: 13px;
+  font-weight: 700;
+  height: 22px;
+  line-height: 1;
+  min-width: 22px;
+  padding: 0 5px;
+  place-items: center;
+  position: absolute;
+  right: -7px;
+  top: -7px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-bdg-f {
+  background: var(--mc-oro);
+  bottom: -7px;
+  color: var(--mc-su-oro);
+  font-size: 11px;
+  top: auto;
+}
+
+/* Le entrate: due nomi per animazione, così un ventaglio nuovo riparte. */
+@keyframes wod5e-mage-mc-pop-a { from { opacity: 0; transform: scale(0.3); } }
+@keyframes wod5e-mage-mc-pop-b { from { opacity: 0; transform: scale(0.3); } }
+@keyframes wod5e-mage-mc-draw-a { from { transform: scaleX(0); } }
+@keyframes wod5e-mage-mc-draw-b { from { transform: scaleX(0); } }
+@keyframes wod5e-mage-mc-fan-a { from { opacity: 0; transform: translate(0, 0) scale(0.3); } }
+@keyframes wod5e-mage-mc-fan-b { from { opacity: 0; transform: translate(0, 0) scale(0.3); } }
+@keyframes wod5e-mage-mc-fade-a { from { opacity: 0; } }
+@keyframes wod5e-mage-mc-fade-b { from { opacity: 0; } }
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode.in-a { animation: wod5e-mage-mc-pop-a 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode.in-b { animation: wod5e-mage-mc-pop-b 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode-l.in-a { animation: wod5e-mage-mc-fade-a 0.3s ease-out 0.55s both; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mode-l.in-b { animation: wod5e-mage-mc-fade-b 0.3s ease-out 0.55s both; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-conn-l.mc-a { animation: wod5e-mage-mc-draw-a 0.35s ease-out both; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-conn-l.mc-b { animation: wod5e-mage-mc-draw-b 0.35s ease-out both; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fi.fan-a { animation: wod5e-mage-mc-fan-a 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fi.fan-b { animation: wod5e-mage-mc-fan-b 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-conn-l.fan-a { animation: wod5e-mage-mc-draw-a 0.4s ease-out both; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-conn-l.fan-b { animation: wod5e-mage-mc-draw-b 0.4s ease-out both; }
+
+/* La legenda dei tre cerchi, in basso a sinistra; quando tocca l'anello diventa un bottone. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-leg {
+  bottom: 20px;
+  color: var(--mc-tenue);
+  font-size: 13px;
+  left: 24px;
+  position: absolute;
+  transition: opacity 0.3s;
+  width: 330px;
+  z-index: 3;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-leg.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-leg.over {
+  background: var(--mc-barra);
+  border: 1px solid var(--mc-riga-2);
+  border-radius: 12px;
+  bottom: 64px;
+  box-shadow: 0 10px 24px var(--mc-ombra);
+  left: 16px;
+  max-width: calc(100% - 32px);
+  padding: 12px 14px;
+  z-index: 9;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-leg-r {
+  align-items: center;
+  color: var(--mc-testo-2);
+  display: flex;
+  gap: 10px;
+  min-height: 26px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lg {
+  border: 3px solid var(--mc-neutro);
+  border-radius: 50%;
+  color: var(--mc-testo);
+  display: grid;
+  flex: none;
+  font-size: 13px;
+  font-weight: 700;
+  height: 22px;
+  line-height: 1;
+  place-items: center;
+  width: 22px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lg-t {
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lg-n {
+  border-color: var(--mc-rosso);
+  border-style: double;
+  border-width: 5px;
+  color: var(--mc-rosso-testo);
+  font-size: 8px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lg-f {
+  border-style: dashed;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-leg-k {
+  line-height: 1.4;
+  margin: 8px 0 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-leg-btn {
+  background: var(--mc-campo);
+  border: 1px solid var(--mc-riga-3);
+  border-radius: 10px;
+  bottom: 16px;
+  cursor: pointer;
+  font-size: 13px;
+  left: 16px;
+  min-height: 40px;
+  padding: 0 14px;
+  position: absolute;
+  z-index: 4;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-leg-btn:hover {
+  border-color: var(--mc-oro);
+}
+
+/* Il pannello: entra da destra, o sale dal basso se la finestra è stretta. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-panel {
+  background: var(--mc-pannello);
+  border-left: 1px solid var(--mc-riga);
+  bottom: 0;
+  overflow-y: auto;
+  padding: 22px;
+  position: absolute;
+  right: 0;
+  scrollbar-width: thin;
+  top: 0;
+  transform: translateX(100%);
+  transition: transform 0.55s var(--mc-curva);
+  z-index: 6;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-panel.on {
+  transform: none;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-panel.sheet {
+  border-left: 0;
+  border-radius: 16px 16px 0 0;
+  border-top: 1px solid var(--mc-riga);
+  left: 0;
+  padding: 18px 16px;
+  top: auto;
+  transform: translateY(100%);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-panel.sheet.on {
+  transform: none;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-panel p {
+  margin: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-p-h,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-head,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-prev-h {
   align-items: center;
   display: flex;
-  gap: 4px;
+  gap: 14px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti button,
-.application.wod5e-mage-quadro .wod5e-mage-menu-vede button {
-  background: var(--mage-incavo);
-  border: 1px solid var(--mage-oro-tenue);
-  border-radius: 6px;
-  color: var(--mage-testo);
-  font-size: 14px;
-  font-weight: 600;
-  min-width: 36px;
-  padding: 6px 9px;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-p-sg {
+  background: var(--mc-campo);
+  border: 3px solid var(--mc-neutro);
+  border-radius: 50%;
+  color: var(--mc-testo);
+  display: grid;
+  flex: none;
+  height: 56px;
+  place-items: center;
+  width: 56px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti button.attivo,
-.application.wod5e-mage-quadro .wod5e-mage-menu-vede button.attivo {
-  background: var(--mage-viola);
-  border-color: var(--mage-viola-chiaro);
-  color: #fff;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-p-sg.c-t { border-color: var(--mc-oro); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-p-sg.c-n { border-color: var(--mc-rosso); border-style: double; border-width: 5px; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-p-sg.c-f { border-style: dashed; }
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-p-t,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-ttl {
+  border: 0;
+  color: var(--mc-testo);
+  font-family: var(--mc-titolo);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.05;
+  margin: 0;
+  padding: 0;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-segmenti input {
-  width: 64px;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-p-d {
+  color: var(--mc-tenue);
+  margin: 4px 0 0;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-vede {
-  display: inline-flex;
-  gap: 4px;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-blk {
+  border-top: 1px solid var(--mc-riga);
+  margin-top: 18px;
+  padding-top: 16px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa .piede {
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-blk p {
+  margin: 6px 0 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-cer {
   align-items: center;
-}
-
-.application.wod5e-mage-quadro .wod5e-mage-menu-conto {
-  color: var(--quadro-tenue);
-  font-size: 14px;
+  border: 1px solid var(--mc-neutro);
+  border-radius: 13px;
+  color: var(--mc-testo);
+  display: inline-flex;
+  font-size: 13px;
+  min-height: 26px;
+  padding: 2px 10px;
   white-space: nowrap;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-conto b {
-  color: var(--mage-oro);
-  font: 700 21px/1 "Modesto Condensed", Georgia, serif;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-cer-t { border-color: var(--mc-oro); }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-cer-n { border-color: var(--mc-rosso); border-style: double; border-width: 3px; }
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-cer-f { border-style: dashed; }
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lati {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin-top: 12px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa.troppo .wod5e-mage-menu-conto b[data-role="prezzoVivo"],
-.application.wod5e-mage-quadro .wod5e-mage-menu-spesa.troppo .wod5e-mage-menu-conto b[data-role="riservaDopo"] {
-  color: var(--mage-rosso-chiaro);
-}
-
-.application.wod5e-mage-quadro button.wod5e-mage-menu-spendi {
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lato {
   align-items: center;
-  background: var(--mage-viola);
-  border: 1px solid var(--mage-viola-chiaro);
-  border-radius: 6px;
-  color: #fff;
-  display: inline-flex;
-  font-size: 14.5px;
-  font-weight: 600;
+  background: var(--mc-campo);
+  border: 1px solid var(--mc-riga-2);
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  min-height: 60px;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lato:hover {
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lato .mc-ico {
+  height: 30px;
+  width: 30px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lato > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lato b {
+  display: block;
+  font-family: var(--mc-titolo);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-lato small {
+  color: var(--mc-tenue);
+  font-size: 13px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-mut {
+  color: var(--mc-tenue);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sm {
+  font-size: 13px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-blk .mc-sm,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-panel > .mc-sm {
+  margin-top: 10px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-leg-b {
+  align-items: center;
+  color: var(--mc-testo-2);
+  display: flex;
+  font-size: 13px;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-leg-b .mc-bdg {
+  flex: none;
+  position: static;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-prev-ic {
+  border: 2px solid var(--mc-riga-3);
+  border-radius: 50%;
+  display: grid;
+  flex: none;
+  height: 48px;
+  place-items: center;
+  width: 48px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-prev-ic .mc-ico,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-ic .mc-ico {
+  height: 58%;
+  width: 58%;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-prev-t {
+  border: 0;
+  font-family: var(--mc-titolo);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-top {
+  align-items: center;
+  color: var(--mc-tenue);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  gap: 8px 10px;
+  margin-bottom: 14px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-top .mc-sg {
+  color: var(--mc-testo);
+  height: 22px;
+  width: 22px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-ic {
+  background: var(--mc-scelta);
+  border: 2px solid var(--mc-oro);
+  border-radius: 50%;
+  color: var(--mc-oro-chiaro);
+  display: grid;
+  flex: none;
+  height: 58px;
+  place-items: center;
+  width: 58px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-txt {
+  line-height: 1.5;
+  margin: 14px 0 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-meta {
+  color: var(--mc-tenue);
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-nota {
+  color: var(--mc-rosso-chiaro);
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+/* La spesa. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-da {
+  border-top: 1px solid var(--mc-riga);
+  color: var(--mc-testo-2);
+  font-size: 13px;
+  margin: 16px 0 0;
+  padding-top: 14px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-da.npc {
+  color: var(--mc-rosso-testo);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-grid {
+  border-top: 1px solid var(--mc-riga);
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 18px;
+  padding-top: 16px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-field {
+  margin-top: 16px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-grid .mc-c-field {
+  margin-top: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-lab {
+  color: var(--mc-tenue);
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-step {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-st-b {
+  background: var(--mc-campo);
+  border: 1px solid var(--mc-riga-3);
+  border-radius: 10px;
+  cursor: pointer;
+  display: grid;
+  height: 44px;
+  place-items: center;
+  width: 44px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-st-b:hover {
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-st-b:disabled {
+  border-color: var(--mc-riga-3);
+  cursor: default;
+  opacity: 0.35;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-st-n {
+  font-family: var(--mc-titolo);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 40px;
+  text-align: center;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sog-n {
+  color: var(--mc-oro-chiaro);
+  display: block;
+  font-family: var(--mc-titolo);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 44px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-sog-r {
+  color: var(--mc-tenue);
+  display: block;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* I pallini della riserva: pieni quelli che restano, vuoti e tratteggiati quelli che spendi. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pip {
+  background: var(--mc-testo);
+  border: 2px solid var(--mc-testo);
+  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pip.paid {
+  background: none;
+  border-color: var(--mc-oro);
+  border-style: dashed;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-chip {
+  background: var(--mc-campo);
+  border: 1px solid var(--mc-riga-3);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 15px;
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-chip:hover {
+  border-color: var(--mc-oro-tenue);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-chip.on {
+  background: var(--mc-scelta);
+  border-color: var(--mc-oro);
+  color: var(--mc-oro-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-inp {
+  background: var(--mc-fondo);
+  border: 1px solid var(--mc-riga-3);
+  border-radius: 10px;
+  box-shadow: none;
+  color: var(--mc-testo);
+  display: block;
+  font: inherit;
+  font-size: 16px;
+  height: 44px;
+  margin-top: 6px;
+  padding: 0 12px;
+  width: 100%;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-inp:focus {
+  border-color: var(--mc-oro);
+  box-shadow: none;
+  outline: none;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc textarea.mc-inp {
+  height: 84px;
+  line-height: 1.4;
+  margin-top: 0;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-warn {
+  align-items: center;
+  background: var(--mc-rosso-fondo);
+  border: 1px solid var(--mc-rosso-riga);
+  border-radius: 10px;
+  color: var(--mc-rosso-testo);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
   gap: 8px;
-  margin-left: auto;
-  padding: 8px 14px;
+  justify-content: space-between;
+  margin: 16px 0 0;
+  padding: 8px 8px 8px 12px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-spendi {
+  background: var(--mc-oro);
+  border-radius: 12px;
+  color: var(--mc-su-oro);
+  cursor: pointer;
+  display: block;
+  font-family: var(--mc-titolo);
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 20px;
+  min-height: 52px;
+  padding: 0 16px;
+  width: 100%;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-spendi:hover {
+  filter: brightness(1.08);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-spendi:disabled {
+  background: var(--mc-riga);
+  color: var(--mc-tenue-2);
+  cursor: default;
+  filter: none;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-quando {
+  color: var(--mc-tenue);
+  font-size: 13px;
+  margin: 10px 0 0;
+}
+
+/* Il Grimorio della Sfera. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-cerca-p {
+  margin-top: 16px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fr {
+  background: var(--mc-campo);
+  border: 1px solid var(--mc-riga);
+  border-radius: 10px;
+  cursor: pointer;
+  display: grid;
+  gap: 2px 10px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 10px 12px;
+  text-align: left;
+  width: 100%;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fr:hover,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fr:focus-visible {
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fr-n {
+  font-family: var(--mc-titolo);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fr-s {
+  color: var(--mc-oro-chiaro);
+  font-size: 13px;
   white-space: nowrap;
 }
 
-.application.wod5e-mage-quadro.wod5e-mage-chiara button.wod5e-mage-menu-spendi {
-  color: #F6F2E6;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-fr-t {
+  color: var(--mc-tenue);
+  font-size: 13px;
+  grid-column: 1 / -1;
+  line-height: 1.35;
 }
 
-.application.wod5e-mage-quadro button.wod5e-mage-menu-spendi:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-back-l {
+  align-items: center;
+  border-radius: 8px;
+  color: var(--mc-tenue);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 13px;
+  gap: 6px;
+  margin: 10px 0 0;
+  min-height: 36px;
+  padding: 0 10px 0 6px;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-legenda {
-  color: var(--quadro-tenue);
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-back-l:hover {
+  background: var(--mc-campo-2);
+  color: var(--mc-testo);
+}
+
+/* Il pop-up della spesa: cinque secondi per nasconderla. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop {
+  animation: wod5e-mage-mc-fade-a 0.3s ease-out both;
+  background: var(--mc-campo-2);
+  border: 1px solid var(--mc-rosso);
+  border-radius: 14px;
+  max-width: calc(100% - 32px);
+  overflow: hidden;
+  padding: 14px 16px 18px;
+  position: absolute;
+  width: 340px;
+  z-index: 10;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop.st-nascosta {
+  border-color: var(--mc-riga-4);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop.st-dichiarata {
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop-top {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop-t {
+  color: var(--mc-rosso-chiaro);
+  font-family: var(--mc-titolo);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop-s {
+  color: var(--mc-tenue);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop-n {
+  font-family: var(--mc-titolo);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 4px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop-x {
+  color: var(--mc-testo-2);
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 6px 0 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop-m {
+  color: var(--mc-tenue);
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop-b {
+  align-items: center;
+  background: var(--mc-rosso-fondo);
+  border: 1px solid var(--mc-rosso-riga);
+  border-radius: 10px;
+  color: var(--mc-rosso-testo);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 8px;
+  margin-top: 12px;
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop-b:hover {
+  border-color: var(--mc-rosso);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop-f {
+  color: var(--mc-testo);
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-pop-bar {
+  background: var(--mc-rosso);
+  bottom: 0;
+  height: 3px;
+  left: 0;
+  position: absolute;
+  transition: width 1s linear;
+}
+
+/* La finestra del lancio, ridotta, sopra il palco. */
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv {
+  align-items: center;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 16px;
+  position: absolute;
+  z-index: 20;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-bg {
+  background: var(--mc-velo);
+  inset: 0;
+  position: absolute;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-box {
+  animation: wod5e-mage-mc-fade-a 0.25s ease-out both;
+  background: var(--mc-pannello);
+  border: 1px solid var(--mc-riga-3);
+  border-radius: 16px;
+  box-shadow: 0 16px 40px var(--mc-ombra);
+  max-height: 100%;
+  max-width: 100%;
+  overflow-y: auto;
+  padding: 18px 22px 20px;
+  position: relative;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-head {
+  align-items: flex-start;
+  display: flex;
+  gap: 12px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-t {
+  border: 0;
+  font-family: var(--mc-titolo);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-s {
+  color: var(--mc-tenue);
   font-size: 13px;
   margin: 2px 0 0;
 }
 
-.application.wod5e-mage-quadro .wod5e-mage-menu-legenda i {
-  color: var(--mage-oro);
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-x {
+  border-radius: 10px;
+  color: var(--mc-tenue);
+  cursor: pointer;
+  display: grid;
+  flex: none;
+  height: 44px;
+  margin-left: auto;
+  place-items: center;
+  width: 44px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-x:hover {
+  background: var(--mc-campo-3);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-row {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-row .mc-c-lab {
+  margin: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dr {
+  align-items: center;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 24px minmax(84px, 110px) minmax(0, 1fr) 20px;
+  min-height: 38px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dr-sg {
+  color: var(--mc-testo);
+  height: 22px;
+  width: 22px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dr-ic {
+  color: var(--mc-tenue-2);
+  text-align: center;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dr.su .mc-dr-ic,
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dr.su .mc-dr-n {
+  color: var(--mc-oro-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dr-l {
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dr.epic {
+  border-bottom: 1px solid var(--mc-riga);
+  margin-bottom: 4px;
+  padding-bottom: 6px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dot {
+  border: 2px solid var(--mc-riga-4);
+  border-radius: 50%;
+  cursor: pointer;
+  height: 26px;
+  width: 26px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dot:hover {
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dot.on {
+  background: var(--mc-oro);
+  border-color: var(--mc-oro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-dr-n {
+  color: var(--mc-tenue-2);
+  font-family: var(--mc-titolo);
+  font-size: 16px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-amb-n {
+  margin: 8px 0 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-amb-n.warn {
+  color: var(--mc-rosso-chiaro);
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-foot {
+  align-items: center;
+  border-top: 1px solid var(--mc-riga);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding-top: 14px;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-foot p {
+  flex: 1 1 200px;
+  margin: 0;
+}
+
+.application.wod5e-mage-quadro .wod5e-mage-mc .mc-wv-go {
+  margin-top: 0;
+  min-width: 160px;
+  padding: 0 28px;
+  width: auto;
+}
+
+@container (max-width: 720px) {
+  .application.wod5e-mage-quadro .wod5e-mage-mc .mc-bar {
+    gap: 8px 12px;
+    padding: 8px 14px;
+  }
+
+  .application.wod5e-mage-quadro .wod5e-mage-mc .mc-bar-c {
+    flex-basis: 100%;
+    max-width: none;
+    order: 3;
+  }
+
+  .application.wod5e-mage-quadro .wod5e-mage-mc .mc-fissati {
+    padding: 6px 14px;
+  }
+
+  .application.wod5e-mage-quadro .wod5e-mage-mc .mc-c-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .application.wod5e-mage-quadro .wod5e-mage-mc * {
+    animation-delay: 0s !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Il fatto fissato nella carta in chat. */
+.wod5e-mage-mc-carta .wod5e-mage-mc-carta-fissa {
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0;
+  opacity: 0.9;
 }
 
 /* 3 · I giocatori: un riquadro per mago, chiuso coi conti, aperto con le tre righe. */
@@ -14981,6 +16474,19 @@
   flex-direction: column;
   font-size: 13.5px;
   gap: 4px;
+}
+
+/* Le mosse delle carte del menù a 65 voci (fino alla 1.44.0), che restano nelle chat dei mondi. */
+.wod5e-mage-menu-card .wod5e-mage-menu-mossa {
+  background: var(--mage-scelta-tenue, #3b2a55);
+  border: 1px solid var(--mage-viola-chiaro, #b58ade);
+  border-radius: 6px;
+  color: var(--mage-scelta-tenue-testo, #fff);
+  display: inline-block;
+  font-size: 13.5px;
+  font-style: normal;
+  margin: 2px 4px 2px 0;
+  padding: 2px 8px;
 }
 
 /* La carta del menù in chat: le righe una sotto l'altra (la griglia a due colonne

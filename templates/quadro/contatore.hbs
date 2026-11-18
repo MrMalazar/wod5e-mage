@@ -1,4 +1,4 @@
-{{!-- Il contatore (24/9): il numero, il ritmo, quello che il Paradosso ha in scena, i tasti. --}}
+{{!-- Il contatore (24/9): il numero, il ritmo, quello che il Paradosso ha in scena (orologi, Presenze, Ancore, fatti fissati), i tasti. --}}
 <div class="wod5e-mage-quadro-corpo wod5e-mage-quadro-contatore">
     <div class="wod5e-mage-quadro-numero">
         <button type="button" data-action="meno" title="{{localize 'WOD5E_MAGE.Paradosso.Minus'}}" aria-label="{{localize 'WOD5E_MAGE.Paradosso.Minus'}}"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
@@ -38,6 +38,10 @@
             {{/each}}
             {{#each ancore as |a|}}
                 <li class="ancora"><i class="fa-solid fa-anchor" aria-hidden="true"></i><span class="nome">{{a.nome}}</span><span class="tenue">· {{a.actorName}}{{#if a.testo}} · {{a.testo}}{{/if}}</span></li>
+            {{/each}}
+            {{!-- I fatti fissati dal menù circolare (18/11/2026): restano con la loro soglia finché i maghi non li scardinano. --}}
+            {{#each fissati as |f|}}
+                <li class="fissato"><i class="fa-solid fa-thumbtack" aria-hidden="true"></i><span class="nome">{{f.testo}}</span><span class="tasti"><button type="button" data-action="scardina" data-id="{{f.id}}" title="{{localize 'WOD5E_MAGE.MenuCircolare.Fissati.via' nome=f.nome}}" aria-label="{{localize 'WOD5E_MAGE.MenuCircolare.Fissati.via' nome=f.nome}}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span></li>
             {{/each}}
         </ul>
     {{else}}

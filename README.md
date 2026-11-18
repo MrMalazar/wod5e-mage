@@ -258,16 +258,26 @@ tokens" client setting, shown to GMs only, turns it off. Logic in
 
 ## Narrator's Board
 
-Since 27 September 2026 the Paradox menu on the Board lists its 65 entries in
-nine drawers, grouped by what the Paradox bounces on: on the mage, on the
-spell, the Sleepers, the Presences, the place, clash and scene, the clocks,
-the Anchors, and at the burst (last, set apart by a dashed line). Each drawer
-has a coloured square with its icon, its name, a "what you find here" line
-and its count, and opens or closes with a click that the client remembers.
-With a scene chosen in the dropdown, the entries the rulebook recommends for
-that scene carry a gold bar on the left and a gold name; the dropdown never
-hides an entry and the search works as before. The families of the data stay
-and still drive spending, chat cards, effects worn and clocks.
+Since 1.45.0 (18 November 2026) the menu mode of the Board is the circular
+menu by Sphere, in place of the 65 entries in drawers. The nine Spheres sit in
+a ring as sigils, each with its name underneath. A click turns the ring, brings
+the Sphere onto the line and opens its two sides, Narrative and Combat, linked
+like a diagram; a side opens the fan of its moves, each with an icon, ending
+with Magick Effect (the Sphere's Grimoire, with a search) and Compose (a
+reduced casting window, already on the Sphere). The spend sits in a panel on
+the right, or in a sheet from the bottom when the window is narrow: who makes
+the move, the price, the threshold to break it (the paid amount, plus 3 when
+the move fixes something), the reserve as pips, on whom, the duration, a note.
+The reserve drops at once; a pop-up gives five seconds to hide the "Paradox
+acts" card, then the card goes to the table. Fixed facts stay on the Board (in
+the menu and in the counter) with their threshold until someone breaks them.
+On the Combat side there is one spend per turn: the combat tracker's turn, or a
+manual turn without a combat. The three circles of the Spheres (at the table,
+an enemy's in the scene, off the table) read from the shape as well as the
+colour: a full ring, a double ring with a skull, a dashed ring with a +. The
+move is made by the selected token (an NPC of the scene); with no token,
+Paradox acts. The rows come from `tools/dati/menu_sfere.json` through
+`tools/build-menu-sfere.py` into `scripts/data/menu-sfere.js`.
 
 "New session" on the Narrator's Board opens no dialog: since 27 September
 2026 it turns the Board into a session page that takes the place of the mode
@@ -427,3 +437,10 @@ Awakening made of it, tied together ("Infermiera, medico dell'occulto",
 "Tassista, in realtà messaggero"). The twelve proposals of the Concept step
 take one concept per group in turn.
 
+## Credits
+
+The icons of the circular menu's moves come from Game-icons
+(https://game-icons.net), by Lorc, Delapouite and the other authors of the
+site, under the CC BY 3.0 licence (https://creativecommons.org/licenses/by/3.0/).
+They are taken through `@iconify-json/game-icons`; the icons in use are listed
+in `tools/dati/icone_game_icons.json`.
